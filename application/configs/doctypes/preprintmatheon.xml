@@ -38,7 +38,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
     xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 
-<!-- required fields -->
+    <!-- required fields -->
     <field name="PersonAuthor" required="yes" formelement="text" datatype="Person" multiplicity="*">
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
         <subfield name="Email" required="no" formelement="text" datatype="Email" />
@@ -49,15 +49,14 @@
     </field>
 
     <field name="TitleMain" formelement="text" required="yes"  datatype="Title" multiplicity="4" />
-    <field name="TitleAbstract" required="no" formelement="textarea"  datatype="Title" multiplicity="4">
+    <field name="TitleAbstract" required="yes" formelement="textarea"  datatype="Title" multiplicity="4">
         <required-if-fulltext/>
     </field>
 
-    <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="5"/>
+    <field name="Institute" required="yes" formelement="Select" datatype="Collection" root="institutes" multiplicity="5"/>
     <field name="Project" required="yes" formelement="Select" datatype="Collection" root="projects" multiplicity="*" />
-    <field name="SubjectMSC" required="no" formelement="Select" datatype="Collection" root="msc" multiplicity="9"/>
+    <field name="SubjectMSC" required="yes" formelement="Select" datatype="Collection" root="msc" multiplicity="*"/>
     
-<!-- unrequired fields -->
+    <!-- unrequired fields -->
     <field name="SubjectUncontrolled" required="no" formelement="text" datatype="Text" multiplicity="*" />
-    <field name="Series" required="no" formelement="Select" datatype="Collection" root="series" multiplicity="1"/>
 </documenttype>
