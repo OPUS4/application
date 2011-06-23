@@ -641,6 +641,24 @@
         </xsl:text>
     </xsl:template>
 
+    <!-- Catch-all for hidden collections. -->
+    <xsl:template match="Collection[@Visible='0']">
+        <xsl:comment>
+            <tr>
+                <th class="name">
+                    <xsl:value-of select="@Name" />
+                    <xsl:text>:</xsl:text>
+                </th>
+                <td>
+                    <xsl:text>(hidden) </xsl:text>
+                    <xsl:call-template name="checkdisplay"/>
+                </td>
+            </tr>
+        </xsl:comment>
+        <xsl:text>
+        </xsl:text>
+    </xsl:template>
+
     <xsl:template match="CompletedDate">
         <tr>
             <th class="name">
