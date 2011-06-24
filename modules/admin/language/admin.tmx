@@ -126,7 +126,7 @@
     
     <tu tuid="admin_title_languages_description">
       <tuv xml:lang="en">
-        <seg>Add, edit or remove languages. Aktivate or deaktivate languages.</seg>
+        <seg>Add, edit or remove languages. Activate or deactivate languages.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Sprachen hinzufügen, editieren, entfernen und ein- oder ausschalten.</seg>
