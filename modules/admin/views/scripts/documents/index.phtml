@@ -104,7 +104,7 @@
                 <?PHP endforeach; ?>
                 <span class="title"><a href="<?=$document->getUrlShow() ?>"
                     title="<?= $this->translate('admin_documents_tooltip_show') ?>"
-                                       ><?= $document->getDocTitle() ?></a></span>
+                                       ><?= htmlspecialchars($document->getDocTitle()) ?></a></span>
                 (<span class="pubDate"><?= $document->getYear() ?></span>)
             </td>
             <td class="doctype">

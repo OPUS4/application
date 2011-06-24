@@ -69,7 +69,7 @@
             <?PHP $document = new Review_Model_DocumentAdapter($this, $docId); ?>
             <td style="vertical-align: top; padding-right: 1em"><?= $docId ?></td>
             <td>
-                <div class="title" style="font-weight: bold"><?= $document->getDocTitle() ?></div>
+                <div class="title" style="font-weight: bold"><?= htmlspecialchars($document->getDocTitle()) ?></div>
                 <div class="authors">
                     <?PHP $authorsCount = count($document->getAuthors()) - 1; ?>
                     <?PHP foreach($document->getAuthors() as $count => $author) : ?>
