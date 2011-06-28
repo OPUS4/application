@@ -72,7 +72,7 @@ class Matheon_SelectReviewerController extends Controller_Action {
         $reviewerId = $reviewerForm->getReviewerId();
 
         $documentModel->storeEnrichmentKeyValue('reviewer.user_id', $reviewerId);
-        $documentModel->addReadFilePrivilege('guest');
+        $documentModel->addReadFilePrivilege('reviewer');
         $documentModel->store();
 
         // Send publish notification.

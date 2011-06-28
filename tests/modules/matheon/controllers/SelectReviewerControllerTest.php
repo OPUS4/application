@@ -35,6 +35,17 @@
 
 class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
 
+    private function createValidDocument($loggedUserId) {
+        $document = new Opus_Document();
+        $document->setServerState('unpublished');
+        $document->addEnrichment()
+                ->setKeyName('submitter.user_id')
+                ->setValue($loggedUserId);
+
+        return $document->store();
+
+    }
+
     public function testFormWithoutDocumentId() {
         $session = new Zend_Session_Namespace('Publish');
         $session->unsetAll();
@@ -57,14 +68,7 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
         $loggedUserModel = new Publish_Model_LoggedUser();
         $loggedUserId = $loggedUserModel->getUserId();
 
-        $document = new Opus_Document();
-        $document->setServerState('unpublished');
-        $document->addEnrichment()
-                ->setKeyName('submitter.user_id')
-                ->setValue($loggedUserId);
-
-        $docId = $document->store();
-
+        $docId = $this->createValidDocument($loggedUserId);
         $session = new Zend_Session_Namespace('Publish');
         $session->depositConfirmDocumentId = $docId;
 
@@ -77,14 +81,7 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
         $loggedUserModel = new Publish_Model_LoggedUser();
         $loggedUserId = $loggedUserModel->getUserId();
 
-        $document = new Opus_Document();
-        $document->setServerState('unpublished');
-        $document->addEnrichment()
-                ->setKeyName('submitter.user_id')
-                ->setValue($loggedUserId);
-
-        $docId = $document->store();
-
+        $docId = $this->createValidDocument($loggedUserId);
         $session = new Zend_Session_Namespace('Publish');
         $session->depositConfirmDocumentId = $docId;
 
@@ -101,6 +98,29 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
         //echo $response->getBody();
 
         $this->assertQueryContentContains('div#content', 'has been notified');
+    }
+
+    public function testFormWithValidDocumentIdSubmitSetsReviewerRole() {
+        $this->loginUser('referee', 'refereereferee');
+        $loggedUserModel = new Publish_Model_LoggedUser();
+        $loggedUserId = $loggedUserModel->getUserId();
+
+        $docId = $this->createValidDocument($loggedUserId);
+        $session = new Zend_Session_Namespace('Publish');
+        $session->depositConfirmDocumentId = $docId;
+
+        $this->request->setMethod('POST')
+                ->setPost(array(
+                    'reviewerid' => $loggedUserId,
+                    'submit'     => 'Send',
+                ));
+
+        $this->dispatch('/matheon/select-reviewer/form');
+        $this->assertResponseCode(200);
+
+        // Check, that right privilege has been set.
+        $reviewer = Opus_UserRole::fetchByName('reviewer');
+        $this->assertContains($docId, $reviewer->listAccessDocuments());
     }
 
     public function testEmptyForm() {
