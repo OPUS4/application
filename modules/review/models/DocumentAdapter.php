@@ -413,5 +413,31 @@ class Review_Model_DocumentAdapter {
         return $this->document->hasField('File');
     }
 
+
+    public function getReviewer() {
+        $return = array();
+        foreach ($this->document->getEnrichment() AS $e) {
+            if ($e->getKeyName() != 'reviewer.user_id') {
+                continue;
+            }
+            $user_id = $e->getValue();
+            $account = new Opus_Account($user_id);
+            $return[$account->getId()] = $account->getLogin();
+        }
+        return $return;
+    }
+
+    public function getSubmitter() {
+        $return = array();
+        foreach ($this->document->getEnrichment() AS $e) {
+            if ($e->getKeyName() != 'submitter.user_id') {
+                continue;
+            }
+            $user_id = $e->getValue();
+            $account = new Opus_Account($user_id);
+            $return[$account->getId()] = $account->getLogin();
+        }
+        return $return;
+    }
 }
 ?>

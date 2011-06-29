@@ -88,6 +88,31 @@
                 <?= ($count < $authorsCount) ? ';' : ''?>
             <?PHP endforeach; ?>
             </div>
+
+            <?php if (count($document->getSubmitter()) > 0 or count($document->getReviewer()) > 0) : ?>
+            <div class="accounts">
+
+            <?php if (count($document->getSubmitter()) > 0) : ?>
+                <i>submitter: </i>
+                <?php foreach ($document->getSubmitter() AS $account_id => $username) : ?>
+                    <?php $account_text = htmlspecialchars("$username") ?>
+                    <a title="submitter <?= $account_text ?>" href="<?= $this->url(array('module' => 'admin', 'controller' => 'account', 'action' => 'show', 'id' => $account_id)) ?>"><?= $account_text ?></a>
+                <?php endforeach; ?>
+                <?php if (count($document->getReviewer()) > 0) : ?>;<?php endif; ?>
+            <?php endif; ?>
+
+
+            <?php if (count($document->getReviewer()) > 0) : ?>
+
+                <i>reviewer: </i>
+                <?php foreach ($document->getReviewer() AS $account_id => $username) : ?>
+                    <?php $account_text = htmlspecialchars("$username") ?>
+                    <a title="reviewer <?= $account_text ?>" href="<?= $this->url(array('module' => 'admin', 'controller' => 'account', 'action' => 'show', 'id' => $account_id)) ?>"><?= $account_text ?></a>
+                <?php endforeach; ?>
+            <?php endif; ?>
+
+            </div>
+            <?php endif; ?>
         </td>
         <td>
             <span class="doctype"><?= $document->getDocType() ?></span>
