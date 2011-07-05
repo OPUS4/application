@@ -43,9 +43,16 @@ class Frontdoor_IndexController extends Controller_Action {
     public function indexAction() {
         $this->view->title = $this->view->translate('frontdoor_title');
         $request = $this->getRequest();
-        $docId = $request->getParam('docId');
+        $docId = $request->getParam('docId', '');
         $this->view->docId = $docId;
         $baseUrl = $request->getBaseUrl();
+
+        if ($docId == '') {
+            $this->view->errorMessage = "frontdoor_doc_id_missing";
+            $this->getResponse()->setHttpResponseCode(404);
+            $this->render('document-error');
+            return;
+        }
 
         $document = null;
         try {
