@@ -138,7 +138,7 @@ INSERT INTO `persons` (`id`, `academic_title`, `date_of_birth`, `email`, `first_
 --
 
 INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_order`, `allow_email_contact`) VALUES
-(253, 91, 'author', 0, 0),
+(253, 91, 'author', 0, 1),
 (253, 92, 'author', 0, 0),
 (253, 93, 'author', 0, 0),
 (253, 94, 'author', 0, 0),
@@ -163,7 +163,7 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_
 (255, 108, 'author', 0, 0),
 (255, 109, 'author', 0, 0),
 (255, 110, 'author', 0, 0),
-(256, 91, 'author', 0, 0),
+(256, 91, 'author', 0, 1),
 (257, 91, 'author', 0, 0),
 (256, 92, 'author', 0, 0),
 (257, 93, 'author', 0, 0);
