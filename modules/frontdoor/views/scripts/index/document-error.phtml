@@ -40,5 +40,5 @@
 ?>
 
 <div class="frontdoor">
-    <?= $this->translate($this->errorMessage, $this->docId) ?>
+    <?= $this->translate($this->errorMessage, htmlspecialchars($this->docId)) ?>
 </div>
