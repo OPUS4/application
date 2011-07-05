@@ -167,3 +167,12 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_
 (257, 91, 'author', 0, 0),
 (256, 92, 'author', 0, 0),
 (257, 93, 'author', 0, 0);
+
+--
+-- Daten für Tabelle `dnb_institutes`
+--
+
+INSERT INTO `dnb_institutes` (`id`, `name`, `address`, `city`, `phone`, `dnb_contact_id`, `is_grantor`, `is_publisher`) VALUES
+(1, 'Foobar Universität', 'Musterstraße 1', 'Musterstadt', '', '', 1, 0),
+(2, 'Foobar Universitätsbibliothek', 'Musterstraße 2', 'Musterstadt', '', '', 0, 1);
+
