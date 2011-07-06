@@ -478,6 +478,15 @@
       </tuv>
     </tu>
 
+	<tu tuid="header_groupThesisGrantor">
+      <tuv xml:lang="en">
+        <seg>Granting Institution</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel verleihende Institution</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="header_ThesisGrantor">
       <tuv xml:lang="en">
         <seg>Granting Institution</seg>
@@ -487,6 +496,15 @@
       </tuv>
     </tu>
 
+	<tu tuid="header_groupThesisPublisher">
+      <tuv xml:lang="en">
+        <seg>Publishing Institution</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichende Institution</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="header_ThesisPublisher">
       <tuv xml:lang="en">
         <seg>Publishing Institution</seg>
