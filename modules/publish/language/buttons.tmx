@@ -316,6 +316,42 @@
         </tuv>
     </tu>
 	
+	<tu tuid="button_label_add_one_moreThesisPublisher">
+        <tuv xml:lang="en">
+            <seg>Add one more publishing Institution</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Eine weitere Veröffentlichende Institution hinzufügen</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="button_label_deleteThesisPublisher">
+        <tuv xml:lang="en">
+            <seg>Delete the last publishing Institution</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die letzte Veröffentlichende Institution löschen</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="button_label_add_one_moreThesisGrantor">
+        <tuv xml:lang="en">
+            <seg>Add one more granting Institution</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Eine weitere Titel verleihende Institution hinzufügen</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="button_label_deleteThesisGrantor">
+        <tuv xml:lang="en">
+            <seg>Delete the last granting Institution</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die letzte Titel verleihende Institution löschen</seg>
+        </tuv>
+    </tu>
+	
 	<tu tuid="button_label_add_one_morePersonTranslator">
         <tuv xml:lang="en">
             <seg>Add one more Translator</seg>
