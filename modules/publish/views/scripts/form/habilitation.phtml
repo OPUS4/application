@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -56,8 +56,8 @@
             <?= $this->element($this->CompletedDate); ?>
             <?= $this->element($this->ThesisDateAccepted); ?>
             <?= $this->group($this->groupPersonAdvisor); ?>
-            <?= $this->element($this->ThesisGrantor); ?>
-            <?= $this->element($this->ThesisPublisher); ?>
+            <?= $this->group($this->groupThesisGrantor); ?>
+            <?= $this->group($this->groupThesisPublisher); ?>
             <?= $this->group($this->groupInstitute); ?>
             <?= $this->element($this->PublisherName); ?>
             <?= $this->element($this->PublisherPlace); ?>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" ?>
+﻿<?xml version="1.0" encoding="UTF-8" ?>
 <!--
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
@@ -57,8 +57,8 @@
     
     <field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1" />
     <field name="ThesisDateAccepted" required="yes" formelement="Text" datatype="Date" multiplicity="1" />
-    <field name="ThesisPublisher" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="1" />
-    <field name="ThesisGrantor" required="yes" formelement="Select" datatype="ThesisGrantor" multiplicity="1" />
+    <field name="ThesisPublisher" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="*" />
+    <field name="ThesisGrantor" required="yes" formelement="Select" datatype="ThesisGrantor" multiplicity="*" />
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
         <required-if-fulltext />
     </field>
