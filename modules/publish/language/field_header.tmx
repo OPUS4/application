@@ -478,7 +478,7 @@
       </tuv>
     </tu>
 
-	<tu tuid="header_groupThesisGrantor">
+	<tu tuid="groupThesisGrantor">
       <tuv xml:lang="en">
         <seg>Granting Institution</seg>
       </tuv>
@@ -496,7 +496,7 @@
       </tuv>
     </tu>
 
-	<tu tuid="header_groupThesisPublisher">
+	<tu tuid="groupThesisPublisher">
       <tuv xml:lang="en">
         <seg>Publishing Institution</seg>
       </tuv>
