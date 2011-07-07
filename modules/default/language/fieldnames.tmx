@@ -2001,6 +2001,24 @@
         <seg>Nummer</seg>
       </tuv>
     </tu>
+
+    <tu tuid="NameNumber">
+      <tuv xml:lang="en">
+        <seg>Name, Number</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Name, Nummer</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="NumberName">
+      <tuv xml:lang="en">
+        <seg>Number, Name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nummer, Name</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="YearApplied">
       <tuv xml:lang="en">

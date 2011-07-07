@@ -84,7 +84,7 @@ class Admin_Model_CollectionRole {
         }
         foreach (array('DisplayBrowsing', 'DisplayFrontdoor', 'DisplayOai') as $fieldname) {
             $field = $this->collectionRole->getField($fieldname);
-            $field->setDefault(array('Name' => 'Name', 'Number' => 'Number', 'Name, Number' => 'Name, Number', 'Number, Name' => 'Number, Name'))
+            $field->setDefault(array('Name' => 'Name', 'Number' => 'Number', 'Name, Number' => 'NameNumber', 'Number, Name' => 'NumberName'))
                     ->setSelection(true)                    
                     ->setMandatory(true);
             if (is_null($position)) {
