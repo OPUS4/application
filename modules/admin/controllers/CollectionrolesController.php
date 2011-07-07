@@ -120,36 +120,46 @@ class Admin_CollectionrolesController extends Controller_Action {
 
         if (!$form->isValid($data)) {
             $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
+            $this->setTitle($collectionRole);
+            return;
+        }
+        
+        // manuelles Überprüfen der IBs in Tabelle collections_roles
+        $tmpRole = Opus_CollectionRole::fetchByName($collectionRole->getName());
+        if (!is_null($tmpRole) && $tmpRole->getId() !== $collectionRole->getId()) {
+            $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
+            $this->view->message = 'name is not unique';
+            $this->setTitle($collectionRole);
+            return;
+        }
+
+        $tmpRole = Opus_CollectionRole::fetchByOaiName($collectionRole->getOaiName());
+        if (!is_null($tmpRole) && $tmpRole->getId() !== $collectionRole->getId()) {
+            $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
+            $this->view->message = 'oainame is not unique';
+            $this->setTitle($collectionRole);
+            return;
+        }
+
+        if (true === $collectionRole->isNewRecord()) {
+            if (true === is_null($collectionRole->getRootCollection())) {
+                $collectionRole->addRootCollection();
+                $collectionRole->getRootCollection()->setVisible('1');
+            }
+            $collectionRole->store();
+            return $this->_redirectTo('index', 'Collection role \'' . $collectionRole->getName() . '\' successfully created.');
         }
         else {
-            // manuelles Überprüfen der IBs in Tabelle collections_roles
-            $tmpRole = Opus_CollectionRole::fetchByName($collectionRole->getName());
-            if (!is_null($tmpRole) && $tmpRole->getId() !== $collectionRole->getId()) {
-                $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
-                $this->view->message = 'name is not unique';
-                return;
-            }
-
-            $tmpRole = Opus_CollectionRole::fetchByOaiName($collectionRole->getOaiName());
-            if (!is_null($tmpRole) && $tmpRole->getId() !== $collectionRole->getId()) {
-                $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
-                $this->view->message = 'oainame is not unique';
-                return;
-            }
-
-            if (true === $collectionRole->isNewRecord()) {
-                if (true === is_null($collectionRole->getRootCollection())) {
-                    $collectionRole->addRootCollection();
-                    $collectionRole->getRootCollection()->setVisible('1');
-                }
-                $collectionRole->store();
-                return $this->_redirectTo('index', 'Collection role \'' . $collectionRole->getName() . '\' successfully created.');
-            }
-            else {
-                $collectionRole->store();
-                return $this->_redirectTo('index', 'Collection role \'' . $collectionRole->getName() . '\' successfully edited.');
-            }
+            $collectionRole->store();
+            return $this->_redirectTo('index', 'Collection role \'' . $collectionRole->getName() . '\' successfully edited.');
         }
+    }
+
+    private function setTitle($collectionRole) {
+        if ($collectionRole->isNewRecord()) {
+            $this->view->title = $this->view->translate('admin_collectionroles_new');
+        }
+        $this->view->title = $this->view->translate('admin_collectionroles_edit');
     }
 
 
