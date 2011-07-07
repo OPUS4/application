@@ -610,7 +610,7 @@
             <seg>Please choose the involved institutes. You may add more instiutes by clicking on the button (or delete them).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Wählen Sie hier bitte die beteiligten Instiute aus. Sie können durch Klicken auf den Button weitere Institute hinzufügen (oder wieder löschen).</seg>
+            <seg>Wählen Sie hier bitte die beteiligten Institute aus. Sie können durch Klicken auf den Button weitere Institute hinzufügen (oder wieder löschen).</seg>
         </tuv>
     </tu>
 
@@ -1182,6 +1182,24 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte das Datum ein, an dem die Abschlussarbeit im Sinne der Prüfungsordnung angenommen wurde .</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_groupThesisGrantor">
+        <tuv xml:lang="en">
+            <seg>Please choose the granting institution.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie bitte die titelverleihende Institution aus.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_groupThesisPublisher">
+        <tuv xml:lang="en">
+            <seg>Please choose the publishing institution(s).</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie bitte die verbreitende(n) Institution(en) aus.</seg>
         </tuv>
     </tu>
 	
