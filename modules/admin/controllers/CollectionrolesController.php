@@ -157,9 +157,9 @@ class Admin_CollectionrolesController extends Controller_Action {
 
     private function setTitle($collectionRole) {
         if ($collectionRole->isNewRecord()) {
-            $this->view->title = $this->view->translate('admin_collectionroles_new');
+            $this->view->title = 'admin_collectionroles_new';
         }
-        $this->view->title = $this->view->translate('admin_collectionroles_edit');
+        $this->view->title = 'admin_collectionroles_edit';
     }
 
 

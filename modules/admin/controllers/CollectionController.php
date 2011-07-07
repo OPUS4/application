@@ -185,9 +185,11 @@ class Admin_CollectionController extends Controller_Action {
         if (!$form->isValid($data)) {
             if ($collection->isNewRecord()) {
                 $form->setAction($this->view->url(array('action' => 'create', 'id' => $this->getRequest()->getParam('id'), 'type' => $this->getRequest()->getParam('type'))));
+                $this->view->title = 'admin_collections_collection_new';
             }
             else {
                 $form->setAction($this->view->url(array('action' => 'create', 'oid' => $collection->getId(), 'id' => $this->getRequest()->getParam('id'), 'type' => $this->getRequest()->getParam('type'))));
+                $this->view->title = 'admin_collections_collection_edit';
             }
             $this->view->form = $form;
             return;
