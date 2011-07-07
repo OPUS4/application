@@ -1185,42 +1185,42 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         </tuv>
     </tu>
 	
-	<tu tuid="hint_groupThesisGrantor">
-        <tuv xml:lang="en">
-            <seg>Please enter the granting institution.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die titelverleihende Institution ein.</seg>
-        </tuv>
-    </tu>
-	
-	<tu tuid="hint_groupThesisGrantor">
-        <tuv xml:lang="en">
-            <seg>Please enter the granting institution.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die titelverleihende Institution ein.</seg>
-        </tuv>
-    </tu>
-	
 	<tu tuid="hint_ThesisGrantor">
         <tuv xml:lang="en">
-            <seg>Please enter the granting institution.</seg>
+            <seg>Please choose the granting institution.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die titelverleihende Institution ein.</seg>
+            <seg>Wählen Sie bitte die titelverleihende Institution aus.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_ThesisGrantor1">
+        <tuv xml:lang="en">
+            <seg>Please choose the granting institution.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie bitte die titelverleihende Institution aus.</seg>
         </tuv>
     </tu>
 	
 	<tu tuid="hint_ThesisPublisher">
         <tuv xml:lang="en">
-            <seg>Please enter the publishing institution.</seg>
+            <seg>Please choose the publishing institution(s).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die verbreitende Institution ein.</seg>
+            <seg>Wählen Sie bitte die verbreitende(n) Institution(en) aus.</seg>
         </tuv>
     </tu>
     
+	<tu tuid="hint_ThesisPublisher1">
+        <tuv xml:lang="en">
+            <seg>Please choose the publishing institution(s).</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Wählen Sie bitte die verbreitende(n) Institution(en) aus.</seg>
+        </tuv>
+    </tu>
+	
     <tu tuid="hint_EnrichmentNeuesFeld">
       <tuv xml:lang="en">
         <seg>You can define whatever you want</seg>
