@@ -54,14 +54,15 @@
             $printname = $collectionRole->getName();
         else
             $printname = $this->translate($translatelabel);
+        $translationInfoText = $this->translate('admin_collectionroles_translation_key') . ' ' . htmlspecialchars($translatelabel);
     ?>
     <tr class="<?= ($i % 2 === 0) ? 'even' : 'odd' ?>">
         <td class="<?= ($collectionRole->getVisible() === '1') ? 'visible' : 'unvisible' ?>">
         <?php if (is_null($collectionRole->getRootCollection())) : ?>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'role' => $collectionRole->getId()), null, true)?>"><?= htmlspecialchars($printname) ?></a>
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'role' => $collectionRole->getId()), null, true)?>" title="<?= $translationInfoText ?>"><?= htmlspecialchars($printname) ?></a>
         <?php else : ?>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $collectionRole->getRootCollection()->getId()), null, true)?>"><?= htmlspecialchars($printname) ?></a>
-        <?php endif ?>            
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $collectionRole->getRootCollection()->getId()), null, true)?>" title="<?= $translationInfoText ?>"><?= htmlspecialchars($printname) ?></a>
+        <?php endif ?>
         </td>
         <td>
             <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'edit', 'roleid' => $collectionRole->getId()), null, true) ?>">

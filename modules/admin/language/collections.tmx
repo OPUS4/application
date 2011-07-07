@@ -445,7 +445,7 @@
 			</tuv>
         </tu>
 
-      <tu tuid="confirm_deletion">
+        <tu tuid="confirm_deletion">
             <tuv xml:lang="en">
                 <seg>The element you are trying to delete has subelements. By continuing the deletion operation those subelements will also be deleted. Are you sure to continue the operation?</seg>
             </tuv>
@@ -460,6 +460,15 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Sind Sie sicher?</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collectionroles_translation_key">
+            <tuv xml:lang="en">
+                <seg>internal translation key:</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>interner Übersetzungsschlüssel:</seg>
             </tuv>
         </tu>
     </body>

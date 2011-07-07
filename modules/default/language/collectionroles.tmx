@@ -1,0 +1,105 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
+    <body>
+        <tu tuid="search_index_custom_browsing_org">
+            <tuv xml:lang="en">
+                <seg>Institutes</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Institutionen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="search_index_custom_browsing_institutes">
+            <tuv xml:lang="en">
+                <seg>Institutes</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Institutionen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="search_index_custom_browsing_series">
+          <tuv xml:lang="en">
+            <seg>Series</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Schriftenreihen</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="search_index_custom_browsing_reports">
+          <tuv xml:lang="en">
+            <seg>Reports</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Berichte</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="search_index_custom_browsing_collections">
+          <tuv xml:lang="en">
+            <seg>Collections</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Sammlungen</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="search_index_custom_browsing_ddc">
+          <tuv xml:lang="en">
+            <seg>DDC-Classification</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>DDC-Sachgruppen</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="search_index_custom_browsing_ccs">
+          <tuv xml:lang="en">
+            <seg>CCS-Classification</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>CCS-Klassifikation</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="search_index_custom_browsing_jel">
+          <tuv xml:lang="en">
+            <seg>JEL-Classification</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>JEL-Klassifikation</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="search_index_custom_browsing_msc">
+          <tuv xml:lang="en">
+            <seg>MSC-Classification</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>MSC-Klassifikation</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="search_index_custom_browsing_pacs">
+          <tuv xml:lang="en">
+            <seg>PACS-Classification</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>PACS-Klassifikation</seg>
+          </tuv>
+        </tu>
+
+        <tu tuid="search_index_custom_browsing_bk">
+          <tuv xml:lang="en">
+            <seg>BKL-Classification</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>BKL-Klassifikation</seg>
+          </tuv>
+        </tu>
+    </body>
+</tmx>
