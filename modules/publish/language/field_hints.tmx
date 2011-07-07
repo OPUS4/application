@@ -1199,25 +1199,25 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
             <seg>Please choose the publishing institution(s).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die verbreitende(n) Institution(en) aus.</seg>
+            <seg>Wählen Sie bitte die veröffentlichende(n) Institution(en) aus.</seg>
         </tuv>
     </tu>
 	
 	<tu tuid="hint_ThesisGrantor">
         <tuv xml:lang="en">
-            <seg>Please choose the granting institution.</seg>
+            <seg>Please choose the granting institution(s).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die titelverleihende Institution aus.</seg>
+            <seg>Wählen Sie bitte die titelverleihende(n) Institution(en) aus.</seg>
         </tuv>
     </tu>
 	
 	<tu tuid="hint_ThesisGrantor1">
         <tuv xml:lang="en">
-            <seg>Please choose the granting institution.</seg>
+            <seg>Please choose the granting institution(s).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die titelverleihende Institution aus.</seg>
+            <seg>Wählen Sie bitte die titelverleihende(n) Institution(en) aus.</seg>
         </tuv>
     </tu>
 	
@@ -1226,7 +1226,7 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
             <seg>Please choose the publishing institution(s).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die verbreitende(n) Institution(en) aus.</seg>
+            <seg>Wählen Sie bitte die veröffentlichende(n) Institution(en) aus.</seg>
         </tuv>
     </tu>
     
@@ -1235,7 +1235,7 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
             <seg>Please choose the publishing institution(s).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die verbreitende(n) Institution(en) aus.</seg>
+            <seg>Wählen Sie bitte die veröffentlichende(n) Institution(en) aus.</seg>
         </tuv>
     </tu>
 	
