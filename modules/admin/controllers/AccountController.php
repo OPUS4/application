@@ -47,18 +47,15 @@ class Admin_AccountController extends Controller_Action {
      * Default action presents list of existing accounts.
      */
     public function indexAction() {
-        $this->view->title = $this->view->translate('admin_account_index');
-
         $accounts = Opus_Account::getAll();
 
         if (empty($accounts)) {
+            $this->view->title = $this->view->translate('admin_account_index');
             return $this->renderScript('account/none.phtml');
         }
-        else {
-            $this->view->accounts = array();
-            foreach ($accounts as $account) {
-                $this->view->accounts[$account->getId()] = $account->getDisplayName();
-            }
+        $this->view->accounts = array();
+        foreach ($accounts as $account) {
+            $this->view->accounts[$account->getId()] = $account->getDisplayName();
         }
     }
 
@@ -175,6 +172,7 @@ class Admin_AccountController extends Controller_Action {
                 $actionUrl = $this->view->url(array('action' => 'create'));
                 $accountForm->setAction($actionUrl);
                 $this->view->form = $accountForm;
+                $this->view->title = 'admin_account_new';
                 return $this->renderScript('account/new.phtml');
             }
         }
@@ -290,6 +288,7 @@ class Admin_AccountController extends Controller_Action {
                 $actionUrl = $this->view->url(array('action' => 'update', 'id' => $id));
                 $accountForm->setAction($actionUrl);
                 $this->view->form = $accountForm;
+                $this->view->title = 'admin_account_edit';
                 return $this->renderScript('account/edit.phtml');
             }
         }
