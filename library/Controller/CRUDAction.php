@@ -101,7 +101,7 @@ class Controller_CRUDAction extends Controller_Action {
         $session = new Zend_Session_Namespace('crud');
         $session->{$this->_modelclass} = $model;
         $modelForm = $form_builder->build($model);
-        $action_url = $this->view->url(array("action" => "create"));
+        $action_url = $this->view->url(array('action' => 'create'));
         $modelForm->setAction($action_url);
         $this->view->form = $modelForm;
     }
@@ -111,38 +111,55 @@ class Controller_CRUDAction extends Controller_Action {
      *
      * @return void
      */
-    public function createAction() {
+    public function createAction() {        
+        if (!$this->_request->isPost()) {
+            return $this->_redirectTo('index');
+        }
+
         // TODO: Use session to store model.
-        if ($this->_request->isPost() === true) {
-            $data = $this->_request->getPost();
-            $form_builder = new Form_Builder();
-            $id = $this->getRequest()->getParam('id');
-            $session = new Zend_Session_Namespace('crud');
-            $model = $session->{$this->_modelclass};
-            if (array_key_exists('submit', $data) === false) {
-                $form_builder->buildModelFromPostData($model, $data[$this->_modelclass]);
-                $form = $form_builder->build($model);
-                $action_url = $this->view->url(array("action" => "create"));
-                $form->setAction($action_url);
-                $this->view->form = $form;
+        $data = $this->_request->getPost();
+        $form_builder = new Form_Builder();
+        $id = $this->getRequest()->getParam('id');
+        $session = new Zend_Session_Namespace('crud');
+        $model = $session->{$this->_modelclass};
+        if (array_key_exists('submit', $data) === false) {
+            
+            // TODO: when does this case occur?
+
+            $form_builder->buildModelFromPostData($model, $data[$this->_modelclass]);
+            $form = $form_builder->build($model);
+            $action_url = $this->view->url(array('action' => 'create'));
+            $form->setAction($action_url);
+            $this->view->form = $form;
+
+            // TODO: $this->view->title needs to be set appropriately
+
+        }
+        else {
+            $form_builder->buildModelFromPostData($model, $data[$this->_modelclass]);
+            $form = $form_builder->build($model);
+            if ($form->isValid($data) === true) {
+                $model->store();
+                // The first 3 params are module, controller and action.
+                // Additional parameters are passed through.
+                $params = $this->getRequest()->getUserParams();
+                $module = array_shift($params);
+                $controller = array_shift($params);
+                $action = array_shift($params);
+                $this->_redirectTo('show', '', $controller, $module, $params);
             } else {
-                $form_builder->buildModelFromPostData($model, $data[$this->_modelclass]);
-                $form = $form_builder->build($model);
-                if ($form->isValid($data) === true) {
-                    $model->store();
-                    // The first 3 params are module, controller and action.
-                    // Additional parameters are passed through.
-                    $params = $this->getRequest()->getUserParams();
-                    $module = array_shift($params);
-                    $controller = array_shift($params);
-                    $action = array_shift($params);
-                    $this->_redirectTo('show', '', $controller, $module, $params);
-                } else {
-                    $this->view->form = $form;
+                $this->view->form = $form;
+
+                $replacement = '';
+                $regexPattern = '/_create$/';
+                if ($model->isNewRecord()) {
+                    $replacement = 'new';
                 }
+                else {
+                    $replacement = 'edit';
+                }
+                $this->view->title = preg_replace($regexPattern, '_' . $replacement, $this->view->title);
             }
-        } else {
-            $this->_redirectTo('index');
         }
     }
 
@@ -159,7 +176,7 @@ class Controller_CRUDAction extends Controller_Action {
             $session = new Zend_Session_Namespace('crud');
             $session->{$this->_modelclass} = $model;
             $modelForm = $form_builder->build($model);
-            $action_url = $this->view->url(array("action" => "create"));
+            $action_url = $this->view->url(array('action' => 'create'));
             $modelForm->setAction($action_url);
             $this->view->form = $modelForm;
         }
