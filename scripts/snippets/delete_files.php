@@ -22,7 +22,11 @@ for ($i = $startId; $i <= $endId; $i++) {
             // ignore exception (is thrown since file does not exist physically)
         }
     }
-    echo 'delete all files associated with docId: ' . $d->getId() . "\n";
+    $numOfFiles = count($files);
+    if ($numOfFiles > 0) {
+        echo 'delete ' . $numOfFiles . ' file(s) associated with docId: ' . $d->getId() . "\n";
+    }
 }
 
+echo "done.\n";
 exit();
