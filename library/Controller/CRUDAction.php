@@ -146,20 +146,20 @@ class Controller_CRUDAction extends Controller_Action {
                 $module = array_shift($params);
                 $controller = array_shift($params);
                 $action = array_shift($params);
-                $this->_redirectTo('show', '', $controller, $module, $params);
-            } else {
-                $this->view->form = $form;
-
-                $replacement = '';
-                $regexPattern = '/_create$/';
-                if ($model->isNewRecord()) {
-                    $replacement = 'new';
-                }
-                else {
-                    $replacement = 'edit';
-                }
-                $this->view->title = preg_replace($regexPattern, '_' . $replacement, $this->view->title);
+                return $this->_redirectTo('show', '', $controller, $module, $params);
             }
+
+            $this->view->form = $form;
+
+            $replacement = '';
+            $regexPattern = '/_create$/';
+            if ($model->isNewRecord()) {
+                $replacement = 'new';
+            }
+            else {
+                $replacement = 'edit';
+            }
+            $this->view->title = preg_replace($regexPattern, '_' . $replacement, $this->view->title);
         }
     }
 
