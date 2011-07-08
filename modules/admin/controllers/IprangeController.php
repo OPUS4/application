@@ -36,8 +36,6 @@
 /**
  * Controller for management of IP ranges.
  *
- * @category    Application
- * @package     Module_Admin
  */
 class Admin_IprangeController extends Controller_Action {
 
@@ -115,7 +113,6 @@ class Admin_IprangeController extends Controller_Action {
 
     /**
      * Creates a new IP range.
-     * @return <type>
      */
     public function createAction() {
         $form = new Admin_Form_IpRange();
@@ -126,6 +123,7 @@ class Admin_IprangeController extends Controller_Action {
             $button = $this->getRequest()->getPost('cancel');
             if (isset($button)) {
                 $this->_helper->redirector('index');
+                return;
             }
 
             if ($form->isValid($postData)) {
@@ -135,6 +133,7 @@ class Admin_IprangeController extends Controller_Action {
                 $actionUrl = $this->view->url(array('action' => 'create'));
                 $form->setAction($actionUrl);
                 $this->view->form = $form;
+                $this->view->title = 'admin_iprange_new';
                 return $this->renderScript('iprange/new.phtml');
             }
         }
@@ -144,7 +143,6 @@ class Admin_IprangeController extends Controller_Action {
 
     /**
      * Updates an IP range.
-     * @return <type>
      */
     public function updateAction() {
         $form = new Admin_Form_IpRange();
@@ -167,6 +165,7 @@ class Admin_IprangeController extends Controller_Action {
                 $actionUrl = $this->view->url(array('action' => 'update', 'id' => $id));
                 $form->setAction($actionUrl);
                 $this->view->form = $form;
+                $this->view->title = 'admin_iprange_edit';
                 return $this->renderScript('iprange/edit.phtml');
             }
         }
