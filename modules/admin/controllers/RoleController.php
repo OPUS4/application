@@ -33,12 +33,6 @@
  * @version     $Id$
  */
 
-/**
- * Main entry point for this module.
- *
- * @category    Application
- * @package     Module_Admin
- */
 class Admin_RoleController extends Controller_Action {
 
     private static $protectedRoles = array('guest', 'administrator');
@@ -102,7 +96,7 @@ class Admin_RoleController extends Controller_Action {
             $postData = $this->getRequest()->getPost();
 
             if ($this->getRequest()->getPost('cancel')) {
-                $this->_redirectTo('index');
+                return $this->_redirectTo('index');
             }
 
             $form = new Admin_Form_Role();
@@ -119,6 +113,7 @@ class Admin_RoleController extends Controller_Action {
                 $actionUrl = $this->view->url(array('action' => 'create'));
                 $form->setAction($actionUrl);
                 $this->view->form = $form;
+                $this->view->title = 'admin_role_new';
                 $this->_helper->viewRenderer->setRender('new');
                 return $this->render('new');
             }
@@ -171,6 +166,7 @@ class Admin_RoleController extends Controller_Action {
                 $actionUrl = $this->view->url(array('action' => 'update', 'id' => $roleId));
                 $roleForm->setAction($actionUrl);
                 $this->view->roleForm = $roleForm;
+                $this->view->title = 'admin_role_edit';
                 $this->_helper->viewRenderer->setRender('edit');
                 return $this->render('edit');
             }
