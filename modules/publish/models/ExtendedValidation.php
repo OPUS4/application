@@ -425,8 +425,9 @@ class Publish_Model_ExtendedValidation {
         $titles = array();
 
         foreach ($this->data as $key => $value) {
-            if (strstr($key, 'SubjectSwd') || strstr($key, 'SubjectUncontrolled') && !strstr($key, 'Language'))
-                $titles[$key] = $value;
+            if (strstr($key, 'SubjectSwd') || strstr($key, 'SubjectUncontrolled'))
+                    if (!strstr($key, 'Language'))
+                            $titles[$key] = $value;
         }
 
         return $titles;
