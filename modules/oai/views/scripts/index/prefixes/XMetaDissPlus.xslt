@@ -355,7 +355,7 @@
        </xsl:element>
     </xsl:template>
 
-    <xsl:template match="PersonReferee" mode="xmetadiss">
+    <xsl:template match="PersonReferee" mode="xmetadissplus">
        <xsl:element name="dc:contributor">
          <xsl:attribute name="xsi:type"><xsl:text>pc:Contributor</xsl:text></xsl:attribute>
          <xsl:attribute name="type"><xsl:text>dcterms:ISO3166</xsl:text></xsl:attribute>
