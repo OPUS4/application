@@ -60,7 +60,7 @@ fi
 
 echo "Clean database"
 cd ../../db
-sh ./createdb.sh
+./createdb.sh
 
 echo "Import institutes, collections and licenses"
 cd ../scripts/migration
