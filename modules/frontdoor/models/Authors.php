@@ -41,17 +41,23 @@ class Frontdoor_Model_Authors {
     private $document;
 
     /**
-     * @param int $docId
+     * @param $arg either an instance of Opus_Document or an int that is interpreted
+     * as a document ID
      * @throws Frontdoor_Model_Exception throws Frontdoor_Model_Exception if
      * no document with id $docId exists
      * or requested document exists but is not in server_state published
      */
-    public function __construct($docId) {
-        try {
-            $this->document = new Opus_Document($docId);
+    public function __construct($arg) {
+        if ($arg instanceof Opus_Document) {
+            $this->document = $arg;
         }
-        catch (Opus_Model_NotFoundException $e) {
-            throw new Frontdoor_Model_Exception('invalid value for parameter docId given', null, $e);
+        else {
+            try {
+                $this->document = new Opus_Document($arg);
+            }
+            catch (Opus_Model_NotFoundException $e) {
+                throw new Frontdoor_Model_Exception('invalid value for parameter docId given', null, $e);
+            }
         }
         
         if ($this->document->getServerState() !== 'published') {

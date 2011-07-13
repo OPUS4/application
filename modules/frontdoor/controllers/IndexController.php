@@ -119,14 +119,18 @@ class Frontdoor_IndexController extends Controller_Action {
         $proc->setParameter('', 'baseUrlServer', $this->getFullServerUrl());
         $proc->setParameter('', 'baseUrl', $baseUrl);
         $proc->setParameter('', 'layoutPath', $baseUrl . '/' . $layoutPath);
-        $proc->setParameter('', 'isMailPossible', $this->isMailPossible($docId));
+        $proc->setParameter('', 'isMailPossible', $this->isMailPossible($document));
         $this->view->frontdoor = $proc->transformToXML($documentNode);
 
         $this->incrementStatisticsCounter($docId);
     }
 
-    private function isMailPossible($docId) {
-        $authors = new Frontdoor_Model_Authors($docId);
+    /**
+     *
+     * @param Opus_Document $doc
+     */
+    private function isMailPossible($doc) {
+        $authors = new Frontdoor_Model_Authors($doc);
         return count($authors->getContactableAuthors()) > 0;
     }
 
