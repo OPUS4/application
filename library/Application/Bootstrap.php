@@ -65,8 +65,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
          * include path to the form classes of modules.
          */
         $moduleprepare = new Controller_Plugin_ModulePrepare(APPLICATION_PATH . '/modules');
-        $moduleprepare->appendClassPath('models')
-        ->appendClassPath('forms');
         $frontController->registerPlugin($moduleprepare);
 
         // Add security realm initialization

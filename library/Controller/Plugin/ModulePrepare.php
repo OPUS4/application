@@ -35,11 +35,10 @@
  */
 
 /**
- * Provides adding paths of helpers, forms, additional classes etc. for
- * controllers dynamicly. When registered as FrontController plugin it hooks into
- * dispatchLoopStartup().
+ * Loads languages from modules.  When registered as FrontController plugin
+ * it hooks into dispatchLoopStartup().
  *
- * TODO this plugin does several things, split up?
+ * TODO this plugin only initializes languages.  Rename?
  *
  * @category    Application
  * @package     Controller
@@ -54,30 +53,12 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
     protected $_path_to_modules = null;
 
     /**
-     * Contains all paths the plugin has been given on initialization.
-     *
-     * @var array
-     */
-    protected $_paths = array();
-
-    /**
      * Setup the plugin with directories to contain modules and special classes.
      *
      * @param string $module_path_name Name of the directory that contains application modules.
      */
     public function __construct($module_path_name) {
         $this->_path_to_modules = $module_path_name;
-    }
-
-    /**
-     * Append a class path. Forewards to _appendPath();
-     *
-     * @param string $cp     Path relative to model path that contains required classes.
-     * @return Opus_Controller_Plugin_ModulePrepare Returns the plugin itself for providing a fluent interface.
-     */
-    public function appendClassPath($cp) {
-        $this->_paths[] = $cp;
-        return $this;
     }
 
     /**
