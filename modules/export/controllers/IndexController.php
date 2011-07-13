@@ -101,7 +101,7 @@ class Export_IndexController extends Controller_Xml {
     }
 
     private function buildQuery() {
-        $queryBuilder = new Util_QueryBuilder(true);
+        $queryBuilder = new Util_QueryBuilder($this->log, true);
         $queryBuilderInput = array();
         try {
             $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($this->getRequest());

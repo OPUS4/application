@@ -35,7 +35,6 @@
 
 class Solrsearch_IndexController extends Controller_Action {
     
-    private $log;
     private $query;
     private $numOfHits;
     private $searchtype;
@@ -43,7 +42,6 @@ class Solrsearch_IndexController extends Controller_Action {
 
     public function  init() {
         parent::init();
-        $this->log = Zend_Registry::get('Zend_Log');
         $this->_helper->mainMenu('search');
     }
 
@@ -118,13 +116,13 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     private function performSearch() {
-        $this->log->debug('performing search');
+        $this->_logger->debug('performing search');
         try {
             $searcher = new Opus_SolrSearch_Searcher();
             $this->resultList = $searcher->search($this->query);
         }
         catch (Opus_SolrSearch_Exception $e) {
-            $this->log->err("Sorry, an internal server error occurred: " . $e);
+            $this->_logger->err("Sorry, an internal server error occurred: " . $e);
             throw new Application_Exception('Sorry, an internal server error occurred.');
         }
         $this->numOfHits = $this->resultList->getNumberOfHits();
@@ -207,7 +205,7 @@ class Solrsearch_IndexController extends Controller_Action {
         $selectedFacets = array();
 
         foreach($facets as $key=>$facet) {
-            $this->log->debug("found $key facet in search results");
+            $this->_logger->debug("found $key facet in search results");
 
             $facetValue = $this->getRequest()->getParam($key . 'fq','');
             if($facetValue !== '') {
@@ -224,13 +222,13 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     private function buildQuery() {
-        $queryBuilder = new Util_QueryBuilder();
+        $queryBuilder = new Util_QueryBuilder($this->_logger);
         $queryBuilderInput = array();
         try {
             $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($this->getRequest());
         }
         catch (Util_QueryBuilderException $e) {
-            $this->log->err(__METHOD__ . ' : ' . $e->getMessage());
+            $this->_logger->err(__METHOD__ . ' : ' . $e->getMessage());
             return $this->_redirectToAndExit('index');
         }
 
@@ -250,7 +248,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $collectionList = new Solrsearch_Model_CollectionList($this->getRequest()->getParam('id'));
         }
         catch (Solrsearch_Model_Exception $e) {
-            $this->log->debug($e->getMessage());
+            $this->_logger->debug($e->getMessage());
             return $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
         }
 
@@ -279,7 +277,7 @@ class Solrsearch_IndexController extends Controller_Action {
                 $this->_helper->layout->setLayoutPath($layoutPath);
             }
             else {
-                $this->log->debug("The requested theme '" . $collectionList->getTheme() . "' does not exist - use default theme instead.");
+                $this->_logger->debug("The requested theme '" . $collectionList->getTheme() . "' does not exist - use default theme instead.");
             }
         }
         return $collectionList->getCollectionId();
@@ -323,15 +321,15 @@ class Solrsearch_IndexController extends Controller_Action {
      */
     private function validateInput($input, $min = 1, $max = 100) {
         if ($input['rows'] > $max) {
-            $this->log->warn("Values greater than 100 are currently not allowed for the rows paramter.");
+            $this->_logger->warn("Values greater than 100 are currently not allowed for the rows paramter.");
             $input['rows'] = $max;
         }
         if ($input['rows'] < $min) {
-            $this->log->warn("rows parameter is smaller than 1: adjusting to 1.");
+            $this->_logger->warn("rows parameter is smaller than 1: adjusting to 1.");
             $input['rows'] = $min;
         }
         if ($input['start'] < 0) {
-            $this->log->warn("A negative start parameter is ignored.");
+            $this->_logger->warn("A negative start parameter is ignored.");
             $input['start'] = 0;
         }
         return $input;

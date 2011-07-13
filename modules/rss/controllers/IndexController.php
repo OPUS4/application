@@ -44,7 +44,7 @@ class Rss_IndexController extends Controller_Xml {
     }
 
     public function indexAction() {
-        $queryBuilder = new Util_QueryBuilder(true);
+        $queryBuilder = new Util_QueryBuilder($this->log, true);
         $params = array (
             'rows' => self::NUM_OF_ITEMS_PER_FEED,
             'searchtype' => Util_Searchtypes::LATEST_SEARCH,
