@@ -42,15 +42,20 @@ class Frontdoor_Model_Authors {
 
     /**
      * @param int $docId
-     * @throws Frontdoor_Model_Exception Throws Frontdoor_Model_Exception if
+     * @throws Frontdoor_Model_Exception throws Frontdoor_Model_Exception if
      * no document with id $docId exists
+     * or requested document exists but is not in server_state published
      */
     public function __construct($docId) {
         try {
             $this->document = new Opus_Document($docId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new Frontdoor_Model_Exception('invalid docId', null, $e);
+            throw new Frontdoor_Model_Exception('invalid value for parameter docId given', null, $e);
+        }
+        
+        if ($this->document->getServerState() !== 'published') {
+            throw new Frontdoor_Model_Exception('access to requested document is forbidden');
         }
     }
 

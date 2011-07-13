@@ -159,7 +159,7 @@ class Frontdoor_MailController extends Controller_Action {
             $authorsModel = new Frontdoor_Model_Authors($docId);
         }
         catch (Frontdoor_Model_Exception $e) {
-            throw new Application_Exception('invalid parameter value for docId', null, $e);
+            throw new Application_Exception($e->getMessage());
         }
 
         $authors = $authorsModel->getContactableAuthors();
