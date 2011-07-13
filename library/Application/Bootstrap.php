@@ -229,6 +229,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $logger->info('Set language to "' . $sessiondata->language . '".');
         $translate->setLocale($sessiondata->language);
         $this->translate = $translate;
+
+        return $translate;
     }
 
     /**
@@ -295,37 +297,16 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * @return void
      */
     protected function _initLanguageList() {
-        $this->bootstrap(array('Session', 'Logging', 'Translation', 'ZendCache', 'Backend'));
-
-        $sessiondata = $this->getResource('Session');
-        $logger = $this->getResource('Logging');
+        $this->bootstrap(array('Translation', 'Backend'));
+        $translate = $this->getResource('Translation');
 
         $languages = array();
-        try {
-            $availableLanguages = Opus_Language::getAllActive();
-
-            foreach ($availableLanguages as $availableLanguage) {
-                $trans = $availableLanguage->getPart1();
-                if (true === empty($trans)) {
-                    $languages[$availableLanguage->getPart2T()] = $availableLanguage->getPart2T();
-                } else {
-                    try {
-                        $locale = new Zend_Locale($sessiondata->language);
-                        $languages[$availableLanguage->getPart2T()] = $locale->getTranslation($trans, 'language', $locale);
-                    } catch (Zend_Locale_Exception $zle) {
-                        $logger->warn('Caught Zend_Locale_Exception while loading ' . $trans . ': ' . $zle->getMessage());
-                        $logger->warn('Ignoring language with ID ' . $availableLanguage->getId());
-                    }
-                }
-            }
-            Zend_Registry::set('Available_Languages', $languages);
+        foreach (Opus_Language::getAllActiveTable() as $languageRow) {
+            $part1 = $languageRow['part1'];
+            $part2_t = $languageRow['part2_t'];
+            $languages[$part2_t] = $translate->translate($part1);
         }
-        catch (Exception $ex) {
-            $message = 'Unknown error while initializing languages.';
-            $logger->err($message);
-            $logger->err($ex);
-            throw new Exception('Opus: ' . $message);
-        }
+        Zend_Registry::set('Available_Languages', $languages);
     }
 
     /**
