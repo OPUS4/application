@@ -39,6 +39,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
     private $author2Id;
     private $author3Id;
     private $author4Id;
+    private $unpublishedDocumentId;
 
     public function setUp() {
         parent::setUp();
@@ -98,6 +99,11 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
 
         $this->assertNotNull($this->author4Id);
         $this->assertNotEquals('', $this->author4Id);
+
+        $document = new Opus_Document();
+        $document->setServerState('unpublished');
+        $this->unpublishedDocumentId = $document->store();
+        $this->assertNotNull($this->unpublishedDocumentId);
     }
 
     public function tearDown() {
@@ -115,6 +121,9 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
 
         $person = new Opus_Person($this->author4Id);
         $person->delete();
+
+        $document = new Opus_Document($this->unpublishedDocumentId);
+        $document->deletePermanent();
         
         parent::tearDown();
     }
@@ -183,6 +192,16 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
         $this->assertEquals('Doe, John', $addresses[0]['name']);
         $this->assertEquals('foo@bar.de', $addresses[1]['address']);
         $this->assertEquals('Bar, Foo', $addresses[1]['name']);
+    }
+
+    public function testUnpublishedDocument() {
+        $this->setExpectedException('Frontdoor_Model_Exception', 'access to requested document is forbidden');
+        new Frontdoor_Model_Authors($this->unpublishedDocumentId);
+    }
+
+    public function testUnknownDocument() {
+        $this->setExpectedException('Frontdoor_Model_Exception', 'invalid value for parameter docId given');
+        new Frontdoor_Model_Authors('foo');
     }
 }
 ?>
