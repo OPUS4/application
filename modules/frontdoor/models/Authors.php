@@ -59,8 +59,13 @@ class Frontdoor_Model_Authors {
                 throw new Frontdoor_Model_Exception('invalid value for parameter docId given', null, $e);
             }
         }
-        
-        if ($this->document->getServerState() !== 'published') {
+
+        // check if document access is allowed
+        // TODO document access check will be refactored in later releases
+        try {
+            new Util_Document($this->document);
+        }
+        catch (Application_Exception $e) {
             throw new Frontdoor_Model_Exception('access to requested document is forbidden');
         }
     }
