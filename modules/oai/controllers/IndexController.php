@@ -93,7 +93,8 @@ class Oai_IndexController extends Controller_Xml {
 
         try {
             $this->__handleRequest($oaiRequest);
-        } catch (Exception $e) {
+        }
+        catch (Oai_Model_Exception $e) {
             switch ($e->getCode()) {
                 case Oai_Model_Error::BADVERB:
                     $errorCode = 'badVerb';
@@ -118,6 +119,18 @@ class Oai_IndexController extends Controller_Xml {
             Zend_Registry::get('Zend_Log')->err($e->getMessage());
             $this->_proc->setParameter('', 'oai_error_message', htmlentities($e->getMessage()));
         }
+        catch (Oai_Model_ResumptionTokenException $e) {
+            Zend_Registry::get('Zend_Log')->err($e);
+            $this->_proc->setParameter('', 'oai_error_code', 'unknown');
+            $this->_proc->setParameter('', 'oai_error_message', 'An error occured while processing the resumption token.');
+            $this->getResponse()->setHttpResponseCode(500);
+        }
+        catch (Exception $e) {
+            Zend_Registry::get('Zend_Log')->err($e);
+            $this->_proc->setParameter('', 'oai_error_code', 'unknown');
+            $this->_proc->setParameter('', 'oai_error_message', 'An internal error occured.');
+            $this->getResponse()->setHttpResponseCode(500);
+        }
     }
 
     private function getOaiBaseUrl() {
@@ -140,7 +153,7 @@ class Oai_IndexController extends Controller_Xml {
      * Handles an OAI request.
      *
      * @param  array  $oaiRequest Contains full request information
-     * @throws Exception Thrown if the request could not be handled.
+     * @throws Oai_Model_Exception Thrown if the request could not be handled.
      * @return void
      */
     private function __handleRequest(array $oaiRequest) {
@@ -161,7 +174,7 @@ class Oai_IndexController extends Controller_Xml {
         $request->setResumptionPath($resumptionPath);
 
         if (true !== $request->validate($oaiRequest)) {
-            throw new Exception($request->getErrorMessage(), $request->getErrorCode());
+            throw new Oai_Model_Exception($request->getErrorMessage(), $request->getErrorCode());
         }
 
         foreach ($oaiRequest as $parameter => $value) {
@@ -216,12 +229,12 @@ class Oai_IndexController extends Controller_Xml {
         try {
             $document = new Opus_Document($docId);
         } catch (Exception $ex) {
-            throw new Exception('The value of the identifier argument is unknown or illegal in this repository.', Oai_Model_Error::BADARGUMENT);
+            throw new Oai_Model_Exception('The value of the identifier argument is unknown or illegal in this repository.', Oai_Model_Error::BADARGUMENT);
         }
 
         // do not deliver documents which are restricted by document state
         if (is_null($document) or false === in_array($document->getServerState(), $this->_deliveringDocumentStates)) {
-            throw new Exception('Document is not available for OAI export!', Oai_Model_Error::NORECORDSMATCH);
+            throw new Oai_Model_Exception('Document is not available for OAI export!', Oai_Model_Error::NORECORDSMATCH);
         }
 
         // for xMetaDiss it must be habilitation-thesis or doctoral-thesis
@@ -229,7 +242,7 @@ class Oai_IndexController extends Controller_Xml {
             $type = $document->getType();
             $isHabOrDoc = in_array($type, $this->_xMetaDissRestriction);
             if (false === $isHabOrDoc) {
-               throw new Exception("The combination of the given values results in an empty list (xMetaDiss only for habilitation and doctoralthesis).", Oai_Model_Error::NORECORDSMATCH);
+               throw new Oai_Model_Exception("The combination of the given values results in an empty list (xMetaDiss only for habilitation and doctoralthesis).", Oai_Model_Error::NORECORDSMATCH);
             }
         }
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
@@ -547,7 +560,7 @@ class Oai_IndexController extends Controller_Xml {
             $token = $tokenWorker->getResumptionToken($resParam);
 
             if (true === is_null($token)) {
-                throw new Exception("file could not be read.", Oai_Model_Error::BADRESUMPTIONTOKEN);
+                throw new Oai_Model_Exception("file could not be read.", Oai_Model_Error::BADRESUMPTIONTOKEN);
             }
 
             $cursor = $token->getStartPosition() - 1;
@@ -572,7 +585,7 @@ class Oai_IndexController extends Controller_Xml {
 
         // no records returned
         if (true === empty($workIds)) {
-            throw new Exception("The combination of the given values results in an empty list.", Oai_Model_Error::NORECORDSMATCH);
+            throw new Oai_Model_Exception("The combination of the given values results in an empty list.", Oai_Model_Error::NORECORDSMATCH);
         }
 
         // store the further Ids in a resumption-file
