@@ -158,23 +158,19 @@ class Oai_Model_Resumptiontokens {
     /**
      * Set resumption path where the resumption token files are stored.
      *
-     * @throws Exception Thrown if directory operations failed.
+     * @throws Oai_Model_ResumptionTokenException Thrown if directory operations failed.
      * @return void
      */
     public function setResumptionPath($resPath) {
-        if (true === empty($resPath)) {
-            throw new InvalidArgumentException('Path for resumption is empty. Non-empty value expected.');
-        }
-
         // expanding all symbolic links and resolving references
         $realPath = realpath($resPath);
 
-        if (false === is_dir($realPath)) {
-            throw new Exception('Given resumption path "' . $resPath . '" (real path: "' . $realPath . '") is not a directory.');
+        if (empty($realPath) or false === is_dir($realPath)) {
+            throw new Oai_Model_ResumptionTokenException('Given resumption path "' . $resPath . '" (real path: "' . $realPath . '") is not a directory.');
         }
 
         if (false === is_writable($realPath)) {
-            throw new Exception('Given resumption path "' . $resPath . '" (real path: "' . $realPath . '") is not writeable.');
+            throw new Oai_Model_ResumptionTokenException('Given resumption path "' . $resPath . '" (real path: "' . $realPath . '") is not writeable.');
         }
 
         $this->_resumptionPath = $realPath;
@@ -184,7 +180,7 @@ class Oai_Model_Resumptiontokens {
      * Store a resumption token
      *
      * @param Oai_Model_Resumptiontoken $token Token to store.
-     * @throws Exception Thrown on file operation error.
+     * @throws Oai_Model_ResumptionTokenException Thrown on file operation error.
      * @return void
      */
     public function storeResumptionToken(Oai_Model_Resumptiontoken $token) {
@@ -193,17 +189,17 @@ class Oai_Model_Resumptiontokens {
 
         $file = fopen($fileName, 'w+');
         if (false === $file) {
-            throw new Exception('Could not open file "' . $fileName . '" for writing!');
+            throw new Oai_Model_ResumptionTokenException('Could not open file "' . $fileName . '" for writing!');
         }
 
         $serialToken = serialize($token);
 
         if (false === fwrite($file, $serialToken)) {
-            throw new Exception('Could not write file "' . $fileName . '"!');
+            throw new Oai_Model_ResumptionTokenException('Could not write file "' . $fileName . '"!');
         }
 
         if (false === fclose($file)) {
-            throw new Exception('Could not close file "' . $fileName . '"!');
+            throw new Oai_Model_ResumptionTokenException('Could not close file "' . $fileName . '"!');
         }
 
         $token->setResumptionId($this->_resumptionId);
