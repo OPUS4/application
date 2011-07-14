@@ -605,52 +605,34 @@ class Oai_IndexController extends Controller_Xml {
      * @return array
      */
     private function getDocumentIdsByOaiRequest(array &$oaiRequest) {
-        $result = array();
+        $finder = new Opus_DocumentFinder();
 
-        $restriction = array();
-        $restriction['ServerState'] = $this->_deliveringDocumentStates;
+        // add server state restrictions
+        $finder->setServerStateInList($this->_deliveringDocumentStates);
 
-        $setInfo = null;
-        if (true === array_key_exists('set', $oaiRequest)) {
+        $metadataPrefix = $oaiRequest['metadataPrefix'];
+        if ('xMetaDiss' === $metadataPrefix or 'XMetaDissPlus' === $metadataPrefix) {
+            $finder->setTypeInList($this->_xMetaDissRestriction);
+        }
+
+        if (array_key_exists('set', $oaiRequest)) {
             $setarray = explode(':', $oaiRequest['set']);
-            $setInfo = $setarray[1];
-        }
-
-        $restriction['Type'] = array();
-        if (('xMetaDiss' === $oaiRequest['metadataPrefix']) or
-            ('xmetadissfis' === $oaiRequest['metadataPrefix'])) {
-            $restriction['Type'] = $this->_xMetaDissRestriction;
-            // if we have xMetaDiss as metadataPrefix format
-            // then we could not accept sets with other values than above
-            if (false === empty($setInfo)) {
-                if (false === in_array($setInfo, $restriction['Type'])) {
-                    throw new Exception("The combination of the given values results in an empty list.", Oai_Model_Error::NORECORDSMATCH);
-                }
-                $restriction['Type'] = array($setInfo);
-            }
-        } else {
-            if (false === empty($setInfo)) {
-                $restriction['Type'][] = $setInfo;
+            if (!empty($setarray[1])) {
+                $finder->setType($setarray[1]);
             }
         }
 
-        $fromDate = null;
-        if (true === array_key_exists('from', $oaiRequest)) {
-            $fromDate = $oaiRequest['from'];
+        if (array_key_exists('from', $oaiRequest) and !empty($oaiRequest['from'])) {
+            $from = DateTime::createFromFormat('Y-m-d', $oaiRequest['from']);
+            $finder->setServerDateModifiedAfter($from->format('Y-m-d'));
         }
 
-        $untilDate = null;
-        if (true === array_key_exists('until', $oaiRequest)) {
-            $untilDate = $oaiRequest['until'];
+        if (array_key_exists('until', $oaiRequest)) {
+            $until = DateTime::createFromFormat('Y-m-d', $oaiRequest['until']);
+            $until->add(new DateInterval('P1D'));
+            $finder->setServerDateModifiedBefore($until->format('Y-m-d'));
         }
 
-        $restriction['Date'] = array(
-            'from' => $fromDate,
-            'until' => $untilDate,
-            'dateFormat' => 'yyyy-MM-dd'
-            );
-
-        $result = Opus_Document::getIdsOfOaiRequest($restriction);
-        return $result;
+        return $finder->ids();
     }
 }

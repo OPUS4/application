@@ -163,6 +163,64 @@ class Oai_IndexControllerTest extends ControllerTestCase {
            "Response must contain '<record>'");
     }
 
-}
+    /**
+     * Test verb=ListRecords, metadataPrefix=XMetaDissPlus, different intervals
+     * list possible intervals containing "2010-06-05"
+     */
+    public function testListRecordsFromUntilDateWithDoc3() {
+        $interval_strings = array(
+            '',
+            '&from=2010-06-04',
+            '&until=2010-06-04',
+            '&from=2010-06-03',
+            '&until=2010-06-05',
+            '&from=2010-06-04&until=2010-06-04',
+            '&from=2010-06-03&until=2010-06-04',
+            '&from=2010-06-04&until=2010-06-05',
+            '&from=2010-06-03&until=2010-06-04',
+        );
 
-?>
+        foreach ($interval_strings AS $interval_string) {
+            $this->dispatch('/oai?verb=ListRecords&metadataPrefix=XMetaDissPlus'.$interval_string);
+            $this->assertResponseCode(200);
+
+            $response = $this->getResponse();
+            $badStrings = array("Exception", "Stacktrace", "badVerb");
+            $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+            $this->assertContains('<ListRecords>', $response->getBody(),
+               "Response for $interval_string must contain '<ListRecords>'");
+            $this->assertContains('<record>', $response->getBody(),
+               "Response for $interval_string must contain '<record>'");
+            $this->assertContains(':3</identifier>', $response->getBody(),
+               "Response for $interval_string must contain '<record>'");
+        }
+    }
+
+    /**
+     * Test verb=ListRecords, metadataPrefix=XMetaDissPlus, different intervals
+     * list possible intervals *NOT* containing "2010-06-05"
+     */
+    public function testListRecordsFromUntilDateWithoutDoc3() {
+        $interval_strings = array(
+            '&from=2010-06-05',
+            '&until=2010-06-03',
+            '&from=2010-06-05&until=2010-06-06',
+            '&from=2010-06-02&until=2010-06-03',
+        );
+
+        foreach ($interval_strings AS $interval_string) {
+            $this->dispatch('/oai?verb=ListRecords&metadataPrefix=XMetaDissPlus'.$interval_string);
+            $this->assertResponseCode(200);
+
+            $response = $this->getResponse();
+            $badStrings = array("Exception", "Stacktrace", "badVerb");
+            $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+            $this->assertNotContains(':3</identifier>', $response->getBody(),
+               "Response for $interval_string must contain '<record>'");
+        }
+    }
+
+
+}
