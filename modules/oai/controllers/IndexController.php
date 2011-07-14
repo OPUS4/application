@@ -165,7 +165,7 @@ class Oai_IndexController extends Controller_Xml {
         }
 
         foreach ($oaiRequest as $parameter => $value) {
-            Zend_Registry::get('Zend_Log')->err("'oai_' . $parameter, $value");
+            Zend_Registry::get('Zend_Log')->debug("'oai_' . $parameter, $value");
             $this->_proc->setParameter('', 'oai_' . $parameter, $value);
         }
 
