@@ -1,8 +1,7 @@
 <?php
-include ("jpgraph/jpgraph.php");
-include ("jpgraph/jpgraph_bar.php");
+include_once ("jpgraph/jpgraph.php");
+include_once ("jpgraph/jpgraph_bar.php");
 
-//TODO change comment
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
