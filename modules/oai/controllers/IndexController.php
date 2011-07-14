@@ -153,51 +153,51 @@ class Oai_IndexController extends Controller_Xml {
         // set OAI base url
         $this->_proc->setParameter('', 'oai_base_url', $this->getOaiBaseUrl());
 
-            $metadataPrefixPath = $this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . 'prefixes';
-            $resumptionPath = $this->_configuration->getResumptionTokenPath();
+        $metadataPrefixPath = $this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . 'prefixes';
+        $resumptionPath = $this->_configuration->getResumptionTokenPath();
 
-            $request = new Oai_Model_Request();
-            $request->setPathToMetadataPrefixFiles($metadataPrefixPath);
-            $request->setResumptionPath($resumptionPath);
+        $request = new Oai_Model_Request();
+        $request->setPathToMetadataPrefixFiles($metadataPrefixPath);
+        $request->setResumptionPath($resumptionPath);
 
-            if (true !== $request->validate($oaiRequest)) {
-                throw new Exception($request->getErrorMessage(), $request->getErrorCode());
-            }
+        if (true !== $request->validate($oaiRequest)) {
+            throw new Exception($request->getErrorMessage(), $request->getErrorCode());
+        }
 
-                foreach ($oaiRequest as $parameter => $value) {
-                    Zend_Registry::get('Zend_Log')->err("'oai_' . $parameter, $value");
-                    $this->_proc->setParameter('', 'oai_' . $parameter, $value);
-                }
+        foreach ($oaiRequest as $parameter => $value) {
+            Zend_Registry::get('Zend_Log')->err("'oai_' . $parameter, $value");
+            $this->_proc->setParameter('', 'oai_' . $parameter, $value);
+        }
 
-                switch ($oaiRequest['verb']) {
-                    case 'GetRecord':
-                        $this->__handleGetRecord($oaiRequest);
-                        break;
+        switch ($oaiRequest['verb']) {
+            case 'GetRecord':
+                $this->__handleGetRecord($oaiRequest);
+                break;
 
-                    case 'Identify':
-                        $this->__handleIdentify($oaiRequest);
-                        break;
+            case 'Identify':
+                $this->__handleIdentify($oaiRequest);
+                break;
 
-                    case 'ListIdentifiers':
-                        $this->__handleListIdentifiers($oaiRequest);
-                        break;
+            case 'ListIdentifiers':
+                $this->__handleListIdentifiers($oaiRequest);
+                break;
 
-                    case 'ListMetadataFormats':
-                        $this->__handleListMetadataFormats($oaiRequest);
-                        break;
+            case 'ListMetadataFormats':
+                $this->__handleListMetadataFormats($oaiRequest);
+                break;
 
-                    case 'ListRecords':
-                        $this->__handleListRecords($oaiRequest);
-                        break;
+            case 'ListRecords':
+                $this->__handleListRecords($oaiRequest);
+                break;
 
-                    case 'ListSets':
-                        $this->__handleListSets($oaiRequest);
-                        break;
+            case 'ListSets':
+                $this->__handleListSets($oaiRequest);
+                break;
 
-                    default:
-                        throw new Exception('The verb provided in the request is illegal.', Oai_Model_Error::BADVERB);
-                        break;
-                }
+            default:
+                throw new Exception('The verb provided in the request is illegal.', Oai_Model_Error::BADVERB);
+                break;
+        }
     }
 
     /**
