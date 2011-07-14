@@ -34,6 +34,7 @@
 class Publish_Model_FormElement {
 
     public $session;
+    public $session2;
     public $form;
     public $log;
     public $additionalFields = array();
@@ -64,7 +65,8 @@ class Publish_Model_FormElement {
     const NR = "Number";
 
     public function __construct($form, $name = null, $required = null, $formElement = null, $datatype = null, $multiplicity = null) {
-        $this->session = new Zend_Session_Namespace();
+        $this->session = new Zend_Session_Namespace('Publish');
+        $this->session2 = new Zend_Session_Namespace();
         $this->log = Zend_Registry::get('Zend_Log');
         $this->form = $form;
 
@@ -306,7 +308,8 @@ class Publish_Model_FormElement {
                 $this->log->debug("Value set to default for " . $this->elementName . " => " . $this->default[0]['value']);
             }
 
-            if (isset($this->default[0]['edit']) && $this->default[0]['edit'] === 'no') {
+            if (isset($this->default[0]['edit']) && $this->default[0]['edit'] === 'no') {                
+                $this->session->disabled[$this->elementName] = $element->getValue();
                 $element->setAttrib('disabled', true);
                 $element->setRequired(false);
             }
@@ -435,7 +438,7 @@ class Publish_Model_FormElement {
 
                 //Date Field has be set to current date
                 if ($defaultValue['value'] === 'today') {
-                    if ($this->session->language === 'de')
+                    if ($this->session2->language === 'de')
                         $defaultValue['value'] = date('d.m.Y');
                     else
                         $defaultValue['value'] = date('Y/m/d');

@@ -266,10 +266,10 @@
 
     <tu tuid="hint_Licence">
         <tuv xml:lang="en">
-            <seg>Please choose the licence(s) for the document.</seg>
+            <seg>Please choose the licence(s) for the document. By choosing a license you decide which legal conditions will apply to the document you are publishing.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Bitte wählen Sie hier die Lizenz(en) für Ihr Dokument aus.</seg>
+            <seg>Bitte wählen Sie hier die Lizenz(en) für Ihr Dokument aus. Mit der Wahl der Lizenz entscheiden Sie, unter welchen Bedingungen das von Ihnen veröffentlichte Dokument zukünftig genutzt werden darf.</seg>
         </tuv>
     </tu>
 

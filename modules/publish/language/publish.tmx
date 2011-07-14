@@ -79,6 +79,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="publish_controller_check_noneditableElements">
+      <tuv xml:lang="en">
+        <seg>Form data with fixed values:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Formulardaten mit festen Werten:</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="publish_controller_changes">
       <tuv xml:lang="en">
         <seg>Make changes</seg>

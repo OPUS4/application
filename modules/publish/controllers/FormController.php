@@ -147,7 +147,6 @@ class Publish_FormController extends Controller_Action {
             $postData = $this->getRequest()->getPost();
 
             if (array_key_exists('abort', $postData)) {
-
                 $this->document = new Opus_Document($this->session->documentId);
                 $this->document->deletePermanent();
                 return $this->_redirectTo('index', '', 'index');

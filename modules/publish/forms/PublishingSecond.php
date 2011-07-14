@@ -191,15 +191,17 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     public function prepareCheck() {
         $session = new Zend_Session_Namespace('Publish');
         $session->elements = array();
+        $session->depositForm = $this;             
 
-        $session->depositForm = $this;
-
+        //iterate over form elements
         foreach ($this->getElements() as $element) {
             $name = $element->getName();
+            
             if ($element->getValue() == ""
                     || $element->getType() == "Zend_Form_Element_Submit"
                     || $element->getType() == "Zend_Form_Element_Hidden"
                     || $element->getValue() == '___EMPTY') {
+               
                 $element->removeDecorator('Label');
                 $this->removeElement($name);
             }
@@ -210,6 +212,16 @@ class Publish_Form_PublishingSecond extends Zend_Form {
                 $element->removeDecorator('Label');                
             }
         }
+
+        //iterate over disabled elements that were not transmitted with form
+        if (isset($this->session->disabled) && !is_null($this->session->disabled)) {            
+            foreach ($this->session->disabled as $key => $value) {
+                $session->elements[$key]['name'] = $key;
+                $session->elements[$key]['value'] = $value;
+                $session->elements[$key]['label'] = $key;
+            }
+        }
+        
         $this->_addSubmit('button_label_back', 'back');
         $this->_addSubmit('button_label_collection', 'collection');
         $this->_addSubmit('button_label_send2', 'send');

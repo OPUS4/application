@@ -86,6 +86,7 @@ class Publish_IndexController extends Controller_Action {
         $this->session->countCollections = 1;
         $this->session->collectionHistory = array();
         $this->session->endOfCollectionTree = array();
+        $this->session->disabled = array();
     }
 
 }

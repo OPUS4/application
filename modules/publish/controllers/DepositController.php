@@ -156,8 +156,10 @@ class Publish_DepositController extends Controller_Action {
 
         if (true === Opus_Security_Realm::getInstance()->check('clearance')) {
             $this->view->showFrontdoor = true;
-        }
-
+        }        
+        //unset all possible session content
+        $this->session->unsetAll();
+        
         return;
     }
 
