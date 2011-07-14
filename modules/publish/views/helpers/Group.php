@@ -257,7 +257,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
      * @return <type> 
      */
     protected function _getRequiredSign() {
-        return "<span class='required' title='" . $this->view->translate('publish_controller_required_hint_sort') . "'>*</span>";
+        return "<span class='required' title='" . $this->view->translate('required_star_title') . "'>*</span>";
     }
 
     /**
