@@ -168,8 +168,35 @@ class Oai_IndexController extends Controller_Xml {
                     $this->_proc->setParameter('', 'oai_' . $parameter, $value);
                 }
 
-                $callname = '__handle' . $oaiRequest['verb'];
-                $this->$callname($oaiRequest);
+                switch ($oaiRequest['verb']) {
+                    case 'GetRecord':
+                        $this->__handleGetRecord($oaiRequest);
+                        break;
+
+                    case 'Identify':
+                        $this->__handleIdentify($oaiRequest);
+                        break;
+
+                    case 'ListIdentifiers':
+                        $this->__handleListIdentifiers($oaiRequest);
+                        break;
+
+                    case 'ListMetadataFormats':
+                        $this->__handleListMetadataFormats($oaiRequest);
+                        break;
+
+                    case 'ListRecords':
+                        $this->__handleListRecords($oaiRequest);
+                        break;
+
+                    case 'ListSets':
+                        $this->__handleListSets($oaiRequest);
+                        break;
+
+                    default:
+                        throw new Exception('The verb provided in the request is illegal.', Oai_Model_Error::BADVERB);
+                        break;
+                }
             } else {
                 throw new Exception($request->getErrorMessage(), $request->getErrorCode());
             }
