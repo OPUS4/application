@@ -39,7 +39,7 @@
 
 <h2><?= $this->title ?></h2>
 <div class="content">
-<h3 class="document-type" title="Dokumententyp"><?= $this->subtitle?></h3>
+<h3 class="document-type" title="<?= $this->translate('selecttype'); ?>"><?= $this->subtitle?></h3>
 
 <?php if (isset($this->errorCaseMessage)) : ?>
     <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
@@ -71,7 +71,7 @@
             <?= $this->element($this->PageLast); ?>
             <?= $this->element($this->Volume); ?>
             <?= $this->element($this->Issue); ?>
-			<?= $this->element($this->Edition); ?>
+	    <?= $this->element($this->Edition); ?>
             <?= $this->group($this->groupInstitute); ?>
             <?= $this->element($this->PublishedYear); ?>
             <?= $this->element($this->PublishedDate); ?>

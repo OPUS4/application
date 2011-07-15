@@ -39,7 +39,7 @@
 
 <h2><?= $this->title ?></h2>
 <div class="content">
-<h3 class="document-type" title="Dokumententyp"><?= $this->subtitle?></h3>
+<h3 class="document-type" title="<?= $this->translate('selecttype'); ?>"><?= $this->subtitle?></h3>
 
 <?php if (isset($this->errorCaseMessage)) : ?>
     <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
