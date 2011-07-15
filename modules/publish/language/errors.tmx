@@ -35,6 +35,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="publish_error_TitleInDocumentLanguageIsRequired">
+        <tuv xml:lang="en">
+            <seg>Please enter here a text of the choosen publication language.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte geben Sie hier Text in der gewählten Dokumentsprache ein.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="publish_error_noEmailButNotification">
         <tuv xml:lang="en">
             <seg>Please fill in a email or delete the checkbox.</seg>

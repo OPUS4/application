@@ -213,6 +213,9 @@ class Publish_Model_ExtendedValidation {
         //3) validate titles per language
         $validate3 = $this->_validateTitlesPerLanguage();
 
+        //4) validate usage of document language for titles
+        $validate4 = $this->_validateDocumentLanguageForTitles();
+
         $validTitles = $validate1 && $validate2 && $validate3;
 
         return $validTitles;
@@ -306,7 +309,7 @@ class Publish_Model_ExtendedValidation {
         foreach ($titles as $key => $title) {
             $this->log->debug("(Validation): Title: " . $key . " with value " . $title);
             if ($title !== "") {
-                //if $name is set and not null, find the corresponding lastname
+                //if $title is set and not null, find the corresponding language
                 $lastChar = substr($key, -1, 1);
                 if ((int) $lastChar >= 1) {
                     $titleType = substr($key, 0, strlen($key) - 1);
@@ -339,6 +342,58 @@ class Publish_Model_ExtendedValidation {
                 }
             }
         }
+        return $validTitles;
+    }
+
+    /**
+     * Methods checks if the user entered a title in the specified document language (this is needed for Solr)
+     * @return boolean
+     */
+    private function _validateDocumentLanguageForTitles() {
+        $validTitles = true;
+        $titles = $this->_getTitleFields();
+        if (array_key_exists('Language', $this->data) && $this->data['Language'] !== "")
+            $docLanguage = $this->data['Language'];
+        else
+            return true;
+
+        $titlesWithDocLanguage = array();
+
+        foreach ($titles as $key => $title) {
+            $this->log->debug("(Validation): Title: " . $key . " with value " . $title);
+            if ($title !== "") {
+                //if $title is set and not null, find the corresponding language
+                $lastChar = substr($key, -1, 1);
+                if ((int) $lastChar >= 1) {
+                    $titleType = substr($key, 0, strlen($key) - 1); //z.B. TitleMain
+                    $languageKey = substr($key, 0, strlen($key) - 1) . 'Language' . $lastChar;
+                }
+                else {
+                    $titleType = $key;
+                    $languageKey = $key . 'Language';
+                }
+
+                if (!array_key_exists($titleType, $titlesWithDocLanguage))
+                    $titlesWithDocLanguage[$titleType] = 0; // 0 means no doc language
+
+                    if ($this->data[$languageKey] != "" && $this->data[$languageKey] == $docLanguage) {
+                    $titlesWithDocLanguage[$titleType] = $titlesWithDocLanguage[$titleType] + 1;
+                }
+            }
+        }
+
+        foreach ($titlesWithDocLanguage as $titleType => $counter) {
+            if ($counter == 0) {
+                if (array_key_exists($titleType . '1', $this->data))
+                    $element = $this->form->getElement($titleType . '1');
+                else
+                    $element = $this->form->getElement($titleType);
+                $element->clearErrorMessages();
+                $element->addError('publish_error_TitleInDocumentLanguageIsRequired');
+                $validTitles = false;
+            }
+        }
+
         return $validTitles;
     }
 
@@ -426,8 +481,8 @@ class Publish_Model_ExtendedValidation {
 
         foreach ($this->data as $key => $value) {
             if (strstr($key, 'SubjectSwd') || strstr($key, 'SubjectUncontrolled'))
-                    if (!strstr($key, 'Language'))
-                            $titles[$key] = $value;
+                if (!strstr($key, 'Language'))
+                    $titles[$key] = $value;
         }
 
         return $titles;
