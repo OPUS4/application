@@ -37,11 +37,13 @@ class Publish_Model_Deposit {
     public $documentData;
     public $log;
     public $session;
+    public $session2;
 
     public function __construct($documentData = null) {
 
         $this->log = Zend_Registry::get('Zend_Log');
         $this->session = new Zend_Session_Namespace('Publish');
+        $this->session2 = new Zend_Session_Namespace();
         $this->document = new Opus_Document($this->session->documentId);
         $this->documentData = $documentData;
 
@@ -71,12 +73,19 @@ class Publish_Model_Deposit {
             }
             else {
                 $this->log->debug("wanna store something else...");
+
+                if (strstr($dataKey, 'Date')) {
+                    if (!is_null($dataValue) and $dataValue !== "")
+                        $dataValue = $this->_castStringToOpusDate($dataValue);
+                }
+
                 if ($this->document->hasMultipleValueField($dataKey)) {
 
                     if ($dataKey === 'Language') {
                         $file = $this->document->getFile();
                         $file->setLanguage($dataValue);
                     }
+
                     // store an external field with adder
                     $function = "add" . $dataKey;
                     $this->log->debug("external field with adder function: " . $function);
@@ -85,6 +94,7 @@ class Publish_Model_Deposit {
                     $this->log->debug("with value: " . $dataValue);
                 }
                 else {
+
                     //store an internal field with setter
                     $function = "set" . $dataKey;
                     $this->log->debug("internal field with setter function: " . $function);
@@ -160,6 +170,14 @@ class Publish_Model_Deposit {
     }
 
     /**
+     * @param String $date
+     * @return Opus_Date
+     */
+    private function _castStringToOpusDate($date) {
+        return new Opus_Date(new Zend_Date($date));
+    }
+
+    /**
      * Methode to prepare a person object for saving in database.
      * @param <type> $dataKey
      * @param <type> $dataValue
@@ -206,42 +224,45 @@ class Publish_Model_Deposit {
         else {
             $index = $personType . $attribute;
         }
-        $entry = $this->documentData[$index];
-        if ($entry !== "") {
-            switch ($attributeType) {
-                case 'first' :
-                    $this->log->debug("First name: " . $entry);
-                    $person->setFirstName($entry);
-                    break;
-                case 'last' :
-                    $this->log->debug("Last name: " . $entry);
-                    $person->setLastName($entry);
-                    break;
-                case 'email' :
-                    $this->log->debug("Email: " . $entry);
-                    $person->setEmail($entry);
-                    break;
-                case 'pob' :
-                    $this->log->debug("Place of Birth: " . $entry);
-                    $person->setPlaceOfBirth($entry);
-                    break;
-                case 'title' :
-                    $this->log->debug("Academic Title: " . $entry);
-                    $person->setAcademicTitle($entry);
-                    break;
-                case 'dob' :
-                    $this->log->debug("Date of Birth: " . $entry);
-                    $person->setDateOfBirth($entry);
-                    break;
-                case 'check' :
-                    $this->log->debug("Allow Email Contact?: " . $entry);
-                    if (is_null($entry))
-                        $entry = 0;
-                    $person->setAllowEmailContact($entry);
-                    break;
-            }
+        if (array_key_exists($index, $this->documentData)) {
+            $entry = $this->documentData[$index];
+            if ($entry !== "") {
+                switch ($attributeType) {
+                    case 'first' :
+                        $this->log->debug("First name: " . $entry);
+                        $person->setFirstName($entry);
+                        break;
+                    case 'last' :
+                        $this->log->debug("Last name: " . $entry);
+                        $person->setLastName($entry);
+                        break;
+                    case 'email' :
+                        $this->log->debug("Email: " . $entry);
+                        $person->setEmail($entry);
+                        break;
+                    case 'pob' :
+                        $this->log->debug("Place of Birth: " . $entry);
+                        $person->setPlaceOfBirth($entry);
+                        break;
+                    case 'title' :
+                        $this->log->debug("Academic Title: " . $entry);
+                        $person->setAcademicTitle($entry);
+                        break;
+                    case 'dob' :
+                        $entry = $this->_castStringToOpusDate($entry);
+                        $this->log->debug("Date of Birth: " . $entry);
+                        $person->setDateOfBirth($entry);
+                        break;
+                    case 'check' :
+                        $this->log->debug("Allow Email Contact?: " . $entry);
+                        if (is_null($entry))
+                            $entry = 0;
+                        $person->setAllowEmailContact($entry);
+                        break;
+                }
 
-            $this->documentData[$index] = "";
+                $this->documentData[$index] = "";
+            }
         }
     }
 
