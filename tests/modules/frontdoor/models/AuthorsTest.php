@@ -195,6 +195,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
     }
 
     public function testUnpublishedDocumentID() {
+        $this->markTestIncomplete('TODO: ensure that this method is called with guest privileges');
         $this->setExpectedException('Frontdoor_Model_Exception', 'access to requested document is forbidden');
         new Frontdoor_Model_Authors($this->unpublishedDocumentId);
     }
@@ -211,6 +212,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
     }
 
     public function testUnpublishedDocument() {
+        $this->markTestIncomplete('TODO: ensure that this method is called with guest privileges');
         $doc = new Opus_Document($this->unpublishedDocumentId);
         $this->setExpectedException('Frontdoor_Model_Exception', 'access to requested document is forbidden');
         new Frontdoor_Model_Authors($doc);
