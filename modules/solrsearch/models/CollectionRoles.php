@@ -79,12 +79,17 @@ class Solrsearch_Model_CollectionRoles {
         if (is_null($rootCollection)) {
             return false;
         }
-        return count($rootCollection->getPublishedDocumentIds()) > 0;
+        $publishedDocIDs = $rootCollection->getPublishedDocumentIds();
+        return is_array($publishedDocIDs) && !empty($publishedDocIDs);
     }
 
     private function isEmpty($collectionRole) {
         $rootCollection = $collectionRole->getRootCollection();
-        if (is_null($rootCollection) || count($rootCollection->getChildren()) === 0) {
+        if (is_null($rootCollection)) {
+            return true;
+	}
+        $children = $rootCollection->getChildren();
+        if (!is_array($children) || empty($children)) {
             return true;
         }
         return false;
