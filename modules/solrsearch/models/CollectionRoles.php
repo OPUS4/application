@@ -56,10 +56,16 @@ class Solrsearch_Model_CollectionRoles {
      * @return bool
      */
     public function hasVisibleChildren($collectionRole) {
-        if ($this->isEmpty($collectionRole)) {
+        $rootCollection = $collectionRole->getRootCollection();
+        if (is_null($rootCollection)) {
+            return false;
+	}
+        $children = $rootCollection->getChildren();
+
+        if ($this->isEmpty($children)) {
             return false;
         }
-        foreach ($collectionRole->getRootCollection()->getChildren() as $child) {
+        foreach ($children as $child) {
             if ($child->getVisible() == '1') {
                 return true;
             }
@@ -83,16 +89,8 @@ class Solrsearch_Model_CollectionRoles {
         return is_array($publishedDocIDs) && !empty($publishedDocIDs);
     }
 
-    private function isEmpty($collectionRole) {
-        $rootCollection = $collectionRole->getRootCollection();
-        if (is_null($rootCollection)) {
-            return true;
-	}
-        $children = $rootCollection->getChildren();
-        if (!is_array($children) || empty($children)) {
-            return true;
-        }
-        return false;
+    private function isEmpty($children) {
+        !is_array($children) || empty($children);
     }
 
     private function isVisible($collectionRole) {
