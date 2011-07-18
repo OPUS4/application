@@ -37,8 +37,10 @@
 
 ;DB SETTINGS
 ; Please insert the credential to connect to your mysql db.
-db.params.host =
-db.params.port =
+; db.params.host =
+; db.params.port =
+; Set path to mysql socket if database runs on same server.
+; db.params.unix_socket = /var/run/mysqld/mysqld.sock
 db.params.username =
 db.params.password =
 db.params.dbname = 
