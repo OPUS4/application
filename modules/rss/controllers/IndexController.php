@@ -89,8 +89,8 @@ class Rss_IndexController extends Controller_Xml {
             $domNode = $this->_xml->importNode($documentXml->getNode(), true);
 
             // add publication date in RFC_2822 format
-            $date = new Zend_Date($document->getServerDatePublished());
-            $itemPubDate = $this->_xml->createElement('ItemPubDate', $date->get(Zend_Date::RFC_2822));
+            $date = $document->getServerDatePublished()->getDateTime();
+            $itemPubDate = $this->_xml->createElement('ItemPubDate', $date->format(DateTime::RFC2822));
             $domNode->appendChild($itemPubDate);
             $this->_xml->documentElement->appendChild($domNode);
         }
