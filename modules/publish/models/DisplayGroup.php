@@ -102,7 +102,7 @@ class Publish_Model_DisplayGroup {
     public function makeBrowseGroup() {
         $displayGroup = array();
         $minNum = $this->minNumber();
-        $maxNum = $this->maxNumber();
+        $maxNum = $this->maxNumber();        
 
         for ($i = $minNum; $i <= $maxNum; $i++) {
             $this->session->additionalFields['step' . $this->elementName . $i] = $this->collectionStep($i);
@@ -138,6 +138,7 @@ class Publish_Model_DisplayGroup {
                         if ($currentStep !== 1) {
                             //make top steps disabled
                             $elem->setAttrib('disabled', true);
+                            $this->session->disabled[$this->elementName . $i] = $elem->getValue();
                         }
                         $this->form->addElement($elem);
                         $displayGroup[] = $elem->getName();

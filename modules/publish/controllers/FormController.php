@@ -145,6 +145,7 @@ class Publish_FormController extends Controller_Action {
 
         if ($this->getRequest()->isPost() === true) {
             $postData = $this->getRequest()->getPost();
+            $postData = array_merge($postData, $this->session->disabled);
 
             if (array_key_exists('abort', $postData)) {
                 $this->document = new Opus_Document($this->session->documentId);
@@ -158,7 +159,7 @@ class Publish_FormController extends Controller_Action {
                     foreach ($this->session->elements AS $element)
                         $postData[$element['name']] = $element['value'];
             }
-            
+
             //initialize the form object
             $form = new Publish_Form_PublishingSecond($postData);
 
@@ -187,7 +188,7 @@ class Publish_FormController extends Controller_Action {
             $this->view->subtitle = $this->view->translate($this->session->documentType);
             $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
-            if (!$form->isValid($this->getRequest()->getPost())) {
+            if (!$form->isValid($postData)) {
                 //Variables are invalid
                 $this->helper->setCurrentForm($form);
                 $this->helper->setSecondFormViewVariables();

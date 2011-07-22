@@ -532,6 +532,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="button_label_browse_downProject">
+        <tuv xml:lang="en">
+            <seg>down</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>runter</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="button_label_browse_downSubjectMSC">
         <tuv xml:lang="en">
             <seg>down</seg>
@@ -574,6 +583,15 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>runter</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_browse_upProject">
+        <tuv xml:lang="en">
+            <seg>up</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>hoch</seg>
         </tuv>
     </tu>
 	

@@ -214,13 +214,13 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         }
 
         //iterate over disabled elements that were not transmitted with form
-        if (isset($this->session->disabled) && !is_null($this->session->disabled)) {            
-            foreach ($this->session->disabled as $key => $value) {
-                $session->elements[$key]['name'] = $key;
-                $session->elements[$key]['value'] = $value;
-                $session->elements[$key]['label'] = $key;
-            }
-        }
+//        if (isset($this->session->disabled) && !is_null($this->session->disabled)) {
+//            foreach ($this->session->disabled as $key => $value) {
+//                $session->elements[$key]['name'] = $key;
+//                $session->elements[$key]['value'] = $value;
+//                $session->elements[$key]['label'] = $key;
+//            }
+//        }
         
         $this->_addSubmit('button_label_back', 'back');
         $this->_addSubmit('button_label_collection', 'collection');

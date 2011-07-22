@@ -75,18 +75,7 @@
     <?php endforeach;?>
     <!-- END: groups -->
 
-    <!-- listing all non-editable elements -->
-    <?php if (!empty($disabled)) : ?>
-        <tr><td class='group' colspan="2"><b><?= $this->translate('publish_controller_check_noneditableElements') ?></b></td></tr>
-        <?php foreach ($disabled AS $disElem => $disValue) : ?>
-            <?php if ($disValue != "") : ?>
-                <tr><td class='label'><?= $this->translate($disElem) ?></td>
-                    <td><?= htmlspecialchars($this->translate($disValue)) ?></td>
-                </tr>
-            <?php endif; ?>
-        <?php endforeach;?>
-    <?php endif; ?>
-    <!-- END: non-editable -->
+   
 
     <!-- listing all single elements -->
     <tr><td class='group' colspan="2"><b><?= $this->translate('publish_controller_check_otherElements') ?></b></td></tr>

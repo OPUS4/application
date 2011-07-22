@@ -359,7 +359,7 @@ class Publish_Model_FormHelper {
                     }
                     break;
                 case 'down':
-                    if (substr($postData[$fieldName . $currentNumber], 3) !== 'EMPTY')
+                    if (substr($postData[$fieldName . $currentNumber], 3) !== 'EMPTY' || $this->session->additionalFields['collId1' . $fieldName . $currentNumber] !== 'EMPTY')
                             $currentCollectionLevel = (int) $currentCollectionLevel + 1;
                     break;
                 case 'up' :
