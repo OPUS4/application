@@ -627,6 +627,9 @@ class Oai_IndexController extends Controller_Xml {
         if ('xMetaDiss' === $metadataPrefix or 'XMetaDissPlus' === $metadataPrefix) {
             $finder->setTypeInList($this->_xMetaDissRestriction);
         }
+        if ('epicur' === $metadataPrefix) {
+            $finder->setIdentifierTypeExists('urn');
+        }
 
         if (array_key_exists('set', $oaiRequest)) {
             $setarray = explode(':', $oaiRequest['set']);
