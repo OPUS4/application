@@ -100,9 +100,13 @@
     <xsl:template match="PersonAuthor" mode="oai_dc">
         <xsl:element name="dc:creator">
             <xsl:value-of select="@AcademicTitle" />
-            <xsl:text> </xsl:text>
+            <xsl:if test="@AcademicTitle != ''" >
+                <xsl:text> </xsl:text>
+            </xsl:if>
             <xsl:value-of select="@FirstName" />
-            <xsl:text> </xsl:text>
+            <xsl:if test="@FirstName != ''" >
+                <xsl:text> </xsl:text>
+            </xsl:if>
             <xsl:value-of select="@LastName" />
         </xsl:element>
     </xsl:template>
