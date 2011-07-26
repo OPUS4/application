@@ -55,64 +55,52 @@
             xmlns="urn:nbn:de:1111-2004033116"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-            <xsl:element name="administrative_data">
-                <xsl:element name="delivery">
+            <administrative_data>
+                <delivery>
                     <update_status type="urn_new"/>
-                </xsl:element>
-            </xsl:element>
-            <xsl:element name="record">
+                </delivery>
+            </administrative_data>
+
+            <record>
                <!-- IdentifierUrn -->
                <xsl:apply-templates select="IdentifierUrn" mode="epicur" />
 
-               <xsl:element name="resource">
-                    <xsl:element name="identifier">
-                        <xsl:attribute name="scheme">url</xsl:attribute>
-                        <xsl:attribute name="type">frontpage</xsl:attribute>
-                        <xsl:attribute name="role">primary</xsl:attribute>
-                        <xsl:attribute name="origin">original</xsl:attribute>
+               <resource>
+                    <identifier scheme="url" type="frontpage" role="primary" origin="original">
                         <xsl:value-of select="@frontdoorurl"/>
-                    </xsl:element>
+                    </identifier>
 
-                    <xsl:element name="format">
-                        <xsl:attribute name="scheme">
-                            <xsl:text>imt</xsl:text>
-                        </xsl:attribute>
+                    <format scheme="imt">
                         <xsl:text>text/html</xsl:text>
-                    </xsl:element>
-               </xsl:element>
+                    </format>
+               </resource>
 
                <xsl:apply-templates select="File" mode="epicur"/>
 
-            </xsl:element>
+            </record>
+
         </epicur>
     </xsl:template>
 
 
     <xsl:template match="IdentifierUrn" mode="epicur">
-        <xsl:element name="identifier">
-            <xsl:attribute name="scheme"><xsl:text>urn:nbn:de</xsl:text></xsl:attribute>
+        <identifier scheme="urn:nbn:de">
             <xsl:value-of select="@Value" />
-        </xsl:element>
+        </identifier>
     </xsl:template>
 
     <!-- skip container file -->
     <xsl:template match="File[@DnbContainer='1']" mode="epicur" />
 
     <xsl:template match="File" mode="epicur">
-        <xsl:element name="resource">
-            <xsl:element name="identifier">
-                <xsl:attribute name="scheme">url</xsl:attribute>
-                <xsl:attribute name="target">transfer</xsl:attribute>
-                <xsl:attribute name="origin">original</xsl:attribute>
+        <resource>
+            <identifier scheme="url" target="transfer" origin="original">
                 <xsl:value-of select="@url"/>
-            </xsl:element>
-            <xsl:element name="format">
-                <xsl:attribute name="scheme">
-                    <xsl:text>imt</xsl:text>
-                </xsl:attribute>
+            </identifier>
+            <format scheme="imt">
                 <xsl:value-of select="@MimeType"/>
-            </xsl:element>
-        </xsl:element>
+            </format>
+        </resource>
     </xsl:template>
 
 </xsl:stylesheet>
