@@ -42,6 +42,7 @@
  */
 -->
 <xsl:stylesheet version="1.0"
+    xmlns="urn:nbn:de:1111-2004033116"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
@@ -51,7 +52,6 @@
     <xsl:template match="Opus_Document" mode="epicur">
         <epicur
             xsi:schemaLocation="urn:nbn:de:1111-2004033116 http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd"
-            xmlns:epicur="urn:nbn:de:1111-2004033116"
             xmlns="urn:nbn:de:1111-2004033116"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
