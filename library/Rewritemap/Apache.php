@@ -92,8 +92,8 @@ class Rewritemap_Apache {
 
     /**
      *
-     * @param  array  $arguments
-     * @return string target path, if any.
+     * @param  string  $arguments
+     * @return array   (docId, target-path).
      */
     private function parseRequestArgumentString($arguments = null) {
         $this->_logger->info("got request '$arguments'");
@@ -172,7 +172,7 @@ class Rewritemap_Apache {
         }
 
         // lookup the target file
-        $targetFile = $this->findFileForDocument($document, $path);
+        $targetFile = Opus_File::fetchByDocIdPathName($document->getId(), $path);
 
         if (is_null($targetFile) === true) {
             // file not found
@@ -190,20 +190,6 @@ class Rewritemap_Apache {
     public function sendServerError() {
         return $this->_targetPrefix . "/error/send500.php"; // Internal Server Error.
     }
-
-    private function findFileForDocument($document, $path) {
-        foreach ($document->getFile() as $file) {
-            $this->_logger->debug("Found file " . $file->getId() . ": " . $file->getPathName());
-
-            $pathnames = $file->getPathName();
-            if ($pathnames === $path) {
-                return $file;
-            }
-        }
-
-        return null;
-    }
-
 
     private function __setupIdentity($ip, $cookiestring) {
         $this->_realm->setIp(null);
