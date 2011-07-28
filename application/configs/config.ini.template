@@ -39,8 +39,8 @@
 ; Please insert the credential to connect to your mysql db.
 ; See also: http://php.net/manual/de/ref.pdo-mysql.connection.php
 ;
-; db.params.host =
-; db.params.port =
+; db.params.host = localhost
+; db.params.port = 3306
 db.params.username =
 db.params.password =
 db.params.dbname = 
