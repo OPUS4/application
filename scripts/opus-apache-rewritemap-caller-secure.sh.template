@@ -31,5 +31,5 @@ fi
 # keep this quite simple!
 while read request
 do
-    echo "`$PHP "$MAP" "$request"`"
+    echo "`$PHP "$MAP" "$request"`" |head -n 1
 done
