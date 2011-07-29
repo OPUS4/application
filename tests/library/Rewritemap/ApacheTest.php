@@ -137,7 +137,7 @@ class Rewritemap_ApacheTest extends PHPUnit_Framework_TestCase {
         $this->bootstrapFramework();
         $rwm = new Rewritemap_Apache;
 
-        $this->assertEquals('/files/error/send404.php', $rwm->rewriteRequest("123\tbla.pdf\t"),
+        $this->assertEquals('/files/error/send404.php', $rwm->rewriteRequest("123\tbla.pdf\t\t"),
                 'Wrong error status file URL for unknown document in request.');
     }
 
@@ -153,7 +153,7 @@ class Rewritemap_ApacheTest extends PHPUnit_Framework_TestCase {
         $config = Zend_Registry::get('Zend_Config');
         $config->security = '0';
 
-        $this->assertEquals('/files/error/send404.php', $rwm->rewriteRequest("100\tfoo.pdf\t"),
+        $this->assertEquals('/files/error/send404.php', $rwm->rewriteRequest("100\tfoo.pdf\t\t"),
                 'Wrong error status file URL for unpublished document.');
     }
 
@@ -169,7 +169,7 @@ class Rewritemap_ApacheTest extends PHPUnit_Framework_TestCase {
         $config = Zend_Registry::get('Zend_Config');
         $config->security = '1';
 
-        $this->assertEquals('/files/error/send403.php', $rwm->rewriteRequest("93\ttest.txt\t"),
+        $this->assertEquals('/files/error/send403.php', $rwm->rewriteRequest("93\ttest.txt\t\t"),
                 'Wrong error status file URL for protected file in request.');
     }
 
@@ -185,7 +185,7 @@ class Rewritemap_ApacheTest extends PHPUnit_Framework_TestCase {
         $config = Zend_Registry::get('Zend_Config');
         $config->security = '0';
 
-        $this->assertEquals('/files/41/Dissertation_Pick.pdf', $rwm->rewriteRequest("41\tDissertation_Pick.pdf\t"),
+        $this->assertEquals('/files/41/Dissertation_Pick.pdf', $rwm->rewriteRequest("41\tDissertation_Pick.pdf\t\t"),
                 'Wrong error status file URL for accessible file in request.');
     }
 
@@ -225,7 +225,7 @@ class Rewritemap_ApacheTest extends PHPUnit_Framework_TestCase {
         $config = Zend_Registry::get('Zend_Config');
         $config->security = '1';
 
-        $this->assertEquals('/files/error/send403.php', $rwm->rewriteRequest("100\tfoo.pdf\t"),
+        $this->assertEquals('/files/error/send403.php', $rwm->rewriteRequest("100\tfoo.pdf\t\t"),
                 'Wrong error status file URL for unpublished document.');
     }
 
@@ -256,7 +256,7 @@ class Rewritemap_ApacheTest extends PHPUnit_Framework_TestCase {
         $logWriter = new Zend_Log_Writer_Mock();
         $log = new Zend_Log($logWriter);
         $rwm = new Rewritemap_Apache($this->mockConfig('/foobar'), $log);
-        $rwm->rewriteRequest('');
+        $rwm->rewriteRequest("\t\t\t");
 
         $this->assertContains('got request \'\'', $logWriter->events[1]['message'],
             'Message log expected "got request" entry.');

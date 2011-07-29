@@ -30,7 +30,8 @@
  * @package    Opus_Deliver
  * @author     Pascal-Nicolas Becker <becker@zib.de>
  * @author     Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
- * @copyright  Copyright (c) 2009, OPUS 4 development team
+ * @author     Thoralf Klein <thoralf.klein@zib.de>
+ * @copyright  Copyright (c) 2009-2011, OPUS 4 development team
  * @license    http://www.gnu.org/licenses/gpl.html General Public License
  * @version    $Id$
  */
@@ -91,22 +92,27 @@ class Rewritemap_Apache {
     }
 
     /**
+     * Parse request.
      *
-     * @param  string  $arguments
+     * @param  string  $arguments ("docid <tab> file <tab> IP <tab> cookie")
      * @return array   (docId, target-path).
+     *
+     * @throws InvalidArgumentException on invalid parameters.
      */
     private function parseRequestArgumentString($arguments = null) {
         $this->_logger->info("got request '$arguments'");
 
         // check input
         if (!is_string($arguments)) {
-            return null;
+            $message = 'arguments should be string';
+            throw new InvalidArgumentException($message);
         }
 
         // Parse input parameters (given as tab-separated string)
-        $parsed = preg_split('/\t/', $arguments, 4);
-        while (count($parsed) < 4) {
-            $parsed[] = '';
+        $parsed = preg_split('/\t/', $arguments);
+        if (count($parsed) != 4) {
+            $message = 'Parameter $arguments must contain exactly 4 fields.';
+            throw new InvalidArgumentException($message);
         }
 
         $docId = $parsed[0];
@@ -115,6 +121,15 @@ class Rewritemap_Apache {
         $cookies = $parsed[3];
 
         $this->_logger->info("got request '$docId', $path', '$remoteAddress', '$cookies'");
+
+        // check input: docId should only be numbers, path should not contain ../
+        if ((mb_strlen($docId) < 1) ||
+                (mb_strlen($path) < 1) ||
+                (preg_match('/^[\d]+$/', $docId) === 0) ||
+                (preg_match('/\.\.\//', $path) === 1)) {
+            $message = 'Got invalid docId or file name.';
+            throw new InvalidArgumentException($message);
+        }
 
         // set ip/username in realm
         $this->__setupIdentity($remoteAddress, $cookies);
@@ -134,24 +149,18 @@ class Rewritemap_Apache {
      */
     public function rewriteRequest($arguments) {
 
-        $request = $this->parseRequestArgumentString($arguments);
-        if (!is_array($request) or count($request) < 2) {
+        $docId = null;
+        $path = null;
+        try {
+            $request = $this->parseRequestArgumentString($arguments);
+            $docId = $request[0];
+            $path = $request[1];
+        }
+        catch (InvalidArgumentException $ie) {
             $this->_logger->err('Internal error: Received unexpected arguments, will send 403');
+            $this->_logger->err('Error: "' . $ie->getMessage() . '"');
             $this->_logger->err('Apache Input: "' . $arguments . '"');
             return $this->_targetPrefix . "/error/send403.php";
-        }
-
-        $docId = $request[0];
-        $path = $request[1];
-
-        // check input: docId should only be numbers, path should not contain ../
-        if ((mb_strlen($docId) < 1) ||
-                (mb_strlen($path) < 1) ||
-                (preg_match('/^[\d]+$/', $docId) === 0) ||
-                (preg_match('/\.\.\//', $path) === 1)) {
-            $this->_logger->err("Error: Got path: $path and docId: $docId, will send "
-                    . $this->_targetPrefix . "/error/send403.php'");
-            return $this->_targetPrefix . "/error/send403.php"; // Forbidden, independent from authorization.
         }
 
         $document = null;
