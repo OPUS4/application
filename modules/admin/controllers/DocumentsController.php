@@ -451,7 +451,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $doc->store();
 
             $message = $this->view->translate('document_published', $id);
-            $this->_redirectTo('show', $message, 'documents', 'admin',
+            $this->_redirectTo('index', $message, 'document', 'admin',
                     array('id' => $id));
         }
         else if (isset($sureno) === true) {
@@ -492,12 +492,12 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $doc->store();
 
             $message = $this->view->translate('document_unpublished', $id);
-            $this->_redirectTo('show', $message, 'documents', 'admin',
+            $this->_redirectTo('index', $message, 'document', 'admin',
                     array('id' => $id));
         }
         else if (isset($sureno) === true) {
             $message = null;
-            $this->_redirectTo('show', $message, 'documents', 'admin',
+            $this->_redirectTo('index', $message, 'document', 'admin',
                     array('id' => $id));
         }
         else {
