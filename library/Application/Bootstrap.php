@@ -78,6 +78,21 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         // Get Name of Module, Controller and Action for Use in View
         $viewSetup = new Controller_Plugin_ViewSetup();
         $frontController->registerPlugin($viewSetup);
+
+        $documentRoute = new Zend_Controller_Router_Route_Regex(
+            '^document/(\d+)/?$',
+            array(
+                'module'     => 'frontdoor',
+                'controller' => 'index',
+                'action'     => 'index',
+                'docId'      => 1,
+            ),
+            array(
+                1 => 'docId',
+            ),
+            'document/%s'
+        );
+        $frontController->getRouter()->addRoute('document', $documentRoute);
     }
 
     /**
