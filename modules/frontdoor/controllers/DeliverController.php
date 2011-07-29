@@ -64,10 +64,4 @@ class Frontdoor_DeliverController extends Controller_Action {
         return;
     }
 
-    // http://codeutopia.net/blog/2009/03/06/sending-files-better-apache-mod_xsendfile-and-php/
-    // http://www.jasny.net/articles/how-i-php-x-sendfile/
-    // http://stackoverflow.com/questions/3572894/how-to-download-existing-file-in-php
-    // https://tn123.org/mod_xsendfile/
-    // http://www.phraseanet.com/de/download/x-sendfile/
-
 }
