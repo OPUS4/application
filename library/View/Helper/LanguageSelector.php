@@ -41,29 +41,12 @@
 class View_Helper_LanguageSelector extends Zend_View_Helper_Abstract {
 
     /**
-     * Holds the current view object.
-     *
-     * @var Zend_View_Interface
-     */
-    protected $_view = null;
-
-    /**
-     * Sets the current view object.
-     *
-     * @param Zend_View_Interface $view The current view object.
-     * @return void
-     */
-    public function setView(Zend_View_Interface $view) {
-        $this->_view = $view;
-    }
-
-    /**
      * Get an instance of the view helper.
      *
      * @return Opus_View_Helper_LanguageSelector
      */
     public function languageSelector() {
-        if (isset($this->_view->languageSelectorDisabled) && $this->_view->languageSelectorDisabled === true) {
+        if (isset($this->view->languageSelectorDisabled) && $this->view->languageSelectorDisabled === true) {
             return null;
         }
         $returnParams = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
@@ -75,7 +58,7 @@ class View_Helper_LanguageSelector extends Zend_View_Helper_Abstract {
         foreach ($translations as $translation) {
             if ($currentLocale->getLanguage() !== $translation) {
                 $languageName = $currentLocale->getTranslation($translation, 'language', $translation);
-                $languageUrl = $this->_view->url(array_merge(array(
+                $languageUrl = $this->view->url(array_merge(array(
                     'action' => 'language',
                     'controller' => 'index',
                     'module' => 'home',

@@ -41,7 +41,7 @@
  * @category    Application
  * @package     View
  */
-class View_Helper_LoginBar {
+class View_Helper_LoginBar extends Zend_View_Helper_Abstract {
 
     /**
      * Default login action.
@@ -56,17 +56,6 @@ class View_Helper_LoginBar {
      * @var array
      */
     protected $_logout_url = array('action' => 'logout', 'controller' => 'auth', 'module' => 'default');
-
-    /**
-     * Holds the current view object.
-     *
-     * @var Zend_View_Interface
-     */
-    protected $_view = null;
-
-    public function setView(Zend_View_Interface $view) {
-        $this->_view = $view;
-    }
 
     /**
      * Set the action (controller and module) to perform a login.
@@ -123,7 +112,7 @@ class View_Helper_LoginBar {
         $returnParams = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
         $identity = Zend_Auth::getInstance()->getIdentity();
         if (empty($identity) === true) {
-            $url = $this->_view->url(array_merge($this->_login_url, $returnParams->getReturnParameters()));
+            $url = $this->view->url(array_merge($this->_login_url, $returnParams->getReturnParameters()));
             return '<a rel="nofollow" href="' . $url . '">Login</a>';
         }
 
@@ -135,11 +124,11 @@ class View_Helper_LoginBar {
             $addAccountLink = $config->account->editOwnAccount;
         }
 
-        $url = $this->_view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
+        $url = $this->view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
         $logoutLink = '<a rel="nofollow" href="' . $url . '">Logout (' . htmlspecialchars($identity) . ')</a>';
 
         if ($addAccountLink) {
-            $accountUrl = $this->_view->url(array('module' => 'account'), null, true);
+            $accountUrl = $this->view->url(array('module' => 'account'), null, true);
             return '<a rel="nofollow" style="padding-right: 1em" href="' . $accountUrl .
             '">Account</a> ' . $logoutLink;
         }
