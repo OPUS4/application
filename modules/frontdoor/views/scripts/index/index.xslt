@@ -98,7 +98,9 @@
                         </xsl:call-template>
                     </h3>
                     <ul>
-                        <xsl:apply-templates select="File[@VisibleInFrontdoor='1']" />
+                        <xsl:apply-templates select="File[@VisibleInFrontdoor='1']">
+                            <xsl:sort select="@Label"/>
+                        </xsl:apply-templates>
                     </ul>
                 </div>
             </xsl:if>
