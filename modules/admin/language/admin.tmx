@@ -198,10 +198,10 @@
 
     <tu tuid="admin_title_security_description">
       <tuv xml:lang="en">
-        <seg>Manage user account, IP ranges, and roles and their privileges.</seg>
+        <seg>Manage IP ranges, and user roles and their privileges.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Verwalten von Nutzerkonten, IP Bereichen, und Rollen sowie deren Privilegien.</seg>
+        <seg>Verwalten von IP Bereichen, und Nutzer-Rollen, sowie deren Privilegien.</seg>
       </tuv>
     </tu>
 

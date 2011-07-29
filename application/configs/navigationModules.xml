@@ -84,6 +84,57 @@
                     <action>index</action>
                 </review>
                 
+                <accounts>
+                    <type>mvc</type>
+                    <label>admin_security_title_accounts</label>
+                    <description>admin_security_title_accounts_description</description>
+                    <module>admin</module>
+                    <controller>account</controller>
+                    <action>index</action>
+                    <pages>
+                        <show>
+                            <type>mvc</type>
+                            <label>admin_account_show</label>
+                            <module>admin</module>
+                            <controller>account</controller>
+                            <action>show</action>
+                        </show>
+
+                        <new>
+                            <type>mvc</type>
+                            <label>admin_account_new</label>
+                            <module>admin</module>
+                            <controller>account</controller>
+                            <action>new</action>
+                        </new>
+
+                        <create>
+                            <type>mvc</type>
+                            <label>admin_account_new</label>
+                            <module>admin</module>
+                            <controller>account</controller>
+                            <action>create</action>
+                        </create>
+
+                        <edit>
+                            <type>mvc</type>
+                            <label>admin_account_edit</label>
+                            <module>admin</module>
+                            <controller>account</controller>
+                            <action>edit</action>
+                        </edit>
+
+                        <update>
+                            <type>mvc</type>
+                            <label>admin_account_edit</label>
+                            <module>admin</module>
+                            <controller>account</controller>
+                            <action>update</action>
+                        </update>
+                    </pages>
+                </accounts>
+                
+                
         	<security>
                     <type>mvc</type>
                     <label>admin_title_security</label>
@@ -141,55 +192,6 @@
                                 </update>
                             </pages>
                         </roles>
-                        <accounts>
-                            <type>mvc</type>
-                            <label>admin_security_title_accounts</label>
-                            <description>admin_security_title_accounts_description</description>
-                            <module>admin</module>
-                            <controller>account</controller>
-                            <action>index</action>
-                            <pages>
-                                <show>
-                                    <type>mvc</type>
-                                    <label>admin_account_show</label>
-                                    <module>admin</module>
-                                    <controller>account</controller>
-                                    <action>show</action>
-                                </show>
-
-                                <new>
-                                    <type>mvc</type>
-                                    <label>admin_account_new</label>
-                                    <module>admin</module>
-                                    <controller>account</controller>
-                                    <action>new</action>
-                                </new>
-
-                                <create>
-                                    <type>mvc</type>
-                                    <label>admin_account_new</label>
-                                    <module>admin</module>
-                                    <controller>account</controller>
-                                    <action>create</action>
-                                </create>
-
-                                <edit>
-                                    <type>mvc</type>
-                                    <label>admin_account_edit</label>
-                                    <module>admin</module>
-                                    <controller>account</controller>
-                                    <action>edit</action>
-                                </edit>
-
-                                <update>
-                                    <type>mvc</type>
-                                    <label>admin_account_edit</label>
-                                    <module>admin</module>
-                                    <controller>account</controller>
-                                    <action>update</action>
-                                </update>
-                            </pages>
-                        </accounts>
 
                         <ipranges>
                             <type>mvc</type>
