@@ -9,10 +9,10 @@
   
     <tu tuid="admin_filemanager_index">
       <tuv xml:lang="en">
-        <seg>Filemanager</seg>
+        <seg>Files</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Dateimanager</seg>
+        <seg>Dateien</seg>
       </tuv>
     </tu>
     
