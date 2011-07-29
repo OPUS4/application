@@ -93,6 +93,24 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             'document/%s'
         );
         $frontController->getRouter()->addRoute('document', $documentRoute);
+
+        $fileRoute = new Zend_Controller_Router_Route_Regex(
+            '^document/(\d+)/(.*)$',
+            array(
+                'module'     => 'frontdoor',
+                'controller' => 'deliver',
+                'action'     => 'index',
+                'docId'      => 1,
+                'file'       => 2,
+            ),
+            array(
+                1 => 'docId',
+                2 => 'file',
+            ),
+            'document/%s/%s'
+        );
+        $frontController->getRouter()->addRoute('file', $fileRoute);
+
     }
 
     /**

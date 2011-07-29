@@ -38,7 +38,7 @@ class Frontdoor_DeliverController extends Controller_Action {
     public function indexAction() {
         $docId = $this->_getParam('docId', null);
         $path = $this->_getParam('file', null);
-        $method = $this->_getParam('option', 'xsendfile');
+        $method = $this->_getParam('option', 'fpassthru');
 
         $realm = Opus_Security_Realm::getInstance();
         $file_model = new Frontdoor_Model_File($docId, $path);
