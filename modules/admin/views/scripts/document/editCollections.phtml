@@ -69,7 +69,7 @@
         <?PHP foreach ($this->assignedCollections as $collection) : ?>
         <li>
             <?= htmlspecialchars($collection['roleName'])?>: <?= htmlspecialchars($collection['collectionName']) ?>
-            <form method="post" action="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'unlinkcollection', 'role' => $collection['roleId'], 'collection' => $collection['collectionId'])) ?>">
+            <form method="post" action="<?= $this->url(array('module' => 'admin', 'controller' => 'document', 'action' => 'unlinkcollection', 'role' => $collection['roleId'], 'collection' => $collection['collectionId'])) ?>">
                 <input type="submit" value="<?= $this->translate('admin_documents_unlinkcollection') ?>" />
             </form>
         </li>

@@ -100,19 +100,6 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertAction('show');
     }
 
-    public function testUnlinkCollectionAction() {
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'submit' => 'submit'
-                ));
-        $this->dispatch('/admin/documents/unlinkcollection/id/1/role/2/collection/15');
-        $this->assertModule('admin');
-        $this->assertController('documents');
-        $this->assertAction('unlinkcollection');
-        $this->assertRedirect('/admin/documents/edit');
-    }
-
 }
 
 ?>

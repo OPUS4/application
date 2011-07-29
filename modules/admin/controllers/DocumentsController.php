@@ -334,41 +334,5 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         }
     }
 
-    /**
-     * Removes a document from a collection.
-     *
-     * @return void
-     */
-    public function unlinkcollectionAction() {
-        if (!$this->_request->isPost()) {
-            return $this->_redirectTo('index');
-        }
-        $document = new Opus_Document($this->getRequest()->getParam('id'));
-        $collection_id = $this->getRequest()->getParam('collection');
-        $collections = array();
-        $deletedCollectionName = null;
-        foreach ($document->getCollection() as $collection) {
-            if ($collection->getId() !== $collection_id) {
-                array_push($collections, $collection);
-            }
-            else {
-                if ($collection->isRoot()) {
-                    $deletedCollectionName = $collection->getRole()->getDisplayName();
-                }
-                else {
-                    $deletedCollectionName = $collection->getDisplayName();
-                }
-            }
-        }
-        $document->setCollection($collections);
-        $document->store();
-        $params = $this->getRequest()->getUserParams();
-        $module = array_shift($params);
-        $controller = array_shift($params);
-        $action = array_shift($params);
-
-        $message = $this->view->translate('admin_document_remove_collection_success', $deletedCollectionName);
-
-        $this->_redirectTo('edit', $message, 'document', 'admin', $params);
-    }    
+    
 }

@@ -163,6 +163,19 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $doc = new Opus_Document(100);
         $this->assertEquals('unpublished', $doc->getServerState());
     }
+    
+    public function testUnlinkCollectionAction() {
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'submit' => 'submit'
+                ));
+        $this->dispatch('/admin/document/unlinkcollection/id/1/role/2/collection/15');
+        $this->assertModule('admin');
+        $this->assertController('document');
+        $this->assertAction('unlinkcollection');
+        $this->assertRedirect('/admin/document/index');
+    }
 
 }
 
