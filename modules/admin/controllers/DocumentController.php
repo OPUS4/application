@@ -637,7 +637,7 @@ class Admin_DocumentController extends Controller_Action {
 
         $message = $this->view->translate('admin_document_remove_collection_success', $deletedCollectionName);
 
-        $this->_redirectTo('index', $message, 'document', 'admin', $params);
+        $this->_redirectTo('edit', $message, 'document', 'admin', $params);
     }    
 
     protected function populateModel($model, $fieldValues) {
