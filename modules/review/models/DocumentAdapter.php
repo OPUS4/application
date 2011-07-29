@@ -35,6 +35,7 @@
  * Wrapper around Opus_Document to prepare presentation.
  *
  * TODO split off base class, URLs are controller specific
+ * TODO move code to admin module (is used there as well and belongs there, or?)
  */
 class Review_Model_DocumentAdapter {
 
@@ -258,7 +259,7 @@ class Review_Model_DocumentAdapter {
     public function getUrlSimpleDelete() {
         $url_delete = array (
             'module'     => 'admin',
-            'controller' => 'documents',
+            'controller' => 'document',
             'action'     => 'delete',
             'docId'         => $this->getDocId()
         );
@@ -272,7 +273,7 @@ class Review_Model_DocumentAdapter {
     public function getUrlPermanentDelete() {
         $url_permadelete = array(
             'module'     => 'admin',
-            'controller' => 'documents',
+            'controller' => 'document',
             'action'     => 'permanentdelete',
             'docId'         => $this->getDocId()
         );
@@ -302,7 +303,7 @@ class Review_Model_DocumentAdapter {
     public function getUrlPublish() {
         $url = array(
             'module'     => 'admin',
-            'controller' => 'documents',
+            'controller' => 'document',
             'action'     => 'publish',
             'docId'         => $this->getDocId()
         );
@@ -312,7 +313,7 @@ class Review_Model_DocumentAdapter {
     public function getUrlUnpublish() {
         $url = array(
             'module'     => 'admin',
-            'controller' => 'documents',
+            'controller' => 'document',
             'action'     => 'unpublish',
             'docId'         => $this->getDocId()
         );
@@ -322,7 +323,7 @@ class Review_Model_DocumentAdapter {
     public function getUrlUndelete() {
         $url = array(
             'module'     => 'admin',
-            'controller' => 'documents',
+            'controller' => 'document',
             'action'     => 'publish',
             'docId'      => $this->getDocId()
         );
