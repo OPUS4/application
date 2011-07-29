@@ -443,9 +443,6 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         if (isset($sureyes) === true) {
             // publish document
             $doc = new Opus_Document($id);
-//            if (false === is_null($doc->getField('ServerDateUnlocking')) and $doc->getServerDateUnlocking() > date('Y-m-d')) {
-//                $this->_redirectTo('index', 'publish_unlocking_date_not_reached');
-//            }
             $doc->setServerState('published');
             //        $doc->setServerDatePublished(date('Y-m-d'));
             //        $doc->setServerDatePublished(date('c'));
