@@ -57,16 +57,7 @@ class Admin_Form_FileUpload extends Zend_Form {
             $maxFileSize = $config->publish->maxfilesize;
         }
         else {
-            $log->warn('publish.maxfilesize not configured.');
-        }
-
-        $fileTypes = 'pdf,txt';
-
-        if (isset($config->publish->filetypes->allowed)) {
-            $fileTypes = $config->publish->filetypes->allowed;
-        }
-        else {
-            $log->warn('publish.filetypes.allowed not configured.');
+            $log->warn('publish.maxfilesize not configured (set to 2M).');
         }
 
         // FIXME: Make hard coded path configurable.
@@ -74,8 +65,7 @@ class Admin_Form_FileUpload extends Zend_Form {
         $fileupload->setRequired(true);
         $fileupload->setLabel('FileToUpload')
             ->addValidator('Count', false, 1)     // ensure only 1 file
-            ->addValidator('Size', false, $maxFileSize) // limit to 100M
-            ->addValidator('Extension', false, $fileTypes); // only PDF
+            ->addValidator('Size', false, $maxFileSize); // limit to 100M
         
         $comment = new Zend_Form_Element_Textarea('comment');
         $comment->setAttrib('cols', 100);
