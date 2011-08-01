@@ -102,7 +102,7 @@
                 </span>
                     <?= ($count < $authorsCount) ? '; ' : ': '?>
                 <?PHP endforeach; ?>
-                <span class="title"><a href="<?=$document->getUrlShow() ?>"
+                <span class="title"><a href="<?=$this->documentUrl()->adminShow($docId) ?>"
                     title="<?= $this->translate('admin_documents_tooltip_show') ?>"
                                        ><?= htmlspecialchars($document->getDocTitle()) ?></a></span>
                 (<span class="pubDate"><?= $document->getYear() ?></span>)
@@ -116,7 +116,7 @@
             </td>
             <?PHP endif; ?>
             <td class="actions">
-                <a href="<?= $document->getUrlShow() ?>"><?= $this->translate('docs_show') ?></a>
+                <a href="<?= $this->documentUrl()->adminShow($docId) ?>"><?= $this->translate('docs_show') ?></a>
             </td>
         </tr>
         <?PHP endforeach; ?>

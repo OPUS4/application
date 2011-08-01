@@ -45,8 +45,8 @@
             'module' => 'admin',
             'controller' => 'document',
             'action' => 'index',
-            'id' => $this->docHelper->getDocId()
-        ));?>"><?= $this->translate('admin_document_breadcrumb_document', $this->docHelper->getDocId()) ?></a>
+            'id' => $this->docId
+        ));?>"><?= $this->translate('admin_document_breadcrumb_document', $this->docId) ?></a>
         &gt;
         <?= $this->translate('admin_document_breadcrumb_edit') ?>
     </div>
@@ -56,7 +56,7 @@
         <legend><a name="collections"><?= $this->translate('admin_documents_label_collections') ?></a></legend>
 
     <div>
-        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'document' => $this->docHelper->getDocId()), null, true); ?>"><?= $this->translate('admin_documents_collectionassign'); ?></a><br/>
+        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'document' => $this->docId), null, true); ?>"><?= $this->translate('admin_documents_collectionassign'); ?></a><br/>
     </div>
 
     <?PHP if (0 < count($this->assignedCollections)) : ?>

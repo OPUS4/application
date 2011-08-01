@@ -44,7 +44,7 @@
                  ->setMinDepth(0)
                  ->setLinkLast(true) ?>
         &gt;
-        <a href="<?= $this->document->getUrlShow() ?>"><?= $this->translate('admin_document_index') ?> (<?= $this->document->getDocId() ?>)</a>
+        <a href="<?= $this->documentUrl()->adminShow($this->document->getDocId()) ?>"><?= $this->translate('admin_document_index') ?> (<?= $this->document->getDocId() ?>)</a>
         &gt;
         <?= $this->translate('admin_filemanager_index') ?>
     </div>

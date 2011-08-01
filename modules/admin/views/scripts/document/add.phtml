@@ -45,8 +45,8 @@
             'module' => 'admin',
             'controller' => 'document',
             'action' => 'index',
-            'id' => $this->docHelper->getDocId()
-        ));?>"><?= $this->translate('admin_document_breadcrumb_document', $this->docHelper->getDocId()) ?></a>
+            'id' => $this->docId
+        ));?>"><?= $this->translate('admin_document_breadcrumb_document', $this->docId) ?></a>
         &gt;
         <?= $this->translate('admin_document_breadcrumb_edit') ?>
     </div>

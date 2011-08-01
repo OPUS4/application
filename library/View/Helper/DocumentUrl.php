@@ -40,10 +40,10 @@
  */
 class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
 
-    public function documentUrl($docId) {
-        return $this->frontdoor($docId);
+    public function documentUrl() {
+        return $this;
     }
-
+    
     public function frontdoor($docId) {
         $url = array(
             'module'     => 'frontdoor',

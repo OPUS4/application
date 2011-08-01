@@ -35,6 +35,65 @@
  * Unit tests for Admin_DocumentController.
  */
 class Admin_DocumentControllerTest extends ControllerTestCase {
+    
+    /**
+     * Test edit action.
+     */
+    public function testEditAction() {
+        $this->markTestSkipped("needs to be adapted"); 
+        $this->dispatch('/admin/documents/edit/id/1');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('documents');
+        $this->assertAction('edit');
+    }
+
+    /**
+     * Test edit action with missing ID.
+     */
+    public function testEditActionWithMissingId() {
+        $this->markTestSkipped("needs to be adapted"); 
+        $this->dispatch('/admin/documents/edit');
+        $this->assertRedirectTo('/admin/documents');
+    }
+
+    /**
+     * Test edit action with bad ID.
+     */
+    public function testEditActionWithBadId() {
+        $this->markTestSkipped("needs to be adapted"); 
+        $this->dispatch('/admin/documents/edit/id/1k1');
+        $this->assertRedirectTo('/admin/documents');
+    }
+
+    /**
+     * Test edit action with unknown ID.
+     *
+     * TODO check for specific exception?
+     */
+    public function testEditActionWithUnknownId() {
+        $this->markTestSkipped("needs to be adapted"); 
+        $this->dispatch('/admin/documents/edit/id/500');
+        $this->assertModule('default');
+        $this->assertController('error');
+        $this->assertAction('error');
+    }
+
+    public function testShowAction() {
+        $this->markTestSkipped("needs to be adapted"); 
+        $this->dispatch('/admin/documents/show/id/1');
+        $this->assertModule('admin');
+        $this->assertController('documents');
+        $this->assertAction('show');
+    }
+
+    public function testShowActionDoc91() {
+        $this->markTestSkipped("needs to be adapted"); 
+        $this->dispatch('/admin/documents/show/id/91');
+        $this->assertModule('admin');
+        $this->assertController('documents');
+        $this->assertAction('show');
+    }
 
     /**
      * Tests deleting a document.

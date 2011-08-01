@@ -95,7 +95,7 @@ class Admin_DocumentController extends Controller_Action {
 
         if (!empty($id) && is_numeric($id)) {
             $model = new Opus_Document($id);
-
+            
             $filter = new Opus_Model_Filter();
             $filter->setModel($model);
             $blacklist = array('PublicationState');
@@ -107,12 +107,11 @@ class Admin_DocumentController extends Controller_Action {
 
             $this->view->overviewHelper = new Admin_Model_DocumentHelper($model);
 
+            $this->view->docId = $id;
+            
             if (!empty($model)) {
-                $this->view->docHelper = new Review_Model_DocumentAdapter(
-                        $this->view, $model);
+                $this->prepareActionLinks($model);
             }
-
-            $this->prepareActionLinks($this->view->docHelper);
 
             $this->prepareEditLinks($id);
 
@@ -143,12 +142,12 @@ class Admin_DocumentController extends Controller_Action {
                         );
                     }
                     $this->view->assignedCollections = $assignedCollections;
-                    $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $document);
+                    $this->view->docId = $id;
                     return $this->renderScript('document/editCollections.phtml');
                     break;
                 default:
                     $model = new Opus_Document($id);
-                    $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $model);
+                    $this->view->docId = $id;
                     $this->view->editForm = $this->getEditForm($model, $section);
                     return $this->renderScript('document/edit' /* . ucfirst($section) */ . '.phtml');
             }
@@ -161,7 +160,7 @@ class Admin_DocumentController extends Controller_Action {
         $id = $this->getRequest()->getParam('id');
         $section = $this->getRequest()->getParam('section');
         $model = new Opus_Document($id);
-        $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $model);
+        $this->view->docId = $id;
         $this->view->addForm = $this->getAddForm($model, $section);
         return $this->renderScript('document/add' /* . ucfirst($section) */ . '.phtml');
     }
@@ -682,19 +681,24 @@ class Admin_DocumentController extends Controller_Action {
      *
      *
      */
-    public function prepareActionLinks($docHelper) {
+    public function prepareActionLinks($model) {
         $actions = array();
+        
+        $docId = $model->getId();
+        $docHelper = new Review_Model_DocumentAdapter($this->view, $model);
+        
+        $documentUrl = $this->view->documentUrl();
         
         $action = array();
         $action['label'] = 'admin_documents_open_frontdoor';
-        $action['url'] = $docHelper->getUrlFrontdoor();
+        $action['url'] = $documentUrl->frontdoor($docId);
         $actions['frontdoor'] = $action;
         
         // TODO should always be shown, or?
         if ($docHelper->hasFiles()) {
             $action = array();
             $action['label'] = 'admin_document_files';
-            $action['url'] = $docHelper->getUrlFileManager();
+            $action['url'] = $documentUrl->adminFileManager($docId);
             $actions['files'] = $action;
         }
 
@@ -705,37 +709,39 @@ class Admin_DocumentController extends Controller_Action {
 //        $action['url'] = $docHelper->getUrlAccessManager();
 //        $actions['access'] = $action;
         
-        if ($docHelper->getDocState() === 'unpublished' || $docHelper->getDocState() === 'restricted' || $docHelper->getDocState() === 'inprogress') {
+        if ($docHelper->getDocState() === 'unpublished' || 
+                $docHelper->getDocState() === 'restricted' || 
+                $docHelper->getDocState() === 'inprogress') {
             $action = array();
             $action['label'] = 'admin_doc_delete';
-            $action['url'] = $docHelper->getUrlDelete();
+            $action['url'] = $documentUrl->adminDelete($docId);
             $actions['delete'] = $action;
             
             $action = array();
             $action['label'] = 'admin_documents_publish';
-            $action['url'] = $docHelper->getUrlPublish();
+            $action['url'] = $documentUrl->adminPublish($docId);
             $actions['publish'] = $action;
         }
         elseif ($docHelper->getDocState() === 'published') {
             $action = array();
             $action['label'] = 'admin_doc_delete';
-            $action['url'] = $docHelper->getUrlDelete();
+            $action['url'] = $documentUrl->adminDelete($docId);
             $actions['delete'] = $action;
 
             $action = array();
             $action['label'] = 'admin_documents_unpublish';
-            $action['url'] = $docHelper->getUrlUnpublish();
+            $action['url'] = $documentUrl->adminUnpublish($docId);
             $actions['unpublish'] = $action;
         }
         elseif ($docHelper->getDocState() === 'deleted') {
             $action = array();
             $action['label'] = 'admin_doc_undelete';
-            $action['url'] = $docHelper->getUrlPublish();
+            $action['url'] = $documentUrl->adminPublish($docId);
             $actions['publish'] = $action;
 
             $action = array();
             $action['label'] = 'admin_doc_delete_permanent';
-            $action['url'] = $docHelper->getUrlPermanentDelete();
+            $action['url'] = $documentUrl->getUrlPermanentDelete($docId);
             $actions['permanentDelete'] = $action;
         }
 

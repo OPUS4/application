@@ -47,59 +47,6 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertAction('index');
     }
 
-    /**
-     * Test edit action.
-     */
-    public function testEditAction() {
-        $this->dispatch('/admin/documents/edit/id/1');
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('documents');
-        $this->assertAction('edit');
-    }
-
-    /**
-     * Test edit action with missing ID.
-     */
-    public function testEditActionWithMissingId() {
-        $this->dispatch('/admin/documents/edit');
-        $this->assertRedirectTo('/admin/documents');
-    }
-
-    /**
-     * Test edit action with bad ID.
-     */
-    public function testEditActionWithBadId() {
-        $this->dispatch('/admin/documents/edit/id/1k1');
-        $this->assertRedirectTo('/admin/documents');
-    }
-
-    /**
-     * Test edit action with unknown ID.
-     *
-     * TODO check for specific exception?
-     */
-    public function testEditActionWithUnknownId() {
-        $this->dispatch('/admin/documents/edit/id/500');
-        $this->assertModule('default');
-        $this->assertController('error');
-        $this->assertAction('error');
-    }
-
-    public function testShowAction() {
-        $this->dispatch('/admin/documents/show/id/1');
-        $this->assertModule('admin');
-        $this->assertController('documents');
-        $this->assertAction('show');
-    }
-
-    public function testShowActionDoc91() {
-        $this->dispatch('/admin/documents/show/id/91');
-        $this->assertModule('admin');
-        $this->assertController('documents');
-        $this->assertAction('show');
-    }
-
 }
 
 ?>

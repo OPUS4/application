@@ -221,69 +221,6 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $this->view->directionLinks = $directionLinks;
     }
 
-    public function showAction() {
-        $id = $this->getRequest()->getParam('id');
-        if (!empty($id) && is_numeric($id)) {
-            $model = new $this->_modelclass($id);
-
-            $filter = new Opus_Model_Filter();
-            $filter->setModel($model);
-            $blacklist = array('PublicationState');
-            $filter->setBlacklist($blacklist);
-
-            $this->view->entry = $filter->toArray();
-            $this->view->objectId = $id;
-
-            if (!empty($model)) {
-                $this->view->docHelper = new Review_Model_DocumentAdapter(
-                        $this->view, $model);
-            }
-
-            return $model;
-        }
-        else {
-            $this->_helper->redirector('index');
-        }
-    }
-
-    /**
-     * Edits a model instance
-     *
-     * @return void
-     */
-    public function editAction() {
-        // get parameters
-        $id = $this->getRequest()->getParam('id');
-        if (empty($id) or !is_numeric($id)) {
-            $this->_helper->redirector('index');
-        }
-
-        $this->view->title = $this->view->translate('admin_documents_edit', $id);
-
-        $form_builder = new Form_Builder();
-        $document = new $this->_modelclass($id);
-
-        $documentInSession = new Zend_Session_Namespace('document');
-        $documentInSession->document = $document;
-
-        $this->view->showFilemanager = $document->hasField('File');
-        $documentWithFilter = $this->__createFilter($document);
-
-        $modelForm = $form_builder->build($documentWithFilter);
-
-        $action_url = $this->view->url(array("action" => "create"));
-        $modelForm->setAction($action_url);
-        $this->view->form = $modelForm;
-        $this->view->docId = $id;
-        $assignedCollections = array();
-        foreach ($document->getCollection() as $assignedCollection) {
-            $assignedCollections[] = array('collectionName' => $assignedCollection->getDisplayName(), 'collectionId' => $assignedCollection->getId(), 'roleName' => $assignedCollection->getRole()->getName(), 'roleId' => $assignedCollection->getRole()->getId());
-        }
-        $this->view->assignedCollections = $assignedCollections;
-        $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $document);
-
-    }
-
     /**
      * Save model instance
      *
