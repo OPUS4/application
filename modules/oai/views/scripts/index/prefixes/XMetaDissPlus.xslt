@@ -63,6 +63,8 @@
 
     <xsl:template match="Opus_Document" mode="xmetadissplus">
         <xMetaDiss
+            xmlns="http://www.d-nb.de/standards/xmetadissplus/"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://www.d-nb.de/standards/xmetadissplus/ http://www.d-nb.de/standards/xmetadissplus/xmetadissplus.xsd">
 
             <!-- dc:title -->
