@@ -48,13 +48,13 @@
             'id' => $this->docId
         ));?>"><?= $this->translate('admin_document_breadcrumb_document', $this->docId) ?></a>
         &gt;
-        <?= $this->translate('admin_document_breadcrumb_edit') ?>
+        <?= $this->translate('admin_document_breadcrumb_add') ?>
     </div>
 
     <div class="content">
         <?PHP if (isset($this->addForm)) : ?>
         <fieldset>
-            <legend><?=$this->translate('Add New')?></legend>
+            <legend><?=$this->translate('admin_document_add_' . $this->section)?></legend>
             <div>
                 <?= $this->addForm ?>
             </div>

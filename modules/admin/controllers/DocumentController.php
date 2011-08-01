@@ -159,6 +159,7 @@ class Admin_DocumentController extends Controller_Action {
     public function addAction() {
         $id = $this->getRequest()->getParam('id');
         $section = $this->getRequest()->getParam('section');
+        $this->view->section = $section;
         $model = new Opus_Document($id);
         $this->view->docId = $id;
         $this->view->addForm = $this->getAddForm($model, $section);

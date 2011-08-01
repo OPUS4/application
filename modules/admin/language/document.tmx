@@ -16,6 +16,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_document_add">
+      <tuv xml:lang="en">
+        <seg>Add Metadata</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Metadaten hinzufügen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_document_edit">
       <tuv xml:lang="en">
         <seg>Edit/Add Metadata</seg>
@@ -196,6 +205,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_breadcrumb_add">
+      <tuv xml:lang="en">
+        <seg>Add Metadata</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Metadaten hinzufügen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_document_breadcrumb_edit">
       <tuv xml:lang="en">
         <seg>Edit Metadata</seg>
@@ -274,6 +292,87 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Collection '%1$s' wurde erfolgreich entfernt.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_add_titles">
+      <tuv xml:lang="en">
+        <seg>Add new title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neuen Titel hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_add_abstracts">
+      <tuv xml:lang="en">
+        <seg>Add new abstract</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neuen Abstrakt hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_add_persons">
+      <tuv xml:lang="en">
+        <seg>Add new person</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neue Person hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_add_identifiers">
+      <tuv xml:lang="en">
+        <seg>Add new identifier</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neuen Identifier hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_add_licences">
+      <tuv xml:lang="en">
+        <seg>Add new licence</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neue Lizenz hinzufügen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_add_subjects">
+      <tuv xml:lang="en">
+        <seg>Add new subject</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neues Schlagwort hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_add_patents">
+      <tuv xml:lang="en">
+        <seg>Add new patent</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neues Patent hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_add_notes">
+      <tuv xml:lang="en">
+        <seg>Add new note</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neue Notiz hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_add_enrichments">
+      <tuv xml:lang="en">
+        <seg>Add new enrichment</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neues Enrichment hinzufügen</seg>
       </tuv>
     </tu>
 
