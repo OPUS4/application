@@ -179,12 +179,22 @@
 
     <tu tuid="admin_filemanager_error_upload">
       <tuv xml:lang="en">
-        <seg>An error occurred during upload.</seg>
+        <seg>An error occurred. The file might have been too large (%1$s).</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Beim Hochladen ist ein Fehler aufgetreten.</seg>
+        <seg>Beim Hochladen ist ein Fehler aufgetreten. Möglicherweise war die Datei zu groß (%1$s).</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_filemanager_error_nofile">
+      <tuv xml:lang="en">
+        <seg>You must select a file.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie müssen eine Datei auswählen.</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

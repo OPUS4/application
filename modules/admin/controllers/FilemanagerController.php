@@ -88,12 +88,23 @@ class Admin_FilemanagerController extends Controller_Action {
                 $this->view->form = $uploadForm;
                 $this->view->actionresult = 'Invalid form input.';
                 $message = $this->view->translate('admin_filemanager_invalid_upload');
+                // Because of redirect below errors are not passed to new page
+                // Only important error is missing file
+                $errors = $uploadForm->getErrors('fileupload');
+                if (!empty($errors)) {
+                    $message = $this->view->translate('admin_filemanager_error_nofile');
+                }
                 $this->_redirectTo('index', array('failure' => $message), 'filemanager', 'admin', array('docId' => $docId));
             }
         }
         else {
             if (!empty($docId)) {
-                $message = $this->view->translate('admin_filemanager_error_upload');
+                $postMaxSize = ini_get('post_max_size');
+                $uploadMaxFilesize = ini_get('upload_max_filesize');
+                
+                $maxSize = ($postMaxSize > $uploadMaxFilesize) ? $uploadMaxFilesize : $postMaxSize;
+                
+                $message = $this->view->translate('admin_filemanager_error_upload', '>' . $maxSize);
                 $this->_redirectTo('index', array('failure' => $message), 'filemanager', 'admin', array('docId' => $docId));
             }
             else {

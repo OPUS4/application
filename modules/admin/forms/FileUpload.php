@@ -51,21 +51,11 @@ class Admin_Form_FileUpload extends Zend_Form {
 
         $config = Zend_Registry::get('Zend_Config');
 
-        $maxFileSize = 2000000;
-
-        if (isset($config->publish->maxfilesize)) {
-            $maxFileSize = $config->publish->maxfilesize;
-        }
-        else {
-            $log->warn('publish.maxfilesize not configured (set to 2M).');
-        }
-
         // FIXME: Make hard coded path configurable.
         $fileupload = new Zend_Form_Element_File('fileupload');
         $fileupload->setRequired(true);
         $fileupload->setLabel('FileToUpload')
-            ->addValidator('Count', false, 1)     // ensure only 1 file
-            ->addValidator('Size', false, $maxFileSize); // limit to 100M
+            ->addValidator('Count', false, 1);     // ensure only 1 file
         
         $comment = new Zend_Form_Element_Textarea('comment');
         $comment->setAttrib('cols', 100);
