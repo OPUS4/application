@@ -44,7 +44,7 @@
                  ->setMinDepth(0)
                  ->setLinkLast(true) ?>
         &gt;
-        <a href="<?= $this->documentUrl()->adminShow($this->document->getDocId()) ?>"><?= $this->translate('admin_document_index') ?> (<?= $this->document->getDocId() ?>)</a>
+        <a href="<?= $this->documentUrl()->adminShow($this->docId) ?>"><?= $this->translate('admin_document_index') ?> (<?= htmlspecialchars($this->docId) ?>)</a>
         &gt;
         <?= $this->translate('admin_filemanager_index') ?>
     </div>
@@ -52,7 +52,7 @@
 <div style="padding: 1em; margin-left: 2em">
     <div>
         <span class="label"><?= $this->translate('DocumentId') ?></span>
-        <span class="value"><?= htmlspecialchars($this->document->getDocId()) ?></span>
+        <span class="value"><?= htmlspecialchars($this->docId) ?></span>
     </div>
     <div>
         <span class="label"><?= $this->translate('TitleMain') ?></span>
