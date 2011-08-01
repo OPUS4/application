@@ -624,7 +624,7 @@ class Oai_IndexController extends Controller_Xml {
         $finder->setServerStateInList($this->_deliveringDocumentStates);
 
         $metadataPrefix = $oaiRequest['metadataPrefix'];
-        if ('xMetaDiss' === $metadataPrefix or 'XMetaDissPlus' === $metadataPrefix) {
+        if ('xMetaDiss' === $metadataPrefix) {
             $finder->setTypeInList($this->_xMetaDissRestriction);
         }
         if ('epicur' === $metadataPrefix) {
