@@ -25,45 +25,29 @@
                     <controller>documents</controller>
                     <action>index</action>
                     <pages>
-                        <edit>
-                            <type>mvc</type>
-                            <label>admin_documents_edit</label>
-                            <module>admin</module>
-                            <controller>documents</controller>
-                            <action>edit</action>
-                        </edit>
-
-                        <create>
-                            <type>mvc</type>
-                            <label>admin_documents_edit</label>
-                            <module>admin</module>
-                            <controller>documents</controller>
-                            <action>create</action>
-                        </create>
-
                         <show>
-                            <type>mvc</type>
-                            <label>admin_documents_show</label>
-                            <module>admin</module>
-                            <controller>documents</controller>
-                            <action>show</action>
-                        </show>
-
-                        <show2>
                             <type>mvc</type>
                             <label>admin_document_index</label>
                             <module>admin</module>
                             <controller>document</controller>
                             <action>index</action>
-                        </show2>
+                        </show>
 
-                        <edit2>
+                        <add>
+                            <type>mvc</type>
+                            <label>admin_document_add</label>
+                            <module>admin</module>
+                            <controller>document</controller>
+                            <action>add</action>
+                        </add>
+
+                        <edit>
                             <type>mvc</type>
                             <label>admin_document_edit</label>
                             <module>admin</module>
                             <controller>document</controller>
                             <action>edit</action>
-                        </edit2>
+                        </edit>
 
                         <filemanager>
                             <type>mvc</type>
