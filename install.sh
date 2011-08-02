@@ -81,23 +81,32 @@ then
 fi
 
 # promt for username, if required
+echo "OPUS requires a dedicated system account under which Solr will be running."
+echo "In order to create this account, you will be prompted for some information."
+[[ -z $OPUS_USER_NAME ]] && read -p "System Account Name [opus4]: " OPUS_USER_NAME
+if [ -z "$OPUS_USER_NAME" ]; then
+  OPUS_USER_NAME='opus4'
+fi
+OPUS_USER_NAME_ESC=`echo "$OPUS_USER_NAME" | sed 's/\!/\\\!/g'`
+
+# create user account
 [[ -z $CREATE_OPUS_USER ]] && CREATE_OPUS_USER=Y
 if [ "$CREATE_OPUS_USER" = Y ];
 then
-  echo "OPUS requires a dedicated system account under which Solr will be running."
-  echo "In order to create this account, you will be prompted for some information."
-  [[ -z $OPUS_USER_NAME ]] && read -p "System Account Name [opus4]: " OPUS_USER_NAME
-  if [ -z "$OPUS_USER_NAME" ]; then
-    OPUS_USER_NAME='opus4'
-  fi
-  OPUS_USER_NAME_ESC=`echo "$OPUS_USER_NAME" | sed 's/\!/\\\!/g'`
-
   if [ "$OS" = ubuntu ]
   then
     useradd -c 'OPUS 4 Solr manager' --system "$OPUS_USER_NAME_ESC"
   else
     useradd -c 'OPUS 4 Solr manager' --system --create-home --shell /bin/bash "$OPUS_USER_NAME_ESC"
   fi
+fi
+
+# preparing OWNER string for chown-calls.
+if [ "$OS" = ubuntu ]
+then
+  OWNER="$OPUS_USER_NAME:$OPUS_USER_NAME"
+else
+  OWNER="$OPUS_USER_NAME"
 fi
 
 # prompt for database parameters
@@ -255,12 +264,6 @@ then
   fi
 
   # change file owner of solr installation
-  if [ "$OS" = ubuntu ]
-  then
-    OWNER="$OPUS_USER_NAME:$OPUS_USER_NAME"
-  else
-    OWNER="$OPUS_USER_NAME"
-  fi
   chown -R "$OWNER" "$BASEDIR/apache-solr-1.4.1"
   chown -R "$OWNER" "$BASEDIR/solrconfig"
 
