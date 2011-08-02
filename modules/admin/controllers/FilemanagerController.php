@@ -57,11 +57,7 @@ class Admin_FilemanagerController extends Controller_Action {
         ));
 
         $this->view->importUrl = $importUrl;
-
-        // TODO not needed anymore
-//        if (!empty($this->view->actionresult)) {
-//            $this->_redirectTo('index', $this->view->actionresult, 'filemanager', 'admin', array('docId' => $docId));
-//        }
+        $this->view->baseUrl = $this->getRequest()->getBaseUrl();
     }
 
     public function uploadAction() {

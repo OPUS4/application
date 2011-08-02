@@ -118,6 +118,12 @@ class Admin_Model_FileHelper {
         return $this->file->getPathName();
     }
 
+    public function getUrl($view) {
+        $config = Zend_Registry::get("Zend_Config");
+        $rawUrl = $view->serverUrl() . $view->baseUrl . "/files/" . $this->document->getId() . "/" . $this->getFileName();
+        return htmlspecialchars($rawUrl);
+    }
+
     public function getHashes() {
         if (!$this->file->exists()) {
             return array();

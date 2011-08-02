@@ -76,7 +76,7 @@
         $fileName = htmlspecialchars($file->getFileName());
     ?>
     <fieldset class="file">
-    <legend class="filename"><?= $fileName ?></legend>
+    <legend class="filename"><a href="<?= $file->getUrl($this) ?>"><?= $fileName ?></a></legend>
 
     <table width="100%">
         <tr>
