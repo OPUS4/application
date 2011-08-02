@@ -481,29 +481,6 @@
 
 
     <!-- Templates for "external fields". -->
-    <xsl:template match="Collection[@RoleName='ccs' or @RoleName='ddc' or @RoleName='msc' or @RoleName='pacs' or @RoleName='series']">
-        <tr>
-            <xsl:choose>
-                <xsl:when test="position()=1">
-                    <th class="name">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_
-                                <xsl:value-of select="@RoleName" />
-                            </xsl:with-param>
-                        </xsl:call-template>
-                        <xsl:text>:</xsl:text>
-                    </th>
-                </xsl:when>
-                <xsl:otherwise>
-                    <td></td>
-                </xsl:otherwise>
-            </xsl:choose>
-            <td>
-                <xsl:call-template name="checkdisplay"/>
-            </td>
-        </tr>
-    </xsl:template>
-
     <xsl:template match="Collection">
         <tr>
             <xsl:choose>
