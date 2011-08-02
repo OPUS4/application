@@ -69,46 +69,10 @@ class Publish_DepositControllerTest extends ControllerTestCase {
                     'back' => ''
                 ));
 
-//        $this->dispatch('/publish/deposit/deposit');
-//        $this->assertResponseCode(200);
-//        $this->assertController('form');
-//        $this->assertAction('check');
-    }
-
-    /**
-     * Method tests the deposit action with a valid POST request
-     * which leads to a OK Message, code 200 and Saving of all document data
-     */
-    public function testDepositActionWithValidPostAndCollectionButton() {
-        $session = new Zend_Session_Namespace('Publish');
-        $elemente = array(
-            1 => array('name' => 'PersonSubmitterFirstName1', 'value' => 'Hans'),
-            2 => array('name' => 'PersonSubmitterLastName1', 'value' => 'Hansmann'),
-            3 => array('name' => 'PersonSubmitterEmail1', 'value' => 'test@mail.com'),
-            4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),            
-            5 => array('name' => 'EnrichmentLegalNotices', 'value' => '1'),
-            6 => array('name' => 'TitleMain1', 'value' => 'Irgendwas'),
-            7 => array('name' => 'TitleMainLanguage1', 'value' => 'deu')
-        );
-        $session->elements = $elemente;
-        
-        $doc = new Opus_Document();
-        $doc->setType('preprint');
-        $doc->setServerState('temporary');
-        $docId = $doc->store();
-        $session->documentType = 'preprint';
-        $session->documentId = $docId;
-
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'collection' => ''
-                ));
-
         $this->dispatch('/publish/deposit/deposit');
         $this->assertResponseCode(200);
-        $this->assertController('collection');
-        $this->assertAction('top');
+        $this->assertController('form');
+        $this->assertAction('check');
     }
 
     /**
@@ -178,10 +142,10 @@ class Publish_DepositControllerTest extends ControllerTestCase {
                     'send' => 'Save document'
                 ));
 
-//        $this->dispatch('/publish/deposit/deposit');
-//        $this->assertResponseCode(302);
-//        $this->assertController('deposit');
-//        $this->assertAction('deposit');
+        $this->dispatch('/publish/deposit/deposit');
+        $this->assertResponseCode(302);
+        $this->assertController('deposit');
+        $this->assertAction('deposit');
     }
 
     public function testConfirmAction() {

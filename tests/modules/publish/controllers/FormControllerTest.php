@@ -73,10 +73,10 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'send' => 'Next step'
                 ));
 
-//        $this->dispatch('/publish/form/check');
-//        $this->assertResponseCode(200);
-//        $this->assertController('form');
-//        $this->assertAction('check');
+        $this->dispatch('/publish/form/check');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
     }      
 
     /**
@@ -201,9 +201,9 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
                        
         $this->dispatch('/publish/form/check');
-       // $this->assertResponseCode(200);
-       // $this->assertController('form');
-        //$this->assertAction('check');
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
     }
     
     /**
@@ -216,46 +216,10 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'abort' => '',
                 ));
 
-//        $this->dispatch('/publish/form/check');
-//        $this->assertResponseCode(302);
-//        $this->assertController('form');
-//        $this->assertAction('check');
-    }
-
-    /**
-     * Abort from Collection view
-     */
-    public function testCheckActionWithAbortCollectionInPost() {
-        $session = new Zend_Session_Namespace('Publish');
-        $elemente = array(
-            1 => array('name' => 'PersonSubmitterFirstName1', 'value' => 'Hans'),
-            2 => array('name' => 'PersonSubmitterLastName1', 'value' => 'Hansmann'),
-            3 => array('name' => 'PersonSubmitterEmail1', 'value' => 'test@mail.com'),
-            4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
-            5 => array('name' => 'EnrichmentLegalNotices', 'value' => '1'),
-            6 => array('name' => 'TitleMain1', 'value' => 'Irgendwas'),
-            7 => array('name' => 'TitleMainLanguage1', 'value' => 'deu')
-        );
-        $session->elements = $elemente;
-        $doc = new Opus_Document();
-        $doc->setType('preprint');
-        $doc->setServerState('temporary');
-        $docId = $doc->store();
-        $session->documentType = 'preprint';
-        $session->documentId = $docId;
-        $session->fulltext = '0';
-        $session->additionalFields = array();
-
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'abortCollection' => '',
-                ));
-
-//        $this->dispatch('/publish/form/check');
-//        $this->assertResponseCode(200);
-//        $this->assertController('form');
-//        $this->assertAction('check');
+        $this->dispatch('/publish/form/check');
+        $this->assertResponseCode(302);
+        $this->assertController('form');
+        $this->assertAction('check');
     }
 
 }
