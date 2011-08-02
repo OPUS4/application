@@ -21,6 +21,12 @@ set -e
 SCRIPT_NAME="`basename "$0"`"
 SCRIPT_PATH="`dirname "`readlink -f "$0"`"`"
 
+# load installer config.
+if [ -f "$SCRIPT_PATH/installer.conf" ]; then
+    . "$SCRIPT_PATH/installer.conf"
+fi
+
+# check input parameter
 if [ $# -lt 1 ]
 then
   echo "Missing Argument: use $SCRIPT_NAME {ubuntu,suse}"
@@ -74,34 +80,38 @@ then
   rm opus4/public/.htaccess.tmp
 fi
 
-# promt for username
-echo "OPUS requires a dedicated system account under which Solr will be running."
-echo "In order to create this account, you will be prompted for some information."
-read -p "System Account Name [opus4]: " OPUS_USER_NAME
-if [ -z "$OPUS_USER_NAME" ]; then
-  OPUS_USER_NAME='opus4'
-fi
-OPUS_USER_NAME_ESC=`echo "$OPUS_USER_NAME" | sed 's/\!/\\\!/g'`
-
-if [ "$OS" = ubuntu ]
+# promt for username, if required
+[[ -z $CREATE_OPUS_USER ]] && CREATE_OPUS_USER=Y
+if [ "$CREATE_OPUS_USER" = Y ];
 then
-  useradd -c 'OPUS 4 Solr manager' --system "$OPUS_USER_NAME_ESC"
-else
-  useradd -c 'OPUS 4 Solr manager' --system --create-home --shell /bin/bash "$OPUS_USER_NAME_ESC"
+  echo "OPUS requires a dedicated system account under which Solr will be running."
+  echo "In order to create this account, you will be prompted for some information."
+  [[ -z $OPUS_USER_NAME ]] && read -p "System Account Name [opus4]: " OPUS_USER_NAME
+  if [ -z "$OPUS_USER_NAME" ]; then
+    OPUS_USER_NAME='opus4'
+  fi
+  OPUS_USER_NAME_ESC=`echo "$OPUS_USER_NAME" | sed 's/\!/\\\!/g'`
+
+  if [ "$OS" = ubuntu ]
+  then
+    useradd -c 'OPUS 4 Solr manager' --system "$OPUS_USER_NAME_ESC"
+  else
+    useradd -c 'OPUS 4 Solr manager' --system --create-home --shell /bin/bash "$OPUS_USER_NAME_ESC"
+  fi
 fi
 
 # prompt for database parameters
-read -p "New OPUS Database Name [opus400]: "          DBNAME
-read -p "New OPUS Database Admin Name [opus4admin]: " ADMIN
-read -p "New OPUS Database Admin Password: " -s       ADMIN_PASSWORD
+[[ -z $DBNAME               ]] && read -p "New OPUS Database Name [opus400]: "          DBNAME
+[[ -z $ADMIN                ]] && read -p "New OPUS Database Admin Name [opus4admin]: " ADMIN
+[[ -z $ADMIN_PASSWORD       ]] && read -p "New OPUS Database Admin Password: " -s       ADMIN_PASSWORD
 echo
-read -p "New OPUS Database User Name [opus4]: "       WEBAPP_USER
-read -p "New OPUS Database User Password: " -s        WEBAPP_USER_PASSWORD
+[[ -z $WEBAPP_USER          ]] && read -p "New OPUS Database User Name [opus4]: "       WEBAPP_USER
+[[ -z $WEBAPP_USER_PASSWORD ]] && read -p "New OPUS Database User Password: " -s        WEBAPP_USER_PASSWORD
 echo
-read -p "MySQL DBMS Host [leave blank for using Unix domain sockets]: " MYSQLHOST
-read -p "MySQL DBMS Port [leave blank for using Unix domain sockets]: " MYSQLPORT
+[[ -z $MYSQLHOST            ]] && read -p "MySQL DBMS Host [leave blank for using Unix domain sockets]: " MYSQLHOST
+[[ -z $MYSQLPORT            ]] && read -p "MySQL DBMS Port [leave blank for using Unix domain sockets]: " MYSQLPORT
 echo
-read -p "MySQL Root User [root]: "                                      MYSQLROOT
+[[ -z $MYSQLROOT            ]] && read -p "MySQL Root User [root]: "                                      MYSQLROOT
 echo
 
 
@@ -185,7 +195,7 @@ chmod +x opus-apache-rewritemap-caller-secure.sh
 
 # install and configure Solr search server
 cd "$BASEDIR"
-read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
+[[ -z $INSTALL_SOLR ]] && read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
 if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ]
 then
   tar xfvz "$BASEDIR/downloads/solr.tgz"
@@ -200,7 +210,7 @@ then
   cd ../../
   ln -sf "$BASEDIR/solrconfig/logging.properties"
 
-  read -p "Solr server port number [8983]: " SOLR_SERVER_PORT
+  [[ -z $SOLR_SERVER_PORT ]] && read -p "Solr server port number [8983]: " SOLR_SERVER_PORT
   if [ -z "$SOLR_SERVER_PORT" ]; then
     SOLR_SERVER_PORT='8983';
   fi
@@ -227,7 +237,7 @@ then
       -e "s!^JETTY_USER=!JETTY_USER=$OPUS_USER_NAME_ESC!" opus4-solr-jetty.conf.template > opus4-solr-jetty.conf
   chmod +x opus4-solr-jetty
 
-  read -p "Install init.d script to start and stop Solr server automatically? [Y]: " INSTALL_INIT_SCRIPT
+  [[ -z $INSTALL_INIT_SCRIPT ]] && read -p "Install init.d script to start and stop Solr server automatically? [Y]: " INSTALL_INIT_SCRIPT
   if [ -z "$INSTALL_INIT_SCRIPT" ] || [ "$INSTALL_INIT_SCRIPT" = Y ] || [ "$INSTALL_INIT_SCRIPT" = y ]
   then
     ln -sf "$BASEDIR/install/opus4-solr-jetty" /etc/init.d/opus4-solr-jetty
@@ -259,7 +269,7 @@ then
 fi
 
 # import some test documents
-read -p "Import test data? [Y]: " IMPORT_TESTDATA
+[[ -z $IMPORT_TESTDATA ]] && read -p "Import test data? [Y]: " IMPORT_TESTDATA
 if [ -z "$IMPORT_TESTDATA" ] || [ "$IMPORT_TESTDATA" = Y ] || [ "$IMPORT_TESTDATA" = y ]
 then
   # import test data
@@ -296,7 +306,7 @@ cd "$BASEDIR"
 chmod -R 777 workspace
 
 # delete tar archives
-read -p "Delete downloads? [N]: " DELETE_DOWNLOADS
+[[ -z $DELETE_DOWNLOADS ]] && read -p "Delete downloads? [N]: " DELETE_DOWNLOADS
 if [ "$DELETE_DOWNLOADS" = Y ] || [ "$DELETE_DOWNLOADS" = y ]; then
   rm -rf downloads
 fi
