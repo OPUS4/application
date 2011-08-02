@@ -3,12 +3,21 @@
   <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
   <body>
 
-    <tu tuid="frontdoor_delivery_error_caption">
+    <tu tuid="frontdoor_deliver_index">
         <tuv xml:lang="en">
-            <seg>Delivery Error</seg>
+            <seg>File Download</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Auslieferungsfehler</seg>
+            <seg>Dateidownload</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="frontdoor_delivery_error_caption">
+        <tuv xml:lang="en">
+            <seg>Error downloading file</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler beim Dateidownload</seg>
         </tuv>
     </tu>
 

@@ -26,10 +26,10 @@
  *
  * @category    Application
  * @package     Module_Frontdoor
- * @author      Sascha Szott <szott@zib.de>
+ * @author      Julian Heise <heise@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Exception.php 8422 2011-05-27 16:53:31Z sszott $
+ * @version     $Id$
  */
 
 class Frontdoor_Model_DocumentNotFoundException extends Frontdoor_Model_FrontdoorDeliveryException {

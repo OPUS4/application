@@ -52,7 +52,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $baseUrl = $request->getBaseUrl();
 
         if ($docId == '') {
-            $this->handleDocumentError("frontdoor_doc_id_missing", 404);
+            $this->printDocumentError("frontdoor_doc_id_missing", 404);
             return;
         }
 
@@ -61,7 +61,7 @@ class Frontdoor_IndexController extends Controller_Action {
             $document = new Opus_Document($docId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            $this->handleDocumentError("frontdoor_doc_id_not_found", 404);
+            $this->printDocumentError("frontdoor_doc_id_not_found", 404);
             return;
         }
 
@@ -70,7 +70,15 @@ class Frontdoor_IndexController extends Controller_Action {
             $documentXml = new Util_Document($document);
         }
         catch (Application_Exception $e) {
-            $this->handleDocumentError("frontdoor_doc_access_denied", 403, $document);
+            switch ($document->getServerState()) {
+                case self::SERVER_STATE_DELETED:
+                    $this->printDocumentError("frontdoor_doc_deleted", 410);
+                    return;
+                case self::SERVER_STATE_UNPUBLISHED:
+                    $this->printDocumentError("frontdoor_doc_unpublished", 403);
+                    return;
+            }
+            $this->printDocumentError("frontdoor_doc_access_denied", 403);
             return;
         }
 
@@ -107,26 +115,10 @@ class Frontdoor_IndexController extends Controller_Action {
         $this->incrementStatisticsCounter($docId);
     }
 
-    private function handleDocumentError($message, $code, $document = null) {
+    private function printDocumentError($message, $code) {
         $this->view->errorMessage = $message;
         $this->getResponse()->setHttpResponseCode($code);
-        if($document != null) {
-            $this->evaluateServerState ($document);
-        }
         $this->render('document-error');
-    }
-
-    private function evaluateServerState($document) {
-        switch ($document->getServerState()) {
-        case self::SERVER_STATE_DELETED:
-            $this->getResponse()->setHttpResponseCode(410);
-            $this->view->errorMessage = "frontdoor_doc_deleted";
-            break;
-        case self::SERVER_STATE_UNPUBLISHED:
-            $this->getResponse()->setHttpResponseCode(403);
-            $this->view->errorMessage = "frontdoor_doc_unpublished";
-            break;
-        }
     }
 
     /**
