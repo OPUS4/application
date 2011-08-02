@@ -481,117 +481,15 @@
 
 
     <!-- Templates for "external fields". -->
-    <xsl:template match="Collection[@RoleName='ccs']">
-        <xsl:choose>
-            <xsl:when test="position()=1">
-                <tr>
-                    <th class="name">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
-                        </xsl:call-template>
-                        <xsl:text>:</xsl:text>
-                    </th>
-                    <td>
-                        <xsl:call-template name="checkdisplay"/>
-                    </td>
-                </tr>
-            </xsl:when>
-            <xsl:otherwise>
-                <tr>
-                    <td></td>
-                    <td>
-                        <xsl:call-template name="checkdisplay"/>
-                    </td>
-                </tr>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
-    <xsl:template match="Collection[@RoleName='ddc']">
-        <xsl:choose>
-            <xsl:when test="position()=1">
-                <tr>
-                    <th class="name">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
-                        </xsl:call-template>
-                        <xsl:text>:</xsl:text>
-                    </th>
-                    <td>
-                        <xsl:call-template name="checkdisplay"/>
-                    </td>
-                </tr>
-            </xsl:when>
-            <xsl:otherwise>
-                <tr>
-                    <td></td>
-                    <td>
-                        <xsl:call-template name="checkdisplay"/>
-                    </td>
-                </tr>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
-    <xsl:template match="Collection[@RoleName='msc']">
-        <xsl:choose>
-            <xsl:when test="position()=1">
-                <tr>
-                    <th class="name">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
-                        </xsl:call-template>
-                        <xsl:text>:</xsl:text>
-                    </th>
-                    <td>
-                        <xsl:call-template name="checkdisplay"/>
-                    </td>
-                </tr>
-            </xsl:when>
-            <xsl:otherwise>
-                <tr>
-                    <td></td>
-                    <td>
-                        <xsl:call-template name="checkdisplay"/>
-                    </td>
-                </tr>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
-    <xsl:template match="Collection[@RoleName='pacs']">
-        <xsl:choose>
-            <xsl:when test="position()=1">
-                <tr>
-                    <th class="name">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
-                        </xsl:call-template>
-                        <xsl:text>:</xsl:text>
-                    </th>
-                    <td>
-                        <xsl:call-template name="checkdisplay"/>
-                    </td>
-                </tr>
-            </xsl:when>
-            <xsl:otherwise>
-                <tr>
-                    <td></td>
-                    <td>
-                        <xsl:call-template name="checkdisplay"/>
-                    </td>
-                </tr>
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
-    <xsl:template match="Collection[@RoleName='series']">
+    <xsl:template match="Collection[@RoleName='ccs' or @RoleName='ddc' or @RoleName='msc' or @RoleName='pacs' or @RoleName='series']">
         <tr>
             <xsl:choose>
                 <xsl:when test="position()=1">
                     <th class="name">
                         <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
+                            <xsl:with-param name="string">collection_role_frontdoor_
+                                <xsl:value-of select="@RoleName" />
+                            </xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
