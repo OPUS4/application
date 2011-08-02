@@ -38,6 +38,7 @@ class Frontdoor_IndexController extends Controller_Action {
     const SERVER_STATE_DELETED = 'deleted';
     const SERVER_STATE_UNPUBLISHED = 'unpublished';
     const TRANSLATE_FUNCTION = 'Frontdoor_IndexController::translate';
+    const TRANSLATE_DEFAULT_FUNCTION = 'Frontdoor_IndexController::translateWithDefault';
     const FILE_ACCESS_FUNCTION = 'Frontdoor_IndexController::checkIfUserHasFileAccess';
     
     /**
@@ -89,6 +90,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $xslt->load($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $template);
         $proc = new XSLTProcessor;
         $proc->registerPHPFunctions(self::TRANSLATE_FUNCTION);
+        $proc->registerPHPFunctions(self::TRANSLATE_DEFAULT_FUNCTION);
         $proc->registerPHPFunctions(self::FILE_ACCESS_FUNCTION);
         $proc->importStyleSheet($xslt);
 
@@ -310,6 +312,23 @@ class Frontdoor_IndexController extends Controller_Action {
         $registry = Zend_Registry::getInstance();
         $translate = $registry->get('Zend_Translate');
         return $translate->_($key);
+    }
+
+    /**
+     * Gateway function to Zend's translation facilities.  Falls back to default
+     * if no translation exists.
+     *
+     * @param  string  $key     The key of the string to translate.
+     * @param  string  $default The default value of no translation exists
+     * @return string  The translated string *or* the default value
+     */
+    static public function translateWithDefault($key, $default = '') {
+        $translate = Zend_Registry::get('Zend_Translate');
+        /* @var $translate Zend_Translate_Adapter */
+        if ($translate->isTranslated($key)) {
+            return $translate->_($key);
+        }
+        return $default;
     }
 
 }

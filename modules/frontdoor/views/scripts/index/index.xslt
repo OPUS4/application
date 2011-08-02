@@ -486,8 +486,9 @@
             <xsl:choose>
                 <xsl:when test="position()=1">
                     <th class="name">
-                        <xsl:call-template name="translateString">
+                        <xsl:call-template name="translateStringWithDefault">
                             <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
+                            <xsl:with-param name="default"><xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -1211,6 +1212,12 @@
     <xsl:template name="translateString">
         <xsl:param name="string" />
         <xsl:value-of select="php:functionString('Frontdoor_IndexController::translate', $string)" />
+    </xsl:template>
+
+    <xsl:template name="translateStringWithDefault">
+        <xsl:param name="string" />
+        <xsl:param name="default" />
+        <xsl:value-of select="php:functionString('Frontdoor_IndexController::translateWithDefault', $string, $default)" />
     </xsl:template>
 
     <xsl:template name="replaceCharsInString">
