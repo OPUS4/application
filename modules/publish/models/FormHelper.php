@@ -44,14 +44,12 @@ class Publish_Model_FormHelper {
     CONST EXPERT = "X";
     CONST LABEL = "_label";
     CONST ERROR = "Error";
-
-    public $log;
+   
     public $session;
     public $form;
     public $view;
 
-    public function __construct($view = null, $form = null) {
-        $this->log = Zend_Registry::get('Zend_Log');
+    public function __construct($view = null, $form = null) {        
         $this->session = new Zend_Session_Namespace('Publish');
 
         if (!is_null($view)) {
@@ -72,23 +70,88 @@ class Publish_Model_FormHelper {
     }
 
     /**
+     *
+     * @param <type> $elementName
+     * @return string
+     */
+    public function getElementAttributes($elementName) {
+        $elementAttributes = array();
+        if (!is_null($this->form->getElement($elementName))) {
+            $element = $this->form->getElement($elementName);
+            $elementAttributes['value'] = $element->getValue();
+            $elementAttributes['label'] = $element->getLabel();
+            $elementAttributes['error'] = $element->getMessages();
+            $elementAttributes['id'] = $element->getId();
+            $elementAttributes['type'] = $element->getType();
+            $elementAttributes['desc'] = $element->getDescription();
+            $elementAttributes['hint'] = 'hint_' . $elementName;
+            $elementAttributes['header'] = 'header_' . $elementName;
+            $elementAttributes['disabled'] = $element->getAttrib('disabled');
+
+            if ($element->getType() === 'Zend_Form_Element_Checkbox') {
+                $elementAttributes['value'] = $element->getCheckedValue();
+                if ($element->isChecked())
+                    $elementAttributes['check'] = 'checked';
+                else
+                    $elementAttributes['check'] = '';
+            }
+
+            if ($element->getType() === 'Zend_Form_Element_Select') {
+                $elementAttributes["options"] = $element->getMultiOptions(); //array
+            }
+
+            if ($element->isRequired())
+                $elementAttributes["req"] = "required";
+            else
+                $elementAttributes["req"] = "optional";
+        }
+
+        return $elementAttributes;
+    }
+
+    /**
      * Renders the data check page in case that all given form values are valid.
      * @param <type> $this->form 
      */
-    public function showCheckPage() {
-        $this->log->debug("Variables are valid!");
-        $this->view->title = $this->view->translate('publish_controller_index');
+    public function showCheckPage($depositForm) {                
         $this->view->subtitle = $this->view->translate('publish_controller_check2');
         $this->view->header = $this->view->translate('publish_controller_changes');
-
-        $depositForm = new Publish_Form_PublishingSecond($this->form->getValues());
+        
         $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
         $depositForm->setAction($action_url);
         $depositForm->setMethod('post');
-        $depositForm->populate($this->form->getValues());
-        $depositForm->prepareCheck();
+        $this->prepareCheck($depositForm);
+
         $this->view->action_url = $action_url;
         $this->view->form = $depositForm;
+    }
+
+    public function prepareCheck($depositForm) {
+        $this->session->elements = array();
+
+        //iterate over form elements
+        foreach ($depositForm->getElements() as $element) {
+            $name = $element->getName();
+
+            if ($element->getValue() == ""
+                    || $element->getType() == "Zend_Form_Element_Submit"
+                    || $element->getType() == "Zend_Form_Element_Hidden"
+                    || $element->getValue() == '___EMPTY') {
+
+                $element->removeDecorator('Label');
+                $depositForm->removeElement($name);
+            }
+            else {
+                $this->session->elements[$name]['name'] = $name;
+                $this->session->elements[$name]['value'] = $element->getValue();
+                $this->session->elements[$name]['label'] = $element->getLabel();
+                $element->removeDecorator('Label');
+            }
+        }
+
+        $depositForm->_addSubmit('button_label_back', 'back');
+        $depositForm->_addSubmit('button_label_collection', 'collection');
+        $depositForm->_addSubmit('button_label_send2', 'send');
     }
 
     /**
@@ -98,15 +161,14 @@ class Publish_Model_FormHelper {
     public function showTemplate($helper) {
         $templateName = $helper->documentTypes->getTemplateName($this->session->documentType);
         $helper->viewRenderer($templateName);
-        $this->view->subtitle = $this->view->translate($this->session->documentType);
-        $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
+        $this->view->subtitle = $this->view->translate($this->session->documentType);        
         $this->view->doctype = $this->session->documentType;
-
-        $publishForm = new Publish_Form_PublishingSecond(null);
+        
+        $publishForm = new Publish_Form_PublishingSecond($this->view);
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
         $publishForm->setAction($action_url);
         $publishForm->setMethod('post');
-        $this->setSecondFormViewVariables($publishForm);
+        //$this->setSecondFormViewVariables($publishForm);
         $this->view->action_url = $action_url;
         $this->view->form = $publishForm;
     }
@@ -189,8 +251,7 @@ class Publish_Model_FormHelper {
             if (!is_null($displayGroup)) {
                 $group = $this->_buildViewDisplayGroup($displayGroup, $form);
                 $group["Name"] = $groupName;
-                $this->view->$groupName = $group;
-                $this->viewElementsCount++;
+                $this->view->$groupName = $group;                
             }
 
             //single field name (for calling with helper class)
@@ -198,12 +259,10 @@ class Publish_Model_FormHelper {
 
             if (strstr($currentElement, 'Enrichment')) {
                 $name = str_replace('Enrichment', '', $currentElement);
-                $this->view->$name = $elementAttributes;
-                $this->viewElementsCount++;
+                $this->view->$name = $elementAttributes;                
             }
             else {
-                $this->view->$currentElement = $elementAttributes;
-                $this->viewElementsCount++;
+                $this->view->$currentElement = $elementAttributes;                
             }
 
             $label = $currentElement . self::LABEL;
@@ -312,13 +371,18 @@ class Publish_Model_FormHelper {
                 $workflow = 'up';
             }
 
-            $currentNumber = $this->session->additionalFields[$fieldName];
+            if (!is_null($this->session->additionalFields[$fieldName]))
+                    $currentNumber = $this->session->additionalFields[$fieldName];
+            else 
+                $currentNumber = 1;
+
+            //collection
             if (array_key_exists('step' . $fieldName . $currentNumber, $this->session->additionalFields)) {
                 $currentCollectionLevel = $this->session->additionalFields['step' . $fieldName . $currentNumber];
                 if ($currentCollectionLevel == '1') {
                     if (isset($postData[$fieldName . $currentNumber])) {
-                        if (substr($postData[$fieldName . $currentNumber], 3) !== 'EMPTY') 
-                                $this->session->additionalFields['collId1' . $fieldName . $currentNumber] = substr($postData[$fieldName . $currentNumber], 3);
+                        if (substr($postData[$fieldName . $currentNumber], 3) !== 'EMPTY')
+                            $this->session->additionalFields['collId1' . $fieldName . $currentNumber] = substr($postData[$fieldName . $currentNumber], 3);
                     }
                 }
                 else {
@@ -360,7 +424,7 @@ class Publish_Model_FormHelper {
                     break;
                 case 'down':
                     if (substr($postData[$fieldName . $currentNumber], 3) !== 'EMPTY' || $this->session->additionalFields['collId1' . $fieldName . $currentNumber] !== 'EMPTY')
-                            $currentCollectionLevel = (int) $currentCollectionLevel + 1;
+                        $currentCollectionLevel = (int) $currentCollectionLevel + 1;
                     break;
                 case 'up' :
                     if ($currentCollectionLevel >= 2)
@@ -374,16 +438,16 @@ class Publish_Model_FormHelper {
             $this->session->additionalFields[$fieldName] = $currentNumber;
             if (isset($currentCollectionLevel)) {
                 $this->session->additionalFields['step' . $fieldName . $fieldsetCount] = $currentCollectionLevel;
-            }
-            //var_dump($this->session->additionalFields);
+            }            
         }
 
-        $form2 = new Publish_Form_PublishingSecond($postData);
+        $form2 = new Publish_Form_PublishingSecond($this->view, $postData);
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
         $form2->setAction($action_url);
         $this->view->action_url = $action_url;
         $this->setSecondFormViewVariables($form2);
-        $this->view->form = $form2;
+        $this->view->form = $form2;       
+
     }
 
     /**
@@ -394,8 +458,8 @@ class Publish_Model_FormHelper {
         $pressedButtonName = "";
         foreach ($this->form->getElements() AS $element) {
             $name = $element->getName();
-            if (strstr($name, 'addMore') || strstr($name, 'deleteMore') || strstr($name, 'browseDown') || strstr($name, 'browseUp')) {                
-                $value = $element->getValue();               
+            if (strstr($name, 'addMore') || strstr($name, 'deleteMore') || strstr($name, 'browseDown') || strstr($name, 'browseUp')) {
+                $value = $element->getValue();
                 if (!is_null($value))
                     $pressedButtonName = $name;
             }

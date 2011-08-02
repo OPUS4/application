@@ -49,7 +49,6 @@ class Publish_Model_DocumenttypeParser {
     private $additionalFields = array();
 
     /**
-     * Constructor!!!
      * Allocates the member variables form, log, session and dom.
      * @param DOMDocument $dom
      * @param Publish_Form_PublishingSecond $form
@@ -76,23 +75,15 @@ class Publish_Model_DocumenttypeParser {
         foreach ($this->dom->getElementsByTagname('field') as $field) {
 
             $this->currentElement = new Publish_Model_FormElement($this->form);
-
             $this->currentElement->setAdditionalFields($this->additionalFields);
-
             $this->_parseAttributes($field);
-
             $this->_parseSubFields($field);
-
             $this->_parseDefaultEntry($field);
-
             $this->_parseRequiredIfFulltext($field);
-
             $this->currentElement->setPostValues($this->postValues);           
-
             $group = $this->currentElement->initGroup();            
-
             $this->formElements[] = $group;
-            
+           
             if (!isset($group)) {
                 $element = $this->currentElement->transform();
                 $this->formElements[] = $element;
@@ -272,6 +263,10 @@ class Publish_Model_DocumenttypeParser {
                     $this->log->debug("currentElement : " . $this->currentElement->getElementName() . " and its required hasn't been changed!");
             }
         }
+    }
+    
+    public function getFormElements() {
+        return $this->formElements;
     }
 
 }

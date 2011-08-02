@@ -39,9 +39,7 @@
  */
 class View_Helper_Group extends Zend_View_Helper_Abstract {
 
-    public $view;
     public $session;
-    public $log;
 
     /**
      * method to render specific elements of an form
@@ -51,9 +49,8 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
      * @return element to render in view
      */
     public function group($value, $options = null, $name = null) {
-        $this->session = new Zend_Session_Namespace('Publish');
-        $this->log = Zend_Registry::get('Zend_Log');
-        $this->session->elementCount = $this->session->elementCount + 1;
+        $this->session = new Zend_Session_Namespace('Publish');        
+        $this->view->count++;
 
         if ($name == null && $value == null) {
             $error_message = $this->view->translate('template_error_unknown_field');
@@ -91,7 +88,6 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
 
             //show fields
             foreach ($group["Fields"] AS $field) {
-
                 $groupCount = 'num' . $group['Name'];
                 $j = (($i - 1) / $this->session->$groupCount);
                 if (is_int($j)) {
@@ -204,7 +200,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
                         throw new Application_Exception("Field Type {$field['type']} not found in View Helper.");
                 }
 
-                if (isset($field["error"]) && count($field["error"]) >= 1) {
+                if (isset($field["error"]) && count($field["error"]) >= 1) {                    
                     $fieldset .= "<div class='form-errors'><ul>";
                     foreach ($field["error"] AS $err)
                         $fieldset .= "<li>" . htmlspecialchars($err) . "</li>";

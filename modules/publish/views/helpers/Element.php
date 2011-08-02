@@ -33,9 +33,7 @@
  * @version     $Id$
  */
 class View_Helper_Element extends Zend_View_Helper_Abstract {
-
-    public $view;
-    public $session;
+   
 
     /**
      * method to render specific elements of an form
@@ -44,11 +42,10 @@ class View_Helper_Element extends Zend_View_Helper_Abstract {
      * @param <type> $name name of possible hidden element
      * @return element to render in view
      */
-    public function element($value, $options = null, $type=null, $name = null) {
-        $this->session = new Zend_Session_Namespace('Publish');
-        $log = Zend_Registry::get('Zend_Log');
-        $this->session->elementCount = $this->session->elementCount + 1;
+    public function element($value, $options = null, $type=null, $name = null) {                        
 
+         $this->view->count++;
+         
         if ($name == null && $value == null) {
             $error_message = $this->view->translate('template_error_unknown_field');
             return "<br/><div style='width: 400px; color:red;'>" . $error_message . "</div><br/><br/>";

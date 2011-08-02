@@ -39,12 +39,7 @@
  */
 class View_Helper_EndTemplate extends Zend_View_Helper_Abstract{
 
-    public function endTemplate(Publish_Form_PublishingSecond $form) {
-        $log = Zend_Registry::get('Zend_Log');
-        $session = new Zend_Session_Namespace('Publish');
-        $elementCount = $session->elementCount;
-        $log->debug("Template expects " . $elementCount . " elements and group.");
-
+    public function endTemplate(Publish_Form_PublishingSecond $form, $elementCounter) {                             
         $formCount = 0;
         $elements = $form->getElements();
         $numberOfElements = count($elements);
@@ -60,16 +55,14 @@ class View_Helper_EndTemplate extends Zend_View_Helper_Abstract{
         
         $formCount = $formCount + $numberOfElements - $groupCount;
 
-        $log->debug("Form expects " . $formCount. " elements and group.");
-
-        if ($formCount === $elementCount)
+        if ($formCount === $elementCounter)
             return "";
 
-        if ($formCount > $elementCount)
-            return $this->view->translate('publish_controller_form_template1');
+        if ($formCount > $elementCounter)
+            return $this->view->translate('publish_controller_form_template1');            
 
-        if ($formCount < $elementCount)
-            return $this->view->translate('publish_controller_form_template2');               
+        if ($formCount < $elementCounter)
+            return $this->view->translate('publish_controller_form_template2');
     }
 }
 ?>

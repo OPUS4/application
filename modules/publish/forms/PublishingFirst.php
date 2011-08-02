@@ -41,18 +41,23 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
     public $config;
     public $session;
-    public $disable;
     public $view;
-    public $log;
+    public $helper;
 
-    public function __construct($view, $disable = null, $options = null) {
-        if (isset($disable))
-            $this->disable = $disable;
-
+    /**
+     *
+     * @param <type> $view View Object from Controller
+     * @param <type> $disable
+     * @param <type> $options
+     */
+    public function __construct($view, $options = null) {
         $this->view = $view;
-        $this->log = Zend_Registry::get('Zend_Log');
+        $this->session = new Zend_Session_Namespace('Publish');
+        $this->config = Zend_Registry::get('Zend_Config');
+        $this->helper = new Publish_Model_FormHelper($view, $this);
 
         parent::__construct($options);
+        $this->helper->setFirstFormViewVariables();
     }
 
     public function isValid($data) {
@@ -77,11 +82,6 @@ class Publish_Form_PublishingFirst extends Zend_Form {
      * @return void
      */
     public function init() {
-
-        $this->session = new Zend_Session_Namespace('Publish');
-
-        $this->config = Zend_Registry::get('Zend_Config');
-
         //create and add document type
         $doctypes = $this->_createDocumentTypeField();
         $this->addElement($doctypes);
@@ -130,14 +130,8 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         $doctypes = $this->createElement('select', 'documentType');
         $doctypes->setLabel('selecttype')
-                ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $translatedOptions));
-
-        if ($this->disable === true) {
-            $doctypes->setAttrib('disabled', true)
-                    ->setRequired(false);
-        }
-        else
-            $doctypes->setRequired(true);
+                ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $translatedOptions))
+                ->setRequired(true);
 
         return $doctypes;
     }
@@ -221,8 +215,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
             $this->session->bibliographie = 1;
             $bibliographie = $this->createElement('checkbox', 'bibliographie');
             $bibliographie->setLabel('bibliographie');
-            if ($this->disable === true)
-                $bibliographie->setAttrib('disabled', true);
+            
         }
 
         return $bibliographie;
@@ -242,38 +235,15 @@ class Publish_Form_PublishingFirst extends Zend_Form {
      * @param <type> $elementName
      * @return string
      */
-    public function getElementAttributes($elementName) {
-        //todo: duplicate in publishing second...
-        $elementAttributes = array();
-        $element = $this->getElement($elementName);
-        $elementAttributes['value'] = $element->getValue();
-        $elementAttributes['label'] = $element->getLabel();
-        $elementAttributes['error'] = $element->getMessages();
-        $elementAttributes['id'] = $element->getId();
-        $elementAttributes['type'] = $element->getType();
-        $elementAttributes['desc'] = $element->getDescription();
-        $elementAttributes['hint'] = 'hint_' . $elementName;
-        $elementAttributes['header'] = 'header_' . $elementName;
-        $elementAttributes['disabled'] = $element->getAttrib('disabled');
-
-        if ($element->getType() === 'Zend_Form_Element_Checkbox') {
-            $elementAttributes['value'] = $element->getCheckedValue();
-            if ($element->isChecked())
-                $elementAttributes['check'] = 'checked';
-            else
-                $elementAttributes['check'] = '';
-        }
-
-        if ($element->getType() === 'Zend_Form_Element_Select') {
-            $elementAttributes["options"] = $element->getMultiOptions(); //array
-        }
-
-        if ($element->isRequired())
-            $elementAttributes["req"] = "required";
-        else
-            $elementAttributes["req"] = "optional";
-
+    public function getElementAttributes($elementName) {       
+        $elementAttributes = $this->helper->getElementAttributes($elementName);
         return $elementAttributes;
     }
+
+    public function setFirstFormViewVariables() {
+        $this->helper->setFirstFormViewVariables();
+    }
+
+    
 
 }

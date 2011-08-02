@@ -46,6 +46,7 @@
 
     <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
 
+    <?php $this->count = 0; ?>
     <?= $this->group($this->groupPersonAuthor); ?>
     <?= $this->element($this->Language); ?>
     <?= $this->group($this->groupTitleMain, "size='60'"); ?>
@@ -66,8 +67,8 @@
 </div>
 </form>
 
-<?php if ($this->endTemplate($this->form) !== "") : ?>
-    <div class="form-hint form-errors"><?= $this->endTemplate($this->form); ?></div>
+<?php if ($this->endTemplate($this->form, $this->count) !== "") : ?>
+          <div class="form-hint form-errors"><?= $this->endTemplate($this->form, $this->count); ?></div>
 <?php endif; ?>
 
 </div>

@@ -41,7 +41,7 @@
  */
 class Publish_DepositController extends Controller_Action {
 
-    public $postData = array();
+    public $depositData = array();
     public $log;
     public $session;
     public $document;
@@ -62,43 +62,34 @@ class Publish_DepositController extends Controller_Action {
         if ($this->getRequest()->isPost() !== true) {
             return $this->_redirectTo('index', '', 'index');
         }
-
+        
+        //post content is just checked for buttons
         $post = $this->getRequest()->getPost();
         if (array_key_exists('back', $post)) {
-            //go back
             return $this->_forward('check', 'form');
-        }
-        else if (array_key_exists('collection', $post)) {
-            //choose any collections
-            return $this->_forward('top', 'collection');
-        }
-        else if (array_key_exists('abort', $post)) {
-            $this->document = new Opus_Document($this->session->documentId);
-            $this->document->deletePermanent();
+        } else if (array_key_exists('abort', $post)) {
+            if (isset($this->session->documentId)) {
+                $this->document = new Opus_Document($this->session->documentId);
+                $this->document->deletePermanent();
+            }
             return $this->_redirectTo('index', '', 'index');
         }
-
-        //deposit data
+        
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
 
+        //deposit data is coming from the session
         if (isset($this->session->elements)) {
             foreach ($this->session->elements AS $element) {
-                $this->postData[$element['name']] = $element['value'];
+                $this->depositData[$element['name']] = $element['value'];
                 $this->log->debug('SAVING DATA: ' . $element['name'] . ' + ' . $element['value']);
             }
         }
 
-        $depositForm = new Publish_Form_PublishingSecond($this->postData);
-        $depositForm->populate($this->postData);
+        if (isset($this->depositData['send']))
+            unset($this->depositData['send']);
 
-        //avoid vulnerability by populate postdata to form => hacked fields won't be saved
-        $depositForm->prepareCheck();
-
-        if (isset($this->postData['send']))
-            unset($this->postData['send']);
-
-        $depositData = new Publish_Model_Deposit($this->postData);
+        $depositData = new Publish_Model_Deposit($this->depositData);
         $this->document = $depositData->getDocument();
         $this->document->setServerState('unpublished');
         $this->session->documentId = $this->document->store();
@@ -156,10 +147,10 @@ class Publish_DepositController extends Controller_Action {
 
         if (true === Opus_Security_Realm::getInstance()->check('clearance')) {
             $this->view->showFrontdoor = true;
-        }        
+        }
         //unset all possible session content
         $this->session->unsetAll();
-        
+
         return;
     }
 
@@ -176,7 +167,7 @@ class Publish_DepositController extends Controller_Action {
             'message' => $message,
             'users' => 'admin',
             'docId' => $this->session->documentId
-        ));   
+        ));
 
         if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
             // Queue job (execute asynchronously)
@@ -184,8 +175,7 @@ class Publish_DepositController extends Controller_Action {
             if (true === $job->isUniqueInQueue()) {
                 $job->store();
             }
-        }
-        else {
+        } else {
             // Execute job immediately (synchronously)
             $mail = new Opus_Job_Worker_MailPublishNotification($this->log);
             $mail->work($job);

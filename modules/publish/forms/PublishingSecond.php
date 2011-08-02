@@ -39,31 +39,30 @@
  */
 class Publish_Form_PublishingSecond extends Zend_Form {
 
-    public $doctype = "";
-    public $docid = "";
-    public $fulltext = "";
+    public $doctype = "";      
     public $additionalFields = array();
     public $postData = array();
-    public $log;
-    public $institutes = array();
-    public $projects = array();
+    public $log;    
     public $msc = array();
-    public $licences = array();
-    public $languages = array();
     public $session;
+    public $helper;
+    public $view;
 
-    public function __construct($postData, $options=null) {
+    public function __construct($view, $postData=null, $options=null) {
         $this->session = new Zend_Session_Namespace('Publish');
-        $log = Zend_Registry::get('Zend_Log');
-        $this->doctype = $this->session->documentType;
-        $this->docid = $this->session->documentId;
-        $this->fulltext = $this->session->fulltext;
+        $this->log = Zend_Registry::get('Zend_Log');
+        $this->doctype = $this->session->documentType;               
         $this->additionalFields = $this->session->additionalFields;
         $this->postData = $postData;
         
-        $this->log = $log;
+        $this->view = $view;
+        if (is_null($this->view))
+                throw new Exception('View is null in Publishing_Second construct');
+        
+        $this->helper = new Publish_Model_FormHelper($this->view, $this);
 
         parent::__construct($options);
+        $this->helper->setSecondFormViewVariables($this);
     }
 
     /**
@@ -110,13 +109,9 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         if ($parser !== false)
             $parser->parse();
 
-        $this->log->debug("Parsing ready");
-
-        $formElements = $parser->formElements;
-        $this->addElements($formElements);
-
+        $this->log->debug("Parsing ready");        
+        $this->addElements($parser->getFormElements());
         $this->_addSubmit('button_label_send', 'send');
-
         $this->_addSubmit('button_label_back', 'back');
 
         if (isset($this->postData))
@@ -127,7 +122,7 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * Adds submit button to the form.
      * @param <type> $label
      */
-    protected function _addSubmit($label, $name) {
+    public function _addSubmit($label, $name) {
         //Submit button
         $submit = $this->createElement('submit', $name);
         $submit->setLabel($label);
@@ -140,91 +135,31 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @return string
      */
     public function getElementAttributes($elementName) {
-        $elementAttributes = array();
-        $element = $this->getElement($elementName);
-        
-        $elementAttributes['value'] = $element->getValue();
-        $elementAttributes['label'] = $element->getLabel();
-        $elementAttributes['error'] = $element->getMessages();
-        $elementAttributes['id'] = $element->getId();
-        $elementAttributes['type'] = $element->getType();
-        $elementAttributes['desc'] = $element->getDescription();
-        $elementAttributes['hint'] = 'hint_' . $elementName;
-        $elementAttributes['header'] = 'header_' . $elementName;
-        $elementAttributes['disabled'] = $element->getAttrib('disabled');
-
-        if ($element->getType() === 'Zend_Form_Element_Checkbox') {
-            $elementAttributes['value'] = $element->getCheckedValue();
-            if ($element->isChecked())
-                $elementAttributes['check'] = 'checked';
-            else
-                $elementAttributes['check'] = '';
-        }
-
-        if ($element->getType() === 'Zend_Form_Element_Select') {
-            $elementAttributes["options"] = $element->getMultiOptions(); //array
-            $elementAttributes["selectedOption"] = $element->getMultiOption($element->getValue());
-        }
-
-            if ($element->isRequired())
-            $elementAttributes["req"] = "required";
-        else
-            $elementAttributes["req"] = "optional";
-
+        $elementAttributes = $this->helper->getElementAttributes($elementName);
         return $elementAttributes;
-    }
-
-    /**
-     * used to set special attributes of an element, for example a hint-text
-     * @param <type> $element
-     * @param <type> $attributeName
-     * @param <type> $attributeValue
-     */
-    public function setElementAttribute($element, $attributeName, $attributeValue) {
-        $element = $this->getElement($elementName);
-        $element->setAttrib($attributeName, $attributeValue);
     }
 
     /**
      * Methods removes unused label, hidden fields, submit fields and empty fields from form to support a proper check page.
      */
     public function prepareCheck() {
-        $session = new Zend_Session_Namespace('Publish');
-        $session->elements = array();
-        $session->depositForm = $this;             
+        return $this->helper->prepareCheck($this);
+    }
 
-        //iterate over form elements
-        foreach ($this->getElements() as $element) {
-            $name = $element->getName();
-            
-            if ($element->getValue() == ""
-                    || $element->getType() == "Zend_Form_Element_Submit"
-                    || $element->getType() == "Zend_Form_Element_Hidden"
-                    || $element->getValue() == '___EMPTY') {
-               
-                $element->removeDecorator('Label');
-                $this->removeElement($name);
-            }
-            else {
-                $session->elements[$name]['name'] = $name;
-                $session->elements[$name]['value'] = $element->getValue();
-                $session->elements[$name]['label'] = $element->getLabel();
-                $element->removeDecorator('Label');                
-            }
-        }
+    public function showTemplate($helper) {
+        return $this->helper->showTemplate($helper);
+    }
 
-        //iterate over disabled elements that were not transmitted with form
-//        if (isset($this->session->disabled) && !is_null($this->session->disabled)) {
-//            foreach ($this->session->disabled as $key => $value) {
-//                $session->elements[$key]['name'] = $key;
-//                $session->elements[$key]['value'] = $value;
-//                $session->elements[$key]['label'] = $key;
-//            }
-//        }
-        
-        $this->_addSubmit('button_label_back', 'back');
-        $this->_addSubmit('button_label_collection', 'collection');
-        $this->_addSubmit('button_label_send2', 'send');
+    public function showCheckpage() {
+        return $this->helper->showCheckPage($this);
+    }
+
+    public function getExtendedForm($postData, $reload) {
+        return $this->helper->getExtendedForm($postData, $reload);
+    }
+
+    public function setSecondFormViewVariables() {
+        $this->helper->setSecondFormViewVariables();
     }
 
 }

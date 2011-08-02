@@ -516,6 +516,9 @@ class Publish_Model_ExtendedValidation {
         return $boxes;
     }
 
+    public function getValidatedValues() {
+        return $this->data;
+    }
 }
 
 ?>

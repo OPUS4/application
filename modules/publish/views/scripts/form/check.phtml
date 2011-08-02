@@ -41,8 +41,8 @@
 <?php
     $session = new Zend_Session_Namespace('Publish');
     $disabled = $session->disabled;
-    $form = $session->depositForm;
-   
+    $form = $this->form;
+
 ?>
 <div id="form-table-check">
 <table cellspacing='5' cellpadding='10' width="60%" border="0">
@@ -108,10 +108,9 @@
 </div>
 
 <form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">
-    <?php //$session->chooseSpecialCollection = "institutes, projects"; ?>
     <div class="button-wrapper">
         <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
-        <?= $this->element('button_label_back', "class='form-button abort-button'", "Submit", "back"); ?>        
+        <?= $this->element('button_label_back', "class='form-button abort-button'", "Submit", "back"); ?>
         <?= $this->element('button_label_send2', "class='form-button submit-button'", "Submit", "send"); ?>
     </div>
 </form>

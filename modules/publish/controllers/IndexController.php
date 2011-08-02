@@ -40,12 +40,7 @@
  * @package     Module_Publish
  */
 class Publish_IndexController extends Controller_Action {
-
-    public $session;
-    public $log;
-    public $helper;
-    CONST LABEL = "_label";
-
+    
     /**
      * Renders the first form:
      * a list of available document types (that can be configured in config.ini
@@ -54,13 +49,11 @@ class Publish_IndexController extends Controller_Action {
      * @return void
      *
      */
-    public function indexAction() {
-        $this->log = Zend_Registry::get('Zend_Log');
-        $this->session = new Zend_Session_Namespace('Publish');
-        $this->helper = new Publish_Model_FormHelper($this->view);
+    public function indexAction() {        
+        $session = new Zend_Session_Namespace('Publish');
 
         //unset all possible session content
-        $this->session->unsetAll();
+        $session->unsetAll();
 
         $this->view->title = $this->view->translate('publish_controller_index');
         $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
@@ -70,23 +63,14 @@ class Publish_IndexController extends Controller_Action {
         //set action_url and give it to the view
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'upload'));
         $form->setAction($action_url);
-        $this->view->action_url = $action_url;
-
         $form->setMethod('post');
-
-        //give the form to the view and the view variables for different rendering
+        $this->view->action_url = $action_url;        
         $this->view->form = $form;
-        $this->helper->setCurrentForm($form);
-        $this->helper->setFirstFormViewVariables();
 
         //initialize session variables
-        $this->session->documentType = "";
-        $this->session->documentId = "";
-        $this->session->chooseSpecialCollection = "";
-        $this->session->countCollections = 1;
-        $this->session->collectionHistory = array();
-        $this->session->endOfCollectionTree = array();
-        $this->session->disabled = array();
+        $session->documentType = "";
+        $session->documentId = "";
+        $session->disabled = array();
+        $session->endOfCollectionTree = array();        
     }
-
 }

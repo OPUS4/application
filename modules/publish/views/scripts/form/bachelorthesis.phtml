@@ -49,6 +49,7 @@
     <div class="form-items-wrapper">
         <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
 
+            <?php $this->count = 0; ?>
             <?= $this->group($this->groupPersonSubmitter); ?>
             <?= $this->group($this->groupTitleMain); ?>
             <?= $this->group($this->groupTitleAbstract); ?>
@@ -79,8 +80,8 @@
     </div>
 </form>
 
-<?php if ($this->endTemplate($this->form) !== "") : ?>
-    <div class="form-hint form-errors"><?= $this->endTemplate($this->form); ?></div>
+<?php if ($this->endTemplate($this->form, $this->count) !== "") : ?>
+          <div class="form-hint form-errors"><?= $this->endTemplate($this->form, $this->count); ?></div>
 <?php endif; ?>
 
 </div>

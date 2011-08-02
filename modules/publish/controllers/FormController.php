@@ -28,7 +28,7 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -40,95 +40,78 @@
  * @package     Module_Publish
  */
 class Publish_FormController extends Controller_Action {
-    CONST FIRST = "Firstname";
-    CONST COUNTER = "1";
-    CONST GROUP = "group";
-    CONST EXPERT = "X";
-    CONST LABEL = "_label";
-    CONST ERROR = "Error";
-
+    
     public $log;
     public $session;
     public $document;
-    public $helper;
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
         $this->log = Zend_Registry::get('Zend_Log');
-        $this->session = new Zend_Session_Namespace('Publish');
-        $this->helper = new Publish_Model_FormHelper();
+        $this->session = new Zend_Session_Namespace('Publish');        
 
         parent::__construct($request, $response, $invokeArgs);
     }
 
-    public function uploadAction() {        
+    public function uploadAction() {
         $this->view->languageSelectorDisabled = true;
         $this->view->title = $this->view->translate('publish_controller_index');
+        $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
+        $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
 
         if ($this->getRequest()->isPost() === true) {
 
             //initializing
             $indexForm = new Publish_Form_PublishingFirst($this->view);
-            $this->helper->setCurrentView($this->view);
-            $data = $this->getRequest()->getPost();
+            $postData = $this->getRequest()->getPost();
 
-            if (is_array($data) && count($data) === 0) {
+            if (is_array($postData) && count($postData) === 0) {
                 $this->log->err('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
-                 return $this->_redirectTo('index', $this->view->translate('error_empty_post_array'), 'index');
+                return $this->_redirectTo('index', $this->view->translate('error_empty_post_array'), 'index');
             }
 
-            $indexForm->populate($data);
-            $this->_initializeDocument($data);
+            $indexForm->populate($postData);
+            $this->_initializeDocument($postData);
 
             //reject manipulated hidden field for file size
-            if (isset($data['MAX_FILE_SIZE']) && $data['MAX_FILE_SIZE'] != $this->session->maxFileSize) {
-                $this->log->debug("wrong Max_file_size and redirect to index");
+            if (isset($postData['MAX_FILE_SIZE']) && $postData['MAX_FILE_SIZE'] != $this->session->maxFileSize) {
                 return $this->_redirectTo('index', '', 'index');
             }
 
             //validate fileupload
-            if (!$indexForm->getElement('fileupload')->isValid($data)) {
-                $this->view->form = $indexForm;
-                $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
-                $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
+            if (!$indexForm->getElement('fileupload')->isValid($postData)) {
+                $indexForm->setFirstFormViewVariables();
+                $this->view->form = $indexForm;                
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-                $this->helper->setCurrentForm($indexForm);            
-                $this->helper->setFirstFormViewVariables();
             }
             else {
                 //file valid-> store file
+                $indexForm->setFirstFormViewVariables();
                 $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
                 $this->view->form = $indexForm;
-                $this->helper->setCurrentForm($indexForm);
-                $this->helper->setFirstFormViewVariables();
-                if (array_key_exists('uploadComment', $data))
-                        $comment = $data['uploadComment'];
-                else 
-                    $comment = "";
-                $this->session->uploadSuccess = $this->_storeUploadedFiles($comment);
+                $this->session->uploadSuccess = $this->_storeUploadedFiles($postData);
 
-                if (array_key_exists('addAnotherFile', $data)) {
-                    $data['uploadComment'] = "";
+                if (array_key_exists('addAnotherFile', $postData)) {
+                    $postData['uploadComment'] = "";
                     return $this->renderScript('index/index.phtml');
                 }
             }
 
             //validate whole form
-            if (!$indexForm->isValid($data)) {
-                $this->view->form = $indexForm;
-                $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
-                $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
+            if (!$indexForm->isValid($postData)) {
+                $indexForm->setFirstFormViewVariables();
+                $this->view->form = $indexForm;                
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-                $this->helper->setCurrentForm($indexForm);
-                $this->helper->setFirstFormViewVariables();
                 return $this->renderScript('index/index.phtml');
             }
 
             //form entries are valid: store data
-            $this->_storeBibliography($data);
+            $this->_storeBibliography($postData);
             $this->_storeSubmitterEnrichment();
 
             //call the appropriate template
-            return $this->helper->showTemplate($this->_helper);
+            $this->_helper->viewRenderer($this->session->documentType);
+            $publishForm = new Publish_Form_PublishingSecond($this->view);
+            return $publishForm->showTemplate($this->_helper);
         }
         return $this->_redirectTo('index', '', 'index');
     }
@@ -140,20 +123,31 @@ class Publish_FormController extends Controller_Action {
      */
     public function checkAction() {
         $this->view->languageSelectorDisabled = true;
-        $this->helper->setCurrentView($this->view);
+        $this->view->title = $this->view->translate('publish_controller_index');
+        if (isset($this->session->documentType))
+                $this->view->subtitle = $this->view->translate($this->session->documentType);
+        $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
+
+        //reload form or show entries, intial: true
         $reload = true;
 
         if ($this->getRequest()->isPost() === true) {
             $postData = $this->getRequest()->getPost();
-            $postData = array_merge($postData, $this->session->disabled);
+            if (!is_null($this->session->disabled))
+                    $postData = array_merge($postData, $this->session->disabled);
 
+            //abort publish process
             if (array_key_exists('abort', $postData)) {
-                $this->document = new Opus_Document($this->session->documentId);
-                $this->document->deletePermanent();
+                if(isset($this->session->documentId)) {
+                    $this->document = new Opus_Document($this->session->documentId);
+                    $this->document->deletePermanent();
+                }                
                 return $this->_redirectTo('index', '', 'index');
             }
 
-            if (array_key_exists('back', $postData) || array_key_exists('abortCollection', $postData)) {
+            //go back and change data
+            if (array_key_exists('back', $postData)) {
+
                 $reload = false;
                 if (isset($this->session->elements))
                     foreach ($this->session->elements AS $element)
@@ -161,44 +155,27 @@ class Publish_FormController extends Controller_Action {
             }
 
             //initialize the form object
-            $form = new Publish_Form_PublishingSecond($postData);
+            $form = new Publish_Form_PublishingSecond($this->view, $postData);
+            $form->populate($postData);
 
-            if (array_key_exists('abortCollection', $postData)) {
-                $form = $form->populate($postData);
-                $this->helper->setCurrentForm($form);
-                return $this->helper->showCheckPage();
-            }
-
-            if (!$form->send->isChecked() || array_key_exists('back', $postData)) {                
+            if (!$form->send->isChecked() || array_key_exists('back', $postData)) {
                 // A button (not SEND) was pressed => add / remove fields
-
-                $this->view->title = $this->view->translate('publish_controller_index');
-                $this->view->subtitle = $this->view->translate($this->session->documentType);
-                $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
-
                 $this->_helper->viewRenderer($this->session->documentType);
-
+                $form->setView($this->view);
                 //call method to add or delete buttons
-                $this->helper->setCurrentForm($form);
-                return $this->helper->getExtendedForm($postData, $reload);
+                return $form->getExtendedForm($postData, $reload);
             }
 
             // SEND was pressed => check the form
-            $this->view->title = $this->view->translate('publish_controller_index');
-            $this->view->subtitle = $this->view->translate($this->session->documentType);
-            $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
-
             if (!$form->isValid($postData)) {
-                //Variables are invalid
-                $this->helper->setCurrentForm($form);
-                $this->helper->setSecondFormViewVariables();
-                $this->view->form = $form;
-                $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-                //error case, and redirect to form, show errors
-                return $this->render($this->session->documentType);
+                $form->setSecondFormViewVariables();
+                $this->view->form = $form;                
+                $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');                
+                return $this->_helper->viewRenderer($this->session->documentType);
             }
-            $this->helper->setCurrentForm($form);
-            return $this->helper->showCheckPage();
+
+            $form->setView($this->view);
+            return $form->showCheckPage();
         }
 
         return $this->_redirectTo('upload');
@@ -207,7 +184,7 @@ class Publish_FormController extends Controller_Action {
     /**
      * Method stores th uploaded files
      */
-    private function _initializeDocument($postData = null) {       
+    private function _initializeDocument($postData = null) {
         if (!isset($this->session->documentId) || $this->session->documentId == '') {
             $this->document = new Opus_Document();
             $this->document->setServerState('temporary');
@@ -220,7 +197,7 @@ class Publish_FormController extends Controller_Action {
         if (isset($postData['documentType'])) {
             if ($postData['documentType'] !== '') {
                 $this->session->documentType = $postData['documentType'];
-                $this->log->info(__METHOD__ .  ' documentType = ' . $this->session->documentType);                
+                $this->log->info(__METHOD__ . ' documentType = ' . $this->session->documentType);
                 $this->document->setType($this->session->documentType);
                 $this->document->store();
             }
@@ -251,7 +228,11 @@ class Publish_FormController extends Controller_Action {
     /**
      * Method stores the uploaded files
      */
-    private function _storeUploadedFiles($comment) {
+    private function _storeUploadedFiles($postData) {
+        if (array_key_exists('uploadComment', $postData))
+            $comment = $postData['uploadComment'];
+        else
+            $comment = "";
         $upload = new Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
         $upload_count = 0;
@@ -311,5 +292,5 @@ class Publish_FormController extends Controller_Action {
             $this->document->store();
         }
     }
-  
+
 }

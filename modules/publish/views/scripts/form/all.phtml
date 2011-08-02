@@ -49,6 +49,7 @@
     <div class="form-items-wrapper">
         <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
 
+            <?php $this->count = 0; ?>
             <?= $this->fileOverview(); ?>
             <?= $this->group($this->groupPersonSubmitter); ?>
             <?= $this->group($this->groupPersonAuthor); ?>
@@ -98,7 +99,7 @@
             <?= $this->group($this->groupSubjectUncontrolled); ?>
             <?= $this->element($this->Note); ?>
             <?= $this->element($this->Licence); ?>            
-            <?= $this->element($this->LegalNotices); ?>
+            <?= $this->element($this->LegalNotices); ?>                
 
             <div class="button-wrapper">
         <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
@@ -108,8 +109,8 @@
     </div>
 </form>
 
-<?php if ($this->endTemplate($this->form) !== "") : ?>
-    <div class="form-hint form-errors"><?= $this->endTemplate($this->form); ?></div>
+<?php if ($this->endTemplate($this->form, $this->count) !== "") : ?>
+    <div class="form-hint form-errors"><?= $this->endTemplate($this->form, $this->count); ?></div>
 <?php endif; ?>
 
 </div>
