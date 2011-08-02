@@ -39,8 +39,7 @@ RewriteEngine on
 RewriteBase <template>
 
 # Rewrite rule for file delivery
-# IMPORTANT: Do not remove the tabulators: $1 <tab> $2 <tab> %{REMOTE_ADDR} <tab> %{HTTP_COOKIE}
-RewriteRule ^files/(\d+)/([^\t\n\r]*)$ "http://127.0.0.1/${opus4deliver:$1	$2	%{REMOTE_ADDR}	%{HTTP_COOKIE}}" [L,P]
+RewriteRule ^files/(\d+)/(.*)$ "frontdoor/deliver/index/docId/$1/file/$2" [L,R]
 
 # Rewrite rule to remove index.php in request URL
 RewriteRule ^index.php/ <template> [L]

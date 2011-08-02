@@ -71,11 +71,6 @@ mail.opus.name = ; Name of administrator
 ; errorController.mailTo.name = root
 ; errorController.mailTo.address = root@localhost
 
-;DOCUMENT-DOWNLOAD-DIRECTORIES
-; Please read the documentation about the delivery proccess of OPUS.
-; Here you can configure the internal address of the fulltext directory.
-; deliver.target.prefix = /files
-
 ; URN SETTINGS
 ; If you want to set URNs automatically, set urn.autoCreate to 1.
 urn.autoCreate = 0
