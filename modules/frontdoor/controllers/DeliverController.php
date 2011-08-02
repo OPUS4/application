@@ -63,6 +63,7 @@ class Frontdoor_DeliverController extends Controller_Action {
                 ->setHeader('Cache-Control', 'private', true)
                 ->setHeader('Pragma', 'cache', true);
 
+        $this->_helper->SendFile->setLogger( Zend_Registry::get('Zend_Log') );
         try {
             $this->_helper->SendFile($full_filename);
         } catch (Exception $e) {
