@@ -177,7 +177,7 @@ table.result-data {
 	width: 28%;
 }
 .result-data .data-marker{
-	white-space: nowrap;
+/*     	white-space: nowrap;    */
 	font-style: normal;
 }
 .frontdoor .abstract {
