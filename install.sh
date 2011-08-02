@@ -85,9 +85,9 @@ OPUS_USER_NAME_ESC=`echo "$OPUS_USER_NAME" | sed 's/\!/\\\!/g'`
 
 if [ "$OS" = ubuntu ]
 then
-  useradd -c 'OPUS 4 Solr manager' --system "$OPUS_USER_NAME"
+  useradd -c 'OPUS 4 Solr manager' --system "$OPUS_USER_NAME_ESC"
 else
-  useradd -c 'OPUS 4 Solr manager' --system --create-home --shell /bin/bash "$OPUS_USER_NAME"
+  useradd -c 'OPUS 4 Solr manager' --system --create-home --shell /bin/bash "$OPUS_USER_NAME_ESC"
 fi
 
 # prompt for database parameters
