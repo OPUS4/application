@@ -88,7 +88,7 @@
                 -->
             </div>
         </div>
-        
+
         <div id="services" class="services-menu">
             <xsl:if test="normalize-space(File/@PathName) and File[@VisibleInFrontdoor='1']">
                 <div id="download-fulltext" class="services">
@@ -120,7 +120,7 @@
             </div>
             
         </div>
-
+      
         <table class="result-data frontdoordata">
             <caption>Metadaten</caption>
             <colgroup class="angaben">
@@ -798,7 +798,7 @@
                             <xsl:with-param name="string">frontdoor_author_search</xsl:with-param>
                         </xsl:call-template>
                     </xsl:attribute>
-                    <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
+                    <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
                 </xsl:element>
             </td>
         </tr>
@@ -1104,33 +1104,37 @@
     </xsl:template>
 
     <xsl:template name="Title">
-        <xsl:for-each select="TitleMain">
-            <xsl:if test="position() = 1">
-                <h2 class="titlemain">
-                    <xsl:value-of select="@Value" />
-                </h2>
-            </xsl:if>
-            <xsl:if test="position() > 1">
-                <h3 class="titlemain">
-                    <xsl:value-of select="@Value" />
-                </h3>
-            </xsl:if>
-        </xsl:for-each>
+        <p>
+            <xsl:for-each select="TitleMain">
+                <xsl:if test="position() = 1">
+                    <h2 class="titlemain">
+                        <xsl:value-of select="@Value" />
+                    </h2>
+                </xsl:if>
+                <xsl:if test="position() > 1">
+                    <h3 class="titlemain">
+                        <xsl:value-of select="@Value" />
+                    </h3>
+                </xsl:if>
+            </xsl:for-each>
+        </p>
     </xsl:template>
 
     <xsl:template name="Abstract">
-        <xsl:for-each select="TitleAbstract">
-            <xsl:if test="position() = 1">
-                <div class="abstract">
-                    <p><xsl:value-of select="@Value" /></p>
-                </div>
-            </xsl:if>
-            <xsl:if test="position() > 1">
-                <div class="abstract">
-                    <p><xsl:value-of select="@Value" /></p>
-                </div>
-            </xsl:if>
-        </xsl:for-each>
+        <p>
+            <xsl:for-each select="TitleAbstract">
+                <xsl:if test="position() = 1">
+                    <div class="abstract">
+                        <xsl:value-of select="@Value" />
+                    </div>
+                </xsl:if>
+                <xsl:if test="position() > 1">
+                    <div class="abstract">
+                        <xsl:value-of select="@Value" />
+                    </div>
+                </xsl:if>
+            </xsl:for-each>
+        </p>
     </xsl:template>
 
     <!-- Named template to proof, what to show for collections, depending on display_frontdoor -->
