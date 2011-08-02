@@ -26,12 +26,10 @@
  *
  * @category    Application
  * @package     Module_Frontdoor
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Julian Heise <heise@zib.de>
+ * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
- *
- *
+ * @version     $Id: $
  *
  * This view gets a filtered one-dimensional associative array ($mydoc_data) from
  * the Frontdoor-Controller and displays it. The order of elements is fixed here.
@@ -39,7 +37,6 @@
  */
 ?>
 
-<h1><?= $this->translate('frontdoor_document_error') ?></h1>
-<div class="frontdoor">
-    <?= $this->translate($this->errorMessage, htmlspecialchars($this->docId)) ?>
-</div>
+<h1><?= $this->translate('frontdoor_delivery_error_caption') ?></h1>
+
+<p><?= htmlspecialchars($this->translate($this->translateKey)) ?></p>

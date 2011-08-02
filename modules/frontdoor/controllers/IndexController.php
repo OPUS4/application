@@ -35,9 +35,13 @@
 
 class Frontdoor_IndexController extends Controller_Action {
 
+    const SERVER_STATE_DELETED = 'deleted';
+    const SERVER_STATE_UNPUBLISHED = 'unpublished';
+    const TRANSLATE_FUNCTION = 'Frontdoor_IndexController::translate';
+    const FILE_ACCESS_FUNCTION = 'Frontdoor_IndexController::checkIfUserHasFileAccess';
+    
     /**
-     * Display the metadata of a document.
-     *
+     * Displays the metadata of a document.
      * @return void
      */
     public function indexAction() {
@@ -48,9 +52,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $baseUrl = $request->getBaseUrl();
 
         if ($docId == '') {
-            $this->view->errorMessage = "frontdoor_doc_id_missing";
-            $this->getResponse()->setHttpResponseCode(404);
-            $this->render('document-error');
+            $this->handleDocumentError("frontdoor_doc_id_missing", 404);
             return;
         }
 
@@ -59,9 +61,7 @@ class Frontdoor_IndexController extends Controller_Action {
             $document = new Opus_Document($docId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            $this->view->errorMessage = "frontdoor_doc_id_not_found";
-            $this->getResponse()->setHttpResponseCode(404);
-            $this->render('document-error');
+            $this->handleDocumentError("frontdoor_doc_id_not_found", 404);
             return;
         }
 
@@ -70,25 +70,7 @@ class Frontdoor_IndexController extends Controller_Action {
             $documentXml = new Util_Document($document);
         }
         catch (Application_Exception $e) {
-            $this->getResponse()->setHttpResponseCode(403);
-            $this->view->errorMessage = "frontdoor_doc_access_denied";
-
-            switch ($document->getServerState()) {
-                case 'deleted':
-                    $this->getResponse()->setHttpResponseCode(410);
-                    $this->view->errorMessage = "frontdoor_doc_deleted";
-                    break;
-
-                case 'unpublished':
-                    $this->getResponse()->setHttpResponseCode(403);
-                    $this->view->errorMessage = "frontdoor_doc_unpublished";
-                    break;
-
-                default:
-                    break;
-            }
-
-            $this->render("document-error");
+            $this->handleDocumentError("frontdoor_doc_access_denied", 403, $document);
             return;
         }
 
@@ -98,8 +80,8 @@ class Frontdoor_IndexController extends Controller_Action {
         $template = 'index.xslt';
         $xslt->load($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $template);
         $proc = new XSLTProcessor;
-        $proc->registerPHPFunctions('Frontdoor_IndexController::translate');
-        $proc->registerPHPFunctions('Frontdoor_IndexController::checkIfUserHasFileAccess');
+        $proc->registerPHPFunctions(self::TRANSLATE_FUNCTION);
+        $proc->registerPHPFunctions(self::FILE_ACCESS_FUNCTION);
         $proc->importStyleSheet($xslt);
 
         $this->view->baseUrl = $baseUrl;
@@ -123,6 +105,28 @@ class Frontdoor_IndexController extends Controller_Action {
         $this->view->frontdoor = $proc->transformToXML($documentNode);
 
         $this->incrementStatisticsCounter($docId);
+    }
+
+    private function handleDocumentError($message, $code, $document = null) {
+        $this->view->errorMessage = $message;
+        $this->getResponse()->setHttpResponseCode($code);
+        if($document != null) {
+            $this->evaluateServerState ($document);
+        }
+        $this->render('document-error');
+    }
+
+    private function evaluateServerState($document) {
+        switch ($document->getServerState()) {
+        case self::SERVER_STATE_DELETED:
+            $this->getResponse()->setHttpResponseCode(410);
+            $this->view->errorMessage = "frontdoor_doc_deleted";
+            break;
+        case self::SERVER_STATE_UNPUBLISHED:
+            $this->getResponse()->setHttpResponseCode(403);
+            $this->view->errorMessage = "frontdoor_doc_unpublished";
+            break;
+        }
     }
 
     /**

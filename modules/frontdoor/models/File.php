@@ -34,66 +34,67 @@
  */
 class Frontdoor_Model_File {
 
+    const SERVER_STATE_DELETED = 'deleted';
+    const SERVER_STATE_PUBLISHED = 'published';
+    
     private $docId;
     private $filename;
 
     public function __construct($docId, $filename) {
-        if (mb_strlen($docId) < 1 or preg_match('/^[\d]+$/', $docId) === 0) {
-            throw new Exception("bad request", 400);
+
+        if (mb_strlen($docId) < 1 || preg_match('/^[\d]+$/', $docId) === 0) {
+            throw new Exception("bad request / illegal argument", 400);
         }
 
-        if (mb_strlen($filename) < 1 or preg_match('/\.\.\//', $filename) === 1) {
-            throw new Exception("bad request", 400);
+        if (mb_strlen($filename) < 1 || preg_match('/\.\.\//', $filename) === 1) {
+            throw new Exception("bad request / illegal argument", 400);
         }
 
         $this->docId = $docId;
         $this->filename = $filename;
-
     }
 
     public function getFileObject($realm) {
+
         $document = null;
         try {
             $document = new Opus_Document($this->docId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new Exception("doc not found", 404);
+            throw new Frontdoor_Model_DocumentNotFoundException();
         }
 
-        if ($document->getServerState() === 'deleted') {
-            throw new Exception("doc gone", 410);
+        if ($document->getServerState() === self::SERVER_STATE_DELETED) {
+            throw new Frontdoor_Model_DocumentDeletedException();
         }
 
-        if ($document->getServerState() !== 'published' 
-                and !$this->checkDocument($this->docId, $realm)) {
-            throw new Exception("doc forbidden", 403);
+        if ($document->getServerState() !== self::SERVER_STATE_PUBLISHED
+                and !$this->isDocumentAccessAllowed($this->docId, $realm)) {
+            throw new Frontdoor_Model_DocumentAccessNotAllowedException();
         }
 
-        // lookup the target file
         $targetFile = Opus_File::fetchByDocIdPathName($this->docId, $this->filename);
-        if (is_null($targetFile) === true) {
-            // file not found
-            throw new Exception("file not found", 404);
+        if (is_null($targetFile)) {
+            throw new Frontdoor_Model_FileNotFoundException();
         }
 
-        // check if we have access
-        if (!$this->checkFile($targetFile->getId(), $realm)) {
-            throw new Exception("file forbidden", 403);
+        if (!$this->isFileAccessAllowed($targetFile->getId(), $realm)) {
+            throw new Frontdoor_Model_FileAccessNotAllowedException();
         }
 
         return $targetFile;
     }
 
-    function checkDocument($docId, $realm) {
+    function isDocumentAccessAllowed($docId, $realm) {
         if (is_null($docId) or !($realm instanceof Opus_Security_Realm)) {
-            return null;
+            return false;
         }
         return $realm->checkDocument($docId);
     }
 
-    function checkFile($fileId, $realm) {
+    function isFileAccessAllowed($fileId, $realm) {
         if (is_null($fileId) or !($realm instanceof Opus_Security_Realm)) {
-            return null;
+            return false;
         }
         return $realm->checkFile($fileId);
     }

@@ -36,19 +36,25 @@
 class Frontdoor_DeliverController extends Controller_Action {
 
     public function indexAction() {
+        
         $docId = $this->_getParam('docId', null);
         $path = $this->_getParam('file', null);
-        $method = $this->_getParam('option', 'fpassthru');
 
         $realm = Opus_Security_Realm::getInstance();
         $file_model = new Frontdoor_Model_File($docId, $path);
-        $file_object = $file_model->getFileObject($realm);
+        $file_object = null;
+        
+        try {
+            $file_object = $file_model->getFileObject($realm);
+        } catch(Frontdoor_Model_FrontdoorDeliveryException $e) {
+            $this->handleDeliveryError($e);
+            return;
+        }
 
         $full_filename = $file_object->getPath();
         $base_filename = basename($full_filename);
 
-        $this->_helper->layout->disableLayout();
-        $this->_helper->viewRenderer->setNoRender();
+        $this->disableViewRendering();
 
         $this->getResponse()
                 ->clearAllHeaders()
@@ -57,11 +63,28 @@ class Frontdoor_DeliverController extends Controller_Action {
                 ->setHeader('Cache-Control', 'private', true)
                 ->setHeader('Pragma', 'cache', true);
 
-        if (!$this->_helper->SendFile($full_filename, $method)) {
-            throw new Exception("Server error", 500);
+        try {
+            $this->_helper->SendFile($full_filename);
+        } catch (Exception $e) {
+            $this->logError($e);
         }
 
         return;
     }
 
+    private function logError($exception) {
+        $logger = Zend_Registry::get("Zend_Log");
+        $logger->err($exception);
+    }
+
+    private function handleDeliveryError($exception) {
+        $this->view->translateKey = $exception->getTranslateKey();
+        $this->view->code = $exception->getCode();
+        $this->render('error');
+    }
+
+    private function disableViewRendering() {
+        $this->_helper->layout->disableLayout();
+        $this->_helper->viewRenderer->setNoRender();
+    }
 }

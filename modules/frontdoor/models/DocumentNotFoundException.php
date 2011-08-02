@@ -26,20 +26,16 @@
  *
  * @category    Application
  * @package     Module_Frontdoor
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
- *
- *
- *
- * This view gets a filtered one-dimensional associative array ($mydoc_data) from
- * the Frontdoor-Controller and displays it. The order of elements is fixed here.
- * Abstracts and keywords were combined with language information and displayed directly.
+ * @version     $Id: Exception.php 8422 2011-05-27 16:53:31Z sszott $
  */
-?>
 
-<h1><?= $this->translate('frontdoor_document_error') ?></h1>
-<div class="frontdoor">
-    <?= $this->translate($this->errorMessage, htmlspecialchars($this->docId)) ?>
-</div>
+class Frontdoor_Model_DocumentNotFoundException extends Frontdoor_Model_FrontdoorDeliveryException {
+    public function __construct() {
+        $this->translateKey = "frontdoor_doc_not_found";
+        $this->code = 404;
+    }
+}
+?>
