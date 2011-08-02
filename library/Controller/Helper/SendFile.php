@@ -33,6 +33,8 @@
  */
 
 class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract {
+    const FPASSTHRU = 'fpassthru';
+    const XSENDFILE = 'xsendfile';
 
     /**
      * This method to call when we use   $this->_helper->SendFile(...)   and
@@ -40,7 +42,7 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
      *
      * @see Controller_Helper_SendFile::sendFile
      */
-    public function direct($file, $method = 'xsendfile', $must_resend = false) {
+    public function direct($file, $method, $must_resend) {
         return $this->sendFile($file, $method, $must_resend);
     }
 
@@ -48,34 +50,75 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
      * This method to call when we use   $this->_helper->SendFile(...)
      *
      * @param string  $file        Absoulte filename of file to send.
-     * @param string  $method      'xsendfile' for X-Sendfile, fpassthru otherwise.
+     * @param string  $method      defaults to self::FPASSTHRU, use self::XSENDFILE for X-Sendfile
      * @param boolean $must_resend Ignore "if-modified-since" header, defaults to false.
-     * @return <type>
+     * @return void
      */
-    public function sendFile($file, $method = 'xsendfile', $must_resend = false) {
-        $response = $this->getResponse();
-        $file = realpath($file);
+    public function sendFile($file, $method = self::FPASSTHRU, $must_resend = false) {
 
-        if (!is_readable($file) || !$response->canSendHeaders()) {
-            return false;
+        $response = $this->getResponse();
+        if (!$response->canSendHeaders()) {
+            throw new Exception("Cannot send headers");
+        }
+
+        $file = realpath($file);
+        if (!is_readable($file)) {
+            throw new Exception("File is not readable");
         }
 
         $modified = filemtime($file);
         if ($must_resend === true && $this->notModifiedSince($modified)) {
-            return true;
+            return;
         }
 
-        $response->setHttpResponseCode(200);
+        if ($method === self::XSENDFILE) {
+            $this->sendFileViaXSendfile($file);
+            return;
+        }
 
-        if ($method === 'xsendfile') {
-            $response->setHeader('X-Opus-Serve-File-Method', 'xsendfile');
-            $response->setHeader('X-Sendfile', $file);
+        $this->sendFileViaFpassthru($file);
+    }
+
+    /**
+     * Check IF_MODIFIED_SINCE header.  Return true, if header set and file
+     * modified.  Return false otherwise.
+     *
+     * @param  string $modified  Timestamp string
+     * @return boolean
+     */
+    public function notModifiedSince($modified) {
+        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $modified <= strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
+            $response = $this->getResponse();
+            $response->setHttpResponseCode(304);
             $response->sendHeaders();
             return true;
         }
+        return false;
+    }
 
-        // prepare headers... ?
-        $response->setHeader('X-Opus-Serve-File-Method', 'fpassthru');
+    /**
+     * Sends X-Sendfile header to let the webserver deliver the file.
+     * (See Apache module mod_xsendfile and HTTP header X-Sendfile.)
+     *
+     * @param string $file
+     */
+    private function sendFileViaXSendfile($file) {
+        $response = $this->getResponse();
+        $response->setHttpResponseCode(200);
+        $response->setHeader('X-Sendfile', $file);
+        $response->sendHeaders();
+    }
+
+    /**
+     * Delivers the file via function "fpassthru()".
+     *
+     * @param string $file
+     */
+    private function sendFileViaFpassthru($file) {
+        $response = $this->getResponse();
+        $response->setHttpResponseCode(200);
+
+        $modified = filemtime($file);
         $response->setHeader('Last-Modified', gmdate('r', $modified), true);
         $response->setHeader('Content-Length', filesize($file), true);
         $response->sendHeaders();
@@ -92,26 +135,6 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
         if ($retval === false) {
             throw new Exception('fpassthru failed.');
         }
-
-        return true;
     }
 
-    /**
-     * Check IF_MODIFIED_SINCE header.  Return true, if header set and file
-     * modified.  Return false otherwise.
-     *
-     * @param  string $modified  Timestamp string
-     * @return boolean
-     */
-    public function notModifiedSince($modified) {
-        if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && $modified <= strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE'])) {
-            // Send a 304 Not Modified header
-            $response = $this->getResponse();
-            $response->setHttpResponseCode(304);
-            $response->sendHeaders();
-            return true;
-        }
-
-        return false;
-    }
 }
