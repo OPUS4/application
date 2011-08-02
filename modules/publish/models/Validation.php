@@ -334,7 +334,7 @@ class Publish_Model_Validation {
     private function _validateYear() {
         $validators = array();
 
-        $validator1 = new Zend_Validate_GreaterThan('1900');
+        $validator1 = new Zend_Validate_GreaterThan('0000');
         $validator1->setMessage('publish_validation_error_year_greaterthan', Zend_Validate_GreaterThan::NOT_GREATER);
         $validators[] = $validator1;
 
