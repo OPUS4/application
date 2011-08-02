@@ -293,7 +293,7 @@
             </xsl:choose>
                 <xsl:element name="datestamp">
                   <xsl:choose>
-                    <xsl:when test="@ServerDateModified">
+                    <xsl:when test="./ServerDateModified">
                         <xsl:value-of select="ServerDateModified/@Year"/>-<xsl:value-of select="format-number(ServerDateModified/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDateModified/@Day,'00')"/>    
                     </xsl:when>  
                     <xsl:otherwise>
