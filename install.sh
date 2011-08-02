@@ -18,7 +18,7 @@
 
 set -e
 
-SCRIPT_NAME=`basename "$0"`
+SCRIPT_NAME="`basename "$0"`"
 
 if [ $# -lt 1 ]
 then
