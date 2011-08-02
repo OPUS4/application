@@ -37,12 +37,17 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
     const XSENDFILE = 'xsendfile';
 
     /**
+     * @var Zend_Log
+     */
+    private $logger = null;
+
+    /**
      * This method to call when we use   $this->_helper->SendFile(...)   and
      * forwards to method Controller_Helper_SendFile::sendFile
      *
      * @see Controller_Helper_SendFile::sendFile
      */
-    public function direct($file, $method, $must_resend) {
+    public function direct($file, $method = self::FPASSTHRU, $must_resend = false) {
         return $this->sendFile($file, $method, $must_resend);
     }
 
@@ -118,13 +123,18 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
         $response = $this->getResponse();
         $response->setHttpResponseCode(200);
 
+        if (!is_null($this->logger)) {
+            $content = ob_get_contents();
+            $this->logger->err($content);
+        }
+
+        ob_end_clean();
+        set_time_limit(300);
+
         $modified = filemtime($file);
         $response->setHeader('Last-Modified', gmdate('r', $modified), true);
         $response->setHeader('Content-Length', filesize($file), true);
         $response->sendHeaders();
-
-        ob_end_flush();
-        set_time_limit(300);
 
         $fp = fopen($file, 'rb');
         if ($fp === false) {
@@ -135,6 +145,14 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
         if ($retval === false) {
             throw new Exception('fpassthru failed.');
         }
+    }
+
+    /**
+     *
+     * @param Zend_Log $logger
+     */
+    public function setLogger($logger) {
+        $this->logger = $logger;
     }
 
 }
