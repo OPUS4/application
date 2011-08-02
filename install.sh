@@ -40,43 +40,30 @@ fi
 BASEDIR='/var/local/opus4'
 MYSQL_CLIENT='/usr/bin/mysql'
 
-ZEND_LIB_URL='http://framework.zend.com/releases/ZendFramework-1.10.6/ZendFramework-1.10.6-minimal.tar.gz'
-JPGRAPH_LIB_URL='http://jpgraph.net/download/download.php?p=1'
-SOLR_SERVER_URL='http://www.apache.org/dist//lucene/solr/1.4.1/apache-solr-1.4.1.tgz'
-SOLR_PHP_CLIENT_LIB_URL='http://solr-php-client.googlecode.com/svn/trunk/'
-SOLR_PHP_CLIENT_LIB_REVISION='36'
-JQUERY_LIB_URL='http://code.jquery.com/jquery-1.4.3.min.js'
-
 cd "$BASEDIR"
 
+# download required files into download folder
 if [ ! -d downloads ]
 then
-  mkdir -p downloads
-  cd downloads
-  wget -O zend.tar.gz "$ZEND_LIB_URL"
-  if [ ! -f zend.tar.gz ]
-  then
-    echo "Unable to download $ZEND_LIB_URL"
-    exit 1
-  fi
-
-  wget -O jpgraph.tar.gz "$JPGRAPH_LIB_URL"
-  if [ ! -f jpgraph.tar.gz ]
-  then
-    echo "Unable to download $JPGRAPH_LIB_URL"
-    exit 1
-  fi
-
-  wget -O solr.tgz "$SOLR_SERVER_URL"
-  if [ ! -f solr.tgz ]
-  then
-    echo "Unable to download $SOLR_SERVER_URL"
-    exit 1
-  fi
-
-  cd -
+  "$SCRIPT_PATH/install-download-files.sh" "$BASEDIR/downloads"
 fi
 
+# install required libraries into libraries folder
+cd libs
+
+tar xfvz "$BASEDIR/downloads/zend.tar.gz"
+ln -svf ZendFramework-1.10.6-minimal ZendFramework
+
+mkdir -p jpgraph-3.0.7
+tar xfvz "$BASEDIR/downloads/jpgraph.tar.gz" --directory jpgraph-3.0.7/
+ln -svf jpgraph-3.0.7 jpgraph
+
+cp -r "$BASEDIR/downloads/SolrPhpClient_r36" .
+ln -svf "SolrPhpClient_r36" SolrPhpClient
+
+cp "$BASEDIR/downloads/jquery.js" "$BASEDIR/opus4/public/js"
+
+cd "$BASEDIR"
 
 # create .htaccess
 sed -e 's!<template>!/opus4!' opus4/public/htaccess-template > opus4/public/.htaccess
@@ -86,31 +73,6 @@ then
   sed -e 's!#Enable for UBUNTU/DEBIAN:# !!' opus4/public/.htaccess.tmp > opus4/public/.htaccess
   rm opus4/public/.htaccess.tmp
 fi
-
-# download and install required libraries
-cd libs
-tar xfvz ../downloads/zend.tar.gz
-ln -svf ZendFramework-1.10.6-minimal ZendFramework
-
-mkdir -p jpgraph-3.0.7
-cd jpgraph-3.0.7
-tar xfvz ../../downloads/jpgraph.tar.gz
-cd ..
-ln -svf jpgraph-3.0.7 jpgraph
-
-svn export --revision "$SOLR_PHP_CLIENT_LIB_REVISION" --force "$SOLR_PHP_CLIENT_LIB_URL" "SolrPhpClient_r$SOLR_PHP_CLIENT_LIB_REVISION"
-if [ ! -d "SolrPhpClient_r$SOLR_PHP_CLIENT_LIB_REVISION" ]
-then
-  echo "Unable to download $SOLR_PHP_CLIENT_LIB_URL"
-  exit 1
-fi
-ln -svf "SolrPhpClient_r$SOLR_PHP_CLIENT_LIB_REVISION" SolrPhpClient
-cd "$BASEDIR"
-
-# download jQuery JavaScript library
-cd opus4/public/js
-wget -O jquery.js "$JQUERY_LIB_URL"
-cd "$BASEDIR"
 
 # promt for username
 echo "OPUS requires a dedicated system account under which Solr will be running."
@@ -226,7 +188,7 @@ cd "$BASEDIR"
 read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
 if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ]
 then
-  tar xfvz downloads/solr.tgz
+  tar xfvz "$BASEDIR/downloads/solr.tgz"
   ln -sf apache-solr-1.4.1 solr
   cd solr
   cp -r example opus4
