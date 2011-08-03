@@ -18,14 +18,14 @@
 
 set -e
 
+# START USER-CONFIGURATION
+BASEDIR='/var/local/opus4'
+OPUS_URL_BASE='/opus4'
+# END OF USER-CONFIGURATION
+
 SCRIPT_NAME="`basename "$0"`"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
 SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
-
-# load installer config.
-if [ -f "$SCRIPT_PATH/installer.conf" ]; then
-    . "$SCRIPT_PATH/installer.conf"
-fi
 
 # check input parameter
 if [ $# -lt 1 ]
@@ -44,8 +44,12 @@ else
   exit 1
 fi
 
-BASEDIR='/var/local/opus4'
 MYSQL_CLIENT='/usr/bin/mysql'
+
+# including installer components
+if [ -f "$SCRIPT_PATH/installer.includes" ]; then
+    . "$SCRIPT_PATH/installer.includes"
+fi
 
 cd "$BASEDIR"
 
@@ -73,7 +77,7 @@ cp "$BASEDIR/downloads/jquery.js" "$BASEDIR/opus4/public/js"
 cd "$BASEDIR"
 
 # create .htaccess
-sed -e 's!<template>!/opus4!' opus4/public/htaccess-template > opus4/public/.htaccess
+sed -e "s!<template>!$OPUS_URL_BASE!" opus4/public/htaccess-template > opus4/public/.htaccess
 if [ "$OS" = ubuntu ]
 then
   cp opus4/public/.htaccess opus4/public/.htaccess.tmp
