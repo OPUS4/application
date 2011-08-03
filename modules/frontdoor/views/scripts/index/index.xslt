@@ -214,10 +214,13 @@
                 <xsl:sort select="@Number"/>
             </xsl:apply-templates>
             <xsl:apply-templates select="Collection[@RoleName='pacs']" />
+            <xsl:apply-templates select="Collection[@RoleName='bk']" />
+            <xsl:apply-templates select="Collection[@RoleName='jel']" />
             <xsl:apply-templates select="Collection[@RoleName='series']" />
+
             <xsl:apply-templates select="IdentifierSerial" />
 
-            <xsl:apply-templates select="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='series']" />
+            <xsl:apply-templates select="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel' and @RoleName!='series']" />
 
             <xsl:apply-templates select="Licence" />
         </table>
