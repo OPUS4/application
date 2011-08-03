@@ -102,12 +102,8 @@ then
 fi
 
 # preparing OWNER string for chown-calls.
-if [ "$OS" = ubuntu ]
-then
-  OWNER="$OPUS_USER_NAME:$OPUS_USER_NAME"
-else
-  OWNER="$OPUS_USER_NAME"
-fi
+OPUS_GROUP_NAME="`id -gn "$OPUS_USER_NAME"`"
+OWNER="$OPUS_USER_NAME:$OPUS_GROUP_NAME"
 
 # prompt for database parameters
 [[ -z $DBNAME               ]] && read -p "New OPUS Database Name [opus400]: "          DBNAME
