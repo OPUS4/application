@@ -742,7 +742,7 @@ class Admin_DocumentController extends Controller_Action {
 
             $action = array();
             $action['label'] = 'admin_doc_delete_permanent';
-            $action['url'] = $documentUrl->getUrlPermanentDelete($docId);
+            $action['url'] = $documentUrl->adminDeletePermanent($docId);
             $actions['permanentDelete'] = $action;
         }
 
