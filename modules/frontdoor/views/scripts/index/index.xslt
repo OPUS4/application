@@ -51,6 +51,8 @@
     <xsl:param name="layoutPath" />
     <xsl:param name="isMailPossible" />
 
+    <xsl:key name="list" match="/Opus/Opus_Document/Subject[@Type='uncontrolled']" use="@Language"/>
+
     <xsl:template match="/">
         <div about="{/Opus/Opus_Document/TitleMain/@Value}">
             <xsl:apply-templates select="Opus/Opus_Document" />
@@ -179,9 +181,29 @@
 
             <!-- -->
             <!-- Subjects section.  New subjects must be introduced right here. -->
-            <!-- -->
+            <!-- -->            
 
-            <xsl:apply-templates select="Subject[@Type='uncontrolled']"><xsl:sort select="@Value"/></xsl:apply-templates>
+            <!-- we need to apply a hack (so called Muenchian grouping) here since XSLT's 2.0 for-each-group feature is currently not supported -->
+            <tr>
+                <th class="name">
+                    <xsl:call-template name="translateString">
+                        <xsl:with-param name="string">subject_frontdoor_uncontrolled</xsl:with-param>
+                    </xsl:call-template>
+                    <xsl:text>:</xsl:text>
+                </th>
+
+                <td><em class="data-marker">
+                <xsl:for-each select="Subject[@Type='uncontrolled'][generate-id(.)=generate-id(key('list', @Language))]/@Language">
+                    <xsl:sort/>
+                    <xsl:for-each select="key('list', .)">
+                        <xsl:sort/>
+                        <xsl:value-of select="@Value"/><xsl:if test="position() != last()">; </xsl:if>
+                    </xsl:for-each>
+                    <xsl:if test="position() != last()"><br/></xsl:if>
+                </xsl:for-each>
+                </em></td>
+            </tr>
+
             <xsl:apply-templates select="Subject[@Type='swd']"><xsl:sort select="@Value"/></xsl:apply-templates>
             <xsl:apply-templates select="Subject[@Type='ddc']"><xsl:sort select="@Value"/></xsl:apply-templates>
             <xsl:apply-templates select="Subject[@Type='msc']"><xsl:sort select="@Value"/></xsl:apply-templates>
