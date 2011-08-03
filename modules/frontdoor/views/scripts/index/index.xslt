@@ -196,7 +196,7 @@
                 <xsl:for-each select="Subject[@Type='uncontrolled'][generate-id(.)=generate-id(key('list', @Language))]/@Language">
                     <xsl:sort/>
                     <xsl:for-each select="key('list', .)">
-                        <xsl:sort/>
+                        <xsl:sort select="@Value" />
                         <xsl:value-of select="@Value"/><xsl:if test="position() != last()">; </xsl:if>
                     </xsl:for-each>
                     <xsl:if test="position() != last()"><br/></xsl:if>

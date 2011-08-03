@@ -88,7 +88,13 @@ INSERT INTO `document_subjects` (`id`, `document_id`, `language`, `type`, `value
 (309, 95, 'eng', 'uncontrolled', 'eBook', NULL),
 (310, 96, 'eng', 'uncontrolled', ' information science ', NULL),
 (311, 97, 'eng', 'uncontrolled', ' information science ', NULL),
-(312, 98, 'eng', 'uncontrolled', ' information science ', NULL);
+(312, 98, 'eng', 'uncontrolled', ' information science ', NULL),
+(313, 91, 'eng', 'uncontrolled', 'english subject ', NULL),
+(314, 91, 'eng', 'uncontrolled', 'another english subject', NULL),
+(315, 91, 'deu', 'uncontrolled', 'deutsches Schlagwort', NULL),
+(316, 91, 'deu', 'uncontrolled', 'ein anderes deutsches Schlagwort', NULL),
+(317, 91, 'fra', 'uncontrolled', 'mot clé français', NULL),
+(318, 91, 'fra', 'uncontrolled', 'autre mot-clé français', NULL);
 
 --
 -- Daten für Tabelle `document_title_abstracts`
