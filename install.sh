@@ -311,8 +311,12 @@ if [ "$DELETE_DOWNLOADS" = Y ] || [ "$DELETE_DOWNLOADS" = y ]; then
   rm -rf downloads
 fi
 
-echo 'restart apache webserver ...'
-/etc/init.d/apache2 restart
+[[ -z $RESTART_APACHE ]] && RESTART_APACHE=Y
+if [ "$RESTART_APACHE" = Y ];
+then
+  echo 'restart apache webserver ...'
+  /etc/init.d/apache2 restart
+fi
   
 echo
 echo
