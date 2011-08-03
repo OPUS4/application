@@ -48,7 +48,7 @@
 
     <table class="collections">
     <?php foreach ($this->collectionRoles as $i => $collectionRole) :
-        $translatelabel = 'search_index_custom_browsing_' . $collectionRole->getName();
+        $translatelabel = 'default_collection_role_' . $collectionRole->getName();
         $printname = '';
         if ($translatelabel === $this->translate($translatelabel))
             $printname = $collectionRole->getName();

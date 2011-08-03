@@ -543,69 +543,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="collection_role_frontdoor_ccs">
-      <tuv xml:lang="en">
-        <seg>CCS-Classification</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>CCS-Klassifikation</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="collection_role_frontdoor_ddc">
-      <tuv xml:lang="en">
-        <seg>Dewey Decimal Classification</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>DDC-Sachgruppe</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="collection_role_frontdoor_msc">
-      <tuv xml:lang="en">
-        <seg>MSC-Classification</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>MSC-Klassifikation</seg>
-      </tuv>
-    </tu>
- 
-    <tu tuid="collection_role_frontdoor_institutes">
-      <tuv xml:lang="en">
-        <seg>Institute</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Institut</seg>
-      </tuv>
-    </tu>
- 
-    <tu tuid="collection_role_frontdoor_projects">
-      <tuv xml:lang="en">
-        <seg>Project</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Projekt</seg>
-      </tuv>
-    </tu>
- 
-    <tu tuid="collection_role_frontdoor_pacs">
-      <tuv xml:lang="en">
-        <seg>PACS-Classification</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>PACS-Klassifikation</seg>
-      </tuv>
-    </tu>
- 
-    <tu tuid="collection_role_frontdoor_series">
-      <tuv xml:lang="en">
-        <seg>Series</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Schriftenreihen</seg>
-      </tuv>
-    </tu>
- 
      <tu tuid="frontdoor_mailtoauthor">
       <tuv xml:lang="en">
         <seg>Send a mail to the author of this document</seg>

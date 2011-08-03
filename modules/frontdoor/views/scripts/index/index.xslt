@@ -487,7 +487,7 @@
                 <xsl:when test="position()=1">
                     <th class="name">
                         <xsl:call-template name="translateStringWithDefault">
-                            <xsl:with-param name="string">collection_role_frontdoor_<xsl:value-of select="@RoleName" /></xsl:with-param>
+                            <xsl:with-param name="string">default_collection_role_<xsl:value-of select="@RoleName" /></xsl:with-param>
                             <xsl:with-param name="default"><xsl:value-of select="@RoleName" /></xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>

@@ -141,7 +141,7 @@ class Solrsearch_Model_CollectionList {
     }
 
     public function getCollectionRoleTitle() {
-        return 'search_index_custom_browsing_' . $this->getCollectionRoleTitlePlain();
+        return 'default_collection_role_' . $this->getCollectionRoleTitlePlain();
     }
 
     public function getCollectionRoleTitlePlain() {

@@ -50,7 +50,7 @@
         </li>
 
         <?php foreach ($this->collectionRoles as $collectionRole) :
-            $translatelabel = 'search_index_custom_browsing_' . $collectionRole->getName();
+            $translatelabel = 'default_collection_role_' . $collectionRole->getName();
             $printname = '';
             if ($translatelabel === $this->translate($translatelabel)) {
                 $printname = $collectionRole->getName();

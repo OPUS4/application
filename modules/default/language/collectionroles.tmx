@@ -3,25 +3,16 @@
 <tmx version="1.4">
     <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
     <body>
-        <tu tuid="search_index_custom_browsing_org">
+        <tu tuid="default_collection_role_institutes">
             <tuv xml:lang="en">
                 <seg>Institutes</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Institutionen</seg>
+                <seg>Institute</seg>
             </tuv>
         </tu>
 
-        <tu tuid="search_index_custom_browsing_institutes">
-            <tuv xml:lang="en">
-                <seg>Institutes</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Institutionen</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="search_index_custom_browsing_series">
+        <tu tuid="default_collection_role_series">
           <tuv xml:lang="en">
             <seg>Series</seg>
           </tuv>
@@ -30,34 +21,16 @@
           </tuv>
         </tu>
 
-        <tu tuid="search_index_custom_browsing_reports">
+        <tu tuid="default_collection_role_ddc">
           <tuv xml:lang="en">
-            <seg>Reports</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>Berichte</seg>
-          </tuv>
-        </tu>
-
-        <tu tuid="search_index_custom_browsing_collections">
-          <tuv xml:lang="en">
-            <seg>Collections</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>Sammlungen</seg>
-          </tuv>
-        </tu>
-
-        <tu tuid="search_index_custom_browsing_ddc">
-          <tuv xml:lang="en">
-            <seg>DDC-Classification</seg>
+            <seg>Dewey Decimal Classification</seg>
           </tuv>
           <tuv xml:lang="de">
             <seg>DDC-Sachgruppen</seg>
           </tuv>
         </tu>
 
-        <tu tuid="search_index_custom_browsing_ccs">
+        <tu tuid="default_collection_role_ccs">
           <tuv xml:lang="en">
             <seg>CCS-Classification</seg>
           </tuv>
@@ -66,7 +39,7 @@
           </tuv>
         </tu>
 
-        <tu tuid="search_index_custom_browsing_jel">
+        <tu tuid="default_collection_role_jel">
           <tuv xml:lang="en">
             <seg>JEL-Classification</seg>
           </tuv>
@@ -75,7 +48,7 @@
           </tuv>
         </tu>
 
-        <tu tuid="search_index_custom_browsing_msc">
+        <tu tuid="default_collection_role_msc">
           <tuv xml:lang="en">
             <seg>MSC-Classification</seg>
           </tuv>
@@ -84,7 +57,7 @@
           </tuv>
         </tu>
 
-        <tu tuid="search_index_custom_browsing_pacs">
+        <tu tuid="default_collection_role_pacs">
           <tuv xml:lang="en">
             <seg>PACS-Classification</seg>
           </tuv>
@@ -93,7 +66,7 @@
           </tuv>
         </tu>
 
-        <tu tuid="search_index_custom_browsing_bk">
+        <tu tuid="default_collection_role_bk">
           <tuv xml:lang="en">
             <seg>BKL-Classification</seg>
           </tuv>
