@@ -111,6 +111,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="frontdoor_additional_options">
+        <tuv xml:lang="en">
+            <seg>Additional Services</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Weitere Dienste</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="frontdoor_download_file">
         <tuv xml:lang="en">
             <seg>Download file</seg>

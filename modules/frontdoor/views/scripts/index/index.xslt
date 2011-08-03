@@ -67,25 +67,15 @@
     <xsl:template match="Opus_Document">
         <div id="titlemain-wrapper">
             <xsl:call-template name="Title" />
-            <!--
-            <xsl:apply-templates select="TitleMain" />
-            -->
         </div>
-
 
         <div id="result-data">
             <div id ="author">
                 <xsl:call-template name="Author" />
-                <!--
-                <xsl:apply-templates select="PersonAuthor" />
-                -->
             </div>
             
             <div id="abstract">
                 <xsl:call-template name="Abstract" />
-                <!--
-                <xsl:apply-templates select="TitleAbstract" />
-                -->
             </div>
         </div>
 
@@ -105,9 +95,6 @@
                 </div>
             </xsl:if>
 
-            <xsl:call-template name="MailToAuthor"/>
-            <xsl:call-template name="services"/>
-            
             <div id="export" class="services">
                 <h3>
                     <xsl:call-template name="translateString">
@@ -116,6 +103,18 @@
                 </h3>
                 <ul>
                     <xsl:call-template name="ExportFunctions" />
+                </ul>
+            </div>
+
+            <div id="additional-services" class="services">
+                <h3>
+                    <xsl:call-template name="translateString">
+                        <xsl:with-param name="string">frontdoor_additional_options</xsl:with-param>
+                    </xsl:call-template>
+                </h3>
+                <ul>
+                    <xsl:call-template name="AdditionalServices"/>
+                    <xsl:call-template name="MailToAuthor"/>
                 </ul>
             </div>
             
@@ -657,31 +656,63 @@
         </li>
     </xsl:template>
 
-    <xsl:template match="PersonAuthor">
-        <tr>
+    <xsl:template match="PersonAuthor|PersonReferee">
+        <xsl:if test="position() = 1">
+            <xsl:text disable-output-escaping="yes">&lt;tr&gt;</xsl:text>
             <th class="name">
                 <xsl:if test="position() = 1">
                    <xsl:call-template name="translateFieldname"/>:
                 </xsl:if>
             </th>
-            <td>
-                <xsl:element name="a">
-                    <xsl:attribute name="href">
-                        <xsl:value-of select="$baseUrl"/>
-                        <xsl:text>/solrsearch/index/search/searchtype/authorsearch/author/</xsl:text>
-                        <xsl:value-of select="concat('&quot;', @FirstName, ' ', @LastName, '&quot;')" />
-                    </xsl:attribute>
-                    <xsl:attribute name="title">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">frontdoor_author_search</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:attribute>
-                    <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
-                </xsl:element>
-            </td>
-        </tr>
+            <xsl:text disable-output-escaping="yes">&lt;td&gt;</xsl:text>
+        </xsl:if>
+        <xsl:element name="a">
+            <xsl:attribute name="href">
+                <xsl:value-of select="$baseUrl"/>
+                <xsl:if test="name()='PersonAuthor'"><xsl:text>/solrsearch/index/search/searchtype/authorsearch/author/</xsl:text></xsl:if>
+                <xsl:if test="name()='PersonReferee'"><xsl:text>/solrsearch/index/search/searchtype/authorsearch/referee/</xsl:text></xsl:if>
+                <xsl:value-of select="concat('&quot;', @FirstName, ' ', @LastName, '&quot;')" />
+            </xsl:attribute>
+            <xsl:attribute name="title">
+                <xsl:if test="name()='PersonAuthor'">
+                    <xsl:call-template name="translateString">
+                        <xsl:with-param name="string">frontdoor_author_search</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:if>
+                <xsl:if test="name()='PersonReferee'">
+                    <xsl:call-template name="translateString">
+                        <xsl:with-param name="string">frontdoor_referee_search</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:if>
+            </xsl:attribute>
+            <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
+        </xsl:element>
+        <xsl:if test="position() != last()">, </xsl:if>
+        <xsl:if test="position() = last()">
+            <xsl:text disable-output-escaping="yes">&lt;/td&gt;</xsl:text>
+            <xsl:text disable-output-escaping="yes">&lt;/tr&gt;</xsl:text>
+        </xsl:if>
     </xsl:template>
-         
+   
+
+    <xsl:template match="PersonAdvisor|PersonOther|PersonContributor|PersonEditor|PersonTranslator">
+        <xsl:if test="position() = 1">
+            <xsl:text disable-output-escaping="yes">&lt;tr&gt;</xsl:text>
+            <th class="name">
+                <xsl:if test="position() = 1">
+                   <xsl:call-template name="translateFieldname"/>:
+                </xsl:if>
+            </th>
+            <xsl:text disable-output-escaping="yes">&lt;td&gt;</xsl:text>
+        </xsl:if>
+        <xsl:value-of select="concat(@FirstName, ' ', @LastName)" />
+        <xsl:if test="position() != last()">, </xsl:if>
+        <xsl:if test="position() = last()">
+            <xsl:text disable-output-escaping="yes">&lt;/td&gt;</xsl:text>
+            <xsl:text disable-output-escaping="yes">&lt;/tr&gt;</xsl:text>
+        </xsl:if>
+    </xsl:template>
+
     <xsl:template match="IdentifierHandle|IdentifierUrl">
         <tr>
             <th class="name">
@@ -791,86 +822,6 @@
     <xsl:template match="Institute"/>
     <xsl:template match="Patent"/>
  
-    <xsl:template match="PersonAdvisor">
-        <tr>
-            <th class="name">
-                <xsl:call-template name="translateFieldname"/>:
-            </th>
-            <td>
-                <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
-            </td>
-        </tr>
-    </xsl:template>
-          
-    <xsl:template match="PersonOther">
-        <tr>
-            <th class="name">
-                <xsl:call-template name="translateFieldname"/>:
-            </th>
-            <td>
-                <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
-            </td>
-        </tr>
-    </xsl:template>
- 
-    <xsl:template match="PersonReferee">
-        <tr>
-            <th class="name">
-                <xsl:if test="position() = 1">
-                   <xsl:call-template name="translateFieldname"/>:
-                </xsl:if>
-            </th>
-            <td>
-                <xsl:element name="a">
-                    <xsl:attribute name="href">
-                        <xsl:value-of select="$baseUrl"/>
-                        <xsl:text>/solrsearch/index/search/searchtype/authorsearch/referee/</xsl:text>
-                        <xsl:value-of select="concat('&quot;', @FirstName, ' ', @LastName, '&quot;')" />
-                    </xsl:attribute>
-                    <xsl:attribute name="title">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">frontdoor_referee_search</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:attribute>
-                    <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
-                </xsl:element>
-            </td>
-        </tr>
-    </xsl:template>
-
-    <xsl:template match="PersonContributor">
-        <tr>
-            <th class="name">
-                <xsl:call-template name="translateFieldname"/>:
-            </th>
-            <td>
-                <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
-            </td>
-        </tr>
-    </xsl:template>
- 
-    <xsl:template match="PersonEditor">
-        <tr>
-            <th class="name">
-                <xsl:call-template name="translateFieldname"/>:
-            </th>
-            <td>
-                <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
-            </td>
-        </tr>
-    </xsl:template>
- 
-    <xsl:template match="PersonTranslator">
-        <tr>
-            <th class="name">
-                <xsl:call-template name="translateFieldname"/>:
-            </th>
-            <td>
-                <xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
-            </td>
-        </tr>
-    </xsl:template>
- 
     <xsl:template match="PublishedDate">
         <tr>
             <th class="name">
@@ -958,6 +909,7 @@
     <xsl:template match="ReferenceCrisLink"/>
     <xsl:template match="ReferenceSplashUrl"/>
 
+    <!-- 3 Templates for the introducing block -->
     <xsl:template name="Author">
         <p>
             <xsl:for-each select="PersonAuthor">
@@ -1045,7 +997,7 @@
 
 
     <!--  Named template for services-buttons -->
-    <xsl:template name="services">
+    <xsl:template name="AdditionalServices">
         <!-- Twitter -->
         <xsl:variable name="frontdoor_share_twitter">
             <xsl:call-template name="translateString">
