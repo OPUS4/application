@@ -315,5 +315,5 @@ fi
   
 echo
 echo
-echo 'OPUS 4 is running now! Point your browser to http://localhost/opus4/'
+echo "OPUS 4 is running now! Point your browser to http://localhost/$OPUS_URL_BASE"
 echo
