@@ -577,14 +577,6 @@
         </tuv>
     </tu>
 
-	<tu tuid="button_label_browse_downSeries">
-        <tuv xml:lang="en">
-            <seg>down</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>runter</seg>
-        </tuv>
-    </tu>
 
     <tu tuid="button_label_browse_upProject">
         <tuv xml:lang="en">

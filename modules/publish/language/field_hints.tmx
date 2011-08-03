@@ -291,15 +291,6 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_PersonAuthorLastName1">
-        <tuv xml:lang="en">
-            <seg>Please enter the last name of an author.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen eines Autoren ein.</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="hint_PersonAuthorFirstName">
         <tuv xml:lang="en">
             <seg>Please enter the first name of an author.</seg>
@@ -336,23 +327,6 @@
         </tuv>
     </tu>
 
-	<tu tuid="hint_PersonAuthorAcademicTitle1">
-        <tuv xml:lang="en">
-            <seg>Please enter the authors shortened academic title (i.e. Dr., Prof., PhD).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den akademischen Titel des Autors in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
-        </tuv>
-    </tu>
-
-	<tu tuid="hint_PersonAuthorEmail1">
-        <tuv xml:lang="en">
-            <seg>Please enter the authors email address.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Emailadresse ein.</seg>
-        </tuv>
-    </tu>
 	<tu tuid="hint_PersonAuthorAcademicTitle1">
         <tuv xml:lang="en">
             <seg>Please enter the authors shortened academic title (i.e. Dr., Prof., PhD).</seg>
