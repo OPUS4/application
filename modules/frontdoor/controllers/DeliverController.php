@@ -51,6 +51,11 @@ class Frontdoor_DeliverController extends Controller_Action {
             return;
         }
 
+        if(!$file_object->exists()) {
+            $this->handleDeliveryError(new Frontdoor_Model_FileNotFoundException());
+            return;
+        }
+
         $full_filename = $file_object->getPath();
         $base_filename = basename($full_filename);
 
@@ -68,6 +73,10 @@ class Frontdoor_DeliverController extends Controller_Action {
             $this->_helper->SendFile($full_filename);
         } catch (Exception $e) {
             $this->logError($e);
+            $response = $this->getResponse();
+            $response->clearAllHeaders();
+            $response->clearBody();
+            $response->setHttpResponseCode(500);
         }
 
         return;
@@ -80,7 +89,6 @@ class Frontdoor_DeliverController extends Controller_Action {
 
     private function handleDeliveryError($exception) {
         $this->view->translateKey = $exception->getTranslateKey();
-        $this->view->code = $exception->getCode();
         $this->render('error');
     }
 

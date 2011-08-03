@@ -59,10 +59,10 @@
 
     <tu tuid="frontdoor_file_not_found">
         <tuv xml:lang="en">
-            <seg>The requested document could not be found</seg>
+            <seg>The requested file could not be found</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Das angeforderte Dokument konnte nicht gefunden werden</seg>
+            <seg>Die angeforderte Datei konnte nicht gefunden werden</seg>
         </tuv>
     </tu>
 
