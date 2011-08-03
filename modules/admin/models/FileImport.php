@@ -40,7 +40,7 @@ class Admin_Model_FileImport {
      * Lists files in import folder.
      */
     public function listFiles() {
-        return Controller_Helper_Files::listFiles($this->__importFolder);
+        return Controller_Helper_Files::listFiles($this->__importFolder, true);
     }
 
     /**
