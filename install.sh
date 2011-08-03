@@ -19,8 +19,9 @@
 set -e
 
 # START USER-CONFIGURATION
+
 BASEDIR='/var/local/opus4'
-OPUS_URL_BASE='/opus4'
+
 # END OF USER-CONFIGURATION
 
 SCRIPT_NAME="`basename "$0"`"
@@ -77,6 +78,7 @@ cp "$BASEDIR/downloads/jquery.js" "$BASEDIR/opus4/public/js"
 cd "$BASEDIR"
 
 # create .htaccess
+[[ -z $OPUS_URL_BASE ]] && OPUS_URL_BASE='/opus4'
 sed -e "s!<template>!$OPUS_URL_BASE!" opus4/public/htaccess-template > opus4/public/.htaccess
 if [ "$OS" = ubuntu ]
 then
