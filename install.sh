@@ -87,6 +87,9 @@ then
   rm opus4/public/.htaccess.tmp
 fi
 
+# prepare apache config
+sed -e "s!/OPUS_URL_BASE!/$OPUS_URL_BASE!g; s!/BASEDIR/!/$BASEDIR/!; s!//*!/!g" "$BASEDIR/apacheconf/apache.conf.template" > "$BASEDIR/apacheconf/opus4"
+
 # promt for username, if required
 echo "OPUS requires a dedicated system account under which Solr will be running."
 echo "In order to create this account, you will be prompted for some information."
