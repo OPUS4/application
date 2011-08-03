@@ -63,6 +63,7 @@ class Publish_FormController extends Controller_Action {
             //initializing
             $indexForm = new Publish_Form_PublishingFirst($this->view);
             $postData = $this->getRequest()->getPost();
+            $this->view->showBib = $indexForm->bibliographie;
 
             if (is_array($postData) && count($postData) === 0) {
                 $this->log->err('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
@@ -73,22 +74,25 @@ class Publish_FormController extends Controller_Action {
             $this->_initializeDocument($postData);
 
             //reject manipulated hidden field for file size
-            if (isset($postData['MAX_FILE_SIZE']) && $postData['MAX_FILE_SIZE'] != $this->session->maxFileSize) {
+            $config = Zend_Registry::get('Zend_Config');
+            if (isset($postData['MAX_FILE_SIZE']) && $postData['MAX_FILE_SIZE'] != $config->publish->maxfilesize) {
                 return $this->_redirectTo('index', '', 'index');
             }
 
             //validate fileupload
             if (!$indexForm->getElement('fileupload')->isValid($postData)) {
                 $indexForm->setFirstFormViewVariables();
-                $this->view->form = $indexForm;                
+                $this->view->form = $indexForm;                  
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
             }
             else {
-                //file valid-> store file
+                //file valid-> store file                
+                $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');  
+                $this->view->uploadSuccess = $this->_storeUploadedFiles($postData);
+                $indexForm = new Publish_Form_PublishingFirst($this->view);
+                $indexForm->populate($postData);
                 $indexForm->setFirstFormViewVariables();
-                $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
                 $this->view->form = $indexForm;
-                $this->session->uploadSuccess = $this->_storeUploadedFiles($postData);
 
                 if (array_key_exists('addAnotherFile', $postData)) {
                     $postData['uploadComment'] = "";
@@ -207,9 +211,7 @@ class Publish_FormController extends Controller_Action {
         $this->session->additionalFields = array();
     }
 
-    /**
-     * Method stores th uploaded files
-     */
+
     private function _storeSubmitterEnrichment() {
         $loggedUserModel = new Publish_Model_LoggedUser();
         $userId = trim($loggedUserModel->getUserId());
@@ -258,7 +260,8 @@ class Publish_FormController extends Controller_Action {
 
         if ($upload_count < 1) {
             $this->log->debug("NO File uploaded!!!");
-            $this->session->fulltext = '0';
+            if (!isset($this->session->fulltext))
+                    $this->session->fulltext = '0';
             return;
         }
 
@@ -266,8 +269,7 @@ class Publish_FormController extends Controller_Action {
         $this->session->fulltext = '1';
 
         foreach ($files AS $file => $fileValues) {
-            if (!empty($fileValues['name'])) {
-                $this->session->publishFiles[] = $fileValues['name'];
+            if (!empty($fileValues['name'])) {                
                 $this->log->info("uploaded: " . $fileValues['name']);
                 $docfile = $this->document->addFile();
                 $docfile->setFromPost($fileValues);

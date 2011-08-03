@@ -43,6 +43,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
     public $session;
     public $view;
     public $helper;
+    public $bibliographie;
 
     /**
      *
@@ -155,8 +156,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $maxFileSize = (int) $this->config->publish->maxfilesize;
         if (true === empty($maxFileSize)) {
             $maxFileSize = 1024000; //1MB
-        }
-        $this->session->maxFileSize = $maxFileSize;
+        }        
 
         // Upload-fields required to enter second stage
         $requireUpload = $this->config->form->first->requireupload;
@@ -173,8 +173,8 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                 ->setValueDisabled(true)
                 ->setAttrib('enctype', 'multipart/form-data');
 
-        if (1 == $requireUpload) {
-            if (empty($this->session->publishFiles))
+        if (1 == $requireUpload) {            
+            if (!isset($this->session->fulltext) || $this->session->fulltext == '0')
                 $fileupload->setRequired(true);
         }
         else
@@ -201,18 +201,16 @@ class Publish_Form_PublishingFirst extends Zend_Form {
      * @return <Zend_Element>
      */
     private function _createBibliographyField() {
-        //show Bibliographie?
-        $this->session->bibliographie = 0;
         $bib = $this->config->form->first->bibliographie;
         if (true === empty($bib)) {
             $bib = 0;
-            $this->session->bibliographie = 0;
+            $this->bibliographie = 0;
         }
 
         $bibliographie = null;
 
         if ($bib == 1) {
-            $this->session->bibliographie = 1;
+            $this->bibliographie = 1;
             $bibliographie = $this->createElement('checkbox', 'bibliographie');
             $bibliographie->setLabel('bibliographie');
             

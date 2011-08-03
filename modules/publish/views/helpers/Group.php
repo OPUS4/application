@@ -74,7 +74,7 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
             if (isset($this->session->invalidForm) && $this->session->invalidForm == '1')
                 $fieldset .= "";
             else {
-                if ($this->session->currentAnchor == $group['Name'])
+                if ($this->view->currentAnchor == $group['Name'])
                     $fieldset .= "<a name='current'></a>";
             }
 

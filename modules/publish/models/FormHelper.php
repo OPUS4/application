@@ -218,7 +218,8 @@ class Publish_Model_FormHelper {
         $group["Buttons"] = $groupButtons;
         $group["Name"] = $groupName;
         $this->view->$groupName = $group;
-        $this->view->MAX_FILE_SIZE = $this->session->maxFileSize;
+        $config = Zend_Registry::get('Zend_Config');
+        $this->view->MAX_FILE_SIZE = $config->publish->maxfilesize;
     }
 
     /**
@@ -230,7 +231,6 @@ class Publish_Model_FormHelper {
             $form = $this->form;
         }
 
-        $this->session->elementCount = 0;
         $errors = $form->getMessages();
 
         //group fields and single fields for view placeholders
@@ -350,7 +350,7 @@ class Publish_Model_FormHelper {
      * @return <View>
      */
     public function getExtendedForm($postData=null, $reload=true) {
-        $this->session->currentAnchor = "";
+        $this->view->currentAnchor = "";
         if ($reload === true) {
             //find out which button was pressed
             $pressedButtonName = $this->_getPressedButton();
@@ -400,7 +400,7 @@ class Publish_Model_FormHelper {
                 $fieldName = str_replace('Enrichment', '', $fieldName);
             }
 
-            $this->session->currentAnchor = 'group' . $fieldName;
+            $this->view->currentAnchor = 'group' . $fieldName;
             //erst Enrichment entfernen und dann unverändert weiter geben
             //todo: schönere Lösung als diese blöden String-Sachen!!!
             if ($saveName != "")

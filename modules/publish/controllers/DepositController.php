@@ -120,10 +120,7 @@ class Publish_DepositController extends Controller_Action {
         $this->log->debug("sending email (subject): $subject");
         $this->log->debug("sending email (body):    \n$message\n-- end email.");
         $this->__scheduleNotification($subject, $message);
-
-        // Prepare redirect to confirmation action.
-        $this->session->depositConfirmDocumentId = $docId;
-
+        
         $targetAction = 'confirm';
         $targetController = 'deposit';
         $targetModule = 'publish';
@@ -143,7 +140,7 @@ class Publish_DepositController extends Controller_Action {
      * finished.
      */
     public function confirmAction() {
-        $this->view->docId = $this->session->depositConfirmDocumentId;
+        $this->view->docId = $this->session->documentId;
 
         if (true === Opus_Security_Realm::getInstance()->check('clearance')) {
             $this->view->showFrontdoor = true;

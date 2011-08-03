@@ -66,6 +66,7 @@ class Publish_IndexController extends Controller_Action {
         $form->setMethod('post');
         $this->view->action_url = $action_url;        
         $this->view->form = $form;
+        $this->view->showBib = $form->bibliographie;
 
         //initialize session variables
         $session->documentType = "";
