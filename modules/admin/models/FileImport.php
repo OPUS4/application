@@ -78,6 +78,11 @@ class Admin_Model_FileImport {
                 catch (Exception $e) {
                     $log->err('import of file ' . $pathname . ' failed: ' . $e->getMessage());
                 }
+
+                $log->info('try to delete file ' . $pathname);
+                if (!unlink($pathname)) {
+                    $log->err('could not delete file ' . $pathname);
+                }
             }
         }
     }
