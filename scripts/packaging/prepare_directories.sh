@@ -77,12 +77,11 @@ rm -v opus4/modules/publish/views/scripts/form/collections.phtml
 rm -v opus4/application/configs/doctypes/collections.xml
 rm -v opus4/modules/publish/views/scripts/form/talkzib.phtml
 rm -v opus4/application/configs/doctypes/talkzib.xml
-rm -rv opus4/modules/{pkm,remotecontrol,matheon}
+rm -rv opus4/modules/{remotecontrol,matheon}
 rm -rv opus4/scripts/{packaging,cron,indexing,install}
 rm -rvf opus4/library/Opus/Search/{Adapter,Index}/Lucene/
 rm -rvf testdata/sql/992_create_documents_testdata__security.sql
 rm -rvf testdata/sql/990_create_documents_testdata__hhhar.sql
-
 
 #
 # Prepare libs/symlinks
