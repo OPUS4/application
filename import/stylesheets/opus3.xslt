@@ -460,7 +460,17 @@
                         <xsl:value-of select="field[@name='lic']" />
                     </xsl:attribute>
                 </xsl:element>
-            </xsl:if>  
+            </xsl:if>
+
+            <!-- Bereich -->
+            <!-- OldRole will be mapped in Opus3XMLImport.php -->
+            <xsl:if test="string-length(field[@name='bereich_id']) > 0">
+                <xsl:element name="OldRole">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='bereich_id']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
             
             <!-- OldGrantor -->
              <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss' or @name='temp_diss']/row[field[@name='source_opus']=$OriginalID]">

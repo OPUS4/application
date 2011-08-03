@@ -41,7 +41,7 @@ do
     echo $stepsize | grep "[^0-9]" > /dev/null 2>&1
 done
 
-echo "Clean workspace/files/* and workspace/log/import.log and workspace/tmp/* directory"
+echo "Clean workspace/files/* and workspace/log/import.log and workspace/tmp/* and workspace/cache/* "
 cd ../../workspace/files/
 if [ "$?" -eq "0" ]
 then
@@ -53,6 +53,11 @@ then
     rm -rf import.log
 fi
 cd ../tmp/
+if [ "$?" -eq "0" ]
+then
+    rm -rf *
+fi
+cd ../cache/
 if [ "$?" -eq "0" ]
 then
     rm -rf *

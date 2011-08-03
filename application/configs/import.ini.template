@@ -41,6 +41,20 @@ import.language.mul = "eng"
 import.language.ita = "ita"
 import.language.por = "por"
 import.language.spa = "spa"
+import.language.non = "deu"
+
+import.role.1.name = "guest"
+import.role.1.bereich = 1
+;import.role.2.name = "campus"
+;import.role.2.bereich = 2
+
+;import.ip.1.name = "IP-Range Campus I"
+;import.ip.1.ip = 12.34.56.78-12.34.56.90
+;import.ip.2.name = "IP Campus II"
+;import.ip.2.ip = 12.34.56.789
+
+;import.role.2.ip.1 = "IP-Range Campus I"
+;import.role.2.ip.2 = "IP Campus II"
 
 import.logfile = APPLICATION_PATH "/workspace/log/import.log"
 
@@ -49,6 +63,7 @@ import.mapping.faculties = APPLICATION_PATH "/workspace/tmp/faculties.map"
 import.mapping.grantors = APPLICATION_PATH "/workspace/tmp/grantor.map"
 import.mapping.institutes = APPLICATION_PATH "/workspace/tmp/institutes.map"
 import.mapping.licences = APPLICATION_PATH "/workspace/tmp/licence.map"
+import.mapping.roles = APPLICATION_PATH "/workspace/tmp/roles.map"
 import.mapping.series = APPLICATION_PATH "/workspace/tmp/series.map"
 import.mapping.universities = APPLICATION_PATH "/workspace/tmp/universities.map"
 

@@ -165,6 +165,7 @@ class Opus3XMLImport {
         $this->mapping['grantor'] = array('name' => 'OldGrantor', 'mapping' => $this->config->import->mapping->grantors);
         $this->mapping['licence'] = array('name' => 'OldLicence',  'mapping' => $this->config->import->mapping->licences);
         $this->mapping['publisherUniversity'] = array('name' => 'OldPublisherUniversity', 'mapping' => $this->config->import->mapping->universities);
+        $this->mapping['role'] = array('name' => 'OldRole', 'mapping' => $this->config->import->mapping->roles);
 
         array_push($this->thesistypes, 'bachelorthesis');
         array_push($this->thesistypes, 'doctoralthesis');
@@ -217,7 +218,7 @@ class Opus3XMLImport {
 
         $this->getSortOrder();
 
-        //$this->log("(2):".$this->completeXML->saveXML($this->document)."\n");
+        //$this->log("(2):".$this->completeXML->saveXML($this->document)."\n\n\n");
         //return;
 
         $imported = array();
@@ -275,6 +276,11 @@ class Opus3XMLImport {
             $imported['result'] = 'success';
             $imported['oldid'] = $oldid;
             $imported['newid'] = $doc->getId();
+       
+            if (array_key_exists('role', $this->values)) {
+                $imported['roleid'] = $this->values['role'];
+                //$this->log("DEBUG Opus3XMLImport: ROLE_ID'" . $this->values['roleid'] . "'\n");
+            }
         } catch (Exception $e) {
             $imported['result'] = 'failure';
             $imported['message'] = $e->getMessage();
@@ -452,14 +458,16 @@ class Opus3XMLImport {
     }
 
      private function mapValues() {
-        $mapping = array('grantor', 'licence', 'publisherUniversity');
+        $mapping = array('grantor', 'licence', 'publisherUniversity', 'role');
         foreach ($mapping as $m) {
             $oa = $this->mapping[$m];
+            //$this->log("DEBUG Opus3XMLImport ($m): Mapping  '" . $oa['mapping'] . "' for '" . $oa['name'] . "'\n");
             $elements = $this->document->getElementsByTagName($oa['name']);
             while ($elements->length > 0) {
                 $e = $elements->Item(0);
                 $old_value = $e->getAttribute('Value');
-                
+
+
                 if ($m === 'publisherUniversity') {
                     $old_value = str_replace(" ", "_", $old_value);
                 }
@@ -467,10 +475,10 @@ class Opus3XMLImport {
                 if (!is_null ($this->getMapping($oa['mapping'], $old_value))) {
                     $new_value = $this->getMapping($oa['mapping'], $old_value);
                     $this->values[$m] = $new_value;
-                    //echo "Found Mapping in ".$oa['mapping'].": '".$old_value."' --> '".$new_value."'\n";
+                    //$this->log("DEBUG Opus3XMLImport: Found Mapping in " . $oa['mapping'] . ": '" .$old_value . "' --> '" .$new_value . "'\n");
                 }
                 else {
-                    $this->log("ERROR Opus3XMLImport ('$m'): No valid Mapping in '".$oa['mapping']."' for '".$old_value."'\n");
+                    $this->log("ERROR Opus3XMLImport ('$m'): No valid Mapping in '" . $oa['mapping'] . "' for '" . $old_value . "'\n");
                 }
 
                 $this->document->removeChild($e);

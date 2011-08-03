@@ -69,7 +69,6 @@ class Opus3FileImport {
      */
     protected $_tmpFiles = array();
 
-
     /**
      * Holds the logfile for Importer
      *
@@ -84,7 +83,7 @@ class Opus3FileImport {
      */
     protected $_logfile;
 
-    
+ 
 
     /**
      * Do some initialization on startup of every action
@@ -121,16 +120,18 @@ class Opus3FileImport {
      * @param Opus_Document $object Opus-Document for that the files should be registered
      * @return void
      */
-    public function loadFiles($id) {
+    public function loadFiles($id, $roleid = null) {
         $this->_tmpDoc = new Opus_Document($id);
         $opus3Id = $this->_tmpDoc->getIdentifierOpus3(0)->getValue();
-   	
+
     	$this->searchDir($this->_path, $opus3Id);
 
         $this->_tmpFiles = array();
         $this->getFiles($this->_tmpPath);
 
         $number = $this->saveFiles();
+        $this->removeFilesFromRole('guest');
+        $this->appendFilesToRole($roleid);
         return $number;
     }
 
@@ -289,6 +290,44 @@ class Opus3FileImport {
         }
 
         return $total;
+    }
+
+    /*
+    * Remove Access -Right from a user     *
+    * @param void
+    * @return void
+    */
+
+    private function removeFilesFromRole($name = null)  {
+        $role = null;
+        if (!is_null($name)) {
+            if (Opus_UserRole::fetchByname($name)) {
+                $role = Opus_UserRole::fetchByname($name);
+                foreach ($this->_tmpDoc->getFile() as $f) {
+                    $role->removeAccessFile($f->getId());
+                }
+                $role->store();
+            }
+        }
+   }
+
+   /*
+    * Append Files to existing Role
+    *
+    * @param void
+    * @return void
+    */
+
+    private function appendFilesToRole($roleId = null)  {
+        // Check if file have limited access
+        if (!is_null($roleId)) {
+            $role = new Opus_UserRole($roleId);
+            foreach ($this->_tmpDoc->getFile() as $f) {
+                $role->appendAccessFile($f->getId());
+                $this->log("DEBUG Opus3FileImport: Role " . $role . " File " . $f->getId() . "\n");
+            }
+            $role->store();
+        }
     }
 }
 

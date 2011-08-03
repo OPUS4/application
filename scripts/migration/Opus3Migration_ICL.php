@@ -53,6 +53,7 @@ require_once 'Zend/Application.php';
 require_once 'Opus3InstituteImport.php';
 require_once 'Opus3CollectionsImport.php';
 require_once 'Opus3LicenceImport.php';
+require_once 'Opus3RoleImport.php';
 
 
 class Opus3Migration_ICL {
@@ -139,7 +140,12 @@ class Opus3Migration_ICL {
         $import= new Opus3LicenceImport($this->importData);
     }
 
+    // Import UserRoles
+    public function load_roles() {
+        $import= new Opus3RoleImport();
+    }
 
+    // Import Fulltexts
     private function loadImportFile() {
         $this->importData = new DOMDocument;
         $this->importData->load($this->importFile);
@@ -167,8 +173,13 @@ class Opus3Migration_ICL {
         // Load Institutes
         $this->load_licences();
 
+        // Load Roles
+        $this->load_roles();
+
     }
 }
+
+echo "Run Opus3Migration_ICL"."\n";
 
 // Bootstrap application.
 $application = new Zend_Application(

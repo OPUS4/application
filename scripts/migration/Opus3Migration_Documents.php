@@ -63,6 +63,7 @@ class Opus3Migration_Documents {
     private $start = null;
     private $end = null;
     private $doclist = array();
+    private $role = array();
 
     private $status;
     
@@ -135,6 +136,9 @@ class Opus3Migration_Documents {
             if ($result['result'] === 'success') {
                 $xmlImporter->log(date('Y-m-d H:i:s') . " Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . " -- memory $mem_now (KB), peak memory $mem_peak (KB)\n");
                 array_push($this->doclist, $result['newid']);
+                if (array_key_exists('roleid', $result))  {
+                    $this->role[$result['newid']] = $result['roleid'];
+                }
             } else if ($result['result'] === 'failure') {
                 $xmlImporter->log(date('Y-m-d H:i:s') . " ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n" . $result['entry'] . "\n");
             }
@@ -152,7 +156,11 @@ class Opus3Migration_Documents {
             $mem_now = round(memory_get_usage() / 1024 );
             $mem_peak = round(memory_get_peak_usage() / 1024);
 
-            $numberOfFiles = $fileImporter->loadFiles($id);
+            if (array_key_exists($id, $this->role)) {
+                $numberOfFiles = $fileImporter->loadFiles($id, $this->role[$id]);
+            } else {
+                $numberOfFiles = $fileImporter->loadFiles($id);
+            }
 
             $mem_now = round(memory_get_usage() / 1024 );
             $mem_peak = round(memory_get_peak_usage() / 1024 );
