@@ -62,12 +62,11 @@ class Opus3InstituteImport {
         $doclist = $xml->getElementsByTagName('table_data');
 
         foreach ($doclist as $document) {
-            
             if ($document->getAttribute('name') === 'university_de') {
-                $uniNumbers = $this->importUniversities($document, $role);
+                $this->importUniversities($document);
             }
             if ($document->getAttribute('name') === 'faculty_de') {
-                $facNumbers = $this->importFaculties($document, $uniNumbers[0]);
+                $facNumbers = $this->importFaculties($document, $role);
             }
             if ($document->getAttribute('name') === 'institute_de') {
                 $instNumbers = $this->importInstitutes($document, $facNumbers);
@@ -103,7 +102,7 @@ class Opus3InstituteImport {
      * @param DOMDocument $data XML-Document to be imported
      * @return array List of documents that have been imported
      */
-    protected function importUniversities($data, $role) {
+    protected function importUniversities($data) {
         $mf = $this->config->import->mapping->universities;
         $fp = null;
         try {
@@ -118,21 +117,12 @@ class Opus3InstituteImport {
 
 
         $classification = $this->transferOpusClassification($data);
-        $subcoll = array();
 
         foreach ($classification as $class) {
 
             if (array_key_exists('universitaet_anzeige', $class) === false) { continue; }
             if (array_key_exists('universitaet', $class) === false) { continue; }
            
-            /* Create a Collection for University */
-            $root = $role->getRootCollection();
-	    $coll = $root->addLastChild();
-            $coll->setName($class['universitaet_anzeige']);
-            $coll->setVisible(1);
-            $root->store();
-            $subcoll[] = $coll->getId();
-
             /* Create a DNB-Institute for University */
             $uni = new Opus_DnbInstitute();
             $uni->setName($class['universitaet_anzeige']);
@@ -148,7 +138,6 @@ class Opus3InstituteImport {
             fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' .  $uni->getId() . "\n");
         }
         fclose($fp);
-        return $subcoll;
     }
 
 	
@@ -159,7 +148,7 @@ class Opus3InstituteImport {
      * @param DOMDocument $data XML-Document to be imported
      * @return array List of documents that have been imported
      */
-    protected function importFaculties($data, $pColl) {
+    protected function importFaculties($data, $role) {
         $mf1 = $this->config->import->mapping->faculties;
         $fp1 = null;
         try {
@@ -192,7 +181,7 @@ class Opus3InstituteImport {
             if (array_key_exists('nr', $class) === false) { continue; }
 
             /* Create a Collection for Faculty */
-            $root = new Opus_Collection($pColl);
+            $root = $role->getRootCollection();
             $coll = $root->addLastChild();
             $coll->setName($class['fakultaet']);
             $coll->setVisible(1);
@@ -207,6 +196,7 @@ class Opus3InstituteImport {
             $fac->store();
 
             echo "Faculty imported: " . $class['fakultaet'] ."\n";
+            //echo "Faculty imported: " . $class['fakultaet'] ."\t" . $class['nr'] . "\t" . $subcoll[$class["nr"]] . "\n";
             fputs($fp1, $class['nr'] . ' ' . $subcoll[$class["nr"]] . "\n");
             fputs($fp2, $class['nr'] . ' ' . $fac->getId() . "\n");
 
@@ -241,6 +231,11 @@ class Opus3InstituteImport {
             if (array_key_exists('fakultaet', $class) === false) { continue; }
             if (array_key_exists('name', $class) === false) { continue; }
             if (array_key_exists('nr', $class) === false) { continue; }
+
+            if (array_key_exists($class['fakultaet'], $pColls) === false) {
+                echo "ERROR Opus3InstituteImport: No Faculty with Opus3-Id '" . $class['fakultaet'] . "'\n";
+                continue;
+            }
 
             /*  Create a Collection for Institute */
             $root = new Opus_Collection($pColls[$class['fakultaet']]);
