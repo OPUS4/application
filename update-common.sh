@@ -450,17 +450,18 @@ function deleteFile() {
 # Deletes a folder from the OPUS4 installation
 # TODO When parent folders are deleted, no entries appear in UPDATE log.
 function deleteFolder() {
+    local FOLDER="$1"
     local DELETE_EMPTY=1
     if [[ ! -z "$2" ]] && [[ "$2" = 'empty' ]]; then
         DELETE_EMPTY=0
     fi
     if [[ $DELETE_EMPTY == 0 ]]; then
-        DRYRUN || rmdir --ignore-fail-on-non-empty --parents "$1"
+        DRYRUN || rmdir --ignore-fail-on-non-empty --parents $FOLDER
     else
-        DRYRUN || rm -rf "$1"
+        DRYRUN || rm -rf $FOLDER
     fi
-    UPDATELOG "DELETED" "$1"
-    DEBUG "Deleted folder $1"
+    UPDATELOG "DELETED" $FOLDER
+    DEBUG "Deleted folder $FOLDER"
 }
 
 # Creates a folder

@@ -255,31 +255,34 @@ export OPUS_UPDATE_VERSION_NEW=$VERSION_NEW
 export OPUS_UPDATE_SCRIPTPATH=$SCRIPTPATH     # TODO necessary? Different way?
 
 # Update configuration
-"$SCRIPTPATH"/update-config.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
+"$SCRIPTPATH"/update-config.sh 
 
 # Update database
-"$SCRIPTPATH"/update-db.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG" "$VERSION_OLD" "$VERSION_NEW"
+"$SCRIPTPATH"/update-db.sh 
 
 # Update *import* folder
-"$SCRIPTPATH"/update-import.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
+"$SCRIPTPATH"/update-import.sh 
 
 # Update *library* folder
-"$SCRIPTPATH"/update-library.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
+"$SCRIPTPATH"/update-library.sh 
 
 # Update modules
-"$SCRIPTPATH"/update-modules.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG" "$MD5_NEW" "$SCRIPTPATH"
+"$SCRIPTPATH"/update-modules.sh 
 
 # Update *public* folder
-"$SCRIPTPATH"/update-public.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
+"$SCRIPTPATH"/update-public.sh 
 
 # Update *scripts* folders
-"$SCRIPTPATH"/update-scripts.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
+"$SCRIPTPATH"/update-scripts.sh 
+
+# Update *workspace* folders
+"$SCRIPTPATH"/update-workspace.sh
 
 # Update SOLR index
-"$SCRIPTPATH"/update-solr.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG" "$VERSION_OLD" 
+"$SCRIPTPATH"/update-solr.sh 
 
 # Update Apache configuration
-"$SCRIPTPATH"/update-apache.sh # "$BASEDIR" "$BASE_SOURCE" "$MD5_OLD" "$_UPDATELOG"
+"$SCRIPTPATH"/update-apache.sh
 
 # =============================================================================
 # Extra update steps
