@@ -32,6 +32,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+require_once 'Opus3ImportLogger.php';
+
 class Opus3LicenceImport {
 
    /**
@@ -41,6 +44,13 @@ class Opus3LicenceImport {
     */
     protected $config = null;
 
+   /**
+    * Holds Logger
+    *
+    * @var file
+    */
+    protected $logger = null;
+
     /**
      * Imports licenses data to Opus4
      *
@@ -49,6 +59,8 @@ class Opus3LicenceImport {
      */
     public function __construct($data) {
         $this->config = Zend_Registry::get('Zend_Config');
+        $this->logger = new Opus3ImportLogger();
+
         $this->mapping['language'] =  array('old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->config->import->language);
 	$doclist = $data->getElementsByTagName('table_data');
 	foreach ($doclist as $document) {
@@ -56,8 +68,11 @@ class Opus3LicenceImport {
                 $this->readLicenses($document);
             }
         }
-        echo "\n";
     }
+
+    public function finalize() {
+        $this->logger->finalize();
+    }    
 
     /**
      * transfers any OPUS3-conform classification System into an array
@@ -100,26 +115,6 @@ class Opus3LicenceImport {
      */
     private function mapLanguage($lang) {
         return $this->config->import->language->$lang;
-        /*
-    	switch ($lang) {
-            case 'ger':
-                return 'deu';
-                break;
-            case 'eng':
-                return 'eng';
-                break;
-            case 'fre':
-                return 'fra';
-                break;
-            case 'rus':
-                return 'rus';
-                break;
-            default:
-                return 'eng';
-                break;
-    	}
-         * 
-         */
     }
 
 
@@ -147,7 +142,7 @@ class Opus3LicenceImport {
             
             $id = $licence->store();
 
-            echo "Licence imported: " . $key . "\n";
+            $this->logger->log_debug("Opus3LicenceImport", "Licence imported: " . $key . ".");
 
             fputs($fp, $key . ' ' . $id . "\n");
 	}

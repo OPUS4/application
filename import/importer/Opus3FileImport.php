@@ -33,6 +33,8 @@
  * @version     $Id$
  */
 
+require_once 'Opus3ImportLogger.php';
+
 class Opus3FileImport {
    /**
     * Holds Zend-Configurationfile
@@ -40,6 +42,13 @@ class Opus3FileImport {
     * @var file
     */
     protected $config = null;
+
+   /**
+    * Holds Logger
+    *
+    * @var file
+    */
+    protected $logger = null;
 
     /**
      * Holds the path to the fulltexts in Opus3
@@ -70,22 +79,6 @@ class Opus3FileImport {
     protected $_tmpFiles = array();
 
     /**
-     * Holds the logfile for Importer
-     *
-     * @var string  Path to logfile
-     */
-    protected $logfile = null;
-
-    /**
-     * Holds the filehandle of the logfile
-     *
-     * @var file  Fileandle logfile
-     */
-    protected $_logfile;
-
- 
-
-    /**
      * Do some initialization on startup of every action
      *
      * @param string $fulltextPath Path to the Opus3-fulltexts
@@ -93,27 +86,14 @@ class Opus3FileImport {
      */
     public function __construct($fulltextPath)  {
         $this->config = Zend_Registry::get('Zend_Config');
-        $this->logfile = $this->config->import->logfile;
+        $this->logger = new Opus3ImportLogger();
         $this->_path = $fulltextPath;
-        try {
-            $this->_logfile= @fopen($this->logfile, 'a');
-            if (!$this->_logfile) {
-                throw new Exception("ERROR Opus3FileImport: Could not create '".$this->logfile."'\n");
-            }
-        } catch (Exception $e){
-            echo $e->getMessage();
-        }
-    }
-
-    public function log($string) {
-        echo $string;
-        fputs($this->_logfile, $string);
     }
 
     public function finalize() {
-        fclose($this->_logfile);
-    }
-    
+        $this->logger->finalize();
+    }    
+
     /**
      * Loads an old Opus ID
      *
@@ -167,7 +147,7 @@ class Opus3FileImport {
             // If correct directory found: take it
             else if ( is_dir($path) && $file === $search) {
                 $this->_tmpPath = $path;
-                $this->log("DEBUG OPus3FileImport: Directory for Opus3Id '".$search."' : ".$path."\n");
+                $this->logger->log_debug("Opus3FileImport", "Directory for Opus3Id '".$search."' : ".$path);
             }
             
             // call function recursively
@@ -207,7 +187,7 @@ class Opus3FileImport {
             }
 
             // If file: take it
-            else  {   
+            else  {
                 array_push($this->_tmpFiles, $path);
             }
             
@@ -240,22 +220,26 @@ class Opus3FileImport {
                         
             // Exclude 'index.html' and files starting with '.'
             if (basename($f) == 'index.html' || strpos(basename($f), '.') === 0) {
-                $this->log("DEBUG Opus3FileImport: Skipped File '".basename($f)."'\n");
+                $this->logger->log_debug("Opus3FileImport", "Skipped File '".basename($f));
                 continue;
             }
 
             // ERROR: File with same Basnemae already imported
             if (array_search(basename($f), $filesImported) !== false) {
-                $this->log("ERROR Opus3FileImport: File ".basename($f)." already imported.\n");
+                $this->logger->log_error("Opus3FileImport", "File ".basename($f)." already imported.");
                 continue;
 
             }
 
             // ERROR: Filename has no Extension
             if (strrchr ($f, ".") === false) {
-                $this->log("ERROR Opus3FileImport: File ".basename($f)." has no extension and will be ignored.\n");
+                $this->logger->log_error("Opus3FileImport", "File ".basename($f)." has no extension and will be ignored.");
                 continue;
             }
+
+            // Prefix for "Original" Files
+            $prefix = "";
+            $prefix = $this->getPrefixFromFile($f);
 
             $suffix = substr (strrchr ($f, "."), 1);
             if (array_key_exists($suffix, $numSuffix) === false) { $numSuffix[$suffix] = 0; }
@@ -263,13 +247,19 @@ class Opus3FileImport {
             $label = "Dokument_" . $numSuffix[$suffix] . "." . $suffix;
 
             array_push($filesImported, basename($f));
-            $this->log("DEBUG Opus3FileImport: File ".basename($f)." imported.\n");
+            $this->logger->log_debug("Opus3FileImport", "File ".basename($f)." imported.");
 
             $file = $this->_tmpDoc->addFile();
-            $file->setPathName(basename($f));
+            $file->setPathName($prefix.basename($f));
             $file->setLabel($label);
             $file->setTempFile($f);
             $file->setLanguage($lang);
+
+            // If File has prefix then it's nneither visible in Frontdoor nor in Oai
+            if ($prefix != "") {
+                $file->setVisibleInFrontdoor(false);
+                $file->setVisibleInOai(false);
+            }
 
             // Check if a '.bem_' file exists and make a filecomment
             $comment_file = dirname($f) . "/.bem_" . basename($f);
@@ -294,7 +284,7 @@ class Opus3FileImport {
 
     /*
     * Remove Access -Right from a user     *
-    * @param void
+    * @param name
     * @return void
     */
 
@@ -314,7 +304,7 @@ class Opus3FileImport {
    /*
     * Append Files to existing Role
     *
-    * @param void
+    * @param roleid
     * @return void
     */
 
@@ -324,10 +314,25 @@ class Opus3FileImport {
             $role = new Opus_UserRole($roleId);
             foreach ($this->_tmpDoc->getFile() as $f) {
                 $role->appendAccessFile($f->getId());
-                $this->log("DEBUG Opus3FileImport: Role " . $role . " File " . $f->getId() . "\n");
+                $this->logger->log_debug("Opus3FileImport", "Role " . $role . " File " . $f->getId());
             }
             $role->store();
         }
     }
+
+
+   /*
+    * Append Files to existing Role
+    *
+    * @param file
+    * @return void
+    */
+
+    private function getPrefixFromFile($f)  {
+        //$this->logger->log_debug("Opus3FileImport", $f);
+        // Check if file have limited access
+        return "";
+    }
+
 }
 

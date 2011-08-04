@@ -52,8 +52,11 @@ define('APPLICATION_ENV', 'testing');
 require_once 'Zend/Application.php';
 require_once 'Opus3XMLImport.php';
 require_once 'Opus3FileImport.php';
+require_once 'Opus3ImportLogger.php';
 
 class Opus3Migration_Documents {
+
+    private $logger = null;
 
     private $importFile;
     private $importData;
@@ -78,6 +81,8 @@ class Opus3Migration_Documents {
      * @param array $options Array with input options.
      */
     function __construct($options) {
+         $this->logger = new Opus3ImportLogger();
+
         if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
         if (array_key_exists('p', $options) !== false) { $this->fulltextPath = $options["p"]; }
         if (array_key_exists('s', $options) !== false) { $this->start = $options["s"]; }
@@ -134,13 +139,13 @@ class Opus3Migration_Documents {
 
             $result = $xmlImporter->import($document);
             if ($result['result'] === 'success') {
-                $xmlImporter->log(date('Y-m-d H:i:s') . " Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . " -- memory $mem_now (KB), peak memory $mem_peak (KB)\n");
+                $this->logger->log_debug("Opus3Migration_Documents", "Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . " -- memory $mem_now (KB), peak memory $mem_peak (KB)");
                 array_push($this->doclist, $result['newid']);
                 if (array_key_exists('roleid', $result))  {
                     $this->role[$result['newid']] = $result['roleid'];
                 }
             } else if ($result['result'] === 'failure') {
-                $xmlImporter->log(date('Y-m-d H:i:s') . " ERROR: " . $result['message'] . " for old ID " . $result['oldid'] . "\n" . $result['entry'] . "\n");
+                $this->logger->log_error("Opus3Migration_Documents", $result['message'] . " for old ID " . $result['oldid'] . "\n" . $result['entry']);
             }
         }
 
@@ -166,7 +171,7 @@ class Opus3Migration_Documents {
             $mem_peak = round(memory_get_peak_usage() / 1024 );
 
             if ($numberOfFiles > 0) {
-                $fileImporter->log(date('Y-m-d H:i:s') . " " . $numberOfFiles . " file(s) have been imported successfully for document ID " . $id . " -- memory $mem_now (KB), peak memory $mem_peak (KB)\n");
+                $this->logger->log_debug("Opus3Migration_Documents", $numberOfFiles . " file(s) have been imported successfully for document ID " . $id . " -- memory $mem_now (KB), peak memory $mem_peak (KB)");
             }
         }
 

@@ -31,6 +31,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+require_once 'Opus3ImportLogger.php';
+
 class Opus3InstituteImport {
 
    /**
@@ -40,6 +43,12 @@ class Opus3InstituteImport {
     */
     protected $config = null;
 
+   /**
+    * Holds Logger
+    *
+    * @var file
+    */
+    protected $logger = null;
 
     /**
      * Imports Collection data to Opus4
@@ -50,6 +59,8 @@ class Opus3InstituteImport {
     public function __construct($data, $path, $stylesheet)	{
 
         $this->config = Zend_Registry::get('Zend_Config');
+        $this->logger = new Opus3ImportLogger();
+        
         $role = Opus_CollectionRole::fetchByName('institutes');
         $xml = new DomDocument;
         $xslt = new DomDocument;
@@ -73,6 +84,10 @@ class Opus3InstituteImport {
             }
         }
      }
+
+    public function finalize() {
+        $this->logger->finalize();
+    }    
 
     /**
      * transfers any OPUS3-conform classification System into an array
@@ -108,10 +123,10 @@ class Opus3InstituteImport {
         try {
             $fp = @fopen($mf, 'w');
             if (!$fp) {
-                throw new Exception("ERROR Opus3InstituteImport: Could not create '".$mf."' for Universities.\n");
+                throw new Exception("Could not create '".$mf."' for Universities.\n");
             }
         } catch (Exception $e){
-            echo $e->getMessage();
+            $this->logger->log_error("Opus3InstituteImport", $e->getMessage());
             return;
         }
 
@@ -134,7 +149,7 @@ class Opus3InstituteImport {
             $uni->setIsGrantor('1');
             $uni->store();
 
-            echo "University imported: " . $class['universitaet_anzeige'] ."\n";
+            $this->logger->log_debug("Opus3InstituteImport", "University imported: " . $class['universitaet_anzeige']);
             fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' .  $uni->getId() . "\n");
         }
         fclose($fp);
@@ -154,10 +169,10 @@ class Opus3InstituteImport {
         try {
             $fp1 = @fopen($mf1, 'w');
             if (!$fp1) {
-                throw new Exception("ERROR Opus3InstituteImport: Could not create '".$mf1."' for Faculties.\n");
+                throw new Exception("Could not create '".$mf1."' for Faculties.\n");
             }
         } catch (Exception $e){
-            echo $e->getMessage();
+            $this->logger->log_error("Opus3InstituteImport", $e->getMessage());
             return;
         }
 
@@ -166,10 +181,10 @@ class Opus3InstituteImport {
         try {
             $fp2 = @fopen($mf2, 'w');
             if (!$fp2) {
-                throw new Exception("ERROR Opus3InstituteImport: Could not create '".$mf2."' for Grantors.\n");
+                throw new Exception("Could not create '".$mf2."' for Grantors.\n");
             }
         } catch (Exception $e){
-            echo $e->getMessage();
+            $this->logger->log_error("Opus3InstituteImport", $e->getMessage());
             return;
         }
 
@@ -195,7 +210,7 @@ class Opus3InstituteImport {
             $fac->setIsGrantor('1');
             $fac->store();
 
-            echo "Faculty imported: " . $class['fakultaet'] ."\n";
+            $this->logger->log_debug("Opus3InstituteImport", "Faculty imported: " . $class['fakultaet']);
             //echo "Faculty imported: " . $class['fakultaet'] ."\t" . $class['nr'] . "\t" . $subcoll[$class["nr"]] . "\n";
             fputs($fp1, $class['nr'] . ' ' . $subcoll[$class["nr"]] . "\n");
             fputs($fp2, $class['nr'] . ' ' . $fac->getId() . "\n");
@@ -221,7 +236,7 @@ class Opus3InstituteImport {
                 throw new Exception("ERROR Opus3InstituteImport: Could not create '".$mf."' for Institutes.\n");
             }
         } catch (Exception $e){
-            echo $e->getMessage();
+            $this->logger->log_error("Opus3InstituteImport", $e->getMessage());
             return;
         }
 
@@ -233,7 +248,7 @@ class Opus3InstituteImport {
             if (array_key_exists('nr', $class) === false) { continue; }
 
             if (array_key_exists($class['fakultaet'], $pColls) === false) {
-                echo "ERROR Opus3InstituteImport: No Faculty with Opus3-Id '" . $class['fakultaet'] . "'\n";
+                $this->logger->log_error("Opus3InstituteImport", "No Faculty with Opus3-Id '" . $class['fakultaet']);
                 continue;
             }
 
@@ -244,7 +259,7 @@ class Opus3InstituteImport {
 	    $coll->setVisible(1);
 	    $root->store();
 
-            echo "Institute imported: " . $class['name'] ."\n";
+            $this->logger->log_debug("Opus3InstituteImport", "Institute imported: " . $class['name']);
             fputs($fp, $class['nr'] . ' ' . $coll->getId() . "\n");
         }
         fclose($fp);

@@ -128,21 +128,25 @@ class Opus3Migration_ICL {
     // Import collections and series
     public function load_collections() {
         $import = new Opus3CollectionsImport($this->importData);
+        $import->finalize();
     }
 
     // Import faculties and institutes
     public function load_institutes() {
         $import = new Opus3InstituteImport($this->importData, $this->stylesheet, $this->xslt);
+        $import->finalize();
     }
 
     // Import Licences
     public function load_licences() {
         $import= new Opus3LicenceImport($this->importData);
+        $import->finalize();
     }
 
     // Import UserRoles
     public function load_roles() {
         $import= new Opus3RoleImport();
+        $import->finalize();
     }
 
     // Import Fulltexts

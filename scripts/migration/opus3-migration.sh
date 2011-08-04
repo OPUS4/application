@@ -9,7 +9,7 @@
 ## -i Build Index after each loop
 ##
 
-stepsize=10
+stepsize=1
 iteration=1
 
 while getopts f:p:z:in o
@@ -79,21 +79,18 @@ start=1
 end=`expr $start + $stepsize - 1`
 
 php Opus3Migration_Documents.php -f $xmlfile -p $fulltextpath -s $start -e $end
-if [ "$iteration" -eq "1" ]
-then
-    while [ "$?" -eq "1" ]
-    do
-        start=`expr $start + $stepsize`
-        end=`expr $end + $stepsize`
-        if [ "$buildindex" = "1" ]
-        then
-            cd ..
-            php SolrIndexBuilder.php
-            cd ./migration
-        fi
-        php Opus3Migration_Documents.php -f $xmlfile -p $fulltextpath -s $start -e $end
-    done
-fi
+while [ "$?" -eq "1" ] && [ "$iteration" -eq "1" ]
+do
+    start=`expr $start + $stepsize`
+    end=`expr $end + $stepsize`
+    if [ "$buildindex" = "1" ]
+    then
+        cd ..
+        php SolrIndexBuilder.php
+        cd ./migration
+    fi
+    php Opus3Migration_Documents.php -f $xmlfile -p $fulltextpath -s $start -e $end
+ done
 
 cd ..
 php SolrIndexBuilder.php

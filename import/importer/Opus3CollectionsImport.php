@@ -32,6 +32,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+require_once 'Opus3ImportLogger.php';
+
 class Opus3CollectionsImport {
 
    /**
@@ -40,6 +43,13 @@ class Opus3CollectionsImport {
     * @var file
     */
     protected $config = null;
+
+   /**
+    * Holds Logger
+    *
+    * @var file
+    */
+    protected $logger = null;
 
     /**
      * Imports Collection data to Opus4
@@ -50,6 +60,7 @@ class Opus3CollectionsImport {
     public function __construct($data) {
 
         $this->config = Zend_Registry::get('Zend_Config');
+        $this->logger = new Opus3ImportLogger();
 
         $collRole = Opus_CollectionRole::fetchByName('collections');
         $seriesRole = Opus_CollectionRole::fetchByName('series');
@@ -66,6 +77,10 @@ class Opus3CollectionsImport {
 
     }
 
+    public function finalize() {
+        $this->logger->finalize();
+    }    
+
    /**
      * Imports Collections from Opus3 to Opus4 directly (from DB-table to DB-tables)
      *
@@ -81,7 +96,7 @@ class Opus3CollectionsImport {
                 throw new Exception("ERROR Opus3CollectionsImport: Could not create '".$mf."' for Collections.\n");
             }
         } catch (Exception $e){
-            echo $e->getMessage();
+            $this->logger->log_error("Opus3CollectionsImport", $e->getMessage());
             return;
         }
 
@@ -173,14 +188,13 @@ class Opus3CollectionsImport {
                 $new_collection->store();
                 $previousRight = $row['rgt'];
 
-                echo "Collection imported: " . $row['coll_name'] ."\n";
+                $this->logger->log_debug("Opus3CollectionsImport", "Collection imported: " . $row['coll_name']);
 
                 fputs($fp, $row['coll_id'] . ' ' . $new_collection->getId() . "\n");
             }
         } catch (Exception $e) {
-            echo $e->getMessage();
+            $this->logger->log_error("Opus3CollectionsImport", $e->getMessage());
         }
-        echo "\n";
 	fclose($fp);
 
     }
@@ -201,7 +215,7 @@ class Opus3CollectionsImport {
                 throw new Exception("ERROR Opus3CollectionsImport: Could not create '".$mf."' for Series.\n");
             }
         } catch (Exception $e){
-            echo $e->getMessage();
+            $this->logger->log_error("Opus3CollectionsImport", $e->getMessage());
             return;
         }
              
@@ -216,11 +230,10 @@ class Opus3CollectionsImport {
             $coll->setName($class['name']);
             $root->store();
 
-            echo "Series imported: " . $class['name'] ."\n";
+            $this->logger->log_debug("Opus3CollectionsImport","Series imported: " . $class['name']);
 
             fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");
         }
-        echo "\n";
 	fclose($fp);
     }
 

@@ -33,6 +33,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+require_once 'Opus3ImportLogger.php';
+
 class Opus3XMLImport {
     
    /**
@@ -40,8 +43,14 @@ class Opus3XMLImport {
     *
     * @var file.
     */
-
     protected $config = null;
+
+   /**
+    * Holds Logger
+    *
+    * @var file
+    */
+    protected $logger = null;
 
     /**
      * Holds xml representation of document information to be processed.
@@ -116,18 +125,6 @@ class Opus3XMLImport {
      */
     protected $completeXML = null;
 
-    /**
-     * Holds the logfile for Importer
-     *
-     * @var string  Path to logfile
-     */
-    protected $logfile = null;
-    /**
-     * Holds the filehandle of the logfile
-     *
-     * @var file  Fileandle logfile
-     */
-    protected $_logfile;
 
     /**
      * Do some initialization on startup of every action
@@ -139,22 +136,14 @@ class Opus3XMLImport {
     public function __construct($xslt, $stylesheetPath) {
         // Initialize member variables.
         $this->config = Zend_Registry::get('Zend_Config');
+        $this->logger = new Opus3ImportLogger();
+
         $this->_xml = new DomDocument;
         $this->_xslt = new DomDocument;
         $this->_xslt->load($stylesheetPath . '/' . $xslt);
         $this->_proc = new XSLTProcessor;
         $this->_proc->registerPhpFunctions();
         $this->_proc->importStyleSheet($this->_xslt);
-        $this->logfile = $this->config->import->logfile;
-
-        try {
-            $this->_logfile= @fopen($this->logfile, 'a');
-            if (!$this->_logfile) {
-                throw new Exception("ERROR Opus3XMLImport: Could not create '".$this->logfile."'\n");
-            }
-        } catch (Exception $e){
-            echo $e->getMessage();
-        }
 
         $this->mapping['language'] =  array('old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->config->import->language);
         $this->mapping['type'] =  array('old' => 'OldType', 'new' => 'Type', 'config' => $this->config->import->doctype);
@@ -174,13 +163,8 @@ class Opus3XMLImport {
         array_push($this->thesistypes, 'studythesis');
     }
 
-    public function log($string) {
-        echo $string;
-        fputs($this->_logfile, $string);
-    }
-
     public function finalize() {
-        fclose($this->_logfile);
+        $this->logger->finalize();
     }
 
     public function initImportFile($data) {
@@ -206,7 +190,7 @@ class Opus3XMLImport {
         $oldid = null;
         $oldid = $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
 
-        //$this->log("(1):".$this->completeXML->saveXML($this->document)."\n");
+        //$this->log_debug("(1):".$this->completeXML->saveXML($this->document). ".");
         $this->skipEmptyFields();
 	$this->validateEmails();
 
@@ -218,7 +202,7 @@ class Opus3XMLImport {
 
         $this->getSortOrder();
 
-        //$this->log("(2):".$this->completeXML->saveXML($this->document)."\n\n\n");
+        //$this->log_debug("(2):".$this->completeXML->saveXML($this->document). ".");
         //return;
 
         $imported = array();
@@ -270,7 +254,7 @@ class Opus3XMLImport {
                 $doc->addCollection($coll);
             }
 
-            //echo "(3):".$this->completeXML->saveXML($this->document)."\n";
+            //$this->logger->log_debug("Opus3XMLImport", "(3):".$this->completeXML->saveXML($this->document));
             $doc->store();
 
             $imported['result'] = 'success';
@@ -279,7 +263,7 @@ class Opus3XMLImport {
        
             if (array_key_exists('role', $this->values)) {
                 $imported['roleid'] = $this->values['role'];
-                //$this->log("DEBUG Opus3XMLImport: ROLE_ID'" . $this->values['roleid'] . "'\n");
+                //$this->logger->log_debug("Opus3XMLImport", "ROLE_ID'" . $this->values['roleid'] . "');
             }
         } catch (Exception $e) {
             $imported['result'] = 'failure';
@@ -323,9 +307,8 @@ class Opus3XMLImport {
         foreach ($roles as $r) {
             $elements = $this->document->getElementsByTagName($r[0]);
             foreach ($elements as $e) {
-                //echo $p->getAttribute('LastName')."\n";
                 if (trim($e->getAttribute($r[1])) == "") {
-                    $this->log("ERROR Opus3XMLImport: '".$r[0]."' with empty '".$r[1]."' will not be imported.\n");
+                    $this->logger->log_error("Opus3XMLImport", $r[0]."' with empty '".$r[1]."' will not be imported");
                     $this->document->removeChild($e);
                 }
             }
@@ -351,7 +334,7 @@ class Opus3XMLImport {
             foreach ($elements as $e) {	
                 if (trim($e->getAttribute('Email')) != "") {
 			if (!($validator->isValid($e->getAttribute('Email')))) {
-				$this->log("ERROR Opus3XMLImport: invalid Email-Address '".$e->getAttribute('Email')."' will not be imported.\n");
+				$this->log_error("Invalid Email-Address '".$e->getAttribute('Email')."' will not be imported.");
 				$e->removeAttribute('Email');
 			}
                 }
@@ -366,7 +349,7 @@ class Opus3XMLImport {
             $oa = $this->mapping[$m];
             $old_value = $this->document->getAttribute($oa['old']);
             $new_value = $oa['config']->$old_value;
-            //echo "Found Mapping: #".$oldvalue."# --> #".$newvalue."#\n";
+            //$this->log_debug("Found Mapping: #".$oldvalue."# --> #".$newvalue."# .");
             $this->document->removeAttribute($oa['old']);
             $this->document->setAttribute($oa['new'], $new_value);
         }
@@ -380,7 +363,7 @@ class Opus3XMLImport {
             foreach ($elements as $e) {
                 $old_value = $e->getAttribute($oa['old']);
                 $new_value = $oa['config']->$old_value;
-                //echo "Found Mapping: #".$oldvalue."# --> #".$newvalue."#\n";
+                //$this->log_debug("Found Mapping: #".$oldvalue."# --> #".$newvalue."# .");
                 $e->removeAttribute($oa['old']);
                 $e->setAttribute($oa['new'], $new_value);
             }
@@ -402,7 +385,7 @@ class Opus3XMLImport {
             while ($elements->length > 0) {
                 $e = $elements->Item(0);
                 $value = $e->getAttribute('Value');
-                //echo "FOUND ".$elements->length." for ".$oa['name']."\n";
+                //$this->log_debug("Found ".$elements->length." for ".$oa['name'].".");
                 $role = Opus_CollectionRole::fetchByName($oa['role']);
                 $colls = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $value);
 
@@ -410,12 +393,12 @@ class Opus3XMLImport {
                     foreach ($colls as $c) {
                         /* TODO: DDC-Hack */
                         if (($oa['role'] === 'ddc') and (count($c->getChildren()) > 0)) { continue; }
-                        //$this->log("Found Mapping for ".$oa['role'].": '".$value."' --> '".$c->getNumber()."'\n");
+                        //$this->log_debug("Found Mapping for ".$oa['role'].": '".$value."' --> '".$c->getNumber()."'.");
                         array_push($this->collections, $c->getId());
                     }
                 }
                 else {
-                    $this->log("ERROR Opus3XMLImport: Document not added to '".$oa['role']."' '" .$value. "'\n");
+                    $this->logger->log_error("Opus3XMLImport", "Document not added to '".$oa['role']."' '" .$value. "'");
                 }
                 $this->document->removeChild($e);
             }
@@ -434,13 +417,13 @@ class Opus3XMLImport {
 
                 if (!is_null ($this->getMapping($oa['mapping'], $old_value))) {
                     $new_value = $this->getMapping($oa['mapping'], $old_value);
-                    //echo "Found Mapping in ".$oa['mapping'].": '".$old_value."' --> '".$new_value."'\n";
+                    //$this->logger->log_debug("Opus3XMLImport", "Found Mapping in ".$oa['mapping'].": '".$old_value."' --> '".$new_value."'");
 
                     if ($m === 'series') {
 
                         $old_issue = $e->getAttribute('Issue');
                         $new_series = array($new_value, $old_issue);
-                        //echo "Found Mapping in ".$oa['mapping'].": '".$old_value."' --> '".$new_value."' with Issue '".$old_issue."'\n";
+                        //$this->logger->log_debug("Opus3XMLImport", "Found Mapping in ".$oa['mapping'].": '".$old_value."' --> '".$new_value."' with Issue '".$old_issue."'");
                         array_push($this->series,  $new_series);
 
                     } else {
@@ -449,7 +432,7 @@ class Opus3XMLImport {
 
                 }
                 else {
-                    $this->log("ERROR Opus3XMLImport ('$m'): No valid Mapping in '".$oa['mapping']."' for '".$old_value."'\n");
+                    $this->logger->log_error("Opus3XMLImport", "('$m'): No valid Mapping in '".$oa['mapping']."' for '".$old_value."'");
                 }
 
                 $this->document->removeChild($e);
@@ -461,7 +444,7 @@ class Opus3XMLImport {
         $mapping = array('grantor', 'licence', 'publisherUniversity', 'role');
         foreach ($mapping as $m) {
             $oa = $this->mapping[$m];
-            //$this->log("DEBUG Opus3XMLImport ($m): Mapping  '" . $oa['mapping'] . "' for '" . $oa['name'] . "'\n");
+            //$this->logger->log_debug("Opus3XMLImport", "($m): Mapping  '" . $oa['mapping'] . "' for '" . $oa['name'] . "'");
             $elements = $this->document->getElementsByTagName($oa['name']);
             while ($elements->length > 0) {
                 $e = $elements->Item(0);
@@ -475,10 +458,10 @@ class Opus3XMLImport {
                 if (!is_null ($this->getMapping($oa['mapping'], $old_value))) {
                     $new_value = $this->getMapping($oa['mapping'], $old_value);
                     $this->values[$m] = $new_value;
-                    //$this->log("DEBUG Opus3XMLImport: Found Mapping in " . $oa['mapping'] . ": '" .$old_value . "' --> '" .$new_value . "'\n");
+                    //$this->logger->log_debug("Opus3XMLImport", "Found Mapping in " . $oa['mapping'] . ": '" .$old_value . "' --> '" .$new_value . "'");
                 }
                 else {
-                    $this->log("ERROR Opus3XMLImport ('$m'): No valid Mapping in '" . $oa['mapping'] . "' for '" . $old_value . "'\n");
+                    $this->logger->log_error("Opus3XMLImport", "('$m'): No valid Mapping in '" . $oa['mapping'] . "' for '" . $old_value . "'");
                 }
 
                 $this->document->removeChild($e);
@@ -514,7 +497,7 @@ class Opus3XMLImport {
      private function getMapping($mappingFile, $id) {
         /* TODO: CHECK if File exists , echo ERROR and return null if not*/
         if (!is_readable($mappingFile)) {
-            $this->log("ERROR Opus3XMLImport: MappingFile '".$mappingFile."' is not readable.\n");
+            $this->logger->log_error("Opus3XMLImport", "MappingFile '".$mappingFile."' is not readable");
             return null;
         }
         $fp = file($mappingFile);

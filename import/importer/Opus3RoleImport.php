@@ -31,12 +31,21 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id: Opus3RoleImport.php 8423 2011-05-27 16:58:20Z sszott $
  */
+
+require_once 'Opus3ImportLogger.php';
+
 class Opus3RoleImport {
 
    /**
     * Holds Zend-Configurationfile
     */
     protected $config = null;
+
+   /**
+    * Holds Logger
+    *
+    */
+    protected $logger = null;
 
     protected $roles = array();
 
@@ -49,6 +58,7 @@ class Opus3RoleImport {
     
     public function __construct() {
         $this->config = Zend_Registry::get('Zend_Config');
+        $this->logger = new Opus3ImportLogger();
 
         $this->ips = $this->config->import->ip;
         $this->storeIps();
@@ -57,28 +67,34 @@ class Opus3RoleImport {
         $this->mapRoles();
     }
 
+    public function finalize() {
+        $this->logger->finalize();
+    }    
+
     private function storeIps() {
         try {
-            foreach ($this->ips as $i) {
-                $ip = explode('-', $i->ip, 2);
-                $lower = "";
-                $upper = "";
+            if (count($this->ips) > 0) {
+                foreach ($this->ips as $i) {
+                    $ip = explode('-', $i->ip, 2);
+                    $lower = "";
+                    $upper = "";
 
-                if (count($ip) == 1) {
-                    $lower = $ip[0];
-                    $upper = $ip[0];
-                } else if (count($ip) == 2) {
-                    $lower = $ip[1];
-                    $upper = $ip[1];
-                } else {
-                    throw new Exception("ERROR Opus3RoleImport: ".$i." is not a regular IP-Address or IP-Range\n");
+                    if (count($ip) == 1) {
+                        $lower = $ip[0];
+                        $upper = $ip[0];
+                    } else if (count($ip) == 2) {
+                        $lower = $ip[1];
+                        $upper = $ip[1];
+                    } else {
+                        throw new Exception("ERROR Opus3RoleImport: ".$i." is not a regular IP-Address or IP-Range\n");
+                    }
+
+                    $range = new Opus_Iprange();
+                    $range->setStartingip($lower);
+                    $range->setEndingip($upper);
+                    $range->setName($i->name);
+                    $range->store();
                 }
-
-                $range = new Opus_Iprange();
-                $range->setStartingip($lower);
-                $range->setEndingip($upper);
-                $range->setName($i->name);
-                $range->store();
             }
         } catch (Exception $e) {
             echo $e->getMessage();
@@ -132,7 +148,7 @@ class Opus3RoleImport {
                     }
                 }
 
-                echo "Bereich imported: " . $r->name ."\n";
+                $this->logger->log_debug("Opus3RoleImport", "Bereich imported: " . $r->name);
                 fputs($fp, $r->bereich . ' ' .  $role->getId() . "\n");
 
             }
