@@ -60,11 +60,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->checkForBadStringsInHtml($response->getBody());
     }
 
-    public function testResultsAction() {
-        // TODO sinnloser test da action nur proforma -> setzt nur titel
-        $this->dispatch('/solrsearch/index/results');
-    }
-
     public function testLatestAction() {
         $this->markTestIncomplete("Test waiting for completion.");
 
