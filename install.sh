@@ -82,9 +82,7 @@ cd "$BASEDIR"
 sed -e "s!<template>!$OPUS_URL_BASE!" opus4/public/htaccess-template > opus4/public/.htaccess
 if [ "$OS" = ubuntu ]
 then
-  cp opus4/public/.htaccess opus4/public/.htaccess.tmp
-  sed -e 's!#Enable for UBUNTU/DEBIAN:# !!' opus4/public/.htaccess.tmp > opus4/public/.htaccess
-  rm opus4/public/.htaccess.tmp
+  sed -i -e 's!#Enable for UBUNTU/DEBIAN:# !!' opus4/public/.htaccess
 fi
 
 # prepare apache config
@@ -234,21 +232,17 @@ then
   SOLR_SERVER_PORT_ESC=`echo "$SOLR_SERVER_PORT" |sed 's/\!/\\\!/g'`
 
   cd "$BASEDIR/opus4/application/configs"
-  cp config.ini config.ini.tmp
-  sed -e "s!^searchengine.index.host =!searchengine.index.host = 'localhost'!" \
-      -e "s!^searchengine.index.port =!searchengine.index.port = '$SOLR_SERVER_PORT_ESC'!" \
-      -e "s!^searchengine.index.app =!searchengine.index.app = 'solr'!" \
-      -e "s!^searchengine.extract.host =!searchengine.extract.host = 'localhost'!" \
-      -e "s!^searchengine.extract.port =!searchengine.extract.port = '$SOLR_SERVER_PORT_ESC'!" \
-      -e "s!^searchengine.extract.app =!searchengine.extract.app = 'solr'!" config.ini.tmp > config.ini 
-  rm config.ini.tmp
+  sed -i -e "s!^searchengine.index.host =!searchengine.index.host = 'localhost'!" \
+         -e "s!^searchengine.index.port =!searchengine.index.port = '$SOLR_SERVER_PORT_ESC'!" \
+         -e "s!^searchengine.index.app =!searchengine.index.app = 'solr'!" \
+         -e "s!^searchengine.extract.host =!searchengine.extract.host = 'localhost'!" \
+         -e "s!^searchengine.extract.port =!searchengine.extract.port = '$SOLR_SERVER_PORT_ESC'!" \
+         -e "s!^searchengine.extract.app =!searchengine.extract.app = 'solr'!" config.ini 
 
   cd "$BASEDIR/install"
   if [ "$OS" = suse ]
   then
-    cp opus4-solr-jetty opus4-solr-jetty.tmp
-    sed -e "s!^START_STOP_DAEMON=1!START_STOP_DAEMON=0!" opus4-solr-jetty.tmp > opus4-solr-jetty
-    rm opus4-solr-jetty.tmp
+    sed -i -e "s!^START_STOP_DAEMON=1!START_STOP_DAEMON=0!" opus4-solr-jetty
   fi
   sed -e "s!^JETTY_PORT=!JETTY_PORT=$SOLR_SERVER_PORT_ESC!" \
       -e "s!^JETTY_USER=!JETTY_USER=$OPUS_USER_NAME_ESC!" opus4-solr-jetty.conf.template > opus4-solr-jetty.conf
