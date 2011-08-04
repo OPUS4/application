@@ -335,9 +335,10 @@ class Opus3FileImport {
     private function getPrefixFromFile($f)  {
         $pr = substr($f, strlen($this->_tmpPath) + 1, strlen($f) - strlen($this->_tmpPath) - strlen(basename($f)) -2);
         $pr = str_replace('/', '_', $pr) . "_";
-        //$this->logger->log_debug("Opus3FileImport", $pr);
+        $pr = preg_replace('/^html_/', '', $pr);
         $pr = preg_replace('/^pdf_/', '', $pr);
         $pr = preg_replace('/^ps_/', '', $pr);
+        //$this->logger->log_debug("Opus3FileImport", $pr);
         return $pr;
     }
 
