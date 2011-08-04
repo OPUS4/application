@@ -331,9 +331,7 @@ function copyFolder() {
 # TODO use? rsync -avz --delete $NEW_FRAMEWORK/ $OLD_FRAMEWORK to sync folders
 
 # Copies files from a source to a destination folder recursively
-# TODO handle links
 # TODO handle errors
-# TODO handle symbolic link
 # TODO check if source/target exist
 # TODO handle errors
 # TODO handle missing target folder
@@ -356,12 +354,15 @@ function updateFolder() {
     # Iterate through files and folders
     local FILE
     for FILE in $SRC_FILES; do
-        # Check if folder
-        if [[ -d $SRC/$FILE ]]; then
-            # Call updateFolder recursively
-            [[ "$FLAT" -eq 0 ]] && updateFolder "$SRC/$FILE" "$DEST/$FILE"
-        else
-            copyFile "$SRC/$FILE" "$DEST/$FILE"
+        # Check that it is not a link
+        if [[ ! -L $SRC/$FILE ]]; then
+            # Check if folder
+            if [[ -d $SRC/$FILE ]]; then
+                # Call updateFolder recursively
+                [[ "$FLAT" -eq 0 ]] && updateFolder "$SRC/$FILE" "$DEST/$FILE"
+            else
+                copyFile "$SRC/$FILE" "$DEST/$FILE"
+            fi
         fi
     done
     return 0 # TODO see comments for deleteFiles
@@ -392,7 +393,7 @@ function deleteFiles() {
                 # TODO Check against MD5 before deleting?
                 # Check if folder is link; Delete if not
                 if [[ ! -L $DEST/$FILE ]]; then 
-                    deleteFolder "$DEST/$FILE"
+                    deleteFolder "$DEST/$FILE" 'empty'
                 else
                     DEBUG "Not deleted symbolic link $DEST/$FILE"
                 fi

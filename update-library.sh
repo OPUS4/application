@@ -19,9 +19,9 @@
 
 # Updates the OPUS4 *library* directory
 
-# TODO Simply update everything, but ignore symbolic links
-# TODO Better way of updating library folder except Application folder.
-# TODO Folders in *library* (top-level) that are not used anymore are not deleted.
+# integrate updateFolder with deleteFiles (make it a single call with parameters for different behaviour)
+# TODO Are we possibly deleting too much in the next line? It will delete everything that does not exist in source location.
+# TODO make sure folders are deleted, but not all of them (.svn)
 
 set -o errexit
 
@@ -40,34 +40,8 @@ DEBUG "OLD_LIBRARY = $OLD_LIBRARY"
 
 echo -e "Updating *library* folder ... \c "
 
-# Updating *Application* folder
-updateFolder $NEW_LIBRARY/Application $OLD_LIBRARY/Application
-deleteFiles $NEW_LIBRARY/Application $OLD_LIBRARY/Application
-
 # Updating *Opus* folder
-updateFolder $NEW_LIBRARY/Opus $OLD_LIBRARY/Opus
-# TODO Are we possibly deleting too much in the next line? It will delete everything that does not exist in source location.
-deleteFiles $NEW_LIBRARY/Opus $OLD_LIBRARY/Opus
-# TODO verify with diff between $NEW_FRAMEWORK and $OLD_FRAMEWORK?
-
-# Updating *Form* folder
-updateFolder $NEW_LIBRARY/Form $OLD_LIBRARY/Form
-deleteFiles $NEW_LIBRARY/Form $OLD_LIBRARY/Form
-
-# Updating *Controller* folder
-updateFolder $NEW_LIBRARY/Controller $OLD_LIBRARY/Controller
-deleteFiles $NEW_LIBRARY/Controller $OLD_LIBRARY/Controller
-
-# Updating *Rewritemap* folder
-updateFolder $NEW_LIBRARY/Rewritemap $OLD_LIBRARY/Rewritemap
-deleteFiles $NEW_LIBRARY/Rewritemap $OLD_LIBRARY/Rewritemap
-
-# Updating *Util* folder
-updateFolder $NEW_LIBRARY/Util $OLD_LIBRARY/Util
-deleteFiles $NEW_LIBRARY/Util $OLD_LIBRARY/Util
-
-# Updating *View* folder
-updateFolder $NEW_LIBRARY/View $OLD_LIBRARY/View
-deleteFiles $NEW_LIBRARY/View $OLD_LIBRARY/View
+updateFolder $NEW_LIBRARY $OLD_LIBRARY
+deleteFiles $NEW_LIBRARY $OLD_LIBRARY
 
 echo "done"
