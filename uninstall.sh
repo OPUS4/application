@@ -23,6 +23,16 @@ MYSQL_CLIENT='/usr/bin/mysql'
 
 cd "$BASEDIR"
 
+if [ ! -r "$BASEDIR/opus4/db/createdb.sh" ]; then
+  echo "file $BASEDIR/opus4/db/createdb.sh is not readable or does not exist"
+  exit 1
+fi
+
+if [ ! -r "$BASEDIR/opus4/application/configs/config.ini" ]; then
+  echo "file $BASEDIR/opus4/application/configs/config.ini is not readable or does not exist"
+  exit 1
+fi
+
 OPUS4_DB_NAME=`grep '^dbname=' "$BASEDIR/opus4/db/createdb.sh" | cut -d= -f2 | sed -e "s/'//g"`
 OPUS4_DB_ADMIN=`grep '^user=' "$BASEDIR/opus4/db/createdb.sh" | cut -d= -f2 | sed -e "s/'//g"`
 OPUS4_DB_USER=`grep 'db.params.username' "$BASEDIR/opus4/application/configs/config.ini" | cut -d' ' -f3 | sed -e "s/'//g"`
