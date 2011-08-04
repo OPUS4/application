@@ -314,10 +314,11 @@ class Publish_Model_DisplayGroup {
             $selectField->setMultiOptions($children);
         }
         else {
+            //reached the end of a collection tree
             $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName . $fieldset);
             $selectField->setLabel('endOfCollectionTree');
             $selectField->setAttrib('disabled', true);
-            $this->session->endOfCollectionTree['collId' . $step . $this->elementName] = 1;
+            $this->view->endOfCollectionTree['collId' . $step . $this->elementName] = 1;
         }
         return $selectField;
     }

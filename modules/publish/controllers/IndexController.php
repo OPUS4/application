@@ -71,7 +71,6 @@ class Publish_IndexController extends Controller_Action {
         //initialize session variables
         $session->documentType = "";
         $session->documentId = "";
-        $session->disabled = array();
-        $session->endOfCollectionTree = array();        
+        $session->disabled = array();        
     }
 }
