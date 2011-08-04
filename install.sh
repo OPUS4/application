@@ -123,10 +123,10 @@ echo
 [[ -z $WEBAPP_USER          ]] && read -p "New OPUS Database User Name [opus4]: "       WEBAPP_USER
 [[ -z $WEBAPP_USER_PASSWORD ]] && read -p "New OPUS Database User Password: " -s        WEBAPP_USER_PASSWORD
 echo
-[[ -z $MYSQLHOST            ]] && read -p "MySQL DBMS Host [leave blank for using Unix domain sockets]: " MYSQLHOST
-[[ -z $MYSQLPORT            ]] && read -p "MySQL DBMS Port [leave blank for using Unix domain sockets]: " MYSQLPORT
+[[ -z $MYSQLHOST            ]] && read -p "MySQL DBMS Host [localhost]: "               MYSQLHOST
+[[ -z $MYSQLPORT            ]] && read -p "MySQL DBMS Port [3306]: "                    MYSQLPORT
 echo
-[[ -z $MYSQLROOT            ]] && read -p "MySQL Root User [root]: "                                      MYSQLROOT
+[[ -z $MYSQLROOT            ]] && read -p "MySQL Root User [root]: "                    MYSQLROOT
 echo
 
 
@@ -144,9 +144,10 @@ if [ -z "$MYSQLROOT" ]; then
    MYSQLROOT='root'
 fi
 if [ -z "$MYSQLHOST" ]; then
-  HOST='localhost'
-else
-  HOST="$MYSQLHOST"
+   MYSQLHOST='localhost'
+fi
+if [ -z "$MYSQLPORT" ]; then
+   MYSQLPORT='3306'
 fi
 
 # escape ! (for later use in sed substitute)
@@ -162,12 +163,12 @@ ADMIN_PASSWORD_QUOTED=`echo "$(printf %q "$ADMIN_PASSWORD")"`
 # process creating mysql user and database
 MYSQL="$MYSQL_CLIENT --default-character-set=utf8 -u $MYSQLROOT -p -v"
 MYSQL_OPUS4ADMIN="$MYSQL_CLIENT --default-character-set=utf8 -u $ADMIN -p$ADMIN_PASSWORD_QUOTED -v"
-if [ -n "$MYSQLHOST" ]
+if [ localhost != "$MYSQLHOST" ]
 then
   MYSQL="$MYSQL -h $MYSQLHOST"
   MYSQL_OPUS4ADMIN="$MYSQL_OPUS4ADMIN -h $MYSQLHOST"
 fi
-if [ -n "$MYSQLPORT" ]
+if [ 3306 != "$MYSQLPORT" ]
 then
   MYSQL="$MYSQL -P $MYSQLPORT"
   MYSQL_OPUS4ADMIN="$MYSQL_OPUS4ADMIN -P $MYSQLPORT"
@@ -176,26 +177,36 @@ fi
 echo "Next you'll be now prompted to enter the root password of your MySQL server"
 $MYSQL <<LimitString
 CREATE DATABASE $DBNAME DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI;
-GRANT ALL PRIVILEGES ON $DBNAME.* TO '$ADMIN'@'$HOST' IDENTIFIED BY '$ADMIN_PASSWORD';
-GRANT SELECT,INSERT,UPDATE,DELETE ON $DBNAME.* TO '$WEBAPP_USER'@'$HOST' IDENTIFIED BY '$WEBAPP_USER_PASSWORD';
+GRANT ALL PRIVILEGES ON $DBNAME.* TO '$ADMIN'@'$MYSQLHOST' IDENTIFIED BY '$ADMIN_PASSWORD';
+GRANT SELECT,INSERT,UPDATE,DELETE ON $DBNAME.* TO '$WEBAPP_USER'@'$MYSQLHOST' IDENTIFIED BY '$WEBAPP_USER_PASSWORD';
 FLUSH PRIVILEGES;
 LimitString
 
 # create config.ini and set database related parameters
 cd "$BASEDIR/opus4/application/configs"
-sed -e "s!^db.params.host =!db.params.host = '$MYSQLHOST_ESC'!" \
-    -e "s!^db.params.port =!db.params.port = '$MYSQLPORT_ESC'!" \
-    -e "s!^db.params.username =!db.params.username = '$WEBAPP_USER_ESC'!" \
-    -e "s!^db.params.password =!db.params.password = '$WEBAPP_USER_PASSWORD_ESC'!" \
-    -e "s!^db.params.dbname =!db.params.dbname = '$DBNAME_ESC'!" config.ini.template > config.ini
+cp config.ini.template config.ini
+if [ localhost != "$MYSQLHOST" ]; then
+  sed -i -e "s!^db.params.host =!db.params.host = '$MYSQLHOST_ESC'!" config.ini
+fi
+if [ 3306 != "$MYSQLPORT" ]; then
+  sed -i -e "s!^db.params.port =!db.params.port = '$MYSQLPORT_ESC'!" config.ini
+fi
+sed -i -e "s!^db.params.username =!db.params.username = '$WEBAPP_USER_ESC'!" \
+       -e "s!^db.params.password =!db.params.password = '$WEBAPP_USER_PASSWORD_ESC'!" \
+       -e "s!^db.params.dbname =!db.params.dbname = '$DBNAME_ESC'!" config.ini
 
 # create createdb.sh and set database related parameters
 cd "$BASEDIR/opus4/db"
-sed -e "s!^user=!user='$ADMIN_ESC'!" \
-    -e "s!^password=!password='$ADMIN_PASSWORD_ESC'!" \
-    -e "s!^host=!host='$MYSQLHOST_ESC'!" \
-    -e "s!^port=!port='$MYSQLPORT_ESC'!" \
-    -e "s!^dbname=!dbname='$DBNAME_ESC'!" createdb.sh.template > createdb.sh
+cp createdb.sh.template createdb.sh
+if [ localhost != "$MYSQLHOST" ]; then
+  sed -i -e "s!^host=!host='$MYSQLHOST_ESC'!" createdb.sh
+fi
+if [ 3306 != "$MYSQLPORT" ]; then
+  sed -i -e "s!^port=!port='$MYSQLPORT_ESC'!" createdb.sh
+fi
+sed -i -e "s!^user=!user='$ADMIN_ESC'!" \
+       -e "s!^password=!password='$ADMIN_PASSWORD_ESC'!" \
+       -e "s!^dbname=!dbname='$DBNAME_ESC'!" createdb.sh
 chmod +x createdb.sh
 ./createdb.sh
 
