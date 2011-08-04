@@ -9,7 +9,7 @@
 ## -i Build Index after each loop
 ##
 
-stepsize=1
+stepsize=50
 iteration=1
 
 while getopts f:p:z:in o
