@@ -184,10 +184,10 @@ LimitString
 cd "$BASEDIR/opus4/application/configs"
 cp config.ini.template config.ini
 if [ localhost != "$MYSQLHOST" ]; then
-  sed -i -e "s!^db.params.host =!db.params.host = '$MYSQLHOST_ESC'!" config.ini
+  sed -i -e "s!^; db.params.host = localhost!db.params.host = '$MYSQLHOST_ESC'!" config.ini
 fi
 if [ 3306 != "$MYSQLPORT" ]; then
-  sed -i -e "s!^db.params.port =!db.params.port = '$MYSQLPORT_ESC'!" config.ini
+  sed -i -e "s!^; db.params.port = 3306!db.params.port = '$MYSQLPORT_ESC'!" config.ini
 fi
 sed -i -e "s!^db.params.username =!db.params.username = '$WEBAPP_USER_ESC'!" \
        -e "s!^db.params.password =!db.params.password = '$WEBAPP_USER_PASSWORD_ESC'!" \
@@ -197,10 +197,10 @@ sed -i -e "s!^db.params.username =!db.params.username = '$WEBAPP_USER_ESC'!" \
 cd "$BASEDIR/opus4/db"
 cp createdb.sh.template createdb.sh
 if [ localhost != "$MYSQLHOST" ]; then
-  sed -i -e "s!^host=!host='$MYSQLHOST_ESC'!" createdb.sh
+  sed -i -e "s!^; host=localhost!host='$MYSQLHOST_ESC'!" createdb.sh
 fi
 if [ 3306 != "$MYSQLPORT" ]; then
-  sed -i -e "s!^port=!port='$MYSQLPORT_ESC'!" createdb.sh
+  sed -i -e "s!^; port=3306!port='$MYSQLPORT_ESC'!" createdb.sh
 fi
 sed -i -e "s!^user=!user='$ADMIN_ESC'!" \
        -e "s!^password=!password='$ADMIN_PASSWORD_ESC'!" \
