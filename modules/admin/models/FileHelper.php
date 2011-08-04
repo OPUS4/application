@@ -99,6 +99,12 @@ class Admin_Model_FileHelper {
         return $checkedRoles;
     }
 
+    /**
+     *
+     * @return type 
+     * 
+     * TODO use view helper
+     */
     protected function _getActionUrl() {
         $actionUrl = $this->view->url(array(
             'module' => 'admin',
@@ -113,14 +119,22 @@ class Admin_Model_FileHelper {
         return $fileForms;
     }
 
-    // fileNames
+    /**
+     * Returns filename.
+     * @return type String
+     */
     public function getFileName() {
         return $this->file->getPathName();
     }
 
+    /**
+     * Constructs download URL for files.
+     * @param type $view
+     * @return type String
+     */
     public function getUrl($view) {
         $config = Zend_Registry::get("Zend_Config");
-        $rawUrl = $view->serverUrl() . $view->baseUrl . "/files/" . $this->document->getId() . "/" . $this->getFileName();
+        $rawUrl = $view->serverUrl() . $view->baseUrl . "/files/" . $this->document->getId() . "/" . urlencode($this->getFileName());
         return htmlspecialchars($rawUrl);
     }
 

@@ -298,7 +298,7 @@ class Admin_FilemanagerController extends Controller_Action {
             $docfile->setLabel($uploadForm->getValue('label'));
             $docfile->setComment($uploadForm->getValue('comment'));
             $docfile->setLanguage($uploadForm->getValue('language'));
-            $docfile->setPathName($file['name']);
+            $docfile->setPathName(urldecode($file['name']));
             $docfile->setMimeType($file['type']);
             $docfile->setTempFile($file['tmp_name']);
         }
