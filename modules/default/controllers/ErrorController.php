@@ -70,7 +70,7 @@ class ErrorController extends Controller_Action
                 break;
             default:
                 // application error
-                $this->getResponse()->setHttpResponseCode(500);
+                $this->setResponseCode($errors->exception->getCode());
                 $this->view->title = 'error_application';
                 $this->view->message = $this->view->translate('error_application');
                 break;
@@ -105,6 +105,14 @@ class ErrorController extends Controller_Action
         }
         catch (Exception $e) {
             $logger->err('ErrorController: Failed sending error email: ' . $e);
+        }
+    }
+
+    private function setResponseCode($code) {
+        if($code != null) {
+            $this->getResponse()->setHttpResponseCode($code);
+        } else {
+            $this->getResponse()->setHttpResponseCode(500);
         }
     }
 

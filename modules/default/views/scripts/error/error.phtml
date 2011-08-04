@@ -46,7 +46,7 @@
     </div>
     <?PHP else : ?>
     <div class="exceptionMessage">
-        <?= htmlspecialchars($this->exception->getMessage()) ?>
+        <?= htmlspecialchars($this->translate($this->exception->getMessage())) ?>
     </div>
     <?PHP endif; ?>
 

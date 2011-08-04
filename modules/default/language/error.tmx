@@ -7,6 +7,15 @@
  
   <body>
 
+    <tu tuid="error_search_unavailable">
+        <tuv xml:lang="en">
+            <seg>The search service is currently not available</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Suchdienst ist im Moment nicht verfügbar</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="error_page_not_found">
         <tuv xml:lang="en">
             <seg>Page not found</seg>
