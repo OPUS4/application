@@ -3,6 +3,24 @@
   <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
   <body>
 
+    <tu tuid="illegal_argument_docid">
+        <tuv xml:lang="en">
+            <seg>Syntax error / illegal argument: docId must be a number</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Syntaxfehler / ungültiges Argument: docId muss eine Zahl sein</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="illegal_argument_filename">
+        <tuv xml:lang="en">
+            <seg>Syntax error / illegal argument: filename must neither begin with ../ nor be empty</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Syntaxfehler / ungültiges Argument: filename darf nicht mit ../ anfangen und auch nicht leer sein</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="frontdoor_deliver_index">
         <tuv xml:lang="en">
             <seg>File Download</seg>

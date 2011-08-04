@@ -44,10 +44,10 @@ class Frontdoor_Model_File {
 
     public function __construct($docId, $filename) {
         if (mb_strlen($docId) < 1 || preg_match('/^[\d]+$/', $docId) === 0 || $docId == null) {
-            throw new Exception(self::ILLEGAL_DOCID_MESSAGE_KEY, 400);
+            throw new Frontdoor_Model_FrontdoorDeliveryException(self::ILLEGAL_DOCID_MESSAGE_KEY, 400);
         }
         if (mb_strlen($filename) < 1 || preg_match('/\.\.\//', $filename) === 1) {
-            throw new Exception(self::ILLEGAL_FILENAME_MESSAGE_KEY, 400);
+            throw new Frontdoor_Model_FrontdoorDeliveryException(self::ILLEGAL_FILENAME_MESSAGE_KEY, 400);
         }
         $this->docId = $docId;
         $this->filename = $filename;

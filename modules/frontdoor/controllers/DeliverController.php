@@ -41,7 +41,13 @@ class Frontdoor_DeliverController extends Controller_Action {
         $path = $this->_getParam('file', null);
 
         $realm = Opus_Security_Realm::getInstance();
-        $file_model = new Frontdoor_Model_File($docId, $path);
+        $file_model = null;
+        try {
+            $file_model = new Frontdoor_Model_File($docId, $path);
+        } catch (Frontdoor_Model_FrontdoorDeliveryException $e) {
+            $this->handleDeliveryError($e);
+            return;
+        }
         $file_object = null;
         
         try {
