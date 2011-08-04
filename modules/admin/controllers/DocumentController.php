@@ -156,6 +156,11 @@ class Admin_DocumentController extends Controller_Action {
         $this->_redirectTo('index');
     }
 
+    /**
+     * Prepares rendering of add form for document metadata child model.
+     * 
+     * @return type Target script
+     */
     public function addAction() {
         $id = $this->getRequest()->getParam('id');
         $section = $this->getRequest()->getParam('section');
@@ -163,7 +168,7 @@ class Admin_DocumentController extends Controller_Action {
         $model = new Opus_Document($id);
         $this->view->docId = $id;
         $this->view->addForm = $this->getAddForm($model, $section);
-        return $this->renderScript('document/add' /* . ucfirst($section) */ . '.phtml');
+        return $this->renderScript('document/add' . '.phtml');
     }
 
     /**
@@ -175,9 +180,7 @@ class Admin_DocumentController extends Controller_Action {
 
         if ($this->getRequest()->isPost()) {
             $postData = $this->getRequest()->getPost();
-
-//            var_dump($postData); return;
-
+            
             $document = new Opus_Document($id);
 
             foreach ($postData as $modelClass => $fields) {
@@ -195,13 +198,13 @@ class Admin_DocumentController extends Controller_Action {
                         $currentLicences = $document->getLicence();
                         $licenceAlreadyAssigned = false;
                         foreach ($currentLicences as $index => $currentLicence) {
-                            if ($currentLicence->getModel()->getId() == ($licenceIndex + 1)) {
+                            if ($currentLicence->getModel()->getId() == $licenceIndex) {
                                 $licenceAlreadyAssigned = true;
                                 // TODO print out message
                             }
                         }
                         if (!$licenceAlreadyAssigned) {
-                            $document->addLicence($licences[$licenceIndex]);
+                            $document->addLicence(new Opus_Licence($licenceIndex));
                         }
                         $processFields = false;
                         break;
@@ -552,7 +555,7 @@ class Admin_DocumentController extends Controller_Action {
                                     else {
                                         $licences = Opus_Licence::getAll();
 
-                                        $fieldValues[$index]->setModel($licences[$licenceIndex]);
+                                        $fieldValues[$index]->setModel(new Opus_Licence($licenceIndex));
                                     }
                                 }
                                 $field->setValue($fieldValues);

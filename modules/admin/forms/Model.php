@@ -140,7 +140,7 @@ class Admin_Form_Model extends Zend_Form_SubForm {
 
         if ($model instanceof Opus_Model_Dependent_Link_DocumentLicence) {
             $element = $this->getElement('Licence');
-            $element->setValue($model->getLinkedModelId() - 1);
+            $element->setValue($model->getLinkedModelId());
         }
         else {
             // iterate through fields and generate form elements

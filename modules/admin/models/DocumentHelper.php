@@ -32,11 +32,9 @@
  * @version     $Id$
  */
 
-
 class Admin_Model_DocumentHelper {
 
     private $__document;
-
 
     /**
      *
