@@ -190,7 +190,6 @@ class Opus3XMLImport {
         $oldid = null;
         $oldid = $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
 
-        //$this->log_debug("(1):".$this->completeXML->saveXML($this->document). ".");
         $this->skipEmptyFields();
 	$this->validateEmails();
 
@@ -201,9 +200,6 @@ class Opus3XMLImport {
         $this->mapValues();
 
         $this->getSortOrder();
-
-        //$this->log_debug("(2):".$this->completeXML->saveXML($this->document). ".");
-        //return;
 
         $imported = array();
         $doc = null;
@@ -334,7 +330,7 @@ class Opus3XMLImport {
             foreach ($elements as $e) {	
                 if (trim($e->getAttribute('Email')) != "") {
 			if (!($validator->isValid($e->getAttribute('Email')))) {
-				$this->log_error("Invalid Email-Address '".$e->getAttribute('Email')."' will not be imported.");
+				$this->logger->log_error("Opus3XMLImport", "Invalid Email-Address '".$e->getAttribute('Email')."' will not be imported.");
 				$e->removeAttribute('Email');
 			}
                 }
@@ -349,7 +345,6 @@ class Opus3XMLImport {
             $oa = $this->mapping[$m];
             $old_value = $this->document->getAttribute($oa['old']);
             $new_value = $oa['config']->$old_value;
-            //$this->log_debug("Found Mapping: #".$oldvalue."# --> #".$newvalue."# .");
             $this->document->removeAttribute($oa['old']);
             $this->document->setAttribute($oa['new'], $new_value);
         }
@@ -363,7 +358,6 @@ class Opus3XMLImport {
             foreach ($elements as $e) {
                 $old_value = $e->getAttribute($oa['old']);
                 $new_value = $oa['config']->$old_value;
-                //$this->log_debug("Found Mapping: #".$oldvalue."# --> #".$newvalue."# .");
                 $e->removeAttribute($oa['old']);
                 $e->setAttribute($oa['new'], $new_value);
             }
@@ -385,7 +379,6 @@ class Opus3XMLImport {
             while ($elements->length > 0) {
                 $e = $elements->Item(0);
                 $value = $e->getAttribute('Value');
-                //$this->log_debug("Found ".$elements->length." for ".$oa['name'].".");
                 $role = Opus_CollectionRole::fetchByName($oa['role']);
                 $colls = Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $value);
 
@@ -393,7 +386,6 @@ class Opus3XMLImport {
                     foreach ($colls as $c) {
                         /* TODO: DDC-Hack */
                         if (($oa['role'] === 'ddc') and (count($c->getChildren()) > 0)) { continue; }
-                        //$this->log_debug("Found Mapping for ".$oa['role'].": '".$value."' --> '".$c->getNumber()."'.");
                         array_push($this->collections, $c->getId());
                     }
                 }
@@ -417,7 +409,6 @@ class Opus3XMLImport {
 
                 if (!is_null ($this->getMapping($oa['mapping'], $old_value))) {
                     $new_value = $this->getMapping($oa['mapping'], $old_value);
-                    //$this->logger->log_debug("Opus3XMLImport", "Found Mapping in ".$oa['mapping'].": '".$old_value."' --> '".$new_value."'");
 
                     if ($m === 'series') {
 
