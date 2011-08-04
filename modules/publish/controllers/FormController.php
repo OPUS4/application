@@ -162,7 +162,8 @@ class Publish_FormController extends Controller_Action {
             $form = new Publish_Form_PublishingSecond($this->view, $postData);
             $form->populate($postData);
 
-            if (!$form->send->isChecked() || array_key_exists('back', $postData)) {
+            //if (!$form->send->isChecked() || array_key_exists('back', $postData)) {
+            if (!array_key_exists('send', $postData) || array_key_exists('back', $postData)) {
                 // A button (not SEND) was pressed => add / remove fields
                 $this->_helper->viewRenderer($this->session->documentType);
                 $form->setView($this->view);
