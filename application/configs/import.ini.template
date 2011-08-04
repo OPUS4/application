@@ -67,4 +67,11 @@ import.mapping.roles = APPLICATION_PATH "/workspace/tmp/roles.map"
 import.mapping.series = APPLICATION_PATH "/workspace/tmp/series.map"
 import.mapping.universities = APPLICATION_PATH "/workspace/tmp/universities.map"
 
+import.licence.active = 0
+import.licence.language = "deu"
+import.licence.link_licence = "http://creativecommons.org/licenses/"
+import.licence.mime_type = "text/html"
+import.licence.name_long = "Lizenzname"
+import.licence.pod_allowed = 0
+
 [testing : production]

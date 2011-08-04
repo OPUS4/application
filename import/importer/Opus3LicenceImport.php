@@ -50,6 +50,19 @@ class Opus3LicenceImport {
     * @var file
     */
     protected $logger = null;
+    
+     /**
+     * Holds the Mappings from ConfigFile
+     *
+     * @var Array
+     */
+    protected $mapping = array();
+
+   /**
+    * Holds Maximum Sortorder
+    *
+    */
+    protected $maxSortOrder = 1;
 
     /**
      * Imports licenses data to Opus4
@@ -62,12 +75,20 @@ class Opus3LicenceImport {
         $this->logger = new Opus3ImportLogger();
 
         $this->mapping['language'] =  array('old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->config->import->language);
+
+        foreach (Opus_Licence::getAll() as $lic) {
+            if ($lic->getSortOrder() > $this->maxSortOrder) {
+                $this->maxSortOrder = $lic->getSortOrder();
+            }
+        }
+
 	$doclist = $data->getElementsByTagName('table_data');
 	foreach ($doclist as $document) {
             if ($document->getAttribute('name') === 'license_de') {
                 $this->readLicenses($document);
             }
         }
+
     }
 
     public function finalize() {
@@ -80,6 +101,8 @@ class Opus3LicenceImport {
      * @param DOMDocument $data XML-Document to be imported
      * @return array List of documents that have been imported
      */
+
+
     protected function transferOpus3Licence($data) {
     	//$classification = array();
 	$doclist = $data->getElementsByTagName('row');
@@ -88,20 +111,27 @@ class Opus3LicenceImport {
             $lic = new Opus_Licence();
             $shortname = "";
             foreach ($document->getElementsByTagName('field') as $field) {
-           	if ($field->getAttribute('name') === 'shortname') $shortname = $field->nodeValue;
-           	if ($field->getAttribute('name') === 'longname') $lic->setNameLong(html_entity_decode($field->nodeValue, ENT_COMPAT, 'UTF-8'));
-           	if ($field->getAttribute('name') === 'desc_text') $lic->setDescText(html_entity_decode($field->nodeValue, ENT_COMPAT, 'UTF-8'));
-           	if ($field->getAttribute('name') === 'active') $lic->setActive($field->nodeValue);
-           	if ($field->getAttribute('name') === 'sort') $lic->setSortOrder($field->nodeValue);
-           	if ($field->getAttribute('name') === 'pod_allowed') $lic->setPodAllowed($field->nodeValue);
-           	if ($field->getAttribute('name') === 'language') $lic->setLanguage($this->mapLanguage($field->nodeValue));
-           	if ($field->getAttribute('name') === 'link') $lic->setLinkLicence($field->nodeValue);
-           	if ($field->getAttribute('name') === 'link_tosign') $lic->setLinkSign($field->nodeValue);
-           	if ($field->getAttribute('name') === 'desc_html') $lic->setDescMarkup($field->nodeValue);
-                if ($field->getAttribute('name') === 'mime_type') $lic->setMimeType($field->nodeValue);
-                if ($field->getAttribute('name') === 'logo') $lic->setLinkLogo($field->nodeValue);
+                if ($field->nodeValue === '') { continue; }
+                if ($field->getAttribute('name') === 'active') $lic->setActive($field->nodeValue);
                 if ($field->getAttribute('name') === 'comment') $lic->setCommentInternal($field->nodeValue);
+                if ($field->getAttribute('name') === 'desc_html') $lic->setDescMarkup($field->nodeValue);
+                if ($field->getAttribute('name') === 'desc_text') $lic->setDescText(html_entity_decode($field->nodeValue, ENT_COMPAT, 'UTF-8'));
+                if ($field->getAttribute('name') === 'language') $lic->setLanguage($this->mapLanguage($field->nodeValue));
+                if ($field->getAttribute('name') === 'link') $lic->setLinkLicence($field->nodeValue);
+                if ($field->getAttribute('name') === 'logo') $lic->setLinkLogo($field->nodeValue);
+                if ($field->getAttribute('name') === 'link_tosign') $lic->setLinkSign($field->nodeValue);
+                if ($field->getAttribute('name') === 'mime_type')  $lic->setMimeType($field->nodeValue); 
+                if ($field->getAttribute('name') === 'longname') $lic->setNameLong(html_entity_decode($field->nodeValue, ENT_COMPAT, 'UTF-8'));
+                if ($field->getAttribute('name') === 'pod_allowed') $lic->setPodAllowed($field->nodeValue);
+                //if ($field->getAttribute('name') === 'sort') $lic->setSortOrder($field->nodeValue);
+           	if ($field->getAttribute('name') === 'shortname') $shortname = $field->nodeValue;
             }
+
+            $this->checkMandatoryFields($lic, $shortname);
+
+            $this->maxSortOrder++;
+            $lic->setSortOrder($this->maxSortOrder);
+
             $licenses[$shortname] = $lic;
 	}
 	return $licenses;
@@ -131,10 +161,10 @@ class Opus3LicenceImport {
         try {
             $fp = @fopen($mf, 'w');
             if (!$fp) {
-                throw new Exception("ERROR Opus3LicenceImport: Could not create '".$mf."' for Licences.\n");
+                throw new Exception("Could not create '".$mf."' for Licences");
             }
         } catch (Exception $e){
-            echo $e->getMessage();
+            $this->logger->log_error("Opus3LicenceImport", $e->getMessage());
             return;
         }
         $licenses = $this->transferOpus3Licence($data);
@@ -142,10 +172,61 @@ class Opus3LicenceImport {
             
             $id = $licence->store();
 
-            $this->logger->log_debug("Opus3LicenceImport", "Licence imported: " . $key . ".");
-
+            $this->logger->log_debug("Opus3LicenceImport", "Licence imported: " . $key);
             fputs($fp, $key . ' ' . $id . "\n");
 	}
 	fclose($fp);
     }
+
+     protected function checkMandatoryFields($lic, $name) {
+         if (is_null($lic->getActive())) {
+             $this->logger->log_error("Opus3LicenceImport", "No Attribute 'active' for " . $name );
+             if (!is_null($this->config->import->licence->active)) {
+                $lic->setActive($this->config->import->licence->active);
+                $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'active' to default value '" . $lic->getActive() ."' for " .$name );
+             }
+         }
+
+         if (is_null($lic->getLanguage())) {
+             $this->logger->log_error("Opus3LicenceImport", "No Attribute 'language' for " . $name);
+             if (!is_null($this->config->import->licence->language)) {
+                $lic->setLanguage($this->config->import->licence->language);
+                $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'language' to default value '" . $lic->getLanguage() . "' for " .$name );
+             }
+         }
+
+         if (is_null($lic->getLinkLicence())) {
+             $this->logger->log_error("Opus3LicenceImport", "No Attribute 'link_licence' for " . $name);
+             if (!is_null($this->config->import->licence->link_licence)) {
+                $lic->setLinkLicence($this->config->import->licence->link_licence);
+                $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'link_licence' to default value '" . $lic->getLinkLicence() ."' for " .$name );
+             }
+         }
+
+         if (is_null($lic->getMimeType())) {
+             $this->logger->log_error("Opus3LicenceImport", "No Attribute 'mime_type' for " . $name);
+             if (!is_null($this->config->import->licence->mime_type)) {
+                $lic->setMimeType($this->config->import->licence->mime_type);
+                $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'mime_type' to default value '" . $lic->getMimeType() ."' for " .$name );
+             }
+         }
+
+         if (is_null($lic->getNameLong())) {
+             $this->logger->log_error("Opus3LicenceImport", "No Attribute 'name_long' for " . $name);
+             if (!is_null($this->config->import->licence->name_long)) {
+                $lic->setNameLong($this->config->import->licence->name_long);
+                $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'name_long' to default value '" . $lic->getNameLong() ."' for " .$name );
+             }
+         }
+
+         if (is_null($lic->getPodAllowed())) {
+             $this->logger->log_error("Opus3LicenceImport", "No Attribute 'pod_allowed' for " . $name);
+             if (!is_null($this->config->import->licence->pod_allowed)) {
+                $lic->setPodAllowed($this->config->import->licence->pod_allowed);
+                $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'pod_allowed' to default value '" . $lic->getPodAllowed() ."' for " .$name );
+             }
+         }
+
+     }
+
 }
