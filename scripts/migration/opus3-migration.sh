@@ -5,18 +5,21 @@
 ## -f OPUS3-XML-database export file (e.g. /usr/local/opus/complete_database.xml)
 ## -p Path your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte)
 ## -z Stepsize for looping
+## -n No iteration after first looping
 ## -i Build Index after each loop
 ##
 
-stepsize=50
+stepsize=10
+iteration=1
 
-while getopts f:p:z:i o
+while getopts f:p:z:in o
 do	case "$o" in
 	f)	xmlfile="$OPTARG";;
 	p)	fulltextpath="$OPTARG";;
         z)	stepsize="$OPTARG";;
         i)      buildindex=1;;
-	[?])	print "Usage: $0 [-f xmlfile] [-p fulltextpath] [-z stepsize for looping] [-i ] "
+        n)      iteration=0;;
+	[?])	print "Usage: $0 [-f xmlfile] [-p fulltextpath] [-z stepsize for looping] [-i ] [ -n ]"
 		exit 1;;
 	esac
 done
@@ -76,18 +79,21 @@ start=1
 end=`expr $start + $stepsize - 1`
 
 php Opus3Migration_Documents.php -f $xmlfile -p $fulltextpath -s $start -e $end
-while [ "$?" -eq "1" ]
-do
-    start=`expr $start + $stepsize`
-    end=`expr $end + $stepsize`
-    if [ "$buildindex" = "1" ]
-    then
-        cd ..
-        php SolrIndexBuilder.php
-        cd ./migration
-    fi
-    php Opus3Migration_Documents.php -f $xmlfile -p $fulltextpath -s $start -e $end
-done
+if [ "$iteration" -eq "1" ]
+then
+    while [ "$?" -eq "1" ]
+    do
+        start=`expr $start + $stepsize`
+        end=`expr $end + $stepsize`
+        if [ "$buildindex" = "1" ]
+        then
+            cd ..
+            php SolrIndexBuilder.php
+            cd ./migration
+        fi
+        php Opus3Migration_Documents.php -f $xmlfile -p $fulltextpath -s $start -e $end
+    done
+fi
 
 cd ..
 php SolrIndexBuilder.php
