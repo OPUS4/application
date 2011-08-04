@@ -101,7 +101,7 @@ fi
 TEMP_DIR=$(mktemp -d $workspace_tmp_dir/old-XXXXXXX)
 mkdir -v $TEMP_DIR/{files,log}
 mv $workspace_files_dir/ $TEMP_DIR/files
-rm -rf $TEMP_DIR/files/{.svn,error}
+rm -rf $TEMP_DIR/files/.svn
 
 mv $workspace_log_dir/ $TEMP_DIR/log
 rm -rf $TEMP_DIR/log/.svn
