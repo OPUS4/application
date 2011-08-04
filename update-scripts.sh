@@ -35,19 +35,12 @@ updateFolder "$NEW_SCRIPTS" "$OLD_SCRIPTS"
 # Files that are not part of new distribution are deleted
 deleteFiles "$NEW_SCRIPTS" "$OLD_SCRIPTS"
 
-# Update opus-apache-rewritemap-caller-secure.sh
+# Remove Update opus-apache-rewritemap-caller-secure.sh if present
 FILE="opus-apache-rewritemap-caller-secure.sh"
-# Make backup of old file
-getProperty "$OLD_SCRIPTS/$FILE" "USER"
-USER_VALUE=$PROP_VALUE
-copyFile "$OLD_SCRIPTS/$FILE" "$OLD_SCRIPTS/$FILE.backup.$VERSION_OLD"
 
-DEBUG "Replacing $FILE."
-DEBUG "USER = $USER_VALUE"
-
-# Copy template
-copyFile "$OLD_SCRIPTS/$FILE.template" "$OLD_SCRIPTS/$FILE"
-setProperty2 "$OLD_SCRIPTS/$FILE" "USER" "$USER_VALUE"
+if [[ -f "$OLD_SCRIPTS/$FILE" ]]; then 
+    deleteFile "$OLD_SCRIPTS/$FILE"
+fi
 
 echo "done"
 
