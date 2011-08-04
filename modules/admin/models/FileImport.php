@@ -32,6 +32,11 @@
  * @version     $Id$
  */
 
+/**
+ * Model for importing files from a specific folder.
+ * 
+ * TODO make __importFolder configurable
+ */
 class Admin_Model_FileImport {
 
     private $__importFolder = '../workspace/incoming';
@@ -94,6 +99,7 @@ class Admin_Model_FileImport {
             $incomingFilenames[$filename] = $filename;
         }
         return $incomingFilenames;
-    }
+    }    
+    
 }
 ?>
