@@ -28,17 +28,18 @@ OPUS4_DB_ADMIN=`grep '^user=' "$BASEDIR/opus4/db/createdb.sh" | cut -d= -f2 | se
 OPUS4_DB_USER=`grep 'db.params.username' "$BASEDIR/opus4/application/configs/config.ini" | cut -d' ' -f3 | sed -e "s/'//g"`
 MYSQL_COMMANDS=''
 
-read -p "MySQL Root User [root]: " MYSQLROOT
-read -p "MySQL DBMS Host [leave blank for using Unix domain sockets]: " MYSQLHOST
-read -p "MySQL DBMS Port [leave blank for using Unix domain sockets]: " MYSQLPORT
+read -p "MySQL Root User [root]: "      MYSQLROOT
+read -p "MySQL DBMS Host [localhost]: " MYSQLHOST
+read -p "MySQL DBMS Port [3306]: "      MYSQLPORT
 echo
 if [ -z "$MYSQLROOT" ]; then
   MYSQLROOT='root'
 fi
 if [ -z "$MYSQLHOST" ]; then
-  HOST='localhost'
-else
-  HOST="$MYSQLHOST"
+  MYSQLHOST='localhost'
+fi
+if [ -z "$MYSQLPORT" ]; then
+  MYSQLPORT='3306'
 fi
 
 read -p "Delete OPUS4 Database $OPUS4_DB_NAME [Y]: " DELETE_DATABASE
@@ -50,22 +51,22 @@ fi
 read -p "Delete OPUS4 Database User $OPUS4_DB_USER [Y]: " DELETE_OPUS4_DB_USER
 if [ -z "$DELETE_OPUS4_DB_USER" ] || [ "$DELETE_OPUS4_DB_USER" = Y ] || [ "$DELETE_OPUS4_DB_USER" = y ]
 then
-  MYSQL_COMMANDS="$MYSQL_COMMANDS DROP USER '$OPUS4_DB_USER'@'$HOST' ;"
+  MYSQL_COMMANDS="$MYSQL_COMMANDS DROP USER '$OPUS4_DB_USER'@'$MYSQLHOST' ;"
 fi
 
 read -p "Delete OPUS4 Database Admin User $OPUS4_DB_ADMIN [Y]: " DELETE_OPUS4_DB_ADMIN
 if [ -z "$DELETE_OPUS4_DB_ADMIN" ] || [ "$DELETE_OPUS4_DB_ADMIN" = Y ] || [ "$DELETE_OPUS4_DB_ADMIN" = y ]
 then
-  MYSQL_COMMANDS="$MYSQL_COMMANDS DROP USER '$OPUS4_DB_ADMIN'@'$HOST' ;"
+  MYSQL_COMMANDS="$MYSQL_COMMANDS DROP USER '$OPUS4_DB_ADMIN'@'$MYSQLHOST' ;"
 fi
 
 if [ -n "$MYSQL_COMMANDS" ]
 then
   MYSQL="$MYSQL_CLIENT --default-character-set=utf8 -u $MYSQLROOT -p -v"
-  if [ -n "$MYSQLHOST" ]; then
+  if [ localhost != "$MYSQLHOST" ]; then
     MYSQL="$MYSQL -h $MYSQLHOST"
   fi
-  if [ -n "$MYSQLPORT" ]; then
+  if [ 3306 != "$MYSQLPORT" ]; then
     MYSQL="$MYSQL -P $MYSQLPORT"
   fi
 
