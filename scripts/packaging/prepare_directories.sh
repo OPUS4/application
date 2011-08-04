@@ -99,8 +99,6 @@ ln -sv "../../libs/ZendFramework/library/Zend" "opus4/library/Zend"
 
 mkdir -vp workspace/{cache,log,files,tmp,incoming}
 mkdir -v workspace/tmp/resumption
-mkdir -v workspace/files/error
-svn --force export https://svn.zib.de/opus4dev/server/$TAG/workspace/files/error workspace/files/error
 ln -sv "../workspace" "opus4/workspace"
 
 touch workspace/log/{opus.log,opus-console.log}
