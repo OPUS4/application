@@ -74,7 +74,7 @@ class ErrorController extends Controller_Action
                 if($errors->exception instanceof Application_Exception) {
                     $code = $errors->exception->getHttpResponsecode();
                     if($code != null) {
-                        $this->setResponseCode($errors->exception->getHttpResponsecode());
+                        $this->setResponseCode($code);
                     }
                 }
                 $this->view->title = 'error_application';
