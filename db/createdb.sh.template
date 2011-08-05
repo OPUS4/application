@@ -9,8 +9,8 @@ set -e
 # user should has rights to drop and create a database (grant rights)
 user=
 password=
-; host=localhost
-; port=3306
+# host=localhost
+# port=3306
 dbname=
 
 # path to mysql binary
