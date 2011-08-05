@@ -197,10 +197,10 @@ sed -i -e "s!^db.params.username =!db.params.username = '$WEBAPP_USER_ESC'!" \
 cd "$BASEDIR/opus4/db"
 cp createdb.sh.template createdb.sh
 if [ localhost != "$MYSQLHOST" ]; then
-  sed -i -e "s!^; host=localhost!host='$MYSQLHOST_ESC'!" createdb.sh
+  sed -i -e "s!^# host=localhost!host='$MYSQLHOST_ESC'!" createdb.sh
 fi
 if [ 3306 != "$MYSQLPORT" ]; then
-  sed -i -e "s!^; port=3306!port='$MYSQLPORT_ESC'!" createdb.sh
+  sed -i -e "s!^# port=3306!port='$MYSQLPORT_ESC'!" createdb.sh
 fi
 sed -i -e "s!^user=!user='$ADMIN_ESC'!" \
        -e "s!^password=!password='$ADMIN_PASSWORD_ESC'!" \
