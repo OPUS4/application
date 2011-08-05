@@ -226,7 +226,8 @@
             <xsl:apply-templates select="Enrichment[@KeyName='Country']" />
             <xsl:apply-templates select="Enrichment[@KeyName='NeuesSelect']" />
             <!-- End Enrichtments -->
-
+			
+			<!-- Collection Roles Section: add the collection roles keys that have to be displayed in frontdoor -->
             <xsl:apply-templates select="Collection[@RoleName='institutes']" />
             <xsl:apply-templates select="Collection[@RoleName='projects']" />
 
@@ -239,8 +240,9 @@
             <xsl:apply-templates select="Collection[@RoleName='bk']" />
             <xsl:apply-templates select="Collection[@RoleName='jel']" />
             <xsl:apply-templates select="Collection[@RoleName='series']" />
-
-            <xsl:apply-templates select="IdentifierSerial" />
+			<!-- End Collection Roles -->
+            
+			<xsl:apply-templates select="IdentifierSerial" />
 
             <xsl:apply-templates select="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel' and @RoleName!='series']" />
 
