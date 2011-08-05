@@ -56,8 +56,8 @@
     </field>
     <field name="Licence" required="yes"  formelement="Select" datatype="Licence" multiplicity="1" />
     <field name="ThesisPublisher" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="*" />
-    <field name="ThesisGrantor" required="yes" formelement="Select" datatype="ThesisGrantor" multiplicity="*" />
-    
+    <field name="ThesisGrantor" required="yes" formelement="Select" datatype="ThesisGrantor" multiplicity="1" />
+    <field name="ThesisDateAccepted" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4" >
         <required-if-fulltext />
     </field>
@@ -67,7 +67,8 @@
 
 <!-- unrequired fields -->
     <field name="PersonAdvisor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
-    <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
+    <field name="PersonReferee" required="no" formelement="text" datatype="Person" multiplicity="*"/>
+	<field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
     <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
@@ -78,6 +79,7 @@
     <field name="IdentifierIsbn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />
     <field name="Series" required="no" formelement="Select" datatype="Collection" root="series" multiplicity="1"/>
+	<field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
     
 	
 </documenttype>

@@ -54,9 +54,12 @@
             <?= $this->group($this->groupTitleMain); ?>
             <?= $this->group($this->groupTitleAbstract); ?>
             <?= $this->group($this->groupPersonAuthor); ?>
-            <?= $this->element($this->CompletedDate); ?>
-            <?= $this->group($this->groupPersonAdvisor); ?>
-            <?= $this->group($this->groupThesisGrantor); ?>
+            <?= $this->element($this->CompletedYear); ?>
+			<?= $this->element($this->CompletedDate); ?>
+            <?= $this->element($this->ThesisDateAccepted); ?>
+			<?= $this->group($this->groupPersonAdvisor); ?>
+            <?= $this->group($this->groupPersonReferee); ?>
+			<?= $this->element($this->ThesisGrantor); ?>
             <?= $this->group($this->groupThesisPublisher); ?>
             <?= $this->group($this->groupInstitute); ?>
             <?= $this->element($this->PublisherName); ?>

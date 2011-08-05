@@ -50,7 +50,7 @@
         <required-if-fulltext />
     </field>
 
-    <field name="PersonAuthor" required="no" formelement="text" datatype="Person" multiplicity="*">
+    <field name="PersonAuthor" required="yes" formelement="text" datatype="Person" multiplicity="*">
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
         <subfield name="Email" required="no" formelement="text" datatype="Email" />
         <subfield name="AllowEmailContact" required="no" formelement="checkbox"  />
@@ -62,7 +62,8 @@
     </field>
 
 <!-- unrequired fields -->
-    <field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
+    <field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
+	<field name="PublisherName" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="PublisherPlace" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="PageFirst" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
     <field name="PageLast" required="no" formelement="Text" datatype="Integer" multiplicity="1"/>
@@ -72,5 +73,6 @@
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />
     <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="1"/>
     <field name="Series" required="no" formelement="Select" datatype="Collection" root="series" multiplicity="1"/>
+	<field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
         
 </documenttype>

@@ -48,7 +48,7 @@
         <required-if-fulltext />
     </field>
 
-    <field name="PersonAuthor" required="no" formelement="text" datatype="Person" multiplicity="*">
+    <field name="PersonAuthor" required="yes" formelement="text" datatype="Person" multiplicity="*">
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />   
         <subfield name="Email" required="no" formelement="text" datatype="Email" />
         <subfield name="AllowEmailContact" required="no" formelement="checkbox"  />
@@ -61,18 +61,14 @@
     </field>
 
  <!-- unrequired fields -->
-    <field name="PersonEditor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
-    <field name="PersonTranslator" required="no" formelement="Text" datatype="Person" multiplicity="*" />
-    <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
-    <field name="CreatingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1" />
-    <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
-    <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1" />    
+    <field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
+	<field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1" />    
     <field name="SubjectSwd" required="no" formelement="Text" datatype="Text" multiplicity="5" />
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5" />
     <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="1"/>
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />
     <field name="Series" required="no" formelement="Select" datatype="Collection" root="series" multiplicity="1"/>
-    
+	<field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
     
 </documenttype>

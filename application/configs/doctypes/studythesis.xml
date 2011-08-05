@@ -50,7 +50,7 @@
         <required-if-fulltext />
     </field>
 
-    <field name="PersonAuthor" required="no" formelement="text" datatype="Person" multiplicity="*">
+    <field name="PersonAuthor" required="yes" formelement="text" datatype="Person" multiplicity="*">
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
         <subfield name="Email" required="no" formelement="text" datatype="Email" />
         <subfield name="AllowEmailContact" required="no" formelement="checkbox"  />
@@ -71,5 +71,5 @@
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1" />
     <field name="Series" required="no" formelement="Select" datatype="Collection" root="series" multiplicity="1"/>
-	
+	<field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
 </documenttype>

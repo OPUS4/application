@@ -52,15 +52,12 @@
 
             <?= $this->group($this->groupPersonSubmitter); ?>
             <?= $this->group($this->groupTitleMain); ?>
+			<?= $this->group($this->groupTitleParent); ?>
             <?= $this->group($this->groupTitleAbstract); ?>
             <?= $this->group($this->groupPersonAuthor); ?>
+			<?= $this->element($this->CompletedYear); ?>
             <?= $this->element($this->CompletedDate); ?>
             <?= $this->element($this->PageNumber); ?>
-            <?= $this->group($this->groupPersonEditor); ?>
-            <?= $this->group($this->groupPersonTranslator); ?>
-            <?= $this->group($this->groupPersonContributor); ?>
-            <?= $this->element($this->CreatingCorporation); ?>
-            <?= $this->element($this->ContributingCorporation); ?>           
             <?= $this->group($this->groupSubjectSwd); ?>
             <?= $this->group($this->groupSubjectUncontrolled); ?>
             <?= $this->group($this->groupInstitute); ?>

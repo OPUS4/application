@@ -49,7 +49,12 @@
     <field name="TitleAbstract" required="no" formelement="Textarea" datatype="Title" multiplicity="4">
         <required-if-fulltext/>
     </field>
-
+    <field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1"/>
+    <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
+        <default value="today" edit="yes" public="yes" />
+    </field>
+    
+<!-- unrequired fields -->
     <field name="PersonAuthor" required="no" formelement="text" datatype="Person" multiplicity="*">
         <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
         <subfield name="Email" required="no" formelement="text" datatype="Email" />
@@ -57,14 +62,7 @@
         <subfield name="DateOfBirth" required="no" formelement="text" datatype="Date" />
         <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
     </field>
-
-    <field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1"/>
-    <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
-        <default value="today" edit="yes" public="yes" />
-    </field>
-    
-<!-- unrequired fields -->
-    <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
+	<field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*"/>
     <field name="CreatingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="ContributingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1"/>   
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5"/>
@@ -72,5 +70,6 @@
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1"/>
     <field name="Note" required="no" formelement="Textarea" datatype="Text" multiplicity="1"/>
     <field name="Series" required="no" formelement="Select" datatype="Collection" root="series" multiplicity="1"/>
+	<field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
     	
 </documenttype>
