@@ -36,7 +36,7 @@
 class Publish_Model_DepositTest extends ControllerTestCase {
     
     /**
-     * @expectedException Publish_Model_FormDocumentNotFoundException
+     * @expectedException Publish_Model_OpusServerException
      */
     public function testInvalidDocumentState() {
         $session = new Zend_Session_Namespace('Publish');        
