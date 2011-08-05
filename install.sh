@@ -231,13 +231,9 @@ then
   fi
   SOLR_SERVER_PORT_ESC=`echo "$SOLR_SERVER_PORT" |sed 's/\!/\\\!/g'`
 
-  cd "$BASEDIR/opus4/application/configs"
-  sed -i -e "s!^searchengine.index.host =!searchengine.index.host = 'localhost'!" \
-         -e "s!^searchengine.index.port =!searchengine.index.port = '$SOLR_SERVER_PORT_ESC'!" \
-         -e "s!^searchengine.index.app =!searchengine.index.app = 'solr'!" \
-         -e "s!^searchengine.extract.host =!searchengine.extract.host = 'localhost'!" \
-         -e "s!^searchengine.extract.port =!searchengine.extract.port = '$SOLR_SERVER_PORT_ESC'!" \
-         -e "s!^searchengine.extract.app =!searchengine.extract.app = 'solr'!" config.ini 
+  # write solr-config to config.ini
+  CONFIG_INI="$BASEDIR/opus4/application/configs/config.ini"
+  "$SCRIPT_PATH/install-config-solr.sh" "$CONFIG_INI" localhost "$SOLR_SERVER_PORT" solr localhost "$SOLR_SERVER_PORT" solr
 
   cd "$BASEDIR/install"
   if [ "$OS" = suse ]
