@@ -37,3 +37,7 @@ if [[ -d $FOLDER ]]; then
     echo "done"
 fi
 
+CACHE_DIR=$BASEDIR/workspace/cache
+
+echo "Cleaning Zend Cache"
+rm -f "$CACHE_DIR/zend_cache---*"
