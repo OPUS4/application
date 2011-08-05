@@ -50,6 +50,20 @@ class Opus3InstituteImport {
     */
     protected $logger = null;
 
+   /**
+    * Holds the complete data to import in XML
+    *
+    * @var xml-structure
+    */
+    protected $data = null;
+
+   /**
+    * Holds Full Path of XSLT-Stylesheet
+    *
+    * @var file
+    */
+    protected $stylesheetPath = null;
+
     /**
      * Imports Collection data to Opus4
      *
@@ -57,18 +71,29 @@ class Opus3InstituteImport {
      * @return array List of documents that have been imported
      */
     public function __construct($data, $path, $stylesheet)	{
-
         $this->config = Zend_Registry::get('Zend_Config');
         $this->logger = new Opus3ImportLogger();
-        
+        $this->data = $data;
+        $this->stylesheetPath = $path.'/'.$stylesheet;
+     }
+
+    /**
+     * Public Method for import of Institutes
+     *
+     * @param void
+     * @return void
+     *
+     */
+
+    public function start() {
         $role = Opus_CollectionRole::fetchByName('institutes');
         $xml = new DomDocument;
         $xslt = new DomDocument;
-        $xslt->load($path.'/'.$stylesheet);
+        $xslt->load($this->stylesheetPath);
         $proc = new XSLTProcessor;
         $proc->registerPhpFunctions();
         $proc->importStyleSheet($xslt);
-        $xml->loadXML($proc->transformToXml($data));
+        $xml->loadXML($proc->transformToXml($this->data));
 
         $doclist = $xml->getElementsByTagName('table_data');
 
@@ -83,8 +108,15 @@ class Opus3InstituteImport {
                 $instNumbers = $this->importInstitutes($document, $facNumbers);
             }
         }
-     }
+    }
 
+    /**
+     * Finalisation of Object
+     *
+     * @param void
+     * @return void
+     *
+     */
     public function finalize() {
         $this->logger->finalize();
     }    
@@ -185,6 +217,7 @@ class Opus3InstituteImport {
             }
         } catch (Exception $e){
             $this->logger->log_error("Opus3InstituteImport", $e->getMessage());
+            fclose($fp1);
             return;
         }
 

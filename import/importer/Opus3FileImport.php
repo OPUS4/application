@@ -55,28 +55,28 @@ class Opus3FileImport {
      *
      * @var string  Defaults to null.
      */
-    protected $_path = null;
+    protected $path = null;
 
     /**
      * Holds the specified document
      *
      * @var string  Defaults to null.
      */
-    protected $_tmpDoc = null;
+    protected $tmpDoc = null;
     
     /**
      * Holds the path to the fulltexts in Opus3 for this certain ID
      *
      * @var string  Defaults to null.
      */
-    protected $_tmpPath = null;
+    protected $tmpPath = null;
 
     /**
      * Holds the files to the fulltexts in Opus3
      *
      * @var string  Defaults to null.
      */
-    protected $_tmpFiles = array();
+    protected $tmpFiles = array();
 
     /**
      * Do some initialization on startup of every action
@@ -87,7 +87,7 @@ class Opus3FileImport {
     public function __construct($fulltextPath)  {
         $this->config = Zend_Registry::get('Zend_Config');
         $this->logger = new Opus3ImportLogger();
-        $this->_path = $fulltextPath;
+        $this->path = $fulltextPath;
     }
 
     public function finalize() {
@@ -101,13 +101,13 @@ class Opus3FileImport {
      * @return void
      */
     public function loadFiles($id, $roleid = null) {
-        $this->_tmpDoc = new Opus_Document($id);
-        $opus3Id = $this->_tmpDoc->getIdentifierOpus3(0)->getValue();
+        $this->tmpDoc = new Opus_Document($id);
+        $opus3Id = $this->tmpDoc->getIdentifierOpus3(0)->getValue();
 
-    	$this->searchDir($this->_path, $opus3Id);
+    	$this->searchDir($this->path, $opus3Id);
 
-        $this->_tmpFiles = array();
-        $this->getFiles($this->_tmpPath);
+        $this->tmpFiles = array();
+        $this->getFiles($this->tmpPath);
 
         $number = $this->saveFiles();
         $this->removeFilesFromRole('guest');
@@ -140,13 +140,13 @@ class Opus3FileImport {
             $path = $from . '/' . $file;
 
             // Workaround for Opus3-Id === year
-            if ( is_dir($path) && $from ===  $this->_path) {
+            if ( is_dir($path) && $from ===  $this->path) {
                 $this->searchDir($path, $search);
             }
 
             // If correct directory found: take it
             else if ( is_dir($path) && $file === $search) {
-                $this->_tmpPath = $path;
+                $this->tmpPath = $path;
                 $this->logger->log_debug("Opus3FileImport", "Directory for Opus3Id '".$search."' : ".$path);
             }
             
@@ -188,7 +188,7 @@ class Opus3FileImport {
 
             // If file: take it
             else  {
-                array_push($this->_tmpFiles, $path);
+                array_push($this->tmpFiles, $path);
             }
             
         }
@@ -206,17 +206,17 @@ class Opus3FileImport {
 
     private function saveFiles()  {
 
-        if (count($this->_tmpFiles) === 0) {
+        if (count($this->tmpFiles) === 0) {
            return 0;
         }
 
-        $lang = $this->_tmpDoc->getLanguage();
+        $lang = $this->tmpDoc->getLanguage();
         $total = 0;
 
         $numSuffix = array();
         $filesImported = array();
 
-        foreach ($this->_tmpFiles as $f) {
+        foreach ($this->tmpFiles as $f) {
                         
             // Exclude 'index.html' and files starting with '.'
             if (basename($f) == 'index.html' || strpos(basename($f), '.') === 0) {
@@ -251,7 +251,7 @@ class Opus3FileImport {
             array_push($filesImported, $pathName);
             $this->logger->log_debug("Opus3FileImport", "File " . $pathName . " imported");
 
-            $file = $this->_tmpDoc->addFile();
+            $file = $this->tmpDoc->addFile();
             $file->setPathName($pathName);
             //$file->setLabel($label);
             $file->setLabel($pathName);
@@ -280,7 +280,7 @@ class Opus3FileImport {
         if ($total > 0) {
             // TODO: Get collections before import files (must be fixed in framework)
             //$this->_tmpDoc->getCollection();
-            $this->_tmpDoc->store();
+            $this->tmpDoc->store();
         }
 
         return $total;
@@ -297,7 +297,7 @@ class Opus3FileImport {
         if (!is_null($name)) {
             if (Opus_UserRole::fetchByname($name)) {
                 $role = Opus_UserRole::fetchByname($name);
-                foreach ($this->_tmpDoc->getFile() as $f) {
+                foreach ($this->tmpDoc->getFile() as $f) {
                     $role->removeAccessFile($f->getId());
                 }
                 $role->store();
@@ -316,7 +316,7 @@ class Opus3FileImport {
         // Check if file have limited access
         if (!is_null($roleId)) {
             $role = new Opus_UserRole($roleId);
-            foreach ($this->_tmpDoc->getFile() as $f) {
+            foreach ($this->tmpDoc->getFile() as $f) {
                 $role->appendAccessFile($f->getId());
                 $this->logger->log_debug("Opus3FileImport", "Role " . $role . " File " . $f->getId());
             }
@@ -326,14 +326,14 @@ class Opus3FileImport {
 
 
    /*
-    * Append Files to existing Role
+    * Get Prefix from a full Filename according to the Fulltext-Directory
     *
     * @param file
-    * @return void
+    * @return string
     */
 
     private function getPrefixFromFile($f)  {
-        $pr = substr($f, strlen($this->_tmpPath) + 1, strlen($f) - strlen($this->_tmpPath) - strlen(basename($f)) -2);
+        $pr = substr($f, strlen($this->tmpPath) + 1, strlen($f) - strlen($this->tmpPath) - strlen(basename($f)) -2);
         $pr = str_replace('/', '_', $pr) . "_";
         $pr = preg_replace('/^html_/', '', $pr);
         $pr = preg_replace('/^pdf_/', '', $pr);

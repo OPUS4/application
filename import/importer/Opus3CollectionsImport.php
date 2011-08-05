@@ -51,6 +51,13 @@ class Opus3CollectionsImport {
     */
     protected $logger = null;
 
+   /**
+    * Holds the complete data to import in XML
+    *
+    * @var xml-structure
+    */
+    protected $data = null;
+
     /**
      * Imports Collection data to Opus4
      *
@@ -61,11 +68,23 @@ class Opus3CollectionsImport {
 
         $this->config = Zend_Registry::get('Zend_Config');
         $this->logger = new Opus3ImportLogger();
+        $this->data = $data;
 
+    }
+    
+    /**
+     * Public Method for import of Collections
+     *
+     * @param void
+     * @return void
+     *
+     */
+
+    public function start() {
         $collRole = Opus_CollectionRole::fetchByName('collections');
         $seriesRole = Opus_CollectionRole::fetchByName('series');
-       
-        $doclist = $data->getElementsByTagName('table_data');
+
+        $doclist = $this->data->getElementsByTagName('table_data');
 	foreach ($doclist as $document)	{
             if ($document->getAttribute('name') === 'collections') {
                 $this->importCollectionsDirectly($document, $collRole);
@@ -74,9 +93,15 @@ class Opus3CollectionsImport {
                 $this->importSeries($document, $seriesRole);
             }
 	}
-
     }
 
+    /**
+     * Finalisation of Object
+     *
+     * @param void
+     * @return void
+     *
+     */
     public function finalize() {
         $this->logger->finalize();
     }    

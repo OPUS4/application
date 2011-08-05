@@ -64,6 +64,14 @@ class Opus3LicenceImport {
     */
     protected $maxSortOrder = 1;
 
+   /**
+    * Holds the complete data to import in XML
+    *
+    * @var xml-structure
+    */
+    protected $data = null;
+
+
     /**
      * Imports licenses data to Opus4
      *
@@ -73,27 +81,43 @@ class Opus3LicenceImport {
     public function __construct($data) {
         $this->config = Zend_Registry::get('Zend_Config');
         $this->logger = new Opus3ImportLogger();
-
         $this->mapping['language'] =  array('old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->config->import->language);
+        $this->data = $data;
 
         foreach (Opus_Licence::getAll() as $lic) {
             if ($lic->getSortOrder() > $this->maxSortOrder) {
                 $this->maxSortOrder = $lic->getSortOrder();
             }
         }
+    }
 
-	$doclist = $data->getElementsByTagName('table_data');
+    /**
+     * Public Method for import of Licenses
+     *
+     * @param void
+     * @return void
+     *
+     */
+
+    public function start() {
+	$doclist = $this->data->getElementsByTagName('table_data');
 	foreach ($doclist as $document) {
             if ($document->getAttribute('name') === 'license_de') {
                 $this->readLicenses($document);
             }
         }
-
     }
 
+    /**
+     * Finalisation of Object
+     *
+     * @param void
+     * @return void
+     *
+     */
     public function finalize() {
         $this->logger->finalize();
-    }    
+    }
 
     /**
      * transfers any OPUS3-conform classification System into an array

@@ -47,8 +47,15 @@ class Opus3RoleImport {
     */
     protected $logger = null;
 
+   /**
+    * Holds Roles
+    *
+    */
     protected $roles = array();
 
+   /**
+    * Holds Ips    *
+    */
     protected $ips = array();
 
     /**
@@ -59,17 +66,34 @@ class Opus3RoleImport {
     public function __construct() {
         $this->config = Zend_Registry::get('Zend_Config');
         $this->logger = new Opus3ImportLogger();
-
         $this->ips = $this->config->import->ip;
-        $this->storeIps();
-
         $this->roles = $this->config->import->role;
+    }
+
+    /**
+     * Public Method for import of Roles and Ips
+     *
+     * @param void
+     * @return void
+     *
+     */
+
+    public function start() {
+        $this->storeIps();
         $this->mapRoles();
     }
 
+    /**
+     * Finalisation of Object
+     *
+     * @param void
+     * @return void
+     *
+     */
     public function finalize() {
         $this->logger->finalize();
-    }    
+    }
+   
 
     private function storeIps() {
         try {
@@ -98,7 +122,6 @@ class Opus3RoleImport {
             }
         } catch (Exception $e) {
             echo $e->getMessage();
-            return;
         }
     }
 
@@ -113,48 +136,51 @@ class Opus3RoleImport {
                 throw new Exception("ERROR Opus3RoleImport: Could not create '".$mf."' for Roles.\n");
             }
         } catch (Exception $e){
-            echo $e->getMessage();
+            $this->logger->log_error("Opus3RoleImport", $e->getMessage());
             return;
         }
 
         try {
-            foreach ($this->roles as $r) {
-                $name = $r->name;
-                $bereich = $r->bereich;
-                
-                $role = null;
-                if (Opus_UserRole::fetchByname($name)) {
-                    $role = Opus_UserRole::fetchByname($name);
-                } else {
-                    $role = new Opus_UserRole();
-                    $role->setName($r->name);
-                    $role->store();
-                }
+            if (count($this->roles) > 0) {
+                foreach ($this->roles as $r) {
+                    $name = $r->name;
+                    $bereich = $r->bereich;
 
-                $db_ips = array();
-                $db_ips = Opus_Iprange::getAll();
+                    $role = null;
+                    if (Opus_UserRole::fetchByname($name)) {
+                        $role = Opus_UserRole::fetchByname($name);
+                        $this->logger->log_debug("Opus3RoleImport", "Role in DB found: " . $r->name);
+                    } else {
+                        $role = new Opus_UserRole();
+                        $role->setName($r->name);
+                        $role->store();
+                        $this->logger->log_debug("Opus3RoleImport", "Role imported: " . $r->name);
+                    }
 
-                if (count($r->ip) > 0) {
-                    foreach ($r->ip as $role_ip) {
-                        foreach ($db_ips as $db_ip) {
-                            if ($role_ip == $db_ip->getDisplayName()) {
-                                $roles = array();
-                                $roles = $db_ip->getRole();
-                                array_push($roles, $role);
-                                $db_ip->setRole($roles);
-                                $db_ip->store();
+                    $db_ips = array();
+                    $db_ips = Opus_Iprange::getAll();
+
+                    if (count($r->ip) > 0) {
+                        foreach ($r->ip as $role_ip) {
+                            foreach ($db_ips as $db_ip) {
+                                if ($role_ip == $db_ip->getDisplayName()) {
+                                    $roles = array();
+                                    $roles = $db_ip->getRole();
+                                    array_push($roles, $role);
+                                    $db_ip->setRole($roles);
+                                    $db_ip->store();
+                                }
                             }
                         }
                     }
+
+
+                    fputs($fp, $r->bereich . ' ' .  $role->getId() . "\n");
+
                 }
-
-                $this->logger->log_debug("Opus3RoleImport", "Bereich imported: " . $r->name);
-                fputs($fp, $r->bereich . ' ' .  $role->getId() . "\n");
-
-            }
+           }
         }  catch (Exception $e){
-            echo $e->getMessage();
-            return;
+            $this->logger->log_error("Opus3RoleImport", $e->getMessage());
         }
 
         fclose($fp);

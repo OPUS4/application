@@ -498,6 +498,7 @@ class Opus3XMLImport {
             $mapping[$values[0]] = trim($values[1]);
         }
         if (array_key_exists($id, $mapping) === false) {
+            unset($fp);
             return null;
         }
         unset($fp);
