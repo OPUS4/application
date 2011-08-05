@@ -16,7 +16,7 @@
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 # @version     $Id: install.sh 8791 2011-08-03 11:34:33Z tklein $
 
-set -ex
+set -e
 
 CONFIG_INI="$1"
 SOLR_INDEX_HOST="`echo "$2" |sed 's/\!/\\\!/g'`"
