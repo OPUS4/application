@@ -32,5 +32,16 @@
  * @version     $Id$
  */
 
-class Application_Exception extends Exception {}
+class Application_Exception extends Exception {
+    
+    private $httpResponseCode = null;
+    
+    public function setHttpResponseCode($code) {
+        $this->httpResponseCode = $code;
+    }
+    
+    public function getHttpResponseCode() {
+        return $this->httpResponseCode;
+    }
+}
 ?>

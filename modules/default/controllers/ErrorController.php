@@ -70,7 +70,13 @@ class ErrorController extends Controller_Action
                 break;
             default:
                 // application error
-                $this->setResponseCode($errors->exception->getCode());
+                $this->setResponseCode(500);
+                if($errors->exception instanceof Application_Exception) {
+                    $code = $errors->exception->getHttpResponsecode();
+                    if($code != null) {
+                        $this->setResponseCode($errors->exception->getHttpResponsecode());
+                    }
+                }
                 $this->view->title = 'error_application';
                 $this->view->message = $this->view->translate('error_application');
                 break;
