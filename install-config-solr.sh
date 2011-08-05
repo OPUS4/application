@@ -32,6 +32,6 @@ sed -e "s!^searchengine.index.host =!searchengine.index.host = '$SOLR_INDEX_HOST
     -e "s!^searchengine.extract.host =!searchengine.extract.host = '$SOLR_EXTRACT_HOST'!" \
     -e "s!^searchengine.extract.port =!searchengine.extract.port = '$SOLR_EXTRACT_PORT'!" \
     -e "s!^searchengine.extract.app =!searchengine.extract.app = '$SOLR_EXTRACT_APP'!" \
-    "$CONFIG_INI"
+    -i "$CONFIG_INI"
 
 exit 0;
