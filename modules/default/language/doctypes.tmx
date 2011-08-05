@@ -88,15 +88,6 @@
         </tuv>
    </tu>
 
-   <tu tuid="festschrift">
-        <tuv xml:lang="en">
-            <seg>Festschrift</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Festschrift</seg>
-        </tuv>
-   </tu>
-
    <tu tuid="habilitation">
         <tuv xml:lang="en">
             <seg>Habilitation</seg>
@@ -148,6 +139,15 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Sonstiges</seg>
+        </tuv>
+   </tu>
+   
+   <tu tuid="periodical">
+        <tuv xml:lang="en">
+            <seg>Periodical</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Periodikum</seg>
         </tuv>
    </tu>
    
