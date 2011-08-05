@@ -91,52 +91,58 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
         $opusFile = $file->getFileObject($realm);
     }
 
-    public function testConstructorIllegalDocId() {
+    public function testConstructorDocIdEmpty() {
         try {
             new Frontdoor_Model_File("", "");
             $this->fail(self::EXPECTED_EXCEPTION);
-        } catch(Exception $e) {
+        } catch(Frontdoor_Model_FrontdoorDeliveryException $e) {
             $this->assertEquals(
                     Frontdoor_Model_File::ILLEGAL_DOCID_MESSAGE_KEY,
-                    $e->getMessage());
-        }
-
-        try {
-            new Frontdoor_Model_File('xx', "");
-            $this->fail(self::EXPECTED_EXCEPTION);
-        } catch(Exception $e) {
-            $this->assertEquals(
-                    Frontdoor_Model_File::ILLEGAL_DOCID_MESSAGE_KEY,
-                    $e->getMessage());
-        }
-
-        try {
-            new Frontdoor_Model_File(null, self::FILENAME);
-            $this->fail(self::EXPECTED_EXCEPTION);
-        } catch(Exception $e) {
-            $this->assertEquals(
-                    Frontdoor_Model_File::ILLEGAL_DOCID_MESSAGE_KEY,
-                    $e->getMessage());
+                    $e->getTranslateKey());
         }
     }
 
-    public function testConstructorIllegalFilename() {
+    public function testConstructorDocIdNoNumber() {
+        try {
+            new Frontdoor_Model_File('xx', "");
+            $this->fail(self::EXPECTED_EXCEPTION);
+        } catch(Frontdoor_Model_FrontdoorDeliveryException $e) {
+            $this->assertEquals(
+                    Frontdoor_Model_File::ILLEGAL_DOCID_MESSAGE_KEY,
+                    $e->getTranslateKey());
+        }
+    }
+
+    public function testConstructorDocId() {
+        try {
+            new Frontdoor_Model_File(null, self::FILENAME);
+            $this->fail(self::EXPECTED_EXCEPTION);
+        } catch(Frontdoor_Model_FrontdoorDeliveryException $e) {
+            $this->assertEquals(
+                    Frontdoor_Model_File::ILLEGAL_DOCID_MESSAGE_KEY,
+                    $e->getTranslateKey());
+        }
+    }
+
+    public function testConstructorFilenameEmpty() {
         try {
             new Frontdoor_Model_File('1', '');
             $this->fail(self::EXPECTED_EXCEPTION);
-        } catch(Exception $e) {
+        } catch(Frontdoor_Model_FrontdoorDeliveryException $e) {
             $this->assertEquals(
                     Frontdoor_Model_File::ILLEGAL_FILENAME_MESSAGE_KEY,
-                    $e->getMessage());
+                    $e->getTranslateKey());
         }
+    }
 
+    public function testConstructorFilenameHigherLevelDir() {
         try {
             new Frontdoor_Model_File('1', '../*');
             $this->fail(self::EXPECTED_EXCEPTION);
-        } catch(Exception $e) {
+        } catch(Frontdoor_Model_FrontdoorDeliveryException $e) {
             $this->assertEquals(
                     Frontdoor_Model_File::ILLEGAL_FILENAME_MESSAGE_KEY,
-                    $e->getMessage());
+                    $e->getTranslateKey());
         }
     }
 
