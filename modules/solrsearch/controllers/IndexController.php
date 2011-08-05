@@ -123,13 +123,26 @@ class Solrsearch_IndexController extends Controller_Action {
         }
         catch (Opus_SolrSearch_Exception $e) {
             $this->_logger->err('Error trying to access Solr server: ' . $e);
-            throw new Application_Exception('error_search_unavailable', 503);
+            $exception = new Application_Exception('error_search_unavailable');
+            $exception->setHttpResponseCode(503);
+            throw $exception;
         }
         $this->numOfHits = $this->resultList->getNumberOfHits();
     }
 
     private function setViewValues() {
-        $this->setGeneralViewValues();        
+
+        $this->setGeneralViewValues();
+
+        if($this->numOfHits > 0) {
+            $nrOfRows = (int)$this->query->getRows();
+            $start = $this->query->getStart();
+            $query = null;
+            if($this->searchtype === Util_Searchtypes::SIMPLE_SEARCH || $this->searchtype === Util_Searchtypes::ALL_SEARCH) {
+                $query = $this->query->getCatchAll();
+            }
+            $this->setUpPagination($nrOfRows, $start, $query);
+        }
 
         if ($this->searchtype === Util_Searchtypes::SIMPLE_SEARCH || $this->searchtype === Util_Searchtypes::ALL_SEARCH) {
             $queryString = $this->query->getCatchAll();
@@ -139,10 +152,6 @@ class Solrsearch_IndexController extends Controller_Action {
             else {
                 $this->view->q = '';
             }
-            $this->view->nextPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
-            $this->view->prevPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
-            $this->view->lastPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>(int)(($this->numOfHits - 1) / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
-            $this->view->firstPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'query'=>$this->query->getCatchAll(),'start'=>'0','rows'=>$this->query->getRows()));
             $this->setFilterQueryBaseURL();
             $browsing = $this->getRequest()->getParam('browsing', 'false');
             if ($browsing === 'true') {
@@ -151,10 +160,6 @@ class Solrsearch_IndexController extends Controller_Action {
             return;
         }
         if ($this->searchtype === Util_Searchtypes::ADVANCED_SEARCH || $this->searchtype === Util_Searchtypes::AUTHOR_SEARCH) {
-            $this->view->nextPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
-            $this->view->prevPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()),'rows'=>$this->query->getRows()));
-            $this->view->lastPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>(int)(($this->numOfHits - 1) / $this->query->getRows()) * $this->query->getRows(),'rows'=>$this->query->getRows()));
-            $this->view->firstPage = self::createSearchUrlArray(array('searchtype'=>$this->searchtype,'start'=>'0','rows'=>$this->query->getRows()));
             $this->setFilterQueryBaseURL();
             $this->view->authorQuery = $this->query->getField('author');
             $this->view->titleQuery = $this->query->getField('title');
@@ -170,10 +175,6 @@ class Solrsearch_IndexController extends Controller_Action {
             return;
         }
         if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH) {
-            $this->view->nextPage = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::COLLECTION_SEARCH, 'start'=>(int)($this->query->getStart()) + (int)($this->query->getRows()), 'rows'=>$this->query->getRows()));
-            $this->view->prevPage = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::COLLECTION_SEARCH, 'start'=>(int)($this->query->getStart()) - (int)($this->query->getRows()), 'rows'=>$this->query->getRows()));
-            $this->view->lastPage = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::COLLECTION_SEARCH, 'start'=>(int)(($this->numOfHits - 1) / $this->query->getRows()) * $this->query->getRows(), 'rows'=>$this->query->getRows()));
-            $this->view->firstPage = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::COLLECTION_SEARCH, 'start'=>'0', 'rows'=>$this->query->getRows()));
             $this->setFilterQueryBaseURL();
             return;
         }
@@ -184,13 +185,24 @@ class Solrsearch_IndexController extends Controller_Action {
         }
     }
 
+    private function setUpPagination($rows, $startIndex, $query) {
+        $pagination = new Solrsearch_Model_PaginationUtil($rows, $this->numOfHits, $startIndex, $query, $this->searchtype);
+        $this->view->nextPage = self::createSearchUrlArray($pagination->getNextPageUrlArray());
+        $this->view->prevPage = self::createSearchUrlArray($pagination->getPreviousPageUrlArray());
+        $this->view->lastPage = self::createSearchUrlArray($pagination->getLastPageUrlArray());
+        $this->view->firstPage = self::createSearchUrlArray($pagination->getFirstPageUrlArray());
+    }
+
     private function setGeneralViewValues() {
         $this->view->results = $this->resultList->getResults();
         $this->view->searchType = $this->searchtype;
         $this->view->numOfHits = $this->numOfHits;
         $this->view->queryTime = $this->resultList->getQueryTime();
         $this->view->start = $this->query->getStart();
-        $this->view->numOfPages = (int) ($this->numOfHits / $this->query->getRows()) + 1;
+        $nrOfRows = $this->query->getRows();
+        if($nrOfRows != 0) {
+            $this->view->numOfPages = (int) ($this->numOfHits / $nrOfRows) + 1;
+        }
         $this->view->rows = $this->query->getRows();
         $this->view->authorSearch = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::AUTHOR_SEARCH));
         $this->view->isSimpleList = false;
