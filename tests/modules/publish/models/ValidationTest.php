@@ -208,7 +208,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $val = new Publish_Model_Validation('ThesisPublisher');
         $children = $val->selectOptions();
         
-        $this->assertArrayHasKey('ID:1', $children);
+        $this->assertArrayHasKey('ID:2', $children);
           
     }
 }
