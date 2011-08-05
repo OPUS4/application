@@ -202,7 +202,7 @@ class Opus3Migration_Documents {
         $status = $this->load_documents();
 
         // Load Fulltext
-        //$this->load_fulltext();
+        $this->load_fulltext();
 
         return $this->status;
 
