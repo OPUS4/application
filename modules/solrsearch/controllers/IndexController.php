@@ -58,7 +58,8 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     public function resultsAction() {
-        $this->view->title = $this->view->translate('solrsearch_title_results');
+        // this action is not to be called manually
+        $this->_redirectToAndExit('index');
     }
 
     public function invalidsearchtermAction() {
