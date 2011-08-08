@@ -616,6 +616,12 @@ Werte in der Frontdoor mit dem Wert '0' auftauchen.
 Issue #OPUSVIER-924 - Nach dem Löschen von Seiten Einträgen im
 Metadaten-Formular erscheint '0' als Wert
 
+h3. Bugfixes
+
+* [OPUSVIER-858] - Keine Field Hints bei hinzugefügten Feldern
+* [OPUSVIER-1011] - r*-Mechanismus in Sprachumschaltung bzw. Login führt zu Exception
+* [OPUSVIER-1015] - Subversion Package-Dependency in deb-Package aufnehmen
+
 h2. ======================== Release 4.0.1 2010-11-26 ========================
 
 * Layout/CSS Änderungen
@@ -632,4 +638,470 @@ und im Admin Modul
 * FormBuilder geändert um bei uninitialisierten Modelinstancen
 Exceptions zu verhindern
 
+h3. Bugfixes
+
+* [OPUSVIER-1011] - r*-Mechanismus in Sprachumschaltung bzw. Login führt zu Exception
+* [OPUSVIER-1015] - Subversion Package-Dependency in deb-Package aufnehmen
+
+h3. Tasks
+
+* [OPUSVIER-804] - Collections aus voherigem Schritt ausblenden
+
+
+h2. ======================== Release 4.0.0 2010-11-15 ========================
+
+h3. Bugfixes
+
+* [OPUSVIER-799] - Klick auf OAI-Links verursacht Error
+* [OPUSVIER-818] - Mail an Autor
+* [OPUSVIER-822] - Validierung Feld "Herausgeber"
+* [OPUSVIER-823] - Übersetzungschlüssel 'solrsearch_index_search' fehlt
+* [OPUSVIER-826] - Fehler bei Titel ohne Sprache
+* [OPUSVIER-831] - Validierung der Felder
+* [OPUSVIER-832] - Validierung der Datumsfelder
+* [OPUSVIER-833] - Zuordnung mehrerer Collections bislang nicht möglich
+* [OPUSVIER-836] - Einheitlichkeit der Bezeichnung von CollectionRole bzw. Collection sicherstellen
+* [OPUSVIER-838] - fehlende Übersetzungsressource bei Kollektionauswahl
+* [OPUSVIER-841] - Übersetzungsschlüssel bei fehlgeschlagenem Zugriff auf die Frontdoor fehlen
+* [OPUSVIER-842] - Adminmodul: Fehler beim Hinzufügen / Löschen von Feldern
+* [OPUSVIER-846] - Ergebnisanzeige: Dokumente ohne Titel
+* [OPUSVIER-854] - Fehler beim Erstellen eines Sammlungseintrags
+* [OPUSVIER-855] - Jahr erscheint nicht in der Trefferanzeige
+* [OPUSVIER-860] - Verschieben von Collections
+* [OPUSVIER-861] - Fehler beim Abspeichern eines Dokuments
+* [OPUSVIER-935] - Auth-Controller verliert Parameter bei Weiterleitung
+* [OPUSVIER-1011] - r*-Mechanismus in Sprachumschaltung bzw. Login führt zu Exception
+* [OPUSVIER-1015] - Subversion Package-Dependency in deb-Package aufnehmen
+
+h3. Stories
+
+* [OPUSVIER-770] - Rewrite-Mechanismus zum Download von Dateien überprüfen
+* [OPUSVIER-853] - Matheon-Anfragen: Remotecontrol, Rechte
+
+h3. Tasks
+
+* [OPUSVIER-68] - Modellierung einer fortgeschrittenen Dokument-Validierung
+* [OPUSVIER-73] - Dokumente in Collections zaehlen
+* [OPUSVIER-85] - XSS Pen-Tests
+* [OPUSVIER-96] - Vereinfachungen von Opus_Model_Field, _Filter
+* [OPUSVIER-165] - Opus_Model_Abstract: getLogger hinzufügen
+* [OPUSVIER-202] - IgnoreMultiplicity-Hack von aus Opus_Model_Field entfernen
+* [OPUSVIER-430] - Tool Tips für die publishing Seite vervollständigen / korrigieren
+* [OPUSVIER-501] - Sprache ist notwendig für jeden eingegebenen Titel und jeden Abstract
+* [OPUSVIER-769] - Funktion zum Verändern des Sichtbarkeitsstatus eines Unterbaums
+* [OPUSVIER-794] - ShowModel View Helper überarbeiten
+* [OPUSVIER-795] - Das Freigabe Modul (Review) benötigt eine Möglichkeit Dokumente abzulehnen
+* [OPUSVIER-819] - keine leeren Felder anzeigen
+* [OPUSVIER-829] - Übersetzungsschlüssel von Collections
+* [OPUSVIER-840] - Emailadresse bei Kontaktdaten des Einstellers
+* [OPUSVIER-843] - Anzeige der Dateigröße im Dateimanager
+* [OPUSVIER-857] - Bestätigungsfeld für Übertragung der Rechte
+
+
+h2. ======================== Release 4.0.0 Release Candidate 2010-10-08 ========================
+
+h3. Bugfixes
+
+* [OPUSVIER-142] - Fehlerbehandlung bei ungültigen Parameterwerten in URL
+* [OPUSVIER-144] - Statstik-Modul funktioniert nicht mit PHP 5.3
+* [OPUSVIER-166] - In frontdoor the links to files are broken
+* [OPUSVIER-178] - SQL in StatisticController in admin module out of date
+* [OPUSVIER-242] - Keine Fehlermeldung, wenn Datenbank nicht erreichbar
+* [OPUSVIER-334] - Dateiname Review_Model_DocumentAdapter.php in der application\module\review folgt nicht den Zend-Konventionen für Dateinamen.
+* [OPUSVIER-335] - Cookie-Path wird nicht korrekt gesetzt
+* [OPUSVIER-345] - Exception in der Suche nach Klick auf Autoren-Namen
+* [OPUSVIER-350] - Opus-Matheon: Icons auf der Frontdoor funktionieren nicht
+* [OPUSVIER-352] - fehlende "required" Dokumenttyp-Felder im Template produzieren keinen sichtbaren Fehler
+* [OPUSVIER-365] - Attribut CompletedYear im Element Opus_Model_Filter in der OPUS-Xml-Dokumentrepräsentation entfernen
+* [OPUSVIER-371] - Authentifikation funktioniert nicht
+* [OPUSVIER-377] - Konzeptionelle Überarbeitung der Behandlung von Default-Werten bei XML-Erzeugung
+* [OPUSVIER-384] - Reihenfolge der Feld-Initialisierung beeinflusst Inhalt von _fetch*-Methoden
+* [OPUSVIER-386] - Get rid of *Invalid controller specified (layouts)* exception
+* [OPUSVIER-387] - 1800 Datenbankabfragen für 1 Publish-Formular
+* [OPUSVIER-402] - Exception not found in the publish module (buggy error handling)
+* [OPUSVIER-408] - Slash in suchanfragen führt zu http 404
+* [OPUSVIER-412] - Browsing zeigt Dokumente mit ServerState unpublished an
+* [OPUSVIER-425] - Frontdoor-Layout wechselt 
+* [OPUSVIER-431] - frontdoor.css kollidiert mit Matheon-Layout
+* [OPUSVIER-441] - webapi-Parameter in config.ini
+* [OPUSVIER-472] - ServerDatePublished wird nicht gesetzt
+* [OPUSVIER-473] - Instanz opus4-devel: Link auf Datei (PDF) funktioniert nicht
+* [OPUSVIER-474] - Instanz opus4-devel: Link auf Lizenz funktioniert nicht
+* [OPUSVIER-481] - Matheon-Daten: Detailanzeige von Dokumenten "komisch"
+* [OPUSVIER-483] - Matheon-Daten: Unvollständige Daten
+* [OPUSVIER-484] - Opus_Security blockt Zugriff auf localhost
+* [OPUSVIER-506] - Warning im zweiten Schritt des Publikationsformulars
+* [OPUSVIER-507] - Default Submit-Button falsch gesetzt
+* [OPUSVIER-513] - Anwendungsfehler in Matheon-Instanz
+* [OPUSVIER-516] - Fehler in Matheon-Instanz: Invalid controller specified (foo)
+* [OPUSVIER-521] - Relevanzsortierung bei Autorensuche entfernen
+* [OPUSVIER-541] - Authorensuche ausgehend vom browsing nach neuesten dokumenten funktioniert nicht
+* [OPUSVIER-542] - Call to a member function translate() on a non-object
+* [OPUSVIER-543] - Speicherung der IP-Adressen ist mangelhaft
+* [OPUSVIER-552] - Publish_DepositControllerTest::testDepositActionWithValidPost schlägt fehl
+* [OPUSVIER-554] - Anwendungsfehler im Publish-Formular für Dokumenttyp all
+* [OPUSVIER-558] - Matheon-Instanz: Klick des Send-Buttons im zweiten Formularschritt führt zu Publish_Model_OpusServerException
+* [OPUSVIER-559] - Matheon: Fehler bei der Migration der Projektinformationen
+* [OPUSVIER-566] - Publish-Formular: Exception "No pressed button found! Possibly ..."
+* [OPUSVIER-589] - Lizenz Link auf Front Door funktioniert nicht
+* [OPUSVIER-596] - Neue Suche aus Trefferliste heraus nicht möglich
+* [OPUSVIER-598] - Ausgewählter Reiter wird nicht immer korrekt angezeigt
+* [OPUSVIER-604] - Automatisch erstellter Bug aus einem kleinen Perl-Script
+* [OPUSVIER-605] - Solr-Exceptions im Matheon-Logfile
+* [OPUSVIER-610] - Bilder können vom front door xslt nicht aufgelöst werden
+* [OPUSVIER-612] - Fehler in Erweiterter Suche: name + fulltext
+* [OPUSVIER-619] - Vulnerability: Metadaten eines vorhandenen Dokuments über publish-Formular veränderbar
+* [OPUSVIER-620] - OPUS_File misses OaiExportFlag
+* [OPUSVIER-621] - Fehler beim Absenden eines ungültigen Dokumenttyps
+* [OPUSVIER-622] - Fehlende Validierung im dritten Formularschritt
+* [OPUSVIER-623] - Nach dem erfolgreichen Abspeichern eines Dokuments Redirect durchführen
+* [OPUSVIER-624] - Vulnerability: Formular kann mit zusätzlichen Feldern angereichert werden
+* [OPUSVIER-625] - Anpassung der Fehlermeldung beim Upload einer zu großen Datei
+* [OPUSVIER-626] - Maximale Upload-Filesize kann im Client geändert werden
+* [OPUSVIER-627] - Vulnerability: Dokument kann mit beliebigem Dokumenttyp in der Datenbank gespeichert und dadurch die Validierung umgangen werden
+* [OPUSVIER-628] - Nach fehlerhafter Eingabe im dritten Formularschritt wird Fehlermeldung und gleichzeitig "Das Dokument wurde erfolgreich gespeichert." angezeigt
+* [OPUSVIER-629] - Beim Auftreten eines Application Errors im dritten Formularschritt wird dennoch ein Dokument in der DB im Zustand unpublished gespeichert
+* [OPUSVIER-632] - fehlender translation key collection_role_frontdoor_ institutes
+* [OPUSVIER-634] - Problem mit Lizenzen im Publish Formular
+* [OPUSVIER-638] - Ausgewählter Dokumententyp wird bei wiederholtem Einstellen von Dokumenten nicht mehr berücksichtigt
+* [OPUSVIER-639] - Dokument-Admin: Leere Document-ID wirft keine Fehlermeldung
+* [OPUSVIER-646] - edit this document link broken
+* [OPUSVIER-647] - Störendes Springen von Anzeige bei Anfordern von neuen Eingabefeldern
+* [OPUSVIER-650] - Die Sprachumschaltung (Deutsch - Englisch) funktioniert nicht ("Seite nicht gefunden")
+* [OPUSVIER-651] - Sprache in der Front Door uneinheitlich
+* [OPUSVIER-663] - RSS-Export der neuesten Dokumente liefert HTML-Seite aus
+* [OPUSVIER-669] - specialtitle für results view nicht als url parameter übergeben
+* [OPUSVIER-672] - Dokument lässt sich nicht abspeichern
+* [OPUSVIER-673] - Felder TitleParent, TitleSub und TitleAdditional nur noch als Group?
+* [OPUSVIER-674] - fehlerhafte Einträge in Tabelle collection_nodes für die Collection institutes (role = 1)
+* [OPUSVIER-687] - Cross-Site-Scripting ganz einfach über home/index/help
+* [OPUSVIER-692] - CollectionRole ohne zugeordnete Collections wird nicht korrekt behandelt
+* [OPUSVIER-697] - DnbInstitutes sollen über das Adminmodul verwaltet werden
+* [OPUSVIER-698] - ThesisGrantor, ThesisPublisher im publishing-Modul
+* [OPUSVIER-699] - Fehlende Publish-Übersetzungressourcen in Matheon-Instanz
+* [OPUSVIER-700] - Helper aus Publish-Modul liegen in globalem Helper-Verzeichnis
+* [OPUSVIER-702] - Fehlermeldungen in der aktuell eingestellten Sprache anzeigen
+* [OPUSVIER-704] - add-fields dauerhaft innerhalb der Session?
+* [OPUSVIER-705] - Matheon-Instanz: Variable "configPath" nicht gesetzt
+* [OPUSVIER-706] - Validierung des Datumsfeld nicht vollständig
+* [OPUSVIER-707] - Datumsfeldvalidierung berücksichtigt Accept-Language HTTP Header
+* [OPUSVIER-709] - Erzeugung der Publikationslisten skaliert nicht
+* [OPUSVIER-717] - Opus_Role guest und administrator sollte man nicht über den Adminbereich löschen können
+* [OPUSVIER-721] - Warning im Publikationsformular, Schritt 2
+* [OPUSVIER-726] - socialBookmarking: User-Passwort laufen über unsere Server
+* [OPUSVIER-728] - Noch schneller.
+* [OPUSVIER-730] - Nicht definierte Variable im Publish-Formular (2. und 3. Schritt)
+* [OPUSVIER-731] - Sprachumschaltung funktioniert nicht (Einfache Suche und Browsing)
+* [OPUSVIER-732] - Opus_Validate_Date: Zugriff auf Session-Daten nicht möglich
+* [OPUSVIER-762] - OPUS4 lässt nicht alle URN-Namespaces zu
+* [OPUSVIER-776] - Matheon-Layout: FlashMessenger schreibt "Y" in den Kopf der Seite
+* [OPUSVIER-779] - Exception 'Solr search server is out of service.'
+* [OPUSVIER-780] - Exception beim Abspeichern einer Collection mit Default-Theme
+* [OPUSVIER-782] - Fehlermeldungen im Publikationsformular von Matheon
+* [OPUSVIER-783] - addNextSibling bzw. addPrevSibling fügt Collection immer am rechten Rand ein
+* [OPUSVIER-790] - Alte Dokumenttypen aus dem Config-Verzeichnsi entfernen
+* [OPUSVIER-813] - XML-Cache nicht konsistent zur DB
+* [OPUSVIER-814] - Zugriff auf Volltext-Dokument verweigert
+* [OPUSVIER-859] - Fehler im Browsing/Collections
+* [OPUSVIER-1011] - r*-Mechanismus in Sprachumschaltung bzw. Login führt zu Exception
+* [OPUSVIER-1015] - Subversion Package-Dependency in deb-Package aufnehmen
+
+h3. Stories
+
+* [OPUSVIER-11] - T8: Modul zum Freischalten von Dokumenten
+* [OPUSVIER-14] - Freigabedatum für Dokumente nutzen/abfragen
+* [OPUSVIER-39] - T1: Performance verbessern
+* [OPUSVIER-47] - XSS verhindern
+* [OPUSVIER-80] - Prio 5: Dokument-Updates und Volltexte nachtragen
+* [OPUSVIER-86] - T6: Datenbank-Modell und ORM vereinheitlichen/vereinfachen
+* [OPUSVIER-101] - T9: Entwicklungssystem aufsetzen
+* [OPUSVIER-229] - Zugriff auf Dokumente über sprechende Namen
+* [OPUSVIER-434] - Behandlung von Matheon-spezifischen Änderungen in der Codebasis
+* [OPUSVIER-567] - Änderungen am Matheon Layout
+* [OPUSVIER-594] - Produktivsystem aufsetzen
+* [OPUSVIER-606] - Migration der Opus-ZIB-Instanz
+* [OPUSVIER-664] - Internationalisierung
+* [OPUSVIER-682] - Collections und CollectionNodes zusammenfassen
+* [OPUSVIER-811] - Einräumung von Verwertungsrechten
+
+h3. Tasks
+
+* [OPUSVIER-8] - Anwenderdokumentation 
+* [OPUSVIER-15] - Schlüsselnamen der Felder in den Übersetzungsressourcen ändern
+* [OPUSVIER-16] - Überprüfen der Mailfunktionen
+* [OPUSVIER-40] - Abstraktion vereinfachen
+* [OPUSVIER-41] - Caching-Layer in XML-Output einfuegen
+* [OPUSVIER-48] - Evaluieren, ob Denial-of-Service moeglich
+* [OPUSVIER-53] - Installations-Dokumentation
+* [OPUSVIER-58] - Neue Unit-Tests fuer ungetesteten Code schreiben
+* [OPUSVIER-63] - Standard-Template fuer Publikation durch Autoren erstellen
+* [OPUSVIER-64] - Validierung der Dokument-Metadaten bei der Eingabe
+* [OPUSVIER-67] - Validierung aus Opus_Document entfernen
+* [OPUSVIER-71] - Auswahl-Mechanismus fuer Collections in Publikation
+* [OPUSVIER-73] - Dokumente in Collections zaehlen
+* [OPUSVIER-78] - Filtern von Dokumenten nach Volltext ja/nein
+* [OPUSVIER-79] - Bibliographie in Dokumenttypen nachbilden
+* [OPUSVIER-83] - Ueberpruefung der Eingaben aus dem Admin-Bereich
+* [OPUSVIER-84] - Browsing und Suche auf XSS ueberpruefen
+* [OPUSVIER-85] - XSS Pen-Tests
+* [OPUSVIER-87] - OAI-Schnittstelle viel zu langsam
+* [OPUSVIER-88] - Personeneindeutigkeit, PND
+* [OPUSVIER-94] - Vereinfachungen wie getIdentifier* -> getIdentifier evaluieren
+* [OPUSVIER-95] - Einfachen LRU-Cache in Model-Klassen evaluieren
+* [OPUSVIER-96] - Vereinfachungen von Opus_Model_Field, _Filter
+* [OPUSVIER-97] - DocumentBuilder entfernen
+* [OPUSVIER-98] - Haeufig ueberschriebene Methoden in Opus_Model refactoren
+* [OPUSVIER-99] - Coding-Styles von Codesniffer mit IDE abgleichen
+* [OPUSVIER-100] - Alte Coding-Styles von Opus4 in Codesniffer einstellen
+* [OPUSVIER-107] - Server besorgen und einrichten
+* [OPUSVIER-112] - Exception-/Fehlerbehandlung in OAI-Controller fixen
+* [OPUSVIER-127] - Auflistung aller verwendeten 3rd party libraries im Wiki
+* [OPUSVIER-129] - Erstellung eines Indexschemas
+* [OPUSVIER-130] - Indexierung implementieren
+* [OPUSVIER-131] - Suchfunktionalität im Framework implementieren
+* [OPUSVIER-134] - Sprachdateien von global in die Module
+* [OPUSVIER-141] - Funktion zum initialen Erstellen eines Index
+* [OPUSVIER-146] - Exception-/Fehler-Behandlung im Frontdoor-Modul
+* [OPUSVIER-147] - Exception-/Fehler-Behandlung im Bootstrap-Prozess
+* [OPUSVIER-149] - Solr Proof-of-Concept erstellen
+* [OPUSVIER-162] - Opus_Model_Abstract: _internalFields streichen
+* [OPUSVIER-163] - Opus_Model_AbstractDb: Unit test für ParentId handling
+* [OPUSVIER-165] - Opus_Model_Abstract: getLogger hinzufügen
+* [OPUSVIER-169] - Update translation resources
+* [OPUSVIER-170] - Cleanup pages (phtml files) for admin module
+* [OPUSVIER-181] - Controller im Adminmodul zur Verwaltung von Roles und Privileges
+* [OPUSVIER-182] - Controller im Adminmodul zur Verwaltung von Accounts
+* [OPUSVIER-183] - Controller im Adminmodul zur Verwaltung von IP-Adressen
+* [OPUSVIER-187] - Spezifikation der Dokumenttypen
+* [OPUSVIER-188] - Webserver neu mit aktuellem OpenSuSE aufsetzen
+* [OPUSVIER-201] - Dokumentation für config.ini erstellen
+* [OPUSVIER-202] - IgnoreMultiplicity-Hack von aus Opus_Model_Field entfernen
+* [OPUSVIER-203] - "PublisherUniversity" ersetzen durch "Publisher"
+* [OPUSVIER-204] - Caching-Layer in OAI-Schnittstelle einfuegen
+* [OPUSVIER-205] - Validierung der Suchformulareingaben und URL-Parameter
+* [OPUSVIER-207] - Restful URLs erzeugen
+* [OPUSVIER-208] - SolrserachController und zugehörige Views umsetzen
+* [OPUSVIER-217] - Konsolidierung der unterschiedlichen Ablageorte von Klassen mit Solr-Bezug
+* [OPUSVIER-234] - Korrektes Suchformular auf der Startseite anbieten
+* [OPUSVIER-235] - Nach absetzen einer neuen Suche eventuelle Filter Queries aus der URL löschen
+* [OPUSVIER-236] - Split configuration file into config.ini and application.ini
+* [OPUSVIER-237] - Zugreifen auf nicht vorhandene array keys im solr search controller erzeugt fehler im apache log
+* [OPUSVIER-238] - Behandlung von Fehlern in Templates
+* [OPUSVIER-243] - ErrorHandler should show appropriate information to the user 
+* [OPUSVIER-248] - XML-Strategie Version1 und Version2 enthalten teure Rekursionen
+* [OPUSVIER-250] - Browsing Modul aus dem alten Search Modul heraustrennen
+* [OPUSVIER-253] - Erweiterte Suche implementieren
+* [OPUSVIER-256] - Erweiterte Suche: setter für default operator in klasse Query
+* [OPUSVIER-257] - Erweiterte Suche: beim bauen der query alle suchfelder überprüfen 
+* [OPUSVIER-260] - Suchfeld modifikatoren in die query klasse aufnehmen
+* [OPUSVIER-261] - Paginierung für erweiterte Suche implementieren
+* [OPUSVIER-265] - Alte Unit Tests für Application reparieren
+* [OPUSVIER-266] - In der erweiterten Suche den Query Parameter, falls vorhanden, aus der URL entfernen
+* [OPUSVIER-290] - Löschen der DNB-Institusfelder aus den Collections
+* [OPUSVIER-291] - Clean up controllers in admin module
+* [OPUSVIER-295] - Verknüpfung der Institutionen mit der Personen-Tabelle
+* [OPUSVIER-307] - Dokumenttyp Preprint 
+* [OPUSVIER-311] - In der Ansicht der Suchergebnisse die Angabe über die Dauer der Abfrage entfernen
+* [OPUSVIER-314] - Externe Opus-Tabellen vereinfachen, überflüssige Felder löschen
+* [OPUSVIER-315] - Collection-Attributes und Vereinfachung des Theme-Handlings
+* [OPUSVIER-326] - tool tips für die publish formulare
+* [OPUSVIER-329] - Opus_File enthält Feld VisibleInFrontdoor, das noch nicht beachtet wird
+* [OPUSVIER-330] - Darf die Frontdoor zu Dokumenten mit Status != published angezeigt werden?
+* [OPUSVIER-332] - Zend_Loader_PluginLoader_Exception im View abfangen
+* [OPUSVIER-339] - Start/Stop der Solr-Server in init-Skripte einfügen
+* [OPUSVIER-347] - Polish review module code
+* [OPUSVIER-353] - Fix metadata edit form im admin module 
+* [OPUSVIER-359] - Solr-extrahierte Volltexte cachen
+* [OPUSVIER-374] - Verwendung des Wertes von theme aus der Config in allen Pfadangaben auf img bzw. css
+* [OPUSVIER-376] - CSS für die Error Seite
+* [OPUSVIER-397] - Remove methods from Browsing/Opus_Document obsoleted by Solr
+* [OPUSVIER-413] - javascript injection im Browsing modul
+* [OPUSVIER-416] - javascript injection im clearance modul
+* [OPUSVIER-424] - Matheon-Preprint-Listen projektweise exportieren
+* [OPUSVIER-426] - Liste der benötigten 3rd party libs in Doku aufnehmen
+* [OPUSVIER-429] - Unit Tests für Applikation lauffähig machen
+* [OPUSVIER-432] - Update-Mechanismus für die Collections
+* [OPUSVIER-437] - Instanzneutrale Codebasis bei Auslieferung sicherstellen
+* [OPUSVIER-442] - Solr-Indexfelder mit stored=true bzw. Facettenfelder auf Escaping testen
+* [OPUSVIER-444] - Es wird eine Solr Query für die neuesten x dokumente benötigt
+* [OPUSVIER-447] - durch browsing refactoring obsoleten code entfernen
+* [OPUSVIER-448] - Aufsplitten der Installationsanleitung im Wiki
+* [OPUSVIER-451] - Unit test: Primary Keys in Datenbank vs. Table-Gateway?
+* [OPUSVIER-452] - Unit test: Test AbstractDb->__construct für Multi-Primary-Keys
+* [OPUSVIER-453] - Entfernen der Methode setConstructionAttributesMap
+* [OPUSVIER-454] - Unit test: Datei-Operationen in Opus_File können fehlschlagen
+* [OPUSVIER-455] - Unit test: Opus_File->getDocumentId()
+* [OPUSVIER-456] - Feld VisibleOnFrontdoor in Opus_File wird in Frontdoor nicht beachtet.
+* [OPUSVIER-457] - Unit test: Falsche Permissions in Opus_File
+* [OPUSVIER-458] - Prüfen, ob alte DB-Tabellen/Felder referenziert werden
+* [OPUSVIER-460] - Unit test: Korrekte Reihenfolge von Collection-Feldern
+* [OPUSVIER-461] - Unit test: Korrekte Parent-Id direkt nach dem Speichern (ehemaliger Model-Bug)
+* [OPUSVIER-462] - Unit test: Bug beim Speichern von CollectionNodes mit ungespeichertem Parent-Model
+* [OPUSVIER-463] - Unit test: Theme-Handling in Collection
+* [OPUSVIER-464] - Unit test: Enrichment-Handling in Collection
+* [OPUSVIER-465] - Code für Publish-Modul refactoren
+* [OPUSVIER-466] - Variable Anzahl von neuesten Dokumenten
+* [OPUSVIER-467] - Überflüssige Publish-Klassen entfernen
+* [OPUSVIER-468] - Unit test: Speichern und Laden von Collections über die Dokument-Klasse
+* [OPUSVIER-471] - Checkout-Script zum Erstellen neuer Instanzen
+* [OPUSVIER-475] - Neue Facette "Bibliographie"
+* [OPUSVIER-477] - Migrations-Intelligenz
+* [OPUSVIER-480] - Temp- und Ziel-Verzeichnis in {{Opus_File}} aus Config laden
+* [OPUSVIER-486] - nur "befüllte" Collections im Browsing anzeigen
+* [OPUSVIER-487] - Add 'clearance' privilege for Clearance (Review) module to framework and database
+* [OPUSVIER-488] - Unbenutztes Feld "publication_state" in der Datenbank/Opus_Document?
+* [OPUSVIER-492] - Check clearance privilege before allowing access to clearance module
+* [OPUSVIER-493] - Referees should only receive notifications for specific project/collection
+* [OPUSVIER-500] - Übersetzungen der Fehlermeldungen im Publish-Formular
+* [OPUSVIER-503] - Benutzer dürfen Unterfelder in Dokumenttypen definieren
+* [OPUSVIER-504] - Collection Informationen aus XML in den Solr Index mit aufnehmen
+* [OPUSVIER-505] - Änderungen am neuen Browsing Modul mit Solr
+* [OPUSVIER-509] - Entfernen der Social Bookmarks
+* [OPUSVIER-510] - frontdoor.css überarbeiten
+* [OPUSVIER-511] - front door ui überarbeiten
+* [OPUSVIER-512] - Browsing-Funktion "list all documents" restlos entfernen
+* [OPUSVIER-515] - Code-Duplication beim BibTex-Export
+* [OPUSVIER-520] - Hervorhebung der ausgewählten Sortierreihenfolge
+* [OPUSVIER-522] - Add tests.ini that contains common testing configuration that normally is not edited locally
+* [OPUSVIER-523] - Add unit tests for administration controllers
+* [OPUSVIER-525] - Selenium RC-Server aufsetzen
+* [OPUSVIER-526] - Selenium-Tests auf CI-System einrichten
+* [OPUSVIER-527] - Bootstrapping von Server-Tests initialisiert nicht den Zend-Translator 
+* [OPUSVIER-528] - Zugriffsschutz für WebAPI-Modul
+* [OPUSVIER-529] - Einbindung in CI-System
+* [OPUSVIER-532] - Neue Instanz opus4-selenium auf opus4web anlegen
+* [OPUSVIER-534] - Einheitliche Benennung des Freischalt-Moduls: Review oder Clearance
+* [OPUSVIER-535] - Im Logfile gefunden: Invalid controller specified (search)
+* [OPUSVIER-546] - Installation einer neuen  Opus4-Instanz auf dem Webserver
+* [OPUSVIER-547] - Feld "PublicationState" existiert in Datenbank, aber nicht in Opus_Document
+* [OPUSVIER-548] - Die Migration der Metadaten
+* [OPUSVIER-550] - BibTex_Icon freischalten
+* [OPUSVIER-551] - Freischalten RIS-Icon
+* [OPUSVIER-555] - Umstrukturierung des Imports
+* [OPUSVIER-556] - Redundantes Feld "document_server_state" in Tabelle "privileges"
+* [OPUSVIER-557] - Klasse "Opus_Security_Realm" ist viel zu lang und voll von Code-Duplication
+* [OPUSVIER-560] - Einige Dateien im Browsing Modul haben keinen Prolog
+* [OPUSVIER-561] - Wenn Jahr der Fertigstellung 0000, dann Jahr der freischaltung verwenden
+* [OPUSVIER-562] - Autorenanzeige in der Front Door überarbeiten
+* [OPUSVIER-563] - Abstand zwischen den Dateinamen ist zu klein
+* [OPUSVIER-564] - Die Migration der Collections
+* [OPUSVIER-565] - Refactoring Solrsearch Controller
+* [OPUSVIER-569] - Facetten absetzen
+* [OPUSVIER-573] - Verbleibende Browsing-Funktionen als Suchen umsetzen
+* [OPUSVIER-578] - Dokumenttypen article, bachelor_thesis, book, book_part, conference_object, contribution_to_periodical, course_material
+* [OPUSVIER-579] - Änderungen an der Navigation
+* [OPUSVIER-580] - Hinzugekommene Matheon-Änderungen vor Release überprüfen
+* [OPUSVIER-583] - Impressum Link im Footer des Master Layouts implementieren
+* [OPUSVIER-584] - frontdoor.css nicht im phtml anhängen
+* [OPUSVIER-587] - Collections für die Institute
+* [OPUSVIER-588] - Dokumenttypen doctoralthesis, festschrift, habilitation, image, lecture, masterthesis, misc
+* [OPUSVIER-607] - Problem der Zeichencodierung
+* [OPUSVIER-608] - Neustrukturierung der Collections  
+* [OPUSVIER-609] - Zuordnung von Dokumenten zu Collections
+* [OPUSVIER-615] - Admin sollte sich nicht selbst löschen können
+* [OPUSVIER-616] - Dokumenttypen movingimage, preprint, report, review, sound, studythesis, workingpaper
+* [OPUSVIER-617] - Navigation an Rechte des eingeloggten Benutzers anpassen
+* [OPUSVIER-630] - Die Licences aus Opus3.2 müssen migriert werden
+* [OPUSVIER-631] - Language Selector anpassen
+* [OPUSVIER-635] - BibTex-Import
+* [OPUSVIER-636] - Analyse der BibTex-Daten
+* [OPUSVIER-637] - Migration des "alten" BibTex-Imports 
+* [OPUSVIER-642] - Abstract-Hide JavaScript: Schleife entfernen und durch einen Aufruf ersetzen
+* [OPUSVIER-643] - JavaScript für Suchformular löschen Button onclick
+* [OPUSVIER-648] - Bennenung der Download Links auf der Front Door
+* [OPUSVIER-653] - Stresstest mit 10.000 Dokumenten durchführen
+* [OPUSVIER-656] - Anzahl aller "published" Dokumente im Unterbaum bestimmen
+* [OPUSVIER-657] - Attribut link_docs_path_to_root aus Tabelle collections_roles entfernen
+* [OPUSVIER-658] - Abbrechen-Button im 2. Formularschritt 
+* [OPUSVIER-659] - Propagierung der Sichtbarkeit von CollectionRole auf zugehörige Collections
+* [OPUSVIER-665] - Übersetzen der Dokumenttypen
+* [OPUSVIER-667] - Documenttype-Browsing: Anzeige des ausgewählten Dokumenttyps in der Dokumentauflistung
+* [OPUSVIER-668] - Umsetzung einer Breadcrumb-Navigation beim Collection-Browsing
+* [OPUSVIER-671] - JQuery JavaScript-Datei aus der Codebasis entfernen
+* [OPUSVIER-678] - Deduplication beim BibTeX- Import
+* [OPUSVIER-679] - BibTeX-Einträge in Collections einfügen
+* [OPUSVIER-680] - Import der Metadaten aus den BibTex-Files
+* [OPUSVIER-681] - Preprocesing der BibTex-Daten
+* [OPUSVIER-683] - Workflow zur Einbindung von JQuery und Javascript dokumentieren
+* [OPUSVIER-684] - Sprache der Veröffentlichung auf erster Seite aussuchen
+* [OPUSVIER-685] - Dokumenttyp soll in Dokumentanzeige im Review-Modul erscheinen
+* [OPUSVIER-688] - bessere/eindeutige Begriffe für Browsing, Collections, CollectionRoles, Veröffentlichen
+* [OPUSVIER-689] - Einheitlichkeit von Begriffen im Web-Interface und im Admin-Interface
+* [OPUSVIER-690] - Style-Elemente aus den Templates für die Dok.typen ins CSS auslagern
+* [OPUSVIER-691] - getChildren() ersetzt getSubCollections()
+* [OPUSVIER-695] - Show document ID in review module
+* [OPUSVIER-701] - Add navigation to administration module
+* [OPUSVIER-710] - Code Duplication zwischen results.phtml und plainresults.phtml auflösen
+* [OPUSVIER-714] - Testdaten erweitern, so dass PublicationList-Module getestet werden kann
+* [OPUSVIER-716] - Integration des PublicationList- in das Solrsearch-Modul
+* [OPUSVIER-719] - Testdokumente mit den Feldern ThesisGrantor und Thesis Publisher
+* [OPUSVIER-727] - Verwaltung der Collections im Adminmodul funktioniert nicht
+* [OPUSVIER-733] - Opus4-Theme für Startseite anpassen
+* [OPUSVIER-735] - Opus4-Theme für die Erweiterte Suche einpflegen
+* [OPUSVIER-736] - Opus4-Theme für das Browsing anpassen
+* [OPUSVIER-737] - Opus4-Theme für Veröffentlichen einpflegen
+* [OPUSVIER-738] - Opus4-Theme für das Hilfemenü
+* [OPUSVIER-739] - Opus4-Logo
+* [OPUSVIER-740] - Auslieferung der Themes
+* [OPUSVIER-741] - Opus4-Theme für die Ergebnisse anpassen
+* [OPUSVIER-742] - CSS in Opus4-Layout in der korrekten Reihenfolge einbinden
+* [OPUSVIER-743] - Body-Tags brauchen eindeutige id
+* [OPUSVIER-744] - Anwenderdokumentation - Konfiguration
+* [OPUSVIER-745] - Default Wert für CompletedDate: auf aktuelles Datum setzen
+* [OPUSVIER-746] - IE6-Css in common.phtml einfügen
+* [OPUSVIER-747] - opus.css: Kein Separator, wenn nur eine Sprache zur Auswahl
+* [OPUSVIER-750] - Fix author search links on document metadata editing result page
+* [OPUSVIER-751] - Fix or remove "Dokument einer organisatorischen Einheit zuweisen" functionality on metadata edit page
+* [OPUSVIER-753] - Überprüfung der Hilfetexte und Übersetzungen
+* [OPUSVIER-759] - Abhängigkeiten zu Opus_Solrsearch_* im IndexController des PublicationList-Moduls entfernen
+* [OPUSVIER-761] - Messages in die common.phtml
+* [OPUSVIER-763] - Haken für Emailbenachrichtigung
+* [OPUSVIER-764] - Migartionstest mit mehreren Opus3-Instanzen
+* [OPUSVIER-769] - Funktion zum Verändern des Sichtbarkeitsstatus eines Unterbaums
+* [OPUSVIER-771] - Übersetzungsressourcen für die Dokumentverwaltung
+* [OPUSVIER-773] - Einige Model Felder sind falsch konfiguriert und erscheinen mit dem falschen Formulareelement
+* [OPUSVIER-774] - Eingabe von Datumsangaben vereinfachen
+* [OPUSVIER-777] - TitleParent sollte durchsuchbar sein
+* [OPUSVIER-787] - "Erfolgsmeldung" nach dem Zurückziehen von Dokumenten
+* [OPUSVIER-803] - Statt DB-Kürzel richtige Namen anzeigen
+* [OPUSVIER-805] - Language-Keys nicht vorhanden
+* [OPUSVIER-806] - Collection-Hierarchie auch nach "oben durchlaufen"
+* [OPUSVIER-807] - Seite zum Überprüfen der Eingaben besser gestalten
+* [OPUSVIER-809] - alphabetische Sortierungen für Selects
+* [OPUSVIER-834] - Ausgabe der Dokument-ID nach dem erfolgreichen Speichern eines Dokuments
+* [OPUSVIER-893] - ZIB-Instanz: Anzeige der hinzugefügten Collections
+* [OPUSVIER-902] - Einbindung des OPUS4-Favicons
+* [OPUSVIER-914] - Anzeige von Dateikommentaren 
+* [OPUSVIER-915] - Anzeige von Dateigröße in KB
+* [OPUSVIER-1149] - Migration der SWD-Schlagworte
+* [OPUSVIER-1191] - Änderungen der Dokumenttypen in OAI-Schnittstelle prüfen
+* [OPUSVIER-1336] - 'Cancel' Button in den Edit Formularen für Metadaten sollte 'Zurück' heißen
+
+h3. Documentation
+
+* [OPUSVIER-148] - Dokument-Config dokumentieren
+* [OPUSVIER-435] - Matheon-spezifischen Änderungen im Wiki dokumentieren
+* [OPUSVIER-443] - Schlüssel ohne Default-Werte in den Admin-Scripte/Config-Dateien
+* [OPUSVIER-531] - Installationsanleitung schreiben
+* [OPUSVIER-661] - Hinweis zur Sichtbarkeit von Collections im Browsing
+* [OPUSVIER-675] - Hinweis in Doku zum Collection-Browsing bzw. beim CSV-Export aufnehmen
+* [OPUSVIER-754] - Dokumentation der Konfiguration der Startseite
+* [OPUSVIER-755] - Dokumentation der Konfiguration der Hilfeseite
+* [OPUSVIER-756] - Dokumentation der Konfiguration der Impressumseite
+* [OPUSVIER-757] - Dokumentation der Konfiguration der Kontaktseite
+
+
+h3. Specification
+
+* [OPUSVIER-60] - Anforderungen an Formular-Generierung
+* [OPUSVIER-66] - Technische Umsetzung von Validierung
+* [OPUSVIER-82] - Spezifikation der Escaping-Strategie
+* [OPUSVIER-105] - Dokumente nachbearbeiten/Volltexte nachtragen widerspricht DINI2010
+* [OPUSVIER-132] - Requirements für die Suche festlegen
+* [OPUSVIER-180] - Spezifikation von OPUS_Securitiy aufschreiben/dokumentieren
+* [OPUSVIER-190] - Dokumenttypen mit DINI-Vokabular abgleichen
+* [OPUSVIER-191] - Bedeutungen von Dokumenttypen und Feldnamen festlegen
+* [OPUSVIER-438] - Umgang mit den Zend_Lucene-Relikten
+* [OPUSVIER-514] - Mapping der Opus-Dokumenttypen auf die BibTex- und RIS-Dokumenttypen 
+* [OPUSVIER-708] - Sortierung für Dokumente mit mehreren Titel nicht eindeutig
 
