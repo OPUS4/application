@@ -88,6 +88,26 @@ class AuthControllerTest extends ControllerTestCase {
     public function testLogoutAction() {
         $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/auth/logout/rmodule/home/rcontroller/index/raction/index');
+        $this->assertResponseLocationHeader($this->response, '/home');
+        $this->assertResponseCode('302');
+        $this->assertNull(Zend_Auth::getInstance()->getIdentity());
+    }
+
+    public function testLogoutActionFromAdministrationView() {
+        $this->loginUser('admin', 'adminadmin');
+        $this->dispatch('/auth/logout/rmodule/admin/rcontroller/index/raction/index');
+        $this->assertNotContains('Anwendungsfehler', $this->response->outputBody());
+        $this->assertNotContains('Argument 4 passed to Zend_Controller_Action_Helper_Redirector::direct() must be an array, null given', $this->response->outputBody());
+        $this->assertResponseLocationHeader($this->response, '/home');
+        $this->assertResponseCode('302');
+        $this->assertNull(Zend_Auth::getInstance()->getIdentity());
+    }
+
+    public function testLogoutActionFromFoobarView() {
+        $this->loginUser('admin', 'adminadmin');
+        $this->dispatch('/auth/logout/rmodule/foobar/rcontroller/index/raction/index');
+        $this->assertResponseLocationHeader($this->response, '/foobar');
+        $this->assertResponseCode('302');
         $this->assertNull(Zend_Auth::getInstance()->getIdentity());
     }
 
