@@ -1,5 +1,182 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.1.2 2011-08-08 ========================
+
+h3. Bugfixes
+
+* [OPUSVIER-232] - Opus_Model_Xml_Version2 crashes
+* [OPUSVIER-729] - Frontdoor Unit Tests funktionieren nicht, weil Opus_Statistic_LocalCounter HTTP Header erwartet
+* [OPUSVIER-791] - Datei immer noch da nach dem löschen im Dateimanager
+* [OPUSVIER-863] - Beim hochladen von Dateien gehen die zugeordneten Collections verloren
+* [OPUSVIER-883] - unpassende Notifikation nach dem Ausloggen
+* [OPUSVIER-1067] - Keine Rückmeldung beim Hochladen von zu großen Dateien im Filemanager
+* [OPUSVIER-1071] - 404-Fehler bei der Auflistung von Volltexten in der Frontdoor für deren MIME-Type kein Icon hinterlegt wurde
+* [OPUSVIER-1112] - Übersetzungsschlüssel im Adminmodul korrigieren
+* [OPUSVIER-1116] - Fehler im Bereich "Metadaten ändern" im Admin-Modul: Sprache bei Schlagworten
+* [OPUSVIER-1139] - Abbruch mit Fehler beim Indexieren
+* [OPUSVIER-1141] - Zend_Date vertauscht Monat und Tag wenn Locale nicht gesetzt
+* [OPUSVIER-1284] - Werte für die Anzeige von Sammlungen werden nicht korrekt übersetzt
+* [OPUSVIER-1320] - Filemanager: Verwirrende Warnungen bei Anzeige von Dateien mit GPG-Signaturen
+* [OPUSVIER-1324] - XSS in Frontdoor-Fehlermeldung möglich
+* [OPUSVIER-1338] - Abspeichern von unzulässigen Werten für das Feld Sprache
+* [OPUSVIER-1390] - Umschalten von public/private beim Bemerkungsfeld fkt. nicht
+* [OPUSVIER-1428] - Fehler beim Eintrag einer MSC-Klasse über das Publish-Formular
+* [OPUSVIER-1434] - Veröffentlichen eines Dokuments mit 10+ Autoren
+* [OPUSVIER-1436] - falscher Objekttyp beim Ändern/Neuanlegen eines Abstracts im Adminformular
+* [OPUSVIER-1466] - Sprache für Subject wird nicht korrekt angezeigt
+* [OPUSVIER-1467] - Sprachen von Subjects werden nicht in der Frontdoor angezeigt
+* [OPUSVIER-1469] - ServerDateUnlocking: Bereits entferntes Feld wird noch im Admin-Bereich benutzt
+* [OPUSVIER-1474] - Dateidownload funktioniert nach der Installation über Deb-Package nicht
+* [OPUSVIER-1477] - Fehler bei der Übermittlung eines Felder mit 'edit="no"'
+* [OPUSVIER-1480] - 302-Redirect auf /, wenn Apache keine Schreibrechte auf opus-console.log besitzt
+* [OPUSVIER-1488] - Uninstall-Script: Fehler falls "OPUS4_DB_NAME" leer
+* [OPUSVIER-1490] - Sichtbarkeitseinstellung von Collections wird auf Frontdoor nicht beachtet
+* [OPUSVIER-1494] - Unschöne Fehlermeldung beim Zugriff auf nicht vorhandene Ressourcen in server/public
+* [OPUSVIER-1504] - Breadcrumbs im Adminbereich uneinheitlich
+* [OPUSVIER-1505] - "Last Page" in Pagination liefert keine Ergebnisse
+* [OPUSVIER-1506] - Publish-Formular: Hart kodierte Bezeichnung "Dokumenttyp" in allen Formularen
+* [OPUSVIER-1508] - Publish-Formular: "missing fields", sobald man versucht ein Projekt auszuwählen
+* [OPUSVIER-1511] - Keine Eingabe im Datumsfeld für Jahre vor "1900" möglich
+* [OPUSVIER-1512] - Erscheinungsjahr wird bei der Migration von OPUS3 nach OPUS4 nicht übernommen
+* [OPUSVIER-1514] - Admin-Modul, Dokumente Verwalten: Sortierung nach Author führt zur Ausblendung des Autors
+* [OPUSVIER-1516] - Frontdoor-Seite validiert nicht nach XHTML
+* [OPUSVIER-1517] - Zeile für Freie und SWD Schlagwörter zu lang
+* [OPUSVIER-1518] - Originaldateien sollen nicht im Frontdoor angezeigt werden
+* [OPUSVIER-1519] - Lizenzen werden nach der Migration nicht korrekt zugeordnet
+* [OPUSVIER-1520] - Die Anzeige bei der Facette Erscheinungsjahr enthält nicht zugeordnete Jahre
+* [OPUSVIER-1521] - Doppeltes Escaping im File Manager des Admin Moduls
+* [OPUSVIER-1522] - Migrationsskript legt Logdatei opus-console.log mit falschen Permissions an
+* [OPUSVIER-1529] - Fehler auf der Frontdoor
+* [OPUSVIER-1531] - Falscher Redirect im Adminformular
+* [OPUSVIER-1541] - Fehlender Übersetzungsschlüssel in den Admin-Formularen, wenn Fehlernachricht angezeigt wird
+* [OPUSVIER-1545] - Unklarer Übersetzungsschlüssel im Publish-Formular
+* [OPUSVIER-1546] - Fehler nach dem Abspeichern eines Dokuments mit SWD-Schlagwort "foo"
+* [OPUSVIER-1549] - Fehlerhafter Aufruf von "createdb.sh" im Migrationsscript: 'printf %q'
+* [OPUSVIER-1553] - Mail-Versand in der Frontdoor prüft Dokument-Berechtigungen nicht
+* [OPUSVIER-1557] - OAI-Schnittstelle spuckt den Pfad der Instanz im Dateisystem aus, wenn workspace/tmp/resumption für Apachen nicht schreibbar ist
+* [OPUSVIER-1559] - OAI-Schnittstelle: from/until-Parameter werden nicht korrekt ausgewertet
+* [OPUSVIER-1560] - OAI-Schnittstelle ignoriert from-Parameter, wenn until-Parameter fehlt
+* [OPUSVIER-1565] - leeres Element xmlns in der oai-epicur-Ausgabe
+* [OPUSVIER-1568] - Kann bei der Migration die oberste Ebene der Institute wegfallen 
+* [OPUSVIER-1569] - Verbesserung des Ranking der Ergebnisse bei der Standardsuche
+* [OPUSVIER-1573] - führendes Leerzeichen im dc:creator Feld entfernen
+* [OPUSVIER-1574] - OAI-Schnittstelle, epicur: Dokumente ohne URN dürfen nicht mit ausgegeben werden
+* [OPUSVIER-1577] - MSC-Classification: auf letzter Ebene erscheint Freitextfeld
+* [OPUSVIER-1579] - Apache liefert falsche PDFs aus
+* [OPUSVIER-1580] - Verschobenes Layout bei Dokumenten ohne Abstract 
+* [OPUSVIER-1582] - Datei exisitert bereits oder kann nicht gespeichert werden.
+* [OPUSVIER-1584] - SolrSearch: All-Documents sortiert *aufsteigend* nach *ID*
+* [OPUSVIER-1586] - Security: Download von Dateien möglich , wenn freigegebene IP-Range bekannt
+* [OPUSVIER-1590] - Fehlermeldung beim Hochladen nicht zugelassener Dateien als solche kennzeichnen
+* [OPUSVIER-1594] - www-data hat keine Schreibrechte für migrierte Dokumente 
+* [OPUSVIER-1616] - Installations-Script: "chown" schlägt unter Ubuntu fehl, wenn keine gleichnamige Gruppe existiert
+* [OPUSVIER-1631] - Fehler beim Zugriff auf Dokument 123 im Adminbereich (/admin/document/index/id/123)
+* [OPUSVIER-1640] - Security Realm durch Interface abstrahieren um den Realm für Tests mocken zu können
+* [OPUSVIER-1642] - Keine Lizenzen zur Auswahl im Adminbereich
+* [OPUSVIER-1643] - Filebrowser im Admin-Bereich überprüft Dateitypen (ps Dateien können nicht importiert werden)
+* [OPUSVIER-1646] - Filemanager: Dateinamen werden falsch/nicht escaped
+* [OPUSVIER-1651] - Dateinamen vor dem Abspeichern in der Datenbank mit urldecode behandeln
+* [OPUSVIER-1656] - direkten Aufruf von /solrsearch/index/results verhindern, z.B. durch Redirect auf /solrsearch/index/index
+* [OPUSVIER-1657] - ErrorController wirft Exception wenn der Error Code einer Exception kein HTTP Error Code ist
+* [OPUSVIER-1658] - Fehler beim Löschen einer Collection, die mindestens ein Kind besitzt
+* [OPUSVIER-1674] - Updateskript muss Zend-Caches (Translation, DB) löschen
+* [OPUSVIER-1675] - Dokumentation: Aufnahme eines weiteren Pakets unter Ubuntu 11.04
+* [OPUSVIER-1676] - cd-Befehl in Dokumentation Kap. 5.2.6 und Kap. 5.3.6 anpassen
+
+h3. Stories
+
+* [OPUSVIER-517] - Klärung von bibliothekarischen Fragen
+* [OPUSVIER-801] - Änderungen von Dokumenten
+* [OPUSVIER-894] - File-Manager: Link auf Volltext fehlt
+* [OPUSVIER-978] - Publish-Formular: Mehrfach belegte TMX-Schlüssel
+* [OPUSVIER-1213] - Print on Demand (PoD) Funktion
+* [OPUSVIER-1373] - Löschen der Dateien im Incoming-Verzeichnis
+* [OPUSVIER-1515] - SolrSearch: Nicht-erreichbarer Solr-Server sollte 503 Service Unavailable liefern
+* [OPUSVIER-1552] - Performance-Optimierung in der Frontdoor: Opus_Document nur einmal laden
+* [OPUSVIER-1564] - Kapitel "Finalizing your OPUS4 installation": PHP-Module "suhosin" und "xdebug"
+* [OPUSVIER-1591] - DB-Host- und DB-Port-Settings überarbeiten
+* [OPUSVIER-1600] - Rewritemap-Datei-Download durch robusteren Mechanismus ersetzen
+* [OPUSVIER-1601] - Frontdoor: Dateien sollen nach Label sortiert angezeigt werden
+* [OPUSVIER-1636] - Doku aufnehmen: Anlegen einer neuen Collection Role / Sammlung
+
+h3. Tasks
+
+* [OPUSVIER-304] - Validierung von Titel und Abstract in Abhängigkeit von der Dokumentsprache
+* [OPUSVIER-324] - Security: Hochgeladene PHP-Dateien werden ausgeführt
+* [OPUSVIER-873] - Mehrfachbelegt Felder in einer Tabellenzeile zusammenfassen
+* [OPUSVIER-874] - Personennamen: Vorname Nachname (ohne Komma)
+* [OPUSVIER-973] - Behandlung von Volltexten, die einer Zugriffsbeschränkung unterliegen
+* [OPUSVIER-1104] - Migrationsscript: Behandlung geänderter Download-Pfade
+* [OPUSVIER-1267] - Google-Scholar in module frontdoor aktivieren
+* [OPUSVIER-1307] - Unit-Tests für Opus_File_Plugin_GuestAccess erstellen
+* [OPUSVIER-1354] - Feld *CompletedYear* kann nicht auf NULL gesetzt werden
+* [OPUSVIER-1411] - Datumsformat ISO_8601 in Opus_Date erzwingen
+* [OPUSVIER-1423] - Alte OPUS3-Migrations-Dokumentation durchsehen und ggf. löschen
+* [OPUSVIER-1454] - Übersetzungen für die CollectionRoles in der Collection-Administration anzeigen
+* [OPUSVIER-1502] - Dokument-Metadaten bearbeiten: Aufspalten von "edit field" und "add field" im Dokument-Formular
+* [OPUSVIER-1509] - Code-Duplication und Division-By-Zero im Solrsearch_IndexController beseitigen
+* [OPUSVIER-1523] - Admin-Navigation: Benutzerverwaltung
+* [OPUSVIER-1526] - Testdokument anlegen für "MailToAuthor" Funktion
+* [OPUSVIER-1527] - DNB-Institution in den Testdaten aufnehmen
+* [OPUSVIER-1532] - Update-Skript muss die Verschiebung der Rewrite-Rule aus der Apache-Config nach .htaccess beachten und Apache neustarten
+* [OPUSVIER-1534] - Multiplicity für Felder ThesisPublisher und ThesisGrantor anpassen
+* [OPUSVIER-1535] - Schlüssel für die Group-Felder bei ThesisPublisher und ThesisGrantor
+* [OPUSVIER-1547] - nicht mehr verwendete Codeteile in Zusammenhang mit der Abschaffung der Sammlungsauswahl im dritten Formularschritt aus Codebase entfernen
+* [OPUSVIER-1548] - Abfangen, wenn kein Titel in der Dokumentsprache eingegeben wurde
+* [OPUSVIER-1570] - Index-Schema-Änderung in OPUS 4.1.2 propagieren und Indexneubau anstoßen
+* [OPUSVIER-1593] - Admin darf beliebige Dateitypen hochladen
+* [OPUSVIER-1596] - Install-Skript muss Kommentarzeichen in config.ini und createdb.sh beim Setzen von DB-Host und -Port entfernen
+* [OPUSVIER-1598] - Defaultwerte für DB-Host und -Port im Installskript anpassen
+* [OPUSVIER-1602] - Aufräumen von DocumentsController und DocumentController
+* [OPUSVIER-1605] - Für Document URLs den neuen View Helper anstatt des Review DocumentAdapter verwenden
+* [OPUSVIER-1606] - Lange Schlagwortketten in der Frontddoor brechen nicht um
+* [OPUSVIER-1609] - Neuer Datei-Download: Fehlerbehalung/Fehler-Seiten
+* [OPUSVIER-1610] - Verschobenes Layout bei Dokumenten ohne Volltexte
+* [OPUSVIER-1619] - Verschobenes Layout bei Dokumenten ohne Titel
+* [OPUSVIER-1620] - Unit Test für neuen Delivery Mechanismus entwickeln
+* [OPUSVIER-1621] - Auftrennung der freien Schlagwörter nach Sprache
+* [OPUSVIER-1622] - erster Schritt des Refactoring
+* [OPUSVIER-1623] - OAI-Schnittstelle: Zurückgegebener Zeitstempel ungleich dem per from-until abgefragtem Zeitstempel
+* [OPUSVIER-1625] - Neuer Datei-Download: Klasse RewriteMap/Apache, etc. entfernen
+* [OPUSVIER-1626] - Neuer Datei-Download: Im Installer nachziehen
+* [OPUSVIER-1627] - Neuer Datei-Download: Im Update-Script nachziehen
+* [OPUSVIER-1628] - Neuer Datei-Download: Weiterer Fehlerfall Datei existiert in DB, aber nicht im Dateisystem
+* [OPUSVIER-1629] - Neuer Datei-Download: gelöschte Abhängigkeit zu mod_proxy aus Deb-Package entfernen
+* [OPUSVIER-1632] - Übersetzungsschlüssel für die Frontdoor beim Anlegen neuer Sammlungen soll auch aus dem default-Modul kommen
+* [OPUSVIER-1638] - Schitt 2: Session weiter entlasten
+* [OPUSVIER-1652] - Verbessertes Logging/Debugging bei der Migration
+* [OPUSVIER-1653] - Verbesserung: benutze statt temporärer Dateien besser inline replacing beim Aufruf von sed
+* [OPUSVIER-1654] - Anpassung des Deinstall-Skripts nach Überarbeitung von DB Host und Port
+* [OPUSVIER-1655] - Fehlerbehandlung im Deinstallationsskript einfügen, wenn Konfigurationsdateien nicht existieren
+
+h3. Documentation
+
+* [OPUSVIER-1020] - Anzeige der hochgeladenen Dateien
+* [OPUSVIER-1330] - Kapitel 8.3 Dokumenttypen überarbeiten
+* [OPUSVIER-1383] - Hinweis in Doku aufnehmen wie man Anzeige der Revision-Nummer auf den Webseiten verhindern kann
+* [OPUSVIER-1407] - Dokumentation erlaubter Zeichen
+* [OPUSVIER-1410] - Config-Parameter "startmodule" aus der Doku entfernen
+* [OPUSVIER-1424] - Hinweis in Dokumentation, dass ein Mailserver benötigt wird
+* [OPUSVIER-1432] - Dokumentation update-public
+* [OPUSVIER-1478] - geänderte Download-Pfade
+* [OPUSVIER-1483] - Konfigurationsvariable mail.opus.address muss gesetzt sein, damit OAI-Schnittstelle valides Ergebnis liefert
+* [OPUSVIER-1487] - Dokumentation: Rewrite-Rule für Datei-Download in .htaccess statt apache-config
+* [OPUSVIER-1491] - Hinweis zu den Feldern LinkLogo und LinkLicence aufnehmen
+* [OPUSVIER-1495] - Formatierungsanpassungen in der Doku
+* [OPUSVIER-1537] - Übersetzungsschlüssel für CollectionRoles-Bezeichnungen nach Module default verschoben
+* [OPUSVIER-1539] - Ablageort der Übersetzungsdatei für CollectionRoles wurde geändert
+* [OPUSVIER-1595] - Anpassung der Dokumentation nach Änderungen in config.ini.template
+* [OPUSVIER-1597] - Anpassung der Ausgaben des Installskriptes zu DB-Host und -Port
+* [OPUSVIER-1599] - Anpassung der Beschreibung zur manuellen Installation (im Zusammenhang mit DB-Host und DB-Port)
+* [OPUSVIER-1612] - Mapping Felder pro Dokumenttyp im Anhang der Doku ergänzen
+* [OPUSVIER-1624] - Neuer Datei-Download: Dokumentations-Änderungen
+* [OPUSVIER-1634] - Änderung des Translation Keys für die Übersetzung der Collection Roles in Module admin, frontdoor und browsing
+* [OPUSVIER-1644] - Hinweis zum Löschen der Dateien im Verzeichnis workspace/incoming aufnehmen
+* [OPUSVIER-1645] - Neue Sammlungen als Browsing-Felder im Publikationsformular
+* [OPUSVIER-1664] - Dokumentation Migration Zugriffsbeschränkung
+* [OPUSVIER-1665] - Dokumentation Migration Lizenzen
+
+
 h2. ======================== Release 4.1.1 2011-06-03 ========================
 
 h3. Bugfixes
