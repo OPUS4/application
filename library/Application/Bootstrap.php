@@ -259,7 +259,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             }
             $sessiondata->language = $language;
         }
-        $logger->info('Set language to "' . $sessiondata->language . '".');
+        $logger->debug('Set language to "' . $sessiondata->language . '".');
         $translate->setLocale($sessiondata->language);
         $this->translate = $translate;
 
