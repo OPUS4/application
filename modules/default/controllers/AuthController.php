@@ -78,6 +78,8 @@ class AuthController extends Controller_Action {
 
         // Initialize form.
         $form = $this->getLoginForm();
+        /* @var $logger Zend_Log */
+        $logger = Zend_Registry::get('Zend_Log');
 
         // check for return module, controller, action and parameteres, overwrite $_login_url.
         $rparams = $this->findReturnParameters();
@@ -126,6 +128,7 @@ class AuthController extends Controller_Action {
             $this->view->auth_failed_msg = $this->view->translate($message[0]);
 
             // Populate the form again to trigger validator decorators.
+            $logger->notice("Failed login attempt of user '" . ($data['login']) . "'.");
             $form->populate($data);
 
             $this->view->form = $form;
@@ -133,6 +136,7 @@ class AuthController extends Controller_Action {
         }
 
         // Persistent the successful authenticated identity.
+        $logger->notice("Successful login attempt of user '" . ($data['login']) . "'.");
         Zend_Auth::getInstance()->getStorage()->write($data['login']);
 
         // Redirect to post login url.
