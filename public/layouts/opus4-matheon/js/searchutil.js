@@ -27,7 +27,7 @@
  * @author      Julian Heise <heise@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: searchutil.js 8423 2011-05-27 16:58:20Z sszott $
  */
 
 function resetAdvancedSearchForm() {

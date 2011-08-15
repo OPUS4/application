@@ -30,7 +30,7 @@
  * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2010-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: common.phtml 8423 2011-05-27 16:58:20Z sszott $
  */
 
 $config = Zend_Registry::get('Zend_Config');
@@ -53,7 +53,20 @@ if (isset($this->title)) {
 $this->headLink()
     ->appendStylesheet($this->layoutPath() . '/css/opus.css')
     ->appendStylesheet($this->layoutPath() . '/css/admin.css')
-    ->headLink(array('rel' => 'shortcut icon', 'href' => $this->layoutPath() . '/img/logo/favicon.ico'));
+    ->headLink(array(
+        'rel' => 'shortcut icon',
+        'type' => 'image/x-icon',
+        'href' => $this->layoutPath() . '/img/logo/favicon.ico'))
+    ->headLink(array(
+        'rel' => 'search',
+        'title' => 'OPUS 4 Search',
+        'type' => 'application/opensearchdescription+xml',
+        'href' => $this->serverUrl() . $this->baseUrl() . '/solrsearch/opensearch'));
+
+/* 
+uncomment the following line if you want to enable your own layout changes
+$this->headLink()->appendStylesheet($this->layoutPath() . '/css/custom.css');
+*/
 
 $this->container = Zend_Registry::get('Opus_Navigation');
 
@@ -79,9 +92,14 @@ $languageSelectors = $this->languageSelector();
         <!--[if IE 6]>
         <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie.css" />
         <![endif]-->
+
+        <!--[if lt IE 9]>
+        <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie-7.css" />
+        <![endif]-->
     </head>
 
     <body>
+        <div id="container">
         <div id="top-header">
             <div class="wrapper">
                 <?php if(!is_null($languageSelectors)) : ?>
@@ -98,13 +116,13 @@ $languageSelectors = $this->languageSelector();
         <div id="header">
             <div class="wrapper">
                 <h1 id="logo">
-                    <a href="http://www.matheon.de/"><img src="<?= $this->layoutPath() ?>/img/theme/matheon-logo-de.jpg" alt="OPUS" title="Home" width="331" height="89" /></a>
+                    <a href="http://www.matheon.de/"><img src="<?= $this->layoutPath() ?>/img/theme/matheon-logo-de.jpg" alt="Matheon" title="Home" width="331" height="89" /></a>
                 </h1>
                 <ul id="primary-nav" class="nav">
                 <?php foreach ($this->container as $page) : ?>
                     <?php $pageIsActive = $page->isActive(false); ?>
                     <li id="<?= $page->getId() ?>" class="<?= ($pageIsActive ? 'active ' : '').$page->getClass()?>">
-                        <a href="<?= $page->getHref() ?>" title="<?= $page->getTitle() ?>">
+                        <a href="<?= $page->getHref() ?>" title="<?= $this->translate($page->getTitle()) ?>">
                             <?php if($pageIsActive) : ?>
                             <em>
                             <?php endif ?>
@@ -119,14 +137,11 @@ $languageSelectors = $this->languageSelector();
             </div>
         </div>
 
-        <div id="content" class="opus <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>">
-
-
-                        <?  endif; ?>
+        <div id="content" class="opus <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
             <?php if (!is_null($this->flashMessenger)) : ?>
             <div class="messages">
                 <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
-                    <div class="<?= $message['level'] ?>"><?= htmlspecialchars($message['message']) ?></div>
+                    <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
                 <?php endforeach ?>
             </div>
             <?php endif ?>
@@ -141,21 +156,13 @@ $languageSelectors = $this->languageSelector();
                 <p id="logo-wrapper"><a href="http://www.kobv.de/opus4/" title="Opus4 Website"><img src="<?= $this->layoutPath() ?>/img/logo/logo_small.gif" alt="OPUS4 Logo" title="" width="69" height="29" /></a></p>
                 <ul id="secondary-nav" class="nav">
                     <li class="first"><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'contact'), null, true) ?>"><?= $this->translate('home_index_contact_actionname'); ?></a></li>
-                    <li class="first"><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'imprint'), null, true) ?>"><?= $this->translate('home_index_imprint_actionname') ?></a></li>
+                    <li><a href="<?= $this->url(array('module' => 'home', 'controller' => 'index', 'action' => 'imprint'), null, true) ?>"><?= $this->translate('home_index_imprint_actionname') ?></a></li>
                     <li class="last"><a href="<?= $this->url(array('module' => 'crawlers', 'controller' => 'sitelinks'), null, true) ?>">Sitelinks</a></li>
                 </ul>
                 <p id="copyright">&copy; <abbr xml:lang="de" title="Kooperativer Bibliotheksverbund Berlin-Brandenburg">KOBV</abbr> 2010-2011</p>
             </div>
         </div>
-
-<!--
-        <div class="debug revision">
-            <hr/>
-            <div class="wrapper">
-                <b>$Rev$</b>
-            </div>
-        </div>
--->
+    </div>
 
         <?php
             $dbprofiler = Zend_Registry::get('db_adapter')->getProfiler();
@@ -190,7 +197,12 @@ $languageSelectors = $this->languageSelector();
         <div class="debug session">
             <div class="wrapper">
                 <h2>Session</h2>
+
+<?php /* do not apply indentation here! */ ?>
+                <pre>
                 <?= Zend_Debug::dump($_SESSION, 'Session Data', false); ?>
+                </pre>
+
             </div>
         </div>
         <?php endif ?>
