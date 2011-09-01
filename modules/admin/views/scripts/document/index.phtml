@@ -74,7 +74,7 @@
         <legend>
             <?=$this->translate('admin_document_section_titles')?>
             <span class="editLink">
-                <a href="<?=$this->addUrls['titles']?>"><?=$this->addLabels['titles']?></a> / 
+                <a href="<?=$this->addUrls['titles']?>"><?=$this->addLabels['titles']?></a> /
                 <a href="<?=$this->editUrls['titles']?>"><?=$this->editLabels['titles']?></a>
             </span>
         </legend>
@@ -104,7 +104,7 @@
             <?=$this->translate('admin_document_section_abstracts')?>
             <span class="editLink">
                 <!--<a href="<?=$this->editUrls['abstracts']?>"><?=$this->editLabels['abstracts']?></a>-->
-                <a href="<?=$this->addUrls['abstracts']?>"><?=$this->addLabels['abstracts']?></a> / 
+                <a href="<?=$this->addUrls['abstracts']?>"><?=$this->addLabels['abstracts']?></a> /
                 <a href="<?=$this->editUrls['abstracts']?>"><?=$this->editLabels['abstracts']?></a>
             </span>
         </legend>
@@ -129,7 +129,7 @@
         <legend>
             <?=$this->translate('admin_document_section_persons')?>
             <span class="editLink">
-                <a href="<?=$this->addUrls['persons']?>"><?=$this->addLabels['persons']?></a> / 
+                <a href="<?=$this->addUrls['persons']?>"><?=$this->addLabels['persons']?></a> /
                 <a href="<?=$this->editUrls['persons']?>"><?=$this->editLabels['persons']?></a>
             </span>
         </legend>
@@ -174,7 +174,7 @@
         <legend>
             <?=$this->translate('admin_document_section_identifiers')?>
             <span class="editLink">
-                <a href="<?=$this->addUrls['identifiers']?>"><?=$this->addLabels['identifiers']?></a> / 
+                <a href="<?=$this->addUrls['identifiers']?>"><?=$this->addLabels['identifiers']?></a> /
                 <a href="<?=$this->editUrls['identifiers']?>"><?=$this->editLabels['identifiers']?></a>
             </span>
         </legend>
@@ -217,7 +217,7 @@
         <legend>
             <?=$this->translate('admin_document_section_licences')?>
             <span class="editLink">
-                <a href="<?=$this->addUrls['licences']?>"><?=$this->addLabels['licences']?></a> / 
+                <a href="<?=$this->addUrls['licences']?>"><?=$this->addLabels['licences']?></a> /
                 <a href="<?=$this->editUrls['licences']?>"><?=$this->editLabels['licences']?></a>
             </span>
         </legend>
@@ -261,7 +261,7 @@
         </div>
 
         <?PHP endforeach; ?>
-        
+
     </fieldset>
 
     <fieldset class="overview">
@@ -277,7 +277,7 @@
         <?PHP foreach($this->overviewHelper->getGroupedCollections() as $collectionRole => $collections) : ?>
 
         <div class="<?= ($rowIndex++ % 2) ? 'even' : 'odd' ?>">
-            <span class="label"><?=htmlspecialchars(Opus_CollectionRole::fetchByName($collectionRole)->getDisplayName())?></span>
+            <span class="label"><?=htmlspecialchars($this->translate('default_collection_role_' . Opus_CollectionRole::fetchByName($collectionRole)->getDisplayName()))?></span>
 
             <span class="value">
                 <?PHP foreach($collections as $index => $collection) : ?>
@@ -333,7 +333,7 @@
             <legend>
                 <?=$this->translate('admin_document_section_patents')?>
                 <span class="editLink">
-                    <a href="<?=$this->addUrls['patents']?>"><?=$this->addLabels['patents']?></a> / 
+                    <a href="<?=$this->addUrls['patents']?>"><?=$this->addLabels['patents']?></a> /
                     <a href="<?=$this->editUrls['patents']?>"><?=$this->editLabels['patents']?></a>
                 </span>
             </legend>
@@ -360,7 +360,7 @@
             <legend>
                 <?=$this->translate('admin_document_section_notes')?>
                 <span class="editLink">
-                    <a href="<?=$this->addUrls['notes']?>"><?=$this->addLabels['notes']?></a> / 
+                    <a href="<?=$this->addUrls['notes']?>"><?=$this->addLabels['notes']?></a> /
                     <a href="<?=$this->editUrls['notes']?>"><?=$this->editLabels['notes']?></a>
                 </span>
             </legend>
