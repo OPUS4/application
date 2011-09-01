@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,12 +25,13 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Tests
- * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @package     Module_Publish Unit Test
+ * @author      Susanne Gottwald <gottwald@zib.de>
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
 class Publish_DepositControllerTest extends ControllerTestCase {
 
     /**
@@ -98,7 +98,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
             14 => array('name' => 'Language', 'value' => 'deu'),
             15 => array('name' => 'SubjectUncontrolled1', 'value' => 'Keyword'),
             16 => array('name' => 'Note', 'value' => 'Dies ist ein Kommentar'),
-            17 => array('name' => 'Licence', 'value' => ''),
+            17 => array('name' => 'Licence', 'value' => 'ID:3'),
             18 => array('name' => 'IdentifierUrn', 'value' => 'blablup987'),
             19 => array('name' => 'Institute', 'value' => ''),
             20 => array('name' => 'ThesisGrantor', 'value' => ''),
@@ -127,7 +127,9 @@ class Publish_DepositControllerTest extends ControllerTestCase {
             43 => array('name' => 'ReferenceUrl', 'value' => 'blablup987'),
             44 => array('name' => 'ReferenceCrisLink', 'value' => 'blablup987'),
             45 => array('name' => 'ReferenceStdDoi', 'value' => 'blablup987'),
-            46 => array('name' => 'ReferenceSplashUrl', 'value' => 'blablup987')
+            46 => array('name' => 'ReferenceSplashUrl', 'value' => 'blablup987'),
+            47 => array('name' => 'Series1', 'value' => '15986'),
+            48 => array('name' => 'SeriesNumber1', 'value' => '3')
         );
         $session->elements = $elemente;
         $session->documentType = 'preprint';
@@ -154,6 +156,56 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $this->dispatch('/publish/deposit/confirm');
         $this->assertController('deposit');
         $this->assertAction('confirm');
+    }
+    
+        /**
+     * Method tests the deposit action with invalid POST request
+     * which leads to a Error Message and code 200
+     */
+    public function testDepositActionWithAbortInPost() {
+        $session = new Zend_Session_Namespace('Publish');
+        $elemente = array(
+            1 => array('name' => 'PersonSubmitterFirstName1', 'value' => 'Hans'),
+            2 => array('name' => 'PersonSubmitterLastName1', 'value' => 'Hansmann'),
+            3 => array('name' => 'PersonSubmitterEmail1', 'value' => 'test@mail.com'),
+            4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),            
+            5 => array('name' => 'EnrichmentLegalNotices', 'value' => '1'),
+            6 => array('name' => 'TitleMain1', 'value' => 'Irgendwas'),
+            7 => array('name' => 'TitleMainLanguage1', 'value' => 'deu')
+        );
+        
+        $session->elements = $elemente;
+        $session->documentType = 'preprint';
+        $doc = new Opus_Document();
+        $doc->setServerState('temporary');
+        $doc->setType('preprint');
+        $session->documentId = $doc->store();
+        
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'abort' => ''
+                ));
+
+        $this->dispatch('/publish/deposit/deposit');
+        $this->assertResponseCode(302);
+        $this->assertController('deposit');
+        $this->assertAction('deposit');
+    }
+    
+        /**
+     * @expectedException Publish_Model_FormDocumentNotFoundException
+     */
+    public function testStoreExistingDocument() {
+        $session = new Zend_Session_Namespace('Publish');
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $doc->setType('preprint');
+        $session->documentId = $doc->store();
+        
+        $deposit = new Publish_Model_Deposit();
+        $this->setExpectedException('Publish_Model_FormDocumentNotFoundException');
+                
     }
 }
 
