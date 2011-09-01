@@ -350,9 +350,11 @@ class Publish_Model_Validation {
         $licences = array();
         if (empty($this->licences)) {
             foreach ($dbLicences = Opus_Licence::getAll() as $lic) {
-                $name = $lic->getDisplayName();
-                $id = $lic->getId();
-                $licences["ID:" . $id] = $name;
+                if ($lic->getActive() == '1') {
+                    $name = $lic->getDisplayName();
+                    $id = $lic->getId();                
+                    $licences["ID:" . $id] = $name;
+                }
             }
             $this->licences = $licences;
             return $licences;
