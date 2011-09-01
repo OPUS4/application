@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
 <!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
 <tmx version="1.4">
- 
+
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
-  
+
   <body>
-  
+
      <tu tuid="Language">
       <tuv xml:lang="en">
         <seg>Language</seg>
@@ -15,7 +15,7 @@
         <seg>Sprache</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="en">
       <tuv xml:lang="en">
         <seg>English</seg>
@@ -24,7 +24,7 @@
         <seg>Englisch</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="de">
       <tuv xml:lang="en">
         <seg>German</seg>
@@ -33,7 +33,7 @@
         <seg>Deutsch</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="deu">
       <tuv xml:lang="en">
         <seg>German</seg>
@@ -42,7 +42,7 @@
         <seg>Deutsch</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="eng">
       <tuv xml:lang="en">
         <seg>English</seg>
@@ -51,7 +51,7 @@
         <seg>Englisch</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="fr">
       <tuv xml:lang="en">
         <seg>French</seg>
@@ -60,7 +60,7 @@
         <seg>Französisch</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="fra">
       <tuv xml:lang="en">
         <seg>French</seg>
@@ -69,7 +69,7 @@
         <seg>Französisch</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="it">
       <tuv xml:lang="en">
         <seg>Italian</seg>
@@ -78,7 +78,7 @@
         <seg>Italienisch</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="ita">
       <tuv xml:lang="en">
         <seg>Italian</seg>
@@ -87,7 +87,7 @@
         <seg>Italienisch</seg>
       </tuv>
     </tu>
-        
+
 	<tu tuid="pt">
       <tuv xml:lang="en">
         <seg>Portuguese</seg>
@@ -96,7 +96,7 @@
         <seg>Portugiesisch</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="por">
       <tuv xml:lang="en">
         <seg>Portuguese</seg>
@@ -105,7 +105,7 @@
         <seg>Portugiesisch</seg>
       </tuv>
     </tu>
-    
+
 	 <tu tuid="ru">
       <tuv xml:lang="en">
         <seg>Russian</seg>
@@ -114,7 +114,7 @@
         <seg>Russisch</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="rus">
       <tuv xml:lang="en">
         <seg>Russian</seg>
@@ -123,7 +123,7 @@
         <seg>Russisch</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="es">
       <tuv xml:lang="en">
         <seg>Spanish</seg>
@@ -132,7 +132,7 @@
         <seg>Spanisch</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="spa">
       <tuv xml:lang="en">
         <seg>Spanish</seg>
@@ -150,7 +150,7 @@
         <seg>Sonstiges</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="son">
       <tuv xml:lang="en">
         <seg>Misc.</seg>
@@ -159,7 +159,7 @@
         <seg>Sonstiges</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="Licence">
       <tuv xml:lang="en">
         <seg>Licence</seg>
@@ -168,7 +168,7 @@
         <seg>Lizenz</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="add_Licence">
       <tuv xml:lang="en">
         <seg>Add Licence</seg>
@@ -177,7 +177,7 @@
         <seg>Lizenz hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="remove_Licence">
       <tuv xml:lang="en">
         <seg>Remove Licence</seg>
@@ -186,24 +186,24 @@
         <seg>Lizenz entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="hint_Opus_Model_Filter_Licence">
       <tuv xml:lang="en">
-        <seg>Please select a license for your document. 
-        By choosing a license you decide which legal 
-        conditions will apply to the document you are 
+        <seg>Please select a license for your document.
+        By choosing a license you decide which legal
+        conditions will apply to the document you are
         publishing.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Bitte wählen Sie die Lizenz, unter der 
-        das Dokument veröffentlicht werden soll. 
-        Mit der Wahl der Lizenz entscheiden Sie, 
-        unter welchen Bedingungen das von Ihnen 
-        veröffentlichte Dokument zukünftig genutzt 
+        <seg>Bitte wählen Sie die Lizenz, unter der
+        das Dokument veröffentlicht werden soll.
+        Mit der Wahl der Lizenz entscheiden Sie,
+        unter welchen Bedingungen das von Ihnen
+        veröffentlichte Dokument zukünftig genutzt
         werden darf.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="File">
       <tuv xml:lang="en">
         <seg>File</seg>
@@ -212,7 +212,7 @@
         <seg>Datei</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="File(s)">
       <tuv xml:lang="en">
         <seg>File(s)</seg>
@@ -221,7 +221,7 @@
         <seg>Datei(en)</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="FileType">
       <tuv xml:lang="en">
         <seg>File Type</seg>
@@ -230,7 +230,7 @@
         <seg>Dateiart</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="PathName">
       <tuv xml:lang="en">
         <seg>Pathname</seg>
@@ -239,7 +239,7 @@
         <seg>Pfadname</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="HashType">
       <tuv xml:lang="en">
         <seg>Hashtype</seg>
@@ -248,7 +248,7 @@
         <seg>Prüfsummentyp</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="HashValue">
       <tuv xml:lang="en">
         <seg>Hashvalue</seg>
@@ -257,7 +257,7 @@
         <seg>Prüfsumme</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="SignatureValue">
       <tuv xml:lang="en">
         <seg>Signature</seg>
@@ -266,7 +266,7 @@
         <seg>Signatur</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="SignatureType">
       <tuv xml:lang="en">
         <seg>Type of signature</seg>
@@ -275,7 +275,7 @@
         <seg>Signaturtyp</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="POD">
       <tuv xml:lang="en">
         <seg>Order of printed copy</seg>
@@ -284,7 +284,7 @@
         <seg>Gedruckte Kopie bestellen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Active">
       <tuv xml:lang="en">
         <seg>Active</seg>
@@ -293,7 +293,7 @@
         <seg>Aktiv</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="CommentInternal">
       <tuv xml:lang="en">
         <seg>Internal Comment</seg>
@@ -302,7 +302,7 @@
         <seg>Interne Bermerkung</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="DescMarkup">
       <tuv xml:lang="en">
         <seg>Description in Markup</seg>
@@ -311,7 +311,7 @@
         <seg>Beschreibung als Markup</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="DescText">
       <tuv xml:lang="en">
         <seg>Description Text</seg>
@@ -320,7 +320,7 @@
         <seg>Beschreibungstext</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="LicenceLanguage">
       <tuv xml:lang="en">
         <seg>Language</seg>
@@ -329,7 +329,7 @@
         <seg>Sprache</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="LinkLicence">
       <tuv xml:lang="en">
         <seg>URI to Licence</seg>
@@ -338,7 +338,7 @@
         <seg>URI zur Lizenz</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Licence_NameLong">
       <tuv xml:lang="en">
         <seg>Document licence</seg>
@@ -347,7 +347,7 @@
         <seg>Lizenz des Dokuments</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="LinkLogo">
       <tuv xml:lang="en">
         <seg>URI to Logo</seg>
@@ -356,7 +356,7 @@
         <seg>URI zum Logo</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="LinkSign">
       <tuv xml:lang="en">
         <seg>Link to Sign</seg>
@@ -365,7 +365,7 @@
         <seg>Link zum Vertrag</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="MimeType">
       <tuv xml:lang="en">
         <seg>Internet Media Type</seg>
@@ -374,7 +374,7 @@
         <seg>Internet Media Typ</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="NameLong">
       <tuv xml:lang="en">
         <seg>Licence Name</seg>
@@ -383,7 +383,7 @@
         <seg>Lizenzname</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Role">
       <tuv xml:lang="en">
         <seg>Role</seg>
@@ -392,7 +392,7 @@
         <seg>Funktion</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="SortOrder">
       <tuv xml:lang="en">
         <seg>Sort Order</seg>
@@ -401,7 +401,7 @@
         <seg>Sortierreihenfolge</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="AllowEmailContact">
       <tuv xml:lang="en">
         <seg>E-Mail contact allowed</seg>
@@ -410,7 +410,7 @@
         <seg>E-Mail-Kontakt erlaubt</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="PodAllowed">
       <tuv xml:lang="en">
         <seg>Print on Demand</seg>
@@ -419,7 +419,7 @@
         <seg>Print on Demand</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="ContributingCorporation">
       <tuv xml:lang="en">
         <seg>Contributing Corporation</seg>
@@ -437,7 +437,7 @@
         <seg>Beteiligte Körperschaft hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="remove_ContributingCorporation">
       <tuv xml:lang="en">
         <seg>remove Contributing Corporation</seg>
@@ -464,7 +464,7 @@
         <seg>Urhebende Körperschaft hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="remove_CreatingCorporation">
       <tuv xml:lang="en">
         <seg>remove Creating Corporation</seg>
@@ -473,7 +473,7 @@
         <seg>Urhebende Körperschaft entfernen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="ThesisDateAccepted">
       <tuv xml:lang="en">
         <seg>Date of final exam</seg>
@@ -482,7 +482,7 @@
         <seg>Datum der Abschlussprüfung</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="add_ThesisDateAccepted">
       <tuv xml:lang="en">
         <seg>Add date of final exam</seg>
@@ -491,7 +491,7 @@
         <seg>Datum der Abschlussprüfung hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="remove_ThesisDateAccepted">
       <tuv xml:lang="en">
         <seg>Remove date of final exam</seg>
@@ -500,7 +500,7 @@
         <seg>Datum der Abschlussprüfung entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="Type">
       <tuv xml:lang="en">
         <seg>Document Type</seg>
@@ -509,7 +509,7 @@
         <seg>Dokumentart</seg>
       </tuv>
      </tu>
-     
+
     <tu tuid="Opus_Document_Type">
       <tuv xml:lang="en">
         <seg>Document Type</seg>
@@ -537,6 +537,33 @@
       </tuv>
      </tu>
 
+     <tu tuid="Opus_Title_Type">
+      <tuv xml:lang="en">
+        <seg>Title Type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titelart</seg>
+      </tuv>
+     </tu>
+
+     <tu tuid="Opus_Title">
+      <tuv xml:lang="en">
+        <seg>Title</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel</seg>
+      </tuv>
+     </tu>
+
+     <tu tuid="Opus_TitleAbstract">
+      <tuv xml:lang="en">
+        <seg>Abstract</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Abstrakt</seg>
+      </tuv>
+     </tu>
+
      <tu tuid="SubjectSwd">
       <tuv xml:lang="en">
         <seg>SWD-Keyword</seg>
@@ -545,18 +572,18 @@
         <seg>SWD-Schlagwort</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="hint_SubjectSwd">
       <tuv xml:lang="en">
-        <seg>Please insert SWD-keywords here. 
+        <seg>Please insert SWD-keywords here.
         You have to determine them external at
-        the moment. We will integrate the 
+        the moment. We will integrate the
         OSWD later.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Bitte vergeben Sie SWD-Schlagwörter 
-        für Ihr Dokument. Momentan müssen Sie diese 
-        noch extern ermitteln. Später wird die OSWD 
+        <seg>Bitte vergeben Sie SWD-Schlagwörter
+        für Ihr Dokument. Momentan müssen Sie diese
+        noch extern ermitteln. Später wird die OSWD
         wieder eingebunden</seg>
       </tuv>
     </tu>
@@ -569,7 +596,7 @@
         <seg>SWD-Schlagwort hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="remove_SubjectSwd">
       <tuv xml:lang="en">
         <seg>remove SWD-Keyword</seg>
@@ -578,7 +605,7 @@
         <seg>SWD-Schlagwort entfernen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="SubjectMSC">
       <tuv xml:lang="en">
         <seg>MSC-Classfication</seg>
@@ -596,7 +623,7 @@
         <seg>MSC-Schlagwort hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="remove_SubjectMSC">
       <tuv xml:lang="en">
         <seg>remove MSC-Keyword</seg>
@@ -605,7 +632,7 @@
         <seg>MSC-Schlagwort entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="SubjectDDC">
       <tuv xml:lang="en">
         <seg>DDC Term</seg>
@@ -623,7 +650,7 @@
         <seg>DDC Sachgruppe hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="remove_SubjectDDC">
       <tuv xml:lang="en">
         <seg>remove DDC Term</seg>
@@ -632,7 +659,7 @@
         <seg>DDC Sachgruppe entfernen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="SubjectUncontrolled">
       <tuv xml:lang="en">
         <seg>Tag</seg>
@@ -641,16 +668,16 @@
         <seg>Freies Schlagwort / Tag</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="hint_add_SubjectUncontrolled">
       <tuv xml:lang="en">
-        <seg>You can index your document with free 
+        <seg>You can index your document with free
         English keywords here.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Sie können hier freie Schlagwörter eingeben.</seg>
       </tuv>
-    </tu>  
+    </tu>
 
     <tu tuid="add_SubjectUncontrolled">
       <tuv xml:lang="en">
@@ -660,7 +687,7 @@
         <seg>Freies Schlagwort hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="remove_SubjectUncontrolled">
       <tuv xml:lang="en">
         <seg>remove Tag</seg>
@@ -669,7 +696,7 @@
         <seg>Freies Schlagwort entfernen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="SubjectPsyndex">
       <tuv xml:lang="en">
         <seg>Psyndex Keyword</seg>
@@ -687,7 +714,7 @@
         <seg>Psyndex-Schlagwort hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="remove_SubjectPsyndex">
       <tuv xml:lang="en">
         <seg>remove Psyndex Keyword</seg>
@@ -696,7 +723,7 @@
         <seg>Psyndex-Schlagwort entfernen</seg>
       </tuv>
     </tu>
-    
+
      <tu tuid="Edition">
       <tuv xml:lang="en">
         <seg>Edition</seg>
@@ -704,7 +731,7 @@
       <tuv xml:lang="de">
         <seg>Auflage</seg>
       </tuv>
-      
+
     </tu>
       <tu tuid="Issue">
       <tuv xml:lang="en">
@@ -714,7 +741,7 @@
         <seg>Ausgabe / Heft</seg>
       </tuv>
     </tu>
-       
+
     <tu tuid="PageFirst">
       <tuv xml:lang="en">
         <seg>First Page</seg>
@@ -723,7 +750,7 @@
         <seg>Erste Seite</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="PageLast">
       <tuv xml:lang="en">
         <seg>Last Page</seg>
@@ -732,7 +759,7 @@
         <seg>Letzte Seite</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="PageNumber">
       <tuv xml:lang="en">
         <seg>Pagenumber</seg>
@@ -741,7 +768,7 @@
         <seg>Seitenzahl</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="CompletedYear">
       <tuv xml:lang="en">
         <seg>Year of Completion</seg>
@@ -768,7 +795,7 @@
         <seg>Titel verleihende Institution hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="remove_ThesisGrantor">
       <tuv xml:lang="en">
         <seg>Remove Granting Institution</seg>
@@ -777,7 +804,7 @@
         <seg>Titel verleihende Institution entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="ThesisPublisher">
       <tuv xml:lang="en">
         <seg>Publishing Institution</seg>
@@ -795,7 +822,7 @@
         <seg>Veröffentlichende Institution hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="remove_ThesisPublisher">
       <tuv xml:lang="en">
         <seg>remove Publishing Institution</seg>
@@ -804,7 +831,7 @@
         <seg>Veröffentlichende Institution entfernen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="PublishedYear">
       <tuv xml:lang="en">
         <seg>Year of first Publication</seg>
@@ -813,7 +840,7 @@
         <seg>Jahr der Erstveröffentlichung</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="add_PublishedYear">
       <tuv xml:lang="en">
         <seg>Add year of first Publication</seg>
@@ -822,7 +849,7 @@
         <seg>Jahr der Erstveröffentlichung hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="remove_PublishedYear">
       <tuv xml:lang="en">
         <seg>Remove year of first Publication</seg>
@@ -831,7 +858,7 @@
         <seg>Jahr der Erstveröffentlichung entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="PublishedDate">
       <tuv xml:lang="en">
         <seg>Date of first Publication</seg>
@@ -840,7 +867,7 @@
         <seg>Datum der Erstveröffentlichung</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="add_PublishedDate">
       <tuv xml:lang="en">
         <seg>Add date of first Publication</seg>
@@ -849,7 +876,7 @@
         <seg>Datum der Erstveröffentlichung hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="remove_PublishedDate">
       <tuv xml:lang="en">
         <seg>Remove date of first Publication</seg>
@@ -858,7 +885,7 @@
         <seg>Datum der Erstveröffentlichung entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="CompletedDate">
       <tuv xml:lang="en">
         <seg>Date of Publication (online)</seg>
@@ -867,7 +894,7 @@
         <seg>Datum der Veröffentlichung (online)</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="add_CompletedDate">
       <tuv xml:lang="en">
         <seg>Add date of Publication (online)</seg>
@@ -876,7 +903,7 @@
         <seg>Datum der Veröffentlichung (online) hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="remove_CompletedDate">
       <tuv xml:lang="en">
         <seg>Remove date of Publication (online)</seg>
@@ -885,7 +912,7 @@
         <seg>Datum der Veröffentlichung (online) entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="Reviewed">
       <tuv xml:lang="en">
         <seg>Style of Review</seg>
@@ -912,7 +939,7 @@
         <seg>Status</seg>
       </tuv>
     </tu>
- 
+
     <tu tuid="ServerDateCreated">
       <tuv xml:lang="en">
         <seg>Date of Creation</seg>
@@ -921,7 +948,7 @@
         <seg>Datum der Erstellung</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="add_ServerDateCreated">
       <tuv xml:lang="en">
         <seg>Add Date of Creation</seg>
@@ -930,7 +957,7 @@
         <seg>Datum der Erstellung hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="remove_ServerDateCreated">
       <tuv xml:lang="en">
         <seg>Remove Date of Creation</seg>
@@ -939,7 +966,7 @@
         <seg>Datum der Erstellung entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="ServerDateModified">
       <tuv xml:lang="en">
         <seg>Date of Last Modification (Server)</seg>
@@ -948,7 +975,7 @@
         <seg>Datum der letzen Änderung (Server)</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="ServerDatePublished">
       <tuv xml:lang="en">
         <seg>Date of the Publication (Server)</seg>
@@ -957,7 +984,7 @@
         <seg>Datum der Publikation (Server)</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="ServerDateDeleted">
       <tuv xml:lang="en">
         <seg>Date of Deletion</seg>
@@ -966,7 +993,7 @@
         <seg>Löschdatum</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="add_ServerDateDeleted">
       <tuv xml:lang="en">
         <seg>Add Date of Deletion</seg>
@@ -975,7 +1002,7 @@
         <seg>Löschdatum hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="remove_ServerDateDeleted">
       <tuv xml:lang="en">
         <seg>Remove Date of Deletion</seg>
@@ -984,7 +1011,7 @@
         <seg>Löschdatum entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="ServerDateValid">
       <tuv xml:lang="en">
         <seg>Valid until</seg>
@@ -993,7 +1020,7 @@
         <seg>Gültig bis</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Source">
       <tuv xml:lang="en">
         <seg>Source</seg>
@@ -1002,7 +1029,7 @@
         <seg>Quelle</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="IdentifierOpac">
       <tuv xml:lang="en">
         <seg>Opac Id</seg>
@@ -1020,7 +1047,7 @@
         <seg>Opac Id hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="remove_IdentifierOpac">
       <tuv xml:lang="en">
         <seg>remove Opac Id</seg>
@@ -1029,7 +1056,7 @@
         <seg>Opac Id entfernen</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="IdentifierArxiv">
       <tuv xml:lang="en">
         <seg>ArXiv Id</seg>
@@ -1038,7 +1065,7 @@
         <seg>ArXiv-Id</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="add_IdentifierArxiv">
       <tuv xml:lang="en">
         <seg>Add ArXiv Id</seg>
@@ -1047,7 +1074,7 @@
         <seg>ArXiv-Id hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="remove_IdentifierArxiv">
       <tuv xml:lang="en">
         <seg>remove ArXiv Id</seg>
@@ -1056,7 +1083,7 @@
         <seg>ArXiv-Id entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="IdentifierPubmed">
       <tuv xml:lang="en">
         <seg>Pubmed Id</seg>
@@ -1065,7 +1092,7 @@
         <seg>Pubmed-Id</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="add_IdentifierPubmed">
       <tuv xml:lang="en">
         <seg>Add Pubmed Id</seg>
@@ -1074,7 +1101,7 @@
         <seg>Pubmed-Id hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="remove_IdentifierPubmed">
       <tuv xml:lang="en">
         <seg>remove Pubmed Id</seg>
@@ -1083,7 +1110,7 @@
         <seg>Pubmed-Id entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="VgWortPixelUrl">
       <tuv xml:lang="en">
         <seg>URL for Pixel in VG Wort</seg>
@@ -1092,7 +1119,7 @@
         <seg>URl für Zählpixel in VG Wort</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Volume">
       <tuv xml:lang="en">
         <seg>Volume</seg>
@@ -1101,7 +1128,7 @@
         <seg>Jahrgang</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="DocumentId">
       <tuv xml:lang="en">
         <seg>Document ID</seg>
@@ -1119,7 +1146,7 @@
         <seg>Titel</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="TitleMainValue">
       <tuv xml:lang="en">
         <seg>Title</seg>
@@ -1127,8 +1154,8 @@
       <tuv xml:lang="de">
         <seg>Titel</seg>
       </tuv>
-    </tu>    
-    
+    </tu>
+
     <tu tuid="hint_Opus_Model_Filter_TitleMain">
       <tuv xml:lang="en">
         <seg>Please insert Title here.</seg>
@@ -1136,8 +1163,8 @@
       <tuv xml:lang="de">
         <seg>Geben Sie hier bitte den Titel ein.</seg>
       </tuv>
-    </tu> 
-    
+    </tu>
+
     <tu tuid="add_TitleMain">
       <tuv xml:lang="en">
         <seg>add Title</seg>
@@ -1146,7 +1173,7 @@
         <seg>Titel hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_TitleMain">
       <tuv xml:lang="en">
         <seg>remove Title</seg>
@@ -1155,7 +1182,7 @@
         <seg>Titel entfernen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="TitleParent">
       <tuv xml:lang="en">
         <seg>Parent Title</seg>
@@ -1173,7 +1200,7 @@
         <seg>Titel des übergeordneten Werkes hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_TitleParent">
       <tuv xml:lang="en">
         <seg>remove Parent Title</seg>
@@ -1182,7 +1209,7 @@
         <seg>Titel des übergeordneten Werkes entfernen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="TitleParentValue">
       <tuv xml:lang="en">
         <seg>Parent Title</seg>
@@ -1191,7 +1218,7 @@
         <seg>Titel des übergeordneten Werks.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="hint_Opus_Model_Filter_TitleParent">
       <tuv xml:lang="en">
         <seg>Please insert the Parent Title.</seg>
@@ -1200,7 +1227,7 @@
         <seg>Geben Sie bitte den Titel des übergeordneten Werks ein</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="TitleAbstract">
       <tuv xml:lang="en">
         <seg>Abstract</seg>
@@ -1209,7 +1236,7 @@
         <seg>Zusammenfassung</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="hint_TitleAbstract">
       <tuv xml:lang="en">
         <seg>Insert an abstract, please!</seg>
@@ -1227,7 +1254,7 @@
         <seg>Zusammenfassung hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_TitleAbstract">
       <tuv xml:lang="en">
         <seg>remove Abstract</seg>
@@ -1236,7 +1263,7 @@
         <seg>Zusammenfassung entfernen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="TitleAbstractLanguage">
       <tuv xml:lang="en">
         <seg>Language</seg>
@@ -1245,7 +1272,7 @@
         <seg>Sprache</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="TitleAbstractValue">
       <tuv xml:lang="en">
         <seg>Abstract</seg>
@@ -1272,7 +1299,7 @@
         <seg>übersetzter Titel</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="hint_Opus_Model_Filter_TitleAdditional">
       <tuv xml:lang="en">
         <seg>Please insert a translated Title.</seg>
@@ -1280,8 +1307,8 @@
       <tuv xml:lang="de">
         <seg>Geben Sie bitte einen übersetzten Titel</seg>
       </tuv>
-    </tu>   
-    
+    </tu>
+
     <tu tuid="add_TitleAdditional">
       <tuv xml:lang="en">
         <seg>add Title Additional</seg>
@@ -1290,7 +1317,7 @@
         <seg>übersetzten Titel hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_TitleAdditional">
       <tuv xml:lang="en">
         <seg>remove Titel Additional</seg>
@@ -1299,7 +1326,7 @@
         <seg>übersetzten Titel entfernen</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="TitleSub">
       <tuv xml:lang="en">
         <seg>Subtitle</seg>
@@ -1308,7 +1335,7 @@
         <seg>Untertitel</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="add_TitleSub">
       <tuv xml:lang="en">
         <seg>add Subtitle</seg>
@@ -1317,7 +1344,7 @@
         <seg>Untertitel hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_TitleSub">
       <tuv xml:lang="en">
         <seg>remove Subtitel</seg>
@@ -1326,7 +1353,7 @@
         <seg>Untertitel entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="IdentifierOld">
       <tuv xml:lang="en">
         <seg>old Identifier</seg>
@@ -1344,7 +1371,7 @@
         <seg>alten Identifier hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_IdentifierOld">
       <tuv xml:lang="en">
         <seg>remove old Identifier</seg>
@@ -1353,7 +1380,7 @@
         <seg>alten Identifier entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="IdentifierIsbn">
       <tuv xml:lang="en">
         <seg>ISBN</seg>
@@ -1371,7 +1398,7 @@
         <seg>ISBN hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_IdentifierIsbn">
       <tuv xml:lang="en">
         <seg>remove ISBN</seg>
@@ -1380,7 +1407,7 @@
         <seg>ISBN entfernen</seg>
       </tuv>
     </tu>
-     
+
 	<tu tuid="IdentifierSerial">
       <tuv xml:lang="en">
         <seg>Serial Number</seg>
@@ -1398,7 +1425,7 @@
         <seg>Bandnummer hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_IdentifierSerial">
       <tuv xml:lang="en">
         <seg>remove Serial Number</seg>
@@ -1407,7 +1434,7 @@
         <seg>Bandnummer entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="IdentifierIssn">
       <tuv xml:lang="en">
         <seg>ISSN</seg>
@@ -1425,7 +1452,7 @@
         <seg>ISSN hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_IdentifierIssn">
       <tuv xml:lang="en">
         <seg>remove ISSN</seg>
@@ -1434,7 +1461,7 @@
         <seg>ISSN entfernen</seg>
       </tuv>
     </tu>
-            
+
     <tu tuid="IdentifierUuid">
       <tuv xml:lang="en">
         <seg>Uuid</seg>
@@ -1452,7 +1479,7 @@
         <seg>Uuid hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_IdentifierUuid">
       <tuv xml:lang="en">
         <seg>remove Uuid</seg>
@@ -1479,7 +1506,7 @@
         <seg>URN hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_IdentifierUrn">
       <tuv xml:lang="en">
         <seg>remove URN</seg>
@@ -1488,7 +1515,7 @@
         <seg>URN entfernen</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="IdentifierDoi">
       <tuv xml:lang="en">
         <seg>DOI</seg>
@@ -1506,7 +1533,7 @@
         <seg>DOI hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_IdentifierDoi">
       <tuv xml:lang="en">
         <seg>remove DOI</seg>
@@ -1515,7 +1542,7 @@
         <seg>DOI entfernen</seg>
       </tuv>
     </tu>
-	
+
      <tu tuid="IdentifierValue">
       <tuv xml:lang="en">
         <seg>URN or ISBN</seg>
@@ -1524,7 +1551,7 @@
         <seg>URN oder ISBN</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="IdentifierHandle">
       <tuv xml:lang="en">
         <seg>Handle</seg>
@@ -1542,7 +1569,7 @@
         <seg>Handle hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_IdentifierHandle">
       <tuv xml:lang="en">
         <seg>remove Handle</seg>
@@ -1551,7 +1578,7 @@
         <seg>Handle entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="IdentifierUrl">
       <tuv xml:lang="en">
         <seg>URL</seg>
@@ -1569,7 +1596,7 @@
         <seg>URL hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_IdentifierUrl">
       <tuv xml:lang="en">
         <seg>remove URL</seg>
@@ -1578,7 +1605,7 @@
         <seg>URL entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="IdentifierStdDoi">
       <tuv xml:lang="en">
         <seg>STD-DOI</seg>
@@ -1596,7 +1623,7 @@
         <seg>STD-DOI hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_IdentifierStdDoi">
       <tuv xml:lang="en">
         <seg>remove STD-DOI</seg>
@@ -1605,7 +1632,7 @@
         <seg>STD-DOI entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="IdentifierCrisLink">
       <tuv xml:lang="en">
         <seg>CRIS-Link</seg>
@@ -1623,7 +1650,7 @@
         <seg>CRIS-Link hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_IdentifierCrisLink">
       <tuv xml:lang="en">
         <seg>remove CRIS-Link</seg>
@@ -1632,7 +1659,7 @@
         <seg>CRIS-Link entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="IdentifierSplashUrl">
       <tuv xml:lang="en">
         <seg>SplashURL</seg>
@@ -1650,7 +1677,7 @@
         <seg>SplashURL hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_IdentifierSplashUrl">
       <tuv xml:lang="en">
         <seg>remove SplashURL</seg>
@@ -1659,7 +1686,7 @@
         <seg>SplashURL entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="SubjectSwdValue">
       <tuv xml:lang="en">
         <seg>SWD Keywords</seg>
@@ -1668,7 +1695,7 @@
         <seg>SWD Schlagwörter</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="SubjectUncontrolledValue">
       <tuv xml:lang="en">
         <seg>Uncontrolled Keywords</seg>
@@ -1677,7 +1704,7 @@
         <seg>Freie Schlagwörter</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="ReferenceIsbn">
       <tuv xml:lang="en">
         <seg>Reference ISBN</seg>
@@ -1694,8 +1721,8 @@
       <tuv xml:lang="de">
         <seg>Referenz-ISBN hinzufügen</seg>
       </tuv>
-    </tu> 
-    
+    </tu>
+
 	<tu tuid="remove_ReferenceIsbn">
       <tuv xml:lang="en">
         <seg>remove Reference ISBN</seg>
@@ -1704,7 +1731,7 @@
         <seg>Referenz-ISBN entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="ReferenceUrn">
       <tuv xml:lang="en">
         <seg>Reference URN</seg>
@@ -1721,8 +1748,8 @@
       <tuv xml:lang="de">
         <seg>Referenz-URN hinzufügen</seg>
       </tuv>
-    </tu> 
-    
+    </tu>
+
 	<tu tuid="remove_ReferenceUrn">
       <tuv xml:lang="en">
         <seg>remove Reference URN</seg>
@@ -1731,7 +1758,7 @@
         <seg>Referenz-URN entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="ReferenceDoi">
       <tuv xml:lang="en">
         <seg>Reference DOI</seg>
@@ -1748,8 +1775,8 @@
       <tuv xml:lang="de">
         <seg>Referenz-DOI hinzufügen</seg>
       </tuv>
-    </tu> 
-    
+    </tu>
+
 	<tu tuid="remove_ReferenceDoi">
       <tuv xml:lang="en">
         <seg>remove Reference DOI</seg>
@@ -1758,7 +1785,7 @@
         <seg>Referenz-DOI entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="ReferenceHandle">
       <tuv xml:lang="en">
         <seg>Reference Handle</seg>
@@ -1775,8 +1802,8 @@
       <tuv xml:lang="de">
         <seg>Referenz-Handle hinzufügen</seg>
       </tuv>
-    </tu> 
-    
+    </tu>
+
 	<tu tuid="remove_ReferenceHandle">
       <tuv xml:lang="en">
         <seg>remove Reference Handle</seg>
@@ -1785,7 +1812,7 @@
         <seg>Referenz-Handle entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="ReferenceUrl">
       <tuv xml:lang="en">
         <seg>Reference URL</seg>
@@ -1802,8 +1829,8 @@
       <tuv xml:lang="de">
         <seg>Referenz-URL hinzufügen</seg>
       </tuv>
-    </tu> 
-    
+    </tu>
+
 	<tu tuid="remove_ReferenceUrl">
       <tuv xml:lang="en">
         <seg>remove Reference URL</seg>
@@ -1812,7 +1839,7 @@
         <seg>Referenz-URL entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="ReferenceIssn">
       <tuv xml:lang="en">
         <seg>Reference ISSN</seg>
@@ -1829,8 +1856,8 @@
       <tuv xml:lang="de">
         <seg>Referenz-ISSN hinzufügen</seg>
       </tuv>
-    </tu> 
-    
+    </tu>
+
 	<tu tuid="remove_ReferenceIssn">
       <tuv xml:lang="en">
         <seg>remove Reference ISSN</seg>
@@ -1839,7 +1866,7 @@
         <seg>Referenz-ISSN entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="ReferenceStdDoi">
       <tuv xml:lang="en">
         <seg>Reference STD-DOI</seg>
@@ -1856,8 +1883,8 @@
       <tuv xml:lang="de">
         <seg>Referenz-STD-DOI hinzufügen</seg>
       </tuv>
-    </tu> 
-    
+    </tu>
+
 	<tu tuid="remove_ReferenceStdDoi">
       <tuv xml:lang="en">
         <seg>remove Reference STD-DOI</seg>
@@ -1866,7 +1893,7 @@
         <seg>Referenz-STD-DOI entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="ReferenceCrisLink">
       <tuv xml:lang="en">
         <seg>Reference CRIS-Link</seg>
@@ -1883,8 +1910,8 @@
       <tuv xml:lang="de">
         <seg>Referenz-CRIS-Link hinzufügen</seg>
       </tuv>
-    </tu> 
-    
+    </tu>
+
 	<tu tuid="remove_ReferenceCrisLink">
       <tuv xml:lang="en">
         <seg>remove Reference CRIS-Link</seg>
@@ -1893,7 +1920,7 @@
         <seg>Referenz-CRIS-Link entfernen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="ReferenceSplashUrl">
       <tuv xml:lang="en">
         <seg>Reference SplashURL</seg>
@@ -1910,8 +1937,8 @@
       <tuv xml:lang="de">
         <seg>Referenz-SplashURL hinzufügen</seg>
       </tuv>
-    </tu> 
-    
+    </tu>
+
 	<tu tuid="remove_ReferenceSplashUrl">
       <tuv xml:lang="en">
         <seg>remove Reference SplashURL</seg>
@@ -1920,7 +1947,7 @@
         <seg>Referenz-SplashURL entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="SubjectPsyndexValue">
       <tuv xml:lang="en">
         <seg>Psyndex Keywords</seg>
@@ -1929,7 +1956,7 @@
         <seg>Psyndex-Schlagwörter</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Note">
       <tuv xml:lang="en">
         <seg>Note</seg>
@@ -1947,7 +1974,7 @@
         <seg>Bemerkung hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_Note">
       <tuv xml:lang="en">
         <seg>remove Note</seg>
@@ -1956,7 +1983,7 @@
         <seg>Bemerkung entfernen</seg>
       </tuv>
     </tu>
-                    
+
     <tu tuid="Message">
       <tuv xml:lang="en">
         <seg>Message</seg>
@@ -1965,7 +1992,7 @@
         <seg>Text</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Creator">
       <tuv xml:lang="en">
         <seg>Creator</seg>
@@ -1974,7 +2001,7 @@
         <seg>Verfasser</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Scope">
       <tuv xml:lang="en">
         <seg>Scope</seg>
@@ -1983,7 +2010,7 @@
         <seg>Geltungsbereich</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Patent">
       <tuv xml:lang="en">
         <seg>Patent Specifications</seg>
@@ -1992,7 +2019,7 @@
         <seg>Patentinformationen</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="add_Patent">
       <tuv xml:lang="en">
         <seg>Add Patent Specifications</seg>
@@ -2001,7 +2028,7 @@
         <seg>Patentinformationen hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="remove_Patent">
       <tuv xml:lang="en">
         <seg>Remove Patent Specifications</seg>
@@ -2010,7 +2037,7 @@
         <seg>Patentinformationen entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="Countries">
       <tuv xml:lang="en">
         <seg>Country of Patent Application</seg>
@@ -2019,7 +2046,7 @@
         <seg>Land der Patentanmeldung</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="DateGranted">
       <tuv xml:lang="en">
         <seg>Date of Patent Granted</seg>
@@ -2028,7 +2055,7 @@
         <seg>Datum der Patenterteilung</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="add_DateGranted">
       <tuv xml:lang="en">
         <seg>Add date of Patent Granted</seg>
@@ -2037,7 +2064,7 @@
         <seg>Datum der Patenterteilung hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="remove_DateGranted">
       <tuv xml:lang="en">
         <seg>Remove date of Patent Granted</seg>
@@ -2046,7 +2073,7 @@
         <seg>Datum der Patenterteilung entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="Number">
       <tuv xml:lang="en">
         <seg>Number</seg>
@@ -2073,7 +2100,7 @@
         <seg>Nummer, Name</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="YearApplied">
       <tuv xml:lang="en">
         <seg>Patent Year applied</seg>
@@ -2082,7 +2109,7 @@
         <seg>Jahr der Anmeldung</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Application">
       <tuv xml:lang="en">
         <seg>PatentApplication</seg>
@@ -2091,7 +2118,7 @@
         <seg>Patentanmeldung</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Enrichment">
       <tuv xml:lang="en">
         <seg>Enrichment</seg>
@@ -2100,7 +2127,7 @@
         <seg>Erweiterung</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="add_Enrichment">
       <tuv xml:lang="en">
         <seg>Add Enrichment</seg>
@@ -2109,7 +2136,7 @@
         <seg>Erweiterung hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="removeEnrichment">
       <tuv xml:lang="en">
         <seg>Remove Enrichment</seg>
@@ -2118,7 +2145,7 @@
         <seg>Erweiterung entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="EnrichmentType">
       <tuv xml:lang="en">
         <seg>Enrichment Type</seg>
@@ -2127,7 +2154,7 @@
         <seg>Typ der Erweiterung</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="PersonAuthor">
       <tuv xml:lang="en">
         <seg>Author</seg>
@@ -2145,7 +2172,7 @@
         <seg>Autor hinzufügen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="remove_PersonAuthor">
       <tuv xml:lang="en">
         <seg>remove Author</seg>
@@ -2154,7 +2181,7 @@
         <seg>Autor entfernen</seg>
       </tuv>
     </tu>
-        
+
     <tu tuid="PersonEditor">
       <tuv xml:lang="en">
         <seg>Editor</seg>
@@ -2172,7 +2199,7 @@
         <seg>Herausgeber hinzufügen</seg>
       </tuv>
     </tu>
-            
+
     <tu tuid="remove_PersonEditor">
       <tuv xml:lang="en">
         <seg>remove Editor</seg>
@@ -2181,7 +2208,7 @@
         <seg>Herausgeber entfernen</seg>
       </tuv>
     </tu>
-            
+
     <tu tuid="PersonAdvisor">
       <tuv xml:lang="en">
         <seg>Advisor</seg>
@@ -2199,7 +2226,7 @@
         <seg>Betreuer hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="remove_PersonAdvisor">
       <tuv xml:lang="en">
         <seg>remove Advisor</seg>
@@ -2208,7 +2235,7 @@
         <seg>Betreuer entfernen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="PersonContributor">
       <tuv xml:lang="en">
         <seg>Contributor</seg>
@@ -2217,7 +2244,7 @@
         <seg>Sonstige beteiligte Person</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="add_PersonContributor">
       <tuv xml:lang="en">
         <seg>add Contributor</seg>
@@ -2244,7 +2271,7 @@
         <seg>Gutachter</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="add_PersonReferee">
       <tuv xml:lang="en">
         <seg>add Referee</seg>
@@ -2253,7 +2280,7 @@
         <seg>Gutachter hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="remove_PersonReferee">
       <tuv xml:lang="en">
         <seg>remove Referee</seg>
@@ -2262,7 +2289,7 @@
         <seg>Gutachter entfernen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="PersonTranslator">
       <tuv xml:lang="en">
         <seg>Translator</seg>
@@ -2271,7 +2298,7 @@
         <seg>Übersetzer</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="add_PersonTranslator">
       <tuv xml:lang="en">
         <seg>add Translator</seg>
@@ -2280,7 +2307,7 @@
         <seg>Übersetzer hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="remove_PersonTranslator">
       <tuv xml:lang="en">
         <seg>remove Translator</seg>
@@ -2289,7 +2316,7 @@
         <seg>Übersetzer entfernen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="PersonOther">
       <tuv xml:lang="en">
         <seg>Other Person(s)</seg>
@@ -2298,7 +2325,7 @@
         <seg>Weitere Person</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="add_PersonOther">
       <tuv xml:lang="en">
         <seg>add Other Person</seg>
@@ -2307,7 +2334,7 @@
         <seg>weitere Person hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="remove_PersonOther">
       <tuv xml:lang="en">
         <seg>remove Other Person</seg>
@@ -2316,7 +2343,7 @@
         <seg>weitere Person entfernen</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="PersonSubmitter">
       <tuv xml:lang="en">
         <seg>Submitter</seg>
@@ -2325,7 +2352,7 @@
         <seg>Einsteller</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="add_PersonSubmitter">
       <tuv xml:lang="en">
         <seg>add Submitter</seg>
@@ -2334,7 +2361,7 @@
         <seg>Einsteller hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="remove_PersonSubmitter">
       <tuv xml:lang="en">
         <seg>remove Submitter</seg>
@@ -2343,7 +2370,7 @@
         <seg>Einsteller entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="AcademicTitle">
       <tuv xml:lang="en">
         <seg>Academic Title</seg>
@@ -2352,7 +2379,7 @@
         <seg>Akademischer Grad</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="DateOfBirth">
       <tuv xml:lang="en">
         <seg>Date of Birth</seg>
@@ -2361,7 +2388,7 @@
         <seg>Geburtsdatum</seg>
       </tuv>
     </tu>
-    
+
 	<tu tuid="add_DateOfBirth">
       <tuv xml:lang="en">
         <seg>Add date of Birth</seg>
@@ -2370,7 +2397,7 @@
         <seg>Geburtsdatum hinzufügen</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="remove_DateOfBirth">
       <tuv xml:lang="en">
         <seg>Remove date of Birth</seg>
@@ -2379,7 +2406,7 @@
         <seg>Geburtsdatum entfernen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="PlaceOfBirth">
       <tuv xml:lang="en">
         <seg>Place of Birth</seg>
@@ -2388,7 +2415,7 @@
         <seg>Geburtsort</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Email">
       <tuv xml:lang="en">
         <seg>E-Mail</seg>
@@ -2397,7 +2424,7 @@
         <seg>E-Mail</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="PersonName">
       <tuv xml:lang="en">
         <seg>Name</seg>
@@ -2406,7 +2433,7 @@
         <seg>Name</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="FirstName">
       <tuv xml:lang="en">
         <seg>First Name</seg>
@@ -2415,7 +2442,7 @@
         <seg>Vorname</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="hint_FirstName">
       <tuv xml:lang="en">
         <seg>If possible, please write out the first name, too.</seg>
@@ -2423,8 +2450,8 @@
       <tuv xml:lang="de">
         <seg>Bitte schreiben Sie wenn möglich auch den Vornamen vollständig aus.</seg>
       </tuv>
-    </tu>    
-    
+    </tu>
+
     <tu tuid="LastName">
       <tuv xml:lang="en">
         <seg>Last Name</seg>
@@ -2433,7 +2460,7 @@
         <seg>Nachname</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="Value">
       <tuv xml:lang="en">
         <seg>Value</seg>
@@ -2442,7 +2469,7 @@
         <seg>Text</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="PublicationVersion">
       <tuv xml:lang="en">
         <seg>Version of Publication</seg>
@@ -2451,7 +2478,7 @@
         <seg>Publikationsversion</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="PublisherPlace">
       <tuv xml:lang="en">
         <seg>Place of publication</seg>
@@ -2460,7 +2487,7 @@
         <seg>Verlagsort</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="PublisherName">
       <tuv xml:lang="en">
         <seg>Publisher</seg>
@@ -2604,7 +2631,7 @@
         <seg>Neu</seg>
       </tuv>
     </tu>
-                        
+
     <tu tuid="ButtonShow">
       <tuv xml:lang="en">
         <seg>Show</seg>
@@ -2631,7 +2658,7 @@
         <seg>Dieses Feld enthält die Hauptsprache des Werkes</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="hint_Opus_Model_Filter_Language">
       <tuv xml:lang="en">
         <seg>Select the language</seg>
