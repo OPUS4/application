@@ -352,8 +352,10 @@ class Publish_Model_FormHelper {
     public function getExtendedForm($postData=null, $reload=true) {
         $this->view->currentAnchor = "";
         if ($reload === true) {
-            //find out which button was pressed
+            
+            //find out which button was pressed            
             $pressedButtonName = $this->_getPressedButton();
+            
             if (substr($pressedButtonName, 0, 7) == "addMore") {
                 $fieldName = substr($pressedButtonName, 7);
                 $workflow = 'add';
@@ -466,7 +468,7 @@ class Publish_Model_FormHelper {
         }
 
         if ($pressedButtonName == "")
-            throw new Publish_Model_OpusServerException("No pressed button found! Possibly the values of the buttons are not equal in the view and Publish class.");
+            throw new Publish_Model_FormNoButtonFoundException();
         else
             return $pressedButtonName;
     }

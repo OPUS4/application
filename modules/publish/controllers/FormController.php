@@ -168,7 +168,14 @@ class Publish_FormController extends Controller_Action {
                 $this->_helper->viewRenderer($this->session->documentType);
                 $form->setView($this->view);
                 //call method to add or delete buttons
-                return $form->getExtendedForm($postData, $reload);
+                try {
+                    return $form->getExtendedForm($postData, $reload);
+                } 
+                catch (Publish_Model_FormNoButtonFoundException $e) {
+                    $this->view->translateKey = $e->getTranslateKey();
+                    return $this->render('error');
+                }
+                
             }
 
             // SEND was pressed => check the form

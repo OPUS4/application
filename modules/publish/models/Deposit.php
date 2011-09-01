@@ -49,7 +49,7 @@ class Publish_Model_Deposit {
 
         if ($this->document->getServerState() !== 'temporary') {
             $this->log->err('Could not find document: Tried to return document, which is not in state "temporary"');
-            throw new Publish_Model_OpusServerException('Could not find document.');
+            throw new Publish_Model_FormDocumentNotFoundException();
         }
 
         $this->_storeDocumentData();
@@ -442,8 +442,7 @@ class Publish_Model_Deposit {
      * @param <Array> $formValues
      * @param <String> $dataKey current Element of formValues
      * @param <Array> $externalFields
-     * @return <Array> $formValues
-     * @throws Publish_Model_OpusServerException
+     * @return <Array> $formValues     
      */
     private function _prepareCollectionObject($dataKey, $dataValue) {
         if ($dataValue == "") {
@@ -509,7 +508,6 @@ class Publish_Model_Deposit {
      * @param <String> $dataKey current Element of formValues
      * @param <Array> $externalFields
      * @return <Array> $formValues
-     * @throws Publish_Model_OpusServerException
      */
     private function _prepareSeriesObject($dataKey, $dataValue) {
         if ($dataValue == "") {
