@@ -95,7 +95,7 @@ class Admin_DocumentController extends Controller_Action {
 
         if (!empty($id) && is_numeric($id)) {
             $model = new Opus_Document($id);
-            
+
             $filter = new Opus_Model_Filter();
             $filter->setModel($model);
             $blacklist = array('PublicationState');
@@ -108,7 +108,7 @@ class Admin_DocumentController extends Controller_Action {
             $this->view->overviewHelper = new Admin_Model_DocumentHelper($model);
 
             $this->view->docId = $id;
-            
+
             if (!empty($model)) {
                 $this->prepareActionLinks($model);
             }
@@ -158,7 +158,7 @@ class Admin_DocumentController extends Controller_Action {
 
     /**
      * Prepares rendering of add form for document metadata child model.
-     * 
+     *
      * @return type Target script
      */
     public function addAction() {
@@ -180,7 +180,7 @@ class Admin_DocumentController extends Controller_Action {
 
         if ($this->getRequest()->isPost()) {
             $postData = $this->getRequest()->getPost();
-            
+
             $document = new Opus_Document($id);
 
             foreach ($postData as $modelClass => $fields) {
@@ -306,7 +306,7 @@ class Admin_DocumentController extends Controller_Action {
             ));
         }
     }
-    
+
     /**
      * Publishes a document
      *
@@ -375,7 +375,7 @@ class Admin_DocumentController extends Controller_Action {
                     	$model->deletePermanent();
                     }
                     catch (Exception $e) {
-                    	$this->_redirectTo('index', $e->getMessage(), 'documents', 'admin');
+                    	$this->_redirectTo('index', array('failure' => $e->getMessage()), 'documents', 'admin');
                     }
                     $this->_redirectTo('index', $this->view->translate('admin_documents_permanent_delete_success'), 'documents', 'admin');
             	}
@@ -394,7 +394,7 @@ class Admin_DocumentController extends Controller_Action {
             $this->_redirectTo('index', null, 'documents', 'admin');
         }
     }
-    
+
     /**
      * Unpublishes a document
      *
@@ -472,7 +472,7 @@ class Admin_DocumentController extends Controller_Action {
             $this->view->form = $yesnoForm;
         }
     }
-    
+
     /**
      * Updates values of fields and models.
      */
@@ -604,7 +604,7 @@ class Admin_DocumentController extends Controller_Action {
             ));
         }
     }
-    
+
     /**
      * Removes a document from a collection.
      *
@@ -641,7 +641,7 @@ class Admin_DocumentController extends Controller_Action {
         $message = $this->view->translate('admin_document_remove_collection_success', $deletedCollectionName);
 
         $this->_redirectTo('edit', $message, 'document', 'admin', $params);
-    }    
+    }
 
     protected function populateModel($model, $fieldValues) {
         foreach($fieldValues as $fieldName => $value) {
@@ -687,17 +687,17 @@ class Admin_DocumentController extends Controller_Action {
      */
     public function prepareActionLinks($model) {
         $actions = array();
-        
+
         $docId = $model->getId();
         $docHelper = new Review_Model_DocumentAdapter($this->view, $model);
-        
+
         $documentUrl = $this->view->documentUrl();
-        
+
         $action = array();
         $action['label'] = 'admin_documents_open_frontdoor';
         $action['url'] = $documentUrl->frontdoor($docId);
         $actions['frontdoor'] = $action;
-        
+
         // TODO should always be shown, or?
         if ($docHelper->hasFiles()) {
             $action = array();
@@ -712,15 +712,15 @@ class Admin_DocumentController extends Controller_Action {
 //        $action['label'] = 'admin_document_access';
 //        $action['url'] = $docHelper->getUrlAccessManager();
 //        $actions['access'] = $action;
-        
-        if ($docHelper->getDocState() === 'unpublished' || 
-                $docHelper->getDocState() === 'restricted' || 
+
+        if ($docHelper->getDocState() === 'unpublished' ||
+                $docHelper->getDocState() === 'restricted' ||
                 $docHelper->getDocState() === 'inprogress') {
             $action = array();
             $action['label'] = 'admin_doc_delete';
             $action['url'] = $documentUrl->adminDelete($docId);
             $actions['delete'] = $action;
-            
+
             $action = array();
             $action['label'] = 'admin_documents_publish';
             $action['url'] = $documentUrl->adminPublish($docId);
@@ -839,7 +839,7 @@ class Admin_DocumentController extends Controller_Action {
                 'section' => $section
             ));
             $form->setAction($addUrl);
-            
+
             if (!empty($sectionModel)) {
                 $form->addSubForm($addForm, $sectionModel);
             }
@@ -904,7 +904,7 @@ class Admin_DocumentController extends Controller_Action {
                 }
                 break;
         }
-        
+
         $updateUrl = $this->view->url(array(
             'action' => 'update',
             'id' => $model->getId(),
@@ -924,16 +924,16 @@ class Admin_DocumentController extends Controller_Action {
         $reset = new Zend_Form_Element_Reset('reset');
         $reset->setLabel('admin_document_button_reset');
         $form->addElement($reset);
-        
+
         return $form;
     }
 
     /**
      * Returns form for asking yes/no question like 'Delete file?'.
-     * 
+     *
      * @param type $id
      * @param type $action
-     * @return Admin_Form_YesNoForm 
+     * @return Admin_Form_YesNoForm
      */
     protected function _getConfirmationForm($id, $action) {
         $yesnoForm = new Admin_Form_YesNoForm();
