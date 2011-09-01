@@ -222,5 +222,39 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         }
     }
 
+    /**
+     * Test that proves the bugfix for OPUSVIER-1710 is working as intended.
+     */
+    public function testGetDeletedDocument() {
+        $r = Opus_UserRole::fetchByName('guest');
+
+        $modules = $r->listAccessModules();
+        $addOaiModuleAccess = !in_array('oai', $modules);
+        if ($addOaiModuleAccess) {
+            $r->appendAccessModule('oai');
+            $r->store();
+        }
+
+        // enable security
+        $config = Zend_Registry::get('Zend_Config');
+        $security = $config->security;
+        $config->security = '1';
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::123');
+        
+        if ($addOaiModuleAccess) {
+            $r->removeAccessModule('oai');
+            $r->store();
+        }
+
+        // restore security settings
+        $config->security = $security;
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->assertResponseCode(500);
+        $this->assertNotContains('<error>Unauthorized: Access to module not allowed.</error>', $this->getResponse()->getBody());
+        $this->assertNotContains('<error code="unknown">An internal error occured.</error>', $this->getResponse()->getBody());
+    }
 
 }
