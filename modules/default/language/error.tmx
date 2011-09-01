@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
 <tmx version="1.4">
- 
+
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
- 
+
   <body>
 
     <tu tuid="error_search_unavailable">
@@ -64,6 +64,16 @@
         </tuv>
     </tu>
 
+    <tu tuid="wrong_identity_error">
+        <!-- Text for alreaded uploaded files -->
+        <tuv xml:lang="en">
+            <seg>You need another identity to access this page.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sie dürfen nicht auf diese Seite zugreifen.</seg>
+        </tuv>
+    </tu>
+
   </body>
-  
+
 </tmx>
