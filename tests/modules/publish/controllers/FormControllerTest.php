@@ -26,12 +26,13 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Tests
+ * @package     Module_Publish Unit Test
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
 class Publish_FormControllerTest extends ControllerTestCase {
 
      /**
@@ -70,7 +71,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'Note' => '',
                     'Language' => 'deu',
                     'Licence' => 'ID:4',
-                    'send' => 'Next step'
+                    'send' => 'Weiter zum nächsten Schritt'
                 ));
 
         $this->dispatch('/publish/form/check');
