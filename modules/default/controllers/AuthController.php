@@ -45,7 +45,7 @@ class AuthController extends Controller_Action {
      *
      * @var array
      */
-    protected $_login_url = array('action' => 'index', 'controller' => 'index', 'module' => 'admin', 'params' => array());
+    protected $_login_url = array('action' => 'index', 'controller' => 'index', 'module' => 'home', 'params' => array());
     /**
      * Default URL to goto after successful logout. Maybe overwritten by findRemoteParameters().
      *
