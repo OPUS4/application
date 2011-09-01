@@ -149,22 +149,13 @@ class AuthController extends Controller_Action {
     }
 
     /**
-     * Logout action performs logout and redirects to the page configured by $_logout_url.
+     * Logout action performs logout and redirects to home module.
      *
      * @return void
      */
     public function logoutAction() {
         Zend_Auth::getInstance()->clearIdentity();
-        // check for return module, controller, action and parameters. Overwrite $_logout_url.
-        $this->findReturnParameters();
-        $action = $this->_logout_url['action'];
-        $controller = $this->_logout_url['controller'];
-        $module = $this->_logout_url['module'];
-        $params = $this->_logout_url['params'];
-        if($module === 'admin') {
-            return $this->_helper->_redirector('index', 'index', 'home');
-        }
-        return $this->_helper->_redirector($action, $controller, $module, $params);
+        return $this->_helper->_redirector('index', 'index', 'home');
     }
 
     /**
