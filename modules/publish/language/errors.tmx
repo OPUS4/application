@@ -327,8 +327,7 @@
         </tuv>
     </tu>
 
-
-     <tu tuid="template_error_unknown_field">
+    <tu tuid="template_error_unknown_field">
       <tuv xml:lang="en">
         <seg>You try to create an unknown form element. 1) Please check the variable name. 2) Single elements (ex: Lanuage, Identifier) are called by element 3) Multiple elements of a group are valled by group (ex: Persons, Titles, Multiplicity=*)</seg>
       </tuv>
@@ -337,5 +336,40 @@
       </tuv>
     </tu>
 
+    <tu tuid="publish_form_check_no_button">
+      <tuv xml:lang="en">
+        <seg>Error during form transmit</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehler bei der Formularübermittlung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_no_pressed_button_found">
+      <tuv xml:lang="en">
+        <seg>No button detected. Possibly, the form page was reloaded after a field was added or deleted. Please start publishing again.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Es wurde leider kein Button erkannt. Eventuell wurde nach dem Hinzufügen oder Löschen eines Feldes ein Reload der Formular-Seite ausgeführt. Bitte beginnen den Veröffentlichungsprozess erneut.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_form_second_timeout_parsing">
+      <tuv xml:lang="en">
+        <seg>Session Timeout. Please start publishing process again.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Session Timeout. Bitte beginnen Sie die Veröffentlichung erneut.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_bo_document_found">
+      <tuv xml:lang="en">
+        <seg>The document cannotbe stored. It has not a proper document state.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument kann leider nicht gespeichert werden, da es sich nicht in einem korrekten Zustand befindet.</seg>
+      </tuv>
+    </tu>
     </body>
 </tmx>
