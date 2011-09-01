@@ -301,7 +301,7 @@ class Publish_Model_FormElement {
                 }
             }
 
-            $element->setRequired($this->required);
+            $element->setRequired($this->required);            
 
             if (isset($this->default[0]['value']) && !empty($this->default[0]['value'])) {
                 $element->setValue($this->default[0]['value']);
@@ -340,7 +340,7 @@ class Publish_Model_FormElement {
 
         switch ($switchVar) {
             case 'Collection':
-                $element->setMultiOptions(array_merge(array('___EMPTY' => 'choose_valid_collection'), $options));
+                $element->setMultiOptions(array_merge(array('' => 'choose_valid_collection'), $options));
                 break;
             case 'Licence' :
                 $element->setMultiOptions(array_merge(array('' => 'choose_valid_licence'), $options));
@@ -350,13 +350,7 @@ class Publish_Model_FormElement {
                     $element->setMultiOptions(array_merge(array('' => 'choose_valid_language'), $options));
                 else
                     $element->setMultiOptions(array_merge(array('' => 'inherit_document_language'), $options));
-                break;
-            case 'Project' : //deprecated
-                $element->setMultiOptions(array_merge(array('' => 'choose_valid_project'), $options));
-                break;
-            case 'Institute' : //deprecated
-                $element->setMultiOptions(array_merge(array('' => 'choose_valid_institute'), $options));
-                break;
+                break;            
             case 'ThesisGrantor' :
                 $element->setMultiOptions(array_merge(array('' => 'choose_valid_thesisgrantor'), $options));
                 break;
