@@ -68,7 +68,13 @@ class Controller_Action extends Zend_Controller_Action {
         $this->__redirector = $this->_helper->getHelper('Redirector');
         $this->__flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $this->view->flashMessenger = $this->__flashMessenger;
+    }
 
+    /**
+     * Use pre-dispatch to check user access rights *before* action is called.
+     */
+    public function preDispatch() {
+        parent::preDispatch();
         $this->checkAccessModulePermissions();
     }
 
@@ -150,7 +156,7 @@ class Controller_Action extends Zend_Controller_Action {
      * @return void
      */
     protected function checkAccessModulePermissions() {
-        $logger = $this->_logger;
+        $logger = Zend_Registry::get('Zend_Log');
         $module = $this->_request->getModuleName();
 
         $logger->debug("starting authorization check for module '$module'");
@@ -158,13 +164,13 @@ class Controller_Action extends Zend_Controller_Action {
         // Check, controller-specific constraints...
         if (true !== $this->customAccessCheck()) {
             $logger->debug("FAILED custom authorization check for module '$module'");
-            $this->rejectRequest();
+            return $this->rejectRequest();
         }
 
         // Check, if the user has the right privileges...
         if (true !== Opus_Security_Realm::getInstance()->checkModule($module)) {
             $logger->debug("FAILED authorization check for module '$module'");
-            $this->rejectRequest();
+            return $this->rejectRequest();
         }
 
         $logger->debug("authorization check for module '$module' successful");

@@ -76,6 +76,13 @@ class Controller_Xml extends Zend_Controller_Action {
         $this->_xml = new DomDocument;
         $this->_proc = new XSLTProcessor;
 
+    }
+
+    /**
+     * Use pre-dispatch to check user access rights *before* action is called.
+     */
+    public function preDispatch() {
+        parent::preDispatch();
         $this->checkAccessModulePermissions();
     }
 
@@ -120,13 +127,13 @@ class Controller_Xml extends Zend_Controller_Action {
         // Check, controller-specific constraints...
         if (true !== $this->customAccessCheck()) {
             $logger->debug("FAILED custom authorization check for module '$module'");
-            $this->rejectRequest();
+            return $this->rejectRequest();
         }
 
         // Check, if the user has the right privileges...
         if (true !== Opus_Security_Realm::getInstance()->checkModule($module)) {
             $logger->debug("FAILED authorization check for module '$module'");
-            $this->rejectRequest();
+            return $this->rejectRequest();
         }
 
         $logger->debug("authorization check for module '$module' successful");
@@ -157,7 +164,7 @@ class Controller_Xml extends Zend_Controller_Action {
                 );
 
         $response->sendResponse();
-        exit();
+        $this->getRequest()->setDispatched(true);
     }
 
 }
