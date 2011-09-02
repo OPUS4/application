@@ -72,7 +72,9 @@ class Publish_Model_ExtendedValidation {
 
         $validSubjectLanguages = $this->_validateSubjectLanguages();
 
-        if ($validPersons && $validTitles && $validCheckboxes && $validSubjectLanguages)
+        $validCollection = $this->_validateCollectionLeafSelection();
+
+        if ($validPersons && $validTitles && $validCheckboxes && $validSubjectLanguages && $validCollection)
             return true;
         else
             return false;
@@ -157,8 +159,7 @@ class Publish_Model_ExtendedValidation {
                             }
                         }
                     }
-                }
-                else {
+                } else {
                     $this->data[$key] = "";
                     $this->data[$titleName] = "";
                 }
@@ -279,8 +280,7 @@ class Publish_Model_ExtendedValidation {
                         $element->setValue($this->documentLanguage);
                         //store the new value in $data array
                         $this->data[$languageKey] = $this->documentLanguage;
-                    }
-                    else {
+                    } else {
                         //error: no document language set -> throw error message
                         if (!$element->isRequired()) {
                             if (!$element->hasErrors()) {
@@ -314,8 +314,7 @@ class Publish_Model_ExtendedValidation {
                 if ((int) $lastChar >= 1) {
                     $titleType = substr($key, 0, strlen($key) - 1);
                     $languageKey = substr($key, 0, strlen($key) - 1) . 'Language' . $lastChar;
-                }
-                else {
+                } else {
                     $titleType = $key;
                     $languageKey = $key . 'Language';
                 }
@@ -327,8 +326,7 @@ class Publish_Model_ExtendedValidation {
 
                     if (isset($languagesPerTitleType[$index])) {
                         $languagesPerTitleType[$index] = $languagesPerTitleType[$index] + 1;
-                    }
-                    else {
+                    } else {
                         $languagesPerTitleType[$index] = 1;
                     }
 
@@ -367,8 +365,7 @@ class Publish_Model_ExtendedValidation {
                 if ((int) $lastChar >= 1) {
                     $titleType = substr($key, 0, strlen($key) - 1); //z.B. TitleMain
                     $languageKey = substr($key, 0, strlen($key) - 1) . 'Language' . $lastChar;
-                }
-                else {
+                } else {
                     $titleType = $key;
                     $languageKey = $key . 'Language';
                 }
@@ -376,7 +373,7 @@ class Publish_Model_ExtendedValidation {
                 if (!array_key_exists($titleType, $titlesWithDocLanguage))
                     $titlesWithDocLanguage[$titleType] = 0; // 0 means no doc language
 
-                    if ($this->data[$languageKey] != "" && $this->data[$languageKey] == $docLanguage) {
+                if ($this->data[$languageKey] != "" && $this->data[$languageKey] == $docLanguage) {
                     $titlesWithDocLanguage[$titleType] = $titlesWithDocLanguage[$titleType] + 1;
                 }
             }
@@ -455,8 +452,7 @@ class Publish_Model_ExtendedValidation {
                         $element->setValue($this->documentLanguage);
                         //store the new value in $data array
                         $this->data[$languageKey] = $this->documentLanguage;
-                    }
-                    else {
+                    } else {
                         //error: no document language set -> throw error message
                         if (!$element->isRequired()) {
                             if (!$element->hasErrors()) {
@@ -519,6 +515,46 @@ class Publish_Model_ExtendedValidation {
     public function getValidatedValues() {
         return $this->data;
     }
+
+    public function _validateCollectionLeafSelection() {
+        $collectionLeafSelection = true;
+        $elements = $this->form->getElements();
+
+        foreach ($elements AS $element) {
+            /* @var $element Zend_Form_Element */
+            if ($element->getAttrib('collectionLeaf') !== true) {
+                continue;
+            }
+
+            $elementName = $element->getName();
+            if (isset($this->session->additionalFields['step' . $elementName])) {
+                $step = (int) $this->session->additionalFields['step' . $elementName];
+                if ($step >= 2) {
+                    $element = $this->form->getElement('collId' . $step . $elementName);
+                }
+            }
+            
+            $matches = array();
+            if (preg_match('/^ID:(\d+)$/', $element->getValue(), $matches) == 0) {
+                continue;
+            }
+                       
+            $collId = $matches[1];
+            
+            if (isset($collId)) {
+                $coll = new Opus_Collection($collId);
+                if ($coll->hasChildren()) {
+                    if (isset($element)) {
+                        $element->clearErrorMessages();
+                        $element->addError('publish_error_collection_leaf_required');
+                        $collectionLeafSelection = false;
+                    }
+                }
+            }
+        }
+        return $collectionLeafSelection;
+    }
+
 }
 
 ?>

@@ -32,11 +32,6 @@
  * @version     $Id$
  */
 
-/**
- * Description of Group
- *
- * @author Susanne Gottwald
- */
 class Publish_Model_DisplayGroup {
 
     public $label;
@@ -44,6 +39,7 @@ class Publish_Model_DisplayGroup {
     public $form;
     public $isBrowseField = false;
     public $collectionIds = array();
+    public $collectionLeaf = false;
     public $implicitGroup = false;
     private $elementName;
     private $additionalFields;
@@ -123,11 +119,13 @@ class Publish_Model_DisplayGroup {
                 else {
                     //only clone special fields
                     if ($element->getName() === $this->elementName) {
-                        //clone the "root selection"
+                        //clone the "root selection"                        
                         $elem = clone $element;
+                        $this->log->debug("BrowseGroup: " . $element->getName() . " | leaf gesetzt? " . $element->getAttrib('collectionLeaf'));
+                        $this->log->debug("BrowseGroup: " . $elem->getName() . " | leaf gesetzt nach clone? " . $elem->getAttrib('collectionLeaf'));
                         $elem->setName($this->elementName . $i);
                         if (isset($this->session->additionalFields['collId1' . $this->elementName . $i])) {
-                            $elem->setValue('ID:' . $this->session->additionalFields['collId1' . $this->elementName . $i]);
+                            $elem->setValue('ID:' . $this->session->additionalFields['collId1' . $this->elementName . $i]);                            
                         }
                         if ($currentStep !== 1) {
                             //make top steps disabled
@@ -261,7 +259,7 @@ class Publish_Model_DisplayGroup {
                 $id = $this->session->additionalFields['collId' . $prev . $this->elementName . $fieldset];
 
                 if ($id != '0' || !is_null($id)) {
-                    //insert to array and geneerate field
+                    //insert to array and generate field
                     $this->collectionIds[] = $id;
                     $selectfield = $this->collectionEntries((int) $id, $j, $fieldset);
                     if (!is_null($selectfield))
@@ -300,15 +298,30 @@ class Publish_Model_DisplayGroup {
         $colls = $collection->getChildren();
 
         if (!is_null($colls) && count($colls) >= 1) {
+            //at least one children exist
             $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName . $fieldset);
             $selectField->setLabel('choose_collection_subcollection');
+            
             $children = array();
             foreach ($colls as $coll) {
-                $children['ID:' . $coll->getId()] = $coll->getDisplayName();
+                if ($coll->getVisible() == 1) {
+                    //$hasChildrenText = $coll->hasChildren() ? "(has children)" : "(no children)";
+                    
+//                    $parentStrings = array();
+//                    foreach ($coll->getParents() AS $collection_parent) {
+//                        $parentStrings[] = $collection_parent->getNumber();
+//                    }
+//                    array_pop($parentStrings);
+//                    
+//                    $debugParentsText = "[".  implode(" -> ", $parentStrings)."]";
+
+                    $children['ID:' . $coll->getId()] = $coll->getDisplayName();// . " " . $hasChildrenText . " " . $debugParentsText;
+                }
             }
             $selectField->setMultiOptions($children);
         }
         else {
+            //end of collection reached
             $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName . $fieldset);
             $selectField->setLabel('endOfCollectionTree');
             $selectField->setAttrib('disabled', true);

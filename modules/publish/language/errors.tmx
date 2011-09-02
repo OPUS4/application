@@ -365,10 +365,19 @@
 
     <tu tuid="publish_bo_document_found">
       <tuv xml:lang="en">
-        <seg>The document cannotbe stored. It has not a proper document state.</seg>
+        <seg>The document cannot be stored. It has not a proper document state.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Das Dokument kann leider nicht gespeichert werden, da es sich nicht in einem korrekten Zustand befindet.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_error_collection_leaf_required">
+      <tuv xml:lang="en">
+        <seg>This collection accepts only those entries which cannot be specified futhermore.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bei dieser Sammlung sind nur Einträge gestattet, die nicht weiter spezifiziert werden können. Wählen Sie einen anderen Eintrag oder navigieren Sie weiter durch Drücken von "runter".</seg>
       </tuv>
     </tu>
     </body>

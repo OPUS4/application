@@ -94,7 +94,7 @@ class Publish_Model_FormElement {
             if ($this->isSubField === false) {
                 $this->group = new Publish_Model_DisplayGroup($this->elementName, $this->form, $this->multiplicity);
                 if (isset($this->collectionRole)) {
-                    $this->group->isBrowseField = true;
+                    $this->group->isBrowseField = true;                    
                     $this->group->collectionIds[] = $this->collectionId;
                 }
 
@@ -320,6 +320,9 @@ class Publish_Model_FormElement {
                 else
                     $element->addValidator($this->validation);
             }
+            
+            if ($this->datatype == 'CollectionLeaf')
+                $element->setAttrib('collectionLeaf', true);
 
             return $element;
         }

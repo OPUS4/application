@@ -127,7 +127,7 @@ class Publish_Model_DocumenttypeParser {
             if ($datatype === 'Enrichment')
                 $elementName = 'Enrichment' . $elementName;
 
-            if ($datatype == 'Collection') {
+            if ($datatype == 'Collection' || $datatype == 'CollectionLeaf') {
                 $collectionRole = $field->getAttribute('root');
                 $this->currentElement->setCollectionRole($collectionRole);
                 $this->currentElement->setCurrentCollectionId();

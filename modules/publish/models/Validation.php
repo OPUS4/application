@@ -97,6 +97,7 @@ class Publish_Model_Validation {
                 break;
                             
             case 'Collection' : 
+            case 'CollectionLeaf' :
             case 'Enrichment' : 
             case 'Text' :
             case 'Title': $this->validator = null;
@@ -238,7 +239,9 @@ class Publish_Model_Validation {
             $switchVar = $this->datatype;
 
         switch ($switchVar) {
-            case 'Collection': return $this->_collectionSelect();
+            case 'Collection':
+            case 'CollectionLeaf' :
+                return $this->_collectionSelect();
                 break;
 
             case 'Language': return $this->_languageSelect();
