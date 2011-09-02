@@ -41,6 +41,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      */
     protected $_document = null;
 
+    protected $_security_backup = null;
+
+
     /**
      * Provide clean documents and statistics table and remove temporary files.
      * Create document for counting.
@@ -62,9 +65,27 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
         $_SERVER['HTTP_USER_AGENT'] = 'bla';
         $_SERVER['REDIRECT_STATUS'] = 200;
+
+        // enable security
+        $config = Zend_Registry::get('Zend_Config');
+        $this->_security_backup = $config->security;
+        $config->security = '1';
     }
 
-    public function testIndexAction() {
+    protected function tearDown() {
+        // restore old security config
+        $config = Zend_Registry::get('Zend_Config');
+        $config->security = $this->_security_backup;
+        Zend_Registry::set('Zend_Config', $config);
+
+        if ($this->_document instanceof Opus_Document) {
+            $this->_document->deletePermanent();
+        }
+        parent::tearDown();
+    }
+
+    public function testIndexActionOnPublished() {
+        $this->_document->setServerState('published')->store();
         $doc_id = $this->_document->getId();
         $this->dispatch('/frontdoor/index/index/docId/'.$doc_id);
 
@@ -74,6 +95,46 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());
+        $this->assertContains('<div class="frontdoor">', $response->getBody());
+    }
+
+    public function testIndexActionOnDeleted() {
+        $this->_document->setServerState('deleted')->store();
+        $doc_id = $this->_document->getId();
+        $this->dispatch('/frontdoor/index/index/docId/'.$doc_id);
+
+        $this->assertResponseCode(410);
+        $this->assertController('index');
+        $this->assertAction('index');
+
+        $response = $this->getResponse();
+        $this->assertContains('<div class="frontdoor-error">', $response->getBody());
+    }
+
+    public function testIndexActionOnUnpublished() {
+        $this->_document->setServerState('unpublished')->store();
+        $doc_id = $this->_document->getId();
+        $this->dispatch('/frontdoor/index/index/docId/'.$doc_id);
+
+        $this->assertResponseCode(403);
+        $this->assertController('index');
+        $this->assertAction('index');
+
+        $response = $this->getResponse();
+        $this->assertContains('<div class="frontdoor-error">', $response->getBody());
+    }
+
+    public function testIndexActionOnTemporary() {
+        $this->_document->setServerState('temporary')->store();
+        $doc_id = $this->_document->getId();
+        $this->dispatch('/frontdoor/index/index/docId/'.$doc_id);
+
+        $this->assertResponseCode(403);
+        $this->assertController('index');
+        $this->assertAction('index');
+
+        $response = $this->getResponse();
+        $this->assertContains('<div class="frontdoor-error">', $response->getBody());
     }
 
     /**
