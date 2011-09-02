@@ -39,9 +39,7 @@ defined('APPLICATION_PATH')
         || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
 
 // Define application environment (use 'production' by default)
-//defined('APPLICATION_ENV') ||
 define('APPLICATION_ENV', 'testing');
-//        (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'testing'));
 
 // Configure include path.
 set_include_path('.' . PATH_SEPARATOR
