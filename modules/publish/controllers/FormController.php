@@ -45,11 +45,11 @@ class Publish_FormController extends Controller_Action {
     public $session;
     public $document;
 
-    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
+    public function init() {
         $this->log = Zend_Registry::get('Zend_Log');
         $this->session = new Zend_Session_Namespace('Publish');        
 
-        parent::__construct($request, $response, $invokeArgs);
+        parent::init();
     }
 
     public function uploadAction() {
@@ -58,66 +58,66 @@ class Publish_FormController extends Controller_Action {
         $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
         $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
 
-        if ($this->getRequest()->isPost() === true) {
+        if ($this->getRequest()->isPost() !== true) {
+            return $this->_redirectTo('index', '', 'index');
+        }
 
-            //initializing
+        //initializing
+        $indexForm = new Publish_Form_PublishingFirst($this->view);
+        $postData = $this->getRequest()->getPost();
+        $this->view->showBib = $indexForm->bibliographie;
+
+        if (is_array($postData) && count($postData) === 0) {
+            $this->log->err('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
+            return $this->_redirectTo('index', $this->view->translate('error_empty_post_array'), 'index');
+        }
+
+        $indexForm->populate($postData);
+        $this->_initializeDocument($postData);
+
+        //reject manipulated hidden field for file size
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($postData['MAX_FILE_SIZE']) && $postData['MAX_FILE_SIZE'] != $config->publish->maxfilesize) {
+            return $this->_redirectTo('index', '', 'index');
+        }
+
+        //validate fileupload
+        if (!$indexForm->getElement('fileupload')->isValid($postData)) {
+            $indexForm->setFirstFormViewVariables();
+            $this->view->form = $indexForm;
+            $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
+        } 
+        else {
+            //file valid-> store file                
+            $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
+            $this->view->uploadSuccess = $this->_storeUploadedFiles($postData);
             $indexForm = new Publish_Form_PublishingFirst($this->view);
-            $postData = $this->getRequest()->getPost();
-            $this->view->showBib = $indexForm->bibliographie;
-
-            if (is_array($postData) && count($postData) === 0) {
-                $this->log->err('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
-                return $this->_redirectTo('index', $this->view->translate('error_empty_post_array'), 'index');
-            }
-
             $indexForm->populate($postData);
-            $this->_initializeDocument($postData);
+            $indexForm->setFirstFormViewVariables();
+            $this->view->form = $indexForm;
 
-            //reject manipulated hidden field for file size
-            $config = Zend_Registry::get('Zend_Config');
-            if (isset($postData['MAX_FILE_SIZE']) && $postData['MAX_FILE_SIZE'] != $config->publish->maxfilesize) {
-                return $this->_redirectTo('index', '', 'index');
-            }
-
-            //validate fileupload
-            if (!$indexForm->getElement('fileupload')->isValid($postData)) {
-                $indexForm->setFirstFormViewVariables();
-                $this->view->form = $indexForm;                  
-                $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-            }
-            else {
-                //file valid-> store file                
-                $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');  
-                $this->view->uploadSuccess = $this->_storeUploadedFiles($postData);
-                $indexForm = new Publish_Form_PublishingFirst($this->view);
-                $indexForm->populate($postData);
-                $indexForm->setFirstFormViewVariables();
-                $this->view->form = $indexForm;
-
-                if (array_key_exists('addAnotherFile', $postData)) {
-                    $postData['uploadComment'] = "";
-                    return $this->renderScript('index/index.phtml');
-                }
-            }
-
-            //validate whole form
-            if (!$indexForm->isValid($postData)) {
-                $indexForm->setFirstFormViewVariables();
-                $this->view->form = $indexForm;                
-                $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
+            if (array_key_exists('addAnotherFile', $postData)) {
+                $postData['uploadComment'] = "";
                 return $this->renderScript('index/index.phtml');
             }
-
-            //form entries are valid: store data
-            $this->_storeBibliography($postData);
-            $this->_storeSubmitterEnrichment();
-
-            //call the appropriate template
-            $this->_helper->viewRenderer($this->session->documentType);
-            $publishForm = new Publish_Form_PublishingSecond($this->view);
-            return $publishForm->showTemplate($this->_helper);
         }
-        return $this->_redirectTo('index', '', 'index');
+
+        //validate whole form
+        if (!$indexForm->isValid($postData)) {
+            $indexForm->setFirstFormViewVariables();
+            $this->view->form = $indexForm;
+            $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
+            return $this->renderScript('index/index.phtml');
+        }
+
+        //form entries are valid: store data
+        $this->_storeBibliography($postData);
+        $this->_storeSubmitterEnrichment();
+
+        //call the appropriate template
+        $this->_helper->viewRenderer($this->session->documentType);
+        $publishForm = new Publish_Form_PublishingSecond($this->view);
+        return $publishForm->showTemplate($this->_helper);
     }
 
     /**
