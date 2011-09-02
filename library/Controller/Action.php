@@ -145,7 +145,7 @@ class Controller_Action extends Controller_ModuleAccess {
     /**
      * Method called when access to module has been denied.
      */
-    protected function rejectRequest() {
+    public function moduleAccessDeniedAction() {
         // we are not allowed to access this module -- but why?
         $identity = Zend_Auth::getInstance()->getIdentity();
 

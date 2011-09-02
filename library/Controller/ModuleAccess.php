@@ -58,18 +58,24 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
         $logger = Zend_Registry::get('Zend_Log');
         $module = $this->_request->getModuleName();
 
+        $action = $this->_request->getActionName();
+        if ($action == 'module-access-denied') {
+            $logger->debug("forwarding to unchecked action $module ($action)");
+            return true;
+        }
+
         $logger->debug("starting authorization check for module '$module'");
 
         // Check, controller-specific constraints...
         if (true !== $this->customAccessCheck()) {
             $logger->debug("FAILED custom authorization check for module '$module'");
-            return $this->rejectRequest();
+            return $this->_forward('module-access-denied');
         }
 
         // Check, if the user has the right privileges...
         if (true !== Opus_Security_Realm::getInstance()->checkModule($module)) {
             $logger->debug("FAILED authorization check for module '$module'");
-            return $this->rejectRequest();
+            return $this->_forward('module-access-denied');
         }
 
         $logger->debug("authorization check for module '$module' successful");
@@ -89,8 +95,8 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
     /**
      * Method called when access to module has been denied.
      */
-    protected function rejectRequest() {
-        throw new Application_Exception();
+    public function moduleAccessDeniedAction() {
+        $this->_forward('login', 'auth', 'default');
     }
 
 }

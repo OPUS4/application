@@ -108,17 +108,13 @@ class Controller_Xml extends Controller_ModuleAccess {
     /**
      * Method called when access to module has been denied.
      */
-    protected function rejectRequest() {
-        // Print empty XML document
+    public function moduleAccessDeniedAction() {
         $response = $this->getResponse();
         $response->setHttpResponseCode(401);
-        $response->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
-        $response->setBody(
-                '<?xml version="1.0" encoding="utf-8" ?>' . "\n" .
-                '<error>Unauthorized: Access to module not allowed.</error>'
-                );
 
-        $this->getRequest()->setDispatched(true);
+        // setup error document.
+        $element = $this->_xml->createElement('error', 'Unauthorized: Access to module not allowed.');
+        $this->_xml->appendChild($element);
     }
 
 }
