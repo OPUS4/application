@@ -85,6 +85,7 @@ class Frontdoor_IndexController extends Controller_Action {
 
         $documentNode = $documentXml->getNode(false);
 
+        /* XSLT transformation. */
         $xslt = new DomDocument;
         $template = 'index.xslt';
         $xslt->load($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $template);
@@ -94,6 +95,17 @@ class Frontdoor_IndexController extends Controller_Action {
         $proc->registerPHPFunctions(self::FILE_ACCESS_FUNCTION);
         $proc->importStyleSheet($xslt);
 
+        $config = Zend_Registry::getInstance()->get('Zend_Config');
+        $layoutPath = 'layouts/' . (isset($config, $config->theme) ? $config->theme : '');
+
+        $proc->setParameter('', 'baseUrlServer', $this->getFullServerUrl());
+        $proc->setParameter('', 'baseUrl', $baseUrl);
+        $proc->setParameter('', 'layoutPath', $baseUrl . '/' . $layoutPath);
+        $proc->setParameter('', 'isMailPossible', $this->isMailPossible($document));
+        $frontdoorContent = $proc->transformToXML($documentNode);
+
+        /* Setup view. */
+        $this->view->frontdoor = $frontdoorContent;
         $this->view->baseUrl = $baseUrl;
         $this->view->doctype('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"  "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">');
 
@@ -104,15 +116,6 @@ class Frontdoor_IndexController extends Controller_Action {
         }
         $this->addMetaTagsForDocument($document);
         $this->setFrontdoorTitleToDocumentTitle($document);
-
-        $config = Zend_Registry::getInstance()->get('Zend_Config');
-        $layoutPath = 'layouts/' . (isset($config, $config->theme) ? $config->theme : '');
-
-        $proc->setParameter('', 'baseUrlServer', $this->getFullServerUrl());
-        $proc->setParameter('', 'baseUrl', $baseUrl);
-        $proc->setParameter('', 'layoutPath', $baseUrl . '/' . $layoutPath);
-        $proc->setParameter('', 'isMailPossible', $this->isMailPossible($document));
-        $this->view->frontdoor = $proc->transformToXML($documentNode);
 
         $this->incrementStatisticsCounter($docId);
     }
