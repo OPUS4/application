@@ -369,6 +369,27 @@ class Oai_IndexController extends Controller_Xml {
     }
 
     /**
+     *
+     * @param Opus_Document $document
+     * @return DOMNode
+     * @throws Exception
+     */
+    private function getDocumentXmlDomNode($document) {
+        if (!in_array($document->getServerState(), $this->_deliveringDocumentStates)) {
+            $message = 'Trying to get a document in server state "' . $document->getServerState() . '"';
+            Zend_Registry::get('Zend_Log')->err($message);
+            throw new Exception($message);
+        }
+
+        $xmlModel = new Opus_Model_Xml();
+        $xmlModel->setModel($document);
+        $xmlModel->excludeEmptyFields();
+        $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
+        $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
+        return $xmlModel->getDomDocument()->getElementsByTagName('Opus_Document')->item(0);
+    }
+
+    /**
      * Create xml structure for one record
      *
      * @param  Opus_Document $document
@@ -376,8 +397,7 @@ class Oai_IndexController extends Controller_Xml {
      */
     private function createXmlRecord(Opus_Document $document) {
         $docId = $document->getId();
-        $documentXml = new Util_Document($document);
-        $domNode = $documentXml->getNode();
+        $domNode = $this->getDocumentXmlDomNode($document);
 
         // add frontdoor url
         $this->_addFrontdoorUrlAttribute($domNode, $docId);

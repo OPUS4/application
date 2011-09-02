@@ -225,7 +225,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     /**
      * Test that proves the bugfix for OPUSVIER-1710 is working as intended.
      */
-    public function testGetDeletedDocument() {
+    public function testGetDeletedDocumentReturnsStatusDeleted() {
         $r = Opus_UserRole::fetchByName('guest');
 
         $modules = $r->listAccessModules();
@@ -252,7 +252,11 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $config->security = $security;
         Zend_Registry::set('Zend_Config', $config);
 
-        $this->assertResponseCode(500);
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        $this->assertContains('<GetRecord>', $this->getResponse()->getBody());
+        $this->assertContains('<header status="deleted">', $this->getResponse()->getBody());
+
+        $this->assertNotContains('<error>', $this->getResponse()->getBody());
         $this->assertNotContains('<error>Unauthorized: Access to module not allowed.</error>', $this->getResponse()->getBody());
         $this->assertNotContains('<error code="unknown">An internal error occured.</error>', $this->getResponse()->getBody());
     }
