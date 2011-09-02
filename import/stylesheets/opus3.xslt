@@ -332,7 +332,19 @@
                         <xsl:value-of select="normalize-space(field[@name='source_title'])" />
                     </xsl:attribute>
                 </xsl:element>
-            </xsl:if>	
+            </xsl:if>
+
+	   <!-- Enrichment-Swb -->
+           <xsl:if test="string-length(field[@name='source_swb']) > 0">
+                <xsl:element name="Enrichment">
+                    <xsl:attribute name="KeyName">
+                        <xsl:text>source_swb</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="normalize-space(field[@name='source_swb'])" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:if>
             
             <!-- OldPublisherUniversity -->
             <xsl:if test="string-length(field[@name='publisher_university']) > 0">
@@ -402,6 +414,14 @@
                     <xsl:with-param name="delimiter">,</xsl:with-param>
                     <xsl:with-param name="language">ger</xsl:with-param>
                 </xsl:call-template>
+                <xsl:element name="Enrichment">
+                    <xsl:attribute name="KeyName">
+                        <xsl:text>subject_swd</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="normalize-space(field[@name='subject_swd'])" />
+                    </xsl:attribute>
+                </xsl:element>
             </xsl:if>
             <xsl:if test="string-length(normalize-space(field[@name='subject_uncontrolled_german'])) > 0">
                 <xsl:call-template name="AddSubjects">
@@ -412,6 +432,14 @@
                     <xsl:with-param name="delimiter">,</xsl:with-param>
                     <xsl:with-param name="language">ger</xsl:with-param>
                 </xsl:call-template>
+                <xsl:element name="Enrichment">
+                    <xsl:attribute name="KeyName">
+                        <xsl:text>subject_uncontrolled_german</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="normalize-space(field[@name='subject_uncontrolled_german'])" />
+                    </xsl:attribute>
+                </xsl:element>
             </xsl:if>
             <xsl:if test="string-length(normalize-space(field[@name='subject_uncontrolled_english'])) > 0">
                 <xsl:call-template name="AddSubjects">
@@ -422,6 +450,14 @@
                     <xsl:with-param name="delimiter">,</xsl:with-param>
                     <xsl:with-param name="language">eng</xsl:with-param>
                 </xsl:call-template>
+                <xsl:element name="Enrichment">
+                    <xsl:attribute name="KeyName">
+                        <xsl:text>subject_uncontrolled_english</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="normalize-space(field[@name='subject_uncontrolled_english'])" />
+                    </xsl:attribute>
+                </xsl:element>
             </xsl:if>
 
             <!-- Notes -->
@@ -563,6 +599,18 @@
             <!-- OldPacs -->
              <xsl:for-each select="/mysqldump/database/table_data[@name='opus_pacs' or @name='temp_pacs']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:element name="OldPacs">
+                    <xsl:attribute name="Value">
+                        <xsl:value-of select="field[@name='class']" />
+                    </xsl:attribute>
+                </xsl:element>
+            </xsl:for-each>
+
+            <!-- RVK -->
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_rvk' or @name='temp_rvk']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:element name="Enrichment">
+                    <xsl:attribute name="KeyName">
+                        <xsl:text>rvk</xsl:text>
+                    </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="field[@name='class']" />
                     </xsl:attribute>
