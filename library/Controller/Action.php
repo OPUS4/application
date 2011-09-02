@@ -35,7 +35,7 @@
  * @version     $Id$
  */
 
-class Controller_Action extends Zend_Controller_Action {
+class Controller_Action extends Controller_ModuleAccess {
 
     /**
      * Holds the Redirector Helper.
@@ -68,14 +68,6 @@ class Controller_Action extends Zend_Controller_Action {
         $this->__redirector = $this->_helper->getHelper('Redirector');
         $this->__flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $this->view->flashMessenger = $this->__flashMessenger;
-    }
-
-    /**
-     * Use pre-dispatch to check user access rights *before* action is called.
-     */
-    public function preDispatch() {
-        parent::preDispatch();
-        $this->checkAccessModulePermissions();
     }
 
     /**
@@ -148,43 +140,6 @@ class Controller_Action extends Zend_Controller_Action {
     protected function _forwardToAction($action) {
         $this->_request->setParam('action', $action);
         $this->_forward($action);
-    }
-
-    /**
-     * Checks if the user is allowed to access the given module.
-     *
-     * @return void
-     */
-    protected function checkAccessModulePermissions() {
-        $logger = Zend_Registry::get('Zend_Log');
-        $module = $this->_request->getModuleName();
-
-        $logger->debug("starting authorization check for module '$module'");
-
-        // Check, controller-specific constraints...
-        if (true !== $this->customAccessCheck()) {
-            $logger->debug("FAILED custom authorization check for module '$module'");
-            return $this->rejectRequest();
-        }
-
-        // Check, if the user has the right privileges...
-        if (true !== Opus_Security_Realm::getInstance()->checkModule($module)) {
-            $logger->debug("FAILED authorization check for module '$module'");
-            return $this->rejectRequest();
-        }
-
-        $logger->debug("authorization check for module '$module' successful");
-        return;
-    }
-
-    /**
-     * Method stub to be overridden by controllers.  Enables checks for custom
-     * properties.
-     *
-     * @return boolean
-     */
-    protected function customAccessCheck() {
-        return true;
     }
 
     /**
