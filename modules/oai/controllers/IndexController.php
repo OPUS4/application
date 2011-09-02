@@ -93,6 +93,7 @@ class Oai_IndexController extends Controller_Xml {
 
         try {
             $this->__handleRequest($oaiRequest);
+            return;
         }
         catch (Oai_Model_Exception $e) {
             switch ($e->getCode()) {
@@ -131,6 +132,8 @@ class Oai_IndexController extends Controller_Xml {
             $this->_proc->setParameter('', 'oai_error_message', 'An internal error occured.');
             $this->getResponse()->setHttpResponseCode(500);
         }
+
+        $this->_xml = new DomDocument;
     }
 
     private function getOaiBaseUrl() {
