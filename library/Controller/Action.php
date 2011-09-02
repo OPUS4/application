@@ -192,10 +192,9 @@ class Controller_Action extends Zend_Controller_Action {
         if (!empty($identity)) {
             $errorcode = 'wrong_identity_error';
         }
-        $message = $this->view->translate($errorcode);
 
         // Forward to module auth
-        $this->__flashMessenger->addMessage(array('level' => 'failure', 'message' => $message));
+        $this->__flashMessenger->addMessage(array('level' => 'failure', 'message' => $errorcode));
         $this->__redirector->gotoSimple('index', 'auth', 'default');
     }
 
