@@ -137,6 +137,18 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<div class="frontdoor-error">', $response->getBody());
     }
 
+    public function testIndexActionOnNonExistent() {
+        $doc_id = $this->_document->getId();
+        $this->dispatch('/frontdoor/index/index/docId/'.$doc_id.$doc_id.'100');
+
+        $this->assertResponseCode(404);
+        $this->assertController('index');
+        $this->assertAction('index');
+
+        $response = $this->getResponse();
+        $this->assertContains('<div class="frontdoor-error">', $response->getBody());
+    }
+
     /**
      * @deprecated since OPUS 3.0.2, the function under test is marked as deprecated
      * and will be removed in future releases
