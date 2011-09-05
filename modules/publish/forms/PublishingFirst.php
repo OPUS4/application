@@ -44,6 +44,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
     public $view;
     public $helper;
     public $bibliographie;
+    public $showRights;
 
     /**
      *
@@ -62,14 +63,16 @@ class Publish_Form_PublishingFirst extends Zend_Form {
     }
 
     public function isValid($data) {
-        $valid1 = true;        
+        $valid1 = true;
         $valid2 = parent::isValid($data);
-        
-        if (array_key_exists('rights', $data)) {
-            if ($data['rights'] == '0') {
-                $rights = $this->getElement('rights');
-                $rights->addError('publish_error_rights_checkbox_empty');
-                $valid2 = false;
+
+        if ($this->config->form->first->show_rights_checkbox === 1) {
+            if (array_key_exists('rights', $data)) {
+                if ($data['rights'] == '0') {
+                    $rights = $this->getElement('rights');
+                    $rights->addError('publish_error_rights_checkbox_empty');
+                    $valid2 = false;
+                }
             }
         }
 
@@ -93,12 +96,13 @@ class Publish_Form_PublishingFirst extends Zend_Form {
 
         //create and add bibliographie
         $bibliographie = $this->_createBibliographyField();
-        if ($bibliographie !== null)
+        if (!is_null($bibliographie))
             $this->addElement($bibliographie);
 
         //create and add rights checkbox
         $rights = $this->_createRightsCheckBox();
-        $this->addElement($rights);
+        if (!is_null($rights))
+            $this->addElement($rights);
 
         //create and add send-button
         $submit = $this->createElement('submit', 'send');
@@ -156,10 +160,10 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $maxFileSize = (int) $this->config->publish->maxfilesize;
         if (true === empty($maxFileSize)) {
             $maxFileSize = 1024000; //1MB
-        }        
+        }
 
         // Upload-fields required to enter second stage
-        $requireUpload = $this->config->form->first->requireupload;
+        $requireUpload = $this->config->form->first->require_upload;
         if (true === empty($requireUpload))
             $requireUpload = 0;
 
@@ -173,7 +177,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                 ->setValueDisabled(true)
                 ->setAttrib('enctype', 'multipart/form-data');
 
-        if (1 == $requireUpload) {            
+        if (1 == $requireUpload) {
             if (!isset($this->session->fulltext) || $this->session->fulltext == '0')
                 $fileupload->setRequired(true);
         }
@@ -213,19 +217,29 @@ class Publish_Form_PublishingFirst extends Zend_Form {
             $this->bibliographie = 1;
             $bibliographie = $this->createElement('checkbox', 'bibliographie');
             $bibliographie->setLabel('bibliographie');
-            
         }
 
         return $bibliographie;
     }
 
     private function _createRightsCheckBox() {
-        $rights = $this->createElement('checkbox', 'rights')
-                        ->setLabel('rights')
-                        ->setRequired(true)
-                        ->setChecked(false);
+        $showRights = $this->config->form->first->show_rights_checkbox;   
+        if (true === empty($showRights)) {
+            $showRights = 0;
+            $this->showRights = 0;
+        }
 
-        return $rights;
+        $rightsCheckbox = null;
+        
+        if ($showRights == 1) {
+            $this->showRights = 1;
+            $rightsCheckbox = $this->createElement('checkbox', 'rights')
+                    ->setLabel('rights')
+                    ->setRequired(true)
+                    ->setChecked(false);
+        }
+      
+        return $rightsCheckbox;
     }
 
     /**
@@ -233,7 +247,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
      * @param <type> $elementName
      * @return string
      */
-    public function getElementAttributes($elementName) {       
+    public function getElementAttributes($elementName) {
         $elementAttributes = $this->helper->getElementAttributes($elementName);
         return $elementAttributes;
     }
@@ -241,7 +255,5 @@ class Publish_Form_PublishingFirst extends Zend_Form {
     public function setFirstFormViewVariables() {
         $this->helper->setFirstFormViewVariables();
     }
-
-    
 
 }

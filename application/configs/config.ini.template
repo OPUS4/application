@@ -97,14 +97,14 @@ urn.nss = de:kobv:test-opus
 ;publish.filetypes.allowed = pdf,txt,html,htm ; filetypes that are accepted in publication form
 
 ;FORM SETTINGS
-; This configures the count of files a user can upload while publishing a document.
-;form.first.numberoffiles = 2
 ; If you would like to use opus to save bibliographical items you should set
 ; this to 1. It will ask on the first site of the publish module if a new
 ; document should be added to the bibliography.
-;form.first.bibliographie = 0
+; form.first.bibliographie = 0
 ; States, if the upload-fields are required to enter the second form.
-;form.first.requireupload = 0
+; form.first.require_upload = 0
+; States, if a checkbox for the institutions legal notices is shown.
+; form.first.show_rights_checkbox = 1
 
 ;REFEREES
 ; reviewer.collections.ddc.66[] = 'admin'

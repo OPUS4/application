@@ -59,7 +59,9 @@
             <?= $this->element($this->bibliographie); ?>
             <?php endif; ?>
 
+            <?php if ($this->showRights == 1) : ?>
             <?= $this->element($this->rights); ?>
+            <?php endif; ?>
 
             <div class="button-wrapper">
                 <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
