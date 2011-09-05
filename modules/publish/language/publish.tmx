@@ -7,6 +7,15 @@
   
   <body>    
   
+    <tu tuid="publish_deposit_confirm">
+      <tuv xml:lang="en">
+        <seg>Your document was successfully stored.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ihr Dokument wurde erfolgreich veröffentlicht.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="publish_controller_index">
       <tuv xml:lang="en">
         <seg>Publish</seg>
