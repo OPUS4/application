@@ -41,10 +41,10 @@ class Publish_Model_DocumenttypeParser {
 
     private $log;
     private $session;
-    public $dom;
-    public $form; //PublishingSecond
-    public $formElements = array(); // Array of FormElement
-    private $currentElement; //FormElement
+    public $dom;                        //DOMDocument
+    public $form;                       //PublishingSecond
+    public $formElements = array();     // Array of FormElement
+    private $currentElement;            //FormElement
     private $postValues = array();
     private $additionalFields = array();
 
@@ -54,14 +54,11 @@ class Publish_Model_DocumenttypeParser {
      * @param Publish_Form_PublishingSecond $form
      * @return false: Dom Object couldn't be accessed
      */
-    public function __construct(DOMDocument $dom, Publish_Form_PublishingSecond $form) {
+    public function __construct($dom, $form) {
         $this->form = $form;
         $this->log = Zend_Registry::get('Zend_Log');
         $this->session = new Zend_Session_Namespace('Publish');
-        if (!is_null($dom))
-            $this->dom = $dom;
-        else
-            return false;
+        $this->dom = $dom;        
     }
 
     /**
