@@ -57,12 +57,12 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         
         $this->view = $view;
         if (is_null($this->view))
-                throw new Exception('View is null in Publishing_Second construct');
+                throw new Publish_Model_NoViewFoundException();
         
         $this->helper = new Publish_Model_FormHelper($this->view, $this);
 
         parent::__construct($options);
-        $this->helper->setSecondFormViewVariables($this);
+        $this->setSecondFormViewVariables($this);
     }
 
     /**
@@ -139,19 +139,12 @@ class Publish_Form_PublishingSecond extends Zend_Form {
         return $elementAttributes;
     }
 
-    /**
-     * Methods removes unused label, hidden fields, submit fields and empty fields from form to support a proper check page.
-     */
-    public function prepareCheck() {
-        return $this->helper->prepareCheck($this);
-    }
-
-    public function showTemplate($helper) {
-        return $this->helper->showTemplate($helper);
+    public function showTemplate() {
+        return $this->helper->showTemplate();
     }
 
     public function showCheckpage() {
-        return $this->helper->showCheckPage($this);
+        return $this->helper->showCheckPage();
     }
 
     public function getExtendedForm($postData, $reload) {

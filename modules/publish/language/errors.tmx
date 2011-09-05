@@ -363,12 +363,21 @@
       </tuv>
     </tu>
 
-    <tu tuid="publish_bo_document_found">
+    <tu tuid="publish_no_document_found">
       <tuv xml:lang="en">
         <seg>The document cannot be stored. It has not a proper document state.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Das Dokument kann leider nicht gespeichert werden, da es sich nicht in einem korrekten Zustand befindet.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_form_second_no_view_given">
+      <tuv xml:lang="en">
+        <seg>Error during form building: no current view object specified.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehler während des Formularaufbaus: es wurde kein aktuelles View-Objekt spezifizert.</seg>
       </tuv>
     </tu>
 

@@ -113,33 +113,32 @@ class Publish_Model_FormHelper {
      * Renders the data check page in case that all given form values are valid.
      * @param <type> $this->form 
      */
-    public function showCheckPage($depositForm) {                
+    public function showCheckPage() {                
         $this->view->subtitle = $this->view->translate('publish_controller_check2');
         $this->view->header = $this->view->translate('publish_controller_changes');
         
         $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
-        $depositForm->setAction($action_url);
-        $depositForm->setMethod('post');
-        $this->prepareCheck($depositForm);
+        $this->form->setAction($action_url);
+        $this->form->setMethod('post');
+        $this->prepareCheck();
 
         $this->view->action_url = $action_url;
-        $this->view->form = $depositForm;
+        $this->view->form = $this->form;
     }
 
-    public function prepareCheck($depositForm) {
+    public function prepareCheck() {
         $this->session->elements = array();
 
         //iterate over form elements
-        foreach ($depositForm->getElements() as $element) {
+        foreach ($this->form->getElements() as $element) {
             $name = $element->getName();
 
             if ($element->getValue() == ""
                     || $element->getType() == "Zend_Form_Element_Submit"
-                    || $element->getType() == "Zend_Form_Element_Hidden"
-                    || $element->getValue() == '___EMPTY') {
+                    || $element->getType() == "Zend_Form_Element_Hidden") {
 
                 $element->removeDecorator('Label');
-                $depositForm->removeElement($name);
+                $this->form->removeElement($name);
             }
             else {
                 $this->session->elements[$name]['name'] = $name;
@@ -149,28 +148,23 @@ class Publish_Model_FormHelper {
             }
         }
 
-        $depositForm->_addSubmit('button_label_back', 'back');
-        $depositForm->_addSubmit('button_label_collection', 'collection');
-        $depositForm->_addSubmit('button_label_send2', 'send');
+        $this->form->_addSubmit('button_label_back', 'back');
+        $this->form->_addSubmit('button_label_collection', 'collection');
+        $this->form->_addSubmit('button_label_send2', 'send');
     }
 
     /**
      * Renders the documenttype specific template
      * @param <type> $helper
      */
-    public function showTemplate($helper) {
-        $templateName = $helper->documentTypes->getTemplateName($this->session->documentType);
-        $helper->viewRenderer($templateName);
+    public function showTemplate() {      
         $this->view->subtitle = $this->view->translate($this->session->documentType);        
-        $this->view->doctype = $this->session->documentType;
-        
-        $publishForm = new Publish_Form_PublishingSecond($this->view);
+        $this->view->doctype = $this->session->documentType;                
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
-        $publishForm->setAction($action_url);
-        $publishForm->setMethod('post');
-        //$this->setSecondFormViewVariables($publishForm);
+        $this->form->setAction($action_url);
+        $this->form->setMethod('post');        
         $this->view->action_url = $action_url;
-        $this->view->form = $publishForm;
+        $this->view->form = $this->form;
     }
 
     /**
