@@ -53,7 +53,10 @@ class Publish_Form_PublishingFirst extends Zend_Form {
      * @param <type> $options
      */
     public function __construct($view, $options = null) {
-        $this->view = $view;
+        if (is_null($view))
+                throw new Publish_Model_NoViewFoundException ();
+        else 
+            $this->view = $view;
         $this->session = new Zend_Session_Namespace('Publish');
         $this->config = Zend_Registry::get('Zend_Config');
         $this->helper = new Publish_Model_FormHelper($view, $this);
@@ -66,7 +69,7 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $valid1 = true;
         $valid2 = parent::isValid($data);
 
-        if ($this->config->form->first->show_rights_checkbox === 1) {
+        if ($this->config->form->first->show_rights_checkbox == 1) {
             if (array_key_exists('rights', $data)) {
                 if ($data['rights'] == '0') {
                     $rights = $this->getElement('rights');
