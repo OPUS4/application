@@ -93,7 +93,7 @@ class Publish_DepositController extends Controller_Action {
         $this->document = $depositData->getDocument();
         $this->document->setServerState('unpublished');
         $this->session->documentId = $this->document->store();
-        $docId = $this->session->documentId;
+        $docId = $this->session->documentId;        
 
         $this->log->info("Document $docId was sucessfully stored!");
 
@@ -120,7 +120,10 @@ class Publish_DepositController extends Controller_Action {
         $this->log->debug("sending email (subject): $subject");
         $this->log->debug("sending email (body):    \n$message\n-- end email.");
         $this->__scheduleNotification($subject, $message);
-        
+
+        // Prepare redirect to confirmation action.
+        $this->session->depositConfirmDocumentId = $docId;
+
         $targetAction = 'confirm';
         $targetController = 'deposit';
         $targetModule = 'publish';
@@ -140,7 +143,7 @@ class Publish_DepositController extends Controller_Action {
      * finished.
      */
     public function confirmAction() {
-        $this->view->docId = $this->session->documentId;
+        $this->view->docId = $this->session->depositConfirmDocumentId;
 
         if (true === Opus_Security_Realm::getInstance()->check('clearance')) {
             $this->view->showFrontdoor = true;
