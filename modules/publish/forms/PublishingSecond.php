@@ -45,7 +45,6 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
     public $log;    
     public $msc = array();
     public $session;
-    public $helper;
     public $view;
 
     public function __construct($view, $postData=null, $options=null) {
@@ -59,8 +58,6 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         if (is_null($this->view))
                 throw new Publish_Model_NoViewFoundException();
         
-        $this->helper = new Publish_Model_FormHelper($this->view, $this);
-
         parent::__construct($options);
         $this->setSecondFormViewVariables($this);
     }
@@ -346,6 +343,13 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         }
     }
 
+    CONST FIRST = "Firstname";
+    CONST COUNTER = "1";
+    CONST GROUP = "group";
+    CONST EXPERT = "X";
+    CONST LABEL = "_label";
+    CONST ERROR = "Error";
+   
     /**
      * Method to find out the element name stemming.
      * @param <String> $element element name
@@ -405,6 +409,27 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $group["Buttons"] = $groupButtons;
 
         return $group;
+    }
+    
+    /**
+     * Method to check which button in the form was pressed 
+     * @return <String> name of button
+     */
+    private function _getPressedButton() {
+        $pressedButtonName = "";
+        foreach ($this->getElements() AS $element) {
+            $name = $element->getName();
+            if (strstr($name, 'addMore') || strstr($name, 'deleteMore') || strstr($name, 'browseDown') || strstr($name, 'browseUp')) {
+                $value = $element->getValue();
+                if (!is_null($value))
+                    $pressedButtonName = $name;
+            }
+        }
+
+        if ($pressedButtonName == "")
+            throw new Publish_Model_FormNoButtonFoundException();
+        else
+            return $pressedButtonName;
     }
 
 }

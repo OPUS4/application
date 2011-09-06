@@ -38,13 +38,6 @@
  * @author Susanne Gottwald
  */
 class Publish_Model_FormHelper {
-    CONST FIRST = "Firstname";
-    CONST COUNTER = "1";
-    CONST GROUP = "group";
-    CONST EXPERT = "X";
-    CONST LABEL = "_label";
-    CONST ERROR = "Error";
-   
     public $session;
     public $form;
     public $view;
@@ -67,27 +60,6 @@ class Publish_Model_FormHelper {
 
     public function setCurrentView($view) {
         $this->view = $view;
-    }
-
-    /**
-     * Method to check which button in the form was pressed 
-     * @return <String> name of button
-     */
-    private function _getPressedButton() {
-        $pressedButtonName = "";
-        foreach ($this->form->getElements() AS $element) {
-            $name = $element->getName();
-            if (strstr($name, 'addMore') || strstr($name, 'deleteMore') || strstr($name, 'browseDown') || strstr($name, 'browseUp')) {
-                $value = $element->getValue();
-                if (!is_null($value))
-                    $pressedButtonName = $name;
-            }
-        }
-
-        if ($pressedButtonName == "")
-            throw new Publish_Model_FormNoButtonFoundException();
-        else
-            return $pressedButtonName;
     }
 
 }
