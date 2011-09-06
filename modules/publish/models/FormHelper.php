@@ -109,33 +109,6 @@ class Publish_Model_FormHelper {
         return $elementAttributes;
     }
 
-    public function prepareCheck() {
-        $this->session->elements = array();
-
-        //iterate over form elements
-        foreach ($this->form->getElements() as $element) {
-            $name = $element->getName();
-
-            if ($element->getValue() == ""
-                    || $element->getType() == "Zend_Form_Element_Submit"
-                    || $element->getType() == "Zend_Form_Element_Hidden") {
-
-                $element->removeDecorator('Label');
-                $this->form->removeElement($name);
-            }
-            else {
-                $this->session->elements[$name]['name'] = $name;
-                $this->session->elements[$name]['value'] = $element->getValue();
-                $this->session->elements[$name]['label'] = $element->getLabel();
-                $element->removeDecorator('Label');
-            }
-        }
-
-        $this->form->_addSubmit('button_label_back', 'back');
-        $this->form->_addSubmit('button_label_collection', 'collection');
-        $this->form->_addSubmit('button_label_send2', 'send');
-    }
-
     /**
      * Method sets the different variables and arrays for the view and the templates in the first form
      * @param <Zend_Form> $form

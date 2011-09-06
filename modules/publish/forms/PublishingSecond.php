@@ -170,6 +170,32 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $this->view->form = $this;
     }
 
+    public function prepareCheck() {
+        $this->session->elements = array();
+
+        //iterate over form elements
+        foreach ($this->getElements() as $element) {
+            $name = $element->getName();
+            $element->removeDecorator('Label');
+
+            if ($element->getValue() == ""
+                    || $element->getType() == "Zend_Form_Element_Submit"
+                    || $element->getType() == "Zend_Form_Element_Hidden") {
+
+                $this->removeElement($name);
+            }
+            else {
+                $this->session->elements[$name]['name'] = $name;
+                $this->session->elements[$name]['value'] = $element->getValue();
+                $this->session->elements[$name]['label'] = $element->getLabel();
+            }
+        }
+
+        $this->_addSubmit('button_label_back', 'back');
+        $this->_addSubmit('button_label_collection', 'collection');
+        $this->_addSubmit('button_label_send2', 'send');
+    }
+
     public function getExtendedForm($postData, $reload) {
         return $this->helper->getExtendedForm($postData, $reload);
     }
