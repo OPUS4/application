@@ -156,11 +156,18 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $this->setAction($action_url);
         $this->setMethod('post');        
         $this->view->action_url = $action_url;
-        $this->view->form = $this->form;
+        $this->view->form = $this;
     }
 
     public function showCheckpage() {
-        return $this->helper->showCheckPage();
+        $this->view->subtitle = $this->view->translate('publish_controller_check2');
+        $this->view->header = $this->view->translate('publish_controller_changes');
+        $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
+        $this->setAction($action_url);
+        $this->setMethod('post');
+        $this->prepareCheck();
+        $this->view->action_url = $action_url;
+        $this->view->form = $this;
     }
 
     public function getExtendedForm($postData, $reload) {

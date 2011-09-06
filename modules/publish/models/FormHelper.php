@@ -109,23 +109,6 @@ class Publish_Model_FormHelper {
         return $elementAttributes;
     }
 
-    /**
-     * Renders the data check page in case that all given form values are valid.
-     * @param <type> $this->form 
-     */
-    public function showCheckPage() {                
-        $this->view->subtitle = $this->view->translate('publish_controller_check2');
-        $this->view->header = $this->view->translate('publish_controller_changes');
-        
-        $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
-        $this->form->setAction($action_url);
-        $this->form->setMethod('post');
-        $this->prepareCheck();
-
-        $this->view->action_url = $action_url;
-        $this->view->form = $this->form;
-    }
-
     public function prepareCheck() {
         $this->session->elements = array();
 
