@@ -120,22 +120,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Test upload action with user-changed MAXFILESIZE in POST array
-     */
-    public function testUploadActionWithAttackedPost() {
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'MAX_FILE_SIZE' => 123
-                ));
-
-        $this->dispatch('/publish/form/upload');
-        $this->assertResponseCode(302);
-        $this->assertController('form');
-        $this->assertAction('upload');
-    }
-
-    /**
      * Test upload action with invalid POST array
      */
     public function testUploadActionWithInvalidDummyPost() {

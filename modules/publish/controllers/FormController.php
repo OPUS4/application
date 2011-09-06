@@ -68,14 +68,14 @@ class Publish_FormController extends Controller_Action {
         $this->view->showBib = $indexForm->bibliographie;
         $this->view->showRights = $indexForm->showRights;
 
-        //don't allow MAX_FILE_SIZE to get overridden
-        $config = Zend_Registry::get('Zend_Config');
-        $postData['MAX_FILE_SIZE'] = $config->publish->maxfilesize;
-
         if (is_array($postData) && count($postData) === 0) {
             $this->log->err('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
             return $this->_redirectTo('index', $this->view->translate('error_empty_post_array'), 'index');
         }
+
+        //don't allow MAX_FILE_SIZE to get overridden
+        $config = Zend_Registry::get('Zend_Config');
+        $postData['MAX_FILE_SIZE'] = $config->publish->maxfilesize;
 
         $indexForm->populate($postData);
         $this->_initializeDocument($postData);

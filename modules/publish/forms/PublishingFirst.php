@@ -37,32 +37,24 @@
  * Builds the fist page of an upload form for one file
  *
  */
-class Publish_Form_PublishingFirst extends Zend_Form {
+class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
-    public $config;
-    public $session;
     public $view;
-    public $helper;
     public $bibliographie;
     public $showRights;
 
     /**
      *
      * @param <type> $view View Object from Controller
-     * @param <type> $disable
      * @param <type> $options
      */
-    public function __construct($view, $options = null) {
-        if (is_null($view))
-                throw new Publish_Model_NoViewFoundException ();
-        else 
-            $this->view = $view;
-        $this->session = new Zend_Session_Namespace('Publish');
-        $this->config = Zend_Registry::get('Zend_Config');
-        $this->helper = new Publish_Model_FormHelper($view, $this);
+    public function __construct() {
+        $this->view = $this->getView();
+        if (is_null($this->view)) {
+            throw new Publish_Model_NoViewFoundException ();
+        }
 
-        parent::__construct($options);
-        $this->helper->setFirstFormViewVariables();
+        parent::__construct();
     }
 
     public function isValid($data) {
@@ -89,6 +81,8 @@ class Publish_Form_PublishingFirst extends Zend_Form {
      * @return void
      */
     public function init() {
+        parent::init();
+        
         //create and add document type
         $doctypes = $this->_createDocumentTypeField();
         $this->addElement($doctypes);
@@ -113,6 +107,8 @@ class Publish_Form_PublishingFirst extends Zend_Form {
         $this->addElement($submit);
 
         $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
+
+        $this->setFirstFormViewVariables();
     }
 
     /**
@@ -226,14 +222,14 @@ class Publish_Form_PublishingFirst extends Zend_Form {
     }
 
     private function _createRightsCheckBox() {
-        $showRights = $this->config->form->first->show_rights_checkbox;   
+        $showRights = $this->config->form->first->show_rights_checkbox;
         if (true === empty($showRights)) {
             $showRights = 0;
             $this->showRights = 0;
         }
 
         $rightsCheckbox = null;
-        
+
         if ($showRights == 1) {
             $this->showRights = 1;
             $rightsCheckbox = $this->createElement('checkbox', 'rights')
@@ -241,22 +237,55 @@ class Publish_Form_PublishingFirst extends Zend_Form {
                     ->setRequired(true)
                     ->setChecked(false);
         }
-      
+
         return $rightsCheckbox;
     }
 
     /**
-     *
-     * @param <type> $elementName
-     * @return string
+     * Method sets the different variables and arrays for the view and the templates in the first form
+     * @param <Zend_Form> $form
      */
-    public function getElementAttributes($elementName) {
-        $elementAttributes = $this->helper->getElementAttributes($elementName);
-        return $elementAttributes;
-    }
-
     public function setFirstFormViewVariables() {
-        $this->helper->setFirstFormViewVariables();
+        $errors = $this->getMessages();
+
+        //first form single fields for view placeholders
+        foreach ($this->getElements() AS $currentElement => $value) {
+            //single field name (for calling with helper class)
+            $elementAttributes = $this->getElementAttributes($currentElement); //array
+            $this->view->$currentElement = $elementAttributes;
+        }
+
+        //Upload-Field and its number of fields (for fieldset)
+        $displayGroup = $this->getDisplayGroup('documentUpload');
+        $this->session->numdocumentUpload = 2;
+
+        $groupName = $displayGroup->getName();
+        $groupFields = array(); //Fields
+        $groupHiddens = array(); //Hidden fields for adding and deleting fields
+        $groupButtons = array(); //Buttons
+
+        foreach ($displayGroup->getElements() AS $groupElement) {
+
+            $elementAttributes = $this->getElementAttributes($groupElement->getName()); //array
+            if ($groupElement->getType() === 'Zend_Form_Element_Submit') {
+                //buttons
+                $groupButtons[$elementAttributes["id"]] = $elementAttributes;
+            } else if ($groupElement->getType() === 'Zend_Form_Element_Hidden') {
+                //hidden fields
+                $groupHiddens[$elementAttributes["id"]] = $elementAttributes;
+            } else {
+                //normal fields
+                $groupFields[$elementAttributes["id"]] = $elementAttributes;
+            }
+        }
+        $group = array();
+        $group["Fields"] = $groupFields;
+        $group["Hiddens"] = $groupHiddens;
+        $group["Buttons"] = $groupButtons;
+        $group["Name"] = $groupName;
+        $this->view->$groupName = $group;
+        $config = Zend_Registry::get('Zend_Config');
+        $this->view->MAX_FILE_SIZE = $config->publish->maxfilesize;
     }
 
 }
