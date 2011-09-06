@@ -85,13 +85,16 @@ class Publish_Model_ExtendedValidation {
      * @return boolean
      */
     private function _validatePersons() {
-        //1) validate: for every given first name must exist a last name
+        //1) validate: no first name without a last name
         $valid1 = $this->_validateFirstNames();
 
-        //2) validate: for a given email notification checkbox must exist an email
-        $valid2 = $this->_validateEmailNotification();
+        //2) validate: no email without a name
+        $valid2 = $this->_validateEmail();
 
-        if ($valid1 && $valid2)
+        //3) validate: no checkbox without mail
+        $valid3 = $this->_validateEmailNotification();
+
+        if ($valid1 && $valid2 && $valid3)
             return true;
         else
             return false;
@@ -126,13 +129,50 @@ class Publish_Model_ExtendedValidation {
         return $validPersons;
     }
 
+    private function _validateEmail() {
+        $validMails = true;
+        $emails = $this->_getPersonEmailFields();
+
+        foreach ($emails as $key => $mail) {
+            $this->log->debug("(Validation): Email: " . $key . " with value " . $mail);
+            if ($mail !== "") {
+                //if email is not null, find the corresponding first and last name
+                $lastName = str_replace('Email', 'LastName', $key);
+                $firstName = str_replace('Last', 'First', $lastName);
+
+                if ($this->data[$firstName] == "") {
+                    //error case: Email exists but first name not
+                    $element = $this->form->getElement($firstName);
+                    if (!$element->isRequired()) {
+                        if (!$element->hasErrors()) {
+                            $element->addError('publish_error_noFirstNameButMail');
+                            $validMails = false;
+                        }
+                    }
+                }
+                if ($this->data[$lastName] == "") {
+                    //error case: Email exists but Last name not
+                    $element = $this->form->getElement($lastName);
+                    if (!$element->isRequired()) {
+                        if (!$element->hasErrors()) {
+                            $element->addError('publish_error_noLastNameButEmail');
+                            $validMails = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        return $validMails;
+    }
+
     /**
      * Checks if there are email adresses for a filled checkbox for email notification.
      * @return boolean true, if yes
      */
     private function _validateEmailNotification() {
         $validMails = true;
-        $emailNotifications = $this->_getPersonEmailFields();
+        $emailNotifications = $this->_getPersonEmailNotificationFields();
 
         foreach ($emailNotifications as $key => $check) {
             $this->log->debug("(Validation): Email Notification: " . $key . " with value " . $check);
@@ -146,7 +186,7 @@ class Publish_Model_ExtendedValidation {
 
                 $this->log->debug("(Validation): Replaced: " . $emailKey);
 
-                if ($this->data[$lastName] != "" || $this->data[$lastName] != "") {
+                if ($this->data[$lastName] != "" || $this->data[$firstName] != "") {
                     //just check the email if first or last name is given
 
                     if ($this->data[$emailKey] == "" || $this->data[$emailKey] == null) {
@@ -183,18 +223,23 @@ class Publish_Model_ExtendedValidation {
         return $firstNames;
     }
 
-    /**
-     * Retrieves all first names from form data
-     * @return <Array> of first names
-     */
     private function _getPersonEmailFields() {
         $emails = array();
 
         foreach ($this->data as $key => $value) {
-            if (strstr($key, 'Person') && strstr($key, 'AllowEmail'))
+            if (strstr($key, 'Person') && strstr($key, 'Email') && !strstr($key, 'Allow'))
                 $emails[$key] = $value;
         }
+        return $emails;
+    }
 
+    private function _getPersonEmailNotificationFields() {
+        $emails = array();
+
+        foreach ($this->data as $key => $value) {
+            if (strstr($key, 'Person') && strstr($key, 'AllowEmailContact'))
+                $emails[$key] = $value;
+        }
         return $emails;
     }
 
@@ -232,12 +277,9 @@ class Publish_Model_ExtendedValidation {
 
         foreach ($languages as $key => $lang) {
             if ($lang !== "") {
-
                 //if $lang is set and not null, find the corresponding title
                 $titleKey = str_replace('Language', '', $key);
-
                 if ($this->data[$titleKey] == "" || $this->data[$titleKey] == null) {
-
                     //error case: language exists but title not
                     $element = $this->form->getElement($titleKey);
                     if (!$element->isRequired()) {
@@ -533,14 +575,14 @@ class Publish_Model_ExtendedValidation {
                     $element = $this->form->getElement('collId' . $step . $elementName);
                 }
             }
-            
+
             $matches = array();
             if (preg_match('/^ID:(\d+)$/', $element->getValue(), $matches) == 0) {
                 continue;
             }
-                       
+
             $collId = $matches[1];
-            
+
             if (isset($collId)) {
                 $coll = new Opus_Collection($collId);
                 if ($coll->hasChildren()) {
