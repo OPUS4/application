@@ -437,7 +437,13 @@ class Publish_Model_FormHelper {
             }            
         }
 
-        $form2 = new Publish_Form_PublishingSecond($this->view, $postData);
+        $form2 = null;
+        try {
+            $form2 = new Publish_Form_PublishingSecond($this->view, $postData);
+        } catch (Publish_Model_FormSessionTimeoutException $e) {
+            // Session timed out.
+            return $this->_redirectTo('index', '', 'index');
+        }
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
         $form2->setAction($action_url);
         $this->view->action_url = $action_url;

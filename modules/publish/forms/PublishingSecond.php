@@ -96,8 +96,18 @@ class Publish_Form_PublishingSecond extends Zend_Form {
      * @return void
      */
     public function init() {
-        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument($this->doctype);        
-        if (!isset($dom)) {
+        
+        if (!isset($this->doctype) or empty($this->doctype)) {
+            throw new Publish_Model_FormSessionTimeoutException();
+        }
+
+        $dom = null;
+        try {
+            $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument($this->doctype);
+        }
+        catch (Application_Exception $e) {
+            $this->log->err("Unable to load document type '" . $this->doctype . "'");
+            // TODO: Need another exception class?
             throw new Publish_Model_FormSessionTimeoutException();
         }
         $parser = new Publish_Model_DocumenttypeParser($dom, $this);

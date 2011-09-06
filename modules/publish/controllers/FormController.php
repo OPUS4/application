@@ -115,8 +115,14 @@ class Publish_FormController extends Controller_Action {
 
         //call the appropriate template
         $this->_helper->viewRenderer($this->session->documentType);
-        $publishForm = new Publish_Form_PublishingSecond($this->view);
-        return $publishForm->showTemplate($this->_helper);
+        try {
+            $publishForm = new Publish_Form_PublishingSecond($this->view);
+        }
+        catch (Publish_Model_FormSessionTimeoutException $e) {
+            // Session timed out.
+            return $this->_redirectTo('index', '', 'index');
+        }
+        return $publishForm->showTemplate();
     }
 
     /**
@@ -158,7 +164,14 @@ class Publish_FormController extends Controller_Action {
             }
 
             //initialize the form object
-            $form = new Publish_Form_PublishingSecond($this->view, $postData);
+            $form = null;
+            try {
+                $form = new Publish_Form_PublishingSecond($this->view, $postData);
+            }
+            catch (Publish_Model_FormSessionTimeoutException $e) {
+                // Session timed out.
+                return $this->_redirectTo('index', '', 'index');
+            }
             $form->populate($postData);
 
             //if (!$form->send->isChecked() || array_key_exists('back', $postData)) {
