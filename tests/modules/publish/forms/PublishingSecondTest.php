@@ -30,7 +30,7 @@
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id:$
+ * @version     $Id$
  */
 
 class Publish_Form_PublishingSecondTest extends ControllerTestCase {
@@ -57,5 +57,35 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $this->assertType('Publish_Model_FormHelper', $form->helper);
     }
     
+    public function testIsValidWithInvalidData() {
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'workingpaper';
+        $form = new Publish_Form_PublishingSecond(new Zend_View());   
+        $data = array(
+            'PersonSubmitterFirstName1' => 'John',
+            'PersonSubmitterLastName1' => 'Doe'
+        );
+        
+        $valid = $form->isValid($data);
+        $this->assertFalse($valid);
+    }
+    
+        public function testIsValidWithValidData() {
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'workingpaper';
+        $form = new Publish_Form_PublishingSecond(new Zend_View());   
+        $data = array(
+            'PersonSubmitterFirstName1' => 'John',
+            'PersonSubmitterLastName1' => 'Doe',
+            'TitleMain1' => 'Entenhausen',
+            'TitleMainLanguage1' => 'deu',
+            'CompletedDate' => '06.09.2011',
+            'Language' => 'deu',
+            'Licence' => 'ID:4'
+        );
+        
+        $valid = $form->isValid($data);
+        $this->assertTrue($valid);
+    }
     
 }
