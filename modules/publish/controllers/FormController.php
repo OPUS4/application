@@ -66,6 +66,7 @@ class Publish_FormController extends Controller_Action {
         $indexForm = new Publish_Form_PublishingFirst($this->view);
         $postData = $this->getRequest()->getPost();
         $this->view->showBib = $indexForm->bibliographie;
+        $this->view->showRights = $indexForm->showRights;
 
         //don't allow MAX_FILE_SIZE to get overridden
         $config = Zend_Registry::get('Zend_Config');
