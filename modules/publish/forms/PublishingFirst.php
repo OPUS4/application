@@ -58,20 +58,19 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
     }
 
     public function isValid($data) {
-        $valid1 = true;
-        $valid2 = parent::isValid($data);
+        $valid = parent::isValid($data);
 
         if ($this->config->form->first->show_rights_checkbox == 1) {
             if (array_key_exists('rights', $data)) {
                 if ($data['rights'] == '0') {
                     $rights = $this->getElement('rights');
                     $rights->addError('publish_error_rights_checkbox_empty');
-                    $valid2 = false;
+                    $valid = false;
                 }
             }
         }
 
-        return ($valid1 && $valid2);
+        return $valid;
     }
 
     /**
