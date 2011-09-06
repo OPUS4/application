@@ -389,5 +389,24 @@
         <seg>Bei dieser Sammlung sind nur Einträge gestattet, die nicht weiter spezifiziert werden können. Wählen Sie einen anderen Eintrag oder navigieren Sie weiter durch Drücken von "runter".</seg>
       </tuv>
     </tu>
+
+    <tu tuid="publish_error_noFirstNameButMail">
+      <tuv xml:lang="en">
+        <seg>Plese enter a first name or delete the mail address.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte geben Sie auch einen Vornamen ein oder löschen Sie die Email-Adresse.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_error_noLastNameButEmail">
+      <tuv xml:lang="en">
+        <seg>Plese enter a last name or delete the mail address.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte geben Sie auch einen Nachnamen ein oder löschen Sie die Email-Adresse.</seg>
+      </tuv>
+    </tu>
+
     </body>
 </tmx>
