@@ -154,20 +154,6 @@ class Publish_Model_FormHelper {
     }
 
     /**
-     * Renders the documenttype specific template
-     * @param <type> $helper
-     */
-    public function showTemplate() {      
-        $this->view->subtitle = $this->view->translate($this->session->documentType);        
-        $this->view->doctype = $this->session->documentType;                
-        $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
-        $this->form->setAction($action_url);
-        $this->form->setMethod('post');        
-        $this->view->action_url = $action_url;
-        $this->view->form = $this->form;
-    }
-
-    /**
      * Method sets the different variables and arrays for the view and the templates in the first form
      * @param <Zend_Form> $form
      */

@@ -37,7 +37,7 @@
  * Shows a publishing form for new documents
  *
  */
-class Publish_Form_PublishingSecond extends Zend_Form {
+class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
     public $doctype = "";      
     public $additionalFields = array();
@@ -150,7 +150,13 @@ class Publish_Form_PublishingSecond extends Zend_Form {
     }
 
     public function showTemplate() {
-        return $this->helper->showTemplate();
+        $this->view->subtitle = $this->view->translate($this->session->documentType);        
+        $this->view->doctype = $this->session->documentType;                
+        $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
+        $this->setAction($action_url);
+        $this->setMethod('post');        
+        $this->view->action_url = $action_url;
+        $this->view->form = $this->form;
     }
 
     public function showCheckpage() {
