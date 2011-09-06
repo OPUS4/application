@@ -52,18 +52,15 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
     public $log;    
     public $view;
 
-    public function __construct($view, $postData=null, $options=null) {
-        $this->log = Zend_Registry::get('Zend_Log');
-        $this->doctype = $this->session->documentType;               
-        $this->additionalFields = $this->session->additionalFields;
+    public function __construct($view, $postData=null) {
         $this->postData = $postData;
+        $this->log = Zend_Registry::get('Zend_Log');
         
         $this->view = $view;
         if (is_null($this->view))
                 throw new Publish_Model_NoViewFoundException();
         
-        parent::__construct($options);
-        $this->setSecondFormViewVariables($this);
+        parent::__construct();
     }
 
     /**
@@ -97,7 +94,9 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
      * @return void
      */
     public function init() {
-        
+        $this->doctype = $this->session->documentType;               
+        $this->additionalFields = $this->session->additionalFields;
+
         if (!isset($this->doctype) or empty($this->doctype)) {
             throw new Publish_Model_FormSessionTimeoutException();
         }
@@ -127,6 +126,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
         if (isset($this->postData))
             $this->populate($this->postData);
+
+        $this->setSecondFormViewVariables($this);
     }
 
     /**
