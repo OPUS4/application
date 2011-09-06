@@ -201,7 +201,116 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
     }
 
     public function setSecondFormViewVariables() {
-        $this->helper->setSecondFormViewVariables();
+        $errors = $this->getMessages();
+
+        //group fields and single fields for view placeholders
+        foreach ($this->getElements() AS $currentElement => $value) {
+            //element names have to loose special strings for finding groups
+            $name = $this->_getRawElementName($currentElement);
+
+            if (strstr($name, 'Enrichment')) {
+                $name = str_replace('Enrichment', '', $name);
+            }
+
+            //build group name
+            $groupName = self::GROUP . $name;
+            $this->view->$name = $this->view->translate($name);
+
+            //get the display group for the current element and build the complete group
+            $displayGroup = $this->getDisplayGroup($groupName);
+            if (!is_null($displayGroup)) {
+                $group = $this->_buildViewDisplayGroup($displayGroup, $this);
+                $group["Name"] = $groupName;
+                $this->view->$groupName = $group;                
+            }
+
+            //single field name (for calling with helper class)
+            $elementAttributes = $this->getElementAttributes($currentElement); //array
+
+            if (strstr($currentElement, 'Enrichment')) {
+                $name = str_replace('Enrichment', '', $currentElement);
+                $this->view->$name = $elementAttributes;                
+            }
+            else {
+                $this->view->$currentElement = $elementAttributes;                
+            }
+
+            $label = $currentElement . self::LABEL;
+            $this->view->$label = $this->view->translate($this->getElement($currentElement)->getLabel());
+
+            //EXPERT VIEW:
+            //also support more difficult templates for "expert admins"
+            $expertField = $currentElement . self::EXPERT;
+            $this->view->$expertField = $this->getElement($currentElement)->getValue();
+            //error values for expert fields view
+            if (isset($errors[$currentElement])) {
+                foreach ($errors[$currentElement] as $error => $errorMessage) {
+                    $errorElement = $expertField . self::ERROR;
+                    $this->view->$errorElement = $errorMessage;
+                }
+            }
+        }
+    }
+
+    /**
+     * Method to find out the element name stemming.
+     * @param <String> $element element name
+     * @return <String> $name
+     */
+    private function _getRawElementName($element) {
+        $name = "";
+        //element is a person element
+        $pos = stripos($element, self::FIRST);
+        if ($pos !== false) {
+            $name = substr($element, 0, $pos);
+        }
+        else {
+            //element belongs to a group
+            $pos = stripos($element, self::COUNTER);
+            if ($pos != false) {
+                $name = substr($element, 0, $pos);
+            }
+            else {
+                //"normal" element name without changes
+                $name = $element;
+            }
+        }
+        return $name;
+    }
+
+    /**
+     * Method to build a disply group by a number of arrays for fields, hidden fields and buttons.
+     * @param <Zend_Form_DisplayGroup> $displayGroup
+     * @param <Publishing_Second> $form
+     * @return <Array> $group
+     */
+    private function _buildViewDisplayGroup($displayGroup, $form) {
+        $groupFields = array(); //Fields
+        $groupHiddens = array(); //Hidden fields for adding and deleting fields
+        $groupButtons = array(); //Buttons
+
+        foreach ($displayGroup->getElements() AS $groupElement) {
+
+            $elementAttributes = $form->getElementAttributes($groupElement->getName()); //array
+            if ($groupElement->getType() === 'Zend_Form_Element_Submit') {
+                //buttons
+                $groupButtons[$elementAttributes["id"]] = $elementAttributes;
+            }
+            else if ($groupElement->getType() === 'Zend_Form_Element_Hidden') {
+                //hidden fields
+                $groupHiddens[$elementAttributes["id"]] = $elementAttributes;
+            }
+            else {
+                //normal fields
+                $groupFields[$elementAttributes["id"]] = $elementAttributes;
+            }
+        }
+        $group[] = array();
+        $group["Fields"] = $groupFields;
+        $group["Hiddens"] = $groupHiddens;
+        $group["Buttons"] = $groupButtons;
+
+        return $group;
     }
 
 }
