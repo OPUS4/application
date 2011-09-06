@@ -47,14 +47,14 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
      */
     public function testConstructorWithCorrectViewAndWithoutDocType() {
         $form = new Publish_Form_PublishingSecond(new Zend_View());        
-        $this->assertType('Publish_Model_FormHelper', $form->helper);
     }
     
     public function testConstructorWithCorrectViewAndWithDocType() {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
-        $form = new Publish_Form_PublishingSecond(new Zend_View());        
-        $this->assertType('Publish_Model_FormHelper', $form->helper);
+        $form = new Publish_Form_PublishingSecond(new Zend_View());
+        $this->assertNotNull( $form->getElement('back') );
+        $this->assertNotNull( $form->getElement('send') );
     }
     
     public function testIsValidWithInvalidData() {

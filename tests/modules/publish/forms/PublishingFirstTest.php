@@ -30,23 +30,16 @@
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id:$
+ * @version     $Id$
  */
 
 class Publish_Form_PublishingFirstTest extends ControllerTestCase {
 
-    /**
-     * @expectedException Publish_Model_NoViewFoundException
-     */
     public function testConstructorWithEmptyView() {
-        $form = new Publish_Form_PublishingFirst(null);        
+        $form = new Publish_Form_PublishingFirst();
+        $this->assertNotNull( $form->getElement('send') );
     }
         
-    public function testConstructorWithCorrectView() {
-        $form = new Publish_Form_PublishingFirst(new Zend_View());        
-        $this->assertType('Publish_Model_FormHelper', $form->helper);
-    }
-    
     public function testIsValidMethodWithMissingDocumentType() {        
         $config = Zend_Registry::get('Zend_Config');
         $config->form->first->require_upload = 0;

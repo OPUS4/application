@@ -70,6 +70,9 @@ class Publish_DepositControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/deposit/deposit');
+        echo "code:" . $this->getResponse()->getHttpResponseCode() . "\n";
+        echo "body:" . $this->getResponse()->getBody() . "\n";
+        
         $this->assertResponseCode(200);
         $this->assertController('form');
         $this->assertAction('check');
