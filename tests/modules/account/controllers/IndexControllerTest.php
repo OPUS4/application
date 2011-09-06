@@ -146,6 +146,32 @@ class Account_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Test modifying account information.
+     */
+    public function testChangePasswordSuccessWithSpecialChars() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->account->editOwnAccount = 1;
+
+        $this->loginUser('john', 'testpwd');
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                   'username' => 'john',
+                   'firstname' => '',
+                   'lastname' => '',
+                   'email' => '',
+                   'password' => 'new@pwd$%',
+                   'confirmPassword' => 'new@pwd$%'
+                ));
+        $this->dispatch('/account/index/save');
+        $this->assertRedirect();
+
+        // Check if change succeeded...
+        $account = new Opus_Account(null, null, 'john');
+        $this->assertTrue( $account->isPasswordCorrect('new@pwd$%') );
+    }
+
+    /**
      * Test changing login.
      */
     public function testChangeLoginSuccess() {
