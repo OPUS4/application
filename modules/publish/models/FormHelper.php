@@ -70,46 +70,6 @@ class Publish_Model_FormHelper {
     }
 
     /**
-     *
-     * @param <type> $elementName
-     * @return string
-     */
-    public function getElementAttributes($elementName) {
-        $elementAttributes = array();
-        if (!is_null($this->form->getElement($elementName))) {
-            $element = $this->form->getElement($elementName);
-            $elementAttributes['value'] = $element->getValue();
-            $elementAttributes['label'] = $element->getLabel();
-            $elementAttributes['error'] = $element->getMessages();
-            $elementAttributes['id'] = $element->getId();
-            $elementAttributes['type'] = $element->getType();
-            $elementAttributes['desc'] = $element->getDescription();
-            $elementAttributes['hint'] = 'hint_' . $elementName;
-            $elementAttributes['header'] = 'header_' . $elementName;
-            $elementAttributes['disabled'] = $element->getAttrib('disabled');
-
-            if ($element->getType() === 'Zend_Form_Element_Checkbox') {
-                $elementAttributes['value'] = $element->getCheckedValue();
-                if ($element->isChecked())
-                    $elementAttributes['check'] = 'checked';
-                else
-                    $elementAttributes['check'] = '';
-            }
-
-            if ($element->getType() === 'Zend_Form_Element_Select') {
-                $elementAttributes["options"] = $element->getMultiOptions(); //array
-            }
-
-            if ($element->isRequired())
-                $elementAttributes["req"] = "required";
-            else
-                $elementAttributes["req"] = "optional";
-        }
-
-        return $elementAttributes;
-    }
-
-    /**
      * Method to check which button in the form was pressed 
      * @return <String> name of button
      */

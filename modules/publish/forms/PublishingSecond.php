@@ -139,16 +139,6 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $this->addElement($submit);
     }
 
-    /**
-     *
-     * @param <type> $elementName
-     * @return string
-     */
-    public function getElementAttributes($elementName) {
-        $elementAttributes = $this->helper->getElementAttributes($elementName);
-        return $elementAttributes;
-    }
-
     public function showTemplate() {
         $this->view->subtitle = $this->view->translate($this->session->documentType);        
         $this->view->doctype = $this->session->documentType;                
