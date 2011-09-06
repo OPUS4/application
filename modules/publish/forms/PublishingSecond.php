@@ -39,16 +39,20 @@
  */
 class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
+    CONST FIRST = "Firstname";
+    CONST COUNTER = "1";
+    CONST GROUP = "group";
+    CONST EXPERT = "X";
+    CONST LABEL = "_label";
+    CONST ERROR = "Error";
+   
     public $doctype = "";      
     public $additionalFields = array();
     public $postData = array();
     public $log;    
-    public $msc = array();
-    public $session;
     public $view;
 
     public function __construct($view, $postData=null, $options=null) {
-        $this->session = new Zend_Session_Namespace('Publish');
         $this->log = Zend_Registry::get('Zend_Log');
         $this->doctype = $this->session->documentType;               
         $this->additionalFields = $this->session->additionalFields;
@@ -343,13 +347,6 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         }
     }
 
-    CONST FIRST = "Firstname";
-    CONST COUNTER = "1";
-    CONST GROUP = "group";
-    CONST EXPERT = "X";
-    CONST LABEL = "_label";
-    CONST ERROR = "Error";
-   
     /**
      * Method to find out the element name stemming.
      * @param <String> $element element name
