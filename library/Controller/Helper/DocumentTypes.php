@@ -116,12 +116,11 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
      *
      * @param string $documentType
      * @return DOMDocument 
-     * 
-     * TODO catch parsing errors
+     * @throws Application_Exception if invalid documentType passed.
      */
     public function getDocument($documentType) {
         if (!$this->isValid($documentType)) {
-            return null; // TODO throw exception
+            throw new Application_Exception('Unable to load invalid document type "' . $documentType . '"');
         }
 
         $xmlFile = $this->getDocTypesPath() . DIRECTORY_SEPARATOR . $documentType . ".xml";
