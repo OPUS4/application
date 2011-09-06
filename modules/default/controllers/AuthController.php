@@ -180,8 +180,7 @@ class AuthController extends Controller_Action {
 
         // Password element.
         $password = new Zend_Form_Element_Password('password');
-        $password->addValidator(new Zend_Validate_Alnum())
-                ->setRequired()
+        $password->setRequired()
                 ->setLabel('auth_field_password');
         $password->addErrorMessages(array(
             Zend_Validate_NotEmpty::IS_EMPTY => 'auth_error_no_password'

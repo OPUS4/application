@@ -54,6 +54,11 @@ class Account_Form_Account extends Zend_Form {
 
         $this->getElement('username')->addValidator(
                 new Form_Validate_LoginAvailable());
+
+        $this->getElement('password')->addErrorMessages(array(
+            Zend_Validate_StringLength::TOO_SHORT =>
+                'admin_account_error_password_tooshort'
+        ));
     }
 
     public function populateFromAccount($account) {

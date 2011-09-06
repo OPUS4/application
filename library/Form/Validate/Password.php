@@ -36,7 +36,7 @@ class Form_Validate_Password extends Zend_Validate_Abstract {
     const NOT_MATCH = 'notMatch';
 
     protected $_messageTemplates = array(
-        self::NOT_MATCH => 'Password confirmation does not match'
+        self::NOT_MATCH => 'password_confirmation_error'
     );
 
     public function isValid($value, $context = null) {
@@ -57,7 +57,7 @@ class Form_Validate_Password extends Zend_Validate_Abstract {
         $this->_error(self::NOT_MATCH);
         return false;
     }
-    
+
 }
 
 ?>

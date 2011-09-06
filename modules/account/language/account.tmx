@@ -1,13 +1,22 @@
 <?xml version="1.0" ?>
 <!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
 <tmx version="1.4">
- 
+
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
- 
+
   <body>
 
     <tu tuid="account_index_index">
+      <tuv xml:lang="en">
+        <seg>Account</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Konto</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="account_index_save">
       <tuv xml:lang="en">
         <seg>Account</seg>
       </tuv>
@@ -59,7 +68,7 @@
         <seg>Email:</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_account_label_password">
       <tuv xml:lang="en">
         <seg>Password:</seg>
@@ -87,6 +96,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_account_error_password_tooshort">
+      <tuv xml:lang="en">
+        <seg>The password is less than 6 characters long.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Password ist kürzer als 6 Zeichen.</seg>
+      </tuv>
+    </tu>
+
   </body>
-  
+
 </tmx>

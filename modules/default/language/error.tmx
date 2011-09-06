@@ -54,6 +54,16 @@
         </tuv>
     </tu>
 
+    <tu tuid="password_confirmation_error">
+        <!-- Text for alreaded uploaded files -->
+        <tuv xml:lang="en">
+            <seg>Password confirmation does not match.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die beiden Passworteingaben sind nicht identisch.</seg>
+        </tuv>
+    </tu>
+
   </body>
 
 </tmx>
