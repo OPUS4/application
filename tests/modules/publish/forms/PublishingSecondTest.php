@@ -76,16 +76,11 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $config = Zend_Registry::get('Zend_Config');
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
-        $session->documentType = 'workingpaper';
+        $session->documentType = 'demo';
         $form = new Publish_Form_PublishingSecond(new Zend_View());   
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
-            'PersonSubmitterLastName1' => 'Doe',
-            'TitleMain1' => 'Entenhausen',
-            'TitleMainLanguage1' => 'deu',
-            'CompletedDate' => '06.09.2011',
-            'Language' => 'deu',
-            'Licence' => 'ID:4'
+            'PersonSubmitterLastName1' => 'Doe'
         );
         
         $valid = $form->isValid($data);
