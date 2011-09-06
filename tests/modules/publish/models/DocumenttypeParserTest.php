@@ -36,6 +36,9 @@
 class Publish_Model_DocumenttypeParserTest extends ControllerTestCase {
 
          
+    /**
+     * @expectedException Application_Exception
+     */
     public function testConstructorWithWrongDom() {
         $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('irgendwas');         
         $model = new Publish_Model_DocumenttypeParser($dom, null);
