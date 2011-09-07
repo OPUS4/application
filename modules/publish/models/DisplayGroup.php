@@ -120,9 +120,7 @@ class Publish_Model_DisplayGroup {
                     //only clone special fields
                     if ($element->getName() === $this->elementName) {
                         //clone the "root selection"                        
-                        $elem = clone $element;
-                        $this->log->debug("BrowseGroup: " . $element->getName() . " | leaf gesetzt? " . $element->getAttrib('collectionLeaf'));
-                        $this->log->debug("BrowseGroup: " . $elem->getName() . " | leaf gesetzt nach clone? " . $elem->getAttrib('collectionLeaf'));
+                        $elem = clone $element;                        
                         $elem->setName($this->elementName . $i);
                         if (isset($this->session->additionalFields['collId1' . $this->elementName . $i])) {
                             $elem->setValue('ID:' . $this->session->additionalFields['collId1' . $this->elementName . $i]);                            
@@ -305,17 +303,7 @@ class Publish_Model_DisplayGroup {
             $children = array();
             foreach ($colls as $coll) {
                 if ($coll->getVisible() == 1) {
-                    //$hasChildrenText = $coll->hasChildren() ? "(has children)" : "(no children)";
-                    
-//                    $parentStrings = array();
-//                    foreach ($coll->getParents() AS $collection_parent) {
-//                        $parentStrings[] = $collection_parent->getNumber();
-//                    }
-//                    array_pop($parentStrings);
-//                    
-//                    $debugParentsText = "[".  implode(" -> ", $parentStrings)."]";
-
-                    $children['ID:' . $coll->getId()] = $coll->getDisplayName();// . " " . $hasChildrenText . " " . $debugParentsText;
+                    $children['ID:' . $coll->getId()] = $coll->getDisplayName();
                 }
             }
             $selectField->setMultiOptions($children);
