@@ -1,5 +1,51 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.1.3 2011-09-07 ========================
+
+h3. Bugs
+
+* [OPUSVIER-883] - unpassende Notifikation nach dem Ausloggen
+* [OPUSVIER-884] - Passwortänderung lässt unzulässige Zeichen zu (keine Validierung)
+* [OPUSVIER-1507] - Publish-Formular: Unvollständige Projekte und MSC-Klassifikationen möglich
+* [OPUSVIER-1551] - Gutachter wird nicht über oai-xmetadissplus ausgeliefert
+* [OPUSVIER-1661] - Publish-Formular: Korrekte Behandlung des Falls, wenn kein Button erkannt wurde
+* [OPUSVIER-1669] - Fehlender Übersetzungsschlüssel publish_deposit_confirm
+* [OPUSVIER-1689] - Fehlende Übersetzungsschlüssel in Dokument-Administration: Titel und Abstract
+* [OPUSVIER-1699] - "wrong_identity_error" direkt nach dem Login
+* [OPUSVIER-1700] - Publish-Formular: Required-Collections in "preprintmatheon" werden nicht geprüft
+* [OPUSVIER-1704] - SWD-  und freie Schlagwörter fehlerhaft migriert
+* [OPUSVIER-1705] - Inhalt des Feldes source_swb aus OPUS3 fehlt 
+* [OPUSVIER-1707] - Lizenzen werden angezeigt, auch wenn sie den Status inaktiv besitzen
+* [OPUSVIER-1710] - Harvesten der Dokumente zur DNB
+* [OPUSVIER-1720] - Dokument kann nicht permanent gelöscht werden, wenn in Datenbank noch mindestens eine Datei assoziiert ist, die aber nicht (mehr) im Dateisystem liegt
+
+h3. Stories
+
+* [OPUSVIER-1702] - Publish-Formular: Session-Variable "depositConfirmDocumentId" verschwunden
+
+h3. Tasks
+
+* [OPUSVIER-1056] - Workflow für die Migration von URNs
+* [OPUSVIER-1204] - Update-Script dokumentieren
+* [OPUSVIER-1279] - Rechte-Umbau: Unit-Tests für Frontdoor-Fehlerfälle hinzufügen
+* [OPUSVIER-1304] - Unit-Tests für Opus_UserRole erstellen
+* [OPUSVIER-1306] - Unit-Test für Rückgabewert von Opus_UserRole
+* [OPUSVIER-1554] - Migration von Nicht-Opus4-Klassifikationen 
+* [OPUSVIER-1635] - Übersetzungsressourcen für die Collection Roles in Modul publish entfernen und auf die Ressourcen im Modul default zugreifen
+* [OPUSVIER-1649] - Klassen-Struktur der Formulare verbessern
+* [OPUSVIER-1660] - Publish-Formular: Unit-Test für gedrückte Buttons in /publish/form/check/
+* [OPUSVIER-1678] - Nach dem Logout nicht auf geschützte Seiten weiterleiten
+* [OPUSVIER-1685] - Changelog für die Releases 4.0.0 nachtragen und für 4.0.1 und 4.0.2 erweitern
+* [OPUSVIER-1732] - CollectionRole-spezifische Übersetzungsschlüssel für Up-/Down-Button entfernen und durch einen generischen Schlüssel ersetzen
+
+h3. Documentation
+
+* [OPUSVIER-1633] - Installations-Script: Section mit User-konfigurierbare Variablen erstellt
+* [OPUSVIER-1724] - Anlegen einer neuen Collecrtion Role: Welche Änderungen sind bezogen auf das Publish-Formular erforderlich?
+* [OPUSVIER-1729] - Config Parameter form-first.numberoffiles wurde entfernt!
+* [OPUSVIER-1731] - Dokumentation des neuen Datatypes "CollectionLeaf" für die Dokumenttypen
+
+
 h2. ======================== Release 4.1.2 2011-08-08 ========================
 
 h3. Bugfixes
