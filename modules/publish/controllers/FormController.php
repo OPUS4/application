@@ -116,7 +116,7 @@ class Publish_FormController extends Controller_Action {
         //call the appropriate template
         $this->_helper->viewRenderer($this->session->documentType);
         try {
-            $publishForm = new Publish_Form_PublishingSecond($this->view);
+            $publishForm = new Publish_Form_PublishingSecond();
         }
         catch (Publish_Model_FormSessionTimeoutException $e) {
             // Session timed out.
@@ -133,8 +133,10 @@ class Publish_FormController extends Controller_Action {
     public function checkAction() {
         $this->view->languageSelectorDisabled = true;
         $this->view->title = $this->view->translate('publish_controller_index');
+        
         if (isset($this->session->documentType))
                 $this->view->subtitle = $this->view->translate($this->session->documentType);
+        
         $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
         //reload form or show entries, intial: true
@@ -142,6 +144,7 @@ class Publish_FormController extends Controller_Action {
 
         if ($this->getRequest()->isPost() === true) {
             $postData = $this->getRequest()->getPost();
+            
             if (!is_null($this->session->disabled))
                     $postData = array_merge($postData, $this->session->disabled);
 
@@ -156,7 +159,6 @@ class Publish_FormController extends Controller_Action {
 
             //go back and change data
             if (array_key_exists('back', $postData)) {
-
                 $reload = false;
                 if (isset($this->session->elements))
                     foreach ($this->session->elements AS $element)
@@ -166,19 +168,16 @@ class Publish_FormController extends Controller_Action {
             //initialize the form object
             $form = null;
             try {
-                $form = new Publish_Form_PublishingSecond($this->view, $postData);
+                $form = new Publish_Form_PublishingSecond($postData);
             }
             catch (Publish_Model_FormSessionTimeoutException $e) {
                 // Session timed out.
                 return $this->_redirectTo('index', '', 'index');
             }
-            $form->populate($postData);
-
-            //if (!$form->send->isChecked() || array_key_exists('back', $postData)) {
+            
             if (!array_key_exists('send', $postData) || array_key_exists('back', $postData)) {
-                // A button (not SEND) was pressed => add / remove fields
+                // A button (not SEND) was pressed => add / remove fields                
                 $this->_helper->viewRenderer($this->session->documentType);
-                $form->setView($this->view);
                 //call method to add or delete buttons
                 try {
                     return $form->getExtendedForm($postData, $reload);
@@ -186,10 +185,8 @@ class Publish_FormController extends Controller_Action {
                 catch (Publish_Model_FormNoButtonFoundException $e) {
                     $this->view->translateKey = $e->getTranslateKey();
                     return $this->render('error');
-                }
-                
+                }                
             }
-
             // SEND was pressed => check the form
             if (!$form->isValid($postData)) {
                 $form->setSecondFormViewVariables();
@@ -197,8 +194,6 @@ class Publish_FormController extends Controller_Action {
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');                
                 return $this->_helper->viewRenderer($this->session->documentType);
             }
-
-            $form->setView($this->view);
             return $form->showCheckPage();
         }
 
@@ -226,9 +221,7 @@ class Publish_FormController extends Controller_Action {
                 $this->document->store();
             }
             unset($postData['documentType']);
-        }
-
-        $this->session->additionalFields = array();
+        }        
     }
 
 
