@@ -52,13 +52,10 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
     public $log;    
     public $view;
 
-    public function __construct($view, $postData=null) {
+    public function __construct($postData=null) {
         $this->postData = $postData;
-        $this->log = Zend_Registry::get('Zend_Log');
-        
-        $this->view = $view;
-        if (is_null($this->view))
-                throw new Publish_Model_NoViewFoundException();
+        $this->log = Zend_Registry::get('Zend_Log');       
+        $this->view = $this->getView();
         
         parent::__construct();
     }
@@ -94,6 +91,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
      * @return void
      */
     public function init() {
+        parent::init();
+        
         $this->doctype = $this->session->documentType;               
         $this->additionalFields = $this->session->additionalFields;
 
@@ -113,7 +112,6 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $parser = new Publish_Model_DocumenttypeParser($dom, $this);
         $this->log->debug("Parser created");
         $parser->setAdditionalFields($this->additionalFields);
-
         $parser->setPostValues($this->postData);
 
         if ($parser !== false)
@@ -127,7 +125,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         if (isset($this->postData))
             $this->populate($this->postData);
 
-        $this->setSecondFormViewVariables($this);
+        $this->setSecondFormViewVariables();
     }
 
     /**
@@ -203,7 +201,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                 $fieldName = substr($pressedButtonName, 10);
                 $workflow = 'delete';
             }
-            else if (substr($pressedButtonName, 0, 10) == "browseDown") {
+            else if (substr($pressedButtonName, 0, 10) == "browseDown") {                
                 $fieldName = substr($pressedButtonName, 10);
                 $workflow = 'down';
             }
@@ -211,7 +209,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                 $fieldName = substr($pressedButtonName, 8);
                 $workflow = 'up';
             }
-
+            
             if (!is_null($this->session->additionalFields[$fieldName]))
                     $currentNumber = $this->session->additionalFields[$fieldName];
             else 
@@ -219,11 +217,13 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
             //collection
             if (array_key_exists('step' . $fieldName . $currentNumber, $this->session->additionalFields)) {
-                $currentCollectionLevel = $this->session->additionalFields['step' . $fieldName . $currentNumber];
+                $currentCollectionLevel = $this->session->additionalFields['step' . $fieldName . $currentNumber];                
                 if ($currentCollectionLevel == '1') {
                     if (isset($postData[$fieldName . $currentNumber])) {
-                        if (substr($postData[$fieldName . $currentNumber], 3) !== 'EMPTY')
+                        if (substr($postData[$fieldName . $currentNumber], 3) !== 'EMPTY') {
+                            //throw new Exception('collId1' . $fieldName . $currentNumber . ' : ' . substr($postData[$fieldName . $currentNumber], 3));                        
                             $this->session->additionalFields['collId1' . $fieldName . $currentNumber] = substr($postData[$fieldName . $currentNumber], 3);
+                        }
                     }
                 }
                 else {
@@ -265,7 +265,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                     break;
                 case 'down':
                     if (substr($postData[$fieldName . $currentNumber], 3) !== 'EMPTY' || $this->session->additionalFields['collId1' . $fieldName . $currentNumber] !== 'EMPTY')
-                        $currentCollectionLevel = (int) $currentCollectionLevel + 1;
+                        $currentCollectionLevel = (int) $currentCollectionLevel + 1;                    
                     break;
                 case 'up' :
                     if ($currentCollectionLevel >= 2)
@@ -275,16 +275,17 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                     break;
             }
 
-            //set the increased value for the pressed button and create a new form
+            //set the increased value for the pressed button
             $this->session->additionalFields[$fieldName] = $currentNumber;
             if (isset($currentCollectionLevel)) {
-                $this->session->additionalFields['step' . $fieldName . $fieldsetCount] = $currentCollectionLevel;
+                $this->session->additionalFields['step' . $fieldName . $fieldsetCount] = $currentCollectionLevel;                
             }            
         }
 
+        //now create a new form with extended fields
         $form2 = null;
         try {
-            $form2 = new Publish_Form_PublishingSecond($this->view, $postData);
+            $form2 = new Publish_Form_PublishingSecond($postData);
         } catch (Publish_Model_FormSessionTimeoutException $e) {
             // Session timed out.
             return $this->_redirectTo('index', '', 'index');
@@ -292,7 +293,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
         $form2->setAction($action_url);
         $this->view->action_url = $action_url;
-        $this->setSecondFormViewVariables($form2);
+        $form2->setSecondFormViewVariables();
         $this->view->form = $form2;       
     }
 

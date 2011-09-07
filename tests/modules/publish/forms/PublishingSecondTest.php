@@ -34,25 +34,18 @@
  */
 
 class Publish_Form_PublishingSecondTest extends ControllerTestCase {
-
-    /**
-     * @expectedException Publish_Model_NoViewFoundException
-     */
-    public function testConstructorWithEmptyView() {
-        $form = new Publish_Form_PublishingSecond(null);        
-    }
     
     /**
      * @expectedException Publish_Model_FormSessionTimeoutException
      */
     public function testConstructorWithCorrectViewAndWithoutDocType() {
-        $form = new Publish_Form_PublishingSecond(new Zend_View());        
+        $form = new Publish_Form_PublishingSecond();        
     }
     
     public function testConstructorWithCorrectViewAndWithDocType() {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
-        $form = new Publish_Form_PublishingSecond(new Zend_View());
+        $form = new Publish_Form_PublishingSecond();
         $this->assertNotNull( $form->getElement('back') );
         $this->assertNotNull( $form->getElement('send') );
     }
@@ -62,7 +55,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
-        $form = new Publish_Form_PublishingSecond(new Zend_View());   
+        $form = new Publish_Form_PublishingSecond();   
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe'
@@ -77,7 +70,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'demo';
-        $form = new Publish_Form_PublishingSecond(new Zend_View());   
+        $form = new Publish_Form_PublishingSecond();   
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe'
