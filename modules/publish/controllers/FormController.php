@@ -177,9 +177,23 @@ class Publish_FormController extends Controller_Action {
             if (!array_key_exists('send', $postData) || array_key_exists('back', $postData)) {
                 // A button (not SEND) was pressed => add / remove fields                
                 $this->_helper->viewRenderer($this->session->documentType);
-                //call method to add or delete buttons
+                
                 try {
-                    return $form->getExtendedForm($postData, $reload);
+                    $form->getExtendedForm($postData, $reload);
+                    //now create a new form with extended fields
+                    $form2 = null;
+                    try {
+                        $form2 = new Publish_Form_PublishingSecond($postData);
+                    } 
+                    catch (Publish_Model_FormSessionTimeoutException $e) {                        
+                        return $this->_redirectTo('index', '', 'index');
+                    }
+                    $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
+                    $form2->setAction($action_url);
+                    $this->view->action_url = $action_url;
+                    $form2->setSecondFormViewVariables();
+                    $this->view->form = $form2;
+                    return;
                 } 
                 catch (Publish_Model_FormNoButtonFoundException $e) {
                     $this->view->translateKey = $e->getTranslateKey();

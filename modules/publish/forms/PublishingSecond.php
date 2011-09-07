@@ -160,8 +160,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             }
         }
 
-        $this->_addSubmit('button_label_back', 'back');
-        $this->_addSubmit('button_label_collection', 'collection');
+        $this->_addSubmit('button_label_back', 'back');        
         $this->_addSubmit('button_label_send2', 'send');
     }
 
@@ -259,21 +258,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             if (isset($currentCollectionLevel)) {
                 $this->session->additionalFields['step' . $fieldName . $fieldsetCount] = $currentCollectionLevel;                
             }            
-        }
-
-        //now create a new form with extended fields
-        $form2 = null;
-        try {
-            $form2 = new Publish_Form_PublishingSecond($postData);
-        } catch (Publish_Model_FormSessionTimeoutException $e) {
-            // Session timed out.
-            return $this->_redirectTo('index', '', 'index');
-        }
-        $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
-        $form2->setAction($action_url);
-        $this->view->action_url = $action_url;
-        $form2->setSecondFormViewVariables();
-        $this->view->form = $form2;       
+        }               
     }
 
     public function setSecondFormViewVariables() {
