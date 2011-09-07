@@ -59,7 +59,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'irgendwas';
         $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');         
-        $form = new Publish_Form_PublishingSecond(new Zend_View());
+        $form = new Publish_Form_PublishingSecond();
         $model = new Publish_Model_DocumenttypeParser($dom, $form);        
         $this->assertType('DOMDocument', $model->dom);        
     }
@@ -68,7 +68,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
         $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');         
-        $form = new Publish_Form_PublishingSecond(new Zend_View());
+        $form = new Publish_Form_PublishingSecond();
         $model = new Publish_Model_DocumenttypeParser($dom, $form);        
         $this->assertType('DOMDocument', $model->dom);
         $this->assertType('Publish_Form_PublishingSecond', $model->form);

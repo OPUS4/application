@@ -35,11 +35,9 @@
 class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
 
     public function testPersonsFirstNamesWithInvalidData() {
-//        $config = Zend_Registry::get('Zend_Config');
-//        $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
-        $form = new Publish_Form_PublishingSecond(new Zend_View());
+        $form = new Publish_Form_PublishingSecond();
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe',
@@ -60,11 +58,9 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
     }
 
     public function testPersonsEmailWithInvalidData() {
-//        $config = Zend_Registry::get('Zend_Config');
-//        $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
-        $form = new Publish_Form_PublishingSecond(new Zend_View());
+        $form = new Publish_Form_PublishingSecond();
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe',
@@ -91,7 +87,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
-        $form = new Publish_Form_PublishingSecond(new Zend_View());
+        $form = new Publish_Form_PublishingSecond();
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe',
@@ -117,7 +113,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
-        $form = new Publish_Form_PublishingSecond(new Zend_View());
+        $form = new Publish_Form_PublishingSecond();
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe',
