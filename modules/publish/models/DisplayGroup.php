@@ -356,13 +356,13 @@ class Publish_Model_DisplayGroup {
 
     private function addDownButtontoGroup() {
         $downButton = $this->form->createElement('submit', 'browseDown' . $this->elementName);
-        $downButton->setLabel('button_label_browse_down' . $this->elementName);
+        $downButton->setLabel('button_label_browse_down');
         return $downButton;
     }
 
     private function addUpButtontoGroup() {
         $upButton = $this->form->createElement('submit', 'browseUp' . $this->elementName);
-        $upButton->setLabel('button_label_browse_up' . $this->elementName);
+        $upButton->setLabel('button_label_browse_up');
         return $upButton;
     }
 
