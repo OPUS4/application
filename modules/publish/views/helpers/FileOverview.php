@@ -71,7 +71,7 @@ class View_Helper_FileOverview extends Zend_View_Helper_Abstract {
         foreach ($files as $file) {
             $overview .= '<p>' . $this->view->translate('name') . ': <b>' . htmlspecialchars($file->getPathName()) .
                         '</b><br/>' . $this->view->translate('type') . ': ' . htmlspecialchars($file->getMimeType()) .
-                        '<br/>' . $this->view->translate('size') . ': ' . htmlspecialchars($file->getFileSize()) . ''. $this->view->translate('bytes')  .
+                        '<br/>' . $this->view->translate('size') . ': ' . htmlspecialchars($file->getFileSize()) . ' '. $this->view->translate('bytes')  .
                         '<br />' . $this->view->translate('uploadComment') . ': ' . htmlspecialchars($file->getComment()) . '</p>';
 
         }
