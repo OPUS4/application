@@ -301,4 +301,48 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $this->assertTrue($session->additionalFields['stepInstitute1']=='1');  
         $this->assertTrue($session->additionalFields['collId2Institute1']=='15995');  
     }    
+    
+    /**
+     * Button pressed: no button pressed
+     * @expectedException Publish_Model_FormNoButtonFoundException
+     */
+    public function testGetExtendedFormMethodWithMssingButton() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'preprint';
+        $session->additionalFields = array();               
+           
+        $data = array(
+            'PersonSubmitterFirstName1' => '',
+            'PersonSubmitterLastName1' => '', 
+            'PersonSubmitterEmail1' => '',            
+            'TitleMain1' => '',
+            'TitleMainLanguage1' => '',            
+            'TitleAbstract1' => '',
+            'TitleAbstractLanguage1' => '',
+            'PersonAuthorFirstName1' => '',
+            'PersonAuthorLastName1' => '',
+            'PersonAuthorAcademicTitle1' => '',
+            'PersonAuthorEmail1' => '', 
+            'PersonAuthorAllowEmailContact1' => '0',
+            'PersonAuthorDateOfBirth1' => '',
+            'PersonAuthorPlaceOfBirth1' => '',
+            'CompletedYear' => '',
+            'CompletedDate' => '07.09.2011',
+            'PageNumber' => '',
+            'SubjectUncontrolled1' => '',
+            'SubjectUncontrolledLanguage1' => '',            
+            'Institute1' => '',
+            'IdentifierUrn' => '',
+            'Note' => '',
+            'Language' => 'deu',
+            'Licence' => '',
+            'SeriesNumber1' => '',
+            'Series1' => ''
+        );
+        
+        $form = new Publish_Form_PublishingSecond($data);
+        $form->getExtendedForm($data, true);                          
+    }    
 }
