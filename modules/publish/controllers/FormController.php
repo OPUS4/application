@@ -40,14 +40,14 @@
  * @package     Module_Publish
  */
 class Publish_FormController extends Controller_Action {
-    
+
     public $log;
     public $session;
     public $document;
 
     public function init() {
         $this->log = Zend_Registry::get('Zend_Log');
-        $this->session = new Zend_Session_Namespace('Publish');        
+        $this->session = new Zend_Session_Namespace('Publish');
 
         parent::init();
     }
@@ -81,25 +81,25 @@ class Publish_FormController extends Controller_Action {
         $this->_initializeDocument($postData);
 
         //validate fileupload
-        if (!$indexForm->getElement('fileupload')->isValid($postData)) {
-            $indexForm->setFirstFormViewVariables();
-            $this->view->form = $indexForm;
-            $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
+            if (!$indexForm->getElement('fileupload')->isValid($postData)) {
+                $indexForm->setFirstFormViewVariables();
+                $this->view->form = $indexForm;
+                $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
         } 
         else {
-            //file valid-> store file                
-            $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
-            $this->view->uploadSuccess = $this->_storeUploadedFiles($postData);
-            $indexForm = new Publish_Form_PublishingFirst($this->view);
-            $indexForm->populate($postData);
-            $indexForm->setFirstFormViewVariables();
-            $this->view->form = $indexForm;
+                //file valid-> store file                
+                $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
+                $this->view->uploadSuccess = $this->_storeUploadedFiles($postData);
+                $indexForm = new Publish_Form_PublishingFirst($this->view);
+                $indexForm->populate($postData);
+                $indexForm->setFirstFormViewVariables();
+                $this->view->form = $indexForm;
 
-            if (array_key_exists('addAnotherFile', $postData)) {
-                $postData['uploadComment'] = "";
-                return $this->renderScript('index/index.phtml');
+                if (array_key_exists('addAnotherFile', $postData)) {
+                    $postData['uploadComment'] = "";
+                    return $this->renderScript('index/index.phtml');
+                }
             }
-        }
 
         //validate whole form
         if (!$indexForm->isValid($postData)) {
@@ -117,26 +117,26 @@ class Publish_FormController extends Controller_Action {
         $this->_helper->viewRenderer($this->session->documentType);
         try {
             $publishForm = new Publish_Form_PublishingSecond();
-        }
-        catch (Publish_Model_FormSessionTimeoutException $e) {
+        } catch (Publish_Model_FormSessionTimeoutException $e) {
             // Session timed out.
             return $this->_redirectTo('index', '', 'index');
         }
-        return $publishForm->showTemplate();
+        return $this->showTemplate($publishForm);
     }
 
     /**
-     * displays and checks the publishing form contents and calls deposit to store the data
-     * uses check_array
-     * @return <type>
+     * Method displays and checks the second form page. It also concerns for extending and reducing form fields.
+     * After correct validation the user is redirected to deposit controller for storing data.
+     * 
+     * @return different types of redirect
      */
     public function checkAction() {
         $this->view->languageSelectorDisabled = true;
         $this->view->title = $this->view->translate('publish_controller_index');
-        
+
         if (isset($this->session->documentType))
-                $this->view->subtitle = $this->view->translate($this->session->documentType);
-        
+            $this->view->subtitle = $this->view->translate($this->session->documentType);
+
         $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
         //reload form or show entries, intial: true
@@ -144,16 +144,16 @@ class Publish_FormController extends Controller_Action {
 
         if ($this->getRequest()->isPost() === true) {
             $postData = $this->getRequest()->getPost();
-            
+
             if (!is_null($this->session->disabled))
-                    $postData = array_merge($postData, $this->session->disabled);
+                $postData = array_merge($postData, $this->session->disabled);
 
             //abort publish process
             if (array_key_exists('abort', $postData)) {
-                if(isset($this->session->documentId)) {
+                if (isset($this->session->documentId)) {
                     $this->document = new Opus_Document($this->session->documentId);
                     $this->document->deletePermanent();
-                }                
+                }
                 return $this->_redirectTo('index', '', 'index');
             }
 
@@ -169,12 +169,11 @@ class Publish_FormController extends Controller_Action {
             $form = null;
             try {
                 $form = new Publish_Form_PublishingSecond($postData);
-            }
-            catch (Publish_Model_FormSessionTimeoutException $e) {
+            } catch (Publish_Model_FormSessionTimeoutException $e) {
                 // Session timed out.
                 return $this->_redirectTo('index', '', 'index');
             }
-            
+
             if (!array_key_exists('send', $postData) || array_key_exists('back', $postData)) {
                 // A button (not SEND) was pressed => add / remove fields                
                 $this->_helper->viewRenderer($this->session->documentType);
@@ -185,23 +184,23 @@ class Publish_FormController extends Controller_Action {
                 catch (Publish_Model_FormNoButtonFoundException $e) {
                     $this->view->translateKey = $e->getTranslateKey();
                     return $this->render('error');
-                }                
+                }
             }
             // SEND was pressed => check the form
             if (!$form->isValid($postData)) {
                 $form->setSecondFormViewVariables();
-                $this->view->form = $form;                
-                $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');                
+                $this->view->form = $form;
+                $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
                 return $this->_helper->viewRenderer($this->session->documentType);
             }
-            return $form->showCheckPage();
+            return $this->showCheckPage($form);
         }
 
         return $this->_redirectTo('upload');
     }
 
     /**
-     * Method stores th uploaded files
+     * Method initializes the current document object by setting ServerState and DocumentType.
      */
     private function _initializeDocument($postData = null) {
         if (!isset($this->session->documentId) || $this->session->documentId == '') {
@@ -221,9 +220,8 @@ class Publish_FormController extends Controller_Action {
                 $this->document->store();
             }
             unset($postData['documentType']);
-        }        
+        }
     }
-
 
     private function _storeSubmitterEnrichment() {
         $loggedUserModel = new Publish_Model_LoggedUser();
@@ -241,7 +239,7 @@ class Publish_FormController extends Controller_Action {
     }
 
     /**
-     * Method stores the uploaded files
+     * Method stores the uploaded files with comment for the current document
      */
     private function _storeUploadedFiles($postData) {
         if (array_key_exists('uploadComment', $postData))
@@ -274,7 +272,7 @@ class Publish_FormController extends Controller_Action {
         if ($upload_count < 1) {
             $this->log->debug("NO File uploaded!!!");
             if (!isset($this->session->fulltext))
-                    $this->session->fulltext = '0';
+                $this->session->fulltext = '0';
             return;
         }
 
@@ -282,7 +280,7 @@ class Publish_FormController extends Controller_Action {
         $this->session->fulltext = '1';
 
         foreach ($files AS $file => $fileValues) {
-            if (!empty($fileValues['name'])) {                
+            if (!empty($fileValues['name'])) {
                 $this->log->info("uploaded: " . $fileValues['name']);
                 $docfile = $this->document->addFile();
                 //$docfile->setFromPost($fileValues);
@@ -292,7 +290,7 @@ class Publish_FormController extends Controller_Action {
                 $docfile->setLanguage("eng");
                 $docfile->setPathName(urldecode($fileValues['name']));
                 $docfile->setMimeType($fileValues['type']);
-                $docfile->setTempFile($fileValues['tmp_name']);                                
+                $docfile->setTempFile($fileValues['tmp_name']);
             }
         }
 
@@ -301,7 +299,7 @@ class Publish_FormController extends Controller_Action {
     }
 
     /**
-     * Method stores the uploaded files
+     * Method sets the bibliography flag in database.
      */
     private function _storeBibliography($data) {
         if (isset($data['bibliographie']) && $data['bibliographie'] === '1') {
@@ -310,6 +308,31 @@ class Publish_FormController extends Controller_Action {
             $this->document->setBelongsToBibliography(1);
             $this->document->store();
         }
+    }
+
+    /**
+     * Method shows the template for the given document type.
+     * @param PublishingSecond $form 
+     */
+    public function showTemplate($form) {
+        $this->view->subtitle = $this->view->translate($this->session->documentType);
+        $this->view->doctype = $this->session->documentType;
+        $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
+        $form->setAction($action_url);
+        $form->setMethod('post');
+        $this->view->action_url = $action_url;
+        $this->view->form = $form;
+    }
+    
+    public function showCheckpage($form) {
+        $this->view->subtitle = $this->view->translate('publish_controller_check2');
+        $this->view->header = $this->view->translate('publish_controller_changes');
+        $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
+        $form->setAction($action_url);
+        $form->setMethod('post');
+        $form->prepareCheck();
+        $this->view->action_url = $action_url;
+        $this->view->form = $form;
     }
 
 }

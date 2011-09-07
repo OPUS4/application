@@ -139,27 +139,6 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $this->addElement($submit);
     }
 
-    public function showTemplate() {
-        $this->view->subtitle = $this->view->translate($this->session->documentType);        
-        $this->view->doctype = $this->session->documentType;                
-        $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
-        $this->setAction($action_url);
-        $this->setMethod('post');        
-        $this->view->action_url = $action_url;
-        $this->view->form = $this;
-    }
-
-    public function showCheckpage() {
-        $this->view->subtitle = $this->view->translate('publish_controller_check2');
-        $this->view->header = $this->view->translate('publish_controller_changes');
-        $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
-        $this->setAction($action_url);
-        $this->setMethod('post');
-        $this->prepareCheck();
-        $this->view->action_url = $action_url;
-        $this->view->form = $this;
-    }
-
     public function prepareCheck() {
         $this->session->elements = array();
 
@@ -220,7 +199,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                 $currentCollectionLevel = $this->session->additionalFields['step' . $fieldName . $currentNumber];                
                 if ($currentCollectionLevel == '1') {
                     if (isset($postData[$fieldName . $currentNumber])) {
-                        if (substr($postData[$fieldName . $currentNumber], 3) !== 'EMPTY') {
+                        if ($postData[$fieldName . $currentNumber] !== '') {
                             //throw new Exception('collId1' . $fieldName . $currentNumber . ' : ' . substr($postData[$fieldName . $currentNumber], 3));                        
                             $this->session->additionalFields['collId1' . $fieldName . $currentNumber] = substr($postData[$fieldName . $currentNumber], 3);
                         }
@@ -264,7 +243,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                     }
                     break;
                 case 'down':
-                    if (substr($postData[$fieldName . $currentNumber], 3) !== 'EMPTY' || $this->session->additionalFields['collId1' . $fieldName . $currentNumber] !== 'EMPTY')
+                    if ($postData[$fieldName . $currentNumber] !== '' || $this->session->additionalFields['collId1' . $fieldName . $currentNumber] !== '')
                         $currentCollectionLevel = (int) $currentCollectionLevel + 1;                    
                     break;
                 case 'up' :
