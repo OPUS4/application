@@ -172,6 +172,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="groupSubjectJEL">
+      <tuv xml:lang="en">
+        <seg>JEL Classifications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>JEL Sachgruppen / Klassifikationen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="groupSubjectCCS">
       <tuv xml:lang="en">
         <seg>CCS Classifications</seg>

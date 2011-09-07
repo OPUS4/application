@@ -294,6 +294,15 @@
         <seg>DDC Sachgruppe</seg>
       </tuv>
     </tu>
+
+    <tu tuid="SubjectJEL">
+      <tuv xml:lang="en">
+        <seg>JEL Term</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>JEL Sachgruppe</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="SubjectUncontrolled">
       <tuv xml:lang="en">

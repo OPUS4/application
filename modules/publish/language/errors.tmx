@@ -306,6 +306,16 @@
     </tu>
 <!-- **************END SubjectPACS************** -->
 
+<tu tuid="publish_validation_error_subjectjel_msgsubjectjel">
+        <tuv xml:lang="en">
+            <seg>The value %value% is not a valid JEL class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Der Wert %value% ist keine gültige JEL Klasse.</seg>
+        </tuv>
+    </tu>
+<!-- **************END SubjectDDC************** -->
+
     <tu tuid="publish_validation_error_int_notint">
         <tuv xml:lang="en">
             <seg>The value %value% is not a number.</seg>

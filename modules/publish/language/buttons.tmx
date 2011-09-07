@@ -208,7 +208,7 @@
         </tuv>
     </tu>
 
-<tu tuid="button_label_add_one_moreSubjectDDC">
+    <tu tuid="button_label_add_one_moreSubjectDDC">
         <tuv xml:lang="en">
             <seg>Add one more DDC-Subject group</seg>
         </tuv>
@@ -241,6 +241,24 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Die letzte PACS Klasse löschen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_add_one_moreSubjectJEL">
+        <tuv xml:lang="en">
+            <seg>Add one more JEL-Subject group</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Eine weitere JEL-Sachgruppe hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteSubjectJEL">
+        <tuv xml:lang="en">
+            <seg>Delete the last JEL-Subject group</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die letzte JEL-Sachgruppe löschen</seg>
         </tuv>
     </tu>
 
@@ -559,6 +577,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="button_label_browse_downSubjectJEL">
+        <tuv xml:lang="en">
+            <seg>down</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>runter</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="button_label_browse_downSubjectPACS">
         <tuv xml:lang="en">
             <seg>down</seg>
@@ -605,6 +632,15 @@
     </tu>
 
     <tu tuid="button_label_browse_upSubjectDDC">
+        <tuv xml:lang="en">
+            <seg>up</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>hoch</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_browse_upSubjectJEL">
         <tuv xml:lang="en">
             <seg>up</seg>
         </tuv>
