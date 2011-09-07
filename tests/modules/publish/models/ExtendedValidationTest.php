@@ -35,21 +35,23 @@
 class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
 
     public function testPersonsFirstNamesWithInvalidData() {
-        $config = Zend_Registry::get('Zend_Config');
-        $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
+//        $config = Zend_Registry::get('Zend_Config');
+//        $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
-        $session->documentType = 'workingpaper';
+        $session->documentType = 'all';
         $form = new Publish_Form_PublishingSecond(new Zend_View());
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe',
+            'PersonSubmitterEmail1' => 'egal@wurscht.de',
             'TitleMain1' => 'Entenhausen',
             'TitleMainLanguage1' => 'deu',
             'PersonAuthorFirstName1' => 'Icke',
             'PersonAuthorLastName1' => '',
             'CompletedDate' => '06.09.2011',
             'Language' => 'deu',
-            'Licence' => 'ID:4'
+            'Licence' => 'ID:4',
+            'EnrichmentLegalNotices' => '1'
         );
 
         $val = new Publish_Model_ExtendedValidation($form, $data);
@@ -58,14 +60,15 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
     }
 
     public function testPersonsEmailWithInvalidData() {
-        $config = Zend_Registry::get('Zend_Config');
-        $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
+//        $config = Zend_Registry::get('Zend_Config');
+//        $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
-        $session->documentType = 'workingpaper';
+        $session->documentType = 'all';
         $form = new Publish_Form_PublishingSecond(new Zend_View());
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe',
+            'PersonSubmitterEmail1' => 'egal@wurscht.de',
             'TitleMain1' => 'Entenhausen',
             'TitleMainLanguage1' => 'deu',
             'PersonAuthorFirstName1' => '',
@@ -74,7 +77,8 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonAuthorAllowEmailContact1' => '',
             'CompletedDate' => '06.09.2011',
             'Language' => 'deu',
-            'Licence' => 'ID:4'
+            'Licence' => 'ID:4',
+            'EnrichmentLegalNotices' => '1'
         );
 
         $val = new Publish_Model_ExtendedValidation($form, $data);
