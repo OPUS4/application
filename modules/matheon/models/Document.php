@@ -223,9 +223,6 @@ class Matheon_Model_Document {
         if (!is_null($person) and $person->isValid()) {
             $submitterString = trim($person->getFirstName() . " " . $person->getLastName());
         }
-        if (empty($submitterString)) {
-            $submitterString = '-- No submitter name given! --';
-        }
 
         $titleModels = $this->document->getTitleMain();
         $titleString = '';
