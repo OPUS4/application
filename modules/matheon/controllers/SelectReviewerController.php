@@ -100,7 +100,7 @@ class Matheon_SelectReviewerController extends Controller_Action {
         $config = Zend_Registry::getInstance()->get('Zend_Config');
         $serverUrl = $this->view->serverUrl();
         $baseUrlServer = $serverUrl . $this->getRequest()->getBaseUrl();
-        $baseUrlFiles = $serverUrl . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents');
+        $baseUrlFiles = $serverUrl . '/files';
 
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_MailPublishNotification::LABEL);
