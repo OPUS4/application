@@ -98,16 +98,13 @@ class Publish_DepositController extends Controller_Action {
         $this->log->info("Document $docId was sucessfully stored!");
 
         // Build URLs for the publish-notification-mail.
-        $fullDocUrl = $this->__getDocumentUrl($docId);
-        $reviewUrl = $this->view->serverUrl() . $this->view->url(array(
+        $serverUrl = $this->view->serverUrl();
+        $fullDocUrl = $serverUrl . $this->view->documentUrl()->frontdoor($docId);
+        $reviewUrl = $serverUrl . $this->view->url(array(
                     'module' => 'review',
                     'controller' => 'index',
                     'action' => 'index'));
-        $adminEditUrl = $this->view->serverUrl() . $this->view->url(array(
-                    'module' => 'admin',
-                    'controller' => 'documents',
-                    'action' => 'edit',
-                    'id' => $docId));
+        $adminEditUrl = $serverUrl . $this->view->documentUrl()->adminShow($docId);
 
 
         $this->log->debug("fullDocUrl:   $fullDocUrl");
@@ -180,26 +177,6 @@ class Publish_DepositController extends Controller_Action {
             $mail = new Opus_Job_Worker_MailPublishNotification($this->log);
             $mail->work($job);
         }
-    }
-
-    /**
-     * Return frontdoor URL for document.
-     * @param <type> $docId
-     * @return <type>
-     *
-     * FIXME move into controller or view helper
-     */
-    private function __getDocumentUrl($docId) {
-        $url_frontdoor = array(
-            'module' => 'frontdoor',
-            'controller' => 'index',
-            'action' => 'index',
-            'docId' => $docId
-        );
-
-        $baseUrl = $this->view->serverUrl(); // TODO doesn't work
-
-        return $baseUrl . $this->view->url($url_frontdoor, 'default', true);
     }
 
 }
