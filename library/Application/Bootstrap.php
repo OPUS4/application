@@ -222,6 +222,10 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $sessiondata = $this->getResource('Session');
 
         $options = array(
+            'logUntranslated' => true,
+            'logMessage' => "Unable to translate key '%message%' into locale '%locale%'",
+            'log' => $logger,
+
             'adapter' => Zend_Translate::AN_TMX,
             'locale' => 'auto',
             'clear' => false,

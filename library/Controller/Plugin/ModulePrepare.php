@@ -98,6 +98,10 @@ class Controller_Plugin_ModulePrepare extends Zend_Controller_Plugin_Abstract {
 
         $translate = Zend_Registry::get('Zend_Translate');
         $options = array(
+            'logUntranslated' => true,
+            'logMessage' => "Unable to translate key '%message%' into locale '%locale%'",
+            'log' => Zend_Registry::get('Zend_Log'),
+
             'adapter' => Zend_Translate::AN_TMX,
             'locale' => 'auto',
             'clear' => false,
