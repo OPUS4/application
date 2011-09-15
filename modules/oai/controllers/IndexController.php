@@ -385,7 +385,7 @@ class Oai_IndexController extends Controller_Xml {
         $xmlModel->setModel($document);
         $xmlModel->excludeEmptyFields();
         $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
-        $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
+        // $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
         return $xmlModel->getDomDocument()->getElementsByTagName('Opus_Document')->item(0);
     }
 

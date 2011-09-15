@@ -72,7 +72,7 @@ class Util_Document {
         $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
         $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
         if ($useCache) {
-            $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
+            // $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
         }
         return $xmlModel->getDomDocument()->getElementsByTagName('Opus_Document')->item(0);
     }
