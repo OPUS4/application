@@ -79,37 +79,37 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $viewSetup = new Controller_Plugin_ViewSetup();
         $frontController->registerPlugin($viewSetup);
 
-        $documentRoute = new Zend_Controller_Router_Route_Regex(
-            '^document/(\d+)/?$',
-            array(
-                'module'     => 'frontdoor',
-                'controller' => 'index',
-                'action'     => 'index',
-                'docId'      => 1,
-            ),
-            array(
-                1 => 'docId',
-            ),
-            'document/%s'
-        );
-        $frontController->getRouter()->addRoute('document', $documentRoute);
-
-        $fileRoute = new Zend_Controller_Router_Route_Regex(
-            '^document/(\d+)/(.*)$',
-            array(
-                'module'     => 'frontdoor',
-                'controller' => 'deliver',
-                'action'     => 'index',
-                'docId'      => 1,
-                'file'       => 2,
-            ),
-            array(
-                1 => 'docId',
-                2 => 'file',
-            ),
-            'document/%s/%s'
-        );
-        $frontController->getRouter()->addRoute('file', $fileRoute);
+//        $documentRoute = new Zend_Controller_Router_Route_Regex(
+//            '^document/(\d+)/?$',
+//            array(
+//                'module'     => 'frontdoor',
+//                'controller' => 'index',
+//                'action'     => 'index',
+//                'docId'      => 1,
+//            ),
+//            array(
+//                1 => 'docId',
+//            ),
+//            'document/%s'
+//        );
+//        $frontController->getRouter()->addRoute('document', $documentRoute);
+//
+//        $fileRoute = new Zend_Controller_Router_Route_Regex(
+//            '^document/(\d+)/(.*)$',
+//            array(
+//                'module'     => 'frontdoor',
+//                'controller' => 'deliver',
+//                'action'     => 'index',
+//                'docId'      => 1,
+//                'file'       => 2,
+//            ),
+//            array(
+//                1 => 'docId',
+//                2 => 'file',
+//            ),
+//            'document/%s/%s'
+//        );
+//        $frontController->getRouter()->addRoute('file', $fileRoute);
 
     }
 
