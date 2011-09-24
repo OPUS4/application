@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -443,21 +443,35 @@ class Admin_DocumentController extends Controller_Action {
      * @return void
      */
     public function deleteAction() {
+
+	$this->_logger->info('call delete action');
         if ($this->_request->isPost() !== true && is_null($this->getRequest()->getParam('docId'))) {
             $this->_redirectTo('index', null, 'documents', 'admin');
         }
+
+	$this->_logger->info('was post request');
 
         $id = $this->getRequest()->getParam('docId');
         if ($id === null) {
             $id = $this->getRequest()->getPost('id');
         }
+
+	$this->_logger->info('id is ' . $id);
+
         $sureyes = $this->getRequest()->getPost('sureyes');
         $sureno = $this->getRequest()->getPost('sureno');
+
+	$this->_logger->info('sureyes is ' . $sureyes);
+
         if (isset($sureyes) === true or isset($sureno) === true) {
             // Safety question answered, deleting
             if (isset($sureyes) === true) {
+		$this->_logger->info('try to remove doc id ' . $id);
+
                 $model = new Opus_Document($id);
                 $model->delete();
+
+		$this->_logger->info('deletion successfully');
                 $this->_redirectTo('index', $this->view->translate('admin_documents_delete_success'), 'document', 'admin', array('id' => $id));
             }
             else {
