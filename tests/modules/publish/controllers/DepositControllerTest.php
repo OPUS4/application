@@ -158,8 +158,18 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $this->assertController('deposit');
         $this->assertAction('confirm');
     }
+
+    /**
+     * Test that GET request on confirm action will result in
+     * redirecting to index action (OPUSVIER-1680)
+     */
+    public function testGetConfirmActionResultsInRedirect() {
+	$this->dispatch('/publish/deposit/confirm');
+	$this->assertResponseCode(302);
+        $this->assertResponseLocationHeader($this->getResponse(), '/publish');
+    }
     
-        /**
+    /**
      * Method tests the deposit action with invalid POST request
      * which leads to a Error Message and code 200
      */
