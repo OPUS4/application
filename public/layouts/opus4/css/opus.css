@@ -115,6 +115,8 @@
 }
 #export li{
 	display: inline;
+        float: left;
+	margin-right: 5px;
 }
 #services h3,
 .facet h4{
