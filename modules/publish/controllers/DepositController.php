@@ -35,9 +35,6 @@
 
 /**
  * Main entry point for this module.
- *
- * @category    Application
- * @package     Module_Publish
  */
 class Publish_DepositController extends Controller_Action {
 
@@ -140,6 +137,10 @@ class Publish_DepositController extends Controller_Action {
      * finished.
      */
     public function confirmAction() {
+        // redirecting if action is called directly 
+        if (is_null($this->session->depositConfirmDocumentId)) {
+            return $this->_redirectToAndExit('index', null, 'index');
+        }
         $this->view->docId = $this->session->depositConfirmDocumentId;
 
         if (true === Opus_Security_Realm::getInstance()->check('clearance')) {
