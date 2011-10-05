@@ -184,6 +184,7 @@
             <!-- -->            
 
             <!-- we need to apply a hack (so called Muenchian grouping) here since XSLT's 2.0 for-each-group feature is currently not supported -->
+            <xsl:if test="Subject[@Type='uncontrolled']">
             <tr>
                 <th class="name">
                     <xsl:call-template name="translateString">
@@ -203,6 +204,7 @@
                 </xsl:for-each>
                 </em></td>
             </tr>
+            </xsl:if>
 
             <xsl:apply-templates select="Subject[@Type='swd']"><xsl:sort select="@Value"/></xsl:apply-templates>
             <xsl:apply-templates select="Subject[@Type='ddc']"><xsl:sort select="@Value"/></xsl:apply-templates>
