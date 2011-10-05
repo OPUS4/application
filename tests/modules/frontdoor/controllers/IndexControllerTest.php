@@ -178,14 +178,14 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      * test to document bug OPUSVIER-1695
      */
     public function testUncontrolledKeywordHeaderIsNotDisplayedIfUncontrolledKeywordsDoNotExist() {
-	$this->dispatch('/frontdoor/index/index/docId/103');
+	$this->dispatch('/frontdoor/index/index/docId/92');
         $this->assertResponseCode(200);
         $this->assertModule('frontdoor');
         $this->assertController('index');
         $this->assertAction('index');
         $body = $this->getResponse()->getBody();
         $this->assertContains('<table class="result-data frontdoordata">', $body);
-        $this->assertNotContains('<td></td>', $body);
+        $this->assertNotContains('<td><em class="data-marker"/></td>', $body);
     }
 }
 ?>

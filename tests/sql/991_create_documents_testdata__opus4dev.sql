@@ -82,7 +82,6 @@ INSERT INTO `document_subjects` (`id`, `document_id`, `language`, `type`, `value
 (303, 94, 'deu', 'swd', 'Informationssystem', NULL),
 (304, 95, 'deu', 'swd', 'Informationssystem', NULL),
 (305, 91, 'eng', 'uncontrolled', 'eBook', NULL),
-(306, 92, 'eng', 'uncontrolled', 'eBook', NULL),
 (307, 93, 'eng', 'uncontrolled', 'eBook', NULL),
 (308, 94, 'eng', 'uncontrolled', 'eBook', NULL),
 (309, 95, 'eng', 'uncontrolled', 'eBook', NULL),
