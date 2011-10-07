@@ -33,7 +33,7 @@
 
 
 /**
- * Tries to exports and import all documents.
+ * Tries to export and import all documents.
  */
 
 $docFinder = new Opus_DocumentFinder();
