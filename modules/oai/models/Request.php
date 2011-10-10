@@ -178,7 +178,7 @@ class Oai_Model_Request {
         // we assuming that a metadata prefix file ends with xslt
         $possibleFiles = glob($this->_pathToMetadataPrefixFiles . DIRECTORY_SEPARATOR . '*.xslt');
 
-        $availableMetadataPrefixes = array();
+        $availableMetadataPrefixes = array('xMetaDissPlus'); // we support both spellings, xMetaDissPlus and XMetaDissPlus
         foreach ($possibleFiles as $prefixFile) {
            $availableMetadataPrefixes[] = basename($prefixFile, '.xslt');
         }

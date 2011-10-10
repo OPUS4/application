@@ -199,6 +199,11 @@
             <xsl:element name="schema"><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</xsl:text></xsl:element>
             <xsl:element name="metadataNamespace"><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3</xsl:text></xsl:element>
           </xsl:element>
+          <xsl:element name="metadataFormat">
+            <xsl:element name="metadataPrefix"><xsl:text>xMetaDissPlus</xsl:text></xsl:element>
+            <xsl:element name="schema"><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</xsl:text></xsl:element>
+            <xsl:element name="metadataNamespace"><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3</xsl:text></xsl:element>
+          </xsl:element>
         </xsl:element>
     </xsl:template>
 
@@ -310,6 +315,9 @@
                  <xsl:element name="metadata">
                  <xsl:choose>
                     <xsl:when test="$oai_metadataPrefix='XMetaDissPlus'">
+                       <xsl:apply-templates select="." mode="xmetadissplus" />
+                    </xsl:when>
+                    <xsl:when test="$oai_metadataPrefix='xMetaDissPlus'">
                        <xsl:apply-templates select="." mode="xmetadissplus" />
                     </xsl:when>
                     <xsl:when test="$oai_metadataPrefix='xMetaDiss'">

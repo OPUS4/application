@@ -37,7 +37,7 @@
 
 <!--
 /**
- * Transforms the xml representation of an Opus_Model_Document to xMetaDiss
+ * Transforms the xml representation of an Opus_Model_Document to XMetaDissPlus
  * xml as required by the OAI-PMH protocol.
  */
 -->
