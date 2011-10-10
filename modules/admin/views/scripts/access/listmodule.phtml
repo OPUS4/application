@@ -60,8 +60,6 @@
             </span>
         </div>
 
-        <br/>
-        
         <ul>
         <?php foreach($this->allModules as $module) : ?>
             <li>
@@ -80,12 +78,12 @@
         <div class="form-item">
             <span class="form-submit-wrapper">
                 <input type="submit" name="save_button" class="form-submit" value="<?= $this->translate('access_button_save') ?>"/>
-            </span>        
+            </span>
             <span class="form-submit-wrapper">
                 <input type="submit" name="cancel_button" class="form-submit" value="<?= $this->translate('access_button_cancel') ?>"/>
             </span>
         </div>
-        
+
         <input type="hidden" name="roleid" value="<?= $this->roleId ?>" />
     </form>
 </div>
