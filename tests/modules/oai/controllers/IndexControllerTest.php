@@ -120,7 +120,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     /**
      * Test verb=GetRecord, prefix=XMetaDissPlus.
      */
-    public function testGetRecordxMetaDissPlus() {
+    public function testGetRecordXMetaDissPlus() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::41');
         $this->assertResponseCode(200);
 
@@ -129,7 +129,25 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
         $this->assertContains('oai::41', $response->getBody(),
-           "Response must contain 'oai::80'");
+           "Response must contain 'oai::41'");
+
+        $this->assertContains('xMetaDiss', $response->getBody(),
+           "Response must contain 'xMetaDiss'");
+    }
+
+    /**
+     * Test verb=GetRecord, prefix=xMetaDissPlus.
+     */
+    public function testGetRecordXMetaDissPlusAlternativeSpelling() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::41');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $this->assertContains('oai::41', $response->getBody(),
+           "Response must contain 'oai::41'");
 
         $this->assertContains('xMetaDiss', $response->getBody(),
            "Response must contain 'xMetaDiss'");
