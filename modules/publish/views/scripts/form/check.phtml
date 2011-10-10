@@ -74,9 +74,7 @@
         <?php endforeach;?> <!--$element-->
     <?php endforeach;?>
     <!-- END: groups -->
-
    
-
     <!-- listing all single elements -->
     <tr><td class='group' colspan="2"><b><?= $this->translate('publish_controller_check_otherElements') ?></b></td></tr>
     <?php foreach ($form->getElements() AS $elem) : ?>
@@ -105,6 +103,8 @@
 
 <?= $this->fileOverview(); ?>
 
+<?= $this->bibliographieOverview(); ?>
+    
 </div>
 
 <form enctype="application/x-www-form-urlencoded" action="<?= $this->action_url; ?>" method="post">

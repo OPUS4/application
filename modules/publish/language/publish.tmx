@@ -169,6 +169,24 @@
       </tuv>
     </tu>   
 
+    <tu tuid="notBelongsToBibliographie">
+      <tuv xml:lang="en">
+        <seg>Document will <b>not</b> be added to bibliography.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument wird <b>nicht</b> zur Bibliographie hinzugefügt.</seg>
+      </tuv>
+    </tu> 
+
+    <tu tuid="belongsToBibliographie">
+      <tuv xml:lang="en">
+        <seg>Document will be <b>added</b> to bibliography.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument wird zur Bibliographie <b>hinzugefügt</b>.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="gpgkeyavailable">
       <tuv xml:lang="en">
         <seg>Do you have a GPG-Key and did you sign your publication files with it?</seg>
