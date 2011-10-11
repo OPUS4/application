@@ -192,6 +192,7 @@ class Opus3XMLImport {
 
         $this->skipEmptyFields();
 	$this->validateEmails();
+        $this->checkTitle();
 
         $this->mapDocumentTypeAndLanguage();
         $this->mapElementLanguage();
@@ -304,8 +305,28 @@ class Opus3XMLImport {
             $elements = $this->document->getElementsByTagName($r[0]);
             foreach ($elements as $e) {
                 if (trim($e->getAttribute($r[1])) == "") {
-                    $this->logger->log_error("Opus3XMLImport", $r[0]."' with empty '".$r[1]."' will not be imported");
+                    $this->logger->log_error("Opus3XMLImport", $r[0] . "' with empty '" . $r[1] . "' will not be imported");
                     $this->document->removeChild($e);
+                }
+            }
+        }
+    }
+
+
+    private function checkTitle() {
+        $tagnames = array('TitleMain', 'TitleAbstract', 'TitleAdditional');
+        $oa = $this->mapping['language'];
+        foreach ($tagnames as $tag) {
+            $language = array();
+            $elements = $this->document->getElementsByTagName($tag);
+            foreach ($elements as $e) {
+                $old_value = $e->getAttribute($oa['old']);
+                $new_value = $oa['config']->$old_value;
+                /* Check for TitleElements with duplicated Languages */
+                if (in_array($new_value, $language)) {
+                    $this->logger->log_error("Opus3XMLImport", $tag . "' with language '" . $new_value . "' already exists . Document will not be indexed.");
+                } else {
+                    array_push($language, $new_value);
                 }
             }
         }
@@ -330,7 +351,7 @@ class Opus3XMLImport {
             foreach ($elements as $e) {	
                 if (trim($e->getAttribute('Email')) != "") {
 			if (!($validator->isValid($e->getAttribute('Email')))) {
-				$this->logger->log_error("Opus3XMLImport", "Invalid Email-Address '".$e->getAttribute('Email')."' will not be imported.");
+				$this->logger->log_error("Opus3XMLImport", "Invalid Email-Address '" . $e->getAttribute('Email') . "' will not be imported.");
 				$e->removeAttribute('Email');
 			}
                 }
@@ -351,7 +372,7 @@ class Opus3XMLImport {
     }
 
     private function mapElementLanguage() {
-        $tagnames = array('TitleMain', 'TitleAbstract', 'SubjectSwd', 'SubjectUncontrolled');
+        $tagnames = array('TitleMain', 'TitleAbstract', 'TitleAdditional', 'SubjectSwd', 'SubjectUncontrolled');
         $oa = $this->mapping['language'];
         foreach ($tagnames as $tag) {
             $elements = $this->document->getElementsByTagName($tag);
@@ -390,7 +411,7 @@ class Opus3XMLImport {
                     }
                 }
                 else {
-                    $this->logger->log_error("Opus3XMLImport", "Document not added to '".$oa['role']."' '" .$value. "'");
+                    $this->logger->log_error("Opus3XMLImport", "Document not added to '" . $oa['role'] . "' '" . $value . "'");
                 }
                 $this->document->removeChild($e);
             }
@@ -423,7 +444,7 @@ class Opus3XMLImport {
 
                 }
                 else {
-                    $this->logger->log_error("Opus3XMLImport", "('$m'): No valid Mapping in '".$oa['mapping']."' for '".$old_value."'");
+                    $this->logger->log_error("Opus3XMLImport", "('$m'): No valid Mapping in '" . $oa['mapping'] . "' for '" . $old_value . "'");
                 }
 
                 $this->document->removeChild($e);
@@ -488,7 +509,7 @@ class Opus3XMLImport {
      private function getMapping($mappingFile, $id) {
         /* TODO: CHECK if File exists , echo ERROR and return null if not*/
         if (!is_readable($mappingFile)) {
-            $this->logger->log_error("Opus3XMLImport", "MappingFile '".$mappingFile."' is not readable");
+            $this->logger->log_error("Opus3XMLImport", "MappingFile '" . $mappingFile . "' is not readable");
             return null;
         }
         $fp = file($mappingFile);

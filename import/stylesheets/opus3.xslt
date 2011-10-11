@@ -103,19 +103,18 @@
             -->
 
             <!-- CompletedYear -->
-                <xsl:attribute name="CompletedYear">
-                    <xsl:value-of select="field[@name='date_year']" />
-                </xsl:attribute>
+            <xsl:attribute name="CompletedYear">
+                <xsl:value-of select="field[@name='date_year']" />
+            </xsl:attribute>
 
-                <!-- CompletedDate -->
-                <!-- CompletedDate is more precise then CompletedYear -->
+            <!-- CompletedDate -->
             <xsl:if test="$date_creation > 0">
                 <xsl:attribute name="CompletedDate">
                     <xsl:value-of select="php:function('date', 'Y-m-d', $date_creation)" />
                 </xsl:attribute>
             </xsl:if>
 
-                <!-- ServerDatePublished -->
+            <!-- ServerDatePublished -->
             <xsl:if test="$date_creation > 0">
                 <xsl:attribute name="ServerDatePublished">
                     <xsl:value-of select="php:function('date', 'c', $date_creation)" />
@@ -269,6 +268,7 @@
                     </xsl:attribute>
                 </xsl:element>
             </xsl:if>
+
             <!-- TitleAbstract (2nd) -->
             <xsl:if test="string-length(normalize-space(field[@name='description2'])) > 0">
                 <xsl:element name="TitleAbstract">
@@ -280,10 +280,11 @@
                     </xsl:attribute>
                 </xsl:element>
             </xsl:if>
-            <!-- Dissertation:TitleMain, Language="deu" (2nd) -->
+
+            <!-- TitleAdditional, Language="deu" (2nd) -->
             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss' or @name='temp_diss']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:if test="string-length(field[@name='title_de'])>0">
-                    <xsl:element name="TitleMain">
+                    <xsl:element name="TitleAdditional">
                         <xsl:attribute name="OldLanguage">
                             <xsl:text>ger</xsl:text>
                         </xsl:attribute>
