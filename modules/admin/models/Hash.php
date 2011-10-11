@@ -80,12 +80,12 @@ class Admin_Model_Hash {
     }
 
     public function getIst() {
-        if ($this->getSignatureType() !== 'gpg') {
-            if (!$this->file->canVerify()) {
-                return;
-            }
-
+        if (($this->getSignatureType() !== 'gpg')
+                && ($this->file->canVerify())) {
             return $this->file->getRealHash($this->getHashType());
+        }
+        else {
+            return null;
         }
     }
 }
