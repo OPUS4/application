@@ -48,14 +48,14 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
      * Verifies that the hash values are displayed.
      */
     public function testHashValuesPresent() {
-        $hash = "1ba50dc8abc619cea3ba39f77c75c0fe";
+        $hash = '1ba50dc8abc619cea3ba39f77c75c0fe';
         $this->dispatch('/admin/filemanager/index/docId/91');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('filemanager');
         $this->assertAction('index');
         $response = $this->getResponse()->getBody();
-        $this->assertTrue(substr_count($hash, $response) == 2);
+        $this->assertTrue(substr_count($response, $hash) == 2);
     }
 
 }
