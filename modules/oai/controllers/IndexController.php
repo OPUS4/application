@@ -402,8 +402,8 @@ class Oai_IndexController extends Controller_Xml {
         // add frontdoor url
         $this->_addFrontdoorUrlAttribute($domNode, $docId);
 
-        // add container file element
-        $this->_addContainerFileElement($domNode, $docId);
+        // add ddb transfer element
+        $this->_addDdbTransferElement($domNode, $docId);
 
         // remove file elements which should not be exported through OAI
         $filenodes = $domNode->getElementsByTagName('File');
@@ -489,33 +489,21 @@ class Oai_IndexController extends Controller_Xml {
      * @param string  $docId
      * @return void
      */
+
+    
     /**
-     * Add <File> element for container file if present.
+     * Add <ddb:transfer> element for ddb container file.
      *
      * @param DOMNode $document Opus_Document XML serialisation
-     * @param string  $docId    Document id
+     * @param string  $docid    Document ID
      * @return void
      */
-    private function _addContainerFileElement(DOMNode $document, $docId) {
-        // TODO
-        return;
+    private function _addDdbTransferElement(DOMNode $document, $docid) {
+        $url = $this->view->serverUrl() . $this->view->baseUrl() . '/oai/container/index/docId/' . $docid;
 
-        $config = Zend_Registry::get('Zend_Config');
-        $destPath = $config->file->destinationPath;
-        $containerFile = "$destPath/$docId/container/container.zip";
-
-        // TODO Remove hard coded container path
-        if (true === file_exists($containerFile)) {
-            $owner = $document->ownerDocument;
-            $fileElement = $owner->createElement('File');
-            $fileElement->setAttribute('PathName', 'container/container.zip');
-            $fileElement->setAttribute('FileSize', filesize($containerFile));
-            $fileElement->setAttribute('MimeType', mime_content_type($containerFile));
-            $fileElement->setAttribute('OaiExport', '1');
-            $fileElement->setAttribute('DnbContainer', '1');
-            $document->appendChild($fileElement);
-        }
-
+        $fileElement = $document->ownerDocument->createElement('TransferUrl');
+        $fileElement->setAttribute('PathName', $url);
+        $document->appendChild($fileElement);
     }
 
     /**

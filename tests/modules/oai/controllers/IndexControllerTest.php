@@ -28,7 +28,8 @@
  * @category    Application
  * @package     Tests
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -277,6 +278,23 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('<error>', $this->getResponse()->getBody());
         $this->assertNotContains('<error>Unauthorized: Access to module not allowed.</error>', $this->getResponse()->getBody());
         $this->assertNotContains('<error code="unknown">An internal error occured.</error>', $this->getResponse()->getBody());
+    }
+
+    public function testTransferUrlIsPresent() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::91');
+        $this->assertResponseCode(200);
+        $this->assertContains('<ddb:transfer ddb:type="dcterms:URI">', $this->getResponse()->getBody());
+        $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/91</ddb:transfer>', $this->getResponse()->getBody());
+    }
+
+    public function testTransferUrlIsNotPresent() {
+        $doc = new Opus_Document();
+        $doc->setServerState("published");
+        $doc->store();
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
+        $this->assertResponseCode(200);
+        $this->assertNotContains('<ddb:transfer ddb:type="dcterms:URI">', $this->getResponse()->getBody());
+        $doc->deletePermanent();
     }
 
 }

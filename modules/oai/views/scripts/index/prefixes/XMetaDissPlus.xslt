@@ -247,6 +247,9 @@
               <xsl:value-of select="count(//File)"/>
             </xsl:element>
             <xsl:apply-templates select="File" mode="xmetadissplus" />
+            <xsl:if test="//File">
+                <xsl:apply-templates select="TransferUrl" mode="xmetadissplus" />
+            </xsl:if>
             <xsl:apply-templates select="IdentifierUrl" mode="xmetadissplus" />
             <xsl:element name="ddb:rights">
                <xsl:attribute name="ddb:kind"><xsl:text>free</xsl:text></xsl:attribute>
@@ -424,20 +427,23 @@
     <xsl:template match="File" mode="xmetadissplus">
         <xsl:element name="ddb:fileProperties">
             <xsl:attribute name="ddb:fileName">
-               <xsl:value-of select="@PathName" />
+                <xsl:value-of select="@PathName" />
             </xsl:attribute>
-            <xsl:attribute name="ddb:fileID"><xsl:text>file</xsl:text>
-            <xsl:value-of select="../@Id"/>-<xsl:number value="position()-1"/>
-            </xsl:attribute> 
-
-       <!-- not yet in XML-Output -->            
-             <xsl:attribute name="ddb:fileSize">
-               <xsl:value-of select="@FileSize"/>
-            </xsl:attribute>   
-
+            <xsl:attribute name="ddb:fileID">
+                <xsl:text>file</xsl:text><xsl:value-of select="../@Id"/>-<xsl:value-of select="position()-1"/>
+            </xsl:attribute>
+            <xsl:attribute name="ddb:fileSize">
+                <xsl:value-of select="@FileSize"/>
+            </xsl:attribute>
         </xsl:element>
     </xsl:template>
 
+    <xsl:template match="TransferUrl" mode="xmetadissplus">
+        <xsl:element name="ddb:transfer">
+            <xsl:attribute name="ddb:type"><xsl:text>dcterms:URI</xsl:text></xsl:attribute>
+            <xsl:value-of select="@PathName" />
+        </xsl:element>
+    </xsl:template>
 
     <xsl:template match="IdentifierUrl" mode="xmetadissplus">
         <xsl:element name="ddb:identifier">
@@ -445,6 +451,5 @@
             <xsl:value-of select="@Value" />
         </xsl:element>
     </xsl:template>
-
 
 </xsl:stylesheet>
