@@ -314,7 +314,7 @@
             <xsl:if test="string-length(field[@name='contributors_name']) > 0">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
-                        <xsl:text>contributor</xsl:text>
+                        <xsl:text>contributors_name</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="normalize-space(field[@name='contributors_name'])" />
@@ -327,7 +327,7 @@
             <xsl:if test="string-length(field[@name='source_title']) > 0">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
-                        <xsl:text>source</xsl:text>
+                        <xsl:text>source_title</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="normalize-space(field[@name='source_title'])" />
@@ -610,7 +610,7 @@
             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_rvk' or @name='temp_rvk']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
-                        <xsl:text>rvk</xsl:text>
+                        <xsl:text>class_rvk</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="field[@name='class']" />
