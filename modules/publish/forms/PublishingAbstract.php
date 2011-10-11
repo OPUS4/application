@@ -30,7 +30,7 @@
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id:$
  */
 abstract class Publish_Form_PublishingAbstract extends Zend_Form {
 
@@ -71,12 +71,63 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
             }
 
             if ($element->isRequired())
-                $elementAttributes["req"] = "required";
+                $elementAttributes['req'] = 'required';
             else
-                $elementAttributes["req"] = "optional";
+                $elementAttributes['req'] = 'optional';
+                    
+            if (!is_null($this->session->endOfCollectionTree)) 
+                if (array_key_exists($elementName, $this->session->endOfCollectionTree))
+                    $elementAttributes['isLeaf'] = true;
+                
         }
 
         return $elementAttributes;
+    }
+
+    /**
+     * Method to build a display group by a number of arrays for fields, hidden fields and buttons.
+     * @param <Zend_Form_DisplayGroup> $displayGroup
+     * @return <Array> $group
+     */
+    function buildViewDisplayGroup($displayGroup) {
+        $groupFields = array();
+        $groupHiddens = array();
+        $groupButtons = array();
+
+        foreach ($displayGroup->getElements() AS $groupElement) {
+
+            $elementAttributes = $this->getElementAttributes($groupElement->getName());
+
+            if ($groupElement->getType() === 'Zend_Form_Element_Submit') {
+                //buttons
+                $groupButtons[$elementAttributes["id"]] = $elementAttributes;
+            } else if ($groupElement->getType() === 'Zend_Form_Element_Hidden') {
+                //hidden fields
+                $groupHiddens[$elementAttributes["id"]] = $elementAttributes;
+            } else {
+                //normal fields
+                $groupFields[$elementAttributes["id"]] = $elementAttributes;
+            }
+        }
+        $group[] = array();
+
+        $group['Fields'] = $groupFields;
+        $group['Hiddens'] = $groupHiddens;
+        $group['Buttons'] = $groupButtons;
+
+        return $group;
+    }
+
+    /**
+     * Adds submit button to the form.
+     * @param type $name unique button name
+     * @param type $label visible button label
+     */
+    function addSubmitButton($label, $name) {
+        $submit = $this->createElement('submit', $name);
+        $submit->setLabel($label);
+        $this->addElement($submit);
+        return $submit;
     }
 
 }
