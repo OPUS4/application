@@ -142,21 +142,12 @@
       </tuv>
     </tu>
 
-	<tu tuid="misc">
+	<tu tuid="mul">
       <tuv xml:lang="en">
-        <seg>Misc.</seg>
+        <seg>Multiple languages</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sonstiges</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="son">
-      <tuv xml:lang="en">
-        <seg>Misc.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sonstiges</seg>
+        <seg>mehrsprachig</seg>
       </tuv>
     </tu>
 
