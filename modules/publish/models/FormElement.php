@@ -291,7 +291,7 @@ class Publish_Model_FormElement {
                     //no options found in database / session / cache
                     $this->log->debug("No options found for element " . $this->elementName);
                     $element = $this->form->createElement('text', $this->elementName);
-                    $element->setDescription('hint_no_selection_' . $this->datatype);
+                    $element->setDescription('hint_no_selection_' . $this->elementName);
                     $element->setAttrib('disabled', true);
                     $this->required = false;
                 }

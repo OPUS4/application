@@ -32,7 +32,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Publish_Model_Validation {
 
     public $datatype;
@@ -196,7 +195,6 @@ class Publish_Model_Validation {
         return $validators;
     }
 
-
     private function _validateThesis($grantors = null) {
         $validators = array();
         $thesisGrantors = $this->getThesis($grantors);
@@ -269,20 +267,24 @@ class Publish_Model_Validation {
     private function _collectionSelect() {
         $browsingHelper1 = new Solrsearch_Model_CollectionRoles();
         $collectionRole = Opus_CollectionRole::fetchByOaiName($this->collectionRole);
-        $children = array();
-        if (!is_null($collectionRole)) {
-            if ($browsingHelper1->hasVisibleChildren($collectionRole)) {
-                $collectionId = $collectionRole->getRootCollection()->getId();
-                $collection = new Opus_Collection($collectionId);
-                $colls = $collection->getChildren();
+        if ($collectionRole->getVisible() == '1') {
+            $children = array();
+            if (!is_null($collectionRole)) {
+                if ($browsingHelper1->hasVisibleChildren($collectionRole)) {
+                    $collectionId = $collectionRole->getRootCollection()->getId();
+                    $collection = new Opus_Collection($collectionId);
+                    $colls = $collection->getChildren();
 
-                foreach ($colls as $coll) {
-                    if ($coll->getVisible() == 1)
-                        $children['ID:' . $coll->getId()] = $coll->getDisplayName();
+                    foreach ($colls as $coll) {
+                        if ($coll->getVisible() == 1)
+                            $children['ID:' . $coll->getId()] = $coll->getDisplayName();
+                    }
                 }
             }
+            return $children;
         }
-        return $children;
+        else
+            return null;
     }
 
     private function _languageSelect() {
@@ -290,8 +292,7 @@ class Publish_Model_Validation {
         if (isset($languages) || count($languages) >= 1) {
             asort($languages);
             return $languages;
-        }
-        else {
+        } else {
             $languages = null;
             return $languages;
         }
@@ -304,8 +305,7 @@ class Publish_Model_Validation {
         $licences = $this->getLicences();
         if (isset($licences) && count($licences) >= 1) {
             $data = $licences;
-        }
-        else {
+        } else {
             $data = null;
         }
 
@@ -330,8 +330,7 @@ class Publish_Model_Validation {
                 $languages = Zend_Registry::get('Available_Languages');
                 $this->languages = $languages;
                 return $languages;
-            }
-            else {
+            } else {
                 $dbLanguages = Opus_Language::getAllActive();
                 if (isset($dbLanguages) || count($dbLanguages) >= 1) {
                     foreach ($dbLanguages as $lan)
