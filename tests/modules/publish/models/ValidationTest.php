@@ -34,182 +34,209 @@
  */
 
 class Publish_Model_ValidationTest extends ControllerTestCase{
-    
+
     public function testValidationWithInvalidDatatype() {
         $val = new Publish_Model_Validation('Irgendwas');
         $val->validate();
-        
+
         $this->assertType('array', $val->validator);
     }
-    
+
     public function testValidationWithCollectionWithoutCollectionRole() {
         $val = new Publish_Model_Validation('Collection');
         $val->validate();
         $validator = $val->validator[0];
-        
+
         $this->assertNull($validator);
-                
-    }       
-    
+
+    }
+
     public function testValidationWithDateDatatype() {
         $val = new Publish_Model_Validation('Date');
         $val->validate();
         $validator = $val->validator[0];
-        
+
         $this->assertType('Zend_Validate_Date', $validator);
-        
+
     }
-    
+
     public function testValidationWithEmailDatatype() {
         $val = new Publish_Model_Validation('Email');
         $val->validate();
         $validator = $val->validator[0];
-        
+
         $this->assertType('Zend_Validate_EmailAddress', $validator);
-        
+
     }
-    
+
     public function testValidationWithEnrichmentDatatype() {
         $val = new Publish_Model_Validation('Enrichment');
         $val->validate();
         $validator = $val->validator[0];
-        
+
         $this->assertNull($val->validator);
-        
+
     }
-    
+
     public function testValidationWithIntegerDatatype() {
         $val = new Publish_Model_Validation('Integer');
         $val->validate();
         $validator = $val->validator[0];
-        
+
         $this->assertType('Zend_Validate_Int', $validator);
-        
+
     }
-    
+
     public function testValidationWithLanguageDatatype() {
         $val = new Publish_Model_Validation('Language');
         $val->validate();
         $validator = $val->validator[0];
-        
-        $this->assertType('Zend_Validate_InArray', $validator);                
+
+        $this->assertType('Zend_Validate_InArray', $validator);
     }
-    
+
     public function testValidationWithLicenceDatatype() {
         $val = new Publish_Model_Validation('Licence');
         $val->validate();
         $validator = $val->validator[0];
-        
-        $this->assertType('Zend_Validate_InArray', $validator);                
+
+        $this->assertType('Zend_Validate_InArray', $validator);
     }
-    
+
     public function testValidationWithListDatatype() {
         $options = array();
         $options['eins'] = 'eins';
         $options['zwei'] = 'zwei';
-        
+
         $val = new Publish_Model_Validation('List', '', $options);
         $val->validate();
         $validator = $val->validator[0];
-        
-        $this->assertType('Zend_Validate_InArray', $validator);                
+
+        $this->assertType('Zend_Validate_InArray', $validator);
     }
-    
+
     public function testValidationWithTextDatatype() {
         $val = new Publish_Model_Validation('Text');
         $val->validate();
-        
+
         $this->assertNull($val->validator);
     }
-    
+
     public function testValidationWithThesisGrantorDatatype() {
         $val = new Publish_Model_Validation('ThesisGrantor');
         $val->validate();
         $validator = $val->validator[0];
-        
-        $this->assertType('Zend_Validate_InArray', $validator);                
+
+        $this->assertType('Zend_Validate_InArray', $validator);
     }
-    
+
     public function testValidationWithThesisPublisherDatatype() {
         $val = new Publish_Model_Validation('ThesisPublisher');
         $val->validate();
         $validator = $val->validator[0];
-        
-        $this->assertType('Zend_Validate_InArray', $validator);                
+
+        $this->assertType('Zend_Validate_InArray', $validator);
     }
-    
+
     public function testValidationWithTitleDatatype() {
         $val = new Publish_Model_Validation('Title');
         $val->validate();
-        
+
         $this->assertNull($val->validator);
     }
-    
+
     public function testValidationWithYearDatatype() {
         $val = new Publish_Model_Validation('Year');
         $val->validate();
         $validator = $val->validator[0];
-        
-        $this->assertType('Zend_Validate_GreaterThan', $validator);                
+
+        $this->assertType('Zend_Validate_GreaterThan', $validator);
     }
-    
+
     public function testSelectOptionsForInvalidDatatype() {
         $val = new Publish_Model_Validation('Irgendwas');
         $children = $val->selectOptions();
-        
-        $this->assertType('array', $val->validator);      
-          
+
+        $this->assertType('array', $val->validator);
+
     }
-    
+
     public function testSelectOptionsForCollection() {
         $val = new Publish_Model_Validation('Collection', 'jel');
         $children = $val->selectOptions('Collection');
-        
-        $this->assertArrayHasKey('ID:6720', $children);        
-          
+
+        $this->assertArrayHasKey('ID:6720', $children);
+
     }
-    
+
     public function testSelectOptionsForLanguage() {
         $val = new Publish_Model_Validation('Language');
         $children = $val->selectOptions();
-        
-        $this->assertArrayHasKey('deu', $children);            
-          
+
+        $this->assertArrayHasKey('deu', $children);
+
     }
-    
+
     public function testSelectOptionsForLicence() {
         $val = new Publish_Model_Validation('Licence');
         $children = $val->selectOptions();
-        
-        $this->assertArrayHasKey('ID:4', $children);        
-          
+
+        $this->assertArrayHasKey('ID:4', $children);
     }
-    
+
+    /**
+     * Tests that the sort order of the licences in the publish form matches
+     * the sort order provided from the database.
+     */
+    public function testSortOrderOfSelectOptionForLicence() {
+        $licences = Opus_Licence::getAll();
+
+        $activeLicences = array();
+
+        foreach($licences as $licence) {
+            if ($licence->getActive() == '1') {
+                $activeLicences[] = $licence->getDisplayName();
+            }
+        }
+
+        $val = new Publish_Model_Validation('Licence');
+        $values = $val->selectOptions();
+
+        $this->assertEquals( count($values), count($activeLicences));
+
+        $pos = 0;
+
+        foreach ($values as $name) {
+            $this->assertEquals($name, $activeLicences[$pos]);
+            $pos++;
+        }
+    }
+
     public function testSelectOptionsForList() {
         $options = array();
         $options['eins'] = 'eins';
         $options['zwei'] = 'zwei';
-        
+
         $val = new Publish_Model_Validation('List', '', $options);
         $children = $val->selectOptions();
-        
-        $this->assertArrayHasKey('eins', $children);                  
+
+        $this->assertArrayHasKey('eins', $children);
     }
-    
+
      public function testSelectOptionsForThesisGrantor() {
         $val = new Publish_Model_Validation('ThesisGrantor');
         $children = $val->selectOptions();
-        
-        $this->assertArrayHasKey('ID:1', $children);        
-          
+
+        $this->assertArrayHasKey('ID:1', $children);
+
     }
-    
+
     public function testSelectOptionsForThesisPublisher() {
         $val = new Publish_Model_Validation('ThesisPublisher');
         $children = $val->selectOptions();
-        
+
         $this->assertArrayHasKey('ID:2', $children);
-          
+
     }
 }
 
