@@ -47,7 +47,7 @@ class Publish_Model_Validation {
     public $listOptions = array();
     public $collectionRole;
 
-    public function __construct($datatype, $collectionRole=null, $options=null) {        
+    public function __construct($datatype, $collectionRole=null, $options=null) {
         if (isset($options) && !empty($options)) {
             $this->listOptions = $options;
             $this->datatype = 'List';
@@ -55,7 +55,7 @@ class Publish_Model_Validation {
         if (isset($collectionRole)) {
             $this->collectionRole = $collectionRole;
         }
-        else 
+        else
             $this->datatype = $datatype;
         $this->log = Zend_Registry::get('Zend_Log');
         $this->sessionP = new Zend_Session_Namespace('Publish');
@@ -68,14 +68,14 @@ class Publish_Model_Validation {
     }
 
     private function _datatypeValidation() {
-        switch ($this->datatype) {            
+        switch ($this->datatype) {
 
             case 'Date' : $this->validator = $this->_validateDate();
                 break;
 
             case 'Email' : $this->validator = $this->_validateEmail();
                 break;
-           
+
             case 'Integer': $this->validator = $this->_validateInteger();
                 break;
 
@@ -86,26 +86,26 @@ class Publish_Model_Validation {
                 break;
 
             case 'List' : $this->validator = $this->_validateList();
-                break;            
+                break;
 
             case 'ThesisGrantor' : $this->validator = $this->_validateThesis(true);
                 break;
 
             case 'ThesisPublisher' : $this->validator = $this->_validateThesis();
                 break;
-            
+
             case 'Year': $this->validator = $this->_validateYear();
                 break;
-                            
-            case 'Collection' : 
+
+            case 'Collection' :
             case 'CollectionLeaf' :
-            case 'Enrichment' : 
+            case 'Enrichment' :
             case 'Text' :
             case 'Title': $this->validator = null;
                 break;
 
             default:
-                //else no datatype required!                 
+                //else no datatype required!
                 break;
         }
     }
@@ -133,8 +133,8 @@ class Publish_Model_Validation {
 
         $validators[] = $validator;
         return $validators;
-    }    
-    
+    }
+
     private function _validateEmail() {
         $validators = array();
         $validator = new Zend_Validate_EmailAddress();
@@ -260,7 +260,7 @@ class Publish_Model_Validation {
             case 'ThesisPublisher' : return $this->_thesisSelect();
                 break;
 
-            default : 
+            default :
                 //else no select options required
                 break;
         }
@@ -275,7 +275,7 @@ class Publish_Model_Validation {
                 $collectionId = $collectionRole->getRootCollection()->getId();
                 $collection = new Opus_Collection($collectionId);
                 $colls = $collection->getChildren();
-                
+
                 foreach ($colls as $coll) {
                     if ($coll->getVisible() == 1)
                         $children['ID:' . $coll->getId()] = $coll->getDisplayName();
@@ -303,7 +303,6 @@ class Publish_Model_Validation {
             $data = array();
             foreach ($licences AS $key => $li)
                 $data[$key] = $li;
-            asort($data);
             return $data;
         }
         else {
@@ -356,7 +355,7 @@ class Publish_Model_Validation {
             foreach ($dbLicences = Opus_Licence::getAll() as $lic) {
                 if ($lic->getActive() == '1') {
                     $name = $lic->getDisplayName();
-                    $id = $lic->getId();                
+                    $id = $lic->getId();
                     $licences["ID:" . $id] = $name;
                 }
             }
