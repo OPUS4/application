@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<tmx version="2.0" xmlns="http://www.lisa.org/tmx20">
+    <header adminlang="en" creationtool="locale4j" creationtoolversion="1.1" o-tmf="unknown" segtype="block" srclang="*all*"/>
+    <body>
+        <tu tuid="error_headline">
+            <tuv xml:lang="en">
+                <seg>An error occurred while accessing DNB container file.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Beim Zugriff auf die DNB-Containerdatei ist ein Fehler aufgetreten.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="oai_container_index">
+            <tuv xml:lang="en">
+                <seg>Application Error</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Anwendungsfehler</seg>
+            </tuv>
+        </tu>
+    </body>
+</tmx>
