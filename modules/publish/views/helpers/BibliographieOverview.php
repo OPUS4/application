@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class View_Helper_BibliographieOverview extends Zend_View_Helper_Abstract {
+class Publish_View_Helper_BibliographieOverview extends Zend_View_Helper_Abstract {
 
     public $view;
     public $session;

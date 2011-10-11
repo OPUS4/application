@@ -38,7 +38,7 @@
  *
  * @author Susanne Gottwald
  */
-class View_Helper_EndTemplate extends Zend_View_Helper_Abstract{
+class Publish_View_Helper_EndTemplate extends Zend_View_Helper_Abstract{
 
     public function endTemplate(Publish_Form_PublishingSecond $form, $elementCounter) {                             
         $formCount = 0;
