@@ -297,18 +297,19 @@ class Publish_Model_Validation {
         }
     }
 
+    /**
+     * TODO REFACTOR: Function still needed since it does not sort anymore?
+     */
     private function _licenceSelect() {
         $licences = $this->getLicences();
         if (isset($licences) && count($licences) >= 1) {
-            $data = array();
-            foreach ($licences AS $key => $li)
-                $data[$key] = $li;
-            return $data;
+            $data = $licences;
         }
         else {
             $data = null;
-            return $data;
         }
+
+        return $data;
     }
 
     private function _thesisSelect($grantors = null) {
