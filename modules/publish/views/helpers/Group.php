@@ -33,15 +33,8 @@
  * @version     $Id$
  */
 
-/**
- * Description of RenderForm
- *
- * @author Susanne Gottwald
- */
-class View_Helper_Group extends Zend_View_Helper_Abstract {
-
-    public $session;
-
+class Publish_View_Helper_Group extends View_Helper_Fieldset {
+   
     /**
      * method to render specific elements of an form
      * @param <type> $type element type that has to rendered
@@ -49,15 +42,13 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
      * @param <type> $name name of possible hidden element
      * @return element to render in view
      */
-    public function group($value, $options = null, $name = null) {
-        $this->session = new Zend_Session_Namespace('Publish');        
+    public function group($value, $options = null, $name = null) {        
         $this->view->count++;
 
         if ($name == null && $value == null) {
             $error_message = $this->view->translate('template_error_unknown_field');
             return "<br/><div style='width: 400px; color:red;'>" . $error_message . "</div><br/><br/>";
-        }
-        else {
+        } else {
             $result = $this->_renderGroup($value, $options, $name);
             return $result;
         }
@@ -67,203 +58,77 @@ class View_Helper_Group extends Zend_View_Helper_Abstract {
      * Method to render a group of elements (group fields, buttons, hidden fields)
      * @param <Array> $group
      */
-    protected function _renderGroup($group, $options= null, $name = null) {
+    function _renderGroup($group, $options= null, $name = null) {
         $fieldset = "";
-        $disable = false;
-        if (isset($group)) {
 
-            if (isset($this->session->invalidForm) && $this->session->invalidForm == '1')
-                $fieldset .= "";
-            else {
-                if ($this->view->currentAnchor == $group['Name'])
-                    $fieldset .= "<a name='current'></a>";
+        if (!isset($group))
+            return $fieldset;
+
+        if ($this->view->currentAnchor == $group['Name'])
+            $fieldset .= "<a name='current'></a>";
+
+        $fieldset .= "<fieldset class='left-labels' id='" . $group['Name'] . "' />\n";
+        $fieldset .= $this->getLegendFor($group['Name']);
+        $fieldset .= $this->getFieldsetHint($group['Name']);
+
+        //inital div class
+        $fieldset .= "<div class='form-multiple odd'>";
+        $i = 1;
+
+        //show fields
+        foreach ($group["Fields"] AS $field) {
+            $j = (($i - 1) / $group['Counter']);
+            if (fmod($j, 2) == 1)
+                $fieldset .= "</div><div class='form-multiple even'>";
+            else
+                $fieldset .= "</div><div class='form-multiple odd'>";
+
+            $fieldset .= "\n<div class='form-item'>\n";
+            $fieldset .= $this->getLabelFor($field["id"], $field["label"], $field['req']);
+
+            switch ($field['type']) {
+
+                case "Zend_Form_Element_Text":
+                    $fieldset .= $this->renderHtmlText($field, $options);
+                    break;
+
+                case "Zend_Form_Element_Textarea":
+                    $fieldset .= $this->renderHtmlTextarea($field, $options);
+                    break;
+
+                case "Zend_Form_Element_Select" :
+                    $fieldset .= $this->renderHtmlSelect($field, $options);
+                    break;
+
+                case 'Zend_Form_Element_Checkbox' :
+                    $fieldset .= $this->renderHtmlCheckbox($field, $options);
+                    break;
+
+                case 'Zend_Form_Element_File' :
+                    $fieldset .= $this->renderHtmlFile($field, $options);
+                    break;
+
+                default:
+                    break;
             }
 
-            $fieldset .= "<fieldset class='left-labels' id='" . $group['Name'] . "' />\n";
-            $fieldset .= "<legend>" . $this->view->translate($group['Name']) . "</legend>\n\t";
-            $fieldset .= "<div class='description hint'><p>" . $this->_getGroupHint($group['Name']) . "</div></p>";
-
-            //inital div class
-            $fieldset .= "<div class='form-multiple odd'>";
-            $i = 1;
-
-            //show fields
-            foreach ($group["Fields"] AS $field) {
-                $groupCount = 'num' . $group['Name'];
-                $j = (($i - 1) / $this->session->$groupCount);
-                if (is_int($j)) {
-                    //show other div in case intial field number is extended
-                    if (fmod($j, 2) == 1)
-                        $fieldset .= "</div><div class='form-multiple even'>";
-                    else
-                        $fieldset .= "</div><div class='form-multiple odd'>";
-                }
-
-                $fieldset .= "\n<div class='form-item'>\n";
-                $fieldset .= "<label for='" . $field["id"] . "'>" . $field["label"];
-
-                if ($field["req"] === 'required')
-                    $fieldset .= $this->_getRequiredSign();
-                $fieldset .= "</label>";
-
-                switch ($field['type']) {
-
-                    case "Zend_Form_Element_Text":
-                        if (!is_null($this->session->endOfCollectionTree)) {
-                            if (!array_key_exists($field['id'], $this->session->endOfCollectionTree)) {
-                                $fieldset .= "\n\t\t\t\t<input type='text' class='form-textfield' name='" . $field['id'] . "' id='" . $field['id'] . "' ";
-                                if ($options !== null)
-                                    $fieldset .= $options . " ";
-                                else
-                                    $fieldset .= "size='30' ";
-
-                                if ($field["disabled"] === true) {
-                                    $fieldset .= " disabled='1' ";
-                                }
-
-                                if (strstr($field["id"], "1"))
-                                    $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
-                                $fieldset .= " value='" . htmlspecialchars($field["value"]) . "' />\n";
-
-                                if (isset($field['desc']))
-                                    $fieldset .= '<div class="description hint">' . $this->view->translate($field['desc']) . '</div>';
-                            }
-                        }
-                        break;
-
-                    case "Zend_Form_Element_Textarea":
-                        $fieldset .= "\n\t\t\t\t<textarea name='" . $field["id"] . "' class='form-textarea' ";
-                        if ($options !== null)
-                            $fieldset .= $options . " ";
-                        else
-                            $fieldset .= "cols='30' rows='5' ";
-
-                        if (strstr($field["id"], "1"))
-                            $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
-
-                        $fieldset .= " id='" . $field["id"] . "'>" . htmlspecialchars($field["value"]) . "</textarea>";
-
-                        break;
-
-                    case "Zend_Form_Element_Select" :
-                        $fieldset .= "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id'] . '" class="form-selectfield"  id="' . $field['id'] . '"';
-                        if (strstr($field['id'], '1'))
-                            $fieldset .= ' title="' . $this->view->translate($field['hint']) . '"';
-                        if ($field["disabled"] === true) {
-                            $fieldset .= ' disabled="1" ';
-                        }
-                        $fieldset .= '>' . "\n\t\t\t\t\t";
-
-                        foreach ($field['options'] AS $key => $option) {
-                            $fieldset .= '<option value="' . htmlspecialchars($key) . '" label="' . htmlspecialchars($option) . '"';
-
-                            if ($option === $field['value'] || $key === $field['value'])
-                                $fieldset .= ' selected="selected"';
-
-                            $fieldset .= '>';
-                            $fieldset .= htmlspecialchars($option) . '</option>' . "\n\t\t\t\t\t";
-                        }
-                        $fieldset .= '</select>' . "\n";
-
-                        if (isset($field['desc']))
-                            $fieldset .= '<div class="description hint">' . $this->view->translate($field['desc']) . '</div>';
-
-                        break;
-
-                    case 'Zend_Form_Element_Checkbox' :
-                        $fieldset .= "<input type='hidden' name='" . $field['id'] . "' value='0' />";
-                        $fieldset .= "\n\t\t\t\t<input type='checkbox' class='form-checkbox' name='" . $field['id'] . "' id='" . $field['id'] . "' ";
-                        $fieldset .= "value='" . $field['value'] . "' ";
-                        if ($field['check'] == 'checked')
-                            $fieldset .= " checked='checked' ";
-
-                        if ($field["disabled"] === true) {
-                            $fieldset .= " disabled='disabled' ";
-                            $disable = true;
-                        }
-
-                        $fieldset .= " />\n";
-                        break;
-
-                    case 'Zend_Form_Element_File' :
-                        $fieldset .= "<input type='file' name='" . $field['id'] . "' id='" . $field['id'] . "' enctype='multipart/form-data' ";
-                        $fieldset .= "title='" . $this->view->translate($field['hint']) . "' ";
-                        if ($options !== null)
-                            $fieldset .= $options . " ";
-                        else
-                            $fieldset .= "size='30'";
-                        $fieldset .= " />\n";
-
-                        break;
-
-
-                    default:
-                        throw new Application_Exception("Field Type {$field['type']} not found in View Helper.");
-                }
-
-                if (isset($field["error"]) && count($field["error"]) >= 1) {                    
-                    $fieldset .= "<div class='form-errors'><ul>";
-                    foreach ($field["error"] AS $err)
-                        $fieldset .= "<li>" . htmlspecialchars($err) . "</li>";
-                    $fieldset .= "</ul></div>";
-                }
-
-                $fieldset .= "</div>";
-                $i++;
-            }
-
-            //close inital div class
+            $fieldset .= $this->renderFieldsetErrors($field['error']);
             $fieldset .= "</div>";
-
-            //show buttons
-            $fieldset .= "\n\t\t\t\t<div class='button-wrapper add-delete-wrapper'>";
-            foreach ($group["Buttons"] AS $button) {
-                if (!$disable) {
-                    $fieldset .= "<input type='submit' ";
-                    if (strstr($button['id'], 'Down') !== false)
-                        $fieldset .= "class='form-button down-button' ";
-                    else {
-                        if (strstr($button['id'], 'Up') !== false)
-                            $fieldset .= "class='form-button up-button' ";
-                    }
-
-                    if (strstr($button['id'], 'add') !== false)
-                        $fieldset .= "class='form-button add-button' ";
-                    else {
-                        if (strstr($button['id'], 'delete') !== false)
-                            $fieldset .= "class='form-button delete-button' ";
-                    }
-
-                    $fieldset .= "name='" . $button["id"] . "' id='" . $button["id"] . "' value='" . $button["label"] . "' />&nbsp;";
-                }
-            }
-            $fieldset .= "</div>";
-
-            //show hidden fields
-            foreach ($group["Hiddens"] AS $hidden) {
-                $fieldset .= "\n<input type='hidden' name='" . $hidden["id"] . "' id='" . $hidden["id"] . "' value='" . $hidden["value"] . "' />";
-            }
-
-            $fieldset .= "\n\n</fieldset>\n\n";
+            $i++;
         }
+
+        //close inital div class
+        $fieldset .= "</div>";
+
+        //show buttons
+        $fieldset .= $this->renderHtmlButtons($group['Buttons']);
+
+        //show hidden fields
+        $fieldset .= $this->renderHtmlHidden($group['Hiddens']);
+
+        $fieldset .= "\n\n</fieldset>\n\n";
+
         return $fieldset;
-    }
-
-    /**
-     * returns the hint string for a required element
-     * @return <type> 
-     */
-    protected function _getRequiredSign() {
-        return "<span class='required' title='" . $this->view->translate('required_star_title') . "'>*</span>";
-    }
-
-    /**
-     * returns a html String for displaying the group hint
-     * @param <String> $groupName
-     * @return <type>
-     */
-    protected function _getGroupHint($groupName) {
-        return $this->view->translate('hint_' . $groupName);
     }
 
 }
