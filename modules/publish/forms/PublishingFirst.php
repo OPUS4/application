@@ -49,11 +49,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      * @param <type> $options
      */
     public function __construct() {
-        $this->view = $this->getView();
-        if (is_null($this->view)) {
-            throw new Publish_Model_NoViewFoundException ();
-        }
-
+        $this->view = $this->getView();        
         parent::__construct();
     }
 
@@ -101,13 +97,10 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
             $this->addElement($rights);
 
         //create and add send-button
-        $submit = $this->createElement('submit', 'send');
-        $submit->setLabel('Send');
-        $this->addElement($submit);
-
+        $this->addSubmitButton('Send', 'send');
+        
         $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
-
-        $this->setFirstFormViewVariables();
+        $this->setViewValues();
     }
 
     /**
@@ -184,16 +177,14 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
         $this->addElement($fileupload);
 
-        //create add-button
-        $addAnotherFile = $this->createElement('submit', 'addAnotherFile');
-        $addAnotherFile->setLabel('addAnotherFile');
-        $this->addElement($addAnotherFile);
-
+        //create add-button        
+        $this->addSubmitButton('addAnotherFile', 'addAnotherFile');
+        
         $comment = $this->createElement('textarea', 'uploadComment');
         $comment->setLabel('uploadComment');
         $this->addElement($comment);
 
-        $group = array($fileupload->getName(), $addAnotherFile->getName(), $comment->getName());
+        $group = array($fileupload->getName(), 'addAnotherFile', $comment->getName());
 
         return $group;
     }
@@ -242,49 +233,23 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
     /**
      * Method sets the different variables and arrays for the view and the templates in the first form
-     * @param <Zend_Form> $form
      */
-    public function setFirstFormViewVariables() {
+    public function setViewValues() {
         $errors = $this->getMessages();
-
-        //first form single fields for view placeholders
-        foreach ($this->getElements() AS $currentElement => $value) {
-            //single field name (for calling with helper class)
-            $elementAttributes = $this->getElementAttributes($currentElement); //array
+        
+        foreach ($this->getElements() AS $currentElement => $value) {            
+            $elementAttributes = $this->getElementAttributes($currentElement); 
             $this->view->$currentElement = $elementAttributes;
         }
-
-        //Upload-Field and its number of fields (for fieldset)
-        $displayGroup = $this->getDisplayGroup('documentUpload');
-        $this->session->numdocumentUpload = 2;
-
-        $groupName = $displayGroup->getName();
-        $groupFields = array(); //Fields
-        $groupHiddens = array(); //Hidden fields for adding and deleting fields
-        $groupButtons = array(); //Buttons
-
-        foreach ($displayGroup->getElements() AS $groupElement) {
-
-            $elementAttributes = $this->getElementAttributes($groupElement->getName()); //array
-            if ($groupElement->getType() === 'Zend_Form_Element_Submit') {
-                //buttons
-                $groupButtons[$elementAttributes["id"]] = $elementAttributes;
-            } else if ($groupElement->getType() === 'Zend_Form_Element_Hidden') {
-                //hidden fields
-                $groupHiddens[$elementAttributes["id"]] = $elementAttributes;
-            } else {
-                //normal fields
-                $groupFields[$elementAttributes["id"]] = $elementAttributes;
-            }
-        }
-        $group = array();
-        $group["Fields"] = $groupFields;
-        $group["Hiddens"] = $groupHiddens;
-        $group["Buttons"] = $groupButtons;
-        $group["Name"] = $groupName;
-        $this->view->$groupName = $group;
-        $config = Zend_Registry::get('Zend_Config');
-        $this->view->MAX_FILE_SIZE = $config->publish->maxfilesize;
+       
+        $displayGroup = $this->getDisplayGroup('documentUpload');                
+        
+        $group = $this->buildViewDisplayGroup($displayGroup);
+        $group['Name'] = 'documentUpload';
+        $group['Counter'] = 2;
+        
+        $this->view->documentUpload = $group;        
+        $this->view->MAX_FILE_SIZE = $this->config->publish->maxfilesize;
     }
 
 }

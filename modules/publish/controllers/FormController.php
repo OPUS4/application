@@ -82,7 +82,7 @@ class Publish_FormController extends Controller_Action {
 
         //validate fileupload
             if (!$indexForm->getElement('fileupload')->isValid($postData)) {
-                $indexForm->setFirstFormViewVariables();
+                $indexForm->setViewValues();
                 $this->view->form = $indexForm;
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
         } 
@@ -92,7 +92,7 @@ class Publish_FormController extends Controller_Action {
                 $this->view->uploadSuccess = $this->_storeUploadedFiles($postData);
                 $indexForm = new Publish_Form_PublishingFirst($this->view);
                 $indexForm->populate($postData);
-                $indexForm->setFirstFormViewVariables();
+                $indexForm->setViewValues();
                 $this->view->form = $indexForm;
 
                 if (array_key_exists('addAnotherFile', $postData)) {
@@ -103,7 +103,7 @@ class Publish_FormController extends Controller_Action {
 
         //validate whole form
         if (!$indexForm->isValid($postData)) {
-            $indexForm->setFirstFormViewVariables();
+            $indexForm->setViewValues();
             $this->view->form = $indexForm;
             $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
             return $this->renderScript('index/index.phtml');
@@ -191,7 +191,7 @@ class Publish_FormController extends Controller_Action {
                     $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
                     $form2->setAction($action_url);
                     $this->view->action_url = $action_url;
-                    $form2->setSecondFormViewVariables();
+                    $form2->setViewValues();
                     $this->view->form = $form2;
                     return;
                 } 
@@ -202,7 +202,7 @@ class Publish_FormController extends Controller_Action {
             }
             // SEND was pressed => check the form
             if (!$form->isValid($postData)) {
-                $form->setSecondFormViewVariables();
+                $form->setViewValues();
                 $this->view->form = $form;
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
                 return $this->_helper->viewRenderer($this->session->documentType);
