@@ -110,11 +110,11 @@ class Admin_StatisticController extends Controller_Action {
             FROM
                 (SELECT id, MONTH(`server_date_published`) as m
                     FROM `documents`
-                    WHERE YEAR(`server_date_published`) = ?)
+                    WHERE YEAR(`server_date_published`) = ? AND server_state = 'published' )
                 d,
                 (SELECT DISTINCT MONTH(`server_date_published`) as m
                     FROM `documents`
-                    WHERE YEAR(`server_date_published`) = ?)
+                    WHERE YEAR(`server_date_published`) = ? AND server_state = 'published' )
                 months
             WHERE months.m = d.m
             GROUP BY months.m",
@@ -141,7 +141,7 @@ class Admin_StatisticController extends Controller_Action {
         $select = $documents->getAdapter()->query("SELECT t.type as ty, count(d.id) as c
           FROM (SELECT DISTINCT type FROM documents) t
           LEFT OUTER JOIN
-          (SELECT id, type FROM documents WHERE YEAR(server_date_published) = ?) d
+          (SELECT id, type FROM documents WHERE YEAR(server_date_published) = ? AND server_state = 'published') d
           ON t.type = d.type
           GROUP BY t.type", $postData['selectedYear']);
         $result = $select->fetchAll();
@@ -174,7 +174,7 @@ class Admin_StatisticController extends Controller_Action {
                 l.document_id WHERE l.collection_id IN (SELECT id FROM collections WHERE `left_id` >=
                 (SELECT `left_id` FROM collections WHERE id = ?) AND `right_id` <=
                 (SELECT `right_id` FROM collections WHERE id = ?)AND
-                YEAR(d.server_date_published) = ?)";
+                YEAR(d.server_date_published) = ? and server_state = 'published' )";
             $res = $db->query($query, array($institut->getId(), $institut->getId(), $postData['selectedYear']))->fetchAll();
             $instStat[$institut->getDisplayName()] = $res[0]['entries'];
         }
