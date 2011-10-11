@@ -38,25 +38,24 @@
  *
  */
 class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
-
     CONST FIRST = "Firstname";
     CONST COUNTER = "1";
     CONST GROUP = "group";
     CONST EXPERT = "X";
     CONST LABEL = "_label";
     CONST ERROR = "Error";
-   
-    public $doctype = "";      
+
+    public $doctype = "";
     public $additionalFields = array();
     public $postData = array();
-    public $log;    
+    public $log;
     public $view;
 
     public function __construct($postData=null) {
         $this->postData = $postData;
-        $this->log = Zend_Registry::get('Zend_Log');       
+        $this->log = Zend_Registry::get('Zend_Log');
         $this->view = $this->getView();
-        
+
         parent::__construct();
     }
 
@@ -76,11 +75,10 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $this->postData = $extended->data;
 
         if ($valid1 && $valid2 && $valid3) {
-            $this->session->invalidForm = '0';
+            //$this->session->invalidForm = '0';
             return true;
-        }
-        else {
-            $this->session->invalidForm = '1';
+        } else {
+            //$this->session->invalidForm = '1';
             return false;
         }
     }
@@ -92,8 +90,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
      */
     public function init() {
         parent::init();
-        
-        $this->doctype = $this->session->documentType;               
+
+        $this->doctype = $this->session->documentType;
         $this->additionalFields = $this->session->additionalFields;
 
         if (!isset($this->doctype) or empty($this->doctype)) {
@@ -103,8 +101,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $dom = null;
         try {
             $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument($this->doctype);
-        }
-        catch (Application_Exception $e) {
+        } catch (Application_Exception $e) {
             $this->log->err("Unable to load document type '" . $this->doctype . "'");
             // TODO: Need another exception class?
             throw new Publish_Model_FormSessionTimeoutException();
@@ -117,26 +114,16 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         if ($parser !== false)
             $parser->parse();
 
-        $this->log->debug("Parsing ready");        
+        $this->log->debug("Parsing ready");
         $this->addElements($parser->getFormElements());
-        $this->_addSubmit('button_label_send', 'send');
-        $this->_addSubmit('button_label_back', 'back');
+        
+        $this->addSubmitButton('button_label_send', 'send');
+        $this->addSubmitButton('button_label_back', 'back');
 
         if (isset($this->postData))
             $this->populate($this->postData);
 
-        $this->setSecondFormViewVariables();
-    }
-
-    /**
-     * Adds submit button to the form.
-     * @param <type> $label
-     */
-    public function _addSubmit($label, $name) {
-        //Submit button
-        $submit = $this->createElement('submit', $name);
-        $submit->setLabel($label);
-        $this->addElement($submit);
+        $this->setViewValues();
     }
 
     public function prepareCheck() {
@@ -152,65 +139,36 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                     || $element->getType() == "Zend_Form_Element_Hidden") {
 
                 $this->removeElement($name);
-            }
-            else {
+            } else {
                 $this->session->elements[$name]['name'] = $name;
                 $this->session->elements[$name]['value'] = $element->getValue();
                 $this->session->elements[$name]['label'] = $element->getLabel();
             }
         }
 
-        $this->_addSubmit('button_label_back', 'back');        
-        $this->_addSubmit('button_label_send2', 'send');
+        $this->addSubmitButton('button_label_back', 'back');
+        $this->addSubmitButton('button_label_send2', 'send');
     }
 
     public function getExtendedForm($postData, $reload) {
         $this->view->currentAnchor = "";
         if ($reload === true) {
-            
+
             //find out which button was pressed            
             $pressedButtonName = $this->_getPressedButton();
-            
-            if (substr($pressedButtonName, 0, 7) == "addMore") {
-                $fieldName = substr($pressedButtonName, 7);
-                $workflow = 'add';
-            }
-            else if (substr($pressedButtonName, 0, 10) == "deleteMore") {
-                $fieldName = substr($pressedButtonName, 10);
-                $workflow = 'delete';
-            }
-            else if (substr($pressedButtonName, 0, 10) == "browseDown") {                
-                $fieldName = substr($pressedButtonName, 10);
-                $workflow = 'down';
-            }
-            else if (substr($pressedButtonName, 0, 8) == "browseUp") {
-                $fieldName = substr($pressedButtonName, 8);
-                $workflow = 'up';
-            }
-            
+
+            //find out the resulting workflow and the field to extend
+            $result = $this->_workflowAndFieldFor($pressedButtonName);
+            $fieldName = $result[0];
+            $workflow = $result[1];
+
             if (!is_null($this->session->additionalFields[$fieldName]))
-                    $currentNumber = $this->session->additionalFields[$fieldName];
-            else 
+                $currentNumber = $this->session->additionalFields[$fieldName];
+            else
                 $currentNumber = 1;
 
-            //collection
-            if (array_key_exists('step' . $fieldName . $currentNumber, $this->session->additionalFields)) {
-                $currentCollectionLevel = $this->session->additionalFields['step' . $fieldName . $currentNumber];                
-                if ($currentCollectionLevel == '1') {
-                    if (isset($postData[$fieldName . $currentNumber])) {
-                        if ($postData[$fieldName . $currentNumber] !== '') {
-                            //throw new Exception('collId1' . $fieldName . $currentNumber . ' : ' . substr($postData[$fieldName . $currentNumber], 3));                        
-                            $this->session->additionalFields['collId1' . $fieldName . $currentNumber] = substr($postData[$fieldName . $currentNumber], 3);
-                        }
-                    }
-                }
-                else {
-                    if (isset($postData['collId' . $currentCollectionLevel . $fieldName . $currentNumber])) {
-                        $entry = substr($postData['collId' . $currentCollectionLevel . $fieldName . $currentNumber], 3);
-                        $this->session->additionalFields['collId' . $currentCollectionLevel . $fieldName . $currentNumber] = $entry;
-                    }
-                }
-            }
+            // update collection fields in session member addtionalFields and find out the current level of collection browsing
+            $level = $this->_updateCollectionField($fieldName, $currentNumber, $postData);            
 
             $saveName = "";
             //Enrichment-Gruppen haben Enrichment im Namen, die aber mit den currentAnchor kollidieren            
@@ -218,23 +176,21 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                 $saveName = $fieldName;
                 $fieldName = str_replace('Enrichment', '', $fieldName);
             }
-
-            $this->view->currentAnchor = 'group' . $fieldName;
-            //erst Enrichment entfernen und dann unverändert weiter geben
-            //todo: schönere Lösung als diese blöden String-Sachen!!!
             if ($saveName != "")
                 $fieldName = $saveName;
-            $fieldsetCount = $currentNumber;
 
+            $this->view->currentAnchor = 'group' . $fieldName;            
+            
+            $fieldsetCount = $currentNumber;
+            
             switch ($workflow) {
-                case 'add':
-                    //show one more fields
+                case 'add':                    
                     $currentNumber = (int) $currentNumber + 1;
                     break;
                 case 'delete':
                     if ($currentNumber > 1) {
-                        if (isset($currentCollectionLevel)) {
-                            for ($i = 0; $i <= $currentCollectionLevel; $i++)
+                        if (isset($level)) {
+                            for ($i = 0; $i <= $level; $i++)
                                 $this->session->additionalFields['collId' . $i . $fieldName . $currentNumber] = "";
                         }
                         //remove one more field, only down to 0
@@ -243,11 +199,11 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                     break;
                 case 'down':
                     if ($postData[$fieldName . $currentNumber] !== '' || $this->session->additionalFields['collId1' . $fieldName . $currentNumber] !== '')
-                        $currentCollectionLevel = (int) $currentCollectionLevel + 1;                    
+                        $level = (int) $level + 1;
                     break;
                 case 'up' :
-                    if ($currentCollectionLevel >= 2)
-                        $currentCollectionLevel = (int) $currentCollectionLevel - 1;
+                    if ($level >= 2)
+                        $level = (int) $level - 1;
                     break;
                 default:
                     break;
@@ -255,13 +211,54 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
             //set the increased value for the pressed button
             $this->session->additionalFields[$fieldName] = $currentNumber;
-            if (isset($currentCollectionLevel)) {
-                $this->session->additionalFields['step' . $fieldName . $fieldsetCount] = $currentCollectionLevel;                
-            }            
-        }               
+            if (isset($level)) {
+                $this->session->additionalFields['step' . $fieldName . $fieldsetCount] = $level;
+            }
+        }
     }
 
-    public function setSecondFormViewVariables() {
+    private function _workflowAndFieldFor($button) {
+        $result = array();
+        if (substr($button, 0, 7) == "addMore") {
+            $result[0] = substr($button, 7);
+            $result[1] = 'add';
+        } else if (substr($button, 0, 10) == "deleteMore") {
+            $result[0] = substr($button, 10);
+            $result[1] = 'delete';
+        } else if (substr($button, 0, 10) == "browseDown") {
+            $result[0] = substr($button, 10);
+            $result[1] = 'down';
+        } else if (substr($button, 0, 8) == "browseUp") {
+            $result[0] = substr($button, 8);
+            $result[1] = 'up';
+        }
+        return $result;
+    }
+
+    private function _updateCollectionField($field, $value, $post) {
+        $level = '1';
+        if (array_key_exists('step' . $field . $value, $this->session->additionalFields)) {
+
+            $level = $this->session->additionalFields['step' . $field . $value];
+            // Root Node 
+            if ($level == '1') {
+                if (isset($post[$field . $value])) {
+                    if ($post[$field . $value] !== '')
+                        $this->session->additionalFields['collId1' . $field . $value] = substr($post[$field . $value], 3);
+                }
+            }
+            // Middle Node or Leaf
+            else {
+                if (isset($post['collId' . $level . $field . $value])) {
+                    $entry = substr($post['collId' . $level . $field . $value], 3);
+                    $this->session->additionalFields['collId' . $level . $field . $value] = $entry;
+                }
+            }
+        }
+        return $level;
+    }
+
+    public function setViewValues() {
         $errors = $this->getMessages();
 
         //group fields and single fields for view placeholders
@@ -276,13 +273,15 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             //build group name
             $groupName = self::GROUP . $name;
             $this->view->$name = $this->view->translate($name);
+            $groupCount = 'num' . $groupName;
 
             //get the display group for the current element and build the complete group
             $displayGroup = $this->getDisplayGroup($groupName);
             if (!is_null($displayGroup)) {
-                $group = $this->_buildViewDisplayGroup($displayGroup, $this);
-                $group["Name"] = $groupName;
-                $this->view->$groupName = $group;                
+                $group = $this->buildViewDisplayGroup($displayGroup);
+                $group['Name'] = $groupName;
+                $group['Counter'] = $this->session->$groupCount;                
+                $this->view->$groupName = $group;
             }
 
             //single field name (for calling with helper class)
@@ -290,26 +289,13 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
             if (strstr($currentElement, 'Enrichment')) {
                 $name = str_replace('Enrichment', '', $currentElement);
-                $this->view->$name = $elementAttributes;                
-            }
-            else {
-                $this->view->$currentElement = $elementAttributes;                
+                $this->view->$name = $elementAttributes;
+            } else {
+                $this->view->$currentElement = $elementAttributes;
             }
 
             $label = $currentElement . self::LABEL;
             $this->view->$label = $this->view->translate($this->getElement($currentElement)->getLabel());
-
-            //EXPERT VIEW:
-            //also support more difficult templates for "expert admins"
-            $expertField = $currentElement . self::EXPERT;
-            $this->view->$expertField = $this->getElement($currentElement)->getValue();
-            //error values for expert fields view
-            if (isset($errors[$currentElement])) {
-                foreach ($errors[$currentElement] as $error => $errorMessage) {
-                    $errorElement = $expertField . self::ERROR;
-                    $this->view->$errorElement = $errorMessage;
-                }
-            }
         }
     }
 
@@ -324,14 +310,12 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $pos = stripos($element, self::FIRST);
         if ($pos !== false) {
             $name = substr($element, 0, $pos);
-        }
-        else {
+        } else {
             //element belongs to a group
             $pos = stripos($element, self::COUNTER);
             if ($pos != false) {
                 $name = substr($element, 0, $pos);
-            }
-            else {
+            } else {
                 //"normal" element name without changes
                 $name = $element;
             }
@@ -339,41 +323,6 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         return $name;
     }
 
-    /**
-     * Method to build a disply group by a number of arrays for fields, hidden fields and buttons.
-     * @param <Zend_Form_DisplayGroup> $displayGroup
-     * @param <Publishing_Second> $form
-     * @return <Array> $group
-     */
-    private function _buildViewDisplayGroup($displayGroup, $form) {
-        $groupFields = array(); //Fields
-        $groupHiddens = array(); //Hidden fields for adding and deleting fields
-        $groupButtons = array(); //Buttons
-
-        foreach ($displayGroup->getElements() AS $groupElement) {
-
-            $elementAttributes = $form->getElementAttributes($groupElement->getName()); //array
-            if ($groupElement->getType() === 'Zend_Form_Element_Submit') {
-                //buttons
-                $groupButtons[$elementAttributes["id"]] = $elementAttributes;
-            }
-            else if ($groupElement->getType() === 'Zend_Form_Element_Hidden') {
-                //hidden fields
-                $groupHiddens[$elementAttributes["id"]] = $elementAttributes;
-            }
-            else {
-                //normal fields
-                $groupFields[$elementAttributes["id"]] = $elementAttributes;
-            }
-        }
-        $group[] = array();
-        $group["Fields"] = $groupFields;
-        $group["Hiddens"] = $groupHiddens;
-        $group["Buttons"] = $groupButtons;
-
-        return $group;
-    }
-    
     /**
      * Method to check which button in the form was pressed 
      * @return <String> name of button
