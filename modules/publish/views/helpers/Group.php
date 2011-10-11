@@ -33,7 +33,7 @@
  * @version     $Id$
  */
 
-class Publish_View_Helper_Group extends View_Helper_Fieldset {
+class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
    
     /**
      * method to render specific elements of an form
