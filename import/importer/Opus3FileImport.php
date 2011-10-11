@@ -74,9 +74,25 @@ class Opus3FileImport {
     /**
      * Holds the files to the fulltexts in Opus3
      *
-     * @var string  Defaults to null.
+     * @var array
      */
     protected $tmpFiles = array();
+
+
+    /**
+     * Counts Suffixes per Document
+     *
+     * @var array
+     */
+    protected $numSuffix = array();
+
+
+    /**
+     * Holds the imported files per Document
+     *
+     * @var array
+     */
+    protected $filesImported = array();
 
     /**
      * Do some initialization on startup of every action
@@ -101,22 +117,34 @@ class Opus3FileImport {
      * @return void
      */
     public function loadFiles($id, $roleid = null) {
+        $this->tmpPath = null;
+        $this->tmpFiles = array();
+
         $this->tmpDoc = new Opus_Document($id);
         $opus3Id = $this->tmpDoc->getIdentifierOpus3(0)->getValue();
+    	
+        // Sets $this->tmpPath
+        $this->searchDir($this->path, $opus3Id);
 
-    	$this->searchDir($this->path, $opus3Id);
+        if (!is_null($this->tmpPath)) {
+            // Sets $this->tmpFiles
+            $this->searchFiles($this->tmpPath);
 
-        $this->tmpFiles = array();
-        $this->getFiles($this->tmpPath);
+            /* Sort Files alphanumerical */
+            sort($this->tmpFiles);
 
-        $number = $this->saveFiles();
-        $this->removeFilesFromRole('guest');
-        $this->appendFilesToRole($roleid);
-        return $number;
+            $number = $this->saveFiles();
+            $this->removeFilesFromRole('guest');
+            $this->appendFilesToRole($roleid);
+
+            return $number;
+        }
+
+        return;
     }
 
     /*
-     * Initialize tmpPath for Opus3Id
+     * Search for tmpPath for specified Path and Opus3Id
      *
      * @param Directory and OpusId
      * @return void
@@ -127,7 +155,7 @@ class Opus3FileImport {
         //echo "Search in ".$from." for id ".$search. "\n";
 
         if(!is_dir($from)) {
-            return;
+            return null;
         }
 
         $handle = opendir($from);
@@ -147,7 +175,7 @@ class Opus3FileImport {
             // If correct directory found: take it
             else if ( is_dir($path) && $file === $search) {
                 $this->tmpPath = $path;
-                $this->logger->log_debug("Opus3FileImport", "Directory for Opus3Id '".$search."' : ".$path);
+                $this->logger->log_debug("Opus3FileImport", "Directory for Opus3Id '" . $search . "' : '" . $path . "'");
             }
             
             // call function recursively
@@ -161,13 +189,13 @@ class Opus3FileImport {
     }
 
     /*
-     * Get Files in specified path
+     * Saerch for Files in specified path
      *
      * @param Directory
      * @return void
      */
 
-    private function getFiles($from)  {
+    private function searchFiles($from)  {
         if(! is_dir($from)) { 
             return;
         }
@@ -183,7 +211,7 @@ class Opus3FileImport {
 
             // If directory: call function recursively
             if (is_dir($path))  {
-                $this->getFiles($path);
+                $this->searchFiles($path);
             }
 
             // If file: take it
@@ -213,73 +241,43 @@ class Opus3FileImport {
         $lang = $this->tmpDoc->getLanguage();
         $total = 0;
 
-        $numSuffix = array();
-        $filesImported = array();
+        $this->numSuffix = array();
+        $this->filesImported = array();
 
         foreach ($this->tmpFiles as $f) {
-                        
-            // Exclude 'index.html' and files starting with '.'
-            if (basename($f) == 'index.html' || strpos(basename($f), '.') === 0) {
-                $this->logger->log_debug("Opus3FileImport", "Skipped File '" . basename($f) . "'");
-                continue;
+
+            if (!$this->isValidFile($f)) { continue; }
+
+            $prefix = $this->getPrefix($f);
+            $label = null;
+
+            $visibleInOai = $this->getVisibilityInOai($prefix);
+            $visibleInFrontdoor = $this->getVisibilityInFrontdoor($prefix);
+            $pathName = $this->getPathName($prefix, basename($f));
+
+            $this->logger->log_debug("Opus3FileImport", "Import '" . $pathName . "'");
+            if ($visibleInFrontdoor) {
+                $this->logger->log_debug("Opus3FileImport", "File '" . $pathName . "' visible");
+                $label = $this->getLabel($f);
             }
-
-            // ERROR: File with same Basnemae already imported
-            if (array_search(basename($f), $filesImported) !== false) {
-                $this->logger->log_error("Opus3FileImport", "File " . basename($f) . " already imported");
-                continue;
-
-            }
-
-            // ERROR: Filename has no Extension
-            if (strrchr ($f, ".") === false) {
-                $this->logger->log_error("Opus3FileImport", "File " . basename($f) . " has no extension and will be ignored");
-                continue;
-            }
-
-            // Prefix for "Original" Files
-            $prefix = "";
-            $prefix = $this->getPrefixFromFile($f);
-
-            $pathName = $prefix.basename($f);
-
-            $suffix = substr (strrchr ($f, "."), 1);
-            if (array_key_exists($suffix, $numSuffix) === false) { $numSuffix[$suffix] = 0; }
-            $numSuffix[$suffix]++;
-            $label = "Dokument_" . $numSuffix[$suffix] . "." . $suffix;
-
-            array_push($filesImported, $pathName);
-            $this->logger->log_debug("Opus3FileImport", "File " . $pathName . " imported");
+            $comment = $this->getComment($f);
 
             $file = $this->tmpDoc->addFile();
             $file->setPathName($pathName);
-            //$file->setLabel($label);
-            $file->setLabel($pathName);
             $file->setTempFile($f);
             $file->setLanguage($lang);
+            $file->setVisibleInFrontdoor($visibleInFrontdoor);
+            $file->setVisibleInOai($visibleInOai);
 
-            // If File has prefix then it's neither visible in Frontdoor nor in Oai
-            if ($prefix != "") {
-                $file->setVisibleInFrontdoor(false);
-                $file->setVisibleInOai(false);
-                $this->logger->log_debug("Opus3FileImport", "File " . $pathName . " is invisible");
-            }
-
-            // Check if a '.bem_' file exists and make a filecomment
-            $comment_file = dirname($f) . "/.bem_" . basename($f);
-            if (file_exists($comment_file)) {
-                $fileArray = file($comment_file);
-                $comment = utf8_encode(implode(' ', $fileArray));
-                $file->setComment($comment);
-            }
-
+            if (!is_null($label)) { $file->setLabel($label); }
+            if (!is_null($comment)) { $file->setComment($comment); }
             $total++;
+
+            array_push($this->filesImported, $pathName);
         }
 
         // store the object
         if ($total > 0) {
-            // TODO: Get collections before import files (must be fixed in framework)
-            //$this->_tmpDoc->getCollection();
             $this->tmpDoc->store();
         }
 
@@ -318,7 +316,7 @@ class Opus3FileImport {
             $role = new Opus_UserRole($roleId);
             foreach ($this->tmpDoc->getFile() as $f) {
                 $role->appendAccessFile($f->getId());
-                $this->logger->log_debug("Opus3FileImport", "Role " . $role . " File " . $f->getId());
+                $this->logger->log_debug("Opus3FileImport", "Role '" . $role . "' for File '" . $f->getPathName() . "'");
             }
             $role->store();
         }
@@ -332,15 +330,122 @@ class Opus3FileImport {
     * @return string
     */
 
-    private function getPrefixFromFile($f)  {
-        $pr = substr($f, strlen($this->tmpPath) + 1, strlen($f) - strlen($this->tmpPath) - strlen(basename($f)) -2);
-        $pr = str_replace('/', '_', $pr) . "_";
-        $pr = preg_replace('/^html_/', '', $pr);
-        $pr = preg_replace('/^pdf_/', '', $pr);
-        $pr = preg_replace('/^ps_/', '', $pr);
-        //$this->logger->log_debug("Opus3FileImport", $pr);
-        return $pr;
+    private function getPrefix($f)  {
+        if ($this->tmpPath == dirname($f)) { return; }
+        return substr(dirname($f), strlen($this->tmpPath) + 1);
     }
 
+    /*
+    * Get OAI-Visibility according to the Prefix
+    *
+    * @param string
+    * @return boolean
+    */
+
+    private function getVisibilityInOai($s)  {
+        if (is_int(strpos($s , "pdf")) &&  strpos($s , "pdf") == 0) { return true; }
+        if (is_int(strpos($s , "ps")) &&  strpos($s , "ps") == 0) { return true; }
+        return false;
+    }
+
+    /*
+    * Get Frontdoor-Visibility according to the Prefix
+    *
+    * @param string
+    * @return boolean
+    */
+
+    private function getVisibilityInFrontdoor($s)  {
+        if (is_int(strpos($s , "pdf")) &&  strpos($s , "pdf") == 0) { return true; }
+        if (is_int(strpos($s , "ps")) &&  strpos($s , "ps") == 0) { return true; }
+        return false;
+    }
+
+    /*
+    * Get Pathname according to the Prefix and Basename
+    *
+    * @param string, string
+    * @return string
+    */
+
+    private function getPathName($prefix, $basename) {
+        if (strlen($prefix) == 0) { return $basename; }
+        if ($prefix == "pdf" || $prefix == "ps") {
+            return $basename;
+        }
+
+        $prefix = str_replace('/', '_', $prefix);
+        if (is_int(strpos($prefix , "pdf")) &&  strpos($prefix , "pdf") == 0) {
+            $prefix = str_replace('pdf_', '', $prefix);
+        }
+        elseif (is_int(strpos($prefix , "ps")) &&  strpos($prefix , "ps") == 0){
+            $prefix = str_replace('ps_', '', $prefix);
+        }
+        
+        return $prefix."_".$basename;
+    }
+
+    /*
+    * Checks if File is valid to import
+    *
+    * @param string
+    * @return boolean
+    */
+
+    private function isValidFile($f)  {
+        // Exclude 'index.html' and files starting with '.'
+        if (basename($f) == 'index.html' || strpos(basename($f), '.') === 0) {
+            $this->logger->log_debug("Opus3FileImport", "Skipped File '" . basename($f) . "'");
+            return false;
+        }
+
+        // ERROR: File with same Basnemae already imported
+        if (array_search(basename($f), $this->filesImported) !== false) {
+            $this->logger->log_error("Opus3FileImport", "File '" . basename($f) . "' already imported");
+            return false;
+
+        }
+
+        // ERROR: Filename has no Extension
+        if (strrchr ($f, ".") === false) {
+            $this->logger->log_error("Opus3FileImport", "File '" . basename($f) . "' has no extension and will be ignored");
+            return false;
+        }
+
+        return true;
+    }
+
+
+   /*
+    * Returns Label for File from a full Filename according to the Suffix
+    *
+    * @param file
+    * @return string
+    */
+
+    private function getLabel($f)  {
+        $suffix = substr(strrchr ($f, "."), 1);
+        if (array_key_exists($suffix, $this->numSuffix) === false) { $this->numSuffix[$suffix] = 0; }
+        $this->numSuffix[$suffix]++;
+        $label = "Dokument_" . $this->numSuffix[$suffix] . "." . $suffix;
+
+        return $label;
+    }
+
+    /*
+    * Returns Comment for File if a '.bem_' file exists
+    *
+    * @param file
+    * @return string
+    */
+
+    private function getComment($f)  {
+        $comment_file = dirname($f) . "/.bem_" . basename($f);
+        if (file_exists($comment_file)) {
+            $fileArray = file($comment_file);
+            return utf8_encode(implode(' ', $fileArray));
+        }
+        return null;
+    }
 }
 
