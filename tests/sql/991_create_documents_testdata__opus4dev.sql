@@ -50,6 +50,9 @@ INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `mime_t
 (119, 94, 'test.ps', 'test.ps', 'application/postscript', 'eng', 22041, 1, 1),
 (120, 95, 'test.html', 'test.html', 'text/html', 'eng', 847, 1, 1);
 
+INSERT INTO `file_hashvalues` (`file_id`, `type`, `value`) VALUES
+(116, 'MD5', '1ba50dc8abc619cea3ba39f77c75c0fe');
+
 --
 -- Daten für Tabelle `access_files`
 --
