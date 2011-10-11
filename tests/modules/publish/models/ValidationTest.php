@@ -238,6 +238,38 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $this->assertArrayHasKey('ID:2', $children);
 
     }
+    
+    public function testInvisibleCollectionRoleDDC() {
+        $val = new Publish_Model_Validation('Collection', 'ddc');
+        
+        $collectionRole = Opus_CollectionRole::fetchByOaiName($val->collectionRole);
+        $visibleFlag = $collectionRole->getVisible();
+        $collectionRole->setVisible(0);
+        $collectionRole->store();
+        
+        $children = $val->selectOptions('Collection');        
+        $this->assertNull($children);
+        
+        $collectionRole->setVisible($visibleFlag);
+        $collectionRole->store();
+        
+    }
+    
+    public function testVisibleCollectionRoleDDC() {
+        $val = new Publish_Model_Validation('Collection', 'ddc');
+        
+        $collectionRole = Opus_CollectionRole::fetchByOaiName($val->collectionRole);
+        $visibleFlag = $collectionRole->getVisible();
+        $collectionRole->setVisible(1);
+        $collectionRole->store();
+        
+        $children = $val->selectOptions('Collection');        
+        $this->assertType('array', $children);                       
+        $this->assertArrayHasKey('ID:3', $children);
+        
+        $collectionRole->setVisible($visibleFlag);
+        $collectionRole->store();
+    }
 }
 
 ?>
