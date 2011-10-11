@@ -335,7 +335,7 @@ class Publish_Model_Validation {
                 $dbLanguages = Opus_Language::getAllActive();
                 if (isset($dbLanguages) || count($dbLanguages) >= 1) {
                     foreach ($dbLanguages as $lan)
-                        $languages[$lan->getPart2B()] = $lan->getDisplayName();
+                        $languages[$lan->getPart2T()] = $lan->getDisplayName();
                     $this->languages = $languages;
 
                     return $languages;
