@@ -35,12 +35,12 @@
  * Unit tests for Admin_DocumentController.
  */
 class Admin_DocumentControllerTest extends ControllerTestCase {
-    
+
     /**
      * Test edit action.
      */
     public function testEditAction() {
-        $this->markTestSkipped("needs to be adapted"); 
+        $this->markTestSkipped("needs to be adapted");
         $this->dispatch('/admin/documents/edit/id/1');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -52,7 +52,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      * Test edit action with missing ID.
      */
     public function testEditActionWithMissingId() {
-        $this->markTestSkipped("needs to be adapted"); 
+        $this->markTestSkipped("needs to be adapted");
         $this->dispatch('/admin/documents/edit');
         $this->assertRedirectTo('/admin/documents');
     }
@@ -61,7 +61,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      * Test edit action with bad ID.
      */
     public function testEditActionWithBadId() {
-        $this->markTestSkipped("needs to be adapted"); 
+        $this->markTestSkipped("needs to be adapted");
         $this->dispatch('/admin/documents/edit/id/1k1');
         $this->assertRedirectTo('/admin/documents');
     }
@@ -72,7 +72,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      * TODO check for specific exception?
      */
     public function testEditActionWithUnknownId() {
-        $this->markTestSkipped("needs to be adapted"); 
+        $this->markTestSkipped("needs to be adapted");
         $this->dispatch('/admin/documents/edit/id/500');
         $this->assertModule('default');
         $this->assertController('error');
@@ -80,7 +80,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     }
 
     public function testShowAction() {
-        $this->markTestSkipped("needs to be adapted"); 
+        $this->markTestSkipped("needs to be adapted");
         $this->dispatch('/admin/documents/show/id/1');
         $this->assertModule('admin');
         $this->assertController('documents');
@@ -88,7 +88,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     }
 
     public function testShowActionDoc91() {
-        $this->markTestSkipped("needs to be adapted"); 
+        $this->markTestSkipped("needs to be adapted");
         $this->dispatch('/admin/documents/show/id/91');
         $this->assertModule('admin');
         $this->assertController('documents');
@@ -105,7 +105,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertController('document');
         $this->assertAction('delete');
     }
-    
+
     /**
      * Tests user selecting no in delete confirmation form.
      */
@@ -148,7 +148,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
     /**
      * Tests permanently deleting a document.
-     * 
+     *
      * @depends testDeleteActionConfirmYes
      */
     public function testPermanentDeleteAction() {
@@ -161,7 +161,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
     /**
      * Tests user answering no in permanent delete confirmation form.
-     * 
+     *
      * @depends testPermanentDeleteAction
      */
     public function testPermanentDeleteActionConfirmNo() {
@@ -203,7 +203,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
     /**
      * Tests unpublishing document.
-     * 
+     *
      * @depends testPublishActionConfirmYes
      */
     public function testUnpublishAction() {
@@ -222,7 +222,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $doc = new Opus_Document(100);
         $this->assertEquals('unpublished', $doc->getServerState());
     }
-    
+
     public function testUnlinkCollectionAction() {
         $this->request
                 ->setMethod('POST')
@@ -234,6 +234,19 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertController('document');
         $this->assertAction('unlinkcollection');
         $this->assertRedirect('/admin/document/index');
+    }
+
+    /**
+     * The Patents section for test document 92 should be empty.
+     */
+    public function testEditLinkForEmptySectionIsNotDisplayed() {
+        $this->dispatch('/admin/document/index/id/92');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('document');
+        $this->assertAction('index');
+        $response = $this->getResponse()->getBody();
+        $this->assertTrue(substr_count($response, 'edit/id/92/section/patents') == 0);
     }
 
 }
