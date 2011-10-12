@@ -237,7 +237,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     }
 
     /**
-     * The Patents section for test document 92 should be empty.
+     * Regression test for OPUSVIER-1757
      */
     public function testEditLinkForEmptySectionIsNotDisplayed() {
         $this->markTestSkipped('Regression Test OPUSVIER-1757. Bug noch nicht gefixt.');
@@ -248,6 +248,19 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertAction('index');
         $response = $this->getResponse()->getBody();
         $this->assertTrue(substr_count($response, 'edit/id/92/section/patents') == 0);
+    }
+
+    /**
+     * Regression test for OPUSVIER-1744. Test for XSS using docId.
+     */
+    public function testXssUsingIdForDeletingDocuments() {
+        $this->dispatch('/admin/document/delete/docId/<span>123');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('document');
+        $this->assertAction('delete');
+        $response = $this->getResponse()->getBody();
+        $this->assertTrue(substr_count($response, '<span>123') == 0);
     }
 
 }
