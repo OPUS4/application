@@ -28,7 +28,7 @@ INSERT INTO `languages` (`id`, `part2_b`, `part2_t`, `part1`, `scope`, `type`, `
 ('5','por','por','pt','I','L','Portuguese','',0),
 ('6','rus','rus','ru','I','L','Russian','',1),
 ('7','spa','spa','es','I','L','Spanish','',1),
-('8','','','','I','L','Misc.','',0);
+('8','mul','mul','','I','L','Multiple languages','',1);
 /*!40000 ALTER TABLE `languages` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
