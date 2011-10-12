@@ -314,7 +314,7 @@
             <xsl:if test="string-length(field[@name='contributors_name']) > 0">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
-                        <xsl:text>contributors_name</xsl:text>
+                        <xsl:text>ContributorsName</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="normalize-space(field[@name='contributors_name'])" />
@@ -327,7 +327,7 @@
             <xsl:if test="string-length(field[@name='source_title']) > 0">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
-                        <xsl:text>source_title</xsl:text>
+                        <xsl:text>SourceTitle</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="normalize-space(field[@name='source_title'])" />
@@ -339,7 +339,7 @@
            <xsl:if test="string-length(field[@name='source_swb']) > 0">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
-                        <xsl:text>source_swb</xsl:text>
+                        <xsl:text>SourceSwb</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="normalize-space(field[@name='source_swb'])" />
@@ -417,7 +417,7 @@
                 </xsl:call-template>
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
-                        <xsl:text>subject_swd</xsl:text>
+                        <xsl:text>SubjectSwd</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="normalize-space(field[@name='subject_swd'])" />
@@ -435,7 +435,7 @@
                 </xsl:call-template>
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
-                        <xsl:text>subject_uncontrolled_german</xsl:text>
+                        <xsl:text>SubjectUncontrolledGerman</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="normalize-space(field[@name='subject_uncontrolled_german'])" />
@@ -453,7 +453,7 @@
                 </xsl:call-template>
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
-                        <xsl:text>subject_uncontrolled_english</xsl:text>
+                        <xsl:text>SubjectUncontrolledEnglish</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="normalize-space(field[@name='subject_uncontrolled_english'])" />
@@ -610,7 +610,7 @@
             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_rvk' or @name='temp_rvk']/row[field[@name='source_opus']=$OriginalID]">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
-                        <xsl:text>class_rvk</xsl:text>
+                        <xsl:text>ClassRvk</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="field[@name='class']" />
