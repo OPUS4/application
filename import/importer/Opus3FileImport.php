@@ -160,7 +160,7 @@ class Opus3FileImport {
 
         $handle = opendir($from);
         while ($file = readdir($handle)) {
-            // Skip '.' , '..' and '.svn'
+            // Skip '.' , '..' and '.svn' 
             if( $file == '.' || $file == '..' || $file === '.svn') {
                 continue;
             }
@@ -202,8 +202,8 @@ class Opus3FileImport {
 
         $handle = opendir($from);
         while ($file = readdir($handle)) {
-            // Skip '.' , '..' and '.svn'
-            if( $file == '.' || $file == '..' || $file === '.svn') {
+            // Skip '.' , '..' and '.svn' and 'html'
+            if( $file == '.' || $file == '..' || $file === '.svn' || $file == 'html') {
                 continue;
             }
             
