@@ -251,16 +251,39 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Regression test for OPUSVIER-1744. Test for XSS using docId.
+     * Regression test for OPUSVIER-1744.
+     *
+     * Test for XSS using docId.
      */
     public function testXssUsingIdForDeletingDocuments() {
         $this->dispatch('/admin/document/delete/docId/<span>123');
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('document');
-        $this->assertAction('delete');
         $response = $this->getResponse()->getBody();
         $this->assertTrue(substr_count($response, '<span>123') == 0);
+    }
+
+    /**
+     * Regression test for OPUSVIER-1744.
+     *
+     * Test for failure to redirect for already deleted documents.
+     */
+    public function testNoRedirectForAlreadyDeletedDocuments() {
+        $this->dispatch('/admin/document/delete/docId/123');
+        $this->assertFalse($this->getResponse()->getHttpResponseCode() == 200,
+                "Request was not redirected.");
+        $this->assertTrue($this->getResponse()->getHttpResponseCode() != 500,
+                "Request produced internal error.");
+    }
+
+    /**
+     * Regression test for OPUSVIER-1744.
+     *
+     * If the document ID is invalid a redirect should happen. This test does
+     * not check the redirect target.
+     */
+    public function testNoRedirectForInvalidIdForDeletingDocuments() {
+        $this->dispatch('/admin/document/delete/docId/1000');
+        $this->assertTrue($this->getResponse()->getHttpResponseCode() != 500,
+                "Request produced internal error. " . $this->getResponse()->getBody());
     }
 
 }
