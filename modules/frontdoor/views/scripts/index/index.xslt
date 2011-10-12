@@ -179,10 +179,8 @@
                 <xsl:apply-templates select="@ContributingCorporation" />
             </xsl:if>
 
-            <!-- -->
-            <!-- Subjects section.  New subjects must be introduced right here. -->
-            <!-- -->            
 
+            <!-- Subjects section:  New subjects must be introduced right here. -->
             <!-- we need to apply a hack (so called Muenchian grouping) here since XSLT's 2.0 for-each-group feature is currently not supported -->
             <xsl:if test="Subject[@Type='uncontrolled']">
             <tr>
@@ -205,10 +203,10 @@
                 </em></td>
             </tr>
             </xsl:if>
-
             <xsl:apply-templates select="Subject[@Type='swd']"><xsl:sort select="@Value"/></xsl:apply-templates>
             <xsl:apply-templates select="Subject[@Type='psyndex']"><xsl:sort select="@Value"/></xsl:apply-templates>
-
+            <!-- End Subjects -->
+            
             <xsl:apply-templates select="@Volume" />
             <xsl:apply-templates select="@Issue" />
             <xsl:apply-templates select="@Edition" />
@@ -224,7 +222,7 @@
             <xsl:apply-templates select="Enrichment[@KeyName='NeuesSelect']" />
             <!-- End Enrichtments -->
 			
-			<!-- Collection Roles Section: add the collection roles keys that have to be displayed in frontdoor -->
+            <!-- Collection Roles Section: add the collection roles keys that have to be displayed in frontdoor -->
             <xsl:apply-templates select="Collection[@RoleName='institutes']" />
             <xsl:apply-templates select="Collection[@RoleName='projects']" />
 
@@ -237,11 +235,9 @@
             <xsl:apply-templates select="Collection[@RoleName='bk']" />
             <xsl:apply-templates select="Collection[@RoleName='jel']" />
             <xsl:apply-templates select="Collection[@RoleName='series']" />
-			<!-- End Collection Roles -->
-            
-			<xsl:apply-templates select="IdentifierSerial" />
-
+            <xsl:apply-templates select="IdentifierSerial" />
             <xsl:apply-templates select="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel' and @RoleName!='series']" />
+            <!-- End Collection Roles -->
 
             <xsl:apply-templates select="Licence" />
         </table>
@@ -801,7 +797,6 @@
         </tr>
     </xsl:template>
  
-    <xsl:template match="Institute"/>
     <xsl:template match="Patent"/>
  
     <xsl:template match="PublishedDate">
@@ -814,8 +809,6 @@
             </td>
         </tr>
     </xsl:template>
-
-    <xsl:template match="PublisherUniversity"/>
 
     <xsl:template match="ReferenceUrl">
         <tr>
