@@ -170,7 +170,7 @@
                 </xsl:when>
             </xsl:choose>
 
-            <xsl:apply-templates select="DateAccepted" />
+            <xsl:apply-templates select="ThesisDateAccepted" />
 
             <xsl:if test="@CreatingCorporation != ''">
                 <xsl:apply-templates select="@CreatingCorporation" />
@@ -209,16 +209,13 @@
             <xsl:apply-templates select="Subject[@Type='swd']"><xsl:sort select="@Value"/></xsl:apply-templates>
             <xsl:apply-templates select="Subject[@Type='psyndex']"><xsl:sort select="@Value"/></xsl:apply-templates>
 
-            <xsl:apply-templates select="@Source" />
             <xsl:apply-templates select="@Volume" />
             <xsl:apply-templates select="@Issue" />
             <xsl:apply-templates select="@Edition" />
             <xsl:apply-templates select="@PageNumber" />
             <xsl:apply-templates select="@PageFirst" />
             <xsl:apply-templates select="@PageLast" />
-            <xsl:apply-templates select="@Reviewed" />
             <xsl:apply-templates select="Note[@Visibility='public']" />
-            <xsl:apply-templates select="@PublicationVersion" />
             
             <!-- Enrichment Section: add the enrichment keys that have to be displayed in frontdoor -->
             <xsl:apply-templates select="Enrichment[@KeyName='Event']" />
@@ -378,20 +375,6 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="@PublicationVersion">
-        <tr>
-            <th class="name">
-                <xsl:call-template name="translateFieldname" />
-                <xsl:text>:</xsl:text>
-            </th>
-            <td>
-                <xsl:call-template name="translateString">
-                    <xsl:with-param name="string" select="." />
-                </xsl:call-template>
-            </td>
-        </tr>
-    </xsl:template>
-
     <xsl:template match="@PublishedYear">
         <tr>
             <th class="name">
@@ -421,34 +404,6 @@
     </xsl:template>
 
     <xsl:template match="@PublisherPlace">
-        <tr>
-            <th class="name">
-                <xsl:call-template name="translateFieldname" />
-                <xsl:text>:</xsl:text>
-            </th>
-            <td>
-                <xsl:call-template name="translateString">
-                    <xsl:with-param name="string" select="." />
-                </xsl:call-template>
-            </td>
-        </tr>
-    </xsl:template>
-
-    <xsl:template match="@Reviewed">
-        <tr>
-            <th class="name">
-                <xsl:call-template name="translateFieldname" />
-                <xsl:text>:</xsl:text>
-            </th>
-            <td>
-                <xsl:call-template name="translateString">
-                    <xsl:with-param name="string" select="." />
-                </xsl:call-template>
-            </td>
-        </tr>
-    </xsl:template>
-
-    <xsl:template match="@Source">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateFieldname" />
@@ -576,7 +531,7 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="DateAccepted">
+    <xsl:template match="ThesisDateAccepted">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateFieldname"/>:
