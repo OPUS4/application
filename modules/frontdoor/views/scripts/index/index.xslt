@@ -119,7 +119,6 @@
                     <xsl:call-template name="MailToAuthor"/>
                 </ul>
             </div>
-            
         </div>
       
         <table class="result-data frontdoordata">
@@ -134,6 +133,8 @@
             <xsl:apply-templates select="IdentifierDoi" />
             <xsl:apply-templates select="IdentifierIsbn" />
             <xsl:apply-templates select="IdentifierIssn" />
+            <xsl:apply-templates select="IdentifierArxiv" />
+            <xsl:apply-templates select="IdentifierPubmed" />
             <xsl:apply-templates select="ReferenceUrn" />
             <xsl:apply-templates select="ReferenceUrl" />
             <xsl:apply-templates select="ReferenceDoi" />
@@ -141,6 +142,8 @@
             <xsl:apply-templates select="ReferenceIsbn" />
             <xsl:apply-templates select="ReferenceIssn" />
             <xsl:apply-templates select="TitleParent" />
+            <xsl:apply-templates select="TitleSub" />
+            <xsl:apply-templates select="TitleAdditional" />
             <xsl:apply-templates select="@PublisherName" />
             <xsl:apply-templates select="@PublisherPlace" />
             <xsl:apply-templates select="PersonEditor" />
@@ -160,7 +163,6 @@
                     <xsl:apply-templates select="@CompletedYear" />
                 </xsl:when>
             </xsl:choose>
-
             <xsl:choose>
                 <xsl:when test="string-length(normalize-space(PublishedDate/@Year)) > 0">
                     <xsl:apply-templates select="PublishedDate" />
@@ -170,15 +172,11 @@
                 </xsl:when>
             </xsl:choose>
 
+            <xsl:apply-templates select="ThesisPublisher" />
+            <xsl:apply-templates select="ThesisGrantor" />
             <xsl:apply-templates select="ThesisDateAccepted" />
-
-            <xsl:if test="@CreatingCorporation != ''">
-                <xsl:apply-templates select="@CreatingCorporation" />
-            </xsl:if>
-            <xsl:if test="@ContributingCorporation != ''">
-                <xsl:apply-templates select="@ContributingCorporation" />
-            </xsl:if>
-
+            <xsl:apply-templates select="@CreatingCorporation" />
+            <xsl:apply-templates select="@ContributingCorporation" />
 
             <!-- Subjects section:  New subjects must be introduced right here. -->
             <!-- we need to apply a hack (so called Muenchian grouping) here since XSLT's 2.0 for-each-group feature is currently not supported -->
@@ -219,6 +217,11 @@
             <xsl:apply-templates select="Enrichment[@KeyName='Event']" />
             <xsl:apply-templates select="Enrichment[@KeyName='City']" />
             <xsl:apply-templates select="Enrichment[@KeyName='Country']" />
+            <!-- Enrichment Fields for Opus3 Documents -->
+            <xsl:apply-templates select="Enrichment[@KeyName='SourceTitle']" />
+            <xsl:apply-templates select="Enrichment[@KeyName='SourceSwb']" />
+            <xsl:apply-templates select="Enrichment[@KeyName='ClassRvk']" />
+            <xsl:apply-templates select="Enrichment[@KeyName='ContributorsName']" />
             <xsl:apply-templates select="Enrichment[@KeyName='NeuesSelect']" />
             <!-- End Enrichtments -->
 			
@@ -236,6 +239,7 @@
             <xsl:apply-templates select="Collection[@RoleName='jel']" />
             <xsl:apply-templates select="Collection[@RoleName='series']" />
             <xsl:apply-templates select="IdentifierSerial" />
+            
             <xsl:apply-templates select="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel' and @RoleName!='series']" />
             <!-- End Collection Roles -->
 
@@ -243,8 +247,10 @@
         </table>
     </xsl:template>
 
-    <!-- here begins the special templates for the fields -->
-    <!-- Templates for "internal fields". -->
+
+<!--  -->
+<!-- Templates for "internal fields". -->
+<!--  -->
     <xsl:template match="@CompletedYear">
         <tr>
             <th class="name">
@@ -441,23 +447,10 @@
         </tr>
     </xsl:template>
 
-<!-- Templates for "enrichments". -->
-    <xsl:template match="Enrichment">
-        <tr>
-            <th class="name">
-                <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">Enrichment<xsl:value-of select="@KeyName" /></xsl:with-param>
-                        </xsl:call-template>
-                        <xsl:text>:</xsl:text>
-                </th>
-            <td>
-                <xsl:value-of select="@Value" />
-        </td>
-        </tr>
-    </xsl:template>
 
-
-    <!-- Templates for "external fields". -->
+<!-- -->
+<!-- Templates for "external fields". -->
+<!-- -->
     <xsl:template match="Collection">
         <tr>
             <xsl:choose>
@@ -527,13 +520,15 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="ThesisDateAccepted">
+    <xsl:template match="Enrichment">
         <tr>
             <th class="name">
-                <xsl:call-template name="translateFieldname"/>:
+                <xsl:call-template name="translateString">
+                    <xsl:with-param name="string">Enrichment<xsl:value-of select="@KeyName" /></xsl:with-param>
+                </xsl:call-template>
             </th>
             <td>
-                <xsl:value-of select="concat(format-number(@Day,'00'),'.',format-number(@Month,'00'),'.',@Year)" />
+                <xsl:value-of select="@Value" />
             </td>
         </tr>
     </xsl:template>
@@ -689,6 +684,42 @@
             <xsl:text disable-output-escaping="yes">&lt;/td&gt;</xsl:text>
             <xsl:text disable-output-escaping="yes">&lt;/tr&gt;</xsl:text>
         </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="IdentifierArxiv">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateFieldname"/>:
+            </th>
+            <td>
+                <xsl:element name="a">
+                    <xsl:attribute name="href">
+                        <xsl:text>http://arxiv.org/abs/</xsl:text>
+                        <xsl:value-of select="@Value" />
+                    </xsl:attribute>
+                    <xsl:text>http://arxiv.org/abs/</xsl:text>
+                    <xsl:value-of select="@Value" />
+                </xsl:element>
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="IdentifierPubmed">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateFieldname"/>:
+            </th>
+            <td>
+                <xsl:element name="a">
+                    <xsl:attribute name="href">
+                        <xsl:text>http://www.ncbi.nlm.nih.gov/pubmed?term=</xsl:text>
+                        <xsl:value-of select="@Value" />
+                    </xsl:attribute>
+                    <xsl:text>http://www.ncbi.nlm.nih.gov/pubmed?term=</xsl:text>
+                    <xsl:value-of select="@Value" />
+                </xsl:element>
+            </td>
+        </tr>
     </xsl:template>
 
     <xsl:template match="IdentifierHandle|IdentifierUrl">
@@ -854,19 +885,40 @@
         </xsl:if>
     </xsl:template>
 
-    <xsl:template match="TitleMain">
-        <h2 class="titlemain">
-            <xsl:value-of select="@Value" />
-        </h2>
+    <xsl:template match="ThesisDateAccepted">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateFieldname"/>:
+            </th>
+            <td>
+                <xsl:value-of select="concat(format-number(@Day,'00'),'.',format-number(@Month,'00'),'.',@Year)" />
+            </td>
+        </tr>
     </xsl:template>
 
-    <xsl:template match="TitleAbstract">
-        <p>
-            <xsl:value-of select="@Value" />
-        </p>
+    <xsl:template match="ThesisGrantor">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateFieldname"/>:
+            </th>
+            <td>
+                <xsl:value-of select="@Name" />
+            </td>
+        </tr>
     </xsl:template>
-    
-    <xsl:template match="TitleParent">
+
+    <xsl:template match="ThesisPublisher">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateFieldname"/>:
+            </th>
+            <td>
+                <xsl:value-of select="@Name" />
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="TitleParent|TitleSub|TitleAdditional">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateFieldname"/>:
@@ -884,7 +936,10 @@
     <xsl:template match="ReferenceCrisLink"/>
     <xsl:template match="ReferenceSplashUrl"/>
 
-    <!-- 3 Templates for the introducing block -->
+
+<!-- -->
+<!-- Templates for the introducing block (Author, Title, Abstract). -->
+<!-- -->
     <xsl:template name="Author">
         <p>
             <xsl:for-each select="PersonAuthor">
@@ -942,17 +997,10 @@
         </p>
     </xsl:template>
 
-    <!-- Named template to proof, what to show for collections, depending on display_frontdoor -->
-    <xsl:template name="checkdisplay">
-        <xsl:if test="contains(@RoleDisplayFrontdoor,'Number') and @Number != ''">
-            <xsl:value-of select="@Number" />
-            <xsl:text> </xsl:text>
-        </xsl:if>
-        <xsl:if test="contains(@RoleDisplayFrontdoor,'Name') and @Name != ''">
-            <xsl:value-of select="@Name" />
-        </xsl:if>
-    </xsl:template>
 
+<!-- -->
+<!-- Templates for the service block (MailToAuthor, AdditionalServices, ExportFunctions). -->
+<!-- -->
     <xsl:template name="MailToAuthor">
         <xsl:if test ="$isMailPossible">
             <xsl:element name="br"/>
@@ -969,7 +1017,6 @@
             </xsl:element>
         </xsl:if>
     </xsl:template>
-
 
     <!--  Named template for services-buttons -->
     <xsl:template name="AdditionalServices">
@@ -1033,8 +1080,7 @@
             </xsl:element>
             <xsl:text> </xsl:text>
         </xsl:if>
-        
-    </xsl:template>
+     </xsl:template>
 
     <xsl:template name="ExportFunctions">
         <!-- Bib-Export -->
@@ -1119,6 +1165,20 @@
                 </xsl:element>
             </xsl:element>
         </li>
+    </xsl:template>
+    
+<!-- -->
+<!-- Additional Templates with auxilliary functions. -->
+<!-- -->
+    <!-- Named template to proof, what to show for collections, depending on display_frontdoor -->
+    <xsl:template name="checkdisplay">
+        <xsl:if test="contains(@RoleDisplayFrontdoor,'Number') and @Number != ''">
+            <xsl:value-of select="@Number" />
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:if test="contains(@RoleDisplayFrontdoor,'Name') and @Name != ''">
+            <xsl:value-of select="@Name" />
+        </xsl:if>
     </xsl:template>
 
     <!-- Named template to translate a field's name. Needs no parameter. -->

@@ -37,13 +37,13 @@ require_once dirname(dirname(__FILE__)) . '/common/bootstrap.php';
 $doc = new Opus_Document();
 $doc->setType('all');
 $doc->setServerState('published');
-$doc->setServerDatePublished('01.01.1900');
+$doc->setServerDatePublished('1900-01-01');
 
 
 // damn API. $doc->addPersonSubmiter() doesn't work for link models!
 // -> we should change this in 4.x
 $submitter = new Opus_Person();
-$submitter->setFirstName('Donald')->setLastName('Duck')->setEmail('donald@example.org')->setDateOfBirth('13.03.1920')->setPlaceOfBirth('Entenhausen');
+$submitter->setFirstName('Donald')->setLastName('Duck')->setEmail('donald@example.org')->setDateOfBirth('1920-03-13')->setPlaceOfBirth('Entenhausen');
 $doc->addPersonSubmitter($submitter);
 
 $author = new Opus_Person();
@@ -116,13 +116,13 @@ if (count($instituteCollections) >=1) {
 $doc->addCollection($instituteCollection);
 
 $doc->setPublishedYear('2010');
-$doc->setPublishedDate('28.09.2010');
+$doc->setPublishedDate('2010-09-28');
 
 $doc->setPublisherName('The Walt Disney Company');
 $doc->setPublisherPlace('Burbank, CA');
 
 $doc->setCompletedYear('2010');
-$doc->setCompletedDate('27.09.2010');
+$doc->setCompletedDate('2010-09-27');
 
 $o3id = $doc->addIdentifierOpus3();
 $o3id->setValue('1234');
@@ -139,7 +139,19 @@ $issn->setValue('1234-5678');
 
 $doc->addIdentifierOpac()->setValue('OPAC-ID 001 1237890654');
 
-$doc->setThesisDateAccepted('01.02.2003');
+// Valid Arxiv-Identifier from ArXiv.org Homepage: http://arxiv.org/help/arxiv_identifier
+$arxiv = $doc->addIdentifierArxiv();
+$arxiv->setValue('arXiv:0706.0001');
+
+// Valid DOI Identifier from DOI Homepage: http://www.doi.org/
+$doi = $doc->addIdentifierDoi();
+$doi->setValue('10.1000/182');
+
+// Valid Pubmed-Identifier from official Pubmed Tutorial: http://www.nlm.nih.gov/bsd/disted/pubmedtutorial/020_830.html
+$pubmed = $doc->addIdentifierPubmed();
+$pubmed->setValue('9382368');
+
+$doc->setThesisDateAccepted('2003-02-01');
 
 $dnbInstitute=new Opus_DnbInstitute();
 $dnbInstitute->setName('Forschungsinstitut für Code Coverage');
@@ -216,8 +228,16 @@ if (count($licences) >= 1) {
 }
 $doc->setLicence($lic);
 
-$ddc = $doc->addSubjectDDC();
-$ddc->setValue('Allgemeines, Wissenschaft')->setLanguage('deu')->setExternalKey('000');
+// Some Enrichment-Fields from Opus3-Migration
+$doc->addEnrichment()->setKeyName('SourceSwb')->setValue('http://www.test.de');
+$doc->addEnrichment()->setKeyName('SourceTitle')->setValue('Dieses Dokument ist auch erschienen als ...');
+$doc->addEnrichment()->setKeyName('ClassRvk')->setValue('LI 99660');
+$doc->addEnrichment()->setKeyName('ContributorsName')->setValue('John Doe (Foreword) and Jane Doe (Illustration)');
+
+// Additional Enrichment-Fields
+$doc->addEnrichment()->setKeyName('Event')->setValue('Opus4 OAI-Event');
+$doc->addEnrichment()->setKeyName('City')->setValue('Opus4 OAI-City');
+$doc->addEnrichment()->setKeyName('Country')->setValue('Opus4 OAI-Country');
 
 $doc->store();
 print("Document stored. ID: " . $doc->getId() . "\n");

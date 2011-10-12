@@ -2686,7 +2686,7 @@
       </tuv>
     </tu>
 
-<tu tuid="EnrichmentEvent">
+    <tu tuid="EnrichmentEvent">
       <tuv xml:lang="en">
         <seg>Name of Event</seg>
       </tuv>
@@ -2710,6 +2710,42 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Land der Veranstaltung</seg>
+      </tuv>
+    </tu>
+
+   <tu tuid="EnrichmentClassRvk">
+      <tuv xml:lang="en">
+        <seg>RVK - Regensburg Classification</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>RVK - Regensburger Verbundklassifikation</seg>
+      </tuv>
+    </tu>
+
+   <tu tuid="EnrichmentSourceTitle">
+      <tuv xml:lang="en">
+        <seg>Source</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Quelle</seg>
+      </tuv>
+    </tu>
+
+   <tu tuid="EnrichmentSourceSwb">
+      <tuv xml:lang="en">
+        <seg>To order the print edition</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zur Bestellung der Druckausgabe</seg>
+      </tuv>
+    </tu>
+
+   <tu tuid="EnrichmentContributorsName">
+      <tuv xml:lang="en">
+        <seg>Contributor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sonstige beteiligte Person</seg>
       </tuv>
     </tu>
 
