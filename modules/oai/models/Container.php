@@ -40,10 +40,16 @@ class Oai_Model_Container {
 
     private $_logger;
 
-    public function  __construct($docId, $logger) {
+    public function  __construct($docId, $logger = null) {
         $this->_logger = $logger;
         $this->doc = $this->validateId($docId);
         $this->docId = $this->doc->getId();
+    }
+
+    private function logErrorMessage($message) {
+        if (!is_null($this->_logger)) {
+            $this->_logger->err(__CLASS__ . ': ' . $message);
+        }
     }
 
     /**
@@ -54,12 +60,12 @@ class Oai_Model_Container {
      */
     private function validateId($docId) {
         if (is_null($docId)) {
-            $this->_logger->err(__CLASS__ . ': missing parameter docId');
+            $this->logErrorMessage('missing parameter docId');
             throw new Oai_Model_Exception('missing parameter docId');
         }
 
-        if (is_null($docId) || !is_numeric($docId)) {
-            $this->_logger->err(__CLASS__ . ': given document id is not valid');
+        if (!is_numeric($docId)) {
+            $this->logErrorMessage('given document id is not valid');
             throw new Oai_Model_Exception('invalid value for parameter docId');
         }
 
@@ -67,7 +73,7 @@ class Oai_Model_Container {
             return new Opus_Document($docId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            $this->_logger->err(__CLASS__ . ': document with id ' . $docId . ' does not exist');
+            $this->logErrorMessage('document with id ' . $docId . ' does not exist');
             throw new Oai_Model_Exception('requested docId does not exist');
         }
     }
@@ -78,14 +84,14 @@ class Oai_Model_Container {
     private function getAccessibleFiles() {
         $realm = Opus_Security_Realm::getInstance();
         if ($this->doc->getServerState() != 'published' || !$realm->checkDocument($this->docId)) {
-            $this->_logger->err(__CLASS__ . ': document with id ' . $this->docId . ' is not in server state published');
-            throw new Exception('access to requested document is forbidden');
+            $this->logErrorMessage('document with id ' .     $this->docId . ' is not in server state published');
+            throw new Oai_Model_Exception('access to requested document is forbidden');
         }
 
         $files = $this->doc->getFile();
         if (empty($files)) {
-            $this->_logger->err(__CLASS__ . ': document with id ' . $this->docId . ' does not have any associated files');
-            throw new Exception('requested document does not have any associated files');
+            $this->logErrorMessage('document with id ' . $this->docId . ' does not have any associated files');
+            throw new Oai_Model_Exception('requested document does not have any associated files');
         }
 
         $containerFiles = array();
@@ -96,8 +102,8 @@ class Oai_Model_Container {
         }
 
         if (empty($containerFiles)) {
-            $this->_logger->err(__CLASS__ . ': document with id ' . $this->docId . ' does not have associated files that are accessible');
-            throw new Exception('access denied on all files that are associated to the requested document');
+            $this->logErrorMessage('document with id ' . $this->docId . ' does not have associated files that are accessible');
+            throw new Oai_Model_Exception('access denied on all files that are associated to the requested document');
         }
 
         return $containerFiles;
@@ -107,8 +113,8 @@ class Oai_Model_Container {
         $config = Zend_Registry::get('Zend_Config');
 
         if (!isset($config->workspacePath)) {
-            $this->_logger->err(__CLASS__ . ': missing config key workspacePath');
-            throw new Exception('missing configuration key workspacePath');
+            $this->logErrorMessage('missing config key workspacePath');
+            throw new Oai_Model_Exception('missing configuration key workspacePath');
         }
 
         return $config->workspacePath . DIRECTORY_SEPARATOR;
