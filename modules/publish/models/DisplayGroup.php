@@ -26,13 +26,17 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+/**
+ * Description of Group
+ *
+ * @author Susanne Gottwald
+ */
 class Publish_Model_DisplayGroup {
 
     public $label;
@@ -120,16 +124,19 @@ class Publish_Model_DisplayGroup {
                 else {
                     //only clone special fields
                     if ($element->getName() === $this->elementName) {
-                        //clone the "root selection"                        
-                        $elem = clone $element;                        
+                        //clone the "root selection"
+                        $elem = clone $element;
                         $elem->setName($this->elementName . $i);
                         if (isset($this->session->additionalFields['collId1' . $this->elementName . $i])) {
-                            $elem->setValue('ID:' . $this->session->additionalFields['collId1' . $this->elementName . $i]);                            
+                            $elem->setValue('ID:' . $this->session->additionalFields['collId1' . $this->elementName . $i]);
                         }
                         if ($currentStep !== 1) {
                             //make top steps disabled
                             $elem->setAttrib('disabled', true);
+                            $elem->setAttrib('isRoot', true);
                             $this->session->disabled[$this->elementName . $i] = $elem->getValue();
+                            
+                            
                         }
                         $this->form->addElement($elem);
                         $displayGroup[] = $elem->getName();
@@ -148,11 +155,10 @@ class Publish_Model_DisplayGroup {
         }
         for ($i = $minNum; $i <= $maxNum; $i++) {
             $maxStep = $this->collectionStep($i);
-            $maxStep = (int) $maxStep -1;
             $name = 'collId' . $maxStep . $this->elementName . $i;
             $formElement = $this->form->getElement($name);
             if (!is_null($formElement))
-                $formElement->setAttrib('disabled', false);           
+                $formElement->setAttrib('disabled', false);
         }
 
 
@@ -258,7 +264,7 @@ class Publish_Model_DisplayGroup {
                 $id = $this->session->additionalFields['collId' . $prev . $this->elementName . $fieldset];
 
                 if ($id != '0' || !is_null($id)) {
-                    //insert to array and generate field
+                    //insert to array and geneerate field
                     $this->collectionIds[] = $id;
                     $selectfield = $this->collectionEntries((int) $id, $j, $fieldset);
                     if (!is_null($selectfield))
@@ -297,10 +303,8 @@ class Publish_Model_DisplayGroup {
         $colls = $collection->getChildren();
 
         if (!is_null($colls) && count($colls) >= 1) {
-            //at least one children exist
             $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName . $fieldset);
             $selectField->setLabel('choose_collection_subcollection');
-            
             $children = array();
             foreach ($colls as $coll) {
                 if ($coll->getVisible() == 1) {
@@ -310,7 +314,6 @@ class Publish_Model_DisplayGroup {
             $selectField->setMultiOptions($children);
         }
         else {
-            //end of collection reached
             $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName . $fieldset);
             $selectField->setLabel('endOfCollectionTree');
             $selectField->setAttrib('disabled', true);

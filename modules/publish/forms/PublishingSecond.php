@@ -136,10 +136,12 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
             if ($element->getValue() == ""
                     || $element->getType() == "Zend_Form_Element_Submit"
-                    || $element->getType() == "Zend_Form_Element_Hidden") {
+                    || $element->getType() == "Zend_Form_Element_Hidden"
+                    || $element->getAttrib('isRoot') == true) {
 
                 $this->removeElement($name);
             } else {
+                
                 $this->session->elements[$name]['name'] = $name;
                 $this->session->elements[$name]['value'] = $element->getValue();
                 $this->session->elements[$name]['label'] = $element->getLabel();
