@@ -207,8 +207,6 @@
             </xsl:if>
 
             <xsl:apply-templates select="Subject[@Type='swd']"><xsl:sort select="@Value"/></xsl:apply-templates>
-            <xsl:apply-templates select="Subject[@Type='ddc']"><xsl:sort select="@Value"/></xsl:apply-templates>
-            <xsl:apply-templates select="Subject[@Type='msc']"><xsl:sort select="@Value"/></xsl:apply-templates>
             <xsl:apply-templates select="Subject[@Type='psyndex']"><xsl:sort select="@Value"/></xsl:apply-templates>
 
             <xsl:apply-templates select="@Source" />
