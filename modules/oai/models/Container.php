@@ -83,7 +83,7 @@ class Oai_Model_Container {
      */
     private function getAccessibleFiles() {
         $realm = Opus_Security_Realm::getInstance();
-        if ($this->doc->getServerState() != 'published' || !$realm->checkDocument($this->docId)) {
+        if ($this->doc->getServerState() !== 'published' && !$realm->checkDocument($this->docId)) {
             $this->logErrorMessage('document with id ' .     $this->docId . ' is not in server state published');
             throw new Oai_Model_Exception('access to requested document is forbidden');
         }
