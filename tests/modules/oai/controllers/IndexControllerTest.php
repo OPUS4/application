@@ -294,7 +294,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<ddb:transfer ddb:type="dcterms:URI">', $this->getResponse()->getBody());
         $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());
         
-        $doc->deletePermament();
+        $doc->deletePermanent();
     }
 
     public function testTransferUrlIsNotPresent() {
