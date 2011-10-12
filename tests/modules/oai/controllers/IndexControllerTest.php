@@ -281,10 +281,20 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testTransferUrlIsPresent() {
-        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::91');
+        $doc = new Opus_Document();
+        $doc->setServerState('published');        
+        $file = new Opus_File();
+        $file->setVisibleInOai(true);
+        $file->setPathName('foobar.pdf');
+        $doc->addFile($file);
+        $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
         $this->assertResponseCode(200);
         $this->assertContains('<ddb:transfer ddb:type="dcterms:URI">', $this->getResponse()->getBody());
-        $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/91</ddb:transfer>', $this->getResponse()->getBody());
+        $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());
+        
+        $doc->deletePermament();
     }
 
     public function testTransferUrlIsNotPresent() {
