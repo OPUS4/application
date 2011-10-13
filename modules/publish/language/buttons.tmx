@@ -570,10 +570,19 @@
 
     <tu tuid="button_label_add_one_moreSeries">
         <tuv xml:lang="en">
-            <seg>up</seg>
+            <seg>Add another serie</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>hoch</seg>
+            <seg>Eine weitere Schriftenreihe hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteSeries">
+        <tuv xml:lang="en">
+            <seg>Delete the last serie</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die letzte Schriftenreihe löschen</seg>
         </tuv>
     </tu>
 
