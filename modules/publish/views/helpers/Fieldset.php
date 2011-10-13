@@ -37,6 +37,10 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
 
     protected $disable = false;
 
+    function fieldset() {
+        
+    }
+    
     function renderHtmlText($field, $options) {
         $fieldset = "";
         if (!isset($field['isLeaf'])) {
