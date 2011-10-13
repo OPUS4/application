@@ -282,6 +282,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      */
     public function testNoRedirectForInvalidIdForDeletingDocuments() {
         $this->dispatch('/admin/document/delete/docId/1000');
+        $this->assertFalse($this->getResponse()->getHttpResponseCode() == 200,
+                "Request was not redirected.");
         $this->assertTrue($this->getResponse()->getHttpResponseCode() != 500,
                 "Request produced internal error. " . $this->getResponse()->getBody());
     }
