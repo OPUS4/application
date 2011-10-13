@@ -284,34 +284,7 @@
       <tuv xml:lang="de">
         <seg>SWD Sprache</seg>
       </tuv>
-    </tu>
-
-    <tu tuid="SubjectDdc">
-      <tuv xml:lang="en">
-        <seg>DDC Term</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>DDC Sachgruppe</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="SubjectJEL">
-      <tuv xml:lang="en">
-        <seg>JEL Term</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>JEL Sachgruppe</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="SubjectUncontrolled">
-      <tuv xml:lang="en">
-        <seg>Tag</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Freies Schlagwort / Tag</seg>
-      </tuv>
-    </tu>
+    </tu>  
 
     <tu tuid="SubjectUncontrolledLanguage">
       <tuv xml:lang="en">
@@ -652,15 +625,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>URN oder ISBN</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="SubjectMSC">
-      <tuv xml:lang="en">
-        <seg>MSC Keyword</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>MSC Schlagwort</seg>
       </tuv>
     </tu>
 
