@@ -22,13 +22,13 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
  * @package     Module_CitationExport
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de> 
+ * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @copyright   Copyright (c) 2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -41,14 +41,14 @@
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     exclude-result-prefixes="php">
 
-    <xsl:output method="text" omit-xml-declaration="yes" />  
- 
-    <xsl:template match="/"> 
-      <xsl:apply-templates select="Opus/Opus_Model_Filter" />   
+    <xsl:output method="text" omit-xml-declaration="yes" />
+
+    <xsl:template match="/">
+      <xsl:apply-templates select="Opus/Opus_Model_Filter" />
     </xsl:template>
 
     <!-- Suppress spilling values with no corresponding templates -->
-      <xsl:template match="@*|node()" /> 
+      <xsl:template match="@*|node()" />
 
 <!-- here you can change the order of the fields, just change the order of the apply-templates-rows
      if there is a choose-block for the field, you have to move the whole choose-block
@@ -56,34 +56,43 @@
      and a special template for each new field below, too -->
     <xsl:template match="Opus_Model_Filter">
        <xsl:choose>
-           <xsl:when test="@Type='article'">
-               <xsl:text>TY  - GEN</xsl:text>
+           <xsl:when test="@Type='book'">
+               <xsl:text>TY  - BOOK</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='conference'">
+           <xsl:when test="@Type='book_part'">
+               <xsl:text>TY  - CHAP</xsl:text>
+           </xsl:when>
+           <xsl:when test="@Type='conference_object'">
                <xsl:text>TY  - CONF</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='conference_item'">
-               <xsl:text>TY  - CONF</xsl:text>
-           </xsl:when>
-           <xsl:when test="@Type='doctoral_thesis'">
-               <xsl:text>TY  - THES</xsl:text>
-           </xsl:when>
-           <xsl:when test="@Type='festschrift'">
+           <xsl:when test="@Type='course_material' or @Type='image' or @Type='lecture' or @Type='other' or @Type='sound' or @Type='study_thesis'">
                <xsl:text>TY  - GEN</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='habilitation'">
-               <xsl:text>TY  - THES</xsl:text>
+           <xsl:when test="@Type='preprint'">
+               <xsl:text>TY  - INPR</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='monograph_section'">
-               <xsl:text>TY  - CHAPT</xsl:text>
+           <xsl:when test="@Type='periodical'">
+               <xsl:text>TY  - JFULL</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='paper'">
-               <xsl:text>TY  - GEN</xsl:text>
+           <xsl:when test="@Type='article' or @Type='review'">
+               <xsl:text>TY  - JOUR</xsl:text>
+           </xsl:when>
+           <xsl:when test="@Type='contribution_to_periodical'">
+               <xsl:text>TY  - NEWS</xsl:text>
            </xsl:when>
            <xsl:when test="@Type='report'">
                <xsl:text>TY  - RPRT</xsl:text>
            </xsl:when>
-             <xsl:otherwise>
+           <xsl:when test="@Type='bachelor_thesis' or @Type='doctoral_thesis' or @Type='habilitation' or @Type='master_thesis'">
+               <xsl:text>TY  - THES</xsl:text>
+           </xsl:when>
+           <xsl:when test="@Type='working_paper'">
+               <xsl:text>TY  - UNPD</xsl:text>
+           </xsl:when>
+           <xsl:when test="@Type='moving_image'">
+               <xsl:text>TY  - VIDEO</xsl:text>
+           </xsl:when>
+           <xsl:otherwise>
                <xsl:text>TY  - GEN</xsl:text>
            </xsl:otherwise>
        </xsl:choose>
@@ -101,7 +110,7 @@ ID  - OPUS</xsl:text><xsl:value-of select="@Id" /><xsl:text>
        </xsl:if>
        <xsl:if test="Collection/@RoleName='Schriftenreihen'">
            <xsl:apply-templates select="Collection[@RoleName='Schriftenreihen']" />
-       </xsl:if>   
+       </xsl:if>
        <xsl:if test="string-length(SubjectUncontrolled/@Value)>0">
            <xsl:apply-templates select="SubjectUncontrolled" />
        </xsl:if>
@@ -131,8 +140,6 @@ ID  - OPUS</xsl:text><xsl:value-of select="@Id" /><xsl:text>
 <xsl:text>UR  - http://nbn-resolving.de/urn/resolver.pl?</xsl:text><xsl:apply-templates select="IdentifierUrn" /><xsl:text>
 </xsl:text>
        </xsl:if>
-       <xsl:text>UR  - </xsl:text><xsl:value-of select="$url_prefix" /><xsl:text>/frontdoor/index/index/docId/</xsl:text><xsl:value-of select="@Id" /><xsl:text>
-</xsl:text>
        <xsl:if test="string-length(IdentifierUrl/@Value)>0">
 <xsl:text>UR  - </xsl:text><xsl:apply-templates select="IdentifierUrl" /><xsl:text>
 </xsl:text>
@@ -168,7 +175,7 @@ ID  - OPUS</xsl:text><xsl:value-of select="@Id" /><xsl:text>
        <xsl:if test="string-length(@PublisherName)>0">
 <xsl:text>PB  - </xsl:text><xsl:value-of select="@PublisherName" /><xsl:text>
 </xsl:text>
-       </xsl:if>   
+       </xsl:if>
        <xsl:if test="string-length(@PublisherPlace)>0">
 <xsl:text>CY  - </xsl:text><xsl:value-of select="@PublisherPlace" /><xsl:text>
 </xsl:text>
@@ -205,27 +212,27 @@ ID  - OPUS</xsl:text><xsl:value-of select="@Id" /><xsl:text>
     <xsl:template match="Note">
       <xsl:value-of select="@Message" />
     </xsl:template>
- 
+
     <xsl:template match="SubjectUncontrolled">
 <xsl:text>KW  - </xsl:text><xsl:value-of select="@Value" /><xsl:text>
 </xsl:text>
-    </xsl:template>  
+    </xsl:template>
 
     <xsl:template match="SubjectSwd">
 <xsl:text>KW  - </xsl:text><xsl:value-of select="@Value" /><xsl:text>
 </xsl:text>
-    </xsl:template>  
- 
+    </xsl:template>
+
     <xsl:template match="PersonAuthor">
 <xsl:text>A1  - </xsl:text><xsl:value-of select="concat(@LastName, ', ', @FirstName)" /><xsl:text>
 </xsl:text>
-    </xsl:template>  
-          
+    </xsl:template>
+
     <xsl:template match="PersonEditor">
 <xsl:text>A2  - </xsl:text><xsl:value-of select="concat(@LastName, ', ', @FirstName)" /><xsl:text>
 </xsl:text>
     </xsl:template>
- 
+
     <xsl:template match="PublisherUniversity"/>
 
     <xsl:template match="TitleMain">
