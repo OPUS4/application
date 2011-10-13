@@ -16,7 +16,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="en">
+    <tu tuid="English">
       <tuv xml:lang="en">
         <seg>English</seg>
       </tuv>
@@ -25,7 +25,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="de">
+    <tu tuid="German">
       <tuv xml:lang="en">
         <seg>German</seg>
       </tuv>
@@ -34,25 +34,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="deu">
-      <tuv xml:lang="en">
-        <seg>German</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Deutsch</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="eng">
-      <tuv xml:lang="en">
-        <seg>English</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Englisch</seg>
-      </tuv>
-    </tu>
-
-	<tu tuid="fr">
+    <tu tuid="French">
       <tuv xml:lang="en">
         <seg>French</seg>
       </tuv>
@@ -61,16 +43,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="fra">
-      <tuv xml:lang="en">
-        <seg>French</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Französisch</seg>
-      </tuv>
-    </tu>
-
-	<tu tuid="it">
+    <tu tuid="Italian">
       <tuv xml:lang="en">
         <seg>Italian</seg>
       </tuv>
@@ -79,16 +52,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="ita">
-      <tuv xml:lang="en">
-        <seg>Italian</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Italienisch</seg>
-      </tuv>
-    </tu>
-
-	<tu tuid="pt">
+    <tu tuid="Portuguese">
       <tuv xml:lang="en">
         <seg>Portuguese</seg>
       </tuv>
@@ -97,16 +61,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="por">
-      <tuv xml:lang="en">
-        <seg>Portuguese</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Portugiesisch</seg>
-      </tuv>
-    </tu>
-
-	 <tu tuid="ru">
+     <tu tuid="Russian">
       <tuv xml:lang="en">
         <seg>Russian</seg>
       </tuv>
@@ -115,16 +70,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="rus">
-      <tuv xml:lang="en">
-        <seg>Russian</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Russisch</seg>
-      </tuv>
-    </tu>
-
-	<tu tuid="es">
+    <tu tuid="Spanish">
       <tuv xml:lang="en">
         <seg>Spanish</seg>
       </tuv>
@@ -133,16 +79,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="spa">
-      <tuv xml:lang="en">
-        <seg>Spanish</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Spanisch</seg>
-      </tuv>
-    </tu>
-
-	<tu tuid="mul">
+    <tu tuid="Multiple">
       <tuv xml:lang="en">
         <seg>Multiple languages</seg>
       </tuv>
@@ -650,6 +587,15 @@
         <seg>DDC Sachgruppe entfernen</seg>
       </tuv>
     </tu>
+
+    <tu tuid="SubjectJEL">
+      <tuv xml:lang="en">
+        <seg>JEL Term</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>JEL Sachgruppe</seg>
+      </tuv>
+    </tu>  
 
     <tu tuid="SubjectUncontrolled">
       <tuv xml:lang="en">
