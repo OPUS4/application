@@ -41,51 +41,75 @@ class Opus3ImportLogger {
     *
     * @var file.
     */
-
     protected $config = null;
 
     /**
-     * Holds the logfile for Importer
+     * Holds the DebugLogfile for Importer
      *
      * @var string  Path to logfile
      */
-    protected $logfile = null;
+    protected $debugLogfile = null;
 
     /**
-     * Holds the filehandle of the logfile
+     * Holds the filehandle of the DebugLogfile
      *
      * @var file  Fileandle logfile
      */
-    protected $_logfile;
+    protected $_debugLogfile;
+    
+    /**
+     * Holds the ErrorLogfile for Importer
+     *
+     * @var string  Path to logfile
+     */
+    protected $errorLogfile = null;
+
+    /**
+     * Holds the filehandle of the ErrorLogfile
+     *
+     * @var file  Fileandle logfile
+     */
+    protected $_errorLogfile;    
 
     public function __construct() {
         $this->config = Zend_Registry::get('Zend_Config');
-        $this->logfile = $this->config->import->logfile;
+        
+	$this->debugLogfile = $this->config->import->debug->logfile;
         try {
-            $this->_logfile= @fopen($this->logfile, 'a');
-            if (!$this->_logfile) {
-                throw new Exception("ERROR Opus3ImportLogger: Could not create '".$this->logfile."'\n");
+            $this->_debugLogfile= @fopen($this->debugLogfile, 'a');
+            if (!$this->_debugLogfile) {
+                throw new Exception("ERROR Opus3ImportLogger: Could not create '".$this->debugLogfile."'\n");
             }
         } catch (Exception $e){
             echo $e->getMessage();
         }
+        
+	$this->errorLogfile = $this->config->import->error->logfile;
+        try {
+            $this->_errorLogfile= @fopen($this->errorLogfile, 'a');
+            if (!$this->_errorLogfile) {
+                throw new Exception("ERROR Opus3ImportLogger: Could not create '".$this->errorLogfile."'\n");
+            }
+        } catch (Exception $e){
+            echo $e->getMessage();
+        }	
     }
-
 
     public function log_debug($class, $string) {
         $string = date('Y-m-d H:i:s') . " DEBUG " . $class . ": " . $string . "\n";
         echo $string;
-        fputs($this->_logfile, $string);
+        fputs($this->_debugLogfile, $string);
     }
 
     public function log_error($class, $string) {
         $string = date('Y-m-d H:i:s') . " ERROR " . $class . ":" . $string . "\n";
         echo $string;
-        fputs($this->_logfile, $string);
+        fputs($this->_errorLogfile, $string);
     }
 
     public function finalize() {
-        fclose($this->_logfile);
+        fclose($this->_debugLogfile);
+	fclose($this->_errorLogfile);	
     }
 }
 ?>

@@ -53,7 +53,8 @@ fi
 cd ../log/
 if [ "$?" -eq "0" ]
 then
-    rm -rf import.log
+    rm -rf import_debug.log
+    rm -rf import_error.log
 fi
 cd ../tmp/
 if [ "$?" -eq "0" ]

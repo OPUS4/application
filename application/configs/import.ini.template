@@ -56,7 +56,8 @@ import.role.1.bereich = 1
 ;import.role.2.ip.1 = "IP-Range Campus I"
 ;import.role.2.ip.2 = "IP Campus II"
 
-import.logfile = APPLICATION_PATH "/workspace/log/import.log"
+import.debug.logfile = APPLICATION_PATH "/workspace/log/import_debug.log"
+import.error.logfile = APPLICATION_PATH "/workspace/log/import_error.log"
 
 import.mapping.collections = APPLICATION_PATH "/workspace/tmp/collections.map"
 import.mapping.faculties = APPLICATION_PATH "/workspace/tmp/faculties.map"

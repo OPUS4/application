@@ -118,7 +118,7 @@ class Opus3CollectionsImport {
         try {
             $fp = @fopen($mf, 'w');
             if (!$fp) {
-                throw new Exception("ERROR Opus3CollectionsImport: Could not create '".$mf."' for Collections.\n");
+                throw new Exception("Could not create '" . $mf . "' for Collections");
             }
         } catch (Exception $e){
             $this->logger->log_error("Opus3CollectionsImport", $e->getMessage());
@@ -128,7 +128,7 @@ class Opus3CollectionsImport {
         try {
             $collections = $this->transferOpusClassification($data);
             if (count($collections) == 0) {
-                throw new Exception("DEBUG: Opus3CollectionsImport: No Collections in XML-Dump.\n");
+                throw new Exception("No Collections in XML-Dump");
             }
 
             // sort by lft-values
@@ -136,13 +136,13 @@ class Opus3CollectionsImport {
 
             if (count($sorted_collections) == 0) {
                 // TODO: Improve error handling in case of empty collections.
-                throw new Exception("ERROR: Sorted collections empty.");
+                throw new Exception("Sorted collections empty");
             }
 
             if ($sorted_collections[0]['lft'] != 1) {
                 // var_dump($sorted_collections[0]);
                 // TODO: Improve error handling in case of wrong left-ids.
-                throw new Exception("ERROR: First left_id is not 1.");
+                throw new Exception("First left_id is not 1");
             }
 
             // 1 is used as a predefined key and should not be used again!
@@ -204,7 +204,7 @@ class Opus3CollectionsImport {
 
                     } else {
                         //echo "case 4: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt'] . "- prevright - " . $previousRight . "-\n";
-                        throw new Exception("Collectionstructure of id ".$row['coll_id']." not valid");
+                        throw new Exception("Collectionstructure of id " . $row['coll_id'] . " not valid");
                     }
                 }
 
@@ -237,7 +237,7 @@ class Opus3CollectionsImport {
         try {
             $fp = @fopen($mf, 'w');
             if (!$fp) {
-                throw new Exception("ERROR Opus3CollectionsImport: Could not create '".$mf."' for Series.\n");
+                throw new Exception("Could not create '" . $mf . "' for Series");
             }
         } catch (Exception $e){
             $this->logger->log_error("Opus3CollectionsImport", $e->getMessage());
