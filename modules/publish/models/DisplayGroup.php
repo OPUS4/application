@@ -134,7 +134,7 @@ class Publish_Model_DisplayGroup {
                             //make top steps disabled
                             $elem->setAttrib('disabled', true);
                             $elem->setAttrib('isRoot', true);
-                            $this->session->disabled[$this->elementName . $i] = $elem->getValue();
+                            $this->session->disabled[$this->elementName . $i] = $elem->getValue();                                                        
                             
                             
                         }
@@ -143,8 +143,8 @@ class Publish_Model_DisplayGroup {
                     }
                     else {
                         if ($count !== $allElements || $count == $allElements && $i < $maxNum) {
-                            //make previous middle steps disabled
-                            $element->setAttrib('disabled', true);
+                            //make previous middle steps disabled                            
+                            $element->setAttrib('disabled', true);                                
                         }
 
                         $this->form->addElement($element);
@@ -180,12 +180,12 @@ class Publish_Model_DisplayGroup {
     }
 
     private function addDeleteButtons() {
-        $displayGroup = array();
+        $displayGroup = array();        
         //show delete button only in case multiplicity has not been reached yet
         if ($this->maxNumber() < (int) $this->multiplicity || $this->multiplicity === '*') {
             $addButton = $this->addAddButtontoGroup();
             $this->form->addElement($addButton);
-            $displayGroup[] = $addButton->getName();
+            $displayGroup[] = $addButton->getName();           
         }
 
         if ($this->maxNumber() > 1) {
@@ -216,9 +216,13 @@ class Publish_Model_DisplayGroup {
             $displayButton = false;
             //check all children to prevent false buttons
             foreach ($colls AS $coll) {
-                $childs = $coll->getChildren();
-                if (!is_null($childs) && count($childs) >= 1)
-                    $displayButton = true;
+                if ($coll->getVisible() == 1) {
+                    $childs = $coll->getChildren();
+                    if (!is_null($childs) && count($childs) >= 1)
+                        foreach ($childs as $child)
+                            if ($child->getVisible() == 1) 
+                                $displayButton = true;
+                }
             }
             if ($displayButton) {
                 //Collection has at least one child with children -> make button to browse down
@@ -228,12 +232,12 @@ class Publish_Model_DisplayGroup {
             }
         }
 
-        $isRoot = $collection->isRoot();       
+        $isRoot = $collection->isRoot();               
         if (!$isRoot && !is_null($this->collectionIds[0])) {
             //Collection has parents -> make button to browse up
             $upButton = $this->addUpButtontoGroup();
             $this->form->addElement($upButton);
-            $displayGroup[] = $upButton->getName();
+            $displayGroup[] = $upButton->getName();            
         }
 
         return $displayGroup;
@@ -254,11 +258,11 @@ class Publish_Model_DisplayGroup {
         }
         if ($fieldset > 1)
             $this->collectionIds[] = $this->collectionIds[0];
-        $this->session->additionalFields['collId0' . $this->elementName . $fieldset] = $this->collectionIds[0];
+        $this->session->additionalFields['collId0' . $this->elementName . $fieldset] = $this->collectionIds[0];       
         $elements = array();
         //found collection level for the current fieldset        
         for ($j = 2; $j <= $step; $j++) {
-            $prev = (int) $j - 1;
+            $prev = (int) $j - 1;           
             //get the previous selection collection id from session
             if (isset($this->session->additionalFields['collId' . $prev . $this->elementName . $fieldset])) {
                 $id = $this->session->additionalFields['collId' . $prev . $this->elementName . $fieldset];
@@ -294,30 +298,42 @@ class Publish_Model_DisplayGroup {
         return $step;
     }
 
-    private function collectionEntries($id, $step, $fieldset) {
+    private function collectionEntries($id, $step, $fieldset) {        
         try {
             $collection = new Opus_Collection($id);
         } catch (Exception $e) {
             return null;
         }
         $colls = $collection->getChildren();
+        $children = array();
 
         if (!is_null($colls) && count($colls) >= 1) {
-            $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName . $fieldset);
+            if ($this->implicitGroup)
+                $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName);
+            else
+                $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName . $fieldset);
             $selectField->setLabel('choose_collection_subcollection');
-            $children = array();
+            
             foreach ($colls as $coll) {
                 if ($coll->getVisible() == 1) {
                     $children['ID:' . $coll->getId()] = $coll->getDisplayName();
                 }
-            }
+            }            
             $selectField->setMultiOptions($children);
         }
-        else {
-            $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName . $fieldset);
+        //show no field?
+        if (empty($children)) {            
+            if ($this->implicitGroup) {
+                $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName);
+                $this->session->endOfCollectionTree['collId' . $step . $this->elementName] = 1;
+            }
+            else 
+                $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName . $fieldset);
+            
             $selectField->setLabel('endOfCollectionTree');
             $selectField->setAttrib('disabled', true);
-            $this->session->endOfCollectionTree['collId' . $step . $this->elementName . $fieldset] = 1;
+            $selectField->setAttrib('isLeaf', true);
+            
         }
         return $selectField;
     }

@@ -75,9 +75,10 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
             else
                 $elementAttributes['req'] = 'optional';
                     
-            if (!is_null($this->session->endOfCollectionTree)) 
-                if (array_key_exists($elementName, $this->session->endOfCollectionTree))
-                    $elementAttributes['isLeaf'] = true;
+//            if (!is_null($this->session->endOfCollectionTree)) 
+//                if (array_key_exists($elementName, $this->session->endOfCollectionTree))
+            if ($element->getAttrib('isLeaf'))
+                $elementAttributes['isLeaf'] = true;
                 
         }
 
