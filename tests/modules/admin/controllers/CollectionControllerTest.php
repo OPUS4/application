@@ -243,5 +243,23 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
+
+    /**
+     * Anti-Regression Test for bug ticket OPUSVIER-1823
+     */
+    public function testCollectionRoleGetsTranslatedAsLink() {
+        $this->dispatch('/admin/collection/show/id/' . $this->collection->getId());       
+        $this->assertContains('<a href="/admin/collection/show/id/' . $this->rootCollection->getId() . '">default_collection_role_test2role</a>', $this->getResponse()->getBody());
+    }
+    
+    /**
+     * Anti-Regression Test for bug ticket OPUSVIER-1823
+     */
+    public function testCollectionRoleGetsTranslatedAsText() {
+        $this->dispatch('/admin/collection/show/id/' . $this->rootCollection->getId());
+        $this->assertContains('default_collection_role_test2role', $this->getResponse()->getBody());
+        $this->assertNotContains('<a href="/admin/collection/show/id/' . $this->rootCollection->getId() . '">default_collection_role_test2role</a>', $this->getResponse()->getBody());
+    }
+
 }
 ?>
