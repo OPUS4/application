@@ -49,7 +49,7 @@ class Export_PublistControllerTest extends ControllerTestCase {
     }
 
     public function testIndexActionWithoutAuthor() {
-        $this->dispatch('/export/publist/index/style/ieee/author/');
+        $this->dispatch('/export/publist/index/style/test/author/');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
         $this->assertContains('author is not specified', $response->getBody());
