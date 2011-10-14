@@ -458,6 +458,13 @@ class Admin_DocumentController extends Controller_Action {
 
 	$this->_logger->info('id is ' . $id);
 
+        if ($id === null || !is_numeric($id)) {
+            // no valid docId provided, redirect
+            $this->_redirectTo('index', array('failure' =>
+                $this->view->translate('admin_document_delete_novalidid')),
+                    'documents', 'admin');
+        }
+
         $sureyes = $this->getRequest()->getPost('sureyes');
         $sureno = $this->getRequest()->getPost('sureno');
 
@@ -479,11 +486,33 @@ class Admin_DocumentController extends Controller_Action {
             }
         }
         else {
-            // show safety question
-            $this->view->title = $this->view->translate('admin_doc_delete');
-            $this->view->text = $this->view->translate('admin_doc_delete_sure', $id);
-            $yesnoForm = $this->_getConfirmationForm($id, 'delete');
-            $this->view->form = $yesnoForm;
+            $doc = null;
+
+            try {
+                $doc = new Opus_Document($id);
+            }
+            catch (Opus_Model_NotFoundException $omnfe) {
+                $doc = null;
+            }
+
+            if (empty($doc)) {
+                $this->_logger->info("trying to delete invalid id " + htmlspecialchars($id));
+                return $this->_redirectToAndExit('index', array('failure' =>
+                    $this->view->translate('admin_document_delete_novalidid')),
+                        'documents', 'admin');
+            }
+            else if ($doc->getServerState() === 'deleted') {
+                return $this->_redirectToAndExit('index', array('failure' =>
+                    $this->view->translate('admin_document_error_already_deleted')),
+                        'document', 'admin', array('id' => $id));
+            }
+            else {
+                // show safety question
+                $this->view->title = $this->view->translate('admin_doc_delete');
+                $this->view->text = $this->view->translate('admin_doc_delete_sure', $id);
+                $yesnoForm = $this->_getConfirmationForm($id, 'delete');
+                $this->view->form = $yesnoForm;
+            }
         }
     }
 
@@ -838,7 +867,7 @@ class Admin_DocumentController extends Controller_Action {
             $addForm->addElement($hiddenDocId);
 
             $submit = new Zend_Form_Element_Submit('submit_add');
-            $submit->setLabel('Add'); // TODO
+            $submit->setLabel('admin_document_button_add');
 
             $addForm->addElement($submit);
 

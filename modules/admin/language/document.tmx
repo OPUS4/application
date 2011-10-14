@@ -15,7 +15,7 @@
         <seg>Dokument</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_add">
       <tuv xml:lang="en">
         <seg>Add Metadata</seg>
@@ -250,6 +250,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_button_add">
+      <tuv xml:lang="en">
+        <seg>Add</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hinzufügen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_document_button_save">
       <tuv xml:lang="en">
         <seg>Save</seg>
@@ -339,7 +348,7 @@
         <seg>Neue Lizenz hinzufügen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_document_add_subjects">
       <tuv xml:lang="en">
         <seg>Add new subject</seg>
@@ -373,6 +382,24 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Neues Enrichment hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_delete_novalidid">
+      <tuv xml:lang="en">
+        <seg>No valid document ID provided.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine zulässige Dokument-ID zum Löschen.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_error_already_deleted">
+      <tuv xml:lang="en">
+        <seg>Document has already been deleted.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument wurde bereits gelöscht.</seg>
       </tuv>
     </tu>
 
