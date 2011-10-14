@@ -46,9 +46,9 @@
             &raquo;
             <?php if ($i === 0) : ?>
                 <?php if (count($this->breadcrumb) > 1) : ?>
-                    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($this->role_name) ?></a>
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($this->translate('default_collection_role_' . $this->role_name)) ?></a>
                 <?php else : ?>
-                    <?= htmlspecialchars($this->role_name) ?>
+                    <?= htmlspecialchars($this->translate('default_collection_role_' . $this->role_name)) ?>
                 <?php endif ?>
             <?php elseif ($i === count($this->breadcrumb) - 1) : ?>
                 <?= htmlspecialchars($parent->getDisplayName()) ?>
