@@ -406,14 +406,22 @@ class Oai_IndexController extends Controller_Xml {
         $this->_addDdbTransferElement($domNode, $docId);
 
         // remove file elements which should not be exported through OAI
+        // Iterating over DOMNodeList is only save for readonly-operations; 
+        // copy element-by-element before removing!
         $filenodes = $domNode->getElementsByTagName('File');
+        $filenodes_list = array();
         foreach ($filenodes as $filenode) {
+            $filenodes_list[] = $filenode;
+        }
+
+        // remove file elements which should not be exported through OAI
+        foreach ($filenodes_list AS $filenode) {
             if ((false === $filenode->hasAttribute('VisibleInOai'))
-                or ('1' !== $filenode->getAttribute('VisibleInOai'))) {
+                    or ('1' !== $filenode->getAttribute('VisibleInOai'))) {
                 $domNode->removeChild($filenode);
             }
         }
-
+        
         // add file download urls
         $filenodes = $domNode->getElementsByTagName('File');
         foreach ($filenodes as $filenode) {
