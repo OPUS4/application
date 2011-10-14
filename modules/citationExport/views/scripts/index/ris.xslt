@@ -140,6 +140,8 @@ ID  - OPUS</xsl:text><xsl:value-of select="@Id" /><xsl:text>
 <xsl:text>UR  - http://nbn-resolving.de/urn/resolver.pl?</xsl:text><xsl:apply-templates select="IdentifierUrn" /><xsl:text>
 </xsl:text>
        </xsl:if>
+       <xsl:text>UR  - </xsl:text><xsl:value-of select="$url_prefix" /><xsl:text>/frontdoor/index/index/docId/</xsl:text><xsl:value-of select="@Id" /><xsl:text>
+</xsl:text>
        <xsl:if test="string-length(IdentifierUrl/@Value)>0">
 <xsl:text>UR  - </xsl:text><xsl:apply-templates select="IdentifierUrl" /><xsl:text>
 </xsl:text>
