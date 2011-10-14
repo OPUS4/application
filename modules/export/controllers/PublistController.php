@@ -76,12 +76,13 @@ class Export_PublistController extends Controller_Xml {
     }
 
     private function normalize() {
-        /* Normalization  of title and year for xslt:sort  */
+        /* Normalization  of year for xslt:sort  */
+        /* Filter all unpublished documents */
         $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'normalize.xslt');
     }
     
     private function filter($author) {
-        /* Filter all unpublished documents and documents that dont belong to specofoed author  */
+        /* Filter all documents that dont belong to specified author  */
         $this->_xml = $this->_proc->transformToDoc($this->_xml);
         $this->_proc->setParameter('', 'author', $author);
         $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'filter.xslt');

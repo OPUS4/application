@@ -47,7 +47,7 @@
 
 	<xsl:template match="export">
 	    <xsl:element name="export">
-	      <xsl:apply-templates select="Opus_Document"/>	
+	      <xsl:apply-templates select="Opus_Document[@ServerState='published']"/>
 	    </xsl:element>
 	</xsl:template>
 
