@@ -33,6 +33,9 @@
 
 /**
  * script that imports collections from a text file
+ * file format: each collection (name and number) on a separate line
+ * collection name and number are separated by | character
+ *
  */
 
 // ID of parent collection
