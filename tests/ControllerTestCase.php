@@ -58,6 +58,10 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         );
         $this->bootstrap = $this->application;
 
+        // added to ensure that application log messages are written to opus.log when running unit tests
+        // if not set messages are written to opus-console.log
+        $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.0';
+
         parent::setUp();
 
         // Needed for SecurityRealm
