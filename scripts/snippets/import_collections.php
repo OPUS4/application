@@ -31,6 +31,10 @@
  * @version     $Id$
  */
 
+/**
+ * script that imports collections from a text file
+ */
+
 // ID of parent collection
 $parent_collection_id = 16005;
 // file to import
