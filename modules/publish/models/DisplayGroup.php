@@ -134,17 +134,16 @@ class Publish_Model_DisplayGroup {
                             //make top steps disabled
                             $elem->setAttrib('disabled', true);
                             $elem->setAttrib('isRoot', true);
-                            $this->session->disabled[$this->elementName . $i] = $elem->getValue();                                                        
-                            
-                            
+                            $this->session->disabled[$this->elementName . $i] = $elem->getValue();                                                                                                                
                         }
                         $this->form->addElement($elem);
                         $displayGroup[] = $elem->getName();
                     }
                     else {
                         if ($count !== $allElements || $count == $allElements && $i < $maxNum) {
-                            //make previous middle steps disabled                            
-                            $element->setAttrib('disabled', true);                                
+                            //make previous middle steps disabled   
+                            if (!array_key_exists('collId' . $currentStep . $this->elementName . $i, $this->session->endOfCollectionTree))
+                                $element->setAttrib('disabled', true);                                
                         }
 
                         $this->form->addElement($element);
@@ -333,7 +332,7 @@ class Publish_Model_DisplayGroup {
             $selectField->setLabel('endOfCollectionTree');
             $selectField->setAttrib('disabled', true);
             $selectField->setAttrib('isLeaf', true);
-            
+            $this->session->endOfCollectionTree['collId' . $step . $this->elementName . $fieldset] = 1;
         }
         return $selectField;
     }
