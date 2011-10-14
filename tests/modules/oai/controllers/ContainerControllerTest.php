@@ -56,6 +56,21 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
     }
 
     public function testRequestUnpublishedDoc() {
+        $r = Opus_UserRole::fetchByName('guest');
+
+        $modules = $r->listAccessModules();
+        $addOaiModuleAccess = !in_array('oai', $modules);
+        if ($addOaiModuleAccess) {
+            $r->appendAccessModule('oai');
+            $r->store();
+        }
+
+        // enable security
+        $config = Zend_Registry::get('Zend_Config');
+        $security = $config->security;
+        $config->security = '1';
+        Zend_Registry::set('Zend_Config', $config);
+
         $doc = new Opus_Document();
         $doc->setServerState('unpublished');
         $doc->store();
@@ -63,7 +78,18 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         $this->assertResponseCode(500);
         $this->assertContains('access to requested document is forbidden',
                 $this->getResponse()->getBody());
+
+        // cleanup
         $doc->deletePermanent();
+
+        if ($addOaiModuleAccess) {
+            $r->removeAccessModule('oai');
+            $r->store();
+        }
+
+        // restore security settings
+        $config->security = $security;
+        Zend_Registry::set('Zend_Config', $config);
     }
 
     public function testRequestPublishedDocWithoutAssociatedFiles() {
