@@ -38,12 +38,11 @@ class Publish_View_Helper_BibliographieOverview extends Zend_View_Helper_Abstrac
     public $session;
     public $document;
 
+
     /**
-     * method to render specific elements of an form
-     * @param <type> $type element type that has to rendered
-     * @param <type> $value value of element or Zend_Form_Element
-     * @param <type> $name name of possible hidden element
-     * @return element to render in view
+     * Method informs the user if the current document belongs to bibliography.
+     * The view helper can be used anywhere in the publish process: on index, specific form or check page.
+     * @return String (html output)
      */
     public function bibliographieOverview() {
         $this->session = new Zend_Session_Namespace('Publish');
