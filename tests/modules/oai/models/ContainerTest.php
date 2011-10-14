@@ -33,7 +33,18 @@
  */
 
 class Oai_Model_ContainerTest extends ControllerTestCase {
-    
+
+    private $workspacePath;
+
+    public function  setUp() {
+        parent::setUp();
+        $config = Zend_Registry::get('Zend_Config');
+        if (!isset($config->workspacePath)) {
+            throw new Exception("config key 'workspacePath' not defined in config file");
+        }
+        $this->workspacePath = $config->workspacePath;        
+    }
+
     public function testConstructorWithNullArgument() {
         $model = null;
         try {
@@ -140,21 +151,24 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
 
         $container = new Oai_Model_Container($doc->getId());
         $this->assertEquals($doc->getId(), $container->getName());
+
+        // cleanup
         $doc->deletePermanent();
     }
 
     public function testDocumentWithRestrictedFile() {
         $filepath = $this->createTestFile('foo.pdf');
-        $this->assertTrue(is_readable($filepath));
 
         $doc = new Opus_Document();
         $doc->setServerState('published');
         $file = new Opus_File();
-        $file->setPathName('foo.pdf');
+        $file->setPathName(basename($filepath));
         $file->setTempFile($filepath);
         $file->setVisibleInOai(false);
         $doc->addFile($file);
         $doc->store();
+
+        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($filepath)));
 
         $model = new Oai_Model_Container($doc->getId());
         $tarball = null;
@@ -168,10 +182,10 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
 
         // cleanup
         $doc->deletePermanent();
-        unlink($filename);
+        Opus_Util_File::deleteDirectory(dirname($filepath));
     }
 
-    public function testDocumentWithNonExistentFile() {
+    public function testDocumentWithNonExistentFile() {       
         $doc = new Opus_Document();
         $doc->setServerState('published');
         $file = new Opus_File();
@@ -181,60 +195,75 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $doc->store();
 
         $model = new Oai_Model_Container($doc->getId());
-        $tarball = $model->getTar();
-        
+        $tarball = null;
+        try {
+            $tarball = $model->getTar();
+        }
+        catch (Oai_Model_Exception $e) {
+            $this->assertEquals('requested document does not have any associated readable files', $e->getMessage());
+        }
+        $this->assertTrue(is_null($tarball));
+
+        //cleanup
+        $doc->deletePermanent();
     }
 
     public function testDocumentWithUnrestrictedFile() {
-        $filepath = $this->createTestFile('test.pdf');
+        $filepath = $this->createTestFile('test.pdf');       
 
         $doc = new Opus_Document();
         $doc->setServerState('published');
         $file = new Opus_File();
-        $file->setPathName('test.pdf');
+        $file->setPathName(basename($filepath));
         $file->setTempFile($filepath);
         $file->setVisibleInOai(true);
         $doc->addFile($file);
         $doc->store();
 
+        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($filepath)));
+
         $model = new Oai_Model_Container($doc->getId());
         $tarball = $model->getTar();
         $this->assertTrue(is_readable($tarball));
 
+        // cleanup
         $doc->deletePermanent();
         Opus_Util_File::deleteDirectory(dirname($filepath));
         unlink($tarball);
     }
 
-    public function testDeleteContainer() {
+    public function testDeleteContainerFile() {
         $filepath = $this->createTestFile('test.pdf');
 
         $doc = new Opus_Document();
         $doc->setServerState('published');
         $file = new Opus_File();
-        $file->setPathName('test.pdf');
+        $file->setPathName(basename($filepath));
         $file->setTempFile($filepath);
         $file->setVisibleInOai(true);
         $doc->addFile($file);
         $doc->store();
 
+        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($filepath)));
+
         $model = new Oai_Model_Container($doc->getId());
         $tarball = $model->getTar();
         $this->assertTrue(is_readable($tarball));
         
-        $model->deleteContainer($tarball);
+        $model->deleteContainerFile($tarball);
         $this->assertFalse(file_exists($tarball));
 
+        // cleanup
         $doc->deletePermanent();
         Opus_Util_File::deleteDirectory(dirname($filepath));
     }
 
-    private function createTestFile($filename) {
-        $config = Zend_Registry::get('Zend_Config');
-        $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
+    private function createTestFile($filename) {        
+        $path = $this->workspacePath . DIRECTORY_SEPARATOR . uniqid();
         mkdir($path, 0777, true);
         $filepath = $path . DIRECTORY_SEPARATOR . $filename;
         touch($filepath);
+        $this->assertTrue(is_readable($filepath));
         return $filepath;
     }
 

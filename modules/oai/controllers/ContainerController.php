@@ -61,7 +61,7 @@ class Oai_ContainerController extends Controller_Action {
         $this->_helper->SendFile->setLogger($this->_logger);
         try {
             $this->_helper->SendFile($tarball);
-            $container->deleteContainer($tarball);
+            $container->deleteContainerFile($tarball);
         } catch (Exception $e) {
             $this->_logger->err($e->getMessage());
             $this->getResponse()->clearAllHeaders();

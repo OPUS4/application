@@ -88,10 +88,21 @@ class Oai_Model_Container {
             throw new Oai_Model_Exception('access to requested document is forbidden');
         }
 
-        $files = $this->doc->getFile();
+        $files = array();
+        $filesToCheck = $this->doc->getFile();
+        foreach ($filesToCheck as $file) {
+            $filename = $this->getFilesPath() . $this->docId . DIRECTORY_SEPARATOR . $file->getPathName();
+            if (is_readable($filename)) {
+                array_push($files, $file);
+            }
+            else {
+                $this->logErrorMessage("skip non-readable file $filename");
+            }
+        }
+        
         if (empty($files)) {
             $this->logErrorMessage('document with id ' . $this->docId . ' does not have any associated files');
-            throw new Oai_Model_Exception('requested document does not have any associated files');
+            throw new Oai_Model_Exception('requested document does not have any associated readable files');
         }
 
         $containerFiles = array();
@@ -124,12 +135,16 @@ class Oai_Model_Container {
         return $this->getWorkspacePath() . 'tmp' . DIRECTORY_SEPARATOR;
     }
 
+    private function getFilesPath() {
+        return $this->getWorkspacePath() . 'files' . DIRECTORY_SEPARATOR;
+    }
+
     public function getTar() {
         $tarball = $this->getTempPath() . uniqid($this->docId, true) . '.tar';
         $phar = new PharData($tarball);
 
         foreach ($this->getAccessibleFiles() as $file) {
-            $filePath = $this->getWorkspacePath() . 'files' . DIRECTORY_SEPARATOR . $this->docId . DIRECTORY_SEPARATOR;
+            $filePath = $this->getFilesPath() . $this->docId . DIRECTORY_SEPARATOR;
             $phar->addFile($filePath . $file->getPathName(), $file->getPathName());
         }
 
@@ -150,7 +165,7 @@ class Oai_Model_Container {
         return $this->docId;
     }
 
-    public function deleteContainer($filename) {
+    public function deleteContainerFile($filename) {
         unlink($filename);
     }
 }
