@@ -39,7 +39,7 @@
  */
 
 // ID of parent collection
-$parent_collection_id = 16005;
+$parent_collection_id = 0;
 // file to import
 $input_file = '../workspace/tmp/test.txt';
 // visibility status of imported collections
