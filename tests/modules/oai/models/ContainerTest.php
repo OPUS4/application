@@ -68,6 +68,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
     }
 
     public function testConstructorWithUnublishedDocument() {
+        $this->markTestSkipped('needs to be tested in non-admin mode');
+
         $doc = new Opus_Document();
         $doc->setServerState('unpublished');
         $doc->store();
