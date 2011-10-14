@@ -44,7 +44,7 @@ foreach($this->facetitems as $facetitem) {
     $translation = $this->translate($facetitem->getText());
     $docTypesTranslated[$translation] = $facetitem;
 }
-ksort($docTypesTranslated);
+uksort($docTypesTranslated, "strnatcasecmp");
 ?>
 
 <div class="content">
