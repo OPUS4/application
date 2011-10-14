@@ -240,7 +240,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                "Response for $interval_string must contain '<record>'");
         }
     }
-
+    
     /**
      * Test that proves the bugfix for OPUSVIER-1710 is working as intended.
      */
@@ -305,6 +305,36 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertNotContains('<ddb:transfer ddb:type="dcterms:URI">', $this->getResponse()->getBody());
         $doc->deletePermanent();
+    }
+    
+    /**
+     * Test if the flag "VisibileInOai" affects all files of a document
+     */
+    public function testDifferentFilesVisibilityOfOneDoc() {
+
+        //create document with two files
+        $d = new Opus_Document();
+        $d->setServerState('published');
+        
+        $f1 = new Opus_File();
+        $f1->setPathName('foo.pdf');
+        $f1->setVisibleInOai(false);
+        $d->addFile($f1);
+
+        $f2 = new Opus_File();
+        $f2->setPathName('bar.pdf');
+        $f2->setVisibleInOai(false);
+        $d->addFile($f2);
+
+        $d->store();
+        $id = $d->getId();
+        
+        //oai query of that document
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::' . $id);
+        $response = $this->getResponse()->getBody();
+        $this->assertContains('<Opus_Document xmlns="" Id="' . $id . '"', $response);
+        $this->assertNotContains('<File', $response);        
+
     }
 
 }
