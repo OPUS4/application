@@ -59,11 +59,12 @@ if ($this->jQueryEnabled()) {
             <legend><?= $this->translate('advanced_search_form_search_fields') ?></legend>
             <table>
                 <?php
+                $fieldnames = null;
                 if ($this->searchType === 'authorsearch') {
-                    $fieldnames = array('author', 'title', 'referee', 'abstract', 'fulltext');
+                    $fieldnames = array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext');
                 }
                 else {
-                    $fieldnames = array('author', 'title', 'referee', 'abstract', 'fulltext', 'year');
+                    $fieldnames = array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year');
                 }
 
                 foreach ($fieldnames as $fieldname) :

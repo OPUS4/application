@@ -173,6 +173,8 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->yearQueryModifier = $this->query->getModifier('year');
             $this->view->refereeQuery = $this->query->getField('referee');
             $this->view->refereeQueryModifier = $this->query->getModifier('referee');
+            $this->view->personsQuery = $this->query->getField('persons');
+            $this->view->personsQueryModifier = $this->query->getModifier('persons');
             return;
         }
         if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH) {

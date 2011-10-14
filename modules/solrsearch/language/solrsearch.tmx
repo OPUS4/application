@@ -454,6 +454,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="solrsearch_advancedsearch_field_persons">
+            <tuv xml:lang="en">
+                <seg>Additional Person(s)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Weitere Person(en)</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="solrsearch_advancedsearch_field_referee">
             <tuv xml:lang="en">
                 <seg>Referee(s)</seg>
@@ -505,6 +514,15 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Sie können in dieses Feld auch mehrere Titel durch Leerzeichen getrennt eingeben.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="solrsearch_advancedsearch_tooltip_persons">
+            <tuv xml:lang="en">
+                <seg>You can type multiple, blank separated additional persons into this field.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sie können in dieses Feld auch mehrere weitere Personen durch Leerzeichen getrennt eingeben.</seg>
             </tuv>
         </tu>
 

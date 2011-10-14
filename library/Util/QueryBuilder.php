@@ -58,7 +58,7 @@ class Util_QueryBuilder {
             array_push($this->filterFields, trim($filterfield));
         }
 
-        $this->searchFields = array('author', 'title', 'referee', 'abstract', 'fulltext', 'year');
+        $this->searchFields = array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year');
         $this->export = $export;
     }
 
@@ -192,7 +192,7 @@ class Util_QueryBuilder {
         $query->setSortField($input['sortField']);
         $query->setSortOrder($input['sortOrder']);
 
-        foreach (array('author', 'title', 'referee', 'abstract', 'fulltext', 'year') as $fieldname) {
+        foreach (array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year') as $fieldname) {
             if (!empty($input[$fieldname])) {
                 $query->setField($fieldname, $input[$fieldname], $input[$fieldname . 'modifier']);
             }

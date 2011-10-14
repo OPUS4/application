@@ -75,7 +75,7 @@ class Solrsearch_DispatchController extends Controller_Action {
     }
 
     private function isAdvancedSearchRequestValid() {
-        foreach (array('author', 'title', 'referee', 'abstract', 'fulltext',  'year') as $fieldname) {
+        foreach (array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext',  'year') as $fieldname) {
             $fieldvalue = $this->getRequest()->getParam($fieldname);
             if (!is_null($fieldvalue) && trim($fieldvalue) != '') {
                 return true;
@@ -104,7 +104,7 @@ class Solrsearch_DispatchController extends Controller_Action {
             'sortorder' => $this->getRequest()->getParam('sortorder', 'desc')
         );
 
-        foreach (array('author', 'title', 'abstract', 'fulltext', 'year', 'referee') as $fieldname) {
+        foreach (array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext',  'year') as $fieldname) {
             $fieldvalue = $this->getRequest()->getParam($fieldname, '');
             if ($fieldvalue !== '') {
                 $params[$fieldname] = $fieldvalue;
