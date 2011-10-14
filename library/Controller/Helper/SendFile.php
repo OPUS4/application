@@ -125,7 +125,9 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
 
         if (!is_null($this->logger)) {
             $content = ob_get_contents();
-            $this->logger->err($content);
+            if (!empty ($content)) {
+                $this->logger->err($content);
+            }
         }
 
         ob_end_clean();
