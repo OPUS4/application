@@ -26,6 +26,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
+ * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -34,8 +35,6 @@
 
 /**
  * Description of Group
- *
- * @author Susanne Gottwald
  */
 class Publish_Model_DisplayGroup {
 
