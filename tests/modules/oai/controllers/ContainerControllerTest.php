@@ -98,18 +98,26 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         $doc->store();
         $this->dispatch('/oai/container/index/docId/' . $doc->getId());
         $this->assertResponseCode(500);
-        $this->assertContains('requested document does not have any associated files',
+        $this->assertContains('requested document does not have any associated readable files',
                 $this->getResponse()->getBody());
         $doc->deletePermanent();
     }
 
     public function testRequestPublishedDocWithInaccessibleFile() {
+        // create test file test.pdf in file system
+        $config = Zend_Registry::get('Zend_Config');
+        $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
+        mkdir($path, 0777, true);
+        $filepath = $path . DIRECTORY_SEPARATOR . 'test.pdf';
+        touch($filepath);
+
         $doc = new Opus_Document();
         $doc->setServerState('published');        
 
         $file = new Opus_File();
         $file->setVisibleInOai(false);
-        $file->setPathName('foo');
+        $file->setPathName('test.pdf');
+        $file->setTempFile($filepath);
         $doc->addFile($file);
         $doc->store();
 
@@ -121,6 +129,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         // cleanup
         $file->delete();
         $doc->deletePermanent();
+        Opus_Util_File::deleteDirectory($path);
     }
 
     public function testRequestPublishedDocWithAccessibleFile() {
