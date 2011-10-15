@@ -291,7 +291,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
         $this->assertResponseCode(200);
-        $this->assertContains('<ddb:transfer ddb:type="dcterms:URI">', $this->getResponse()->getBody());
+        $this->assertContains('<ddb:transfer', $this->getResponse()->getBody());
         $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());
         
         $doc->deletePermanent();
