@@ -73,7 +73,6 @@ if (!is_null($root_collection)) {
         if (trim($line) === '') {
             continue;
         }
-        $collection = new Opus_Collection();
         $parts = explode('|', $line);
         if (count($parts) > 2) {
             echo "Warning: ignore line number $line_count (more than one | character exists): $line\n";
@@ -84,6 +83,7 @@ if (!is_null($root_collection)) {
             continue;
         }
 
+        $collection = new Opus_Collection();
         $collection->setName(trim($parts[0]));
         $collection->setNumber(trim($parts[1]));
         $collection->setVisible($visible);
