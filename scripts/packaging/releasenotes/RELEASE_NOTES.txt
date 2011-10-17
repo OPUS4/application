@@ -2,6 +2,79 @@ h1. OPUS 4 Release Notes
 
 h2. ======================== Release 4.1.4 2011-10-18 ========================
 
+h3. Änderungen an Dateien im benutzerdefinierten Layout-Verzeichnis
+
+Wird ein Custom Layout verwendet, so müssen zwei Änderungen an CSS und
+JavaScript manuell nachgezogen werden, da das Update-Skript keine Veränderung an
+benutzerdefinierten Layouts vollzieht. Betroffen sind die Dateien
+
+* public/layouts/opus4/css/opus.css
+* public/layouts/opus4/js/searchutil.js
+
+Diese müssen in das eigene Layout durch Kopieren der Dateien übernommen werden.
+
+
+h3. Änderungen an Solr-Indexschema
+
+Wird der Solr-Server nicht im Rahmen des Updateskripts aktualisiert (weil er
+z.B. auf einem anderen Server betrieben wird), dann muss das Indexschema
+aktualisiert werden. Dazu muss die Datei
+
+* solrconfig/schema.xml
+
+in das Konfigurationsverzeichnis der Solr-Server kopiert werden und anschließend
+der Index neu erstellt werden mittels:
+
+cd $BASEDIR/opus4/scripts
+php SolrIndexBuilder.php
+
+
+h3. Umbennung von benutzerspezifischen Enrichment-Feldern
+
+Mit OPUS 4.1.4 wurden in der Standardauslieferung neue Enrichment-Felder
+eingeführt, die für die Migration von Dokumenten aus OPUS3 relevant sind:
+
+    * ClassRvk
+    * SourceTitle
+    * SourceSwd
+    * SourceSwb
+    * ContributorsName
+    * SubjectUncontrolledGerman
+    * SubjectUncontrolledEnglish
+
+Damit im Rahmen eines OPUS4-Updates keine Konflikte mit bereits vom Benutzer
+angelegten Enrichment-Feldern auftreten, werden diese benutzerdefinierten
+Enrichments beim Update auf OPUS 4.1.4 durch das Update-Skript automatisch
+umbenannt in:
+
+    * TempClassRvk
+    * TempSourceTitle
+    * TempSourceSwd
+    * TempSourceSwb
+    * TempContributorsName
+    * TempSubjectUncontrolledGerman
+    * TempSubjectUncontrolledEnglish
+
+Im Falle einer Umbenennung muss die Übersetzungsressource des alten Feldes
+angepasst werden.
+
+Z.B. muss im Falle der Umbennung von SourceTitle in TempSourceTitle in der Datei
+$BASEDIR/opus4/modules/default/language_custom/custom.tmx folgende Änderung
+vollzogen werden:
+
+ersetze
+
+<tu tuid="EnrichmentSourceTitle">
+...
+</tu>
+
+durch
+
+<tu tuid="EnrichmentTempSourceTitle">
+...
+</tu>
+
+
 
 
 
