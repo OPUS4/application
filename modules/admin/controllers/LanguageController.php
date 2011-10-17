@@ -57,7 +57,8 @@ class Admin_LanguageController extends Controller_CRUDAction {
         $entries = Opus_Language::getAll();
         $this->view->entries = array();
         foreach ($entries as $entry) {
-            $this->view->entries[$entry->getId()] = $entry->getPart2T();
+            //$this->view->entries[$entry->getId()] = $entry->getPart2T();
+            $this->view->entries[$entry->getId()] = $entry->getRefName();            
         }
     }
 
