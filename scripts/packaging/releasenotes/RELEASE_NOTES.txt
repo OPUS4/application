@@ -43,9 +43,8 @@ eingeführt, die für die Migration von Dokumenten aus OPUS3 relevant sind:
     * SubjectUncontrolledEnglish
 
 Damit im Rahmen eines OPUS4-Updates keine Konflikte mit bereits vom Benutzer
-angelegten Enrichment-Feldern auftreten, werden diese benutzerdefinierten
-Enrichments beim Update auf OPUS 4.1.4 durch das Update-Skript automatisch
-umbenannt in:
+angelegten Enrichment-Feldern auftreten, müssen diese benutzerdefinierten
+Enrichments vor dem Update auf OPUS 4.1.4 selbständig umbenannt in:
 
     * TempClassRvk
     * TempSourceTitle
