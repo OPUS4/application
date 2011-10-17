@@ -29,7 +29,7 @@ cd $BASEDIR/opus4/scripts
 php SolrIndexBuilder.php
 
 
-h3. Umbennung von benutzerspezifischen Enrichment-Feldern
+h3. Umbenennung von benutzerspezifischen Enrichment-Feldern
 
 Mit OPUS 4.1.4 wurden in der Standardauslieferung neue Enrichment-Felder
 eingeführt, die für die Migration von Dokumenten aus OPUS3 relevant sind:
@@ -58,9 +58,9 @@ umbenannt in:
 Im Falle einer Umbenennung muss die Übersetzungsressource des alten Feldes
 angepasst werden.
 
-Z.B. muss im Falle der Umbennung von SourceTitle in TempSourceTitle in der Datei
-$BASEDIR/opus4/modules/default/language_custom/custom.tmx folgende Änderung
-vollzogen werden:
+Zum Beispiel muss im Falle der Umbennung von SourceTitle in TempSourceTitle in
+der Datei $BASEDIR/opus4/modules/default/language_custom/custom.tmx folgende
+Änderung vollzogen werden:
 
 ersetze
 
