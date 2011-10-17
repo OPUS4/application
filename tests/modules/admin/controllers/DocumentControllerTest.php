@@ -288,6 +288,30 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
                 "Request produced internal error. " . $this->getResponse()->getBody());
     }
 
+    /**
+     * Regression test for OPUSVIER-1841.
+     */
+    public function testWarningDisplayingDateOfBirth() {
+        $doc = new Opus_Document();
+
+        $person = new Opus_Person();
+        $person->setFirstName("Johnny");
+        $person->setLastName("Test");
+        $dateOfBirth = new Opus_Date(new Zend_Date('1.1.2010', 'dd/MM/yyyy'));
+        $person->setDateOfBirth($dateOfBirth);
+
+        $doc->addPersonAuthor($person);
+
+        $doc->store();
+
+        $docId = $doc->getId();
+
+        $this->dispatch('/admin/document/index/id/' . $docId);
+
+        $body = $this->getResponse()->getBody();
+        $this->assertTrue(substr_count($body, 'exception \'PHPUnit_Framework_Error_Warning\' with message \'htmlspecialchars() expects parameter 1 to be string, array given\' in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml:145') == 0);
+    }
+
 }
 
 ?>
