@@ -56,16 +56,24 @@ if [ -f opus4/scripts/packaging/changelog/CHANGES.txt ]; then
 else
   touch CHANGES.txt
 fi
+
 if [ -f opus4/scripts/packaging/gpl-3.0.txt ]; then
   mv opus4/scripts/packaging/gpl-3.0.txt .
 else
   touch gpl-3.0.txt
 fi
+
 if [ -d opus4/scripts/packaging/releases ]; then
   mv opus4/scripts/packaging/releases .
 else
   mkdir releases
-fi;
+fi
+
+if [ -d opus4/scripts/packaging/releasenotes/RELEASE_NOTES.txt ]; then
+  mv opus4/scripts/packaging/releasenotes/RELEASE_NOTES.txt .
+else
+  touch RELEASE_NOTES.txt
+fi
 
 rm -rv opus4/{nbproject,tests,workspace}
 rm -rvf opus4/public/layouts/{opus33,opus34,darker,matheon,plain,opus4-matheon}
