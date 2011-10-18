@@ -38,14 +38,24 @@ class Oai_ContainerController extends Controller_Action {
     public function indexAction() {
         $docId = $this->getRequest()->getParam('docId', null);
 
-        $container = null;
-        $tarball = null;
+        $container = null;        
         try {
-            $container = new Oai_Model_Container($docId, $this->_logger);
-            $tarball = $container->getTar();
+            $container = new Oai_Model_Container($docId, $this->_logger);            
         }
         catch (Oai_Model_Exception $e) {
+            $this->_logger->err($e->getMessage());
             $this->view->errorMessage = $e->getMessage();
+            $this->getResponse()->setHttpResponseCode(500);
+            return $this->render('error');
+        }
+
+        $tarball = null;
+        try {
+            $tarball = $container->getTar();
+        }
+        catch (Exception $e) {
+            $this->_logger->err($e->getMessage());
+            $this->view->errorMessage = 'An error occurred while creating container archive file.';
             $this->getResponse()->setHttpResponseCode(500);
             return $this->render('error');
         }
@@ -60,14 +70,15 @@ class Oai_ContainerController extends Controller_Action {
 
         $this->_helper->SendFile->setLogger($this->_logger);
         try {
-            $this->_helper->SendFile($tarball);
-            $container->deleteContainerFile($tarball);
+            $this->_helper->SendFile($tarball);            
         } catch (Exception $e) {
             $this->_logger->err($e->getMessage());
             $this->getResponse()->clearAllHeaders();
             $this->getResponse()->clearBody();
             $this->getResponse()->setHttpResponseCode(500);
         }
+        
+        $container->deleteContainerFile($tarball);
     }
 
 }
