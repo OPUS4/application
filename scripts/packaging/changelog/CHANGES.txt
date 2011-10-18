@@ -1,5 +1,71 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.1.4 2011-10-18 ========================
+
+h3. Bugs
+
+* [OPUSVIER-1317] - Sichtbarkeitseinstellung einer CollectionRole wird nicht beachtet
+* [OPUSVIER-1449] - Unzureichende Validierung von Formularwerten
+* [OPUSVIER-1670] - Ausgewählte Option "Belongs to Bibliography" erscheint nicht auf der dritten Formularseite
+* [OPUSVIER-1680] - Action publish/deposit/confirm sollte nicht direkt aufrufbar sein
+* [OPUSVIER-1695] - Frontdoor: Leere Zeile "Tag" wenn kein subjects vergeben
+* [OPUSVIER-1703] - Publish-Formular: Anzeige hochgeladener Dateien, fehlendes Leerzeichen
+* [OPUSVIER-1725] - Anzeigefehler in /admin/access/listmodule in Chrome
+* [OPUSVIER-1735] - Frontdoor: Feld "PublicationVersion" existiert anscheinend garnicht
+* [OPUSVIER-1736] - Frontdoor: Feld-Werte sollen nicht übersetzt werden
+* [OPUSVIER-1737] - Sortierreihenfolge der Lizenzen hat keine Wirkung
+* [OPUSVIER-1738] - OAI-Schnittstelle missachtet das Datei-Flag VisibleInOai-Flag bei der *zweiten* Datei eines Dokuments
+* [OPUSVIER-1744] - Aufruf von admin/document/delete/docId/ mit ungültiger Doc-ID möglich (inkl. XSS)
+* [OPUSVIER-1747] - RIS-Export mit falschen Typangaben
+* [OPUSVIER-1749] - Migration: Nach dem Import sind in der Tabelle document_title_abstracts einige Einträge doppelt
+* [OPUSVIER-1750] - Migration: zip-Datei bei Mehrdateiendokument wird falsch umbenannt
+* [OPUSVIER-1755] - opus.css: bei der Anzeige von mehr als zwei Service-Buttons fehlender Abstand zwischen den einzelnen Buttons
+* [OPUSVIER-1756] - Frontdoor zeigt nicht alle Metadaten eines Dokuments an
+* [OPUSVIER-1771] - Ist-Prüfsummen von hochgeladenen Dateien werden im Filemanager nicht angezeigt
+* [OPUSVIER-1779] - Anzeige der Dateinamen in der Frontdoor
+* [OPUSVIER-1785] - Anzeige der ausgewählen Collection auf der letzten Seite des Publish-Formulars: alle Ebenen werden angezeigt
+* [OPUSVIER-1786] - Abspeicherung der Collections: bei DDC/MSC werden die letzten beiden Ebenen abgespeichert
+* [OPUSVIER-1799] - Publish: Anzeige der Sprachen benutzt falsche Ressource
+* [OPUSVIER-1819] - Frontdoor hält Templates für nicht (mehr) benutzte Felder vor
+* [OPUSVIER-1823] - Navigation der Collections im Adminbereich berücksichtigt nicht die Übersetzungsressourcen
+* [OPUSVIER-1826] - leere Lognachricht mit Loglevel error beim Download von Dateien
+
+h3. Stories
+
+* [OPUSVIER-1807] - DB-Änderungen für die 4.1.4
+
+h3. Tasks
+
+* [OPUSVIER-715] - Unit-Tests für das PublicationList-Feature erstellen
+* [OPUSVIER-835] - Kollektionsauswahl im dritten Formularschritt berücksichtigt nicht die Sichtbarkeitseinstellung von CollectionRole bzw. Collection
+* [OPUSVIER-1258] - OAI-Schnittstelle kann keine ZIP-Container für die DNB generieren
+* [OPUSVIER-1711] - Beim Browsing der Dokumenttypen alphabetisch nach der Sprache sortieren
+* [OPUSVIER-1714] - Lizenz Creative Common updaten
+* [OPUSVIER-1740] - Transfer-URL
+* [OPUSVIER-1741] - MetadataFormat auch als "xMetaDissPlus" in der Schreibweise mit kleinem "x" unterstützen
+* [OPUSVIER-1759] - Den Suchindex um "Weitere  Personen" erweitern 
+* [OPUSVIER-1780] - Die Sprache "Multilanguage" in die Standardausführung aufnehmen
+* [OPUSVIER-1781] - Im Migrationsscript die Sprache "Multilanguage" nach "Multilanguage" mappen.
+* [OPUSVIER-1782] - Mapping von Opus-Dokumenttypen auf RIS-Dokumenttypen
+* [OPUSVIER-1783] - Integration in das export-Modul
+* [OPUSVIER-1792] - view Helper aus dem Publish besser strukturieren
+* [OPUSVIER-1803] - Konsistentes Mapping auf Enrichmentfelder
+* [OPUSVIER-1808] - Anpassungen an den Enrichment-Feldern in SQL 
+* [OPUSVIER-1809] - Update-Skript implementieren
+* [OPUSVIER-1811] - Unterordner 'html' wird nicht migriert
+* [OPUSVIER-1812] - SubjectDDC und SubjectMSC aus der Frontdoor entfernen
+* [OPUSVIER-1816] - Errors und Warnings bei der Migration in separates Logfile
+
+h3. Documentation
+
+* [OPUSVIER-1793] - RIS Mapping bei neu angelegten Dokumenttypen
+* [OPUSVIER-1794] - OAI Mapping bei neu angelegten Dokumenttypen
+* [OPUSVIER-1836] - Release Notes OPUS 4.1.4
+* [OPUSVIER-1838] - Migration: Fehlermeldungen in separatem Logfile
+* [OPUSVIER-1839] - Migration: Fehlermeldung bei Dokumenten mit zwei sprachidentischen Titeln oder Abstracts
+* [OPUSVIER-1802] - Parameter checksum.maxVerificationSize in die Dokumentation aufnehmen
+
+
 h2. ======================== Release 4.1.3 2011-09-07 ========================
 
 h3. Bugs
