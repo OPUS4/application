@@ -191,7 +191,7 @@ class Admin_Model_DocumentHelper {
         $groupFields = array();
 
         $groupFieldNames = Admin_Model_DocumentHelper::$fieldGroups[$groupName];
-        
+
         foreach ($groupFieldNames as $name) {
             $field = $this->__document->getField($name);
             $value = $field->getValue();
@@ -255,7 +255,14 @@ class Admin_Model_DocumentHelper {
 
         foreach ($values as $key => $value) {
             if (!empty($value)) {
-                $result[$key] = $value;
+                // TODO review (hack)
+                if (strpos($key, 'Date') !== FALSE) {
+                    $field = $model->getField($key);
+                    $result[$key] = $field->getValue();
+                }
+                else {
+                    $result[$key] = $value;
+                }
             }
         }
 
@@ -276,6 +283,7 @@ class Admin_Model_DocumentHelper {
 
         $format = Admin_Model_DocumentHelper::getDateFormat();
 
+        // TODO review What does this do?
         $timestamp = $date->getUnixTimestamp();
 
         if (empty($timestamp)) {
@@ -294,31 +302,38 @@ class Admin_Model_DocumentHelper {
      * TODO replicates part of ShowModel helper (todo separate value formatting from layout)
      */
     public function formatField($field) {
-        $modelClass = $field->getValueModelClass();
-
-        if (!empty($modelClass)) {
-            switch ($modelClass) {
-                case 'Opus_Date':
-                    return $this->formatDate($field->getValue());
-                case 'Opus_Note':
-                    return 'TODO handle Opus_Note';
-                case 'Opus_Patent':
-                    return 'TODO handle Opus_Patent';
-                case 'Opus_DnbInstitute':
-                    $value = $field->getValue();
-                    if (isset($value[0])) {
-                        return $value[0]->getName();
-                    }
-                    else {
-                        return 'none';
-                    }
-                default:
-                    // TODO handle other models
-                    break;
-            }
+        if ($field instanceof Opus_Date) {
+            return $this->formatDate($field);
         }
         else {
-            return $field->getValue();
+            $modelClass = $field->getValueModelClass();
+
+            Zend_Registry::get('Zend_Log')->debug('Formatting field ' . $field->getName());
+
+            if (!empty($modelClass)) {
+                switch ($modelClass) {
+                    case 'Opus_Date':
+                        return $this->formatDate($field->getValue());
+                    case 'Opus_Note':
+                        return 'TODO handle Opus_Note';
+                    case 'Opus_Patent':
+                        return 'TODO handle Opus_Patent';
+                    case 'Opus_DnbInstitute':
+                        $value = $field->getValue();
+                        if (isset($value[0])) {
+                            return $value[0]->getName();
+                        }
+                        else {
+                            return 'none';
+                        }
+                    default:
+                        // TODO handle other models
+                        break;
+                }
+            }
+            else {
+                return $field->getValue();
+            }
         }
     }
 
@@ -333,6 +348,10 @@ class Admin_Model_DocumentHelper {
      * TODO some things have special methods (Person->getDisplayName())
      */
     public function formatValue($value) {
+
+        // TODO cleanup
+        Zend_Registry::get('Zend_Log')->debug('Formatting ' . $value);
+
         if ($value instanceof Opus_Model_Abstract) {
             return $this->formatField($value);
         }
@@ -401,8 +420,8 @@ class Admin_Model_DocumentHelper {
     public static function getDateFormat() {
         $session = new Zend_Session_Namespace();
 
-        $format_de = "dd.MM.YYYY";
-        $format_en = "YYYY/MM/dd";
+        $format_de = "dd.MM.yyyy";
+        $format_en = "yyyy/MM/dd";
 
         switch($session->language) {
            case 'de':
