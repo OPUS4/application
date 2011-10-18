@@ -31,7 +31,7 @@ php SolrIndexBuilder.php
 
 h3. Umbenennung von benutzerspezifischen Enrichment-Feldern
 
-Mit OPUS 4.1.4 wurden in der Standardauslieferung neue Enrichment-Felder
+Mit OPUS 4.1.4 werden in der Standardauslieferung neue Enrichment-Felder
 eingeführt, die für die Migration von Dokumenten aus OPUS3 relevant sind:
 
     * ClassRvk
@@ -42,9 +42,9 @@ eingeführt, die für die Migration von Dokumenten aus OPUS3 relevant sind:
     * SubjectUncontrolledGerman
     * SubjectUncontrolledEnglish
 
-Damit im Rahmen eines OPUS4-Updates keine Konflikte mit bereits vom Benutzer
-angelegten Enrichment-Feldern auftreten, müssen diese benutzerdefinierten
-Enrichments vor dem Update auf OPUS 4.1.4 selbständig umbenannt in:
+Damit im Rahmen eines OPUS4-Updates keine Konflikte mit identischen, vom
+Benutzer angelegten, Enrichment-Feldern auftreten, werden die benutzerdefinier-
+ten Enrichment-Felder vor dem Update auf OPUS 4.1.4 umbenannt in:
 
     * TempClassRvk
     * TempSourceTitle
