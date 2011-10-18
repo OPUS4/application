@@ -43,6 +43,8 @@ class Admin_Form_Model extends Zend_Form_SubForm {
 
     private $includedFields;
 
+    private $_logger;
+
     /**
      * Constructs form for Opus_Model_Abstract instance.
      * @param <type> $model
@@ -50,6 +52,9 @@ class Admin_Form_Model extends Zend_Form_SubForm {
      */
     public function __construct($clazz, $includedFields = null) {
         parent::__construct();
+
+        // Cleanup
+        $this->_logger = Zend_Registry::get('Zend_Log');
 
         $this->includedFields = $includedFields;
 
@@ -173,8 +178,13 @@ class Admin_Form_Model extends Zend_Form_SubForm {
 
                         if (!empty($value)) {
                             // TODO use common function for formatting
+                            $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
+                            $this->_logger->debug('Reading Date ' . $value . ' for field ' . $field->getName());
                             $date = $value->getZendDate();
-                            $element->setValue($date->get('YYYY/MM/dd'));
+                            $this->_logger->debug('Reading Date ' . $date . ' for field ' . $field->getName());
+                            $element->setValue($date->get($dateFormat));
+                            $this->_logger->debug('Formatting ' . $field->getName() . ' using ' . $dateFormat);
+                            $this->_logger->debug('Reading Date ' . $date->get($dateFormat) . ' for field ' . $field->getName());
                         }
                         else {
                             $element->setValue(null);

@@ -541,10 +541,17 @@ class Admin_DocumentController extends Controller_Action {
                                 switch ($field->getValueModelClass()) {
                                     case 'Opus_Date':
                                         $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
+                                        $this->_logger->debug('Saving date format' . $dateFormat);
                                         if (!empty($value)) {
-                                            $date = new Zend_Date($value);
+                                            if (!Zend_Date::isDate($value, $dateFormat)) {
+                                                throw new Exception('Invalid date entered');
+                                            }
+                                            $this->_logger->debug('Saving date ' . $value . ' to field ' . $field->getName());
+                                            $date = new Zend_Date($value, $dateFormat);
+                                            $this->_logger->debug('Saving Zend_Date = ' . $date . ' to field ' . $field->getName());
                                             $dateModel = new Opus_Date();
                                             $dateModel->setZendDate($date);
+                                            $this->_logger->debug('Saving Opus_Date = ' . $dateModel . ' to field ' . $field->getName());
                                         }
                                         else {
                                             $dateModel = null;
@@ -580,6 +587,7 @@ class Admin_DocumentController extends Controller_Action {
                             }
                         }
                         $model->store();
+                        $this->_logger->debug('ServerDatePublished = ' . $model->getServerDatePublished());
                         break;
                     case 'licences':
                         // TODO merge with default case
@@ -687,6 +695,7 @@ class Admin_DocumentController extends Controller_Action {
     }
 
     protected function populateModel($model, $fieldValues) {
+        $this->_logger->debug('Populate model ' . $model);
         foreach($fieldValues as $fieldName => $value) {
             $field = $model->getField($fieldName);
             if (!empty($field)) {
@@ -694,9 +703,15 @@ class Admin_DocumentController extends Controller_Action {
                     case 'Opus_Date':
                         $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
                         if (!empty($value)) {
-                            $date = new Zend_Date($value);
+                            if (!Zend_Date::isDate($value, $dateFormat)) {
+                                throw new Exception('Invalid date entered');
+                            }
+                            $this->_logger->debug('Saving date: ' . $value . ' for field ' . $field->getName() . ' using format ' . $dateFormat);
+                            $date = new Zend_Date($value, $dateFormat);
+                            $this->_logger->debug('Saving Zend_Date = ' . $date . ' for field ' . $field->getName());
                             $dateModel = new Opus_Date();
                             $dateModel->setZendDate($date);
+                            $this->_logger->debug('Saving Opus_Date = ' . $dateModel . ' for field ' . $field->getName());
                         }
                         else {
                             $dateModel = null;
