@@ -257,8 +257,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      */
     public function testXssUsingIdForDeletingDocuments() {
         $this->dispatch('/admin/document/delete/docId/<span>123');
-        $response = $this->getResponse()->getBody();
-        $this->assertTrue(substr_count($response, '<span>123') == 0);
+        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/documents');
+
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), '<span>123') == 0);
     }
 
     /**
@@ -268,6 +270,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      */
     public function testNoRedirectForAlreadyDeletedDocuments() {
         $this->dispatch('/admin/document/delete/docId/123');
+        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/document/index/id/123');
+
         $this->assertFalse($this->getResponse()->getHttpResponseCode() == 200,
                 "Request was not redirected.");
         $this->assertTrue($this->getResponse()->getHttpResponseCode() != 500,
@@ -277,11 +282,29 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-1744.
      *
-     * If the document ID is invalid a redirect should happen. This test does
-     * not check the redirect target.
+     * If the document ID is invalid a redirect should happen.
      */
     public function testNoRedirectForInvalidIdForDeletingDocuments() {
-        $this->dispatch('/admin/document/delete/docId/1000');
+        $this->dispatch('/admin/document/delete/docId/123456789');
+        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/documents');
+
+        $this->assertFalse($this->getResponse()->getHttpResponseCode() == 200,
+                "Request was not redirected.");
+        $this->assertTrue($this->getResponse()->getHttpResponseCode() != 500,
+                "Request produced internal error. " . $this->getResponse()->getBody());
+    }
+
+    /**
+     * Regression test for OPUSVIER-1744.
+     *
+     * If the document ID is non-numeric a redirect should happen.
+     */
+    public function testNoRedirectForNonNumericIdForDeletingDocuments() {
+        $this->dispatch('/admin/document/delete/docId/foo');
+        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/documents');
+
         $this->assertFalse($this->getResponse()->getHttpResponseCode() == 200,
                 "Request was not redirected.");
         $this->assertTrue($this->getResponse()->getHttpResponseCode() != 500,
