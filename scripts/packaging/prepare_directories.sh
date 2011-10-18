@@ -105,7 +105,7 @@ ln -sv "../../libs/ZendFramework/library/Zend" "opus4/library/Zend"
 # Prepare workspace directory
 #
 
-mkdir -vp workspace/{cache,log,files,tmp,incoming}
+mkdir -vp workspace/{cache,log,files,tmp,incoming,export}
 mkdir -v workspace/tmp/resumption
 ln -sv "../workspace" "opus4/workspace"
 
