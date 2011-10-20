@@ -39,23 +39,13 @@ class Oai_ContainerController extends Controller_Action {
         $docId = $this->getRequest()->getParam('docId', null);
 
         $container = null;        
+	$tarball = null;
         try {
-            $container = new Oai_Model_Container($docId, $this->_logger);            
-        }
-        catch (Oai_Model_Exception $e) {
-            $this->_logger->err($e->getMessage());
-            $this->view->errorMessage = $e->getMessage();
-            $this->getResponse()->setHttpResponseCode(500);
-            return $this->render('error');
-        }
-
-        $tarball = null;
-        try {
+            $container = new Oai_Model_Container($docId, $this->_logger);       
             $tarball = $container->getTar();
         }
-        catch (Exception $e) {
-            $this->_logger->err($e->getMessage());
-            $this->view->errorMessage = 'An error occurred while creating container archive file.';
+        catch (Oai_Model_Exception $e) {
+            $this->view->errorMessage = $e->getMessage();
             $this->getResponse()->setHttpResponseCode(500);
             return $this->render('error');
         }

@@ -141,11 +141,22 @@ class Oai_Model_Container {
 
     public function getTar() {
         $tarball = $this->getTempPath() . uniqid($this->docId, true) . '.tar';
-        $phar = new PharData($tarball);
+	$phar = null;
+	try {
+            $phar = new PharData($tarball);
+        } catch(UnexpectedValueException $e) {
+            $this->logErrorMessage('could not create tarball archive file ' . $tarball . ' due to insufficient file system permissions: ' . $e->getMessage());
+            throw new Oai_Model_Exception('error while creating tarball container: could not open tarball');
+	}
 
         foreach ($this->getAccessibleFiles() as $file) {
             $filePath = $this->getFilesPath() . $this->docId . DIRECTORY_SEPARATOR;
-            $phar->addFile($filePath . $file->getPathName(), $file->getPathName());
+            try {
+            	$phar->addFile($filePath . $file->getPathName(), $file->getPathName());
+            } catch (Exception $e) {
+		$this->logErrorMessage('could not add ' . $file->getPathName() . ' to tarball archive file: ' . $e->getMessage());
+		throw new Oai_Model_Exception('error while creating tarball container: could not add file to tarball');
+            }
         }
 
         return $tarball;
