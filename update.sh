@@ -79,20 +79,20 @@ BASEDIR_DEFAULT=/var/local/opus4
 # TODO handle BASEDIR passed as parameter consistently
 function getBasedir() {
     local ABORT='n'
-    while [[ -z $BASEDIR ]] || [[ ! -d $BASEDIR ]] && [[ $ABORT != 'y' ]]; do 
+    while [[ -z $BASEDIR ]] || [[ ! -d $BASEDIR ]] && [[ $ABORT != 'y' ]]; do
         echo -e "Please specify OPUS4 installation directory ($BASEDIR_DEFAULT): \c "
         read BASEDIR_NEW
         if [[ -z "$BASEDIR_NEW" ]]; then
             BASEDIR_NEW=$BASEDIR_DEFAULT
         fi
         # Verify BASEDIR_NEW
-        if [[ ! -d $BASEDIR_NEW ]]; then 
+        if [[ ! -d $BASEDIR_NEW ]]; then
             echo "OPUS4 could not be found at $BASEDIR_NEW"
             echo -e "Would you like to abort the update (y/N)? \c ";
             read ABORT
-            if [[ -z $ABORT ]]; then 
+            if [[ -z $ABORT ]]; then
                 ABORT='n'
-            else 
+            else
                 # TODO better way of doing the two steps below
                 # TODO removing whitespace (trim) does not seem necessary
                 ABORT=${ABORT,,} # convert to lowercase
@@ -103,7 +103,7 @@ function getBasedir() {
         fi
         unset BASEDIR_NEW
     done
-    if [[ $ABORT == 'y' ]]; then 
+    if [[ $ABORT == 'y' ]]; then
         echo "OPUS4 update aborted"
         exit 1
     fi
@@ -114,7 +114,7 @@ function getBasedir() {
 # TODO What if VERSION.txt is missing, but it is a post 4.1 version?
 # TODO What if content of VERSION.txt is wrong (no MD5SUMS file for version)
 function getOldVersion() {
-    if [[ ! -f $BASEDIR/VERSION.txt ]]; then 
+    if [[ ! -f $BASEDIR/VERSION.txt ]]; then
         local ABORT='n'
         while [[ -z $MD5_OLD ]] || [[ ! -f $MD5_OLD ]] && [[ $ABORT != 'y' ]]; do
             # Check if version has been specified as parameter
@@ -130,9 +130,9 @@ function getOldVersion() {
             if [[ ! -f $MD5_OLD ]]; then
                 echo -e "You entered an unknown OPUS4 version number. Abort the update [y/N]? \c "
                 read ABORT
-                if [[ -z $ABORT ]]; then 
+                if [[ -z $ABORT ]]; then
                     ABORT='n'
-                else 
+                else
                     # TODO better way of doing the two steps below
                     # TODO removing whitespace (trim) does not seem necessary
                     ABORT=${ABORT,,} # convert to lowercase
@@ -142,13 +142,13 @@ function getOldVersion() {
                 unset VERSION_OLD
             fi
         done
-        if [[ $ABORT == 'y' ]]; then 
+        if [[ $ABORT == 'y' ]]; then
             echo "OPUS4 update aborted"
             exit 1
         fi
-    else 
+    else
         # Read content of VERSION into VERSION_OLD
-	VERSION_OLD=$(sed -n '1p' "$BASEDIR/VERSION.txt")		
+	VERSION_OLD=$(sed -n '1p' "$BASEDIR/VERSION.txt")
     fi
 }
 
@@ -159,7 +159,7 @@ function getNewVersion() {
 }
 
 # Find MD5SUMS for installed OPUS4
-# Use file MD5SUMS if it exists, otherwise 
+# Use file MD5SUMS if it exists, otherwise
 # TODO Ways to make it more robust?
 # TODO rename MD5_OLD to MD5SUMS_INSTALLED or something else
 function getMd5Sums() {
@@ -182,13 +182,13 @@ function backup() {
     echo " before running the update. Files will be overwritten!"
     echo -e "Start the update to OPUS $VERSION_NEW now [y/N]? \c "
     read UPDATE_NOW
-    if [[ -z $UPDATE_NOW ]]; then 
+    if [[ -z $UPDATE_NOW ]]; then
         UPDATE_NOW='n'
     else
         UPDATE_NOW=${UPDATE_NOW,,}
         UPDATE_NOW=${UPDATE_NOW:0:1}
     fi
-    if [[ $UPDATE_NOW != 'y' ]]; then 
+    if [[ $UPDATE_NOW != 'y' ]]; then
         echo "OPUS4 update aborted"
         exit 1
     fi
@@ -204,7 +204,7 @@ SCRIPTPATH=$(cd `dirname $0` && pwd)
 # If BASE_SOURCE was not provided set to parent folder of SCRIPTPATH
 if [ -z $BASE_SOURCE ]; then
     BASE_SOURCE=$SCRIPTPATH/..
-fi 
+fi
 
 DEBUG "BASE_SOURCE = $BASE_SOURCE"
 DEBUG "SCRIPTNAME = $SCRIPTNAME"
@@ -226,14 +226,14 @@ DEBUG "BASEDIR = $BASEDIR"
 getOldVersion
 
 # Determine version of new OPUS4
-getNewVersion 
+getNewVersion
 
 DEBUG "VERSION_OLD = $VERSION_OLD"
 DEBUG "VERSION_NEW = $VERSION_NEW"
 
 # Make sure MD5_OLD is set (in case it was not set by getOldVersion)
 if [[ -z $MD5_OLD ]] ; then
-    getMd5Sums 
+    getMd5Sums
 fi
 
 # Create file for update log (sets _UPDATELOG)
@@ -255,31 +255,31 @@ export OPUS_UPDATE_VERSION_NEW=$VERSION_NEW
 export OPUS_UPDATE_SCRIPTPATH=$SCRIPTPATH     # TODO necessary? Different way?
 
 # Update configuration
-"$SCRIPTPATH"/update-config.sh 
+"$SCRIPTPATH"/update-config.sh
 
 # Update database
-"$SCRIPTPATH"/update-db.sh 
+"$SCRIPTPATH"/update-db.sh
 
 # Update *import* folder
-"$SCRIPTPATH"/update-import.sh 
+"$SCRIPTPATH"/update-import.sh
 
 # Update *library* folder
-"$SCRIPTPATH"/update-library.sh 
+"$SCRIPTPATH"/update-library.sh
 
 # Update modules
-"$SCRIPTPATH"/update-modules.sh 
+"$SCRIPTPATH"/update-modules.sh
 
 # Update *public* folder
-"$SCRIPTPATH"/update-public.sh 
+"$SCRIPTPATH"/update-public.sh
 
 # Update *scripts* folders
-"$SCRIPTPATH"/update-scripts.sh 
+"$SCRIPTPATH"/update-scripts.sh
 
 # Update *workspace* folders
 "$SCRIPTPATH"/update-workspace.sh
 
 # Update SOLR index
-"$SCRIPTPATH"/update-solr.sh 
+"$SCRIPTPATH"/update-solr.sh
 
 # Update Apache configuration
 "$SCRIPTPATH"/update-apache.sh
@@ -320,6 +320,7 @@ fi
 # Restart Solr
 if askYesNo "Would you like to restart Solr server (Jetty) now [Y/n]?"; then
     echo "Restarting Jetty server ..."
+    UPDATELOG "Restarting Jetty server"
     DRYRUN || /etc/init.d/opus4-solr-jetty restart
 fi
 
@@ -338,9 +339,10 @@ done
 echo "done"
 
 
-# TODO move into separate script for execution after all other update scripts?    
+# TODO move into separate script for execution after all other update scripts?
 if askYesNo "Would you like to rebuild Solr index now [Y/n]?"; then
     echo "Rebuilding Solr index ..."
+    UPDATELOG "Rebuilding Solr index"
     if [[ "$_DRYRUN" -eq 0 ]]; then
         echo -e "Rebuilding Solr index ... \c "
         php5 "$BASEDIR/opus4/scripts/SolrIndexBuilder.php"
