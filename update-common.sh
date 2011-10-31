@@ -44,7 +44,7 @@ function INIT_UPDATELOG() {
     if [[ -z $_UPDATELOG ]]; then
         DEBUG "Setup UPDATE log"
         _UPDATELOG=$BASEDIR/UPDATE-$(date -Iseconds).log # TODO change name?
-        if [[ ! -f $_UPDATELOG ]]; then  
+        if [[ ! -f $_UPDATELOG ]]; then
             DEBUG "Write UPDATE log header"
             echo "Following operations were executed during the update:" > $_UPDATELOG
             echo "" >> $_UPDATELOG
@@ -52,7 +52,7 @@ function INIT_UPDATELOG() {
     fi
 }
 
-# Writes operations into UPDATE.log 
+# Writes operations into UPDATE.log
 # @param pathtofile
 # @param operation
 # TODO remove code for initializing update log?
@@ -60,7 +60,7 @@ function UPDATELOG() {
     if [[ -z $_UPDATELOG ]]; then
         DEBUG "Setup UPDATE log"
         _UPDATELOG=$BASEDIR/UPDATE-$(date -Iseconds).log # TODO change name?
-        if [[ ! -f $_UPDATELOG ]]; then  
+        if [[ ! -f $_UPDATELOG ]]; then
             DEBUG "Write UPDATE log header"
             echo "Following operations were executed during the update:" > $_UPDATELOG
             echo "" >> $_UPDATELOG
@@ -82,7 +82,7 @@ function DRYRUN() {
 function getFiles() {
     local FOLDER=$1
     find "$FOLDER" -type f -print0 | while read -r -d $'\0' FILE_PATH; do
-        echo $(basename "$FILE_PATH") 
+        echo $(basename "$FILE_PATH")
     done
 }
 
@@ -112,19 +112,19 @@ function setProperty() {
 }
 
 # Set property value in script file (does not look for "[production]"
-function setProperty2() {
+function setPropertyInShellScript() {
     local FILE="$1"
     local PROP_NAME="$2"
     local PROP_VALUE="$3"
     DEBUG "Setting property $PROP_NAME in file $FILE to $PROP_VALUE."
-    sed -i "s|^\([[:space:]]*$PROP_NAME[[:space:]]*=.*$\)|;\1\n$PROP_NAME=$PROP_VALUE\n|" $FILE
+    sed -i "s|^\([[:space:]]*$PROP_NAME[[:space:]]*=.*$\)|#\1\n$PROP_NAME=$PROP_VALUE\n|" $FILE
 }
 
 # Returns the actual MD5 hash for a file.
 function getActualMD5() {
     local FILEPATH="$1"
     echo "$(md5sum $FILEPATH | cut -b 1-32)"
-}   
+}
 
 # Returns the reference MD5 hash for a file.
 function getMD5() {
@@ -144,19 +144,19 @@ function askYesNo() {
         echo -e "$QUESTION \c "
         read ANSWER
 
-        if [[ -z $ANSWER ]]; then 
+        if [[ -z $ANSWER ]]; then
             return 0 # default
-        else 
+        else
             ANSWER=${ANSWER,,} # convert to lowercase
             ANSWER=${ANSWER:0:1} # get first letter
         fi
-        
+
         if [[ $ANSWER != 'y' ]] && [[ $ANSWER != 'n' ]]; then
             echo "Invalid input."
         fi
     done
 
-    if [[ $ANSWER == 'y' ]]; then 
+    if [[ $ANSWER == 'y' ]]; then
         return 0
     else
         return 1
@@ -171,7 +171,7 @@ function addConflict() {
     if [[ -z $CONFLICT ]]; then
         DEBUG "Setup CONFLICT"
         CONFLICT="$BASEDIR/conflicts.txt" # TODO change name to CONFLICTS.txt?
-        if [[ ! -f $CONFLICT ]]; then  
+        if [[ ! -f $CONFLICT ]]; then
             DEBUG "Write CONFLICT header"
             echo "Following files created conflicts and need to be changed manually:" > $CONFLICT
             echo "" >> $CONFLICT
@@ -182,14 +182,14 @@ function addConflict() {
 
 # Checks and prompts user if files are different
 # Using MD5 hashes to check if files have been modified.
-# @param source folder 
+# @param source folder
 # @param destination folder
 # @param Path to MD5
 # @param file
 # Uses global variable MD5_OLD
 # TODO use local SRC_FILE and DEST_FILE instead of construction over and over
 # TODO create backup before replacing file
-function updateFile {	
+function updateFile {
     local SRC="$1" # source folder
     local DEST="$2" # destination folder
     local MD5PATH="$3" # relative path in distribution
@@ -201,7 +201,7 @@ function updateFile {
     if [[ ! -f $DEST/$FILE ]]; then
         # File does not exist at target destination and can be copied
         addFile "$SRC/$FILE" "$DEST/$FILE"
-    else 
+    else
         # File already exists at target destination
         echo "Checking file $DEST/$MD5PATH/$FILE for changes."
 
@@ -224,26 +224,26 @@ function updateFile {
                 # File was changed. User decides which file to keep.
                 # TODO Add variable for automatic decision, for entire script, after first decision?
                 echo "Conflict for $FILE"
-                
+
                 # TODO Add variable for printing out explanation only once.
                 echo -e "You can keep the existing modified file and resolve the"
                 echo -e " conflict after the update manually or the file can be"
                 echo " replaced by the new file from OPUS4 $VERSION_NEW."
-                
+
                 # TODO Add option for more information
-                echo -e "[K]eep modified file or [r]eplace with new file [K/r]? : \c " 
+                echo -e "[K]eep modified file or [r]eplace with new file [K/r]? : \c "
                 local ANSWER
                 read ANSWER # TODO How to make ANSWER local variable?
 
                 # Check and format input
-                if [[ -z $ANSWER ]]; then 
+                if [[ -z $ANSWER ]]; then
                     ANSWER='k'
-                else 
+                else
                     ANSWER=${ANSWER,,}
                     ANSWER=${ANSWER:0:1}
                 fi
 
-                # TODO Check for invalid input? 
+                # TODO Check for invalid input?
                 if [[ $ANSWER = 'r' ]]; then
                     if [[ $BACKUP = 1 ]]; then
                         copyFile "$DEST/$FILE" "$DEST/$FILE.backup.$VERSION_OLD"
@@ -275,8 +275,8 @@ function checkForModifications() {
     DEBUG "Check $FOLDER for modifications"
     find "$FOLDER" -type f -print0 | while read -r -d $'\0' FILE; do
         # Get relative path for file
-        local FILE_PATH=$(echo "$FILE" | sed -e "s|$FOLDER/||") 
-        DEBUG "Checking $FILE_PATH" 
+        local FILE_PATH=$(echo "$FILE" | sed -e "s|$FOLDER/||")
+        DEBUG "Checking $FILE_PATH"
 
         # Check if file has been modified
         # TODO use path relative to root of distribution
@@ -308,10 +308,10 @@ function copyFile() {
         # Create folder if it does not exist
         createFolder "$DEST_DIR"
     fi
-    if [[ ! -f $DEST ]]; then 
+    if [[ ! -f $DEST ]]; then
         # target file does not exist
         addFile "$SRC" "$DEST"
-    else 
+    else
         # target file already exists
         replaceFile "$SRC" "$DEST"
     fi
@@ -392,7 +392,7 @@ function deleteFiles() {
                 # TODO Delete folder file by file recursively (for log)?
                 # TODO Check against MD5 before deleting?
                 # Check if folder is link; Delete if not
-                if [[ ! -L $DEST/$FILE ]]; then 
+                if [[ ! -L $DEST/$FILE ]]; then
                     deleteFolder "$DEST/$FILE" 'empty'
                 else
                     DEBUG "Not deleted symbolic link $DEST/$FILE"
@@ -407,7 +407,7 @@ function deleteFiles() {
                 # File does not exist; Delete file in destination folder
                 # TODO Check against MD5 before deleting?
                 # TODO check for linked files?
-                local MD5PATH=$(echo "$FILE" | sed -e "s|$BASEDIR||") 
+                local MD5PATH=$(echo "$FILE" | sed -e "s|$BASEDIR||")
                 local FILE_MD5_REF="$(getMD5 $MD5PATH $MD5_OLD)"
 
                 # Check if file was part of old distribution; it has MD5
@@ -417,7 +417,7 @@ function deleteFiles() {
                 else
                     DEBUG "Did not delete unknown file $DEST/$FILE"
                 fi
-            fi 
+            fi
         fi
     done
     return 0 # TODO better way of preventing things to stop when $FLAT = 1? (related to set -o errexit)

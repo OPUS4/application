@@ -226,10 +226,10 @@ copyFile "$FILE.template" "$FILE"
 
 # Set properties
 # TODO only modify files if DRYRUN is disabled
-setProperty2 "$FILE" "user" "$CREATEDB_USER"
-setProperty2 "$FILE" "password" "$CREATEDB_PASSWORD"
-setProperty2 "$FILE" "host" "$CREATEDB_HOST"
-setProperty2 "$FILE" "port" "$CREATEDB_PORT"
-setProperty2 "$FILE" "dbname" "$CREATEDB_DBNAME"
-setProperty2 "$FILE" "mysql_bin" "$CREATEDB_MYSQL_BIN"
-setProperty2 "$FILE" "master_dir" "$CREATEDB_MASTER_DIR"
+setPropertyInShellScript "$FILE" "user" "$CREATEDB_USER"
+setPropertyInShellScript "$FILE" "password" "$CREATEDB_PASSWORD"
+setPropertyInShellScript "$FILE" "host" "$CREATEDB_HOST"
+setPropertyInShellScript "$FILE" "port" "$CREATEDB_PORT"
+setPropertyInShellScript "$FILE" "dbname" "$CREATEDB_DBNAME"
+setPropertyInShellScript "$FILE" "mysql_bin" "$CREATEDB_MYSQL_BIN"
+setPropertyInShellScript "$FILE" "master_dir" "$CREATEDB_MASTER_DIR"
