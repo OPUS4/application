@@ -32,149 +32,16 @@
  * @version     $Id$
  */
 
+/**
+ * Helper functions for the metadata form for documents.
+ */
 class Admin_Model_DocumentHelper {
 
     private $__document;
 
     /**
-     *
-     * @var <type>
-     *
-     * TODO reverse configuration: fieldName -> group?
-     * TODO how about sorting?
+     * Constructs Admin_Model_DocumentHelper for document.
      */
-    public static $fieldGroups = array(
-        'dates' => array(
-            'PublishedDate',
-            'PublishedYear',
-            'CompletedDate',
-            'CompletedYear',
-            'ThesisDateAccepted',
-            'ServerDatePublished',
-            'ServerDateModified'
-        ),
-        'general' => array(
-            'Language',
-            'ServerState',
-            'Type'
-        ),
-        'thesis' => array(
-            'ThesisGrantor',
-            'ThesisPublisher',
-            'ThesisDateAccepted'
-        ),
-        'titles' => array(
-            'TitleMain',
-            'TitleParent',
-            'TitleSub',
-            'TitleAdditional'
-        ),
-        'abstracts' => array(
-            'TitleAbstract'
-        ),
-        'persons' => array(
-            'PersonAuthor',
-            'PersonSubmitter',
-            'PersonAdvisor',
-            'PersonContributor',
-            'PersonEditor',
-            'PersonReferee',
-            'PersonTranslator',
-            'PersonOther'
-        ),
-        'subjects' => array(
-            'Subject'
-        ),
-        'other' => array(
-            'ContributingCorporation',
-            'CreatingCorporation',
-            'Edition',
-            'Issue',
-            'PageFirst',
-            'PageLast',
-            'PageNumber',
-            'PublisherName',
-            'PublisherPlace',
-            'PublicationState',
-            'Volume',
-            'BelongsToBibliography'
-        ),
-        'enrichments' => array(
-            'Enrichment'
-        ),
-        'files' => array(
-            'File'
-        ),
-        'notes' => array(
-            'Note'
-        ),
-        'patents' => array(
-            'Patent'
-        ),
-        'identifiers' => array(
-            'Identifier'
-        ),
-        'references' => array(
-            'Reference'
-        ),
-        'licences' => array(
-            'Licence'
-        )
-    );
-
-    // TODO actual values are different
-    private $identifierTypes = array(
-        'old',
-        'serial',
-        'uuid',
-        'isbn',
-        'urn',
-        'doi',
-        'handle',
-        'url',
-        'issn',
-        'std-doi',
-        'cris-link',
-        'splash-url',
-        'opus3-id',
-        'opac-id',
-        'arxiv',
-        'pmid'
-    );
-
-    private $referenceTypes = array(
-        'isbn',
-        'urn',
-        'doi',
-        'handle',
-        'url',
-        'issn',
-        'std-doi',
-        'cris-link',
-        'splash-url',
-        'opus4-id'
-    );
-
-    private $personRoles = array(
-        'Advisor',
-        'Author',
-        'Contributor',
-        'Editor',
-        'Referee',
-        'Other',
-        'Translator',
-        'Submitter'
-    );
-
-    private $personFields = array(
-        'AcademicTitle',
-        'FirstName',
-        'LastName',
-        'DateOfBirth',
-        'PlaceOfBirth',
-        'Email'
-    );
-
     public function __construct($document) {
         $this->__document = $document;
     }
@@ -182,15 +49,17 @@ class Admin_Model_DocumentHelper {
     /**
      * Returns fields for a defined group.
      *
-     * @param <type> $groupName
-     * @return <type>
+     * By default only the fields are returned that contain values. The
+     * filtering can be turned off using 'false' as second parameter.
      *
-     * TODO filter empty values?
+     * @param string Name of section in metadata form
+     * @param boolean Filtering enabled (default true)
+     * @return array Opus_Model_Field objects for document
      */
     public function getFieldsForGroup($groupName, $filterEmpty = true) {
         $groupFields = array();
 
-        $groupFieldNames = Admin_Model_DocumentHelper::$fieldGroups[$groupName];
+        $groupFieldNames = $this->getFieldNamesForGroup($groupName);
 
         foreach ($groupFieldNames as $name) {
             $field = $this->__document->getField($name);
@@ -201,9 +70,6 @@ class Admin_Model_DocumentHelper {
         }
 
         return $groupFields;
-    }
-
-    protected function groupFields() {
     }
 
     public function getGroupedCollections() {
@@ -373,30 +239,6 @@ class Admin_Model_DocumentHelper {
         return $result;
     }
 
-    /**
-     * Returns possible types for Opus_Identifier.
-     * @return array
-     */
-    public function getIdentifierTypes() {
-        return $this->identifierTypes;
-    }
-
-    /**
-     * Returns possible roles for Opus_Person.
-     * @return array
-     */
-    public function getPersonRoles() {
-        return $this->personRoles;
-    }
-
-    /**
-     * Returns possible types for Opus_Reference.
-     * @return array
-     */
-    public function getReferenceTypes() {
-        return $this->referenceTypes;
-    }
-
     public function getForm($model, $includedFields) {
         $fields = $model->toArray();
         foreach ($fields as $key => $value) {
@@ -413,8 +255,29 @@ class Admin_Model_DocumentHelper {
         }
     }
 
+    /**
+     * Returns the field names for a section in the metadata form.
+     * @param string $section Name of metadata form section
+     * @return array Field names for section
+     */
     public static function getFieldNamesForGroup($section) {
-       return Admin_Model_DocumentHelper::$fieldGroups[$section];
+        $config = Admin_Model_DocumentHelper::getMetadataConfig();
+
+        $data = $config->toArray();
+
+        return $data[$section];
+    }
+
+    /**
+     * Returns the names of the groups (sections) for the metadata form.
+     * @return array of group names
+     */
+    public static function getGroups() {
+        $config = Admin_Model_DocumentHelper::getMetadataConfig();
+
+        $data = $config->toArray();
+
+        return array_keys($data);
     }
 
     public static function getDateFormat() {
@@ -433,6 +296,28 @@ class Admin_Model_DocumentHelper {
         }
 
         return $format;
+    }
+
+    /**
+     * Configuration of sections and fields for metadata form.
+     * @var Zend_Config_Ini
+     */
+    private static $__metadataConfig;
+
+    /**
+     * Returns configuration of sections and fields.
+     *
+     * The function loads the configuration, if not already loaded.
+     *
+     * @return Zend_Config_Ini containing section and fields configuration
+     */
+    private static function getMetadataConfig() {
+        if (empty(Admin_Model_DocumentHelper::$__metadataConfig)) {
+            Admin_Model_DocumentHelper::$__metadataConfig = new Zend_Config_Ini(
+                    APPLICATION_PATH . '/modules/admin/models/sections.ini');
+        }
+
+        return Admin_Model_DocumentHelper::$__metadataConfig;
     }
 
 }
