@@ -135,97 +135,6 @@ class Admin_Model_DocumentHelper {
         return $result;
     }
 
-    /**
-     *
-     * @param <type> $date
-     * @return <type>
-     *
-     * TODO create central util class
-     */
-    public function formatDate($date) {
-        if (!($date instanceof Opus_Date)) {
-            return $date;
-        }
-
-        $format = Admin_Model_DocumentHelper::getDateFormat();
-
-        // TODO review What does this do?
-        $timestamp = $date->getUnixTimestamp();
-
-        if (empty($timestamp)) {
-            return null;
-        }
-        else {
-            return $date->getZendDate()->get($format);
-        }
-    }
-
-    /**
-     *
-     * @param <type> $field
-     * @return <type>
-     *
-     * TODO replicates part of ShowModel helper (todo separate value formatting from layout)
-     */
-    public function formatField($field) {
-        if ($field instanceof Opus_Date) {
-            return $this->formatDate($field);
-        }
-        else {
-            $modelClass = $field->getValueModelClass();
-
-            Zend_Registry::get('Zend_Log')->debug('Formatting field ' . $field->getName());
-
-            if (!empty($modelClass)) {
-                switch ($modelClass) {
-                    case 'Opus_Date':
-                        return $this->formatDate($field->getValue());
-                    case 'Opus_Note':
-                        return 'TODO handle Opus_Note';
-                    case 'Opus_Patent':
-                        return 'TODO handle Opus_Patent';
-                    case 'Opus_DnbInstitute':
-                        $value = $field->getValue();
-                        if (isset($value[0])) {
-                            return $value[0]->getName();
-                        }
-                        else {
-                            return 'none';
-                        }
-                    default:
-                        // TODO handle other models
-                        break;
-                }
-            }
-            else {
-                return $field->getValue();
-            }
-        }
-    }
-
-    /**
-     *
-     * @param Opus_Model_Abstract $value
-     * @return Opus_Model_Abstract
-     *
-     * TODO some values need to be translated (others don't)
-     * TODO problem is that: can't iterator over fields
-     * TODO can't get list of allowed values from model
-     * TODO some things have special methods (Person->getDisplayName())
-     */
-    public function formatValue($value) {
-
-        // TODO cleanup
-        Zend_Registry::get('Zend_Log')->debug('Formatting ' . $value);
-
-        if ($value instanceof Opus_Model_Abstract) {
-            return $this->formatField($value);
-        }
-        else {
-            return $value;
-        }
-    }
-
     public function flattenValues($fields) {
         $result = array();
 
@@ -280,6 +189,10 @@ class Admin_Model_DocumentHelper {
         return array_keys($data);
     }
 
+    /**
+     * TODO centralize
+     * @return string
+     */
     public static function getDateFormat() {
         $session = new Zend_Session_Namespace();
 

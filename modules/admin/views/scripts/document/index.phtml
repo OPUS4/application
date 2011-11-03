@@ -142,7 +142,7 @@
             <?PHP foreach($this->overviewHelper->getValues($person) as $key => $value) : ?>
             <div>
                 <span class="label"><?=$this->translate($key)?></span>
-                <span class="value"><?=htmlspecialchars($this->overviewHelper->formatValue($value))?></span>
+                <span class="value"><?=htmlspecialchars($this->formatValue()->format($value))?></span>
             </div>
             <?PHP endforeach; ?>
 
@@ -163,7 +163,7 @@
         <?PHP foreach($this->overviewHelper->getFieldsForGroup('dates') as $index => $field) : ?>
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
             <span class="label"><?=$this->translate($field->getName())?></span>
-            <span class="value"><?=htmlspecialchars($this->overviewHelper->formatDate($field->getValue()))?></span>
+            <span class="value"><?=htmlspecialchars($this->formatValue()->format($field->getValue()))?></span>
         </div>
         <?PHP endforeach; ?>
 
@@ -174,8 +174,10 @@
         <legend>
             <?=$this->translate('admin_document_section_identifiers')?>
             <span class="editLink">
-                <a href="<?=$this->addUrls['identifiers']?>"><?=$this->addLabels['identifiers']?></a> /
+                <a href="<?=$this->addUrls['identifiers']?>"><?=$this->addLabels['identifiers']?></a>
+                <?PHP if (isset($this->editUrls['identifiers'])) : ?> /
                 <a href="<?=$this->editUrls['identifiers']?>"><?=$this->editLabels['identifiers']?></a>
+                <?PHP endif; ?>
             </span>
         </legend>
 
@@ -304,7 +306,7 @@
             <?PHP foreach($this->overviewHelper->getFieldsForGroup('thesis') as $index => $field) : ?>
             <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
                 <span class="label"><?=$this->translate($field->getName())?></span>
-                <span class="value"><?=htmlspecialchars($this->overviewHelper->formatField($field))?></span>
+                <span class="value"><?=htmlspecialchars($this->formatValue()->format($field))?></span>
             </div>
             <?PHP endforeach; ?>
 
@@ -322,7 +324,7 @@
             <?PHP foreach($this->overviewHelper->getFieldsForGroup('other') as $index => $field) : ?>
             <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
                 <span class="label"><?=$this->translate($field->getName())?></span>
-                <span class="value"><?=htmlspecialchars($this->overviewHelper->formatField($field))?></span>
+                <span class="value"><?=htmlspecialchars($this->formatValue()->format($field))?></span>
             </div>
             <?PHP endforeach; ?>
 
@@ -346,7 +348,7 @@
                 <?PHP foreach($this->overviewHelper->getValues($patent) as $key => $value) : ?>
                 <div>
                     <span class="label"><?=$this->translate($key)?></span>
-                    <span class="value"><?=htmlspecialchars($this->overviewHelper->formatValue($value))?></span>
+                    <span class="value"><?=htmlspecialchars($this->formatValue()->format($value))?></span>
                 </div>
                 <?PHP endforeach; ?>
 
