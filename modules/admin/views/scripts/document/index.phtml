@@ -192,27 +192,33 @@
 
     </fieldset>
 
-    <?PHP /*
     <fieldset class="overview">
 
         <legend>
             <?=$this->translate('admin_document_section_references')?>
-            <span class="editLink"><a href="<?=$this->editUrls['references']?>"><?=$this->editLabels['references']?></a></span>
+            <span class="editLink">
+                <a href="<?=$this->addUrls['references']?>"><?=$this->addLabels['references']?></a> /
+                <a href="<?=$this->editUrls['references']?>"><?=$this->editLabels['references']?></a>
+            </span>
         </legend>
 
         <?PHP foreach($this->document->getReference() as $index => $reference) : ?>
 
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
             <div class="Reference">
-                <span class="Reference label"><?=htmlspecialchars($identifier->getLabel()) ?></span>
-                <span class="Reference value"><?=htmlspecialchars($identifier->getValue()) ?></span>
+                <span class="Reference label"><?=htmlspecialchars($reference->getLabel()) ?>
+                    <span style="font-weight: normal">(<?=htmlspecialchars($reference->getType())?>)</span>
+                </span>
+                <span class="Reference value"><?=htmlspecialchars($reference->getValue()) ?>
+                    <span style="font-weight: normal">(<?=htmlspecialchars($reference->getRelation())?>)</span>
+                </span>
+
             </div>
         </div>
 
         <?PHP endforeach; ?>
 
     </fieldset>
-     */?>
 
     <fieldset class="overview">
 

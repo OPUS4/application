@@ -340,6 +340,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_add_references">
+      <tuv xml:lang="en">
+        <seg>Add new reference</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neue Referenz hinzufügen</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="admin_document_add_licences">
       <tuv xml:lang="en">
         <seg>Add new licence</seg>
