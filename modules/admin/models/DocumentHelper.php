@@ -33,10 +33,17 @@
  */
 
 /**
- * Helper functions for the metadata form for documents.
+ * Helper functions for the overview page für documents.
+ *
+ * The terms 'group' and 'section' are used synonymous. The fields are grouped
+ * in sections of the overview page for a document.
  */
 class Admin_Model_DocumentHelper {
 
+    /**
+     * Document that is viewed.
+     * @var Opus_Document
+     */
     private $__document;
 
     /**
@@ -47,7 +54,25 @@ class Admin_Model_DocumentHelper {
     }
 
     /**
-     * Returns fields for a defined group.
+     * Returns true if at least on field in a section has a value.
+     * @param string Name of section
+     * @return boolean True if at least one field in the section has a value
+     */
+    public function hasValues($groupName) {
+        $fields = $this->getFieldsForGroup($groupName);
+
+        foreach($fields as $field) {
+            $value = $field->getValue();
+            if (!empty($value)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Returns fields for a section of the overview form.
      *
      * By default only the fields are returned that contain values. The
      * filtering can be turned off using 'false' as second parameter.
@@ -72,6 +97,10 @@ class Admin_Model_DocumentHelper {
         return $groupFields;
     }
 
+    /**
+     * Returns the collections grouped by CollectionRole.
+     * @return array Collections grouped by CollectionRole
+     */
     public function getGroupedCollections() {
         $groupedCollections = array();
 
@@ -93,6 +122,10 @@ class Admin_Model_DocumentHelper {
         return $groupedCollections;
     }
 
+    /**
+     * Returns subjects grouped by type.
+     * @return array Subjects grouped by type
+     */
     public function getGroupedSubjects() {
         $groupedSubjects = array();
 
@@ -115,18 +148,28 @@ class Admin_Model_DocumentHelper {
         return $groupedSubjects;
     }
 
+    /**
+     * Returns the field values of a model as array.
+     * @param Opus_Model_Abstract Model (e.g. Opus_Person, ...)
+     * @return array Field values
+     */
     public function getValues($model) {
         $values = $model->toArray();
         $result = array();
 
+        // Iterate through array representation of Model
         foreach ($values as $key => $value) {
+            // Only include fields that are not empty
             if (!empty($value)) {
                 // TODO review (hack)
+                // Check if field is a Date field (by name)
                 if (strpos($key, 'Date') !== FALSE) {
+                    // Get value of Date field and add to result
                     $field = $model->getField($key);
                     $result[$key] = $field->getValue();
                 }
                 else {
+                    // Add key and value to result array
                     $result[$key] = $value;
                 }
             }
@@ -135,6 +178,15 @@ class Admin_Model_DocumentHelper {
         return $result;
     }
 
+    /**
+     * Returns array of values from multiple fields.
+     *
+     * For instance a single array containing different Opus_Title fields.
+     * Use for 'titles', 'persons', and 'patents' section.
+     *
+     * @param Opus_Model_Field Fields that need to be combined
+     * @return array Values from different fields
+     */
     public function flattenValues($fields) {
         $result = array();
 
@@ -146,22 +198,6 @@ class Admin_Model_DocumentHelper {
         }
 
         return $result;
-    }
-
-    public function getForm($model, $includedFields) {
-        $fields = $model->toArray();
-        foreach ($fields as $key => $value) {
-            $field = $model->getField($key);
-            if (!empty($field)) {
-                $valueModelClass = $field->getValueModelClass();
-                switch ($valueModelClass) {
-                    case 'Opus_Date':
-                        break;
-                    default:
-                        break;
-                }
-            }
-        }
     }
 
     /**

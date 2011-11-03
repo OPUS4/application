@@ -240,7 +240,6 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-1757
      */
     public function testEditLinkForEmptySectionIsNotDisplayed() {
-        $this->markTestSkipped('Regression Test OPUSVIER-1757. Bug noch nicht gefixt.');
         $this->dispatch('/admin/document/index/id/92');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -334,6 +333,29 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $body = $this->getResponse()->getBody();
         $this->assertTrue(substr_count($body, 'exception \'PHPUnit_Framework_Error_Warning\' with message \'htmlspecialchars() expects parameter 1 to be string, array given\' in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml:145') == 0);
         $this->assertTrue(substr_count($body, 'Warning: htmlspecialchars() expects parameter 1 to be string, array given in /home/jens/opus4dev/opus4/server/modules/admin/views/scripts/document/index.phtml on line 145') == 0);
+    }
+
+    /**
+     * Regression test for OPUSVIER-1843.
+     */
+    public function test() {
+        $this->markTestSkipped('not working yet');
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'Opus_Document[CompletedDate]' => '2000/01/01',
+                    'Opus_Document[CompletedYear]' => '2000',
+                    'Opus_Document[ThesisDateAccepted]' => '2000/01/01',
+                    'Opus_Document[PublishedDate]' => '2000/01/01',
+                    'Opus_Document[PublishedYear]' => '2000',
+                    'Opus_Document[ServerDateModified]' => '2000/01/01',
+                    'Opus_Document[ServerDatePublished]' => '2000/01/01',
+                    'save' => 'Speichern'
+                ));
+        $this->dispatch('/admin/document/update/id/96/section/dates');
+
+        $body = $this->getResponse()->getBody();
+        $this->assertTrue(substr_count($body, '1999/01/01') !== 0, $body);
     }
 
 }

@@ -108,6 +108,35 @@ class Admin_Model_DocumentHelperTest extends ControllerTestCase {
         }
     }
 
+    public function testHasValueForEmptySection() {
+        $doc = new Opus_Document(40);
+
+        $helper = new Admin_Model_DocumentHelper($doc);
+
+        $this->assertFalse($helper->hasValues('patents'));
+    }
+
+    public function testHasValueForSectionWithValues() {
+        $doc = new Opus_Document(40);
+
+        $helper = new Admin_Model_DocumentHelper($doc);
+
+        $this->assertTrue($helper->hasValues('identifiers'));
+    }
+
+    public function testHasValueForEmtpyDocAllSections() {
+        $doc = new Opus_Document();
+
+        $helper = new Admin_Model_DocumentHelper($doc);
+
+        $sections = $helper->getGroups();
+
+        foreach($sections as $section) {
+            $this->assertFalse($helper->hasValues($section), 'Section \''
+                    . $section . '\ should be empty.');
+        }
+    }
+
 }
 
 ?>

@@ -74,8 +74,10 @@
         <legend>
             <?=$this->translate('admin_document_section_titles')?>
             <span class="editLink">
-                <a href="<?=$this->addUrls['titles']?>"><?=$this->addLabels['titles']?></a> /
+                <a href="<?=$this->addUrls['titles']?>"><?=$this->addLabels['titles']?></a>
+                <?PHP if ($this->overviewHelper->hasValues('titles')) : ?> /
                 <a href="<?=$this->editUrls['titles']?>"><?=$this->editLabels['titles']?></a>
+                <?PHP endif; ?>
             </span>
         </legend>
 
@@ -103,9 +105,10 @@
         <legend>
             <?=$this->translate('admin_document_section_abstracts')?>
             <span class="editLink">
-                <!--<a href="<?=$this->editUrls['abstracts']?>"><?=$this->editLabels['abstracts']?></a>-->
-                <a href="<?=$this->addUrls['abstracts']?>"><?=$this->addLabels['abstracts']?></a> /
+                <a href="<?=$this->addUrls['abstracts']?>"><?=$this->addLabels['abstracts']?></a>
+                <?PHP if ($this->overviewHelper->hasValues('abstracts')) : ?> /
                 <a href="<?=$this->editUrls['abstracts']?>"><?=$this->editLabels['abstracts']?></a>
+                <?PHP endif; ?>
             </span>
         </legend>
 
@@ -129,8 +132,10 @@
         <legend>
             <?=$this->translate('admin_document_section_persons')?>
             <span class="editLink">
-                <a href="<?=$this->addUrls['persons']?>"><?=$this->addLabels['persons']?></a> /
+                <a href="<?=$this->addUrls['persons']?>"><?=$this->addLabels['persons']?></a>
+                <?PHP if ($this->overviewHelper->hasValues('persons')) : ?> /
                 <a href="<?=$this->editUrls['persons']?>"><?=$this->editLabels['persons']?></a>
+                <?PHP endif; ?>
             </span>
         </legend>
 
@@ -175,7 +180,7 @@
             <?=$this->translate('admin_document_section_identifiers')?>
             <span class="editLink">
                 <a href="<?=$this->addUrls['identifiers']?>"><?=$this->addLabels['identifiers']?></a>
-                <?PHP if (isset($this->editUrls['identifiers'])) : ?> /
+                <?PHP if ($this->overviewHelper->hasValues('identifiers')) : ?> /
                 <a href="<?=$this->editUrls['identifiers']?>"><?=$this->editLabels['identifiers']?></a>
                 <?PHP endif; ?>
             </span>
@@ -197,8 +202,10 @@
         <legend>
             <?=$this->translate('admin_document_section_references')?>
             <span class="editLink">
-                <a href="<?=$this->addUrls['references']?>"><?=$this->addLabels['references']?></a> /
+                <a href="<?=$this->addUrls['references']?>"><?=$this->addLabels['references']?></a>
+                <?PHP if ($this->overviewHelper->hasValues('references')) : ?> /
                 <a href="<?=$this->editUrls['references']?>"><?=$this->editLabels['references']?></a>
+                <?PHP endif; ?>
             </span>
         </legend>
 
@@ -225,8 +232,10 @@
         <legend>
             <?=$this->translate('admin_document_section_licences')?>
             <span class="editLink">
-                <a href="<?=$this->addUrls['licences']?>"><?=$this->addLabels['licences']?></a> /
+                <a href="<?=$this->addUrls['licences']?>"><?=$this->addLabels['licences']?></a>
+                <?PHP if ($this->overviewHelper->hasValues('licences')) : ?> /
                 <a href="<?=$this->editUrls['licences']?>"><?=$this->editLabels['licences']?></a>
+                <?PHP endif; ?>
             </span>
         </legend>
 
@@ -249,8 +258,10 @@
         <legend>
             <?=$this->translate('admin_document_section_subjects')?>
             <span class="editLink">
-                <a href="<?=$this->addUrls['subjects']?>"><?=$this->addLabels['subjects']?></a> /
+                <a href="<?=$this->addUrls['subjects']?>"><?=$this->addLabels['subjects']?></a>
+                <?PHP if ($this->overviewHelper->hasValues('subjects')) : ?> /
                 <a href="<?=$this->editUrls['subjects']?>"><?=$this->editLabels['subjects']?></a>
+                <?PHP endif; ?>
             </span>
         </legend>
 
@@ -341,8 +352,10 @@
             <legend>
                 <?=$this->translate('admin_document_section_patents')?>
                 <span class="editLink">
-                    <a href="<?=$this->addUrls['patents']?>"><?=$this->addLabels['patents']?></a> /
+                    <a href="<?=$this->addUrls['patents']?>"><?=$this->addLabels['patents']?></a>
+                    <?PHP if ($this->overviewHelper->hasValues('patents')) : ?> /
                     <a href="<?=$this->editUrls['patents']?>"><?=$this->editLabels['patents']?></a>
+                    <?PHP endif; ?>
                 </span>
             </legend>
 
@@ -368,8 +381,10 @@
             <legend>
                 <?=$this->translate('admin_document_section_notes')?>
                 <span class="editLink">
-                    <a href="<?=$this->addUrls['notes']?>"><?=$this->addLabels['notes']?></a> /
+                    <a href="<?=$this->addUrls['notes']?>"><?=$this->addLabels['notes']?></a>
+                    <?PHP if ($this->overviewHelper->hasValues('notes')) : ?> /
                     <a href="<?=$this->editUrls['notes']?>"><?=$this->editLabels['notes']?></a>
+                    <?PHP endif; ?>
                 </span>
             </legend>
 
@@ -387,8 +402,10 @@
             <legend>
                 <?=$this->translate('admin_document_section_enrichments')?>
                 <span class="editLink">
-                    <a href="<?=$this->addUrls['enrichments']?>"><?=$this->addLabels['enrichments']?></a> /
+                    <a href="<?=$this->addUrls['enrichments']?>"><?=$this->addLabels['enrichments']?></a>
+                    <?PHP if ($this->overviewHelper->hasValues('enrichments')) : ?> /
                     <a href="<?=$this->editUrls['enrichments']?>"><?=$this->editLabels['enrichments']?></a>
+                    <?PHP endif; ?>
                 </span>
             </legend>
 
