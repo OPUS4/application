@@ -24,7 +24,8 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Application
+ * @package     Controller
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -115,7 +116,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
      * Returm DOMDocument for document type.
      *
      * @param string $documentType
-     * @return DOMDocument 
+     * @return DOMDocument
      * @throws Application_Exception if invalid documentType passed.
      */
     public function getDocument($documentType) {
@@ -142,7 +143,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         if (!$this->isValid($documentType)) {
             return null; // TODO throw exception
         }
-        
+
         $template = null;
 
         if (isset($this->config->documentTypes->templates->$documentType)) {
@@ -168,11 +169,11 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         if (isset($this->config->publish->path->documenttypes)) {
             $path = $this->config->publish->path->documenttypes;
         }
-        
+
         if (empty($path)) {
             throw new Exception('Path to document types not configured.');
         }
-        
+
         return $path;
     }
 
