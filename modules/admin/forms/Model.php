@@ -33,17 +33,29 @@
  */
 
 /**
- * Description of Admin_Form_Document
  *
- * @author jens
+ *
+ *
  */
 class Admin_Form_Model extends Zend_Form_SubForm {
 
+    /**
+     * Model class for the form.
+     * @var string
+     */
     private $modelClazz;
 
+    /**
+     * Visible fields in form.
+     * @var array
+     */
     private $includedFields;
 
-    private $_logger;
+    /**
+     * Logger for this class.
+     * @var Zend_Log
+     */
+    private $__logger;
 
     /**
      * Constructs form for Opus_Model_Abstract instance.
@@ -52,9 +64,6 @@ class Admin_Form_Model extends Zend_Form_SubForm {
      */
     public function __construct($clazz, $includedFields = null) {
         parent::__construct();
-
-        // Cleanup
-        $this->_logger = Zend_Registry::get('Zend_Log');
 
         $this->includedFields = $includedFields;
 
@@ -136,7 +145,7 @@ class Admin_Form_Model extends Zend_Form_SubForm {
     }
 
     /**
-     * Populates form from model values.
+     * Populates form element from model instance.
      */
     public function populateFromModel($model) {
         // TODO check if model matches form
@@ -179,12 +188,12 @@ class Admin_Form_Model extends Zend_Form_SubForm {
                         if (!empty($value)) {
                             // TODO use common function for formatting
                             $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
-                            $this->_logger->debug('Reading Date ' . $value . ' for field ' . $field->getName());
+                            $this->getLogger()->debug('Reading Date ' . $value . ' for field ' . $field->getName());
                             $date = $value->getZendDate();
-                            $this->_logger->debug('Reading Date ' . $date . ' for field ' . $field->getName());
+                            $this->getLogger()->debug('Reading Date ' . $date . ' for field ' . $field->getName());
                             $element->setValue($date->get($dateFormat));
-                            $this->_logger->debug('Formatting ' . $field->getName() . ' using ' . $dateFormat);
-                            $this->_logger->debug('Reading Date ' . $date->get($dateFormat) . ' for field ' . $field->getName());
+                            $this->getLogger()->debug('Formatting ' . $field->getName() . ' using ' . $dateFormat);
+                            $this->getLogger()->debug('Reading Date ' . $date->get($dateFormat) . ' for field ' . $field->getName());
                         }
                         else {
                             $element->setValue(null);
@@ -199,12 +208,6 @@ class Admin_Form_Model extends Zend_Form_SubForm {
     }
 
     /**
-     * Sets values in model instance.
-     */
-    public function populateModel() {
-    }
-
-    /**
      * Generates a Zend_Form_Element for model field.
      *
      * TODO add method to Opus_Field to *getField(Render)Type()*
@@ -216,7 +219,13 @@ class Admin_Form_Model extends Zend_Form_SubForm {
             $element = $this->_createCheckbox($field);
         }
         elseif ($field->isSelection()) {
-            $element = $this->_createSelect($field, $flag);
+            if ($model instanceOf Opus_Model_Dependent_Link_Abstract) {
+                $modelName = $model->getModelClass();
+            }
+            else {
+                $modelName = get_class($model);
+            }
+            $element = $this->_createSelect($modelName, $field, $flag);
         }
         elseif ($field->isTextarea()) {
             $element = $this->_createTextarea($field);
@@ -240,6 +249,11 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         return $element;
     }
 
+    /**
+     * Creates checkbox input element.
+     * @param Opus_Model_Field $field
+     * @return Zend_Form_Element_Checkbox
+     */
     protected function _createCheckbox($field) {
         $name = $field->getName();
         $checkbox = new Zend_Form_Element_Checkbox($name);
@@ -247,8 +261,8 @@ class Admin_Form_Model extends Zend_Form_SubForm {
     }
 
     /**
-     *
-     * @param <type> $field
+     * Create text input element.
+     * @param Opus_Model_Field $field
      * @return Zend_Form_Element_Text
      *
      * TODO handle validation for Date fields
@@ -260,6 +274,11 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         return $textfield;
     }
 
+    /**
+     * Creates textarea input element.
+     * @param Opus_Model_Field $field
+     * @return Zend_Form_Element_Textarea
+     */
     protected function _createTextarea($field) {
         $name = $field->getName();
         $textarea = new Zend_Form_Element_Textarea($name);
@@ -268,7 +287,13 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         return $textarea;
     }
 
-    protected function _createSelect($field, $flag) {
+    /**
+     * Creates select input element.
+     * @param Opus_Model_Field $field
+     * @param string $flag
+     * @return Zend_Form_Element_Select
+     */
+    protected function _createSelect($modelName, $field, $flag) {
         $name = $field->getName();
         $select = new Zend_Form_Element_Select($name);
 
@@ -313,7 +338,12 @@ class Admin_Form_Model extends Zend_Form_SubForm {
                     break;
                 default:
                     // TODO needed for any field?
-                    $select->addMultiOption($option, $option);
+                    if ($flag === 'DocType') {
+                        $select->addMultiOption($option, $option);
+                    }
+                    else {
+                        $select->addMultiOption($option, $modelName . '_' . $name . '_Value_' . ucfirst($option));
+                    }
                     break;
             }
         }
@@ -321,8 +351,24 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         return $select;
     }
 
-    protected function _getFieldNames() {
+    /**
+     * Set logger for this class.
+     * @param Zend_Log $logger
+     */
+    public function setLogger($logger) {
+        $this->__logger = $logger;
+    }
 
+    /**
+     * Returns logger for this class.
+     * @return Zend_Log
+     */
+    public function getLogger() {
+        if (empty($this->__logger)) {
+            $this->__logger = Zend_Registry::get('Zend_Log');
+        }
+
+        return $this->__logger;
     }
 
 }

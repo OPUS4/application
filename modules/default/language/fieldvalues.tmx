@@ -1,0 +1,564 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+
+    <!--
+        This language resource contains the translations for field values
+        defined by enums in the data model. For instance the different roles
+        that are allowed for a person, or the different allowed publication
+        states. So in general it is used for the values of 'select' input
+        elements.
+
+        The key follow the pattern:
+
+        [MODEL_CLASS]_[FIELD_NAME]_Value_[Value]
+
+        The first letter of the value used as default in the model and defined
+        in an enum in the database is capitalized.
+    -->
+
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+    </header>
+
+    <body>
+
+        <tu tuid="Opus_Document_ServerState_Value_Unpublished">
+            <tuv xml:lang="en">
+                <seg>Unpublished</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Nicht publiziert</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_ServerState_Value_Published">
+            <tuv xml:lang="en">
+                <seg>Published</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Freigegeben</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_ServerState_Value_Deleted">
+            <tuv xml:lang="en">
+                <seg>Deleted</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Gelöscht</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_ServerState_Value_Restricted">
+            <tuv xml:lang="en">
+                <seg>Restricted</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Zugriffsbeschränkt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_ServerState_Value_Inprogress">
+            <tuv xml:lang="en">
+                <seg>In Progress</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>In Arbeit</seg>
+            </tuv>
+        </tu>
+
+        <!--
+            IMPORTANT: The pattern deviates from default for values of role
+            field for class Opus_Model_Dependent_Link_DocumentPerson.
+        -->
+
+        <tu tuid="Opus_Person_Role_Value_Author">
+            <tuv xml:lang="en">
+                <seg>Author</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Verfasserangaben</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Person_Role_Value_Editor">
+            <tuv xml:lang="en">
+                <seg>Editor</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Herausgeber</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Person_Role_Value_Advisor">
+            <tuv xml:lang="en">
+                <seg>Advisor</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Betreuer</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Person_Role_Value_Contributor">
+            <tuv xml:lang="en">
+                <seg>Contributor</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sonstige beteiligte Person</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Person_Role_Value_Referee">
+            <tuv xml:lang="en">
+                <seg>Referee</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Gutachter</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Person_Role_Value_Translator">
+            <tuv xml:lang="en">
+                <seg>Translator</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Übersetzer</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Person_Role_Value_Other">
+            <tuv xml:lang="en">
+                <seg>Other Person(s)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Weitere Person</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Person_Role_Value_Submitter">
+            <tuv xml:lang="en">
+                <seg>Submitter</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Einsteller</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Title_Type_Value_Main">
+            <tuv xml:lang="en">
+                <seg>Title</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Titel</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Title_Type_Value_Parent">
+            <tuv xml:lang="en">
+                <seg>Parent Title</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Titel des übergordneten Werkes</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Title_Type_Value_Additional">
+            <tuv xml:lang="en">
+                <seg>Title Additional</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>übersetzter Titel</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Title_Type_Value_Sub">
+            <tuv xml:lang="en">
+                <seg>Subtitle</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Untertitel</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_TitleAbstract_Type_Value_Abstract">
+            <tuv xml:lang="en">
+                <seg>Abstract</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Abstrakt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Opac-id">
+            <tuv xml:lang="en">
+                <seg>Opac Id</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Opac Id</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Arxiv">
+            <tuv xml:lang="en">
+                <seg>ArXiv Id</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>ArXiv-Id</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Pubmed">
+            <tuv xml:lang="en">
+                <seg>Pubmed Id</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Pubmed-Id</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Old">
+            <tuv xml:lang="en">
+                <seg>old Identifier</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>alter Identifier</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Isbn">
+            <tuv xml:lang="en">
+                <seg>ISBN</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>ISBN</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Serial">
+            <tuv xml:lang="en">
+                <seg>Serial Number</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bandnummer</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Issn">
+            <tuv xml:lang="en">
+                <seg>ISSN</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>ISSN</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Uuid">
+            <tuv xml:lang="en">
+                <seg>Uuid</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Uuid</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Urn">
+            <tuv xml:lang="en">
+                <seg>URN</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>URN</seg>
+            </tuv>
+        </tu>
+
+
+        <tu tuid="Opus_Identifier_Type_Value_Doi">
+            <tuv xml:lang="en">
+                <seg>DOI</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>DOI</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Handle">
+            <tuv xml:lang="en">
+                <seg>Handle</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Handle</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Url">
+            <tuv xml:lang="en">
+                <seg>URL</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>URL</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Std-doi">
+            <tuv xml:lang="en">
+                <seg>STD-DOI</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>STD-DOI</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Cris-link">
+            <tuv xml:lang="en">
+                <seg>CRIS-Link</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>CRIS-Link</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Splash-url">
+            <tuv xml:lang="en">
+                <seg>SplashURL</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>SplashURL</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Identifier_Type_Value_Opus3-id">
+            <tuv xml:lang="en">
+                <seg>Opus3 Id</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>OPUS 3 Id</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Reference_Relation_Value_Updates">
+            <tuv xml:lang="en">
+                <seg>Updates</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Aktualisiert</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Reference_Relation_Value_Updated-by">
+            <tuv xml:lang="en">
+                <seg>Updated by</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Aktualisiert durch</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Reference_Relation_Value_Other">
+            <tuv xml:lang="en">
+                <seg>Other</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Andere</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Reference_Type_Value_Isbn">
+            <tuv xml:lang="en">
+                <seg>Reference ISBN</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Referenz-ISBN</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Reference_Type_Value_Urn">
+            <tuv xml:lang="en">
+                <seg>Reference URN</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Referenz-URN</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Reference_Type_Value_Doi">
+            <tuv xml:lang="en">
+                <seg>Reference DOI</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Referenz-DOI</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Reference_Type_Value_Handle">
+            <tuv xml:lang="en">
+                <seg>Reference Handle</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Referenz-Handle</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Reference_Type_Value_Url">
+            <tuv xml:lang="en">
+                <seg>Reference URL</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Referenz-URL</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Reference_Type_Value_Issn">
+            <tuv xml:lang="en">
+                <seg>Reference ISSN</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Referenz-ISSN</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Reference_Type_Value_Std-doi">
+            <tuv xml:lang="en">
+                <seg>Reference STD-DOI</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Referenz-STD-DOI</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Reference_Type_Value_Cris-link">
+            <tuv xml:lang="en">
+                <seg>Reference CRIS-Link</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Referenz-CRIS-Link</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Reference_Type_Value_Splash-url">
+            <tuv xml:lang="en">
+                <seg>Reference SplashURL</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Referenz-SplashURL</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Reference_Type_Value_Opus4-id">
+            <tuv xml:lang="en">
+                <seg>Reference Opus4 ID</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Referenz OPUS 4 ID</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Subject_Type_Value_Swd">
+            <tuv xml:lang="en">
+                <seg>SWD-Keyword</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>SWD-Schlagwort</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Subject_Type_Value_Msc">
+            <tuv xml:lang="en">
+                <seg>MSC-Classfication</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>MSC-Klassifikation</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Subject_Type_Value_Ddc">
+            <tuv xml:lang="en">
+                <seg>DDC Term</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>DDC Sachgruppe</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Subject_Type_Value_Uncontrolled">
+            <tuv xml:lang="en">
+                <seg>Tag</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Freies Schlagwort / Tag</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Subject_Type_Value_Psyndex">
+            <tuv xml:lang="en">
+                <seg>Psyndex Keyword</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Psyndex-Schlagwort</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_PublicationState_Value_Draft">
+            <tuv xml:lang="en">
+                <seg>Draft</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Entwurf</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_PublicationState_Value_Accepted">
+            <tuv xml:lang="en">
+                <seg>Accepted</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Akzeptiert</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_PublicationState_Value_Submitted">
+            <tuv xml:lang="en">
+                <seg>Submitted</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Eingereicht</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_PublicationState_Value_Published">
+            <tuv xml:lang="en">
+                <seg>Published</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Veröffentlicht</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Document_PublicationState_Value_Updated">
+            <tuv xml:lang="en">
+                <seg>Updated</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Aktualisiert</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Note_Visibility_Value_Private">
+            <tuv xml:lang="en">
+                <seg>Private</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Intern</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Note_Visibility_Value_Public">
+            <tuv xml:lang="en">
+                <seg>Public</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Öffentlich</seg>
+            </tuv>
+        </tu>
+
+    </body>
+
+</tmx>
