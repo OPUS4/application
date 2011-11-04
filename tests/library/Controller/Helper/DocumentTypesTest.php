@@ -164,6 +164,23 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         $path = $docTypeHelper->getDocTypesPath();
     }
 
+    /**
+     * Check if all document types can be translated.
+     */
+    public function testTranslationOfDocumentTypes() {
+        $translate = Zend_Registry::get('Zend_Translate');
+
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+
+        $documentTypes = $docTypeHelper->getDocumentTypes();
+
+        foreach ($documentTypes as $docType) {
+            $this->assertNotEquals($docType, $translate->translate($docType),
+                    'Could not translate document type: ' . $docType);
+        }
+    }
+
+
 }
 
 ?>
