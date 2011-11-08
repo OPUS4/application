@@ -313,12 +313,30 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_edit_titles">
+      <tuv xml:lang="en">
+        <seg>Edit Titles</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel editieren</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_document_add_abstracts">
       <tuv xml:lang="en">
         <seg>Add new abstract</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Neuen Abstrakt hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_edit_abstracts">
+      <tuv xml:lang="en">
+        <seg>Edit Abstracts</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Abstrakte editieren</seg>
       </tuv>
     </tu>
 
@@ -331,12 +349,30 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_edit_persons">
+      <tuv xml:lang="en">
+        <seg>Edit Persons</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Personen editieren</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_document_add_identifiers">
       <tuv xml:lang="en">
         <seg>Add new identifier</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Neuen Identifier hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_edit_identifiers">
+      <tuv xml:lang="en">
+        <seg>Edit Identifiers</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Identifier editieren</seg>
       </tuv>
     </tu>
 
@@ -348,13 +384,31 @@
         <seg>Neue Referenz hinzufügen</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="admin_document_edit_references">
+      <tuv xml:lang="en">
+        <seg>Edit References</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Referenzen editieren</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_document_add_licences">
       <tuv xml:lang="en">
         <seg>Add new licence</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Neue Lizenz hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_edit_licences">
+      <tuv xml:lang="en">
+        <seg>Edit Licences</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenzen editieren</seg>
       </tuv>
     </tu>
 
@@ -367,12 +421,30 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_edit_subjects">
+      <tuv xml:lang="en">
+        <seg>Edit Subjects</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schlagwörter editieren</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_document_add_patents">
       <tuv xml:lang="en">
         <seg>Add new patent</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Neues Patent hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_edit_patents">
+      <tuv xml:lang="en">
+        <seg>Edit Patents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Patente editieren</seg>
       </tuv>
     </tu>
 
@@ -385,12 +457,66 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_edit_notes">
+      <tuv xml:lang="en">
+        <seg>Edit Notes</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Notizen editieren</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_document_add_enrichments">
       <tuv xml:lang="en">
         <seg>Add new enrichment</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Neues Enrichment hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_edit_enrichments">
+      <tuv xml:lang="en">
+        <seg>Edit Enrichments</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Enrichments editieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_edit_dates">
+      <tuv xml:lang="en">
+        <seg>Edit Dates</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datumsangaben editieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_edit_general">
+      <tuv xml:lang="en">
+        <seg>Edit General</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Allgemeine Angaben editieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_edit_thesis">
+      <tuv xml:lang="en">
+        <seg>Edit Thesis Information</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hochschulschriften editieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_edit_other">
+      <tuv xml:lang="en">
+        <seg>Edit Other Information</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Weitere Informationen editieren</seg>
       </tuv>
     </tu>
 

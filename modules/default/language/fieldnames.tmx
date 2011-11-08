@@ -2030,7 +2030,38 @@
             </tuv>
         </tu>
 
+        <!-- Keys for Opus_Person -->
+
+        <tu tuid="Opus_Person">
+            <tuv xml:lang="en">
+                <seg>Person</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Person</seg>
+            </tuv>
+        </tu>
+
+        <!-- Keys for Opus_Identifier -->
+
+        <tu tuid="Opus_Identifier">
+            <tuv xml:lang="en">
+                <seg>Identifier</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Identifier</seg>
+            </tuv>
+        </tu>
+
         <!-- Keys for Opus_Reference -->
+
+        <tu tuid="Opus_Reference">
+            <tuv xml:lang="en">
+                <seg>Reference</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Referenz</seg>
+            </tuv>
+        </tu>
 
         <tu tuid="Label">
             <tuv xml:lang="en">
@@ -2059,6 +2090,17 @@
             </tuv>
         </tu>
 
+        <!-- Keys for Opus_Licence -->
+
+        <tu tuid="Opus_Licence">
+            <tuv xml:lang="en">
+                <seg>Licence</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Lizenz</seg>
+            </tuv>
+        </tu>
+
         <!-- Keys for Opus_TitleAbstract -->
 
         <tu tuid="Opus_TitleAbstract_Type">
@@ -2072,6 +2114,15 @@
 
         <!-- Keys for Opus_Subject -->
 
+        <tu tuid="Opus_Subject">
+            <tuv xml:lang="en">
+                <seg>Subject</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Schlagwort</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="ExternalKey">
             <tuv xml:lang="en">
                 <seg>External Key</seg>
@@ -2081,7 +2132,27 @@
             </tuv>
         </tu>
 
+        <!-- Keys for Opus_Patent -->
+
+        <tu tuid="Opus_Patent">
+            <tuv xml:lang="en">
+                <seg>Patent</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Patent</seg>
+            </tuv>
+        </tu>
+
         <!-- Keys for Opus_Note -->
+
+        <tu tuid="Opus_Note">
+            <tuv xml:lang="en">
+                <seg>Note</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Notiz</seg>
+            </tuv>
+        </tu>
 
         <tu tuid="Visibility">
             <tuv xml:lang="en">
@@ -2093,6 +2164,15 @@
         </tu>
 
         <!-- Keys for Opus_Enrichment -->
+
+        <tu tuid="Opus_Enrichment">
+            <tuv xml:lang="en">
+                <seg>Enrichment</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Enrichment</seg>
+            </tuv>
+        </tu>
 
         <tu tuid="KeyName">
             <tuv xml:lang="en">

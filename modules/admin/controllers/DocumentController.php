@@ -127,6 +127,7 @@ class Admin_DocumentController extends Controller_Action {
         $id = $this->getRequest()->getParam('id');
 
         $section = $this->getRequest()->getParam('section');
+        $this->view->section = $section;
 
         if (!empty($section) && !empty($id) && is_numeric($id)) {
             switch ($section) {
