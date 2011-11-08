@@ -46,14 +46,14 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
 
     public function setUp() {
         parent::setUp();
-        
+
         $this->emptyCollectionRole = new Opus_CollectionRole();
         $this->emptyCollectionRole->setName("test1role");
         $this->emptyCollectionRole->setOaiName("test1role");
         $this->emptyCollectionRole->setDisplayBrowsing("Name");
         $this->emptyCollectionRole->setDisplayFrontdoor("Name");
         $this->emptyCollectionRole->setDisplayOai("Name");
-        $this->emptyCollectionRole->setPosition(100);        
+        $this->emptyCollectionRole->setPosition(100);
         $this->emptyCollectionRole->store();
 
         $this->nonEmptyCollectionRole = new Opus_CollectionRole();
@@ -64,20 +64,20 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->nonEmptyCollectionRole->setDisplayOai("Name");
         $this->nonEmptyCollectionRole->setPosition(101);
         $this->nonEmptyCollectionRole->store();
-        
+
         $this->rootCollection = $this->nonEmptyCollectionRole->addRootCollection();
         $this->rootCollection->store();
-        
+
         $this->collection = new Opus_Collection();
         $this->rootCollection->addFirstChild($this->collection);
         $this->collection->store();
 
-        $this->anotherCollection = new Opus_Collection();        
+        $this->anotherCollection = new Opus_Collection();
         $this->rootCollection->addLastChild($this->anotherCollection);
         $this->anotherCollection->store();
     }
 
-    public function tearDown() {        
+    public function tearDown() {
         if (!is_null($this->nonEmptyCollectionRole) && !is_null($this->nonEmptyCollectionRole->getId())) {
             $this->nonEmptyCollectionRole->delete();
         }
@@ -153,7 +153,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->assertController('collection');
         $this->assertAction('new');
     }
-    
+
     public function testNewActionWithMissingParams() {
         $this->dispatch('/admin/collection/new');
         $this->assertRedirect();
@@ -248,10 +248,10 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
      * Anti-Regression Test for bug ticket OPUSVIER-1823
      */
     public function testCollectionRoleGetsTranslatedAsLink() {
-        $this->dispatch('/admin/collection/show/id/' . $this->collection->getId());       
+        $this->dispatch('/admin/collection/show/id/' . $this->collection->getId());
         $this->assertContains('<a href="/admin/collection/show/id/' . $this->rootCollection->getId() . '">default_collection_role_test2role</a>', $this->getResponse()->getBody());
     }
-    
+
     /**
      * Anti-Regression Test for bug ticket OPUSVIER-1823
      */
@@ -259,6 +259,15 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->dispatch('/admin/collection/show/id/' . $this->rootCollection->getId());
         $this->assertContains('default_collection_role_test2role', $this->getResponse()->getBody());
         $this->assertNotContains('<a href="/admin/collection/show/id/' . $this->rootCollection->getId() . '">default_collection_role_test2role</a>', $this->getResponse()->getBody());
+    }
+
+    /**
+     * Anti-Regression Test for bug ticket OPUSVIER-1889.
+     */
+    public function testCancelAssignCollection() {
+        $this->dispatch('/admin/collection/assign/document/40');
+        $body = $this->getResponse()->getBody();
+        $this->assertNotContains('/admin/documents/edit/id/40', $body);
     }
 
 }
