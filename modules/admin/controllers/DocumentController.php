@@ -954,7 +954,7 @@ class Admin_DocumentController extends Controller_Action {
                             $subform->setLegend($field->getValueModelClass()); // TODO remove/replace
                             $remove = new Zend_Form_Element_Submit('remove');
                             $remove->setValue($field->getValueModelClass() . $index2);
-                            $remove->setLabel('Remove'); // TODO translate model specific
+                            $remove->setLabel('admin_document_button_remove');
                             $subform->addElement($remove);
                             $fieldNameSub->addSubForm($subform, $index2);
                             $form->addSubForm($fieldNameSub, $fieldName);

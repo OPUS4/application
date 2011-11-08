@@ -259,6 +259,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_button_remove">
+      <tuv xml:lang="en">
+        <seg>Remove</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entfernen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_document_button_save">
       <tuv xml:lang="en">
         <seg>Save</seg>
