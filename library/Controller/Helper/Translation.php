@@ -34,22 +34,62 @@
 
 /**
  * Helper for handling translations.
+ *
+ * This class keeps some of the special code generating translation keys out of
+ * the controllers and view scripts.
  */
 class Controller_Helper_Translation extends Zend_Controller_Action_Helper_Abstract {
 
     /**
      * Gets called when the helper is used like a method of the broker.
      *
-     * @return array
+     * @param string $modelName
+     * @param string $fieldName
+     * @param string $value
+     * @return string
      */
     public function direct($modelName, $fieldName, $value) {
         return getKeyForValue($modelName, $fieldName, $value);
     }
 
+    /**
+     * Returns translation key for a value of a selection field.
+     * @param string $modelName
+     * @param string $fieldName
+     * @param string $value
+     * @return string Translation key
+     */
     public function getKeyForValue($modelName, $fieldName, $value) {
-        return $modelName . '_' . $fieldName . '_Value_' . ucfirst($value);
+        // The 'Type' and the 'Language' field of Opus_Document currently need
+        // to be handled separately, since their key don't have a prefix.
+        if ($modelName === 'Opus_Document'
+                && ($fieldName === 'Language'
+                        || $fieldName === 'Type')) {
+            return $value;
+        }
+        else {
+            return $modelName . '_' . $fieldName . '_Value_' . ucfirst($value);
+        }
     }
 
+    /**
+     * Returns translation key for a field.
+     *
+     * Currently the names of the fields are used as key, except for the 'Type'
+     * fields which are present in multiple models.
+     *
+     * @param string $modelName
+     * @param string $fieldName
+     * @return string Translation key
+     */
+    public function getKeyForField($modelName, $fieldName) {
+        if ($fieldName === 'Type') {
+            return $modelName . '_' . $fieldName;
+        }
+        else {
+            return $fieldName;
+        }
+    }
 
 }
 

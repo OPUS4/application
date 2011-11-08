@@ -49,6 +49,34 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
     private $__logger;
 
     /**
+     * Controller helper for translations.
+     * @var Controller_Helper_Translation
+     */
+    private $__translation;
+
+    /**
+     * Current view.
+     * @var Zend_View_Interface
+     */
+    private $__view;
+
+    /**
+     * Constructs View_Helper_FormatValue.
+     */
+    public function __construct() {
+        $this->__translation =
+                Zend_Controller_Action_HelperBroker::getStaticHelper(
+                        'Translation');
+    }
+
+    /**
+     * Sets the current view, so it can be used by helper.
+     */
+    public function setView(Zend_View_Interface $view) {
+        $this->__view = $view;
+    }
+
+    /**
      * Returns instance of the view helper.
      * @return View_Helper_FormatValue
      */
@@ -59,9 +87,10 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
     /**
      * Formats value that is instance of Opus_Model_Abstract.
      * @param Opus_Model_Abstract $field
+     * @param string Name of model for field (default = null)
      * @return string Formatted output
      */
-    public function formatModel($field) {
+    public function formatModel($field, $model = null) {
         if ($field instanceof Opus_Date) {
             return $this->formatDate($field);
         }
@@ -89,7 +118,23 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
                 }
             }
             else {
-                return $field->getValue();
+                if ($field->isSelection()) {
+                    $value = $field->getValue();
+                    $key = $this->__translation->getKeyForValue($model, $field->getName(), $value);
+                    return $this->__view->translate($key);
+                }
+                else if ($field->isCheckbox()) {
+                    if ($field->getValue()) {
+                        $key = 'Field_Value_True';
+                    }
+                    else {
+                        $key = 'Field_Value_False';
+                    }
+                    return $this->__view->translate($key);
+                }
+                else {
+                    return $field->getValue();
+                }
             }
         }
     }
@@ -121,6 +166,7 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
      * Formats value for output on metadata overview page.
      *
      * @param Field value
+     * @param string Name of model for field
      * @return string Formatted output
      *
      * TODO some values need to be translated (others don't)
@@ -128,12 +174,12 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
      * TODO can't get list of allowed values from model
      * TODO some things have special methods (Person->getDisplayName())
      */
-    public function format($value) {
+    public function format($value, $model = null) {
         if ($value instanceof Opus_Model_Abstract) {
-            return $this->formatModel($value);
+            return $this->formatModel($value, $model);
         }
         if ($value instanceof Opus_Model_Field) {
-            return $this->formatModel($value);
+            return $this->formatModel($value, $model);
         }
         else {
             $this->getLogger()->debug('Formatting ' . $value);

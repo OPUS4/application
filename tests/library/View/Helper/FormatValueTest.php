@@ -36,54 +36,52 @@
  */
 class View_Helper_FormatValueTest extends ControllerTestCase {
 
-    public function testViewHelperReturnsItself() {
-        $helper = new View_Helper_FormatValue();
+    private $__helper;
 
-        $this->assertEquals($helper, $helper->formatValue());
+    public function setUp() {
+        parent::setUp();
+        $this->__helper = new View_Helper_FormatValue();
+        $this->__helper->setView(Zend_Registry::get('Opus_View'));
+    }
+
+    public function testViewHelperReturnsItself() {
+        $this->assertEquals($this->__helper, $this->__helper->formatValue());
     }
 
     public function testFormatValueForNull() {
-        $helper = new View_Helper_FormatValue();
-
-        $ouput = $helper->format(null);
+        $ouput = $this->__helper->format(null);
 
         $this->assertTrue(empty($output));
     }
 
     public function testFormatValueForString() {
-        $helper = new View_Helper_FormatValue();
-
         $value = "Test";
 
-        $output = $helper->format($value);
+        $output = $this->__helper->format($value);
 
         $this->assertEquals($value, $output);
     }
 
-    public function testFormatValueForField() {
-        $helper = new View_Helper_FormatValue();
-
+    public function testFormatValueForSelectField() {
         $doc = new Opus_Document();
 
         $field = $doc->getField('Language');
 
         $field->setValue('deu');
 
-        $output = $helper->format($field);
+        $output = $this->__helper->format($field, 'Opus_Document');
 
-        $this->assertEquals('deu', $output);
+        $this->assertEquals('German', $output);
     }
 
     public function testFormatValueForYear() {
-        $helper = new View_Helper_FormatValue();
-
         $doc = new Opus_Document();
 
         $field = $doc->getField('PublishedYear');
 
         $field->setValue(2010);
 
-        $output = $helper->format($field);
+        $output = $this->__helper->format($field);
 
         $this->assertEquals('2010', $output);
     }
@@ -95,27 +93,23 @@ class View_Helper_FormatValueTest extends ControllerTestCase {
      * TODO figure out unit test that checks all locales
      */
     public function testFormatValueForDate() {
-        $helper = new View_Helper_FormatValue();
-
         $doc = new Opus_Document(3);
 
         $field = $doc->getField('ThesisDateAccepted');
 
-        $output = $helper->format($field);
+        $output = $this->__helper->format($field);
 
         $this->assertEquals('2002/06/17', $output);
     }
 
     public function testFormatValueForPublicationState() {
-        $helper = new View_Helper_FormatValue();
-
         $doc = new Opus_Document(3);
 
         $field = $doc->getField('PublicationState');
 
-        $output = $helper->format($field);
+        $output = $this->__helper->format($field, 'Opus_Document');
 
-        $this->assertEquals('draft', $output);
+        $this->assertEquals('Draft', $output);
     }
 
 }

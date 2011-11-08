@@ -159,6 +159,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
 
+        // Make View available to unit test (TODO maybe there is a better way?)
+        Zend_Registry::set('Opus_View', $view);
+
         return $view;
     }
 
@@ -247,7 +250,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             $language = 'en';
             $logger->debug("language need to be set");
             $supportedLanguages = array();
-            $config = $this->getResource('configuration');            
+            $config = $this->getResource('configuration');
             if (isset($config->supportedLanguages)) {
                 $supportedLanguages = explode(",", $config->supportedLanguages);
                 $logger->debug(count($supportedLanguages) . " supported languages: " . $config->supportedLanguages);
@@ -321,7 +324,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     /**
      * Setup session.
      *
-     * @return Zend_Session_Namespace 
+     * @return Zend_Session_Namespace
      */
     protected function _initSession() {
         $this->bootstrap(array('Database'));
@@ -338,9 +341,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $translate = $this->getResource('Translation');
 
         $languages = array();
-        foreach (Opus_Language::getAllActiveTable() as $languageRow) {            
+        foreach (Opus_Language::getAllActiveTable() as $languageRow) {
             $ref_name = $languageRow['ref_name'];
-            $part2_t = $languageRow['part2_t'];            
+            $part2_t = $languageRow['part2_t'];
             $languages[$part2_t] = $translate->translate($ref_name);
         }
         Zend_Registry::set('Available_Languages', $languages);

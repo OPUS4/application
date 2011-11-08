@@ -58,11 +58,7 @@
         <?PHP if (!empty($value)) : ?>
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
             <span class="label"><?=$this->translate($field->getName())?></span>
-            <?PHP if ($field->isSelection()) : ?>
-            <span class="value"><?=$this->translate($field->getValue())?></span>
-            <?PHP else : ?>
-            <span class="value"><?=$field->getValue()?></span>
-            <?PHP endif; ?>
+            <span class="value"><?=htmlspecialchars($this->formatValue()->format($field, 'Opus_Document'))?></span>
         </div>
         <?PHP endif; ?>
         <?PHP endforeach; ?>
@@ -144,10 +140,10 @@
         <?PHP foreach($persons as $index => $person) : ?>
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
 
-            <?PHP foreach($this->overviewHelper->getValues($person) as $key => $value) : ?>
+            <?PHP foreach($this->overviewHelper->getFields($person) as $key => $value) : ?>
             <div>
                 <span class="label"><?=$this->translate($key)?></span>
-                <span class="value"><?=htmlspecialchars($this->formatValue()->format($value))?></span>
+                <span class="value"><?=htmlspecialchars($this->formatValue()->format($value, 'Opus_Person'))?></span>
             </div>
             <?PHP endforeach; ?>
 
@@ -214,10 +210,10 @@
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
             <div class="Reference">
                 <span class="Reference label"><?=htmlspecialchars($reference->getLabel()) ?>
-                    <span style="font-weight: normal">(<?=htmlspecialchars($reference->getType())?>)</span>
+                    <span style="font-weight: normal">(<?=htmlspecialchars($this->formatValue()->format($reference->getField('Type'), 'Opus_Reference'))?>)</span>
                 </span>
                 <span class="Reference value"><?=htmlspecialchars($reference->getValue()) ?>
-                    <span style="font-weight: normal">(<?=htmlspecialchars($reference->getRelation())?>)</span>
+                    <span style="font-weight: normal">(<?=htmlspecialchars($this->formatValue()->format($reference->getField('Relation'), 'Opus_Reference'))?>)</span>
                 </span>
 
             </div>
@@ -341,7 +337,7 @@
             <?PHP foreach($this->overviewHelper->getFieldsForGroup('other') as $index => $field) : ?>
             <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
                 <span class="label"><?=$this->translate($field->getName())?></span>
-                <span class="value"><?=htmlspecialchars($this->formatValue()->format($field))?></span>
+                <span class="value"><?=htmlspecialchars($this->formatValue()->format($field, 'Opus_Document'))?></span>
             </div>
             <?PHP endforeach; ?>
 
@@ -390,7 +386,7 @@
 
             <?PHP foreach($this->document->getNote() as $index => $note) : ?>
             <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
-                <span class="label"><?=htmlspecialchars($note->getVisibility())?></span>
+                <span class="label"><?=htmlspecialchars($this->formatValue()->format($note->getField('Visibility'), 'Opus_Note'))?></span>
                 <span class="value"><?=htmlspecialchars($note->getMessage())?></span>
             </div>
             <?PHP endforeach; ?>

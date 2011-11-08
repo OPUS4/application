@@ -137,6 +137,45 @@ class Admin_Model_DocumentHelperTest extends ControllerTestCase {
         }
     }
 
+    /**
+     * Test that getFields returns the fields of a model exluding empty ones.
+     */
+    public function testGetFields() {
+        $doc = new Opus_Document();
+
+        $helper = new Admin_Model_DocumentHelper($doc);
+
+        $person = new Opus_Person();
+
+        $person->setFirstName('John');
+        $person->setLastName('Doe');
+        $person->setEmail('john@test.org.dummy');
+
+        $doc->addPerson($person);
+
+        $persons = $doc->getPerson();
+
+        $person = $persons[0];
+
+        $fields = $helper->getFields($person);
+
+        $this->assertNotEmpty($fields);
+        $this->assertTrue(count($fields) == 4, count($fields));
+
+        $keys = array_keys($fields);
+
+        // Check that the expected fields are present
+        $this->assertContains('FirstName', $keys);
+        $this->assertContains('LastName', $keys);
+        $this->assertContains('SortOrder', $keys);
+        $this->assertContains('Email', $keys);
+
+        // Check that each key is associated with the matching field
+        foreach($fields as $name => $field) {
+            $this->assertEquals($name, $field->getName());
+        }
+    }
+
 }
 
 ?>

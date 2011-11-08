@@ -559,6 +559,24 @@
             </tuv>
         </tu>
 
+        <tu tuid="Field_Value_True">
+            <tuv xml:lang="en">
+                <seg>Yes</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Ja</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Field_Value_False">
+            <tuv xml:lang="en">
+                <seg>No</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Nein</seg>
+            </tuv>
+        </tu>
+
     </body>
 
 </tmx>

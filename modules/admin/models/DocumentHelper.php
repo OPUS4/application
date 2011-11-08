@@ -179,6 +179,30 @@ class Admin_Model_DocumentHelper {
     }
 
     /**
+     * Returns field instances for a model instance.
+     *
+     * Empty fields are not included.
+     *
+     * @param Opus_Model_Abstract $model
+     * @return array Opus_Model_Field instances
+     */
+    public function getFields($model) {
+        $fieldNames = $model->describe();
+
+        $fields = array();
+
+        foreach ($fieldNames as $name) {
+            $field = $model->getField($name);
+            $value = $field->getValue();
+            if (!empty($value)) {
+                $fields[$name] = $field;
+            }
+        }
+
+        return $fields;
+    }
+
+    /**
      * Returns array of values from multiple fields.
      *
      * For instance a single array containing different Opus_Title fields.
