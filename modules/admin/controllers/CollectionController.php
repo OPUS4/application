@@ -100,7 +100,7 @@ class Admin_CollectionController extends Controller_Action {
         }
         catch (Admin_Model_Exception $e) {
             $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
-        }       
+        }
     }
 
     private function changeCollectionVisibility($visibility) {
@@ -111,15 +111,15 @@ class Admin_CollectionController extends Controller_Action {
         }
         catch (Application_Exception $e) {
             $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
-        }        
+        }
     }
 
     public function hideAction() {
-        $this->changeCollectionVisibility(false);        
+        $this->changeCollectionVisibility(false);
     }
 
     public function unhideAction() {
-        $this->changeCollectionVisibility(true);        
+        $this->changeCollectionVisibility(true);
     }
 
     public function deleteAction() {
@@ -130,13 +130,13 @@ class Admin_CollectionController extends Controller_Action {
         }
         catch (Application_Exception $e) {
             $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
-        }        
+        }
     }
 
     public function showAction() {
         $roleId = $this->getRequest()->getParam('role');
         $id = null;
-        if (!is_null($roleId)) {            
+        if (!is_null($roleId)) {
             $collectionRole = new Opus_CollectionRole($roleId);
             $rootCollection = $collectionRole->getRootCollection();
             if (is_null($rootCollection)) {
@@ -159,25 +159,25 @@ class Admin_CollectionController extends Controller_Action {
             return;
         }
 
-        $collection = $collectionModel->getObject();        
+        $collection = $collectionModel->getObject();
         $this->view->breadcrumb = array_reverse($collection->getParents());
         $this->view->collections = $collection->getChildren();
         $this->view->collection_id = $collection->getId();
-        
+
         $role = $collection->getRole();
         $this->view->role_id    = $role->getId();
-        $this->view->role_name  = $role->getDisplayName();        
+        $this->view->role_name  = $role->getDisplayName();
     }
 
     public function createAction() {
         if (!$this->getRequest()->isPost()) {
             return $this->_redirectToAndExit('index', '', 'collectionroles');
         }
-        
+
         $data = $this->_request->getPost();
         $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('oid'));
         $collection = $collectionModel->getObject();
-        
+
         $form_builder = new Form_Builder();
         $form_builder->buildModelFromPostData($collection, $data['Opus_Model_Filter']);
         $form = $form_builder->build($this->__createFilter($collection));
@@ -193,7 +193,7 @@ class Admin_CollectionController extends Controller_Action {
             }
             $this->view->form = $form;
             return;
-        }       
+        }
         if (true === $collection->isNewRecord()) {
             $id = $this->getRequest()->getParam('id');
             $type = $this->getRequest()->getParam('type');
@@ -236,7 +236,7 @@ class Admin_CollectionController extends Controller_Action {
         if (is_null($documentId)) {
             return $this->_redirectToAndExit('index', array('failure' => 'document parameter missing'), 'collectionroles');
         }
-        
+
         if ($this->getRequest()->isPost() === true) {
             // Zuordnung des Dokuments zur Collection ist erfolgt
             $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
@@ -246,7 +246,7 @@ class Admin_CollectionController extends Controller_Action {
                     'Document successfully assigned to collection "' . $collectionModel->getDisplayName() . '".',
                     'document', 'admin', array('id' => $documentId, 'section' => 'collections'));
         }
-        
+
         $collectionId = $this->getRequest()->getParam('id');
         if (is_null($collectionId)) {
             // Einsprungseite anzeigen
@@ -266,13 +266,13 @@ class Admin_CollectionController extends Controller_Action {
             if (is_null($rootCollection)) {
                 // create empty root collection
                 $rootCollection = $collectionRole->addRootCollection();
-                $rootCollection->store();                
+                $rootCollection->store();
             }
-            
+
             array_push($this->view->collections,
                     array(
                         'id' => $rootCollection->getId(),
-                        'name' => $collectionRole->getDisplayName(),
+                        'name' => $this->view->translate('default_collection_role_' . $collectionRole->getDisplayName()),
                         'hasChildren' => (count($rootCollection->getChildren()) > 0)));
         }
         $this->view->documentId = $documentId;
