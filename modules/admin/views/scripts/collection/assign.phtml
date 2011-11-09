@@ -52,9 +52,9 @@
             <?php else : ?>
                 <?= htmlspecialchars($this->role_name) ?>
             <?php endif ?>
-        <?php elseif ($i === count($this->breadcrumb) - 1) : ?>            
+        <?php elseif ($i === count($this->breadcrumb) - 1) : ?>
             <?= htmlspecialchars($parent->getDisplayName()) ?>
-        <?php else : ?>            
+        <?php else : ?>
             <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'id' => $parent->getId(), 'document' => $this->documentId), null, true) ?>"><?= htmlspecialchars($parent->getDisplayName()) ?></a>
         <?php endif ?>
     <?php endforeach; ?>
@@ -62,7 +62,7 @@
 <?php endif ?>
 
 <div>
-<a class="add" href="<?=$this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'edit', 'id' => $this->documentId), null, true)?>"><?=$this->translate('admin_collections_collection_assign_abort')?></a>
+<a class="add" href="<?=$this->url(array('module' => 'admin', 'controller' => 'document', 'action' => 'edit', 'id' => $this->documentId, 'section' => 'collections'), null, true)?>"><?=$this->translate('admin_collections_collection_assign_abort')?></a>
 </div>
 
 <table class="collections">
@@ -73,7 +73,7 @@
                 <a href="<?=$this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'id' => $collection['id'], 'document' => $this->documentId), null, true)?>"><?= htmlspecialchars($collection['name']) ?></a>
             <?php else : ?>
                 <?= htmlspecialchars($collection['name']) ?>
-            <?php endif ?>            
+            <?php endif ?>
         </td>
         <td>
             <form method="post" action="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'id' => $collection['id'], 'document' => $this->documentId), null, true)?>">
