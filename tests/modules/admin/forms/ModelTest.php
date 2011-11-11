@@ -152,5 +152,15 @@ class Admin_Form_ModelTest extends ControllerTestCase {
         $this->assertEquals('SortOrder', $fields[8]);
     }
 
+    public function testCreateFormForTitleAbstract() {
+        $model = new Opus_TitleAbstract();
+
+        $form = new Admin_Form_Model($model);
+
+        $this->assertEquals(2, count($form->getElements()));
+        $this->assertNotNull($form->getElement('Language'));
+        $this->assertNotNull($form->getElement('Value'));
+    }
+
 }
 ?>
