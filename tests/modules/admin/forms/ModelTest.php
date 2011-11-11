@@ -119,6 +119,25 @@ class Admin_Form_ModelTest extends ControllerTestCase {
         $this->assertEquals('Value', $fields[1], 'Field Value should be second.');
     }
 
+    public function testGetVisibleFieldsForOpusTitle() {
+        $model = new Opus_Title();
+
+        $form = new Admin_Form_Model($model);
+
+        $fields = $form->getVisibleFields($model);
+
+        $this->assertNotEmpty($fields);
+        $this->assertEquals(3, count($fields));
+        $this->assertContains('Type', $fields);
+        $this->assertContains('Language', $fields);
+        $this->assertContains('Value', $fields);
+
+        // Verify order
+        $this->assertEquals('Type', $fields[0], 'Field Type should be first.');
+        $this->assertEquals('Language', $fields[1], 'Field Language should be second.');
+        $this->assertEquals('Value', $fields[2], 'Field Value should be third.');
+    }
+
     public function testGetVisibleFieldsForOpusPerson() {
         $model = new Opus_Person();
 
@@ -160,6 +179,28 @@ class Admin_Form_ModelTest extends ControllerTestCase {
         $this->assertEquals(2, count($form->getElements()));
         $this->assertNotNull($form->getElement('Language'));
         $this->assertNotNull($form->getElement('Value'));
+    }
+
+    public function testCreateFormForIdentifier() {
+        $model = new Opus_Identifier();
+
+        $form = new Admin_Form_Model($model);
+
+        $this->assertEquals(2, count($form->getElements()));
+        $this->assertNotNull($form->getElement('Type'));
+        $this->assertNotNull($form->getElement('Value'));
+    }
+
+    public function testCreateFormForReference() {
+        $model = new Opus_Reference();
+
+        $form = new Admin_Form_Model($model);
+
+        $this->assertEquals(4, count($form->getElements()));
+        $this->assertNotNull($form->getElement('Type'));
+        $this->assertNotNull($form->getElement('Value'));
+        $this->assertNotNull($form->getElement('Label'));
+        $this->assertNotNull($form->getElement('Relation'));
     }
 
 }
