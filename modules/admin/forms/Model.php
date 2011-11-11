@@ -427,8 +427,11 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         }
         else if (!empty($this->model)) {
             if ($this->model instanceof Opus_Model_Field) {
-                // only used for editing persons in Metadata form
-                return $this->model->getLinkModelClass();
+                $modelClass = $this->model->getLinkModelClass();
+                if (empty($modelClass)) {
+                    $modelClass = $this->model->getValueModelClass();
+                }
+                return $modelClass;
             }
             else {
                 return get_class($this->model);

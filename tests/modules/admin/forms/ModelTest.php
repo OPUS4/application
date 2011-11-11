@@ -212,5 +212,19 @@ class Admin_Form_ModelTest extends ControllerTestCase {
         $this->assertEquals('disabled', $form->getElement('ServerDatePublished')->getAttrib('disabled'));
     }
 
+    public function testSortOrderForOpusIdentifierCreatedForField() {
+        $doc = new Opus_Document();
+
+        $field = $doc->getField('Identifier');
+
+        $form = new Admin_Form_Model($field);
+
+        $fields = $form->getVisibleFields(null);
+
+        $this->assertEquals(2, count($fields));
+        $this->assertEquals('Type', $fields[0]);
+        $this->assertEquals('Value', $fields[1]);
+    }
+
 }
 ?>
