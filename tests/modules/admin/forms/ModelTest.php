@@ -203,5 +203,14 @@ class Admin_Form_ModelTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('Relation'));
     }
 
+    public function testDisabledFieldsOfOpusDocument() {
+        $model = new Opus_Document();
+
+        $form = new Admin_Form_Model($model);
+
+        $this->assertEquals('disabled', $form->getElement('ServerDateModified')->getAttrib('disabled'));
+        $this->assertEquals('disabled', $form->getElement('ServerDatePublished')->getAttrib('disabled'));
+    }
+
 }
 ?>
