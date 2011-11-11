@@ -33,23 +33,32 @@
  */
 
 /**
- *
- *
- *
+ * Dynamic form for editing model classes.
  */
 class Admin_Form_Model extends Zend_Form_SubForm {
 
     /**
-     * Model class for the form.
+     * Name of model class for form.
      * @var string
      */
     private $modelClazz;
+
+    /**
+     * Instance of model for form.
+     * @var Opus_Model_Abstract
+     */
+    private $model;
 
     /**
      * Visible fields in form.
      * @var array
      */
     private $includedFields;
+
+    /**
+     * Configuration for form for model class.
+     */
+    private $__formConfig;
 
     /**
      * Logger for this class.
@@ -59,20 +68,24 @@ class Admin_Form_Model extends Zend_Form_SubForm {
 
     /**
      * Constructs form for Opus_Model_Abstract instance.
-     * @param <type> $model
-     * @param <type> $clear
+     * @param multi $clazz
+     * @param array $includedFields
      */
     public function __construct($clazz, $includedFields = null) {
         parent::__construct();
+
+        $this->__formConfig = new Admin_Model_FormConfig();
 
         $this->includedFields = $includedFields;
 
         if ($clazz instanceof Opus_Model_Field) {
             $this->modelClazz = null;
+            $this->model = $clazz;
             $this->_init($clazz);
         }
         elseif ($clazz instanceof Opus_Model_Abstract) {
             $this->modelClazz = null;
+            $this->model = $clazz;
             $this->_init($clazz);
         }
         else {
@@ -81,6 +94,10 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         }
     }
 
+    /**
+     * Constructs form.
+     * @param type $field
+     */
     protected function _init($field = null) {
         if (!empty($field) && $field instanceof Opus_Model_Field) {
             $linkModelClass = $field->getLinkModelClass();
@@ -102,7 +119,7 @@ class Admin_Form_Model extends Zend_Form_SubForm {
             $model = new $this->modelClazz;
         }
 
-        $modelFields = $model->describe();
+        $modelFields = $this->getVisibleFields($model);
 
         $filteredFields = array();
 
@@ -120,27 +137,26 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         // iterate through fields and generate form elements
         foreach ($modelFields as $fieldName) {
             $field = $model->getField($fieldName);
+
             if ($model instanceof Opus_Document && $field->getName() === 'Type') {
                 $element = $this->_getElementForField($model, $field, 'DocType');
             }
             else {
                 $element = $this->_getElementForField($model, $field);
             }
+
             // $element->setName($model->getName());
             if ($field->isMandatory()) {
                 $element->setRequired(true);
             }
+
             $validator = $field->getValidator();
+
             if (!empty($validator)) {
                 $element->addValidator($validator);
             }
+
             $this->addElement($element);
-//            switch ($fieldName) {
-//                case 'Licence':
-//                    break;
-//                default:
-//                    break;
-//            }
         }
     }
 
@@ -244,6 +260,10 @@ class Admin_Form_Model extends Zend_Form_SubForm {
             default:
                 $element->setLabel($field->getName());
                 break;
+        }
+
+        if ($this->isFieldDisabled($fieldName)) {
+            $element->setAttrib('disabled', 'disabled');
         }
 
         return $element;
@@ -369,6 +389,78 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         }
 
         return $this->__logger;
+    }
+
+    /**
+     * Returns the list of fields of model that should be part of form.
+     * @param Opus_Model_Abstract $model
+     * @return array Names of fields
+     */
+    public function getVisibleFields($model) {
+        $fields = $this->__formConfig->getFields($this->getModelClass());
+
+        if (empty($fields)) {
+            $modelFields = $model->describe();
+
+            $fields = array();
+
+            foreach ($modelFields as $fieldName) {
+                if (!$this->isFieldHidden($fieldName)) {
+                    $fields[] = $fieldName;
+                }
+            }
+
+            return $fields;
+        }
+        else {
+            return $fields;
+        }
+    }
+
+    /**
+     * Return name of model class for form.
+     * @return string Name of model class
+     */
+    public function getModelClass() {
+        if (!empty($this->modelClazz)) {
+            return $this->modelClazz;
+        }
+        else if (!empty($this->model)) {
+            if ($this->model instanceof Opus_Model_Field) {
+                // only used for editing persons in Metadata form
+                return $this->model->getLinkModelClass();
+            }
+            else {
+                return get_class($this->model);
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Checks if field is disabled for model class of form.
+     * @param string $fieldName Name of field
+     * @return boolean True - if field disabled
+     */
+    public function isFieldDisabled($fieldName) {
+        $disabledFields = $this->__formConfig->getDisabledFields(
+                $this->getModelClass());
+
+        return in_array($fieldName, $disabledFields);
+    }
+
+    /**
+     * Checks if field is hidden for model class of form.
+     * @param string $fieldName Name of field
+     * @return boolean True - if field is hidden
+     */
+    public function isFieldHidden($fieldName) {
+        $hiddenFields = $this->__formConfig->getHiddenFields(
+                $this->getModelClass());
+
+        return in_array($fieldName, $hiddenFields);
     }
 
 }
