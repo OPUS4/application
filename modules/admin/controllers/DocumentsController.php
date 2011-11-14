@@ -134,7 +134,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         else if (isset($config->admin->documents->defaultview)) {
             $state = $config->admin->documents->defaultview;
         }
-        
+
         if (!empty($state) && !in_array($state, $this->docOptions)) {
             $state = 'unpublished';
         }
@@ -145,7 +145,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         if (true === array_key_exists('sort_order', $data)) {
             $sort_order = $data['sort_order'];
         }
-        
+
         $this->view->sort_order = $sort_order;
 
         if (!empty($collectionId)) {
@@ -221,55 +221,4 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         $this->view->directionLinks = $directionLinks;
     }
 
-    /**
-     * Save model instance
-     *
-     * @return void
-     */
-    public function createAction() {
-        if ($this->_request->isPost() === true) {
-            $data = $this->_request->getPost();
-            $form_builder = new Form_Builder();
-            $id = $this->getRequest()->getParam('id');
-            $documentInSession = new Zend_Session_Namespace('document');
-            $document = $documentInSession->document;
-            $form_builder->buildModelFromPostData($document, $data['Opus_Model_Filter']);
-            $form = $form_builder->build($this->__createFilter($document));
-            if (array_key_exists('submit', $data) === false) {
-                $action_url = $this->view->url(array("action" => "create"));
-                $form->setAction($action_url);
-                $this->view->form = $form;
-            }
-            else {
-                try {
-                    if ($form->isValid($data) === true) {
-                        // store document
-                        $document->store();
-
-                        // The first 3 params are module, controller and action.
-                        // Additional parameters are passed through.
-                        $params = $this->getRequest()->getUserParams();
-                        $module = array_shift($params);
-                        $controller = array_shift($params);
-                        $action = array_shift($params);
-                        $this->_redirectTo('edit', '', $controller, $module, $params);
-                    }
-                    else {
-                        $this->view->form = $form;
-                    }
-                }
-                catch (Exception $e) {
-                    echo $e->getMessage();
-                }
-            }
-            $this->view->title = $this->view->translate('admin_documents_edit', $id);
-            $this->view->docHelper = new Review_Model_DocumentAdapter($this->view, $document);
-            // $this->renderScript('documents/edit.phtml');
-        }
-        else {
-            $this->_redirectTo('edit');
-        }
-    }
-
-    
 }
