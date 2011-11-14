@@ -56,6 +56,50 @@ class Review_Model_DocumentAdapterTest extends ControllerTestCase {
         $this->assertFalse($docAdapter->hasFiles());
     }
 
+    public function testGetFileCount() {
+        $view = Zend_Registry::get('Opus_View');
+
+        $doc = new Opus_Document(1);
+
+        $docAdapter = new Review_Model_DocumentAdapter($view, $doc);
+
+        $this->assertEquals(2, $docAdapter->getFileCount());
+    }
+
+    public function testGetFileCountZero() {
+        $view = Zend_Registry::get('Opus_View');
+
+        $doc = new Opus_Document();
+
+        $docAdapter = new Review_Model_DocumentAdapter($view, $doc);
+
+        $this->assertEquals(0, $docAdapter->getFileCount());
+    }
+
+    public function testIsBelongsToBibliographyTrue() {
+        $view = Zend_Registry::get('Opus_View');
+
+        $doc = new Opus_Document();
+
+        $doc->setBelongsToBibliography(true);
+
+        $docAdapter = new Review_Model_DocumentAdapter($view, $doc);
+
+        $this->assertTrue($docAdapter->isBelongsToBibliography());
+    }
+
+    public function testIsBelongsToBibliographyFalse() {
+        $view = Zend_Registry::get('Opus_View');
+
+        $doc = new Opus_Document();
+
+        $doc->setBelongsToBibliography(false);
+
+        $docAdapter = new Review_Model_DocumentAdapter($view, $doc);
+
+        $this->assertFalse($docAdapter->isBelongsToBibliography());
+    }
+
 }
 
 ?>

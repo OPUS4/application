@@ -263,6 +263,10 @@ class Review_Model_DocumentAdapter {
         }
     }
 
+    public function isBelongsToBibliography() {
+        return $this->document->getBelongsToBibliography();
+    }
+
     /**
      * Returns true if the document is deleted.
      * @return boolean
@@ -283,6 +287,12 @@ class Review_Model_DocumentAdapter {
         $field = $this->document->getField('File');
         $values = $field->getValue();
         return !empty($values);
+    }
+
+    public function getFileCount() {
+        $field = $this->document->getField('File');
+        $values = $field->getValue();
+        return count($values);
     }
 
     public function getReviewer() {

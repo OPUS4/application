@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
 <!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
 <tmx version="1.4">
- 
+
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
- 
+
   <body>
-  
+
     <tu tuid="admin_documents_index">
       <tuv xml:lang="en">
         <seg>Administration of Documents</seg>
@@ -15,7 +15,7 @@
         <seg>Administration der Dokumente</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="document_no_title">
       <tuv xml:lang="en">
         <seg>No title specified for document ID </seg>
@@ -78,7 +78,7 @@
         <seg>Publizierte</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_documents_state_unpublished">
       <tuv xml:lang="en">
         <seg>Unpublished</seg>
@@ -87,7 +87,7 @@
         <seg>Nicht publizierte</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_documents_state_deleted">
       <tuv xml:lang="en">
         <seg>Deleted</seg>
@@ -96,7 +96,7 @@
         <seg>Gelöschte</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="docs_edit">
       <tuv xml:lang="en">
         <seg>Edit</seg>
@@ -105,7 +105,7 @@
         <seg>Ändern</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="docs_delete">
       <tuv xml:lang="en">
         <seg>Delete</seg>
@@ -114,7 +114,7 @@
         <seg>Löschen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_doc_undelete">
       <tuv xml:lang="en">
         <seg>Undelete (publish again)</seg>
@@ -231,7 +231,7 @@
         <seg>Dokument (%1$s) Metadaten ändern</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_documents_show">
       <tuv xml:lang="en">
         <seg>Document Metadata</seg>
@@ -249,7 +249,7 @@
         <seg>Dokument freischalten</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_documents_unpublish">
       <tuv xml:lang="en">
         <seg>Unpublish document</seg>
@@ -258,7 +258,7 @@
         <seg>Dokument zurückziehen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_documents_collectionsassigned">
       <tuv xml:lang="en">
         <seg>The document is assigned to the following collections:</seg>
@@ -267,7 +267,7 @@
         <seg>Das Dokument ist folgenden Sammlungen zugewiesen:</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_documents_nocollectionsassigned">
       <tuv xml:lang="en">
         <seg>The document is not assigned to a collection.</seg>
@@ -276,7 +276,7 @@
         <seg>Das Dokument ist keiner Sammlung zugewiesen.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_documents_unlinkcollection">
       <tuv xml:lang="en">
         <seg>Remove document from this collection</seg>
@@ -385,6 +385,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_documents_link_filemanager">
+      <tuv xml:lang="en">
+        <seg>Show FileManager</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dateimanager anzeigen</seg>
+      </tuv>
+    </tu>
+
   </body>
-  
+
 </tmx>

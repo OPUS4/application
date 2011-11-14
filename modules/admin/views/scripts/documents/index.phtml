@@ -82,7 +82,7 @@
     </div>
 
     <?= $this->paginationControl($this->paginator, NULL, 'itemCount_pagination.phtml') ?>
-    
+
     <?= $this->paginationControl($this->paginator, 'Sliding', 'results_pagination.phtml') ?>
 
     <table class="documents">
@@ -108,7 +108,18 @@
                 (<span class="pubDate"><?= $document->getYear() ?></span>)
             </td>
             <td class="doctype">
-                <span class="doctype"><?= $document->getDocType() ?></span>
+                <span class="doctype"><?=htmlspecialchars($this->translate($document->getDocType())) ?></span>
+            </td>
+            <td class="files">
+                <span class="files">
+                    <a href="<?=$this->documentUrl()->adminFilemanager($docId)?>"
+                       title="<?=$this->translate("admin_documents_link_filemanager")?>"><?=$document->getFileCount() ?></a>
+                </span>
+            </td>
+            <td class="bibliography">
+                <span class="bibliography">
+                    <?= $this->translate($document->isBelongsToBibliography() ? 'Field_Value_True' : 'Field_Value_False') ?>
+                </span>
             </td>
             <?PHP if (!empty($this->collection)) : ?>
             <td class="">
