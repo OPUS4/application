@@ -51,6 +51,29 @@ class Controller_Helper_Documents extends Zend_Controller_Action_Helper_Abstract
     }
 
     /**
+     * Returns true if the document identifier is valid.
+     * @param int $docId Document identifier
+     * @return true - if document identifier is valid
+     */
+    public function isValidId($docId) {
+        // Check if parameter is formally correct
+        if (empty($docId) || !is_numeric($docId)) {
+            return false;
+        }
+
+        // Check if document exists
+        // TODO more efficient way without need to intantiate document?
+        try {
+            $doc = new Opus_Document($docId);
+        }
+        catch (Opus_Model_NotFoundException $omnfe) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Returns documents from database for browsing.
      *
      * @param string $sortOrder
