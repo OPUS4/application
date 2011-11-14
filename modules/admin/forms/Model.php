@@ -61,6 +61,11 @@ class Admin_Form_Model extends Zend_Form_SubForm {
     private $__formConfig;
 
     /**
+     * Factory for form elements.
+     */
+    private $__formElementFactory;
+
+    /**
      * Logger for this class.
      * @var Zend_Log
      */
@@ -75,6 +80,8 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         parent::__construct();
 
         $this->__formConfig = new Admin_Model_FormConfig();
+
+        $this->__formElementFactory = new Admin_Model_FormElementFactory();
 
         $this->includedFields = $includedFields;
 
@@ -138,11 +145,12 @@ class Admin_Form_Model extends Zend_Form_SubForm {
         foreach ($modelFields as $fieldName) {
             $field = $model->getField($fieldName);
 
-            if ($model instanceof Opus_Document && $field->getName() === 'Type') {
-                $element = $this->_getElementForField($model, $field, 'DocType');
-            }
-            else {
-                $element = $this->_getElementForField($model, $field);
+            $element = $this->__formElementFactory->getElementForField($model,
+                    $field);
+
+            // Disable element if necessary
+            if ($this->isFieldDisabled($fieldName)) {
+                $element->setAttrib('disabled', 'disabled');
             }
 
             // $element->setName($model->getName());
@@ -221,154 +229,6 @@ class Admin_Form_Model extends Zend_Form_SubForm {
                 }
             }
         }
-    }
-
-    /**
-     * Generates a Zend_Form_Element for model field.
-     *
-     * TODO add method to Opus_Field to *getField(Render)Type()*
-     */
-    protected function _getElementForField($model, $field, $flag = null) {
-        $element = null;
-
-        if ($field->isCheckbox()) {
-            $element = $this->_createCheckbox($field);
-        }
-        elseif ($field->isSelection()) {
-            if ($model instanceOf Opus_Model_Dependent_Link_Abstract) {
-                $modelName = $model->getModelClass();
-            }
-            else {
-                $modelName = get_class($model);
-            }
-            $element = $this->_createSelect($modelName, $field, $flag);
-        }
-        elseif ($field->isTextarea()) {
-            $element = $this->_createTextarea($field);
-        }
-        else {
-            $element = $this->_createTextfield($field);
-        }
-
-        $fieldName = $field->getName();
-
-        // TODO consider always prepending the class
-        switch ($fieldName) {
-            case "Type":
-                $element->setLabel(get_class($model) . "_" . $fieldName);
-                break;
-            default:
-                $element->setLabel($field->getName());
-                break;
-        }
-
-        if ($this->isFieldDisabled($fieldName)) {
-            $element->setAttrib('disabled', 'disabled');
-        }
-
-        return $element;
-    }
-
-    /**
-     * Creates checkbox input element.
-     * @param Opus_Model_Field $field
-     * @return Zend_Form_Element_Checkbox
-     */
-    protected function _createCheckbox($field) {
-        $name = $field->getName();
-        $checkbox = new Zend_Form_Element_Checkbox($name);
-        return $checkbox;
-    }
-
-    /**
-     * Create text input element.
-     * @param Opus_Model_Field $field
-     * @return Zend_Form_Element_Text
-     *
-     * TODO handle validation for Date fields
-     */
-    protected function _createTextfield($field) {
-        $name = $field->getName();
-        $textfield = new Zend_Form_Element_Text($name);
-        $textfield->setAttrib('size', 60);
-        return $textfield;
-    }
-
-    /**
-     * Creates textarea input element.
-     * @param Opus_Model_Field $field
-     * @return Zend_Form_Element_Textarea
-     */
-    protected function _createTextarea($field) {
-        $name = $field->getName();
-        $textarea = new Zend_Form_Element_Textarea($name);
-        $textarea->setAttrib('cols', 100);
-        $textarea->setAttrib('rows', 6);
-        return $textarea;
-    }
-
-    /**
-     * Creates select input element.
-     * @param Opus_Model_Field $field
-     * @param string $flag
-     * @return Zend_Form_Element_Select
-     */
-    protected function _createSelect($modelName, $field, $flag) {
-        $name = $field->getName();
-        $select = new Zend_Form_Element_Select($name);
-
-        // add message (null option)
-        // TODO only if null is allowed
-        // $message = Zend_Registry::get('Zend_Translate')->translate('choose_option');
-        // $select->addMultiOption('', $message);
-
-        // add possible values
-        if ($flag === 'DocType') {
-            $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-            $options = $docTypeHelper->getDocumentTypes();
-        }
-        else {
-            switch ($name) {
-                case 'ThesisPublisher':
-                    $options['nothing'] = 'admin_document_publisher_none';
-                    $options = array_merge($options, $field->getDefault());
-                    break;
-                case 'ThesisGrantor':
-                    $options['nothing'] = 'admin_document_grantor_none';
-                    $options = array_merge($options, $field->getDefault());
-                    break;
-                default:
-                    $options = $field->getDefault();
-                break;
-            }
-        }
-
-        foreach ($options as $index => $option) {
-            switch ($name) {
-                case 'Licence':
-                case 'ThesisPublisher':
-                case 'ThesisGrantor':
-                case 'Language':
-                    if ($option instanceof Opus_Model_Abstract) {
-                        $select->addMultiOption($option->getId(), $option);
-                    }
-                    else {
-                        $select->addMultiOption($index, $option);
-                    }
-                    break;
-                default:
-                    // TODO needed for any field?
-                    if ($flag === 'DocType') {
-                        $select->addMultiOption($option, $option);
-                    }
-                    else {
-                        $select->addMultiOption($option, $modelName . '_' . $name . '_Value_' . ucfirst($option));
-                    }
-                    break;
-            }
-        }
-
-        return $select;
     }
 
     /**
