@@ -1,12 +1,12 @@
 <?xml version="1.0" ?>
 <!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
 <tmx version="1.4">
- 
+
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
- 
+
   <body>
-  
+
     <tu tuid="admin_filemanager_index">
       <tuv xml:lang="en">
         <seg>Files</seg>
@@ -15,7 +15,7 @@
         <seg>Dateien</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_filemanager_nofiles">
       <tuv xml:lang="en">
         <seg>No files available for this document!</seg>
@@ -32,7 +32,7 @@
         <seg>Diese Datei löschen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_filemanager_uploadsuccess">
       <tuv xml:lang="en">
         <seg>Upload successful!</seg>
@@ -41,7 +41,7 @@
         <seg>Datei erfolgreich hochgeladen!</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_filemanager_uploadfailure">
       <tuv xml:lang="en">
         <seg>Upload NOT successful - please check write permissions for file directory!</seg>
@@ -50,7 +50,7 @@
         <seg>Datei konnte nicht erfolgreich hochgeladen werden - bitte prüfen Sie die Schreibberchtigung im Dokumentverzeichnis.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_filemanager_signsuccess">
       <tuv xml:lang="en">
         <seg>Successfully signed file!</seg>
@@ -59,7 +59,7 @@
         <seg>Datei wurde erfolgreich signiert.</seg>
       </tuv>
     </tu>
-      
+
     <tu tuid="admin_filemanager_delete_success">
       <tuv xml:lang="en">
         <seg>Successfully deleted file!</seg>
@@ -95,7 +95,7 @@
         <seg>Keine Dateien gefunden für dieses Dokument.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_filemanager_label_visibleinfrontdoor">
       <tuv xml:lang="en">
         <seg>Visible in Frontdoor</seg>
@@ -195,6 +195,42 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_filemanager_error_novalidid">
+      <tuv xml:lang="en">
+        <seg>No valid file ID provided.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei-ID existiert nicht.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_filemanager_delete">
+      <tuv xml:lang="en">
+        <seg>Delete File</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei löschen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_filemanager_delete_sure">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to delete the file?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sind Sie sicher, daß Sie die Datei löschen wollen?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_filemanager_error_filenotlinkedtodoc">
+      <tuv xml:lang="en">
+        <seg>File does not belong to document.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Datei gehört nicht zu dem angegebenen Dokument.</seg>
+      </tuv>
+    </tu>
+
   </body>
-  
+
 </tmx>

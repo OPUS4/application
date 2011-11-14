@@ -547,6 +547,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_error_novalidid">
+      <tuv xml:lang="en">
+        <seg>No valid document ID provided.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Dokumenten-ID existiert nicht.</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

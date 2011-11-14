@@ -48,7 +48,7 @@ class Admin_FilemanagerController extends Controller_Action {
         if (empty($docId)) {
             return $this->renderScript('filemanager/nodoc.phtml');
         }
-        
+
         $importUrl = $this->view->url(array(
             'module' => 'admin',
             'controller' => 'filebrowser',
@@ -61,7 +61,7 @@ class Admin_FilemanagerController extends Controller_Action {
     }
 
     public function uploadAction() {
-        
+
         $data = $this->_request->getPost();
 
         $uploadForm = $this->_getUploadForm();
@@ -97,9 +97,9 @@ class Admin_FilemanagerController extends Controller_Action {
             if (!empty($docId)) {
                 $postMaxSize = ini_get('post_max_size');
                 $uploadMaxFilesize = ini_get('upload_max_filesize');
-                
+
                 $maxSize = ($postMaxSize > $uploadMaxFilesize) ? $uploadMaxFilesize : $postMaxSize;
-                
+
                 $message = $this->view->translate('admin_filemanager_error_upload', '>' . $maxSize);
                 $this->_redirectTo('index', array('failure' => $message), 'filemanager', 'admin', array('docId' => $docId));
             }
@@ -120,14 +120,14 @@ class Admin_FilemanagerController extends Controller_Action {
     }
 
     protected function _prepareView() {
-        
+
         $data = $this->_request->getPost();
         $docId = $this->getRequest()->getParam('docId');
         $uploadForm = $this->_getUploadForm();
         $this->configureView($docId, $uploadForm);
         $document = $this->view->document->getDocument();
         $files = $this->getNumberedFiles($document);
-        
+
         $fileHelpers = array();
         if (!empty($files)) {
             foreach ($files as $file) {
@@ -179,24 +179,148 @@ class Admin_FilemanagerController extends Controller_Action {
 
     }
 
+    /**
+     * Action for deleting a file.
+     *
+     * The action redirects the request to a confirmation form bevor actually
+     * deleting the file.
+     *
+     * TODO catch invalid file IDs
+     */
     public function deleteAction() {
         $docId = $this->getRequest()->getParam('docId');
         $fileId = $this->getRequest()->getParam('fileId');
 
-        if (empty($fileId)) {
-            $this->_redirectTo('index', '', 'filemanager', 'admin', array('docId' => $docId));
+        $documents = $this->_helper->getHelper('Documents');
+
+        // TODO extend to cover invalid IDs
+        if (!$documents->isValidId($docId)) {
+            return $this->_redirectToAndExit('index', array('failure' =>
+                $this->view->translate('admin_document_error_novalidid')), 'documents', 'admin');
         }
+
+        if (!$this->_isValidFileId($fileId)) {
+            return $this->_redirectToAndExit('index', array('failure' =>
+                $this->view->translate('admin_filemanager_error_novalidid')), 'filemanager', 'admin', array('docId' => $docId));
+        }
+
+        if (!$this->_isFileBelongsToDocument($docId, $fileId)) {
+            return $this->_redirectToAndExit('index', array('failure' =>
+                $this->view->translate('admin_filemanager_error_filenotlinkedtodoc')), 'filemanager', 'admin', array('docId' => $docId));
+        }
+
+        switch ($this->_confirm($docId, $fileId)) {
+            case 'YES':
+                try {
+                    $file = new Opus_File($fileId);
+                    $file->doDelete($file->delete());
+                    $this->view->actionresult = $this->view->translate('admin_filemanager_delete_success');
+                }
+                catch (Opus_Storage_Exception $e) {
+                    $this->view->actionresult = $e->getMessage();
+                }
+
+                $this->_redirectTo('index', $this->view->translate('admin_filemanager_delete_success'), 'filemanager', 'admin', array('docId' => $docId));
+                break;
+            case 'NO':
+                $this->_redirectTo('index', null, 'filemanager', 'admin', array('docId' => $docId));
+                break;
+            default:
+                break;
+        }
+    }
+
+    /**
+     * Checks if a file id is formally correct and file exists.
+     * @param string $fileId
+     * @return boolean True if file ID is valid
+     */
+    protected function _isValidFileId($fileId) {
+        if (empty($fileId) || !is_numeric($fileId)) {
+            return false;
+        }
+
+        $file = null;
 
         try {
             $file = new Opus_File($fileId);
-            $file->doDelete($file->delete());
-            $this->view->actionresult = $this->view->translate('admin_filemanager_delete_success');
         }
-        catch (Opus_Storage_Exception $e) {
-            $this->view->actionresult = $e->getMessage();
+        catch (Opus_Model_NotFoundException $omnfe) {
+            return false;
         }
 
-        $this->_redirectTo('index', $this->view->translate('admin_filemanager_delete_success'), 'filemanager', 'admin', array('docId' => $docId));
+        return true;
+    }
+
+    /**
+     * Checks if a file ID is linked to a document.
+     * @param int $docId
+     * @param int $fileId
+     * @return boolean True - if the file is linked to the document
+     */
+    protected function _isFileBelongsToDocument($docId, $fileId) {
+        $doc = new Opus_Document($docId);
+
+        $files = $doc->getFile();
+
+        foreach ($files as $file) {
+            if ($file->getId() === $fileId) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Handles confirmation of action.
+     *
+     * The return value null means that the confirmation page should be shown.
+     *
+     * @param int $docId
+     * @param int $fileId
+     * @return string 'YES' if confirmed, 'NO' if denied, NULL otherwise
+     */
+    protected function _confirm($docId, $fileId) {
+        $sureyes = $this->getRequest()->getPost('sureyes');
+        $sureno = $this->getRequest()->getPost('sureno');
+
+        if (isset($sureyes) === true or isset($sureno) === true) {
+            // Safety question answered, deleting
+            if (isset($sureyes) === true) {
+                return 'YES';
+            }
+            else {
+                return 'NO';
+            }
+        }
+        else {
+            // show safety question
+            $this->view->title = $this->view->translate('admin_filemanager_delete');
+            $this->view->text = $this->view->translate('admin_filemanager_delete_sure', $fileId);
+            $yesnoForm = $this->_getConfirmationForm($fileId, 'delete');
+            $this->view->form = $yesnoForm;
+            $this->renderScript('document/confirm.phtml');
+        }
+    }
+
+    /**
+     * Returns form for asking yes/no question like 'Delete file?'.
+     *
+     * @param type $id
+     * @param type $action
+     * @return Admin_Form_YesNoForm
+     */
+    protected function _getConfirmationForm($id, $action) {
+        $yesnoForm = new Admin_Form_YesNoForm();
+        $idElement = new Zend_Form_Element_Hidden('id');
+        $idElement->setValue($id);
+        $yesnoForm->addElement($idElement);
+        $yesnoForm->setAction($this->view->url(array(
+            "controller" => "filemanager",
+            "action" => $action)));
+        $yesnoForm->setMethod('post');
+        return $yesnoForm;
     }
 
     /**
