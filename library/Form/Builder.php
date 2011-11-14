@@ -55,7 +55,7 @@ class Form_Builder {
     public function build(Opus_Model_Abstract $model) {
         $config = Zend_Registry::get('Zend_Config');
 		$this->DEBUG = (bool) $config->debug;
-        
+
         // Construct base form
         $form = new Zend_Form;
         $form->removeDecorator('DtDdWrapper');
@@ -92,7 +92,7 @@ class Form_Builder {
     private function __populateModel(Opus_Model_Abstract $model, array $data) {
         if ($model instanceof Opus_Date) {
             $this->log->debug('populateModel: Opus_Date');
-            
+
             $dateStr = $data['date'][1];
             $date = new Zend_Date($dateStr);
             $model->setZendDate($date);
@@ -285,7 +285,7 @@ class Form_Builder {
         else {
             $widget->setValue($fieldValue->get($format));
         }
-        
+
         $widget->setLabel($fieldName);
 
         $widget->setRequired(false);
@@ -396,7 +396,7 @@ class Form_Builder {
 
         $widget->removeDecorator('HtmlTag');
         $widget->setValue($fieldValue);
-        $widget->setLabel($fieldName);
+        $widget->setLabel(Zend_Controller_Action_HelperBroker::getStaticHelper('Translation')->getKeyForField($modelName, $fieldName));
         $widget->setRequired($field->isMandatory());
 
         $this->__addDescription($modelName . '_' . $fieldName, $widget);
@@ -430,13 +430,13 @@ class Form_Builder {
         $this->__addDescription($modelName . '_' . $fieldName, $widget);
         $fieldForm->addElement($widget);
     }
-    
+
     protected function _getFieldValues($field) {
         $fieldValues = $field->getValue();
 
         $valueModelClass = $field->getValueModelClass();
         $linkModelClass = $field->getLinkModelClass();
-        
+
         // If getter returns no value, initialize new values if field is
         // mandatory, since null-values will be ignored.
         if (true === empty($fieldValues) and (true === $field->isMandatory())) {
@@ -444,14 +444,14 @@ class Form_Builder {
                 $fieldValues = new $linkModelClass;
                 $target = new $valueModelClass;
                 $fieldValues->setModel($target);
-            } 
+            }
             else if (false === is_null($valueModelClass)) {
                 $fieldValues = new $valueModelClass;
-            } 
+            }
             else {
                 $fieldValues = '';
             }
-        } 
+        }
         else if (true === empty($fieldValues) and (true === is_null($field->getValueModelClass()))) {
             $fieldValues = '';
         }
@@ -460,7 +460,7 @@ class Form_Builder {
         if (false === is_array($fieldValues) and false === is_null($fieldValues)) {
             $fieldValues = array($fieldValues);
         }
-        
+
         return $fieldValues;
     }
 

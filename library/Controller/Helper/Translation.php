@@ -87,7 +87,12 @@ class Controller_Helper_Translation extends Zend_Controller_Action_Helper_Abstra
             return $modelName . '_' . $fieldName;
         }
         else {
-            return $fieldName;
+            switch ($modelName) {
+                case 'Opus_Language':
+                    return $modelName . '_' . $fieldName;
+                default:
+                    return $fieldName;
+            }
         }
     }
 
