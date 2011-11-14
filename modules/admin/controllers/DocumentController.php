@@ -351,6 +351,7 @@ class Admin_DocumentController extends Controller_Action {
             $this->view->text = $this->view->translate('admin_doc_publish_sure', $id);
             $yesnoForm = $this->_getConfirmationForm($id, 'publish');
             $this->view->form = $yesnoForm;
+            return $this->renderScript('document/confirm.phtml');
         }
     }
 
@@ -390,6 +391,7 @@ class Admin_DocumentController extends Controller_Action {
                 $this->view->text = $this->view->translate('admin_doc_delete_permanent_sure', $id);
                 $yesnoForm = $this->_getConfirmationForm($id, 'permanentdelete');
                 $this->view->form = $yesnoForm;
+                return $this->renderScript('document/confirm.phtml');
             }
         } else {
             $this->_redirectTo('index', null, 'documents', 'admin');
@@ -434,6 +436,7 @@ class Admin_DocumentController extends Controller_Action {
             $this->view->text = $this->view->translate('admin_doc_unpublish_sure', $id);
             $yesnoForm = $this->_getConfirmationForm($id, 'unpublish');
             $this->view->form = $yesnoForm;
+            return $this->renderScript('document/confirm.phtml');
         }
 
     }
@@ -513,6 +516,7 @@ class Admin_DocumentController extends Controller_Action {
                 $this->view->text = $this->view->translate('admin_doc_delete_sure', $id);
                 $yesnoForm = $this->_getConfirmationForm($id, 'delete');
                 $this->view->form = $yesnoForm;
+                return $this->renderScript('document/confirm.phtml');
             }
         }
     }
