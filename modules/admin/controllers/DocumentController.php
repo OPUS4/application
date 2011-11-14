@@ -737,16 +737,7 @@ class Admin_DocumentController extends Controller_Action {
     }
 
     /**
-     * Removes a value (model) from document.
-     */
-    public function removeAction() {
-
-    }
-
-    /**
      * Prepares URLs for action links, e.g frontdoor, delete, publish.
-     *
-     *
      */
     public function prepareActionLinks($model) {
         $actions = array();
@@ -761,13 +752,10 @@ class Admin_DocumentController extends Controller_Action {
         $action['url'] = $documentUrl->frontdoor($docId);
         $actions['frontdoor'] = $action;
 
-        // TODO should always be shown, or?
-        if ($docHelper->hasFiles()) {
-            $action = array();
-            $action['label'] = 'admin_document_files';
-            $action['url'] = $documentUrl->adminFileManager($docId);
-            $actions['files'] = $action;
-        }
+        $action = array();
+        $action['label'] = 'admin_document_files';
+        $action['url'] = $documentUrl->adminFileManager($docId);
+        $actions['files'] = $action;
 
         // TODO implement docHelper method
         // TODO: Disabled, since feature is not usable for the user!

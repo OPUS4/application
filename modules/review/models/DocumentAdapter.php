@@ -37,6 +37,7 @@
  *
  * TODO split off base class, URLs are controller specific
  * TODO move code to admin module (is used there as well and belongs there, or?)
+ * TODO remove dependency on View (and update unit tests accordingly)
  */
 class Review_Model_DocumentAdapter {
 
@@ -279,9 +280,10 @@ class Review_Model_DocumentAdapter {
     }
 
     public function hasFiles() {
-        return $this->document->hasField('File');
+        $field = $this->document->getField('File');
+        $values = $field->getValue();
+        return !empty($values);
     }
-
 
     public function getReviewer() {
         $return = array();
