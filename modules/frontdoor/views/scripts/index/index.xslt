@@ -583,17 +583,22 @@
             <th class="name">
                 <xsl:call-template name="translateFieldname"/>
             </th>
-            <td>
+            <td>                
                 <xsl:element name="a">
-                <!-- TODO: Use Zend Url-Helper to build href attribute -->
-                    <xsl:attribute name="href">
-                        <xsl:value-of select="@Value" />
-                    </xsl:attribute>
-                    <xsl:attribute name="target">
-                        <xsl:text>tab/</xsl:text>
-                    </xsl:attribute>
-
-                    <xsl:value-of select="@Value" />
+                    <xsl:choose>
+                        <xsl:when test="starts-with(@Value, 'http://') or starts-with(@Value, 'https://') or starts-with(@Value, 'ftp://')">
+                            <xsl:attribute name="href">
+                                <xsl:value-of select="@Value" />
+                            </xsl:attribute>
+                            <xsl:value-of select="@Value" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="href">
+                                <xsl:text>http://</xsl:text><xsl:value-of select="@Value" />
+                            </xsl:attribute>
+                            <xsl:text>http://</xsl:text><xsl:value-of select="@Value" />
+                        </xsl:otherwise>
+                    </xsl:choose>
                 </xsl:element>
             </td>
         </tr>
@@ -623,8 +628,7 @@
                 <xsl:call-template name="translateFieldname"/>
             </th>
             <td>
-                <xsl:element name="a">
-                <!-- TODO: Use Zend Url-Helper to build href attribute -->
+                <xsl:element name="a">                
                     <xsl:attribute name="href">
                         <xsl:text>http://nbn-resolving.de/urn/resolver.pl?</xsl:text>
                         <xsl:value-of select="@Value" />
