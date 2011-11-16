@@ -43,7 +43,7 @@
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     exclude-result-prefixes="php">
-
+   
     <xsl:output method="xml" omit-xml-declaration="yes" />
  
     <xsl:param name="baseUrlServer" />
@@ -357,6 +357,20 @@
             </th>
             <td>
                 <xsl:value-of select="concat(format-number(@Day,'00'),'.',format-number(@Month,'00'),'.',@Year)" />
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="Enrichment" mode="unescaped">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateString">
+                    <xsl:with-param name="string">Enrichment<xsl:value-of select="@KeyName" /></xsl:with-param>
+                </xsl:call-template>
+             <xsl:text>:</xsl:text>
+            </th>
+            <td>
+                <xsl:value-of select="@Value" disable-output-escaping="yes"/>
             </td>
         </tr>
     </xsl:template>
