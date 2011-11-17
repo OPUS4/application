@@ -147,6 +147,9 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
         if ($retval === false) {
             throw new Exception('fpassthru failed.');
         }
+        
+        fclose($fp);
+        exit;
     }
 
     /**
