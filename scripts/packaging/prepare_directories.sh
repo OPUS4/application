@@ -37,6 +37,7 @@ svn --force export https://svn.zib.de/opus4dev/framework/$TAG/library/Opus opus4
 svn --force export https://svn.zib.de/opus4dev/solrconfig/$TAG solrconfig
 svn --force export https://svn.zib.de/opus4dev/apacheconf/$TAG apacheconf
 svn --force export https://svn.zib.de/opus4dev/install/$TAG install
+svn --force export https://svn.zib.de/opus4dev/documentation/$TAG/help_and_manual/OPUS4_Handbuch/opus_dokumentation_de.pdf
 
 mkdir -pv testdata
 cd testdata
