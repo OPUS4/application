@@ -31,7 +31,7 @@
  * @version     $Id$
  */
 
-class Controller_Helper_DocumentsText extends ControllerTestCase {
+class Controller_Helper_DocumentsTest extends ControllerTestCase {
 
     private $documents;
 
