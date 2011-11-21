@@ -37,25 +37,10 @@
  */
 class Admin_DocumentController extends Controller_Action {
 
-    // TODO move to documenthelper (or configuration file)
-    private $sections = array(
-        'general',
-        'titles',
-        'abstracts',
-        'persons',
-        'dates',
-        'identifiers',
-        'references',
-        'licences',
-        'subjects',
-        'collections',
-        'thesis',
-        'other',
-        'patents',
-        'notes',
-        'enrichments'
-    );
-
+    /**
+     * Model classes for sections of metadata form.
+     * @var hash section name => model class
+     */
     private $sectionModel = array(
         'titles' => 'Opus_Title',
         'abstracts' => 'Opus_TitleAbstract',
@@ -67,6 +52,10 @@ class Admin_DocumentController extends Controller_Action {
         'enrichments' => 'Opus_Enrichment'
     );
 
+    /**
+     * Field name for sections of metadata form.
+     * @var hash section name => field name
+     */
     private $sectionField = array(
         'persons' => 'Person',
         'licences' => 'Licence'
@@ -74,244 +63,164 @@ class Admin_DocumentController extends Controller_Action {
     );
 
     /**
-     * Returns a filtered representation of the document.
-     *
-     * @param  Opus_Document  $document The document to be filtered.
-     * @return Opus_Model_Filter The filtered document.
+     * Helper for verifying document IDs.
+     * @var Controller_Helper_Documents
      */
-    private function __createFilter(Opus_Document $document, $page = null) {
-        $filter = new Opus_Model_Filter();
-        $filter->setModel($document);
-        $blacklist = array('Collection', 'IdentifierOpus3', 'Source', 'File',
-            'ServerState', 'ServerDatePublished', 'ServerDateModified',
-            'Type', 'PublicationState');
-        $filter->setBlacklist($blacklist);
-        // $filter->setSortOrder($type->getAdminFormSortOrder());
-        return $filter;
+    private $documentsHelper;
+
+    /**
+     * Initializes controller.
+     */
+    public function init() {
+        parent::init();
+        $this->documentsHelper = $this->_helper->getHelper('Documents');
     }
 
+    /**
+     * Produces metadata overview page of a document.
+     * @return Opus_Document
+     */
     public function indexAction() {
-        $id = $this->getRequest()->getParam('id');
+        $docId = $this->getRequest()->getParam('id');
 
-        if (!empty($id) && is_numeric($id)) {
-            $model = new Opus_Document($id);
-
-            $filter = new Opus_Model_Filter();
-            $filter->setModel($model);
-            $blacklist = array('PublicationState');
-            $filter->setBlacklist($blacklist);
+        if ($this->documentsHelper->isValidId($docId)) {
+            $model = new Opus_Document($docId);
 
             $this->view->document = $model;
-            $this->view->entry = $filter->toArray();
-            $this->view->objectId = $id;
-
             $this->view->overviewHelper = new Admin_Model_DocumentHelper($model);
 
-            $this->view->docId = $id;
-
-            if (!empty($model)) {
-                $this->prepareActionLinks($model);
-            }
-
-            $this->prepareEditLinks($id);
+            $this->__prepareActionLinks($model);
+            $this->__prepareSectionLinks($docId);
 
             return $model;
         }
         else {
             // missing or bad parameter => go back to main page
-            $this->_redirectTo('index', null, 'documents', 'admin');
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate('admin_document_error_novalidid')),
+                    'documents', 'admin');
         }
-    }
-
-    public function editAction() {
-        $id = $this->getRequest()->getParam('id');
-
-        $section = $this->getRequest()->getParam('section');
-        $this->view->section = $section;
-
-        if (!empty($section) && !empty($id) && is_numeric($id)) {
-            switch ($section) {
-                case 'collections':
-                    $document = new Opus_Document($id);
-                    $assignedCollections = array();
-                    foreach ($document->getCollection() as $assignedCollection) {
-                        $assignedCollections[] = array(
-                            'collectionName' => $assignedCollection->getDisplayName(),
-                            'collectionId' => $assignedCollection->getId(),
-                            'roleName' => $assignedCollection->getRole()->getName(),
-                            'roleId' => $assignedCollection->getRole()->getId()
-                        );
-                    }
-                    $this->view->assignedCollections = $assignedCollections;
-                    $this->view->docId = $id;
-                    return $this->renderScript('document/editCollections.phtml');
-                    break;
-                default:
-                    $model = new Opus_Document($id);
-                    $this->view->docId = $id;
-                    $this->view->editForm = $this->getEditForm($model, $section);
-                    return $this->renderScript('document/edit' /* . ucfirst($section) */ . '.phtml');
-            }
-        }
-
-        $this->_redirectTo('index');
     }
 
     /**
-     * Prepares rendering of add form for document metadata child model.
+     * Shows the edit page for a metadata section.
+     */
+    public function editAction() {
+        $docId = $this->getRequest()->getParam('id');
+
+        if ($this->documentsHelper->isValidId($docId)) {
+            $section = $this->getRequest()->getParam('section');
+
+            if (Admin_Model_DocumentHelper::isValidGroup($section)) {
+                $this->view->section = $section;
+                $this->view->docId = $docId;
+
+                $document = new Opus_Document($docId);
+
+                switch ($section) {
+                    case 'collections':
+                        $this->view->assignedCollections =
+                            $this->__prepareAssignedCollections($document);
+                        return $this->renderScript(
+                                'document/editCollections.phtml');
+                    default:
+                        $this->view->editForm = $this->__getEditForm($document,
+                                $section);
+                        return $this->renderScript('document/edit.phtml');
+                }
+            }
+            else {
+                return $this->_redirectTo('index', null, 'document', 'admin',
+                        array('id' => $docId));
+            }
+        }
+        else {
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate('admin_document_error_novalidid')),
+                    'documents', 'admin');
+        }
+    }
+
+    /**
+     * Prepares rendering of add form for document metadata section.
      *
-     * @return type Target script
+     * @return string Target script
      */
     public function addAction() {
-        $id = $this->getRequest()->getParam('id');
-        $section = $this->getRequest()->getParam('section');
-        $this->view->section = $section;
-        $model = new Opus_Document($id);
-        $this->view->docId = $id;
-        $this->view->addForm = $this->getAddForm($model, $section);
-        return $this->renderScript('document/add' . '.phtml');
+        $docId = $this->getRequest()->getParam('id');
+
+        if ($this->documentsHelper->isValidId($docId)) {
+            $section = $this->getRequest()->getParam('section');
+
+            if (Admin_Model_DocumentHelper::isValidGroup($section)) {
+                switch ($section) {
+                    // Redirect for sections that do not have 'Add' page
+                    case 'collections':
+                    case 'general':
+                    case 'dates':
+                    case 'thesis':
+                    case 'other':
+                        return $this->_redirectTo('index', null, 'document',
+                                'admin', array('id' => $docId));
+                    default:
+                        $model = new Opus_Document($docId);
+                        $this->view->section = $section;
+                        $this->view->docId = $docId;
+                        $this->view->addForm = $this->__getAddForm($model,
+                                $section);
+                        return $this->renderScript('document/add.phtml');
+                }
+            }
+            else {
+                return $this->_redirectTo('index', null, 'document', 'admin',
+                        array('id' => $docId));
+            }
+        }
+        else {
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate('admin_document_error_novalidid')),
+                    'documents', 'admin');
+        }
     }
 
     /**
      * Create new model and add to document.
+     *
+     * TODO handle processing failures.
      */
     public function createAction() {
-        $id = $this->getRequest()->getParam('id');
-        $section = $this->getRequest()->getParam('section');
+        $docId = $this->getRequest()->getParam('id');
 
-        if ($this->getRequest()->isPost()) {
-            $postData = $this->getRequest()->getPost();
+        if ($this->documentsHelper->isValidId($docId)) {
+            $section = $this->getRequest()->getParam('section');
 
-            $document = new Opus_Document($id);
+            if ($this->getRequest()->isPost() &&
+                    Admin_Model_DocumentHelper::isValidGroup($section)) {
+                $postData = $this->getRequest()->getPost();
 
-            foreach ($postData as $modelClass => $fields) {
-                $processFields = true;
+                $document = new Opus_Document($docId);
 
-                switch ($modelClass) {
-                    case 'Opus_Person':
-                        $person = new Opus_Person();
-                        $model = $document->addPerson($person);
-                        break;
-                    case 'Opus_Licence':
-                        // TODO no duplicate entries
-                        $licenceIndex = $fields['Licence'];
-                        $licences = Opus_Licence::getAll();
-                        $currentLicences = $document->getLicence();
-                        $licenceAlreadyAssigned = false;
-                        foreach ($currentLicences as $index => $currentLicence) {
-                            if ($currentLicence->getModel()->getId() == $licenceIndex) {
-                                $licenceAlreadyAssigned = true;
-                                // TODO print out message
-                            }
-                        }
-                        if (!$licenceAlreadyAssigned) {
-                            $document->addLicence(new Opus_Licence($licenceIndex));
-                        }
-                        $processFields = false;
-                        break;
-                    default:
-                        $model = new $modelClass;
-                        break;
-                }
+                $this->__processCreatePost($postData, $document);
 
-                if ($processFields) {
-                    foreach ($fields as $name => $value) {
-                        // TODO filter buttons
-                        $field = $model->getField($name);
-                        if (!empty($field)) {
-                            switch ($field->getValueModelClass()) {
-                                case 'Opus_Date':
-                                    $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
-                                    if (!empty($value)) {
-                                        $date = new Zend_Date($value);
-                                        $dateModel = new Opus_Date();
-                                        $dateModel->setZendDate($date);
-                                    }
-                                    else {
-                                        $dateModel = null;
-                                    }
-                                    $field->setValue($dateModel);
-                                    break;
-                                default:
-                                    $field->setValue($value);
-                                    break;
-                            }
-                        }
-                    }
-                }
-
-                // TODO move in class that can be shared with publishing
-                switch ($modelClass) {
-                    case 'Opus_Identifier':
-                        $document->addIdentifier($model);
-                        break;
-                    case 'Opus_Person':
-                        $document->addPerson($model);
-                        break;
-                    case 'Opus_Reference':
-                        $document->addReference($model);
-                        break;
-                    case 'Opus_Title':
-                        switch ($model->getType()) {
-                            case 'main':
-                                $document->addTitleMain($model);
-                                break;
-                            case 'sub':
-                                $document->addTitleSub($model);
-                                break;
-                            case 'parent':
-                                $document->addTitleParent($model);
-                                break;
-                            case 'additional':
-                                $document->addTitleAdditional($model);
-                                break;
-                            default:
-                                break;
-                        }
-                        break;
-                    case 'Opus_TitleAbstract':
-                        $model->setType('abstract');
-                        $document->addTitleAbstract($model);
-                        break;
-                    case 'Opus_Subject':
-                        $document->addSubject($model);
-                        break;
-                    case 'Opus_SubjectSwd':
-                        $document->addSubjectSwd($model);
-                        break;
-                    case 'Opus_Patent':
-                        $document->addPatent($model);
-                        break;
-                    case 'Opus_Enrichment':
-                        $document->addEnrichment($model);
-                        break;
-                    case 'Opus_Note':
-                        $document->addNote($model);
-                        break;
-                    default:
-                        break;
-                }
-
-                $document->store();
+                return $this->_redirectTo('edit', null, 'document', 'admin',
+                        array('id' => $docId, 'section' => $section));
             }
-
-            $this->_redirectTo('edit', null, 'document', 'admin', array(
-                'id' => $id,
-                'section' => $section
-            ));
+            else {
+                // no valid section provided
+                return $this->_redirectTo('index', null, 'document', 'admin',
+                        array('id' => $docId));
+            }
         }
         else {
-            // TODO What if there is no $id?
-            $this->_redirectTo('index', null, 'document', 'admin', array(
-                'id' => $id
-            ));
+            // no valid document ID provided
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate('admin_document_error_novalidid')),
+                    'documents', 'admin');
         }
     }
 
     /**
-     * Publishes a document
-     *
-     * @return void
+     * Switches the status of a document to published.
      */
     public function publishAction() {
         if (($this->_request->isPost() === false) && ($this->getRequest()->getParam('docId') === null)) {
@@ -349,16 +258,14 @@ class Admin_DocumentController extends Controller_Action {
             // show safety question
             $this->view->title = $this->view->translate('admin_doc_publish');
             $this->view->text = $this->view->translate('admin_doc_publish_sure', $id);
-            $yesnoForm = $this->_getConfirmationForm($id, 'publish');
+            $yesnoForm = $this->__getConfirmationForm($id, 'publish');
             $this->view->form = $yesnoForm;
             return $this->renderScript('document/confirm.phtml');
         }
     }
 
     /**
-     * Deletes a document permanently (removes it from database and disk)
-     *
-     * @return void
+     * Deletes a document permanently (removes it from database and disk).
      */
     public function permanentdeleteAction() {
         if ($this->_request->isPost() === true || $this->getRequest()->getParam('docId') !== null) {
@@ -389,7 +296,7 @@ class Admin_DocumentController extends Controller_Action {
                 // show safety question
                 $this->view->title = $this->view->translate('admin_doc_delete_permanent');
                 $this->view->text = $this->view->translate('admin_doc_delete_permanent_sure', $id);
-                $yesnoForm = $this->_getConfirmationForm($id, 'permanentdelete');
+                $yesnoForm = $this->__getConfirmationForm($id, 'permanentdelete');
                 $this->view->form = $yesnoForm;
                 return $this->renderScript('document/confirm.phtml');
             }
@@ -399,9 +306,7 @@ class Admin_DocumentController extends Controller_Action {
     }
 
     /**
-     * Unpublishes a document
-     *
-     * @return void
+     * Unpublishes a document (sets ServerState to unpublished).
      */
     public function unpublishAction() {
         if (($this->_request->isPost() === false) && ($this->getRequest()->getParam('docId') === null)) {
@@ -434,7 +339,7 @@ class Admin_DocumentController extends Controller_Action {
             // show safety question
             $this->view->title = $this->view->translate('admin_doc_unpublish');
             $this->view->text = $this->view->translate('admin_doc_unpublish_sure', $id);
-            $yesnoForm = $this->_getConfirmationForm($id, 'unpublish');
+            $yesnoForm = $this->__getConfirmationForm($id, 'unpublish');
             $this->view->form = $yesnoForm;
             return $this->renderScript('document/confirm.phtml');
         }
@@ -442,9 +347,7 @@ class Admin_DocumentController extends Controller_Action {
     }
 
     /**
-     * Deletes a document (sets state to deleted)
-     *
-     * @return void
+     * Deletes a document (sets state to deleted).
      */
     public function deleteAction() {
 
@@ -514,7 +417,7 @@ class Admin_DocumentController extends Controller_Action {
                 // show safety question
                 $this->view->title = $this->view->translate('admin_doc_delete');
                 $this->view->text = $this->view->translate('admin_doc_delete_sure', $id);
-                $yesnoForm = $this->_getConfirmationForm($id, 'delete');
+                $yesnoForm = $this->__getConfirmationForm($id, 'delete');
                 $this->view->form = $yesnoForm;
                 return $this->renderScript('document/confirm.phtml');
             }
@@ -523,183 +426,92 @@ class Admin_DocumentController extends Controller_Action {
 
     /**
      * Updates values of fields and models.
+     *
+     * TODO Handle processing failures.
      */
     public function updateAction() {
-        $id = $this->getRequest()->getParam('id');
-        $section = $this->getRequest()->getParam('section');
+        $docId = $this->getRequest()->getParam('id');
 
-        if ($this->getRequest()->isPost()) {
-            $postData = $this->getRequest()->getPost();
-            if (!array_key_exists('cancel', $postData)) {
-                switch ($section) {
-                    case 'general':
-                    case 'misc':
-                    case 'dates':
-                    case 'other':
-                    case 'thesis':
-                        $model = new Opus_Document($id);
-                        $fields = $postData['Opus_Document'];
-                        foreach ($fields as $fieldName => $value) {
-                            $field = $model->getField($fieldName);
-                            if (!empty($field)) {
-                                // TODO handle NULL
-                                switch ($field->getValueModelClass()) {
-                                    case 'Opus_Date':
-                                        $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
-                                        $this->_logger->debug('Saving date format' . $dateFormat);
-                                        if (!empty($value)) {
-                                            if (!Zend_Date::isDate($value, $dateFormat)) {
-                                                throw new Exception('Invalid date entered');
-                                            }
-                                            $this->_logger->debug('Saving date ' . $value . ' to field ' . $field->getName());
-                                            $date = new Zend_Date($value, $dateFormat);
-                                            $this->_logger->debug('Saving Zend_Date = ' . $date . ' to field ' . $field->getName());
-                                            $dateModel = new Opus_Date();
-                                            $dateModel->setZendDate($date);
-                                            $this->_logger->debug('Saving Opus_Date = ' . $dateModel . ' to field ' . $field->getName());
-                                        }
-                                        else {
-                                            $dateModel = null;
-                                        }
-                                        $field->setValue($dateModel);
-                                        break;
-                                    case 'Opus_DnbInstitute':
-                                        if ($value === 'nothing') {
-                                            $field->setValue(null);
-                                        }
-                                        else {
-                                            $institute = new Opus_DnbInstitute($value);
-                                            // TODO simplify
-                                            switch ($field->getName()) {
-                                                case 'ThesisGrantor':
-                                                    $model->setThesisGrantor($institute);
-                                                    break;
-                                                case 'ThesisPublisher':
-                                                    $model->setThesisPublisher($institute);
-                                                    break;
-                                            }
-                                        }
-                                        break;
-                                    default:
-                                        if (empty($value)) {
-                                           $field->setValue(null);
-                                        }
-                                        else {
-                                            $field->setValue($value);
-                                        }
-                                        break;
-                                }
-                            }
-                        }
-                        $model->store();
-                        $this->_logger->debug('ServerDatePublished = ' . $model->getServerDatePublished());
-                        break;
-                    case 'licences':
-                        // TODO merge with default case
-                        $model = new Opus_Document($id);
-                        foreach ($postData as $fieldName => $modelData) {
-                            $field = $model->getField($fieldName);
-                            if (!empty($field)) {
-                                foreach ($modelData as $index => $modelValues) {
-                                    $fieldValues = $field->getValue();
-                                    $licenceIndex = $modelValues['Licence'];
-                                    if (array_key_exists('remove', $modelValues)) {
-                                        unset($fieldValues[$index]);
-                                        $field->setValue($fieldValues);
-                                        break;
-                                    }
-                                    else {
-                                        $licences = Opus_Licence::getAll();
+        if ($this->documentsHelper->isValidId($docId)) {
+            $section = $this->getRequest()->getParam('section');
 
-                                        $fieldValues[$index]->setModel(new Opus_Licence($licenceIndex));
-                                    }
-                                }
-                                $field->setValue($fieldValues);
-                            }
-                        }
-                        $model->store();
-                        break;
-                    default:
-                        $model = new Opus_Document($id);
-                        foreach ($postData as $fieldName => $modelData) {
-                            $field = $model->getField($fieldName);
-                            foreach ($modelData as $index => $modelValues) {
-                                $fieldValues = $field->getValue();
-                                if (array_key_exists('remove', $modelValues)) {
-                                    unset($fieldValues[$index]);
-                                    $field->setValue($fieldValues);
-                                    break;
-                                }
-                                else {
-                                    $this->populateModel($fieldValues[$index], $modelValues);
-                                }
-                            }
-                        }
-                        $model->store();
-                        break;
+            if ($this->getRequest()->isPost() &&
+                    Admin_Model_DocumentHelper::isValidGroup($section)) {
+                $postData = $this->getRequest()->getPost();
+
+                if (!array_key_exists('cancel', $postData)) {
+                    $document = new Opus_Document($docId);
+
+                    $this->__processUpdatePost($postData, $document, $section);
+
+                    $message = $this->view->translate(
+                            'admin_document_update_success');
+
+                    return $this->_redirectTo('edit', $message, 'document',
+                        'admin', array('id' => $docId, 'section' => $section));
                 }
-
-                $message = $this->view->translate('admin_document_update_success');
-
-                $this->_redirectTo('edit', $message, 'document', 'admin', array(
-                    'id' => $id,
-                    'section' => $section
-                ));
+                else {
+                    // 'cancel' received
+                    return $this->_redirectTo('index', null, 'document',
+                        'admin', array('id' => $docId));
+                }
             }
             else {
-                // TODO what if no $id
-                $this->_redirectTo('index', null, 'document', 'admin', array(
-                    'id' => $id
-                ));
+                // no valid section provided
+                return $this->_redirectTo('index', null, 'document', 'admin',
+                    array('id' => $docId));
             }
         }
         else {
-            // TODO what if no $id, no POST
-            $this->_redirectTo('index', null, 'document', 'admin', array(
-                'id' => $id
-            ));
+            // no valid document ID provided
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate('admin_document_error_novalidid')),
+                    'documents', 'admin');
         }
     }
 
     /**
      * Removes a document from a collection.
      *
-     * @return void
+     * TODO Handle processing failure
      */
     public function unlinkcollectionAction() {
-        if (!$this->_request->isPost()) {
-            return $this->_redirectTo('index');
-        }
-        $document = new Opus_Document($this->getRequest()->getParam('id'));
-        $collection_id = $this->getRequest()->getParam('collection');
-        $collections = array();
-        $deletedCollectionName = null;
-        foreach ($document->getCollection() as $collection) {
-            if ($collection->getId() !== $collection_id) {
-                array_push($collections, $collection);
+        $docId = $this->getRequest()->getParam('id');
+
+        if ($this->documentsHelper->isValidId($docId)) {
+            if ($this->getRequest()->isPost()) {
+                $document = new Opus_Document($docId);
+
+                $deletedCollectionName =
+                    $this->__processUnlinkPost($document);
+
+                $message = $this->view->translate(
+                        'admin_document_remove_collection_success',
+                        $deletedCollectionName);
+
+                $this->_redirectTo('edit', $message, 'document', 'admin',
+                    array('id' => $docId, 'section' => 'collections'));
             }
             else {
-                if ($collection->isRoot()) {
-                    $deletedCollectionName = $collection->getRole()->getDisplayName();
-                }
-                else {
-                    $deletedCollectionName = $collection->getDisplayName();
-                }
+                // not a post request
+                return $this->_redirectTo('index', null, 'document', 'admin',
+                        array('id' => $docId));
             }
         }
-        $document->setCollection($collections);
-        $document->store();
-        $params = $this->getRequest()->getUserParams();
-        $module = array_shift($params);
-        $controller = array_shift($params);
-        $action = array_shift($params);
-
-        $message = $this->view->translate('admin_document_remove_collection_success', $deletedCollectionName);
-
-        $this->_redirectTo('edit', $message, 'document', 'admin', $params);
+        else {
+            // no valid document ID
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate('admin_document_error_novalidid')),
+                    'documents', 'admin');
+        }
     }
 
-    protected function populateModel($model, $fieldValues) {
+    /**
+     * Populates a model with the provided values.
+     * @param Opus_Model_Abstract $model Model instance
+     * @param array $fieldValues
+     */
+    private function __populateModel($model, $fieldValues) {
         $this->_logger->debug('Populate model ' . $model);
         foreach($fieldValues as $fieldName => $value) {
             $field = $model->getField($fieldName);
@@ -737,9 +549,30 @@ class Admin_DocumentController extends Controller_Action {
     }
 
     /**
-     * Prepares URLs for action links, e.g frontdoor, delete, publish.
+     * Returns array with hashes for information about assigned collections.
+     * @return array of hashes containing collection metadata
      */
-    public function prepareActionLinks($model) {
+    private function __prepareAssignedCollections($document) {
+        $assignedCollections = array();
+
+        foreach ($document->getCollection() as $assignedCollection) {
+            $assignedCollections[] = array(
+                'collectionName' => $assignedCollection->getDisplayName(),
+                'collectionId' => $assignedCollection->getId(),
+                'roleName' => $assignedCollection->getRole()->getName(),
+                'roleId' => $assignedCollection->getRole()->getId()
+            );
+        }
+
+        return $assignedCollections;
+    }
+
+    /**
+     * Prepares URLs for action links, e.g frontdoor, delete, publish.
+     *
+     * TODO remove dependency on Review_Model_DocumentAdapter
+     */
+    private function __prepareActionLinks($model) {
         $actions = array();
 
         $docId = $model->getId();
@@ -805,12 +638,21 @@ class Admin_DocumentController extends Controller_Action {
         return $actions;
     }
 
-    public function prepareEditLinks($docId) {
+    /**
+     * Generates URLs for add and edit links of metadata sections and sets them
+     * in the view.
+     * @param int $docId Document identifier
+     */
+    private function __prepareSectionLinks($docId) {
         $editUrls = array();
         $editLabels = array();
         $addUrls = array();
+        $addLabels = array();
 
-        foreach ($this->sections as $section) {
+        $sections = Admin_Model_DocumentHelper::getGroups();
+
+        foreach ($sections as $section) {
+            // Links for 'Edit' pages
             $editUrls[$section] = $this->view->url(array(
                 'module' => 'admin',
                 'controller' => 'document',
@@ -818,6 +660,11 @@ class Admin_DocumentController extends Controller_Action {
                 'id' => $docId,
                 'section' => $section
             ), 'default', false);
+
+            $editLabels[$section] = $this->view->translate(
+                    'admin_document_edit_section');
+
+            // Links for 'Add' pages
             $addUrls[$section] = $this->view->url(array(
                 'module' => 'admin',
                 'controller' => 'document',
@@ -825,8 +672,9 @@ class Admin_DocumentController extends Controller_Action {
                 'id' => $docId,
                 'section' => $section
             ), 'default', false);
-            $editLabels[$section] = $this->view->translate('admin_document_edit_section');
-            $addLabels[$section] = $this->view->translate('admin_document_add_section');
+
+            $addLabels[$section] = $this->view->translate(
+                    'admin_document_add_section');
         }
 
         $this->view->editUrls = $editUrls;
@@ -835,7 +683,13 @@ class Admin_DocumentController extends Controller_Action {
         $this->view->addLabels = $addLabels;
     }
 
-    public function getAddForm($model, $section) {
+    /**
+     * Generates Zend_Form for adding a value to a document field.
+     * @param type $model
+     * @param type $section
+     * @return Zend_Form
+     */
+    private function __getAddForm($model, $section) {
         $form = null;
 
         $id = $model->getId();
@@ -905,8 +759,15 @@ class Admin_DocumentController extends Controller_Action {
         return $form;
     }
 
-    public function getEditForm($model, $section) {
-        $includedFields = Admin_Model_DocumentHelper::getFieldNamesForGroup($section);
+    /**
+     * Generates form for editing the values of document fields.
+     * @param type $model
+     * @param type $section
+     * @return Zend_Form
+     */
+    private function __getEditForm($model, $section) {
+        $includedFields = Admin_Model_DocumentHelper::getFieldNamesForGroup(
+                $section);
 
         $form = new Zend_Form('edit');
 
@@ -982,18 +843,290 @@ class Admin_DocumentController extends Controller_Action {
     /**
      * Returns form for asking yes/no question like 'Delete file?'.
      *
-     * @param type $id
-     * @param type $action
+     * @param int $id Document identifier
+     * @param string $action Target action that needs to be confirmed
      * @return Admin_Form_YesNoForm
      */
-    protected function _getConfirmationForm($id, $action) {
+    private function __getConfirmationForm($docId, $action) {
         $yesnoForm = new Admin_Form_YesNoForm();
         $idElement = new Zend_Form_Element_Hidden('id');
-        $idElement->setValue($id);
+        $idElement->setValue($docId);
         $yesnoForm->addElement($idElement);
-        $yesnoForm->setAction($this->view->url(array("controller"=>"document", "action"=>$action)));
+        $yesnoForm->setAction($this->view->url(
+                array("controller" => "document", "action" => $action)));
         $yesnoForm->setMethod('post');
         return $yesnoForm;
+    }
+
+    /**
+     * Processes POST request for adding new value (model) to document.
+     */
+    private function __processCreatePost($postData, $document) {
+        foreach ($postData as $modelClass => $fields) {
+            $processFields = true;
+
+            switch ($modelClass) {
+                case 'Opus_Person':
+                    $person = new Opus_Person();
+                    $model = $document->addPerson($person);
+                    break;
+                case 'Opus_Licence':
+                    // TODO no duplicate entries
+                    $licenceIndex = $fields['Licence'];
+                    $licences = Opus_Licence::getAll();
+                    $currentLicences = $document->getLicence();
+                    $licenceAlreadyAssigned = false;
+                    foreach ($currentLicences as $index => $currentLicence) {
+                        if ($currentLicence->getModel()->getId() == $licenceIndex) {
+                            $licenceAlreadyAssigned = true;
+                            // TODO print out message
+                        }
+                    }
+                    if (!$licenceAlreadyAssigned) {
+                        $document->addLicence(new Opus_Licence($licenceIndex));
+                    }
+                    $processFields = false;
+                    break;
+                default:
+                    $model = new $modelClass;
+                    break;
+            }
+
+            if ($processFields) {
+                foreach ($fields as $name => $value) {
+                    // TODO filter buttons
+                    $field = $model->getField($name);
+                    if (!empty($field)) {
+                        switch ($field->getValueModelClass()) {
+                            case 'Opus_Date':
+                                $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
+                                if (!empty($value)) {
+                                    $date = new Zend_Date($value);
+                                    $dateModel = new Opus_Date();
+                                    $dateModel->setZendDate($date);
+                                }
+                                else {
+                                    $dateModel = null;
+                                }
+                                $field->setValue($dateModel);
+                                break;
+                            default:
+                                $field->setValue($value);
+                                break;
+                        }
+                    }
+                }
+            }
+
+            // TODO move in class that can be shared with publishing
+            switch ($modelClass) {
+                case 'Opus_Identifier':
+                    $document->addIdentifier($model);
+                    break;
+                case 'Opus_Person':
+                    $document->addPerson($model);
+                    break;
+                case 'Opus_Reference':
+                    $document->addReference($model);
+                    break;
+                case 'Opus_Title':
+                    switch ($model->getType()) {
+                        case 'main':
+                            $document->addTitleMain($model);
+                            break;
+                        case 'sub':
+                            $document->addTitleSub($model);
+                            break;
+                        case 'parent':
+                            $document->addTitleParent($model);
+                            break;
+                        case 'additional':
+                            $document->addTitleAdditional($model);
+                            break;
+                        default:
+                            break;
+                    }
+                    break;
+                case 'Opus_TitleAbstract':
+                    $model->setType('abstract');
+                    $document->addTitleAbstract($model);
+                    break;
+                case 'Opus_Subject':
+                    $document->addSubject($model);
+                    break;
+                case 'Opus_SubjectSwd':
+                    $document->addSubjectSwd($model);
+                    break;
+                case 'Opus_Patent':
+                    $document->addPatent($model);
+                    break;
+                case 'Opus_Enrichment':
+                    $document->addEnrichment($model);
+                    break;
+                case 'Opus_Note':
+                    $document->addNote($model);
+                    break;
+                default:
+                    break;
+            }
+
+            $document->store();
+        }
+    }
+
+    /**
+     * Process POST request for updating document fields.
+     * @param type $postData
+     * @param type $document
+     * @param type $section
+     */
+    private function __processUpdatePost($postData, $model, $section){
+        switch ($section) {
+            case 'general':
+            case 'misc':
+            case 'dates':
+            case 'other':
+            case 'thesis':
+                $fields = $postData['Opus_Document'];
+                foreach ($fields as $fieldName => $value) {
+                    $field = $model->getField($fieldName);
+                    if (!empty($field)) {
+                        // TODO handle NULL
+                        switch ($field->getValueModelClass()) {
+                            case 'Opus_Date':
+                                $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
+                                $this->_logger->debug('Saving date format'
+                                        . $dateFormat);
+                                if (!empty($value)) {
+                                    if (!Zend_Date::isDate($value, $dateFormat)) {
+                                        throw new Exception('Invalid date entered');
+                                    }
+                                    $this->_logger->debug('Saving date '
+                                            . $value . ' to field '
+                                            . $field->getName());
+                                    $date = new Zend_Date($value, $dateFormat);
+                                    $this->_logger->debug('Saving Zend_Date = '
+                                            . $date . ' to field '
+                                            . $field->getName());
+                                    $dateModel = new Opus_Date();
+                                    $dateModel->setZendDate($date);
+                                    $this->_logger->debug('Saving Opus_Date = '
+                                            . $dateModel . ' to field '
+                                            . $field->getName());
+                                }
+                                else {
+                                    $dateModel = null;
+                                }
+                                $field->setValue($dateModel);
+                                break;
+                            case 'Opus_DnbInstitute':
+                                if ($value === 'nothing') {
+                                    $field->setValue(null);
+                                }
+                                else {
+                                    $institute = new Opus_DnbInstitute($value);
+                                    // TODO simplify
+                                    switch ($field->getName()) {
+                                        case 'ThesisGrantor':
+                                            $model->setThesisGrantor($institute);
+                                            break;
+                                        case 'ThesisPublisher':
+                                            $model->setThesisPublisher($institute);
+                                            break;
+                                    }
+                                }
+                                break;
+                            default:
+                                if (empty($value)) {
+                                   $field->setValue(null);
+                                }
+                                else {
+                                    $field->setValue($value);
+                                }
+                                break;
+                        }
+                    }
+                }
+                $model->store();
+                $this->_logger->debug('ServerDatePublished = ' .
+                        $model->getServerDatePublished());
+                break;
+            case 'licences':
+                // TODO merge with default case
+                foreach ($postData as $fieldName => $modelData) {
+                    $field = $model->getField($fieldName);
+                    if (!empty($field)) {
+                        foreach ($modelData as $index => $modelValues) {
+                            $fieldValues = $field->getValue();
+                            $licenceIndex = $modelValues['Licence'];
+                            if (array_key_exists('remove', $modelValues)) {
+                                unset($fieldValues[$index]);
+                                $field->setValue($fieldValues);
+                                break;
+                            }
+                            else {
+                                $licences = Opus_Licence::getAll();
+
+                                $fieldValues[$index]->setModel(
+                                        new Opus_Licence($licenceIndex));
+                            }
+                        }
+                        $field->setValue($fieldValues);
+                    }
+                }
+                $model->store();
+                break;
+            default:
+                foreach ($postData as $fieldName => $modelData) {
+                    $field = $model->getField($fieldName);
+                    foreach ($modelData as $index => $modelValues) {
+                        $fieldValues = $field->getValue();
+                        if (array_key_exists('remove', $modelValues)) {
+                            unset($fieldValues[$index]);
+                            $field->setValue($fieldValues);
+                            break;
+                        }
+                        else {
+                            $this->__populateModel($fieldValues[$index],
+                                    $modelValues);
+                        }
+                    }
+                }
+                $model->store();
+                break;
+        }
+    }
+
+    /**
+     * Processes POST request for unlinking collection from document.
+     * @param Opus_Document $document
+     * @return string Name of collection that was unlinked
+     */
+    private function __processUnlinkPost($document) {
+        $deletedCollectionName = null;
+
+        $collectionId = $this->getRequest()->getParam('collection');
+        $collections = array();
+        foreach ($document->getCollection() as $collection) {
+            if ($collection->getId() !== $collectionId) {
+                array_push($collections, $collection);
+            }
+            else {
+                // Get name of removed collection
+                if ($collection->isRoot()) {
+                    $deletedCollectionName =
+                            $collection->getRole()->getDisplayName();
+                }
+                else {
+                    $deletedCollectionName =
+                            $collection->getDisplayName();
+                }
+            }
+        }
+        $document->setCollection($collections);
+        $document->store();
+
+        return $deletedCollectionName;
     }
 
 }
