@@ -250,6 +250,16 @@ class Admin_Model_DocumentHelper {
     }
 
     /**
+     * Checks if a group name is valid.
+     * @return boolean True - if the group name is valid.
+     */
+    public static function isValidGroup($group) {
+        $groups = Admin_Model_DocumentHelper::getGroups();
+
+        return in_array($group, $groups);
+    }
+
+    /**
      * TODO centralize
      * @return string
      */

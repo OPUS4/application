@@ -83,7 +83,7 @@ class Admin_Model_DocumentHelperTest extends ControllerTestCase {
 
         $groups = $helper->getGroups();
 
-        $this->assertEquals(15, count($groups));
+        $this->assertEquals(16, count($groups));
         $this->assertContains('dates', $groups);
         $this->assertContains('general', $groups);
     }
@@ -174,6 +174,25 @@ class Admin_Model_DocumentHelperTest extends ControllerTestCase {
         foreach($fields as $name => $field) {
             $this->assertEquals($name, $field->getName());
         }
+    }
+
+    public function testIsValidGroupTrue() {
+       $groups = Admin_Model_DocumentHelper::getGroups();
+
+       foreach ($groups as $group) {
+           $this->assertTrue(Admin_Model_DocumentHelper::isValidGroup($group),
+                   'Group name \'' . $group . '\' should be valid.');
+       }
+    }
+
+    public function testIsValidGroupFalse() {
+        $this->assertFalse(
+                Admin_Model_DocumentHelper::isValidGroup('doesnotexist'));
+    }
+
+    public function testIsValidGroupWithNull() {
+        $this->assertFalse(
+                Admin_Model_DocumentHelper::isValidGroup(null));
     }
 
 }
