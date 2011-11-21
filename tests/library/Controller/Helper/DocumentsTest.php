@@ -72,5 +72,3 @@ class Controller_Helper_DocumentsTest extends ControllerTestCase {
     }
 
 }
-
-?>

@@ -55,4 +55,3 @@ class Admin_SecurityController extends Controller_Action {
     }
 
 }
-?>

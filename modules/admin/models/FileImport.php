@@ -34,7 +34,7 @@
 
 /**
  * Model for importing files from a specific folder.
- * 
+ *
  * TODO make __importFolder configurable
  */
 class Admin_Model_FileImport {
@@ -62,16 +62,16 @@ class Admin_Model_FileImport {
         catch (Opus_Model_NotFoundException $e) {
             throw new Application_Exception('no document found for id ' . $docId, null, $e);
         }
-        
+
         $log = Zend_Registry::get('Zend_Log');
         $validFilenames = $this->getNamesOfIncomingFiles();
-        
+
         foreach ($files as $file) {
             $log->debug('check filename ' . $file);
             if (array_key_exists($file, $validFilenames)) {
                 $pathname = $this->__importFolder . DIRECTORY_SEPARATOR . $validFilenames[$file];
                 $log->info('import file ' . $pathname);
-                
+
                 $docfile = $document->addFile();
                 $docfile->setTempFile($pathname);
                 $docfile->setPathName($validFilenames[$file]);
@@ -99,7 +99,6 @@ class Admin_Model_FileImport {
             $incomingFilenames[$filename] = $filename;
         }
         return $incomingFilenames;
-    }    
-    
+    }
+
 }
-?>

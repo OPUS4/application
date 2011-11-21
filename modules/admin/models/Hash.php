@@ -89,4 +89,3 @@ class Admin_Model_Hash {
         }
     }
 }
-?>

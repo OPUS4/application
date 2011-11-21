@@ -294,6 +294,3 @@ class Admin_Model_DocumentHelper {
     }
 
 }
-
-
-?>

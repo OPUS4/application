@@ -182,5 +182,3 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
 
 
 }
-
-?>

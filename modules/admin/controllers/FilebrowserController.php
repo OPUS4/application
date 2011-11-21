@@ -57,7 +57,7 @@ class Admin_FilebrowserController extends Controller_Action {
 
         $importHelper = new Admin_Model_FileImport();
         $this->view->files = $importHelper->listFiles();
-        $this->view->document = $document;        
+        $this->view->document = $document;
     }
 
     /**
@@ -67,7 +67,7 @@ class Admin_FilebrowserController extends Controller_Action {
         if (!$this->getRequest()->isPost()) {
             throw new Application_Exception('unsupported HTTP method');
         }
-        
+
         $docId = $this->getRequest()->getPost('docId');
         if (is_null($docId)) {
             throw new Application_Exception('missing parameter docId');
@@ -87,4 +87,3 @@ class Admin_FilebrowserController extends Controller_Action {
         return $this->_redirectToAndExit('index', null, 'filemanager', 'admin', array('docId' => $docId));
     }
 }
-?>

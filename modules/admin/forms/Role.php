@@ -73,6 +73,3 @@ class Admin_Form_Role extends Zend_Form {
     }
 
 }
-
-
-?>

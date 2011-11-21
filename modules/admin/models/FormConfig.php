@@ -114,6 +114,3 @@ class Admin_Model_FormConfig {
     }
 
 }
-
-?>
-

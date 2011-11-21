@@ -55,5 +55,3 @@ class Admin_InfoController extends Controller_Action {
     }
 
 }
-
-?>

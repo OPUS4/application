@@ -997,5 +997,3 @@ class Admin_DocumentController extends Controller_Action {
     }
 
 }
-
-?>

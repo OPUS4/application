@@ -33,6 +33,5 @@
  */
 
 class Admin_Model_Exception extends Application_Exception {
-    
+
 }
-?>

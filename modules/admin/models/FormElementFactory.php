@@ -194,5 +194,3 @@ class Admin_Model_FormElementFactory extends Admin_Model_AbstractModel {
     }
 
 }
-
-?>

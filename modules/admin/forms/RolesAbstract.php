@@ -53,7 +53,7 @@ abstract class Admin_Form_RolesAbstract extends Zend_Form {
             $roleName = $role->getDisplayName();
             $roleCheckbox = $this->createElement('checkbox',
                     'role' . $roleName)->setLabel($roleName);
-            
+
             // TODO special code to handle role 'guest': Is that good?
             if ($roleName === 'guest' && $this->alwaysCheckAndDisableGuest) {
                 $roleCheckbox->setValue(1);
@@ -115,5 +115,3 @@ abstract class Admin_Form_RolesAbstract extends Zend_Form {
     }
 
 }
-
-?>

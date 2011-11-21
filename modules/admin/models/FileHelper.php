@@ -86,7 +86,7 @@ class Admin_Model_FileHelper {
 
     public static function getRolesForFile($fileId) {
         $checkedRoles = array();
-        
+
         $roles = Opus_UserRole::getAll();
 
         $items = array();
@@ -102,8 +102,8 @@ class Admin_Model_FileHelper {
 
     /**
      *
-     * @return type 
-     * 
+     * @return type
+     *
      * TODO use view helper
      */
     protected function _getActionUrl() {
@@ -163,5 +163,3 @@ class Admin_Model_FileHelper {
     }
 
 }
-
-?>

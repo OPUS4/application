@@ -60,7 +60,7 @@ class Admin_CollectionrolesController extends Controller_Action {
         }
         catch (Application_Exception $e) {
             return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
-        }       
+        }
     }
 
     public function moveAction() {
@@ -82,11 +82,11 @@ class Admin_CollectionrolesController extends Controller_Action {
         }
         catch (Application_Exception $e) {
             return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
-        }        
+        }
     }
 
     public function hideAction() {
-        $this->changeRoleVisibility(false);        
+        $this->changeRoleVisibility(false);
     }
 
     public function unhideAction() {
@@ -123,7 +123,7 @@ class Admin_CollectionrolesController extends Controller_Action {
             $this->setTitle($collectionRole);
             return;
         }
-        
+
         // manuelles Überprüfen der IBs in Tabelle collections_roles
         $tmpRole = Opus_CollectionRole::fetchByName($collectionRole->getName());
         if (!is_null($tmpRole) && $tmpRole->getId() !== $collectionRole->getId()) {
@@ -190,7 +190,6 @@ class Admin_CollectionrolesController extends Controller_Action {
         }
         catch (Application_Exception $e) {
             return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
-        }        
+        }
     }
 }
-?>

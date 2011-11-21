@@ -64,5 +64,3 @@ abstract class Admin_Model_AbstractModel {
     }
 
 }
-
-?>

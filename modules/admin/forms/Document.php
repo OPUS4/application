@@ -42,7 +42,7 @@ class Admin_Form_Document extends Zend_Form {
     private $model;
 
     private $includedFields;
-    
+
     /**
      * Constructs form for Opus_Model_Abstract instance.
      * @param <type> $model
@@ -75,4 +75,3 @@ class Admin_Form_Document extends Zend_Form {
     }
 
 }
-?>

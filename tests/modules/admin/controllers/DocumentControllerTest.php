@@ -359,5 +359,3 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     }
 
 }
-
-?>

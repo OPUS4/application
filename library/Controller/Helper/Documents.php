@@ -99,5 +99,3 @@ class Controller_Helper_Documents extends Zend_Controller_Action_Helper_Abstract
     }
 
 }
-
-?>

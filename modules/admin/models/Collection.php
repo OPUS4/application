@@ -71,7 +71,7 @@ class Admin_Model_Collection {
         }
         $parents = $this->collection->getParents();
         $this->collection->delete();
-        return $parents[1]->getId();        
+        return $parents[1]->getId();
     }
 
     public function setVisiblity($visibility) {
@@ -117,7 +117,7 @@ class Admin_Model_Collection {
         if (is_null($newPosition)) {
             throw new Admin_Model_Exception('missing parameter pos');
         }
-        
+
         $newPosition = (int) $newPosition;
         if ($newPosition < 1) {
             throw new Admin_Model_Exception('cannot move collection to position ' . $newPosition);
@@ -139,7 +139,7 @@ class Admin_Model_Collection {
             $sibling->setSortOrder($position);
             $sibling->store();
             if ($sibling->getId() === $this->collection->getId()) {
-                $oldPosition = $position;                
+                $oldPosition = $position;
             }
         }
 
@@ -157,7 +157,7 @@ class Admin_Model_Collection {
         if ($oldPosition !== $newPosition) {
             $siblings[$oldPosition]->setSortOrder($newPosition);
             $siblings[$newPosition]->setSortOrder($oldPosition);
-            
+
             $siblings[$oldPosition]->store();
             $siblings[$newPosition]->store();
         }
@@ -165,4 +165,3 @@ class Admin_Model_Collection {
         return $parents[1]->getId();
     }
 }
-?>

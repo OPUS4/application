@@ -103,5 +103,3 @@ class Admin_Form_FileAccess extends Admin_Form_RolesAbstract {
 
 
 }
-
-?>

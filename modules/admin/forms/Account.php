@@ -80,7 +80,7 @@ class Admin_Form_Account extends Admin_Form_RolesAbstract {
         // add form elements for selecting roles
         $this->_addRolesGroup();
     }
-    
+
     /**
      * Populate the form values from Opus_Account instance.
      * @param <type> $account
@@ -103,4 +103,3 @@ class Admin_Form_Account extends Admin_Form_RolesAbstract {
     }
 
 }
-?>
