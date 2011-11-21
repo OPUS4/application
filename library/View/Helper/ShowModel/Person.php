@@ -119,4 +119,3 @@ class View_Helper_ShowModel_Person extends View_Helper_ShowModel_Abstract {
 
 }
 
-?>

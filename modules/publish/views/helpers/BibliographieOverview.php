@@ -69,4 +69,3 @@ class Publish_View_Helper_BibliographieOverview extends Zend_View_Helper_Abstrac
 
 }
 
-?>

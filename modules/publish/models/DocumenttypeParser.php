@@ -269,4 +269,3 @@ class Publish_Model_DocumenttypeParser {
 
 }
 
-?>

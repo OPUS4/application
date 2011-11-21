@@ -38,4 +38,4 @@ class Frontdoor_Model_DocumentNotFoundException extends Frontdoor_Model_Frontdoo
         $this->code = 404;
     }
 }
-?>
+

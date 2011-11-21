@@ -85,4 +85,3 @@ class Form_Validate_RequiredIfTest extends PHPUnit_Framework_TestCase {
 
 }
 
-?>

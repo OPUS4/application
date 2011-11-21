@@ -100,4 +100,4 @@ class Rss_IndexController extends Controller_Xml {
         $this->_proc->setParameter('', 'frontdoorBaseUrl', $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/frontdoor/index/index/docId/');
     }
 }
-?>
+

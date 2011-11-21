@@ -47,4 +47,4 @@ class Opus_View extends Zend_View {
         $this->_params[$key] = $val;
     }
 }
-?>
+

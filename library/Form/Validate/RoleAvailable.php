@@ -103,4 +103,4 @@ class Form_Validate_RoleAvailable extends Zend_Validate_Abstract {
     }
 
 }
-?>
+

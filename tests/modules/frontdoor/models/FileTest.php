@@ -191,4 +191,4 @@ class MockRealm implements Opus_Security_IRealm {
     public function setIp($ipaddress){}
     public function check($privilege, $documentServerState = null, $fileId = null){}
 }
-?>
+

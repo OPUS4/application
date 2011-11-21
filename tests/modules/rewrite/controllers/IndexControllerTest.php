@@ -117,4 +117,4 @@ class Rewrite_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals($httpCode, $response->getHttpResponseCode());
     }
 }
-?>
+

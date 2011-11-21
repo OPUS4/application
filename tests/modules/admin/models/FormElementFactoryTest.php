@@ -100,4 +100,3 @@ class Admin_Model_FormElementFactoryTest extends ControllerTestCase {
 
 }
 
-?>

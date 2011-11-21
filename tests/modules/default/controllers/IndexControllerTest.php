@@ -46,4 +46,3 @@ class IndexControllerTest extends ControllerTestCase {
 
 }
 
-?>

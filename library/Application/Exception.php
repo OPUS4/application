@@ -44,4 +44,4 @@ class Application_Exception extends Exception {
         return $this->httpResponseCode;
     }
 }
-?>
+

@@ -56,4 +56,4 @@ class Solrsearch_BrowseController extends Controller_Action {
         $this->view->title = $this->view->translate('solrsearch_browse_doctypes');
     }
 }
-?>
+

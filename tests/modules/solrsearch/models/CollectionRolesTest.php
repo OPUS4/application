@@ -39,4 +39,4 @@ class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase {
         $collectionRoles->getAllVisible();
     }
 }
-?>
+

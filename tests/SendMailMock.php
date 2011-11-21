@@ -76,4 +76,4 @@ class SendMailMock {
         return $this->address;
     }
 }
-?>
+

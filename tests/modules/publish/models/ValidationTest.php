@@ -272,4 +272,3 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
     }
 }
 
-?>

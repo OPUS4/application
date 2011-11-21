@@ -197,4 +197,3 @@ class Admin_Model_DocumentHelperTest extends ControllerTestCase {
 
 }
 
-?>

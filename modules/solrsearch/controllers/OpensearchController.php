@@ -51,4 +51,4 @@ class Solrsearch_OpensearchController extends Controller_Xml {
         $this->loadStyleSheet($this->view->getScriptPath('opensearch') . DIRECTORY_SEPARATOR . 'opensearch.xslt');
     }
 }
-?>
+

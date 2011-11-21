@@ -393,4 +393,3 @@ class Publish_Model_Validation {
 
 }
 
-?>

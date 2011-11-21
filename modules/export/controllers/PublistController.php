@@ -96,4 +96,3 @@ class Export_PublistController extends Controller_Xml {
 
 }
 
-?>

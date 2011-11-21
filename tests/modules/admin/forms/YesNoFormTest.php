@@ -39,4 +39,4 @@ class Admin_Form_YesNoFormTest extends ControllerTestCase {
     }
     
 }
-?>
+

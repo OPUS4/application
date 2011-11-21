@@ -134,4 +134,4 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
 }
-?>
+

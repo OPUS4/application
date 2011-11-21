@@ -53,4 +53,4 @@ class Util_Searchtypes {
         return in_array($searchtype, $supportedTypes);
     }
 }
-?>
+

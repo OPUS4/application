@@ -218,4 +218,4 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
         new Frontdoor_Model_Authors($doc);
     }
 }
-?>
+

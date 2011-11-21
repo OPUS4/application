@@ -42,4 +42,4 @@ class Rss_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<rss version="2.0">', $response->getBody());
     }
 }
-?>
+

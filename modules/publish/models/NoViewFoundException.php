@@ -41,4 +41,3 @@ class Publish_Model_NoViewFoundException extends Publish_Model_FormException {
     }
 }
 
-?>

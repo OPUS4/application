@@ -78,4 +78,3 @@ class Admin_Form_IpRangeTest extends ControllerTestCase {
 
 }
 
-?>

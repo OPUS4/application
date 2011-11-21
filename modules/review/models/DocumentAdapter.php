@@ -321,4 +321,4 @@ class Review_Model_DocumentAdapter {
         return $return;
     }
 }
-?>
+

@@ -33,4 +33,4 @@
  */
 class Oai_Model_ResumptionTokenException extends Exception {
 }
-?>
+

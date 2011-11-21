@@ -114,4 +114,3 @@ class View_Helper_FormatValueTest extends ControllerTestCase {
 
 }
 
-?>

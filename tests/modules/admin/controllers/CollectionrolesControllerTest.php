@@ -144,4 +144,4 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }    
 }
-?>
+

@@ -105,4 +105,4 @@ class Frontdoor_Form_AtLeastOneValidator extends Zend_Validate_Abstract
         return $result;
     }
 }
-?>
+

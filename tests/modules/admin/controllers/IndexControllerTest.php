@@ -48,4 +48,3 @@ class Admin_IndexControllerTest extends ControllerTestCase {
 
 }
 
-?>

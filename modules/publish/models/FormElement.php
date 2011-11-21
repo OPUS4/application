@@ -523,4 +523,3 @@ class Publish_Model_FormElement {
 
 }
 
-?>

@@ -38,4 +38,4 @@ class Frontdoor_Model_DocumentAccessNotAllowedException extends Frontdoor_Model_
         $this->code = 403;
     }
 }
-?>
+

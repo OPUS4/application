@@ -118,4 +118,4 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertAction('notice');
     }
 }
-?>
+

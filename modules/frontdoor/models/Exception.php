@@ -35,4 +35,4 @@
 class Frontdoor_Model_Exception extends Exception {
 
 }
-?>
+

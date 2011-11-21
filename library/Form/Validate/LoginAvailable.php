@@ -99,4 +99,4 @@ class Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
     }
 
 }
-?>
+

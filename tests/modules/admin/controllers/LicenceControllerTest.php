@@ -78,5 +78,3 @@ class Admin_LicenceControllerTest extends ControllerTestCase {
 
 }
 
-?>
-

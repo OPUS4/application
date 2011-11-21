@@ -40,4 +40,3 @@ class Frontdoor_Form_MailFormTest extends ControllerTestCase {
 
 }
 
-?>

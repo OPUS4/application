@@ -45,4 +45,3 @@ class Account_Form_AccountTest extends ControllerTestCase {
 
 }
 
-?>

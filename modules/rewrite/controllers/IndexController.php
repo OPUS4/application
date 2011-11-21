@@ -77,4 +77,4 @@ class Rewrite_IndexController extends Controller_Action {
         return $this->_redirect($this->getRequest()->getBaseUrl() . '/files/' . $ids[0] . '/' . $filename, array('prependBase' => false, 'code' => 301));
     }
 }
-?>
+

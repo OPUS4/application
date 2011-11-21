@@ -38,4 +38,4 @@ class Frontdoor_Model_DocumentDeletedException extends Frontdoor_Model_Frontdoor
         $this->code = 410;
     }
 }
-?>
+

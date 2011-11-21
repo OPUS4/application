@@ -271,4 +271,4 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
     }
 
 }
-?>
+

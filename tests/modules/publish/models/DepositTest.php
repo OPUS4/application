@@ -113,4 +113,3 @@ class Publish_Model_DepositTest extends ControllerTestCase {
     
 }
 
-?>

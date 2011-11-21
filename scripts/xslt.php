@@ -52,11 +52,3 @@ $proc->importStyleSheet($xslt);
 error_reporting(0);
 echo $proc->transformToXml($xml);
 
-
-
-
-
-
-
-
-

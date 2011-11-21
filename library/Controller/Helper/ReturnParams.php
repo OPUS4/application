@@ -94,4 +94,3 @@ class Controller_Helper_ReturnParams extends Zend_Controller_Action_Helper_Abstr
 
 }
 
-?>

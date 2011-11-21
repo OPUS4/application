@@ -38,4 +38,4 @@ class Solrsearch_Model_ExceptionTest extends ControllerTestCase {
         new Solrsearch_Model_Exception();
     }
 }
-?>
+

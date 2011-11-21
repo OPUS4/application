@@ -48,4 +48,3 @@ class Admin_SecurityControllerTest extends ControllerTestCase {
 
 }
 
-?>

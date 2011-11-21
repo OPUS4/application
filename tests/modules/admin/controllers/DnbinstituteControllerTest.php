@@ -80,4 +80,4 @@ class Admin_DnbinstituteControllerTest extends ControllerTestCase {
     }
 
 }
-?>
+

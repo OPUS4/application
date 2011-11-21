@@ -43,4 +43,4 @@ class Remotecontrol_IndexController extends Controller_Action {
     }
 
 }
-?>
+

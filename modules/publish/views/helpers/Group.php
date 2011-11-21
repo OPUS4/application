@@ -133,4 +133,3 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
 
 }
 
-?>

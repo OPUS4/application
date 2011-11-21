@@ -290,4 +290,3 @@ class Admin_AccountControllerTest extends ControllerTestCase {
 
 }
 
-?>

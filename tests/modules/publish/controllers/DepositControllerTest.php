@@ -220,4 +220,3 @@ class Publish_DepositControllerTest extends ControllerTestCase {
     }
 }
 
-?>

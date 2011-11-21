@@ -78,4 +78,3 @@ class View_Helper_ShowModel_Licence extends View_Helper_ShowModel_Abstract {
 
 }
 
-?>

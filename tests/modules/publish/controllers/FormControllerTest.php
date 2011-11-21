@@ -221,4 +221,3 @@ class Publish_FormControllerTest extends ControllerTestCase {
     }      
 }
 
-?>

@@ -38,4 +38,4 @@ class Frontdoor_Model_FileNotFoundException extends Frontdoor_Model_FrontdoorDel
         $this->code = 404;
     }
 }
-?>
+

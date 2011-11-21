@@ -103,4 +103,3 @@ class Admin_LanguageControllerTest extends ControllerTestCase {
 
 }
 
-?>

@@ -47,4 +47,4 @@ class Statistic_IndexControllerTest extends ControllerTestCase {
     }
 
 }
-?>
+

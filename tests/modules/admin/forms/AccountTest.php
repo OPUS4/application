@@ -60,4 +60,3 @@ class Admin_Form_AccountTest extends ControllerTestCase {
 
 }
 
-?>

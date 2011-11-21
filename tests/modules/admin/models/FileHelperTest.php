@@ -69,4 +69,3 @@ class Admin_Model_FileHelperTest extends ControllerTestCase {
 
 }
 
-?>

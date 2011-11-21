@@ -71,4 +71,3 @@ class View_Helper_ShowModel_Language extends View_Helper_ShowModel_Abstract {
 
 }
 
-?>

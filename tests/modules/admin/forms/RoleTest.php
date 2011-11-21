@@ -46,4 +46,3 @@ class Admin_Form_RoleTest extends ControllerTestCase {
 
 }
 
-?>

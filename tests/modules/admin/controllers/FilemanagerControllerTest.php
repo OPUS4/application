@@ -74,4 +74,3 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
 
 }
 
-?>

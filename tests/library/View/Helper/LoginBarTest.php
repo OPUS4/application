@@ -48,4 +48,3 @@ class View_Helper_LoginBarTest extends ControllerTestCase {
 
 }
 
-?>

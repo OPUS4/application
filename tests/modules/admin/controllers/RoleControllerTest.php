@@ -212,5 +212,3 @@ class Admin_RoleControllerTest extends ControllerTestCase {
 
 }
 
-
-?>

@@ -386,4 +386,3 @@ class Publish_Model_DisplayGroup {
 
 }
 
-?>

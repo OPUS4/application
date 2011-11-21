@@ -350,4 +350,4 @@ class Solrsearch_IndexController extends Controller_Action {
         return $input;
     }
 }
-?>
+

@@ -148,4 +148,4 @@ class Solrsearch_Model_CollectionList {
         return $this->collectionRole->getDisplayName('browsing');
     }
 }
-?>
+

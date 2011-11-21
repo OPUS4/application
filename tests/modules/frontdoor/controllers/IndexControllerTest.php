@@ -188,4 +188,4 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('<td><em class="data-marker"/></td>', $body);
     }
 }
-?>
+

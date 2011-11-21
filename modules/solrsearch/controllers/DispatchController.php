@@ -115,4 +115,4 @@ class Solrsearch_DispatchController extends Controller_Action {
         return $params;
     }
 }
-?>
+

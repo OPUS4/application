@@ -43,4 +43,3 @@ class View_Helper_ShowModelTest extends ControllerTestCase {
 
 }
 
-?>

@@ -42,4 +42,4 @@ class Admin_OailinkControllerTest extends ControllerTestCase {
     }
 
 }
-?>
+

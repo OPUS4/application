@@ -158,4 +158,3 @@ class Account_IndexController extends Controller_Action {
 
 }
 
-?>

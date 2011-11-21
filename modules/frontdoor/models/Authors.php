@@ -149,4 +149,4 @@ class Frontdoor_Model_Authors {
         }
     }
 }
-?>
+

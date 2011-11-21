@@ -55,4 +55,4 @@ class LicenseControllerTest extends ControllerTestCase {
     }
 
 }
-?>
+

@@ -69,4 +69,3 @@ class View_Helper_ShowModel_Date extends View_Helper_ShowModel_Abstract {
 
 }
 
-?>

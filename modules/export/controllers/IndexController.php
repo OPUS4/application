@@ -127,4 +127,3 @@ class Export_IndexController extends Controller_Xml {
     }
 }
 
-?>

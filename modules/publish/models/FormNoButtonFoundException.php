@@ -41,4 +41,3 @@ class Publish_Model_FormNoButtonFoundException extends Publish_Model_FormExcepti
     }
 }
 
-?>

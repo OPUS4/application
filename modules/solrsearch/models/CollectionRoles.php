@@ -97,4 +97,4 @@ class Solrsearch_Model_CollectionRoles {
         return $collectionRole->getVisible() === '1' and $collectionRole->getVisibleBrowsingStart() === '1';
     }
 }
-?>
+

@@ -60,4 +60,3 @@ class Form_Validate_Password extends Zend_Validate_Abstract {
 
 }
 
-?>

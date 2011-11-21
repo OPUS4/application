@@ -234,4 +234,3 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
 
 }
 
-?>

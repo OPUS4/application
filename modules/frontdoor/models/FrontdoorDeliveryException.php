@@ -44,4 +44,4 @@ class Frontdoor_Model_FrontdoorDeliveryException extends Exception {
         return $this->translateKey;
     }
 }
-?>
+

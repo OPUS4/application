@@ -41,4 +41,3 @@ class Frontdoor_Form_ToauthorFormTest extends ControllerTestCase {
 
 }
 
-?>

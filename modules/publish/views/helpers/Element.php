@@ -102,4 +102,3 @@ class Publish_View_Helper_Element extends Publish_View_Helper_Fieldset {
     }
 }
 
-?>

@@ -600,4 +600,3 @@ class Publish_Model_ExtendedValidation {
 
 }
 
-?>

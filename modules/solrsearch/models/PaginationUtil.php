@@ -88,4 +88,4 @@ class Solrsearch_Model_PaginationUtil {
         return $this->constructUrlArrayWithStartIndex($this->lastPageStartIndex);
     }
 }
-?>
+

@@ -42,4 +42,3 @@ class Admin_Model_HashTest extends ControllerTestCase {
 
 }
 
-?>

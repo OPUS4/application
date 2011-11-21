@@ -272,4 +272,3 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
 
 }
 
-?>

@@ -81,4 +81,3 @@ class Publish_View_Helper_FileOverview extends Zend_View_Helper_Abstract {
 
 }
 
-?>

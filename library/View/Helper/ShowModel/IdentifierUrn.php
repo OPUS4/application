@@ -74,4 +74,3 @@ class View_Helper_ShowModel_IdentifierUrn extends View_Helper_ShowModel_Abstract
 
 }
 
-?>

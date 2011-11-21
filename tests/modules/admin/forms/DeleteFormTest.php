@@ -40,4 +40,3 @@ class Admin_Form_DeleteFormTest extends ControllerTestCase {
 
 }
 
-?>

@@ -181,4 +181,3 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
 
 }
 
-?>

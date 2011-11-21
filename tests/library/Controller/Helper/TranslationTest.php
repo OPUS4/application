@@ -309,4 +309,3 @@ class Controller_Helper_TranslationTest extends ControllerTestCase {
 
 }
 
-?>

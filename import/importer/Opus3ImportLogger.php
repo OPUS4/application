@@ -112,4 +112,4 @@ class Opus3ImportLogger {
 	fclose($this->_errorLogfile);	
     }
 }
-?>
+

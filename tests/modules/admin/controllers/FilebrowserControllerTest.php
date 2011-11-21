@@ -124,4 +124,4 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase {
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/filemanager/index/docId/' . $this->documentId);
     }
 }
-?>
+

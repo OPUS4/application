@@ -44,4 +44,4 @@ class Publish_Model_FormException extends Exception {
         return $this->translateKey;
     }
 }
-?>
+

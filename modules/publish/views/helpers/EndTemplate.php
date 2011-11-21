@@ -66,4 +66,4 @@ class Publish_View_Helper_EndTemplate extends Zend_View_Helper_Abstract{
             return $this->view->translate('publish_controller_form_template2');
     }
 }
-?>
+

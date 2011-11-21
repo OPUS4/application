@@ -250,4 +250,4 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         }
     }
 }
-?>
+

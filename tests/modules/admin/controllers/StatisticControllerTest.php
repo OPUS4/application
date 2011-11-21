@@ -54,4 +54,3 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
 
 }
 
-?>

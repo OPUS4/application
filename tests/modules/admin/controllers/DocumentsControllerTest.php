@@ -49,4 +49,3 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
 
 }
 
-?>

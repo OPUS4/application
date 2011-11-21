@@ -82,4 +82,3 @@ class View_Helper_ShowModel_Complex extends View_Helper_ShowModel_Abstract {
 
 }
 
-?>

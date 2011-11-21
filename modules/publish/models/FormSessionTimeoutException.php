@@ -41,4 +41,3 @@ class Publish_Model_FormSessionTimeoutException extends Publish_Model_FormExcept
     }
 }
 
-?>
