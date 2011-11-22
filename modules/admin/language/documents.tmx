@@ -151,7 +151,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_doc_delete_permanent">
+    <tu tuid="admin_doc_permanentdelete">
       <tuv xml:lang="en">
         <seg>Delete document permanently</seg>
       </tuv>
@@ -160,7 +160,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_doc_delete_permanent_sure">
+    <tu tuid="admin_doc_permanentdelete_sure">
       <tuv xml:lang="en">
         <seg>Are you sure you want to delete document %1$s permanently? All contents will be removed from disk without the possibility to undelete!</seg>
       </tuv>

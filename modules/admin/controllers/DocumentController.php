@@ -223,44 +223,44 @@ class Admin_DocumentController extends Controller_Action {
      * Switches the status of a document to published.
      */
     public function publishAction() {
-        if (($this->_request->isPost() === false) && ($this->getRequest()->getParam('docId') === null)) {
-            $this->_redirect('index', null, 'documents', 'admin');
+        $docId = $this->getRequest()->getParam('docId');
+
+        // Check if document identifier is valid
+        if (!$this->documentsHelper->isValidId($docId)) {
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate('admin_document_error_novalidid')),
+                    'documents', 'admin');
         }
 
-        $id = null;
-        $id = $this->getRequest()->getParam('docId');
-        if ($id === null) {
-            $id = $this->getRequest()->getPost('id');
-        }
-        $sureyes = $this->getRequest()->getPost('sureyes');
-        $sureno = $this->getRequest()->getPost('sureno');
+        $doc = new Opus_Document($docId);
 
-        if (isset($sureyes) === true) {
-            // publish document
-            $doc = new Opus_Document($id);
-            $doc->setServerState('published');
-            //        $doc->setServerDatePublished(date('Y-m-d'));
-            //        $doc->setServerDatePublished(date('c'));
-            $date = new Zend_Date();
-            $doc->setServerDatePublished($date->get('yyyy-MM-ddThh:mm:ss') . 'Z');
-            $doc->store();
+        if ($doc->getServerState() === 'published') {
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate(
+                        'admin_document_error_already_published')),
+                    'document', 'admin', array('id' => $docId));
+        }
 
-            $message = $this->view->translate('document_published', $id);
-            $this->_redirectTo('index', $message, 'document', 'admin',
-                    array('id' => $id));
-        }
-        else if (isset($sureno) === true) {
-            $message = null;
-            $this->_redirectTo('index', $message, 'document', 'admin',
-                    array('id' => $id));
-        }
-        else {
-            // show safety question
-            $this->view->title = $this->view->translate('admin_doc_publish');
-            $this->view->text = $this->view->translate('admin_doc_publish_sure', $id);
-            $yesnoForm = $this->__getConfirmationForm($id, 'publish');
-            $this->view->form = $yesnoForm;
-            return $this->renderScript('document/confirm.phtml');
+        switch ($this->__confirm($docId, 'publish')) {
+            case 'YES':
+                $doc->setServerState('published');
+                //        $doc->setServerDatePublished(date('Y-m-d'));
+                //        $doc->setServerDatePublished(date('c'));
+                $date = new Zend_Date();
+                $doc->setServerDatePublished(
+                        $date->get('yyyy-MM-ddThh:mm:ss') . 'Z');
+                $doc->store();
+
+                $message = $this->view->translate('document_published', $docId);
+                return $this->_redirectTo('index', $message, 'document',
+                        'admin', array('id' => $docId));
+                break;
+            case 'NO':
+                $this->_redirectTo('index', null, 'document', 'admin',
+                        array('id' => $docId));
+                break;
+            default:
+                break;
         }
     }
 
@@ -268,40 +268,36 @@ class Admin_DocumentController extends Controller_Action {
      * Deletes a document permanently (removes it from database and disk).
      */
     public function permanentdeleteAction() {
-        if ($this->_request->isPost() === true || $this->getRequest()->getParam('docId') !== null) {
-            $id = null;
-            $id = $this->getRequest()->getParam('docId');
-            if ($id === null) {
-                $id = $this->getRequest()->getPost('id');
-            }
-            $sureyes = $this->getRequest()->getPost('sureyes');
-            $sureno = $this->getRequest()->getPost('sureno');
-            if (isset($sureyes) === true or isset($sureno) === true) {
-            	// Safety question answered, deleting
-            	if (isset($sureyes) === true) {
-                    $model = new Opus_Document($id);
-                    try {
-                    	$model->deletePermanent();
-                    }
-                    catch (Exception $e) {
-                    	$this->_redirectTo('index', array('failure' => $e->getMessage()), 'documents', 'admin');
-                    }
-                    $this->_redirectTo('index', $this->view->translate('admin_documents_permanent_delete_success'), 'documents', 'admin');
-            	}
-            	else {
-                    $this->_redirectTo('index', null, 'documents', 'admin');
-            	}
-            }
-            else {
-                // show safety question
-                $this->view->title = $this->view->translate('admin_doc_delete_permanent');
-                $this->view->text = $this->view->translate('admin_doc_delete_permanent_sure', $id);
-                $yesnoForm = $this->__getConfirmationForm($id, 'permanentdelete');
-                $this->view->form = $yesnoForm;
-                return $this->renderScript('document/confirm.phtml');
-            }
-        } else {
-            $this->_redirectTo('index', null, 'documents', 'admin');
+        $docId = $this->getRequest()->getParam('docId');
+
+        // Check if document identifier is valid
+        if (!$this->documentsHelper->isValidId($docId)) {
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate('admin_document_error_novalidid')),
+                    'documents', 'admin');
+        }
+
+        $doc = new Opus_Document($docId);
+
+        switch ($this->__confirm($docId, 'permanentdelete')) {
+            case 'YES':
+                try {
+                    $doc->deletePermanent();
+                }
+                catch (Exception $e) {
+                    $this->_redirectTo('index', array('failure' =>
+                        $e->getMessage()), 'documents', 'admin');
+                }
+                return $this->_redirectTo('index', $this->view->translate(
+                        'admin_documents_permanent_delete_success'),
+                        'documents', 'admin');
+                break;
+            case 'NO':
+                $this->_redirectTo('index', null, 'document', 'admin',
+                        array('id' => $docId));
+                break;
+            default:
+                break;
         }
     }
 
@@ -309,118 +305,78 @@ class Admin_DocumentController extends Controller_Action {
      * Unpublishes a document (sets ServerState to unpublished).
      */
     public function unpublishAction() {
-        if (($this->_request->isPost() === false) && ($this->getRequest()->getParam('docId') === null)) {
-            $this->_redirect('index', null, 'documents', 'admin');
+        $docId = $this->getRequest()->getParam('docId');
+
+        // Check if document identifier is valid
+        if (!$this->documentsHelper->isValidId($docId)) {
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate('admin_document_error_novalidid')),
+                    'documents', 'admin');
         }
 
-        $id = null;
-        $id = $this->getRequest()->getParam('docId');
-        if ($id === null) {
-            $id = $this->getRequest()->getPost('id');
-        }
-        $sureyes = $this->getRequest()->getPost('sureyes');
-        $sureno = $this->getRequest()->getPost('sureno');
+        $doc = new Opus_Document($docId);
 
-        if (isset($sureyes) === true) {
-            $doc = new Opus_Document($id);
-            $doc->setServerState('unpublished');
-            $doc->store();
-
-            $message = $this->view->translate('document_unpublished', $id);
-            $this->_redirectTo('index', $message, 'document', 'admin',
-                    array('id' => $id));
-        }
-        else if (isset($sureno) === true) {
-            $message = null;
-            $this->_redirectTo('index', $message, 'document', 'admin',
-                    array('id' => $id));
-        }
-        else {
-            // show safety question
-            $this->view->title = $this->view->translate('admin_doc_unpublish');
-            $this->view->text = $this->view->translate('admin_doc_unpublish_sure', $id);
-            $yesnoForm = $this->__getConfirmationForm($id, 'unpublish');
-            $this->view->form = $yesnoForm;
-            return $this->renderScript('document/confirm.phtml');
+        if ($doc->getServerState() === 'unpublished') {
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate(
+                        'admin_document_error_already_unpublished')),
+                    'document', 'admin', array('id' => $docId));
         }
 
+        switch ($this->__confirm($docId, 'unpublish')) {
+            case 'YES':
+                $doc->setServerState('unpublished');
+                $doc->store();
+
+                $message = $this->view->translate('document_unpublished',
+                        $docId);
+                return $this->_redirectTo('index', $message, 'document',
+                        'admin', array('id' => $docId));
+                break;
+            case 'NO':
+                $this->_redirectTo('index', null, 'document', 'admin',
+                        array('id' => $docId));
+                break;
+            default:
+                break;
+        }
     }
 
     /**
      * Deletes a document (sets state to deleted).
      */
     public function deleteAction() {
+        $docId = $this->getRequest()->getParam('docId');
 
-	$this->_logger->info('call delete action');
-        if ($this->_request->isPost() !== true && is_null($this->getRequest()->getParam('docId'))) {
-            $this->_redirectTo('index', null, 'documents', 'admin');
-        }
-
-	$this->_logger->info('was post request');
-
-        $id = $this->getRequest()->getParam('docId');
-        if ($id === null) {
-            $id = $this->getRequest()->getPost('id');
-        }
-
-	$this->_logger->info('id is ' . $id);
-
-        if ($id === null || !is_numeric($id)) {
-            // no valid docId provided, redirect
-            $this->_redirectTo('index', array('failure' =>
+        // Check if document identifier is valid
+        if (!$this->documentsHelper->isValidId($docId)) {
+            return $this->_redirectTo('index', array('failure' =>
                 $this->view->translate('admin_document_delete_novalidid')),
                     'documents', 'admin');
         }
 
-        $sureyes = $this->getRequest()->getPost('sureyes');
-        $sureno = $this->getRequest()->getPost('sureno');
+        $doc = new Opus_Document($docId);
 
-	$this->_logger->info('sureyes is ' . $sureyes);
-
-        if (isset($sureyes) === true or isset($sureno) === true) {
-            // Safety question answered, deleting
-            if (isset($sureyes) === true) {
-		$this->_logger->info('try to remove doc id ' . $id);
-
-                $model = new Opus_Document($id);
-                $model->delete();
-
-		$this->_logger->info('deletion successfully');
-                $this->_redirectTo('index', $this->view->translate('admin_documents_delete_success'), 'document', 'admin', array('id' => $id));
-            }
-            else {
-                $this->_redirectTo('index', null, 'document', 'admin', array('id' => $id));
-            }
+        if ($doc->getServerState() === 'deleted') {
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate('admin_document_error_already_deleted')),
+                    'document', 'admin', array('id' => $docId));
         }
-        else {
-            $doc = null;
 
-            try {
-                $doc = new Opus_Document($id);
-            }
-            catch (Opus_Model_NotFoundException $omnfe) {
-                $doc = null;
-            }
+        switch ($this->__confirm($docId, 'delete')) {
+            case 'YES':
+                $doc->delete();
+                return $this->_redirectTo('index', $this->view->translate(
+                        'admin_documents_delete_success'), 'document',
+                        'admin', array('id' => $docId));
+                break;
+            case 'NO':
+                return $this->_redirectTo('index', null, 'document', 'admin',
+                        array('id' => $docId));
 
-            if (empty($doc)) {
-                $this->_logger->info("trying to delete invalid id " + htmlspecialchars($id));
-                return $this->_redirectToAndExit('index', array('failure' =>
-                    $this->view->translate('admin_document_delete_novalidid')),
-                        'documents', 'admin');
-            }
-            else if ($doc->getServerState() === 'deleted') {
-                return $this->_redirectToAndExit('index', array('failure' =>
-                    $this->view->translate('admin_document_error_already_deleted')),
-                        'document', 'admin', array('id' => $id));
-            }
-            else {
-                // show safety question
-                $this->view->title = $this->view->translate('admin_doc_delete');
-                $this->view->text = $this->view->translate('admin_doc_delete_sure', $id);
-                $yesnoForm = $this->__getConfirmationForm($id, 'delete');
-                $this->view->form = $yesnoForm;
-                return $this->renderScript('document/confirm.phtml');
-            }
+                break;
+            default:
+                break;
         }
     }
 
@@ -504,6 +460,35 @@ class Admin_DocumentController extends Controller_Action {
                 $this->view->translate('admin_document_error_novalidid')),
                     'documents', 'admin');
         }
+    }
+
+    /**
+     * Prepare or processes POST from confirmation page.
+     * @param type $docId
+     * @param type $action
+     * @return type
+     */
+    private function __confirm($docId, $action) {
+        // Check if request is POST and if yes check for user response
+        if ($this->getRequest()->isPost()) {
+            $sureyes = $this->getRequest()->getPost('sureyes');
+            $sureno = $this->getRequest()->getPost('sureno');
+
+            if (isset($sureyes) === true) {
+                return 'YES';
+            }
+            else if (isset($sureno) === true) {
+                return 'NO';
+            }
+        }
+
+        // show confirmation page if not a POST and if not answered YES or NO
+        $this->view->title = $this->view->translate('admin_doc_' . $action);
+        $this->view->text = $this->view->translate(
+                'admin_doc_' . $action . '_sure', $docId);
+        $yesnoForm = $this->__getConfirmationForm($docId, $action);
+        $this->view->form = $yesnoForm;
+        $this->renderScript('document/confirm.phtml');
     }
 
     /**
@@ -628,7 +613,7 @@ class Admin_DocumentController extends Controller_Action {
             $actions['publish'] = $action;
 
             $action = array();
-            $action['label'] = 'admin_doc_delete_permanent';
+            $action['label'] = 'admin_doc_permanentdelete';
             $action['url'] = $documentUrl->adminDeletePermanent($docId);
             $actions['permanentDelete'] = $action;
         }

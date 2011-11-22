@@ -113,10 +113,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'id' => '24',
                     'sureno' => 'sureno'
                 ));
-        $this->dispatch('/admin/document/delete');
+        $this->dispatch('/admin/document/delete/docId/24');
         $this->assertModule('admin');
         $this->assertController('document');
         $this->assertAction('delete');
@@ -133,10 +132,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'id' => '25',
                     'sureyes' => 'sureyes'
                 ));
-        $this->dispatch('/admin/document/delete');
+        $this->dispatch('/admin/document/delete/docId/25');
         $this->assertModule('admin');
         $this->assertController('document');
         $this->assertAction('delete');
@@ -168,10 +166,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'id' => '24',
                     'sureno' => 'sureno'
                 ));
-        $this->dispatch('/admin/document/permanentdelete');
+        $this->dispatch('/admin/document/permanentdelete/docId/24');
         $this->assertModule('admin');
         $this->assertController('document');
         $this->assertAction('permanentdelete');
@@ -188,10 +185,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'id' => '100',
                     'sureyes' => 'sureyes'
                 ));
-        $this->dispatch('/admin/document/publish');
+        $this->dispatch('/admin/document/publish/docId/100');
         $this->assertModule('admin');
         $this->assertController('document');
         $this->assertAction('publish');
@@ -210,10 +206,9 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'id' => '100',
                     'sureyes' => 'sureyes'
                 ));
-        $this->dispatch('/admin/document/unpublish');
+        $this->dispatch('/admin/document/unpublish/docId/100');
         $this->assertModule('admin');
         $this->assertController('document');
         $this->assertAction('unpublish');

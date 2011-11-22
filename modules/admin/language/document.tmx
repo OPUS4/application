@@ -556,6 +556,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_error_already_published">
+      <tuv xml:lang="en">
+        <seg>The document has already been published.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument wurde bereits veröffentlicht.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_error_already_unpublished">
+      <tuv xml:lang="en">
+        <seg>The document has already been published.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument wurde bereits veröffentlicht.</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>
