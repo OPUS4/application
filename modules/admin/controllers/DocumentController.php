@@ -38,31 +38,6 @@
 class Admin_DocumentController extends Controller_Action {
 
     /**
-     * Model classes for sections of metadata form.
-     * @var hash section name => model class
-     */
-    private $sectionModel = array(
-        'titles' => 'Opus_Title',
-        'abstracts' => 'Opus_TitleAbstract',
-        'identifiers' => 'Opus_Identifier',
-        'references' => 'Opus_Reference',
-        'subjects' => 'Opus_Subject',
-        'patents' => 'Opus_Patent',
-        'notes' => 'Opus_Note',
-        'enrichments' => 'Opus_Enrichment'
-    );
-
-    /**
-     * Field name for sections of metadata form.
-     * @var hash section name => field name
-     */
-    private $sectionField = array(
-        'persons' => 'Person',
-        'licences' => 'Licence'
-
-    );
-
-    /**
      * Helper for verifying document IDs.
      * @var Controller_Helper_Documents
      */
@@ -163,10 +138,10 @@ class Admin_DocumentController extends Controller_Action {
                         return $this->_redirectTo('index', null, 'document',
                                 'admin', array('id' => $docId));
                     default:
-                        $model = new Opus_Document($docId);
+                        $doc = new Opus_Document($docId);
                         $this->view->section = $section;
                         $this->view->docId = $docId;
-                        $this->view->addForm = $this->__getAddForm($model,
+                        $this->view->addForm = $this->__getAddForm($doc,
                                 $section);
                         return $this->renderScript('document/add.phtml');
                 }
@@ -669,47 +644,39 @@ class Admin_DocumentController extends Controller_Action {
     }
 
     /**
-     * Generates Zend_Form for adding a value to a document field.
-     * @param type $model
-     * @param type $section
+     * Generates Zend_Form for adding a value to a metadata section of a
+     * document.
+     * @param Opus_Document $doc Document instance
+     * @param string $section Name of metadata section
      * @return Zend_Form
      */
-    private function __getAddForm($model, $section) {
+    private function __getAddForm($doc, $section) {
         $form = null;
 
-        $id = $model->getId();
+        $docId = $doc->getId();
 
-        $includedFields = Admin_Model_DocumentHelper::getFieldNamesForGroup($section);
+        $includedFields = Admin_Model_DocumentHelper::getFieldNamesForGroup(
+                $section);
 
-        if (isset($this->sectionModel[$section])) {
-            $sectionModel = $this->sectionModel[$section];
-        }
-        if (isset($this->sectionField[$section])) {
-            $sectionField = $this->sectionField[$section];
-        }
+        $sectionModel = Admin_Model_DocumentHelper::getModelClassForGroup(
+                $section);
+
+        $sectionField = Admin_Model_DocumentHelper::getFieldNameForGroup(
+                $section);
+
+        $addForm = null;
 
         if (!empty($sectionModel)) {
             $addForm = new Admin_Form_Model($sectionModel);
         }
         elseif (!empty($sectionField)) {
-            $temp = new Opus_Document();
-            $field = $temp->getField($sectionField);
-            switch ($sectionField) {
-                case 'Licence':
-                    $addForm = new Admin_Form_Model('Opus_Document', array('Licence'));
-                    break;
-                default:
-                    $addForm = new Admin_Form_Model($temp->getField($sectionField));
-                    break;
-            }
-        }
-        else {
-            $addForm = null;
+            $field = $doc->getField($sectionField);
+            $addForm = $this->__getFormForField($field);
         }
 
         if (!empty($addForm)) {
             $hiddenDocId = new Zend_Form_Element_Hidden('docid');
-            $hiddenDocId->setValue($id);
+            $hiddenDocId->setValue($docId);
 
             $addForm->addElement($hiddenDocId);
 
@@ -725,7 +692,7 @@ class Admin_DocumentController extends Controller_Action {
 
             $addUrl = $this->view->url(array(
                 'action' => 'create',
-                'id' => $id,
+                'id' => $docId,
                 'section' => $section
             ));
             $form->setAction($addUrl);
@@ -746,11 +713,11 @@ class Admin_DocumentController extends Controller_Action {
 
     /**
      * Generates form for editing the values of document fields.
-     * @param type $model
+     * @param Opus_Document $doc
      * @param type $section
      * @return Zend_Form
      */
-    private function __getEditForm($model, $section) {
+    private function __getEditForm($doc, $section) {
         $includedFields = Admin_Model_DocumentHelper::getFieldNamesForGroup(
                 $section);
 
@@ -762,14 +729,14 @@ class Admin_DocumentController extends Controller_Action {
             case 'other':
             case 'dates':
             case 'thesis':
-                $subform = new Admin_Form_Model($model, $includedFields);
-                $subform->populateFromModel($model);
+                $subform = new Admin_Form_Model($doc, $includedFields);
+                $subform->populateFromModel($doc);
                 $form->addSubForm($subform, 'Opus_Document');
                 break;
 
             default:
                 foreach ($includedFields as $index => $fieldName) {
-                    $field = $model->getField($fieldName);
+                    $field = $doc->getField($fieldName);
 
                     $fieldNameSub = new Zend_Form_SubForm($fieldName);
                     $fieldNameSub->removeDecorator('fieldset');
@@ -779,19 +746,13 @@ class Admin_DocumentController extends Controller_Action {
 
                     if (is_array($values)) {
                         foreach ($values as $index2 => $value) {
-                            switch ($fieldName) {
-                                case 'Licence':
-                                    $subform = new Admin_Form_Model('Opus_Document', array('Licence'));
-                                    break;
-                                default:
-                                    $subform = new Admin_Form_Model($field);
-                                    break;
-                            }
+                            $subform = $this->__getFormForField($field);
                             $subform->removeDecorator('DtDdWrapper');
                             $subform->populateFromModel($value);
                             $subform->setLegend($field->getValueModelClass()); // TODO remove/replace
                             $remove = new Zend_Form_Element_Submit('remove');
-                            $remove->setValue($field->getValueModelClass() . $index2);
+                            $remove->setValue(
+                                    $field->getValueModelClass() . $index2);
                             $remove->setLabel('admin_document_button_remove');
                             $subform->addElement($remove);
                             $fieldNameSub->addSubForm($subform, $index2);
@@ -804,7 +765,7 @@ class Admin_DocumentController extends Controller_Action {
 
         $updateUrl = $this->view->url(array(
             'action' => 'update',
-            'id' => $model->getId(),
+            'id' => $doc->getId(),
             'section'=> $section
         ));
 
@@ -823,6 +784,25 @@ class Admin_DocumentController extends Controller_Action {
         $form->addElement($reset);
 
         return $form;
+    }
+
+    /**
+     * Returns empty form for a model field.
+     * @param Opus_Model_Field $field
+     * @return Admin_Form_Model
+     */
+    private function __getFormForField($field) {
+        $subform = null;
+        switch ($field->getName()) {
+            case 'Licence':
+                $subform = new Admin_Form_Model(
+                        'Opus_Document', array('Licence'));
+                break;
+            default:
+                $subform = new Admin_Form_Model($field);
+                break;
+        }
+        return $subform;
     }
 
     /**

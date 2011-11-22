@@ -195,5 +195,35 @@ class Admin_Model_DocumentHelperTest extends ControllerTestCase {
                 Admin_Model_DocumentHelper::isValidGroup(null));
     }
 
+    public function testGetModelClassForGroupSubjects() {
+        $this->assertEquals('Opus_Subject',
+                Admin_Model_DocumentHelper::getModelClassForGroup('subjects'));
+    }
+
+    public function testGetModelClassForGroupOther() {
+        $this->assertNull(
+                Admin_Model_DocumentHelper::getModelClassForGroup('other'));
+    }
+
+    public function testGetModelClassForGroupNull() {
+        $this->assertNull(
+                Admin_Model_DocumentHelper::getModelClassForGroup(null));
+    }
+
+    public function testGetFieldNameForGroupPersons() {
+        $this->assertEquals('Person',
+                Admin_Model_DocumentHelper::getFieldNameForGroup('persons'));
+    }
+
+    public function testGetFieldNameForGroupSubjects() {
+        $this->assertNull(
+                Admin_Model_DocumentHelper::getFieldNameForGroup('subjects'));
+    }
+
+    public function testGetFieldNameForGroupNull() {
+        $this->assertNull(
+                Admin_Model_DocumentHelper::getFieldNameForGroup(null));
+    }
+
 }
 

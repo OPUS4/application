@@ -41,6 +41,31 @@
 class Admin_Model_DocumentHelper {
 
     /**
+     * Model classes for sections of metadata form.
+     * @var hash section name => model class
+     */
+    private static $sectionModel = array(
+        'titles' => 'Opus_Title',
+        'abstracts' => 'Opus_TitleAbstract',
+        'identifiers' => 'Opus_Identifier',
+        'references' => 'Opus_Reference',
+        'subjects' => 'Opus_Subject',
+        'patents' => 'Opus_Patent',
+        'notes' => 'Opus_Note',
+        'enrichments' => 'Opus_Enrichment'
+    );
+
+    /**
+     * Field name for sections of metadata form.
+     * @var hash section name => field name
+     */
+    private static $sectionField = array(
+        'persons' => 'Person',
+        'licences' => 'Licence'
+
+    );
+
+    /**
      * Document that is viewed.
      * @var Opus_Document
      */
@@ -247,6 +272,34 @@ class Admin_Model_DocumentHelper {
         $data = $config->toArray();
 
         return array_keys($data);
+    }
+
+    /**
+     * Returns the field name for a group (section).
+     * @param string $group Name of group (section)
+     * @return string Name of field of Opus_Document for group (section)
+     */
+    public static function getFieldNameForGroup($group) {
+        if (isset(self::$sectionField[$group])) {
+            return self::$sectionField[$group];
+        }
+        else {
+            return null;
+        }
+    }
+
+    /**
+     * Returns the common model class for a group (section).
+     * @param string $group Name of group (section)
+     * @return string Model class name for group
+     */
+    public static function getModelClassForGroup($group) {
+        if (isset(self::$sectionModel[$group])) {
+            return self::$sectionModel[$group];
+        }
+        else {
+            return null;
+        }
     }
 
     /**
