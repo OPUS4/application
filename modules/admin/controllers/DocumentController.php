@@ -828,114 +828,146 @@ class Admin_DocumentController extends Controller_Action {
      */
     private function __processCreatePost($postData, $document) {
         foreach ($postData as $modelClass => $fields) {
-            $processFields = true;
-
             switch ($modelClass) {
                 case 'Opus_Person':
                     $person = new Opus_Person();
                     $model = $document->addPerson($person);
+                    $this->__processFields($model, $fields);
                     break;
                 case 'Opus_Licence':
-                    // TODO no duplicate entries
-                    $licenceIndex = $fields['Licence'];
-                    $licences = Opus_Licence::getAll();
-                    $currentLicences = $document->getLicence();
-                    $licenceAlreadyAssigned = false;
-                    foreach ($currentLicences as $index => $currentLicence) {
-                        if ($currentLicence->getModel()->getId() == $licenceIndex) {
-                            $licenceAlreadyAssigned = true;
-                            // TODO print out message
-                        }
-                    }
-                    if (!$licenceAlreadyAssigned) {
-                        $document->addLicence(new Opus_Licence($licenceIndex));
-                    }
-                    $processFields = false;
+                    $this->__addLicence($document, $fields);
                     break;
                 default:
                     $model = new $modelClass;
-                    break;
-            }
-
-            if ($processFields) {
-                foreach ($fields as $name => $value) {
-                    // TODO filter buttons
-                    $field = $model->getField($name);
-                    if (!empty($field)) {
-                        switch ($field->getValueModelClass()) {
-                            case 'Opus_Date':
-                                $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
-                                if (!empty($value)) {
-                                    $date = new Zend_Date($value);
-                                    $dateModel = new Opus_Date();
-                                    $dateModel->setZendDate($date);
-                                }
-                                else {
-                                    $dateModel = null;
-                                }
-                                $field->setValue($dateModel);
-                                break;
-                            default:
-                                $field->setValue($value);
-                                break;
-                        }
-                    }
-                }
-            }
-
-            // TODO move in class that can be shared with publishing
-            switch ($modelClass) {
-                case 'Opus_Identifier':
-                    $document->addIdentifier($model);
-                    break;
-                case 'Opus_Person':
-                    $document->addPerson($model);
-                    break;
-                case 'Opus_Reference':
-                    $document->addReference($model);
-                    break;
-                case 'Opus_Title':
-                    switch ($model->getType()) {
-                        case 'main':
-                            $document->addTitleMain($model);
-                            break;
-                        case 'sub':
-                            $document->addTitleSub($model);
-                            break;
-                        case 'parent':
-                            $document->addTitleParent($model);
-                            break;
-                        case 'additional':
-                            $document->addTitleAdditional($model);
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                case 'Opus_TitleAbstract':
-                    $model->setType('abstract');
-                    $document->addTitleAbstract($model);
-                    break;
-                case 'Opus_Subject':
-                    $document->addSubject($model);
-                    break;
-                case 'Opus_SubjectSwd':
-                    $document->addSubjectSwd($model);
-                    break;
-                case 'Opus_Patent':
-                    $document->addPatent($model);
-                    break;
-                case 'Opus_Enrichment':
-                    $document->addEnrichment($model);
-                    break;
-                case 'Opus_Note':
-                    $document->addNote($model);
-                    break;
-                default:
+                    $this->__processFields($model, $fields);
+                    $this->__addFieldValue($document, $modelClass, $model);
                     break;
             }
 
             $document->store();
+        }
+    }
+
+    /**
+     * Adds a new licence to a document.
+     * @param Opus_Document $document Opus_Document instance
+     * @param type $fields
+     */
+    private function __addLicence($document, $fields) {
+        $licenceId = $fields['Licence'];
+        $licences = Opus_Licence::getAll();
+        $currentLicences = $document->getLicence();
+        $licenceAlreadyAssigned = false;
+        foreach ($currentLicences as $index => $currentLicence) {
+            if ($currentLicence->getModel()->getId() == $licenceId) {
+                $licenceAlreadyAssigned = true;
+                // TODO print out message
+            }
+        }
+        if (!$licenceAlreadyAssigned) {
+            $document->addLicence(new Opus_Licence($licenceId));
+        }
+    }
+
+    /**
+     * Processes submitted field values.
+     * @param Opus_Model_Abstract $model Model instance for fields
+     * @param array $fields POST array for model fields
+     */
+    private function __processFields($model, $fields) {
+        foreach ($fields as $name => $value) {
+            // TODO filter buttons
+            $field = $model->getField($name);
+            if (!empty($field)) {
+                switch ($field->getValueModelClass()) {
+                    case 'Opus_Date':
+                        $this->__setDateField($field, $value);
+                        break;
+                    default:
+                        $field->setValue($value);
+                        break;
+                }
+            }
+        }
+    }
+
+    /**
+     * Sets the value of a field with value type Opus_Date.
+     * @param Opus_Model_Field $field
+     * @param string $value Date value
+     */
+    private function __setDateField($field, $value) {
+        $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
+        if (!empty($value)) {
+            $date = new Zend_Date($value);
+            $dateModel = new Opus_Date();
+            $dateModel->setZendDate($date);
+        }
+        else {
+            $dateModel = null;
+        }
+        $field->setValue($dateModel);
+    }
+
+    /**
+     * Sets the field value for a specific value model class.
+     * @param Opus_Document $document
+     * @param string $valueModelClass Value model class
+     * @param type $value
+     *
+     * TODO can this be simplified?
+     */
+    private function __addFieldValue($document, $valueModelClass, $model) {
+        switch ($valueModelClass) {
+            case 'Opus_Identifier':
+                $document->addIdentifier($model);
+                break;
+            case 'Opus_Person':
+                $document->addPerson($model);
+                break;
+            case 'Opus_Reference':
+                $document->addReference($model);
+                break;
+            case 'Opus_Title':
+                switch ($model->getType()) {
+                    case 'main':
+                        $document->addTitleMain($model);
+                        break;
+                    case 'sub':
+                        $document->addTitleSub($model);
+                        break;
+                    case 'parent':
+                        $document->addTitleParent($model);
+                        break;
+                    case 'additional':
+                        $document->addTitleAdditional($model);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 'Opus_TitleAbstract':
+                $model->setType('abstract');
+                $document->addTitleAbstract($model);
+                break;
+            case 'Opus_Subject':
+                $document->addSubject($model);
+                break;
+            case 'Opus_SubjectSwd':
+                $document->addSubjectSwd($model);
+                break;
+            case 'Opus_Patent':
+                $document->addPatent($model);
+                break;
+            case 'Opus_Enrichment':
+                $document->addEnrichment($model);
+                break;
+            case 'Opus_Note':
+                $document->addNote($model);
+                break;
+            default:
+                // Unknown model class
+                break;
         }
     }
 
@@ -1064,6 +1096,10 @@ class Admin_DocumentController extends Controller_Action {
 
     /**
      * Processes POST request for unlinking collection from document.
+     *
+     * In the case that the provided collectionId does not match any collection
+     * associated with the document NULL is returned.
+     *
      * @param Opus_Document $document
      * @return string Name of collection that was unlinked
      */
