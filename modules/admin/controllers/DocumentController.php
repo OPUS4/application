@@ -467,48 +467,6 @@ class Admin_DocumentController extends Controller_Action {
     }
 
     /**
-     * Populates a model with the provided values.
-     * @param Opus_Model_Abstract $model Model instance
-     * @param array $fieldValues
-     */
-    private function __populateModel($model, $fieldValues) {
-        $this->_logger->debug('Populate model ' . $model);
-        foreach($fieldValues as $fieldName => $value) {
-            $field = $model->getField($fieldName);
-            if (!empty($field)) {
-                switch ($field->getValueModelClass()) {
-                    case 'Opus_Date':
-                        $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
-                        if (!empty($value)) {
-                            if (!Zend_Date::isDate($value, $dateFormat)) {
-                                throw new Exception('Invalid date entered');
-                            }
-                            $this->_logger->debug('Saving date: ' . $value . ' for field ' . $field->getName() . ' using format ' . $dateFormat);
-                            $date = new Zend_Date($value, $dateFormat);
-                            $this->_logger->debug('Saving Zend_Date = ' . $date . ' for field ' . $field->getName());
-                            $dateModel = new Opus_Date();
-                            $dateModel->setZendDate($date);
-                            $this->_logger->debug('Saving Opus_Date = ' . $dateModel . ' for field ' . $field->getName());
-                        }
-                        else {
-                            $dateModel = null;
-                        }
-                        $field->setValue($dateModel);
-                        break;
-                    default:
-                        if (empty($value)) {
-                            $field->setValue(null);
-                        }
-                        else {
-                            $field->setValue($value);
-                        }
-                        break;
-                }
-            }
-        }
-    }
-
-    /**
      * Returns array with hashes for information about assigned collections.
      * @return array of hashes containing collection metadata
      */
@@ -855,18 +813,87 @@ class Admin_DocumentController extends Controller_Action {
      */
     private function __addLicence($document, $fields) {
         $licenceId = $fields['Licence'];
-        $licences = Opus_Licence::getAll();
+        if (!$this->__hasLicence($document, $licenceId)) {
+            $document->addLicence(new Opus_Licence($licenceId));
+        }
+    }
+
+    /**
+     * Updates multiple licences associated with document.
+     *
+     * Only one licence can be removed at a time. The function exits if the
+     * first licence has been removed.
+     *
+     * If the same licence is selected multiple times it is assigned only once
+     * and the previous value of the modified select box is removed.
+     *
+     * @param Opus_Document $doc
+     * @param hash $postData
+     */
+    private function __updateLicences($doc, $postData) {
+        foreach ($postData as $fieldName => $modelData) {
+            $field = $doc->getField($fieldName);
+            if (!empty($field)) {
+                // remove licence
+                foreach ($modelData as $index => $modelValues) {
+                    $fieldValues = $field->getValue();
+                    if (array_key_exists('remove', $modelValues)) {
+                        // remove licence
+                        unset($fieldValues[$index]);
+                        $field->setValue($fieldValues);
+                        return; // exit update if licence was removed
+                    }
+                }
+                // collect new licence IDs
+                $newLicences = array();
+                foreach ($modelData as $index => $modelValues) {
+                    $licenceId = $modelValues['Licence'];
+                    // prevent duplicate entries
+                    if (!in_array($licenceId, $newLicences)) {
+                        $newLicences[] = $licenceId;
+                    }
+                }
+
+                $fieldValues = $field->getValue();
+
+                // remove licences that are no longer selected
+                $currentLicences = $doc->getLicence();
+                foreach ($currentLicences as $index => $currentLicence) {
+                    $licenceId = $currentLicence->getModel()->getId();
+
+                    if (!in_array($licenceId, $newLicences)) {
+                        unset($fieldValues[$index]);
+                    }
+                }
+
+                $field->setValue($fieldValues);
+
+                $doc->store(); // TODO can this additional store be avoided?
+
+                // add new licences
+                foreach ($newLicences as $licenceId) {
+                    if (!$this->__hasLicence($doc, $licenceId)) {
+                        $doc->addLicence(new Opus_Licence($licenceId));
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Verify if a document has a licence.
+     * @param Opus_Document $document
+     * @param int $licenceId
+     */
+    private function __hasLicence($document, $licenceId) {
         $currentLicences = $document->getLicence();
         $licenceAlreadyAssigned = false;
         foreach ($currentLicences as $index => $currentLicence) {
-            if ($currentLicence->getModel()->getId() == $licenceId) {
-                $licenceAlreadyAssigned = true;
-                // TODO print out message
+            if ($currentLicence->getModel()->getId() === $licenceId) {
+                return true;
             }
         }
-        if (!$licenceAlreadyAssigned) {
-            $document->addLicence(new Opus_Licence($licenceId));
-        }
+        return false;
     }
 
     /**
@@ -883,8 +910,30 @@ class Admin_DocumentController extends Controller_Action {
                     case 'Opus_Date':
                         $this->__setDateField($field, $value);
                         break;
+                    case 'Opus_DnbInstitute':
+                        if ($value === 'nothing') {
+                            $field->setValue(null);
+                        }
+                        else {
+                            $institute = new Opus_DnbInstitute($value);
+                            // TODO simplify?
+                            switch ($field->getName()) {
+                                case 'ThesisGrantor':
+                                    $doc->setThesisGrantor($institute);
+                                    break;
+                                case 'ThesisPublisher':
+                                    $doc->setThesisPublisher($institute);
+                                    break;
+                            }
+                        }
+                        break;
                     default:
-                        $field->setValue($value);
+                        if (empty($value)) {
+                            $field->setValue(null);
+                        }
+                        else {
+                            $field->setValue($value);
+                        }
                         break;
                 }
             }
@@ -898,10 +947,26 @@ class Admin_DocumentController extends Controller_Action {
      */
     private function __setDateField($field, $value) {
         $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
+        $this->_logger->debug('Saving date format' . $dateFormat);
         if (!empty($value)) {
-            $date = new Zend_Date($value);
+            // TODO hack to prevent bad data in database (fix properly)
+            if (!Zend_Date::isDate($value, $dateFormat)) {
+                throw new Exception('Invalid date entered');
+            }
+
+            $this->_logger->debug('Saving date ' . $value . ' to field '
+                    . $field->getName());
+
+            $date = new Zend_Date($value, $dateFormat);
+
+            $this->_logger->debug('Saving Zend_Date = ' . $date . ' to field '
+                    . $field->getName());
+
             $dateModel = new Opus_Date();
             $dateModel->setZendDate($date);
+
+            $this->_logger->debug('Saving Opus_Date = ' . $dateModel .
+                    ' to field ' . $field->getName());
         }
         else {
             $dateModel = null;
@@ -977,105 +1042,26 @@ class Admin_DocumentController extends Controller_Action {
      * @param type $document
      * @param type $section
      */
-    private function __processUpdatePost($postData, $model, $section){
+    private function __processUpdatePost($postData, $doc, $section){
         switch ($section) {
             case 'general':
             case 'misc':
             case 'dates':
             case 'other':
             case 'thesis':
+                // Process section that contains multiple fields
                 $fields = $postData['Opus_Document'];
-                foreach ($fields as $fieldName => $value) {
-                    $field = $model->getField($fieldName);
-                    if (!empty($field)) {
-                        // TODO handle NULL
-                        switch ($field->getValueModelClass()) {
-                            case 'Opus_Date':
-                                $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
-                                $this->_logger->debug('Saving date format'
-                                        . $dateFormat);
-                                if (!empty($value)) {
-                                    if (!Zend_Date::isDate($value, $dateFormat)) {
-                                        throw new Exception('Invalid date entered');
-                                    }
-                                    $this->_logger->debug('Saving date '
-                                            . $value . ' to field '
-                                            . $field->getName());
-                                    $date = new Zend_Date($value, $dateFormat);
-                                    $this->_logger->debug('Saving Zend_Date = '
-                                            . $date . ' to field '
-                                            . $field->getName());
-                                    $dateModel = new Opus_Date();
-                                    $dateModel->setZendDate($date);
-                                    $this->_logger->debug('Saving Opus_Date = '
-                                            . $dateModel . ' to field '
-                                            . $field->getName());
-                                }
-                                else {
-                                    $dateModel = null;
-                                }
-                                $field->setValue($dateModel);
-                                break;
-                            case 'Opus_DnbInstitute':
-                                if ($value === 'nothing') {
-                                    $field->setValue(null);
-                                }
-                                else {
-                                    $institute = new Opus_DnbInstitute($value);
-                                    // TODO simplify
-                                    switch ($field->getName()) {
-                                        case 'ThesisGrantor':
-                                            $model->setThesisGrantor($institute);
-                                            break;
-                                        case 'ThesisPublisher':
-                                            $model->setThesisPublisher($institute);
-                                            break;
-                                    }
-                                }
-                                break;
-                            default:
-                                if (empty($value)) {
-                                   $field->setValue(null);
-                                }
-                                else {
-                                    $field->setValue($value);
-                                }
-                                break;
-                        }
-                    }
-                }
-                $model->store();
+                $this->__processFields($doc, $fields);
                 $this->_logger->debug('ServerDatePublished = ' .
-                        $model->getServerDatePublished());
+                        $doc->getServerDatePublished());
                 break;
             case 'licences':
                 // TODO merge with default case
-                foreach ($postData as $fieldName => $modelData) {
-                    $field = $model->getField($fieldName);
-                    if (!empty($field)) {
-                        foreach ($modelData as $index => $modelValues) {
-                            $fieldValues = $field->getValue();
-                            $licenceIndex = $modelValues['Licence'];
-                            if (array_key_exists('remove', $modelValues)) {
-                                unset($fieldValues[$index]);
-                                $field->setValue($fieldValues);
-                                break;
-                            }
-                            else {
-                                $licences = Opus_Licence::getAll();
-
-                                $fieldValues[$index]->setModel(
-                                        new Opus_Licence($licenceIndex));
-                            }
-                        }
-                        $field->setValue($fieldValues);
-                    }
-                }
-                $model->store();
+                $this->__updateLicences($doc, $postData);
                 break;
             default:
                 foreach ($postData as $fieldName => $modelData) {
-                    $field = $model->getField($fieldName);
+                    $field = $doc->getField($fieldName);
                     foreach ($modelData as $index => $modelValues) {
                         $fieldValues = $field->getValue();
                         if (array_key_exists('remove', $modelValues)) {
@@ -1084,14 +1070,14 @@ class Admin_DocumentController extends Controller_Action {
                             break;
                         }
                         else {
-                            $this->__populateModel($fieldValues[$index],
+                            $this->__processFields($fieldValues[$index],
                                     $modelValues);
                         }
                     }
                 }
-                $model->store();
                 break;
         }
+        $doc->store();
     }
 
     /**
