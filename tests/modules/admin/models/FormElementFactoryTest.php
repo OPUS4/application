@@ -58,15 +58,15 @@ class Admin_Model_FormElementFactoryTest extends ControllerTestCase {
     }
 
     public function testCreateElementForTextField() {
-        $model = new Opus_Title();
+        $model = new Opus_Document();
 
-        $field = $model->getField('Value');
+        $field = $model->getField('PageFirst');
 
         $element = $this->__factory->getElementForField($model, $field);
 
         $this->assertNotNull($element);
         $this->assertTrue($element instanceOf Zend_Form_Element_Text);
-        $this->assertEquals('Value', $element->getName());
+        $this->assertEquals('PageFirst', $element->getName());
     }
 
     public function testCreateElementForTextareaField() {
