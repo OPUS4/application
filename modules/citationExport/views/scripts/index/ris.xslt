@@ -59,13 +59,13 @@
            <xsl:when test="@Type='book'">
                <xsl:text>TY  - BOOK</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='book_part'">
+           <xsl:when test="@Type='bookpart'">
                <xsl:text>TY  - CHAP</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='conference_object'">
+           <xsl:when test="@Type='conferenceobject'">
                <xsl:text>TY  - CONF</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='course_material' or @Type='image' or @Type='lecture' or @Type='other' or @Type='sound' or @Type='study_thesis'">
+           <xsl:when test="@Type='coursematerial' or @Type='image' or @Type='lecture' or @Type='other' or @Type='sound' or @Type='studythesis'">
                <xsl:text>TY  - GEN</xsl:text>
            </xsl:when>
            <xsl:when test="@Type='preprint'">
@@ -77,19 +77,19 @@
            <xsl:when test="@Type='article' or @Type='review'">
                <xsl:text>TY  - JOUR</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='contribution_to_periodical'">
+           <xsl:when test="@Type='contributiontoperiodical'">
                <xsl:text>TY  - NEWS</xsl:text>
            </xsl:when>
            <xsl:when test="@Type='report'">
                <xsl:text>TY  - RPRT</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='bachelor_thesis' or @Type='doctoral_thesis' or @Type='habilitation' or @Type='master_thesis'">
+           <xsl:when test="@Type='bachelorthesis' or @Type='doctoralthesis' or @Type='habilitation' or @Type='masterthesis'">
                <xsl:text>TY  - THES</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='working_paper'">
+           <xsl:when test="@Type='workingpaper'">
                <xsl:text>TY  - UNPD</xsl:text>
            </xsl:when>
-           <xsl:when test="@Type='moving_image'">
+           <xsl:when test="@Type='movingimage'">
                <xsl:text>TY  - VIDEO</xsl:text>
            </xsl:when>
            <xsl:otherwise>
