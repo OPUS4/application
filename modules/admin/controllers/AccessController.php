@@ -73,7 +73,17 @@ class Admin_AccessController extends Controller_Action {
         if ($role->getName() !== 'guest') {
             $guest = Opus_UserRole::fetchByName('guest');
             $guestModules = $guest->listAccessModules();
+            // Role 'guest' has always access to 'default' module
+            if (!in_array('default', $guestModules)) {
+                $guestModules[] = 'default';
+            }
             $this->view->guestModules = $guestModules;
+        }
+        else {
+            // Role 'guest' has alreays access to 'default' module
+            if (!in_array('default', $roleModules)) {
+                $roleModules[] = 'default';
+            }
         }
 
         $moduleDirectory = dirname($this->getFrontController()->getModuleDirectory());
