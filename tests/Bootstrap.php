@@ -41,11 +41,12 @@ defined('APPLICATION_PATH')
 // Define application environment (use 'production' by default)
 define('APPLICATION_ENV', 'testing');
 
-// Configure include path.
-set_include_path('.' . PATH_SEPARATOR
-    . PATH_SEPARATOR . dirname(__FILE__)
-    . PATH_SEPARATOR . dirname(dirname(__FILE__)) . '/library'
-    . PATH_SEPARATOR . get_include_path());
+// Ensure library/ is on include_path
+set_include_path(implode(PATH_SEPARATOR, array(
+            '.',
+            realpath(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library'),
+            get_include_path(),
+        )));
 
 // enable fallback autoloader for testing
 require_once 'Zend/Loader/Autoloader.php';
