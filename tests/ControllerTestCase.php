@@ -44,7 +44,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         Opus_Db_TableGateway::clearInstances();
 
         // FIXME Does it help with the mystery bug?
-        Zend_Registry::set('Opus_Navigation', null);
+        Zend_Registry::_unsetInstance();
 
         // Clean-up possible artifacts in $_SERVER of previous test.
         unset($_SERVER['REMOTE_ADDR']);
