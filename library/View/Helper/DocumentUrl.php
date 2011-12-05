@@ -33,17 +33,17 @@
  */
 
 /**
- * 
+ *
  * This helper class defines only one method baseUrl() to retrieve the
  * application base url for absolute urls in views.
- * 
+ *
  */
 class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
 
     public function documentUrl() {
         return $this;
     }
-    
+
     public function frontdoor($docId) {
         $url = array(
             'module'     => 'frontdoor',
@@ -98,7 +98,7 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
     public function adminPublish($docId) {
         $url = array(
             'module'     => 'admin',
-            'controller' => 'document',
+            'controller' => 'workflow',
             'action'     => 'publish',
             'docId'      => $docId,
         );
@@ -108,7 +108,7 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
     public function adminUnpublish($docId) {
         $url = array(
             'module'     => 'admin',
-            'controller' => 'document',
+            'controller' => 'workflow',
             'action'     => 'unpublish',
             'docId'      => $docId,
         );
@@ -118,7 +118,7 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
     public function adminDelete($docId) {
         $url = array(
             'module'     => 'admin',
-            'controller' => 'document',
+            'controller' => 'workflow',
             'action'     => 'delete',
             'docId'      => $docId,
         );
@@ -128,7 +128,7 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
     public function adminDeletePermanent($docId) {
         $url = array(
             'module'     => 'admin',
-            'controller' => 'document',
+            'controller' => 'workflow',
             'action'     => 'permanentdelete',
             'docId'      => $docId,
         );
@@ -138,12 +138,12 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
     public function adminUndelete($docId) {
         $url = array(
             'module'     => 'admin',
-            'controller' => 'document',
+            'controller' => 'workflow',
             'action'     => 'publish',
             'docId'      => $docId,
         );
         return $this->view->url($url, 'default', true);
     }
 
-    
+
 }
