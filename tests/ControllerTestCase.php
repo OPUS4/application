@@ -46,6 +46,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         // FIXME Does it help with the mystery bug?
         Zend_Registry::set('Opus_Navigation', null);
 
+        // Clean-up possible artifacts in $_SERVER of previous test.
+        unset($_SERVER['REMOTE_ADDR']);
+
         $this->bootstrap = new Zend_Application(
             APPLICATION_ENV,
             array(
@@ -62,8 +65,6 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.0';
 
         parent::setUp();
-
-        unset($_SERVER['REMOTE_ADDR']);
 
         // Initializing start_mtime to make tests pass if debugging is enabled.
         $GLOBALS['start_mtime'] = 0;
