@@ -65,9 +65,6 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.0';
 
         parent::setUp();
-
-        // Initializing start_mtime to make tests pass if debugging is enabled.
-        $GLOBALS['start_mtime'] = 0;
     }
 
     /**

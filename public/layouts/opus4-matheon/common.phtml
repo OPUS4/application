@@ -172,7 +172,7 @@ $languageSelectors = $this->languageSelector();
         ?>
         <div class="debug dbprofiler">
             <div class="wrapper">
-                <h2>Profiling information (execution time <?= microtime(true) - $GLOBALS['start_mtime'] ?>)</h2>
+                <h2>Profiling information<?php if (isset($GLOBALS['start_mtime'])) : ?> (execution time <?= microtime(true) - $GLOBALS['start_mtime'] ?>)<?php endif ?></h2>
                 <b>Total number of queries: </b><?= $dbprofiler->getTotalNumQueries() ?><br />
                 <b>Total query time (s): </b><?= $dbprofiler->getTotalElapsedSecs() ?><br />
                 <b>Current memory consumption: </b><?= memory_get_usage(true) ?><br />
