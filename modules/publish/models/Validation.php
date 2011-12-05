@@ -39,6 +39,7 @@ class Publish_Model_Validation {
     public $institutes = array();
     public $projects = array();
     public $licences = array();
+    public $sets = array();
     public $languages = array();
     public $log;
     public $sessionP;
@@ -87,6 +88,9 @@ class Publish_Model_Validation {
             case 'List' : $this->validator = $this->_validateList();
                 break;
 
+            case 'Set' : $this->validator = $this->_validateSet();
+                break;
+                
             case 'ThesisGrantor' : $this->validator = $this->_validateThesis(true);
                 break;
 
@@ -180,6 +184,22 @@ class Publish_Model_Validation {
             return $validators;
         }
     }
+    
+    private function _validateSet() {
+        $validators = array();
+        $sets = array_keys($this->getSets());
+        if (is_null($sets))
+            return null;
+        else {
+            $validator = new Zend_Validate_InArray($sets);
+            $messages = array(
+                Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
+            $validator->setMessages($messages);
+
+            $validators[] = $validator;
+            return $validators;
+        }
+    }
 
     private function _validateList() {
         $validators = array();
@@ -258,6 +278,9 @@ class Publish_Model_Validation {
             case 'ThesisPublisher' : return $this->_thesisSelect();
                 break;
 
+            case 'Set' : return $this->_setSelect();
+                break;
+            
             default :
                 //else no select options required
                 break;
@@ -305,6 +328,17 @@ class Publish_Model_Validation {
         $licences = $this->getLicences();
         if (isset($licences) && count($licences) >= 1) {
             $data = $licences;
+        } else {
+            $data = null;
+        }
+
+        return $data;
+    }
+    
+    private function _setSelect() {
+        $sets = $this->getSets();
+        if (isset($sets) && count($sets) >= 1) {
+            $data = $sets;
         } else {
             $data = null;
         }
@@ -363,6 +397,26 @@ class Publish_Model_Validation {
             return $licences;
         } else
             return $this->licences;
+    }
+    
+    /**
+     * return the available documents sets from database or chache
+     * @return <Array> sets
+     */
+    private function getSets() {
+        $sets = array();
+        if (empty($this->sets)) {
+            foreach ($dbSets = Opus_DocumentSets::getAll() as $set) {
+                
+                    $title = $set->getTitle();
+                    $id = $set->getId();
+                    $sets["ID:" . $id] = $title;
+                
+            }
+            $this->sets = $sets;
+            return $sets;
+        } else
+            return $this->sets;
     }
 
     /**
