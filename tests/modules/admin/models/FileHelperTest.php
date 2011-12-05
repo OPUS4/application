@@ -37,15 +37,11 @@ class Admin_Model_FileHelperTest extends ControllerTestCase {
         $document = new Opus_Document(91);
 
         $files = $document->getFile();
-
-        $bootstrap = $this->application->getBootstrap();
-
-        $view = $bootstrap->getResource('view');
-
         if(count($files) === 0) {
             $this->markTestSkipped('Test document (docId = 91) does not have file.');
         }
 
+        $view = $this->bootstrap->getBootstrap()->getResource('view');
         return new Admin_Model_FileHelper($view, $document, $files[0]);
     }
 
