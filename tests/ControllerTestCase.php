@@ -46,7 +46,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         // FIXME Does it help with the mystery bug?
         Zend_Registry::set('Opus_Navigation', null);
 
-        $this->application = new Zend_Application(
+        $this->bootstrap = new Zend_Application(
             APPLICATION_ENV,
             array(
                 "config" => array(
@@ -56,7 +56,6 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
                 )
             )
         );
-        $this->bootstrap = $this->application;
 
         // added to ensure that application log messages are written to opus.log when running unit tests
         // if not set messages are written to opus-console.log
