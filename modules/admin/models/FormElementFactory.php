@@ -126,6 +126,13 @@ class Admin_Model_FormElementFactory extends Admin_Model_AbstractModel {
         $textarea = new Zend_Form_Element_Textarea($name);
         $textarea->setAttrib('cols', 100);
         $textarea->setAttrib('rows', 6);
+
+        // special code for striping new lines from TitleMain, ... fields
+        if ($field->getOwningModelClass() === 'Opus_Title'
+                && strpos($name, 'Value') === 0) {
+            $filter = new Form_Filter_ReplaceNewlines();
+            $textarea->addFilter($filter);
+        }
         return $textarea;
     }
 
