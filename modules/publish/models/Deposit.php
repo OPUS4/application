@@ -374,13 +374,14 @@ class Publish_Model_Deposit {
             case 'Swd' :   
                 // store as Subject
                 $this->log->debug("subject is a " . $type . " subject.");
-                $subject = new Opus_Subject();                
+                $subject = new Opus_Subject();  
+                $subject->setLanguage('deu');
                 break;
 
             case 'Uncontrolled':  
                 // store as Subject
                 $this->log->debug("subject is a " . $type . " or other subject.");
-                $subject = new Opus_Subject();
+                $subject = new Opus_Subject();               
                 break;
 
         }
@@ -389,16 +390,16 @@ class Publish_Model_Deposit {
             $this->log->debug("subjectType: " . $subjectType);
             $subject->setValue($dataValue);
             $subject->setType(strtolower($type));
+            
             if (array_key_exists($subjectType . 'Language' . $counter, $this->documentData)) {
-                $subject->setLanguage($this->documentData[$subjectType . 'Language' . $counter]);
-                $this->documentData[$subjectType . 'Language' . $counter] = "";
-            }
-
+                    $subject->setLanguage($this->documentData[$subjectType . 'Language' . $counter]);
+                    $this->documentData[$subjectType . 'Language' . $counter] = "";
+                }
+            
             $addFunction = "add" . $subjectType;
             $this->log->debug("addfunction: " . $addFunction);
             $this->document->$addFunction($subject);
-            if (isset($step))
-                $dataValue = $this->documentData['collId' . $step . $dataKey] = "";
+
         }
     }
 

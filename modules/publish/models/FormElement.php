@@ -234,8 +234,7 @@ class Publish_Model_FormElement {
     }
 
     private function isSubjectElement() {
-        if (strstr($this->elementName, 'Swd')
-                || strstr($this->elementName, 'Uncontrolled'))
+        if (strstr($this->elementName, 'Uncontrolled'))
             return true;
         else
             return false;
