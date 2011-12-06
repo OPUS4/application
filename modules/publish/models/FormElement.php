@@ -107,10 +107,9 @@ class Publish_Model_FormElement {
                     $implicitFields = $this->implicitFields('Title');
                     $this->addSubFormElements($implicitFields);
                 }
-                else if ($this->isSeriesElement()) {
-                    $implicitFields = $this->implicitFields('Series');
-                    $this->addSubFormElements($implicitFields);
-                    $this->group->implicitGroup = true;
+                else if ($this->isDocumentSetElement()) {
+                    $implicitFields = $this->implicitFields('Set');
+                    $this->addSubFormElements($implicitFields);                    
                 }
                 else if ($this->isSubjectElement()) {
                     $implicitFields = $this->implicitFields('Subject');
@@ -137,7 +136,7 @@ class Publish_Model_FormElement {
             return true;
         else if ($this->isPersonElement())
             return true;
-        else if ($this->isSeriesElement())
+        else if ($this->isDocumentSetElement())
             return true;
         else if ($this->datatype == 'Collection')
             return true;
@@ -164,18 +163,15 @@ class Publish_Model_FormElement {
                 return array($elementFirst, $elementLast);
                 break;
 
-            case 'Series':
+            case 'Set':
                 //creates a additional field for a number
                 $number = new Publish_Model_FormElement($this->form, $this->elementName . self::NR, $this->required, 'text', 'Text');
                 $number->isSubField = true;
                 $number->setDefaultValue($this->default, self::NR);
                 $elementNumber = $number->transform();
 
-                $select = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'select', 'Collection');
-                $select->isSubField = true;
-                $select->collectionRole = $this->collectionRole;
-                $select->collectionId = $this->collectionId;
-                $select->validationObject->collectionRole = $this->collectionRole;
+                $select = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'select', 'Set');
+                $select->isSubField = true;                
                 $select->setDefaultValue($this->default);
                 $element = $select->transform();
 
@@ -226,8 +222,8 @@ class Publish_Model_FormElement {
             return false;
     }
 
-    private function isSeriesElement() {
-        if (strstr($this->elementName, 'Series'))
+    private function isDocumentSetElement() {
+        if ($this->datatype === 'Set')
             return true;
         else
             return false;
