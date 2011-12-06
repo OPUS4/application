@@ -26,7 +26,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Import
+ * @package     Import
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2009, 2010, OPUS 4 development team
@@ -36,11 +36,9 @@
 
 // Configure include path.
 set_include_path('.' . PATH_SEPARATOR
-        . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/import/importer'
-        . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/import/stylesheets'
+        . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/importer'
+        . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/stylesheets'
         . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/library'
-        . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/modules/import'
-        . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/modules'
         . PATH_SEPARATOR . get_include_path());
 
 // Define path to application directory
@@ -121,7 +119,7 @@ class Opus3Migration_ICL {
     }
 
     private function setStylesheet() {
-        $this->stylesheet = '../../import/stylesheets';
+        $this->stylesheet = 'stylesheets';
         $this->xslt = 'institute_structure.xslt';
     }
 

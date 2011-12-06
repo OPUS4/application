@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Import
+ * @package     Import
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2009-2011 OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License

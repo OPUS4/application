@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Import
+ * @package     Import
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
