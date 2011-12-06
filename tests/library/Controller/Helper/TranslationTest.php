@@ -307,5 +307,51 @@ class Controller_Helper_TranslationTest extends ControllerTestCase {
         }
     }
 
-}
+    public function testTranslationOfLanguages() {
+        $languages = Opus_Language::getAll();
 
+        foreach ($languages as $language) {
+            $key = $language->getPart2T();
+            $this->assertTrue($this->translate->isTranslated($key), $key);
+        }
+    }
+
+    public function testTranslationOfTitleForAddSections() {
+        $this->markTestSkipped('Does not work because translation resources are not in default module.');
+        $exceptions = array(
+            'general',
+            'dates',
+            'thesis'
+            );
+
+        $doc = new Opus_Document();
+
+        $helper = new Admin_Model_DocumentHelper($doc);
+
+        $sections = $helper->getGroups();
+
+        foreach ($sections as $section) {
+            if (!in_array($section, $exceptions)) {
+                $key = 'admin_document_add_' . $section;
+                $this->assertTrue($this->translate->isTranslated($key),
+                        'Translation key \'' . $key . '\' is missing.');
+            }
+        }
+    }
+
+    public function testTranslationOfTitleForEditSections() {
+        $this->markTestSkipped('Does not work because translation resources are not in default module.');
+        $doc = new Opus_Document();
+
+        $helper = new Admin_Model_DocumentHelper($doc);
+
+        $sections = $helper->getGroups();
+
+        foreach ($sections as $section) {
+            $key = 'admin_document_edit_' . $section;
+            $this->assertTrue($this->translate->isTranslated($key),
+                    'Translation key \'' . $key . '\' is missing.');
+        }
+    }
+
+}

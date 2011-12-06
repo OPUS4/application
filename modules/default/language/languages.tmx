@@ -52,6 +52,24 @@
             </tuv>
         </tu>
 
+        <tu tuid="ita">
+            <tuv xml:lang="en">
+                <seg>Italien</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Italienisch</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="por">
+            <tuv xml:lang="en">
+                <seg>Portuguese</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Portugiesisch</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="mul">
             <tuv xml:lang="en">
                 <seg>Multiple languages</seg>
