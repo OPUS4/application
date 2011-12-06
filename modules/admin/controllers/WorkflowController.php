@@ -41,167 +41,83 @@ class Admin_WorkflowController extends Controller_Action {
      * Helper for verifying document IDs.
      * @var Controller_Helper_Documents
      */
-    private $documentsHelper;
+    private $__documentsHelper;
+
+    /**
+     * Helper for workflow functionality.
+     * @var Controller_Helper_Workflow
+     */
+    private $__workflowHelper;
 
     /**
      * Initializes controller.
      */
     public function init() {
         parent::init();
-        $this->documentsHelper = $this->_helper->getHelper('Documents');
+        $this->__documentsHelper = $this->_helper->getHelper('Documents');
+        $this->__workflowHelper = $this->_helper->getHelper('Workflow');
     }
 
+
     /**
-     * Switches the status of a document to published.
+     * Switches the status of a document to target state.
      */
-    public function publishAction() {
+    public function changestateAction() {
         $docId = $this->getRequest()->getParam('docId');
+        $targetState = $this->getRequest()->getParam('targetState');
 
         // Check if document identifier is valid
-        if (!$this->documentsHelper->isValidId($docId)) {
+        if (!$this->__documentsHelper->isValidId($docId)) {
             return $this->_redirectTo('index', array('failure' =>
                 $this->view->translate('admin_document_error_novalidid')),
                     'documents', 'admin');
         }
 
-        $doc = new Opus_Document($docId);
-
-        if ($doc->getServerState() === 'published') {
+        // Check if valid target state
+        if (!$this->__workflowHelper->isValidState($targetState)) {
             return $this->_redirectTo('index', array('failure' =>
-                $this->view->translate(
-                        'admin_document_error_already_published')),
+                $this->view->translate('admin_workflow_error_invalidstate')),
                     'document', 'admin', array('id' => $docId));
         }
 
-        switch ($this->__confirm($docId, 'publish')) {
-            case 'YES':
-                $doc->setServerState('published');
-                //        $doc->setServerDatePublished(date('Y-m-d'));
-                //        $doc->setServerDatePublished(date('c'));
-                $date = new Zend_Date();
-                $doc->setServerDatePublished(
-                        $date->get('yyyy-MM-ddThh:mm:ss') . 'Z');
-                $doc->store();
-
-                $message = $this->view->translate('document_published', $docId);
-                return $this->_redirectTo('index', $message, 'document',
-                        'admin', array('id' => $docId));
-                break;
-            case 'NO':
-                $this->_redirectTo('index', null, 'document', 'admin',
-                        array('id' => $docId));
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * Unpublishes a document (sets ServerState to unpublished).
-     */
-    public function unpublishAction() {
-        $docId = $this->getRequest()->getParam('docId');
-
-        // Check if document identifier is valid
-        if (!$this->documentsHelper->isValidId($docId)) {
-            return $this->_redirectTo('index', array('failure' =>
-                $this->view->translate('admin_document_error_novalidid')),
-                    'documents', 'admin');
-        }
+        // TODO check if allowed target state (OPUSVIER-1959)
 
         $doc = new Opus_Document($docId);
 
-        if ($doc->getServerState() === 'unpublished') {
-            return $this->_redirectTo('index', array('failure' =>
-                $this->view->translate(
-                        'admin_document_error_already_unpublished')),
+        // Check if document is already in target state
+        if ($doc->getServerState() === $targetState) {
+            // if defined used custom message for state, other use common key
+            $key = 'admin_workflow_error_already_' . $targetState;
+            if (!$this->view->translate()->getTranslator()->isTranslated($key)) {
+                $key = 'admin_workflow_error_alreadyinstate';
+            }
+            $message = $this->view->translate($key, $targetState);
+
+            return $this->_redirectTo('index', array('failure' => $message),
                     'document', 'admin', array('id' => $docId));
         }
 
-        switch ($this->__confirm($docId, 'unpublish')) {
-            case 'YES':
-                $doc->setServerState('unpublished');
-                $doc->store();
-
-                $message = $this->view->translate('document_unpublished',
-                        $docId);
-                return $this->_redirectTo('index', $message, 'document',
-                        'admin', array('id' => $docId));
-                break;
-            case 'NO':
-                $this->_redirectTo('index', null, 'document', 'admin',
-                        array('id' => $docId));
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * Deletes a document (sets state to deleted).
-     */
-    public function deleteAction() {
-        $docId = $this->getRequest()->getParam('docId');
-
-        // Check if document identifier is valid
-        if (!$this->documentsHelper->isValidId($docId)) {
-            return $this->_redirectTo('index', array('failure' =>
-                $this->view->translate('admin_document_delete_novalidid')),
-                    'documents', 'admin');
-        }
-
-        $doc = new Opus_Document($docId);
-
-        if ($doc->getServerState() === 'deleted') {
-            return $this->_redirectTo('index', array('failure' =>
-                $this->view->translate('admin_document_error_already_deleted')),
-                    'document', 'admin', array('id' => $docId));
-        }
-
-        switch ($this->__confirm($docId, 'delete')) {
-            case 'YES':
-                $doc->delete();
-                return $this->_redirectTo('index', $this->view->translate(
-                        'admin_documents_delete_success'), 'document',
-                        'admin', array('id' => $docId));
-                break;
-            case 'NO':
-                return $this->_redirectTo('index', null, 'document', 'admin',
-                        array('id' => $docId));
-
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * Deletes a document permanently (removes it from database and disk).
-     */
-    public function permanentdeleteAction() {
-        $docId = $this->getRequest()->getParam('docId');
-
-        // Check if document identifier is valid
-        if (!$this->documentsHelper->isValidId($docId)) {
-            return $this->_redirectTo('index', array('failure' =>
-                $this->view->translate('admin_document_error_novalidid')),
-                    'documents', 'admin');
-        }
-
-        $doc = new Opus_Document($docId);
-
-        switch ($this->__confirm($docId, 'permanentdelete')) {
+        switch ($this->__confirm($docId, $targetState)) {
             case 'YES':
                 try {
-                    $doc->deletePermanent();
+                    $this->__workflowHelper->changeState($doc, $targetState);
                 }
                 catch (Exception $e) {
                     $this->_redirectTo('index', array('failure' =>
                         $e->getMessage()), 'documents', 'admin');
                 }
-                return $this->_redirectTo('index', $this->view->translate(
-                        'admin_documents_permanent_delete_success'),
-                        'documents', 'admin');
+
+                $message = $this->view->translate(
+                        'admin_workflow_'. $targetState . '_success', $docId);
+
+                if ($targetState === 'removed') {
+                    return $this->_redirectTo('index', $message, 'documents',
+                            'admin');
+                }
+                else {
+                    return $this->_redirectTo('index', $message, 'document',
+                            'admin', array('id' => $docId));
+                }
                 break;
             case 'NO':
                 $this->_redirectTo('index', null, 'document', 'admin',
@@ -218,7 +134,7 @@ class Admin_WorkflowController extends Controller_Action {
      * @param type $action
      * @return type
      */
-    private function __confirm($docId, $action) {
+    private function __confirm($docId, $targetState) {
         // Check if request is POST and if yes check for user response
         if ($this->getRequest()->isPost()) {
             $sureyes = $this->getRequest()->getPost('sureyes');
@@ -233,10 +149,10 @@ class Admin_WorkflowController extends Controller_Action {
         }
 
         // show confirmation page if not a POST and if not answered YES or NO
-        $this->view->title = $this->view->translate('admin_doc_' . $action);
+        $this->view->title = $this->view->translate('admin_workflow_' . $targetState);
         $this->view->text = $this->view->translate(
-                'admin_doc_' . $action . '_sure', $docId);
-        $yesnoForm = $this->__getConfirmationForm($docId, $action);
+                'admin_workflow_' . $targetState . '_sure', $docId);
+        $yesnoForm = $this->__getConfirmationForm($docId, $targetState);
         $this->view->form = $yesnoForm;
         $this->renderScript('document/confirm.phtml');
     }
@@ -248,13 +164,14 @@ class Admin_WorkflowController extends Controller_Action {
      * @param string $action Target action that needs to be confirmed
      * @return Admin_Form_YesNoForm
      */
-    private function __getConfirmationForm($docId, $action) {
+    private function __getConfirmationForm($docId, $targetState) {
         $yesnoForm = new Admin_Form_YesNoForm();
         $idElement = new Zend_Form_Element_Hidden('id');
         $idElement->setValue($docId);
         $yesnoForm->addElement($idElement);
         $yesnoForm->setAction($this->view->url(
-                array("controller" => "workflow", "action" => $action)));
+                array('controller' => 'workflow', 'action' => 'changestate',
+                    'targetState' => $targetState)));
         $yesnoForm->setMethod('post');
         return $yesnoForm;
     }

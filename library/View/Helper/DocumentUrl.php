@@ -99,8 +99,9 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
         $url = array(
             'module'     => 'admin',
             'controller' => 'workflow',
-            'action'     => 'publish',
+            'action'     => 'changestate',
             'docId'      => $docId,
+            'targetState' => 'published'
         );
         return $this->view->url($url, 'default', true);
     }
@@ -109,8 +110,9 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
         $url = array(
             'module'     => 'admin',
             'controller' => 'workflow',
-            'action'     => 'unpublish',
+            'action'     => 'changestate',
             'docId'      => $docId,
+            'targetState' => 'unpublished'
         );
         return $this->view->url($url, 'default', true);
     }
@@ -119,8 +121,9 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
         $url = array(
             'module'     => 'admin',
             'controller' => 'workflow',
-            'action'     => 'delete',
+            'action'     => 'changestate',
             'docId'      => $docId,
+            'targetState' => 'deleted'
         );
         return $this->view->url($url, 'default', true);
     }
@@ -129,8 +132,9 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
         $url = array(
             'module'     => 'admin',
             'controller' => 'workflow',
-            'action'     => 'permanentdelete',
+            'action'     => 'changestate',
             'docId'      => $docId,
+            'targetState' => 'removed'
         );
         return $this->view->url($url, 'default', true);
     }
@@ -139,8 +143,9 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
         $url = array(
             'module'     => 'admin',
             'controller' => 'workflow',
-            'action'     => 'publish',
+            'action'     => 'changestate',
             'docId'      => $docId,
+            'targetState' => 'published'
         );
         return $this->view->url($url, 'default', true);
     }

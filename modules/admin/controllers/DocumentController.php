@@ -329,34 +329,34 @@ class Admin_DocumentController extends Controller_Action {
                 $docHelper->getDocState() === 'restricted' ||
                 $docHelper->getDocState() === 'inprogress') {
             $action = array();
-            $action['label'] = 'admin_doc_delete';
+            $action['label'] = 'admin_workflow_deleted';
             $action['url'] = $documentUrl->adminDelete($docId);
             $actions['delete'] = $action;
 
             $action = array();
-            $action['label'] = 'admin_documents_publish';
+            $action['label'] = 'admin_workflow_published';
             $action['url'] = $documentUrl->adminPublish($docId);
             $actions['publish'] = $action;
         }
         elseif ($docHelper->getDocState() === 'published') {
             $action = array();
-            $action['label'] = 'admin_doc_delete';
+            $action['label'] = 'admin_workflow_deleted';
             $action['url'] = $documentUrl->adminDelete($docId);
             $actions['delete'] = $action;
 
             $action = array();
-            $action['label'] = 'admin_documents_unpublish';
+            $action['label'] = 'admin_workflow_unpublished';
             $action['url'] = $documentUrl->adminUnpublish($docId);
             $actions['unpublish'] = $action;
         }
         elseif ($docHelper->getDocState() === 'deleted') {
             $action = array();
-            $action['label'] = 'admin_doc_undelete';
+            $action['label'] = 'admin_workflow_undeleted';
             $action['url'] = $documentUrl->adminPublish($docId);
             $actions['publish'] = $action;
 
             $action = array();
-            $action['label'] = 'admin_doc_permanentdelete';
+            $action['label'] = 'admin_workflow_removed';
             $action['url'] = $documentUrl->adminDeletePermanent($docId);
             $actions['permanentDelete'] = $action;
         }

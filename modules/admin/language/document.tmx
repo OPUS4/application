@@ -538,39 +538,12 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_document_error_already_deleted">
-      <tuv xml:lang="en">
-        <seg>Document has already been deleted.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Das Dokument wurde bereits gelöscht.</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="admin_document_error_novalidid">
       <tuv xml:lang="en">
         <seg>No valid document ID provided.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Die Dokumenten-ID existiert nicht.</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_document_error_already_published">
-      <tuv xml:lang="en">
-        <seg>The document has already been published.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Das Dokument wurde bereits veröffentlicht.</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_document_error_already_unpublished">
-      <tuv xml:lang="en">
-        <seg>The document has already been published.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Das Dokument wurde bereits veröffentlicht.</seg>
       </tuv>
     </tu>
 

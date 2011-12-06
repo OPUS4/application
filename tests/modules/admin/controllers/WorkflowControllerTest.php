@@ -38,11 +38,11 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
      * Tests deleting a document.
      */
     public function testDeleteAction() {
-        $this->dispatch('/admin/workflow/delete/docId/24');
+        $this->dispatch('/admin/workflow/changestate/docId/24/targetState/deleted');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('workflow');
-        $this->assertAction('delete');
+        $this->assertAction('changestate');
     }
 
     /**
@@ -54,10 +54,10 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
                 ->setPost(array(
                     'sureno' => 'sureno'
                 ));
-        $this->dispatch('/admin/workflow/delete/docId/24');
+        $this->dispatch('/admin/workflow/changestate/docId/24/targetState/deleted');
         $this->assertModule('admin');
         $this->assertController('workflow');
-        $this->assertAction('delete');
+        $this->assertAction('changestate');
         $this->assertRedirect('/admin/document/index');
 
         $doc = new Opus_Document(24);
@@ -73,10 +73,10 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
                 ->setPost(array(
                     'sureyes' => 'sureyes'
                 ));
-        $this->dispatch('/admin/workflow/delete/docId/25');
+        $this->dispatch('/admin/workflow/changestate/docId/25/targetState/deleted');
         $this->assertModule('admin');
         $this->assertController('workflow');
-        $this->assertAction('delete');
+        $this->assertAction('changestate');
         $this->assertRedirect('/admin/document/index');
 
         $doc = new Opus_Document(25);
@@ -89,11 +89,11 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
      * @depends testDeleteActionConfirmYes
      */
     public function testPermanentDeleteAction() {
-        $this->dispatch('/admin/workflow/permanentdelete/docId/25');
+        $this->dispatch('/admin/workflow/changestate/docId/25/targetState/removed');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('workflow');
-        $this->assertAction('permanentdelete');
+        $this->assertAction('changestate');
     }
 
     /**
@@ -107,10 +107,10 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
                 ->setPost(array(
                     'sureno' => 'sureno'
                 ));
-        $this->dispatch('/admin/workflow/permanentdelete/docId/24');
+        $this->dispatch('/admin/workflow/changestate/docId/24/targetState/removed');
         $this->assertModule('admin');
         $this->assertController('workflow');
-        $this->assertAction('permanentdelete');
+        $this->assertAction('changestate');
         $this->assertRedirect('/admin/document/index');
 
         $doc = new Opus_Document(25);
@@ -126,10 +126,10 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
                 ->setPost(array(
                     'sureyes' => 'sureyes'
                 ));
-        $this->dispatch('/admin/workflow/publish/docId/100');
+        $this->dispatch('/admin/workflow/changestate/docId/100/targetState/published');
         $this->assertModule('admin');
         $this->assertController('workflow');
-        $this->assertAction('publish');
+        $this->assertAction('changestate');
         $this->assertRedirect('/admin/document/index');
 
         $doc = new Opus_Document(100);
@@ -147,10 +147,10 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
                 ->setPost(array(
                     'sureyes' => 'sureyes'
                 ));
-        $this->dispatch('/admin/workflow/unpublish/docId/100');
+        $this->dispatch('/admin/workflow/changestate/docId/100/targetState/unpublished');
         $this->assertModule('admin');
         $this->assertController('workflow');
-        $this->assertAction('unpublish');
+        $this->assertAction('changestate');
         $this->assertRedirect('/admin/document/index');
 
         $doc = new Opus_Document(100);
@@ -163,7 +163,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
      * Test for XSS using docId.
      */
     public function testXssUsingIdForDeletingDocuments() {
-        $this->dispatch('/admin/workflow/delete/docId/<span>123');
+        $this->dispatch('/admin/workflow/changestate/docId/<span>123/targetState/deleted');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/documents');
 
@@ -176,7 +176,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
      * Test for failure to redirect for already deleted documents.
      */
     public function testNoRedirectForAlreadyDeletedDocuments() {
-        $this->dispatch('/admin/workflow/delete/docId/123');
+        $this->dispatch('/admin/workflow/changestate/docId/123/targetState/deleted');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/document/index/id/123');
 
@@ -192,7 +192,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
      * If the document ID is invalid a redirect should happen.
      */
     public function testNoRedirectForInvalidIdForDeletingDocuments() {
-        $this->dispatch('/admin/workflow/delete/docId/123456789');
+        $this->dispatch('/admin/workflow/changestate/docId/123456789/targetState/deleted');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/documents');
 
@@ -208,7 +208,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
      * If the document ID is non-numeric a redirect should happen.
      */
     public function testNoRedirectForNonNumericIdForDeletingDocuments() {
-        $this->dispatch('/admin/workflow/delete/docId/foo');
+        $this->dispatch('/admin/workflow/changestate/docId/foo/targetState/deleted');
         $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/documents');
 

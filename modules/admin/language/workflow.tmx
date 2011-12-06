@@ -1,0 +1,184 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+
+  <body>
+
+    <tu tuid="admin_workflow_undeleted">
+      <tuv xml:lang="en">
+        <seg>Undelete (publish again)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wiederherstellung (erneut publizieren)</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_deleted">
+      <tuv xml:lang="en">
+        <seg>Delete document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument löschen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_deleted_sure">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to delete document %1$s?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sind Sie sicher, dass Dokument %1$s gelöscht werden soll?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_removed">
+      <tuv xml:lang="en">
+        <seg>Delete document permanently</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument komplett löschen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_removed_sure">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to delete document %1$s permanently? All contents will be removed from disk without the possibility to undelete!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sind Sie sicher, dass Dokument %1$s komplett gelöscht werden soll? Alle Daten zum Dokument werden vollständig entfernt und es gibt keine Möglichkeit, dies rückgängig zu machen!</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_published">
+      <tuv xml:lang="en">
+        <seg>Publish document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument freischalten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_published_sure">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to publish document %1$s?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sind Sie sicher, daß Dokument %1$s freigeschaltet werden soll?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_unpublished">
+      <tuv xml:lang="en">
+        <seg>Unpublish document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument zurückziehen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_unpublished_sure">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to unpublish document %1$s?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sind Sie sicher, dass Dokument %1$s zurück gezogen werden soll?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_error_alreadyinstate">
+      <tuv xml:lang="en">
+        <seg>The document is already in state '%1$s'.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument befindet sich bereits in Status '$1$s'.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_error_already_published">
+      <tuv xml:lang="en">
+        <seg>The document has already been published.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument wurde bereits veröffentlicht.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_error_already_unpublished">
+      <tuv xml:lang="en">
+        <seg>The document has already been published.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument wurde bereits veröffentlicht.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_error_already_deleted">
+      <tuv xml:lang="en">
+        <seg>Document has already been deleted.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument wurde bereits gelöscht.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_error_invalidstate">
+      <tuv xml:lang="en">
+        <seg>Requested state for document is invalid.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Unbekannter Status für Dokument angefordert.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_deleted_success">
+      <tuv xml:lang="en">
+        <seg>Document was successfully deleted.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument wurde erfolgreich gelöscht.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_removed_success">
+      <tuv xml:lang="en">
+        <seg>Document was successfully removed from the repository.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument wurde erfolgreich aus dem Repository entfernt.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_published_success">
+      <tuv xml:lang="en">
+        <seg>Document %1$s published successfully!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument %1$s wurde freigeschaltet!</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_unpublished_success">
+      <tuv xml:lang="en">
+        <seg>Document %1$s successfully unpublished!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument %1$s wurde zurückgezogen!</seg>
+      </tuv>
+    </tu>
+
+    <!-- TODO currently not used -->
+    <tu tuid="publish_unlocking_date_not_reached">
+      <tuv xml:lang="en">
+        <seg>This document has an unlocking date, which has not been reached. It will be published automatically.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieses Dokument hat ein festgelegtes Freischaltdatum, das noch nicht erreicht wurde. Es wird automatisch am festgelegten Tag freigeschaltet.</seg>
+      </tuv>
+    </tu>
+
+  </body>
+
+</tmx>

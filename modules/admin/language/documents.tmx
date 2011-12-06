@@ -25,33 +25,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="document_published">
-      <tuv xml:lang="en">
-        <seg>Document %1$s published successfully!</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Das Dokument %1$s wurde freigeschaltet!</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="document_unpublished">
-      <tuv xml:lang="en">
-        <seg>Document %1$s successfully unpublished!</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Das Dokument %1$s wurde zurückgezogen!</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="publish_unlocking_date_not_reached">
-      <tuv xml:lang="en">
-        <seg>This document has an unlocking date, which has not been reached. It will be published automatically.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dieses Dokument hat ein festgelegtes Freischaltdatum, das noch nicht erreicht wurde. Es wird automatisch am festgelegten Tag freigeschaltet.</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="admin_documents_show_docs">
       <tuv xml:lang="en">
         <seg>Show documents:</seg>
@@ -97,6 +70,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_documents_state_inprogress">
+      <tuv xml:lang="en">
+        <seg>In-Progress</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>In Bearbeitung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_documents_state_restricted">
+      <tuv xml:lang="en">
+        <seg>Restricted</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geschützt</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="docs_edit">
       <tuv xml:lang="en">
         <seg>Edit</seg>
@@ -112,96 +103,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Löschen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_doc_undelete">
-      <tuv xml:lang="en">
-        <seg>Undelete (publish again)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Wiederherstellung (erneut publizieren)</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_doc_delete">
-      <tuv xml:lang="en">
-        <seg>Delete document</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dokument löschen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_doc_delete_sure">
-      <tuv xml:lang="en">
-        <seg>Are you sure you want to delete document %1$s?</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sind Sie sicher, dass Dokument %1$s gelöscht werden soll?</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="docs_permadelete">
-      <tuv xml:lang="en">
-        <seg>Delete permanently</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Ganz entfernen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_doc_permanentdelete">
-      <tuv xml:lang="en">
-        <seg>Delete document permanently</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dokument komplett löschen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_doc_permanentdelete_sure">
-      <tuv xml:lang="en">
-        <seg>Are you sure you want to delete document %1$s permanently? All contents will be removed from disk without the possibility to undelete!</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sind Sie sicher, dass Dokument %1$s komplett gelöscht werden soll? Alle Daten zum Dokument werden vollständig entfernt und es gibt keine Möglichkeit, dies rückgängig zu machen!</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_doc_publish">
-      <tuv xml:lang="en">
-        <seg>Publish document</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dokument freischalten</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_doc_publish_sure">
-      <tuv xml:lang="en">
-        <seg>Are you sure you want to publish document %1$s?</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sind Sie sicher, daß Dokument %1$s freigeschaltet werden soll?</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_doc_unpublish">
-      <tuv xml:lang="en">
-        <seg>Unpublish document</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dokument zurückziehen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_doc_unpublish_sure">
-      <tuv xml:lang="en">
-        <seg>Are you sure you want to unpublish document %1$s?</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sind Sie sicher, dass Dokument %1$s zurück gezogen werden soll?</seg>
       </tuv>
     </tu>
 
@@ -238,24 +139,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokument Metadaten</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_documents_publish">
-      <tuv xml:lang="en">
-        <seg>Publish document</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dokument freischalten</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_documents_unpublish">
-      <tuv xml:lang="en">
-        <seg>Unpublish document</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dokument zurückziehen</seg>
       </tuv>
     </tu>
 
@@ -331,24 +214,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_documents_delete_success">
-      <tuv xml:lang="en">
-        <seg>Document was successfully deleted.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Das Dokument wurde erfolgreich gelöscht.</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_documents_permanent_delete_success">
-      <tuv xml:lang="en">
-        <seg>Document was successfully removed from the repository.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Das Dokument wurde erfolgreich aus dem Repository entfernt.</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="admin_documents_tooltip_show">
       <tuv xml:lang="en">
         <seg>Show document metadata.</seg>
@@ -364,24 +229,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Übersicht</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_documents_state_inprogress">
-      <tuv xml:lang="en">
-        <seg>In-Progress</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>In Bearbeitung</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_documents_state_restricted">
-      <tuv xml:lang="en">
-        <seg>Restricted</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Geschützt</seg>
       </tuv>
     </tu>
 
