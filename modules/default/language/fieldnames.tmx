@@ -2030,6 +2030,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="DocumentSets">
+            <tuv xml:lang="en">
+                <seg>Document sets</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Dokumentlisten</seg>
+            </tuv>
+        </tu>
+
         <!-- Keys for Opus_Person -->
 
         <tu tuid="Opus_Person">
