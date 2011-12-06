@@ -154,7 +154,7 @@
             <xs:enumeration value="contributor"/>
             <xs:enumeration value="editor"/>
             <xs:enumeration value="referee"/>
-            <xs:enumeration value="translater"/>
+            <xs:enumeration value="translator"/>
             <xs:enumeration value="submitter"/>
         </xs:restriction>
     </xs:simpleType>
