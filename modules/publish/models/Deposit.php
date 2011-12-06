@@ -356,21 +356,11 @@ class Publish_Model_Deposit {
 
         switch ($type) {
             case 'MSC' :
-            case 'DDC' :
-                $this->log->debug("subject is a " . $type . " subject and has to be stored as a Collection.");                
-                if (isset($this->session->additionalFields['step' . $dataKey])) {
-                    $step = $this->session->additionalFields['step' . $dataKey];
-                    if (array_key_exists('collId' . $step . $dataKey, $this->documentData))
-                        $dataValue = $this->documentData['collId' . $step . $dataKey];
-                }
-                $this->_storeCollectionObject(strtolower($type), $dataValue);
-                $this->log->debug("subject has also be stored as subject.");
-                $subject = new Opus_Subject();
-                break;
-
+            case 'DDC' :   
             case 'CCS' :
-            case 'PACS' :
-                $this->log->debug("subject is a " . $type . " subject and has only to be stored as a Collection.");                
+            case 'PACS' :   
+                // store as Collection                
+                $this->log->debug("subject is a " . $type . " subject and has to be stored as a Collection.");           
                 if (isset($this->session->additionalFields['step' . $dataKey])) {
                     $step = $this->session->additionalFields['step' . $dataKey];
                     if (array_key_exists('collId' . $step . $dataKey, $this->documentData))
@@ -379,15 +369,16 @@ class Publish_Model_Deposit {
                 $this->_storeCollectionObject(strtolower($type), $dataValue);
                 if (isset($step))
                     $dataValue = $this->documentData['collId' . $step . $dataKey] = "";
-                return;
+                return;                          
 
-            case 'Swd' :
+            case 'Swd' :   
+                // store as Subject
                 $this->log->debug("subject is a " . $type . " subject.");
-                $subject = new Opus_Subject();
-                //$subject = new Opus_SubjectSwd();
+                $subject = new Opus_Subject();                
                 break;
 
-            case 'Uncontrolled':
+            case 'Uncontrolled':  
+                // store as Subject
                 $this->log->debug("subject is a " . $type . " or other subject.");
                 $subject = new Opus_Subject();
                 break;
@@ -395,13 +386,7 @@ class Publish_Model_Deposit {
         }
         if ($counter >= 1) {
             $subjectType = 'Subject' . $type;
-            //collectionID
             $this->log->debug("subjectType: " . $subjectType);
-            if (strstr($dataValue, 'ID:')) {
-                $dataValue = substr($dataValue, 3);
-                $coll = new Opus_Collection($dataValue);
-                $dataValue = $coll->getNumber();
-            }            
             $subject->setValue($dataValue);
             $subject->setType(strtolower($type));
             if (array_key_exists($subjectType . 'Language' . $counter, $this->documentData)) {
