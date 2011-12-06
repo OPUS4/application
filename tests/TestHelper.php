@@ -51,10 +51,10 @@ class TestHelper extends Application_Bootstrap {
     protected function _initDatabase() {
         parent::_initDatabase();
 
-        $log = Zend_Registry::get('Zend_Log');
-        
-        // Determine current schema revision from opus400.sql
-        $sqlFile = dirname(dirname(__FILE__)) . '/db/schema/opus410.sql';
+        $log = $this->getResource('Logging');
+
+        // Determine current schema revision from opus4current.sql
+        $sqlFile = dirname(dirname(__FILE__)) . '/db/schema/opus4current.sql';
         if (false === is_file($sqlFile)) {
             $log->warn('Schema file ' . $sqlFile . ' not found.');
             return;
