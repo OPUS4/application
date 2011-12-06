@@ -339,7 +339,7 @@ class Publish_Model_FormElement {
 
         switch ($switchVar) {
             case 'Collection':
-                $element->setMultiOptions(array_merge(array('' => 'choose_valid_collection'), $options));
+                $element->setMultiOptions(array_merge(array('' => 'choose_valid_'.$this->collectionRole), $options));
                 break;
             case 'Licence' :
                 $element->setMultiOptions(array_merge(array('' => 'choose_valid_licence'), $options));

@@ -277,12 +277,102 @@
       </tuv>
     </tu>
 
-    <tu tuid="choose_valid_collection">
+    <tu tuid="choose_valid_institutes">
+      <tuv xml:lang="en">
+        <seg>Please choose a institute</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie ein Institut</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="choose_valid_ddc">
+      <tuv xml:lang="en">
+        <seg>Please choose a DDC class</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie eine DDC Klasse</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="choose_valid_ccs">
+      <tuv xml:lang="en">
+        <seg>Please choose a CCS class</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie eine CCS Klasse</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="choose_valid_pacs">
+      <tuv xml:lang="en">
+        <seg>Please choose a PACS class</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie eine PACS Klasse</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="choose_valid_series">
+      <tuv xml:lang="en">
+        <seg>Please choose a series</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie eine Schriftenreihe</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="choose_valid_msc">
+      <tuv xml:lang="en">
+        <seg>Please choose a MSC class</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie eine MSC Klasse</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="choose_valid_jel">
+      <tuv xml:lang="en">
+        <seg>Please choose a JEL class</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie eine JEL Klasse</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="choose_valid_bk">
+      <tuv xml:lang="en">
+        <seg>Please choose a BK class</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie eine BK Klasse</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="choose_valid_collections">
       <tuv xml:lang="en">
         <seg>Please choose a collection entry</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Bitte wählen Sie einen Sammlungseintrag</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="choose_valid_reports">
+      <tuv xml:lang="en">
+        <seg>Please choose a report</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie einen Report</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="choose_valid_projects">
+      <tuv xml:lang="en">
+        <seg>Please choose a project</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie ein Projekt</seg>
       </tuv>
     </tu>
 
