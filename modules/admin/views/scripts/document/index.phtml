@@ -38,10 +38,18 @@
         <?= $this->navigation()->breadcrumbs() ?> (<?= $this->document->getId() ?>)
     </div>
 
-    <div id="showdocmenu" style="padding: 0.5em 1em; font-size: larger; text-align: center;">
-        <?PHP foreach ($this->actions as $action) : ?>
-        <a href="<?=$action['url']?>"><?=$this->translate($action['label']) ?></a>
-        <?PHP endforeach; ?>
+    <div style="padding-top: 0.5em; padding-bottom: 0em;">
+        <div id="showdocmenu" style="padding: 0em 1em; font-size: larger; text-align: center;">
+            <?PHP foreach ($this->actions as $action) : ?>
+            <a href="<?=$action['url']?>"><?=$this->translate($action['label']) ?></a>
+            <?PHP endforeach; ?>
+        </div>
+
+        <div id="showdocmenu" style="padding: 0.5em 1em; font-size: larger; text-align: center;">
+            <?PHP foreach ($this->workflowActions as $action) : ?>
+            <a href="<?=$action['url']?>"><?=$this->translate($action['label']) ?></a>
+            <?PHP endforeach; ?>
+        </div>
     </div>
 
     <div id="showdoc">

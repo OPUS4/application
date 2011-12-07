@@ -80,9 +80,14 @@ class Admin_WorkflowController extends Controller_Action {
                     'document', 'admin', array('id' => $docId));
         }
 
-        // TODO check if allowed target state (OPUSVIER-1959)
-
         $doc = new Opus_Document($docId);
+
+        // Check if allowed target state
+        if (!$this->__workflowHelper->isTransitionAllowed($doc, $targetState)) {
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate('admin_workflow_error_illegal_transition',
+                        $targetState)), 'document', 'admin', array('id' => $docId));
+        }
 
         // Check if document is already in target state
         if ($doc->getServerState() === $targetState) {
@@ -107,8 +112,13 @@ class Admin_WorkflowController extends Controller_Action {
                         $e->getMessage()), 'documents', 'admin');
                 }
 
-                $message = $this->view->translate(
-                        'admin_workflow_'. $targetState . '_success', $docId);
+                $key = 'admin_workflow_' . $targetState . '_success';
+
+                if (!$this->view->translate()->getTranslator()->isTranslated($key)) {
+                    $key = 'admin_workflow_success';
+                }
+
+                $message = $this->view->translate($key, $docId, $targetState);
 
                 if ($targetState === 'removed') {
                     return $this->_redirectTo('index', $message, 'documents',

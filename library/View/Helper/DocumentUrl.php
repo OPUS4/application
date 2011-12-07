@@ -95,60 +95,15 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
         return $this->view->url($url, 'default', true);
     }
 
-    public function adminPublish($docId) {
+    public function adminChangeState($docId, $targetState) {
         $url = array(
             'module'     => 'admin',
             'controller' => 'workflow',
             'action'     => 'changestate',
             'docId'      => $docId,
-            'targetState' => 'published'
+            'targetState' => $targetState
         );
         return $this->view->url($url, 'default', true);
     }
-
-    public function adminUnpublish($docId) {
-        $url = array(
-            'module'     => 'admin',
-            'controller' => 'workflow',
-            'action'     => 'changestate',
-            'docId'      => $docId,
-            'targetState' => 'unpublished'
-        );
-        return $this->view->url($url, 'default', true);
-    }
-
-    public function adminDelete($docId) {
-        $url = array(
-            'module'     => 'admin',
-            'controller' => 'workflow',
-            'action'     => 'changestate',
-            'docId'      => $docId,
-            'targetState' => 'deleted'
-        );
-        return $this->view->url($url, 'default', true);
-    }
-
-    public function adminDeletePermanent($docId) {
-        $url = array(
-            'module'     => 'admin',
-            'controller' => 'workflow',
-            'action'     => 'changestate',
-            'docId'      => $docId,
-            'targetState' => 'removed'
-        );
-        return $this->view->url($url, 'default', true);
-    }
-
-    public function adminUndelete($docId) {
-        $url = array(
-            'module'     => 'admin',
-            'controller' => 'workflow',
-            'action'     => 'changestate',
-            'docId'      => $docId,
-            'targetState' => 'published'
-        );
-        return $this->view->url($url, 'default', true);
-    }
-
 
 }

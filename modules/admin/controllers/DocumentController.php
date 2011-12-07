@@ -325,42 +325,20 @@ class Admin_DocumentController extends Controller_Action {
 //        $action['url'] = $docHelper->getUrlAccessManager();
 //        $actions['access'] = $action;
 
-        if ($docHelper->getDocState() === 'unpublished' ||
-                $docHelper->getDocState() === 'restricted' ||
-                $docHelper->getDocState() === 'inprogress') {
-            $action = array();
-            $action['label'] = 'admin_workflow_deleted';
-            $action['url'] = $documentUrl->adminDelete($docId);
-            $actions['delete'] = $action;
+        $workflowActions = array();
 
-            $action = array();
-            $action['label'] = 'admin_workflow_published';
-            $action['url'] = $documentUrl->adminPublish($docId);
-            $actions['publish'] = $action;
-        }
-        elseif ($docHelper->getDocState() === 'published') {
-            $action = array();
-            $action['label'] = 'admin_workflow_deleted';
-            $action['url'] = $documentUrl->adminDelete($docId);
-            $actions['delete'] = $action;
+        $workflow = $this->_helper->getHelper('Workflow');
 
-            $action = array();
-            $action['label'] = 'admin_workflow_unpublished';
-            $action['url'] = $documentUrl->adminUnpublish($docId);
-            $actions['unpublish'] = $action;
-        }
-        elseif ($docHelper->getDocState() === 'deleted') {
-            $action = array();
-            $action['label'] = 'admin_workflow_undeleted';
-            $action['url'] = $documentUrl->adminPublish($docId);
-            $actions['publish'] = $action;
+        $targetStates = $workflow->getAllowedTargetStatesForDocument($model);
 
+        foreach ($targetStates as $targetState) {
             $action = array();
-            $action['label'] = 'admin_workflow_removed';
-            $action['url'] = $documentUrl->adminDeletePermanent($docId);
-            $actions['permanentDelete'] = $action;
+            $action['label'] = 'admin_workflow_' . $targetState;
+            $action['url'] = $documentUrl->adminChangeState($docId, $targetState);
+            $workflowActions[$targetState] = $action;
         }
 
+        $this->view->workflowActions = $workflowActions;
         $this->view->actions = $actions;
 
         return $actions;

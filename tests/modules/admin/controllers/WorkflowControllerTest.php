@@ -139,22 +139,20 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
     /**
      * Tests unpublishing document.
      *
+     * Moving a document to state 'unpublished' is not permitted.
+     *
      * @depends testPublishActionConfirmYes
      */
     public function testUnpublishAction() {
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'sureyes' => 'sureyes'
-                ));
         $this->dispatch('/admin/workflow/changestate/docId/100/targetState/unpublished');
-        $this->assertModule('admin');
-        $this->assertController('workflow');
-        $this->assertAction('changestate');
-        $this->assertRedirect('/admin/document/index');
 
-        $doc = new Opus_Document(100);
-        $this->assertEquals('unpublished', $doc->getServerState());
+        $this->assertEquals(302, $this->getResponse()->getHttpResponseCode());
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/document/index/id/100');
+
+        $this->assertFalse($this->getResponse()->getHttpResponseCode() == 200,
+                "Request was not redirected.");
+        $this->assertTrue($this->getResponse()->getHttpResponseCode() != 500,
+                "Request produced internal error. " . $this->getResponse()->getBody());
     }
 
     /**
