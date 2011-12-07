@@ -67,6 +67,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="Opus_Document_ServerState_Value_Audited">
+            <tuv xml:lang="en">
+                <seg>Audited</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Geprüft</seg>
+            </tuv>
+        </tu>
+
         <!--
             IMPORTANT: The pattern deviates from default for values of role
             field for class Opus_Model_Dependent_Link_DocumentPerson.
