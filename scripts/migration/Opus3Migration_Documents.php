@@ -34,23 +34,17 @@
  * @version     $Id$
  */
 
-// Configure include path.
+// Configure include path
+require_once dirname(__FILE__) . '/../common/bootstrap.php';
+
 set_include_path('.' . PATH_SEPARATOR
         . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/importer'
-        . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/stylesheets'
-        . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/library'
         . PATH_SEPARATOR . get_include_path());
 
-// Define path to application directory
-defined('APPLICATION_PATH')
-       || define('APPLICATION_PATH', realpath(dirname(dirname(dirname(__FILE__)))));
-
-define('APPLICATION_ENV', 'testing');
-
-require_once 'Zend/Application.php';
 require_once 'Opus3XMLImport.php';
 require_once 'Opus3FileImport.php';
 require_once 'Opus3ImportLogger.php';
+
 
 class Opus3Migration_Documents {
 
@@ -227,4 +221,3 @@ $migration = new Opus3Migration_Documents($options);
 $status = $migration->run();
 
 if ($status === Opus3Migration_Documents::_BREAK) { exit(1); }
-
