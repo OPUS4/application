@@ -50,7 +50,7 @@
                         <xs:element name="creatingCorporation" type="xs:string" minOccurs="0"/>
                         <xs:element name="contributingCorporation" type="xs:string" minOccurs="0"/>
                         <xs:element name="keywords" type="keywordsType" minOccurs="0"/>
-                        <xs:element name="dnbInstitutes" type="dnbInstitutesType" minOccurs="0"/>
+                        <xs:element name="dnbInstitutions" type="dnbInstitutionsType" minOccurs="0"/>
                         <xs:element name="dates" type="datesType"/>
                         <xs:element name="identifiers" type="identifiersType" minOccurs="0"/>
                         <xs:element name="references" type="referencesType" minOccurs="0"/>
@@ -181,9 +181,9 @@
         </xs:restriction>
     </xs:simpleType>
 
-    <xs:complexType name="dnbInstitutesType">
+    <xs:complexType name="dnbInstitutionsType">
         <xs:sequence>
-            <xs:element name="dnbInstitute" maxOccurs="unbounded">
+            <xs:element name="dnbInstitution" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:attribute name="id" type="xs:integer" use="required"/>
                 </xs:complexType>
