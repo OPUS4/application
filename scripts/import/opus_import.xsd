@@ -48,18 +48,10 @@
                         <xs:element name="titles" type="titlesType" minOccurs="0"/>
                         <xs:element name="abstracts" type="abstractsType" minOccurs="0"/>
                         <xs:element name="persons" type="personsType" minOccurs="0"/>
-                        <xs:element name="creatingCorporation" type="xs:string" minOccurs="0"/>
-                        <xs:element name="contributingCorporation" type="xs:string" minOccurs="0"/>
                         <xs:element name="keywords" type="keywordsType" minOccurs="0"/>
                         <xs:element name="dnbInstitutions" type="dnbInstitutionsType" minOccurs="0"/>
                         <xs:element name="dates" type="datesType"/>
                         <xs:element name="identifiers" type="identifiersType" minOccurs="0"/>
-                        <xs:element name="references" type="referencesType" minOccurs="0"/>
-                        <xs:element name="publisher" type="publisherType" minOccurs="0"/>
-                        <xs:element name="page" type="pageType" minOccurs="0"/>
-                        <xs:element name="edition" type="xs:string" minOccurs="0"/>
-                        <xs:element name="volume" type="xs:string" minOccurs="0"/>
-                        <xs:element name="issue" type="xs:string" minOccurs="0"/>
                         <xs:element name="notes" type="notesType" minOccurs="0"/>
 
                         <xs:element name="collections" type="collectionsType" minOccurs="0"/>
@@ -71,6 +63,17 @@
                     <xs:attribute name="docType" type="xs:string" use="required"/>
                     <xs:attribute name="oldId" type="xs:string" use="required"/>
                     <xs:attribute name="licenceId" type="xs:integer"/>
+                    <xs:attribute name="pageFirst" type="xs:integer"/>
+                    <xs:attribute name="pageLast" type="xs:integer"/>
+                    <xs:attribute name="pageCount" type="xs:integer"/>
+                    <xs:attribute name="edition" type="xs:string"/>
+                    <xs:attribute name="volume" type="xs:string"/>
+                    <xs:attribute name="issue" type="xs:string"/>
+                    <xs:attribute name="publisherName" type="xs:string"/>
+                    <xs:attribute name="publisherPlace" type="xs:string"/>
+                    <xs:attribute name="creatingCorporation" type="xs:string"/>
+                    <xs:attribute name="contributingCorporation" type="xs:string"/>
+                    <xs:attribute name="belongsToBibliography" type="xs:boolean"/>
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
@@ -246,55 +249,6 @@
             <xs:enumeration value="arxiv"/>
         </xs:restriction>
     </xs:simpleType>
-
-    <xs:complexType name="referencesType">
-        <xs:sequence>
-            <xs:element name="reference" maxOccurs="unbounded">
-                <xs:complexType>
-                    <xs:simpleContent>
-                        <xs:extension base="xs:string">
-                            <xs:attribute name="type" type="referenceTypeValues" use="required"/>
-                            <xs:attribute name="relation" type="relationTypeValues" use="required"/>
-                        </xs:extension>
-                    </xs:simpleContent>
-                </xs:complexType>
-            </xs:element>
-        </xs:sequence>
-    </xs:complexType>
-
-    <xs:simpleType name="referenceTypeValues">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="isbn"/>
-            <xs:enumeration value="urn"/>
-            <xs:enumeration value="doi"/>
-            <xs:enumeration value="handle"/>
-            <xs:enumeration value="url"/>
-            <xs:enumeration value="issn"/>
-            <xs:enumeration value="std-doi"/>
-            <xs:enumeration value="cris-link"/>
-            <xs:enumeration value="splash-url"/>
-            <xs:enumeration value="opus4-id"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:simpleType name="relationTypeValues">
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="updates"/>
-            <xs:enumeration value="updated-by"/>
-            <xs:enumeration value="other"/>
-        </xs:restriction>
-    </xs:simpleType>
-
-    <xs:complexType name="publisherType">
-        <xs:attribute name="name" type="xs:string" use="required"/>
-        <xs:attribute name="place" type="xs:string" use="required"/>
-    </xs:complexType>
-
-    <xs:complexType name="pageType">
-        <xs:attribute name="first" type="xs:string" use="required"/>
-        <xs:attribute name="last" type="xs:string" use="required"/>
-        <xs:attribute name="count" type="xs:string" use="required"/>
-    </xs:complexType>
 
     <xs:complexType name="notesType">
         <xs:sequence>
