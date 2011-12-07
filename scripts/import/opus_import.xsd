@@ -53,7 +53,6 @@
                         <xs:element name="dates" type="datesType"/>
                         <xs:element name="identifiers" type="identifiersType" minOccurs="0"/>
                         <xs:element name="notes" type="notesType" minOccurs="0"/>
-
                         <xs:element name="collections" type="collectionsType" minOccurs="0"/>
                         <xs:element name="documentSets" type="documentSetsType" minOccurs="0"/>
                         <xs:element name="enrichments" type="enrichmentsType" minOccurs="0"/>
@@ -286,6 +285,7 @@
             <xs:element name="documentSet" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:attribute name="id" type="xs:integer" use="required"/>
+                    <xs:attribute name="number" type="xs:integer"/>
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
