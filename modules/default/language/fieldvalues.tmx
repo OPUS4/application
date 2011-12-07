@@ -216,7 +216,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="Opus_Identifier_Type_Value_Pubmed">
+        <tu tuid="Opus_Identifier_Type_Value_Pmid">
             <tuv xml:lang="en">
                 <seg>Pubmed Id</seg>
             </tuv>

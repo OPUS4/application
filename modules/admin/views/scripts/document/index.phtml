@@ -193,7 +193,7 @@
         <?PHP foreach($this->document->getIdentifier() as $index => $identifier) : ?>
 
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
-            <span class="Identifier label"><?=htmlspecialchars($this->translate('Identifier' . ucfirst($identifier->getType()))) ?></span>
+            <span class="Identifier label"><?=htmlspecialchars($this->translate('Opus_Identifier_Type_Value_' . ucfirst($identifier->getType()))) ?></span>
             <span class="Identifier value"><?=htmlspecialchars($identifier->getValue()) ?></span>
         </div>
 
