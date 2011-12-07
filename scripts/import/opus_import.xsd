@@ -58,10 +58,10 @@
                         <xs:element name="documentSets" type="documentSetsType" minOccurs="0"/>
                         <xs:element name="enrichments" type="enrichmentsType" minOccurs="0"/>
                     </xs:sequence>
+                    <xs:attribute name="oldId" type="xs:string" use="required"/>
                     <xs:attribute name="docId" type="xs:integer"/>
                     <xs:attribute name="language" type="xs:string" use="required"/>
-                    <xs:attribute name="docType" type="xs:string" use="required"/>
-                    <xs:attribute name="oldId" type="xs:string" use="required"/>
+                    <xs:attribute name="docType" type="xs:string" use="required"/>                    
                     <xs:attribute name="licenceId" type="xs:integer"/>
                     <xs:attribute name="pageFirst" type="xs:string"/>
                     <xs:attribute name="pageLast" type="xs:string"/>
