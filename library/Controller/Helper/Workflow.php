@@ -64,6 +64,18 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
     }
 
     /**
+     * Returns true if a transition is allowed for a document.
+     * @param Opus_Document $document
+     * @param string $targetState
+     * @return boolean - True only if transition is allowed
+     */
+    public function isTransitionAllowed($document, $targetState) {
+        $allowedStates = $this->getAllowedTargetStatesForDocument($document);
+
+        return in_array($targetState, $allowedStates);
+    }
+
+    /**
      * Returns all allowed target states for a document.
      * @param Opus_Document $document
      * @return array of strings - Possible target states for document

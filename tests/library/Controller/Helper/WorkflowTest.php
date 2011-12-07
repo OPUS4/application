@@ -172,14 +172,43 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
 
         $this->__workflowHelper->changeState($doc, 'unpublished');
 
-        $documentsHelper = new Controller_Helper_Documents();
-
         $doc = new Opus_Document($docId);
 
         $this->assertEquals('unpublished', $doc->getServerState());
 
         $doc->delete();
         $doc->deletePermanent();
+    }
+
+    public function testIsAllowedTransitionTrue() {
+        $doc = new Opus_Document();
+
+        $doc->setServerState('unpublished');
+
+        $this->assertTrue($this->__workflowHelper->isTransitionAllowed($doc,
+                'published'));
+    }
+
+    public function testIsAllowedTransitionFalse() {
+        $doc = new Opus_Document();
+
+        $doc->setServerState('published');
+
+        $this->assertFalse($this->__workflowHelper->isTransitionAllowed($doc,
+                'unpublished'));
+    }
+
+    public function testWorkflowTranslationsForStates() {
+        $this->markTestSkipped('Not working yet because resources are not in default module.');
+        $states = $this->__workflowHelper->getAllStates();
+
+        $translate = Zend_Registry::get('Zend_Translate');
+
+        foreach ($states as $state) {
+            $key = 'admin_workflow_' . $state;
+            $this->assertTrue($translate->isTranslated($key),
+                    'Translation key \'' . $key . '\' is missing.');
+        }
     }
 
 }

@@ -7,12 +7,57 @@
 
   <body>
 
-    <tu tuid="admin_workflow_undeleted">
+    <tu tuid="admin_workflow_restricted">
       <tuv xml:lang="en">
-        <seg>Undelete (publish again)</seg>
+        <seg>Restrict document</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Wiederherstellung (erneut publizieren)</seg>
+        <seg>Zugriff beschränken</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_restricted_sure">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to change the state of the document to 'restricted'?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sind Sie sicher, daß sie das sie das Dokument für beschränkten Zugang freigeben wollen?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_inprogress">
+      <tuv xml:lang="en">
+        <seg>In Progress</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bearbeitung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_inprogress_sure">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to change the state of the document to 'inprogress'?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sind Sie sicher, daß sie den Zustand des Dokumentes auf 'Bearbeitung' setzen wollen?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_audited">
+      <tuv xml:lang="en">
+        <seg>Audited</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geprüft</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_audited_sure">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to change the state of the document to 'audited'?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sind Sie sicher, daß sie den Zustand des Dokumentes auf 'Geprüft' setzen wollen?</seg>
       </tuv>
     </tu>
 
@@ -97,6 +142,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_workflow_error_illegal_transition">
+      <tuv xml:lang="en">
+        <seg>The document status cannot be changed to '%1$s'.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Der Status des Dokumentes kann nicht zu '$1$s' geändert werden.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_workflow_error_already_published">
       <tuv xml:lang="en">
         <seg>The document has already been published.</seg>
@@ -130,6 +184,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Unbekannter Status für Dokument angefordert.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_success">
+      <tuv xml:lang="en">
+        <seg>The state of document %1$s was successfully changed to '%2$s'.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokument %1$s wurde erfolgreich in den Zustand '%2$s' gesetzt.</seg>
       </tuv>
     </tu>
 
