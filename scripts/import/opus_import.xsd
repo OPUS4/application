@@ -63,9 +63,9 @@
                     <xs:attribute name="docType" type="xs:string" use="required"/>
                     <xs:attribute name="oldId" type="xs:string" use="required"/>
                     <xs:attribute name="licenceId" type="xs:integer"/>
-                    <xs:attribute name="pageFirst" type="xs:integer"/>
-                    <xs:attribute name="pageLast" type="xs:integer"/>
-                    <xs:attribute name="pageCount" type="xs:integer"/>
+                    <xs:attribute name="pageFirst" type="xs:string"/>
+                    <xs:attribute name="pageLast" type="xs:string"/>
+                    <xs:attribute name="pageCount" type="xs:string"/>
                     <xs:attribute name="edition" type="xs:string"/>
                     <xs:attribute name="volume" type="xs:string"/>
                     <xs:attribute name="issue" type="xs:string"/>
