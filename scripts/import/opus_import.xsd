@@ -242,6 +242,8 @@
             <xs:enumeration value="splash-url"/>
             <xs:enumeration value="opus3-id"/>
             <xs:enumeration value="opac-id"/>
+            <xs:enumeration value="pmid"/>
+            <xs:enumeration value="arxiv"/>
         </xs:restriction>
     </xs:simpleType>
 
