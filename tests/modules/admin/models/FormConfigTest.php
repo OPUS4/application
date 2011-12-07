@@ -76,9 +76,10 @@ class Admin_Model_FormConfigTest extends ControllerTestCase {
         $fields = $config->getDisabledFields('Opus_Document');
 
         $this->assertNotNull($fields);
-        $this->assertEquals(2, count($fields));
+        $this->assertEquals(3, count($fields));
         $this->assertContains('ServerDatePublished', $fields);
         $this->assertContains('ServerDateModified', $fields);
+        $this->assertContains('ServerState', $fields);
     }
 
     public function testGetFields() {
