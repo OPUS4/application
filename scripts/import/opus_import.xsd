@@ -285,7 +285,7 @@
             <xs:element name="documentSet" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:attribute name="id" type="xs:integer" use="required"/>
-                    <xs:attribute name="number" type="xs:integer"/>
+                    <xs:attribute name="number" type="xs:string"/>
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
