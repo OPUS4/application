@@ -309,11 +309,7 @@
         <xs:sequence>
             <xs:element name="licence" maxOccurs="unbounded">
                 <xs:complexType>
-                    <xs:simpleContent>
-                        <xs:extension base="xs:string">
-                            <xs:attribute name="id" type="xs:integer" use="required"/>
-                        </xs:extension>
-                    </xs:simpleContent>
+                    <xs:attribute name="id" type="xs:integer" use="required"/>
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
