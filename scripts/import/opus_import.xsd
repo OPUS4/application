@@ -140,7 +140,7 @@
                             <xs:attribute name="lastName" type="xs:string" use="required"/>
                             <xs:attribute name="academicTitle" type="xs:string"/>
                             <xs:attribute name="email" type="xs:string"/>
-                            <xs:attribute name="allowsEmailContact" type="xs:boolean"/>
+                            <xs:attribute name="allowEmailContact" type="xs:boolean"/>
                             <xs:attribute name="placeOfBirth" type="xs:string"/>
                             <xs:attribute name="dateOfBirth" type="xs:date"/>
                         </xs:extension>
