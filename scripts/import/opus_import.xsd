@@ -54,7 +54,7 @@
                         <xs:element name="identifiers" type="identifiersType" minOccurs="0"/>
                         <xs:element name="notes" type="notesType" minOccurs="0"/>
                         <xs:element name="collections" type="collectionsType" minOccurs="0"/>
-                        <xs:element name="documentSets" type="documentSetsType" minOccurs="0"/>
+                        <xs:element name="series" type="seriesType" minOccurs="0"/>
                         <xs:element name="enrichments" type="enrichmentsType" minOccurs="0"/>
                         <xs:element name="licences" type="licencesType" minOccurs="0"/>
                     </xs:sequence>
@@ -280,9 +280,9 @@
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="documentSetsType">
+    <xs:complexType name="seriesType">
         <xs:sequence>
-            <xs:element name="documentSet" maxOccurs="unbounded">
+            <xs:element name="seriesItem" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:attribute name="id" type="xs:integer" use="required"/>
                     <xs:attribute name="number" type="xs:string"/>
