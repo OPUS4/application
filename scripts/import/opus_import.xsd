@@ -56,15 +56,15 @@
                         <xs:element name="collections" type="collectionsType" minOccurs="0"/>
                         <xs:element name="documentSets" type="documentSetsType" minOccurs="0"/>
                         <xs:element name="enrichments" type="enrichmentsType" minOccurs="0"/>
+                        <xs:element name="licences" type="licencesType" minOccurs="0"/>
                     </xs:sequence>
                     <xs:attribute name="oldId" type="xs:string" use="required"/>
                     <xs:attribute name="docId" type="xs:integer"/>
                     <xs:attribute name="language" type="xs:string" use="required"/>
-                    <xs:attribute name="docType" type="xs:string" use="required"/>                    
-                    <xs:attribute name="licenceId" type="xs:integer"/>
+                    <xs:attribute name="type" type="xs:string" use="required"/>                    
                     <xs:attribute name="pageFirst" type="xs:string"/>
                     <xs:attribute name="pageLast" type="xs:string"/>
-                    <xs:attribute name="pageCount" type="xs:string"/>
+                    <xs:attribute name="pageNumber" type="xs:string"/>
                     <xs:attribute name="edition" type="xs:string"/>
                     <xs:attribute name="volume" type="xs:string"/>
                     <xs:attribute name="issue" type="xs:string"/>
@@ -298,6 +298,20 @@
                     <xs:simpleContent>
                         <xs:extension base="xs:string">
                             <xs:attribute name="key" type="xs:integer" use="required"/>
+                        </xs:extension>
+                    </xs:simpleContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="licencesType">
+        <xs:sequence>
+            <xs:element name="licence" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:simpleContent>
+                        <xs:extension base="xs:string">
+                            <xs:attribute name="id" type="xs:integer" use="required"/>
                         </xs:extension>
                     </xs:simpleContent>
                 </xs:complexType>
