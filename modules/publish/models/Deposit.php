@@ -212,7 +212,7 @@ class Publish_Model_Deposit {
 
     /**
      * Method stores attributes like name or email for a given person object.
-     * @param <Opus_Person> $person - given person object
+     * @param <Opus_Model_Dependent_LinkDocumentPerson> $person - given person object
      * @param <String> $personType - type of person (editor, author etc.)
      * @param <String> $attribute - the value to store
      * @param <String> $attributeType - type of attribute (first name, email etc.)
