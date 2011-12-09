@@ -72,12 +72,20 @@ class Admin_Form_Model extends Zend_Form_SubForm {
     private $__logger;
 
     /**
+     * Controller helper for handling dates.
+     * @var Controller_Helper_Dates
+     */
+    private $__dates;
+
+    /**
      * Constructs form for Opus_Model_Abstract instance.
      * @param multi $clazz
      * @param array $includedFields
      */
     public function __construct($clazz, $includedFields = null) {
         parent::__construct();
+
+        $this->__dates = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
 
         $this->__formConfig = new Admin_Model_FormConfig();
 
@@ -210,14 +218,7 @@ class Admin_Form_Model extends Zend_Form_SubForm {
                         $value = $field->getValue();
 
                         if (!empty($value)) {
-                            // TODO use common function for formatting
-                            $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
-                            $this->getLogger()->debug('Reading Date ' . $value . ' for field ' . $field->getName());
-                            $date = $value->getZendDate();
-                            $this->getLogger()->debug('Reading Date ' . $date . ' for field ' . $field->getName());
-                            $element->setValue($date->get($dateFormat));
-                            $this->getLogger()->debug('Formatting ' . $field->getName() . ' using ' . $dateFormat);
-                            $this->getLogger()->debug('Reading Date ' . $date->get($dateFormat) . ' for field ' . $field->getName());
+                            $element->setValue($this->__dates->getDateString($value));
                         }
                         else {
                             $element->setValue(null);

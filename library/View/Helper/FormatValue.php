@@ -61,12 +61,21 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
     private $__view;
 
     /**
+     * Controller helper for handling of dates.
+     * @var Controller_Helper_Dates
+     */
+    private $__dates;
+
+    /**
      * Constructs View_Helper_FormatValue.
      */
     public function __construct() {
         $this->__translation =
                 Zend_Controller_Action_HelperBroker::getStaticHelper(
                         'Translation');
+
+        $this->__dates =
+                Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
     }
 
     /**
@@ -141,24 +150,15 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
 
     /**
      * Returns Opus_Date values formatted as string.
-     * @param <type> $date
+     * @param Opus_Date $date
      * @return string Formatted date
      */
     public function formatDate($date) {
         if (!($date instanceof Opus_Date)) {
             return $date;
         }
-
-        $format = Admin_Model_DocumentHelper::getDateFormat();
-
-        // TODO review What does this do?
-        $timestamp = $date->getUnixTimestamp();
-
-        if (empty($timestamp)) {
-            return null;
-        }
         else {
-            return $date->getZendDate()->get($format);
+            return $this->__dates->getDateString($date);
         }
     }
 

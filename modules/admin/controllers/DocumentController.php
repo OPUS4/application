@@ -44,11 +44,18 @@ class Admin_DocumentController extends Controller_Action {
     private $documentsHelper;
 
     /**
+     * Controller helper for handling dates.
+     * @var Controller_Helper_Dates
+     */
+    private $__dates;
+
+    /**
      * Initializes controller.
      */
     public function init() {
         parent::init();
         $this->documentsHelper = $this->_helper->getHelper('Documents');
+        $this->__dates = $this->_helper->getHelper('Dates');
     }
 
     /**
@@ -716,27 +723,14 @@ class Admin_DocumentController extends Controller_Action {
      * @param string $value Date value
      */
     private function __setDateField($field, $value) {
-        $dateFormat = Admin_Model_DocumentHelper::getDateFormat();
-        $this->_logger->debug('Saving date format' . $dateFormat);
         if (!empty($value)) {
             // TODO hack to prevent bad data in database (fix properly)
+            $dateFormat = $this->__dates->getDateFormat();
             if (!Zend_Date::isDate($value, $dateFormat)) {
                 throw new Exception('Invalid date entered');
             }
 
-            $this->_logger->debug('Saving date ' . $value . ' to field '
-                    . $field->getName());
-
-            $date = new Zend_Date($value, $dateFormat);
-
-            $this->_logger->debug('Saving Zend_Date = ' . $date . ' to field '
-                    . $field->getName());
-
-            $dateModel = new Opus_Date();
-            $dateModel->setZendDate($date);
-
-            $this->_logger->debug('Saving Opus_Date = ' . $dateModel .
-                    ' to field ' . $field->getName());
+            $dateModel = $this->__dates->getOpusDate($value);
         }
         else {
             $dateModel = null;

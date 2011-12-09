@@ -313,28 +313,6 @@ class Admin_Model_DocumentHelper {
     }
 
     /**
-     * TODO centralize
-     * @return string
-     */
-    public static function getDateFormat() {
-        $session = new Zend_Session_Namespace();
-
-        $format_de = "dd.MM.yyyy";
-        $format_en = "yyyy/MM/dd";
-
-        switch($session->language) {
-           case 'de':
-               $format = $format_de;
-               break;
-           default:
-               $format = $format_en;
-               break;
-        }
-
-        return $format;
-    }
-
-    /**
      * Configuration of sections and fields for metadata form.
      * @var Zend_Config_Ini
      */
