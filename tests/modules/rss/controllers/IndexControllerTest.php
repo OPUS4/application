@@ -36,7 +36,7 @@ class Rss_IndexControllerTest extends ControllerTestCase {
 
     public function testIndexAction() {
         $this->dispatch('/rss/index/index');
-        $this->assertResponseCode(200);
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
         $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
         $this->assertContains('<rss version="2.0">', $response->getBody());

@@ -58,7 +58,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
 
     public function testIndexActionWithoutStylesheetParam() {
         $this->dispatch('/export/index/index/export/xml/query/foo/searchtype/latest');
-        $this->assertResponseCode(200);
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
         $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
         $this->assertContains('<export timestamp=', $response->getBody());
@@ -66,7 +66,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
 
     public function testIndexActionWithStylesheetParam() {
         $this->dispatch('/export/index/index/export/xml/query/foo/searchtype/latest/stylesheet/example');
-        $this->assertResponseCode(200);
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
         $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
         $this->assertContains('<export-example>', $response->getBody());
