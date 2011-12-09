@@ -189,10 +189,18 @@
             <xs:element name="dnbInstitution" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:attribute name="id" type="xs:integer" use="required"/>
+                    <xs:attribute name="role" type="dnbInstitutionTypeValues" use="required"/>
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
     </xs:complexType>
+
+    <xs:simpleType name="dnbInstitutionTypeValues">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="publisher"/>
+            <xs:enumeration value="grantor"/>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:complexType name="datesType">
         <xs:sequence>
