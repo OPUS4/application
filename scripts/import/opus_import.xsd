@@ -285,7 +285,7 @@
             <xs:element name="seriesItem" maxOccurs="unbounded">
                 <xs:complexType>
                     <xs:attribute name="id" type="xs:integer" use="required"/>
-                    <xs:attribute name="number" type="xs:string"/>
+                    <xs:attribute name="number" type="xs:string" use="required"/>
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
