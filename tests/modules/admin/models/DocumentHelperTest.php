@@ -83,7 +83,7 @@ class Admin_Model_DocumentHelperTest extends ControllerTestCase {
 
         $groups = $helper->getGroups();
 
-        $this->assertEquals(16, count($groups));
+        $this->assertEquals(15, count($groups));
         $this->assertContains('dates', $groups);
         $this->assertContains('general', $groups);
     }
