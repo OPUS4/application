@@ -63,7 +63,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
         $realm = new MockRealm(true, true);
         $opusFile = $file->getFileObject($realm);
     }
-    
+
     /**
      * @expectedException Frontdoor_Model_DocumentAccessNotAllowedException
      */
@@ -72,7 +72,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
         $realm = new MockRealm(true, false);
         $opusFile = $file->getFileObject($realm);
     }
-    
+
     /**
      * @expectedException Frontdoor_Model_FileNotFoundException
      */
@@ -185,6 +185,10 @@ class MockRealm implements Opus_Security_IRealm {
 
     public function checkModule($module_name = null) {
         return true;
+    }
+
+    public function getRoles() {
+        return array('guest');
     }
 
     public function setUser($username){}
