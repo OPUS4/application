@@ -26,7 +26,7 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 (6, NULL, 2002, NULL, NULL, '2002-02-08', 'doctoralthesis', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2002, '', NULL, '2010-06-04T02:30:49Z', '2003-01-22T14:16:12Z', 'published', NULL, 0),
 (7, NULL, 0000, NULL, NULL, NULL, 'bookpart', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 1991, '', NULL, '2010-06-04T02:30:54Z', '2003-01-22T14:06:14Z', 'published', NULL, 0),
 (8, NULL, 2003, NULL, NULL, '2003-05-14', 'doctoralthesis', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2003, '', NULL, '2010-06-04T02:30:57Z', '2003-07-10T09:34:55Z', 'published', NULL, 0),
-(9, NULL, 0000, NULL, 'Arbeitsbereich Wasserbau, Technische Universität Hamburg-Harburg', NULL, 'festschrift', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2003, '', NULL, '2010-06-04T02:31:03Z', '2003-11-17T13:29:07Z', 'published', NULL, 0),
+(9, NULL, 0000, NULL, 'Arbeitsbereich Wasserbau, Technische Universität Hamburg-Harburg', NULL, 'book', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2003, '', NULL, '2010-06-04T02:31:03Z', '2003-11-17T13:29:07Z', 'published', NULL, 0),
 (10, NULL, 2003, NULL, NULL, '2003-12-01', 'doctoralthesis', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2003, '', NULL, '2010-06-04T02:31:05Z', '2004-01-15T09:13:10Z', 'published', NULL, 0),
 (11, NULL, 1955, NULL, NULL, NULL, 'masterthesis', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, NULL, '', NULL, '2010-06-04T02:25:39Z', '2009-08-12T07:45:25Z', 'published', NULL, 0),
 (12, NULL, 0000, NULL, NULL, NULL, 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 1955, '', NULL, '2010-06-04T02:25:39Z', '2009-08-12T07:46:50Z', 'published', NULL, 0),
