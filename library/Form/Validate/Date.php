@@ -38,14 +38,6 @@
 class Form_Validate_Date extends Zend_Validate_Date {
 
     /**
-     * Message key for invalid format error message.
-     *
-     * This key equals the key that is documented for Zend_Validate_Date. The
-     * key in the parent class has only private access.
-     */
-    const MSG_INVALIDFORMAT = "dateFalseFormat";
-
-    /**
      * Regex pattern for valid date input.
      * @var string
      */
@@ -87,7 +79,7 @@ class Form_Validate_Date extends Zend_Validate_Date {
         $datePattern = $this->getInputPattern();
         $validator = new Zend_Validate_Regex($datePattern);
         if (!$validator->isValid($value)) {
-            $this->_error(self::MSG_INVALIDFORMAT);
+            $this->_error(Zend_Validate_Date::FALSEFORMAT);
             return false;
         }
 
