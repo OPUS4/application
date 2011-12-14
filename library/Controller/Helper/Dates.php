@@ -38,6 +38,19 @@
 class Controller_Helper_Dates extends Zend_Controller_Action_Helper_Abstract {
 
     /**
+     * Validator for dates.
+     * @var Form_Validate_Date
+     */
+    private $__validator;
+
+    /**
+     * Constructs Controller_Helper_Dates.
+     */
+    public function __construct() {
+        $this->__validator = new Form_Validate_Date();
+    }
+
+    /**
      * Gets called when helper is used like method of the broker.
      * @param string $datestr Date string
      * @return
@@ -47,51 +60,50 @@ class Controller_Helper_Dates extends Zend_Controller_Action_Helper_Abstract {
     }
 
     /**
+     * Checks if date string is valid for current locale.
+     * @param string $datestr Date string
+     * @return boolean TRUE - Only if date string is valid for current local
+     */
+    public function isValid($datestr) {
+        $validator = new Form_Validate_Date();
+        return $validator->isValid($datestr);
+    }
+
+    /**
      * Converts string to Opus_Date depending on current language.
      * @param string $datestr Date string
      * @return Opus_Date
      */
     public function getOpusDate($datestr) {
-        $dateFormat = $this->getDateFormat();
+        if ($this->isValid($datestr)) {
+            $dateFormat = $this->__validator->getDateFormat();
 
-        $date = new Zend_Date($datestr, $dateFormat);
+            $date = new Zend_Date($datestr, $dateFormat);
 
-        $dateModel = new Opus_Date();
-        $dateModel->setZendDate($date);
-
-        return $dateModel;
+            $dateModel = new Opus_Date($date);
+            return $dateModel;
+        }
+        else {
+            // TODO throw exception
+            return null;
+        }
     }
 
     /**
      * Converts Opus_Date into string depending on current language.
-     * @param Opus_Date $date Date string for current language
+     * @param Opus_Date $date Date
+     * @return Date string for current language
      */
     public function getDateString($date) {
-        $dateFormat = $this->getDateFormat();
-        $zendDate = $date->getZendDate();
-        return $zendDate->get($dateFormat);
-    }
-
-    /**
-     * Returns date format string for selected language of session.
-     * @return string Date format string
-     */
-    public function getDateFormat() {
-        $session = new Zend_Session_Namespace();
-
-        $format_de = "dd.MM.yyyy";
-        $format_en = "yyyy/MM/dd";
-
-        switch($session->language) {
-           case 'de':
-               $format = $format_de;
-               break;
-           default:
-               $format = $format_en;
-               break;
+        // Protect against invalid dates
+        if ($date->isValid()) {
+            $dateFormat = $this->__validator->getDateFormat();
+            $zendDate = $date->getZendDate();
+            return $zendDate->get($dateFormat);
         }
-
-        return $format;
+        else {
+            return null;
+        }
     }
 
 }
