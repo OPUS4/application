@@ -90,7 +90,7 @@ class Publish_Model_Validation {
 
             case 'Set' : $this->validator = $this->_validateSet();
                 break;
-                
+
             case 'ThesisGrantor' : $this->validator = $this->_validateThesis(true);
                 break;
 
@@ -114,20 +114,12 @@ class Publish_Model_Validation {
     }
 
     private function _validateDate() {
-        $format_de = "DD.MM.YYYY";
-        $format_en = "YYYY/MM/DD";
-
         $lang = $this->session->language;
         $validators = array();
 
-        switch ($lang) {
-            case 'en' : $validator = new Zend_Validate_Date(array('format' => $format_en, 'locale' => $lang));
-                break;
-            case 'de' : $validator = new Zend_Validate_Date(array('format' => $format_de, 'locale' => $lang));
-                break;
-            default : $validator = new Zend_Validate_Date(array('format' => $format_en, 'locale' => $lang));
-                break;
-        }
+        $validator = new Form_Validate_Date();
+        $validator->setLocale($lang);
+        
         $messages = array(
             Zend_Validate_Date::INVALID => 'publish_validation_error_date_invalid',
             Zend_Validate_Date::INVALID_DATE => 'publish_validation_error_date_invaliddate',
@@ -184,7 +176,7 @@ class Publish_Model_Validation {
             return $validators;
         }
     }
-    
+
     private function _validateSet() {
         $validators = array();
         $sets = array_keys($this->getSets());
@@ -280,7 +272,7 @@ class Publish_Model_Validation {
 
             case 'Set' : return $this->_setSelect();
                 break;
-            
+
             default :
                 //else no select options required
                 break;
@@ -334,7 +326,7 @@ class Publish_Model_Validation {
 
         return $data;
     }
-    
+
     private function _setSelect() {
         $sets = $this->getSets();
         if (isset($sets) && count($sets) >= 1) {
@@ -398,7 +390,7 @@ class Publish_Model_Validation {
         } else
             return $this->licences;
     }
-    
+
     /**
      * return the available documents sets from database or chache
      * @return <Array> sets
@@ -407,11 +399,11 @@ class Publish_Model_Validation {
         $sets = array();
         if (empty($this->sets)) {
             foreach ($dbSets = Opus_DocumentSets::getAll() as $set) {
-                
+
                     $title = $set->getTitle();
                     $id = $set->getId();
                     $sets["ID:" . $id] = $title;
-                
+
             }
             $this->sets = $sets;
             return $sets;
