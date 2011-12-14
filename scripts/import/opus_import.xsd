@@ -214,7 +214,7 @@
         <xs:restriction base="xs:string">
             <xs:enumeration value="completed"/>
             <xs:enumeration value="published"/>
-            <xs:enumeration value="thesis"/>
+            <xs:enumeration value="thesisAccepted"/>
         </xs:restriction>
     </xs:simpleType>
 
