@@ -48,7 +48,7 @@
         <seg>Published</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Publizierte</seg>
+        <seg>Publiziert</seg>
       </tuv>
     </tu>
 
@@ -57,7 +57,7 @@
         <seg>Unpublished</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Nicht publizierte</seg>
+        <seg>Nicht publiziert</seg>
       </tuv>
     </tu>
 
@@ -66,7 +66,7 @@
         <seg>Deleted</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Gelöschte</seg>
+        <seg>Gelöscht</seg>
       </tuv>
     </tu>
 
