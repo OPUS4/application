@@ -339,6 +339,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="ThesisYearAccepted">
+            <tuv xml:lang="en">
+                <seg>Year of final exam</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Jahr der Abschlussprüfung</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="add_ThesisDateAccepted">
             <tuv xml:lang="en">
                 <seg>Add date of final exam</seg>
