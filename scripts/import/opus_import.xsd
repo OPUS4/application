@@ -73,10 +73,23 @@
                     <xs:attribute name="creatingCorporation" type="xs:string"/>
                     <xs:attribute name="contributingCorporation" type="xs:string"/>
                     <xs:attribute name="belongsToBibliography" type="xs:boolean"/>
+                    <xs:attribute name="serverState" type="serverStateType" use="required"/>
                 </xs:complexType>
             </xs:element>
         </xs:sequence>
     </xs:complexType>
+
+    <xs:simpleType name="serverStateType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="audited"/>
+            <xs:enumeration value="published"/>
+            <xs:enumeration value="restricted"/>
+            <xs:enumeration value="inprogress"/>
+            <xs:enumeration value="unpublished"/>
+            <xs:enumeration value="deleted"/>
+            <xs:enumeration value="temporary"/>
+        </xs:restriction>
+    </xs:simpleType>
 
     <xs:complexType name="titlesMainType">
         <xs:sequence>
