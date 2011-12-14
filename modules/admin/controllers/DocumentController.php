@@ -696,10 +696,10 @@ class Admin_DocumentController extends Controller_Action {
                             // TODO simplify?
                             switch ($field->getName()) {
                                 case 'ThesisGrantor':
-                                    $doc->setThesisGrantor($institute);
+                                    $model->setThesisGrantor($institute);
                                     break;
                                 case 'ThesisPublisher':
-                                    $doc->setThesisPublisher($institute);
+                                    $model->setThesisPublisher($institute);
                                     break;
                             }
                         }
@@ -725,9 +725,8 @@ class Admin_DocumentController extends Controller_Action {
     private function __setDateField($field, $value) {
         if (!empty($value)) {
             // TODO hack to prevent bad data in database (fix properly)
-            $dateFormat = $this->__dates->getDateFormat();
-            if (!Zend_Date::isDate($value, $dateFormat)) {
-                throw new Exception('Invalid date entered');
+            if (!$this->__dates->isValid($value)) {
+                throw new Exception('Invalid date entered \'' . $value . '\'!');
             }
 
             $dateModel = $this->__dates->getOpusDate($value);
