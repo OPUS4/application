@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
 <tmx version="1.4">
- 
+
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
-  
+
   <body>
 <!-- This language file contains all texts and cases concerning errors. -->
 
@@ -237,10 +237,10 @@
 
     <tu tuid="publish_validation_error_date_falseformat">
         <tuv xml:lang="en">
-            <seg>Please change %value% to fit the date format %format%.</seg>
+            <seg>Please change %value% to fit the date format YYYY/MM/DD.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Bitte ändern Sie %value% in das Datumsformat %format%.</seg>
+            <seg>Bitte ändern Sie %value% in das Datumsformat TT.MM.JJJJ.</seg>
         </tuv>
     </tu>
 <!-- **************END Date************** -->
@@ -254,7 +254,7 @@
         </tuv>
     </tu>
 <!-- **************END NotEmpty************** -->
-  
+
     <tu tuid="publish_validation_error_inarray_notinarray">
         <tuv xml:lang="en">
             <seg>The value %value% was not found in the selection.</seg>
