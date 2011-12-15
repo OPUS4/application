@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<import 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="opus_import.xsd">
+
+  <opusDocument oldId="13" language="eng" type="preprint" 
+  serverState="inprogress">
+
+    <titlesMain>
+      <titleMain>La Vie un Rose</titleMain>
+    </titlesMain>    
+
+    <dates>
+      <date type="completed" monthDay="--12-01" year="2011"/>
+    </dates>
+  </opusDocument>
+</import>
