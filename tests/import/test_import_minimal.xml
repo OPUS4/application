@@ -4,15 +4,15 @@
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:noNamespaceSchemaLocation="opus_import.xsd">
 
-  <opusDocument oldId="13" language="fra" type="preprint" 
+  <opusDocument oldId="13" language="eng" type="preprint" 
   serverState="inprogress">
 
     <titlesMain>
-      <titleMain language="fra">La Vie un Rose</titleMain>
+      <titleMain language="eng">La Vie un Rose</titleMain>
     </titlesMain>    
 
     <dates>
       <date type="completed" monthDay="--12-01" year="2011"/>
     </dates>
-
+  </opusDocument>
 </import>
