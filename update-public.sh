@@ -18,10 +18,10 @@
 # @version     $Id$
 
 # Updates the OPUS4 *public* folder
-# If the user is using a different theme than 'opus4'. The 'opus4' layout is 
-# updated without further questions. If the user is using 'opus4' he is given
-# the option of copying the current 'opus4' layout as a new theme, before the
-# 'opus4' layout is updated.
+#
+# The 'opus4' layout is always updated without further questions.
+# If the user is using 'opus4' he is given the option of copying the current
+# 'opus4' layout as a new theme, before the 'opus4' layout is updated.
 #
 # In short, the 'opus4' layout is always updated. User can save the old layout.
 
@@ -59,7 +59,7 @@ if [[ -z "$THEME" ]] || [[ "$THEME" == "$THEME_OPUS" ]]; then
     echo -e " update. Would you like to create a copy of the current layout"
     echo -e " under a different name (Y/n)? \c "
     read ANSWER
-    if [[ -z "$ANSWER" ]]; then 
+    if [[ -z "$ANSWER" ]]; then
         ANSWER='y' # default is update layout
     else
         ANSWER=${ANSWER,,} # convert to lowercase
@@ -84,14 +84,14 @@ if [[ -z "$THEME" ]] || [[ "$THEME" == "$THEME_OPUS" ]]; then
         echo "Creating new theme '$THEME_NEW' ..."
         # Copy files from 'opus4' to new folder
         copyFolder "$LAYOUTS/$THEME_OPUS" "$LAYOUTS/$THEME_NEW"
-        
+
         # Update configuration to use new theme
         setProperty "$OLD_CONFIG/config.ini" "theme" "$THEME_NEW"
 
         # TODO log to UPDATE.log
         echo "Your config.ini has been updated (theme = $THEME_NEW)."
     fi
-fi 
+fi
 
 # =============================================================================
 # Update 'opus4' layout
@@ -100,7 +100,7 @@ fi
 # Add and replace files
 updateFolder "$NEW_PUBLIC/layouts/$THEME_OPUS" "$LAYOUTS/$THEME_OPUS"
 # Delete files no longer needed
-deleteFiles "$NEW_PUBLIC/layouts/$THEME_OPUS" "$LAYOUTS/$THEME_OPUS"		
+deleteFiles "$NEW_PUBLIC/layouts/$THEME_OPUS" "$LAYOUTS/$THEME_OPUS"
 
 # Update other files
 # TODO Should this be replace by "updateFolder SRC DEST flat" to handle all files in the folder
@@ -121,7 +121,7 @@ if askYesNo "Would you like to update file $OLD_PUBLIC/$FILE [Y/n]?"; then
 
     ENABLE_UBUNTU=$(grep -v '^[[:space:]]*#' $OLD_PUBLIC/$FILE | grep "session.gc_probability" || true)
 
-    # Replace .htaccess with new template 
+    # Replace .htaccess with new template
     copyFile "$NEW_PUBLIC/htaccess-template" "$OLD_PUBLIC/.htaccess"
 
     # Set RewriteBase
