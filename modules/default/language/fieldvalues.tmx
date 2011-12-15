@@ -586,6 +586,24 @@
             </tuv>
         </tu>
 
+        <tu tuid="Bibliography_Value_True">
+            <tuv xml:lang="en">
+                <seg>B</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>B</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Bibliography_Value_False">
+            <tuv xml:lang="en">
+                <seg>-</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>-</seg>
+            </tuv>
+        </tu>
+
     </body>
 
 </tmx>
