@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<import 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="opus_import.xsd">
+
+  <opusDocument oldId="00" language="deu" type="doctoralthesis" 
+  pageFirst="1" pageLast="4"
+  serverState="inprogress">
+
+    <titlesMain>
+      <titleMain language="deu">KOBV</titleMain>
+    </titlesMain>    
+
+    <titles>
+      <title type="sub" language="deu">Service-Zentrale</title>
+    </titles>
+
+    <abstracts>
+      <abstract language="deu">Die KOBV-Zentrale regelt den technischen 
+Ablauf der KOBV-Fernleihe, dies auch für die Fernleihe des Verbundes der 
+öffentlichen Bibliotheken Berlins (VÖBB) - ist aber selbst keine 
+Bibliothek d.h. besitzt und verleiht keine Medien.</abstract>
+    </abstracts>
+
+    <persons>
+      <person role="author" firstName="Beate" lastName="Rusch" email="doe@example.org" allowEmailContact="true"/>
+      <person role="contributor" firstName="Stefan" lastName="Lohrum"/>
+    </persons>
+        
+    <keywords>
+      <keyword language="deu" type="swd">Berlin</keyword>
+      <keyword language="deu" type="uncontrolled">Palmöl</keyword>
+    </keywords>
+    
+    <dnbInstitutions>
+      <dnbInstitution id="3" role="grantor"/>
+    </dnbInstitutions>
+
+    <dates>
+      <date type="completed" monthDay="--12-01" year="2011"/>
+      <date type="completed" year="2011"/>
+      <date type="published" monthDay="--12-01" year="2011"/>
+      <date type="published" year="2011"/>      
+      <date type="thesisAccepted" monthDay="--11-02" year="2010"/>
+      <date type="thesisAccepted" year="1999"/>
+    </dates>
+
+    <identifiers>
+      <identifier type="uuid">123</identifier>
+    </identifiers>
+           
+    <notes>
+      <note visibility="public">Für die Öffentlichkeit</note>
+      <note visibility="private">Für den Admin</note>
+    </notes>
+    
+    <collections>
+      <collection id="63"/>
+    </collections>
+    
+    <series>
+      <seriesItem id="3" number="3"/>
+    </series>
+    
+    <enrichments>
+      <enrichment key="LegalNotices">Köln</enrichment>
+    </enrichments>
+    
+    
+    <licences>
+      <licence id="1"/>
+    </licences>  
+  </opusDocument>
+
+
+</import>
