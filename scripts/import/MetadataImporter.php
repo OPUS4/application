@@ -423,13 +423,13 @@ class MetadataImporter {
                 $instRole = $childNode->getAttribute('role');
                 // check if dnbInstitute with given id and role exists
                 try {
-                    $i = new Opus_DnbInstitute($instId);
+                    $inst = new Opus_DnbInstitute($instId);
 
                     // check if dnbInstitute supports given role
                     $method = 'getIs' . ucfirst($instRole);
-                    if ($i->$method === '1') {
+                    if ($inst->$method() === '1') {
                         $method = 'addThesis' . ucfirst($instRole);
-                        $doc->$method($i);
+                        $doc->$method($inst);
                     }
                     else {
                         throw new Exception('given role ' . $instRole . ' is not allowed for dnbInstitution id ' . $instId);
