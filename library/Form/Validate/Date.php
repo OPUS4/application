@@ -75,6 +75,7 @@ class Form_Validate_Date extends Zend_Validate_Date {
      * @return boolean - True only if date input is valid for Opus requirements
      */
     public function isValid($value) {
+        $this->_setValue($value);
         // Check first if input matches expected pattern
         $datePattern = $this->getInputPattern();
         $validator = new Zend_Validate_Regex($datePattern);
