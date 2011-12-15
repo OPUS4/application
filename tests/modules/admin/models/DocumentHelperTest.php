@@ -249,7 +249,7 @@ class Admin_Model_DocumentHelperTest extends ControllerTestCase {
 
         // Invalid date wird nicht gefiltert (not empty)
         $this->assertEquals(1, count($fields));
-        $this->assertInstanceOf('Opus_Model_Field', $fields[0]);
+        $this->assertType('Opus_Model_Field', $fields[0]);
     }
 
 }
