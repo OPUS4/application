@@ -41,19 +41,23 @@
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     exclude-result-prefixes="php">
 
-    <xsl:output method="text" omit-xml-declaration="yes" />
+    <xsl:output method="text" omit-xml-declaration="yes"/>
 
     <xsl:template match="/">
       <xsl:apply-templates select="Opus/Opus_Model_Filter" />
     </xsl:template>
 
     <!-- Suppress spilling values with no corresponding templates -->
-      <xsl:template match="@*|node()" />
+    <xsl:template match="@*|node()" />
 
-<!-- here you can change the order of the fields, just change the order of the apply-templates-rows
-     if there is a choose-block for the field, you have to move the whole choose-block
-     if you wish new fields, you have to add a new line xsl:apply-templates...
-     and a special template for each new field below, too -->
+    <!--
+        here you can change the order of the fields, just change the order of the
+        apply-templates-rows 
+        if there is a choose-block for the field, you have to move the whole
+        choose-block
+        if you wish new fields, you have to add a new line xsl:apply-templates...
+        and a special template for each new field below, too
+    -->
     <xsl:template match="Opus_Model_Filter">
        <xsl:choose>
            <xsl:when test="@Type='book'">
@@ -96,9 +100,8 @@
                <xsl:text>TY  - GEN</xsl:text>
            </xsl:otherwise>
        </xsl:choose>
-       <xsl:text>
-ID  - OPUS</xsl:text><xsl:value-of select="@Id" /><xsl:text>
-</xsl:text>
+       <xsl:text>&#10;</xsl:text>
+       
        <xsl:if test="string-length(PersonAuthor/@LastName)>0">
            <xsl:apply-templates select="PersonAuthor" />
        </xsl:if>
@@ -120,69 +123,83 @@ ID  - OPUS</xsl:text><xsl:value-of select="@Id" /><xsl:text>
 
        <xsl:choose>
          <xsl:when test="normalize-space(ComletedDate/@Year)">
-             <xsl:text>Y1  - </xsl:text><xsl:value-of select="ComletedDate/@Year" /> <xsl:text>
-</xsl:text>
+             <xsl:text>Y1  - </xsl:text><xsl:value-of select="ComletedDate/@Year" />
          </xsl:when>
          <xsl:when test="string-length(PublishedDate/@Year)>0">
-           <xsl:text>Y1  - </xsl:text><xsl:value-of select="PublishedDate/@Year" /> <xsl:text>
-</xsl:text>
+           <xsl:text>Y1  - </xsl:text><xsl:value-of select="PublishedDate/@Year" />
          </xsl:when>
          <xsl:when test="normalize-space(@CompletedYear)">
-             <xsl:text>Y1  - </xsl:text><xsl:value-of select="@CompletedYear" /> <xsl:text>
-</xsl:text>
+             <xsl:text>Y1  - </xsl:text><xsl:value-of select="@CompletedYear" />
          </xsl:when>
          <xsl:otherwise>
-               <xsl:text>Y1  - </xsl:text><xsl:value-of select="@PublishedYear" /> <xsl:text>
-</xsl:text>
+               <xsl:text>Y1  - </xsl:text><xsl:value-of select="@PublishedYear" />
          </xsl:otherwise>
        </xsl:choose>
-       <xsl:if test="string-length(IdentifierUrn/@Value)>0">
-<xsl:text>UR  - http://nbn-resolving.de/urn/resolver.pl?</xsl:text><xsl:apply-templates select="IdentifierUrn" /><xsl:text>
-</xsl:text>
-       </xsl:if>
-       <xsl:text>UR  - </xsl:text><xsl:value-of select="$url_prefix" /><xsl:text>/frontdoor/index/index/docId/</xsl:text><xsl:value-of select="@Id" /><xsl:text>
-</xsl:text>
-       <xsl:if test="string-length(IdentifierUrl/@Value)>0">
-<xsl:text>UR  - </xsl:text><xsl:apply-templates select="IdentifierUrl" /><xsl:text>
-</xsl:text>
-       </xsl:if>
-       <xsl:if test="string-length(IdentifierIsbn/@Value)>0">
-<xsl:text>SN  - </xsl:text><xsl:apply-templates select="IdentifierIsbn" /><xsl:text>
-</xsl:text>
-       </xsl:if>
-       <xsl:if test="string-length(IdentifierIssn/@Value)>0">
-<xsl:text>SN  - </xsl:text><xsl:apply-templates select="IdentifierIssn" /><xsl:text>
-</xsl:text>
-       </xsl:if>
-       <xsl:if test="string-length(Note/@Message)>0">
-<xsl:text>N1  - </xsl:text><xsl:apply-templates select="Note" /><xsl:text>
-</xsl:text>
-       </xsl:if>
-       <xsl:if test="string-length(@Volume)>0">
-<xsl:text>VL  - </xsl:text><xsl:value-of select="@Volume" /><xsl:text>
-</xsl:text>
-       </xsl:if>
-       <xsl:if test="string-length(@Issue)>0">
-<xsl:text>IS  - </xsl:text><xsl:value-of select="@Issue" /><xsl:text>
-</xsl:text>
-       </xsl:if>
-       <xsl:if test="string-length(@PageFirst)>0">
-<xsl:text>SP  - </xsl:text><xsl:value-of select="@PageFirst" /><xsl:text>
-</xsl:text>
-       </xsl:if>
-       <xsl:if test="string-length(@PageLast)>0">
-<xsl:text>EP  - </xsl:text><xsl:value-of select="@PageLast" /><xsl:text>
-</xsl:text>
-       </xsl:if>
-       <xsl:if test="string-length(@PublisherName)>0">
-<xsl:text>PB  - </xsl:text><xsl:value-of select="@PublisherName" /><xsl:text>
-</xsl:text>
-       </xsl:if>
-       <xsl:if test="string-length(@PublisherPlace)>0">
-<xsl:text>CY  - </xsl:text><xsl:value-of select="@PublisherPlace" /><xsl:text>
-</xsl:text>
-       </xsl:if>
-<xsl:text>ER  - </xsl:text>
+       <xsl:text>&#10;</xsl:text>
+       
+        <xsl:if test="string-length(IdentifierUrn/@Value)>0">
+            <xsl:text>UR  - http://nbn-resolving.de/urn/resolver.pl?</xsl:text>
+            <xsl:apply-templates select="IdentifierUrn" />
+            <xsl:text>&#10;</xsl:text>
+        </xsl:if>
+
+        <xsl:text>UR  - </xsl:text>
+        <xsl:value-of select="$url_prefix" />
+        <xsl:text>/frontdoor/index/index/docId/</xsl:text>
+        <xsl:value-of select="@Id" />
+        <xsl:text>&#10;</xsl:text>
+
+        <xsl:if test="string-length(IdentifierUrl/@Value)>0">
+            <xsl:text>UR  - </xsl:text>
+            <xsl:apply-templates select="IdentifierUrl" />
+            <xsl:text>&#10;</xsl:text>
+        </xsl:if>
+        <xsl:if test="string-length(IdentifierIsbn/@Value)>0">
+            <xsl:text>SN  - </xsl:text>
+            <xsl:apply-templates select="IdentifierIsbn" />
+            <xsl:text>&#10;</xsl:text>
+        </xsl:if>
+        <xsl:if test="string-length(IdentifierIssn/@Value)>0">
+            <xsl:text>SN  - </xsl:text>
+            <xsl:apply-templates select="IdentifierIssn" />
+            <xsl:text>&#10;</xsl:text>
+        </xsl:if>
+        <xsl:if test="string-length(Note/@Message)>0">
+            <xsl:text>N1  - </xsl:text>
+            <xsl:apply-templates select="Note" />
+            <xsl:text>&#10;</xsl:text>
+        </xsl:if>
+        <xsl:if test="string-length(@Volume)>0">
+            <xsl:text>VL  - </xsl:text>
+            <xsl:value-of select="@Volume" />
+            <xsl:text>&#10;</xsl:text>
+        </xsl:if>
+        <xsl:if test="string-length(@Issue)>0">
+            <xsl:text>IS  - </xsl:text>
+            <xsl:value-of select="@Issue" />
+            <xsl:text>&#10;</xsl:text>
+        </xsl:if>
+        <xsl:if test="string-length(@PageFirst)>0">
+            <xsl:text>SP  - </xsl:text>
+            <xsl:value-of select="@PageFirst" />
+            <xsl:text>&#10;</xsl:text>
+        </xsl:if>
+        <xsl:if test="string-length(@PageLast)>0">
+            <xsl:text>EP  - </xsl:text>
+            <xsl:value-of select="@PageLast" />
+            <xsl:text>&#10;</xsl:text>
+        </xsl:if>
+        <xsl:if test="string-length(@PublisherName)>0">
+            <xsl:text>PB  - </xsl:text>
+            <xsl:value-of select="@PublisherName" />
+            <xsl:text>&#10;</xsl:text>
+        </xsl:if>
+        <xsl:if test="string-length(@PublisherPlace)>0">
+            <xsl:text>CY  - </xsl:text>
+            <xsl:value-of select="@PublisherPlace" />
+            <xsl:text>&#10;</xsl:text>
+        </xsl:if>
+        <xsl:text>ER  - </xsl:text>
     </xsl:template>
 
     <!-- here begins the special templates for the fields -->
@@ -216,48 +233,47 @@ ID  - OPUS</xsl:text><xsl:value-of select="@Id" /><xsl:text>
     </xsl:template>
 
     <xsl:template match="SubjectUncontrolled">
-<xsl:text>KW  - </xsl:text><xsl:value-of select="@Value" /><xsl:text>
-</xsl:text>
+        <xsl:text>KW  - </xsl:text><xsl:value-of select="@Value" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="SubjectSwd">
-<xsl:text>KW  - </xsl:text><xsl:value-of select="@Value" /><xsl:text>
-</xsl:text>
+        <xsl:text>KW  - </xsl:text><xsl:value-of select="@Value" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="PersonAuthor">
-<xsl:text>A1  - </xsl:text><xsl:value-of select="concat(@LastName, ', ', @FirstName)" /><xsl:text>
-</xsl:text>
+        <xsl:text>A1  - </xsl:text><xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="PersonEditor">
-<xsl:text>A2  - </xsl:text><xsl:value-of select="concat(@LastName, ', ', @FirstName)" /><xsl:text>
-</xsl:text>
+        <xsl:text>A2  - </xsl:text><xsl:value-of select="concat(@LastName, ', ', @FirstName)" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
-    <xsl:template match="PublisherUniversity"/>
-
     <xsl:template match="TitleMain">
-<xsl:text>T1  - </xsl:text><xsl:value-of select="@Value" /><xsl:text>
-</xsl:text>
+        <xsl:text>T1  - </xsl:text><xsl:value-of select="@Value" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="TitleAbstract">
-<xsl:text>N2  - </xsl:text><xsl:value-of select="@Value" /><xsl:text>
-</xsl:text>
+        <xsl:text>N2  - </xsl:text><xsl:value-of select="@Value" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="TitleParent">
-<xsl:value-of select="@Value" />
+        <xsl:value-of select="@Value" />
     </xsl:template>
 
     <xsl:template match="Collection[@RoleName='Schriftenreihen']">
-<xsl:text>T3  - </xsl:text>
+        <xsl:text>T3  - </xsl:text>
         <xsl:if test="@Number != ''">
-<xsl:value-of select="@Number" /><xsl:text> </xsl:text>
+            <xsl:value-of select="@Number" />
+            <xsl:text> </xsl:text>
         </xsl:if>
-<xsl:value-of select="@Name" /><xsl:text>
-</xsl:text>
+        <xsl:value-of select="@Name" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
 </xsl:stylesheet>
