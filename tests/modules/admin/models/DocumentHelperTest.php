@@ -225,5 +225,32 @@ class Admin_Model_DocumentHelperTest extends ControllerTestCase {
                 Admin_Model_DocumentHelper::getFieldNameForGroup(null));
     }
 
+    public function testGetFieldsForGroupDates() {
+        $doc = new Opus_Document();
+
+        $doc->setPublishedDate(new Opus_Date('2005'));
+
+        $helper = new Admin_Model_DocumentHelper($doc);
+
+        $fields = $helper->getFieldsForGroup('dates', false);
+
+        $this->assertEquals(6, count($fields));
+        $this->assertInstanceOf('Opus_Model_Field', $fields[0]);
+    }
+
+    public function testGetFieldsForGroupDatesWithFiltering() {
+        $doc = new Opus_Document();
+
+        $doc->setPublishedDate(new Opus_Date('2005'));
+
+        $helper = new Admin_Model_DocumentHelper($doc);
+
+        $fields = $helper->getFieldsForGroup('dates');
+
+        // Invalid date wird nicht gefiltert (not empty)
+        $this->assertEquals(1, count($fields));
+        $this->assertInstanceOf('Opus_Model_Field', $fields[0]);
+    }
+
 }
 

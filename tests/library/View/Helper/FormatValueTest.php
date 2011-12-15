@@ -102,6 +102,18 @@ class View_Helper_FormatValueTest extends ControllerTestCase {
         $this->assertEquals('2002/06/17', $output);
     }
 
+    public function testFormatValueForInvalidDate() {
+        $doc = new Opus_Document();
+
+        $doc->setPublishedDate(new Opus_Date('2005'));
+
+        $field = $doc->getField('PublishedDate');
+
+        $output = $this->__helper->format($field);
+
+        $this->assertEquals(null, $output);
+    }
+
     public function testFormatValueForPublicationState() {
         $doc = new Opus_Document(3);
 
