@@ -86,8 +86,6 @@
             <xs:enumeration value="restricted"/>
             <xs:enumeration value="inprogress"/>
             <xs:enumeration value="unpublished"/>
-            <xs:enumeration value="deleted"/>
-            <xs:enumeration value="temporary"/>
         </xs:restriction>
     </xs:simpleType>
 
