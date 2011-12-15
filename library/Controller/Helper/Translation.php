@@ -67,6 +67,9 @@ class Controller_Helper_Translation extends Zend_Controller_Action_Helper_Abstra
                         || $fieldName === 'Type')) {
             return $value;
         }
+        elseif ($modelName === 'Opus_Enrichment' && $fieldName === 'KeyName') {
+            return $value;
+        }
         else {
             return $modelName . '_' . $fieldName . '_Value_' . ucfirst($value);
         }
