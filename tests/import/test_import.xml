@@ -24,7 +24,7 @@ Bibliothek d.h. besitzt und verleiht keine Medien.</abstract>
     </abstracts>
 
     <persons>
-      <person role="author" firstName="Beate" lastName="Rusch" email="rusch@zib.de" allowEmailContact="true"/>
+      <person role="author" firstName="Beate" lastName="Rusch" email="doe@example.org" allowEmailContact="true"/>
       <person role="contributor" firstName="Stefan" lastName="Lohrum"/>
     </persons>
         
@@ -40,8 +40,11 @@ Bibliothek d.h. besitzt und verleiht keine Medien.</abstract>
 
     <dates>
       <date type="completed" monthDay="--12-01" year="2011"/>
-      <date type="published" year="2011"/>
+      <date type="completed" year="2011"/>
+      <date type="published" monthDay="--12-01" year="2011"/>
+      <date type="published" year="2011"/>      
       <date type="thesisAccepted" monthDay="--11-02" year="2010"/>
+      <date type="thesisAccepted" year="1999"/>
     </dates>
 
     <identifiers>
