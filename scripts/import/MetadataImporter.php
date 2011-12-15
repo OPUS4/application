@@ -138,7 +138,6 @@ class MetadataImporter {
         $this->logfile->log($docId);
     }
 
-
     /**
      *
      * @param Opus_Document $doc
@@ -371,8 +370,8 @@ class MetadataImporter {
                 $p = new Opus_Person();
 
                 // mandatory fields
-                $p->setFirstName($childNode->getAttribute('firstName'));
-                $p->setLastName($childNode->getAttribute('lastName'));
+                $p->setFirstName(trim($childNode->getAttribute('firstName')));
+                $p->setLastName(trim($childNode->getAttribute('lastName')));
 
                 // optional fields
                 $optionalFields = array('academicTitle', 'email', 'placeOfBirth', 'dateOfBirth');
@@ -419,25 +418,25 @@ class MetadataImporter {
     private function handleDnbInstitutions($node, $doc) {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
+
+                $instId = trim($childNode->getAttribute('id'));
+                $instRole = $childNode->getAttribute('role');
                 // check if dnbInstitute with given id and role exists
                 try {
-                    $i = new Opus_DnbInstitute(trim($childNode->getAttribute('id')));
+                    $i = new Opus_DnbInstitute($instId);
 
                     // check if dnbInstitute supports given role
-                    $method = 'getIs' . ucfirst($childNode->getAttribute('role'));
+                    $method = 'getIs' . ucfirst($instRole);
                     if ($i->$method === '1') {
-                        $method = 'addThesis' . ucfirst($childNode->getAttribute('role'));
+                        $method = 'addThesis' . ucfirst($instRole);
                         $doc->$method($i);
                     }
                     else {
-
-                        // TODO: error (given role is not allowed)
+                        throw new Exception('given role ' . $instRole . ' is not allowed for dnbInstitution id ' . $instId);
                     }
                 }
                 catch (Opus_Model_NotFoundException $e) {
-
-                    // TODO
-
+                    throw new Exception('dnbInstitution id ' . $instId . ' does not exist: ' . $e->getMessage());
                 }
             }
         }
@@ -481,15 +480,15 @@ class MetadataImporter {
     private function handleCollections($node, $doc) {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
+
+                $collectionId = trim($childNode->getAttribute('id'));
                 // check if collection with given id exists
                 try {
-                    $c = new Opus_Collection(trim($childNode->getAttribute('id')));
+                    $c = new Opus_Collection($collectionId);
                     $doc->addCollection($c);
                 }
                 catch (Opus_Model_NotFoundException $e) {
-
-                    // TODO
-
+                    throw new Exception('collection id ' . $collectionId . ' does not exist: ' . $e->getMessage());
                 }
             }
         }
@@ -503,16 +502,16 @@ class MetadataImporter {
     private function handleSeries($node, $doc) {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
+
+                $seriesId = trim($childNode->getAttribute('id'));
                 // check if document set with given id exists
                 try {
-                    $s = new Opus_DocumentSets(trim($childNode->getAttribute('id')));
+                    $s = new Opus_DocumentSets($seriesId);
                     $link = $doc->addDocumentSets($s);
                     $link->setNumber(trim($childNode->getAttribute('number')));
                 }
                 catch (Opus_Model_NotFoundException $e) {
-
-                    // TODO
-
+                    throw new Exception('series id ' . $seriesId . ' does not exist: ' . $e->getMessage());
                 }
             }
         }
@@ -526,8 +525,8 @@ class MetadataImporter {
     private function handleEnrichments($node, $doc) {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
+                
                 $key = trim($childNode->getAttribute('key'));
-
                 // check if enrichment key exists
                 try {
                     new Opus_EnrichmentKey($key);
@@ -551,6 +550,7 @@ class MetadataImporter {
     private function handleLicences($node, $doc) {
         foreach ($node->childNodes as $childNode) {
             if ($childNode instanceof DOMElement) {
+                
                 $licenceId = trim($childNode->getAttribute('id'));
                 try {
                     $l = new Opus_Licence($licenceId);
@@ -587,10 +587,10 @@ class MetadataImporter {
 
                 }
 
-                $date = $childNode->getAttribute('year');
+                $date = trim($childNode->getAttribute('year'));
                 if ($childNode->hasAttribute('monthDay')) {
                     // ignore first character of monthDay's attribute value (is always a hyphen)
-                    $date .= substr($childNode->getAttribute('monthDay'), 1);
+                    $date .= substr(trim($childNode->getAttribute('monthDay')), 1);
                 }
 
                 $doc->$method($date);
