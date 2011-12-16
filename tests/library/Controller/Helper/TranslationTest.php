@@ -97,17 +97,6 @@ class Controller_Helper_TranslationTest extends ControllerTestCase {
         }
     }
 
-    public function testTranslationOfPublicationStateValues() {
-        $doc = new Opus_Document();
-        $values = $doc->getField('PublicationState')->getDefault();
-
-        foreach ($values as $value) {
-            $key = $this->helper->getKeyForValue('Opus_Document', 'PublicationState', $value);
-            $this->assertNotEquals($key, $this->translate->translate($key),
-                    'Translation key \'' . $key . '\' is missing.');
-        }
-    }
-
     public function testTranslationOfPersonRoleValues() {
         $model = new Opus_Model_Dependent_Link_DocumentPerson();
         $values = $model->getField('Role')->getDefault();

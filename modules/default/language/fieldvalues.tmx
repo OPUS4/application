@@ -505,51 +505,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="Opus_Document_PublicationState_Value_Draft">
-            <tuv xml:lang="en">
-                <seg>Draft</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Entwurf</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="Opus_Document_PublicationState_Value_Accepted">
-            <tuv xml:lang="en">
-                <seg>Accepted</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Akzeptiert</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="Opus_Document_PublicationState_Value_Submitted">
-            <tuv xml:lang="en">
-                <seg>Submitted</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Eingereicht</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="Opus_Document_PublicationState_Value_Published">
-            <tuv xml:lang="en">
-                <seg>Published</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Veröffentlicht</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="Opus_Document_PublicationState_Value_Updated">
-            <tuv xml:lang="en">
-                <seg>Updated</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Aktualisiert</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="Opus_Note_Visibility_Value_Private">
             <tuv xml:lang="en">
                 <seg>Private</seg>
