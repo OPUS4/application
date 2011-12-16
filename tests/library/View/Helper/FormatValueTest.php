@@ -115,13 +115,14 @@ class View_Helper_FormatValueTest extends ControllerTestCase {
     }
 
     public function testFormatValueForPublicationState() {
+
         $doc = new Opus_Document(3);
 
         $field = $doc->getField('PublicationState');
 
         $output = $this->__helper->format($field, 'Opus_Document');
 
-        $this->assertEquals('Draft', $output);
+        $this->assertEquals('draft', $output);
     }
 
 }

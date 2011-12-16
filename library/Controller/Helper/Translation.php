@@ -64,7 +64,8 @@ class Controller_Helper_Translation extends Zend_Controller_Action_Helper_Abstra
         // to be handled separately, since their key don't have a prefix.
         if ($modelName === 'Opus_Document'
                 && ($fieldName === 'Language'
-                        || $fieldName === 'Type')) {
+                        || $fieldName === 'Type'
+                        || $fieldName === 'PublicationState')) {
             return $value;
         }
         elseif ($modelName === 'Opus_Enrichment' && $fieldName === 'KeyName') {
