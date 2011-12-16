@@ -1967,12 +1967,12 @@
             </tuv>
         </tu>
 
-        <tu tuid="DocumentSets">
+        <tu tuid="Series">
             <tuv xml:lang="en">
-                <seg>Document sets</seg>
+                <seg>Series</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Dokumentlisten</seg>
+                <seg>Schriftenreihe</seg>
             </tuv>
         </tu>
 
