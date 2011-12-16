@@ -40,9 +40,9 @@ Bibliothek d.h. besitzt und verleiht keine Medien.</abstract>
 
     <dates>
       <date type="completed" monthDay="--12-01" year="2011"/>
-      <date type="completed" year="2011"/>
-      <date type="published" monthDay="--12-01" year="2011"/>
-      <date type="published" year="2011"/>      
+      <date type="completed" year="2009"/>
+      <date type="published" monthDay="--04-30" year="2007"/>
+      <date type="published" year="2008"/>      
       <date type="thesisAccepted" monthDay="--11-02" year="2010"/>
       <date type="thesisAccepted" year="1999"/>
     </dates>
@@ -61,7 +61,7 @@ Bibliothek d.h. besitzt und verleiht keine Medien.</abstract>
     </collections>
     
     <series>
-      <seriesItem id="3" number="3"/>
+      <seriesItem id="1" number="3"/>
     </series>
     
     <enrichments>
