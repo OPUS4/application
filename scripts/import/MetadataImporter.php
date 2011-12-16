@@ -507,8 +507,8 @@ class MetadataImporter {
                 $seriesId = trim($childNode->getAttribute('id'));
                 // check if document set with given id exists
                 try {
-                    $s = new Opus_DocumentSets($seriesId);
-                    $link = $doc->addDocumentSets($s);
+                    $s = new Opus_Series($seriesId);
+                    $link = $doc->addSeries($s);
                     $link->setNumber(trim($childNode->getAttribute('number')));
                 }
                 catch (Opus_Model_NotFoundException $e) {
