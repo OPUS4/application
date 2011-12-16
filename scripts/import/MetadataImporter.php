@@ -189,6 +189,7 @@ class MetadataImporter {
                     );
 
                 $doc->deleteFields($fieldsToDelete);
+                $doc->store();
     }
 
     private function getErrorMessage() {
