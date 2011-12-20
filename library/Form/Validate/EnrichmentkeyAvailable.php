@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,48 +24,60 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
+ * @category    TODO
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Enrichmentkey.php 9260 2011-12-20 10:44:39Z gmaiwald $
+ * @version     $Id: EnrichmentkeyAvailable.php 9263 2011-12-20 20:30:14Z gmaiwald $
  */
 
 /**
- * Form for creating and editing a role.
+ * Checks if a login already exists.
  */
-class Admin_Form_Enrichmentkey extends Zend_Form {
-
-    //private static $protectedRoles = array('administrator', 'guest');
+class Form_Validate_EnrichmentkeyAvailable extends Zend_Validate_Abstract {
 
     /**
-     * Constructs form.
-     * @param int $id
+     * Constant for login is not available anymore.
      */
-    public function __construct($name = null) {
-        $section = empty($name) ? 'new' : 'edit';
+    const NOT_AVAILABLE = 'isAvailable';
 
-        $config = new Zend_Config_Ini(APPLICATION_PATH .
-                '/modules/admin/forms/enrichmentkey.ini', $section);
+    /**
+     * Error messages.
+     */
+    protected $_messageTemplates = array(
+        self::NOT_AVAILABLE => 'admin_enrichmentkey_error_name_exists'
+    );
 
-        parent::__construct($config->form->enrichmentkey);
+    /**
+     * Checks if an enrichmentkey already exists.
+     */
+    public function isValid($value) {
 
-        if (!empty($name)) {
-            $enrichmentkey = new Opus_Enrichmentkey($name);
-            $this->populateFromEnrichmentkey($enrichmentkey);
+        $value = (string) $value;
+
+        $this->_setValue($value);
+
+        if ($this->_isEnrichmentKeyUsed($value)) {
+            $this->_error(self::NOT_AVAILABLE);
+            return false;
         }
+
+        return true;
     }
 
-    public function init() {
-        parent::init();
-        $this->getElement('name')->addValidator(new Form_Validate_EnrichmentkeyAvailable());
-    }
+    /**
+     * Checks if a login name already exists in database.
+     * @param string $login
+     * @return boolean
+     */
+    protected function _isEnrichmentKeyUsed($name) {
 
-    public function populateFromEnrichmentkey($enrichmentkey) {
-        $nameElement = $this->getElement('name');
-        $name = $enrichmentkey->getName();
-        $nameElement->setValue($enrichmentkey);
+        $enrichmentkey = Opus_EnrichmentKey::fetchByName($name);
+        if (is_null($enrichmentkey )) {
+            return false;
+        }
+        return true;
     }
 
 }
+
