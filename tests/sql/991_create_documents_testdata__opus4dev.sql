@@ -186,9 +186,9 @@ INSERT INTO `dnb_institutes` (`id`, `name`, `address`, `city`, `phone`, `dnb_con
 (2, 'Foobar Universitätsbibliothek', 'Musterstraße 2', 'Musterstadt', '', '', 0, 1);
 
 --
--- Daten für Tabelle `document_sets`
+-- Daten für Tabelle `document_series`
 --
 
-INSERT INTO `document_sets` (`id`, `title`, `logo`, `publisher`, `issn`, `infobox`) VALUES
+INSERT INTO `document_series` (`id`, `title`, `logo`, `publisher`, `issn`, `infobox`) VALUES
 (1, 'MySeries', 'no logo available', 'no publisher available', NULL, NULL);
 
