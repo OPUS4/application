@@ -16,6 +16,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_enrichmentkey_index">
+      <tuv xml:lang="en">
+        <seg>Enrichmentkeys Overview</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Enrichmentkeys Übersicht</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_enrichmentkey_new">
       <tuv xml:lang="en">
         <seg>New Enrichmentkey</seg>

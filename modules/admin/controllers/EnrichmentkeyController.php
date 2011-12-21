@@ -57,7 +57,7 @@ class Admin_EnrichmentkeyController extends Controller_Action {
      * Show enrichmentkey information.
      */
     public function showAction() {
-        $this->view->title = $this->view->translate('admin_enrichmentkey_action_show');
+        $this->view->title = $this->view->translate('admin_enrichmentkey_show');
         $name = $this->getRequest()->getParam('name');
 
         if (!empty($name)) {
