@@ -310,7 +310,6 @@
             -->
 	    
 	   <!-- New: Enrichment-Contributor -->
-	   <!-- TODO: Opus4.2: Handle Contributor as PersonContributor -->
             <xsl:if test="string-length(field[@name='contributors_name']) > 0">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
@@ -323,7 +322,6 @@
             </xsl:if>
 	    
 	   <!-- Enrichment-Source --> 
-	   <!-- TODO: Opus 4.2: Handle source as new Document -->
             <xsl:if test="string-length(field[@name='source_title']) > 0">
                 <xsl:element name="Enrichment">
                     <xsl:attribute name="KeyName">
