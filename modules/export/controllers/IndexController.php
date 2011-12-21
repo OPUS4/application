@@ -51,7 +51,15 @@ class Export_IndexController extends Controller_Xml {
         // currently only xml is supported here
         if ($exportParam !== 'xml') {
             throw new Application_Exception('export format is not supported');
-        }        
+        }
+
+        // parameter stylesheet is mandatory (only administrator is able to see raw output)
+        // non-administrative users can only reference user-defined stylesheets
+        if (is_null($this->getRequest()->getParam('stylesheet')) && !Opus_Security_Realm::getInstance()->checkModule('admin')) {
+            throw new Application_Exception('missing parameter stylesheet');
+
+        }
+
         $this->prepareXml();
     }
 
@@ -76,12 +84,15 @@ class Export_IndexController extends Controller_Xml {
      * @return void
      */
     private function setStylesheet($stylesheet = null) {
-        if (!is_null($stylesheet) && is_readable($this->view->getScriptPath('') . 'stylesheets-custom' . DIRECTORY_SEPARATOR . $stylesheet . '.xslt')) {            
-            $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets-custom' . DIRECTORY_SEPARATOR .  $stylesheet . '.xslt');
+        if (!is_null($stylesheet)) {
+            if (is_readable($this->view->getScriptPath('') . 'stylesheets-custom' . DIRECTORY_SEPARATOR . $stylesheet . '.xslt')) {
+                $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets-custom' . DIRECTORY_SEPARATOR .  $stylesheet . '.xslt');
+                return;
+            }
+
+            throw new Application_Exception('given stylesheet does not exist or is not readable: ' . $stylesheet);
         }
-        else {
-            $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'raw.xslt');
-        }
+        $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'raw.xslt');
     }
 
     /**
