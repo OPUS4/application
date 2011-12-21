@@ -201,6 +201,7 @@ class Opus3XMLImport {
         $this->mapValues();
 
         $this->getSortOrder();
+        $this->createNewEnrichmentKeys();
 
         $imported = array();
         $doc = null;
@@ -275,6 +276,19 @@ class Opus3XMLImport {
         unset($this->document);
 
         return $imported;
+    }
+
+    private function createNewEnrichmentKeys() {
+
+        $elements = $this->document->getElementsByTagName('Enrichment');
+        foreach ($elements as $e) {
+            $keyname = $e->getAttribute('KeyName');
+            if (is_null(Opus_EnrichmentKey::fetchByName($keyname))) {
+                $enrichmentkey = new Opus_EnrichmentKey();
+                $enrichmentkey->setName($keyname);
+                $enrichmentkey->store();
+            }
+        }
     }
 
     private function skipEmptyFields() {
