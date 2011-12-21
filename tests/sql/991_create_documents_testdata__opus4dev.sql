@@ -192,3 +192,9 @@ INSERT INTO `dnb_institutes` (`id`, `name`, `address`, `city`, `phone`, `dnb_con
 INSERT INTO `document_series` (`id`, `title`, `logo`, `publisher`, `issn`, `infobox`) VALUES
 (1, 'MySeries', 'no logo available', 'no publisher available', NULL, NULL);
 
+--
+-- Daten für Tabelle `link_documents_series`
+--
+INSERT INTO `link_documents_series` (`document_id`, `series_id`, `number`) VALUES
+(91, 1, '123'),
+(92, 1, '456');
