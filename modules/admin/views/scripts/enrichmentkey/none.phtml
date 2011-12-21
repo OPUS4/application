@@ -1,5 +1,5 @@
-<?php
-/*
+<?PHP
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,70 +24,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
- * @author      Gunar Maiwald <maiwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @category    Application
+ * @package     Module_Admin
+ * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
+ * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: EnrichmentkeyAvailable.php 9263 2011-12-20 20:30:14Z gmaiwald $
+ * @version     $Id: none.phtml 8422 2011-05-27 16:53:31Z sszott $
  */
+?>
 
-/**
- * Checks if a login already exists.
- */
-class Form_Validate_EnrichmentkeyAvailable extends Zend_Validate_Abstract {
+<div class="adminContainer">
 
-    /**
-     * Constant for login is not available anymore.
-     */
-    const NOT_AVAILABLE = 'isAvailable';
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
 
-    /**
-     * Error messages.
-     */
-    protected $_messageTemplates = array(
-        self::NOT_AVAILABLE => 'admin_enrichmentkey_error_name_exists'
-    );
+    <a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_enrichmentkey_new') ?></a>
 
-    /**
-     * Checks if an enrichmentkey already exists.
-     */
-    public function isValid($value, $context = null) {
+    <div><?= $this->translate('admin_enrichmentkey_none_defined') ?></div>
 
-        $value = (string) $value;
-        $this->_setValue($value);
-
-        $name = null;
-
-        if (is_array($context)) {
-            if (isset($context['oldName'])) {
-                $name = $context['oldName'];
-            }
-        }
-        elseif (is_string($context)) {
-            $name = $context;
-        }
-
-        if (!($name === $value) && $this->_isEnrichmentKeyUsed($value)) {
-            $this->_error(self::NOT_AVAILABLE);
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Checks if a login name already exists in database.
-     * @param string $login
-     * @return boolean
-     */
-    protected function _isEnrichmentKeyUsed($name) {
-
-        $enrichmentkey = Opus_EnrichmentKey::fetchByName($name);
-        if (is_null($enrichmentkey )) {
-            return false;
-        }
-        return true;
-    }
-
-}
+</div>
 

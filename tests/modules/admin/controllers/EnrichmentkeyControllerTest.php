@@ -47,24 +47,42 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $this->assertAction('index');
     }
 
+    public function testIndexActionWithoutEnrichmentkeys() {
+        $enrichmentkeys = Opus_EnrichmentKey::getAll();
+        $keyNames = array();
+        foreach ($enrichmentkeys as $key) {
+            array_push($keyNames, $key->getName());
+            Opus_EnrichmentKey::fetchbyName($key->getName())->delete();
+        }
+
+        $this->dispatch('/admin/enrichmentkey');
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+ 
+        foreach ($keyNames as $key) {
+            $ek = new Opus_EnrichmentKey();
+            $ek->setName($key);
+            $ek->store();
+        }
+    }
+
     /**
      * Test show enrichmentkey information.
      */
     public function testShowAction() {
         $this->dispatch('/admin/enrichmentkey/show/name/validtestkey');
         $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('enrichmentkey');
-        $this->assertAction('show');
+        $response = $this->getResponse();
+        $this->assertContains('<td>validtestkey</td>', $response->getBody());
     }
 
     public function testShowActionWithoutId() {
         $this->dispatch('/admin/enrichmentkey/show');
-        $this->assertRedirect('/admin/enrichmentkey/index');
-        $this->assertModule('admin');
-        $this->assertController('enrichmentkey');
-        $this->assertAction('show');
+        $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
     }
+
+
 
     /**
      * Test showing form for new enrichmentkey.
@@ -72,9 +90,8 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
     public function testNewAction() {
         $this->dispatch('/admin/enrichmentkey/new');
         $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('enrichmentkey');
-        $this->assertAction('new');
+        $response = $this->getResponse();
+        $this->assertContains('<input type="text" name="name" id="name" value="" />', $response->getBody());
     }
 
     /**
@@ -83,19 +100,19 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
     public function testEditAction() {
         $this->dispatch('/admin/enrichmentkey/edit/name/validtestkey');
         $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('enrichmentkey');
-        $this->assertAction('edit');
+        $response = $this->getResponse();
+        $this->assertContains('<input type="text" name="name" id="name" value="validtestkey" />', $response->getBody());
     }
 
     public function testEditActionWithoutId() {
         $this->dispatch('/admin/enrichmentkey/edit');
-        $this->assertRedirect('/admin/enrichmentkey/index');
-        $this->assertModule('admin');
-        $this->assertController('enrichmentkey');
-        $this->assertAction('edit');
+        $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
     }
 
+    /**
+     * Test creating enrichmentkey.
+     */
     public function testCreateAction() {
         $this->request
                 ->setMethod('POST')
@@ -105,10 +122,8 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/admin/enrichmentkey/create');
-        $this->assertModule('admin');
-        $this->assertController('enrichmentkey');
-        $this->assertAction('create');
-        $this->assertRedirect('/admin/enrichmentkey/index');
+        $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
         $this->assertNotNull(Opus_EnrichmentKey::fetchByName('testkey'));
     }
 
@@ -116,15 +131,13 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
          $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'name' => 'testkey',
+                    'name' => 'testkey2',
                     'cancel' => 'cancel'
                 ));
-
         $this->dispatch('/admin/enrichmentkey/create');
-        $this->assertModule('admin');
-        $this->assertController('enrichmentkey');
-        $this->assertAction('create');
-        $this->assertRedirect('/admin/enrichmentkey/index');
+        $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
+        $this->assertNull(Opus_EnrichmentKey::fetchByName('testkey2'));
     }
 
     public function testCreateActionMissingInput() {
@@ -144,6 +157,7 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
     /**
      * @depends testCreateAction
      */
+
     public function testUpdateAction() {
         $enrichmentkey = Opus_EnrichmentKey::fetchByName('testkey');
 
@@ -155,19 +169,18 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/admin/enrichmentkey/update/name/' . $enrichmentkey->getName());
-        $this->assertModule('admin');
-        $this->assertController('enrichmentkey');
-        $this->assertAction('update');
         $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
+        $this->assertNull(Opus_EnrichmentKey::fetchByName('testkey'));
+        $this->assertNotNull(Opus_EnrichmentKey::fetchByName('testkey2'));
         $enrichmentkey = Opus_EnrichmentKey::fetchByName('testkey2');
-        $this->assertNotNull($enrichmentkey);
-        $this->assertNotNull($enrichmentkey->getName());
         $this->assertEquals('testkey2', $enrichmentkey->getDisplayName());
     }
 
     /**
      * @depends testUpdateAction
      */
+
     public function testUpdateActionInvalidInput() {
          $enrichmentkey = Opus_EnrichmentKey::fetchByName('testkey2');
 
@@ -192,10 +205,9 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $enrichmentkey = Opus_EnrichmentKey::fetchByName('testkey2');
         $this->assertNotNull($enrichmentkey);
         $this->dispatch('/admin/enrichmentkey/delete/name/' . $enrichmentkey->getName());
-        $this->assertModule('admin');
-        $this->assertController('enrichmentkey');
-        $this->assertAction('delete');
         $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
+        $this->assertNull(Opus_EnrichmentKey::fetchByName('testkey2'));
     }
 
 }

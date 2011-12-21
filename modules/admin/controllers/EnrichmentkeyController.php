@@ -42,16 +42,15 @@ class Admin_EnrichmentkeyController extends Controller_Action {
         $enrichmentkeys = Opus_EnrichmentKey::getAll();
 
         if (!empty($enrichmentkeys)) {
+            $this->view->protectedKeys = Opus_EnrichmentKey::getAllReferenced();
             $this->view->enrichmentkeys = array();
             foreach ($enrichmentkeys as $enrichmentkey) {
                 $this->view->enrichmentkeys[$enrichmentkey->getName()] = $enrichmentkey->getDisplayName();
             }
         }
         else {
-            $this->view->render('none');
+            return $this->renderScript('enrichmentkey/none.phtml');
         }
-
-        $this->view->protectedKeys = Opus_EnrichmentKey::getAllReferenced();
     }
 
     /**
@@ -129,32 +128,36 @@ class Admin_EnrichmentkeyController extends Controller_Action {
     }
 
     /**
-     * Updates an  enrichmentkey.
+     * Updates an enrichmentkey.
      */
     public function updateAction() {
         $name = $this->getRequest()->getParam('name');
 
         if (!empty($name)) {
             $postData = $this->getRequest()->getPost();
-            $enrichmentkey = new Opus_EnrichmentKey($name);
+            $enrichmentkey = Opus_EnrichmentKey::fetchByName($name);
 
-            if (!isset($postData['name'])) {
-                $postData['name'] = $enrichmentkey->getName();
-            }
+            if(!is_null($enrichmentkey)) {
 
-            $form = new Admin_Form_Enrichmentkey();
+                if (!isset($postData['name'])) {
+                    $postData['name'] = $enrichmentkey->getName();
+                }
+                
+                $form = new Admin_Form_Enrichmentkey();
 
-            if ($form->isValid($postData)) {
-                $name = $postData['name'];
-                $this->_updateEnrichmentkey($enrichmentkey, $name);
-            }
-            else {
-                $actionUrl = $this->view->url(array('action' => 'update', 'name' => $name));
-                $form->setAction($actionUrl);
-                $this->view->form = $form;
-                $this->view->title = 'admin_enrichmentkey_edit';
-                $this->_helper->viewRenderer->setRender('edit');
-                return $this->render('edit');
+                $postData['oldName'] =  $enrichmentkey->getName();
+                if ($form->isValid($postData)) {
+                    $name = $postData['name'];
+                    $this->_updateEnrichmentkey($enrichmentkey, $name);
+                }
+                else {
+                    $actionUrl = $this->view->url(array('action' => 'update', 'name' => $name));
+                    $form->setAction($actionUrl);
+                    $this->view->form = $form;
+                    $this->view->title = 'admin_enrichmentkey_edit';
+                    $this->_helper->viewRenderer->setRender('edit');
+                    return $this->render('edit');
+                }
             }
         }
 
@@ -169,19 +172,11 @@ class Admin_EnrichmentkeyController extends Controller_Action {
         $name = $this->getRequest()->getParam('name');
 
         if (!empty($name)) {
-            
-            if (in_array($name, Opus_EnrichmentKey::getAllReferenced())) {
-                // TODO deliver message to user
-            }
-            elseif (!in_array($name, Opus_EnrichmentKey::getAll())) {
-                // TODO deliver message to user
-            }
-            else {
+            if (in_array($name, Opus_EnrichmentKey::getAll()) && !in_array($name, Opus_EnrichmentKey::getAllReferenced())) {
                 $enrichmentkey = new Opus_EnrichmentKey($name);
                 $enrichmentkey->delete();
             }
-            
-         }
+        }
 
         $this->_helper->redirector('index');
     }

@@ -25,6 +25,33 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_enrichmentkey_edit">
+      <tuv xml:lang="en">
+        <seg>Edit Enrichmentkey</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Enrichmentkey bearbeiten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_show">
+      <tuv xml:lang="en">
+        <seg>Enrichmentkey</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Enrichmentkey</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_none_defined">
+      <tuv xml:lang="en">
+        <seg>No Enrichmentkeys defined.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine Enrichmentkeys definiert.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_enrichmentkey_error_name_exists">
       <tuv xml:lang="en">
         <seg>Enrichmentkey already exists.</seg>
