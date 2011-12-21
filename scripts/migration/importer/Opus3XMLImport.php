@@ -169,6 +169,9 @@ class Opus3XMLImport {
 
     public function initImportFile($data) {
         $this->completeXML = new DOMDocument;
+        if (isset($this->config->import->bem_extern)) {
+            $this->_proc->setParameter('', 'bem_extern', $this->config->import->bem_extern);
+        }
         $this->completeXML->loadXML($this->_proc->transformToXml($data));
         $doclist = $this->completeXML->getElementsByTagName('Opus_Document');
         return $doclist;

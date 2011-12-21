@@ -75,4 +75,6 @@ import.licence.mime_type = "text/html"
 import.licence.name_long = "Lizenzname"
 import.licence.pod_allowed = 0
 
+;import.bem_extern = "enrichment"
+
 [testing : production]

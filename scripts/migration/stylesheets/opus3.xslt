@@ -42,6 +42,8 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:php="http://php.net/xsl">
 
+    <xsl:param name="bem_extern"/>
+
     <xsl:output method="xml" indent="no" />
 
     <!--
@@ -474,17 +476,31 @@
                 </xsl:element>
             </xsl:if>
             <xsl:if test="string-length(field[@name='bem_extern']) > 0">
-                <xsl:element name="Note">
-                    <xsl:attribute name="Scope">
-                        <xsl:text>public</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="Message">
-                        <xsl:value-of select="field[@name='bem_extern']" />
-                    </xsl:attribute>
-                    <xsl:attribute name="Creator">
-                        <xsl:text>unknown</xsl:text>
-                    </xsl:attribute>
-                </xsl:element>
+                <xsl:choose>
+                    <xsl:when test="$bem_extern = 'enrichment'">
+                        <xsl:element name="Enrichment">
+                            <xsl:attribute name="KeyName">
+                                <xsl:text>BemExtern</xsl:text>
+                            </xsl:attribute>
+                            <xsl:attribute name="Value">
+                                <xsl:value-of select="field[@name='bem_extern']" />
+                            </xsl:attribute>
+                        </xsl:element>
+                    </xsl:when>
+                    <xsl:otherwise>
+                         <xsl:element name="Note">
+                            <xsl:attribute name="Scope">
+                                <xsl:text>public</xsl:text>
+                            </xsl:attribute>
+                            <xsl:attribute name="Message">
+                                <xsl:value-of select="field[@name='bem_extern']" />
+                            </xsl:attribute>
+                            <xsl:attribute name="Creator">
+                                <xsl:text>unknown</xsl:text>
+                            </xsl:attribute>
+                        </xsl:element>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:if>
 
             <!-- Old Opus3-data must be mapped later -->
