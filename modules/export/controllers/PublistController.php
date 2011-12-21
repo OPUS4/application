@@ -48,7 +48,7 @@ class Export_PublistController extends Controller_Xml {
 
     public function indexAction() {
 
-        $this->exportFile = $this->config->workspacePath . DIRECTORY_SEPARATOR . "export" . DIRECTORY_SEPARATOR . "export.xml";
+        $this->exportFile = $this->config->workspacePath . DIRECTORY_SEPARATOR . 'export' . DIRECTORY_SEPARATOR . 'export.xml';
         if (!is_readable($this->exportFile)) {
             throw new Application_Exception('exportfile does not exist or is not readable');
         }
@@ -58,7 +58,7 @@ class Export_PublistController extends Controller_Xml {
             throw new Application_Exception('style is not specified');
         }
 
-        if (!is_readable($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'style_' . $styleParam . '.xslt')) {
+        if (!is_readable($this->view->getScriptPath('') . 'publist' . DIRECTORY_SEPARATOR . 'style_' . $styleParam . '.xslt')) {
             throw new Application_Exception('style is not supported');
         }
 
@@ -78,19 +78,19 @@ class Export_PublistController extends Controller_Xml {
     private function normalize() {
         /* Normalization  of year for xslt:sort  */
         /* Filter all unpublished documents */
-        $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'normalize.xslt');
+        $this->loadStyleSheet($this->view->getScriptPath('') . 'publist' . DIRECTORY_SEPARATOR . 'normalize.xslt');
     }
     
     private function filter($author) {
         /* Filter all documents that dont belong to specified author  */
         $this->_xml = $this->_proc->transformToDoc($this->_xml);
         $this->_proc->setParameter('', 'author', $author);
-        $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'filter.xslt');
+        $this->loadStyleSheet($this->view->getScriptPath('') . 'publist' . DIRECTORY_SEPARATOR . 'filter.xslt');
     }
 
     private function export($style) {
         $this->_xml = $this->_proc->transformToDoc($this->_xml);
-        $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'style_' .$style . '.xslt');
+        $this->loadStyleSheet($this->view->getScriptPath('') . 'publist' . DIRECTORY_SEPARATOR . 'style_' .$style . '.xslt');
     }
 
 
