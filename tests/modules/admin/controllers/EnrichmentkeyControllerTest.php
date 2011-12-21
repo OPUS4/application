@@ -198,6 +198,22 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $this->assertAction('update');
     }
 
+    public function testUpdateActionWithUsedName() {
+         $enrichmentkey = Opus_EnrichmentKey::fetchByName('testkey2');
+
+         $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'name' => 'validtestkey',
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/enrichmentkey/update/name/' . $enrichmentkey->getName());
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertContains('<ul class="errors">', $response->getBody());
+    }
+
     /**
      * @depends testUpdateActionInvalidInput
      */
