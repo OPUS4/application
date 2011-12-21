@@ -90,7 +90,7 @@ class Export_IndexController extends Controller_Xml {
                 return;
             }
 
-            throw new Application_Exception('given stylesheet does not exist or is not readable: ' . $stylesheet);
+            throw new Application_Exception('given stylesheet does not exist or is not readable');
         }
         $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'raw.xslt');
     }
