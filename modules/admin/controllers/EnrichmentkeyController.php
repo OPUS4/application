@@ -60,7 +60,7 @@ class Admin_EnrichmentkeyController extends Controller_Action {
         $this->view->title = $this->view->translate('admin_enrichmentkey_show');
         $name = $this->getRequest()->getParam('name');
 
-        if (!empty($name)) {
+        if (!is_null(Opus_EnrichmentKey::fetchByName($name))) {
             $enrichmentkey = new Opus_EnrichmentKey($name);
             $this->view->enrichmentkey = $enrichmentkey;
         }
@@ -75,8 +75,8 @@ class Admin_EnrichmentkeyController extends Controller_Action {
     public function editAction() {
         $this->view->title = $this->view->translate($this->view->title);
         $name = $this->getRequest()->getParam('name');
-
-        if (!empty($name) && !in_array($name, Opus_EnrichmentKey::getAllReferenced())) {
+  
+         if (!is_null(Opus_EnrichmentKey::fetchByName($name)) && !in_array($name, Opus_EnrichmentKey::getAllReferenced())) {
             $form = new Admin_Form_Enrichmentkey($name);
             $actionUrl = $this->view->url(array('action' => 'update', 'name' => $name));
             $form->setAction($actionUrl);
@@ -133,7 +133,7 @@ class Admin_EnrichmentkeyController extends Controller_Action {
     public function updateAction() {
         $name = $this->getRequest()->getParam('name');
 
-        if (!empty($name)) {
+        if (!is_null(Opus_EnrichmentKey::fetchByName($name))) {
             $postData = $this->getRequest()->getPost();
             $enrichmentkey = Opus_EnrichmentKey::fetchByName($name);
 
@@ -171,11 +171,9 @@ class Admin_EnrichmentkeyController extends Controller_Action {
     public function deleteAction() {
         $name = $this->getRequest()->getParam('name');
 
-        if (!empty($name)) {
-            if (in_array($name, Opus_EnrichmentKey::getAll()) && !in_array($name, Opus_EnrichmentKey::getAllReferenced())) {
-                $enrichmentkey = new Opus_EnrichmentKey($name);
-                $enrichmentkey->delete();
-            }
+        if (!is_null(Opus_EnrichmentKey::fetchByName($name)) && !in_array($name, Opus_EnrichmentKey::getAllReferenced())) {
+            $enrichmentkey = new Opus_EnrichmentKey($name);
+            $enrichmentkey->delete();
         }
 
         $this->_helper->redirector('index');

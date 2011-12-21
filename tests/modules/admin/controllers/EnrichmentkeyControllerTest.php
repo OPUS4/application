@@ -131,7 +131,7 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
 
     public function testEditActionWithUnknownNameParam() {
         $this->assertNull(Opus_EnrichmentKey::fetchByName('testEditActionWithUnknownNameParam'));
-        $this->dispatch('/admin/enrichmentkeys/edit/name/testEditActionWithUnknownNameParam');
+        $this->dispatch('/admin/enrichmentkey/edit/name/testEditActionWithUnknownNameParam');
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
     }
