@@ -154,12 +154,23 @@ class Home_IndexController extends Controller_Action {
                 }
 
                 $translation = $this->view->translate('help_content_' . $content);
-                $contentFile = $this->view->getScriptPath('') . $translation;
-                if (is_file($contentFile) && is_readable($contentFile)) {
-                    $this->view->contenttitle = 'help_title_' . $content;
-                    $this->view->content = file_get_contents($contentFile);
+
+                // get all readable help files in directory /home/views/scripts
+                $helpFilesAvailable = array();
+                $dir = new DirectoryIterator($this->view->getScriptPath(''));
+                foreach ($dir as $file) {
+                    if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
+                        array_push($helpFilesAvailable, $file->getBasename());
+                    }
                 }
+
+                $pos =array_search($translation, $helpFilesAvailable);
+                if ($pos !== FALSE) {
+                    $this->view->contenttitle = 'help_title_' . $content;
+                    $this->view->content = file_get_contents($this->view->getScriptPath('') . $helpFilesAvailable[$pos]);
+                }                
                 elseif ($translation !== 'help_content_' . $content) {
+                    // a translation exists, but it is not a valid file name
                     $this->view->contenttitle = 'help_title_' . $content;
                     $this->view->content = $translation;
                 }
