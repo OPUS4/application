@@ -145,11 +145,22 @@ class CitationExport_IndexController extends Controller_Action {
             throw new CitationExport_Model_Exception('invalid_format');
         }
 
-        if (is_readable($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $outputFormat . '_' . $document->getType() . '.xslt')) {
-           return $outputFormat . '_' . $document->getType() . '.xslt';
+        $stylesheetsAvailable = array();
+        $dir = new DirectoryIterator($this->view->getScriptPath('index'));
+        foreach ($dir as $file) {
+            if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
+                array_push($stylesheetsAvailable, $file->getBasename('.xslt'));
+            }
         }
-        if (is_readable($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $outputFormat . '.xslt')) {
-            return $outputFormat . '.xslt';
+
+        $pos = array_search($outputFormat . '_' . $document->getType(), $stylesheetsAvailable);
+        if ($pos !== FALSE) {
+            return $stylesheetsAvailable[$pos] . '.xslt';
+        }
+
+        $pos = array_search($outputFormat, $stylesheetsAvailable);
+        if ($pos !== FALSE) {
+            return $stylesheetsAvailable[$pos] . '.xslt';
         }
 
         throw new CitationExport_Model_Exception('invalid_format');
