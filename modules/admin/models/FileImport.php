@@ -68,14 +68,14 @@ class Admin_Model_FileImport {
 
         foreach ($files as $file) {
             $log->debug('check filename ' . $file);
-            if (array_key_exists($file, $validFilenames)) {
-                $pathname = $this->__importFolder . DIRECTORY_SEPARATOR . $validFilenames[$file];
+            if (in_array($file, $validFilenames)) {
+                $pathname = $this->__importFolder . DIRECTORY_SEPARATOR . $file;
                 $log->info('import file ' . $pathname);
 
                 $docfile = $document->addFile();
                 $docfile->setTempFile($pathname);
-                $docfile->setPathName($validFilenames[$file]);
-                $docfile->setLabel($validFilenames[$file]);
+                $docfile->setPathName($file);
+                $docfile->setLabel($file);
                 try {
                     $document->store();
                     $log->info('import of file ' . $pathname . ' successful');
@@ -95,8 +95,7 @@ class Admin_Model_FileImport {
     private function getNamesOfIncomingFiles() {
         $incomingFilenames = array();
         foreach ($this->listFiles() as $file) {
-            $filename = $file['name'];
-            $incomingFilenames[$filename] = $filename;
+            array_push($incomingFilenames, $file['name']);            
         }
         return $incomingFilenames;
     }
