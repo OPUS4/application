@@ -85,11 +85,20 @@ class Export_IndexController extends Controller_Xml {
      */
     private function setStylesheet($stylesheet = null) {
         if (!is_null($stylesheet)) {
-            if (is_readable($this->view->getScriptPath('') . 'stylesheets-custom' . DIRECTORY_SEPARATOR . $stylesheet . '.xslt')) {
-                $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets-custom' . DIRECTORY_SEPARATOR .  $stylesheet . '.xslt');
+
+            $stylesheetsAvailable = array();
+            $dir = new DirectoryIterator($this->view->getScriptPath('') . 'stylesheets-custom');
+            foreach ($dir as $file) {
+                if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
+                    array_push($stylesheetsAvailable, $file->getBasename('.xslt'));
+                }
+            }            
+
+            $pos = array_search($stylesheet, $stylesheetsAvailable);            
+            if ($pos !== FALSE) {
+                $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets-custom' . DIRECTORY_SEPARATOR .  $stylesheetsAvailable[$pos] . '.xslt');
                 return;
             }
-
             throw new Application_Exception('given stylesheet does not exist or is not readable');
         }
         $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'raw.xslt');
