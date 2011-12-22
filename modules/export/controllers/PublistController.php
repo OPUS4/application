@@ -47,7 +47,6 @@ class Export_PublistController extends Controller_Xml {
     }
 
     public function indexAction() {
-
         $this->exportFile = $this->config->workspacePath . DIRECTORY_SEPARATOR . 'export' . DIRECTORY_SEPARATOR . 'export.xml';
         if (!is_readable($this->exportFile)) {
             throw new Application_Exception('exportfile does not exist or is not readable');
@@ -58,7 +57,16 @@ class Export_PublistController extends Controller_Xml {
             throw new Application_Exception('style is not specified');
         }
 
-        if (!is_readable($this->view->getScriptPath('') . 'publist' . DIRECTORY_SEPARATOR . 'style_' . $styleParam . '.xslt')) {
+        $stylesheetsAvailable = array();
+        $dir = new DirectoryIterator($this->view->getScriptPath('') . 'publist');
+        foreach ($dir as $file) {
+            if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
+                array_push($stylesheetsAvailable, $file->getBasename('.xslt'));
+            }
+        }
+
+        $pos = array_search('style_' . $styleParam, $stylesheetsAvailable);
+        if ($pos === FALSE) {
             throw new Application_Exception('style is not supported');
         }
 
@@ -71,8 +79,7 @@ class Export_PublistController extends Controller_Xml {
         
         $this->normalize();
         $this->filter($authorParam );
-        $this->export($styleParam);
-
+        $this->export($stylesheetsAvailable[$pos]);
     }
 
     private function normalize() {
@@ -90,9 +97,8 @@ class Export_PublistController extends Controller_Xml {
 
     private function export($style) {
         $this->_xml = $this->_proc->transformToDoc($this->_xml);
-        $this->loadStyleSheet($this->view->getScriptPath('') . 'publist' . DIRECTORY_SEPARATOR . 'style_' .$style . '.xslt');
+        $this->loadStyleSheet($this->view->getScriptPath('') . 'publist' . DIRECTORY_SEPARATOR . $style . '.xslt');
     }
-
 
 }
 
