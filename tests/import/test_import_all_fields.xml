@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<import 
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="opus_import.xsd">
+
+  <opusDocument 
+  oldId="00" 
+  language="deu" 
+  type="doctoralthesis" 
+  pageFirst="1" 
+  pageLast="4"
+  pageNumber="4"
+  edition="1"
+  volume="2"
+  issue="3"
+  publisherName="Foo Publishing"
+  publisherPlace="Timbuktu"
+  creatingCorporation="Bar University"
+  contributingCorporation="Baz University"
+  belongsToBibliography="true"
+  serverState="inprogress">
+
+    <titlesMain>
+      <titleMain language="deu">KOBV</titleMain>
+      <titleMain language="eng">COLN</titleMain>
+    </titlesMain>    
+
+    <titles>
+      <title type="sub" language="deu">Service-Zentrale</title>
+      <title type="sub" language="eng">Service Center</title>
+      <title type="parent" language="deu">Parent Title</title>
+      <title type="additional" language="deu">Kooperativer Biblioheksverbund Berlin-Brandenburg</title>
+    </titles>
+
+    <abstracts>
+      <abstract language="deu">Die KOBV-Zentrale in Berlin-Dahlem.</abstract>
+      <abstract language="eng">Lorem impsum.</abstract>
+    </abstracts>
+
+    <persons>
+      <person role="author" firstName="John" lastName="Doe" email="doe@example.org" allowEmailContact="true"/>
+      <person role="contributor" firstName="Jane" lastName="Doe" academicTitle="PhD" placeOfBirth="New York" dateOfBirth="1970-01-01"/>
+      <person role="advisor" firstName="Jane" lastName="Doe" academicTitle="PhD" placeOfBirth="New York" dateOfBirth="1970-01-01"/>
+      <person role="editor" firstName="Jane" lastName="Doe" academicTitle="PhD" placeOfBirth="New York" dateOfBirth="1970-01-01"/>
+      <person role="referee" firstName="Jane" lastName="Doe" academicTitle="PhD" placeOfBirth="New York" dateOfBirth="1970-01-01"/>
+      <person role="translator" firstName="Jane" lastName="Doe" academicTitle="PhD" placeOfBirth="New York" dateOfBirth="1970-01-01"/>
+      <person role="submitter" firstName="Jane" lastName="Doe" academicTitle="PhD" placeOfBirth="New York" dateOfBirth="1970-01-01"/>
+    </persons>
+        
+    <keywords>
+      <keyword language="deu" type="swd">Berlin</keyword>
+      <keyword language="deu" type="uncontrolled">Palmöl</keyword>
+    </keywords>
+    
+    <dnbInstitutions>
+      <dnbInstitution id="1" role="grantor"/>
+      <dnbInstitution id="2" role="publisher"/>
+    </dnbInstitutions>
+
+    <dates>
+      <date type="completed" monthDay="--12-01" year="2011"/>
+      <date type="completed" year="2009"/>
+      <date type="published" monthDay="--04-30" year="2007"/>
+      <date type="published" year="2008"/>      
+      <date type="thesisAccepted" monthDay="--11-02" year="2010"/>
+      <date type="thesisAccepted" year="1999"/>
+    </dates>
+
+    <identifiers>
+      <identifier type="old">123</identifier>
+      <identifier type="serial">123</identifier>
+      <identifier type="uuid">123</identifier>
+      <identifier type="isbn">123</identifier>
+      <identifier type="urn">123</identifier>
+      <identifier type="doi">123</identifier>
+      <identifier type="handle">123</identifier>
+      <identifier type="url">123</identifier>
+      <identifier type="issn">123</identifier>
+      <identifier type="std-doi">123</identifier>
+      <identifier type="cris-link">123</identifier>
+      <identifier type="splash-url">123</identifier>
+      <identifier type="opus3-id">123</identifier>
+      <identifier type="opac-id">123</identifier>
+      <identifier type="pmid">123</identifier>
+      <identifier type="arxiv">123</identifier>
+    </identifiers>
+           
+    <notes>
+      <note visibility="public">Für die Öffentlichkeit</note>
+      <note visibility="private">Für den Admin</note>
+    </notes>
+    
+    <collections>
+      <collection id="63"/>
+    </collections>
+    
+    <series>
+      <seriesItem id="1" number="3a"/>
+    </series>
+    
+    <enrichments>
+      <enrichment key="LegalNotices">Köln</enrichment>
+    </enrichments>    
+    
+    <licences>
+      <licence id="1"/>
+    </licences>  
+  </opusDocument>
+
+</import>
