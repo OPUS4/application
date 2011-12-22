@@ -82,7 +82,24 @@ class Home_IndexController extends Controller_Action {
         if (array_search($actionName, $phtmlFilesAvailable) === FALSE) {
             $this->_logger->info(__METHOD__ . ' requested file ' . $actionName . '.phtml is not readable or does not exist');
             parent::__call($action, $parameters);
-        }        
+        }
+
+        $translation = $this->view->translate('help_content_' . $actionName);
+        $helpFilesAvailable = array();
+        $dir = new DirectoryIterator($this->view->getScriptPath(''));
+        foreach ($dir as $file) {
+            if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
+                array_push($helpFilesAvailable, $file->getBasename());
+            }
+        }
+
+        $pos = array_search($translation, $helpFilesAvailable);
+        if ($pos === FALSE) {
+            $this->view->text = $translation;
+        }
+        else {
+            $this->view->text = file_get_contents($this->view->getScriptPath('') . $helpFilesAvailable[$pos]);
+        }
     }
 
     /**
@@ -167,7 +184,7 @@ class Home_IndexController extends Controller_Action {
                     }
                 }
 
-                $pos =array_search($translation, $helpFilesAvailable);
+                $pos = array_search($translation, $helpFilesAvailable);
                 if ($pos !== FALSE) {
                     $this->view->contenttitle = 'help_title_' . $content;
                     $this->view->content = file_get_contents($this->view->getScriptPath('') . $helpFilesAvailable[$pos]);
