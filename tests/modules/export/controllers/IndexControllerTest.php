@@ -71,5 +71,39 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
         $this->assertContains('<export-example>', $response->getBody());
     }
+
+    /**
+     * request for raw export output is denied for non-administrative people
+     */
+    public function testRequestToRawXmlIsDenied() {
+        $r = Opus_UserRole::fetchByName('guest');
+
+        $modules = $r->listAccessModules();
+        $addOaiModuleAccess = !in_array('export', $modules);
+        if ($addOaiModuleAccess) {
+            $r->appendAccessModule('export');
+            $r->store();
+        }
+
+        // enable security
+        $config = Zend_Registry::get('Zend_Config');
+        $security = $config->security;
+        $config->security = '1';
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->dispatch('/export/index/index/export/xml');
+        $this->assertResponseCode(500);
+        $this->assertContains('missing parameter stylesheet', $this->getResponse()->getBody());
+
+        // restore security settings
+        if ($addOaiModuleAccess) {
+            $r->removeAccessModule('export');
+            $r->store();
+        }
+        
+        $config->security = $security;
+        Zend_Registry::set('Zend_Config', $config);
+    }
+
 }
 

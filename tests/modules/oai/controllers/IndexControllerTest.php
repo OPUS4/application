@@ -36,6 +36,10 @@
 
 class Oai_IndexControllerTest extends ControllerTestCase {
 
+    private $_security;
+
+    private $_addOaiModuleAccess;
+
     /**
      * Basic test for invalid verbs.
      */
@@ -240,37 +244,15 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                "Response for $interval_string must contain '<record>'");
         }
     }
-    
+
     /**
      * Test that proves the bugfix for OPUSVIER-1710 is working as intended.
      */
     public function testGetDeletedDocumentReturnsStatusDeleted() {
-        $r = Opus_UserRole::fetchByName('guest');
-
-        $modules = $r->listAccessModules();
-        $addOaiModuleAccess = !in_array('oai', $modules);
-        if ($addOaiModuleAccess) {
-            $r->appendAccessModule('oai');
-            $r->store();
-        }
-
-        // enable security
-        $config = Zend_Registry::get('Zend_Config');
-        $security = $config->security;
-        $config->security = '1';
-        Zend_Registry::set('Zend_Config', $config);
-
+        $this->enableSecurity();
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::123');
+        $this->resetSecurity();
         
-        if ($addOaiModuleAccess) {
-            $r->removeAccessModule('oai');
-            $r->store();
-        }
-
-        // restore security settings
-        $config->security = $security;
-        Zend_Registry::set('Zend_Config', $config);
-
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
         $this->assertContains('<GetRecord>', $this->getResponse()->getBody());
         $this->assertContains('<header status="deleted">', $this->getResponse()->getBody());
@@ -282,7 +264,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     public function testTransferUrlIsPresent() {
         $doc = new Opus_Document();
-        $doc->setServerState('published');        
+        $doc->setServerState('published');
         $file = new Opus_File();
         $file->setVisibleInOai(true);
         $file->setPathName('foobar.pdf');
@@ -293,7 +275,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertContains('<ddb:transfer', $this->getResponse()->getBody());
         $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());
-        
+
         $doc->deletePermanent();
     }
 
@@ -306,7 +288,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('<ddb:transfer ddb:type="dcterms:URI">', $this->getResponse()->getBody());
         $doc->deletePermanent();
     }
-    
+
     /**
      * Test if the flag "VisibileInOai" affects all files of a document
      */
@@ -315,7 +297,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         //create document with two files
         $d = new Opus_Document();
         $d->setServerState('published');
-        
+
         $f1 = new Opus_File();
         $f1->setPathName('foo.pdf');
         $f1->setVisibleInOai(false);
@@ -328,13 +310,73 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $d->store();
         $id = $d->getId();
-        
+
         //oai query of that document
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::' . $id);
         $response = $this->getResponse()->getBody();
         $this->assertContains('<Opus_Document xmlns="" Id="' . $id . '"', $response);
-        $this->assertNotContains('<File', $response);        
+        $this->assertNotContains('<File', $response);
 
+    }
+
+    /**
+     * request for metadataPrefix=copy_xml is denied for non-administrative people
+     */
+    public function testRequestForMetadataPrefixCopyxmlAndVerbGetRecordIsDenied() {
+        $this->enableSecurity();
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::80');
+        $this->assertContains('<error code="cannotDisseminateFormat">The metadata format &amp;quot;copy_xml&amp;quot; given by metadataPrefix is not supported by the item or this repository.</error>',
+                $this->getResponse()->getBody(), 'do not prevent usage of metadataPrefix copy_xml and verb GetRecords');
+        $this->resetSecurity();
+    }
+
+    public function testRequestForMetadataPrefixCopyxmlAndVerbListRecordIsDenied() {
+        $this->enableSecurity();
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=copy_xml&from=2100-01-01');
+        $this->assertContains('<error code="cannotDisseminateFormat">The metadata format &amp;quot;copy_xml&amp;quot; given by metadataPrefix is not supported by the item or this repository.</error>',
+                $this->getResponse()->getBody(), 'do not prevent usage of metadataPrefix copy_xml and verb ListRecords');
+        $this->resetSecurity();
+
+    }
+
+    public function testRequestForMetadataPrefixCopyxmlAndVerbListIdentifiersIsDenied() {
+        $this->enableSecurity();
+        $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=copy_xml');
+        $this->assertContains('<error code="cannotDisseminateFormat">The metadata format &amp;quot;copy_xml&amp;quot; given by metadataPrefix is not supported by the item or this repository.</error>',
+                $this->getResponse()->getBody(), 'do not prevent usage of metadataPrefix copy_xml and verb ListIdentifiers');
+        $this->resetSecurity();
+    }
+
+
+    private function enableSecurity() {
+        $r = Opus_UserRole::fetchByName('guest');
+
+        $modules = $r->listAccessModules();
+        $this->_addOaiModuleAccess = !in_array('oai', $modules);
+        if ($this->_addOaiModuleAccess) {
+            $r->appendAccessModule('oai');
+            $r->store();
+        }
+
+        // enable security
+        $config = Zend_Registry::get('Zend_Config');
+        $this->_security = $config->security;
+        $config->security = '1';
+        Zend_Registry::set('Zend_Config', $config);
+    }
+
+    private function resetSecurity() {
+        $r = Opus_UserRole::fetchByName('guest');
+        
+        if ($this->_addOaiModuleAccess) {
+            $r->removeAccessModule('oai');
+            $r->store();
+        }
+
+        // restore security settings
+        $config = Zend_Registry::get('Zend_Config');
+        $config->security = $this->_security;
+        Zend_Registry::set('Zend_Config', $config);
     }
 
 }

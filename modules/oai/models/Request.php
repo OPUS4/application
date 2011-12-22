@@ -183,6 +183,11 @@ class Oai_Model_Request {
            $availableMetadataPrefixes[] = basename($prefixFile, '.xslt');
         }
 
+        // only adminstrators can request copy_xml format
+        if (!Opus_Security_Realm::getInstance()->checkModule('admin')) {
+            $availableMetadataPrefixes = array_diff($availableMetadataPrefixes, array('copy_xml'));
+        }
+
         $result = in_array($oaiMetadataPrefix, $availableMetadataPrefixes);
 
         if (false === $result) {
