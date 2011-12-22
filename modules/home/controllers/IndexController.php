@@ -62,24 +62,27 @@ class Home_IndexController extends Controller_Action {
      * @param  array  $parameters The parameters passed to the action.
      * @return void
      */
-    public function __call($action, $parameters) {
-        $logger = Zend_Registry::get('Zend_Log');
+    public function __call($action, $parameters) {        
         if (!'Action' == substr($action, -6)) {
-            $logger->info(__METHOD__ . ' undefined method: ' . $action);
+            $this->_logger->info(__METHOD__ . ' undefined method: ' . $action);
             parent::__call($action, $parameters);
         }
         // it should be checked if the requested static page exists at all, as
         // otherwise this controller will not throw exceptions of type NO_ACTION
         $actionName = $this->getRequest()->getActionName();
-        $sanitizedActionName = str_replace(array('\\', '/'), '', $actionName);
-        $logger->debug(__METHOD__ . ' requested action: ' . $actionName);
-        $logger->debug(__METHOD__ . ' sanitized action: ' . $sanitizedActionName);
-        $scriptPaths = $this->view->getScriptPaths();
-        $staticFile = $scriptPaths[0] . '/index/' .$sanitizedActionName . '.phtml';
-        if (!is_readable($staticFile)) {
-            $logger->info(__METHOD__ . ' requested file ' . $actionName . '.phtml is not readable');
-            parent::__call($action, $parameters);
+
+        $phtmlFilesAvailable = array();
+        $dir = new DirectoryIterator($this->view->getScriptPath('index'));
+        foreach ($dir as $file) {
+            if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
+                array_push($phtmlFilesAvailable, $file->getBasename('.phtml'));
+            }
         }
+
+        if (array_search($actionName, $phtmlFilesAvailable) === FALSE) {
+            $this->_logger->info(__METHOD__ . ' requested file ' . $actionName . '.phtml is not readable or does not exist');
+            parent::__call($action, $parameters);
+        }        
     }
 
     /**
