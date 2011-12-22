@@ -87,8 +87,7 @@ class Frontdoor_IndexController extends Controller_Action {
 
         /* XSLT transformation. */
         $xslt = new DomDocument;
-        $template = 'index.xslt';
-        $xslt->load($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $template);
+        $xslt->load($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . 'index.xslt');
         $proc = new XSLTProcessor;
         $proc->registerPHPFunctions(self::TRANSLATE_FUNCTION);
         $proc->registerPHPFunctions(self::TRANSLATE_DEFAULT_FUNCTION);
