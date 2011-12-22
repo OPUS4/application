@@ -250,7 +250,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      */
     public function testGetDeletedDocumentReturnsStatusDeleted() {
         $this->enableSecurity();
-        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::123');
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::123');
         $this->resetSecurity();
         
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
