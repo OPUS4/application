@@ -43,12 +43,17 @@
  */
 class IndexController extends Controller_Action {
 
-	/**
-	 * Redirect to default module 'home'.
-	 *
-	 * @return void
-	 */
-	public function indexAction() {
-		$this->_helper->getHelper('Redirector')->gotoSimple('index', 'index', 'home');
-	}
+    /**
+     * Always allow access to this controller; Override check in parent method.
+     */
+    protected function checkAccessModulePermissions() {}
+
+    /**
+     * Redirect to default module 'home'.
+     *
+     * @return void
+     */
+    public function indexAction() {
+        $this->_helper->getHelper('Redirector')->gotoSimple('index', 'index', 'home');
+    }
 }

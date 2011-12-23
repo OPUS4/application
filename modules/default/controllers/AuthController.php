@@ -41,6 +41,11 @@
 class AuthController extends Controller_Action {
 
     /**
+     * Always allow access to this controller; Override check in parent method.
+     */
+    protected function checkAccessModulePermissions() {}
+
+    /**
      * Default URL to goto after successful login. Maybe overwritten by findRemoteParameters().
      *
      * @var array

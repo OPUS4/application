@@ -42,6 +42,12 @@
  */
 class ErrorController extends Controller_Action
 {
+
+    /**
+     * Always allow access to this controller; Override check in parent method.
+     */
+    protected function checkAccessModulePermissions() {}
+
     /**
      * Print error information appropriate to environment.
      *
