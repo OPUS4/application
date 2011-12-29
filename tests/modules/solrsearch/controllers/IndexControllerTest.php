@@ -61,11 +61,28 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testLatestAction() {
-        $this->markTestIncomplete("Test waiting for completion.");
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/latest', 'index', 'search');
+        $this->checkForBadStringsInHtml($this->getResponse()->getBody());
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 10);
+    }
 
-        $this->doStandardControllerTest('/solrsearch/index/latest', 'index', 'latest');
-        $response = $this->getResponse();
-        $this->checkForBadStringsInHtml($response->getBody());
+    public function testLatestActionWith20Hits() {
+        $this->doStandardControllerTest('/solrsearch/index/search/rows/20/searchtype/latest', 'index', 'search');
+        $this->checkForBadStringsInHtml($this->getResponse()->getBody());
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 20);
+    }
+
+    public function testLatestActionWithNegativeNumberOfHits() {
+        $this->doStandardControllerTest('/solrsearch/index/search/rows/-1/searchtype/latest', 'index', 'search');
+        $this->checkForBadStringsInHtml($this->getResponse()->getBody());
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 10);
+    }
+
+    public function testLatestActionWithTooLargeNumberOfHits() {
+        $this->doStandardControllerTest('/solrsearch/index/search/rows/1000/searchtype/latest', 'index', 'search');
+        // we need to mask 'fehler' in metadata (otherwise checkForBadStringsInHtml will assume an error has occurred)
+        $this->checkForBadStringsInHtml(str_replace('IMU–Sensorfehler', 'IMU–Sensorxxxxxx', $this->getResponse()->getBody()));
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 100);
     }
 
     public function testSearchdispatchAction() {
@@ -108,6 +125,79 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         $this->assertTrue($numberOfHitsLower > 0);
         $this->assertEquals($numberOfHitsLower, $numberOfHitsUpper);
+    }
+
+    public function testPhraseQueriesWithWildcards() {
+        $d = new Opus_Document();
+        $d->setServerState('published');
+        $d->setLanguage('eng');
+        $d->addTitleMain()->setValue('testphrasequerieswithwildcard*s')->setLanguage('eng');
+        $d->store();
+
+        $testCnt = 1;
+
+        $this->getResponse()->clearBody();
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"testphrasequerieswith*"', null, null);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 0, "($testCnt) result is not empty");
+        $testCnt++;
+
+        $this->getResponse()->clearBody();
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"testphrasequerieswithwildcard*"', null, null);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
+        $testCnt++;
+
+        $this->getResponse()->clearBody();
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"testphrasequerieswithwildcard*s"', null, null);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
+        $testCnt++;
+
+        $this->getResponse()->clearBody();
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"TESTPHRASEQUERIESWITH*"', null, null);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 0, "($testCnt) result is not empty");
+        $testCnt++;
+
+        $this->getResponse()->clearBody();
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"TESTPHRASEQUERIESWITHWILDCARD*"', null, null);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
+        $testCnt++;
+
+        $this->getResponse()->clearBody();
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"TESTPHRASEQUERIESWITHWILDCARD*S"', null, null);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
+        $testCnt++;
+
+        $this->getResponse()->clearBody();
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/testphrasequerieswith*', null, null);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
+        $testCnt++;
+
+        $this->getResponse()->clearBody();
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/testphrasequerieswithwildcard*', null, null);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
+        $testCnt++;
+
+        $this->getResponse()->clearBody();
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/testphrasequerieswithwildcard*s', null, null);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
+        $testCnt++;
+
+        $this->getResponse()->clearBody();
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/TESTPHRASEQUERIESWITH*', null, null);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
+        $testCnt++;
+
+        $this->getResponse()->clearBody();
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/TESTPHRASEQUERIESWITHWILDCARD*', null, null);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
+        $testCnt++;
+
+        $this->getResponse()->clearBody();
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/TESTPHRASEQUERIESWITHWILDCARD*S', null, null);
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
+        $testCnt++;
+
+        // cleanup
+        $d->deletePermanent();
     }
 
     public function testInvalidsearchtermAction() {
