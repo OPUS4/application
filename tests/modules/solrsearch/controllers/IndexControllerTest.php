@@ -114,13 +114,26 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('results_title', strtolower($this->getResponse()->getBody()));
     }
 
-    public function testWildcardUppercaseQuerySearch() {
+    public function testWildcardAsteriskUppercaseQuerySearch() {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/test+Docum*', null, null);        
         $numberOfHitsUpper = substr_count($this->getResponse()->getBody(), 'result_box');
 
         $this->getResponse()->clearBody();
         
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/test+docum*', null, null);
+        $numberOfHitsLower = substr_count($this->getResponse()->getBody(), 'result_box');
+
+        $this->assertTrue($numberOfHitsLower > 0);
+        $this->assertEquals($numberOfHitsLower, $numberOfHitsUpper);
+    }
+
+    public function testWildcardQuestionMarkUppercaseQuerySearch() {
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/test+Do%3Fum%3Fnt', null, null);
+        $numberOfHitsUpper = substr_count($this->getResponse()->getBody(), 'result_box');
+
+        $this->getResponse()->clearBody();
+
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/test+do%3Fum%3Fnt', null, null);
         $numberOfHitsLower = substr_count($this->getResponse()->getBody(), 'result_box');
 
         $this->assertTrue($numberOfHitsLower > 0);
