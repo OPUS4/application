@@ -87,17 +87,27 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertRedirect();
     }
 
-    public function testSearchAction() {
-        $this->markTestIncomplete("Test waiting for completion.");
-
+    public function testSimpleSearchAction() {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*:*', null, null);
-        $response = $this->getResponse();
-        $body = strtolower($response->getBody());
-        $this->assertContains('results_title', $body);
+        $this->assertContains('results_title', strtolower($this->getResponse()->getBody()));
+    }
+
+    public function testAdvancedSearchAction() {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/advanced/author/doe', null, null);
-        $response = $this->getResponse();
-        $body = strtolower($response->getBody());
-        $this->assertContains('results_title', $body);
+        $this->assertContains('results_title', strtolower($this->getResponse()->getBody()));
+    }
+
+    public function testWildcardUppercaseQuerySearch() {
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/test+Docum*', null, null);        
+        $numberOfHitsUpper = substr_count($this->getResponse()->getBody(), 'result_box');
+
+        $this->getResponse()->clearBody();
+        
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/test+docum*', null, null);
+        $numberOfHitsLower = substr_count($this->getResponse()->getBody(), 'result_box');
+
+        $this->assertTrue($numberOfHitsLower > 0);
+        $this->assertEquals($numberOfHitsLower, $numberOfHitsUpper);
     }
 
     public function testInvalidsearchtermAction() {
