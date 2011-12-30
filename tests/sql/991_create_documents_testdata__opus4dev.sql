@@ -178,23 +178,14 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_
 (257, 93, 'author', 0, 0);
 
 --
--- Daten für Tabelle `dnb_institutes`
---
-
-INSERT INTO `dnb_institutes` (`id`, `name`, `address`, `city`, `phone`, `dnb_contact_id`, `is_grantor`, `is_publisher`) VALUES
-(1, 'Foobar Universität', 'Musterstraße 1', 'Musterstadt', '', '', 1, 0),
-(2, 'Foobar Universitätsbibliothek', 'Musterstraße 2', 'Musterstadt', '', '', 0, 1);
-
---
--- Daten für Tabelle `document_series`
---
-
-INSERT INTO `document_series` (`id`, `title`, `logo`, `publisher`, `issn`, `infobox`) VALUES
-(1, 'MySeries', 'no logo available', 'no publisher available', NULL, NULL);
-
---
 -- Daten für Tabelle `link_documents_series`
 --
 INSERT INTO `link_documents_series` (`document_id`, `series_id`, `number`) VALUES
-(91, 1, '123'),
-(92, 1, '456');
+(91, 1, '1'),
+(92, 1, '2'),
+(93, 1, '3'),
+(94, 1, '4'),
+(91, 2, 'd'),
+(92, 2, 'c'),
+(93, 2, 'b'),
+(94, 2, 'a');
