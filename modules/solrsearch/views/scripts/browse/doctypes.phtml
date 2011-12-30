@@ -38,22 +38,13 @@
 
 <p><?= htmlspecialchars($this->translate('browse_doctypes_message')) ?></p>
 
-<?php
-$docTypesTranslated = array();
-foreach($this->facetitems as $facetitem) {
-    $translation = $this->translate($facetitem->getText());
-    $docTypesTranslated[$translation] = $facetitem;
-}
-uksort($docTypesTranslated, "strnatcasecmp");
-?>
-
 <div class="content">
-<ul class="nav browsing">
-<?php foreach($docTypesTranslated as $facetitem) : ?>
-    <li>
-        <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'simple', 'query' => '*:*', 'browsing' => 'true', 'doctypefq' => $facetitem->getText()), null, true) ?>"><?= htmlspecialchars($this->translate($facetitem->getText())) ?></a>
-        &nbsp;(<?= $facetitem->getCount() ?>)
-    </li>
-<?php endforeach ?>
-</ul>
+    <ul class="nav browsing">
+    <?php foreach($this->facetitems as $facetitem) : ?>
+        <li>
+            <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'simple', 'query' => '*:*', 'browsing' => 'true', 'doctypefq' => $facetitem->getText()), null, true) ?>"><?= htmlspecialchars($this->translate($facetitem->getText())) ?></a>
+            &nbsp;(<?= $facetitem->getCount() ?>)
+        </li>
+    <?php endforeach ?>
+    </ul>
 </div>

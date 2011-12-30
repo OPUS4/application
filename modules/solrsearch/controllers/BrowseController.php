@@ -42,7 +42,7 @@ class Solrsearch_BrowseController extends Controller_Action {
     public function indexAction() {
         $this->view->baseUrl = $this->getRequest()->getBaseUrl();
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
-        $this->view->collectionRoles = $collectionRoles->getAllVisible();
+        $this->view->collectionRoles = $collectionRoles->getAllVisible();        
     }
 
     public function doctypesAction() {
@@ -51,8 +51,13 @@ class Solrsearch_BrowseController extends Controller_Action {
         $query->setFacetField($facetname);
         $searcher = new Opus_SolrSearch_Searcher();
         $facets = $searcher->search($query)->getFacets();
-        $facetitems = $facets[$facetname];
-        $this->view->facetitems = $facetitems;
+        $docTypesTranslated = array();
+        foreach($facets[$facetname] as $facetitem) {
+            $translation = $this->view->translate($facetitem->getText());
+            $docTypesTranslated[$translation] = $facetitem;
+        }
+        uksort($docTypesTranslated, "strnatcasecmp");
+        $this->view->facetitems = $docTypesTranslated;
         $this->view->title = $this->view->translate('solrsearch_browse_doctypes');
     }
 }
