@@ -71,24 +71,23 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
         $fieldset .= $this->getLegendFor($group['Name']);
         $fieldset .= $this->getFieldsetHint($group['Name']);
 
-        $groupCount = 1;
-        $groupElementCount = 0;
+        //inital div class
+        $fieldset .= "<div class='form-multiple odd'>";
+        $i = 1;
 
         //show fields
         foreach ($group["Fields"] AS $field) {
-            if ($groupElementCount == 0) {
-                if ($groupCount % 2 == 0) {
-                    $fieldset .= "<div class='form-multiple even'>";
-                }
-                else {
-                    $fieldset .= "<div class='form-multiple odd'>";
-                }
-            }
+            $j = (($i - 1) / $group['Counter']);
+            if (fmod($j, 2) == 1)
+                $fieldset .= "</div><div class='form-multiple even'>";
+            else
+                $fieldset .= "</div><div class='form-multiple odd'>";
 
             $fieldset .= "\n<div class='form-item'>\n";
             $fieldset .= $this->getLabelFor($field["id"], $field["label"], $field['req']);
 
             switch ($field['type']) {
+
                 case "Zend_Form_Element_Text":
                     $fieldset .= $this->renderHtmlText($field, $options);
                     break;
@@ -115,13 +114,11 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
 
             $fieldset .= $this->renderFieldsetErrors($field['error']);
             $fieldset .= "</div>";
-            $groupElementCount++;
-            if ($groupElementCount === intval($group['Counter'])) {
-                $groupCount++;
-                $groupElementCount = 0;
-                $fieldset .= "</div>";
-            }
+            $i++;
         }
+
+        //close inital div class
+        $fieldset .= "</div>";
 
         //show buttons
         $fieldset .= $this->renderHtmlButtons($group['Buttons']);
