@@ -1,5 +1,22 @@
 h1. OPUS 4 Release Notes
 
+h2. ======================== Release 4.2.0 2012-01-09 ========================
+
+h3. Änderungen an Solr-Indexschema
+
+Wird der Solr-Server nicht im Rahmen des Updateskripts aktualisiert (weil er
+z.B. auf einem anderen Server betrieben wird), dann muss das Indexschema
+aktualisiert werden. Dazu muss die Datei
+
+* solrconfig/schema.xml
+
+in das Konfigurationsverzeichnis der Solr-Server kopiert werden und anschließend
+der Index neu erstellt werden mittels:
+
+cd $BASEDIR/opus4/scripts
+php SolrIndexBuilder.php
+
+
 h2. ======================== Release 4.1.4 2011-10-18 ========================
 
 h3. Änderungen an Dateien im benutzerdefinierten Layout-Verzeichnis
