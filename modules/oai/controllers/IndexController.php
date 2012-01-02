@@ -688,7 +688,11 @@ class Oai_IndexController extends Controller_Xml {
 
         if (array_key_exists('set', $oaiRequest)) {
             $setarray = explode(':', $oaiRequest['set']);
-            if (isset($setarray[0]) and $setarray[0] == 'doc-type') {
+            if (!isset($setarray[0])) {
+                return array();
+            }
+
+            if ($setarray[0] == 'doc-type') {
                 if (count($setarray) === 2 and !empty($setarray[1])) {
                     $finder->setType($setarray[1]);
                 }
@@ -696,8 +700,7 @@ class Oai_IndexController extends Controller_Xml {
                     return array();
                 }
             }
-
-            if (isset($setarray[0]) and $setarray[0] == 'bibliography') {
+            else if ($setarray[0] == 'bibliography') {
                 if (count($setarray) !== 2 or empty($setarray[1])) {
                     return array();
                 }
@@ -713,6 +716,10 @@ class Oai_IndexController extends Controller_Xml {
 
                 $finder->setBelongsToBibliography($bibliographyMap[$setValue]);
             }
+            else {
+                return array();
+            }
+
         }
 
         if (array_key_exists('from', $oaiRequest) and !empty($oaiRequest['from'])) {
