@@ -262,4 +262,20 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<h3>51', $this->getResponse()->getBody());
     }
 
+    /**
+     * Regression test for OPUSVIER-2144
+     */
+    public function testLastPageUrlEqualsNextPageUrl() {
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article', null, null);
+        $this->assertTrue(2 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/article/start/10/rows/10">'));
+        $this->assertContains('<h3>20', $this->getResponse()->getBody());       
+    }
+
+    public function testLagePageUrlEqualsNextPageUrl() {
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/doctoralthesis', null, null);
+        $this->assertTrue(2 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/10/rows/10">'));
+        $this->assertContains('<h3>18', $this->getResponse()->getBody());
+
+    }
+
 }

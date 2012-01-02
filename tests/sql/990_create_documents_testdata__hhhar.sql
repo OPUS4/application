@@ -29,7 +29,7 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 (9, NULL, 0000, NULL, 'Arbeitsbereich Wasserbau, Technische Universität Hamburg-Harburg', NULL, 'book', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2003, '', NULL, '2010-06-04T02:31:03Z', '2003-11-17T13:29:07Z', 'published', NULL, 0),
 (10, NULL, 2003, NULL, NULL, '2003-12-01', 'doctoralthesis', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2003, '', NULL, '2010-06-04T02:31:05Z', '2004-01-15T09:13:10Z', 'published', NULL, 0),
 (11, NULL, 1955, NULL, NULL, NULL, 'masterthesis', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, NULL, '', NULL, '2010-06-04T02:25:39Z', '2009-08-12T07:45:25Z', 'published', NULL, 0),
-(12, NULL, 0000, NULL, NULL, NULL, 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 1955, '', NULL, '2010-06-04T02:25:39Z', '2009-08-12T07:46:50Z', 'published', NULL, 0),
+(12, NULL, 0000, NULL, NULL, NULL, 'book', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 1955, '', NULL, '2010-06-04T02:25:39Z', '2009-08-12T07:46:50Z', 'published', NULL, 0),
 (13, NULL, 0000, NULL, NULL, NULL, 'article', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 1962, '', NULL, '2010-06-04T02:31:06Z', '2009-08-12T07:51:34Z', 'published', NULL, 0),
 (14, NULL, 0000, NULL, NULL, NULL, 'article', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 1962, '', NULL, '2010-06-04T02:31:10Z', '2009-08-12T08:08:51Z', 'published', NULL, 0),
 (15, NULL, 0000, NULL, NULL, NULL, 'article', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 1962, '', NULL, '2010-06-04T02:31:11Z', '2009-08-12T08:10:46Z', 'published', NULL, 0),
