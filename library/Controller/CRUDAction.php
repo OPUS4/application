@@ -224,9 +224,4 @@ class Controller_CRUDAction extends Controller_Action {
         }
     }
 
-    public function initView() {
-        parent::initView();
-        $baseDir = $this->view->basePath;
-        $this->view = new Opus_View(array('basePath' => $baseDir));
-    }
 }
