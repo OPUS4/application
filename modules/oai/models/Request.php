@@ -200,26 +200,6 @@ class Oai_Model_Request {
     }
 
     /**
-     * Checks the availability of given parameter set.
-     *
-     * @param  string  $oaiSet The set to check for.
-     * @return boolean
-     */
-    private function _validateSet($oaiSet) {
-        $setInfo = explode(':', $oaiSet);
-
-        $result = true;
-        if ((2 !== count($setInfo)) or
-            ('doc-type' !== $setInfo[0])) {
-            $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
-            $this->setErrorMessage('The given set is not correct');
-            $result = false;
-        }
-
-        return $result;
-    }
-
-    /**
      * Checks if until date is in preferred date format.
      *
      * @param mixed $date

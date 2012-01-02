@@ -686,8 +686,11 @@ class Oai_IndexController extends Controller_Xml {
         if (array_key_exists('set', $oaiRequest)) {
             $setarray = explode(':', $oaiRequest['set']);
             if (isset($setarray[0]) and $setarray[0] == 'doc-type') {
-                if (!empty($setarray[1])) {
+                if (count($setarray) === 2 and !empty($setarray[1])) {
                     $finder->setType($setarray[1]);
+                }
+                else {
+                    return array();
                 }
             }
         }
