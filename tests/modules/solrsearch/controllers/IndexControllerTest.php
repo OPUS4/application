@@ -246,5 +246,20 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         //$this->assertRedirectTo('/solrsearch/index/invalidsearchterm');
     }
 
-}
+    /**
+     * Regression test for OPUSVIER-2147 (collection browsing)
+     */
+    public function testPaginationBarContainsOverallNumberOfHitsInCollectionBrowsing() {
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/collection/id/74', null, null);
+        $this->assertContains('<h3>74', $this->getResponse()->getBody());
+    }
 
+    /**
+     * Regression test for OPUSVIER-2147 (doctype browsing)
+     */
+    public function testPaginationBarContainsOverallNumberOfHitsInDoctypeBrowsing() {
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/report', null, null);
+        $this->assertContains('<h3>51', $this->getResponse()->getBody());
+    }
+
+}
