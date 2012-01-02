@@ -333,7 +333,10 @@ class Oai_IndexController extends Controller_Xml {
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
 
-        $sets = array();
+        $sets = array(
+            'bibliography:true'  => 'Set for bibliographic entries',
+            'bibliography:false' => 'Set for non-bibliographic entries',
+        );
 
         $finder = new Opus_DocumentFinder();
         $finder->setServerState('published');
