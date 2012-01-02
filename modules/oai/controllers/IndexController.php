@@ -464,6 +464,11 @@ class Oai_IndexController extends Controller_Xml {
         $bibliography = $document->getBelongsToBibliography() == 1 ? 'true' : 'false';
         $this->_addSpecInformation($node, 'bibliography:' . $bibliography);
 
+        $setSpecs = Oai_Model_SetSpec::getSetSpecsFromCollections($document->getCollection());
+        foreach ($setSpecs AS $setSpec) {
+            $this->_addSpecInformation($node, $setSpec);
+        }
+
         $this->_xml->documentElement->appendChild($node);
     }
 
