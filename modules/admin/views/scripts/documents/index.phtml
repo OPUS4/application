@@ -117,9 +117,15 @@
                 </span>
             </td>
             <td class="bibliography">
-                <span class="bibliography">
-                    <?= $this->translate($document->isBelongsToBibliography() ? 'Bibliography_Value_True' : 'Bibliography_Value_False') ?>
+                <?PHP if ($document->isBelongsToBibliography()) : ?>
+                <span class="bibliography" title="<?= $this->translate('admin_documents_tooltip_belongsToBibliography_true') ?>">
+                    <?= $this->translate('Bibliography_Value_True') ?>
                 </span>
+                <?PHP else : ?>
+                <span class="bibliography" title="<?= $this->translate('admin_documents_tooltip_belongsToBibliography_false') ?>">
+                    <?= $this->translate('Bibliography_Value_False') ?>
+                </span>
+                <?PHP endif; ?>
             </td>
             <?PHP if (!empty($this->collection)) : ?>
             <td class="">

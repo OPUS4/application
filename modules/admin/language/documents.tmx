@@ -241,6 +241,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_documents_tooltip_belongsToBibliography_true">
+      <tuv xml:lang="en">
+        <seg>Belongs to bibliography.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gehört zur Bibliographie.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_documents_tooltip_belongsToBibliography_false">
+      <tuv xml:lang="en">
+        <seg>Does not belong to bibliography.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gehört nicht zur Bibliographie.</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>
