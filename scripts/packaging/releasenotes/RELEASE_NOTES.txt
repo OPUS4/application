@@ -19,7 +19,7 @@ php SolrIndexBuilder.php
 
 h3. Änderungen an der Datenbank
 
-Das Update-Script befüllt für alle Collection automatisch das Feld "oai_subset"
+Das Update-Script befüllt für alle Collections automatisch das Feld "oai_subset"
 mit dem Inhalt des Feldes "number", sofern "number" gesetzt und das Feld
 "oai_subset" nicht leer ist.  Eventuelle manuelle Änderungen des Feldes
 "oai_subset" überschreibt das Update nicht.  Trotzdem empfehlen wir ein Backup
