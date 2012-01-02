@@ -717,7 +717,40 @@ class Oai_IndexController extends Controller_Xml {
                 $finder->setBelongsToBibliography($bibliographyMap[$setValue]);
             }
             else {
-                return array();
+                if (count($setarray) < 1 or count($setarray) > 2) {
+                    $msg = "Invalid SetSpec: Must be in format 'set:subset'.";
+                    throw new Oai_Model_Exception($msg);
+                }
+
+                // Trying to locate collection role and filter documents.
+                $role = Opus_CollectionRole::fetchByOaiName($setarray[0]);
+                if (is_null($role)) {
+                    $msg = "Invalid SetSpec: Top level set does not exist.";
+                    throw new Oai_Model_Exception($msg);
+                }
+                $finder->setCollectionRoleId($role->getId());
+
+                // Trying to locate given collection and filter documents.
+                if (count($setarray) == 2) {
+                    $subsetName = $setarray[1];
+                    $foundSubsets = array_filter($role->getOaiSetNames(), function ($s) use ($subsetName) {
+                                return $s['oai_subset'] === $subsetName;
+                            }
+                    );
+
+                    if (count($foundSubsets) < 1) {
+                        $msg = "Invalid SetSpec: Subset does not exist.";
+                        throw new Oai_Model_Exception($msg);
+                    }
+
+                    foreach ($foundSubsets AS $subset) {
+                        if ($subset['oai_subset'] !== $subsetName) {
+                            $msg = "Invalid SetSpec: Internal error.";
+                            throw new Oai_Model_Exception($msg);
+                        }
+                        $finder->setCollectionId($subset['id']);
+                    }
+                }
             }
 
         }
