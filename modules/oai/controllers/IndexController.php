@@ -342,8 +342,8 @@ class Oai_IndexController extends Controller_Xml {
         $finder->setServerState('published');
         foreach ($finder->groupedTypesPlusCount() AS $doctype => $row) {
             $setSpec = 'doc-type:' . urlencode($doctype);
-            $count = $row['count'];
-            $sets[$setSpec] = "Set for document type '$doctype' ($count documents)";
+            // $count = $row['count'];
+            $sets[$setSpec] = "Set for document type '$doctype'";
         }
 
         $oaiRolesSets = Opus_CollectionRole::fetchAllOaiEnabledRoles();
@@ -353,19 +353,17 @@ class Oai_IndexController extends Controller_Xml {
             }
 
             $setSpec = urlencode($result['oai_name']);
-            $count   = $result['count'];
-            $sets[$setSpec] = "Set for collection '" . $result['oai_name'] . "'"
-                    . " ($count documents)";
+            // $count = $result['count'];
+            $sets[$setSpec] = "Set for collection '" . $result['oai_name'] . "'";
 
             $role = new Opus_CollectionRole($result['id']);
             foreach ($role->getOaiSetNames() AS $subset) {
                 $subSetSpec  = "$setSpec:" . urlencode($subset['oai_subset']);
-                $subSetCount = $subset['count'];
+                // $subSetCount = $subset['count'];
 
                 $sets[$subSetSpec] = "Subset '" . $subset['oai_subset'] . "'"
                         . " for collection '" . $result['oai_name'] . "'"
-                        . ': "' . trim($subset['name']) . '"'
-                        . " ($subSetCount documents)";
+                        . ': "' . trim($subset['name']) . '"';
             }
         }
 
