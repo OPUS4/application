@@ -693,6 +693,23 @@ class Oai_IndexController extends Controller_Xml {
                     return array();
                 }
             }
+
+            if (isset($setarray[0]) and $setarray[0] == 'bibliography') {
+                if (count($setarray) !== 2 or empty($setarray[1])) {
+                    return array();
+                }
+                $setValue = $setarray[1];
+
+                $bibliographyMap = array(
+                    "true"  => 1,
+                    "false" => 0,
+                );
+                if (false === isset($setValue, $bibliographyMap[$setValue])) {
+                    return array();
+                }
+
+                $finder->setBelongsToBibliography($bibliographyMap[$setValue]);
+            }
         }
 
         if (array_key_exists('from', $oaiRequest) and !empty($oaiRequest['from'])) {
