@@ -459,7 +459,7 @@ class Oai_IndexController extends Controller_Xml {
         $node = $this->_xml->importNode($domNode, true);
 
         $type = $document->getType();
-        $this->_addSpecInformation($node, 'pub-type:' . $type);
+        $this->_addSpecInformation($node, 'doc-type:' . $type);
 
         $bibliography = $document->getBelongsToBibliography() == 1 ? 'true' : 'false';
         $this->_addSpecInformation($node, 'bibliography:' . $bibliography);
