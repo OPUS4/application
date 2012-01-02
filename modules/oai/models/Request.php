@@ -210,7 +210,7 @@ class Oai_Model_Request {
 
         $result = true;
         if ((2 !== count($setInfo)) or
-            ('pub-type' !== $setInfo[0])) {
+            ('doc-type' !== $setInfo[0])) {
             $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
             $this->setErrorMessage('The given set is not correct');
             $result = false;
