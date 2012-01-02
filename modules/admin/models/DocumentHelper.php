@@ -259,7 +259,12 @@ class Admin_Model_DocumentHelper {
 
         $data = $config->toArray();
 
-        return $data[$section];
+        if (array_key_exists($section, $data)) {
+            return $data[$section];
+        }
+        else {
+            return null;
+        }
     }
 
     /**

@@ -46,6 +46,26 @@ class Admin_Model_DocumentHelperTest extends ControllerTestCase {
         $this->assertContains('Type', $fieldNames);
     }
 
+    public function testGetFieldNamesForGroupUnknown() {
+        $doc = new Opus_Document();
+
+        $helper = new Admin_Model_DocumentHelper($doc);
+
+        $fieldNames = $helper->getFieldNamesForGroup('unknown');
+
+        $this->assertNull($fieldNames);
+    }
+
+    public function testGetFieldNamesForGroupNull() {
+        $doc = new Opus_Document();
+
+        $helper = new Admin_Model_DocumentHelper($doc);
+
+        $fieldNames = $helper->getFieldNamesForGroup(null);
+
+        $this->assertNull($fieldNames);
+    }
+
     public function testGetFieldsForGroupGeneralWithFiltering() {
         $doc = new Opus_Document();
 
