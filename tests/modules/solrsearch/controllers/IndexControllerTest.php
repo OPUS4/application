@@ -251,7 +251,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      */
     public function testPaginationBarContainsOverallNumberOfHitsInCollectionBrowsing() {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/collection/id/74', null, null);
-        $this->assertContains('<h3>74', $this->getResponse()->getBody());
+        $this->assertContains('<h3>75', $this->getResponse()->getBody());
     }
 
     /**
