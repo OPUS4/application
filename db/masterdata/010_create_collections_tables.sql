@@ -73,7 +73,7 @@ CREATE TABLE IF NOT EXISTS `collections_roles` (
 -- Tabellenstruktur für Tabelle `collections_enrichments`
 --
 
-CREATE TABLE collections_enrichments (
+CREATE TABLE IF NOT EXISTS collections_enrichments (
    id            INT UNSIGNED NOT NULL,
    collection_id INT(10) unsigned NOT NULL,
    key_name      VARCHAR(255),
