@@ -37,14 +37,29 @@
 class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
 
     /**
+     * Instanz of DocumentTypes helper for testing.
+     * @var Controller_Helper_DocumentTypes
+     */
+    private $docTypeHelper;
+
+    /**
+     * Setup tests.
+     */
+    public function setUp() {
+        parent::setUp();
+
+        $this->docTypeHelper =
+                Zend_Controller_Action_HelperBroker::getStaticHelper(
+                        'DocumentTypes');
+    }
+
+    /**
      * Tests getting document types.
      *
      * The available document types are configured in *tests.ini*.
      */
     public function testGetDocumentTypes() {
-        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-
-        $documentTypes = $docTypeHelper->getDocumentTypes();
+        $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         $this->assertNotNull($documentTypes);
         $this->assertEquals(2, count($documentTypes));
@@ -57,9 +72,7 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
      * Test getting standard template name for document type.
      */
     public function testGetTemplateName() {
-        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-
-        $template = $docTypeHelper->getTemplateName('preprint');
+        $template = $this->docTypeHelper->getTemplateName('preprint');
 
         $this->assertNotNull($template);
         $this->assertEquals('preprint', $template);
@@ -71,9 +84,7 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
      * The custom template name is configured in *tests.ini*.
      */
     public function testGetCustomTemplateName() {
-        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-
-        $template = $docTypeHelper->getTemplateName('all');
+        $template = $this->docTypeHelper->getTemplateName('all');
 
         $this->assertNotNull($template);
         $this->assertEquals('all_default', $template);
@@ -83,27 +94,21 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
      * Test checking validity of allowed document type.
      */
     public function testIsValid() {
-        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-
-        $this->assertTrue($docTypeHelper->isValid('preprint'));
+        $this->assertTrue($this->docTypeHelper->isValid('preprint'));
     }
 
     /**
      * Test checking validity of excluded document type.
      */
     public function testIsNotValid() {
-        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-
-        $this->assertFalse($docTypeHelper->isValid('article'));
+        $this->assertFalse($this->docTypeHelper->isValid('article'));
     }
 
     /**
      * Test getting DOM for document type.
      */
     public function testGetDocument() {
-        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-
-        $dom = $docTypeHelper->getDocument('preprint');
+        $dom = $this->docTypeHelper->getDocument('preprint');
 
         $this->assertNotNull($dom);
     }
@@ -116,9 +121,7 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
 
         unset($config->documentTypes);
 
-        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-
-        $documentTypes = $docTypeHelper->getDocumentTypes();
+        $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         $this->assertNotNull($documentTypes);
         $this->assertArrayHasKey('article', $documentTypes);
@@ -129,11 +132,9 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
      */
 
     public function testGetDocumentTypesTwice() {
-        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+        $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
-        $documentTypes = $docTypeHelper->getDocumentTypes();
-
-        $documentTypes2 = $docTypeHelper->direct(); // test direct method
+        $documentTypes2 = $this->docTypeHelper->direct(); // test direct method
 
         $this->assertEquals($documentTypes, $documentTypes2);
     }
@@ -142,9 +143,7 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
      * Test getting template name for unknown document type.
      */
     public function testGetTemplateForInvalidDocumentType() {
-        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-
-        $template = $docTypeHelper->getTemplateName('unknownDocType');
+        $template = $this->docTypeHelper->getTemplateName('unknownDocType');
 
         $this->assertNull($template);
     }
@@ -155,13 +154,11 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
      * @expectedException Exception
      */
     public function testGetDocumentTypesWithPathNotSet() {
-        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-
         $config = Zend_Registry::get('Zend_Config');
 
         unset($config->publish->path->documenttypes);
 
-        $path = $docTypeHelper->getDocTypesPath();
+        $path = $this->docTypeHelper->getDocTypesPath();
     }
 
     /**
@@ -170,9 +167,7 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
     public function testTranslationOfDocumentTypes() {
         $translate = Zend_Registry::get('Zend_Translate');
 
-        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-
-        $documentTypes = $docTypeHelper->getDocumentTypes();
+        $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         foreach ($documentTypes as $docType) {
             $this->assertNotEquals($docType, $translate->translate($docType),
