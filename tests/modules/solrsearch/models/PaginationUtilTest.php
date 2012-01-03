@@ -66,7 +66,7 @@ class Solrsearch_Model_PaginationUtilTest extends ControllerTestCase {
     public function testGetLastPageUrlArray() {
         $util = new Solrsearch_Model_PaginationUtil(10, 100, 0, null, 'testSearchType');
         $array =  $util->getLastPageUrlArray();
-        $this->assertUrlArray(99, 10, 'testSearchType', null, $array);
+        $this->assertUrlArray(90, 10, 'testSearchType', null, $array);
     }
 
     public function testAssignmentOfQueryTerm() {
