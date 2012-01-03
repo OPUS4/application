@@ -33,6 +33,9 @@
 
 /**
  * Unit tests for document types helper.
+ *
+ * The unit test depend on the available document types in the doctypes folder
+ * as well as the configuration in the file tests.ini. 
  */
 class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
 
