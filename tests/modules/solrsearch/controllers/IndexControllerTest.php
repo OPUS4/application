@@ -282,4 +282,42 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<h3>18', $this->getResponse()->getBody());
     }
 
+    /**
+     * Regression test for OPUSVIER-2134
+     */
+    public function testCatchAllSearch() {
+        $d = new Opus_Document();
+        $d->setServerState('published');
+        $d->setLanguage('eng');
+        $d->addTitleParent()->setValue('testcatchallsearch_title_parent')->setLanguage('eng');
+        $d->addTitleAdditional()->setValue('testcatchallsearch_title_additional')->setLanguage('eng');
+        $d->addTitleAdditional()->setValue('testcatchallsearch_title_sub')->setLanguage('eng');
+        $d->setPublisherName('testcatchallsearch_publisher_name');
+        $d->setPublisherPlace('testcatchallsearch_publisher_place');
+        $d->setCreatingCorporation('testcatchallsearch_creating_corporation');
+        $d->setContributingCorporation('testcatchallsearch_contributing_corporation');
+        $d->store();
+
+        $queries = array(
+            'testcatchallsearch_title_parent',
+            'testcatchallsearch_title_additional',
+            'testcatchallsearch_title_sub',
+            'testcatchallsearch_publisher_name',
+            'testcatchallsearch_publisher_place',
+            'testcatchallsearch_creating_corporation',
+            'testcatchallsearch_contributing_corporation'
+        );
+
+        // check that each catch all search for given query terms returns one hit
+        foreach ($queries as $query) {
+            $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/start/0/rows/10/query/' . $query, null, null);
+            $this->assertTrue(substr_count($this->getResponse()->getBody(), '<strong>1</strong>') == 4);
+            $this->assertContains('<h3>1', $this->getResponse()->getBody());
+            $this->getResponse()->clearBody();
+        }
+
+        // cleanup
+        $d->deletePermanent();
+    }
+
 }
