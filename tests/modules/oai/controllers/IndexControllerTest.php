@@ -50,6 +50,22 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Create DOMXPath object and register namespaces.
+     *
+     * @param string $resultString XML
+     * @return DOMXPath Resulting Xpath object with registered namespaces
+     */
+    protected function prepareXpathFromResultString($resultString) {
+        $domDocument = new DOMDocument();
+        $domDocument->loadXML($resultString);
+
+        $xpath = new DOMXPath($domDocument);
+        $xpath->registerNamespace('dc', "http://purl.org/dc/elements/1.1/");
+        $xpath->registerNamespace('xMetaDiss', "http://www.d-nb.de/standards/xmetadissplus/");
+        return $xpath;
+    }
+
+    /**
      * Basic test for invalid verbs.
      */
     public function testInvalidVerb() {
@@ -188,7 +204,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     /**
      * Test verb=GetRecord, prefix=XMetaDissPlus.
      */
-    public function testGetRecordXMetaDissPlusContent() {
+    public function testGetRecordXMetaDissPlusContentDoc41() {
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::41');
         $this->assertResponseCode(200);
 
@@ -196,12 +212,30 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
+        // Regression test for OPUSVIER-1866
         $assertTitles = array("Dr.", "Prof.");
         foreach ($assertTitles AS $title) {
             $testString = "<pc:academicTitle>$title</pc:academicTitle>";
             $this->assertContains($testString, $response->getBody(),
                "Response must contain '$testString'");
         }
+    }
+
+    /**
+     * Test verb=GetRecord, prefix=XMetaDissPlus.
+     */
+    public function testGetRecordXMetaDissPlusContentDoc91() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        // Regression test for OPUSVIER-1865
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/dc:creator');
+        $this->assertEquals(3, $elements->length);
     }
 
     /**
