@@ -292,6 +292,11 @@
                <xsl:value-of select="@LastName" />
              </xsl:element>
           </xsl:element>
+          <xsl:if test="normalize-space(@AcademicTitle)">
+             <xsl:element name="pc:academicTitle">
+               <xsl:value-of select="@AcademicTitle" />
+             </xsl:element>
+          </xsl:if>
         </xsl:element>
     </xsl:template>
 
@@ -352,7 +357,7 @@
                 </xsl:element>
              </xsl:element>
              <xsl:if test="normalize-space(@AcademicTitle)">
-                <xsl:element name="academicTitle">
+                <xsl:element name="pc:academicTitle">
                   <xsl:value-of select="@AcademicTitle" />
                 </xsl:element>
              </xsl:if>
@@ -377,7 +382,7 @@
                 </xsl:element>
              </xsl:element>
              <xsl:if test="normalize-space(@AcademicTitle)">
-                <xsl:element name="academicTitle">
+                <xsl:element name="pc:academicTitle">
                   <xsl:value-of select="@AcademicTitle" />
                 </xsl:element>
              </xsl:if>
