@@ -155,7 +155,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
 
         $documentsHelper = new Controller_Helper_Documents();
 
-        $this->assertFalse($documentsHelper->isValidId($docId));
+        $this->assertNull($documentsHelper->getDocumentForId($docId));
     }
 
     /**

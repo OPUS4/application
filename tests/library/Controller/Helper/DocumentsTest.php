@@ -41,34 +41,37 @@ class Controller_Helper_DocumentsTest extends ControllerTestCase {
         $this->documents = Zend_Controller_Action_HelperBroker::getStaticHelper('Documents');
     }
 
-    public function testIsValidIdForValidId() {
+    public function testGetDocumentForIdForValidId() {
         $docId = 1;
 
-        $this->assertTrue($this->documents->isValidId($docId));
+        $document = $this->documents->getDocumentForId($docId);
+
+        $this->assertNotNull($document);
+        $this->assertType('Opus_Document', $document);
     }
 
-    public function testIsValidIdForEmptyValue() {
+    public function testGetDocumentForIdForEmptyValue() {
         $docId = null;
 
-        $this->assertFalse($this->documents->isValidId($docId));
+        $this->assertNull($this->documents->getDocumentForId($docId));
     }
 
-    public function testIsValidIdForMalformedValue() {
+    public function testGetDocumentForIdForMalformedValue() {
         $docId = '<h1>123</h1>';
 
-        $this->assertFalse($this->documents->isValidId($docId));
+        $this->assertNull($this->documents->getDocumentForId($docId));
     }
 
-    public function testIsValidIdForNotExistingValue() {
+    public function testGetDocumentForIdForNotExistingValue() {
         $docId = 3000;
 
-        $this->assertFalse($this->documents->isValidId($docId));
+        $this->assertNull($this->documents->getDocumentForId($docId));
     }
 
-    public function testIsValidIdForNegativeValue() {
+    public function testGetDocumentForIdForNegativeValue() {
         $docId = -1;
 
-        $this->assertFalse($this->documents->isValidId($docId));
+        $this->assertNull($this->documents->getDocumentForId($docId));
     }
 
 }

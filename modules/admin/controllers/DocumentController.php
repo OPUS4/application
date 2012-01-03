@@ -65,16 +65,16 @@ class Admin_DocumentController extends Controller_Action {
     public function indexAction() {
         $docId = $this->getRequest()->getParam('id');
 
-        if ($this->documentsHelper->isValidId($docId)) {
-            $model = new Opus_Document($docId);
+        $document = $this->documentsHelper->getDocumentForId($docId);
 
-            $this->view->document = $model;
-            $this->view->overviewHelper = new Admin_Model_DocumentHelper($model);
+        if (isset($document)) {
+            $this->view->document = $document;
+            $this->view->overviewHelper = new Admin_Model_DocumentHelper($document);
 
-            $this->__prepareActionLinks($model);
+            $this->__prepareActionLinks($document);
             $this->__prepareSectionLinks($docId);
 
-            return $model;
+            return $document;
         }
         else {
             // missing or bad parameter => go back to main page
@@ -90,14 +90,14 @@ class Admin_DocumentController extends Controller_Action {
     public function editAction() {
         $docId = $this->getRequest()->getParam('id');
 
-        if ($this->documentsHelper->isValidId($docId)) {
+        $document = $this->documentsHelper->getDocumentForId($docId);
+
+        if (isset($document)) {
             $section = $this->getRequest()->getParam('section');
 
             if (Admin_Model_DocumentHelper::isValidGroup($section)) {
                 $this->view->section = $section;
                 $this->view->docId = $docId;
-
-                $document = new Opus_Document($docId);
 
                 switch ($section) {
                     case 'collections':
@@ -131,7 +131,9 @@ class Admin_DocumentController extends Controller_Action {
     public function addAction() {
         $docId = $this->getRequest()->getParam('id');
 
-        if ($this->documentsHelper->isValidId($docId)) {
+        $document = $this->documentsHelper->getDocumentForId($docId);
+
+        if (isset($document)) {
             $section = $this->getRequest()->getParam('section');
 
             if (Admin_Model_DocumentHelper::isValidGroup($section)) {
@@ -145,10 +147,9 @@ class Admin_DocumentController extends Controller_Action {
                         return $this->_redirectTo('index', null, 'document',
                                 'admin', array('id' => $docId));
                     default:
-                        $doc = new Opus_Document($docId);
                         $this->view->section = $section;
                         $this->view->docId = $docId;
-                        $this->view->addForm = $this->__getAddForm($doc,
+                        $this->view->addForm = $this->__getAddForm($document,
                                 $section);
                         return $this->renderScript('document/add.phtml');
                 }
@@ -173,14 +174,14 @@ class Admin_DocumentController extends Controller_Action {
     public function createAction() {
         $docId = $this->getRequest()->getParam('id');
 
-        if ($this->documentsHelper->isValidId($docId)) {
+        $document = $this->documentsHelper->getDocumentForId($docId);
+
+        if (isset($document)) {
             $section = $this->getRequest()->getParam('section');
 
             if ($this->getRequest()->isPost() &&
                     Admin_Model_DocumentHelper::isValidGroup($section)) {
                 $postData = $this->getRequest()->getPost();
-
-                $document = new Opus_Document($docId);
 
                 $this->__processCreatePost($postData, $document);
 
@@ -209,7 +210,9 @@ class Admin_DocumentController extends Controller_Action {
     public function updateAction() {
         $docId = $this->getRequest()->getParam('id');
 
-        if ($this->documentsHelper->isValidId($docId)) {
+        $document = $this->documentsHelper->getDocumentForId($docId);
+
+        if (isset($document)) {
             $section = $this->getRequest()->getParam('section');
 
             if ($this->getRequest()->isPost() &&
@@ -217,8 +220,6 @@ class Admin_DocumentController extends Controller_Action {
                 $postData = $this->getRequest()->getPost();
 
                 if (!array_key_exists('cancel', $postData)) {
-                    $document = new Opus_Document($docId);
-
                     $this->__processUpdatePost($postData, $document, $section);
 
                     $message = $this->view->translate(
@@ -255,10 +256,10 @@ class Admin_DocumentController extends Controller_Action {
     public function unlinkcollectionAction() {
         $docId = $this->getRequest()->getParam('id');
 
-        if ($this->documentsHelper->isValidId($docId)) {
-            if ($this->getRequest()->isPost()) {
-                $document = new Opus_Document($docId);
+        $document = $this->documentsHelper->getDocumentForId($docId);
 
+        if (isset($document)) {
+            if ($this->getRequest()->isPost()) {
                 $deletedCollectionName =
                     $this->__processUnlinkPost($document);
 

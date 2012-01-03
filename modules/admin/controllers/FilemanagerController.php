@@ -191,10 +191,11 @@ class Admin_FilemanagerController extends Controller_Action {
         $docId = $this->getRequest()->getParam('docId');
         $fileId = $this->getRequest()->getParam('fileId');
 
-        $documents = $this->_helper->getHelper('Documents');
+        $documentsHelper = $this->_helper->getHelper('Documents');
 
-        // TODO extend to cover invalid IDs
-        if (!$documents->isValidId($docId)) {
+        $document = $documentsHelper->getDocumentForId($docId);
+
+        if (!isset($document)) {
             return $this->_redirectToAndExit('index', array('failure' =>
                 $this->view->translate('admin_document_error_novalidid')), 'documents', 'admin');
         }

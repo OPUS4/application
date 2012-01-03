@@ -66,8 +66,10 @@ class Admin_WorkflowController extends Controller_Action {
         $docId = $this->getRequest()->getParam('docId');
         $targetState = $this->getRequest()->getParam('targetState');
 
+        $document = $this->__documentsHelper->getDocumentForId($docId);
+
         // Check if document identifier is valid
-        if (!$this->__documentsHelper->isValidId($docId)) {
+        if (!isset($document)) {
             return $this->_redirectTo('index', array('failure' =>
                 $this->view->translate('admin_document_error_novalidid')),
                     'documents', 'admin');
@@ -80,17 +82,15 @@ class Admin_WorkflowController extends Controller_Action {
                     'document', 'admin', array('id' => $docId));
         }
 
-        $doc = new Opus_Document($docId);
-
         // Check if allowed target state
-        if (!$this->__workflowHelper->isTransitionAllowed($doc, $targetState)) {
+        if (!$this->__workflowHelper->isTransitionAllowed($document, $targetState)) {
             return $this->_redirectTo('index', array('failure' =>
                 $this->view->translate('admin_workflow_error_illegal_transition',
                         $targetState)), 'document', 'admin', array('id' => $docId));
         }
 
         // Check if document is already in target state
-        if ($doc->getServerState() === $targetState) {
+        if ($document->getServerState() === $targetState) {
             // if defined used custom message for state, other use common key
             $key = 'admin_workflow_error_already_' . $targetState;
             if (!$this->view->translate()->getTranslator()->isTranslated($key)) {
@@ -105,7 +105,7 @@ class Admin_WorkflowController extends Controller_Action {
         switch ($this->__confirm($docId, $targetState)) {
             case 'YES':
                 try {
-                    $this->__workflowHelper->changeState($doc, $targetState);
+                    $this->__workflowHelper->changeState($document, $targetState);
                 }
                 catch (Exception $e) {
                     $this->_redirectTo('index', array('failure' =>
