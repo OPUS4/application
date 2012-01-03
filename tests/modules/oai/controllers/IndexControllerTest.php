@@ -41,6 +41,15 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     private $_addOaiModuleAccess;
 
     /**
+     * Method to check response for "bad" strings.
+     */
+    protected function checkForBadStringsInHtml($body) {
+        $badStrings = array("Exception", "Fehler", "Stacktrace", "badVerb",
+            "unauthorized", "internal error", "<error", "</error>");
+        $this->checkForCustomBadStringsInHtml($body, $badStrings);
+    }
+
+    /**
      * Basic test for invalid verbs.
      */
     public function testInvalidVerb() {
