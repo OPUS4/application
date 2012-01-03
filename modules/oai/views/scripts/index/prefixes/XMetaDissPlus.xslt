@@ -70,10 +70,7 @@
             <!-- dc:title -->
             <xsl:apply-templates select="TitleMain" mode="xmetadissplus" />
             <!-- dc:creator -->
-            <xsl:element name="dc:creator">
-                <xsl:attribute name="xsi:type"><xsl:text>pc:MetaPers</xsl:text></xsl:attribute>
-                <xsl:apply-templates select="PersonAuthor" mode="xmetadissplus" />
-            </xsl:element>
+            <xsl:apply-templates select="PersonAuthor" mode="xmetadissplus" />
             <!-- dc:subject -->
             <xsl:apply-templates select="Subject[@Type='ddc']" mode="xmetadissplus" />
             <xsl:apply-templates select="Subject[@Type='swd']" mode="xmetadissplus" />
@@ -282,7 +279,9 @@
     </xsl:template>
 
     <xsl:template match="PersonAuthor" mode="xmetadissplus">
-        <xsl:element name="pc:person">
+       <xsl:element name="dc:creator">
+         <xsl:attribute name="xsi:type"><xsl:text>pc:MetaPers</xsl:text></xsl:attribute>
+         <xsl:element name="pc:person">
           <xsl:element name="pc:name">
              <xsl:attribute name="type"><xsl:text>nameUsedByThePerson</xsl:text></xsl:attribute>
              <xsl:element name="pc:foreName">
@@ -297,7 +296,8 @@
                <xsl:value-of select="@AcademicTitle" />
              </xsl:element>
           </xsl:if>
-        </xsl:element>
+         </xsl:element>
+       </xsl:element>
     </xsl:template>
 
     <xsl:template match="Subject[@Type='ddc']" mode="xmetadissplus">
