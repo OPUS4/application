@@ -58,7 +58,6 @@ CREATE TABLE IF NOT EXISTS `collections_roles` (
    `visible_frontdoor`          TINYINT(1) UNSIGNED NOT NULL    COMMENT 'Show tree on frontdoor. (1=yes, 0=no).' ,
    `display_frontdoor`          VARCHAR(512) NULL               COMMENT 'Comma separated list of collection_contents_x-fields to display in frontdoor context.' ,
    `visible_oai`                TINYINT(1) UNSIGNED NOT NULL    COMMENT 'Show tree in oai output. (1=yes, 0=no).' ,
-   `display_oai`                VARCHAR(512) NULL               COMMENT 'collection_contents_x-field to display in oai context.' ,
    PRIMARY KEY (`id`) ,
    UNIQUE INDEX `UNIQUE_NAME` (`name` ASC) ,
    UNIQUE INDEX `UNIQUE_OAI_NAME` (`oai_name` ASC) )
