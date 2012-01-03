@@ -61,6 +61,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $xpath = new DOMXPath($domDocument);
         $xpath->registerNamespace('dc', "http://purl.org/dc/elements/1.1/");
+        $xpath->registerNamespace('pc', "http://www.d-nb.de/standards/pc/");
         $xpath->registerNamespace('xMetaDiss', "http://www.d-nb.de/standards/xmetadissplus/");
         return $xpath;
     }
@@ -277,6 +278,12 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $xpath = $this->prepareXpathFromResultString($response->getBody());
         $elements = $xpath->query('//xMetaDiss:xMetaDiss/dc:creator');
         $this->assertEquals(3, $elements->length);
+
+        // Regression test for OPUSVIER-2164
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/*/pc:person');
+        $this->assertEquals(4, $elements->length);
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/*/pc:person/pc:name');
+        $this->assertEquals(4, $elements->length);
     }
 
     /**

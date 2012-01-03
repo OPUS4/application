@@ -281,22 +281,21 @@
     <xsl:template match="PersonAuthor" mode="xmetadissplus">
        <xsl:element name="dc:creator">
          <xsl:attribute name="xsi:type"><xsl:text>pc:MetaPers</xsl:text></xsl:attribute>
-         <xsl:element name="pc:person">
-          <xsl:element name="pc:name">
-             <xsl:attribute name="type"><xsl:text>nameUsedByThePerson</xsl:text></xsl:attribute>
-             <xsl:element name="pc:foreName">
+         <pc:person>
+          <pc:name type="nameUsedByThePerson">
+             <pc:foreName>
                <xsl:value-of select="@FirstName" />
-             </xsl:element>
-             <xsl:element name="pc:surName">
+             </pc:foreName>
+             <pc:surName>
                <xsl:value-of select="@LastName" />
-             </xsl:element>
-          </xsl:element>
+             </pc:surName>
+          </pc:name>
           <xsl:if test="normalize-space(@AcademicTitle)">
-             <xsl:element name="pc:academicTitle">
+             <pc:academicTitle>
                <xsl:value-of select="@AcademicTitle" />
-             </xsl:element>
+             </pc:academicTitle>
           </xsl:if>
-         </xsl:element>
+         </pc:person>
        </xsl:element>
     </xsl:template>
 
@@ -346,22 +345,21 @@
          <xsl:attribute name="type"><xsl:text>dcterms:ISO3166</xsl:text></xsl:attribute>
          <xsl:attribute name="thesis:role"><xsl:text>advisor</xsl:text></xsl:attribute>
          <xsl:attribute name="countryCode"><xsl:text>DE</xsl:text></xsl:attribute>
-           <xsl:element name="pc:person">
-             <xsl:element name="pc:name">
-                <xsl:attribute name="type"><xsl:text>nameUsedByThePerson</xsl:text></xsl:attribute>
-                <xsl:element name="pc:foreName">
+           <pc:person>
+             <pc:name type="nameUsedByThePerson">
+                <pc:foreName>
                   <xsl:value-of select="@FirstName" />
-                </xsl:element>
-                <xsl:element name="pc:surName">
+                </pc:foreName>
+                <pc:surName>
                   <xsl:value-of select="@LastName" />
-                </xsl:element>
-             </xsl:element>
+                </pc:surName>
+             </pc:name>
              <xsl:if test="normalize-space(@AcademicTitle)">
-                <xsl:element name="pc:academicTitle">
+                <pc:academicTitle>
                   <xsl:value-of select="@AcademicTitle" />
-                </xsl:element>
+                </pc:academicTitle>
              </xsl:if>
-           </xsl:element>
+           </pc:person>
        </xsl:element>
     </xsl:template>
 
@@ -371,22 +369,21 @@
          <xsl:attribute name="type"><xsl:text>dcterms:ISO3166</xsl:text></xsl:attribute>
          <xsl:attribute name="thesis:role"><xsl:text>referee</xsl:text></xsl:attribute>
          <xsl:attribute name="countryCode"><xsl:text>DE</xsl:text></xsl:attribute>
-           <xsl:element name="pc:person">
-             <xsl:element name="pc:name">
-                <xsl:attribute name="type"><xsl:text>nameUsedByThePerson</xsl:text></xsl:attribute>
-                <xsl:element name="pc:foreName">
+           <pc:person>
+             <pc:name type="nameUsedByThePerson">
+                <pc:foreName>
                   <xsl:value-of select="@FirstName" />
-                </xsl:element>
-                <xsl:element name="pc:surName">
+                </pc:foreName>
+                <pc:surName>
                   <xsl:value-of select="@LastName" />
-                </xsl:element>
-             </xsl:element>
+                </pc:surName>
+             </pc:name>
              <xsl:if test="normalize-space(@AcademicTitle)">
-                <xsl:element name="pc:academicTitle">
+                <pc:academicTitle>
                   <xsl:value-of select="@AcademicTitle" />
-                </xsl:element>
+                </pc:academicTitle>
              </xsl:if>
-           </xsl:element>
+           </pc:person>
        </xsl:element>
     </xsl:template>
 
