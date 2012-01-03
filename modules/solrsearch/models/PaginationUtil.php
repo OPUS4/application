@@ -45,6 +45,14 @@ class Solrsearch_Model_PaginationUtil {
     private $prevPageStartIndex;
     private $nextPageStartIndex;
 
+    /**
+     *
+     * @param int $rows number of hits per page
+     * @param int $numHits total number of hits
+     * @param int $startIndex start index
+     * @param string $query search query
+     * @param string $searchType search type
+     */
     public function  __construct($rows, $numHits, $startIndex, $query, $searchType) {
         $this->rows = $rows;
         $this->numHits = $numHits;
@@ -65,17 +73,6 @@ class Solrsearch_Model_PaginationUtil {
         return $this->constructUrlArrayWithStartIndex('0');
     }
 
-    private function constructUrlArrayWithStartIndex($pageStartIndex) {
-        $array =  array(
-            'searchtype'=>$this->searchType,
-            'start'=>$pageStartIndex,
-            'rows'=>$this->rows);
-        if($this->query != null) {
-            $array['query'] = $this->query;
-        }
-        return $array;
-    }
-
     public function getNextPageUrlArray() {
         return $this->constructUrlArrayWithStartIndex($this->nextPageStartIndex);
     }
@@ -86,6 +83,17 @@ class Solrsearch_Model_PaginationUtil {
 
     public function getLastPageUrlArray() {
         return $this->constructUrlArrayWithStartIndex($this->lastPageStartIndex);
+    }
+
+    private function constructUrlArrayWithStartIndex($pageStartIndex) {
+        $array =  array(
+            'searchtype'=>$this->searchType,
+            'start'=>$pageStartIndex,
+            'rows'=>$this->rows);
+        if($this->query != null) {
+            $array['query'] = $this->query;
+        }
+        return $array;
     }
 }
 
