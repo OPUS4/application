@@ -95,7 +95,7 @@ function getFiles() {
 function getProperty() {
     local FILE="$1"
     local PROP_NAME="$2"
-    PROP_VALUE=$(grep -v '^[[:space:]]*;' $FILE | grep "^[[:space:]]*$PROP_NAME[[:space:]]*=" | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//")
+    PROP_VALUE=$(grep -v '^[[:space:]]*;' "$FILE" | grep "^[[:space:]]*$PROP_NAME[[:space:]]*=" | cut -d= -f2 | sed "s/\;.*$//; s/[ \'\"]*$//; s/^[ \'\"]*//")
 }
 
 # Replace property value in INI file
@@ -107,8 +107,8 @@ function setProperty() {
     local PROP_NAME="$2"
     local PROP_VALUE="$3"
     DEBUG "Setting property $PROP_NAME in file $FILE to $PROP_VALUE."
-    sed -i "s|^\([[:space:]]*$PROP_NAME[[:space:]]*=\)|;\1|" $FILE
-    sed -i "s|^\([[:space:]]*\[production\][[:space:]]*\)|\1\n$PROP_NAME = $PROP_VALUE\n|" $FILE
+    sed -i "s|^\([[:space:]]*$PROP_NAME[[:space:]]*=\)|;\1|" "$FILE"
+    sed -i "s|^\([[:space:]]*\[production\][[:space:]]*\)|\1\n$PROP_NAME = $PROP_VALUE\n|" "$FILE"
 }
 
 # Set property value in script file (does not look for "[production]"
@@ -117,7 +117,7 @@ function setPropertyInShellScript() {
     local PROP_NAME="$2"
     local PROP_VALUE="$3"
     DEBUG "Setting property $PROP_NAME in file $FILE to $PROP_VALUE."
-    sed -i "s|^\([[:space:]]*$PROP_NAME[[:space:]]*=.*$\)|#\1\n$PROP_NAME=$PROP_VALUE\n|" $FILE
+    sed -i "s|^\([[:space:]]*$PROP_NAME[[:space:]]*=.*$\)|#\1\n$PROP_NAME=$PROP_VALUE\n|" "$FILE"
 }
 
 # Returns the actual MD5 hash for a file.
