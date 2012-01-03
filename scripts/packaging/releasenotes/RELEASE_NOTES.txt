@@ -25,6 +25,9 @@ mit dem Inhalt des Feldes "number", sofern "number" gesetzt und das Feld
 "oai_subset" überschreibt das Update nicht.  Trotzdem empfehlen wir ein Backup
 Ihrer OPUS4-Instanz und -Datenbank vor dem Update.
 
+Kapitel 9.7 "Sammlungen verwalten" beschreibt, welche OAI-Einstellungen die
+Collections besitzen und wie diese manuell geändert werden können.
+
 
 h2. ======================== Release 4.1.4 2011-10-18 ========================
 
