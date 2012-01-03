@@ -186,6 +186,25 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Test verb=GetRecord, prefix=XMetaDissPlus.
+     */
+    public function testGetRecordXMetaDissPlusContent() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::41');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $assertTitles = array("Dr.", "Prof.");
+        foreach ($assertTitles AS $title) {
+            $testString = "<pc:academicTitle>$title</pc:academicTitle>";
+            $this->assertContains($testString, $response->getBody(),
+               "Response must contain '$testString'");
+        }
+    }
+
+    /**
      * Test verb=ListIdentifiers.
      */
     public function testListIdentifiers() {
