@@ -171,7 +171,8 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         }
 
         if (empty($path)) {
-            throw new Exception('Path to document types not configured.');
+            throw new Application_Exception(
+                    'Path to document types not configured.');
         }
 
         return $path;

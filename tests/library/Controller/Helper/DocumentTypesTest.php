@@ -151,7 +151,7 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
     /**
      * Test getting path for document types with path not set.
      *
-     * @expectedException Exception
+     * @expectedException Application_Exception
      */
     public function testGetDocumentTypesWithPathNotSet() {
         $config = Zend_Registry::get('Zend_Config');
