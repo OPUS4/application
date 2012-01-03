@@ -192,7 +192,7 @@
         <seg>Enrichmentkeys</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Enrichmentkeys</seg>
+        <seg>Spezialfelder (Enrichments)</seg>
       </tuv>
     </tu>
 
@@ -201,7 +201,7 @@
         <seg>Add, edit, or remove Enrichmentkeys.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Enrichmentkeys hinzufügen, editieren, oder löschen.</seg>
+        <seg>Spezialfelder hinzufügen, editieren, oder löschen.</seg>
       </tuv>
     </tu>
 
