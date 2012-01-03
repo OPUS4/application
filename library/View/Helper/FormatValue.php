@@ -118,12 +118,14 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
                             return $value[0]->getName();
                         }
                         else {
-                            return 'none';
+                            // Should never happen (DNB Institute without name),
+                            // but in case it does:
+                            return 'ERROR: DNB institute without name.';
                         }
                     default:
-                        // Should not happen, but in case it does:
+                        // Should never happen, but in case it does:
                         $this->getLogger()->err(__CLASS__ . ' Trying to format unknown model ' . $modelClass);
-                        return 'ERROR: COULD NOT FORMAT';
+                        return 'ERROR: Unknown model class (see log).';
                 }
             }
             else {
