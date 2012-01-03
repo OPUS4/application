@@ -187,5 +187,33 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<table class="result-data frontdoordata">', $body);
         $this->assertNotContains('<td><em class="data-marker"/></td>', $body);
     }
+
+    /*
+     * Regression test for OPUSVIER-2165
+     */
+    public function testFrontdoorTitleRespectsDocumentLanguageDeu() {
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertNotContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
+        $this->assertContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
+    }
+
+    /**
+     * Regression test for OPUSVIER-2165
+     */
+    public function testFrontdoorTitleRespectsDocumentLanguageEng() {
+        $d = new Opus_Document(146);
+        $lang = $d->getLanguage();
+        $d->setLanguage('eng');
+        $d->store();
+
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
+        $this->assertNotContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
+
+        // restore
+        $d = new Opus_Document(146);
+        $d->setLanguage($lang);
+        $d->store();
+    }
 }
 
