@@ -104,6 +104,24 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $response = $this->getResponse();
         $this->checkForBadStringsInHtml($response->getBody());
+
+        // Test "valid" set specs: Non-empty sets in test data
+        $assertSets = array('doc-type:article', 'doc-type:preprint',
+            'bibliography:true', 'bibliography:true',
+            'ddc:62', 'msc:65Fxx', 'pacs:07.07.Df');
+        foreach ($assertSets AS $assertSet) {
+            $this->assertContains($assertSet, $response->getBody(),
+                    "Response must contain set '$assertSet'");
+            $this->assertContains("<setSpec>$assertSet</setSpec>", $response->getBody(),
+                    "Response must contain set '$assertSet'");
+        }
+
+        // Test "valid" set specs: Non-existent/empty sets in test data.
+        $assertNoSets = array('msc:90C90');
+        foreach ($assertNoSets AS $assertNoSet) {
+            $this->assertNotContains($assertNoSet, $response->getBody(),
+                    "Response must not contain set '$assertNoSet'");
+        }
     }
 
     /**
