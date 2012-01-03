@@ -265,14 +265,17 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-2144
      */
-    public function testLastPageUrlEqualsNextPageUrl() {
+    public function testLastPageUrlEqualsNextPageUrlDocTypeArticle() {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article', null, null);
         $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/article/start/10/rows/10">'));
         $this->assertNotContains('solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/19/rows/10">', $this->getResponse()->getBody());
         $this->assertContains('<h3>20', $this->getResponse()->getBody());       
     }
 
-    public function testLagePageUrlEqualsNextPageUrl() {
+    /**
+     * Regression test for OPUSVIER-2144
+     */
+    public function testLagePageUrlEqualsNextPageUrlDocTypeDoctoralThesis() {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/doctoralthesis', null, null);
         $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/10/rows/10">'));
         $this->assertNotContains('solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/17/rows/10">', $this->getResponse()->getBody());
