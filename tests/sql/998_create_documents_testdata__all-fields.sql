@@ -55,7 +55,7 @@ INSERT INTO `link_documents_dnb_institutes` VALUES
 (146,2,'publisher');
 
 INSERT INTO `link_documents_licences` VALUES
-(146,1);
+(146,4);
 
 INSERT INTO `link_documents_series` VALUES
 (146,1,'3a');
