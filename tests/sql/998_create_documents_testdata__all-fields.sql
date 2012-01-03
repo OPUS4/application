@@ -1,5 +1,5 @@
 INSERT INTO `documents` VALUES
-(146,'2011-12-01',2009,'Baz University','Bar University','2010-11-02',1999,'doctoralthesis','1','3','deu',1,4,4,'draft','2007-04-30',2008,'Foo Publishing','Timbuktu','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00',NULL,'inprogress','2',0);
+(146,'2011-12-01',2009,'Baz University','Bar University','2010-11-02',1999,'masterthesis','1','3','deu',1,4,4,'draft','2007-04-30',2008,'Foo Publishing','Timbuktu','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00',NULL,'published','2',0);
 
 INSERT INTO `document_enrichments` VALUES
 (1,146,'LegalNotices','Köln');
