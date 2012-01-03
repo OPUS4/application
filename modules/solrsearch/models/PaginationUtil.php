@@ -56,7 +56,7 @@ class Solrsearch_Model_PaginationUtil {
 
     private function compute() {
         $this->lastPageStartIndex = 0;
-        $this->lastPageStartIndex =(int)(($this->numHits - 1) / $this->rows  * $this->rows);
+        $this->lastPageStartIndex = (int) (($this->numHits - 1) / $this->rows)  * $this->rows;
         $this->prevPageStartIndex = $this->startIndex - $this->rows;
         $this->nextPageStartIndex = $this->startIndex + $this->rows;
     }
