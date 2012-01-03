@@ -140,6 +140,47 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         }
     }
 
+    public function testGetRecordsFormats() {
+        $formatTestDocuments = array(
+            'xMetaDiss' => 80,
+            'xMetaDissPlus' => 41,
+            'XMetaDissPlus' => 41,
+            'oai_dc' => 91,
+            'oai_pp' => 91,
+            'copy_xml' => 91,
+            'epicur' => 91);
+
+        foreach ($formatTestDocuments AS $format => $docId) {
+            $this->dispatch("/oai?verb=GetRecord&metadataPrefix=$format&identifier=oai::$docId");
+            $this->assertResponseCode(200);
+
+            $response = $this->getResponse();
+            $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+            $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+            $this->assertContains("oai::$docId", $response->getBody(),
+                "Response must contain 'oai::$docId'");
+
+            $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+            $result = $xpath->query('/*[name()="OAI-PMH"]');
+            $this->assertEquals(1, $result->length,
+                    'Expecting one <OAI-PMH> element');
+
+            $result = $xpath->query('/*[name()="OAI-PMH"]/*[name()="error"]');
+            $this->assertEquals(0, $result->length,
+                    'Expecting no <OAI-PMH>/<error> element');
+
+            $result = $xpath->query('/*[name()="OAI-PMH"]/*[name()="GetRecord"]');
+            $this->assertEquals(1, $result->length,
+                    'Expecting one <OAI-PMH>/<GetRecord> element');
+
+            $result = $xpath->query('/*[name()="OAI-PMH"]/*[name()="GetRecord"]/*[name()="record"]');
+            $this->assertEquals(1, $result->length,
+                    'Expecting one <OAI-PMH>/<GetRecord>/<record> element');
+        }
+    }
+
     /**
      * Test verb=GetRecord, prefix=xMetaDiss.
      */
