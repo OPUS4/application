@@ -706,7 +706,9 @@ class Admin_DocumentController extends Controller_Action {
                         }
                         break;
                     default:
-                        if (empty($value)) {
+                        // String that only contain whitespaces are considered
+                        // empty
+                        if (strlen(trim($value)) === 0) {
                             $field->setValue(null);
                         }
                         else {
