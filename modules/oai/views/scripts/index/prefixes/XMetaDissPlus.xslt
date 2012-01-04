@@ -232,12 +232,12 @@
                 </thesis:degree>
             </xsl:if>
 
-            <xsl:element name="ddb:contact">
+            <ddb:contact>
                 <xsl:attribute name="ddb:contactID"><xsl:value-of select="ThesisPublisher/@DnbContactId" /></xsl:attribute>
-            </xsl:element>
-            <xsl:element name="ddb:fileNumber">
+            </ddb:contact>
+            <ddb:fileNumber>
               <xsl:value-of select="count(//File)"/>
-            </xsl:element>
+            </ddb:fileNumber>
             <xsl:apply-templates select="File" mode="xmetadissplus" />
             <xsl:if test="//File">
                 <xsl:apply-templates select="TransferUrl" mode="xmetadissplus" />
