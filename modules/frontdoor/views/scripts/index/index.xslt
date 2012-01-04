@@ -586,7 +586,7 @@
             <td>                
                 <xsl:element name="a">
                     <xsl:choose>
-                        <xsl:when test="starts-with(@Value, 'http://') or starts-with(@Value, 'https://') or starts-with(@Value, 'ftp://')">
+                        <xsl:when test="contains(@Value, '://')">
                             <xsl:attribute name="href">
                                 <xsl:value-of select="@Value" />
                             </xsl:attribute>

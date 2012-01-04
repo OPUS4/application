@@ -220,5 +220,29 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $d->setTitleMain($titles);
         $d->store();
     }
-}
 
+    /**
+     * Regression test for OPUSVIER-1924
+     */
+    public function testIdentifierUrlIsHandledProperlyInFrontdoorForNonProtocolURL() {
+        $d = new Opus_Document('91');
+        $identifiers = $d->getIdentifierUrl();
+        $identifier = $identifiers[0];
+        $this->assertEquals('www.myexampledomain.de/myexamplepath', $identifier->getValue());
+        $this->dispatch('/frontdoor/index/index/docId/91');
+        $this->assertTrue(2 == substr_count($this->getResponse()->getBody(), 'http://www.myexampledomain.de/myexamplepath'));
+    }
+
+    /**
+     * Regression test for OPUSVIER-1924
+     */
+    public function testIdentifierUrlIsHandledProperlyInFrontdoorForProtocolURL() {
+        $d = new Opus_Document('92');
+        $identifiers = $d->getIdentifierUrl();
+        $identifier = $identifiers[0];
+        $this->assertEquals('http://www.myexampledomain.de/myexamplepath', $identifier->getValue());
+        $this->dispatch('/frontdoor/index/index/docId/92');
+        $this->assertTrue(2 == substr_count($this->getResponse()->getBody(), 'http://www.myexampledomain.de/myexamplepath'));
+    }
+
+}
