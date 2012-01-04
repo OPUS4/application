@@ -166,7 +166,7 @@ class Frontdoor_IndexController extends Controller_Action {
                 continue;
             }
 
-            if (in_array($title->getValue(), $docLanguage)) {
+            if (in_array($title->getLanguage(), $docLanguage)) {
                 $titleStringMain = $titleValue;
             }
             else {
