@@ -85,8 +85,7 @@
 
             <xsl:apply-templates select="ThesisDateAccepted" mode="xmetadissplus" />
 
-            <xsl:element name="dcterms:issued">
-              <xsl:attribute name="xsi:type"><xsl:text>dcterms:W3CDTF</xsl:text></xsl:attribute>
+            <dcterms:issued xsi:type="dcterms:W3CDTF">
                 <xsl:choose>
                   <xsl:when test="PublishedDate">
                     <xsl:value-of select="PublishedDate/@Year"/>-<xsl:value-of select="format-number(PublishedDate/@Month,'00')"/>-<xsl:value-of select="format-number(PublishedDate/@Day,'00')"/>
@@ -104,10 +103,9 @@
                     <xsl:value-of select="ServerDatePublished/@Year"/>-<xsl:value-of select="format-number(ServerDatePublished/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDatePublished/@Day,'00')"/>
                   </xsl:otherwise>
                 </xsl:choose>
-            </xsl:element>
+            </dcterms:issued>
 
-            <xsl:element name="dc:type">
-               <xsl:attribute name="xsi:type"><xsl:text>dini:PublType</xsl:text></xsl:attribute>
+            <dc:type xsi:type="dini:PublType">
                  <xsl:choose>
                    <xsl:when test="@Type='article'">
                        <xsl:text>article</xsl:text>
@@ -174,15 +172,13 @@
                        <xsl:text>Other</xsl:text>
                    </xsl:otherwise>    
                  </xsl:choose>  
-            </xsl:element>
+            </dc:type>
 
             <xsl:apply-templates select="IdentifierUrn" mode="xmetadissplus" />
-            <xsl:element name="dcterms:medium">
-               <xsl:attribute name="xsi:type"><xsl:text>dcterms:IMT</xsl:text></xsl:attribute>
+            <dcterms:medium xsi:type="dcterms:IMT">
                <xsl:text>application/pdf</xsl:text>
-            </xsl:element>
-            <xsl:element name="dc:language">
-              <xsl:attribute name="xsi:type"><xsl:text>dcterms:ISO639-2</xsl:text></xsl:attribute>    
+            </dcterms:medium>
+            <dc:language xsi:type="dcterms:ISO639-2">
                  <xsl:choose>
                    <xsl:when test="@Language='deu'">
                       <xsl:text>ger</xsl:text>
@@ -191,13 +187,13 @@
                        <xsl:value-of select="@Language" />
                     </xsl:otherwise>
                  </xsl:choose>
-            </xsl:element>
+            </dc:language >
             <xsl:apply-templates select="Licence" mode="xmetadissplus" />
 
            <!--  thesis.degree only, if type doctoral or habilitation -->
             <xsl:if test="@Type='bachelorthesis' or @Type='doctoralthesis' or @Type='habilitation' or @Type='masterthesis'">
-                <xsl:element name="thesis:degree">
-                   <xsl:element name="thesis:level">
+                <thesis:degree>
+                   <thesis:level>
                      <xsl:choose>
                        <xsl:when test="@Type='bachelorthesis'">
                            <xsl:text>bachelor</xsl:text>
@@ -215,26 +211,25 @@
                            <xsl:text>other</xsl:text> 
                        </xsl:otherwise>    
                      </xsl:choose>  
-                   </xsl:element>
+                   </thesis:level>
 
-                <xsl:element name="thesis:grantor">
-                   <xsl:attribute name="xsi:type"><xsl:text>cc:Corporate</xsl:text></xsl:attribute>
-                   <xsl:element name="cc:universityOrInstitution">
-                       <xsl:element name="cc:name">
+                <thesis:grantor xsi:type="cc:Corporate">
+                   <cc:universityOrInstitution>
+                       <cc:name>
                           <xsl:value-of select="ThesisGrantor/@Name" />
-                       </xsl:element>   
-                       <xsl:element name="cc:place">
+                       </cc:name>   
+                       <cc:place>
                           <xsl:value-of select="ThesisGrantor/@City" />
-                       </xsl:element>
-                       <xsl:element name="cc:department">
-                          <xsl:element name="cc:name">
+                       </cc:place>
+                       <cc:department>
+                          <cc:name>
                              <xsl:value-of select="ThesisGrantor/@Name" />
-                          </xsl:element>
-                       </xsl:element>
-                   </xsl:element>
-                </xsl:element>    
+                          </cc:name>
+                       </cc:department>
+                   </cc:universityOrInstitution>
+                </thesis:grantor>    
 
-                </xsl:element>
+                </thesis:degree>
             </xsl:if>
 
             <xsl:element name="ddb:contact">
@@ -248,9 +243,7 @@
                 <xsl:apply-templates select="TransferUrl" mode="xmetadissplus" />
             </xsl:if>
             <xsl:apply-templates select="IdentifierUrl" mode="xmetadissplus" />
-            <xsl:element name="ddb:rights">
-               <xsl:attribute name="ddb:kind"><xsl:text>free</xsl:text></xsl:attribute>
-            </xsl:element>
+            <ddb:rights ddb:kind="free" />
          </xMetaDiss:xMetaDiss>
     </xsl:template>
 
