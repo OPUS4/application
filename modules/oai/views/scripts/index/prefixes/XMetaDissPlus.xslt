@@ -248,8 +248,7 @@
     </xsl:template>
 
     <xsl:template match="TitleMain" mode="xmetadissplus">
-        <xsl:element name="dc:title">
-            <xsl:attribute name="xsi:type"><xsl:text>ddb:titleISO639-2</xsl:text></xsl:attribute>
+        <dc:title xsi:type="ddb:titleISO639-2">
             <xsl:attribute name="lang">
                <xsl:choose>
                   <xsl:when test="@Language='deu'">
@@ -268,12 +267,11 @@
               </xsl:otherwise>
             </xsl:choose>
             <xsl:value-of select="@Value" />
-        </xsl:element>
+        </dc:title>
     </xsl:template>
 
     <xsl:template match="PersonAuthor" mode="xmetadissplus">
-       <xsl:element name="dc:creator">
-         <xsl:attribute name="xsi:type"><xsl:text>pc:MetaPers</xsl:text></xsl:attribute>
+       <dc:creator xsi:type="pc:MetaPers">
          <pc:person>
           <pc:name type="nameUsedByThePerson">
              <pc:foreName>
@@ -289,32 +287,29 @@
              </pc:academicTitle>
           </xsl:if>
          </pc:person>
-       </xsl:element>
+       </dc:creator>
     </xsl:template>
 
     <xsl:template match="Subject[@Type='ddc']" mode="xmetadissplus">
-        <xsl:element name="dc:subject">
-            <xsl:attribute name="xsi:type"><xsl:text>xMetaDiss:DDC-SG</xsl:text></xsl:attribute>
+        <dc:subject xsi:type="xMetaDiss:DDC-SG">
             <xsl:value-of select="@Value" />
-        </xsl:element>
+        </dc:subject>
     </xsl:template>
 
     <xsl:template match="Subject[@Type='swd']" mode="xmetadissplus">
-        <xsl:element name="dc:subject">
-            <xsl:attribute name="xsi:type"><xsl:text>xMetaDiss:SWD</xsl:text></xsl:attribute>
+        <dc:subject xsi:type="xMetaDiss:SWD">
             <xsl:value-of select="@Value" />
-        </xsl:element>
+        </dc:subject>
     </xsl:template>
 
     <xsl:template match="Subject[@Type='uncontrolled']" mode="xmetadissplus">
-        <xsl:element name="dc:subject">
-            <xsl:attribute name="xsi:type"><xsl:text>xMetaDiss:noScheme</xsl:text></xsl:attribute>
+        <dc:subject xsi:type="xMetaDiss:noScheme">
             <xsl:value-of select="@Value" />
-        </xsl:element>
+        </dc:subject>
     </xsl:template>
 
     <xsl:template match="TitleAbstract" mode="xmetadissplus">
-        <xsl:element name="dcterms:abstract">
+        <dcterms:abstract>
             <xsl:attribute name="xsi:type"><xsl:text>ddb:contentISO639-2</xsl:text></xsl:attribute>
             <xsl:attribute name="lang">
                <xsl:choose>
@@ -328,12 +323,12 @@
             </xsl:attribute>
             <xsl:attribute name="ddb:type"><xsl:text>noScheme</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
-        </xsl:element>
+        </dcterms:abstract>
     </xsl:template>
 
 
     <xsl:template match="PersonAdvisor" mode="xmetadissplus">
-       <xsl:element name="dc:contributor">
+       <dc:contributor>
          <xsl:attribute name="xsi:type"><xsl:text>pc:Contributor</xsl:text></xsl:attribute>
          <xsl:attribute name="type"><xsl:text>dcterms:ISO3166</xsl:text></xsl:attribute>
          <xsl:attribute name="thesis:role"><xsl:text>advisor</xsl:text></xsl:attribute>
@@ -353,11 +348,11 @@
                 </pc:academicTitle>
              </xsl:if>
            </pc:person>
-       </xsl:element>
+       </dc:contributor>
     </xsl:template>
 
     <xsl:template match="PersonReferee" mode="xmetadissplus">
-       <xsl:element name="dc:contributor">
+       <dc:contributor>
          <xsl:attribute name="xsi:type"><xsl:text>pc:Contributor</xsl:text></xsl:attribute>
          <xsl:attribute name="type"><xsl:text>dcterms:ISO3166</xsl:text></xsl:attribute>
          <xsl:attribute name="thesis:role"><xsl:text>referee</xsl:text></xsl:attribute>
@@ -377,50 +372,47 @@
                 </pc:academicTitle>
              </xsl:if>
            </pc:person>
-       </xsl:element>
+       </dc:contributor>
     </xsl:template>
 
     <xsl:template match="ThesisPublisher" mode="xmetadissplus">
-        <xsl:element name="dc:publisher">
+        <dc:publisher>
            <xsl:attribute name="xsi:type"><xsl:text>cc:Publisher</xsl:text></xsl:attribute>
            <xsl:attribute name="type"><xsl:text>dcterms:ISO3166</xsl:text></xsl:attribute>
-               <xsl:element name="cc:universityOrInstitution">
-                 <xsl:element name="cc:name">
+               <cc:universityOrInstitution>
+                 <cc:name>
                      <xsl:value-of select="@Name" />
-                 </xsl:element>
-                 <xsl:element name="cc:place">
+                 </cc:name>
+                 <cc:place>
                     <xsl:value-of select="@City" />
-                 </xsl:element>
-               </xsl:element>
-                 <xsl:element name="cc:address">
-                    <xsl:attribute name="cc:Scheme"><xsl:text>DIN5008</xsl:text></xsl:attribute>
+                 </cc:place>
+               </cc:universityOrInstitution>
+                 <cc:address cc:Scheme="DIN5008">
                     <xsl:value-of select="@Address" />
-                 </xsl:element>
-        </xsl:element>
+                 </cc:address>
+        </dc:publisher>
     </xsl:template>          
 
     <xsl:template match="ThesisDateAccepted" mode="xmetadissplus">
-        <xsl:element name="dcterms:dateAccepted">
-          <xsl:attribute name="xsi:type"><xsl:text>dcterms:W3CDTF</xsl:text></xsl:attribute>
+        <dcterms:dateAccepted xsi:type="dcterms:W3CDTF">
             <xsl:value-of select="@Year"/>-<xsl:value-of select="format-number(@Month,'00')"/>-<xsl:value-of select="format-number(@Day,'00')"/>
-        </xsl:element>
+        </dcterms:dateAccepted>
     </xsl:template>
 
     <xsl:template match="IdentifierUrn" mode="xmetadissplus">
-        <xsl:element name="dc:identifier">
-            <xsl:attribute name="xsi:type"><xsl:text>urn:nbn</xsl:text></xsl:attribute>
+        <dc:identifier xsi:type="urn:nbn">
             <xsl:value-of select="@Value" />
-        </xsl:element>
+        </dc:identifier>
     </xsl:template>
 
     <xsl:template match="Licence" mode="xmetadissplus">
-        <xsl:element name="dc:rights">
+        <dc:rights>
             <xsl:value-of select="@NameLong" />
-        </xsl:element>
+        </dc:rights>
     </xsl:template>
   
     <xsl:template match="File" mode="xmetadissplus">
-        <xsl:element name="ddb:fileProperties">
+        <ddb:fileProperties>
             <xsl:attribute name="ddb:fileName">
                 <xsl:value-of select="@PathName" />
             </xsl:attribute>
@@ -430,21 +422,19 @@
             <xsl:attribute name="ddb:fileSize">
                 <xsl:value-of select="@FileSize"/>
             </xsl:attribute>
-        </xsl:element>
+        </ddb:fileProperties>
     </xsl:template>
 
     <xsl:template match="TransferUrl" mode="xmetadissplus">
-        <xsl:element name="ddb:transfer">
-            <xsl:attribute name="ddb:type"><xsl:text>dcterms:URI</xsl:text></xsl:attribute>
+        <ddb:transfer ddb:type="dcterms:URI">
             <xsl:value-of select="@PathName" />
-        </xsl:element>
+        </ddb:transfer>
     </xsl:template>
 
     <xsl:template match="IdentifierUrl" mode="xmetadissplus">
-        <xsl:element name="ddb:identifier">
-            <xsl:attribute name="ddb:type"><xsl:text>URL</xsl:text></xsl:attribute>
+        <ddb:identifier ddb:type="URL">
             <xsl:value-of select="@Value" />
-        </xsl:element>
+        </ddb:identifier>
     </xsl:template>
 
 </xsl:stylesheet>
