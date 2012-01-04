@@ -41,9 +41,10 @@ INSERT INTO `document_title_abstracts` VALUES
 (270,146,'additional','Kooperativer Biblioheksverbund Berlin-Brandenburg','deu');
 
 INSERT INTO `link_documents_collections` VALUES
-(146,63,2),
 (146,16007,1),
 (146,2,2),
+(146,63,2),
+(146,494,2)
 (146,1029,3),
 (146,2930,4),
 (146,6719,5),
