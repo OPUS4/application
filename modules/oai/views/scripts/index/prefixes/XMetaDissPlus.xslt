@@ -62,8 +62,8 @@
     <xsl:output method="xml" indent="yes" />
 
     <xsl:template match="Opus_Document" mode="xmetadissplus">
-        <xMetaDiss
-            xmlns="http://www.d-nb.de/standards/xmetadissplus/"
+        <xMetaDiss:xMetaDiss
+            xmlns:xMetaDiss="http://www.d-nb.de/standards/xmetadissplus/"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://www.d-nb.de/standards/xmetadissplus/ http://www.d-nb.de/standards/xmetadissplus/xmetadissplus.xsd">
 
@@ -251,7 +251,7 @@
             <xsl:element name="ddb:rights">
                <xsl:attribute name="ddb:kind"><xsl:text>free</xsl:text></xsl:attribute>
             </xsl:element>
-         </xMetaDiss>
+         </xMetaDiss:xMetaDiss>
     </xsl:template>
 
     <xsl:template match="TitleMain" mode="xmetadissplus">

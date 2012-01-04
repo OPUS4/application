@@ -300,7 +300,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
-        // Regression test for OPUSVIER-2170
+        // Regression test for OPUSVIER-2170, OPUSVIER-2175
         $badNSes = array(
             'xmlns:dc="http://www.d-nb.de/standards/subject/"',
             'xmlns:dcterms="http://www.d-nb.de/standards/subject/"',
