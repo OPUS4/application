@@ -272,5 +272,35 @@ class Admin_Model_DocumentHelperTest extends ControllerTestCase {
         $this->assertType('Opus_Model_Field', $fields[0]);
     }
 
+    /**
+     * Regression Test for OPUSVIER-2163.
+     *
+     * Empty string (assignment to collection root) aren't visible in user
+     * interface. This test makes sure the number of displayed collections is
+     * correct and that none has an empty display name.
+     */
+    public function testGetGroupedCollectionsRegression() {
+        $this->markTestSkipped('Skipped because OPUSVIER-2163 is not fixed yet.');
+
+        $doc = new Opus_Document(146);
+
+        $helper = new Admin_Model_DocumentHelper($doc);
+
+        $collections = $doc->getCollection();
+
+        $groupedCollections = $helper->getGroupedCollections();
+
+        $counter = 0;
+
+        foreach($groupedCollections as $collectionRole => $roleCollections) {
+            $counter += count($roleCollections);
+            foreach($roleCollections as $displayedCollection) {
+                $this->assertNotEmpty($displayedCollection->getDisplayName());
+            }
+        }
+
+        $this->assertEquals(count($collections), $counter);
+    }
+
 }
 
