@@ -73,7 +73,9 @@ INSERT INTO `document_identifiers` (`id`, `document_id`, `type`, `value`) VALUES
 (495, 91, 'uuid', '11111111-1111-1111-1111-111111111111'),
 (496, 91, 'opus3-id', 'rewritetest-foo'),
 (497, 92, 'opus3-id', 'rewritetest-baz'),
-(498, 93, 'opus3-id', 'rewritetest-foo');
+(498, 93, 'opus3-id', 'rewritetest-foo'),
+(515, 91, 'url', 'www.myexampledomain.de/myexamplepath'),
+(516, 92, 'url', 'http://www.myexampledomain.de/myexamplepath');
 
 --
 -- Daten für Tabelle `document_subjects`
