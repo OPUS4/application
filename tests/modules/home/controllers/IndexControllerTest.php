@@ -122,8 +122,24 @@ class Home_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-849
      */
     public function testStartPageContainsTotalNumOfDocs() {
+        // get total number of documents from all doc search
+        $this->dispatch('/solrsearch/index/search/searchtype/all');
+
+        // a very ugly way of extracting number of hits (please do not copy and paste!)
+        $startPos = strpos($this->getResponse()->getBody(), '<div class="breadcrumb_results">');
+        $endPos = strpos($this->getResponse()->getBody(), '<div class="results_pagination">');
+        $this->assertTrue($startPos !== FALSE);
+        $this->assertTrue($endPos !== FALSE);
+
+        $numOfHits = substr($this->getResponse()->getBody(), $startPos + 32, $endPos - $startPos);
+        $numOfHits = str_replace('<h3>', '', $numOfHits);
+        $numOfHits = str_replace('</h3>', '', $numOfHits);
+        $numOfHits = preg_replace("/[^0-9]/", '', $numOfHits);
+
+        $this->getResponse()->clearBody();
+
         $this->dispatch('/home');
-        $this->assertContains('(129)', $this->getResponse()->getBody());
+        $this->assertContains("($numOfHits)", $this->getResponse()->getBody());
     }
 }
 
