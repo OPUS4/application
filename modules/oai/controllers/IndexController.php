@@ -625,7 +625,10 @@ class Oai_IndexController extends Controller_Xml {
 
         // no resumptionToken is given
         } else {
-            $reldocIds = $this->getDocumentIdsByOaiRequest($oaiRequest);
+            $docListModel = new Oai_Model_DocumentList();
+            $docListModel->_deliveringDocumentStates = $this->_deliveringDocumentStates;
+            $docListModel->_xMetaDissRestriction = $this->_xMetaDissRestriction;
+            $reldocIds = $docListModel->query($oaiRequest);
         }
 
         // handling of document ids
@@ -662,108 +665,5 @@ class Oai_IndexController extends Controller_Xml {
         if ((false === empty($resParam)) || ($countRestIds > 0)) {
             $this->setParamResumption($res, $cursor, $totalIds);
         }
-    }
-
-    /**
-     * Retrieve all document ids for a valid oai request.
-     *
-     * @param array &$oaiRequest
-     * @return array
-     */
-    private function getDocumentIdsByOaiRequest(array &$oaiRequest) {
-        $finder = new Opus_DocumentFinder();
-
-        // add server state restrictions
-        $finder->setServerStateInList($this->_deliveringDocumentStates);
-
-        $metadataPrefix = $oaiRequest['metadataPrefix'];
-        if ('xMetaDiss' === $metadataPrefix) {
-            $finder->setTypeInList($this->_xMetaDissRestriction);
-        }
-        if ('epicur' === $metadataPrefix) {
-            $finder->setIdentifierTypeExists('urn');
-        }
-
-        if (array_key_exists('set', $oaiRequest)) {
-            $setarray = explode(':', $oaiRequest['set']);
-            if (!isset($setarray[0])) {
-                return array();
-            }
-
-            if ($setarray[0] == 'doc-type') {
-                if (count($setarray) === 2 and !empty($setarray[1])) {
-                    $finder->setType($setarray[1]);
-                }
-                else {
-                    return array();
-                }
-            }
-            else if ($setarray[0] == 'bibliography') {
-                if (count($setarray) !== 2 or empty($setarray[1])) {
-                    return array();
-                }
-                $setValue = $setarray[1];
-
-                $bibliographyMap = array(
-                    "true"  => 1,
-                    "false" => 0,
-                );
-                if (false === isset($setValue, $bibliographyMap[$setValue])) {
-                    return array();
-                }
-
-                $finder->setBelongsToBibliography($bibliographyMap[$setValue]);
-            }
-            else {
-                if (count($setarray) < 1 or count($setarray) > 2) {
-                    $msg = "Invalid SetSpec: Must be in format 'set:subset'.";
-                    throw new Oai_Model_Exception($msg);
-                }
-
-                // Trying to locate collection role and filter documents.
-                $role = Opus_CollectionRole::fetchByOaiName($setarray[0]);
-                if (is_null($role)) {
-                    $msg = "Invalid SetSpec: Top level set does not exist.";
-                    throw new Oai_Model_Exception($msg);
-                }
-                $finder->setCollectionRoleId($role->getId());
-
-                // Trying to locate given collection and filter documents.
-                if (count($setarray) == 2) {
-                    $subsetName = $setarray[1];
-                    $foundSubsets = array_filter($role->getOaiSetNames(), function ($s) use ($subsetName) {
-                                return $s['oai_subset'] === $subsetName;
-                            }
-                    );
-
-                    if (count($foundSubsets) < 1) {
-                        $msg = "Invalid SetSpec: Subset does not exist.";
-                        throw new Oai_Model_Exception($msg);
-                    }
-
-                    foreach ($foundSubsets AS $subset) {
-                        if ($subset['oai_subset'] !== $subsetName) {
-                            $msg = "Invalid SetSpec: Internal error.";
-                            throw new Oai_Model_Exception($msg);
-                        }
-                        $finder->setCollectionId($subset['id']);
-                    }
-                }
-            }
-
-        }
-
-        if (array_key_exists('from', $oaiRequest) and !empty($oaiRequest['from'])) {
-            $from = DateTime::createFromFormat('Y-m-d', $oaiRequest['from']);
-            $finder->setServerDateModifiedAfter($from->format('Y-m-d'));
-        }
-
-        if (array_key_exists('until', $oaiRequest)) {
-            $until = DateTime::createFromFormat('Y-m-d', $oaiRequest['until']);
-            $until->add(new DateInterval('P1D'));
-            $finder->setServerDateModifiedBefore($until->format('Y-m-d'));
-        }
-
-        return $finder->ids();
     }
 }
