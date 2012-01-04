@@ -290,6 +290,30 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Test verb=GetRecord, prefix=XMetaDissPlus.
+     */
+    public function testGetRecordXMetaDissPlusNamespacesDoc91() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        // Regression test for OPUSVIER-2170
+        $badNSes = array(
+            'xmlns:dc="http://www.d-nb.de/standards/subject/"',
+            'xmlns:dcterms="http://www.d-nb.de/standards/subject/"',
+            'xmlns:ddb="http://www.d-nb.de/standards/subject/"',
+            'xmlns:ddb1="http://www.d-nb.de/standards/ddb/"',
+        );
+        foreach ($badNSes AS $badNS) {
+            $this->assertNotContains($badNS, $response->getBody(),
+                    "Output contains '$badNS', which indicates bad namespaces.");
+        }
+    }
+
+    /**
      * Test verb=ListIdentifiers.
      */
     public function testListIdentifiers() {
