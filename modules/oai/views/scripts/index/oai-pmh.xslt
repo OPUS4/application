@@ -82,14 +82,11 @@
 
     <!--create the head of oai response  -->
     <xsl:template match="/">
-        <xsl:element name="OAI-PMH">
-            <xsl:attribute name="xsi:schemaLocation">
-                <xsl:text>http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd</xsl:text>
-            </xsl:attribute>
-            <xsl:element name="responseDate">
+        <OAI-PMH xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
+            <responseDate>
                 <xsl:value-of select="$dateTime" />
-            </xsl:element>
-            <xsl:element name="request">
+            </responseDate>
+            <request>
                 <xsl:if test="$oai_verb != ''">
                     <xsl:attribute name="verb"><xsl:value-of select="$oai_verb" /></xsl:attribute>
                 </xsl:if>
@@ -109,12 +106,12 @@
                     <xsl:attribute name="resumptionToken"><xsl:value-of select="$oai_resumptionToken" /></xsl:attribute>
                 </xsl:if>
                 <xsl:value-of select="$oai_base_url" />
-            </xsl:element>
+            </request>
             <xsl:if test="$oai_error_code!=''">
-                <xsl:element name="error">
+                <error>
                     <xsl:attribute name="code"><xsl:value-of select="$oai_error_code" /></xsl:attribute>
                     <xsl:value-of select="$oai_error_message" />
-                </xsl:element>
+                </error>
             </xsl:if>
             
     <!--create the rest of oai response depending on oai_verb -->
@@ -138,124 +135,123 @@
                     <xsl:apply-templates select="Documents" mode="ListSets" />
                 </xsl:when>
             </xsl:choose>
-        </xsl:element>
+        </OAI-PMH>
     </xsl:template>
 
 
     <!-- template for Identiy  -->
     <xsl:template match="Documents" mode="Identify">
-        <xsl:element name="Identify">
-           <xsl:element name="repositoryName">
+        <Identify>
+           <repositoryName>
               <xsl:value-of select="$repName"/>
-           </xsl:element>
-           <xsl:element name="baseURL">
+           </repositoryName>
+           <baseURL>
              <xsl:value-of select="$oai_base_url"/>
-           </xsl:element>
-           <xsl:element name="protocolVersion"><xsl:text>2.0</xsl:text></xsl:element>
-           <xsl:element name="adminEmail">
+           </baseURL>
+           <protocolVersion><xsl:text>2.0</xsl:text></protocolVersion>
+           <adminEmail>
              <xsl:value-of select="$emailAddress"/>
-           </xsl:element>
-           <xsl:element name="earliestDatestamp">
+           </adminEmail>
+           <earliestDatestamp>
              <xsl:value-of select="$earliestDate"/>
-           </xsl:element>
-           <xsl:element name="deletedRecord"><xsl:text>persistent</xsl:text></xsl:element>
+           </earliestDatestamp>
+           <deletedRecord><xsl:text>persistent</xsl:text></deletedRecord>
            <!--TODO: check granularity throughout the OAI component-->
            <!--xsl:element name="granularity">YYYY-MM-DDThh:mm:ssZ</xsl:element>-->
-           <xsl:element name="granularity">YYYY-MM-DD</xsl:element>
-           <xsl:element name="description">
-               <xsl:element name="oai-identifier">
-                  <xsl:attribute name="xmlns">http://www.openarchives.org/OAI/2.0/oai-identifier</xsl:attribute>
-                  <xsl:attribute name="xsi:schemaLocation">http://www.openarchives.org/OAI/2.0/oai-identifier http://www.openarchives.org/OAI/2.0/oai-identifier.xsd</xsl:attribute>
-                  <xsl:element name="scheme">oai</xsl:element>
-                  <xsl:element name="repositoryIdentifier"><xsl:value-of select="$repIdentifier"/></xsl:element>
-                  <xsl:element name="delimiter"><xsl:text>:</xsl:text></xsl:element>
-                  <xsl:element name="sampleIdentifier"><xsl:value-of select="$sampleIdentifier"/></xsl:element>
-               </xsl:element>
-           </xsl:element>
-        </xsl:element>
+           <granularity><xsl:text>YYYY-MM-DD</xsl:text></granularity>
+           <description>
+               <oai-identifier xmlns="http://www.openarchives.org/OAI/2.0/oai-identifier"
+                  xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai-identifier http://www.openarchives.org/OAI/2.0/oai-identifier.xsd">
+                  <scheme><xsl:text>oai</xsl:text></scheme>
+                  <repositoryIdentifier><xsl:value-of select="$repIdentifier"/></repositoryIdentifier>
+                  <delimiter><xsl:text>:</xsl:text></delimiter>
+                  <sampleIdentifier><xsl:value-of select="$sampleIdentifier"/></sampleIdentifier>
+               </oai-identifier>
+           </description>
+        </Identify>
     </xsl:template>
 
 
     <!-- template for ListMetadataFormats  -->
     <xsl:template match="Documents" mode="ListMetadataFormats">
-        <xsl:element name="ListMetadataFormats">
-          <xsl:element name="metadataFormat">
-            <xsl:element name="metadataPrefix"><xsl:text>oai_dc</xsl:text></xsl:element>
-            <xsl:element name="schema"><xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc.xsd</xsl:text></xsl:element>
-            <xsl:element name="metadataNamespace"><xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc/</xsl:text></xsl:element>
-          </xsl:element>
-          <xsl:element name="metadataFormat">
-            <xsl:element name="metadataPrefix"><xsl:text>epicur</xsl:text></xsl:element>
-            <xsl:element name="schema"><xsl:text>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</xsl:text></xsl:element>
-            <xsl:element name="metadataNamespace"><xsl:text>urn:nbn:de:1111-2004033116</xsl:text></xsl:element>
-          </xsl:element>
-          <xsl:element name="metadataFormat">
-            <xsl:element name="metadataPrefix"><xsl:text>xMetaDiss</xsl:text></xsl:element>
-            <xsl:element name="schema"><xsl:text>http://www.d-nb.de/standards/xmetadiss/xmetadiss.xsd</xsl:text></xsl:element>
-            <xsl:element name="metadataNamespace"><xsl:text>http://www.d-nb.de/standards/xMetaDiss/</xsl:text></xsl:element>
-          </xsl:element>
-          <xsl:element name="metadataFormat">
-            <xsl:element name="metadataPrefix"><xsl:text>XMetaDissPlus</xsl:text></xsl:element>
-            <xsl:element name="schema"><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</xsl:text></xsl:element>
-            <xsl:element name="metadataNamespace"><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3</xsl:text></xsl:element>
-          </xsl:element>
-          <xsl:element name="metadataFormat">
-            <xsl:element name="metadataPrefix"><xsl:text>xMetaDissPlus</xsl:text></xsl:element>
-            <xsl:element name="schema"><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</xsl:text></xsl:element>
-            <xsl:element name="metadataNamespace"><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3</xsl:text></xsl:element>
-          </xsl:element>
-        </xsl:element>
+        <ListMetadataFormats>
+          <metadataFormat>
+            <metadataPrefix><xsl:text>oai_dc</xsl:text></metadataPrefix>
+            <schema><xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc.xsd</xsl:text></schema>
+            <metadataNamespace><xsl:text>http://www.openarchives.org/OAI/2.0/oai_dc/</xsl:text></metadataNamespace>
+          </metadataFormat>
+          <metadataFormat>
+            <metadataPrefix><xsl:text>epicur</xsl:text></metadataPrefix>
+            <schema><xsl:text>http://www.persistent-identifier.de/xepicur/version1.0/xepicur.xsd</xsl:text></schema>
+            <metadataNamespace><xsl:text>urn:nbn:de:1111-2004033116</xsl:text></metadataNamespace>
+          </metadataFormat>
+          <metadataFormat>
+            <metadataPrefix><xsl:text>xMetaDiss</xsl:text></metadataPrefix>
+            <schema><xsl:text>http://www.d-nb.de/standards/xmetadiss/xmetadiss.xsd</xsl:text></schema>
+            <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xMetaDiss/</xsl:text></metadataNamespace>
+          </metadataFormat>
+          <metadataFormat>
+            <metadataPrefix><xsl:text>XMetaDissPlus</xsl:text></metadataPrefix>
+            <schema><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</xsl:text></schema>
+            <metadataNamespace><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3</xsl:text></metadataNamespace>
+          </metadataFormat>
+          <metadataFormat>
+            <metadataPrefix><xsl:text>xMetaDissPlus</xsl:text></metadataPrefix>
+            <schema><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</xsl:text></schema>
+            <metadataNamespace><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3</xsl:text></metadataNamespace>
+          </metadataFormat>
+        </ListMetadataFormats>
     </xsl:template>
 
     <xsl:template match="Documents" mode="ListIdentifiers">
         <xsl:if test="count(Opus_Document) > 0">
-            <xsl:element name="ListIdentifiers">
+            <ListIdentifiers>
                 <xsl:apply-templates select="Opus_Document" /> 
                 <xsl:if test="$totalIds > 0">
-                    <xsl:element name = "resumptionToken">
+                    <resumptionToken>
                         <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
-                        <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/>
-                        </xsl:attribute><xsl:attribute name="cursor"><xsl:value-of select="$cursor"/>
-                        </xsl:attribute><xsl:value-of select="$res"/>
-                    </xsl:element>
+                        <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/></xsl:attribute>
+                        <xsl:attribute name="cursor"><xsl:value-of select="$cursor"/></xsl:attribute>
+                        <xsl:value-of select="$res"/>
+                    </resumptionToken>
                 </xsl:if>
-            </xsl:element>
+            </ListIdentifiers>
         </xsl:if>
     </xsl:template>
 
     <xsl:template match="Documents" mode="ListSets">
-        <xsl:element name="ListSets">
+        <ListSets>
             <xsl:apply-templates select="Opus_Sets" />
-        </xsl:element>
+        </ListSets>
     </xsl:template>
 
     <xsl:template match="Documents" mode="ListRecords">
         <xsl:if test="count(Opus_Document) > 0">
-            <xsl:element name="ListRecords">
+            <ListRecords>
             <xsl:apply-templates select="Opus_Document" />
                 <xsl:if test="$totalIds > 0">
-                    <xsl:element name = "resumptionToken">
+                    <resumptionToken>
                         <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
-                        <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/>
-                        </xsl:attribute><xsl:attribute name="cursor"><xsl:value-of select="$cursor"/>
-                        </xsl:attribute><xsl:value-of select="$res"/>
-                    </xsl:element>
+                        <xsl:attribute name="completeListSize"><xsl:value-of select="$totalIds"/></xsl:attribute>
+                        <xsl:attribute name="cursor"><xsl:value-of select="$cursor"/></xsl:attribute>
+                        <xsl:value-of select="$res"/>
+                    </resumptionToken>
                 </xsl:if>
-            </xsl:element>
+            </ListRecords>
         </xsl:if>
     </xsl:template>
 
     <xsl:template match="Documents" mode="GetRecord">
-        <xsl:element name="GetRecord">
+        <GetRecord>
             <xsl:apply-templates select="Opus_Document" />
-        </xsl:element>
+        </GetRecord>
     </xsl:template>
 
     <xsl:template match="Opus_Sets">
-        <xsl:element name="set">
-           <xsl:element name="setSpec"><xsl:value-of select="@Type"/></xsl:element>
-           <xsl:element name="setName"><xsl:value-of select="@TypeName"/></xsl:element>
-        </xsl:element>
+        <set>
+           <setSpec><xsl:value-of select="@Type"/></setSpec>
+           <setName><xsl:value-of select="@TypeName"/></setName>
+        </set>
     </xsl:template>    
 
 
@@ -265,16 +261,16 @@
            <xsl:call-template name="Opus_Document_Data"/>
          </xsl:when>
          <xsl:otherwise>
-           <xsl:element name="record">
+           <record>
              <xsl:call-template name="Opus_Document_Data"/>
-           </xsl:element>
+           </record>
          </xsl:otherwise>
       </xsl:choose>
     </xsl:template>       
 
 
     <xsl:template name="Opus_Document_Data">
-        <xsl:element name="header">
+        <header>
             <xsl:if test="@ServerState='deleted'">
                  <xsl:attribute name="status">
                     <xsl:text>deleted</xsl:text>
@@ -286,17 +282,17 @@
                 -->
             <xsl:choose>
               <xsl:when test="$oai_verb='GetRecord'">
-                <xsl:element name="identifier">
+                <identifier>
                     <xsl:value-of select="$oai_identifier" />
-                </xsl:element>
+                </identifier>
               </xsl:when>  
               <xsl:otherwise>  
-                <xsl:element name="identifier">
+                <identifier>
                     <xsl:text>oai:</xsl:text><xsl:value-of select="$repIdentifier" /><xsl:text>:</xsl:text><xsl:value-of select="@Id" />
-                </xsl:element>
+                </identifier>
                </xsl:otherwise> 
             </xsl:choose>
-                <xsl:element name="datestamp">
+                <datestamp>
                   <xsl:choose>
                     <xsl:when test="./ServerDateModified">
                         <xsl:value-of select="ServerDateModified/@Year"/>-<xsl:value-of select="format-number(ServerDateModified/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDateModified/@Day,'00')"/>    
@@ -305,14 +301,14 @@
                         <xsl:value-of select="ServerDatePublished/@Year"/>-<xsl:value-of select="format-number(ServerDatePublished/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDatePublished/@Day,'00')"/> 
                     </xsl:otherwise>   
                   </xsl:choose>
-                </xsl:element>
+                </datestamp>
             <xsl:apply-templates select="SetSpec" />
-            </xsl:element>
+            </header>
             <!-- choose the corresponding template depending on metadataPrefix -->
             <!-- not, when verb=ListIdentifiers -->
             <xsl:choose>
                  <xsl:when test="$oai_verb!='ListIdentifiers' and @ServerState!='deleted'">  
-                 <xsl:element name="metadata">
+                 <metadata>
                  <xsl:choose>
                     <xsl:when test="$oai_metadataPrefix='XMetaDissPlus'">
                        <xsl:apply-templates select="." mode="xmetadissplus" />
@@ -336,14 +332,14 @@
                        <xsl:apply-templates select="." mode="copy_xml" />
                     </xsl:when>
                  </xsl:choose>
-                 </xsl:element>
+                 </metadata>
             
             </xsl:when>
             </xsl:choose>            
     </xsl:template>
     
     <xsl:template match="SetSpec">
-       <xsl:element name="setSpec"><xsl:value-of select="@Value"/></xsl:element>
+       <setSpec><xsl:value-of select="@Value"/></setSpec>
     </xsl:template>         
     
 
