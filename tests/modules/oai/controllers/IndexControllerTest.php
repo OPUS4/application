@@ -277,13 +277,16 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         // Regression test for OPUSVIER-1865
         $xpath = $this->prepareXpathFromResultString($response->getBody());
         $elements = $xpath->query('//xMetaDiss:xMetaDiss/dc:creator');
-        $this->assertEquals(3, $elements->length);
+        $this->assertEquals(3, $elements->length,
+                "Unexpected dc:creator count");
 
         // Regression test for OPUSVIER-2164
         $elements = $xpath->query('//xMetaDiss:xMetaDiss/*/pc:person');
-        $this->assertEquals(4, $elements->length);
+        $this->assertEquals(4, $elements->length,
+                "Unexpected pc:person count");
         $elements = $xpath->query('//xMetaDiss:xMetaDiss/*/pc:person/pc:name');
-        $this->assertEquals(4, $elements->length);
+        $this->assertEquals(4, $elements->length,
+                "Unexpected pc:name count");
     }
 
     /**
