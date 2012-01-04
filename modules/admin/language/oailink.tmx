@@ -61,12 +61,21 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_oailink_example_listrecords">
+    <tu tuid="admin_oailink_example_listrecords_from">
       <tuv xml:lang="en">
-        <seg>OAI request with verb ListRecords</seg>
+        <seg>OAI request with verb ListRecords (with from-date)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>OAI Anfrage mit dem Verb ListRecords</seg>
+        <seg>OAI Anfrage mit dem Verb ListRecords (mit Anfangsdatum)</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_oailink_example_listrecords_set">
+      <tuv xml:lang="en">
+        <seg>OAI request with verb ListRecords (with OAI set)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>OAI Anfrage mit dem Verb ListRecords (mit OAI-Set)</seg>
       </tuv>
     </tu>
 
