@@ -151,6 +151,9 @@ class Home_IndexController extends Controller_Action {
 
     public function indexAction() {
         $this->_helper->mainMenu('home');
+        $finder = new Opus_DocumentFinder();
+        $finder->setServerState('published');
+        $this->view->totalNumOfDocs = $finder->count();
     }
 
 

@@ -117,5 +117,13 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertController('index');
         $this->assertAction('notice');
     }
+
+    /**
+     * Regression test for OPUSVIER-849
+     */
+    public function testStartPageContainsTotalNumOfDocs() {
+        $this->dispatch('/home');
+        $this->assertContains('(129)', $this->getResponse()->getBody());
+    }
 }
 
