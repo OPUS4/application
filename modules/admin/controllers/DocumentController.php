@@ -784,9 +784,6 @@ class Admin_DocumentController extends Controller_Action {
             case 'Opus_Subject':
                 $document->addSubject($model);
                 break;
-            case 'Opus_SubjectSwd':
-                $document->addSubjectSwd($model);
-                break;
             case 'Opus_Patent':
                 $document->addPatent($model);
                 break;
