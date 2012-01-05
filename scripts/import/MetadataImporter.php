@@ -235,6 +235,7 @@ class MetadataImporter {
         $this->console->log('... OK');
 
         // Enable user error handling while validating input file
+        libxml_clear_errors();
         libxml_use_internal_errors(true);
 
         $this->console->log("Validate XML file '$filename' ...");
