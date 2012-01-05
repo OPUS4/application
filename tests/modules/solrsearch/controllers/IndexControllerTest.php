@@ -275,7 +275,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-2144
      */
-    public function testLagePageUrlEqualsNextPageUrlDocTypeDoctoralThesis() {
+    public function testLastPageUrlEqualsNextPageUrlDocTypeDoctoralThesis() {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/doctoralthesis', null, null);
         $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/10/rows/10">'));
         $this->assertNotContains('solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/17/rows/10">', $this->getResponse()->getBody());
