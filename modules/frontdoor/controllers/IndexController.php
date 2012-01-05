@@ -114,7 +114,7 @@ class Frontdoor_IndexController extends Controller_Action {
                     ->appendHttpEquiv('Last-Modified', $dateModified->getDateTime()->format(DateTime::RFC1123));
         }
         $this->addMetaTagsForDocument($document);
-        $this->setFrontdoorTitleToDocumentTitle($document);
+        $this->view->title = $this->getFrontdoorTitle($document);
 
         $this->incrementStatisticsCounter($docId);
     }
@@ -153,33 +153,38 @@ class Frontdoor_IndexController extends Controller_Action {
         return $realm->checkFile($file_id);
     }
 
-    private function setFrontdoorTitleToDocumentTitle($document) {
+    /**
+     *
+     * @param Opus_Document $document
+     * @return string
+     */
+    private function getFrontdoorTitle($document) {
+        $titlesMain = $document->getTitleMain();
+        if (count($titlesMain) == 0) {
+            return '';
+        }
+
         $docLanguage = $document->getLanguage();
         $docLanguage = is_array($docLanguage) ? $docLanguage : array($docLanguage);
 
-        $titleStringMain = "";
-        $titleStringAlt = "";
+        $firstNonEmptyTitle = '';
 
-        foreach ($document->getTitleMain() AS $title) {
+        foreach ($titlesMain AS $title) {
             $titleValue = trim($title->getValue());
-            if (empty($titleValue)) {
+            if (strlen($titleValue) == 0) {
                 continue;
             }
 
             if (in_array($title->getLanguage(), $docLanguage)) {
-                $titleStringMain = $titleValue;
+                return $titleValue;
             }
-            else {
-                $titleStringAlt = $titleValue;
+
+            if ($firstNonEmptyTitle == '') {
+                $firstNonEmptyTitle = $titleValue;
             }
         }
 
-        if (!empty($titleStringMain)) {
-            $this->view->title = $titleStringMain;
-        }
-        elseif (!empty($titleStringAlt)) {
-            $this->view->title = $titleStringAlt;
-        }
+        return $firstNonEmptyTitle;
     }
 
     private function addMetaTagsForDocument($document) {
