@@ -396,9 +396,7 @@ class Publish_Model_Deposit {
                     $this->documentData[$subjectType . 'Language' . $counter] = "";
                 }
             
-            $addFunction = "add" . $subjectType;
-            $this->log->debug("addfunction: " . $addFunction);
-            $this->document->$addFunction($subject);
+            $this->document->addSubject($subject);
 
         }
     }
