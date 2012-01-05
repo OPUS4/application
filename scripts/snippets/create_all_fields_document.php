@@ -201,7 +201,7 @@ $doc->addPersonContributor($contributor);
 $doc->setCreatingCorporation('Walt Disney Creation Laboratories');
 $doc->setContributingCorporation('Pixar Animation Studio');
 
-$swd = $doc->addSubjectSwd();
+$swd = $doc->addSubject()->setType('swd');
 $swd->setValue('Test');
 
 $free_subject_deu = $doc->addSubjectUncontrolled();

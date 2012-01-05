@@ -220,23 +220,23 @@ $doc->setThesisPublisher($dnbInstitute);
 //
 // Subjects
 //
-$doc->addSubjectSwd()
+$doc->addSubject()->setType('swd')
    ->setValue(randString($counter++));
 
-foreach (array('addSubjectUncontrolled', 'addSubjectMSC', 'addSubjectDDC') AS $addMethod) {
-   $doc->$addMethod()
+foreach (array('uncontrolled', 'msc', 'ddc') AS $type) {
+   $doc->addSubject()->setType($type)
    ->setLanguage(randString($counter++))
    ->setValue(randString($counter++))
    ->setExternalKey(randString($counter++));
-   $doc->$addMethod()
+   $doc->addSubject()->setType($type)
    ->setLanguage("eng\0".randString($counter++))
    ->setValue(randString($counter++))
    ->setExternalKey(randString($counter++));
-   $doc->$addMethod()
+   $doc->addSubject()->setType($type)
    ->setLanguage("deu")
    ->setValue(randString($counter++))
    ->setExternalKey(randString($counter++));
-   $doc->$addMethod()
+   $doc->addSubject()->setType($type)
    ->setLanguage("eng")
    ->setValue(randString($counter++))
    ->setExternalKey(randString($counter++));

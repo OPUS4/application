@@ -59,7 +59,7 @@ for ($i = 1; $i < 10000; $i++) {
   $c = new Opus_Collection(15990 + ($i%103));
   $d->addCollection($c);
 
-  $s = $d->addSubjectDDC();
+  $s = $d->addSubject()->setType('ddc');
   $s->setValue($i%97);
 
   $docId = $d->store();
