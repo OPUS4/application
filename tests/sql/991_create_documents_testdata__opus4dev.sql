@@ -49,7 +49,9 @@ INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `mime_t
 (118, 93, 'test.txt', 'test.txt', 'text/plain', 'eng', 591, 1, 1),
 (119, 94, 'test.ps', 'test.ps', 'application/postscript', 'eng', 22041, 1, 1),
 (120, 95, 'test.html', 'test.html', 'text/html', 'eng', 847, 1, 1),
-(127, 91, 'test.txt', 'test.txt', 'text/plain', 'eng', 591, 1, 1);
+(127, 91, 'test.txt', 'test.txt', 'text/plain', 'eng', 591, 1, 1),
+(128, 91, 'frontdoor_invisible.txt', 'frontdoor_invisible.txt', 'text/plain', 'eng', 591, 0, 1),
+(129, 91, 'oai_invisible.txt', 'oai_invisible.txt', 'text/plain', 'eng', 591, 1, 0);
 
 INSERT INTO `file_hashvalues` (`file_id`, `type`, `value`) VALUES
 (116, 'MD5', '1ba50dc8abc619cea3ba39f77c75c0fe'),
