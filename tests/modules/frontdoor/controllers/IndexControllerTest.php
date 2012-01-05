@@ -203,20 +203,61 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     public function testFrontdoorTitleRespectsDocumentLanguageEng() {
         $d = new Opus_Document(146);
         $lang = $d->getLanguage();
-        $titles = $d->getTitleMain();
-        // change language and add a new title
         $d->setLanguage('eng');        
-        $d->addTitleMain()->setValue('VBOK')->setLanguage('fra');
         $d->store();
 
         $this->dispatch('/frontdoor/index/index/docId/146');
-        $this->assertContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
-        $this->assertNotContains('<title>OPUS 4 | VBOK</title>', $this->getResponse()->getBody());
+        $this->assertContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());        
         $this->assertNotContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
 
-        // restore
+        // restore language
         $d = new Opus_Document(146);
         $d->setLanguage($lang);
+        $d->store();
+    }
+
+    /**
+     * Regression test for OPUSVIER-2165
+     *
+     * if database does not contain a title in the document's language,
+     * the first title is used as page title
+     * 
+     */
+    public function testFrontdoorTitleRespectsDocumentLanguageWithoutCorrespondingTitle() {
+        $d = new Opus_Document(146);
+        $lang = $d->getLanguage();
+        $d->setLanguage('fra');
+        $d->store();
+
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertNotContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
+        $this->assertContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
+
+        // restore language
+        $d = new Opus_Document(146);
+        $d->setLanguage($lang);
+        $d->store();
+    }
+
+    /**
+     * Regression test for OPUSVIER-2165
+     *
+     * if database contains more than one title in the document's language,
+     * the first title is used as page title
+     */
+    public function testFrontdoorTitleRespectsDocumentLanguageMultipleCandidates() {
+        $d = new Opus_Document(146);
+        $titles = $d->getTitleMain();
+        $d->addTitleMain()->setValue('VBOK')->setLanguage('deu');
+        $d->store();
+
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertNotContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
+        $this->assertNotContains('<title>OPUS 4 | VBKO</title>', $this->getResponse()->getBody());
+        $this->assertContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
+
+        // restore titles
+        $d = new Opus_Document(146);
         $d->setTitleMain($titles);
         $d->store();
     }
