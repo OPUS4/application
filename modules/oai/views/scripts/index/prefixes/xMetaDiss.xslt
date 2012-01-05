@@ -337,17 +337,3 @@
 
 
 </xsl:stylesheet>
-
-
-<!-- folgende Felder sind unklar bzw. fehlen noch im Datenmodell bzw.
-     in der xml-Darstellung
-SubjectSwd : freie Schlagwoerter tauchen in der XML-Darstellung
-             doppelt auf, einmal als
-             SubjectSwd Type=uncontrolled  und zweitens als
-             SubjectUncontrolled
-             Welches soll ich nehmen? Wird eines wegfallen?
-             z.Zt. werden sie auch hier doppelt ausgegeben
-fileSize    ist bei den Attributen zum Feld file nicht dabei
-            hier z.Zt. FileSize benannt 
-
--->
