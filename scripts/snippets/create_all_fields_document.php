@@ -204,10 +204,10 @@ $doc->setContributingCorporation('Pixar Animation Studio');
 $swd = $doc->addSubject()->setType('swd');
 $swd->setValue('Test');
 
-$free_subject_deu = $doc->addSubjectUncontrolled();
+$free_subject_deu = $doc->addSubject()->setType('uncontrolled');
 $free_subject_deu->setLanguage('deu')->setValue('Maustest');
 
-$free_subject_eng = $doc->addSubjectUncontrolled();
+$free_subject_eng = $doc->addSubject()->setType('uncontrolled');
 $free_subject_eng->setLanguage('eng')->setValue('mouse test');
 
 $note1 = $doc->addNote();
