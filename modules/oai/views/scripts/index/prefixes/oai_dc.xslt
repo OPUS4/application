@@ -57,7 +57,7 @@
             <!-- dc:creator -->
             <xsl:apply-templates select="PersonAuthor" mode="oai_dc" />
             <!-- dc:subject -->
-            <xsl:apply-templates select="SubjectSwd" mode="oai_dc" />
+            <xsl:apply-templates select="Subject[@Type='swd']" mode="oai_dc" />
             <!-- dc:description -->
             <xsl:apply-templates select="TitleAbstract" mode="oai_dc" />
             <!-- dc:publisher -->
@@ -108,7 +108,7 @@
         </dc:creator>
     </xsl:template>
 
-    <xsl:template match="SubjectSwd" mode="oai_dc">
+    <xsl:template match="Subject[@Type='swd']" mode="oai_dc">
         <dc:subject>
             <xsl:if test="@language != ''">
               <xsl:attribute name="xml:lang">

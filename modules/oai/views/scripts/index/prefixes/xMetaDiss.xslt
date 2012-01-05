@@ -68,9 +68,9 @@
                 <xsl:apply-templates select="PersonAuthor" mode="xmetadiss" />
             </xsl:element>
             <!-- dc:subject -->
-            <xsl:apply-templates select="SubjectDdc" mode="xmetadiss" />
-            <xsl:apply-templates select="SubjectSwd" mode="xmetadiss" />
-            <xsl:apply-templates select="SubjectUncontrolled" mode="xmetadiss" />
+            <xsl:apply-templates select="Subject[@Type='ddc']" mode="xmetadiss" />
+            <xsl:apply-templates select="Subject[@Type='swd']" mode="xmetadiss" />
+            <xsl:apply-templates select="Subject[@Type='uncontrolled']" mode="xmetadiss" />
             <!-- dc:abstract -->
             <xsl:apply-templates select="TitleAbstract" mode="xmetadiss" />
             <!-- dc:publisher -->
@@ -204,21 +204,21 @@
         </xsl:element>
     </xsl:template>          
 
-    <xsl:template match="SubjectDdc" mode="xmetadiss">
+    <xsl:template match="Subject[@Type='ddc']" mode="xmetadiss">
         <xsl:element name="dc:subject">
             <xsl:attribute name="xsi:type"><xsl:text>xMetaDiss:DDC-SG</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="SubjectSwd" mode="xmetadiss">
+    <xsl:template match="Subject[@Type='swd']" mode="xmetadiss">
         <xsl:element name="dc:subject">
             <xsl:attribute name="xsi:type"><xsl:text>xMetaDiss:SWD</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="SubjectUncontrolled" mode="xmetadiss">
+    <xsl:template match="Subject[@Type='uncontrolled']" mode="xmetadiss">
         <xsl:element name="dc:subject">
             <xsl:attribute name="xsi:type"><xsl:text>xMetaDiss:noScheme</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />

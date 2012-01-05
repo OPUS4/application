@@ -63,8 +63,8 @@
             <!-- dc:title -->
             <xsl:apply-templates select="TitleMain" mode="oai_pp" />
             <!-- dc:subject -->
-            <xsl:apply-templates select="SubjectSwd" mode="oai_pp" />
-            <xsl:apply-templates select="SubjectUncontrolled" mode="oai_pp" />
+            <xsl:apply-templates select="Subject[@Type='swd']" mode="oai_pp" />
+            <xsl:apply-templates select="Subject[@Type='uncontrolled']" mode="oai_pp" />
             <!-- dc:abstract -->
             <xsl:apply-templates select="TitleAbstract" mode="oai_pp" />
             <!-- contributor, noch anpassen (Personen und Institutionen) -->
@@ -112,7 +112,7 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="SubjectSwd" mode="oai_pp">
+    <xsl:template match="Subject[@Type='swd']" mode="oai_pp">
         <xsl:element name="PP:DC.Subject">
             <xsl:attribute name="scheme">
                 <xsl:text>swd</xsl:text>
@@ -121,7 +121,7 @@
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="SubjectUncontrolled" mode="oai_pp">
+    <xsl:template match="Subject[@Type='uncontrolled']" mode="oai_pp">
         <xsl:element name="PP:DC.Subject">
             <xsl:attribute name="language">
                 <xsl:value-of select="@Language" />
