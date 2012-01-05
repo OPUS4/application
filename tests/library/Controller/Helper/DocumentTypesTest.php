@@ -40,8 +40,7 @@
 class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
 
     /**
-     * Instanz of DocumentTypes helper for testing.
-     * @var Controller_Helper_DocumentTypes
+     * @var Controller_Helper_DocumentTypes Instance of DocumentTypes helper for testing.
      */
     private $docTypeHelper;
 
@@ -52,8 +51,7 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         parent::setUp();
 
         $this->docTypeHelper =
-                Zend_Controller_Action_HelperBroker::getStaticHelper(
-                        'DocumentTypes');
+                Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
     }
 
     /**
@@ -176,6 +174,29 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
             $this->assertNotEquals($docType, $translate->translate($docType),
                     'Could not translate document type: ' . $docType);
         }
+    }
+
+    /**
+     * Regression test for OPUSVIER-2168
+     */
+    public function testValidateAllXMLDocumentTypeDefinitions() {
+        $iterator = new DirectoryIterator($this->docTypeHelper->getDocTypesPath());
+        
+        // Enable user error handling while validating input file
+        libxml_clear_errors();
+        libxml_use_internal_errors(true);
+        
+        foreach ($iterator as $fileinfo) {
+            if ($fileinfo->isFile()) {
+                $this->assertTrue($fileinfo->isReadable(), $fileinfo->getFilename() . ' is not readable');
+                
+                $xml = new DOMDocument();
+                $xml->load($fileinfo->getPathname());
+                $this->assertTrue($xml->schemaValidate(APPLICATION_PATH . '/library/Opus/Document/documenttype.xsd'), $fileinfo->getFilename() . ' is not valid');
+            }
+        }
+
+        libxml_clear_errors();
     }
 
 
