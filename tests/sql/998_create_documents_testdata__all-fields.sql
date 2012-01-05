@@ -1,10 +1,10 @@
-INSERT INTO `documents` VALUES
-(146,'2011-12-01',2009,'Baz University','Bar University','2010-11-02',1999,'masterthesis','1','3','deu',1,4,4,'draft','2007-04-30',2008,'Foo Publishing','Timbuktu','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00',NULL,'published','2',0);
+INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing_corporation`, `creating_corporation`, `thesis_date_accepted`, `thesis_year_accepted`, `type`, `edition`, `issue`, `language`, `page_first`, `page_last`, `page_number`, `publication_state`, `published_date`, `published_year`, `publisher_name`, `publisher_place`, `server_date_created`, `server_date_modified`, `server_date_published`, `server_date_deleted`, `server_state`, `volume`, `belongs_to_bibliography`) VALUES
+(146,'2011-12-01',2009,'Baz University','Bar University','2010-11-02',1999,'masterthesis','1','3','deu',1,4,4,'draft','2007-04-30',2008,'Foo Publishing','Timbuktu','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00',NULL,'published','2',1);
 
-INSERT INTO `document_enrichments` VALUES
+INSERT INTO `document_enrichments` (`id`, `document_id`, `key_name`, `value`) VALUES
 (1,146,'LegalNotices','Köln');
 
-INSERT INTO `document_identifiers` VALUES
+INSERT INTO `document_identifiers` (`id`, `document_id`, `type`, `value`) VALUES
 (499,146,'old','123'),
 (500,146,'serial','123'),
 (501,146,'uuid','123'),
@@ -22,15 +22,15 @@ INSERT INTO `document_identifiers` VALUES
 (513,146,'pmid','123'),
 (514,146,'arxiv','123');
 
-INSERT INTO `document_notes` VALUES
+INSERT INTO `document_notes` (`id`, `document_id`, `message`, `visibility`) VALUES
 (17,146,'Für die Öffentlichkeit','public'),
 (18,146,'Für den Admin','private');
 
-INSERT INTO `document_subjects` VALUES
+INSERT INTO `document_subjects` (`id`, `document_id`, `language`, `type`, `value`, `external_key`) VALUES
 (319,146,'deu','swd','Berlin',NULL),
 (320,146,'deu','uncontrolled','Palmöl',NULL);
 
-INSERT INTO `document_title_abstracts` VALUES
+INSERT INTO `document_title_abstracts` (`id`, `document_id`, `type`, `value`, `language`) VALUES
 (263,146,'main','KOBV','deu'),
 (264,146,'main','COLN','eng'),
 (265,146,'abstract','Die KOBV-Zentrale in Berlin-Dahlem.','deu'),
@@ -40,7 +40,7 @@ INSERT INTO `document_title_abstracts` VALUES
 (269,146,'sub','Service Center','eng'),
 (270,146,'additional','Kooperativer Biblioheksverbund Berlin-Brandenburg','deu');
 
-INSERT INTO `link_documents_collections` VALUES
+INSERT INTO `link_documents_collections` (`document_id`, `collection_id`, `role_id`) VALUES
 (146,16007,1),
 (146,2,2),
 (146,63,2),
@@ -51,17 +51,17 @@ INSERT INTO `link_documents_collections` VALUES
 (146,7871,6),
 (146,13944,7);
 
-INSERT INTO `link_documents_dnb_institutes` VALUES
+INSERT INTO `link_documents_dnb_institutes` (`document_id`, `dnb_institute_id`, `role`) VALUES
 (146,1,'grantor'),
 (146,2,'publisher');
 
-INSERT INTO `link_documents_licences` VALUES
+INSERT INTO `link_documents_licences` (`document_id`, `licence_id`) VALUES
 (146,4);
 
-INSERT INTO `link_documents_series` VALUES
+INSERT INTO `link_documents_series` (`document_id`, `series_id`, `number`) VALUES
 (146,1,'3a');
 
-INSERT INTO `persons` VALUES
+INSERT INTO `persons` (`id`, `academic_title`, `date_of_birth`, `email`, `first_name`, `last_name`, `place_of_birth`) VALUES
 (258,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
 (259,NULL,NULL,'doe@example.org','John','Doe',NULL),
 (260,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
@@ -70,7 +70,7 @@ INSERT INTO `persons` VALUES
 (263,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
 (264,'PhD','1970-01-01',NULL,'Jane','Doe','New York');
 
-INSERT INTO `link_persons_documents` VALUES
+INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_order`, `allow_email_contact`) VALUES
 (258,146,'advisor',1,0),
 (259,146,'author',1,1),
 (260,146,'contributor',1,0),
@@ -79,17 +79,17 @@ INSERT INTO `link_persons_documents` VALUES
 (263,146,'translator',1,0),
 (264,146,'submitter',1,0);
 
-INSERT INTO `document_patents` VALUES
+INSERT INTO `document_patents` (`id`, `document_id`, `countries`, `date_granted`, `number`, `year_applied`, `application`) VALUES
 (1,146,'DDR','1970-1-1T0:00:00CET','1234',1970,'The foo machine.');
 
-INSERT INTO `document_files` VALUES
+INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `comment`, `mime_type`, `language`, `file_size`, `visible_in_frontdoor`, `visible_in_oai`, `embargo_date`) VALUES
 (126,146,'test.pdf','foo-pdf','foo-pdf file','application/pdf','deu',8817,1,1,NULL);
 
-INSERT INTO `file_hashvalues` VALUES
+INSERT INTO `file_hashvalues` (`file_id`, `type`, `value`) VALUES
 (126,'md5','1ba50dc8abc619cea3ba39f77c75c0fe'),
 (126,'sha512','24bb2209810bacb3f9c05e08a08aec9ead4ac606fdc7c9d6c5fadffcf66f1e56396fdf46424cf52ef916f9e51f8178fb618c787f952d35aaf6d9079bbc9a50ad');
 
-INSERT INTO `access_files` VALUES
+INSERT INTO `access_files` (`role_id`, `file_id`) VALUES
 (1,126),
 (2,126),
 (4,126);
