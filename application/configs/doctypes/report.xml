@@ -63,7 +63,7 @@
         <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
     </field>
 	<field name="CreatingCorporation" required="no" formelement="Text" datatype="Text" multiplicity="1" />
-    <field name="PageNumber" required="no" formelement="Text" datatype="Integer" multiplicity="1" />    
+    <field name="PageNumber" required="no" formelement="Text" datatype="Text" multiplicity="1" />    
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Text" multiplicity="5" />
     <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="1"/>
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Text" multiplicity="1" />
