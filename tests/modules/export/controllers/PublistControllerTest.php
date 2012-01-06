@@ -34,8 +34,22 @@
 
 class Export_PublistControllerTest extends ControllerTestCase {
 
+    public function setUp() {
+        parent::setUp();
+
+        // create empty (!) export.xml in tests/workspace/export
+	$handle = fopen(APPLICATION_PATH . '/tests/workspace/export/export.xml', 'w');
+        fclose($handle);
+    }
+
+    public function tearDown() {
+        // remove empty export.xml in tests/workspace/export
+	unlink(APPLICATION_PATH . '/tests/workspace/export/export.xml');
+        
+        parent::tearDown();
+    }
+
     public function testIndexActionWithoutStyle() {
-        $this->markTestIncomplete("fix export.xml first (See OPUSVIER-715 and OPUSVIER-2196).");
         $this->dispatch('/export/publist/');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
@@ -43,7 +57,6 @@ class Export_PublistControllerTest extends ControllerTestCase {
     }
 
     public function testIndexActionWithUnsupportedStyle() {
-        $this->markTestIncomplete("fix export.xml first (See OPUSVIER-715 and OPUSVIER-2196).");
         $this->dispatch('/export/publist/index/style/unsuppored');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
@@ -51,7 +64,6 @@ class Export_PublistControllerTest extends ControllerTestCase {
     }
 
     public function testIndexActionWithoutAuthor() {
-        $this->markTestIncomplete("fix export.xml first (See OPUSVIER-715 and OPUSVIER-2196).");
         $this->dispatch('/export/publist/index/style/test/author/');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
