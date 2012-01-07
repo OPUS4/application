@@ -34,6 +34,20 @@
 
 class Export_PublistControllerTest extends ControllerTestCase {
 
+    public static function setUpBeforeClass() {
+        parent::setUpBeforeClass();
+
+        $pathToExportDir = APPLICATION_PATH . '/tests/workspace/export';
+
+        if (!is_readable($pathToExportDir)) {
+            throw new Exception($pathToExportDir . ' is not readable');
+        }
+
+        if (file_exists($pathToExportDir . '/export.xml')) {
+            throw new Exception($pathToExportDir . '/export.xml already exists');
+        }
+    }
+
     public function setUp() {
         parent::setUp();
 
@@ -47,13 +61,6 @@ class Export_PublistControllerTest extends ControllerTestCase {
 	unlink(APPLICATION_PATH . '/tests/workspace/export/export.xml');
         
         parent::tearDown();
-    }
-
-    public function  assertPreConditions() {
-        parent::assertPreConditions();
-
-        $this->assertTrue(is_readable(APPLICATION_PATH . '/tests/workspace/export'));
-        $this->assertFalse(file_exists(APPLICATION_PATH . '/tests/workspace/export/export.xml'));
     }
 
     public function testIndexActionWithoutStyle() {
