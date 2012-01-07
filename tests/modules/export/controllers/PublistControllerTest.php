@@ -49,6 +49,13 @@ class Export_PublistControllerTest extends ControllerTestCase {
         parent::tearDown();
     }
 
+    public function  assertPreConditions() {
+        parent::assertPreConditions();
+
+        $this->assertTrue(is_readable(APPLICATION_PATH . '/tests/workspace/export'));
+        $this->assertFalse(file_exists(APPLICATION_PATH . '/tests/workspace/export/export.xml'));
+    }
+
     public function testIndexActionWithoutStyle() {
         $this->dispatch('/export/publist/');
         $this->assertResponseCode(500);

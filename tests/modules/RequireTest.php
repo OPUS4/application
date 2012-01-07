@@ -97,10 +97,4 @@ class RequireTest extends PHPUnit_Framework_TestCase {
             require_once($file);
         }
     }
-
-    public function testDirWorkspaceExportIsEmpty() {
-        $this->assertTrue(is_readable(APPLICATION_PATH . '/tests/workspace/export'));
-        $this->assertFalse(file_exists(APPLICATION_PATH . '/tests/workspace/export/export.xml'));     
-    }
-
 }
