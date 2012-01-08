@@ -192,7 +192,13 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
                 
                 $xml = new DOMDocument();
                 $xml->load($fileinfo->getPathname());
-                $this->assertTrue($xml->schemaValidate(APPLICATION_PATH . '/library/Opus/Document/documenttype.xsd'), $fileinfo->getFilename() . ' is not valid');
+		$result = $xml->schemaValidate(APPLICATION_PATH . '/library/Opus/Document/documenttype.xsd');
+		if ($fileinfo->getFilename() == 'demo_invalid.xml') {
+                   $this->assertFalse($result, $fileinfo->getFilename() . ' is valid');
+		}
+		else {
+                   $this->assertTrue($result, $fileinfo->getFilename() . ' is not valid');
+		}
             }
         }
 
