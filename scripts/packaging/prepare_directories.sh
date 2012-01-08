@@ -76,8 +76,14 @@ else
   touch RELEASE_NOTES.txt
 fi
 
+#
+# exclude files and directories
+#
+
 rm -rv opus4/{nbproject,tests,workspace}
 rm -rvf opus4/public/layouts/{opus33,opus34,darker,matheon,plain,opus4-matheon}
+
+# exclude test document types
 rm -v opus4/modules/publish/views/scripts/form/preprintmatheon.phtml
 rm -v opus4/application/configs/doctypes/preprintmatheon.xml
 rm -v opus4/modules/publish/views/scripts/form/demo.phtml
@@ -86,11 +92,19 @@ rm -v opus4/modules/publish/views/scripts/form/collections.phtml
 rm -v opus4/application/configs/doctypes/collections.xml
 rm -v opus4/modules/publish/views/scripts/form/talkzib.phtml
 rm -v opus4/application/configs/doctypes/talkzib.xml
+rm -v opus4/application/configs/doctypes/demo_invalid.xml
+
+# exclude modules
 rm -rv opus4/modules/{remotecontrol,matheon}
 rm -rv opus4/scripts/{packaging,cron,indexing,install}
+
+# exclude framework classes
 rm -rvf opus4/library/Opus/Search/{Adapter,Index}/Lucene/
+
+# exclude certain testdata
 rm -rvf testdata/sql/992_create_documents_testdata__security.sql
 rm -rvf testdata/sql/990_create_documents_testdata__hhhar.sql
+
 
 #
 # Prepare libs/symlinks
