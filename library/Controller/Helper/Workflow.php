@@ -118,13 +118,6 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
      */
     public function changeState($document, $targetState) {
         switch ($targetState) {
-            case 'published':
-                $document->setServerState($targetState);
-                $date = new Zend_Date();
-                $document->setServerDatePublished(
-                        $date->get('yyyy-MM-ddThh:mm:ss') . 'Z');
-                $document->store();
-                break;
             case 'deleted':
                 $document->delete();
                 break;
