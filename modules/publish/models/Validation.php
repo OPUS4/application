@@ -279,9 +279,12 @@ class Publish_Model_Validation {
         }
     }
 
-    private function _collectionSelect() {
+    private function _collectionSelect(){
         $browsingHelper1 = new Solrsearch_Model_CollectionRoles();
-        $collectionRole = Opus_CollectionRole::fetchByOaiName($this->collectionRole);
+        $collectionRole = Opus_CollectionRole::fetchByName($this->collectionRole);
+        if (is_null($collectionRole))
+            return null;
+                
         if ($collectionRole->getVisible() == '1') {
             $children = array();
             if (!is_null($collectionRole)) {
@@ -398,7 +401,7 @@ class Publish_Model_Validation {
     private function getSets() {
         $sets = array();
         if (empty($this->sets)) {
-            foreach ($dbSets = Opus_DocumentSets::getAll() as $set) {
+            foreach ($dbSets = Opus_Series::getAll() as $set) {
 
                     $title = $set->getTitle();
                     $id = $set->getId();
