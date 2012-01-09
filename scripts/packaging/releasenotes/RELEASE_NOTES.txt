@@ -28,12 +28,21 @@ Ihrer OPUS4-Instanz und -Datenbank vor dem Update.
 Kapitel 9.7 "Sammlungen verwalten" beschreibt, welche OAI-Einstellungen die
 Collections besitzen und wie diese manuell geändert werden können.
 
-h3. Änderungen bzgl. Schriftenreihen
+h3. Migration der sammlungsbasierten Schriftenreihen
 
-Die Schriftenreihen wurden neu konzipiert. Das Update-Script führt für die (alte) Collection Role series folgende Änderungen durch:
-* Collection Role series wird unsichtbar gesetzt (alle vier visible-Felder werden auf 0 gesetzt)
-* alle Collections in dieser Role werden unsichtbar gesetzt
-* Identifier serial (wurde bislang für die Bandnummer verwendet) wird für alle Dokumente gelöscht, die mindestens einer Collection der Role series zugeordnet sind
+Die Schriftenreihen wurden neu modelliert. Es gibt ab sofort ein separtes
+Modell für die Abbildung von Schriftenreihen. Der Umweg über die Sammlung mit
+dem Namen _series_ entfällt damit ab sofort. Im Rahmen des Updates auf die
+Version 4.2.0 werden die Schriftenreihen, die in der Sammlung series abgelegt
+wurden, auf das neue Modell migriert. Nach der Migration wird die Sammlung
+series auf unsichtbar gesetzt (alle vier Sichtbarkeitsattribute). Ebenso werden
+alle in ihr gespeicherten Schriftenreihen als unsichtbar markiert. Für die einer
+Schriftenreihe zugeordneten Dokumente wird jeweils der Identifier _serial_ 
+im Rahmen des Updates entfernt. Dieser wurde bislang zur Speicherung der 
+Bandnummer benutzt. 
+
+Die Sammlung _series_ kann nach dem Update gelöscht werden, wenn die
+Übernahme der Daten in das neue Schriftenreihen-Modell akzeptiert wird.
 
 h2. ======================== Release 4.1.4 2011-10-18 ========================
 
