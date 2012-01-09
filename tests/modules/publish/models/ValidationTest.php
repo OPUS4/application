@@ -270,5 +270,15 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $collectionRole->setVisible($visibleFlag);
         $collectionRole->store();
     }
+    
+    /**
+     * Regression Test for Ticket https://wiki.kobv.de/jira/browse/OPUSVIER-2209           
+     */     
+    public function testNonExistingCollectionRole() {
+        $collRole = 'irgendwas';
+        $val = new Publish_Model_Validation('Collection', $collRole);
+        
+        $this->assertNull($val->selectOptions());
+    }
 }
 
