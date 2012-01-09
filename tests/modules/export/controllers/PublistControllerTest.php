@@ -29,7 +29,7 @@
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: PublistControllerTest.php 9112 2011-10-13 10:07:40Z gmaiwald $
+ * @version     $Id$
  */
 
 class Export_PublistControllerTest extends ControllerTestCase {

@@ -28,7 +28,7 @@
  * @author      Gunar Maiwald <szott@zib.de>
  * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: export_all_docs.php 9044 2011-10-13 16:11:16Z gmaiwald $
+ * @version     $Id$
  */
 
 
