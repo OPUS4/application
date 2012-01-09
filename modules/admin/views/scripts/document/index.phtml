@@ -248,7 +248,7 @@
         <?PHP foreach($this->document->getLicence() as $index => $licence) : ?>
 
         <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
-            <div class=""Licence">
+            <div class="Licence">
                 <span class="Licence"><?=$index + 1?>.</span>
                 <span class="Licence"><a href="<?=htmlspecialchars($licence->getLinkLicence())?>"><?=htmlspecialchars($licence->getNameLong())?></a></span>
             </div>
@@ -321,6 +321,26 @@
         <?PHP endforeach; ?>
 
     </fieldset>
+
+        <fieldset class="overview">
+
+            <legend>
+                <?= $this->translate('admin_document_section_series')?>
+                <?PHP /* <span class="editLink">
+                    <a href="<?=$this->editUrls['series']?>"><?=$this->editLabels['series']?></a>
+                </span> */ ?>
+            </legend>
+
+            <?PHP foreach($this->document->getSeries() as $index => $series) : ?>
+
+            <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
+                <span class="label"><?= htmlspecialchars($series->getTitle())?></span>
+                <span class="value"><?= htmlspecialchars($series->getNumber())?></span>
+            </div>
+
+            <?PHP endforeach; ?>
+
+        </fieldset>
 
         <fieldset class="overview">
 
