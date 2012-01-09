@@ -355,15 +355,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="subject_msc_facet_heading">
-            <tuv xml:lang="en">
-                <seg>MSC</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>MSC</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="project_facet_heading">
             <tuv xml:lang="en">
                 <seg>Project</seg>
