@@ -28,6 +28,12 @@ Ihrer OPUS4-Instanz und -Datenbank vor dem Update.
 Kapitel 9.7 "Sammlungen verwalten" beschreibt, welche OAI-Einstellungen die
 Collections besitzen und wie diese manuell geändert werden können.
 
+h3. Änderungen bzgl. Schriftenreihen
+
+Die Schriftenreihen wurden neu konzipiert. Das Update-Script führt für die (alte) Collection Role series folgende Änderungen durch:
+* Collection Role series wird unsichtbar gesetzt (alle vier visible-Felder werden auf 0 gesetzt)
+* alle Collections in dieser Role werden unsichtbar gesetzt
+* Identifier serial (wurde bislang für die Bandnummer verwendet) wird für alle Dokumente gelöscht, die mindestens einer Collection der Role series zugeordnet sind
 
 h2. ======================== Release 4.1.4 2011-10-18 ========================
 
