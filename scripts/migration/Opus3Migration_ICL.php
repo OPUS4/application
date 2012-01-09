@@ -42,6 +42,7 @@ set_include_path('.' . PATH_SEPARATOR
 
 require_once 'Opus3InstituteImport.php';
 require_once 'Opus3CollectionsImport.php';
+require_once 'Opus3SeriesImport.php';
 require_once 'Opus3LicenceImport.php';
 require_once 'Opus3RoleImport.php';
 
@@ -77,9 +78,7 @@ class Opus3Migration_ICL {
     public function create_collection_roles() {
 
         $roles = array(
-            //"Institute" => array("name" => "institutes", "position" => 1),
             "Collections" => array("name" => "collections", "position" => 9),
-            //"Sammlungen" => array("name" => "series", "position" => 10)
         );
 
         foreach ($roles as $r) {
@@ -104,10 +103,6 @@ class Opus3Migration_ICL {
         $root = $role->addRootCollection()->setVisible(1);
         $root->store();
 
-        $role = Opus_CollectionRole::fetchByName('series');
-        $root = $role->addRootCollection()->setVisible(1);
-        $root->store();
-
     }
 
     private function setStylesheet() {
@@ -115,9 +110,16 @@ class Opus3Migration_ICL {
         $this->xslt = 'institute_structure.xslt';
     }
 
-    // Import collections and series
+    // Import collections
     public function load_collections() {
         $import = new Opus3CollectionsImport($this->importData);
+        $import->start();
+        $import->finalize();
+    }
+
+    // Import series
+    public function load_series() {
+        $import = new Opus3SeriesImport($this->importData);
         $import->start();
         $import->finalize();
     }
@@ -164,6 +166,9 @@ class Opus3Migration_ICL {
 
         // Load Collections
         $this->load_collections();
+
+        // Load Series
+        $this->load_series();
 
         // Load Institutes
         $this->load_institutes();

@@ -82,15 +82,11 @@ class Opus3CollectionsImport {
 
     public function start() {
         $collRole = Opus_CollectionRole::fetchByName('collections');
-        $seriesRole = Opus_CollectionRole::fetchByName('series');
 
         $doclist = $this->data->getElementsByTagName('table_data');
 	foreach ($doclist as $document)	{
             if ($document->getAttribute('name') === 'collections') {
                 $this->importCollectionsDirectly($document, $collRole);
-            }
-            if ($document->getAttribute('name') === 'schriftenreihen') {
-                $this->importSeries($document, $seriesRole);
             }
 	}
     }
@@ -222,44 +218,6 @@ class Opus3CollectionsImport {
         }
 	fclose($fp);
 
-    }
-
-
-    /**
-     * Imports Series from Opus3 to Opus4
-     *
-     * @param DOMDocument $data XML-Document to be imported
-     * @return array List of documents that have been imported
-     */
-    protected function importSeries($data, $role) {
-        $mf = $this->config->import->mapping->series;
-        $fp = null;
-        try {
-            $fp = @fopen($mf, 'w');
-            if (!$fp) {
-                throw new Exception("Could not create '" . $mf . "' for Series");
-            }
-        } catch (Exception $e){
-            $this->logger->log_error("Opus3CollectionsImport", $e->getMessage());
-            return;
-        }
-             
-        $classification = $this->transferOpusClassification($data);
-        foreach ($classification as $class) {
-            if (array_key_exists('name', $class) === false) { continue; }
-            if (array_key_exists('sr_id', $class) === false) { continue; }
-            //echo ".";
-            $root = $role->getRootCollection();
-            $coll = $root->addLastChild();
-            $coll->setVisible(1);
-            $coll->setName($class['name']);
-            $root->store();
-
-            $this->logger->log_debug("Opus3CollectionsImport","Series imported: " . $class['name']);
-
-            fputs($fp, $class['sr_id'] . ' ' . $coll->getId() . "\n");
-        }
-	fclose($fp);
     }
 
     /**

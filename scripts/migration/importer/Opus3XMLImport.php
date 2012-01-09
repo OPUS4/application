@@ -246,13 +246,8 @@ class Opus3XMLImport {
             }
 
             foreach ($this->series as $s) {
-                $coll = new Opus_Collection($s[0]);
-                $coll->setVisible(1);
-                $coll->store();
-                $identifierSerial = new Opus_Identifier();
-                $identifierSerial->setValue($s[1]);
-                $doc->addIdentifierSerial($identifierSerial);
-                $doc->addCollection($coll);
+                $series = new Opus_Series($s[0]);
+                $doc->addSeries($series)->setNumber($s[1]);
             }
 
             //$this->logger->log_debug("Opus3XMLImport", "(3):".$this->completeXML->saveXML($this->document));
