@@ -2129,6 +2129,44 @@
             </tuv>
         </tu>
 
+        <!-- Keys for Opus_Series -->
+
+        <tu tuid="Title">
+            <tuv xml:lang="en">
+                <seg>Title</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Titel</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Publisher">
+            <tuv xml:lang="en">
+                <seg>Publisher</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Verlag</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Issn">
+            <tuv xml:lang="en">
+                <seg>ISSN</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>ISSN</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Infobox">
+            <tuv xml:lang="en">
+                <seg>Info</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Info</seg>
+            </tuv>
+        </tu>
+
     </body>
 
 </tmx>

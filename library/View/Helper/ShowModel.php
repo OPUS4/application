@@ -94,7 +94,7 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
         }
         $result = '';
         foreach ($modeldata as $field => $value) {
-            if (true === empty($value) 
+            if (true === empty($value)
                     || (count($value) === 1
                     && is_array($value) === true
                     && is_string($value[0]) === true
@@ -155,6 +155,9 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
         }
         else if (stripos($field, 'subject') !== false) {
             return 'Subject';
+        }
+        else if ($field === 'Title') {
+            return 'General';
         }
         else if (stripos($field, 'title') !== false) {
             return 'Title';

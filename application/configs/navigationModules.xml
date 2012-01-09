@@ -67,7 +67,7 @@
                     <controller>index</controller>
                     <action>index</action>
                 </review>
-                
+
                 <accounts>
                     <type>mvc</type>
                     <label>admin_security_title_accounts</label>
@@ -117,8 +117,8 @@
                         </update>
                     </pages>
                 </accounts>
-                
-                
+
+
         	<security>
                     <type>mvc</type>
                     <label>admin_title_security</label>
@@ -287,6 +287,38 @@
                     <controller>collectionroles</controller>
                     <action>index</action>
                 </collections>
+
+                <series>
+                    <type>mvc</type>
+                    <label>admin_title_series</label>
+                    <description>admin_title_series_description</description>
+                    <module>admin</module>
+                    <controller>series</controller>
+                    <action>index</action>
+                    <pages>
+                        <show>
+                            <type>mvc</type>
+                            <label>admin_series_show</label>
+                            <module>admin</module>
+                            <controller>series</controller>
+                            <action>show</action>
+                        </show>
+                        <new>
+                            <type>mvc</type>
+                            <label>admin_series_show</label>
+                            <module>admin</module>
+                            <controller>series</controller>
+                            <action>new</action>
+                        </new>
+                        <edit>
+                            <type>mvc</type>
+                            <label>admin_series_show</label>
+                            <module>admin</module>
+                            <controller>series</controller>
+                            <action>edit</action>
+                        </edit>
+                    </pages>
+                </series>
 
                 <languages>
                     <type>mvc</type>

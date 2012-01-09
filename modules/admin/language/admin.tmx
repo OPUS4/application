@@ -1,10 +1,10 @@
 <?xml version="1.0" ?>
 <!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
 <tmx version="1.4">
- 
+
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
- 
+
   <body>
 
     <tu tuid="admin_index_title">
@@ -15,7 +15,7 @@
         <seg>Administration</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_title_configuration">
       <tuv xml:lang="en">
         <seg>Configure</seg>
@@ -24,7 +24,7 @@
         <seg>Konfiguration</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_title_indexbuild">
       <tuv xml:lang="en">
         <seg>Build Lucene index</seg>
@@ -33,13 +33,13 @@
         <seg>Luceneindex aufbauen</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_title_collections">
       <tuv xml:lang="en">
-        <seg>Manage Collections</seg>
+        <seg>Collections</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sammlungen verwalten</seg>
+        <seg>Sammlungen</seg>
       </tuv>
     </tu>
 
@@ -51,7 +51,25 @@
         <seg>Sammlungen erstellen, editieren und löschen.</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="admin_title_series">
+      <tuv xml:lang="en">
+        <seg>Series</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schriftenreihen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_series_description">
+      <tuv xml:lang="en">
+        <seg>Create, edit, and delete series.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schriftenreihen erstellen, editieren und löschen.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_title_person">
       <tuv xml:lang="en">
         <seg>Person data</seg>
@@ -60,7 +78,7 @@
         <seg>Personendaten verwalten</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_title_licence">
       <tuv xml:lang="en">
         <seg>Licence types</seg>
@@ -69,7 +87,7 @@
         <seg>Lizenzen verwalten</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_title_licence_description">
       <tuv xml:lang="en">
         <seg>Add, edit or remove licences.</seg>
@@ -87,7 +105,7 @@
         <seg>Organisatorische Einheiten (Institute, Fakultäten, ...) verwalten</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_title_organizational_units_edit">
       <tuv xml:lang="en">
         <seg>Organization tree</seg>
@@ -96,7 +114,7 @@
         <seg>Organisationsbaum verwalten</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_title_documents">
       <tuv xml:lang="en">
         <seg>Manage Documents</seg>
@@ -105,7 +123,7 @@
         <seg>Dokumente verwalten</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_title_documents_description">
       <tuv xml:lang="en">
         <seg>Edit document metadata. Delete documents and manage files.</seg>
@@ -123,7 +141,7 @@
         <seg>Sprachen verwalten</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_title_languages_description">
       <tuv xml:lang="en">
         <seg>Add, edit or remove languages. Activate or deactivate languages.</seg>
@@ -141,7 +159,7 @@
         <seg>Veröffentlichungsstatistik</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_title_statistic_description">
       <tuv xml:lang="en">
         <seg>Shows publication statistics for individual years.</seg>
@@ -232,7 +250,7 @@
         <seg>Editieren</seg>
       </tuv>
     </tu>
-   
+
     <tu tuid="admin_form_action_delete">
       <tuv xml:lang="en">
         <seg>Delete</seg>
@@ -297,5 +315,5 @@
     </tu>
 
   </body>
-  
+
 </tmx>
