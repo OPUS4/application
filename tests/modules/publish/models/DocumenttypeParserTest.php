@@ -32,47 +32,77 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Publish_Model_DocumenttypeParserTest extends ControllerTestCase {
 
-         
     /**
      * @expectedException Application_Exception
      */
     public function testConstructorWithWrongDom() {
-        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('irgendwas');         
+        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('irgendwas');
         $model = new Publish_Model_DocumenttypeParser($dom, null);
         $this->assertNull($model->dom);
     }
-    
-    
+
     public function testConstructorWithCorrectDom() {
-        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');         
+        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
         $model = new Publish_Model_DocumenttypeParser($dom, null);
         $this->assertType('DOMDocument', $model->dom);
-    }    
-    
+    }
+
     /**
      * @expectedException Publish_Model_FormSessionTimeoutException
      */
     public function testConstructorWithCorrectDomAndWrongForm() {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'irgendwas';
-        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');         
+        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
         $form = new Publish_Form_PublishingSecond();
-        $model = new Publish_Model_DocumenttypeParser($dom, $form);        
-        $this->assertType('DOMDocument', $model->dom);        
+        $model = new Publish_Model_DocumenttypeParser($dom, $form);
+        $this->assertType('DOMDocument', $model->dom);
     }
-    
+
     public function testConstructorWithCorrectDomAndCorrectForm() {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
-        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');         
+        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
         $form = new Publish_Form_PublishingSecond();
-        $model = new Publish_Model_DocumenttypeParser($dom, $form);        
+        $model = new Publish_Model_DocumenttypeParser($dom, $form);
         $this->assertType('DOMDocument', $model->dom);
         $this->assertType('Publish_Form_PublishingSecond', $model->form);
     }
-    
-    
+
+    /**
+     * @expectedException Publish_Model_FormIncorrectFieldNameException
+     */
+    public function testInccorectFieldName() {
+
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'preprint';
+        
+        /* @var $dom DomDocument */
+        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('all');
+        $this->assertType('DOMDocument', $dom);
+
+        foreach ($dom->getElementsByTagname('documenttype') as $rootNode) {
+
+            $domElement = $dom->createElement('field');
+            $domAttribute = $dom->createAttribute('name');
+            
+            // Value for the created attribute
+            $domAttribute->value = 'wrong.name';
+
+            // Don't forget to append it to the element
+            $domElement->appendChild($domAttribute);
+
+            // Append it to the document itself
+            $rootNode->appendChild($domElement);
+            $dom->saveXML();
+        }
+
+        $form = new Publish_Form_PublishingSecond();
+        
+        $model = new Publish_Model_DocumenttypeParser($dom, $form);
+        $model->parse();
+    }
+
 }

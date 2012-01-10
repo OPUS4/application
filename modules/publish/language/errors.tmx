@@ -364,6 +364,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="publish_incorrect_field_name">
+      <tuv xml:lang="en">
+        <seg>Incorrect fieldname %value% caused by illegal characters.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Inkorrekter Feldname %value% : es wurden nicht erlaubte Zeichen verwendet.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="publish_form_second_timeout_parsing">
       <tuv xml:lang="en">
         <seg>Session Timeout. Please start publishing process again.</seg>

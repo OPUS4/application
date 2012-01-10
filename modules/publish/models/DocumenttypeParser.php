@@ -33,11 +33,6 @@
  * @version     $Id$
  */
 
-/**
- * Description of DocumenttypeParser
- *
- * @author Susanne Gottwald
- */
 class Publish_Model_DocumenttypeParser {
 
     private $log;
@@ -131,7 +126,10 @@ class Publish_Model_DocumenttypeParser {
                 $this->currentElement->setCurrentCollectionId();
             }
             
+            $this->zendConformElementName($elementName);
+                
             $this->currentElement->setElementName($elementName);
+            
             if ($required === 'yes')
                 $this->currentElement->setRequired(true);
             else
@@ -267,5 +265,20 @@ class Publish_Model_DocumenttypeParser {
         return $this->formElements;
     }
 
+    /**
+     * @return true if string can be used as zend_form_element name, else Exception
+     * 
+     */    
+    public function zendConformElementName($string){
+       
+        $element = new Zend_Form_Element_Text($string);
+        $element->setName($string);
+        
+        if ($element->getName() !== $string)
+            throw new Publish_Model_FormIncorrectFieldNameException($string);
+        
+        return true;
+        
+    }
 }
 

@@ -106,7 +106,16 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             // TODO: Need another exception class?
             throw new Publish_Model_FormSessionTimeoutException();
         }
-        $parser = new Publish_Model_DocumenttypeParser($dom, $this);
+        
+        try {
+                $parser = new Publish_Model_DocumenttypeParser($dom, $this);
+            }
+            catch (Publish_Model_FormIncorrectFieldNameException $e) {
+                $this->log->err('Wrong field name: '. $e->fieldName);
+                throw new Publish_Model_FormIncorrectFieldNameException($e->fieldName);
+            }
+            
+        
         $this->log->debug("Parser created");
         $parser->setAdditionalFields($this->additionalFields);
         $parser->setPostValues($this->postData);
