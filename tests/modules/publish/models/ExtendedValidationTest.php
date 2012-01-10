@@ -48,8 +48,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonAuthorLastName1' => '',
             'CompletedDate' => '06.09.2011',
             'Language' => 'deu',
-            'Licence' => 'ID:4',
-            'EnrichmentLegalNotices' => '1'
+            'Licence' => 'ID:4'
         );
 
         $val = new Publish_Model_ExtendedValidation($form, $data);
@@ -73,8 +72,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonAuthorAllowEmailContact1' => '',
             'CompletedDate' => '06.09.2011',
             'Language' => 'deu',
-            'Licence' => 'ID:4',
-            'EnrichmentLegalNotices' => '1'
+            'Licence' => 'ID:4'
         );
 
         $val = new Publish_Model_ExtendedValidation($form, $data);
@@ -148,7 +146,6 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
 //            'TitleMainLanguage1' => 'deu',
 //            'TitleMain2' => 'Entenhausen Extended',
 //            'TitleMainLanguage2' => 'deu',
-//            'EnrichmentLegalNotices' => '1',
 //            'Language' => 'deu',
 //            'addMoreTitleMain' => "Einen weiteren Titel hinzufügen"
 //        );
@@ -170,8 +167,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
 //            'TitleMain1' => 'Entenhausen',
 //            'TitleMainLanguage1' => 'eng',                        
 //            'CompletedDate' => '06.09.2011',
-//            'Language' => 'deu',
-//            'EnrichmentLegalNotices' => '1'
+//            'Language' => 'deu'
 //        );
 //
 //        $val = new Publish_Model_ExtendedValidation($form, $data);
