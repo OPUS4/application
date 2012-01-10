@@ -307,7 +307,7 @@ class Opus3XMLImport {
         array_push($roles, array('TitleSub', 'Value'));
         array_push($roles, array('TitleAdditional', 'Value'));
 
-        array_push($roles, array('SubjectUncontrolled', 'Value'));
+        array_push($roles, array('Subject', 'Value'));
         array_push($roles, array('IdentifierIsbn', 'Value'));
 	array_push($roles, array('Enrichment', 'Value'));
 
@@ -384,7 +384,7 @@ class Opus3XMLImport {
     }
 
     private function mapElementLanguage() {
-        $tagnames = array('TitleMain', 'TitleAbstract', 'TitleAdditional', 'SubjectSwd', 'SubjectUncontrolled');
+        $tagnames = array('TitleMain', 'TitleAbstract', 'TitleAdditional', 'Subject');
         $oa = $this->mapping['language'];
         foreach ($tagnames as $tag) {
             $elements = $this->document->getElementsByTagName($tag);

@@ -408,7 +408,7 @@
             <!-- Subjects -->
             <xsl:if test="string-length(normalize-space(field[@name='subject_swd'])) > 0">
                 <xsl:call-template name="AddSubjects">
-                    <xsl:with-param name="type">SubjectSwd</xsl:with-param>
+                    <xsl:with-param name="type">swd</xsl:with-param>
                     <xsl:with-param name="list">
                         <xsl:value-of select="field[@name='subject_swd']" />
                     </xsl:with-param>
@@ -426,7 +426,7 @@
             </xsl:if>
             <xsl:if test="string-length(normalize-space(field[@name='subject_uncontrolled_german'])) > 0">
                 <xsl:call-template name="AddSubjects">
-                    <xsl:with-param name="type">SubjectUncontrolled</xsl:with-param>
+                    <xsl:with-param name="type">uncontrolled</xsl:with-param>
                     <xsl:with-param name="list">
                         <xsl:value-of select="field[@name='subject_uncontrolled_german']" />
                     </xsl:with-param>
@@ -444,7 +444,7 @@
             </xsl:if>
             <xsl:if test="string-length(normalize-space(field[@name='subject_uncontrolled_english'])) > 0">
                 <xsl:call-template name="AddSubjects">
-                    <xsl:with-param name="type">SubjectUncontrolled</xsl:with-param>
+                    <xsl:with-param name="type">uncontrolled</xsl:with-param>
                     <xsl:with-param name="list">
                         <xsl:value-of select="field[@name='subject_uncontrolled_english']" />
                     </xsl:with-param>
@@ -773,9 +773,9 @@
         <xsl:variable name="first" select="substring-before($newlist, $delimiter)" />
         <xsl:variable name="remaining" select="substring-after($newlist, $delimiter)" />
         <xsl:call-template name="AddSubject">
-             <xsl:with-param name="type" select="$type" />
-             <xsl:with-param name="subject" select="$first" />
              <xsl:with-param name="language" select="$language" />
+             <xsl:with-param name="type" select="$type" />
+             <xsl:with-param name="value" select="$first" />
         </xsl:call-template>
         <xsl:if test="$remaining">
             <xsl:call-template name="AddSubjects">
@@ -788,15 +788,18 @@
     </xsl:template>
     
     <xsl:template name="AddSubject">
-        <xsl:param name="type" required="yes" />
-        <xsl:param name="subject" required="yes" />
         <xsl:param name="language" required="yes" />
-        <xsl:element name="{$type}">
+        <xsl:param name="type" required="yes" />
+        <xsl:param name="value" required="yes" />
+        <xsl:element name="Subject">
             <xsl:attribute name="OldLanguage">
                 <xsl:value-of select="$language" />
             </xsl:attribute>
+            <xsl:attribute name="Type">
+                <xsl:value-of select="$type" />
+            </xsl:attribute>
             <xsl:attribute name="Value">
-                <xsl:value-of select="$subject" />
+                <xsl:value-of select="$value" />
             </xsl:attribute>
         </xsl:element>
     </xsl:template>
