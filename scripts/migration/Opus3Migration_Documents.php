@@ -131,13 +131,13 @@ class Opus3Migration_Documents {
 
             $result = $xmlImporter->import($document);
             if ($result['result'] === 'success') {
-                $this->logger->log_debug("Opus3Migration_Documents", "Successfully imported old ID " . $result['oldid'] . " with new ID " . $result['newid'] . " -- memory $mem_now (KB), peak memory $mem_peak (KB)");
+                $this->logger->log_debug("Opus3Migration_Documents", "Successfully imported old ID '" . $result['oldid'] . "' with new ID '" . $result['newid'] . "' -- memory $mem_now (KB), peak memory $mem_peak (KB)");
                 array_push($this->doclist, $result['newid']);
                 if (array_key_exists('roleid', $result))  {
                     $this->role[$result['newid']] = $result['roleid'];
                 }
             } else if ($result['result'] === 'failure') {
-                $this->logger->log_error("Opus3Migration_Documents", $result['message'] . " for old ID " . $result['oldid'] . "\n" . $result['entry']);
+                $this->logger->log_error("Opus3Migration_Documents", $result['message'] . " for old ID '" . $result['oldid'] . "'\n" . $result['entry']);
             }
         }
 
