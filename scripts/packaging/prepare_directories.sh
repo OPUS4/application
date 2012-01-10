@@ -93,6 +93,7 @@ rm -v opus4/application/configs/doctypes/collections.xml
 rm -v opus4/modules/publish/views/scripts/form/talkzib.phtml
 rm -v opus4/application/configs/doctypes/talkzib.xml
 rm -v opus4/application/configs/doctypes/demo_invalid.xml
+rm -v opus4/application/configs/doctypes/demo_invalidfieldname.xml
 
 # exclude modules
 rm -rv opus4/modules/{remotecontrol,matheon}
