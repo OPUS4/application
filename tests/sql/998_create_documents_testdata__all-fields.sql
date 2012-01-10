@@ -2,7 +2,7 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 (146,'2011-12-01',2009,'Baz University','Bar University','2010-11-02',1999,'masterthesis','1','3','deu',1,4,4,'draft','2007-04-30',2008,'Foo Publishing','Timbuktu','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00',NULL,'published','2',1);
 
 INSERT INTO `document_enrichments` (`id`, `document_id`, `key_name`, `value`) VALUES
-(1,146,'LegalNotices','Köln');
+(1,146,'validtestkey','Köln');
 
 INSERT INTO `document_identifiers` (`id`, `document_id`, `type`, `value`) VALUES
 (499,146,'old','123'),

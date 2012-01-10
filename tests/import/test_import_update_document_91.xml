@@ -65,7 +65,7 @@ Bibliothek d.h. besitzt und verleiht keine Medien.</abstract>
     </series>
     
     <enrichments>
-      <enrichment key="LegalNotices">Köln</enrichment>
+      <enrichment key="validtestkey">Köln</enrichment>
     </enrichments>
     
     

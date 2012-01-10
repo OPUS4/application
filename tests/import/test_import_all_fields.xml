@@ -100,7 +100,7 @@
     </series>
     
     <enrichments>
-      <enrichment key="LegalNotices">Köln</enrichment>
+      <enrichment key="validtestkey">Köln</enrichment>
     </enrichments>    
     
     <licences>
