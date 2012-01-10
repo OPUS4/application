@@ -124,11 +124,15 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
             throw new Application_Exception('Unable to load invalid document type "' . $documentType . '"');
         }
 
-        $xmlFile = $this->getDocTypesPath() . DIRECTORY_SEPARATOR . $documentType . ".xml";
-
         $dom = new DOMDocument();
+        $dom->load($this->getDocTypesPath() . DIRECTORY_SEPARATOR . $documentType . '.xml');
 
-        $dom->load($xmlFile);
+        // clear libxml error buffer
+        libxml_clear_errors();
+        
+        if (!$dom->schemaValidate(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'Opus' .  DIRECTORY_SEPARATOR . 'Document' . DIRECTORY_SEPARATOR . 'documenttype.xsd')) {
+            throw new Exception('given xml document type definition for document type ' . $documentType . ' is not valid');
+        }
 
         return $dom;
     }
