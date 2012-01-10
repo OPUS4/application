@@ -138,7 +138,7 @@ class Form_Builder {
                         case 'PageFirst':
                         case 'PageLast':
                         case 'PageNumber':
-                            if (empty($value)) {
+                            if (strlen(trim($value)) === 0) {
                                 $values[$key] = null;
                             }
                             break;
@@ -279,7 +279,7 @@ class Form_Builder {
         }
 
         $timestamp = $model->getUnixTimestamp();
-        if (empty($timestamp)) {
+        if (strlen(trim($timestamp)) === 0) {
             $widget->setValue(null);
         }
         else {
@@ -437,23 +437,45 @@ class Form_Builder {
         $valueModelClass = $field->getValueModelClass();
         $linkModelClass = $field->getLinkModelClass();
 
-        // If getter returns no value, initialize new values if field is
-        // mandatory, since null-values will be ignored.
-        if (true === empty($fieldValues) and (true === $field->isMandatory())) {
-            if (false === is_null($linkModelClass)) {
-                $fieldValues = new $linkModelClass;
-                $target = new $valueModelClass;
-                $fieldValues->setModel($target);
+        if (true === is_array($fieldValues)) {
+            // If getter returns no value, initialize new values if field is
+            // mandatory, since null-values will be ignored.
+            if (true === empty($fieldValues) and (true === $field->isMandatory())) {
+                if (false === is_null($linkModelClass)) {
+                    $fieldValues = new $linkModelClass;
+                    $target = new $valueModelClass;
+                    $fieldValues->setModel($target);
+                }
+                else if (false === is_null($valueModelClass)) {
+                    $fieldValues = new $valueModelClass;
+                }
+                else {
+                    $fieldValues = '';
+                }
             }
-            else if (false === is_null($valueModelClass)) {
-                $fieldValues = new $valueModelClass;
-            }
-            else {
+            else if (true === empty($fieldValues) and (true === is_null($field->getValueModelClass()))) {
                 $fieldValues = '';
             }
         }
-        else if (true === empty($fieldValues) and (true === is_null($field->getValueModelClass()))) {
-            $fieldValues = '';
+        else {
+            // If getter returns no value, initialize new values if field is
+            // mandatory, since null-values will be ignored.
+            if ((strlen(trim($fieldValues)) === 0) and (true === $field->isMandatory())) {
+                if (false === is_null($linkModelClass)) {
+                    $fieldValues = new $linkModelClass;
+                    $target = new $valueModelClass;
+                    $fieldValues->setModel($target);
+                }
+                else if (false === is_null($valueModelClass)) {
+                    $fieldValues = new $valueModelClass;
+                }
+                else {
+                    $fieldValues = '';
+                }
+            }
+            else if (is_null($fieldValues) and (true === is_null($field->getValueModelClass()))) {
+                $fieldValues = '';
+            }
         }
 
         // Construct value array if neccessary
