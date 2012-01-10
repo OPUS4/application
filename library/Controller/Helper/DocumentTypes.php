@@ -187,40 +187,23 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
      *
      * @return array
      *
-     * TODO try catch around IO operations?
      */
     protected function _getDocTypeFileNames() {
         $docTypesPath = $this::getDocTypesPath();
 
+        if (!is_dir($docTypesPath) || !is_readable($docTypesPath)) {
+            throw new Exception('could not read document type definitions');
+        }
+
         $files = array();
-
-        $dirHandle = opendir($docTypesPath);
-
-        if ($dirHandle) {
-            while (($file = readdir($dirHandle)) !== false) {
-                // ignore non-Xml files
-                if (preg_match("/.xml$/", $file) === 0) {
-                    continue;
-                }
-
-                $path_parts = pathinfo($file);
-
-                $filename = $path_parts['filename'];
-                $basename = $path_parts['basename'];
-                $extension = $path_parts['extension'];
-
-                if (($basename !== '.') and ($basename !== '..') and ($extension === 'xml')) {
-                    $files[$filename] = $filename;
+        foreach (new DirectoryIterator($docTypesPath) as $fileinfo) {
+            if ($fileinfo->isFile()) {
+                if (strrchr($fileinfo->getBaseName(), '.') == '.xml') {
+                    array_push($files, $fileinfo->getBaseName('.xml'));
                 }
             }
-            closedir($dirHandle);
         }
-        else {
-            // TODO throw something
-        }
-
         asort($files);
-
         return $files;
     }
 
