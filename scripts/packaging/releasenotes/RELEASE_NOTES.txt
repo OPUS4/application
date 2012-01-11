@@ -44,6 +44,17 @@ Bandnummer benutzt.
 Die Sammlung _series_ kann nach dem Update gelöscht werden, wenn die
 Übernahme der Daten in das neue Schriftenreihen-Modell akzeptiert wird.
 
+h3. Änderung in der Verarbeitung der XML-basierten Dokumenttypdefinitionen
+
+Mit OPUS 4.2.0 werden die XML-basierten Dokumenttypdefinitionen (im Verzeichnis
+$BASEDIR/opus4/applications/config/doctypes) gegen das XML-Schema validiert,
+das im Verzeichnis $BASEDIR/opus4/library/Opus/Document/documenttype.xsd
+abgelegt ist. Einzelheiten dazu sind in Kapitel 8.4.6 der OPUS4-Dokumentation
+aufgeführt. Wir empfehlen im Rahmen des Updates auf OPUS 4.2.0 sämtliche
+Dokumenttypdefinitionen auf Schema-Konformität zu testen, um so sicherzustellen,
+dass die Dokumenttypen weiterhin im Publikationsformular benutzt werden können.
+
+
 h2. ======================== Release 4.1.4 2011-10-18 ========================
 
 h3. Änderungen an Dateien im benutzerdefinierten Layout-Verzeichnis
