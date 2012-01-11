@@ -39,7 +39,7 @@ class Publish_Model_Validation {
     public $institutes = array();
     public $projects = array();
     public $licences = array();
-    public $sets = array();
+    public $series = array();
     public $languages = array();
     public $log;
     public $sessionP;
@@ -88,7 +88,7 @@ class Publish_Model_Validation {
             case 'List' : $this->validator = $this->_validateList();
                 break;
 
-            case 'Set' : $this->validator = $this->_validateSet();
+            case 'Series' : $this->validator = $this->_validateSeries();
                 break;
 
             case 'ThesisGrantor' : $this->validator = $this->_validateThesis(true);
@@ -103,6 +103,10 @@ class Publish_Model_Validation {
             case 'Collection' :
             case 'CollectionLeaf' :
             case 'Enrichment' :
+            case 'Subject' :
+            case 'Reference' :
+            case 'Person' :
+            case 'Note' :
             case 'Text' :
             case 'Title': $this->validator = null;
                 break;
@@ -177,9 +181,9 @@ class Publish_Model_Validation {
         }
     }
 
-    private function _validateSet() {
+    private function _validateSeries() {
         $validators = array();
-        $sets = array_keys($this->getSets());
+        $sets = array_keys($this->getSeries());
         if (is_null($sets))
             return null;
         else {
@@ -248,7 +252,7 @@ class Publish_Model_Validation {
             $switchVar = $datatype;
         else
             $switchVar = $this->datatype;
-
+                
         switch ($switchVar) {
             case 'Collection':
             case 'CollectionLeaf' :
@@ -270,7 +274,7 @@ class Publish_Model_Validation {
             case 'ThesisPublisher' : return $this->_thesisSelect();
                 break;
 
-            case 'Set' : return $this->_setSelect();
+            case 'Series' : return $this->_seriesSelect();
                 break;
 
             default :
@@ -330,8 +334,8 @@ class Publish_Model_Validation {
         return $data;
     }
 
-    private function _setSelect() {
-        $sets = $this->getSets();
+    private function _seriesSelect() {
+        $sets = $this->getSeries();
         if (isset($sets) && count($sets) >= 1) {
             $data = $sets;
         } else {
@@ -398,20 +402,20 @@ class Publish_Model_Validation {
      * return the available documents sets from database or chache
      * @return <Array> sets
      */
-    private function getSets() {
+    private function getSeries() {
         $sets = array();
-        if (empty($this->sets)) {
-            foreach ($dbSets = Opus_Series::getAll() as $set) {
+        if (empty($this->series)) {
+            foreach ($dbSeries = Opus_Series::getAll() as $set) {
 
                     $title = $set->getTitle();
                     $id = $set->getId();
                     $sets["ID:" . $id] = $title;
 
             }
-            $this->sets = $sets;
+            $this->series = $sets;
             return $sets;
         } else
-            return $this->sets;
+            return $this->series;
     }
 
     /**
