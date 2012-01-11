@@ -41,7 +41,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
     /**
      * Configuration.
      *
-     * @var <type>
+     * @var Zend_Config
      */
     private $config;
 
@@ -66,38 +66,30 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         if (isset($this->docTypes)) {
             return $this->docTypes;
         }
-        else {
-            $allDocTypes = $this->_getDocTypeFileNames();
+        
+        $allDocTypes = $this->_getDocTypeFileNames();
+        $docTypes = $allDocTypes;
 
-            $include = $this->_getIncludeList();
+        $include = $this->_getIncludeList();
 
-            // include all or only listed document types
-            if (!empty($include)) {
-                $docTypes = array();
+        // include only listed document types
+        if (!empty($include)) {
+            $docTypes = array();
 
-                foreach ($include as $docType) {
-                    if (array_search($docType, $allDocTypes)) {
-                        $docTypes[$docType] = $docType;
-                    }
+            foreach ($include as $docType) {
+                if (array_search($docType, $allDocTypes)) {
+                    $docTypes[$docType] = $docType;
                 }
             }
-            else {
-                $docTypes = $allDocTypes;
-            }
-
-            $exclude = $this->_getExcludeList();
-
-            // remove all listed document types
-            if (!empty($exclude)) {
-                foreach ($exclude as $docType) {
-                    unset($docTypes[$docType]);
-                }
-            }
-
-            $this->docTypes = $docTypes;
-
-            return $docTypes;
         }
+
+        // remove all listed document types
+        foreach ($this->_getExcludeList() as $docType) {
+            unset($docTypes[$docType]);
+        }
+
+        $this->docTypes = $docTypes;
+        return $docTypes;
     }
 
     /**
@@ -107,9 +99,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
      * @return boolean
      */
     public function isValid($documentType) {
-        $docTypes = $this->getDocumentTypes();
-
-        return array_key_exists($documentType, $docTypes);
+        return array_key_exists($documentType, $this->getDocumentTypes());
     }
 
     /**
@@ -199,7 +189,8 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         foreach (new DirectoryIterator($docTypesPath) as $fileinfo) {
             if ($fileinfo->isFile()) {
                 if (strrchr($fileinfo->getBaseName(), '.') == '.xml') {
-                    array_push($files, $fileinfo->getBaseName('.xml'));
+                    $filename = $fileinfo->getBaseName('.xml');
+                    $files[$filename] = $filename;                    
                 }
             }
         }
@@ -222,19 +213,9 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
      */
     protected function _getIncludeList() {
         if (!isset($this->config->documentTypes->include)) {
-            return null;
+            return array();
         }
-
-        $include = $this->config->documentTypes->include;
-
-        $result = null;
-
-        if (!empty($include)) {
-            $result = explode(",", $include);
-            Util_Array::trim($result);
-        }
-
-        return $result;
+        return $this->_getList($this->config->documentTypes->include);
     }
 
     /**
@@ -243,18 +224,14 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
      */
     protected function _getExcludeList() {
         if (!isset($this->config->documentTypes->exclude)) {
-            return null;
+            return array();
         }
+        return $this->_getList($this->config->documentTypes->exclude);
+    }
 
-        $exclude = $this->config->documentTypes->exclude;
-
-        $result = null;
-
-        if (!empty($exclude)) {
-            $result = explode(",", $exclude);
-            Util_Array::trim($result);
-        }
-
+    private function _getList($str) {
+        $result = explode(',', $str);
+        Util_Array::trim($result);
         return $result;
     }
 
