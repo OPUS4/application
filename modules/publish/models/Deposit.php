@@ -62,84 +62,76 @@ class Publish_Model_Deposit {
 
     private function _storeDocumentData() {
 
-        foreach ($this->documentData as $dataKey => $dataValue) {
-            $datasetType = $this->_getDatasetType($dataKey);
-
-            if (isset($datasetType) && !empty($datasetType)) {
-                $this->log->debug("Wanna store a " . $datasetType . "!");
-                $this->log->debug("dataKey: " . $dataKey . " AND dataValue " . $dataValue);
-                $storeMethod = "_prepare" . $datasetType . "Object";
-
-                $this->$storeMethod($dataKey, $dataValue);
-            }
-            else {
-                $this->log->debug("wanna store something else...");
-
-                if (strstr($dataKey, 'Date')) {
-                    if (!is_null($dataValue) and $dataValue !== "")
-                        $dataValue = $this->_castStringToOpusDate($dataValue);
-                }
-
-                if ($this->document->hasMultipleValueField($dataKey)) {
-
-                    if ($dataKey === 'Language') {
-                        $file = $this->document->getFile();
-                        $file->setLanguage($dataValue);
-                    }
-
-                    // store an external field with adder
-                    $function = "add" . $dataKey;
-                    $this->log->debug("external field with adder function: " . $function);
-                    $addedValue = $this->document->$function();
-                    $addedValue->setValue($dataValue);
-                    $this->log->debug("with value: " . $dataValue);
-                }
-                else {
-
-                    //store an internal field with setter
-                    $function = "set" . $dataKey;
-                    $this->log->debug("internal field with setter function: " . $function);
-                    $addedValue = $this->document->$function($dataValue);
-                    $this->log->debug("with value: " . $dataValue);
+        foreach ($this->documentData as $dataKey => $dataEntry) {                        
+            $datasetType = $dataEntry['datatype'];            
+            $dataValue = $dataEntry['value']; 
+            $dataSubfield = $dataEntry['subfield']; 
+                        
+            $this->log->debug("Store -- " . $datasetType . " --");
+            $this->log->debug("Name: " . $dataKey . " : Value " . $dataValue . " (" . $dataSubfield . ")");
+            
+            if (!$dataSubfield) {
+                            
+                switch ($datasetType) {
+                    case 'Person' : $this->preparePersonObject($dataKey, $dataValue);
+                        break;
+                    case 'Title' : $this->prepareTitleObject($dataKey, $dataValue);
+                        break;
+                    case 'Subject' : $this->storeSubjectObject($dataKey, $dataValue);
+                        break;
+                    case 'Note' : $this->storeNoteObject($dataValue);
+                        break;
+                    case 'Collection' :
+                    case 'CollectionLeaf' : $this->storeCollectionObject($dataValue);
+                        break;
+                    case 'Licence' : $this->storeLicenceObject($dataValue);
+                        break;
+                    case 'ThesisGrantor' : $this->storeThesisObject($dataValue, true);
+                        break;
+                    case 'ThesisPublisher' : $this->storeThesisObject($dataValue, false);
+                        break;
+                    case 'Identifier' : $this->storeIdentifierObject($dataKey, $dataValue);
+                        break;
+                    case 'Reference' : $this->storeReferenceObject($dataKey, $dataValue);
+                        break;
+                    case 'Enrichment' : $this->storeEnrichmentObject($dataKey, $dataValue);
+                        break;  
+                    case 'Series' : $this->storeSeriesObject($dataValue);
+                        break;
+                    
+                    default: 
+                        $this->log->debug("Want to store a internal field: type = " . $datasetType . " name = " . $dataKey . " value = " . $dataValue);
+                        $this->storeInternalValue($datasetType, $dataKey, $dataValue);               
                 }
             }
         }
     }
 
-    /**
-     * get the dataset type of the current post data key (used to store the post data in db)
-     * @param <String> $dataKey
-     * @return <String> Type or ""
-     */
-    private function _getDatasetType($dataKey) {
-        if (strstr($dataKey, 'Person'))
-            return 'Person';
-        else if (strstr($dataKey, 'Title'))
-            return 'Title';
-        else if (strstr($dataKey, 'Subject'))
-            return 'Subject';
-        else if (strstr($dataKey, 'Note'))
-            return 'Note';
-        else if (strstr($dataKey, 'Project') || strstr($dataKey, 'Institute') || strstr($dataKey, 'Collection'))
-            return 'Collection';
-        else if (strstr($dataKey, 'Licence'))
-            return 'Licence';
-        else if (strstr($dataKey, 'ThesisGrantor') || strstr($dataKey, 'ThesisPublisher'))
-            return 'Thesis';
-        else if (strstr($dataKey, 'Identifier'))
-            return 'Identifier';
-        else if (strstr($dataKey, 'Reference'))
-            return 'Reference';
-        else if (strstr($dataKey, 'Patent'))
-            return 'Patent';
-        else if (strstr($dataKey, 'Enrichment'))
-            return 'Enrichment';
-        else if (strstr($dataKey, 'Series'))
-            return 'Series';
+    private function storeInternalValue($datasetType, $dataKey, $dataValue) {
 
-        return "";
+        if ($datasetType === 'Date') {
+            if (!is_null($dataValue) and $dataValue !== "")
+                $dataValue = $this->castStringToOpusDate($dataValue);
+        }
+
+        //external Field
+        if ($this->document->hasMultipleValueField($dataKey)) {
+
+            if ($dataKey === 'Language') {
+                $file = $this->document->getFile();
+                $file->setLanguage($dataValue);
+            }            
+            $function = "add" . $dataKey;            
+            $addedValue = $this->document->$function();
+            $addedValue->setValue($dataValue);            
+        }
+        //internal Fiels
+        else {            
+            $function = "set" . $dataKey;            
+            $this->document->$function($dataValue);            
+        }
     }
-
+        
     /**
      * Method to retrieve a possible counter from key name. The counter can be the last character of an data key.
      * Counter > 0 is returned if last character is a integer. Else 0 is returned.
@@ -157,24 +149,54 @@ class Publish_Model_Deposit {
                 return (int) $lastChar;
         return 0;
     }
-
+    
     /**
-     * Method finds out which type of person or title is given by removing unneccesary chars.
-     * @param <type> $dataKey
-     * @param <type> $removeString
-     * @return <type>
+     * Method returns which type of person is given
+     * @param <String> $dataKey     
+     * @return <String> Type of Person
      */
-    private function getObjectType($dataKey, $removeString) {
-        $pos = strpos($dataKey, $removeString);
-        if ($pos !== false)
-            return substr($dataKey, 0, $pos);
+    private function getPersonType($dataKey) {
+        $dataKey = strtolower($dataKey);
+        if (strstr($dataKey, 'author'))
+                return 'Author';
+        else if (strstr($dataKey, 'submitter'))
+                return 'Submitter';
+        else if (strstr($dataKey, 'referee'))
+                return 'Referee';
+        else if (strstr($dataKey, 'editor'))
+                return 'Editor';
+        else if  (strstr($dataKey, 'advisor'))
+                return 'Advisor';
+        else if  (strstr($dataKey, 'translator'))
+                return 'Translator';
+        else if  (strstr($dataKey, 'contributor'))
+                return 'Contributor';        
     }
-
+    
+    /**
+     * Method returns which type of title is given
+     * @param <String> $dataKey
+     * @return <String> Type of Title
+     */
+    private function getTitleType($dataKey) {
+        $dataKey = strtolower($dataKey);
+        if (strstr($dataKey, 'main'))
+                return 'Main';
+        else if (strstr($dataKey, 'abstract'))
+                return 'Abstract';
+        else if (strstr($dataKey, 'sub'))
+                return 'Sub';
+        else if (strstr($dataKey, 'additional'))
+                return 'Additional';
+        else if (strstr($dataKey, 'parent'))
+                return 'Parent';        
+    }
+    
     /**
      * @param String $date
      * @return Opus_Date
      */
-    private function _castStringToOpusDate($date) {
+    private function castStringToOpusDate($date) {
         return new Opus_Date(new Zend_Date($date));
     }
 
@@ -183,12 +205,8 @@ class Publish_Model_Deposit {
      * @param <type> $dataKey
      * @param <type> $dataValue
      */
-    private function _preparePersonObject($dataKey = null, $dataValue = null) {
-        //String can be changed here        
-        $last = "LastName";
-
-        if (strstr($dataKey, $last)) {
-            $type = $this->getObjectType($dataKey, $last);
+    private function preparePersonObject($dataKey = null, $dataValue = null) {            
+            $type = 'Person' . $this->getPersonType($dataKey);
             $this->log->debug("Person type:" . $type);
 
             $counter = $this->getCounter($dataKey);
@@ -199,7 +217,7 @@ class Publish_Model_Deposit {
 
             // person model
             $this->storePersonAttribute($person, $type, 'FirstName', 'first', $counter);
-            $this->storePersonAttribute($person, $type, $last, 'last', $counter);
+            $this->storePersonAttribute($person, $type, 'LastName', 'last', $counter);
             $this->storePersonAttribute($person, $type, 'Email', 'email', $counter);
             $this->storePersonAttribute($person, $type, 'PlaceOfBirth', 'pob', $counter);
             $this->storePersonAttribute($person, $type, 'AcademicTitle', 'title', $counter);
@@ -208,8 +226,7 @@ class Publish_Model_Deposit {
             // link-person-model
             $this->storePersonAttribute($person, $type, 'AllowEmailContact', 'check', $counter);
         }
-    }
-
+    
     /**
      * Method stores attributes like name or email for a given person object.
      * @param <Opus_Model_Dependent_LinkDocumentPerson> $person - given person object
@@ -226,7 +243,7 @@ class Publish_Model_Deposit {
             $index = $personType . $attribute;
         }
         if (array_key_exists($index, $this->documentData)) {
-            $entry = $this->documentData[$index];
+            $entry = $this->documentData[$index]['value'];
             if ($entry !== "") {
                 switch ($attributeType) {
                     case 'first' :
@@ -250,7 +267,7 @@ class Publish_Model_Deposit {
                         $person->setAcademicTitle($entry);
                         break;
                     case 'dob' :
-                        $entry = $this->_castStringToOpusDate($entry);
+                        $entry = $this->castStringToOpusDate($entry);
                         $this->log->debug("Date of Birth: " . $entry);
                         $person->setDateOfBirth($entry);
                         break;
@@ -260,33 +277,22 @@ class Publish_Model_Deposit {
                             $entry = 0;
                         $person->setAllowEmailContact($entry);
                         break;
-                }
-
-                $this->documentData[$index] = "";
+                }                
             }
         }
     }
 
-    private function _prepareTitleObject($dataKey, $dataValue) {
-        if ($dataValue == "") {
-            $this->log->info("title already stored!");
-            return;
-        }
-        //String can be changed here
-        $lang = "Language";
-
-        if (!strstr($dataKey, $lang)) {
-            $type = substr($dataKey, 0, strlen($dataKey) - 1);
-            $addFunction = 'add' . $type;
-            $title = new Opus_Title();
-
-            $this->log->debug("Title type:" . $type);
-            $counter = $this->getCounter($dataKey);
-            $this->log->debug("counter: " . $counter);
-            $this->storeTitleValue($title, $type, $counter);
-            $this->storeTitleLanguage($title, $type, $lang, $counter);
-            $this->document->$addFunction($title);
-        }
+    private function prepareTitleObject($dataKey, $dataValue) {
+        $type = 'Title' . $this->getTitleType($dataKey);
+        $this->log->debug("Title type:" . $type);
+        $addFunction = 'add' . $type;
+        $title = new Opus_Title();
+           
+        $counter = $this->getCounter($dataKey);
+        $this->log->debug("counter: " . $counter);
+        $this->storeTitleValue($title, $type, $counter);
+        $this->storeTitleLanguage($title, $type, 'Language', $counter);
+        $this->document->$addFunction($title);        
     }
 
     private function storeTitleValue($title, $type, $counter) {
@@ -296,12 +302,10 @@ class Publish_Model_Deposit {
         else {
             $index = $type;
         }
-        $entry = $this->documentData[$index];
+        $entry = $this->documentData[$index]['value'];
         if ($entry !== "") {
             $this->log->debug("Value of title: " . $entry);
-            $title->setValue($entry);
-            //"delete" value to avoid possible redundant record
-            $this->documentData[$index] = "";
+            $title->setValue($entry);                        
         }
     }
 
@@ -312,26 +316,18 @@ class Publish_Model_Deposit {
         else {
             $index = $type . $short;
         }
-        $entry = $this->documentData[$index];
+        $entry = $this->documentData[$index]['value'];
         if ($entry !== "") {
             $this->log->debug("Value of title language: " . $entry);
-            $title->setLanguage($entry);
-            //"delete" value to avoid possible redundant record
-            $this->documentData[$index] = "";
+            $title->setLanguage($entry);                        
         }
     }
 
     private function getSubjectType($dataKey) {
-        if (strstr($dataKey, 'MSC'))
-            return 'MSC';
-        else if (strstr($dataKey, 'DDC'))
-            return 'DDC';
-        else if (strstr($dataKey, 'Swd'))
-            return 'Swd';
-        else if (strstr($dataKey, 'CCS'))
-            return 'CCS';
-        else if (strstr($dataKey, 'PACS'))
-            return 'PACS';
+        $dataKey = strtolower($dataKey);
+        
+        if (strstr($dataKey, 'swd'))
+            return 'Swd';        
         else
             return 'Uncontrolled';
     }
@@ -344,61 +340,27 @@ class Publish_Model_Deposit {
      * @param <Array> $externalFields
      * @return <Array> $formValues
      */
-    private function _prepareSubjectObject($dataKey, $dataValue) {
-        if ($dataValue == "" || strstr($dataKey, 'Language')) {
-            $this->log->debug("Subject already stored.");
-            return;
-        }
-        $this->log->debug("try to store subject: " . $dataKey);
+    private function storeSubjectObject($dataKey, $dataValue) {                        
         $type = $this->getSubjectType($dataKey);
+        $this->log->debug("subject is a " . $type);
         $counter = (int) $this->getCounter($dataKey);
         $this->log->debug("counter: " . $counter);
-
-        switch ($type) {
-            case 'MSC' :
-            case 'DDC' :   
-            case 'CCS' :
-            case 'PACS' :   
-                // store as Collection                
-                $this->log->debug("subject is a " . $type . " subject and has to be stored as a Collection.");           
-                if (isset($this->session->additionalFields['step' . $dataKey])) {
-                    $step = $this->session->additionalFields['step' . $dataKey];
-                    if (array_key_exists('collId' . $step . $dataKey, $this->documentData))
-                        $dataValue = $this->documentData['collId' . $step . $dataKey];
-                }
-                $this->_storeCollectionObject(strtolower($type), $dataValue);
-                if (isset($step))
-                    $dataValue = $this->documentData['collId' . $step . $dataKey] = "";
-                return;                          
-
-            case 'Swd' :   
-                // store as Subject
-                $this->log->debug("subject is a " . $type . " subject.");
-                $subject = new Opus_Subject();  
-                $subject->setLanguage('deu');
-                break;
-
-            case 'Uncontrolled':  
-                // store as Subject
-                $this->log->debug("subject is a " . $type . " or other subject.");
-                $subject = new Opus_Subject();               
-                break;
-
+        
+        $subject = new Opus_Subject();        
+        
+        if ($type === 'Swd')
+            $subject->setLanguage('deu'); 
+        else {
+            $index = 'Subject'. $type . 'Language' . $counter;
+            $entry = $this->documentData[$index]['value']; 
+            if ($entry !== "") {
+                $subject->setLanguage($entry);                
+            }
         }
-        if ($counter >= 1) {
-            $subjectType = 'Subject' . $type;
-            $this->log->debug("subjectType: " . $subjectType);
-            $subject->setValue($dataValue);
-            $subject->setType(strtolower($type));
-            
-            if (array_key_exists($subjectType . 'Language' . $counter, $this->documentData)) {
-                    $subject->setLanguage($this->documentData[$subjectType . 'Language' . $counter]);
-                    $this->documentData[$subjectType . 'Language' . $counter] = "";
-                }
-            
-            $this->document->addSubject($subject);
-
-        }
+                        
+        $subject->setValue($dataValue);
+        $subject->setType(strtolower($type));        
+        $this->document->addSubject($subject);    
     }
 
     /**
@@ -409,12 +371,7 @@ class Publish_Model_Deposit {
      * @param <Array> $externalFields
      * @return <Array> $formValues
      */
-    private function _prepareNoteObject($dataKey, $dataValue) {
-        if ($dataValue == "") {
-            $this->log->debug("Note already stored.");
-            return;
-        }
-        $this->log->debug("try to store note: " . $dataKey);
+    private function storeNoteObject($dataValue) {        
         $note = new Opus_Note();
         $note->setMessage($dataValue);
         $note->setVisibility("private");
@@ -429,61 +386,13 @@ class Publish_Model_Deposit {
      * @param <Array> $externalFields
      * @return <Array> $formValues     
      */
-    private function _prepareCollectionObject($dataKey, $dataValue) {
-        if ($dataValue == "") {
-            $this->log->debug("Collection already stored.");
-            return;
-        }
-        $this->log->debug("try to store Collection: " . $dataValue);
-
-        if (strstr($dataKey, "Project"))
-            $this->_storeCollectionObject('projects', $dataValue);
-
-        else if (strstr($dataKey, "Institute"))
-            $this->_storeCollectionObject('institutes', $dataValue);
-
-        else if (strstr($dataKey, "Collection"))
-            $this->_storeCollectionObject('', $dataValue);
-    }
-
-    private function _storeCollectionObject($collectionRole, $dataValue) {
-        if ($dataValue == "") {
-            $this->log->debug("Collection already stored.");
-            return;
-        }
+    private function storeCollectionObject($dataValue) {
         if (strstr($dataValue, 'ID:')) {
             $dataValue = substr($dataValue, 3);
-            //store a simple collection
-            $this->document->addCollection(new Opus_Collection($dataValue));
-            return;
         }
-
-        if ($collectionRole == "") {
-            //store a simple collection            
-            $this->document->addCollection(new Opus_Collection($dataValue));
-            return;
-        }
-        $role = Opus_CollectionRole::fetchByName($collectionRole);
-        if (isset($role)) {
-            $roleId = $role->getId();
-            $this->log->debug("Role: " . $role . " with ID " . $roleId . " and value " . $dataValue);
-
-            if ($collectionRole === 'institutes') {
-                //fetch role name for institutes (they don't have a number)
-                $collArray = Opus_Collection::fetchCollectionsByRoleName($roleId, $dataValue);
-            }
-            else {
-                //all other roles are catched by number
-                $collArray = Opus_Collection::fetchCollectionsByRoleNumber($roleId, $dataValue);
-            }
-
-            if (!is_null($collArray)) {
-                $this->document->addCollection($collArray[0]);
-            }
-            if (count($collArray) >= 2) {
-                $this->log->err("While trying to store " . $collectionRole . " as Collection, an error occurred. The method fetchCollectionsByRoleNumber returned an array with > 1 values. The " . $collectionRole . " cannot be definitely assigned but was stored to the first entry.");
-            }
-        }
+        //store a simple collection
+        $this->document->addCollection(new Opus_Collection($dataValue));
+        return;
     }
 
     /**
@@ -494,69 +403,41 @@ class Publish_Model_Deposit {
      * @param <Array> $externalFields
      * @return <Array> $formValues
      */
-    private function _prepareSeriesObject($dataKey, $dataValue) {
-        if ($dataValue == "") {
-            $this->log->debug("Series collection already stored.");
-            return;
-        }
-        $this->log->debug("try to store serie collection: " . $dataValue);
-
-        if (strstr($dataKey, "Number"))
-            $this->_prepareIdentifierObject('IdentifierSerial', $dataValue);
-
-        else
-            $this->_storeCollectionObject('', $dataValue);
+    private function storeSeriesObject($dataValue) {
+                
+        //TODO: implement -> store a document in a document set  with a given number                
     }
 
     /**
-     * Prepare and store a licence for the current document.
-     * @param <type> $dataKey
+     * Prepare and store a licence for the current document.     
      * @param <type> $dataValue
      */
-    private function _prepareLicenceObject($dataKey, $dataValue) {
-
-        if ($dataValue == "") {
-            $this->log->debug("Licence already stored.");
-            return;
-        }
-        $dataValue = substr($dataValue, 3);
-        $this->log->debug("try to store Licence with id: " . $dataValue);
+    private function storeLicenceObject($dataValue) {        
+        if (strstr($dataValue, 'ID:')) {
+            $dataValue = substr($dataValue, 3);
+        }        
         $licence = new Opus_Licence($dataValue);
         $this->document->addLicence($licence);
     }
 
     /**
      * Prepare and store a dnb institute for the current document.
-     * @param <type> $dataKey
+     * @param <type> $grantor
      * @param <type> $dataValue
      */
-    private function _prepareThesisObject($dataKey, $dataValue) {
-
-        if ($dataValue == "") {
-            $this->log->debug("ThesisGrantor or ThesisPublisher already stored.");
-            return;
-        }
+    private function storeThesisObject($dataValue, $grantor=false) {
         if (strstr($dataValue, 'ID:')) {
             $dataValue = substr($dataValue, 3);
             $thesis = new Opus_DnbInstitute($dataValue);
         }
-        
-        $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
-        
-        if (strstr($dataKey, 'Grantor')) {
+        if ($grantor)
             $this->document->addThesisGrantor($thesis);
-        }
-        else if (strstr($dataKey, 'Publisher')) {
+        else
             $this->document->addThesisPublisher($thesis);
-        }
-    }
+        
+    }        
 
-    private function _prepareIdentifierObject($dataKey, $dataValue) {
-        if ($dataValue == "") {
-            $this->log->debug("Identifier already stored.");
-            return;
-        }
-        $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
+    private function storeIdentifierObject($dataKey, $dataValue) {        
         $identifier = new Opus_Identifier();
         $identifier->setValue($dataValue);
         if (strstr($dataKey, 'Old')) {
@@ -601,19 +482,18 @@ class Publish_Model_Deposit {
         else if (strstr($dataKey, 'Opac')) {
             $this->document->addIdentifierOpac($identifier);
         }
+        else if (strstr($dataKey, 'Arxiv')) {
+            $this->document->addIdentifierArxiv($identifier);
+        }
+        else if (strstr($dataKey, 'Pubmed')) {
+            $this->document->addIdentifierPubmed($identifier);
+        }
     }
 
-    private function _prepareReferenceObject($dataKey, $dataValue) {
+    private function storeReferenceObject($dataKey, $dataValue) {
         //TODO: probably no valid storing possible because a label is missing
         //a reference should be a new datatype with implicit fields value and label
-
-        if ($dataValue == "") {
-            $this->log->debug("Reference already stored.");
-            return;
-        }
-
-        $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);
-
+        
         $reference = new Opus_Reference();
         $reference->setValue($dataValue);
         $reference->setLabel("no Label given");
@@ -647,11 +527,7 @@ class Publish_Model_Deposit {
         }
     }
 
-    private function _prepareEnrichmentObject($dataKey, $dataValue) {
-        if ($dataValue == "") {
-            $this->log->debug("Enrichment already stored.");
-            return;
-        }
+    private function storeEnrichmentObject($dataKey, $dataValue) {
         $counter = $this->getCounter($dataKey);
         if ($counter != 0) {
             //remove possible counter char
