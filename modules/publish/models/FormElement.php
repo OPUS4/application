@@ -76,7 +76,7 @@ class Publish_Model_FormElement {
 
         $this->required = $required;
 
-        $this->formElement = $formElement;
+        $this->formElement = strtolower($formElement);        
         $this->datatype = $datatype;
         $this->multiplicity = $multiplicity;
 
@@ -107,11 +107,11 @@ class Publish_Model_FormElement {
                     $implicitFields = $this->implicitFields('Title');
                     $this->addSubFormElements($implicitFields);
                 }
-                else if ($this->isDocumentSetElement()) {
-                    $implicitFields = $this->implicitFields('Set');
+                else if ($this->isSeriesElement()) {
+                    $implicitFields = $this->implicitFields('Series');
                     $this->addSubFormElements($implicitFields);                    
                 }
-                else if ($this->isSubjectElement()) {
+                else if ($this->isSubjectUElement()) {
                     $implicitFields = $this->implicitFields('Subject');
                     $this->addSubFormElements($implicitFields);
                 }
@@ -136,8 +136,10 @@ class Publish_Model_FormElement {
             return true;
         else if ($this->isPersonElement())
             return true;
-        else if ($this->isDocumentSetElement())
+        else if ($this->isSeriesElement())
             return true;
+        else if ($this->isSubjectUElement())
+            return true;        
         else if ($this->datatype == 'Collection')
             return true;
         else if ($this->multiplicity !== '1')
@@ -150,12 +152,12 @@ class Publish_Model_FormElement {
         switch ($workflow) {
             case 'Person':
                 //creates two subfields for first and last name
-                $first = new Publish_Model_FormElement($this->form, $this->elementName . self::FIRST, $this->required, 'text', 'Text');
-                $first->isSubField = true;
+                $first = new Publish_Model_FormElement($this->form, $this->elementName . self::FIRST, $this->required, 'text', 'Person');
+                $first->isSubField = false;
                 $first->setDefaultValue($this->default, self::FIRST);
                 $elementFirst = $first->transform();
 
-                $last = new Publish_Model_FormElement($this->form, $this->elementName . self::LAST, $this->required, 'text', 'Text');
+                $last = new Publish_Model_FormElement($this->form, $this->elementName . self::LAST, $this->required, 'text', 'Person');
                 $last->isSubField = true;
                 $last->setDefaultValue($this->default, self::LAST);
                 $elementLast = $last->transform();
@@ -163,14 +165,14 @@ class Publish_Model_FormElement {
                 return array($elementFirst, $elementLast);
                 break;
 
-            case 'Set':
+            case 'Series':
                 //creates a additional field for a number
-                $number = new Publish_Model_FormElement($this->form, $this->elementName . self::NR, $this->required, 'text', 'Text');
-                $number->isSubField = true;
+                $number = new Publish_Model_FormElement($this->form, $this->elementName . self::NR, $this->required, 'text', 'Series');
+                $number->isSubField = false;
                 $number->setDefaultValue($this->default, self::NR);
                 $elementNumber = $number->transform();
 
-                $select = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'select', 'Set');
+                $select = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'select', 'Series');
                 $select->isSubField = true;                
                 $select->setDefaultValue($this->default);
                 $element = $select->transform();
@@ -179,27 +181,16 @@ class Publish_Model_FormElement {
                 break;
 
             case 'Subject':
-                //creates two subfields for subject and language
-                $subject = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'text', 'Text');
-                $subject->isSubField = true;
-                $subject->setDefaultValue($this->default, self::VALUE);
-                $elementSubject = $subject->transform();
-
-                $lang = new Publish_Model_FormElement($this->form, $this->elementName . self::LANG, $this->required, 'select', 'Language');
-                $lang->isSubField = true;
-                $lang->setDefaultValue($this->default, self::LANG);
-                $elementLang = $lang->transform();
-
-                return array($elementSubject, $elementLang);
-                break;
-
-            case 'Title':
-                //creates two subfields for title value and language (select)
-                if ($this->isTextareaElement())
-                    $value = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'textarea', 'Text');
+                case 'Title' :
+                //creates two subfields: a value text field (subject, title) and language selection                
+                if ($this->isTitleElement())
+                    if ($this->isTextareaElement())
+                        $value = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'textarea', 'Title');
+                    else
+                        $value = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'text', 'Title');
                 else
-                    $value = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'text', 'Text');
-                $value->isSubField = true;
+                    $value = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'text', 'Subject');
+                $value->isSubField = false;
                 $value->setDefaultValue($this->default, self::VALUE);
                 $elementValue = $value->transform();
 
@@ -214,30 +205,49 @@ class Publish_Model_FormElement {
     }
 
     private function isTitleElement() {
-        if (strstr($this->elementName, 'Title')
-                || strstr($this->elementName, 'Abstract'
-                        || $this->datatype === 'Title'))
+        if ($this->datatype === 'Title')
             return true;
         else
             return false;
     }
 
-    private function isDocumentSetElement() {
-        if ($this->datatype === 'Set')
+    private function isSeriesElement() {
+        if ($this->datatype === 'Series')
             return true;
         else
             return false;
     }
 
+    /**
+     * Subject field must have datatype "Subject" 
+     * @return boolean 
+     */ 
     private function isSubjectElement() {
-        if (strstr($this->elementName, 'Uncontrolled'))
+        
+        if ($this->datatype === 'Subject')
             return true;
-        else
-            return false;
+
+        return false;
     }
 
+    /**
+     * Subject field must have datatype "Subject" and can be a SWD or uncontrolled field (with or without languague)
+     * @return boolean 
+     */ 
+    private function isSubjectUElement() {
+        
+        if ($this->datatype === 'Subject' && !(strstr($this->elementName, 'Swd')))
+            return true;
+
+        return false;
+    }
+    
+    /**
+     * A Person field must have datatype "Person" or is one of the possible subfields of Person.
+     * @return type 
+     */
     private function isPersonElement() {
-        if (strstr($this->elementName, 'Person')
+        if (($this->datatype === 'Person')
                 || strstr($this->elementName, 'Email')
                 || strstr($this->elementName, 'Birth')
                 || strstr($this->elementName, 'AcademicTitle'))
@@ -247,15 +257,15 @@ class Publish_Model_FormElement {
             return false;
     }
 
-    private function isSelectElement() {
-        if ($this->formElement === 'select' || $this->formElement === 'Select')
+    private function isSelectElement() {        
+        if ($this->formElement === 'select')
             return true;
         else
             return false;
     }
 
     private function isTextareaElement() {
-        if ($this->formElement === 'textarea' || $this->formElement === 'Textarea')
+        if ($this->formElement === 'textarea')
             return true;
         else
             return false;
@@ -317,11 +327,35 @@ class Publish_Model_FormElement {
                     $element->addValidator($this->validation);
             }
             
+            $element->setAttrib('datatype', $this->realDatatype($element)); 
+            
+            if ($this->isSubField == true)
+                $element->setAttrib('subfield', true);
+            else 
+                $element->setAttrib('subfield', false);
+            
             if ($this->datatype == 'CollectionLeaf')
                 $element->setAttrib('collectionLeaf', true);
 
             return $element;
         }
+    }
+    
+    private function realDatatype() {
+        if ($this->isPersonElement())
+            return 'Person';
+        
+        else if ($this->isTitleElement())
+            return 'Title';
+        
+        else if ($this->isSeriesElement())
+            return 'Series';
+        
+        else if ($this->isSubjectElement())
+            return 'Subject';        
+        else 
+            return $this->datatype;
+        
     }
 
     private function showSelectField($options, $datatype=null, $elementName=null) {
@@ -355,6 +389,9 @@ class Publish_Model_FormElement {
                 break;
             case 'ThesisPublisher':
                 $element->setMultiOptions(array_merge(array('' => 'choose_valid_thesispublisher'), $options));
+                break;
+            case 'Series':
+                $element->setMultiOptions(array_merge(array('' => 'choose_valid_documentset'), $options));
                 break;
             default:
                 $element->setMultiOptions(array_merge(array('' => 'choose_valid_option'), $options));
@@ -467,7 +504,7 @@ class Publish_Model_FormElement {
     }
 
     public function setFormElement($formElement) {
-        $this->formElement = $formElement;
+        $this->formElement = strtolower($formElement);
     }
 
     public function getDatatype() {
