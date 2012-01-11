@@ -57,7 +57,8 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
             $elementAttributes['hint'] = 'hint_' . $elementName;
             $elementAttributes['header'] = 'header_' . $elementName;
             $elementAttributes['disabled'] = $element->getAttrib('disabled');
-
+            $elementAttributes['datatype'] = $element->getAttrib('datatype');
+                        
             if ($element->getType() === 'Zend_Form_Element_Checkbox') {
                 $elementAttributes['value'] = $element->getCheckedValue();
                 if ($element->isChecked())
@@ -74,11 +75,15 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
                 $elementAttributes['req'] = 'required';
             else
                 $elementAttributes['req'] = 'optional';
-                    
-//            if (!is_null($this->session->endOfCollectionTree)) 
-//                if (array_key_exists($elementName, $this->session->endOfCollectionTree))
+
             if ($element->getAttrib('isLeaf'))
                 $elementAttributes['isLeaf'] = true;
+
+            if ($element->getAttrib('subfield'))
+                $elementAttributes['subfield'] = true;
+            else 
+                $elementAttributes['subfield'] = false;
+
                 
         }
 
