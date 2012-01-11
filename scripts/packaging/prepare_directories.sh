@@ -83,17 +83,21 @@ fi
 rm -rv opus4/{nbproject,tests,workspace}
 rm -rvf opus4/public/layouts/{opus33,opus34,darker,matheon,plain,opus4-matheon}
 
-# exclude test document types
-rm -v opus4/modules/publish/views/scripts/form/preprintmatheon.phtml
+# exclude XML-definitions for test document types
 rm -v opus4/application/configs/doctypes/preprintmatheon.xml
-rm -v opus4/modules/publish/views/scripts/form/demo.phtml
 rm -v opus4/application/configs/doctypes/demo.xml
-rm -v opus4/modules/publish/views/scripts/form/collections.phtml
 rm -v opus4/application/configs/doctypes/collections.xml
-rm -v opus4/modules/publish/views/scripts/form/talkzib.phtml
 rm -v opus4/application/configs/doctypes/talkzib.xml
 rm -v opus4/application/configs/doctypes/demo_invalid.xml
 rm -v opus4/application/configs/doctypes/demo_invalidfieldname.xml
+rm -v opus4/application/configs/doctypes/demodemo.xml
+
+# exclude PHTML-templates for test document types
+rm -v opus4/modules/publish/views/scripts/form/preprintmatheon.phtml
+rm -v opus4/modules/publish/views/scripts/form/demo.phtml
+rm -v opus4/modules/publish/views/scripts/form/collections.phtml
+rm -v opus4/modules/publish/views/scripts/form/talkzib.phtml
+rm -v opus4/modules/publish/views/scripts/form/demodemo.phtml
 
 # exclude modules
 rm -rv opus4/modules/{remotecontrol,matheon}
