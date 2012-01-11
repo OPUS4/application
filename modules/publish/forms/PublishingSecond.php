@@ -154,6 +154,11 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                 $this->session->elements[$name]['name'] = $name;
                 $this->session->elements[$name]['value'] = $element->getValue();
                 $this->session->elements[$name]['label'] = $element->getLabel();
+                $this->session->elements[$name]['datatype'] = $element->getAttrib('datatype');
+                if ($element->getAttrib('subfield'))
+                    $this->session->elements[$name]['subfield'] = '1';
+                else 
+                    $this->session->elements[$name]['subfield'] = '0';
             }
         }
 
