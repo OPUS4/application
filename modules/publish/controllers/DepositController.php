@@ -78,8 +78,12 @@ class Publish_DepositController extends Controller_Action {
         //deposit data is coming from the session
         if (isset($this->session->elements)) {
             foreach ($this->session->elements AS $element) {
-                $this->depositData[$element['name']] = $element['value'];
-                $this->log->debug('SAVING DATA: ' . $element['name'] . ' + ' . $element['value']);
+                $this->depositData[$element['name']] = array(
+                    'value' => $element['value'], 
+                    'datatype' => $element['datatype'],
+                    'subfield' => $element['subfield']);  
+                
+                $this->log->debug("STORE DATA: " . $element['name'] . ": " . $element['value'] . ", Typ:" . $element['datatype'] . ", Sub:" . $element['subfield']);
             }
         }
 
@@ -92,7 +96,7 @@ class Publish_DepositController extends Controller_Action {
         $this->session->documentId = $this->document->store();
         $docId = $this->session->documentId;        
 
-        $this->log->info("Document $docId was sucessfully stored!");
+        $this->log->info("Document $docId was successfully stored!");
 
         // Build URLs for the publish-notification-mail.
         $serverUrl = $this->view->serverUrl();
