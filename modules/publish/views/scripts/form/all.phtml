@@ -50,7 +50,7 @@
         <div class="form-hint"><p><?= $this->requiredHint; ?></p></div>
 
             <?php $this->count = 0; ?>
-            <?= $this->fileOverview(); ?>
+            <?= $this->fileOverview(); ?>           
             <?= $this->group($this->groupPersonSubmitter); ?>
             <?= $this->group($this->groupPersonAuthor); ?>
             <?= $this->element($this->Language); ?>
@@ -86,9 +86,21 @@
             <?= $this->element($this->IdentifierIsbn); ?>
             <?= $this->element($this->IdentifierIssn); ?>
             <?= $this->element($this->IdentifierOpac); ?>
+            <?= $this->element($this->IdentifierOld); ?>
+            <?= $this->element($this->IdentifierSerial); ?>
+            <?= $this->element($this->IdentifierUuid); ?>
+            <?= $this->element($this->IdentifierDoi); ?>
+            <?= $this->element($this->IdentifierHandle); ?>
+            <?= $this->element($this->IdentifierUrl); ?>
+            <?= $this->element($this->IdentifierStdDoi); ?>
+            <?= $this->element($this->IdentifierCrisLink); ?>
+            <?= $this->element($this->IdentifierSplashUrl); ?>
+            <?= $this->element($this->IdentifierPubmed); ?>
+            <?= $this->element($this->IdentifierArxiv); ?>
             <?= $this->element($this->ThesisDateAccepted); ?>
             <?= $this->group($this->groupThesisGrantor); ?>
             <?= $this->group($this->groupThesisPublisher); ?>
+            <?= $this->element($this->ThesisYearAccepted); ?>
             <?= $this->group($this->groupPersonReferee); ?>
             <?= $this->group($this->groupPersonEditor); ?>
             <?= $this->group($this->groupPersonAdvisor); ?>
