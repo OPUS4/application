@@ -38,12 +38,10 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
 	xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 	
-
     <field name="SubjectMSC" required="no" formelement="Select" datatype="Collection" root="msc" multiplicity="*"/>
     <field name="SubjectDDC" required="no" formelement="Select" datatype="Collection" root="ddc" multiplicity="*"/>
     <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="5"/>
     <field name="SubjectPACS" required="no" formelement="Select" datatype="Collection" root="pacs" multiplicity="*"/>
-    <field name="SubjectCCS" required="no" formelement="Select" datatype="Collection" root="ccs" multiplicity="*"/>
-    <field name="Series" required="no" formelement="Select" datatype="Collection" root="series" multiplicity="1"/>
+    <field name="SubjectCCS" required="no" formelement="Select" datatype="Collection" root="ccs" multiplicity="*"/>    
 
 </documenttype>
