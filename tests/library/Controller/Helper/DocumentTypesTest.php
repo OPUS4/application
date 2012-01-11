@@ -63,9 +63,10 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         $this->assertNotNull($documentTypes);
-        $this->assertEquals(2, count($documentTypes));
+        $this->assertEquals(3, count($documentTypes));
         $this->assertArrayHasKey('all', $documentTypes);
         $this->assertArrayHasKey('preprint', $documentTypes);
+        $this->assertArrayHasKey('demo_invalid', $documentTypes);
         $this->assertArrayNotHasKey('article', $documentTypes);
     }
 
@@ -114,6 +115,16 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         $this->assertNotNull($dom);
     }
 
+    public function testGetDocumentThrowsException() {
+        $this->setExpectedException('Application_Exception');
+        $this->docTypeHelper->getDocument('article');
+    }
+
+    public function testGetDocumentThrowsSchemaInvalidException() {
+        $this->setExpectedException('Exception');
+        $this->docTypeHelper->getDocument('demo_invalid');
+    }
+
     /**
      * Testing helper without any configuration.
      */
@@ -126,6 +137,8 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
 
         $this->assertNotNull($documentTypes);
         $this->assertArrayHasKey('article', $documentTypes);
+
+        // TODO: restore config key "documentTypes"
     }
 
     /**
@@ -160,6 +173,9 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         unset($config->publish->path->documenttypes);
 
         $path = $this->docTypeHelper->getDocTypesPath();
+
+        // TODO: missing assertion(s)
+        // TODO: restore config key "publish.path.documenttypes"
     }
 
     /**
@@ -171,8 +187,10 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         foreach ($documentTypes as $docType) {
-            $this->assertNotEquals($docType, $translate->translate($docType),
-                    'Could not translate document type: ' . $docType);
+            if ($docType !== 'demo_invalid') {
+                $this->assertNotEquals($docType, $translate->translate($docType),
+                        'Could not translate document type: ' . $docType);
+            }
         }
     }
 
@@ -193,7 +211,7 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
                 $xml = new DOMDocument();
                 $xml->load($fileinfo->getPathname());
 		$result = $xml->schemaValidate(APPLICATION_PATH . '/library/Opus/Document/documenttype.xsd');
-		if ($fileinfo->getFilename() == 'demo_invalid.xml') {
+		if ($fileinfo->getFilename() == 'demo_invalid.xml' || $fileinfo->getFilename() == 'demo_invalidfieldname.xml') {
                    $this->assertFalse($result, $fileinfo->getFilename() . ' is valid');
 		}
 		else {

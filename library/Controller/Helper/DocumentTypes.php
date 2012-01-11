@@ -117,10 +117,12 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         $dom = new DOMDocument();
         $dom->load($this->getDocTypesPath() . DIRECTORY_SEPARATOR . $documentType . '.xml');
 
-        // clear libxml error buffer
+        // clear libxml error buffer and enable user error handling
         libxml_clear_errors();
-        
+        libxml_use_internal_errors(true);
+
         if (!$dom->schemaValidate(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'Opus' .  DIRECTORY_SEPARATOR . 'Document' . DIRECTORY_SEPARATOR . 'documenttype.xsd')) {
+            libxml_clear_errors();
             throw new Exception('given xml document type definition for document type ' . $documentType . ' is not valid');
         }
 
