@@ -68,7 +68,8 @@ class TestHelper extends Application_Bootstrap {
         }
         while(false === feof($handle)) {
             $line = fgets($handle);
-            if (1 === preg_match('/\$Rev$line, $matches)) {
+            // Replaced Rev by [R][e][v] to avoid substitution of SVN keywords!
+            if (1 === preg_match('/\$[R][e][v]: \d*\s\$/', $line, $matches)) {
                 $sqlRev = $matches[0];
                 break;
             }
