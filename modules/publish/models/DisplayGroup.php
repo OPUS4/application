@@ -45,6 +45,7 @@ class Publish_Model_DisplayGroup {
     public $collectionIds = array();
     public $collectionLeaf = false;
     public $implicitGroup = false;
+    public $datatype;
     private $elementName;
     private $additionalFields;
     private $multiplicity;
@@ -141,11 +142,12 @@ class Publish_Model_DisplayGroup {
                     else {
                         if ($count !== $allElements || $count == $allElements && $i < $maxNum) {
                             //make previous middle steps disabled   
-                            if (!array_key_exists('collId' . $currentStep . $this->elementName . $i, $this->session->endOfCollectionTree))
+                            //if (!array_key_exists('collId' . $currentStep . $this->elementName . $i, $this->session->endOfCollectionTree))
+                            if ($element->getAttrib('isLeaf') != true)
                                 $element->setAttrib('disabled', true);                                
                         }
-
-                        $this->form->addElement($element);
+                        $element->setAttrib('datatype', $this->datatype);
+                        $this->form->addElement($element);                        
                         $displayGroup[] = $element->getName();
                     }
                 }
@@ -154,7 +156,7 @@ class Publish_Model_DisplayGroup {
         for ($i = $minNum; $i <= $maxNum; $i++) {
             $maxStep = $this->collectionStep($i);
             $name = 'collId' . $maxStep . $this->elementName . $i;
-            $formElement = $this->form->getElement($name);
+            $formElement = $this->form->getElement($name);            
             if (!is_null($formElement))
                 $formElement->setAttrib('disabled', false);
         }
