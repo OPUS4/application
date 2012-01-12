@@ -36,10 +36,10 @@
 
     <tu tuid="admin_title_collections">
       <tuv xml:lang="en">
-        <seg>Collections</seg>
+        <seg>Manage Collections</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sammlungen</seg>
+        <seg>Sammlungen verwalten</seg>
       </tuv>
     </tu>
 
@@ -54,10 +54,10 @@
 
     <tu tuid="admin_title_series">
       <tuv xml:lang="en">
-        <seg>Series</seg>
+        <seg>Manage Series</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Schriftenreihen</seg>
+        <seg>Schriftenreihen verwalten</seg>
       </tuv>
     </tu>
 
@@ -207,10 +207,10 @@
 
     <tu tuid="admin_title_enrichmentkey">
       <tuv xml:lang="en">
-        <seg>Enrichmentkeys</seg>
+        <seg>Manage Enrichmentkeys</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Spezialfelder (Enrichments)</seg>
+        <seg>Benutzerdefinierte Felder (Enrichments) verwalten</seg>
       </tuv>
     </tu>
 
@@ -219,10 +219,9 @@
         <seg>Add, edit, or remove Enrichmentkeys.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Spezialfelder hinzufügen, editieren, oder löschen.</seg>
+        <seg>Benutzerdefinierte Felder hinzufügen, editieren, oder löschen.</seg>
       </tuv>
     </tu>
-
 
     <tu tuid="admin_title_security">
       <tuv xml:lang="en">
@@ -283,7 +282,7 @@
         <seg>Cancel</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Zurueck</seg>
+        <seg>Zurück</seg>
       </tuv>
     </tu>
 
