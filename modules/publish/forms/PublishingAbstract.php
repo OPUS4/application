@@ -82,9 +82,7 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
             if ($element->getAttrib('subfield'))
                 $elementAttributes['subfield'] = true;
             else 
-                $elementAttributes['subfield'] = false;
-
-                
+                $elementAttributes['subfield'] = false;                
         }
 
         return $elementAttributes;
