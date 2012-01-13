@@ -214,7 +214,9 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                     }
                     break;
                 case 'down':
-                    if ($postData[$fieldName . $currentNumber] !== '' || $this->session->additionalFields['collId1' . $fieldName . $currentNumber] !== '')
+                    if ($postData[$fieldName . $currentNumber] !== '' || 
+                        array_key_exists('collId1' . $fieldName . $currentNumber, $this->session->additionalFields) &&
+                                $this->session->additionalFields['collId1' . $fieldName . $currentNumber] !== '')
                         $level = (int) $level + 1;
                     break;
                 case 'up' :
@@ -359,5 +361,5 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         else
             return $pressedButtonName;
     }
-
+    
 }
