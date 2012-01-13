@@ -326,9 +326,12 @@
 
             <legend>
                 <?= $this->translate('admin_document_section_series')?>
-                <?PHP /* <span class="editLink">
+                <span class="editLink">
+                    <a href="<?=$this->addUrls['series']?>"><?=$this->addLabels['series']?></a>
+                    <?PHP if ($this->overviewHelper->hasValues('series')) : ?> /
                     <a href="<?=$this->editUrls['series']?>"><?=$this->editLabels['series']?></a>
-                </span> */ ?>
+                    <?PHP endif; ?>
+                </span>
             </legend>
 
             <?PHP foreach($this->document->getSeries() as $index => $series) : ?>

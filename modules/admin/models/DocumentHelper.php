@@ -61,7 +61,8 @@ class Admin_Model_DocumentHelper {
      */
     private static $sectionField = array(
         'persons' => 'Person',
-        'licences' => 'Licence'
+        'licences' => 'Licence',
+        'series' => 'Series'
 
     );
 

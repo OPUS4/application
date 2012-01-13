@@ -116,6 +116,11 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $collectionId = $data['collectionid'];
         }
 
+        $seriesId = null;
+        if (array_key_exists('seriesid', $data)) {
+            $seriesId = $data['seriesid'];
+        }
+
         // Default Ordering...
         $sort_reverse = '0';
         if (true === array_key_exists('sort_reverse', $data)) {
@@ -158,6 +163,11 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             else {
                 $this->view->collectionName = $collection->getDisplayName();
             }
+        }
+        
+        if (!empty($seriesId)) {
+            $series = new Opus_Series($seriesId);
+            // $result = $series->get
         }
         else {
             $result = $this->_helper->documents($sort_order, $sort_reverse, $state);

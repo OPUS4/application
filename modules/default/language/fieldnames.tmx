@@ -2131,6 +2131,15 @@
 
         <!-- Keys for Opus_Series -->
 
+        <tu tuid="Opus_Series">
+            <tuv xml:lang="en">
+                <seg>Series</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Schriftenreihe</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="Title">
             <tuv xml:lang="en">
                 <seg>Title</seg>
@@ -2164,6 +2173,34 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Info</seg>
+            </tuv>
+        </tu>
+
+        <!-- Keys for Opus_Model_Dependent_Link_DocumentSeries -->
+
+        <tu tuid="Opus_Model_Dependent_Link_DocumentSeries_Series">
+            <tuv xml:lang="en">
+                <seg>Series</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Schriftenreihe</seg>
+            </tuv>
+        </tu>
+        
+        <tu tuid="Opus_Model_Dependent_Link_DocumentSeries_Number">
+            <tuv xml:lang="en">
+                <seg>Number</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Nummer</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Model_Dependent_Link_DocumentSeries_SortOrder">
+            <tuv xml:lang="en">
+                <seg>Sort Order</seg>           </tuv>
+            <tuv xml:lang="de">
+                <seg>Sortierreihenfolge</seg>
             </tuv>
         </tu>
 

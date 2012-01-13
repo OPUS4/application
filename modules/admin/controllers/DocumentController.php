@@ -425,7 +425,7 @@ class Admin_DocumentController extends Controller_Action {
         }
         elseif (!empty($sectionField)) {
             $field = $doc->getField($sectionField);
-            $addForm = $this->__getFormForField($field);
+            $addForm = $this->__getFormForField($field, $doc);
         }
 
         if (!empty($addForm)) {
@@ -459,6 +459,7 @@ class Admin_DocumentController extends Controller_Action {
             }
             else {
                 // TODO take care of this case
+                throw new Exception('internal error'); // should not happen
             }
         }
 
@@ -500,7 +501,7 @@ class Admin_DocumentController extends Controller_Action {
 
                     if (is_array($values)) {
                         foreach ($values as $index2 => $value) {
-                            $subform = $this->__getFormForField($field);
+                            $subform = $this->__getFormForField($field, $doc);
                             $subform->removeDecorator('DtDdWrapper');
                             $subform->populateFromModel($value);
                             $subform->setLegend($field->getValueModelClass()); // TODO remove/replace
@@ -545,12 +546,15 @@ class Admin_DocumentController extends Controller_Action {
      * @param Opus_Model_Field $field
      * @return Admin_Form_Model
      */
-    private function __getFormForField($field) {
+    private function __getFormForField($field, $doc) {
         $subform = null;
         switch ($field->getName()) {
             case 'Licence':
                 $subform = new Admin_Form_Model(
                         'Opus_Document', array('Licence'));
+                break;
+            case 'Series':
+                $subform = new Admin_Form_SeriesEntry($doc);
                 break;
             default:
                 $subform = new Admin_Form_Model($field);
@@ -573,6 +577,9 @@ class Admin_DocumentController extends Controller_Action {
                 case 'Opus_Licence':
                     $this->__addLicence($document, $fields);
                     break;
+                case 'Opus_Series':
+                    $this->__addSeries($document, $fields);
+                    break;
                 default:
                     $model = new $modelClass;
                     $this->__processFields($model, $fields);
@@ -587,13 +594,35 @@ class Admin_DocumentController extends Controller_Action {
     /**
      * Adds a new licence to a document.
      * @param Opus_Document $document Opus_Document instance
-     * @param type $fields
+     * @param array $fields
      */
     private function __addLicence($document, $fields) {
         $licenceId = $fields['Licence'];
         if (!$this->__hasLicence($document, $licenceId)) {
             $document->addLicence(new Opus_Licence($licenceId));
         }
+    }
+
+    /**
+     * Adds a series assignment to a document.
+     * @param Opus_Document $document
+     * @param array $fields
+     *
+     * TODO don't ignore conflict (use validation)
+     */
+    private function __addSeries($document, $fields) {
+        $seriesId = $fields['Series'];
+        $number = $fields['Number'];
+        $sortOrder = $fields['SortOrder'];
+
+        $series = $this->__hasSeries($document, $seriesId);
+
+        if ($series === null) {
+            $series = $document->addSeries(new Opus_Series($seriesId));
+        }
+
+        $series->setNumber($number);
+        $series->setSortOrder($sortOrder);
     }
 
     /**
@@ -659,19 +688,96 @@ class Admin_DocumentController extends Controller_Action {
     }
 
     /**
+     *
+     * @param type $document
+     * @param type $postData
+     * @return type
+     *
+     * TODO Refactor similarities between __updateLicences and __updateSeries.
+     */
+    private function __updateSeries($doc, $postData) {
+        foreach ($postData as $fieldName => $modelData) {
+            $field = $doc->getField($fieldName);
+            if (!empty($field)) {
+                // remove series
+                foreach ($modelData as $index => $modelValues) {
+                    $fieldValues = $field->getValue();
+                    if (array_key_exists('remove', $modelValues)) {
+                        // remove series
+                        unset($fieldValues[$index]);
+                        $field->setValue($fieldValues);
+                        return; // exit update if series was removed
+                    }
+                }
+
+                // collect new series IDs
+                $newSeries = array();
+                foreach ($modelData as $index => $modelValues) {
+                    $seriesId = $modelValues['Series'];
+                    // prevent duplicate entries
+                    if (!array_key_exists($seriesId, $newSeries)) {
+                        $newSeries[$seriesId] = $modelValues;
+                    }
+                }
+
+                $fieldValues = $field->getValue();
+
+                $modified = false;
+
+                // remove series that are no longer selected
+                $currentSeries = $doc->getSeries();
+                foreach ($currentSeries as $index => $currentSeries) {
+                    $seriesId = $currentSeries->getModel()->getId();
+
+                    if (!array_key_exists($seriesId, $newSeries)) {
+                        unset($fieldValues[$index]);
+                        $modified = true;
+                    }
+                }
+
+                if ($modified) {
+                    $field->setValue($fieldValues);
+
+                    $doc->store(); // TODO can this additional store be avoided?
+                }
+
+                // add new licences
+                foreach ($newSeries as $seriesId => $modelValues) {
+                    $this->__addSeries($doc, $modelValues);
+                }
+            }
+        }
+    }
+
+    /**
      * Verify if a document has a licence.
      * @param Opus_Document $document
      * @param int $licenceId
      */
     private function __hasLicence($document, $licenceId) {
         $currentLicences = $document->getLicence();
-        $licenceAlreadyAssigned = false;
         foreach ($currentLicences as $index => $currentLicence) {
             if ($currentLicence->getModel()->getId() === $licenceId) {
                 return true;
             }
         }
         return false;
+    }
+
+    /**
+     * Check if series is already assigned to document.
+     * @param Opus_Document $document
+     * @param int $seriesId
+     * @return boolean
+     */
+    private function __hasSeries($document, $seriesId) {
+        $assignedSeries = $document->getSeries();
+        foreach ($assignedSeries as $index => $series) {
+            if ($series->getModel()->getId() === $seriesId) {
+                return $series;
+            }
+        }
+        return null;
     }
 
     /**
@@ -822,6 +928,9 @@ class Admin_DocumentController extends Controller_Action {
                 // TODO merge with default case
                 $this->__updateLicences($doc, $postData);
                 break;
+            case 'series':
+                $this->__updateSeries($doc, $postData);
+                break;
             default:
                 foreach ($postData as $fieldName => $modelData) {
                     $field = $doc->getField($fieldName);
@@ -840,6 +949,7 @@ class Admin_DocumentController extends Controller_Action {
                 }
                 break;
         }
+
         $doc->store();
     }
 

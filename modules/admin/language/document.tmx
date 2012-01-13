@@ -151,6 +151,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_section_series">
+      <tuv xml:lang="en">
+        <seg>Series</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schriftenreihen</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_document_section_other">
       <tuv xml:lang="en">
         <seg>Miscellaneous Information</seg>
@@ -454,6 +463,24 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Patente editieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_add_series">
+      <tuv xml:lang="en">
+        <seg>Add to series</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zu Schriftenreihe hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_edit_series">
+      <tuv xml:lang="en">
+        <seg>Edit Series</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schriftenreihen editieren</seg>
       </tuv>
     </tu>
 
