@@ -58,8 +58,8 @@ INSERT INTO `link_documents_dnb_institutes` (`document_id`, `dnb_institute_id`, 
 INSERT INTO `link_documents_licences` (`document_id`, `licence_id`) VALUES
 (146,4);
 
-INSERT INTO `link_documents_series` (`document_id`, `series_id`, `number`) VALUES
-(146,1,'3a');
+INSERT INTO `link_documents_series` (`document_id`, `series_id`, `number`, `doc_sort_order`) VALUES
+(146,1,'5/5',6);
 
 INSERT INTO `persons` (`id`, `academic_title`, `date_of_birth`, `email`, `first_name`, `last_name`, `place_of_birth`) VALUES
 (258,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),

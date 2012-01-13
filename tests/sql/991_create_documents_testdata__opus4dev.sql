@@ -185,12 +185,12 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_
 --
 -- Daten für Tabelle `link_documents_series`
 --
-INSERT INTO `link_documents_series` (`document_id`, `series_id`, `number`) VALUES
-(91, 1, '1'),
-(92, 1, '2'),
-(93, 1, '3'),
-(94, 1, '4'),
-(91, 2, 'd'),
-(92, 2, 'c'),
-(93, 2, 'b'),
-(94, 2, 'a');
+INSERT INTO `link_documents_series` (`document_id`, `series_id`, `number`, `doc_sort_order`) VALUES
+(91, 1, '1/5', 0),
+(92, 1, '3/5', 3),
+(93, 1, '4/5', 5),
+(94, 1, '2/5', 1),
+(91, 2, 'd', 0),
+(92, 2, 'c', 1),
+(93, 2, 'b', 2),
+(94, 2, 'a', 3);
