@@ -46,7 +46,11 @@ class Admin_SeriesController extends Controller_CRUDAction {
      * Shows all series.
      */
     public function indexAction() {
-        parent::indexAction();
+        $entries = Opus_Series::getAll();
+        $this->view->entries = array();
+        foreach ($entries as $entry) {
+            $this->view->entries[$entry->getId()] = $entry->getTitle();
+        }
     }
 
     /**
