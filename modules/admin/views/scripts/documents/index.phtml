@@ -41,7 +41,7 @@
         <?= $this->navigation()->breadcrumbs() ?>
     </div>
 
-    <?PHP if (empty($this->collection)) : ?>
+    <?PHP if (empty($this->collection) and empty($this->series)) : ?>
     <div style="text-align: center; margin: 0.1em 0em">
         <form action="<?= $this->url_call_id ?>" method="post" class="crud">
              <?= $this->translate('docs_call_id_label') ?>
@@ -54,6 +54,8 @@
     <div class="documentOptions">
         <?PHP if (!empty($this->collection)) : ?>
             <?=$this->translate('admin_documents_label_collection')?>: <b><?=htmlspecialchars($this->collectionName)?></b>
+        <?PHP elseif (!empty($this->series)) : ?>
+            <?= $this->translate('Opus_Series') ?>: <b><?=htmlspecialchars($this->series->getTitle())?></b>
         <?PHP else : ?>
         <div class="docstateMenu">
             <span><?= $this->translate('admin_documents_show_docs') ?></span>
@@ -107,6 +109,11 @@
                                        ><?= htmlspecialchars($document->getDocTitle()) ?></a></span>
                 (<span class="pubDate"><?= $document->getYear() ?></span>)
             </td>
+            <?PHP if (!empty($this->series)) : ?>
+            <td>
+                <span><?= $this->seriesNumber($document->getDocument(), $this->series) ?></span>
+            </td>
+            <?PHP endif; ?>
             <td class="doctype">
                 <span class="doctype"><?=htmlspecialchars($this->translate($document->getDocType())) ?></span>
             </td>

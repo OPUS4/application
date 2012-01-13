@@ -25,6 +25,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="admin_series_link_showdocuments">
+            <tuv xml:lang="en">
+                <seg>Show documents</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Dokumente anzeigen</seg>
+            </tuv>
+        </tu>
+
     </body>
 
 </tmx>

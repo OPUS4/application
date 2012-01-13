@@ -52,6 +52,11 @@
     </div>
 
     <div class="content">
+        <?PHP if (!is_null($this->inputErrorMessage)) : ?>
+        <div class="form-hint form-errors">
+            <?= $this->inputErrorMessage; ?>
+        </div>
+        <?PHP endif; ?>
         <?PHP if (isset($this->addForm)) : ?>
         <fieldset>
             <legend><?=$this->translate('admin_document_add_' . $this->section)?></legend>

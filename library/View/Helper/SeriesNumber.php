@@ -25,42 +25,32 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
+ * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<div class="adminContainer">
+/**
+ * This view helper returns the escaped number of a document in a series.
+ */
+class View_Helper_SeriesNumber extends Zend_View_Helper_Abstract {
 
-<div class="breadcrumbsContainer">
-<?= $this->navigation()->breadcrumbs() ?>
-</div>
+    /**
+     * Returns the number of a document in a series.
+     * @param Opus_Document $document
+     * @param Opus_Series $series
+     * @return string
+     */
+    public function seriesNumber($document, $series) {
+        foreach ($document->getSeries() as $linkedSeries) {
+            if ($linkedSeries->getModel()->getId() === $series->getId()) {
+                return htmlspecialchars($linkedSeries->getNumber());
+            }
+        }
 
-<table>
-    <? foreach($this->entries as $id => $entry) : ?>
-    <tr>
-        <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($entry) ?></a></td>
-        <td>
-        <form action="<?= $this->url(array('action' => 'dispatch')) ?>" class="crud" method="post">
-            <input type='submit' name="actionEdit" value='<?= $this->translate('ButtonEdit')?>' class="crud">
-            <input type="submit" name="actionDelete" value='<?= $this->translate('ButtonDelete') ?>' />
-            <input type="hidden" name="id" value="<?=$id?>" />
-        </form>
-        </td>
-        <td>
-            <a href="<?= $this->url(array('module' => 'admin',
-                'controller' => 'documents', 'action' => 'index',
-                'seriesid' => $id)) ?>"><?= $this->translate('admin_series_link_showdocuments') ?></a>
-        </td>
-    </tr>
-    <? endforeach; ?>
-</table>
+        return '';
+    }
 
-<form action="<?= $this->url(array('action' => 'new')) ?>" class="crud" method="get">
-  <input type='submit' value='<?= $this->translate('ButtonNew') ?>' class="crud">
-</form>
-
-</div>
+}

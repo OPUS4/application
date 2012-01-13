@@ -164,10 +164,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 $this->view->collectionName = $collection->getDisplayName();
             }
         }
-        
-        if (!empty($seriesId)) {
+        else if (!empty($seriesId)) {
             $series = new Opus_Series($seriesId);
-            // $result = $series->get
+            $this->view->series = $series;
+            $result = $series->getDocumentIdsSortedBySortKey();
         }
         else {
             $result = $this->_helper->documents($sort_order, $sort_reverse, $state);
