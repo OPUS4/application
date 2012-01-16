@@ -102,7 +102,11 @@ INSERT INTO `document_subjects` (`id`, `document_id`, `language`, `type`, `value
 (315, 91, 'deu', 'uncontrolled', 'deutsches Schlagwort', NULL),
 (316, 91, 'deu', 'uncontrolled', 'ein anderes deutsches Schlagwort', NULL),
 (317, 91, 'fra', 'uncontrolled', 'mot clé français', NULL),
-(318, 91, 'fra', 'uncontrolled', 'autre mot-clé français', NULL);
+(318, 91, 'fra', 'uncontrolled', 'autre mot-clé français', NULL),
+(321, 91, 'deu', 'uncontrolled', 'ein seeehrrr laaaanges schlagwort', NULL),
+(322, 92, 'deu', 'uncontrolled', 'ein seeehrrr laaaanges schlagwort', NULL),
+(323, 93, 'deu', 'uncontrolled', 'ein seeehrrr laaaanges schlagwort', NULL);
+
 
 --
 -- Daten für Tabelle `document_title_abstracts`
