@@ -263,7 +263,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $session->additionalFields = array();
         $session->additionalFields['Institute'] = '1';                
         $session->additionalFields['collId0Institute1'] = '1';
-        $session->additionalFields['collId1Institute1'] = '15994';
+        $session->additionalFields['collId1Institute1'] = '15994';        
         $session->additionalFields['stepInstitute1'] = '2';         
            
         $data = array(
@@ -296,10 +296,10 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
             'Series1' => ''
         );
         
-        $form = new Publish_Form_PublishingSecond($data);
+        $form = new Publish_Form_PublishingSecond($data);       
         $form->getExtendedForm($data, true);                   
-        $this->assertTrue($session->additionalFields['stepInstitute1']=='1');  
-        $this->assertTrue($session->additionalFields['collId2Institute1']=='15995');  
+        $this->assertTrue($session->additionalFields['stepInstitute1']=='1');          
+        $this->assertFalse(array_key_exists('collId2Institute1', $session->additionalFields));  
     }    
     
     /**
