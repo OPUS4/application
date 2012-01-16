@@ -29,7 +29,8 @@
  * @category    Application
  * @package     Module_Oai
  * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @copyright   Copyright (c) 2009-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -83,7 +84,18 @@
             <xsl:apply-templates select="PersonAdvisor" mode="xmetadissplus" />
             <xsl:apply-templates select="PersonReferee" mode="xmetadissplus" />
 
-            <xsl:apply-templates select="ThesisDateAccepted" mode="xmetadissplus" />
+            <xsl:choose>
+                <xsl:when test="ThesisDateAccepted">
+                    <dcterms:dateAccepted xsi:type="dcterms:W3CDTF">
+                        <xsl:value-of select="ThesisDateAccepted/@Year"/>-<xsl:value-of select="format-number(ThesisDateAccepted/@Month,'00')"/>-<xsl:value-of select="format-number(ThesisDateAccepted/@Day,'00')"/>
+                    </dcterms:dateAccepted>
+                </xsl:when>
+                <xsl:when test="@ThesisYearAccepted">
+                    <dcterms:dateAccepted xsi:type="dcterms:W3CDTF">
+                        <xsl:value-of select="@ThesisYearAccepted"/>
+                    </dcterms:dateAccepted>
+                </xsl:when>
+            </xsl:choose>
 
             <dcterms:issued xsi:type="dcterms:W3CDTF">
                 <xsl:choose>
@@ -389,12 +401,6 @@
                  </cc:address>
         </dc:publisher>
     </xsl:template>          
-
-    <xsl:template match="ThesisDateAccepted" mode="xmetadissplus">
-        <dcterms:dateAccepted xsi:type="dcterms:W3CDTF">
-            <xsl:value-of select="@Year"/>-<xsl:value-of select="format-number(@Month,'00')"/>-<xsl:value-of select="format-number(@Day,'00')"/>
-        </dcterms:dateAccepted>
-    </xsl:template>
 
     <xsl:template match="IdentifierUrn" mode="xmetadissplus">
         <dc:identifier xsi:type="urn:nbn">
