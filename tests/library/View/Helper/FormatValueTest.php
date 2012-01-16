@@ -71,7 +71,7 @@ class View_Helper_FormatValueTest extends ControllerTestCase {
 
         $output = $this->__helper->format($field, 'Opus_Document');
 
-        $this->assertEquals('German', $output);
+        $this->assertTrue(in_array($output, array('German', 'Deutsch')));
     }
 
     public function testFormatValueForYear() {
