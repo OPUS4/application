@@ -49,7 +49,7 @@ class Admin_SeriesController extends Controller_CRUDAction {
         $entries = Opus_Series::getAllSortedBySortKey();
         $this->view->entries = array();
         foreach ($entries as $entry) {
-            $this->view->entries[$entry->getId()] = $entry->getTitle();
+            $this->view->entries[$entry->getId()] = $entry;
         }
     }
 

@@ -42,7 +42,7 @@
 <table>
     <? foreach($this->entries as $id => $entry) : ?>
     <tr>
-        <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($entry) ?></a></td>
+        <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($entry->getTitle()) ?></a></td>
         <td>(id = <?= $id ?>)</td>
         <td>
         <form action="<?= $this->url(array('action' => 'dispatch')) ?>" class="crud" method="post">
@@ -52,9 +52,14 @@
         </form>
         </td>
         <td>
+            <?PHP $docCount = $entry->getNumOfAssociatedDocuments(); ?>
+            <?PHP if ($docCount > 0) : ?>
             <a href="<?= $this->url(array('module' => 'admin',
                 'controller' => 'documents', 'action' => 'index',
-                'seriesid' => $id)) ?>"><?= $this->translate('admin_series_link_showdocuments') ?></a>
+                'seriesid' => $id)) ?>"><?= $this->translate('admin_series_link_showdocuments') ?> (<?= $docCount ?>)</a>
+            <?PHP else : ?>
+            &nbsp;
+            <?PHP endif; ?>
         </td>
     </tr>
     <? endforeach; ?>
