@@ -49,7 +49,7 @@ class Controller_Helper_Translation extends Zend_Controller_Action_Helper_Abstra
      * @return string
      */
     public function direct($modelName, $fieldName, $value) {
-        return getKeyForValue($modelName, $fieldName, $value);
+        return $this->getKeyForValue($modelName, $fieldName, $value);
     }
 
     /**
