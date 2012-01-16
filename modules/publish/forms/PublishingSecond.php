@@ -167,7 +167,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
     }
 
     public function getExtendedForm($postData, $reload) {
-        $this->view->currentAnchor = "";
+        $this->view->currentAnchor = "";        
         if ($reload === true) {
 
             //find out which button was pressed            
@@ -215,13 +215,20 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                     break;
                 case 'down':
                     if ($postData[$fieldName . $currentNumber] !== '' || 
-                        array_key_exists('collId1' . $fieldName . $currentNumber, $this->session->additionalFields) &&
-                                $this->session->additionalFields['collId1' . $fieldName . $currentNumber] !== '')
+                        array_key_exists('collId' . $level . $fieldName . $currentNumber, $this->session->additionalFields) &&
+                                $this->session->additionalFields['collId' . $level . $fieldName . $currentNumber] !== '')
                         $level = (int) $level + 1;
                     break;
                 case 'up' :
-                    if ($level >= 2)
-                        $level = (int) $level - 1;
+                    if ($level >= 2) {
+                        unset($this->session->additionalFields['collId' . $level . $fieldName . $currentNumber]);
+                        $level = (int) $level - 1;                             
+                    }                                        
+                    if ($level == 1)
+                        unset($this->session->additionalFields['collId1'. $fieldName . $currentNumber]);
+                    // unset root node in disabled array
+                    if (array_key_exists($fieldName . $currentNumber, $this->session->disabled))
+                            unset($this->session->disabled[$fieldName . $currentNumber]);
                     break;
                 default:
                     break;
@@ -263,8 +270,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                 if (isset($post[$field . $value])) {
                     if ($post[$field . $value] !== '')
                         $this->session->additionalFields['collId1' . $field . $value] = substr($post[$field . $value], 3);
+                    }
                 }
-            }
             // Middle Node or Leaf
             else {
                 if (isset($post['collId' . $level . $field . $value])) {

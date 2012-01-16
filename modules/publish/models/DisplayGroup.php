@@ -201,7 +201,7 @@ class Publish_Model_DisplayGroup {
      * The buttons have been added to the current Zend_Form.
      * @return <Array> of button names
      */
-    private function browseButtons() {
+    private function browseButtons() {        
         $displayGroup = array();
         //show browseDown button only for the last select field
         $level = (int) count($this->collectionIds);
@@ -239,7 +239,7 @@ class Publish_Model_DisplayGroup {
             $this->form->addElement($upButton);
             $displayGroup[] = $upButton->getName();            
         }
-
+        
         return $displayGroup;
     }
 
@@ -258,7 +258,10 @@ class Publish_Model_DisplayGroup {
         }
         if ($fieldset > 1)
             $this->collectionIds[] = $this->collectionIds[0];
-        $this->session->additionalFields['collId0' . $this->elementName . $fieldset] = $this->collectionIds[0];       
+        
+        //initialize root node
+        $this->session->additionalFields['collId0' . $this->elementName . $fieldset] = $this->collectionIds[0];        
+                        
         $elements = array();
         //found collection level for the current fieldset        
         for ($j = 2; $j <= $step; $j++) {
@@ -266,7 +269,7 @@ class Publish_Model_DisplayGroup {
             //get the previous selection collection id from session
             if (isset($this->session->additionalFields['collId' . $prev . $this->elementName . $fieldset])) {
                 $id = $this->session->additionalFields['collId' . $prev . $this->elementName . $fieldset];
-
+                
                 if ($id != '0' || !is_null($id)) {
                     //insert to array and geneerate field
                     $this->collectionIds[] = $id;
