@@ -46,8 +46,10 @@ schema_file=$script_dir/../db/schema/opus4current.sql
 master_dir=$script_dir/../db/masterdata/
 test_dir=$script_dir/sql/
 
-# path to directory that contains test fulltexts
-fulltext_dir=$script_dir/fulltexts
+#
+# Application Workspace Directories
+#
+
 # path to workspace directory
 workspace_dir=$script_dir/../workspace
 # path to workspace directory that hosts fulltexts
@@ -59,8 +61,20 @@ workspace_tmp_dir=$workspace_dir/tmp
 # path to workspace directory that hosts cached files
 workspace_cache_dir=$workspace_dir/cache
 
+# path to directory of series_logos
+series_logos_dir=$script_dir/../public/series_logos
+
+
+#
+# Files and Directiories associated with test documents / data
+#
+
+# path to directory that contains fulltexts of test documents
+fulltext_dir=$script_dir/fulltexts
 # path to test workspace
 workspace_test_dir=$script_dir/workspace
+# path to directory of test series logos
+test_series_logos_dir=$script_dir/series_logos
 
 #
 # end editable part
@@ -100,28 +114,57 @@ if [ -d ${test_dir} ] ; then
     done
 fi
 
-#Backup old fulltexts and log files
+
+#
+# Backup old fulltexts and log files and series logos
+#
+
 TEMP_DIR=$(mktemp -d $workspace_tmp_dir/old-XXXXXXX)
 mkdir -v $TEMP_DIR/{files,log}
+
 mv $workspace_files_dir/ $TEMP_DIR/files
 rm -rf $TEMP_DIR/files/.svn
 
 mv $workspace_log_dir/ $TEMP_DIR/log
 rm -rf $TEMP_DIR/log/.svn
  
+mv $series_logos_dir $TEMP_DIR
+rm -rf $TEMP_DIR/series_logos/.svn
+
 cd $workspace_dir
 svn up
 cd -
 echo -e "\n*** Created backup of fulltexts and log files in $TEMP_DIR ***\n"
+
+svn up $series_logos_dir
+cd -
+
+echo -e "\n*** Created backup of fulltexts, log files and series logos in $TEMP_DIR ***\n"
 
 cd $workspace_test_dir
 rm -rf *
 svn up
 cd -
 
-#Copy test fulltexts to workspace
+
+#
+# Copy test fulltexts to workspace
+#
+
 rsync -rv --exclude=.svn $fulltext_dir/ $workspace_files_dir
+
+
+#
+# Restore log files
+#
 
 touch $workspace_log_dir/{opus.log,opus-console.log}
 chmod -R o+w,g+w {$workspace_files_dir,$workspace_log_dir}
+
+
+#
+# Copy test series logos to public/series_logos
+#
+
+rsync -rv --exclude=.svn $test_series_logos_dir/ $series_logos_dir
 
