@@ -414,7 +414,7 @@
                 <xsl:text>/files/</xsl:text>
                 <xsl:value-of select="../@Id" />
                 <xsl:text>/</xsl:text>
-                <xsl:value-of select="@PathName" />
+                <xsl:value-of select="php:function('urlencode',string(@PathName))"/>
             </xsl:variable>
 
             <xsl:variable name="fileLinkText">

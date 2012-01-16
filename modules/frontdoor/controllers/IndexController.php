@@ -92,6 +92,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $proc->registerPHPFunctions(self::TRANSLATE_FUNCTION);
         $proc->registerPHPFunctions(self::TRANSLATE_DEFAULT_FUNCTION);
         $proc->registerPHPFunctions(self::FILE_ACCESS_FUNCTION);
+        $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
 
         $config = Zend_Registry::getInstance()->get('Zend_Config');
