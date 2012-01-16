@@ -43,6 +43,7 @@
     <? foreach($this->entries as $id => $entry) : ?>
     <tr>
         <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($entry) ?></a></td>
+        <td>(id = <?= $id ?>)</td>
         <td>
         <form action="<?= $this->url(array('action' => 'dispatch')) ?>" class="crud" method="post">
             <input type='submit' name="actionEdit" value='<?= $this->translate('ButtonEdit')?>' class="crud">
