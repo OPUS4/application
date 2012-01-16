@@ -286,4 +286,49 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertTrue(2 == substr_count($this->getResponse()->getBody(), 'http://www.myexampledomain.de/myexamplepath'));
     }
 
+    /**
+     * Regression test for OPUSVIER-1647
+     */
+    public function testUrlEscapedFileNameDoc1() {
+        $d = new Opus_Document(1);
+        $filePathnames = array();
+        foreach ($d->getFile() AS $file) {
+            $filePathnames[] = $file->getPathName();
+        }
+
+        $filenameNormal = 'asis-hap.pdf';
+        $filenameWeird = 'asis-hap_\'.pdf';
+        $this->assertContains($filenameNormal, $filePathnames, "testdata changed!");
+        $this->assertContains($filenameWeird, $filePathnames, "testdata changed!");
+
+        $this->dispatch('/frontdoor/index/index/docId/1');
+
+        $responseBody = $this->getResponse()->getBody();
+        $this->assertRegExp('/<a href="[^"]+\/1\/asis-hap.pdf"/', $responseBody);
+        $this->assertRegExp('/<a href="[^"]+\/1\/asis-hap_%27.pdf"/', $responseBody);
+        $this->assertNotRegExp('/<a href="[^"]+\/1\/asis-hap_\'.pdf"/', $responseBody);
+    }
+
+    /**
+     * Regression test for OPUSVIER-1647
+     */
+    public function testUrlEscapedFileNameDoc147() {
+        $d = new Opus_Document(147);
+        $filePathnames = array();
+        foreach ($d->getFile() AS $file) {
+            $filePathnames[] = $file->getPathName();
+        }
+
+        $filenameNormal = 'special-chars-%-"-#-&.pdf';
+        $filenameWeird = "'many'  -  spaces  and  quotes.pdf";
+        $this->assertContains($filenameNormal, $filePathnames, "testdata changed!");
+        $this->assertContains($filenameWeird, $filePathnames, "testdata changed!");
+
+        $this->dispatch('/frontdoor/index/index/docId/147');
+
+        $responseBody = $this->getResponse()->getBody();
+        $this->assertRegExp('/<a href="[^"]+\/\d+\/special-chars-%25-%22-%23-%26.pdf">/', $responseBody);
+        $this->assertRegExp('/<a href="[^"]+\/\d+\/%27many%27\+\+-\+\+spaces\+\+and\+\+quotes.pdf">/', $responseBody);
+    }
+
 }
