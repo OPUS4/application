@@ -55,12 +55,6 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
     private $__translation;
 
     /**
-     * Current view.
-     * @var Zend_View_Interface
-     */
-    private $__view;
-
-    /**
      * Controller helper for handling of dates.
      * @var Controller_Helper_Dates
      */
@@ -76,13 +70,6 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
 
         $this->__dates =
                 Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
-    }
-
-    /**
-     * Sets the current view, so it can be used by helper.
-     */
-    public function setView(Zend_View_Interface $view) {
-        $this->__view = $view;
     }
 
     /**
@@ -132,7 +119,7 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
                 if ($field->isSelection()) {
                     $value = $field->getValue();
                     $key = $this->__translation->getKeyForValue($model, $field->getName(), $value);
-                    return $this->__view->translate($key);
+                    return $this->view->translate($key);
                 }
                 else if ($field->isCheckbox()) {
                     if ($field->getValue()) {
@@ -141,7 +128,7 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
                     else {
                         $key = 'Field_Value_False';
                     }
-                    return $this->__view->translate($key);
+                    return $this->view->translate($key);
                 }
                 else {
                     return $field->getValue();
