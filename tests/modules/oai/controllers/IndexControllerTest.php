@@ -342,6 +342,52 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Regression test for OPUSVIER-2068
+     */
+    public function testGetRecordXMetaDissPlusDoc91CheckThesisYearAccepted() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2068
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/dcterms:dateAccepted');
+        $this->assertEquals(1, $elements->length,
+                "Unexpected dcterms:dateAccepted count");
+
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/dcterms:dateAccepted[text()="2010-02-26"]');
+        $this->assertEquals(1, $elements->length,
+                "Unexpected dcterms:dateAccepted count");
+    }
+
+    /**
+     * Regression test for OPUSVIER-2068
+     */
+    public function testGetRecordXMetaDissPlusDoc148CheckThesisYearAccepted() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::148');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2068
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/dcterms:dateAccepted');
+        $this->assertEquals(1, $elements->length,
+                "Unexpected dcterms:dateAccepted count");
+
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/dcterms:dateAccepted[text()="2012"]');
+        $this->assertEquals(1, $elements->length,
+                "Unexpected dcterms:dateAccepted count");
+    }
+
+    /**
      * Test verb=ListIdentifiers.
      */
     public function testListIdentifiers() {
