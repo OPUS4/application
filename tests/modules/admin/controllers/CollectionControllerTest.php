@@ -267,7 +267,8 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
     public function testCancelAssignCollection() {
         $this->dispatch('/admin/collection/assign/document/40');
         $body = $this->getResponse()->getBody();
-        $this->assertNotContains('/admin/documents/edit/id/40', $body);
+        $this->assertNotContains('/admin/documents/edit/id/40', $body); // old link before fix ("documentS")
+        $this->assertContains('/admin/document/edit/id/40/section/collections', $body);
     }
 
 }
