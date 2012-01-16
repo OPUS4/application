@@ -2596,3 +2596,25 @@ INSERT INTO `access_files` (`role_id`, `file_id`) VALUES
 (2, 113),
 (2, 114),
 (2, 115);
+
+
+--
+-- Daten für Tabelle `link_documents_series`
+--
+INSERT INTO `link_documents_series` (`document_id`, `series_id`, `number`, `doc_sort_order`) VALUES
+(1, 5, 'A', 0),
+(2, 5, 'B', 1),
+(3, 5, 'C', 2),
+(4, 5, 'D', 3),
+(5, 5, 'E', 4),
+(6, 5, 'F', 5),
+(7, 5, 'G', 6),
+(8, 5, 'H', 7),
+(9, 5, 'I', 8),
+(10, 5, 'J', 9),
+(11, 5, 'K', 10),
+(12, 5, 'L', 11),
+(13, 5, 'M', 12);
+
+
+
