@@ -175,9 +175,6 @@
             </dc:type>
 
             <xsl:apply-templates select="IdentifierUrn" mode="xmetadissplus" />
-            <dcterms:medium xsi:type="dcterms:IMT">
-               <xsl:text>application/pdf</xsl:text>
-            </dcterms:medium>
             <dc:language xsi:type="dcterms:ISO639-2">
                  <xsl:choose>
                    <xsl:when test="@Language='deu'">
@@ -423,6 +420,9 @@
                 <xsl:value-of select="@FileSize"/>
             </xsl:attribute>
         </ddb:fileProperties>
+        <dcterms:medium xsi:type="dcterms:IMT">
+            <xsl:value-of select="@MimeType" />
+        </dcterms:medium>
     </xsl:template>
 
     <xsl:template match="TransferUrl" mode="xmetadissplus">

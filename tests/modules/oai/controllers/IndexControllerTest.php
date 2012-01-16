@@ -63,6 +63,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $xpath->registerNamespace('dc', "http://purl.org/dc/elements/1.1/");
         $xpath->registerNamespace('pc', "http://www.d-nb.de/standards/pc/");
         $xpath->registerNamespace('xMetaDiss', "http://www.d-nb.de/standards/xmetadissplus/");
+        $xpath->registerNamespace('dcterms', "http://purl.org/dc/terms/");
         return $xpath;
     }
 
@@ -311,6 +312,33 @@ class Oai_IndexControllerTest extends ControllerTestCase {
             $this->assertNotContains($badNS, $response->getBody(),
                     "Output contains '$badNS', which indicates bad namespaces.");
         }
+    }
+
+    /**
+     * Regression test for OPUSVIER-2193
+     */
+    public function testGetRecordXMetaDissPlusDoc91Dcterms() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::91');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2193
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/dcterms:medium');
+        $this->assertEquals(3, $elements->length,
+                "Unexpected dcterms:medium count");
+
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/dcterms:medium[text()="application/pdf"]');
+        $this->assertEquals(1, $elements->length,
+                "Unexpected dcterms:medium count for application/pdf");
+
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/dcterms:medium[text()="text/plain"]');
+        $this->assertEquals(2, $elements->length,
+                "Unexpected dcterms:medium count for text/plain");
     }
 
     /**
