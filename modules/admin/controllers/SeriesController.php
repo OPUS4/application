@@ -46,7 +46,7 @@ class Admin_SeriesController extends Controller_CRUDAction {
      * Shows all series.
      */
     public function indexAction() {
-        $entries = Opus_Series::getAll();
+        $entries = Opus_Series::getAllSortedBySortKey();
         $this->view->entries = array();
         foreach ($entries as $entry) {
             $this->view->entries[$entry->getId()] = $entry->getTitle();
