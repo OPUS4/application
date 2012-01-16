@@ -31,48 +31,16 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+?>
 
-class Solrsearch_BrowseController extends Controller_Action {
+<h2><?= htmlspecialchars($this->title) ?></h2>
 
-    public function  init() {
-        parent::init();
-        $this->_helper->mainMenu('browsing');
-    }
-
-    public function indexAction() {
-        $this->view->baseUrl = $this->getRequest()->getBaseUrl();
-        $collectionRoles = new Solrsearch_Model_CollectionRoles();
-        $this->view->collectionRoles = $collectionRoles->getAllVisible();
-        $this->view->showSeriesBrowsing = Solrsearch_Model_Series::hasDisplayableSeries();
-    }
-
-    public function doctypesAction() {
-        $facetname = 'doctype';
-        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::FACET_ONLY);
-        $query->setFacetField($facetname);
-        $searcher = new Opus_SolrSearch_Searcher();
-        $facets = $searcher->search($query)->getFacets();
-        $docTypesTranslated = array();
-        foreach($facets[$facetname] as $facetitem) {
-            $translation = $this->view->translate($facetitem->getText());
-            $docTypesTranslated[$translation] = $facetitem;
-        }
-        uksort($docTypesTranslated, "strnatcasecmp");
-        $this->view->facetitems = $docTypesTranslated;
-        $this->view->title = $this->view->translate('solrsearch_browse_doctypes');
-    }
-
-    public function seriesAction() {
-        $visibleSeries = Solrsearch_Model_Series::getVisibleNonEmptySeriesSortedBySortKey();
-
-        if (count($visibleSeries) == 0) {
-            $this->_redirectToAndExit('index');
-        }
-
-        $this->view->series = array();
-        foreach ($visibleSeries as $series) {
-            array_push($this->view->series, array('id' => $series->getId(), 'title' => $series->getTitle()));
-        }
-    }
-}
-
+<div id="seriesbar">
+    <div id="serieslogo">
+        <img src="<?= $this->baseUrl() . '/series_logos/' . $this->seriesId . '/' . $this->logoFilename ?>"/>
+    </div>
+    <div id="seriesinfobox">
+        <?= $this->infobox ?>
+    </div>
+    <div class="clearbar"/>
+</div>

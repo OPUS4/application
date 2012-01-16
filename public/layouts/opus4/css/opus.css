@@ -973,3 +973,27 @@ body > #top-header{
 	width: 100%;
 	/* background-color: white; */
 }
+
+
+/* Series browsing */
+
+#seriesbar {
+    padding: 10px;
+    width: 100%;
+}
+
+#serieslogo {
+    width: 400px;
+    float: left;        
+}
+
+#seriesinfobox {
+    padding-left: 420px;    
+    font-size: larger;
+    color: #26517D;    
+}
+
+#seriesbar div.clearbar {
+    clear: both;
+    margin-bottom: 30px;
+}

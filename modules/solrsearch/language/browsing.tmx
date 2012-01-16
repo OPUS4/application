@@ -22,6 +22,16 @@
         </tuv>
     </tu>
 
+    <tu tuid="solrsearch_browse_series">
+        <tuv xml:lang="en">
+            <seg>Browse series</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Schriftenreihen</seg>
+        </tuv>
+    </tu>
+
+
     <tu tuid="search_index_browsing">
       <tuv xml:lang="en">
         <seg>Browse</seg>
@@ -40,6 +50,14 @@
       </tuv>
     </tu>
 
+    <tu tuid="search_index_series_browsing">
+      <tuv xml:lang="en">
+        <seg>Series</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schriftenreihen</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="latest_documents_title">
       <tuv xml:lang="en">
@@ -50,14 +68,21 @@
       </tuv>
     </tu>
 
-
-
     <tu tuid="browse_doctypes_title">
         <tuv xml:lang="en">
             <seg>Browse documents by type</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Dokumenttypen</seg>
+            <seg>Übersicht der Dokumenttypen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="browse_series_title">
+        <tuv xml:lang="en">
+            <seg>Browse series</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersicht der Schriftenreihen</seg>
         </tuv>
     </tu>
 

@@ -40,6 +40,7 @@ class Util_Searchtypes {
     const COLLECTION_SEARCH = 'collection';
     const LATEST_SEARCH = 'latest';
     const ALL_SEARCH = 'all';
+    const SERIES_SEARCH = 'series';
 
     public static function isSupported($searchtype) {
         $supportedTypes = array (
@@ -48,7 +49,8 @@ class Util_Searchtypes {
             self::AUTHOR_SEARCH,
             self::COLLECTION_SEARCH,
             self::LATEST_SEARCH,
-            self::ALL_SEARCH
+            self::ALL_SEARCH,
+            self::SERIES_SEARCH
         );
         return in_array($searchtype, $supportedTypes);
     }

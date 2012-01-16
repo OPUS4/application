@@ -158,6 +158,9 @@ class Util_QueryBuilder {
         if ($input['searchtype'] === Util_Searchtypes::COLLECTION_SEARCH) {
             return $this->createCollectionSearchQuery($input);
         }
+        if ($input['searchtype'] === Util_Searchtypes::SERIES_SEARCH) {
+            return $this->createSeriesSearchQuery($input);
+        }
         if ($input['searchtype'] === Util_Searchtypes::ALL_SEARCH) {
             return $this->createAllSearchQuery($input);
         }
@@ -240,6 +243,27 @@ class Util_QueryBuilder {
 
         $query->setCatchAll('*:*');
         $query->addFilterQuery('collection_ids', $input['collectionId']);
+        $this->addFiltersToQuery($query, $input);
+
+        if ($this->export) {
+            $query->setReturnIdsOnly(true);
+        }
+
+        $this->logger->debug("Query $query complete");
+        return $query;
+    }
+
+    private function createSeriesSearchQuery($input) {
+        $this->logger->debug("Constructing query for series search.");
+
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
+        $query->setStart($input['start']);
+        $query->setRows($input['rows']);
+        $query->setSortField($input['sortField']);
+        $query->setSortOrder($input['sortOrder']);
+
+        $query->setCatchAll('*:*');
+        $query->addFilterQuery('series_ids', $input['seriesId']);
         $this->addFiltersToQuery($query, $input);
 
         if ($this->export) {

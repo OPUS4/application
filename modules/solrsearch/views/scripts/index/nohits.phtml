@@ -40,6 +40,8 @@
         include('advancedSearchForm.phtml');
     else if ($this->searchType === 'collection')
         include('browsecollection.phtml');
+    else if ($this->searchType === 'series')
+        include('browseseries.phtml');
 ?>
 
 <?php if ($this->searchType !== 'collection') : ?>

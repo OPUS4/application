@@ -39,7 +39,11 @@
     <p class="label"><?= $this->translate('sorting_sort_by') ?></p>
     <ul class="sorting_options">
     
-    <?php if ($this->q !== '' && !$this->browsing && $this->searchType !== 'authorsearch' && $this->searchType !== 'collection' && $this->searchType !== 'all') :
+    <?php if ($this->q !== '' && !$this->browsing 
+            && $this->searchType !== 'authorsearch'
+            && $this->searchType !== 'collection'
+            && $this->searchType !== 'series'
+            && $this->searchType !== 'all') :
         $urlparams = $this->firstPage;
         $urlparams['sortfield'] = 'score';
         $urlparams['sortorder'] = 'desc';

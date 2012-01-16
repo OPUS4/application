@@ -28,7 +28,7 @@
  * @package     Module_Solrsearch
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -81,12 +81,20 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     public function searchAction() {
-        if (!is_null($this->getRequest()->getParam('export'))) {
+        if (!is_null($this->getRequest()->getParam('export')) || !is_null($this->getRequest()->getParam('rss'))) {
             $params = $this->getRequest()->getParams();
             // export module ignores pagination parameters
             unset($params['rows']);
             unset($params['start']);
-            return $this->_redirectToAndExit('index', null, 'index', 'export', $params);
+            
+            if (!is_null($this->getRequest()->getParam('export'))) {
+                return $this->_redirectToAndExit('index', null, 'index', 'export', $params);
+            }
+            
+            if (!is_null($this->getRequest()->getParam('rss'))) {
+                unset($params['rss']);
+                return $this->_redirectToAndExit('index', null, 'index', 'rss', $params);
+            }
         }
 
         $this->query = $this->buildQuery();
@@ -177,7 +185,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->personsQueryModifier = $this->query->getModifier('persons');
             return;
         }
-        if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH) {
+        if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH || $this->searchtype === Util_Searchtypes::SERIES_SEARCH) {
             $this->setFilterQueryBaseURL();
             return;
         }
@@ -254,8 +262,29 @@ class Solrsearch_IndexController extends Controller_Action {
         if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH) {
             $queryBuilderInput['collectionId'] = $this->prepareChildren();
         }
+        if ($this->searchtype === Util_Searchtypes::SERIES_SEARCH) {
+            $queryBuilderInput['seriesId'] = $this->prepareSeries();
+        }
         return $queryBuilder->createSearchQuery($this->validateInput($queryBuilderInput));
     }
+
+    private function prepareSeries() {
+        $series = null;
+        try {
+            $series = new Solrsearch_Model_Series($this->getRequest()->getParam('id'));
+        }
+        catch (Solrsearch_Model_Exception $e) {
+            $this->_logger->debug($e->getMessage());
+            return $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
+        }
+
+        $this->view->title = $series->getTitle();
+        $this->view->seriesId = $series->getId();
+        $this->view->infobox = $series->getInfobox();
+        $this->view->logoFilename = $series->getLogoFilename();
+        return $series->getId();
+    }
+
 
     private function prepareChildren() {
         $collectionList = null;
