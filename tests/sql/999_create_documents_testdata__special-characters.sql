@@ -1,5 +1,5 @@
 INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing_corporation`, `creating_corporation`, `thesis_date_accepted`, `type`, `edition`, `issue`, `language`, `page_first`, `page_last`, `page_number`, `publication_state`, `published_date`, `published_year`, `publisher_name`, `publisher_place`, `server_date_modified`, `server_date_published`, `server_state`, `volume`, `belongs_to_bibliography`) VALUES
-(147, NULL, 2012, NULL, NULL, NULL, 'article', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2012, '', NULL, '2012-01-12T11:12:13Z', '2012-01-12T11:12:13Z', 'published', NULL, 0);
+(147, NULL, 2012, NULL, NULL, NULL, 'preprint', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2012, '', NULL, '2012-01-12T11:12:13Z', '2012-01-12T11:12:13Z', 'published', NULL, 0);
 
 INSERT INTO `document_title_abstracts` (`document_id`, `type`, `value`, `language`) VALUES
 (147, 'main', 'Sonderzeichen, die in der Frontdoor korrekt escaped werden müssen, siehe auch Ticket OPUSVIER-1647.', 'deu');
