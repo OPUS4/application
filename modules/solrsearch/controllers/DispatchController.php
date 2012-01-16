@@ -35,15 +35,8 @@
 
 class Solrsearch_DispatchController extends Controller_Action {
 
-    private $log;
-
-    public function  init() {
-        parent::init();
-        $this->log = Zend_Registry::get('Zend_Log');
-    }
-
     public function indexAction() {
-        $this->log->debug('Received new search request. Redirecting to search action of IndexController.');
+        $this->_logger->debug('Received new search request. Redirecting to search action of IndexController.');
         $params = array();
         $action = 'search';
 
