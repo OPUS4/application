@@ -583,6 +583,11 @@ class Admin_DocumentController extends Controller_Action {
                 break;
             default:
                 $subform = new Admin_Form_Model($field);
+                // TODO hack for OPUSVIER-1544 to make SortOrder mandatory
+                if ($editMode && strpos($field->getName(), 'Person') === 0) {
+                    $subform->getElement('SortOrder')
+                            ->setRequired(true);
+                }
                 break;
         }
         return $subform;
