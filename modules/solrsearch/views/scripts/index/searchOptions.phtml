@@ -59,7 +59,14 @@
         </li>
     <?php endif ?>
 
-    <?php foreach (array('year', 'title', 'author') as $sortfield) : ?>
+    <?php
+        $availableSearchFields = array('year', 'title', 'author');
+        if ($this->searchType === 'series') {
+            array_unshift($availableSearchFields, 'seriesnumber');
+        };
+    ?>
+
+    <?php foreach ($availableSearchFields as $sortfield) : ?>
         <?php foreach (array('asc', 'desc') as $sortorder) :
                     $urlparams = $this->firstPage;
                     $urlparams['sortfield'] = $sortfield;

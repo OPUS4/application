@@ -24,7 +24,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -798,7 +798,7 @@ body > #top-header{
 }
 .result_box dt{
 	background: #f3f6f8 no-repeat 24px 4px;
-	padding: 4px 8px 0 41px;
+	padding: 4px 8px 0 41px;        
 }
 .results_title img{
 	float: left;
@@ -806,9 +806,12 @@ body > #top-header{
 	margin: -14px 0 0 -50px;
 	vertical-align: bottom;
 }
+dl.result_box {
+    border-top: 1px solid #e2e6e9;
+}
 .result_box .results_title{
 	background-image: url(../img/theme/icon-title.gif);
-	border-top: 1px solid #e2e6e9;
+        padding-right: 75px!important;
 }
 .results_title a{
 	font-weight: bold;
@@ -817,10 +820,18 @@ body > #top-header{
 	padding-bottom: 5px;
 	background-image: url(../img/theme/icon-author.gif);
 }
+.result_box .results_seriesnumber {
+        float: right;
+        text-align: right;
+        min-width: 50px;
+        padding: 4px 8px 4px 12px;
+        color: #26517D;        
+        font-style: italic;
+}
 .result_box dd{
 	padding: 3px 6px;
 	margin: 0;
-	line-height: 1.5em;
+	line-height: 1.5em;        
 }
 /* Browsing */
 .nav.help li,

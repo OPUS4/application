@@ -218,7 +218,12 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->authorSearch = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::AUTHOR_SEARCH));
         $this->view->isSimpleList = false;
         $this->view->browsing = (boolean) $this->getRequest()->getParam('browsing', false);
-        $this->view->sortfield = $this->getRequest()->getParam('sortfield', 'score');
+        if ($this->searchtype == Util_Searchtypes::SERIES_SEARCH) {
+            $this->view->sortfield = $this->getRequest()->getParam('sortfield', 'seriesnumber');
+        }
+        else {
+            $this->view->sortfield = $this->getRequest()->getParam('sortfield', 'score');
+        }
         $this->view->sortorder = $this->getRequest()->getParam('sortorder', 'desc');
     }
 

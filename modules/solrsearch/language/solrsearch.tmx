@@ -112,6 +112,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="sorting_seriesnumber">
+            <tuv xml:lang="en">
+                <seg>Series</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Band</seg>
+            </tuv>
+        </tu>
+
          <tu tuid="sorting_sort_by">
             <tuv xml:lang="en">
                 <seg>Sort by</seg>

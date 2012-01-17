@@ -78,6 +78,9 @@ if($this->jQueryEnabled()) {
                                 'action' => 'index',
                                 'docId' => $result->getId());
                         ?>
+                        <?php if (!is_null($result->getSeriesNumber())) : ?>
+                            <dt class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber()); ?></dt>
+                        <?php endif ?>
                         <dt class="results_title">
                             <?php if ($this->jQueryEnabled()) : ?>
                                 <?php if (!is_null($result->getAbstract())) : ?>

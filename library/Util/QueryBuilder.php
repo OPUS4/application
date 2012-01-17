@@ -259,7 +259,12 @@ class Util_QueryBuilder {
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
         $query->setStart($input['start']);
         $query->setRows($input['rows']);
-        $query->setSortField($input['sortField']);
+        if ($input['sortField'] === 'seriesnumber' || $input['sortField'] === Opus_SolrSearch_Query::DEFAULT_SORTFIELD) {
+            $query->setSortField('doc_sort_order_for_seriesid_' . $input['seriesId']);
+        }
+        else {
+            $query->setSortField($input['sortField']);
+        }
         $query->setSortOrder($input['sortOrder']);
 
         $query->setCatchAll('*:*');
