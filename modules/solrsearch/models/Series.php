@@ -68,14 +68,16 @@ class Solrsearch_Model_Series {
     }
 
     public function getLogoFilename() {
-        $iterator = new DirectoryIterator(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'series_logos' . DIRECTORY_SEPARATOR . $this->series->getId());
-        foreach ($iterator as $fileinfo) {
-            if ($fileinfo->isFile()) {
-                return $fileinfo->getFilename();
+        $logoDir = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'series_logos' . DIRECTORY_SEPARATOR . $this->series->getId();
+        if (is_readable($logoDir)) {
+            $iterator = new DirectoryIterator($logoDir);
+            foreach ($iterator as $fileinfo) {
+                if ($fileinfo->isFile()) {
+                    return $fileinfo->getFilename();
+                }
             }
         }
-        return null;
-        
+        return null;        
     }
 
     public static function hasDisplayableSeries() {

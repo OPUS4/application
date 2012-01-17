@@ -36,11 +36,16 @@
 <h2><?= htmlspecialchars($this->title) ?></h2>
 
 <div id="seriesbar">
+    <?php $classAttribute = '' ?>
+    <?php if (!is_null($this->logoFilename)) : ?>
     <div id="serieslogo">
         <img src="<?= $this->baseUrl() . '/series_logos/' . $this->seriesId . '/' . $this->logoFilename ?>"/>
     </div>
-    <div id="seriesinfobox">
+    <?php else : ?>
+    <?php $classAttribute = 'class="max-width-available"' ?>
+    <?php endif ?>
+
+    <div id="seriesinfobox" <?= $classAttribute ?>>
         <?= $this->infobox ?>
-    </div>
-    <div class="clearbar"/>
+    </div>    
 </div>

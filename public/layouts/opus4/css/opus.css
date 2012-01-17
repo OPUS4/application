@@ -979,7 +979,7 @@ body > #top-header{
 
 #seriesbar {
     padding: 10px;
-    width: 100%;
+    margin-bottom: 30px;
 }
 
 #serieslogo {
@@ -993,7 +993,6 @@ body > #top-header{
     color: #26517D;    
 }
 
-#seriesbar div.clearbar {
-    clear: both;
-    margin-bottom: 30px;
+#seriesinfobox.max-width-available {
+    padding-left: 0;
 }
