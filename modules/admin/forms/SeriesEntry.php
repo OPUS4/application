@@ -69,10 +69,8 @@ class Admin_Form_SeriesEntry extends Zend_Form_SubForm {
 
         $sortOrder = new Zend_Form_Element_Text('SortOrder');
         $sortOrder->setLabel(self::MODEL_CLASS . '_SortOrder')
-                ->setRequired(true)
                 ->addValidator(new Zend_Validate_Int())
-                ->setErrorMessages(array(Zend_Validate_NotEmpty::IS_EMPTY => 'admin_document_form_error_is_empty',
-                    Zend_Validate_Int::NOT_INT => 'admin_document_form_error_not_int'));
+                ->setErrorMessages(array(Zend_Validate_Int::NOT_INT => 'admin_document_form_error_not_int'));
 
         $this->addElement($series);
         $this->addElement($number);
