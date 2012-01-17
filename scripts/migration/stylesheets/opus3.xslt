@@ -464,14 +464,11 @@
             <!-- Notes -->
             <xsl:if test="string-length(field[@name='bem_intern']) > 0">
                 <xsl:element name="Note">
-                    <xsl:attribute name="Scope">
+                    <xsl:attribute name="Visibility">
                         <xsl:text>private</xsl:text>
                     </xsl:attribute>
                     <xsl:attribute name="Message">
                         <xsl:value-of select="field[@name='bem_intern']" />
-                    </xsl:attribute>
-                    <xsl:attribute name="Creator">
-                        <xsl:text>unknown</xsl:text>
                     </xsl:attribute>
                 </xsl:element>
             </xsl:if>
@@ -489,14 +486,11 @@
                     </xsl:when>
                     <xsl:otherwise>
                          <xsl:element name="Note">
-                            <xsl:attribute name="Scope">
+                            <xsl:attribute name="Visibility">
                                 <xsl:text>public</xsl:text>
                             </xsl:attribute>
                             <xsl:attribute name="Message">
                                 <xsl:value-of select="field[@name='bem_extern']" />
-                            </xsl:attribute>
-                            <xsl:attribute name="Creator">
-                                <xsl:text>unknown</xsl:text>
                             </xsl:attribute>
                         </xsl:element>
                     </xsl:otherwise>
@@ -799,7 +793,7 @@
                 <xsl:value-of select="$type" />
             </xsl:attribute>
             <xsl:attribute name="Value">
-                <xsl:value-of select="$value" />
+                <xsl:value-of select="normalize-space($value)" />
             </xsl:attribute>
         </xsl:element>
     </xsl:template>
