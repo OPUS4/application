@@ -452,3 +452,7 @@
     border: 1px dotted lightgray;
     padding: 4px;
 }
+
+form.inline {
+    display: inline!important;
+}
