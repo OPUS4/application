@@ -34,6 +34,16 @@
             </tuv>
         </tu>
 
+
+        <tu tuid="admin_series_confirm_deletion">
+            <tuv xml:lang="en">
+                <seg>Are you sure?</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sind Sie sicher?</seg>
+            </tuv>
+        </tu>
+
     </body>
 
 </tmx>

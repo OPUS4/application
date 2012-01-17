@@ -45,8 +45,11 @@
         <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($entry->getTitle()) ?></a></td>
         <td>(id = <?= $id ?>)</td>
         <td>
-        <form action="<?= $this->url(array('action' => 'dispatch')) ?>" class="crud" method="post">
-            <input type='submit' name="actionEdit" value='<?= $this->translate('ButtonEdit')?>' class="crud">
+        <form action="<?= $this->url(array('action' => 'dispatch')) ?>" method="post" class="crud inline">
+            <input type='submit' name="actionEdit" value='<?= $this->translate('ButtonEdit')?>'>
+            <input type="hidden" name="id" value="<?=$id?>" />
+        </form>
+        <form action="<?= $this->url(array('action' => 'dispatch')) ?>" method="post" class="crud inline" onsubmit="return confirm('<?= $this->translate('admin_series_confirm_deletion') ?>');">
             <input type="submit" name="actionDelete" value='<?= $this->translate('ButtonDelete') ?>' />
             <input type="hidden" name="id" value="<?=$id?>" />
         </form>
@@ -66,7 +69,7 @@
 </table>
 
 <form action="<?= $this->url(array('action' => 'new')) ?>" class="crud" method="get">
-  <input type='submit' value='<?= $this->translate('ButtonNew') ?>' class="crud">
+  <input type='submit' value='<?= $this->translate('ButtonNew') ?>'>
 </form>
 
 </div>
