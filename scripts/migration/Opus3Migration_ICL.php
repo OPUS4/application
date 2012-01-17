@@ -191,7 +191,8 @@ $application = new Zend_Application(
         "config"=>array(
             APPLICATION_PATH . '/application/configs/application.ini',
             APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/import.ini'
+            APPLICATION_PATH . '/application/configs/migration.ini',
+            APPLICATION_PATH . '/application/configs/migration_config.ini'
         )
     )
 );
