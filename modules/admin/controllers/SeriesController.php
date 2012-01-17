@@ -53,6 +53,13 @@ class Admin_SeriesController extends Controller_CRUDAction {
         }
     }
 
+    public function newAction() {
+        parent::newAction();
+        $form = $this->view->form->getSubform('Opus_Series');
+        $form = $form->getSubform('Visible');
+        $form->getElement('1')->setValue(true);
+    }
+
     /**
      * Show series.
      */
