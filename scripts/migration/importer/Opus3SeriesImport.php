@@ -103,36 +103,35 @@ class Opus3SeriesImport {
 
 
     /**
-     * Imports Series from Opus3 to Opus4
+     * Imports Series from Opus3 to Opus4 in alphabetical order
      *
      * @param DOMDocument $data XML-Document to be imported
-     * @return array List of documents that have been imported
+     * @return void
      */
     protected function importSeries($data) {
-        $mf = $this->config->import->mapping->series;
+        $mf = $this->config->migration->mapping->series;
         $fp = null;
-        try {
-            $fp = @fopen($mf, 'w');
-            if (!$fp) {
-                throw new Exception("Could not create '" . $mf . "' for Series");
-            }
-        } catch (Exception $e){
-            $this->logger->log_error("Opus3SeriesImport", $e->getMessage());
+        $fp = @fopen($mf, 'w');
+        if (!$fp) {
+            $this->logger->log_error("Opus3SeriesImport", "Could not create '" . $mf . "' for Series");
             return;
         }
              
-        $classification = $this->transferOpusClassification($data);
-        foreach ($classification as $class) {
-            if (array_key_exists('name', $class) === false) { continue; }
-            if (array_key_exists('sr_id', $class) === false) { continue; }
-            //echo ".";
-            $series = new Opus_Series();
-            $series->setTitle($class['name']);
-            $series->store();
+        $series = $this->transferOpusSeries($data);
+        $sort_order = 1;
+        foreach ($series as $s) {
+            if (array_key_exists('name', $s) === false) { continue; }
+            if (array_key_exists('sr_id', $s) === false) { continue; }
 
-            $this->logger->log_debug("Opus3SeriesImport","Series imported: " . $class['name']);
+            $sr = new Opus_Series();
+            $sr->setTitle($s['name']);
+            $sr->setVisible(1);
+            $sr->setSortOrder($sort_order++);
+            $sr->store();
 
-            fputs($fp, $class['sr_id'] . ' ' . $series->getId() . "\n");
+            $this->logger->log_debug("Opus3SeriesImport","Series imported: " . $s['name']);
+
+            fputs($fp, $s['sr_id'] . ' ' . $sr->getId() . "\n");
         }
 	fclose($fp);
     }
@@ -141,19 +140,25 @@ class Opus3SeriesImport {
      * transfers any OPUS3-conform classification System into an array
      *
      * @param DOMDocument $data XML-Document to be imported
-     * @return array List of documents that have been imported
+     * @return array Seriess sorted by Name
      */
-    protected function transferOpusClassification($data) {
-	$classification = array();
-	$doclist = $data->getElementsByTagName('row');
+    protected function transferOpusSeries($data) {
+	$series = array();
+	$rowlist = $data->getElementsByTagName('row');
 	$index = 0;
-	foreach ($doclist as $document)	{
-            $classification[$index] = array();
-            foreach ($document->getElementsByTagName('field') as $field) {
-           	$classification[$index][$field->getAttribute('name')] = $field->nodeValue;
+	foreach ($rowlist as $row)	{
+            $series[$index] = array();
+            foreach ($row->getElementsByTagName('field') as $field) {
+           	$series[$index][$field->getAttribute('name')] = $field->nodeValue;
             }
             $index++;
 	}
-	return $classification;
+
+        foreach($series as $s=>$key) {
+            $sort_name[] = $key['name'];
+        }
+        array_multisort($sort_name, SORT_ASC, $series);
+
+	return $series;
     }
 }
