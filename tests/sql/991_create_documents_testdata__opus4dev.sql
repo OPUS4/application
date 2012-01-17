@@ -197,4 +197,6 @@ INSERT INTO `link_documents_series` (`document_id`, `series_id`, `number`, `doc_
 (91, 2, 'd', 0),
 (92, 2, 'c', 1),
 (93, 2, 'b', 2),
-(94, 2, 'a', 3);
+(94, 2, 'a', 3),
+(91, 6, '1', 0),
+(92, 6, '2', 1);
