@@ -571,7 +571,10 @@ class Admin_DocumentController extends Controller_Action {
             switch ($modelClass) {
                 case 'Opus_Person':
                     $person = new Opus_Person();
-                    $model = $document->addPerson($person);
+                    // Hack for OPUSVIER-1544
+                    $role = $fields['Role'];
+                    $method = 'addPerson' . ucfirst($role);
+                    $model = $document->$method($person);
                     $this->__processFields($model, $fields);
                     break;
                 case 'Opus_Licence':
@@ -815,7 +818,19 @@ class Admin_DocumentController extends Controller_Action {
                         // String that only contain whitespaces are considered
                         // empty
                         if (strlen(trim($value)) === 0) {
-                            $field->setValue(null);
+                            switch (get_class($model)) {
+                                case 'Opus_Model_Dependent_Link_DocumentPerson':
+                                    if ($field->getName() === 'SortOrder') {
+                                        $field->setValue('x'); // TODO hack for OPUSVIER-1544
+                                    }
+                                    else {
+                                        $field->setValue(null);
+                                    }
+                                    break;
+                                default:
+                                    $field->setValue(null);
+                                    break;
+                            }
                         }
                         else {
                             $field->setValue($value);
@@ -860,7 +875,9 @@ class Admin_DocumentController extends Controller_Action {
                 $document->addIdentifier($model);
                 break;
             case 'Opus_Person':
-                $document->addPerson($model);
+                // TODO refactor: this is not used, right?
+                $method = 'addPerson' . $model->getRole();
+                $document->$method($model);
                 break;
             case 'Opus_Reference':
                 $document->addReference($model);
