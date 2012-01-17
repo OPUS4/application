@@ -241,7 +241,8 @@ class Oai_IndexController extends Controller_Xml {
         }
 
         // for xMetaDiss it must be habilitation-thesis or doctoral-thesis
-        if ('xMetaDiss' === $oaiRequest['metadataPrefix']) {
+        $metadataPrefix = $oaiRequest['metadataPrefix'];
+        if ('xMetaDiss' === $metadataPrefix) {
             $type = $document->getType();
             $isHabOrDoc = in_array($type, $this->_xMetaDissRestriction);
             if (false === $isHabOrDoc) {
@@ -250,7 +251,7 @@ class Oai_IndexController extends Controller_Xml {
         }
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
 
-        $this->createXmlRecord($document);
+        $this->createXmlRecord($document, $metadataPrefix);
     }
 
     /**
@@ -448,9 +449,10 @@ class Oai_IndexController extends Controller_Xml {
      * Create xml structure for one record
      *
      * @param  Opus_Document $document
+     * @param  string        $metadataPrefix
      * @return void
      */
-    private function createXmlRecord(Opus_Document $document) {
+    private function createXmlRecord(Opus_Document $document, $metadataPrefix) {
         $docId = $document->getId();
         $domNode = $this->getDocumentXmlDomNode($document);
 
@@ -662,7 +664,7 @@ class Oai_IndexController extends Controller_Xml {
         $workIds = array_splice($restIds, 0, $max_records);
         foreach ($workIds as $docId) {
             $document = new Opus_Document($docId);
-            $this->createXmlRecord($document);
+            $this->createXmlRecord($document, $metadataPrefix);
         }
 
         // no records returned
