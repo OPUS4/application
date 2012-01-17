@@ -153,16 +153,16 @@ class Opus3XMLImport {
         $this->_proc->registerPhpFunctions();
         $this->_proc->importStyleSheet($this->_xslt);
 
-        $this->mapping['language'] =  array('old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->config->import->language);
-        $this->mapping['type'] =  array('old' => 'OldType', 'new' => 'Type', 'config' => $this->config->import->doctype);
+        $this->mapping['language'] =  array('old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->config->migration->language);
+        $this->mapping['type'] =  array('old' => 'OldType', 'new' => 'Type', 'config' => $this->config->migration->doctype);
 
-        $this->mapping['collection'] = array('name' => 'OldCollection', 'mapping' => $this->config->import->mapping->collections);
-        $this->mapping['institute'] = array('name' => 'OldInstitute',  'mapping' => $this->config->import->mapping->institutes);
-        $this->mapping['series'] = array('name' => 'OldSeries',  'mapping' => $this->config->import->mapping->series);
-        $this->mapping['grantor'] = array('name' => 'OldGrantor', 'mapping' => $this->config->import->mapping->grantors);
-        $this->mapping['licence'] = array('name' => 'OldLicence',  'mapping' => $this->config->import->mapping->licences);
-        $this->mapping['publisherUniversity'] = array('name' => 'OldPublisherUniversity', 'mapping' => $this->config->import->mapping->universities);
-        $this->mapping['role'] = array('name' => 'OldRole', 'mapping' => $this->config->import->mapping->roles);
+        $this->mapping['collection'] = array('name' => 'OldCollection', 'mapping' => $this->config->migration->mapping->collections);
+        $this->mapping['institute'] = array('name' => 'OldInstitute',  'mapping' => $this->config->migration->mapping->institutes);
+        $this->mapping['series'] = array('name' => 'OldSeries',  'mapping' => $this->config->migration->mapping->series);
+        $this->mapping['grantor'] = array('name' => 'OldGrantor', 'mapping' => $this->config->migration->mapping->grantors);
+        $this->mapping['licence'] = array('name' => 'OldLicence',  'mapping' => $this->config->migration->mapping->licences);
+        $this->mapping['publisherUniversity'] = array('name' => 'OldPublisherUniversity', 'mapping' => $this->config->migration->mapping->universities);
+        $this->mapping['role'] = array('name' => 'OldRole', 'mapping' => $this->config->migration->mapping->roles);
 
         array_push($this->thesistypes, 'bachelorthesis');
         array_push($this->thesistypes, 'doctoralthesis');
@@ -177,8 +177,8 @@ class Opus3XMLImport {
 
     public function initImportFile($data) {
         $this->completeXML = new DOMDocument;
-        if (isset($this->config->import->bem_extern)) {
-            $this->_proc->setParameter('', 'bem_extern', $this->config->import->bem_extern);
+        if (isset($this->config->migration->bem_extern)) {
+            $this->_proc->setParameter('', 'bem_extern', $this->config->migration->bem_extern);
         }
         $this->completeXML->loadXML($this->_proc->transformToXml($data));
         $doclist = $this->completeXML->getElementsByTagName('Opus_Document');

@@ -66,8 +66,8 @@ class Opus3RoleImport {
     public function __construct() {
         $this->config = Zend_Registry::get('Zend_Config');
         $this->logger = new Opus3ImportLogger();
-        $this->ips = $this->config->import->ip;
-        $this->roles = $this->config->import->role;
+        $this->ips = $this->config->migration->ip;
+        $this->roles = $this->config->migration->role;
     }
 
     /**
@@ -128,7 +128,7 @@ class Opus3RoleImport {
 
     private function mapRoles() {
 
-        $mf = $this->config->import->mapping->roles;
+        $mf = $this->config->migration->mapping->roles;
         $fp = null;
         try {
             $fp = @fopen($mf, 'w');

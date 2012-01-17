@@ -109,7 +109,7 @@ class Opus3CollectionsImport {
      * @return array List of documents that have been imported
      */
     protected function importCollectionsDirectly($data, $collRole)  {
-        $mf = $this->config->import->mapping->collections;
+        $mf = $this->config->migration->mapping->collections;
         $fp = null;
         try {
             $fp = @fopen($mf, 'w');

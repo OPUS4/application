@@ -25,16 +25,16 @@ do	case "$o" in
 done
 
 script_migration_dir=$(cd `dirname $0` && pwd)
+# path to directory thats hosts migration log files
+scripts_migration_log_dir=$script_migration_dir/log
+# path to directory that hosts temporary migration files
+scripts_migration_tmp_dir=$script_migration_dir/tmp
 # path to script directory
 script_dir=$script_migration_dir/..
 # path to workspace directory
 workspace_dir=$script_dir/../workspace
 # path to workspace directory that hosts fulltexts
 workspace_files_dir=$workspace_dir/files
-# path to workspace directory thats hosts log files
-workspace_log_dir=$workspace_dir/log
-# path to workspace directory that hosts temporary files
-workspace_tmp_dir=$workspace_dir/tmp
 # path to workspace directory that hosts cached files
 workspace_cache_dir=$workspace_dir/cache
 # path to db directory
@@ -64,21 +64,21 @@ do
     echo $stepsize | grep "[^0-9]" > /dev/null 2>&1
 done
 
-echo "Clean workspace/files/* and workspace/log/import.log and workspace/tmp/* and workspace/cache/* "
+echo "Clean workspace/files/* and migration/log/* and migration/tmp/* and workspace/cache/* "
 cd $workspace_files_dir
 if [ "$?" -eq "0" ]
 then
     rm -rf [0-9]*
 fi
 
-cd $workspace_log_dir
+cd $scripts_migration_log_dir
 if [ "$?" -eq "0" ]
 then
-    rm -rf import_debug.log
-    rm -rf import_error.log
+    rm -rf migration_debug.log
+    rm -rf migration_error.log
 fi
 
-cd $workspace_tmp_dir
+cd $scripts_migration_tmp_dir
 if [ "$?" -eq "0" ]
 then
     rm -rf *

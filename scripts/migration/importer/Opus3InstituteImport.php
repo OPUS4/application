@@ -150,7 +150,7 @@ class Opus3InstituteImport {
      * @return array List of documents that have been imported
      */
     protected function importUniversities($data) {
-        $mf = $this->config->import->mapping->universities;
+        $mf = $this->config->migration->mapping->universities;
         $fp = null;
         try {
             $fp = @fopen($mf, 'w');
@@ -179,6 +179,7 @@ class Opus3InstituteImport {
             $this->unicity = $class['univort'];
             $uni->setDnbContactId($class['ddb_idn']);
             $uni->setIsGrantor('1');
+            $uni->setIsPublisher('1');
             $uni->store();
 
             $this->logger->log_debug("Opus3InstituteImport", "University imported: " . $class['universitaet_anzeige']);
@@ -196,7 +197,7 @@ class Opus3InstituteImport {
      * @return array List of documents that have been imported
      */
     protected function importFaculties($data, $role) {
-        $mf1 = $this->config->import->mapping->faculties;
+        $mf1 = $this->config->migration->mapping->faculties;
         $fp1 = null;
         try {
             $fp1 = @fopen($mf1, 'w');
@@ -208,7 +209,7 @@ class Opus3InstituteImport {
             return;
         }
 
-        $mf2 = $this->config->import->mapping->grantors;
+        $mf2 = $this->config->migration->mapping->grantors;
         $fp2 = null;
         try {
             $fp2 = @fopen($mf2, 'w');
@@ -261,7 +262,7 @@ class Opus3InstituteImport {
      * @return array List of documents that have been imported
      */
     protected function importInstitutes($data, $pColls)     {
-        $mf = $this->config->import->mapping->institutes;
+        $mf = $this->config->migration->mapping->institutes;
         $fp = null;
         try {
             $fp = @fopen($mf, 'w');

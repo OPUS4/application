@@ -73,7 +73,7 @@ class Opus3ImportLogger {
     public function __construct() {
         $this->config = Zend_Registry::get('Zend_Config');
         
-	$this->debugLogfile = $this->config->import->debug->logfile;
+	$this->debugLogfile = $this->config->migration->debug->logfile;
         try {
             $this->_debugLogfile= @fopen($this->debugLogfile, 'a');
             if (!$this->_debugLogfile) {
@@ -83,7 +83,7 @@ class Opus3ImportLogger {
             echo $e->getMessage();
         }
         
-	$this->errorLogfile = $this->config->import->error->logfile;
+	$this->errorLogfile = $this->config->migration->error->logfile;
         try {
             $this->_errorLogfile= @fopen($this->errorLogfile, 'a');
             if (!$this->_errorLogfile) {

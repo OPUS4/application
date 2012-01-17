@@ -81,7 +81,7 @@ class Opus3LicenceImport {
     public function __construct($data) {
         $this->config = Zend_Registry::get('Zend_Config');
         $this->logger = new Opus3ImportLogger();
-        $this->mapping['language'] =  array('old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->config->import->language);
+        $this->mapping['language'] =  array('old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->config->migration->language);
         $this->data = $data;
 
         foreach (Opus_Licence::getAll() as $lic) {
@@ -168,7 +168,7 @@ class Opus3LicenceImport {
      * @return Opus4-Language-String
      */
     private function mapLanguage($lang) {
-        return $this->config->import->language->$lang;
+        return $this->config->migration->language->$lang;
     }
 
 
@@ -180,7 +180,7 @@ class Opus3LicenceImport {
      */
     protected function readLicenses($data) {
 
-        $mf = $this->config->import->mapping->licences;
+        $mf = $this->config->migration->mapping->licences;
         $fp = null;
         try {
             $fp = @fopen($mf, 'w');
@@ -205,48 +205,48 @@ class Opus3LicenceImport {
      protected function checkMandatoryFields($lic, $name) {
          if (is_null($lic->getActive())) {
              $this->logger->log_error("Opus3LicenceImport", "No Attribute 'active' for " . $name );
-             if (!is_null($this->config->import->licence->active)) {
-                $lic->setActive($this->config->import->licence->active);
+             if (!is_null($this->config->migration->licence->active)) {
+                $lic->setActive($this->config->migration->licence->active);
                 $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'active' to default value '" . $lic->getActive() ."' for " .$name );
              }
          }
 
          if (is_null($lic->getLanguage())) {
              $this->logger->log_error("Opus3LicenceImport", "No Attribute 'language' for " . $name);
-             if (!is_null($this->config->import->licence->language)) {
-                $lic->setLanguage($this->config->import->licence->language);
+             if (!is_null($this->config->migration->licence->language)) {
+                $lic->setLanguage($this->config->migration->licence->language);
                 $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'language' to default value '" . $lic->getLanguage() . "' for " .$name );
              }
          }
 
          if (is_null($lic->getLinkLicence())) {
              $this->logger->log_error("Opus3LicenceImport", "No Attribute 'link_licence' for " . $name);
-             if (!is_null($this->config->import->licence->link_licence)) {
-                $lic->setLinkLicence($this->config->import->licence->link_licence);
+             if (!is_null($this->config->migration->licence->link_licence)) {
+                $lic->setLinkLicence($this->config->migration->licence->link_licence);
                 $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'link_licence' to default value '" . $lic->getLinkLicence() ."' for " .$name );
              }
          }
 
          if (is_null($lic->getMimeType())) {
              $this->logger->log_error("Opus3LicenceImport", "No Attribute 'mime_type' for " . $name);
-             if (!is_null($this->config->import->licence->mime_type)) {
-                $lic->setMimeType($this->config->import->licence->mime_type);
+             if (!is_null($this->config->migration->licence->mime_type)) {
+                $lic->setMimeType($this->config->migration->licence->mime_type);
                 $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'mime_type' to default value '" . $lic->getMimeType() ."' for " .$name );
              }
          }
 
          if (is_null($lic->getNameLong())) {
              $this->logger->log_error("Opus3LicenceImport", "No Attribute 'name_long' for " . $name);
-             if (!is_null($this->config->import->licence->name_long)) {
-                $lic->setNameLong($this->config->import->licence->name_long);
+             if (!is_null($this->config->migration->licence->name_long)) {
+                $lic->setNameLong($this->config->migration->licence->name_long);
                 $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'name_long' to default value '" . $lic->getNameLong() ."' for " .$name );
              }
          }
 
          if (is_null($lic->getPodAllowed())) {
              $this->logger->log_error("Opus3LicenceImport", "No Attribute 'pod_allowed' for " . $name);
-             if (!is_null($this->config->import->licence->pod_allowed)) {
-                $lic->setPodAllowed($this->config->import->licence->pod_allowed);
+             if (!is_null($this->config->migration->licence->pod_allowed)) {
+                $lic->setPodAllowed($this->config->migration->licence->pod_allowed);
                 $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'pod_allowed' to default value '" . $lic->getPodAllowed() ."' for " .$name );
              }
          }
