@@ -313,6 +313,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_error_invalid_input">
+      <tuv xml:lang="en">
+        <seg>The form input is not valid.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Eingaben sind leider nicht vollständig korrekt.</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

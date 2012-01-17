@@ -183,7 +183,19 @@ class Admin_DocumentController extends Controller_Action {
                     Admin_Model_DocumentHelper::isValidGroup($section)) {
                 $postData = $this->getRequest()->getPost();
 
-                $this->__processCreatePost($postData, $document);
+                $form = $this->__getAddForm($document, $section);
+
+                if ($form->isValid($postData)) {
+                    $this->__processCreatePost($postData, $document);
+                }
+                else {
+                    // Show form again
+                    $this->view->inputErrorMessage = $this->view->translate('admin_error_invalid_input');
+                    $this->view->section = $section;
+                    $this->view->docId = $docId;
+                    $this->view->addForm = $form;
+                    return $this->renderScript('document/add.phtml');
+                }
 
                 return $this->_redirectTo('edit', null, 'document', 'admin',
                         array('id' => $docId, 'section' => $section));
@@ -220,7 +232,20 @@ class Admin_DocumentController extends Controller_Action {
                 $postData = $this->getRequest()->getPost();
 
                 if (!array_key_exists('cancel', $postData)) {
-                    $this->__processUpdatePost($postData, $document, $section);
+
+                    $form = $this->__getEditForm($document, $section);
+
+                    if ($form->isValid($postData)) {
+                        $this->__processUpdatePost($postData, $document, $section);
+                    }
+                    else {
+                        // Show form again
+                        $this->view->inputErrorMessage = $this->view->translate('admin_error_invalid_input');
+                        $this->view->section = $section;
+                        $this->view->docId = $docId;
+                        $this->view->editForm = $form;
+                        return $this->renderScript('document/edit.phtml');
+                    }
 
                     $message = $this->view->translate(
                             'admin_document_update_success');
@@ -484,7 +509,7 @@ class Admin_DocumentController extends Controller_Action {
             case 'other':
             case 'dates':
             case 'thesis':
-                $subform = new Admin_Form_Model($doc, $includedFields);
+                $subform = new Admin_Form_Model($doc, $includedFields, true);
                 $subform->populateFromModel($doc);
                 $form->addSubForm($subform, 'Opus_Document');
                 break;
@@ -501,7 +526,7 @@ class Admin_DocumentController extends Controller_Action {
 
                     if (is_array($values)) {
                         foreach ($values as $index2 => $value) {
-                            $subform = $this->__getFormForField($field, $doc);
+                            $subform = $this->__getFormForField($field, $doc, true);
                             $subform->removeDecorator('DtDdWrapper');
                             $subform->populateFromModel($value);
                             $subform->setLegend($field->getValueModelClass()); // TODO remove/replace
@@ -546,7 +571,7 @@ class Admin_DocumentController extends Controller_Action {
      * @param Opus_Model_Field $field
      * @return Admin_Form_Model
      */
-    private function __getFormForField($field, $doc) {
+    private function __getFormForField($field, $doc, $editMode = false) {
         $subform = null;
         switch ($field->getName()) {
             case 'Licence':

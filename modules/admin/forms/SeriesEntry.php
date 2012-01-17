@@ -58,19 +58,21 @@ class Admin_Form_SeriesEntry extends Zend_Form_SubForm {
     private function __init() {
         $series = $this->__getSeriesSelect();
         $series->setRequired(true);
+
         // TODO validate if series exists
         // TODO validate if series is already assigned (for add)
 
         $number = new Zend_Form_Element_Text('Number');
         $number->setLabel(self::MODEL_CLASS . '_Number')
                 ->setRequired(true)
-                ->addValidator(new Zend_Validate_Alnum());
+                ->setErrorMessages(array(Zend_Validate_NotEmpty::IS_EMPTY => 'admin_document_form_error_is_empty'));
 
         $sortOrder = new Zend_Form_Element_Text('SortOrder');
         $sortOrder->setLabel(self::MODEL_CLASS . '_SortOrder')
                 ->setRequired(true)
                 ->addValidator(new Zend_Validate_Int())
-                ->setValue(0);
+                ->setErrorMessages(array(Zend_Validate_NotEmpty::IS_EMPTY => 'admin_document_form_error_is_empty',
+                    Zend_Validate_Int::NOT_INT => 'admin_document_form_error_not_int'));
 
         $this->addElement($series);
         $this->addElement($number);

@@ -574,6 +574,33 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_create">
+      <tuv xml:lang="en">
+        <seg>Add metadata</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Metadaten hinzufügen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_form_error_is_empty">
+      <tuv xml:lang="en">
+        <seg>This value is required.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Wert wird benötigt.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_form_error_not_int">
+      <tuv xml:lang="en">
+        <seg>Please enter a number.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte geben sie eine Nummer ein.</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

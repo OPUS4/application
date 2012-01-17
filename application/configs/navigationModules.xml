@@ -41,6 +41,14 @@
                             <action>add</action>
                         </add>
 
+                        <create>
+                            <type>mvc</type>
+                            <label>admin_document_add</label>
+                            <module>admin</module>
+                            <controller>document</controller>
+                            <action>create</action>
+                        </create>
+
                         <edit>
                             <type>mvc</type>
                             <label>admin_document_edit</label>
@@ -48,6 +56,14 @@
                             <controller>document</controller>
                             <action>edit</action>
                         </edit>
+
+                        <update>
+                            <type>mvc</type>
+                            <label>admin_document_edit</label>
+                            <module>admin</module>
+                            <controller>document</controller>
+                            <action>edit</action>
+                        </update>
 
                         <filemanager>
                             <type>mvc</type>
