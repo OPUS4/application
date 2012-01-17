@@ -131,19 +131,37 @@ class Export_IndexController extends Controller_Xml {
         }
 
         $this->searchtype = $this->getRequest()->getParam('searchtype');
+        
         if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH) {
-            $collectionList = null;
-            try {
-                $collectionList = new Solrsearch_Model_CollectionList($this->getRequest()->getParam('id'));
-            }
-            catch (Solrsearch_Model_Exception $e) {
-                $this->log->debug($e->getMessage());
-                throw new Application_Exception($e->getMessage(), $e->getCode(), $e);
-            }
-            $queryBuilderInput['collectionId'] = $collectionList->getCollectionId();
+            $this->handleCollectionSearch($queryBuilderInput);
+        }
+        else if ($this->searchtype === Util_Searchtypes::SERIES_SEARCH) {
+            $this->handleSeriesSearch($queryBuilderInput);
         }
 
         return $queryBuilder->createSearchQuery($queryBuilderInput);
+    }
+
+    private function handleCollectionSearch($queryBuilderInput) {
+        try {
+            $collectionList = new Solrsearch_Model_CollectionList($this->getRequest()->getParam('id'));
+            $queryBuilderInput['collectionId'] = $collectionList->getCollectionId();
+        }
+        catch (Solrsearch_Model_Exception $e) {
+            $this->log->debug($e->getMessage());
+            throw new Application_Exception($e->getMessage(), $e->getCode(), $e);
+        }        
+    }
+
+    private function handleSeriesSearch($queryBuilderInput) {
+        try {
+            $series = new Solrsearch_Model_Series($this->getRequest()->getParam('id'));
+            $queryBuilderInput['seriesId'] = $series->getId();
+        }
+        catch (Solrsearch_Model_Exception $e) {
+            $this->log->debug($e->getMessage());
+            throw new Application_Exception($e->getMessage(), $e->getCode(), $e);
+        }        
     }
 }
 
