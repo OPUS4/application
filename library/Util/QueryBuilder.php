@@ -107,7 +107,20 @@ class Util_QueryBuilder {
             $param = $filterField . 'fq';
             $input[$param] = $request->getParam($param, '');                        
         }
-       
+
+
+        if ($request->getParam('searchtype') === Util_Searchtypes::COLLECTION_SEARCH || $request->getParam('searchtype') === Util_Searchtypes::SERIES_SEARCH) {
+            $searchParams = new Util_BrowsingParams($request, $this->logger);
+            switch ($request->getParam('searchtype')) {
+                case Util_Searchtypes::COLLECTION_SEARCH:
+                    $input['collectionId'] = $searchParams->getCollectionId();
+                    break;
+                case Util_Searchtypes::SERIES_SEARCH:
+                    $input['seriesId'] = $searchParams->getSeriesId();
+                    break;
+            }
+        }
+
         return $input;
     }
 
@@ -124,6 +137,8 @@ class Util_QueryBuilder {
             'sortField',
             'sortOrder',
             'query',
+            'collectionId',
+            'seriesId'
         );
         foreach ($this->searchFields as $searchField) {
             array_push($paramNames, $searchField, $searchField . 'modifier');

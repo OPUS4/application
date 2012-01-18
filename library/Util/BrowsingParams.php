@@ -25,29 +25,53 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
+ * @package     Util
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+
+class Util_BrowsingParams {
+
+    private $request;
+
+    public function  __construct($request, $log) {
+        $this->log = $log;
+        $this->request = $request;
+    }
+
+    /**
+     *
+     * @return string collection id
+     * @throws Util_BrowsingParamsException if requested collection is not accessible in search context
+     */
+    public function getCollectionId() {
+        try {
+            $collectionList = new Solrsearch_Model_CollectionList($this->request->getParam('id'));
+            return $collectionList->getCollectionId();
+        }
+        catch (Solrsearch_Model_Exception $e) {
+            $this->log->debug($e->getMessage());
+            throw new Util_BrowsingParamsException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     *
+     * @return string series id
+     * @throws Util_BrowsingParamsException if requested series is not accessible in search context
+     */
+    public function getSeriesId() {
+        try {
+            $series = new Solrsearch_Model_Series($this->request->getParam('id'));
+            return $series->getId();
+        }
+        catch (Solrsearch_Model_Exception $e) {
+            $this->log->debug($e->getMessage());
+            throw new Util_BrowsingParamsException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+}
 ?>
-
-<h2><?= htmlspecialchars($this->translate('browse_doctypes_title')) ?></h2>
-
-<p><?= htmlspecialchars($this->translate('browse_doctypes_message')) ?></p>
-
-<div class="content">
-    <ul class="nav browsing">
-    <?php foreach($this->facetitems as $facetitem) : ?>
-        <li>
-            <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'simple', 'query' => '*:*', 'browsing' => 'true', 'doctypefq' => $facetitem->getText()), null, true) ?>"><?= htmlspecialchars($this->translate($facetitem->getText())) ?></a>
-            &nbsp;(<?= $facetitem->getCount() ?>)
-            <a href="<?= $this->url(array('module' => 'rss', 'controller' => 'index', 'action' => 'index', 'searchtype' => 'simple', 'query' => '*:*', 'doctypefq' => $facetitem->getText()), null, true) ?>" class="rss" type="application/rss+xml">
-                <img src="<?= $this->layoutPath() ?>/img/feed_small.png" width="12" height="12" alt="<?= $this->translate('rss_icon') ?>" title="<?= $this->translate('rss_title') ?>" />
-            </a>
-        </li>
-    <?php endforeach ?>
-    </ul>
-</div>

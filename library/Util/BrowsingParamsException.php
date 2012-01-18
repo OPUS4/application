@@ -25,29 +25,14 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
+ * @package     Util
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<h2><?= htmlspecialchars($this->translate('browse_doctypes_title')) ?></h2>
+class Util_BrowsingParamsException extends Util_QueryBuilderException {
 
-<p><?= htmlspecialchars($this->translate('browse_doctypes_message')) ?></p>
-
-<div class="content">
-    <ul class="nav browsing">
-    <?php foreach($this->facetitems as $facetitem) : ?>
-        <li>
-            <a href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'simple', 'query' => '*:*', 'browsing' => 'true', 'doctypefq' => $facetitem->getText()), null, true) ?>"><?= htmlspecialchars($this->translate($facetitem->getText())) ?></a>
-            &nbsp;(<?= $facetitem->getCount() ?>)
-            <a href="<?= $this->url(array('module' => 'rss', 'controller' => 'index', 'action' => 'index', 'searchtype' => 'simple', 'query' => '*:*', 'doctypefq' => $facetitem->getText()), null, true) ?>" class="rss" type="application/rss+xml">
-                <img src="<?= $this->layoutPath() ?>/img/feed_small.png" width="12" height="12" alt="<?= $this->translate('rss_icon') ?>" title="<?= $this->translate('rss_title') ?>" />
-            </a>
-        </li>
-    <?php endforeach ?>
-    </ul>
-</div>
+    
+}

@@ -1008,3 +1008,8 @@ dl.result_box {
 #seriesinfobox.max-width-available {
     padding-left: 0;
 }
+
+.wrapper li a.rss {
+    float: right;
+    padding-right: 0;    
+}

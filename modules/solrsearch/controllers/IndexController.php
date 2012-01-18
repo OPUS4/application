@@ -81,20 +81,20 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     public function searchAction() {
-        if (!is_null($this->getRequest()->getParam('export')) || !is_null($this->getRequest()->getParam('rss'))) {
+        if (!is_null($this->getRequest()->getParam('export'))) {
+            
             $params = $this->getRequest()->getParams();
             // export module ignores pagination parameters
             unset($params['rows']);
             unset($params['start']);
-            
-            if (!is_null($this->getRequest()->getParam('export'))) {
-                return $this->_redirectToAndExit('index', null, 'index', 'export', $params);
-            }
-            
-            if (!is_null($this->getRequest()->getParam('rss'))) {
-                unset($params['rss']);
+
+            if ($this->getRequest()->getParam('export') === 'rss') {
+                unset($params['export']);
+                unset($params['sortfield']);
+                unset($params['sortorder']);
                 return $this->_redirectToAndExit('index', null, 'index', 'rss', $params);
             }
+            return $this->_redirectToAndExit('index', null, 'index', 'export', $params);
         }
 
         $this->query = $this->buildQuery();
@@ -164,7 +164,8 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->setFilterQueryBaseURL();
             $browsing = $this->getRequest()->getParam('browsing', 'false');
             if ($browsing === 'true') {
-                $this->view->specialTitle = $this->getRequest()->getParam('doctypefq', '');
+                $this->view->specialTitle = $this->view->translate($this->getRequest()->getParam('doctypefq', ''));
+                $this->view->doctype = $this->getRequest()->getParam('doctypefq', null);
             }
             return;
         }
@@ -255,6 +256,10 @@ class Solrsearch_IndexController extends Controller_Action {
         try {
             $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($this->getRequest());
         }
+        catch (Util_BrowsingParamsException $e) {
+            $this->_logger->err(__METHOD__ . ' : ' . $e->getMessage());
+            return $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
+        }
         catch (Util_QueryBuilderException $e) {
             $this->_logger->err(__METHOD__ . ' : ' . $e->getMessage());
             return $this->_redirectToAndExit('index');
@@ -264,11 +269,12 @@ class Solrsearch_IndexController extends Controller_Action {
         if ($this->searchtype === Util_Searchtypes::LATEST_SEARCH) {
             return $queryBuilder->createSearchQuery($this->validateInput($queryBuilderInput, 10, 100));
         }
+        
         if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH) {
-            $queryBuilderInput['collectionId'] = $this->prepareChildren();
+            $this->prepareChildren();
         }
-        if ($this->searchtype === Util_Searchtypes::SERIES_SEARCH) {
-            $queryBuilderInput['seriesId'] = $this->prepareSeries();
+        else if ($this->searchtype === Util_Searchtypes::SERIES_SEARCH) {
+            $this->prepareSeries();
         }
         return $queryBuilder->createSearchQuery($this->validateInput($queryBuilderInput));
     }
@@ -286,8 +292,7 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->title = $series->getTitle();
         $this->view->seriesId = $series->getId();
         $this->view->infobox = $series->getInfobox();
-        $this->view->logoFilename = $series->getLogoFilename();
-        return $series->getId();
+        $this->view->logoFilename = $series->getLogoFilename();        
     }
 
 
@@ -301,6 +306,7 @@ class Solrsearch_IndexController extends Controller_Action {
             return $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
         }
 
+        $this->view->collectionId = $collectionList->getCollectionId();
         $this->view->children = $collectionList->getChildren();
         $this->view->parents = $collectionList->getParents();
         $translation = $this->view->translate($collectionList->getCollectionRoleTitle());
@@ -329,7 +335,6 @@ class Solrsearch_IndexController extends Controller_Action {
                 $this->_logger->debug("The requested theme '" . $collectionList->getTheme() . "' does not exist - use default theme instead.");
             }
         }
-        return $collectionList->getCollectionId();
     }
 
     /**

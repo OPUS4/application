@@ -40,7 +40,9 @@ if($this->jQueryEnabled()) {
 }
 ?>
 <?php if (isset($this->specialTitle)) : ?>
-<h2><?= htmlspecialchars($this->translate($this->specialTitle)) ?></h2>
+
+<h2><?= htmlspecialchars($this->specialTitle) ?></h2>
+
 <?php endif ?>
 <div class="content">
     <?php

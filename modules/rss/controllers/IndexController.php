@@ -37,6 +37,8 @@ class Rss_IndexController extends Controller_Xml {
 
     private $log;
     const NUM_OF_ITEMS_PER_FEED = '25';
+    const RSS_SORT_FIELD = 'server_date_published';
+    const RSS_SORT_ORDER = 'desc';
 
     public function init() {
         parent::init();
@@ -45,11 +47,29 @@ class Rss_IndexController extends Controller_Xml {
 
     public function indexAction() {
         $queryBuilder = new Util_QueryBuilder($this->log, true);
-        $params = array (
-            'rows' => self::NUM_OF_ITEMS_PER_FEED,
-            'searchtype' => Util_Searchtypes::LATEST_SEARCH,
-        );
+
+        // support backward compatibility: interpret missing parameter searchtype as latest search
+        if (is_null($this->getRequest()->getParam('searchtype', null))) {
+            $this->getRequest()->setParam('searchtype', Util_Searchtypes::LATEST_SEARCH);            
+        }
+
+        $params = array();
+        try {
+            $params = $queryBuilder->createQueryBuilderInputFromRequest($this->getRequest());
+        }
+        catch (Util_QueryBuilderException $e) {
+            $this->log->err(__METHOD__ . ' : ' . $e->getMessage());
+            throw new Application_Exception($e->getMessage());
+        }
         
+        // overwrite parameters in rss context
+        // rss feeds have a fixed maximum number of items        
+        $params['rows'] = self::NUM_OF_ITEMS_PER_FEED;
+        $params['start'] = 0;
+        // rss feeds have both a fixed sort field and sort order
+        $params['sortField'] = self::RSS_SORT_FIELD;
+        $params['sortOrder'] = self::RSS_SORT_ORDER;
+
         $resultList = array();
         try {
             $searcher = new Opus_SolrSearch_Searcher();
