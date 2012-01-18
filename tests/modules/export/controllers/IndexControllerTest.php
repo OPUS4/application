@@ -55,7 +55,6 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('Unspecified search type', $response->getBody());
     }
 
-
     public function testIndexActionWithoutStylesheetParam() {
         $this->dispatch('/export/index/index/export/xml/query/foo/searchtype/latest');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
@@ -70,6 +69,24 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $response = $this->getResponse();
         $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
         $this->assertContains('<export-example>', $response->getBody());
+    }
+
+    public function testIndexActionCollectionSearch() {
+        $this->dispatch('/export/index/index/searchtype/collection/id/2/export/xml/stylesheet/example');
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $response = $this->getResponse();
+        $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
+        $this->assertContains('<export-example>', $response->getBody());
+        $this->assertTrue(substr_count($response->getBody(), '<doc>') == 1);
+    }
+
+    public function testIndexActionSeriesSearch() {
+        $this->dispatch('/export/index/index/searchtype/series/id/1/export/xml/stylesheet/example');
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $response = $this->getResponse();
+        $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
+        $this->assertContains('<export-example>', $response->getBody());
+        $this->assertTrue(substr_count($response->getBody(), '<doc>') == 5);
     }
 
     /**
