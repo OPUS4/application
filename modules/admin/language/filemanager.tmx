@@ -69,6 +69,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_filemanager_delete_failure">
+      <tuv xml:lang="en">
+        <seg>Could not delete file!</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Datei konnte nicht gelöscht werden!</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_filemanager_checksum">
       <tuv xml:lang="en">
         <seg>Checksum</seg>

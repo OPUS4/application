@@ -175,10 +175,6 @@ class Admin_FilemanagerController extends Controller_Action {
         $this->_redirectTo('index', null, 'filemanager', 'admin', array('docId' => $docId));
     }
 
-    public function signAction() {
-
-    }
-
     /**
      * Action for deleting a file.
      *
@@ -213,15 +209,15 @@ class Admin_FilemanagerController extends Controller_Action {
         switch ($this->_confirm($docId, $fileId)) {
             case 'YES':
                 try {
-                    $file = new Opus_File($fileId);
-                    $file->doDelete($file->delete());
-                    $this->view->actionresult = $this->view->translate('admin_filemanager_delete_success');
+                    $this->_deleteFile($docId, $fileId);
+                    $message = $this->view->translate('admin_filemanager_delete_success');
                 }
-                catch (Opus_Storage_Exception $e) {
-                    $this->view->actionresult = $e->getMessage();
+                catch (Opus_Model_Exception $e) {
+                    $this->_logger->debug($e->getMessage());
+                    $message = array('failure' => $this->view->translate('admin_filemanager_delete_failure'));
                 }
 
-                $this->_redirectTo('index', $this->view->translate('admin_filemanager_delete_success'), 'filemanager', 'admin', array('docId' => $docId));
+                $this->_redirectTo('index', $message, 'filemanager', 'admin', array('docId' => $docId));
                 break;
             case 'NO':
                 $this->_redirectTo('index', null, 'filemanager', 'admin', array('docId' => $docId));
@@ -229,6 +225,25 @@ class Admin_FilemanagerController extends Controller_Action {
             default:
                 break;
         }
+    }
+
+    /**
+     * Deletes a single file from a document.
+     * @param type $docId
+     * @param type $fileId
+     * @return type
+     */
+    protected function _deleteFile($docId, $fileId) {
+        $doc = new Opus_Document($docId);
+        $keepFiles = array();
+        $files = $doc->getFile();
+        foreach($files as $index => $file) {
+            if ($file->getId() !== $fileId) {
+                $keepFiles[] = $file;
+            }
+        }
+        $doc->setFile($keepFiles);
+        $doc->store();
     }
 
     /**
@@ -386,21 +401,6 @@ class Admin_FilemanagerController extends Controller_Action {
         }
         else {
             // TODO error message?
-        }
-    }
-
-    protected function _processDeleteSubmit($postData) {
-        $e = null;
-        try {
-            $file = new Opus_File($postData['FileObject']);
-            // Really delete this file
-            $file->doDelete($file->delete());
-        }
-        catch (Exception $e) {
-            $this->view->actionresult = $e->getMessage();
-        }
-        if ($e === null) {
-            $this->view->actionresult = $this->view->translate('admin_filemanager_delete_success');
         }
     }
 
