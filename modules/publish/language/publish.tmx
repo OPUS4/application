@@ -412,15 +412,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="choose_valid_institute">
-      <tuv xml:lang="en">
-        <seg>Please choose a institute.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Bitte wählen Sie ein Institut.</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="choose_valid_thesisgrantor">
       <tuv xml:lang="en">
         <seg>Please choose a granting institution.</seg>

@@ -373,7 +373,8 @@ class Publish_Model_FormElement {
             $switchVar = $this->datatype;
 
         switch ($switchVar) {
-            case 'Collection':
+            case 'Collection': 
+            case 'CollectionLeaf' :
                 $element->setMultiOptions(array_merge(array('' => 'choose_valid_'.$this->collectionRole), $options));
                 break;
             case 'Licence' :
@@ -392,7 +393,7 @@ class Publish_Model_FormElement {
                 $element->setMultiOptions(array_merge(array('' => 'choose_valid_thesispublisher'), $options));
                 break;
             case 'Series':
-                $element->setMultiOptions(array_merge(array('' => 'choose_valid_documentset'), $options));
+                $element->setMultiOptions(array_merge(array('' => 'choose_valid_series'), $options));
                 break;
             default:
                 $element->setMultiOptions(array_merge(array('' => 'choose_valid_option'), $options));
