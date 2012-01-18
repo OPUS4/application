@@ -122,7 +122,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      */
     protected function requireSolrConfig() {
         $config = Zend_Registry::get('Zend_Config');
-        if (!isset($config->engine)) {
+        if (!isset($config->searchengine->index->host) ||
+            !isset($config->searchengine->index->port) ||
+            !isset($config->searchengine->index->app)) {
             $this->markTestSkipped('No solr-config given.  Skipping test.');
         }
     }

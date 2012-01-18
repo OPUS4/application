@@ -48,4 +48,35 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/browse/doctypes');
         $this->assertResponseCode(200);
     }
+
+    public function testSeriesAction() {
+        $this->dispatch('/solrsearch/browse/series');
+        $responseBody = $this->getResponse()->getBody();
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/1', $responseBody);
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/2', $responseBody);
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5', $responseBody);
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/6', $responseBody);
+        $this->assertResponseCode(200);
+    }
+
+    public function testSeriesActionWithUnvisibleSeries() {
+        $visibilities = array();
+        
+        // set all series to unvisible
+        foreach (Opus_Series::getAll() as $seriesItem) {
+            $visibilities[$seriesItem->getId()] = $seriesItem->getVisible();
+            $seriesItem->setVisible(0);
+            $seriesItem->store();
+        }
+
+        $this->dispatch('/solrsearch/browse/series');
+        $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');
+
+        // restore visibility settings
+        foreach (Opus_Series::getAll() as $seriesItem) {
+            $seriesItem->setVisible($visibilities[$seriesItem->getId()]);
+            $seriesItem->store();
+        }
+    }
 }
