@@ -125,12 +125,12 @@
             </td>
             <td class="bibliography">
                 <?PHP if ($document->isBelongsToBibliography()) : ?>
-                <span class="bibliography" title="<?= $this->translate('admin_documents_tooltip_belongsToBibliography_true') ?>">
-                    <?= $this->translate('Bibliography_Value_True') ?>
+                <span class="bibliography" title="<?= htmlspecialchars($this->translate('admin_documents_tooltip_belongsToBibliography_true')) ?>">
+                    <?= htmlspecialchars($this->translate('Bibliography_Value_True')) ?>
                 </span>
                 <?PHP else : ?>
-                <span class="bibliography" title="<?= $this->translate('admin_documents_tooltip_belongsToBibliography_false') ?>">
-                    <?= $this->translate('Bibliography_Value_False') ?>
+                <span class="bibliography" title="<?= htmlspecialchars($this->translate('admin_documents_tooltip_belongsToBibliography_false')) ?>">
+                    <?= htmlspecialchars($this->translate('Bibliography_Value_False')) ?>
                 </span>
                 <?PHP endif; ?>
             </td>

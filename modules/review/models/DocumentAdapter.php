@@ -284,15 +284,11 @@ class Review_Model_DocumentAdapter {
     }
 
     public function hasFiles() {
-        $field = $this->document->getField('File');
-        $values = $field->getValue();
-        return !empty($values);
+        return (count($this->document->getFile()) !== 0);
     }
 
     public function getFileCount() {
-        $field = $this->document->getField('File');
-        $values = $field->getValue();
-        return count($values);
+        return count($this->document->getFile());
     }
 
     public function getReviewer() {
