@@ -33,6 +33,8 @@
 
 /**
  * Unit test for class Review_Model_DocumentAdapter.
+ *
+ * TODO $view not used at the moment, refactor or add tests
  */
 class Review_Model_DocumentAdapterTest extends ControllerTestCase {
 
