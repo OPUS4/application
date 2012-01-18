@@ -80,6 +80,24 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertTrue(substr_count($response->getBody(), '<doc>') == 1);
     }
 
+    public function testIndexActionInvalidCollectionSearch_MissingIdParam() {
+        $this->dispatch('/export/index/index/searchtype/collection/export/xml/stylesheet/example');
+        $this->assertResponseCode(500);
+        $this->assertContains("Could not browse collection due to missing id parameter.", $this->getResponse()->getBody());
+    }
+
+    public function testIndexActionInvalidCollectionSearch_UnknownId() {
+        $this->dispatch('/export/index/index/searchtype/collection/id/-1/export/xml/stylesheet/example');
+        $this->assertResponseCode(500);
+        $this->assertContains("Collection with id '-1' does not exist.", $this->getResponse()->getBody());
+    }
+
+    public function testIndexActionInvalidCollectionSearch_Unvisible() {
+        $this->dispatch('/export/index/index/searchtype/collection/id/23/export/xml/stylesheet/example');
+        $this->assertResponseCode(500);
+        $this->assertContains("Collection with id '23' is not visible.", $this->getResponse()->getBody());
+    }
+
     public function testIndexActionSeriesSearch() {
         $this->dispatch('/export/index/index/searchtype/series/id/1/export/xml/stylesheet/example');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
@@ -87,6 +105,30 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
         $this->assertContains('<export-example>', $response->getBody());
         $this->assertTrue(substr_count($response->getBody(), '<doc>') == 5);
+    }
+
+    public function testIndexActionInvalidSeriesSearch_MissingIdParam() {
+        $this->dispatch('/export/index/index/searchtype/series/export/xml/stylesheet/example');
+        $this->assertResponseCode(500);
+        $this->assertContains("Could not browse series due to missing id parameter.", $this->getResponse()->getBody());
+    }
+
+    public function testIndexActionInvalidSeriesSearch_UnknownId() {
+        $this->dispatch('/export/index/index/searchtype/series/id/999999/export/xml/stylesheet/example');
+        $this->assertResponseCode(500);
+        $this->assertContains("Series with id '999999' does not exist.", $this->getResponse()->getBody());
+    }
+
+    public function testIndexActionInvalidSeriesSearch_Unvisible() {
+        $this->dispatch('/export/index/index/searchtype/series/id/3/export/xml/stylesheet/example');
+        $this->assertResponseCode(500);
+        $this->assertContains("Series with id '3' is not visible.", $this->getResponse()->getBody());
+    }
+
+    public function testIndexActionInvalidSeriesSearch_NoDocuments() {
+        $this->dispatch('/export/index/index/searchtype/series/id/4/export/xml/stylesheet/example');
+        $this->assertResponseCode(500);
+        $this->assertContains("Series with id '4' does not have any published documents.", $this->getResponse()->getBody());
     }
 
     /**

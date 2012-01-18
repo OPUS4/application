@@ -37,20 +37,24 @@ class Solrsearch_Model_Series {
     private $series;
 
     public function  __construct($seriesId) {
+        if (is_null($seriesId)) {
+            throw new Solrsearch_Model_Exception('Could not browse series due to missing id parameter.');
+        }
+
         $s = null;
         try {
             $s = new Opus_Series($seriesId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new Solrsearch_Model_Exception('series id does not exist');
+            throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' does not exist.");            
         }
 
         if ($s->getVisible() !== '1') {
-            throw new Solrsearch_Model_Exception('requested series is not visible');
+            throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' is not visible.");
         }
 
         if ($s->getNumOfAssociatedPublishedDocuments() === 0) {
-            throw new Solrsearch_Model_Exception('requested series does not have any published documents');
+            throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' does not have any published documents.");
         }
         $this->series = $s;
     }
