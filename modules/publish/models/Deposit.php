@@ -96,7 +96,10 @@ class Publish_Model_Deposit {
                         break;
                     case 'Enrichment' : $this->storeEnrichmentObject($dataKey, $dataValue);
                         break;  
-                    case 'Series' : $this->storeSeriesObject($dataValue);
+                    case 'Series' :
+                        break;
+                    case 'SeriesNumber' :
+                        $this->storeSeriesObject($dataKey, $dataValue);
                         break;
                     
                     default: 
@@ -364,12 +367,8 @@ class Publish_Model_Deposit {
     }
 
     /**
-     * method to prepare a note object for storing
-     * @param <Opus_Document> $this->document
-     * @param <Array> $formValues
-     * @param <String> $key current Element of formValues
-     * @param <Array> $externalFields
-     * @return <Array> $formValues
+     * Store a note in the current document
+     * @param type $dataValue Note text
      */
     private function storeNoteObject($dataValue) {        
         $note = new Opus_Note();
@@ -379,38 +378,40 @@ class Publish_Model_Deposit {
     }
 
     /**
-     * method to prepare a Collection object for storing
-     * @param <Opus_Document> $this->document
-     * @param <Array> $formValues
-     * @param <String> $dataKey current Element of formValues
-     * @param <Array> $externalFields
-     * @return <Array> $formValues     
+     * Store a collection in the current document.
+     * @param type $dataValue Collection ID
      */
     private function storeCollectionObject($dataValue) {
         if (strstr($dataValue, 'ID:')) {
             $dataValue = substr($dataValue, 3);
         }
         //store a simple collection
-        $this->document->addCollection(new Opus_Collection($dataValue));
-        return;
+        $this->document->addCollection(new Opus_Collection($dataValue));        
     }
 
     /**
-     * method to prepare a Collection object for storing
-     * @param <Opus_Document> $this->document
-     * @param <Array> $formValues
-     * @param <String> $dataKey current Element of formValues
-     * @param <Array> $externalFields
-     * @return <Array> $formValues
+     * Prepare and store a series in the current document.
+     * @param String $dataKey Fieldname of series number
+     * @param String $dataValue Number of series     
      */
-    private function storeSeriesObject($dataValue) {
-                
-        //TODO: implement -> store a document in a document set  with a given number                
+    private function storeSeriesObject($dataKey, $dataValue) {
+        //find the series ID
+        $id = str_replace('Number', '', $dataKey);
+        $seriesId = $this->documentData[$id]['value'];
+        $this->log->debug('Deposit: ' . $dataKey . ' and ' . $id . ' = ' . $seriesId);
+        
+        if (strstr($seriesId, 'ID:')) {
+            $seriesId = substr($seriesId, 3);
+        }
+        $s = new Opus_Series($seriesId);
+        
+        //store a simple collection
+        $this->document->addSeries($s)->setNumber($dataValue);                      
     }
 
     /**
      * Prepare and store a licence for the current document.     
-     * @param <type> $dataValue
+     * @param <type> $dataValue Licence ID
      */
     private function storeLicenceObject($dataValue) {        
         if (strstr($dataValue, 'ID:')) {
