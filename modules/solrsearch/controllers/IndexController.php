@@ -53,15 +53,6 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->title = $this->view->translate('solrsearch_title_advanced');
     }
 
-    public function nohitsAction() {
-        $this->view->title = $this->view->translate('solrsearch_title_nohits');
-    }
-
-    public function resultsAction() {
-        // this action is not to be called manually
-        $this->_redirectToAndExit('index');
-    }
-
     public function invalidsearchtermAction() {
         $this->view->title = $this->view->translate('solrsearch_title_invalidsearchterm');
         $searchtype = $this->getRequest()->getParam('searchtype');

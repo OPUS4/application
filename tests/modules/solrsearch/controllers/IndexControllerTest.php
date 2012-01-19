@@ -54,10 +54,10 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->checkForBadStringsInHtml($response->getBody());
     }
 
-    public function testNohitsAction() {
-        $this->doStandardControllerTest('/solrsearch/index/nohits', 'index', 'nohits');
-        $response = $this->getResponse();
-        $this->checkForBadStringsInHtml($response->getBody());
+    public function testEmptySearch() {
+        $this->dispatch('/solrsearch/index/search/searchtype/simple/start/0/rows/10/query/thissearchtermdoesnotexist/sortfield/score/sortorder/desc');
+        $this->assertNotContains('result_box', $this->getResponse()->getBody());
+        $this->assertNotContains('search_results', $this->getResponse()->getBody());
     }
 
     public function testLatestAction() {
@@ -322,6 +322,66 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         // cleanup
         $d->deletePermanent();
+    }
+
+    public function testRssLinkIsDisplayedForSimpleSearch() {
+        $this->dispatch('/solrsearch/index/search/searchtype/simple/start/0/rows/10/query/doe/sortfield/author/sortorder/asc/yearfq/2008');
+        $this->assertResponseCode(200);
+        $this->assertContains('/rss/index/index/searchtype/simple/query/doe/yearfq/2008" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
+    }
+
+    public function testRssLinkIsDisplayedForAdvancedSearch() {
+        $this->dispatch('/solrsearch/index/search/searchtype/advanced/start/0/rows/20/sortfield/score/sortorder/desc/author/doe/authormodifier/contains_all/fulltext/test/fulltextmodifier/contains_all/subjectfq/eBook');
+        $this->assertResponseCode(200);
+        $this->assertContains('/rss/index/index/searchtype/advanced/author/doe/authormodifier/contains_all/fulltext/test/fulltextmodifier/contains_all/subjectfq/eBook" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
+    }
+
+    public function testRssLinkIsDisplayedForAllSearch() {
+        $this->dispatch('/solrsearch/index/search/searchtype/all/start/0/rows/10/sortfield/author/sortorder/asc/author_facetfq/Arndt+Klocke');
+        $this->assertResponseCode(200);
+        $this->assertContains('/rss/index/index/searchtype/all/author_facetfq/Arndt+Klocke" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
+    }
+
+    public function testRssLinkIsDisplayedForLatestSearch() {
+        $this->dispatch('/solrsearch/index/search?rows=20&searchtype=latest');
+        $this->assertResponseCode(200);
+        $this->assertContains('/rss" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
+    }
+
+    public function testRssLinkIsDisplayedForLatestSearchAlternative() {
+        $this->dispatch('/solrsearch/index/search/rows/20/searchtype/latest');
+        $this->assertResponseCode(200);
+        $this->assertContains('/rss/index/index/searchtype/latest" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
+    }
+
+    public function testRssLinkIsDisplayedForBrowseDocumenttypes() {
+        $this->dispatch('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/workingpaper/start/0/rows/10/author_facetfq/Siang+Fung+Ang');
+        $this->assertResponseCode(200);
+        $this->assertContains('/rss/index/index/searchtype/simple/query/%2A%3A%2A/doctypefq/workingpaper/author_facetfq/Siang+Fung+Ang" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
+    }
+
+    public function testRssLinkIsDisplayedForBrowseSeries() {
+        $this->dispatch('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/author_facetfq/John+Doe/sortfield/seriesnumber/sortorder/asc');
+        $this->assertResponseCode(200);
+        $this->assertContains('/rss/index/index/searchtype/series/id/1/author_facetfq/John+Doe" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
+    }
+
+    public function testRssLinkIsDisplayedForBrowseCollection() {
+        $this->dispatch('/solrsearch/index/search/searchtype/collection/id/63/start/0/rows/10/languagefq/deu');
+        $this->assertResponseCode(200);
+        $this->assertContains('/rss/index/index/searchtype/collection/id/63/languagefq/deu" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
+    }
+
+    public function testRssLinkIsDisplayedForAuthorSearch() {
+        $this->dispatch('/solrsearch/index/search/searchtype/authorsearch/author/"John+Doe"/start/0/rows/10/yearfq/2008/sortfield/year/sortorder/desc');
+        $this->assertResponseCode(200);
+        $this->assertContains('/rss/index/index/searchtype/authorsearch/author/%22John+Doe%22/yearfq/2008" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
+    }
+
+    public function testRssLinkIsDisplayedForEmptySearch() {
+        $this->dispatch('/solrsearch/index/search/searchtype/simple/start/0/rows/10/query/thissearchtermdoesnotexist/sortfield/score/sortorder/desc');
+        $this->assertResponseCode(200);
+        $this->assertContains('/rss/index/index/searchtype/simple/query/thissearchtermdoesnotexist" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
     }
 
 }

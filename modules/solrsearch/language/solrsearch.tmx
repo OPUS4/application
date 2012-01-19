@@ -400,15 +400,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="solrsearch_title_nohits">
-            <tuv xml:lang="en">
-                <seg>No search results</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Keine Treffer</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="solrsearch_title_results">
             <tuv xml:lang="en">
                 <seg>Search Results</seg>
