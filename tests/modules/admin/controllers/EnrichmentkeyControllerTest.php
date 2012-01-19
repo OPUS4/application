@@ -153,6 +153,10 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
         $this->assertNotNull(Opus_EnrichmentKey::fetchByName('testCreateAction'));
+
+        $enrichmentkey = Opus_EnrichmentKey::fetchByName('testCreateAction');
+        $this->assertEquals('testCreateAction', $enrichmentkey->getDisplayName());
+        $enrichmentkey->delete();
     }
 
     public function testCreateActionCancel() {
@@ -203,6 +207,21 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $ek->delete();
     }
 
+    public function testCreateActionInvalidInput() {
+        $this->assertNull(Opus_EnrichmentKey::fetchByName('foo/bar'));
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'name' => 'foo/bar',
+                    'submit' => 'submit'
+                ));
+        $this->dispatch('/admin/enrichmentkey/create');
+        $this->assertResponseCode(200);
+        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
+   }
+
+
     /**
      * @depends testCreateAction
      */
@@ -214,7 +233,7 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'name' => $ek->getName() . '-updated',
+                    'name' => $ek->getName() . '_updated',
                     'submit' => 'submit'
                 ));
 
@@ -223,12 +242,37 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
 
         $this->assertNull(Opus_EnrichmentKey::fetchByName('testUpdateAction'));
-        $this->assertNotNull(Opus_EnrichmentKey::fetchByName('testUpdateAction-updated'));
+        $this->assertNotNull(Opus_EnrichmentKey::fetchByName('testUpdateAction_updated'));
 
-        $enrichmentkey = Opus_EnrichmentKey::fetchByName('testUpdateAction-updated');
-        $this->assertEquals('testUpdateAction-updated', $enrichmentkey->getDisplayName());
+        $enrichmentkey = Opus_EnrichmentKey::fetchByName('testUpdateAction_updated');
+        $this->assertEquals('testUpdateAction_updated', $enrichmentkey->getDisplayName());
 
         $enrichmentkey->delete();
+    }
+
+
+
+    /**
+     * @depends testUpdateAction
+     */
+    public function testUpdateActionNoInput() {
+        $ek = new Opus_EnrichmentKey();
+        $ek->setName('testUpdateActionInvalidInput');
+        $ek->store();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'name' => '',
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/enrichmentkey/update/name/' . $ek->getName());
+
+        $this->assertResponseCode(200);
+        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
+
+        $ek->delete();
     }
 
     /**
@@ -242,7 +286,7 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'name' => '',
+                    'name' => $ek->getName() . '-updated',
                     'submit' => 'submit'
                 ));
 
