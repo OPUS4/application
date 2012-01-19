@@ -407,11 +407,11 @@ class Publish_Model_Validation {
         $sets = array();
         if (empty($this->series)) {
             foreach ($dbSeries = Opus_Series::getAllSortedBySortKey() as $set) {
-
-                    $title = $set->getTitle();
-                    $id = $set->getId();
-                    $sets["ID:" . $id] = $title;
-
+                    if ($set->getVisible()) {
+                        $title = $set->getTitle();
+                        $id = $set->getId();
+                        $sets["ID:" . $id] = $title;
+                    }
             }
             $this->series = $sets;
             return $sets;
