@@ -143,11 +143,11 @@ class Solrsearch_IndexController extends Controller_Action {
 
         $this->setGeneralViewValues();
 
-        if($this->numOfHits > 0) {
+        if ($this->numOfHits > 0) {
             $nrOfRows = (int)$this->query->getRows();
             $start = $this->query->getStart();
             $query = null;
-            if($this->searchtype === Util_Searchtypes::SIMPLE_SEARCH || $this->searchtype === Util_Searchtypes::ALL_SEARCH) {
+            if ($this->searchtype === Util_Searchtypes::SIMPLE_SEARCH || $this->searchtype === Util_Searchtypes::ALL_SEARCH) {
                 $query = $this->query->getCatchAll();
             }
             $this->setUpPagination($nrOfRows, $start, $query);
@@ -226,6 +226,11 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->sortfield = $this->getRequest()->getParam('sortfield', 'score');
         }
         $this->view->sortorder = $this->getRequest()->getParam('sortorder', 'desc');
+        $this->setRssUrl();        
+    }
+
+    private function setRssUrl() {
+        $this->view->rssUrl = self::createSearchUrlArray(array(), true);
     }
 
     private function setViewFacets() {
@@ -341,13 +346,21 @@ class Solrsearch_IndexController extends Controller_Action {
      * Creates an URL to execute a search. The URL will be mapped to:
      * module=solrsearch, controller=index, action=search
      */
-    public static function createSearchUrlArray($params = array()) {
+    public static function createSearchUrlArray($params = array(), $rss = false) {
         $url = array(
-            'module' => 'solrsearch',
+            'module' => $rss ? 'rss' : 'solrsearch',
             'controller' => 'index',
-            'action' => 'search');
-        foreach($params as $key=>$value) {
-            $url[$key]=$value;
+            'action' => $rss ? 'index' : 'search');
+        foreach($params as $key => $value) {
+            $url[$key] = $value;
+        }
+        if ($rss) {
+            // some ignores some search related parameters
+            $url['rows'] = null;
+            $url['start'] = null;
+            $url['sortfield'] = null;
+            $url['sortorder'] = null;
+            $url['browsing'] = null;
         }
         return $url;
     }

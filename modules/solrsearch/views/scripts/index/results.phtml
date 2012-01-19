@@ -39,11 +39,19 @@ if($this->jQueryEnabled()) {
     $this->headScript()->appendScript("$(document).ready(function () { $('.abstractText').hide(); });");
 }
 ?>
+
+<?php
+    $this->headLink(array(
+        'rel' => 'alternate',
+        'type' => 'application/rss+xml',
+        'href' => $this->serverUrl() . $this->url($this->rssUrl)
+    ));
+?>
+
 <?php if (isset($this->specialTitle)) : ?>
-
 <h2><?= htmlspecialchars($this->specialTitle) ?></h2>
-
 <?php endif ?>
+
 <div class="content">
     <?php
      if ($this->searchType === 'simple' && !$this->browsing)

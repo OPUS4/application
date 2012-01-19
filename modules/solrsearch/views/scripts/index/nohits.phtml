@@ -34,6 +34,14 @@
 ?>
 
 <?php
+    $this->headLink(array(
+        'rel' => 'alternate',
+        'type' => 'application/rss+xml',
+        'href' => $this->serverUrl() . $this->url($this->rssUrl)
+    ));
+?>
+
+<?php
     if($this->searchType === 'simple')
         include('simpleSearchForm.phtml');
     else if ($this->searchType === 'advanced' || $this->searchType === 'authorsearch')
