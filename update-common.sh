@@ -492,3 +492,51 @@ function setVars() {
     VERSION_NEW=$OPUS_UPDATE_VERSION_NEW
     SCRIPTPATH=$OPUS_UPDATE_SCRIPTPATH
 }
+
+# Calculates the changes between two releases for a folder.
+# Compares MD5 hashes of two releases.
+# NOTE: This function does not list folders that have been added or removed!
+function calculateChanges() {
+    local MD5PATH="$1" # relative path in distribution
+    local OUTPUT="$2"
+
+    # File already exists at target destination
+    echo "Checking if file $DEST/$MD5PATH/$FILE changed between releases."
+    echo "Layout changes between releases $VERSION_OLD and $VERSION_NEW:" > $OUTPUT;
+
+    # Iterate over old MD5 entries to catch MODIFIED and DELETED files
+    grep -e $MD5PATH $MD5_OLD |
+    while read LINE; do
+        local HASH_OLD=$(echo $LINE | cut -b 1-32)
+        local FILE=$(echo $LINE | cut -b 34-)
+        # DEBUG $FILE
+        # DEBUG $HASH_OLD
+        local HASH_NEW="$(getMD5 $FILE $MD5_NEW)"
+        # DEBUG $HASH_NEW
+
+        if [[ ! -n $HASH_NEW ]]; then
+            echo 'DELETED  =>' "$FILE" >> $OUTPUT;
+        else
+            if [[ $HASH_OLD != $HASH_NEW ]]; then
+                # File was modified
+               echo 'MODIFIED =>' "$FILE" >> $OUTPUT;
+            fi
+        fi
+    done
+
+    # Iterate over new MD5 entries to catch ADDED files
+    grep -e $MD5PATH $MD5_NEW |
+    while read LINE; do
+        local HASH_NEW=$(echo $LINE | cut -b 1-32)
+        local FILE=$(echo $LINE | cut -b 34-)
+        # DEBUG $FILE
+        # DEBUG $HASH_OLD
+        local HASH_OLD="$(getMD5 $FILE $MD5_OLD)"
+        # DEBUG $HASH_NEW
+
+        if [[ ! -n $HASH_OLD ]]; then
+            echo 'ADDED    =>' "$FILE" >> $OUTPUT;
+        fi
+    done
+}
+

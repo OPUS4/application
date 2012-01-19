@@ -97,6 +97,10 @@ fi
 # Update 'opus4' layout
 # =============================================================================
 
+# Output changes between releases to file
+LAYOUT_CHANGES="$BASEDIR"'/LAYOUT_CHANGES_'"$VERSION_OLD"'_to_'"$VERSION_NEW"'.log'
+calculateChanges './opus4/public/layouts/opus4' $LAYOUT_CHANGES
+
 # Add and replace files
 updateFolder "$NEW_PUBLIC/layouts/$THEME_OPUS" "$LAYOUTS/$THEME_OPUS"
 # Delete files no longer needed
