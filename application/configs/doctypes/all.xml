@@ -33,16 +33,13 @@
  * @version     $Id$
  */
  -->
-<documenttype name="all" 
-	xmlns="http://schemas.opus.org/documenttype" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
+<documenttype xmlns="http://schemas.opus.org/documenttype" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="all" xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 	
     <field name="PersonSubmitter" required="yes" multiplicity="1" formelement="text" datatype="Person">
-        <default for="FirstName" value="Hans" edit="yes" public="yes"  />
-        <default for="LastName" value="Hansmann" edit="yes" public="yes"  />
+        <default for="FirstName" value="Hans" edit="yes" public="yes"/>
+        <default for="LastName" value="Hansmann" edit="yes" public="yes"/>
         <subfield name="Email" required="yes" formelement="text" datatype="Email">
-          <default value="doe@example.org" edit="yes" public="yes" />
+          <default value="doe@example.org" edit="yes" public="yes"/>
         </subfield>
     </field>
     <field name="Language" required="no" formelement="select" datatype="Language" multiplicity="1">
@@ -59,26 +56,26 @@
     <field name="TitleAdditional" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
     <field name="TitleParent" required="no" formelement="text" datatype="Title" multiplicity="1"/>
 
-    <field name="PublicationState" required="no" formelement="Select" datatype="List" multiplicity="1" >
-        <option value="draft" />
-        <option value="accepted" />
+    <field name="PublicationState" required="no" formelement="Select" datatype="List" multiplicity="1">
+        <option value="draft"/>
+        <option value="accepted"/>
     </field>
 
-    <field name="NeuesSelect" required="no" formelement="Select" datatype="Enrichment" multiplicity="*" >
-        <option value="hallo" />
-        <option value="ballo" />
-        <option value="knallo" />
-        <option value="fallo" />
+    <field name="NeuesSelect" required="no" formelement="Select" datatype="Enrichment" multiplicity="*">
+        <option value="hallo"/>
+        <option value="ballo"/>
+        <option value="knallo"/>
+        <option value="fallo"/>
     </field>
 
     <field name="PersonAuthor" required="no" formelement="text" datatype="Person" multiplicity="*">
-        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" >
-            <default value="Dr." edit="yes" public="yes"  />
+        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text">
+            <default value="Dr." edit="yes" public="yes"/>
         </subfield>
-        <subfield name="Email" required="no" formelement="text" datatype="Email" />
-        <subfield name="AllowEmailContact" required="no" formelement="checkbox"  />
-        <subfield name="DateOfBirth" required="no" formelement="text" datatype="Date" />
-        <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text" />
+        <subfield name="Email" required="no" formelement="text" datatype="Email"/>
+        <subfield name="AllowEmailContact" required="no" formelement="checkbox"/>
+        <subfield name="DateOfBirth" required="no" formelement="text" datatype="Date"/>
+        <subfield name="PlaceOfBirth" required="no" formelement="text" datatype="Text"/>
     </field>
     
     <field name="PersonReferee" required="no" formelement="text" datatype="Person" multiplicity="*"/>
@@ -105,7 +102,7 @@
     <field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
     
     <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
-        <default value="today" edit="yes" public="yes" />
+        <default value="today" edit="yes" public="yes"/>
     </field>
     
     <!-- possible Identifiers -->

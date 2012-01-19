@@ -34,30 +34,27 @@
  * @version     $Id$
  */
  -->
-<documenttype name="preprintmatheon" 
-    xmlns="http://schemas.opus.org/documenttype"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-    xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
+<documenttype xmlns="http://schemas.opus.org/documenttype" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="preprintmatheon" xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 
     <!-- required fields -->
     <field name="PersonAuthor" required="yes" formelement="text" datatype="Person" multiplicity="*">
-        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" />
-        <subfield name="Email" required="no" formelement="text" datatype="Email" />
+        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text"/>
+        <subfield name="Email" required="no" formelement="text" datatype="Email"/>
     </field>
 
-    <field name="Language" required="yes" formelement="select"  datatype="Language" multiplicity="1">
-        <default value="eng" edit="yes" public="yes" />
+    <field name="Language" required="yes" formelement="select" datatype="Language" multiplicity="1">
+        <default value="eng" edit="yes" public="yes"/>
     </field>
 
-    <field name="TitleMain" formelement="text" required="yes"  datatype="Title" multiplicity="4" />
-    <field name="TitleAbstract" required="yes" formelement="textarea"  datatype="Title" multiplicity="4">
+    <field name="TitleMain" formelement="text" required="yes" datatype="Title" multiplicity="4"/>
+    <field name="TitleAbstract" required="yes" formelement="textarea" datatype="Title" multiplicity="4">
         <required-if-fulltext/>
     </field>
 
     <field name="Institute" required="yes" formelement="Select" datatype="CollectionLeaf" root="institutes" multiplicity="5"/>
-    <field name="Project" required="yes" formelement="Select" datatype="CollectionLeaf" root="projects" multiplicity="*" />
+    <field name="Project" required="yes" formelement="Select" datatype="CollectionLeaf" root="projects" multiplicity="*"/>
     <field name="SubjectMSC" required="yes" formelement="Select" datatype="CollectionLeaf" root="msc" multiplicity="*"/>
 
     <!-- unrequired fields -->
-    <field name="SubjectUncontrolled" required="no" formelement="text" datatype="Subject" multiplicity="*" />
+    <field name="SubjectUncontrolled" required="no" formelement="text" datatype="Subject" multiplicity="*"/>
 </documenttype>

@@ -33,10 +33,7 @@
  * @version     $Id$
  */
  -->
-<documenttype name="talkzib"
-	xmlns="http://schemas.opus.org/documenttype" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
+<documenttype xmlns="http://schemas.opus.org/documenttype" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="talkzib" xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 	
     
     <field name="Language" required="no" formelement="select" datatype="Language" multiplicity="1">
@@ -48,10 +45,10 @@
     <field name="TitleAbstract" required="yes" formelement="textarea" datatype="Title" multiplicity="4"/>
     
     <field name="PersonAuthor" required="yes" formelement="text" datatype="Person" multiplicity="*">
-        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text" >
-            <default value="Dr." edit="yes" public="yes"  />
+        <subfield name="AcademicTitle" required="no" formelement="text" datatype="Text">
+            <default value="Dr." edit="yes" public="yes"/>
         </subfield>
-        <subfield name="Email" required="no" formelement="text" datatype="Email" />        
+        <subfield name="Email" required="no" formelement="text" datatype="Email"/>        
     </field>
     <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="1"/>
 

@@ -33,10 +33,7 @@
  * @version     $Id$
  */
  -->
-<documenttype name="collections"
-	xmlns="http://schemas.opus.org/documenttype" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
+<documenttype xmlns="http://schemas.opus.org/documenttype" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="collections" xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
 	
     <field name="SubjectMSC" required="no" formelement="Select" datatype="CollectionLeaf" root="msc" multiplicity="*"/>
     <field name="SubjectDDC" required="no" formelement="Select" datatype="Collection" root="ddc" multiplicity="*"/>
