@@ -24,70 +24,89 @@ do	case "$o" in
 	esac
 done
 
-script_migration_dir=$(cd `dirname $0` && pwd)
+migration_dir=$(cd `dirname $0` && pwd)
 # path to directory thats hosts migration log files
-scripts_migration_log_dir=$script_migration_dir/log
+migration_log_dir=$migration_dir/log
 # path to directory that hosts temporary migration files
-scripts_migration_tmp_dir=$script_migration_dir/tmp
+migration_tmp_dir=$migration_dir/tmp
 # path to script directory
-script_dir=$script_migration_dir/..
+script_dir=$migration_dir/..
 # path to workspace directory
 workspace_dir=$script_dir/../workspace
-# path to workspace directory that hosts fulltexts
+# path to workspace directory that hosts fulltext files
 workspace_files_dir=$workspace_dir/files
 # path to workspace directory that hosts cached files
 workspace_cache_dir=$workspace_dir/cache
 # path to db directory
 db_dir=$script_dir/../db
+# path to config directory
+config_dir=$script_dir/../application/configs 
+# path to migration.ini
+migration_ini=$config_dir/migration.ini
+# path to migration_config.ini 
+migration_config_ini=$config_dir/migration_config.ini
 
-while [ ! -f "$xmlfile" ]
-do
-    echo "Please type the name of a dumpfile of the database in XML format (e.g. /usr/local/opus/complete_database.xml):"
-    read xmlfile
-done
+if [ ! -f "$migration_ini" ]
+then
+    echo "Configurationfile '`readlink -f $migration_ini`' does not exist or is not readable."
+    exit
+fi
+
+if [ ! -f "$migration_config_ini" ]
+then
+    echo "Configurationfile '`readlink -f $migration_config_ini`' does not exist or is not readable."
+    exit
+fi
+
+if [ ! -f "$xmlfile" ]
+then
+    echo "Opus3-XML-Dumpfile '$xmlfile' does not exist or is not readable."
+    exit
+fi
 
 xml_file=$(readlink -f $xmlfile)
 
-while [ ! -d "$fulltextpath" ]
-do
-    echo "Please type the path to your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte):"
-    read fulltextpath
-done
+if [ ! -d "$fulltextpath" ]
+then
+    echo "Opus3-Fulltextpath '$fulltextpath' does not exist or is not readable."
+    exit
+fi
 
 fulltext_path=$(readlink -f $fulltextpath)
 
 echo $stepsize | grep "[^0-9]" > /dev/null 2>&1
-while [ "$?" -eq "0" ]
-do
-    echo "Please enter a valid number of documents to be imported per each loop (e.g. 50)"
-    read stepsize
-    echo $stepsize | grep "[^0-9]" > /dev/null 2>&1
-done
-
-echo "Clean workspace/files/* and migration/log/* and migration/tmp/* and workspace/cache/* "
-cd $workspace_files_dir
 if [ "$?" -eq "0" ]
 then
-    rm -rf [0-9]*
+    echo "Stepsize '$stepsize' for Looping is not a valid number."
+    exit
 fi
 
-cd $scripts_migration_log_dir
+echo "Remove migration/log/* and migration/tmp/*"
+cd $migration_log_dir
 if [ "$?" -eq "0" ]
 then
     rm -rf migration_debug.log
     rm -rf migration_error.log
 fi
 
-cd $scripts_migration_tmp_dir
+
+cd $migration_tmp_dir
 if [ "$?" -eq "0" ]
 then
     rm -rf *
 fi
 
+echo "Remove workspace/cache/* and workspace/files/*"
 cd $workspace_cache_dir
 if [ "$?" -eq "0" ]
 then
     rm -rf *
+fi
+
+cd $workspace_files_dir
+if [ "$?" -eq "0" ]
+then
+    rm -rf [0-9]*
 fi
 
 echo "Clean database"
@@ -95,7 +114,7 @@ cd $db_dir
 ./createdb.sh
 
 echo "Import institutes, collections and licenses"
-cd $script_migration_dir
+cd $migration_dir
 php Opus3Migration_ICL.php -f $xml_file
 
 echo "Import metadata and fulltext"
@@ -111,11 +130,11 @@ do
     then
         cd script_dir
         php SolrIndexBuilder.php
-        cd $script_migration_dir
+        cd $migration_dir
     fi
     php Opus3Migration_Documents.php -f $xml_file -p $fulltext_path -s $start -e $end
- done
+done
 
 cd $script_dir
 php SolrIndexBuilder.php
-cd $script_migration_dir
+cd $migration_dir
