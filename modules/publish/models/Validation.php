@@ -103,11 +103,12 @@ class Publish_Model_Validation {
             case 'Collection' :
             case 'CollectionLeaf' :
             case 'Enrichment' :
+            case 'SeriesNumber' : //internal datatype, do not use in documenttypes!
             case 'Subject' :
             case 'Reference' :
             case 'Person' :
             case 'Note' :
-            case 'Text' :
+            case 'Text' :                
             case 'Title': $this->validator = null;
                 break;
 
@@ -405,7 +406,7 @@ class Publish_Model_Validation {
     private function getSeries() {
         $sets = array();
         if (empty($this->series)) {
-            foreach ($dbSeries = Opus_Series::getAll() as $set) {
+            foreach ($dbSeries = Opus_Series::getAllSortedBySortKey() as $set) {
 
                     $title = $set->getTitle();
                     $id = $set->getId();

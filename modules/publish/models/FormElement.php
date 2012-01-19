@@ -168,7 +168,7 @@ class Publish_Model_FormElement {
 
             case 'Series':
                 //creates a additional field for a number
-                $number = new Publish_Model_FormElement($this->form, $this->elementName . self::NR, $this->required, 'text', 'Series');
+                $number = new Publish_Model_FormElement($this->form, $this->elementName . self::NR, $this->required, 'text', 'SeriesNumber');
                 $number->isSubField = false;
                 $number->setDefaultValue($this->default, self::NR);
                 $elementNumber = $number->transform();
@@ -182,7 +182,7 @@ class Publish_Model_FormElement {
                 break;
 
             case 'Subject':
-                case 'Title' :
+            case 'Title' :
                 //creates two subfields: a value text field (subject, title) and language selection                
                 if ($this->isTitleElement())
                     if ($this->isTextareaElement())

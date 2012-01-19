@@ -17,6 +17,24 @@
         </tuv>
     </tu>
 
+    <tu tuid="publish_error_only_one_series_per_document">
+        <tuv xml:lang="en">
+            <seg>A document may only be related once to a series. Please choose another one.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Ein Dokument darf einer Schriftenreihe nur einmal zugeordnet werden. Bitte wählen Sie eine andere Schriftenreihe aus.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="publish_error_seriesnumber_not_available">
+        <tuv xml:lang="en">
+            <seg>This number is already used for the choosen series. Please enter another number.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Diese Bandnummer wurde in der gewählten Schriftenreihe bereits vergeben. Bitte wählen Sie eine andere Nummer.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="publish_error_rights_checkbox_empty">
         <tuv xml:lang="en">
             <seg>Error: Please confirm our legal notices.</seg>

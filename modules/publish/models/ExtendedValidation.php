@@ -43,6 +43,7 @@ class Publish_Model_ExtendedValidation {
 
     public $form;
     public $data;
+    public $extendedData = array();
     public $log;
     public $session;
     public $documentLanguage;
@@ -52,6 +53,18 @@ class Publish_Model_ExtendedValidation {
         $this->data = $data;
         $this->log = Zend_Registry::get('Zend_Log');
         $this->session = new Zend_Session_Namespace('Publish');
+        
+        foreach ($data AS $key => $value) {
+            $element = $this->form->getElement($key);
+            $this->extendedData[$key] = array(
+                'value' => $element->getValue(),
+                'datatype' => $element->getAttrib('datatype'));
+            
+            if ($element->getAttrib('subfield'))
+                    $this->extendedData[$key]['subfield'] = '1';
+                else 
+                    $this->extendedData[$key]['subfield'] = '0';                       
+        }
     }
 
     /**
@@ -74,8 +87,19 @@ class Publish_Model_ExtendedValidation {
         $validSubjectLanguages = $this->_validateSubjectLanguages();
 
         $validCollection = $this->_validateCollectionLeafSelection();
+        
+        $validSeriesNumber = $this->_validateSeriesNumber();
+        
+        $validSeveralSeries = $this->_validateSeries();
+        
 
-        if ($validPersons && $validTitles && $validCheckboxes && $validSubjectLanguages && $validCollection)
+        if ($validPersons 
+                && $validTitles 
+                && $validCheckboxes 
+                && $validSubjectLanguages 
+                && $validCollection 
+                && $validSeriesNumber
+                && $validSeveralSeries)
             return true;
         else
             return false;
@@ -596,6 +620,85 @@ class Publish_Model_ExtendedValidation {
             }
         }
         return $collectionLeafSelection;
+    }
+    
+    private function _validateSeriesNumber() {
+        $validSeries = true;
+        $series = $this->fetchSeriesFields();
+
+        foreach ($series AS $fieldname => $number) {
+            $selectFieldName = str_replace('Number', '', $fieldname);
+            $selectFieldValue = $this->data[$selectFieldName];
+            
+            $matches = array();
+            if (preg_match('/^ID:(\d+)$/', $selectFieldValue, $matches) == 0) {
+                continue;
+            }
+
+            $seriesId = $matches[1];
+            
+            $currSeries = new Opus_Series($seriesId);
+            if (!$currSeries->isNumberAvailable($number)) {
+                $this->log->debug("(Validation): error for element " . $fieldname);
+                $element = $this->form->getElement($fieldname);
+                $element->clearErrorMessages();
+                $element->addError('publish_error_seriesnumber_not_available');
+                $validSeries = false;
+            }            
+        }
+
+        return $validSeries;
+    }
+    
+    private function _validateSeries() {
+        $validSeries = true;
+        $series = $this->fetchSeriesFields(false);
+        $countSeries = array();
+
+        foreach ($series AS $fieldname => $option) {
+            
+            $matches = array();
+            if (preg_match('/^ID:(\d+)$/', $option, $matches) == 0) {
+                continue;
+            }
+
+            $seriesId = $matches[1];
+            
+            //count how often the same series id has to be stored for the same document
+            if (isset($countSeries[$seriesId])) 
+                $countSeries[$seriesId] = $countSeries[$seriesId] + 1;
+            else 
+                $countSeries[$seriesId] = 1;
+            
+            if ($countSeries[$seriesId] > 1) {
+                $this->log->debug("(Validation): error for element " . $fieldname);
+                $element = $this->form->getElement($fieldname);
+                $element->clearErrorMessages();
+                $element->addError('publish_error_only_one_series_per_document');
+                $validSeries = false;
+            }                        
+        }
+
+        return $validSeries;
+    }
+    
+    /**
+     * Fetch the transmitted series numbers or the series selection fields.
+     * @return type Array of series numbers
+     */
+    private function fetchSeriesFields($fetchNumbers = true) {
+        $series = array();
+
+        foreach ($this->extendedData as $name => $entry) {
+            if ($entry['datatype'] == 'SeriesNumber' && $fetchNumbers)
+                $series[$name] = $entry['value'];
+            else {
+                if ($entry['datatype'] == 'Series')
+                    $series[$name] = $entry['value'];
+            }
+        }
+
+        return $series;
     }
 
 }
