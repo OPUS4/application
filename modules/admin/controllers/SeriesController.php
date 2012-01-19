@@ -53,11 +53,18 @@ class Admin_SeriesController extends Controller_CRUDAction {
         }
     }
 
+    protected function adaptForm($form) {
+        $subform = $form->getSubform('Opus_Series');
+        $sortOrder = $subform->getSubform('SortOrder');
+        $sortOrder->getElement('1')->setRequired(true);
+    }
+
     public function newAction() {
         parent::newAction();
+        $this->adaptForm($this->view->form);
         $form = $this->view->form->getSubform('Opus_Series');
-        $form = $form->getSubform('Visible');
-        $form->getElement('1')->setValue(true);
+        $form->getSubform('Visible')->getElement('1')->setValue(true);
+        $form->getSubform('SortOrder')->getElement('1')->setValue(Opus_Series::getMaxSortKey() + 1);
     }
 
     /**
@@ -72,6 +79,7 @@ class Admin_SeriesController extends Controller_CRUDAction {
      */
     public function createAction() {
         parent::createAction();
+        $this->adaptForm($this->view->form);
     }
 
     /**
@@ -79,6 +87,7 @@ class Admin_SeriesController extends Controller_CRUDAction {
      */
     public function editAction() {
         parent::editAction();
+        $this->adaptForm($this->view->form);
     }
 
     /**
@@ -86,6 +95,7 @@ class Admin_SeriesController extends Controller_CRUDAction {
      */
     public function updateAction() {
         parent::updateAction();
+        $this->adaptForm($this->view->form);
     }
 
     /**
