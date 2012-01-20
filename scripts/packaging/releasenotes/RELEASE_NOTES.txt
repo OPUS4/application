@@ -62,7 +62,8 @@ h3. Hinweis zu URNs von migrierten Dokumenten
 Wir haben einen Hinweis in die Dokumentation aufgenommen, die alle Instanzen
 betrifft die bereits vor OPUS4 für die URN-Vergabe registriert waren.  Bei
 der Migration müssen Sie in der config.ini den Präfix dex NISS anpassen, um
-Kollisionen mit bereits vergebenen URNs zu vermeiden.
+Kollisionen mit bereits vergebenen URNs zu vermeiden.  Die Informationen 
+finden Sie in Kapitel 7.6 "URN SETTINGS".
 
 Der entsprechende Schlüssel in der Config lautet "urn.nss".  Hatten ihre URNs
 vor der Migration z.B. die Form "urn:nbn:de:kobv:123-opus-123x" für ein 
