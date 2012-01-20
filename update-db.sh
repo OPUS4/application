@@ -141,13 +141,13 @@ function versionGroup() {
 #@param $1 update script file
 function runDbUpdate() {
     UPDATE_FILE=$1
-
-    if [[ DRYRUN ]]; then
+ 
+    if DRYRUN ; then
         MYSQL="${mysql_bin} --default-character-set=utf8 --user=${USER} --password=${PASSWORD} --host=${HOST} --port=${PORT}"
 
         if [[ -n "${PASSWORD}" ]]; then
             MYSQL="${MYSQL} --password=${PASSWORD}"
-        fi    
+        fi
 
     $MYSQL <<-EOFMYSQL
     USE $DBNAME;
@@ -155,7 +155,7 @@ function runDbUpdate() {
 EOFMYSQL
 
     fi
-    DEBUG "MYSQL UPDATE SCRIPT = $UPDATE_FILE"    
+    DEBUG "MYSQL UPDATE SCRIPT = $UPDATE_FILE"
     echo "$UPDATE_FILE" >> "$BASE_SOURCE"/dbupdated.txt
 }
 
