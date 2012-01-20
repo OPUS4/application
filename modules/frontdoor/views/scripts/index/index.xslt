@@ -144,6 +144,10 @@
             <xsl:apply-templates select="TitleParent" />
             <xsl:apply-templates select="TitleSub" />
             <xsl:apply-templates select="TitleAdditional" />
+            <xsl:apply-templates select="Series[@Visible=1]" >
+                <xsl:sort select="@Number"/>
+            </xsl:apply-templates>
+
             <xsl:apply-templates select="@PublisherName" />
             <xsl:apply-templates select="@PublisherPlace" />
             <xsl:apply-templates select="PersonEditor" />
@@ -650,6 +654,35 @@
         </tr>
     </xsl:template>
  
+    <xsl:template match="Series[@Visible=1]">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateFieldname"/>
+            </th>
+            <td>
+                <a>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$baseUrl"/>
+                        <xsl:text>/solrsearch/index/search/searchtype/series/id/</xsl:text>
+                        <xsl:value-of select="@Id" />
+                    </xsl:attribute>
+
+<!--
+                    <xsl:attribute name="title">
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_series_link</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
+-->
+
+                    <xsl:value-of select="@Title" />
+                    <xsl:text> - </xsl:text>
+                    <xsl:value-of select="@Number" />
+                </a>
+            </td>
+        </tr>
+    </xsl:template>
+
     <xsl:template match="Licence">
         <tr>
             <th class="name">
