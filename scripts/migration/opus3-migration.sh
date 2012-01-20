@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#! /bin/bash
 
 ##
 ## Call This Skript with paramaters:
@@ -49,19 +49,19 @@ migration_config_ini=$config_dir/migration_config.ini
 if [ ! -f "$migration_ini" ]
 then
     echo "Configurationfile '`readlink -f $migration_ini`' does not exist or is not readable."
-    exit
+    exit -1
 fi
 
 if [ ! -f "$migration_config_ini" ]
 then
     echo "Configurationfile '`readlink -f $migration_config_ini`' does not exist or is not readable."
-    exit
+    exit -1
 fi
 
 if [ ! -f "$xmlfile" ]
 then
     echo "Opus3-XML-Dumpfile '$xmlfile' does not exist or is not readable."
-    exit
+    exit -1
 fi
 
 xml_file=$(readlink -f $xmlfile)
@@ -69,7 +69,7 @@ xml_file=$(readlink -f $xmlfile)
 if [ ! -d "$fulltextpath" ]
 then
     echo "Opus3-Fulltextpath '$fulltextpath' does not exist or is not readable."
-    exit
+    exit -1
 fi
 
 fulltext_path=$(readlink -f $fulltextpath)
@@ -78,7 +78,7 @@ echo $stepsize | grep "[^0-9]" > /dev/null 2>&1
 if [ "$?" -eq "0" ]
 then
     echo "Stepsize '$stepsize' for Looping is not a valid number."
-    exit
+    exit -1
 fi
 
 echo "Remove migration/log/* and migration/tmp/*"
@@ -86,7 +86,7 @@ cd $migration_log_dir
 if [ "$?" -eq "0" ]
 then
     rm -rf migration_debug.log
-    rm -rf migration_error.log
+    rm -rf migration.log
 fi
 
 
@@ -116,13 +116,17 @@ cd $db_dir
 echo "Import institutes, collections and licenses"
 cd $migration_dir
 php Opus3Migration_ICL.php -f $xml_file
+[ $? != 0 ] && echo "Aborting migration: Opus3Migration_ICL.php FAILED." && exit -1
 
 echo "Import metadata and fulltext"
 start=1
 end=`expr $start + $stepsize - 1`
 
 php Opus3Migration_Documents.php -f $xml_file -p $fulltext_path -s $start -e $end
-while [ "$?" -eq "1" ] && [ "$iteration" -eq "1" ]
+RETVAL=$?
+[ $RETVAL != 0 ] && [ $RETVAL != 1 ] && echo "Aborting migration: Opus3Migration_Documents.php FAILED." && exit -1
+
+while [ "$RETVAL" -eq "1" ] && [ "$iteration" -eq "1" ]
 do
     start=`expr $start + $stepsize`
     end=`expr $end + $stepsize`
@@ -133,8 +137,11 @@ do
         cd $migration_dir
     fi
     php Opus3Migration_Documents.php -f $xml_file -p $fulltext_path -s $start -e $end
+    RETVAL=$?
+    [ $RETVAL != 0 ] && [ $RETVAL != 1 ] && echo "Aborting migration: Opus3Migration_Documents.php FAILED." && exit -1
 done
 
 cd $script_dir
 php SolrIndexBuilder.php
+[ $? != 0 ] && echo "Aborting migration: SolrIndexBuilder.php FAILED." && exit -1
 cd $migration_dir
