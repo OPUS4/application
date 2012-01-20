@@ -185,23 +185,26 @@ echo "Database is updating now..."
 dbScript "$VERSION_OLD" "$VERSION_NEW"
 echo "Database is up-to-date!"
 
-# !! Migrate the old series !!
-# TODO: Ensure this is only done for updates < 4.2.0
-# Ask user for migration
-echo -e "Would you like to migrate your old series (y/N)? \c ";
-read ANSWER
-if [[ -z $ANSWER ]]; then
-    ANSWER='n'
-else
-    if [[ $ANSWER == 'y' ]]; then
-        # inform user which series documents have no IdentifierSerial        
-        # TODO server entfernen!!!!!!!!!!!!!!
-        php5 "$BASEDIR/opus4/server/scripts/FindMissingSeriesNumbers.php" "$UPDATESERIESLOG"
-        # run migration script
-        runDbUpdate "update-series-for-4.2.0.sql"
-    else
-        echo "Keep the old series."
-    fi
+#
+# Migration of Collection-based series (were eliminated with OPUS 4.2.0)
+#
+# Ensure this is only done for updates from versions < 4.2.0
+if [[ "$VERSION_OLD" < "4.2" && "$VERSION_NEW" > "4.2" ]]; then
+   echo -e "Would you like to migrate your old series (y/N)? \c ";
+   read ANSWER
+   if [[ -z $ANSWER ]]; then
+      ANSWER='n'
+   else
+      if [[ $ANSWER == 'y' ]]; then
+         # inform user which series documents have no IdentifierSerial        
+         # TODO server entfernen!!!!!!!!!!!!!!
+         "$BASEDIR/opus4/server/scripts/FindMissingSeriesNumbers.php" "$UPDATESERIESLOG"
+         # run migration script
+         runDbUpdate "update-series-for-4.2.0.sql"
+      else
+         echo "Keep the old series."
+      fi
+   fi
 fi
 
 # Copy sql files from source to destination folder
