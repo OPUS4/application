@@ -32,14 +32,8 @@
  * @version     $Id$
  **/
 
-
 // Bootstrapping
 require_once dirname(__FILE__) . '/common/bootstrap.php';
-
-//throw new Exception(APPLICATION_PATH);
-//throw new Exception(dir_name(__FILE__));
-
-
 
 class FindMissingSeriesNumbers {
 
@@ -51,6 +45,8 @@ class FindMissingSeriesNumbers {
     private function initLogger($logfileName) {
         $logfile = @fopen($logfileName, 'a', false);
         $writer = new Zend_Log_Writer_Stream($logfile);        
+	$formatter=new Zend_Log_Formatter_Simple('%message%' . PHP_EOL);
+	$writer->setFormatter($formatter);
         $this->logger = new Zend_Log($writer);        
     }
     
@@ -67,9 +63,9 @@ class FindMissingSeriesNumbers {
      */
     private function query() {
         $query = 'SELECT document_id, collection_id AS series_id 
-            FROM `link_documents_collections` 
-            WHERE `role_id` = (SELECT id FROM `collections_roles` WHERE name="series") 
-            AND document_id NOT IN (SELECT document_id FROM `link_documents_collections` LEFT JOIN `document_identifiers` USING (document_id) WHERE `role_id` = (SELECT id FROM `collections_roles` WHERE name="series" and type="serial"));';
+            FROM link_documents_collections 
+            WHERE role_id = (SELECT id FROM collections_roles WHERE name = "series") 
+            AND document_id NOT IN (SELECT document_id FROM document_identifiers WHERE type = "serial");';
         $db = Zend_Db_Table::getDefaultAdapter();
         $result = $db->fetchAssoc($query);
        
@@ -94,7 +90,7 @@ class FindMissingSeriesNumbers {
             $this->logger->info('');
             
             foreach ($queryresult AS $row) {
-                $this->logger->info('document_id: ' . $row['document_id'] . ' -> ' . 'series_id:' . $row['series_id']);
+                $this->logger->info('document_id: ' . $row['document_id'] . ' -> series_id: ' . $row['series_id']);
             }
         }
         
@@ -103,14 +99,15 @@ class FindMissingSeriesNumbers {
 }
 
 $numbers = new FindMissingSeriesNumbers;
-
-    $result = $numbers->run();
-    if (!is_null($result))
-        $count = count($result);
+$result = $numbers->run();
+if (!is_null($result)) {
+	$count = count($result);
         if ($count > 0) {
             echo "\n$count documents do not have an IdentiferSerial.";
             echo "\nMore information can be found in the log file $argv[1]\n\n";
         }
-        else 
-            echo "\nNo problems found.\n";        
+        else { 
+            echo "\nNo problems found.\n";
+	}
+}
 
