@@ -37,6 +37,8 @@
  */
 class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
 
+    private static $protectedEnrichmentkey = 'review.accepted_by';
+
     /**
      * Test showing index page.
      */
@@ -71,6 +73,23 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         }
     }
 
+    public function testIndexActionWithProtectedEnrichmentKeys() {
+        $ek = Opus_EnrichmentKey::fetchByName(self::$protectedEnrichmentkey);
+        $this->assertNotNull($ek);
+        $config = Zend_Registry::get('Zend_Config');
+        $this->assertTrue(in_array($ek->getName(), explode(',', $config->enrichmentkey->protected->modules)));
+
+        $this->dispatch('/admin/enrichmentkey');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('enrichmentkey');
+        $this->assertAction('index');
+        
+        $this->assertContains('/admin/enrichmentkey/show/name/' . $ek->getName(), $this->getResponse()->getBody());
+        $this->assertNotContains('/admin/enrichmentkey/edit/name/' . $ek->getName(), $this->getResponse()->getBody());
+        $this->assertNotContains('/admin/enrichmentkey/delete/name/' . $ek->getName(), $this->getResponse()->getBody());
+    }
+
     /**
      * Test show enrichmentkey information.
      */
@@ -100,7 +119,7 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Test showing form for new enrichmentkey.
+     * Test showing empty form for new enrichmentkey.
      */
     public function testNewAction() {
         $this->dispatch('/admin/enrichmentkey/new');
@@ -132,6 +151,17 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
     public function testEditActionWithUnknownNameParam() {
         $this->assertNull(Opus_EnrichmentKey::fetchByName('testEditActionWithUnknownNameParam'));
         $this->dispatch('/admin/enrichmentkey/edit/name/testEditActionWithUnknownNameParam');
+        $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
+    }
+
+    public function testEditActionProtectedEnrichmentKey() {
+        $ek = Opus_EnrichmentKey::fetchByName(self::$protectedEnrichmentkey);
+        $this->assertNotNull($ek);
+        $config = Zend_Registry::get('Zend_Config');
+        $this->assertTrue(in_array($ek->getName(), explode(',', $config->enrichmentkey->protected->modules)));
+
+        $this->dispatch('/admin/enrichmentkey/edit/name/' . $ek->getName());
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
     }
@@ -205,6 +235,24 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
 
         $ek->delete();
+    }
+
+    public function testCreateActionProtectedEnrichmentKey() {
+        $ek = Opus_EnrichmentKey::fetchByName(self::$protectedEnrichmentkey);
+        $this->assertNotNull($ek);
+        $config = Zend_Registry::get('Zend_Config');
+        $this->assertTrue(in_array($ek->getName(), explode(',', $config->enrichmentkey->protected->modules)));
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'name' => $ek->getName(),
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/enrichmentkey/create');
+        $this->assertResponseCode(200);
+        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
     }
 
     public function testCreateActionInvalidInput() {
@@ -324,6 +372,24 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $ek_bar->delete();
     }
 
+    public function testUpdateActionProtectedEnrichmentKey() {
+        $ek = Opus_EnrichmentKey::fetchByName(self::$protectedEnrichmentkey);
+        $this->assertNotNull($ek);
+        $config = Zend_Registry::get('Zend_Config');
+        $this->assertTrue(in_array($ek->getName(), explode(',', $config->enrichmentkey->protected->modules)));
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'name' => $ek->getName() .'_update',
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/enrichmentkey/update/name/' . $ek->getName());
+        $this->assertResponseCode(200);
+        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
+    }
+
     /**
      * @depends testUpdateActionInvalidInput
      */
@@ -354,4 +420,16 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
     }
+
+    public function testDeleteActionProtectedEnrichmentKey() {
+        $ek = Opus_EnrichmentKey::fetchByName(self::$protectedEnrichmentkey);
+        $this->assertNotNull($ek);
+        $config = Zend_Registry::get('Zend_Config');
+        $this->assertTrue(in_array($ek->getName(), explode(',', $config->enrichmentkey->protected->modules)));
+
+        $this->dispatch('/admin/enrichmentkey/delete/name/' . $ek->getName());
+        $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
+    }
+
 }

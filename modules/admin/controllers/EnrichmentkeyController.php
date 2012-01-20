@@ -33,6 +33,36 @@
  */
 
 class Admin_EnrichmentkeyController extends Controller_Action {
+    
+
+    private $protectedEnrichmentkeys = array();
+
+
+    /**
+     * Initializes controller.
+     */
+    public function init() {
+        parent::init();
+        $config = Zend_Registry::get('Zend_Config');
+
+        if (!isset($config->enrichmentkey->protected->modules)) {
+           throw new Opus_Exception("config key 'enrichmentkey.protected.modules' is not defined in config file");
+        }
+
+        foreach(explode(',', $config->enrichmentkey->protected->modules) as $protectedEnrichmentkey) {
+            array_push($this->protectedEnrichmentkeys, $protectedEnrichmentkey);
+
+        }
+
+        if (!isset($config->enrichmentkey->protected->migration)) {
+           throw new Opus_Exception("config key 'enrichmentkey.protected.migration' is not defined in config file");
+        }
+
+        foreach(explode(',', $config->enrichmentkey->protected->migration) as $protectedEnrichmentkey) {
+            array_push($this->protectedEnrichmentkeys, $protectedEnrichmentkey);
+
+        }
+    }
 
     /**
      * Shows list of all enrichmentkeys.
@@ -42,7 +72,7 @@ class Admin_EnrichmentkeyController extends Controller_Action {
         $enrichmentkeys = Opus_EnrichmentKey::getAll();
 
         if (!empty($enrichmentkeys)) {
-            $this->view->protectedKeys = Opus_EnrichmentKey::getAllReferenced();
+            $this->view->protectedKeys = array_merge(Opus_EnrichmentKey::getAllReferenced(), $this->protectedEnrichmentkeys);
             $this->view->enrichmentkeys = array();
             foreach ($enrichmentkeys as $enrichmentkey) {
                 $this->view->enrichmentkeys[$enrichmentkey->getName()] = $enrichmentkey->getDisplayName();
@@ -76,7 +106,7 @@ class Admin_EnrichmentkeyController extends Controller_Action {
         $this->view->title = $this->view->translate($this->view->title);
         $name = $this->getRequest()->getParam('name');
   
-         if (!is_null(Opus_EnrichmentKey::fetchByName($name)) && !in_array($name, Opus_EnrichmentKey::getAllReferenced())) {
+        if (!is_null(Opus_EnrichmentKey::fetchByName($name)) && !in_array($name, $this->protectedEnrichmentkeys)) {
             $form = new Admin_Form_Enrichmentkey($name);
             $actionUrl = $this->view->url(array('action' => 'update', 'name' => $name));
             $form->setAction($actionUrl);
@@ -171,7 +201,7 @@ class Admin_EnrichmentkeyController extends Controller_Action {
     public function deleteAction() {
         $name = $this->getRequest()->getParam('name');
 
-        if (!is_null(Opus_EnrichmentKey::fetchByName($name)) && !in_array($name, Opus_EnrichmentKey::getAllReferenced())) {
+        if (!is_null(Opus_EnrichmentKey::fetchByName($name)) && !in_array($name, $this->protectedEnrichmentkeys)) {
             $enrichmentkey = new Opus_EnrichmentKey($name);
             $enrichmentkey->delete();
         }
