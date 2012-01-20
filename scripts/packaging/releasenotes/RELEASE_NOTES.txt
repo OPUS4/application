@@ -28,6 +28,7 @@ Ihrer OPUS4-Instanz und -Datenbank vor dem Update.
 Kapitel 9.7 "Sammlungen verwalten" beschreibt, welche OAI-Einstellungen die
 Collections besitzen und wie diese manuell geändert werden können.
 
+
 h3. Migration der sammlungsbasierten Schriftenreihen
 
 Die Schriftenreihen wurden neu modelliert. Es gibt ab sofort ein separtes
@@ -44,6 +45,7 @@ Bandnummer benutzt.
 Die Sammlung _series_ kann nach dem Update gelöscht werden, wenn die
 Übernahme der Daten in das neue Schriftenreihen-Modell akzeptiert wird.
 
+
 h3. Änderung in der Verarbeitung der XML-basierten Dokumenttypdefinitionen
 
 Mit OPUS 4.2.0 werden die XML-basierten Dokumenttypdefinitionen (im Verzeichnis
@@ -53,6 +55,25 @@ abgelegt ist. Wir empfehlen im Rahmen des Updates auf OPUS 4.2.0 sämtliche
 Dokumenttypdefinitionen auf Schema-Konformität zu testen, um so sicherzustellen,
 dass die Dokumenttypen weiterhin im Publikationsformular benutzt werden können.
 Einzelheiten dazu sind in Kapitel 8.4.6 der OPUS4-Dokumentation aufgeführt.
+
+
+h3. Hinweis zu URNs von migrierten Dokumenten
+
+Wir haben einen Hinweis in die Dokumentation aufgenommen, die alle Instanzen
+betrifft die bereits vor OPUS4 für die URN-Vergabe registriert waren.  Bei
+der Migration müssen Sie in der config.ini den Präfix dex NISS anpassen, um
+Kollisionen mit bereits vergebenen URNs zu vermeiden.
+
+Der entsprechende Schlüssel in der Config lautet "urn.nss".  Hatten ihre URNs
+vor der Migration z.B. die Form "urn:nbn:de:kobv:123-opus-123x" für ein 
+Dokument mit der ID 123, so genügt es den Schlüssel "urn.nss" auf den Wert
+"de:kobv:123-opus4" zu setzen.  Die URN eines neuen Dokuments 123 lautet dann
+einfach "urn:nbn:de:kobv:123-opus4-123y" und kollidiert nicht mehr mit der
+ID 123 aus dem alten System.
+
+Weitere Details erhalten Sie bei der DNB oder im Nestor-Handbuch:
+* http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:de:0008-20100305176
+
 
 h2. ======================== Release 4.1.4 2011-10-18 ========================
 
