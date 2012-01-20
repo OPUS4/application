@@ -197,10 +197,9 @@ if [[ "$VERSION_OLD" < "4.2" && "$VERSION_NEW" > "4.2" ]]; then
    else
       if [[ $ANSWER == 'y' ]]; then
          # inform user which series documents have no IdentifierSerial        
-         # TODO server entfernen!!!!!!!!!!!!!!
-         "$BASEDIR/opus4/server/scripts/FindMissingSeriesNumbers.php" "$UPDATESERIESLOG"
+         "$BASEDIR/opus4/scripts/FindMissingSeriesNumbers.php" "$UPDATESERIESLOG"
          # run migration script
-         runDbUpdate "update-series-for-4.2.0.sql"
+         runDbUpdate "$SCHEMA_PATH/update-series-for-4.2.0.sql"
       else
          echo "Keep the old series."
       fi
