@@ -54,16 +54,18 @@ class Publish_Model_ExtendedValidation {
         $this->log = Zend_Registry::get('Zend_Log');
         $this->session = new Zend_Session_Namespace('Publish');
         
-        foreach ($data AS $key => $value) {
+        foreach ($this->data AS $key => $value) {
             $element = $this->form->getElement($key);
-            $this->extendedData[$key] = array(
-                'value' => $element->getValue(),
-                'datatype' => $element->getAttrib('datatype'));
+            if (!is_null($element)) {
+                $this->extendedData[$key] = array(
+                    'value' => $element->getValue(),
+                    'datatype' => $element->getAttrib('datatype'));
             
-            if ($element->getAttrib('subfield'))
+                if ($element->getAttrib('subfield'))
                     $this->extendedData[$key]['subfield'] = '1';
                 else 
                     $this->extendedData[$key]['subfield'] = '0';                       
+            }
         }
     }
 
