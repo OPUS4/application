@@ -38,7 +38,7 @@ DEBUG "MD5_OLD = $MD5_OLD"
 DEST="$BASEDIR/opus4/application/configs"
 MD5PATH=opus4/application/configs
 SRC="$BASE_SOURCE/$MD5PATH"
-UPDATE_DOCTYPES_LOG="$BASEDIR/UPDATE-DOCTYPES.log"
+UPDATE_DOCTYPES_LOG="$BASEDIR/UPDATE-documenttypes.log"
 
 echo "Updating configuration files ..."
 
