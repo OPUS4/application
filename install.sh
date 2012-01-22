@@ -296,7 +296,7 @@ then
   echo -e "Solr server is running under http://localhost:$SOLR_SERVER_PORT/solr\n"
 
   # start indexing of testdata
-  php5 "$BASEDIR/opus4/scripts/SolrIndexBuilder.php"
+  "$BASEDIR/opus4/scripts/SolrIndexBuilder.php"
 fi
 
 # change file owner of all files in $BASEDIR to $OPUS_USER_NAME
