@@ -2,6 +2,12 @@ h1. OPUS 4 Release Notes
 
 h2. ======================== Release 4.2.0 2012-01-09 ========================
 
+h3. Dokumentation im Tarball aufgenommen
+
+Ab dieser Version ist die aktuelle Dokumentation in deutscher Sprache im
+Tarball enthalten (opus_dokumentation_de.pdf).
+
+
 h3. Änderungen an Solr-Indexschema
 
 Wird der Solr-Server nicht im Rahmen des Updateskripts aktualisiert (weil er
