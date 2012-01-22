@@ -38,6 +38,7 @@ DEBUG "MD5_OLD = $MD5_OLD"
 DEST="$BASEDIR/opus4/application/configs"
 MD5PATH=opus4/application/configs
 SRC="$BASE_SOURCE/$MD5PATH"
+UPDATE_DOCTYPES_LOG="$BASEDIR/UPDATE-DOCTYPES.log"
 
 echo "Updating configuration files ..."
 
@@ -65,4 +66,16 @@ FILES=$(getFiles "$SRC/doctypes")
 for FILE in $FILES; do
     updateFile "$SRC/doctypes" "$DEST/doctypes" "$MD5PATH/doctypes" "$FILE" backup
 done
+
+# if updating from version <= 4.1.4 to version >= 4.2.0:
+# we need to check all user created doctypes since schema modifications were made
+# hint: 4.2.0 > 4.2 is true in lexicographic ordering
+if [[ "$VERSION_OLD" < "4.2" && "$VERSION_NEW" > "4.2" ]]; then
+    FILES=$(getFiles "$DEST/doctypes")
+
+    for FILE in $FILES; do
+        # replace some attribute values if necessary and validate xml document type against new xml schema
+        "$SCRIPTPATH/update-documenttypes.php" "$FILE" "$BASE_SOURCE/opus4/library/Opus/Document/documenttype.xsd" >> "$UPDATE_DOCTYPES_LOG"
+    done
+fi
 
