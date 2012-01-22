@@ -353,7 +353,7 @@ if askYesNo "Would you like to rebuild Solr index now [Y/n]?"; then
     UPDATELOG "Rebuilding Solr index"
     if [[ "$_DRYRUN" -eq 0 ]]; then
         echo -e "Rebuilding Solr index ... \c "
-        php5 "$BASEDIR/opus4/scripts/SolrIndexBuilder.php"
+        "$BASEDIR/opus4/scripts/SolrIndexBuilder.php"
         echo "done"
     fi
 fi
