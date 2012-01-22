@@ -211,7 +211,7 @@ function updateFile {
 
         # Calculate MD5 for existing file
         local MD5_ACTUAL="$(getActualMD5 $DEST/$FILE)"
-        DEBUG "MD4 cur = $MD5_ACTUAL"
+        DEBUG "MD5 cur = $MD5_ACTUAL"
 
         # Compare MD5 values
         if [[ "$MD5_REFERENCE" != "$MD5_ACTUAL" ]]; then
