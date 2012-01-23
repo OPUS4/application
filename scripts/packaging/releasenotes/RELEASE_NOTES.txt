@@ -110,6 +110,18 @@ Dokumenttypdefinitionen auf Schema-Konformität zu testen, um so sicherzustellen
 dass die Dokumenttypen weiterhin im Publikationsformular benutzt werden können.
 Einzelheiten dazu sind in Kapitel 8.4.6 der OPUS4-Dokumentation aufgeführt.
 
+Wenn Sie die Instanz über das Update-Skript aktualisieren, wird im Anschluss
+an die Aktualisierung der XML-Dokumenttypdefinitionen eine Validierung 
+der unter $BASEDIR/opus4/applications/config/doctypes abgelegten XML-Dateien
+durchgeführt. Wird für eine Datei foo.xml ein Schemaverstoß festgestellt, so
+wird die Datei durch Umbenennung in foo.xml.invalid.<TIMESTAMP> invalidiert.
+Der Dokumenttyp kann dann nicht mehr im Publikationsformular ausgewählt
+werden. Die festgestellten Validierungsfehler werden in der Logdatei unter
+$BASEDIR/UPDATE-documenttypes.log protokolliert. Nach dem Beheben der 
+Fehler können Sie den Dokumenttyp durch das Entfernen des Suffix 
+.invalid.<TIMESTAMP> im Dateinamen wieder für die Auswahl im Publikations-
+formular freigeben.
+
 
 h3. Hinweis zu URNs von migrierten Dokumenten
 
