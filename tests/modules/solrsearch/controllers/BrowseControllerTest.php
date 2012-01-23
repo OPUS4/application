@@ -134,4 +134,77 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
             $seriesItem->store();
         }
     }
+
+    public function testSeriesActionRespectsSeriesSortOrder() {
+        $this->dispatch('/solrsearch/browse/series');
+        $this->assertResponseCode(200);
+        $responseBody = $this->getResponse()->getBody();
+        $seriesIds = array('1', '2', '5', '6');
+        foreach ($seriesIds as $seriesId) {
+            $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
+            $this->assertTrue($pos !== false);
+            $responseBody = substr($responseBody, $pos);
+        }        
+    }
+
+    public function testSeriesActionRespectsSeriesSortOrderAfterManipulation() {
+        $sortOrders = $this->getSortOrders();
+
+        // reverse ordering of series
+        foreach (Opus_Series::getAll() as $seriesItem) {
+            $seriesItem->setSortOrder(10 - intval($sortOrders[$seriesItem->getId()]));
+            $seriesItem->store();
+        }
+
+        $this->dispatch('/solrsearch/browse/series');
+        $this->assertResponseCode(200);
+        $responseBody = $this->getResponse()->getBody();
+        $seriesIds = array('6', '5', '2', '1');
+        foreach ($seriesIds as $seriesId) {
+            $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
+            $this->assertTrue($pos !== false);
+            $responseBody = substr($responseBody, $pos);
+        }        
+
+        $this->setSortOrders($sortOrders);
+    }
+
+    public function testSeriesActionRespectsSeriesSortOrderIfItCoincidesBetweenTwoSeries() {
+        $sortOrders = $this->getSortOrders();
+
+        $s = new Opus_Series(2);
+        $s->setSortOrder(6);
+        $s->store();
+
+        $s = new Opus_Series(6);
+        $s->setSortOrder(0);
+        $s->store();
+
+        $this->dispatch('/solrsearch/browse/series');
+        $this->assertResponseCode(200);
+        $responseBody = $this->getResponse()->getBody();
+        $seriesIds = array('1', '6', '2', '5');
+        foreach ($seriesIds as $seriesId) {
+            $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
+            $this->assertTrue($pos !== false);
+            $responseBody = substr($responseBody, $pos);
+        }
+
+        $this->setSortOrders($sortOrders);
+    }
+
+    private function getSortOrders() {
+        $sortOrders = array();
+        foreach (Opus_Series::getAll() as $seriesItem) {
+            $sortOrders[$seriesItem->getId()] = $seriesItem->getSortOrder();            
+        }
+        return $sortOrders;
+    }
+
+    private function setSortOrders($sortOrders) {
+        foreach (Opus_Series::getAll() as $seriesItem) {
+            $seriesItem->setSortOrder($sortOrders[$seriesItem->getId()]);
+            $seriesItem->store();
+        }
+    }
 }
