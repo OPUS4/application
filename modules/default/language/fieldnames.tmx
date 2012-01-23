@@ -1976,6 +1976,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="SeriesNumber">
+            <tuv xml:lang="en">
+                <seg>Serial Number</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bandnummer</seg>
+            </tuv>
+        </tu>
+
         <!-- Keys for Opus_Person -->
 
         <tu tuid="Opus_Person">
