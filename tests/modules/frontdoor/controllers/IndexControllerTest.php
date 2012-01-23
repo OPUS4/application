@@ -332,13 +332,47 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Regression test for OPUSVIER-1647
+     * Regression test for OPUSVIER-2129
      */
     public function testSeries146() {
         $this->dispatch('/frontdoor/index/index/docId/146');
 
         $responseBody = $this->getResponse()->getBody();
         $this->assertRegExp('/href="\/solrsearch\/index\/search\/searchtype\/series\/id\/1"/',
+                $responseBody);
+    }
+
+    /**
+     * Regression test for OPUSVIER-2232
+     */
+    public function testSeries149InVisible() {
+        $d = new Opus_Document(149);
+        $seriesIds     = array();
+        $seriesNumbers = array();
+        foreach ($d->getSeries() AS $series) {
+            $seriesIds[] = $series->getModel()->getId();
+            $seriesNumbers[] = $series->getNumber();
+        }
+
+        $this->assertContains(3, $seriesIds);
+        $this->assertContains(4, $seriesIds);
+        $this->assertContains('id-3-is-invisible', $seriesNumbers);
+        $this->assertContains('id-4-is-visible', $seriesNumbers);
+
+        $this->dispatch('/frontdoor/index/index/docId/149');
+        $this->assertResponseCode(200);
+        $responseBody = $this->getResponse()->getBody();
+
+        // series 3 is NOT visible
+        $this->assertNotContains('id-3-is-invisible',
+                $responseBody);
+        $this->assertNotRegExp('/href="\/solrsearch\/index\/search\/searchtype\/series\/id\/3"/',
+                $responseBody);
+
+        // series 4 is visible
+        $this->assertContains('id-4-is-visible',
+                $responseBody);
+        $this->assertRegExp('/href="\/solrsearch\/index\/search\/searchtype\/series\/id\/4"/',
                 $responseBody);
     }
 
