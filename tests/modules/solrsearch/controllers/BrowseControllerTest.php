@@ -207,4 +207,12 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
             $seriesItem->store();
         }
     }
+
+    public function testIndexActionDoesNotDisplaySeriesBrowsingLinkIfNothingToShow() {
+        $visibilities = $this->setAllSeriesToUnvisible();
+        $this->dispatch('/solrsearch/browse');
+        $this->assertResponseCode(200);
+        $this->assertNotContains('/solrsearch/browse/series">', $this->getResponse()->getBody());
+        $this->restoreSeriesVisibility($visibilities);
+    }
 }
