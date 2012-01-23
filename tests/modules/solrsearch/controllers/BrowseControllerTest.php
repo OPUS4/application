@@ -56,24 +56,79 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/2', $responseBody);
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/5', $responseBody);
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/6', $responseBody);
+        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/3', $responseBody);
+        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/4', $responseBody);
         $this->assertResponseCode(200);
     }
 
     public function testSeriesActionWithUnvisibleSeries() {
-        $visibilities = array();
-        
-        // set all series to unvisible
-        foreach (Opus_Series::getAll() as $seriesItem) {
-            $visibilities[$seriesItem->getId()] = $seriesItem->getVisible();
-            $seriesItem->setVisible(0);
-            $seriesItem->store();
-        }
+        $visibilities = $this->setAllSeriesToUnvisible();
 
         $this->dispatch('/solrsearch/browse/series');
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');
 
-        // restore visibility settings
+        $this->restoreSeriesVisibility($visibilities);
+    }
+
+    public function testSeriesActionWithOneVisibleSeriesWithoutAnyPublishedDocument() {
+        $visibilities = $this->setAllSeriesToUnvisible();
+
+        $d = new Opus_Document();
+        $d->setServerState('unpublished');
+        $d->store();
+
+        $s = new Opus_Series(3);
+        $d->addSeries($s)->setNumber('testSeriesAction-3');
+        $s = new Opus_Series(4);
+        $s->setVisible('1');
+        $s->store();
+        $d->addSeries($s)->setNumber('testSeriesAction-4');
+        $d->store();
+
+        $this->dispatch('/solrsearch/browse/series');
+        $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');
+
+        $this->restoreSeriesVisibility($visibilities);
+        $d->deletePermanent();        
+    }
+
+    public function testSeriesActionWithOneVisibleSeriesWithOnePublishedDocument() {
+        $visibilities = $this->setAllSeriesToUnvisible();
+
+        $d = new Opus_Document();
+        $d->setServerState('published');
+        $d->store();
+
+        $s = new Opus_Series(3);
+        $d->addSeries($s)->setNumber('testSeriesAction-3');
+        $s = new Opus_Series(4);
+        $s->setVisible('1');
+        $s->store();
+        $d->addSeries($s)->setNumber('testSeriesAction-4');
+        $d->store();
+
+        $this->dispatch('/solrsearch/browse/series');
+        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/3', $this->getResponse()->getBody());
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/4', $this->getResponse()->getBody());        
+        $this->assertResponseCode(200);
+
+        $this->restoreSeriesVisibility($visibilities);
+        $d->deletePermanent();
+    }
+
+    private function setAllSeriesToUnvisible() {
+        $visibilities = array();
+        foreach (Opus_Series::getAll() as $seriesItem) {
+            $visibilities[$seriesItem->getId()] = $seriesItem->getVisible();
+            $seriesItem->setVisible(0);
+            $seriesItem->store();
+        }
+        return $visibilities;
+    }
+
+    private function restoreSeriesVisibility($visibilities) {
         foreach (Opus_Series::getAll() as $seriesItem) {
             $seriesItem->setVisible($visibilities[$seriesItem->getId()]);
             $seriesItem->store();
