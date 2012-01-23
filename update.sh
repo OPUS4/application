@@ -257,6 +257,9 @@ export OPUS_UPDATE_SCRIPTPATH=$SCRIPTPATH     # TODO necessary? Different way?
 # Update configuration
 "$SCRIPTPATH"/update-config.sh
 
+# Update *scripts* folders
+"$SCRIPTPATH"/update-scripts.sh
+
 # Update database
 "$SCRIPTPATH"/update-db.sh
 
@@ -271,9 +274,6 @@ export OPUS_UPDATE_SCRIPTPATH=$SCRIPTPATH     # TODO necessary? Different way?
 
 # Update *public* folder
 "$SCRIPTPATH"/update-public.sh
-
-# Update *scripts* folders
-"$SCRIPTPATH"/update-scripts.sh
 
 # Update *workspace* folders
 "$SCRIPTPATH"/update-workspace.sh
