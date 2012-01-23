@@ -27,19 +27,18 @@ source update-common.sh
 
 setVars
 
-echo -e "Updating *import* folder ... \c "
+echo -e "Removing old *import* folder ... \c "
 
 SRC="$BASE_SOURCE/opus4/import"
 DEST="$BASEDIR/opus4/import"
 
 # Create import folder if it does not exit yet
-if [[ ! -d $DEST ]]; then
-    createFolder "$DEST"
+if [[ -d $DEST ]]; then
+    # Remove files from destination that do not exist in source folder
+    deleteFiles "$SRC" "$DEST"
+    # Delete folder if empty
+    deleteFolder "$DEST" 'empty'
 fi
 
-# Copy files from source to destination folder
-updateFolder "$SRC" "$DEST"
-# Remove files from destination that do not exist in source folder
-deleteFiles "$SRC" "$DEST"
 
 echo "done"
