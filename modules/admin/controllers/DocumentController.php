@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -655,7 +655,11 @@ class Admin_DocumentController extends Controller_Action {
         }
 
         $series->setNumber($number);
-        $series->setSortOrder($sortOrder);
+
+        // if sortOrder is not set, it is set automatically by framework
+        if (trim($sortOrder) !== '') {
+            $series->setSortOrder($sortOrder);
+        }
     }
 
     /**

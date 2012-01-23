@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -105,7 +105,7 @@ class Admin_Form_SeriesEntry extends Zend_Form_SubForm {
         $this->getElement('Series')->addMultiOption($model->getModel()->getId(), $model->getTitle());
         $this->getElement('Series')->setValue($model->getModel()->getId());
         $this->getElement('Number')->setValue($model->getNumber());
-        $this->getElement('SortOrder')->setValue($model->getSortOrder());
+        $this->getElement('SortOrder')->setValue($model->getDocSortOrder());
     }
 
     /**
