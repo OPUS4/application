@@ -97,7 +97,7 @@ fi
 # Update 'opus4' layout
 # =============================================================================
 
-# Output changes between releases to file
+# Output 'opus4' layout changes between releases to file
 LAYOUT_CHANGES="$BASEDIR"'/LAYOUT_CHANGES_'"$VERSION_OLD"'_to_'"$VERSION_NEW"'.log'
 calculateChanges './opus4/public/layouts/opus4' $LAYOUT_CHANGES
 
@@ -105,6 +105,17 @@ calculateChanges './opus4/public/layouts/opus4' $LAYOUT_CHANGES
 updateFolder "$NEW_PUBLIC/layouts/$THEME_OPUS" "$LAYOUTS/$THEME_OPUS"
 # Delete files no longer needed
 deleteFiles "$NEW_PUBLIC/layouts/$THEME_OPUS" "$LAYOUTS/$THEME_OPUS"
+
+# =============================================================================
+# Create folder 'series_logos' if necessary
+# =============================================================================
+
+SERIES_LOGOS="$OLD_PUBLIC/series_logos"
+
+# Create import folder if it does not exit yet
+if [[ ! -d $SERIES_LOGOS ]]; then
+    createFolder "$SERIES_LOGOS"
+fi
 
 # Update other files
 # TODO Should this be replace by "updateFolder SRC DEST flat" to handle all files in the folder
