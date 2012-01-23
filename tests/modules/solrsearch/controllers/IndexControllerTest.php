@@ -437,6 +437,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     public function testSeriesSearchPaginationAndSortingLinks() {
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/5');
         $this->assertResponseCode(200);
+
         $this->assertContains('/series_logos/5/400_100.png', $this->getResponse()->getBody());
         $this->assertContains('Lorem ipsum dolor sit amet,', $this->getResponse()->getBody());
 
@@ -456,6 +457,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
     public function testSeriesSearchPaginationWorks() {
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/5/start/10/rows/10');
+        $this->assertResponseCode(200);
+        
         $this->assertContains('/frontdoor/index/index/docId/3', $this->getResponse()->getBody());
         $this->assertContains('/frontdoor/index/index/docId/2', $this->getResponse()->getBody());
         $this->assertContains('/frontdoor/index/index/docId/1', $this->getResponse()->getBody());
@@ -469,4 +472,56 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertTrue(substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10">') == 4);
     }
 
+    public function testSeriesSearchRespectsDefaultDocSortOrder() {
+        $this->dispatch('/solrsearch/index/search/searchtype/series/id/1');
+        $this->assertResponseCode(200);
+
+        $responseBody = $this->getResponse()->getBody();
+
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/asc" ', $responseBody);
+        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/desc" ', $responseBody);
+
+        $responseBody = $this->getResponse()->getBody();
+        $seriesIds = array(146, 93, 92, 94, 91);
+        foreach ($seriesIds as $seriesId) {
+            $pos = strpos($responseBody, '/frontdoor/index/index/docId/' . $seriesId);
+            $this->assertTrue($pos !== false);
+            $responseBody = substr($responseBody, $pos);
+        }
+    }
+
+    public function testSeriesActionRespectsAscendingDocSortOrder() {
+        $this->dispatch('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/asc');
+        $this->assertResponseCode(200);
+
+        $responseBody = $this->getResponse()->getBody();
+
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/desc" ', $responseBody);
+        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/asc" ', $responseBody);
+
+        $responseBody = $this->getResponse()->getBody();
+        $seriesIds = array_reverse(array(146, 93, 92, 94, 91));
+        foreach ($seriesIds as $seriesId) {
+            $pos = strpos($responseBody, '/frontdoor/index/index/docId/' . $seriesId);
+            $this->assertTrue($pos !== false);
+            $responseBody = substr($responseBody, $pos);
+        }
+    }
+
+    public function testSeriesActionRespectsDescendingDocSortOrder() {
+        $this->dispatch('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/desc');
+        $this->assertResponseCode(200);
+
+        $responseBody = $this->getResponse()->getBody();
+
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/asc" ', $responseBody);
+        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/desc" ', $responseBody);
+        
+        $seriesIds = array(146, 93, 92, 94, 91);
+        foreach ($seriesIds as $seriesId) {
+            $pos = strpos($responseBody, '/frontdoor/index/index/docId/' . $seriesId);
+            $this->assertTrue($pos !== false);
+            $responseBody = substr($responseBody, $pos);
+        }
+    }
 }
