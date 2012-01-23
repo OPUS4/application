@@ -164,6 +164,138 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $this->checkBibtexAssertions('@misc');
     }
 
+    public function testIndexActionRisDoctypeArticle() {
+        $this->setDocumentType('article');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('JOUR');
+    }
+
+    public function testIndexActionRisDoctypeBook() {
+        $this->setDocumentType('book');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('BOOK');
+    }
+
+    public function testIndexActionRisDoctypeBookpart() {
+        $this->setDocumentType('bookpart');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('CHAP');
+    }
+
+    public function testIndexActionRisDoctypeConferenceobject() {
+        $this->setDocumentType('conferenceobject');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('CONF');
+    }
+
+    public function testIndexActionRisDoctypeDoctoralthesis() {
+        $this->setDocumentType('doctoralthesis');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('THES');;
+    }
+
+    public function testIndexActionRisDoctypeMasterthesis() {
+        $this->setDocumentType('masterthesis');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('THES');
+    }
+
+    public function testIndexActionRisDoctypeBachelorthesis() {
+        $this->setDocumentType('bachelorthesis');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('THES');
+    }
+
+    public function testIndexActionRisDoctypeHabilitation() {
+        $this->setDocumentType('habilitation');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('THES');
+    }
+
+    public function testIndexActionRisDoctypeReport() {
+        $this->setDocumentType('report');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('RPRT');
+    }
+
+    public function testIndexActionRisPreprint() {
+        $this->setDocumentType('preprint');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('INPR');
+    }
+
+    public function testIndexActionRisPeriodical() {
+        $this->setDocumentType('periodical');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('JFULL');
+    }
+
+    public function testIndexActionRisContributiontoperiodical() {
+        $this->setDocumentType('contributiontoperiodical');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('NEWS');
+    }
+
+    public function testIndexActionRisReview() {
+        $this->setDocumentType('review');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('JOUR');
+    }
+
+    public function testIndexActionRisWorkingpaper() {
+        $this->setDocumentType('workingpaper');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('UNPD');
+    }
+
+    public function testIndexActionRisMovingimage() {
+        $this->setDocumentType('movingimage');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('VIDEO');
+    }
+
+    public function testIndexActionRisCoursematerial() {
+        $this->setDocumentType('coursematerial');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('GEN');
+    }
+
+    public function testIndexActionRisImage() {
+        $this->setDocumentType('image');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('GEN');
+    }
+
+    public function testIndexActionRisLecture() {
+        $this->setDocumentType('lecture');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('GEN');
+    }
+
+    public function testIndexActionRisSound() {
+        $this->setDocumentType('sound');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('GEN');
+    }
+
+    public function testIndexActionRisStudythesis() {
+        $this->setDocumentType('studythesis');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('GEN');
+    }
+
+    public function testIndexActionRisOther() {
+        $this->setDocumentType('other');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('GEN');
+    }
+
+    public function testIndexActionRisMisc() {
+        $this->setDocumentType('foo');
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->checkRisAssertions('GEN');
+    }
+
     public function testDownloadActionWithMissingDocIdParam() {
         $this->dispatch('/citationExport/index/download');
         $this->assertResponseCode(400);
@@ -267,6 +399,15 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $this->assertContains($bibtexType, $response->getBody());
         if ($downloadLinkExists) {
             $this->assertContains('/citationExport/index/download/output/bibtex/docId/' . $this->documentId, $response->getBody());
+        }
+    }
+
+    private function checkRisAssertions($risType, $downloadLinkExists = true) {
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertContains('TY  - ' . $risType, $response->getBody());
+        if ($downloadLinkExists) {
+            $this->assertContains('/citationExport/index/download/output/ris/docId/' . $this->documentId, $response->getBody());
         }
     }
 }
