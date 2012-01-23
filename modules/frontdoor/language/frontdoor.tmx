@@ -111,6 +111,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="frontdoor_series_link">
+        <tuv xml:lang="en">
+            <seg>Show all entries in this series</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Alle Einträge dieser Schriftenreihe zeigen</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="frontdoor_export_options">
         <tuv xml:lang="en">
             <seg>Export metadata</seg>

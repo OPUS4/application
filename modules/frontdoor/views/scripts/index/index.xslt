@@ -145,7 +145,7 @@
             <xsl:apply-templates select="TitleSub" />
             <xsl:apply-templates select="TitleAdditional" />
             <xsl:apply-templates select="Series[@Visible=1]" >
-                <xsl:sort select="@Number"/>
+                <xsl:sort select="@SortOrder"/>
             </xsl:apply-templates>
 
             <xsl:apply-templates select="@PublisherName" />
@@ -657,7 +657,13 @@
     <xsl:template match="Series[@Visible=1]">
         <tr>
             <th class="name">
-                <xsl:call-template name="translateFieldname"/>
+                <xsl:call-template name="translateString">
+                    <xsl:with-param name="string">Series</xsl:with-param>
+                </xsl:call-template>
+                <xsl:text> / </xsl:text>
+                <xsl:call-template name="translateString">
+                    <xsl:with-param name="string">SeriesNumber</xsl:with-param>
+                </xsl:call-template>
             </th>
             <td>
                 <a>
@@ -667,13 +673,11 @@
                         <xsl:value-of select="@Id" />
                     </xsl:attribute>
 
-<!--
                     <xsl:attribute name="title">
                         <xsl:call-template name="translateString">
                             <xsl:with-param name="string">frontdoor_series_link</xsl:with-param>
                         </xsl:call-template>
                     </xsl:attribute>
--->
 
                     <xsl:value-of select="@Title" />
                     <xsl:text> - </xsl:text>
