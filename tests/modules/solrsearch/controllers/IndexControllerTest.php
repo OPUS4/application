@@ -384,4 +384,89 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('/rss/index/index/searchtype/simple/query/thissearchtermdoesnotexist" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
     }
 
+
+    /**
+     * series search related test cases
+     * 
+     */
+    
+    public function testSeriesSearchWithInvalidId() {
+        $this->markTestSkipped('cannot be tested at the moment: method _redirectToAndExit does not work in test environment');
+        $this->dispatch('/solrsearch/index/search/searchtype/series/id/12345');
+        $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');
+    }
+
+    public function testSeriesSearchWithoutId() {
+        $this->markTestSkipped('cannot be tested at the moment: method _redirectToAndExit does not work in test environment');
+        $this->dispatch('/solrsearch/index/search/searchtype/series/id/');
+        $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');
+    }
+
+    public function testSeriesSearchWithInvisibleId() {
+        $this->markTestSkipped('cannot be tested at the moment: method _redirectToAndExit does not work in test environment');
+        $this->dispatch('/solrsearch/index/search/searchtype/series/id/3');
+        $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');
+    }
+
+    public function testSeriesSearchWithEmptyDocumentsId() {
+        $this->markTestSkipped('cannot be tested at the moment: method _redirectToAndExit does not work in test environment');
+        $this->dispatch('/solrsearch/index/search/searchtype/series/id/4');
+        $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');
+    }
+
+    public function testSeriesSearch() {
+        $this->dispatch('/solrsearch/index/search/searchtype/series/id/1');
+        $this->assertResponseCode(200);
+        
+        $docIds = array(146, 93, 92, 94, 91);
+        foreach ($docIds as $docId) {
+            $this->assertContains('/frontdoor/index/index/docId/' . $docId, $this->getResponse()->getBody());
+        }
+        $seriesNumbers = array('5/5', '4/5', '3/5', '2/5', '1/5');
+        foreach ($seriesNumbers as $seriesNumber) {
+            $this->assertContains('<dt class="results_seriesnumber">' . $seriesNumber . '</dt>', $this->getResponse()->getBody());
+        }
+        $this->assertContains('/series_logos/1/300_150.png', $this->getResponse()->getBody());
+        $this->assertContains('Dies ist die Schriftenreihe <b>MySeries</b>', $this->getResponse()->getBody());
+    }
+
+    public function testSeriesSearchPaginationAndSortingLinks() {
+        $this->dispatch('/solrsearch/index/search/searchtype/series/id/5');
+        $this->assertResponseCode(200);
+        $this->assertContains('/series_logos/5/400_100.png', $this->getResponse()->getBody());
+        $this->assertContains('Lorem ipsum dolor sit amet,', $this->getResponse()->getBody());
+
+        // pagination links
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/series/id/5/start/10/rows/10">') == 4);
+
+        // sorting links
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/seriesnumber/sortorder/asc', $this->getResponse()->getBody());
+        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/seriesnumber/sortorder/desc', $this->getResponse()->getBody());
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/year/sortorder/asc', $this->getResponse()->getBody());
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/year/sortorder/desc', $this->getResponse()->getBody());
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/title/sortorder/asc', $this->getResponse()->getBody());
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/title/sortorder/desc', $this->getResponse()->getBody());
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/author/sortorder/asc', $this->getResponse()->getBody());
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/author/sortorder/desc', $this->getResponse()->getBody());        
+    }
+
+    public function testSeriesSearchPaginationWorks() {
+        $this->dispatch('/solrsearch/index/search/searchtype/series/id/5/start/10/rows/10');
+        $this->assertContains('/frontdoor/index/index/docId/3', $this->getResponse()->getBody());
+        $this->assertContains('/frontdoor/index/index/docId/2', $this->getResponse()->getBody());
+        $this->assertContains('/frontdoor/index/index/docId/1', $this->getResponse()->getBody());
+        $this->assertContains('<dt class="results_seriesnumber">C</dt>', $this->getResponse()->getBody());
+        $this->assertContains('<dt class="results_seriesnumber">B</dt>', $this->getResponse()->getBody());
+        $this->assertContains('<dt class="results_seriesnumber">A</dt>', $this->getResponse()->getBody());
+        $this->assertContains('/series_logos/5/400_100.png', $this->getResponse()->getBody());
+        $this->assertContains('Lorem ipsum dolor sit amet,', $this->getResponse()->getBody());
+
+        // pagination links
+        $this->assertTrue(substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10">') == 4);
+    }
+
 }
