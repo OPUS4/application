@@ -90,6 +90,26 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('/citationExport/index/download/output/ris/docId/' . $this->documentId, $response->getBody());
     }
 
+    public function testIndexActionRisSubjectUncontrolled() {
+        $doc = new Opus_Document($this->documentId);
+        $doc->addSubject()->setType('uncontrolled')->setValue('Freies Schlagwort');
+        $doc->store();
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertContains('KW  - Freies Schlagwort', $response->getBody());
+    }
+
+    public function testIndexActionRisSubjectSwd() {
+        $doc = new Opus_Document($this->documentId);
+        $doc->addSubject()->setType('swd')->setValue('SWD-Schlagwort');
+        $doc->store();
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertContains('KW  - SWD-Schlagwort', $response->getBody());
+    }
+
     public function testIndexActionBibtexDoctypeArticle() {
         $this->setDocumentType('article');
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/' . $this->documentId);

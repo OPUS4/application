@@ -114,13 +114,9 @@
        <xsl:if test="Collection/@RoleName='Schriftenreihen'">
            <xsl:apply-templates select="Collection[@RoleName='Schriftenreihen']" />
        </xsl:if>
-       <xsl:if test="string-length(SubjectUncontrolled/@Value)>0">
-           <xsl:apply-templates select="SubjectUncontrolled" />
+       <xsl:if test="string-length(Subject/@Value)>0">
+           <xsl:apply-templates select="Subject" />
        </xsl:if>
-       <xsl:if test="string-length(SubjectSwd/@Value)>0">
-           <xsl:apply-templates select="SubjectSwd" />
-       </xsl:if>
-
        <xsl:choose>
          <xsl:when test="normalize-space(ComletedDate/@Year)">
              <xsl:text>Y1  - </xsl:text><xsl:value-of select="ComletedDate/@Year" />
@@ -232,12 +228,7 @@
       <xsl:value-of select="@Message" />
     </xsl:template>
 
-    <xsl:template match="SubjectUncontrolled">
-        <xsl:text>KW  - </xsl:text><xsl:value-of select="@Value" />
-        <xsl:text>&#10;</xsl:text>
-    </xsl:template>
-
-    <xsl:template match="SubjectSwd">
+    <xsl:template match="Subject[@Type='uncontrolled' or @Type='swd']">
         <xsl:text>KW  - </xsl:text><xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
