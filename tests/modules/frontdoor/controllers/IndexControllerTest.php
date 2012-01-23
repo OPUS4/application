@@ -331,4 +331,15 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertRegExp('/<a href="[^"]+\/\d+\/%27many%27\+\+-\+\+spaces\+\+and\+\+quotes.pdf">/', $responseBody);
     }
 
+    /**
+     * Regression test for OPUSVIER-1647
+     */
+    public function testSeries146() {
+        $this->dispatch('/frontdoor/index/index/docId/146');
+
+        $responseBody = $this->getResponse()->getBody();
+        $this->assertRegExp('/href="\/solrsearch\/index\/search\/searchtype\/series\/id\/1"/',
+                $responseBody);
+    }
+
 }
