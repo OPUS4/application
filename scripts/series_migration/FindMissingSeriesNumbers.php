@@ -33,7 +33,7 @@
  **/
 
 // Bootstrapping
-require_once dirname(__FILE__) . '/common/bootstrap.php';
+require_once dirname(__FILE__) . '../common/bootstrap.php';
 
 class FindMissingSeriesNumbers {
 
