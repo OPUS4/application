@@ -77,7 +77,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase {
     public function testInccorectFieldName() {
 
         $session = new Zend_Session_Namespace('Publish');
-        $session->documentType = 'preprint';
+        $session->documentType = 'all';
         
         /* @var $dom DomDocument */
         $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('all');
@@ -105,4 +105,41 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase {
         $model->parse();
     }
 
+    /**
+     * @expectedException Publish_Model_FormIncorrectEnrichmentKeyException
+     */
+    public function testIncorrectEnrichmentKey() {
+        
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'all';
+        
+        /* @var $dom DomDocument */
+        $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('all');
+        $this->assertType('DOMDocument', $dom);
+
+        foreach ($dom->getElementsByTagname('documenttype') as $rootNode) {
+
+            $domElement = $dom->createElement('field');
+            
+            $domAttribute = $dom->createAttribute('name');                        
+            $domAttribute->value = 'IncorrectEnrichmentKey';
+
+            $domAttribute2 = $dom->createAttribute('datatype');            
+            $domAttribute2->value = 'Enrichment';
+            
+            // Don't forget to append it to the element
+            $domElement->appendChild($domAttribute);
+            $domElement->appendChild($domAttribute2);
+
+            // Append it to the document itself
+            $rootNode->appendChild($domElement);
+            $dom->saveXML();
+        }
+
+        $form = new Publish_Form_PublishingSecond();
+        
+        $model = new Publish_Model_DocumenttypeParser($dom, $form);
+        $model->parse();
+        
+    }
 }

@@ -117,8 +117,9 @@ class Publish_Model_DocumenttypeParser {
             $datatype = $field->getAttribute('datatype');
             $multiplicity = $field->getAttribute('multiplicity');
 
-            if ($datatype === 'Enrichment')
-                $elementName = 'Enrichment' . $elementName;
+            if ($datatype === 'Enrichment') 
+                if ($this->isValidEnrichmentKey($elementName))
+                    $elementName = 'Enrichment' . $elementName;            
 
             if ($datatype == 'Collection' || $datatype == 'CollectionLeaf') {
                 $collectionRole = $field->getAttribute('root');
@@ -269,7 +270,7 @@ class Publish_Model_DocumenttypeParser {
      * @return true if string can be used as zend_form_element name, else Exception
      * 
      */    
-    public function zendConformElementName($string){
+    private function zendConformElementName($string){
        
         $element = new Zend_Form_Element_Text($string);
         $element->setName($string);
@@ -279,6 +280,14 @@ class Publish_Model_DocumenttypeParser {
         
         return true;
         
+    }
+    
+    private function isValidEnrichmentKey($elementName) {
+        $enrichment = Opus_EnrichmentKey::fetchByName($elementName);
+        if (is_null($enrichment))
+            throw new Publish_Model_FormIncorrectEnrichmentKeyException($elementName);
+            
+        return true;
     }
 }
 

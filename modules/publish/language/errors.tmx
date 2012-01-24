@@ -391,6 +391,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="publish_incorrect_enrichment_name">
+      <tuv xml:lang="en">
+        <seg>The enrichment field %value% wasn't created yet in the administration and may not be used.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Enrichmentfeld %value% wurde noch nicht in der Administration angelegt und darf nicht verwendet werden.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="publish_form_second_timeout_parsing">
       <tuv xml:lang="en">
         <seg>Session Timeout. Please start publishing process again.</seg>

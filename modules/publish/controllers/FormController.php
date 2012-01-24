@@ -124,6 +124,10 @@ class Publish_FormController extends Controller_Action {
             $this->view->translateKey = preg_replace('/%value%/', $e->fieldName, $this->view->translate($e->getTranslateKey()));
             return $this->render('error');
         }
+        catch (Publish_Model_FormIncorrectEnrichmentKeyException $e) {
+            $this->view->translateKey = preg_replace('/%value%/', $e->enrichmentKey, $this->view->translate($e->getTranslateKey()));
+            return $this->render('error');
+        }
         
         return $this->showTemplate($publishForm);
     }
