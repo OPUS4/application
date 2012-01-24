@@ -344,5 +344,32 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         
         $form = new Publish_Form_PublishingSecond($data);
         $form->getExtendedForm($data, true);                          
-    }    
+    }  
+    
+    public function testExternalElementLegalNotices() {
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'all';
+        $session->additionalFields = array();   
+        
+        $elementData = array(
+            'id' => 'LegalNotices',
+            'label' => 'LegalNotices',
+            'req' => 'required',
+            'type' => 'Zend_Form_Element_Checkbox',
+            'createType' => 'checkbox',
+            'header' => 'header_LegalNotices',
+            'value' => '0',
+            'check' => '',
+            'disabled' => '0',
+            'error' => array(),
+            'DT_external' => true            
+            );
+
+        $session->DT_externals['LegalNotices'] = $elementData;
+        
+        $form = new Publish_Form_PublishingSecond();
+        $this->assertNotNull($form->getElement('LegalNotices'));
+        
+        
+    }
 }

@@ -111,6 +111,8 @@
             <?= $this->element($this->Note); ?>
             <?= $this->element($this->Licence); ?>            
 
+            <?= $this->legalNotices($this->form); ?>
+        
             <div class="button-wrapper">
         <?= $this->element('button_label_abort', "class='form-button abort-button'", "Submit", "abort"); ?>
         <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
