@@ -99,6 +99,8 @@ class Publish_Model_DepositTest extends ControllerTestCase {
             'ReferenceCrisLink'                 => array('value' => 'blablup987', 'datatype'=>'Reference', 'subfield'=>'0'),
             'ReferenceStdDoi'                   => array('value' => 'blablup987', 'datatype'=>'Reference', 'subfield'=>'0'),
             'ReferenceSplashUrl'                => array('value' => 'blablup987', 'datatype'=>'Reference', 'subfield'=>'0'),
+            'SeriesNumber1'                     => array('value' => '5', 'datatype'=>'SeriesNumber', 'subfield'=>'0'),
+            'Series1'                           => array('value' => 'ID:4', 'datatype'=>'Series', 'subfield'=>'1')
         );
         
         $dep = new Publish_Model_Deposit($data);          
