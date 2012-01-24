@@ -361,6 +361,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testRssLinkIsDisplayedForBrowseSeries() {
+        $this->markTestSkipped('see OPUSVIER-2315');
+
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/languagefq/eng/sortfield/seriesnumber/sortorder/asc');
         $this->assertResponseCode(200);
         $this->assertContains('/rss/index/index/searchtype/series/id/1/languagefq/eng" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
