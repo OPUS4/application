@@ -222,6 +222,20 @@ getBasedir
 
 DEBUG "BASEDIR = $BASEDIR"
 
+# =============================================================================
+# Determine user and group for installation
+# =============================================================================
+
+OPUS4_USERNAME="$(stat -c %U "$BASEDIR")"
+OPUS4_GROUPNAME="$(stat -c %G "$BASEDIR")"
+
+DEBUG "OPUS user  = '$OPUS4_USERNAME'"
+DEBUG "OPUS group = '$OPUS4_GROUPNAME'"
+
+# =============================================================================
+# Determine old and new release version
+# =============================================================================
+
 # Determine version of old OPUS4 installation
 getOldVersion
 
