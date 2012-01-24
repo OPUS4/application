@@ -76,7 +76,7 @@ if [[ "$VERSION_OLD" < "4.2" && "$VERSION_NEW" > "4.2" ]]; then
 
     for FILE in $FILES; do
         # replace some attribute values if necessary and validate xml document type against new xml schema
-        "$SCRIPTPATH/update-documenttypes.php" "$FILE" "$BASE_SOURCE/opus4/library/Opus/Document/documenttype.xsd" >> "$UPDATE_DOCTYPES_LOG"
+        "$SCRIPTPATH/update-documenttypes.php" "$DEST/doctypes/$FILE" "$BASE_SOURCE/opus4/library/Opus/Document/documenttype.xsd" >> "$UPDATE_DOCTYPES_LOG"
     done
 fi
 
