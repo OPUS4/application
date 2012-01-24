@@ -157,7 +157,16 @@ class Publish_Model_Validation {
 
     private function _validateLanguage() {
         $validators = array();
-        $validator = new Zend_Validate_InArray(array_keys($this->getLanguages()));
+        $languages = array_keys($this->getLanguages());
+        
+        if (is_null($languages))
+            return null;
+        
+        return $this->validateSelect($languages);
+    }
+
+    private function validateSelect($set) {
+        $validator = new Zend_Validate_InArray($set);
         $messages = array(
             Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
         $validator->setMessages($messages);
@@ -171,31 +180,17 @@ class Publish_Model_Validation {
         $licences = array_keys($this->getLicences());
         if (is_null($licences))
             return null;
-        else {
-            $validator = new Zend_Validate_InArray($licences);
-            $messages = array(
-                Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
-            $validator->setMessages($messages);
-
-            $validators[] = $validator;
-            return $validators;
-        }
+        
+        return $this->validateSelect($licences);
     }
 
     private function _validateSeries() {
         $validators = array();
-        $sets = array_keys($this->getSeries());
-        if (is_null($sets))
+        $series = array_keys($this->getSeries());
+        if (is_null($series))
             return null;
-        else {
-            $validator = new Zend_Validate_InArray($sets);
-            $messages = array(
-                Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
-            $validator->setMessages($messages);
-
-            $validators[] = $validator;
-            return $validators;
-        }
+        
+        return $this->validateSelect($series);
     }
 
     private function _validateList() {
@@ -203,13 +198,7 @@ class Publish_Model_Validation {
         foreach ($this->listOptions as $option)
             $this->listOptions[$option] = $option;
 
-        $validator = new Zend_Validate_InArray($this->listOptions);
-        $messages = array(
-            Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
-        $validator->setMessages($messages);
-
-        $validators[] = $validator;
-        return $validators;
+        return $this->validateSelect($this->listOptions);
     }
 
     private function _validateThesis($grantors = null) {
@@ -217,17 +206,11 @@ class Publish_Model_Validation {
         $thesisGrantors = $this->getThesis($grantors);
         if (!is_null($thesisGrantors)) {
             $thesises = array_keys($thesisGrantors);
+            
             if (is_null($thesises))
                 return null;
-            else {
-                $validator = new Zend_Validate_InArray($thesises);
-                $messages = array(
-                    Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
-                $validator->setMessages($messages);
-
-                $validators[] = $validator;
-                return $validators;
-            }
+            
+            return $this->validateSelect($thesises);
         }
     }
 

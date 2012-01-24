@@ -242,7 +242,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
     public function testInvisibleCollectionRoleDDC() {
         $val = new Publish_Model_Validation('Collection', 'ddc');
         
-        $collectionRole = Opus_CollectionRole::fetchByOaiName($val->collectionRole);
+        $collectionRole = Opus_CollectionRole::fetchByName($val->collectionRole);
         $visibleFlag = $collectionRole->getVisible();
         $collectionRole->setVisible(0);
         $collectionRole->store();
@@ -258,7 +258,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
     public function testVisibleCollectionRoleDDC() {
         $val = new Publish_Model_Validation('Collection', 'ddc');
         
-        $collectionRole = Opus_CollectionRole::fetchByOaiName($val->collectionRole);
+        $collectionRole = Opus_CollectionRole::fetchByName($val->collectionRole);
         $visibleFlag = $collectionRole->getVisible();
         $collectionRole->setVisible(1);
         $collectionRole->store();
@@ -279,6 +279,25 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $val = new Publish_Model_Validation('Collection', $collRole);
         
         $this->assertNull($val->selectOptions());
+    }
+    
+    public function testVisibleSeries() {
+        $val = new Publish_Model_Validation('Series');
+        
+        $children = $val->selectOptions('Series');        
+        $this->assertType('array', $children);                       
+        $this->assertArrayHasKey('ID:4', $children);
+        //series with title: Visible Series
+                
+    }
+    
+        public function testInvisibleSeries() {
+        $val = new Publish_Model_Validation('Series');
+        
+        $children = $val->selectOptions('Series');        
+        $this->assertType('array', $children);                       
+        $this->assertArrayNotHasKey('ID:3', $children);
+        //series with title: Invisible Series                
     }
 }
 
