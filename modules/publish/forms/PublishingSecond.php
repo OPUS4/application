@@ -74,13 +74,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $this->populate($extended->data);
         $this->postData = $extended->data;
 
-        if ($valid1 && $valid2 && $valid3) {
-            //$this->session->invalidForm = '0';
-            return true;
-        } else {
-            //$this->session->invalidForm = '1';
-            return false;
-        }
+        return ($valid1 && $valid2 && $valid3);
     }
 
     /**
@@ -125,6 +119,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
         $this->log->debug("Parsing ready");
         $this->addElements($parser->getFormElements());
+        if(!is_null($this->getExternalElements()))
+            $this->addElements($this->getExternalElements());
         
         $this->addSubmitButton('button_label_send', 'send');
         $this->addSubmitButton('button_label_back', 'back');
@@ -135,6 +131,34 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $this->setViewValues();
     }
 
+    private function getExternalElements(){
+        $externals = array();
+        $session = new Zend_Session_Namespace('Publish');
+        $externalFields = $session->DT_externals;
+        
+        if (is_null($externalFields))
+            return;
+        
+        foreach ($externalFields AS $element) {
+            
+            if (!is_null($this->getElement($element['id'])))
+                    return null;
+            
+            $externalElement = $this->createElement($element['createType'], $element['id']);
+            $req = ($element['req']=='required') ? true : false;            
+            $externalElement->setRequired($req)
+                            ->setValue($element['value'])
+                            ->setLabel($element['label'])
+                            ->setAttrib('disabled' , $element['disabled'])
+                            ->setAttrib('DT_external' , $element['DT_external'])
+                            ->addErrorMessages($element['error']);
+            $externals[] = $externalElement;
+            $this->postData[$element['id']] = $element['value'];
+            
+        }
+        return $externals;
+    }
+    
     public function prepareCheck() {
         $this->session->elements = array();
 
