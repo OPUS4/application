@@ -8,7 +8,7 @@
   <body>
 <!-- This language file contains all texts concerning field hints. -->
 
-    <tu tuid="hint_EnrichmentLegalNotices">
+    <tu tuid="hint_LegalNotices">
         <tuv xml:lang="en">
             <seg>Please confirm that you read and commit to the legal notices and <a href="home/index/help#policies">policies</a> of our document server.</seg>
         </tuv>

@@ -16,7 +16,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="EnrichmentLegalNotices">
+    <tu tuid="LegalNotices">
       <tuv xml:lang="en">
         <seg>I have read these legal notices and agree to them.</seg>
       </tuv>

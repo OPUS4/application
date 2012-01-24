@@ -44,7 +44,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="header_EnrichmentLegalNotices">
+    <tu tuid="header_LegalNotices">
       <tuv xml:lang="en">
         <seg>Granting a simple right of use</seg>
       </tuv>
