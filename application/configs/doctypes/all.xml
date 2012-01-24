@@ -138,7 +138,7 @@
     <field name="SubjectMSC" required="no" formelement="Select" datatype="Collection" root="msc" multiplicity="*"/>
     <field name="SubjectPACS" required="no" formelement="Select" datatype="Collection" root="pacs" multiplicity="*"/>
     <field name="SubjectCCS" required="no" formelement="Select" datatype="Collection" root="ccs" multiplicity="*"/>
-    <field name="Subject.JEL" required="no" formelement="Select" datatype="Collection" root="jel" multiplicity="*"/>
+    <field name="SubjectJEL" required="no" formelement="Select" datatype="Collection" root="jel" multiplicity="*"/>
         
 
 </documenttype>
