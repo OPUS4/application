@@ -429,14 +429,16 @@ function deleteFiles() {
 # Adds a new file to the OPUS4 installation
 function addFile() {
     [ -f "$2" ] && ( echo "File '$2' already exists."; exit )
-    DRYRUN || install --preserve-timestamps --owner="$OPUS4_USERNAME" --group="$OPUS4_GROUPNAME" "$1" "$2"
+    local ACCESS="$(stat -c %a "$1")"
+    DRYRUN || install --preserve-timestamps --mode="$ACCESS" --owner="$OPUS4_USERNAME" --group="$OPUS4_GROUPNAME" "$1" "$2"
     UPDATELOG "ADDED" "$2"
     DEBUG "Added file $2"
 }
 
 # Updates an unmodified file of the OPUS4 installation
 function replaceFile() {
-    DRYRUN || install --preserve-timestamps --owner="$OPUS4_USERNAME" --group="$OPUS4_GROUPNAME" "$1" "$2"
+    local ACCESS="$(stat -c %a "$1")"
+    DRYRUN || install --preserve-timestamps --mode="$ACCESS" --owner="$OPUS4_USERNAME" --group="$OPUS4_GROUPNAME" "$1" "$2"
     UPDATELOG "REPLACED" "$2"
     DEBUG "Replaced file $2"
 }
