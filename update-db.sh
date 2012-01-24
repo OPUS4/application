@@ -197,7 +197,7 @@ if [[ "$VERSION_OLD" < "4.2" && "$VERSION_NEW" > "4.2" ]]; then
    else
       if [[ $ANSWER == 'y' ]]; then
          # inform user which series documents have no IdentifierSerial        
-         "$BASEDIR/opus4/scripts/FindMissingSeriesNumbers.php" "$UPDATESERIESLOG"
+         "$BASEDIR/opus4/scripts/series_migration/FindMissingSeriesNumbers.php" "$UPDATESERIESLOG"
          # run migration script
          runDbUpdate "$SCHEMA_PATH/update-series-for-4.2.0.sql"
       else
