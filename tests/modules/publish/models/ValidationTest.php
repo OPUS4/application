@@ -287,11 +287,10 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $children = $val->selectOptions('Series');        
         $this->assertType('array', $children);                       
         $this->assertArrayHasKey('ID:4', $children);
-        //series with title: Visible Series
-                
+        //series with title: Visible Series                
     }
     
-        public function testInvisibleSeries() {
+     public function testInvisibleSeries() {
         $val = new Publish_Model_Validation('Series');
         
         $children = $val->selectOptions('Series');        
@@ -299,5 +298,30 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $this->assertArrayNotHasKey('ID:3', $children);
         //series with title: Invisible Series                
     }
+    
+    public function testSortOrderOfSeries() {
+        $val = new Publish_Model_Validation('Series');
+        $values = $val->selectOptions();
+                
+        $series = Opus_Series::getAllSortedBySortKey();
+
+        $visibleSeries = array();
+
+        foreach($series as $serie) {
+            if ($serie->getVisible() == '1') {
+                $visibleSeries[] = $serie->getTitle();
+            }
+        }
+
+        $this->assertEquals( count($values), count($visibleSeries));
+
+        $index = 0;
+        foreach ($values as $name) {
+            $this->assertEquals($name, $visibleSeries[$index]);
+            $index++;
+        }
+                    
+    }
+    
 }
 
