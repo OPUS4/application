@@ -322,30 +322,29 @@ if askYesNo "Would you like to restart Solr server (Jetty) now [Y/n]?"; then
     echo "Restarting Jetty server ..."
     UPDATELOG "Restarting Jetty server"
     DRYRUN || /etc/init.d/opus4-solr-jetty restart
+
+    getProperty "$BASEDIR/opus4/application/configs/config.ini" "searchengine.index.host"
+    SOLR_SERVER_HOST=$PROP_VALUE
+
+    getProperty "$BASEDIR/opus4/application/configs/config.ini" "searchengine.index.port"
+    SOLR_SERVER_PORT=$PROP_VALUE
+
+    getProperty "$BASEDIR/opus4/application/configs/config.ini" "searchengine.index.app"
+    SOLR_SERVER_APP=$PROP_VALUE
+
+    DEBUG "SOLR_SERVER_HOST = $SOLR_SERVER_HOST"
+    DEBUG "SOLR_SERVER_PORT = $SOLR_SERVER_PORT"
+    DEBUG "SOLR_SERVER_APP = $SOLR_SERVER_APP"
+
+    # sleep some seconds to ensure the server is running
+    echo -e "Wait until Solr server is running... \c "
+    while :; do
+        echo -n "."
+        wget -q -O /dev/null "http://$SOLR_SERVER_HOST:$SOLR_SERVER_PORT/$SOLR_SERVER_APP/ping" && break
+        sleep 2
+    done
+    echo "done"
 fi
-
-getProperty "$BASEDIR/opus4/application/configs/config.ini" "searchengine.index.host"
-SOLR_SERVER_HOST=$PROP_VALUE
-
-getProperty "$BASEDIR/opus4/application/configs/config.ini" "searchengine.index.port"
-SOLR_SERVER_PORT=$PROP_VALUE
-
-getProperty "$BASEDIR/opus4/application/configs/config.ini" "searchengine.index.app"
-SOLR_SERVER_APP=$PROP_VALUE
-
-DEBUG "SOLR_SERVER_HOST = $SOLR_SERVER_HOST"
-DEBUG "SOLR_SERVER_PORT = $SOLR_SERVER_PORT"
-DEBUG "SOLR_SERVER_APP = $SOLR_SERVER_APP"
-
-# sleep some seconds to ensure the server is running
-echo -e "Wait until Solr server is running... \c "
-while :; do
-    echo -n "."
-    wget -q -O /dev/null "http://$SOLR_SERVER_HOST:$SOLR_SERVER_PORT/$SOLR_SERVER_APP/ping" && break
-    sleep 2
-done
-echo "done"
-
 
 # TODO move into separate script for execution after all other update scripts?
 if askYesNo "Would you like to rebuild Solr index now [Y/n]?"; then
