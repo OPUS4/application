@@ -324,6 +324,7 @@ function copyFolder() {
     local SRC="$1"
     local DEST="$2"
     DRYRUN || cp -R "$SRC" "$DEST"
+    DRYRUN || chown -R "$OPUS4_USERNAME:$OPUS4_GROUPNAME" "$DEST"
     UPDATELOG "CREATED" "$DEST"
     DEBUG "Copied folder $SRC to $DEST"
 }
