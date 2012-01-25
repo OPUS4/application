@@ -34,7 +34,6 @@ DEBUG "MD5_OLD = $MD5_OLD"
 DEBUG "VERSION_NEW = $VERSION_NEW"
 DEBUG "VERSION_OLD = $VERSION_OLD"
 DEBUG "_UPDATELOG = $_UPDATELOG"
-UPDATESERIESLOG="$BASEDIR/UPDATE-series.log"
 
 SCHEMA_PATH="$BASE_SOURCE/opus4/db/schema"
 
@@ -185,27 +184,6 @@ echo "Database is updating now..."
 dbScript "$VERSION_OLD" "$VERSION_NEW"
 echo "Database is up-to-date!"
 
-#
-# Migration of Collection-based series (were eliminated with OPUS 4.2.0)
-#
-# Ensure this is only done for updates from versions < 4.2.0
-if [[ "$VERSION_OLD" < "4.2" && "$VERSION_NEW" > "4.2" ]]; then
-   echo -e "Would you like to migrate your old series (y/N)? \c ";
-   read ANSWER
-   if [[ -z $ANSWER ]]; then
-      ANSWER='n'
-   else
-      if [[ $ANSWER == 'y' ]]; then
-         # inform user which series documents have no IdentifierSerial        
-         "$BASEDIR/opus4/scripts/series_migration/FindMissingSeriesNumbers.php" "$UPDATESERIESLOG"
-         # run migration script
-         runDbUpdate "$SCHEMA_PATH/update-series-for-4.2.0.sql"
-      else
-         echo "Keep the old series."
-      fi
-   fi
-fi
-
 # Copy sql files from source to destination folder
 updateFolder "$SCHEMA_PATH" "$BASEDIR"/opus4/db/schema
 updateFolder "$BASE_SOURCE"/opus4/db/masterdata "$BASEDIR"/opus4/db/masterdata
@@ -247,7 +225,7 @@ copyFile "$FILE" "$FILE.backup.$VERSION_OLD"
 copyFile "$FILE.template" "$FILE"
 
 # Set properties
-# TODO only modify files if _dDRYRUN is disabled
+# TODO only modify files if _DRYRUN is disabled
 setPropertyInShellScript "$FILE" "user" "$CREATEDB_USER"
 setPropertyInShellScript "$FILE" "password" "$CREATEDB_PASSWORD"
 setPropertyInShellScript "$FILE" "host" "$CREATEDB_HOST"

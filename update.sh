@@ -280,6 +280,9 @@ export OPUS_UPDATE_SCRIPTPATH=$SCRIPTPATH     # TODO necessary? Different way?
 # Update database
 "$SCRIPTPATH"/update-db.sh
 
+# Update series (needs to be run only for updates from <= 4.1.4 to >= 4.2.0)
+"$SCRIPTPATH"/update-series.sh
+
 # Update *import* folder
 "$SCRIPTPATH"/update-import.sh
 
