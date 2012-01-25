@@ -99,7 +99,7 @@ class View_Helper_FormatValueTest extends ControllerTestCase {
 
         $output = $this->__helper->format($field);
 
-        $this->assertEquals('2002/06/17', $output);
+        $this->assertTrue(in_array($output, array('2002/06/17', '17.06.2002')));
     }
 
     public function testFormatValueForInvalidDate() {
@@ -122,6 +122,7 @@ class View_Helper_FormatValueTest extends ControllerTestCase {
 
         $output = $this->__helper->format($field, 'Opus_Document');
 
+        // PublicationState is not translated right now
         $this->assertEquals('draft', $output);
     }
 
