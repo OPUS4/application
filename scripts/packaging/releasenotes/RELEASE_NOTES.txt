@@ -1,6 +1,6 @@
 h1. OPUS 4 Release Notes
 
-h2. ======================== Release 4.2.0 2012-01-09 ========================
+h2. ======================== Release 4.2.0 2012-01-25 ========================
 
 h3. Dokumentation im Tarball aufgenommen
 
@@ -140,6 +140,23 @@ ID 123 aus dem alten System.
 
 Weitere Details erhalten Sie bei der DNB oder im Nestor-Handbuch:
 * http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:de:0008-20100305176
+
+
+h3. Neue Konfigurationsdateien für die Migration aus OPUS3
+
+Mit OPUS 4.2.0 ändert sich die Konfiguration der Migration aus OPUS3. Für
+instanzspezifische Anpassungen steht im Verzeichnis
+$BASEDIR/opus4/applications/config/ das Template migration_config.ini.template
+zur Verfügung. Dieses muss vor Ablauf der Migration in migration_config.ini
+umbenannt werden.
+
+Kapitel 10.1 "Vorbereitung" beschreibt, welche Einstellungen manuell geändert
+werden können.
+
+Die alten Anpassungen aus $BASEDIR/opus4/applications/config/import.ini müssen
+vor der Migration nach migration_config.ini unter Berücksichtigung der neuen
+Konfigurationsschlüssel übetragen werden.
+
 
 
 h2. ======================== Release 4.1.4 2011-10-18 ========================
