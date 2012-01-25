@@ -142,7 +142,7 @@ Weitere Details erhalten Sie bei der DNB oder im Nestor-Handbuch:
 * http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:de:0008-20100305176
 
 
-h3. Neue Konfigurationsdateie für die Migration aus OPUS3
+h3. Neue Konfigurationsdatei für die Migration aus OPUS3
 
 Mit OPUS 4.2.0 ändert sich die Konfiguration der Migration aus OPUS3. Für
 instanzspezifische Anpassungen steht im Verzeichnis
