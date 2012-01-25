@@ -18,7 +18,7 @@
 # @version     $Id$
 
 # Updates the OPUS4 configuration files
-# 
+#
 # Document types are updated after asking the user.
 
 # TODO simply mechanism so that not every file has to be handled separately
@@ -49,8 +49,9 @@ copyFile "$SRC/application.ini" "$DEST/application.ini"
 copyFile "$SRC/config.ini.template" "$DEST/config.ini.template"
 # TODO maybe config.ini should be merged with new template? Message to user?
 
-# Copy import.sh.template file
+# Copy migration.ini file
 copyFile "$SRC/migration.ini" "$DEST/migration.ini"
+# Copy migration_config.ini.template file
 copyFile "$SRC/migration_config.ini.template" "$DEST/migration_config.ini.template"
 
 # Ask user before replacing the following files if they have been modified.
