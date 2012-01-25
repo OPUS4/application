@@ -133,11 +133,6 @@
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">series   </xsl:with-param>
-            <xsl:with-param name="value"><xsl:value-of select ="TitleSub/@Value" /></xsl:with-param>
-            <xsl:with-param name="delimiter">,</xsl:with-param>
-	</xsl:call-template>
-        <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">editor   </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select="$editor" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
@@ -187,20 +182,20 @@
             <xsl:with-param name="value"><xsl:value-of select ="IdentifierUrl/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
-        <xsl:if test="Collection/@RoleName='series' = 'true'">
-            <xsl:call-template name="outputFieldValue">
-                <xsl:with-param name="field">institution</xsl:with-param>
-                <xsl:with-param name="value"><xsl:value-of select ="Collection[@RoleName='institutes']/@Name" /></xsl:with-param>
-                <xsl:with-param name="delimiter">,</xsl:with-param>
-            </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">institution</xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select ="Collection[@RoleName='institutes']/@Name" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:if test="Series/@Visible='1'">
             <xsl:call-template name="outputFieldValue">
                 <xsl:with-param name="field">series   </xsl:with-param>
-                <xsl:with-param name="value"><xsl:value-of select ="Collection[@RoleName='series']/@Name" /></xsl:with-param>
+                <xsl:with-param name="value"><xsl:value-of select ="Series/@Title" /></xsl:with-param>
                 <xsl:with-param name="delimiter">,</xsl:with-param>
             </xsl:call-template>
             <xsl:call-template name="outputFieldValue">
                 <xsl:with-param name="field">number   </xsl:with-param>
-                <xsl:with-param name="value"><xsl:value-of select ="IdentifierSerial/@Value" /></xsl:with-param>
+                <xsl:with-param name="value"><xsl:value-of select ="Series/@Number" /></xsl:with-param>
                 <xsl:with-param name="delimiter">,</xsl:with-param>
             </xsl:call-template>
         </xsl:if>

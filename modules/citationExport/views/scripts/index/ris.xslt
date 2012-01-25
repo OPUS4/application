@@ -111,9 +111,10 @@
        <xsl:if test="string-length(TitleAbstract/@Value)>0">
            <xsl:apply-templates select="TitleAbstract" />
        </xsl:if>
-       <xsl:if test="Collection/@RoleName='Schriftenreihen'">
-           <xsl:apply-templates select="Collection[@RoleName='Schriftenreihen']" />
+       <xsl:if test="Series">
+           <xsl:apply-templates select="Series" />
        </xsl:if>
+
        <xsl:if test="string-length(Subject/@Value)>0">
            <xsl:apply-templates select="Subject" />
        </xsl:if>
@@ -257,13 +258,14 @@
         <xsl:value-of select="@Value" />
     </xsl:template>
 
-    <xsl:template match="Collection[@RoleName='Schriftenreihen']">
+    <xsl:template match="Series[@Visible='1']">
         <xsl:text>T3  - </xsl:text>
+        <xsl:value-of select="@Title" />
         <xsl:if test="@Number != ''">
+            <xsl:text> - </xsl:text>
             <xsl:value-of select="@Number" />
             <xsl:text> </xsl:text>
         </xsl:if>
-        <xsl:value-of select="@Name" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
