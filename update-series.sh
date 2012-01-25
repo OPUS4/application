@@ -17,7 +17,7 @@
 # @version     $Id$
 
 
-# Migration of Collection-based series (were eliminated with OPUS 4.2.0)
+# Migration of Collection-based Series (were eliminated in OPUS 4.2.0)
 
 set -o errexit
 
@@ -32,62 +32,7 @@ DEBUG "VERSION_NEW = $VERSION_NEW"
 DEBUG "VERSION_OLD = $VERSION_OLD"
 DEBUG "_UPDATELOG = $_UPDATELOG"
 
-SCHEMA_PATH="$BASE_SOURCE/opus4/db/schema"
 UPDATESERIESLOG="$BASEDIR/UPDATE-series.log"
-
-
-
-##############################################
-## begin: duplicated code from update-db.sh ##
-##############################################
-
-# TODO more flexible way to find mysql binary?
-mysql_bin=/usr/bin/mysql
-mysql_dump=/usr/bin/mysqldump
-SCRIPT="$BASEDIR/opus4/db/createdb.sh"
-UPDATED=0
-
-#read database credentials from createdb.sh
-# TODO Handle missing values
-getProperty $SCRIPT user
-USER="$PROP_VALUE"
-getProperty $SCRIPT password
-PASSWORD=$PROP_VALUE
-getProperty $SCRIPT host
-HOST=$PROP_VALUE
-getProperty $SCRIPT port
-PORT=$PROP_VALUE
-getProperty $SCRIPT dbname
-DBNAME=$PROP_VALUE
-
-
-#method executes a db update script (with global mysql credentials)
-#@param $1 update script file
-function runDbUpdate() {
-    UPDATE_FILE=$1
-
-    if ! DRYRUN ; then
-        MYSQL="${mysql_bin} --default-character-set=utf8 --user=${USER} --password=${PASSWORD} --host=${HOST} --port=${PORT}"
-
-        if [[ -n "${PASSWORD}" ]]; then
-            MYSQL="${MYSQL} --password=${PASSWORD}"
-        fi
-
-    $MYSQL <<-EOFMYSQL
-    USE $DBNAME;
-    SOURCE $UPDATE_FILE;
-EOFMYSQL
-
-    fi
-    DEBUG "MYSQL UPDATE SCRIPT = $UPDATE_FILE"
-    echo "$UPDATE_FILE" >> "$BASE_SOURCE"/dbupdated.txt
-}
-
-############################################
-## end: duplicated code from update-db.sh ##
-############################################
-
-
 
 # Ensure this is only done for updates from versions < 4.2.0
 if [[ "$VERSION_OLD" < "4.2" && "$VERSION_NEW" > "4.2" ]]; then
@@ -99,8 +44,6 @@ if [[ "$VERSION_OLD" < "4.2" && "$VERSION_NEW" > "4.2" ]]; then
       if [[ $ANSWER == 'y' ]]; then
          # inform user which series documents have no IdentifierSerial
          "$BASEDIR/opus4/scripts/series_migration/FindMissingSeriesNumbers.php" "$UPDATESERIESLOG"
-         # run migration script
-         runDbUpdate "$SCHEMA_PATH/update-series-for-4.2.0.sql"
       else
          echo "Keep the old series."
       fi
