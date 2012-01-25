@@ -235,7 +235,7 @@ class Admin_DocumentController extends Controller_Action {
 
                     $form = $this->__getEditForm($document, $section);
 
-                    if ($form->isValid($postData)) {
+                    if ($form->isValid($postData) || $this->_isRemoveRequest($postData)) {
                         $this->__processUpdatePost($postData, $document, $section);
                     }
                     else {
@@ -271,6 +271,22 @@ class Admin_DocumentController extends Controller_Action {
                 $this->view->translate('admin_document_error_novalidid')),
                     'documents', 'admin');
         }
+    }
+
+    /**
+     * Checks if the request is for removing a model from a document.
+     * This is currently used to prevent validation for 'remove' requests,
+     * since the input for the model that is being removed is irrelevant.
+     */
+    protected function _isRemoveRequest($postData) {
+        foreach ($postData as $fieldName => $modelData) {
+            foreach ($modelData as $index => $modelValues) {
+                if (array_key_exists('remove', $modelValues)) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     /**
