@@ -126,8 +126,8 @@ formular freigeben.
 h3. Hinweis zu URNs von migrierten Dokumenten
 
 Wir haben einen Hinweis in die Dokumentation aufgenommen, die alle Instanzen
-betrifft die bereits vor OPUS4 für die URN-Vergabe registriert waren.  Bei
-der Migration müssen Sie in der config.ini den Präfix dex NISS anpassen, um
+betrifft, die bereits vor OPUS4 für die URN-Vergabe registriert waren.  Bei
+der Migration müssen Sie in der config.ini den Präfix des NISS anpassen, um
 Kollisionen mit bereits vergebenen URNs zu vermeiden.  Die Informationen 
 finden Sie in Kapitel 7.6 "URN SETTINGS".
 
@@ -138,7 +138,8 @@ Dokument mit der ID 123, so genügt es den Schlüssel "urn.nss" auf den Wert
 einfach "urn:nbn:de:kobv:123-opus4-123y" und kollidiert nicht mehr mit der
 ID 123 aus dem alten System.
 
-Weitere Details erhalten Sie bei der DNB oder im Nestor-Handbuch:
+Weitere Details erhalten Sie in Kapitel 7.6 unserer Dokumentation, bei der
+DNB oder im Nestor-Handbuch:
 * http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:de:0008-20100305176
 
 
