@@ -167,12 +167,14 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             $name = $element->getName();
             $element->removeDecorator('Label');
 
-            if ($element->getValue() == ""
-                    || $element->getType() == "Zend_Form_Element_Submit"
-                    || $element->getType() == "Zend_Form_Element_Hidden"
-                    || $element->getAttrib('isRoot') == true) {
-
+            if ($element->getValue() == "" 
+                    || $element->getType() == "Zend_Form_Element_Submit" 
+                    || $element->getType() == "Zend_Form_Element_Hidden" 
+                    || $element->getAttrib('isRoot') == true
+                    || array_key_exists($element->getName(), $this->session->DT_externals)) {
+                
                 $this->removeElement($name);
+                
             } else {
                 
                 $this->session->elements[$name]['name'] = $name;
