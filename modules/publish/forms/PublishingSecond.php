@@ -78,7 +78,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
     }
 
     /**
-     * Build document publishing form that depends on the doc type
+     * Build document publishing form whose fields depend on the choosen documenttype.
+     * 
      * @param $doctype
      * @return void
      */
@@ -94,56 +95,56 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
         $dom = null;
         try {
+            // Fetch the current XML DOM structure of the documenttype.
             $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument($this->doctype);
         } catch (Application_Exception $e) {
             $this->log->err("Unable to load document type '" . $this->doctype . "'");
             // TODO: Need another exception class?
             throw new Publish_Model_FormSessionTimeoutException();
         }
-        
-        try {
-                $parser = new Publish_Model_DocumenttypeParser($dom, $this);
-            }
-            catch (Publish_Model_FormIncorrectFieldNameException $e) {
-                $this->log->err('Wrong field name: '. $e->fieldName);
-                throw new Publish_Model_FormIncorrectFieldNameException($e->fieldName);
-            }
-            
-        
-        $this->log->debug("Parser created");
+                
+        // Call the parser for that DOM object and the current form object and set important members.
+        $parser = new Publish_Model_DocumenttypeParser($dom, $this);
         $parser->setAdditionalFields($this->additionalFields);
         $parser->setPostValues($this->postData);
-
-        if ($parser !== false)
-            $parser->parse();
-
-        $this->log->debug("Parsing ready");
-        $this->addElements($parser->getFormElements());
+        $parser->parse();
+        $parserElements = $parser->getFormElements();
+        
+        $this->log->info("Documenttype Parser ready with parsing " . $this->doctype . " found: " . count($parserElements) . " elements." );
+        
+        // Fill the Form Object!
+        $this->addElements($parserElements);
         if(!is_null($this->getExternalElements()))
             $this->addElements($this->getExternalElements());
         
         $this->addSubmitButton('button_label_send', 'send');
         $this->addSubmitButton('button_label_back', 'back');
 
-        if (isset($this->postData))
-            $this->populate($this->postData);
+        if (!is_null($this->postData)) $this->populate($this->postData);
 
         $this->setViewValues();
     }
 
+    /**
+     * Checks if there are external fields that belongs to the form and are not defined 
+     * by document type (e.g. "LegalNotices" be the View_Helper).
+     * It sets important array values for these elements and returns an array of external fields.
+     * @return type Array of external fields.
+     */
     private function getExternalElements(){
         $externals = array();
         $session = new Zend_Session_Namespace('Publish');
         $externalFields = $session->DT_externals;
         
+        // No external values found!
         if (is_null($externalFields))
             return;
         
         foreach ($externalFields AS $element) {
-            
+            // Element is already appended.
             if (!is_null($this->getElement($element['id'])))
                     return null;
-            
+            // ELSE: Create a new element and keep the element's values in an array.
             $externalElement = $this->createElement($element['createType'], $element['id']);
             $req = ($element['req']=='required') ? true : false;            
             $externalElement->setRequired($req)
@@ -159,6 +160,13 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         return $externals;
     }
     
+    /**
+     * Prepares the form object for check view page and data storing in database.
+     * It removes submit buttons, hidden fields, root nodes of browsing fields and #
+     * external fields (e.g. in view helpers) from the form object.
+     * Other elements are left untouched.
+     * It adds two new buttons for "Back" and "Deposit Data".
+     */
     public function prepareCheck() {
         $this->session->elements = array();
 
@@ -168,15 +176,16 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             $element->removeDecorator('Label');
 
             if ($element->getValue() == "" 
-                    || $element->getType() == "Zend_Form_Element_Submit" 
-                    || $element->getType() == "Zend_Form_Element_Hidden" 
-                    || $element->getAttrib('isRoot') == true
-                    || array_key_exists($element->getName(), $this->session->DT_externals)) {
+                    || $element->getType() == "Zend_Form_Element_Submit"        // Submit buttons
+                    || $element->getType() == "Zend_Form_Element_Hidden"        // Hidden fields
+                    || $element->getAttrib('isRoot') == true                    // Rood Nodes of Browsefields
+                    || (!is_null($this->session->DT_externals)) && array_key_exists($element->getName(), $this->session->DT_externals)) {   // additional externals fields (from view helpers)
                 
                 $this->removeElement($name);
                 
             } else {
-                
+                // set important element values in an  array: name, value, label, datatype and subfield
+                // these are used for Deposit
                 $this->session->elements[$name]['name'] = $name;
                 $this->session->elements[$name]['value'] = $element->getValue();
                 $this->session->elements[$name]['label'] = $element->getLabel();
@@ -225,11 +234,16 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             
             $fieldsetCount = $currentNumber;
             
+            // Updates several counter in additionalFields that depends on the button label.
             switch ($workflow) {
+                
                 case 'add':                    
+                    // Add another form field.
                     $currentNumber = (int) $currentNumber + 1;
                     break;
+                
                 case 'delete':
+                    // Delete the last field.
                     if ($currentNumber > 1) {
                         if (isset($level)) {
                             for ($i = 0; $i <= $level; $i++)
@@ -239,13 +253,17 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                         $currentNumber = (int) $currentNumber - 1;
                     }
                     break;
+                    
                 case 'down':
+                    // Browse down in the Collection hierarchy.
                     if ($postData[$fieldName . $currentNumber] !== '' || 
                         array_key_exists('collId' . $level . $fieldName . $currentNumber, $this->session->additionalFields) &&
                                 $this->session->additionalFields['collId' . $level . $fieldName . $currentNumber] !== '')
                         $level = (int) $level + 1;
                     break;
+                    
                 case 'up' :
+                    // Brose up in the Collection hierarchy.
                     if ($level >= 2) {
                         unset($this->session->additionalFields['collId' . $level . $fieldName . $currentNumber]);
                         $level = (int) $level - 1;                             
@@ -268,6 +286,11 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         }
     }
 
+    /**
+     * Finds out which button for which field was pressed.
+     * @param type $button String button label
+     * @return string array with fieldname and workflow
+     */
     private function _workflowAndFieldFor($button) {
         $result = array();
         if (substr($button, 0, 7) == "addMore") {
@@ -286,6 +309,13 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         return $result;
     }
 
+    /**
+     * Finds the current level of collection browsing for a given field.
+     * @param type $field name of field
+     * @param type $value counter of fieldsets
+     * @param type $post Array of post data
+     * @return type current level
+     */
     private function _updateCollectionField($field, $value, $post) {
         $level = '1';
         if (array_key_exists('step' . $field . $value, $this->session->additionalFields)) {
@@ -309,6 +339,9 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         return $level;
     }
 
+    /**
+     * Set values of view variables.
+     */
     public function setViewValues() {
         $errors = $this->getMessages();
 
