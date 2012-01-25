@@ -74,20 +74,32 @@ foreach ($docFinder->ids() AS $docId) {
       continue;
    }
 
-   $removeMscSubjects = array();
-   if (is_object($mscRole)) {
-       $removeMscSubjects = migrateSubjectToCollection($doc, 'msc', $mscRole->getId(), 'MigrateSubjectMSC');
-   }
+   try {
+      $removeMscSubjects = array();
+      if (is_object($mscRole)) {
+         $removeMscSubjects = migrateSubjectToCollection($doc, 'msc', $mscRole->getId(), 'MigrateSubjectMSC');
+      }
 
-   $removeDdcSubjects = array();
-   if (is_object($ddcRole)) {
-       $removeDdcSubjects = migrateSubjectToCollection($doc, 'ddc', $ddcRole->getId(), 'MigrateSubjectDDC');
+      $removeDdcSubjects = array();
+      if (is_object($ddcRole)) {
+         $removeDdcSubjects = migrateSubjectToCollection($doc, 'ddc', $ddcRole->getId(), 'MigrateSubjectDDC');
+      }
+   }
+   catch (Exception $e) {
+      $logger->err("fatal error while parsing document $docId: " . $e);
+      continue;
    }
 
    if (count($removeMscSubjects) > 0 or count($removeDdcSubjects) > 0) {
       $changedDocumentIds[] = $docId;
-      $logger->info("changed document $docId");
-      $doc->store();
+
+      try {
+         $doc->store();
+         $logger->info("changed document $docId");
+      }
+      catch (Exception $e) {
+         $logger->err("fatal error while STORING document $docId: " . $e);
+      }
    }
 
 }
