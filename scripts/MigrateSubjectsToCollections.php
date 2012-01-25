@@ -25,20 +25,46 @@ $d->addCollection(new Opus_Collection(7688));
 $d->addCollection(new Opus_Collection(7653));
 $d->store();
 
+
+// Parse arguments.
+global $argc, $argv;
+
+if (count($argv) != 2) {
+   echo "usage: " . __FILE__ . " logfile.log\n";
+   exit(-1);
+}
+
+// Initialize logger.
+$logfileName = $argv[1];
+echo "setting logger: $logfileName\n";
+
+$logfile = @fopen($logfileName, 'a', false);
+$writer = new Zend_Log_Writer_Stream($logfile);        
+$formatter=new Zend_Log_Formatter_Simple('%timestamp% %priorityName%: %message%' . PHP_EOL);
+$writer->setFormatter($formatter);
+$logger = new Zend_Log($writer);
+$logger->info('Script started...');
+
 // load collections (and check existence)
 $mscRole   = Opus_CollectionRole::fetchByName('msc');
 if (!is_object($mscRole)) {
-    echo "WARNING: MSC collection does not exist.  Cannot migrate SubjectMSC.\n";
+    $logger->warn("MSC collection does not exist.  Cannot migrate SubjectMSC.");
 }
 
 $ddcRole   = Opus_CollectionRole::fetchByName('ddc');
 if (!is_object($ddcRole)) {
-    echo "WARNING: DDC collection does not exist.  Cannot migrate SubjectDDC.\n";
+    $logger->warn("DDC collection does not exist.  Cannot migrate SubjectDDC.");
 }
+
+// create enrichment keys (if neccessary)
+createEnrichmentKey('MigrateSubjectMSC');
+createEnrichmentKey('MigrateSubjectDDC');
 
 // Iterate over all documents.
 $docFinder = new Opus_DocumentFinder();
+$changedDocumentIds = array();
 foreach ($docFinder->ids() AS $docId) {
+   echo "processing $docId... \n";
 
    $doc = null;
    try {
@@ -48,15 +74,24 @@ foreach ($docFinder->ids() AS $docId) {
       continue;
    }
 
+   $removeMscSubjects = array();
    if (is_object($mscRole)) {
-       $removeMscSubjects = migrateSubjectToCollection($doc, 'msc', $mscRole->getId());
-   }
-   if (is_object($ddcRole)) {
-       $removeDdcSubjects = migrateSubjectToCollection($doc, 'ddc', $ddcRole->getId());
+       $removeMscSubjects = migrateSubjectToCollection($doc, 'msc', $mscRole->getId(), 'MigrateSubjectMSC');
    }
 
-   $doc->store();
+   $removeDdcSubjects = array();
+   if (is_object($ddcRole)) {
+       $removeDdcSubjects = migrateSubjectToCollection($doc, 'ddc', $ddcRole->getId(), 'MigrateSubjectDDC');
+   }
+
+   if (count($removeMscSubjects) > 0 or count($removeDdcSubjects) > 0) {
+      $changedDocumentIds[] = $docId;
+      $logger->info("changed document $docId");
+      $doc->store();
+   }
+
 }
+$logger->info("changed " . count($changedDocumentIds) . " documents: " . implode(",", $changedDocumentIds));
 
 function checkDocumentHasCollectionId($doc, $collectionId) {
    foreach ($doc->getCollection() AS $c) {
@@ -67,7 +102,8 @@ function checkDocumentHasCollectionId($doc, $collectionId) {
    return false;
 }
 
-function migrateSubjectToCollection($doc, $subjectType, $roleId) {
+function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName) {
+   global $logger;
    $logPrefix = sprintf("[docId % 5d] ", $doc->getId());
 
    $keepSubjects   = array();
@@ -79,19 +115,31 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId) {
       $value = $subject->getValue();
 
       if ($type !== $subjectType) {
-         // echo "$logPrefix   Skipping subject (type '$type', value '$value')\n";
+         // $logger->debug("$logPrefix  Skipping subject (type '$type', value '$value')");
          continue;
       }
+
+      // From now on, every subject will be migrated
+      $keepSubjects[$subject->getId()] = false;
+      $removeSubjects[] = $subject;
 
       // check if (unique) collection for subject value exists
       $collections = Opus_Collection::fetchCollectionsByRoleNumber($roleId, $value);
       if (!is_array($collections) or count($collections) < 1) {
-         echo "$logPrefix WARNING: No collection found for value '$value'\n";
+         $logger->warn("$logPrefix  No collection found for value '$value' -- migrating to enrichment $eKeyName.");
+         // migrate subject to enrichments
+         $doc->addEnrichment()
+            ->setKeyName($eKeyName)
+            ->setValue($value);
          continue;
       }
 
       if (count($collections) > 1) {
-         echo "$logPrefix WARNING: Ambiguous collections for value '$value'\n";
+         $logger->warn("$logPrefix  Ambiguous collections for value '$value' -- migrating to enrichment $eKeyName.");
+         // migrate subject to enrichments
+         $doc->addEnrichment()
+            ->setKeyName($eKeyName)
+            ->setValue($value);
          continue;
       }
 
@@ -99,30 +147,43 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId) {
       $collectionId = $collection->getId();
       // check if document already belongs to this collection
       if (checkDocumentHasCollectionId($doc, $collectionId)) {
-         echo "$logPrefix NOTICE: Only removing subject (type '$type', value '$value') -- collection already assigned (collections $collectionId)...\n";
+         // migrate subject to collections
+         $logger->info("$logPrefix  Migrating subject (type '$type', value '$value') -- collection already assigned (collections $collectionId).");
          $doc->addCollection($collection);
-         $keepSubjects[$subject->getId()] = false;
-         $removeSubjects[] = $subject;
          continue;
       }
 
-      echo "$logPrefix NOTICE: Migrating subject (type '$type', value '$value') to (collection $collectionId)\n";
+      // migrate subject to collections
+      $logger->info("$logPrefix  Migrating subject (type '$type', value '$value') to (collection $collectionId)");
       $doc->addCollection($collection);
-      $keepSubjects[$subject->getId()] = false;
-      $removeSubjects[] = $subject;
    }
 
    if (count($removeSubjects) > 0) {
       // debug: removees
       foreach ($removeSubjects AS $r) {
-         echo "$logPrefix DEBUG: Not keeping (type '".$r->getType()."', value '".$r->getValue()."')\n";
+         $logger->debug("$logPrefix  Removing subject (type '".$r->getType()."', value '".$r->getValue()."')");
       }
-   
-      $doc->setSubject(array_values($keepSubjects));
-      echo "\n";
+
+      $newSubjects = array_filter(array_values($keepSubjects));
+      foreach ($newSubjects AS $k) {
+         $logger->debug("$logPrefix  Keeping subject (type '".$k->getType()."', value '".$k->getValue()."')");
+      }
+
+      $doc->setSubject($newSubjects);
    }
 
    return $removeSubjects;
+}
+
+function createEnrichmentKey($name) {
+   try {
+      $eKey = new Opus_EnrichmentKey();
+      $eKey->setName($name)->store();
+   }
+   catch (Exception $e) {
+   }
+
+   return new Opus_EnrichmentKey($name);
 }
 
 exit();
