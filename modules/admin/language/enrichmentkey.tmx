@@ -70,6 +70,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_enrichmentkey_error_name_protected">
+      <tuv xml:lang="en">
+        <seg>Internal Enrichmentkey system is not available.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Interner Enrichmentkey ist nicht verfügbar.</seg>
+      </tuv>
+    </tu>
+
   </body>
   
 </tmx>

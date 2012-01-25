@@ -141,6 +141,8 @@ class Admin_EnrichmentkeyController extends Controller_Action {
 
             $form = new Admin_Form_Enrichmentkey();
 
+
+
             if ($form->isValid($postData)) {
                 $name = $postData['name'];
                 $this->_updateEnrichmentkey(null, $name);

@@ -26,26 +26,28 @@
  *
  * @category    TODO
  * @author      Gunar Maiwald <maiwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Checks if a login already exists.
+ * Checks if a enrichmentkey already exists.
  */
 class Form_Validate_EnrichmentkeyAvailable extends Zend_Validate_Abstract {
 
     /**
-     * Constant for login is not available anymore.
+     * Constants for enrichmentkey not available anymore.
      */
     const NOT_AVAILABLE = 'isAvailable';
+    const PROTECT = 'isProtected';
 
     /**
      * Error messages.
      */
     protected $_messageTemplates = array(
-        self::NOT_AVAILABLE => 'admin_enrichmentkey_error_name_exists'
+        self::NOT_AVAILABLE => 'admin_enrichmentkey_error_name_exists',
+        self::PROTECT => 'admin_enrichmentkey_error_name_protected'
     );
 
     /**
@@ -72,11 +74,16 @@ class Form_Validate_EnrichmentkeyAvailable extends Zend_Validate_Abstract {
             return false;
         }
 
+        if (!($name === $value) && $this->_isEnrichmentKeyProtected($value)) {
+            $this->_error(self::PROTECT);
+            return false;
+        }
+
         return true;
     }
 
     /**
-     * Checks if a login name already exists in database.
+     * Checks if a enrichmentkey already used.
      * @param string $login
      * @return boolean
      */
@@ -86,6 +93,42 @@ class Form_Validate_EnrichmentkeyAvailable extends Zend_Validate_Abstract {
         if (is_null($enrichmentkey )) {
             return false;
         }
+        return true;
+    }
+
+    /**
+     * Checks if a enrichmentkey already used.
+     * @param string $login
+     * @return boolean
+     */
+    protected function _isEnrichmentKeyProtected($name) {
+
+        $config = Zend_Registry::get('Zend_Config');
+        $protectedEnrichmentkeys = array();
+
+
+        if (!isset($config->enrichmentkey->protected->modules)) {
+           throw new Opus_Exception("config key 'enrichmentkey.protected.modules' is not defined in config file");
+        }
+
+        foreach(explode(',', $config->enrichmentkey->protected->modules) as $protectedEnrichmentkey) {
+            array_push($protectedEnrichmentkeys, $protectedEnrichmentkey);
+
+        }
+
+        if (!isset($config->enrichmentkey->protected->migration)) {
+           throw new Opus_Exception("config key 'enrichmentkey.protected.migration' is not defined in config file");
+        }
+
+        foreach(explode(',', $config->enrichmentkey->protected->migration) as $protectedEnrichmentkey) {
+            array_push($protectedEnrichmentkeys, $protectedEnrichmentkey);
+
+        }
+
+        if (!in_array($name, $protectedEnrichmentkeys)) {
+            return false;
+        }
+        
         return true;
     }
 

@@ -38,6 +38,7 @@
 class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
 
     private static $protectedEnrichmentkey = 'review.accepted_by';
+    private static $protectedUnusedEnrichmentkey = 'SubjectSwd';
 
     /**
      * Test showing index page.
@@ -253,6 +254,26 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $this->dispatch('/admin/enrichmentkey/create');
         $this->assertResponseCode(200);
         $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
+    }
+
+    public function testCreateActionProtectedUnusedEnrichmentKey() {
+        $ek = Opus_EnrichmentKey::fetchByName(self::$protectedUnusedEnrichmentkey);
+        $this->assertNull($ek);
+
+        $config = Zend_Registry::get('Zend_Config');
+        $this->assertTrue(in_array(self::$protectedUnusedEnrichmentkey, explode(',', $config->enrichmentkey->protected->migration)));
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'name' => self::$protectedUnusedEnrichmentkey,
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/enrichmentkey/create');
+        $this->assertResponseCode(200);
+        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
+
     }
 
     public function testCreateActionInvalidInput() {
