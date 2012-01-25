@@ -510,19 +510,19 @@ function calculateChanges() {
     # Iterate over old MD5 entries to catch MODIFIED and DELETED files
     grep -e "$MD5PATH" "$MD5_OLD" |
     while read LINE; do
-        local HASH_OLD="$(echo $LINE | cut -b 1-32)"
-        local FILE="$(echo $LINE | cut -b 34-)"
+        local HASH_OLD="$(echo "$LINE" | cut -b 1-32)"
+        local FILE="$(echo "$LINE" | cut -b 34-)"
         # DEBUG $FILE
         # DEBUG $HASH_OLD
-        local HASH_NEW="$(getMD5 $FILE $MD5_NEW)"
+        local HASH_NEW="$(getMD5 "$FILE" "$MD5_NEW")"
         # DEBUG $HASH_NEW
 
         if [[ ! -n $HASH_NEW ]]; then
-            echo 'DELETED  =>' "$FILE" >> "$OUTPUT";
+            echo 'DELETED  =>'"$FILE" >> "$OUTPUT";
         else
             if [[ $HASH_OLD != $HASH_NEW ]]; then
                 # File was modified
-               echo 'MODIFIED =>' "$FILE" >> "$OUTPUT";
+               echo 'MODIFIED =>'"$FILE" >> "$OUTPUT";
             fi
         fi
     done
@@ -530,14 +530,14 @@ function calculateChanges() {
     # Iterate over new MD5 entries to catch ADDED files
     grep -e "$MD5PATH" "$MD5_NEW" |
     while read LINE; do
-        local HASH_NEW="$(echo $LINE | cut -b 1-32)"
-        local FILE="$(echo $LINE | cut -b 34-)"
+        local HASH_NEW="$(echo "$LINE" | cut -b 1-32)"
+        local FILE="$(echo "$LINE" | cut -b 34-)"
         # DEBUG $FILE
         # DEBUG $HASH_OLD
-        local HASH_OLD="$(getMD5 $FILE $MD5_OLD)"
+        local HASH_OLD="$(getMD5 "$FILE" "$MD5_OLD")"
         # DEBUG $HASH_NEW
         if [[ ! -n $HASH_OLD ]]; then
-            echo 'ADDED    =>' "$FILE" >> "$OUTPUT";
+            echo 'ADDED    =>'"$FILE" >> "$OUTPUT";
         fi
     done
 }
