@@ -16037,6 +16037,5 @@ INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `visible`
 (4, 'pacs', 'pacs', 4, 1, 1, 'Number, Name', 1, 'Number, Name', 1),
 (5, 'jel', 'jel', 5, 1, 1, 'Number, Name', 1, 'Number, Name', 1),
 (6, 'msc', 'msc', 6, 1, 1, 'Number, Name', 1, 'Number, Name', 1),
-(7, 'bk', 'bk', 7, 1, 1, 'Number, Name', 1, 'Number, Name', 1),
-(10, 'series', 'series', 10, 1, 1, 'Name', 1, 'Name', 1);
+(7, 'bk', 'bk', 7, 1, 1, 'Number, Name', 1, 'Number, Name', 1);
 
