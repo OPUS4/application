@@ -12,15 +12,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="default_collection_role_series">
-          <tuv xml:lang="en">
-            <seg>Series</seg>
-          </tuv>
-          <tuv xml:lang="de">
-            <seg>Schriftenreihen</seg>
-          </tuv>
-        </tu>
-
         <tu tuid="default_collection_role_ddc">
           <tuv xml:lang="en">
             <seg>Dewey Decimal Classification</seg>
