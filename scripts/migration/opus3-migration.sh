@@ -82,6 +82,11 @@ then
 fi
 
 echo "Remove migration/log/* and migration/tmp/*"
+if [ ! -d "$migration_log_dir" ]
+then
+    mkdir $migration_log_dir
+fi
+
 cd $migration_log_dir
 if [ "$?" -eq "0" ]
 then
@@ -89,6 +94,10 @@ then
     rm -rf migration.log
 fi
 
+if [ ! -d "$migration_tmp_dir" ]
+then
+    mkdir $migration_tmp_dir
+fi
 
 cd $migration_tmp_dir
 if [ "$?" -eq "0" ]
@@ -111,7 +120,10 @@ fi
 
 echo "Clean database"
 cd $db_dir
-./createdb.sh
+if [ "$?" -eq "0" ]
+then
+    ./createdb.sh
+fi
 
 echo "Import institutes, collections and licenses"
 cd $migration_dir
