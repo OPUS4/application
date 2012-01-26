@@ -163,14 +163,14 @@ function askYesNo() {
     fi
 }
 
-# Adds entry to CONFLICTS.txt
+# Adds entry to UPDATE-doctypes_conflicts.log
 # @param path to file that creates conflict
 # TODO what if file already exists when update starts?
-# TODO log conflicts to UPDATE.log
+# TODO log conflicts to UPDATE-doctypes_conflicts.log
 function addConflict() {
     if [[ -z $CONFLICT ]]; then
         DEBUG "Setup CONFLICT"
-        CONFLICT="$BASEDIR/conflicts.txt" # TODO change name to CONFLICTS.txt?
+        CONFLICT="$BASEDIR/UPDATE-doctypes_conflicts.log"
         if [[ ! -f $CONFLICT ]]; then
             DEBUG "Write CONFLICT header"
             echo "Following files created conflicts and need to be changed manually:" > $CONFLICT
