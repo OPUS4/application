@@ -221,12 +221,12 @@ if ($argc < 2) {
     echo "missing argument: logfile\n";
     exit;
 }
-echo "migrating series -- can take a while";
+echo "\nmigrating series -- can take a while\n";
 $numbers = new FindMissingSeriesNumbers($argv[1]);
 $result = $numbers->run();
 if ($result[0] > 0 || $result[1] > 0 || $result[2] > 0) {
-    echo "\n" . $result[0] . ' conflicts were found while series migration';
+    echo $result[0] . ' conflicts were found while series migration';
     echo "\n" . $result[1] . ' collections were migrated into series';
     echo "\n" . $result[2] . ' documents were migrated into series';
-    echo "\nMore information can be found in the log file $argv[1]\n";
+    echo "\nConsult the log file $argv[1] for full details\n";
 }
