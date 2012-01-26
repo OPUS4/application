@@ -934,7 +934,20 @@
       </tuv>
     </tu>
 
+<!-- BEGIN OF COMMENT
+    Language keys can be used after the corresponding Enrichment keys
+    were created in administration -> Enrichments. 
+
     <tu tuid="EnrichmentNeuesSelect">
+      <tuv xml:lang="en">
+        <seg>A new self defined selection field</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ein neues selbst definiertes Auswahl-Feld</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="EnrichmentNeuesFeld">
       <tuv xml:lang="en">
         <seg>A new self defined field</seg>
       </tuv>
@@ -942,33 +955,7 @@
         <seg>Ein neues selbst definiertes Feld</seg>
       </tuv>
     </tu>
-
-    <tu tuid="EnrichmentEvent">
-      <tuv xml:lang="en">
-        <seg>Name of Event</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Name der Veranstaltung</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="EnrichmentCity">
-      <tuv xml:lang="en">
-        <seg>City of event</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Stadt der Veranstaltung</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="EnrichmentCountry">
-      <tuv xml:lang="en">
-        <seg>Country of event</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Land der Veranstaltung</seg>
-      </tuv>
-    </tu>
+END OF COMMENT-->
 
     <tu tuid="choose_collection_role">
       <tuv xml:lang="en">

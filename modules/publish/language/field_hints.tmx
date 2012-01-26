@@ -1277,6 +1277,10 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
             <seg>Wählen Sie bitte die veröffentlichende(n) Institution(en) aus.</seg>
         </tuv>
     </tu>
+
+<!-- BEGIN OF COMMENT
+    Language keys can be used after the corresponding Enrichment keys
+    were created in administration -> Enrichments. 
 	
     <tu tuid="hint_EnrichmentNeuesFeld">
       <tuv xml:lang="en">
@@ -1286,16 +1290,6 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         <seg>Sie können hier definieren, was Sie möchten.</seg>
       </tuv>
     </tu>
-
-    <tu tuid="hint_groupNeuesFeld">
-      <tuv xml:lang="en">
-        <seg>You can define whatever you want</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sie können hier definieren, was Sie möchten.</seg>
-      </tuv>
-    </tu>
-
 
     <tu tuid="hint_EnrichmentNeuesSelect">
       <tuv xml:lang="en">
@@ -1324,33 +1318,8 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
       </tuv>
     </tu>
 
-    <tu tuid="hint_EnrichmentEvent">
-      <tuv xml:lang="en">
-        <seg>Please enter the event at which the talk was given.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Bitte tragen Sie die Veranstaltung ein, bei der der Vortrag gehalten wurde.</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="hint_EnrichmentCity">
-      <tuv xml:lang="en">
-        <seg>The city where the event was located.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Die Stadt, in der die Veranstaltung abgehalten wurde.</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="hint_EnrichmentCountry">
-      <tuv xml:lang="en">
-        <seg>The country in which the event took place.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Das Land, in dem die Veranstaktung statt fand.</seg>
-      </tuv>
-    </tu>
-
+END OF COMMENT -->
+    
     <tu tuid="hint_IdentifierOpac">
         <tuv xml:lang="en">
             <seg>Please enter the documents OPAC-Number.</seg>

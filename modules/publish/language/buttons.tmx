@@ -514,6 +514,10 @@
         </tuv>
     </tu>
 
+<!-- BEGIN OF COMMENT
+    Language keys can be used after the corresponding Enrichment keys
+    were created in administration -> Enrichments. 
+
     <tu tuid="button_label_add_one_moreEnrichmentNeuesSelect">
         <tuv xml:lang="en">
             <seg>Add one more new field</seg>
@@ -549,6 +553,7 @@
             <seg>Das letzte neue Feld löschen</seg>
         </tuv>
     </tu>
+END of COMMENT -->
 
     <tu tuid="button_label_browse_down">
         <tuv xml:lang="en">
