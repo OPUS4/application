@@ -1206,7 +1206,7 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         </tuv>
     </tu>
 	
-	<tu tuid="hint_groupThesisDateAccepted">
+    <tu tuid="hint_groupThesisDateAccepted">
         <tuv xml:lang="en">
             <seg>Please enter the date, when the Thesis has been accepted in terms of the examination regulations. In most cases this will be equal to the date of the (last) oral exam.</seg>
         </tuv>
@@ -1215,7 +1215,7 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         </tuv>
     </tu>
 	
-	<tu tuid="hint_ThesisDateAccepted">
+    <tu tuid="hint_ThesisDateAccepted">
         <tuv xml:lang="en">
             <seg>Please enter the date, when the Thesis has been accepted.</seg>
         </tuv>
@@ -1224,7 +1224,16 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         </tuv>
     </tu>
 	
-	<tu tuid="hint_groupThesisGrantor">
+    <tu tuid="hint_ThesisYearAccepted">
+        <tuv xml:lang="en">
+            <seg>Please enter the year, when the Thesis has been accepted.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte das Jahr ein, an dem die Abschlussarbeit im Sinne der Prüfungsordnung angenommen wurde .</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_groupThesisGrantor">
         <tuv xml:lang="en">
             <seg>Please choose the granting institution.</seg>
         </tuv>

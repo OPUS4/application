@@ -482,7 +482,16 @@ END OF COMMENT -->
       </tuv>
     </tu>
 
-	<tu tuid="groupThesisGrantor">
+    <tu tuid="header_ThesisYearAccepted">
+      <tuv xml:lang="en">
+        <seg>Thesis: Year</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Abschlussarbeit: Jahr</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="groupThesisGrantor">
       <tuv xml:lang="en">
         <seg>Granting Institution</seg>
       </tuv>
