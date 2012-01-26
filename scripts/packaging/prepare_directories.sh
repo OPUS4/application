@@ -51,30 +51,36 @@ cd ..
 
 find -P . -name .gitignore -print0 | xargs -r0 rm -v 
 
-# added checks to ensure compatibility with older releases
+# added checks for existence to ensure compatibility with older releases
+
 if [ -f opus4/scripts/packaging/changelog/CHANGES.txt ]; then
   mv opus4/scripts/packaging/changelog/CHANGES.txt .
 else
+  echo "WARN: CHANGES.txt does not exist\n"
   touch CHANGES.txt
 fi
 
 if [ -f opus4/scripts/packaging/gpl-3.0.txt ]; then
   mv opus4/scripts/packaging/gpl-3.0.txt .
 else
+  echo "WARN: gpl-3.0.txt does not exist\n"
   touch gpl-3.0.txt
+fi
+
+if [ -f opus4/scripts/packaging/releasenotes/RELEASE_NOTES.txt ]; then
+  mv opus4/scripts/packaging/releasenotes/RELEASE_NOTES.txt .
+else
+  echo "WARN: RELEASE_NOTES.txt does not exist\n"
+  touch RELEASE_NOTES.txt
 fi
 
 if [ -d opus4/scripts/packaging/releases ]; then
   mv opus4/scripts/packaging/releases .
 else
+  echo "WARN: directory 'releases' does not exist\n"
   mkdir releases
 fi
 
-if [ -d opus4/scripts/packaging/releasenotes/RELEASE_NOTES.txt ]; then
-  mv opus4/scripts/packaging/releasenotes/RELEASE_NOTES.txt .
-else
-  touch RELEASE_NOTES.txt
-fi
 
 #
 # exclude files and directories
