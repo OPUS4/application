@@ -120,10 +120,14 @@ fi
 
 echo "Clean database"
 cd $db_dir
-if [ "$?" -eq "0" ]
+if [ "$?" -ne "0" ]
 then
-    ./createdb.sh
+    echo "Aborting migration: cd '$db_dir'  FAILED."
+    exit -1
 fi
+
+./createdb.sh
+[ $? != 0 ] && echo "Aborting migration: creatdb.sh FAILED." && exit -1
 
 echo "Import institutes, collections and licenses"
 cd $migration_dir
