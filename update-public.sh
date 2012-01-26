@@ -57,7 +57,7 @@ if [[ -z "$THEME" ]] || [[ "$THEME" == "$THEME_OPUS" ]]; then
     echo -e "You are currently using the standard OPUS4 layout. Any"
     echo -e " modifications you made to the layout will be lost during the"
     echo -e " update. Would you like to create a copy of the current layout"
-    echo -e " under a different name (Y/n)? \c "
+    echo -e " under a different name [Y/n]? \c "
     read ANSWER
     if [[ -z "$ANSWER" ]]; then
         ANSWER='y' # default is update layout
