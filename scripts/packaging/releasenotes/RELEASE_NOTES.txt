@@ -41,8 +41,9 @@ Die Schriftenreihen werden in OPUS 4.2.0 neu modelliert. Es gibt nun ein
 eigenes Modell für die Abbildung von Schriftenreihen. Der Umweg über die
 Sammlung mit dem Namen _series_ und das Speichern der (global gültigen)
 Bandnummer eines Dokuments im Feld IdentifierSerial entfällt damit ab sofort.
-Damit kann ein Dokument fortan mehreren Schriftenreihen mit unterschiedlicher
-Bandnummer zugewiesen werden.
+Damit kann ein Dokument fortan mehreren Schriftenreihen zugewiesen werden. Pro
+Schriftenreihe muss eine Bandnummer für das Dokument für das Dokument vergeben
+werden.
 
 Im Rahmen des Updates werden -- nach Bestätigung durch den Benutzer -- die
 Einträge in der Sammlung series auf das neue Schriftenreihen-Modell migriert.
@@ -51,8 +52,8 @@ Name, Sichtbarkeitsstatus und Sortierung übernommen. Die einzelnen Aktionen
 bei der Durchführung der Migration werden im Logfile $BASEDIR/UPDATE-series.log
 protokolliert.
 
-Bei der Übernahme der den Sammlungseinträgen der Sammlung series zugeordneten
-Dokumente im Rahmen der Migration werden mehrere Fälle unterschieden.
+Bei der Übernahme von Dokumenten, die den Sammlungseinträgen der Sammlung series
+zugeordneten sind, werden im Rahmen der Migration mehrere Fälle unterschieden.
 
 Fall 1: Dokument hat keinen IdentifierSerial (Bandnummer)
 * das Dokument wird nicht migriert -- es verbleibt am Sammlungseintrag / an
@@ -74,9 +75,9 @@ Fall 2: Dokument hat mehrere IdentifierSerial
 
 Fall 3: Dokument hat genau einen IdentifierSerial
 * grundsätzlich: das Dokument wird nur dann in die neuen Schriftenreihen
-  migriert, wenn es zu keinem Bandnummernkonflikt kommt (d.h. bei der Zuweisung
-  zu einer Schriftenreihe wird eine Bandnummer verwendet, die für ein bereits
-  zugewiesenes Dokument in der Schriftenreihe genutzt wurde)
+  migriert, wenn es zu keinem Bandnummernkonflikt (d.h. bei der Zuweisung zu
+  einer Schriftenreihe wird eine Bandnummer verwendet, die für ein bereits
+  zugewiesenes Dokument in der Schriftenreihe genutzt wurde) kommt
 * für jeden Sammlungseintrag aus der Sammlung series, für den eine Verknüpfung
   mit dem Dokument besteht, wird die Migration in die neuen Schriftenreihen
   durchgeführt
@@ -88,16 +89,17 @@ Fall 3: Dokument hat genau einen IdentifierSerial
 
 Am Ende der Migration wird die Sammlung series auf unsichtbar gesetzt, so dass
 Sie für den Benutzer fortan nur noch in der Administration angezeigt wird.
-Sind die erforderlich Nacharbeiten nach Durchsicht der Logdatei abgeschlossen,
-so kann die Sammlung series entfernt werden.
 
-Das Migrationsskript gibt nach Beendigung eine Statistik aus. Aus dieser können
+Das Updateskript gibt nach Beendigung eine Statistik aus. Aus dieser können
 
 * die Anzahl der aufgetretenen Konflikte
 * die Anzahl der migrierten Sammlungseinträge
 * die Anzahl der erfolgreich migrierten Dokumente
 
 entnommen werden.
+
+Sind die erforderlich Nacharbeiten nach Durchsicht der Logdatei abgeschlossen,
+kann die Sammlung series entfernt werden.
 
 
 h3. Anpassungen im den XML-Dokumenttypdefinitionen zugrunde liegenden XML Schema
