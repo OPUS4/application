@@ -44,6 +44,8 @@ if (count($argv) != 2) {
     exit(-1);
 }
 
+echo "\nmigrating classification subjects -- can take a while";
+
 // Initialize logger.
 $logfileName = $argv[1];
 
@@ -52,7 +54,7 @@ $writer = new Zend_Log_Writer_Stream($logfile);
 $formatter = new Zend_Log_Formatter_Simple('%timestamp% %priorityName%: %message%' . PHP_EOL);
 $writer->setFormatter($formatter);
 $logger = new Zend_Log($writer);
-$logger->info('Script started...');
+
 
 // load collections (and check existence)
 $mscRole = Opus_CollectionRole::fetchByName('msc');
@@ -212,4 +214,5 @@ function createEnrichmentKey($name) {
     return new Opus_EnrichmentKey($name);
 }
 
+echo "\nConsult the log file $argv[1] for full details\n";
 exit();
