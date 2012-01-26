@@ -53,8 +53,11 @@ class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract {
         }            
         
         $element = $form->createElement('checkbox', 'LegalNotices');
-        $element->setRequired(true)
-                ->setValue(0);
+        $element->setRequired(true)                
+                ->setCheckedValue(1)
+                ->setUncheckedValue(0)
+                ->setValue(0)
+                ->setChecked(false);
         
         $form->addElement($element);
         
@@ -65,7 +68,7 @@ class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract {
             'type' => 'Zend_Form_Element_Checkbox',
             'createType' => 'checkbox',
             'header' => 'header_LegalNotices',
-            'value' => '1',
+            'value' => '0',
             'check' => '',
             'disabled' => '0',
             'error' => array(),
