@@ -282,7 +282,8 @@ export OPUS_UPDATE_GROUPNAME=$OPUS4_GROUPNAME
 # Update database
 "$SCRIPTPATH"/update-db.sh
 
-# Update series (needs to be run only for updates from <= 4.1.4 to >= 4.2.0)
+# Migrate series and subject classifications
+# needs to be run only for updates from <= 4.1.4 to >= 4.2.0
 "$SCRIPTPATH"/update-migration.sh
 
 # Update *import* folder
