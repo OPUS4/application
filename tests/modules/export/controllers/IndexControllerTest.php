@@ -126,9 +126,9 @@ class Export_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testIndexActionInvalidSeriesSearch_NoDocuments() {
-        $this->dispatch('/export/index/index/searchtype/series/id/4/export/xml/stylesheet/example');
+        $this->dispatch('/export/index/index/searchtype/series/id/8/export/xml/stylesheet/example');
         $this->assertResponseCode(500);
-        $this->assertContains("Series with id '4' does not have any published documents.", $this->getResponse()->getBody());
+        $this->assertContains("Series with id '8' does not have any published documents.", $this->getResponse()->getBody());
     }
 
     /**
