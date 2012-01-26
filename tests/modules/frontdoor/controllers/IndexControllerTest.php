@@ -349,10 +349,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         foreach ($d->getSeries() AS $series) {
             $seriesIds[] = $series->getModel()->getId();
             $seriesNumbers[] = $series->getNumber();
-        }
+        }        
 
-        $this->assertContains(3, $seriesIds);
-        $this->assertContains(4, $seriesIds);
+        $this->assertContains('3', $seriesIds);
+        $this->assertContains('4', $seriesIds);
         $this->assertContains('id-3-is-invisible', $seriesNumbers);
         $this->assertContains('id-4-is-visible', $seriesNumbers);
 
