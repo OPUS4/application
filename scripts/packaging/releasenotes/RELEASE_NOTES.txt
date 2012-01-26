@@ -20,7 +20,7 @@ in das Konfigurationsverzeichnis der Solr-Server kopiert werden und anschließen
 der Index neu erstellt werden mittels:
 
 cd $BASEDIR/opus4/scripts
-php SolrIndexBuilder.php
+./SolrIndexBuilder.php
 
 
 h3. Änderungen an der Datenbank
@@ -37,19 +37,67 @@ Collections besitzen und wie diese manuell geändert werden können.
 
 h3. Migration der sammlungsbasierten Schriftenreihen
 
-Die Schriftenreihen wurden neu modelliert. Es gibt ab sofort ein separtes
-Modell für die Abbildung von Schriftenreihen. Der Umweg über die Sammlung mit
-dem Namen _series_ entfällt damit ab sofort. Im Rahmen des Updates auf die
-Version 4.2.0 werden die Schriftenreihen, die in der Sammlung series abgelegt
-wurden, auf das neue Modell migriert. Nach der Migration wird die Sammlung
-series auf unsichtbar gesetzt (alle vier Sichtbarkeitsattribute). Ebenso werden
-alle in ihr gespeicherten Schriftenreihen als unsichtbar markiert. Für die einer
-Schriftenreihe zugeordneten Dokumente wird jeweils der Identifier _serial_
-im Rahmen des Updates entfernt. Dieser wurde bislang zur Speicherung der
-Bandnummer benutzt.
+Die Schriftenreihen werden in OPUS 4.2.0 neu modelliert. Es gibt nun ein
+eigenes Modell für die Abbildung von Schriftenreihen. Der Umweg über die
+Sammlung mit dem Namen _series_ und das Speichern der (global gültigen)
+Bandnummer eines Dokuments im Feld IdentifierSerial entfällt damit ab sofort.
+Damit kann ein Dokument fortan mehreren Schriftenreihen mit unterschiedlicher
+Bandnummer zugewiesen werden.
 
-Die Sammlung _series_ kann nach dem Update gelöscht werden, wenn die
-Übernahme der Daten in das neue Schriftenreihen-Modell akzeptiert wird.
+Im Rahmen des Updates werden -- nach Bestätigung durch den Benutzer -- die
+Einträge in der Sammlung series auf das neue Schriftenreihen-Modell migriert.
+Für jeden Sammlungseintrag wird eine neue Schriftenreihe angelegt. Dabei werden
+Name, Sichtbarkeitsstatus und Sortierung übernommen. Die einzelnen Aktionen
+bei der Durchführung der Migration werden im Logfile $BASEDIR/UPDATE-series.log
+protokolliert.
+
+Bei der Übernahme der den Sammlungseinträgen der Sammlung series zugeordneten
+Dokumente im Rahmen der Migration werden mehrere Fälle unterschieden.
+
+Fall 1: Dokument hat keinen IdentifierSerial (Bandnummer)
+* das Dokument wird nicht migriert -- es verbleibt am Sammlungseintrag / an
+  den Sammlungseinträgen in der Sammlung series
+* es wird eine Warnung im Logfile ausgegeben (diese enthält die ID des
+  Dokuments)
+* im Zuge der Nacharbeit kann das Dokument manuell in die neuen Schriftenreihen
+  migriert werden -- dabei muss eine Bandnummer festgelegt werden
+
+Fall 2: Dokument hat mehrere IdentifierSerial
+* das Dokument wird nicht migriert -- es verbleibt am Sammlungseintrag / an
+  den Sammlungseinträgen in der Sammlung series
+* es wird eine Warnung im Logfile ausgegeben (diese enthält die ID des
+  Dokuments)
+* im Zuge der Nacharbeit kann das Dokument manuell in die neuen Schriftenreihen
+  migriert werden -- dabei muss eine Bandnummer festgelegt werden
+* ggf. können nach der Übernahme die nicht mehr benötigten IdentifierSerials
+  manuell vom Dokument entfernt werden
+
+Fall 3: Dokument hat genau einen IdentifierSerial
+* grundsätzlich: das Dokument wird nur dann in die neuen Schriftenreihen
+  migriert, wenn es zu keinem Bandnummernkonflikt kommt (d.h. bei der Zuweisung
+  zu einer Schriftenreihe wird eine Bandnummer verwendet, die für ein bereits
+  zugewiesenes Dokument in der Schriftenreihe genutzt wurde)
+* für jeden Sammlungseintrag aus der Sammlung series, für den eine Verknüpfung
+  mit dem Dokument besteht, wird die Migration in die neuen Schriftenreihen
+  durchgeführt
+* tritt dabei kein Konflikt auf, so wird der IdentifierSerial als Bandnummer
+  gesetzt und vom Dokument entfernt; ferner wird die Verknüpfung zum
+  Sammlungseintrag nach der Übernahme in die Schriftenreihe entfernt
+* tritt ein Konflikt auf, so wird eine Warnung ins Logfile geschrieben (enthält
+  ID des Dokument und ID des betroffenen Sammlungseintrags)
+
+Am Ende der Migration wird die Sammlung series auf unsichtbar gesetzt, so dass
+Sie für den Benutzer fortan nur noch in der Administration angezeigt wird.
+Sind die erforderlich Nacharbeiten nach Durchsicht der Logdatei abgeschlossen,
+so kann die Sammlung series entfernt werden.
+
+Das Migrationsskript gibt nach Beendigung eine Statistik aus. Aus dieser können
+
+* die Anzahl der aufgetretenen Konflikte
+* die Anzahl der migrierten Sammlungseinträge
+* die Anzahl der erfolgreich migrierten Dokumente
+
+entnommen werden.
 
 
 h3. Anpassungen im den XML-Dokumenttypdefinitionen zugrunde liegenden XML Schema
