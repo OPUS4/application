@@ -24,15 +24,26 @@ set -e
 # Create opus-trunk.tgz from subversion-subdirectory trunk:
 # ./prepare_tarball.sh trunk opus-trunk
 
+
 #
 # Prepare directories
 #
 
 $(dirname $0)/prepare_directories.sh $1 $2
 
+
+#
+# check for empty files
+#
+echo -e "\nempty files included in tarball:"
+find $2 -size 0
+echo
+
+
 #
 # Build tarball
 #
 
+echo "files included in tarball:"
 cd $2
 tar czvf ../$(basename $2).tgz opus4 workspace libs solrconfig apacheconf install testdata CHANGES.txt RELEASE_NOTES.txt MD5SUMS VERSION.txt gpl-3.0.txt releases opus_dokumentation_de.pdf
