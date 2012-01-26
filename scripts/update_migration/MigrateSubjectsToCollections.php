@@ -169,19 +169,23 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName) {
         $collection = $collections[0];
         if ($collection->isRoot()) {
             $logger->warn("$logPrefix  No non-root collection found for value '$value' -- migrating to enrichment $eKeyName.");
+            // migrate subject to enrichments
+            $doc->addEnrichment()
+                    ->setKeyName($eKeyName)
+                    ->setValue($value);
             continue;
         }
 
         $collectionId = $collection->getId();
         // check if document already belongs to this collection
         if (checkDocumentHasCollectionId($doc, $collectionId)) {
-            // nothing to do
-            $logger->info("$logPrefix  Migrating subject (type '$type', value '$value') -- collection already assigned (collections $collectionId).");
+            // nothing to do            
+            $logger->info("$logPrefix  Migrating subject (type '$type', value '$value') -- collection already assigned to collection $collectionId.");
             continue;
         }
 
         // migrate subject to collections
-        $logger->info("$logPrefix  Migrating subject (type '$type', value '$value') to (collection $collectionId)");
+        $logger->info("$logPrefix  Migrating subject (type '$type', value '$value') to collection $collectionId.");
         $doc->addCollection($collection);
     }
 
