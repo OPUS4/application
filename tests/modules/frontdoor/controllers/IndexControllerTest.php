@@ -336,10 +336,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      */
     public function testSeries146() {
         $this->dispatch('/frontdoor/index/index/docId/146');
-
-        $responseBody = $this->getResponse()->getBody();
-        $this->assertRegExp('/href="\/solrsearch\/index\/search\/searchtype\/series\/id\/1"/',
-                $responseBody);
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/1" ', $this->getResponse()->getBody());
     }
 
     /**
