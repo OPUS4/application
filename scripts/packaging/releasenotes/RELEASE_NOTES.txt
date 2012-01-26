@@ -102,6 +102,35 @@ Sind die erforderlich Nacharbeiten nach Durchsicht der Logdatei abgeschlossen,
 kann die Sammlung series entfernt werden.
 
 
+h3. Migration von SubjectMsc bzw. SubjectDdc in die Sammlungen msc bzw. ddc
+
+In früheren Versionen konnten MSC- und DDC-Klassifikationen eines Dokuments
+sowohl in den Sammlungen (msc bzw. ddc) als auch in den Subject-Feldern
+SubjectMsc bzw. SubjectDdc gespeichert werden. Mit OPUS 4.2.0 entfällt die
+letztgenannte Möglichkeit. Daher müssen die Subject-Felder beim
+Update in die Sammlungen migriert und anschließend gelöscht werden.
+
+Die während der Migration der Subject-Felder durchgeführten Änderungen werden in
+der Logdatei $BASEDIR/UPDATE-subjects.log protokolliert. Folgende Schritte
+werden beim Update für jedes Dokument durchgeführt:
+
+* es werden alle Werte in den Feldern SubjectMsc bzw. SubjectDdc betrachtet
+* wenn das Dokument bereits einem Sammlungseintrag zugeordnet ist, dessen
+  Nummer dem Wert des Subject-Feldes entspricht, dann wird das Subject-Feld
+  entfernt
+* andernfalls wird das Dokument dem entsprechenden Sammlungseintrag zugewiesen
+  und anschließend das Subject-Feld entfernt
+* im Rahmen des Versuchs der Zuweisung kann folgender Fehlerfall auftreten: es
+  gibt keinen oder mehrere Sammlungseinträge mit der gegeben Nummer. In diesem
+  Fall wird der Wert des Subject-Feldes in einem Enrichment 'MigrateSubjectDDC'
+  bzw. 'MigrateSubjectMSC' abgelegt. Das Subject-Feld wird anschließend
+  entfernt.
+
+Werden während des Prozesses Werte aus den Subject-Feldern in Enrichments
+gespeichert, so ist im Anschluss an die Ausführung des Updates eine manuelle
+Nacharbeit erforderlich.
+
+
 h3. Anpassungen im den XML-Dokumenttypdefinitionen zugrunde liegenden XML Schema
 
 Mit dieser Version hat sich die Spezifikation von Feldern, die auf den internen
