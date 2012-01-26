@@ -206,6 +206,7 @@ class FindMissingSeriesNumbers {
         $this->seriesRole->setVisibleFrontdoor(0);
         $this->seriesRole->setVisibleOai(0);
         $this->seriesRole->store();
+        $this->logger->info("set visibility status of collection role series to unvisible");
     }
 
     public function run() {
