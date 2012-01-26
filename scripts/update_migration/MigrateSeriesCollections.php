@@ -194,6 +194,7 @@ class FindMissingSeriesNumbers {
             }
 
             $doc->setCollection($remainingCollections);
+            $doc->unregisterPlugin('Opus_Document_Plugin_Index');
             $doc->store();
         }
         
