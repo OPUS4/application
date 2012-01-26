@@ -1,30 +1,7 @@
 <?php
 
 // Bootstrapping.
-require_once dirname(__FILE__) . '/common/bootstrap.php';
-
-// test data.
-$d = new Opus_Document();
-$d->addSubject()->setType('msc')->setValue('00-XX');
-$d->addSubject()->setType('msc')->setValue('00-XX');
-$d->addSubject()->setType('ddc')->setValue('10');
-$d->addSubject()->setType('uncontrolled')->setValue('foo');
-$d->store();
-
-$d = new Opus_Document();
-$d->addSubject()->setType('msc')->setValue('01-XX');
-$d->store();
-
-$d = new Opus_Document();
-$d->addSubject()->setType('msc')->setValue('12345');
-$d->store();
-
-$d = new Opus_Document();
-$d->addSubject()->setType('msc')->setValue('00-XX');
-$d->addCollection(new Opus_Collection(7688));
-$d->addCollection(new Opus_Collection(7653));
-$d->store();
-
+require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 // Parse arguments.
 global $argc, $argv;
