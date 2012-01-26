@@ -71,6 +71,7 @@ foreach ($docFinder->ids() AS $docId) {
       $changedDocumentIds[] = $docId;
 
       try {
+         $doc->unregisterPlugin('Opus_Document_Plugin_Index');
          $doc->store();
          $logger->info("changed document $docId");
       }
