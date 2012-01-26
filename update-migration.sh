@@ -32,8 +32,6 @@ DEBUG "VERSION_NEW = $VERSION_NEW"
 DEBUG "VERSION_OLD = $VERSION_OLD"
 DEBUG "_UPDATELOG = $_UPDATELOG"
 
-UPDATESERIESLOG="$BASEDIR/UPDATE-series.log"
-
 # Ensure this is only done for updates from versions < 4.2.0
 if [[ "$VERSION_OLD" < "4.2" && "$VERSION_NEW" > "4.2" ]]; then
    echo -e "Would you like to migrate your old series (y/N)? \c ";
@@ -43,9 +41,11 @@ if [[ "$VERSION_OLD" < "4.2" && "$VERSION_NEW" > "4.2" ]]; then
    else
       if [[ $ANSWER == 'y' ]]; then
          # inform user which series documents have no IdentifierSerial
-         "$BASEDIR/opus4/scripts/series_migration/FindMissingSeriesNumbers.php" "$UPDATESERIESLOG"
+         "$BASEDIR/opus4/scripts/update_migration/MigrateSeriesCollections.php" "$BASEDIR/UPDATE-series.log"
       else
          echo "Keep the old series."
       fi
    fi
+
+   "$BASEDIR/opus4/scripts/update_migration/MigrateSubjectsToCollections.php" "$BASEDIR/UPDATE-subjects.log"
 fi
