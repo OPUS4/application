@@ -88,11 +88,11 @@ sie das Skript *nicht* manuell aufrufen (s.u.).
 In sämtlichen XML-Dokumenttypdefinitionen, die standardmäßig ausgeliefert
 werden, sind die Änderungen schon berücksichtigt. Sofern Sie beim Update die
 Änderungen übernehmen, sind keine weiteren Eingriffe erforderlich. Für
-benutzerdefinierte XML-Dokumenttypen führt das Update-Skript, sofern 
+benutzerdefinierte XML-Dokumenttypen führt das Update-Skript, sofern
 erforderlich, eine automatische Umschreibung durch. In diesem Fall wird eine
 Backup-Datei im Verzeichnis $BASEDIR/opus4/applications/config/doctypes
 angelegt, die z.B. für die Datei foo.xml mit foo.xml.update-backup.<TIMESTAMP>
-bezeichnet wird. Außerdem werden die benutzerdefinierten 
+bezeichnet wird. Außerdem werden die benutzerdefinierten
 Dokumenttypdefinitionen gegen das XML-Schema (siehe nächster Punkt) validiert.
 Wird ein Schemaverstoß festgestellt, so wird der Dokumenttyp invalidiert,
 indem z.B. die Datei foo.xml in foo.xml.invalid.<TIMESTAMP> umbenannt wird.
@@ -111,14 +111,14 @@ dass die Dokumenttypen weiterhin im Publikationsformular benutzt werden können.
 Einzelheiten dazu sind in Kapitel 8.4.6 der OPUS4-Dokumentation aufgeführt.
 
 Wenn Sie die Instanz über das Update-Skript aktualisieren, wird im Anschluss
-an die Aktualisierung der XML-Dokumenttypdefinitionen eine Validierung 
+an die Aktualisierung der XML-Dokumenttypdefinitionen eine Validierung
 der unter $BASEDIR/opus4/applications/config/doctypes abgelegten XML-Dateien
 durchgeführt. Wird für eine Datei foo.xml ein Schemaverstoß festgestellt, so
 wird die Datei durch Umbenennung in foo.xml.invalid.<TIMESTAMP> invalidiert.
 Der Dokumenttyp kann dann nicht mehr im Publikationsformular ausgewählt
 werden. Die festgestellten Validierungsfehler werden in der Logdatei unter
-$BASEDIR/UPDATE-documenttypes.log protokolliert. Nach dem Beheben der 
-Fehler können Sie den Dokumenttyp durch das Entfernen des Suffix 
+$BASEDIR/UPDATE-documenttypes.log protokolliert. Nach dem Beheben der
+Fehler können Sie den Dokumenttyp durch das Entfernen des Suffix
 .invalid.<TIMESTAMP> im Dateinamen wieder für die Auswahl im Publikations-
 formular freigeben.
 
@@ -128,11 +128,11 @@ h3. Hinweis zu URNs von migrierten Dokumenten
 Wir haben einen Hinweis in die Dokumentation aufgenommen, die alle Instanzen
 betrifft, die bereits vor OPUS4 für die URN-Vergabe registriert waren.  Bei
 der Migration müssen Sie in der config.ini den Präfix des NISS anpassen, um
-Kollisionen mit bereits vergebenen URNs zu vermeiden.  Die Informationen 
+Kollisionen mit bereits vergebenen URNs zu vermeiden.  Die Informationen
 finden Sie in Kapitel 7.6 "URN SETTINGS".
 
 Der entsprechende Schlüssel in der Config lautet "urn.nss".  Hatten ihre URNs
-vor der Migration z.B. die Form "urn:nbn:de:kobv:123-opus-123x" für ein 
+vor der Migration z.B. die Form "urn:nbn:de:kobv:123-opus-123x" für ein
 Dokument mit der ID 123, so genügt es den Schlüssel "urn.nss" auf den Wert
 "de:kobv:123-opus4" zu setzen.  Die URN eines neuen Dokuments 123 lautet dann
 einfach "urn:nbn:de:kobv:123-opus4-123y" und kollidiert nicht mehr mit der
@@ -159,6 +159,13 @@ vor der Migration nach migration_config.ini unter Berücksichtigung der neuen
 Konfigurationsschlüssel übetragen werden.
 
 
+h3. Validierung in Metadaten-Formularen (Administration)
+
+Es wurde angefangen die Validierung der Formulare umzusetzen. Es werden aber
+immer noch nicht sämtliche Fehleingaben abgefangen und es kann zu Exceptions
+kommen. In diesem Fall bitte den 'Back' Knopf im Browser verwenden und die
+Eingaben korrigieren. Es sollte bei einer Fehleingabe nicht zu korrumpierten
+Daten in der Datenbank kommen.
 
 h2. ======================== Release 4.1.4 2011-10-18 ========================
 
