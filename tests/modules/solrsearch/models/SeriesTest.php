@@ -53,7 +53,7 @@ class Solrsearch_Model_SeriesTest extends ControllerTestCase {
 
     public function testConstructWithEmptyVisibleSeries() {
         $this->setExpectedException('Solrsearch_Model_Exception');
-        new Solrsearch_Model_Series(4);
+        new Solrsearch_Model_Series(8);
     }
 
     public function testConstructWithNonEmptyVisibleSeries() {
@@ -87,13 +87,13 @@ class Solrsearch_Model_SeriesTest extends ControllerTestCase {
     }
 
     public function testGetVisibleNonEmptySeriesSortedBySortKey() {
-        $this->assertTrue(count(Solrsearch_Model_Series::getVisibleNonEmptySeriesSortedBySortKey()) === 4);
+        $this->assertTrue(count(Solrsearch_Model_Series::getVisibleNonEmptySeriesSortedBySortKey()) === 5);
 
         $this->setAllSeriesToUnvisible();
         $this->assertTrue(count(Solrsearch_Model_Series::getVisibleNonEmptySeriesSortedBySortKey()) === 0);
 
         $this->restoreVisiblitySettings();
-        $this->assertTrue(count(Solrsearch_Model_Series::getVisibleNonEmptySeriesSortedBySortKey()) === 4);
+        $this->assertTrue(count(Solrsearch_Model_Series::getVisibleNonEmptySeriesSortedBySortKey()) === 5);
     }
 
     private function setAllSeriesToUnvisible() {
