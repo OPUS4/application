@@ -50,13 +50,14 @@ foreach ($docFinder->ids() AS $docId) {
       continue;
    }
 
+   $removeMscSubjects = array();
+   $removeDdcSubjects = array();
    try {
-      $removeMscSubjects = array();
+      
       if (is_object($mscRole)) {
          $removeMscSubjects = migrateSubjectToCollection($doc, 'msc', $mscRole->getId(), 'MigrateSubjectMSC');
       }
-
-      $removeDdcSubjects = array();
+      
       if (is_object($ddcRole)) {
          $removeDdcSubjects = migrateSubjectToCollection($doc, 'ddc', $ddcRole->getId(), 'MigrateSubjectDDC');
       }
@@ -135,9 +136,8 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName) {
       $collectionId = $collection->getId();
       // check if document already belongs to this collection
       if (checkDocumentHasCollectionId($doc, $collectionId)) {
-         // migrate subject to collections
-         $logger->info("$logPrefix  Migrating subject (type '$type', value '$value') -- collection already assigned (collections $collectionId).");
-         $doc->addCollection($collection);
+         // nothing to do
+         $logger->info("$logPrefix  Migrating subject (type '$type', value '$value') -- collection already assigned (collections $collectionId).");         
          continue;
       }
 
