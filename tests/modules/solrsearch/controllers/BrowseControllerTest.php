@@ -53,11 +53,13 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/browse/series');
         $responseBody = $this->getResponse()->getBody();
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/1', $responseBody);
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/4', $responseBody);
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/2', $responseBody);
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/5', $responseBody);
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/6', $responseBody);
         $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/3', $responseBody);
-        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/4', $responseBody);
+        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/7', $responseBody);
+        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/8', $responseBody);
         $this->assertResponseCode(200);
     }
 
@@ -78,12 +80,11 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $d->setServerState('unpublished');
         $d->store();
 
-        $s = new Opus_Series(3);
-        $d->addSeries($s)->setNumber('testSeriesAction-3');
-        $s = new Opus_Series(4);
+        $s = new Opus_Series(7);
         $s->setVisible('1');
         $s->store();
-        $d->addSeries($s)->setNumber('testSeriesAction-4');
+        
+        $d->addSeries($s)->setNumber('testSeriesAction-7');
         $d->store();
 
         $this->dispatch('/solrsearch/browse/series');
@@ -101,17 +102,20 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $d->setServerState('published');
         $d->store();
 
-        $s = new Opus_Series(3);
-        $d->addSeries($s)->setNumber('testSeriesAction-3');
-        $s = new Opus_Series(4);
+        $s = new Opus_Series(7);
         $s->setVisible('1');
         $s->store();
-        $d->addSeries($s)->setNumber('testSeriesAction-4');
+        
+        $d->addSeries($s)->setNumber('testSeriesAction-7');
         $d->store();
 
         $this->dispatch('/solrsearch/browse/series');
-        $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/3', $this->getResponse()->getBody());
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/4', $this->getResponse()->getBody());        
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/7', $this->getResponse()->getBody());
+        foreach (Opus_Series::getAll() as $series) {
+            if ($series->getId() != 7) {
+                $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/' . $series->getId(), $this->getResponse()->getBody());
+            }
+        }                
         $this->assertResponseCode(200);
 
         $this->restoreSeriesVisibility($visibilities);
@@ -139,7 +143,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = array('1', '2', '5', '6');
+        $seriesIds = array('1', '4', '2', '5', '6');
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
@@ -159,7 +163,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = array('6', '5', '2', '1');
+        $seriesIds = array('6', '5', '2', '4', '1');
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
@@ -183,7 +187,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/browse/series');
         $this->assertResponseCode(200);
         $responseBody = $this->getResponse()->getBody();
-        $seriesIds = array('1', '6', '2', '5');
+        $seriesIds = array('1', '6', '4', '2', '5');
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
