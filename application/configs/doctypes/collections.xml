@@ -43,5 +43,6 @@
     <field name="Institute" required="no" formelement="Select" datatype="CollectionLeaf" root="institutes" multiplicity="5"/>
     <field name="SubjectPACS" required="no" formelement="Select" datatype="Collection" root="pacs" multiplicity="*"/>
     <field name="SubjectCCS" required="no" formelement="Select" datatype="Collection" root="ccs" multiplicity="*"/>    
+    <field name="SubjectBKL" required="no" formelement="Select" datatype="Collection" root="bk" multiplicity="*"/> 
 
 </documenttype>
