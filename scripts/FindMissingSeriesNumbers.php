@@ -33,7 +33,7 @@
  * @version     $Id$
  **/
 
-require_once dirname(__FILE__) . '/../common/bootstrap.php';
+require_once dirname(__FILE__) . '/common/bootstrap.php';
 
 class FindMissingSeriesNumbers {
 
@@ -56,221 +56,17 @@ class FindMissingSeriesNumbers {
 	$writer->setFormatter($formatter);
         $this->logger = new Zend_Log($writer);        
     }
-        
 
     /**
+     * Für jede Collection der Collection Role series wird eine neue Schriftenreihe
+     * Opus_Series angelegt, wobei der Name, die Sichtbarkeit und die Sorierreihenfolge
+     * übernommen wird.
      *
-     * Problem:
-     * Dokumente, die einer Collection der Collection Role series zugeordnet sind und keinen IdentifierSerial
-     * besitzen, müssen behandelt werden. Grund: bei der Migration in die neue Schriftenreihen-Struktur muss pro
-     * Dokument und Schriftenreihe immer eine Bandnummer vergeben werden.
+     * Die Wurzel-Collection der Collection Role series wird nicht betrachtet.
      *
-     * Konfliktlösungsstrategie:
-     * Für die betroffenen Dokumente wird im Rahmen der Migration eine künstliche Bandnummer
-     * bestimmt.
-     *
-     * Logfile:
-     * Im Logfile werden die IDs der betreffenden Dokumente ausgegeben, für die eine künstliche Bandnummer bestimmt
-     * wird. Es wird außerdem die ID der Schriftenreihe ausgegeben, in deren Kontext das Dokumente eine künstliche
-     * Bandnummer erhalten hat.
      * 
-     * Erforderlich Nacharbeit durch den Benutzer:
-     * @TODO
-     *
+     * @return int number of collections that were migrated
      */
-    private function handleMissingIdentifierSerials() {
-        $conflictsFound = 0;
-        $finder = new Opus_DocumentFinder();        
-        $finder->setCollectionRoleId($this->seriesRole->getId());
-        foreach ($finder->ids() as $docId) {
-            $doc = new Opus_Document($docId);
-            if (count($doc->getIdentifierSerial()) == 0) {
-                $this->logger->info("doc #$docId : does not have a field IdentifierSerial -- document will not be migrated into new series structure");
-                foreach (Opus_Collection::fetchCollectionIdsByDocumentId($docId) as $collectionId) {
-                    $collection = new Opus_Collection($collectionId);
-                    if ($collection->getRoleId() === $this->seriesRole->getId()) {
-                        $this->logger->info("doc #$docId : needs to be manually migrated into series #" . $collectionId);
-                        $conflictsFound++;
-                    }
-                }
-            }
-        }
-        return $conflictsFound;
-    }
-
-    /**
-     * 
-     * Problem:
-     * Dokumente, die einer Collection der Collection Role series zugeordnet
-     * sind und mehr als einen IdentifierSerial besitzen, müssen behandelt werden.
-     * Grund: bei der Migration in die neue Schriftenreihen-Struktur kann pro
-     * Dokument und Schriftenreihe nur eine Bandnummer vergeben werden.
-     *
-     * Konfliktlösungsstrategie:
-     * Es wird der ein IdentifierSerial beibehalten und als Bandnummer migriert.
-     * Die restlichen IdentifierSerial werden gelöscht. Die Werte werden als
-     * Enrichments mit dem Schlüssel 'serialmigration' angelegt.
-     *
-     * Logfile:
-     * Im Logfile werden die IDs der betreffenden Dokumente ausgegeben. Außerdem
-     * werden die Werte der gelöschten IdentifierSerial ausgegeben, die
-     * jeweils in einem Enrichment 'serialmigration' gespeichert wurden.
-     *
-     * Erforderlich Nacharbeit durch den Benutzer:
-     * @TODO
-     * 
-     */
-    private function handleDocumentsWithMultipleIdentifierSerials() {
-        $conflictsFound = 0;
-        $finder = new Opus_DocumentFinder();
-        $finder->setIdentifierTypeExists('serial');        
-        $finder->setCollectionRoleId($this->seriesRole->getId());
-
-        foreach ($finder->ids() as $docId) {
-            $doc = new Opus_Document($docId);
-            $serialIds = $doc->getIdentifierSerial();
-            if (count($serialIds) > 1) {
-                $this->logger->info("doc #$docId : needs to be updated manually (has " . count($serialIds) . ' values in field IdentifierSerial)');
-                $this->createEnrichmentKeyIfItDoesNotExist('serialmigration');
-
-                $remainingIdentifierSerial = $serialIds[0];                
-                array_shift($serialIds);
-                
-                foreach ($serialIds as $serialId) {
-                    $serialValue = $serialId->getValue();
-                    try {
-                        $doc->addEnrichment()->setKeyName('serialmigration')->setValue($serialValue);
-                        $this->logger->info("doc #$docId : removed IdentifierSerial and stored value " . $serialValue . ' in enrichment serialmigration');
-                        $doc->store();
-                    }
-                    catch (Opus_Enrichment_NotUniqueException $e) {
-                        // enrichment serialmigration with value $serialvalue already exists for given document
-                        $this->logger->info("doc #$docId : duplicate value " . $serialValue . ' in field IdentifierSerial -- removed duplicate value');
-                        $doc = new Opus_Document($docId);
-                    }
-                    $conflictsFound++;
-                }
-                // remove all but the first SerialIdentifer from document
-                $doc->setIdentifierSerial($remainingIdentifierSerial);
-                $doc->store();
-            }
-        }
-        return $conflictsFound;
-    }
-
-    /**
-     * 
-     * Problem:
-     * Wenn zwei oder mehrere Dokumente existieren, die jeweils der gleichen Collection in der Collection Role
-     * series zugeordnet wurden, und den gleichen Wert im Feld IdentifierSerial besitzen, dann müssen wir vor
-     * der Übernahme der Dokumente in die neue Series-Struktur die Eindeutigkeit von IdentifierSerial für die
-     * betroffenen Dokumente sicherstellen. Andernfalls würde das anschließend ausgeführte Migrationsskript
-     * einen Verstoß gegen die Constraints auf der Tabelle link_documents_series auslösen (Bandnummer muss
-     * innerhalb einer Schriftenreihe eindeutig sein)
-     *
-     * Konfliktlösungsstrategie:
-     * Für das erste Dokument wird der IdentifierSerial belassen. Für alle anderen betroffenen Dokumente
-     * wird der IdentifierSerial gelöscht. Der Wert wird in das Enrichment serialmigration geschrieben.
-     *
-     * Logfile:
-     * Im Logfile werden die IDs der betreffenden Dokumente ausgegeben. Außerdem werden die IDs der gelöschten
-     * IdentifierSerial ausgegeben und der jeweilige Werte, der im Enrichment serialmigration gespeichert wurde.
-     *
-     * Erforderlich Nacharbeit durch den Benutzer:
-     * @TODO
-     *
-     */
-    private function handleConflictingIdentifierSerials() {
-        $conflictsFound = 0;
-        $finder = new Opus_DocumentFinder();
-        $finder->setIdentifierTypeExists('serial');
-        $finder->setCollectionRoleId($this->seriesRole->getId());
-
-        $serialIdsInUse = array();
-        foreach ($finder->ids() as $docId) {
-            $doc = new Opus_Document($docId);            
-
-            $seriesCollectionIds = array();
-            foreach (Opus_Collection::fetchCollectionIdsByDocumentId($docId) as $collectionId) {
-                $c = new Opus_Collection($collectionId);
-                if (!$c->isRoot() && $c->getRoleId() === $this->seriesRole->getId()) {
-                    array_push($seriesCollectionIds, $collectionId);
-                }
-            }
-
-            $serialIdsToRemove = array();
-            foreach ($doc->getIdentifierSerial() as $serialId) {
-                $serialValue = $serialId->getValue();
-                foreach ($seriesCollectionIds as $collectionId) {
-                    if (array_key_exists($collectionId, $serialIdsInUse)) {
-                        if (in_array($serialValue, $serialIdsInUse[$collectionId])) {
-                            array_push($serialIdsToRemove, $serialId->getId());
-                        }
-                    }
-                }
-            }
-            if (!empty($serialIdsToRemove)) {
-                $remainingSerialIds = array();
-                foreach ($doc->getIdentifierSerial() as $serialId) {
-                    if (!in_array($serialId->getId(), $serialIdsToRemove)) {
-                        array_push($remainingSerialIds, $serialId);
-                    }
-                    else {
-                        $serialValue = $serialId->getValue();
-                        // value of field IdentifierSerial is already in use: remove it from document and store it in enrichment serialmigration
-                        $this->logger->info("doc #$docId : has a conflicting value in field IdentifierSerial and needs to be updated manually");
-                        $this->createEnrichmentKeyIfItDoesNotExist('serialmigration');
-                        try {
-                            $doc->addEnrichment()->setKeyName('serialmigration')->setValue($serialValue);
-                            $doc->store();
-                        }
-                        catch (Opus_Enrichment_NotUniqueException $e) {
-                            // enrichment serialmigration with value $serialvalue already exists for given document
-                            $doc = new Opus_Document($docId);
-                        }
-                        $this->logger->info("doc #$docId : removed IdentifierSerial and stored value " . $serialValue . ' in enrichment serialmigration');
-                        $conflictsFound++;
-                    }
-                }
-                $doc->setIdentifierSerial($remainingSerialIds);
-                $doc->store();
-
-                if (empty($remainingSerialIds)) {
-                    foreach ($seriesCollectionIds as $collectionId) {
-                        $this->logger->info("doc #$docId : needs to be manually migrated into series #$collectionId");
-                    }
-                }
-            }
-            
-            foreach ($doc->getIdentifierSerial() as $serialId) {
-                $serialValue = $serialId->getValue();
-                if (!in_array($serialId->getId(), $serialIdsToRemove)) {
-                    foreach ($seriesCollectionIds as $collectionId) {
-                        if (array_key_exists($collectionId, $serialIdsInUse)) {
-                            array_push($serialIdsInUse[$collectionId], $serialValue);
-                        }
-                        else {
-                            $serialIdsInUse[$collectionId] = array($serialValue);
-                        }
-                    }
-                }
-            }
-        }
-        return $conflictsFound;
-    }
-
-    private function createEnrichmentKeyIfItDoesNotExist($keyName) {
-        try {
-            $enrichmentKey = new Opus_EnrichmentKey();
-            $enrichmentKey->setName($keyName);
-            $enrichmentKey->store();
-            $this->logger->debug('created enrichment key ' . $keyName);
-        }
-        catch (Opus_Model_Exception $e) {
-            // enrichment key does already exist
-        }
-    }
-
     private function migrateCollectionToSeries() {
         $numOfCollectionsMigrated = 0;
         foreach (Opus_Collection::fetchCollectionsByRoleId($this->seriesRole->getId()) as $collection) {            
@@ -283,51 +79,125 @@ class FindMissingSeriesNumbers {
             $series->setVisible($collection->getVisible());
             $series->setSortOrder($collection->getSortOrder());
             $series->store();
-            $this->logger->debug('created series with id ' . $collection->getId());
+            $this->logger->info('created series with id #' . $collection->getId());
             $numOfCollectionsMigrated++;
         }
         return $numOfCollectionsMigrated;
     }
 
+    /**
+     * Im Rahmen der Zuweisung von Dokumenten, die Collections der Collection Role
+     * series zugeordnet sind, müssen verschiedene Konflikte behandelt werden.
+     *
+     * Im Folgenden werden nur Dokumente betrachtet, die mindestens einer Collection
+     * der Collection Role series (kurz: series-Collection) zugeordnet sind.
+     *
+     * Fall 1 (Dokumente ohne IdentifierSerial):
+     * Da die Bandnummer einer Schriftenreihe Opus_Series obligatorisch ist, können
+     * Dokumente ohne IdentifierSerial nicht migriert werden. Sie verbleiben
+     * unangetastet. Die Zuweisung(en) zu series-Collection(s) wird (werden) nicht
+     * verändert.
+     *
+     * Fall 2 (Dokumente mit mehr als einem IdentifierSerial):
+     * Da ein Dokument pro Schriftenreihe nur eine Bandnummer besitzen kann, können
+     * Dokumente mit mehr als einem Wert für das Feld IdentifierSerial nicht
+     * migriert werden. Sie verbleiben unangetastet. Die Zuweisung(en) zu
+     * series-Collection(s) wird (werden) nicht verändert.
+     *
+     * Fall 3 (Dokumente mit einem IdentifierSerial):
+     * Da in einer Schriftenreihe nicht zwei Dokumente mit der gleichen Bandnummer
+     * existieren können, muss beim Zuweisen von Dokumenten darauf geachtet werden,
+     * dass eine Bandnummer nicht mehrfach vergeben wird.
+     * Wird versucht ein Dokument zu einer Schriftenreihe mit einer bereits
+     * in Benutzung befindlichen Bandnummer zuzuweisen, so wird die Zuweisung
+     * nicht durchgeführt. Die Zuweisung des Dokuments zur series-Collection wird
+     * in diesem Fall unverändert beibehalten.
+     *
+     * Im Falle der erfolgreichen Zuweisung des Dokuments zu einer Schriftenreihe
+     * wird die Verknüpfung mit der korrespondierenden series-Collection
+     * entfernt. Außerdem wird das Feld IdentifierSerial entfernt.
+     *
+     *
+     * @return array an array that contains both the number of conflicts found and
+     * the number of documents that were successfully migrated
+     */
     private function migrateDocuments() {
+        $numOfConflicts = 0;
         $numOfDocsMigrated = 0;
         $finder = new Opus_DocumentFinder();
-        $finder->setIdentifierTypeExists('serial');
         $finder->setCollectionRoleId($this->seriesRole->getId());
-        
+        $serialIdsInUse = array();
         foreach ($finder->ids() as $docId) {
-            $doc = new Opus_Document($docId);            
+            $doc = new Opus_Document($docId);
+            $serialIds = $doc->getIdentifierSerial();
+            $numOfSerialIds = count($serialIds);
 
-            // remove identifier serial
-            $serial = $doc->getIdentifierSerial();
-            if (count($serial) !== 1) {
-                // this case is not intended to occur
-                $this->logger->error("doc #$docId : has " . count($serial) . ' values for field IdentifierSerial -- ignore document while migrating series');
+            if ($numOfSerialIds == 0) {
+                $this->logger->warn("doc #$docId : does not have a field IdentifierSerial -- leave it untouched");
+                $numOfConflicts++;
                 continue;
             }
-            $serialNumber = $serial[0]->getValue();            
-            $doc->setIdentifierSerial(array());
-            $this->logger->debug("doc #$docId : removed field IdentifierSerial " . $serialNumber);
 
-            // remove document from collections and assign it to series
-            $collections = $doc->getCollection();
+            if ($numOfSerialIds > 1) {
+                $this->logger->warn("doc #$docId : has $numOfSerialIds values for field IdentifierSerial -- leave it untouched");
+                $numOfConflicts++;
+                continue;
+            }
+
+            $serialId = $serialIds[0]->getValue();
             $remainingCollections = array();
-            foreach ($collections as $collection) {
-                if ($collection->getRoleId() === $this->seriesRole->getId()) {                    
-                    $series = new Opus_Series($collection->getId());
-                    $doc->addSeries($series)->setNumber($serialNumber);
-                    $this->logger->debug("doc #$docId: removed assignment from collection #" . $collection->getId());
-                    $this->logger->debug("doc #$docId: created assignment to series #" . $collection->getId() . ' with value ' . $serialNumber);
+
+            foreach ($doc->getCollection() as $collection) {
+
+                // only consider collection in collection role series
+                if ($collection->getRoleId() != $this->seriesRole->getId()) {
+                    array_push($remainingCollections, $collection);
                 }
                 else {
-                    array_push($remainingCollections);
+                    $collectionId = $collection->getId();
+                    if (!$collection->isRoot()) {
+                        
+                        // check for conflict
+                        if (array_key_exists($collectionId, $serialIdsInUse) && in_array($serialId, $serialIdsInUse[$collectionId])) {
+                            // conflict was found: serialId for series $collectionId already in use
+                            $this->logger->warn("doc #$docId : could not assign to series #$collectionId: value $serialId already in use");
+                            $this->logger->warn("doc #$docId : leave assignment to collection #$collectionId untouched");
+                            array_push($remainingCollections, $collection);
+                            $numOfConflicts++;
+                        }
+                        else {
+                            // no conflict
+                            $series = new Opus_Series($collectionId);
+                            $doc->addSeries($series)->setNumber($serialId);
+                            $doc->setIdentifierSerial(array());
+                            
+                            // mark usage of serialId for collection $collectionId
+                            if (array_key_exists($collectionId, $serialIdsInUse)) {
+                                array_push($serialIdsInUse[$collectionId], $serialId);
+                            }
+                            else {
+                                $serialIdsInUse[$collectionId] = array($serialId);
+                            }
+                            $this->logger->info("doc #$docId : assign document to series #$collectionId with value $serialId");
+                            $this->logger->info("doc #$docId : removed assignment from collection #$collectionId");                            
+                            $this->logger->info("doc #$docId : removed field IdentifierSerial with value " . $serialId);
+                            $numOfDocsMigrated++;
+                        }
+                    }
+                    else {
+                        // series root collection assignment will not be migrated
+                        $this->logger->warn("doc #$docId : is assigned to root collection #$collectionId of collection role series: leave assignment untouched");
+                        array_push($remainingCollections, $collection);
+                        $numOfConflicts++;
+                    }
                 }
             }
+
             $doc->setCollection($remainingCollections);
             $doc->store();
-            $numOfDocsMigrated++;
         }
-        return $numOfDocsMigrated;
+        
+        return array('numOfConflicts' => $numOfConflicts, 'numOfDocsMigrated' => $numOfDocsMigrated);
     }
 
     private function hideCollectionRoleSeries() {
@@ -338,16 +208,11 @@ class FindMissingSeriesNumbers {
         $this->seriesRole->store();
     }
 
-    public function run() {               
-        $conflictsFound = $this->handleMissingIdentifierSerials();
-        $conflictsFound += $this->handleDocumentsWithMultipleIdentifierSerials();
-        $conflictsFound += $this->handleConflictingIdentifierSerials();
-
+    public function run() {
         $numOfCollectionsMigrated = $this->migrateCollectionToSeries();
-        $numOfDocsMigrated = $this->migrateDocuments();
+        $result = $this->migrateDocuments();
         $this->hideCollectionRoleSeries();
-        
-        return array($conflictsFound, $numOfCollectionsMigrated, $numOfDocsMigrated);
+        return array($result['numOfConflicts'], $numOfCollectionsMigrated, $result['numOfDocsMigrated']);
     }
 }
 if ($argc < 2) {
