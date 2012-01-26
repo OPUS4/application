@@ -1,3 +1,4 @@
+#!/usr/bin/env php5
 <?php
 
 // Bootstrapping.
@@ -13,7 +14,6 @@ if (count($argv) != 2) {
 
 // Initialize logger.
 $logfileName = $argv[1];
-echo "setting logger: $logfileName\n";
 
 $logfile = @fopen($logfileName, 'a', false);
 $writer = new Zend_Log_Writer_Stream($logfile);        
@@ -41,7 +41,6 @@ createEnrichmentKey('MigrateSubjectDDC');
 $docFinder = new Opus_DocumentFinder();
 $changedDocumentIds = array();
 foreach ($docFinder->ids() AS $docId) {
-   echo "processing $docId... \n";
 
    $doc = null;
    try {
