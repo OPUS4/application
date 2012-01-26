@@ -43,6 +43,7 @@ INSERT INTO `document_title_abstracts` (`id`, `document_id`, `type`, `value`, `l
 INSERT INTO `link_documents_collections` (`document_id`, `collection_id`, `role_id`) VALUES
 (146,16007,1),
 (146,2,2),
+(146,40,2),
 (146,63,2),
 (146,494,2),
 (146,1029,3),

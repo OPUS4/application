@@ -365,6 +365,40 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Regression test for OPUSVIER-1788
+     */
+    public function testGetRecordXMetaDissPlusDoc146SubjectDDCSG() {
+        $doc = new Opus_Document(146);
+        $ddcs = array();
+        foreach ($doc->getCollection() AS $c) {
+            if ($c->getRoleName() == 'ddc') {
+                $ddcs[] = $c->getNumber();
+            }
+        }
+        $this->assertContains(28, $ddcs, "testdata changed");
+        $this->assertContains(51, $ddcs, "testdata changed");
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-1788 (show DDC 51)
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/dc:subject[@xsi:type="xMetaDiss:DDC-SG" and text()="51"]');
+        $this->assertEquals(1, $elements->length,
+                "Unexpected count for ddc:51 (should be visible)");
+
+        // Regression test for OPUSVIER-1788 (dont show DDC 28)
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/dc:subject[@xsi:type="xMetaDiss:DDC-SG" and text()="28"]');
+        $this->assertEquals(0, $elements->length,
+                "Unexpected count for ddc:28 (should be invisible)");
+    }
+
+    /**
      * Regression test for OPUSVIER-2068
      */
     public function testGetRecordXMetaDissPlusDoc148CheckThesisYearAccepted() {

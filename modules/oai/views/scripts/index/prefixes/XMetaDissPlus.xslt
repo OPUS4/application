@@ -73,7 +73,7 @@
             <!-- dc:creator -->
             <xsl:apply-templates select="PersonAuthor" mode="xmetadissplus" />
             <!-- dc:subject -->
-            <xsl:apply-templates select="Subject[@Type='ddc']" mode="xmetadissplus" />
+            <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]" mode="xmetadissplus" />
             <xsl:apply-templates select="Subject[@Type='swd']" mode="xmetadissplus" />
             <xsl:apply-templates select="Subject[@Type='uncontrolled']" mode="xmetadissplus" />
             <!-- dc:abstract -->
@@ -299,9 +299,9 @@
        </dc:creator>
     </xsl:template>
 
-    <xsl:template match="Subject[@Type='ddc']" mode="xmetadissplus">
+    <xsl:template match="Collection[@RoleName='ddc' and @Visible=1]" mode="xmetadissplus">
         <dc:subject xsi:type="xMetaDiss:DDC-SG">
-            <xsl:value-of select="@Value" />
+            <xsl:value-of select="@Number" />
         </dc:subject>
     </xsl:template>
 
