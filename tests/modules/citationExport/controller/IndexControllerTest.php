@@ -271,23 +271,19 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testIndexActionRisPublicNote() {
-        $doc = new Opus_Document($this->documentId);
-        $doc->addNote()->setVisibility('public')->setMessage('I am public.');
-        $doc->store();
-        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $doc = new Opus_Document(146);
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $doc->getId());
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertContains('N1  - I am public.', $response->getBody());
+        $this->assertContains('N1  - Für die Öffentlichkeit', $response->getBody());
     }
 
     public function testIndexActionRisPrivateNote() {
-        $doc = new Opus_Document($this->documentId);
-        $doc->addNote()->setVisibility('private')->setMessage('I am private.');
-        $doc->store();
-        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $doc = new Opus_Document(146);
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $doc->getId());
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertNotContains('N1  - I am private.', $response->getBody());
+        $this->assertNotContains('N1  - Für den Admin.', $response->getBody());
     }
 
 

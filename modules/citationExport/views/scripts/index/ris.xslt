@@ -162,7 +162,7 @@
             <xsl:text>&#10;</xsl:text>
         </xsl:if>
         <xsl:if test="string-length(Note/@Message)>0">
-            <xsl:apply-templates select="Note" />
+            <xsl:apply-templates select="Note[@Visibility='public']" />
         </xsl:if>
         <xsl:if test="string-length(@Volume)>0">
             <xsl:text>VL  - </xsl:text>
