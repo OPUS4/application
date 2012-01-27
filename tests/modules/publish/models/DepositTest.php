@@ -75,6 +75,7 @@ class Publish_Model_DepositTest extends ControllerTestCase {
             'SubjectUncontrolled1'              => array('value' => 'Keyword', 'datatype'=>'Subject', 'subfield'=>'0'),
             'SubjectUncontrolledLanguage1'      => array('value' => 'deu', 'datatype'=>'Language', 'subfield'=>'1'),              
             'SubjectMSC1'                       => array('value' => 'ID:8030', 'datatype'=>'Collection', 'subfield'=>'0'),
+            'SubjectJEL1'                       => array('value' => 'ID:6740', 'datatype'=>'Collection', 'subfield'=>'0'),
             'SubjectPACS1'                      => array('value' => 'ID:2878', 'datatype'=>'Collection', 'subfield'=>'0'),
             'SubjectBKL1'                       => array('value' => 'ID:13874', 'datatype'=>'Collection', 'subfield'=>'0'),
             'IdentifierUrn'                     => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
