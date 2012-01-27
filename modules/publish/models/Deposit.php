@@ -456,21 +456,24 @@ class Publish_Model_Deposit {
         else if (strstr($dataKey, 'Urn')) {
             $this->document->addIdentifierUrn($identifier);
         }
-        else if (strstr($dataKey, 'Doi') && !strstr($dataKey, 'StdDoi')) {
+        else if (strstr($dataKey, 'StdDoi')) {
+            $this->document->addIdentifierStdDoi($identifier);
+        }
+        else if (strstr($dataKey, 'Doi')) {
             $this->document->addIdentifierDoi($identifier);
         }
         else if (strstr($dataKey, 'Handle')) {
             $this->document->addIdentifierHandle($identifier);
         }
-        else if (strstr($dataKey, 'Url') && !(strstr($dataKey, 'SplashUrl'))) {
+        else if (strstr($dataKey, 'SplashUrl')) {
+            $this->document->addIdentifierSplashUrl($identifier);
+        }
+        else if (strstr($dataKey, 'Url')) {
             $this->document->addIdentifierUrl($identifier);
         }
         else if (strstr($dataKey, 'Issn')) {
             $this->document->addIdentifierIssn($identifier);
-        }
-        else if (strstr($dataKey, 'StdDoi')) {
-            $this->document->addIdentifierStdDoi($identifier);
-        }
+        }        
         else if (strstr($dataKey, 'CrisLink')) {
             $this->document->addIdentifierCrisLink($identifier);
         }
