@@ -187,7 +187,7 @@ echo "Database is up-to-date!"
 # Copy sql files from source to destination folder
 updateFolder "$SCHEMA_PATH" "$BASEDIR"/opus4/db/schema
 
-// Copy symlink for current OPUS4 SQL file (TODO handle with install? Refactor?)
+# Copy symlink for current OPUS4 SQL file (TODO handle with install? Refactor?)
 DRYRUN || cp --no-dereference "$SCHEMA_PATH"/opus4current.sql "$BASEDIR"/opus4/db/schema/opus4current.sql
 DRYRUN || chown "$OPUS4_USERNAME":"$OPUS4_GROUPNAME" "$BASEDIR"/opus4/db/schema/opus4current.sql
 
