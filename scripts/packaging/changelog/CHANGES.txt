@@ -1,5 +1,290 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.2.0 2012-01-27 ========================
+
+h3. Bugs
+
+* [OPUSVIER-1316] - Collection-Auswahl im Publikationsformular Schritt 2: Nicht ausgewählte Collection kann nicht mehr rückgängig gemacht werden
+* [OPUSVIER-1583] - Newlines und Tabulatoren im Dateinamen verursachen Probleme
+* [OPUSVIER-1647] - Frontdoor: Dateinamen in Links werden nicht URL-kodiert
+* [OPUSVIER-1753] - OAI-Schnittstelle: Unterstützung für weitere OAI-SetSpecs neben doc-type
+* [OPUSVIER-1806] - unklare Exception im SendFile-Helper (Reproduzierbarkeit ist ebenfalls bislang unklar)
+* [OPUSVIER-1842] - Ausbleibende Validierung bei der Eingabe von Datumswerten
+* [OPUSVIER-1845] - DB-Fehler beim Update auf OPUS 4.1.4, sofern in der Datenbank in der Tabelle document_licences schon ein Eintrag mit der ID 8 steht
+* [OPUSVIER-1846] - Update-Skript versucht den Solr-Server neuzustarten, obwohl der Benutzer dies verneint hat
+* [OPUSVIER-1847] - Update-Skript verwendet beim Anlegen der Datei db/createdb.sh falsche Shell-Kommentarzeichen (; statt #)
+* [OPUSVIER-1848] - Dokumentation: manuelles Update muss mit sudo ausgeführt werden
+* [OPUSVIER-1859] - Übersetzung der Sprache eines Dokuments in der Frontdoor schlägt fehl
+* [OPUSVIER-1863] - Beschränkung der Enrichment-Felder auf 255 Zeichen aufheben
+* [OPUSVIER-1865] - gesamtes Element <dc:creator> muss für mehrere Autoren wiederholt werden
+* [OPUSVIER-1866] - falsche Bezeichnung für Akademischen Titel
+* [OPUSVIER-1889] - Abbruch/Abort Link auf der Seite um Sammlungen zuzuweisen gebrochen
+* [OPUSVIER-1914] - Funktion hasFiles der Klasse Review_Model_DocumentAdapter gibt immer True zurück
+* [OPUSVIER-1916] - Eigenener Schlüssel für die Auswahl des Collectionfeld "Institute"
+* [OPUSVIER-1924] - falsche Verlinkung des Felds identifier_url in der Frontdoor
+* [OPUSVIER-1928] - Download liefert korruptes PDF aus
+* [OPUSVIER-1943] - Falsche Bezeichnung einiger Dokumenttypen in ris.xslt
+* [OPUSVIER-1944] - Collection-Auswahl fällt auf alten Wert zurück, wenn man "up"-"down" benutzt
+* [OPUSVIER-1956] - Anzeigefehler beim Hinzufügen von weiteren Feldern innerhalb des Publish-Formulars
+* [OPUSVIER-2001] - Migrationsskripte laufen im Modus testing (fest codiert)
+* [OPUSVIER-2016] - Migrationsskript gibt "kryptische" Fehlermeldung aus, wenn import.ini nicht gefunden bzw. gelesen werden kann
+* [OPUSVIER-2053] - Opus_EnrichmentKey::getAll()liefert die Einträge mit Klassenbezeichner aus
+* [OPUSVIER-2056] - Export und OAI-Schnittstelle liefern sensible Daten aus
+* [OPUSVIER-2057] - Export liefert Informationen zu zugriffsgeschützten Dateien aus
+* [OPUSVIER-2058] - Einige Identifier-Felder werden nicht korrekt gespeichert
+* [OPUSVIER-2078] - RIS-Export enthält nicht-standardkonformes Feld ID
+* [OPUSVIER-2098] - Framework-Tests: Unknown Exception in Zusammenhang mit Opus_Enrichment
+* [OPUSVIER-2099] - OAI-Set der Dokumenttypen muss nach DINI "doc-type" heißen
+* [OPUSVIER-2100] - JEL-Klassifikation wird nicht korrekt abgespeichert
+* [OPUSVIER-2101] - Umbenennung von Document_Sets zu Document_Series in der Datenbank durchziehen
+* [OPUSVIER-2105] - Nach dem Anlegen eines EnrichmentKey, der einen Slash im Namen enthält, können die entsprechenden Admin-Actions nicht mehr aufgerufen werden
+* [OPUSVIER-2111] - Zu lange Felder werden von mySQL ohne Warnung abgeschnitten.
+* [OPUSVIER-2123] - Lowercasing von Wildcard Queries vor dem Abschicken der Anfrage an den Solr-Server durchführen
+* [OPUSVIER-2136] - Muss/Sollte der ©-Eintrag im Seitenfooter entfernt werden?
+* [OPUSVIER-2144] - Link "Letzte Seite" zeigt nur den	letzten Eintrag
+* [OPUSVIER-2147] - Anzahl der Dokumente wird beim Dokument-Browsing in der Pagination-Leiste nicht angezeigt
+* [OPUSVIER-2151] - Feldnamen erlauben nur bestimmte Zeichen
+* [OPUSVIER-2164] - xMetaDissPlus: Auf dem CI-System erzeugt der XSL-Prozessor "dc:person" statt "pc:person"
+* [OPUSVIER-2165] - Seitentitel der Frontdoor zeigt nicht den Dokumenttitel in der Dokumentsprache an
+* [OPUSVIER-2168] - Sämtliche Dokumenttypdefinitionen verstoßen gegen das XML Schema documenttype.xsd
+* [OPUSVIER-2172] - Collection-Edit-Formular zeigt Wert 0 für Attribut oai_subset und number nicht an
+* [OPUSVIER-2175] - Unter CentOS liefert die OAI-Schnittstelle per XMetaDissPlus falsche Namespaces aus
+* [OPUSVIER-2177] - Dokument-ID bei Fehlerausgabe in der import_error.log  angeben
+* [OPUSVIER-2184] - Import-Skript arbeitet im Verzeichnis server/workspace
+* [OPUSVIER-2193] - XMetaDissPlus-Ausgabe enthält fest-codiertes Element medium
+* [OPUSVIER-2199] - Model setzt beim Anlegen eines Dokuments ServerDatePublished, auch wenn sich das Dokument nicht im ServerState published befindet
+* [OPUSVIER-2200] - ServerDatePublished wird beim Überführen eines Dokuments in den ServerState published nicht aktualisiert
+* [OPUSVIER-2209] - Null-Pointer-Zugriff im Form-Validator löst Fatal Error aus, wenn für eine CollectionRole name != oai_name bzw. keine CollectionRoles existieren
+* [OPUSVIER-2216] - Element required-if-fulltext in Dokumenttypdefinition wird in Dokumentation nicht beschrieben
+* [OPUSVIER-2220] - falscher Name für das Ablageverzeichnis der XML-Dokumenttypdefinitionen
+* [OPUSVIER-2248] - "URN vorhanden" Validierung greift zu früh beim Veröffentlichen über das Publish-Formular
+* [OPUSVIER-2258] - ein Dokument kann in unterschiedlichen Schriftenreihen nicht die gleiche Bandnummer haben
+* [OPUSVIER-2261] - Nach dem Speichern von Opus_Document werden greifen weitere Änderungen nicht mehr beim zweiten Speichern
+* [OPUSVIER-2265] - Geschütztes Leerzeichen in Facettenanzeige aufnehmen, so dass die Dokumentanzahl nicht allein umgebrochen wird
+* [OPUSVIER-2280] - Externe Bemerkungen sind nach der Migration nicht öffensichtlich sichtbar
+* [OPUSVIER-2290] - update-db.sh beachtet die Variable DRYRUN nicht und führt Datenbank-Update in jedem Fall durch
+* [OPUSVIER-2292] - Document->addIdentifierUrn initialisiert Type-Feld nicht korrekt
+* [OPUSVIER-2316] - fehlender Dokueintrag: Konfigurationsmöglichkeit der Facettenreihenfolge
+* [OPUSVIER-2322] - Beschreibung der Inhalte der Datei UPDATE-conflicts.log (früher: conflicts.txt) in Doku nachziehen
+* [OPUSVIER-2324] - RIS-Export ignoriert Sichtbarkeit von Note
+* [OPUSVIER-2326] - Release Notes im Tarball sind leer
+* [OPUSVIER-2329] - Symlink db/schema/opus4current.sql wird beim Update nicht in das Instanzverzeichnis kopiert
+
+h3. Stories
+
+* [OPUSVIER-979] - Alle Opus_Subject*-Klassen durch ein Opus_Subject ersetzen
+* [OPUSVIER-1064] - Fehlende Bandnr. für Schriftenreihen
+* [OPUSVIER-2012] - Aktuellstes Datenbank-Schema ab jetzt immer in "opus4current.sql"
+* [OPUSVIER-2202] - Änderung Feldtyp  - page_number
+* [OPUSVIER-2233] - Anzeige von Legal Notices im zweiten Schritt des Publish-Formulars
+
+h3. Tasks
+
+* [OPUSVIER-175] - Form for creating and editing languages could use hints
+* [OPUSVIER-845] - Einstellung eines Defaultwerts bei Angabe von Seitenzahlen
+* [OPUSVIER-849] - Angabe des Gesamtbestandes auf der Startseite
+* [OPUSVIER-980] - Alle überflüssigen Subject-Felder aus Opus_Document entfernen
+* [OPUSVIER-1339] - Übersetzungen der Feldnamen- und werte in der Übersicht für ein Dokument
+* [OPUSVIER-1428] - Fehler beim Eintrag einer MSC-Klasse über das Publish-Formular
+* [OPUSVIER-1471] - Update-Script: Neue angelegte Dateien sollen dem OPUS4-User gehören
+* [OPUSVIER-1548] - Abfangen, wenn kein Titel in der Dokumentsprache eingegeben wurde
+* [OPUSVIER-1603] - View und Edit Code vom DocumentsController entfernen
+* [OPUSVIER-1722] - Type Feld für TitleAbstract entfernen
+* [OPUSVIER-1757] - Dokument-Metadatenadministration: Anzeige der Funktion "Bearbeiten" bei leeren Feldern unterbinden
+* [OPUSVIER-1758] - fehlende Übersetzungen in Metadatenadministration bei Edit-Formularen für unterschiedliche Felder
+* [OPUSVIER-1776] - Sprachzuordnung bei SWD-Schlagwortfeldern entfernen
+* [OPUSVIER-1788] - Änderungen in der OAI-Schnittstelle übernehmen
+* [OPUSVIER-1789] - Änderungen im Publish-Modul übernehmen
+* [OPUSVIER-1790] - Änderungen im Admin-Modul übernehmen
+* [OPUSVIER-1815] - Migration von SubjectDDC bzw. SubjectMSC in die Collections beim Release-Update
+* [OPUSVIER-1832] - Abhilfe gegen die lange Laufzeit der Server-Unit-Tests: ein Test-Target pro Modul einrichten
+* [OPUSVIER-1834] - Beschleunigung der Unit Tests des IndexControllers des OAI-Moduls
+* [OPUSVIER-1844] - Dokument-ID beim permanenten Löschen eines Dokuments wird nicht validiert
+* [OPUSVIER-1851] - Schemaänderung Enrichments: globale Registry für die Enrichments anlegen (Modellierung einer n-zu-m statt einer 1-zu-n Relation zwischen Dokumenten und Enrichments)
+* [OPUSVIER-1855] - RSS-Feed für Autorensuche anbieten
+* [OPUSVIER-1856] - Import-Schnittstelle für Metadaten-Import (keine Dateien)
+* [OPUSVIER-1861] - View Skripte für DocumentController zusammenfassen
+* [OPUSVIER-1862] - Ungenutzte View-Skripte für den DocumentController entfernen
+* [OPUSVIER-1867] - Konfiguration der Felder für Sektionen im Metadaten Formular in INI auslagern und testen
+* [OPUSVIER-1868] - Funktionen zur Formatierung von Feldwerten in View Helper verschieben
+* [OPUSVIER-1871] - Referenzen wieder ins Metadaten Formular einbinden
+* [OPUSVIER-1872] - Feld Relation in Opus_Reference als Selection mit Defaultwerten definieren
+* [OPUSVIER-1873] - Übersetzungen für Sprachen in separate TMX Datei im Default Modul verschieben
+* [OPUSVIER-1874] - Änderung der Übersetzungsschlüssel für Sprache prüfen und Konflikte auflösen
+* [OPUSVIER-1876] - Default Werte für Feld PublicationState in Opus_Document definieren
+* [OPUSVIER-1877] - Übersetzung von Feldwerten für Select Boxen (z.B. ServerState, Type)
+* [OPUSVIER-1879] - Übersetzung der Dokumententypen durch Unit Test sicherstellen
+* [OPUSVIER-1884] - Ist es möglich Opus_Model_Field so zu erweitern, daß man das Opus_Model abfragen kann?
+* [OPUSVIER-1895] - Namen von CollectionRoles bei der Zuweisung von Collections übersetzen
+* [OPUSVIER-1896] - Eingabefeld für Titel vergrößern
+* [OPUSVIER-1897] - Interne Felder wie ServerDateModified und ServerDatePublished sollen nicht editiert werden
+* [OPUSVIER-1898] - Funktion von Personen als erstes Feld anzeigen
+* [OPUSVIER-1901] - Anzeige, ob ein Dokument einen Volltext besitzt und ob es zur Bibliographie gehört
+* [OPUSVIER-1908] - Mechanismus für die Konfiguration von Model Formularen
+* [OPUSVIER-1909] - Konfiguration für Model Klassen in dynamisches Formular integrieren
+* [OPUSVIER-1911] - Sortierung der Felder greift nicht bei den Edit-Formularen
+* [OPUSVIER-1913] - Functionen für das erzeugen von Form Elementen in separate Klasse verschieben
+* [OPUSVIER-1915] - Controller Helper Documents um Funktion zum Prüfen einer Dokumenten ID erweitern
+* [OPUSVIER-1925] - Ausgabe von Enrichments in der Frontdoor ermöglichen, die nicht escaped wird
+* [OPUSVIER-1929] - PDF-Version der Dokumentation automatisch im Rahmen des Release-Prozesses in den Tarball aufnehmen
+* [OPUSVIER-1931] - reine PHP-Dateien dürfen kein schließendes ?> Tag besitzen
+* [OPUSVIER-1934] - Funktion zum Prüfen von erlaubten Sektionsnamen im Metadaten Überblick
+* [OPUSVIER-1935] - DocumentController aufräumen als Vorbereitung für Einbau von Validierung
+* [OPUSVIER-1937] - DocumentController Actions für Änderungen des Dokumentenstatus aufräumen
+* [OPUSVIER-1938] - DocumentController Funktionen zum Generieren von Formularen überarbeiten
+* [OPUSVIER-1941] - Erlaubte Subject Typen im Framework aktualisieren
+* [OPUSVIER-1950] - Zugriff auf 'default' Modul darf Rolle 'guest' nicht entzogen werden
+* [OPUSVIER-1953] - Actions für Status-Änderungen an einem Dokument in separaten WorkflowController verschieben
+* [OPUSVIER-1955] - RewriteRules auf statische Verzeichnisse unterhalb von public entfernen
+* [OPUSVIER-1959] - Umsetzung des grundlegenden Workflow-Modelles
+* [OPUSVIER-1964] - Link auf die Schriftenreihe in der Frontdoor
+* [OPUSVIER-1965] - Framework-Funktionalität bereitstellen, die es ermöglicht eine Menge von Feldern von einem Opus_Document zu entfernen
+* [OPUSVIER-1975] - Anzeige der Dokumente einer Schriftenreihe in der Administration
+* [OPUSVIER-1977] - Browsing Änderungen bzgl. Schriftenreihen
+* [OPUSVIER-1979] - Tabellenschema für Schriftenreihen erstellen
+* [OPUSVIER-1981] - Anzeige von Schriftenreihen in der Administrations-Metadatenübersicht für ein Dokument
+* [OPUSVIER-1983] - CI-System (server-Targets) häuft mit jedem Build Temp-Dateien an
+* [OPUSVIER-1995] - neuer Datatype "Set" für die Dokumenttypen
+* [OPUSVIER-1997] - WorkflowController umbauen, so daß alle Statusänderungen über eine Action "changestate" passieren
+* [OPUSVIER-2007] - OPUS3-Testdump in server/tests/migration anlegen, so dass Migrationsskript systematisch getestet werden kann
+* [OPUSVIER-2008] - Datenbank-Schema jetzt in "opus4current.sql": Install-/Update-Script anpassen
+* [OPUSVIER-2010] - Sprachen in Datei 'languages.tmx' im Default Modul definiert
+* [OPUSVIER-2011] - Controller Helper für Workflow Funktionalität implementieren
+* [OPUSVIER-2013] - Feld für Bandnummer erzeugen
+* [OPUSVIER-2014] - Feld Nummer muss auf Existenz hin validiert werden
+* [OPUSVIER-2015] - korrektes Abspeichern des neuen Feldes "DocumentSet"
+* [OPUSVIER-2018] - Hinweis auf partielles Löschen des workspace in die Dokumentation aufnehmen
+* [OPUSVIER-2020] - Status 'audited' für ServerState von Dokumenten zur Datenbank und zum Framework hinzufügen
+* [OPUSVIER-2021] - fehlende identifier types in der Dokumentverwaltung
+* [OPUSVIER-2022] - Dokumentstatus ändern in Administration
+* [OPUSVIER-2023] - neue Select Felder Aufforderung für Collections
+* [OPUSVIER-2024] - Änderungen an den Dokumenttypen
+* [OPUSVIER-2030] - Anpassungen am Datenbank-Design: NOT NULL Constraints entfernen; Anpassung Datentyp des Felds number
+* [OPUSVIER-2031] - Umbennungen durchführen: Opus_DocumentSets wird zu Opus_Series
+* [OPUSVIER-2033] - Modell muss das Setzen der Nummer aktiv einfordern: Abspeichern ohne Nummer muss zu Exception führen
+* [OPUSVIER-2040] - Referenzen in Administration verstecken
+* [OPUSVIER-2041] - Effiziente Methode zum Ermitteln der Rollen eines Nutzers implementieren
+* [OPUSVIER-2052] - Zuverlässig Validierung von Datumseingaben ermöglichen
+* [OPUSVIER-2054] - Verwaltung der Enrichmentkeys in der Administration
+* [OPUSVIER-2055] - Anpassungen im Metadatenformular der Dokumente zu DocumentEnrichments
+* [OPUSVIER-2059] - Aussagekräftige Fehlermeldung in der Adminstration beim Versuch einen doppelten EnrichmentKey anzulegen
+* [OPUSVIER-2062] - Anpassung des Migrationsskripts wegen Schemaänderung der Enrichments
+* [OPUSVIER-2063] - Anpassungen im Opus-Update-Skript
+* [OPUSVIER-2064] - Feld ThesisYearAccepted in der Datenbank anlegen
+* [OPUSVIER-2066] - neues Feld thesisYearAccepted im Adminbereich berücksichtigen
+* [OPUSVIER-2067] - neues Feld thesisYearAccepted im Publish berücksichtigen
+* [OPUSVIER-2068] - neues Feld thesisYearAccepted in der OAI-Schnittstelle berücksichtigen
+* [OPUSVIER-2069] - neues Feld thesisYearAccepted für den Import berücksichtigen
+* [OPUSVIER-2070] - ein Testdokument pro Standarddokumenttyp
+* [OPUSVIER-2072] - UNIQUE-Constraint für DocumentEnrichment-Tripel (document_id, key_name, value) über das Framework gewährleisten
+* [OPUSVIER-2073] - Form_Validate_Date im *Publish* Modul einsetzen
+* [OPUSVIER-2074] - Form_Validate_Date im Admin Modul einsetzen
+* [OPUSVIER-2081] - Anpassung von RIS- und BibTeX-Export-Templates nach Umbau der Schriftenreihen
+* [OPUSVIER-2086] - Anzeige von 'Bibliography' in Dokumentbrowsing von Yes/No zu B/- verändern
+* [OPUSVIER-2091] - PublicationState aus der Dokumentenübersicht entfernen
+* [OPUSVIER-2096] - Übersetzungen für PublicationState entfernen
+* [OPUSVIER-2102] - Unit-Tests für Opus_Series, die CRUD-Completeness sicherstellen
+* [OPUSVIER-2107] - example.xslt sollte nur noch rudimentäre Metadaten ausgeben
+* [OPUSVIER-2115] - Ausgabe der nicht-leeren Collections als OAI SetSpec per ListSets
+* [OPUSVIER-2116] - Update der Collection-Tabelle für Änderungen an den SetSpecs
+* [OPUSVIER-2119] - Ausgabe der OAI SetSpecs über Verbs "GetRecord"/"ListRecords"
+* [OPUSVIER-2120] - Unterstützung für OAI SetSpecs "bibliography:true" und "bibliography:false"
+* [OPUSVIER-2121] - Unterstützung für Parameter "set=" für OAI-Verbs ListRecords/ListIdentifiers
+* [OPUSVIER-2126] - Nicht mehr benötigte Datei deposit.phtml entfernen oder Prolog ergänzen
+* [OPUSVIER-2129] - Anzeige der zugeordneten Schriftenreihen auf der Frontdoor eines Dokuments
+* [OPUSVIER-2130] - Migrationsskript muss für die Schriftenreihen nun Opus_Series verwenden (statt der besonderen Collection Role series)
+* [OPUSVIER-2131] - Migration der Collection-basierten Schriftenreihen beim Update von OPUS4-Versionen < 4.2
+* [OPUSVIER-2132] - Collection Role series aus der Standardauslieferung entfernen
+* [OPUSVIER-2133] - Indexerweiterung im Hinblick auf das Schriftenreihen-Browsing
+* [OPUSVIER-2134] - Aufnahme weiterer Metadaten für die Catch-All-Suche
+* [OPUSVIER-2137] - Sortierbarkeit der Dokumente einer Schriftenreihe nach Bandnummer
+* [OPUSVIER-2138] - Attribute isVisible für Schriftenreihen anbieten
+* [OPUSVIER-2142] - Sortierung der Schriftenreihen ermöglichen: Attribute sort_order für Schriftenreihen anbieten
+* [OPUSVIER-2149] - Release Notes: Änderung von oai_subset durch das Update-Script
+* [OPUSVIER-2153] - Zusätzliches Mappen des Feldes "Externe Bemerkung" auf ein Enrichmentfeld
+* [OPUSVIER-2159] - Einbindung der Tests ins CI-System
+* [OPUSVIER-2160] - Dokument mit vollständig belegten Metadaten zu den Testdaten hinzufügen
+* [OPUSVIER-2169] - Dokumenttypdefinition wird aktuell beim Einlesen nicht validiert
+* [OPUSVIER-2179] - Überflüssige Namespace-Deklarationen aus OAI-metaPrefix oai_dc entfernen
+* [OPUSVIER-2180] - Erlaubte Zeichen für SetSpecs auf [A-Za-z0-9\-_\.!~\*\'\(\)]+ einschränken
+* [OPUSVIER-2189] - beim Update auf Version 4.2.0 sollte das Update-Skript die vorhandenen XML-Dokumenttypdefinitionen auf Schema-Konformität überprüfen
+* [OPUSVIER-2191] - Alte Subject*-Felder im Migrationsscript durch Subject[Type='...'] ersetzen
+* [OPUSVIER-2192] - Alte Subject*-Felder im Modul citationExport durch Subject[Type='...'] ersetzen
+* [OPUSVIER-2205] - alphanumerische Eingaben für pageFirst, pageLast und pageNumber zulassen
+* [OPUSVIER-2207] - Invalide Dokumenttypdefinition für Testzwecke aufnehmen, die aber nicht mit ausgeliefert wird
+* [OPUSVIER-2208] - Unit-Test schreiben, der die Validierung der Dokumenttypdefinitionen sicherstellt
+* [OPUSVIER-2221] - Sichtbarkeitseinstellungen der Schriftenreihen in der Anzeige im Publish-Formular respektieren
+* [OPUSVIER-2222] - Sichtbarkeitseinstellungen der Schriftenreihen im Browsing respektieren
+* [OPUSVIER-2223] - Sortierung der Schriftenreihen bei der Anzeige im Publish-Formular berücksichtigen
+* [OPUSVIER-2224] - Sortierung der Schriftenreihen beim Browsing berücksichtigen
+* [OPUSVIER-2225] - Attribut logo für Schriftenreihen entfernen
+* [OPUSVIER-2228] - Sortierreihenfolge bei der Anzeige der Dokumente einer Schriftenreihe berücksichtigen
+* [OPUSVIER-2229] - Clean-Up-Operation in der Datenbank durchführen nach der Migration der Collection-basierten Schriftenreihen
+* [OPUSVIER-2231] - Abhängigkeiten auf subject_msc im Index-Schema entfernen
+* [OPUSVIER-2232] - Sichtbarkeitseinstellungen der Schriftenreihen bei der Anzeige auf der Frontdoor respektieren
+* [OPUSVIER-2234] - EnrichmentKey LegalNotices aus den Datenbank-Scripten und Testdaten entfernen
+* [OPUSVIER-2235] - Enrichments mit dem Schlüssel LegalNotices beim Update von 4.1.4 auf 4.2.0 aus der Datenbank entfernen
+* [OPUSVIER-2236] - Anpassung der Übersetzungsressourcen: LegalNotices ist nun kein EnrichmentKey mehr
+* [OPUSVIER-2237] - Neuen View-Helper bereitstellen, der die Anzeige der LegalNotices auf der zweiten Formularseite ermöglicht
+* [OPUSVIER-2243] - Löschen für spez. EnrichmentKeys unterbinden
+* [OPUSVIER-2250] - Funktionalität von 'opus3-migration.sh' in anderen working-directories gewährleisten
+* [OPUSVIER-2251] - URN-Bug in Release-Notes aufnehmen
+* [OPUSVIER-2252] - URN-Vergabe vorläufig auf Dokumente im Status "published" einschränken
+* [OPUSVIER-2253] - Funktionen getDocumentIds und getSortedDocumentIds für Opus_Series hinzufügen (wie bei Collections)
+* [OPUSVIER-2256] - Methode zum Abfragen der Existenz einer Bandnummer
+* [OPUSVIER-2257] - Update der vorhandenen XML-Dokumenttypdefinitionen
+* [OPUSVIER-2263] - import.ini.template / import.ini sollte in migration.ini.template / migration.ini umbenannt werden
+* [OPUSVIER-2267] - Schriftenreihen-Logos in die Testdaten aufnehmen
+* [OPUSVIER-2269] - Felder publisher und issn aus den Schriftenreihen vorerst entfernen
+* [OPUSVIER-2270] - Opus_Series um Methode erweitern, die die Anzahl der Dokumente einer Schriftenreihe zurückgibt
+* [OPUSVIER-2271] - Anzahl der einer Schriftenreihe zugeordneten Dokumente in Administration anzeigen und Link ausblenden, wenn keine zugeordneten Dokumente existieren
+* [OPUSVIER-2276] - Einblendung eines Warnhinweis vor dem Löschen einer Schriftenreihe
+* [OPUSVIER-2277] - Benutzer beim Update über Änderungen im Standardlayout informieren
+* [OPUSVIER-2279] - Änderungen in den Konfigurationsschlüsseln und den Logfiles für die Migration übernehmen
+* [OPUSVIER-2284] - RSS-Link in Bezug auf die konkrete Suchanfrage in den HTML-Head von Suchergebnisseiten aufnehmen
+* [OPUSVIER-2288] - Anlegen der opus4migration-Db auf opus4ci und checkout von cruisecontrol/config.xml
+* [OPUSVIER-2289] - URN-Kollision vor einfügen in Datenbank erkennen
+* [OPUSVIER-2295] - Anpassungen an update-import.sh beim Update auf OPUS 4.2.0: Verzeichnis server/import nach server/scripts/migration verschoben
+* [OPUSVIER-2296] - Anpassungen an update-import.sh beim Update auf OPUS 4.2.0: Behandlung neu hinzugekommener Verzeichnisse
+* [OPUSVIER-2302] - Übersetzungs-Schlüssel für Schriftenreihen anlegen (und alte entfernen!)
+* [OPUSVIER-2303] - update-config.sh: Anpassungen der Migrationskonfigurationsdateien
+* [OPUSVIER-2309] - geeignete Behandlung von Bandnummern-Konflikten bei der Migration der Collection-basierten Schriftenreihen
+* [OPUSVIER-2327] - Sichtbarkeitsstatus der einzelnen Schriftenreihen in der Administration farblich kennzeichnen
+
+
+h3. Documentation
+
+* [OPUSVIER-1728] - Dokumentation des neuen Parameters form.first.show_rights_checkbox
+* [OPUSVIER-1849] - Konfiguration des FAQ-Menüeintrags, so dass der Link auf eine externe URL verweist
+* [OPUSVIER-1926] - Dokumentation der Ausgabe von Enrichments ohne Escaping
+* [OPUSVIER-1991] - Übersetzungen für die Formulare zum Erstellen bzw. Editieren von Sprachen haben sich geändert
+* [OPUSVIER-1993] - Beim Browsing der Dokumente in der Administration werden Anzahl der Dateien und Bibliographie (Ja/Nein) angezeigt
+* [OPUSVIER-1998] - Import-XML und Import-XSD dokumentieren
+* [OPUSVIER-2026] - Doku: Updatevorgang beim Import von Metadaten
+* [OPUSVIER-2071] - Benutzung des Import-Skripts dokumentieren
+* [OPUSVIER-2075] - Import-Konfig-Parameter import.debug.logfile und import.error.logfile werden nicht in der Doku beschrieben
+* [OPUSVIER-2106] - Kapitel 2.6: Hinweistext zum Fehlen des URL-Parameters stylesheet anpassen
+* [OPUSVIER-2108] - Ergänzungen in der Dokumentation zur Migration
+* [OPUSVIER-2118] - Sichtbarkeits-Einstellungen für Collections in der OAI-Schnittstelle
+* [OPUSVIER-2122] - Aktualisierung des ER-Schemas nach Schemaänderungen für OPUS 4.2.0 und Einstellen ins SVN
+* [OPUSVIER-2135] - Anpassung der Dokumentation nach dem Entfernen der Sonder-Collection-Role series
+* [OPUSVIER-2154] - "Anzuzeigende Metadaten-Felder im OAI-Set" aus Dokumentation entfernen
+* [OPUSVIER-2166] - Anlegen der globalen Enrichment(key)s dokumentieren
+* [OPUSVIER-2182] - Mögliche Werte für das Attribut formelement in der Doku ergänzen
+* [OPUSVIER-2183] - Liste der möglichen Datatypes in der Datei documenttype.xsd mit der Dokumentation abgeleichen und Beschreibung einfügen
+* [OPUSVIER-2215] - Hinweise zum Anlegen neuer Dokumenttyp-Definitionen
+* [OPUSVIER-2217] - Wie wird eine Schriftenreihe (Series) in der Dokumenttypdefinition spezifiziert?
+* [OPUSVIER-2218] - Hinweis zur Validierung der XML-Dokumenttypdefinitionen in 4.2.0-Releasenotes aufnehmen
+* [OPUSVIER-2230] - Hinweis zur Migration der Collection-basierten Schriftenreihen in die Release Notes aufnehmen
+* [OPUSVIER-2238] - Dokumentation der Konfiguration der Anzeige von LegalNotices
+* [OPUSVIER-2244] - spez. EnrichmentKeys dokumentieren
+* [OPUSVIER-2266] - Ablageort der Schriftenreihen-Logos in der Doku beschreiben
+* [OPUSVIER-2285] - Beschreibung der Funktion RSS-Feeds auf beliebige Suchanfragen in Doku aufnehmen
+* [OPUSVIER-2287] - Neue Datei mit Layout Änderung beim Update dokumentieren
+* [OPUSVIER-2325] - Eintrag in den Releasenotes, der die Migration der SubjectClassifications (MSC, DDC) beschreibt
+* [OPUSVIER-2330] - Grafik Datenmodell aktualisieren
+
+
 h2. ======================== Release 4.1.4 2011-10-18 ========================
 
 h3. Bugs
