@@ -270,6 +270,26 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('T3  - ' . $s->getTitle() . ' - SeriesNumber', $response->getBody());
     }
 
+    public function testIndexActionRisPublicNote() {
+        $doc = new Opus_Document($this->documentId);
+        $doc->addNote()->setVisibility('public')->setMessage('I am public.');
+        $doc->store();
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertContains('N1  - I am public.', $response->getBody());
+    }
+
+    public function testIndexActionRisPrivateNote() {
+        $doc = new Opus_Document($this->documentId);
+        $doc->addNote()->setVisibility('private')->setMessage('I am private.');
+        $doc->store();
+        $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertNotContains('N1  - I am private.', $response->getBody());
+    }
+
 
     /* BIBTEX - TESTS for Documenttypes */
 

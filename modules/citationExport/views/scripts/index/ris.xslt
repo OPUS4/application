@@ -162,9 +162,7 @@
             <xsl:text>&#10;</xsl:text>
         </xsl:if>
         <xsl:if test="string-length(Note/@Message)>0">
-            <xsl:text>N1  - </xsl:text>
             <xsl:apply-templates select="Note" />
-            <xsl:text>&#10;</xsl:text>
         </xsl:if>
         <xsl:if test="string-length(@Volume)>0">
             <xsl:text>VL  - </xsl:text>
@@ -225,8 +223,9 @@
       <xsl:value-of select="@Value" />
     </xsl:template>
 
-    <xsl:template match="Note">
-      <xsl:value-of select="@Message" />
+    <xsl:template match="Note[@Visibility='public']">
+        <xsl:text>N1  - </xsl:text><xsl:value-of select="@Message" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="Subject[@Type='uncontrolled' or @Type='swd']">
