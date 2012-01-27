@@ -295,11 +295,17 @@
     padding: 1em;
 }
 
-.adminContainer table.collections td.visible, .adminContainer table.collections td.visible a {
+.adminContainer table.collections td.visible,
+.adminContainer table.collections td.visible a,
+.adminContainer table.series td.visible,
+.adminContainer table.series td.visible a {
     color: green;
 }
 
-.adminContainer table.collections td.unvisible, .adminContainer table.collections td.unvisible a {
+.adminContainer table.collections td.unvisible,
+.adminContainer table.collections td.unvisible a,
+.adminContainer table.series td.unvisible,
+.adminContainer table.series td.unvisible a {
     color: red;
 }
 
