@@ -189,7 +189,7 @@ updateFolder "$SCHEMA_PATH" "$BASEDIR"/opus4/db/schema
 
 # Copy symlink for current OPUS4 SQL file (TODO handle with install? Refactor?)
 DRYRUN || cp --no-dereference "$SCHEMA_PATH"/opus4current.sql "$BASEDIR"/opus4/db/schema/opus4current.sql
-DRYRUN || chown "$OPUS4_USERNAME":"$OPUS4_GROUPNAME" "$BASEDIR"/opus4/db/schema/opus4current.sql
+DRYRUN || chown --no-dereference "$OPUS4_USERNAME":"$OPUS4_GROUPNAME" "$BASEDIR"/opus4/db/schema/opus4current.sql
 
 updateFolder "$BASE_SOURCE"/opus4/db/masterdata "$BASEDIR"/opus4/db/masterdata
 
