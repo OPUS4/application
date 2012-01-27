@@ -141,7 +141,7 @@ function versionGroup() {
 #@param $1 update script file
 function runDbUpdate() {
     UPDATE_FILE=$1
- 
+
     if ! DRYRUN ; then
         MYSQL="${mysql_bin} --default-character-set=utf8 --user=${USER} --password=${PASSWORD} --host=${HOST} --port=${PORT}"
 
@@ -186,6 +186,7 @@ echo "Database is up-to-date!"
 
 # Copy sql files from source to destination folder
 updateFolder "$SCHEMA_PATH" "$BASEDIR"/opus4/db/schema
+copyFile "$SCHEMA_PATH"/opus4current.sql "$BASEDIR"/opus4/db/schema/opus4current.sql
 updateFolder "$BASE_SOURCE"/opus4/db/masterdata "$BASEDIR"/opus4/db/masterdata
 
 # Update createdb.sh.template
