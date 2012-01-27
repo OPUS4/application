@@ -1,6 +1,6 @@
 h1. OPUS 4 Release Notes
 
-h2. ======================== Release 4.2.0 2012-01-25 ========================
+h2. ======================== Release 4.2.0 2012-01-27 ========================
 
 h3. Dokumentation im Tarball aufgenommen
 
