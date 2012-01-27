@@ -68,7 +68,7 @@ class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract {
             'type' => 'Zend_Form_Element_Checkbox',
             'createType' => 'checkbox',
             'header' => 'header_LegalNotices',
-            'value' => '0',
+            'value' => '1',
             'check' => '',
             'disabled' => '0',
             'error' => array(),
