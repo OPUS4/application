@@ -104,7 +104,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
             20 => array('name' => 'SubjectUncontrolledLanguage1','value' => 'deu', 'datatype'=>'Language', 'subfield'=>'1'),              
             21 => array('name' => 'SubjectMSC1' ,'value' => 'ID:8030', 'datatype'=>'Collection', 'subfield'=>'0'),
             22 => array('name' => 'SubjectPACS1','value' => 'ID:2878', 'datatype'=>'Collection', 'subfield'=>'0'),
-            23 => array('name' => 'IdentifierUrn' ,'value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
+            23 => array('name' => 'IdentifierUrn' ,'value' => 'Publish_DepositControllerTest_testDepositActionWithValidPostAndSendButton', 'datatype'=>'Identifier', 'subfield'=>'0'),
             24 => array('name' => 'IdentifierOld' ,'value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
             25 => array('name' => 'IdentifierSerial','value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
             26 => array('name' => 'IdentifierUuid','value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
@@ -145,6 +145,8 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $this->assertResponseCode(302);
         $this->assertController('deposit');
         $this->assertAction('deposit');
+
+        $doc->deletePermanent();
     }
 
     public function testConfirmAction() {
