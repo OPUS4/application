@@ -89,6 +89,7 @@ class Publish_Model_DepositTest extends ControllerTestCase {
             'IdentifierIsbn'                    => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
             'IdentifierDoi'                     => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
             'IdentifierHandle'                  => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
+            'IdentifierUrn'                     => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
             'IdentifierUrl'                     => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
             'IdentifierIssn'                    => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
             'IdentifierStdDoi'                  => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
@@ -115,8 +116,9 @@ class Publish_Model_DepositTest extends ControllerTestCase {
         $dep = new Publish_Model_Deposit($data);          
         $document = $dep->getDocument();
         $document->store();
-
-    }
-    
+        
+        $document->deletePermanent();
+        Opus_EnrichmentKey::fetchbyName('TitleMain')->delete();                        
+    }    
 }
 
