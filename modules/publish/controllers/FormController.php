@@ -254,6 +254,12 @@ class Publish_FormController extends Controller_Action {
             return;
         }
 
+        $enrichment = $this->document->getEnrichment();
+        if (!is_null($enrichment)) {
+            $this->log->debug("User Id already logged. Skipping enrichment.");
+            return;
+        }
+            
         $this->document->addEnrichment()
                 ->setKeyName('submitter.user_id')
                 ->setValue($userId);
