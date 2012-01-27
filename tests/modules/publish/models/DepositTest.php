@@ -53,6 +53,10 @@ class Publish_Model_DepositTest extends ControllerTestCase {
         $document->setServerState('temporary');
         $session->documentId = $document->store();
         
+        $enrichment = new Opus_EnrichmentKey();
+        $enrichment->setName('TitleMain');
+        $enrichment->store();
+        
         $data = array(
             'PersonSubmitterFirstName1'         => array('value' => 'Hans', 'datatype'=>'Person', 'subfield'=>'0'),
             'PersonSubmitterLastName1'          => array('value' => 'Hansmann', 'datatype'=>'Person', 'subfield'=>'1'),
@@ -105,7 +109,8 @@ class Publish_Model_DepositTest extends ControllerTestCase {
             'ReferenceStdDoi'                   => array('value' => 'blablup987', 'datatype'=>'Reference', 'subfield'=>'0'),
             'ReferenceSplashUrl'                => array('value' => 'blablup987', 'datatype'=>'Reference', 'subfield'=>'0'),
             'SeriesNumber1'                     => array('value' => '5', 'datatype'=>'SeriesNumber', 'subfield'=>'0'),
-            'Series1'                           => array('value' => 'ID:4', 'datatype'=>'Series', 'subfield'=>'1')
+            'Series1'                           => array('value' => 'ID:4', 'datatype'=>'Series', 'subfield'=>'1'),
+            'TitleMain'                         => array('value' => 'title as enrichment', 'datatype'=>'Enrichment', 'subfield'=>'0'),
         );
         
         $dep = new Publish_Model_Deposit($data);          
