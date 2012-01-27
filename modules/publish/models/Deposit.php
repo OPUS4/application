@@ -456,13 +456,13 @@ class Publish_Model_Deposit {
         else if (strstr($dataKey, 'Urn')) {
             $this->document->addIdentifierUrn($identifier);
         }
-        else if (strstr($dataKey, 'Doi')) {
+        else if (strstr($dataKey, 'Doi') && !strstr($dataKey, 'StdDoi')) {
             $this->document->addIdentifierDoi($identifier);
         }
         else if (strstr($dataKey, 'Handle')) {
             $this->document->addIdentifierHandle($identifier);
         }
-        else if (strstr($dataKey, 'Url')) {
+        else if (strstr($dataKey, 'Url') && !(strstr($dataKey, 'SplashUrl'))) {
             $this->document->addIdentifierUrl($identifier);
         }
         else if (strstr($dataKey, 'Issn')) {

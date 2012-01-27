@@ -89,6 +89,8 @@ class Publish_Model_DepositTest extends ControllerTestCase {
             'IdentifierUrl'                     => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
             'IdentifierIssn'                    => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
             'IdentifierStdDoi'                  => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
+            'IdentifierArxiv'                   => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
+            'IdentifierPubmed'                  => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
             'IdentifierCrisLink'                => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
             'IdentifierSplashUrl'               => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
             'IdentifierOpus3'                   => array('value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
