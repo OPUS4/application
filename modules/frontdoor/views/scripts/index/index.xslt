@@ -147,7 +147,6 @@
             <xsl:apply-templates select="Series[@Visible=1]" >
                 <xsl:sort select="@SortOrder"/>
             </xsl:apply-templates>
-
             <xsl:apply-templates select="@PublisherName" />
             <xsl:apply-templates select="@PublisherPlace" />
             <xsl:apply-templates select="PersonEditor" />
@@ -652,18 +651,26 @@
             </td>
         </tr>
     </xsl:template>
- 
+
     <xsl:template match="Series[@Visible=1]">
         <tr>
-            <th class="name">
-                <xsl:call-template name="translateString">
-                    <xsl:with-param name="string">Series</xsl:with-param>
-                </xsl:call-template>
-                <xsl:text> / </xsl:text>
-                <xsl:call-template name="translateString">
-                    <xsl:with-param name="string">SeriesNumber</xsl:with-param>
-                </xsl:call-template>
-            </th>
+            <xsl:choose>
+                <xsl:when test="position()=1">
+                    <th class="name">
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">Series</xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:text> (</xsl:text>
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">SeriesNumber</xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:text>)</xsl:text>
+                    </th>
+                </xsl:when>
+                <xsl:otherwise>
+                    <th class="name"></th>
+                </xsl:otherwise>
+            </xsl:choose>
             <td>
                 <a>
                     <xsl:attribute name="href">
@@ -679,9 +686,10 @@
                     </xsl:attribute>
 
                     <xsl:value-of select="@Title" />
-                    <xsl:text> - </xsl:text>
-                    <xsl:value-of select="@Number" />
                 </a>
+                <xsl:text> (</xsl:text>
+                <xsl:value-of select="@Number" />
+                <xsl:text>)</xsl:text>
             </td>
         </tr>
     </xsl:template>
