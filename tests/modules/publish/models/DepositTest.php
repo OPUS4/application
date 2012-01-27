@@ -71,6 +71,7 @@ class Publish_Model_DepositTest extends ControllerTestCase {
             'Licence'                           => array('value' => 'ID:3', 'datatype'=>'Licence', 'subfield'=>'0'),                        
             'ThesisGrantor'                     => array('value' => 'ID:1', 'datatype'=>'ThesisGrantor', 'subfield'=>'0'),
             'ThesisPublisher'                   => array('value' => 'ID:2', 'datatype'=>'ThesisPublisher', 'subfield'=>'0'),
+            'ThesisYearAccepted'                => array('value' => '2009', 'datatype'=>'Year', 'subfield'=>'0'),
             'SubjectSwd1'                       => array('value' => 'hallo098', 'datatype'=>'Subject', 'subfield'=>'0'),   
             'SubjectUncontrolled1'              => array('value' => 'Keyword', 'datatype'=>'Subject', 'subfield'=>'0'),
             'SubjectUncontrolledLanguage1'      => array('value' => 'deu', 'datatype'=>'Language', 'subfield'=>'1'),              
