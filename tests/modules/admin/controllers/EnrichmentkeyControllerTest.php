@@ -52,21 +52,59 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
     }
 
     public function testIndexActionWithoutEnrichmentkeys() {
-        $this->markTestSkipped(
-                'Test will fail because referenced enrichmentkeys cannot be deleted .'
-        );
+        $enrichment = $this->_removeEnrichmentAssociation();
 
-        $enrichmentkeys = Opus_EnrichmentKey::getAll();
-        $keyNames = array();
-        foreach ($enrichmentkeys as $key) {
-            array_push($keyNames, $key->getName());
-            Opus_EnrichmentKey::fetchbyName($key->getName())->delete();
+        $keyNames = $this->_removeAllEnrichmentKeys();
+        if (!is_array($keyNames)) {
+            $this->_restoreEnrichmentAssociation($enrichment);
+            $this->markTestSkipped("Skipped, because EnrichmentKey '$keyNames' could not be deleted.");
         }
 
+        // call index action of controller
         $this->dispatch('/admin/enrichmentkey');
         $this->assertResponseCode(200);
         $response = $this->getResponse();
 
+        $this->_addEnrichmentKeys($keyNames);
+        $this->_restoreEnrichmentAssociation($enrichment);
+    }
+
+    protected function _removeEnrichmentAssociation() {
+        $d = new Opus_Document(146);
+        $enrichment = $d->getEnrichment();
+        $this->assertEquals(1, count($enrichment), "Test data has changed.");
+        $d->setEnrichment(null);
+        $d->store();
+        return $enrichment;
+    }
+
+    protected function _restoreEnrichmentAssociation($enrichment) {
+        $d = new Opus_Document(146);
+        $newEnrichment = new Opus_Enrichment();
+        $newEnrichment->setKeyName($enrichment[0]->getKeyName())->setValue($enrichment[0]->getValue());
+        $d->addEnrichment($newEnrichment);
+        $d->store();
+    }
+
+    protected function _removeAllEnrichmentKeys() {
+        $enrichmentkeys = Opus_EnrichmentKey::getAll();
+        $keyNames = array();
+        $deletedKeys = array();
+        foreach ($enrichmentkeys as $key) {
+            array_push($keyNames, $key->getName());
+            try {
+                Opus_EnrichmentKey::fetchbyName($key->getName())->delete();
+                $deletedKeys[] = $key->getName();
+            }
+            catch (Opus_Model_Exception $e) {
+                $this->_addEnrichmentKeys($deletedKeys);
+                return $key->getName();
+            }
+        }
+        return $keyNames;
+    }
+
+    protected function _addEnrichmentKeys($keyNames) {
         foreach ($keyNames as $key) {
             $ek = new Opus_EnrichmentKey();
             $ek->setName($key);
@@ -85,7 +123,7 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $this->assertModule('admin');
         $this->assertController('enrichmentkey');
         $this->assertAction('index');
-        
+
         $this->assertContains('/admin/enrichmentkey/show/name/' . $ek->getName(), $this->getResponse()->getBody());
         $this->assertNotContains('/admin/enrichmentkey/edit/name/' . $ek->getName(), $this->getResponse()->getBody());
         $this->assertNotContains('/admin/enrichmentkey/delete/name/' . $ek->getName(), $this->getResponse()->getBody());
@@ -418,12 +456,12 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $ek = new Opus_EnrichmentKey();
         $ek->setName('testDeleteAction');
         $ek->store();
-        
+
         $this->dispatch('/admin/enrichmentkey/delete/name/' . $ek->getName());
-        
+
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
-        
+
         $this->assertNull(Opus_EnrichmentKey::fetchByName('testDeleteAction'));
 
         // cleanup is not needed here
