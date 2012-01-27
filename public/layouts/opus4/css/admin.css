@@ -291,7 +291,8 @@
     margin: 3em 0;
 }
 
-.adminContainer table.collections td {
+.adminContainer table.collections td,
+.adminContainer table.series td {
     padding: 1em;
 }
 
@@ -338,7 +339,8 @@
     background-color: #dfefff;
 }
 
-.adminContainer table.collections {
+.adminContainer table.collections,
+.adminContainer table.series {
     margin: 2em 0;
 }
 

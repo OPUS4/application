@@ -39,9 +39,10 @@
 <?= $this->navigation()->breadcrumbs() ?>
 </div>
 
+<?php $i = 0 ?>
 <table class="series">
     <? foreach($this->entries as $id => $entry) : ?>
-    <tr>
+    <tr class="<?= ($i++ % 2 === 0) ? 'even' : 'odd' ?>">
         <?php $cssClass = ($entry->getVisible() === '1') ? 'visible' : 'unvisible' ?>
         <td class="<?= $cssClass ?>"><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($entry->getTitle()) ?></a></td>
         <td>(id = <?= $id ?>)</td>
