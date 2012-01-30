@@ -34,6 +34,14 @@
  */
 class Publish_Model_DocumenttypeParserTest extends ControllerTestCase {
 
+    protected $_logger;
+
+    public function setUp() {
+        $writer = new Zend_Log_Writer_Null;
+        $this->_logger = new Zend_Log($writer);
+        parent::setUp();
+    }
+
     /**
      * @expectedException Application_Exception
      */
@@ -56,7 +64,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'irgendwas';
         $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
-        $form = new Publish_Form_PublishingSecond();
+        $form = new Publish_Form_PublishingSecond($this->_logger);
         $model = new Publish_Model_DocumenttypeParser($dom, $form);
         $this->assertType('DOMDocument', $model->dom);
     }
@@ -65,7 +73,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
         $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument('preprint');
-        $form = new Publish_Form_PublishingSecond();
+        $form = new Publish_Form_PublishingSecond($this->_logger);
         $model = new Publish_Model_DocumenttypeParser($dom, $form);
         $this->assertType('DOMDocument', $model->dom);
         $this->assertType('Publish_Form_PublishingSecond', $model->form);
@@ -99,7 +107,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase {
             $dom->saveXML();
         }
 
-        $form = new Publish_Form_PublishingSecond();
+        $form = new Publish_Form_PublishingSecond($this->_logger);
         
         $model = new Publish_Model_DocumenttypeParser($dom, $form);
         $model->parse();
@@ -136,7 +144,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase {
             $dom->saveXML();
         }
 
-        $form = new Publish_Form_PublishingSecond();
+        $form = new Publish_Form_PublishingSecond($this->_logger);
         
         $model = new Publish_Model_DocumenttypeParser($dom, $form);
         $model->parse();

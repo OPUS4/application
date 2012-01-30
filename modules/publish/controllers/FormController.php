@@ -33,22 +33,13 @@
  * @version     $Id$
  */
 
-/**
- * Main entry point for this module.
- *
- * @category    Application
- * @package     Module_Publish
- */
 class Publish_FormController extends Controller_Action {
 
-    public $log;
     public $session;
     public $document;
 
     public function init() {
-        $this->log = Zend_Registry::get('Zend_Log');
         $this->session = new Zend_Session_Namespace('Publish');
-
         parent::init();
     }
 
@@ -69,7 +60,7 @@ class Publish_FormController extends Controller_Action {
         $this->view->showRights = $indexForm->showRights;
 
         if (is_array($postData) && count($postData) === 0) {
-            $this->log->err('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
+            $this->_logger->err('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
             return $this->_redirectTo('index', $this->view->translate('error_empty_post_array'), 'index');
         }
 
@@ -81,7 +72,7 @@ class Publish_FormController extends Controller_Action {
         $this->_initializeDocument($postData);
 
         //validate fileupload
-            if (!$indexForm->getElement('fileupload')->isValid($postData)) {
+	if (!$indexForm->getElement('fileupload')->isValid($postData)) {
                 $indexForm->setViewValues();
                 $this->view->form = $indexForm;
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
@@ -116,7 +107,7 @@ class Publish_FormController extends Controller_Action {
         //call the appropriate template
         $this->_helper->viewRenderer($this->session->documentType);
         try {
-            $publishForm = new Publish_Form_PublishingSecond();
+            $publishForm = new Publish_Form_PublishingSecond($this->_logger);
         } catch (Publish_Model_FormSessionTimeoutException $e) {
             // Session timed out.
             return $this->_redirectTo('index', '', 'index');
@@ -176,7 +167,7 @@ class Publish_FormController extends Controller_Action {
             //initialize the form object
             $form = null;
             try {
-                $form = new Publish_Form_PublishingSecond($postData);
+                $form = new Publish_Form_PublishingSecond($this->_logger, $postData);
             } catch (Publish_Model_FormSessionTimeoutException $e) {
                 // Session timed out.
                 return $this->_redirectTo('index', '', 'index');
@@ -191,7 +182,7 @@ class Publish_FormController extends Controller_Action {
                     //now create a new form with extended fields
                     $form2 = null;
                     try {
-                        $form2 = new Publish_Form_PublishingSecond($postData);
+                        $form2 = new Publish_Form_PublishingSecond($this->_logger, $postData);
                     } 
                     catch (Publish_Model_FormSessionTimeoutException $e) {                        
                         return $this->_redirectTo('index', '', 'index');
@@ -201,6 +192,10 @@ class Publish_FormController extends Controller_Action {
                     $this->view->action_url = $action_url;
                     $form2->setViewValues();
                     $this->view->form = $form2;
+                    if (array_key_exists('LegalNotices', $postData) && $postData['LegalNotices'] != '1') {
+			$legalNotices = $form2->getElement('LegalNotices');
+			$legalNotices->setChecked(false);
+                    }
                     return;
                 } 
                 catch (Publish_Model_FormNoButtonFoundException $e) {
@@ -229,7 +224,7 @@ class Publish_FormController extends Controller_Action {
             $this->document = new Opus_Document();
             $this->document->setServerState('temporary');
             $this->session->documentId = $this->document->store();
-            $this->log->info(__METHOD__ . ' The corresponding document ID is: ' . $this->session->documentId);
+            $this->_logger->info(__METHOD__ . ' The corresponding document ID is: ' . $this->session->documentId);
         }
         else
             $this->document = new Opus_Document($this->session->documentId);
@@ -237,7 +232,7 @@ class Publish_FormController extends Controller_Action {
         if (isset($postData['documentType'])) {
             if ($postData['documentType'] !== '') {
                 $this->session->documentType = $postData['documentType'];
-                $this->log->info(__METHOD__ . ' documentType = ' . $this->session->documentType);
+                $this->_logger->info(__METHOD__ . ' documentType = ' . $this->session->documentType);
                 $this->document->setType($this->session->documentType);
                 $this->document->store();
             }
@@ -250,13 +245,13 @@ class Publish_FormController extends Controller_Action {
         $userId = trim($loggedUserModel->getUserId());
 
         if (empty($userId)) {
-            $this->log->debug("No user logged in.  Skipping enrichment.");
+            $this->_logger->debug("No user logged in.  Skipping enrichment.");
             return;
         }
 
         $enrichment = $this->document->getEnrichment();
         if (!is_null($enrichment)) {
-            $this->log->debug("User Id already logged. Skipping enrichment.");
+            $this->_logger->debug("User Id already logged. Skipping enrichment.");
             return;
         }
             
@@ -295,21 +290,21 @@ class Publish_FormController extends Controller_Action {
             }
         }
 
-        $this->log->info("Fileupload of: " . count($files) . " potential files (vs. $upload_count really uploaded)");
+        $this->_logger->info("Fileupload of: " . count($files) . " potential files (vs. $upload_count really uploaded)");
 
         if ($upload_count < 1) {
-            $this->log->debug("NO File uploaded!!!");
+            $this->_logger->debug("NO File uploaded!!!");
             if (!isset($this->session->fulltext))
                 $this->session->fulltext = '0';
             return;
         }
 
-        $this->log->debug("File uploaded!!!");
+        $this->_logger->debug("File uploaded!!!");
         $this->session->fulltext = '1';
 
         foreach ($files AS $file => $fileValues) {
             if (!empty($fileValues['name'])) {
-                $this->log->info("uploaded: " . $fileValues['name']);
+                $this->_logger->info("uploaded: " . $fileValues['name']);
                 $docfile = $this->document->addFile();
                 //$docfile->setFromPost($fileValues);
                 $docfile->setLabel(urldecode($fileValues['name']));
@@ -331,7 +326,7 @@ class Publish_FormController extends Controller_Action {
      */
     private function _storeBibliography($data) {
         if (isset($data['bibliographie']) && $data['bibliographie'] === '1') {
-            $this->log->debug("Bibliographie is set -> store it!");
+            $this->_logger->debug("Bibliographie is set -> store it!");
             //store the document internal field BelongsToBibliography
             $this->document->setBelongsToBibliography(1);
             $this->document->store();

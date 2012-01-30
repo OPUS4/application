@@ -43,7 +43,6 @@ class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract {
      */
     public function legalNotices($form) {
         $session = new Zend_Session_Namespace('Publish');
-        $log = Zend_Registry::get('Zend_Log');                
         
         if (!is_null($form->getElement('LegalNotices')))  {
             $fieldset = new Publish_View_Helper_Element();
@@ -54,9 +53,6 @@ class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract {
         
         $element = $form->createElement('checkbox', 'LegalNotices');
         $element->setRequired(true)                
-                ->setCheckedValue(1)
-                ->setUncheckedValue(0)
-                ->setValue(0)
                 ->setChecked(false);
         
         $form->addElement($element);

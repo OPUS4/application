@@ -34,12 +34,20 @@
  */
 class Publish_Form_PublishingSecondTest extends ControllerTestCase {
 
+    protected $_logger;
+
+    public function setUp() {
+	$writer = new Zend_Log_Writer_Null;
+	$this->_logger = new Zend_Log($writer);
+	parent::setUp();
+    }
+
     /**
      * @expectedException Publish_Model_FormSessionTimeoutException
      * exception because of missing session documentType 
      */
     public function testConstructorWithoutDocTypeInSession() {
-        $form = new Publish_Form_PublishingSecond();
+        $form = new Publish_Form_PublishingSecond($this->_logger);
     }
 
     /**
@@ -48,7 +56,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
     public function testConstructorWithDocTypeInSession() {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'preprint';
-        $form = new Publish_Form_PublishingSecond();
+        $form = new Publish_Form_PublishingSecond($this->_logger);
         $this->assertNotNull($form->getElement('back'));
         $this->assertNotNull($form->getElement('send'));
     }
@@ -61,7 +69,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
-        $form = new Publish_Form_PublishingSecond();
+        $form = new Publish_Form_PublishingSecond($this->_logger);
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe'
@@ -79,7 +87,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'demo';
-        $form = new Publish_Form_PublishingSecond();
+        $form = new Publish_Form_PublishingSecond($this->_logger);
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe'
@@ -98,7 +106,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'demo';
         
-        $form = new Publish_Form_PublishingSecond();
+        $form = new Publish_Form_PublishingSecond($this->_logger);
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe'
@@ -150,7 +158,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
             'Series1' => ''
         );
         
-        $form = new Publish_Form_PublishingSecond($data);
+        $form = new Publish_Form_PublishingSecond($this->_logger, $data);
         $form->getExtendedForm($data, true);               
         $this->assertTrue($session->additionalFields['TitleMain']=='2');        
     }
@@ -198,7 +206,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
             'Series1' => ''
         );
         
-        $form = new Publish_Form_PublishingSecond($data);
+        $form = new Publish_Form_PublishingSecond($this->_logger, $data);
         $form->getExtendedForm($data, true);               
         $this->assertTrue($session->additionalFields['TitleMain']=='1');                 
     }
@@ -246,7 +254,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
             'Series1' => ''
         );
         
-        $form = new Publish_Form_PublishingSecond($data);
+        $form = new Publish_Form_PublishingSecond($this->_logger, $data);
         $form->getExtendedForm($data, true);           
         $this->assertTrue($session->additionalFields['collId1Institute1']=='15994');       
         $this->assertTrue($session->additionalFields['stepInstitute1']=='2');       
@@ -296,7 +304,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
             'Series1' => ''
         );
         
-        $form = new Publish_Form_PublishingSecond($data);       
+        $form = new Publish_Form_PublishingSecond($this->_logger, $data);       
         $form->getExtendedForm($data, true);                   
         $this->assertTrue($session->additionalFields['stepInstitute1']=='1');          
         $this->assertFalse(array_key_exists('collId2Institute1', $session->additionalFields));  
@@ -342,7 +350,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
             'Series1' => ''
         );
         
-        $form = new Publish_Form_PublishingSecond($data);
+        $form = new Publish_Form_PublishingSecond($this->_logger, $data);
         $form->getExtendedForm($data, true);                          
     }  
     
@@ -367,7 +375,7 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
 
         $session->DT_externals['LegalNotices'] = $elementData;
         
-        $form = new Publish_Form_PublishingSecond();
+        $form = new Publish_Form_PublishingSecond($this->_logger);
         $this->assertNotNull($form->getElement('LegalNotices'));
         
         

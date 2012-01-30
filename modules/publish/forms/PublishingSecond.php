@@ -51,9 +51,9 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
     public $log;
     public $view;
 
-    public function __construct($postData=null) {
+    public function __construct($log, $postData = null) {
         $this->postData = $postData;
-        $this->log = Zend_Registry::get('Zend_Log');
+        $this->log = $log;
         $this->view = $this->getView();
 
         parent::__construct();

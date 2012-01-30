@@ -47,7 +47,6 @@ class Publish_View_Helper_FileOverview extends Zend_View_Helper_Abstract {
      */
     public function fileOverview() {
         $this->session = new Zend_Session_Namespace('Publish');
-        $log = Zend_Registry::get('Zend_Log');
 
         $fieldset_start = "<fieldset><legend>" . $this->view->translate('already_uploaded_files') . "</legend>\n\t\t\n\t\t";
         $fieldset_end = "</fieldset>";

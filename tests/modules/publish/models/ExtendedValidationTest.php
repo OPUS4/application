@@ -34,10 +34,18 @@
  */
 class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
 
+    protected $_logger;
+
+    public function setUp() {
+        $writer = new Zend_Log_Writer_Null;
+        $this->_logger = new Zend_Log($writer);
+        parent::setUp();
+    }
+
     public function testPersonsFirstNamesWithInvalidData() {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
-        $form = new Publish_Form_PublishingSecond();
+        $form = new Publish_Form_PublishingSecond($this->_logger);
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe',
@@ -59,7 +67,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
     public function testPersonsEmailWithInvalidData() {
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'all';
-        $form = new Publish_Form_PublishingSecond();
+        $form = new Publish_Form_PublishingSecond($this->_logger);
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe',
@@ -85,7 +93,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
-        $form = new Publish_Form_PublishingSecond();
+        $form = new Publish_Form_PublishingSecond($this->_logger);
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe',
@@ -111,7 +119,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
         $session->documentType = 'workingpaper';
-        $form = new Publish_Form_PublishingSecond();
+        $form = new Publish_Form_PublishingSecond($this->_logger);
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe',
