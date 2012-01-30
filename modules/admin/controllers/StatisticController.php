@@ -33,20 +33,8 @@
  * @version     $Id$
  */
 
-/**
- * Main entry point for this module.
- *
- * @category    Application
- * @package     Module_Admin
- */
-
 class Admin_StatisticController extends Controller_Action {
 
-    /**
-     * TODO
-     *
-     * @return void
-     */
     public function indexAction() {
         $this->view->title = $this->view->translate('Statistic_Controller');
 
@@ -86,10 +74,13 @@ class Admin_StatisticController extends Controller_Action {
     }
 
     public function showAction() {
-        $this->view->languageSelectorDisabled = true;
+        $selectedYear = $this->getRequest()->getParam('selectedYear', null);
+        if (is_null($selectedYear)) {
+            return $this->_redirectToAndExit('index');
+        }
 
+        $this->view->languageSelectorDisabled = true;
         $documents = new Opus_Db_Documents();
-        $postData = $this->_request->getPost();
         // get month overview from database
 
 
@@ -98,7 +89,7 @@ class Admin_StatisticController extends Controller_Action {
          * for ($i = 1; $i<13; $i++) {
          *
          * $select = $documents->select()->from('documents', array('c' => 'count(*)'))
-         * ->where('YEAR(server_date_published) = ?', $postData['selectedYear'])
+         * ->where('YEAR(server_date_published) = ?', $selectedYear)
          * ->where('MONTH(server_date_published) = ?', $i);
          * $monthStat[$i] = $documents->fetchRow($select)->c;
          * }
@@ -118,7 +109,7 @@ class Admin_StatisticController extends Controller_Action {
                 months
             WHERE months.m = d.m
             GROUP BY months.m",
-        array($postData['selectedYear'], $postData['selectedYear']));
+        array($selectedYear, $selectedYear));
 
         $result = $select->fetchAll();
         foreach($result as $row) {
@@ -133,7 +124,7 @@ class Admin_StatisticController extends Controller_Action {
         ksort($monthStat);
 
         $this->view->totalNumber = array_sum($monthStat);
-        $this->view->title = $this->view->translate('Statistic_Controller') . ' (' . $postData['selectedYear'] . ')';
+        $this->view->title = $this->view->translate('Statistic_Controller') . ' (' . $selectedYear . ')';
         $this->view->monthStat = $monthStat;
 
 
@@ -143,7 +134,7 @@ class Admin_StatisticController extends Controller_Action {
           LEFT OUTER JOIN
           (SELECT id, type FROM documents WHERE YEAR(server_date_published) = ? AND server_state = 'published') d
           ON t.type = d.type
-          GROUP BY t.type", $postData['selectedYear']);
+          GROUP BY t.type", $selectedYear);
         $result = $select->fetchAll();
         foreach($result as $row) {
             $typeStat[$row['ty']] = $row['c'];
@@ -175,7 +166,7 @@ class Admin_StatisticController extends Controller_Action {
                 (SELECT `left_id` FROM collections WHERE id = ?) AND `right_id` <=
                 (SELECT `right_id` FROM collections WHERE id = ?)AND
                 YEAR(d.server_date_published) = ? and server_state = 'published' )";
-            $res = $db->query($query, array($institut->getId(), $institut->getId(), $postData['selectedYear']))->fetchAll();
+            $res = $db->query($query, array($institut->getId(), $institut->getId(), $selectedYear))->fetchAll();
             $instStat[$institut->getDisplayName()] = $res[0]['entries'];
         }
         $this->view->instStat = $instStat;
