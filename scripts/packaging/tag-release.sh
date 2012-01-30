@@ -60,6 +60,25 @@ function askYesNo() {
     fi
 }
 
+# TODO add support for REVISION parameter
+# TODO enable tagging
+function createTag() {
+    local COMPONENT="$1"
+    local TAG="$2"
+    local MESSAGE="$3"
+    local SRC="$BASE_URL/$COMPONENT/trunk"
+    local DEST="$BASE_URL/$COMPONENT/tags/$TAG"
+    echo "Creating tag for '$COMPONENT' ..."
+    # svn copy "$SRC" "$DEST" -m "$MESSAGE"
+    DEBUG "$SRC"
+    DEBUG "$DEST"
+    DEBUG "$MESSAGE"
+}
+
+# -----------------------------------------------------------------------------
+# Main
+# -----------------------------------------------------------------------------
+
 # Determine date for tag
 DATESTR="$(date +"%Y-%m-%d")"
 
@@ -93,21 +112,6 @@ echo 'Creating tags ...'
 
 BASE_URL='https://svn.zib.de/opus4dev'
 MESSAGE="Tagging release $RELEASE_VERSION of OPUS 4."
-
-# TODO add support for REVISION parameter
-# TODO enable tagging
-function createTag() {
-    local COMPONENT="$1"
-    local TAG="$2"
-    local MESSAGE="$3"
-    local SRC="$BASE_URL/$COMPONENT/trunk"
-    local DEST="$BASE_URL/$COMPONENT/tags/$TAG"
-    echo "Creating tag for '$COMPONENT' ..."
-    # svn copy "$SRC" "$DEST" -m "$MESSAGE"
-    DEBUG "$SRC"
-    DEBUG "$DEST"
-    DEBUG "$MESSAGE"
-}
 
 # Create tags for release
 createTag 'framework' "$TAG" "$MESSAGE"
