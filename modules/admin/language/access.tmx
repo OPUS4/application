@@ -15,6 +15,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_access_store">
+      <tuv xml:lang="en">
+        <seg>Access to Modules/Controllers</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zugriff auf Module/Controller</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_access_listrole">
       <tuv xml:lang="en">
         <seg>Access to Document</seg>
