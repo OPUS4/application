@@ -160,6 +160,7 @@ class DocumentTypeDefinitionUpdater {
     }
 
     private function updateAttributeValue($restrictions, $replacementForDatatypeAttribute, $attributesToRemove = array()) {
+        $modifiedXml = false;
         $nodes = $this->xml->getElementsByTagName('field');
         foreach ($nodes as $node) {
             $allChecksPassed = true;
@@ -175,10 +176,10 @@ class DocumentTypeDefinitionUpdater {
                 foreach ($attributesToRemove as $attribute) {
                     $node->removeAttribute($attribute);
                 }
-                return true;
+                $modifiedXml = true;
             }
         }
-        return false;
+        return $modifiedXml;
     }
 
 }
