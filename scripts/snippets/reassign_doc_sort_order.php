@@ -40,8 +40,8 @@
  * Dazu werden für eine Schriftenreihe alle Bandnummern der zugeordneten
  * Dokumente ermittelt. Die Dokumente werden anschließend der Schriftenreihe
  * neu zugeordnet. Als Sortierkriterium wird dabei die existierende Bandnummer
- * betrachtet. Sind alle Bandnummern numerisch, so wird numerisch absteigend
- * nach Bandnummer sortiert; andernfalls lexikographisch absteigend.
+ * betrachtet. Sind alle Bandnummern numerisch, so wird numerisch nach
+ * Bandnummer sortiert; andernfalls lexikographisch nach Bandnummer.
  *
  */
 
@@ -74,14 +74,14 @@ foreach (Opus_Series::getAll() as $series) {
     
     if ($allNumerics) {
         echo "sorting documents in series #" . $series->getId() . " numerically\n";
-        if (!arsort($seriesNumbers, SORT_NUMERIC)) {
+        if (!asort($seriesNumbers, SORT_NUMERIC)) {
             echo "Error while sorting docs -- skip series #" . $series->getId() . "\n";
             break;
         }
     }
     else {
         echo "sorting documents in series #" . $series->getId() . " lexicographically\n";
-        if (!arsort($seriesNumbers, SORT_STRING)) {
+        if (!asort($seriesNumbers, SORT_STRING)) {
             echo "Error while sorting docs -- skip series #" . $series->getId() . "\n";
             break;
         }
