@@ -176,11 +176,14 @@ class Opus3Migration_Documents {
     }
 
     private function loadImportFile() {
-        $this->importData = new DOMDocument;
-        $this->importData->load($this->importFile);
+        if (!is_readable($this->importFile)) {
+            echo "\ngiven XML dump " . $this->importFile . " is not readable -- abort migration";
+            exit;
+        }
+        $xml = new XMLReader();
         libxml_use_internal_errors(true);
-        libxml_clear_errors();
-        if (!$this->importData->validate()) {
+        libxml_clear_errors();        
+        if (!$xml->open($this->importFile) || !$xml->isValid()) {
             echo "\ngiven XML dump " . $this->importFile . " is not well-formed -- abort migration";
             $errors = libxml_get_errors();
             echo "\n" . count($errors) . " error found";
@@ -190,6 +193,9 @@ class Opus3Migration_Documents {
             echo "\n";
             exit;
         }
+        $xml->close();
+        $this->importData = new DOMDocument;
+        $this->importData->load($this->importFile);
     }
 
    /**
