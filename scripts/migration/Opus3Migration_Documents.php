@@ -178,20 +178,12 @@ class Opus3Migration_Documents {
     private function loadImportFile() {
         if (!is_readable($this->importFile)) {
             echo "\ngiven XML dump " . $this->importFile . " is not readable -- abort migration";
-            exit;
+            throw new Exception("XML dump is not readable");
         }
         $xml = new XMLReader();
-        libxml_use_internal_errors(true);
-        libxml_clear_errors();        
         if (!$xml->open($this->importFile) || !$xml->isValid()) {
             echo "\ngiven XML dump " . $this->importFile . " is not well-formed -- abort migration";
-            $errors = libxml_get_errors();
-            echo "\n" . count($errors) . " error found";
-            foreach ($errors as $error) {
-                echo "\n(line " . $error->line . ") " . $error->message;
-            }
-            echo "\n";
-            exit;
+            throw new Exception("XML dump is not well-formed");
         }
         $xml->close();
         $this->importData = new DOMDocument;

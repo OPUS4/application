@@ -65,6 +65,11 @@ then
 fi
 
 xml_file=$(readlink -f $xmlfile)
+xmllint --noout "$xml_file"
+if [ $? ]; then
+    echo "given Opus3-XML-Dumpfile is not well-formed"
+    exit
+fi
 
 if [ ! -d "$fulltextpath" ]
 then
