@@ -178,6 +178,18 @@ class Opus3Migration_Documents {
     private function loadImportFile() {
         $this->importData = new DOMDocument;
         $this->importData->load($this->importFile);
+        libxml_use_internal_errors(true);
+        libxml_clear_errors();
+        if (!$this->importData->validate()) {
+            echo "\ngiven XML dump " . $this->importFile . " is not well-formed -- abort migration";
+            $errors = libxml_get_errors();
+            echo "\n" . count($errors) . " error found";
+            foreach ($errors as $error) {
+                echo "\n(line " . $error->line . ") " . $error->message;
+            }
+            echo "\n";
+            exit;
+        }
     }
 
    /**
