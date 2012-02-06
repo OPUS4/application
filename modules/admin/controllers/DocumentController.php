@@ -679,7 +679,7 @@ class Admin_DocumentController extends Controller_Action {
 
         // if sortOrder is not set, it is set automatically by framework
         if (trim($sortOrder) !== '') {
-            $series->setSortOrder($sortOrder);
+            $series->setDocSortOrder($sortOrder);
         }
     }
 
