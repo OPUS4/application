@@ -65,7 +65,12 @@ foreach ($docfinder->ids() as $docId) {
     }
 
     if ($numOfTitles > 1 || $numOfAbstracts > 1) {
-        $msg = "document #$docId (server_state: " . $doc->getServerState() . ") needs to be updated manually: has";
+        $msg = "document #$docId (";
+        $opus3Id = $doc->getIdentifierOpus3();
+        if (count($opus3Id) > 0) {
+            $msg .= 'opus3id #' . $opus3Id[0]->getValue() . ' ';
+        }
+        $msg .= 'server_state: ' . $doc->getServerState() . ') needs to be updated manually: has';
         if ($numOfTitles > 1) {
             $msg .= " $numOfTitles titles";
         }
