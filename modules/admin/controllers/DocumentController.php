@@ -605,7 +605,7 @@ class Admin_DocumentController extends Controller_Action {
                         $subform->getElement('SortOrder')
                                 ->setRequired(true);
                     }
-                    else if (strpos($field->getName(), 'Title') === 0 && $field->getName() !== 'Title') {
+                    else if (strpos($field->getName(), 'Title') === 0 && $field->getName() !== 'Title' && $field->getName() !== 'TitleAbstract') {
                         $subform->getElement('Type')->setAttrib('disabled', 'disabled');
                     }
                 }
