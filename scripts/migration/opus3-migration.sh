@@ -1,5 +1,7 @@
 #! /bin/bash
 
+set -e
+
 ##
 ## Call This Skript with paramaters:
 ## -f OPUS3-XML-database export file (e.g. /usr/local/opus/complete_database.xml)
@@ -79,12 +81,7 @@ fi
 
 fulltext_path=$(readlink -f $fulltextpath)
 
-echo $stepsize | grep "[^0-9]" > /dev/null 2>&1
-if [ "$?" -eq "0" ]
-then
-    echo "Stepsize '$stepsize' for Looping is not a valid number."
-    exit -1
-fi
+[ -z "${stepsize##*[!0-9]*}" ] && echo "Aborting migration: '$stepsize' is not a valid number." && exit -1
 
 echo "Remove migration/log/* and migration/tmp/*"
 if [ ! -d "$migration_log_dir" ]
