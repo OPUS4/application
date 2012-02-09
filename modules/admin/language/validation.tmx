@@ -1,0 +1,41 @@
+<?xml version="1.0" ?>
+<!DOCTYPE tmx SYSTEM "http://www.lisa.org/fileadmin/standards/tmx1.4/tmx14.dtd.txt">
+<tmx version="1.4">
+
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+    </header>
+
+    <body>
+
+        <!-- Should only occur if POST has been manipulated. -->
+        <tu tuid="admin_validate_error_language_invalid">
+            <tuv xml:lang="en">
+                <seg>The selected language does not exit.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Die ausgewählte Sprache existiert nicht.</seg>
+            </tuv>
+        </tu>
+
+        <!-- Should only occur if POST has been manipulated. -->
+        <tu tuid="admin_validate_error_language_disabled">
+            <tuv xml:lang="en">
+                <seg>The selected language has been deactivated.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Die ausgewählte Sprache ist nicht aktiviert.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_validate_error_language_used">
+            <tuv xml:lang="en">
+                <seg>An entry with that language already exists.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Es gibt bereits einen Eintrag für diese Sprache.</seg>
+            </tuv>
+        </tu>
+
+    </body>
+
+</tmx>

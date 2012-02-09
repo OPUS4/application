@@ -463,6 +463,23 @@ class Admin_DocumentController extends Controller_Action {
 
         if (!empty($sectionModel)) {
             $addForm = new Admin_Form_Model($sectionModel);
+            $language = $addForm->getElement('Language');
+            if (!empty($language)) {
+                switch ($sectionModel) {
+                    case 'Opus_TitleAbstract':
+                        // Validate if abtract for language already exists
+                        $language->addValidator(new Form_Validate_Language(array('doc' => $doc, 'fieldName' => 'TitleAbstract')));
+                        break;
+                    case 'Opus_Title':
+                        // Validate if TitleXXXX for language already exists
+                        $language->addValidator(new Form_Validate_Language(array('doc' => $doc)));
+                        break;
+                    default:
+                        // Validate if language is valid and activated
+                        $language->addValidator(new Form_Validate_Language());
+                        break;
+                }
+            }
         }
         elseif (!empty($sectionField)) {
             $field = $doc->getField($sectionField);
