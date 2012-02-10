@@ -47,7 +47,7 @@
 
         <tu tuid="admin_validate_error_language_duplicated_TitleMain">
             <tuv xml:lang="en">
-                <seg>The same language has been selected more than one title.</seg>
+                <seg>The same language has been selected for more than one title.</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Die selbe Sprache wurde für mehrere Titel ausgewählt.</seg>
@@ -56,7 +56,7 @@
 
         <tu tuid="admin_validate_error_language_duplicated_TitleSub">
             <tuv xml:lang="en">
-                <seg>The same language has been selected more than one subtitle.</seg>
+                <seg>The same language has been selected for more than one subtitle.</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Die selbe Sprache wurde für mehrere Untertitel ausgewählt.</seg>
@@ -65,7 +65,7 @@
 
         <tu tuid="admin_validate_error_language_duplicated_TitleParent">
             <tuv xml:lang="en">
-                <seg>The same language has been selected more than one parent title.</seg>
+                <seg>The same language has been selected for more than one parent title.</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Die selbe Sprache wurde für mehrere übergeordnete Werke ausgewählt.</seg>
@@ -74,7 +74,7 @@
 
         <tu tuid="admin_validate_error_language_duplicated_TitleAdditional">
             <tuv xml:lang="en">
-                <seg>The same language has been selected more than one additional title.</seg>
+                <seg>The same language has been selected for more than one additional title.</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Die selbe Sprache wurde für mehrere übersetzte Titel ausgewählt.</seg>
@@ -83,7 +83,7 @@
 
         <tu tuid="admin_validate_error_language_duplicated_TitleAbstract">
             <tuv xml:lang="en">
-                <seg>The same language has been selected more than one abstract.</seg>
+                <seg>The same language has been selected for more than one abstract.</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Die selbe Sprache wurde für mehrere Abstrakte ausgewählt.</seg>
