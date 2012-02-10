@@ -277,12 +277,19 @@ class Admin_DocumentController extends Controller_Action {
      * Checks if the request is for removing a model from a document.
      * This is currently used to prevent validation for 'remove' requests,
      * since the input for the model that is being removed is irrelevant.
+     *
+     * The function ignores simple form elements and only processes subforms
+     * (embedded arrays).
      */
     protected function _isRemoveRequest($postData) {
         foreach ($postData as $fieldName => $modelData) {
-            foreach ($modelData as $index => $modelValues) {
-                if (array_key_exists('remove', $modelValues)) {
-                    return true;
+            // ignore for instance 'save' element
+            if (is_array($modelData)) {
+                foreach ($modelData as $index => $modelValues) {
+                    // ignore for instance hidden element for language validation
+                    if (is_array($modelValues) && array_key_exists('remove', $modelValues)) {
+                        return true;
+                    }
                 }
             }
         }
@@ -554,6 +561,17 @@ class Admin_DocumentController extends Controller_Action {
                     $fieldNameSub = new Zend_Form_SubForm($fieldName);
                     $fieldNameSub->removeDecorator('fieldset');
                     $fieldNameSub->removeDecorator('DtDdWrapper');
+
+                    // don't execute this for 'subjects' (multiple subjects with same language are allowed)
+                    if (in_array($section, array('titles', 'abstracts'))) {
+                        // add validation for same language selected more than once
+                        $hidden = new Zend_Form_Element_Hidden('validation');
+                        $hidden->setValue('language');
+                        $validator = new Form_Validate_DuplicateValue('Language');
+                        $validator->setMessages(array(Form_Validate_DuplicateValue::NOT_VALID => 'admin_validate_error_language_duplicated_' . $fieldName));
+                        $hidden->addValidator($validator);
+                        $fieldNameSub->addElement($hidden);
+                    }
 
                     $values = $field->getValue();
 

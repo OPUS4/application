@@ -62,7 +62,7 @@
                             <label>admin_document_edit</label>
                             <module>admin</module>
                             <controller>document</controller>
-                            <action>edit</action>
+                            <action>update</action>
                         </update>
 
                         <filemanager>

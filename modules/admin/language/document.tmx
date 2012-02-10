@@ -34,6 +34,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_update">
+      <tuv xml:lang="en">
+        <seg>Edit Metadata</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Metadaten editieren</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_document_edit_section">
       <tuv xml:lang="en">
         <seg>Edit</seg>
@@ -598,6 +607,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Bitte geben sie eine Nummer ein.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_series_error_number_exists">
+      <tuv xml:lang="en">
+        <seg>The number already exists in the series.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Bandnummer existiert bereits in der Schriftreihe.</seg>
       </tuv>
     </tu>
 
