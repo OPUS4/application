@@ -34,9 +34,7 @@
 class Admin_Model_DocumentHelperTest extends ControllerTestCase {
 
     public function testGetFieldNamesForGroupGeneral() {
-        $doc = new Opus_Document();
-
-        $helper = new Admin_Model_DocumentHelper($doc);
+        $helper = new Admin_Model_DocumentHelper(null);
 
         $fieldNames = $helper->getFieldNamesForGroup('general');
 
@@ -47,9 +45,7 @@ class Admin_Model_DocumentHelperTest extends ControllerTestCase {
     }
 
     public function testGetFieldNamesForGroupUnknown() {
-        $doc = new Opus_Document();
-
-        $helper = new Admin_Model_DocumentHelper($doc);
+        $helper = new Admin_Model_DocumentHelper(null);
 
         $fieldNames = $helper->getFieldNamesForGroup('unknown');
 
@@ -57,9 +53,7 @@ class Admin_Model_DocumentHelperTest extends ControllerTestCase {
     }
 
     public function testGetFieldNamesForGroupNull() {
-        $doc = new Opus_Document();
-
-        $helper = new Admin_Model_DocumentHelper($doc);
+        $helper = new Admin_Model_DocumentHelper(null);
 
         $fieldNames = $helper->getFieldNamesForGroup(null);
 
