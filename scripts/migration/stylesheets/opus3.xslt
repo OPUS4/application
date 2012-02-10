@@ -79,9 +79,13 @@
             </xsl:attribute>
 
             <!-- Language -->
+            <xsl:variable name="language">
+                <xsl:value-of select="field[@name='language']" />
+            </xsl:variable>
+
             <!-- OldLanguage will be mapped in Opus3XMLImport.php -->
             <xsl:attribute name="OldLanguage">
-                 <xsl:value-of select="field[@name='language']" />
+                 <xsl:value-of select="$language" />
             </xsl:attribute>
 
             <!-- Variables for internal use -->
@@ -233,24 +237,67 @@
             <xsl:if test="string-length(field[@name='title']) > 0">
                 <xsl:element name="TitleMain">
                     <xsl:attribute name="OldLanguage">
-                        <xsl:value-of select="field[@name='language']" />
+                        <xsl:value-of select="$language" />
                     </xsl:attribute>
                     <xsl:attribute name="Value">
                         <xsl:value-of select="field[@name='title']" />
                     </xsl:attribute>
                 </xsl:element>
             </xsl:if>
+
             <!-- TitleMain (english) -->
             <xsl:if test="string-length(field[@name='title_en']) > 0">
-                <xsl:element name="TitleMain">
-                    <xsl:attribute name="OldLanguage">
-                        <xsl:text>eng</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="Value">
-                        <xsl:value-of select="field[@name='title_en']" />
-                    </xsl:attribute>
-                </xsl:element>
+                <xsl:choose>
+                    <xsl:when test="$language='eng'">
+                        <xsl:element name="TitleAdditional">
+                            <xsl:attribute name="OldLanguage">
+                                <xsl:text>eng</xsl:text>
+                            </xsl:attribute>
+                            <xsl:attribute name="Value">
+                                <xsl:value-of select="field[@name='title_en']" />
+                            </xsl:attribute>
+                        </xsl:element>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:element name="TitleMain">
+                            <xsl:attribute name="OldLanguage">
+                                <xsl:text>eng</xsl:text>
+                            </xsl:attribute>
+                            <xsl:attribute name="Value">
+                                <xsl:value-of select="field[@name='title_en']" />
+                            </xsl:attribute>
+                        </xsl:element>
+                    </xsl:otherwise>
+               </xsl:choose>
             </xsl:if>
+
+            <!-- TitleAdditional, Language="deu" (2nd) -->
+            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss' or @name='temp_diss']/row[field[@name='source_opus']=$OriginalID]">
+                <xsl:if test="string-length(field[@name='title_de'])>0">
+                    <xsl:choose>
+                        <xsl:when test="$language='ger'">
+                            <xsl:element name="TitleAdditional">
+                                <xsl:attribute name="OldLanguage">
+                                    <xsl:text>ger</xsl:text>
+                                </xsl:attribute>
+                                <xsl:attribute name="Value">
+                                    <xsl:value-of select="field[@name='title_de']" />
+                                </xsl:attribute>
+                            </xsl:element>
+                         </xsl:when>
+                         <xsl:otherwise>
+                            <xsl:element name="TitleMain">
+                                <xsl:attribute name="OldLanguage">
+                                    <xsl:text>ger</xsl:text>
+                                </xsl:attribute>
+                                <xsl:attribute name="Value">
+                                    <xsl:value-of select="field[@name='title_de']" />
+                                </xsl:attribute>
+                            </xsl:element>
+                         </xsl:otherwise>
+                    </xsl:choose>
+                </xsl:if>
+            </xsl:for-each>
 
             <!-- TitleAbstract -->
             <xsl:if test="string-length(normalize-space(field[@name='description'])) > 0">
@@ -261,7 +308,7 @@
                                 <xsl:value-of select="field[@name='description_lang']" />
                             </xsl:when>
                             <xsl:otherwise>
-                                <xsl:value-of select="field[@name='language']" />
+                                <xsl:value-of select="$language" />
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:attribute>
@@ -283,19 +330,6 @@
                 </xsl:element>
             </xsl:if>
 
-            <!-- TitleAdditional, Language="deu" (2nd) -->
-            <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss' or @name='temp_diss']/row[field[@name='source_opus']=$OriginalID]">
-                <xsl:if test="string-length(field[@name='title_de'])>0">
-                    <xsl:element name="TitleAdditional">
-                        <xsl:attribute name="OldLanguage">
-                            <xsl:text>ger</xsl:text>
-                        </xsl:attribute>
-                        <xsl:attribute name="Value">
-                            <xsl:value-of select="field[@name='title_de']" />
-                        </xsl:attribute>
-                    </xsl:element>
-                </xsl:if>
-            </xsl:for-each>
 
 
             <!-- Old: PersonContributor -->
