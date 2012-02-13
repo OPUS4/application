@@ -101,7 +101,7 @@ class Opus3ImportLogger {
     }
 
     public function log_error($class, $string) {
-        $string = date('Y-m-d H:i:s') . " ERROR " . $class . ":" . $string . "\n";
+        $string = date('Y-m-d H:i:s') . " ERROR " . $class . ": " . $string . "\n";
         echo $string;
         fputs($this->_errorLogfile, $string);
     }

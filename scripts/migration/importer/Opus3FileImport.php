@@ -245,43 +245,52 @@ class Opus3FileImport {
         $this->filesImported = array();
 
         foreach ($this->tmpFiles as $f) {
-
-            if (!$this->isValidFile($f)) { continue; }
-
-            $prefix = $this->getPrefix($f);
-            $label = null;
-
-            $visibleInOai = $this->getVisibilityInOai($prefix);
-            $visibleInFrontdoor = $this->getVisibilityInFrontdoor($prefix);
-            $pathName = $this->getPathName($prefix, basename($f));
-
-            $this->logger->log_debug("Opus3FileImport", "Import '" . $pathName . "'");
-            if ($visibleInFrontdoor) {
-                $this->logger->log_debug("Opus3FileImport", "File '" . $pathName . "' visible");
-                $label = $this->getLabel($f);
-            }
-            $comment = $this->getComment($f);
-
-            $file = $this->tmpDoc->addFile();
-            $file->setPathName($pathName);
-            $file->setTempFile($f);
-            $file->setLanguage($lang);
-            $file->setVisibleInFrontdoor($visibleInFrontdoor);
-            $file->setVisibleInOai($visibleInOai);
-
-            if (!is_null($label)) { $file->setLabel($label); }
-            if (!is_null($comment)) { $file->setComment($comment); }
-            $total++;
-
-            array_push($this->filesImported, $pathName);
+            if ($this->saveFile($f)) { $total++; }
         }
 
-        // store the object
         if ($total > 0) {
             $this->tmpDoc->store();
         }
 
         return $total;
+    }
+
+
+    private function saveFile($f) {
+        if (!$this->isValidFile($f)) { return false; }
+
+        $prefix = $this->getPrefix($f);
+        $label = null;
+
+        $visibleInOai = $this->getVisibilityInOai($prefix);
+        $visibleInFrontdoor = $this->getVisibilityInFrontdoor($prefix);
+
+        $pathName = $this->getPathName($prefix, basename($f));
+        $tmpPathName = iconv("UTF-8", "UTF-8//IGNORE", $pathName);
+        if ($pathName != $tmpPathName) {
+            $this->logger->log_error("Opus3FileImport", "Filename '" . $pathName . "' is corrupt. Changed to '" . $tmpPathName . "'.");
+            $pathName = $tmpPathName;
+        }
+
+        $this->logger->log_debug("Opus3FileImport", "Import '" . $pathName . "'");
+        if ($visibleInFrontdoor) {
+            $this->logger->log_debug("Opus3FileImport", "File '" . $pathName . "' visible");
+            $label = $this->getLabel($f);
+        }
+        $comment = $this->getComment($f);
+
+        $file = $this->tmpDoc->addFile();
+        $file->setPathName($pathName);
+        $file->setTempFile($f);
+        $file->setLanguage($lang);
+        $file->setVisibleInFrontdoor($visibleInFrontdoor);
+        $file->setVisibleInOai($visibleInOai);
+
+        if (!is_null($label)) { $file->setLabel($label); }
+        if (!is_null($comment)) { $file->setComment($comment); }
+
+        array_push($this->filesImported, $pathName);
+        return true;
     }
 
     /*
@@ -413,7 +422,7 @@ class Opus3FileImport {
         }
 
         return true;
-    }
+   }
 
 
    /*
