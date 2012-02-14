@@ -129,9 +129,9 @@
     </xsl:template>
 
     <xsl:template match="@Type" mode="oai_dc">
-        <xsl:element name="dc:type">
-            <xsl:value-of select="." />
-        </xsl:element>
+        <dc:type>
+            <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
+        </dc:type>
     </xsl:template>
 
     <xsl:template match="@ContributingCorporation" mode="oai_dc">

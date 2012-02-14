@@ -60,6 +60,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $domDocument->loadXML($resultString);
 
         $xpath = new DOMXPath($domDocument);
+        $xpath->registerNamespace('oai_dc', "http://www.openarchives.org/OAI/2.0/oai_dc/");
         $xpath->registerNamespace('dc', "http://purl.org/dc/elements/1.1/");
         $xpath->registerNamespace('pc', "http://www.d-nb.de/standards/pc/");
         $xpath->registerNamespace('xMetaDiss', "http://www.d-nb.de/standards/xmetadissplus/");
@@ -419,6 +420,28 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $elements = $xpath->query('//xMetaDiss:xMetaDiss/dcterms:dateAccepted[text()="2012"]');
         $this->assertEquals(1, $elements->length,
                 "Unexpected dcterms:dateAccepted count");
+    }
+
+    /**
+     * Regression test for OPUSVIER-2379
+     */
+    public function testGetRecordOaiDcDoc91DocType() {
+        $doc = new Opus_Document(91);
+        $this->assertEquals("report", $doc->getType(), "testdata changed");
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::91');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2379 (show doc-type:report)
+        $elements = $xpath->query('//oai_dc:dc/dc:type[text()="doc-type:report"]');
+        $this->assertEquals(1, $elements->length,
+                "Unexpected count for doc-type:report");
     }
 
     /**
