@@ -62,7 +62,6 @@ class Opus3Migration_Documents {
 
     private $status;
     
-    //CONST _ERROR = "-1";
     CONST _INIT = "-1";
     CONST _FINISH = "0";
     CONST _BREAK = "1";
@@ -116,7 +115,7 @@ class Opus3Migration_Documents {
         $totalCount = 0;
 
         $this->status = self::_FINISH;
-
+	
         foreach ($toImport as $document) {
             $mem_now = round(memory_get_usage() / 1024 );
             $mem_peak = round(memory_get_peak_usage() / 1024);
@@ -170,22 +169,16 @@ class Opus3Migration_Documents {
         $fileImporter->finalize();
     }
 
+    public function getStatus() {
+        return $this->status;
+    }
+
     private function setStylesheet() {
         $this->stylesheet = 'stylesheets';
         $this->xslt = 'opus3.xslt';
     }
 
     private function loadImportFile() {
-        if (!is_readable($this->importFile)) {
-            echo "\ngiven XML dump " . $this->importFile . " is not readable -- abort migration";
-            throw new Exception("XML dump is not readable");
-        }
-        $xml = new XMLReader();
-        if (!$xml->open($this->importFile) || !$xml->isValid()) {
-            echo "\ngiven XML dump " . $this->importFile . " is not well-formed -- abort migration";
-            throw new Exception("XML dump is not well-formed");
-        }
-        $xml->close();
         $this->importData = new DOMDocument;
         $this->importData->load($this->importFile);
     }
@@ -196,17 +189,14 @@ class Opus3Migration_Documents {
      * @return void
      */
     public function run() {
-
         // Load Opus3-mySQL-XML-dump
         $this->init($this->importFile, $this->fulltextPath, $this->start, $this->end);
-
-         // Load Metadata
-        $status = $this->load_documents();
+        
+        // Load Metadata
+        $this->load_documents();
 
         // Load Fulltext
         $this->load_fulltext();
-
-        return $this->status;
 
     }
 }
@@ -229,6 +219,6 @@ $options = getopt("f:p:s:e:");
 
 // Start Opus3Migration
 $migration = new Opus3Migration_Documents($options);
-$status = $migration->run();
+$migration->run();
 
-if ($status === Opus3Migration_Documents::_BREAK) { exit(1); }
+if ($migration->getStatus() === Opus3Migration_Documents::_BREAK) { exit(1); }

@@ -67,11 +67,11 @@ then
 fi
 
 xml_file=$(readlink -f $xmlfile)
-xmllint --noout "$xml_file"
-if [ "$?" -ne "0" ]; then
-    echo "given Opus3-XML-Dumpfile is not well-formed"
-    exit
-fi
+#xmllint --noout "$xml_file"
+#if [ "$?" -ne "0" ]; then
+#    echo "given Opus3-XML-Dumpfile is not well-formed"
+#    exit
+#fi
 
 if [ ! -d "$fulltextpath" ]
 then
@@ -131,8 +131,13 @@ fi
 ./createdb.sh
 [ $? != 0 ] && echo "Aborting migration: creatdb.sh FAILED." && exit -1
 
-echo "Import institutes, collections and licenses"
 cd $migration_dir
+
+echo "Validation of Opus3-XML-Dumpfile"
+php Opus3Migration_Validation.php -f $xml_file
+[ $? != 0 ] && echo "Aborting migration: Opus3Migration_Validation.php FAILED." && exit -1
+
+echo "Import institutes, collections and licenses"
 php Opus3Migration_ICL.php -f $xml_file
 [ $? != 0 ] && echo "Aborting migration: Opus3Migration_ICL.php FAILED." && exit -1
 
