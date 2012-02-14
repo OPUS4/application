@@ -58,6 +58,7 @@
             <xsl:apply-templates select="PersonAuthor" mode="oai_dc" />
             <!-- dc:subject -->
             <xsl:apply-templates select="Subject[@Type='swd']" mode="oai_dc" />
+            <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]" mode="oai_dc" />
             <!-- dc:description -->
             <xsl:apply-templates select="TitleAbstract" mode="oai_dc" />
             <!-- dc:publisher -->
@@ -116,6 +117,12 @@
               </xsl:attribute>
             </xsl:if>    
          <xsl:value-of select="@Value" />
+        </dc:subject>
+    </xsl:template>
+
+    <xsl:template match="Collection[@RoleName='ddc' and @Visible=1]" mode="oai_dc">
+        <dc:subject>
+            <xsl:text>ddc:</xsl:text><xsl:value-of select="@Number" />
         </dc:subject>
     </xsl:template>
 

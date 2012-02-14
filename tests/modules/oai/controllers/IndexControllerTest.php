@@ -445,6 +445,34 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Regression test for OPUSVIER-2380
+     */
+    public function testGetRecordOaiDcDoc10SubjectDdc() {
+        $doc = new Opus_Document(10);
+        $ddcs = array();
+        foreach ($doc->getCollection() AS $c) {
+            if ($c->getRoleName() == 'ddc') {
+                $ddcs[] = $c->getNumber();
+            }
+        }
+        $this->assertContains("004", $ddcs, "testdata changed");
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::10');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2380 (show <dc:subject>ddc:)
+        $elements = $xpath->query('//oai_dc:dc/dc:subject[text()="ddc:004"]');
+        $this->assertEquals(1, $elements->length,
+                "Unexpected count for ddc:004");
+    }
+
+    /**
      * Test verb=ListIdentifiers.
      */
     public function testListIdentifiers() {
