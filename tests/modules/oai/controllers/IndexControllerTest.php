@@ -445,9 +445,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Regression test for OPUSVIER-2380
+     * Regression test for OPUSVIER-2380 and OPUSVIER-2378
      */
-    public function testGetRecordOaiDcDoc10SubjectDdc() {
+    public function testGetRecordOaiDcDoc10SubjectDdcAndDate() {
         $doc = new Opus_Document(10);
         $ddcs = array();
         foreach ($doc->getCollection() AS $c) {
@@ -470,6 +470,44 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $elements = $xpath->query('//oai_dc:dc/dc:subject[text()="ddc:004"]');
         $this->assertEquals(1, $elements->length,
                 "Unexpected count for ddc:004");
+
+        // Regression test for OPUSVIER-2378 (show <dc:date>)
+        $elements = $xpath->query('//oai_dc:dc/dc:date');
+        $this->assertEquals(1, $elements->length,
+                "Unexpected count for dc:date");
+
+        // Regression test for OPUSVIER-2378 (show <dc:date>2003)
+        $elements = $xpath->query('//oai_dc:dc/dc:date[text()="2003"]');
+        $this->assertEquals(1, $elements->length,
+                "Unexpected count for dc:date");
+    }
+
+    /**
+     * Regression test for OPUSVIER-2378
+     */
+    public function testGetRecordOaiDcDoc114DcDate() {
+        $doc = new Opus_Document(114);
+        $completedDate = $doc->getCompletedDate();
+        $this->assertEquals("2011-04-19", "$completedDate", "testdata changed");
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::114');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2378 (show <dc:date>)
+        $elements = $xpath->query('//oai_dc:dc/dc:date');
+        $this->assertEquals(1, $elements->length,
+                "Unexpected count for dc:date");
+
+        // Regression test for OPUSVIER-2378 (show <dc:date>2011-04-19)
+        $elements = $xpath->query('//oai_dc:dc/dc:date[text()="2011-04-19"]');
+        $this->assertEquals(1, $elements->length,
+                "Unexpected count for dc:date");
     }
 
     /**

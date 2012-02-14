@@ -66,7 +66,26 @@
             <!-- dc:contributor -->
             <xsl:apply-templates select="@ContributingCorporation" mode="oai_dc" />
             <!-- dc:date -->
-            <xsl:apply-templates select="@PublishedDate" mode="oai_dc" />
+            <!-- TODO: date-code has been copy-pasted from XMetaDissPlus.xslt! -->
+            <dc:date>
+                <xsl:choose>
+                  <xsl:when test="PublishedDate">
+                    <xsl:value-of select="PublishedDate/@Year"/>-<xsl:value-of select="format-number(PublishedDate/@Month,'00')"/>-<xsl:value-of select="format-number(PublishedDate/@Day,'00')"/>
+                  </xsl:when>
+                  <xsl:when test="CompletedDate">
+                    <xsl:value-of select="CompletedDate/@Year"/>-<xsl:value-of select="format-number(CompletedDate/@Month,'00')"/>-<xsl:value-of select="format-number(CompletedDate/@Day,'00')"/>
+                  </xsl:when>
+                  <xsl:when test="@PublishedYear">
+                    <xsl:value-of select="@PublishedYear"/>
+                  </xsl:when>
+                  <xsl:when test="@CompletedYear">
+                    <xsl:value-of select="@CompletedYear"/>
+                  </xsl:when>
+                  <xsl:otherwise>
+                    <xsl:value-of select="ServerDatePublished/@Year"/>-<xsl:value-of select="format-number(ServerDatePublished/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDatePublished/@Day,'00')"/>
+                  </xsl:otherwise>
+                </xsl:choose>
+            </dc:date>
             <!-- dc:type -->
             <xsl:apply-templates select="@Type" mode="oai_dc" /> 
             <!-- dc:format -->
@@ -145,12 +164,6 @@
         <dc:contributor>
             <xsl:value-of select="." />
         </dc:contributor>
-    </xsl:template>
-
-    <xsl:template match="@PublishedDate" mode="oai_dc">
-        <dc:date>
-            <xsl:value-of select="." />
-        </dc:date>
     </xsl:template>
 
     <xsl:template match="File/@MimeType" mode="oai_dc">
