@@ -65,5 +65,14 @@
             <seg>BKL-Klassifikation</seg>
           </tuv>
         </tu>
+		
+		<tu tuid="default_collection_role_open_access">
+          <tuv xml:lang="en">
+            <seg>open_access (DINI-Set)</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>open_access (DINI-Set)</seg>
+          </tuv>
+        </tu>
     </body>
 </tmx>
