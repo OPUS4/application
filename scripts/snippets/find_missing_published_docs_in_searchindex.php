@@ -40,8 +40,6 @@
  *
  */
 
-require_once dirname(dirname(__FILE__)) . '/common/bootstrap.php';
-
 $numOfErrors = 0;
 $finder = new Opus_DocumentFinder();
 $finder->setServerState('published');

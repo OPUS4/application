@@ -42,8 +42,6 @@
  *
  */
 
-require_once dirname(dirname(__FILE__)) . '/common/bootstrap.php';
-
 $updateRequired = 0;
 
 $docfinder = new Opus_DocumentFinder();

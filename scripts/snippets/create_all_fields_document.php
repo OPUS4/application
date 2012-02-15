@@ -31,9 +31,6 @@
  * @version     $Id$
  */
 
-// basic bootstrapping
-require_once dirname(dirname(__FILE__)) . '/common/bootstrap.php';
-
 $doc = new Opus_Document();
 $doc->setType('all');
 $doc->setServerState('published');
