@@ -63,19 +63,8 @@ class Opus3Migration_ICL {
         if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
     }
 
-
-    // Set XMl-Dump-Import-File
-    public function init($file = null) {
-        $this->setStylesheet();
-        while (false === file_exists($file)) {
-            $file= readline('Please type the path to your OPUS3 database export file (a dumpfile of the database in XML format e.g. /usr/local/opus/complete_database.xml): ');
-        }
-        $this->importFile = $file;
-        $this->loadImportFile();
-    }
-
     // Create Collections
-    public function create_collection_roles() {
+    private function create_collection_roles() {
 
         $roles = array(
             "Collections" => array("name" => "collections", "position" => 9),
@@ -111,35 +100,35 @@ class Opus3Migration_ICL {
     }
 
     // Import collections
-    public function load_collections() {
+    private function load_collections() {
         $import = new Opus3CollectionsImport($this->importData);
         $import->start();
         $import->finalize();
     }
 
     // Import series
-    public function load_series() {
+    private function load_series() {
         $import = new Opus3SeriesImport($this->importData);
         $import->start();
         $import->finalize();
     }
 
     // Import faculties and institutes
-    public function load_institutes() {
+    private function load_institutes() {
         $import = new Opus3InstituteImport($this->importData, $this->stylesheet, $this->xslt);
         $import->start();
         $import->finalize();
     }
 
     // Import Licences
-    public function load_licences() {
+    private function load_licences() {
         $import= new Opus3LicenceImport($this->importData);
         $import->start();
         $import->finalize();
     }
 
     // Import UserRoles
-    public function load_roles() {
+    private function load_roles() {
         $import= new Opus3RoleImport();
         $import->start();
         $import->finalize();
@@ -152,14 +141,17 @@ class Opus3Migration_ICL {
     }
 
    /**
-     * Migrates OPUS3 to OPUS4 using readline
+     * Migrates OPUS3 to OPUS4
      *
      * @return void
      */
     public function run() {
 
+
+         $this->setStylesheet();
+
         // Load Opus3-mySQL-XML-dump
-        $this->init($this->importFile);
+         $this->loadImportFile();
 
         // Create Collection Roles
         $this->create_collection_roles();
@@ -178,7 +170,6 @@ class Opus3Migration_ICL {
 
         // Load Roles
         $this->load_roles();
-
     }
 }
 

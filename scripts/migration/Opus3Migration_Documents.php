@@ -80,36 +80,8 @@ class Opus3Migration_Documents {
         if (array_key_exists('e', $options) !== false) { $this->end  = $options["e"]; }
     }
 
-    // Set XMl-Dump-Import-File
-    public function init($file = null, $path = null, $start = null, $end = null) {
-
-        $this->status = self::_INIT;
-
-        $this->setStylesheet();
-        while (false === file_exists($file)) {
-            $file= readline('Please type the path to your OPUS3 database export file (a dumpfile of the database in XML format e.g. /usr/local/opus/complete_database.xml): ');
-        }
-        $this->importFile = $file;
-        $this->loadImportFile();
-
-        while (false === file_exists($path)) {
-            $path = readline('Please type the path to your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte): ');
-        }
-        $this->fulltextPath = rtrim($path,"/");
-
-        while (false === is_numeric($start)) {
-            $start = readline('Please type the number of the first document to import (e.g. 1) : ');
-        }
-        $this->start = $start;
-
-        while (false === is_numeric($end)) {
-            $end = readline('Please type the number of the last document to import (e.g. 50) : ');
-        }
-        $this->end = $end;
-    }
-
    // Import Documents
-    public function load_documents() {
+    private function load_documents() {
         $xmlImporter = new Opus3XMLImport($this->xslt, $this->stylesheet);
         $toImport = $xmlImporter->initImportFile($this->importData);
         $totalCount = 0;
@@ -143,7 +115,7 @@ class Opus3Migration_Documents {
         $xmlImporter->finalize();
    }
 
-    public function load_fulltext() {
+    private function load_fulltext() {
 
         $fileImporter = new Opus3FileImport($this->fulltextPath);
  
@@ -189,8 +161,11 @@ class Opus3Migration_Documents {
      * @return void
      */
     public function run() {
+        // Set XSLT-Stylesheet for Migration
+        $this->setStylesheet();
+
         // Load Opus3-mySQL-XML-dump
-        $this->init($this->importFile, $this->fulltextPath, $this->start, $this->end);
+        $this->loadImportFile();
         
         // Load Metadata
         $this->load_documents();
@@ -199,6 +174,7 @@ class Opus3Migration_Documents {
         $this->load_fulltext();
 
     }
+
 }
 
 // Bootstrap application.
