@@ -59,12 +59,12 @@ class Opus3Migration_Documents {
     private $end = null;
     private $doclist = array();
     private $role = array();
+    private $lockFile;
 
     private $status;
     
-    CONST _INIT = "-1";
-    CONST _FINISH = "0";
-    CONST _BREAK = "1";
+    CONST _FINISHED = "0";
+    CONST _RUNNING = "1";
 
     /**
      * Constructur.
@@ -78,6 +78,7 @@ class Opus3Migration_Documents {
         if (array_key_exists('p', $options) !== false) { $this->fulltextPath = $options["p"]; }
         if (array_key_exists('s', $options) !== false) { $this->start = $options["s"]; }
         if (array_key_exists('e', $options) !== false) { $this->end  = $options["e"]; }
+        if (array_key_exists('l', $options) !== false) { $this->lockFile  = $options["l"]; }
     }
 
    // Import Documents
@@ -86,7 +87,7 @@ class Opus3Migration_Documents {
         $toImport = $xmlImporter->initImportFile($this->importData);
         $totalCount = 0;
 
-        $this->status = self::_FINISH;
+        $this->status = self::_RUNNING;
 	
         foreach ($toImport as $document) {
             $mem_now = round(memory_get_usage() / 1024 );
@@ -96,7 +97,6 @@ class Opus3Migration_Documents {
 
             if (!(is_null($this->start)) && ($totalCount < $this->start)) { continue; }
             if (!(is_null($this->end)) && ($totalCount > $this->end)) {
-                $this->status = self::_BREAK;
                 break;
             }
 
@@ -110,6 +110,10 @@ class Opus3Migration_Documents {
             } else if ($result['result'] === 'failure') {
                 $this->logger->log_error("Opus3Migration_Documents", $result['message'] . " for old ID '" . $result['oldid'] . "'\n" . $result['entry']);
             }
+        }
+
+        if ($totalCount <= $this->end) {
+            $this->status = self::_FINISHED;
         }
 
         $xmlImporter->finalize();
@@ -155,11 +159,10 @@ class Opus3Migration_Documents {
         $this->importData->load($this->importFile);
     }
 
-   /**
-     * Migrates OPUS3 to OPUS4 using readline
-     *
-     * @return void
-     */
+    public function unlinkLockFile() {
+        unlink($this->lockFile);
+    }
+
     public function run() {
         // Set XSLT-Stylesheet for Migration
         $this->setStylesheet();
@@ -191,10 +194,12 @@ $application = new Zend_Application(
 );
 $application->bootstrap(array('Configuration', 'Logging', 'Database'));
 
-$options = getopt("f:p:s:e:");
+$options = getopt("f:p:s:e:l:");
 
 // Start Opus3Migration
 $migration = new Opus3Migration_Documents($options);
 $migration->run();
 
-if ($migration->getStatus() === Opus3Migration_Documents::_BREAK) { exit(1); }
+if ($migration->getStatus() === Opus3Migration_Documents::_FINISHED) {
+    $migration->unlinkLockFile();
+}

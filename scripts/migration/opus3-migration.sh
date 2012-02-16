@@ -13,6 +13,7 @@ set -e
 
 stepsize=50
 iteration=1
+buildindex=0
 
 while getopts f:p:z:in o
 do	case "$o" in
@@ -29,6 +30,8 @@ done
 migration_dir=$(cd `dirname $0` && pwd)
 # path to directory thats hosts migration log files
 migration_log_dir=$migration_dir/log
+# locking file for migration process
+migration_lock_file=$migration_log_dir/migration.lock
 # path to directory that hosts temporary migration files
 migration_tmp_dir=$migration_dir/tmp
 # path to script directory
@@ -54,11 +57,6 @@ migration_config_ini=$config_dir/migration_config.ini
 
 [ ! -f "$xmlfile" -o ! -r "$xmlfile" ] && echo "Aborting migration: Opus3-XML-Dumpfile '$xmlfile' does not exist or is not readable." && exit -1
 xml_file=$(readlink -f $xmlfile)
-#xmllint --noout "$xml_file"
-#if [ "$?" -ne "0" ]; then
-#    echo "given Opus3-XML-Dumpfile is not well-formed"
-#    exit
-#fi
 
 [ ! -d "$fulltextpath" -o ! -r "$fulltextpath" ] && echo "Aborting migration: Opus3-Fulltextpath '$fulltextpath' does not exist or is not readable." && exit -1
 fulltext_path=$(readlink -f $fulltextpath)
@@ -81,49 +79,35 @@ cd $workspace_files_dir && rm -rf [0-9]*
 
 echo "Clean database"
 cd $db_dir
-if [ "$?" -ne "0" ]
-then
-    echo "Aborting migration: cd '$db_dir'  FAILED."
-    exit -1
-fi
-
 ./createdb.sh
-[ $? != 0 ] && echo "Aborting migration: creatdb.sh FAILED." && exit -1
-
-cd $migration_dir
 
 echo "Validation of Opus3-XML-Dumpfile"
+cd $migration_dir
 php Opus3Migration_Validation.php -f $xml_file
-[ $? != 0 ] && echo "Aborting migration: Opus3Migration_Validation.php FAILED." && exit -1
 
 echo "Import institutes, collections and licenses"
 php Opus3Migration_ICL.php -f $xml_file
-[ $? != 0 ] && echo "Aborting migration: Opus3Migration_ICL.php FAILED." && exit -1
 
 echo "Import metadata and fulltext"
 start=1
 end=`expr $start + $stepsize - 1`
 
-php Opus3Migration_Documents.php -f $xml_file -p $fulltext_path -s $start -e $end
-RETVAL=$?
-[ $RETVAL != 0 ] && [ $RETVAL != 1 ] && echo "Aborting migration: Opus3Migration_Documents.php FAILED." && exit -1
+touch $migration_lock_file
+php Opus3Migration_Documents.php -f $xml_file -p $fulltext_path -s $start -e $end -l $migration_lock_file
 
-while [ "$RETVAL" -eq "1" ] && [ "$iteration" -eq "1" ]
+while [ -f $migration_lock_file ] && [ "$iteration" -eq "1" ]
 do
     start=`expr $start + $stepsize`
     end=`expr $end + $stepsize`
-    if [ "$buildindex" = "1" ]
+    if [ "$buildindex" -eq "1" ]
     then
         cd script_dir
         php SolrIndexBuilder.php
         cd $migration_dir
     fi
-    php Opus3Migration_Documents.php -f $xml_file -p $fulltext_path -s $start -e $end
-    RETVAL=$?
-    [ $RETVAL != 0 ] && [ $RETVAL != 1 ] && echo "Aborting migration: Opus3Migration_Documents.php FAILED." && exit -1
+    php Opus3Migration_Documents.php -f $xml_file -p $fulltext_path -s $start -e $end -l $migration_lock_file
 done
 
 cd $script_dir
 php SolrIndexBuilder.php
-[ $? != 0 ] && echo "Aborting migration: SolrIndexBuilder.php FAILED." && exit -1
 cd $migration_dir
