@@ -48,24 +48,11 @@ migration_ini=$config_dir/migration.ini
 # path to migration_config.ini 
 migration_config_ini=$config_dir/migration_config.ini
 
-if [ ! -f "$migration_ini" ]
-then
-    echo "Configurationfile '`readlink -f $migration_ini`' does not exist or is not readable."
-    exit -1
-fi
+[ ! -f "$migration_ini" -o ! -r "$migration_ini" ] && echo "Aborting migration: Configurationfile '`readlink -f $migration_ini`' does not exist or is not readable." && exit -1
 
-if [ ! -f "$migration_config_ini" ]
-then
-    echo "Configurationfile '`readlink -f $migration_config_ini`' does not exist or is not readable."
-    exit -1
-fi
+[ ! -f "$migration_config_ini" -o ! -r "$migration_config_ini" ] && echo "Aborting migration: Configurationfile '`readlink -f $migration_config_ini`' does not exist or is not readable." && exit -1
 
-if [ ! -f "$xmlfile" ]
-then
-    echo "Opus3-XML-Dumpfile '$xmlfile' does not exist or is not readable."
-    exit -1
-fi
-
+[ ! -f "$xmlfile" -o ! -r "$xmlfile" ] && echo "Aborting migration: Opus3-XML-Dumpfile '$xmlfile' does not exist or is not readable." && exit -1
 xml_file=$(readlink -f $xmlfile)
 #xmllint --noout "$xml_file"
 #if [ "$?" -ne "0" ]; then
@@ -73,52 +60,24 @@ xml_file=$(readlink -f $xmlfile)
 #    exit
 #fi
 
-if [ ! -d "$fulltextpath" ]
-then
-    echo "Opus3-Fulltextpath '$fulltextpath' does not exist or is not readable."
-    exit -1
-fi
-
+[ ! -d "$fulltextpath" -o ! -r "$fulltextpath" ] && echo "Aborting migration: Opus3-Fulltextpath '$fulltextpath' does not exist or is not readable." && exit -1
 fulltext_path=$(readlink -f $fulltextpath)
 
-[ -z "${stepsize##*[!0-9]*}" ] && echo "Aborting migration: '$stepsize' is not a valid number." && exit -1
+[ -z "${stepsize##*[!0-9]*}" ] && echo "Aborting migration: Stepsize '$stepsize' is not a valid number." && exit -1
 
 echo "Remove migration/log/* and migration/tmp/*"
-if [ ! -d "$migration_log_dir" ]
-then
-    mkdir $migration_log_dir
-fi
+[ ! -d "$migration_log_dir" ] && mkdir $migration_log_dir
+[ ! -d "$migration_tmp_dir" ] && mkdir $migration_tmp_dir
 
-cd $migration_log_dir
-if [ "$?" -eq "0" ]
-then
-    rm -rf migration_debug.log
-    rm -rf migration.log
-fi
+[ ! -r "$migration_log_dir" -o ! -w "$migration_log_dir" ] && echo "Aborting migration: Migration-Log-Dir '$migration_log_dir' is not readable or writeable." && exit -1
+[ ! -r "$migration_tmp_dir" -o ! -w "$migration_tmp_dir" ] && echo "Aborting migration: Migration-Tmp-Dir '$migration_tmp_dir' is not readable or writeable." && exit -1
 
-if [ ! -d "$migration_tmp_dir" ]
-then
-    mkdir $migration_tmp_dir
-fi
-
-cd $migration_tmp_dir
-if [ "$?" -eq "0" ]
-then
-    rm -rf *
-fi
+cd $migration_log_dir && rm -rf migration_debug.log && rm -rf migration.log
+cd $migration_tmp_dir && rm -rf *
 
 echo "Remove workspace/cache/* and workspace/files/*"
-cd $workspace_cache_dir
-if [ "$?" -eq "0" ]
-then
-    rm -rf *
-fi
-
-cd $workspace_files_dir
-if [ "$?" -eq "0" ]
-then
-    rm -rf [0-9]*
-fi
+cd $workspace_cache_dir && rm -rf *
+cd $workspace_files_dir && rm -rf [0-9]*
 
 echo "Clean database"
 cd $db_dir
