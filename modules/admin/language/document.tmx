@@ -108,10 +108,10 @@
 
     <tu tuid="admin_document_section_subjects">
       <tuv xml:lang="en">
-        <seg>Subjects, Classifications</seg>
+        <seg>Subjects</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Schlagwörter, Klassifikationen</seg>
+        <seg>Schlagwörter</seg>
       </tuv>
     </tu>
 
@@ -156,7 +156,7 @@
         <seg>Collections</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Collections</seg>
+        <seg>Sammlungen, Klassifikationen</seg>
       </tuv>
     </tu>
 
@@ -171,10 +171,10 @@
 
     <tu tuid="admin_document_section_other">
       <tuv xml:lang="en">
-        <seg>Miscellaneous Information</seg>
+        <seg>Miscellaneous bibliographic Information</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Weitere Informationen</seg>
+        <seg>Weitere bibliographische Angaben</seg>
       </tuv>
     </tu>
 
@@ -183,7 +183,7 @@
         <seg>Enrichments</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Enrichments</seg>
+        <seg>Benutzerdefinierte Felder (Enrichments)</seg>
       </tuv>
     </tu>
 
@@ -219,7 +219,7 @@
         <seg>Note(s)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Notizen</seg>
+        <seg>Bemerkungen</seg>
       </tuv>
     </tu>
 
@@ -324,10 +324,10 @@
 
     <tu tuid="admin_document_remove_collection_success">
       <tuv xml:lang="en">
-        <seg>Collection '%1$s' was successfully removed.</seg>
+        <seg>Linked Collection '%1$s' was successfully removed.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Collection '%1$s' wurde erfolgreich entfernt.</seg>
+        <seg>Die Verknüpfung des Dokuments zur Sammlung '%1$s' wurde erfolgreich entfernt.</seg>
       </tuv>
     </tu>
 
@@ -354,7 +354,7 @@
         <seg>Add new abstract</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Neuen Abstrakt hinzufügen</seg>
+        <seg>Neuen Abstract hinzufügen</seg>
       </tuv>
     </tu>
 
@@ -363,7 +363,7 @@
         <seg>Edit Abstracts</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Abstrakte editieren</seg>
+        <seg>Abstracts editieren</seg>
       </tuv>
     </tu>
 
@@ -498,7 +498,7 @@
         <seg>Add new note</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Neue Notiz hinzufügen</seg>
+        <seg>Neue Bemerkung hinzufügen</seg>
       </tuv>
     </tu>
 
@@ -507,7 +507,7 @@
         <seg>Edit Notes</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Notizen editieren</seg>
+        <seg>Bemerkungen editieren</seg>
       </tuv>
     </tu>
 
@@ -516,7 +516,7 @@
         <seg>Add new enrichment</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Neues Enrichment hinzufügen</seg>
+        <seg>Neues benutzerdefiniertes Feld (Enrichment) hinzufügen</seg>
       </tuv>
     </tu>
 
@@ -525,7 +525,7 @@
         <seg>Edit Enrichments</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Enrichments editieren</seg>
+        <seg>Benutzerdefinierte Felder (Enrichments) editieren</seg>
       </tuv>
     </tu>
 
@@ -558,10 +558,10 @@
 
     <tu tuid="admin_document_edit_other">
       <tuv xml:lang="en">
-        <seg>Edit Other Information</seg>
+        <seg>Edit other bibliographic Information</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Weitere Informationen editieren</seg>
+        <seg>Weitere bibliographische Angaben editieren</seg>
       </tuv>
     </tu>
 
@@ -579,7 +579,7 @@
         <seg>No valid document ID provided.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Die Dokumenten-ID existiert nicht.</seg>
+        <seg>Die Dokument-ID existiert nicht.</seg>
       </tuv>
     </tu>
 
@@ -612,10 +612,10 @@
 
     <tu tuid="admin_series_error_number_exists">
       <tuv xml:lang="en">
-        <seg>The number already exists in the series.</seg>
+        <seg>The number already exists in the selected series.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Die Bandnummer existiert bereits in der Schriftreihe.</seg>
+        <seg>Die Bandnummer existiert bereits in der gewählten Schriftreihe.</seg>
       </tuv>
     </tu>
 
