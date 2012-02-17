@@ -17,4 +17,5 @@ INSERT INTO access_modules (role_id, module_name) VALUES
 (2, 'rewrite'),
 (2, 'rss'),
 (2, 'citationExport'),
+(2, 'crawlers'),
 (4, 'review');
