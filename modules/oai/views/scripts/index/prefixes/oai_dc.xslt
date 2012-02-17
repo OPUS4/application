@@ -56,6 +56,8 @@
             <xsl:apply-templates select="TitleMain" mode="oai_dc" />
             <!-- dc:creator -->
             <xsl:apply-templates select="PersonAuthor" mode="oai_dc" />
+            <!-- dc:contributor -->
+            <xsl:apply-templates select="PersonContributor" mode="oai_dc" />
             <!-- dc:subject -->
             <xsl:apply-templates select="Subject[@Type='swd']" mode="oai_dc" />
             <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]" mode="oai_dc" />
@@ -91,7 +93,11 @@
             <!-- dc:format -->
             <xsl:apply-templates select="File/@MimeType" mode="oai_dc" />
             <!-- dc:identifier -->
-            <xsl:apply-templates select="IdentifierIsbn|IdentifierUrn" mode="oai_dc" />
+            <dc:identifier>
+               <xsl:value-of select="@frontdoorurl"/>
+            </dc:identifier>
+            <xsl:apply-templates select="IdentifierUrn" mode="oai_dc" />
+            <xsl:apply-templates select="IdentifierIsbn" mode="oai_dc" />
             <!-- dc:source -->
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:language -->
@@ -116,16 +122,32 @@
 
     <xsl:template match="PersonAuthor" mode="oai_dc">
         <dc:creator>
-            <xsl:value-of select="@AcademicTitle" />
-            <xsl:if test="@AcademicTitle != ''" >
-                <xsl:text> </xsl:text>
+            <xsl:value-of select="@LastName" />
+            <xsl:if test="@FirstName != ''" >
+                <xsl:text>, </xsl:text>
             </xsl:if>
             <xsl:value-of select="@FirstName" />
-            <xsl:if test="@FirstName != ''" >
-                <xsl:text> </xsl:text>
+            <xsl:if test="@AcademicTitle != ''" >
+                <xsl:text> (</xsl:text>
+                <xsl:value-of select="@AcademicTitle" />
+                <xsl:text>)</xsl:text>
             </xsl:if>
-            <xsl:value-of select="@LastName" />
         </dc:creator>
+    </xsl:template>
+
+    <xsl:template match="PersonContributor" mode="oai_dc">
+        <dc:contributor>
+            <xsl:value-of select="@LastName" />
+            <xsl:if test="@FirstName != ''" >
+                <xsl:text>, </xsl:text>
+            </xsl:if>
+            <xsl:value-of select="@FirstName" />
+            <xsl:if test="@AcademicTitle != ''" >
+                <xsl:text> (</xsl:text>
+                <xsl:value-of select="@AcademicTitle" />
+                <xsl:text>)</xsl:text>
+            </xsl:if>
+        </dc:contributor>
     </xsl:template>
 
     <xsl:template match="Subject[@Type='swd']" mode="oai_dc">
@@ -172,8 +194,18 @@
         </dc:format>
     </xsl:template>
 
-    <xsl:template match="IdentifierIsbn|IdentifierUrn" mode="oai_dc">
+    <xsl:template match="IdentifierIsbn" mode="oai_dc">
         <dc:identifier>
+            <xsl:value-of select="@Value" />
+        </dc:identifier>
+    </xsl:template>
+
+    <xsl:template match="IdentifierUrn" mode="oai_dc">
+        <dc:identifier>
+            <xsl:value-of select="@Value" />
+        </dc:identifier>
+        <dc:identifier>
+            <xsl:text>http://nbn-resolving.de/urn/resolver.pl?</xsl:text>
             <xsl:value-of select="@Value" />
         </dc:identifier>
     </xsl:template>
