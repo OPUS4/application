@@ -61,6 +61,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_documents_state_audited">
+      <tuv xml:lang="en">
+        <seg>Audited</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geprüft</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_documents_state_deleted">
       <tuv xml:lang="en">
         <seg>Deleted</seg>
@@ -249,7 +258,7 @@
         <seg>Gehört zur Bibliographie.</seg>
       </tuv>
     </tu>
-    
+
     <tu tuid="admin_documents_tooltip_belongsToBibliography_false">
       <tuv xml:lang="en">
         <seg>Does not belong to bibliography.</seg>
