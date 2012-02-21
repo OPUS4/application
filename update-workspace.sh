@@ -26,10 +26,10 @@ setVars
 
 # Remove workspace/files/error if present
 
-FOLDER=$BASEDIR/workspace/files/error
+FOLDER="$BASEDIR/workspace/files/error"
 
 DEBUG "Updating workspace"
-DEBUG $FOLDER
+DEBUG "$FOLDER"
 
 if [[ -d $FOLDER ]]; then
     echo "Removing unused folder $FOLDER"
@@ -37,7 +37,7 @@ if [[ -d $FOLDER ]]; then
     echo "done"
 fi
 
-CACHE_DIR=$BASEDIR/workspace/cache
+CACHE_DIR="$BASEDIR/workspace/cache"
 
 echo -e "Cleaning Zend Cache ... \c "
 find "$CACHE_DIR" -type f -name "zend_cache*" -print0 |xargs -r0 rm
