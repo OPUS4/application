@@ -39,5 +39,6 @@ fi
 
 CACHE_DIR=$BASEDIR/workspace/cache
 
-echo "Cleaning Zend Cache"
-rm -f "$CACHE_DIR/zend_cache---*"
+echo -e "Cleaning Zend Cache ... \c "
+find "$CACHE_DIR" -type f -name "zend_cache*" -print0 |xargs -r0 rm
+echo 'done'
