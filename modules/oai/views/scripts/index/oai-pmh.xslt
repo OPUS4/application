@@ -192,13 +192,13 @@
           </metadataFormat>
           <metadataFormat>
             <metadataPrefix><xsl:text>XMetaDissPlus</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3</xsl:text></metadataNamespace>
+            <schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>
+            <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>
           </metadataFormat>
           <metadataFormat>
             <metadataPrefix><xsl:text>xMetaDissPlus</xsl:text></metadataPrefix>
-            <schema><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3/xmetadissplus.xsd</xsl:text></schema>
-            <metadataNamespace><xsl:text>http://www.bsz-bw.de/xmetadissplus/1.3</xsl:text></metadataNamespace>
+            <schema><xsl:text>http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd</xsl:text></schema>
+            <metadataNamespace><xsl:text>http://www.d-nb.de/standards/xmetadissplus/</xsl:text></metadataNamespace>
           </metadataFormat>
         </ListMetadataFormats>
     </xsl:template>
