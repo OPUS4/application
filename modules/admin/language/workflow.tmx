@@ -27,10 +27,10 @@
 
     <tu tuid="admin_workflow_inprogress">
       <tuv xml:lang="en">
-        <seg>In Progress</seg>
+        <seg>Change state: In Progress</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>In Bearbeitung</seg>
+        <seg>Status ändern: In Bearbeitung</seg>
       </tuv>
     </tu>
 
@@ -45,10 +45,10 @@
 
     <tu tuid="admin_workflow_audited">
       <tuv xml:lang="en">
-        <seg>Audited</seg>
+        <seg>Change state: Audited</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Geprüft</seg>
+        <seg>Status ändern: Geprüft</seg>
       </tuv>
     </tu>
 
