@@ -21,7 +21,7 @@
         <seg>Are you sure you want to change the state of the document to 'restricted'?</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sind Sie sicher, daß sie das sie das Dokument für beschränkten Zugang freigeben wollen?</seg>
+        <seg>Sind Sie sicher, dass Sie das Dokument für beschränkten Zugang freigeben wollen?</seg>
       </tuv>
     </tu>
 
@@ -30,7 +30,7 @@
         <seg>In Progress</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Bearbeitung</seg>
+        <seg>In Bearbeitung</seg>
       </tuv>
     </tu>
 
@@ -39,7 +39,7 @@
         <seg>Are you sure you want to change the state of the document to 'inprogress'?</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sind Sie sicher, daß sie den Zustand des Dokumentes auf 'Bearbeitung' setzen wollen?</seg>
+        <seg>Sind Sie sicher, dass Sie den Zustand des Dokumentes auf 'In Bearbeitung' setzen wollen?</seg>
       </tuv>
     </tu>
 
@@ -57,7 +57,7 @@
         <seg>Are you sure you want to change the state of the document to 'audited'?</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sind Sie sicher, daß sie den Zustand des Dokumentes auf 'Geprüft' setzen wollen?</seg>
+        <seg>Sind Sie sicher, dass Sie den Zustand des Dokumentes auf 'Geprüft' setzen wollen?</seg>
       </tuv>
     </tu>
 
@@ -162,10 +162,10 @@
 
     <tu tuid="admin_workflow_error_already_unpublished">
       <tuv xml:lang="en">
-        <seg>The document has already been published.</seg>
+        <seg>The document has already been unpublished.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Das Dokument wurde bereits veröffentlicht.</seg>
+        <seg>Das Dokument wurde bereits zurück gezogen.</seg>
       </tuv>
     </tu>
 
