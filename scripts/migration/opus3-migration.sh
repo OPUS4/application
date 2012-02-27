@@ -56,58 +56,58 @@ migration_config_ini=$config_dir/migration_config.ini
 [ ! -f "$migration_config_ini" -o ! -r "$migration_config_ini" ] && echo "Aborting migration: Configurationfile '`readlink -f $migration_config_ini`' does not exist or is not readable." && exit -1
 
 [ ! -f "$xmlfile" -o ! -r "$xmlfile" ] && echo "Aborting migration: Opus3-XML-Dumpfile '$xmlfile' does not exist or is not readable." && exit -1
-xml_file=$(readlink -f $xmlfile)
+xml_file="$(readlink -f "$xmlfile")"
 
 [ ! -d "$fulltextpath" -o ! -r "$fulltextpath" ] && echo "Aborting migration: Opus3-Fulltextpath '$fulltextpath' does not exist or is not readable." && exit -1
-fulltext_path=$(readlink -f $fulltextpath)
+fulltext_path="$(readlink -f "$fulltextpath")"
 
 [ -z "${stepsize##*[!0-9]*}" ] && echo "Aborting migration: Stepsize '$stepsize' is not a valid number." && exit -1
 
 echo "Remove migration/log/* and migration/tmp/*"
-[ ! -d "$migration_log_dir" ] && mkdir $migration_log_dir
-[ ! -d "$migration_tmp_dir" ] && mkdir $migration_tmp_dir
+[ ! -d "$migration_log_dir" ] && mkdir "$migration_log_dir"
+[ ! -d "$migration_tmp_dir" ] && mkdir "$migration_tmp_dir"
 
 [ ! -r "$migration_log_dir" -o ! -w "$migration_log_dir" ] && echo "Aborting migration: Migration-Log-Dir '$migration_log_dir' is not readable or writeable." && exit -1
 [ ! -r "$migration_tmp_dir" -o ! -w "$migration_tmp_dir" ] && echo "Aborting migration: Migration-Tmp-Dir '$migration_tmp_dir' is not readable or writeable." && exit -1
 
-cd $migration_log_dir && rm -rf migration_debug.log && rm -rf migration.log
-cd $migration_tmp_dir && rm -rf *
+find "$migration_log_dir" -maxdepth 1 -type f -name *.log -exec rm {} \;
+find "$migration_tmp_dir" -maxdepth 1 -type f -name *.tmp -exec rm {} \;
 
 echo "Remove workspace/cache/* and workspace/files/*"
-cd $workspace_cache_dir && rm -rf *
-cd $workspace_files_dir && rm -rf [0-9]*
+find "$workspace_cache_dir" -maxdepth 1 -type f -name zend_cache* -exec rm {} \;
+find "$workspace_files_dir" -maxdepth 1 -type d -name [0-9]* -exec rm -r {} \;
 
 echo "Clean database"
-cd $db_dir 
+cd "$db_dir"
 ./createdb.sh || { echo "Aborting migration: creatdb.sh FAILED."; exit -1; }
 
 echo "Validation of Opus3-XML-Dumpfile"
-cd $migration_dir
-php Opus3Migration_Validation.php -f $xml_file || { echo "Aborting migration: Opus3Migration_Validation.php FAILED"; exit -1; }
+cd "$migration_dir"
+php Opus3Migration_Validation.php -f "$xml_file" || { echo "Aborting migration: Opus3Migration_Validation.php FAILED"; exit -1; }
 
 echo "Import institutes, collections and licenses"
-php Opus3Migration_ICL.php -f $xml_file || { echo "Aborting migration: Opus3Migration_ICL.php FAILED"; exit -1; }
+php Opus3Migration_ICL.php -f "$xml_file" || { echo "Aborting migration: Opus3Migration_ICL.php FAILED"; exit -1; }
 
 echo "Import metadata and fulltext"
 start=1
 end=`expr $start + $stepsize - 1`
 
-touch $migration_lock_file
-php Opus3Migration_Documents.php -f $xml_file -p $fulltext_path -s $start -e $end -l $migration_lock_file || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
+touch "$migration_lock_file"
+php Opus3Migration_Documents.php -f "$xml_file" -p "$fulltext_path" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
 
-while [ -f $migration_lock_file ] && [ "$iteration" -eq "1" ]
+while [ -f "$migration_lock_file" ] && [ "$iteration" -eq "1" ]
 do
     start=`expr $start + $stepsize`
     end=`expr $end + $stepsize`
     if [ "$buildindex" -eq "1" ]
     then
-        cd script_dir
+        cd "$script_dir"
         php SolrIndexBuilder.php || { echo "Aborting migration: SolrIndexBuilder.php  FAILED"; exit -1; }
-        cd $migration_dir
+        cd "$migration_dir"
     fi
-    php Opus3Migration_Documents.php -f $xml_file -p $fulltext_path -s $start -e $end -l $migration_lock_file || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
+    php Opus3Migration_Documents.php -f "$xml_file" -p "$fulltext_path" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
 done
 
-cd $script_dir
+cd "$script_dir"
 php SolrIndexBuilder.php || { echo "Aborting migration: SolrIndexBuilder.php  FAILED"; exit -1; }
-cd $migration_dir
+cd "$migration_dir"
