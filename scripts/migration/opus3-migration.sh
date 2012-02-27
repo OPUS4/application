@@ -63,7 +63,7 @@ fulltext_path="$(readlink -f "$fulltextpath")"
 
 [ -z "${stepsize##*[!0-9]*}" ] && echo "Aborting migration: Stepsize '$stepsize' is not a valid number." && exit -1
 
-echo "Remove migration/log/* and migration/tmp/*"
+echo "Remove migration/log/*.log and migration/tmp/*.map"
 [ ! -d "$migration_log_dir" ] && mkdir "$migration_log_dir"
 [ ! -d "$migration_tmp_dir" ] && mkdir "$migration_tmp_dir"
 
@@ -71,9 +71,9 @@ echo "Remove migration/log/* and migration/tmp/*"
 [ ! -r "$migration_tmp_dir" -o ! -w "$migration_tmp_dir" ] && echo "Aborting migration: Migration-Tmp-Dir '$migration_tmp_dir' is not readable or writeable." && exit -1
 
 find "$migration_log_dir" -maxdepth 1 -type f -name *.log -exec rm {} \;
-find "$migration_tmp_dir" -maxdepth 1 -type f -name *.tmp -exec rm {} \;
+find "$migration_tmp_dir" -maxdepth 1 -type f -name *.map -exec rm {} \;
 
-echo "Remove workspace/cache/* and workspace/files/*"
+echo "Remove workspace/cache/zend_cache* and workspace/files/[0-9]*"
 find "$workspace_cache_dir" -maxdepth 1 -type f -name zend_cache* -exec rm {} \;
 find "$workspace_files_dir" -maxdepth 1 -type d -name [0-9]* -exec rm -r {} \;
 
