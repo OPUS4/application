@@ -1,5 +1,44 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.2.1 2012-03-01 ========================
+
+h3. Bugs
+
+* [OPUSVIER-1930] - Sprachabhängige Assertions in Unit-Tests entfernen
+* [OPUSVIER-2281] - Fehlender Übersetzungsschlüssel admin_access_store
+* [OPUSVIER-2341] - update-documenttypes.php ersetzt nur den Attributwert von datatype für das SubjectFeld
+* [OPUSVIER-2348] - MIgrationsskript bricht ab, wenn es mit der Einstellung set -ex läuft
+* [OPUSVIER-2350] - Migrationsskript prüft nicht (mehr), ob der einzulesende XML-Dump valide ist
+* [OPUSVIER-2351] - Migrationsskript testet nur Existenz von Dateien / Verzeichnissen; es prüft aber nicht Lese- bzw. Schreibrechte
+* [OPUSVIER-2353] - Exception für die Formulare zum Hinzufügen/Editieren von Abstrakten
+* [OPUSVIER-2355] - Änderungen der DocSortOrder eines Dokumentes einer Schriftenreihe werden nicht abgespeichert
+* [OPUSVIER-2356] - Migrationsskript bricht ab, wenn Sonderzeichen im Namen von zu importierenden Dateien auftritt
+* [OPUSVIER-2361] - Anlegen von zwei Dokumenttiteln in Dokumentsprache während der Migration verhindern
+* [OPUSVIER-2376] - CI-Target opus4migration wird nicht automatisch ausgeführt
+* [OPUSVIER-2377] - Solr-Indexer versucht leeres Dokument zu indexieren, wenn bei der Volltextextraktion bestimmte Sonderzeichen ermittelt werden
+* [OPUSVIER-2378] - OAI-Schnittstelle gibt dc:date nicht aus, obwohl Dokument Inhalt für alle Datumsfelder besitzt
+* [OPUSVIER-2379] - OAI-Schnittstelle gibt im Feld dc:type falschen Inhalt aus
+* [OPUSVIER-2380] - OAI-Schnittstelle gibt Element dc:subject nicht aus
+* [OPUSVIER-2387] - Referenz-URL der .tmx-Dateien ist nicht mehr aktuell
+* [OPUSVIER-2392] - Migrationsskript bricht nach der ersten Iteration ab, wenn es mit set -e läuft
+* [OPUSVIER-2395] - Update-Script muss "workspace/cache/zend_cache*" löschen
+* [OPUSVIER-2401] - "Geprüfte" Dokumente sind nicht auffindbar. In der Administration -> Dokumente verwalten fehlt der Punkt "Zeige Dokumente: Geprüft".
+* [OPUSVIER-2402] - Element "required-if-fulltext" in Dokumenttyp-Definition bringt abhängig von der Position Fehler
+* [OPUSVIER-2403] - Falsche Pfadangabe in der Dokumentation zur XMetaDissPlus.xslt
+
+h3. Tasks
+
+* [OPUSVIER-1497] - Unklarheit beim Aufruf des Update-Skripts
+* [OPUSVIER-2369] - Shell-Skript erstellen, das die IDs der Dokumente ausgibt, die im ServerState published sind, aber nicht im Index enthalten sind
+* [OPUSVIER-2405] - XMetaDissPlus auf neue Scheme Location anpassen
+
+h3. Documentation
+
+* [OPUSVIER-2388] - Hinweis auf Umbenennung "korrupter" Dateinamen in die Dokumentation aufnehmen
+* [OPUSVIER-2389] - Hinweis auf manuelles Bearbeiten "korrupter" XML-Dumps in die Dokumentation aufnehmen
+* [OPUSVIER-2408] - Abängigkeit von Modul php5-phar auf openSUSE
+
+
 h2. ======================== Release 4.2.0 2012-01-27 ========================
 
 h3. Bugs

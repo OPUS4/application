@@ -1,5 +1,26 @@
 h1. OPUS 4 Release Notes
 
+h2. ======================== Release 4.2.1 2012-03-01 ========================
+
+h3. Validierung des XML-Dumps für die Migration aus OPUS3
+
+Ab dieser Version wird der Opus3-XML-Dump vor Beginn der Migration validiert.
+Treten dabei Fehler auf, bricht die Migration mit Hinweis auf Fehlerstelle und
+Fehlerursache ab.
+Wir empfehlen in diesem Fall, den Opus3-XML-Dump von Hand zu korrigieren und die
+Migration anschließend erneut durchzuführen.
+
+
+h3. Migration von Volltextdateien aus OPUS3 mit fehlerhaften Sonderzeichen
+
+Enthält der Dateiname eines Dokuments fehlerhafte Sonderzeichen, wird diese
+Datei mit modifizierten Dateinamen migriert: die fehlerhaften Zeichen werden aus
+dem Dateinamen herausgeschnitten.
+Wir empfehlen, die Originaldatei nach Abschluss der Migration von Hand
+umzubenennen und über die Administration einzufügen. Die durch die Migration
+umbenannte Datei kann anschließend gelöscht werden.
+
+
 h2. ======================== Release 4.2.0 2012-01-27 ========================
 
 h3. Dokumentation im Tarball aufgenommen
