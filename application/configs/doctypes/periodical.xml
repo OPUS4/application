@@ -33,7 +33,7 @@
  * @version     $Id: book.xml 8423 2011-05-27 16:58:20Z sszott $
  */
  -->
-<documenttype name="book"
+<documenttype name="periodical"
     xmlns="http://schemas.opus.org/documenttype"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://schemas.opus.org/documenttype https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd">
