@@ -92,7 +92,6 @@ foreach (Opus_Series::getAll() as $series) {
         $doc = new Opus_Document($docId);
         $allSeries = $doc->getSeries();
         $doc->setSeries(array());
-        $doc->store();
         foreach ($allSeries as $docSeries) {            
             $seriesInstance = $docSeries->getModel();
             if ($seriesInstance->getId() === $series->getId()) {
