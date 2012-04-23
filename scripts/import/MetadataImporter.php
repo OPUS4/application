@@ -404,10 +404,9 @@ class MetadataImporter {
             if ($childNode instanceof DOMElement) {
                 $s = new Opus_Subject();
                 $s->setLanguage(trim($childNode->getAttribute('language')));
-                $s->setValue(trim($childNode->textContent));
-
-                $method = 'addSubject' . ucfirst($childNode->getAttribute('type'));
-                $doc->$method($s);
+                $s->setType($childNode->getAttribute('type'));
+                $s->setValue(trim($childNode->textContent));                
+                $doc->addSubject($s);
             }
         }        
     }
