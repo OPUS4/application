@@ -89,6 +89,6 @@ foreach ($docFinder->ids() as $id) {
 
 echo "overall num of full texts: $overallNumOfFulltexts\n";
 
-$errorRate = (1.0 * $numOfNonExtractableFulltexts) / $overallNumOfFulltexts;
+$errorRate = (100.0 * $numOfNonExtractableFulltexts) / $overallNumOfFulltexts;
 echo "num of non extractable full texts: $numOfNonExtractableFulltexts ($errorRate %)\n";
 exit();
