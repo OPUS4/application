@@ -65,7 +65,15 @@ foreach ($docFinder->ids() as $id) {
 
     foreach ($files as $file) {
         $overallNumOfFulltexts++;
-        $response = $solrServer->extract($file->getPath(), array( 'extractOnly' => 'true', 'extractFormat' => 'text' ));
+        $response = null;
+        try {
+            $response = $solrServer->extract($file->getPath(), array( 'extractOnly' => 'true', 'extractFormat' => 'text' ));
+        }
+        catch (Exception $e) {
+            echo "error while extracting full text for document # " + $d->getId() + " (file name : " + $file->getPath() + " )";
+            $numOfNonExtractableFulltexts++;
+            continue;
+        }        
         if ($response->getHttpStatus() != 200) {
             echo "error while extracting full text for document # " + $d->getId() + " (file name : " + $file->getPath() + " )";
             $numOfNonExtractableFulltexts++;
