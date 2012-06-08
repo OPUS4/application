@@ -260,9 +260,7 @@ class CSVImporter {
     private function addPerson($doc, $type, $firstname, $lastname, $oldId) {
         $p = new Opus_Person();
         if (trim($firstname) == '') {
-            // TODO OPUSHOSTING-70
-            echo "Datensatz $oldId ohne Wert für $type.firstname\n";
-            $p->setFirstName('anonymous');
+            echo "Datensatz $oldId ohne Wert für $type.firstname\n";            
         }
         else {
             $p->setFirstName(trim($firstname));
