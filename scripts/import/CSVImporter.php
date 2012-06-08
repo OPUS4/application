@@ -274,14 +274,15 @@ class CSVImporter {
     }
 
     private function processDate($row, $doc, $oldId) {
-        // TODO aktuell nur Unterstützung für Jahreszahlen
-        $method = 'set' . ucfirst($row[self::DATE_TYPE]) . "Year";
+        // TODO aktuell nur Unterstützung für Jahreszahlen        
         $date = trim($row[self::DATE_VALUE]);
-        if (!preg_match("/^[0-9]{4}$/", $date)) {
-            $date = '0000';
-            echo "Dokument $oldId mit Jahresangabe 0000 versehen\n";
+        if (preg_match("/^[0-9]{4}$/", $date)) {
+            $method = 'set' . ucfirst($row[self::DATE_TYPE]) . "Year";
+            $doc->$method($date);
         }
-        $doc->$method($date);
+        else {
+            echo "Dokument $oldId mit ungültiger Jahresangabe '$date' : wird ignoriert\n";
+        }
     }
 
     private function processIdentifier($row, $doc) {
