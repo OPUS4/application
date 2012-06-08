@@ -34,6 +34,16 @@
  */
 
 
+/**
+ *
+ * TODO: dieses Skript wird aktuell nicht in den Tarball / Deb-Package aufgenommen
+ * Es ist noch sehr stark an die Anforderungen einer Testinstanz angepasst und
+ * müsste vor der offiziellen Aufnahme noch generalisiert werden. Die Steuerung
+ * sollte über eine externe Konfigurationsdatei erfolgen, so dass der Quellcode
+ * später nicht mehr angepasst werden muss.
+ *
+ */
+
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 require_once 'Log.php';
 

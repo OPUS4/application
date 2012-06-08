@@ -116,6 +116,8 @@ rm -rvf opus4/library/Opus/Search/{Adapter,Index}/Lucene/
 rm -rvf testdata/sql/992_create_documents_testdata__security.sql
 rm -rvf testdata/sql/990_create_documents_testdata__hhhar.sql
 
+# exclude CSV metadata import script (see OPUSVIER-2497)
+rm -v opus4/scripts/import/CSVImporter.php
 
 #
 # Prepare libs/symlinks
