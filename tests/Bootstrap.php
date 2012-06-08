@@ -43,9 +43,9 @@ define('APPLICATION_ENV', 'testing');
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
-            '.',
+            realpath(dirname(__FILE__)),
             realpath(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library'),
-            get_include_path(),
+            get_include_path()
         )));
 
 // enable fallback autoloader for testing
