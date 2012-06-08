@@ -144,10 +144,10 @@ class CSVImporter {
         $oldId = $row[self::OLD_ID];
 
         try {
-            $doc->setLanguage($row[self::LANGUAGE]);
+            $doc->setLanguage(trim($row[self::LANGUAGE]));
             // Dokumenttyp muss kleingeschrieben werden (bei Fromm aber groß)
-            $doc->setType(lcfirst($row[self::TYPE]));
-            $doc->setServerState($row[self::SERVER_STATE]);
+            $doc->setType(lcfirst(trim($row[self::TYPE])));
+            $doc->setServerState(trim($row[self::SERVER_STATE]));
             $this->processTitlesAndAbstract($row, $doc, $oldId);
             $this->processPersons($row, $doc, $oldId);
             $this->processDate($row, $doc, $oldId);
