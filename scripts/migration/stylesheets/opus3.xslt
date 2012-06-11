@@ -121,7 +121,7 @@
             </xsl:if>
 
             <!-- ServerDatePublished -->
-            <xsl:if test="$date_creation > 0">
+            <xsl:if test="$date_creation > 0 and $modus = 'opus'">
                 <xsl:attribute name="ServerDatePublished">
                     <xsl:value-of select="php:function('date', 'c', $date_creation)" />
                 </xsl:attribute>
