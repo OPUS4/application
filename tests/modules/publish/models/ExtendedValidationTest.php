@@ -49,7 +49,6 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe',
-            'PersonSubmitterEmail1' => 'egal@wurscht.de',
             'TitleMain1' => 'Entenhausen',
             'TitleMainLanguage1' => 'deu',
             'PersonAuthorFirstName1' => 'Icke',
@@ -71,7 +70,6 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $data = array(
             'PersonSubmitterFirstName1' => 'John',
             'PersonSubmitterLastName1' => 'Doe',
-            'PersonSubmitterEmail1' => 'egal@wurscht.de',
             'TitleMain1' => 'Entenhausen',
             'TitleMainLanguage1' => 'deu',
             'PersonAuthorFirstName1' => '',
@@ -100,9 +98,9 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'TitleMain1' => 'Entenhausen',
             'TitleMainLanguage1' => 'deu',
             'PersonAuthorFirstName1' => '',
-            'PersonAuthorLastName1' => '',
-            'PersonAuthorEmail1' => '',
-            'PersonAuthorAllowEmailContact1' => '1',
+            'PersonAuthorLastName1' => 'Tester',
+            'PersonAuthorEmail1' => 'egal@wurscht.de',
+            'PersonAuthorAllowEmailContact1' => '0',
             'CompletedDate' => '06.09.2011',
             'Language' => 'deu',
             'Licence' => 'ID:4'
@@ -110,7 +108,6 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
 
         $val = new Publish_Model_ExtendedValidation($form, $data);
         $result = $val->validate();
-        //Checkbox is deleted because no other person field is filled
         $this->assertTrue($result);
     }
 
@@ -125,8 +122,8 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonSubmitterLastName1' => 'Doe',
             'TitleMain1' => 'Entenhausen',
             'TitleMainLanguage1' => 'deu',
-            'PersonAuthorFirstName1' => 'Icke',
-            'PersonAuthorLastName1' => '',
+            'PersonAuthorFirstName1' => '',
+            'PersonAuthorLastName1' => 'Tester',
             'PersonAuthorEmail1' => '',
             'PersonAuthorAllowEmailContact1' => '1',
             'CompletedDate' => '06.09.2011',
@@ -137,51 +134,32 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $val = new Publish_Model_ExtendedValidation($form, $data);
         $result = $val->validate();
         $this->assertFalse($result);
-    }    
-    
-//    public function testMainTitlesWithSameLanguage() {
-//        $session = new Zend_Session_Namespace('Publish');
-//        $session->documentType = 'all';
-//        //$session->additionalFields = array();
-//        $session->additionalFields['TitleMain'] = '2';
-//        $form = new Publish_Form_PublishingSecond(new Zend_View());
-//        
-//        $data = array(
-//            'PersonSubmitterFirstName1' => 'John',
-//            'PersonSubmitterLastName1' => 'Doe',
-//            'PersonSubmitterEmail1' => 'egal@wurscht.de',
-//            'TitleMain1' => 'Entenhausen',
-//            'TitleMainLanguage1' => 'deu',
-//            'TitleMain2' => 'Entenhausen Extended',
-//            'TitleMainLanguage2' => 'deu',
-//            'Language' => 'deu',
-//            'addMoreTitleMain' => "Einen weiteren Titel hinzufügen"
-//        );
-//        $form->getExtendedForm($data, true);
-//
-//        $val = new Publish_Model_ExtendedValidation($form, $data);
-//        $result = $val->validate();
-//        $this->assertFalse($result);
-//    }
-    
-//        public function testOneMainTitleWithDifferentDocLanguage() {
-//        $session = new Zend_Session_Namespace('Publish');
-//        $session->documentType = 'all';
-//        $form = new Publish_Form_PublishingSecond(new Zend_View());
-//        $data = array(
-//            'PersonSubmitterFirstName1' => 'John',
-//            'PersonSubmitterLastName1' => 'Doe',
-//            'PersonSubmitterMail1' => 'Doe@Doe.com',            
-//            'TitleMain1' => 'Entenhausen',
-//            'TitleMainLanguage1' => 'eng',                        
-//            'CompletedDate' => '06.09.2011',
-//            'Language' => 'deu'
-//        );
-//
-//        $val = new Publish_Model_ExtendedValidation($form, $data);
-//        $result = $val->validate();
-//        $this->assertFalse($result);
-//    }
+    }
+
+    public function testMainTitleWithDifferentDocLanguage() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'workingpaper';
+        $form = new Publish_Form_PublishingSecond($this->_logger);
+        $data = array(
+            'PersonSubmitterFirstName1' => 'John',
+            'PersonSubmitterLastName1' => 'Doe',
+            'TitleMain1' => 'Entenhausen',
+            'TitleMainLanguage1' => 'eng',
+            'PersonAuthorFirstName1' => '',
+            'PersonAuthorLastName1' => 'Tester',
+            'PersonAuthorEmail1' => '',
+            'PersonAuthorAllowEmailContact1' => '0',
+            'CompletedDate' => '11.06.2012',
+            'Language' => 'deu',
+            'Licence' => 'ID:4'
+        );
+
+        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $result = $val->validate();
+        $this->assertFalse($result);
+    }
 
 }
 
