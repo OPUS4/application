@@ -45,7 +45,7 @@ class Publish_Model_FormElement {
     //private member variables
     private $elementName;
     private $label;
-    private $required;
+    private $required;                      //Bool
     private $formElement;
     private $datatype;
     private $collectionRole;
@@ -53,10 +53,10 @@ class Publish_Model_FormElement {
     private $multiplicity;
     private $value;
     private $default = array();
-    private $validationObject; //Publish_Model_Validation
+    private $validationObject;              //Publish_Model_Validation
     private $validation = array();
-    private $group;         //Publish_Model_Group
-    private $subFormElements = array();         //array of Zend_Form_Element    
+    private $group;                         //Publish_Model_Group
+    private $subFormElements = array();     //array of Zend_Form_Element    
 
     //Constants
     const FIRST = "FirstName";
@@ -153,7 +153,7 @@ class Publish_Model_FormElement {
         switch ($workflow) {
             case 'Person':
                 //creates two subfields for first and last name
-                $first = new Publish_Model_FormElement($this->form, $this->elementName . self::FIRST, $this->required, 'text', 'Person');
+                $first = new Publish_Model_FormElement($this->form, $this->elementName . self::FIRST, false, 'text', 'Person');
                 $first->isSubField = false;
                 $first->setDefaultValue($this->default, self::FIRST);
                 $elementFirst = $first->transform();
