@@ -154,12 +154,12 @@ class Publish_Model_FormElement {
             case 'Person':
                 //creates two subfields for first and last name
                 $first = new Publish_Model_FormElement($this->form, $this->elementName . self::FIRST, false, 'text', 'Person');
-                $first->isSubField = false;
+                $first->isSubField = true;
                 $first->setDefaultValue($this->default, self::FIRST);
                 $elementFirst = $first->transform();
 
                 $last = new Publish_Model_FormElement($this->form, $this->elementName . self::LAST, $this->required, 'text', 'Person');
-                $last->isSubField = true;
+                $last->isSubField = false;
                 $last->setDefaultValue($this->default, self::LAST);
                 $elementLast = $last->transform();
 
