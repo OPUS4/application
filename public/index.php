@@ -75,6 +75,7 @@ try {
 }
 catch (Exception $e) {
     if (APPLICATION_ENV === 'production') {
+        header("HTTP/1.0 500 Internal Server Error");
         echo $e->getMessage();
     }
     else {
