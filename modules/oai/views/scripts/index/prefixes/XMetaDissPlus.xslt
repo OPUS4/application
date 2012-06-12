@@ -245,7 +245,7 @@
                 <xsl:attribute name="ddb:contactID"><xsl:value-of select="ThesisPublisher/@DnbContactId" /></xsl:attribute>
             </ddb:contact>
             <ddb:fileNumber>
-              <xsl:value-of select="count(//File)"/>
+              <xsl:value-of select="count(File)"/>
             </ddb:fileNumber>
             <xsl:apply-templates select="File" mode="xmetadissplus" />
             <xsl:if test="//File">

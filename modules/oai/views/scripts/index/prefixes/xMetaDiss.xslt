@@ -138,7 +138,7 @@
                 <xsl:attribute name="ddb:contactID"><xsl:value-of select="ThesisPublisher/@DnbContactId" /></xsl:attribute>
             </xsl:element>
             <xsl:element name="ddb:fileNumber">
-              <xsl:value-of select="count(//File)"/>
+              <xsl:value-of select="count(File)"/>
             </xsl:element>
             <xsl:apply-templates select="File" mode="xmetadiss" />
             <xsl:apply-templates select="IdentifierUrl" mode="xmetadiss" />
