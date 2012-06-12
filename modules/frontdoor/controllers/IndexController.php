@@ -97,11 +97,13 @@ class Frontdoor_IndexController extends Controller_Action {
 
         $config = Zend_Registry::getInstance()->get('Zend_Config');
         $layoutPath = 'layouts/' . (isset($config, $config->theme) ? $config->theme : '');
+        $numOfShortAbstractChars = isset($config, $config->frontdoor->numOfShortAbstractChars) ? $config->frontdoor->numOfShortAbstractChars : '';
 
         $proc->setParameter('', 'baseUrlServer', $this->getFullServerUrl());
         $proc->setParameter('', 'baseUrl', $baseUrl);
         $proc->setParameter('', 'layoutPath', $baseUrl . '/' . $layoutPath);
         $proc->setParameter('', 'isMailPossible', $this->isMailPossible($document));
+        $proc->setParameter('', 'numOfShortAbstractChars', $numOfShortAbstractChars);
         $frontdoorContent = $proc->transformToXML($documentNode);
 
         /* Setup view. */

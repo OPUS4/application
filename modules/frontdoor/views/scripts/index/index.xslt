@@ -50,6 +50,7 @@
     <xsl:param name="baseUrl" />
     <xsl:param name="layoutPath" />
     <xsl:param name="isMailPossible" />
+    <xsl:param name="numOfShortAbstractChars" />
 
     <xsl:key name="list" match="/Opus/Opus_Document/Subject[@Type='uncontrolled']" use="@Language"/>
 
@@ -834,15 +835,15 @@
         <p>
             <xsl:for-each select="TitleAbstract">
                 <div class="abstract">                    
-                    <xsl:choose>                        
-                        <xsl:when test="string-length(@Value) &lt; 200">
+                    <xsl:choose>           
+                        <xsl:when test="$numOfShortAbstractChars = '' or string-length(@Value) &lt; $numOfShortAbstractChars">
                             <xsl:value-of select="@Value" />
                         </xsl:when>
                         <xsl:otherwise>
                             <span>
                                 <xsl:attribute name="id">abstractShort_<xsl:value-of select="@Id"/></xsl:attribute>
                                 <xsl:attribute name="class">abstractShort</xsl:attribute>
-                                <xsl:value-of select="substring(@Value, 0, 200)"/>
+                                <xsl:value-of select="substring(@Value, 0, $numOfShortAbstractChars)"/>
                             </span>
                             <span>
                                 <xsl:attribute name="id">abstractFull_<xsl:value-of select="@Id"/></xsl:attribute>
