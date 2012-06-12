@@ -227,7 +227,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->assertTrue(is_readable($file->getPath()));
         $this->assertEquals('.txt', $file->getExtension());
         // TODO OPUSVIER-2503
-        $this->true($file->getMimeType() == 'application/x-empty' || $file->getMimeType() == 'inode/x-empty');
+        $this->assertTrue($file->getMimeType() == 'application/x-empty' || $file->getMimeType() == 'inode/x-empty');
 
         // cleanup
         $doc->deletePermanent();
