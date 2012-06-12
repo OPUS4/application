@@ -38,6 +38,9 @@
  */
 class Crawlers_SitelinksController extends Controller_Action {
 
+    protected function checkAccessModulePermissions() {
+    }
+
     public function indexAction() {
         $f = new Opus_DocumentFinder();
         $f->setServerState('published');
