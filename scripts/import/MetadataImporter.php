@@ -64,7 +64,7 @@ class MetadataImporter {
 
         $numOfDocsImported = 0;
         $numOfSkippedDocs = 0;
-        
+
         foreach ($xml->getElementsByTagName('opusDocument') as $opusDocumentElement) {
 
             // save oldId for later referencing of the record under consideration
@@ -97,7 +97,9 @@ class MetadataImporter {
                 // create new document
                 $doc = new Opus_Document();
             }
-
+            
+            $doc->unregisterPlugin('Opus_Document_Plugin_XmlCache');
+            $doc->unregisterPlugin('Opus_Document_Plugin_SequenceNumber');
 
             try {
                 $this->processAttributes($opusDocumentElement->attributes, $doc);
@@ -112,7 +114,7 @@ class MetadataImporter {
             
 
             try {
-                $doc->store();                
+                $doc->store();
             }
             catch (Exception $e) {
                 $this->console->log('Error while saving imported document #' . $oldId . ' to database: ' . $e->getMessage());
