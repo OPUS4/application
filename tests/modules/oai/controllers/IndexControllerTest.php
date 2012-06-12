@@ -714,10 +714,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-2450
      */
-    public function testDdbFileNumberForMultipleDocuments() {
-
-        // create two files: one with 2 full texts; another with 1 full text
-        // add both to the same DDC collection and query oai interface via set parameter
+    public function testDdbFileNumberForMultipleDocumentsForXMetaDissPlus() {
         $collection = new Opus_Collection(112);
 
         $doc1 = new Opus_Document();
@@ -746,9 +743,51 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $body = $this->getResponse()->getBody();
         $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
         $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $body);
+        $this->assertNotContains('<ddb:fileNumber>3</ddb:fileNumber>', $body);
 
         $doc1->deletePermanent();
         $doc2->deletePermanent();
     }
+
+    /**
+     * Regression test for OPUSVIER-2450
+     */
+    public function testDdbFileNumberForMultipleDocumentsForXMetaDiss() {
+        $collection = new Opus_Collection(112);
+
+        $doc1 = new Opus_Document();
+        $doc1->setServerState('published');
+        $doc1->setType('habilitation'); // xMetaDiss liefert nur Doktorarbeiten und Habilitationen aus
+        $file = new Opus_File();
+        $file->setVisibleInOai(true);
+        $file->setPathName('foo.pdf');
+        $doc1->addFile($file);
+        $file = new Opus_File();
+        $file->setVisibleInOai(true);
+        $file->setPathName('bar.pdf');
+        $doc1->addFile($file);
+        $doc1->addCollection($collection);
+        $doc1->store();
+
+        $doc2 = new Opus_Document();
+        $doc2->setServerState('published');
+        $doc2->setType('doctoralthesis'); // xMetaDiss liefert nur Doktorarbeiten und Habilitationen aus
+        $file = new Opus_File();
+        $file->setVisibleInOai(true);
+        $file->setPathName('baz.pdf');
+        $doc2->addFile($file);
+        $doc2->addCollection($collection);
+        $doc2->store();
+
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDiss&set=ddc:000');
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
+        $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $body);
+        $this->assertNotContains('<ddb:fileNumber>3</ddb:fileNumber>', $body);
+
+        $doc1->deletePermanent();
+        $doc2->deletePermanent();
+    }
+
 
 }
