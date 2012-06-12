@@ -544,7 +544,7 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */  
     private function _addFileUrlAttribute(DOMNode $file, $docid, $filename) {
-        $url = $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/files/' . $docid . '/' . $filename;
+        $url = $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/files/' . $docid . '/' . rawurlencode($filename);
 
         $owner = $file->ownerDocument;
         $attr = $owner->createAttribute('url');

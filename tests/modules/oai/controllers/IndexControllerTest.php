@@ -62,6 +62,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $xpath->registerNamespace('dc', "http://purl.org/dc/elements/1.1/");
         $xpath->registerNamespace('pc', "http://www.d-nb.de/standards/pc/");
         $xpath->registerNamespace('xMetaDiss', "http://www.d-nb.de/standards/xmetadissplus/");
+        $xpath->registerNamespace('epicur', "urn:nbn:de:1111-2004033116");
         $xpath->registerNamespace('dcterms', "http://purl.org/dc/terms/");
         return $xpath;
     }
@@ -578,6 +579,41 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertNotContains('<ddb:transfer ddb:type="dcterms:URI">', $this->getResponse()->getBody());
         $doc->deletePermanent();
+    }
+
+    /**
+     * Test verb=GetRecord, prefix=epicur.
+     */
+    public function testGetRecordEpicurUrlEncoding() {
+        $expectedFileNames = array("'many'  -  spaces  and  quotes.pdf", 'special-chars-%-"-#-&.pdf');
+
+        $doc = new Opus_Document(147);
+        $fileNames = array_map(function ($f) { return $f->getPathName(); }, $doc->getFile());
+        sort($fileNames);
+
+        $this->assertEquals(2, count($fileNames), "testdata changed");
+        $this->assertEquals($expectedFileNames, $fileNames, "testdata changed");
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=epicur&identifier=oai::147');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2444 - url encoding of transfer files.
+        $elements = $xpath->query('//epicur:resource/epicur:identifier[@target="transfer"]/text()');
+        $this->assertEquals(2, $elements->length, "Unexpected identifier count");
+
+        $fetchedNames = array();
+        foreach ($elements AS $element) {
+            $fetchedNames[] = preg_replace("/^.*\/147\//", "", $element->nodeValue);
+        }
+
+        $this->assertContains("special-chars-%25-%22-%23-%26.pdf", $fetchedNames);
+        $this->assertContains("%27many%27%20%20-%20%20spaces%20%20and%20%20quotes.pdf", $fetchedNames);
     }
 
     /**
