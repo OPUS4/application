@@ -45,12 +45,12 @@ class MetadataImporter {
     public function run($options) {
         $consoleConf = array('lineFormat' => '[%1$s] %4$s');
         $logfileConf = array('append' => false, 'lineFormat' => '%4$s');
-
         
         $this->console = Log::factory('console', '', '', $consoleConf, PEAR_LOG_INFO);
 
         if (count($options) < 2) {
             $this->console->log('Missing parameter: no file to import.');
+            return;
         }
 
         $logfilePath = 'reject.log';
