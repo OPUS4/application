@@ -63,6 +63,13 @@ class Opus3FileImport {
      * @var string  Defaults to null.
      */
     protected $tmpDoc = null;
+
+    /**
+     * Holds the roleId for this document
+     *
+     * @var int Defaults to null.
+     */
+    protected $roleId = null;
     
     /**
      * Holds the path to the fulltexts in Opus3 for this certain ID
@@ -122,7 +129,9 @@ class Opus3FileImport {
 
         $this->tmpDoc = new Opus_Document($id);
         $opus3Id = $this->tmpDoc->getIdentifierOpus3(0)->getValue();
-    	
+
+        $this->roleId = $roleid;
+
         // Sets $this->tmpPath
         $this->searchDir($this->path, $opus3Id);
 
@@ -135,7 +144,7 @@ class Opus3FileImport {
 
             $number = $this->saveFiles();
             $this->removeFilesFromRole('guest');
-            $this->appendFilesToRole($roleid);
+            $this->appendFilesToRole();
 
             return $number;
         }
@@ -319,10 +328,10 @@ class Opus3FileImport {
     * @return void
     */
 
-    private function appendFilesToRole($roleId = null)  {
+    private function appendFilesToRole()  {
         // Check if file have limited access
-        if (!is_null($roleId)) {
-            $role = new Opus_UserRole($roleId);
+        if (!is_null($this->roleId)) {
+            $role = new Opus_UserRole($this->roleId);
             foreach ($this->tmpDoc->getFile() as $f) {
                 $role->appendAccessFile($f->getId());
                 $this->logger->log_debug("Opus3FileImport", "Role '" . $role . "' for File '" . $f->getPathName() . "'");
@@ -345,20 +354,25 @@ class Opus3FileImport {
     }
 
     /*
-    * Get OAI-Visibility according to the Prefix
+    * Get OAI-Visibility according to the Prefix and Role
     *
     * @param string
     * @return boolean
     */
 
     private function getVisibilityInOai($s)  {
-        if (is_int(strpos($s , "pdf")) &&  strpos($s , "pdf") == 0) { return true; }
-        if (is_int(strpos($s , "ps")) &&  strpos($s , "ps") == 0) { return true; }
+        if (!is_null($this->roleId)) {
+            $role = new Opus_UserRole($this->roleId);
+            if ($role->getName() == 'guest') {
+                if (is_int(strpos($s , "pdf")) &&  strpos($s , "pdf") == 0) { return true; }
+                if (is_int(strpos($s , "ps")) &&  strpos($s , "ps") == 0) { return true; }
+            }
+        }
         return false;
     }
 
     /*
-    * Get Frontdoor-Visibility according to the Prefix
+    * Get Frontdoor-Visibility according to the Prefix 
     *
     * @param string
     * @return boolean
