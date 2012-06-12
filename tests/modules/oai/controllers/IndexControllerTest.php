@@ -33,11 +33,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Oai_IndexControllerTest extends ControllerTestCase {
 
     private $_security;
-
     private $_addOaiModuleAccess;
 
     /**
@@ -77,7 +75,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $response = $this->getResponse();
         $this->assertContains('badVerb', $response->getBody(),
-           "Response must contain 'badVerb'");
+                "Response must contain 'badVerb'");
     }
 
     /**
@@ -89,7 +87,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $response = $this->getResponse();
         $this->assertContains('badVerb', $response->getBody(),
-           "Response must contain 'badVerb'");
+                "Response must contain 'badVerb'");
     }
 
     /**
@@ -162,7 +160,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
             $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
             $this->assertContains("oai::$docId", $response->getBody(),
-                "Response must contain 'oai::$docId'");
+                    "Response must contain 'oai::$docId'");
 
             $xpath = $this->prepareXpathFromResultString($response->getBody());
 
@@ -195,7 +193,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->checkForBadStringsInHtml($response->getBody());
 
         $this->assertContains('oai::80', $response->getBody(),
-           "Response must contain 'oai::80'");
+                "Response must contain 'oai::80'");
     }
 
     /**
@@ -221,10 +219,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
         $this->assertContains('oai::41', $response->getBody(),
-           "Response must contain 'oai::41'");
+                "Response must contain 'oai::41'");
 
         $this->assertContains('xMetaDiss', $response->getBody(),
-           "Response must contain 'xMetaDiss'");
+                "Response must contain 'xMetaDiss'");
     }
 
     /**
@@ -239,10 +237,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
         $this->assertContains('oai::41', $response->getBody(),
-           "Response must contain 'oai::41'");
+                "Response must contain 'oai::41'");
 
         $this->assertContains('xMetaDiss', $response->getBody(),
-           "Response must contain 'xMetaDiss'");
+                "Response must contain 'xMetaDiss'");
     }
 
     /**
@@ -261,7 +259,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         foreach ($assertTitles AS $title) {
             $testString = "<pc:academicTitle>$title</pc:academicTitle>";
             $this->assertContains($testString, $response->getBody(),
-               "Response must contain '$testString'");
+                    "Response must contain '$testString'");
         }
     }
 
@@ -533,9 +531,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
         $this->assertContains('<ListRecords>', $response->getBody(),
-           "Response must contain '<ListRecords>'");
+                "Response must contain '<ListRecords>'");
         $this->assertContains('<record>', $response->getBody(),
-           "Response must contain '<record>'");
+                "Response must contain '<record>'");
     }
 
     /**
@@ -545,7 +543,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->enableSecurity();
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::123');
         $this->resetSecurity();
-        
+
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
         $this->assertContains('<GetRecord>', $this->getResponse()->getBody());
         $this->assertContains('<header status="deleted">', $this->getResponse()->getBody());
@@ -609,7 +607,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $response = $this->getResponse()->getBody();
         $this->assertContains('<Opus_Document xmlns="" Id="' . $id . '"', $response);
         $this->assertNotContains('<File', $response);
-
     }
 
     /**
@@ -629,7 +626,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<error code="cannotDisseminateFormat">The metadata format &amp;quot;copy_xml&amp;quot; given by metadataPrefix is not supported by the item or this repository.</error>',
                 $this->getResponse()->getBody(), 'do not prevent usage of metadataPrefix copy_xml and verb ListRecords');
         $this->resetSecurity();
-
     }
 
     public function testRequestForMetadataPrefixCopyxmlAndVerbListIdentifiersIsDenied() {
@@ -639,7 +635,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                 $this->getResponse()->getBody(), 'do not prevent usage of metadataPrefix copy_xml and verb ListIdentifiers');
         $this->resetSecurity();
     }
-
 
     private function enableSecurity() {
         $r = Opus_UserRole::fetchByName('guest');
@@ -660,7 +655,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     private function resetSecurity() {
         $r = Opus_UserRole::fetchByName('guest');
-        
+
         if ($this->_addOaiModuleAccess) {
             $r->removeAccessModule('oai');
             $r->store();
@@ -670,6 +665,90 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $config = Zend_Registry::get('Zend_Config');
         $config->security = $this->_security;
         Zend_Registry::set('Zend_Config', $config);
+    }
+
+    /**
+     * Regression test for OPUSVIER-2450
+     */
+    public function testDdbFileNumberForSingleDocumentAndSingleFile() {
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $file = new Opus_File();
+        $file->setVisibleInOai(true);
+        $file->setPathName('foobar.pdf');
+        $doc->addFile($file);
+        $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
+        $this->assertResponseCode(200);
+        $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $this->getResponse()->getBody());
+        $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());
+
+        $doc->deletePermanent();
+    }
+
+    /**
+     * Regression test for OPUSVIER-2450
+     */
+    public function testDdbFileNumberForSingleDocumentAndMultipleFiles() {
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $file = new Opus_File();
+        $file->setVisibleInOai(true);
+        $file->setPathName('foo.pdf');
+        $doc->addFile($file);
+        $file = new Opus_File();
+        $file->setVisibleInOai(true);
+        $file->setPathName('bar.pdf');
+        $doc->addFile($file);
+        $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
+        $this->assertResponseCode(200);
+        $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $this->getResponse()->getBody());
+        $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());
+
+        $doc->deletePermanent();
+    }
+
+    /**
+     * Regression test for OPUSVIER-2450
+     */
+    public function testDdbFileNumberForMultipleDocuments() {
+
+        // create two files: one with 2 full texts; another with 1 full text
+        // add both to the same DDC collection and query oai interface via set parameter
+        $collection = new Opus_Collection(112);
+
+        $doc1 = new Opus_Document();
+        $doc1->setServerState('published');
+        $file = new Opus_File();
+        $file->setVisibleInOai(true);
+        $file->setPathName('foo.pdf');
+        $doc1->addFile($file);
+        $file = new Opus_File();
+        $file->setVisibleInOai(true);
+        $file->setPathName('bar.pdf');
+        $doc1->addFile($file);
+        $doc1->addCollection($collection);
+        $doc1->store();
+
+        $doc2 = new Opus_Document();
+        $doc2->setServerState('published');
+        $file = new Opus_File();
+        $file->setVisibleInOai(true);
+        $file->setPathName('baz.pdf');
+        $doc2->addFile($file);
+        $doc2->addCollection($collection);
+        $doc2->store();
+
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
+        $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $body);
+
+        $doc1->deletePermanent();
+        $doc2->deletePermanent();
     }
 
 }
