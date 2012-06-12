@@ -161,5 +161,32 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $this->assertFalse($result);
     }
 
+    /**
+     * Checks, if validation is successful if title main language is empty - "Sprache der Veröffentlichung übernehmen"
+     */
+    public function testEmptyMainTitleLanguage() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'workingpaper';
+        $form = new Publish_Form_PublishingSecond($this->_logger);
+        $data = array(
+            'PersonSubmitterFirstName1' => 'John',
+            'PersonSubmitterLastName1' => 'Doe',
+            'TitleMain1' => 'Entenhausen',
+            'TitleMainLanguage1' => '',
+            'PersonAuthorFirstName1' => '',
+            'PersonAuthorLastName1' => 'Tester',
+            'PersonAuthorEmail1' => '',
+            'PersonAuthorAllowEmailContact1' => '0',
+            'CompletedDate' => '11.06.2012',
+            'Language' => 'deu',
+            'Licence' => 'ID:4'
+        );
+
+        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $result = $val->validate();
+        $this->assertTrue($result);
+    }
 }
 

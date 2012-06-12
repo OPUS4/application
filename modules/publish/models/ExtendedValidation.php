@@ -56,11 +56,13 @@ class Publish_Model_ExtendedValidation {
         
         foreach ($this->data AS $key => $value) {
             $element = $this->form->getElement($key);
-            $this->extendedData[$key] = array(
-                'value' => $value,
-                'datatype' => $element->getAttrib('datatype'),
-                'subfield' => $element->getAttrib('subfield'));                        
-        }          
+            if (!is_null($element)) {
+                $this->extendedData[$key] = array(
+                    'value' => $value,
+                    'datatype' => $element->getAttrib('datatype'),
+                    'subfield' => $element->getAttrib('subfield'));
+            }
+        }
     }
 
     /**
@@ -400,7 +402,7 @@ class Publish_Model_ExtendedValidation {
     }
 
     /**
-     * Methods checks if the user entered a title in the specified document language (this is needed for Solr)
+     * Methods checks if the user entered a main title in the specified document language (this is needed for Solr)
      * @return boolean
      */
     private function _validateDocumentLanguageForMainTitles() {
@@ -483,9 +485,13 @@ class Publish_Model_ExtendedValidation {
     private function _getTitleMainLanguageFields() {
         $titles = array();
 
-        foreach ($this->extendedData as $name => $entry) {            
-            if ($entry['datatype'] == 'Language' && $entry['subfield'] == true && strstr($name, 'ain'))
+        foreach ($this->extendedData as $name => $entry) {
+            if ($entry['datatype'] == 'Language' && $entry['subfield'] == true && strstr($name, 'ain')) {
+                
+                if (empty($entry['value'])) 
+                    $entry['value'] = $this->documentLanguage;
                 $titles[$name] = $entry['value'];
+            }
         }
         
         return $titles;
