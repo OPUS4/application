@@ -609,5 +609,23 @@
       </tuv>
     </tu>
 
+    <tu tuid="frontdoor_abstract_show_more">
+        <tuv xml:lang="en">
+            <seg>show more</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>zeige mehr</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="frontdoor_abstract_show_less">
+        <tuv xml:lang="en">
+            <seg>show less</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>zeige weniger</seg>
+        </tuv>
+    </tu>
+
   </body>
 </tmx>

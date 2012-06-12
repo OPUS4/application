@@ -186,6 +186,24 @@ table.result-data {
 	background: url(../img/theme/icon-abstract-frontdoor.gif) no-repeat 3px 0;
 	line-height: 1.4em;
 }
+
+.frontdoor .abstractShort {
+    display: none;
+}
+
+.frontdoor .abstractFull {   
+}
+
+.frontdoor .abstractThreeDots {
+    display: none;
+    padding-left: .25em;    
+    font-weight: bold;
+}
+
+.frontdoor .abstractButton {
+    display: none;    
+}
+
 /* form styles
 ----------------------------------------------------------- */
 .opus h3.document-type{

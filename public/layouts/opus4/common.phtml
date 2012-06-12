@@ -73,7 +73,8 @@ $this->container = Zend_Registry::get('Opus_Navigation');
 if ($this->jQueryEnabled()) {
     $this->headScript()
          ->prependFile($this->baseUrl() . '/' . $config->javascript->jquery->path)
-         ->appendFile($this->layoutPath() . '/js/searchutil.js');
+         ->appendFile($this->layoutPath() . '/js/searchutil.js')
+         ->appendFile($this->layoutPath() . '/js/abstractutil.js');
 }
 
 $languageSelectors = $this->languageSelector();

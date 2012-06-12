@@ -833,16 +833,66 @@
     <xsl:template name="Abstract">
         <p>
             <xsl:for-each select="TitleAbstract">
-                <xsl:if test="position() = 1">
-                    <div class="abstract">
-                        <xsl:value-of select="@Value" />
-                    </div>
-                </xsl:if>
-                <xsl:if test="position() > 1">
-                    <div class="abstract">
-                        <xsl:value-of select="@Value" />
-                    </div>
-                </xsl:if>
+                <div class="abstract">                    
+                    <xsl:choose>                        
+                        <xsl:when test="string-length(@Value) &lt; 200">
+                            <xsl:value-of select="@Value" />
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <span>
+                                <xsl:attribute name="id">abstractShort_<xsl:value-of select="@Id"/></xsl:attribute>
+                                <xsl:attribute name="class">abstractShort</xsl:attribute>
+                                <xsl:value-of select="substring(@Value, 0, 200)"/>
+                            </span>
+                            <span>
+                                <xsl:attribute name="id">abstractFull_<xsl:value-of select="@Id"/></xsl:attribute>
+                                <xsl:attribute name="class">abstractFull</xsl:attribute>
+                                <xsl:value-of select="@Value"/>
+                            </span>
+                            <span>
+                                <xsl:attribute name="id">abstractThreeDots_<xsl:value-of select="@Id" /></xsl:attribute>
+                                <xsl:attribute name="class">abstractThreeDots</xsl:attribute>
+                                <xsl:text disable-output-escaping="yes">&#x2026;</xsl:text>
+                            </span>
+                            <img>
+                                <xsl:attribute name="src">
+                                    <xsl:value-of select="$layoutPath"/>
+                                    <xsl:text>/img/arrow_down.png</xsl:text>
+                                </xsl:attribute>
+                                <xsl:attribute name="id">abstractButtonShow_<xsl:value-of select="@Id" /></xsl:attribute>
+                                <xsl:attribute name="class">abstractButtonShow abstractButton</xsl:attribute>
+                                <xsl:attribute name="title">
+                                    <xsl:call-template name="translateString">
+                                        <xsl:with-param name="string">frontdoor_abstract_show_more</xsl:with-param>
+                                    </xsl:call-template>
+                                </xsl:attribute>
+                                <xsl:attribute name="alt">
+                                    <xsl:call-template name="translateString">
+                                        <xsl:with-param name="string">frontdoor_abstract_show_more</xsl:with-param>
+                                    </xsl:call-template>
+                                </xsl:attribute>
+                            </img>
+                            <img>
+                                <xsl:attribute name="src">
+                                    <xsl:value-of select="$layoutPath"/>
+                                    <xsl:text>/img/arrow_up.png</xsl:text>
+                                </xsl:attribute>
+                                <xsl:attribute name="id">abstractButtonHide_<xsl:value-of select="@Id" /></xsl:attribute>
+                                <xsl:attribute name="class">abstractButtonHide abstractButton</xsl:attribute>
+                                <xsl:attribute name="title">
+                                    <xsl:call-template name="translateString">
+                                        <xsl:with-param name="string">frontdoor_abstract_show_less</xsl:with-param>
+                                    </xsl:call-template>
+                                </xsl:attribute>
+                                <xsl:attribute name="alt">
+                                    <xsl:call-template name="translateString">
+                                        <xsl:with-param name="string">frontdoor_abstract_show_less</xsl:with-param>
+                                    </xsl:call-template>
+                                </xsl:attribute>
+                            </img>
+                        </xsl:otherwise>
+                    </xsl:choose>
+                </div>
             </xsl:for-each>
         </p>
     </xsl:template>
