@@ -60,34 +60,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
     }
  
     /**
-     * Test upload action with correct form entries.
-     * Test always fails because filupload validation fails.
-     * => replaced by a selnium test
-     */
-//    public function testUploadActionWithValidPost() {
-//        $config = Zend_Registry::get('Zend_Config');        
-//        $config->form->first->require_upload = 0;
-//        $config->publish->maxfilesize = 1024;
-//        $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
-//        
-//        $this->request
-//                ->setMethod('POST')
-//                ->setPost(array(
-//                    'documentType' => 'all',
-//                    'MAX_FILE_SIZE' => '10240000',
-//                    'rights' => '0',
-//                    'rights' => '1',                    
-//                    'uploadComment' => '',
-//                    'send' => 'Weiter zum nächsten Schritt'
-//                ));
-//
-//        $this->dispatch('/publish/form/upload');        
-//        $this->assertResponseCode(200);
-//        $this->assertController('form');
-//        $this->assertAction('check');
-//    }
-
-    /**
      * Test upload action with invalid POST array
      */
     public function testUploadActionWithInvalidDummyPost() {
@@ -126,30 +98,30 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'PersonSubmitterFirstName1' => 'John',
-                    'PersonSubmitterLastName1' => 'Doe',
-                    'PersonSubmitterEmail1' => 'doe@example.org',
-                    'TitleMain1' => 'Entenhausen',
-                    'TitleMainLanguage1' => 'eng',
-                    'TitleAbstract1' => 'Testabsatz',
-                    'TitleAbstractLanguage1' => 'deu',
-                    'PersonAuthorFirstName1' => '',
-                    'PersonAuthorLastName1' => '',
-                    'PersonAuthorAcademicTitle1' => 'Dr.',
-                    'PersonAuthorEmail1' => '',
-                    'PersonAuthorAllowEmailContact1' => '0',
-                    'PersonAuthorDateOfBirth1' => '',
-                    'PersonAuthorPlaceOfBirth1' => '',
+                    'PersonSubmitterFirstName_1' => 'John',
+                    'PersonSubmitterLastName_1' => 'Doe',
+                    'PersonSubmitterEmail_1' => 'doe@example.org',
+                    'TitleMain_1' => 'Entenhausen',
+                    'TitleMainLanguage_1' => 'eng',
+                    'TitleAbstract_1' => 'Testabsatz',
+                    'TitleAbstractLanguage_1' => 'deu',
+                    'PersonAuthorFirstName_1' => '',
+                    'PersonAuthorLastName_1' => '',
+                    'PersonAuthorAcademicTitle_1' => 'Dr.',
+                    'PersonAuthorEmail_1' => '',
+                    'PersonAuthorAllowEmailContact_1' => '0',
+                    'PersonAuthorDateOfBirth_1' => '',
+                    'PersonAuthorPlaceOfBirth_1' => '',
                     'CompletedDate' => '2011/04/20',
                     'PageNumber' => '',
-                    'SubjectUncontrolled1' => '',
+                    'SubjectUncontrolled_1' => '',
                     'Institute' => '',
                     'IdentifierUrn' => '',
                     'Note' => '',
                     'Language' => 'deu',
                     'Licence' => 'ID:1',
-                    'Series1' => '',
-                    'SeriesNumber1' => '',
+                    'Series_1' => '',
+                    'SeriesNumber_1' => '',
                     'addMoreTitleMain' => 'Add one more title main'
                 ));
                        
@@ -189,23 +161,23 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'PersonSubmitterFirstName1' => 'John',
-                    'PersonSubmitterLastName1' => 'Doe',
-                    'PersonSubmitterEmail1' => 'doe@example.org',
-                    'TitleMain1' => 'Entenhausen',
-                    'TitleMainLanguage1' => 'eng',
-                    'TitleAbstract1' => 'Testabsatz',
-                    'TitleAbstractLanguage1' => 'deu',
-                    'PersonAuthorFirstName1' => '',
-                    'PersonAuthorLastName1' => '',
-                    'PersonAuthorAcademicTitle1' => 'Dr.',
-                    'PersonAuthorEmail1' => '',
-                    'PersonAuthorAllowEmailContact1' => '0',
-                    'PersonAuthorDateOfBirth1' => '',
-                    'PersonAuthorPlaceOfBirth1' => '',
+                    'PersonSubmitterFirstName_1' => 'John',
+                    'PersonSubmitterLastName_1' => 'Doe',
+                    'PersonSubmitterEmail_1' => 'doe@example.org',
+                    'TitleMain_1' => 'Entenhausen',
+                    'TitleMainLanguage_1' => 'deu',
+                    'TitleAbstract_1' => 'Testabsatz',
+                    'TitleAbstractLanguage_1' => 'deu',
+                    'PersonAuthorFirstName_1' => '',
+                    'PersonAuthorLastName_1' => '',
+                    'PersonAuthorAcademicTitle_1' => 'Dr.',
+                    'PersonAuthorEmail_1' => '',
+                    'PersonAuthorAllowEmailContact_1' => '0',
+                    'PersonAuthorDateOfBirth_1' => '',
+                    'PersonAuthorPlaceOfBirth_1' => '',
                     'CompletedDate' => '2011/02/22',
                     'PageNumber' => '',
-                    'SubjectUncontrolled1' => '',
+                    'SubjectUncontrolled_1' => '',
                     'Institute' => '',
                     'IdentifierUrn' => '',
                     'Note' => '',

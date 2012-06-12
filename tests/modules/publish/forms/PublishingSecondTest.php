@@ -71,8 +71,8 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $session->documentType = 'workingpaper';
         $form = new Publish_Form_PublishingSecond($this->_logger);
         $data = array(
-            'PersonSubmitterFirstName1' => 'John',
-            'PersonSubmitterLastName1' => 'Doe'
+            'PersonSubmitterFirstName_1' => 'John',
+            'PersonSubmitterLastName_1' => 'Doe'
         );
 
         $valid = $form->isValid($data);
@@ -89,8 +89,8 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $session->documentType = 'demo';
         $form = new Publish_Form_PublishingSecond($this->_logger);
         $data = array(
-            'PersonSubmitterFirstName1' => 'John',
-            'PersonSubmitterLastName1' => 'Doe'
+            'PersonSubmitterFirstName_1' => 'John',
+            'PersonSubmitterLastName_1' => 'Doe'
         );
 
         $valid = $form->isValid($data);
@@ -108,14 +108,14 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         
         $form = new Publish_Form_PublishingSecond($this->_logger);
         $data = array(
-            'PersonSubmitterFirstName1' => 'John',
-            'PersonSubmitterLastName1' => 'Doe'
+            'PersonSubmitterFirstName_1' => 'John',
+            'PersonSubmitterLastName_1' => 'Doe'
         );
         $form->prepareCheck();
         $this->assertNotNull($form->getElement('back'));
         $this->assertNotNull($form->getElement('send'));
-        $this->assertTrue($session->elements['PersonSubmitterFirstName1']['value']=='John');
-        $this->assertTrue($session->elements['PersonSubmitterLastName1']['value']=='Doe');
+        $this->assertTrue($session->elements['PersonSubmitterFirstName_1']['value']=='John');
+        $this->assertTrue($session->elements['PersonSubmitterLastName_1']['value']=='Doe');
     }
     
     /**
@@ -129,33 +129,33 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $session->additionalFields = array();
                 
         $data = array(
-            'PersonSubmitterFirstName1' => '',
-            'PersonSubmitterLastName1' => '', 
-            'PersonSubmitterEmail1' => '',            
-            'TitleMain1' => '',
-            'TitleMainLanguage1' => '',
+            'PersonSubmitterFirstName_1' => '',
+            'PersonSubmitterLastName_1' => '', 
+            'PersonSubmitterEmail_1' => '',            
+            'TitleMain_1' => '',
+            'TitleMainLanguage_1' => '',
             'addMoreTitleMain' => 'Einen+weiteren+Titel+hinzufügen',
-            'TitleAbstract1' => '',
-            'TitleAbstractLanguage1' => '',
-            'PersonAuthorFirstName1' => '',
-            'PersonAuthorLastName1' => '',
-            'PersonAuthorAcademicTitle1' => '',
-            'PersonAuthorEmail1' => '', 
-            'PersonAuthorAllowEmailContact1' => '0',
-            'PersonAuthorDateOfBirth1' => '',
-            'PersonAuthorPlaceOfBirth1' => '',
+            'TitleAbstract_1' => '',
+            'TitleAbstractLanguage_1' => '',
+            'PersonAuthorFirstName_1' => '',
+            'PersonAuthorLastName_1' => '',
+            'PersonAuthorAcademicTitle_1' => '',
+            'PersonAuthorEmail_1' => '', 
+            'PersonAuthorAllowEmailContact_1' => '0',
+            'PersonAuthorDateOfBirth_1' => '',
+            'PersonAuthorPlaceOfBirth_1' => '',
             'CompletedYear' => '',
             'CompletedDate' => '07.09.2011',
             'PageNumber' => '',
-            'SubjectUncontrolled1' => '',
-            'SubjectUncontrolledLanguage1' => '',
-            'Institute1' => '',
+            'SubjectUncontrolled_1' => '',
+            'SubjectUncontrolledLanguage_1' => '',
+            'Institute_1' => '',
             'IdentifierUrn' => '',
             'Note' => '',
             'Language' => 'deu',
             'Licence' => '',
-            'SeriesNumber1' => '',
-            'Series1' => ''
+            'SeriesNumber_1' => '',
+            'Series_1' => ''
         );
         
         $form = new Publish_Form_PublishingSecond($this->_logger, $data);
@@ -175,35 +175,35 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $session->additionalFields['TitleMain'] = '2';                
                 
         $data = array(
-            'PersonSubmitterFirstName1' => '',
-            'PersonSubmitterLastName1' => '', 
-            'PersonSubmitterEmail1' => '',            
-            'TitleMain1' => '',
-            'TitleMainLanguage1' => '',
-            'TitleMain2' => '',
-            'TitleMainLanguage2' => '',
+            'PersonSubmitterFirstName_1' => '',
+            'PersonSubmitterLastName_1' => '', 
+            'PersonSubmitterEmail_1' => '',            
+            'TitleMain_1' => '',
+            'TitleMainLanguage_1' => '',
+            'TitleMain_2' => '',
+            'TitleMainLanguage_2' => '',
             'deleteMoreTitleMain' => 'Den+letzten+Titel+löschen',
-            'TitleAbstract1' => '',
-            'TitleAbstractLanguage1' => '',
-            'PersonAuthorFirstName1' => '',
-            'PersonAuthorLastName1' => '',
-            'PersonAuthorAcademicTitle1' => '',
-            'PersonAuthorEmail1' => '', 
-            'PersonAuthorAllowEmailContact1' => '0',
-            'PersonAuthorDateOfBirth1' => '',
-            'PersonAuthorPlaceOfBirth1' => '',
+            'TitleAbstract_1' => '',
+            'TitleAbstractLanguage_1' => '',
+            'PersonAuthorFirstName_1' => '',
+            'PersonAuthorLastName_1' => '',
+            'PersonAuthorAcademicTitle_1' => '',
+            'PersonAuthorEmail_1' => '', 
+            'PersonAuthorAllowEmailContact_1' => '0',
+            'PersonAuthorDateOfBirth_1' => '',
+            'PersonAuthorPlaceOfBirth_1' => '',
             'CompletedYear' => '',
             'CompletedDate' => '07.09.2011',
             'PageNumber' => '',
-            'SubjectUncontrolled1' => '',
-            'SubjectUncontrolledLanguage1' => '',
-            'Institute1' => '',
+            'SubjectUncontrolled_1' => '',
+            'SubjectUncontrolledLanguage_1' => '',
+            'Institute_1' => '',
             'IdentifierUrn' => '',
             'Note' => '',
             'Language' => 'deu',
             'Licence' => '',
-            'SeriesNumber1' => '',
-            'Series1' => ''
+            'SeriesNumber_1' => '',
+            'Series_1' => ''
         );
         
         $form = new Publish_Form_PublishingSecond($this->_logger, $data);
@@ -221,43 +221,43 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $session->documentType = 'preprint';
         $session->additionalFields = array();
         $session->additionalFields['Institute'] = '1';                
-        $session->additionalFields['collId0Institute1'] = '1'; 
-        $session->additionalFields['stepInstitute1'] = '1';         
+        $session->additionalFields['collId0Institute_1'] = '1'; 
+        $session->additionalFields['stepInstitute_1'] = '1';         
            
         $data = array(
-            'PersonSubmitterFirstName1' => '',
-            'PersonSubmitterLastName1' => '', 
-            'PersonSubmitterEmail1' => '',            
-            'TitleMain1' => '',
-            'TitleMainLanguage1' => '',            
-            'TitleAbstract1' => '',
-            'TitleAbstractLanguage1' => '',
-            'PersonAuthorFirstName1' => '',
-            'PersonAuthorLastName1' => '',
-            'PersonAuthorAcademicTitle1' => '',
-            'PersonAuthorEmail1' => '', 
-            'PersonAuthorAllowEmailContact1' => '0',
-            'PersonAuthorDateOfBirth1' => '',
-            'PersonAuthorPlaceOfBirth1' => '',
+            'PersonSubmitterFirstName_1' => '',
+            'PersonSubmitterLastName_1' => '', 
+            'PersonSubmitterEmail_1' => '',            
+            'TitleMain_1' => '',
+            'TitleMainLanguage_1' => '',            
+            'TitleAbstract_1' => '',
+            'TitleAbstractLanguage_1' => '',
+            'PersonAuthorFirstName_1' => '',
+            'PersonAuthorLastName_1' => '',
+            'PersonAuthorAcademicTitle_1' => '',
+            'PersonAuthorEmail_1' => '', 
+            'PersonAuthorAllowEmailContact_1' => '0',
+            'PersonAuthorDateOfBirth_1' => '',
+            'PersonAuthorPlaceOfBirth_1' => '',
             'CompletedYear' => '',
             'CompletedDate' => '07.09.2011',
             'PageNumber' => '',
-            'SubjectUncontrolled1' => '',
-            'SubjectUncontrolledLanguage1' => '',
-            'Institute1' => 'ID:15994',
+            'SubjectUncontrolled_1' => '',
+            'SubjectUncontrolledLanguage_1' => '',
+            'Institute_1' => 'ID:15994',
             'browseDownInstitute' => 'runter',
             'IdentifierUrn' => '',
             'Note' => '',
             'Language' => 'deu',
             'Licence' => '',
-            'SeriesNumber1' => '',
-            'Series1' => ''
+            'SeriesNumber_1' => '',
+            'Series_1' => ''
         );
         
         $form = new Publish_Form_PublishingSecond($this->_logger, $data);
         $form->getExtendedForm($data, true);           
-        $this->assertTrue($session->additionalFields['collId1Institute1']=='15994');       
-        $this->assertTrue($session->additionalFields['stepInstitute1']=='2');       
+        $this->assertTrue($session->additionalFields['collId1Institute_1']=='15994');       
+        $this->assertTrue($session->additionalFields['stepInstitute_1']=='2');       
     }
 
     /**
@@ -270,44 +270,44 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $session->documentType = 'preprint';
         $session->additionalFields = array();
         $session->additionalFields['Institute'] = '1';                
-        $session->additionalFields['collId0Institute1'] = '1';
-        $session->additionalFields['collId1Institute1'] = '15994';        
-        $session->additionalFields['stepInstitute1'] = '2';         
+        $session->additionalFields['collId0Institute_1'] = '1';
+        $session->additionalFields['collId1Institute_1'] = '15994';        
+        $session->additionalFields['stepInstitute_1'] = '2';         
            
         $data = array(
-            'PersonSubmitterFirstName1' => '',
-            'PersonSubmitterLastName1' => '', 
-            'PersonSubmitterEmail1' => '',            
-            'TitleMain1' => '',
-            'TitleMainLanguage1' => '',            
-            'TitleAbstract1' => '',
-            'TitleAbstractLanguage1' => '',
-            'PersonAuthorFirstName1' => '',
-            'PersonAuthorLastName1' => '',
-            'PersonAuthorAcademicTitle1' => '',
-            'PersonAuthorEmail1' => '', 
-            'PersonAuthorAllowEmailContact1' => '0',
-            'PersonAuthorDateOfBirth1' => '',
-            'PersonAuthorPlaceOfBirth1' => '',
+            'PersonSubmitterFirstName_1' => '',
+            'PersonSubmitterLastName_1' => '', 
+            'PersonSubmitterEmail_1' => '',            
+            'TitleMain_1' => '',
+            'TitleMainLanguage_1' => '',            
+            'TitleAbstract_1' => '',
+            'TitleAbstractLanguage_1' => '',
+            'PersonAuthorFirstName_1' => '',
+            'PersonAuthorLastName_1' => '',
+            'PersonAuthorAcademicTitle_1' => '',
+            'PersonAuthorEmail_1' => '', 
+            'PersonAuthorAllowEmailContact_1' => '0',
+            'PersonAuthorDateOfBirth_1' => '',
+            'PersonAuthorPlaceOfBirth_1' => '',
             'CompletedYear' => '',
             'CompletedDate' => '07.09.2011',
             'PageNumber' => '',
-            'SubjectUncontrolled1' => '',
-            'SubjectUncontrolledLanguage1' => '',            
-            'collId2Institute1' => 'ID:15995',
+            'SubjectUncontrolled_1' => '',
+            'SubjectUncontrolledLanguage_1' => '',            
+            'collId2Institute_1' => 'ID:15995',
             'browseUpInstitute' => 'hoch',
             'IdentifierUrn' => '',
             'Note' => '',
             'Language' => 'deu',
             'Licence' => '',
-            'SeriesNumber1' => '',
-            'Series1' => ''
+            'SeriesNumber_1' => '',
+            'Series_1' => ''
         );
         
         $form = new Publish_Form_PublishingSecond($this->_logger, $data);       
         $form->getExtendedForm($data, true);                   
-        $this->assertTrue($session->additionalFields['stepInstitute1']=='1');          
-        $this->assertFalse(array_key_exists('collId2Institute1', $session->additionalFields));  
+        $this->assertTrue($session->additionalFields['stepInstitute_1']=='1');          
+        $this->assertFalse(array_key_exists('collId2Institute_1', $session->additionalFields));  
     }    
     
     /**
@@ -322,32 +322,32 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         $session->additionalFields = array();               
            
         $data = array(
-            'PersonSubmitterFirstName1' => '',
-            'PersonSubmitterLastName1' => '', 
-            'PersonSubmitterEmail1' => '',            
-            'TitleMain1' => '',
-            'TitleMainLanguage1' => '',            
-            'TitleAbstract1' => '',
-            'TitleAbstractLanguage1' => '',
-            'PersonAuthorFirstName1' => '',
-            'PersonAuthorLastName1' => '',
-            'PersonAuthorAcademicTitle1' => '',
-            'PersonAuthorEmail1' => '', 
-            'PersonAuthorAllowEmailContact1' => '0',
-            'PersonAuthorDateOfBirth1' => '',
-            'PersonAuthorPlaceOfBirth1' => '',
+            'PersonSubmitterFirstName_1' => '',
+            'PersonSubmitterLastName_1' => '', 
+            'PersonSubmitterEmail_1' => '',            
+            'TitleMain_1' => '',
+            'TitleMainLanguage_1' => '',            
+            'TitleAbstract_1' => '',
+            'TitleAbstractLanguage_1' => '',
+            'PersonAuthorFirstName_1' => '',
+            'PersonAuthorLastName_1' => '',
+            'PersonAuthorAcademicTitle_1' => '',
+            'PersonAuthorEmail_1' => '', 
+            'PersonAuthorAllowEmailContact_1' => '0',
+            'PersonAuthorDateOfBirth_1' => '',
+            'PersonAuthorPlaceOfBirth_1' => '',
             'CompletedYear' => '',
             'CompletedDate' => '07.09.2011',
             'PageNumber' => '',
-            'SubjectUncontrolled1' => '',
-            'SubjectUncontrolledLanguage1' => '',            
-            'Institute1' => '',
+            'SubjectUncontrolled_1' => '',
+            'SubjectUncontrolledLanguage_1' => '',            
+            'Institute_1' => '',
             'IdentifierUrn' => '',
             'Note' => '',
             'Language' => 'deu',
             'Licence' => '',
-            'SeriesNumber1' => '',
-            'Series1' => ''
+            'SeriesNumber_1' => '',
+            'Series_1' => ''
         );
         
         $form = new Publish_Form_PublishingSecond($this->_logger, $data);

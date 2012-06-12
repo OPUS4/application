@@ -51,12 +51,12 @@ class Publish_DepositControllerTest extends ControllerTestCase {
     public function testDepositActionWithValidPostAndBackButton() {
         $session = new Zend_Session_Namespace('Publish');
         $elemente = array(
-            1 => array('name' => 'PersonSubmitterFirstName1', 'value' => 'Hans'),
-            2 => array('name' => 'PersonSubmitterLastName1', 'value' => 'Hansmann'),
-            3 => array('name' => 'PersonSubmitterEmail1', 'value' => 'test@mail.com'),
+            1 => array('name' => 'PersonSubmitterFirstName_1','value' => 'Hans'),
+            2 => array('name' => 'PersonSubmitterLastName_1','value' => 'Hansmann'),
+            3 => array('name' => 'PersonSubmitterEmail_1','value' => 'test@mail.com'),
             4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),            
-            5 => array('name' => 'TitleMain1', 'value' => 'Irgendwas'),
-            6 => array('name' => 'TitleMainLanguage1', 'value' => 'deu')
+            5 => array('name' => 'TitleMain_1','value' => 'Irgendwas'),
+            6 => array('name' => 'TitleMainLanguage_1','value' => 'deu')
         );
         $session->elements = $elemente;
         $session->documentId = '712';
@@ -82,28 +82,28 @@ class Publish_DepositControllerTest extends ControllerTestCase {
     public function testDepositActionWithValidPostAndSendButton() {
         $session = new Zend_Session_Namespace('Publish');
         $elemente = array(
-            1 => array('name' => 'PersonSubmitterFirstName1', 'value' => 'Hans', 'datatype'=>'Person', 'subfield'=>'0'),
-            2 => array('name' => 'PersonSubmitterLastName1', 'value' => 'Hansmann', 'datatype'=>'Person', 'subfield'=>'1'),
-            3 => array('name' => 'PersonSubmitterEmail1', 'value' => 'test@mail.com', 'datatype'=>'Person', 'subfield'=>'1'),
-            4 => array('name' => 'PersonSubmitterPlaceOfBirth1', 'value' => 'Stadt', 'datatype'=>'Person', 'subfield'=>'1'),
-            5 => array('name' => 'PersonSubmitterDateOfBirth1', 'value' => '1970/01/01', 'datatype'=>'Person', 'subfield'=>'1'),
-            6 => array('name' => 'PersonSubmitterAcademicTitle1', 'value' => 'Dr.', 'datatype'=>'Person', 'subfield'=>'1'),
-            7 => array('name' => 'PersonSubmitterAllowEmailContact1', 'value' => '0', 'datatype'=>'Person', 'subfield'=>'1'),
-            8 => array('name' => 'CompletedDate', 'value' => '2012/1/1', 'datatype'=>'Date', 'subfield'=>'0'),
-            9 => array('name' => 'TitleMain1', 'value' => 'Entenhausen', 'datatype'=>'Title', 'subfield'=>'0'),
-            10 => array('name' => 'TitleMainLanguage1', 'value' => 'deu', 'datatype'=>'Language', 'subfield'=>'1'),
-            11 => array('name' => 'TitleMain2','value' => 'Irgendwas sonst', 'datatype'=>'Title', 'subfield'=>'0'),
-            12 => array('name' => 'TitleMainLanguage2','value' => 'eng', 'datatype'=>'Language', 'subfield'=>'1'),
+            1 => array('name' => 'PersonSubmitterFirstName_1', 'value' => 'Hans', 'datatype'=>'Person', 'subfield'=>'0'),
+            2 => array('name' => 'PersonSubmitterLastName_1', 'value' => 'Hansmann', 'datatype'=>'Person', 'subfield'=>'1'),
+            3 => array('name' => 'PersonSubmitterEmail_1', 'value' => 'test@mail.com', 'datatype'=>'Person', 'subfield'=>'1'),
+            4 => array('name' => 'PersonSubmitterPlaceOfBirth_1', 'value' => 'Stadt', 'datatype'=>'Person', 'subfield'=>'1'),
+            5 => array('name' => 'PersonSubmitterDateOfBirth_1', 'value' => '1970/01/01', 'datatype'=>'Person', 'subfield'=>'1'),
+            6 => array('name' => 'PersonSubmitterAcademicTitle_1', 'value' => 'Dr.', 'datatype'=>'Person', 'subfield'=>'1'),
+            7 => array('name' => 'PersonSubmitterAllowEmailContact_1', 'value' => '0', 'datatype'=>'Person', 'subfield'=>'1'),
+            8 => array('name' => 'CompletedDate', 'value' => '2012/1/_1', 'datatype'=>'Date', 'subfield'=>'0'),
+            9 => array('name' => 'TitleMain_1', 'value' => 'Entenhausen', 'datatype'=>'Title', 'subfield'=>'0'),
+            10 => array('name' => 'TitleMainLanguage_1', 'value' => 'deu', 'datatype'=>'Language', 'subfield'=>'1'),
+            11 => array('name' => 'TitleMain_2','value' => 'Irgendwas sonst', 'datatype'=>'Title', 'subfield'=>'0'),
+            12 => array('name' => 'TitleMainLanguage_2','value' => 'eng', 'datatype'=>'Language', 'subfield'=>'1'),
             13 => array('name' => 'Language','value' => 'deu', 'datatype'=>'Language', 'subfield'=>'0'),                        
             14 => array('name' => 'Note','value' => 'Dies ist ein Kommentar', 'datatype'=>'Note', 'subfield'=>'0'),
             15 => array('name' => 'Licence','value' => 'ID:3', 'datatype'=>'Licence', 'subfield'=>'0'),                        
             16 => array('name' => 'ThesisGrantor','value' => 'ID:1', 'datatype'=>'ThesisGrantor', 'subfield'=>'0'),
             17 => array('name' => 'ThesisPublisher' ,'value' => 'ID:2', 'datatype'=>'ThesisPublisher', 'subfield'=>'0'),
-            18 => array('name' => 'SubjectSwd1','value' => 'hallo098', 'datatype'=>'Subject', 'subfield'=>'0'),   
-            19 => array('name' => 'SubjectUncontrolled1','value' => 'Keyword', 'datatype'=>'Subject', 'subfield'=>'0'),
-            20 => array('name' => 'SubjectUncontrolledLanguage1','value' => 'deu', 'datatype'=>'Language', 'subfield'=>'1'),              
-            21 => array('name' => 'SubjectMSC1' ,'value' => 'ID:8030', 'datatype'=>'Collection', 'subfield'=>'0'),
-            22 => array('name' => 'SubjectPACS1','value' => 'ID:2878', 'datatype'=>'Collection', 'subfield'=>'0'),
+            18 => array('name' => 'SubjectSwd_1','value' => 'hallo098', 'datatype'=>'Subject', 'subfield'=>'0'),   
+            19 => array('name' => 'SubjectUncontrolled_1','value' => 'Keyword', 'datatype'=>'Subject', 'subfield'=>'0'),
+            20 => array('name' => 'SubjectUncontrolledLanguage_1','value' => 'deu', 'datatype'=>'Language', 'subfield'=>'1'),              
+            21 => array('name' => 'SubjectMSC_1' ,'value' => 'ID:8030', 'datatype'=>'Collection', 'subfield'=>'0'),
+            22 => array('name' => 'SubjectPACS_1','value' => 'ID:2878', 'datatype'=>'Collection', 'subfield'=>'0'),
             23 => array('name' => 'IdentifierUrn' ,'value' => 'Publish_DepositControllerTest_testDepositActionWithValidPostAndSendButton', 'datatype'=>'Identifier', 'subfield'=>'0'),
             24 => array('name' => 'IdentifierOld' ,'value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
             25 => array('name' => 'IdentifierSerial','value' => 'blablup987', 'datatype'=>'Identifier', 'subfield'=>'0'),
@@ -174,12 +174,12 @@ class Publish_DepositControllerTest extends ControllerTestCase {
     public function testDepositActionWithAbortInPost() {
         $session = new Zend_Session_Namespace('Publish');
         $elemente = array(
-            1 => array('name' => 'PersonSubmitterFirstName1', 'value' => 'Hans'),
-            2 => array('name' => 'PersonSubmitterLastName1', 'value' => 'Hansmann'),
-            3 => array('name' => 'PersonSubmitterEmail1', 'value' => 'test@mail.com'),
+            1 => array('name' => 'PersonSubmitterFirstName_1', 'value' => 'Hans'),
+            2 => array('name' => 'PersonSubmitterLastName_1', 'value' => 'Hansmann'),
+            3 => array('name' => 'PersonSubmitterEmail_1', 'value' => 'test@mail.com'),
             4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),            
-            5 => array('name' => 'TitleMain1', 'value' => 'Irgendwas'),
-            6 => array('name' => 'TitleMainLanguage1', 'value' => 'deu')
+            5 => array('name' => 'TitleMain_1', 'value' => 'Irgendwas'),
+            6 => array('name' => 'TitleMainLanguage_1', 'value' => 'deu')
         );
         
         $session->elements = $elemente;
