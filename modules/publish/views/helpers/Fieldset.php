@@ -50,16 +50,15 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
             else
                 $fieldset .= "size='30' ";
 
-            if ($field["disabled"] === true) {
+            if ($field['disabled'] === true) {
                 $fieldset .= " disabled='1' ";
                 $this->disable = true;
             }
 
-            if (strstr($field["id"], "1"))
-                $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
+            if (strstr($field['id'], "1"))
+                $fieldset .= " title='" . $this->view->translate($field['hint']) . "' ";
 
-            $fieldset .= " value='" . htmlspecialchars($field["value"]) . "' />\n";
-
+            $fieldset .= " value='" . htmlspecialchars($field['value'], ENT_QUOTES) . "' />\n";            
             if (isset($field['desc']))
                 $fieldset .= '<div class="description hint">' . $this->view->translate($field['desc']) . '</div>';
         }
@@ -67,21 +66,21 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     }
 
     function renderHtmlTextarea($field, $options) {
-        $fieldset = "\n\t\t\t\t<textarea name='" . $field["id"] . "' class='form-textarea' ";
+        $fieldset = "\n\t\t\t\t<textarea name='" . $field['id'] . "' class='form-textarea' ";
         if ($options !== null)
             $fieldset .= $options . " ";
         else
             $fieldset .= "cols='30' rows='5' ";
 
-        if ($field["disabled"] === true) {
+        if ($field['disabled'] === true) {
             $fieldset .= " disabled='1' ";
             $this->disable = true;
         }
 
-        if (strstr($field["id"], "1"))
-            $fieldset .= " title='" . $this->view->translate($field["hint"]) . "' ";
+        if (strstr($field['id'], "1"))
+            $fieldset .= " title='" . $this->view->translate($field['hint']) . "' ";
 
-        $fieldset .= " id='" . $field["id"] . "'>" . htmlspecialchars($field["value"]) . "</textarea>";
+        $fieldset .= " id='" . $field['id'] . "'>" . htmlspecialchars($field['value']) . "</textarea>";
 
         return $fieldset;
     }
@@ -90,7 +89,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         $fieldset = "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id'] . '" class="form-selectfield"  id="' . $field['id'] . '"';
         if (strstr($field['id'], '1'))
             $fieldset .= ' title="' . $this->view->translate($field['hint']) . '"';
-        if ($field["disabled"] === true) {
+        if ($field['disabled'] === true) {
             $fieldset .= ' disabled="1" ';
         }
         $fieldset .= '>' . "\n\t\t\t\t\t";
@@ -119,7 +118,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         if ($field['check'] == 'checked')
             $fieldset .= " checked='checked' ";
 
-        if ($field["disabled"] === true) {
+        if ($field['disabled'] === true) {
             $fieldset .= " disabled='disabled' ";
             $this->disable = true;
         }
@@ -171,7 +170,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
                         $fieldset .= "class='form-button delete-button' ";
                 }
 
-                $fieldset .= "name='" . $button["id"] . "' id='" . $button["id"] . "' value='" . $button["label"] . "' />&nbsp;";
+                $fieldset .= "name='" . $button['id'] . "' id='" . $button['id'] . "' value='" . $button['label'] . "' />&nbsp;";
             }
         }
         $fieldset .= "</div>";
@@ -183,7 +182,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     function renderHtmlHidden($hiddens) {
     $fieldset = "";
         foreach ($hiddens AS $hidden) {
-            $fieldset .= "\n<input type='hidden' name='" . $hidden["id"] . "' id='" . $hidden["id"] . "' value='" . $hidden["value"] . "' />";
+            $fieldset .= "\n<input type='hidden' name='" . $hidden['id'] . "' id='" . $hidden['id'] . "' value='" . $hidden['value'] . "' />";
         }    
         return $fieldset;
     }
