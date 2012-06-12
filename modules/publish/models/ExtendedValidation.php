@@ -229,8 +229,8 @@ class Publish_Model_ExtendedValidation {
         $firstNames = array();
 
         foreach ($this->extendedData as $name => $entry) { 
-            //PersonFirstname is main field of that group -> subfield is 1
-            if ($entry['datatype'] == 'Person' && $entry['subfield'] == '0')
+            
+            if ($entry['datatype'] == 'Person' && $entry['subfield'] == true && strstr($name, 'First'))
                 $firstNames[$name] = $entry['value'];
         }
 

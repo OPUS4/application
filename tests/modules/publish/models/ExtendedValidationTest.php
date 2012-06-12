@@ -47,13 +47,15 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $session->documentType = 'all';
         $form = new Publish_Form_PublishingSecond($this->_logger);
         $data = array(
-            'PersonSubmitterFirstName_1' => 'John',
+            'PersonSubmitterFirstName__1' => '',
             'PersonSubmitterLastName_1' => 'Doe',
             'TitleMain_1' => 'Entenhausen',
             'TitleMainLanguage_1' => 'deu',
-            'PersonAuthorFirstName_1' => 'Icke',
+            'PersonAuthorFirstName_1' => 'Vorname',
             'PersonAuthorLastName_1' => '',
-            'CompletedDate' => '06.09.2011',
+            'PersonAuthorEmail_1' => '',
+            'PersonAuthorAllowEmailContact_1' => '0',
+            'CompletedDate' => '12.06.2012',
             'Language' => 'deu',
             'Licence' => 'ID:4'
         );
