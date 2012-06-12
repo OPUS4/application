@@ -38,11 +38,11 @@ class Oai_ContainerController extends Controller_Action {
     public function indexAction() {
         $docId = $this->getRequest()->getParam('docId', null);
 
-        $container = null;        
-	$tarball = null;
+        $container = null;
+        $fileHandle = null;	
         try {
-            $container = new Oai_Model_Container($docId, $this->_logger);       
-            $tarball = $container->getTar();
+            $container = new Oai_Model_Container($docId, $this->_logger);
+            $fileHandle = $container->getFileHandle();            
         }
         catch (Oai_Model_Exception $e) {
             $this->view->errorMessage = $e->getMessage();
@@ -55,20 +55,20 @@ class Oai_ContainerController extends Controller_Action {
         $this->_helper->viewRenderer->setNoRender();
 
         $this->getResponse()
-                ->setHeader('Content-Type', 'application/x-tar', true)
-                ->setHeader('Content-Disposition', 'attachment; filename=' . $container->getName() . '.tar', true);
+                ->setHeader('Content-Type', $fileHandle->getMimeType(), true)
+                ->setHeader('Content-Disposition', 'attachment; filename=' . $container->getName() . $fileHandle->getExtension(), true);
 
         $this->_helper->SendFile->setLogger($this->_logger);
         try {
-            $this->_helper->SendFile($tarball);            
+            $this->_helper->SendFile($fileHandle->getPath());
         } catch (Exception $e) {
             $this->_logger->err($e->getMessage());
             $this->getResponse()->clearAllHeaders();
             $this->getResponse()->clearBody();
             $this->getResponse()->setHttpResponseCode(500);
         }
-        
-        $container->deleteContainerFile($tarball);
+
+        $fileHandle->delete();
     }
 
 }

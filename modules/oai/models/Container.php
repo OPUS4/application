@@ -84,7 +84,7 @@ class Oai_Model_Container {
     private function getAccessibleFiles() {
         $realm = Opus_Security_Realm::getInstance();
         if ($this->doc->getServerState() !== 'published' && !$realm->checkDocument($this->docId)) {
-            $this->logErrorMessage('document with id ' .     $this->docId . ' is not in server state published');
+            $this->logErrorMessage('document with id ' . $this->docId . ' is not in server state published');
             throw new Oai_Model_Exception('access to requested document is forbidden');
         }
 
@@ -139,27 +139,14 @@ class Oai_Model_Container {
         return $this->getWorkspacePath() . 'files' . DIRECTORY_SEPARATOR;
     }
 
-    public function getTar() {
-        $tarball = $this->getTempPath() . uniqid($this->docId, true) . '.tar';
-	$phar = null;
-	try {
-            $phar = new PharData($tarball);
-        } catch(UnexpectedValueException $e) {
-            $this->logErrorMessage('could not create tarball archive file ' . $tarball . ' due to insufficient file system permissions: ' . $e->getMessage());
-            throw new Oai_Model_Exception('error while creating tarball container: could not open tarball');
-	}
-
-        foreach ($this->getAccessibleFiles() as $file) {
-            $filePath = $this->getFilesPath() . $this->docId . DIRECTORY_SEPARATOR;
-            try {
-            	$phar->addFile($filePath . $file->getPathName(), $file->getPathName());
-            } catch (Exception $e) {
-		$this->logErrorMessage('could not add ' . $file->getPathName() . ' to tarball archive file: ' . $e->getMessage());
-		throw new Oai_Model_Exception('error while creating tarball container: could not add file to tarball');
-            }
+    public function getFileHandle() {
+        $filesToInclude = $this->getAccessibleFiles();
+        if (count($filesToInclude) > 1) {
+            return new Oai_Model_TarFile($this->docId, $filesToInclude, $this->getFilesPath(), $this->getTempPath(), $this->_logger);
         }
-
-        return $tarball;
+        else {
+            return new Oai_Model_SingleFile($this->docId, $filesToInclude, $this->getFilesPath(), $this->getTempPath(), $this->_logger);
+        }
     }
 
     public function getZip() {
@@ -174,9 +161,5 @@ class Oai_Model_Container {
 
     public function getName() {
         return $this->docId;
-    }
-
-    public function deleteContainerFile($filename) {
-        unlink($filename);
     }
 }
