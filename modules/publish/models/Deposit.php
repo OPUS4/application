@@ -136,21 +136,21 @@ class Publish_Model_Deposit {
     }
         
     /**
-     * Method to retrieve a possible counter from key name. The counter can be the last character of an data key.
-     * Counter > 0 is returned if last character is a integer. Else 0 is returned.
+     * Method to retrieve a possible counter from key name. The counter is divided by _ from element name.
+     * If _x can't be found, 0 is returned.
      * @param <String> $dataKey
      * @return <Int> counter or 0
      */
     private function getCounter($dataKey) {
-        //counters may appear on the last position
-        $lastChar = (substr($dataKey, -1, 1));
-        $seclastChar = (substr($dataKey, -2, 1));
-        if (is_numeric($lastChar))
-            if (is_numeric($seclastChar))
-                return (int) $seclastChar . $lastChar;
-            else
-                return (int) $lastChar;
-        return 0;
+        //counters may appear after _
+        if (strstr($dataKey, '_')) {
+            $array = explode('_' , $dataKey);
+            $i = count($array);
+            $counter = $array[$i-1];
+            return (int) $counter;
+        }
+        else
+            return 0;
     }
     
     /**
@@ -212,13 +212,13 @@ class Publish_Model_Deposit {
             $type = 'Person' . $this->getPersonType($dataKey);
             $this->log->debug("Person type:" . $type);
 
-            $counter = $this->getCounter($dataKey);
+            $counter = $this->getCounter($dataKey);            
             $this->log->debug("counter: " . $counter);
 
             $addFunction = 'add' . $type;
             $person = $this->document->$addFunction(new Opus_Person());
 
-            // person model
+            // person model            
             $this->storePersonAttribute($person, $type, 'FirstName', 'first', $counter);
             $this->storePersonAttribute($person, $type, 'LastName', 'last', $counter);
             $this->storePersonAttribute($person, $type, 'Email', 'email', $counter);
@@ -240,7 +240,7 @@ class Publish_Model_Deposit {
      */
     private function storePersonAttribute($person, $personType, $attribute, $attributeType, $counter) {
         if ($counter >= 1) {
-            $index = $personType . $attribute . $counter;
+            $index = $personType . $attribute . '_' . $counter;
         }
         else {
             $index = $personType . $attribute;
@@ -291,7 +291,7 @@ class Publish_Model_Deposit {
         $addFunction = 'add' . $type;
         $title = new Opus_Title();
            
-        $counter = $this->getCounter($dataKey);
+        $counter = $this->getCounter($dataKey);        
         $this->log->debug("counter: " . $counter);
         $this->storeTitleValue($title, $type, $counter);
         $this->storeTitleLanguage($title, $type, 'Language', $counter);
@@ -300,7 +300,7 @@ class Publish_Model_Deposit {
 
     private function storeTitleValue($title, $type, $counter) {
         if ($counter >= 1) {
-            $index = $type . $counter;
+            $index = $type .  '_' . $counter;
         }
         else {
             $index = $type;
@@ -314,7 +314,7 @@ class Publish_Model_Deposit {
 
     private function storeTitleLanguage($title, $type, $short, $counter) {
         if ($counter >= 1) {
-            $index = $type . $short . $counter;
+            $index = $type . $short . '_' . $counter;
         }
         else {
             $index = $type . $short;
@@ -346,7 +346,7 @@ class Publish_Model_Deposit {
     private function storeSubjectObject($dataKey, $dataValue) {                        
         $type = $this->getSubjectType($dataKey);
         $this->log->debug("subject is a " . $type);
-        $counter = (int) $this->getCounter($dataKey);
+        $counter = $this->getCounter($dataKey);
         $this->log->debug("counter: " . $counter);
         
         $subject = new Opus_Subject();        
@@ -354,7 +354,7 @@ class Publish_Model_Deposit {
         if ($type === 'Swd')
             $subject->setLanguage('deu'); 
         else {
-            $index = 'Subject'. $type . 'Language' . $counter;
+            $index = 'Subject'. $type . 'Language' . '_' . $counter;
             $entry = $this->documentData[$index]['value']; 
             if ($entry !== "") {
                 $subject->setLanguage($entry);                
@@ -534,8 +534,8 @@ class Publish_Model_Deposit {
     private function storeEnrichmentObject($dataKey, $dataValue) {
         $counter = $this->getCounter($dataKey);
         if ($counter != 0) {
-            //remove possible counter char
-            $dataKey = str_replace($counter, '', $dataKey);
+            //remove possible counter 
+            $dataKey = str_replace('_' . $counter, '', $dataKey);
         }
 
         $this->log->debug("try to store " . $dataKey . " with id: " . $dataValue);

@@ -39,7 +39,7 @@
  */
 class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
     CONST FIRST = "Firstname";
-    CONST COUNTER = "1";
+    CONST COUNTER = "_1";
     CONST GROUP = "group";
     CONST EXPERT = "X";
     CONST LABEL = "_label";
@@ -247,7 +247,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                     if ($currentNumber > 1) {
                         if (isset($level)) {
                             for ($i = 0; $i <= $level; $i++)
-                                $this->session->additionalFields['collId' . $i . $fieldName . $currentNumber] = "";
+                                $this->session->additionalFields['collId' . $i . $fieldName . '_' . $currentNumber] = "";
                         }
                         //remove one more field, only down to 0
                         $currentNumber = (int) $currentNumber - 1;
@@ -256,23 +256,23 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                     
                 case 'down':
                     // Browse down in the Collection hierarchy.
-                    if ($postData[$fieldName . $currentNumber] !== '' || 
-                        array_key_exists('collId' . $level . $fieldName . $currentNumber, $this->session->additionalFields) &&
-                                $this->session->additionalFields['collId' . $level . $fieldName . $currentNumber] !== '')
+                    if ($postData[$fieldName . '_' . $currentNumber] !== '' || 
+                        array_key_exists('collId' . $level . $fieldName . '_' . $currentNumber, $this->session->additionalFields) &&
+                                $this->session->additionalFields['collId' . $level . $fieldName . '_' . $currentNumber] !== '')
                         $level = (int) $level + 1;
                     break;
                     
                 case 'up' :
                     // Brose up in the Collection hierarchy.
                     if ($level >= 2) {
-                        unset($this->session->additionalFields['collId' . $level . $fieldName . $currentNumber]);
+                        unset($this->session->additionalFields['collId' . $level . $fieldName . '_' . $currentNumber]);
                         $level = (int) $level - 1;                             
                     }                                        
                     if ($level == 1)
-                        unset($this->session->additionalFields['collId1'. $fieldName . $currentNumber]);
+                        unset($this->session->additionalFields['collId1'. $fieldName . '_' . $currentNumber]);
                     // unset root node in disabled array
-                    if (array_key_exists($fieldName . $currentNumber, $this->session->disabled))
-                            unset($this->session->disabled[$fieldName . $currentNumber]);
+                    if (array_key_exists($fieldName . '_' . $currentNumber, $this->session->disabled))
+                            unset($this->session->disabled[$fieldName . '_' . $currentNumber]);
                     break;
                 default:
                     break;
@@ -281,7 +281,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             //set the increased value for the pressed button
             $this->session->additionalFields[$fieldName] = $currentNumber;
             if (isset($level)) {
-                $this->session->additionalFields['step' . $fieldName . $fieldsetCount] = $level;
+                $this->session->additionalFields['step' . $fieldName . '_' . $fieldsetCount] = $level;
             }
         }
     }
@@ -318,21 +318,21 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
      */
     private function _updateCollectionField($field, $value, $post) {
         $level = '1';
-        if (array_key_exists('step' . $field . $value, $this->session->additionalFields)) {
+        if (array_key_exists('step' . $field . '_' . $value, $this->session->additionalFields)) {
 
-            $level = $this->session->additionalFields['step' . $field . $value];
+            $level = $this->session->additionalFields['step' . $field . '_' . $value];
             // Root Node 
             if ($level == '1') {
-                if (isset($post[$field . $value])) {
-                    if ($post[$field . $value] !== '')
-                        $this->session->additionalFields['collId1' . $field . $value] = substr($post[$field . $value], 3);
+                if (isset($post[$field . '_' . $value])) {
+                    if ($post[$field . '_' . $value] !== '')
+                        $this->session->additionalFields['collId1' . $field . '_' . $value] = substr($post[$field . '_' . $value], 3);
                     }
                 }
             // Middle Node or Leaf
             else {
-                if (isset($post['collId' . $level . $field . $value])) {
-                    $entry = substr($post['collId' . $level . $field . $value], 3);
-                    $this->session->additionalFields['collId' . $level . $field . $value] = $entry;
+                if (isset($post['collId' . $level . $field . '_' . $value])) {
+                    $entry = substr($post['collId' . $level . $field . '_' . $value], 3);
+                    $this->session->additionalFields['collId' . $level . $field . '_' . $value] = $entry;
                 }
             }
         }
@@ -347,9 +347,9 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
         //group fields and single fields for view placeholders
         foreach ($this->getElements() AS $currentElement => $value) {
-            //element names have to loose special strings for finding groups
+            //element names have to loose special strings for finding groups            
             $name = $this->_getRawElementName($currentElement);
-
+            
             if (strstr($name, 'Enrichment')) {
                 $name = str_replace('Enrichment', '', $name);
             }
@@ -377,7 +377,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             } else {
                 $this->view->$currentElement = $elementAttributes;
             }
-
+            
             $label = $currentElement . self::LABEL;
             $this->view->$label = $this->view->translate($this->getElement($currentElement)->getLabel());
         }

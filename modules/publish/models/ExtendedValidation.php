@@ -311,47 +311,27 @@ class Publish_Model_ExtendedValidation {
     }
 
     /**
-     * Checks if filled titles also have an language.
+     * Fills empty title languages with current document language
      * @return boolean
      */
-    private function _validateTitleValues() {
-        $validTitles = true;
+    private function _validateTitleValues() {        
         $titles = $this->_getTitleFields();
 
-        foreach ($titles as $key => $title) {
-            $this->log->debug("(Validation): Title: " . $key . " with value " . $title);
-            if ($title !== "") {
-                //if $name is set and not null, find the corresponding lastname
-                $lastChar = substr($key, -1, 1);
+        foreach ($titles as $key => $title) {           
+            if (!empty($title)) {                
+                $counter = $this->_getCounterOrType($key);
 
-                if ((int) $lastChar >= 1)
-                    $languageKey = substr($key, 0, strlen($key) - 1) . 'Language' . $lastChar;
-                else
+                if (!is_null($counter)) {
+                    $titleType = $this->_getCounterOrType($key, 'type');
+                    $languageKey = $titleType . 'Language' . '_' . $counter;                   
+                } else {
+                    $titleType = $key;
                     $languageKey = $key . 'Language';
-
-                if ($this->data[$languageKey] == "" || $this->data[$languageKey] == null) {
-                    //error case: Title exists but Language not
-                    $element = $this->form->getElement($languageKey);
-                    //set language value to the document language
-                    if ($this->documentLanguage != null) {
-                        $this->log->debug("(Validation): Set value of " . $languageKey . " to " . $this->documentLanguage);
-                        $element->setValue($this->documentLanguage);
-                        //store the new value in $data array
-                        $this->data[$languageKey] = $this->documentLanguage;
-                    } else {
-                        //error: no document language set -> throw error message
-                        if (!$element->isRequired()) {
-                            if (!$element->hasErrors()) {
-                                $element->addError('publish_error_noLanguageButTitle');
-                                $validTitles = false;
-                            }
-                        }
-                    }
-                }
-            }
+                }                               
+                $this->_checkLanguageElement($languageKey);                                
+            }            
         }
-
-        return $validTitles;
+        return true;                
     }
 
     /**
@@ -367,16 +347,18 @@ class Publish_Model_ExtendedValidation {
         foreach ($titles as $key => $title) {
             $this->log->debug("(Validation): Title: " . $key . " with value " . $title);
             if ($title !== "") {
-                //if $title is set and not null, find the corresponding language
-                $lastChar = substr($key, -1, 1);
-                if ((int) $lastChar >= 1) {
-                    $titleType = substr($key, 0, strlen($key) - 1);
-                    $languageKey = substr($key, 0, strlen($key) - 1) . 'Language' . $lastChar;
-                } else {
+                 
+                $counter = $this->_getCounterOrType($key);
+                if (!is_null($counter)) {
+                    $titleType = $this->_getCounterOrType($key, 'type');
+                    $languageKey = $titleType . 'Language' .'_' . $counter;
+                }                
+                
+                else {
                     $titleType = $key;
                     $languageKey = $key . 'Language';
                 }
-
+                
                 if ($this->data[$languageKey] != "") {
                     //count title types and languages => same languages for same title type must produce an error
                     $index = $titleType . $this->data[$languageKey]; //z.B. TitleSubdeu
@@ -498,47 +480,52 @@ class Publish_Model_ExtendedValidation {
     }
 
     /**
-     * Checks if filled subjects (swd, uncontrolled) also have an language.
+     * Fills empty language subject fields with current document language
      * @return boolean
      */
-    private function _validateSubjectLanguages() {
-        $validSubjects = true;
+    private function _validateSubjectLanguages() {        
         $subjects = $this->_getSubjectFields();
 
-        foreach ($subjects as $key => $subject) {
-            $this->log->debug("(Validation): Subject: " . $key . " with value " . $subject);
-            if ($subject !== "") {
-                //if $name is set and not null, find the corresponding lastname
-                $lastChar = substr($key, -1, 1);
+        foreach ($subjects as $key => $subject) {           
+            if (!empty($subject)) {                
+                $counter = $this->_getCounterOrType($key);
 
-                if ((int) $lastChar >= 1)
-                    $languageKey = substr($key, 0, strlen($key) - 1) . 'Language' . $lastChar;
-                else
+                if (!is_null($counter)) {
+                    $titleType = $this->_getCounterOrType($key, 'type');
+                    $languageKey = $titleType . 'Language' . '_' . $counter;                   
+                } else {
+                    $titleType = $key;
                     $languageKey = $key . 'Language';
-
-                if ($this->data[$languageKey] == "" || $this->data[$languageKey] == null) {
-                    //error case: Title exists but Language not
-                    $element = $this->form->getElement($languageKey);
-                    //set language value to the document language
-                    if ($this->documentLanguage != null) {
-                        $this->log->debug("(Validation): Set value of " . $languageKey . " to " . $this->documentLanguage);
-                        $element->setValue($this->documentLanguage);
-                        //store the new value in $data array
-                        $this->data[$languageKey] = $this->documentLanguage;
-                    } else {
-                        //error: no document language set -> throw error message
-                        if (!$element->isRequired()) {
-                            if (!$element->hasErrors()) {
-                                $element->addError('publish_error_noLanguageButTitle');
-                                $validSubjects = false;
-                            }
-                        }
-                    }
-                }
-            }
+                }                               
+                $this->_checkLanguageElement($languageKey);                                
+            }            
         }
 
-        return $validSubjects;
+        return true;
+    }
+    
+    private function _getCounterOrType($dataKey, $method = 'counter') {
+        if (!strstr($dataKey, '_'))
+            return;
+
+        $array = explode('_', $dataKey);
+        $i = count($array);
+
+        if ($method == 'counter')
+            return $array[$i - 1];
+
+        if ($method == 'type')
+            return $array[0];
+    }
+    
+    private function _checkLanguageElement($languageKey) {
+        if (is_null($this->data[$languageKey]) || empty($this->data[$languageKey])) {            
+            //set language value to the document language
+            if (!is_null($this->documentLanguage)) {                
+                $this->data[$languageKey] = $this->documentLanguage;
+            }
+        }
+        return true;
     }
 
     /**

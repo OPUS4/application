@@ -79,7 +79,7 @@ class Publish_Model_DisplayGroup {
             foreach ($this->elements as $element) {
 
                 $elem = clone $element;
-                $elem->setName($element->getName() . $i);
+                $elem->setName($element->getName() . '_' . $i);
                 $this->form->addElement($elem);
                 $displayGroup[] = $elem->getName();
             }
@@ -106,7 +106,7 @@ class Publish_Model_DisplayGroup {
         $maxNum = $this->maxNumber();        
 
         for ($i = $minNum; $i <= $maxNum; $i++) {
-            $this->session->additionalFields['step' . $this->elementName . $i] = $this->collectionStep($i);
+            $this->session->additionalFields['step' . $this->elementName . '_' . $i] = $this->collectionStep($i);
             //update $this->collectionIds and generate fields for the current fieldset
             $currentStep = (int) $this->collectionStep($i);
             
@@ -117,7 +117,7 @@ class Publish_Model_DisplayGroup {
                 if ($this->implicitGroup) {
                     //clone all elements
                     $elem = clone $element;
-                    $elem->setName($element->getName() . $i);
+                    $elem->setName($element->getName() . '_' . $i);
                     $this->form->addElement($elem);
                     $displayGroup[] = $elem->getName();
                 }
@@ -126,15 +126,15 @@ class Publish_Model_DisplayGroup {
                     if ($element->getName() === $this->elementName) {
                         //clone the "root selection"
                         $elem = clone $element;
-                        $elem->setName($this->elementName . $i);
-                        if (isset($this->session->additionalFields['collId1' . $this->elementName . $i])) {
-                            $elem->setValue('ID:' . $this->session->additionalFields['collId1' . $this->elementName . $i]);
+                        $elem->setName($this->elementName . '_' . $i);
+                        if (isset($this->session->additionalFields['collId1' . $this->elementName . '_' . $i])) {
+                            $elem->setValue('ID:' . $this->session->additionalFields['collId1' . $this->elementName . '_' . $i]);
                         }
                         if ($currentStep !== 1) {
                             //make top steps disabled
                             $elem->setAttrib('disabled', true);
                             $elem->setAttrib('isRoot', true);
-                            $this->session->disabled[$this->elementName . $i] = $elem->getValue();                                                                                                                
+                            $this->session->disabled[$this->elementName . '_' . $i] = $elem->getValue();                                                                                                                
                         }
                         $this->form->addElement($elem);
                         $displayGroup[] = $elem->getName();
@@ -155,7 +155,7 @@ class Publish_Model_DisplayGroup {
         }
         for ($i = $minNum; $i <= $maxNum; $i++) {
             $maxStep = $this->collectionStep($i);
-            $name = 'collId' . $maxStep . $this->elementName . $i;
+            $name = 'collId' . $maxStep . $this->elementName . '_' . $i;
             $formElement = $this->form->getElement($name);            
             if (!is_null($formElement))
                 $formElement->setAttrib('disabled', false);
@@ -260,15 +260,15 @@ class Publish_Model_DisplayGroup {
             $this->collectionIds[] = $this->collectionIds[0];
         
         //initialize root node
-        $this->session->additionalFields['collId0' . $this->elementName . $fieldset] = $this->collectionIds[0];        
+        $this->session->additionalFields['collId0' . $this->elementName . '_' . $fieldset] = $this->collectionIds[0];        
                         
         $elements = array();
         //found collection level for the current fieldset        
         for ($j = 2; $j <= $step; $j++) {
             $prev = (int) $j - 1;           
             //get the previous selection collection id from session
-            if (isset($this->session->additionalFields['collId' . $prev . $this->elementName . $fieldset])) {
-                $id = $this->session->additionalFields['collId' . $prev . $this->elementName . $fieldset];
+            if (isset($this->session->additionalFields['collId' . $prev . $this->elementName . '_' . $fieldset])) {
+                $id = $this->session->additionalFields['collId' . $prev . $this->elementName . '_' . $fieldset];
                 
                 if ($id != '0' || !is_null($id)) {
                     //insert to array and geneerate field
@@ -294,8 +294,8 @@ class Publish_Model_DisplayGroup {
     private function collectionStep($max=null) {
         $step = 1;
         if (isset($this->session->additionalFields)) {
-            if (isset($this->session->additionalFields['step' . $this->elementName . $max])) {
-                $step = (int) $this->session->additionalFields['step' . $this->elementName . $max];
+            if (isset($this->session->additionalFields['step' . $this->elementName . '_' . $max])) {
+                $step = (int) $this->session->additionalFields['step' . $this->elementName . '_' . $max];
             }
         }
         return $step;
@@ -314,7 +314,7 @@ class Publish_Model_DisplayGroup {
             if ($this->implicitGroup)
                 $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName);
             else
-                $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName . $fieldset);
+                $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName . '_' . $fieldset);
             $selectField->setLabel('choose_collection_subcollection');
             
             foreach ($colls as $coll) {
@@ -331,12 +331,12 @@ class Publish_Model_DisplayGroup {
                 $this->session->endOfCollectionTree['collId' . $step . $this->elementName] = 1;
             }
             else 
-                $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName . $fieldset);
+                $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName . '_' . $fieldset);
             
             $selectField->setLabel('endOfCollectionTree');
             $selectField->setAttrib('disabled', true);
             $selectField->setAttrib('isLeaf', true);
-            $this->session->endOfCollectionTree['collId' . $step . $this->elementName . $fieldset] = 1;
+            $this->session->endOfCollectionTree['collId' . $step . $this->elementName . '_' . $fieldset] = 1;
         }
         return $selectField;
     }
