@@ -82,6 +82,10 @@
 
     <!--create the head of oai response  -->
     <xsl:template match="/">
+        <xsl:processing-instruction name="xml-stylesheet">
+           <xsl:text>type="text/xsl" href="xsl/oai2.xsl"</xsl:text>
+        </xsl:processing-instruction>
+
         <OAI-PMH xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/ http://www.openarchives.org/OAI/2.0/OAI-PMH.xsd">
             <responseDate>
                 <xsl:value-of select="$dateTime" />
