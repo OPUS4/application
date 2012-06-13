@@ -268,6 +268,10 @@
                 <xsl:apply-templates select="TransferUrl" mode="xmetadissplus" />
             </xsl:if>
             <xsl:apply-templates select="IdentifierUrl" mode="xmetadissplus" />
+            <ddb:identifier ddb:type="URL">
+               <xsl:value-of select="@frontdoorurl" />
+            </ddb:identifier>
+
             <ddb:rights ddb:kind="free" />
          </xMetaDiss:xMetaDiss>
     </xsl:template>
