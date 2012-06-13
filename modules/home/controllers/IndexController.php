@@ -36,20 +36,12 @@
 class Home_IndexController extends Controller_Action {
 
     /**
-     * Redirector - defined for code completion
-     *
-     * @var Zend_Controller_Action_Helper_Redirector
-     */
-    protected $_redirector = null;
-
-    /**
      * Do some initialization on startup of every action.
      *
      * @return void
      */
     public function init() {
         parent::init();
-        $this->_redirector = $this->_helper->getHelper('Redirector');
     }
 
     /**
@@ -62,7 +54,7 @@ class Home_IndexController extends Controller_Action {
      * @param  array  $parameters The parameters passed to the action.
      * @return void
      */
-    public function __call($action, $parameters) {        
+    public function __call($action, $parameters) {
         if (!'Action' == substr($action, -6)) {
             $this->_logger->info(__METHOD__ . ' undefined method: ' . $action);
             parent::__call($action, $parameters);
@@ -71,13 +63,7 @@ class Home_IndexController extends Controller_Action {
         // otherwise this controller will not throw exceptions of type NO_ACTION
         $actionName = $this->getRequest()->getActionName();
 
-        $phtmlFilesAvailable = array();
-        $dir = new DirectoryIterator($this->view->getScriptPath('index'));
-        foreach ($dir as $file) {
-            if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
-                array_push($phtmlFilesAvailable, $file->getBasename('.phtml'));
-            }
-        }
+        $phtmlFilesAvailable = $this->getViewScripts();
 
         if (array_search($actionName, $phtmlFilesAvailable) === FALSE) {
             $this->_logger->info(__METHOD__ . ' requested file ' . $actionName . '.phtml is not readable or does not exist');
@@ -85,20 +71,15 @@ class Home_IndexController extends Controller_Action {
         }
 
         $translation = $this->view->translate('help_content_' . $actionName);
-        $helpFilesAvailable = array();
-        $dir = new DirectoryIterator($this->view->getScriptPath(''));
-        foreach ($dir as $file) {
-            if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
-                array_push($helpFilesAvailable, $file->getBasename());
-            }
-        }
+
+        $helpFilesAvailable = Home_Model_HelpFiles::getFiles();
 
         $pos = array_search($translation, $helpFilesAvailable);
         if ($pos === FALSE) {
             $this->view->text = $translation;
         }
         else {
-            $this->view->text = file_get_contents($this->view->getScriptPath('') . $helpFilesAvailable[$pos]);
+            $this->view->text = Home_Model_HelpFiles::getFileContent($helpFilesAvailable[$pos]);
         }
     }
 
@@ -179,25 +160,19 @@ class Home_IndexController extends Controller_Action {
                 $translation = $this->view->translate('help_content_' . $content);
 
                 // get all readable help files in directory /home/views/scripts
-                $helpFilesAvailable = array();
-                $dir = new DirectoryIterator($this->view->getScriptPath(''));
-                foreach ($dir as $file) {
-                    if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
-                        array_push($helpFilesAvailable, $file->getBasename());
-                    }
-                }
+                $helpFilesAvailable = Home_Model_HelpFiles::getFiles();
 
                 $pos = array_search($translation, $helpFilesAvailable);
                 if ($pos !== FALSE) {
                     $this->view->contenttitle = 'help_title_' . $content;
-                    $this->view->content = file_get_contents($this->view->getScriptPath('') . $helpFilesAvailable[$pos]);
-                }                
+                    $this->view->content = Home_Model_HelpFiles::getFileContent($helpFilesAvailable[$pos]);
+                }
                 elseif ($translation !== 'help_content_' . $content) {
                     // a translation exists, but it is not a valid file name
                     $this->view->contenttitle = 'help_title_' . $content;
                     $this->view->content = $translation;
                 }
-            }            
+            }
         }
 
         $this->_helper->mainMenu('help');
@@ -216,4 +191,20 @@ class Home_IndexController extends Controller_Action {
     public function noticeAction() {
         $this->_redirectTo('index', array('notice' => 'This is a notice.'));
     }
+
+    /**
+     * Returns basenames of all phtml files.
+     * @return array Basenames of phtml files for 'home' module
+     */
+    protected function getViewScripts() {
+        $phtmlFilesAvailable = array();
+        $dir = new DirectoryIterator($this->view->getScriptPath('index'));
+        foreach ($dir as $file) {
+            if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
+                array_push($phtmlFilesAvailable, $file->getBasename('.phtml'));
+            }
+        }
+        return $phtmlFilesAvailable;
+    }
+
 }
