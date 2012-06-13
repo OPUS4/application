@@ -32,7 +32,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Publish_FormController extends Controller_Action {
 
     public $session;
@@ -55,7 +54,7 @@ class Publish_FormController extends Controller_Action {
 
         //initializing
         $indexForm = new Publish_Form_PublishingFirst($this->view);
-        $postData = $this->getRequest()->getPost();        
+        $postData = $this->getRequest()->getPost();
         $this->view->showBib = $indexForm->bibliographie;
         $this->view->showRights = $indexForm->showRights;
 
@@ -72,25 +71,24 @@ class Publish_FormController extends Controller_Action {
         $this->_initializeDocument($postData);
 
         //validate fileupload
-	if (!$indexForm->getElement('fileupload')->isValid($postData)) {
-                $indexForm->setViewValues();
-                $this->view->form = $indexForm;
-                $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-        } 
-        else {
-                //file valid-> store file                
-                $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
-                $this->view->uploadSuccess = $this->_storeUploadedFiles($postData);
-                $indexForm = new Publish_Form_PublishingFirst($this->view);
-                $indexForm->populate($postData);
-                $indexForm->setViewValues();
-                $this->view->form = $indexForm;
+        if (!$indexForm->getElement('fileupload')->isValid($postData)) {
+            $indexForm->setViewValues();
+            $this->view->form = $indexForm;
+            $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
+        } else {
+            //file valid-> store file                
+            $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
+            $this->view->uploadSuccess = $this->_storeUploadedFiles($postData);
+            $indexForm = new Publish_Form_PublishingFirst($this->view);
+            $indexForm->populate($postData);
+            $indexForm->setViewValues();
+            $this->view->form = $indexForm;
 
-                if (array_key_exists('addAnotherFile', $postData)) {
-                    $postData['uploadComment'] = "";
-                    return $this->renderScript('index/index.phtml');
-                }
+            if (array_key_exists('addAnotherFile', $postData)) {
+                $postData['uploadComment'] = "";
+                return $this->renderScript('index/index.phtml');
             }
+        }
 
         //validate whole form
         if (!$indexForm->isValid($postData)) {
@@ -114,12 +112,11 @@ class Publish_FormController extends Controller_Action {
         } catch (Publish_Model_FormIncorrectFieldNameException $e) {
             $this->view->translateKey = preg_replace('/%value%/', $e->fieldName, $this->view->translate($e->getTranslateKey()));
             return $this->render('error');
-        }
-        catch (Publish_Model_FormIncorrectEnrichmentKeyException $e) {
+        } catch (Publish_Model_FormIncorrectEnrichmentKeyException $e) {
             $this->view->translateKey = preg_replace('/%value%/', $e->enrichmentKey, $this->view->translate($e->getTranslateKey()));
             return $this->render('error');
         }
-        
+
         return $this->showTemplate($publishForm);
     }
 
@@ -176,32 +173,34 @@ class Publish_FormController extends Controller_Action {
             if (!array_key_exists('send', $postData) || array_key_exists('back', $postData)) {
                 // A button (not SEND) was pressed => add / remove fields                
                 $this->_helper->viewRenderer($this->session->documentType);
+
+                $form->getExtendedForm($postData, $reload);
                 
-                try {
-                    $form->getExtendedForm($postData, $reload);
-                    //now create a new form with extended fields
-                    $form2 = null;
-                    try {
-                        $form2 = new Publish_Form_PublishingSecond($this->_logger, $postData);
-                    } 
-                    catch (Publish_Model_FormSessionTimeoutException $e) {                        
-                        return $this->_redirectTo('index', '', 'index');
-                    }
-                    $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
-                    $form2->setAction($action_url);
-                    $this->view->action_url = $action_url;
-                    $form2->setViewValues();
-                    $this->view->form = $form2;
-                    if (array_key_exists('LegalNotices', $postData) && $postData['LegalNotices'] != '1') {
-			$legalNotices = $form2->getElement('LegalNotices');
-			$legalNotices->setChecked(false);
-                    }
-                    return;
-                } 
-                catch (Publish_Model_FormNoButtonFoundException $e) {
-                    $this->view->translateKey = $e->getTranslateKey();
+                if (isset($this->view->translateKey)) {
+                    
                     return $this->render('error');
                 }
+
+                //now create a new form with extended fields
+                $form2 = null;
+                try {
+                    $form2 = new Publish_Form_PublishingSecond($this->_logger, $postData);
+                }
+                catch (Publish_Model_FormSessionTimeoutException $e) {
+
+                    return $this->_redirectTo('index', '', 'index');
+                }
+                $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
+                $form2->setAction($action_url);
+                $this->view->action_url = $action_url;
+                $form2->setViewValues();
+                $this->view->form = $form2;
+                
+                if (array_key_exists('LegalNotices', $postData) && $postData['LegalNotices'] != '1') {
+                    $legalNotices = $form2->getElement('LegalNotices');
+                    $legalNotices->setChecked(false);
+                }
+                return;
             }
             // SEND was pressed => check the form
             if (!$form->isValid($postData)) {
@@ -254,7 +253,7 @@ class Publish_FormController extends Controller_Action {
             $this->_logger->debug("User Id already logged. Skipping enrichment.");
             return;
         }
-            
+
         $this->document->addEnrichment()
                 ->setKeyName('submitter.user_id')
                 ->setValue($userId);
@@ -346,7 +345,7 @@ class Publish_FormController extends Controller_Action {
         $this->view->action_url = $action_url;
         $this->view->form = $form;
     }
-    
+
     public function showCheckpage($form) {
         $this->view->subtitle = $this->view->translate('publish_controller_check2');
         $this->view->header = $this->view->translate('publish_controller_changes');

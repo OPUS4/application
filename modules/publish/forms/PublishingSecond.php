@@ -205,8 +205,13 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $this->view->currentAnchor = "";        
         if ($reload === true) {
 
-            //find out which button was pressed            
-            $pressedButtonName = $this->_getPressedButton();
+            try {
+                //find out which button was pressed            
+                $pressedButtonName = $this->_getPressedButton();
+            } catch (Publish_Model_FormNoButtonFoundException $e) {
+                $this->view->translateKey = $e->getTranslateKey();
+                return null;
+            }
 
             //find out the resulting workflow and the field to extend
             $result = $this->_workflowAndFieldFor($pressedButtonName);

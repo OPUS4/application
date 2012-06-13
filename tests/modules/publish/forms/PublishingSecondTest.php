@@ -311,10 +311,9 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
     }    
     
     /**
-     * Button pressed: no button pressed
-     * @expectedException Publish_Model_FormNoButtonFoundException
+     * Button pressed: no button pressed 
      */
-    public function testGetExtendedFormMethodWithMssingButton() {
+    public function testGetExtendedFormMethodWithMissingButton() {
         $config = Zend_Registry::get('Zend_Config');
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
@@ -349,9 +348,9 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
             'SeriesNumber_1' => '',
             'Series_1' => ''
         );
-        
+        // no send button in post => FormController calls getExtendedForm() to find add or remove button 
         $form = new Publish_Form_PublishingSecond($this->_logger, $data);
-        $form->getExtendedForm($data, true);                          
+        $this->assertNull($form->getExtendedForm($data, true));
     }  
     
     public function testExternalElementLegalNotices() {
@@ -377,7 +376,6 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         
         $form = new Publish_Form_PublishingSecond($this->_logger);
         $this->assertNotNull($form->getElement('LegalNotices'));
-        
-        
+                
     }
 }
