@@ -928,18 +928,24 @@ dl.result_box {
 }
 .form-submit{
 	background: transparent url(../img/theme/bg_button_r.gif) no-repeat right center;
-	border: none;
+        border: none;
 	color: white;
 	font-size: 16px;
 	font-family: Arial, Helvetica, sans-serif;
 	padding: 0 15px;
 }
+.solrsearch_search .form-submit-wrapper,
 .solrsearch_advanced .form-submit-wrapper{
 	background: none;
 }
-.solrsearch_advanced .form-submit{
+.solrsearch_advanced .form-submit,
+.solrsearch_search .form-submit{
 	background: url(../img/theme/bg_button_l.gif) no-repeat left center;
-	-moz-border-radius: 6px;
+}
+.solrsearch_advanced .form-submit,
+.solrsearch_search #reset-form .form-submit,
+.solrsearch_search .opus_form .form-submit{
+        -moz-border-radius: 6px;
 	border-radius: 6px;
 }
 #edit-submit-advanced-search-wrapper{
