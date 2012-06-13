@@ -68,7 +68,7 @@
                 <xsl:apply-templates select="PersonAuthor" mode="xmetadiss" />
             </xsl:element>
             <!-- dc:subject -->
-            <xsl:apply-templates select="Subject[@Type='ddc']" mode="xmetadiss" />
+            <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]" mode="xmetadiss" />
             <xsl:apply-templates select="Subject[@Type='swd']" mode="xmetadiss" />
             <xsl:apply-templates select="Subject[@Type='uncontrolled']" mode="xmetadiss" />
             <!-- dc:abstract -->
@@ -204,10 +204,10 @@
         </xsl:element>
     </xsl:template>          
 
-    <xsl:template match="Subject[@Type='ddc']" mode="xmetadiss">
+    <xsl:template match="Collection[@RoleName='ddc' and @Visible=1]" mode="xmetadiss">
         <xsl:element name="dc:subject">
-            <xsl:attribute name="xsi:type"><xsl:text>xMetaDiss:DDC-SG</xsl:text></xsl:attribute>
-            <xsl:value-of select="@Value" />
+            <xsl:attribute name="xsi:type"><xsl:text>dcterms:DDC</xsl:text></xsl:attribute>
+            <xsl:value-of select="@Number" />
         </xsl:element>
     </xsl:template>
 
