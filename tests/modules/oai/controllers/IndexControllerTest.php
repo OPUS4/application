@@ -60,6 +60,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $xpath = new DOMXPath($domDocument);
         $xpath->registerNamespace('oai_dc', "http://www.openarchives.org/OAI/2.0/oai_dc/");
         $xpath->registerNamespace('dc', "http://purl.org/dc/elements/1.1/");
+        $xpath->registerNamespace('ddb', "http://www.d-nb.de/standards/ddb/");
         $xpath->registerNamespace('pc', "http://www.d-nb.de/standards/pc/");
         $xpath->registerNamespace('xMetaDiss', "http://www.d-nb.de/standards/xmetadissplus/");
         $xpath->registerNamespace('epicur', "urn:nbn:de:1111-2004033116");
@@ -419,6 +420,25 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $elements = $xpath->query('//xMetaDiss:xMetaDiss/dcterms:dateAccepted[text()="2012"]');
         $this->assertEquals(1, $elements->length,
                 "Unexpected dcterms:dateAccepted count");
+    }
+
+    /**
+     * Regression test for OPUSVIER-2448
+     */
+    public function testGetRecordXMetaDissPlusDoc1DdbIdentifier() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::1');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2448 - ddb:identifier with frontdoor url
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/ddb:identifier[@ddb:type="URL"]/text()');
+        $this->assertEquals(1, $elements->length, "Unexpected ddb:identifier count");
+
+        $value = $elements->item(0)->nodeValue;
+        $this->assertContains("frontdoor/index/index/docId/1", $value,
+                'expected frontdoor URL in ddb:identifier');
     }
 
     /**
