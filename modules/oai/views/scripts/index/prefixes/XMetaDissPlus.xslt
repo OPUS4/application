@@ -193,6 +193,16 @@
             </dc:type>
 
             <xsl:apply-templates select="IdentifierUrn" mode="xmetadissplus" />
+
+            <!-- weird DNB constraint: dcterms:medium must appear after dc:identifier -->
+            <xsl:for-each select="File[not(@MimeType = preceding-sibling::File/@MimeType)]/@MimeType">
+                <xsl:sort select="." />
+                <dcterms:medium xsi:type="dcterms:IMT">
+                    <xsl:value-of select="." />
+                </dcterms:medium>
+            </xsl:for-each>
+
+            <!-- weird DNB constraint: dc:language must appear after dcterms:medium -->
             <dc:language xsi:type="dcterms:ISO639-2">
                  <xsl:choose>
                    <xsl:when test="@Language='deu'">
@@ -205,7 +215,7 @@
             </dc:language >
             <xsl:apply-templates select="Licence" mode="xmetadissplus" />
 
-           <!--  thesis.degree only, if type doctoral or habilitation -->
+            <!--  thesis.degree only, if type doctoral or habilitation -->
             <xsl:if test="@Type='bachelorthesis' or @Type='doctoralthesis' or @Type='habilitation' or @Type='masterthesis'">
                 <thesis:degree>
                    <thesis:level>
@@ -432,9 +442,6 @@
                 <xsl:value-of select="@FileSize"/>
             </xsl:attribute>
         </ddb:fileProperties>
-        <dcterms:medium xsi:type="dcterms:IMT">
-            <xsl:value-of select="@MimeType" />
-        </dcterms:medium>
     </xsl:template>
 
     <xsl:template match="TransferUrl" mode="xmetadissplus">
