@@ -825,5 +825,53 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc2->deletePermanent();
     }
 
+    /**
+     * Regression test for OPUSVIER-2508
+     */
+    public function testTransferUrlIsIOnlyGivenForDocsWithFulltext() {
+        $collection = new Opus_Collection(112);
+
+        $doc1 = new Opus_Document();
+        $doc1->setServerState('published');
+        $file = new Opus_File();
+        $file->setVisibleInOai(true);
+        $file->setPathName('foo.pdf');
+        $doc1->addFile($file);
+        $file = new Opus_File();
+        $file->setVisibleInOai(true);
+        $file->setPathName('bar.pdf');
+        $doc1->addFile($file);
+        $doc1->addCollection($collection);
+        $doc1->store();
+
+        $doc2 = new Opus_Document();
+        $doc2->setServerState('published');
+        $file = new Opus_File();
+        $file->setVisibleInOai(true);
+        $file->setPathName('baz.pdf');
+        $doc2->addFile($file);
+        $doc2->addCollection($collection);
+        $doc2->store();
+
+        $doc3 = new Opus_Document();
+        $doc3->setServerState('published');
+        $doc3->addCollection($collection);
+        $doc3->store();
+
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
+        $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $body);
+        $this->assertContains('<ddb:fileNumber>0</ddb:fileNumber>', $body);
+        $this->assertNotContains('<ddb:fileNumber>3</ddb:fileNumber>', $body);
+        $this->assertContains('<ddb:transfer ddb:type="dcterms:URI">http://localhost/opus4-devel/oai/container/index/docId/' . $doc1->getId() . '</ddb:transfer>', $body);
+        $this->assertContains('<ddb:transfer ddb:type="dcterms:URI">http://localhost/opus4-devel/oai/container/index/docId/' . $doc2->getId() . '</ddb:transfer>', $body);
+        $this->assertNotContains('<ddb:transfer ddb:type="dcterms:URI">http://localhost/opus4-devel/oai/container/index/docId/' . $doc3->getId() . '</ddb:transfer>', $body);
+
+        $doc1->deletePermanent();
+        $doc2->deletePermanent();
+        $doc3->deletePermanent();
+    }
+
 
 }
