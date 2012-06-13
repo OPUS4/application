@@ -161,6 +161,12 @@
                    <xsl:when test="@Type='other'">
                        <xsl:text>Other</xsl:text>
                    </xsl:when>
+                   <xsl:when test="@Type='periodical'">
+                       <xsl:text>Periodical</xsl:text>
+                   </xsl:when>
+                   <xsl:when test="@Type='periodicalpart'">
+                       <xsl:text>PeriodicalPart</xsl:text>
+                   </xsl:when>
                    <xsl:when test="@Type='preprint'">
                        <xsl:text>preprint</xsl:text>
                    </xsl:when>
