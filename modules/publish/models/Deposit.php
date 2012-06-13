@@ -119,17 +119,20 @@ class Publish_Model_Deposit {
 
         //external Field
         if ($this->document->hasMultipleValueField($dataKey)) {
-
-            if ($dataKey === 'Language') {
-                $file = $this->document->getFile();
-                $file->setLanguage($dataValue);
-            }            
+                       
             $function = "add" . $dataKey;            
             $addedValue = $this->document->$function();
             $addedValue->setValue($dataValue);            
         }
         //internal Fiels
-        else {            
+        else { 
+            if ($dataKey === 'Language') {                
+                $files = $this->document->getFile();
+                foreach ($files as $file) {
+                    $file->setLanguage($dataValue);
+                }
+            } 
+            
             $function = "set" . $dataKey;            
             $this->document->$function($dataValue);            
         }

@@ -307,9 +307,7 @@ class Publish_FormController extends Controller_Action {
                 $docfile = $this->document->addFile();
                 //$docfile->setFromPost($fileValues);
                 $docfile->setLabel(urldecode($fileValues['name']));
-                $docfile->setComment($comment);
-                //file always requires a language, this value is later overwritten by the exact language
-                $docfile->setLanguage("eng");
+                $docfile->setComment($comment);                
                 $docfile->setPathName(urldecode($fileValues['name']));
                 $docfile->setMimeType($fileValues['type']);
                 $docfile->setTempFile($fileValues['tmp_name']);
