@@ -74,7 +74,7 @@ if ($this->jQueryEnabled()) {
     $this->headScript()
          ->prependFile($this->baseUrl() . '/' . $config->javascript->jquery->path)
          ->appendFile($this->layoutPath() . '/js/searchutil.js')
-         ->appendFile($this->layoutPath() . '/js/abstractutil.js');
+         ->appendFile($this->layoutPath() . '/js/frontdoorutil.js');
 }
 
 $languageSelectors = $this->languageSelector();
