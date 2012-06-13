@@ -29,7 +29,7 @@
  * @package     Tests
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -873,5 +873,43 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc3->deletePermanent();
     }
 
+    /**
+     * Regression test for OPUSVIER-2509
+     */
+    public function testForDDCSubjectTypeForXMetaDissPlus() {
+        $collection = new Opus_Collection(112);
+
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $doc->addCollection($collection);
+        $doc->store();
+
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');
+        $body = $this->getResponse()->getBody();
+        $this->assertNotContains('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
+        $this->assertContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);
+        
+        $doc->deletePermanent();
+    }
+
+/**
+     * Regression test for OPUSVIER-2509 and OPUSVIER-2510
+     */
+    public function testForDDCSubjectTypeForXMetaDiss() {
+        $collection = new Opus_Collection(112);
+
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $doc->setType('doctoralthesis'); // xMetaDiss liefert nur Doktorarbeiten und Habilitationen aus
+        $doc->addCollection($collection);
+        $doc->store();
+
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDiss&set=ddc:000');
+        $body = $this->getResponse()->getBody();
+        $this->assertNotContains('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
+        $this->assertContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);
+
+        $doc->deletePermanent();
+    }
 
 }
