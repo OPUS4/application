@@ -248,7 +248,7 @@
               <xsl:value-of select="count(File)"/>
             </ddb:fileNumber>
             <xsl:apply-templates select="File" mode="xmetadissplus" />
-            <xsl:if test="//File">
+            <xsl:if test="File">
                 <xsl:apply-templates select="TransferUrl" mode="xmetadissplus" />
             </xsl:if>
             <xsl:apply-templates select="IdentifierUrl" mode="xmetadissplus" />
