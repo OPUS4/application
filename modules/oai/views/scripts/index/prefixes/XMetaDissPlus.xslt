@@ -300,7 +300,7 @@
     </xsl:template>
 
     <xsl:template match="Collection[@RoleName='ddc' and @Visible=1]" mode="xmetadissplus">
-        <dc:subject xsi:type="xMetaDiss:DDC-SG">
+        <dc:subject xsi:type="dcterms:DDC">
             <xsl:value-of select="@Number" />
         </dc:subject>
     </xsl:template>
