@@ -40,7 +40,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     function fieldset() {
         
     }
-    
+     
     function renderHtmlText($field, $options) {
         $fieldset = "";
         if (!isset($field['isLeaf'])) {
@@ -56,7 +56,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
             }
 
             if (strstr($field['id'], "1"))
-                $fieldset .= " title='" . $this->view->translate($field['hint']) . "' ";
+                $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
 
             $fieldset .= " value='" . htmlspecialchars($field['value'], ENT_QUOTES) . "' />\n";            
             if (isset($field['desc']))
@@ -78,9 +78,9 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         }
 
         if (strstr($field['id'], "1"))
-            $fieldset .= " title='" . $this->view->translate($field['hint']) . "' ";
+            $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
 
-        $fieldset .= " id='" . $field['id'] . "'>" . htmlspecialchars($field['value']) . "</textarea>";
+        $fieldset .= " id='" . $field['id'] . "'>" . htmlspecialchars($field['value'], ENT_QUOTES) . "</textarea>";
 
         return $fieldset;
     }
@@ -88,20 +88,20 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     function renderHtmlSelect($field, $options) {
         $fieldset = "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id'] . '" class="form-selectfield"  id="' . $field['id'] . '"';
         if (strstr($field['id'], '1'))
-            $fieldset .= ' title="' . $this->view->translate($field['hint']) . '"';
+            $fieldset .= ' title="' . htmlspecialchars ($this->view->translate($field['hint']), ENT_QUOTES) . '"';
         if ($field['disabled'] === true) {
             $fieldset .= ' disabled="1" ';
         }
         $fieldset .= '>' . "\n\t\t\t\t\t";
 
         foreach ($field['options'] AS $key => $option) {
-            $fieldset .= '<option value="' . htmlspecialchars($key) . '" label="' . htmlspecialchars($option) . '"';
+            $fieldset .= '<option value="' . htmlspecialchars($key, ENT_QUOTES) . '" label="' . htmlspecialchars($option, ENT_QUOTES) . '"';
 
             if ($option === $field['value'] || $key === $field['value'])
                 $fieldset .= ' selected="selected"';
 
             $fieldset .= '>';
-            $fieldset .= htmlspecialchars($option) . '</option>' . "\n\t\t\t\t\t";
+            $fieldset .= htmlspecialchars($option, ENT_QUOTES) . '</option>' . "\n\t\t\t\t\t";
         }
         $fieldset .= '</select>' . "\n";
 
@@ -130,7 +130,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
 
     function renderHtmlFile($field, $options) {
         $fieldset = "<input type='file' name='" . $field['id'] . "' id='" . $field['id'] . "' enctype='multipart/form-data' ";
-        $fieldset .= "title='" . $this->view->translate($field['hint']) . "' ";
+        $fieldset .= "title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
         if ($options !== null)
             $fieldset .= $options . " ";
         else
@@ -140,12 +140,19 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         return $fieldset;
     }
 
+    /**
+     * TODO:
+     * Fehlerursache: multiplicity > 1 (Gruppe) aber Aufruf mit element
+     * Wenn element aufgerufen wird, es sich aber um eine Gruppe handelt, wird hier eine Exception geworfen und die Gruppe nicht gerendert.
+     * Kann man verhindern, wenn man dem Array ein zusätzliches Feld "isGroup" o.ä. mitgibt, das überprüft, ob es sich tatsächlich
+     * um eine Gruppe handelt.
+     */
     function renderFieldsetErrors($field) {
         $fieldset = "";
         if ( isset($field) && !empty($field) ) {
             $fieldset .= "<div class='form-errors'><ul>";
             foreach ($field AS $err)
-                $fieldset .= "\n\t\t\t<li>" . htmlspecialchars($err) . "</li>";
+                $fieldset .= "\n\t\t\t<li>" . htmlspecialchars($err, ENT_QUOTES) . "</li>";
             $fieldset .= "\n\t\t</ul></div>";
         }
         return $fieldset;
@@ -170,7 +177,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
                         $fieldset .= "class='form-button delete-button' ";
                 }
 
-                $fieldset .= "name='" . $button['id'] . "' id='" . $button['id'] . "' value='" . $button['label'] . "' />&nbsp;";
+                $fieldset .= "name='" . $button['id'] . "' id='" . $button['id'] . "' value='" . htmlspecialchars($button['label'], ENT_QUOTES) . "' />&nbsp;";
             }
         }
         $fieldset .= "</div>";
@@ -188,7 +195,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     }
     
     function _renderSubmit($value, $options=null, $name=null) {
-        $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='" . $this->view->translate($value) . "' ";
+        $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='" . htmlspecialchars($this->view->translate($value), ENT_QUOTES) . "' ";
         if (isset($options))
             $submit .= $options . " />";
         return $submit;
@@ -204,7 +211,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
      * @return <type> 
      */
     function getRequiredSign() {
-        return "<span class='required' title='" . $this->view->translate('required_star_title') . "'>*</span>";
+        return "<span class='required' title='" . htmlspecialchars($this->view->translate('required_star_title'), ENT_QUOTES) . "'>*</span>";
     }
 
     /**
@@ -212,12 +219,12 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
      * @param <String> Name of element or group
      * @return <type>
      */
-    function getFieldsetHint($name) {
+    function getFieldsetHint($name) {        
         return "<div class='description hint'><p>" . $this->view->translate('hint_' . $name) . "</div></p>";
     }
 
     function getLabelFor($name, $label, $required) {
-        $fieldset = "<label for='" . $name . "'>" . $this->view->translate($label);
+        $fieldset = "<label for='" . $name . "'>" . htmlspecialchars($this->view->translate($label), ENT_QUOTES);
 
         if ($required === 'required')
             $fieldset .= $this->getRequiredSign();
