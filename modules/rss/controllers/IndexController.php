@@ -77,7 +77,9 @@ class Rss_IndexController extends Controller_Xml {
         }
         catch (Opus_SolrSearch_Exception $e) {
             $this->log->err(__METHOD__ . ' : ' . $e->getMessage());
-            throw new Application_Exception('Sorry, an internal server error occurred.');
+            $exception = new Application_Exception('search server is not responding -- try again later');
+            $exception->setHttpResponseCode(503);
+            throw $exception;
         }
         
         $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'rss2_0.xslt');
