@@ -65,6 +65,9 @@ class Publish_Model_DepositTest extends ControllerTestCase {
             'PersonSubmitterAcademicTitle_1' => array('value' => 'Dr.', 'datatype' => 'Person', 'subfield' => '1'),
             'PersonSubmitterAllowEmailContact_1' => array('value' => '0', 'datatype' => 'Person', 'subfield' => '1'),
             'CompletedDate' => array('value' => '2012/1/1', 'datatype' => 'Date', 'subfield' => '0'),
+            'PersonAuthorFirstName_1' => array('value' => 'vorname', 'datatype' => 'Person', 'subfield' => '1'),
+            'PersonAuthorLastName_1' => array('value' => 'nachname', 'datatype' => 'Person', 'subfield' => '0'),            
+            'PersonAuthorLastName_2' => array('value' => 'nurNachname', 'datatype' => 'Person', 'subfield' => '0'),
             'TitleMain_1' => array('value' => 'Entenhausen', 'datatype' => 'Title', 'subfield' => '0'),
             'TitleMainLanguage_1' => array('value' => 'deu', 'datatype' => 'Language', 'subfield' => '1'),
             'TitleMain_2' => array('value' => 'Irgendwas sonst', 'datatype' => 'Title', 'subfield' => '0'),
@@ -82,31 +85,31 @@ class Publish_Model_DepositTest extends ControllerTestCase {
             'SubjectJEL_1' => array('value' => 'ID:6740', 'datatype' => 'Collection', 'subfield' => '0'),
             'SubjectPACS_1' => array('value' => 'ID:2878', 'datatype' => 'Collection', 'subfield' => '0'),
             'SubjectBKL_1' => array('value' => 'ID:13874', 'datatype' => 'Collection', 'subfield' => '0'),
-            'IdentifierOld' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierSerial' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierUuid' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierIsbn' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierDoi' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierHandle' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierUrn' => array('value' => 'Publish_Model_DepositTest_testValidDocumentData', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierUrl' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierIssn' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierStdDoi' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierArxiv' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierPubmed' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierCrisLink' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierSplashUrl' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierOpus3' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'IdentifierOpac' => array('value' => 'blablup987', 'datatype' => 'Identifier', 'subfield' => '0'),
-            'ReferenceIsbn' => array('value' => 'blablup987', 'datatype' => 'Reference', 'subfield' => '0'),
-            'ReferenceUrn' => array('value' => 'blablup987', 'datatype' => 'Reference', 'subfield' => '0'),
-            'ReferenceHandle' => array('value' => 'blablup987', 'datatype' => 'Reference', 'subfield' => '0'),
-            'ReferenceDoi' => array('value' => 'blablup987', 'datatype' => 'Reference', 'subfield' => '0'),
-            'ReferenceIssn' => array('value' => 'blablup987', 'datatype' => 'Reference', 'subfield' => '0'),
-            'ReferenceUrl' => array('value' => 'blablup987', 'datatype' => 'Reference', 'subfield' => '0'),
-            'ReferenceCrisLink' => array('value' => 'blablup987', 'datatype' => 'Reference', 'subfield' => '0'),
-            'ReferenceStdDoi' => array('value' => 'blablup987', 'datatype' => 'Reference', 'subfield' => '0'),
-            'ReferenceSplashUrl' => array('value' => 'blablup987', 'datatype' => 'Reference', 'subfield' => '0'),
+            'IdentifierOld' => array('value' => 'Publish_Model_DepositTest_old', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierSerial' => array('value' => 'Publish_Model_DepositTest_serial', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierUuid' => array('value' => 'Publish_Model_DepositTest_uuid', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierIsbn' => array('value' => 'Publish_Model_DepositTest_isbn', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierDoi' => array('value' => 'Publish_Model_DepositTest_doi', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierHandle' => array('value' => 'Publish_Model_DepositTest_handle', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierUrn' => array('value' => 'Publish_Model_DepositTest_urn', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierUrl' => array('value' => 'Publish_Model_DepositTest_url', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierIssn' => array('value' => 'Publish_Model_DepositTest_issn', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierStdDoi' => array('value' => 'Publish_Model_DepositTest_stddoi', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierArxiv' => array('value' => 'Publish_Model_DepositTest_arxiv', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierPubmed' => array('value' => 'Publish_Model_DepositTest_pubmed', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierCrisLink' => array('value' => 'Publish_Model_DepositTest_crislink', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierSplashUrl' => array('value' => 'Publish_Model_DepositTest_splashurl', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierOpus3' => array('value' => 'Publish_Model_DepositTest_opus3', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'IdentifierOpac' => array('value' => 'Publish_Model_DepositTest_opac', 'datatype' => 'Identifier', 'subfield' => '0'),
+            'ReferenceIsbn' => array('value' => 'Publish_Model_DepositTest_ref_isbn', 'datatype' => 'Reference', 'subfield' => '0'),
+            'ReferenceUrn' => array('value' => 'Publish_Model_DepositTest_ref_urn', 'datatype' => 'Reference', 'subfield' => '0'),
+            'ReferenceHandle' => array('value' => 'Publish_Model_DepositTest_ref_handle', 'datatype' => 'Reference', 'subfield' => '0'),
+            'ReferenceDoi' => array('value' => 'Publish_Model_DepositTest_ref_doi', 'datatype' => 'Reference', 'subfield' => '0'),
+            'ReferenceIssn' => array('value' => 'Publish_Model_DepositTest_ref_issn', 'datatype' => 'Reference', 'subfield' => '0'),
+            'ReferenceUrl' => array('value' => 'Publish_Model_DepositTest_ref_url', 'datatype' => 'Reference', 'subfield' => '0'),
+            'ReferenceCrisLink' => array('value' => 'Publish_Model_DepositTest_ref_crislink', 'datatype' => 'Reference', 'subfield' => '0'),
+            'ReferenceStdDoi' => array('value' => 'Publish_Model_DepositTest_ref_stddoi', 'datatype' => 'Reference', 'subfield' => '0'),
+            'ReferenceSplashUrl' => array('value' => 'Publish_Model_DepositTest_ref_splashurl', 'datatype' => 'Reference', 'subfield' => '0'),
             'SeriesNumber1' => array('value' => '5', 'datatype' => 'SeriesNumber', 'subfield' => '0'),
             'Series1' => array('value' => 'ID:4', 'datatype' => 'Series', 'subfield' => '1'),
             'Foo2Title' => array('value' => 'title as enrichment', 'datatype' => 'Enrichment', 'subfield' => '0'),
@@ -114,8 +117,91 @@ class Publish_Model_DepositTest extends ControllerTestCase {
 
         $dep = new Publish_Model_Deposit($data);
         $document = $dep->getDocument();
-        $document->store();
-
+        $document->store();                               
+        
+        $personSubmitter = $document->getPersonSubmitter(0);        
+        $this->assertEquals('Hans', $personSubmitter->getFirstName());
+        $this->assertEquals('Hansmann', $personSubmitter->getLastName());
+        $this->assertEquals('test@mail.com', $personSubmitter->getEmail());
+        $this->assertEquals('Stadt', $personSubmitter->getPlaceOfBirth());
+        $this->assertEquals(new Opus_Date(new Zend_Date('1970/01/01')), $personSubmitter->getDateOfBirth());
+        $this->assertEquals('Dr.', $personSubmitter->getAcademicTitle());
+        $this->assertEquals('0', $personSubmitter->getAllowEmailContact());
+        
+        $this->assertEquals(new Opus_Date(new Zend_Date('2012/1/1')), $document->getCompletedDate());
+        
+        $personAuthor1 = $document->getPersonAuthor(0);        
+        $this->assertEquals('vorname', $personAuthor1->getFirstName());
+        $this->assertEquals('nachname', $personAuthor1->getLastName());        
+        $personAuthor2 = $document->getPersonAuthor(1);                
+        $this->assertEquals('nurNachname', $personAuthor2->getLastName());
+        
+        $titleMains = $document->getTitleMain();
+        $titleMain1 = $titleMains[0];
+        $this->assertEquals('Entenhausen', $titleMain1->getValue());
+        $this->assertEquals('deu', $titleMain1->getLanguage());
+        $titleMain2 = $titleMains[1];
+        $this->assertEquals('Irgendwas sonst', $titleMain2->getValue());
+        $this->assertEquals('eng', $titleMain2->getLanguage());
+        
+        $this->assertEquals('deu', $document->getLanguage());
+        
+        $this->assertEquals('Dies ist ein Kommentar', $document->getNote(0)->getMessage());
+                        
+        $this->assertEquals(3, $document->getLicence(0)->getModel()->getId());
+          
+        $this->assertEquals(1, $document->getThesisGrantor(0)->getModel()->getId());
+        $this->assertEquals(2, $document->getThesisPublisher(0)->getModel()->getId());
+        
+        $this->assertEquals('2009', $document->getThesisYearAccepted());
+                
+        $this->assertEquals('hallo098', $document->getSubject(0)->getValue());
+        $this->assertEquals('Keyword', $document->getSubject(1)->getValue());
+        $this->assertEquals('deu', $document->getSubject(1)->getLanguage());
+        
+        $this->assertEquals(8030, $document->getCollection(0)->getId());
+        $this->assertEquals(6740, $document->getCollection(1)->getId());
+        $this->assertEquals(2878, $document->getCollection(2)->getId());
+        $this->assertEquals(13874, $document->getCollection(3)->getId());
+        
+        $this->assertEquals('Publish_Model_DepositTest_old', $document->getIdentifier(0)->getValue());
+        $this->assertEquals('old', $document->getIdentifier(0)->getType());        
+        $this->assertEquals('Publish_Model_DepositTest_serial', $document->getIdentifier(1)->getValue());
+        $this->assertEquals('serial', $document->getIdentifier(1)->getType());        
+        $this->assertEquals('Publish_Model_DepositTest_uuid', $document->getIdentifier(2)->getValue());
+        $this->assertEquals('uuid', $document->getIdentifier(2)->getType());        
+        $this->assertEquals('Publish_Model_DepositTest_isbn', $document->getIdentifier(3)->getValue());
+        $this->assertEquals('isbn', $document->getIdentifier(3)->getType());        
+        $this->assertEquals('Publish_Model_DepositTest_urn', $document->getIdentifier(4)->getValue());
+        $this->assertEquals('urn', $document->getIdentifier(4)->getType());        
+        $this->assertEquals('Publish_Model_DepositTest_doi', $document->getIdentifier(5)->getValue());
+        $this->assertEquals('doi', $document->getIdentifier(5)->getType());        
+        $this->assertEquals('Publish_Model_DepositTest_handle', $document->getIdentifier(6)->getValue());
+        $this->assertEquals('handle', $document->getIdentifier(6)->getType());   
+        $this->assertEquals('Publish_Model_DepositTest_url', $document->getIdentifier(7)->getValue());
+        $this->assertEquals('url', $document->getIdentifier(7)->getType());        
+        $this->assertEquals('Publish_Model_DepositTest_issn', $document->getIdentifier(8)->getValue());
+        $this->assertEquals('issn', $document->getIdentifier(8)->getType());        
+        $this->assertEquals('Publish_Model_DepositTest_stddoi', $document->getIdentifier(9)->getValue());
+        $this->assertEquals('std-doi', $document->getIdentifier(9)->getType());
+        $this->assertEquals('Publish_Model_DepositTest_crislink', $document->getIdentifier(10)->getValue());
+        $this->assertEquals('cris-link', $document->getIdentifier(10)->getType());
+        $this->assertEquals('Publish_Model_DepositTest_splashurl', $document->getIdentifier(11)->getValue());
+        $this->assertEquals('splash-url', $document->getIdentifier(11)->getType());        
+        $this->assertEquals('Publish_Model_DepositTest_opus3', $document->getIdentifier(12)->getValue());
+        $this->assertEquals('opus3-id', $document->getIdentifier(12)->getType());        
+        $this->assertEquals('Publish_Model_DepositTest_opac', $document->getIdentifier(13)->getValue());
+        $this->assertEquals('opac-id', $document->getIdentifier(13)->getType());
+        $this->assertEquals('Publish_Model_DepositTest_arxiv', $document->getIdentifier(14)->getValue());
+        $this->assertEquals('arxiv', $document->getIdentifier(14)->getType());        
+        $this->assertEquals('Publish_Model_DepositTest_pubmed', $document->getIdentifier(15)->getValue());
+        $this->assertEquals('pmid', $document->getIdentifier(15)->getType());
+                
+        $this->assertEquals(5, $document->getSeries(0)->getNumber());
+        $this->assertEquals(4, $document->getSeries(0)->getModel()->getId());
+        
+        $this->assertEquals('title as enrichment', $document->getEnrichment(0)->getValue());
+         
         $document->deletePermanent();
         Opus_EnrichmentKey::fetchbyName('Foo2Title')->delete();
     }
