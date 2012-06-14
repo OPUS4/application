@@ -297,15 +297,8 @@ class Opus3XMLImport {
     }
 
     private function skipEmptyFields() {
-       // BUGFIX:OPUSVIER-938: Fehler beim Import von Dokumenten mit Autoren ohne Vornamen
+
         $roles = array();
-        array_push($roles, array('PersonAdvisor', 'FirstName'));
-        array_push($roles, array('PersonAuthor', 'FirstName'));
-        array_push($roles, array('PersonContributor', 'FirstName'));
-        array_push($roles, array('PersonEditor', 'FirstName'));
-        array_push($roles, array('PersonReferee', 'FirstName'));
-        array_push($roles, array('PersonOther', 'FirstName'));
-        array_push($roles, array('PersonTranslator', 'FirstName'));
 
         array_push($roles, array('TitleMain', 'Value'));
         array_push($roles, array('TitleAbstract', 'Value'));
