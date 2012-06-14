@@ -350,7 +350,33 @@ class Publish_Form_PublishingSecondTest extends ControllerTestCase {
         );
         // no send button in post => FormController calls getExtendedForm() to find add or remove button 
         $form = new Publish_Form_PublishingSecond($this->_logger, $data);
-        $this->assertNull($form->getExtendedForm($data, true));
+        //additionalFields in intial state: all fields have value 1
+        $this->assertEquals(9, count($session->additionalFields));          
+        $this->assertEquals(1, $session->additionalFields['PersonSubmitter']);
+        $this->assertEquals(1, $session->additionalFields['TitleMain']);
+        $this->assertEquals(1, $session->additionalFields['TitleAbstract']);
+        $this->assertEquals(1, $session->additionalFields['PersonAuthor']);
+        $this->assertEquals(1, $session->additionalFields['SubjectUncontrolled']);
+        $this->assertEquals(1, $session->additionalFields['stepInstitute_1']);
+        $this->assertEquals(1, $session->additionalFields['collId0Institute_1']);
+        $this->assertEquals(1, $session->additionalFields['Institute']);
+        $this->assertEquals(1, $session->additionalFields['Series']);
+        
+        $form->getExtendedForm($data, true);        
+        //no button pressed, additionalFields still in intial state
+        //in case of pressed button -> some values differ from 1 
+        //size: 9 (Submitter, TitleMain, TitleAbstract, Author, Uncontrolled, 3xInstitute, Series)
+        $this->assertEquals(9, count($session->additionalFields));          
+        $this->assertEquals(1, $session->additionalFields['PersonSubmitter']);
+        $this->assertEquals(1, $session->additionalFields['TitleMain']);
+        $this->assertEquals(1, $session->additionalFields['TitleAbstract']);
+        $this->assertEquals(1, $session->additionalFields['PersonAuthor']);
+        $this->assertEquals(1, $session->additionalFields['SubjectUncontrolled']);
+        $this->assertEquals(1, $session->additionalFields['stepInstitute_1']);
+        $this->assertEquals(1, $session->additionalFields['collId0Institute_1']);
+        $this->assertEquals(1, $session->additionalFields['Institute']);
+        $this->assertEquals(1, $session->additionalFields['Series']);
+        
     }  
     
     public function testExternalElementLegalNotices() {
