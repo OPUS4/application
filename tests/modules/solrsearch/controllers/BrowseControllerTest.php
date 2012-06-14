@@ -219,4 +219,27 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->assertNotContains('/solrsearch/browse/series">', $this->getResponse()->getBody());
         $this->restoreSeriesVisibility($visibilities);
     }
+
+    /**
+     * Regression test for OPUSVIER-2337
+     */
+    public function testUnavailableServiceReturnsHttpCode503() {
+        // manipulate solr configuration and enable security
+        $config = Zend_Registry::get('Zend_Config');
+        $host = $config->searchengine->index->host;
+        $port = $config->searchengine->index->port;
+        $oldValue = $config->searchengine->index->app;
+        $config->searchengine->index->app = 'solr/corethatdoesnotexist';
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->dispatch('/solrsearch/browse/doctypes');
+        
+        $this->assertNotContains("Solr server http://${host}:${port}/solr/corethatdoesnotexist is not responding.", $this->getResponse()->getBody());
+        $this->assertResponseCode(503);
+
+        // restore configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $config->searchengine->index->app = $oldValue;
+        Zend_Registry::set('Zend_Config', $config);
+    }
 }
