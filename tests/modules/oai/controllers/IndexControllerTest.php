@@ -368,7 +368,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-1788
      */
-    public function testGetRecordXMetaDissPlusDoc146SubjectDDCSG() {
+    public function testGetRecordXMetaDissPlusDoc146SubjectDDC() {
         $doc = new Opus_Document(146);
         $ddcs = array();
         foreach ($doc->getCollection() AS $c) {
@@ -376,8 +376,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                 $ddcs[] = $c->getNumber();
             }
         }
-        $this->assertContains(28, $ddcs, "testdata changed");
-        $this->assertContains(51, $ddcs, "testdata changed");
+        $this->assertContains('28', $ddcs, "testdata changed");
+        $this->assertContains('51', $ddcs, "testdata changed");
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
         $this->assertResponseCode(200);
