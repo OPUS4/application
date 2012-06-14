@@ -34,12 +34,44 @@
 
 class Rss_IndexControllerTest extends ControllerTestCase {
 
+    public function setUp($applicationEnv = APPLICATION_ENV) {
+        parent::setUp($applicationEnv);
+    }
+
     public function testIndexAction() {
         $this->dispatch('/rss/index/index');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
         $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
         $this->assertContains('<rss version="2.0">', $response->getBody());
+    }
+
+    /**
+     * Regression test for OPUSVIER-2337
+     */
+    public function testUnavailableSolrServerReturns503() {
+        $this->setUp('production');
+
+        // manipulate solr configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $host = $config->searchengine->index->host;
+        $port = $config->searchengine->index->port;
+        $oldValue = $config->searchengine->index->app;
+        $config->searchengine->index->app = 'solr/corethatdoesnotexist';
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->dispatch('/rss/index/index/searchtype/all');
+
+        $body = $this->getResponse()->getBody();
+        $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
+        $this->assertContains('search server is not responding -- try again later', $body);
+        $this->assertResponseCode(503);
+
+        // restore configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $config->searchengine->index->app = $oldValue;
+        Zend_Registry::set('Zend_Config', $config);
+        
     }
 }
 

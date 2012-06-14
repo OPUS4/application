@@ -35,7 +35,7 @@
 class Solrsearch_BrowseControllerTest extends ControllerTestCase {
 
     public function setUp($applicationEnv = APPLICATION_ENV) {
-        parent::setUp('production');
+        parent::setUp($applicationEnv);
         $this->requireSolrConfig();
     }
 
@@ -224,7 +224,10 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-2337
      */
     public function testUnavailableServiceReturnsHttpCode503() {
-        // manipulate solr configuration and enable security
+        // run this test in production mode (otherwise we cannot check for translated keys)
+        $this->setUp('production');
+        
+        // manipulate solr configuration
         $config = Zend_Registry::get('Zend_Config');
         $host = $config->searchengine->index->host;
         $port = $config->searchengine->index->port;
@@ -235,7 +238,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/browse/doctypes');
         
         $body = $this->getResponse()->getBody();        
-        $this->assertNotContains("Solr server http://${host}:${port}/solr/corethatdoesnotexist is not responding.", $body);
+        $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
         $this->assertContains('<div class="exceptionMessage">', $body);
         $this->assertTrue(strstr($body, 'Der Suchdienst ist im Moment nicht verfügbar') == false || strstr($body, 'The search service is currently not available') == false);
         

@@ -34,6 +34,10 @@
 
 class Export_IndexControllerTest extends ControllerTestCase {
 
+    public function setUp($applicationEnv = APPLICATION_ENV) {
+        parent::setUp($applicationEnv);
+    }
+
     public function testIndexActionWithoutFormat() {
         $this->dispatch('/export');
         $this->assertResponseCode(500);
@@ -161,6 +165,37 @@ class Export_IndexControllerTest extends ControllerTestCase {
         }
         
         $config->security = $security;
+        Zend_Registry::set('Zend_Config', $config);
+    }
+
+    /**
+     * Regression test for OPUSVIER-2337
+     */
+    public function testUnavailableSolrServerReturns503() {
+        $this->setUp('production');
+        
+        // manipulate solr configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $host = $config->searchengine->index->host;
+        $port = $config->searchengine->index->port;
+        $oldValue = $config->searchengine->index->app;
+        $config->searchengine->index->app = 'solr/corethatdoesnotexist';
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->dispatch('/export/index/index/searchtype/all/export/xml/stylesheet/example');
+
+        $body = $this->getResponse()->getBody();
+
+        echo $body;
+
+        
+        $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
+        $this->assertContains('search server is not responding -- try again later', $body);
+        $this->assertResponseCode(503);
+        
+        // restore configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $config->searchengine->index->app = $oldValue;
         Zend_Registry::set('Zend_Config', $config);
     }
 
