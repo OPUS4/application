@@ -35,14 +35,6 @@
 
 class Rewrite_IndexControllerTest extends ControllerTestCase {
 
-    public function setUp() {
-        parent::setUp();
-    }
-    
-    public function  tearDown() {
-        parent::tearDown();
-    }
-
     public function testIdActionWithMissingArgs() {
         $this->dispatch('/rewrite/index/id');
         $this->assertRedirect();

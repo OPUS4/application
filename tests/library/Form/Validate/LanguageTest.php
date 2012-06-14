@@ -36,10 +36,6 @@
  */
 class Form_Validate_LanguageTest extends ControllerTestCase {
 
-    public function setUp() {
-        parent::setUp();
-    }
-
     public function testIsLanguageValidFalse() {
         $doc = new Opus_Document(146);
 

@@ -36,10 +36,6 @@
  */
 class Form_Validate_DuplicateValueTest extends ControllerTestCase {
 
-    public function setUp() {
-        parent::setUp();
-    }
-
     public function testIsSelectionValidTrue() {
         $context = array(
             array('Language' => 'deu'),
