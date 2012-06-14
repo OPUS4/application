@@ -34,7 +34,7 @@
 
 class Solrsearch_BrowseController extends Controller_Action {
 
-    public function  init() {
+    public function init() {
         parent::init();
         $this->_helper->mainMenu('browsing');
     }
@@ -50,8 +50,18 @@ class Solrsearch_BrowseController extends Controller_Action {
         $facetname = 'doctype';
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::FACET_ONLY);
         $query->setFacetField($facetname);
-        $searcher = new Opus_SolrSearch_Searcher();
-        $facets = $searcher->search($query)->getFacets();
+        $facets = array();
+        try {
+            $searcher = new Opus_SolrSearch_Searcher();
+            $facets = $searcher->search($query)->getFacets();
+        }
+        catch (Opus_SolrSearch_Exception $e) {
+            $this->_logger->err('Error trying to access Solr server: ' . $e);
+            $exception = new Application_Exception('error_search_unavailable');
+            $exception->setHttpResponseCode(503);
+            throw $exception;
+        }
+        
         $docTypesTranslated = array();
         foreach($facets[$facetname] as $facetitem) {
             $translation = $this->view->translate($facetitem->getText());
