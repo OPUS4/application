@@ -140,4 +140,30 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertHeaderContains('Content-Disposition', 'filename=ddc_521.csv');
     }
+
+    /**
+     * Regression test for OPUSVIER-2518
+     */
+    public function test503IfSolrServerIsUnavailable() {
+        $this->requireSolrConfig();
+
+        // manipulate solr configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $host = $config->searchengine->index->host;
+        $port = $config->searchengine->index->port;
+        $oldValue = $config->searchengine->index->app;
+        $config->searchengine->index->app = 'solr/corethatdoesnotexist';
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->request->setMethod('GET');
+        $this->dispatch('/remotecontrol/collection/list?role=ddc&number=000');
+        
+        $this->assertResponseCode('503');
+        $this->assertContains('search server is not responding -- try again later', $this->getResponse()->getBody());
+
+        // restore configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $config->searchengine->index->app = $oldValue;
+        Zend_Registry::set('Zend_Config', $config);
+    }
 }
