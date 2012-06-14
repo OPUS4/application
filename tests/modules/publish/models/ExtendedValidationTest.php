@@ -138,7 +138,10 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $this->assertFalse($result);
     }
 
-    public function testMainTitleWithDifferentDocLanguage() {
+    /**
+     * Test, if validation fails if Language is deu and TitleMainLanguage is eng
+     */
+    public function testMainTitleWithWrongDocLanguage() {
         $config = Zend_Registry::get('Zend_Config');
         $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
         $session = new Zend_Session_Namespace('Publish');
@@ -164,7 +167,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
     }
 
     /**
-     * Checks, if validation is successful if title main language is empty - "Sprache der Veröffentlichung übernehmen"
+     * Test, if validation is successful if title main language is empty - "Sprache der Veröffentlichung übernehmen"
      */
     public function testEmptyMainTitleLanguage() {
         $config = Zend_Registry::get('Zend_Config');
@@ -190,5 +193,79 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $result = $val->validate();
         $this->assertTrue($result);
     }
+    
+    /**
+     * Test, if validation is successful for several title main languages
+     * Last title main has the document language (deu)
+     */
+    public function testSeveralMainTitleLanguages() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'workingpaper';
+        $session->additionalFields = array();
+        $session->additionalFields['TitleMain'] = '4';          
+        $form = new Publish_Form_PublishingSecond($this->_logger);
+        $data = array(
+            'PersonSubmitterFirstName_1' => 'John',
+            'PersonSubmitterLastName_1' => 'Doe',
+            'TitleMain_1' => 'Entenhausen',
+            'TitleMainLanguage_1' => 'spa',
+            'TitleMain_2' => 'Entenhausen2',
+            'TitleMainLanguage_2' => 'eng',
+            'TitleMain_3' => 'Entenhausen3',
+            'TitleMainLanguage_3' => 'fra',
+            'TitleMain_4' => 'Entenhausen4',
+            'TitleMainLanguage_4' => 'deu',
+            'PersonAuthorFirstName_1' => '',
+            'PersonAuthorLastName_1' => 'Tester',
+            'PersonAuthorEmail_1' => '',
+            'PersonAuthorAllowEmailContact_1' => '0',
+            'CompletedDate' => '14.06.2012',
+            'Language' => 'deu',
+            'Licence' => 'ID:4'            
+        );
+
+        $form->getExtendedForm($data, false);
+        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $result = $val->validate();
+        $this->assertTrue($result);
+    }
+    
+    /**
+     * Test, if validation is successful for diferent types of title languages
+     * Only main title may be validated with document language (deu), the languages of the other titles must be ignored
+     */
+    public function testSeveralTitleTypeLanguages() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->documentTypes->include = 'all,preprint,article,demo,workingpaper';
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'workingpaper';
+        $form = new Publish_Form_PublishingSecond($this->_logger);
+        $data = array(
+            'PersonSubmitterFirstName_1' => 'John',
+            'PersonSubmitterLastName_1' => 'Doe',
+            'TitleMain_1' => 'Entenhausen',
+            'TitleMainLanguage_1' => 'deu',
+            'TitleAbstract_1' => 'rus Title',
+            'TitleAbstractLanguage_1' => 'rus',
+            'TitleSub_1' => 'spa title',
+            'TitleSubLanguage_1' => 'spa',
+            'TitleAdditional_1' => 'mul title',
+            'TitleAdditionalLanguage_1' => 'mul',
+            'PersonAuthorFirstName_1' => '',
+            'PersonAuthorLastName_1' => 'Tester',
+            'PersonAuthorEmail_1' => '',
+            'PersonAuthorAllowEmailContact_1' => '0',
+            'CompletedDate' => '11.06.2012',
+            'Language' => 'deu',
+            'Licence' => 'ID:4'
+        );
+
+        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $result = $val->validate();
+        $this->assertTrue($result);
+    }
+        
 }
 

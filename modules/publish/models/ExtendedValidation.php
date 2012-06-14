@@ -53,7 +53,7 @@ class Publish_Model_ExtendedValidation {
         $this->data = $data;
         $this->log = Zend_Registry::get('Zend_Log');
         $this->session = new Zend_Session_Namespace('Publish');
-        
+                
         foreach ($this->data AS $key => $value) {
             $element = $this->form->getElement($key);
             if (!is_null($element)) {
@@ -62,9 +62,9 @@ class Publish_Model_ExtendedValidation {
                     'datatype' => $element->getAttrib('datatype'),
                     'subfield' => $element->getAttrib('subfield'));
             }
-        }
+        }       
     }
-
+    
     /**
      * Method to trigger the validatation of desired fields: persons, titles...
      * @return <boolean> false = error, else true
@@ -161,7 +161,6 @@ class Publish_Model_ExtendedValidation {
             if ($mail !== "") {
                 //if email is not null, find the corresponding first and last name
                 $lastName = str_replace('Email', 'LastName', $key);
-                $firstName = str_replace('Last', 'First', $lastName);
 
                 if ($this->data[$lastName] == "") {
                     //error case: Email exists but Last name not
@@ -275,9 +274,9 @@ class Publish_Model_ExtendedValidation {
         //3) validate titles per language
         $validate3 = $this->_validateTitlesPerLanguage();
 
-        //4) validate usage of document language for titles
+        //4) validate usage of document language for main titles
         $validate4 = $this->_validateDocumentLanguageForMainTitles();
-
+        
         $validTitles = $validate1 && $validate2 && $validate3 && $validate4;
 
         return $validTitles;
@@ -389,14 +388,13 @@ class Publish_Model_ExtendedValidation {
      */
     private function _validateDocumentLanguageForMainTitles() {
         $validTitles = true;
-        $titles = $this->_getTitleMainFields();
-        $languages = $this->_getTitleMainLanguageFields();
+        $titles = $this->_getTitleMainFields();        
+        $languages = $this->_getTitleMainLanguageFields();                
         if (array_key_exists('Language', $this->data) && $this->data['Language'] !== "")
             $docLanguage = $this->data['Language'];
         else
             return true;
-
-        $titlesWithDocLanguage = array();
+        
         $i = 0;
         
         foreach ($languages AS $title => $lang) {
@@ -455,9 +453,9 @@ class Publish_Model_ExtendedValidation {
             //find only TitleMain fields: datatype=Title, no subfield, 'main' must be present in name
             $fieldname = strtolower($name);
             if ($entry['datatype'] == 'Title' && $entry['subfield'] == false && strstr($fieldname, 'main'))
-                $titles[$name] = $entry['value'];
-        }
-        
+                $titles[$name] = $entry['value'];           
+            }
+                
         return $titles;
     }
     
