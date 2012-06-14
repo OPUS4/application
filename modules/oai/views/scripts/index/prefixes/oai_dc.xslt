@@ -98,6 +98,7 @@
             </dc:identifier>
             <xsl:apply-templates select="IdentifierUrn" mode="oai_dc" />
             <xsl:apply-templates select="IdentifierIsbn" mode="oai_dc" />
+            <xsl:apply-templates select="File" mode="oai_dc" />
             <!-- dc:source -->
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:language -->
@@ -192,6 +193,12 @@
         <dc:format>
             <xsl:value-of select="." />
         </dc:format>
+    </xsl:template>
+
+    <xsl:template match="File" mode="oai_dc">
+        <dc:identifier>
+            <xsl:value-of select="@url" />
+        </dc:identifier>
     </xsl:template>
 
     <xsl:template match="IdentifierIsbn" mode="oai_dc">

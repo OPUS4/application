@@ -464,6 +464,36 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Regression test for OPUSVIER-2393
+     */
+    public function testGetRecordOaiDcDoc91() {
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::91');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2393 (show dc:identifier)
+        $elements = $xpath->query('//oai_dc:dc/dc:identifier/text()');
+
+        $foundIds = array();
+        foreach ($elements AS $element) {
+            $nodeValue = $element->nodeValue;
+            if (strstr($nodeValue, '/files/')) {
+                $foundIds[] = preg_replace("/^.*(\/files\/\d+\/.*)$/", "$1", $element->nodeValue);
+            }
+        }
+
+        $this->assertContains("/files/91/test.pdf", $foundIds);
+        $this->assertContains("/files/91/test.txt", $foundIds);
+        $this->assertContains("/files/91/frontdoor_invisible.txt", $foundIds);
+    }
+
+    /**
      * Regression test for OPUSVIER-2380 and OPUSVIER-2378
      */
     public function testGetRecordOaiDcDoc10SubjectDdcAndDate() {
