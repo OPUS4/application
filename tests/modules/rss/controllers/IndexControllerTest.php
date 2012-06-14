@@ -34,10 +34,6 @@
 
 class Rss_IndexControllerTest extends ControllerTestCase {
 
-    public function setUp($applicationEnv = APPLICATION_ENV) {
-        parent::setUp($applicationEnv);
-    }
-
     public function testIndexAction() {
         $this->dispatch('/rss/index/index');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
@@ -50,7 +46,9 @@ class Rss_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-2337
      */
     public function testUnavailableSolrServerReturns503() {
-        $this->setUp('production');
+        // run this test in production mode (otherwise we cannot check for translated keys)
+        parent::setUpWithEnv('production');
+        $this->requireSolrConfig();
 
         // manipulate solr configuration
         $config = Zend_Registry::get('Zend_Config');

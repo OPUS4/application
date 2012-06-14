@@ -34,10 +34,6 @@
 
 class Export_IndexControllerTest extends ControllerTestCase {
 
-    public function setUp($applicationEnv = APPLICATION_ENV) {
-        parent::setUp($applicationEnv);
-    }
-
     public function testIndexActionWithoutFormat() {
         $this->dispatch('/export');
         $this->assertResponseCode(500);
@@ -172,7 +168,9 @@ class Export_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-2337
      */
     public function testUnavailableSolrServerReturns503() {
-        $this->setUp('production');
+        // run this test in production mode (otherwise we cannot check for translated keys)
+        parent::setUpWithEnv('production');
+        $this->requireSolrConfig();
         
         // manipulate solr configuration
         $config = Zend_Registry::get('Zend_Config');
