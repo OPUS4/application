@@ -393,26 +393,13 @@
             <!-- All Related Persons (Author/Editor/Submitter/Contributor/...)-->
             <!-- PersonSubmitter -->
             <xsl:if test="string-length(field[@name='verification'])>0">
-                <xsl:choose>
-                    <xsl:when test="contains(field[@name='verification'], ',')">
-                        <xsl:call-template name="AddPersons">
-                            <xsl:with-param name="role">PersonSubmitter</xsl:with-param>
-                            <xsl:with-param name="list">
-                                <xsl:value-of select="field[@name='verification']" />
-                            </xsl:with-param>
-                            <xsl:with-param name="delimiter">,</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:call-template name="AddPersons">
-                            <xsl:with-param name="role">PersonSubmitter</xsl:with-param>
-                            <xsl:with-param name="list">
-                                <xsl:value-of select="field[@name='verification']" />
-                            </xsl:with-param>
-                            <xsl:with-param name="delimiter">;</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <xsl:element name="PersonSubmitter">
+                    <xsl:attribute name="LastName">unknown</xsl:attribute>
+                    <xsl:attribute name="Email">
+                        <xsl:value-of select="field[@name='verification']" />
+                    </xsl:attribute>
+                    <xsl:attribute name="SortOrder">1</xsl:attribute>
+                </xsl:element>
             </xsl:if>
 	    
             <!-- PersonAuthor -->

@@ -200,7 +200,7 @@ class Opus3XMLImport {
         $this->oldId = $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
 
         $this->skipEmptyFields();
-	$this->validateEmails();
+	$this->validatePersonSubmitterEmail();
         $this->checkTitle();
 
         $this->mapDocumentTypeAndLanguage();
@@ -306,7 +306,6 @@ class Opus3XMLImport {
         array_push($roles, array('PersonReferee', 'FirstName'));
         array_push($roles, array('PersonOther', 'FirstName'));
         array_push($roles, array('PersonTranslator', 'FirstName'));
-        array_push($roles, array('PersonSubmitter', 'FirstName'));
 
         array_push($roles, array('TitleMain', 'Value'));
         array_push($roles, array('TitleAbstract', 'Value'));
@@ -350,35 +349,26 @@ class Opus3XMLImport {
             }
         }
     }
-    
-    private function validateEmails() {
-    
+
+     private function validatePersonSubmitterEmail() {
+
         $roles = array();
-        array_push($roles, 'PersonAdvisor');
-        array_push($roles, 'PersonAuthor');
-        array_push($roles, 'PersonContributor');
-        array_push($roles, 'PersonEditor');
-        array_push($roles, 'PersonReferee');
-        array_push($roles, 'PersonOther');
-        array_push($roles, 'PersonTranslator');
-        array_push($roles, 'PersonSubmitter');    
-    
-	$validator = new Zend_Validate_EmailAddress();
-	
-        foreach ($roles as $r) {
-            $elements = $this->document->getElementsByTagName($r);
-            foreach ($elements as $e) {	
-                if (trim($e->getAttribute('Email')) != "") {
-			if (!($validator->isValid($e->getAttribute('Email')))) {
-				$this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : Invalid Email-Address '" . $e->getAttribute('Email') . "' will not be imported");
-				$e->removeAttribute('Email');
-			}
+ 	$validator = new Zend_Validate_EmailAddress();
+        $elements = $this->document->getElementsByTagName('PersonSubmitter');
+        foreach ($elements as $e) {
+            if (trim($e->getAttribute('Email')) != "") {
+                if (!($validator->isValid($e->getAttribute('Email')))) {
+                    $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : Invalid Email-Address '" . $e->getAttribute('Email') . "' will be imported as 'InvalidVerification'-Enrichment");
+                    $enrichment =  $this->document->appendChild(new DOMElement('Enrichment'));
+                    $enrichment->setAttributeNode(new DOMAttr('KeyName', 'InvalidVerification'));
+                    $enrichment->setAttributeNode(new DOMAttr('Value', $e->getAttribute('Email')));
+                    $e->removeAttribute('Email');
                 }
             }
         }
-    }	    
+    }
 
- 
+    
     private function mapDocumentTypeAndLanguage() {
         $mapping = array('language', 'type');
         foreach ($mapping as $m) {
