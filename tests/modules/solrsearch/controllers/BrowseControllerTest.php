@@ -34,8 +34,8 @@
 
 class Solrsearch_BrowseControllerTest extends ControllerTestCase {
 
-    public function setUp($applicationEnv = APPLICATION_ENV) {
-        parent::setUp($applicationEnv);
+    public function setUp() {
+        parent::setUp();
         $this->requireSolrConfig();
     }
 
@@ -225,7 +225,8 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
      */
     public function testUnavailableServiceReturnsHttpCode503() {
         // run this test in production mode (otherwise we cannot check for translated keys)
-        $this->setUp('production');
+        $this->setUpWithEnv('production');
+        $this->requireSolrConfig();
         
         // manipulate solr configuration
         $config = Zend_Registry::get('Zend_Config');

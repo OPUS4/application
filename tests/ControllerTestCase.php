@@ -39,7 +39,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     /**
      * Method to initialize Zend_Application for each test.
      */
-    public function setUp($applicationEnv = APPLICATION_ENV) {
+    public function setUpWithEnv($applicationEnv) {
         // Resetting singletons or other kinds of persistent objects.
         Opus_Db_TableGateway::clearInstances();
 
@@ -65,6 +65,10 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.0';
 
         parent::setUp();
+    }
+
+    public function setUp() {
+        $this->setUpWithEnv(APPLICATION_ENV);
     }
 
     /**
