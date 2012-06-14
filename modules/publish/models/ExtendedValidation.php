@@ -451,9 +451,10 @@ class Publish_Model_ExtendedValidation {
      */
     private function _getTitleMainFields() {
         $titles = array();
-
-        foreach ($this->extendedData as $name => $entry) {            
-            if ($entry['datatype'] == 'Title' && $entry['subfield'] == false && strstr($name, 'ain'))
+        foreach ($this->extendedData as $name => $entry) {    
+            //find only TitleMain fields: datatype=Title, no subfield, 'main' must be present in name
+            $fieldname = strtolower($name);
+            if ($entry['datatype'] == 'Title' && $entry['subfield'] == false && strstr($fieldname, 'main'))
                 $titles[$name] = $entry['value'];
         }
         
@@ -468,8 +469,9 @@ class Publish_Model_ExtendedValidation {
         $titles = array();
 
         foreach ($this->extendedData as $name => $entry) {
-            if ($entry['datatype'] == 'Language' && $entry['subfield'] == true && strstr($name, 'ain')) {
-                
+            $fieldname = strtolower($name);
+            //find only TitleMainLanguage fields: datatype=Language, subfield, 'main' must be present in name
+            if ($entry['datatype'] == 'Language' && $entry['subfield'] == true && strstr($fieldname, 'main')) {                
                 if (empty($entry['value'])) 
                     $entry['value'] = $this->documentLanguage;
                 $titles[$name] = $entry['value'];
