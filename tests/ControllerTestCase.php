@@ -73,9 +73,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     protected function tearDown() {
         $this->logoutUser();
 
-        // Close logfile to prevent plenty of open logfile.
-        $log = Zend_Registry::get('Zend_Log');
-        $log->__destruct();
+//        // Close logfile to prevent plenty of open logfile.
+//        $log = Zend_Registry::get('Zend_Log');
+//        $log->__destruct();
 
         parent::tearDown();
     }
