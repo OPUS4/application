@@ -39,7 +39,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     /**
      * Method to initialize Zend_Application for each test.
      */
-    public function setUp() {
+    public function setUp($applicationEnv = APPLICATION_ENV) {
         // Resetting singletons or other kinds of persistent objects.
         Opus_Db_TableGateway::clearInstances();
 
@@ -50,7 +50,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         unset($_SERVER['REMOTE_ADDR']);
 
         $this->bootstrap = new Zend_Application(
-            APPLICATION_ENV,
+            $applicationEnv,
             array(
                 "config" => array(
                     APPLICATION_PATH . '/application/configs/application.ini',

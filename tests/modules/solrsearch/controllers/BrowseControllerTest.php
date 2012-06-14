@@ -34,8 +34,8 @@
 
 class Solrsearch_BrowseControllerTest extends ControllerTestCase {
 
-    public function setUp() {
-        parent::setUp();
+    public function setUp($applicationEnv = APPLICATION_ENV) {
+        parent::setUp('production');
         $this->requireSolrConfig();
     }
 
@@ -234,7 +234,11 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
 
         $this->dispatch('/solrsearch/browse/doctypes');
         
-        $this->assertNotContains("Solr server http://${host}:${port}/solr/corethatdoesnotexist is not responding.", $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();        
+        $this->assertNotContains("Solr server http://${host}:${port}/solr/corethatdoesnotexist is not responding.", $body);
+        $this->assertContains('<div class="exceptionMessage">', $body);
+        $this->assertTrue(strstr($body, 'Der Suchdienst ist im Moment nicht verfügbar') == false || strstr($body, 'The search service is currently not available') == false);
+        
         $this->assertResponseCode(503);
 
         // restore configuration
