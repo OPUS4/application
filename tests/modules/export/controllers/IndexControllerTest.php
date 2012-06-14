@@ -171,29 +171,37 @@ class Export_IndexControllerTest extends ControllerTestCase {
         // run this test in production mode (otherwise we cannot check for translated keys)
         parent::setUpWithEnv('production');
         $this->requireSolrConfig();
-        
+
+        // role guest needs privilege to access module export
+        $r = Opus_UserRole::fetchByName('guest');
+
+        $modules = $r->listAccessModules();
+        $addOaiModuleAccess = !in_array('export', $modules);
+        if ($addOaiModuleAccess) {
+            $r->appendAccessModule('export');
+            $r->store();
+        }
+
         // manipulate solr configuration
         $config = Zend_Registry::get('Zend_Config');
         $host = $config->searchengine->index->host;
         $port = $config->searchengine->index->port;
         $oldValue = $config->searchengine->index->app;
         $config->searchengine->index->app = 'solr/corethatdoesnotexist';
+        $security = $config->security;
+        $config->security = '1';
         Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/export/index/index/searchtype/all/export/xml/stylesheet/example');
-
         $body = $this->getResponse()->getBody();
-
-        echo $body;
-
-        
         $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
         $this->assertContains('search server is not responding -- try again later', $body);
         $this->assertResponseCode(503);
         
         // restore configuration
-        $config = Zend_Registry::get('Zend_Config');
+        $config = Zend_Registry::get('Zend_Config');        
         $config->searchengine->index->app = $oldValue;
+        $config->security = $security;
         Zend_Registry::set('Zend_Config', $config);
     }
 
