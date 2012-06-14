@@ -51,4 +51,34 @@ class Remotecontrol_Model_DownloadListTest extends ControllerTestCase {
         $csv = $downloadList->getCvsFile('ddc', '621', null);
         $this->assertRegExp('/^$/', $csv);
     }
+
+    /**
+     * Regression test for OPUSVIER-2518
+     */
+    public function testExceptionIfSolrServerIsUnavailable() {
+        // manipulate solr configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $host = $config->searchengine->index->host;
+        $port = $config->searchengine->index->port;
+        $oldValue = $config->searchengine->index->app;
+        $config->searchengine->index->app = 'solr/corethatdoesnotexist';
+        Zend_Registry::set('Zend_Config', $config);
+
+        $downloadList = new Remotecontrol_Model_DownloadList();
+        $exception = null;
+        try {
+            $downloadList->getCvsFile('ddc', '000');
+        }
+        catch (Exception $e) {
+            $exception = $e;
+        }
+        $this->assertType('Remotecontrol_Model_Exception', $e);
+        $this->assertFalse($e->collectionIsNotUnique());
+        $this->assertTrue($e->searchServerIsUnavailable());      
+
+        // restore configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $config->searchengine->index->app = $oldValue;
+        Zend_Registry::set('Zend_Config', $config);
+    }
 }
