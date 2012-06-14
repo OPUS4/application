@@ -91,6 +91,11 @@ class Remotecontrol_CollectionController extends Controller_Action {
             if ($e->collectionIsNotUnique()) {
                 $this->getResponse()->setHttpResponseCode(501);
             }
+            if ($e->searchServerIsUnavailable()) {
+                $exception = new Application_Exception('search server is not responding -- try again later');
+                $exception->setHttpResponseCode(503);
+                throw $exception;                
+            }
             else {
                 $this->getResponse()->setHttpResponseCode(400);
             }
