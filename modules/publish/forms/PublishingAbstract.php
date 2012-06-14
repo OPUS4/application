@@ -47,6 +47,8 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
     function getElementAttributes($elementName) {
         $elementAttributes = array();
         if (!is_null($this->getElement($elementName))) {
+            $nameWithoutCounter = explode('_', $elementName);
+            $nameWithoutCounter = $nameWithoutCounter[0];
             $element = $this->getElement($elementName);
             $elementAttributes['value'] = $element->getValue();
             $elementAttributes['label'] = $element->getLabel();
@@ -54,7 +56,7 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
             $elementAttributes['id'] = $element->getId();
             $elementAttributes['type'] = $element->getType();
             $elementAttributes['desc'] = $element->getDescription();
-            $elementAttributes['hint'] = 'hint_' . $elementName;
+            $elementAttributes['hint'] = 'hint_' . $nameWithoutCounter;
             $elementAttributes['header'] = 'header_' . $elementName;
             $elementAttributes['disabled'] = $element->getAttrib('disabled');
             $elementAttributes['datatype'] = $element->getAttrib('datatype');

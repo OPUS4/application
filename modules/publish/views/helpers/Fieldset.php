@@ -54,9 +54,8 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
                 $fieldset .= " disabled='1' ";
                 $this->disable = true;
             }
-
-            if (strstr($field['id'], "1"))
-                $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
+           
+            $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
 
             $fieldset .= " value='" . htmlspecialchars($field['value'], ENT_QUOTES) . "' />\n";            
             if (isset($field['desc']))
@@ -77,8 +76,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
             $this->disable = true;
         }
 
-        if (strstr($field['id'], "1"))
-            $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
+        $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
 
         $fieldset .= " id='" . $field['id'] . "'>" . htmlspecialchars($field['value'], ENT_QUOTES) . "</textarea>";
 
@@ -87,8 +85,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
 
     function renderHtmlSelect($field, $options) {
         $fieldset = "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id'] . '" class="form-selectfield"  id="' . $field['id'] . '"';
-        if (strstr($field['id'], '1'))
-            $fieldset .= ' title="' . htmlspecialchars ($this->view->translate($field['hint']), ENT_QUOTES) . '"';
+        $fieldset .= ' title="' . htmlspecialchars ($this->view->translate($field['hint']), ENT_QUOTES) . '"';
         if ($field['disabled'] === true) {
             $fieldset .= ' disabled="1" ';
         }
