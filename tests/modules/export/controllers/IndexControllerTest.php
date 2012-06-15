@@ -255,8 +255,6 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $indexer->commit();
 
         $body = $this->getResponse()->getBody();
-
-        echo $body;
         
         $this->assertNotContains("No Opus_Db_Documents with id $docId2 in database.", $body);
         $this->assertContains('Language="eng" Value="test document for OPUSVIER-1726" Type="main"', $body);
