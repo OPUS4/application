@@ -644,6 +644,42 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Regression test for OPUSVIER-2454
+     */
+    public function testGetRecordOaiDcDoc1ByIdentifierPrefixOai() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::1');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2454 (check returned dc:identifier)
+        $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="urn:nbn:de:gbv:830-opus-225"]');
+        $this->assertEquals(1, $elements->length, "Expected URN not found");
+    }
+
+    /**
+     * Regression test for OPUSVIER-2454
+     */
+    public function testGetRecordOaiDcDoc1ByIdentifierPrefixUrn() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=urn:nbn:de:gbv:830-opus-225');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2454 (check returned dc:identifier)
+        $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="urn:nbn:de:gbv:830-opus-225"]');
+        $this->assertEquals(1, $elements->length, "Expected URN not found");
+    }
+
+    /**
      * Test verb=ListIdentifiers.
      */
     public function testListIdentifiers() {

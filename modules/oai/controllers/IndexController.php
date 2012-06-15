@@ -225,8 +225,12 @@ class Oai_IndexController extends Controller_Xml {
     private function __handleGetRecord(array &$oaiRequest) {
 
         // Identifier references metadata Urn, not plain Id!
-        // Currently implemented as 'oai:foo.bar.de:{docId}'
-        $docId = substr(strrchr($oaiRequest['identifier'], ':'), 1);
+        // Currently implemented as 'oai:foo.bar.de:{docId}' or 'urn:nbn...-123'
+        $docId = $this->getDocumentIdByOaiIdentifier($oaiRequest['identifier']);
+
+        if (empty($docId) or !preg_match('/^(\d+)$/', $docId)) {
+            throw new Oai_Model_Exception('The value of the identifier argument is unknown or illegal in this repository.', Oai_Model_Error::BADARGUMENT);
+        }
 
         $document = null;
         try {
@@ -583,18 +587,28 @@ class Oai_IndexController extends Controller_Xml {
      * @result int
      */
     private function getDocumentIdByOaiIdentifier($oaiIdentifier) {
-        // currently oai identifers are not stored in database
-        // workaround this by urn identifier
-        $urnPrefix = 'urn:nbn:de';
-        $localPrefix = '%'; // Workaround for different local prefixes
-        $identifierInfo = mb_substr(mb_strrchr($oaiIdentifier, ':'), 1);
-        $urnIdentifier = $urnPrefix . ':' . $localPrefix . ':' . $identifierInfo;
+        $identifierParts = explode(":", $oaiIdentifier);
 
-        $result = Opus_Document::getDocumentByIdentifier($urnIdentifier);
-        if (null === $result) {
-            $result = -1;
+        $docId = null;
+        switch ($identifierParts[0]) {
+            case 'urn':
+                $finder = new Opus_DocumentFinder();
+                $finder->setIdentifierTypeValue('urn', $oaiIdentifier);
+                $finder->setServerStateInList($this->_deliveringDocumentStates);
+                $docIds = $finder->ids();
+                $docId = $docIds[0];
+                break;
+            case 'oai':
+                if (isset($identifierParts[2])) {
+                    $docId = $identifierParts[2];
+                }
+                break;
+            default:
+                throw new Oai_Model_Exception('The prefix of the identifier argument is unknown.', Oai_Model_Error::BADARGUMENT);
+                break;
         }
-        return $result;
+
+        return $docId;
     }
 
     /**
