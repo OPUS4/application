@@ -238,22 +238,23 @@
                      </xsl:choose>  
                    </thesis:level>
 
-                <thesis:grantor xsi:type="cc:Corporate">
-                   <cc:universityOrInstitution>
-                       <cc:name>
-                          <xsl:value-of select="ThesisGrantor/@Name" />
-                       </cc:name>   
-                       <cc:place>
-                          <xsl:value-of select="ThesisGrantor/@City" />
-                       </cc:place>
-                       <cc:department>
-                          <cc:name>
-                             <xsl:value-of select="ThesisGrantor/@Name" />
-                          </cc:name>
-                       </cc:department>
-                   </cc:universityOrInstitution>
-                </thesis:grantor>    
-
+                    <xsl:for-each select="ThesisGrantor">
+                        <thesis:grantor xsi:type="cc:Corporate">
+                            <cc:universityOrInstitution>
+                                <cc:name>
+                                    <xsl:value-of select="@Name" />
+                                </cc:name>
+                                <cc:place>
+                                    <xsl:value-of select="@City" />
+                                </cc:place>
+                                <cc:department>
+                                    <cc:name>
+                                        <xsl:value-of select="@Name" />
+                                    </cc:name>
+                                </cc:department>
+                            </cc:universityOrInstitution>
+                        </thesis:grantor>
+                    </xsl:for-each>
                 </thesis:degree>
             </xsl:if>
 

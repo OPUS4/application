@@ -65,6 +65,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $xpath->registerNamespace('xMetaDiss', "http://www.d-nb.de/standards/xmetadissplus/");
         $xpath->registerNamespace('epicur', "urn:nbn:de:1111-2004033116");
         $xpath->registerNamespace('dcterms', "http://purl.org/dc/terms/");
+        $xpath->registerNamespace('thesis', "http://www.ndltd.org/standards/metadata/etdms/1.0/");
         return $xpath;
     }
 
@@ -439,6 +440,29 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $value = $elements->item(0)->nodeValue;
         $this->assertContains("frontdoor/index/index/docId/1", $value,
                 'expected frontdoor URL in ddb:identifier');
+    }
+
+    /**
+     * Regression test for OPUSVIER-2452
+     */
+    public function testGetRecordXMetaDissPlusDoc132EmptyThesisGrantor() {
+        $doc = new Opus_Document(132);
+        $this->assertEquals('doctoralthesis', $doc->getType(),
+                'testdata changed: document type changed');
+        $this->assertEquals('published',      $doc->getServerState(),
+                'testdata changed: document state changed');
+        $this->assertEquals(0,                count($doc->getThesisGrantor()),
+                'testdata changed: thesis grantor added to document');
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::132');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2452 - no thesis:grantor element
+        $elements = $xpath->query('//thesis:degree/thesis:grantor');
+        $this->assertEquals(0, $elements->length, "Unexpected thesis:grantor count");
     }
 
     /**
