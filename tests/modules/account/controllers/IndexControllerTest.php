@@ -50,8 +50,8 @@ class Account_IndexControllerTest extends ControllerTestCase {
     }
 
     public function tearDown() {
-        parent::tearDown();
         $this->user->delete();
+        parent::tearDown();
     }
 
     private function deleteUser($username) {
