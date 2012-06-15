@@ -87,6 +87,10 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      * Close logfile to prevent plenty of open logfiles.
      */
     protected function closeLogfile() {
+        if (!Zend_Registry::isRegistered('Zend_Log')) {
+            return;
+        }
+
         $log = Zend_Registry::get('Zend_Log');
         if (isset($log)) {
             $log->__destruct();
