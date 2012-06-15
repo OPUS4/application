@@ -209,7 +209,6 @@ class Export_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-1726
      */
     public function testSolrIndexIsNotUpToDate() {
-        // add a document to the search index that is not stored in database
         $doc = new Opus_Document();
         $doc->setServerState('published');
         $doc->setLanguage('eng');
@@ -217,13 +216,21 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $title->setValue('test document for OPUSVIER-1726');
         $title->setLanguage('eng');
         $doc->setTitleMain($title);
+        $doc->store();
+        $docId1 = $doc->getId();
+        
+        // add a document to the search index that is not stored in database
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $doc->setLanguage('eng');
+        $title = new Opus_Title();
+        $title->setValue('another test document for OPUSVIER-1726');
+        $title->setLanguage('eng');
+        $doc->setTitleMain($title);
         // unregister index plugin: database changes are not reflected in search index
         $doc->unregisterPlugin('Opus_Document_Plugin_Index');
         $doc->store();
-
-        $docId = $doc->getId();
-        $date = new Zend_Date($doc->getServerDatePublished());
-        $dateValue = $date->get(Zend_Date::RFC_2822);
+        $docId2 = $doc->getId();
 
         $indexer = new Opus_SolrSearch_Index_Indexer();
 
@@ -244,13 +251,19 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/export/index/index/searchtype/simple/query/opusvier-1726/export/xml');
 
         // make search index up to date
-        $indexer->removeDocumentFromEntryIndexById($docId);
+        $indexer->removeDocumentFromEntryIndexById($docId2);
         $indexer->commit();
 
         $body = $this->getResponse()->getBody();
-        $this->assertNotContains("No Opus_Db_Documents with id $docId in database.", $body);
+
+        echo $body;
+        
+        $this->assertNotContains("No Opus_Db_Documents with id $docId2 in database.", $body);
         $this->assertContains('Language="eng" Value="test document for OPUSVIER-1726" Type="main"', $body);
-        $this->assertContains('<Opus_Document Id="' . $docId . '" Language="eng"', $body);
+        $this->assertNotContains('Language="eng" Value="another test document for OPUSVIER-1726" Type="main"', $body);
+        $this->assertContains('<Opus_Document Id="' . $docId1 . '" Language="eng"', $body);
+        $this->assertNotContains('<Opus_Document Id="' . $docId2 . '" Language="eng"', $body);
+        $this->assertContains('doccount="1"', $body);
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());        
     }
 
