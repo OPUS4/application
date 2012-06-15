@@ -1,5 +1,22 @@
 h1. OPUS 4 Release Notes
 
+h2. ======================== Release 4.2.2 2012-06-20 ========================
+
+h3. URNs werden nur noch für Artikel mit sichtbarem Volltext vergeben
+
+Die DNB lässt nur URNs für Dokumente mit Volltexten zu.  Daher wurde die 
+Vergabe von URNs auf Dokumente im Status "published" beschränkt, die per OAI
+sichtbare Dateien besitzen.  Sichtbar per OAI sind alle Dateien, bei denen
+das Attribut "VisibleInOai" auf 1 gesetzt ist.
+
+Bitte stellen Sie für bereits existierende Dokumente sicher, dass Sie keine
+Dokumente ohne sichtbare Dateien an die DNB melden.  Zu diesem Zweck haben
+wir ein kleines Script für Sie vorbereitet:
+
+$ opus4/scripts/
+$ php opus-console.php snippets/find_urns_for_docs_without_visible_files.php
+
+
 h2. ======================== Release 4.2.1 2012-03-01 ========================
 
 h3. Validierung des XML-Dumps für die Migration aus OPUS3
