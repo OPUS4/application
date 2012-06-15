@@ -258,9 +258,12 @@
                 </thesis:degree>
             </xsl:if>
 
-            <ddb:contact>
-                <xsl:attribute name="ddb:contactID"><xsl:value-of select="ThesisPublisher/@DnbContactId" /></xsl:attribute>
-            </ddb:contact>
+            <xsl:for-each select="ThesisPublisher">
+                <ddb:contact>
+                    <xsl:attribute name="ddb:contactID"><xsl:value-of select="@DnbContactId" /></xsl:attribute>
+                </ddb:contact>
+            </xsl:for-each>-->
+
             <ddb:fileNumber>
               <xsl:value-of select="count(File)"/>
             </ddb:fileNumber>
