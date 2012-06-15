@@ -129,6 +129,8 @@ class Rss_IndexControllerTest extends ControllerTestCase {
         $indexer->removeDocumentFromEntryIndexById($docId1);
         $indexer->commit();
 
+        $doc2->deletePermanent();
+
         $body = $this->getResponse()->getBody();
         $this->assertNotContains("No Opus_Db_Documents with id $docId1 in database.", $body);
         $this->assertNotContains('<title>test document for OPUSVIER-1726</title>', $body);
