@@ -40,6 +40,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      * Method to initialize Zend_Application for each test.
      */
     public function setUpWithEnv($applicationEnv) {
+        $this->closeLogfile();
+
         // Resetting singletons or other kinds of persistent objects.
         Opus_Db_TableGateway::clearInstances();
 
@@ -76,12 +78,20 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      */
     protected function tearDown() {
         $this->logoutUser();
-
-        // Close logfile to prevent plenty of open logfile.
-        $log = Zend_Registry::get('Zend_Log');
-        $log->__destruct();
+        $this->closeLogfile();
 
         parent::tearDown();
+    }
+
+    /**
+     * Close logfile to prevent plenty of open logfiles.
+     */
+    protected function closeLogfile() {
+        $log = Zend_Registry::get('Zend_Log');
+        if (isset($log)) {
+            $log->__destruct();
+            Zend_Registry::set('Zend_Log', null);
+        }
     }
 
     /**
