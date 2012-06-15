@@ -71,5 +71,51 @@ class Rss_IndexControllerTest extends ControllerTestCase {
         Zend_Registry::set('Zend_Config', $config);
         
     }
-}
 
+    /**
+     * Regression test for OPUSVIER-1726
+     */
+    public function testSolrIndexIsNotUpToDate() {
+        // add a document to the search index that is not stored in database
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $doc->setLanguage('eng');
+        $title = new Opus_Title();
+        $title->setValue('test document for OPUSVIER-1726');
+        $title->setLanguage('eng');
+        $doc->setTitleMain($title);
+        // unregister index plugin: database changes are not reflected in search index
+        $doc->unregisterPlugin('Opus_Document_Plugin_Index');
+        $doc->store();
+
+        $docId = $doc->getId();
+        $date = new Zend_Date($doc->getServerDatePublished());
+        $dateValue = $date->get(Zend_Date::RFC_2822);
+        
+        $indexer = new Opus_SolrSearch_Index_Indexer();
+
+        $class = new ReflectionClass('Opus_SolrSearch_Index_Indexer');
+        $methodGetSolrXmlDocument = $class->getMethod('getSolrXmlDocument');
+        $methodGetSolrXmlDocument->setAccessible(true);
+        $solrXml = $methodGetSolrXmlDocument->invoke($indexer, $doc);
+
+        // delete document from database
+        $doc->deletePermanent();
+
+        // add document to search index
+        $methodSendSolrXmlToServer = $class->getMethod('sendSolrXmlToServer');
+        $methodSendSolrXmlToServer->setAccessible(true);
+        $methodSendSolrXmlToServer->invoke($indexer, $solrXml);
+        $indexer->commit();        
+
+        $this->dispatch('/rss/index/index/searchtype/all');
+        $body = $this->getResponse()->getBody();
+        $this->assertNotContains("No Opus_Db_Documents with id $docId in database.", $body);
+        $this->assertContains('<title>test document for OPUSVIER-1726</title>', $body);
+        $this->assertContains("frontdoor/index/index/docId/$docId</link>", $body);
+        $this->assertContains("<pubDate>$dateValue</pubDate>", $body);
+        $this->assertContains("<lastBuildDate>$dateValue</lastBuildDate>", $body);
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+    }
+
+}
