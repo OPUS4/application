@@ -106,9 +106,14 @@ class Rss_IndexControllerTest extends ControllerTestCase {
         $methodSendSolrXmlToServer = $class->getMethod('sendSolrXmlToServer');
         $methodSendSolrXmlToServer->setAccessible(true);
         $methodSendSolrXmlToServer->invoke($indexer, $solrXml);
-        $indexer->commit();        
+        $indexer->commit();
 
         $this->dispatch('/rss/index/index/searchtype/all');
+
+        // make search index up to date
+        $indexer->removeDocumentFromEntryIndexById($docId);
+        $indexer->commit();
+        
         $body = $this->getResponse()->getBody();
         $this->assertNotContains("No Opus_Db_Documents with id $docId in database.", $body);
         $this->assertContains('<title>test document for OPUSVIER-1726</title>', $body);
