@@ -209,38 +209,38 @@ class Export_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-1726
      */
     public function testSolrIndexIsNotUpToDate() {
-        $doc = new Opus_Document();
-        $doc->setServerState('published');
-        $doc->setLanguage('eng');
+        $doc1 = new Opus_Document();
+        $doc1->setServerState('published');
+        $doc1->setLanguage('eng');
         $title = new Opus_Title();
         $title->setValue('test document for OPUSVIER-1726');
         $title->setLanguage('eng');
-        $doc->setTitleMain($title);
-        $doc->store();
-        $docId1 = $doc->getId();
+        $doc1->setTitleMain($title);
+        $doc1->store();
+        $docId1 = $doc1->getId();
         
         // add a document to the search index that is not stored in database
-        $doc = new Opus_Document();
-        $doc->setServerState('published');
-        $doc->setLanguage('eng');
+        $doc2 = new Opus_Document();
+        $doc2->setServerState('published');
+        $doc2->setLanguage('eng');
         $title = new Opus_Title();
         $title->setValue('another test document for OPUSVIER-1726');
         $title->setLanguage('eng');
-        $doc->setTitleMain($title);
+        $doc2->setTitleMain($title);
         // unregister index plugin: database changes are not reflected in search index
-        $doc->unregisterPlugin('Opus_Document_Plugin_Index');
-        $doc->store();
-        $docId2 = $doc->getId();
+        $doc2->unregisterPlugin('Opus_Document_Plugin_Index');
+        $doc2->store();
+        $docId2 = $doc2->getId();
 
         $indexer = new Opus_SolrSearch_Index_Indexer();
 
         $class = new ReflectionClass('Opus_SolrSearch_Index_Indexer');
         $methodGetSolrXmlDocument = $class->getMethod('getSolrXmlDocument');
         $methodGetSolrXmlDocument->setAccessible(true);
-        $solrXml = $methodGetSolrXmlDocument->invoke($indexer, $doc);
+        $solrXml = $methodGetSolrXmlDocument->invoke($indexer, $doc2);
 
         // delete document from database
-        $doc->deletePermanent();
+        $doc2->deletePermanent();
 
         // add document to search index
         $methodSendSolrXmlToServer = $class->getMethod('sendSolrXmlToServer');
@@ -262,7 +262,9 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<Opus_Document Id="' . $docId1 . '" Language="eng"', $body);
         $this->assertNotContains('<Opus_Document Id="' . $docId2 . '" Language="eng"', $body);
         $this->assertContains('doccount="1"', $body);
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());        
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+
+        $doc1->deletePermanent();
     }
 
 }
