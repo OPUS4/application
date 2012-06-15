@@ -94,8 +94,19 @@ class Util_QueryBuilder {
         if ($this->export) {
             // java.lang.Integer.MAX_VALUE
             $MAX_ROWS = 2147483647;
-            $input['rows'] = $MAX_ROWS;
-            $input['start'] = 0;
+            // pagination within export was introduced in OPUS 4.2.2
+            $startParam = $request->getParam('expstart', 0);
+            $rowsParam = $request->getParam('exprows', $MAX_ROWS);
+            $start = intval($startParam);
+            $rows = intval($rowsParam);
+            $input['start'] = $start > 0 ? $start : 0;
+            $input['rows'] = $rows > 0 || ($rows == 0 && $rowsParam == '0') ? $rows : $MAX_ROWS;
+            if ($input['start'] > $MAX_ROWS) {
+                $input['start'] = $MAX_ROWS;
+            }
+            if ($input['rows'] + $input['start'] > $MAX_ROWS) {
+                $input['rows'] = $MAX_ROWS - $start;
+            }
         }
 
         foreach ($this->searchFields as $searchField) {

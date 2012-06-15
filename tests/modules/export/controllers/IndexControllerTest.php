@@ -267,5 +267,137 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $doc1->deletePermanent();
     }
 
+    /**
+     * helper function for tests related to OPUSVIER-2488
+     */
+    private function helperForOPUSVIER2488($url, $numOfTestDocs, $rows, $start = 0) {
+        $docs = array();
+        for ($i = 0; $i < $numOfTestDocs; $i++) {
+            $doc = new Opus_Document();
+            $doc->setServerState('published');
+            $doc->setLanguage('eng');
+            $title = new Opus_Title();
+            $title->setValue('OPUSVIER-2488');
+            $title->setLanguage('eng');
+            $doc->setTitleMain($title);
+            $doc->store();
+            array_push($docs, $doc);
+        }
+
+        $this->dispatch($url);
+        $body = $this->getResponse()->getBody();
+
+        $docIds = array();
+        // perform cleanup before asserting anything
+        foreach ($docs as $doc) {
+            array_push($docIds, $doc->getId());
+            $doc->deletePermanent();
+        }
+
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        $this->assertContains('doccount="' . $rows . '"', $body);
+        $this->assertEquals($rows, substr_count($body, 'Language="eng" Value="OPUSVIER-2488" Type="main"'));
+        $this->assertNotContains('Application_Exception', $body);
+
+        for ($i = $start; $i < $rows; $i++) {
+            $this->assertContains('<Opus_Document Id="' . $docIds[$i] . '"', $body);
+        }
+    }
+
+    /**
+     * begin: tests for OPUSVIER-2488
+     */    
+    public function testPaginationIsSupportedInExportWithoutPaginationParams() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml', 5, 5);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamExpstart0() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/0', 5, 5);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamExpstart2() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/2', 5, 3, 2);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamExpstart5() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/5', 5, 0);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamExpstartTooLarge() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/10', 5, 0);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamExpstartTooSmall() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/-1', 5, 5);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamExpstartInvalid() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/foo', 5, 5);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamExprows0() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/exprows/0', 5, 0);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamExprows2() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/exprows/2', 5, 2);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamExprows5() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/exprows/5', 5, 5);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamExprowsTooLarge() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/exprows/50', 5, 5);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamExprowsTooSmall() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/exprows/-1', 5, 5);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamExprowsInvalid() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/exprows/foo', 5, 5);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamsStart0Rows2() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/0/exprows/2', 5, 2);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamsStart0Rows10() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/0/exprows/10', 5, 5);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamsStart2Rows2() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/2/exprows/2', 5, 2, 2);
+    }
+
+    public function testPaginationIsSupportedInExportWithPaginationParamsStart2Rows5() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/2/exprows/5', 5, 3, 2);
+    }
+
+    public function testPaginationIsSupportedInExportWithExtremeValues1() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/0/exprows/2147483647', 5, 5);
+    }
+
+    public function testPaginationIsSupportedInExportWithExtremeValues2() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/0/exprows/2147483648', 5, 5);
+    }
+
+    public function testPaginationIsSupportedInExportWithExtremeValues3() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/2147483647/exprows/10', 5, 0);
+    }
+    
+    public function testPaginationIsSupportedInExportWithExtremeValues4() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/2147483648/exprows/10', 5, 0);
+    }
+
+    public function testPaginationIsSupportedInExportWithExtremeValues5() {
+        $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/expstart/2147483646/exprows/1', 5, 0);
+    }
+
+    /**
+     * end: tests for OPUSVIER-2488
+     */
+
 }
 
