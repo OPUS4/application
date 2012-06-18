@@ -37,6 +37,7 @@ class Publish_Model_Exception extends Exception {
     protected $translateKey;
 
     public function __construct($key) {
+        parent::__construct($key);
         $this->translateKey = $key;
     }
 
