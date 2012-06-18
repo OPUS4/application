@@ -99,6 +99,11 @@ class Rss_IndexController extends Controller_Xml {
             $this->_proc->setParameter('', 'lastBuildDate', $date->get(Zend_Date::RFC_2822));
             $this->_proc->setParameter('', 'pubDate', $date->get(Zend_Date::RFC_2822));
         }
+        else {
+            $date = Zend_Date::now();
+            $this->_proc->setParameter('', 'lastBuildDate', $date->get(Zend_Date::RFC_2822));
+            $this->_proc->setParameter('', 'pubDate', $date->get(Zend_Date::RFC_2822));            
+        }
     }
 
     private function setItems($resultList) {                    
