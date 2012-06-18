@@ -57,10 +57,10 @@ class Remotecontrol_Model_DownloadList {
         try {
             $resultList = $this->getListItems($collection->getId());
             $log->debug(count($resultList) . ' documents found.');
-        }
+    }
         catch (Opus_SolrSearch_Exception $e) {
-            $log->debug($e->getMessage());            
-            throw new Remotecontrol_Model_Exception($e->getMessage(), Remotecontrol_Model_Exception::SEARCH_SERVER_UNAVAILABLE);
+            $log->err(__METHOD__ . ' : ' . $e);
+            throw new Remotecontrol_Model_Exception($e->getMessage(), null, $e);
         }
         return $this->prepareCsv($resultList);
     }

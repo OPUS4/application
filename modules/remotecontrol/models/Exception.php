@@ -37,14 +37,8 @@ class Remotecontrol_Model_Exception extends Exception {
 
     const COLLECTION_IS_NOT_UNIQUE = 1;
 
-    const SEARCH_SERVER_UNAVAILABLE = 2;
-
     public function collectionIsNotUnique() {
         return $this->getCode() === self::COLLECTION_IS_NOT_UNIQUE;
-    }
-
-    public function searchServerIsUnavailable() {
-        return $this->getCode() === self::SEARCH_SERVER_UNAVAILABLE;
     }
 
 }

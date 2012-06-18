@@ -88,18 +88,17 @@ class Remotecontrol_CollectionController extends Controller_Action {
             $this->getResponse()->setBody($downloadList->getCvsFile($role, $number));
         }
         catch (Remotecontrol_Model_Exception $e) {
+            if ($e->getPrevious() instanceof Opus_SolrSearch_Exception) {
+                throw new Application_SearchException($e->getPrevious(), true);
+            }
             if ($e->collectionIsNotUnique()) {
-                $this->getResponse()->setHttpResponseCode(501);
+                $e = new Application_Exception();
+                $e->setHttpResponseCode(501);
+                throw $e;
             }
-            if ($e->searchServerIsUnavailable()) {
-                $exception = new Application_Exception('search server is not responding -- try again later');
-                $exception->setHttpResponseCode(503);
-                throw $exception;                
-            }
-            else {
-                $this->getResponse()->setHttpResponseCode(400);
-            }
-            return;
+            $e = new Application_Exception();
+            $e->setHttpResponseCode(400);
+            throw $e;
         }
         $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
         $filename = $role . '_' . $number;

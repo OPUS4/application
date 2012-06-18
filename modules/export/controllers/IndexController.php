@@ -72,12 +72,9 @@ class Export_IndexController extends Controller_Xml {
             $this->handleResults($resultList->getResults());
         }
         catch (Opus_SolrSearch_Exception $e) {
-            $this->log->err(__METHOD__ . ' : ' . $e->getMessage());
-            $exception = new Application_Exception('search server is not responding -- try again later');
-            $exception->setHttpResponseCode(503);
-            throw $exception;
-        }
-        
+            $this->log->err(__METHOD__ . ' : ' . $e);
+            throw new Application_SearchException($e, true);
+        }        
     }
 
     /**

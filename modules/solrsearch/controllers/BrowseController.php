@@ -56,10 +56,8 @@ class Solrsearch_BrowseController extends Controller_Action {
             $facets = $searcher->search($query)->getFacets();
         }
         catch (Opus_SolrSearch_Exception $e) {
-            $this->_logger->err('Error trying to access Solr server: ' . $e);
-            $exception = new Application_Exception('error_search_unavailable');
-            $exception->setHttpResponseCode(503);
-            throw $exception;
+            $this->_logger->err(__METHOD__ . ' : ' . $e);
+            throw new Application_SearchException($e);
         }
         
         $docTypesTranslated = array();
