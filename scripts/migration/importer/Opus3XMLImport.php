@@ -336,7 +336,7 @@ class Opus3XMLImport {
                 $new_value = $oa['config']->$old_value;
                 /* Check for TitleElements with duplicated Languages */
                 if (in_array($new_value, $language)) {
-                    $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : '" . $tag . "' with language '" . $new_value . "' already exists . Document will not be indexed");
+                    $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : This document has two '" . $tag . "' with equal language. Document will not be indexed");
                 } else {
                     array_push($language, $new_value);
                 }
