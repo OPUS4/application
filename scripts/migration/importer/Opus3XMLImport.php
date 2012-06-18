@@ -201,7 +201,7 @@ class Opus3XMLImport {
 
         $this->skipEmptyFields();
 	$this->validatePersonSubmitterEmail();
-        $this->checkTitle();
+        $this->checkTitleMainAbstractForDuplicateLanguage();
         $this->checkTitleAdditional();
 
         $this->mapDocumentTypeAndLanguage();
@@ -325,8 +325,8 @@ class Opus3XMLImport {
     }
 
 
-    private function checkTitle() {
-        $tagnames = array('TitleMain', 'TitleAbstract', 'TitleAdditional');
+    private function checkTitleMainAbstractForDuplicateLanguage() {
+        $tagnames = array('TitleMain', 'TitleAbstract');
         $oa = $this->mapping['language'];
         foreach ($tagnames as $tag) {
             $language = array();
