@@ -100,7 +100,7 @@ class Matheon_SelectReviewerController extends Controller_Action {
         $config = Zend_Registry::getInstance()->get('Zend_Config');
         $serverUrl = $this->view->serverUrl();
         $baseUrlServer = $serverUrl . $this->getRequest()->getBaseUrl();
-        $baseUrlFiles = $serverUrl . '/files';
+        $baseUrlFiles = $serverUrl . '/opus4-matheon/files';
 
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_MailPublishNotification::LABEL);
