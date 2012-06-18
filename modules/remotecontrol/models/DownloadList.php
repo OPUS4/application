@@ -90,7 +90,16 @@ class Remotecontrol_Model_DownloadList {
     private function prepareCsv($items) {
         $csv = '';
         foreach ($items as $item) {
-            $csv .= $item->getId() . "\t" . str_replace("\t", " ", $item->getTitle()) . "\t" . $item->getYear() . "\n";
+            $title = $item->getTitle();
+            $title   = preg_replace("/\s+/", " ", $title);
+
+            $authors = "";
+            if (count($item->getAuthors()) > 0) {
+               $authors = implode("; ", $item->getAuthors());
+            }
+            $authors = preg_replace("/\s+/", " ", $authors);
+
+            $csv .= $item->getId() . "\t" . $authors . "\t" . $title . "\t" . $item->getYear() . "\n";
         }
         return $csv;
     }
