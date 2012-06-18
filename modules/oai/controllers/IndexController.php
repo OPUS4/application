@@ -226,7 +226,7 @@ class Oai_IndexController extends Controller_Xml {
 
         // Identifier references metadata Urn, not plain Id!
         // Currently implemented as 'oai:foo.bar.de:{docId}' or 'urn:nbn...-123'
-        $docId = $this->getDocumentIdByOaiIdentifier($oaiRequest['identifier']);
+        $docId = $this->getDocumentIdByIdentifier($oaiRequest['identifier']);
 
         if (empty($docId) or !preg_match('/^(\d+)$/', $docId)) {
             throw new Oai_Model_Exception('The value of the identifier argument is unknown or illegal in this repository.', Oai_Model_Error::BADARGUMENT);
@@ -586,7 +586,7 @@ class Oai_IndexController extends Controller_Xml {
      * @param string $oaiIdentifier
      * @result int
      */
-    private function getDocumentIdByOaiIdentifier($oaiIdentifier) {
+    private function getDocumentIdByIdentifier($oaiIdentifier) {
         $identifierParts = explode(":", $oaiIdentifier);
 
         $docId = null;
