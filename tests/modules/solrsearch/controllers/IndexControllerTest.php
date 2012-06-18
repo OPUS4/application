@@ -542,13 +542,38 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-2434
      */
-    public function testInvalidSearchQuery() {
+    public function testInvalidSearchQueryReturns500() {
         $this->requireSolrConfig();
-
+        
         $this->dispatch('/solrsearch/index/search/searchtype/simple/start/0/rows/10/query/"\""');
 
         $body = $this->getResponse()->getBody();
         $this->assertNotContains("exception 'Application_Exception' with message 'error_search_unavailable'", $body);
-        $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());
+        $this->assertContains("exception 'Application_SearchException' with message 'error_search_invalidquery'", $body);
+        $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());        
+    }
+
+    public function testUnavailableSolrServerReturns503() {
+        $this->requireSolrConfig();
+
+        // manipulate solr configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $host = $config->searchengine->index->host;
+        $port = $config->searchengine->index->port;
+        $oldValue = $config->searchengine->index->app;
+        $config->searchengine->index->app = 'solr/corethatdoesnotexist';
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->dispatch('/solrsearch/browse/doctypes');
+
+        $body = $this->getResponse()->getBody();
+        $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
+        $this->assertContains("exception 'Application_SearchException' with message 'error_search_unavailable'", $body);
+        $this->assertResponseCode(503);
+
+        // restore configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $config->searchengine->index->app = $oldValue;
+        Zend_Registry::set('Zend_Config', $config);
     }
 }
