@@ -95,8 +95,8 @@ class Util_QueryBuilder {
             // java.lang.Integer.MAX_VALUE
             $MAX_ROWS = 2147483647;
             // pagination within export was introduced in OPUS 4.2.2
-            $startParam = $request->getParam('expstart', 0);
-            $rowsParam = $request->getParam('exprows', $MAX_ROWS);
+            $startParam = $request->getParam('start', 0);
+            $rowsParam = $request->getParam('rows', $MAX_ROWS);
             $start = intval($startParam);
             $rows = intval($rowsParam);
             $input['start'] = $start > 0 ? $start : 0;
