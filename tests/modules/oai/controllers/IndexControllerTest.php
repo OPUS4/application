@@ -696,6 +696,21 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Regression test for OPUSVIER-2454
+     */
+    public function testGetRecordWithInvalidIdentifierPrefix() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=foo::1');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2454 (check OAI error codes)
+        $elements = $xpath->query('//oai:error[@code="badArgument"]');
+        $this->assertEquals(1, $elements->length, "Expecting badArgument");
+    }
+
+    /**
      * Test verb=ListIdentifiers.
      */
     public function testListIdentifiers() {
