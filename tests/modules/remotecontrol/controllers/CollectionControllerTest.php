@@ -159,7 +159,7 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
         $this->dispatch('/remotecontrol/collection/list?role=ddc&number=000');
         
         $this->assertResponseCode('503');
-        $this->assertContains('search server is not responding -- try again later', $this->getResponse()->getBody());
+        $this->assertContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $this->getResponse()->getBody());
 
         // restore configuration
         $config = Zend_Registry::get('Zend_Config');
