@@ -836,7 +836,7 @@
             <xsl:for-each select="TitleAbstract">
                 <div class="abstract">                    
                     <xsl:choose>           
-                        <xsl:when test="$numOfShortAbstractChars = '' or string-length(@Value) &lt; $numOfShortAbstractChars">
+                        <xsl:when test="$numOfShortAbstractChars = '0' or string-length(@Value) &lt; $numOfShortAbstractChars">
                             <xsl:value-of select="@Value" />
                         </xsl:when>
                         <xsl:otherwise>

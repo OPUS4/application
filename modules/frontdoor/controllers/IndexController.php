@@ -97,7 +97,7 @@ class Frontdoor_IndexController extends Controller_Action {
 
         $config = Zend_Registry::getInstance()->get('Zend_Config');
         $layoutPath = 'layouts/' . (isset($config, $config->theme) ? $config->theme : '');
-        $numOfShortAbstractChars = isset($config, $config->frontdoor->numOfShortAbstractChars) ? $config->frontdoor->numOfShortAbstractChars : '';
+        $numOfShortAbstractChars = isset($config, $config->frontdoor->numOfShortAbstractChars) ? $config->frontdoor->numOfShortAbstractChars : '0';
 
         $proc->setParameter('', 'baseUrlServer', $this->getFullServerUrl());
         $proc->setParameter('', 'baseUrl', $baseUrl);
