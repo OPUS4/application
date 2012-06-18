@@ -16,6 +16,24 @@
         </tuv>
     </tu>
 
+    <tu tuid="error_search_invalidquery">
+        <tuv xml:lang="en">
+            <seg>The given search query is not supported</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die angegebene Suchanfrage wird nicht unterstützt</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="error_search_unknown">
+        <tuv xml:lang="en">
+            <seg>An unknown error occurred when trying to execute search</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die Suche konnte aufgrund eines Fehlers nicht ausgeführt werden</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="error_page_not_found">
         <tuv xml:lang="en">
             <seg>Page not found</seg>
