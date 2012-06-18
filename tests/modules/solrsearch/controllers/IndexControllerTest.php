@@ -538,4 +538,17 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             $responseBody = substr($responseBody, $pos);
         }
     }
+
+    /**
+     * Regression test for OPUSVIER-2434
+     */
+    public function testInvalidSearchQuery() {
+        $this->requireSolrConfig();
+
+        $this->dispatch('/solrsearch/index/search/searchtype/simple/start/0/rows/10/query/"\""');
+
+        $body = $this->getResponse()->getBody();
+        $this->assertNotContains("exception 'Application_Exception' with message 'error_search_unavailable'", $body);
+        $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());
+    }
 }
