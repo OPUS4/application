@@ -46,8 +46,6 @@ class Rss_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-2337
      */
     public function testUnavailableSolrServerReturns503() {
-        // run this test in production mode (otherwise we cannot check for translated keys)
-        parent::setUpWithEnv('production');
         $this->requireSolrConfig();
 
         // manipulate solr configuration
@@ -61,15 +59,15 @@ class Rss_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/rss/index/index/searchtype/all');
 
         $body = $this->getResponse()->getBody();
-        $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
-        $this->assertContains('search server is not responding -- try again later', $body);
+        $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);        
+        $this->assertContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $this->getResponse()->getBody());
+
         $this->assertResponseCode(503);
 
         // restore configuration
         $config = Zend_Registry::get('Zend_Config');
         $config->searchengine->index->app = $oldValue;
-        Zend_Registry::set('Zend_Config', $config);
-        
+        Zend_Registry::set('Zend_Config', $config);        
     }
 
     /**
@@ -142,6 +140,20 @@ class Rss_IndexControllerTest extends ControllerTestCase {
         $this->assertContains("<pubDate>$dateValue2</pubDate>", $body);
         $this->assertContains("<lastBuildDate>$dateValue2</lastBuildDate>", $body);
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+    }
+
+    /**
+     * Regression test for OPUSVIER-2434
+     */
+    public function testInvalidSearchQueryReturn500() {        
+        $this->requireSolrConfig();
+
+        $this->dispatch('/rss/index/index/searchtype/simple/start/0/rows/10/query/%22%5C%22%22');
+
+        $this->assertContains("exception 'Application_SearchException' with message 'search query is invalid -- check syntax'", $this->getResponse()->getBody());
+        $this->assertNotContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $this->getResponse()->getBody());
+        
+        $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());
     }
 
 }
