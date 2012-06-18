@@ -13,6 +13,15 @@
             <seg>example_text_german</seg>
           </tuv>
         </tu>
+		
+		<tu tuid="example_key_txt">
+          <tuv xml:lang="en">
+            <seg>example_english.txt</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>example_german.txt</seg>
+          </tuv>
+        </tu>
         -->
 
     </body>
