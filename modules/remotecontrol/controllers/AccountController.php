@@ -62,6 +62,12 @@ class Remotecontrol_AccountController extends Controller_Action {
             if ($role instanceof Opus_UserRole) {
                 $account->addRole($role);
             }
+            else {
+                $this->getResponse()->setHttpResponseCode(400);
+                $this->getResponse()->setBody("ERROR: Role '$role_name' does not exist.");
+                return;
+            }
+
         }
 
         try {
