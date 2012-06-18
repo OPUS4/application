@@ -148,6 +148,14 @@ class Matheon_Model_Document {
      * @return Matheon_Model_Document Fluent interface.
      */
     public function storeEnrichmentKeyValue($key, $value) {
+        foreach ($this->document->getEnrichment() AS $e) {
+            if ($e->getKeyName() == $key) {
+                if ($e->getValue() == $value) {
+                    return $this;
+                }
+            }
+        }
+
         $this->document->addEnrichment()
                 ->setKeyName($key)
                 ->setValue($value);
