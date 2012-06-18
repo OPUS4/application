@@ -224,8 +224,6 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-2337
      */
     public function testUnavailableServiceReturnsHttpCode503() {
-        // run this test in production mode (otherwise we cannot check for translated keys)
-        $this->setUpWithEnv('production');
         $this->requireSolrConfig();
         
         // manipulate solr configuration
@@ -240,9 +238,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         
         $body = $this->getResponse()->getBody();        
         $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
-        $this->assertContains('<div class="exceptionMessage">', $body);
-        $this->assertTrue(strstr($body, 'Der Suchdienst ist im Moment nicht verfügbar') == false || strstr($body, 'The search service is currently not available') == false);
-        
+        $this->assertContains("exception 'Application_SearchException' with message 'error_search_unavailable'", $body);
         $this->assertResponseCode(503);
 
         // restore configuration
