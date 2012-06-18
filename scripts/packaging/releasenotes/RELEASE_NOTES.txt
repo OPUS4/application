@@ -28,6 +28,11 @@ im Exportergebnis enthalten. Will man dagegen alle Ergebnisse der Suche
 exportieren, so müssen die beiden Paginierungsparameter aus der URL entfernt
 werden.
 
+h3. Hilfedateien (FAQ-, Kontakt- und Impressumsseite)
+
+Die Hilfedateien liegen jetzt unter $BASEDIR/opus4/application/configs/help". 
+(Siehe auch Dokumentation Kapitel 8.10 ff.) Beim Update von existierenden Instanzen 
+werden die Dateien automatisch verschoben.
 
 h2. ======================== Release 4.2.1 2012-03-01 ========================
 
