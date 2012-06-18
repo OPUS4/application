@@ -74,11 +74,74 @@ class Remotecontrol_Model_DownloadListTest extends ControllerTestCase {
         }
         $this->assertType('Remotecontrol_Model_Exception', $e);
         $this->assertFalse($e->collectionIsNotUnique());
-        $this->assertTrue($e->searchServerIsUnavailable());      
+        $this->assertTrue($e->getPrevious() instanceof Opus_SolrSearch_Exception);
+        $this->assertEquals($e->getPrevious()->getCode(), Opus_SolrSearch_Exception::SERVER_UNREACHABLE);
 
         // restore configuration
         $config = Zend_Registry::get('Zend_Config');
         $config->searchengine->index->app = $oldValue;
         Zend_Registry::set('Zend_Config', $config);
     }
+
+    /**
+     * Regression test for OPUSVIER-2434
+     */
+    public function testGetListItemsExceptionIfSolrQueryIsInvalid() {
+        $this->markTestIncomplete('es scheint nicht möglich zu sein eine "raw fq query" so zu schreiben, dass sie einen Parserfehler auslöst');
+        $this->requireSolrConfig();
+
+        $downloadList = new Remotecontrol_Model_DownloadList();
+
+        $class = new ReflectionClass('Remotecontrol_Model_DownloadList');
+        $method = $class->getMethod('getListItems');
+        $method->setAccessible(true);
+        $exception = null;
+        try {
+            $method->invoke($downloadList, '"\""');
+        }
+        catch (Exception $e) {
+            $exception = $e;
+        }
+
+        $this->assertNotNull($exception);
+        $this->assertType('Opus_SolrSearch_Exception', $exception);
+        $this->assertEquals($exception->getCode(), Opus_SolrSearch_Exception::INVALID_QUERY);
+    }
+
+    /**
+     * Regression test for OPUSVIER-2518
+     */
+    public function testGetListItemsExceptionIfSolrServerIsUnreachable() {
+        $this->requireSolrConfig();
+
+        // manipulate solr configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $host = $config->searchengine->index->host;
+        $port = $config->searchengine->index->port;
+        $oldValue = $config->searchengine->index->app;
+        $config->searchengine->index->app = 'solr/corethatdoesnotexist';
+        Zend_Registry::set('Zend_Config', $config);
+
+        $downloadList = new Remotecontrol_Model_DownloadList();
+
+        $class = new ReflectionClass('Remotecontrol_Model_DownloadList');
+        $method = $class->getMethod('getListItems');
+        $method->setAccessible(true);
+        $exception = null;
+        try {
+            $method->invoke($downloadList, '123');
+        }
+        catch (Exception $e) {
+            $exception = $e;
+        }
+        $this->assertNotNull($exception);
+        $this->assertType('Opus_SolrSearch_Exception', $exception);
+        $this->assertEquals($exception->getCode(), Opus_SolrSearch_Exception::SERVER_UNREACHABLE);
+
+        // restore configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $config->searchengine->index->app = $oldValue;
+        Zend_Registry::set('Zend_Config', $config);
+    }
+
 }
