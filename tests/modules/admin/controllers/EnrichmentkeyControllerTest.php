@@ -431,6 +431,30 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
         $ek_bar->delete();
     }
 
+    public function testUpdateActionCaseSensitiveName() {
+        $cs_string = 'testUpdateActionCaseSensitiveKey';
+        $cs_string_lc = strtolower($cs_string);
+
+        $ek_foo = new Opus_EnrichmentKey();
+        $ek_foo->setName($cs_string);
+        $ek_foo->store();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'name' => $cs_string_lc,
+                    'submit' => 'submit'
+                ));
+
+        $this->dispatch('/admin/enrichmentkey/update/name/' . $cs_string);
+        $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
+
+        $ek_test = Opus_EnrichmentKey::fetchByName($cs_string_lc);
+        $this->assertEquals($cs_string_lc, $ek_test->getDisplayName());
+        $ek_test->delete();
+    }
+
     public function testUpdateActionProtectedEnrichmentKey() {
         $ek = Opus_EnrichmentKey::fetchByName(self::$protectedEnrichmentkey);
         $this->assertNotNull($ek);

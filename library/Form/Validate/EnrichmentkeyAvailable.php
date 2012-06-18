@@ -53,7 +53,7 @@ class Form_Validate_EnrichmentkeyAvailable extends Zend_Validate_Abstract {
     /**
      * Checks if an enrichmentkey already exists.
      */
-    public function isValid($value, $context = null) {
+   public function isValid($value, $context = null) {
 
         $value = (string) $value;
         $this->_setValue($value);
@@ -69,16 +69,20 @@ class Form_Validate_EnrichmentkeyAvailable extends Zend_Validate_Abstract {
             $name = $context;
         }
 
-        if (!($name === $value) && $this->_isEnrichmentKeyUsed($value)) {
-            $this->_error(self::NOT_AVAILABLE);
-            return false;
+        if (strtolower($name) === strtolower($value)) {
+            return true;
         }
 
-        if (!($name === $value) && $this->_isEnrichmentKeyProtected($value)) {
+        if ($this->_isEnrichmentKeyProtected($value)) {
             $this->_error(self::PROTECT);
             return false;
         }
 
+        if ($this->_isEnrichmentKeyUsed($value)) {
+            $this->_error(self::NOT_AVAILABLE);
+            return false;
+        }
+        
         return true;
     }
 
