@@ -202,6 +202,7 @@ class Opus3XMLImport {
         $this->skipEmptyFields();
 	$this->validatePersonSubmitterEmail();
         $this->checkTitle();
+        $this->checkTitleAdditional();
 
         $this->mapDocumentTypeAndLanguage();
         $this->mapElementLanguage();
@@ -342,6 +343,13 @@ class Opus3XMLImport {
             }
         }
     }
+
+    private function checkTitleAdditional() {
+        $elements = $this->document->getElementsByTagName('TitleAdditional');
+        foreach ($elements as $e) {
+            $this->logger->log_warn("Opus3XMLImport", "Old ID '" . $this->oldId . "' : 'title_en' or 'title_de' mapped to TitleAdditional to prevent two TitleMain-Values with same language");
+        }
+     }
 
      private function validatePersonSubmitterEmail() {
 

@@ -106,6 +106,12 @@ class Opus3ImportLogger {
         fputs($this->_errorLogfile, $string);
     }
 
+    public function log_warn($class, $string) {
+        $string = date('Y-m-d H:i:s') . " WARN " . $class . ": " . $string . "\n";
+        echo $string;
+        fputs($this->_errorLogfile, $string);
+    }
+
     public function finalize() {
         fclose($this->_debugLogfile);
 	fclose($this->_errorLogfile);	
