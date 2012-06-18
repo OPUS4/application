@@ -41,6 +41,7 @@ class Oai_Model_Error {
     const CANNOTDISSEMINATEFORMAT = 1012;
     const BADRESUMPTIONTOKEN = 1013;
     const NORECORDSMATCH = 1014;
+    const IDDOESNOTEXIST = 1015;
 
     /**
      * Holds OAI error codes for internal error numbers.
@@ -53,6 +54,7 @@ class Oai_Model_Error {
         self::NORECORDSMATCH => 'noRecordsMatch',
         self::CANNOTDISSEMINATEFORMAT => 'cannotDisseminateFormat',
         self::BADRESUMPTIONTOKEN => 'badResumptionToken',
+        self::IDDOESNOTEXIST => 'idDoesNotExist',
     );
 
     /**

@@ -58,6 +58,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $domDocument->loadXML($resultString);
 
         $xpath = new DOMXPath($domDocument);
+        $xpath->registerNamespace('oai', "http://www.openarchives.org/OAI/2.0/");
         $xpath->registerNamespace('oai_dc', "http://www.openarchives.org/OAI/2.0/oai_dc/");
         $xpath->registerNamespace('cc', "http://www.d-nb.de/standards/cc/");
         $xpath->registerNamespace('dc', "http://purl.org/dc/elements/1.1/");
@@ -677,6 +678,21 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         // Regression test for OPUSVIER-2454 (check returned dc:identifier)
         $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="urn:nbn:de:gbv:830-opus-225"]');
         $this->assertEquals(1, $elements->length, "Expected URN not found");
+    }
+
+    /**
+     * Regression test for OPUSVIER-2535
+     */
+    public function testGetRecordWithNonExistingDocumentId() {
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::12345678');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2535 (check OAI error codes)
+        $elements = $xpath->query('//oai:error[@code="idDoesNotExist"]');
+        $this->assertEquals(1, $elements->length, "Expecting idDoesNotExist");
     }
 
     /**

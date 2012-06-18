@@ -112,6 +112,9 @@ class Oai_IndexController extends Controller_Xml {
                 case Oai_Model_Error::BADRESUMPTIONTOKEN:
                     $errorCode = 'badResumptionToken';
                     break;
+                case Oai_Model_Error::IDDOESNOTEXIST:
+                    $errorCode = 'idDoesNotExist';
+                    break;
                 default:
                     $errorCode = 'unknown';
             }
@@ -228,15 +231,11 @@ class Oai_IndexController extends Controller_Xml {
         // Currently implemented as 'oai:foo.bar.de:{docId}' or 'urn:nbn...-123'
         $docId = $this->getDocumentIdByIdentifier($oaiRequest['identifier']);
 
-        if (empty($docId) or !preg_match('/^(\d+)$/', $docId)) {
-            throw new Oai_Model_Exception('The value of the identifier argument is unknown or illegal in this repository.', Oai_Model_Error::BADARGUMENT);
-        }
-
         $document = null;
         try {
             $document = new Opus_Document($docId);
         } catch (Exception $ex) {
-            throw new Oai_Model_Exception('The value of the identifier argument is unknown or illegal in this repository.', Oai_Model_Error::BADARGUMENT);
+            throw new Oai_Model_Exception('The value of the identifier argument is unknown or illegal in this repository.', Oai_Model_Error::IDDOESNOTEXIST);
         }
 
         // do not deliver documents which are restricted by document state
@@ -606,6 +605,10 @@ class Oai_IndexController extends Controller_Xml {
             default:
                 throw new Oai_Model_Exception('The prefix of the identifier argument is unknown.', Oai_Model_Error::BADARGUMENT);
                 break;
+        }
+
+        if (empty($docId) or !preg_match('/^\d+$/', $docId)) {
+            throw new Oai_Model_Exception('The value of the identifier argument is unknown or illegal in this repository.', Oai_Model_Error::IDDOESNOTEXIST);
         }
 
         return $docId;
