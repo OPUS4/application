@@ -32,46 +32,57 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Publish_Model_Document {
+class Publish_Model_DocumentWorkflow {
+    
+    const DOCUMENT_STATE = 'temporary';
 
-    public function __construct() {
-    }
+    /**
+     * @var Opus_Document
+     */
+    private $document;
 
-    public function createTempDocument($documentType) {
-        $document = new Opus_Document();
-        $document->setServerState('temporary')
+    /**
+     * Create and initialize document object.
+     *
+     * @param type $documentType
+     * @return Opus_Document 
+     */
+    public function createDocument($documentType) {
+        $this->document = new Opus_Document();
+        $this->document->setServerState(self::DOCUMENT_STATE)
             ->setType($documentType);
 
-        // $this->addSubmitterUserId($document);
+        $this->initializeDocument();
 
-        return $document;
+        return $this->document;
     }
 
-    public function loadTempDocument($documentId) {
+    /**
+     * Initialize custom document fields.
+     *
+     * @return void
+     */
+    protected function initializeDocument() {
+    }
+
+    /**
+     * Load initialized document object (and check document status).
+     *
+     * @param type $documentId
+     * @return Opus_Document
+     * @throws Publish_Model_Exception 
+     */
+    public function loadDocument($documentId) {
         if (!isset($documentId) or !preg_match('/^\d+$/', $documentId)) {
-            throw new Exception('Invalid document ID given');
+            throw new Publish_Model_Exception('Invalid document ID given');
         }
 
-        $document = new Opus_Document($documentId);
-        if ($document->getServerState() !== 'temporary') {
+        $this->document = new Opus_Document($documentId);
+        if ($this->document->getServerState() !== self::DOCUMENT_STATE) {
             throw new Publish_Model_Exception('Document->ServerState mismatch!');
         }
 
-        return $document;
-    }
-
-    public function addSubmitterUserId($document) {
-        $loggedUserModel = new Publish_Model_LoggedUser();
-        $userId = trim($loggedUserModel->getUserId());
-
-        if (empty($userId)) {
-            $this->_logger->debug("No user logged in.  Skipping enrichment.");
-            return;
-        }
-
-        $document->addEnrichment()
-                ->setKeyName('submitter.user_id')
-                ->setValue($userId);
+        return $this->document;
     }
 
 }

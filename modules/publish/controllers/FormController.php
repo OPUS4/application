@@ -219,17 +219,17 @@ class Publish_FormController extends Controller_Action {
      */
     private function _initializeDocument($postData = null) {
         $documentType = isset($postData['documentType']) ? $postData['documentType'] : '';
-        $docModel = new Publish_Model_Document();
+        $docModel = new Publish_Model_DocumentWorkflow();
 
         if (!isset($this->session->documentId) || $this->session->documentId == '') {
             $this->_logger->info(__METHOD__ . ' documentType = ' . $documentType);
-            $this->document = $docModel->createTempDocument($documentType);
+            $this->document = $docModel->createDocument($documentType);
             $this->session->documentId = $this->document->store();
             $this->session->documentType = $documentType;
             $this->_logger->info(__METHOD__ . ' The corresponding document ID is: ' . $this->session->documentId);
         }
         else {
-            $this->document = $docModel->loadTempDocument($this->session->documentId);
+            $this->document = $docModel->loadDocument($this->session->documentId);
         }
     }
 
