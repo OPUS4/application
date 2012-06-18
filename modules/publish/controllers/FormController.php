@@ -100,7 +100,6 @@ class Publish_FormController extends Controller_Action {
 
         //form entries are valid: store data
         $this->_storeBibliography($postData);
-        $this->_storeSubmitterEnrichment();
 
         //call the appropriate template
         $this->_helper->viewRenderer($this->session->documentType);
@@ -219,45 +218,21 @@ class Publish_FormController extends Controller_Action {
      * Method initializes the current document object by setting ServerState and DocumentType.
      */
     private function _initializeDocument($postData = null) {
+        $documentType = isset($postData['documentType']) ? $postData['documentType'] : '';
+        $docModel = new Publish_Model_Document();
+
         if (!isset($this->session->documentId) || $this->session->documentId == '') {
-            $this->document = new Opus_Document();
-            $this->document->setServerState('temporary');
+            $this->_logger->info(__METHOD__ . ' documentType = ' . $documentType);
+            $this->document = $docModel->createTempDocument($documentType);
             $this->session->documentId = $this->document->store();
+            $this->session->documentType = $documentType;
             $this->_logger->info(__METHOD__ . ' The corresponding document ID is: ' . $this->session->documentId);
         }
-        else
-            $this->document = new Opus_Document($this->session->documentId);
-
-        if (isset($postData['documentType'])) {
-            if ($postData['documentType'] !== '') {
-                $this->session->documentType = $postData['documentType'];
-                $this->_logger->info(__METHOD__ . ' documentType = ' . $this->session->documentType);
-                $this->document->setType($this->session->documentType);
-                $this->document->store();
-            }
-            unset($postData['documentType']);
+        else {
+            $documentId = $this->session->documentId;
+            $documentType = $this->session->documentType;
+            $this->document = $docModel->loadTempDocument($documentId, $documentType);
         }
-    }
-
-    private function _storeSubmitterEnrichment() {
-        $loggedUserModel = new Publish_Model_LoggedUser();
-        $userId = trim($loggedUserModel->getUserId());
-
-        if (empty($userId)) {
-            $this->_logger->debug("No user logged in.  Skipping enrichment.");
-            return;
-        }
-
-        $enrichment = $this->document->getEnrichment();
-        if (!is_null($enrichment)) {
-            $this->_logger->debug("User Id already logged. Skipping enrichment.");
-            return;
-        }
-
-        $this->document->addEnrichment()
-                ->setKeyName('submitter.user_id')
-                ->setValue($userId);
-        $this->document->store();
     }
 
     /**

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -27,17 +26,21 @@
  *
  * @category    Application
  * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @copyright   Copyright (c) 2011-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Publish_Model_NoViewFoundException extends Publish_Model_Exception {
+class Publish_Model_Exception extends Exception {
     
-    public function  __construct() {
-        parent::__construct('publish_form_second_no_view_given');
-        $this->code = 404;
+    protected $translateKey;
+
+    public function __construct($key) {
+        $this->translateKey = $key;
+    }
+
+    public function getTranslateKey() {
+        return $this->translateKey;
     }
 }
-

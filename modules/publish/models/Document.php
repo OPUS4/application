@@ -27,17 +27,55 @@
  *
  * @category    Application
  * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @copyright   Copyright (c) 2011-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Publish_Model_Document {
 
-class Publish_Model_NoViewFoundException extends Publish_Model_Exception {
-    
-    public function  __construct() {
-        parent::__construct('publish_form_second_no_view_given');
-        $this->code = 404;
+    public function __construct() {
     }
-}
 
+    public function createTempDocument($documentType) {
+        $document = new Opus_Document();
+        $document->setServerState('temporary')
+            ->setType($documentType);
+
+        // $this->addSubmitterUserId($document);
+
+        return $document;
+    }
+
+    public function loadTempDocument($documentId, $documentType) {
+        if (!isset($documentId) or !preg_match('/^\d+$/', $documentId)) {
+            throw new Exception('Invalid document ID given');
+        }
+
+        $document = new Opus_Document($documentId);
+        if ($document->getServerState() === 'temporary') {
+            throw new Exception('Document->ServerState mismatch!');
+        }
+
+        if ($document->getType() === $documentType) {
+            throw new Exception('Document->Type mismatch!');
+        }
+
+        return $document;
+    }
+
+    public function addSubmitterUserId($document) {
+        $loggedUserModel = new Publish_Model_LoggedUser();
+        $userId = trim($loggedUserModel->getUserId());
+
+        if (empty($userId)) {
+            $this->_logger->debug("No user logged in.  Skipping enrichment.");
+            return;
+        }
+
+        $document->addEnrichment()
+                ->setKeyName('submitter.user_id')
+                ->setValue($userId);
+    }
+
+}
