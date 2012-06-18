@@ -156,4 +156,18 @@ class Rss_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());
     }
 
+    /**
+     * Regression test for OPUSVIER-2534
+     */
+    public function testOutputWithEmptySearchResult() {
+        $this->requireSolrConfig();
+
+        $this->dispatch('/rss/index/index/searchtype/simple/start/0/rows/10/query/asearchquerywithoutanyhits');
+        
+        $this->assertNotContains("Warning: XSLTProcessor::transformToXml(): runtime error", $this->getResponse()->getBody());
+
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+
+    }
+
 }
