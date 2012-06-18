@@ -58,10 +58,28 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
     /**
      * @expectedException Frontdoor_Model_DocumentDeletedException
      */
-    public function testGetFileObjectDocumentDeletedException() {
+    public function testGetFileObjectDocumentDeletedExceptionIfDocForbidden() {
+        $file = new Frontdoor_Model_File(123, self::FILENAME_DELETED_DOC);
+        $realm = new MockRealm(true, false);
+        $opusFile = $file->getFileObject($realm);
+    }
+
+    /**
+     * @expectedException Frontdoor_Model_FileAccessNotAllowedException
+     */
+    public function testGetFileObjectFileAccessNotAllowedExceptionIfFileForbidden() {
+        $file = new Frontdoor_Model_File(123, self::FILENAME_DELETED_DOC);
+        $realm = new MockRealm(false, true);
+        $opusFile = $file->getFileObject($realm);
+    }
+
+    public function testGetFileObjectNoDocumentDeletedExceptionIfAccessAllowed() {
         $file = new Frontdoor_Model_File(123, self::FILENAME_DELETED_DOC);
         $realm = new MockRealm(true, true);
         $opusFile = $file->getFileObject($realm);
+
+        $this->assertTrue($opusFile instanceof Opus_File);
+        $this->assertEquals(self::FILENAME_DELETED_DOC, $opusFile->getPathName());
     }
 
     /**

@@ -67,12 +67,18 @@ class Frontdoor_Model_File {
         catch (Opus_Model_NotFoundException $e) {
             throw new Frontdoor_Model_DocumentNotFoundException();
         }
-        if ($document->getServerState() === self::SERVER_STATE_DELETED) {
-            throw new Frontdoor_Model_DocumentDeletedException();
-        }
-        if ($document->getServerState() !== self::SERVER_STATE_PUBLISHED
-                and !$this->isDocumentAccessAllowed($this->docId, $realm)) {
-            throw new Frontdoor_Model_DocumentAccessNotAllowedException();
+        if (!$this->isDocumentAccessAllowed($this->docId, $realm)) {
+            switch ($document->getServerState()) {
+                case self::SERVER_STATE_DELETED:
+                    throw new Frontdoor_Model_DocumentDeletedException();
+                    break;
+                case self::SERVER_STATE_PUBLISHED:
+                    // do nothing if in published state - access is granted!
+                    break;
+                default:
+                    throw new Frontdoor_Model_DocumentAccessNotAllowedException();
+                    break;
+            }
         }
     }
 
