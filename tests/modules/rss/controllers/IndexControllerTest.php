@@ -60,7 +60,7 @@ class Rss_IndexControllerTest extends ControllerTestCase {
 
         $body = $this->getResponse()->getBody();
         $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);        
-        $this->assertContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $this->getResponse()->getBody());
+        $this->assertContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $body);
 
         $this->assertResponseCode(503);
 
