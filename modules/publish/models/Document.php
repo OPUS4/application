@@ -47,18 +47,14 @@ class Publish_Model_Document {
         return $document;
     }
 
-    public function loadTempDocument($documentId, $documentType) {
+    public function loadTempDocument($documentId) {
         if (!isset($documentId) or !preg_match('/^\d+$/', $documentId)) {
             throw new Exception('Invalid document ID given');
         }
 
         $document = new Opus_Document($documentId);
-        if ($document->getServerState() === 'temporary') {
-            throw new Exception('Document->ServerState mismatch!');
-        }
-
-        if ($document->getType() === $documentType) {
-            throw new Exception('Document->Type mismatch!');
+        if ($document->getServerState() !== 'temporary') {
+            throw new Publish_Model_Exception('Document->ServerState mismatch!');
         }
 
         return $document;

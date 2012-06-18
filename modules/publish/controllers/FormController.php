@@ -229,9 +229,7 @@ class Publish_FormController extends Controller_Action {
             $this->_logger->info(__METHOD__ . ' The corresponding document ID is: ' . $this->session->documentId);
         }
         else {
-            $documentId = $this->session->documentId;
-            $documentType = $this->session->documentType;
-            $this->document = $docModel->loadTempDocument($documentId, $documentType);
+            $this->document = $docModel->loadTempDocument($this->session->documentId);
         }
     }
 
