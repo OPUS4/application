@@ -17,6 +17,18 @@ $ opus4/scripts/
 $ php opus-console.php snippets/find_urns_for_docs_without_visible_files.php
 
 
+h3. Paginierung in der Exportausgabe
+
+Mit dieser Version ist die Paginierung innerhalb des Exports möglich (unter
+Verwendung der Parameter *start* und *rows*). Bislang wurden die beiden
+Paginierungsparameter ignoriert (im Export waren immer alle Suchtreffer
+enthalten). Wird der Export durch Anhängen von '/export/xml' aus einer
+Suchergebnisseite angefordert, so sind nun nur noch die dort angezeigten Treffer
+im Exportergebnis enthalten. Will man dagegen alle Ergebnisse der Suche
+exportieren, so müssen die beiden Paginierungsparameter aus der URL entfernt
+werden.
+
+
 h2. ======================== Release 4.2.1 2012-03-01 ========================
 
 h3. Validierung des XML-Dumps für die Migration aus OPUS3
