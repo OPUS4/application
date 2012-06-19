@@ -34,6 +34,39 @@ Die Hilfedateien liegen jetzt unter $BASEDIR/opus4/application/configs/help".
 (Siehe auch Dokumentation Kapitel 8.10 ff.) Beim Update von existierenden Instanzen 
 werden die Dateien automatisch verschoben.
 
+h3. Umbenennung von benutzerspezifischen Enrichment-Feldern
+
+Mit OPUS 4.2.2 wird in der Standardauslieferung ein neues Enrichment-Feld
+eingeführt, das für die Migration von Dokumenten aus OPUS3 relevant sind:
+
+    * InvalidVerification
+
+Damit im Rahmen eines OPUS4-Updates keine Konflikte mit identischen, vom
+Benutzer angelegten, Enrichment-Feldern auftreten, wird ein gleichnamiges
+benutzerdefiniertes Enrichment-Feld vor dem Update auf OPUS 4.2.2 umbenannt in:
+
+    * TempInvalidVerification
+
+Im Falle einer Umbenennung muss die Übersetzungsressource des alten Feldes
+angepasst werden.
+
+Zum Beispiel muss im Falle der Umbennung von SourceTitle in TempSourceTitle in
+der Datei $BASEDIR/opus4/modules/default/language_custom/custom.tmx folgende
+Änderung vollzogen werden:
+
+ersetze
+
+<tu tuid="InvalidVerification">
+...
+</tu>
+
+durch
+
+<tu tuid="TempInvalidVerification">
+...
+</tu>
+
+
 h2. ======================== Release 4.2.1 2012-03-01 ========================
 
 h3. Validierung des XML-Dumps für die Migration aus OPUS3
