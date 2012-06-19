@@ -31,7 +31,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-require_once '/home/tklein/opus4-zib/server/modules/frontdoor/controllers/DeliverController.php';
 
 class Frontdoor_DeliverControllerTest extends ControllerTestCase {
 
