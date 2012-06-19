@@ -47,5 +47,32 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertAction('index');
     }
 
+    /**
+     * Regression test for OPUSVIER-2540
+     */
+    public function testCollectionRoleNameGetsTranslatedForDDC() {
+        $this->dispatch('/admin/documents/index/collectionid/2');
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        $body = $this->getResponse()->getBody();
+        $this->assertNotContains('ddc', $body);
+        $this->assertTrue(strstr($body, '<b>Dewey Decimal Classification</b>') || strstr($body, '<b>DDC-Sachgruppen</b>'));
+    }
+
+    /**
+     * Regression test for OPUSVIER-2540
+     */
+    public function testCollectionRoleNameGetsTranslatedForUserCollection() {
+        $cr = new Opus_CollectionRole();
+        $cr->setName('foo');
+        $cr->setOaiName('foo');
+        $cr->store();
+
+        $this->dispatch('/admin/documents/index/collectionid/' . $cr->getId());
+        $cr->delete();
+
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        $this->assertNotContains('<b>foo</b>', $this->getResponse()->getBody());
+    }
+
 }
 
