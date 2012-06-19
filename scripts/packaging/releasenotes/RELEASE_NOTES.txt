@@ -28,11 +28,13 @@ im Exportergebnis enthalten. Will man dagegen alle Ergebnisse der Suche
 exportieren, so müssen die beiden Paginierungsparameter aus der URL entfernt
 werden.
 
+
 h3. Hilfedateien (FAQ-, Kontakt- und Impressumsseite)
 
 Die Hilfedateien liegen jetzt unter $BASEDIR/opus4/application/configs/help". 
-(Siehe auch Dokumentation Kapitel 8.10 ff.) Beim Update von existierenden Instanzen 
-werden die Dateien automatisch verschoben.
+(Siehe auch Dokumentation Kapitel 8.10 ff.) Beim Update von existierenden
+Instanzen werden die Dateien automatisch verschoben.
+
 
 h3. Umbenennung von benutzerspezifischen Enrichment-Feldern
 
@@ -65,6 +67,21 @@ durch
 <tu tuid="TempInvalidVerification">
 ...
 </tu>
+
+
+h3. Änderungen an Solr-Indexschema
+
+Wird der Solr-Server nicht im Rahmen des Updateskripts aktualisiert (weil er
+z.B. auf einem anderen Server betrieben wird), dann muss das Indexschema
+aktualisiert werden. Dazu muss die Datei
+
+* solrconfig/schema.xml
+
+in das Konfigurationsverzeichnis der Solr-Server kopiert werden und anschließend
+der Index neu erstellt werden mittels:
+
+cd $BASEDIR/opus4/scripts
+./SolrIndexBuilder.php
 
 
 h2. ======================== Release 4.2.1 2012-03-01 ========================
