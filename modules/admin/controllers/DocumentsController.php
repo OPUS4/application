@@ -158,7 +158,11 @@ class Admin_DocumentsController extends Controller_CRUDAction {
             $result = $collection->getDocumentIds();
             $this->view->collection = $collection;
             if ($collection->isRoot()) {
-                $this->view->collectionName = $collection->getRole()->getDisplayName();
+                $collectionRoleName = 'default_collection_role_' . $collection->getRole()->getDisplayName();
+                $this->view->collectionName = $this->view->translate($collectionRoleName);
+                if ($this->view->collectionName == $collectionRoleName) {
+                    $this->view->collectionName = $collection->getRole()->getDisplayName();
+                }
             }
             else {
                 $this->view->collectionName = $collection->getDisplayName();
