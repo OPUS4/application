@@ -591,25 +591,10 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $title->setValue('test document for OPUSVIER-2484');
         $title->setLanguage('eng');
         $doc->setTitleMain($title);
-        $identifierTypes = array(
-            'old',
-            'serial',
-            'uuid',
-            'isbn',
-            'urn',
-            'doi',
-            'handle',
-            'url',
-            'issn',
-            'std-doi',
-            'cris-link',
-            'splash-url',
-            'opus3-id',
-            'opac-id',
-            'pmid',
-            'arxiv'
-        );
 
+        $id = new Opus_Identifier();
+        $field = $id->getField('Type');
+        $identifierTypes = array_keys($field->getDefault());
 
         foreach ($identifierTypes as $identifierType) {
             $doc->addIdentifier()
