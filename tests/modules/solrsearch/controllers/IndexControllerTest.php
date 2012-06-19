@@ -576,4 +576,60 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $config->searchengine->index->app = $oldValue;
         Zend_Registry::set('Zend_Config', $config);
     }
+
+    /**
+     * test for OPUSVIER-2484
+     */
+    public function testCatchAllSearchConsidersIdentifiers() {
+        $this->requireSolrConfig();
+        
+        // create a test doc with all available identifier types
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $doc->setLanguage('eng');
+        $title = new Opus_Title();
+        $title->setValue('test document for OPUSVIER-2484');
+        $title->setLanguage('eng');
+        $doc->setTitleMain($title);
+        $identifierTypes = array(
+            'old',
+            'serial',
+            'uuid',
+            'isbn',
+            'urn',
+            'doi',
+            'handle',
+            'url',
+            'issn',
+            'std-doi',
+            'cris-link',
+            'splash-url',
+            'opus3-id',
+            'opac-id',
+            'pmid',
+            'arxiv'
+        );
+
+
+        foreach ($identifierTypes as $identifierType) {
+            $doc->addIdentifier()
+                ->setType($identifierType)
+                ->setValue($identifierType . '-opusvier-2484');
+        }
+        $doc->store();
+
+        // search for document based on identifiers
+        foreach ($identifierTypes as $identifierType) {
+            $searchString = $identifierType . '-opusvier-2484';
+            $this->dispatch('/solrsearch/index/search/searchtype/simple/query/' . $searchString);
+
+            $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+            $this->assertContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());            
+
+            $this->getResponse()->clearAllHeaders();
+            $this->getResponse()->clearBody();
+        }
+
+        $doc->deletePermanent();
+    }
 }
