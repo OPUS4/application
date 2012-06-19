@@ -578,7 +578,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * test for OPUSVIER-2484
+     * test for OPUSVIER-2475
      */
     public function testCatchAllSearchConsidersIdentifiers() {
         $this->requireSolrConfig();
@@ -588,7 +588,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $doc->setServerState('published');
         $doc->setLanguage('eng');
         $title = new Opus_Title();
-        $title->setValue('test document for OPUSVIER-2484');
+        $title->setValue('test document for OPUSVIER-2475');
         $title->setLanguage('eng');
         $doc->setTitleMain($title);
 
@@ -599,21 +599,101 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         foreach ($identifierTypes as $identifierType) {
             $doc->addIdentifier()
                 ->setType($identifierType)
-                ->setValue($identifierType . '-opusvier-2484');
+                ->setValue($identifierType . '-opusvier-2475');
         }
         $doc->store();
 
         // search for document based on identifiers
         foreach ($identifierTypes as $identifierType) {
-            $searchString = $identifierType . '-opusvier-2484';
+            $searchString = $identifierType . '-opusvier-2475';
             $this->dispatch('/solrsearch/index/search/searchtype/simple/query/' . $searchString);
 
             $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
-            $this->assertContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());            
+            $this->assertContains('test document for OPUSVIER-2475', $this->getResponse()->getBody());
 
             $this->getResponse()->clearAllHeaders();
             $this->getResponse()->clearBody();
         }
+
+        $doc->deletePermanent();
+    }
+
+    /**
+     * test for OPUSVIER-2484 and regression test for OPUSVIER-2539
+     */
+    public function testCatchAllSearchConsidersAllPersons() {
+        $this->requireSolrConfig();
+
+        // create a test doc with all available person types
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $doc->setLanguage('eng');
+        $title = new Opus_Title();
+        $title->setValue('test document for OPUSVIER-2484');
+        $title->setLanguage('eng');
+        $doc->setTitleMain($title);
+
+        $p = new Opus_Person();
+        $p->setLastName('personauthor-opusvier-2484');
+        $doc->addPersonAuthor($p);
+
+        $p = new Opus_Person();
+        $p->setLastName('personadvisor-opusvier-2484');
+        $doc->addPersonAdvisor($p);
+
+        $p = new Opus_Person();
+        $p->setLastName('personcontributor-opusvier-2484');
+        $doc->addPersonContributor($p);
+
+        $p = new Opus_Person();
+        $p->setLastName('personeditor-opusvier-2484');
+        $doc->addPersonEditor($p);
+
+        $p = new Opus_Person();
+        $p->setLastName('personreferee-opusvier-2484');
+        $doc->addPersonReferee($p);
+
+        $p = new Opus_Person();
+        $p->setLastName('personother-opusvier-2484');
+        $doc->addPersonOther($p);
+
+        $p = new Opus_Person();
+        $p->setLastName('persontranslator-opusvier-2484');
+        $doc->addPersonTranslator($p);
+
+        // nach Submitter kann nicht gesucht werden
+        $p = new Opus_Person();
+        $p->setLastName('personsubmitter-opusvier-2484');
+        $doc->addPersonSubmitter($p);
+        
+        $doc->store();
+
+        // search for document based on persons
+        $persons = array(
+            'personauthor-opusvier-2484',
+            'personadvisor-opusvier-2484',
+            'personcontributor-opusvier-2484',
+            'personeditor-opusvier-2484',
+            'personreferee-opusvier-2484',
+            'personother-opusvier-2484',
+            'persontranslator-opusvier-2484',
+        );
+        foreach ($persons as $person) {            
+            $this->dispatch('/solrsearch/index/search/searchtype/simple/query/' . $person);
+
+            $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+            $this->assertContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());
+            $this->assertContains($person, $this->getResponse()->getBody());
+
+            $this->getResponse()->clearAllHeaders();
+            $this->getResponse()->clearBody();
+        }
+
+        $this->dispatch('/solrsearch/index/search/searchtype/simple/query/personsubmitter-opusvier-2484');
+
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
+        // search should not return the test document
+        $this->assertNotContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());        
 
         $doc->deletePermanent();
     }
