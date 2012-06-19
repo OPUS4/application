@@ -64,12 +64,13 @@ class Frontdoor_DeliverController extends Controller_Action {
 
         $full_filename = $file_object->getPath();
         $base_filename = basename($full_filename);
+        $base_filename = self::quoteFileName($base_filename);
 
         $this->disableViewRendering();
 
         $this->getResponse()
                 ->clearAllHeaders()
-                ->setHeader('Content-Disposition', "attachment; filename=$base_filename", true)
+                ->setHeader('Content-Disposition', 'attachment; filename="'.$base_filename.'"', true)
                 ->setHeader('Content-type', $file_object->getMimeType(), true)
                 ->setHeader('Cache-Control', 'private', true)
                 ->setHeader('Pragma', 'cache', true);
@@ -86,6 +87,22 @@ class Frontdoor_DeliverController extends Controller_Action {
         }
 
         return;
+    }
+
+    /**
+     * Replace "tspecials" (RFC 2183, RFC 2045) for clean HTTP headers.
+     * See also ticket OPUSVIER-2455.
+     *
+     * tspecials: [\(\)<>@,;:\\\"\/\[\]\?=\s]
+     *
+     * @param  string $filename
+     * @return string quoted/mime-encoded
+     */
+    public static function quoteFileName($filename) {
+        if (preg_match('/[^A-Za-z0-9_., -]/', $filename)) {
+            return '=?UTF-8?B?'.base64_encode($filename).'?=';
+        }
+        return $filename;
     }
 
     private function logError($exception) {
