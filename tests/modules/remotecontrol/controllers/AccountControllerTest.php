@@ -49,7 +49,7 @@ class Remotecontrol_AccountControllerTest extends ControllerTestCase {
         // Prepare first request.
         $this->login    = 'foobar'.rand();
         $this->password = 'bla';
-        $this->roles    = array("foobar","administrator");
+        $this->roles    = array("reviewer","administrator");
 
         $this->requestData = array(
                     'login'      => $this->login,
@@ -87,7 +87,7 @@ class Remotecontrol_AccountControllerTest extends ControllerTestCase {
 
         // Test if created account has requested roles
         $roles = $account->getRole();
-        $this->assertEquals(1, count($roles));
+        $this->assertEquals(2, count($roles));
         $this->assertEquals("administrator", $roles[0]->getName());
 
     }
@@ -105,6 +105,35 @@ class Remotecontrol_AccountControllerTest extends ControllerTestCase {
                 ->setPost($this->requestData);
         $this->dispatch('/remotecontrol/account/add');
         $this->assertResponseCode(400);
+    }
+
+    /**
+     * Test action to check "add" module, expect failure at second insert.
+     */
+    public function testAddInsertUnknownRoleAction() {
+        $this->addTestAccountWithRoles();
+
+        $requestData = array(
+                    'login'      => $this->login,
+                    'password'   => $this->password,
+                    'user-roles' => "foobar",
+        );
+
+        // First request has been issued in setUp.
+        // Second insert with same key should fail.
+        $this->request
+                ->setMethod('POST')
+                ->setPost($requestData);
+        $this->dispatch('/remotecontrol/account/add');
+
+        // Check HTTP return code
+        $this->assertResponseCode(400);
+        $this->assertController('account');
+        $this->assertAction('add');
+
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('ERROR', $body);
+        $this->assertContains('ERROR', "ERROR: Role 'foobar' does not exist.");
     }
 
     /**
