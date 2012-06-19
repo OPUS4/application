@@ -322,9 +322,18 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_add_collection_success">
+      <tuv xml:lang="en">
+        <seg>Link to collection '%1$s' was successfully created.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Verknüpfung des Dokuments zur Sammlung '%1$s' wurde erfolgreich erstellt.</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_document_remove_collection_success">
       <tuv xml:lang="en">
-        <seg>Linked Collection '%1$s' was successfully removed.</seg>
+        <seg>Linked collection '%1$s' was successfully removed.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Die Verknüpfung des Dokuments zur Sammlung '%1$s' wurde erfolgreich entfernt.</seg>

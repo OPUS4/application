@@ -241,9 +241,10 @@ class Admin_CollectionController extends Controller_Action {
             // Zuordnung des Dokuments zur Collection ist erfolgt
             $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
             $collectionModel->addDocument($documentId);
+
             return $this->_redirectToAndExit(
                     'edit',
-                    'Document successfully assigned to collection "' . $collectionModel->getDisplayName() . '".',
+                    $this->view->translate('admin_document_add_collection_success', $collectionModel->getDisplayName()),
                     'document', 'admin', array('id' => $documentId, 'section' => 'collections'));
         }
 
