@@ -259,10 +259,12 @@
             </xsl:if>
 
             <xsl:for-each select="ThesisPublisher">
-                <ddb:contact>
-                    <xsl:attribute name="ddb:contactID"><xsl:value-of select="@DnbContactId" /></xsl:attribute>
-                </ddb:contact>
-            </xsl:for-each>-->
+                <xsl:if test="normalize-space(@DnbContactId)">
+                    <ddb:contact>
+                        <xsl:attribute name="ddb:contactID"><xsl:value-of select="@DnbContactId" /></xsl:attribute>
+                    </ddb:contact>
+                </xsl:if>
+            </xsl:for-each>
 
             <ddb:fileNumber>
               <xsl:value-of select="count(File)"/>
