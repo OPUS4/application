@@ -843,7 +843,7 @@
                             <span>
                                 <xsl:attribute name="id">abstractShort_<xsl:value-of select="@Id"/></xsl:attribute>
                                 <xsl:attribute name="class">abstractShort</xsl:attribute>
-                                <xsl:value-of select="substring(@Value, 0, $numOfShortAbstractChars)"/>
+                                <xsl:value-of select="substring(@Value, 1, $numOfShortAbstractChars)"/>
                             </span>
                             <span>
                                 <xsl:attribute name="id">abstractFull_<xsl:value-of select="@Id"/></xsl:attribute>
