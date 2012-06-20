@@ -571,7 +571,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         // Regression test for OPUSVIER-2393 (show dc:identifier)
         $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="http://nbn-resolving.de/urn/resolver.pl?123"]');
-        $this->assertGreaterThanOrEqual(1, $elements->length, 'dc:identifier URN count changed');
+        $this->assertEquals(1, $elements->length, 'dc:identifier URN count changed');
 
         $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="123"]');
         $this->assertGreaterThanOrEqual(1, $elements->length, 'dc:identifier URN count changed');
