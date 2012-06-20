@@ -202,3 +202,9 @@ INSERT INTO `link_documents_series` (`document_id`, `series_id`, `number`, `doc_
 (94, 2, 'a', 3),
 (91, 6, '1', 0),
 (92, 6, '2', 1);
+
+--
+-- Daten für Tabelle `link_documents_dnb_institutes`
+--
+INSERT INTO `link_documents_dnb_institutes` (`document_id`, `dnb_institute_id`, `role`) VALUES
+(93,2,'publisher');

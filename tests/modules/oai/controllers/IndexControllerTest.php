@@ -491,6 +491,31 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Regression tests on document 93
+     */
+    public function testGetRecordXMetaDissPlusDoc93() {
+        $doc = new Opus_Document(93);
+        $this->assertEquals('doctoralthesis', $doc->getType(),
+                'testdata changed: document type changed');
+        $this->assertEquals('published',      $doc->getServerState(),
+                'testdata changed: document state changed');
+        $this->assertEquals(1,                count($doc->getThesisPublisher()),
+                'testdata changed: thesis publisher removed from document');
+        $this->assertEquals("",               $doc->getThesisPublisher(0)->getDnbContactId(),
+                'testdata changed: someone added a DnbContactId to thesis publisher ');
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::93');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2523 - no ddb:contact element on empty contactId
+        $elements = $xpath->query('//ddb:contact');
+        $this->assertEquals(0, $elements->length, "Unexpected thesis:grantor count");
+    }
+
+    /**
      * Regression test for existing thesis:* and ddb:* elements
      */
     public function testGetRecordXMetaDissPlusDoc146ThesisAndDdb() {
