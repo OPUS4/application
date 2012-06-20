@@ -246,6 +246,7 @@ class Review_IndexController extends Controller_Action {
 
         $logger = Zend_Registry::get('Zend_Log');
         $userId = $this->loggedUser->getUserId();
+        $onlyReviewerByUserId = false;
 
         // Add constraint for reviewer, if current user is *not* admin.
         if (Opus_Security_Realm::getInstance()->checkModule('admin')) {
@@ -253,7 +254,14 @@ class Review_IndexController extends Controller_Action {
             $logger->debug( $message . " (user_id: $userId)");
         }
         elseif (Opus_Security_Realm::getInstance()->checkModule('review')) {
-            $finder->setEnrichmentKeyValue('reviewer.user_id', $userId);
+            if ($onlyReviewerByUserId) {
+                $message = "Review: Showing only documents belonging to reviewer";
+                $finder->setEnrichmentKeyValue('reviewer.user_id', $userId);
+            }
+            else {
+                $message = "Review: Showing all unpublished documents to reviewer";
+            }
+            $logger->debug( $message . " (user_id: $userId)");
         }
         else {
             $message = 'Review: Access to unpublished documents denied.';
