@@ -180,6 +180,9 @@ class Opus3XMLImport {
         if (isset($this->config->migration->bem_extern)) {
             $this->_proc->setParameter('', 'bem_extern', $this->config->migration->bem_extern);
         }
+        if (isset($this->config->migration->subjects)) {
+            $this->_proc->setParameter('', 'subjects', $this->config->migration->subjects);
+        }
         $this->completeXML->loadXML($this->_proc->transformToXml($data));
         $doclist = $this->completeXML->getElementsByTagName('Opus_Document');
         return $doclist;

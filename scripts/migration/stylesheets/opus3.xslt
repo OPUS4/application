@@ -43,6 +43,7 @@
     xmlns:php="http://php.net/xsl">
 
     <xsl:param name="bem_extern"/>
+    <xsl:param name="subjects"/>
 
     <xsl:output method="xml" indent="no" />
 
@@ -436,14 +437,16 @@
                     <xsl:with-param name="delimiter">,</xsl:with-param>
                     <xsl:with-param name="language">ger</xsl:with-param>
                 </xsl:call-template>
-                <xsl:element name="Enrichment">
-                    <xsl:attribute name="KeyName">
-                        <xsl:text>SubjectSwd</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="Value">
-                        <xsl:value-of select="normalize-space(field[@name='subject_swd'])" />
-                    </xsl:attribute>
-                </xsl:element>
+                <xsl:if test="$subjects = 'enrichment'">
+                    <xsl:element name="Enrichment">
+                        <xsl:attribute name="KeyName">
+                            <xsl:text>SubjectSwd</xsl:text>
+                        </xsl:attribute>
+                        <xsl:attribute name="Value">
+                            <xsl:value-of select="normalize-space(field[@name='subject_swd'])" />
+                        </xsl:attribute>
+                    </xsl:element>
+                </xsl:if>
             </xsl:if>
             <xsl:if test="string-length(normalize-space(field[@name='subject_uncontrolled_german'])) > 0">
                 <xsl:call-template name="AddSubjects">
@@ -454,14 +457,16 @@
                     <xsl:with-param name="delimiter">,</xsl:with-param>
                     <xsl:with-param name="language">ger</xsl:with-param>
                 </xsl:call-template>
-                <xsl:element name="Enrichment">
-                    <xsl:attribute name="KeyName">
-                        <xsl:text>SubjectUncontrolledGerman</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="Value">
-                        <xsl:value-of select="normalize-space(field[@name='subject_uncontrolled_german'])" />
-                    </xsl:attribute>
-                </xsl:element>
+                <xsl:if test="$subjects = 'enrichment'">
+                    <xsl:element name="Enrichment">
+                        <xsl:attribute name="KeyName">
+                            <xsl:text>SubjectUncontrolledGerman</xsl:text>
+                        </xsl:attribute>
+                        <xsl:attribute name="Value">
+                            <xsl:value-of select="normalize-space(field[@name='subject_uncontrolled_german'])" />
+                        </xsl:attribute>
+                    </xsl:element>
+                </xsl:if>
             </xsl:if>
             <xsl:if test="string-length(normalize-space(field[@name='subject_uncontrolled_english'])) > 0">
                 <xsl:call-template name="AddSubjects">
@@ -472,14 +477,16 @@
                     <xsl:with-param name="delimiter">,</xsl:with-param>
                     <xsl:with-param name="language">eng</xsl:with-param>
                 </xsl:call-template>
-                <xsl:element name="Enrichment">
-                    <xsl:attribute name="KeyName">
-                        <xsl:text>SubjectUncontrolledEnglish</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="Value">
-                        <xsl:value-of select="normalize-space(field[@name='subject_uncontrolled_english'])" />
-                    </xsl:attribute>
-                </xsl:element>
+                <xsl:if test="$subjects = 'enrichment'">
+                    <xsl:element name="Enrichment">
+                        <xsl:attribute name="KeyName">
+                            <xsl:text>SubjectUncontrolledEnglish</xsl:text>
+                        </xsl:attribute>
+                        <xsl:attribute name="Value">
+                            <xsl:value-of select="normalize-space(field[@name='subject_uncontrolled_english'])" />
+                        </xsl:attribute>
+                    </xsl:element>
+                </xsl:if>
             </xsl:if>
 
             <!-- Notes -->

@@ -94,5 +94,6 @@ migration.licence.name_long = "Lizenzname"
 migration.licence.pod_allowed = 0
 
 ;migration.bem_extern = "enrichment"
+;migration.subjects = "enrichment"
 
 [testing : production]
