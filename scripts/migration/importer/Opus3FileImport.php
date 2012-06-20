@@ -273,12 +273,11 @@ class Opus3FileImport {
 
         $visibleInOai = $this->getVisibilityInOai($prefix);
         $visibleInFrontdoor = $this->getVisibilityInFrontdoor($prefix);
-
         $pathName = $this->getPathName($prefix, basename($f));
-        $tmpPathName = iconv("UTF-8", "UTF-8//IGNORE", $pathName);
-        if ($pathName != $tmpPathName) {
-            $this->logger->log_error("Opus3FileImport", "Filename '" . $pathName . "' is corrupt. Changed to '" . $tmpPathName . "'.");
-            $pathName = $tmpPathName;
+        
+        if ($pathName != iconv("UTF-8", "UTF-8//IGNORE", $pathName)) {
+            $this->logger->log_error("Opus3FileImport", "Filename '" . $pathName . "' is corrupt. Changed to '" . utf8_encode($pathName) . "'.");
+            $pathName = utf8_encode($pathName);
         }
 
         $this->logger->log_debug("Opus3FileImport", "Import '" . $pathName . "'");
