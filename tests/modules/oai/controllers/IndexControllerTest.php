@@ -515,8 +515,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(1, $elements->length, "Unexpected thesis:grantor count");
 
         // Regression test for OPUSVIER-2523 - existing ddb:contact element
-        $elements = $xpath->query('//ddb:contact');
-        $this->assertEquals(1, $elements->length, "Unexpected thesis:grantor count");
+        $elements = $xpath->query('//ddb:contact/@ddb:contactID');
+        $this->assertEquals(1, $elements->length, "Unexpected ddb:contact count");
+        $this->assertEquals('Lxxxx-xxxx', $elements->item(0)->nodeValue, "Wrong ddb:contact");
 
         // Testing for other existing elements
         $elements = $xpath->query('//thesis:degree/thesis:level[text()="master"]');
