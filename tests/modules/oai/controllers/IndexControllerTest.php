@@ -550,7 +550,35 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Regression test for OPUSVIER-2393
+     * Regression tests on document 146
+     */
+    public function testGetRecordOaiDcDoc146() {
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::146');
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        // Regression test for OPUSVIER-2393 (show dc:contributor)
+        $elements = $xpath->query('//oai_dc:dc/dc:contributor/text()');
+        $this->assertGreaterThanOrEqual(2, $elements->length, 'dc:contributor count changed');
+        $this->assertEquals('Doe, Jane (PhD)', $elements->item(0)->nodeValue, 'dc:contributor field changed');
+        $this->assertEquals('Baz University',  $elements->item(1)->nodeValue, 'dc:contributor field changed');
+
+        // Regression test for OPUSVIER-2393 (show dc:identifier)
+        $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="http://nbn-resolving.de/urn/resolver.pl?123"]');
+        $this->assertGreaterThanOrEqual(1, $elements->length, 'dc:identifier URN count changed');
+
+        $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="123"]');
+        $this->assertGreaterThanOrEqual(1, $elements->length, 'dc:identifier URN count changed');
+    }
+
+    /**
+     * Regression tests on document 91
      */
     public function testGetRecordOaiDcDoc91() {
 
@@ -577,6 +605,13 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertContains("/files/91/test.pdf", $foundIds);
         $this->assertContains("/files/91/test.txt", $foundIds);
         $this->assertContains("/files/91/frontdoor_invisible.txt", $foundIds);
+
+        // Regression test for OPUSVIER-2393 (show dc:creator)
+        $elements = $xpath->query('//oai_dc:dc/dc:creator/text()');
+        $this->assertEquals(3, $elements->length, 'dc:creator count changed');
+        $this->assertEquals('Doe, John', $elements->item(0)->nodeValue, 'dc:creator field changed');
+        $this->assertEquals('Zufall, Rainer', $elements->item(1)->nodeValue, 'dc:creator field changed');
+        $this->assertEquals('Fall, Klara', $elements->item(2)->nodeValue, 'dc:creator field changed');
     }
 
     /**
