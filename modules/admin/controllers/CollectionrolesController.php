@@ -147,11 +147,13 @@ class Admin_CollectionrolesController extends Controller_Action {
                 $collectionRole->getRootCollection()->setVisible('1');
             }
             $collectionRole->store();
-            return $this->_redirectTo('index', 'Collection role \'' . $collectionRole->getName() . '\' successfully created.');
+            $message = $this->view->translate('admin_collectionroles_add', $collectionRole->getName());
+            return $this->_redirectTo('index', $message);
         }
         else {
             $collectionRole->store();
-            return $this->_redirectTo('index', 'Collection role \'' . $collectionRole->getName() . '\' successfully edited.');
+            $message = $this->view->translate('admin_collectionroles_edit', $collectionRole->getName());
+            return $this->_redirectTo('index', $message);
         }
     }
 
@@ -186,7 +188,9 @@ class Admin_CollectionrolesController extends Controller_Action {
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->delete();
-            return $this->_redirectTo('index', 'Operation completed successfully.');
+            $collectionRoleModel->getObject()->getDisplayName();
+            $message = $this->view->translate('admin_collectionroles_delete', $collectionRoleModel->getObject()->getName());
+            return $this->_redirectTo('index', $message);
         }
         catch (Application_Exception $e) {
             return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));

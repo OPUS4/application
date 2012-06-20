@@ -471,5 +471,60 @@
                 <seg>interner Übersetzungsschlüssel:</seg>
             </tuv>
         </tu>
+
+        <tu tuid="admin_collectionroles_add">
+            <tuv xml:lang="en">
+                <seg>Collection role '%1$s' was created successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sammlung '%1$s' wurde erfolgreich angelegt.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collectionroles_edit">
+            <tuv xml:lang="en">
+                <seg>Collection role '%1$s' was edited successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sammlung '%1$s' wurde erfolgreich bearbeitet.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collectionroles_delete">
+            <tuv xml:lang="en">
+                <seg>Collection role '%1$s' was deleted successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sammlung '%1$s' wurde erfolgreich gelöscht.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collections_add">
+            <tuv xml:lang="en">
+                <seg>Collection '%1$s' was created successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sammlungseintrag '%1$s' wurde erfolgreich angelegt.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collections_edit">
+            <tuv xml:lang="en">
+                <seg>Collection '%1$s' was edited successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sammlungseintrag '%1$s' wurde erfolgreich bearbeitet.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collections_delete">
+            <tuv xml:lang="en">
+                <seg>Collection '%1$s' was deleted successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sammlungseintrag '%1$s' wurde erfolgreich gelöscht.</seg>
+            </tuv>
+        </tu>
+
     </body>
 </tmx>

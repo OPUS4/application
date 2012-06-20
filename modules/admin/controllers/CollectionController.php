@@ -126,7 +126,8 @@ class Admin_CollectionController extends Controller_Action {
         try {
             $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
             $returnId = $collectionModel->delete();
-            $this->_redirectTo('show', 'Operation completed successfully.', 'collection', 'admin', array ('id' => $returnId));
+            $message = $this->view->translate('admin_collections_delete', $collectionModel->getDisplayName());
+            $this->_redirectTo('show', $message, 'collection', 'admin', array ('id' => $returnId));
         }
         catch (Application_Exception $e) {
             $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
@@ -207,23 +208,26 @@ class Admin_CollectionController extends Controller_Action {
                 $refCollection = new Opus_Collection($id);
                 $refCollection->addFirstChild($collection);
                 $refCollection->store();
-                return $this->_redirectTo('show', 'Insert successful', 'collection', 'admin', array('id' => $collection->getId()));
+                $message = $this->view->translate('admin_collections_add', $collection->getDisplayName());
+                return $this->_redirectTo('show', $message, 'collection', 'admin', array('id' => $collection->getId()));
             }
             if ($type === 'sibling') {
                 $refCollection = new Opus_Collection($id);
                 $refCollection->addNextSibling($collection);
                 $refCollection->store();
-                return $this->_redirectTo('show', 'Insert successful', 'collection', 'admin', array('id' => $collection->getId()));
+                $message = $this->view->translate('admin_collections_add', $collection->getDisplayName());
+                return $this->_redirectTo('show', $message, 'collection', 'admin', array('id' => $collection->getId()));
             }
             return $this->_redirectToAndExit('index', array('failure' => 'type paramter invalid'), 'collectionroles');
         }
-        // nur Änderungen
+        // nur Änderungen        
         $collection->store();
+        $message = $this->view->translate('admin_collections_edit', $collection->getDisplayName());
         $parents = $collection->getParents();
         if (count($parents) === 1) {
-            return $this->_redirectTo('show', 'Edit successful', 'collection', 'admin', array('id' => $collection->getRoleId()));
+            return $this->_redirectTo('show', $message, 'collection', 'admin', array('id' => $collection->getRoleId()));
         }
-        return $this->_redirectTo('show', 'Edit successful', 'collection', 'admin', array('id' => $parents[1]->getId()));
+        return $this->_redirectTo('show', $message, 'collection', 'admin', array('id' => $parents[1]->getId()));
     }
 
     /**
