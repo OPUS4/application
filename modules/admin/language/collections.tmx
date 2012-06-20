@@ -499,6 +499,24 @@
             </tuv>
         </tu>
 
+        <tu tuid="admin_collectionroles_changevisibility">
+            <tuv xml:lang="en">
+                <seg>Visibility of collection role '%1$s' was changed successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sichtbarkeit der Sammlung '%1$s' wurde erfolgreich geändert.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collectionroles_move">
+            <tuv xml:lang="en">
+                <seg>Collection role '%1$s' was moved successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sammlung '%1$s' wurde erfolgreich verschoben.</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="admin_collections_add">
             <tuv xml:lang="en">
                 <seg>Collection '%1$s' was created successfully.</seg>
@@ -523,6 +541,24 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Sammlungseintrag '%1$s' wurde erfolgreich gelöscht.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collections_changevisibility">
+            <tuv xml:lang="en">
+                <seg>Visibility of collection '%1$s' was changed successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sichtbarkeit des Sammlungseintrags '%1$s' wurde erfolgreich geändert.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collections_move">
+            <tuv xml:lang="en">
+                <seg>Collection '%1$s' was moved successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sammlungseintrag '%1$s' wurde erfolgreich verschoben.</seg>
             </tuv>
         </tu>
 

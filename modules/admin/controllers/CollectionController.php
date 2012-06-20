@@ -96,7 +96,7 @@ class Admin_CollectionController extends Controller_Action {
         try {
             $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
             $parentId = $collectionModel->move($this->getRequest()->getParam('pos'));
-            $this->_redirectTo('show', 'Operation completed successfully.', 'collection', 'admin', array('id' => $parentId));
+            $this->_redirectTo('show', $this->view->translate('admin_collections_move', $collectionModel->getDisplayName()), 'collection', 'admin', array('id' => $parentId));
         }
         catch (Admin_Model_Exception $e) {
             $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
@@ -107,7 +107,7 @@ class Admin_CollectionController extends Controller_Action {
         try {
             $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
             $id = $collectionModel->setVisiblity($visibility);
-            $this->_redirectTo('show', 'Operation completed successfully.', 'collection', 'admin', array('id' => $id));
+            $this->_redirectTo('show', $this->view->translate('admin_collections_changevisibility', $collectionModel->getDisplayName()), 'collection', 'admin', array('id' => $id));
         }
         catch (Application_Exception $e) {
             $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');

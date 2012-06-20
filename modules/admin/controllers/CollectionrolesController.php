@@ -67,7 +67,7 @@ class Admin_CollectionrolesController extends Controller_Action {
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->move($this->getRequest()->getParam('pos'));
-            return $this->_redirectTo('index', 'Operation completed successfully.');
+            return $this->_redirectTo('index', $this->view->translate('admin_collectionroles_move', $collectionRoleModel->getObject()->getName()));
         }
         catch (Application_Exception $e) {
             return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
@@ -78,7 +78,7 @@ class Admin_CollectionrolesController extends Controller_Action {
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->setVisibility($visibility);
-            return $this->_redirectTo('index', 'Operation completed successfully.');
+            return $this->_redirectTo('index', $this->view->translate('admin_collectionroles_changevisibility', $collectionRoleModel->getObject()->getName()));
         }
         catch (Application_Exception $e) {
             return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
