@@ -373,4 +373,28 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
                 $responseBody);
     }
 
+    /**
+     * Regression test for OPUSVIER-2435
+     */
+    public function testUrlEncodedAuthorNamesDoc150() {
+        $d = new Opus_Document(150);
+        $firstNames = array();
+        $lastNames = array();
+
+        foreach ($d->getPersonAuthor() AS $author) {
+            $firstNames[] = $author->getFirstName();
+            $lastNames[] = $author->getLastName();
+        }
+
+        $this->assertContains('J\"ohn', $firstNames, "testdata changed!");
+        $this->assertContains('J\"ane', $firstNames, "testdata changed!");
+        $this->assertContains('D\"oe', $lastNames, "testdata changed!");
+        $this->dispatch('/frontdoor/index/index/docId/150');
+
+        $responseBody = $this->getResponse()->getBody();
+        $this->assertRegExp('/<a href="[^"]+\/author\/J%5C%22ohn\+Doe"/', $responseBody);
+        $this->assertRegExp('/<a href="[^"]+\/author\/J%5C%22ane\+D%5C%22oe"/', $responseBody);
+        $this->assertNotRegExp('/<a href="[^"]+\/author\/\&quot;J\\\&quot;ohn Doe\&quot;"/', $responseBody);
+        $this->assertNotRegExp('/<a href="[^"]+\/author\/\&quot;J\\\&quot;ane D\\\&quot;oe\&quot;"/', $responseBody);
+    }
 }

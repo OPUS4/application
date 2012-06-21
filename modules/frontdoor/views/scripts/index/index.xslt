@@ -503,7 +503,7 @@
                 <xsl:value-of select="$baseUrl"/>
                 <xsl:if test="name()='PersonAuthor'"><xsl:text>/solrsearch/index/search/searchtype/authorsearch/author/</xsl:text></xsl:if>
                 <xsl:if test="name()='PersonReferee'"><xsl:text>/solrsearch/index/search/searchtype/authorsearch/referee/</xsl:text></xsl:if>
-                <xsl:value-of select="concat('&quot;', @FirstName, ' ', @LastName, '&quot;')" />
+                <xsl:value-of select="php:function('urlencode', concat(@FirstName, ' ', @LastName))" />
             </xsl:attribute>
             <xsl:attribute name="title">
                 <xsl:if test="name()='PersonAuthor'">
@@ -798,7 +798,7 @@
                     <xsl:attribute name="href">
                         <xsl:value-of select="$baseUrl"/>
                         <xsl:text>/solrsearch/index/search/searchtype/authorsearch/author/</xsl:text>
-                        <xsl:value-of select="concat('&quot;', @FirstName, ' ', @LastName, '&quot;')" />
+                         <xsl:value-of select="php:function('urlencode', concat(@FirstName, ' ', @LastName))" />
                     </xsl:attribute>
                     <xsl:attribute name="title">
                         <xsl:call-template name="translateString">
