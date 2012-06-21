@@ -1156,7 +1156,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc->deletePermanent();
     }
 
-/**
+    /**
      * Regression test for OPUSVIER-2509 and OPUSVIER-2510
      */
     public function testForDDCSubjectTypeForXMetaDiss() {
@@ -1174,6 +1174,66 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);
 
         $doc->deletePermanent();
+    }
+
+    /**
+     * Regression test for OPUSVIER-2564
+     */
+    public function testForInvalidSetSpecsInListRecords() {
+        $collectionRole = Opus_CollectionRole::fetchByOaiName('pacs');
+        $this->assertNotNull($collectionRole);
+
+        $this->assertContains(79, $collectionRole->getDocumentIdsInSet('pacs:07.75.+h'));
+        $this->assertContains(79, $collectionRole->getDocumentIdsInSet('pacs:85.85.+j'));
+
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=pacs');
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<setSpec>pacs:07.07.Df</setSpec>', $body);
+        $this->assertContains(':79</identifier>', $body);
+
+        // Regression test for OPUSVIER-2564: invalid SetSpec characters
+        $this->assertNotContains('<setSpec>pacs:07.75.', $body);
+        $this->assertNotContains('<setSpec>pacs:85.85.', $body);
+    }
+
+    /**
+     * Regression test for OPUSVIER-2564
+     */
+    public function testForInvalidSetSpecsInListIdentifiers() {
+        $collectionRole = Opus_CollectionRole::fetchByOaiName('pacs');
+        $this->assertNotNull($collectionRole);
+
+        $this->assertContains(79, $collectionRole->getDocumentIdsInSet('pacs:07.75.+h'));
+        $this->assertContains(79, $collectionRole->getDocumentIdsInSet('pacs:85.85.+j'));
+
+        $this->dispatch('/oai?verb=ListIdentifiers&metadataPrefix=oai_dc&set=pacs');
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<setSpec>pacs:07.07.Df</setSpec>', $body);
+        $this->assertContains(':79</identifier>', $body);
+
+        // Regression test for OPUSVIER-2564: invalid SetSpec characters
+        $this->assertNotContains('<setSpec>pacs:07.75.', $body);
+        $this->assertNotContains('<setSpec>pacs:85.85.', $body);
+    }
+
+    /**
+     * Regression test for OPUSVIER-2564
+     */
+    public function testForInvalidSetSpecsInGetRecord79() {
+        $collectionRole = Opus_CollectionRole::fetchByOaiName('pacs');
+        $this->assertNotNull($collectionRole);
+
+        $this->assertContains(79, $collectionRole->getDocumentIdsInSet('pacs:07.75.+h'));
+        $this->assertContains(79, $collectionRole->getDocumentIdsInSet('pacs:85.85.+j'));
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai:opus4.demo:79');
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('<setSpec>pacs:07.07.Df</setSpec>', $body);
+        $this->assertContains(':79</identifier>', $body);
+
+        // Regression test for OPUSVIER-2564: invalid SetSpec characters
+        $this->assertNotContains('<setSpec>pacs:07.75.', $body);
+        $this->assertNotContains('<setSpec>pacs:85.85.', $body);
     }
 
 }

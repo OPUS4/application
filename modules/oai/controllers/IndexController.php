@@ -496,9 +496,14 @@ class Oai_IndexController extends Controller_Xml {
         $bibliography = $document->getBelongsToBibliography() == 1 ? 'true' : 'false';
         $this->_addSpecInformation($node, 'bibliography:' . $bibliography);
 
+        $logger = Zend_Registry::get('Zend_Log');
         $setSpecs = Oai_Model_SetSpec::getSetSpecsFromCollections($document->getCollection());
         foreach ($setSpecs AS $setSpec) {
-            $this->_addSpecInformation($node, $setSpec);
+            if (preg_match("/^([A-Za-z0-9\-_\.!~\*'\(\)]+)(:[A-Za-z0-9\-_\.!~\*'\(\)]+)*$/", $setSpec)) {
+                $this->_addSpecInformation($node, $setSpec);
+                continue;
+            }
+            $logger->info("skipping invalid setspec: " . $setSpec);
         }
 
         $this->_xml->documentElement->appendChild($node);
