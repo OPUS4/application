@@ -36,29 +36,21 @@
 -->
 
 <xsl:stylesheet version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
     <xsl:output method="xml" indent="yes" encoding="utf-8" />
 
     <xsl:template match="/">
-        <xsl:element name="OpenSearchDescription">
-            <xsl:attribute name="xmlns">http://a9.com/-/spec/opensearch/1.1/</xsl:attribute>
-            <xsl:element name="ShortName">OPUS 4</xsl:element>
-            <xsl:element name="Description">OPUS 4 Search</xsl:element>
-            <xsl:element name="Url">
-                <xsl:attribute name="type">text/html</xsl:attribute>
-                <xsl:attribute name="template"><xsl:value-of select="$searchBaseUrl"/></xsl:attribute>
-            </xsl:element>
-            <xsl:element name="Image">
-                <xsl:attribute name="height">16</xsl:attribute>
-                <xsl:attribute name="width">16</xsl:attribute>
-                <xsl:attribute name="type">image/x-icon</xsl:attribute>
+        <OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+            <ShortName><xsl:text>OPUS 4</xsl:text></ShortName>
+            <Description><xsl:text>OPUS 4 Search</xsl:text></Description>
+            <Url type="text/html" template="{$searchBaseUrl}"/>
+            <Image height="16" width="16" type="image/x-icon">
                 <xsl:value-of select="$faviconUrl"/>
-            </xsl:element>
-            <xsl:element name="InputEncoding">UTF-8</xsl:element>
-            <xsl:element name="OutputEncoding">UTF-8</xsl:element>
-        </xsl:element>
+            </Image>
+            <InputEncoding><xsl:text>UTF-8</xsl:text></InputEncoding>
+            <OutputEncoding><xsl:text>UTF-8</xsl:text></OutputEncoding>
+        </OpenSearchDescription>
     </xsl:template>
 
 </xsl:stylesheet>
