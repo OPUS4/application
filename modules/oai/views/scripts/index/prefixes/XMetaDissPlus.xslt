@@ -367,7 +367,6 @@
          <xsl:attribute name="xsi:type"><xsl:text>pc:Contributor</xsl:text></xsl:attribute>
          <xsl:attribute name="type"><xsl:text>dcterms:ISO3166</xsl:text></xsl:attribute>
          <xsl:attribute name="thesis:role"><xsl:text>advisor</xsl:text></xsl:attribute>
-         <xsl:attribute name="countryCode"><xsl:text>DE</xsl:text></xsl:attribute>
            <pc:person>
              <pc:name type="nameUsedByThePerson">
                 <pc:foreName>
@@ -391,7 +390,6 @@
          <xsl:attribute name="xsi:type"><xsl:text>pc:Contributor</xsl:text></xsl:attribute>
          <xsl:attribute name="type"><xsl:text>dcterms:ISO3166</xsl:text></xsl:attribute>
          <xsl:attribute name="thesis:role"><xsl:text>referee</xsl:text></xsl:attribute>
-         <xsl:attribute name="countryCode"><xsl:text>DE</xsl:text></xsl:attribute>
            <pc:person>
              <pc:name type="nameUsedByThePerson">
                 <pc:foreName>
