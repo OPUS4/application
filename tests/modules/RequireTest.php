@@ -77,24 +77,34 @@ class RequireTest extends PHPUnit_Framework_TestCase {
     }
 
     /**
-     * Try to load all class files, just to make sure no syntax error have
-     * been introduced.  As a side effect, all classes will be visible to
-     * code coverage report.
+     * Data provider for all classes which should be loadable.
+     *
+     * @return array
      */
-    public function testRequire() {
-        // Run find to locate all class files
+    public static function serverClassesDataProvider() {
         $cmd = 'find ../modules -type f -iname "*php" |cut -d/ -f3-';
         $classFiles = array();
         exec($cmd, $classFiles);
 
+        $checkClassFiles = array();
         foreach ($classFiles AS $file) {
-            if (strstr($file, '/init.php')
-                    or strstr($file, 'statistic/models/StatisticGraph')
+            if (strstr($file, 'statistic/models/StatisticGraph')
                     or strstr($file, '/views/') ) {
                 continue;
             }
-
-            require_once($file);
+            $checkClassFiles[] = array($file);
         }
+        return $checkClassFiles;
+    }
+
+    /**
+     * Try to load all class files, just to make sure no syntax error have
+     * been introduced.  As a side effect, all classes will be visible to
+     * code coverage report.
+     *
+     * @dataProvider serverClassesDataProvider
+     */
+    public function testRequire($file) {
+        require_once($file);
     }
 }
