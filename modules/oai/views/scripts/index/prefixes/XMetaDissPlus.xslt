@@ -260,9 +260,7 @@
 
             <xsl:for-each select="ThesisPublisher">
                 <xsl:if test="normalize-space(@DnbContactId)">
-                    <ddb:contact>
-                        <xsl:attribute name="ddb:contactID"><xsl:value-of select="@DnbContactId" /></xsl:attribute>
-                    </ddb:contact>
+                    <ddb:contact ddb:contactID="{@DnbContactId}" />
                 </xsl:if>
             </xsl:for-each>
 
@@ -344,8 +342,7 @@
     </xsl:template>
 
     <xsl:template match="TitleAbstract" mode="xmetadissplus">
-        <dcterms:abstract>
-            <xsl:attribute name="xsi:type"><xsl:text>ddb:contentISO639-2</xsl:text></xsl:attribute>
+        <dcterms:abstract xsi:type="ddb:contentISO639-2" ddb:type="noScheme">
             <xsl:attribute name="lang">
                <xsl:choose>
                   <xsl:when test="@Language='deu'">
@@ -356,17 +353,13 @@
                   </xsl:otherwise>
                </xsl:choose>
             </xsl:attribute>
-            <xsl:attribute name="ddb:type"><xsl:text>noScheme</xsl:text></xsl:attribute>
             <xsl:value-of select="@Value" />
         </dcterms:abstract>
     </xsl:template>
 
 
     <xsl:template match="PersonAdvisor" mode="xmetadissplus">
-       <dc:contributor>
-         <xsl:attribute name="xsi:type"><xsl:text>pc:Contributor</xsl:text></xsl:attribute>
-         <xsl:attribute name="type"><xsl:text>dcterms:ISO3166</xsl:text></xsl:attribute>
-         <xsl:attribute name="thesis:role"><xsl:text>advisor</xsl:text></xsl:attribute>
+       <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="advisor">
            <pc:person>
              <pc:name type="nameUsedByThePerson">
                 <pc:foreName>
@@ -386,10 +379,7 @@
     </xsl:template>
 
     <xsl:template match="PersonReferee" mode="xmetadissplus">
-       <dc:contributor>
-         <xsl:attribute name="xsi:type"><xsl:text>pc:Contributor</xsl:text></xsl:attribute>
-         <xsl:attribute name="type"><xsl:text>dcterms:ISO3166</xsl:text></xsl:attribute>
-         <xsl:attribute name="thesis:role"><xsl:text>referee</xsl:text></xsl:attribute>
+       <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="referee">
            <pc:person>
              <pc:name type="nameUsedByThePerson">
                 <pc:foreName>
@@ -409,20 +399,18 @@
     </xsl:template>
 
     <xsl:template match="ThesisPublisher" mode="xmetadissplus">
-        <dc:publisher>
-           <xsl:attribute name="xsi:type"><xsl:text>cc:Publisher</xsl:text></xsl:attribute>
-           <xsl:attribute name="type"><xsl:text>dcterms:ISO3166</xsl:text></xsl:attribute>
-               <cc:universityOrInstitution>
-                 <cc:name>
-                     <xsl:value-of select="@Name" />
-                 </cc:name>
-                 <cc:place>
+        <dc:publisher xsi:type="cc:Publisher" type="dcterms:ISO3166">
+            <cc:universityOrInstitution>
+                <cc:name>
+                    <xsl:value-of select="@Name" />
+                </cc:name>
+                <cc:place>
                     <xsl:value-of select="@City" />
-                 </cc:place>
-               </cc:universityOrInstitution>
-                 <cc:address cc:Scheme="DIN5008">
-                    <xsl:value-of select="@Address" />
-                 </cc:address>
+                </cc:place>
+            </cc:universityOrInstitution>
+            <cc:address cc:Scheme="DIN5008">
+                <xsl:value-of select="@Address" />
+            </cc:address>
         </dc:publisher>
     </xsl:template>          
 
@@ -439,15 +427,9 @@
     </xsl:template>
   
     <xsl:template match="File" mode="xmetadissplus">
-        <ddb:fileProperties>
-            <xsl:attribute name="ddb:fileName">
-                <xsl:value-of select="@PathName" />
-            </xsl:attribute>
+        <ddb:fileProperties ddb:fileName="{@PathName}" ddb:fileSize="{@FileSize}">
             <xsl:attribute name="ddb:fileID">
                 <xsl:text>file</xsl:text><xsl:value-of select="../@Id"/>-<xsl:value-of select="position()-1"/>
-            </xsl:attribute>
-            <xsl:attribute name="ddb:fileSize">
-                <xsl:value-of select="@FileSize"/>
             </xsl:attribute>
         </ddb:fileProperties>
     </xsl:template>
