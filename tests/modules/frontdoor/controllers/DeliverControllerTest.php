@@ -35,12 +35,24 @@
 class Frontdoor_DeliverControllerTest extends ControllerTestCase {
 
     /**
+     * Use this test to trigger class loader on 'Frontdoor_DeliverController'.
+     */
+    public function testClassLoaded() {
+        $this->dispatch('/frontdoor/deliver/index');
+        $this->assertController('deliver');
+        $this->assertAction('index');
+
+        // Use this assertion to trigger autoloader
+        $this->assertTrue(class_exists('Frontdoor_DeliverController'),
+                'could not load tested class');
+    }
+
+    /**
      * Regression test for OPUSVIER-2455.  (Special chars in HTTP/MIME headers)
+     *
+     * @depends testClassLoaded
      */
     public function testQuoteAsciiFileName() {
-        // Use this assertion to trigger autoloader
-        $this->assertTrue(class_exists('Frontdoor_DeliverController'));
-
         $testcase = array(
             'my-file.txt' => 'my-file.txt',
             'my file.txt' => 'my file.txt',
@@ -55,11 +67,10 @@ class Frontdoor_DeliverControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2455.  (Special chars in HTTP/MIME headers)
+     *
+     * @depends testClassLoaded
      */
     public function testQuoteUnicodeFileName() {
-        // Use this assertion to trigger autoloader
-        $this->assertTrue(class_exists('Frontdoor_DeliverController'));
-
         $testcase = array(
             'schrödinger-equation.pdf' => '=?UTF-8?B?c2NocsO2ZGluZ2VyLWVxdWF0aW9uLnBkZg==?=',
             'with "weird" chars.pdf'   => '=?UTF-8?B?d2l0aCAid2VpcmQiIGNoYXJzLnBkZg==?=',
