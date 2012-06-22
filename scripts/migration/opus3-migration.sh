@@ -9,19 +9,22 @@ set -e
 ## -z Stepsize for looping
 ## -n No iteration after first looping
 ## -i Build Index after each loop
+## -t Testing
 ##
 
 stepsize=50
 iteration=1
 buildindex=0
+testing=0
 
-while getopts f:p:z:in o
+while getopts f:p:z:int o
 do	case "$o" in
 	f)	xmlfile="$OPTARG";;
 	p)	fulltextpath="$OPTARG";;
         z)	stepsize="$OPTARG";;
         i)      buildindex=1;;
         n)      iteration=0;;
+        t)      testing=1;;
 	[?])	print "Usage: $0 [-f xmlfile] [-p fulltextpath] [-z stepsize for looping] [-i ] [ -n ]"
 		exit 1;;
 	esac
@@ -91,6 +94,10 @@ php Opus3Migration_ICL.php -f "$xml_file" || { echo "Aborting migration: Opus3Mi
 echo "Import metadata and fulltext"
 start=1
 end=`expr $start + $stepsize - 1`
+
+APPLICATION_ENV=production;
+[ "$testing" -eq "1" ] && APPLICATION_ENV=testing;
+export APPLICATION_ENV;
 
 touch "$migration_lock_file"
 php Opus3Migration_Documents.php -f "$xml_file" -p "$fulltext_path" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
