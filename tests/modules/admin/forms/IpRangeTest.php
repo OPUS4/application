@@ -76,5 +76,106 @@ class Admin_Form_IpRangeTest extends ControllerTestCase {
         $this->assertEquals(1, $form->getElement('roleguest')->getValue());
     }
 
+    public function testValidateValidIp() {
+        $form = new Admin_Form_IpRange();
+
+        $postData = array(
+            'name' => 'ValidIpTest',
+            'startingip' => '127.0.0.1',
+            'endingip' => '127.0.0.2');
+
+        $this->assertTrue($form->isValid($postData));
+
+        $errors = $form->getElement('startingip')->getErrors();
+
+        $this->assertTrue(empty($errors));
+
+        $errors = $form->getElement('endingip')->getErrors();
+
+        $this->assertTrue(empty($errors));
+    }
+
+    public function testValidateInvalidIpShortStartingIp() {
+        $form = new Admin_Form_IpRange();
+
+        $postData = array(
+            'name' => 'ValidIpTest',
+            'startingip' => '127.0.1',
+            'endingip' => '127.0.0.2');
+
+        $this->assertFalse($form->isValid($postData));
+
+        $errors = $form->getElement('startingip')->getErrors();
+
+        $this->assertFalse(empty($errors));
+        $this->assertTrue($errors[0] === 'notIpAddress');
+
+        $errors = $form->getElement('endingip')->getErrors();
+
+        $this->assertTrue(empty($errors));
+    }
+
+    public function testValidateInvalidIpShortEndingIp() {
+        $form = new Admin_Form_IpRange();
+
+        $postData = array(
+            'name' => 'ValidIpTest',
+            'startingip' => '127.0.0.1',
+            'endingip' => '127.0.2');
+
+        $this->assertFalse($form->isValid($postData));
+
+        $errors = $form->getElement('startingip')->getErrors();
+
+        $this->assertTrue(empty($errors));
+
+        $errors = $form->getElement('endingip')->getErrors();
+
+        $this->assertFalse(empty($errors));
+        $this->assertTrue($errors[0] === 'notIpAddress');
+    }
+
+    public function testValidateInvalidIpHostname() {
+        $form = new Admin_Form_IpRange();
+
+        $postData = array(
+            'name' => 'ValidIpTest',
+            'startingip' => 'opus4.kobv.de',
+            'endingip' => 'opus4.kobv.de');
+
+        $this->assertFalse($form->isValid($postData));
+
+        $errors = $form->getElement('startingip')->getErrors();
+
+        $this->assertFalse(empty($errors));
+        $this->assertTrue($errors[0] === 'notIpAddress');
+
+        $errors = $form->getElement('endingip')->getErrors();
+
+        $this->assertFalse(empty($errors));
+        $this->assertTrue($errors[0] === 'notIpAddress');
+    }
+
+    public function testValidateInvalidIpV6() {
+        $form = new Admin_Form_IpRange();
+
+        $postData = array(
+            'name' => 'ValidIpTest',
+            'startingip' => '2001:0db8:85a3:0000:0000:8a2e:0370:7334',
+            'endingip' => '2001:0db8:85a3:0000:0000:8a2e:0370:7334');
+
+        $this->assertFalse($form->isValid($postData));
+
+        $errors = $form->getElement('startingip')->getErrors();
+
+        $this->assertFalse(empty($errors));
+        $this->assertTrue($errors[0] === 'notIpAddress');
+
+        $errors = $form->getElement('endingip')->getErrors();
+
+        $this->assertFalse(empty($errors));
+        $this->assertTrue($errors[0] === 'notIpAddress');
+    }
+
 }
 
