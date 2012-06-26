@@ -211,4 +211,18 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
         }
     }
 
+    /**
+     * OPUSVIER-2446 Regression Test
+     */
+    public function testRegression2446DontSetServerDatePublished() {
+        $doc = new Mock_Opus_Document();
+
+        $doc->setServerState('unpublished');
+
+        $this->__workflowHelper->changeState($doc, 'published');
+
+        $this->assertEquals('published', $doc->getServerState());
+        $this->assertNull($doc->getServerDatePublished());
+    }
+
 }
