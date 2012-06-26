@@ -58,5 +58,22 @@ class Admin_Form_AccountTest extends ControllerTestCase {
         $this->assertEquals(true, $element->getAttrib('disabled'));
     }
 
+    /**
+     * Test creating an account form.
+     */
+    public function testDoNotLowerCaseUsername() {
+        $user = new Opus_Account(null, null, 'user');
+
+        $form = new Admin_Form_Account($user->getId());
+
+        $this->assertNotNUll($form);
+
+        $username = $form->getElement("username");
+
+        $username->setValue('DummYuser');
+
+        $this->assertTrue($username->getValue() === 'DummYuser', $username->getValue());
+    }
+
 }
 

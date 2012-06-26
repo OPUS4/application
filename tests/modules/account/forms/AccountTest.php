@@ -41,6 +41,21 @@ class Account_Form_AccountTest extends ControllerTestCase {
      */
     public function testCreateForm() {
         $form = new Account_Form_Account('user');
+
+        $this->assertNotNull($form);
+    }
+
+    /**
+     * OPUSVIER-2413 Regression Test.
+     */
+    public function testDoNotLowerCaseUsername() {
+        $form = new Account_Form_Account('user');
+
+        $username = $form->getElement("username");
+
+        $username->setValue('DummYuser');
+
+        $this->assertTrue($username->getValue() === 'DummYuser');
     }
 
 }
