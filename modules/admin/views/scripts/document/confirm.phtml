@@ -27,12 +27,27 @@
  *
  * @category    Application
  * @package     Module_Admin
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2009-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 ?>
-<h1><?php echo $this->title?></h1>
-<?= $this->text ?>
-<?= $this->form ?>
+
+<div class="adminContainer">
+
+    <div class="breadcrumbsContainer">
+        <?php echo $this->title?>
+    </div>
+
+    <p>
+    <?= $this->text ?>
+    </p>
+
+    <?= $this->showModel($this->removeObject); ?>
+
+    <?= $this->form ?>
+
+</div>
+
+

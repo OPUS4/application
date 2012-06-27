@@ -235,7 +235,17 @@ class Admin_DocumentController extends Controller_Action {
 
                     $form = $this->__getEditForm($document, $section);
 
-                    if ($form->isValid($postData) || $this->_isRemoveRequest($postData)) {
+                    if ($this->_isRemoveRequest($postData)) {
+                        if ($this->__processRemoveRequest($postData, $document, $section)) {
+                            // request has been handled
+                            return;
+                        }
+                        else {
+                            // TODO for now keep processing if removeRequest could not be handled
+                        }
+                    }
+
+                    if ($form->isValid($postData)) {
                         $this->__processUpdatePost($postData, $document, $section);
                     }
                     else {
@@ -271,6 +281,252 @@ class Admin_DocumentController extends Controller_Action {
                 $this->view->translate('admin_document_error_novalidid')),
                     'documents', 'admin');
         }
+    }
+
+    /**
+     * Action for removing an object (like Opus_Person) from a document.
+     *
+     * Requires as input
+     * - document identifier
+     * - object type
+     * - object identifier
+     * - confirmation yes/no
+     */
+    public function removeAction() {
+        $request = $this->getRequest();
+
+        $docId = $request->getParam('id');
+
+        $document = $this->documentsHelper->getDocumentForId($docId);
+
+        if (isset($document)) {
+
+            $section = $request->getParam('section');
+
+            $confirmationResult = $this->_checkConfirmation();
+
+            if ($confirmationResult === 'YES') {
+
+                if (isset($document)) {
+                    $objId = $request->getParam('objId');
+
+                    $fieldName = Admin_Model_DocumentHelper::getFieldNameForGroup($section);
+
+                    $this->_logger->debug("fieldName = $fieldName");
+
+                    if (is_null($fieldName)) {
+                        $fieldName = $request->getParam('field');
+                    }
+
+                    if (isset($fieldName)) {
+                        $field = $document->getField($fieldName);
+
+                        $values = $field->getValue();
+
+                        $removeIndex = null;
+
+                        $this->_logger->debug("Looking for '$objId' to remove");
+
+                        foreach ($values as $index => $value) {
+                            if ($value instanceof Opus_Model_Dependent_Link_Abstract) {
+                                $currentId = $value->getLinkedModelId();
+                            }
+                            else {
+                                $currentId = $value->getId();
+                            }
+                            $this->_logger->debug("Found '$currentId'");
+                            if ($currentId === $objId) {
+                                $removeIndex = $index;
+                            }
+                        }
+
+                        $this->_logger->debug("Index = $removeIndex");
+
+                        if (!is_null($removeIndex)) {
+                            unset($values[$removeIndex]);
+                            $field->setValue($values);
+
+                            $document->store();
+
+                            $modelClass = Admin_Model_DocumentHelper::getModelClassForGroup($section);
+
+                            $message = $this->view->translate(
+                                    'admin_document_remove_success', $this->view->translate($modelClass));
+
+                            return $this->_redirectTo('edit', $message, 'document',
+                                'admin', array('id' => $docId, 'section' => $section));
+                        }
+                        else {
+                            $message = $this->view->translate(
+                                    'admin_document_remove_failure');
+
+                            return $this->_redirectTo('edit', array('failure' => $message), 'document',
+                                'admin', array('id' => $docId, 'section' => $section));
+                        }
+
+                    }
+                    else {
+                        $modelClass = Admin_Model_DocumentHelper::getModelClassForGroup($section);
+
+                        $message = $this->view->translate(
+                                'admin_document_remove_failure',
+                                $this->view->translate($modelClass),
+                                $this->view->translate('admin_document_remove_failure_fieldname'));
+
+                        return $this->_redirectTo('edit', array('failure' => $message), 'document',
+                            'admin', array('id' => $docId, 'section' => $section));
+                    }
+                }
+            }
+            else if ($confirmationResult === 'NO' ) {
+                $modelClass = Admin_Model_DocumentHelper::getModelClassForGroup($section);
+
+                $message = $this->view->translate(
+                        'admin_document_remove_cancelled', $this->view->translate(
+                                $modelClass));
+
+                return $this->_redirectTo('edit', $message, 'document',
+                    'admin', array('id' => $docId, 'section' => $section));
+            }
+            else {
+                // no valid request received
+                return $this->_redirectTo('index', array('failure' =>
+                    'admin_document_remove_invalid_request'), 'document',
+                        'admin', array('id' => $docId));
+            }
+        }
+        else {
+            // no valid document ID provided
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate('admin_document_error_novalidid')),
+                    'documents', 'admin');
+        }
+    }
+
+    /**
+     * Returns relevant classname for object.
+     *
+     * @param Opus_Model_Dependent_Link_Abstract $object
+     * @return type
+     *
+     * TODO check for redundant code
+     */
+    private function __getModelClass($object) {
+        if ($object instanceof Opus_Model_Dependent_Link_Abstract) {
+            return $object->getModelClass();
+        }
+        else {
+            return get_class($object);
+        }
+    }
+
+    protected function _checkConfirmation() {
+        // Check if request is POST and if yes check for user response
+        if ($this->getRequest()->isPost()) {
+            $sureyes = $this->getRequest()->getPost('sureyes');
+            $sureno = $this->getRequest()->getPost('sureno');
+
+            if (isset($sureyes) === true) {
+                return 'YES';
+            }
+            else if (isset($sureno) === true) {
+                return 'NO';
+            }
+        }
+    }
+
+    /**
+     * Processes request for removing object from document.
+     *
+     * Collects information and creates confirmation form.
+     *
+     * @param array $postData
+     * @param Opus_Document $doc
+     * @param string $section
+     */
+    private function __processRemoveRequest($postData, $doc, $section) {
+        // find object id
+        $object = null;
+        $removeFieldName = null;
+
+        switch ($section) {
+            case 'titles':
+            case 'abstracts':
+            case 'persons':
+            case 'identifiers':
+            case 'subjects':
+            case 'series':
+            case 'patents':
+            case 'notes':
+            case 'enrichments':
+                // Remove operation supported
+                foreach ($postData as $fieldName => $modelData) {
+                    $field = $doc->getField($fieldName);
+                    foreach ($modelData as $index => $modelValues) {
+                        $fieldValues = $field->getValue();
+                        if (is_Array($modelValues) && array_key_exists('remove', $modelValues)) {
+                            // Found object that needs to be removed
+                            $object = $fieldValues[$index];
+                            // Remember name of field
+                            $removeFieldName = $fieldName;
+                            break;
+                        }
+                    }
+                }
+                break;
+            default:
+                // Remove operation not supported
+                return false;
+        }
+
+        if (!empty($object)) {
+            // show confirmation page if not a POST and if not answered YES or NO
+            if ($object instanceof Opus_Model_Dependent_Link_Abstract) {
+                $modelClass = $object->getModelClass();
+                $objectId = $object->getLinkedModelId();
+            }
+            else {
+                $modelClass = get_class($object);
+                $objectId = $object->getId();
+            }
+            $this->view->title = $this->view->translate('admin_document_remove', $this->view->translate($modelClass));
+            $this->view->text = $this->view->translate('admin_document_remove_sure');
+            $yesnoForm = $this->__getConfirmationForm($doc->getId(), $section, $objectId, $removeFieldName);
+            $this->view->form = $yesnoForm;
+            $this->view->removeObject = $object->toArray();
+            $this->renderScript('document/confirm.phtml');
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    /**
+     * Returns form for asking yes/no question like 'Delete author?'.
+     *
+     * @param int $id Document identifier
+     * @param string $action Target action that needs to be confirmed
+     * @return Admin_Form_YesNoForm
+     */
+    private function __getConfirmationForm($docId, $section, $objectId, $fieldName) {
+        $yesnoForm = new Admin_Form_YesNoForm();
+        $docIdElement = new Zend_Form_Element_Hidden('id');
+        $docIdElement->setValue($docId);
+        $yesnoForm->addElement($docIdElement);
+        $sectionElement = new Zend_Form_Element_Hidden('section');
+        $sectionElement->setValue($section);
+        $yesnoForm->addElement($sectionElement);
+        $fieldElement = new Zend_Form_Element_Hidden('field');
+        $fieldElement->setValue($fieldName);
+        $yesnoForm->addElement($fieldElement);
+        $objectIdElement = new Zend_Form_Element_Hidden('objId');
+        $objectIdElement->setValue($objectId);
+        $yesnoForm->addElement($objectIdElement);
+        $yesnoForm->setAction($this->view->url(
+                array('controller' => 'document', 'action' => 'remove')));
+        $yesnoForm->setMethod('post');
+        return $yesnoForm;
     }
 
     /**
@@ -461,7 +717,7 @@ class Admin_DocumentController extends Controller_Action {
                 $section);
 
         $sectionModel = Admin_Model_DocumentHelper::getModelClassForGroup(
-                $section);
+                $section, false);
 
         $sectionField = Admin_Model_DocumentHelper::getFieldNameForGroup(
                 $section);
@@ -1044,8 +1300,10 @@ class Admin_DocumentController extends Controller_Action {
                     foreach ($modelData as $index => $modelValues) {
                         $fieldValues = $field->getValue();
                         if (array_key_exists('remove', $modelValues)) {
-                            unset($fieldValues[$index]);
-                            $field->setValue($fieldValues);
+                            // TODO remove 'remove' handling
+//                            unset($fieldValues[$index]);
+//                            $field->setValue($fieldValues);
+                            $this->_logger->err("encountered 'remove' key in update POST");
                             break;
                         }
                         else {

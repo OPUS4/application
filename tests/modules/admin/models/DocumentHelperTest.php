@@ -224,6 +224,21 @@ class Admin_Model_DocumentHelperTest extends ControllerTestCase {
                 Admin_Model_DocumentHelper::getModelClassForGroup(null));
     }
 
+    public function testGetModelClassForGroupNullCheckField() {
+        $this->assertNull(
+                Admin_Model_DocumentHelper::getModelClassForGroup(null, true));
+    }
+
+    public function testGetModelClassForGroupPersons() {
+        $this->assertEquals('Opus_Person',
+                Admin_Model_DocumentHelper::getModelClassForGroup('persons', true));
+    }
+
+    public function testGetModelClassForGroupSeries() {
+        $this->assertEquals('Opus_Series',
+                Admin_Model_DocumentHelper::getModelClassForGroup('series', true));
+    }
+
     public function testGetFieldNameForGroupPersons() {
         $this->assertEquals('Person',
                 Admin_Model_DocumentHelper::getFieldNameForGroup('persons'));

@@ -628,6 +628,69 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_remove">
+      <tuv xml:lang="en">
+        <seg>Remove '%1$s' from document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>'%1$s' vom Dokument entfernen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_remove_sure">
+      <tuv xml:lang="en">
+        <seg>Are you sure you want to remove the following entry?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wollen Sie folgenden Eintrag wirklich entfernen?</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_remove_cancelled">
+      <tuv xml:lang="en">
+        <seg>'%1$s' was not removed (cancelled by user).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>'%1$s' wurde nicht entfernt (vom Nutzer abgebrochen).</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_remove_success">
+      <tuv xml:lang="en">
+        <seg>'%1$s' was successfully removed.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>'%1$s' wurde erfolgreich entfernt.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_remove_failure">
+      <tuv xml:lang="en">
+        <seg>Could not remove '%1$s'. %2$s</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>'%1$s' konnte nicht entfernt werden. %2$s</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_remove_failure_fieldname">
+      <tuv xml:lang="en">
+        <seg>Could not determine fieldname.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Feldname konnte nicht ermittelt werden.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_remove_invalid_request">
+      <tuv xml:lang="en">
+        <seg>Invalid remove request.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehler beim Entfernen.</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

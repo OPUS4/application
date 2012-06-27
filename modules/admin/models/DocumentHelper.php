@@ -297,15 +297,25 @@ class Admin_Model_DocumentHelper {
     /**
      * Returns the common model class for a group (section).
      * @param string $group Name of group (section)
+     * @param boolean $tryField set to false if valueModelClass for section field should be returned
      * @return string Model class name for group
      */
-    public static function getModelClassForGroup($group) {
+    public static function getModelClassForGroup($group, $tryField = true) {
         if (isset(self::$sectionModel[$group])) {
             return self::$sectionModel[$group];
         }
-        else {
-            return null;
+        else if ($tryField) {
+            $document = new Opus_Document();
+            $fieldName = Admin_Model_DocumentHelper::getFieldNameForGroup($group);
+            if (!is_null($fieldName)) {
+                $field = $document->getField($fieldName);
+                if (!is_null($field)) {
+                    return $field->getValueModelClass();
+                }
+            }
         }
+
+        return null;
     }
 
     /**
