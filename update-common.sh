@@ -203,7 +203,7 @@ function updateFile {
         addFile "$SRC/$FILE" "$DEST/$FILE"
     else
         # File already exists at target destination
-        echo "Checking file $DEST/$MD5PATH/$FILE for changes."
+        echo "Checking file $DEST/$FILE for changes."
 
         # Get reference MD5 for file
         local MD5_REFERENCE="$(getMD5 $MD5PATH/$FILE $MD5_OLD)"
