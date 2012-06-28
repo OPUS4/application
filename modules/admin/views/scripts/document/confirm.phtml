@@ -44,7 +44,9 @@
     <?= $this->text ?>
     </p>
 
-    <?= $this->showModel($this->removeObject); ?>
+    <?php if (isset($this->removeObject)) : ?>
+        <?= $this->showModel($this->removeObject); ?>
+    <?php endif; ?>
 
     <?= $this->form ?>
 
