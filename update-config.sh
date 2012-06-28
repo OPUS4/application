@@ -81,3 +81,34 @@ if [[ "$VERSION_OLD" < "4.2" && "$VERSION_NEW" > "4.2" ]]; then
     done
 fi
 
+# =============================================================================
+# Updating help files
+# =============================================================================
+
+# The help files should be moved from 'modules' to 'configs'.
+HELP_FILES_MODULES="$BASEDIR/opus4/modules/home/views/scripts"
+HELP_FILES_CONFIGS="$BASEDIR/opus4/application/configs/help"
+
+# Create folder if necessary
+if [[ ! -d $HELP_FILES_CONFIGS ]]; then
+    createFolder "$HELP_FILES_CONFIGS"
+fi
+
+# Copy files if old folder is present (version < 4.2.2)
+if [[ -d $HELP_FILES_MODULES ]]; then
+    echo "Moving help files from $HELP_FILES_MODULES to $HELP_FILES_CONFIGS ..."
+    find "$HELP_FILES_MODULES" -type f -name "*.txt" -print0 | while read -r -d $'\0' FILE_PATH; do
+        FILE=$(basename "$FILE_PATH")
+        moveFile "$HELP_FILES_MODULES/$FILE" "$HELP_FILES_CONFIGS/$FILE"
+    done
+    echo 'done'
+fi
+
+# TODO OPUSVIER-2354 delete old txt files from "../modules/home/views/scripts"?
+
+# Update help files, but ask user for every modified file
+FILES=$(getFiles "$SRC/help")
+
+for FILE in $FILES; do
+    updateFile "$SRC/help" "$HELP_FILES_CONFIGS" "$MD5PATH/help" "$FILE" backup
+done

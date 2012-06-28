@@ -478,9 +478,17 @@ function createFolder() {
 # Rename a file
 # Used to move modified files out of the way.
 function renameFile() {
-    DRYRUN || mv $1 $2
+    DRYRUN || mv "$1" "$2"
     UPDATELOG "RENAMED" "$1 => `basename $2`"
     DEBUG "Renamed file $1"
+}
+
+# Move file
+# Used to move files to a different folder
+function moveFile() {
+    DRYRUN || mv "$1" "$2"
+    UPDATELOG "MOVED" "$1 => $2"
+    DEBUG "Moved file from '$1' to '$2'"
 }
 
 # Sets the global variables used across scripts
