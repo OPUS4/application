@@ -49,7 +49,7 @@ cd ..
 # Clean everything the user doesn't need
 #
 
-find -P . -name .gitignore -print0 | xargs -r0 rm -v 
+find -P . -name .gitignore -print0 | xargs -r0 rm -v
 
 # added checks for existence to ensure compatibility with older releases
 
@@ -149,6 +149,7 @@ chmod 777 workspace/tmp/resumption
 chmod +x install/install.sh
 chmod +x install/uninstall.sh
 chmod +x install/update*.sh
+chmod +x install/opus4-solr-jetty
 
 #
 # create VERSION.txt
