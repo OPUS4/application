@@ -357,10 +357,10 @@ if askYesNo "Would you like to restart Solr server (Jetty) now [Y/n]?"; then
     DEBUG "SOLR_SERVER_APP = $SOLR_SERVER_APP"
 
     # sleep some seconds to ensure the server is running
-    echo -e "Wait until Solr server is running... \c "
+    echo -e "Wait until Solr server (http://$SOLR_SERVER_HOST:$SOLR_SERVER_PORT/$SOLR_SERVER_APP) is running... \c "
     while :; do
         echo -n "."
-        wget -q -O /dev/null "http://$SOLR_SERVER_HOST:$SOLR_SERVER_PORT/$SOLR_SERVER_APP/ping" && break
+        wget -q -O /dev/null "http://$SOLR_SERVER_HOST:$SOLR_SERVER_PORT/$SOLR_SERVER_APP/admin/ping" && break
         sleep 2
     done
     echo "done"
