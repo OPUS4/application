@@ -159,7 +159,7 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
         else if ($field === 'Title') {
             return 'General';
         }
-        else if (stripos($field, 'title') !== false) {
+        else if (stripos($field, 'title') !== false && $field !== 'AcademicTitle') {
             return 'Title';
         }
         else {
