@@ -104,7 +104,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $response = $this->getResponse();
         $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
         $this->assertContains('<export-example>', $response->getBody());
-        $this->assertTrue(substr_count($response->getBody(), '<doc>') == 5);
+        $this->assertTrue(substr_count($response->getBody(), '<doc>') == 6);
     }
 
     public function testIndexActionInvalidSeriesSearch_MissingIdParam() {
@@ -159,7 +159,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
             $r->removeAccessModule('export');
             $r->store();
         }
-        
+
         $config->security = $security;
         Zend_Registry::set('Zend_Config', $config);
     }
@@ -195,9 +195,9 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
         $this->assertContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $body);
         $this->assertResponseCode(503);
-        
+
         // restore configuration
-        $config = Zend_Registry::get('Zend_Config');        
+        $config = Zend_Registry::get('Zend_Config');
         $config->searchengine->index->app = $oldValue;
         $config->security = $security;
         Zend_Registry::set('Zend_Config', $config);
@@ -216,7 +216,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $doc1->setTitleMain($title);
         $doc1->store();
         $docId1 = $doc1->getId();
-        
+
         // add a document to the search index that is not stored in database
         $doc2 = new Opus_Document();
         $doc2->setServerState('published');
@@ -253,7 +253,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $indexer->commit();
 
         $body = $this->getResponse()->getBody();
-        
+
         $this->assertNotContains("No Opus_Db_Documents with id $docId2 in database.", $body);
         $this->assertContains('Language="eng" Value="test document for OPUSVIER-1726" Type="main"', $body);
         $this->assertNotContains('Language="eng" Value="another test document for OPUSVIER-1726" Type="main"', $body);
@@ -304,7 +304,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
 
     /**
      * begin: tests for OPUSVIER-2488
-     */    
+     */
     public function testPaginationIsSupportedInExportWithoutPaginationParams() {
         $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml', 5, 5);
     }
@@ -384,7 +384,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
     public function testPaginationIsSupportedInExportWithExtremeValues3() {
         $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/start/2147483647/rows/10', 5, 0);
     }
-    
+
     public function testPaginationIsSupportedInExportWithExtremeValues4() {
         $this->helperForOPUSVIER2488('/export/index/index/searchtype/simple/query/opusvier-2488/export/xml/start/2147483648/rows/10', 5, 0);
     }

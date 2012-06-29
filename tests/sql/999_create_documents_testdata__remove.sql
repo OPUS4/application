@@ -42,10 +42,6 @@ INSERT INTO `document_title_abstracts` (`id`, `document_id`, `type`, `value`, `l
 
 INSERT INTO `link_documents_collections` (`document_id`, `collection_id`, `role_id`) VALUES
 (200,16007,1),
-(200,2,2),
-(200,40,2),
-(200,63,2),
-(200,494,2),
 (200,1029,3),
 (200,2930,4),
 (200,6719,5),
