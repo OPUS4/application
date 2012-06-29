@@ -33,12 +33,28 @@
 
 class View_Helper_ShowModelTest extends ControllerTestCase {
 
+    private $__helper;
+
+    public function setUp() {
+        parent::setUp();
+        $this->__helper = new View_Helper_ShowModel();
+        $this->__helper->setView(Zend_Registry::get('Opus_View'));
+    }
+
     public function testShowLicence() {
-        $this->markTestIncomplete('Still do not know how to handle view in unit tests.');
+        $this->markTestIncomplete("Does not verify output yet.");
         $model = new Opus_Licence(1);
         $this->assertNotNull($model);
-        $helper = new View_Helper_ShowModel();
-        $helper->showModel($model->toArray());
+        $this->__helper->showModel($model->toArray());
+    }
+
+    public function testGetHelperNameForAcademicTitle() {
+        $this->assertNotEquals('Title', $this->__helper->getHelperName('AcademicTitle'));
+        $this->assertEquals('General', $this->__helper->getHelperName('AcademicTitle'));
+    }
+
+    public function testGetHelperNameForTitle() {
+        $this->assertEquals('General', $this->__helper->getHelperName('Title'));
     }
 
 }

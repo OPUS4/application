@@ -113,7 +113,7 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
      * @param clazz $field
      * @return clazzName
      */
-    protected function getHelper($field) {
+    public function getHelper($field) {
         $clazzName = self::HELPER_PREFIX;
 
         $helperName = $this->getHelperName($field);
@@ -143,7 +143,7 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
      * @param string $field
      * @return string
      */
-    protected function getHelperName($field) {
+    public function getHelperName($field) {
         if (isset($this->fieldHelperMap->$field)) {
             return $this->fieldHelperMap->$field;
         }
@@ -156,10 +156,10 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
         else if (stripos($field, 'subject') !== false) {
             return 'Subject';
         }
-        else if ($field === 'Title') {
+        else if ($field === 'Title' || $field === 'AcademicTitle') {
             return 'General';
         }
-        else if (stripos($field, 'title') !== false && $field !== 'AcademicTitle') {
+        else if (stripos($field, 'title') !== false) {
             return 'Title';
         }
         else {
