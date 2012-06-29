@@ -4,7 +4,7 @@ h2. ======================== Release 4.2.2 2012-06-20 ========================
 
 h3. URNs werden nur noch für Artikel mit sichtbarem Volltext vergeben
 
-Die DNB lässt nur URNs für Dokumente mit Volltexten zu.  Daher wurde die 
+Die DNB lässt nur URNs für Dokumente mit Volltexten zu.  Daher wurde die
 Vergabe von URNs auf Dokumente im Status "published" beschränkt, die per OAI
 sichtbare Dateien besitzen.  Sichtbar per OAI sind alle Dateien, bei denen
 das Attribut "VisibleInOai" auf 1 gesetzt ist.
@@ -31,10 +31,15 @@ werden.
 
 h3. Hilfedateien (FAQ-, Kontakt- und Impressumsseite)
 
-Die Hilfedateien liegen jetzt unter $BASEDIR/opus4/application/configs/help". 
+Die Hilfedateien liegen jetzt unter $BASEDIR/opus4/application/configs/help".
 (Siehe auch Dokumentation Kapitel 8.10 ff.) Beim Update von existierenden
-Instanzen werden die Dateien automatisch verschoben.
+Instanzen werden die Dateien automatisch verschoben. Danach wird für jede Datei
+nachgefragt, ob sie ersetzt werden soll.
 
+Die Konfiguration der Hilfeseite, die bisher in der Datei
+"$BASEDIR/opus4/modules/home/views/scripts/index/help.phtml" erfolgte, befindet
+sich jetzt in der Datei "$BASEDIR/opus4/application/configs/help/help.ini". Die
+alte Konfiguration muß manuell übertragen werden. 
 
 h3. Umbenennung von benutzerspezifischen Enrichment-Feldern
 
