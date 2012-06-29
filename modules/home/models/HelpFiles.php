@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Module_Home
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -74,11 +74,59 @@ class Home_Model_HelpFiles {
         $helpFilesAvailable = array();
         $dir = new DirectoryIterator(Home_Model_HelpFiles::getHelpPath());
         foreach ($dir as $file) {
-            if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
+            if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()
+                    && $file->getExtension() === 'txt') {
                 array_push($helpFilesAvailable, $file->getBasename());
             }
         }
         return $helpFilesAvailable;
+    }
+
+    public static function getHelpEntries() {
+        $config = Home_Model_HelpFiles::getHelpConfig();
+
+        $data = $config->toArray();
+
+        return $data;
+    }
+
+    /**
+     * Stores help configuration after reading it for the first time.
+     * @var array
+     */
+    private static $__helpConfig;
+
+    /**
+     * Loads help configuration.
+     * @return Zend_Config_Ini
+     */
+    private static function getHelpConfig() {
+        if (empty(Home_Model_HelpFiles::$__helpConfig)) {
+            $config = null;
+
+            $filePath = Home_Model_HelpFiles::getHelpPath() . 'help.ini';
+
+            if (file_exists($filePath)) {
+                try {
+                    $config = new Zend_Config_Ini($filePath);
+                }
+                catch (Zend_Config_Exception $zce) {
+                    // TODO einfachere Lösung?
+                    $logger = Zend_Registry::get('Zend_Log');
+                    if (!is_null($logger)) {
+                        $logger->err("could not load help configuration", $zce);
+                    }
+                }
+            }
+
+            if (is_null($config)) {
+                $config = new Zend_Config(array());
+            }
+
+            Home_Model_HelpFiles::$__helpConfig = $config;
+        }
+
+        return Home_Model_HelpFiles::$__helpConfig;
     }
 
 }

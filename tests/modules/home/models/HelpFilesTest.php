@@ -73,5 +73,29 @@ class Home_Model_HelpFilesTest extends ControllerTestCase {
         }
     }
 
+    public function testGetHelpEntries() {
+        $entries = Home_Model_HelpFiles::getHelpEntries();
+
+        $this->assertNotNull($entries);
+        $this->assertEquals(5, count(array_keys($entries)));
+
+        $this->assertTrue(array_key_exists('help_index_general', $entries));
+        $this->assertTrue(array_key_exists('help_index_misc', $entries));
+
+        $this->assertTrue(in_array('policies', $entries['help_index_misc']));
+        $this->assertTrue(in_array('documentation', $entries['help_index_misc']));
+    }
+
+    public function testHelpFileExists() {
+        $this->markTestIncomplete("File names are translated, but translation resources not yet accessible here.");
+        $entries = Home_Model_HelpFiles::getHelpEntries();
+
+        foreach ($entries as $section) {
+            foreach ($section as $file) {
+                // TODO $this->assertTrue();
+            }
+        }
+    }
+
 }
 
