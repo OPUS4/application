@@ -299,7 +299,7 @@ class Review_Model_DocumentAdapter {
             }
             $user_id = $e->getValue();
             $account = new Opus_Account($user_id);
-            $return[$account->getId()] = $account->getLogin();
+            $return[$account->getId()] = strtolower($account->getLogin());
         }
         return $return;
     }
@@ -312,7 +312,7 @@ class Review_Model_DocumentAdapter {
             }
             $user_id = $e->getValue();
             $account = new Opus_Account($user_id);
-            $return[$account->getId()] = $account->getLogin();
+            $return[$account->getId()] = strtolower($account->getLogin());
         }
         return $return;
     }

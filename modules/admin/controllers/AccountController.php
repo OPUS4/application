@@ -83,7 +83,7 @@ class Admin_AccountController extends Controller_Action {
         foreach ($account->getRole() AS $roleLinkModel) {
             $roles[] = $roleLinkModel->getModel();
         }
- 
+
         $guestRole = Opus_UserRole::fetchByName('guest');
         if (!is_null($guestRole)) {
             $roles[] = $guestRole;
@@ -229,7 +229,7 @@ class Admin_AccountController extends Controller_Action {
 
             $account = new Opus_Account($id);
 
-            $postData['oldLogin'] = $account->getLogin();
+            $postData['oldLogin'] = strtolower($account->getLogin());
 
             if ($accountForm->isValid($postData)) {
 
@@ -237,7 +237,7 @@ class Admin_AccountController extends Controller_Action {
                 $account->setLastName($postData['lastname']);
                 $account->setEmail($postData['email']);
 
-                $oldLogin = $account->getLogin();
+                $oldLogin = strtolower($account->getLogin());
 
                 // update login name
                 $newLogin = $postData['username'];
@@ -261,14 +261,14 @@ class Admin_AccountController extends Controller_Action {
 
                 // TODO optimize code
                 $hasAdministratorRole = false;
-                
+
                 foreach ($newRoles as $role) {
                     if (strtolower($role->getDisplayName()) === 'administrator') {
                         $hasAdministratorRole = true;
                         break;
                     }
                 }
-                    
+
                 $currentUser = Zend_Auth::getInstance()->getIdentity();
                 $isCurrentUser = ($currentUser === $oldLogin) ? true : false;
 
@@ -312,10 +312,10 @@ class Admin_AccountController extends Controller_Action {
 
                 // Check that user does not delete himself and protect admin
                 // account
-                if ($currentUser === $account->getLogin()) {
+                if ($currentUser === strtolower($account->getLogin())) {
                     $message = 'admin_account_error_delete_self';
                 }
-                else if ($account->getLogin() === 'admin') {
+                else if (strtolower($account->getLogin()) === 'admin') {
                     $message = 'admin_account_error_delete_admin';
                 }
                 else {

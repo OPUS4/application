@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,37 +24,35 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Licence
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @category    Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<div class="adminContainer">
 
-<div class="breadcrumbsContainer">
-<?= $this->navigation()->breadcrumbs() ?>
-</div>
+/**
+ *
+ */
+class Form_Validate_LoginAvailableTest extends PHPUnit_Framework_TestCase {
 
-<div>
-<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_account_action_new')?></a>
-</div>
+    private $validator;
 
-<table>
-<? $index = -1; foreach($this->accounts as $id => $entry) : ?>
-    <tr class="<?= ($index++ % 2) ? 'odd' : 'even' ?>">
-        <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars(strtolower($entry)) ?></a></td>
-        <td>
-            <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>"><?= $this->translate('admin_account_action_edit')?></a>
-            <?PHP if ((Zend_Auth::getInstance()->getIdentity() !== strtolower($entry)) && ($entry !== 'admin')) : ?>
-                <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_account_action_delete')?></a>
-            <?PHP endif; ?>
-        </td>
-    </tr>
-<? endforeach; ?>
-</table>
+    protected function setUp() {
+        $this->validator = new Form_Validate_LoginAvailable();
+    }
 
-</div>
+    /**
+     * Test that validation of existing user account is not case sensitive.
+     * This test will break if that behaviour of the database/framework will
+     * change.
+     */
+    public function testValidationNotCaseSensitive() {
+        $this->assertFalse($this->validator->isValid('User'));
+        $this->assertFalse($this->validator->isValid('user'));
+        $this->assertFalse($this->validator->isValid('uSer'));
+        $this->assertFalse($this->validator->isValid('USER'));
+    }
+
+}
+

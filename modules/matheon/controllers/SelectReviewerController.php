@@ -79,7 +79,7 @@ class Matheon_SelectReviewerController extends Controller_Action {
         $reviewerAccount = new Opus_Account($reviewerId);
         $recipients = array_unique(array(
                     'admin',
-                    $reviewerAccount->getLogin(),
+                    strtolower($reviewerAccount->getLogin()),
                 ));
 
         $this->_logger->debug('sending messages to users (' . implode(",", $recipients) . ')');
@@ -141,7 +141,7 @@ class Matheon_SelectReviewerController extends Controller_Action {
 
         foreach ($role->getAllAccountIds() AS $id) {
             $user = new Opus_Account($id);
-            $login = $user->getLogin();
+            $login = strtolower($user->getLogin());
 
             if (is_null($user)) {
                 $this->_logger->warn("-- skipping name: " . $login . " (user does not exist)");

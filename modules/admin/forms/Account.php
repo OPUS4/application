@@ -86,7 +86,7 @@ class Admin_Form_Account extends Admin_Form_RolesAbstract {
      * @param <type> $account
      */
     public function populateFromAccount($account) {
-        $this->getElement('username')->setValue($account->getLogin());
+        $this->getElement('username')->setValue(strtolower($account->getLogin()));
         $this->getElement('firstname')->setValue($account->getFirstName());
         $this->getElement('lastname')->setValue($account->getLastName());
         $this->getElement('email')->setValue($account->getEmail());
@@ -97,7 +97,7 @@ class Admin_Form_Account extends Admin_Form_RolesAbstract {
 
         $adminRoleElement = $this->getElement('roleadministrator');
 
-        if (Zend_Auth::getInstance()->getIdentity() === $account->getLogin()) {
+        if (Zend_Auth::getInstance()->getIdentity() === strtolower($account->getLogin())) {
             $adminRoleElement->setAttrib('disabled', true);
         }
     }

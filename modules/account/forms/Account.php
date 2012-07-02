@@ -63,7 +63,7 @@ class Account_Form_Account extends Zend_Form {
     }
 
     public function populateFromAccount($account) {
-        $login = $account->getLogin();
+        $login = strtolower($account->getLogin());
 
         $this->getElement('username')->setValue($login);
 
