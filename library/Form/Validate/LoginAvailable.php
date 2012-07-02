@@ -42,6 +42,21 @@ class Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
     const NOT_AVAILABLE = 'isAvailable';
 
     /**
+     * If this is set to true, the validation assumes an account is available
+     * if the old login name and the new one only differ in upper or lower case
+     * characters. This is used to avoid validation errors if an existing account
+     * is edited.
+     * @var type
+     */
+    private $ignoreCase = false;
+
+    public function __construct($options = null) {
+        if (isset($options['ignoreCase'])) {
+            $this->ignoreCase = $options['ignoreCase'];
+        }
+    }
+
+    /**
      * Error messages.
      */
     protected $_messageTemplates = array(
@@ -77,8 +92,10 @@ class Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
         }
 
         if (($this->_isLoginUsed($value)) && !($oldLogin === $value)) {
-            $this->_error(self::NOT_AVAILABLE);
-            return false;
+            if ($this->ignoreCase || !$this->ignoreCase && strtolower($oldLogin) !== strtolower($value)) {
+                $this->_error(self::NOT_AVAILABLE);
+                return false;
+            }
         }
 
         return true;
