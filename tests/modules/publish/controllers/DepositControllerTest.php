@@ -54,7 +54,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
             1 => array('name' => 'PersonSubmitterFirstName_1','value' => 'Hans'),
             2 => array('name' => 'PersonSubmitterLastName_1','value' => 'Hansmann'),
             3 => array('name' => 'PersonSubmitterEmail_1','value' => 'test@mail.com'),
-            4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),            
+            4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
             5 => array('name' => 'TitleMain_1','value' => 'Irgendwas'),
             6 => array('name' => 'TitleMainLanguage_1','value' => 'deu')
         );
@@ -69,7 +69,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/deposit/deposit');
-        
+
         $this->assertResponseCode(200);
         $this->assertController('form');
         $this->assertAction('check');
@@ -89,19 +89,19 @@ class Publish_DepositControllerTest extends ControllerTestCase {
             5 => array('name' => 'PersonSubmitterDateOfBirth_1', 'value' => '1970/01/01', 'datatype'=>'Person', 'subfield'=>'1'),
             6 => array('name' => 'PersonSubmitterAcademicTitle_1', 'value' => 'Dr.', 'datatype'=>'Person', 'subfield'=>'1'),
             7 => array('name' => 'PersonSubmitterAllowEmailContact_1', 'value' => '0', 'datatype'=>'Person', 'subfield'=>'1'),
-            8 => array('name' => 'CompletedDate', 'value' => '2012/1/_1', 'datatype'=>'Date', 'subfield'=>'0'),
+            8 => array('name' => 'CompletedDate', 'value' => '2012/1/1', 'datatype'=>'Date', 'subfield'=>'0'),
             9 => array('name' => 'TitleMain_1', 'value' => 'Entenhausen', 'datatype'=>'Title', 'subfield'=>'0'),
             10 => array('name' => 'TitleMainLanguage_1', 'value' => 'deu', 'datatype'=>'Language', 'subfield'=>'1'),
             11 => array('name' => 'TitleMain_2','value' => 'Irgendwas sonst', 'datatype'=>'Title', 'subfield'=>'0'),
             12 => array('name' => 'TitleMainLanguage_2','value' => 'eng', 'datatype'=>'Language', 'subfield'=>'1'),
-            13 => array('name' => 'Language','value' => 'deu', 'datatype'=>'Language', 'subfield'=>'0'),                        
+            13 => array('name' => 'Language','value' => 'deu', 'datatype'=>'Language', 'subfield'=>'0'),
             14 => array('name' => 'Note','value' => 'Dies ist ein Kommentar', 'datatype'=>'Note', 'subfield'=>'0'),
-            15 => array('name' => 'Licence','value' => 'ID:3', 'datatype'=>'Licence', 'subfield'=>'0'),                        
+            15 => array('name' => 'Licence','value' => 'ID:3', 'datatype'=>'Licence', 'subfield'=>'0'),
             16 => array('name' => 'ThesisGrantor','value' => 'ID:1', 'datatype'=>'ThesisGrantor', 'subfield'=>'0'),
             17 => array('name' => 'ThesisPublisher' ,'value' => 'ID:2', 'datatype'=>'ThesisPublisher', 'subfield'=>'0'),
-            18 => array('name' => 'SubjectSwd_1','value' => 'hallo098', 'datatype'=>'Subject', 'subfield'=>'0'),   
+            18 => array('name' => 'SubjectSwd_1','value' => 'hallo098', 'datatype'=>'Subject', 'subfield'=>'0'),
             19 => array('name' => 'SubjectUncontrolled_1','value' => 'Keyword', 'datatype'=>'Subject', 'subfield'=>'0'),
-            20 => array('name' => 'SubjectUncontrolledLanguage_1','value' => 'deu', 'datatype'=>'Language', 'subfield'=>'1'),              
+            20 => array('name' => 'SubjectUncontrolledLanguage_1','value' => 'deu', 'datatype'=>'Language', 'subfield'=>'1'),
             21 => array('name' => 'SubjectMSC_1' ,'value' => 'ID:8030', 'datatype'=>'Collection', 'subfield'=>'0'),
             22 => array('name' => 'SubjectPACS_1','value' => 'ID:2878', 'datatype'=>'Collection', 'subfield'=>'0'),
             23 => array('name' => 'IdentifierUrn' ,'value' => 'Publish_DepositControllerTest_testDepositActionWithValidPostAndSendButton', 'datatype'=>'Identifier', 'subfield'=>'0'),
@@ -127,7 +127,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
             43 => array('name' => 'ReferenceCrisLink','value' => 'blablup987', 'datatype'=>'Reference', 'subfield'=>'0'),
             44 => array('name' => 'ReferenceStdDoi','value' => 'blablup987', 'datatype'=>'Reference', 'subfield'=>'0'),
             45 => array('name' => 'ReferenceSplashUrl','value' => 'blablup987', 'datatype'=>'Reference', 'subfield'=>'0'));
-           
+
         $session->elements = $elemente;
         $session->documentType = 'preprint';
         $doc = new Opus_Document();
@@ -166,7 +166,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
 	$this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/publish');
     }
-    
+
     /**
      * Method tests the deposit action with invalid POST request
      * which leads to a Error Message and code 200
@@ -177,18 +177,18 @@ class Publish_DepositControllerTest extends ControllerTestCase {
             1 => array('name' => 'PersonSubmitterFirstName_1', 'value' => 'Hans'),
             2 => array('name' => 'PersonSubmitterLastName_1', 'value' => 'Hansmann'),
             3 => array('name' => 'PersonSubmitterEmail_1', 'value' => 'test@mail.com'),
-            4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),            
+            4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
             5 => array('name' => 'TitleMain_1', 'value' => 'Irgendwas'),
             6 => array('name' => 'TitleMainLanguage_1', 'value' => 'deu')
         );
-        
+
         $session->elements = $elemente;
         $session->documentType = 'preprint';
         $doc = new Opus_Document();
         $doc->setServerState('temporary');
         $doc->setType('preprint');
         $session->documentId = $doc->store();
-        
+
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
@@ -200,7 +200,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $this->assertController('deposit');
         $this->assertAction('deposit');
     }
-    
+
         /**
      * @expectedException Publish_Model_FormDocumentNotFoundException
      */
@@ -210,10 +210,10 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $doc->setServerState('published');
         $doc->setType('preprint');
         $session->documentId = $doc->store();
-        
+
         $deposit = new Publish_Model_Deposit();
         $this->setExpectedException('Publish_Model_FormDocumentNotFoundException');
-                
+
     }
 }
 
