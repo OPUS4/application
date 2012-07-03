@@ -221,7 +221,7 @@ class Admin_AccountController extends Controller_Action {
             $passwordChanged = true;
             if (empty($postData['password'])) {
                 // modify to pass default validation
-                // TODO think about better solution
+                // TODO think about better solution (validation context?)
                 $postData['password'] = 'notchanged';
                 $postData['confirmPassword'] = 'notchanged';
                 $passwordChanged = false;

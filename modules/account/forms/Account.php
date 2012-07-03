@@ -54,7 +54,7 @@ class Account_Form_Account extends Zend_Form {
                 new Form_Validate_Password());
 
         $this->getElement('username')->addValidator(
-                new Form_Validate_LoginAvailable());
+                new Form_Validate_LoginAvailable(array('ignoreCase' => true)));
 
         $this->getElement('password')->addErrorMessages(array(
             Zend_Validate_StringLength::TOO_SHORT =>

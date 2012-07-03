@@ -30,7 +30,9 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
+/**
+ * TODO if password is not set should the result be TRUE?
+ */
 class Form_Validate_Password extends Zend_Validate_Abstract {
 
     const NOT_MATCH = 'notMatch';

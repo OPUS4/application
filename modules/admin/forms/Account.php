@@ -35,6 +35,8 @@
 /**
  * Account administration form.
  *
+ * TODO handle password change validation internally (not in AccountController)
+ * by checking the context and the edit mode
  */
 class Admin_Form_Account extends Admin_Form_RolesAbstract {
 
@@ -47,7 +49,7 @@ class Admin_Form_Account extends Admin_Form_RolesAbstract {
     public function __construct($id = null) {
         $env = (empty($id)) ? 'new' : 'edit';
 
-        $mode = $env;
+        $this->mode = $env;
 
         $config = new Zend_Config_Ini(APPLICATION_PATH .
                 '/modules/admin/forms/account.ini', $env);

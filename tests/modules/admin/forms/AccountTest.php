@@ -66,13 +66,103 @@ class Admin_Form_AccountTest extends ControllerTestCase {
 
         $form = new Admin_Form_Account($user->getId());
 
-        $this->assertNotNUll($form);
+        $this->assertNotNull($form);
 
         $username = $form->getElement("username");
 
         $username->setValue('DummYuser');
 
         $this->assertTrue($username->getValue() === 'DummYuser', $username->getValue());
+    }
+
+    public function testChangedLoginNameValidationExistingLoginNameAccount() {
+        $user = new Opus_Account(null, null, 'user');
+
+        $form = new Admin_Form_Account($user->getId());
+
+        $this->assertNotNull($form);
+
+        $postData = array(
+            'username' => 'admin',
+            'roleguest' => '1',
+            'password' => 'notchanged',
+            'confirmPassword' => 'notchanged'
+            );
+
+        $this->assertFalse($form->isValid($postData));
+    }
+
+    public function testChangedLoginNameValidationNewLoginName() {
+        $user = new Opus_Account(null, null, 'user');
+
+        $form = new Admin_Form_Account($user->getId());
+
+        $this->assertNotNull($form);
+
+        $postData = array(
+            'username' => 'newuser',
+            'roleguest' => '1',
+            'password' => 'notchanged',
+            'confirmPassword' => 'notchanged'
+            );
+
+        $this->assertTrue($form->isValid($postData));
+    }
+
+    public function testEditValidationSameAccount() {
+        $user = new Opus_Account(null, null, 'user');
+
+        $form = new Admin_Form_Account($user->getId());
+
+        // check that form was populated
+        $this->assertEquals('user', $form->getElement('username')->getValue());
+
+        $postData = array(
+            'username' => 'user',
+            'oldLogin' => 'user', // added by AccountController based on ID
+            'roleguest' => '1',
+            'password' => 'notchanged',
+            'confirmPassword' => 'notchanged'
+            );
+
+        $this->assertTrue($form->isValid($postData));
+    }
+
+    public function testValidationMissmatchedPasswords() {
+        $form = new Admin_Form_Account();
+
+        $postData = array(
+            'username' => 'newaccount',
+            'roleguest' => '1',
+            'password' => 'password',
+            'confirmPassword' => 'different'
+        );
+
+        $this->assertFalse($form->isValid($postData));
+
+        $errors = $form->getErrors();
+
+        $this->assertTrue(isset($errors['confirmPassword']));
+        $this->assertTrue(in_array('notMatch', $errors['confirmPassword']));
+    }
+
+    public function testValidationBadEmail() {
+        $form = new Admin_Form_Account();
+
+        $postData = array(
+            'username' => 'newaccount',
+            'roleguest' => '1',
+            'email' => 'notAnEmail',
+            'password' => 'password',
+            'confirmPassword' => 'password'
+        );
+
+        $this->assertFalse($form->isValid($postData));
+
+        $errors = $form->getErrors();
+
+        $this->assertTrue(isset($errors['email']));
+        $this->assertTrue(in_array('emailAddressInvalidFormat', $errors['email']));
     }
 
 }
