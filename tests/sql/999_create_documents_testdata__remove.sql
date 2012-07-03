@@ -2,7 +2,8 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 (200,'2011-12-01',2009,'Baz University','Bar University','2010-11-02',1999,'masterthesis','1','3','deu',1,4,4,'draft','2007-04-30',2008,'Foo Publishing','Timbuktu','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00','2012-01-03T15:06:40+01:00',NULL,'published','2',1);
 
 INSERT INTO `document_enrichments` (`id`, `document_id`, `key_name`, `value`) VALUES
-(2,200,'validtestkey','Köln');
+(2,200,'validtestkey','Köln'),
+(3,200,'validtestkey','Berlin');
 
 INSERT INTO `document_identifiers` (`id`, `document_id`, `type`, `value`) VALUES
 (600,200,'old','123'),
@@ -56,7 +57,8 @@ INSERT INTO `link_documents_licences` (`document_id`, `licence_id`) VALUES
 (200,4);
 
 INSERT INTO `link_documents_series` (`document_id`, `series_id`, `number`, `doc_sort_order`) VALUES
-(200,1,'6/6',7);
+(200,1,'6/6',7),
+(200,4,'6/6',2);
 
 INSERT INTO `persons` (`id`, `academic_title`, `date_of_birth`, `email`, `first_name`, `last_name`, `place_of_birth`) VALUES
 (300,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
@@ -77,4 +79,5 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_
 (306,200,'submitter',1,0);
 
 INSERT INTO `document_patents` (`id`, `document_id`, `countries`, `date_granted`, `number`, `year_applied`, `application`) VALUES
-(2,200,'DDR','1970-1-1T0:00:00CET','1234',1970,'The foo machine.');
+(2,200,'DDR','1970-1-1T0:00:00CET','1234',1970,'The foo machine.'),
+(3,200,'BRD','1972-1-1T0:00:00CET','4321',1972,'The bar machine.');
