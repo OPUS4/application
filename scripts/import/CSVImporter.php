@@ -51,7 +51,7 @@ class CSVImporter {
 
     // das ist aktuell nur eine Auswahl der Metadatenfelder (speziell für Fromm zugeschnitten)
 
-    const NUM_OF_COLUMNS = 28;
+    const NUM_OF_COLUMNS = 31;
 
     const OLD_ID = 0;
     const LANGUAGE = 1;
@@ -74,14 +74,17 @@ class CSVImporter {
     const NOTE_VISIBILITY = 18;
     const NOTE_VALUE = 19;
     const COLLECTION_ID = 20;
-    const LICENCE_ID = 21;
-    const ENRICHMENTS = 22; // wird aktuell ignoriert
+	const SERIES_ID = 21;
+    const LICENCE_ID = 22;
+    const ENRICHMENTS = 23; // wird aktuell ignoriert
     //TODO bei Fromm gibt es fünf Enrichmentkeys
-    const ENRICHMENT_AVAILABILITY = 23;
-    const ENRICHMENT_FORMAT = 24;
-    const ENRICHMENT_KINDOFPUBLICATION = 25;
-    const ENRICHMENT_IDNO = 26;
-    const ENRICHMENT_RELEVANCE = 27;
+    const ENRICHMENT_AVAILABILITY = 24;
+    const ENRICHMENT_FORMAT = 25;
+    const ENRICHMENT_KINDOFPUBLICATION = 26;
+    const ENRICHMENT_IDNO = 27;
+	const ENRICHMENT_COPYRIGHTPRINT = 28;
+	const ENRICHMENT_COPYRIGHTBOOK = 29;
+    const ENRICHMENT_RELEVANCE = 30;
 
 
     public function run($argv) {
@@ -156,12 +159,14 @@ class CSVImporter {
             $this->processCollections($row, $doc);
             $this->processLicence($row, $doc);
 
-            // TODO Fromm verwendet aktuell fünf Enrichments (muss noch generalisiert werden)
+            // TODO Fromm verwendet aktuell sieben Enrichments (muss noch generalisiert werden)
             $enrichementkeys = array(
                 self::ENRICHMENT_AVAILABILITY,
                 self::ENRICHMENT_FORMAT,
                 self::ENRICHMENT_KINDOFPUBLICATION,
                 self::ENRICHMENT_IDNO,
+				self::ENRICHMENT_COPYRIGHTPRINT,
+				self::ENRICHMENT_COPYRIGHTBOOK,
                 self::ENRICHMENT_RELEVANCE
             );
             foreach ($enrichementkeys as $enrichmentkey) {
