@@ -258,7 +258,16 @@ class MetadataImporter {
     private function processAttributes($attributes, $doc) {        
         foreach ($attributes as $attribute) {
             $method = 'set' . ucfirst($attribute->name);
-            $doc->$method(trim($attribute->value));
+            $value = trim($attribute->value);
+            if ($attribute->name == 'belongsToBibliography') {
+                if ($value == 'true') {
+                    $value = '1';
+                }
+                else if ($value == 'false') {
+                    $value = '0';
+                }                
+            }            
+            $doc->$method($value);
         }
     }
 
@@ -389,7 +398,7 @@ class MetadataImporter {
                 $method = 'addPerson' . ucfirst($childNode->getAttribute('role'));
                 $link = $doc->$method($p);
 
-                if ($childNode->hasAttribute('allowEmailContact') && $childNode->getAttribute('allowEmailContact') === 'true') {
+                if ($childNode->hasAttribute('allowEmailContact') && ($childNode->getAttribute('allowEmailContact') === 'true' || $childNode->getAttribute('allowEmailContact') === '1')) {
                     $link->setAllowEmailContact(true);
                 }
             }
