@@ -97,9 +97,6 @@ class MetadataImporter {
                 // create new document
                 $doc = new Opus_Document();
             }
-            
-            $doc->unregisterPlugin('Opus_Document_Plugin_XmlCache');
-            $doc->unregisterPlugin('Opus_Document_Plugin_SequenceNumber');
 
             try {
                 $this->processAttributes($opusDocumentElement->attributes, $doc);
