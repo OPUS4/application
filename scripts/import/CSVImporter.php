@@ -32,8 +32,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-
 /**
  *
  * TODO: dieses Skript wird aktuell nicht in den Tarball / Deb-Package aufgenommen
@@ -43,12 +41,10 @@
  * später nicht mehr angepasst werden muss.
  *
  */
-
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 require_once 'Log.php';
 
 class CSVImporter {
-
     // das ist aktuell nur eine Auswahl der Metadatenfelder (speziell für Fromm zugeschnitten)
 
     const NUM_OF_COLUMNS = 31;
@@ -74,18 +70,20 @@ class CSVImporter {
     const NOTE_VISIBILITY = 18;
     const NOTE_VALUE = 19;
     const COLLECTION_ID = 20;
-	const SERIES_ID = 21;
+    const SERIES_ID = 21;
     const LICENCE_ID = 22;
     const ENRICHMENTS = 23; // wird aktuell ignoriert
-    //TODO bei Fromm gibt es fünf Enrichmentkeys
+    
+    //TODO bei Fromm gibt es 7 Enrichmentkeys
     const ENRICHMENT_AVAILABILITY = 24;
     const ENRICHMENT_FORMAT = 25;
     const ENRICHMENT_KINDOFPUBLICATION = 26;
     const ENRICHMENT_IDNO = 27;
-	const ENRICHMENT_COPYRIGHTPRINT = 28;
-	const ENRICHMENT_COPYRIGHTBOOK = 29;
+    const ENRICHMENT_COPYRIGHTPRINT = 28;
+    const ENRICHMENT_COPYRIGHTBOOK = 29;
     const ENRICHMENT_RELEVANCE = 30;
 
+    private $seriesIdsMap = array();
 
     public function run($argv) {
         if (count($argv) < 2) {
@@ -116,7 +114,7 @@ class CSVImporter {
             $rowCounter++;
             $numOfCols = count($row);
             if ($numOfCols != self::NUM_OF_COLUMNS) {
-                echo "unexpected number of columns ($numOfCols) in row $rowCounter: row is skipped\n";           
+                echo "unexpected number of columns ($numOfCols) in row $rowCounter: row is skipped\n";
                 // TODO add to reject.log
                 continue;
             }
@@ -128,21 +126,23 @@ class CSVImporter {
             }
             else {
                 $errorCounter++;
-            }            
+            }
         }
 
         echo "number of rows: $rowCounter\n";
         echo "number of created docs: $docCounter\n";
         echo "number of skipped docs: $errorCounter\n";
 
+        // Informationen zu den vergebenen Bandnummern
+        foreach ($this->seriesIdsMap as $seriesId => $number) {
+            echo "series # $seriesId : max. number is $number\n";
+        }
+
         fclose($file);
     }
 
-    private function processRow($row) {        
+    private function processRow($row) {
         $doc = new Opus_Document();
-
-        $doc->unregisterPlugin('Opus_Document_Plugin_XmlCache');
-        $doc->unregisterPlugin('Opus_Document_Plugin_SequenceNumber');
 
         $oldId = $row[self::OLD_ID];
 
@@ -158,6 +158,7 @@ class CSVImporter {
             $this->processNote($row, $doc);
             $this->processCollections($row, $doc);
             $this->processLicence($row, $doc);
+            $this->processSeries($row, $doc);
 
             // TODO Fromm verwendet aktuell sieben Enrichments (muss noch generalisiert werden)
             $enrichementkeys = array(
@@ -165,8 +166,8 @@ class CSVImporter {
                 self::ENRICHMENT_FORMAT,
                 self::ENRICHMENT_KINDOFPUBLICATION,
                 self::ENRICHMENT_IDNO,
-				self::ENRICHMENT_COPYRIGHTPRINT,
-				self::ENRICHMENT_COPYRIGHTBOOK,
+                self::ENRICHMENT_COPYRIGHTPRINT,
+                self::ENRICHMENT_COPYRIGHTBOOK,
                 self::ENRICHMENT_RELEVANCE
             );
             foreach ($enrichementkeys as $enrichmentkey) {
@@ -191,9 +192,22 @@ class CSVImporter {
         // Abstract ist kein Pflichtfeld
         if (trim($row[self::ABSTRACT_LANGUAGE]) != '') {
             if (trim($row[self::ABSTRACT_VALUE]) != '') {
-                $t = $doc->addTitleAbstract();
-                $t->setValue(trim($row[self::ABSTRACT_VALUE]));
-                $t->setLanguage(trim($row[self::ABSTRACT_LANGUAGE]));
+
+                // möglicherweise sind mehrere Abstracts (und zugehörige Sprachen) vorhanden
+
+                $values = explode('||', trim($row[self::ABSTRACT_VALUE]));
+                $languages = explode('||', trim($row[self::ABSTRACT_LANGUAGE]));
+
+                if (count($values) != count($languages)) {
+                    echo "Dokument $oldId mit Mismatch zwischen Anzahl Abstracts und zugehörigen Sprachen\n";
+                    return;
+                }
+
+                for ($i = 0; $i < count($values); $i++) {
+                    $t = $doc->addTitleAbstract();
+                    $t->setValue(trim($values[$i]));
+                    $t->setLanguage(trim($languages[$i]));
+                }
             }
             else {
                 echo "Dokument $oldId mit leerem Abstract, aber vorhandener Sprachangabe\n";
@@ -265,7 +279,7 @@ class CSVImporter {
     private function addPerson($doc, $type, $firstname, $lastname, $oldId) {
         $p = new Opus_Person();
         if (trim($firstname) == '') {
-            echo "Datensatz $oldId ohne Wert für $type.firstname\n";            
+            echo "Datensatz $oldId ohne Wert für $type.firstname\n";
         }
         else {
             $p->setFirstName(trim($firstname));
@@ -273,7 +287,7 @@ class CSVImporter {
         $p->setLastName(trim($lastname));
 
         $method = 'addPerson' . ucfirst(trim($type));
-        $doc->$method($p);        
+        $doc->$method($p);
     }
 
     private function processDate($row, $doc, $oldId) {
@@ -337,7 +351,7 @@ class CSVImporter {
             }
             catch (Opus_Model_NotFoundException $e) {
                 throw new Exception('licence id ' . $licenceId . ' does not exist: ' . $e->getMessage());
-            }            
+            }
         }
     }
 
@@ -345,6 +359,8 @@ class CSVImporter {
         // aktuell hat der Feldinhalt die Struktur '{ ekey: evalue }'
         // TODO das ist natürlich redundant, da innerhalb einer Spalte immer
         // nur Enrichments eines Enrichmentkeys stehen
+
+        // zusätzliche Anforderung: in evalue können mehrere Werte stehen (dann durch || getrennt)
         $value = trim($row[$enrichmentkey]);
         if ($value != '') {
             preg_match('/^{([A-Za-z]+):(.+)}$/', $value, $matches);
@@ -352,7 +368,7 @@ class CSVImporter {
             if (count($matches) != 3) {
                 throw new Exception("unerwarteter Wert '$value' für Enrichment in Spalte $enrichmentkey");
             }
-            
+
             $key = trim($matches[1]);
             // check if enrichment key exists
             try {
@@ -362,11 +378,41 @@ class CSVImporter {
                 throw new Exception('enrichment key ' . $key . ' does not exist: ' . $e->getMessage());
             }
 
-            $e = $doc->addEnrichment();
-            $e->setKeyName($key);
-            $e->setValue(trim($matches[2]));
+            $values = explode('||', trim($matches[2]));
+            foreach ($values as $value) {
+                $e = $doc->addEnrichment();
+                $e->setKeyName($key);
+                $e->setValue(trim($value));
+            }
         }
     }
+
+    private function processSeries($row, $doc) {
+        // ist kein Pflichtfeld
+        if (trim($row[self::SERIES_ID]) != '') {
+            $seriesIds = explode('||', $row[self::SERIES_ID]);
+            foreach ($seriesIds as $seriesId) {
+                $seriesIdTrimmed = trim($seriesId);
+                // check if series with given id exists
+                try {
+                    $series = new Opus_Series($seriesIdTrimmed);
+
+                    $seriesNumber = 0;
+                    if (array_key_exists($seriesIdTrimmed, $this->seriesIdsMap)) {
+                        $seriesNumber = $this->seriesIdsMap[$seriesIdTrimmed];
+                    }
+                    $seriesNumber++;
+                    $doc->addSeries($series)->setNumber($seriesNumber);
+                    $this->seriesIdsMap[$seriesIdTrimmed] = $seriesNumber;
+                }
+                catch (Opus_Model_NotFoundException $e) {
+                    throw new Exception('series id ' . $seriesIdTrimmed . ' does not exist: ' . $e->getMessage());
+                }
+            }
+        }
+    }
+
+
 }
 
 $importer = new CSVImporter();
