@@ -16,6 +16,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="admin_series_new">
+            <tuv xml:lang="en">
+                <seg>New Series</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Neue Schriftenreihe</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="admin_series_show">
             <tuv xml:lang="en">
                 <seg>Series</seg>
