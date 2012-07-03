@@ -34,11 +34,12 @@
 /**
  *
  */
-class Form_Validate_LoginAvailableTest extends PHPUnit_Framework_TestCase {
+class Form_Validate_LoginAvailableTest extends ControllerTestCase {
 
     private $validator;
 
-    protected function setUp() {
+    public function setUp() {
+        parent::setUp();
         $this->validator = new Form_Validate_LoginAvailable();
     }
 
@@ -52,6 +53,46 @@ class Form_Validate_LoginAvailableTest extends PHPUnit_Framework_TestCase {
         $this->assertFalse($this->validator->isValid('user'));
         $this->assertFalse($this->validator->isValid('uSer'));
         $this->assertFalse($this->validator->isValid('USER'));
+    }
+
+    public function testAccountAvailable() {
+        $this->assertTrue($this->validator->isValid('newuser'));
+    }
+
+    public function testAccountNotAvailable() {
+        $this->assertFalse($this->validator->isValid('admin'));
+    }
+
+    public function testAccountAvailableInEditMode() {
+        $validator = new Form_Validate_LoginAvailable(array('ignoreCase' => true));
+        $this->assertTrue($validator->isValid('newuser'));
+    }
+
+    public function testAccountNotAvailableInEditMode() {
+        $validator = new Form_Validate_LoginAvailable(array('ignoreCase' => true));
+        $this->assertFalse($validator->isValid('admin'));
+    }
+
+    /**
+     * Im Edit Mode (ignoreCase) ist die Validierung auch erfolgreich, wenn der
+     * Account bereits existiert, aber sich der neue Name nur im Case von Zeichen
+     * vom alten Namen unterscheidet.
+     */
+    public function testIgnoreCaseChangesForEditMode() {
+        $validator = new Form_Validate_LoginAvailable(array('ignoreCase' => true));
+
+        $context = array('oldLogin' => 'admin');
+
+        $this->assertTrue($validator->isValid('ADMIN', $context));
+        $this->assertTrue($validator->isValid('aDmin', $context));
+    }
+
+    public function testNotAvailableForEditMode() {
+        $validator = new Form_Validate_LoginAvailable(array('ignoreCase' => true));
+
+        $context = array('oldLogin' => 'admin');
+
+        $this->assertFalse($validator->isValid('user', $context));
     }
 
 }

@@ -91,11 +91,14 @@ class Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
             $oldLogin = $context;
         }
 
-        if (($this->_isLoginUsed($value)) && !($oldLogin === $value)) {
-            if ($this->ignoreCase || !$this->ignoreCase && strtolower($oldLogin) !== strtolower($value)) {
-                $this->_error(self::NOT_AVAILABLE);
-                return false;
-            }
+        if ($this->ignoreCase) {
+            $value = strtolower($value);
+            $oldLogin = strtolower($oldLogin);
+        }
+
+        if ($this->_isLoginUsed($value) && $oldLogin !== $value) {
+            $this->_error(self::NOT_AVAILABLE);
+            return false;
         }
 
         return true;
