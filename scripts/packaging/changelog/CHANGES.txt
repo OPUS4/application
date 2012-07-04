@@ -1,5 +1,125 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.2.2 2012-07-04 ========================
+
+h3. Bugs
+
+* [OPUSVIER-938]  - Import
+* [OPUSVIER-1207] - FormController Unit-Tests schlagen fehl
+* [OPUSVIER-1368] - Export wirft Fehler, wenn Solr-Index nicht up-to-date ist
+* [OPUSVIER-1659] - Publish-Formular: Gedrückte Buttons werden nicht erkannt, wenn Sprache falsch gesetzt ist.
+* [OPUSVIER-1726] - RSS stirbt, wenn dex Solr-Index Dokumente enthält, die nicht mehr in der Datenbank sind
+* [OPUSVIER-1764] - Date-Attribut Timezone in XML-Ausgabe enthält ungültigen Inhalt
+* [OPUSVIER-1919] - Suche hinter den RSS-Feeds wirft keinen 503er
+* [OPUSVIER-1948] - Nach Angabe ab 10 der Keywords/Titeln erhält man bei "next step" eine weiße Seite
+* [OPUSVIER-1999] - Enrichment-Feld mit "Title" im Namen läßt sich nicht anlegen
+* [OPUSVIER-2051] - Validierung Titel <-> Dokumentsprache auf TitleMain beschränken
+* [OPUSVIER-2077] - Document-XML enthält (für Opus_Model_Filter) nicht mehr die Dokument-ID
+* [OPUSVIER-2240] - Indexierungsfehler des Solr-Servers werden im OPUS-Indexer-Code nicht erkannt
+* [OPUSVIER-2337] - HTTP Response Code 503 senden, wenn Solr-Server keine Verbindung annimmt
+* [OPUSVIER-2343] - Selenium-Server schliesst Firefox nicht automatisch
+* [OPUSVIER-2354] - Update-Script überschreibt alle Standardhilfetexte wie z.B. Kontaktdatei und Imprintdatei sowie die Indexdatei help.phtml
+* [OPUSVIER-2393] - erforderliche Minimalanpassungen für DINI-Compliance der OAI-Schnittstelle
+* [OPUSVIER-2397] - Nutzer in Role 'reviewer' bekommt keine 'unpublished' Dokumente angezeigt
+* [OPUSVIER-2398] - fehlender Übersetzungsschlüssel beim Zuweisen von Sammlungen
+* [OPUSVIER-2409] - Datei zum Dokument wird beim Veröffentlichen mit der Sprache "Englisch" versehen, auch wenn Dokumentensprache "Deutsch" ist
+* [OPUSVIER-2410] - Das Migrationsscript setzt für unpublish-Dokumente aus OPUS3 das Datum "server_date_published"
+* [OPUSVIER-2413] - Unnötiges "string to lower" in Account-Administration sorgt für Probleme bei Mixed-Case-Usernamen
+* [OPUSVIER-2417] - Sichtbarkeit und Lesezugriffsrecht von Dateien wird bei der Befüllung des Indexfeld has_fulltext ignoriert
+* [OPUSVIER-2419] - Fehler in der Beschreibung des Anlegens von benutzerspezifischen Übersetzungsressourcen: Kap. 8.2
+* [OPUSVIER-2420] - Fehler beim Umbenennen von bereits existierenden Enrichmentkeys
+* [OPUSVIER-2424] - Admin kann Dateien von gelöschten Dokumenten nicht ansehen
+* [OPUSVIER-2425] - Publish-Formular: Felder mit einfachen Quotes ' werden abgeschnitten
+* [OPUSVIER-2426] - Anpassung der OPUS-Versionsnummer sowie der Link in der FAQ-Datei "dokumentation.de.txt"
+* [OPUSVIER-2427] - Migrationsscript lässt Dateien von "eingeschränkten" Dokumenten aus OPUS3 für OAI zu
+* [OPUSVIER-2431] - Fehler im Template für Anlegen eines neuen Gruppen-Feldes
+* [OPUSVIER-2432] - Text zur Verlinkung zum "Kapitel 8.3.2 Felder umbenennen" ist an mehreren Stellen falsch
+* [OPUSVIER-2433] - Verschiedene Sprachen für TitleParent und Dokument soll möglich sein
+* [OPUSVIER-2434] - Solr-Searcher erzeugt Queries, die im Solr einen Parse-Error auslösen
+* [OPUSVIER-2435] - Sonderzeichen (", \) in Autoren-Namen erzeugen ungültige Such-Links in der Frontdoor
+* [OPUSVIER-2437] - Migrationsscript migriert nicht alle Datensätze (bei ungültiger Mail-Adresse in "verification")
+* [OPUSVIER-2440] - Administration der IP-Ranges lässt nur alpha-numerische Beschreibungen zu
+* [OPUSVIER-2441] - Administration der IP-Ranges darf nur auf IPs validieren
+* [OPUSVIER-2444] - URLS mit Sonderzeichen sind in der  OAI-Schnittstelle nicht korrekt codiert
+* [OPUSVIER-2448] - Fehler in der XMetaDissPlus-Ausgabe
+* [OPUSVIER-2449] - Transfercontainer für ein Dokument nicht erzeugen, wenn dem Dokument nur eine in der OAI-Schnittstelle sichtbare Datei zugeordnet ist
+* [OPUSVIER-2450] - Element ddb:fileNumber enthält Anzahl der Dateien für alle ausgelieferten Dokumente (falscher XPath-Selektor)
+* [OPUSVIER-2454] - OAI-Schnittstelle parst ungültige Identifier nicht korrekt
+* [OPUSVIER-2455] - Duplicate headers received from server (Multiple Content-Disposition headers)
+* [OPUSVIER-2456] - Hinweis in die Installationsbeschreibung aufnehmen, dass allow_url_fopen auf On gesetzt sein muss
+* [OPUSVIER-2461] - Metadatenimport-Skript wirft Fehlermeldung beim Versuch die Keywords eines Dokuments zu indexieren
+* [OPUSVIER-2463] - Formatierung der Beispiel-XML-Snippets und der Lognachrichten im Kapitel 12 verbessern
+* [OPUSVIER-2467] - Status-Code 500 bei schwerwiegenden Fehlern im Production-Mode ausliefern
+* [OPUSVIER-2468] - bei Personen: nur Nachnamen als Pflichtfeld
+* [OPUSVIER-2469] - bei Personennamen darf nur der Nachname verpflichtend sein
+* [OPUSVIER-2470] - Personen werden nicht korrekt gespeichert
+* [OPUSVIER-2476] - URLs zur DNB sind veraltet - bitte aktualisieren
+* [OPUSVIER-2477] - Migrationsscript löscht Umlaute in Volltextdateien während der Migration
+* [OPUSVIER-2482] - Fehler in der Dokumentation, das Feld "Journal" gibt es nicht mehr
+* [OPUSVIER-2487] - Metadatenimport-Skript gibt sinnlose Meldungen aus, wenn es ohne Datei aufgerufen wird
+* [OPUSVIER-2491] - Import von 8000 Datensätzen dauert mit 60 Minuten sehr lange
+* [OPUSVIER-2493] - XML-Cache wird immer noch befüllt
+* [OPUSVIER-2502] - Layout-Bug bei der Erweiterten Suche im Kontext der Suche nach einem Autoren
+* [OPUSVIER-2508] - XMetaDissPlus zeigt auch Transfer-URLs für Dokumente an, die keine Volltexte besitzen
+* [OPUSVIER-2509] - XMetaDissPlus: DDC-SG durch DDC ersetzen
+* [OPUSVIER-2510] - XMetaDiss-Stylesheet enthält noch Abfragen auf Subject-DDC
+* [OPUSVIER-2513] - Doppelklicks auf Submit-Buttons sollten abgefangen und zum Einfachklick transformiert werden
+* [OPUSVIER-2518] - HTTP Response Code 400 statt 503, wenn Solr-Server keine Verbindung annimmt
+* [OPUSVIER-2519] - Plugin Opus_Document_Plugin_SequenceNumber wird nicht mehr benötigt -- Plugin wird aber initialisiert
+* [OPUSVIER-2523] - Element "ddb:contact" bei XMetaDissPlus nicht ausgeben falls ThesisPublisher leer
+* [OPUSVIER-2524] - Element "thesis:grantor" bei XMetaDissPlus nicht ausgeben falls ThesisGrantor leer
+* [OPUSVIER-2534] - Fehler, wenn RSS-Export mit Suchanfrage aufgerufen wird, die ein leeres Ergebnis zurückliefert
+* [OPUSVIER-2535] - OAI-Schnittstelle: "idDoesNotExist" wenn Dokument nicht gefunden
+* [OPUSVIER-2539] - PersonSubmitter sollte nicht in den Suchindex wandern
+* [OPUSVIER-2540] - fehlende Übersetzungen in der Sammlungsadministration
+* [OPUSVIER-2541] - Migration der Subjects konfigurierbar machen
+* [OPUSVIER-2543] - fehlende Übersetzungen in der Sammlungsadministration für die Aktionen Move und ChangeVisibility
+* [OPUSVIER-2564] - OAI-Schnittstelle: GetRecord liefert SetSpecs mit ungültigen Zeichen aus
+* [OPUSVIER-2570] - boolesche Attribute "belongstobibliography" und "allowemailcontact" werden nicht korrekt importiert, wenn als Werte statt 0/1 die Werte false/true verwendet werden
+
+h3. Tasks
+
+* [OPUSVIER-2490] - OAI-Schnittstelle soll XSLT für Browser-Rendering übermitteln
+* [OPUSVIER-645]  - Frontdoor: Abstracts einklappbar machen
+* [OPUSVIER-1481] - Fehlende DC-Felder in Ausgabe der OAI-Schnittstelle
+* [OPUSVIER-1770] - Aufruf von /admin/statistic/show resultiert in Exception
+* [OPUSVIER-2072] - UNIQUE-Constraint für DocumentEnrichment-Tripel (document_id, key_name, value) über das Framework gewährleisten
+* [OPUSVIER-2362] - Migrationsskript sollte WARNING ausgeben, wenn Dokumente mit mehreren Abstracts in gleicher Sprache migriert werden
+* [OPUSVIER-2363] - Migrationsskript sollte WARNING ausgeben, wenn Dokument in Sprache eng vorliegt und title_en nicht leer ist
+* [OPUSVIER-2364] - Migrationsskript sollte WARNING ausgeben, wenn OPUS4-Dokumente mit mehreren TitleMain/TitleAbstract-Feldern in der gleichen Sprache angelegt werden
+* [OPUSVIER-2400] - Verwendung von ENTER-Taste im Edit-Formular für Autoren entfernt unter Umständen einen Autor
+* [OPUSVIER-2445] - Zusätzliche Prüfung einführen: URN nur bei Volltext
+* [OPUSVIER-2446] - setServerDatePublished nicht mehr "manuell" setzen
+* [OPUSVIER-2475] - Alle Identifier mit in den Suchindex aufnehmen
+* [OPUSVIER-2484] - copy field statements für alle Personen für die einfache Suche anlegen
+* [OPUSVIER-2488] - XML-Export sollte auch Paginierung unterstützen
+* [OPUSVIER-2520] - Migration nichtvalider E-Mail-Adressen bei PersonSubmitter
+* [OPUSVIER-2521] - Neuer EnrichmentKey 'InvalidVerification' für die Migration
+* [OPUSVIER-2526] - Neuen Parameter frontdoor.numOfShortAbstractChars abschaltbar machen
+* [OPUSVIER-2532] - Ubuntu 12.04 LTS unterstützt "mysql-server-5.5" anstatt "5.1"
+* [OPUSVIER-2544] - Migration der Subjects konfigurierbar machen: Implementation
+* [OPUSVIER-2553] - Migration der Subjects konfigurierbar machen: Tests
+* [OPUSVIER-1917] - Collection "open_access" und OAI-Set einrichten
+
+h3. Dokumentation
+
+* [OPUSVIER-2458] - Hinweis zur Dokumentsprache aufnehmen
+* [OPUSVIER-2460] - Hinweis in die Checkliste für die Liveschaltung aufnehmen, dass uns nach der Liveschaltung die Instanz-URL mitgeteilt wird
+* [OPUSVIER-2481] - Verlinkung zu Famfamfam bei Nutzung der Icons
+* [OPUSVIER-2485] - Kapitel Einfache Suche aktualisieren
+* [OPUSVIER-2495] - Klarstellung zu oldId und docId im Import-XML
+* [OPUSVIER-2507] - neuer Konfigschlüssel frontdoor.numOfShortAbstractChars
+* [OPUSVIER-2512] - Hilfedateien verschoben
+* [OPUSVIER-2514] - Kapitel zur Benennung der Dokumenttypen anpassen
+* [OPUSVIER-2517] - OPUS3 migrierte Benutzerdefinierte Felder - Hinweis zur Verwendung präzisieren
+* [OPUSVIER-2525] - Export unterstützt jetzt auch Paginierung
+* [OPUSVIER-2530] - Neuer EnrichmentKey 'InvalidVerification' in die Dokumentatuion aufnehmen
+* [OPUSVIER-2545] - Migration der Subjects konfigurierbar machen: Dokumentation
+* [OPUSVIER-2555] - Dokumentation der Abhängigkeiten (Dependencies) von OPUS aktualisieren
+* [OPUSVIER-2566] - Kapitel 2.6 Export: Der Parameter heißt "stylesheets"
+* [OPUSVIER-2567] - Hilfe Index wird in "help.ini" statt "help.phtml" konfiguriert
+* [OPUSVIER-2569] - Nur noch "all-lower-case" Loginnamen verwenden
+
 h2. ======================== Release 4.2.1 2012-03-01 ========================
 
 h3. Bugs

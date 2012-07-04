@@ -1,6 +1,6 @@
 h1. OPUS 4 Release Notes
 
-h2. ======================== Release 4.2.2 2012-07-02 ========================
+h2. ======================== Release 4.2.2 2012-07-04 ========================
 
 h3. URNs werden nur noch für Dokumente mit sichtbarem Volltext vergeben
 
@@ -39,7 +39,7 @@ nachgefragt, ob sie ersetzt werden soll.
 Die Konfiguration der Hilfeseite, die bisher in der Datei
 "$BASEDIR/opus4/modules/home/views/scripts/index/help.phtml" erfolgte, befindet
 sich jetzt in der Datei "$BASEDIR/opus4/application/configs/help/help.ini". Die
-alte Konfiguration muß manuell übertragen werden. 
+alte Konfiguration muß manuell übertragen werden.
 
 h3. Umbenennung von benutzerspezifischen Enrichment-Feldern
 
