@@ -19,8 +19,8 @@
 set -o errexit
 
 # TODO Enable/disable based on script parameters
-DEBUG_ENABLED=1
-DRYRUN=1
+DEBUG_ENABLED=0
+DRYRUN_ENABLED=0
 
 # -----------------------------------------------------------------------------
 # Functions
@@ -29,6 +29,11 @@ DRYRUN=1
 function DEBUG() {
     [[ "${DEBUG_ENABLED}" -eq 1 ]] && echo 'DEBUG' - "$@"
     return 0
+}
+
+function DRYRUN() {
+    [ "$DRYRUN_ENABLED" -eq 1 ] && return 0;
+    return 1;
 }
 
 # Asks yes/no question
@@ -69,7 +74,7 @@ function createTag() {
     local SRC="$BASE_URL/$COMPONENT/trunk"
     local DEST="$BASE_URL/$COMPONENT/tags/$TAG"
     echo "Creating tag for '$COMPONENT' ..."
-    # svn copy "$SRC" "$DEST" -m "$MESSAGE"
+    DRYRUN || svn copy "$SRC" "$DEST" -m "\"$MESSAGE\""
     DEBUG "$SRC"
     DEBUG "$DEST"
     DEBUG "$MESSAGE"
