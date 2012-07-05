@@ -65,6 +65,9 @@ xmlns:marcxml="http://www.loc.gov/MARC21/slim">
         <xsl:attribute name="oldId">
             <xsl:value-of select="text()"/>
         </xsl:attribute>
+		<xsl:attribute name="type">article</xsl:attribute>
+		<xsl:attribute name="serverState">published</xsl:attribute>
+		<xsl:attribute name="language">deu</xsl:attribute>
     </xsl:template>
 
     <xsl:template match="marcxml:datafield[@tag='953']/marcxml:subfield[@code='j']">
