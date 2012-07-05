@@ -54,7 +54,10 @@ xmlns:marcxml="http://www.loc.gov/MARC21/slim">
         <xsl:element name="opusDocument">
             <xsl:apply-templates select="marcxml:controlfield[@tag='001']"/>
             <xsl:apply-templates select="marcxml:datafield[@tag='773']/marcxml:subfield[@code='q']"/>
-            <xsl:apply-templates select="marcxml:datafield[@tag='953']/marcxml:subfield[@code='j']"/>
+            <xsl:apply-templates select="marcxml:datafield[@tag='245']/marcxml:subfield[@code='a']"/>
+			<xsl:apply-templates select="marcxml:datafield[@tag='953']/marcxml:subfield[@code='j']"/>
+            <xsl:apply-templates select="marcxml:datafield[@tag='773']/marcxml:subfield[@code='t']"/>
+            <xsl:apply-templates select="marcxml:datafield[@tag='100']/marcxml:subfield[@code='a']"/>
         </xsl:element>
     </xsl:template>
 
@@ -65,12 +68,14 @@ xmlns:marcxml="http://www.loc.gov/MARC21/slim">
     </xsl:template>
 
     <xsl:template match="marcxml:datafield[@tag='953']/marcxml:subfield[@code='j']">
+     <xsl:element name="dates">
         <xsl:element name="date">
             <xsl:attribute name="type">published</xsl:attribute>
             <xsl:attribute name="year">
             <xsl:value-of select="text()"/>
             </xsl:attribute>
         </xsl:element>
+     </xsl:element>
     </xsl:template>
 
     <xsl:template match="marcxml:datafield[@tag='773']/marcxml:subfield[@code='q']">
@@ -79,5 +84,32 @@ xmlns:marcxml="http://www.loc.gov/MARC21/slim">
             <xsl:value-of select="substring(text(), 2)"/>
         </xsl:attribute>
     </xsl:template>
-
+    
+   <xsl:template match="marcxml:datafield[@tag='245']/marcxml:subfield[@code='a']">
+    <xsl:element name="titlesMain">
+        <xsl:element name="titleMain">
+            <xsl:attribute name="language">deu</xsl:attribute>
+            <xsl:value-of select="text()"/>
+        </xsl:element>
+     </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="marcxml:datafield[@tag='100']/marcxml:subfield[@code='a']">
+     <xsl:element name="persons">
+        <xsl:element name="person">
+            <xsl:attribute name="role">author</xsl:attribute>
+            <xsl:value-of select="text()"/>
+        </xsl:element>
+     </xsl:element>
+    </xsl:template>
+    
+    <xsl:template match="marcxml:datafield[@tag='773']/marcxml:subfield[@code='t']">
+        <xsl:element name="titles">
+         <xsl:element name="title">
+            <xsl:attribute name="language">deu</xsl:attribute>
+            <xsl:attribute name="type">parent</xsl:attribute>
+            <xsl:value-of select="text()"/>
+        </xsl:element>
+     </xsl:element>
+    </xsl:template>
 </xsl:stylesheet>
