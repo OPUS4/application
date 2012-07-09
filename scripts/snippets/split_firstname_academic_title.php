@@ -62,7 +62,7 @@ foreach (Opus_Person::getAll() as $person) {
     }
 
     // check if firstname ends with '('
-    if (preg_match('/^.*\\)\\s*$/', $firstname) == 0) {
+    if (preg_match('/^.*\)\s*$/', $firstname) == 0) {
         echo '[WARN] Opus_Person #' . $person->getId() . " without trailing closing parenthesis in firstname '$firstname' -- skip person\n";
         continue;
     }
@@ -72,6 +72,7 @@ foreach (Opus_Person::getAll() as $person) {
     }
 
     $academicTitle = trim(strstr($firstname, '('));
+    $academicTitle = trim(preg_replace('/^\((.*)\)$/', '$1', $academicTitle));
     $person->setAcademicTitle($academicTitle);
 
     $remainingFirstname = trim(strstr($firstname, '(', true));
