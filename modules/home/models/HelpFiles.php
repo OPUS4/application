@@ -75,7 +75,7 @@ class Home_Model_HelpFiles {
         $dir = new DirectoryIterator(Home_Model_HelpFiles::getHelpPath());
         foreach ($dir as $file) {
             if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()
-                    && $file->getExtension() === 'txt') {
+                    && pathinfo($file->getFilename(), PATHINFO_EXTENSION) === 'txt') {
                 array_push($helpFilesAvailable, $file->getBasename());
             }
         }
