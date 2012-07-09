@@ -107,6 +107,16 @@ updateFolder "$NEW_PUBLIC/layouts/$THEME_OPUS" "$LAYOUTS/$THEME_OPUS"
 deleteFiles "$NEW_PUBLIC/layouts/$THEME_OPUS" "$LAYOUTS/$THEME_OPUS"
 
 # =============================================================================
+# Update 'xsl' folder
+# =============================================================================
+
+# Add and replace files
+updateFolder "$NEW_PUBLIC/xsl" "$OLD_PUBLIC/xsl"
+
+# Delete files no longer needed
+deleteFiles "$NEW_PUBLIC/xsl" "$OLD_PUBLIC/xsl"
+
+# =============================================================================
 # Create folder 'series_logos' if necessary
 # =============================================================================
 
