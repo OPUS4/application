@@ -119,6 +119,9 @@ rm -rvf testdata/sql/990_create_documents_testdata__hhhar.sql
 # exclude CSV metadata import script (see OPUSVIER-2497)
 rm -v opus4/scripts/import/CSVImporter.php
 
+# exclude MARCXML import XSL stylesheet (see OPUSVIER-2581)
+rm -v opus4/scripts/import/marcxml-import.xsl
+
 #
 # Prepare libs/symlinks
 #
