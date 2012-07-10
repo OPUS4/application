@@ -37,7 +37,8 @@
 
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0"
 xmlns:marcxml="http://www.loc.gov/MARC21/slim">
-    <xsl:output method="xml"/>
+    <xsl:output	method="xml"
+				encoding="UTF-8"/>
 
     <!--
     Suppress output for all elements that don't have an explicit template.
@@ -52,64 +53,110 @@ xmlns:marcxml="http://www.loc.gov/MARC21/slim">
 
     <xsl:template match="marcxml:record">
         <xsl:element name="opusDocument">
-            <xsl:apply-templates select="marcxml:controlfield[@tag='001']"/>
-            <xsl:apply-templates select="marcxml:datafield[@tag='773']/marcxml:subfield[@code='q']"/>
+		<!--Reihenfolge entspricht import.xsd-->
+            <xsl:apply-templates select="marcxml:controlfield[@tag='008']"/>
+            <xsl:apply-templates select="marcxml:datafield[@tag='953']/marcxml:subfield[@code='h']"/>
             <xsl:apply-templates select="marcxml:datafield[@tag='245']/marcxml:subfield[@code='a']"/>
+			<xsl:apply-templates select="marcxml:datafield[@tag='773']/marcxml:subfield[@code='t']"/>
+			<xsl:apply-templates select="marcxml:datafield[@tag='100']/marcxml:subfield[@code='a']"/>
 			<xsl:apply-templates select="marcxml:datafield[@tag='953']/marcxml:subfield[@code='j']"/>
-            <xsl:apply-templates select="marcxml:datafield[@tag='773']/marcxml:subfield[@code='t']"/>
-            <xsl:apply-templates select="marcxml:datafield[@tag='100']/marcxml:subfield[@code='a']"/>
+			<xsl:apply-templates select="marcxml:datafield[@tag='900']/marcxml:subfield[@code='d']"/>
+			<xsl:apply-templates select="marcxml:controlfield[@tag='001']"/>
+            
         </xsl:element>
     </xsl:template>
-
-    <xsl:template match="marcxml:controlfield[@tag='001']">
+	
+	<!--OPUSDOCUMENT Attribute-->
+    <xsl:template match="marcxml:controlfield[@tag='008']">
         <xsl:attribute name="oldId">
             <xsl:value-of select="text()"/>
         </xsl:attribute>
+		<!--Da Serverstate und Dokumenttyp nicht im MarcXML enthalten sind, werden "type" und "serverState
+		aktuell statisch befüllt-->
+		<xsl:attribute name="type">article</xsl:attribute>
+		<xsl:attribute name="serverState">published</xsl:attribute>
+		<!--TODO: Hier Feld 040 auswerten bzw. Fallunterscheidung einführen,
+			die eine Standardsprache setzt, wenn 040 nicht existiert.-->
+		<xsl:attribute name="language">deu</xsl:attribute>
     </xsl:template>
 
-    <xsl:template match="marcxml:datafield[@tag='953']/marcxml:subfield[@code='j']">
-     <xsl:element name="dates">
-        <xsl:element name="date">
-            <xsl:attribute name="type">published</xsl:attribute>
-            <xsl:attribute name="year">
-            <xsl:value-of select="text()"/>
-            </xsl:attribute>
-        </xsl:element>
-     </xsl:element>
-    </xsl:template>
-
-    <xsl:template match="marcxml:datafield[@tag='773']/marcxml:subfield[@code='q']">
+    <xsl:template match="marcxml:datafield[@tag='953']/marcxml:subfield[@code='h']">
         <xsl:attribute name="pageNumber">
-            <!-- am Anfang scheint immer das Entity &lt; zu stehen - daher ignorieren wir das erste Zeichen -->
-            <xsl:value-of select="substring(text(), 2)"/>
+            <xsl:value-of select="text()"/>
         </xsl:attribute>
     </xsl:template>
-    
+	
+	<!--TITLESMAIN-->
    <xsl:template match="marcxml:datafield[@tag='245']/marcxml:subfield[@code='a']">
     <xsl:element name="titlesMain">
         <xsl:element name="titleMain">
-            <xsl:attribute name="language">deu</xsl:attribute>
+            <!--TODO: Hier auf Sprache aus Feld 040 zugreifen bzw. Fallunterscheidung einführen,
+			die eine Standardsprache setzt, wenn 040 nicht existiert.-->
+			<xsl:attribute name="language">deu</xsl:attribute>
             <xsl:value-of select="text()"/>
         </xsl:element>
      </xsl:element>
     </xsl:template>
-    
+	
+	<!--PERSONS-->
     <xsl:template match="marcxml:datafield[@tag='100']/marcxml:subfield[@code='a']">
      <xsl:element name="persons">
         <xsl:element name="person">
             <xsl:attribute name="role">author</xsl:attribute>
-            <xsl:value-of select="text()"/>
+            <xsl:attribute name="firstName">
+			<xsl:value-of select="substring-after(text(), ',')"/>
+			</xsl:attribute>
+			<xsl:attribute name="lastName">
+			<xsl:value-of select="substring-before(text(), ',')"/>
+		</xsl:attribute>
         </xsl:element>
      </xsl:element>
     </xsl:template>
-    
+	
+	<!--TITLES-->
     <xsl:template match="marcxml:datafield[@tag='773']/marcxml:subfield[@code='t']">
         <xsl:element name="titles">
          <xsl:element name="title">
-            <xsl:attribute name="language">deu</xsl:attribute>
+            <!--TODO: Hier auf Sprache aus Feld 040 zugreifen bzw. Fallunterscheidung einführen,
+			die eine Standardsprache setzt, wenn 040 nicht existiert.-->
+			<xsl:attribute name="language">deu</xsl:attribute>
             <xsl:attribute name="type">parent</xsl:attribute>
             <xsl:value-of select="text()"/>
         </xsl:element>
      </xsl:element>
     </xsl:template>
+	
+	<!--DATES-->
+	    <xsl:template match="marcxml:datafield[@tag='953']/marcxml:subfield[@code='j']">
+     <xsl:element name="dates">
+        <xsl:element name="date">
+            <xsl:attribute name="type">published</xsl:attribute>
+            <xsl:attribute name="year">
+			<!--Bei Angaben mit mehr als 4 Zeichen werden nur die ersten 4 genommen, sonst validiert "year" nicht.-->
+            <xsl:value-of select="substring(text(), 0, 5)"/>
+            </xsl:attribute>
+        </xsl:element>
+     </xsl:element>
+    </xsl:template>
+	
+	<!--IDENTIFIERs-->
+	<xsl:template match="marcxml:datafield[@tag='900']/marcxml:subfield[@code='d']">
+        <xsl:element name="identifiers">
+         <xsl:element name="identifier">
+            <xsl:attribute name="type">opac-id</xsl:attribute>
+            <xsl:value-of select="text()"/>
+        </xsl:element>
+     </xsl:element>
+    </xsl:template>
+	
+	<!--ENRICHMENTS-->
+	<xsl:template match="marcxml:controlfield[@tag='001']">
+        <xsl:element name="enrichments">
+         <xsl:element name="enrichment">
+            <xsl:attribute name="key">ppn</xsl:attribute>
+            <xsl:value-of select="text()"/>
+        </xsl:element>
+     </xsl:element>
+    </xsl:template>
+	
 </xsl:stylesheet>
