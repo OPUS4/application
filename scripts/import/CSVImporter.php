@@ -47,7 +47,7 @@ require_once 'Log.php';
 class CSVImporter {
     // das ist aktuell nur eine Auswahl der Metadatenfelder (speziell für Fromm zugeschnitten)
 
-    const NUM_OF_COLUMNS = 31;
+    const NUM_OF_COLUMNS = 32;
 
     const OLD_ID = 0;
     const LANGUAGE = 1;
@@ -80,8 +80,9 @@ class CSVImporter {
     const ENRICHMENT_KINDOFPUBLICATION = 26;
     const ENRICHMENT_IDNO = 27;
     const ENRICHMENT_COPYRIGHTPRINT = 28;
-    const ENRICHMENT_COPYRIGHTBOOK = 29;
+    const ENRICHMENT_COPYRIGHTEBOOK = 29;
     const ENRICHMENT_RELEVANCE = 30;
+	const FILENAME = 31;
 
     private $seriesIdsMap = array();
 
@@ -167,7 +168,7 @@ class CSVImporter {
                 self::ENRICHMENT_KINDOFPUBLICATION,
                 self::ENRICHMENT_IDNO,
                 self::ENRICHMENT_COPYRIGHTPRINT,
-                self::ENRICHMENT_COPYRIGHTBOOK,
+                self::ENRICHMENT_COPYRIGHTEBOOK,
                 self::ENRICHMENT_RELEVANCE
             );
             foreach ($enrichementkeys as $enrichmentkey) {
@@ -303,13 +304,33 @@ class CSVImporter {
     }
 
     private function processIdentifier($row, $doc) {
-        // TODO aktuell nur Unterstützung für *einen* Identifier
         // ist kein Pflichtfeld
         if (trim($row[self::IDENTIFIER_TYPE]) != '') {
-            $i = $doc->addIdentifier();
-            $i->setValue(trim($row[self::IDENTIFIER_VALUE]));
-            $i->setType($row[self::IDENTIFIER_TYPE]);
-        }
+			// die zwei Spalten identifiertype und identifier können mehrere
+            // Identifier enthalten
+            // in diesem Fall erfolgt die Abtrennung *innerhalb* des Felds durch ||
+			$types = $row[self::IDENTIFIER_TYPE];
+            $values = $row[self::IDENTIFIER_VALUE];
+			$numOfPipesTypeField = substr_count($types, '||');
+            $numOfPipesTypeValues = substr_count($values, '||');
+			if (!$numOfPipesTypeField == $numOfPipesTypeValues) {
+                        throw new Exception("skip all identifiers of document $oldId");
+                    }
+			$values = explode('||', $values);
+            $types = explode('||', $types);
+			for ($i = 0; $i <= $numOfPipesTypeValues; $i++) {
+                        $this->addIdentifier($doc, $types[$i], $values[$i], $oldId);
+            }
+		}
+    }
+	
+	private function addIdentifier($doc, $type, $value, $oldId) {
+        
+		$p = new Opus_Identifier();
+            $p->setValue(trim($value));
+            $p->setType(trim($type));
+        $method = 'addIdentifier' . ucfirst(trim($type));
+        $doc->$method($p);
     }
 
     private function processNote($row, $doc) {
