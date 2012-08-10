@@ -168,7 +168,7 @@ class CSVImporter {
             $this->processTitlesAndAbstract($row, $doc, $oldId);
             $this->processPersons($row, $doc, $oldId);
             $this->processDate($row, $doc, $oldId);
-            $this->processIdentifier($row, $doc);
+            $this->processIdentifier($row, $doc, $oldId);
             $this->processNote($row, $doc);
             $this->processCollections($row, $doc);
             $this->processLicence($row, $doc, $oldId);
@@ -323,7 +323,7 @@ class CSVImporter {
         }
     }
 
-    private function processIdentifier($row, $doc) {
+    private function processIdentifier($row, $doc, $oldId) {
         // ist kein Pflichtfeld
         if (trim($row[self::IDENTIFIER_TYPE]) != '') {
             // die zwei Spalten identifiertype und identifier können mehrere
@@ -333,7 +333,7 @@ class CSVImporter {
             $values = $row[self::IDENTIFIER_VALUE];
             $numOfPipesTypeField = substr_count($types, '||');
             $numOfPipesTypeValues = substr_count($values, '||');
-            if (!$numOfPipesTypeField == $numOfPipesTypeValues) {
+            if ($numOfPipesTypeField != $numOfPipesTypeValues) {
                 throw new Exception("skip all identifiers of document $oldId");
             }
             $values = explode('||', $values);
@@ -344,13 +344,12 @@ class CSVImporter {
         }
     }
 
-    private function addIdentifier($doc, $type, $value, $oldId) {
-
-        $p = new Opus_Identifier();
-        $p->setValue(trim($value));
-        $p->setType(trim($type));
+    private function addIdentifier($doc, $type, $value) {
+        $identifier = new Opus_Identifier();
+        $identifier->setValue(trim($value));
+        $identifier->setType(trim($type));
         $method = 'addIdentifier' . ucfirst(trim($type));
-        $doc->$method($p);
+        $doc->$method($identifier);
     }
 
     private function processNote($row, $doc) {
