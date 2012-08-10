@@ -73,7 +73,6 @@ class CSVImporter {
     const SERIES_ID = 21;
     const LICENCE_ID = 22;
     const ENRICHMENTS = 23; // wird aktuell ignoriert
-    
     //TODO bei Fromm gibt es 7 Enrichmentkeys
     const ENRICHMENT_AVAILABILITY = 24;
     const ENRICHMENT_FORMAT = 25;
@@ -82,9 +81,13 @@ class CSVImporter {
     const ENRICHMENT_COPYRIGHTPRINT = 28;
     const ENRICHMENT_COPYRIGHTEBOOK = 29;
     const ENRICHMENT_RELEVANCE = 30;
-	const FILENAME = 31;
+    const FILENAME = 31;    
 
     private $seriesIdsMap = array();
+
+    private $fulltextDir = null;
+    
+    private $guestRole = null;
 
     public function run($argv) {
         if (count($argv) < 2) {
@@ -93,8 +96,18 @@ class CSVImporter {
         }
 
         $ignoreHeader = true;
-        if (count($argv) > 2 && $argv[2] == 'noheader') {
+        if (count($argv) > 3 && $argv[3] == 'noheader') {
             $ignoreHeader = false;
+        }
+
+        if (count($argv) > 2) {            
+            if (!is_readable($argv[2])) {
+                echo "fulltext directory '" . $argv[2] . "' is not readable -- check path or permissions\n";
+            }
+            else {
+                $this->fulltextDir = $argv[2];                
+                $this->guestRole = Opus_UserRole::fetchByName('guest');
+            }
         }
 
         $filename = $argv[1];
@@ -158,7 +171,7 @@ class CSVImporter {
             $this->processIdentifier($row, $doc);
             $this->processNote($row, $doc);
             $this->processCollections($row, $doc);
-            $this->processLicence($row, $doc);
+            $this->processLicence($row, $doc, $oldId);
             $this->processSeries($row, $doc);
 
             // TODO Fromm verwendet aktuell sieben Enrichments (muss noch generalisiert werden)
@@ -175,8 +188,15 @@ class CSVImporter {
                 $this->processEnrichment($enrichmentkey, $row, $doc);
             }
 
+            $file = $this->processFile($row, $doc, $oldId);
+
             $doc->store();
             //echo "created document #" . $doc->getId() . "\n";
+
+            if (!is_null($file) && $file instanceof Opus_File && !is_null($this->guestRole)) {
+                $this->guestRole->appendAccessFile($file->getId());
+                $this->guestRole->store();
+            }
             return true;
         }
         catch (Exception $e) {
@@ -306,29 +326,29 @@ class CSVImporter {
     private function processIdentifier($row, $doc) {
         // ist kein Pflichtfeld
         if (trim($row[self::IDENTIFIER_TYPE]) != '') {
-			// die zwei Spalten identifiertype und identifier können mehrere
+            // die zwei Spalten identifiertype und identifier können mehrere
             // Identifier enthalten
             // in diesem Fall erfolgt die Abtrennung *innerhalb* des Felds durch ||
-			$types = $row[self::IDENTIFIER_TYPE];
+            $types = $row[self::IDENTIFIER_TYPE];
             $values = $row[self::IDENTIFIER_VALUE];
-			$numOfPipesTypeField = substr_count($types, '||');
+            $numOfPipesTypeField = substr_count($types, '||');
             $numOfPipesTypeValues = substr_count($values, '||');
-			if (!$numOfPipesTypeField == $numOfPipesTypeValues) {
-                        throw new Exception("skip all identifiers of document $oldId");
-                    }
-			$values = explode('||', $values);
-            $types = explode('||', $types);
-			for ($i = 0; $i <= $numOfPipesTypeValues; $i++) {
-                        $this->addIdentifier($doc, $types[$i], $values[$i], $oldId);
+            if (!$numOfPipesTypeField == $numOfPipesTypeValues) {
+                throw new Exception("skip all identifiers of document $oldId");
             }
-		}
+            $values = explode('||', $values);
+            $types = explode('||', $types);
+            for ($i = 0; $i <= $numOfPipesTypeValues; $i++) {
+                $this->addIdentifier($doc, $types[$i], $values[$i], $oldId);
+            }
+        }
     }
-	
-	private function addIdentifier($doc, $type, $value, $oldId) {
-        
-		$p = new Opus_Identifier();
-            $p->setValue(trim($value));
-            $p->setType(trim($type));
+
+    private function addIdentifier($doc, $type, $value, $oldId) {
+
+        $p = new Opus_Identifier();
+        $p->setValue(trim($value));
+        $p->setType(trim($type));
         $method = 'addIdentifier' . ucfirst(trim($type));
         $doc->$method($p);
     }
@@ -362,7 +382,7 @@ class CSVImporter {
         }
     }
 
-    private function processLicence($row, $doc) {
+    private function processLicence($row, $doc, $oldId) {
         // TODO aktuell nur Unterstützung für *eine* Lizenz
         if (trim($row[self::LICENCE_ID]) != '') {
             $licenceId = trim($row[self::LICENCE_ID]);
@@ -374,13 +394,49 @@ class CSVImporter {
                 throw new Exception('licence id ' . $licenceId . ' does not exist: ' . $e->getMessage());
             }
         }
+        else {
+            // in diesem Fall versuchen wir die Lizenz aus dem format-Enrichment abzuleiten
+            $format = trim($row[self::ENRICHMENT_FORMAT]);
+
+            if (!(strpos($format, 'no download') == false) || !(strpos($format, 'no copy') == false)) {
+                $l = new Opus_Licence(11);
+                $doc->addLicence($l);
+                return;
+            }
+
+            if (!(strpos($format, 'xerox') == false)) {
+                $l = new Opus_Licence(13);
+                $doc->addLicence($l);
+                return;
+            }
+
+            if (!(strpos($format, 'to download') == false)) {
+                $l = new Opus_Licence(9);
+                $doc->addLicence($l);
+                return;
+            }
+
+            if (!(strpos($format, 'upon request') == false)) {
+                $l = new Opus_Licence(10);
+                $doc->addLicence($l);
+                return;
+            }
+
+            if (!(strpos($format, 'to purchase') == false)) {
+                $l = new Opus_Licence(12);
+                $doc->addLicence($l);
+                return;
+            }
+
+            echo "Dokument $oldId: Lizenz konnte nicht ermittelt werden, da im format-Enrichment unerwarteter Wert '$format'\n";
+
+        }
     }
 
     private function processEnrichment($enrichmentkey, $row, $doc, $oldId) {
         // aktuell hat der Feldinhalt die Struktur '{ ekey: evalue }'
         // TODO das ist natürlich redundant, da innerhalb einer Spalte immer
         // nur Enrichments eines Enrichmentkeys stehen
-
         // zusätzliche Anforderung: in evalue können mehrere Werte stehen (dann durch || getrennt)
         $value = trim($row[$enrichmentkey]);
         if ($value != '') {
@@ -432,7 +488,67 @@ class CSVImporter {
             }
         }
     }
+    
+    private function processFile($row, $doc, $oldId, $extension = 'pdf') {
 
+        $format = trim($row[self::ENRICHMENT_FORMAT]);
+        $filename = trim($row[self::FILENAME]);
+
+        // in format-Spalte sind nur bestimmte Werte zulässig
+        if ((strpos($format, 'no download') === false) &&
+            (strpos($format, 'no copy') === false) &&
+            (strpos($format, 'to purchase') === false) &&
+            (strpos($format, 'to download') === false) &&
+            (strpos($format, 'upon request') === false)) {
+            echo "Dokument $oldId: [ERR001] Inhalt '$format' des format-Enrichments entspricht nicht dem zulässigen Vokabular -- evtl. vorhandene Datei wird nicht importiert\n";
+            return null;
+        }
+
+        // bei den Keywords 'no download', 'no copy' und 'to purchase' wird keine Dateiangabe erwartet: steht doch ein da, ist das ein Fehler!
+        if (!(strpos($format, 'no download') === false) ||
+            !(strpos($format, 'no copy') === false) ||
+            !(strpos($format, 'to purchase') === false)) {
+            if ($filename != '') {
+                echo "Dokument $oldId: [ERR002] Dateiname angegeben aber format-Enrichment mit unerwartetem Inhalt '$format' -- Datei wird nicht importiert\n";
+            }
+            return null;
+        }
+
+        // nur bei den Keywords 'to download' und 'upon request' wird überhaupt eine Datei erwartet
+        if ($filename == '' && (!(strpos($format, 'to download') === false) || !(strpos($format, 'upon request') === false))) {
+            echo "Dokument $oldId: [ERR003] Dateiname erwartet, aber leeren Inhalt in Spalte für Dateinamen vorgefunden -- Datei wird nicht importiert\n";
+            return null;
+        }
+
+        // Dateiname ist gesetzt und format-Enrichment mit 'to download' oder 'upon request'
+        if (is_null($this->fulltextDir)) {
+            echo "Dokument $oldId: [ERR004] zugeordnete Datei wurden nicht importiert, da Importverzeichnis nicht lesbar oder nicht existent\n";
+            return null;
+        }
+            
+        $filename = $filename . '.' . $extension;
+        $tempfile = $this->fulltextDir . DIRECTORY_SEPARATOR . $filename;
+
+        if (!is_readable($tempfile)) {
+            echo "Dokument $oldId: [ERR005] zugeordnete Datei wurden nicht importiert, da nicht lesbar oder nicht existent\n";
+            return null;
+        }
+
+        $file = $doc->addFile();
+        $file->setTempFile($tempfile);
+        $file->setPathName($filename);
+        $file->setLanguage(trim($row[self::LANGUAGE]));
+
+        $file->setVisibleInFrontdoor('1');
+        $file->setVisibleInOai('1');
+                
+        // guest-Role darf Datei nur lesen, wenn format-Enrichment den Wert 'to download' hat (ansonsten nur die administrator-Role, die das Leserecht automatisch erhält)
+        if (!(strpos($format, 'to download') === false)) {
+            return $file;
+        }
+
+        return null;
+    }
 
 }
 
