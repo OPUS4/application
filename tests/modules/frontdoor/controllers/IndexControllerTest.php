@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,7 +32,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
     /**
@@ -40,9 +40,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      * @var Opus_Document
      */
     protected $_document = null;
-
     protected $_security_backup = null;
-
 
     /**
      * Provide clean documents and statistics table and remove temporary files.
@@ -50,7 +48,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      *
      * @return void
      */
-
     public function setUp() {
         parent::setUp();
 
@@ -87,7 +84,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     public function testIndexActionOnPublished() {
         $this->_document->setServerState('published')->store();
         $doc_id = $this->_document->getId();
-        $this->dispatch('/frontdoor/index/index/docId/'.$doc_id);
+        $this->dispatch('/frontdoor/index/index/docId/' . $doc_id);
 
         $this->assertResponseCode(200);
         $this->assertController('index');
@@ -101,7 +98,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     public function testIndexActionOnDeleted() {
         $this->_document->setServerState('deleted')->store();
         $doc_id = $this->_document->getId();
-        $this->dispatch('/frontdoor/index/index/docId/'.$doc_id);
+        $this->dispatch('/frontdoor/index/index/docId/' . $doc_id);
 
         $this->assertResponseCode(410);
         $this->assertController('index');
@@ -114,7 +111,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     public function testIndexActionOnUnpublished() {
         $this->_document->setServerState('unpublished')->store();
         $doc_id = $this->_document->getId();
-        $this->dispatch('/frontdoor/index/index/docId/'.$doc_id);
+        $this->dispatch('/frontdoor/index/index/docId/' . $doc_id);
 
         $this->assertResponseCode(403);
         $this->assertController('index');
@@ -127,7 +124,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     public function testIndexActionOnTemporary() {
         $this->_document->setServerState('temporary')->store();
         $doc_id = $this->_document->getId();
-        $this->dispatch('/frontdoor/index/index/docId/'.$doc_id);
+        $this->dispatch('/frontdoor/index/index/docId/' . $doc_id);
 
         $this->assertResponseCode(403);
         $this->assertController('index');
@@ -139,7 +136,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
     public function testIndexActionOnNonExistent() {
         $doc_id = $this->_document->getId();
-        $this->dispatch('/frontdoor/index/index/docId/'.$doc_id.$doc_id.'100');
+        $this->dispatch('/frontdoor/index/index/docId/' . $doc_id . $doc_id . '100');
 
         $this->assertResponseCode(404);
         $this->assertController('index');
@@ -153,12 +150,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      * @deprecated since OPUS 3.0.2, the function under test is marked as deprecated
      * and will be removed in future releases
      */
-    public function testMapopus3Action() {        
-        $opus3_id = 'foobar-'.rand();
+    public function testMapopus3Action() {
+        $opus3_id = 'foobar-' . rand();
         $this->_document->addIdentifierOpus3()->setValue($opus3_id);
         $doc_id = $this->_document->store();
 
-        $this->dispatch('/frontdoor/index/mapopus3/oldId/'.$opus3_id);
+        $this->dispatch('/frontdoor/index/mapopus3/oldId/' . $opus3_id);
 
         $this->assertResponseCode(302);
         $this->assertModule('frontdoor');
@@ -178,7 +175,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      * test to document bug OPUSVIER-1695
      */
     public function testUncontrolledKeywordHeaderIsNotDisplayedIfUncontrolledKeywordsDoNotExist() {
-	$this->dispatch('/frontdoor/index/index/docId/92');
+        $this->dispatch('/frontdoor/index/index/docId/92');
         $this->assertResponseCode(200);
         $this->assertModule('frontdoor');
         $this->assertController('index');
@@ -191,6 +188,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     /*
      * Regression test for OPUSVIER-2165
      */
+
     public function testFrontdoorTitleRespectsDocumentLanguageDeu() {
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertNotContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
@@ -203,11 +201,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     public function testFrontdoorTitleRespectsDocumentLanguageEng() {
         $d = new Opus_Document(146);
         $lang = $d->getLanguage();
-        $d->setLanguage('eng');        
+        $d->setLanguage('eng');
         $d->store();
 
         $this->dispatch('/frontdoor/index/index/docId/146');
-        $this->assertContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());        
+        $this->assertContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
         $this->assertNotContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
 
         // restore language
@@ -344,12 +342,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      */
     public function testSeries149InVisible() {
         $d = new Opus_Document(149);
-        $seriesIds     = array();
+        $seriesIds = array();
         $seriesNumbers = array();
         foreach ($d->getSeries() AS $series) {
             $seriesIds[] = $series->getModel()->getId();
             $seriesNumbers[] = $series->getNumber();
-        }        
+        }
 
         $this->assertContains('3', $seriesIds);
         $this->assertContains('4', $seriesIds);
@@ -361,16 +359,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $responseBody = $this->getResponse()->getBody();
 
         // series 3 is NOT visible
-        $this->assertNotContains('id-3-is-invisible',
-                $responseBody);
-        $this->assertNotRegExp('/href="\/solrsearch\/index\/search\/searchtype\/series\/id\/3"/',
-                $responseBody);
+        $this->assertNotContains('id-3-is-invisible', $responseBody);
+        $this->assertNotRegExp('/href="\/solrsearch\/index\/search\/searchtype\/series\/id\/3"/', $responseBody);
 
         // series 4 is visible
-        $this->assertContains('id-4-is-visible',
-                $responseBody);
-        $this->assertRegExp('/href="\/solrsearch\/index\/search\/searchtype\/series\/id\/4"/',
-                $responseBody);
+        $this->assertContains('id-4-is-visible', $responseBody);
+        $this->assertRegExp('/href="\/solrsearch\/index\/search\/searchtype\/series\/id\/4"/', $responseBody);
     }
 
     /**
@@ -397,4 +391,21 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertNotRegExp('/<a href="[^"]+\/author\/\&quot;J\\\&quot;ohn Doe\&quot;"/', $responseBody);
         $this->assertNotRegExp('/<a href="[^"]+\/author\/\&quot;J\\\&quot;ane D\\\&quot;oe\&quot;"/', $responseBody);
     }
+
+    /**
+     * Regression test for OPUSHOSTING-52
+     */
+    public function testShowLinkForPrintOnDemandIfLicenceAppropriate() {
+        $this->dispatch('/frontdoor/index/index/docId/1');
+        $this->assertQuery('div#print-on-demand');
+    }
+
+    /**
+     * Regression test for OPUSHOSTING-52
+     */
+    public function testHideLinkForPrintOnDemandIfLicenceNotAppropriate() {
+        $this->dispatch('/frontdoor/index/index/docId/91');
+        $this->assertNotQuery('div#print-on-demand');
+    }
+
 }
