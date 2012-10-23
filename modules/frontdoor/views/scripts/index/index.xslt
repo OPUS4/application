@@ -31,6 +31,7 @@
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de> 
  * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de> 
  * @author      Thoralf Klein <thoralf.klein@zib.de>
+ * @author      Edouard Simon <edouard.simon@zib.de>
  * @copyright   Copyright (c) 2009-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -38,11 +39,11 @@
 -->
 
 <xsl:stylesheet version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:php="http://php.net/xsl"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:xml="http://www.w3.org/XML/1998/namespace"
-    exclude-result-prefixes="php">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:php="http://php.net/xsl"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:xml="http://www.w3.org/XML/1998/namespace"
+                exclude-result-prefixes="php">
    
     <xsl:output method="xml" omit-xml-declaration="yes" />
  
@@ -63,10 +64,10 @@
     <!-- Suppress spilling values with no corresponding templates -->
     <xsl:template match="@*|node()" />
 
-<!-- here you can change the order of the fields, just change the order of the apply-templates-rows
-     if there is a choose-block for the field, you have to move the whole choose-block
-     if you wish new fields, you have to add a new line xsl:apply-templates...
-     and a special template for each new field below, too -->
+    <!-- here you can change the order of the fields, just change the order of the apply-templates-rows
+    if there is a choose-block for the field, you have to move the whole choose-block
+    if you wish new fields, you have to add a new line xsl:apply-templates...
+    and a special template for each new field below, too -->
     <xsl:template match="Opus_Document">
         <div id="titlemain-wrapper">
             <xsl:call-template name="Title" />
@@ -108,6 +109,19 @@
                     <xsl:call-template name="ExportFunctions" />
                 </ul>
             </div>
+            
+            <xsl:if test="Licence[@PodAllowed='1']">
+                <div id="print-on-demand" class="services">
+                    <h3>
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_pod_options</xsl:with-param>
+                        </xsl:call-template>
+                    </h3>
+                    <ul>
+                        <xsl:call-template name="PrintOnDemand" />
+                    </ul>
+                </div>
+            </xsl:if>
 
             <div id="additional-services" class="services">
                 <h3>
@@ -185,28 +199,37 @@
             <!-- Subjects section:  New subjects must be introduced right here. -->
             <!-- we need to apply a hack (so called Muenchian grouping) here since XSLT's 2.0 for-each-group feature is currently not supported -->
             <xsl:if test="Subject[@Type='uncontrolled']">
-            <tr>
-                <th class="name">
-                    <xsl:call-template name="translateString">
-                        <xsl:with-param name="string">subject_frontdoor_uncontrolled</xsl:with-param>
-                    </xsl:call-template>
-                    <xsl:text>:</xsl:text>
-                </th>
+                <tr>
+                    <th class="name">
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">subject_frontdoor_uncontrolled</xsl:with-param>
+                        </xsl:call-template>
+                        <xsl:text>:</xsl:text>
+                    </th>
 
-                <td><em class="data-marker">
-                <xsl:for-each select="Subject[@Type='uncontrolled'][generate-id(.)=generate-id(key('list', @Language))]/@Language">
-                    <xsl:sort/>
-                    <xsl:for-each select="key('list', .)">
-                        <xsl:sort select="@Value" />
-                        <xsl:value-of select="@Value"/><xsl:if test="position() != last()">; </xsl:if>
-                    </xsl:for-each>
-                    <xsl:if test="position() != last()"><br/></xsl:if>
-                </xsl:for-each>
-                </em></td>
-            </tr>
+                    <td>
+                        <em class="data-marker">
+                            <xsl:for-each select="Subject[@Type='uncontrolled'][generate-id(.)=generate-id(key('list', @Language))]/@Language">
+                                <xsl:sort/>
+                                <xsl:for-each select="key('list', .)">
+                                    <xsl:sort select="@Value" />
+                                    <xsl:value-of select="@Value"/>
+                                    <xsl:if test="position() != last()">; </xsl:if>
+                                </xsl:for-each>
+                                <xsl:if test="position() != last()">
+                                    <br/>
+                                </xsl:if>
+                            </xsl:for-each>
+                        </em>
+                    </td>
+                </tr>
             </xsl:if>
-            <xsl:apply-templates select="Subject[@Type='swd']"><xsl:sort select="@Value"/></xsl:apply-templates>
-            <xsl:apply-templates select="Subject[@Type='psyndex']"><xsl:sort select="@Value"/></xsl:apply-templates>
+            <xsl:apply-templates select="Subject[@Type='swd']">
+                <xsl:sort select="@Value"/>
+            </xsl:apply-templates>
+            <xsl:apply-templates select="Subject[@Type='psyndex']">
+                <xsl:sort select="@Value"/>
+            </xsl:apply-templates>
             <!-- End Subjects -->
             
             <xsl:apply-templates select="@Volume" />
@@ -251,9 +274,9 @@
     </xsl:template>
 
 
-<!--  -->
-<!-- Templates for "internal fields". -->
-<!--  -->
+    <!--  -->
+    <!-- Templates for "internal fields". -->
+    <!--  -->
     <xsl:template match="@CompletedYear|@ContributingCorporation|@CreatingCorporation|@Volume|@Issue|@Edition">
         <tr>
             <th class="name">
@@ -265,7 +288,7 @@
         </tr>
     </xsl:template>
     
-     <xsl:template match="@PageFirst|@PageLast|@PageNumber|@PublishedYear|@PublisherName|@PublisherPlace">
+    <xsl:template match="@PageFirst|@PageLast|@PageNumber|@PublishedYear|@PublisherName|@PublisherPlace">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateFieldname" />
@@ -284,25 +307,29 @@
             <td>
                 <xsl:call-template name="translateString">
                     <xsl:with-param name="string">
-		    <xsl:value-of select="." />
-		</xsl:with-param>
+                        <xsl:value-of select="." />
+                    </xsl:with-param>
                 </xsl:call-template>	    
                 
             </td>
         </tr>
     </xsl:template>    
 
-<!-- -->
-<!-- Templates for "external fields". -->
-<!-- -->
+    <!-- -->
+    <!-- Templates for "external fields". -->
+    <!-- -->
     <xsl:template match="Collection">
         <tr>
             <xsl:choose>
                 <xsl:when test="position()=1">
                     <th class="name">
                         <xsl:call-template name="translateStringWithDefault">
-                            <xsl:with-param name="string">default_collection_role_<xsl:value-of select="@RoleName" /></xsl:with-param>
-                            <xsl:with-param name="default"><xsl:value-of select="@RoleName" /></xsl:with-param>
+                            <xsl:with-param name="string">default_collection_role_
+                                <xsl:value-of select="@RoleName" />
+                            </xsl:with-param>
+                            <xsl:with-param name="default">
+                                <xsl:value-of select="@RoleName" />
+                            </xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>:</xsl:text>
                     </th>
@@ -368,9 +395,11 @@
         <tr>
             <th class="name">
                 <xsl:call-template name="translateString">
-                    <xsl:with-param name="string">Enrichment<xsl:value-of select="@KeyName" /></xsl:with-param>
+                    <xsl:with-param name="string">Enrichment
+                        <xsl:value-of select="@KeyName" />
+                    </xsl:with-param>
                 </xsl:call-template>
-             <xsl:text>:</xsl:text>
+                <xsl:text>:</xsl:text>
             </th>
             <td>
                 <xsl:value-of select="@Value" disable-output-escaping="yes"/>
@@ -382,9 +411,11 @@
         <tr>
             <th class="name">
                 <xsl:call-template name="translateString">
-                    <xsl:with-param name="string">Enrichment<xsl:value-of select="@KeyName" /></xsl:with-param>
+                    <xsl:with-param name="string">Enrichment
+                        <xsl:value-of select="@KeyName" />
+                    </xsl:with-param>
                 </xsl:call-template>
-	     <xsl:text>:</xsl:text>
+                <xsl:text>:</xsl:text>
             </th>
             <td>
                 <xsl:value-of select="@Value" />
@@ -480,10 +511,10 @@
             </xsl:choose>
 
             <xsl:if test="@Comment">
-                    <xsl:text> </xsl:text>
-                    <p>
-                        <xsl:value-of select="@Comment" />
-                    </p>
+                <xsl:text> </xsl:text>
+                <p>
+                    <xsl:value-of select="@Comment" />
+                </p>
             </xsl:if>
         </li>
     </xsl:template>
@@ -493,7 +524,7 @@
             <xsl:text disable-output-escaping="yes">&lt;tr&gt;</xsl:text>
             <th class="name">
                 <xsl:if test="position() = 1">
-                   <xsl:call-template name="translateFieldname"/>
+                    <xsl:call-template name="translateFieldname"/>
                 </xsl:if>
             </th>
             <xsl:text disable-output-escaping="yes">&lt;td&gt;</xsl:text>
@@ -501,8 +532,12 @@
         <xsl:element name="a">
             <xsl:attribute name="href">
                 <xsl:value-of select="$baseUrl"/>
-                <xsl:if test="name()='PersonAuthor'"><xsl:text>/solrsearch/index/search/searchtype/authorsearch/author/</xsl:text></xsl:if>
-                <xsl:if test="name()='PersonReferee'"><xsl:text>/solrsearch/index/search/searchtype/authorsearch/referee/</xsl:text></xsl:if>
+                <xsl:if test="name()='PersonAuthor'">
+                    <xsl:text>/solrsearch/index/search/searchtype/authorsearch/author/</xsl:text>
+                </xsl:if>
+                <xsl:if test="name()='PersonReferee'">
+                    <xsl:text>/solrsearch/index/search/searchtype/authorsearch/referee/</xsl:text>
+                </xsl:if>
                 <xsl:value-of select="php:function('urlencode', concat(@FirstName, ' ', @LastName))" />
             </xsl:attribute>
             <xsl:attribute name="title">
@@ -532,7 +567,7 @@
             <xsl:text disable-output-escaping="yes">&lt;tr&gt;</xsl:text>
             <th class="name">
                 <xsl:if test="position() = 1">
-                   <xsl:call-template name="translateFieldname"/>
+                    <xsl:call-template name="translateFieldname"/>
                 </xsl:if>
             </th>
             <xsl:text disable-output-escaping="yes">&lt;td&gt;</xsl:text>
@@ -597,9 +632,11 @@
                         </xsl:when>
                         <xsl:otherwise>
                             <xsl:attribute name="href">
-                                <xsl:text>http://</xsl:text><xsl:value-of select="@Value" />
+                                <xsl:text>http://</xsl:text>
+                                <xsl:value-of select="@Value" />
                             </xsl:attribute>
-                            <xsl:text>http://</xsl:text><xsl:value-of select="@Value" />
+                            <xsl:text>http://</xsl:text>
+                            <xsl:value-of select="@Value" />
                         </xsl:otherwise>
                     </xsl:choose>
                 </xsl:element>
@@ -742,9 +779,13 @@
             </th>
             <td>
                 <xsl:element name="a">
-                <xsl:attribute name="href"><xsl:value-of select="@Value" /></xsl:attribute>
-                <xsl:attribute name="rel"><xsl:text>nofollow</xsl:text></xsl:attribute>
-                <xsl:value-of select="@Label" />
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="@Value" />
+                    </xsl:attribute>
+                    <xsl:attribute name="rel">
+                        <xsl:text>nofollow</xsl:text>
+                    </xsl:attribute>
+                    <xsl:value-of select="@Label" />
                 </xsl:element>
             </td>
         </tr>
@@ -755,13 +796,16 @@
             <xsl:text disable-output-escaping="yes">&lt;tr&gt;</xsl:text>
             <xsl:text disable-output-escaping="yes">&lt;th class="name"&gt;</xsl:text>
             <xsl:call-template name="translateString">
-                <xsl:with-param name="string">subject_frontdoor_<xsl:value-of select="@Type" /></xsl:with-param>
+                <xsl:with-param name="string">subject_frontdoor_
+                    <xsl:value-of select="@Type" />
+                </xsl:with-param>
             </xsl:call-template>
             <xsl:text>:</xsl:text>
             <xsl:text disable-output-escaping="yes">&lt;/th&gt;</xsl:text>
             <xsl:text disable-output-escaping="yes">&lt;td&gt;&lt;em class="data-marker"&gt;</xsl:text>
         </xsl:if>
-        <xsl:value-of select="@Value" /><xsl:if test="position() != last()">; </xsl:if>
+        <xsl:value-of select="@Value" />
+        <xsl:if test="position() != last()">; </xsl:if>
         <xsl:if test="position() = last()">
             <xsl:text disable-output-escaping="yes">&lt;/em&gt;&lt;/td&gt;</xsl:text>
             <xsl:text disable-output-escaping="yes">&lt;/tr&gt;</xsl:text>
@@ -788,9 +832,9 @@
     <xsl:template match="ReferenceSplashUrl"/>
 
 
-<!-- -->
-<!-- Named Templates for the introducing block (Author, Title, Abstract). -->
-<!-- -->
+    <!-- -->
+    <!-- Named Templates for the introducing block (Author, Title, Abstract). -->
+    <!-- -->
     <xsl:template name="Author">
         <p>
             <xsl:for-each select="PersonAuthor">
@@ -798,7 +842,7 @@
                     <xsl:attribute name="href">
                         <xsl:value-of select="$baseUrl"/>
                         <xsl:text>/solrsearch/index/search/searchtype/authorsearch/author/</xsl:text>
-                         <xsl:value-of select="php:function('urlencode', concat(@FirstName, ' ', @LastName))" />
+                        <xsl:value-of select="php:function('urlencode', concat(@FirstName, ' ', @LastName))" />
                     </xsl:attribute>
                     <xsl:attribute name="title">
                         <xsl:call-template name="translateString">
@@ -841,17 +885,23 @@
                         </xsl:when>
                         <xsl:otherwise>
                             <span>
-                                <xsl:attribute name="id">abstractShort_<xsl:value-of select="@Id"/></xsl:attribute>
+                                <xsl:attribute name="id">abstractShort_
+                                    <xsl:value-of select="@Id"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="class">abstractShort</xsl:attribute>
                                 <xsl:value-of select="substring(@Value, 1, $numOfShortAbstractChars)"/>
                             </span>
                             <span>
-                                <xsl:attribute name="id">abstractFull_<xsl:value-of select="@Id"/></xsl:attribute>
+                                <xsl:attribute name="id">abstractFull_
+                                    <xsl:value-of select="@Id"/>
+                                </xsl:attribute>
                                 <xsl:attribute name="class">abstractFull</xsl:attribute>
                                 <xsl:value-of select="@Value"/>
                             </span>
                             <span>
-                                <xsl:attribute name="id">abstractThreeDots_<xsl:value-of select="@Id" /></xsl:attribute>
+                                <xsl:attribute name="id">abstractThreeDots_
+                                    <xsl:value-of select="@Id" />
+                                </xsl:attribute>
                                 <xsl:attribute name="class">abstractThreeDots</xsl:attribute>
                                 <xsl:text disable-output-escaping="yes">&#x2026;</xsl:text>
                             </span>
@@ -860,7 +910,9 @@
                                     <xsl:value-of select="$layoutPath"/>
                                     <xsl:text>/img/arrow_down.png</xsl:text>
                                 </xsl:attribute>
-                                <xsl:attribute name="id">abstractButtonShow_<xsl:value-of select="@Id" /></xsl:attribute>
+                                <xsl:attribute name="id">abstractButtonShow_
+                                    <xsl:value-of select="@Id" />
+                                </xsl:attribute>
                                 <xsl:attribute name="class">abstractButtonShow abstractButton</xsl:attribute>
                                 <xsl:attribute name="title">
                                     <xsl:call-template name="translateString">
@@ -878,7 +930,9 @@
                                     <xsl:value-of select="$layoutPath"/>
                                     <xsl:text>/img/arrow_up.png</xsl:text>
                                 </xsl:attribute>
-                                <xsl:attribute name="id">abstractButtonHide_<xsl:value-of select="@Id" /></xsl:attribute>
+                                <xsl:attribute name="id">abstractButtonHide_
+                                    <xsl:value-of select="@Id" />
+                                </xsl:attribute>
                                 <xsl:attribute name="class">abstractButtonHide abstractButton</xsl:attribute>
                                 <xsl:attribute name="title">
                                     <xsl:call-template name="translateString">
@@ -899,9 +953,9 @@
     </xsl:template>
 
 
-<!-- -->
-<!-- Named Templates for the service block (MailToAuthor, AdditionalServices, ExportFunctions). -->
-<!-- -->
+    <!-- -->
+    <!-- Named Templates for the service block (MailToAuthor, AdditionalServices, ExportFunctions). -->
+    <!-- -->
     <xsl:template name="MailToAuthor">
         <xsl:if test ="$isMailPossible">
             <xsl:element name="br"/>
@@ -956,7 +1010,7 @@
         <!-- google-scholar -->
         <xsl:if test="normalize-space(TitleMain/@Value)">
             <xsl:element name="a">
-           <!-- TODO: Use Zend Url-Helper to build href attribute -->
+                <!-- TODO: Use Zend Url-Helper to build href attribute -->
                 <xsl:attribute name="href">
                     <xsl:text disable-output-escaping="yes">http://scholar.google.de/scholar?hl=de&amp;q="</xsl:text>
                     <xsl:value-of select="TitleMain/@Value"/>
@@ -981,13 +1035,13 @@
             </xsl:element>
             <xsl:text> </xsl:text>
         </xsl:if>
-     </xsl:template>
+    </xsl:template>
 
     <xsl:template name="ExportFunctions">
         <!-- Bib-Export -->
         <li>
             <xsl:element name="a">
-               <!-- TODO: Use Zend Url-Helper to build href attribute -->
+                <!-- TODO: Use Zend Url-Helper to build href attribute -->
                 <xsl:attribute name="href">
                     <xsl:value-of select="$baseUrl"/>
                     <xsl:text>/citationExport/index/download/output/bibtex/docId/</xsl:text>
@@ -1029,7 +1083,7 @@
         <!-- Ris-Export -->
         <li>
             <xsl:element name="a">
-               <!-- TODO: Use Zend Url-Helper to build href attribute -->
+                <!-- TODO: Use Zend Url-Helper to build href attribute -->
                 <xsl:attribute name="href">
                     <xsl:value-of select="$baseUrl"/>
                     <xsl:text>/citationExport/index/download/output/ris/docId/</xsl:text>
@@ -1068,9 +1122,37 @@
         </li>
     </xsl:template>
     
-<!-- -->
-<!-- Additional Templates with auxilliary functions. -->
-<!-- -->
+    <xsl:template name="PrintOnDemand">
+        <a>
+            <xsl:attribute name="href">
+                <xsl:text>http://www.epubli.de/oai/kobv.de-opus-tuberlin/</xsl:text>
+                <xsl:value-of select="@Id" />
+            </xsl:attribute>
+                <xsl:element name="img">
+                    <xsl:attribute name="src">
+                        <xsl:value-of select="$layoutPath"/>
+                        <xsl:text>/img/epubli.png</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="name">
+                        <xsl:text>epubli</xsl:text>
+                    </xsl:attribute>
+                    <xsl:attribute name="title">
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_epubli</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:attribute name="alt">
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_epubli</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                </xsl:element>
+        </a>
+    </xsl:template>
+    
+    <!-- -->
+    <!-- Additional Templates with auxilliary functions. -->
+    <!-- -->
     <!-- Named template to proof, what to show for collections, depending on display_frontdoor -->
     <xsl:template name="checkdisplay">
         <xsl:if test="contains(@RoleDisplayFrontdoor,'Number') and @Number != ''">
@@ -1093,7 +1175,7 @@
             </xsl:call-template>
             <xsl:text>)</xsl:text>
         </xsl:if>
-	<xsl:text>:</xsl:text>
+        <xsl:text>:</xsl:text>
     </xsl:template>
 
     <!-- Named template to translate an arbitrary string. Needs the translation key as a parameter. -->
