@@ -55,7 +55,7 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
         $body = $this->getResponse()->getBody();
         $this->assertNotContains('ddc', $body);
-        $this->assertTrue(strstr($body, '<b>Dewey Decimal Classification</b>') || strstr($body, '<b>DDC-Sachgruppen</b>'));
+        $this->assertTrue(strstr($body, '<b>Dewey Decimal Classification</b>') || strstr($body, '<b>DDC-Klassifikation</b>'));
     }
 
     /**
