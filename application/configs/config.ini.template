@@ -126,6 +126,17 @@ oai.repository.name = Opus4 Demo Instance
 oai.repository.identifier = opus4.demo
 oai.sample.identifier = oai:opus4.demo:90
 
+; PRINT ON DEMAND SETTINGS
+; To enable print on demand services specifiy the provider's url 
+; and (optionally) the name of a button image.
+; The image must reside in the current layout's image folder
+; (e.g. server/public/layouts/opus4/img/)
+;
+; When a provider is specified, the print on demand button or link will
+; be displayed if the document's licence allows it.
+; printOnDemand.url = 
+; printOnDemand.button =
+
 ; The following is needed even if sections are empty.
 [staging : production]
 

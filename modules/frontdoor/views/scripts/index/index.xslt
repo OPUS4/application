@@ -110,7 +110,7 @@
                 </ul>
             </div>
             
-            <xsl:if test="Licence[@PodAllowed='1']">
+            <xsl:if test="$printOnDemandEnabled and Licence[@PodAllowed='1']">
                 <div id="print-on-demand" class="services">
                     <h3>
                         <xsl:call-template name="translateString">
@@ -1125,28 +1125,38 @@
     <xsl:template name="PrintOnDemand">
         <a>
             <xsl:attribute name="href">
-                <xsl:text>http://www.epubli.de/oai/kobv.de-opus-tuberlin/</xsl:text>
+                <xsl:value-of select="$printOnDemandUrl"/>
                 <xsl:value-of select="@Id" />
             </xsl:attribute>
-                <xsl:element name="img">
-                    <xsl:attribute name="src">
-                        <xsl:value-of select="$layoutPath"/>
-                        <xsl:text>/img/epubli.png</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="name">
-                        <xsl:text>epubli</xsl:text>
-                    </xsl:attribute>
-                    <xsl:attribute name="title">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">frontdoor_epubli</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:attribute>
-                    <xsl:attribute name="alt">
-                        <xsl:call-template name="translateString">
-                            <xsl:with-param name="string">frontdoor_epubli</xsl:with-param>
-                        </xsl:call-template>
-                    </xsl:attribute>
-                </xsl:element>
+            <xsl:choose>
+                <xsl:when test="$printOnDemandButton != ''">
+                    <xsl:element name="img">
+                        <xsl:attribute name="src">
+                            <xsl:value-of select="$layoutPath"/>
+                            <xsl:text>/img/</xsl:text>
+                            <xsl:value-of select="$printOnDemandButton" />
+                        </xsl:attribute>
+                        <xsl:attribute name="name">
+                            <xsl:text>epubli</xsl:text>
+                        </xsl:attribute>
+                        <xsl:attribute name="title">
+                            <xsl:call-template name="translateString">
+                                <xsl:with-param name="string">frontdoor_pod_description</xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:attribute>
+                        <xsl:attribute name="alt">
+                            <xsl:call-template name="translateString">
+                                <xsl:with-param name="string">frontdoor_pod_description</xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:attribute>
+                    </xsl:element>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="translateString">
+                        <xsl:with-param name="string">frontdoor_pod_description</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:otherwise>
+            </xsl:choose>
         </a>
     </xsl:template>
     

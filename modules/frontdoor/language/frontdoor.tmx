@@ -148,12 +148,12 @@
             <seg>Print On Demand</seg>
         </tuv>
     </tu>
-    <tu tuid="frontdoor_epubli">
+    <tu tuid="frontdoor_pod_description">
         <tuv xml:lang="en">
-            <seg>gedruckt bestellen bei epubli</seg>
+            <seg>gedruckt bestellen</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>order print from epubli</seg>
+            <seg>order print</seg>
         </tuv>
     </tu>
 

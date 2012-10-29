@@ -396,6 +396,13 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSHOSTING-52
      */
     public function testShowLinkForPrintOnDemandIfLicenceAppropriate() {
+        $podConfArray = array('printOnDemand' => array(
+            'url' => 'http://localhost/',
+            'button' => ''
+        ));
+        $podConfig = new Zend_Config($podConfArray);
+        Zend_Registry::getInstance()->get('Zend_Config')->merge($podConfig);
+        
         $this->dispatch('/frontdoor/index/index/docId/1');
         $this->assertQuery('div#print-on-demand');
     }
@@ -404,6 +411,13 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSHOSTING-52
      */
     public function testHideLinkForPrintOnDemandIfLicenceNotAppropriate() {
+        $podConfArray = array('printOnDemand' => array(
+            'url' => 'http://localhost/',
+            'button' => ''
+        ));
+        $podConfig = new Zend_Config($podConfArray);
+        Zend_Registry::getInstance()->get('Zend_Config')->merge($podConfig);
+        
         $this->dispatch('/frontdoor/index/index/docId/91');
         $this->assertNotQuery('div#print-on-demand');
     }

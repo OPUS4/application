@@ -104,6 +104,17 @@ class Frontdoor_IndexController extends Controller_Action {
         $proc->setParameter('', 'layoutPath', $baseUrl . '/' . $layoutPath);
         $proc->setParameter('', 'isMailPossible', $this->isMailPossible($document));
         $proc->setParameter('', 'numOfShortAbstractChars', $numOfShortAbstractChars);
+        
+        /* print on demand config */
+        $printOnDemandEnabled = false;
+        $podConfig = $config->get('printOnDemand', false);
+        if ($podConfig !== false) {
+            $printOnDemandEnabled = true;
+            $proc->setParameter('', 'printOnDemandUrl', $podConfig->get('url', ''));
+            $proc->setParameter('', 'printOnDemandButton', $podConfig->get('button', ''));
+        }
+        $proc->setParameter('', 'printOnDemandEnabled', $printOnDemandEnabled);
+
         $frontdoorContent = $proc->transformToXML($documentNode);
 
         /* Setup view. */
