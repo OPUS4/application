@@ -265,8 +265,10 @@
             <xsl:apply-templates select="Collection[@RoleName='bk']" />
             <xsl:apply-templates select="Collection[@RoleName='jel']" />            
             <xsl:apply-templates select="IdentifierSerial" />
-            
-            <xsl:apply-templates select="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel']" />
+
+            <xsl:for-each select="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel']">
+               <xsl:apply-templates select="." />
+            </xsl:for-each>
             <!-- End Collection Roles -->
 
             <xsl:apply-templates select="Licence" />

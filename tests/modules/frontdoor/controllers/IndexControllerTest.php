@@ -397,12 +397,12 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      */
     public function testShowLinkForPrintOnDemandIfLicenceAppropriate() {
         $podConfArray = array('printOnDemand' => array(
-            'url' => 'http://localhost/',
-            'button' => ''
-        ));
+                'url' => 'http://localhost/',
+                'button' => ''
+                ));
         $podConfig = new Zend_Config($podConfArray);
         Zend_Registry::getInstance()->get('Zend_Config')->merge($podConfig);
-        
+
         $this->dispatch('/frontdoor/index/index/docId/1');
         $this->assertQuery('div#print-on-demand');
     }
@@ -412,14 +412,24 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      */
     public function testHideLinkForPrintOnDemandIfLicenceNotAppropriate() {
         $podConfArray = array('printOnDemand' => array(
-            'url' => 'http://localhost/',
-            'button' => ''
-        ));
+                'url' => 'http://localhost/',
+                'button' => ''
+                ));
         $podConfig = new Zend_Config($podConfArray);
         Zend_Registry::getInstance()->get('Zend_Config')->merge($podConfig);
-        
+
         $this->dispatch('/frontdoor/index/index/docId/91');
         $this->assertNotQuery('div#print-on-demand');
+    }
+
+    /**
+     * Regression test for OPUSVIER-2492
+     */
+    public function testDisplayAllUserDefinedCollectionRoles() {
+
+        $this->dispatch('/frontdoor/index/index/docId/151');
+        $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'frontdoor-test-1:');
+        $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'frontdoor-test-2:');
     }
 
 }
