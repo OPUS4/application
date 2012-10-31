@@ -515,6 +515,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(0, $elements->length, "Unexpected thesis:grantor count");
     }
 
+
     /**
      * Regression test for existing thesis:* and ddb:* elements
      */
@@ -1235,5 +1236,46 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('<setSpec>pacs:07.75.', $body);
         $this->assertNotContains('<setSpec>pacs:85.85.', $body);
     }
+    /**
+     * Regression test for OPUSVIER-2607
+     */
+    public function testXMetaDissPlusOmitPersonSurnameIfEmpty() {
+
+      $document = new Opus_Document();
+      $document->setServerState('published');
+
+      $author = new Opus_Person();
+      $author->setLastName('Foo');
+      $author->setDateOfBirth('1900-01-01');
+      $author->setPlaceOfBirth('Berlin');
+      $document->addPersonAuthor($author);
+
+      $advisor = new Opus_Person();
+      $advisor->setLastName('Bar');
+      $advisor->setDateOfBirth('1900-01-01');
+      $advisor->setPlaceOfBirth('Berlin');
+      $document->addPersonAdvisor($advisor);
+
+      $referee = new Opus_Person();
+      $referee->setLastName('Baz');
+      $referee->setDateOfBirth('1900-01-01');
+      $referee->setPlaceOfBirth('Berlin');
+      $document->addPersonReferee($referee);
+
+      $document->store();
+
+      $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $document->getId());
+      $this->assertResponseCode(200);
+      $response = $this->getResponse();
+      $xpath = $this->prepareXpathFromResultString($response->getBody());
+      $authorFirstName = $xpath->query('//xMetaDiss:xMetaDiss/dc:creator/pc:person/pc:name/pc:foreName');
+      $this->assertEquals(0, $authorFirstName->length);
+      $advisorFirstName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[thesis:role="advisor"]/pc:person/pc:name/pc:foreName');
+      $this->assertEquals(0, $advisorFirstName->length);
+      $refereeFirstName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[thesis:role="referee"]/pc:person/pc:name/pc:foreName');
+      $this->assertEquals(0, $refereeFirstName->length);
+
+      $document->deletePermanent();
+   }
 
 }
