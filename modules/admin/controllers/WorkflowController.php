@@ -106,6 +106,19 @@ class Admin_WorkflowController extends Controller_Action {
             case 'YES':
                 try {
                     $this->__workflowHelper->changeState($document, $targetState);
+                    if ($targetState == 'published') {
+                        $notification = new Util_Notification();
+                        $url = $this->view->url(
+                            array(
+                                "module" => "frontdoor",
+                                "controller" => "index",
+                                "action" => "index",
+                                "docId" => $document->getId()
+                            ),
+                            null,
+                            true);
+                        $notification->prepareMail($document, Util_Notification::PUBLICATION, $this->view->serverUrl() . $url);
+                    }
                 }
                 catch (Exception $e) {
                     $this->_redirectTo('index', array('failure' =>

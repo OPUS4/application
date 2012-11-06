@@ -1,0 +1,28 @@
+Information zum OPUS4-Dokumentenserver!
+
+Folgendes Dokument wurde auf dem OPUS4-Dokumentenserver freigegeben:
+
+<?echo $url . "\n" ?>
+
+
+<?php if (!empty($authors)) : ?>
+Autor(en):
+<?php foreach ($authors as $author) : ?>
+<?php echo $author . "\n" ?>
+<?php endforeach ?>
+<?php else : ?>
+Autor(en): n/a
+<?php endif ?>
+
+<?php if ($title != '') : ?>
+Titel: <?php echo $title . "\n" ?>
+<?php else : ?>
+Titel: n/a
+<?php endif ?>
+
+OPUS-ID: <?echo $docId . "\n" ?>
+
+
+Mit freundlichen Grüßen
+
+Ihr OPUS-Team

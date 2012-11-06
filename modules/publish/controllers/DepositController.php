@@ -46,7 +46,7 @@ class Publish_DepositController extends Controller_Action {
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
         $this->log = Zend_Registry::get('Zend_Log');
         $this->session = new Zend_Session_Namespace('Publish');
-
+        
         parent::__construct($request, $response, $invokeArgs);
     }
 
@@ -87,38 +87,17 @@ class Publish_DepositController extends Controller_Action {
             }
         }
 
-        if (isset($this->depositData['send']))
+        if (isset($this->depositData['send'])) {
             unset($this->depositData['send']);
+        }
 
         $depositData = new Publish_Model_Deposit($this->depositData);
         $this->document = $depositData->getDocument();
         $this->document->setServerState('unpublished');
         $this->session->documentId = $this->document->store();
-        $docId = $this->session->documentId;        
-
-        $this->log->info("Document $docId was successfully stored!");
-
-        // Build URLs for the publish-notification-mail.
-        $serverUrl = $this->view->serverUrl();
-        $fullDocUrl = $serverUrl . $this->view->documentUrl()->frontdoor($docId);
-        $reviewUrl = $serverUrl . $this->view->url(array(
-                    'module' => 'review',
-                    'controller' => 'index',
-                    'action' => 'index'));
-        $adminEditUrl = $serverUrl . $this->view->documentUrl()->adminShow($docId);
-
-
-        $this->log->debug("fullDocUrl:   $fullDocUrl");
-        $this->log->debug("reviewUrl:    $reviewUrl");
-        $this->log->debug("adminEditUrl: $adminEditUrl");
-
-        $subject = $this->view->translate('mail_publish_notification_subject', $docId);
-        $message = $this->view->translate('mail_publish_notification', $fullDocUrl, $reviewUrl, $adminEditUrl);
-
-        $this->log->debug("sending email (subject): $subject");
-        $this->log->debug("sending email (body):    \n$message\n-- end email.");
-        $this->__scheduleNotification($subject, $message);
-
+        $docId = $this->session->documentId;  
+        $this->log->info("Document $docId was successfully stored!");        
+      
         // Prepare redirect to confirmation action.
         $this->session->depositConfirmDocumentId = $docId;
 
@@ -132,6 +111,18 @@ class Publish_DepositController extends Controller_Action {
             $targetController = $config->publish->depositComplete->controller;
             $targetModule = $config->publish->depositComplete->module;
         }
+
+        $notification = new Util_Notification($this->log, $config);
+        $url = $this->view->url(
+            array(
+                "module" => "admin",
+                "controller" => "document",
+                "action" => "index",
+                "id" => $this->document->getId()
+            ),
+            null,
+            true);
+        $notification->prepareMail($this->document, Util_Notification::SUBMISSION, $this->view->serverUrl() . $url);
 
         return $this->_redirectToAndExit($targetAction, null, $targetController, $targetModule);
     }
@@ -154,34 +145,6 @@ class Publish_DepositController extends Controller_Action {
         $this->session->unsetAll();
 
         return;
-    }
-
-    /**
-     * Schedules notifications for referees.
-     * @param <type> $projects
-     */
-    private function __scheduleNotification($subject, $message) {
-
-        $job = new Opus_Job();
-        $job->setLabel(Opus_Job_Worker_MailPublishNotification::LABEL);
-        $job->setData(array(
-            'subject' => $subject,
-            'message' => $message,
-            'users' => 'admin',
-            'docId' => $this->session->documentId
-        ));
-
-        if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
-            // Queue job (execute asynchronously)
-            // skip creating job if equal job already exists
-            if (true === $job->isUniqueInQueue()) {
-                $job->store();
-            }
-        } else {
-            // Execute job immediately (synchronously)
-            $mail = new Opus_Job_Worker_MailPublishNotification($this->log);
-            $mail->work($job);
-        }
     }
 
 }

@@ -103,12 +103,11 @@ class Matheon_SelectReviewerController extends Controller_Action {
         $baseUrlFiles = $serverUrl . '/opus4-matheon/files';
 
         $job = new Opus_Job();
-        $job->setLabel(Opus_Job_Worker_MailPublishNotification::LABEL);
+        $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
         $job->setData(array(
             'subject' => $document->renderPublishMailSubject(),
             'message' => $document->renderPublishMailBody($baseUrlServer, $baseUrlFiles),
-            'users' => $recipient,
-            'docId' => $document->getId(),
+            'users' => $recipient
         ));
 
 
@@ -124,7 +123,7 @@ class Matheon_SelectReviewerController extends Controller_Action {
         }
 
         // Execute job immediately (synchronously)
-        $mail = new Opus_Job_Worker_MailPublishNotification($this->_logger);
+        $mail = new Opus_Job_Worker_MailNotification($this->_logger);
         $mail->work($job);
 
         return true;
