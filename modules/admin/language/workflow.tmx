@@ -138,7 +138,7 @@
         <seg>The document is already in state '%1$s'.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Das Dokument befindet sich bereits in Status '$1$s'.</seg>
+        <seg>Das Dokument befindet sich bereits in Status '%1$s'.</seg>
       </tuv>
     </tu>
 
@@ -147,7 +147,7 @@
         <seg>The document status cannot be changed to '%1$s'.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Der Status des Dokumentes kann nicht zu '$1$s' geändert werden.</seg>
+        <seg>Der Status des Dokumentes kann nicht zu '%1$s' geändert werden.</seg>
       </tuv>
     </tu>
 
