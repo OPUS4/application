@@ -204,25 +204,30 @@ class Util_Notification {
             return;
         }
 
-        foreach ($recipients as $recipient) {
-            $job = new Opus_Job();
-            $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
-            $job->setData(array(
-                'subject' => $subject,
-                'message' => $message,
-                'users' => array($recipient)
-            ));
+        $addressesUsed = array();
 
-            if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
-                // Queue job (execute asynchronously)
-                // skip creating job if equal job already exists
-                if (true === $job->isUniqueInQueue()) {
-                    $job->store();
+        foreach ($recipients as $recipient) {
+            if (!in_array($recipient['address'], $addressesUsed)) {
+                $job = new Opus_Job();
+                $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
+                $job->setData(array(
+                    'subject' => $subject,
+                    'message' => $message,
+                    'users' => array($recipient)
+                ));
+
+                if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
+                    // Queue job (execute asynchronously)
+                    // skip creating job if equal job already exists
+                    if (true === $job->isUniqueInQueue()) {
+                        $job->store();
+                    }
+                } else {
+                    // Execute job immediately (synchronously)
+                    $mail = new Opus_Job_Worker_MailNotification($this->logger, false);
+                    $mail->work($job);
                 }
-            } else {
-                // Execute job immediately (synchronously)
-                $mail = new Opus_Job_Worker_MailNotification($this->logger, false);
-                $mail->work($job);
+                array_push($addressesUsed, $recipient['address']);
             }
         }
 
