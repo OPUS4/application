@@ -266,6 +266,53 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         $result = $val->validate();
         $this->assertTrue($result);
     }
-        
+
+    /**
+     * Regression test for OPUSVIER-2635
+     */
+    public function testSeriesNumberValidationWithUnknownSeries() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->documentTypes->include = 'all';
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'all';
+        $form = new Publish_Form_PublishingSecond($this->_logger);
+        $data = array(
+            'PersonSubmitterFirstName_1' => 'John',
+            'PersonSubmitterLastName_1' => 'Doe',
+            'TitleMain_1' => 'Entenhausen',
+            'TitleMainLanguage_1' => 'deu',
+            'Licence' => 'ID:4',
+            'Series_1' => 'ID:123456-doesnotexist',
+            'SeriesNumber_1' => '123'
+        );
+
+        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $result = $val->validate();
+        $this->assertTrue($result);
+    }
+
+
+    /**
+     * Regression test for OPUSVIER-2635
+     */
+    public function testSeriesNumberValidationWithMissingSeriesField() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->documentTypes->include = 'all';
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'all';
+        $form = new Publish_Form_PublishingSecond($this->_logger);
+        $data = array(
+            'PersonSubmitterFirstName_1' => 'John',
+            'PersonSubmitterLastName_1' => 'Doe',
+            'TitleMain_1' => 'Entenhausen',
+            'TitleMainLanguage_1' => 'deu',
+            'Licence' => 'ID:4',
+            'SeriesNumber_1' => '123'
+        );
+
+        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $result = $val->validate();
+        $this->assertTrue($result);
+    }
 }
 
