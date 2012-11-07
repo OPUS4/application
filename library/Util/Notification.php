@@ -47,7 +47,7 @@ class Util_Notification {
 
     public function prepareMail($document, $context, $url) {
         if (!$this->validateContext($context)) {
-            $this->logger->error("context $context is currently not supported");
+            $this->logger->err("context $context is currently not supported");
             return;
         }
 
@@ -203,25 +203,28 @@ class Util_Notification {
             $this->logger->warn("No recipients could be determined for email notification: skip operation");
             return;
         }
-        
-        $job = new Opus_Job();
-        $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
-        $job->setData(array(
-            'subject' => $subject,
-            'message' => $message,
-            'users' => $recipients
-        ));
 
-        if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
-            // Queue job (execute asynchronously)
-            // skip creating job if equal job already exists
-            if (true === $job->isUniqueInQueue()) {
-                $job->store();
+        foreach ($recipients as $recipient) {
+            $job = new Opus_Job();
+            $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
+            $job->setData(array(
+                'subject' => $subject,
+                'message' => $message,
+                'users' => array($recipient)
+            ));
+
+            if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
+                // Queue job (execute asynchronously)
+                // skip creating job if equal job already exists
+                if (true === $job->isUniqueInQueue()) {
+                    $job->store();
+                }
+            } else {
+                // Execute job immediately (synchronously)
+                $mail = new Opus_Job_Worker_MailNotification($this->logger, false);
+                $mail->work($job);
             }
-        } else {
-            // Execute job immediately (synchronously)
-            $mail = new Opus_Job_Worker_MailNotification($this->logger, false);
-            $mail->work($job);
         }
+
     }
 }
