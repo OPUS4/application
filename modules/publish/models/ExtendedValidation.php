@@ -34,11 +34,6 @@
  * @version     $Id$
  */
 
-/**
- * Description of ExtendedValidation
- *
- * @author Susanne Gottwald
- */
 class Publish_Model_ExtendedValidation {
 
     public $form;
@@ -71,36 +66,21 @@ class Publish_Model_ExtendedValidation {
      */
     public function validate() {
 
-        if (array_key_exists('Language', $this->data))
+        if (array_key_exists('Language', $this->data)) {
             $this->documentLanguage = $this->data['Language'];
-        else
+        }
+        else {
             $this->documentLanguage = null;
+        }
 
         $validPersons = $this->_validatePersons();
-
         $validTitles = $this->_validateTitles();
-
         $validCheckboxes = $this->_validateCheckboxes();
-
         $validSubjectLanguages = $this->_validateSubjectLanguages();
-
         $validCollection = $this->_validateCollectionLeafSelection();
-
         $validSeriesNumber = $this->_validateSeriesNumber();
-
         $validSeveralSeries = $this->_validateSeries();
-
-
-        if ($validPersons
-                && $validTitles
-                && $validCheckboxes
-                && $validSubjectLanguages
-                && $validCollection
-                && $validSeriesNumber
-                && $validSeveralSeries)
-            return true;
-        else
-            return false;
+        return $validPersons && $validTitles && $validCheckboxes && $validSubjectLanguages && $validCollection && $validSeriesNumber && $validSeveralSeries;
     }
 
     /**
@@ -612,8 +592,16 @@ class Publish_Model_ExtendedValidation {
             $collId = $matches[1];
 
             if (isset($collId)) {
-                $coll = new Opus_Collection($collId);
-                if ($coll->hasChildren()) {
+                $coll = null;
+                try {
+                    $coll = new Opus_Collection($collId);
+                }
+                catch (Opus_Model_Exception $e) {
+                    $this->log->error("could not instantiate Opus_Collection with id $collId", $e);
+                    $collectionLeafSelection = false;
+                }
+
+                if ($coll != null && $coll->hasChildren()) {
                     if (isset($element)) {
                         $element->clearErrorMessages();
                         $element->addError('publish_error_collection_leaf_required');
@@ -631,22 +619,31 @@ class Publish_Model_ExtendedValidation {
 
         foreach ($series AS $fieldname => $number) {
             $selectFieldName = str_replace('Number', '', $fieldname);
-            $selectFieldValue = $this->data[$selectFieldName];
+            if (key_exists($selectFieldName, $this->data)) {
+                $selectFieldValue = $this->data[$selectFieldName];
 
-            $matches = array();
-            if (preg_match('/^ID:(\d+)$/', $selectFieldValue, $matches) == 0) {
-                continue;
-            }
+                $matches = array();
+                if (preg_match('/^ID:(\d+)$/', $selectFieldValue, $matches) == 0) {
+                    continue;
+                }
 
-            $seriesId = $matches[1];
+                $seriesId = $matches[1];
+                $currSeries = null;
+                try {
+                    $currSeries = new Opus_Series($seriesId);
+                }
+                catch (Opus_Model_Exception $e) {
+                    $this->log->err("could not instantiate Opus_Series with id $seriesId", $e);
+                    $validSeries = false;
+                }
 
-            $currSeries = new Opus_Series($seriesId);
-            if (!$currSeries->isNumberAvailable($number)) {
-                $this->log->debug("(Validation): error for element " . $fieldname);
-                $element = $this->form->getElement($fieldname);
-                $element->clearErrorMessages();
-                $element->addError('publish_error_seriesnumber_not_available');
-                $validSeries = false;
+                if ($currSeries != null && !$currSeries->isNumberAvailable($number)) {
+                    $this->log->debug("(Validation): error for element " . $fieldname);
+                    $element = $this->form->getElement($fieldname);
+                    $element->clearErrorMessages();
+                    $element->addError('publish_error_seriesnumber_not_available');
+                    $validSeries = false;
+                }
             }
         }
 
