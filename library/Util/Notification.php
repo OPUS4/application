@@ -47,7 +47,7 @@ class Util_Notification {
 
     public function prepareMail($document, $context, $url) {
         if (!$this->validateContext($context)) {
-            $this->logger->err("context $context is currently not supported");
+            $this->logger->err("context $context is currently not supported or delivery of notification mails is not enabled for the current context");
             return;
         }
 
