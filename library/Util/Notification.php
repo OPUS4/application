@@ -47,6 +47,7 @@ class Util_Notification {
 
     public function prepareMail($document, $context, $url) {
         if (!$this->validateContext($context)) {
+            $this->logger->error("context $context is currently not supported");
             return;
         }
 
@@ -64,8 +65,7 @@ class Util_Notification {
                 if ($context == self::PUBLICATION) {
                     $email = trim($author->getEmail());
                     if (!empty($email)) {
-                        array_push($authorAddresses, array( "name" => $name, "address" => $email));
-                        $this->logger->debug("send $context notification mail to author $email ($name)");
+                        array_push($authorAddresses, array( "name" => $name, "address" => $email));                        
                     }
                 }
             }
@@ -145,6 +145,9 @@ class Util_Notification {
     private function getRecipients($context, $authorAddresses = null, $document = null) {
         if ($context == self::SUBMISSION && isset($this->config->notification->document->submitted->email)) {
             $addresses = array();
+            if (trim($this->config->notification->document->submitted->email) == '') {
+                return $addresses;
+            }
             foreach (explode(",", $this->config->notification->document->submitted->email) as $address) {
                 $address = trim($address);
                 $this->logger->debug("send $context notification mail to $address");
@@ -156,6 +159,9 @@ class Util_Notification {
         if ($context == self::PUBLICATION) {
             $addresses = array();
             if (isset($this->config->notification->document->published->email)) {
+                if (trim($this->config->notification->document->published->email) == '') {
+                    return $addresses;
+                }
                 foreach (explode(",", $this->config->notification->document->published->email) as $address) {
                     $address = trim($address);
                     $this->logger->debug("send $context notification mail to $address");
@@ -165,6 +171,7 @@ class Util_Notification {
 
             foreach ($authorAddresses as $authorAddress) {
                 array_push($addresses, $authorAddress);
+                $this->logger->debug("send $context notification mail to author " . $authorAddress['address'] . "(" . $authorAddress['name'] . ")");
             }
             
             $submitter = $document->getPersonSubmitter();
@@ -180,14 +187,14 @@ class Util_Notification {
         }        
     }
 
-    private function validateContext($context, $logger = null) {
+    private function validateContext($context) {
         if ($context == self::SUBMISSION) {
-            return true;
+            return isset($this->config->notification->document->submitted->enabled) && $this->config->notification->document->submitted->enabled == 1;
         }
         if ($context == self::PUBLICATION) {
-            return true;
+            return isset($this->config->notification->document->published->enabled) && $this->config->notification->document->published->enabled == 1;;
         }
-        $logger->err("Email notification mechanism is not supported for context '$context'");
+        $this->logger->err("Email notification mechanism is not supported for context '$context'");
         return false;
     }
 
@@ -196,6 +203,7 @@ class Util_Notification {
             $this->logger->warn("No recipients could be determined for email notification: skip operation");
             return;
         }
+        
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
         $job->setData(array(
