@@ -45,7 +45,17 @@ class Util_Notification {
         $this->config = is_null($config) ? Zend_Registry::get('Zend_Config') : $config;
     }
 
-    public function prepareMail($document, $context, $url, $notifySubmitter = false, $notifyAuthors = array()) {
+    /**
+     *
+     * @param Opus_Document $document das Dokument auf das sich die Notifizierung bezieht
+     * @param String $context Notifizierungskontext
+     * @param String $url vollständiger Deeplink, der in der Mail angezeigt werden soll
+     * @param boolean $notifySubmitter Wenn false, wird der Submitter nicht notifiziert, auch wenn er eine Mailadresse hat
+     * @param array $notifyAuthors Bitmaske, die für jeden Autor (über den Index referenziert) angibt, ob ihm/ihr eine
+     *                             E-Mail gesendet werden kann (wenn false, dann wird keine Notifizierung versendet, auch
+     *                             wenn der Autor eine Mailadresse hat)
+     */
+    public function prepareMail($document, $context, $url, $notifySubmitter = true, $notifyAuthors = array()) {
         if (!$this->validateContext($context)) {
             $this->logger->err("context $context is currently not supported or delivery of notification mails is not enabled for the current context");
             return;
@@ -142,7 +152,7 @@ class Util_Notification {
         return $body;
     }
 
-    private function getRecipients($context, $authorAddresses = null, $document = null, $notifySubmitter = false, $notifyAuthors = array()) {
+    private function getRecipients($context, $authorAddresses = null, $document = null, $notifySubmitter = true, $notifyAuthors = array()) {
         if ($context == self::SUBMISSION && isset($this->config->notification->document->submitted->email)) {
             $addresses = array();
             if (trim($this->config->notification->document->submitted->email) == '') {
@@ -171,7 +181,7 @@ class Util_Notification {
 
             if (!is_null($authorAddresses)) {
                 for ($i = 0; $i < count($authorAddresses); $i++) {
-                    if (isset($notifyAuthors[$i]) && $notifyAuthors[$i]) {
+                    if (empty($notifyAuthors) || (isset($notifyAuthors[$i]) && $notifyAuthors[$i])) {
                         $authorAddress = $authorAddresses[$i];
                         array_push($addresses, $authorAddress);
                         $this->logger->debug("send $context notification mail to author " . $authorAddress['address'] . " (" . $authorAddress['name'] . ")");
