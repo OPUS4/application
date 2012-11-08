@@ -69,15 +69,17 @@ class Util_Notification {
 
         $personAuthors = $document->getPersonAuthor();
         if (!empty($personAuthors)) {
+            $index = 0;
             foreach ($personAuthors as $author) {
                 $name = trim($author->getLastName() . ", " . $author->getFirstName());
                 array_push($authors, $name);
                 if ($context == self::PUBLICATION) {
                     $email = trim($author->getEmail());
-                    if (!empty($email)) {
+                    if (!empty($email) && (empty($notifyAuthors) || (isset($notifyAuthors[$index]) && $notifyAuthors[$index]))) {
                         array_push($authorAddresses, array( "name" => $name, "address" => $email));                        
                     }
                 }
+                $index++;
             }
         }
 
@@ -96,7 +98,7 @@ class Util_Notification {
         $this->scheduleNotification(
                 $this->getMailSubject($context, $document->getId(), $authors, $title),
                 $this->getMailBody($context, $document->getId(), $authors, $title, $url),
-                $this->getRecipients($context, $authorAddresses, $document, $notifySubmitter, $notifyAuthors));
+                $this->getRecipients($context, $authorAddresses, $document, $notifySubmitter));
 
         $this->logger->info("$context notification mail creation was completed successfully");
     }
@@ -152,7 +154,7 @@ class Util_Notification {
         return $body;
     }
 
-    private function getRecipients($context, $authorAddresses = null, $document = null, $notifySubmitter = true, $notifyAuthors = array()) {
+    private function getRecipients($context, $authorAddresses = null, $document = null, $notifySubmitter = true) {
         if ($context == self::SUBMISSION && isset($this->config->notification->document->submitted->email)) {
             $addresses = array();
             if (trim($this->config->notification->document->submitted->email) == '') {
@@ -180,12 +182,10 @@ class Util_Notification {
             }
 
             if (!is_null($authorAddresses)) {
-                for ($i = 0; $i < count($authorAddresses); $i++) {
-                    if (empty($notifyAuthors) || (isset($notifyAuthors[$i]) && $notifyAuthors[$i])) {
-                        $authorAddress = $authorAddresses[$i];
-                        array_push($addresses, $authorAddress);
-                        $this->logger->debug("send $context notification mail to author " . $authorAddress['address'] . " (" . $authorAddress['name'] . ")");
-                    }
+                for ($i = 0; $i < count($authorAddresses); $i++) {                    
+                    $authorAddress = $authorAddresses[$i];
+                    array_push($addresses, $authorAddress);
+                    $this->logger->debug("send $context notification mail to author " . $authorAddress['address'] . " (" . $authorAddress['name'] . ")");
                 }
             }
 

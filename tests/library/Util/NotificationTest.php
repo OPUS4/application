@@ -370,6 +370,69 @@ class Util_NotificationTest extends ControllerTestCase {
         $this->assertEquals($recipients[0]['address'], "published@localhost");
     }
 
+    /**
+     * Diese Testmethode hat keine Assertions. Sie stellt lediglich sicher, dass alle Codeteile
+     * der Funktion prepareMail durchlaufen werden.
+     */
+    public function testPrepareMailWithTwoOptionalArgs() {
+        $doc = new Opus_Document();
+        $doc->setLanguage("eng");
+
+        $title = new Opus_Title();
+        $title->setValue("Test Document");
+        $title->setLanguage("eng");
+        $doc->addTitleMain($title);
+
+        $author = new Opus_Person();
+        $author->setFirstName("John");
+        $author->setLastName("Doe");
+        $author->setEmail("john@localhost.de");
+        $doc->addPersonAuthor($author);
+
+        $author = new Opus_Person();
+        $author->setFirstName("Jane");
+        $author->setLastName("Doe");
+        $author->setEmail("jane@localhost.de");
+        $doc->addPersonAuthor($author);
+
+        $submitter = new Opus_Person();
+        $submitter->setFirstName("John");
+        $submitter->setLastName("Submitter");
+        $submitter->setEmail("sub@localhost.de");
+        $doc->addPersonSubmitter($submitter);
+
+        $doc->store();
+        $this->notification->prepareMail($doc, Util_Notification::PUBLICATION, 'http://localhost/foo/1', false, array(false, true));
+        $doc->deletePermanent();
+    }
+
+    public function testGetRecipientsForPublicationContextWithoutSubmitter() {
+        $doc = new Opus_Document();
+        $doc->setLanguage("eng");
+
+        $title = new Opus_Title();
+        $title->setValue("Test Document");
+        $title->setLanguage("eng");
+        $doc->addTitleMain($title);
+
+        $submitter = new Opus_Person();
+        $submitter->setFirstName("John");
+        $submitter->setLastName("Submitter");
+        $submitter->setEmail("sub@localhost.de");
+        $doc->addPersonSubmitter($submitter);
+
+        $doc->store();
+        $method = $this->getMethod('getRecipients');
+        $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, array(array("name" => "foo", "address" => "foo@localhost")), $doc, false));
+        $this->assertEquals(2, count($recipients));
+        $this->assertEquals("published@localhost", $recipients[0]["name"]);
+        $this->assertEquals("published@localhost", $recipients[0]["address"]);
+        $this->assertEquals("foo", $recipients[1]["name"]);
+        $this->assertEquals("foo@localhost", $recipients[1]["address"]);
+        $doc->deletePermanent();
+        
+    }
+
     private function getMethod($methodName) {
         $class = new ReflectionClass('Util_Notification');
         $method = $class->getMethod($methodName);
