@@ -270,7 +270,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
         $doc->deletePermanent();
     }
 
-    private function testAuthorNotificationForMultipleAuthors() {
+    public function testAuthorNotificationForMultipleAuthors() {
         $this->enablePublishNotification();
         $doc = $this->createDocWithSubmitterAndAuthor('submitter@localhost.de', 'author@localhost.de');
 
