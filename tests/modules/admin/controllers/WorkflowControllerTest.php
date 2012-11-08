@@ -297,13 +297,13 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
         $this->assertContains('submitter@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('author@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('A@localhost.de', $this->getResponse()->getBody());
-        $this->assertContains('B@localhost.de', $this->getResponse()->getBody());
+        $this->assertContains('C@localhost.de', $this->getResponse()->getBody());
         
         $this->assertContains('<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"', $this->getResponse()->getBody());
-        $this->assertContains('<input type="checkbox" name="author_1" id="author_1" value="1"  checked="checked"', $this->getResponse()->getBody());
-        $this->assertContains('<input type="checkbox" name="author_2" id="author_2" value="1"  checked="checked"', $this->getResponse()->getBody());
+        $this->assertContains('<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"', $this->getResponse()->getBody());
+        $this->assertContains('<input type="checkbox" name="author_2" id="author_2" value="1" checked="checked"', $this->getResponse()->getBody());
         $this->assertContains('<input type="checkbox" name="author_3" id="author_3" value="1" disabled="1"', $this->getResponse()->getBody());
-        $this->assertContains('<input type="checkbox" name="author_4" id="author_4" value="1"  checked="checked"', $this->getResponse()->getBody());
+        $this->assertContains('<input type="checkbox" name="author_4" id="author_4" value="1" checked="checked"', $this->getResponse()->getBody());
 
         $doc->deletePermanent();
     }
