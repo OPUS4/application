@@ -27,7 +27,8 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -70,23 +71,17 @@ class Admin_WorkflowController extends Controller_Action {
 
         // Check if document identifier is valid
         if (!isset($document)) {
-            return $this->_redirectTo('index', array('failure' =>
-                $this->view->translate('admin_document_error_novalidid')),
-                    'documents', 'admin');
+            return $this->_redirectTo('index', array('failure' => $this->view->translate('admin_document_error_novalidid')), 'documents', 'admin');
         }
 
         // Check if valid target state
         if (!$this->__workflowHelper->isValidState($targetState)) {
-            return $this->_redirectTo('index', array('failure' =>
-                $this->view->translate('admin_workflow_error_invalidstate')),
-                    'document', 'admin', array('id' => $docId));
+            return $this->_redirectTo('index', array('failure' => $this->view->translate('admin_workflow_error_invalidstate')), 'document', 'admin', array('id' => $docId));
         }
 
         // Check if allowed target state
         if (!$this->__workflowHelper->isTransitionAllowed($document, $targetState)) {
-            return $this->_redirectTo('index', array('failure' =>
-                $this->view->translate('admin_workflow_error_illegal_transition',
-                        $targetState)), 'document', 'admin', array('id' => $docId));
+            return $this->_redirectTo('index', array('failure' => $this->view->translate('admin_workflow_error_illegal_transition', $targetState)), 'document', 'admin', array('id' => $docId));
         }
 
         // Check if document is already in target state
@@ -96,14 +91,13 @@ class Admin_WorkflowController extends Controller_Action {
             if (!$this->view->translate()->getTranslator()->isTranslated($key)) {
                 $key = 'admin_workflow_error_alreadyinstate';
             }
-            $message = $this->view->translate($key, $targetState);
-
-            return $this->_redirectTo('index', array('failure' => $message),
-                    'document', 'admin', array('id' => $docId));
+            return $this->_redirectTo('index', array('failure' => $this->view->translate($key, $targetState)), 'document', 'admin', array('id' => $docId));
         }
 
-        switch ($this->__confirm($docId, $targetState)) {
-            case 'YES':
+        if ($this->getRequest()->isPost()) {
+            $form = $this->__getConfirmationForm($docId, $targetState);
+            $sureyes = $this->getRequest()->getPost('sureyes');
+            if ($form->isValid($this->getRequest()->getPost()) && isset($sureyes) === true) {
                 try {
                     $this->__workflowHelper->changeState($document, $targetState);
                     if ($targetState == 'published') {
@@ -117,67 +111,45 @@ class Admin_WorkflowController extends Controller_Action {
                             ),
                             null,
                             true);
-                        $notification->prepareMail($document, Util_Notification::PUBLICATION, $this->view->serverUrl() . $url);
+
+                        $authorsBitmask = array();
+                        foreach ($form->getValues() as $key => $val) {
+                            $pos = strpos($key, 'author_');
+                            if ($pos !== false && $pos === 0) {
+                                array_push($authorsBitmask, $val == '1');
+                            }
+                        }
+
+                        $notification->prepareMail(
+                                $document,
+                                Util_Notification::PUBLICATION,
+                                $this->view->serverUrl() . $url,
+                                $form->getValue('submitter') == '1',
+                                $authorsBitmask);
                     }
                 }
                 catch (Exception $e) {
-                    $this->_redirectTo('index', array('failure' =>
-                        $e->getMessage()), 'documents', 'admin');
+                    $this->_redirectTo('index', array('failure' => $e->getMessage()), 'documents', 'admin');
                 }
 
                 $key = 'admin_workflow_' . $targetState . '_success';
-
                 if (!$this->view->translate()->getTranslator()->isTranslated($key)) {
                     $key = 'admin_workflow_success';
                 }
-
                 $message = $this->view->translate($key, $docId, $targetState);
 
                 if ($targetState === 'removed') {
-                    return $this->_redirectTo('index', $message, 'documents',
-                            'admin');
+                    return $this->_redirectTo('index', $message, 'documents', 'admin');
                 }
-                else {
-                    return $this->_redirectTo('index', $message, 'document',
-                            'admin', array('id' => $docId));
-                }
-                break;
-            case 'NO':
-                $this->_redirectTo('index', null, 'document', 'admin',
-                        array('id' => $docId));
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * Prepare or processes POST from confirmation page.
-     * @param type $docId
-     * @param type $action
-     * @return type
-     */
-    private function __confirm($docId, $targetState) {
-        // Check if request is POST and if yes check for user response
-        if ($this->getRequest()->isPost()) {
-            $sureyes = $this->getRequest()->getPost('sureyes');
-            $sureno = $this->getRequest()->getPost('sureno');
-
-            if (isset($sureyes) === true) {
-                return 'YES';
+                return $this->_redirectTo('index', $message, 'document', 'admin', array('id' => $docId));
             }
-            else if (isset($sureno) === true) {
-                return 'NO';
-            }
+            return $this->_redirectTo('index', null, 'document', 'admin', array('id' => $docId));
         }
-
-        // show confirmation page if not a POST and if not answered YES or NO
+        
+        // show confirmation page
         $this->view->title = $this->view->translate('admin_workflow_' . $targetState);
-        $this->view->text = $this->view->translate(
-                'admin_workflow_' . $targetState . '_sure', $docId);
-        $yesnoForm = $this->__getConfirmationForm($docId, $targetState);
-        $this->view->form = $yesnoForm;
-        $this->renderScript('document/confirm.phtml');
+        $this->view->text = $this->view->translate('admin_workflow_' . $targetState . '_sure', $docId);
+        $this->view->form = $this->__getConfirmationForm($docId, $targetState);
     }
 
     /**
@@ -188,15 +160,84 @@ class Admin_WorkflowController extends Controller_Action {
      * @return Admin_Form_YesNoForm
      */
     private function __getConfirmationForm($docId, $targetState) {
-        $yesnoForm = new Admin_Form_YesNoForm();
+        $form = new Admin_Form_YesNoForm();
+        $form->setAction($this->view->url(array('controller' => 'workflow', 'action' => 'changestate', 'targetState' => $targetState)));
+        $form->setMethod('post');
+
         $idElement = new Zend_Form_Element_Hidden('id');
         $idElement->setValue($docId);
-        $yesnoForm->addElement($idElement);
-        $yesnoForm->setAction($this->view->url(
-                array('controller' => 'workflow', 'action' => 'changestate',
-                    'targetState' => $targetState)));
-        $yesnoForm->setMethod('post');
-        return $yesnoForm;
+        $form->addElement($idElement);
+
+        $config = Zend_Registry::get('Zend_Config');
+        if ($targetState == 'published' && isset($config->notification->document->published->enabled) && $config->notification->document->published->enabled == 1) {
+            $this->addPublishNotificationSelection($docId, $form);
+        }
+        return $form;
+    }
+
+    /**
+     * add a checkbox for each PersonSubmitter and PersonAuthor (used to select
+     * recipients for publish notification email)
+     *
+     * @param int $docId
+     * @param Zend_Form $form
+     * 
+     */
+    private function addPublishNotificationSelection($docId, $form) {
+        $document = null;
+        try {
+            $document = new Opus_Document($docId);
+        }
+        catch (Opus_Model_Exception $e) {
+            $this->_logger->err(__CLASS__ . " could not retrieve Opus_Document with id $docId", $e);
+            return;
+        }
+
+        $form->addElement('hidden', 'plaintext',
+            array(
+                'description' => '<br/><p><strong>' . $this->view->translate('admin_workflow_notification_headline') . '</strong></p>' .
+                                 '<p>' . $this->view->translate('admin_workflow_notification_description') . '</p>',
+                'ignore' => true,
+                'decorators' => array(array('Description', array('escape' => false, 'tag' => '')))
+            )
+        );
+
+        $submitters = $document->getPersonSubmitter();
+        if (!is_null($submitters) && count($submitters) > 0) {
+            $label = $this->view->translate('admin_workflow_notification_submitter') . ' ' . trim($submitters[0]->getLastName()) . ", " . trim($submitters[0]->getFirstName());
+            $element = null;
+            if (trim($submitters[0]->getEmail()) == '') {
+                // email notification is not possible since no email address is specified for submitter
+                $label .= ' (' . $this->view->translate('admin_workflow_notification_noemail') . ')';
+                $element = new Zend_Form_Element_Checkbox('submitter', array('checked' => false, 'disabled' => true, 'label' => $label));
+            }
+            else {
+                $label .= ' (' . trim($submitters[0]->getEmail()) . ')';
+                $element = new Zend_Form_Element_Checkbox('submitter', array('checked' => true, 'label' => $label));
+            }            
+            $form->addElement($element);
+        }
+
+        $authors = $document->getPersonAuthor();
+        if (!is_null($authors)) {
+            $index = 1;
+            foreach ($authors as $author) {
+                $id = 'author_' . $index;
+                $label = $index . '. ' . $this->view->translate('admin_workflow_notification_author') . ' ' . trim($author->getLastName()) . ", " . trim($author->getFirstName());
+                $element = null;
+                if (trim($author->getEmail()) == '') {
+                    // email notification is not possible since no email address is specified for author
+                    $label .= ' (' . $this->view->translate('admin_workflow_notification_noemail') . ')';
+                    $element = new Zend_Form_Element_Checkbox($id, array('checked' => false, 'disabled' => true, 'label' => $label));
+                }
+                else {
+                    $label .= ' (' . trim($author->getEmail()) . ')';
+                    $element = new Zend_Form_Element_Checkbox($id, array('checked' => true, 'label' => 'foo', 'label' => $label));
+                }               
+                $form->addElement($element);
+                $index++;
+            }
+        }
     }
 
 }

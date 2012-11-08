@@ -45,7 +45,7 @@ class Util_Notification {
         $this->config = is_null($config) ? Zend_Registry::get('Zend_Config') : $config;
     }
 
-    public function prepareMail($document, $context, $url) {
+    public function prepareMail($document, $context, $url, $notifySubmitter = false, $notifyAuthors = array()) {
         if (!$this->validateContext($context)) {
             $this->logger->err("context $context is currently not supported or delivery of notification mails is not enabled for the current context");
             return;
@@ -86,7 +86,7 @@ class Util_Notification {
         $this->scheduleNotification(
                 $this->getMailSubject($context, $document->getId(), $authors, $title),
                 $this->getMailBody($context, $document->getId(), $authors, $title, $url),
-                $this->getRecipients($context, $authorAddresses, $document));
+                $this->getRecipients($context, $authorAddresses, $document, $notifySubmitter, $notifyAuthors));
 
         $this->logger->info("$context notification mail creation was completed successfully");
     }
@@ -142,7 +142,7 @@ class Util_Notification {
         return $body;
     }
 
-    private function getRecipients($context, $authorAddresses = null, $document = null) {
+    private function getRecipients($context, $authorAddresses = null, $document = null, $notifySubmitter = false, $notifyAuthors = array()) {
         if ($context == self::SUBMISSION && isset($this->config->notification->document->submitted->email)) {
             $addresses = array();
             if (trim($this->config->notification->document->submitted->email) == '') {
@@ -169,18 +169,25 @@ class Util_Notification {
                 }               
             }
 
-            foreach ($authorAddresses as $authorAddress) {
-                array_push($addresses, $authorAddress);
-                $this->logger->debug("send $context notification mail to author " . $authorAddress['address'] . "(" . $authorAddress['name'] . ")");
+            if (!is_null($authorAddresses)) {
+                for ($i = 0; $i < count($authorAddresses); $i++) {
+                    if (isset($notifyAuthors[$i]) && $notifyAuthors[$i]) {
+                        $authorAddress = $authorAddresses[$i];
+                        array_push($addresses, $authorAddress);
+                        $this->logger->debug("send $context notification mail to author " . $authorAddress['address'] . " (" . $authorAddress['name'] . ")");
+                    }
+                }
             }
-            
-            $submitter = $document->getPersonSubmitter();
-            if (!empty($submitter)) {
-                $name = trim($submitter[0]->getLastName() . ", " . $submitter[0]->getFirstName());
-                $email = trim($submitter[0]->getEmail());
-                if (!empty($email)) {
-                    array_push($addresses, array( "name" => $name , "address" => $email));
-                    $this->logger->debug("send $context notification mail to submitter $email ($name)");
+
+            if ($notifySubmitter && !is_null($document)) {
+                $submitter = $document->getPersonSubmitter();
+                if (!empty($submitter)) {
+                    $name = trim($submitter[0]->getLastName() . ", " . $submitter[0]->getFirstName());
+                    $email = trim($submitter[0]->getEmail());
+                    if (!empty($email)) {
+                        array_push($addresses, array( "name" => $name , "address" => $email));
+                        $this->logger->debug("send $context notification mail to submitter $email ($name)");
+                    }
                 }
             }
             return $addresses;

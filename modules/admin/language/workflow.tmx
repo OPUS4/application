@@ -242,6 +242,52 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_workflow_notification_headline">
+      <tuv xml:lang="en">
+        <seg>Notification Settings</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Benachrichtigungseinstellungen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_notification_description">
+      <tuv xml:lang="en">
+        <seg>A notification about the publish event is sent to the following persons via email:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Eine Benachrichtigung über das Freischalten wird per E-Mail an folgende Personen verschickt:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_notification_submitter">
+      <tuv xml:lang="en">
+        <seg>Submitter</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einsteller</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_notification_author">
+      <tuv xml:lang="en">
+        <seg>Author</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Autor</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_workflow_notification_noemail">
+      <tuv xml:lang="en">
+        <seg>No email address available</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Keine E-Mail-Adresse verfügbar</seg>
+      </tuv>
+    </tu>
+
+
   </body>
 
 </tmx>
