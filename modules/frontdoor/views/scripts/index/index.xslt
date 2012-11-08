@@ -767,7 +767,7 @@
                 <xsl:call-template name="translateFieldname"/>
             </th>
             <td>
-                <xsl:value-of select="@Message" />
+                <pre class="preserve-spaces"><xsl:value-of select="@Message" /></pre>
             </td>
         </tr>
     </xsl:template>
@@ -883,7 +883,7 @@
                 <div class="abstract">                    
                     <xsl:choose>           
                         <xsl:when test="$numOfShortAbstractChars = '0' or string-length(@Value) &lt; $numOfShortAbstractChars">
-                            <xsl:value-of select="@Value" />
+                            <pre class="preserve-spaces"><xsl:value-of select="@Value" /></pre>
                         </xsl:when>
                         <xsl:otherwise>
                             <span>
@@ -891,14 +891,14 @@
                                     <xsl:value-of select="@Id"/>
                                 </xsl:attribute>
                                 <xsl:attribute name="class">abstractShort</xsl:attribute>
-                                <xsl:value-of select="substring(@Value, 1, $numOfShortAbstractChars)"/>
+                                <pre class="preserve-spaces"><xsl:value-of select="substring(@Value, 1, $numOfShortAbstractChars)"/></pre>
                             </span>
                             <span>
                                 <xsl:attribute name="id">abstractFull_
                                     <xsl:value-of select="@Id"/>
                                 </xsl:attribute>
                                 <xsl:attribute name="class">abstractFull</xsl:attribute>
-                                <xsl:value-of select="@Value"/>
+                                <pre class="preserve-spaces"><xsl:value-of select="@Value"/></pre>
                             </span>
                             <span>
                                 <xsl:attribute name="id">abstractThreeDots_

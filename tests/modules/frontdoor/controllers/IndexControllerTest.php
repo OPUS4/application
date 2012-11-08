@@ -432,4 +432,41 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'frontdoor-test-2:');
     }
 
+    public function testAbstractPreserveSpace() {
+        $doc = new Opus_Document();
+        $doc->setLanguage("eng");
+        $doc->setServerState("published");
+
+        $abstract = new Opus_Title();
+        $abstract->setLanguage("eng");
+        $abstract->setValue("foo\nbar\n\nbaz");
+        $doc->addTitleAbstract($abstract);
+
+        $doc->store();
+
+        $this->dispatch('/frontdoor/index/index/docId/' . $doc->getId());
+        echo $this->getResponse()->getBody();
+        $this->assertContains('<div class="abstract"><pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre></div>", $this->getResponse()->getBody());
+
+        $doc->deletePermanent();
+    }
+
+    public function testNotePerserveSpace() {
+        $doc = new Opus_Document();
+        $doc->setLanguage("eng");
+        $doc->setServerState("published");
+        
+        $note = new Opus_Note();
+        $note->setMessage("foo\nbar\n\nbaz");
+        $note->setVisibility("public");
+        $doc->addNote($note);
+
+        $doc->store();
+
+        $this->dispatch('/frontdoor/index/index/docId/' . $doc->getId());
+        $this->assertContains('<pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre>", $this->getResponse()->getBody());
+
+        $doc->deletePermanent();
+    }
+
 }

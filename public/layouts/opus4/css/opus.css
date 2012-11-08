@@ -1037,3 +1037,7 @@ dl.result_box {
     float: right;
     padding-right: 0;    
 }
+
+pre.preserve-spaces {
+    font-family: Arial, Helvetica, sans-serif;
+}
