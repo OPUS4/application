@@ -210,11 +210,13 @@ class Admin_WorkflowController extends Controller_Action {
                 // email notification is not possible since no email address is specified for submitter
                 $label .= ' (' . $this->view->translate('admin_workflow_notification_noemail') . ')';
                 $element = new Zend_Form_Element_Checkbox('submitter', array('checked' => false, 'disabled' => true, 'label' => $label));
+                $element->getDecorator('Label')->setOption('class', 'notification-option option-not-available');
             }
             else {
                 $label .= ' (' . trim($submitters[0]->getEmail()) . ')';
                 $element = new Zend_Form_Element_Checkbox('submitter', array('checked' => true, 'label' => $label));
-            }            
+                $element->getDecorator('Label')->setOption('class', 'notification-option');
+            }
             $form->addElement($element);
         }
 
@@ -229,12 +231,14 @@ class Admin_WorkflowController extends Controller_Action {
                     // email notification is not possible since no email address is specified for author
                     $label .= ' (' . $this->view->translate('admin_workflow_notification_noemail') . ')';
                     $element = new Zend_Form_Element_Checkbox($id, array('checked' => false, 'disabled' => true, 'label' => $label));
+                    $element->getDecorator('Label')->setOption('class', 'notification-option option-not-available');
                 }
                 else {
                     $label .= ' (' . trim($author->getEmail()) . ')';
                     $element = new Zend_Form_Element_Checkbox($id, array('checked' => true, 'label' => 'foo', 'label' => $label));
-                }               
-                $form->addElement($element);
+                    $element->getDecorator('Label')->setOption('class', 'notification-option');
+                }                
+                $form->addElement($element);                
                 $index++;
             }
         }

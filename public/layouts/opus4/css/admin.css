@@ -464,3 +464,13 @@
 form.inline {
     display: inline!important;
 }
+
+label.option-not-available {    
+    color: gray;
+}
+
+label.notification-option {
+    padding-top: 1.5em;
+    padding-left: 1em;
+    display: block;
+}
