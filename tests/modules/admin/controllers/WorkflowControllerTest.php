@@ -24,9 +24,11 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Unit Tests
+ * @category    Application
+ * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -214,6 +216,125 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
                 "Request was not redirected.");
         $this->assertTrue($this->getResponse()->getHttpResponseCode() != 500,
                 "Request produced internal error. " . $this->getResponse()->getBody());
+    }
+
+    public function testNotificationIsNotSupported() {
+        $doc = $this->createDocWithSubmitterAndAuthor('submitter@localhost.de', 'author@localhost.de');
+        $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
+        $this->assertNotContains('submitter@localhost.de', $this->getResponse()->getBody());
+        $this->assertNotContains('author@localhost.de', $this->getResponse()->getBody());
+        $this->assertNotContains('<input type="checkbox" name="submitter" id="submitter"', $this->getResponse()->getBody());
+        $this->assertNotContains('<input type="checkbox" name="author_1" id="author_1"', $this->getResponse()->getBody());
+        $doc->deletePermanent();
+    }
+
+    public function testSubmitterNotificationIsAvailable() {        
+        $this->enablePublishNotification();
+        $doc = $this->createDocWithSubmitterAndAuthor('submitter@localhost.de', 'author@localhost.de');
+        $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');        
+        $this->assertContains('submitter@localhost.de', $this->getResponse()->getBody());
+        $this->assertContains('author@localhost.de', $this->getResponse()->getBody());
+        $this->assertContains('<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"', $this->getResponse()->getBody());        
+        $doc->deletePermanent();
+    }
+
+    public function testAuthorNotificationIsAvailable() {
+        $this->enablePublishNotification();
+        $doc = $this->createDocWithSubmitterAndAuthor('submitter@localhost.de', 'author@localhost.de');
+        $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
+        $this->assertContains('submitter@localhost.de', $this->getResponse()->getBody());
+        $this->assertContains('author@localhost.de', $this->getResponse()->getBody());
+        $this->assertContains('<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"', $this->getResponse()->getBody());
+        $doc->deletePermanent();
+    }
+
+    public function testSubmitterNotificationIsNotAvailable() {
+        $this->enablePublishNotification();
+        $doc = $this->createDocWithSubmitterAndAuthor('', 'author@localhost.de');
+        $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
+        $this->assertNotContains('submitter@localhost.de', $this->getResponse()->getBody());
+        $this->assertContains('author@localhost.de', $this->getResponse()->getBody());
+        $this->assertContains('<input type="checkbox" name="submitter" id="submitter" value="1" disabled="1"', $this->getResponse()->getBody());
+        $this->assertContains('<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"', $this->getResponse()->getBody());
+        $doc->deletePermanent();
+    }
+
+    public function testAuthorNotificationIsNotAvailable() {
+        $this->enablePublishNotification();
+        $doc = $this->createDocWithSubmitterAndAuthor('submitter@localhost.de', '');
+        $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
+        $this->assertContains('submitter@localhost.de', $this->getResponse()->getBody());
+        $this->assertNotContains('author@localhost.de', $this->getResponse()->getBody());
+        $this->assertContains('<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"', $this->getResponse()->getBody());
+        $this->assertContains('<input type="checkbox" name="author_1" id="author_1" value="1" disabled="1"', $this->getResponse()->getBody());        
+        $doc->deletePermanent();
+    }
+
+    private function testAuthorNotificationForMultipleAuthors() {
+        $this->enablePublishNotification();
+        $doc = $this->createDocWithSubmitterAndAuthor('submitter@localhost.de', 'author@localhost.de');
+
+        $author = new Opus_Person();
+        $author->setFirstName("AFN");
+        $author->setLastName("ALN");
+        $author->setEmail("A@localhost.de");
+        $doc->addPersonAuthor($author);
+
+        $author = new Opus_Person();
+        $author->setFirstName("BFN");
+        $author->setLastName("BLN");        
+        $doc->addPersonAuthor($author);
+
+        $author = new Opus_Person();
+        $author->setFirstName("CFN");
+        $author->setLastName("CLN");
+        $author->setEmail("C@localhost.de");
+        $doc->addPersonAuthor($author);
+
+        $doc->store();
+
+        $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
+        $this->assertContains('submitter@localhost.de', $this->getResponse()->getBody());
+        $this->assertContains('author@localhost.de', $this->getResponse()->getBody());
+        $this->assertContains('A@localhost.de', $this->getResponse()->getBody());
+        $this->assertContains('B@localhost.de', $this->getResponse()->getBody());
+        
+        $this->assertContains('<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"', $this->getResponse()->getBody());
+        $this->assertContains('<input type="checkbox" name="author_1" id="author_1" value="1"  checked="checked"', $this->getResponse()->getBody());
+        $this->assertContains('<input type="checkbox" name="author_2" id="author_2" value="1"  checked="checked"', $this->getResponse()->getBody());
+        $this->assertContains('<input type="checkbox" name="author_3" id="author_3" value="1" disabled="1"', $this->getResponse()->getBody());
+        $this->assertContains('<input type="checkbox" name="author_4" id="author_4" value="1"  checked="checked"', $this->getResponse()->getBody());
+
+        $doc->deletePermanent();
+    }
+
+    private function enablePublishNotification() {
+        $config = Zend_Registry::get('Zend_Config');        
+        $config->notification->document->published->enabled = 1;        
+        $config->notification->document->published->email = "published@localhost";
+    }
+
+    private function createDocWithSubmitterAndAuthor($submitterMail, $authorMail) {
+        $doc = new Opus_Document();
+
+        $author = new Opus_Person();
+        $author->setFirstName("John");
+        $author->setLastName("Doe");
+        if ($author != '') {
+            $author->setEmail($authorMail);
+        }
+        $doc->addPersonAuthor($author);
+
+        $submitter = new Opus_Person();
+        $submitter->setFirstName("John");
+        $submitter->setLastName("Submitter");
+        if ($submitterMail != '') {
+            $submitter->setEmail($submitterMail);
+        }
+        $doc->addPersonSubmitter($submitter);
+
+        $doc->store();
+        return $doc;
     }
 
 }
