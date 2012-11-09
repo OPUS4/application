@@ -843,7 +843,7 @@
 
         <tu tuid="IdentifierOpus3">
             <tuv xml:lang="en">
-                <seg>Opus 3 Id</seg>
+                <seg>OPUS 3 ID</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>OPUS 3 ID</seg>
@@ -852,10 +852,10 @@
 
         <tu tuid="IdentifierOpac">
             <tuv xml:lang="en">
-                <seg>Opac Id</seg>
+                <seg>Opac ID</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Opac Id</seg>
+                <seg>Opac ID</seg>
             </tuv>
         </tu>
 
@@ -964,15 +964,6 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Zusammenfassung</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="hint_TitleAbstract">
-            <tuv xml:lang="en">
-                <seg>Insert an abstract, please!</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Geben Sie bitte eine Zusammenfassung ein!</seg>
             </tuv>
         </tu>
 

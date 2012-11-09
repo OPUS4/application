@@ -210,7 +210,7 @@
         </tuv>
     </tu>
 
-	<tu tuid="hint_PersonSubmitterFirstName1">
+	<tu tuid="hint_PersonSubmitterFirstName">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the submitter.</seg>
         </tuv>
@@ -219,7 +219,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonSubmitterLastName1">
+	<tu tuid="hint_PersonSubmitterLastName">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the submitter.</seg>
         </tuv>
@@ -228,7 +228,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonSubmitterEmail1">
+	<tu tuid="hint_PersonSubmitterEmail">
         <tuv xml:lang="en">
             <seg>Please enter the email adress of the submitter.</seg>
         </tuv>
@@ -237,7 +237,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonSubmitterAcademicTitle1">
+	<tu tuid="hint_PersonSubmitterAcademicTitle">
         <tuv xml:lang="en">
             <seg>Please enter the academic title of the submitter.</seg>
         </tuv>
@@ -246,7 +246,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonSubmitterDateOfBirth1">
+	<tu tuid="hint_PersonSubmitterDateOfBirth">
         <tuv xml:lang="en">
             <seg>Please enter the date of birth of the submitter.</seg>
         </tuv>
@@ -255,7 +255,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonSubmitterPlaceOfBirth1">
+	<tu tuid="hint_PersonSubmitterPlaceOfBirth">
         <tuv xml:lang="en">
             <seg>Please enter the place of birth of the submitter.</seg>
         </tuv>
@@ -291,24 +291,6 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_PersonAuthorFirstName1">
-        <tuv xml:lang="en">
-            <seg>Please enter the first name of an author.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Vornamen eines Autoren ein.</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="hint_PersonAuthorLastName1">
-        <tuv xml:lang="en">
-            <seg>Please enter the last name of an author.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen eines Autoren ein.</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="hint_PersonAuthorFirstName">
         <tuv xml:lang="en">
             <seg>Please enter the first name of an author.</seg>
@@ -326,15 +308,6 @@
             <seg>Tragen Sie bitte den Nachnamen eines Autoren ein.</seg>
         </tuv>
     </tu>
-
-    <tu tuid="hint_PersonAuthorLastName1">
-        <tuv xml:lang="en">
-            <seg>Please enter the last name of an author.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Nachnamen eines Autoren ein.</seg>
-        </tuv>
-    </tu>
 	
 	<tu tuid="hint_PersonAuthorAcademicTitle">
         <tuv xml:lang="en">
@@ -344,34 +317,8 @@
             <seg>Tragen Sie bitte den akademischen Titel des Autors in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
         </tuv>
     </tu>
-
-	<tu tuid="hint_PersonAuthorAcademicTitle1">
-        <tuv xml:lang="en">
-            <seg>Please enter the authors shortened academic title (i.e. Dr., Prof., PhD).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den akademischen Titel des Autors in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
-        </tuv>
-    </tu>
-
-	<tu tuid="hint_PersonAuthorEmail1">
-        <tuv xml:lang="en">
-            <seg>Please enter the authors email address.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die Emailadresse ein.</seg>
-        </tuv>
-    </tu>
-	<tu tuid="hint_PersonAuthorAcademicTitle1">
-        <tuv xml:lang="en">
-            <seg>Please enter the authors shortened academic title (i.e. Dr., Prof., PhD).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den akademischen Titel des Autors in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
-        </tuv>
-    </tu>
 	
-	<tu tuid="hint_PersonAuthorEmail1">
+	<tu tuid="hint_PersonAuthorEmail">
         <tuv xml:lang="en">
             <seg>Please enter the authors email adress.</seg>
         </tuv>
@@ -380,7 +327,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonAuthorDateOfBirth1">
+	<tu tuid="hint_PersonAuthorDateOfBirth">
         <tuv xml:lang="en">
             <seg>Please enter the authors date of birth.</seg>
         </tuv>
@@ -389,7 +336,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonAuthorPlaceOfBirth1">
+	<tu tuid="hint_PersonAuthorPlaceOfBirth">
         <tuv xml:lang="en">
             <seg>Please enter the authors place of birth.</seg>
         </tuv>
@@ -407,7 +354,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonRefereeFirstName1">
+	<tu tuid="hint_PersonRefereeFirstName">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the referee.</seg>
         </tuv>
@@ -416,7 +363,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonRefereeLastName1">
+	<tu tuid="hint_PersonRefereeLastName">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the referee.</seg>
         </tuv>
@@ -425,6 +372,42 @@
         </tuv>
     </tu>
 
+	<tu tuid="hint_PersonRefereeAcademicTitle">
+        <tuv xml:lang="en">
+            <seg>Please enter the referee's shortened academic title (i.e. Dr., Prof., PhD).</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den akademischen Titel des Gutachters in abgekürzter Form (z.B. Dr., Prof., Dr. jur.) ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_PersonRefereeEmail">
+        <tuv xml:lang="en">
+            <seg>Please enter the referee's email adress.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte eine E-Mailadresse des Gutachters ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_PersonRefereeDateOfBirth">
+        <tuv xml:lang="en">
+            <seg>Please enter the referee's date of birth.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte das Geburtsdatum des Gutachters ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_PersonRefereePlaceOfBirth">
+        <tuv xml:lang="en">
+            <seg>Please enter the referee's place of birth.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Geburtsort des Gutachters ein.</seg>
+        </tuv>
+    </tu>
+	
 	<tu tuid="hint_groupPersonEditor">
         <tuv xml:lang="en">
             <seg>Please enter the Editor.</seg>
@@ -434,7 +417,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonEditorFirstName1">
+	<tu tuid="hint_PersonEditorFirstName">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the Editor.</seg>
         </tuv>
@@ -443,7 +426,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonEditorLastName1">
+	<tu tuid="hint_PersonEditorLastName">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the Editor.</seg>
         </tuv>
@@ -461,7 +444,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonAdvisorFirstName1">
+	<tu tuid="hint_PersonAdvisorFirstName">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the Advisor.</seg>
         </tuv>
@@ -470,7 +453,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonAdvisorLastName1">
+	<tu tuid="hint_PersonAdvisorLastName">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the Advisor.</seg>
         </tuv>
@@ -488,7 +471,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonTranslatorFirstName1">
+	<tu tuid="hint_PersonTranslatorFirstName">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the Translator.</seg>
         </tuv>
@@ -497,7 +480,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonTranslatorLastName1">
+	<tu tuid="hint_PersonTranslatorLastName">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the Translator.</seg>
         </tuv>
@@ -515,7 +498,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonContributorFirstName1">
+	<tu tuid="hint_PersonContributorFirstName">
         <tuv xml:lang="en">
             <seg>Please enter the first name of the Contributor.</seg>
         </tuv>
@@ -524,7 +507,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonContributorLastName1">
+	<tu tuid="hint_PersonContributorLastName">
         <tuv xml:lang="en">
             <seg>Please enter the last name of the Contributor.</seg>
         </tuv>
@@ -551,15 +534,6 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_CreatingCorporation1">
-        <tuv xml:lang="en">
-            <seg>Please enter the creating Corporation.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die urhebende Körperschaft ein.</seg>
-        </tuv>
-    </tu>
-	
 	<tu tuid="hint_groupContributingCorporation">
         <tuv xml:lang="en">
             <seg>Please enter the contributing Corporation.</seg>
@@ -578,15 +552,6 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_ContributingCorporation1">
-        <tuv xml:lang="en">
-            <seg>Please enter the contributing Corporation.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die beteiligte Körperschaft ein.</seg>
-        </tuv>
-    </tu>
-
 	<tu tuid="hint_Edition">
         <tuv xml:lang="en">
             <seg>Please enter the Edition.</seg>

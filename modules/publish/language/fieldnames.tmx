@@ -374,35 +374,8 @@
       <tuv xml:lang="de">
         <seg>Sprache</seg>
       </tuv>
-    </tu> 
-
-    <tu tuid="IdentifierOpus3">
-      <tuv xml:lang="en">
-        <seg>Opus3 Id</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>OPUS 3 Id</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="IdentifierIsbn">
-      <tuv xml:lang="en">
-        <seg>ISBN</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>ISBN</seg>
-      </tuv>
     </tu>
             
-    <tu tuid="IdentifierIssn">
-      <tuv xml:lang="en">
-        <seg>ISSN</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>ISSN</seg>
-      </tuv>
-    </tu>
-      
     <tu tuid="SubjectPACS">
       <tuv xml:lang="en">
         <seg>PACS Keyword</seg>
