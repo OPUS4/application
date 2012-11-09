@@ -1039,5 +1039,6 @@ dl.result_box {
 }
 
 pre.preserve-spaces {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: Arial, Helvetica, sans-serif;    
+    white-space: pre-wrap;
 }
