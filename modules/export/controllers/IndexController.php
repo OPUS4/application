@@ -69,7 +69,7 @@ class Export_IndexController extends Controller_Xml {
         try {
             $searcher = new Opus_SolrSearch_Searcher();
             $resultList = $searcher->search($this->buildQuery());
-            $this->handleResults($resultList->getResults());
+            $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits());
         }
         catch (Opus_SolrSearch_Exception $e) {
             $this->log->err(__METHOD__ . ' : ' . $e);
@@ -107,9 +107,10 @@ class Export_IndexController extends Controller_Xml {
      *
      * @param array $results An array of Opus_SolrSearch_Result objects.
      */
-    private function handleResults($results) {
+    private function handleResults($results, $numOfHits) {
         $this->_proc->setParameter('', 'timestamp', str_replace('+00:00', 'Z', Zend_Date::now()->setTimeZone('UTC')->getIso()));
         $this->_proc->setParameter('', 'docCount', count($results));
+        $this->_proc->setParameter('', 'queryhits', $numOfHits);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         foreach ($results as $result) {
             $document = new Opus_Document($result->getId());

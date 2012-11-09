@@ -259,7 +259,9 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('Language="eng" Value="another test document for OPUSVIER-1726" Type="main"', $body);
         $this->assertContains('<Opus_Document Id="' . $docId1 . '" Language="eng"', $body);
         $this->assertNotContains('<Opus_Document Id="' . $docId2 . '" Language="eng"', $body);
-        $this->assertContains('doccount="1"', $body);
+        echo $body;
+        $this->assertContains(' doccount="1"', $body); // only the first document can be instantiated (xml output does not contain the second document although it exists in search index)
+        $this->assertContains(' queryhits="2"', $body); // both documents exist in search index, but only the first one exists in database (queryhits contains the number of search hits)
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
 
         $doc1->deletePermanent();
@@ -294,6 +296,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
         $this->assertContains('doccount="' . $rows . '"', $body);
+        $this->assertContains('queryhits="' . $numOfTestDocs . '"', $body);
         $this->assertEquals($rows, substr_count($body, 'Language="eng" Value="OPUSVIER-2488" Type="main"'));
         $this->assertNotContains('Application_Exception', $body);
 

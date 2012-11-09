@@ -54,6 +54,9 @@
             <xsl:attribute name="doccount">
                 <xsl:value-of select="$docCount"/>
             </xsl:attribute>
+            <xsl:attribute name="queryhits">
+                <xsl:value-of select="$queryhits"/>
+            </xsl:attribute>
             <xsl:apply-templates select="Documents"/>
         </xsl:element>
     </xsl:template>
