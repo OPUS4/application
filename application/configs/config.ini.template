@@ -67,6 +67,17 @@ searchengine.extract.app =
 mail.opus.address = ; email address of administrator
 mail.opus.name = ; Name of administrator
 
+;NOTIFICATION SETTINGS
+; comma separated list of email addresses that should receive a submission notification email
+;notification.document.submitted.email = ""
+; comma separated list of email addresses that should receive a publication notification email
+;notification.document.published.email = ""
+; uncomment the next line if notification emails should be sent if a new document is submitted
+;notification.document.submitted.enabled = 1
+; uncomment the next line if notification emails should be sent if a document is published
+;notification.document.published.enabled = 1
+
+
 ;ERROR CONTROLLER SETTINGS - who should receive error mails?
 ; errorController.mailTo.name = root
 ; errorController.mailTo.address = root@localhost
