@@ -195,25 +195,7 @@
         <seg>Vorname</seg>
       </tuv>
     </tu>
-	
-     <tu tuid="Language">
-      <tuv xml:lang="en">
-        <seg>Language of publication</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sprache der Veröffentlichung</seg>
-      </tuv>
-    </tu>   
         
-    <tu tuid="Licence">
-      <tuv xml:lang="en">
-        <seg>Licence</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Lizenz</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="File">
       <tuv xml:lang="en">
         <seg>File</seg>
@@ -283,51 +265,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Auflage</seg>
-      </tuv>
-      
+      </tuv>  
     </tu>
-      <tu tuid="Issue">
-      <tuv xml:lang="en">
-        <seg>Issue</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Ausgabe / Heft</seg>
-      </tuv>
-    </tu>
-
+	
     <tu tuid="Institute">
       <tuv xml:lang="en">
         <seg>Institute</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Institut</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="PageFirst">
-      <tuv xml:lang="en">
-        <seg>First Page</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Erste Seite</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="PageLast">
-      <tuv xml:lang="en">
-        <seg>Last Page</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Letzte Seite</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="PageNumber">
-      <tuv xml:lang="en">
-        <seg>Number of page</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Seitenzahl</seg>
       </tuv>
     </tu>
     
@@ -456,25 +402,7 @@
         <seg>ISSN</seg>
       </tuv>
     </tu>
-            
-    <tu tuid="IdentifierUuid">
-      <tuv xml:lang="en">
-        <seg>Uuid</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Uuid</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="IdentifierUrn">
-      <tuv xml:lang="en">
-        <seg>URN</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>URN</seg>
-      </tuv>
-    </tu>
-                
+      
     <tu tuid="SubjectPACS">
       <tuv xml:lang="en">
         <seg>PACS Keyword</seg>
@@ -492,34 +420,7 @@
         <seg>CCS Klasse</seg>
       </tuv>
     </tu>
-    
-    <tu tuid="Note">
-      <tuv xml:lang="en">
-        <seg>Note</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Bemerkung</seg>
-      </tuv>
-    </tu>
                     
-    <tu tuid="Message">
-      <tuv xml:lang="en">
-        <seg>Message</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Text</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="Patent">
-      <tuv xml:lang="en">
-        <seg>Patent Specifications</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Patentinformationen</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="Countries">
       <tuv xml:lang="en">
         <seg>Country of Patent Application</seg>
@@ -535,15 +436,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Datum der Patenterteilung</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="Number">
-      <tuv xml:lang="en">
-        <seg>Number</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Nummer</seg>
       </tuv>
     </tu>
     
@@ -564,16 +456,7 @@
         <seg>Typ der Erweiterung</seg>
       </tuv>
     </tu>
-    
-    <tu tuid="PersonAuthor">
-      <tuv xml:lang="en">
-        <seg>Author</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Verfasserangaben</seg>
-      </tuv>
-    </tu>
-	
+    	
     <tu tuid="PersonEditorLastName">
       <tuv xml:lang="en">
         <seg>Last name</seg>
@@ -582,25 +465,7 @@
         <seg>Nachname</seg>
       </tuv>
     </tu>
-            
-    <tu tuid="PersonAdvisor">
-      <tuv xml:lang="en">
-        <seg>Advisor</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Betreuer</seg>
-      </tuv>
-    </tu>
     
-    <tu tuid="PersonContributor">
-      <tuv xml:lang="en">
-        <seg>Contributor(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sonstige beteiligte Person(en)</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="PersonContributorLastName">
       <tuv xml:lang="en">
         <seg>Last name</seg>

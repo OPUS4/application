@@ -8,13 +8,13 @@
     <body>
 
         <tu tuid="Language">
-            <tuv xml:lang="en">
-                <seg>Language</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Sprache</seg>
-            </tuv>
-        </tu>
+      <tuv xml:lang="en">
+        <seg>Language of publication</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprache der Veröffentlichung</seg>
+      </tuv>
+    </tu>   
 
         <tu tuid="Licence">
             <tuv xml:lang="en">
@@ -1528,10 +1528,10 @@
 
         <tu tuid="PersonContributor">
             <tuv xml:lang="en">
-                <seg>Contributor</seg>
+                <seg>Contributor(s)</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Sonstige beteiligte Person</seg>
+                <seg>Sonstige beteiligte Person(en)</seg>
             </tuv>
         </tu>
 
