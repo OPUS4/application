@@ -51,9 +51,9 @@
                     <?= htmlspecialchars($this->translate('default_collection_role_' . $this->role_name)) ?>
                 <?php endif ?>
             <?php elseif ($i === count($this->breadcrumb) - 1) : ?>
-                <?= htmlspecialchars($parent->getDisplayName()) ?>
+                <?= htmlspecialchars($parent->getNumberAndName()) ?>
             <?php else : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($parent->getDisplayName()) ?></a>
+                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $parent->getId()), null, true) ?>"><?= htmlspecialchars($parent->getNumberAndName()) ?></a>
             <?php endif ?>
         <?php endforeach; ?>
     </div>
@@ -77,7 +77,7 @@
         <tr class="<?= ($i % 2 == 0) ? 'even' : 'odd'?>">
             <td class="<?= ($collection->getVisible() === '1') ? 'visible' : 'unvisible' ?>">
                 <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $collection->getId()), null, true) ?>">
-                <?= htmlspecialchars($collection->getDisplayName()) ?>
+                <?= htmlspecialchars($collection->getNumberAndName()) ?>
                 </a>
             </td>
 

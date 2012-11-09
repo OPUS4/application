@@ -96,7 +96,7 @@ class Admin_CollectionController extends Controller_Action {
         try {
             $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
             $parentId = $collectionModel->move($this->getRequest()->getParam('pos'));
-            $this->_redirectTo('show', $this->view->translate('admin_collections_move', $collectionModel->getDisplayName()), 'collection', 'admin', array('id' => $parentId));
+            $this->_redirectTo('show', $this->view->translate('admin_collections_move', $collectionModel->getName()), 'collection', 'admin', array('id' => $parentId));
         }
         catch (Admin_Model_Exception $e) {
             $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
@@ -107,7 +107,7 @@ class Admin_CollectionController extends Controller_Action {
         try {
             $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
             $id = $collectionModel->setVisiblity($visibility);
-            $this->_redirectTo('show', $this->view->translate('admin_collections_changevisibility', $collectionModel->getDisplayName()), 'collection', 'admin', array('id' => $id));
+            $this->_redirectTo('show', $this->view->translate('admin_collections_changevisibility', $collectionModel->getName()), 'collection', 'admin', array('id' => $id));
         }
         catch (Application_Exception $e) {
             $this->_redirectToAndExit('index', array('failure' => $e->getMessage()), 'collectionroles');
@@ -125,8 +125,9 @@ class Admin_CollectionController extends Controller_Action {
     public function deleteAction() {
         try {
             $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
+            $name = $collectionModel->getName();
             $returnId = $collectionModel->delete();
-            $message = $this->view->translate('admin_collections_delete', $collectionModel->getDisplayName());
+            $message = $this->view->translate('admin_collections_delete', $name);
             $this->_redirectTo('show', $message, 'collection', 'admin', array ('id' => $returnId));
         }
         catch (Application_Exception $e) {
@@ -208,21 +209,21 @@ class Admin_CollectionController extends Controller_Action {
                 $refCollection = new Opus_Collection($id);
                 $refCollection->addFirstChild($collection);
                 $refCollection->store();
-                $message = $this->view->translate('admin_collections_add', $collection->getDisplayName());
+                $message = $this->view->translate('admin_collections_add', $collectionModel->getName());
                 return $this->_redirectTo('show', $message, 'collection', 'admin', array('id' => $collection->getId()));
             }
             if ($type === 'sibling') {
                 $refCollection = new Opus_Collection($id);
                 $refCollection->addNextSibling($collection);
                 $refCollection->store();
-                $message = $this->view->translate('admin_collections_add', $collection->getDisplayName());
+                $message = $this->view->translate('admin_collections_add', $collectionModel->getName());
                 return $this->_redirectTo('show', $message, 'collection', 'admin', array('id' => $collection->getId()));
             }
             return $this->_redirectToAndExit('index', array('failure' => 'type paramter invalid'), 'collectionroles');
         }
         // nur Änderungen        
         $collection->store();
-        $message = $this->view->translate('admin_collections_edit', $collection->getDisplayName());
+        $message = $this->view->translate('admin_collections_edit', $collectionModel->getName());
         $parents = $collection->getParents();
         if (count($parents) === 1) {
             return $this->_redirectTo('show', $message, 'collection', 'admin', array('id' => $collection->getRoleId()));
@@ -248,7 +249,7 @@ class Admin_CollectionController extends Controller_Action {
 
             return $this->_redirectToAndExit(
                     'edit',
-                    $this->view->translate('admin_document_add_collection_success', $collectionModel->getDisplayName()),
+                    $this->view->translate('admin_document_add_collection_success', $collectionModel->getName()),
                     'document', 'admin', array('id' => $documentId, 'section' => 'collections'));
         }
 
@@ -299,7 +300,7 @@ class Admin_CollectionController extends Controller_Action {
                 array_push($this->view->collections,
                         array(
                             'id' => $child->getId(),
-                            'name' => $child->getDisplayName(),
+                            'name' => $child->getNumberAndName(),
                             'hasChildren' => (count($child->getChildren()) > 0)));
             }
             $this->view->documentId = $documentId;

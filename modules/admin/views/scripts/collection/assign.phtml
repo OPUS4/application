@@ -53,9 +53,9 @@
                 <?= htmlspecialchars($this->translate('default_collection_role_' . $this->role_name)) ?>
             <?php endif ?>
         <?php elseif ($i === count($this->breadcrumb) - 1) : ?>
-            <?= htmlspecialchars($parent->getDisplayName()) ?>
+            <?= htmlspecialchars($parent->getNumberAndName()) ?>
         <?php else : ?>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'id' => $parent->getId(), 'document' => $this->documentId), null, true) ?>"><?= htmlspecialchars($parent->getDisplayName()) ?></a>
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'id' => $parent->getId(), 'document' => $this->documentId), null, true) ?>"><?= htmlspecialchars($parent->getNumberAndName()) ?></a>
         <?php endif ?>
     <?php endforeach; ?>
 </div>

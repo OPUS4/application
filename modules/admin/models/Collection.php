@@ -99,11 +99,12 @@ class Admin_Model_Collection {
         $document->store();
     }
 
-    public function getDisplayName() {
+    public function getName() {
         if (count($this->collection->getParents()) === 1) {
+            // die Wurzel einer Collection-Hierarchie hat selbst keinen Namen/Number: in diesem Fall wird der Name der Collection Role verwendet
             return $this->collection->getRole()->getDisplayName();
         }
-        return $this->collection->getDisplayName();
+        return $this->collection->getNumberAndName();
     }
 
     /**
