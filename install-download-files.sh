@@ -25,7 +25,7 @@ DOWNLOADS_DIR="$1"
 
 ZEND_LIB_URL='http://framework.zend.com/releases/ZendFramework-1.10.6/ZendFramework-1.10.6-minimal.tar.gz'
 JPGRAPH_LIB_URL='http://jpgraph.net/download/download.php?p=1'
-SOLR_SERVER_URL='http://www.apache.org/dist//lucene/solr/1.4.1/apache-solr-1.4.1.tgz'
+SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/1.4.1/apache-solr-1.4.1.tgz'
 SOLR_PHP_CLIENT_LIB_URL='http://solr-php-client.googlecode.com/svn/trunk/'
 SOLR_PHP_CLIENT_LIB_REVISION='36'
 JQUERY_LIB_URL='http://code.jquery.com/jquery-1.4.3.min.js'
