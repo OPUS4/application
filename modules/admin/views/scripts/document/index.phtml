@@ -122,9 +122,7 @@
             <div>
                 <?=$index+1?>. Abstract (<b><?=htmlspecialchars($this->translate($abstract->getLanguage()))?></b>)
             </div>
-            <div class="abstractTextContainer">
-                <?=htmlspecialchars($abstract->getValue())?>
-            </div>
+            <pre class="abstractTextContainer preserve-spaces"><?= htmlspecialchars($abstract->getValue()) ?></pre>
         </div>
 
         <?PHP endforeach; ?>
@@ -425,7 +423,7 @@
             <?PHP foreach($this->document->getNote() as $index => $note) : ?>
             <div class="<?= ($index % 2) ? 'even' : 'odd' ?>">
                 <span class="label"><?=htmlspecialchars($this->formatValue()->format($note->getField('Visibility'), 'Opus_Note'))?></span>
-                <span class="value"><?=htmlspecialchars($note->getMessage())?></span>
+                <span class="value"><pre class="preserve-spaces noteTextContainer"><?= htmlspecialchars($note->getMessage()) ?></pre></span>
             </div>
             <?PHP endforeach; ?>
 
