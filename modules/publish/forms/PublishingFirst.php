@@ -42,6 +42,11 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
     public $view;
     public $bibliographie;
     public $showRights;
+    /**
+     *
+     * @var boolean
+     */
+    public $enableUpload = false;
 
     /**
      *
@@ -83,8 +88,11 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         $this->addElement($doctypes);
 
         //create and add file upload
-        $fileupload = $this->_createFileuploadField();
-        $this->addDisplayGroup($fileupload, 'documentUpload');
+        $this->enableUpload = ($this->config->form->first->enable_upload == 1);
+        if ($this->enableUpload) {
+            $fileupload = $this->_createFileuploadField();
+            $this->addDisplayGroup($fileupload, 'documentUpload');
+        }
 
         //create and add bibliographie
         $bibliographie = $this->_createBibliographyField();
@@ -241,15 +249,17 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
             $elementAttributes = $this->getElementAttributes($currentElement); 
             $this->view->$currentElement = $elementAttributes;
         }
-       
-        $displayGroup = $this->getDisplayGroup('documentUpload');                
-        
-        $group = $this->buildViewDisplayGroup($displayGroup);
-        $group['Name'] = 'documentUpload';
-        $group['Counter'] = 2;
-        
-        $this->view->documentUpload = $group;        
-        $this->view->MAX_FILE_SIZE = $this->config->publish->maxfilesize;
+
+        if ($this->enableUpload) {
+            $displayGroup = $this->getDisplayGroup('documentUpload');
+
+            $group = $this->buildViewDisplayGroup($displayGroup);
+            $group['Name'] = 'documentUpload';
+            $group['Counter'] = 2;
+
+            $this->view->documentUpload = $group;
+            $this->view->MAX_FILE_SIZE = $this->config->publish->maxfilesize;
+        }
     }
 
 }

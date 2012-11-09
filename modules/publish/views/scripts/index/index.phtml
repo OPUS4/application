@@ -48,20 +48,22 @@
     <?php endif; ?>
 
         <form enctype="multipart/form-data" action="<?= $this->action_url; ?>" method="post">
-
             <div class="form-items-wrapper">
-            <?= $this->element($this->documentType); ?>
-            <?= $this->element($this->MAX_FILE_SIZE, null, 'hidden', 'MAX_FILE_SIZE'); ?>
-            <?= $this->group($this->documentUpload); ?>
-            <?= $this->fileOverview(); ?>
+                <?= $this->element($this->documentType); ?>
 
-            <?php if ($this->showBib == 1) : ?>
-            <?= $this->element($this->bibliographie); ?>
-            <?php endif; ?>
+                <?php if ($this->enableUpload) : ?>
+                    <?= $this->element($this->MAX_FILE_SIZE, null, 'hidden', 'MAX_FILE_SIZE'); ?>
+                    <?= $this->group($this->documentUpload); ?>
+                    <?= $this->fileOverview(); ?>
+                <?php endif; ?>
 
-            <?php if ($this->showRights == 1) : ?>
-            <?= $this->element($this->rights); ?>
-            <?php endif; ?>
+                <?php if ($this->showBib == 1) : ?>
+                    <?= $this->element($this->bibliographie); ?>
+                <?php endif; ?>
+
+                <?php if ($this->showRights == 1) : ?>
+                    <?= $this->element($this->rights); ?>
+                <?php endif; ?>
 
             <div class="button-wrapper">
                 <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>

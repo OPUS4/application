@@ -57,6 +57,7 @@ class Publish_FormController extends Controller_Action {
         $postData = $this->getRequest()->getPost();
         $this->view->showBib = $indexForm->bibliographie;
         $this->view->showRights = $indexForm->showRights;
+        $this->view->enableUpload = $indexForm->enableUpload;
 
         if (is_array($postData) && count($postData) === 0) {
             $this->_logger->err('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
@@ -70,8 +71,8 @@ class Publish_FormController extends Controller_Action {
         $indexForm->populate($postData);
         $this->_initializeDocument($postData);
 
-        //validate fileupload
-        if (!$indexForm->getElement('fileupload')->isValid($postData)) {
+        // validate fileupload (if the current form contains a file upload field)
+        if ($indexForm->getElement('fileupload') != null && !$indexForm->getElement('fileupload')->isValid($postData)) {
             $indexForm->setViewValues();
             $this->view->form = $indexForm;
             $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');

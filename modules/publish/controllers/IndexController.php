@@ -67,7 +67,8 @@ class Publish_IndexController extends Controller_Action {
         $this->view->action_url = $action_url;        
         $this->view->form = $form;
         $this->view->showBib = $form->bibliographie;
-        $this->view->showRights = $form->showRights;        
+        $this->view->showRights = $form->showRights;
+        $this->view->enableUpload = $form->enableUpload;
 
         //initialize session variables
         $session->documentType = "";
