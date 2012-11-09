@@ -426,7 +426,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-2492
      */
     public function testDisplayAllUserDefinedCollectionRoles() {
-
         $this->dispatch('/frontdoor/index/index/docId/151');
         $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'frontdoor-test-1:');
         $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'frontdoor-test-2:');
@@ -445,7 +444,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/frontdoor/index/index/docId/' . $doc->getId());
-        echo $this->getResponse()->getBody();
         $this->assertContains('<div class="abstract"><pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre></div>", $this->getResponse()->getBody());
 
         $doc->deletePermanent();
