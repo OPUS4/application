@@ -463,7 +463,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="admin_collectionroles_edit">
+        <tu tuid="admin_collectionroles_edit_notice">
             <tuv xml:lang="en">
                 <seg>Collection role '%1$s' was edited successfully.</seg>
             </tuv>

@@ -152,7 +152,7 @@ class Admin_CollectionrolesController extends Controller_Action {
         }
         else {
             $collectionRole->store();
-            $message = $this->view->translate('admin_collectionroles_edit', $collectionRole->getName());
+            $message = $this->view->translate('admin_collectionroles_edit_notice', $collectionRole->getName());
             return $this->_redirectTo('index', $message);
         }
     }
