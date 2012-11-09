@@ -165,7 +165,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 }
             }
             else {
-                $this->view->collectionName = $collection->getDisplayName();
+                $this->view->collectionName = $collection->getNumberAndName();
             }
         }
         else if (!empty($seriesId)) {

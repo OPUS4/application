@@ -597,7 +597,7 @@ class Admin_DocumentController extends Controller_Action {
 
         foreach ($document->getCollection() as $assignedCollection) {
             $assignedCollections[] = array(
-                'collectionName' => $assignedCollection->getDisplayName(),
+                'collectionName' => $assignedCollection->getNumberAndName(),
                 'collectionId' => $assignedCollection->getId(),
                 'roleName' => $assignedCollection->getRole()->getName(),
                 'roleId' => $assignedCollection->getRole()->getId()
@@ -1339,12 +1339,10 @@ class Admin_DocumentController extends Controller_Action {
             else {
                 // Get name of removed collection
                 if ($collection->isRoot()) {
-                    $deletedCollectionName =
-                            $collection->getRole()->getDisplayName();
+                    $deletedCollectionName = $collection->getRole()->getDisplayName();
                 }
                 else {
-                    $deletedCollectionName =
-                            $collection->getDisplayName();
+                    $deletedCollectionName = $collection->getNumberAndName();
                 }
             }
         }

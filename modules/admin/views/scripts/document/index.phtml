@@ -304,7 +304,7 @@
 
             <span class="value">
                 <?PHP foreach($collections as $index => $collection) : ?>
-                <?PHP $colName = $collection->getDisplayName(); ?>
+                <?PHP $colName = $collection->getNumberAndName(); ?>
                 <div>
                 <?PHP if (!empty($colName)) : ?>
                     <?=htmlspecialchars($colName)?>
