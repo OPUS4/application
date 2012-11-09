@@ -231,8 +231,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $role->setDisplayBrowsing($displayBrowsing);
         $role->store();
         
-        $this->assertContains('<div> 62 Ingenieurwissenschaften </div>', $this->getResponse()->getBody());
-        $this->assertNotContains('<div> Ingenieurwissenschaften 62 </div>', $this->getResponse()->getBody());
+        $this->assertContains('62 Ingenieurwissenschaften', $this->getResponse()->getBody());
+        $this->assertNotContains('Ingenieurwissenschaften 62', $this->getResponse()->getBody());
     }
 
     public function testDisplayCollectionNumberAndNameOnAssignmentPageForDDCCollection() {
