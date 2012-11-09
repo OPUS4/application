@@ -41,6 +41,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      */
     public function testEditAction() {
         $this->markTestSkipped("needs to be adapted");
+
         $this->dispatch('/admin/documents/edit/id/1');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -53,6 +54,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      */
     public function testEditActionWithMissingId() {
         $this->markTestSkipped("needs to be adapted");
+
         $this->dispatch('/admin/documents/edit');
         $this->assertRedirectTo('/admin/documents');
     }
@@ -62,6 +64,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      */
     public function testEditActionWithBadId() {
         $this->markTestSkipped("needs to be adapted");
+
         $this->dispatch('/admin/documents/edit/id/1k1');
         $this->assertRedirectTo('/admin/documents');
     }
@@ -73,6 +76,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      */
     public function testEditActionWithUnknownId() {
         $this->markTestSkipped("needs to be adapted");
+
         $this->dispatch('/admin/documents/edit/id/500');
         $this->assertModule('default');
         $this->assertController('error');
@@ -81,6 +85,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
     public function testShowAction() {
         $this->markTestSkipped("needs to be adapted");
+
         $this->dispatch('/admin/documents/show/id/1');
         $this->assertModule('admin');
         $this->assertController('documents');
@@ -89,6 +94,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
     public function testShowActionDoc91() {
         $this->markTestSkipped("needs to be adapted");
+        
         $this->dispatch('/admin/documents/show/id/91');
         $this->assertModule('admin');
         $this->assertController('documents');
@@ -113,7 +119,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-1757
      */
     public function testEditLinkForEmptySectionIsNotDisplayed() {
-        $this->dispatch('/admin/document/index/id/92');
+        $this->dispatch('/admin/document/index/id/92');       
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('document');
@@ -152,6 +158,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      */
     public function test() {
         $this->markTestSkipped('not working yet');
+        
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
@@ -175,6 +182,41 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $body = $this->getResponse()->getBody();
         $this->assertTrue(substr_count($body, 'Call to a member function setAttrib') == 0);
         $this->checkForBadStringsInHtml($body);
+    }
+
+    public function testPreserveNewlinesForAbstract() {
+        $doc = new Opus_Document();
+        $doc->setLanguage("eng");
+
+        $abstract = new Opus_Title();
+        $abstract->setLanguage("eng");
+        $abstract->setValue("foo\nbar\n\nbaz");
+        $doc->addTitleAbstract($abstract);
+
+        $doc->store();
+
+        $this->dispatch('/admin/document/index/id/' . $doc->getId());        
+        $this->assertContains('<pre class="abstractTextContainer preserve-spaces">' . "foo\nbar\n\nbaz" . '</pre>', $this->getResponse()->getBody());
+
+        $doc->deletePermanent();
+    }
+
+    public function testPreserveNewlinesForNote() {
+        $doc = new Opus_Document();
+        $doc->setLanguage("eng");
+        $doc->setServerState("published");
+
+        $note = new Opus_Note();
+        $note->setMessage("foo\nbar\n\nbaz");
+        $note->setVisibility("public");
+        $doc->addNote($note);
+
+        $doc->store();
+
+        $this->dispatch('/admin/document/index/id/' . $doc->getId());
+        $this->assertContains('<pre class="preserve-spaces noteTextContainer">' . "foo\nbar\n\nbaz" . '</pre>', $this->getResponse()->getBody());
+
+        $doc->deletePermanent();
     }
 
 }
