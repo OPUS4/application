@@ -67,24 +67,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="admin_collections_edit">
-            <tuv xml:lang="en">
-                <seg>Edit</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Ändern</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="admin_collections_delete">
-			<tuv xml:lang="en">
-				<seg>Remove</seg>
-			</tuv>
-			<tuv xml:lang="de">
-				<seg>Entfernen</seg>
-			</tuv>
-        </tu>
-
         <tu tuid="admin_collections_role_edit">
 			<tuv xml:lang="en">
 				<seg>Collection Properties</seg>
