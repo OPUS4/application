@@ -74,5 +74,37 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertNotContains('<b>foo</b>', $this->getResponse()->getBody());
     }
 
+    public function testShowAllDocsForDDCCollection() {
+        $role = new Opus_CollectionRole(2);
+        $displayBrowsing = $role->getDisplayBrowsing();
+        $role->setDisplayBrowsing('Name');
+        $role->store();
+
+        $this->dispatch('/admin/documents/index/collectionid/74');
+
+        // undo changes
+        $role->setDisplayBrowsing($displayBrowsing);
+        $role->store();
+
+        $this->assertContains('<b>62 Ingenieurwissenschaften</b>', $this->getResponse()->getBody());
+        $this->assertNotContains('<b>Ingenieurwissenschaften</b>', $this->getResponse()->getBody());
+    }
+
+    public function testShowAllDocsForBklCollection() {
+        $role = new Opus_CollectionRole(7);
+        $displayBrowsing = $role->getDisplayBrowsing();
+        $role->setDisplayBrowsing('Name');
+        $role->store();
+        
+        $this->dispatch('/admin/documents/index/collectionid/15028');
+
+        // undo changes
+        $role->setDisplayBrowsing($displayBrowsing);
+        $role->store();
+
+        $this->assertContains('<b>52.00 Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</b>', $this->getResponse()->getBody());
+        $this->assertNotContains('<b>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</b>', $this->getResponse()->getBody());
+    }
+
 }
 

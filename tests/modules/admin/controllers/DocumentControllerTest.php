@@ -219,4 +219,37 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $doc->deletePermanent();
     }
 
+    public function testDisplayCollectionNumberAndNameOnOverviewPageForDDCCollection() {
+        $role = new Opus_CollectionRole(2);
+        $displayBrowsing = $role->getDisplayBrowsing();
+        $role->setDisplayBrowsing('Name');
+        $role->store();
+        
+        $this->dispatch('/admin/document/index/id/89');
+
+        // undo changes
+        $role->setDisplayBrowsing($displayBrowsing);
+        $role->store();
+        
+        $this->assertContains('<div> 62 Ingenieurwissenschaften </div>', $this->getResponse()->getBody());
+        $this->assertNotContains('<div> Ingenieurwissenschaften 62 </div>', $this->getResponse()->getBody());
+    }
+
+    public function testDisplayCollectionNumberAndNameOnAssignmentPageForDDCCollection() {
+        $role = new Opus_CollectionRole(2);
+        $displayBrowsing = $role->getDisplayBrowsing();
+        $role->setDisplayBrowsing('Name');
+        $role->store();
+
+        $this->dispatch('/admin/document/edit/id/89/section/collections');
+
+        // undo changes
+        $role->setDisplayBrowsing($displayBrowsing);
+        $role->store();
+        
+        $this->assertContains('62 Ingenieurwissenschaften', $this->getResponse()->getBody());
+        $this->assertNotContains('Ingenieurwissenschaften 62', $this->getResponse()->getBody());
+    }
+    
+
 }

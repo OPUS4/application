@@ -69,10 +69,14 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->rootCollection->store();
 
         $this->collection = new Opus_Collection();
+        $this->collection->setName("first collection");
+        $this->collection->setNumber("123");
         $this->rootCollection->addFirstChild($this->collection);
         $this->collection->store();
 
         $this->anotherCollection = new Opus_Collection();
+        $this->anotherCollection->setName("last collection");
+        $this->anotherCollection->setNumber("987");
         $this->rootCollection->addLastChild($this->anotherCollection);
         $this->anotherCollection->store();
     }
@@ -102,6 +106,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->assertModule('admin');
         $this->assertController('collection');
         $this->assertAction('show');
+        $this->assertContains('123 first collection', $this->getResponse()->getBody());        
     }
 
     public function testShowActionWithEmptyRole() {
@@ -118,6 +123,8 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->assertModule('admin');
         $this->assertController('collection');
         $this->assertAction('show');
+        $this->assertContains('123 first collection', $this->getResponse()->getBody());
+        $this->assertContains('987 last collection', $this->getResponse()->getBody());
     }
 
     public function testShowActionMissingArg() {
@@ -137,7 +144,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
     public function testDeleteAction() {
         $this->dispatch('/admin/collection/delete/id/' . $this->collection->getId());
         $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/' . $this->rootCollection->getId());
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/' . $this->rootCollection->getId());        
     }
 
     public function testDeleteActionWithMissingParam() {
