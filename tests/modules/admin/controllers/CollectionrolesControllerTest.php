@@ -142,6 +142,21 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->dispatch('/admin/collectionroles/unhide');
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
-    }    
+    }
+
+    /**
+     * Regression Test for OPUSVIER-2638
+     */
+    public function testOPUSVIER2638() {
+        $this->dispatch('/admin/collectionroles/edit/roleid/' . $this->nonEmptyCollectionRole->getId());
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('collectionroles');
+        $this->assertAction('edit');
+
+        $containsGermanTitle = strpos($this->getResponse()->getBody(), '<title>OPUS 4 | Sammlungseinstellungen</title>');
+        $containsEnglishTitle = strpos($this->getResponse()->getBody(), '<title>OPUS 4 | Collection Properties</title>');
+        $this->assertTrue($containsGermanTitle || $containsEnglishTitle);
+    }
 }
 
