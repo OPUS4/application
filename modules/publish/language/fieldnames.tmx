@@ -259,15 +259,6 @@
       </tuv>
     </tu>
     
-    <tu tuid="SubjectSwd">
-      <tuv xml:lang="en">
-        <seg>SWD Keywords</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>SWD Schlagwörter</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="SubjectSwdLanguage">
       <tuv xml:lang="en">
         <seg>SWD Language</seg>
@@ -348,24 +339,6 @@
         <seg>Jahr der Fertigstellung</seg>
       </tuv>
     </tu>
-        
-    <tu tuid="PublishedYear">
-      <tuv xml:lang="en">
-        <seg>Year of Publication</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Jahr der Veröffentlichung</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="PublishedDate">
-      <tuv xml:lang="en">
-        <seg>Date of first Publication</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Datum der Erstveröffentlichung</seg>
-      </tuv>
-    </tu>
     
     <tu tuid="CompletedDate">
       <tuv xml:lang="en">
@@ -375,16 +348,7 @@
         <seg>Veröffentlichungsdatum (online)</seg>
       </tuv>
     </tu>
-    
-    <tu tuid="Reviewed">
-      <tuv xml:lang="en">
-        <seg>Style of Review</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Art des Review</seg>
-      </tuv>
-    </tu>
-    
+      
     <tu tuid="TitleMain">
       <tuv xml:lang="en">
         <seg>Main Title</seg>
@@ -610,15 +574,6 @@
       </tuv>
     </tu>
 	
-    <tu tuid="PersonEditor">
-      <tuv xml:lang="en">
-        <seg>Editor(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Herausgeber</seg>
-      </tuv>
-    </tu>
-	
     <tu tuid="PersonEditorLastName">
       <tuv xml:lang="en">
         <seg>Last name</seg>
@@ -691,15 +646,6 @@
       </tuv>
     </tu>
     
-    <tu tuid="PublicationVersion">
-      <tuv xml:lang="en">
-        <seg>Version of Publication</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Publikationsversion</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="ThesisDateAccepted">
       <tuv xml:lang="en">
         <seg>Acceptance Date of the Thesis</seg>
@@ -709,24 +655,6 @@
       </tuv>
     </tu>
     
-    <tu tuid="PublisherPlace">
-      <tuv xml:lang="en">
-        <seg>Place of publication</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Verlagsort</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="PublisherName">
-      <tuv xml:lang="en">
-        <seg>Publisher</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Verlag</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="ButtonDelete">
       <tuv xml:lang="en">
         <seg>Delete</seg>
@@ -819,15 +747,6 @@ END OF COMMENT-->
       </tuv>
       <tuv xml:lang="de">
         <seg>Kommentar</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="PublicationState">
-      <tuv xml:lang="en">
-        <seg>Status</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Status</seg>
       </tuv>
     </tu>
 

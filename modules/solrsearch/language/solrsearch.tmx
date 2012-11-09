@@ -391,15 +391,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="solrsearch_query_label">
-            <tuv xml:lang="en">
-                <seg>Search Term</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Suchbegriff</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="solrsearch_title_results">
             <tuv xml:lang="en">
                 <seg>Search Results</seg>
