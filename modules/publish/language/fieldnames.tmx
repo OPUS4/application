@@ -231,24 +231,6 @@
         <seg>Institut</seg>
       </tuv>
     </tu>
-      
-    <tu tuid="TitleMain">
-      <tuv xml:lang="en">
-        <seg>Main Title</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Titel</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="TitleMainValue">
-      <tuv xml:lang="en">
-        <seg>Main Title</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Titel</seg>
-      </tuv>
-    </tu>
 
     <tu tuid="TitleMainLanguage">
       <tuv xml:lang="en">
@@ -274,33 +256,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Sprache</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="TitleParentValue">
-      <tuv xml:lang="en">
-        <seg>Main Title</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Haupttitel</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="TitleAbstract">
-      <tuv xml:lang="en">
-        <seg>Abstract</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Abstract / Kurzfassung</seg>
-      </tuv>
-    </tu>
-   
-    <tu tuid="TitleAbstractValue">
-      <tuv xml:lang="en">
-        <seg>Abstract</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Abstract / Kurzfassung</seg>
       </tuv>
     </tu>
 
@@ -373,24 +328,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Nachname</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="PersonTranslator">
-      <tuv xml:lang="en">
-        <seg>Translator</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Übersetzer</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="ThesisDateAccepted">
-      <tuv xml:lang="en">
-        <seg>Acceptance Date of the Thesis</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Datum der Annahme der Abschlussarbeit</seg>
       </tuv>
     </tu>
 	

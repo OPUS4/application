@@ -958,15 +958,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="hint_Opus_Model_Filter_TitleAbstract_add">
-            <tuv xml:lang="en">
-                <seg>If given an abstract, order an input field</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Sofern es eine Zusammenfassung (Abstract) gibt, fordern Sie bitte ein Eingabefeld an</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="TitleAdditional">
             <tuv xml:lang="en">
                 <seg>Title Additional</seg>
