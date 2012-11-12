@@ -733,15 +733,6 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_Institute1">
-        <tuv xml:lang="en">
-            <seg>Please choose the involved institute. </seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie das beteiligte Institut aus.</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="hint_Institute">
         <tuv xml:lang="en">
             <seg>Please choose the involved institute. </seg>
@@ -769,15 +760,6 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_TitleMain1">
-        <tuv xml:lang="en">
-            <seg>Please enter the documents title.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Titel des Dokuments ein.</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="hint_TitleMain">
         <tuv xml:lang="en">
             <seg>Please enter the documents main title.</seg>
@@ -787,12 +769,12 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_TitleMainLanguage1">
+    <tu tuid="hint_TitleMainLanguage">
         <tuv xml:lang="en">
-            <seg>Please enter the language.</seg>
+            <seg>Please enter the language of the title.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die Sprache aus.</seg>
+            <seg>Wählen Sie bitte die Sprache des Titels aus.</seg>
         </tuv>
     </tu>
 
@@ -805,30 +787,12 @@
         </tuv>
     </tu>
 
-    <tu tuid="hint_TitleAbstract1">
-        <tuv xml:lang="en">
-            <seg>Please enter the documents abstract.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Abstract des Dokuments ein.</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="hint_TitleAbstract">
         <tuv xml:lang="en">
             <seg>Please enter the documents abstract.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte die Zusammenfassung des Dokuments ein.</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="hint_TitleAbstractLanguage1">
-        <tuv xml:lang="en">
-            <seg>Please choose the language.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die Sprache aus.</seg>
         </tuv>
     </tu>
 
@@ -850,30 +814,12 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_TitleSub1">
-        <tuv xml:lang="en">
-            <seg>Please enter the documents subtitle.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte den Untertitel des Dokuments ein.</seg>
-        </tuv>
-    </tu>
-	
 	<tu tuid="hint_TitleSubLanguage">
         <tuv xml:lang="en">
             <seg>Please choose the language of the documents subtitle.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Bitte wählen Sie die Sprache des Untertitels aus.</seg>
-        </tuv>
-    </tu>
-	
-	<tu tuid="hint_TitleSubLanguage1">
-        <tuv xml:lang="en">
-            <seg>Please choose a Language.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte wählen Sie eine Sprache.</seg>
         </tuv>
     </tu>
 	
@@ -886,7 +832,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_TitleAdditional1">
+	<tu tuid="hint_TitleAdditional">
         <tuv xml:lang="en">
             <seg>Please enter the documents translated title.</seg>
         </tuv>
@@ -904,39 +850,30 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_TitleAdditionalLanguage1">
-        <tuv xml:lang="en">
-            <seg>Please choose a language.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte wählen Sie eine Sprache aus.</seg>
-        </tuv>
-    </tu>
-	
 	<tu tuid="hint_groupTitleParent">
         <tuv xml:lang="en">
-            <seg>Please enter the parent works title (i.e. Journal, Compilation, Anthology).</seg>
+            <seg>Please enter the parent work's title (i.e. Journal, Compilation, Anthology).</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den Titel des übergeordneten Werks (z.B. Zeitschrift, Sammelwerk, Sammelband) ein.</seg>
         </tuv>
     </tu>
 	
-	<tu tuid="hint_TitleParent1">
+	<tu tuid="hint_TitleParent">
         <tuv xml:lang="en">
-            <seg>Please enter the parent works title (i.e. Journal, Collected Edition, Anthology).</seg>
+            <seg>Please enter the parent work's title (i.e. Journal, Collected Edition, Anthology).</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte den Titel des übergeordneten Werks (z.B. Zeitschrift, Sammelwerk, Sammelband) ein.</seg>
         </tuv>
     </tu>
 	
-	<tu tuid="hint_TitleParentLanguage1">
+	<tu tuid="hint_TitleParentLanguage">
         <tuv xml:lang="en">
-            <seg>Please choose a language.</seg>
+            <seg>Please choose a parent work's title language.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Bitte wählen Sie eine Sprache.</seg>
+            <seg>Bitte wählen Sie eine Sprache des Titels des übergeordneten Werks.</seg>
         </tuv>
     </tu>
 	
@@ -946,15 +883,6 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Wählen Sie hier bitte die zugehörigen Matheon Projekte Ihres Dokumentes aus. Sie können durch Klicken auf den Button weitere Projekte hinzufügen (oder wieder löschen)</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="hint_Project1">
-        <tuv xml:lang="en">
-            <seg>Please choose the documents Matheon projects.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die zugehörigen Matheon Projekte Ihres Dokumentes aus.</seg>
         </tuv>
     </tu>
 
@@ -978,15 +906,6 @@ Example input: "00A09" (for Popularization of mathematics)</seg>
             <seg>Tragen Sie hier bitte die MSC Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
 Hilfe zur Klassifikation bekommen Sie unter: <a href="http://www.ams.org/mathscinet/msc/msc2010.html" target="tab" >http://www.ams.org/mathscinet/msc/msc2010.html</a><br />
 Beispieleingabe: "00A09" (für Popularization of mathematics)</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="hint_SubjectMSC1">
-        <tuv xml:lang="en">
-            <seg>Please enter a MSC class.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine MSC Klasse ein.</seg>
         </tuv>
     </tu>
 
@@ -1022,15 +941,6 @@ Beispieleingabe: "100" (für Philosophy and psychology)</seg>
         </tuv>
     </tu>
 
-    <tu tuid="hint_SubjectDDC1">
-        <tuv xml:lang="en">
-            <seg>Please enter a DDC class.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine DDC Klasse ein.</seg>
-        </tuv>
-    </tu>
-
 <!-- JEL **************************************************** -->
 <tu tuid="hint_groupSubjectJEL">
         <tuv xml:lang="en">
@@ -1052,15 +962,6 @@ Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://ww
         </tuv>
     </tu>
 
-    <tu tuid="hint_SubjectJEL1">
-        <tuv xml:lang="en">
-            <seg>Please enter a JEL class.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine JEL Klasse ein.</seg>
-        </tuv>
-    </tu>
-
 <!-- CCS ****************************************************** -->
 <tu tuid="hint_groupSubjectCCS">
         <tuv xml:lang="en">
@@ -1072,15 +973,6 @@ Example input: "C.1" (for Processor Architectures)</seg>
             <seg>Tragen Sie hier bitte die CCS Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
 Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://portal.acm.org/ccs.cfm" target="tab" >http://portal.acm.org/ccs.cfm</a><br />
 Beispieleingabe: "C.1" (für Processor Architectures)</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="hint_SubjectCCS1">
-        <tuv xml:lang="en">
-            <seg>Please enter a CCS class.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine CCS Klasse ein.</seg>
         </tuv>
     </tu>
 
@@ -1107,15 +999,6 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         </tuv>
     </tu>
 
-    <tu tuid="hint_SubjectPACS1">
-        <tuv xml:lang="en">
-            <seg>Please enter a PACS class.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte eine PACS Klasse ein.</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="hint_SubjectPACS">
         <tuv xml:lang="en">
             <seg>Please enter a PACS class.</seg>
@@ -1135,15 +1018,6 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         </tuv>
     </tu>
 
-    <tu tuid="hint_SubjectUncontrolled1">
-        <tuv xml:lang="en">
-            <seg>Please enter a subject of your choice.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte ein beliebiges Schlagwort ein.</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="hint_SubjectUncontrolled">
         <tuv xml:lang="en">
             <seg>Please enter a subject of your choice.</seg>
@@ -1152,7 +1026,8 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
             <seg>Tragen Sie bitte ein beliebiges Schlagwort ein.</seg>
         </tuv>
     </tu>
-
+	
+<!-- SubjectSwd ************************************************** -->
 	<tu tuid="hint_groupSubjectSwd">
         <tuv xml:lang="en">
             <seg>Please enter SWD keywords of the document. You may add more keywords by clicking on the button (or delete them).</seg>
@@ -1163,7 +1038,7 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         </tuv>
     </tu>
 
-    <tu tuid="hint_SubjectSwd1">
+    <tu tuid="hint_SubjectSwd">
         <tuv xml:lang="en">
             <seg>Please enter a SWD subject.</seg>
         </tuv>
@@ -1178,15 +1053,6 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         </tuv>
         <tuv xml:lang="de">
             <seg>Sie haben die Möglichkeit, gemeinsam mit Ihrem Dokument Notizen oder eine Nachricht auf unseren Server hochzuladen.</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="hint_Note1">
-        <tuv xml:lang="en">
-            <seg>Room for a notification...</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Raum für Notizen und Benachrichtigungen...</seg>
         </tuv>
     </tu>
 
@@ -1223,15 +1089,6 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie bitte die Nummer der letzten Seite des Dokuments ein.</seg>
-        </tuv>
-    </tu>
-	
-	<tu tuid="hint_Collection">
-        <tuv xml:lang="en">
-            <seg>Please enter the collection.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Bitte wählen Sie eine Sammlung.</seg>
         </tuv>
     </tu>
 	
@@ -1370,25 +1227,7 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         </tuv>
     </tu>
 	
-	<tu tuid="hint_ThesisGrantor1">
-        <tuv xml:lang="en">
-            <seg>Please choose the granting institution(s).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die titelverleihende(n) Institution(en) aus.</seg>
-        </tuv>
-    </tu>
-	
 	<tu tuid="hint_ThesisPublisher">
-        <tuv xml:lang="en">
-            <seg>Please choose the publishing institution(s).</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Wählen Sie bitte die veröffentlichende(n) Institution(en) aus.</seg>
-        </tuv>
-    </tu>
-    
-	<tu tuid="hint_ThesisPublisher1">
         <tuv xml:lang="en">
             <seg>Please choose the publishing institution(s).</seg>
         </tuv>
@@ -1411,15 +1250,6 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
     </tu>
 
     <tu tuid="hint_EnrichmentNeuesSelect">
-      <tuv xml:lang="en">
-        <seg>You can define whatever you want</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sie können hier definieren, was Sie möchten.</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="hint_EnrichmentNeuesSelect1">
       <tuv xml:lang="en">
         <seg>You can define whatever you want</seg>
       </tuv>
@@ -1481,7 +1311,7 @@ END OF COMMENT -->
         </tuv>
     </tu>
 
-    <tu tuid="hint_collection1">
+    <tu tuid="hint_collection">
         <tuv xml:lang="en">
             <seg>Please choose a collection. After that you can navigate to the collection entries of that collection.</seg>
         </tuv>
@@ -1581,7 +1411,7 @@ END OF COMMENT -->
       </tuv>
     </tu>
 	
-	<tu tuid="hint_Series1">
+	<tu tuid="hint_Series">
       <tuv xml:lang="en">
         <seg>Choose a series from the select box and enter the corresponding number.</seg>
       </tuv>
@@ -1599,7 +1429,7 @@ END OF COMMENT -->
         </tuv>
     </tu>
 
-<tu tuid="hint_SeriesNumber1">
+<tu tuid="hint_SeriesNumber">
       <tuv xml:lang="en">
         <seg>Please specify the corresponding number.</seg>
       </tuv>
