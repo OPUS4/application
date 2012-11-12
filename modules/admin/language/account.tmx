@@ -131,6 +131,15 @@
         <seg>Passwort bestaetigen:</seg>
       </tuv>
     </tu>
+	
+	<tu tuid="admin_account_error_password_tooshort">
+      <tuv xml:lang="en">
+        <seg>The password is less than 6 characters long.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Password ist kürzer als 6 Zeichen.</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="admin_account_label_roles">
       <tuv xml:lang="en">

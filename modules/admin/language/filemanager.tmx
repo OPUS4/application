@@ -24,14 +24,6 @@
         <seg>Zu diesem Dokument sind keine Dateien vorhanden!</seg>
       </tuv>
     </tu>
-    <tu tuid="admin_filemanager_delete">
-      <tuv xml:lang="en">
-        <seg>Delete this file</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Diese Datei löschen</seg>
-      </tuv>
-    </tu>
 
     <tu tuid="admin_filemanager_uploadsuccess">
       <tuv xml:lang="en">
@@ -215,10 +207,10 @@
 
     <tu tuid="admin_filemanager_delete">
       <tuv xml:lang="en">
-        <seg>Delete File</seg>
+        <seg>Delete this File</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Datei löschen</seg>
+        <seg>Diese Datei löschen</seg>
       </tuv>
     </tu>
 
