@@ -72,7 +72,7 @@ class Publish_DepositController extends Controller_Action {
                     $document->deletePermanent();
                 }
                 catch (Opus_Model_Exception $e) {
-                    $this->_logger->error("deletion of document # " . $this->session->documentId . " was not successful", $e);
+                    $this->_logger->err("deletion of document # " . $this->session->documentId . " was not successful", $e);
                 }
             }
             return $this->_redirectTo('index', '', 'index');
