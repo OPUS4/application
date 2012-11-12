@@ -344,17 +344,6 @@
     </tu>
 <!-- **************END Int************** -->
 
-
-    <tu tuid="error_uploaded_files">
-        <!-- Text for alreaded uploaded files -->
-        <tuv xml:lang="en">
-            <seg>Error: File already exists or could not be stored.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Fehler: Datei exisitert bereits oder kann nicht gespeichert werden.</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="template_error_unknown_field">
       <tuv xml:lang="en">
         <seg>You try to create an unknown form element. 1) Please check the variable name. 2) Single elements (ex: Lanuage, Identifier) are called by element 3) Multiple elements of a group are valled by group (ex: Persons, Titles, Multiplicity=*)</seg>

@@ -195,24 +195,6 @@
         <seg>Vorname</seg>
       </tuv>
     </tu>
-        
-    <tu tuid="File">
-      <tuv xml:lang="en">
-        <seg>File</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Datei</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="File(s)">
-      <tuv xml:lang="en">
-        <seg>File(s)</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Datei(en)</seg>
-      </tuv>
-    </tu>          
     
     <tu tuid="ContributingCorporation">
       <tuv xml:lang="en">
@@ -528,15 +510,6 @@
         <seg>Anzeigen</seg>
       </tuv>
     </tu>
-
-    <tu tuid="help_formbuilder_field_link">
-      <tuv xml:lang="en">
-        <seg>Show Help for this field</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Hilfe zu diesem Feld anzeigen</seg>
-      </tuv>
-    </tu>  
 
 <!-- BEGIN OF COMMENT
     Language keys can be used after the corresponding Enrichment keys

@@ -43,23 +43,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="hint_Opus_Model_Filter_Licence">
-            <tuv xml:lang="en">
-                <seg>Please select a license for your document.
-        By choosing a license you decide which legal
-        conditions will apply to the document you are
-        publishing.</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Bitte wählen Sie die Lizenz, unter der
-        das Dokument veröffentlicht werden soll.
-        Mit der Wahl der Lizenz entscheiden Sie,
-        unter welchen Bedingungen das von Ihnen
-        veröffentlichte Dokument zukünftig genutzt
-        werden darf.</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="File">
             <tuv xml:lang="en">
                 <seg>File</seg>
@@ -498,16 +481,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="hint_add_SubjectUncontrolled">
-            <tuv xml:lang="en">
-                <seg>You can index your document with free
-        English keywords here.</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Sie können hier freie Schlagwörter eingeben.</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="SubjectPsyndex">
             <tuv xml:lang="en">
                 <seg>Psyndex Keyword</seg>
@@ -922,15 +895,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="hint_Opus_Model_Filter_TitleMain">
-            <tuv xml:lang="en">
-                <seg>Please insert Title here.</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Geben Sie hier bitte den Titel ein.</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="TitleParent">
             <tuv xml:lang="en">
                 <seg>Parent Title</seg>
@@ -946,15 +910,6 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Titel des übergeordneten Werks.</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="hint_Opus_Model_Filter_TitleParent">
-            <tuv xml:lang="en">
-                <seg>Please insert the Parent Title.</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Geben Sie bitte den Titel des übergeordneten Werks ein</seg>
             </tuv>
         </tu>
 
@@ -1018,15 +973,6 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>übersetzter Titel</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="hint_Opus_Model_Filter_TitleAdditional">
-            <tuv xml:lang="en">
-                <seg>Please insert a translated Title.</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Geben Sie bitte einen übersetzten Titel</seg>
             </tuv>
         </tu>
 
@@ -1634,15 +1580,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="hint_FirstName">
-            <tuv xml:lang="en">
-                <seg>If possible, please write out the first name, too.</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Bitte schreiben Sie wenn möglich auch den Vornamen vollständig aus.</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="LastName">
             <tuv xml:lang="en">
                 <seg>Last Name</seg>
@@ -1847,15 +1784,6 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Dieses Feld enthält die Hauptsprache des Werkes</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="hint_Opus_Model_Filter_Language">
-            <tuv xml:lang="en">
-                <seg>Select the language</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Bitte die Hauptsprache des Werkes angeben</seg>
             </tuv>
         </tu>
 
