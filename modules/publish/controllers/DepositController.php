@@ -64,7 +64,8 @@ class Publish_DepositController extends Controller_Action {
         $post = $this->getRequest()->getPost();
         if (array_key_exists('back', $post)) {
             return $this->_forward('check', 'form');
-        } else if (array_key_exists('abort', $post)) {
+        }
+        if (array_key_exists('abort', $post)) {
             if (isset($this->session->documentId)) {
                 try {
                     $document = new Opus_Document($this->session->documentId);
