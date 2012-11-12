@@ -45,6 +45,11 @@ class Publish_View_Helper_BibliographieOverview extends Zend_View_Helper_Abstrac
      * @return String (html output)
      */
     public function bibliographieOverview() {
+        $config = Zend_Registry::get('Zend_Config');
+        if (!isset($config->form->first->bibliographie) || $config->form->first->bibliographie != 1) {
+            return;
+        }
+
         $this->session = new Zend_Session_Namespace('Publish');
 
         $fieldset_start = "<fieldset><legend>" . $this->view->translate('header_bibliographie') . "</legend>\n\t\t\n\t\t";
