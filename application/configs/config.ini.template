@@ -143,7 +143,7 @@ oai.sample.identifier = oai:opus4.demo:90
 ; To enable print on demand services specifiy the provider's url 
 ; and (optionally) the name of a button image.
 ; The image must reside in the current layout's image folder
-; (e.g. server/public/layouts/opus4/img/)
+; (e.g. $BASEDIR/opus4/public/layouts/<LAYOUTNAME>/img/)
 ;
 ; When a provider is specified, the print on demand button or link will
 ; be displayed if the document's licence allows it.
