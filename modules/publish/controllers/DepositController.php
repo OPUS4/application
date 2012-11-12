@@ -66,8 +66,13 @@ class Publish_DepositController extends Controller_Action {
             return $this->_forward('check', 'form');
         } else if (array_key_exists('abort', $post)) {
             if (isset($this->session->documentId)) {
-                $this->document = new Opus_Document($this->session->documentId);
-                $this->document->deletePermanent();
+                try {
+                    $document = new Opus_Document($this->session->documentId);
+                    $document->deletePermanent();
+                }
+                catch (Opus_Model_Exception $e) {
+                    $this->_logger->error("deletion of document # " . $this->session->documentId . " was not successful", $e);
+                }
             }
             return $this->_redirectTo('index', '', 'index');
         }
