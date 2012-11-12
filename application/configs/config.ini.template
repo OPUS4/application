@@ -121,11 +121,11 @@ urn.nss = de:kobv:test-opus
 ; If you would like to use opus to save bibliographical items you should set
 ; this to 1. It will ask on the first site of the publish module if a new
 ; document should be added to the bibliography.
-;form.first.bibliographie = 0
+;form.first.bibliographie = 1
 ; uncomment next line if file upload in first publish form should be disabled
 ;form.first.enable_upload = 0
 ; States, if the upload-fields are required to enter the second form.
-;form.first.require_upload = 0
+;form.first.require_upload = 1
 ; States, if a checkbox for the institutions legal notices is shown.
 ;form.first.show_rights_checkbox = 1
 
