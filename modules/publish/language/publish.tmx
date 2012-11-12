@@ -195,23 +195,6 @@
         <seg>Haben Sie einen GPG-Schlüssel und haben Sie Ihre Dateien damit signiert?</seg>
       </tuv>
     </tu>
-    
-    <tu tuid="answer_no">
-      <tuv xml:lang="en">
-        <seg>No</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Nein</seg>
-      </tuv>
-    </tu>
-    <tu tuid="answer_yes">
-      <tuv xml:lang="en">
-        <seg>Yes</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Ja</seg>
-      </tuv>
-    </tu>
 
     <tu tuid="process">
       <tuv xml:lang="en">

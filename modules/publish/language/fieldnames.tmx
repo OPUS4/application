@@ -196,24 +196,6 @@
       </tuv>
     </tu>
     
-    <tu tuid="ContributingCorporation">
-      <tuv xml:lang="en">
-        <seg>Contributing Corporation</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Beteiligte Körperschaft</seg>
-      </tuv>
-    </tu>
-	
-    <tu tuid="CreatingCorporation">
-      <tuv xml:lang="en">
-        <seg>Creating Corporation</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Urhebende Körperschaft</seg>
-      </tuv>
-    </tu>
-    
     <tu tuid="DateAccepted">
       <tuv xml:lang="en">
         <seg>Date of final exam</seg>
@@ -241,39 +223,12 @@
       </tuv>
     </tu>
     
-    <tu tuid="Edition">
-      <tuv xml:lang="en">
-        <seg>Edition</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Auflage</seg>
-      </tuv>  
-    </tu>
-	
     <tu tuid="Institute">
       <tuv xml:lang="en">
         <seg>Institute</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Institut</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="CompletedYear">
-      <tuv xml:lang="en">
-        <seg>Year of Completion</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Jahr der Fertigstellung</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="CompletedDate">
-      <tuv xml:lang="en">
-        <seg>Publication Date</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Veröffentlichungsdatum (online)</seg>
       </tuv>
     </tu>
       
@@ -376,42 +331,6 @@
       </tuv>
     </tu>
                     
-    <tu tuid="Countries">
-      <tuv xml:lang="en">
-        <seg>Country of Patent Application</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Land der Patentanmeldung</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="DateGranted">
-      <tuv xml:lang="en">
-        <seg>Date of Patent Granted</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Datum der Patenterteilung</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="Enrichment">
-      <tuv xml:lang="en">
-        <seg>Enrichment</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Erweiterung</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="EnrichmentType">
-      <tuv xml:lang="en">
-        <seg>Enrichment Type</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Typ der Erweiterung</seg>
-      </tuv>
-    </tu>
-    	
     <tu tuid="PersonEditorLastName">
       <tuv xml:lang="en">
         <seg>Last name</seg>
@@ -474,43 +393,7 @@
         <seg>Datum der Annahme der Abschlussarbeit</seg>
       </tuv>
     </tu>
-    
-    <tu tuid="ButtonDelete">
-      <tuv xml:lang="en">
-        <seg>Delete</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Löschen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="ButtonEdit">
-      <tuv xml:lang="en">
-        <seg>Edit</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Ändern</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="ButtonNew">
-      <tuv xml:lang="en">
-        <seg>New</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Neu</seg>
-      </tuv>
-    </tu>
-                        
-    <tu tuid="ButtonShow">
-      <tuv xml:lang="en">
-        <seg>Show</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Anzeigen</seg>
-      </tuv>
-    </tu>
-
+	
 <!-- BEGIN OF COMMENT
     Language keys can be used after the corresponding Enrichment keys
     were created in administration -> Enrichments. 
