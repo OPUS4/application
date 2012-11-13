@@ -1,2 +1,9 @@
 INSERT INTO `enrichmentkeys` (`name`) VALUES
-('validtestkey');
+('validtestkey'),
+('City'),
+('ClassRvk'),
+('ContributorsName'),
+('Country'),
+('Event'),
+('SourceSwb'),
+('SourceTitle');

@@ -225,6 +225,21 @@ if (count($licences) >= 1) {
 }
 $doc->setLicence($lic);
 
+// check for enrichment keys before creating enrichments
+$enrichmentKeys = Opus_EnrichmentKey::getAll();
+$enrichmentKeyNames = array();
+foreach($enrichmentKeys as $enrichmentKey) {
+   $enrichmentKeyNames[] = $enrichmentKey->getName();
+}
+$missingEnrichmentKeyNames = array_diff(array('SourceSwb','SourceTitle','ClassRvk','ContributorsName','Event', 'City', 'Country'), $enrichmentKeyNames);
+if(!empty($missingEnrichmentKeyNames)) {
+   foreach($missingEnrichmentKeyNames as $missingEnrichmentKeyName) {
+      $newEnrichmentKey = new Opus_EnrichmentKey();
+      $newEnrichmentKey->setName($missingEnrichmentKeyName);
+      $newEnrichmentKey->store();
+   }
+}
+
 // Some Enrichment-Fields from Opus3-Migration
 $doc->addEnrichment()->setKeyName('SourceSwb')->setValue('http://www.test.de');
 $doc->addEnrichment()->setKeyName('SourceTitle')->setValue('Dieses Dokument ist auch erschienen als ...');
