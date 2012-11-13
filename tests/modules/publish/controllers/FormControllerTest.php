@@ -89,9 +89,11 @@ class Publish_FormControllerTest extends ControllerTestCase {
      * Add Button was pressed and the post is valid
      */
     public function testCheckActionWithValidPostAndAddButton() {
+        $doc = $this->createTemporaryDoc();
+
         $session = new Zend_Session_Namespace('Publish');        
         $session->documentType = 'preprint';
-        $session->documentId = '950';
+        $session->documentId = $doc->getId();
         $session->fulltext = '0';
         $session->additionalFields = array();
         
@@ -124,8 +126,10 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'SeriesNumber_1' => '',
                     'addMoreTitleMain' => 'Add one more title main'
                 ));
-                       
+
         $this->dispatch('/publish/form/check');
+        $this->deleteTemporaryDoc($doc);
+
         $this->assertResponseCode(200);
         $this->assertController('form');
         $this->assertAction('check');
@@ -151,10 +155,12 @@ class Publish_FormControllerTest extends ControllerTestCase {
      * Send Button was pressed but the post is invalid (missing first name)
      */
     public function testCheckActionWithValidPostAndSendButton() {
+        $doc = $this->createTemporaryDoc();
+        
         $session = new Zend_Session_Namespace('Publish');
         //$session->unsetAll();
         $session->documentType = 'preprint';
-        $session->documentId = '750';
+        $session->documentId = $doc->getId();
         $session->fulltext = '0';
         $session->additionalFields = array();
 
@@ -187,9 +193,204 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
+
+        $this->deleteTemporaryDoc($doc);
+
         $this->assertResponseCode(200);
         $this->assertController('form');
         $this->assertAction('check');
-    }      
+    }
+
+    /**
+     * Regression Test for OPUSVIER-1886
+     */
+    public function testOPUSVIER1886WithBibliography() {
+        $config = Zend_Registry::get('Zend_Config');
+        $oldval = null;
+        if (isset($config->form->first->bibliographie)) {
+            $oldval = $config->form->first->bibliographie;
+        }
+        $config->form->first->bibliographie = 1;
+
+        $doc = $this->createTemporaryDoc();
+
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'demo';
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonSubmitterFirstName_1' => 'John',
+                    'PersonSubmitterLastName_1' => 'Doe',
+                    'send' => 'Weiter zum nächsten Schritt'
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->deleteTemporaryDoc($doc);
+        
+        // undo config changes
+        if (is_null($oldval)) {
+            unset($config->form->first->bibliographie);
+        }
+        else {
+            $config->form->first->bibliographie = $oldval;
+        }
+
+        $this->assertResponseCode(200);
+        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
+        $this->assertContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
+        $this->assertContains('Dokument wird <b>nicht</b> zur Bibliographie hinzugefügt.', $this->getResponse()->getBody());
+    }
+
+    public function testOPUSVIER1886WithBibliographyUnselected() {
+        $config = Zend_Registry::get('Zend_Config');
+        $oldval = null;
+        if (isset($config->form->first->bibliographie)) {
+            $oldval = $config->form->first->bibliographie;
+        }
+        $config->form->first->bibliographie = 1;
+
+        $doc = $this->createTemporaryDoc();
+        $doc->setBelongsToBibliography(0);
+        $doc->store();
+
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'demo';
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonSubmitterFirstName_1' => 'John',
+                    'PersonSubmitterLastName_1' => 'Doe',
+                    'send' => 'Weiter zum nächsten Schritt'
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->deleteTemporaryDoc($doc);
+
+        // undo config changes
+        if (is_null($oldval)) {
+            unset($config->form->first->bibliographie);
+        }
+        else {
+            $config->form->first->bibliographie = $oldval;
+        }
+
+        $this->assertResponseCode(200);
+        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
+        $this->assertContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
+        $this->assertContains('Dokument wird <b>nicht</b> zur Bibliographie hinzugefügt.', $this->getResponse()->getBody());
+    }
+
+    public function testOPUSVIER1886WithBibliographySelected() {
+        $config = Zend_Registry::get('Zend_Config');
+        $oldval = null;
+        if (isset($config->form->first->bibliographie)) {
+            $oldval = $config->form->first->bibliographie;
+        }
+        $config->form->first->bibliographie = 1;
+
+        $doc = $this->createTemporaryDoc();
+        $doc->setBelongsToBibliography(1);
+        $doc->store();
+
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'demo';
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonSubmitterFirstName_1' => 'John',
+                    'PersonSubmitterLastName_1' => 'Doe',
+                    'send' => 'Weiter zum nächsten Schritt'
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->deleteTemporaryDoc($doc);
+
+        // undo config changes
+        if (is_null($oldval)) {
+            unset($config->form->first->bibliographie);
+        }
+        else {
+            $config->form->first->bibliographie = $oldval;
+        }
+
+        $this->assertResponseCode(200);
+        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
+        $this->assertContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
+        $this->assertContains('Dokument wird zur Bibliographie <b>hinzugefügt</b>.', $this->getResponse()->getBody());
+    }
+
+    /**
+     * Regression Test for OPUSVIER-1886
+     */
+    public function testOPUSVIER1886WithoutBibliography() {
+        $config = Zend_Registry::get('Zend_Config');
+        $oldval = null;
+        if (isset($config->form->first->bibliographie)) {
+            $oldval = $config->form->first->bibliographie;
+        }
+        $config->form->first->bibliographie = 0;
+
+        $doc = $this->createTemporaryDoc();
+
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'demo';
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonSubmitterFirstName_1' => 'John',
+                    'PersonSubmitterLastName_1' => 'Doe',
+                    'send' => 'Weiter zum nächsten Schritt'
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->deleteTemporaryDoc($doc);
+        
+        // undo config changes
+        if (is_null($oldval)) {
+            unset($config->form->first->bibliographie);
+        }
+        else {
+            $config->form->first->bibliographie = $oldval;
+        }
+
+        $this->assertResponseCode(200);
+        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
+        $this->assertNotContains('<legend>Bibliographie</legend>', $this->getResponse()->getBody());
+        $this->assertNotContains('Dokument wird <b>nicht</b> zur Bibliographie hinzugefügt.', $this->getResponse()->getBody());        
+    }
+
+    /**
+     * @return Opus_Document
+     */
+    private function createTemporaryDoc() {
+        $doc = new Opus_Document();
+        $doc->setServerState('temporary');
+        $doc->store();
+        return $doc;
+    }
+
+    /**
+     *
+     * @param Opus_Document $doc
+     */
+    private function deleteTemporaryDoc($doc) {
+        $doc->deletePermanent();
+    }
 }
 
