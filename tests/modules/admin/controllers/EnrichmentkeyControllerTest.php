@@ -72,21 +72,25 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
     protected function _removeEnrichmentAssociation() {
         $d = new Opus_Document(146);
         $enrichment = $d->getEnrichment();
-        $this->assertEquals(1, count($enrichment), "Test data has changed.");
+        $this->assertEquals(8, count($enrichment), "Test data has changed.");
         $d->setEnrichment(null);
         $d->store();
         return $enrichment;
     }
 
-    protected function _restoreEnrichmentAssociation($enrichment) {
-        $d = new Opus_Document(146);
-        $newEnrichment = new Opus_Enrichment();
-        $newEnrichment->setKeyName($enrichment[0]->getKeyName())->setValue($enrichment[0]->getValue());
-        $d->addEnrichment($newEnrichment);
+    protected function _restoreEnrichmentAssociation($enrichments) {
+      $d = new Opus_Document(146);
+        if (!is_array($enrichments))
+            $enrichments = array($enrichments);
+        foreach ($enrichments as $enrichment) {
+            $newEnrichment = new Opus_Enrichment();
+            $newEnrichment->setKeyName($enrichment->getKeyName())->setValue($enrichment->getValue());
+            $d->addEnrichment($newEnrichment);
+        }
         $d->store();
     }
 
-    protected function _removeAllEnrichmentKeys() {
+   protected function _removeAllEnrichmentKeys() {
         $enrichmentkeys = Opus_EnrichmentKey::getAll();
         $keyNames = array();
         $deletedKeys = array();
