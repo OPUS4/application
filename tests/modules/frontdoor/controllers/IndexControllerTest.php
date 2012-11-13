@@ -547,4 +547,81 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $doc->deletePermanent();
     }
 
+    /**
+     * Regression Test for OPUSVIER-2651
+     */
+    public function testOPUSVIER2651NameNumber() {
+        $role = new Opus_CollectionRole(7);
+        $displayFrontdoor = $role->getDisplayFrontdoor();
+        $role->setDisplayFrontdoor('Name,Number');
+        $role->store();
+
+        $this->dispatch('/frontdoor/index/index/docId/89');
+
+        // undo changes
+        $role->setDisplayBrowsing($displayFrontdoor);
+        $role->store();
+
+        $this->assertContains('</th><td>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines 52.00</td></tr>', $this->getResponse()->getBody());
+    }
+
+    /**
+     * Regression Test for OPUSVIER-2651
+     */
+    public function testOPUSVIER2651NumberName() {
+        $role = new Opus_CollectionRole(7);
+        $displayFrontdoor = $role->getDisplayFrontdoor();
+        $role->setDisplayFrontdoor('Number,Name');
+        $role->store();
+
+        $this->dispatch('/frontdoor/index/index/docId/89');
+
+        // undo changes
+        $role->setDisplayBrowsing($displayFrontdoor);
+        $role->store();
+
+        $this->assertContains('</th><td>52.00 Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</td></tr>', $this->getResponse()->getBody());
+    }
+
+    /**
+     * Regression Test for OPUSVIER-2651
+     */
+    public function testOPUSVIER2651Name() {
+        $role = new Opus_CollectionRole(7);
+        $displayFrontdoor = $role->getDisplayFrontdoor();
+        $role->setDisplayFrontdoor('Name');
+        $role->store();
+
+        $this->dispatch('/frontdoor/index/index/docId/89');
+
+        // undo changes
+        $role->setDisplayBrowsing($displayFrontdoor);
+        $role->store();
+
+        echo $this->getResponse()->getBody();
+
+        $this->assertContains('</th><td>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</td></tr>', $this->getResponse()->getBody());
+    }
+
+    /**
+     * Regression Test for OPUSVIER-2651
+     */
+    public function testOPUSVIER2651Number() {
+        $role = new Opus_CollectionRole(7);
+        $displayFrontdoor = $role->getDisplayFrontdoor();
+        $role->setDisplayFrontdoor('Number');
+        $role->store();
+
+        $this->dispatch('/frontdoor/index/index/docId/89');
+
+        // undo changes
+        $role->setDisplayBrowsing($displayFrontdoor);
+        $role->store();
+
+        echo $this->getResponse()->getBody();
+
+        $this->assertContains('</th><td>52.00 </td></tr>', $this->getResponse()->getBody());
+    }
+
+    
 }
