@@ -1145,7 +1145,17 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
             <seg>Tragen Sie bitte den Verlagsort ein.</seg>
         </tuv>
     </tu>
-	
+
+<!-- Beginn IDENTIFIER ************************************************** -->
+	<tu tuid="hint_IdentifierUrl">
+      <tuv xml:lang="en">
+        <seg>Please enter the url at which the document is available.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte geben Sie den URL an, bei dem das Dokument verfügbar ist.</seg>
+      </tuv>
+    </tu>
+
 	<tu tuid="hint_IdentifierUrn">
         <tuv xml:lang="en">
             <seg>Please enter the URN.</seg>
@@ -1173,6 +1183,116 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         </tuv>
     </tu>
 	
+	<tu tuid="hint_IdentifierOpus3">
+      <tuv xml:lang="en">
+        <seg>Please specify the Opus3 ID, if you have one.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geben Sie hier die Opus3 ID ein, wenn vorhanden.</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="hint_IdentifierOpac">
+        <tuv xml:lang="en">
+            <seg>Please enter the documents OPAC-Number.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die OPAC-Nummer des Dokuments ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_IdentifierOld">
+        <tuv xml:lang="en">
+            <seg>Please enter the old ID, if you have one.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Geben Sie hier die alte ID ein, wenn vorhanden.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_IdentifierSerial">
+        <tuv xml:lang="en">
+            <seg>Please enter the Serial.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die Sequenznummer ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_IdentifierUuid">
+        <tuv xml:lang="en">
+            <seg>Please enter the Uuid.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die Uuid ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_IdentifierDoi">
+        <tuv xml:lang="en">
+            <seg>Please enter the DOI.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die DOI ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_IdentifierHandle">
+        <tuv xml:lang="en">
+            <seg>Please enter the Handle.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Handle ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_IdentifierStdDoi">
+        <tuv xml:lang="en">
+            <seg>Please enter the StdDoi.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die StdDoi ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_IdentifierCrisLink">
+        <tuv xml:lang="en">
+            <seg>Please enter the CRIS-Link.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den CRIS-Link ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_IdentifierSplashUrl">
+        <tuv xml:lang="en">
+            <seg>Please enter the SplashURL.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den SplashURL ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_IdentifierPubmed">
+        <tuv xml:lang="en">
+            <seg>Please enter the Pubmed Id.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die Pubmed-Id ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_IdentifierArxiv">
+        <tuv xml:lang="en">
+            <seg>Please enter the Arxiv Id.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die Arxiv-Id ein.</seg>
+        </tuv>
+    </tu>
+	
+<!-- Ende IDENTIFIER ************************************************** -->
+
     <tu tuid="hint_groupThesisDateAccepted">
         <tuv xml:lang="en">
             <seg>Please enter the date, when the Thesis has been accepted in terms of the examination regulations. In most cases this will be equal to the date of the (last) oral exam.</seg>
@@ -1268,15 +1388,6 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
     </tu>
 
 END OF COMMENT -->
-    
-    <tu tuid="hint_IdentifierOpac">
-        <tuv xml:lang="en">
-            <seg>Please enter the documents OPAC-Number.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Tragen Sie bitte die OPAC-Nummer des Dokuments ein.</seg>
-        </tuv>
-    </tu>
 
     <tu tuid="hint_documentType">
         <tuv xml:lang="en">
@@ -1393,15 +1504,6 @@ END OF COMMENT -->
       </tuv>
     </tu>
 
-    <tu tuid="hint_IdentifierUrl">
-      <tuv xml:lang="en">
-        <seg>Please enter the url at which the document is available.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Bitte geben Sie die URL an, bei der das Dokument verfügbar ist.</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="hint_groupSeries">
       <tuv xml:lang="en">
         <seg>Choose a serie from the select box and enter the corresponding number.</seg>
@@ -1435,15 +1537,6 @@ END OF COMMENT -->
       </tuv>
       <tuv xml:lang="de">
         <seg>Geben Sie die Bandnummer ein.</seg>
-      </tuv>
-    </tu>
-
-<tu tuid="hint_IdentifierOpus3">
-      <tuv xml:lang="en">
-        <seg>Please specify the Opus3 ID, if you have one.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Geben Sie hier die Opus3 ID ein, wenn vorhanden.</seg>
       </tuv>
     </tu>
     </body>

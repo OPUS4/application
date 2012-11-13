@@ -419,6 +419,7 @@ END OF COMMENT -->
       </tuv>
     </tu>
 
+	<!-- Beginn IDENTIFIER ************************************************** -->
     <tu tuid="header_IdentifierOpus3">
       <tuv xml:lang="en">
         <seg>OPUS 3 ID of document</seg>
@@ -428,6 +429,15 @@ END OF COMMENT -->
       </tuv>
     </tu>
 
+	<tu tuid="header_IdentifierOld">
+      <tuv xml:lang="en">
+        <seg>Old Identifier of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alter Identifier des Dokuments</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="header_IdentifierUrn">
       <tuv xml:lang="en">
         <seg>URN of document</seg>
@@ -466,12 +476,94 @@ END OF COMMENT -->
 
     <tu tuid="header_IdentifierOpac">
       <tuv xml:lang="en">
-        <seg>OPAC of document</seg>
+        <seg>OPAC Number of document</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>OPAC des Dokuments</seg>
+        <seg>OPAC-Nummer des Dokuments</seg>
       </tuv>
     </tu>
+	
+	<tu tuid="header_IdentifierSerial">
+      <tuv xml:lang="en">
+        <seg>Serial Number of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sequenznummer des Dokuments</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="header_IdentifierUuid">
+      <tuv xml:lang="en">
+        <seg>Uuid of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Uuid des Dokuments</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="header_IdentifierDoi">
+      <tuv xml:lang="en">
+        <seg>DOI of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DOI des Dokuments</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="header_IdentifierHandle">
+      <tuv xml:lang="en">
+        <seg>Handle of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Handle des Dokuments</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="header_IdentifierStdDoi">
+      <tuv xml:lang="en">
+        <seg>StdDoi of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>StdDoi des Dokuments</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="header_IdentifierCrisLink">
+      <tuv xml:lang="en">
+        <seg>CRIS-Link of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>CRIS-Link des Dokuments</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="header_IdentifierSplashUrl">
+      <tuv xml:lang="en">
+        <seg>Splash URL of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Splash-URL des Dokuments</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="header_IdentifierPubmed">
+      <tuv xml:lang="en">
+        <seg>Pubmed ID of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Pubmed-ID des Dokuments</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="header_IdentifierArxiv">
+      <tuv xml:lang="en">
+        <seg>Arxiv ID of document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Arxiv-ID des Dokuments</seg>
+      </tuv>
+    </tu>
+<!-- Ende IDENTIFIER ************************************************** -->
 
     <tu tuid="header_ThesisDateAccepted">
       <tuv xml:lang="en">
