@@ -95,7 +95,7 @@ class Admin_WorkflowController extends Controller_Action {
         }
 
         if ($this->getRequest()->isPost()) {
-            $form = $this->__getConfirmationForm($docId, $targetState);
+            $form = $this->__getConfirmationForm($document, $targetState);
             $sureyes = $this->getRequest()->getPost('sureyes');
             if ($form->isValid($this->getRequest()->getPost()) && isset($sureyes) === true) {
                 try {
