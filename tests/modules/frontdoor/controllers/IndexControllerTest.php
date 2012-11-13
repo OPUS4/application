@@ -596,9 +596,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
         // undo changes
         $role->setDisplayBrowsing($displayFrontdoor);
-        $role->store();
-
-        echo $this->getResponse()->getBody();
+        $role->store();        
 
         $this->assertContains('</th><td>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</td></tr>', $this->getResponse()->getBody());
     }
@@ -617,8 +615,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         // undo changes
         $role->setDisplayBrowsing($displayFrontdoor);
         $role->store();
-
-        echo $this->getResponse()->getBody();
 
         $this->assertContains('</th><td>52.00 </td></tr>', $this->getResponse()->getBody());
     }
