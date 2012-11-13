@@ -28,7 +28,8 @@
  * @category    Application
  * @package     Module_Publish Unit Test
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -36,14 +37,80 @@
 class Publish_IndexControllerTest extends ControllerTestCase{
 
     
-    /**
-     * Just call the publish first site.
-     */
     public function testIndexAction() {
-        $this->dispatch('/publish');        
+        $this->dispatch('/publish');  
         $this->assertResponseCode(200);
         $this->assertController('index');
         $this->assertAction('index');
+    }
+
+    public function testShowFileUpload() {
+        $config = Zend_Registry::get('Zend_Config');
+        
+        // manipulate config
+        $oldval = null;
+        if (isset($config->form->first->enable_upload)) {
+            $oldval = $config->form->first->enable_upload;
+        }
+        $config->form->first->enable_upload = 1;
+
+        $this->dispatch('/publish');
+
+        // undo config changes before asserting anything
+        if (is_null($oldval)) {
+            unset($config->form->first->enable_upload);
+        }
+        else {
+            $config->form->first->enable_upload = $oldval;
+        }
+
+        $this->assertResponseCode(200);
+        $this->assertController('index');
+        $this->assertAction('index');
+
+        $this->assertContains('<h3 class="document-type">Dokumenttyp und Datei wählen</h3>', $this->getResponse()->getBody());
+        $this->assertContains('<legend>Dokument(e) hochladen</legend>', $this->getResponse()->getBody());
+        $this->assertContains("<input type='hidden' name='MAX_FILE_SIZE' id='MAX_FILE_SIZE' value='10240000' />", $this->getResponse()->getBody());
+        $this->assertContains("<label for='fileupload'>Datei wählen</label>", $this->getResponse()->getBody());
+        $this->assertContains("<input type='file' name='fileupload' id='fileupload' enctype='multipart/form-data' title='Bitte wählen Sie eine Datei, die Sie hochladen möchten ' size='30' />", $this->getResponse()->getBody());
+        $this->assertContains("<label for='uploadComment'>Kommentar</label>", $this->getResponse()->getBody());
+        $this->assertContains("<textarea name='uploadComment' class='form-textarea' cols='30' rows='5'  title='hint_uploadComment'  id='uploadComment'></textarea>", $this->getResponse()->getBody());                                
+    }
+
+    public function testDoNotShowFileUpload() {
+        $config = Zend_Registry::get('Zend_Config');
+        
+        // manipulate config
+        $oldval = null;
+        if (isset($config->form->first->enable_upload)) {
+            $oldval = $config->form->first->enable_upload;
+        }
+        $config->form->first->enable_upload = 0;
+
+        $this->dispatch('/publish');
+
+        // undo config changes
+        if (is_null($oldval)) {
+            unset($config->form->first->enable_upload);
+        }
+        else {
+            $config->form->first->enable_upload = $oldval;
+        }
+
+        echo $this->getResponse()->getBody();
+
+        $this->assertResponseCode(200);
+        $this->assertController('index');
+        $this->assertAction('index');
+
+        $this->assertContains('<h3 class="document-type">Dokumenttyp wählen</h3>', $this->getResponse()->getBody());
+        $this->assertNotContains('<legend>Dokument(e) hochladen</legend>', $this->getResponse()->getBody());
+        $this->assertNotContains("<input type='hidden' name='MAX_FILE_SIZE' id='MAX_FILE_SIZE' value='10240000' />", $this->getResponse()->getBody());
+        $this->assertNotContains("<label for='fileupload'>Datei wählen</label>", $this->getResponse()->getBody());
+        $this->assertNotContains("<input type='file' name='fileupload' id='fileupload' enctype='multipart/form-data' title='Bitte wählen Sie eine Datei, die Sie hochladen möchten ' size='30' />", $this->getResponse()->getBody());
+        $this->assertNotContains("<label for='uploadComment'>Kommentar</label>", $this->getResponse()->getBody());
+        $this->assertNotContains("<textarea name='uploadComment' class='form-textarea' cols='30' rows='5'  title='hint_uploadComment'  id='uploadComment'></textarea>", $this->getResponse()->getBody());
+
     }
     
 

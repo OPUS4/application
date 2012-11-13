@@ -27,10 +27,19 @@
 
     <tu tuid="publish_controller_index_sub">
       <tuv xml:lang="en">
-        <seg>Choose document type and file </seg>
+        <seg>Choose document type and file</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumenttyp und Datei wählen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_controller_index_sub_without_file">
+      <tuv xml:lang="en">
+        <seg>Choose document type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumenttyp wählen</seg>
       </tuv>
     </tu>
 

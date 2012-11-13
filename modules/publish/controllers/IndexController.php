@@ -70,6 +70,10 @@ class Publish_IndexController extends Controller_Action {
         $this->view->showRights = $form->showRights;
         $this->view->enableUpload = $form->enableUpload;
 
+        if (!$form->enableUpload) {
+            $this->view->subtitle = $this->view->translate('publish_controller_index_sub_without_file');
+        }
+
         //initialize session variables
         $session->documentType = "";
         $session->documentId = "";
