@@ -149,28 +149,28 @@ class Admin_WorkflowController extends Controller_Action {
         // show confirmation page
         $this->view->title = $this->view->translate('admin_workflow_' . $targetState);
         $this->view->text = $this->view->translate('admin_workflow_' . $targetState . '_sure', $docId);
-        $this->view->form = $this->__getConfirmationForm($docId, $targetState);
+        $this->view->form = $this->__getConfirmationForm($document, $targetState);
     }
 
     /**
      * Returns form for asking yes/no question like 'Delete file?'.
      *
-     * @param int $id Document identifier
+     * @param Opus_Document $document
      * @param string $action Target action that needs to be confirmed
      * @return Admin_Form_YesNoForm
      */
-    private function __getConfirmationForm($docId, $targetState) {
+    private function __getConfirmationForm($document, $targetState) {
         $form = new Admin_Form_YesNoForm();
         $form->setAction($this->view->url(array('controller' => 'workflow', 'action' => 'changestate', 'targetState' => $targetState)));
         $form->setMethod('post');
 
         $idElement = new Zend_Form_Element_Hidden('id');
-        $idElement->setValue($docId);
+        $idElement->setValue($document->getId());
         $form->addElement($idElement);
 
         $config = Zend_Registry::get('Zend_Config');
         if ($targetState == 'published' && isset($config->notification->document->published->enabled) && $config->notification->document->published->enabled == 1) {
-            $this->addPublishNotificationSelection($docId, $form);
+            $this->addPublishNotificationSelection($document, $form);
         }
         return $form;
     }
@@ -179,20 +179,11 @@ class Admin_WorkflowController extends Controller_Action {
      * add a checkbox for each PersonSubmitter and PersonAuthor (used to select
      * recipients for publish notification email)
      *
-     * @param int $docId
+     * @param Opus_Document $document
      * @param Zend_Form $form
      * 
      */
-    private function addPublishNotificationSelection($docId, $form) {
-        $document = null;
-        try {
-            $document = new Opus_Document($docId);
-        }
-        catch (Opus_Model_Exception $e) {
-            $this->_logger->err(__CLASS__ . " could not retrieve Opus_Document with id $docId", $e);
-            return;
-        }
-
+    private function addPublishNotificationSelection($document, $form) {
         $form->addElement('hidden', 'plaintext',
             array(
                 'description' => '<br/><p><strong>' . $this->view->translate('admin_workflow_notification_headline') . '</strong></p>' .
