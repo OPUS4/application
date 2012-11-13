@@ -28,7 +28,8 @@
  * @category    Application
  * @package     Module_Publish Unit Test
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -69,10 +70,15 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'foo' => 'bar',
                 ));
 
-        $this->dispatch('/publish/form/upload');
+        $this->dispatch('/publish/form/upload');        
+
         $this->assertResponseCode(200);
         $this->assertController('form');
         $this->assertAction('upload');
+
+        $this->assertContains('Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.', $this->getResponse()->getBody());
+        $this->assertContains('Bitte wählen Sie einen Dokumenttyp aus der Liste aus.', $this->getResponse()->getBody());
+        $this->assertContains("<div class='form-errors'>", $this->getResponse()->getBody());
     }
 
     /**
@@ -86,7 +92,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
     }   
 
     /**
-     * Add Button was pressed and the post is valid
+     * "Add Title" Button was pressed and the post is valid
      */
     public function testCheckActionWithValidPostAndAddButton() {
         $doc = $this->createTemporaryDoc();
@@ -100,39 +106,30 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'PersonSubmitterFirstName_1' => 'John',
                     'PersonSubmitterLastName_1' => 'Doe',
                     'PersonSubmitterEmail_1' => 'doe@example.org',
                     'TitleMain_1' => 'Entenhausen',
-                    'TitleMainLanguage_1' => 'eng',
-                    'TitleAbstract_1' => 'Testabsatz',
-                    'TitleAbstractLanguage_1' => 'deu',
-                    'PersonAuthorFirstName_1' => '',
-                    'PersonAuthorLastName_1' => '',
-                    'PersonAuthorAcademicTitle_1' => 'Dr.',
-                    'PersonAuthorEmail_1' => '',
-                    'PersonAuthorAllowEmailContact_1' => '0',
-                    'PersonAuthorDateOfBirth_1' => '',
-                    'PersonAuthorPlaceOfBirth_1' => '',
-                    'CompletedDate' => '2011/04/20',
-                    'PageNumber' => '',
-                    'SubjectUncontrolled_1' => '',
-                    'Institute' => '',
-                    'IdentifierUrn' => '',
-                    'Note' => '',
+                    'TitleMainLanguage_1' => 'deu',
+                    'PersonAuthorLastName_1' => 'AuthorLastName',
+                    'CompletedDate' => '22.01.2011',
                     'Language' => 'deu',
-                    'Licence' => 'ID:1',
-                    'Series_1' => '',
-                    'SeriesNumber_1' => '',
+                    'Licence' => 'ID:4',
                     'addMoreTitleMain' => 'Add one more title main'
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);
+        $this->deleteTemporaryDoc($doc);        
 
         $this->assertResponseCode(200);
         $this->assertController('form');
         $this->assertAction('check');
+        
+        $this->assertContains('TitleMain_1', $this->getResponse()->getBody());
+        $this->assertContains('TitleMainLanguage_1', $this->getResponse()->getBody());
+        $this->assertContains('TitleMain_2', $this->getResponse()->getBody());
+        $this->assertContains('TitleMainLanguage_2', $this->getResponse()->getBody());
+
+        $this->assertNotContains("<div class='form-errors'>", $this->getResponse()->getBody());
     }
     
     /**
@@ -152,13 +149,12 @@ class Publish_FormControllerTest extends ControllerTestCase {
     }
 
      /**
-     * Send Button was pressed but the post is invalid (missing first name)
+     * Send Button was pressed but the post is invalid (missing last name for author)
      */
     public function testCheckActionWithValidPostAndSendButton() {
         $doc = $this->createTemporaryDoc();
         
         $session = new Zend_Session_Namespace('Publish');
-        //$session->unsetAll();
         $session->documentType = 'preprint';
         $session->documentId = $doc->getId();
         $session->fulltext = '0';
@@ -167,38 +163,76 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                    'PersonSubmitterFirstName_1' => 'John',
                     'PersonSubmitterLastName_1' => 'Doe',
                     'PersonSubmitterEmail_1' => 'doe@example.org',
                     'TitleMain_1' => 'Entenhausen',
-                    'TitleMainLanguage_1' => 'deu',
-                    'TitleAbstract_1' => 'Testabsatz',
-                    'TitleAbstractLanguage_1' => 'deu',
-                    'PersonAuthorFirstName_1' => '',
-                    'PersonAuthorLastName_1' => '',
-                    'PersonAuthorAcademicTitle_1' => 'Dr.',
-                    'PersonAuthorEmail_1' => '',
-                    'PersonAuthorAllowEmailContact_1' => '0',
-                    'PersonAuthorDateOfBirth_1' => '',
-                    'PersonAuthorPlaceOfBirth_1' => '',
-                    'CompletedDate' => '2011/02/22',
-                    'PageNumber' => '',
-                    'SubjectUncontrolled_1' => '',
-                    'Institute' => '',
-                    'IdentifierUrn' => '',
-                    'Note' => '',
+                    'TitleMainLanguage_1' => 'deu',                    
+                    'CompletedDate' => '22.01.2011',
                     'Language' => 'deu',
                     'Licence' => 'ID:4',
                     'send' => 'Weiter zum nächsten Schritt'
                 ));
 
         $this->dispatch('/publish/form/check');
-
         $this->deleteTemporaryDoc($doc);
 
         $this->assertResponseCode(200);
         $this->assertController('form');
         $this->assertAction('check');
+        $this->assertContains('Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.', $this->getResponse()->getBody());
+        $this->assertContains("<div class='form-errors'>", $this->getResponse()->getBody());
+    }
+
+    public function testCheckActionWithValidPostAndSendButtonAndAllRequiredFields() {
+        $doc = $this->createTemporaryDoc();
+        
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'preprint';
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonSubmitterLastName_1' => 'Doe',
+                    'PersonSubmitterEmail_1' => 'doe@example.org',
+                    'TitleMain_1' => 'Entenhausen',
+                    'TitleMainLanguage_1' => 'deu',
+                    'PersonAuthorLastName_1' => 'AuthorLastName',
+                    'CompletedDate' => '22.01.2011',
+                    'Language' => 'deu',
+                    'Licence' => 'ID:4',
+                    'send' => 'Weiter zum nächsten Schritt'
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->deleteTemporaryDoc($doc);
+
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
+        
+        $this->assertNotContains('Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.', $this->getResponse()->getBody());
+        $this->assertNotContains("<div class='form-errors'>", $this->getResponse()->getBody());
+
+        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben.', $this->getResponse()->getBody());
+        $this->assertContains('<b>Kontaktdaten des Einstellers</b>', $this->getResponse()->getBody());
+        $this->assertContains('<td>Doe</td>', $this->getResponse()->getBody());
+        $this->assertContains('<td>doe@example.org</td>', $this->getResponse()->getBody());
+
+        $this->assertContains('<b>Haupttitel</b>', $this->getResponse()->getBody());
+        $this->assertContains('<td>Entenhausen</td>', $this->getResponse()->getBody());
+        $this->assertContains('<td>Deutsch</td>', $this->getResponse()->getBody());
+
+        $this->assertContains('<b>Autor(en)</b>', $this->getResponse()->getBody());
+        $this->assertContains('<td>AuthorLastName</td>', $this->getResponse()->getBody());
+        $this->assertContains('<td>Nein</td>', $this->getResponse()->getBody());
+
+        $this->assertContains('<b>Weitere Formulardaten:</b>', $this->getResponse()->getBody());
+        $this->assertContains('<td>22.01.2011</td>', $this->getResponse()->getBody());
+        $this->assertContains('<td>Creative Commons - Namensnennung</td>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());        
     }
 
     /**
