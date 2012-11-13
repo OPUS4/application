@@ -129,7 +129,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertContains('TitleMain_2', $this->getResponse()->getBody());
         $this->assertContains('TitleMainLanguage_2', $this->getResponse()->getBody());
 
-        $this->assertNotContains("<div class='form-errors'>", $this->getResponse()->getBody());
+        $this->assertNotContains("<div class='form-errors'>", $this->getResponse()->getBody());        
     }
     
     /**
@@ -180,7 +180,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertController('form');
         $this->assertAction('check');
         $this->assertContains('Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.', $this->getResponse()->getBody());
-        $this->assertContains("<div class='form-errors'>", $this->getResponse()->getBody());
+        $this->assertContains("<div class='form-errors'>", $this->getResponse()->getBody());        
     }
 
     public function testCheckActionWithValidPostAndSendButtonAndAllRequiredFields() {
@@ -426,5 +426,110 @@ class Publish_FormControllerTest extends ControllerTestCase {
     private function deleteTemporaryDoc($doc) {
         $doc->deletePermanent();
     }
+
+    public function testDoNotShowFileNoticeOnSecondFormPageIfFileUploadIsDisabled() {
+        $this->fileNoticeOnSecondFormPage(0);
+
+        $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $this->getResponse()->getBody());
+        $this->assertNotContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
+        $this->assertNotContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
+    }
+
+    public function testDoNotShowFileNoticeOnThirdFormPageIfFileUploadIsDisabled() {
+        $this->fileNoticeOnThirdFormPage(0);
+        
+        $this->assertResponseCode(200);
+        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $this->getResponse()->getBody());
+        $this->assertNotContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
+        $this->assertNotContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
+    }
+
+    public function testShowFileNoticeOnSecondFormPageIfFileUploadIsEnabled() {
+        $this->fileNoticeOnSecondFormPage(1);
+
+        $this->assertContains('<h3 class="document-type" title="Dokumenttyp">Alle Felder (Testdokumenttyp)</h3>', $this->getResponse()->getBody());
+        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
+    }
+
+    public function testShowFileNoticeOnThirdFormPageIfFileUploadIsEnabled() {
+        $this->fileNoticeOnThirdFormPage(1);
+
+        $this->assertResponseCode(200);
+        $this->assertContains('Bitte überprüfen Sie Ihre Eingaben', $this->getResponse()->getBody());
+        $this->assertContains('<legend>Sie haben folgende Datei(en) hochgeladen: </legend>', $this->getResponse()->getBody());
+        $this->assertContains('<b>Es wurden keine Dateien hochgeladen. </b>', $this->getResponse()->getBody());
+    }
+
+    private function fileNoticeOnThirdFormPage($value) {
+        $config = Zend_Registry::get('Zend_Config');
+        $oldval = null;
+        if (isset($config->form->first->enable_upload)) {
+            $oldval = $config->form->first->enable_upload;
+        }
+        $config->form->first->enable_upload = $value;
+
+        $doc = $this->createTemporaryDoc();
+
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'demo';
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonSubmitterFirstName_1' => 'John',
+                    'PersonSubmitterLastName_1' => 'Doe',
+                    'send' => 'Weiter zum nächsten Schritt'
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->deleteTemporaryDoc($doc);
+
+        // undo config changes
+        if (is_null($oldval)) {
+            unset($config->form->first->enable_upload);
+        }
+        else {
+            $config->form->first->enable_upload = $oldval;
+        }
+    }
+
+    private function fileNoticeOnSecondFormPage($value) {
+        $config = Zend_Registry::get('Zend_Config');
+        $oldval = null;
+        if (isset($config->form->first->enable_upload)) {
+            $oldval = $config->form->first->enable_upload;
+        }
+        $config->form->first->enable_upload = $value;
+
+        $doc = $this->createTemporaryDoc();
+
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'all';
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'addMoreTitleMain' => 'Add one more title main'
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->deleteTemporaryDoc($doc);
+
+        // undo config changes
+        if (is_null($oldval)) {
+            unset($config->form->first->enable_upload);
+        }
+        else {
+            $config->form->first->enable_upload = $oldval;
+        }
+    }
+
 }
 
