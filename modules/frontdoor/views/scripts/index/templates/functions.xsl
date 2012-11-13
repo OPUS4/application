@@ -46,14 +46,39 @@
     <!-- -->
     <!-- Named template to proof, what to show for collections, depending on display_frontdoor -->
     <xsl:template name="checkdisplay">
-        <xsl:chhose>
-        <xsl:if test="contains(@RoleDisplayFrontdoor,'Number') and @Number != ''">
-            <xsl:value-of select="@Number" />
-            <xsl:text> </xsl:text>
-        </xsl:if>
-        <xsl:if test="contains(@RoleDisplayFrontdoor,'Name') and @Name != ''">
-            <xsl:value-of select="@Name" />
-        </xsl:if>
+        <xsl:choose>
+            <xsl:when test="@RoleDisplayFrontdoor = 'Number' and @Number != ''">
+                <xsl:value-of select="@Number" />
+            </xsl:when>
+            
+            <xsl:when test="@RoleDisplayFrontdoor = 'Name' and @Name != ''">
+                <xsl:value-of select="@Name" />
+            </xsl:when>
+
+            <xsl:when test="@RoleDisplayFrontdoor = 'Number,Name'">
+                <xsl:if test="@Number != ''">
+                    <xsl:value-of select="@Number" />
+                </xsl:if>
+                <xsl:if test="@Name != ''">
+                    <xsl:if test="@Number != ''">
+                        <xsl:text> </xsl:text>
+                    </xsl:if>
+                    <xsl:value-of select="@Name" />
+                </xsl:if>
+            </xsl:when>
+
+            <xsl:when test="@RoleDisplayFrontdoor = 'Name,Number'">
+                <xsl:if test="@Name != ''">
+                    <xsl:value-of select="@Name" />
+                </xsl:if>
+                <xsl:if test="@Number != ''">
+                    <xsl:if test="@Name != ''">
+                        <xsl:text> </xsl:text>
+                    </xsl:if>
+                    <xsl:value-of select="@Number" />
+                </xsl:if>
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
 
     <!-- Named template to translate a field's name. Needs no parameter. -->

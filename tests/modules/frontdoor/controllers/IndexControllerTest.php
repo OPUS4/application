@@ -616,7 +616,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $role->setDisplayBrowsing($displayFrontdoor);
         $role->store();
 
-        $this->assertContains('</th><td>52.00 </td></tr>', $this->getResponse()->getBody());
+        $this->assertContains('</th><td>52.00</td></tr>', $this->getResponse()->getBody());
     }
 
     
