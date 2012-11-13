@@ -437,47 +437,78 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
    public function testDisplayAllDocumentFields() {
 
       $this->dispatch('/frontdoor/index/index/docId/146');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Verfasserangaben:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'URN:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'DOI:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'ISBN:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'ISSN:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'ArXiv-Id:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Pubmed-Id:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Titel des übergordneten Werkes (Deutsch):');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Untertitel (Deutsch):');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'übersetzter Titel (Deutsch):');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Verlag:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Verlagsort:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Herausgeber:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Gutachter:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Betreuer:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Dokumentart:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Sprache der Veröffentlichung:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Datum der Veröffentlichung (online):');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Datum der Erstveröffentlichung:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Veröffentlichende Institution:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Titel verleihende Institution:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Datum der Abschlussprüfung:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Urhebende Körperschaft:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Beteiligte Körperschaft:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Freies Schlagwort / Tag:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'SWD-Schlagwort:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Jahrgang:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Ausgabe / Heft:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Seitenzahl:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Erste Seite:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Letzte Seite:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Bemerkung:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Name der Veranstaltung:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Stadt der Veranstaltung:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Land der Veranstaltung:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Quelle:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Zur Bestellung der Druckausgabe:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'RVK - Regensburger Verbundklassifikation:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Sonstige beteiligte Person:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Institute:');
-      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'Lizenz (Deutsch):');
+      $translate = Zend_Registry::getInstance()->get('Zend_Translate');
+      
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonAuthor'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierUrn'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierUrl'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierHandle'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierDoi'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierIsbn'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierIssn'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierArxiv'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierPubmed'));
+//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ReferenceUrn'));
+//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ReferenceUrl'));
+//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ReferenceDoi'));
+//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ReferenceHandle'));
+//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ReferenceIsbn'));
+//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ReferenceIsbn'));
+//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ReferenceIssn'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('TitleParent'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('TitleSub'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('TitleAdditional'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('Series'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PublisherName'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PublisherPlace'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonEditor'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonTranslator'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonContributor'));
+//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonOther'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonReferee'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonAdvisor'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('Type'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('Language'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('CompletedDate'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PublishedDate'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ThesisPublisher'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ThesisGrantor'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ThesisDateAccepted'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('CreatingCorporation'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ContributingCorporation'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('subject_frontdoor_swd'));
+//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('subject_frontdoor_psyndex'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('Volume'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('Issue'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('Edition'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PageNumber'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PageFirst'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PageLast'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('Note'));
+      // Enrichments
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentEvent'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentCity'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentCountry'));
+      // Opus3 Enrichments
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentSourceTitle'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentSourceSwb'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentClassRvk'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentContributorsName'));
+//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentNeuesSelect'));
+      
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_institutes'));
+//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_projects'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_ccs'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_ddc'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_msc'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_pacs'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_bk'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_jel'));
+      
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierSerial'));
+      
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('Licence'));
+      
    }
 
     public function testAbstractPreserveSpace() {
