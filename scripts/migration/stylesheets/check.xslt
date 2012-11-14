@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the North Rhine-Westphalian Library Service Center,
+ * the Cooperative Library Network Berlin-Brandenburg, the Saarland University
+ * and State Library, the Saxon State Library - Dresden State and University
+ * Library, the Bielefeld University Library and the University Library of
+ * Hamburg University of Technology with funding from the German Research
+ * Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License 
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application
+ * @package     Import
+ * @author      Gunar Maiwald <maiwald@zib.de>
+ * @copyright   Copyright (c) 2009-2010 OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
+ */
+-->
+
+<xsl:stylesheet version="1.0"
+    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+
+    <xsl:output method="text" indent="no" />
+
+    <xsl:template match="/">
+	<xsl:for-each select="/mysqldump/database/table_data[@name='opus']/row/field[@name='source_opus']">
+	    <xsl:variable name="id">
+		<xsl:value-of select="." />
+	    </xsl:variable>
+
+	    <xsl:if test="/mysqldump/database/table_data[@name='temp_autor']/row[field[@name='source_opus']=$id]">
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_autor
+</xsl:text>
+	    </xsl:if>
+
+	    <xsl:if test="/mysqldump/database/table_data[@name='temp_coll']/row[field[@name='source_opus']=$id]">
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_coll
+</xsl:text>
+	    </xsl:if>
+
+	    <xsl:if test="/mysqldump/database/table_data[@name='temp_diss']/row[field[@name='source_opus']=$id]">
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_diss
+</xsl:text>
+	    </xsl:if>
+
+	    <xsl:if test="/mysqldump/database/table_data[@name='temp_inst']/row[field[@name='source_opus']=$id]">
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_inst
+</xsl:text>
+	    </xsl:if>
+
+	    <xsl:if test="/mysqldump/database/table_data[@name='temp_schriftenreihe']/row[field[@name='source_opus']=$id]">
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_schriftenreihe
+</xsl:text>
+	    </xsl:if>
+
+	    <xsl:if test="/mysqldump/database/table_data[@name='temp_ccs']/row[field[@name='source_opus']=$id]">
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_ccs
+</xsl:text>
+	    </xsl:if>
+
+	    <xsl:if test="/mysqldump/database/table_data[@name='temp_jel']/row[field[@name='source_opus']=$id]">
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_jel
+</xsl:text>
+	    </xsl:if>
+
+	    <xsl:if test="/mysqldump/database/table_data[@name='temp_msc']/row[field[@name='source_opus']=$id]">
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_msc
+</xsl:text>
+	    </xsl:if>
+
+	    <xsl:if test="/mysqldump/database/table_data[@name='temp_pacs']/row[field[@name='source_opus']=$id]">
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_pacs
+</xsl:text>
+	    </xsl:if>
+
+	    <xsl:if test="/mysqldump/database/table_data[@name='temp_rvk']/row[field[@name='source_opus']=$id]">
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_rvk
+</xsl:text>
+	    </xsl:if>
+	</xsl:for-each>
+    </xsl:template>
+
+</xsl:stylesheet>

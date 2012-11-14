@@ -88,6 +88,11 @@ echo "Validation of Opus3-XML-Dumpfile"
 cd "$migration_dir"
 php Opus3Migration_Validation.php -f "$xml_file" || { echo "Aborting migration: Opus3Migration_Validation.php FAILED"; exit -1; }
 
+echo "Validation of Consistency of Opus3-XML-Dumpfile"
+cd "$migration_dir"
+check=`php ../xslt.php stylesheets/check.xslt "$xml_file"`
+[[ -z $check ]] || { echo "Aborting migration: Consistency check of Opus3-Dump FAILED"; echo $check; exit -1; }
+
 echo "Import institutes, collections and licenses"
 php Opus3Migration_ICL.php -f "$xml_file" || { echo "Aborting migration: Opus3Migration_ICL.php FAILED"; exit -1; }
 
