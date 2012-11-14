@@ -233,7 +233,7 @@ class Util_Notification {
                     'users' => array($recipient)
                 ));
 
-                if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
+                if (isset($this->config->runjobs->asynchronous) && $this->config->runjobs->asynchronous) {
                     // Queue job (execute asynchronously)
                     // skip creating job if equal job already exists
                     if (true === $job->isUniqueInQueue()) {
