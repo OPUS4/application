@@ -439,7 +439,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->dispatch('/frontdoor/index/index/docId/146');
       $translate = Zend_Registry::getInstance()->get('Zend_Translate');
       
+      $this->assertQuery('h2.titlemain');
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonAuthor'));
+      $this->assertQuery('div#abstract');
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierUrn'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierUrl'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierHandle'));
@@ -448,13 +450,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierIssn'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierArxiv'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierPubmed'));
-//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ReferenceUrn'));
-//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ReferenceUrl'));
-//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ReferenceDoi'));
-//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ReferenceHandle'));
-//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ReferenceIsbn'));
-//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ReferenceIsbn'));
-//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ReferenceIssn'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('TitleParent'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('TitleSub'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('TitleAdditional'));
@@ -464,7 +459,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonEditor'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonTranslator'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonContributor'));
-//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonOther'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonReferee'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonAdvisor'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('Type'));
@@ -477,7 +471,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('CreatingCorporation'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ContributingCorporation'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('subject_frontdoor_swd'));
-//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('subject_frontdoor_psyndex'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('subject_frontdoor_uncontrolled'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('Volume'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('Issue'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('Edition'));
@@ -494,10 +488,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentSourceSwb'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentClassRvk'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentContributorsName'));
-//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentNeuesSelect'));
       
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_institutes'));
-//      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_projects'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_ccs'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_ddc'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_msc'));

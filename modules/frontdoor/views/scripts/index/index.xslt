@@ -159,12 +159,6 @@
             <xsl:apply-templates select="IdentifierIssn" />
             <xsl:apply-templates select="IdentifierArxiv" />
             <xsl:apply-templates select="IdentifierPubmed" />
-            <xsl:apply-templates select="ReferenceUrn" />
-            <xsl:apply-templates select="ReferenceUrl" />
-            <xsl:apply-templates select="ReferenceDoi" />
-            <xsl:apply-templates select="ReferenceHandle" />
-            <xsl:apply-templates select="ReferenceIsbn" />
-            <xsl:apply-templates select="ReferenceIssn" />
             <xsl:apply-templates select="TitleParent" />
             <xsl:apply-templates select="TitleSub" />
             <xsl:apply-templates select="TitleAdditional" />
