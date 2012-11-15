@@ -625,7 +625,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonConributorAcademicTitle">
+	<tu tuid="hint_PersonContributorAcademicTitle">
         <tuv xml:lang="en">
             <seg>Please enter the contributor's shortened academic title (i.e. Dr., Prof., PhD).</seg>
         </tuv>
@@ -634,7 +634,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonConributorEmail">
+	<tu tuid="hint_PersonContributorEmail">
         <tuv xml:lang="en">
             <seg>Please enter the contributor's email adress.</seg>
         </tuv>
@@ -643,7 +643,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonConributorDateOfBirth">
+	<tu tuid="hint_PersonContributorDateOfBirth">
         <tuv xml:lang="en">
             <seg>Please enter the contributor's date of birth.</seg>
         </tuv>
@@ -652,7 +652,7 @@
         </tuv>
     </tu>
 	
-	<tu tuid="hint_PersonConributorPlaceOfBirth">
+	<tu tuid="hint_PersonContributorPlaceOfBirth">
         <tuv xml:lang="en">
             <seg>Please enter the contributor's place of birth.</seg>
         </tuv>
