@@ -436,6 +436,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     */
    public function testDisplayAllDocumentFields() {
 
+       $this->markTestSkipped('Postponed due to encoding problem.');
+       
       $this->dispatch('/frontdoor/index/index/docId/146');
       $translate = Zend_Registry::getInstance()->get('Zend_Translate');
       
