@@ -18,52 +18,7 @@
 
 set -o errexit
 
-# TODO Enable/disable based on script parameters
-DEBUG_ENABLED=0
-DRYRUN_ENABLED=0
-
-# -----------------------------------------------------------------------------
-# Functions
-# -----------------------------------------------------------------------------
-
-function DEBUG() {
-    [[ "${DEBUG_ENABLED}" -eq 1 ]] && echo 'DEBUG' - "$@"
-    return 0
-}
-
-function DRYRUN() {
-    [ "$DRYRUN_ENABLED" -eq 1 ] && return 0;
-    return 1;
-}
-
-# Asks yes/no question
-# @return 0 = yes = default, 1 = no
-function askYesNo() {
-    local QUESTION="$1"
-    local ANSWER=''
-
-    while [[ -z $ANSWER ]] || [[ $ANSWER != 'y' ]] && [[ $ANSWER != 'n' ]]; do
-        echo -e "$QUESTION \c "
-        read ANSWER
-
-        if [[ -z $ANSWER ]]; then
-            return 0 # default
-        else
-            ANSWER=${ANSWER,,} # convert to lowercase
-            ANSWER=${ANSWER:0:1} # get first letter
-        fi
-
-        if [[ $ANSWER != 'y' ]] && [[ $ANSWER != 'n' ]]; then
-            echo "Invalid input."
-        fi
-    done
-
-    if [[ $ANSWER == 'y' ]]; then
-        return 0
-    else
-        return 1
-    fi
-}
+source release_common.sh
 
 # TODO add support for REVISION parameter
 # TODO enable tagging
