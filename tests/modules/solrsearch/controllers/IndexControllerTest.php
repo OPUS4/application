@@ -697,4 +697,117 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         $doc->deletePermanent();
     }
+
+    public function testFacetLimitWithDefaultSetting() {
+        $config = Zend_Registry::get('Zend_Config');
+        
+        $numOfSubjects = 20;
+        $doc = $this->addSampleDocWithMultipleSubjects($numOfSubjects);
+
+        $this->dispatch('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610');
+        $doc->deletePermanent();
+        
+        for ($index = 0; $index < $config->searchengine->solr->globalfacetlimit; $index++) {
+            $this->assertContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
+        }
+        for ($index = $config->searchengine->solr->globalfacetlimit; $index < $numOfSubjects; $index++) {
+            $this->assertNotContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
+        }        
+    }
+
+    public function testFacetLimitWithGlobalSetting() {
+        // manipulate application configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $limit = null;
+        if (isset($config->searchengine->solr->globalfacetlimit)) {
+            $limit = $config->searchengine->solr->globalfacetlimit;
+        }
+        $config->searchengine->solr->globalfacetlimit = 5;
+        Zend_Registry::set('Zend_Config', $config);
+
+        $numOfSubjects = 10;
+        $doc = $this->addSampleDocWithMultipleSubjects($numOfSubjects);
+
+        $this->dispatch('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610');
+
+        $doc->deletePermanent();
+        
+        // undo configuration manipulation
+        $config = Zend_Registry::get('Zend_Config');
+        $config->searchengine->solr->globalfacetlimit = $limit;
+        Zend_Registry::set('Zend_Config', $config);
+
+        for ($index = 0; $index < 5; $index++) {
+            $this->assertContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
+        }
+        for ($index = 5; $index < $numOfSubjects; $index++) {
+            $this->assertNotContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
+        }
+    }
+
+    public function testFacetLimitWithLocalSettingForSubjectFacet() {
+        // manipulate application configuration
+        $config = Zend_Registry::get('Zend_Config');        
+        $limit = null;
+        $oldConfig = null;
+        if (isset($config->searchengine->solr->facetlimit->subject)) {
+            $limit = $config->searchengine->solr->facetlimit->subject;
+        }
+        else {
+            $config = new Zend_Config(array(
+                'searchengine' => array(
+                    'solr' => array(
+                        'facetlimit' => array(
+                            'subject' => 5)))), true);
+            $oldConfig = Zend_Registry::get('Zend_Config');
+            // Include the above made configuration changes in the application configuration.
+            $config->merge(Zend_Registry::get('Zend_Config'));
+        }
+        Zend_Registry::set('Zend_Config', $config);
+
+        $numOfSubjects = 10;
+        $doc = $this->addSampleDocWithMultipleSubjects($numOfSubjects);
+
+        $this->dispatch('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610');
+        
+        $doc->deletePermanent();
+        
+        // undo configuration manipulation
+        $config = Zend_Registry::get('Zend_Config');
+        if (!is_null($oldConfig)) {
+            $config = $oldConfig;
+        }
+        else {
+            $config->searchengine->solr->facetlimit->subject = $limit;
+        }
+        Zend_Registry::set('Zend_Config', $config);
+
+        for ($index = 0; $index < 5; $index++) {
+            $this->assertContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
+        }
+        for ($index = 5; $index < $numOfSubjects; $index++) {
+            $this->assertNotContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
+        }        
+    }
+
+    private function addSampleDocWithMultipleSubjects($numOfSubjects = 0) {
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $doc->setLanguage('eng');
+        $title = new Opus_Title();
+        $title->setValue('facetlimittestwithsubjects-opusvier2610');
+        $title->setLanguage('eng');
+        $doc->addTitleMain($title);
+
+        for ($index = 0; $index < $numOfSubjects; $index++) {
+            $subject = new Opus_Subject();
+            $subject->setValue('subject' . $index);
+            $subject->setType('uncontrolled');
+            $subject->setLanguage('eng');
+            $doc->addSubject($subject);
+        }
+
+        $doc->store();
+        return $doc;
+    }
 }
