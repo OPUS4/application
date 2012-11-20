@@ -708,7 +708,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $doc->deletePermanent();
         
         for ($index = 0; $index < $config->searchengine->solr->globalfacetlimit; $index++) {
-            $this->assertContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
+            $this->assertContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody(), $this->getResponse()->getBody());
         }
         for ($index = $config->searchengine->solr->globalfacetlimit; $index < $numOfSubjects; $index++) {
             $this->assertNotContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
