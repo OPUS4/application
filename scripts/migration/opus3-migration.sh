@@ -93,16 +93,16 @@ cd "$migration_dir"
 check=`php ../xslt.php stylesheets/check.xslt "$xml_file"`
 [[ -z $check ]] || { echo "Aborting migration: Consistency check of Opus3-Dump FAILED"; echo $check; exit -1; }
 
+APPLICATION_ENV=production;
+[ "$testing" -eq "1" ] && APPLICATION_ENV=testing;
+export APPLICATION_ENV;
+
 echo "Import institutes, collections and licenses"
 php Opus3Migration_ICL.php -f "$xml_file" || { echo "Aborting migration: Opus3Migration_ICL.php FAILED"; exit -1; }
 
 echo "Import metadata and fulltext"
 start=1
 end=`expr $start + $stepsize - 1`
-
-APPLICATION_ENV=production;
-[ "$testing" -eq "1" ] && APPLICATION_ENV=testing;
-export APPLICATION_ENV;
 
 touch "$migration_lock_file"
 php Opus3Migration_Documents.php -f "$xml_file" -p "$fulltext_path" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }

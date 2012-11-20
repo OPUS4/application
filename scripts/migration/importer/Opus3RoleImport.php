@@ -107,7 +107,7 @@ class Opus3RoleImport {
                         $lower = $ip[0];
                         $upper = $ip[0];
                     } else if (count($ip) == 2) {
-                        $lower = $ip[1];
+                        $lower = $ip[0];
                         $upper = $ip[1];
                     } else {
                         throw new Exception("ERROR Opus3RoleImport: ".$i." is not a regular IP-Address or IP-Range\n");
