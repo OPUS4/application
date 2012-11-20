@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+
+  <body>
+
+    <tu tuid="acl_resource_module_generic">
+      <tuv xml:lang="en">
+        <seg>Access to module '%1$s'</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zugriff auf Modul '%1$s'</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_documents">
+      <tuv xml:lang="en">
+        <seg>Manage documents.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumente verwalten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_collections">
+      <tuv xml:lang="en">
+        <seg>Manage collections.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Collections verwalten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_languages">
+      <tuv xml:lang="en">
+        <seg>Manage languages.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprachen verwalten.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="acl_resource_licences">
+      <tuv xml:lang="en">
+        <seg>Manage licences.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Lizenzen verwalten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_series">
+      <tuv xml:lang="en">
+        <seg>Manage series.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Schriftenreihen verwalten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_security">
+      <tuv xml:lang="en">
+        <seg>Manage security (roles, ip-ranges).</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sicherheit (Rollen, IP-Bereiche) verwalten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_accounts">
+      <tuv xml:lang="en">
+        <seg>Manage user accounts.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Nutzerkonten verwalten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_institutions">
+      <tuv xml:lang="en">
+        <seg>Manage institutions.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Intitute verwalten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_enrichments">
+      <tuv xml:lang="en">
+        <seg>Manage enrichment keys.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Enrichment Schlüssel verwalten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_statistics">
+      <tuv xml:lang="en">
+        <seg>View statistics.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Statistik anzeigen.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_systeminfo">
+      <tuv xml:lang="en">
+        <seg>View system info.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>System Informationen anzeigen.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_reviewing">
+      <tuv xml:lang="en">
+        <seg>Review documents.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumente begutachten.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_workflow_generic">
+      <tuv xml:lang="en">
+          <seg>Allow transition from '%1$s' to '%2$s'.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Erlaube Übergang von '%1$s' zu '%2$s'.</seg>
+      </tuv>
+    </tu>
+    
+  </body>
+
+</tmx>

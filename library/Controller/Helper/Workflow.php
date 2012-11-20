@@ -34,6 +34,8 @@
 
 /**
  * Controller helper for providing workflow support.
+ * 
+ * Implementiert den Workflow ohne Einschränkungen durch Rollen.
  */
 class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract {
 
@@ -139,6 +141,26 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
         $workflow = self::getWorkflowConfig();
 
         return array_keys($workflow->toArray());
+    }
+    
+    /**
+     * Returns an array with resource names for all possible transitions.
+     * @return array of strings
+     */
+    public function getWorkflowResources() {
+        $transitions = array();
+        
+        $allStates = $this->getAllStates();
+        
+        foreach ($allStates as $state) {
+            $allTargetStates = $this->getTargetStates($state);
+            
+            foreach ($allTargetStates as $targetState) {
+                $transitions[] = "workflow_" . $state . "_" . $targetState;
+            }
+        }
+        
+        return $transitions;
     }
 
     /**

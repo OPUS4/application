@@ -31,16 +31,28 @@
  * @version     $Id$
  */
 ?>
+
 <?PHP
 $activePages = $this->navigation()->findActive($this->container, 0, 1);
-$parent = $activePages['page'];
-// Figure out using the following
-// echo $this->navigation()->current();
+if (!is_null($activePages) && isset($activePages['page'])) {
+    $parent = $activePages['page'];
+    // Figure out using the following
+    $role = Zend_Auth::getInstance()->getIdentity(); // get current user and use as role for ACL check
+    $acl = $this->navigation()->getAcl(); // get ACLs from navigation
+}
+else {
+    $parent = null;
+}
 ?>
 
+<?PHP if (!is_null($parent)) : ?>
 <dl class="menu">
     <?PHP foreach ($parent->getPages() as $page) : ?>
+    <?PHP if ($acl->isAllowed($role, $page->getResource(), $page->getPrivilege()) 
+            || !$acl->has($page->getResource())) : ?>
     <dt><?= $this->navigation()->menu()->htmlify($page) ?></dt>
     <dd><?= $this->translate($page->description) ?></dd>
+    <?PHP endif; ?>
     <?PHP endforeach; ?>
 </dl>
+<?PHP endif; ?>

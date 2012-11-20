@@ -29,18 +29,21 @@
  * @package     Module_Admin
  * @author      Julian Heise <heise@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Controller for managing role access to documents and modules.
- *
- * TODO implement assigning documents to roles
+ * Controller for managing permissions for roles including module access.
+ * 
+ * 
  */
 class Admin_AccessController extends Controller_Action {
 
+    /**
+     * 
+     */
     public function listroleAction() {
         $id = $this->getRequest()->getParam('docid');
         $roles = Opus_UserRole::getAll();
@@ -49,6 +52,13 @@ class Admin_AccessController extends Controller_Action {
         $this->view->checkedRoles = $this->getCheckedRoles($id, $roles);
     }
 
+    /**
+     * Returns list of selected roles.
+     * 
+     * @param type $id
+     * @param type $roles
+     * @return array
+     */
     private function getCheckedRoles($id, $roles) {
         $items = array();
         foreach($roles as $role) {
@@ -60,7 +70,13 @@ class Admin_AccessController extends Controller_Action {
         }
         return $items;
     }
-
+    
+    
+    /**
+     * Action for showing list of modules and permissions.
+     * 
+     * @throws Exception
+     */
     public function listmoduleAction() {
 
         $id = $this->getRequest()->getParam('roleid');
@@ -88,14 +104,23 @@ class Admin_AccessController extends Controller_Action {
 
         $moduleDirectory = dirname($this->getFrontController()->getModuleDirectory());
         $modulesModel = new Admin_Model_Modules($moduleDirectory);
+        
+        $workflowHelper = $this->_helper->getHelper('Workflow');
+        $transitions = $workflowHelper->getWorkflowResources();
 
         $this->view->loginNames = $role->getAllAccountNames();
         $this->view->roleId = $role->getId();
         $this->view->roleName = $role->getName();
         $this->view->modules = $roleModules;
         $this->view->allModules = $modulesModel->getAll();
+        $this->view->allResources = $this->getAllResources();
+        $this->view->allWorkflow = $transitions;
     }
 
+    /**
+     * Action for saving selected permissions for role.
+     * 
+     */
     public function storeAction() {
         $save = $this->getRequest()->getParam('save_button');
         $id = $this->getRequest()->getParam('roleid');
@@ -122,8 +147,16 @@ class Admin_AccessController extends Controller_Action {
         }
     }
 
+    /**
+     * Stores selected permissions in database.
+     * 
+     * @param type $request
+     * 
+     * TODO secure against missing parameters
+     */
     private function storeModules($request) {
         $id = $request->getParam('roleid');
+        
         $role = new Opus_UserRole($id);
         $roleModules = $role->listAccessModules();
 
@@ -134,18 +167,21 @@ class Admin_AccessController extends Controller_Action {
         }
 
         $params = $request->getParams();
+        
         foreach($params as $name=>$value) {
             if($this->string_begins_with($name, 'set_')) {
-                $module = explode("_", $name);
+                $module = explode("_", $name, 2);
                 $module = $module[1];
                 $role->appendAccessModule($module);
             }
         }
+        
         $role->store();
     }
 
     /**
-     *
+     * Stores roles for document.
+     * 
      * @param <type> $request
      *
      * TODO Is it a problem if document is append twice?
@@ -170,7 +206,8 @@ class Admin_AccessController extends Controller_Action {
     }
 
     /**
-     * Checks whether a given string has the supplied prefix
+     * Checks whether a given string has the supplied prefix.
+     * 
      * @param $string
      * @param $prefix
      * @return boolean
@@ -178,5 +215,26 @@ class Admin_AccessController extends Controller_Action {
     private function string_begins_with($string, $prefix) {
         return (strncmp($string, $prefix, strlen($prefix)) == 0);
     }
+    
+    /**
+     * Liefert Liste mit Ressourcen für die Rechteverwaltung.
+     * 
+     * Ressourcen für die Rechte vergeben können. Module und Workflow-Übergänge werden separat behandelt.
+     * 
+     * @return array of strings
+     */
+    private function getAllResources() {
+        $allResources = array();
 
+        $aclProvider = new Application_Security_AclProvider();
+        
+        $resources = $aclProvider->getAllResources();
+        
+        foreach ($resources as $resource) {
+            $allResources[] = 'resource_' . $resource;
+        }
+        
+        return $allResources;
+    }
+    
 }

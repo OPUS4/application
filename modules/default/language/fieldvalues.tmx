@@ -75,6 +75,16 @@
                 <seg>Geprüft</seg>
             </tuv>
         </tu>
+        
+        <!-- Übersetzung wird für Workflow Rechte benötigt. -->
+        <tu tuid="Opus_Document_ServerState_Value_Removed">
+            <tuv xml:lang="en">
+                <seg>Permanently Deleted</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Komplett entfernt</seg>
+            </tuv>
+        </tu>
 
         <!--
             IMPORTANT: The pattern deviates from default for values of role

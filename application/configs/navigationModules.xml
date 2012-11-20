@@ -9,7 +9,7 @@
             <controller>index</controller>
             <action>index</action>
         </home>
-
+        
         <administration>
             <type>mvc</type>
             <label>admin_menu_label</label>
@@ -24,12 +24,14 @@
                     <module>admin</module>
                     <controller>documents</controller>
                     <action>index</action>
+                    <resource>documents</resource>
                     <pages>
                         <show>
                             <type>mvc</type>
                             <label>admin_document_index</label>
                             <module>admin</module>
                             <controller>document</controller>
+                            <resource>documents</resource>
                             <action>index</action>
                         </show>
 
@@ -82,6 +84,7 @@
                     <module>review</module>
                     <controller>index</controller>
                     <action>index</action>
+                    <resource>reviewing</resource>
                 </review>
 
                 <accounts>
@@ -91,6 +94,7 @@
                     <module>admin</module>
                     <controller>account</controller>
                     <action>index</action>
+                    <resource>accounts</resource>
                     <pages>
                         <show>
                             <type>mvc</type>
@@ -134,7 +138,6 @@
                     </pages>
                 </accounts>
 
-
         	<security>
                     <type>mvc</type>
                     <label>admin_title_security</label>
@@ -142,6 +145,7 @@
                     <module>admin</module>
                     <controller>security</controller>
                     <action>index</action>
+                    <resource>security</resource>
                     <pages>
                         <roles>
                             <type>mvc</type>
@@ -252,6 +256,7 @@
                     <module>admin</module>
                     <controller>licence</controller>
                     <action>index</action>
+                    <resource>licences</resource>
                     <pages>
                         <show>
                             <type>mvc</type>
@@ -302,6 +307,7 @@
                     <module>admin</module>
                     <controller>collectionroles</controller>
                     <action>index</action>
+                    <resource>collections</resource>
                 </collections>
 
                 <series>
@@ -311,6 +317,7 @@
                     <module>admin</module>
                     <controller>series</controller>
                     <action>index</action>
+                    <resource>series</resource>
                     <pages>
                         <show>
                             <type>mvc</type>
@@ -343,7 +350,8 @@
                     <module>admin</module>
                     <controller>language</controller>
                     <action>index</action>
-                    <pages>
+                    <resource>languages</resource>
+                    <pages>                        
                         <show>
                             <type>mvc</type>
                             <label>admin_language_show</label>
@@ -383,6 +391,15 @@
                             <controller>language</controller>
                             <action>update</action>
                         </update>
+                        
+                        <dispatch>
+                            <!-- Musste angelegt werden damit Breadcrumbs für Edit-Seite auftauchen -->
+                            <type>mvc</type>
+                            <label>admin_language_edit</label>
+                            <module>admin</module>
+                            <controller>language</controller>
+                            <action>dispatch</action>
+                        </dispatch>
                     </pages>
                 </languages>
 
@@ -393,6 +410,7 @@
                     <module>admin</module>
                     <controller>statistic</controller>
                     <action>index</action>
+                    <resource>statistics</resource>
                     <pages>
                         <show>
                             <type>mvc</type>
@@ -420,6 +438,7 @@
                     <module>admin</module>
                     <controller>dnbinstitute</controller>
                     <action>index</action>
+                    <resource>institutions</resource>
                     <pages>
                         <show>
                             <type>mvc</type>
@@ -462,6 +481,7 @@
                     <module>admin</module>
                     <controller>enrichmentkey</controller>
                     <action>index</action>
+                    <resource>enrichments</resource>
                     <pages>
                         <show>
                             <type>mvc</type>
@@ -504,6 +524,7 @@
                     <module>admin</module>
                     <controller>info</controller>
                     <action>index</action>
+                    <resource>systeminfo</resource>
                 </info>
 
             </pages>

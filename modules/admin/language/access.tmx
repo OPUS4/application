@@ -164,6 +164,24 @@
         <seg>Änderungen am Modul-Zugriff</seg>
       </tuv>
     </tu>
+    
+    <tu tuid="access_resource_changes">
+      <tuv xml:lang="en">
+        <seg>Changing Resource Access</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Änderungen am Ressourcen-Zugriff</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="access_workflow_changes">
+      <tuv xml:lang="en">
+        <seg>Changing Workflow Access</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Änderungen am Workflow-Zugriff</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="access_module_changes_affect_accounts">
       <tuv xml:lang="en">

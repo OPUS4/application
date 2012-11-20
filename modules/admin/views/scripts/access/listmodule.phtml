@@ -48,18 +48,11 @@
 <br/>
 
 <div class="form-wrapper">
-    <h2><?= $this->translate('access_module_changes') ?></h2>
     <form action="<?= $this->url(array('module'=>'admin', 'controller'=>'access', 'action'=>'store'), null ,true) ?>" method="post">
 
-        <div class="form-item">
-            <span class="form-submit-wrapper">
-                <input type="submit" name="save_button" class="form-submit" value="<?= $this->translate('access_button_save') ?>" style="width: 100%"/>
-            </span>
-            <span class="form-submit-wrapper">
-                <input type="submit" name="cancel_button" class="form-submit" value="<?= $this->translate('access_button_cancel') ?>" style="width: 100%"/>
-            </span>
-        </div>
-
+        <?PHP // Liste mit allen Modulen ?>
+        <h2><?= $this->translate('access_module_changes') ?></h2>
+        
         <ul>
         <?php foreach($this->allModules as $module) : ?>
             <li>
@@ -67,8 +60,47 @@
             <input name="<?= 'set_'.$module ?>" type="checkbox" value="set"
                 <?= in_array($module, $this->modules) ? ' checked="checked" ' : '' ?>
                 <?= in_array($module, array('default')) ? ' disabled="disabled" ' : '' ?>
-            /> <?= $module ?>
-
+            /> <?= $this->translate('acl_resource_module_generic', array($module)); ?>
+            <?PHP if (isset($this->guestModules) && in_array($module, $this->guestModules)) : ?>
+                <span style="font-style: italic; color: gray; padding-left: 0.5em"><?= $this->translate('admin_access_checked_in_guest'); ?></span>
+            <?PHP endif; ?>
+          </li>
+        <?php endforeach ?>
+        </ul>
+        
+        <?PHP // Liste mit allen Ressourcen ?>
+        <h2><?= $this->translate('access_resource_changes') ?></h2>
+        
+        <ul>
+        <?php foreach($this->allResources as $resource) : ?>
+            <li>
+            <input type="hidden" name="<?= 'list_'.$resource ?>" value="list" />
+            <input name="<?= 'set_'.$resource ?>" type="checkbox" value="set"
+                <?= in_array($resource, $this->modules) ? ' checked="checked" ' : '' ?>
+                <?= in_array($resource, array('default')) ? ' disabled="disabled" ' : '' ?>
+            /> <?= $this->translate('acl_' . $resource); ?>
+            <?PHP if (isset($this->guestModules) && in_array($module, $this->guestModules)) : ?>
+                <span style="font-style: italic; color: gray; padding-left: 0.5em"><?= $this->translate('admin_access_checked_in_guest'); ?></span>
+            <?PHP endif; ?>
+          </li>
+        <?php endforeach ?>
+        </ul>
+        
+        <?PHP // Liste mit allen Workflow Übergängen ?>
+        <h2><?= $this->translate('access_workflow_changes') ?></h2>
+        
+        <ul>
+        <?php foreach($this->allWorkflow as $resource) : ?>
+            <li>
+            <input type="hidden" name="<?= 'list_'.$resource ?>" value="list" />
+            <input name="<?= 'set_'.$resource ?>" type="checkbox" value="set"
+                <?= in_array($resource, $this->modules) ? ' checked="checked" ' : '' ?>
+                <?= in_array($resource, array('default')) ? ' disabled="disabled" ' : '' ?>
+            /> 
+            <?PHP $states = explode('_', $resource, 3); ?>
+            <?PHP $state = $this->translate('Opus_Document_ServerState_Value_' . ucfirst($states[1]) ); ?>
+            <?PHP $targetState = $this->translate('Opus_Document_ServerState_Value_' . ucfirst($states[2])); ?>
+            <?= $this->translate('acl_resource_workflow_generic', array($state, $targetState)); ?> 
             <?PHP if (isset($this->guestModules) && in_array($module, $this->guestModules)) : ?>
                 <span style="font-style: italic; color: gray; padding-left: 0.5em"><?= $this->translate('admin_access_checked_in_guest'); ?></span>
             <?PHP endif; ?>

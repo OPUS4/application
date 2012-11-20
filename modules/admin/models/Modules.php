@@ -27,13 +27,24 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @authro      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+/**
+ * Model for getting list of modules in server application.
+ * 
+ * Die Liste der Module wird verwendet, damit ein Administration bestimmen kann auf welche Module eine Role zugreifen
+ * darf.
+ */
 class Admin_Model_Modules {
 
+    /**
+     * Directory path for modules.
+     * @var String
+     */
     private $moduleDirectory;
 
     public function __construct($module_directory = null) {
@@ -41,8 +52,8 @@ class Admin_Model_Modules {
     }
 
     /**
-     * Iterates over module directories and return all module names
-     * @return array
+     * Iterates over module directories and returns all module names
+     * @return array List of module names
      */
     public function getAll() {
         $module_dir = $this->moduleDirectory;
@@ -59,7 +70,10 @@ class Admin_Model_Modules {
                 continue;
             }
 
-            $modules[] = $module;
+            // Zugriff auf 'default' muß immer erlaubt sein
+            if ($module !== 'default') {
+                $modules[] = $module;
+            }
         }
         return $modules;
     }
