@@ -42,24 +42,18 @@ class Publish_View_Helper_Element extends Publish_View_Helper_Fieldset {
      * @param <type> $name name of possible hidden element
      * @return element to render in view
      */
-    public function element($value, $options = null, $type=null, $name = null) {                        
-        
-         $this->view->count++;
-         
+    public function element($value, $options = null, $type=null, $name = null) {
+        $this->view->count++;
         if ($name == null && $value == null) {
             $error_message = $this->view->translate('template_error_unknown_field');
+            // TODO move to CSS
             return "<br/><div style='width: 400px; color:red;'>" . $error_message . "</div><br/><br/>";
         }
-        else {
-            $method = "_render" . $type;
-            if (method_exists($this, $method) === true) {
-                $result = $this->$method($value, $options, $name);
-            }
-            else {
-                $result = $this->_renderElement($value, $options, $name);
-            }
-            return $result;
+        $method = "_render" . $type;
+        if (method_exists($this, $method) === true) {
+            return $this->$method($value, $options, $name);
         }
+        return $this->_renderElement($value, $options, $name);
     }
 
     function _renderElement($field, $options=null, $name=null) {
