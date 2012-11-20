@@ -394,18 +394,22 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     protected function _initAuthz() {
         $this->bootstrap('Logging', 'Navigation', 'view');
         
-        $aclProvider = new Application_Security_AclProvider();
-        
-        $acl = $aclProvider->getAcls();
-        
-        Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl($acl);
-        Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole('guest');        
-        
-        $user = Zend_Auth::getInstance()->getIdentity();
-        
-        if (!is_null($user)) {
-            $view = $this->getResource('view');
-            $view->navigation()->setRole($user);
+        $config = $this->getResource('configuration');
+
+        if (isset($config->security) && $config->security === 1) {
+            $aclProvider = new Application_Security_AclProvider();
+
+            $acl = $aclProvider->getAcls();
+
+            Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl($acl);
+            Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole('guest');        
+
+            $user = Zend_Auth::getInstance()->getIdentity();
+
+            if (!is_null($user)) {
+                $view = $this->getResource('view');
+                $view->navigation()->setRole($user);
+            }
         }
     }
     

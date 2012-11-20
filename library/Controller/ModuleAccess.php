@@ -106,8 +106,13 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
         $role = $this->getUserRole();
         
         $navigation = $this->view->getHelper('navigation');
-        $navigation->setRole($role);
         $acl = $navigation->getAcl();
+
+        if (is_null($acl)) {
+            return true;
+        }
+        
+        $navigation->setRole($role);
         
         $activePage = $navigation->findActive($navigation->getContainer());
         

@@ -48,7 +48,7 @@ else {
 <?PHP if (!is_null($parent)) : ?>
 <dl class="menu">
     <?PHP foreach ($parent->getPages() as $page) : ?>
-    <?PHP if ($acl->isAllowed($role, $page->getResource(), $page->getPrivilege()) 
+    <?PHP if (is_null($acl) || $acl->isAllowed($role, $page->getResource(), $page->getPrivilege()) 
             || !$acl->has($page->getResource())) : ?>
     <dt><?= $this->navigation()->menu()->htmlify($page) ?></dt>
     <dd><?= $this->translate($page->description) ?></dd>
