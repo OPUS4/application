@@ -112,7 +112,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 //        $frontController->getRouter()->addRoute('file', $fileRoute);
 
     }
-
+    
     /**
      * Configure view with UTF-8 options and ViewRenderer action helper.
      * The Zend_Layout component also gets initialized here.
@@ -380,12 +380,35 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $view = $this->getResource('View');
         $view->navigation($container);
-
+        
         $log->debug('Zend_Navigation initialization completed');
 
         return $container;
     }
-
+    
+    /**
+     * Initialisiert Zend_Acl für die Authorization in OPUS.
+     * 
+     * TODO use Application_Security_AclProvider
+     */
+    protected function _initAuthz() {
+        $this->bootstrap('Logging', 'Navigation', 'view');
+        
+        $aclProvider = new Application_Security_AclProvider();
+        
+        $acl = $aclProvider->getAcls();
+        
+        Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl($acl);
+        Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole('guest');        
+        
+        $user = Zend_Auth::getInstance()->getIdentity();
+        
+        if (!is_null($user)) {
+            $view = $this->getResource('view');
+            $view->navigation()->setRole($user);
+        }
+    }
+    
     /**
      * Initializes navigation container for main menu.
      * @return Zend_Navigation

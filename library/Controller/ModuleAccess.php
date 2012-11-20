@@ -40,7 +40,9 @@
  * @package     Controller
  */
 class Controller_ModuleAccess extends Zend_Controller_Action {
-
+    
+    const ACCESS_DENIED_ACTION = 'module-access-denied';
+    
     /**
      * Use pre-dispatch to check user access rights *before* action is called.
      */
@@ -59,27 +61,134 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
         $module = $this->_request->getModuleName();
 
         $action = $this->_request->getActionName();
-        if ($action == 'module-access-denied') {
+        if ($action == self::ACCESS_DENIED_ACTION) {
             $logger->debug("forwarding to unchecked action $module ($action)");
             return true;
         }
 
         $logger->debug("starting authorization check for module '$module'");
 
+        $realm = Opus_Security_Realm::getInstance();
+        
+        if (!$realm->skipSecurityChecks()) {
+            // Check, if the user has accesss to the module...
+            if (true !== $realm->checkModule($module)) {
+                $logger->debug("FAILED authorization check for module '$module'");
+                return $this->_forward(self::ACCESS_DENIED_ACTION);
+            }
+
+            // Check, if the user has the right permission...
+            if (true !== $this->checkPermissions()) {
+                $logger->debug("FAILED authorization through ACLs");
+                return $this->_forward(self::ACCESS_DENIED_ACTION);
+            }
+        }
+
         // Check, controller-specific constraints...
         if (true !== $this->customAccessCheck()) {
             $logger->debug("FAILED custom authorization check for module '$module'");
-            return $this->_forward('module-access-denied');
+            return $this->_forward(self::ACCESS_DENIED_ACTION);
         }
-
-        // Check, if the user has the right privileges...
-        if (true !== Opus_Security_Realm::getInstance()->checkModule($module)) {
-            $logger->debug("FAILED authorization check for module '$module'");
-            return $this->_forward('module-access-denied');
-        }
-
+        
         $logger->debug("authorization check for module '$module' successful");
         return;
+    }
+    
+    /**
+     * 
+     * @return boolean
+     * 
+     * TODO Kann ein Teil davon vielleicht schon im Bootstrap passieren?
+     */
+    protected function checkPermissions() {
+        $logger = Zend_Registry::get('Zend_Log');
+        // get role ('guest' or username)
+        $role = $this->getUserRole();
+        
+        $navigation = $this->view->getHelper('navigation');
+        $navigation->setRole($role);
+        $acl = $navigation->getAcl();
+        
+        $activePage = $navigation->findActive($navigation->getContainer());
+        
+        if (!empty($activePage)) {            
+            $logger->debug('ACL: active page found');
+            $activePage = $activePage['page'];
+            
+            $resource = $this->findResourceForPage($activePage);
+            
+            return is_null($resource) || $acl->isAllowed($role, $resource);
+        }
+        else {
+            $logger->debug('ACL: active page not found');
+            // Entweder die Seite ist nicht erfasst oder Zugriff ist nicht erlaubt. 
+            $pageInNav = $this->isPageForRequestInNavigation($navigation);
+            
+            $logger->debug('ACL: page configured = ' . $pageInNav);
+            
+            return !$pageInNav;
+        }
+                
+        return true;
+    }
+    
+    /**
+     * Searches navigation for resource definition for current request.
+     * @return string
+     */
+    protected function findResourceForPage($activePage) {
+        $resource = null;
+        
+        if ($activePage instanceof Zend_Navigation_Page) {
+            $resource = $activePage->getResource();
+
+            $page = $activePage->getParent();
+
+            while (!is_null($page) && $page instanceof Zend_Navigation_Page && is_null($resource)) {
+                $resource = $page->getResource();
+                $page = $page->getParent();
+            }
+        }
+        
+        return $resource;
+    }
+    
+    /**
+     * Prüft ob die Seite in der Navigation definiert ist.
+     */
+    protected function isPageForRequestInNavigation($navigation) {
+        $module = $this->_request->getModuleName();
+        $controller = $this->_request->getControllerName();
+        $action = $this->_request->getActionName();
+
+        if (!is_null($module)) {
+            $pages = $navigation->getContainer()->findAllBy('module', $this->_request->getModuleName());
+
+            if (!is_null($controller) && !is_null($pages)) {
+                // found pages for module
+                foreach ($pages as $page) {
+                    if ($page->getController() === $controller) {
+                        // found pages for controller
+                        if (!is_null($action) && $page->getAction() === $action) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    /**
+     * Returns name of current user or 'guest'.
+     * 
+     * @return String
+     */
+    protected function getUserRole() {
+        $role = Zend_Auth::getInstance()->getIdentity();
+        
+        return is_null($role) ? 'guest' : $role;
     }
 
     /**
@@ -89,7 +198,7 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
      * @return boolean
      */
     protected function customAccessCheck() {
-        return true;
+        return true; 
     }
 
     /**
