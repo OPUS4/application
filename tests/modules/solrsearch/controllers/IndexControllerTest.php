@@ -708,7 +708,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $doc->deletePermanent();
         
         for ($index = 0; $index < $config->searchengine->solr->globalfacetlimit; $index++) {
-            $this->assertContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody(), $this->getResponse()->getBody());
+            $this->assertContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
         }
         for ($index = $config->searchengine->solr->globalfacetlimit; $index < $numOfSubjects; $index++) {
             $this->assertNotContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
@@ -801,7 +801,12 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         for ($index = 0; $index < $numOfSubjects; $index++) {
             $subject = new Opus_Subject();
-            $subject->setValue('subject' . $index);
+            if ($index < 10) {
+                $subject->setValue('subject' . '0' . $index);
+            }
+            else {
+                $subject->setValue('subject' . $index);
+            }
             $subject->setType('uncontrolled');
             $subject->setLanguage('eng');
             $doc->addSubject($subject);
