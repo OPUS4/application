@@ -32,13 +32,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-/**
- * Main entry point for this module.
- *
- * @category    Application
- * @package     Module_Publish
- */
 class Publish_IndexController extends Controller_Action {
     
     /**
@@ -55,8 +48,7 @@ class Publish_IndexController extends Controller_Action {
         //unset all possible session content
         $session->unsetAll();
 
-        $this->view->title = $this->view->translate('publish_controller_index');
-        $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
+        $this->view->title = $this->view->translate('publish_controller_index');        
 
         $form = new Publish_Form_PublishingFirst();
 
@@ -72,6 +64,9 @@ class Publish_IndexController extends Controller_Action {
 
         if (!$form->enableUpload) {
             $this->view->subtitle = $this->view->translate('publish_controller_index_sub_without_file');
+        }
+        else {
+            $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
         }
 
         //initialize session variables
