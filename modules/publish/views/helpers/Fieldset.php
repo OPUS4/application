@@ -83,9 +83,10 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         return $fieldset;
     }
 
+    // TODO: wofür wird der Parameter $options benötigt?
     function renderHtmlSelect($field, $options) {
         $fieldset = "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id'] . '" class="form-selectfield"  id="' . $field['id'] . '"';
-        $fieldset .= ' title="' . htmlspecialchars ($this->view->translate($field['hint']), ENT_QUOTES) . '"';
+        $fieldset .= ' title="' . htmlspecialchars ($this->view->translate($field['hint']), ENT_QUOTES) . '"';        
         if ($field['disabled'] === true) {
             $fieldset .= ' disabled="1" ';
         }
@@ -93,18 +94,19 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
 
         foreach ($field['options'] AS $key => $option) {
             $fieldset .= '<option value="' . htmlspecialchars($key, ENT_QUOTES) . '" label="' . htmlspecialchars($option, ENT_QUOTES) . '"';
-
-            if ($option === $field['value'] || $key === $field['value'])
+            
+            if ($option === $field['value'] || $key === $field['value']) {
                 $fieldset .= ' selected="selected"';
+            }
 
             $fieldset .= '>';
             $fieldset .= htmlspecialchars($option, ENT_QUOTES) . '</option>' . "\n\t\t\t\t\t";
         }
         $fieldset .= '</select>' . "\n";
 
-        if (isset($field['desc']))
+        if (isset($field['desc'])) {
             $fieldset .= '<div class="description hint">' . $this->view->translate($field['desc']) . '</div>';
-
+        }
         return $fieldset;
     }
 

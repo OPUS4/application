@@ -127,7 +127,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         $translatedOptions = array();
 
         foreach ($listOptions as $option) {
-            $translatedOptions[$option] = $this->view->translate($option);
+            $translatedOptions[$option] = $option;
         }
 
         asort($translatedOptions);
