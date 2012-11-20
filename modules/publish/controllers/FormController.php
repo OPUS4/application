@@ -61,7 +61,7 @@ class Publish_FormController extends Controller_Action {
         if (!$indexForm->enableUpload) {
             $this->view->subtitle = $this->view->translate('publish_controller_index_sub_without_file');
         }
-
+        
         if (is_array($postData) && count($postData) === 0) {
             $this->_logger->err('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
             return $this->_redirectTo('index', $this->view->translate('error_empty_post_array'), 'index');
@@ -73,17 +73,25 @@ class Publish_FormController extends Controller_Action {
 
         $indexForm->populate($postData);
         $this->_initializeDocument($postData);
-
+        
+        $files = $this->document->getFile();
+        if (!empty($files)) {
+            $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
+        }
+        
         // validate fileupload (if the current form contains a file upload field and file upload is enabled in application config)
         if ($indexForm->enableUpload) {
             if ($indexForm->getElement('fileupload') != null && !$indexForm->getElement('fileupload')->isValid($postData)) {
                 $indexForm->setViewValues();
                 $this->view->form = $indexForm;
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-            } else {
-                //file valid-> store file
-                $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
+            }
+            else {
+                //file valid-> store file                
                 $this->view->uploadSuccess = $this->_storeUploadedFiles($postData);
+                if ($this->view->uploadSuccess) {
+                    $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
+                }
                 $indexForm = new Publish_Form_PublishingFirst($this->view);
                 $indexForm->populate($postData);
                 $indexForm->setViewValues();
@@ -111,13 +119,16 @@ class Publish_FormController extends Controller_Action {
         $this->_helper->viewRenderer($this->session->documentType);
         try {
             $publishForm = new Publish_Form_PublishingSecond($this->_logger);
-        } catch (Publish_Model_FormSessionTimeoutException $e) {
+        }
+        catch (Publish_Model_FormSessionTimeoutException $e) {
             // Session timed out.
             return $this->_redirectTo('index', '', 'index');
-        } catch (Publish_Model_FormIncorrectFieldNameException $e) {
+        }
+        catch (Publish_Model_FormIncorrectFieldNameException $e) {
             $this->view->translateKey = preg_replace('/%value%/', $e->fieldName, $this->view->translate($e->getTranslateKey()));
             return $this->render('error');
-        } catch (Publish_Model_FormIncorrectEnrichmentKeyException $e) {
+        }
+        catch (Publish_Model_FormIncorrectEnrichmentKeyException $e) {
             $this->view->translateKey = preg_replace('/%value%/', $e->enrichmentKey, $this->view->translate($e->getTranslateKey()));
             return $this->render('error');
         }
@@ -251,12 +262,7 @@ class Publish_FormController extends Controller_Action {
      * Method stores the uploaded files with comment for the current document
      */
     private function _storeUploadedFiles($postData) {
-        if (array_key_exists('uploadComment', $postData)) {
-            $comment = $postData['uploadComment'];
-        }
-        else {
-            $comment = "";
-        }
+        $comment = array_key_exists('uploadComment', $postData) ? $postData['uploadComment'] : '';
         $upload = new Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
         $upload_count = 0;
@@ -282,9 +288,10 @@ class Publish_FormController extends Controller_Action {
 
         if ($upload_count < 1) {
             $this->_logger->debug("NO File uploaded!!!");
-            if (!isset($this->session->fulltext))
+            if (!isset($this->session->fulltext)) {
                 $this->session->fulltext = '0';
-            return;
+            }
+            return false;
         }
 
         $this->_logger->debug("File uploaded!!!");
