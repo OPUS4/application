@@ -1398,6 +1398,15 @@ END OF COMMENT -->
         </tuv>
     </tu>
 
+    <tu tuid="hint_uploadComment">
+        <tuv xml:lang="en">
+            <seg>Add a comment.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fügen Sie hier einen Kommentar hinzu.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="hint_documentUpload">
         <tuv xml:lang="en">
             <seg>
