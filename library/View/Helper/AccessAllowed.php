@@ -25,21 +25,44 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Frontdoor
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @package     View
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
- *
  */
-?>
 
-<?php if ($this->accessAllowed('documents')) : ?>
-<a href="<?= $this->url(array('module' => 'admin', 'controller' => 'document', 'action' => 'index', 'id' => $this->docId), null, true) ?>" id="admin-edit-document">
-    <?= $this->translate('frontdoor_edit_document') ?>
-</a>
-<?php endif ?>
+/**
+ * Returns true is current user has access to a resource.
+ */
+class View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
 
-<div class="frontdoor">
-    <?= $this->frontdoor ?>
-</div>
+    /**
+     * Returns true if access to resource is allowed or resource does not exist.
+     * @param type $resource
+     * @return boolean
+     */
+    public function accessAllowed($resource) {
+        $acl = $this->getAcl();
+        
+        if (!is_null($resource) && !is_null($acl)) {
+            $role = Zend_Auth::getInstance()->getIdentity();
+            if (is_null($role)) {
+                $role = 'guest';
+            }
+            
+            return $acl->isAllowed($role, $resource);
+        }
+
+        return true;
+    }
+    
+    /**
+     * Returns the Zend_Acl object or null.
+     * @return Zend_Acl
+     */
+    protected function getAcl() {
+        return Zend_Registry::isRegistered('Opus_Acl') ? Zend_Registry::get('Opus_Acl') : null;
+    }
+
+}
