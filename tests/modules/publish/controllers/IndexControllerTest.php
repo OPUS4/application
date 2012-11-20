@@ -74,7 +74,7 @@ class Publish_IndexControllerTest extends ControllerTestCase{
         $this->assertContains("<label for='fileupload'>Datei wählen</label>", $this->getResponse()->getBody());
         $this->assertContains("<input type='file' name='fileupload' id='fileupload' enctype='multipart/form-data' title='Bitte wählen Sie eine Datei, die Sie hochladen möchten ' size='30' />", $this->getResponse()->getBody());
         $this->assertContains("<label for='uploadComment'>Kommentar</label>", $this->getResponse()->getBody());
-        $this->assertContains("<textarea name='uploadComment' class='form-textarea' cols='30' rows='5'  title='hint_uploadComment'  id='uploadComment'></textarea>", $this->getResponse()->getBody());                                
+        $this->assertContains("<textarea name='uploadComment' class='form-textarea' cols='30' rows='5'  title='Fügen Sie hier einen Kommentar hinzu.'  id='uploadComment'></textarea>", $this->getResponse()->getBody());
     }
 
     public function testDoNotShowFileUpload() {
@@ -107,7 +107,7 @@ class Publish_IndexControllerTest extends ControllerTestCase{
         $this->assertNotContains("<label for='fileupload'>Datei wählen</label>", $this->getResponse()->getBody());
         $this->assertNotContains("<input type='file' name='fileupload' id='fileupload' enctype='multipart/form-data' title='Bitte wählen Sie eine Datei, die Sie hochladen möchten ' size='30' />", $this->getResponse()->getBody());
         $this->assertNotContains("<label for='uploadComment'>Kommentar</label>", $this->getResponse()->getBody());
-        $this->assertNotContains("<textarea name='uploadComment' class='form-textarea' cols='30' rows='5'  title='hint_uploadComment'  id='uploadComment'></textarea>", $this->getResponse()->getBody());
+        $this->assertNotContains("<textarea name='uploadComment' class='form-textarea' cols='30' rows='5'  title='Fügen Sie hier einen Kommentar hinzu.'  id='uploadComment'></textarea>", $this->getResponse()->getBody());
     }
 
 
