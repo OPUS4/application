@@ -110,6 +110,18 @@ class Application_Security_AclProvider {
                 $acl->addResource(new Zend_Acl_Resource($resource), $module);
             }
         }
+        
+        $this->loadWorkflowResources($acl);
+    }
+    
+    public function loadWorkflowResources($acl) {
+        $resources = Controller_Helper_Workflow::getWorkflowResources();
+        
+        $acl->addResource(new Zend_Acl_Resource('workflow'));
+        
+        foreach($resources as $resource) {
+            $acl->addResource(new Zend_Acl_Resource($resource), 'workflow');
+        }
     }
     
     public function getAllResources() {

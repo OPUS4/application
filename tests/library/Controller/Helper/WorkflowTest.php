@@ -58,7 +58,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
     }
 
     public function testIsValidStateForAllStates() {
-        $states = $this->__workflowHelper->getAllStates();
+        $states = Controller_Helper_Workflow::getAllStates();
 
         foreach ($states as $state) {
             $this->assertTrue($this->__workflowHelper->isValidState($state),
@@ -67,7 +67,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
     }
 
     public function testgetAllStates() {
-        $states = $this->__workflowHelper->getAllStates();
+        $states = Controller_Helper_Workflow::getAllStates();
 
         $this->assertEquals(7, count($states));
         $this->assertTrue(in_array('removed', $states));
@@ -86,19 +86,19 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
     }
 
     public function testGetTargetStatesForRemoved() {
-       $targetStates = $this->__workflowHelper->getTargetStates('removed');
+       $targetStates = Controller_Helper_Workflow::getTargetStates('removed');
 
        $this->assertEquals(0, count($targetStates));
     }
 
     public function testGetTargetStatesForInvalidState() {
-       $targetStates = $this->__workflowHelper->getTargetStates('invalid');
+       $targetStates = Controller_Helper_Workflow::getTargetStates('invalid');
 
        $this->assertEquals(0, count($targetStates));
     }
 
     public function testGetTargetStatesForNull() {
-       $targetStates = $this->__workflowHelper->getTargetStates(null);
+       $targetStates = Controller_Helper_Workflow::getTargetStates(null);
 
        $this->assertEquals(0, count($targetStates));
     }
@@ -200,7 +200,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
 
     public function testWorkflowTranslationsForStates() {
         $this->markTestSkipped('Not working yet because resources are not in default module.');
-        $states = $this->__workflowHelper->getAllStates();
+        $states = Controller_Helper_Workflow::getAllStates();
 
         $translate = Zend_Registry::get('Zend_Translate');
 

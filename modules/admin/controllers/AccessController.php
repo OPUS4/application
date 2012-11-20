@@ -105,8 +105,7 @@ class Admin_AccessController extends Controller_Action {
         $moduleDirectory = dirname($this->getFrontController()->getModuleDirectory());
         $modulesModel = new Admin_Model_Modules($moduleDirectory);
         
-        $workflowHelper = $this->_helper->getHelper('Workflow');
-        $transitions = $workflowHelper->getWorkflowResources();
+        $transitions = Controller_Helper_Workflow::getWorkflowResources();
 
         $this->view->loginNames = $role->getAllAccountNames();
         $this->view->roleId = $role->getId();

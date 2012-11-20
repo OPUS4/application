@@ -395,12 +395,16 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $this->bootstrap('Logging', 'Navigation', 'view');
         
         $config = $this->getResource('configuration');
-
-        if (isset($config->security) && $config->security === 1) {
+        $log = $this->getResource('Logging');
+        
+        if (isset($config->security) && $config->security == 1) {
             $aclProvider = new Application_Security_AclProvider();
 
             $acl = $aclProvider->getAcls();
-
+            
+            $log->debug('ACL: bootrapping');
+            Zend_Registry::set('Opus_Acl', $acl);
+            
             Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl($acl);
             Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole('guest');        
 

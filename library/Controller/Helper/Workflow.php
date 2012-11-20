@@ -60,7 +60,7 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
      * @return boolean TRUE - only if the state string exists
      */
     public function isValidState($state) {
-        $states = $this->getAllStates();
+        $states = self::getAllStates();
 
         return in_array($state, $states);
     }
@@ -83,9 +83,40 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
      * @return array of strings - Possible target states for document
      */
     public function getAllowedTargetStatesForDocument($document) {
+        $logger = Zend_Registry::get('Zend_Log');
+        
         $currentState = $document->getServerState();
+        
+        $targetStates = self::getTargetStates($currentState);
+        
+        $role = Zend_Auth::getInstance()->getIdentity();
+        
+        $logger->debug("ACL: getAllowedTargetStates for role $role");
+        
+        if (Zend_Registry::isRegistered('Opus_Acl')) {
+            
+            $acl = Zend_Registry::get('Opus_Acl');
 
-        return $this->getTargetStates($currentState);
+            $logger->debug("ACL: got instance");
+
+            if (!is_null($acl)) {
+                $allowedTargetStates = array();
+
+                foreach ($targetStates as $targetState) {
+                    $resource = 'workflow_' . $currentState . '_' . $targetState;
+                    if (!$acl->has(new Zend_Acl_Resource($resource)) || $acl->isAllowed($role, $resource)) {
+                        $allowedTargetStates[] = $targetState;
+                    }
+                    else {
+                        $logger->debug("ACL: $resource not allowed");
+                    }
+                }
+
+                return $allowedTargetStates;
+            }
+        }
+        
+        return $targetStates;
     }
 
     /**
@@ -93,7 +124,7 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
      * @param string $currentState All lowercase name of current state
      * @return array of strings - Possible target states for document
      */
-    public function getTargetStates($currentState) {
+    public static function getTargetStates($currentState) {
         // special code to handle 'removed' state
         if ($currentState === 'removed') {
             return array();
@@ -137,7 +168,7 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
      * Returns all defined states of workflow model.
      * @return array of string Names of defined states
      */
-    public function getAllStates() {
+    public static function getAllStates() {
         $workflow = self::getWorkflowConfig();
 
         return array_keys($workflow->toArray());
@@ -147,13 +178,13 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
      * Returns an array with resource names for all possible transitions.
      * @return array of strings
      */
-    public function getWorkflowResources() {
+    public static function getWorkflowResources() {
         $transitions = array();
         
-        $allStates = $this->getAllStates();
+        $allStates = self::getAllStates();
         
         foreach ($allStates as $state) {
-            $allTargetStates = $this->getTargetStates($state);
+            $allTargetStates = self::getTargetStates($state);
             
             foreach ($allTargetStates as $targetState) {
                 $transitions[] = "workflow_" . $state . "_" . $targetState;

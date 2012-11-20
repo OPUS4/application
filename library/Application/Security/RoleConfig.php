@@ -75,7 +75,8 @@ class Application_Security_RoleConfig {
             }
             else if (!strncmp('workflow_', $resource, 9)) {
                 // workflow permission
-                // TODO erweitern um Rechte für Workflow Übergänge zu definieren
+                $resource = new Zend_Acl_Resource($resource);
+                $acl->allow($roleName, $resource);
             }
             else {
                 // module access
