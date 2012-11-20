@@ -44,14 +44,12 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
      */
     public function group($value, $options = null, $name = null) {        
         $this->view->count++;
-
         if ($name == null && $value == null) {
             $error_message = $this->view->translate('template_error_unknown_field');
+            // TODO move to CSS
             return "<br/><div style='width: 400px; color:red;'>" . $error_message . "</div><br/><br/>";
-        } else {
-            $result = $this->_renderGroup($value, $options, $name);
-            return $result;
         }
+        return $this->_renderGroup($value, $options, $name);
     }
 
     /**

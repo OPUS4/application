@@ -68,6 +68,7 @@
             <td>
                 <?php foreach ($docStats['authorEmails'] AS $author) : ?>
                 <?php if (empty($author['email'])) : ?>
+                    <?php /* TODO move to CSS */ ?>
                     <span style="color:red"><?= $author['name'] ?></span>
                 <?php else : ?>
                     <a href="mailto:<?= $author['email'] ?>"><?= $author['name'] ?></a>
