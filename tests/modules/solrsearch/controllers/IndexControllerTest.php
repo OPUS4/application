@@ -705,13 +705,21 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $doc = $this->addSampleDocWithMultipleSubjects($numOfSubjects);
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610');
-        $doc->deletePermanent();
-        
+        $doc->deletePermanent();        
+
         for ($index = 0; $index < $config->searchengine->solr->globalfacetlimit; $index++) {
-            $this->assertContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
+            $path = '/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject';
+            if ($index < 10) {
+                $path .= '0';
+            }
+            $this->assertContains($path . $index, $this->getResponse()->getBody());
         }
         for ($index = $config->searchengine->solr->globalfacetlimit; $index < $numOfSubjects; $index++) {
-            $this->assertNotContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
+            $path = '/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject';
+            if ($index < 10) {
+                $path .= '0';
+            }
+            $this->assertNotContains($path . $index, $this->getResponse()->getBody());
         }        
     }
 
@@ -738,10 +746,10 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         Zend_Registry::set('Zend_Config', $config);
 
         for ($index = 0; $index < 5; $index++) {
-            $this->assertContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
+            $this->assertContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject0' . $index, $this->getResponse()->getBody());
         }
         for ($index = 5; $index < $numOfSubjects; $index++) {
-            $this->assertNotContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
+            $this->assertNotContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject0' . $index, $this->getResponse()->getBody());
         }
     }
 
@@ -783,10 +791,10 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         Zend_Registry::set('Zend_Config', $config);
 
         for ($index = 0; $index < 5; $index++) {
-            $this->assertContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
+            $this->assertContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject0' . $index, $this->getResponse()->getBody());
         }
         for ($index = 5; $index < $numOfSubjects; $index++) {
-            $this->assertNotContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject' . $index, $this->getResponse()->getBody());
+            $this->assertNotContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject0' . $index, $this->getResponse()->getBody());
         }        
     }
 
