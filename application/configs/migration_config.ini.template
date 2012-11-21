@@ -52,6 +52,7 @@ migration.doctype.27 = "image"
 migration.doctype.28 = "movingimage"
 migration.doctype.29 = "sound"
 migration.doctype.30 = "coursematerial"
+migration.doctype.31 = "masterthesis"
 migration.doctype.default = "other"
 
 migration.language.ger = "deu"
