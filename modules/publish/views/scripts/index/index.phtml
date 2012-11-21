@@ -31,17 +31,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-//for printing a generized Zend Form with standard layout:
-//echo $this->form;
-//element($value, $options = null, $type = null, $name = null)
-//group($value, $options = null, $name = null)
-//echo $this->form;
-
 ?>
 
-<h2><?= $this->title ?></h2>
+<h2><?= $this->translate($this->title) ?></h2>
 <div class="content">
-    <h3 class="document-type"><?= $this->subtitle ?></h3>
+    <h3 class="document-type"><?= $this->translate($this->subtitle) ?></h3>
 
     <?php if (isset($this->errorCaseMessage)) : ?>
         <div class="form-hint form-errors"><p><?= $this->errorCaseMessage; ?></p></div>
@@ -68,6 +62,6 @@
             <div class="button-wrapper">
                 <?= $this->element('button_label_send', "class='form-button submit-button'", "Submit", "send"); ?>
             </div>
-        </div>
+        </div>            
     </form>
 </div>

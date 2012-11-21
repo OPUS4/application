@@ -48,32 +48,27 @@ class Publish_IndexController extends Controller_Action {
         //unset all possible session content
         $session->unsetAll();
 
-        $this->view->title = $this->view->translate('publish_controller_index');        
-
+        $this->view->title = 'publish_controller_index';
+        
         $form = new Publish_Form_PublishingFirst();
 
-        //set action_url and give it to the view
-        $action_url = $this->view->url(array('controller' => 'form', 'action' => 'upload'));
-        $form->setAction($action_url);
-        $form->setMethod('post');
-        $this->view->action_url = $action_url;        
-        $this->view->form = $form;
+        $this->view->action_url = $this->view->url(array('controller' => 'form', 'action' => 'upload'));
         $this->view->showBib = $form->bibliographie;
         $this->view->showRights = $form->showRights;
         $this->view->enableUpload = $form->enableUpload;
-
         if (!$form->enableUpload) {
-            $this->view->subtitle = $this->view->translate('publish_controller_index_sub_without_file');
+            $this->view->subtitle = 'publish_controller_index_sub_without_file';
         }
         else {
-            $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
+            $this->view->subtitle = 'publish_controller_index_sub';
         }
 
         //initialize session variables
+        // TODO hide initialization routine
         $session->documentType = "";
         $session->documentId = "";
         $session->disabled = array();
         $session->endOfCollectionTree = array();        
-        $session->additionalFields = array();
+        $session->additionalFields = array();        
     }
 }

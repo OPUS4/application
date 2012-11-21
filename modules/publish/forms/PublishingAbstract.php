@@ -36,12 +36,13 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
 
     protected $config;
     protected $session;
+    protected $view;
 
     public function __construct() {
         $this->session = new Zend_Session_Namespace('Publish');
         $this->config = Zend_Registry::get('Zend_Config');
-
-        parent::__construct();
+        $this->view = $this->getView();
+        parent::__construct();        
     }
 
     function getElementAttributes($elementName) {
@@ -134,7 +135,8 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
      */
     function addSubmitButton($label, $name) {
         $submit = $this->createElement('submit', $name);
-        $submit->setLabel($label);
+        $submit->setDisableTranslator(true);
+        $submit->setLabel($this->view->translate($label));
         $this->addElement($submit);
         return $submit;
     }

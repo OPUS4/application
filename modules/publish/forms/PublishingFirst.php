@@ -39,7 +39,6 @@
  */
 class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
-    public $view;
     public $bibliographie;
     public $showRights;
     /**
@@ -48,13 +47,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      */
     public $enableUpload = false;
 
-    /**
-     *
-     * @param <type> $view View Object from Controller
-     * @param <type> $options
-     */
-    public function __construct() {
-        $this->view = $this->getView();        
+    public function __construct() {        
         parent::__construct();
     }
 
@@ -82,30 +75,34 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      */
     public function init() {
         parent::init();
+
+        $this->setDisableTranslator(true);
         
         //create and add document type
         $doctypes = $this->_createDocumentTypeField();
-        $this->addElement($doctypes);
+        $this->addElement($doctypes);        
 
         //create and add file upload
         $this->enableUpload = ($this->config->form->first->enable_upload == 1);
         if ($this->enableUpload) {
-            $fileupload = $this->_createFileuploadField();
-            $this->addDisplayGroup($fileupload, 'documentUpload');
+            $fileupload = $this->_createFileuploadField();            
+            $this->addDisplayGroup($fileupload, 'documentUpload');            
         }
 
         //create and add bibliographie
         $bibliographie = $this->_createBibliographyField();
-        if (!is_null($bibliographie))
-            $this->addElement($bibliographie);
+        if (!is_null($bibliographie)) {
+            $this->addElement($bibliographie);            
+        }
 
         //create and add rights checkbox
         $rights = $this->_createRightsCheckBox();
-        if (!is_null($rights))
+        if (!is_null($rights)) {
             $this->addElement($rights);
+        }
 
-        //create and add send-button
-        $this->addSubmitButton('Send', 'send');
+        // TODO can be removed?
+        //$this->addSubmitButton('Send', 'send');
         
         $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
         $this->setViewValues();
@@ -135,7 +132,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         $doctypes = $this->createElement('select', 'documentType');
         $doctypes->setLabel('selecttype')
                 ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $translatedOptions))
-                ->setRequired(true);
+                ->setRequired(true)
+                ->setDisableTranslator(true);
 
         return $doctypes;
     }
@@ -177,19 +175,22 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
                 ->setAttrib('enctype', 'multipart/form-data');
 
         if (1 == $requireUpload) {
-            if (!isset($this->session->fulltext) || $this->session->fulltext == '0')
+            if (!isset($this->session->fulltext) || $this->session->fulltext == '0') {
                 $fileupload->setRequired(true);
+            }
         }
-        else
+        else {
             $fileupload->setRequired(false);
+        }
 
+        $fileupload->setDisableTranslator(true);
         $this->addElement($fileupload);
 
-        //create add-button        
         $this->addSubmitButton('addAnotherFile', 'addAnotherFile');
         
         $comment = $this->createElement('textarea', 'uploadComment');
         $comment->setLabel('uploadComment');
+        $comment->setDisableTranslator(true);
         $this->addElement($comment);
 
         $group = array($fileupload->getName(), 'addAnotherFile', $comment->getName());
@@ -214,6 +215,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
             $this->bibliographie = 1;
             $bibliographie = $this->createElement('checkbox', 'bibliographie');
             $bibliographie->setLabel('bibliographie');
+            $bibliographie->setDisableTranslator(true);
         }
 
         return $bibliographie;
@@ -233,7 +235,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
             $rightsCheckbox = $this->createElement('checkbox', 'rights')
                     ->setLabel('rights')
                     ->setRequired(true)
-                    ->setChecked(false);
+                    ->setChecked(false)
+                    ->setDisableTranslator(true);
         }
 
         return $rightsCheckbox;

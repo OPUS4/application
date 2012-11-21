@@ -42,7 +42,7 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
      * @param <type> $name name of possible hidden element
      * @return element to render in view
      */
-    public function group($value, $options = null, $name = null) {        
+    public function group($value, $options = null, $name = null) {
         $this->view->count++;
         if ($name == null && $value == null) {
             $error_message = $this->view->translate('template_error_unknown_field');

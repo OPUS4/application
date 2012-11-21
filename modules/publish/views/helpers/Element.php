@@ -59,8 +59,8 @@ class Publish_View_Helper_Element extends Publish_View_Helper_Fieldset {
     function _renderElement($field, $options=null, $name=null) {
         
         $fieldset = "<fieldset class='left-labels'>";
-        $fieldset .= $this->getLegendFor($field['header']);        
-        $fieldset .= $this->getFieldsetHint($field['id']);        
+        $fieldset .= $this->getLegendFor($field['header']);
+        $fieldset .= $this->getFieldsetHint($field['id']);
         $fieldset .= "<div class='form-item'>";        
         $fieldset .= $this->getLabelFor($field['id'], $field['label'], $field['req']);
         

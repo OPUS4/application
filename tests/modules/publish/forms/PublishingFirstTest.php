@@ -37,7 +37,7 @@ class Publish_Form_PublishingFirstTest extends ControllerTestCase {
 
     public function testConstructorWithEmptyView() {
         $form = new Publish_Form_PublishingFirst();
-        $this->assertNotNull( $form->getElement('send') );
+        $this->assertNotNull( $form->getElement('documentType') );
     }
         
     public function testIsValidMethodWithMissingDocumentType() {        

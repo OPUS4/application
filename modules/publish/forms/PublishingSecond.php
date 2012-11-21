@@ -49,13 +49,10 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
     public $additionalFields = array();
     public $postData = array();
     public $log;
-    public $view;
 
     public function __construct($log, $postData = null) {
         $this->postData = $postData;
         $this->log = $log;
-        $this->view = $this->getView();
-
         parent::__construct();
     }
 

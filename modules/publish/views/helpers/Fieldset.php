@@ -45,31 +45,36 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         $fieldset = "";
         if (!isset($field['isLeaf'])) {
             $fieldset .= "\n\t\t\t\t<input type='text' class='form-textfield' name='" . $field['id'] . "' id='" . $field['id'] . "' ";
-            if ($options !== null)
+            if ($options !== null) {
                 $fieldset .= $options . " ";
-            else
+            }
+            else {
                 $fieldset .= "size='30' ";
+            }
 
             if ($field['disabled'] === true) {
                 $fieldset .= " disabled='1' ";
                 $this->disable = true;
             }
-           
-            $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
 
+            $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
+            
             $fieldset .= " value='" . htmlspecialchars($field['value'], ENT_QUOTES) . "' />\n";            
-            if (isset($field['desc']))
+            if (isset($field['desc'])) {
                 $fieldset .= '<div class="description hint">' . $this->view->translate($field['desc']) . '</div>';
+            }
         }
         return $fieldset;
     }
 
     function renderHtmlTextarea($field, $options) {
         $fieldset = "\n\t\t\t\t<textarea name='" . $field['id'] . "' class='form-textarea' ";
-        if ($options !== null)
+        if ($options !== null) {
             $fieldset .= $options . " ";
-        else
+        }
+        else {
             $fieldset .= "cols='30' rows='5' ";
+        }
 
         if ($field['disabled'] === true) {
             $fieldset .= " disabled='1' ";
@@ -77,7 +82,6 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         }
 
         $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
-
         $fieldset .= " id='" . $field['id'] . "'>" . htmlspecialchars($field['value'], ENT_QUOTES) . "</textarea>";
 
         return $fieldset;
@@ -86,7 +90,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     // TODO: wofür wird der Parameter $options benötigt?
     function renderHtmlSelect($field, $options) {
         $fieldset = "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id'] . '" class="form-selectfield"  id="' . $field['id'] . '"';
-        $fieldset .= ' title="' . htmlspecialchars ($this->view->translate($field['hint']), ENT_QUOTES) . '"';        
+        $fieldset .= ' title="' . htmlspecialchars ($this->view->translate($field['hint']), ENT_QUOTES) . '"';
         if ($field['disabled'] === true) {
             $fieldset .= ' disabled="1" ';
         }
@@ -110,6 +114,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         return $fieldset;
     }
 
+    // TODO: wofür wird der Parameter $options benötigt?
     function renderHtmlCheckbox($field, $options) {
         $fieldset = "<input type='hidden' name='" . $field['id'] . "' value='0' />";
         $fieldset .= "\n\t\t\t\t<input type='checkbox' class='form-checkbox' name='" . $field['id'] . "' id='" . $field['id'] . "' ";
@@ -130,10 +135,12 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     function renderHtmlFile($field, $options) {
         $fieldset = "<input type='file' name='" . $field['id'] . "' id='" . $field['id'] . "' enctype='multipart/form-data' ";
         $fieldset .= "title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
-        if ($options !== null)
+        if ($options !== null) {
             $fieldset .= $options . " ";
-        else
+        }
+        else {
             $fieldset .= "size='30'";
+        }
         $fieldset .= " />\n";
 
         return $fieldset;
@@ -195,11 +202,13 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     
     function _renderSubmit($value, $options=null, $name=null) {
         $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='" . htmlspecialchars($this->view->translate($value), ENT_QUOTES) . "' ";
-        if (isset($options))
+        if (isset($options)) {
             $submit .= $options . " />";
+        }
         return $submit;
     }
-    
+
+    // TODO: wofür wird der Parameter $options benötigt?
     function _renderHidden($value, $options = null, $name=null) {
         $hiddenfield = "<input type='hidden' name='" . $name . "' id='" . $name . "' value='" . $value . "' />";
         return $hiddenfield;
@@ -218,18 +227,18 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
      * @param <String> Name of element or group
      * @return <type>
      */
-    function getFieldsetHint($name) {        
+    function getFieldsetHint($name) {
         return "<div class='description hint'><p>" . $this->view->translate('hint_' . $name) . "</div></p>";
     }
 
     function getLabelFor($name, $label, $required) {
         $fieldset = "<label for='" . $name . "'>" . htmlspecialchars($this->view->translate($label), ENT_QUOTES);
 
-        if ($required === 'required')
+        if ($required === 'required') {
             $fieldset .= $this->getRequiredSign();
+        }
 
         $fieldset .= "</label>";
-
         return $fieldset;
     }
 
