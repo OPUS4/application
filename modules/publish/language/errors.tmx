@@ -35,6 +35,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="publish_error_missing_doctype">
+        <tuv xml:lang="en">
+            <seg>Error: missing document type!</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler: Dokumenttyp fehlt!</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="publish_error_rights_checkbox_empty">
         <tuv xml:lang="en">
             <seg>Error: Please confirm our legal notices.</seg>

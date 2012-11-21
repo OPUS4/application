@@ -58,7 +58,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
             if (array_key_exists('rights', $data)) {
                 if ($data['rights'] == '0') {
                     $rights = $this->getElement('rights');
-                    $rights->addError('publish_error_rights_checkbox_empty');
+                    $rights->addError($this->view->translate('publish_error_rights_checkbox_empty'));
                     $valid = false;
                 }
             }
@@ -129,11 +129,12 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
         asort($translatedOptions);
 
-        $doctypes = $this->createElement('select', 'documentType');
+        $doctypes = $this->createElement('select', 'documentType');        
         $doctypes->setLabel('selecttype')
                 ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $translatedOptions))
                 ->setRequired(true)
-                ->setDisableTranslator(true);
+                ->setDisableTranslator(true)
+                ->setErrorMessages(array($this->view->translate('publish_error_missing_doctype')));
 
         return $doctypes;
     }
