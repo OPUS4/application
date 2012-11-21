@@ -55,7 +55,7 @@
                 <xsl:value-of select="@Name" />
             </xsl:when>
 
-            <xsl:when test="@RoleDisplayFrontdoor = 'Number,Name'">
+            <xsl:when test="@RoleDisplayFrontdoor = 'Number, Name' or @RoleDisplayFrontdoor = 'Number,Name'">
                 <xsl:if test="@Number != ''">
                     <xsl:value-of select="@Number" />
                 </xsl:if>
@@ -67,7 +67,7 @@
                 </xsl:if>
             </xsl:when>
 
-            <xsl:when test="@RoleDisplayFrontdoor = 'Name,Number'">
+            <xsl:when test="@RoleDisplayFrontdoor = 'Name, Number' or @RoleDisplayFrontdoor = 'Name,Number'">
                 <xsl:if test="@Name != ''">
                     <xsl:value-of select="@Name" />
                 </xsl:if>
