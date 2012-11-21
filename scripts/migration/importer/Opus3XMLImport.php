@@ -275,7 +275,7 @@ class Opus3XMLImport {
             $imported['result'] = 'failure';
             $imported['message'] = $e->getMessage();
             if (!is_null($doc)) {
-                $imported['entry'] = $doc->toXml()->saveHTML();                        
+                $imported['entry'] = $doc->toXml()->saveHTML();
             } else  {
                 $imported['entry'] = $this->completeXML->saveXML($this->document);
             }
@@ -340,7 +340,11 @@ class Opus3XMLImport {
             $elements = $this->document->getElementsByTagName($tag);
             foreach ($elements as $e) {
                 $old_value = $e->getAttribute($oa['old']);
-                $new_value = $oa['config']->$old_value;
+                if ($oa['config']->$old_value) {
+                    $new_value = $oa['config']->$old_value;
+                } else {
+                    $new_value = $oa['config']->default;
+                }
                 /* Check for TitleElements with duplicated Languages */
                 if (in_array($new_value, $language)) {
                     $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : This document has two '" . $tag . "' with equal language. Document will not be indexed");
@@ -382,7 +386,11 @@ class Opus3XMLImport {
         foreach ($mapping as $m) {
             $oa = $this->mapping[$m];
             $old_value = $this->document->getAttribute($oa['old']);
-            $new_value = $oa['config']->$old_value;
+            if ($oa['config']->$old_value) {
+                $new_value = $oa['config']->$old_value;
+            } else {
+                $new_value = $oa['config']->default;
+            }
             $this->document->removeAttribute($oa['old']);
             $this->document->setAttribute($oa['new'], $new_value);
         }
@@ -395,7 +403,11 @@ class Opus3XMLImport {
             $elements = $this->document->getElementsByTagName($tag);
             foreach ($elements as $e) {
                 $old_value = $e->getAttribute($oa['old']);
-                $new_value = $oa['config']->$old_value;
+                if ($oa['config']->$old_value) {
+                    $new_value = $oa['config']->$old_value;
+                } else {
+                    $new_value = $oa['config']->default;
+                }
                 $e->removeAttribute($oa['old']);
                 $e->setAttribute($oa['new'], $new_value);
             }
