@@ -83,6 +83,8 @@ find "$OLD_MODULES" -type f -print0 | while read -r -d $'\0' FILE_PATH; do
                 deleteFile "$OLD_MODULES/$FILE"
             fi
         else 
+            # Log conflict requiring manual attention
+            addConflict "$OLD_MODULES/$FILE"
             # File was modified
             # Check if new version exists
             if [ ! -z "$FILE_MD5_NEW" ]; then
