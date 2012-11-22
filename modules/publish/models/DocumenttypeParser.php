@@ -28,7 +28,7 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -37,10 +37,31 @@ class Publish_Model_DocumenttypeParser {
 
     private $log;
     private $session;
-    public $dom;                        //DOMDocument
-    public $form;                       //PublishingSecond
-    public $formElements = array();     // Array of FormElement
-    private $currentElement;            //FormElement
+
+    /**
+     *
+     * @var DOMDocument
+     */
+    public $dom;
+
+    /**
+     *
+     * @var Publish_Form_PublishingSecond
+     */
+    public $form;
+
+    /**
+     *
+     * @var array Array of Publish_Model_FormElement
+     */
+    public $formElements = array();
+
+    /**
+     *
+     * @var Publish_Model_FormElement
+     */
+    private $currentElement;
+    
     private $postValues = array();
     private $additionalFields = array();
 
@@ -74,11 +95,11 @@ class Publish_Model_DocumenttypeParser {
             $this->_parseDefaultEntry($field);
             $this->_parseRequiredIfFulltext($field);
             $this->currentElement->setPostValues($this->postValues);           
-            $group = $this->currentElement->initGroup();            
+            $group = $this->currentElement->initGroup();
             $this->formElements[] = $group;
            
             if (!isset($group)) {
-                $element = $this->currentElement->transform();
+                $element = $this->currentElement->transform();                
                 $this->formElements[] = $element;
             }
         }
@@ -124,7 +145,7 @@ class Publish_Model_DocumenttypeParser {
             if ($datatype == 'Collection' || $datatype == 'CollectionLeaf') {
                 $collectionRole = $field->getAttribute('root');
                 $this->currentElement->setCollectionRole($collectionRole);
-                $this->currentElement->setCurrentCollectionId();
+                $this->currentElement->setCurrentCollectionId();                
             }
             
             $this->zendConformElementName($elementName);
@@ -232,7 +253,7 @@ class Publish_Model_DocumenttypeParser {
 
                     if (!isset($subfield)) {
                         $this->currentElement->setDefaultValue($defaultArray);
-                        $this->log->debug("Parser -> parseDefault(): " . $value);
+                        $this->log->debug(__METHOD__ . " : " . $value);
                     }
                     else {
                         $subfield->setDefaultValue($defaultArray);

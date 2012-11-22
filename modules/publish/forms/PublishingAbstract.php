@@ -36,7 +36,7 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
 
     protected $config;
     protected $session;
-    protected $view;
+    public $view;
 
     public function __construct() {
         $this->session = new Zend_Session_Namespace('Publish');

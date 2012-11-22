@@ -41,7 +41,6 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
     CONST FIRST = "Firstname";
     CONST COUNTER = "_1";
     CONST GROUP = "group";
-    CONST EXPERT = "X";
     CONST LABEL = "_label";
     CONST ERROR = "Error";
 
@@ -83,6 +82,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
     public function init() {
         parent::init();
 
+        $this->setDisableTranslator(true);        
+
         $this->doctype = $this->session->documentType;
         $this->additionalFields = $this->session->additionalFields;
 
@@ -99,25 +100,29 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             // TODO: Need another exception class?
             throw new Publish_Model_FormSessionTimeoutException();
         }
-                
+
         // Call the parser for that DOM object and the current form object and set important members.
-        $parser = new Publish_Model_DocumenttypeParser($dom, $this);
-        $parser->setAdditionalFields($this->additionalFields);
-        $parser->setPostValues($this->postData);
-        $parser->parse();
-        $parserElements = $parser->getFormElements();
+        $parser = new Publish_Model_DocumenttypeParser($dom, $this);        
+        $parser->setAdditionalFields($this->additionalFields);        
+        $parser->setPostValues($this->postData);       
+        $parser->parse();        
+        $parserElements = $parser->getFormElements();        
         
         $this->log->info("Documenttype Parser ready with parsing " . $this->doctype . " found: " . count($parserElements) . " elements." );
         
         // Fill the Form Object!
         $this->addElements($parserElements);
-        if(!is_null($this->getExternalElements()))
-            $this->addElements($this->getExternalElements());
+        $externalElements = $this->getExternalElements();
+        if (!is_null($externalElements)) {
+            $this->addElements($externalElements);
+        }
         
         $this->addSubmitButton('button_label_send', 'send');
         $this->addSubmitButton('button_label_back', 'back');
 
-        if (!is_null($this->postData)) $this->populate($this->postData);
+        if (!is_null($this->postData)) {
+            $this->populate($this->postData);
+        }
 
         $this->setViewValues();
     }
@@ -128,23 +133,26 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
      * It sets important array values for these elements and returns an array of external fields.
      * @return type Array of external fields.
      */
-    private function getExternalElements(){
-        $externals = array();
+    private function getExternalElements(){        
         $session = new Zend_Session_Namespace('Publish');
         $externalFields = $session->DT_externals;
         
         // No external values found!
-        if (is_null($externalFields))
+        if (is_null($externalFields)) {
             return;
-        
+        }
+
+        $externals = array();
         foreach ($externalFields AS $element) {
             // Element is already appended.
-            if (!is_null($this->getElement($element['id'])))
-                    return null;
-            // ELSE: Create a new element and keep the element's values in an array.
+            if (!is_null($this->getElement($element['id']))) {
+                return null;
+            }
+            // create a new element and keep the element's values in an array.
             $externalElement = $this->createElement($element['createType'], $element['id']);
             $req = ($element['req']=='required') ? true : false;            
-            $externalElement->setRequired($req)
+            $externalElement->setDisableTranslator(true)
+                            ->setRequired($req)
                             ->setValue($element['value'])
                             ->setLabel($element['label'])
                             ->setAttrib('disabled' , $element['disabled'])
@@ -358,7 +366,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
             //build group name
             $groupName = self::GROUP . $name;
-            $this->view->$name = $this->view->translate($name);
+            //$this->view->$name = $this->view->translate($name);
+            $this->view->$name = $name;
             $groupCount = 'num' . $groupName;
 
             //get the display group for the current element and build the complete group
@@ -381,7 +390,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             }
             
             $label = $currentElement . self::LABEL;
-            $this->view->$label = $this->view->translate($this->getElement($currentElement)->getLabel());
+            //$this->view->$label = $this->view->translate($this->getElement($currentElement)->getLabel());
+            $this->view->$label = $this->getElement($currentElement)->getLabel();
         }
     }
 

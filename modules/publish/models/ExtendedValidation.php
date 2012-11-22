@@ -122,7 +122,7 @@ class Publish_Model_ExtendedValidation {
                     $element = $this->form->getElement($lastKey);
                     if (!$element->isRequired()) {
                         if (!$element->hasErrors()) {
-                            $element->addError('publish_error_noLastButFirstName');
+                            $element->addError($this->form->view->translate('publish_error_noLastButFirstName'));
                             $validPersons = false;
                         }
                     }
@@ -147,7 +147,7 @@ class Publish_Model_ExtendedValidation {
                     $element = $this->form->getElement($lastName);
                     if (!$element->isRequired()) {
                         if (!$element->hasErrors()) {
-                            $element->addError('publish_error_noLastNameButEmail');
+                            $element->addError($this->form->view->translate('publish_error_noLastNameButEmail'));
                             $validMails = false;
                         }
                     }
@@ -186,7 +186,7 @@ class Publish_Model_ExtendedValidation {
                         $element = $this->form->getElement($emailKey);
                         if (!$element->isRequired()) {
                             if (!$element->hasErrors()) {
-                                $element->addError('publish_error_noEmailButNotification');
+                                $element->addError($this->form->view->translate('publish_error_noEmailButNotification'));
                                 $validMails = false;
                             }
                         }
@@ -279,7 +279,7 @@ class Publish_Model_ExtendedValidation {
                     $element = $this->form->getElement($titleKey);
                     if (!$element->isRequired()) {
                         if (!$element->hasErrors()) {
-                            $element->addError('publish_error_noTitleButLanguage');
+                            $element->addError($this->form->view->translate('publish_error_noTitleButLanguage'));
                             $validTitles = false;
                         }
                     }
@@ -353,7 +353,7 @@ class Publish_Model_ExtendedValidation {
                         $this->log->debug("(Validation): > 1 -> error for element " . $languageKey);
                         $element = $this->form->getElement($languageKey);
                         $element->clearErrorMessages();
-                        $element->addError('publish_error_justOneLanguagePerTitleType');
+                        $element->addError($this->form->view->translate('publish_error_justOneLanguagePerTitleType'));
                         $validTitles = false;
                     }
                 }
@@ -386,7 +386,7 @@ class Publish_Model_ExtendedValidation {
             $titles = array_keys($titles);
             $element = $this->form->getElement($titles[0]);
             $element->clearErrorMessages();
-            $element->addError('publish_error_TitleInDocumentLanguageIsRequired');
+            $element->addError($this->form->view->translate('publish_error_TitleInDocumentLanguageIsRequired'));
             $validTitles = false;
         }
 
@@ -543,7 +543,7 @@ class Publish_Model_ExtendedValidation {
                 $this->log->debug("(Validation): error for element " . $box);
                 $element = $this->form->getElement($box);
                 $element->clearErrorMessages();
-                $element->addError('publish_error_rights_checkbox_empty');
+                $element->addError($this->form->view->translate('publish_error_rights_checkbox_empty'));
                 $validCheckboxes = false;
             }
         }
@@ -604,7 +604,7 @@ class Publish_Model_ExtendedValidation {
                 if ($coll != null && $coll->hasChildren()) {
                     if (isset($element)) {
                         $element->clearErrorMessages();
-                        $element->addError('publish_error_collection_leaf_required');
+                        $element->addError($this->form->view->translate('publish_error_collection_leaf_required'));
                         $collectionLeafSelection = false;
                     }
                 }
@@ -641,7 +641,7 @@ class Publish_Model_ExtendedValidation {
                     $this->log->debug("(Validation): error for element " . $fieldname);
                     $element = $this->form->getElement($fieldname);
                     $element->clearErrorMessages();
-                    $element->addError('publish_error_seriesnumber_not_available');
+                    $element->addError($this->form->view->translate('publish_error_seriesnumber_not_available'));
                     $validSeries = false;
                 }
             }
@@ -674,7 +674,7 @@ class Publish_Model_ExtendedValidation {
                 $this->log->debug("(Validation): error for element " . $fieldname);
                 $element = $this->form->getElement($fieldname);
                 $element->clearErrorMessages();
-                $element->addError('publish_error_only_one_series_per_document');
+                $element->addError($this->form->view->translate('publish_error_only_one_series_per_document'));
                 $validSeries = false;
             }
         }

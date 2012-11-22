@@ -83,7 +83,6 @@ class Publish_FormController extends Controller_Action {
         if ($indexForm->enableUpload) {
             if ($indexForm->getElement('fileupload') != null && !$indexForm->getElement('fileupload')->isValid($postData)) {
                 $indexForm->setViewValues();
-                $this->view->form = $indexForm;
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
             }
             else {
@@ -92,6 +91,7 @@ class Publish_FormController extends Controller_Action {
                 if ($this->view->uploadSuccess) {
                     $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
                 }
+                // TODO warum wird hier nochmal eine Form instanziiert und nicht die weiter oben bereits erzeugte verwendet?
                 $indexForm = new Publish_Form_PublishingFirst($this->view);
                 $indexForm->populate($postData);
                 $indexForm->setViewValues();                
@@ -335,7 +335,7 @@ class Publish_FormController extends Controller_Action {
         $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
         $form->setAction($action_url);
         $form->setMethod('post');
-        $this->view->action_url = $action_url;
+        $this->view->action_url = $action_url;        
         $this->view->form = $form;
     }
 

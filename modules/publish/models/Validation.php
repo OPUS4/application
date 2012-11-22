@@ -268,6 +268,7 @@ class Publish_Model_Validation {
     }
 
     private function _collectionSelect(){
+        // TODO do not use models within other modules
         $browsingHelper1 = new Solrsearch_Model_CollectionRoles();
         $collectionRole = Opus_CollectionRole::fetchByName($this->collectionRole);
         if (is_null($collectionRole))

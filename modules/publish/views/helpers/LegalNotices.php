@@ -53,8 +53,8 @@ class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract {
         
         $element = $form->createElement('checkbox', 'LegalNotices');
         $element->setRequired(true)                
-                ->setChecked(false);
-        
+                ->setChecked(false)
+                ->setDisableTranslator(true);
         $form->addElement($element);
         
         $elementData = array(

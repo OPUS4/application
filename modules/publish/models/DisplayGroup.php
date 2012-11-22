@@ -79,7 +79,8 @@ class Publish_Model_DisplayGroup {
             foreach ($this->elements as $element) {
 
                 $elem = clone $element;
-                $elem->setName($element->getName() . '_' . $i);
+                $elem->setDisableTranslator(true);
+                $elem->setName($element->getName() . '_' . $i);                
                 $this->form->addElement($elem);
                 $displayGroup[] = $elem->getName();
             }
@@ -117,7 +118,8 @@ class Publish_Model_DisplayGroup {
                 if ($this->implicitGroup) {
                     //clone all elements
                     $elem = clone $element;
-                    $elem->setName($element->getName() . '_' . $i);
+                    $elem->setDisableTranslator(true);
+                    $elem->setName($element->getName() . '_' . $i);                    
                     $this->form->addElement($elem);
                     $displayGroup[] = $elem->getName();
                 }
@@ -126,6 +128,7 @@ class Publish_Model_DisplayGroup {
                     if ($element->getName() === $this->elementName) {
                         //clone the "root selection"
                         $elem = clone $element;
+                        $elem->setDisableTranslator(true);
                         $elem->setName($this->elementName . '_' . $i);
                         if (isset($this->session->additionalFields['collId1' . $this->elementName . '_' . $i])) {
                             $elem->setValue('ID:' . $this->session->additionalFields['collId1' . $this->elementName . '_' . $i]);
@@ -135,7 +138,7 @@ class Publish_Model_DisplayGroup {
                             $elem->setAttrib('disabled', true);
                             $elem->setAttrib('isRoot', true);
                             $this->session->disabled[$this->elementName . '_' . $i] = $elem->getValue();                                                                                                                
-                        }
+                        }                        
                         $this->form->addElement($elem);
                         $displayGroup[] = $elem->getName();
                     }
@@ -304,17 +307,23 @@ class Publish_Model_DisplayGroup {
     private function collectionEntries($id, $step, $fieldset) {        
         try {
             $collection = new Opus_Collection($id);
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
+            // TODO: improve exception handling!
             return null;
         }
         $colls = $collection->getChildren();
         $children = array();
 
         if (!is_null($colls) && count($colls) >= 1) {
-            if ($this->implicitGroup)
+            if ($this->implicitGroup) {
                 $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName);
-            else
+                $selectField->setDisableTranslator(true);
+            }
+            else {
                 $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName . '_' . $fieldset);
+                $selectField->setDisableTranslator(true);
+            }
             $selectField->setLabel('choose_collection_subcollection');
             
             foreach ($colls as $coll) {
@@ -328,16 +337,19 @@ class Publish_Model_DisplayGroup {
         if (empty($children)) {            
             if ($this->implicitGroup) {
                 $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName);
+                $selectField->setDisableTranslator(true);
                 $this->session->endOfCollectionTree['collId' . $step . $this->elementName] = 1;
             }
-            else 
+            else {
                 $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName . '_' . $fieldset);
+                $selectField->setDisableTranslator(true);
+            }
             
             $selectField->setLabel('endOfCollectionTree');
             $selectField->setAttrib('disabled', true);
             $selectField->setAttrib('isLeaf', true);
             $this->session->endOfCollectionTree['collId' . $step . $this->elementName . '_' . $fieldset] = 1;
-        }
+        }        
         return $selectField;
     }
 
@@ -367,25 +379,29 @@ class Publish_Model_DisplayGroup {
 
     private function addAddButtontoGroup() {
         $addButton = $this->form->createElement('submit', 'addMore' . $this->elementName);
-        $addButton->setLabel('button_label_add_one_more' . $this->elementName);
+        $addButton->setDisableTranslator(true);
+        $addButton->setLabel($this->form->view->translate('button_label_add_one_more' . $this->elementName));
         return $addButton;
     }
 
     private function addDeleteButtonToGroup() {
         $deleteButton = $this->form->createElement('submit', 'deleteMore' . $this->elementName);
-        $deleteButton->setLabel('button_label_delete' . $this->elementName);
+        $deleteButton->setDisableTranslator(true);
+        $deleteButton->setLabel($this->form->view->translate('button_label_delete' . $this->elementName));
         return $deleteButton;
     }
 
     private function addDownButtontoGroup() {
         $downButton = $this->form->createElement('submit', 'browseDown' . $this->elementName);
-        $downButton->setLabel('button_label_browse_down');
+        $downButton->setDisableTranslator(true);
+        $downButton->setLabel($this->form->view->translate('button_label_browse_down'));
         return $downButton;
     }
 
     private function addUpButtontoGroup() {
         $upButton = $this->form->createElement('submit', 'browseUp' . $this->elementName);
-        $upButton->setLabel('button_label_browse_up');
+        $upButton->setDisableTranslator(true);
+        $upButton->setLabel($this->form->view->translate('button_label_browse_up'));
         return $upButton;
     }
 
