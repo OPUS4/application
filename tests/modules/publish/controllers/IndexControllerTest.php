@@ -177,15 +177,26 @@ class Publish_IndexControllerTest extends ControllerTestCase{
      * Regression Test for OPUSVIER-809
      */
     public function testDocumentTypeSelectBoxIsSortedAlphabetically() {
+        // manipulate list of available document types in application configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $include = $config->documentTypes->include;
+        $exclude = $config->documentTypes->exclude;
+        $config->documentTypes->include = 'all, article, workingpaper, demodemo';
+        $config->documentTypes->exclude = '';
+
         $this->dispatch('/publish');
+
+        $config->documentTypes->include = $include;
+        $config->documentTypes->exclude = $exclude;
+
         $this->assertResponseCode(200);
 
         $body = $this->getResponse()->getBody();
 
-        $doctypeAllPos = strpos($body, '<option label="Alle Felder (Testdokumenttyp)" value="all">Alle Felder (Testdokumenttyp)</option>');
-        $doctypeArticlePos = strpos($body, '<option label="Wissenschaftlicher Artikel" value="article">Wissenschaftlicher Artikel</option>');
-        $doctypeWorkingpaper = strpos($body, '<option label="Arbeitspapier" value="workingpaper">Arbeitspapier</option>');
-        $doctypeDemodemo = strpos($body, '<option label="demodemo" value="demodemo">demodemo</option>');
+        $doctypeAllPos = strpos($body, '<option value="all" label="Alle Felder (Testdokumenttyp)">Alle Felder (Testdokumenttyp)</option>');
+        $doctypeArticlePos = strpos($body, '<option value="article" label="Wissenschaftlicher Artikel">Wissenschaftlicher Artikel</option>');
+        $doctypeWorkingpaper = strpos($body, '<option value="workingpaper" label="Arbeitspapier">Arbeitspapier</option>');
+        $doctypeDemodemo = strpos($body, '<option value="demodemo" label="demodemo">demodemo</option>');
 
         $this->assertTrue($doctypeAllPos < $doctypeWorkingpaper);
         $this->assertTrue($doctypeWorkingpaper < $doctypeArticlePos);
