@@ -40,20 +40,23 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 // Disable for testing.
 // $d = new Opus_Document(1); $d->setServerState('published')->store();
+try {
+    // set up job runner
+    $jobrunner = new Opus_Job_Runner;
+    $jobrunner->setLogger(Zend_Registry::get('Zend_Log'));
 
-// set up job runner
-$jobrunner = new Opus_Job_Runner;
-$jobrunner->setLogger(Zend_Registry::get('Zend_Log'));
+    // no waiting between jobs
+    $jobrunner->setDelay(0);
 
-// no waiting between jobs
-$jobrunner->setDelay(0);
+    // set a limit of 100 index jobs per run
+    $jobrunner->setLimit(100);
 
-// set a limit of 100 index jobs per run
-$jobrunner->setLimit(100);
+    $indexWorker = new Opus_Job_Worker_IndexOpusDocument;
+    $indexWorker->setIndex(new Opus_SolrSearch_Index_Indexer(false));
+    $jobrunner->registerWorker($indexWorker);
 
-$indexWorker = new Opus_Job_Worker_IndexOpusDocument;
-$indexWorker->setIndex(new Opus_SolrSearch_Index_Indexer(false));
-$jobrunner->registerWorker($indexWorker);
-
-// run processing
-$jobrunner->run();
+    // run processing
+    $jobrunner->run();
+} catch (Exception $e) {
+    echo "Exception: ".$e->getMessage()."\n";
+}

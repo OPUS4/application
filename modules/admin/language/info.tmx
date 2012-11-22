@@ -97,6 +97,43 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_info_index_failedjobs">
+      <tuv xml:lang="en">
+        <seg>Asynchronous Processing - Failed Jobs</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Asynchrone Verarbeitung - Fehlgeschlagene Aufträge</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_index_nofailedjobs">
+      <tuv xml:lang="en">
+        <seg>No jobs failed</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>keine Aufträge fehlgeschlagen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_index_joblabel">
+      <tuv xml:lang="en">
+        <seg>Label</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bezeichnung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_index_jobcount">
+      <tuv xml:lang="en">
+        <seg>Count</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzahl</seg>
+      </tuv>
+    </tu>
+
+
   </body>
 
 </tmx>

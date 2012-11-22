@@ -70,6 +70,28 @@
             </table>
 
         </fieldset>
+        <? if(isset($this->failedJobCount)): ?>
+            <fieldset>
+                <legend><?= $this->translate('admin_info_index_failedjobs') ?></legend>
+            <? if(empty($this->failedJobCount)): ?>
+                <div><?= $this->translate('admin_info_index_nofailedjobs') ?></div>
+            <? else: ?>
+
+                <table class="worker-jobs">
+                    <tr>
+                        <th class="label"><?= $this->translate('admin_info_index_joblabel') ?></th>
+                        <th class="value"><?= $this->translate('admin_info_index_jobcount') ?></th>
+                    </tr>
+                    <? foreach ($this->failedJobCount as $label => $count) : ?>
+                        <tr>
+                            <td class="label"><?= $label ?></td>
+                            <td class="value"><?= $count ?></td>
+                        </tr>
+                    <? endforeach ?>
+                </table>
+            </fieldset>
+            <? endif ?>
+        <? endif ?>
     </div>
 
 </div>

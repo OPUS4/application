@@ -150,6 +150,12 @@ oai.sample.identifier = oai:opus4.demo:90
 ; printOnDemand.url = 
 ; printOnDemand.button =
 
+; JOB EXECUTION SETTINGS
+; To enable asynchronous job execution, set this to 1
+; You will need to set up appropriate cron jobs for 
+; scripts/cron/cron-php-runner.sh
+runjobs.asynchronous = 0
+
 ; The following is needed even if sections are empty.
 [staging : production]
 
