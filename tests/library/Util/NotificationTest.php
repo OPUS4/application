@@ -432,6 +432,48 @@ class Util_NotificationTest extends ControllerTestCase {
         $doc->deletePermanent();
         
     }
+    
+    public function testCreateWorkerJobIfAsyncEnabled() {
+        if (isset($this->config->runjobs->asynchronous)) {
+            $origAsyncFlag = $this->config->runjobs->asynchronous;
+            $this->config->runjobs->asynchronous = true;
+        } else {
+            $origAsyncFlag = null;
+            $this->config->merge(new Zend_Config(array('runjobs' => array('asynchronous' => true))));
+        }
+
+        $this->assertEquals(0, Opus_Job::getCount(), 'test data changed.');
+
+        $doc = new Opus_Document();
+        $doc->setLanguage("eng");
+
+        $title = new Opus_Title();
+        $title->setValue("Test Document");
+        $title->setLanguage("eng");
+        $doc->addTitleMain($title);
+
+        $doc->store();
+        $this->notification->prepareMail($doc, Util_Notification::SUBMISSION, 'http://localhost/foo/1');
+        $doc->deletePermanent();        
+
+        $mailJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_MailNotification::LABEL));
+        
+        $this->assertEquals(1, count($mailJobs), 'Expected 1 mail job');
+        
+        $jobs = Opus_Job::getAll();
+        
+        if(!empty($jobs)) {
+            foreach($jobs as $job) {
+                $job->delete();
+            }
+        }
+        if (is_null($origAsyncFlag)) {
+            unset($this->config->runjobs->asynchronous);
+        } else {
+            $this->config->runjobs->asynchronous = $origAsyncFlag;
+        }
+        
+    }
 
     private function getMethod($methodName) {
         $class = new ReflectionClass('Util_Notification');
