@@ -9,10 +9,10 @@
 
         <tu tuid="Language">
       <tuv xml:lang="en">
-        <seg>Language of publication</seg>
+        <seg>Language</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sprache der Veröffentlichung</seg>
+        <seg>Sprache</seg>
       </tuv>
     </tu>   
 
