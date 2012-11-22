@@ -35,53 +35,80 @@
 class Admin_InfoControllerTest extends ControllerTestCase {
 
     public function testIndexDisplayFailedWorkerJobs() {
+        $asyncFlag = $this->setAsynchronousExecution();
 
         $this->assertEquals(0, Opus_Job::getCount(Opus_Job::STATE_FAILED), 'test data changed.');
         $jobIds = array();
         for ($i = 0; $i < 10; $i++) {
             $job = new Opus_Job();
-            $job->setLabel('testjob'.($i < 5 ? 1 : 2));
+            $job->setLabel('testjob' . ($i < 5 ? 1 : 2));
             $job->setData(array(
                 'documentId' => $i,
                 'task' => 'get-me-a-coffee'));
             $job->setState(Opus_Job::STATE_FAILED);
             $jobIds[] = $job->store();
         }
-        
+
         $this->dispatch('/admin/info');
         $this->assertResponseCode(200);
         $this->assertQueryContentContains('table.worker-jobs td', 'testjob1');
         $this->assertQueryContentContains('table.worker-jobs td', 'testjob2');
 
         $testJobs = Opus_Job::getAll($jobIds);
-        foreach($testJobs as $job) {
+        foreach ($testJobs as $job) {
             $job->delete();
         }
+
+        $this->resetAsynchronousExecution($asyncFlag);
     }
 
     public function testMonitorFailedWorkerJobs() {
+        $asyncFlag = $this->setAsynchronousExecution();
 
         $this->assertEquals(0, Opus_Job::getCount(Opus_Job::STATE_FAILED), 'test data changed.');
         $jobIds = array();
         for ($i = 0; $i < 10; $i++) {
             $job = new Opus_Job();
-            $job->setLabel('testjob'.($i < 5 ? 1 : 2));
+            $job->setLabel('testjob' . ($i < 5 ? 1 : 2));
             $job->setData(array(
                 'documentId' => $i,
                 'task' => 'get-me-a-coffee'));
             $job->setState(Opus_Job::STATE_FAILED);
             $jobIds[] = $job->store();
         }
-        
+
         $this->dispatch('/admin/info/worker-monitor');
         $this->assertResponseCode(200);
         $this->assertEquals('1', $this->_response->getBody(), 'Expected value 1');
 
         $testJobs = Opus_Job::getAll($jobIds);
-        foreach($testJobs as $job) {
+        foreach ($testJobs as $job) {
             $job->delete();
         }
+
+        $this->resetAsynchronousExecution($asyncFlag);
     }
-    
+
+    private function setAsynchronousExecution($enabled = true) {
+        $oldValue = null;
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config->runjobs->asynchronous)) {
+            $oldValue = $config->runjobs->asynchronous;
+            $config->runjobs->asynchronous = $enabled;
+        } else {
+            $config->merge(new Zend_Config(array('runjobs' => array('asynchronous' => $enabled))));
+        }
+        return $oldValue;
+    }
+
+    private function resetAsynchronousExecution($oldValue) {
+        $config = Zend_Registry::get('Zend_Config');
+        if (is_null($oldValue)) {
+            unset($config->runjobs->asynchronous);
+        } else {
+            $config->runjobs->asynchronous = $oldValue;
+        }
+    }
+
 }
 
