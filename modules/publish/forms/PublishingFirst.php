@@ -118,22 +118,17 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
     private function _createDocumentTypeField() {
         $documentTypes = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
 
-        //Select with different document types given by the used function
-        $listOptions = $documentTypes->getDocumentTypes();
-
-        $translatedOptions = array();
-
-        foreach ($listOptions as $option) {
-            $translatedOptions[$option] = $option;
-        }
-
-        asort($translatedOptions);
+        $optionsSorted = array();
+        foreach ($documentTypes->getDocumentTypes() as $value) {
+            $optionsSorted[$value] = $this->view->translate($value);
+        }        
+        asort($optionsSorted);
 
         $doctypes = $this->createElement('select', 'documentType');        
-        $doctypes->setLabel('selecttype')
-                ->setMultiOptions(array_merge(array('' => 'choose_valid_doctype'), $translatedOptions))
-                ->setRequired(true)
-                ->setDisableTranslator(true)
+        $doctypes->setDisableTranslator(true)
+                ->setLabel('selecttype')
+                ->setMultiOptions(array_merge(array('' => $this->view->translate('choose_valid_doctype')), $optionsSorted))
+                ->setRequired(true)                
                 ->setErrorMessages(array($this->view->translate('publish_error_missing_doctype')));
 
         return $doctypes;
@@ -167,7 +162,9 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
         //file upload field(s)
         $fileupload = new Zend_Form_Element_File('fileupload');
-        $fileupload->setLabel('fileupload')
+        $fileupload
+                ->setDisableTranslator(true)
+                ->setLabel('fileupload')
                 ->setDestination($tempPath)
                 ->addValidator('Size', false, $maxFileSize)     // limit to value given in application.ini
                 ->setMaxFileSize($maxFileSize)
@@ -183,15 +180,14 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         else {
             $fileupload->setRequired(false);
         }
-
-        $fileupload->setDisableTranslator(true);
+        
         $this->addElement($fileupload);
 
         $this->addSubmitButton('addAnotherFile', 'addAnotherFile');
         
         $comment = $this->createElement('textarea', 'uploadComment');
-        $comment->setLabel('uploadComment');
         $comment->setDisableTranslator(true);
+        $comment->setLabel('uploadComment');        
         $this->addElement($comment);
 
         $group = array($fileupload->getName(), 'addAnotherFile', $comment->getName());
@@ -215,8 +211,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         if ($bib == 1) {
             $this->bibliographie = 1;
             $bibliographie = $this->createElement('checkbox', 'bibliographie');
-            $bibliographie->setLabel('bibliographie');
             $bibliographie->setDisableTranslator(true);
+            $bibliographie->setLabel('bibliographie');            
         }
 
         return $bibliographie;
@@ -233,11 +229,12 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
         if ($showRights == 1) {
             $this->showRights = 1;
-            $rightsCheckbox = $this->createElement('checkbox', 'rights')
+            $rightsCheckbox = $this->createElement('checkbox', 'rights');
+            $rightsCheckbox
+                    ->setDisableTranslator(true)
                     ->setLabel('rights')
                     ->setRequired(true)
-                    ->setChecked(false)
-                    ->setDisableTranslator(true);
+                    ->setChecked(false);
         }
 
         return $rightsCheckbox;
@@ -250,8 +247,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         $errors = $this->getMessages();
         
         foreach ($this->getElements() AS $currentElement => $value) {            
-            $elementAttributes = $this->getElementAttributes($currentElement); 
-            $this->view->$currentElement = $elementAttributes;
+            $this->view->$currentElement = $this->getElementAttributes($currentElement);
         }
 
         if ($this->enableUpload) {
