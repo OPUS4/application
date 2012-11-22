@@ -1248,18 +1248,21 @@ class Oai_IndexControllerTest extends ControllerTestCase {
       $author->setLastName('Foo');
       $author->setDateOfBirth('1900-01-01');
       $author->setPlaceOfBirth('Berlin');
+//      $authorId = $author->store();
       $document->addPersonAuthor($author);
 
       $advisor = new Opus_Person();
       $advisor->setLastName('Bar');
       $advisor->setDateOfBirth('1900-01-01');
       $advisor->setPlaceOfBirth('Berlin');
+//      $advisorId = $advisor->store();
       $document->addPersonAdvisor($advisor);
 
       $referee = new Opus_Person();
       $referee->setLastName('Baz');
       $referee->setDateOfBirth('1900-01-01');
       $referee->setPlaceOfBirth('Berlin');
+//      $refereeId = $referee->store();
       $document->addPersonReferee($referee);
 
       $document->store();
@@ -1268,14 +1271,32 @@ class Oai_IndexControllerTest extends ControllerTestCase {
       $this->assertResponseCode(200);
       $response = $this->getResponse();
       $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+      $authorName = $xpath->query('//xMetaDiss:xMetaDiss/dc:creator/pc:person/pc:name');
+      $this->assertEquals(1, $authorName->length);
       $authorFirstName = $xpath->query('//xMetaDiss:xMetaDiss/dc:creator/pc:person/pc:name/pc:foreName');
       $this->assertEquals(0, $authorFirstName->length);
-      $advisorFirstName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[thesis:role="advisor"]/pc:person/pc:name/pc:foreName');
+      $authorLastName = $xpath->query('//xMetaDiss:xMetaDiss/dc:creator/pc:person/pc:name/pc:surName');
+      $this->assertEquals(1, $authorLastName->length);
+
+      $advisorName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="advisor"]/pc:person/pc:name');
+      $this->assertEquals(1, $advisorName->length);
+      $advisorFirstName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="advisor"]/pc:person/pc:name/pc:foreName');
       $this->assertEquals(0, $advisorFirstName->length);
-      $refereeFirstName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[thesis:role="referee"]/pc:person/pc:name/pc:foreName');
+      $advisorLastName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="advisor"]/pc:person/pc:name/pc:surName');
+      $this->assertEquals(1, $advisorLastName->length);
+
+      $refereeName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="referee"]/pc:person/pc:name');
+      $this->assertEquals(1, $refereeName->length);
+      $refereeFirstName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="referee"]/pc:person/pc:name/pc:foreName');
       $this->assertEquals(0, $refereeFirstName->length);
+      $refereeLastName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="referee"]/pc:person/pc:name/pc:surName');
+      $this->assertEquals(1, $refereeLastName->length);
 
       $document->deletePermanent();
+      $author->delete();
+      $advisor->delete();
+      $referee->delete();
    }
 
 }
