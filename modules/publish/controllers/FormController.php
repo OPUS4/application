@@ -44,11 +44,11 @@ class Publish_FormController extends Controller_Action {
 
     public function uploadAction() {
         $this->view->languageSelectorDisabled = true;
-        $this->view->title = $this->view->translate('publish_controller_index');
+        $this->view->title = 'publish_controller_index';
         $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
         $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
 
-        if ($this->getRequest()->isPost() !== true) {
+        if ($this->getRequest()->isPost() !== true) {            
             return $this->_redirectTo('index', '', 'index');
         }
 
@@ -94,20 +94,18 @@ class Publish_FormController extends Controller_Action {
                 }
                 $indexForm = new Publish_Form_PublishingFirst($this->view);
                 $indexForm->populate($postData);
-                $indexForm->setViewValues();
-                $this->view->form = $indexForm;
+                $indexForm->setViewValues();                
 
                 if (array_key_exists('addAnotherFile', $postData)) {
                     $postData['uploadComment'] = "";
                     return $this->renderScript('index/index.phtml');
-                }
+                }                
             }
         }
 
         //validate whole form
-        if (!$indexForm->isValid($postData)) {
+        if (!$indexForm->isValid($postData)) {            
             $indexForm->setViewValues();
-            $this->view->form = $indexForm;
             $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
             return $this->renderScript('index/index.phtml');
         }
@@ -121,7 +119,7 @@ class Publish_FormController extends Controller_Action {
             $publishForm = new Publish_Form_PublishingSecond($this->_logger);
         }
         catch (Publish_Model_FormSessionTimeoutException $e) {
-            // Session timed out.
+            // Session timed out.            
             return $this->_redirectTo('index', '', 'index');
         }
         catch (Publish_Model_FormIncorrectFieldNameException $e) {
@@ -144,7 +142,7 @@ class Publish_FormController extends Controller_Action {
      */
     public function checkAction() {
         $this->view->languageSelectorDisabled = true;
-        $this->view->title = $this->view->translate('publish_controller_index');
+        $this->view->title = 'publish_controller_index';
 
         if (isset($this->session->documentType)) {
             $this->view->subtitle = $this->view->translate($this->session->documentType);
@@ -244,13 +242,14 @@ class Publish_FormController extends Controller_Action {
      */
     private function _initializeDocument($postData = null) {
         $documentType = isset($postData['documentType']) ? $postData['documentType'] : '';
+        $this->session->documentType = $documentType;
+
         $docModel = new Publish_Model_DocumentWorkflow();
 
         if (!isset($this->session->documentId) || $this->session->documentId == '') {
             $this->_logger->info(__METHOD__ . ' documentType = ' . $documentType);
             $this->document = $docModel->createDocument($documentType);
-            $this->session->documentId = $this->document->store();
-            $this->session->documentType = $documentType;
+            $this->session->documentId = $this->document->store();            
             $this->_logger->info(__METHOD__ . ' The corresponding document ID is: ' . $this->session->documentId);
         }
         else {
