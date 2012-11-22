@@ -1,5 +1,30 @@
 h1. OPUS 4 Release Notes
 
+h2. ======================== Release 4.3.0 2012-11-XX ========================
+
+h3. Anpassung an den PHTML-Dokumenttyp-Templates
+
+Sämtliche Dokumenttyp-Templates im Verzeichnis modules/publish/views/scripts/form
+wurden angepasst. Zum einen wurde ein auskommentierter Codeblock direkt unter
+dem OPUS4-Prolog entfernt. Außerdem wurde zur Vermeidung doppelter Übersetzungen
+die Zeile
+
+<h2><?= $this->title ?></h2>
+
+ersetzt durch
+
+<h2><?= $this->translate($this->title) ?></h2>
+
+Die alten Dokumenttyp-Templates funktionieren weiterhin. Wird die Änderung
+bezüglich der Übersetzung nicht nachgezogen, so erscheint auf der zweiten
+Seite des Publikationsformulars ein nicht übersetzter Titel. Die Funktionsweise
+der Formulare wird dadurch nicht berührt.
+
+Die Änderung wird automatisch beim Update übernommen, sofern die Dokumenttyp-
+Templates nicht vom Benutzer verändert wurden. Geänderte oder neu angelegte
+Dokumenttyp-Templates müssen manuell aktualisiert werden. Das Update-Skript
+wird bei geänderten Templates einen Hinweis ausgeben.
+
 h2. ======================== Release 4.2.2 2012-07-04 ========================
 
 h3. URNs werden nur noch für Dokumente mit sichtbarem Volltext vergeben
