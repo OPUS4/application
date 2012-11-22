@@ -173,4 +173,23 @@ class Publish_IndexControllerTest extends ControllerTestCase{
         $this->assertNotContains("<input type='hidden' name='bibliographie' value='0' />", $this->getResponse()->getBody());
     }
 
+    /**
+     * Regression Test for OPUSVIER-809
+     */
+    public function testDocumentTypeSelectBoxIsSortedAlphabetically() {
+        $this->dispatch('/publish');
+        $this->assertResponseCode(200);
+
+        $body = $this->getResponse()->getBody();
+
+        $doctypeAllPos = strpos($body, '<option label="Alle Felder (Testdokumenttyp)" value="all">Alle Felder (Testdokumenttyp)</option>');
+        $doctypeArticlePos = strpos($body, '<option label="Wissenschaftlicher Artikel" value="article">Wissenschaftlicher Artikel</option>');
+        $doctypeWorkingpaper = strpos($body, '<option label="Arbeitspapier" value="workingpaper">Arbeitspapier</option>');
+        $doctypeDemodemo = strpos($body, '<option label="demodemo" value="demodemo">demodemo</option>');
+
+        $this->assertTrue($doctypeAllPos < $doctypeWorkingpaper);
+        $this->assertTrue($doctypeWorkingpaper < $doctypeArticlePos);
+        $this->assertTrue($doctypeArticlePos < $doctypeDemodemo);        
+    }
+
 }
