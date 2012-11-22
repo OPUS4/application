@@ -170,7 +170,7 @@ function askYesNo() {
 function addConflict() {
     if [[ -z $CONFLICT ]]; then
         DEBUG "Setup CONFLICT"
-        CONFLICT="$BASEDIR/UPDATE-conflicts.log"
+        CONFLICT="$BASEDIR/UPDATE-conflicts-$(date -Iseconds).log"
         if [[ ! -f $CONFLICT ]]; then
             DEBUG "Write CONFLICT header"
             echo "Following files created conflicts and need to be changed manually:" > $CONFLICT
