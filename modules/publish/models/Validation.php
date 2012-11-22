@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,7 +27,7 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -47,7 +46,9 @@ class Publish_Model_Validation {
     public $listOptions = array();
     public $collectionRole;
 
-    public function __construct($datatype, $collectionRole=null, $options=null) {
+    private $view;
+
+    public function __construct($datatype, $collectionRole = null, $options = null, $view = null) {
         if (isset($options) && !empty($options)) {
             $this->listOptions = $options;
             $this->datatype = 'List';
@@ -55,11 +56,13 @@ class Publish_Model_Validation {
         if (isset($collectionRole)) {
             $this->collectionRole = $collectionRole;
         }
-        else
+        else {
             $this->datatype = $datatype;
+        }
         $this->log = Zend_Registry::get('Zend_Log');
         $this->sessionP = new Zend_Session_Namespace('Publish');
         $this->session = new Zend_Session_Namespace();
+        $this->view = $view;
     }
 
     public function validate() {
@@ -126,9 +129,10 @@ class Publish_Model_Validation {
         $validator->setLocale($lang);
         
         $messages = array(
-            Zend_Validate_Date::INVALID => 'publish_validation_error_date_invalid',
-            Zend_Validate_Date::INVALID_DATE => 'publish_validation_error_date_invaliddate',
-            Zend_Validate_Date::FALSEFORMAT => 'publish_validation_error_date_falseformat');
+            Zend_Validate_Date::INVALID => $this->view->translate('publish_validation_error_date_invalid'),
+            Zend_Validate_Date::INVALID_DATE => $this->view->translate('publish_validation_error_date_invaliddate'),
+            Zend_Validate_Date::FALSEFORMAT => $this->view->translate('publish_validation_error_date_falseformat')
+        );
         $validator->setMessages($messages);
 
         $validators[] = $validator;
@@ -139,7 +143,8 @@ class Publish_Model_Validation {
         $validators = array();
         $validator = new Zend_Validate_EmailAddress();
         $messages = array(
-            Zend_Validate_EmailAddress::INVALID => 'publish_validation_error_email_invalid');
+            Zend_Validate_EmailAddress::INVALID => $this->view->translate('publish_validation_error_email_invalid')
+        );
         $validator->setMessages($messages);
 
         $validators[] = $validator;
@@ -149,7 +154,7 @@ class Publish_Model_Validation {
     private function _validateInteger() {
         $validators = array();
         $validator = new Zend_Validate_Int();
-        $validator->setMessage('publish_validation_error_int', Zend_Validate_Int::NOT_INT);
+        $validator->setMessage($this->view->translate('publish_validation_error_int', Zend_Validate_Int::NOT_INT));
 
         $validators[] = $validator;
         return $validators;
@@ -168,7 +173,8 @@ class Publish_Model_Validation {
     private function validateSelect($set) {
         $validator = new Zend_Validate_InArray($set);
         $messages = array(
-            Zend_Validate_InArray::NOT_IN_ARRAY => 'publish_validation_error_inarray_notinarray');
+            Zend_Validate_InArray::NOT_IN_ARRAY => $this->view->translate('publish_validation_error_inarray_notinarray')
+        );
         $validator->setMessages($messages);
 
         $validators[] = $validator;
@@ -218,13 +224,14 @@ class Publish_Model_Validation {
         $validators = array();
 
         $validator1 = new Zend_Validate_GreaterThan('0000');
-        $validator1->setMessage('publish_validation_error_year_greaterthan', Zend_Validate_GreaterThan::NOT_GREATER);
+        $validator1->setMessage($this->view->translate('publish_validation_error_year_greaterthan'), Zend_Validate_GreaterThan::NOT_GREATER);
         $validators[] = $validator1;
 
         $validator2 = new Zend_Validate_Int();
         $messages = array(
-            Zend_Validate_Int::INVALID => 'publish_validation_error_year_intinvalid',
-            Zend_Validate_Int::NOT_INT => 'publish_validation_error_year_notint');
+            Zend_Validate_Int::INVALID => $this->view->translate('publish_validation_error_year_intinvalid'),
+            Zend_Validate_Int::NOT_INT => $this->view->translate('publish_validation_error_year_notint')
+        );
         $validator2->setMessages($messages);
         $validators[] = $validator2;
 

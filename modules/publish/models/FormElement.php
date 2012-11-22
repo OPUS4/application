@@ -85,7 +85,7 @@ class Publish_Model_FormElement {
     }
 
     public function initValidation() {
-        $this->validationObject = new Publish_Model_Validation($this->datatype, $this->collectionRole, $this->listOptions);
+        $this->validationObject = new Publish_Model_Validation($this->datatype, $this->collectionRole, $this->listOptions, $this->form->view);
         $this->validationObject->validate();
         $this->validation = $this->validationObject->validator;
     }
