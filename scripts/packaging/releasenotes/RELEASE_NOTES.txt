@@ -25,6 +25,7 @@ Templates nicht vom Benutzer verändert wurden. Geänderte oder neu angelegte
 Dokumenttyp-Templates müssen manuell aktualisiert werden. Das Update-Skript
 wird bei geänderten Templates einen Hinweis ausgeben.
 
+
 h2. ======================== Release 4.2.2 2012-07-04 ========================
 
 h3. URNs werden nur noch für Dokumente mit sichtbarem Volltext vergeben
