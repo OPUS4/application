@@ -78,7 +78,7 @@ class Publish_DepositController extends Controller_Action {
             return $this->_redirectTo('index', '', 'index');
         }
         
-        $this->view->title = $this->view->translate('publish_controller_index');
+        $this->view->title = 'publish_controller_index';
         $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
 
         //deposit data is coming from the session
