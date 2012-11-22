@@ -112,11 +112,11 @@ class Publish_Model_ExtendedValidation {
         $firstNames = $this->_getPersonFirstNameFields();
 
         foreach ($firstNames as $key => $name) {
-            $this->log->debug("(Validation): Firstname: " . $key . " with value " . $name);
+            $this->log->debug(__METHOD__ . " : Firstname: " . $key . " with value " . $name);
             if ($name !== "") {
                 //if $name is set and not null, find the corresponding lastname
                 $lastKey = str_replace('First', 'Last', $key);
-                $this->log->debug("(Validation): Replaced: " . $lastKey);
+                $this->log->debug(__METHOD__ . " : Replaced: " . $lastKey);
                 if ($this->data[$lastKey] == "") {
                     //error case: Firstname exists but Lastname not
                     $element = $this->form->getElement($lastKey);
@@ -137,7 +137,7 @@ class Publish_Model_ExtendedValidation {
         $emails = $this->_getPersonEmailFields();
 
         foreach ($emails as $key => $mail) {
-            $this->log->debug("(Validation): Email: " . $key . " with value " . $mail);
+            $this->log->debug(__METHOD__ . " : Email: " . $key . " with value " . $mail);
             if ($mail !== "") {
                 //if email is not null, find the corresponding first and last name
                 $lastName = str_replace('Email', 'LastName', $key);
@@ -167,7 +167,7 @@ class Publish_Model_ExtendedValidation {
         $emailNotifications = $this->_getPersonEmailNotificationFields();
 
         foreach ($emailNotifications as $key => $check) {
-            $this->log->debug("(Validation): Email Notification: " . $key . " with value " . $check);
+            $this->log->debug(__METHOD__ . " : Email Notification: " . $key . " with value " . $check);
             if ($check == "1") {
                 //if $check is set and not null, find the corresponding email and name
                 $emailKey = str_replace('Allow', '', $key);
@@ -176,7 +176,7 @@ class Publish_Model_ExtendedValidation {
                 $firstName = str_replace('Last', 'First', $lastName);
                 $titleName = str_replace('LastName', 'AcademicTitle', $lastName);
 
-                $this->log->debug("(Validation): Replaced: " . $emailKey);
+                $this->log->debug(__METHOD__ . " : Replaced: " . $emailKey);
 
                 if ($this->data[$lastName] != "" || $this->data[$firstName] != "") {
                     //just check the email if first or last name is given
@@ -324,7 +324,7 @@ class Publish_Model_ExtendedValidation {
         $languagesPerTitleType = array();
 
         foreach ($titles as $key => $title) {
-            $this->log->debug("(Validation): Title: " . $key . " with value " . $title);
+            $this->log->debug(__METHOD__ . " : Title: " . $key . " with value " . $title);
             if ($title !== "") {
 
                 $counter = $this->_getCounterOrType($key);
@@ -341,7 +341,7 @@ class Publish_Model_ExtendedValidation {
                 if ($this->data[$languageKey] != "") {
                     //count title types and languages => same languages for same title type must produce an error
                     $index = $titleType . $this->data[$languageKey]; //z.B. TitleSubdeu
-                    $this->log->debug("(Validation): language is set, titletype " . $titleType . " and language " . $languageKey . " index = " . $index);
+                    $this->log->debug(__METHOD__ . " : language is set, titletype " . $titleType . " and language " . $languageKey . " index = " . $index);
 
                     if (isset($languagesPerTitleType[$index])) {
                         $languagesPerTitleType[$index] = $languagesPerTitleType[$index] + 1;
@@ -350,7 +350,7 @@ class Publish_Model_ExtendedValidation {
                     }
 
                     if ($languagesPerTitleType[$index] > 1) {
-                        $this->log->debug("(Validation): > 1 -> error for element " . $languageKey);
+                        $this->log->debug(__METHOD__ . " : > 1 -> error for element " . $languageKey);
                         $element = $this->form->getElement($languageKey);
                         $element->clearErrorMessages();
                         $element->addError($this->form->view->translate('publish_error_justOneLanguagePerTitleType'));
@@ -540,7 +540,7 @@ class Publish_Model_ExtendedValidation {
 
         foreach ($checkBoxes AS $box) {
             if ($this->data[$box] === '0') {
-                $this->log->debug("(Validation): error for element " . $box);
+                $this->log->debug(__METHOD__ . " : error for element " . $box);
                 $element = $this->form->getElement($box);
                 $element->clearErrorMessages();
                 $element->addError($this->form->view->translate('publish_error_rights_checkbox_empty'));
@@ -638,7 +638,7 @@ class Publish_Model_ExtendedValidation {
                 }
 
                 if ($currSeries != null && !$currSeries->isNumberAvailable($number)) {
-                    $this->log->debug("(Validation): error for element " . $fieldname);
+                    $this->log->debug(__METHOD__ . " : error for element " . $fieldname);
                     $element = $this->form->getElement($fieldname);
                     $element->clearErrorMessages();
                     $element->addError($this->form->view->translate('publish_error_seriesnumber_not_available'));
@@ -671,7 +671,7 @@ class Publish_Model_ExtendedValidation {
                 $countSeries[$seriesId] = 1;
 
             if ($countSeries[$seriesId] > 1) {
-                $this->log->debug("(Validation): error for element " . $fieldname);
+                $this->log->debug(__METHOD__ . " : error for element " . $fieldname);
                 $element = $this->form->getElement($fieldname);
                 $element->clearErrorMessages();
                 $element->addError($this->form->view->translate('publish_error_only_one_series_per_document'));
