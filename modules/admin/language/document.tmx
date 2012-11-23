@@ -144,10 +144,10 @@
 
     <tu tuid="admin_document_section_thesis">
       <tuv xml:lang="en">
-        <seg>Thesis</seg>
+        <seg>Thesis, DNB</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Hochschulschriften</seg>
+        <seg>Hochschulschriften, DNB</seg>
       </tuv>
     </tu>
 
