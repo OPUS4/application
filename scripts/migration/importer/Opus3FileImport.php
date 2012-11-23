@@ -212,7 +212,7 @@ class Opus3FileImport {
         $handle = opendir($from);
         while ($file = readdir($handle)) {
             // Skip '.' , '..' and '.svn' and 'html'
-            if( $file == '.' || $file == '..' || $file === '.svn' || $file == 'html') {
+            if( $file == '.' || $file == '..' || $file === '.svn') {
                 continue;
             }
             
@@ -288,6 +288,7 @@ class Opus3FileImport {
         $comment = $this->getComment($f);
 
         $file = $this->tmpDoc->addFile();
+        $lang = $this->tmpDoc->getLanguage();
         $file->setPathName($pathName);
         $file->setTempFile($f);
         $file->setLanguage($lang);
