@@ -244,6 +244,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      * Method sets the different variables and arrays for the view and the templates in the first form
      */
     public function setViewValues() {
+        // TODO unused variable?
         $errors = $this->getMessages();
         
         foreach ($this->getElements() AS $currentElement => $value) {            
