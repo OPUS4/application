@@ -129,9 +129,9 @@ class Publish_Model_Validation {
         $validator->setLocale($lang);
         
         $messages = array(
-            Zend_Validate_Date::INVALID => $this->view->translate('publish_validation_error_date_invalid'),
-            Zend_Validate_Date::INVALID_DATE => $this->view->translate('publish_validation_error_date_invaliddate'),
-            Zend_Validate_Date::FALSEFORMAT => $this->view->translate('publish_validation_error_date_falseformat')
+            Zend_Validate_Date::INVALID => $this->translate('publish_validation_error_date_invalid'),
+            Zend_Validate_Date::INVALID_DATE => $this->translate('publish_validation_error_date_invaliddate'),
+            Zend_Validate_Date::FALSEFORMAT => $this->translate('publish_validation_error_date_falseformat')
         );
         $validator->setMessages($messages);
 
@@ -143,15 +143,15 @@ class Publish_Model_Validation {
         $validators = array();
         $validator = new Publish_Model_ValidationEmail();
         $messages = array(
-            Zend_Validate_EmailAddress::INVALID => $this->view->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::INVALID_FORMAT => $this->view->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::INVALID_HOSTNAME => $this->view->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::INVALID_LOCAL_PART => $this->view->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::INVALID_MX_RECORD => $this->view->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::INVALID_SEGMENT => $this->view->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::LENGTH_EXCEEDED => $this->view->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::QUOTED_STRING => $this->view->translate('publish_validation_error_email_invalid'),
-            Zend_Validate_EmailAddress::DOT_ATOM => $this->view->translate('publish_validation_error_email_invalid'),
+            Zend_Validate_EmailAddress::INVALID => $this->translate('publish_validation_error_email_invalid'),
+            Zend_Validate_EmailAddress::INVALID_FORMAT => $this->translate('publish_validation_error_email_invalid'),
+            Zend_Validate_EmailAddress::INVALID_HOSTNAME => $this->translate('publish_validation_error_email_invalid'),
+            Zend_Validate_EmailAddress::INVALID_LOCAL_PART => $this->translate('publish_validation_error_email_invalid'),
+            Zend_Validate_EmailAddress::INVALID_MX_RECORD => $this->translate('publish_validation_error_email_invalid'),
+            Zend_Validate_EmailAddress::INVALID_SEGMENT => $this->translate('publish_validation_error_email_invalid'),
+            Zend_Validate_EmailAddress::LENGTH_EXCEEDED => $this->translate('publish_validation_error_email_invalid'),
+            Zend_Validate_EmailAddress::QUOTED_STRING => $this->translate('publish_validation_error_email_invalid'),
+            Zend_Validate_EmailAddress::DOT_ATOM => $this->translate('publish_validation_error_email_invalid'),
         );
         $validator->setMessages($messages);
 
@@ -162,7 +162,7 @@ class Publish_Model_Validation {
     private function _validateInteger() {
         $validators = array();
         $validator = new Zend_Validate_Int();
-        $validator->setMessage($this->view->translate('publish_validation_error_int'), Zend_Validate_Int::NOT_INT);
+        $validator->setMessage($this->translate('publish_validation_error_int'), Zend_Validate_Int::NOT_INT);
 
         $validators[] = $validator;
         return $validators;
@@ -181,7 +181,7 @@ class Publish_Model_Validation {
     private function validateSelect($set) {
         $validator = new Zend_Validate_InArray($set);
         $messages = array(
-            Zend_Validate_InArray::NOT_IN_ARRAY => $this->view->translate('publish_validation_error_inarray_notinarray')
+            Zend_Validate_InArray::NOT_IN_ARRAY => $this->translate('publish_validation_error_inarray_notinarray')
         );
         $validator->setMessages($messages);
 
@@ -232,13 +232,13 @@ class Publish_Model_Validation {
         $validators = array();
 
         $validator1 = new Zend_Validate_GreaterThan('0000');
-        $validator1->setMessage($this->view->translate('publish_validation_error_year_greaterthan'), Zend_Validate_GreaterThan::NOT_GREATER);
+        $validator1->setMessage($this->translate('publish_validation_error_year_greaterthan'), Zend_Validate_GreaterThan::NOT_GREATER);
         $validators[] = $validator1;
 
         $validator2 = new Zend_Validate_Int();
         $messages = array(
-            Zend_Validate_Int::INVALID => $this->view->translate('publish_validation_error_year_intinvalid'),
-            Zend_Validate_Int::NOT_INT => $this->view->translate('publish_validation_error_year_notint')
+            Zend_Validate_Int::INVALID => $this->translate('publish_validation_error_year_intinvalid'),
+            Zend_Validate_Int::NOT_INT => $this->translate('publish_validation_error_year_notint')
         );
         $validator2->setMessages($messages);
         $validators[] = $validator2;
@@ -442,6 +442,13 @@ class Publish_Model_Validation {
             $thesisList["ID:" . $thesis->getId()] = $thesis->getDisplayName();
         }
         return $thesisList;
+    }
+
+    private function translate($key) {
+        if (is_null($this->view)) {
+            return $key;
+        }
+        return $this->view->translate($key);
     }
 
 }
