@@ -74,7 +74,7 @@ class Opus3FileImport {
     /**
      * Holds the path to the fulltexts in Opus3 for this certain ID
      *
-     * @var string  Defaults to null.
+     * @var string
      */
     protected $tmpPath = null;
 
@@ -91,7 +91,7 @@ class Opus3FileImport {
      *
      * @var array
      */
-    protected $numSuffix = array();
+    protected $numExtension = array();
 
 
     /**
@@ -120,8 +120,8 @@ class Opus3FileImport {
     /**
      * Loads an old Opus ID
      *
-     * @param Opus_Document $object Opus-Document for that the files should be registered
-     * @return void
+     * @param $document-id, $roleid
+     * @return integer
      */
     public function loadFiles($id, $roleid = null) {
         $this->tmpPath = null;
@@ -131,149 +131,86 @@ class Opus3FileImport {
         $opus3Id = $this->tmpDoc->getIdentifierOpus3(0)->getValue();
 
         $this->roleId = $roleid;
+        $this->tmpPath = $this->searchDir($this->path, $opus3Id);
+	
+	foreach($this->find_all_files($this->tmpPath) as $f) {
+	    array_push($this->tmpFiles, $f);
+	}
 
-        // Sets $this->tmpPath
-        $this->searchDir($this->path, $opus3Id);
-
-        if (!is_null($this->tmpPath)) {
-            // Sets $this->tmpFiles
-            $this->searchFiles($this->tmpPath);
-
-            /* Sort Files alphanumerical */
-            sort($this->tmpFiles);
-
-            $number = $this->saveFiles();
-            $this->removeFilesFromRole('guest');
-            $this->appendFilesToRole();
-
-            return $number;
+	sort($this->tmpFiles);
+	
+	foreach ($this->tmpFiles as $f) {
+            $this->saveFile($f);
         }
 
-        return;
+        $this->tmpDoc->store();
+
+        foreach ($this->tmpDoc->getFile() as $f) {
+            $this->removeFileFromRole($f, 'guest');
+            $this->appendFileToRole($f);
+        }
+
+        return count($this->tmpDoc->getFile());
     }
 
     /*
      * Search for tmpPath for specified Path and Opus3Id
      *
      * @param Directory and OpusId
-     * @return void
+     * @return string
      */
 
-    private function searchDir($from, $search) {
-
-        //echo "Search in ".$from." for id ".$search. "\n";
-
-        if(!is_dir($from)) {
-            return null;
-        }
-
-        $handle = opendir($from);
-        while ($file = readdir($handle)) {
-            // Skip '.' , '..' and '.svn' 
-            if( $file == '.' || $file == '..' || $file === '.svn') {
-                continue;
+    private function searchDir($root, $id) {
+        $seeds = array('.', 'campus', 'incoming');
+    	foreach ($seeds as $s) {
+            foreach (scandir($root. "/" . $s) as $year) {
+                if (!preg_match('/^[0-9]{4}$/', $year)) { continue; }
+                foreach (scandir($root. "/" . $s . "/" . $year) as $i) {
+                    if ($i == $id) {
+                        $this->logger->log_debug("Opus3FileImport", "Directory for Opus3Id '" . $id . "' : '" . $root . "/" . $s . "/" . $year . "/" . $i  . "'");
+                        return $root . "/" . $s . "/" . $year . "/" . $i;
+                    }
+                }
             }
-
-            $path = $from . '/' . $file;
-
-            // Workaround for Opus3-Id === year
-            if ( is_dir($path) && $from ===  $this->path) {
-                $this->searchDir($path, $search);
-            }
-
-            // If correct directory found: take it
-            else if ( is_dir($path) && $file === $search) {
-                $this->tmpPath = $path;
-                $this->logger->log_debug("Opus3FileImport", "Directory for Opus3Id '" . $search . "' : '" . $path . "'");
-            }
-            
-            // call function recursively
-            else if( is_dir($path) ) {  
-                $this->searchDir($path, $search);
-            }
-        }
-        closedir($handle);
-  
-        return;
+	}
+        return "";
     }
 
     /*
-     * Saerch for Files in specified path
+     * Search all Files in specified directory
      *
-     * @param Directory
-     * @return void
+     * @param directory
+     * @return array
      */
-
-    private function searchFiles($from)  {
-        if(! is_dir($from)) { 
-            return;
-        }
-
-        $handle = opendir($from);
-        while ($file = readdir($handle)) {
-            // Skip '.' , '..' and '.svn' and 'html'
-            if( $file == '.' || $file == '..' || $file === '.svn') {
-                continue;
+     
+    private function find_all_files($dir) {
+        $root = scandir($dir);
+        foreach($root as $value)  {
+            if($value === '.' || $value === '..' || $value === '.svn') {continue;}
+            if(is_file("$dir/$value")) {$result[]="$dir/$value";continue;}
+            foreach($this->find_all_files("$dir/$value") as $value) {
+		$result[]=$value;
             }
-            
-            $path = $from . '/' . $file;
-
-            // If directory: call function recursively
-            if (is_dir($path))  {
-                $this->searchFiles($path);
-            }
-
-            // If file: take it
-            else  {
-                array_push($this->tmpFiles, $path);
-            }
-            
         }
-        closedir($handle);
-
-        return;
-   }
-   
-   /*
-    * Save Files to Opus-Document and return number of saved files
-    * 
-    * @param void 
-    * @return int 
-    */
-
-    private function saveFiles()  {
-
-        if (count($this->tmpFiles) === 0) {
-           return 0;
-        }
-
-        $lang = $this->tmpDoc->getLanguage();
-        $total = 0;
-
-        $this->numSuffix = array();
-        $this->filesImported = array();
-
-        foreach ($this->tmpFiles as $f) {
-            if ($this->saveFile($f)) { $total++; }
-        }
-
-        if ($total > 0) {
-            $this->tmpDoc->store();
-        }
-
-        return $total;
+        return $result;
     }
 
 
+    /*
+     * Set File-Proprerties and save File to Document
+     *
+     * @param filename
+     * @return boolean
+     */
+
     private function saveFile($f) {
         if (!$this->isValidFile($f)) { return false; }
-
-        $prefix = $this->getPrefix($f);
-        $label = null;
-
-        $visibleInOai = $this->getVisibilityInOai($prefix);
-        $visibleInFrontdoor = $this->getVisibilityInFrontdoor($prefix);
-        $pathName = $this->getPathName($prefix, basename($f));
+	$subdir = $this->getSubdir($f);
+	$label = null;
+	
+	$visibleInOai = $this->getVisibilityInOai();
+        $visibleInFrontdoor = $this->getVisibilityInFrontdoor($subdir);
+        $pathName = $this->getPathName($subdir, basename($f));
         
         if ($pathName != iconv("UTF-8", "UTF-8//IGNORE", $pathName)) {
             $this->logger->log_error("Opus3FileImport", "Filename '" . $pathName . "' is corrupt. Changed to '" . utf8_encode($pathName) . "'.");
@@ -303,19 +240,18 @@ class Opus3FileImport {
     }
 
     /*
-    * Remove Access -Right from a user     *
+    * Remove Access -Right from a user
+    *
     * @param name
     * @return void
     */
 
-    private function removeFilesFromRole($name = null)  {
+    private function removeFileFromRole($file, $name = null)  {
         $role = null;
         if (!is_null($name)) {
             if (Opus_UserRole::fetchByname($name)) {
                 $role = Opus_UserRole::fetchByname($name);
-                foreach ($this->tmpDoc->getFile() as $f) {
-                    $role->removeAccessFile($f->getId());
-                }
+                $role->removeAccessFile($file->getId());
                 $role->store();
             }
         }
@@ -328,85 +264,77 @@ class Opus3FileImport {
     * @return void
     */
 
-    private function appendFilesToRole()  {
-        // Check if file have limited access
+    private function appendFileToRole($file)  {
         if (!is_null($this->roleId)) {
             $role = new Opus_UserRole($this->roleId);
-            foreach ($this->tmpDoc->getFile() as $f) {
-                $role->appendAccessFile($f->getId());
-                $this->logger->log_debug("Opus3FileImport", "Role '" . $role . "' for File '" . $f->getPathName() . "'");
-            }
+            $role->appendAccessFile($file->getId());
+            $this->logger->log_debug("Opus3FileImport", "Role '" . $role . "' for File '" . $file->getPathName() . "'");
             $role->store();
         }
     }
 
 
    /*
-    * Get Prefix from a full Filename according to the Fulltext-Directory
+    * Get SubDirectory from a full Filename according to the 'global' Fulltext-Directory
     *
     * @param file
     * @return string
     */
 
-    private function getPrefix($f)  {
+    private function getSubdir($f)  {
         if ($this->tmpPath == dirname($f)) { return; }
         return substr(dirname($f), strlen($this->tmpPath) + 1);
     }
 
     /*
-    * Get OAI-Visibility according to the Prefix and Role
+    * Get OAI-Visibility according to the Role
     *
     * @param string
     * @return boolean
     */
 
-    private function getVisibilityInOai($s)  {
+    private function getVisibilityInOai()  {
         if (!is_null($this->roleId)) {
             $role = new Opus_UserRole($this->roleId);
             if ($role->getName() == 'guest') {
-                if (is_int(strpos($s , "pdf")) &&  strpos($s , "pdf") == 0) { return true; }
-                if (is_int(strpos($s , "ps")) &&  strpos($s , "ps") == 0) { return true; }
+		return true;
             }
         }
         return false;
     }
 
     /*
-    * Get Frontdoor-Visibility according to the Prefix 
+    * Get Frontdoor-Visibility according to the Subdir
     *
     * @param string
     * @return boolean
     */
 
-    private function getVisibilityInFrontdoor($s)  {
-        if (is_int(strpos($s , "pdf")) &&  strpos($s , "pdf") == 0) { return true; }
-        if (is_int(strpos($s , "ps")) &&  strpos($s , "ps") == 0) { return true; }
-        return false;
+    private function getVisibilityInFrontdoor($subdir)  {
+	if (strpos($subdir , "original") === 0) {
+            return false;
+	}    
+        return true;
     }
 
     /*
-    * Get Pathname according to the Prefix and Basename
+    * Get Pathname according to the Subdir and Basename
     *
     * @param string, string
     * @return string
     */
 
-    private function getPathName($prefix, $basename) {
-        if (strlen($prefix) == 0) { return $basename; }
-        if ($prefix == "pdf" || $prefix == "ps") {
-            return $basename;
-        }
+    private function getPathName($subdir, $basename) {
+        if (strlen($subdir) == 0) { return $basename; }
 
-        $prefix = str_replace('/', '_', $prefix);
-        if (is_int(strpos($prefix , "pdf")) &&  strpos($prefix , "pdf") == 0) {
-            $prefix = str_replace('pdf_', '', $prefix);
-        }
-        elseif (is_int(strpos($prefix , "ps")) &&  strpos($prefix , "ps") == 0){
-            $prefix = str_replace('ps_', '', $prefix);
-        }
-        
-        return $prefix."_".$basename;
-    }
+        $name = str_replace('/', '_', $subdir)."_".$basename;
+	
+	if (strpos($subdir , "original") === 0) {
+            return $name;
+	}
+	
+	return substr($name, strpos($name, '_') + 1);
+     }
 
     /*
     * Checks if File is valid to import
@@ -440,18 +368,17 @@ class Opus3FileImport {
 
 
    /*
-    * Returns Label for File from a full Filename according to the Suffix
+    * Returns Label for File from a full Filename according to FileExtension
     *
     * @param file
     * @return string
     */
 
     private function getLabel($f)  {
-        $suffix = substr(strrchr ($f, "."), 1);
-        if (array_key_exists($suffix, $this->numSuffix) === false) { $this->numSuffix[$suffix] = 0; }
-        $this->numSuffix[$suffix]++;
-        $label = "Dokument_" . $this->numSuffix[$suffix] . "." . $suffix;
-
+        $extension = substr(strrchr ($f, "."), 1);
+        if (array_key_exists($extension, $this->numExtension) === false) { $this->numExtension[$extension] = 0; }
+        $this->numExtension[$extension]++;
+        $label = "Dokument_" . $this->numExtension[$extension] . "." . $extension;
         return $label;
     }
 
