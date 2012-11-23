@@ -116,7 +116,7 @@ class Solrsearch_Model_CollectionList {
 
     /**
      *
-     * @return array
+     * @return array of Opus_Collection
      */
     public function getChildren() {
         $children = array();
@@ -146,6 +146,10 @@ class Solrsearch_Model_CollectionList {
 
     public function getCollectionRoleTitlePlain() {
         return $this->collectionRole->getDisplayName('browsing');
+    }
+
+    public function getCollectionRole() {
+        return $this->collectionRole;
     }
 }
 

@@ -301,6 +301,7 @@ class Solrsearch_IndexController extends Controller_Action {
         }
 
         $this->view->collectionId = $collectionList->getCollectionId();
+        $this->view->collectionRole = $collectionList->getCollectionRole();
         $this->view->children = $collectionList->getChildren();
         $this->view->parents = $collectionList->getParents();
         $translation = $this->view->translate($collectionList->getCollectionRoleTitle());
