@@ -274,7 +274,11 @@ class Opus3XMLImport {
         } catch (Exception $e) {
             $imported['result'] = 'failure';
             $imported['message'] = $e->getMessage();
-            $imported['entry'] = $this->completeXML->saveXML($this->document);
+            if (!is_null($doc)) {
+                $imported['entry'] = $doc->toXml()->saveXML();
+            } else  {
+                $imported['entry'] = $this->completeXML->saveXML($this->document);
+            }
             $imported['oldid'] = $this->oldId;
         }
 
