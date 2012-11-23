@@ -87,15 +87,14 @@ class Publish_Model_DocumenttypeParser {
     public function parse() {
         //parse root node for tags named 'field'
         foreach ($this->dom->getElementsByTagname('field') as $field) {
-
             $this->currentElement = new Publish_Model_FormElement($this->form);
             $this->currentElement->setAdditionalFields($this->additionalFields);
             $this->_parseAttributes($field);
             $this->_parseSubFields($field);
             $this->_parseDefaultEntry($field);
             $this->_parseRequiredIfFulltext($field);
-            $this->currentElement->setPostValues($this->postValues);           
-            $group = $this->currentElement->initGroup();
+            $this->currentElement->setPostValues($this->postValues);            
+            $group = $this->currentElement->initGroup();            
             $this->formElements[] = $group;
            
             if (!isset($group)) {
@@ -142,10 +141,10 @@ class Publish_Model_DocumenttypeParser {
                 if ($this->isValidEnrichmentKey($elementName))
                     $elementName = 'Enrichment' . $elementName;            
 
-            if ($datatype == 'Collection' || $datatype == 'CollectionLeaf') {
+            if ($datatype == 'Collection' || $datatype == 'CollectionLeaf') {                
                 $collectionRole = $field->getAttribute('root');
                 $this->currentElement->setCollectionRole($collectionRole);
-                $this->currentElement->setCurrentCollectionId();                
+                $this->currentElement->setCurrentCollectionId();
             }
             
             $this->zendConformElementName($elementName);

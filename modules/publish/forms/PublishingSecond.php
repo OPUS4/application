@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -95,19 +94,21 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         try {
             // Fetch the current XML DOM structure of the documenttype.
             $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument($this->doctype);
-        } catch (Application_Exception $e) {
+        }
+        catch (Application_Exception $e) {
             $this->log->err("Unable to load document type '" . $this->doctype . "'");
+
             // TODO: Need another exception class?
             throw new Publish_Model_FormSessionTimeoutException();
         }
 
-        // Call the parser for that DOM object and the current form object and set important members.
+        // Call the parser for that DOM object and the current form object and set important members.                
         $parser = new Publish_Model_DocumenttypeParser($dom, $this);        
-        $parser->setAdditionalFields($this->additionalFields);        
-        $parser->setPostValues($this->postData);       
-        $parser->parse();        
-        $parserElements = $parser->getFormElements();        
-        
+        $parser->setAdditionalFields($this->additionalFields);                
+        $parser->setPostValues($this->postData);               
+        $parser->parse();
+        $parserElements = $parser->getFormElements();
+                
         $this->log->info("Documenttype Parser ready with parsing " . $this->doctype . " found: " . count($parserElements) . " elements." );
         
         // Fill the Form Object!

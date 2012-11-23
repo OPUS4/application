@@ -593,7 +593,7 @@ class Publish_Model_ExtendedValidation {
 
             if (isset($collId)) {
                 $coll = null;
-                try {
+                try {                    
                     $coll = new Opus_Collection($collId);
                 }
                 catch (Opus_Model_Exception $e) {

@@ -78,13 +78,13 @@ class Publish_Model_FormElement {
 
         $this->formElement = strtolower($formElement);        
         $this->datatype = $datatype;
-        $this->multiplicity = $multiplicity;
-
-        if (isset($this->datatype))
+        $this->multiplicity = $multiplicity;       
+        if (isset($this->datatype)) {
             $this->initValidation();
+        }
     }
 
-    public function initValidation() {
+    public function initValidation() {        
         $this->validationObject = new Publish_Model_Validation($this->datatype, $this->collectionRole, $this->listOptions, $this->form->view);
         $this->validationObject->validate();
         $this->validation = $this->validationObject->validator;
@@ -92,7 +92,7 @@ class Publish_Model_FormElement {
 
     public function initGroup() {
         if ($this->isGroup()) {
-            if ($this->isSubField === false) {
+            if ($this->isSubField === false) {                                
                 $this->group = new Publish_Model_DisplayGroup($this->elementName, $this->form, $this->multiplicity);
                 if (isset($this->collectionRole)) {
                     $this->group->isBrowseField = true;  

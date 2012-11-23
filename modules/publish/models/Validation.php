@@ -48,7 +48,7 @@ class Publish_Model_Validation {
 
     private $view;
 
-    public function __construct($datatype, $collectionRole = null, $options = null, $view = null) {
+    public function __construct($datatype, $collectionRole = null, $options = null, $view = null) {        
         if (isset($options) && !empty($options)) {
             $this->listOptions = $options;
             $this->datatype = 'List';
@@ -283,8 +283,6 @@ class Publish_Model_Validation {
     }
 
     private function _collectionSelect(){
-        // TODO do not use models within other modules
-        $browsingHelper1 = new Solrsearch_Model_CollectionRoles();
         $collectionRole = Opus_CollectionRole::fetchByName($this->collectionRole);
         if (is_null($collectionRole))
             return null;
@@ -292,21 +290,20 @@ class Publish_Model_Validation {
         if ($collectionRole->getVisible() == '1') {
             $children = array();
             if (!is_null($collectionRole)) {
-                if ($browsingHelper1->hasVisibleChildren($collectionRole)) {
+                if ($this->hasVisibleChildren($collectionRole)) {
                     $collectionId = $collectionRole->getRootCollection()->getId();
                     $collection = new Opus_Collection($collectionId);
                     $colls = $collection->getChildren();
-
                     foreach ($colls as $coll) {
-                        if ($coll->getVisible() == 1)
-                            $children['ID:' . $coll->getId()] = $coll->getDisplayName();
+                        if ($coll->getVisible() == 1) {
+                            $children['ID:' . $coll->getId()] = $coll->getDisplayNameForBrowsingContext($collectionRole);
+                        }
                     }
                 }
             }
             return $children;
         }
-        else
-            return null;
+        return null;
     }
 
     private function _languageSelect() {
@@ -450,6 +447,38 @@ class Publish_Model_Validation {
         }
         return $this->view->translate($key);
     }
+
+    /**
+     *
+     * code taken from Solrsearch_Model_CollectionRoles()
+     * 
+     */
+    private function hasVisibleChildren($collectionRole) {
+        $rootCollection = $collectionRole->getRootCollection();
+        if (is_null($rootCollection)) {
+            return false;
+	}
+        $children = $rootCollection->getChildren();
+
+        if ($this->isEmpty($children)) {
+            return false;
+        }
+        foreach ($children as $child) {
+            if ($child->getVisible() == '1') {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     *
+     * code taken from Solrsearch_Model_CollectionRoles()
+     */
+    private function isEmpty($children) {
+        !is_array($children) || empty($children);
+    }
+
 
 }
 

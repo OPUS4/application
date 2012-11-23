@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -33,9 +32,6 @@
  * @version     $Id$
  */
 
-/**
- * Description of Group
- */
 class Publish_Model_DisplayGroup {
 
     public $label;
@@ -314,7 +310,7 @@ class Publish_Model_DisplayGroup {
      * wird nur für Collection Roles aufgerufen
      */
     private function collectionEntries($id, $step, $fieldset) {        
-        try {
+        try {            
             $collection = new Opus_Collection($id);
         }
         catch (Exception $e) {
@@ -335,10 +331,11 @@ class Publish_Model_DisplayGroup {
                 $selectField->setDisableTranslator(true);
             }
             $selectField->setLabel('choose_collection_subcollection');
-            
+
+            $role = $collection->getRole();
             foreach ($colls as $coll) {
                 if ($coll->getVisible() == 1) {
-                    $children['ID:' . $coll->getId()] = $coll->getDisplayName();
+                    $children['ID:' . $coll->getId()] = $coll->getDisplayNameForBrowsingContext($role);
                 }
             }            
             $selectField->setMultiOptions($children);
