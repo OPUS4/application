@@ -343,6 +343,7 @@ class Opus3XMLImport {
                 if ($oa['config']->$old_value) {
                     $new_value = $oa['config']->$old_value;
                 } else {
+                    $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : No Mapping for 'language' in '" . $tag . "' with value '" . $old_value . "' found. Set to default-Value '" .  $oa['config']->default . "'");
                     $new_value = $oa['config']->default;
                 }
                 /* Check for TitleElements with duplicated Languages */
@@ -389,6 +390,7 @@ class Opus3XMLImport {
             if ($oa['config']->$old_value) {
                 $new_value = $oa['config']->$old_value;
             } else {
+                $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : No Mapping for '" . $m . "' in Document with value '" . $old_value . "' found. Set to default-Value '" .  $oa['config']->default . "'");
                 $new_value = $oa['config']->default;
             }
             $this->document->removeAttribute($oa['old']);
@@ -406,6 +408,7 @@ class Opus3XMLImport {
                 if ($oa['config']->$old_value) {
                     $new_value = $oa['config']->$old_value;
                 } else {
+                    $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : No Mapping for '" . $m . "' in '" . $tag . "' with value '" . $old_value . "' found. Set to default-Value '" .  $oa['config']->default . "'");
                     $new_value = $oa['config']->default;
                 }
                 $e->removeAttribute($oa['old']);
