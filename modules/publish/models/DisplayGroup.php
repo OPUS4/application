@@ -68,6 +68,9 @@ class Publish_Model_DisplayGroup {
         $this->session = new Zend_Session_Namespace('Publish');
     }
 
+    /**
+     * Wird für alle Group-Felder aufgerufen, die keine Collection Roles sind.
+     */
     public function makeDisplayGroup() {
         $displayGroup = array();
         $minNum = $this->minNumber();
@@ -101,6 +104,9 @@ class Publish_Model_DisplayGroup {
         $this->elements = $displayGroup;
     }
 
+    /**
+     * Diese Funktion wird nur für CollectionRoles aufgerufen!
+     */
     public function makeBrowseGroup() {
         $displayGroup = array();
         $minNum = $this->minNumber();
@@ -160,14 +166,14 @@ class Publish_Model_DisplayGroup {
             $maxStep = $this->collectionStep($i);
             $name = 'collId' . $maxStep . $this->elementName . '_' . $i;
             $formElement = $this->form->getElement($name);            
-            if (!is_null($formElement))
+            if (!is_null($formElement)) {
                 $formElement->setAttrib('disabled', false);
+            }
         }
-
 
         //count fields for "visually grouping" in template
         $groupCount = "num" . $this->label;
-        $this->session->$groupCount = 100;
+        $this->session->$groupCount = 100; // TODO: unklar
 
         $this->session->additionalFields[$this->elementName] = $maxNum;
 
@@ -202,6 +208,9 @@ class Publish_Model_DisplayGroup {
     /**
      * Method returns an array with one or two buttons for browsing the collections during publication.
      * The buttons have been added to the current Zend_Form.
+     *
+     * Wird nur für Collection Roles aufgerufen.
+     *
      * @return <Array> of button names
      */
     private function browseButtons() {        
@@ -210,37 +219,32 @@ class Publish_Model_DisplayGroup {
         $level = (int) count($this->collectionIds);
         try {
             $collection = new Opus_Collection($this->collectionIds[$level - 1]);
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
+            // TODO improve exception handling
             return null;
         }
+        
         $colls = $collection->getChildren();
         if (!is_null($colls) && count($colls) >= 1) {
-            //collection has children
-            $displayButton = false;
-            //check all children to prevent false buttons
+            // collection has children: check all children to prevent false buttons
             foreach ($colls AS $coll) {
                 if ($coll->getVisible() == 1) {
-                    $childs = $coll->getChildren();
-                    if (!is_null($childs) && count($childs) >= 1)
-                        foreach ($childs as $child)
-                            if ($child->getVisible() == 1) 
-                                $displayButton = true;
+                    // if collection has at least one visible child -> make button to browse down
+                    $downButton = $this->addDownButtontoGroup();
+                    $this->form->addElement($downButton);
+                    $displayGroup[] = $downButton->getName();
+                    break;
                 }
-            }
-            if ($displayButton) {
-                //Collection has at least one child with children -> make button to browse down
-                $downButton = $this->addDownButtontoGroup();
-                $this->form->addElement($downButton);
-                $displayGroup[] = $downButton->getName();
             }
         }
 
         $isRoot = $collection->isRoot();               
         if (!$isRoot && !is_null($this->collectionIds[0])) {
-            //Collection has parents -> make button to browse up
+            // collection has parents -> make button to browse up
             $upButton = $this->addUpButtontoGroup();
             $this->form->addElement($upButton);
-            $displayGroup[] = $upButton->getName();            
+            $displayGroup[] = $upButton->getName();          
         }
         
         return $displayGroup;
@@ -259,13 +263,14 @@ class Publish_Model_DisplayGroup {
             $this->elements[] = $error;
             return;
         }
-        if ($fieldset > 1)
+        
+        if ($fieldset > 1) {
             $this->collectionIds[] = $this->collectionIds[0];
+        }
         
         //initialize root node
         $this->session->additionalFields['collId0' . $this->elementName . '_' . $fieldset] = $this->collectionIds[0];        
-                        
-        $elements = array();
+                                
         //found collection level for the current fieldset        
         for ($j = 2; $j <= $step; $j++) {
             $prev = (int) $j - 1;           
@@ -274,11 +279,12 @@ class Publish_Model_DisplayGroup {
                 $id = $this->session->additionalFields['collId' . $prev . $this->elementName . '_' . $fieldset];
                 
                 if ($id != '0' || !is_null($id)) {
-                    //insert to array and geneerate field
+                    //insert to array and generate field
                     $this->collectionIds[] = $id;
                     $selectfield = $this->collectionEntries((int) $id, $j, $fieldset);
-                    if (!is_null($selectfield))
+                    if (!is_null($selectfield)) {
                         $this->elements[] = $selectfield;
+                    }
                 }
             }
         }
@@ -304,6 +310,9 @@ class Publish_Model_DisplayGroup {
         return $step;
     }
 
+    /**
+     * wird nur für Collection Roles aufgerufen
+     */
     private function collectionEntries($id, $step, $fieldset) {        
         try {
             $collection = new Opus_Collection($id);
@@ -312,6 +321,7 @@ class Publish_Model_DisplayGroup {
             // TODO: improve exception handling!
             return null;
         }
+        
         $colls = $collection->getChildren();
         $children = array();
 

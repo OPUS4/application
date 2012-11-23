@@ -122,10 +122,12 @@ class Publish_Model_FormElement {
 
                 $this->group->setAdditionalFields($this->additionalFields);
                 $this->group->setSubFields($this->subFormElements);
-                if (isset($this->collectionRole))
+                if (isset($this->collectionRole)) {
                     $this->group->makeBrowseGroup();
-                else
+                }
+                else {
                     $this->group->makeDisplayGroup();
+                }
             }
             $displayGroup = $this->form->addDisplayGroup($this->group->elements, $this->group->label);
             $displayGroup->setDisableTranslator(true);
