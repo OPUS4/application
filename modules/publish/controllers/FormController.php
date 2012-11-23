@@ -111,7 +111,7 @@ class Publish_FormController extends Controller_Action {
         }
 
         //form entries are valid: store data
-        $this->_storeBibliography($postData);
+        $this->_storeBibliography($postData, $config);
 
         //call the appropriate template
         $this->_helper->viewRenderer($this->session->documentType);
@@ -296,6 +296,7 @@ class Publish_FormController extends Controller_Action {
         $this->_logger->debug("File uploaded!!!");
         $this->session->fulltext = '1';
 
+        $perfomStore = false;
         foreach ($files AS $file => $fileValues) {
             if (!empty($fileValues['name'])) {
                 $this->_logger->info("uploaded: " . $fileValues['name']);
@@ -306,17 +307,24 @@ class Publish_FormController extends Controller_Action {
                 $docfile->setPathName(urldecode($fileValues['name']));
                 $docfile->setMimeType($fileValues['type']);
                 $docfile->setTempFile($fileValues['tmp_name']);
+                $perfomStore = true;
             }
         }
 
-        $this->document->store();
+        if ($perfomStore) {
+            $this->document->store();
+        }
         return true;
     }
 
     /**
      * Method sets the bibliography flag in database.
      */
-    private function _storeBibliography($data) {
+    private function _storeBibliography($data, $config) {
+        if (!isset($config->form->first->bibliographie) || $config->form->first->bibliographie != '1') {
+            return;
+        }
+        
         if (isset($data['bibliographie']) && $data['bibliographie'] === '1') {
             $this->_logger->debug("Bibliographie is set -> store it!");
             //store the document internal field BelongsToBibliography
