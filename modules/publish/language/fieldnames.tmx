@@ -267,24 +267,6 @@
         <seg>Sprache</seg>
       </tuv>
     </tu>
-            
-    <tu tuid="SubjectPACS">
-      <tuv xml:lang="en">
-        <seg>PACS Keyword</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>PACS Klasse</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="SubjectCCS">
-      <tuv xml:lang="en">
-        <seg>CCS Keyword</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>CCS Klasse</seg>
-      </tuv>
-    </tu>
                     
     <tu tuid="PersonEditorLastName">
       <tuv xml:lang="en">

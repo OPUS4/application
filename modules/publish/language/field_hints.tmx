@@ -165,6 +165,15 @@
         </tuv>
     </tu>
 
+	<tu tuid="hint_no_selection_SubjectBKL">
+        <tuv xml:lang="en">
+            <seg>Sorry: No BKL classes have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine BKL Klassen in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
+	
     <tu tuid="hint_no_selection_Series">
         <tuv xml:lang="en">
             <seg>Sorry: No series have been found in our database.</seg>
@@ -1008,6 +1017,29 @@ Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</s
         </tuv>
     </tu>
 
+	<!-- BKL ****************************************************** -->
+<tu tuid="hint_groupSubjectBKL">
+        <tuv xml:lang="en">
+            <seg>Please enter the BKL classes of the document. You may add more BKL classes by clicking on the button (or delete them).<br />
+See the overview at <a href="http://www.gbv.de/vgm/info/mitglieder/02Verbund/01Erschliessung/02Richtlinien/05Basisklassifikation/index" target="tab" >http://www.gbv.de/vgm/info/mitglieder/02Verbund/01Erschliessung/02Richtlinien/05Basisklassifikation/index</a>.<br />
+Example input: "17.08" (for Semiotik)</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte die BKL Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
+Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://www.gbv.de/vgm/info/mitglieder/02Verbund/01Erschliessung/02Richtlinien/05Basisklassifikation/index" target="tab" >http://www.gbv.de/vgm/info/mitglieder/02Verbund/01Erschliessung/02Richtlinien/05Basisklassifikation/index</a><br />
+Beispieleingabe: "17.08" (für Semiotik)</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_SubjectBKL">
+        <tuv xml:lang="en">
+            <seg>Please enter a BKL class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte eine BKL Klasse ein.</seg>
+        </tuv>
+    </tu>
+	
 <!-- SubjectUncontrolled ************************************************** -->
     <tu tuid="hint_groupSubjectUncontrolled">
         <tuv xml:lang="en">

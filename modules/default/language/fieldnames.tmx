@@ -448,12 +448,39 @@
             </tuv>
         </tu>
 
+		<tu tuid="SubjectPACS">
+			<tuv xml:lang="en">
+				<seg>PACS Keyword</seg>
+			</tuv>
+			<tuv xml:lang="de">
+				<seg>PACS Klasse</seg>
+			</tuv>
+		</tu>
+
+		<tu tuid="SubjectCCS">
+			<tuv xml:lang="en">
+				<seg>CCS Keyword</seg>
+			</tuv>
+			<tuv xml:lang="de">
+				<seg>CCS Klasse</seg>
+			</tuv>
+		</tu>
+	
         <tu tuid="SubjectJEL">
             <tuv xml:lang="en">
                 <seg>JEL Term</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>JEL Sachgruppe</seg>
+            </tuv>
+        </tu>
+		
+		<tu tuid="SubjectBKL">
+            <tuv xml:lang="en">
+                <seg>BKL Term</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>BKL Sachgruppe</seg>
             </tuv>
         </tu>
 

@@ -194,6 +194,15 @@ END OF COMMENT -->
       </tuv>
     </tu>
 
+	<tu tuid="groupSubjectBKL">
+      <tuv xml:lang="en">
+        <seg>BKL Classifications</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>BKL Sachgruppen / Klassifikationen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="groupSubjectUncontrolled">
       <tuv xml:lang="en">
         <seg>Tag(s)</seg>

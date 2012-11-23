@@ -261,6 +261,24 @@
             <seg>Die letzte JEL-Sachgruppe löschen</seg>
         </tuv>
     </tu>
+	
+	<tu tuid="button_label_add_one_moreSubjectBKL">
+        <tuv xml:lang="en">
+            <seg>Add one more BKL-Subject group</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Eine weitere BKL-Sachgruppe hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteSubjectBKL">
+        <tuv xml:lang="en">
+            <seg>Delete the last BKL-Subject group</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die letzte BKL-Sachgruppe löschen</seg>
+        </tuv>
+    </tu>
 
     <tu tuid="button_label_add_one_moreSubjectUncontrolled">
         <tuv xml:lang="en">

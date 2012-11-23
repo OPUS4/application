@@ -132,6 +132,7 @@
     <field name="SubjectPACS" required="no" formelement="Select" datatype="Collection" root="pacs" multiplicity="*"/>
     <field name="SubjectCCS" required="no" formelement="Select" datatype="Collection" root="ccs" multiplicity="*"/>
     <field name="SubjectJEL" required="no" formelement="Select" datatype="Collection" root="jel" multiplicity="*"/>
+	<field name="SubjectBKL" required="no" formelement="Select" datatype="Collection" root="bk" multiplicity="*"/>
     
     <!-- Enrichment fields NeuesFeld and NeuesSelect can be used after they 
         were created in administration -> Enrichments.
