@@ -47,9 +47,7 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
 
     function getElementAttributes($elementName) {
         $elementAttributes = array();
-        if (!is_null($this->getElement($elementName))) {
-            $nameWithoutCounter = explode('_', $elementName);
-            $nameWithoutCounter = $nameWithoutCounter[0];
+        if (!is_null($this->getElement($elementName))) {            
             $element = $this->getElement($elementName);
             $elementAttributes['value'] = $element->getValue();
             $elementAttributes['label'] = $element->getLabel();
@@ -57,7 +55,7 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
             $elementAttributes['id'] = $element->getId();
             $elementAttributes['type'] = $element->getType();
             $elementAttributes['desc'] = $element->getDescription();
-            $elementAttributes['hint'] = 'hint_' . $nameWithoutCounter;
+            $elementAttributes['hint'] = $this->getFieldHint($elementName);
             $elementAttributes['header'] = 'header_' . $elementName;
             $elementAttributes['disabled'] = $element->getAttrib('disabled');
             $elementAttributes['datatype'] = $element->getAttrib('datatype');
@@ -139,6 +137,16 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
         $submit->setLabel($this->view->translate($label));
         $this->addElement($submit);
         return $submit;
+    }
+
+    private function getFieldHint($elementName) {        
+        if (strpos($elementName, 'collId') === 0) {
+            // Übersetzung für "collection hints": Stufennummer im Elementnamen enthalten
+            // d.h. Elementname folgt dem Schema 'collId' . $level . $suffix
+            $elementName = preg_replace('/^collId\d*/', '', $elementName);
+        }
+        $nameWithoutCounter = explode('_', $elementName);
+        return 'hint_' . $nameWithoutCounter[0];
     }
 
 }

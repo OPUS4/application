@@ -89,8 +89,9 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
 
     // TODO: wofür wird der Parameter $options benötigt?
     function renderHtmlSelect($field, $options) {
+        // TODO move style to CSS
         $fieldset = "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id'] . '" class="form-selectfield"  id="' . $field['id'] . '"';
-        $fieldset .= ' title="' . htmlspecialchars ($this->view->translate($field['hint']), ENT_QUOTES) . '"';
+        $fieldset .= ' title="' . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . '"';
         if ($field['disabled'] === true) {
             $fieldset .= ' disabled="1" ';
         }
