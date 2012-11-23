@@ -362,42 +362,53 @@ class Publish_Model_FormElement {
     }
 
     private function showSelectField($options, $datatype=null, $elementName=null) {
-        if (isset($elementName))
+        if (isset($elementName)) {
             $name = $elementName;
-        else
+        }
+        else {
             $name = $this->elementName;
-
+        }
         $element = $this->form->createElement('select', $name);
         $element->setDisableTranslator(true);
 
-        if (isset($datatype))
+        if (isset($datatype)) {
             $switchVar = $datatype;
-        else
+        }
+        else {
             $switchVar = $this->datatype;
+        }
 
         switch ($switchVar) {
             case 'Collection': 
             case 'CollectionLeaf' :
                 $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_'.$this->collectionRole)), $options));
                 break;
+
             case 'Licence' :
                 $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_licence')), $options));
                 break;
+
             case 'Language' :
-                if ($this->elementName === 'Language')
+                if ($this->elementName === 'Language') {
                     $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_language')), $options));
-                else
+                }
+                else {
                     $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('inherit_document_language')), $options));
-                break;            
+                }
+                break;
+
             case 'ThesisGrantor' :
                 $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_thesisgrantor')), $options));
                 break;
+
             case 'ThesisPublisher':
                 $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_thesispublisher')), $options));
                 break;
+
             case 'Series':
                 $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_series')), $options));
                 break;
+
             default:
                 $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_option')), $options));
                 break;

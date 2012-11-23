@@ -219,11 +219,10 @@ class Publish_Model_Validation {
         $validators = array();
         $thesisGrantors = $this->getThesis($grantors);
         if (!is_null($thesisGrantors)) {
-            $thesises = array_keys($thesisGrantors);
-            
-            if (is_null($thesises))
+            $thesises = array_keys($thesisGrantors);            
+            if (is_null($thesises)) {
                 return null;
-            
+            }            
             return $this->validateSelect($thesises);
         }
     }
@@ -246,11 +245,13 @@ class Publish_Model_Validation {
         return $validators;
     }
 
-    public function selectOptions($datatype=null) {
-        if (isset($datatype))
+    public function selectOptions($datatype = null) {
+        if (isset($datatype)) {
             $switchVar = $datatype;
-        else
+        }
+        else {
             $switchVar = $this->datatype;
+        }
                 
         switch ($switchVar) {
             case 'Collection':
@@ -344,8 +345,9 @@ class Publish_Model_Validation {
 
     private function _thesisSelect($grantors = null) {
         $thesisList = $this->getThesis($grantors);
-        if (!is_null($thesisList))
+        if (!is_null($thesisList)) {
             asort($thesisList);
+        }
         return $thesisList;
     }
 
@@ -418,23 +420,24 @@ class Publish_Model_Validation {
     /**
      * Retrieves all available ThesisGrantors or ThesisPublishers in a array.
      * Used for generating a select box.
-     * @param <type> $grantors true -> ThesisGrantors, null -> ThesisPublishers
+     *
+     * @param $grantors true -> get thesis grantors
+     *                  null -> get thesis publishers
      * @return Array of Dnb_Institutes Objects
      */
     private function getThesis($grantors = null) {
-        $thesisList = array();
+        $thesises = array();
         if ($grantors === true) {
-            //get all grantors
             $thesises = Opus_DnbInstitute::getGrantors();
-            if (is_null($thesises) || empty($thesises))
-                return null;
-        } else if (is_null($grantors)) {
-            //get all Publishers
+        }
+        else if (is_null($grantors)) {
             $thesises = Opus_DnbInstitute::getPublishers();
-            if (is_null($thesises) || empty($thesises))
-                return null;
+        }
+        if (empty($thesises)) {
+            return null;
         }
 
+        $thesisList = array();
         foreach ($thesises AS $thesis) {
             $thesisList["ID:" . $thesis->getId()] = $thesis->getDisplayName();
         }
