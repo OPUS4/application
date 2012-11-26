@@ -129,7 +129,7 @@ class Solrsearch_Model_CollectionList {
     }
 
     public function getTitle() {
-        return $this->collection->getDisplayName('browsing');
+        return $this->collection->getDisplayNameForBrowsingContext($this->collectionRole);
     }
 
     public function getTheme() {

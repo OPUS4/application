@@ -43,7 +43,7 @@
                     $displayNameShortened = $this->collectionRoleTitle;
                 }
                 else {
-                    $displayNameShortened = $parent->getDisplayName();
+                    $displayNameShortened = $parent->getDisplayNameForBrowsingContext($this->collectionRole);
                 }
                 if (strlen($displayNameShortened) > 50) {
                     $displayNameShortened = substr($displayNameShortened, 0, 50) . '...';
