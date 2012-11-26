@@ -438,7 +438,7 @@ class Opus3XMLImport {
                 if (count($colls) > 0) {
                     foreach ($colls as $c) {
                         /* TODO: DDC-Hack */
-                        if (($oa['role'] === 'ddc') and (count($c->getChildren()) > 0)) { continue; }
+                        if (($oa['role'] === 'ddc') and ($c->hasChildren())) { continue; }
                         array_push($this->collections, $c->getId());
                     }
                 }

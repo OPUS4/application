@@ -279,7 +279,7 @@ class Admin_CollectionController extends Controller_Action {
                     array(
                         'id' => $rootCollection->getId(),
                         'name' => $this->view->translate('default_collection_role_' . $collectionRole->getDisplayName()),
-                        'hasChildren' => (count($rootCollection->getChildren()) > 0)));
+                        'hasChildren' => $rootCollection->hasChildren()));
         }
         $this->view->documentId = $documentId;
         $this->view->breadcrumb = array();
@@ -294,19 +294,17 @@ class Admin_CollectionController extends Controller_Action {
             $this->_redirectToAndExit('assign', array('failure' => 'specified collection does not have any subcollections'), 'collection', 'admin', array('document' => $documentId));
             return;
         }
-        else {
-            $this->view->collections = array();
-            foreach ($children as $child) {
-                array_push($this->view->collections,
-                        array(
-                            'id' => $child->getId(),
-                            'name' => $child->getNumberAndName(),
-                            'hasChildren' => (count($child->getChildren()) > 0)));
-            }
-            $this->view->documentId = $documentId;
-            $this->view->breadcrumb = array_reverse($collection->getParents());
-            $this->view->role_name = $collection->getRole()->getDisplayName();
+        $this->view->collections = array();
+        foreach ($children as $child) {
+            array_push($this->view->collections,
+                    array(
+                        'id' => $child->getId(),
+                        'name' => $child->getNumberAndName(),
+                        'hasChildren' => $child->hasChildren()));
         }
+        $this->view->documentId = $documentId;
+        $this->view->breadcrumb = array_reverse($collection->getParents());
+        $this->view->role_name = $collection->getRole()->getDisplayName();
     }
 
     private function getForm($collection, $id = null, $type = null) {

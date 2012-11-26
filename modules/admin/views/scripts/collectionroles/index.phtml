@@ -107,9 +107,7 @@
         </td>
         <td>
             <?php
-            $confirmKey = 
-                (is_null($collectionRole->getRootCollection()) || count($collectionRole->getRootCollection()->getChildren()) === 0) ?
-                    'confirm_deletion_empty' : 'confirm_deletion'
+            $confirmKey = (is_null($collectionRole->getRootCollection()) || !$collectionRole->getRootCollection()->hasChildren()) ? 'confirm_deletion_empty' : 'confirm_deletion'
             ?>
             <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'delete', 'roleid' => $collectionRole->getId()), null, true) ?>" onclick="return confirm('<?= $this->translate($confirmKey) ?>');">
             <?= $this->translate('admin_collections_role_delete') ?>
