@@ -2,5 +2,6 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 (151, NULL, 2012, NULL, NULL, '2012', 'preprint', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2012, '', NULL, '2012-01-16T19:23:14Z', '2012-01-16T19:23:14Z', 'published', NULL, 0);
 
 INSERT INTO `link_documents_collections` (`document_id`, `collection_id`, `role_id`) VALUES
-(151,16202, 18),
+(151,16204, 18),
+(151,16205, 18),
 (151,16203, 19);

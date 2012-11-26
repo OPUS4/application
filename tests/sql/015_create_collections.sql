@@ -13,4 +13,6 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`, `lef
 (15983, 10, NULL, NULL, NULL, 1, 2, NULL, 1),
 (15984, 11, NULL, NULL, NULL, 1, 2, NULL, 1),
 (16202, 18, NULL, NULL, NULL, 1, 2, NULL, 1),
-(16203, 19, NULL, NULL, NULL, 1, 2, NULL, 1);
+(16203, 19, NULL, NULL, NULL, 1, 2, NULL, 1),
+(16205, 18, '2', 'Test Frontdoor 1.2', 0, 4, 5, 16202, 1),
+(16204, 18, '1', 'Test Frontdoor 1.1', 0, 2, 3, 16202, 1);

@@ -429,6 +429,9 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->dispatch('/frontdoor/index/index/docId/151');
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'frontdoor-test-1:');
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'frontdoor-test-2:');
+      $this->assertQueryContentRegex('table.result-data.frontdoordata tr', '/frontdoor-test-1.*Test Frontdoor 1.1/');
+      $this->assertQueryContentContains('table.result-data.frontdoordata td', 'Test Frontdoor 1.2');
+      $this->assertNotQueryContentRegex('table.result-data.frontdoordata tr', '/frontdoor-test-1.*Test Frontdoor 1.2/');
    }
 
    /**
