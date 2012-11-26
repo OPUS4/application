@@ -72,16 +72,8 @@ class Solrsearch_Model_CollectionList {
         // additional root collection check
         $rootCollection = $collectionRole->getRootCollection();
         if (!is_null($rootCollection)) {
-            // check if at least one visible child exists
-            $visibleChild = false;
-            foreach ($rootCollection->getChildren() as $child) {
-                if ($child->getVisible() == '1') {
-                    $visibleChild = true;
-                    break;
-                }
-            }
-
-            if (!$visibleChild && count($rootCollection->getPublishedDocumentIds()) == 0) {
+            // check if at least one visible child exists or current collection has at least one associated document
+            if (!$rootCollection->hasVisibleChildren() && count($rootCollection->getPublishedDocumentIds()) == 0) {
                 throw new Solrsearch_Model_Exception("Collection role with id '" . $collectionRole->getId() . "' is not clickable and therefore not displayed.");
             }
         }
