@@ -452,5 +452,14 @@
       </tuv>
     </tu>
 
+	<tu tuid="publish_validation_error_email_invalid">
+      <tuv xml:lang="en">
+        <seg>Please check the mail address you provided.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte überprüfen Sie die angegebene Email-Adresse!</seg>
+      </tuv>
+    </tu>
+	
     </body>
 </tmx>
