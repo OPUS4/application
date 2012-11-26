@@ -309,11 +309,10 @@ class Publish_Model_DisplayGroup {
             // TODO: improve exception handling!
             return null;
         }
-        
-        $colls = $collection->getChildren();
+                
         $children = array();
 
-        if (!is_null($colls) && count($colls) >= 1) {
+        if ($collection->hasChildren()) {
             if ($this->implicitGroup) {
                 $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName);
                 $selectField->setDisableTranslator(true);
@@ -325,10 +324,9 @@ class Publish_Model_DisplayGroup {
             $selectField->setLabel('choose_collection_subcollection');
 
             $role = $collection->getRole();
+            $colls = $collection->getVisibleChildren();
             foreach ($colls as $coll) {
-                if ($coll->getVisible() == 1) {
-                    $children['ID:' . $coll->getId()] = $coll->getDisplayNameForBrowsingContext($role);
-                }
+                $children['ID:' . $coll->getId()] = $coll->getDisplayNameForBrowsingContext($role);
             }            
             $selectField->setMultiOptions($children);
         }
