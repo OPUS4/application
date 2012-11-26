@@ -36,7 +36,64 @@ class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase {
 
     public function testGetAllVisible() {
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
-        $collectionRoles->getAllVisible();
+        $visibleRoles = $collectionRoles->getAllVisible();
+        $this->assertEquals(11, count($visibleRoles));
     }
+
+    public function testHasVisibleChildrenForEmptyCollectionRole() {
+        $collectionRoles = new Solrsearch_Model_CollectionRoles();
+
+        $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');
+        $method = $class->getMethod('hasVisibleChildren');
+        $method->setAccessible(true);
+        $hasChildren = $method->invokeArgs($collectionRoles, array(new Opus_CollectionRole(17)));
+
+        $this->assertFalse($hasChildren);
+    }
+
+    public function testHasVisibleChildrenForNonEmptyCollectionRole() {
+        $collectionRoles = new Solrsearch_Model_CollectionRoles();
+
+        $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');
+        $method = $class->getMethod('hasVisibleChildren');
+        $method->setAccessible(true);
+        $hasChildren = $method->invokeArgs($collectionRoles, array(new Opus_CollectionRole(7)));
+
+        $this->assertTrue($hasChildren);
+    }
+
+    public function testHasPublishedDocsForEmptyCollectionRole() {
+        $collectionRoles = new Solrsearch_Model_CollectionRoles();
+
+        $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');
+        $method = $class->getMethod('hasPublishedDocs');
+        $method->setAccessible(true);
+        $hasChildren = $method->invokeArgs($collectionRoles, array(new Opus_CollectionRole(17)));
+
+        $this->assertFalse($hasChildren);
+    }
+
+    public function testHasPublishedDocsForNonEmptyCollectionRoleWithoutPublishedDocs() {
+        $collectionRoles = new Solrsearch_Model_CollectionRoles();
+
+        $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');
+        $method = $class->getMethod('hasPublishedDocs');
+        $method->setAccessible(true);
+        $hasChildren = $method->invokeArgs($collectionRoles, array(new Opus_CollectionRole(7)));
+
+        $this->assertFalse($hasChildren);
+    }
+
+    public function testHasPublishedDocsForNonEmptyCollectionRoleWithPublishedDocs() {
+        $collectionRoles = new Solrsearch_Model_CollectionRoles();
+
+        $class = new ReflectionClass('Solrsearch_Model_CollectionRoles');
+        $method = $class->getMethod('hasPublishedDocs');
+        $method->setAccessible(true);
+        $hasChildren = $method->invokeArgs($collectionRoles, array(new Opus_CollectionRole(5)));
+
+        $this->assertTrue($hasChildren);
+    }
+
 }
 

@@ -55,22 +55,12 @@ class Solrsearch_Model_CollectionRoles {
      * @param Opus_CollectionRole $collectionRole
      * @return bool
      */
-    public function hasVisibleChildren($collectionRole) {
+    private function hasVisibleChildren($collectionRole) {
         $rootCollection = $collectionRole->getRootCollection();
         if (is_null($rootCollection)) {
             return false;
 	}
-        $children = $rootCollection->getChildren();
-
-        if ($this->isEmpty($children)) {
-            return false;
-        }
-        foreach ($children as $child) {
-            if ($child->getVisible() == '1') {
-                return true;
-            }
-        }
-        return false;
+        return $rootCollection->hasVisibleChildren();
     }
 
     /**
@@ -87,10 +77,6 @@ class Solrsearch_Model_CollectionRoles {
         }
         $publishedDocIDs = $rootCollection->getPublishedDocumentIds();
         return is_array($publishedDocIDs) && !empty($publishedDocIDs);
-    }
-
-    private function isEmpty($children) {
-        !is_array($children) || empty($children);
     }
 
     private function isVisible($collectionRole) {
