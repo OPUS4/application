@@ -59,7 +59,8 @@
     <xsl:param name="numOfShortAbstractChars" />
 
     <xsl:key name="list" match="/Opus/Opus_Document/Subject[@Type='uncontrolled']" use="@Language"/>
-    
+    <xsl:key name="userCollections-by-roleId" match="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel']" use="@RoleId"/>
+
     <xsl:template match="/">
         <div about="{/Opus/Opus_Document/TitleMain/@Value}">
             <xsl:apply-templates select="Opus/Opus_Document" />
@@ -269,8 +270,8 @@
             <xsl:apply-templates select="Collection[@RoleName='jel']" />            
             <xsl:apply-templates select="IdentifierSerial" />
 
-            <xsl:for-each select="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel']">
-               <xsl:apply-templates select="." />
+            <xsl:for-each select="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel'][count(. | key('userCollections-by-roleId', @RoleId)[1]) = 1]">
+                <xsl:apply-templates select="key('userCollections-by-roleId', @RoleId)" />
             </xsl:for-each>
             <!-- End Collection Roles -->
 
