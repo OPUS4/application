@@ -111,13 +111,7 @@ class Solrsearch_Model_CollectionList {
      * @return array of Opus_Collection
      */
     public function getChildren() {
-        $children = array();
-        foreach ($this->collection->getChildren() as $child) {
-            if ($child->getVisible() === '1') {
-                $children[] = $child;
-            }
-        }
-        return $children;
+        return $this->collection->getVisibleChildren();
     }
 
     public function getTitle() {
