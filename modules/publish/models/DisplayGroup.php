@@ -391,14 +391,22 @@ class Publish_Model_DisplayGroup {
     private function addDownButtontoGroup() {
         $downButton = $this->form->createElement('submit', 'browseDown' . $this->elementName);
         $downButton->setDisableTranslator(true);
-        $downButton->setLabel($this->form->view->translate('button_label_browse_down'));
+        $label = $this->form->view->translate('button_label_browse_down' . $this->elementName);
+        if ($label == 'button_label_browse_down' . $this->elementName) {
+            $label = $this->form->view->translate('button_label_browse_down');
+        }
+        $downButton->setLabel($label);
         return $downButton;
     }
 
     private function addUpButtontoGroup() {
         $upButton = $this->form->createElement('submit', 'browseUp' . $this->elementName);
         $upButton->setDisableTranslator(true);
-        $upButton->setLabel($this->form->view->translate('button_label_browse_up'));
+        $label = $this->form->view->translate('button_label_browse_up' . $this->elementName);
+        if ($label == 'button_label_browse_up' . $this->elementName) {
+            $label = $this->form->view->translate('button_label_browse_up');
+        }
+        $upButton->setLabel($label);
         return $upButton;
     }
 
