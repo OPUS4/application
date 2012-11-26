@@ -220,19 +220,11 @@ class Publish_Model_DisplayGroup {
             // TODO improve exception handling
             return null;
         }
-        
-        $colls = $collection->getChildren();
-        if (!is_null($colls) && count($colls) >= 1) {
-            // collection has children: check all children to prevent false buttons
-            foreach ($colls AS $coll) {
-                if ($coll->getVisible() == 1) {
-                    // if collection has at least one visible child -> make button to browse down
-                    $downButton = $this->addDownButtontoGroup();
-                    $this->form->addElement($downButton);
-                    $displayGroup[] = $downButton->getName();
-                    break;
-                }
-            }
+
+        if ($collection->hasVisibleChildren()) {
+            $downButton = $this->addDownButtontoGroup();
+            $this->form->addElement($downButton);
+            $displayGroup[] = $downButton->getName();
         }
 
         $isRoot = $collection->isRoot();               
