@@ -461,27 +461,7 @@ class Publish_Model_Validation {
         if (is_null($rootCollection)) {
             return false;
 	}
-        $children = $rootCollection->getChildren();
-
-        if ($this->isEmpty($children)) {
-            return false;
-        }
-        foreach ($children as $child) {
-            if ($child->getVisible() == '1') {
-                return true;
-            }
-        }
-        return false;
+        return $rootCollection->hasVisibleChildren();
     }
-
-    /**
-     *
-     * code taken from Solrsearch_Model_CollectionRoles()
-     */
-    private function isEmpty($children) {
-        !is_array($children) || empty($children);
-    }
-
-
 }
 
