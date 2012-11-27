@@ -54,8 +54,8 @@ class Util_NotificationTest extends ControllerTestCase {
         $this->config->notification->document->published->template = 'published.phtml';
         $this->config->notification->document->submitted->email = "submitted@localhost";
         $this->config->notification->document->published->email = "published@localhost";
-    }    
-
+    }
+    
     /**
      * Diese Testmethode hat keine Assertions. Sie stellt lediglich sicher, dass alle Codeteile
      * der Funktion prepareMail durchlaufen werden.
@@ -434,14 +434,7 @@ class Util_NotificationTest extends ControllerTestCase {
     }
     
     public function testCreateWorkerJobIfAsyncEnabled() {
-        if (isset($this->config->runjobs->asynchronous)) {
-            $origAsyncFlag = $this->config->runjobs->asynchronous;
-            $this->config->runjobs->asynchronous = true;
-        } else {
-            $origAsyncFlag = null;
-            $this->config->merge(new Zend_Config(array('runjobs' => array('asynchronous' => true))));
-        }
-
+        $this->config->merge(new Zend_Config(array('runjobs' => array('asynchronous' => 1))));
         $this->assertEquals(0, Opus_Job::getCount(), 'test data changed.');
 
         $doc = new Opus_Document();
@@ -467,14 +460,8 @@ class Util_NotificationTest extends ControllerTestCase {
                 $job->delete();
             }
         }
-        if (is_null($origAsyncFlag)) {
-            unset($this->config->runjobs->asynchronous);
-        } else {
-            $this->config->runjobs->asynchronous = $origAsyncFlag;
-        }
-        
     }
-
+    
     private function getMethod($methodName) {
         $class = new ReflectionClass('Util_Notification');
         $method = $class->getMethod($methodName);
