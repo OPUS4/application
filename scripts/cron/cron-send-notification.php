@@ -42,7 +42,7 @@ $jobrunner->setDelay(0);
 // set a limit of 100 index jobs per run
 $jobrunner->setLimit(100);
 
-$mailWorker = new Opus_Job_Worker_MailNotification(false);
+$mailWorker = new Opus_Job_Worker_MailNotification(null, false);
 $mailWorker->setLogger(Zend_Registry::get('Zend_Log'));
 
 $jobrunner->registerWorker($mailWorker);
