@@ -31,6 +31,18 @@
  * @version     $Id$
  */
 
+
+/**
+ *
+ * This file is not part of the main OPUS 4 distribution!
+ *
+ * It is currently used in the matheon module. The tarball
+ * creation script prepare_directories.sh ignores this file and
+ * does not add it to the tarball.
+ *
+ *
+ */
+
 define('APPLICATION_ENV', 'production');
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
