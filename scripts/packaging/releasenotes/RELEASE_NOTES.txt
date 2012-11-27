@@ -25,6 +25,20 @@ Templates nicht vom Benutzer verändert wurden. Geänderte oder neu angelegte
 Dokumenttyp-Templates müssen manuell aktualisiert werden. Das Update-Skript
 wird bei geänderten Templates einen Hinweis ausgeben.
 
+h3. Änderung an der Frontdoor - index.xslt
+
+Die Datei modules/frontdoor/view/scripts/index.xslt wurde aufgeteilt, 
+um die Übersichtlichkeit und Wartbarkeit zu verbessern.
+Die bisher in dieser Datei definierten XSLT-Templates wurden in mehrere Dateien
+verschoben, die nun im Unterverzeichnis "templates" liegen.
+
+Sofern sie eine eigene, angepasste index.xslt verwenden, können sie diese ohne
+Änderungen weiter verwenden. Die ausgelagerten Templates werden in diesem Fall
+nicht verwendet. 
+Stellen Sie dabei sicher, dass ihre eigene Version der Datei bei einem Update 
+nicht überschrieben wird, indem sie vor dem Update eine Sicherungskopie 
+erstellen und diese danach wieder herstellen. Eventuelle Änderungen, die sich
+durch ein Update ergeben, müssen in diesem Fall von Hand eingearbeitet werden.
 
 h2. ======================== Release 4.2.2 2012-07-04 ========================
 
