@@ -107,7 +107,10 @@ rm -v opus4/modules/publish/views/scripts/form/demodemo.phtml
 
 # exclude modules
 rm -rv opus4/modules/{remotecontrol,matheon}
-rm -rv opus4/scripts/{packaging,cron,indexing,install}
+
+# exclude scripts
+rm -rv opus4/scripts/{packaging,indexing,install}
+rm -rv opus4/scripts/cron/cron-send-review-request.php
 
 # exclude framework classes
 rm -rvf opus4/library/Opus/Search/{Adapter,Index}/Lucene/
