@@ -679,8 +679,11 @@ class Admin_DocumentController extends Controller_Action {
                 'section' => $section
             ), 'default', false);
 
-            $editLabels[$section] = $this->view->translate(
-                    'admin_document_edit_section');
+			$translation = $this->view->translate('admin_document_edit_section_' . $section);
+			if ($translation == 'admin_document_edit_section_' . $section) {
+				$translation = $this->view->translate('admin_document_edit_section');
+			}
+            $editLabels[$section] = $translation;
 
             // Links for 'Add' pages
             $addUrls[$section] = $this->view->url(array(
@@ -691,8 +694,11 @@ class Admin_DocumentController extends Controller_Action {
                 'section' => $section
             ), 'default', false);
 
-            $addLabels[$section] = $this->view->translate(
-                    'admin_document_add_section');
+			$translation = $this->view->translate('admin_document_add_section_' . $section);
+			if ($translation == 'admin_document_add_section_' . $section) {
+				$translation = $this->view->translate('admin_document_add_section');
+			}
+            $addLabels[$section] = $translation;
         }
 
         $this->view->editUrls = $editUrls;
