@@ -48,52 +48,52 @@
 	    </xsl:variable>
 
 	    <xsl:if test="/mysqldump/database/table_data[@name='temp_autor']/row[field[@name='source_opus']=$id]">
-		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_autor
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. Table:temp_autor
 </xsl:text>
 	    </xsl:if>
 
 	    <xsl:if test="/mysqldump/database/table_data[@name='temp_coll']/row[field[@name='source_opus']=$id]">
-		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_coll
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. Table:temp_coll
 </xsl:text>
 	    </xsl:if>
 
 	    <xsl:if test="/mysqldump/database/table_data[@name='temp_diss']/row[field[@name='source_opus']=$id]">
-		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_diss
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. Table:temp_diss
 </xsl:text>
 	    </xsl:if>
 
 	    <xsl:if test="/mysqldump/database/table_data[@name='temp_inst']/row[field[@name='source_opus']=$id]">
-		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_inst
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. Table:temp_inst
 </xsl:text>
 	    </xsl:if>
 
 	    <xsl:if test="/mysqldump/database/table_data[@name='temp_schriftenreihe']/row[field[@name='source_opus']=$id]">
-		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_schriftenreihe
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. Table:temp_schriftenreihe
 </xsl:text>
 	    </xsl:if>
 
 	    <xsl:if test="/mysqldump/database/table_data[@name='temp_ccs']/row[field[@name='source_opus']=$id]">
-		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_ccs
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. Table:temp_ccs
 </xsl:text>
 	    </xsl:if>
 
 	    <xsl:if test="/mysqldump/database/table_data[@name='temp_jel']/row[field[@name='source_opus']=$id]">
-		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_jel
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. Table:temp_jel
 </xsl:text>
 	    </xsl:if>
 
 	    <xsl:if test="/mysqldump/database/table_data[@name='temp_msc']/row[field[@name='source_opus']=$id]">
-		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_msc
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. Table:temp_msc
 </xsl:text>
 	    </xsl:if>
 
 	    <xsl:if test="/mysqldump/database/table_data[@name='temp_pacs']/row[field[@name='source_opus']=$id]">
-		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_pacs
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. Table:temp_pacs
 </xsl:text>
 	    </xsl:if>
 
 	    <xsl:if test="/mysqldump/database/table_data[@name='temp_rvk']/row[field[@name='source_opus']=$id]">
-		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. temp_rvk
+		<xsl:text>Opus3-Id:</xsl:text><xsl:value-of select="$id" /><xsl:text>. Table:temp_rvk
 </xsl:text>
 	    </xsl:if>
 	</xsl:for-each>
