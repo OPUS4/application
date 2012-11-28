@@ -132,8 +132,10 @@ class Opus3FileImport {
 
         $this->roleId = $roleid;
         $this->tmpPath = $this->searchDir($this->path, $opus3Id);
-	
-	foreach($this->find_all_files($this->tmpPath) as $f) {
+
+        if (is_null($this->tmpPath)) { return 0; }
+
+    	foreach($this->find_all_files($this->tmpPath) as $f) {
 	    array_push($this->tmpFiles, $f);
 	}
 
@@ -173,7 +175,7 @@ class Opus3FileImport {
                 }
             }
 	}
-        return "";
+        return null;
     }
 
     /*
