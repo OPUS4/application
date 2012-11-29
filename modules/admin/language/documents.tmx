@@ -216,10 +216,10 @@
 
     <tu tuid="admin_documents_open_frontdoor">
       <tuv xml:lang="en">
-        <seg>Open in Frontdoor</seg>
+        <seg>Preview: Frontdoor</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>In Frontdoor zeigen</seg>
+        <seg>Vorschau: Frontdoor</seg>
       </tuv>
     </tu>
 
