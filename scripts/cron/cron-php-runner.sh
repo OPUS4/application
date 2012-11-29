@@ -36,7 +36,7 @@ BASENAME=/usr/bin/basename
 DATE=/bin/date
 PHP=/usr/bin/php
 
-set -e
+#set -e
 
 if [ "0$#" -lt 2 ] ; then
    echo "USAGE: $0 PHP-SCRIPT LOCK-DIRECTORY [LOG-DIRECTORY]"

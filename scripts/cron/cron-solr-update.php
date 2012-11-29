@@ -38,10 +38,6 @@ define('APPLICATION_ENV', 'development');
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-// Disable for testing.
-// $d = new Opus_Document(1); $d->setServerState('published')->store();
-try {
-    // set up job runner
     $jobrunner = new Opus_Job_Runner;
     $jobrunner->setLogger(Zend_Registry::get('Zend_Log'));
 
@@ -52,11 +48,7 @@ try {
     $jobrunner->setLimit(100);
 
     $indexWorker = new Opus_Job_Worker_IndexOpusDocument;
-    $indexWorker->setIndex(new Opus_SolrSearch_Index_Indexer(false));
     $jobrunner->registerWorker($indexWorker);
 
     // run processing
     $jobrunner->run();
-} catch (Exception $e) {
-    echo "Exception: ".$e->getMessage()."\n";
-}
