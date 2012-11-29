@@ -52,6 +52,33 @@
       </tuv>
     </tu>
 
+	<tu tuid="admin_document_edit_section_series">
+      <tuv xml:lang="en">
+        <seg>Edit assignment(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zuweisung(en) ändern</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="admin_document_edit_section_licences">
+      <tuv xml:lang="en">
+        <seg>Edit assignment(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zuweisung(en) ändern</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="admin_document_edit_section_collections">
+      <tuv xml:lang="en">
+        <seg>Edit assignment(s)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Zuweisung(en) ändern</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="admin_document_add_section">
       <tuv xml:lang="en">
         <seg>Add New</seg>
@@ -61,6 +88,33 @@
       </tuv>
     </tu>
 
+	<tu tuid="admin_document_add_section_series">
+      <tuv xml:lang="en">
+        <seg>Add new Assignment</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neu Zuweisung hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="admin_document_add_section_licences">
+      <tuv xml:lang="en">
+        <seg>Add new Assignment</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neu Zuweisung hinzufügen</seg>
+      </tuv>
+    </tu>
+	
+	<tu tuid="admin_document_add_section_collections">
+      <tuv xml:lang="en">
+        <seg>Add new Assignment</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Neu Zuweisung hinzufügen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="admin_document_section_general">
       <tuv xml:lang="en">
         <seg>General</seg>
