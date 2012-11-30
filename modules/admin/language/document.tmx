@@ -189,10 +189,10 @@
 
     <tu tuid="admin_document_section_thesis">
       <tuv xml:lang="en">
-        <seg>Thesis, DNB</seg>
+        <seg>Thesis statement, DNB</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Hochschulschriften, DNB</seg>
+        <seg>Hochschulschriftenvermerk, DNB</seg>
       </tuv>
     </tu>
 
@@ -603,10 +603,10 @@
 
     <tu tuid="admin_document_edit_thesis">
       <tuv xml:lang="en">
-        <seg>Edit Thesis Information</seg>
+        <seg>Edit thesis statement</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Hochschulschriften editieren</seg>
+        <seg>Hochschulschriftenvermerk editieren</seg>
       </tuv>
     </tu>
 
