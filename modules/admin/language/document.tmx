@@ -106,15 +106,6 @@
       </tuv>
     </tu>
 	
-	<tu tuid="admin_document_add_section_collections">
-      <tuv xml:lang="en">
-        <seg>Add new Assignment</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Neue Zuweisung hinzufügen</seg>
-      </tuv>
-    </tu>
-	
     <tu tuid="admin_document_section_general">
       <tuv xml:lang="en">
         <seg>General</seg>
