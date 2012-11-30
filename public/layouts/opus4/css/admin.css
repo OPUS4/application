@@ -214,6 +214,16 @@
     text-decoration: none;
 }
 
+.adminContainer .docstateMenu a.workflow {
+    background-color: #26517D;
+    color: white;
+    padding: 0px 6px;
+    padding-bottom: 1px;
+    -moz-border-radius: 6px;
+    border-radius: 6px;
+    text-decoration: none;
+}
+
 .adminContainer .docstateMenu span.active a {
     background-color: #0088bb;
     color: white;
@@ -474,4 +484,10 @@ label.notification-option {
     padding-top: 1.5em;
     padding-left: 1em;
     display: block;
+}
+.adminFrame {
+	border-style:solid; 
+	border-width: 1px; 
+	border-color: #D4DDE6; 
+	padding: 1em;"
 }

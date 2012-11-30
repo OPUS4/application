@@ -38,20 +38,24 @@
         <?= $this->navigation()->breadcrumbs() ?> (<?= $this->document->getId() ?>)
     </div>
 
-    <div style="padding-top: 0.5em; padding-bottom: 0em;">
-        <div id="showdocmenu" style="padding: 0em 1em; font-size: larger; text-align: center;">
+    <div style="padding-top: 1.5em; padding-bottom: 1.5em">
+        <div class="docstateMenu" style="padding-bottom: 1em;" >
             <?PHP foreach ($this->actions as $action) : ?>
-            <a href="<?=$action['url']?>"><?=$this->translate($action['label']) ?></a>
-            <?PHP endforeach; ?>
+            <span>
+			<a href="<?=$action['url']?>"><?=$this->translate($action['label']) ?></a>
+            </span>
+			<?PHP endforeach; ?>
         </div>
 
-        <div id="showdocmenu" style="padding: 0.5em 1em; font-size: larger; text-align: center;">
+        <div class="docstateMenu">
             <?PHP foreach ($this->workflowActions as $action) : ?>
-            <a href="<?=$action['url']?>"><?=$this->translate($action['label']) ?></a>
-            <?PHP endforeach; ?>
+            <span>
+				<a href="<?=$action['url']?>"><?=$this->translate($action['label']) ?></a>
+         	</span>
+			<?PHP endforeach; ?>
         </div>
     </div>
-
+	<div class="adminFrame">
     <div id="showdoc">
 
     <fieldset class="overview">
@@ -451,5 +455,5 @@
         </fieldset>
 
     </div>
-
+</div>
 </div>
