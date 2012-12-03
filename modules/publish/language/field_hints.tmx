@@ -823,6 +823,15 @@
         </tuv>
     </tu>
 	
+	<tu tuid="hint_TitleSub">
+        <tuv xml:lang="en">
+            <seg>Please enter the documents subtitle.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte den Untertitel des Dokuments ein.</seg>
+        </tuv>
+    </tu>
+	
 	<tu tuid="hint_TitleSubLanguage">
         <tuv xml:lang="en">
             <seg>Please choose the language of the documents subtitle.</seg>
@@ -1046,16 +1055,25 @@ Beispieleingabe: "17.08" (für Semiotik)</seg>
             <seg>Please enter keywords of the document. You may add more keywords by clicking on the button (or delete them).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte frei wählbare Keywords Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Keywords hinzufügen (oder wieder löschen).</seg>
+            <seg>Tragen Sie hier bitte frei wählbare Schlagwörter Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Schlagwörter hinzufügen (oder wieder löschen).</seg>
         </tuv>
     </tu>
 
     <tu tuid="hint_SubjectUncontrolled">
         <tuv xml:lang="en">
-            <seg>Please enter a subject of your choice.</seg>
+            <seg>Please enter an uncontrolled subject.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte ein beliebiges Schlagwort ein.</seg>
+            <seg>Tragen Sie bitte ein freies Schlagwort ein.</seg>
+        </tuv>
+    </tu>
+	
+	<tu tuid="hint_SubjectUncontrolledLanguage">
+        <tuv xml:lang="en">
+            <seg>Please enter the language of an uncontrolled subject.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte die Sprache des freien Schlagworts ein.</seg>
         </tuv>
     </tu>
 	
