@@ -384,6 +384,15 @@
           </tuv>
         </tu>
 
+		<tu tuid="Save">
+          <tuv xml:lang="en">
+            <seg>Save</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Speichern</seg>
+          </tuv>
+        </tu>
+		
         <tu tuid="pkm_list_keys">
           <tuv xml:lang="en">
             <seg>Key Management</seg>
