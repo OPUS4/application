@@ -51,8 +51,8 @@ if (isset($this->title)) {
 }
 
 $this->headLink()
-    ->appendStylesheet($this->layoutPath() . '/css/opus.css')
-    ->appendStylesheet($this->layoutPath() . '/css/admin.css')
+    ->appendStylesheet($this->layoutPath() . '/css/opus.css', 'screen,print')
+    ->appendStylesheet($this->layoutPath() . '/css/admin.css', 'screen,print')
     ->headLink(array(
         'rel' => 'shortcut icon',
         'type' => 'image/x-icon',
