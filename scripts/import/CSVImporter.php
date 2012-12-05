@@ -81,12 +81,10 @@ class CSVImporter {
     const ENRICHMENT_COPYRIGHTPRINT = 28;
     const ENRICHMENT_COPYRIGHTEBOOK = 29;
     const ENRICHMENT_RELEVANCE = 30;
-    const FILENAME = 31;    
+    const FILENAME = 31;
 
     private $seriesIdsMap = array();
-
     private $fulltextDir = null;
-    
     private $guestRole = null;
 
     public function run($argv) {
@@ -100,12 +98,12 @@ class CSVImporter {
             $ignoreHeader = false;
         }
 
-        if (count($argv) > 2) {            
+        if (count($argv) > 2) {
             if (!is_readable($argv[2])) {
                 echo "fulltext directory '" . $argv[2] . "' is not readable -- check path or permissions\n";
             }
             else {
-                $this->fulltextDir = $argv[2];                
+                $this->fulltextDir = $argv[2];
                 $this->guestRole = Opus_UserRole::fetchByName('guest');
             }
         }
@@ -165,14 +163,19 @@ class CSVImporter {
             // Dokumenttyp muss kleingeschrieben werden (bei Fromm aber groß)
             $doc->setType(lcfirst(trim($row[self::TYPE])));
             $doc->setServerState(trim($row[self::SERVER_STATE]));
-            $this->processTitlesAndAbstract($row, $doc, $oldId);			
+
+            // speichere die oldId als Identifier old ab, so dass später nach dieser gesucht werden kann
+            // und die Verbindung zwischen Ausgangsdatensatz und importiertem Datensatz erhalten bleibt
+            $this->addIdentifier($doc, 'old', $oldId);
+
+            $this->processTitlesAndAbstract($row, $doc, $oldId);
             $this->processDate($row, $doc, $oldId);
             $this->processIdentifier($row, $doc, $oldId);
             $this->processNote($row, $doc);
             $this->processCollections($row, $doc);
             $this->processLicence($row, $doc, $oldId);
             $this->processSeries($row, $doc);
-			
+
             // TODO Fromm verwendet aktuell sieben Enrichments (muss noch generalisiert werden)
             $enrichementkeys = array(
                 self::ENRICHMENT_AVAILABILITY,
@@ -199,15 +202,15 @@ class CSVImporter {
         catch (Exception $e) {
             echo "import of document " . $oldId . " was not successful: " . $e->getMessage() . "\n";
         }
-		
-		try {
-			$this->processPersons($row, $doc, $oldId);
-			$doc->store();
-			return true;
-		}
-		catch (Exception $e) {
-			echo "import of person(s) for document " . $oldId . " was not successful: " . $e->getMessage() . "\n";
-		}
+
+        try {
+            $this->processPersons($row, $doc, $oldId);
+            $doc->store();
+            return true;
+        }
+        catch (Exception $e) {
+            echo "import of person(s) for document " . $oldId . " was not successful: " . $e->getMessage() . "\n";
+        }
 
         return false;
     }
@@ -435,7 +438,6 @@ class CSVImporter {
             }
 
             echo "Dokument $oldId: Lizenz konnte nicht ermittelt werden, da im format-Enrichment unerwarteter Wert '$format'\n";
-
         }
     }
 
@@ -494,7 +496,7 @@ class CSVImporter {
             }
         }
     }
-    
+
     private function processFile($row, $doc, $oldId, $extension = 'pdf') {
 
         $format = trim($row[self::ENRICHMENT_FORMAT]);
@@ -502,18 +504,18 @@ class CSVImporter {
 
         // in format-Spalte sind nur bestimmte Werte zulässig
         if ((strpos($format, 'no download') === false) &&
-            (strpos($format, 'no copy') === false) &&
-            (strpos($format, 'to purchase') === false) &&
-            (strpos($format, 'to download') === false) &&
-            (strpos($format, 'upon request') === false)) {
+                (strpos($format, 'no copy') === false) &&
+                (strpos($format, 'to purchase') === false) &&
+                (strpos($format, 'to download') === false) &&
+                (strpos($format, 'upon request') === false)) {
             echo "Dokument $oldId: [ERR001] Inhalt '$format' des format-Enrichments entspricht nicht dem zulässigen Vokabular -- evtl. vorhandene Datei wird nicht importiert\n";
             return null;
         }
 
         // bei den Keywords 'no download', 'no copy' und 'to purchase' wird keine Dateiangabe erwartet: steht doch ein da, ist das ein Fehler!
         if (!(strpos($format, 'no download') === false) ||
-            !(strpos($format, 'no copy') === false) ||
-            !(strpos($format, 'to purchase') === false)) {
+                !(strpos($format, 'no copy') === false) ||
+                !(strpos($format, 'to purchase') === false)) {
             if ($filename != '') {
                 echo "Dokument $oldId: [ERR002] Dateiname angegeben aber format-Enrichment mit unerwartetem Inhalt '$format' -- Datei wird nicht importiert\n";
             }
@@ -531,15 +533,15 @@ class CSVImporter {
             echo "Dokument $oldId: [ERR004] zugeordnete Datei wurden nicht importiert, da Importverzeichnis nicht lesbar oder nicht existent\n";
             return null;
         }
-            
+
         $filename = $filename . '.' . $extension;
         $tempfile = $this->fulltextDir . DIRECTORY_SEPARATOR . $filename;
 
-		if (!file_exists($tempfile)) {
-			echo "Dokument $oldId: [ERR006] zugeordnete Datei wurden nicht importiert, da sie nicht im angegebenen Ordner existiert\n";
+        if (!file_exists($tempfile)) {
+            echo "Dokument $oldId: [ERR006] zugeordnete Datei wurden nicht importiert, da sie nicht im angegebenen Ordner existiert\n";
             return null;
-		}
-		
+        }
+
         if (!is_readable($tempfile)) {
             echo "Dokument $oldId: [ERR005] zugeordnete Datei wurden nicht importiert, da nicht lesbar\n";
             return null;
@@ -552,7 +554,7 @@ class CSVImporter {
 
         $file->setVisibleInFrontdoor('1');
         $file->setVisibleInOai('1');
-                
+
         // guest-Role darf Datei nur lesen, wenn format-Enrichment den Wert 'to download' hat (ansonsten nur die administrator-Role, die das Leserecht automatisch erhält)
         if (!(strpos($format, 'to download') === false)) {
             return $file;
