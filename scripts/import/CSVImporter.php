@@ -165,15 +165,14 @@ class CSVImporter {
             // Dokumenttyp muss kleingeschrieben werden (bei Fromm aber groß)
             $doc->setType(lcfirst(trim($row[self::TYPE])));
             $doc->setServerState(trim($row[self::SERVER_STATE]));
-            $this->processTitlesAndAbstract($row, $doc, $oldId);
-            $this->processPersons($row, $doc, $oldId);
+            $this->processTitlesAndAbstract($row, $doc, $oldId);			
             $this->processDate($row, $doc, $oldId);
             $this->processIdentifier($row, $doc, $oldId);
             $this->processNote($row, $doc);
             $this->processCollections($row, $doc);
             $this->processLicence($row, $doc, $oldId);
             $this->processSeries($row, $doc);
-
+			
             // TODO Fromm verwendet aktuell sieben Enrichments (muss noch generalisiert werden)
             $enrichementkeys = array(
                 self::ENRICHMENT_AVAILABILITY,
@@ -191,17 +190,25 @@ class CSVImporter {
             $file = $this->processFile($row, $doc, $oldId);
 
             $doc->store();
-            //echo "created document #" . $doc->getId() . "\n";
 
             if (!is_null($file) && $file instanceof Opus_File && !is_null($this->guestRole)) {
                 $this->guestRole->appendAccessFile($file->getId());
                 $this->guestRole->store();
             }
-            return true;
         }
         catch (Exception $e) {
             echo "import of document " . $oldId . " was not successful: " . $e->getMessage() . "\n";
         }
+		
+		try {
+			$this->processPersons($row, $doc, $oldId);
+			$doc->store();
+			return true;
+		}
+		catch (Exception $e) {
+			echo "import of person(s) for document " . $oldId . " was not successful: " . $e->getMessage() . "\n";
+		}
+
         return false;
     }
 
@@ -528,8 +535,13 @@ class CSVImporter {
         $filename = $filename . '.' . $extension;
         $tempfile = $this->fulltextDir . DIRECTORY_SEPARATOR . $filename;
 
+		if (!file_exists($tempfile)) {
+			echo "Dokument $oldId: [ERR006] zugeordnete Datei wurden nicht importiert, da sie nicht im angegebenen Ordner existiert\n";
+            return null;
+		}
+		
         if (!is_readable($tempfile)) {
-            echo "Dokument $oldId: [ERR005] zugeordnete Datei wurden nicht importiert, da nicht lesbar oder nicht existent\n";
+            echo "Dokument $oldId: [ERR005] zugeordnete Datei wurden nicht importiert, da nicht lesbar\n";
             return null;
         }
 
