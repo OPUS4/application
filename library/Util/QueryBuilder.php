@@ -92,8 +92,7 @@ class Util_QueryBuilder {
         );
 
         if ($this->export) {
-            // java.lang.Integer.MAX_VALUE
-            $MAX_ROWS = 2147483647;
+            $MAX_ROWS = Opus_SolrSearch_Query::MAX_ROWS;
             // pagination within export was introduced in OPUS 4.2.2
             $startParam = $request->getParam('start', 0);
             $rowsParam = $request->getParam('rows', $MAX_ROWS);
