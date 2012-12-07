@@ -175,7 +175,8 @@ class CSVImporter {
             $this->processCollections($row, $doc);
             $this->processLicence($row, $doc, $oldId);
             $this->processSeries($row, $doc);
-
+            $this->processEnrichmentKindofpublication($row, $doc, $oldId);
+			
             // TODO Fromm verwendet aktuell sieben Enrichments (muss noch generalisiert werden)
             $enrichementkeys = array(
                 self::ENRICHMENT_AVAILABILITY,
@@ -472,6 +473,26 @@ class CSVImporter {
         }
     }
 
+	private function processEnrichmentKindofpublication ($row, $doc, $oldId) {
+		// Spezial-Workaround fuer Fromm, um die Inhalte aus der 
+		// Spalte 26 (Enrichment: kindofpublication) in das Identifierfeld serial zu schreiben
+		$value = trim($row[self::ENRICHMENT_KINDOFPUBLICATION]);
+		if ($value != '') {
+			preg_match('/^{([A-Za-z]+):(.+)}$/', $value, $matches);
+            if (count($matches) != 3) {
+                throw new Exception("unerwarteter Wert '$value' fuer Enrichment in Spalte $enrichmentkey");
+            }
+			$values = explode('||', trim($matches[2]));
+            foreach ($values as $value) {
+				$identifier = new Opus_Identifier();
+				$identifier->setValue(trim($value));
+				$identifier->setType(serial);
+				$method = 'addIdentifier' . ucfirst(trim($type));
+				$doc->$method($identifier);
+			}
+		}
+	}
+	
     private function processSeries($row, $doc) {
         // ist kein Pflichtfeld
         if (trim($row[self::SERIES_ID]) != '') {
