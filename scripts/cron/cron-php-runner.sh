@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 #
 # This file is part of OPUS. The software OPUS has been originally developed
 # at the University of Stuttgart with funding from the German Research Net,
@@ -36,18 +36,18 @@ BASENAME=/usr/bin/basename
 DATE=/bin/date
 PHP=/usr/bin/php
 
-#set -e
+set -e
 
 if [ "0$#" -lt 2 ] ; then
    echo "USAGE: $0 PHP-SCRIPT LOCK-DIRECTORY [LOG-DIRECTORY]"
    exit 1;
 fi
 
-SCRIPT=$1
-LOCKDIR=$2
-LOGDIR=$3
+SCRIPT="$1"
+LOCKDIR="$2"
+LOGDIR="$3"
 
-LOCKFILE=$LOCKDIR/`$BASENAME $SCRIPT`.lock
+LOCKFILE="$LOCKDIR/`$BASENAME $SCRIPT`.lock"
 
 LOGFILE=/dev/stdout
 CRONLOG=/dev/stdout
@@ -71,16 +71,13 @@ if [ -e $LOCKFILE ] ; then
     exit 1;
 fi
 
-touch $LOCKFILE 2>&1 >>$CRONLOG
+touch "$LOCKFILE" 2>&1 >>$CRONLOG
 echo "`date --iso-8601=seconds`: starting job '$SCRIPT' ..." 2>&1 >>$CRONLOG
 
-$PHP $SCRIPT 2>&1 >>$LOGFILE
-RETVAL=$?
-
-if [ "$RETVAL" -ne 0 ] ; then
-   echo "`date --iso-8601=seconds`: job '$SCRIPT' FAILED (return value $RETVAL, logfile $LOGFILE, cronlog $CRONLOG)." 2>&1 |tee -a $CRONLOG
-else
+if $PHP $SCRIPT 2>&1 >>$LOGFILE; then
    echo "`date --iso-8601=seconds`: job '$SCRIPT' done." 2>&1 >>$CRONLOG
+else
+   echo "`date --iso-8601=seconds`: job '$SCRIPT' FAILED (return value $RETVAL, logfile $LOGFILE, cronlog $CRONLOG)." 2>&1 |tee -a $CRONLOG
 fi
 
-rm $LOCKFILE 2>&1 >>$CRONLOG
+rm "$LOCKFILE" 2>&1 >>$CRONLOG || :
