@@ -28,6 +28,7 @@
  * @package     View
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @author      Pascal-Nicolas Becker <becker@zib.de>
+ * @author      Jens Schwidder (schwidder@zib.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -117,11 +118,17 @@ class View_Helper_LoginBar extends Zend_View_Helper_Abstract {
         }
 
         // Default setting for edit own account: allow and add link.
-        $addAccountLink = true;
+        $addAccountLink = false;
 
-        $config = Zend_Registry::get('Zend_Config');
-        if (isset($config) and isset($config->account->editOwnAccount)) {
-            $addAccountLink = $config->account->editOwnAccount;
+        // Prüfe, ob Nutzer Zugriff auf Account Modul hat
+        $realm = Opus_Security_Realm::getInstance();
+        
+        if ($realm->checkModule('account') == true) {
+            // Prüfe, ob Nutzer ihren Account editieren dürfen
+            $config = Zend_Registry::get('Zend_Config');
+            if (isset($config) and isset($config->account->editOwnAccount)) {
+                $addAccountLink = $config->account->editOwnAccount;
+            }
         }
 
         $url = $this->view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
