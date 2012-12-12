@@ -38,13 +38,14 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 $f = new Opus_DocumentFinder();
 $f->setServerState('temporary')
-  ->setServerDatePublishedBefore(date('Y-m-d'));
+  ->setServerDateCreatedBefore(date('Y-m-d'));
 
 foreach ($f->ids() AS $id) {
   $d = new Opus_Document( $id );
-  assert($d->getServerState() == 'temporary');
-
-  echo "deleting document: $id\n";
-  $d->deletePermanent();
+  if($d->getServerState() == 'temporary') {
+    echo "deleting document: $id\n";
+    $d->deletePermanent();
+  } else {
+      echo "NOT deleting document: $id because it has server state ".$d->getServerState();
+  }
 }
-
