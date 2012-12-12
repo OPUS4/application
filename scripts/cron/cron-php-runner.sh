@@ -32,11 +32,12 @@
 # @version     $Id$
 
 
-BASENAME=/usr/bin/basename
-DATE=/bin/date
-PHP=/usr/bin/php
 
 set -e
+
+BASENAME="`which basename`"
+DATE="`which date`"
+PHP="`which php`"
 
 if [ "0$#" -lt 2 ] ; then
    echo "USAGE: $0 PHP-SCRIPT LOCK-DIRECTORY [LOG-DIRECTORY]"
