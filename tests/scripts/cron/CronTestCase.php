@@ -67,7 +67,7 @@ class CronTestCase extends ControllerTestCase {
     protected function executeScript($fileName) {
         $command = self::$scriptPath . 'cron-php-runner.sh ' . self::$scriptPath . $fileName . ' ' . self::$lockDir;
         $result = shell_exec($command);
-        $this->assertNotNull($result, 'Expected result');
+        $this->assertNotNull($result, "Script execution failed:\n".$command);
         $this->assertContains("job '" . self::$scriptPath . $fileName . "' done", $result);
         return $result;
     }
