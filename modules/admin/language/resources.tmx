@@ -18,109 +18,109 @@
 
     <tu tuid="acl_resource_documents">
       <tuv xml:lang="en">
-        <seg>Manage documents.</seg>
+        <seg>Manage documents</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Dokumente verwalten.</seg>
+        <seg>Dokumente verwalten</seg>
       </tuv>
     </tu>
 
     <tu tuid="acl_resource_collections">
       <tuv xml:lang="en">
-        <seg>Manage collections.</seg>
+        <seg>Manage collections</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Collections verwalten.</seg>
+        <seg>Sammlungen verwalten</seg>
       </tuv>
     </tu>
 
     <tu tuid="acl_resource_languages">
       <tuv xml:lang="en">
-        <seg>Manage languages.</seg>
+        <seg>Manage languages</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sprachen verwalten.</seg>
+        <seg>Sprachen verwalten</seg>
       </tuv>
     </tu>
     
     <tu tuid="acl_resource_licences">
       <tuv xml:lang="en">
-        <seg>Manage licences.</seg>
+        <seg>Manage licences</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Lizenzen verwalten.</seg>
+        <seg>Lizenzen verwalten</seg>
       </tuv>
     </tu>
 
     <tu tuid="acl_resource_series">
       <tuv xml:lang="en">
-        <seg>Manage series.</seg>
+        <seg>Manage series</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Schriftenreihen verwalten.</seg>
+        <seg>Schriftenreihen verwalten</seg>
       </tuv>
     </tu>
 
     <tu tuid="acl_resource_security">
       <tuv xml:lang="en">
-        <seg>Manage security (roles, ip-ranges).</seg>
+        <seg>Manage security (roles, ip-ranges)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Zugriffskontrolle (Rollen, IP-Bereiche) verwalten.</seg>
+        <seg>Zugriffskontrolle (Rollen, IP-Bereiche) verwalten</seg>
       </tuv>
     </tu>
 
     <tu tuid="acl_resource_accounts">
       <tuv xml:lang="en">
-        <seg>Manage user accounts.</seg>
+        <seg>Manage user accounts</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Nutzerkonten verwalten.</seg>
+        <seg>Nutzerkonten verwalten</seg>
       </tuv>
     </tu>
 
     <tu tuid="acl_resource_institutions">
       <tuv xml:lang="en">
-        <seg>Manage institution (dispersive body).</seg>
+        <seg>Manage institution (dispersive body)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Institution (Verbreitende Stelle) verwalten.</seg>
+        <seg>Institution (Verbreitende Stelle) verwalten</seg>
       </tuv>
     </tu>
 
     <tu tuid="acl_resource_enrichments">
       <tuv xml:lang="en">
-        <seg>Manage enrichment keys.</seg>
+        <seg>Manage enrichment keys</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Benutzerdefinierte Felder (Enrichments) verwalten.</seg>
+        <seg>Benutzerdefinierte Felder (Enrichments) verwalten</seg>
       </tuv>
     </tu>
 
     <tu tuid="acl_resource_statistics">
       <tuv xml:lang="en">
-        <seg>View statistics.</seg>
+        <seg>View statistics</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Veröffentlichungsstatistik anzeigen.</seg>
+        <seg>Veröffentlichungsstatistik anzeigen</seg>
       </tuv>
     </tu>
 
     <tu tuid="acl_resource_systeminfo">
       <tuv xml:lang="en">
-        <seg>View system info.</seg>
+        <seg>View system info</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>System Informationen anzeigen.</seg>
+        <seg>System Informationen anzeigen</seg>
       </tuv>
     </tu>
 
     <tu tuid="acl_resource_reviewing">
       <tuv xml:lang="en">
-        <seg>Review documents.</seg>
+        <seg>Review (documents)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Dokumente begutachten.</seg>
+        <seg>Freischalten (Dokumente begutachten)</seg>
       </tuv>
     </tu>
 
