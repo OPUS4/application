@@ -9,10 +9,10 @@
 
     <tu tuid="acl_resource_module_generic">
       <tuv xml:lang="en">
-        <seg>Access to module '%1$s'</seg>
+        <seg>Module '%1$s'</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Zugriff auf Modul '%1$s'</seg>
+        <seg>Modul '%1$s'</seg>
       </tuv>
     </tu>
 
@@ -66,7 +66,7 @@
         <seg>Manage security (roles, ip-ranges).</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sicherheit (Rollen, IP-Bereiche) verwalten.</seg>
+        <seg>Zugriffskontrolle (Rollen, IP-Bereiche) verwalten.</seg>
       </tuv>
     </tu>
 
@@ -81,10 +81,10 @@
 
     <tu tuid="acl_resource_institutions">
       <tuv xml:lang="en">
-        <seg>Manage institutions.</seg>
+        <seg>Manage institution (dispersive body).</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Intitute verwalten.</seg>
+        <seg>Institution (Verbreitende Stelle) verwalten.</seg>
       </tuv>
     </tu>
 
@@ -93,7 +93,7 @@
         <seg>Manage enrichment keys.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Enrichment Schlüssel verwalten.</seg>
+        <seg>Benutzerdefinierte Felder (Enrichments) verwalten.</seg>
       </tuv>
     </tu>
 
@@ -102,7 +102,7 @@
         <seg>View statistics.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Statistik anzeigen.</seg>
+        <seg>Veröffentlichungsstatistik anzeigen.</seg>
       </tuv>
     </tu>
 

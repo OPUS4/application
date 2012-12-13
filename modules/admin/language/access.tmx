@@ -8,19 +8,19 @@
 <body>
     <tu tuid="admin_access_listmodule">
       <tuv xml:lang="en">
-        <seg>Access to Modules/Controllers</seg>
+        <seg>Edit user roles - access control</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Zugriff auf Module/Controller</seg>
+        <seg>Nutzerrollen editieren -Zugriffskontrolle</seg>
       </tuv>
     </tu>
 
     <tu tuid="admin_access_store">
       <tuv xml:lang="en">
-        <seg>Access to Modules/Controllers</seg>
+        <seg>Edit user roles - access control</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Zugriff auf Module/Controller</seg>
+        <seg>Nutzerrollen editieren -Zugriffskontrolle</seg>
       </tuv>
     </tu>
 
@@ -35,24 +35,25 @@
 
     <tu tuid="access_select_module">
       <tuv xml:lang="en">
-        <seg>Module access for role '%1$s'</seg>
+        <seg>Overview of access control for role '%1$s'</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Modul-Zugriff für Rolle '%1$s'</seg>
+        <seg>Übersicht der Zugriffskontrolle für Rolle '%1$s'</seg>
       </tuv>
     </tu>
 
     <tu tuid="access_current_role_name">
       <tuv xml:lang="en">
         <seg>
-        You are editing module access for role '%1$s'.  Please select
-        modules you would like to grant access to.
+        You are editing access control for role '%1$s'.  Please select
+        modules, resources and document transitions you would like to grant access to or enable.
         </seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>
-        Sie bearbeiten gerade den Modul-Zugriff für Rolle '%1$s'.
-        Bitte wählen Sie Module, für die Sie Zugriff gewähren möchten.
+        Sie bearbeiten gerade die Zugriffskontrolle für die Rolle '%1$s'.
+        Bitte wählen Sie Module und Administrationsbereiche, für die Sie Zugriff gewähren möchten, und geben Sie an, 
+		welche Zustandsänderungen des Dokuments diese Rolle durchführen darf.
         </seg>
       </tuv>
     </tu>
@@ -158,28 +159,28 @@
 
     <tu tuid="access_module_changes">
       <tuv xml:lang="en">
-        <seg>Changing Module Access</seg>
+        <seg>Modules - Role has access to:</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Änderungen am Modul-Zugriff</seg>
+        <seg>Module - Rolle hat Zugriff auf:</seg>
       </tuv>
     </tu>
     
     <tu tuid="access_resource_changes">
       <tuv xml:lang="en">
-        <seg>Changing Resource Access</seg>
+        <seg>Administration sections - Role has access to:</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Änderungen am Ressourcen-Zugriff</seg>
+        <seg>Administrationsbereiche - Rolle hat Zugriff auf:</seg>
       </tuv>
     </tu>
     
     <tu tuid="access_workflow_changes">
       <tuv xml:lang="en">
-        <seg>Changing Workflow Access</seg>
+        <seg>Document status - Role can execute the following status changes:</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Änderungen am Workflow-Zugriff</seg>
+        <seg>Dokumentstatus - Rolle kann folgende Zustandsänderungen durchführen:</seg>
       </tuv>
     </tu>
 
