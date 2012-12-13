@@ -129,7 +129,8 @@
         <seg>Edit document metadata. Delete documents and manage files.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Metadaten der Dokumente editieren. Dokumente löschen und Dateien verwalten.</seg>
+        <seg>Metadaten der Dokumente und Zuweisungen zu Sammlungen, Klassifikationen, Lizenzen und Schriftenreihen editieren. 
+		Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
       </tuv>
     </tu>
 
@@ -189,10 +190,10 @@
 
     <tu tuid="admin_title_dnbinstitute">
       <tuv xml:lang="en">
-        <seg>Institution (dispersive body)</seg>
+        <seg>Manage dispersive body and awarding institution</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Institution (Verbreitende Stelle)</seg>
+        <seg>Verbreitende Stelle und Vergabeinstitution (DNB) verwalten</seg>
       </tuv>
     </tu>
 
@@ -201,7 +202,7 @@
         <seg>Add, edit, or remove Institutions, that serve as dispersive body for theses.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Institutionen hinzufügen, editieren, oder löschen, die als verbreitende Stelle für Hochschulschriften fungieren.</seg>
+        <seg>Institutionen hinzufügen, editieren oder löschen, die als verbreitende Stelle oder Vergabeinstitution für Hochschulschriften (DNB) fungieren.</seg>
       </tuv>
     </tu>
 
@@ -219,7 +220,7 @@
         <seg>Add, edit, or remove Enrichmentkeys.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Benutzerdefinierte Felder hinzufügen, editieren, oder löschen.</seg>
+        <seg>Benutzerdefinierte Felder hinzufügen, editieren oder löschen.</seg>
       </tuv>
     </tu>
 
@@ -234,10 +235,10 @@
 
     <tu tuid="admin_title_security_description">
       <tuv xml:lang="en">
-        <seg>Manage IP ranges, and user roles and their privileges.</seg>
+        <seg>Manage IP ranges and user roles and their privileges.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Verwalten von IP Bereichen, und Nutzer-Rollen, sowie deren Privilegien.</seg>
+        <seg>Nutzerrollen und IP Bereiche erstellen, editieren oder löschen.</seg>
       </tuv>
     </tu>
 
