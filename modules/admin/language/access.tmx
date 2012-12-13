@@ -168,10 +168,10 @@
     
     <tu tuid="access_resource_changes">
       <tuv xml:lang="en">
-        <seg>Administration sections - Role has access to:</seg>
+        <seg>Sections of administration  - Role has access to:</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Administrationsbereiche - Rolle hat Zugriff auf:</seg>
+        <seg>Bereiche der Administration - Rolle hat Zugriff auf:</seg>
       </tuv>
     </tu>
     
