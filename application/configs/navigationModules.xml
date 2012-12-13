@@ -73,7 +73,42 @@
                             <module>admin</module>
                             <controller>filemanager</controller>
                             <action>index</action>
+                            <pages>
+                                <filebrowser>
+                                    <type>mvc</type>
+                                    <label>admin_filebrowser_index</label>
+                                    <module>admin</module>
+                                    <controller>filebrowser</controller>
+                                    <action>index</action>
+                                    <pages>
+                                        <import>
+                                            <type>mvc</type>
+                                            <label>admin_filebrowser_import</label>
+                                            <module>admin</module>
+                                            <controller>filebrowser</controller>
+                                            <action>import</action>
+                                        </import>
+                                    </pages>
+                                </filebrowser>
+                            </pages>
                         </filemanager>
+                        
+                        <workflow>
+                            <type>mvc</type>
+                            <label>admin_workflow_index</label>
+                            <module>admin</module>
+                            <controller>workflow</controller>
+                            <action>changestate</action>
+                        </workflow>
+                        
+                        <collection>
+                            <type>mvc</type>
+                            <label>admin_collection_asign</label>
+                            <module>admin</module>
+                            <controller>collection</controller>
+                            <action>assign</action>
+                        </collection>
+                        
                     </pages>
                 </documents>
 
@@ -194,6 +229,22 @@
                                     <controller>role</controller>
                                     <action>update</action>
                                 </update>
+                                
+                                <listmodule>
+                                    <type>mvc</type>
+                                    <label>admin_access_listmodule</label>
+                                    <module>admin</module>
+                                    <controller>access</controller>
+                                    <action>listmodule</action>
+                                </listmodule>
+                                
+                                <storemodules>
+                                    <type>mvc</type>
+                                    <label>admin_access_listmodule</label>
+                                    <module>admin</module>
+                                    <controller>access</controller>
+                                    <action>store</action>
+                                </storemodules>
                             </pages>
                         </roles>
 
@@ -308,6 +359,73 @@
                     <controller>collectionroles</controller>
                     <action>index</action>
                     <resource>collections</resource>
+                    <pages>
+                        <collection>
+                            <type>mvc</type>
+                            <label>admin_collection_index</label>
+                            <module>admin</module>
+                            <controller>collection</controller>
+                            <action>index</action>
+                            <pages>
+                                <new>
+                                    <type>mvc</type>
+                                    <label>admin_collection_new</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>new</action>
+                                </new>
+                                <edit>
+                                    <type>mvc</type>
+                                    <label>admin_collection_edit</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>edit</action>
+                                </edit>
+                                <move>
+                                    <type>mvc</type>
+                                    <label>admin_collection_move</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>move</action>
+                                </move>
+                                <hide>
+                                    <type>mvc</type>
+                                    <label>admin_collection_hide</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>hide</action>
+                                </hide>
+                                <unhide>
+                                    <type>mvc</type>
+                                    <label>admin_collection_unhide</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>unhide</action>
+                                </unhide>
+                                <delete>
+                                    <type>mvc</type>
+                                    <label>admin_collection_delete</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>delete</action>
+                                </delete>
+                                <show>
+                                    <type>mvc</type>
+                                    <label>admin_collection_show</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>show</action>
+                                </show>
+                                <create>
+                                    <type>mvc</type>
+                                    <label>admin_collection_create</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>create</action>
+                                </create>
+                            </pages>
+                        </collection>
+                    </pages>
                 </collections>
 
                 <series>
