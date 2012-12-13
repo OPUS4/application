@@ -40,19 +40,21 @@
  * Gibt es keine Datei hat der Nutzer keine Einschränkungen beim Zugriff.
  */
 class Application_Security_AclProvider {
+    
+    const ACTIVE_ROLE = '_user';
 
     public static $RESOURCE_NAMES = array(
         'admin' => array(
             'documents', 
-            'languages', 
-            'licences', 
-            'series', 
-            'collections', 
-            'security', 
             'accounts', 
+            'security', 
+            'licences', 
+            'collections', 
+            'series', 
+            'languages', 
+            'statistics',
             'institutions',
             'enrichments',
-            'statistics',
             'systeminfo'),
         'review' => array(
             'reviewing'
@@ -63,6 +65,7 @@ class Application_Security_AclProvider {
      * Liefert ein Zend_Acl Objekt für den aktuellen Nutzer zurück.
      * 
      * TODO Überlappt sich mit Controller_Helper_SecurityRealm
+     * TODO IP Range beruecksichtigen
      */
     public function getAcls() {
         $logger = Zend_Registry::get('Zend_Log');
@@ -72,25 +75,25 @@ class Application_Security_AclProvider {
         $this->loadResources($acl);
 
         $user = Zend_Auth::getInstance()->getIdentity();
-        
+                
         if (is_null($user)) {
             $user = 'guest';
             $this->loadRoles($acl, array('guest'));
         }
         else {
             $realm = Opus_Security_Realm::getInstance();
-            
+
             $realm->setUser($user);
-            
+
             $parents = $realm->getRoles();
-            
+
             $this->loadRoles($acl, $parents);
-            
+
             // create role for user on-the-fly with assigned roles as parents
             if (Zend_Registry::get('LOG_LEVEL') >= Zend_LOG::DEBUG) {
-                $logger->debug("ACL: Create role '" . $user . "' with parents " . "(" . implode( ", ", $parents) . ")");
+                    $logger->debug("ACL: Create role '" . $user . "' with parents " . "(" . implode( ", ", $parents) . ")");
             }
-            
+        
             // Add role for user
             $acl->addRole(new Zend_Acl_Role($user), $parents);
         }
@@ -135,7 +138,7 @@ class Application_Security_AclProvider {
         
         return $allResources;
     }
-    
+        
     /**
      * Lädt die konfigurierten Rollen.
      * 
@@ -160,5 +163,3 @@ class Application_Security_AclProvider {
     }
         
 }
-
-?>
