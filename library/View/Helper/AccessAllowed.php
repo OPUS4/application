@@ -46,15 +46,11 @@ class View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
         $acl = $this->getAcl();
         
         if (!is_null($resource) && !is_null($acl)) {
-            $role = Zend_Auth::getInstance()->getIdentity();
-            if (is_null($role)) {
-                $role = 'guest';
-            }
-            
             return $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, $resource);
         }
-
-        return true;
+        else {
+            return true;
+        }
     }
     
     /**
