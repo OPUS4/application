@@ -419,11 +419,12 @@
 
             <!-- PersonAdvisor -->
             <xsl:for-each select="/mysqldump/database/table_data[@name='opus_diss' or @name='temp_diss']/row[field[@name='source_opus']=$OriginalID]">
-                <xsl:call-template name="AddPerson" >
+                <xsl:call-template name="AddPersons" >
                     <xsl:with-param name="role">PersonAdvisor</xsl:with-param>
-                    <xsl:with-param name="name">
+                    <xsl:with-param name="list">
                         <xsl:value-of select="field[@name='advisor']" />
                     </xsl:with-param>
+                    <xsl:with-param name="delimiter">;</xsl:with-param>
                 </xsl:call-template>
             </xsl:for-each>
 
@@ -689,97 +690,62 @@
         <xsl:param name="name" required="yes" />
         <xsl:param name="sortorder" />
         <xsl:element name="{$role}">
-            <xsl:attribute name="AcademicTitle">
-                <xsl:call-template name="getAcademicTitle">
-                    <xsl:with-param name="name">
-                        <xsl:value-of select="$name" />
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:attribute>
-             <xsl:attribute name="Email">
-                <xsl:call-template name="getEmail">
-                    <xsl:with-param name="name">
-                        <xsl:value-of select="$name" />
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:attribute>
-            <xsl:attribute name="FirstName">
-                <xsl:call-template name="getFirstName">
-                    <xsl:with-param name="name">
-                        <xsl:value-of select="$name" />
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:attribute>
-            <xsl:attribute name="LastName">
-                <xsl:call-template name="getLastName">
-                    <xsl:with-param name="name">
-                        <xsl:value-of select="$name" />
-                    </xsl:with-param>
-                </xsl:call-template>
-            </xsl:attribute>
+            <xsl:choose>
+                <!-- Nachname, Vorname (Akademischer Titel in Klammern) -->
+                <!-- Mustermann, Max (Prof.Dr.) -->
+                <xsl:when test="php:function('preg_match', '/^.+,.+ \(.+\)$/', $name) = 1">
+                    <xsl:attribute name="LastName">
+                        <xsl:value-of select="normalize-space(substring-before($name,','))" />
+                    </xsl:attribute>
+                    <xsl:attribute name="FirstName">
+                        <xsl:value-of select="normalize-space(substring-after(substring-before($name,'('),' '))" />
+                    </xsl:attribute>
+                    <xsl:attribute name="AcademicTitle">
+                        <xsl:value-of select="normalize-space(substring-after(substring-before($name,')'),'('))" />
+                    </xsl:attribute>
+                </xsl:when>
+		
+                <!-- Nachname, Vorname Akad.Tit. -->
+                <!-- Mustermann, Max M. Prof. Dr. -->
+                <xsl:when test="php:function('preg_match', '/^.+,.+ [A-Z][a-z]+\./', $name) = 1">
+                    <xsl:attribute name="LastName">
+                        <xsl:value-of select="normalize-space(substring-before($name,','))" />
+                    </xsl:attribute>
+                    <xsl:attribute name="FirstName">
+                        <xsl:value-of select="normalize-space(substring-after(php:function('preg_replace', '/[A-Z][a-z]+\..*$/', '', $name),','))" />
+                     </xsl:attribute>
+                    <xsl:attribute name="AcademicTitle">
+                        <xsl:value-of select="normalize-space(substring-after($name, php:function('preg_replace', '/[A-Z][a-z]+\..*$/', '', $name)))" />
+                    </xsl:attribute>
+                </xsl:when>
+		
+                <!-- Nachname, Vorname -->
+                <!-- Mustermann, Max P. -->
+                <xsl:when test="contains($name, ',')">
+                    <xsl:attribute name="LastName">
+                        <xsl:value-of select="normalize-space(substring-before($name,','))" />
+                    </xsl:attribute>
+                    <xsl:attribute name="FirstName">
+                        <xsl:value-of select="normalize-space(substring-after($name,','))" />
+                    </xsl:attribute>
+                </xsl:when>
+
+
+                <!-- Sonst: Nachname -->
+                <!-- Mustermann -->
+                <xsl:otherwise>
+                    <xsl:attribute name="LastName">
+                        <xsl:value-of select="normalize-space($name)" />
+                    </xsl:attribute>
+                </xsl:otherwise>
+            </xsl:choose>
             <xsl:attribute name="SortOrder">
                 <xsl:value-of select="$sortorder" />
             </xsl:attribute>
         </xsl:element>
     </xsl:template>
     
-   <!-- Holt den Vornamen des Autors -->
-   <xsl:template name="getAcademicTitle">
-        <xsl:param name="name" required="yes" />
-        <xsl:if test="string-length(substring-after(substring-before($name,')'),'(')) > 0">
-            <xsl:value-of select="substring-after(substring-before($name,')'),'(')" />
-        </xsl:if>
-    </xsl:template>
-
-   <!-- Holt den Vornamen des Autors -->
-   <xsl:template name="getEmail">
-        <xsl:param name="name" required="yes" />
-        <xsl:if test="contains($name, '@')">
-            <xsl:value-of select="normalize-space($name)" />
-        </xsl:if>
-    </xsl:template>
     
-   <!-- Holt den Vornamen des Autors -->
-   <xsl:template name="getFirstName">
-        <xsl:param name="name" required="yes" />
-        <xsl:choose>
-            <xsl:when test="contains($name, '@')">unknown</xsl:when>
-            <xsl:when test="contains($name, ',')">
-                <xsl:value-of select="normalize-space(substring-after($name,','))" />
-            </xsl:when>
-            <xsl:when test="contains($name, ' ')">
-                <xsl:variable name="pos"><xsl:value-of select="php:function('strrpos', $name, ' ')"/></xsl:variable>
-                <xsl:value-of select="normalize-space(php:function('substr', $name, 0, $pos))"/>
-            </xsl:when>
-            <xsl:when test="contains($name, '.')">
-                <xsl:variable name="pos"><xsl:value-of select="php:function('strrpos', $name, '.')"/></xsl:variable>
-                <xsl:value-of select="normalize-space(php:function('substr', $name, 0, $pos))"/>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:template>
-
-   <!-- Holt den Nachnamen des Autors -->
-   <xsl:template name="getLastName">
-        <xsl:param name="name" required="yes" />
-        <xsl:choose>
-            <xsl:when test="contains($name, '@')">unknown</xsl:when>
-            <xsl:when test="contains($name, ',')">
-                <xsl:value-of select="normalize-space(substring-before($name,','))" />
-            </xsl:when>
-            <xsl:when test="contains($name, ' ')">
-                <xsl:variable name="pos"><xsl:value-of select="php:function('strrpos', $name, ' ')"/></xsl:variable>
-                <xsl:value-of select="normalize-space(php:function('substr', $name, $pos+1))"/>
-            </xsl:when>
-            <xsl:when test="contains($name, '.')">
-                <xsl:variable name="pos"><xsl:value-of select="php:function('strrpos', $name, '.')"/></xsl:variable>
-                <xsl:value-of select="normalize-space(php:function('substr', $name, $pos+1))"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="normalize-space($name)" />
-            </xsl:otherwise>
-        </xsl:choose>
-    </xsl:template>
-
     <!-- This Templat add Subjects to Opus4 -->
     <xsl:template name="AddSubjects">
         <xsl:param name="type" required="yes" />
