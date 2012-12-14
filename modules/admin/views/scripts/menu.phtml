@@ -36,8 +36,6 @@
 $activePages = $this->navigation()->findActive($this->container, 0, 1);
 if (!is_null($activePages) && isset($activePages['page'])) {
     $parent = $activePages['page'];
-    // Figure out using the following
-    $role = Zend_Auth::getInstance()->getIdentity(); // get current user and use as role for ACL check
     $acl = $this->navigation()->getAcl(); // get ACLs from navigation
 }
 else {
@@ -48,7 +46,8 @@ else {
 <?PHP if (!is_null($parent)) : ?>
 <dl class="menu">
     <?PHP foreach ($parent->getPages() as $page) : ?>
-    <?PHP if (is_null($acl) || $acl->isAllowed($role, $page->getResource(), $page->getPrivilege()) 
+    <?PHP if (is_null($acl) || $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 
+            $page->getResource(), $page->getPrivilege()) 
             || !$acl->has($page->getResource())) : ?>
     <dt><?= $this->navigation()->menu()->htmlify($page) ?></dt>
     <dd><?= $this->translate($page->description) ?></dd>

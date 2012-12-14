@@ -41,8 +41,16 @@
  */
 class Application_Security_AclProvider {
     
+    /**
+     * Name der Role, die für ACL Prüfungen verwendet wird.
+     *
+     * Dieser Name wird anstatt des eigentlich Nutzernamens verwendet.
+     */
     const ACTIVE_ROLE = '_user';
 
+    /**
+     * Ressourcen, die in Datei application/configs/navigationModules.xml referenziert werden.
+     */
     public static $RESOURCE_NAMES = array(
         'admin' => array(
             'documents', 
@@ -63,9 +71,6 @@ class Application_Security_AclProvider {
     
     /**
      * Liefert ein Zend_Acl Objekt für den aktuellen Nutzer zurück.
-     * 
-     * TODO Überlappt sich mit Controller_Helper_SecurityRealm
-     * TODO IP Range beruecksichtigen
      */
     public function getAcls() {
         $logger = Zend_Registry::get('Zend_Log');
@@ -74,29 +79,29 @@ class Application_Security_AclProvider {
         
         $this->loadResources($acl);
 
+        $realm = Opus_Security_Realm::getInstance();
+        
+        if (isset($_SERVER['REMOTE_ADDR']) and preg_match('/:/', $_SERVER['REMOTE_ADDR']) === 0) {
+            $realm->setIp($_SERVER['REMOTE_ADDR']);
+        }
+        
         $user = Zend_Auth::getInstance()->getIdentity();
                 
-        if (is_null($user)) {
-            $user = 'guest';
-            $this->loadRoles($acl, array('guest'));
-        }
-        else {
-            $realm = Opus_Security_Realm::getInstance();
-
+        if (!is_null($user)) {
             $realm->setUser($user);
-
-            $parents = $realm->getRoles();
-
-            $this->loadRoles($acl, $parents);
-
-            // create role for user on-the-fly with assigned roles as parents
-            if (Zend_Registry::get('LOG_LEVEL') >= Zend_LOG::DEBUG) {
-                    $logger->debug("ACL: Create role '" . $user . "' with parents " . "(" . implode( ", ", $parents) . ")");
-            }
-        
-            // Add role for user
-            $acl->addRole(new Zend_Acl_Role($user), $parents);
         }
+
+        $parents = $realm->getRoles();
+        
+        $this->loadRoles($acl, $parents);
+
+        // create role for user on-the-fly with assigned roles as parents
+        if (Zend_Registry::get('LOG_LEVEL') >= Zend_LOG::DEBUG) {
+                $logger->debug("ACL: Create role '" . $user . "' with parents " . "(" . implode( ", ", $parents) . ")");
+        }
+        
+        // Add role for current user
+        $acl->addRole(new Zend_Acl_Role(self::ACTIVE_ROLE), $parents);
         
         return $acl;
     }

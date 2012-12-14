@@ -104,7 +104,8 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
 
                 foreach ($targetStates as $targetState) {
                     $resource = 'workflow_' . $currentState . '_' . $targetState;
-                    if (!$acl->has(new Zend_Acl_Resource($resource)) || $acl->isAllowed($role, $resource)) {
+                    if (!$acl->has(new Zend_Acl_Resource($resource)) || $acl->isAllowed(
+                            Application_Security_AclProvider::ACTIVE_ROLE, $resource)) {
                         $allowedTargetStates[] = $targetState;
                     }
                     else {

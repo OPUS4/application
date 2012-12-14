@@ -51,7 +51,7 @@ class View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
                 $role = 'guest';
             }
             
-            return $acl->isAllowed($role, $resource);
+            return $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, $resource);
         }
 
         return true;

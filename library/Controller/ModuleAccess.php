@@ -112,8 +112,6 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
             return true;
         }
         
-        $navigation->setRole($role);
-        
         $activePage = $navigation->findActive($navigation->getContainer());
         
         if (!empty($activePage)) {            
@@ -122,7 +120,7 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
             
             $resource = $this->findResourceForPage($activePage);
             
-            return is_null($resource) || $acl->isAllowed($role, $resource);
+            return is_null($resource) || $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, $resource);
         }
         else {
             $logger->debug('ACL: active page not found');

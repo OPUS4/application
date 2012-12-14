@@ -154,7 +154,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         // Set path to shared view partials
         $view->addScriptPath($libRealPath . '/View/Partials');
-
+        
         $viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer($view);
 
         Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
@@ -406,14 +406,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             Zend_Registry::set('Opus_Acl', $acl);
             
             Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl($acl);
-            Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole('guest');        
-
-            $user = Zend_Auth::getInstance()->getIdentity();
-
-            if (!is_null($user)) {
-                $view = $this->getResource('view');
-                $view->navigation()->setRole($user);
-            }
+            Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(
+                    Application_Security_AclProvider::ACTIVE_ROLE);   
         }
     }
     
