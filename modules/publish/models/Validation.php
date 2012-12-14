@@ -111,7 +111,7 @@ class Publish_Model_Validation {
             case 'Reference' :
             case 'Person' :
             case 'Note' :
-            case 'Text' :                
+            case 'Text' :
             case 'Title': $this->validator = null;
                 break;
 
@@ -127,7 +127,7 @@ class Publish_Model_Validation {
 
         $validator = new Form_Validate_Date();
         $validator->setLocale($lang);
-        
+
         $messages = array(
             Zend_Validate_Date::INVALID => $this->translate('publish_validation_error_date_invalid'),
             Zend_Validate_Date::INVALID_DATE => $this->translate('publish_validation_error_date_invaliddate'),
@@ -171,10 +171,10 @@ class Publish_Model_Validation {
     private function _validateLanguage() {
         $validators = array();
         $languages = array_keys($this->getLanguages());
-        
+
         if (is_null($languages))
             return null;
-        
+
         return $this->validateSelect($languages);
     }
 
@@ -194,7 +194,7 @@ class Publish_Model_Validation {
         $licences = array_keys($this->getLicences());
         if (is_null($licences))
             return null;
-        
+
         return $this->validateSelect($licences);
     }
 
@@ -203,7 +203,7 @@ class Publish_Model_Validation {
         $series = array_keys($this->getSeries());
         if (is_null($series))
             return null;
-        
+
         return $this->validateSelect($series);
     }
 
@@ -287,7 +287,7 @@ class Publish_Model_Validation {
         $collectionRole = Opus_CollectionRole::fetchByName($this->collectionRole);
         if (is_null($collectionRole))
             return null;
-                
+
         if ($collectionRole->getVisible() == '1') {
             $children = array();
             if (!is_null($collectionRole)) {
@@ -361,6 +361,7 @@ class Publish_Model_Validation {
                 $this->languages = $languages;
                 return $languages;
             } else {
+                // TODO is this code ever used (see setup in Bootstrap)
                 $dbLanguages = Opus_Language::getAllActive();
                 if (isset($dbLanguages) || count($dbLanguages) >= 1) {
                     foreach ($dbLanguages as $lan)
