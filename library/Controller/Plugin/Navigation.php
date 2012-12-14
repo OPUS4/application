@@ -58,12 +58,16 @@ class Controller_Plugin_Navigation extends Zend_Controller_Plugin_Abstract {
         // Create a Realm instance.
         $realm = Opus_Security_Realm::getInstance();
 
+        // Der folgende Code sorgt dafür, daß für Nutzer mit Zugriff auf das 'admin' und das 'review' Modul der Link
+        // zu den Review Seiten in der Administration angezeigt wird.
         if ($realm->checkModule('admin') or !$realm->checkModule('review')) {
+            // Entferne Link zu Review
             $page = $navigation->findBy('label', 'review_menu_label');
             $navigation->removePage($page);
         }
 
         if (!$realm->checkModule('admin')) {
+            // Entferne Link zu Admin
             $page = $navigation->findBy('label', 'admin_menu_label');
             $navigation->removePage($page);
         }
