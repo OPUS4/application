@@ -61,7 +61,7 @@ class Application_Security_RoleConfig {
         $role = Opus_UserRole::fetchByName($roleName);
         
         if (is_null($role)) {
-            Zend_Registry::get('Zend_Log')->error("Attempt to load unknown role '$roleName'.");
+            Zend_Registry::get('Zend_Log')->err("Attempt to load unknown role '$roleName'.");
             return;
         }
         
