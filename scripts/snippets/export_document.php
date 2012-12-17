@@ -36,7 +36,13 @@
  * Returns the XML representation of the document with given id $id.
  */
 
-$id = 91;
+if(isset($argv[2]) 
+&& !empty($argv[2])
+&& is_numeric($argv[2])) {
+   $id = $argv[2];
+} else {
+   $id = 91;
+}
 
 try {
     $doc = new Opus_Document($id);
