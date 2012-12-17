@@ -597,7 +597,7 @@ class Publish_Model_ExtendedValidation {
                     $coll = new Opus_Collection($collId);
                 }
                 catch (Opus_Model_Exception $e) {
-                    $this->log->error("could not instantiate Opus_Collection with id $collId", $e);
+                    $this->log->err("could not instantiate Opus_Collection with id $collId", $e);
                     $collectionLeafSelection = false;
                 }
 
