@@ -102,8 +102,6 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
      */
     protected function checkPermissions() {
         $logger = Zend_Registry::get('Zend_Log');
-        // get role ('guest' or username)
-        $role = $this->getUserRole();
         
         $navigation = $this->view->getHelper('navigation');
         $acl = $navigation->getAcl();
@@ -183,17 +181,6 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
         return false;
     }
     
-    /**
-     * Returns name of current user or 'guest'.
-     * 
-     * @return String
-     */
-    protected function getUserRole() {
-        $role = Zend_Auth::getInstance()->getIdentity();
-        
-        return is_null($role) ? 'guest' : $role;
-    }
-
     /**
      * Method stub to be overridden by controllers.  Enables checks for custom
      * properties.

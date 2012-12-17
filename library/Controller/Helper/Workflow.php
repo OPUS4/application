@@ -88,11 +88,7 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
         $currentState = $document->getServerState();
         
         $targetStates = self::getTargetStates($currentState);
-        
-        $role = Zend_Auth::getInstance()->getIdentity();
-        
-        $logger->debug("ACL: getAllowedTargetStates for role $role");
-        
+                
         if (Zend_Registry::isRegistered('Opus_Acl')) {
             
             $acl = Zend_Registry::get('Opus_Acl');
