@@ -60,6 +60,11 @@ class Application_Security_RoleConfig {
     public function getRolePermissions($acl, $roleName) {
         $role = Opus_UserRole::fetchByName($roleName);
         
+        if (is_null($role)) {
+            Zend_Registry::get('Zend_Log')->error("Attempt to load unknown role '$roleName'.");
+            return;
+        }
+        
         $resources = $role->listAccessModules();
         
         $resourcesConfigured = false;
