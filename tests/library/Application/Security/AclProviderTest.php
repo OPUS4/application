@@ -76,7 +76,6 @@ class Application_Security_AclProviderTest extends ControllerTestCase {
     }
 
     public function testRoleNameLikeUserName() {
-        
         $userAccount = new Opus_Account();
         $userAccount->setLogin('_test')
                 ->setPassword('role_tester');
@@ -86,10 +85,10 @@ class Application_Security_AclProviderTest extends ControllerTestCase {
 
         $aclProvider = new Application_Security_AclProvider();
         $acl = $aclProvider->getAcls();
-        $this->assertTrue($acl instanceof Zend_Acl, 'Excpected instance of Zend_Acl');
-        $this->assertTrue($acl->isAllowed('role_tester', 'documents'), "expectec user has access to resource 'documents'");
-        $this->assertFalse($acl->isAllowed('role_tester', 'account'), "expectec user has no access to resource 'account'");
         $userAccount->delete();
+        $this->assertTrue($acl instanceof Zend_Acl, 'Excpected instance of Zend_Acl');
+        $this->assertTrue($acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 'documents'), "expected user has access to resource 'documents'");
+        $this->assertFalse($acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 'accounts'), "expected user has no access to resource 'account'");
     }
     
     public function testGetAllResources() {
@@ -105,7 +104,37 @@ class Application_Security_AclProviderTest extends ControllerTestCase {
         $this->assertEquals($allResources, $aclProvider->getAllResources());
 
     }
+    
+    /*
+    public function testSetupAcls() {
+        $acl = new Zend_Acl();
+        
+        // $adminRes = new Zend_Acl_Resource('admin');
+        $documentsRes = new Zend_Acl_Resource('documents');
+        
+        // $acl->addResource($adminRes);
+        $acl->addResource($documentsRes);
+        $acl->addRole(new Zend_Acl_Role('guest'));
+        $acl->addRole(new Zend_Acl_Role('administrator'));
+        
+        $roles = array('administrator');
+        
+        $acl->allow('administrator');
+        
+        $acl->addRole(new Zend_Acl_Role('admin'), $roles);
+        // $acl->deny('guest', 'documents');
+        
+        $this->assertFalse($acl->isAllowed('guest', 'documents'));
+        $this->assertTrue($acl->isAllowed('administrator', 'documents'));
+        $this->assertTrue($acl->isAllowed('admin', 'documents'));
+    }
+    
+    public function testLoadResources() {
+        $aclProvider = new Application_Security_AclProvider();
+        
+        $acl = new Zend_Acl();
+        
+        $aclProvider->loadResources($acl);
+    }*/    
 
 }
-
-?>
