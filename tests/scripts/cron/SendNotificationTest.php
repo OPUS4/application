@@ -32,53 +32,22 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 require_once('CronTestCase.php');
-require_once('OpusDocumentMock.php');
+
 /**
  * 
  */
-class DbCleanTemporaryTest extends CronTestCase {
+class SendNotificationTest extends CronTestCase {
 
-    private $doc;
-    
-    public function setUp() {
-        parent::setUp();
-        $this->doc = new OpusDocumentMock();
-        $this->doc->setServerState('temporary');
-        $this->doc->store();
-    }
-    
-    public function tearDown() {
-        parent::tearDown();
-    }
-    
-    public function testCleanUpDocumentOlderThan2Days() {
-        $this->changeDocumentDateModified(3);
-        $this->executeScript('cron-db-clean-temporary.php');
-        try {
-            $doc = new Opus_Document($this->doc->getId());
-            $doc->deletePermanent();
-            $this->fail("expected Opus_Model_NotFoundException");
-        } catch(Opus_Model_NotFoundException $e) {
-        }
+    public function testSendNotification() {
+        $this->createJob(Opus_Job_Worker_MailNotification::LABEL, array(
+            'subject' => 'SendNotification Test',
+            'message' => 'This is a test message generated in ' . __FILE__,
+            'users' => 'user@localhost'
+        ));
+        $this->executeScript('cron-send-notification.php');
+        $allJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_MailNotification::LABEL), null, Opus_Job::STATE_UNDEFINED);
+        $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue');
     }
 
-    public function testKeepDocumentNewerThan3Days() {
-        $this->changeDocumentDateModified(2);
-        $this->executeScript('cron-db-clean-temporary.php');
-        try {
-            $doc = new Opus_Document($this->doc->getId());
-            $doc->deletePermanent();
-        } catch(Opus_Model_NotFoundException $e) {
-            $this->fail("expected existing document.");
-        }
-    }
-    
-    private function changeDocumentDateModified($numDaysBeforeNow) {
-        $date = new Zend_Date();
-        $date->subDay($numDaysBeforeNow);
-        $this->doc->changeServerDateModified(new Opus_Date($date));
-    }
-    
 }

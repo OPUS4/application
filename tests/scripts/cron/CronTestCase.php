@@ -25,8 +25,8 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
- * @package     TODO
+ * @category    Cronjob
+ * @package     Tests
  * @author      Edouard Simon (edouard.simon@zib.de)
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -37,8 +37,6 @@
  * 
  */
 class CronTestCase extends ControllerTestCase {
-
-//class CronTestCase extends PHPUnit_Framework_TestCase {
 
     protected static $scriptPath;
     protected static $lockDir;
@@ -80,5 +78,3 @@ class CronTestCase extends ControllerTestCase {
     }
 
 }
-
-?>
