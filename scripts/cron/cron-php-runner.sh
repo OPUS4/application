@@ -78,7 +78,7 @@ echo "`date --iso-8601=seconds`: starting job '$SCRIPT' ..." 2>&1 >>$CRONLOG
 if $PHP $SCRIPT 2>&1 >>$LOGFILE; then
    echo "`date --iso-8601=seconds`: job '$SCRIPT' done." 2>&1 >>$CRONLOG
 else
-   echo "`date --iso-8601=seconds`: job '$SCRIPT' FAILED (return value $RETVAL, logfile $LOGFILE, cronlog $CRONLOG)." 2>&1 |tee -a $CRONLOG
+   echo "`date --iso-8601=seconds`: job '$SCRIPT' FAILED (logfile $LOGFILE, cronlog $CRONLOG)." 2>&1 |tee -a $CRONLOG
 fi
 
 rm "$LOCKFILE" 2>&1 >>$CRONLOG || :
