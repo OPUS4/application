@@ -34,29 +34,51 @@
  */
 
 require_once('CronTestCase.php');
+require_once('OpusDocumentMock.php');
 /**
  * 
  */
 class DbCleanTemporaryTest extends CronTestCase {
-    
-    public function testCleanUpDocument() {
-        $doc = new Opus_Document();
-        $doc->setServerState('temporary');
-        $date = new Opus_Date();
-        $date->setNow();
-        $date->setDay(date('d') - 1);
-        $date->setHour(date('H') - 1);
-        $docId = $doc->store();
-        $doc->setServerDateCreated($date);
-        $doc->store();
 
+    private $doc;
+    
+    public function setUp() {
+        parent::setUp();
+        $this->doc = new OpusDocumentMock();
+        $this->doc->setServerState('temporary');
+        $this->doc->store();
+    }
+    
+    public function tearDown() {
+        parent::tearDown();
+    }
+    
+    public function testCleanUpDocumentOlderThan2Days() {
+        $this->changeDocumentDateModified(3);
         $this->executeScript('cron-db-clean-temporary.php');
         try {
-            $doc = new Opus_Document($docId);
+            $doc = new Opus_Document($this->doc->getId());
             $doc->deletePermanent();
             $this->fail("expected Opus_Model_NotFoundException");
         } catch(Opus_Model_NotFoundException $e) {
         }
+    }
+
+    public function testKeepDocumentNewerThan3Days() {
+        $this->changeDocumentDateModified(2);
+        $this->executeScript('cron-db-clean-temporary.php');
+        try {
+            $doc = new Opus_Document($this->doc->getId());
+            $doc->deletePermanent();
+        } catch(Opus_Model_NotFoundException $e) {
+            $this->fail("expected existing document.");
+        }
+    }
+    
+    private function changeDocumentDateModified($numDaysBeforeNow) {
+        $date = new Zend_Date();
+        $date->subDay($numDaysBeforeNow);
+        $this->doc->changeServerDateModified(new Opus_Date($date));
     }
     
 }

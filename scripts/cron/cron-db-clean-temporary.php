@@ -36,9 +36,11 @@
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
+$date = new DateTime();
+$dateString = $date->sub(new DateInterval('P2D'))->format('Y-m-d');
 $f = new Opus_DocumentFinder();
 $f->setServerState('temporary')
-  ->setServerDateCreatedBefore(date('Y-m-d'));
+  ->setServerDateModifiedBefore($dateString);
 
 foreach ($f->ids() AS $id) {
   $d = new Opus_Document( $id );
