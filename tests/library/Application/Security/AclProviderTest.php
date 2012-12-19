@@ -96,7 +96,6 @@ class Application_Security_AclProviderTest extends ControllerTestCase {
     }
     
     public function testGetAllResources() {
-        
         $aclResources = Application_Security_AclProvider::$RESOURCE_NAMES;
         
         $allResources = array();
@@ -106,39 +105,6 @@ class Application_Security_AclProviderTest extends ControllerTestCase {
         }
         $aclProvider = new Application_Security_AclProvider();
         $this->assertEquals($allResources, $aclProvider->getAllResources());
-
     }
     
-    /*
-    public function testSetupAcls() {
-        $acl = new Zend_Acl();
-        
-        // $adminRes = new Zend_Acl_Resource('admin');
-        $documentsRes = new Zend_Acl_Resource('documents');
-        
-        // $acl->addResource($adminRes);
-        $acl->addResource($documentsRes);
-        $acl->addRole(new Zend_Acl_Role('guest'));
-        $acl->addRole(new Zend_Acl_Role('administrator'));
-        
-        $roles = array('administrator');
-        
-        $acl->allow('administrator');
-        
-        $acl->addRole(new Zend_Acl_Role('admin'), $roles);
-        // $acl->deny('guest', 'documents');
-        
-        $this->assertFalse($acl->isAllowed('guest', 'documents'));
-        $this->assertTrue($acl->isAllowed('administrator', 'documents'));
-        $this->assertTrue($acl->isAllowed('admin', 'documents'));
-    }
-    
-    public function testLoadResources() {
-        $aclProvider = new Application_Security_AclProvider();
-        
-        $acl = new Zend_Acl();
-        
-        $aclProvider->loadResources($acl);
-    }*/    
-
 }
