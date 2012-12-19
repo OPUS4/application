@@ -241,8 +241,12 @@ class Util_Notification {
                     }
                 } else {
                     // Execute job immediately (synchronously)
-                    $mail = new Opus_Job_Worker_MailNotification($this->logger, false);
-                    $mail->work($job);
+                    try {
+                        $mail = new Opus_Job_Worker_MailNotification($this->logger, false);
+                        $mail->work($job);
+                    } catch(Exception $exc) {
+                        $this->logger->err("Email notification failed: ".$exc);
+                    }
                 }
                 array_push($addressesUsed, $recipient['address']);
             }

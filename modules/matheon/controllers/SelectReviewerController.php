@@ -123,8 +123,12 @@ class Matheon_SelectReviewerController extends Controller_Action {
         }
 
         // Execute job immediately (synchronously)
-        $mail = new Opus_Job_Worker_MailNotification($this->_logger);
-        $mail->work($job);
+        try {
+            $mail = new Opus_Job_Worker_MailNotification($this->_logger);
+            $mail->work($job);
+        } catch(Exception $exc) {
+            $this->_logger->err($exc);
+        }
 
         return true;
     }
