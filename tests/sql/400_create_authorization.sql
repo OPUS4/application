@@ -5,7 +5,8 @@ INSERT INTO `user_roles` (`id`, `name`) VALUES
 (12, 'testuserrole'),
 (13, 'docsadmin'),
 (14, 'collectionsadmin'),
-(15, 'securityadmin');
+(15, 'securityadmin'),
+(16, 'accesstest');
 
 # Rollen mit Rechten verknüpfen
 INSERT INTO `access_modules` (`role_id`, `module_name`) VALUES 
@@ -22,7 +23,11 @@ INSERT INTO `access_modules` (`role_id`, `module_name`) VALUES
 (14, 'resource_collections'),
 (15, 'admin'),
 (15, 'resource_security'),
-(15, 'resource_accounts');
+(15, 'resource_accounts'),
+(16, 'admin'),
+(16, 'account'),
+(16, 'resource_collections'),
+(16, 'workflow_unpublished_published');
 
 # Accounts anlegen
 INSERT INTO `accounts` (`id`, `login`,`password`,`email`,`first_name`,`last_name`) VALUES
