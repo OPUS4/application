@@ -4,7 +4,7 @@ h2. ======================== Release 4.3.0 2012-12-20 ========================
 
 h3. Bugs
 
-* [OPUSVIER-1886] - Falscher Hinweis zur Zugehörigkeit des Dokuments zur  Bibliographie
+* [OPUSVIER-1886] - Falscher Hinweis zur Zugehörigkeit des Dokuments zur Bibliographie
 * [OPUSVIER-1933] - BK Collection führt zu weißer Seite im Publish
 * [OPUSVIER-1988] - Migration der Tabelle "diss" aus OPUS3
 * [OPUSVIER-2422] - Fehlerhafte Übersetzung bei einem neuen Dokumenttyp "patent" in der Auswahlliste auf der ersten Seite des Publish-Formulars
@@ -88,9 +88,6 @@ h3. Tasks
 * [OPUSVIER-2667] - Link zum Editieren eines Dokumentes in der Frontdoor nur für Nutzer mit Zugriff auf "documents" anzeigen
 * [OPUSVIER-2668] - Defaultvalues für das Mapping von Dokumentsprache und Dokumenttyp
 * [OPUSVIER-2670] - Umsetzung des Workers für Mailversand
-* [OPUSVIER-2671] - Kapitel 10.1: Mapping von Dokumenttypen anpassen
-* [OPUSVIER-2672] - Kapitel 10.1: Mapping von Sprachen anpassen
-* [OPUSVIER-2674] - Kapitel 10.1: Migration der Lizenzen
 * [OPUSVIER-2679] - Probeme bei der Jobverarbeitung werden u.U. nicht sichtbar
 * [OPUSVIER-2690] - Fehlerausgabe bei der Migration, wenn Dokumenttyp und Sprache nicht gemappt werden können
 * [OPUSVIER-2692] - Systematische Tests für mehrere Titel mit  gleicher Sprache
@@ -113,6 +110,10 @@ h3. Documentation
 * [OPUSVIER-2700] - zu ändernde Übersetzungsschlüssel beim Anlegen neuer Felder tabellarisch darstellen
 * [OPUSVIER-2713] - Erweiterte Möglichkeiten der Rechteverwaltung dokumentieren
 * [OPUSVIER-877] - Feinjustierung bei Opus3XMLImport
+* [OPUSVIER-2671] - Kapitel 10.1: Mapping von Dokumenttypen anpassen
+* [OPUSVIER-2672] - Kapitel 10.1: Mapping von Sprachen anpassen
+* [OPUSVIER-2674] - Kapitel 10.1: Migration der Lizenzen
+
 
 h3. Stories
 
