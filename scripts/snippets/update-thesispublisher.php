@@ -35,22 +35,26 @@
  * 
  */
 
-if ($argc != 3) {
-    echo "Usage: {$argv[0]} <document type> <thesis publisher ID>\n";
+if ($argc < 4) {
+    echo "Usage: {opus-console.php $argv[1]} <document type> <thesis publisher ID> (dryrun)\n";
     exit;
 }
 
-require_once dirname(__FILE__) . '/common/bootstrap.php';
+$dryrun = (isset($argv[4]) && $argv[4] == 'dryrun');
 
 try {
-    $dnbInstitute = new Opus_DnbInstitute($argv[2]);
+    $dnbInstitute = new Opus_DnbInstitute($argv[3]);
 } catch (Opus_Model_NotFoundException $omnfe) {
-    _log("Opus_DnbInstitute with ID {$argv[2]} does not exist.\nExiting...");
+    _log("Opus_DnbInstitute with ID {$argv[3]} does not exist.\nExiting...");
     exit;
 }
+if($dryrun)
+    _log("TEST RUN: NO DATA WILL BE MODIFIED");
 
 $docFinder = new Opus_DocumentFinder();
-$docIds = $docFinder->setType($argv[1])->ids();
+$docIds = $docFinder
+        ->setServerState('published')
+        ->setType($argv[2])->ids();
 
 _log(count($docIds) . " documents of type '{$argv[1]}' found");
 
@@ -59,10 +63,11 @@ foreach ($docIds as $docId) {
         $doc = new Opus_Document($docId);
         $thesisPublisher = $doc->getThesisPublisher();
         if (empty($thesisPublisher)) {
-            $doc->setThesisPublisher($dnbInstitute);
-            $doc->store();
-        _log("Set ThesisPublisher <{$argv[2]}> on Document <$docId>");
-
+            if(!$dryrun) {
+                $doc->setThesisPublisher($dnbInstitute);
+                $doc->store();
+            }
+        _log("Set ThesisPublisher <{$argv[3]}> on Document <$docId>");
         } else {
             $thesisPublisherId = $thesisPublisher[0]->getId();
             _log("Document <$docId> already has ThesisPublisher <{$thesisPublisherId[1]}>");
