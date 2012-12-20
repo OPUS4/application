@@ -114,7 +114,6 @@ h3. Documentation
 * [OPUSVIER-2672] - Kapitel 10.1: Mapping von Sprachen anpassen
 * [OPUSVIER-2674] - Kapitel 10.1: Migration der Lizenzen
 
-
 h3. Stories
 
 * [OPUSVIER-2691] - Systematische Tests für Titel und Abstracts
