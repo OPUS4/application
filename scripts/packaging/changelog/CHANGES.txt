@@ -1,5 +1,124 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.3.0 2012-12-20 ========================
+
+h3. Bugs
+
+* [OPUSVIER-1886] - Falscher Hinweis zur Zugehörigkeit des Dokuments zur  Bibliographie
+* [OPUSVIER-1933] - BK Collection führt zu weißer Seite im Publish
+* [OPUSVIER-1988] - Migration der Tabelle "diss" aus OPUS3
+* [OPUSVIER-2422] - Fehlerhafte Übersetzung bei einem neuen Dokumenttyp "patent" in der Auswahlliste auf der ersten Seite des Publish-Formulars
+* [OPUSVIER-2443] - Upload Feld kann nicht ausgeblendet werden
+* [OPUSVIER-2492] - Bezeichnungen der Collection Roles erscheinen nicht auf der Frontdoor
+* [OPUSVIER-2538] - Sinn der PHTML-Templates unterhalb von server/modules/publish/views/scripts/form/expert klären
+* [OPUSVIER-2580] - Update Skript berücksichtigt Ordner "public/xsl" nicht
+* [OPUSVIER-2582] - Home_Model_HelpFiles verwendet getExtension Funktion, die es erst seit PHP 5.3.6 gibt
+* [OPUSVIER-2583] - Migrationsskript sollte für den Fall gehärtet werden, dass für ein freigeschaltetes Dokument noch Einträge in den OPUS3-temp-Tabellen existieren
+* [OPUSVIER-2584] - das bei Migrationsfehlern ausgegebene OPUS4-XML-Dokument enthält nur eine Teilmenge der Datenfelder
+* [OPUSVIER-2586] - Umbenennung der Buttons "up" und "down" nur global möglich
+* [OPUSVIER-2589] - Publish-Formular ruft bei der Generierung eines Response mehrfach (mindestens zweimal) den Translate-Mechanismus auf
+* [OPUSVIER-2602] - Update erneuert Templates für Dokumenttypen trotz Angabe [K]eep modified file
+* [OPUSVIER-2607] - XMetaDissPlus: Vornamen optional ausliefern
+* [OPUSVIER-2613] - Auskommentieren der Revision-Nummer in common.phtml nicht mit HTML- sondern besser mit PHP-Kommentaren
+* [OPUSVIER-2618] - Download von Solr 1.4.1 scheitert aufgrund geänderter URL
+* [OPUSVIER-2635] - Fehlermeldung im dritten Formularschritt beim Dokumenttyp all, wenn alle Schriftenreihen in der Administration gelöscht wurden
+* [OPUSVIER-2638] - Formular für das Ändern der Sammlungseinstellungen zeigt "OPUS 4 | Sammlung '%1$s' wurde erfolgreich bearbeitet" im Seitentitel
+* [OPUSVIER-2639] - fehlende Übersetzungsschlüssel für PersonReferee, PersonEditor, PersonAdvisor, PersonTranslator, PersonContributor nachtragen
+* [OPUSVIER-2640] - Übersetzungsschlüssel mit dem Suffix "1" in der Datei modules/publish/language/field_hints.tmx überprüfen
+* [OPUSVIER-2645] - erste Seite des Publikationsformulars wird doppelt durch den Translate-Mechanismus geschleift
+* [OPUSVIER-2646] - wenn form.first.bibliographie auf den Wert 0 gesetzt wird, kann dennoch das Dokument der Bibliographie zugeordnet werden, wenn das Formular manipuliert wird
+* [OPUSVIER-2650] - fehlende Übersetzungen der header und hints für Identifier ergänzen
+* [OPUSVIER-2651] - falsche Anzeige von Collections auf der Frontdoor, wenn die Anzeigeoption "Name, Number" für die zugehörige Collection Role ausgewählt wurde
+* [OPUSVIER-2654] - Parameter "stylesheets" ändern in "stylesheet"
+* [OPUSVIER-2655] - Assertions der Tests in Publish_FormControllerTest sind zu schwach
+* [OPUSVIER-2657] - falscher Anzeigetitel "Wählen Sie eine weitere Datei zum Hochladen" im ersten Schritt des Publikationsformulars, wenn auf erster Seite ein Fehler auftritt
+* [OPUSVIER-2664] - Publish-Formular verwirft die bereits hochgeladene Datei, wenn Button "Upload another file" und anschließend "Next Step" gedrückt wird
+* [OPUSVIER-2676] - Publish-Formular geht nicht in Schritt 2, wenn anfängliches Formular kein ausgewählten Dokumenttyp hatte
+* [OPUSVIER-2681] - zwei fehlende hint-Übersetzungsschlüssel nachtragen
+* [OPUSVIER-2683] - Übersetzungsschlüssel der Hints für Browsing-Felder im zweiten Publikationsformular dürfen keine fortlaufende Nummer bekommen
+* [OPUSVIER-2684] - Collection Role 'bk' wird im Dokumenttyp 'all' nicht verwendet und es existieren auch keine Übersetzungsschlüssel
+* [OPUSVIER-2685] - Englische Standardfehlermeldung, wenn in deutscher Formularversion eine ungültige E-Mail-Adresse eingetragen wurde
+* [OPUSVIER-2686] - Fehler bei der Migration von Volltexten in Verzeichnishierarchien
+* [OPUSVIER-2688] - Downloadlink für Solr 1.4.1 veraltet
+* [OPUSVIER-2697] - Verknüpfung eines Dokuments zu einer Collection (nicht zur obersten) in der Administration führt ggf. zu "Fatal error: Allowed memory size of XXX bytes exhausted"
+* [OPUSVIER-2699] - mehrere Warnungen und Hinweise im PHP-Error-Log in Zusammenhang mit dem Test von Opus3FileImport.php
+* [OPUSVIER-2712] - Nutzer können eigenen Account nicht editieren
+
+h3. Tasks
+
+* [OPUSVIER-2127] - Check-Seite im Publish-Modul: Anzeige des BelongsToBibliography-Status und der hochgeladenen Dateien sollte jeweils ausblendbar sein
+* [OPUSVIER-2677] - Hinweis in die Release Notes aufnehmen, dass mit OPUS 4.3.0 kleine Anpassungen an den PHTML-Dokumenttyp-Templates vorgenommen wurden
+* [OPUSVIER-2694] - neue Funktion hasVisibleChildren in Opus_Collection einführen
+* [OPUSVIER-2695] - neue Funktion getVisibleChildren in Opus_Collection schaffen
+* [OPUSVIER-2698] - neu eingeführte Funktion getDisplayNameForBrowsingContext in Opus_Collection sollte Kompatibilität der übergebenen Collection Role überprüfen
+* [OPUSVIER-2719] - PersonController entfernen
+* [OPUSVIER-491] - Mehrfach belegte Übersetzungs-Schlüssel prüfen
+* [OPUSVIER-809] - alphabetische Sortierungen für Selects
+* [OPUSVIER-1858] - automatische E-Mail an den Submitter/Autor eines Dokuments nach dessen Veröffentlichung
+* [OPUSVIER-1947] - Datei modules/publish/documentation/publish.ger.txt und Verzeichnis modules/publish/documentation entfernen
+* [OPUSVIER-1951] - Template-Definitionen in index.xslt in externe Dateien auslagern
+* [OPUSVIER-1960] - Übersetzung der Namen von Modulen auf der Access Seite für Rollen
+* [OPUSVIER-1961] - Erweiterung der Liste der möglichen Rechte auf der Access Seite für Rollen
+* [OPUSVIER-1967] - Anpassung der Datenbank zur Speicherung der neuen Rechte für Rollen
+* [OPUSVIER-1968] - Modifizieren der Klasse Opus_SecurityRealm um neue Rechte zu unterstützen
+* [OPUSVIER-1969] - Filterung des Administrationsmenüs in Abhängigkeit von den Rechten eines Nutzers
+* [OPUSVIER-1970] - Transparente Absicherung von Controllern implementieren
+* [OPUSVIER-1971] - Einschränkung des Workflows in Abhängigkeit von Rollen umsetzen
+* [OPUSVIER-2043] - Klasse für die Konfiguration der ACLs implementieren
+* [OPUSVIER-2065] - Cleanup-Skript für das Entfernen von Dokumenten im Zustand temporary und deren Dateien
+* [OPUSVIER-2297] - Migrationstest für die Collections anlegen
+* [OPUSVIER-2298] - Migrationstest für die Volltexte anlegen
+* [OPUSVIER-2299] - Migrationstest für die Lizenzen anlegen
+* [OPUSVIER-2300] - Migrationstests für die fehlenden Dokumenttypen anlegen
+* [OPUSVIER-2301] - Migrationstest für Enrichments anlegen
+* [OPUSVIER-2557] - leeres DB-Update-Skript db/schema/update-4.2.2-to-4.3.0.sql anlegen
+* [OPUSVIER-2565] - Formatierungen (z.B. Absätze) im Abstract ermöglichen
+* [OPUSVIER-2576] - Migration der Subjects konfigurierbar machen: Tests nachreichen
+* [OPUSVIER-2601] - Anzeige von Sammlungen mit Name und Nummer konfigurierbar ob in Administration oder im Browsing oder in beiden
+* [OPUSVIER-2609] - Exportausgabe um zusätzliches Wurzelelement-Attribut queryhits erweitern, das Gesamttrefferanzahl der zugrundeliegenden Suchanfrage enthält
+* [OPUSVIER-2610] - neuer Config-Parameter einführen searchengine.solr.facetlimit.FACETTE
+* [OPUSVIER-2625] - Dokumentation der Print on Demand Funktionalität
+* [OPUSVIER-2630] - Autor(en)/Submitter zum Verschicken der Benachrichtigung auswählbar machen
+* [OPUSVIER-2631] - doppelten Versand von Emails verhindern, wenn Autor=Submitter
+* [OPUSVIER-2633] - Benachrichtigung an jede Person einzeln verschicken anstatt eine E-Mail an alle Personen
+* [OPUSVIER-2648] - Hinweis zu hochgeladenen Dateien im zweiten und dritten Formularschritt ausblenden, wenn File-Upload deaktiviert wurde
+* [OPUSVIER-2649] - Unit Test schreiben, der mehrfach belegte Übersetzungsschlüssel detektiert
+* [OPUSVIER-2659] - Umsetzung des Worker-Mechanismus'
+* [OPUSVIER-2666] - Migrationstests für Zugriffsbeschränkungen auf Dateien
+* [OPUSVIER-2667] - Link zum Editieren eines Dokumentes in der Frontdoor nur für Nutzer mit Zugriff auf "documents" anzeigen
+* [OPUSVIER-2668] - Defaultvalues für das Mapping von Dokumentsprache und Dokumenttyp
+* [OPUSVIER-2670] - Umsetzung des Workers für Mailversand
+* [OPUSVIER-2671] - Kapitel 10.1: Mapping von Dokumenttypen anpassen
+* [OPUSVIER-2672] - Kapitel 10.1: Mapping von Sprachen anpassen
+* [OPUSVIER-2674] - Kapitel 10.1: Migration der Lizenzen
+* [OPUSVIER-2679] - Probeme bei der Jobverarbeitung werden u.U. nicht sichtbar
+* [OPUSVIER-2690] - Fehlerausgabe bei der Migration, wenn Dokumenttyp und Sprache nicht gemappt werden können
+* [OPUSVIER-2692] - Systematische Tests für mehrere Titel mit  gleicher Sprache
+* [OPUSVIER-2702] - Verzeichnis scripts/cron muss in Distribution-Tarball aufgenommen werden
+* [OPUSVIER-2704] - Erzeugen von Dumps und Testklassen für die Konsistenzprüfung der temp-Klassen
+* [OPUSVIER-2706] - Testaufbau für die asynchrone Jobverarbeitung
+* [OPUSVIER-2710] - Tests für erweiterte Recht im Admin Modul hinzufügen
+
+h3. Documentation
+
+* [OPUSVIER-2626] - Kapitel "Dokumente verwalten" bzw. "Übersicht - Metadaten bearbeiten" überarbeiten
+* [OPUSVIER-2627] - Kapitel "Lizenzen verwalten" überarbeiten
+* [OPUSVIER-2628] - Kapitel "Sprachen verwalten" überarbeiten
+* [OPUSVIER-2629] - Kapitel "DNB-Institution (Verbreitende Stelle)" überarbeiten
+* [OPUSVIER-2634] - Dokumentation des E-Mail-Notifizierungsmechanismus
+* [OPUSVIER-2647] - Dokumentation des neu eingeführten Konfigurationsschlüssels form.first.enable_upload
+* [OPUSVIER-2661] - Kapitel "Installation mittels Paketverwaltung" temporär aus der Doku nehmen
+* [OPUSVIER-2662] - Überschreiben des Default-Werts (von 10) für die angezeigten Werte pro Facette
+* [OPUSVIER-2678] - Dokumentation der asynchronen Jobverarbeitung
+* [OPUSVIER-2700] - zu ändernde Übersetzungsschlüssel beim Anlegen neuer Felder tabellarisch darstellen
+* [OPUSVIER-2713] - Erweiterte Möglichkeiten der Rechteverwaltung dokumentieren
+* [OPUSVIER-877] - Feinjustierung bei Opus3XMLImport
+
+h3. Stories
+
+* [OPUSVIER-2691] - Systematische Tests für Titel und Abstracts
+
+
 h2. ======================== Release 4.2.2 2012-07-04 ========================
 
 h3. Bugs
@@ -101,7 +220,7 @@ h3. Tasks
 * [OPUSVIER-2553] - Migration der Subjects konfigurierbar machen: Tests
 * [OPUSVIER-1917] - Collection "open_access" und OAI-Set einrichten
 
-h3. Dokumentation
+h3. Documentation
 
 * [OPUSVIER-2458] - Hinweis zur Dokumentsprache aufnehmen
 * [OPUSVIER-2460] - Hinweis in die Checkliste für die Liveschaltung aufnehmen, dass uns nach der Liveschaltung die Instanz-URL mitgeteilt wird
@@ -402,7 +521,6 @@ h3. Tasks
 * [OPUSVIER-2303] - update-config.sh: Anpassungen der Migrationskonfigurationsdateien
 * [OPUSVIER-2309] - geeignete Behandlung von Bandnummern-Konflikten bei der Migration der Collection-basierten Schriftenreihen
 * [OPUSVIER-2327] - Sichtbarkeitsstatus der einzelnen Schriftenreihen in der Administration farblich kennzeichnen
-
 
 h3. Documentation
 
