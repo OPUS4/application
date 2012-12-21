@@ -87,7 +87,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      * @return void
      */
     public function indexAction() {
-    	$this->view->title = $this->view->translate('admin_documents_index');
+    	$this->view->title = 'admin_documents_index';
 
         $this->_prepareDocStateLinks();
 

@@ -51,7 +51,7 @@ class Admin_IndexController extends Controller_Action {
      * @return void
      */
     public function indexAction() {
-        $this->view->title = $this->view->translate('admin_index_title');
+        $this->view->title = 'admin_index_title';
     }
 
 }

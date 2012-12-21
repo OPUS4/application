@@ -698,13 +698,11 @@ class Admin_DocumentController extends Controller_Action {
             ), 'default', false);
 
             if ($translator->isTranslated('admin_document_add_section_' . $section)) {
-                $editLabels[$section] = $translator->translate('admin_document_add_section_' . $section);
+                $addLabels[$section] = $translator->translate('admin_document_add_section_' . $section);
             }
             else {
-                $editLabels[$section] = $translator->translate('admin_document_add_section');
+                $addLabels[$section] = $translator->translate('admin_document_add_section');
             }
-            
-            $addLabels[$section] = $translation;
         }
 
         $this->view->editUrls = $editUrls;
