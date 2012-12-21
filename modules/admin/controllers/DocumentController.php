@@ -679,11 +679,14 @@ class Admin_DocumentController extends Controller_Action {
                 'section' => $section
             ), 'default', false);
 
-			$translation = $this->view->translate('admin_document_edit_section_' . $section);
-			if ($translation == 'admin_document_edit_section_' . $section) {
-				$translation = $this->view->translate('admin_document_edit_section');
-			}
-            $editLabels[$section] = $translation;
+            $translator = $this->view->getHelper('translate')->getTranslator();
+            
+            if ($translator->isTranslated('admin_document_edit_section_' . $section)) {
+                $editLabels[$section] = $translator->translate('admin_document_edit_section_' . $section);
+            }
+            else {
+                $editLabels[$section] = $translator->translate('admin_document_edit_section');
+            }
 
             // Links for 'Add' pages
             $addUrls[$section] = $this->view->url(array(
@@ -694,10 +697,13 @@ class Admin_DocumentController extends Controller_Action {
                 'section' => $section
             ), 'default', false);
 
-			$translation = $this->view->translate('admin_document_add_section_' . $section);
-			if ($translation == 'admin_document_add_section_' . $section) {
-				$translation = $this->view->translate('admin_document_add_section');
-			}
+            if ($translator->isTranslated('admin_document_add_section_' . $section)) {
+                $editLabels[$section] = $translator->translate('admin_document_add_section_' . $section);
+            }
+            else {
+                $editLabels[$section] = $translator->translate('admin_document_add_section');
+            }
+            
             $addLabels[$section] = $translation;
         }
 
