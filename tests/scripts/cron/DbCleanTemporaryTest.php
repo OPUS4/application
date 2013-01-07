@@ -76,8 +76,8 @@ class DbCleanTemporaryTest extends CronTestCase {
     }
     
     private function changeDocumentDateModified($numDaysBeforeNow) {
-        $date = new Zend_Date();
-        $date->subDay($numDaysBeforeNow);
+        $date = new DateTime();
+        $date->sub(new DateInterval("P{$numDaysBeforeNow}D"));
         $this->doc->changeServerDateModified(new Opus_Date($date));
     }
     
