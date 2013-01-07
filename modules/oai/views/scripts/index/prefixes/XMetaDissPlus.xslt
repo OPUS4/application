@@ -247,11 +247,6 @@
                                 <cc:place>
                                     <xsl:value-of select="@City" />
                                 </cc:place>
-                                <cc:department>
-                                    <cc:name>
-                                        <xsl:value-of select="@Name" />
-                                    </cc:name>
-                                </cc:department>
                             </cc:universityOrInstitution>
                         </thesis:grantor>
                     </xsl:for-each>
