@@ -35,17 +35,26 @@
  * 
  */
 
-if ($argc < 4) {
-    echo "Usage: {opus-console.php $argv[1]} <document type> <thesis publisher ID> (dryrun)\n";
+if(basename(__FILE__) !== basename($argv[0])) {
+    echo "script must be executed directy (not via opus-console)\n";
     exit;
 }
 
-$dryrun = (isset($argv[4]) && $argv[4] == 'dryrun');
+require_once dirname(__FILE__) . '/../common/bootstrap.php';
+
+if ($argc < 3) {
+    echo "Usage: {$argv[0]} <document type> <thesis publisher ID> (dryrun)\n";
+    exit;
+}
+
+$documentType = $argv[1];
+$thesisPublisherId = $argv[2];
+$dryrun = (isset($argv[3]) && $argv[3] == 'dryrun');
 
 try {
-    $dnbInstitute = new Opus_DnbInstitute($argv[3]);
+    $dnbInstitute = new Opus_DnbInstitute($thesisPublisherId);
 } catch (Opus_Model_NotFoundException $omnfe) {
-    _log("Opus_DnbInstitute with ID {$argv[3]} does not exist.\nExiting...");
+    _log("Opus_DnbInstitute with ID <$thesisPublisherId> does not exist.\nExiting...");
     exit;
 }
 if($dryrun)
@@ -54,9 +63,9 @@ if($dryrun)
 $docFinder = new Opus_DocumentFinder();
 $docIds = $docFinder
         ->setServerState('published')
-        ->setType($argv[2])->ids();
+        ->setType($documentType)->ids();
 
-_log(count($docIds) . " documents of type '{$argv[1]}' found");
+_log(count($docIds) . " documents of type '{$documentType}' found");
 
 foreach ($docIds as $docId) {
     try {
@@ -67,10 +76,10 @@ foreach ($docIds as $docId) {
                 $doc->setThesisPublisher($dnbInstitute);
                 $doc->store();
             }
-        _log("Set ThesisPublisher <{$argv[3]}> on Document <$docId>");
+        _log("Setting ThesisPublisher <$thesisPublisherId> on Document <$docId>");
         } else {
-            $thesisPublisherId = $thesisPublisher[0]->getId();
-            _log("Document <$docId> already has ThesisPublisher <{$thesisPublisherId[1]}>");
+            $existingThesisPublisherId = $thesisPublisher[0]->getId();
+            _log("ThesisPublisher <{$existingThesisPublisherId[1]}> already set for Document <$docId>");
         }
     } catch (Exception $exc) {
         _log("Error processing Document with ID $docId!");
