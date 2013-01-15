@@ -42,14 +42,21 @@ if(basename(__FILE__) !== basename($argv[0])) {
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-if ($argc < 3) {
-    echo "Usage: {$argv[0]} <document type> <thesis publisher ID> (dryrun)\n";
+//if ($argc < 3) {
+//    echo "Usage: {$argv[0]} <document type> <thesis publisher ID> (dryrun)\n";
+//    exit;
+//}
+
+$options = getopt('', array('doctype:', 'publisherid:', 'dryrun'));
+
+if(!isset($options['publisherid']) || empty($options['publisherid'])) {
+    echo "Usage: {$argv[0]} --publisherid <thesis publisher ID> (--doctype <document type>) (--dryrun)\n";
     exit;
 }
 
-$documentType = $argv[1];
-$thesisPublisherId = $argv[2];
-$dryrun = (isset($argv[3]) && $argv[3] == 'dryrun');
+$documentType = @$options['doctype'] ? $options['doctype'] : false;
+$thesisPublisherId = $options['publisherid'];
+$dryrun = isset($options['dryrun']);
 
 try {
     $dnbInstitute = new Opus_DnbInstitute($thesisPublisherId);
@@ -62,10 +69,12 @@ if($dryrun)
 
 $docFinder = new Opus_DocumentFinder();
 $docIds = $docFinder
-        ->setServerState('published')
-        ->setType($documentType)->ids();
+        ->setServerState('published');
+if($documentType != false)
+        $docFinder->setType($documentType);
+    $docIds = $docFinder->ids();
 
-_log(count($docIds) . " documents of type '{$documentType}' found");
+_log(count($docIds) . " documents ".($documentType != false ? "of type '$documentType' " : '')."found");
 
 foreach ($docIds as $docId) {
     try {
