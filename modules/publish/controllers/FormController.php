@@ -193,13 +193,12 @@ class Publish_FormController extends Controller_Action {
             }
 
             if (!array_key_exists('send', $postData) || array_key_exists('back', $postData)) {
-                // A button (not SEND) was pressed => add / remove fields                
+                // A button (not SEND) was pressed => add / remove fields or browse fields
                 $this->_helper->viewRenderer($this->session->documentType);
 
                 $form->getExtendedForm($postData, $reload);
                 
-                if (isset($this->view->translateKey)) {
-                    
+                if (isset($this->view->translateKey)) {                    
                     return $this->render('error');
                 }
 
@@ -209,14 +208,11 @@ class Publish_FormController extends Controller_Action {
                     $form2 = new Publish_Form_PublishingSecond($this->_logger, $postData);
                 }
                 catch (Publish_Model_FormSessionTimeoutException $e) {
-
                     return $this->_redirectTo('index', '', 'index');
                 }
-                $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
-                $form2->setAction($action_url);
-                $this->view->action_url = $action_url;
+
                 $form2->setViewValues();
-                $this->view->form = $form2;
+                $this->setViewValues('form', 'check', '#current', $form2);
                 
                 if (array_key_exists('LegalNotices', $postData) && $postData['LegalNotices'] != '1') {
                     $legalNotices = $form2->getElement('LegalNotices');
@@ -224,6 +220,7 @@ class Publish_FormController extends Controller_Action {
                 }
                 return;
             }
+            
             // SEND was pressed => check the form
             if (!$form->isValid($postData)) {
                 $form->setViewValues();
@@ -231,6 +228,8 @@ class Publish_FormController extends Controller_Action {
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
                 return $this->_helper->viewRenderer($this->session->documentType);
             }
+
+            // form is valid: move to third form step (confirmation page)
             return $this->showCheckPage($form);
         }
 
@@ -341,7 +340,7 @@ class Publish_FormController extends Controller_Action {
     private function showTemplate($form) {
         $this->view->subtitle = $this->view->translate($this->session->documentType);
         $this->view->doctype = $this->session->documentType;
-        $this->setViewValues($this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current', $form);
+        $this->setViewValues('form', 'check', '#current', $form);
     }
 
     /**
@@ -352,10 +351,11 @@ class Publish_FormController extends Controller_Action {
     private function showCheckPage($form) {
         $this->view->subtitle = $this->view->translate('publish_controller_check2');
         $this->view->header = $this->view->translate('publish_controller_changes');
-        $this->setViewValues($this->view->url(array('controller' => 'deposit', 'action' => 'deposit')), $form, true);
+        $this->setViewValues('deposit', 'deposit', '', $form, true);
     }
 
-    private function setViewValues($url, $form, $prepareCheck = false) {
+    private function setViewValues($controller, $action, $form, $anchor, $prepareCheck = false) {
+        $url = $this->view->url(array('controller' => $controller, 'action' => $action)) . $anchor;
         $form->setAction($url);
         $form->setMethod('post');
         if ($prepareCheck) {
@@ -364,5 +364,5 @@ class Publish_FormController extends Controller_Action {
         $this->view->action_url = $url;
         $this->view->form = $form;
     }
-
+    
 }
