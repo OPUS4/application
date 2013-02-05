@@ -334,27 +334,34 @@ class Publish_FormController extends Controller_Action {
     }
 
     /**
-     * Method shows the template for the given document type.
-     * @param PublishingSecond $form 
+     * Prepare view template (second form step) for the given document type.
+     * 
+     * @param Publish_Form_PublishingSecond $form
      */
-    public function showTemplate($form) {
+    private function showTemplate($form) {
         $this->view->subtitle = $this->view->translate($this->session->documentType);
         $this->view->doctype = $this->session->documentType;
-        $action_url = $this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current';
-        $form->setAction($action_url);
-        $form->setMethod('post');
-        $this->view->action_url = $action_url;        
-        $this->view->form = $form;
+        $this->setViewValues($this->view->url(array('controller' => 'form', 'action' => 'check')) . '#current', $form);
     }
 
-    public function showCheckpage($form) {
+    /**
+     * Prepare confirmation page (third form step) for the current document.
+     * 
+     * @param Publish_Form_PublishingSecond $form
+     */
+    private function showCheckPage($form) {
         $this->view->subtitle = $this->view->translate('publish_controller_check2');
         $this->view->header = $this->view->translate('publish_controller_changes');
-        $action_url = $this->view->url(array('controller' => 'deposit', 'action' => 'deposit'));
-        $form->setAction($action_url);
+        $this->setViewValues($this->view->url(array('controller' => 'deposit', 'action' => 'deposit')), $form, true);
+    }
+
+    private function setViewValues($url, $form, $prepareCheck = false) {
+        $form->setAction($url);
         $form->setMethod('post');
-        $form->prepareCheck();
-        $this->view->action_url = $action_url;
+        if ($prepareCheck) {
+            $form->prepareCheck();
+        }
+        $this->view->action_url = $url;
         $this->view->form = $form;
     }
 
