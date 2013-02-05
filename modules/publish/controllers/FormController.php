@@ -115,6 +115,7 @@ class Publish_FormController extends Controller_Action {
 
         //call the appropriate template
         $this->_helper->viewRenderer($this->session->documentType);
+        $publishForm = null;
         try {
             $publishForm = new Publish_Form_PublishingSecond($this->_logger);
         }
@@ -210,8 +211,7 @@ class Publish_FormController extends Controller_Action {
                 catch (Publish_Model_FormSessionTimeoutException $e) {
                     return $this->_redirectTo('index', '', 'index');
                 }
-
-                $form2->setViewValues();
+                
                 $this->setViewValues('form', 'check', '#current', $form2);
                 
                 if (array_key_exists('LegalNotices', $postData) && $postData['LegalNotices'] != '1') {
@@ -354,7 +354,7 @@ class Publish_FormController extends Controller_Action {
         $this->setViewValues('deposit', 'deposit', '', $form, true);
     }
 
-    private function setViewValues($controller, $action, $form, $anchor, $prepareCheck = false) {
+    private function setViewValues($controller, $action, $anchor, $form, $prepareCheck = false) {
         $url = $this->view->url(array('controller' => $controller, 'action' => $action)) . $anchor;
         $form->setAction($url);
         $form->setMethod('post');
