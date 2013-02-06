@@ -149,8 +149,6 @@ class Publish_DepositController extends Controller_Action {
         }
         //unset all possible session content
         $this->session->unsetAll();
-
-        return;
     }
 
 }
