@@ -578,7 +578,7 @@ class Publish_Model_ExtendedValidation {
 
             $elementName = $element->getName();
             if (isset($this->session->additionalFields['step' . $elementName])) {
-                $step = (int) $this->session->additionalFields['step' . $elementName];
+                $step = $this->session->additionalFields['step' . $elementName];
                 if ($step >= 2) {
                     $element = $this->form->getElement('collId' . $step . $elementName);
                 }
