@@ -36,44 +36,39 @@ class Publish_Model_DisplayGroup {
 
     public $label;
     public $elements = array(); //Array of Zend_Form_Element
-    public $form;
-    public $isBrowseField = false;
     public $collectionIds = array();
-    public $collectionLeaf = false;
-    public $implicitGroup = false;
     public $datatype;
+            
     private $elementName;
     private $additionalFields;
+    private $form;
     private $multiplicity;
     private $log;
     private $session;
 
-    public function __construct($elementName, Publish_Form_PublishingSecond $form, $multiplicity) {
+    public function __construct($elementName, Publish_Form_PublishingSecond $form, $multiplicity, $log, $session) {
         $this->elementName = $elementName;
 
         if (strstr($elementName, 'Enrichment')) {
-            $name = str_replace('Enrichment', '', $elementName);
-            $this->label = 'group' . $name;
+            $this->label = 'group' . str_replace('Enrichment', '', $elementName);
         }
-        else
+        else {
             $this->label = 'group' . $elementName;
+        }
 
         $this->form = $form;
         $this->multiplicity = $multiplicity;
-        $this->log = Zend_Registry::get('Zend_Log');
-        $this->session = new Zend_Session_Namespace('Publish');
+        $this->log = $log;
+        $this->session = $session;
     }
 
     /**
      * Wird für alle Group-Felder aufgerufen, die keine Collection Roles sind.
      */
     public function makeDisplayGroup() {
-        $displayGroup = array();
-        $minNum = $this->minNumber();
-        $maxNum = $this->maxNumber();
-
-        //Number of fieldsets for the same field type (ex: 3 x author fieldset)
-        for ($i = $minNum; $i <= $maxNum; $i++) {
+        $displayGroup = array();        
+        $maxNum = $this->maxNumber(); // number of fieldsets for the same field type
+        for ($i = 1; $i <= $maxNum; $i++) {
 
             foreach ($this->elements as $element) {
 
@@ -88,11 +83,10 @@ class Publish_Model_DisplayGroup {
         //count fields for "visually grouping" in template
         $number = count($displayGroup);
         $groupCount = "num" . $this->label;
-        if (!isset($this->session->$groupCount) || $number < $this->session->$groupCount)
+        if (!isset($this->session->$groupCount) || $number < $this->session->$groupCount) {
             $this->session->$groupCount = $number;
-        $this->log->debug("initial number for group elements = " . $number . " for group " . $this->label);
-
-        $this->session->additionalFields[$this->elementName] = $this->maxNumber();
+        }
+        $this->log->debug("initial number for group elements = " . $number . " for group " . $this->label);        
 
         $buttons = $this->addDeleteButtons();
         $displayGroup = array_merge($buttons, $displayGroup);
@@ -100,78 +94,77 @@ class Publish_Model_DisplayGroup {
         $this->elements = $displayGroup;
     }
 
+    private function cloneElement($i, $currentStep) {
+        $elem = clone $this->elements[0];
+
+        $elem->setDisableTranslator(true);
+        $elem->setName($this->elementName . '_' . $i);
+        if (isset($this->session->additionalFields['collId1' . $this->elementName . '_' . $i])) {
+            $elem->setValue('ID:' . $this->session->additionalFields['collId1' . $this->elementName . '_' . $i]);
+        }
+        if ($currentStep !== 1) { // dieser Fall tritt ein, wenn in der aktuellen Gruppe mindestens die erste Stufe ausgewählt wurde (in diesem Fall wird die erste Stufe disabled)
+            $elem->setAttrib('disabled', true);
+            $elem->setAttrib('isRoot', true);
+        }
+        $this->form->addElement($elem);        
+        $this->elements[] = $elem;
+        return $elem->getName();
+    }
+
     /**
      * Diese Funktion wird nur für CollectionRoles aufgerufen!
      */
     public function makeBrowseGroup() {
         $displayGroup = array();
-        $minNum = $this->minNumber();
-        $maxNum = $this->maxNumber();        
+        $maxNum = $this->maxNumber(); // Anzahl der vorhandenen Gruppen für den aktuellen Collection-Typ
 
-        for ($i = $minNum; $i <= $maxNum; $i++) {
-            $this->session->additionalFields['step' . $this->elementName . '_' . $i] = $this->collectionStep($i);
-            //update $this->collectionIds and generate fields for the current fieldset
-            $currentStep = (int) $this->collectionStep($i);
-            
-            $this->browseFields($i, $currentStep);
-            $allElements = count($this->elements) - 1;
+        for ($i = 1; $i <= $maxNum; $i++) {
+            $currentStep = $this->collectionStep($i); // Anzahl der Stufen für die aktuelle Gruppe mit dem Index $i
 
-            foreach ($this->elements as $count => $element) {
-                if ($this->implicitGroup) {
-                    //clone all elements
-                    $elem = clone $element;
-                    $elem->setDisableTranslator(true);
-                    $elem->setName($element->getName() . '_' . $i);                    
-                    $this->form->addElement($elem);
-                    $displayGroup[] = $elem->getName();
-                }
-                else {
-                    //only clone special fields
-                    if ($element->getName() === $this->elementName) {
-                        //clone the "root selection"
-                        $elem = clone $element;
-                        $elem->setDisableTranslator(true);
-                        $elem->setName($this->elementName . '_' . $i);
-                        if (isset($this->session->additionalFields['collId1' . $this->elementName . '_' . $i])) {
-                            $elem->setValue('ID:' . $this->session->additionalFields['collId1' . $this->elementName . '_' . $i]);
-                        }
-                        if ($currentStep !== 1) {
-                            //make top steps disabled
-                            $elem->setAttrib('disabled', true);
-                            $elem->setAttrib('isRoot', true);
-                            $this->session->disabled[$this->elementName . '_' . $i] = $elem->getValue();                                                                                                                
-                        }                        
-                        $this->form->addElement($elem);
-                        $displayGroup[] = $elem->getName();
-                    }
-                    else {
-                        if ($count !== $allElements || $count == $allElements && $i < $maxNum) {
-                            //make previous middle steps disabled   
-                            //if (!array_key_exists('collId' . $currentStep . $this->elementName . $i, $this->session->endOfCollectionTree))
-                            if ($element->getAttrib('isLeaf') != true)
-                                $element->setAttrib('disabled', true);                                
-                        }
-                        $element->setAttrib('datatype', $this->datatype);
-                        $this->form->addElement($element);                        
-                        $displayGroup[] = $element->getName();
-                    }
-                }
+            $selectFields = $this->browseFields($i, $currentStep);
+
+            if (!is_array($selectFields)) {
+                // es wurde noch keine Auswahl für die aktuelle Gruppe $i vorgenommen
+                $displayGroup[] = $this->cloneElement($i, $currentStep);
             }
-        }
-        for ($i = $minNum; $i <= $maxNum; $i++) {
-            $maxStep = $this->collectionStep($i);
-            $name = 'collId' . $maxStep . $this->elementName . '_' . $i;
-            $formElement = $this->form->getElement($name);            
-            if (!is_null($formElement)) {
-                $formElement->setAttrib('disabled', false);
-            }
+            else {
+                // es wurde mindestens die erste Stufe der aktuellen Gruppe $i ausgewählt
+
+                // die erste Stufe der Gruppe $i muss aus dem "Standard-Element" geklont werden (unschön)
+                $displayGroup[] = $this->cloneElement($i, $currentStep);
+
+                $numOfFields = count($selectFields);
+
+                for ($count = 0; $count < $numOfFields; $count++) {
+
+                    $element = $selectFields[$count];
+                    $this->elements[] = $element;
+
+                    // es muss sichergestellt werden, dass nur die unterste Stufe einer Gruppe dem Dokument zugeordnet wird
+                    // alle höheren Stufen der Gruppe bekommen daher das Attribut 'doNotStore', das die Zuordnung verhindert                    
+                    if ($count < $numOfFields - 2 || // mindestens zwei Stufen vor der letzten Stufe: nicht zum Dokument zuordnen
+                            ($count == $numOfFields - 2 && $selectFields[$numOfFields - 1]->getAttrib('isLeaf') != true) || // die vorletzte Stufe: keine Zuordnung, wenn die letzte Stufe nicht(!) der Hinweis "Ende wurde erreicht" ist
+                            ($count == $numOfFields - 1 && $element->getAttrib('isLeaf') == true)) { // die letzte Stufe: keine Zuordnung, wenn die letzte Stufe der Hinweis "Ende wurde erreicht" ist
+                        $element->setAttrib('doNotStore', true);
+                    }
+
+                    // nur die letzte Select-Box der letzten Stufe darf aktiv sein (der Hinweis "Ende wurde erreicht" (erkennbar am Attribut isLeaf) darf grundsätzlich nicht disabled werden)
+                    if ($i < $maxNum || ($i == $maxNum && $count < $numOfFields - 1)) {
+                        if ($element->getAttrib('isLeaf') != true) {
+                            $element->setAttrib('disabled', true);
+                        }
+                    }
+
+                    $element->setAttrib('datatype', $this->datatype);
+                    $this->form->addElement($element);
+                    $displayGroup[] = $element->getName();
+                }
+            }          
         }
 
         //count fields for "visually grouping" in template
         $groupCount = "num" . $this->label;
-        $this->session->$groupCount = 100; // TODO: unklar
-
-        $this->session->additionalFields[$this->elementName] = $maxNum;
+        $this->session->$groupCount = 100; // TODO: unklar (100 ist offenbar der Maximalwert für die Anzahl der Gruppen des Typs "$this->label")
 
         $buttons = $this->addDeleteButtons();
         $displayGroup = array_merge($displayGroup, $buttons);
@@ -181,7 +174,7 @@ class Publish_Model_DisplayGroup {
             $displayGroup = array_merge($buttons, $displayGroup);
         }
 
-        $this->elements = $displayGroup;
+        $this->elements = $displayGroup;        
     }
 
     private function addDeleteButtons() {
@@ -239,8 +232,11 @@ class Publish_Model_DisplayGroup {
     }
 
     /**
-     * Method adds different collection selection fields to the elements list of the disyplay group for the current fieldset
-     * @param <Int> $fieldset Counter of the current fieldset
+     * Method adds different collection selection fields to the elements list of
+     * the display group for the current fieldset
+     *
+     * @param int $fieldset Counter of the current fieldset
+     * @param int $step
      */
     private function browseFields($fieldset, $step) {
         if (is_null($this->collectionIds[0])) {
@@ -251,57 +247,64 @@ class Publish_Model_DisplayGroup {
             $this->elements[] = $error;
             return;
         }
-        
+
         if ($fieldset > 1) {
-            $this->collectionIds[] = $this->collectionIds[0];
+            $this->collectionIds[] = $this->collectionIds[0]; // ID der Root Collection
         }
         
         //initialize root node
-        $this->session->additionalFields['collId0' . $this->elementName . '_' . $fieldset] = $this->collectionIds[0];        
-                                
-        //found collection level for the current fieldset        
-        for ($j = 2; $j <= $step; $j++) {
-            $prev = (int) $j - 1;           
+        $this->session->additionalFields['collId0' . $this->elementName . '_' . $fieldset] = $this->collectionIds[0];
+
+        if ($step < 2) { // es wurde für die aktuelle Gruppe noch keine Auswahl auf der ersten Stufe vorgenommen
+            return;
+        }
+
+        $selectFields = array();
+
+        // für die aktuelle Gruppe wurde mindestens die erste Stufe ausgewählt
+        for ($j = 1; $j < $step; $j++) {
             //get the previous selection collection id from session
-            if (isset($this->session->additionalFields['collId' . $prev . $this->elementName . '_' . $fieldset])) {
-                $id = $this->session->additionalFields['collId' . $prev . $this->elementName . '_' . $fieldset];
-                
-                if ($id != '0' || !is_null($id)) {
-                    //insert to array and generate field
+            if (isset($this->session->additionalFields['collId' . $j . $this->elementName . '_' . $fieldset])) {
+                $id = $this->session->additionalFields['collId' . $j . $this->elementName . '_' . $fieldset];
+
+                if (!is_null($id)) {
                     $this->collectionIds[] = $id;
-                    $selectfield = $this->collectionEntries((int) $id, $j, $fieldset);
+                    $selectfield = $this->collectionEntries((int) $id, $j + 1, $fieldset);
                     if (!is_null($selectfield)) {
-                        $this->elements[] = $selectfield;
+                        $selectFields[] = $selectfield;
                     }
                 }
             }
         }
+        return $selectFields;
     }
 
-    private function maxNumber() {
-        $maxNumber = 1;
-        if (isset($this->additionalFields)) {
-            if (array_key_exists($this->elementName, $this->additionalFields)) {
-                $maxNumber = (int) $this->additionalFields[$this->elementName];
-            }
+    private function maxNumber() {        
+        if (!isset($this->additionalFields) || !array_key_exists($this->elementName, $this->additionalFields)) {
+            $this->additionalFields[$this->elementName] = 1;            
         }
-        return $maxNumber;
+        return $this->additionalFields[$this->elementName];
     }
 
-    private function collectionStep($max=null) {
-        $step = 1;
-        if (isset($this->session->additionalFields)) {
-            if (isset($this->session->additionalFields['step' . $this->elementName . '_' . $max])) {
-                $step = (int) $this->session->additionalFields['step' . $this->elementName . '_' . $max];
-            }
+    /**
+     *
+     * @param int $index Index der Collection-Gruppe (beginnend bei 1)
+     * @return int
+     */
+    private function collectionStep($index = null) {
+        if (!isset($this->session->additionalFields) || !isset($this->session->additionalFields['step' . $this->elementName . '_' . $index])) {
+            $this->session->additionalFields['step' . $this->elementName . '_' . $index] = 1;
         }
-        return $step;
+        return $this->session->additionalFields['step' . $this->elementName . '_' . $index];
     }
 
     /**
      * wird nur für Collection Roles aufgerufen
+     * @param int $id ID einer Collection
+     * @param int $step aktuelle Stufe innerhalb der Gruppe (>= 1)
+     * @param int $fieldset aktuelle Gruppe (>= 1)
      */
-    private function collectionEntries($id, $step, $fieldset) {        
+    private function collectionEntries($id, $step, $fieldset) {
         try {            
             $collection = new Opus_Collection($id);
         }
@@ -313,14 +316,8 @@ class Publish_Model_DisplayGroup {
         $children = array();
 
         if ($collection->hasChildren()) {
-            if ($this->implicitGroup) {
-                $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName);
-                $selectField->setDisableTranslator(true);
-            }
-            else {
-                $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName . '_' . $fieldset);
-                $selectField->setDisableTranslator(true);
-            }
+            $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName . '_' . $fieldset);
+            $selectField->setDisableTranslator(true);
             $selectField->setLabel('choose_collection_subcollection');
 
             $role = $collection->getRole();
@@ -330,44 +327,20 @@ class Publish_Model_DisplayGroup {
             }            
             $selectField->setMultiOptions($children);
         }
+        
         //show no field?
-        if (empty($children)) {            
-            if ($this->implicitGroup) {
-                $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName);
-                $selectField->setDisableTranslator(true);
-                $this->session->endOfCollectionTree['collId' . $step . $this->elementName] = 1;
-            }
-            else {
-                $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName . '_' . $fieldset);
-                $selectField->setDisableTranslator(true);
-            }
-            
+        if (empty($children)) {
+            $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName . '_' . $fieldset);
+            $selectField->setDisableTranslator(true);            
             $selectField->setLabel('endOfCollectionTree');
             $selectField->setAttrib('disabled', true);
             $selectField->setAttrib('isLeaf', true);
-            $this->session->endOfCollectionTree['collId' . $step . $this->elementName . '_' . $fieldset] = 1;
         }        
         return $selectField;
     }
 
-    private function minNumber() {
-        $minNumber = 1;
-        return $minNumber;
-    }
-
-    public function getGroupLabel() {
-        return $this->label;
-    }
-
-    public function getGroupElements() {
-        if (isset($this->elements))
-            return $this->elements;
-        else
-            return false;
-    }
-
     public function setSubFields($subFields) {
-        $this->elements = array_merge($this->elements, $subFields);
+        $this->elements = $subFields;
     }
 
     public function setAdditionalFields($additionalFields) {
