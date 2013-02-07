@@ -288,19 +288,15 @@ class Publish_Model_Validation {
             return null;
         }
 
-        if ($collectionRole->getVisible() == '1') {            
-            if (!is_null($collectionRole)) {
-                if ($this->hasVisibleChildren($collectionRole)) {
-                    $children = array();
-                    $collectionId = $collectionRole->getRootCollection()->getId();
-                    $collection = new Opus_Collection($collectionId);
-                    $colls = $collection->getVisibleChildren();
-                    foreach ($colls as $coll) {
-                        $children[$coll->getId()] = $coll->getDisplayNameForBrowsingContext($collectionRole);
-                    }
-                    return $children;
-                }
+        if ($collectionRole->getVisible() == '1' && $this->hasVisibleChildren($collectionRole)) {
+            $children = array();
+            $collectionId = $collectionRole->getRootCollection()->getId();
+            $collection = new Opus_Collection($collectionId);
+            $colls = $collection->getVisibleChildren();
+            foreach ($colls as $coll) {
+                $children[$coll->getId()] = $coll->getDisplayNameForBrowsingContext($collectionRole);
             }
+            return $children;
         }
         return null;
     }
