@@ -40,33 +40,32 @@ class Publish_Model_Validation {
     public $licences = array();
     public $series = array();
     public $languages = array();
-    public $log;
-    public $sessionP;
-    public $session;
     public $listOptions = array();
     public $collectionRole;
 
     private $view;
+    private $log;
+    private $session;
 
-    public function __construct($datatype, $collectionRole = null, $options = null, $view = null) {        
+    public function __construct($datatype, $collectionRole, $options, $view, $log, $session) {
         if (isset($options) && !empty($options)) {
             $this->listOptions = $options;
             $this->datatype = 'List';
         }
+        
         if (isset($collectionRole)) {
             $this->collectionRole = $collectionRole;
         }
         else {
             $this->datatype = $datatype;
         }
-        $this->log = Zend_Registry::get('Zend_Log');
-        $this->sessionP = new Zend_Session_Namespace('Publish');
-        $this->session = new Zend_Session_Namespace();
+        
         $this->view = $view;
+        $this->log = $log;
+        $this->session = $session;        
     }
 
     public function validate() {
-
         $this->_datatypeValidation();
     }
 
