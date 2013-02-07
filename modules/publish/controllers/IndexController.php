@@ -67,8 +67,6 @@ class Publish_IndexController extends Controller_Action {
         // TODO hide initialization routine
         $session->documentType = "";
         $session->documentId = "";
-        $session->disabled = array();
-        $session->endOfCollectionTree = array();        
-        $session->additionalFields = array();        
+        $session->additionalFields = array();
     }
 }
