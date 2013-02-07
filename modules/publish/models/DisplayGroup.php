@@ -82,7 +82,7 @@ class Publish_Model_DisplayGroup {
 
         //count fields for "visually grouping" in template
         $number = count($displayGroup);
-        $groupCount = "num" . $this->label;
+        $groupCount = 'num' . $this->label;
         if (!isset($this->session->$groupCount) || $number < $this->session->$groupCount) {
             $this->session->$groupCount = $number;
         }
@@ -163,8 +163,8 @@ class Publish_Model_DisplayGroup {
         }
 
         //count fields for "visually grouping" in template
-        $groupCount = "num" . $this->label;
-        $this->session->$groupCount = 100; // TODO: unklar (100 ist offenbar der Maximalwert für die Anzahl der Gruppen des Typs "$this->label")
+        $groupCount = 'num' . $this->label;
+        $this->session->$groupCount = null; // besondere Berechnung der Zebrastreifen in der View (CRs müssen speziell behandelt werden)
 
         $buttons = $this->addDeleteButtons();
         $displayGroup = array_merge($displayGroup, $buttons);

@@ -117,12 +117,11 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
                 $groupFields[$elementAttributes["id"]] = $elementAttributes;
             }
         }
-        $group[] = array();
 
+        $group = array();
         $group['Fields'] = $groupFields;
         $group['Hiddens'] = $groupHiddens;
         $group['Buttons'] = $groupButtons;
-
         return $group;
     }
 

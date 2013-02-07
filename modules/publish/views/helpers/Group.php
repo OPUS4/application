@@ -59,21 +59,33 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
     private function _renderGroup($group, $options= null, $name = null) {
         $fieldset = "";
 
-        if (!isset($group))
+        if (!isset($group)) {
             return $fieldset;
+        }
 
-        if ($this->view->currentAnchor == $group['Name'])
+        if ($this->view->currentAnchor == $group['Name']) {
             $fieldset .= "<a name='current'></a>";
+        }
 
-        $fieldset .= "<fieldset class='left-labels' id='" . $group['Name'] . "' />\n";
+        $fieldset .= "<fieldset class='left-labels' id='" . $group['Name'] . "' />";
         $fieldset .= $this->getLegendFor($group['Name']);
         $fieldset .= $this->getFieldsetHint($group['Name']);
 
         $groupCount = 1;
         $groupElementCount = 0;
+        $index = 0;
 
-        //show fields
-        foreach ($group["Fields"] AS $field) {
+        foreach ($group['Fields'] AS $field) {
+
+            // besonderer Mechanismus erforderlich für Collection Roles (CRs sind erkennbar, weil nur bei ihnen $group['Counter'] auf null gesetzt wurde)
+            // dort kann jede Gruppe aus unterschiedlich vielen Select-Boxen aufgebaut sein
+            // daher greift der Mechanimus der Auswertung von $group['Counter'] hier nicht
+            if (is_null($group['Counter']) && $index > 0 && $field['label'] !== 'choose_collection_subcollection' && $field['label'] !== 'endOfCollectionTree') {                
+                $groupCount++;
+                $groupElementCount = 0;
+                $fieldset .= "</div>";
+            }
+                       
             if ($groupElementCount == 0) {
                 if ($groupCount % 2 == 0) {
                     $fieldset .= "<div class='form-multiple even'>";
@@ -82,8 +94,9 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
                     $fieldset .= "<div class='form-multiple odd'>";
                 }
             }
+            $groupElementCount++;
 
-            $fieldset .= "\n<div class='form-item'>\n";
+            $fieldset .= "<div class='form-item'>";
             $fieldset .= $this->getLabelFor($field["id"], $field["label"], $field['req']);
 
             switch ($field['type']) {
@@ -112,13 +125,20 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
             }
 
             $fieldset .= $this->renderFieldsetErrors($field['error']);
-            $fieldset .= "</div>";
-            $groupElementCount++;
-            if ($groupElementCount === intval($group['Counter'])) {
+            $fieldset .= "</div>"; // div.form-item schließen
+
+            // Mechanimus für alle Gruppenfelder, die keine Collection Roles sind
+            if (!is_null($group['Counter']) && $groupElementCount === intval($group['Counter'])) {
                 $groupCount++;
                 $groupElementCount = 0;
-                $fieldset .= "</div>";
+                $fieldset .= "</div>"; // div.form-multiple schließen
             }
+            $index++;
+        }
+
+        // besonderer Mechanismus für Collection Roles (s.o.)
+        if (is_null($group['Counter'])) {
+            $fieldset .= "</div>";
         }
 
         //show buttons
@@ -127,7 +147,7 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
         //show hidden fields
         $fieldset .= $this->renderHtmlHidden($group['Hiddens']);
 
-        $fieldset .= "\n\n</fieldset>\n\n";
+        $fieldset .= "</fieldset>";
 
         return $fieldset;
     }
