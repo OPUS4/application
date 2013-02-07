@@ -85,7 +85,7 @@ class Publish_Model_FormElement {
     }
 
     public function initValidation() {        
-        $this->validationObject = new Publish_Model_Validation($this->datatype, $this->collectionRole, $this->listOptions, $this->form->view);
+        $this->validationObject = new Publish_Model_Validation($this->datatype, $this->collectionRole, $this->listOptions, $this->form->view, $this->log, $this->session2);
         $this->validationObject->validate();
         $this->validation = $this->validationObject->validator;
     }
@@ -93,9 +93,8 @@ class Publish_Model_FormElement {
     public function initGroup() {
         if ($this->isGroup()) {
             if ($this->isSubField === false) {                                
-                $this->group = new Publish_Model_DisplayGroup($this->elementName, $this->form, $this->multiplicity);
+                $this->group = new Publish_Model_DisplayGroup($this->elementName, $this->form, $this->multiplicity, $this->log, $this->session);
                 if (isset($this->collectionRole)) {
-                    $this->group->isBrowseField = true;  
                     $this->group->datatype = $this->datatype;                      
                     $this->group->collectionIds[] = $this->collectionId;
                 }
@@ -318,7 +317,6 @@ class Publish_Model_FormElement {
             }
 
             if (isset($this->default[0]['edit']) && $this->default[0]['edit'] === 'no') {                
-                $this->session->disabled[$this->elementName] = $element->getValue();
                 $element->setAttrib('disabled', true);
                 $element->setRequired(false);
             }
