@@ -288,19 +288,19 @@ class Publish_Model_Validation {
             return null;
         }
 
-        if ($collectionRole->getVisible() == '1') {
-            $children = array();
+        if ($collectionRole->getVisible() == '1') {            
             if (!is_null($collectionRole)) {
                 if ($this->hasVisibleChildren($collectionRole)) {
+                    $children = array();
                     $collectionId = $collectionRole->getRootCollection()->getId();
                     $collection = new Opus_Collection($collectionId);
                     $colls = $collection->getVisibleChildren();
                     foreach ($colls as $coll) {
                         $children[$coll->getId()] = $coll->getDisplayNameForBrowsingContext($collectionRole);
-                    }                    
+                    }
+                    return $children;
                 }
             }
-            return $children;
         }
         return null;
     }
@@ -310,10 +310,8 @@ class Publish_Model_Validation {
         if (isset($languages) || count($languages) >= 1) {
             asort($languages);
             return $languages;
-        } else {
-            $languages = null;
-            return $languages;
         }
+        return null;
     }
 
     /**
@@ -322,23 +320,17 @@ class Publish_Model_Validation {
     private function _licenceSelect() {
         $licences = $this->getLicences();
         if (isset($licences) && count($licences) >= 1) {
-            $data = $licences;
-        } else {
-            $data = null;
+            return $licences;
         }
-
-        return $data;
+        return null;
     }
 
     private function _seriesSelect() {
         $sets = $this->getSeries();
         if (isset($sets) && count($sets) >= 1) {
-            $data = $sets;
-        } else {
-            $data = null;
+            return $sets;
         }
-
-        return $data;
+        return null;
     }
 
     private function _thesisSelect($grantors = null) {
