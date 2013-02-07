@@ -385,10 +385,8 @@ class Publish_Model_Deposit {
      * @param type $dataValue Collection ID
      */
     private function storeCollectionObject($dataValue) {
-        if (strstr($dataValue, 'ID:')) {
-            $dataValue = substr($dataValue, 3);
-        }
         //store a simple collection
+        // TODO exception handling?
         $this->document->addCollection(new Opus_Collection($dataValue));        
     }
 
@@ -402,10 +400,8 @@ class Publish_Model_Deposit {
         $id = str_replace('Number', '', $dataKey);
         $seriesId = $this->documentData[$id]['value'];
         $this->log->debug('Deposit: ' . $dataKey . ' and ' . $id . ' = ' . $seriesId);
-        
-        if (strstr($seriesId, 'ID:')) {
-            $seriesId = substr($seriesId, 3);
-        }
+
+        // TODO exception handling?
         $s = new Opus_Series($seriesId);
         
         //store a simple collection
@@ -416,10 +412,8 @@ class Publish_Model_Deposit {
      * Prepare and store a licence for the current document.     
      * @param <type> $dataValue Licence ID
      */
-    private function storeLicenceObject($dataValue) {        
-        if (strstr($dataValue, 'ID:')) {
-            $dataValue = substr($dataValue, 3);
-        }        
+    private function storeLicenceObject($dataValue) {
+        // TODO exception handling?
         $licence = new Opus_Licence($dataValue);
         $this->document->addLicence($licence);
     }
@@ -430,15 +424,14 @@ class Publish_Model_Deposit {
      * @param <type> $dataValue
      */
     private function storeThesisObject($dataValue, $grantor=false) {
-        if (strstr($dataValue, 'ID:')) {
-            $dataValue = substr($dataValue, 3);
-            $thesis = new Opus_DnbInstitute($dataValue);
-        }
-        if ($grantor)
+        // TODO exception handling?
+        $thesis = new Opus_DnbInstitute($dataValue);
+        if ($grantor) {
             $this->document->addThesisGrantor($thesis);
-        else
+        }
+        else {
             $this->document->addThesisPublisher($thesis);
-        
+        }
     }        
 
     private function storeIdentifierObject($dataKey, $dataValue) {        

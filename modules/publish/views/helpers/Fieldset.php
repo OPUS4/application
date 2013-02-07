@@ -100,7 +100,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         foreach ($field['options'] AS $key => $option) {
             $fieldset .= '<option value="' . htmlspecialchars($key, ENT_QUOTES) . '" label="' . htmlspecialchars($option, ENT_QUOTES) . '"';
             
-            if ($option === $field['value'] || $key === $field['value']) {
+            if ($option == $field['value'] || $key == $field['value']) {
                 $fieldset .= ' selected="selected"';
             }
 

@@ -100,7 +100,7 @@ class Publish_Model_DisplayGroup {
         $elem->setDisableTranslator(true);
         $elem->setName($this->elementName . '_' . $i);
         if (isset($this->session->additionalFields['collId1' . $this->elementName . '_' . $i])) {
-            $elem->setValue('ID:' . $this->session->additionalFields['collId1' . $this->elementName . '_' . $i]);
+            $elem->setValue($this->session->additionalFields['collId1' . $this->elementName . '_' . $i]);
         }
         if ($currentStep !== 1) { // dieser Fall tritt ein, wenn in der aktuellen Gruppe mindestens die erste Stufe ausgewählt wurde (in diesem Fall wird die erste Stufe disabled)
             $elem->setAttrib('disabled', true);
@@ -323,8 +323,10 @@ class Publish_Model_DisplayGroup {
             $role = $collection->getRole();
             $colls = $collection->getVisibleChildren();
             foreach ($colls as $coll) {
-                $children['ID:' . $coll->getId()] = $coll->getDisplayNameForBrowsingContext($role);
-            }            
+                $children[] = array(
+                    'key' => strval($coll->getId()),
+                    'value' => $coll->getDisplayNameForBrowsingContext($role));
+            }
             $selectField->setMultiOptions($children);
         }
         

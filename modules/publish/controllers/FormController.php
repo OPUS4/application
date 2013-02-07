@@ -162,16 +162,9 @@ class Publish_FormController extends Controller_Action {
         //reload form or show entries, intial: true
         $reload = true;
 
-        if ($this->getRequest()->isPost() === true) {
-            
-            $sessionData = $this->session->additionalFields;
-            foreach ($sessionData as $key => $value) {
-                if (preg_match("/^collId[0-9]+/", $key)) {
-                    $sessionData[$key] = 'ID:' . $value;
-                }
-            }
+        if ($this->getRequest()->isPost() === true) {           
 
-            $postData = array_merge($sessionData, $this->getRequest()->getPost());
+            $postData = array_merge($this->session->additionalFields, $this->getRequest()->getPost());
 
             //abort publish process
             if (array_key_exists('abort', $postData)) {
@@ -206,24 +199,37 @@ class Publish_FormController extends Controller_Action {
                 }
 
                 //now create a new form with extended fields
-                $form2 = null;
+                $form = null;
                 try {
-                    $form2 = new Publish_Form_PublishingSecond($this->_logger, $postData);
+                    $form = new Publish_Form_PublishingSecond($this->_logger, $postData);
                 }
                 catch (Publish_Model_FormSessionTimeoutException $e) {
                     return $this->_redirectTo('index', '', 'index');
                 }
                 
-                $this->setViewValues('form', 'check', '#current', $form2);
+                $this->setViewValues('form', 'check', '#current', $form);
                 
                 if (array_key_exists('LegalNotices', $postData) && $postData['LegalNotices'] != '1') {
-                    $legalNotices = $form2->getElement('LegalNotices');
+                    $legalNotices = $form->getElement('LegalNotices');
                     $legalNotices->setChecked(false);
                 }
                 return;
             }
             
             // SEND was pressed => check the form
+
+            // der nachfolgende Schritt ist erforderlich, da die Selectbox der obersten Ebene einer Collection-Gruppe
+            // gegen das Naming Scheme der Selectboxen der tieferen Ebenen verstößt
+            foreach ($postData as $key => $value) {
+                if (preg_match("/^collId1\D/", $key) === 1) {
+                    $subkey = substr($key, 7);
+                    if (!array_key_exists($subkey, $postData)) {
+                        $postData[$subkey] = $value;
+                    }
+                }
+            }
+            
+            $this->_logger->debug(var_export($postData, true));
             $form = null;
             try {
                 $form = new Publish_Form_PublishingSecond($this->_logger, $postData);
@@ -425,7 +431,7 @@ class Publish_FormController extends Controller_Action {
                     // Delete the last field.
                     if ($currentNumber > 1) {
                         for ($i = 0; $i <= $level; $i++) {
-                            unset($this->session->additionalFields['collId' . $i . $fieldName . '_' . $currentNumber]);
+                            unset($this->session->additionalFields['collId' . $i . $fieldName . '_' . $currentNumber]);                            
                         }
                         //remove one more field, only down to 0
                         $this->session->additionalFields[$fieldName] = $currentNumber - 1;
@@ -514,16 +520,14 @@ class Publish_FormController extends Controller_Action {
 
         if ($level == 1) {
             // Root Node
-            if (isset($post[$field . '_' . $value]) && $post[$field . '_' . $value] !== '') {
-                // der Wert im POST besitzt das Präfix ID: (daher die 3)
-                $this->session->additionalFields['collId1' . $field . '_' . $value] = substr($post[$field . '_' . $value], 3);
+            if (isset($post[$field . '_' . $value]) && $post[$field . '_' . $value] !== '') {                
+                $this->session->additionalFields['collId1' . $field . '_' . $value] = $post[$field . '_' . $value];
             }
         }
         else {
             // Middle Node or Leaf
             if (isset($post['collId' . $level . $field . '_' . $value])) {
-                // der Wert im POST besitzt das Präfix ID: (daher die 3)
-                $this->session->additionalFields['collId' . $level . $field . '_' . $value] = substr($post['collId' . $level . $field . '_' . $value], 3);
+                $this->session->additionalFields['collId' . $level . $field . '_' . $value] = $post['collId' . $level . $field . '_' . $value];
             }
         }
 

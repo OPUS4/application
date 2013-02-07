@@ -585,7 +585,7 @@ class Publish_Model_ExtendedValidation {
             }
 
             $matches = array();
-            if (preg_match('/^ID:(\d+)$/', $element->getValue(), $matches) == 0) {
+            if (preg_match('/^(\d+)$/', $element->getValue(), $matches) == 0) {
                 continue;
             }
 
@@ -623,7 +623,7 @@ class Publish_Model_ExtendedValidation {
                 $selectFieldValue = $this->data[$selectFieldName];
 
                 $matches = array();
-                if (preg_match('/^ID:(\d+)$/', $selectFieldValue, $matches) == 0) {
+                if (preg_match('/^(\d+)$/', $selectFieldValue, $matches) == 0) {
                     continue;
                 }
 
@@ -658,7 +658,7 @@ class Publish_Model_ExtendedValidation {
         foreach ($series AS $fieldname => $option) {
 
             $matches = array();
-            if (preg_match('/^ID:(\d+)$/', $option, $matches) == 0) {
+            if (preg_match('/^(\d+)$/', $option, $matches) == 0) {
                 continue;
             }
 

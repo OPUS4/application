@@ -284,8 +284,9 @@ class Publish_Model_Validation {
 
     private function _collectionSelect(){
         $collectionRole = Opus_CollectionRole::fetchByName($this->collectionRole);
-        if (is_null($collectionRole))
+        if (is_null($collectionRole)) {
             return null;
+        }
 
         if ($collectionRole->getVisible() == '1') {
             $children = array();
@@ -295,8 +296,8 @@ class Publish_Model_Validation {
                     $collection = new Opus_Collection($collectionId);
                     $colls = $collection->getVisibleChildren();
                     foreach ($colls as $coll) {
-                        $children['ID:' . $coll->getId()] = $coll->getDisplayNameForBrowsingContext($collectionRole);
-                    }
+                        $children[$coll->getId()] = $coll->getDisplayNameForBrowsingContext($collectionRole);
+                    }                    
                 }
             }
             return $children;
@@ -386,7 +387,7 @@ class Publish_Model_Validation {
                 if ($lic->getActive() == '1') {
                     $name = $lic->getDisplayName();
                     $id = $lic->getId();
-                    $licences["ID:" . $id] = $name;
+                    $licences[$id] = $name;
                 }
             }
             $this->licences = $licences;
@@ -396,7 +397,7 @@ class Publish_Model_Validation {
     }
 
     /**
-     * return the available documents sets from database or chache
+     * return all visible series from database or chache
      * @return <Array> sets
      */
     private function getSeries() {
@@ -406,7 +407,7 @@ class Publish_Model_Validation {
                     if ($set->getVisible()) {
                         $title = $set->getTitle();
                         $id = $set->getId();
-                        $sets["ID:" . $id] = $title;
+                        $sets[$id] = $title;
                     }
             }
             $this->series = $sets;
@@ -437,7 +438,7 @@ class Publish_Model_Validation {
 
         $thesisList = array();
         foreach ($thesises AS $thesis) {
-            $thesisList["ID:" . $thesis->getId()] = $thesis->getDisplayName();
+            $thesisList[$thesis->getId()] = $thesis->getDisplayName();
         }
         return $thesisList;
     }

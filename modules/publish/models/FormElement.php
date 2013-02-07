@@ -115,7 +115,7 @@ class Publish_Model_FormElement {
                     $implicitFields = $this->implicitFields('Subject');
                     $this->addSubFormElements($implicitFields);
                 }
-                else {
+                else {                    
                     $this->addSubFormElement($this->transform());
                 }
 
@@ -290,11 +290,13 @@ class Publish_Model_FormElement {
                 $element->setDisableTranslator(true);
             }
             else {
+                $options = null;
                 if (is_null($this->listOptions) || empty($this->listOptions)) {
-                    $options = $this->validationObject->selectOptions($this->datatype);
+                    $options = $this->validationObject->selectOptions($this->datatype);                    
                 }
-                else
+                else {
                     $options = $this->listOptions;
+                }
 
                 if (is_null($options)) {
                     //no options found in database / session / cache                    
@@ -375,6 +377,15 @@ class Publish_Model_FormElement {
         else {
             $switchVar = $this->datatype;
         }
+
+        // reorganize $options since Zend multiOptions does not accept integers as keys
+        $reorgOptions = array();
+        foreach ($options as $key => $value) {
+            $reorgOptions[] = array(
+                'key' => is_string($key) ? $key : strval($key),
+                'value' => $value);
+        }
+        $options = $reorgOptions;
 
         switch ($switchVar) {
             case 'Collection': 
