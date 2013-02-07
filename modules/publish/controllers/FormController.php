@@ -229,7 +229,6 @@ class Publish_FormController extends Controller_Action {
                 }
             }
             
-            $this->_logger->debug(var_export($postData, true));
             $form = null;
             try {
                 $form = new Publish_Form_PublishingSecond($this->_logger, $postData);
