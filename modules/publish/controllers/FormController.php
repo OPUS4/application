@@ -34,6 +34,14 @@
  */
 class Publish_FormController extends Controller_Action {
 
+    CONST BUTTON_ADD = 'addMore';
+    CONST BUTTON_DELETE = 'deleteMore';
+    CONST BUTTON_BROWSE_UP = 'browseUp';
+    CONST BUTTON_BROWSE_DOWN = 'browseDown';
+
+    CONST STEP = 'step';
+
+
     public $session;
     public $document;
 
@@ -155,11 +163,15 @@ class Publish_FormController extends Controller_Action {
         $reload = true;
 
         if ($this->getRequest()->isPost() === true) {
-            $postData = $this->getRequest()->getPost();
-
-            if (!is_null($this->session->disabled)) {
-                $postData = array_merge($postData, $this->session->disabled);
+            
+            $sessionData = $this->session->additionalFields;
+            foreach ($sessionData as $key => $value) {
+                if (preg_match("/^collId[0-9]+/", $key)) {
+                    $sessionData[$key] = 'ID:' . $value;
+                }
             }
+
+            $postData = array_merge($sessionData, $this->getRequest()->getPost());
 
             //abort publish process
             if (array_key_exists('abort', $postData)) {
@@ -183,21 +195,11 @@ class Publish_FormController extends Controller_Action {
                         $postData[$element['name']] = $element['value'];
             }
 
-            //initialize the form object
-            $form = null;
-            try {
-                $form = new Publish_Form_PublishingSecond($this->_logger, $postData);
-            }
-            catch (Publish_Model_FormSessionTimeoutException $e) {
-                // Session timed out.
-                return $this->_redirectTo('index', '', 'index');
-            }
-
             if (!array_key_exists('send', $postData) || array_key_exists('back', $postData)) {
                 // A button (not SEND) was pressed => add / remove fields or browse fields
                 $this->_helper->viewRenderer($this->session->documentType);
 
-                $form->getExtendedForm($postData, $reload);
+                $this->manipulateSession($postData, $reload);
                 
                 if (isset($this->view->translateKey)) {                    
                     return $this->render('error');
@@ -222,6 +224,15 @@ class Publish_FormController extends Controller_Action {
             }
             
             // SEND was pressed => check the form
+            $form = null;
+            try {
+                $form = new Publish_Form_PublishingSecond($this->_logger, $postData);
+            }
+            catch (Publish_Model_FormSessionTimeoutException $e) {
+                // Session timed out.
+                return $this->_redirectTo('index', '', 'index');
+            }
+
             if (!$form->isValid($postData)) {
                 $form->setViewValues();
                 $this->view->form = $form;
@@ -363,6 +374,160 @@ class Publish_FormController extends Controller_Action {
         }
         $this->view->action_url = $url;
         $this->view->form = $form;
+    }
+
+    private function manipulateSession($postData, $reload) {
+        $this->view->currentAnchor = "";
+        if ($reload === true) {
+
+            try {
+                //find out which button was pressed
+                $pressedButtonName = $this->_getPressedButton($postData);
+            } catch (Publish_Model_FormNoButtonFoundException $e) {
+                $this->view->translateKey = $e->getTranslateKey();
+                return null;
+            }
+
+            //find out the resulting workflow and the field to extend
+            $result = $this->_workflowAndFieldFor($pressedButtonName);
+            $fieldName = $result[0];
+            $workflow = $result[1];
+
+            // Häufigkeit des Felds im aktuellen Formular (Standard ist 1)
+            $currentNumber = 1;
+            if (isset($this->session->additionalFields[$fieldName])) {
+                $currentNumber = $this->session->additionalFields[$fieldName];
+            }
+
+            // update collection fields in session member addtionalFields and find out the current level of collection browsing
+            $level = $this->_updateCollectionField($fieldName, $currentNumber, $postData);
+
+            $saveName = "";
+            //Enrichment-Gruppen haben Enrichment im Namen, die aber mit den currentAnchor kollidieren
+            if (strstr($fieldName, 'Enrichment')) {
+                $saveName = $fieldName;
+                $fieldName = str_replace('Enrichment', '', $fieldName);
+            }
+            if ($saveName != "")
+                $fieldName = $saveName;
+
+            $this->view->currentAnchor = 'group' . $fieldName;
+
+            // Updates several counter in additionalFields that depends on the button label.
+            switch ($workflow) {
+
+                case 'add':
+                    // Add another form field.
+                    $this->session->additionalFields[$fieldName] = $currentNumber + 1;
+                    break;
+
+                case 'delete':
+                    // Delete the last field.
+                    if ($currentNumber > 1) {
+                        for ($i = 0; $i <= $level; $i++) {
+                            unset($this->session->additionalFields['collId' . $i . $fieldName . '_' . $currentNumber]);
+                        }
+                        //remove one more field, only down to 0
+                        $this->session->additionalFields[$fieldName] = $currentNumber - 1;
+                    }
+                    break;
+
+                case 'down':
+                    // Browse down in the Collection hierarchy.
+                    if (($level == 1 && $postData[$fieldName . '_' . $currentNumber] !== '') || ($postData['collId' . $level . $fieldName . '_' . $currentNumber] != '')) {
+                        $this->session->additionalFields[self::STEP . $fieldName . '_' . $currentNumber] = $level + 1;
+                    }
+                    break;
+
+                case 'up' :
+                    // Browse up in the Collection hierarchy.
+                    unset($this->session->additionalFields['collId' . $level . $fieldName . '_' . $currentNumber]);
+
+                    if ($level >= 2) {
+                        $this->session->additionalFields[self::STEP . $fieldName . '_' . $currentNumber] = $level - 1;
+                    }
+                    else {
+                        unset($this->session->additionalFields[self::STEP . $fieldName . '_' . $currentNumber]);
+                    }
+
+                    break;
+
+                default:
+                    break;
+            }
+        }
+    }
+
+    /**
+     * Method to check which button in the form was pressed
+     * @param array $post array of POST request values
+     * @return <String> name of button
+     */
+    private function _getPressedButton($post) {        
+        foreach ($post AS $name => $value) {
+            if (strstr($name, self::BUTTON_ADD) ||
+                    strstr($name, self::BUTTON_DELETE) ||
+                    strstr($name, self::BUTTON_BROWSE_DOWN) ||
+                    strstr($name, self::BUTTON_BROWSE_UP)) {
+                return $name;
+            }
+        }
+        throw new Publish_Model_FormNoButtonFoundException();
+    }
+
+    /**
+     * Finds out which button for which field was pressed.
+     * @param string $button button label
+     * @return two-element array with fieldname and workflow
+     */
+    private function _workflowAndFieldFor($button) {
+        $result = array();
+        if (substr($button, 0, 7) == self::BUTTON_ADD) {
+            $result[0] = substr($button, 7);
+            $result[1] = 'add';
+        } else if (substr($button, 0, 10) == self::BUTTON_DELETE) {
+            $result[0] = substr($button, 10);
+            $result[1] = 'delete';
+        } else if (substr($button, 0, 10) == self::BUTTON_BROWSE_DOWN) {
+            $result[0] = substr($button, 10);
+            $result[1] = 'down';
+        } else if (substr($button, 0, 8) == self::BUTTON_BROWSE_UP) {
+            $result[0] = substr($button, 8);
+            $result[1] = 'up';
+        }
+        return $result;
+    }
+
+    /**
+     * Finds the current level of collection browsing for a given field.
+     * @param string $field name of field
+     * @param string $value counter of fieldsets
+     * @param array $post Array of post data
+     * @return int current level
+     */
+    private function _updateCollectionField($field, $value, $post) {
+        if (!array_key_exists(self::STEP . $field . '_' . $value, $this->session->additionalFields)) {
+            return 1;
+        }
+
+        $level = $this->session->additionalFields[self::STEP . $field . '_' . $value];
+
+        if ($level == 1) {
+            // Root Node
+            if (isset($post[$field . '_' . $value]) && $post[$field . '_' . $value] !== '') {
+                // der Wert im POST besitzt das Präfix ID: (daher die 3)
+                $this->session->additionalFields['collId1' . $field . '_' . $value] = substr($post[$field . '_' . $value], 3);
+            }
+        }
+        else {
+            // Middle Node or Leaf
+            if (isset($post['collId' . $level . $field . '_' . $value])) {
+                // der Wert im POST besitzt das Präfix ID: (daher die 3)
+                $this->session->additionalFields['collId' . $level . $field . '_' . $value] = substr($post['collId' . $level . $field . '_' . $value], 3);
+            }
+        }
+
+        return $level;
     }
     
 }
