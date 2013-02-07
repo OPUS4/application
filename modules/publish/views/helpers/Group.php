@@ -56,7 +56,7 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
      * Method to render a group of elements (group fields, buttons, hidden fields)
      * @param <Array> $group
      */
-    function _renderGroup($group, $options= null, $name = null) {
+    private function _renderGroup($group, $options= null, $name = null) {
         $fieldset = "";
 
         if (!isset($group))
