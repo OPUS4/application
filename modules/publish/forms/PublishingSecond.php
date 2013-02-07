@@ -73,9 +73,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
     }
 
     /**
-     * Build document publishing form whose fields depend on the choosen documenttype.
+     * Build document publishing form whose fields depend on the choosen document type.
      * 
-     * @param $doctype
      * @return void
      */
     public function init() {
@@ -83,8 +82,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
         $this->setDisableTranslator(true);        
 
-        $this->doctype = $this->session->documentType;
-        $this->additionalFields = $this->session->additionalFields;
+        $this->doctype = $this->session->documentType;        
 
         if (!isset($this->doctype) or empty($this->doctype)) {
             throw new Publish_Model_FormSessionTimeoutException();
@@ -101,6 +99,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             // TODO: Need another exception class?
             throw new Publish_Model_FormSessionTimeoutException();
         }
+
+        $this->additionalFields = $this->session->additionalFields;
 
         // Call the parser for that DOM object and the current form object and set important members.                
         $parser = new Publish_Model_DocumenttypeParser($dom, $this);        
@@ -185,6 +185,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                     || $element->getType() == "Zend_Form_Element_Submit"        // Submit buttons
                     || $element->getType() == "Zend_Form_Element_Hidden"        // Hidden fields
                     || $element->getAttrib('isRoot') == true                    // Rood Nodes of Browsefields
+                    || $element->getAttrib('doNotStore') == true                // bei Collections erfolgt die Zuordnung zum Dokument nur die unterste Collection pro Gruppe
                     || (!is_null($this->session->DT_externals)) && array_key_exists($element->getName(), $this->session->DT_externals)) {   // additional externals fields (from view helpers)
                 
                 $this->removeElement($name);
@@ -196,158 +197,17 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                 $this->session->elements[$name]['value'] = $element->getValue();
                 $this->session->elements[$name]['label'] = $element->getLabel();
                 $this->session->elements[$name]['datatype'] = $element->getAttrib('datatype');
-                if ($element->getAttrib('subfield'))
+                if ($element->getAttrib('subfield')) {
                     $this->session->elements[$name]['subfield'] = '1';
-                else 
+                }
+                else {
                     $this->session->elements[$name]['subfield'] = '0';
+                }
             }
         }
 
         $this->addSubmitButton('button_label_back', 'back');
         $this->addSubmitButton('button_label_send2', 'send');
-    }
-
-    public function getExtendedForm($postData, $reload) {
-        $this->view->currentAnchor = "";        
-        if ($reload === true) {
-
-            try {
-                //find out which button was pressed            
-                $pressedButtonName = $this->_getPressedButton();
-            } catch (Publish_Model_FormNoButtonFoundException $e) {
-                $this->view->translateKey = $e->getTranslateKey();
-                return null;
-            }
-
-            //find out the resulting workflow and the field to extend
-            $result = $this->_workflowAndFieldFor($pressedButtonName);
-            $fieldName = $result[0];
-            $workflow = $result[1];
-
-            if (!is_null($this->session->additionalFields[$fieldName]))
-                $currentNumber = $this->session->additionalFields[$fieldName];
-            else
-                $currentNumber = 1;
-
-            // update collection fields in session member addtionalFields and find out the current level of collection browsing
-            $level = $this->_updateCollectionField($fieldName, $currentNumber, $postData);            
-
-            $saveName = "";
-            //Enrichment-Gruppen haben Enrichment im Namen, die aber mit den currentAnchor kollidieren            
-            if (strstr($fieldName, 'Enrichment')) {
-                $saveName = $fieldName;
-                $fieldName = str_replace('Enrichment', '', $fieldName);
-            }
-            if ($saveName != "")
-                $fieldName = $saveName;
-
-            $this->view->currentAnchor = 'group' . $fieldName;            
-            
-            $fieldsetCount = $currentNumber;
-            
-            // Updates several counter in additionalFields that depends on the button label.
-            switch ($workflow) {
-                
-                case 'add':                    
-                    // Add another form field.
-                    $currentNumber = (int) $currentNumber + 1;
-                    break;
-                
-                case 'delete':
-                    // Delete the last field.
-                    if ($currentNumber > 1) {
-                        if (isset($level)) {
-                            for ($i = 0; $i <= $level; $i++)
-                                $this->session->additionalFields['collId' . $i . $fieldName . '_' . $currentNumber] = "";
-                        }
-                        //remove one more field, only down to 0
-                        $currentNumber = (int) $currentNumber - 1;
-                    }
-                    break;
-                    
-                case 'down':
-                    // Browse down in the Collection hierarchy.
-                    if ($postData[$fieldName . '_' . $currentNumber] !== '' || 
-                        array_key_exists('collId' . $level . $fieldName . '_' . $currentNumber, $this->session->additionalFields) &&
-                                $this->session->additionalFields['collId' . $level . $fieldName . '_' . $currentNumber] !== '')
-                        $level = (int) $level + 1;
-                    break;
-                    
-                case 'up' :
-                    // Brose up in the Collection hierarchy.
-                    if ($level >= 2) {
-                        unset($this->session->additionalFields['collId' . $level . $fieldName . '_' . $currentNumber]);
-                        $level = (int) $level - 1;                             
-                    }                                        
-                    if ($level == 1)
-                        unset($this->session->additionalFields['collId1'. $fieldName . '_' . $currentNumber]);
-                    // unset root node in disabled array
-                    if (array_key_exists($fieldName . '_' . $currentNumber, $this->session->disabled))
-                            unset($this->session->disabled[$fieldName . '_' . $currentNumber]);
-                    break;
-                default:
-                    break;
-            }
-
-            //set the increased value for the pressed button
-            $this->session->additionalFields[$fieldName] = $currentNumber;
-            if (isset($level)) {
-                $this->session->additionalFields['step' . $fieldName . '_' . $fieldsetCount] = $level;
-            }
-        }
-    }
-
-    /**
-     * Finds out which button for which field was pressed.
-     * @param type $button String button label
-     * @return string array with fieldname and workflow
-     */
-    private function _workflowAndFieldFor($button) {
-        $result = array();
-        if (substr($button, 0, 7) == "addMore") {
-            $result[0] = substr($button, 7);
-            $result[1] = 'add';
-        } else if (substr($button, 0, 10) == "deleteMore") {
-            $result[0] = substr($button, 10);
-            $result[1] = 'delete';
-        } else if (substr($button, 0, 10) == "browseDown") {
-            $result[0] = substr($button, 10);
-            $result[1] = 'down';
-        } else if (substr($button, 0, 8) == "browseUp") {
-            $result[0] = substr($button, 8);
-            $result[1] = 'up';
-        }
-        return $result;
-    }
-
-    /**
-     * Finds the current level of collection browsing for a given field.
-     * @param type $field name of field
-     * @param type $value counter of fieldsets
-     * @param type $post Array of post data
-     * @return type current level
-     */
-    private function _updateCollectionField($field, $value, $post) {
-        $level = '1';
-        if (array_key_exists('step' . $field . '_' . $value, $this->session->additionalFields)) {
-
-            $level = $this->session->additionalFields['step' . $field . '_' . $value];
-            // Root Node 
-            if ($level == '1') {
-                if (isset($post[$field . '_' . $value])) {
-                    if ($post[$field . '_' . $value] !== '')
-                        $this->session->additionalFields['collId1' . $field . '_' . $value] = substr($post[$field . '_' . $value], 3);
-                    }
-                }
-            // Middle Node or Leaf
-            else {
-                if (isset($post['collId' . $level . $field . '_' . $value])) {
-                    $entry = substr($post['collId' . $level . $field . '_' . $value], 3);
-                    $this->session->additionalFields['collId' . $level . $field . '_' . $value] = $entry;
-                }
-            }
-        }
-        return $level;
     }
 
     /**
@@ -366,8 +226,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             }
 
             //build group name
-            $groupName = self::GROUP . $name;
-            //$this->view->$name = $this->view->translate($name);
+            $groupName = self::GROUP . $name;            
             $this->view->$name = $name;
             $groupCount = 'num' . $groupName;
 
@@ -390,8 +249,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                 $this->view->$currentElement = $elementAttributes;
             }
             
-            $label = $currentElement . self::LABEL;
-            //$this->view->$label = $this->view->translate($this->getElement($currentElement)->getLabel());
+            $label = $currentElement . self::LABEL;        
             $this->view->$label = $this->getElement($currentElement)->getLabel();
         }
     }
@@ -401,44 +259,21 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
      * @param <String> $element element name
      * @return <String> $name
      */
-    private function _getRawElementName($element) {
-        $name = "";
-        //element is a person element
+    private function _getRawElementName($element) {        
         $pos = stripos($element, self::FIRST);
         if ($pos !== false) {
-            $name = substr($element, 0, $pos);
-        } else {
-            //element belongs to a group
-            $pos = stripos($element, self::COUNTER);
-            if ($pos != false) {
-                $name = substr($element, 0, $pos);
-            } else {
-                //"normal" element name without changes
-                $name = $element;
-            }
-        }
-        return $name;
-    }
-
-    /**
-     * Method to check which button in the form was pressed 
-     * @return <String> name of button
-     */
-    private function _getPressedButton() {
-        $pressedButtonName = "";
-        foreach ($this->getElements() AS $element) {
-            $name = $element->getName();
-            if (strstr($name, 'addMore') || strstr($name, 'deleteMore') || strstr($name, 'browseDown') || strstr($name, 'browseUp')) {
-                $value = $element->getValue();
-                if (!is_null($value))
-                    $pressedButtonName = $name;
-            }
+            //element is a person element: remove suffix "Firstname"
+            return substr($element, 0, $pos);
         }
 
-        if ($pressedButtonName == "")
-            throw new Publish_Model_FormNoButtonFoundException();
-        else
-            return $pressedButtonName;
+        $pos = stripos($element, self::COUNTER);
+        if ($pos != false) {
+            //element belongs to a group: remove suffix "_1"
+            return substr($element, 0, $pos);
+        }
+
+        //"normal" element name without changes
+        return $element;
     }
     
 }
