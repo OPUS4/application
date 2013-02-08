@@ -435,6 +435,7 @@ class Publish_FormController extends Controller_Action {
                     }
                     //remove one more field, only down to 0
                     $this->session->additionalFields[$fieldName] = $currentNumber - 1;
+                    unset($this->session->additionalFields[self::STEP . $fieldName . '_' . $currentNumber]);
                 }
                 break;
 
