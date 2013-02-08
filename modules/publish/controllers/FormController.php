@@ -441,7 +441,7 @@ class Publish_FormController extends Controller_Action {
 
             case 'down':
                 // Browse down in the Collection hierarchy.
-                if (($level == 1 && $postData[$fieldName . '_' . $currentNumber] !== '') || ($postData['collId' . $level . $fieldName . '_' . $currentNumber] != '')) {
+                if (($level == 1 && $postData[$fieldName . '_' . $currentNumber] !== '') || ($level > 1 && $postData['collId' . $level . $fieldName . '_' . $currentNumber] != '')) {
                     $this->session->additionalFields[self::STEP . $fieldName . '_' . $currentNumber] = $level + 1;
                 }
                 break;
