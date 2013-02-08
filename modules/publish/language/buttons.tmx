@@ -174,16 +174,16 @@
 
     <tu tuid="button_label_add_one_moreSubjectMSC">
         <tuv xml:lang="en">
-            <seg>Add one more MSC Word</seg>
+            <seg>Add one more MSC term</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Ein weiteres MSC Wort hinzufügen</seg>
+            <seg>Ein weiteres MSC Klasse hinzufügen</seg>
         </tuv>
     </tu>
 
     <tu tuid="button_label_deleteSubjectMSC">
         <tuv xml:lang="en">
-            <seg>Delete the last MSC subject</seg>
+            <seg>Delete the last MSC term</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Die letzte MSC Klasse löschen</seg>
@@ -192,7 +192,7 @@
 
     <tu tuid="button_label_add_one_moreSubjectCCS">
         <tuv xml:lang="en">
-            <seg>Add one more CCS Class</seg>
+            <seg>Add one more CCS term</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Eine weitere CCS Klasse hinzufügen</seg>
@@ -201,7 +201,7 @@
 
     <tu tuid="button_label_deleteSubjectCCS">
         <tuv xml:lang="en">
-            <seg>Delete the last CCS class</seg>
+            <seg>Delete the last CCS term</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Die letzte CCS Klasse löschen</seg>
@@ -210,25 +210,25 @@
 
     <tu tuid="button_label_add_one_moreSubjectDDC">
         <tuv xml:lang="en">
-            <seg>Add one more DDC notation</seg>
+            <seg>Add one more DDC term</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Eine weitere DDC Notation hinzufügen</seg>
+            <seg>Eine weitere DDC Klasse hinzufügen</seg>
         </tuv>
     </tu>
 
     <tu tuid="button_label_deleteSubjectDDC">
         <tuv xml:lang="en">
-            <seg>Delete the last DDC notation group</seg>
+            <seg>Delete the last DDC term group</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Die letzte DDC Notation löschen</seg>
+            <seg>Die letzte DDC Klasse löschen</seg>
         </tuv>
     </tu>
 
  <tu tuid="button_label_add_one_moreSubjectPACS">
         <tuv xml:lang="en">
-            <seg>Add one more PACS Class</seg>
+            <seg>Add one more PACS term</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Eine weitere PACS Klasse hinzufügen</seg>
@@ -237,7 +237,7 @@
 
     <tu tuid="button_label_deleteSubjectPACS">
         <tuv xml:lang="en">
-            <seg>Delete the last PACS class</seg>
+            <seg>Delete the last PACS term</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Die letzte PACS Klasse löschen</seg>
@@ -246,37 +246,37 @@
 
     <tu tuid="button_label_add_one_moreSubjectJEL">
         <tuv xml:lang="en">
-            <seg>Add one more JEL-Subject group</seg>
+            <seg>Add one more JEL term</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Eine weitere JEL-Sachgruppe hinzufügen</seg>
+            <seg>Eine weitere JEL Klasse hinzufügen</seg>
         </tuv>
     </tu>
 
     <tu tuid="button_label_deleteSubjectJEL">
         <tuv xml:lang="en">
-            <seg>Delete the last JEL-Subject group</seg>
+            <seg>Delete the last JEL term group</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Die letzte JEL-Sachgruppe löschen</seg>
+            <seg>Die letzte JEL Klasse löschen</seg>
         </tuv>
     </tu>
 	
 	<tu tuid="button_label_add_one_moreSubjectBKL">
         <tuv xml:lang="en">
-            <seg>Add one more BKL-Subject group</seg>
+            <seg>Add one more BKL term group</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Eine weitere BKL-Sachgruppe hinzufügen</seg>
+            <seg>Eine weitere BKL Klasse hinzufügen</seg>
         </tuv>
     </tu>
 
     <tu tuid="button_label_deleteSubjectBKL">
         <tuv xml:lang="en">
-            <seg>Delete the last BKL-Subject group</seg>
+            <seg>Delete the last BKL term group</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Die letzte BKL-Sachgruppe löschen</seg>
+            <seg>Die letzte BKL Klasse löschen</seg>
         </tuv>
     </tu>
 

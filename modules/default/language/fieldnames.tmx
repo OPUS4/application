@@ -432,10 +432,10 @@
 
         <tu tuid="SubjectMSC">
             <tuv xml:lang="en">
-                <seg>MSC-Classfication</seg>
+                <seg>MSC Term</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>MSC-Klassifikation</seg>
+                <seg>MSC Klasse</seg>
             </tuv>
         </tu>
 
@@ -444,7 +444,7 @@
                 <seg>DDC Term</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>DDC Notation</seg>
+                <seg>DDC Klasse</seg>
             </tuv>
         </tu>
 
@@ -471,7 +471,7 @@
                 <seg>JEL Term</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>JEL Sachgruppe</seg>
+                <seg>JEL Klasse</seg>
             </tuv>
         </tu>
 		
@@ -480,7 +480,7 @@
                 <seg>BKL Term</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>BKL Sachgruppe</seg>
+                <seg>BKL Klasse</seg>
             </tuv>
         </tu>
 
