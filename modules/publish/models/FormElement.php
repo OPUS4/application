@@ -361,7 +361,7 @@ class Publish_Model_FormElement {
         
     }
 
-    private function showSelectField($options, $datatype=null, $elementName=null) {
+    private function showSelectField($options, $datatype = null, $elementName = null) {
         if (isset($elementName)) {
             $name = $elementName;
         }
@@ -384,42 +384,41 @@ class Publish_Model_FormElement {
             $reorgOptions[] = array(
                 'key' => is_string($key) ? $key : strval($key),
                 'value' => $value);
-        }
-        $options = $reorgOptions;
+        }        
 
         switch ($switchVar) {
             case 'Collection': 
             case 'CollectionLeaf' :
-                $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_'.$this->collectionRole)), $options));
+                $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_'.$this->collectionRole)), $reorgOptions));
                 break;
 
             case 'Licence' :
-                $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_licence')), $options));
+                $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_licence')), $reorgOptions));
                 break;
 
             case 'Language' :
                 if ($this->elementName === 'Language') {
-                    $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_language')), $options));
+                    $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_language')), $reorgOptions));
                 }
                 else {
-                    $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('inherit_document_language')), $options));
+                    $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('inherit_document_language')), $reorgOptions));
                 }
                 break;
 
             case 'ThesisGrantor' :
-                $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_thesisgrantor')), $options));
+                $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_thesisgrantor')), $reorgOptions));
                 break;
 
             case 'ThesisPublisher':
-                $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_thesispublisher')), $options));
+                $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_thesispublisher')), $reorgOptions));
                 break;
 
             case 'Series':
-                $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_series')), $options));
+                $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_series')), $reorgOptions));
                 break;
 
             default:
-                $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_option')), $options));
+                $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_option')), $reorgOptions));
                 break;
         }
         
