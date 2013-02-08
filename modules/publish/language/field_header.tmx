@@ -167,6 +167,15 @@ END OF COMMENT -->
       </tuv>
     </tu>
 
+	<tu tuid="groupddc_dnb">
+      <tuv xml:lang="en">
+        <seg>DDC subject groups</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>DDC Sachgruppen</seg>
+      </tuv>
+    </tu>
+	
     <tu tuid="groupSubjectJEL">
       <tuv xml:lang="en">
         <seg>JEL Classification</seg>

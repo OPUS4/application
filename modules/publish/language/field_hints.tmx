@@ -137,6 +137,15 @@
             <seg>Entschuldigung: Es wurden keine DDC Klassen in unserer Datenbank gefunden.</seg>
         </tuv>
     </tu>
+	
+	<tu tuid="hint_no_selection_ddc_dnb">
+        <tuv xml:lang="en">
+            <seg>Sorry: No DDC subject categories have been found in our database.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Entschuldigung: Es wurden keine DDC-Sachgruppen in unserer Datenbank gefunden.</seg>
+        </tuv>
+    </tu>
 
     <tu tuid="hint_no_selection_SubjectJEL">
         <tuv xml:lang="en">
@@ -959,6 +968,25 @@ Beispieleingabe: "100" (für Philosophy and psychology)</seg>
         </tuv>
     </tu>
 
+	<!-- DDC-Sachgruppen **************************************************** -->
+<tu tuid="hint_groupddc_dnb">
+        <tuv xml:lang="en">
+            <seg>Please enter the DDC subject groups of the document. You may add more DDC subject groups by clicking on the button )or delete them).</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte die DDC-Sachgruppe Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere DDC-Sachgruppen hinzufügen (oder wieder löschen).</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_SubjectDDC">
+        <tuv xml:lang="en">
+            <seg>Please enter a DDC class.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte eine DDC Klasse ein.</seg>
+        </tuv>
+    </tu>
+	
 <!-- JEL **************************************************** -->
 <tu tuid="hint_groupSubjectJEL">
         <tuv xml:lang="en">

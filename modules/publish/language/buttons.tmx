@@ -225,6 +225,24 @@
             <seg>Die letzte DDC Klasse löschen</seg>
         </tuv>
     </tu>
+	
+    <tu tuid="button_label_add_one_moreddc_dnb">
+        <tuv xml:lang="en">
+            <seg>Add one more DDC subject category</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Eine weitere DDC-Sachgruppe hinzufügen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="button_label_deleteddc_dnb">
+        <tuv xml:lang="en">
+            <seg>Delete the last DDC subject category</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die letzte DDC-Sachgruppe löschen</seg>
+        </tuv>
+    </tu>
 
  <tu tuid="button_label_add_one_moreSubjectPACS">
         <tuv xml:lang="en">

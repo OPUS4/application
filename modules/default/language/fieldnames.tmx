@@ -447,6 +447,15 @@
                 <seg>DDC Klasse</seg>
             </tuv>
         </tu>
+		
+		<tu tuid="ddc_dnb">
+            <tuv xml:lang="en">
+                <seg>DDC subject group</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>DDC-Sachgruppe</seg>
+            </tuv>
+        </tu>
 
 		<tu tuid="SubjectPACS">
 			<tuv xml:lang="en">
