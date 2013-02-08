@@ -161,7 +161,10 @@ class Publish_FormController extends Controller_Action {
 
         if ($this->getRequest()->isPost() === true) {           
 
-            $postData = array_merge($this->session->additionalFields, $this->getRequest()->getPost());
+            $postData = $this->getRequest()->getPost();
+            if (!is_null($this->session->additionalFields)) {
+                $postData = array_merge($this->session->additionalFields, $postData);
+            }
 
             //abort publish process
             if (array_key_exists('abort', $postData)) {
