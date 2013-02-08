@@ -108,7 +108,7 @@ class Publish_Model_DisplayGroup {
         }
         $this->form->addElement($elem);        
         $this->elements[] = $elem;
-        return $elem->getName();
+        return $elem;
     }
 
     /**
@@ -125,13 +125,18 @@ class Publish_Model_DisplayGroup {
 
             if (!is_array($selectFields)) {
                 // es wurde noch keine Auswahl für die aktuelle Gruppe $i vorgenommen
-                $displayGroup[] = $this->cloneElement($i, $currentStep);
+                $element = $this->cloneElement($i, $currentStep);
+                if ($i < $maxNum) { // nur die letzte Gruppe kann vom Benutzer editiert werden
+                    $element->setAttrib('disabled', true);
+                }
+                $displayGroup[] = $element->getName();
             }
             else {
                 // es wurde mindestens die erste Stufe der aktuellen Gruppe $i ausgewählt
 
                 // die erste Stufe der Gruppe $i muss aus dem "Standard-Element" geklont werden (unschön)
-                $displayGroup[] = $this->cloneElement($i, $currentStep);
+                $element = $this->cloneElement($i, $currentStep);
+                $displayGroup[] = $element->getName();
 
                 $numOfFields = count($selectFields);
 
