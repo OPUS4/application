@@ -185,13 +185,16 @@ class Publish_FormController extends Controller_Action {
             }
 
             if (!array_key_exists('send', $postData) || array_key_exists('back', $postData)) {
-                // A button (not SEND) was pressed => add / remove fields or browse fields
+                // A button (not SEND) was pressed => add / remove fields or browse fields OR back button (in step 3)
                 $this->_helper->viewRenderer($this->session->documentType);
 
-                $this->manipulateSession($postData);
-                
-                if (isset($this->view->translateKey)) {                    
-                    return $this->render('error');
+                if (!array_key_exists('back', $postData)) {
+                    // die Session muss nur dann manipuliert werden, wenn im zweiten Schritt ADD/DELETE/BROWSE durchgeführt wurde
+                    $this->manipulateSession($postData);
+
+                    if (isset($this->view->translateKey)) {
+                        return $this->render('error');
+                    }
                 }
 
                 //now create a new form with extended fields
