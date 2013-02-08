@@ -112,7 +112,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'PersonAuthorLastName_1' => 'AuthorLastName',
                     'CompletedDate' => '22.01.2011',
                     'Language' => 'deu',
-                    'Licence' => 'ID:4',
+                    'Licence' => '4',
                     'addMoreTitleMain' => 'Add one more title main'
                 ));
 
@@ -168,7 +168,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'TitleMainLanguage_1' => 'deu',
                     'CompletedDate' => '22.01.2011',
                     'Language' => 'deu',
-                    'Licence' => 'ID:4',
+                    'Licence' => '4',
                     'send' => 'Weiter zum nächsten Schritt'
                 ));
 
@@ -201,7 +201,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'PersonAuthorLastName_1' => 'AuthorLastName',
                     'CompletedDate' => '22.01.2011',
                     'Language' => 'deu',
-                    'Licence' => 'ID:4',
+                    'Licence' => '4',
                     'send' => 'Weiter zum nächsten Schritt'
                 ));
 
