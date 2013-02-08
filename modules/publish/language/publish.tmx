@@ -277,6 +277,15 @@
         <seg>Bitte wählen Sie eine DDC Klasse</seg>
       </tuv>
     </tu>
+	
+	<tu tuid="choose_valid_ddc_dnb">
+      <tuv xml:lang="en">
+        <seg>Please choose a DDC subject group</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie eine DDC-Sachgruppe</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="choose_valid_ccs">
       <tuv xml:lang="en">
