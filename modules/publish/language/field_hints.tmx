@@ -978,7 +978,7 @@ Beispieleingabe: "100" (für Philosophy and psychology)</seg>
         </tuv>
     </tu>
 
-    <tu tuid="hint_ddc_dnb">
+    <tu tuid="hint_ddc">
         <tuv xml:lang="en">
             <seg>Please enter a DDC subject group.</seg>
         </tuv>
