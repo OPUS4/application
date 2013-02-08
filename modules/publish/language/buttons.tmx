@@ -210,19 +210,19 @@
 
     <tu tuid="button_label_add_one_moreSubjectDDC">
         <tuv xml:lang="en">
-            <seg>Add one more DDC-Subject group</seg>
+            <seg>Add one more DDC notation</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Eine weitere DDC-Sachgruppe hinzufügen</seg>
+            <seg>Eine weitere DDC Notation hinzufügen</seg>
         </tuv>
     </tu>
 
     <tu tuid="button_label_deleteSubjectDDC">
         <tuv xml:lang="en">
-            <seg>Delete the last DDC-Subject group</seg>
+            <seg>Delete the last DDC notation group</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Die letzte DDC-Sachgruppe löschen</seg>
+            <seg>Die letzte DDC Notation löschen</seg>
         </tuv>
     </tu>
 

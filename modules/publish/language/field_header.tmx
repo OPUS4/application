@@ -160,46 +160,46 @@ END OF COMMENT -->
 
     <tu tuid="groupSubjectDDC">
       <tuv xml:lang="en">
-        <seg>DDC Classifications</seg>
+        <seg>DDC Classification</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>DDC Sachgruppen / Klassifikationen</seg>
+        <seg>DDC Klassifikation</seg>
       </tuv>
     </tu>
 
     <tu tuid="groupSubjectJEL">
       <tuv xml:lang="en">
-        <seg>JEL Classifications</seg>
+        <seg>JEL Classification</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>JEL Sachgruppen / Klassifikationen</seg>
+        <seg>JEL Klassifikation</seg>
       </tuv>
     </tu>
 
     <tu tuid="groupSubjectCCS">
       <tuv xml:lang="en">
-        <seg>CCS Classifications</seg>
+        <seg>CCS Classification</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>CCS Sachgruppen / Klassifikationen</seg>
+        <seg>CCS Klassifikation</seg>
       </tuv>
     </tu>
 
     <tu tuid="groupSubjectPACS">
       <tuv xml:lang="en">
-        <seg>PACS Classifications</seg>
+        <seg>PACS Classification</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>PACS Sachgruppen / Klassifikationen</seg>
+        <seg>PACS Klassifikation</seg>
       </tuv>
     </tu>
 
 	<tu tuid="groupSubjectBKL">
       <tuv xml:lang="en">
-        <seg>BKL Classifications</seg>
+        <seg>BKL Classification</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>BKL Sachgruppen / Klassifikationen</seg>
+        <seg>BKL Klassifikation</seg>
       </tuv>
     </tu>
 	
@@ -268,10 +268,10 @@ END OF COMMENT -->
 
     <tu tuid="groupSubjectMSC">
       <tuv xml:lang="en">
-        <seg>MSC Classification(s)</seg>
+        <seg>MSC Classification</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>MSC Klassifikation(en)</seg>
+        <seg>MSC Klassifikation</seg>
       </tuv>
     </tu>
 
