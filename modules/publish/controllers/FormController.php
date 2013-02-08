@@ -159,9 +159,6 @@ class Publish_FormController extends Controller_Action {
 
         $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
-        //reload form or show entries, intial: true
-        $reload = true;
-
         if ($this->getRequest()->isPost() === true) {           
 
             $postData = array_merge($this->session->additionalFields, $this->getRequest()->getPost());
@@ -181,8 +178,7 @@ class Publish_FormController extends Controller_Action {
             }
 
             //go back and change data
-            if (array_key_exists('back', $postData)) {
-                $reload = false;
+            if (array_key_exists('back', $postData)) {                
                 if (isset($this->session->elements))
                     foreach ($this->session->elements AS $element)
                         $postData[$element['name']] = $element['value'];
@@ -192,7 +188,7 @@ class Publish_FormController extends Controller_Action {
                 // A button (not SEND) was pressed => add / remove fields or browse fields
                 $this->_helper->viewRenderer($this->session->documentType);
 
-                $this->manipulateSession($postData, $reload);
+                $this->manipulateSession($postData);
                 
                 if (isset($this->view->translateKey)) {                    
                     return $this->render('error');
@@ -381,85 +377,83 @@ class Publish_FormController extends Controller_Action {
         $this->view->form = $form;
     }
 
-    private function manipulateSession($postData, $reload) {
-        $this->view->currentAnchor = "";
-        if ($reload === true) {
+    private function manipulateSession($postData) {
+        $this->view->currentAnchor = "";       
 
-            try {
-                //find out which button was pressed
-                $pressedButtonName = $this->_getPressedButton($postData);
-            } catch (Publish_Model_FormNoButtonFoundException $e) {
-                $this->view->translateKey = $e->getTranslateKey();
-                return null;
-            }
+        try {
+            //find out which button was pressed
+            $pressedButtonName = $this->_getPressedButton($postData);
+        } catch (Publish_Model_FormNoButtonFoundException $e) {
+            $this->view->translateKey = $e->getTranslateKey();
+            return null;
+        }
 
-            //find out the resulting workflow and the field to extend
-            $result = $this->_workflowAndFieldFor($pressedButtonName);
-            $fieldName = $result[0];
-            $workflow = $result[1];
+        //find out the resulting workflow and the field to extend
+        $result = $this->_workflowAndFieldFor($pressedButtonName);
+        $fieldName = $result[0];
+        $workflow = $result[1];
 
-            // Häufigkeit des Felds im aktuellen Formular (Standard ist 1)
-            $currentNumber = 1;
-            if (isset($this->session->additionalFields[$fieldName])) {
-                $currentNumber = $this->session->additionalFields[$fieldName];
-            }
+        // Häufigkeit des Felds im aktuellen Formular (Standard ist 1)
+        $currentNumber = 1;
+        if (isset($this->session->additionalFields[$fieldName])) {
+            $currentNumber = $this->session->additionalFields[$fieldName];
+        }
 
-            // update collection fields in session member addtionalFields and find out the current level of collection browsing
-            $level = $this->_updateCollectionField($fieldName, $currentNumber, $postData);
+        // update collection fields in session member addtionalFields and find out the current level of collection browsing
+        $level = $this->_updateCollectionField($fieldName, $currentNumber, $postData);
 
-            $saveName = "";
-            //Enrichment-Gruppen haben Enrichment im Namen, die aber mit den currentAnchor kollidieren
-            if (strstr($fieldName, 'Enrichment')) {
-                $saveName = $fieldName;
-                $fieldName = str_replace('Enrichment', '', $fieldName);
-            }
-            if ($saveName != "")
-                $fieldName = $saveName;
+        $saveName = "";
+        //Enrichment-Gruppen haben Enrichment im Namen, die aber mit den currentAnchor kollidieren
+        if (strstr($fieldName, 'Enrichment')) {
+            $saveName = $fieldName;
+            $fieldName = str_replace('Enrichment', '', $fieldName);
+        }
+        if ($saveName != "")
+            $fieldName = $saveName;
 
-            $this->view->currentAnchor = 'group' . $fieldName;
+        $this->view->currentAnchor = 'group' . $fieldName;
 
-            // Updates several counter in additionalFields that depends on the button label.
-            switch ($workflow) {
+        // Updates several counter in additionalFields that depends on the button label.
+        switch ($workflow) {
 
-                case 'add':
-                    // Add another form field.
-                    $this->session->additionalFields[$fieldName] = $currentNumber + 1;
-                    break;
+            case 'add':
+                // Add another form field.
+                $this->session->additionalFields[$fieldName] = $currentNumber + 1;
+                break;
 
-                case 'delete':
-                    // Delete the last field.
-                    if ($currentNumber > 1) {
-                        for ($i = 0; $i <= $level; $i++) {
-                            unset($this->session->additionalFields['collId' . $i . $fieldName . '_' . $currentNumber]);                            
-                        }
-                        //remove one more field, only down to 0
-                        $this->session->additionalFields[$fieldName] = $currentNumber - 1;
+            case 'delete':
+                // Delete the last field.
+                if ($currentNumber > 1) {
+                    for ($i = 0; $i <= $level; $i++) {
+                        unset($this->session->additionalFields['collId' . $i . $fieldName . '_' . $currentNumber]);
                     }
-                    break;
+                    //remove one more field, only down to 0
+                    $this->session->additionalFields[$fieldName] = $currentNumber - 1;
+                }
+                break;
 
-                case 'down':
-                    // Browse down in the Collection hierarchy.
-                    if (($level == 1 && $postData[$fieldName . '_' . $currentNumber] !== '') || ($postData['collId' . $level . $fieldName . '_' . $currentNumber] != '')) {
-                        $this->session->additionalFields[self::STEP . $fieldName . '_' . $currentNumber] = $level + 1;
-                    }
-                    break;
+            case 'down':
+                // Browse down in the Collection hierarchy.
+                if (($level == 1 && $postData[$fieldName . '_' . $currentNumber] !== '') || ($postData['collId' . $level . $fieldName . '_' . $currentNumber] != '')) {
+                    $this->session->additionalFields[self::STEP . $fieldName . '_' . $currentNumber] = $level + 1;
+                }
+                break;
 
-                case 'up' :
-                    // Browse up in the Collection hierarchy.
-                    unset($this->session->additionalFields['collId' . $level . $fieldName . '_' . $currentNumber]);
+            case 'up' :
+                // Browse up in the Collection hierarchy.
+                unset($this->session->additionalFields['collId' . $level . $fieldName . '_' . $currentNumber]);
 
-                    if ($level >= 2) {
-                        $this->session->additionalFields[self::STEP . $fieldName . '_' . $currentNumber] = $level - 1;
-                    }
-                    else {
-                        unset($this->session->additionalFields[self::STEP . $fieldName . '_' . $currentNumber]);
-                    }
+                if ($level >= 2) {
+                    $this->session->additionalFields[self::STEP . $fieldName . '_' . $currentNumber] = $level - 1;
+                }
+                else {
+                    unset($this->session->additionalFields[self::STEP . $fieldName . '_' . $currentNumber]);
+                }
 
-                    break;
+                break;
 
-                default:
-                    break;
-            }
+            default:
+                break;
         }
     }
 
