@@ -563,5 +563,293 @@ class Publish_FormControllerTest extends ControllerTestCase {
         }
     }
 
+    private function addTestDocument($session, $documentType) {
+        $doc = $this->createTemporaryDoc();
+        
+        $session->documentType = $documentType;
+        $session->documentId = $doc->getId();
+        $session->additionalFields = array();
+    }
+
+    /**
+     * Button pressed: Add one more Title Main
+     */
+    public function testCheckActionWithAddButton() {
+        $session = new Zend_Session_Namespace('Publish');
+        $this->addTestDocument($session, 'preprint');
+        $data = array(
+            'PersonSubmitterFirstName_1' => '',
+            'PersonSubmitterLastName_1' => '',
+            'PersonSubmitterEmail_1' => '',
+            'TitleMain_1' => '',
+            'TitleMainLanguage_1' => '',            
+            'TitleAbstract_1' => '',
+            'TitleAbstractLanguage_1' => '',
+            'PersonAuthorFirstName_1' => '',
+            'PersonAuthorLastName_1' => '',
+            'PersonAuthorAcademicTitle_1' => '',
+            'PersonAuthorEmail_1' => '',
+            'PersonAuthorAllowEmailContact_1' => '0',
+            'PersonAuthorDateOfBirth_1' => '',
+            'PersonAuthorPlaceOfBirth_1' => '',
+            'CompletedYear' => '',
+            'CompletedDate' => '07.09.2011',
+            'PageNumber' => '',
+            'SubjectUncontrolled_1' => '',
+            'SubjectUncontrolledLanguage_1' => '',
+            'Institute_1' => '',
+            'IdentifierUrn' => '',
+            'Note' => '',
+            'Language' => 'deu',
+            'Licence' => '',
+            'SeriesNumber_1' => '',
+            'Series_1' => '',
+
+            // Add Button wurde gedrückt
+            'addMoreTitleMain' => 'Einen+weiteren+Titel+hinzufügen',
+        );
+
+        $this->request
+            ->setMethod('POST')
+            ->setPost($data);
+        $this->dispatch('/publish/form/check');
+        $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());        
+        
+        $this->assertEquals(3, count($session->additionalFields));
+        $this->assertEquals('2', $session->additionalFields['TitleMain']);
+        $this->assertEquals(1, $session->additionalFields['stepInstitute_1']);
+        $this->assertEquals('1', $session->additionalFields['collId0Institute_1']);
+    }
+
+    /**
+     * Button pressed: Delete the last Title Main
+     */
+    public function testCheckActionWithDeleteButton() {
+        $session = new Zend_Session_Namespace('Publish');
+        $this->addTestDocument($session, 'preprint');        
+        $session->additionalFields['TitleMain'] = '2';
+
+        $data = array(
+            'PersonSubmitterFirstName_1' => '',
+            'PersonSubmitterLastName_1' => '',
+            'PersonSubmitterEmail_1' => '',
+            'TitleMain_1' => '',
+            'TitleMainLanguage_1' => '',
+            'TitleMain_2' => '',
+            'TitleMainLanguage_2' => '',            
+            'TitleAbstract_1' => '',
+            'TitleAbstractLanguage_1' => '',
+            'PersonAuthorFirstName_1' => '',
+            'PersonAuthorLastName_1' => '',
+            'PersonAuthorAcademicTitle_1' => '',
+            'PersonAuthorEmail_1' => '',
+            'PersonAuthorAllowEmailContact_1' => '0',
+            'PersonAuthorDateOfBirth_1' => '',
+            'PersonAuthorPlaceOfBirth_1' => '',
+            'CompletedYear' => '',
+            'CompletedDate' => '07.09.2011',
+            'PageNumber' => '',
+            'SubjectUncontrolled_1' => '',
+            'SubjectUncontrolledLanguage_1' => '',
+            'Institute_1' => '',
+            'IdentifierUrn' => '',
+            'Note' => '',
+            'Language' => 'deu',
+            'Licence' => '',
+            'SeriesNumber_1' => '',
+            'Series_1' => '',
+
+            // Delete Button wurde gedrückt
+            'deleteMoreTitleMain' => 'Den+letzten+Titel+löschen',
+        );
+
+        $this->request
+            ->setMethod('POST')
+            ->setPost($data);
+        $this->dispatch('/publish/form/check');
+        $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
+
+        $this->assertEquals(3, count($session->additionalFields));
+        $this->assertEquals(1, $session->additionalFields['TitleMain']);
+        $this->assertEquals(1, $session->additionalFields['stepInstitute_1']);
+        $this->assertEquals('1', $session->additionalFields['collId0Institute_1']);
+    }
+
+    /**
+     * Button pressed: Browse down Institute
+     */
+    public function testCheckActionWithBrowseDownButton() {
+        $session = new Zend_Session_Namespace('Publish');
+        $this->addTestDocument($session, 'preprint');        
+        $session->additionalFields['Institute'] = '1';
+        $session->additionalFields['collId0Institute_1'] = '1';
+        $session->additionalFields['stepInstitute_1'] = '1';
+
+        $data = array(
+            'PersonSubmitterFirstName_1' => '',
+            'PersonSubmitterLastName_1' => '',
+            'PersonSubmitterEmail_1' => '',
+            'TitleMain_1' => '',
+            'TitleMainLanguage_1' => '',
+            'TitleAbstract_1' => '',
+            'TitleAbstractLanguage_1' => '',
+            'PersonAuthorFirstName_1' => '',
+            'PersonAuthorLastName_1' => '',
+            'PersonAuthorAcademicTitle_1' => '',
+            'PersonAuthorEmail_1' => '',
+            'PersonAuthorAllowEmailContact_1' => '0',
+            'PersonAuthorDateOfBirth_1' => '',
+            'PersonAuthorPlaceOfBirth_1' => '',
+            'CompletedYear' => '',
+            'CompletedDate' => '07.09.2011',
+            'PageNumber' => '',
+            'SubjectUncontrolled_1' => '',
+            'SubjectUncontrolledLanguage_1' => '',
+            'Institute_1' => '15994',            
+            'IdentifierUrn' => '',
+            'Note' => '',
+            'Language' => 'deu',
+            'Licence' => '',
+            'SeriesNumber_1' => '',
+            'Series_1' => '',
+
+            // Browse Down Button wurde gedrückt
+            'browseDownInstitute' => 'runter',
+        );
+
+        $this->request
+            ->setMethod('POST')
+            ->setPost($data);
+        $this->dispatch('/publish/form/check');
+        $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
+
+        $this->assertEquals(4, count($session->additionalFields));
+        $this->assertEquals('15994', $session->additionalFields['collId1Institute_1']);
+        $this->assertEquals(2, $session->additionalFields['stepInstitute_1']);
+        $this->assertEquals('1', $session->additionalFields['Institute']);
+        $this->assertEquals('1', $session->additionalFields['collId0Institute_1']);
+    }
+
+    /**
+     * Button pressed: Browse up Institute
+     */
+    public function testCheckActionWithBrowseUpButton() {
+        $session = new Zend_Session_Namespace('Publish');
+        $this->addTestDocument($session, 'preprint');        
+        $session->additionalFields['Institute'] = '1';
+        $session->additionalFields['collId0Institute_1'] = '1';
+        $session->additionalFields['collId1Institute_1'] = '15994';
+        $session->additionalFields['stepInstitute_1'] = '2';
+
+        $data = array(
+            'PersonSubmitterFirstName_1' => '',
+            'PersonSubmitterLastName_1' => '',
+            'PersonSubmitterEmail_1' => '',
+            'TitleMain_1' => '',
+            'TitleMainLanguage_1' => '',
+            'TitleAbstract_1' => '',
+            'TitleAbstractLanguage_1' => '',
+            'PersonAuthorFirstName_1' => '',
+            'PersonAuthorLastName_1' => '',
+            'PersonAuthorAcademicTitle_1' => '',
+            'PersonAuthorEmail_1' => '',
+            'PersonAuthorAllowEmailContact_1' => '0',
+            'PersonAuthorDateOfBirth_1' => '',
+            'PersonAuthorPlaceOfBirth_1' => '',
+            'CompletedYear' => '',
+            'CompletedDate' => '07.09.2011',
+            'PageNumber' => '',
+            'SubjectUncontrolled_1' => '',
+            'SubjectUncontrolledLanguage_1' => '',
+            'collId2Institute_1' => '15995',            
+            'IdentifierUrn' => '',
+            'Note' => '',
+            'Language' => 'deu',
+            'Licence' => '',
+            'SeriesNumber_1' => '',
+            'Series_1' => '',
+
+            // Browse Up Button wurde gedrückt
+            'browseUpInstitute' => 'hoch',
+        );
+
+        $this->request
+            ->setMethod('POST')
+            ->setPost($data);
+        $this->dispatch('/publish/form/check');
+        $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
+
+        $this->assertEquals(4, count($session->additionalFields));
+        $this->assertEquals(1, $session->additionalFields['stepInstitute_1']);
+        $this->assertEquals('1', $session->additionalFields['Institute']);
+        $this->assertEquals('15994', $session->additionalFields['collId1Institute_1']);
+        $this->assertEquals('1', $session->additionalFields['collId0Institute_1']);
+    }
+
+    /**
+     * Button pressed: no button pressed
+     */
+    public function testCheckActionWithMissingButton() {
+        $session = new Zend_Session_Namespace('Publish');
+        $this->addTestDocument($session, 'preprint');
+        $session->additionalFields['PersonSubmitter'] = '1';
+        $session->additionalFields['TitleMain'] = '1';
+        $session->additionalFields['TitleAbstract'] = '1';
+        $session->additionalFields['PersonAuthor'] = '1';
+        $session->additionalFields['SubjectUncontrolled'] = '1';
+        $session->additionalFields['stepInstitute_1'] = '1';
+        $session->additionalFields['collId0Institute_1'] = '1';
+        $session->additionalFields['Institute'] = '1';
+        $session->additionalFields['Series'] = '1';
+
+        $data = array(
+            'PersonSubmitterFirstName_1' => '',
+            'PersonSubmitterLastName_1' => '',
+            'PersonSubmitterEmail_1' => '',
+            'TitleMain_1' => '',
+            'TitleMainLanguage_1' => '',
+            'TitleAbstract_1' => '',
+            'TitleAbstractLanguage_1' => '',
+            'PersonAuthorFirstName_1' => '',
+            'PersonAuthorLastName_1' => '',
+            'PersonAuthorAcademicTitle_1' => '',
+            'PersonAuthorEmail_1' => '',
+            'PersonAuthorAllowEmailContact_1' => '0',
+            'PersonAuthorDateOfBirth_1' => '',
+            'PersonAuthorPlaceOfBirth_1' => '',
+            'CompletedYear' => '',
+            'CompletedDate' => '07.09.2011',
+            'PageNumber' => '',
+            'SubjectUncontrolled_1' => '',
+            'SubjectUncontrolledLanguage_1' => '',
+            'Institute_1' => '',
+            'IdentifierUrn' => '',
+            'Note' => '',
+            'Language' => 'deu',
+            'Licence' => '',
+            'SeriesNumber_1' => '',
+            'Series_1' => ''
+            // kein Button wurde gedrückt
+        );
+
+        $this->request
+            ->setMethod('POST')
+            ->setPost($data);
+        $this->dispatch('/publish/form/check');
+        $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
+        
+        //no button pressed, additionalFields still in intial state
+        $this->assertEquals(9, count($session->additionalFields));
+        $this->assertEquals('1', $session->additionalFields['PersonSubmitter']);
+        $this->assertEquals('1', $session->additionalFields['TitleMain']);
+        $this->assertEquals('1', $session->additionalFields['TitleAbstract']);
+        $this->assertEquals('1', $session->additionalFields['PersonAuthor']);
+        $this->assertEquals('1', $session->additionalFields['SubjectUncontrolled']);
+        $this->assertEquals('1', $session->additionalFields['stepInstitute_1']);
+        $this->assertEquals('1', $session->additionalFields['collId0Institute_1']);
+        $this->assertEquals('1', $session->additionalFields['Institute']);
+        $this->assertEquals('1', $session->additionalFields['Series']);
+    }  
+
 }
 
