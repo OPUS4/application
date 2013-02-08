@@ -57,7 +57,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonAuthorAllowEmailContact_1' => '0',
             'CompletedDate' => '12.06.2012',
             'Language' => 'deu',
-            'Licence' => 'ID:4'
+            'Licence' => '4'
         );
 
         $val = new Publish_Model_ExtendedValidation($form, $data);
@@ -80,7 +80,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonAuthorAllowEmailContact_1' => '',
             'CompletedDate' => '06.09.2011',
             'Language' => 'deu',
-            'Licence' => 'ID:4'
+            'Licence' => '4'
         );
 
         $val = new Publish_Model_ExtendedValidation($form, $data);
@@ -105,7 +105,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonAuthorAllowEmailContact_1' => '0',
             'CompletedDate' => '06.09.2011',
             'Language' => 'deu',
-            'Licence' => 'ID:4'
+            'Licence' => '4'
         );
 
         $val = new Publish_Model_ExtendedValidation($form, $data);
@@ -130,7 +130,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonAuthorAllowEmailContact_1' => '1',
             'CompletedDate' => '06.09.2011',
             'Language' => 'deu',
-            'Licence' => 'ID:4'
+            'Licence' => '4'
         );
 
         $val = new Publish_Model_ExtendedValidation($form, $data);
@@ -158,7 +158,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonAuthorAllowEmailContact_1' => '0',
             'CompletedDate' => '11.06.2012',
             'Language' => 'deu',
-            'Licence' => 'ID:4'
+            'Licence' => '4'
         );
 
         $val = new Publish_Model_ExtendedValidation($form, $data);
@@ -186,7 +186,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonAuthorAllowEmailContact_1' => '0',
             'CompletedDate' => '11.06.2012',
             'Language' => 'deu',
-            'Licence' => 'ID:4'
+            'Licence' => '4'
         );
 
         $val = new Publish_Model_ExtendedValidation($form, $data);
@@ -223,7 +223,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonAuthorAllowEmailContact_1' => '0',
             'CompletedDate' => '14.06.2012',
             'Language' => 'deu',
-            'Licence' => 'ID:4'            
+            'Licence' => '4'            
         );
 
         $form->getExtendedForm($data, false);
@@ -259,7 +259,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonAuthorAllowEmailContact_1' => '0',
             'CompletedDate' => '11.06.2012',
             'Language' => 'deu',
-            'Licence' => 'ID:4'
+            'Licence' => '4'
         );
 
         $val = new Publish_Model_ExtendedValidation($form, $data);
@@ -281,8 +281,8 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonSubmitterLastName_1' => 'Doe',
             'TitleMain_1' => 'Entenhausen',
             'TitleMainLanguage_1' => 'deu',
-            'Licence' => 'ID:4',
-            'Series_1' => 'ID:123456-doesnotexist',
+            'Licence' => '4',
+            'Series_1' => '123456-doesnotexist',
             'SeriesNumber_1' => '123'
         );
 
@@ -306,7 +306,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'PersonSubmitterLastName_1' => 'Doe',
             'TitleMain_1' => 'Entenhausen',
             'TitleMainLanguage_1' => 'deu',
-            'Licence' => 'ID:4',
+            'Licence' => '4',
             'SeriesNumber_1' => '123'
         );
 

@@ -165,7 +165,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $val = new Publish_Model_Validation('Collection', 'jel');
         $children = $val->selectOptions('Collection');
 
-        $this->assertArrayHasKey('ID:6720', $children);
+        $this->assertArrayHasKey('6720', $children);
 
     }
 
@@ -181,7 +181,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $val = new Publish_Model_Validation('Licence');
         $children = $val->selectOptions();
 
-        $this->assertArrayHasKey('ID:4', $children);
+        $this->assertArrayHasKey('4', $children);
     }
 
     /**
@@ -227,7 +227,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $val = new Publish_Model_Validation('ThesisGrantor');
         $children = $val->selectOptions();
 
-        $this->assertArrayHasKey('ID:1', $children);
+        $this->assertArrayHasKey('1', $children);
 
     }
 
@@ -235,7 +235,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $val = new Publish_Model_Validation('ThesisPublisher');
         $children = $val->selectOptions();
 
-        $this->assertArrayHasKey('ID:2', $children);
+        $this->assertArrayHasKey('2', $children);
 
     }
     
@@ -265,7 +265,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         
         $children = $val->selectOptions('Collection');        
         $this->assertType('array', $children);                       
-        $this->assertArrayHasKey('ID:3', $children);
+        $this->assertArrayHasKey('3', $children);
         
         $collectionRole->setVisible($visibleFlag);
         $collectionRole->store();
@@ -286,7 +286,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         
         $children = $val->selectOptions('Series');        
         $this->assertType('array', $children);                       
-        $this->assertArrayHasKey('ID:4', $children);
+        $this->assertArrayHasKey('4', $children);
         //series with title: Visible Series                
     }
     
@@ -295,7 +295,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         
         $children = $val->selectOptions('Series');        
         $this->assertType('array', $children);                       
-        $this->assertArrayNotHasKey('ID:3', $children);
+        $this->assertArrayNotHasKey('3', $children);
         //series with title: Invisible Series                
     }
     
