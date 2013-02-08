@@ -44,10 +44,9 @@ class Publish_Model_Validation {
     public $collectionRole;
 
     private $view;
-    private $log;
     private $session;
 
-    public function __construct($datatype, $collectionRole, $options, $view, $log, $session) {
+    public function __construct($datatype, $session, $collectionRole = null, $options = null, $view = null) {
         if (isset($options) && !empty($options)) {
             $this->listOptions = $options;
             $this->datatype = 'List';
@@ -61,7 +60,6 @@ class Publish_Model_Validation {
         }
         
         $this->view = $view;
-        $this->log = $log;
         $this->session = $session;        
     }
 
@@ -121,6 +119,10 @@ class Publish_Model_Validation {
     }
 
     private function _validateDate() {
+        if (!isset($this->session->language)) {
+            return;
+        }
+        
         $lang = $this->session->language;
         $validators = array();
 
