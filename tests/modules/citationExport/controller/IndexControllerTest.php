@@ -54,6 +54,14 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
     }
 
     /* Regression-Test OPUSVIER-2328 */
+     public function testTitleParentInRis() {
+        $this->dispatch('/citationExport/index/index/output/ris/docId/146');
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertContains('T2  - Parent Title', $response->getBody());
+    }    
+
+    /* Regression-Test OPUSVIER-2328 */
      public function testPersonEditorInRis() {
         $this->dispatch('/citationExport/index/index/output/ris/docId/146');
         $this->assertResponseCode(200);
