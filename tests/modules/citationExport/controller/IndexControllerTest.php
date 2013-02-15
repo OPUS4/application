@@ -53,6 +53,14 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         parent::tearDown();
     }
 
+    /* Regression-Test OPUSVIER-2328 */
+     public function testPersonEditorInRis() {
+        $this->dispatch('/citationExport/index/index/output/ris/docId/146');
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertContains('A2  - Doe, Jane', $response->getBody());
+    }
+
     /* Regression-Test OPUSVIER-2716 */
      public function testSpecialCharactersInTtitle() {
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/152');
