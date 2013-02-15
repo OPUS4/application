@@ -105,6 +105,9 @@
        <xsl:if test="string-length(PersonAuthor/@LastName)>0">
            <xsl:apply-templates select="PersonAuthor" />
        </xsl:if>
+       <xsl:if test="string-length(PersonEditor/@LastName)>0">
+           <xsl:apply-templates select="PersonEditor" />
+       </xsl:if>
        <xsl:if test="string-length(TitleMain/@Value)>0">
            <xsl:apply-templates select="TitleMain" />
        </xsl:if>
@@ -123,13 +126,13 @@
              <xsl:text>Y1  - </xsl:text><xsl:value-of select="ComletedDate/@Year" />
          </xsl:when>
          <xsl:when test="string-length(PublishedDate/@Year)>0">
-           <xsl:text>Y1  - </xsl:text><xsl:value-of select="PublishedDate/@Year" />
+             <xsl:text>Y1  - </xsl:text><xsl:value-of select="PublishedDate/@Year" />
          </xsl:when>
          <xsl:when test="normalize-space(@CompletedYear)">
              <xsl:text>Y1  - </xsl:text><xsl:value-of select="@CompletedYear" />
          </xsl:when>
          <xsl:otherwise>
-               <xsl:text>Y1  - </xsl:text><xsl:value-of select="@PublishedYear" />
+             <xsl:text>Y1  - </xsl:text><xsl:value-of select="@PublishedYear" />
          </xsl:otherwise>
        </xsl:choose>
        <xsl:text>&#10;</xsl:text>
