@@ -37,6 +37,10 @@
 
 <string_replacement>
     <search>
+            <find>"</find>
+            <replace>\"</replace>
+    </search>
+    <search>
             <find>%</find>
             <replace>\%</replace>
     </search>

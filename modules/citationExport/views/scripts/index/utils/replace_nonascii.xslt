@@ -93,11 +93,11 @@
         <xsl:param name="from" />
         <xsl:param name="to" />
         <xsl:choose>
-            <xsl:when test="contains($text, $from)">
+             <xsl:when test="contains($text, $from)">
+		<xsl:value-of select="substring-before($text, $from)" />
+		<xsl:value-of select="$to" />
                 <xsl:call-template name="replace_substring">
                     <xsl:with-param name="text">
-                        <xsl:value-of select="substring-before($text, $from)" />
-                        <xsl:value-of select="$to" />
                         <xsl:value-of select="substring-after($text, $from)" />
                     </xsl:with-param>
                     <xsl:with-param name="from">
