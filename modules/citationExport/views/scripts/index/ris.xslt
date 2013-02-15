@@ -111,6 +111,9 @@
        <xsl:if test="string-length(TitleMain/@Value)>0">
            <xsl:apply-templates select="TitleMain" />
        </xsl:if>
+       <xsl:if test="string-length(TitleParent/@Value)>0">
+           <xsl:apply-templates select="TitleParent" />
+       </xsl:if>
        <xsl:if test="string-length(TitleAbstract/@Value)>0">
            <xsl:apply-templates select="TitleAbstract" />
        </xsl:if>
@@ -202,14 +205,6 @@
 
     <!-- here begins the special templates for the fields -->
     <!-- Templates for "external fields". -->
-    <xsl:template match="CompletedDate">
-      <xsl:value-of select="@Year" />
-    </xsl:template>
-
-    <xsl:template match="PublishedDate">
-      <xsl:value-of select="@Year" />
-    </xsl:template>
-
     <xsl:template match="IdentifierUrl">
       <xsl:value-of select="@Value" />
     </xsl:template>
@@ -257,7 +252,8 @@
     </xsl:template>
 
     <xsl:template match="TitleParent">
-        <xsl:value-of select="@Value" />
+        <xsl:text>T2  - </xsl:text><xsl:value-of select="@Value" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="Series[@Visible='1']">
