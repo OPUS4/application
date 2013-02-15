@@ -58,7 +58,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/152');
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertContains('title', $response->getBody());
+        $this->assertContains('title   = {Dokumenttitel mit Sonderzeichen \%-\&quot;-\#-\&amp;, vgl. OPUSVIER-2716.},', $response->getBody());
     }
 
     public function testIndexActionWithMissingDocIdParam() {
