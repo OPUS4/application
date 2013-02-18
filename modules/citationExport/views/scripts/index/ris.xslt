@@ -139,12 +139,6 @@
          </xsl:otherwise>
        </xsl:choose>
        <xsl:text>&#10;</xsl:text>
-       
-        <xsl:if test="string-length(IdentifierUrn/@Value)>0">
-            <xsl:text>UR  - http://nbn-resolving.de/urn/resolver.pl?</xsl:text>
-            <xsl:apply-templates select="IdentifierUrn" />
-            <xsl:text>&#10;</xsl:text>
-        </xsl:if>
 
         <xsl:text>UR  - </xsl:text>
         <xsl:value-of select="$url_prefix" />
@@ -152,20 +146,18 @@
         <xsl:value-of select="@Id" />
         <xsl:text>&#10;</xsl:text>
 
+        <xsl:if test="string-length(IdentifierUrn/@Value)>0">
+            <xsl:apply-templates select="IdentifierUrn" />
+        </xsl:if>
+
         <xsl:if test="string-length(IdentifierUrl/@Value)>0">
-            <xsl:text>UR  - </xsl:text>
             <xsl:apply-templates select="IdentifierUrl" />
-            <xsl:text>&#10;</xsl:text>
         </xsl:if>
         <xsl:if test="string-length(IdentifierIsbn/@Value)>0">
-            <xsl:text>SN  - </xsl:text>
             <xsl:apply-templates select="IdentifierIsbn" />
-            <xsl:text>&#10;</xsl:text>
         </xsl:if>
         <xsl:if test="string-length(IdentifierIssn/@Value)>0">
-            <xsl:text>SN  - </xsl:text>
             <xsl:apply-templates select="IdentifierIssn" />
-            <xsl:text>&#10;</xsl:text>
         </xsl:if>
         <xsl:if test="string-length(Note/@Message)>0">
             <xsl:apply-templates select="Note" />
@@ -206,19 +198,27 @@
     <!-- here begins the special templates for the fields -->
     <!-- Templates for "external fields". -->
     <xsl:template match="IdentifierUrl">
-      <xsl:value-of select="@Value" />
+        <xsl:text>UR  - </xsl:text>
+        <xsl:value-of select="@Value" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="IdentifierUrn">
-      <xsl:value-of select="@Value" />
+        <xsl:text>UR  - http://nbn-resolving.de/urn/resolver.pl?</xsl:text>
+        <xsl:value-of select="@Value" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="IdentifierIsbn">
-      <xsl:value-of select="@Value" />
+        <xsl:text>SN  - </xsl:text>
+        <xsl:value-of select="@Value" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="IdentifierIssn">
-      <xsl:value-of select="@Value" />
+        <xsl:text>SN  - </xsl:text>
+        <xsl:value-of select="@Value" />
+        <xsl:text>&#10;</xsl:text>
     </xsl:template>
 
     <xsl:template match="Note[@Visibility='public']">
