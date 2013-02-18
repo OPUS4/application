@@ -53,6 +53,21 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         parent::tearDown();
     }
 
+    /* Regression-Test OPUSVIER-2738 */
+     public function testMultipleIdentifiersInRis() {
+        $this->dispatch('/citationExport/index/index/output/ris/docId/153');
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertContains('SN  - 1-2345-678-9', $response->getBody());
+        $this->assertContains('SN  - 1-5432-876-9', $response->getBody());
+        $this->assertContains('SN  - 1234-5678', $response->getBody());
+        $this->assertContains('SN  - 4321-8765', $response->getBody());
+        $this->assertContains('UR  - http://nbn-resolving.de/urn/resolver.pl?urn:nbn:de:foo:123-bar-456', $response->getBody());
+        $this->assertContains('UR  - http://nbn-resolving.de/urn/resolver.pl?urn:nbn:de:foo:123-bar-789', $response->getBody());
+        $this->assertContains('UR  - http://www.myexampledomain.de/foo', $response->getBody());
+        $this->assertContains('UR  - http://www.myexampledomain.de/bar', $response->getBody());
+    }
+
     /* Regression-Test OPUSVIER-2328 */
      public function testTitleParentInRis() {
         $this->dispatch('/citationExport/index/index/output/ris/docId/146');
