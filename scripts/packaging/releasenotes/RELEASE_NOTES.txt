@@ -1,5 +1,12 @@
 h1. OPUS 4 Release Notes
 
+h2. ======================== Release 4.3.1 2013-02-21 ========================
+
+h3. Bugfixes
+
+In diesem Release wurden einige Fehler behoben, genaueres findet sich in der 
+Datei CHANGES.txt
+
 h2. ======================== Release 4.3.0 2012-12-20 ========================
 
 h3. Anpassung an den PHTML-Dokumenttyp-Templates

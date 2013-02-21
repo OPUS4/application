@@ -1,5 +1,28 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.3.0 2013-02-21 ========================
+
+h3. Bugs
+
+* [OPUSVIER-2328] - PersonEditor wird im RIS-Export nicht ausgegeben
+* [OPUSVIER-2587] - Übersetzungsresource modules/admin/language/access.tmx ist nicht valide
+* [OPUSVIER-2599] - ThesisGrantor/@Name wird in XMetaDissPlus.xslt zweimal ausgegeben
+* [OPUSVIER-2701] - sichtbare Gruppierung (Zebrastreifen) von Sammlungseinträgen im Publikationsformular funktioniert nicht
+* [OPUSVIER-2716] - BibTeX Export liefert leere Datei
+* [OPUSVIER-2734] - Browsing-Felder (Collections) werden nicht abgespeichert, wenn man mehr als 2 Ebenen absteigt
+* [OPUSVIER-2738] - Datenexport RIS: mehrere Werte des gleichen Typs separat ausgeben
+* [OPUSVIER-2739] - Standardbezeichnungen für DDC im Publish anpassen
+
+h3. Aufgaben
+
+* [OPUSVIER-2407] - optionales Anlegen einer DINI-konformen DDC (nach DNB-Standard)
+* [OPUSVIER-2642] - leeres DB-Update-Skript db/schema/update-4.3.0-to-4.3.1.sql anlegen
+
+h3. Dokumentation
+
+* [OPUSVIER-2723] - Anforderungen an Mail-Server (SMTP) in der Dokumentation präzisieren
+* [OPUSVIER-2736] - Abhängigkeit zwischen PHTML-Template und XML-Dokumenttypdefinition: Schreibweise des Wertes des Attributs name
+
 h2. ======================== Release 4.3.0 2012-12-20 ========================
 
 h3. Bugs
