@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -21,59 +21,40 @@
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details. You should have received a copy of the GNU General Public License
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * along with OPUS; >if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
+ * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- *
+ * Unit Tests for Admin_Model_OpusInfo.
  */
-class Admin_InfoController extends Controller_Action {
+class Admin_Model_OpusInfoTest extends ControllerTestCase {
 
-    public function indexAction() {
-        $this->view->info = new Admin_Model_OpusInfo();
+    public function testGetVersion() {
+        $this->markTestIncomplete("Wie kann APPLICATION_PATH/VERSION.txt in Unit Tests gehandhabt werden?");
         
-        $config = Zend_Registry::get('Zend_Config');
+        $info = new Admin_Model_OpusInfo();
         
-        if (isset($config->publish->maxfilesize)) {
-            $this->view->maxfilesize = $config->publish->maxfilesize;
-        }
-        else {
-            $this->view->maxfilesize = $this->view->translate('admin_info_error_not_set');
-        }
-
-        $this->view->postMaxSize = ini_get('post_max_size');
-        $this->view->uploadMaxFilesize = ini_get('upload_max_filesize');
-
-        if(isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
-            $this->view->failedJobCount = Opus_Job::getCountPerLabel(Opus_Job::STATE_FAILED);
-        }
+        $version = $info->getVersion();
+        
+        // TODO $this->assertEquals("???", $version);
     }
     
-    /**
-     * TODO review functionality and create ticket
-     */
-    public function phpinfoAction() {
+    public function testGetInfo() {
+        $info = new Admin_Model_OpusInfo();
+        
+        $data = $info->getInfo();
+        
+        $this->assertInternalType('array', $data);
+        $this->assertArrayHasKey('admin_info_version', $data);
     }
-
-    /**
-     * TODO review functionality and create ticket
-     */
-    public function workerMonitorAction() {
-        $config = Zend_Registry::get('Zend_Config');
-        $this->_helper->layout()->disableLayout(); 
-        if(isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
-            $this->view->failedJobCount = Opus_Job::getCount(Opus_Job::STATE_FAILED);
-        } else {
-            $this->view->failedJobCount = 0;
-        }
-    }
-
+    
 }
+
+?>

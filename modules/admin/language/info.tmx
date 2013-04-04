@@ -133,7 +133,24 @@
       </tuv>
     </tu>
 
-
+    <tu tuid="admin_info_version">
+      <tuv xml:lang="en">
+        <seg>Installed OPUS Version</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Installierte OPUS Version</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_info_version_not_found">
+      <tuv xml:lang="en">
+        <seg>File 'VERSION.txt' not found.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei 'VERSION.txt' nicht gefunden.</seg>
+      </tuv>
+    </tu>
+    
   </body>
 
 </tmx>

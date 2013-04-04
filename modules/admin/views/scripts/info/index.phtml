@@ -39,6 +39,13 @@
     </div>
 
     <div id="adminMenuContainer">
+        <dl>
+        <?PHP foreach ($this->info->getInfo() as $infoKey => $infoValue) : ?>
+            <dt id="<?=$infoKey?>"><?= $this->translate($infoKey) ?></dt>
+            <dd><?= $infoValue ?></dd>
+        <?PHP endforeach ?>
+        </dl>
+        
         <fieldset>
             <legend><?= $this->translate('admin_info_section_upload') ?></legend>
 

@@ -27,53 +27,34 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- *
+ * Description of OpusInfo
  */
-class Admin_InfoController extends Controller_Action {
-
-    public function indexAction() {
-        $this->view->info = new Admin_Model_OpusInfo();
-        
-        $config = Zend_Registry::get('Zend_Config');
-        
-        if (isset($config->publish->maxfilesize)) {
-            $this->view->maxfilesize = $config->publish->maxfilesize;
-        }
-        else {
-            $this->view->maxfilesize = $this->view->translate('admin_info_error_not_set');
-        }
-
-        $this->view->postMaxSize = ini_get('post_max_size');
-        $this->view->uploadMaxFilesize = ini_get('upload_max_filesize');
-
-        if(isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
-            $this->view->failedJobCount = Opus_Job::getCountPerLabel(Opus_Job::STATE_FAILED);
-        }
-    }
+class Admin_Model_OpusInfo {
     
     /**
-     * TODO review functionality and create ticket
+     * Liest Inhalt von VERSION.txt um installierte Version zu ermitteln.
      */
-    public function phpinfoAction() {
+    public function getVersion() {
+        $filepath = APPLICATION_PATH . DIRECTORY_SEPARATOR . "VERSION.txt";
+        
+        return (file_exists($filepath)) ? $version = trim(file_get_contents($filepath)) : null;
     }
-
+   
     /**
-     * TODO review functionality and create ticket
+     * Liefert Informationen als Key -> Value Paare in einem Array.
      */
-    public function workerMonitorAction() {
-        $config = Zend_Registry::get('Zend_Config');
-        $this->_helper->layout()->disableLayout(); 
-        if(isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
-            $this->view->failedJobCount = Opus_Job::getCount(Opus_Job::STATE_FAILED);
-        } else {
-            $this->view->failedJobCount = 0;
-        }
+    public function getInfo() {
+        $info = array();
+       
+        $info['admin_info_version'] = $this->getVersion();
+       
+        return $info;
     }
-
+    
 }

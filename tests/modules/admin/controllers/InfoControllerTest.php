@@ -66,6 +66,12 @@ class Admin_InfoControllerTest extends ControllerTestCase {
         Zend_Registry::set('Zend_Config', $this->__configBackup);
         parent::tearDown();
     }
+    
+    public function testIndexDisplayVersion() {
+        $this->dispatch('admin/info');
+        $this->assertResponseCode(200);
+        $this->assertQuery('dt#admin_info_version');
+    }
 
     public function testIndexDisplayFailedWorkerJobs() {
 
