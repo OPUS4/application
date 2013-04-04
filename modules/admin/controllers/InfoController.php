@@ -61,6 +61,7 @@ class Admin_InfoController extends Controller_Action {
      * TODO review functionality and create ticket
      */
     public function phpinfoAction() {
+        $this->_helper->layout()->disableLayout();
     }
 
     /**
