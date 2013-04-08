@@ -83,7 +83,7 @@ class Frontdoor_IndexController extends Controller_Action {
             return;
         }
 
-        $documentNode = $documentXml->getNode(false);
+        $documentNode = $documentXml->getNode();
 
         /* XSLT transformation. */
         $xslt = new DomDocument;
