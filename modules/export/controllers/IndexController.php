@@ -112,11 +112,36 @@ class Export_IndexController extends Controller_Xml {
         $this->_proc->setParameter('', 'docCount', count($results));
         $this->_proc->setParameter('', 'queryhits', $numOfHits);
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
+        
+        $resultIds = array();
         foreach ($results as $result) {
-            $document = new Opus_Document($result->getId());
-            $documentXml = new Util_Document($document);
-            $domNode = $this->_xml->importNode($documentXml->getNode(), true);
-            $this->_xml->documentElement->appendChild($domNode);
+            $resultIds[] = $result->getId();
+        }
+        if(!empty($resultIds)) {
+            $documentCacheTable = new Opus_Db_DocumentXmlCache();
+            $docXmlCache = $documentCacheTable->fetchAll($documentCacheTable->select()->where('document_id IN (?)', $resultIds));//->find($this->document->getId(), '1')->current()->xml_data;
+
+            $processedIds = array();
+            
+            foreach($docXmlCache as $row) {
+                $fragment = new DomDocument();
+                $fragment->loadXML($row->xml_data);
+                $domNode = $this->_xml->importNode($fragment->getElementsByTagName('Opus_Document')->item(0), true);
+                $this->_xml->documentElement->appendChild($domNode);
+                $processedIds[] = $row->document_id;
+            }
+            
+            // create and append cache for documents without cache
+            $unprocessedIds = array_diff($resultIds, $processedIds);
+            
+            if(!empty($unprocessedIds)) {
+                foreach($unprocessedIds as $docId) {
+                    $document = new Opus_Document($docId);
+                    $documentXml = new Util_Document($document);
+                    $domNode = $this->_xml->importNode($documentXml->getNode(), true);
+                    $this->_xml->documentElement->appendChild($domNode);
+                }
+            }
         }
     }
 
