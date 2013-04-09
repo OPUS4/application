@@ -167,7 +167,7 @@ class Publish_Model_DisplayGroup {
                 }
 
                 // Spezialbehandlung für einstufige Collection Roles: hier muss das Attribut isRoot für die erste Select-Box
-                // entfernt werden, da sonst keine Zuordnung zur Collection erfolgt, wenn der "Browse Down"-Button verwendet wurde (ALBERT-2759)
+                // entfernt werden, da sonst keine Zuordnung zur Collection erfolgt, wenn der "Browse Down"-Button verwendet wurde (OPUSVIER-2759)
                 if ($numOfFields == 1 && $element->getAttrib('isLeaf') == true) {
                     $rootElement->setAttrib('isRoot', false);
                 }
