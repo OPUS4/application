@@ -109,10 +109,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $this->log->info("DocumenttypeParser (doctype '" . $this->doctype . "') found: " . count($parserElements) . " elements.");
         
         $this->addElements($parserElements);
-        $externalElements = $this->getExternalElements();
-        if (!is_null($externalElements)) {
-            $this->addElements($externalElements);
-        }
+        $this->addElements($this->getExternalElements());
         
         $this->addSubmitButton('button_label_send', 'send');
         $this->addSubmitButton('button_label_back', 'back');
@@ -136,7 +133,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         
         // No external values found!
         if (is_null($externalFields)) {
-            return;
+            return array();
         }
 
         $externals = array();
@@ -144,7 +141,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             
             if (!is_null($this->getElement($element['id']))) {
                 // element is already appended
-                return null; // TODO besser nur Schleifendurchlauf mit 'continue' abbrechen?
+                return array(); // TODO besser nur Schleifendurchlauf mit 'continue' abbrechen?
             }
             
             // create a new element and keep the element's values in an array.
