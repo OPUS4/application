@@ -97,6 +97,7 @@ rm -v opus4/application/configs/doctypes/talkzib.xml
 rm -v opus4/application/configs/doctypes/demo_invalid.xml
 rm -v opus4/application/configs/doctypes/demo_invalidfieldname.xml
 rm -v opus4/application/configs/doctypes/demodemo.xml
+rm -v opus4/application/configs/doctypes/single_level_collection.xml
 
 # exclude PHTML-templates for test document types
 rm -v opus4/modules/publish/views/scripts/form/preprintmatheon.phtml
@@ -104,6 +105,7 @@ rm -v opus4/modules/publish/views/scripts/form/demo.phtml
 rm -v opus4/modules/publish/views/scripts/form/collections.phtml
 rm -v opus4/modules/publish/views/scripts/form/talkzib.phtml
 rm -v opus4/modules/publish/views/scripts/form/demodemo.phtml
+rm -v opus4/modules/publish/views/scripts/form/single-level-collection.phtml
 
 # exclude modules
 rm -rv opus4/modules/{remotecontrol,matheon}
