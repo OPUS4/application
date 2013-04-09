@@ -35,9 +35,6 @@
 
 class Publish_Model_DocumenttypeParser {
 
-    private $log;
-    private $session;
-
     /**
      *
      * @var DOMDocument
@@ -61,21 +58,30 @@ class Publish_Model_DocumenttypeParser {
      * @var Publish_Model_FormElement
      */
     private $currentElement;
-    
+
+    private $log;
+    private $session;
     private $postValues = array();
     private $additionalFields = array();
 
     /**
-     * Allocates the member variables form, log, session and dom.
+     * 
      * @param DOMDocument $dom
      * @param Publish_Form_PublishingSecond $form
-     * @return false: Dom Object couldn't be accessed
+     * @param array $additionalFields
+     * @param array $postValues
      */
-    public function __construct($dom, $form) {
-        $this->form = $form;
+    public function __construct($dom, $form, $additionalFields = array(), $postValues = array()) {
         $this->log = Zend_Registry::get('Zend_Log');
         $this->session = new Zend_Session_Namespace('Publish');
-        $this->dom = $dom;        
+        $this->form = $form;
+        $this->dom = $dom;
+        if (is_array($additionalFields)) {
+            $this->additionalFields = $additionalFields;
+        }
+        if (is_array($postValues)) {
+            $this->postValues = $postValues;
+        }
     }
 
     /**
@@ -102,24 +108,6 @@ class Publish_Model_DocumenttypeParser {
                 $this->formElements[] = $element;
             }
         }
-    }
-
-    /**
-     * Allocates member variable additionalFields. Used for Publishing_Second.
-     * @param <Array> $additionalFields
-     */
-    public function setAdditionalFields($additionalFields) {
-        if (isset($additionalFields) && is_array($additionalFields))
-            $this->additionalFields = $additionalFields;
-    }
-
-    /**
-     * Allocates member variable postValues. Used for Publishing_Second.
-     * @param <Array> $postValues
-     */
-    public function setPostValues($postValues) {
-        if (isset($postValues) && is_array($postValues))
-            $this->postValues = $postValues;
     }
 
     /**

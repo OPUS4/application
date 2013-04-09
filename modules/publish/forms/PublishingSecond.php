@@ -102,16 +102,12 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
         $this->additionalFields = $this->session->additionalFields;
 
-        // Call the parser for that DOM object and the current form object and set important members.                
-        $parser = new Publish_Model_DocumenttypeParser($dom, $this);        
-        $parser->setAdditionalFields($this->additionalFields);                
-        $parser->setPostValues($this->postData);               
+        $parser = new Publish_Model_DocumenttypeParser($dom, $this, $this->additionalFields, $this->postData);
         $parser->parse();
         $parserElements = $parser->getFormElements();
                 
-        $this->log->info("Documenttype Parser ready with parsing " . $this->doctype . " found: " . count($parserElements) . " elements." );
+        $this->log->info("DocumenttypeParser (doctype '" . $this->doctype . "') found: " . count($parserElements) . " elements.");
         
-        // Fill the Form Object!
         $this->addElements($parserElements);
         $externalElements = $this->getExternalElements();
         if (!is_null($externalElements)) {
@@ -145,10 +141,12 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
         $externals = array();
         foreach ($externalFields AS $element) {
-            // Element is already appended.
+            
             if (!is_null($this->getElement($element['id']))) {
-                return null;
+                // element is already appended
+                return null; // TODO besser nur Schleifendurchlauf mit 'continue' abbrechen?
             }
+            
             // create a new element and keep the element's values in an array.
             $externalElement = $this->createElement($element['createType'], $element['id']);
             $req = ($element['req']=='required') ? true : false;            
@@ -160,8 +158,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                             ->setAttrib('DT_external' , $element['DT_external'])
                             ->addErrorMessages($element['error']);
             $externals[] = $externalElement;
-            $this->postData[$element['id']] = $element['value'];
-            
+            $this->postData[$element['id']] = $element['value'];            
         }
         return $externals;
     }

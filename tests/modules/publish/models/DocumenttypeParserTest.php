@@ -107,9 +107,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase {
             $dom->saveXML();
         }
 
-        $form = new Publish_Form_PublishingSecond($this->_logger);
-        
-        $model = new Publish_Model_DocumenttypeParser($dom, $form);
+        $model = new Publish_Model_DocumenttypeParser($dom, new Publish_Form_PublishingSecond($this->_logger));
         $model->parse();
     }
 
@@ -143,11 +141,8 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase {
             $rootNode->appendChild($domElement);
             $dom->saveXML();
         }
-
-        $form = new Publish_Form_PublishingSecond($this->_logger);
         
-        $model = new Publish_Model_DocumenttypeParser($dom, $form);
-        $model->parse();
-        
+        $model = new Publish_Model_DocumenttypeParser($dom, new Publish_Form_PublishingSecond($this->_logger));
+        $model->parse();        
     }
 }
