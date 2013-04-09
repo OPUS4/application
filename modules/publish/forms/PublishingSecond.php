@@ -172,13 +172,13 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
         //iterate over form elements
         foreach ($this->getElements() as $element) {
-            $name = $element->getName();
+            $name = $element->getName();            
             $element->removeDecorator('Label');
 
             if ($element->getValue() == "" 
                     || $element->getType() == "Zend_Form_Element_Submit"        // Submit buttons
                     || $element->getType() == "Zend_Form_Element_Hidden"        // Hidden fields
-                    || $element->getAttrib('isRoot') == true                    // Rood Nodes of Browsefields
+                    || $element->getAttrib('isRoot') == true                    // Root Nodes of Browsefields
                     || $element->getAttrib('doNotStore') == true                // bei Collections erfolgt die Zuordnung zum Dokument nur die unterste Collection pro Gruppe
                     || (!is_null($this->session->DT_externals)) && array_key_exists($element->getName(), $this->session->DT_externals)) {   // additional externals fields (from view helpers)
                 

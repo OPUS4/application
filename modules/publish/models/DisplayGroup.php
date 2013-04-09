@@ -114,7 +114,7 @@ class Publish_Model_DisplayGroup {
     /**
      * Diese Funktion wird nur für CollectionRoles aufgerufen!
      */
-    public function makeBrowseGroup() {
+    public function makeBrowseGroup() {        
         $displayGroup = array();
         $maxNum = $this->maxNumber(); // Anzahl der vorhandenen Gruppen für den aktuellen Collection-Typ
 
@@ -136,6 +136,7 @@ class Publish_Model_DisplayGroup {
 
                 // die erste Stufe der Gruppe $i muss aus dem "Standard-Element" geklont werden (unschön)
                 $element = $this->cloneElement($i, $currentStep);
+                $rootElement = $element;
                 $displayGroup[] = $element->getName();
 
                 $numOfFields = count($selectFields);
@@ -163,6 +164,12 @@ class Publish_Model_DisplayGroup {
                     $element->setAttrib('datatype', $this->datatype);
                     $this->form->addElement($element);
                     $displayGroup[] = $element->getName();
+                }
+
+                // Spezialbehandlung für einstufige Collection Roles: hier muss das Attribut isRoot für die erste Select-Box
+                // entfernt werden, da sonst keine Zuordnung zur Collection erfolgt, wenn der "Browse Down"-Button verwendet wurde (ALBERT-2759)
+                if ($numOfFields == 1 && $element->getAttrib('isLeaf') == true) {
+                    $rootElement->setAttrib('isRoot', false);
                 }
             }          
         }

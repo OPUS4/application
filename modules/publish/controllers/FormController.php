@@ -188,7 +188,7 @@ class Publish_FormController extends Controller_Action {
             }
 
             if (!array_key_exists('send', $postData) || array_key_exists('back', $postData)) {
-                // A button (not SEND) was pressed => add / remove fields or browse fields OR back button (in step 3)
+                // A button (not SEND) was pressed => add / remove fields or browse fields (both in form step 2) OR back button (in form step 3)
                 $this->_helper->viewRenderer($this->session->documentType);
 
                 if (!array_key_exists('back', $postData)) {
@@ -230,7 +230,7 @@ class Publish_FormController extends Controller_Action {
                     }
                 }
             }
-            
+
             $form = null;
             try {
                 $form = new Publish_Form_PublishingSecond($this->_logger, $postData);
