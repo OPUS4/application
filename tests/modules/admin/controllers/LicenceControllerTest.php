@@ -24,7 +24,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -60,6 +60,18 @@ class Admin_LicenceControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertController('licence');
         $this->assertAction('show');
+    }
+    
+    /**
+     * Test, ob Active Status für Wert false (0) angezeigt wird.
+     */
+    public function testShowActiveValueForInactiveLicence() {
+        $this->dispatch('/admin/licence/show/id/20');
+        $this->assertResponseCode(200);
+        $this->assertController('licence');
+        $this->assertAction('show');
+        
+        $this->assertQueryContentContains('div.Active', '0');
     }
 
     /**
