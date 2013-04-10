@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+ 
+<header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+</header>
+ 
+<body>
+  
+    <tu tuid="admin_licence_legend">
+      <tuv xml:lang="en">
+        <seg>Legend:</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Legende:</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_licence_legend_active">
+      <tuv xml:lang="en">
+        <seg>Active</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Aktiviert</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_licence_legend_inactive">
+      <tuv xml:lang="en">
+        <seg>Disabled</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Deaktiviert</seg>
+      </tuv>
+    </tu>
+    
+</body>
+  
+</tmx>

@@ -38,12 +38,18 @@ class Admin_LicenceControllerTest extends ControllerTestCase {
 
     /**
      * Tests routing to and successfull execution of 'index' action.
+     * 
+     * TODO prüfe aktive/inaktive Lizenzen, die angezeigt werden
      */
     public function testIndexAction() {
         $this->dispatch('/admin/licence');
         $this->assertResponseCode(200);
         $this->assertController('licence');
         $this->assertAction('index');
+        
+        // Prüfen, daß zwei Lizenzen mit korrektem Status angezeigt werden
+        $this->assertQueryContentContains('a.active_licence', 'Veröffentlichungsvertrag für Publikationen mit Print on Demand');
+        $this->assertQueryContentContains('a.inactive_licence', 'Lizenz für Unit Testing');
     }
 
     /**

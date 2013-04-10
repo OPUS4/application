@@ -45,7 +45,8 @@
 <table>
     <? foreach($this->entries as $id => $entry) : ?>
     <tr>
-        <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($entry) ?></a></td>
+        <td><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>" 
+               class="<?= $entry->getActive() ? 'active_licence' : 'inactive_licence'?>"><?= htmlspecialchars($entry) ?></a></td>
         <td>
             <form action="<?= $this->url(array('action' => 'dispatch')) ?>" class="crud" method="post">
                 <input type='submit' name="actionEdit" value='<?= $this->translate('ButtonEdit')?>' class="crud">
@@ -56,5 +57,11 @@
     </tr>
     <? endforeach; ?>
 </table>
+
+<div id="licence_legend">
+    <?=$this->translate('admin_licence_legend') ?>
+    <span class="active_licence"><?= $this->translate('admin_licence_legend_active') ?></span>
+    <span class="inactive_licence"><?= $this->translate('admin_licence_legend_inactive') ?></span>
+</div>
 
 </div>
