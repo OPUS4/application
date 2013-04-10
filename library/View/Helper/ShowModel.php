@@ -94,15 +94,14 @@ class View_Helper_ShowModel extends Zend_View_Helper_Abstract {
         }
         $result = '';
         foreach ($modeldata as $field => $value) {
-            if (true === empty($value)
-                    || (count($value) === 1
+            if (true === (count($value) === 1
                     && is_array($value) === true
                     && is_string($value[0]) === true
                     && strlen($value[0]) === 0)) {
                 continue;
             }
 
-            $helper = $this->getHelper($field);
+            $helper = $this->getHelper($field);            
             $result .= $helper->display($field, $value);
         }
         return $result;
