@@ -39,7 +39,7 @@
  * TODO move code to admin module (is used there as well and belongs there, or?)
  * TODO remove dependency on View (and update unit tests accordingly)
  */
-class Review_Model_DocumentAdapter {
+class Util_DocumentAdapter {
 
     /**
      * Document identifier.
@@ -124,7 +124,7 @@ class Review_Model_DocumentAdapter {
             return $this->view->translate('document_no_title') . '(id = ' . $this->getDocId() . ')';
         }
     }
-
+    
     /**
      * Returns document type.
      * @return string

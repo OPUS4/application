@@ -152,7 +152,7 @@ class Admin_FilemanagerController extends Controller_Action {
             'controller' => 'documents', 'action' => 'edit', 'id' => $docId),
                 null, true);
         $this->view->uploadform = $uploadForm;
-        $this->view->document = new Review_Model_DocumentAdapter($this->view, $docId);
+        $this->view->document = new Util_DocumentAdapter($this->view, $docId);
         $this->view->verifyResult = array();
     }
 

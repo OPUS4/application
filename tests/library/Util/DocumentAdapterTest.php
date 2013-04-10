@@ -36,14 +36,14 @@
  *
  * TODO $view not used at the moment, refactor or add tests
  */
-class Review_Model_DocumentAdapterTest extends ControllerTestCase {
+class Util_DocumentAdapterTest extends ControllerTestCase {
 
     public function testHasFilesTrue() {
         $view = Zend_Registry::get('Opus_View');
 
         $doc = new Opus_Document(1);
 
-        $docAdapter = new Review_Model_DocumentAdapter($view, $doc);
+        $docAdapter = new Util_DocumentAdapter($view, $doc);
 
         $this->assertTrue($docAdapter->hasFiles());
     }
@@ -53,7 +53,7 @@ class Review_Model_DocumentAdapterTest extends ControllerTestCase {
 
         $doc = new Opus_Document();
 
-        $docAdapter = new Review_Model_DocumentAdapter($view, $doc);
+        $docAdapter = new Util_DocumentAdapter($view, $doc);
 
         $this->assertFalse($docAdapter->hasFiles());
     }
@@ -63,7 +63,7 @@ class Review_Model_DocumentAdapterTest extends ControllerTestCase {
 
         $doc = new Opus_Document(1);
 
-        $docAdapter = new Review_Model_DocumentAdapter($view, $doc);
+        $docAdapter = new Util_DocumentAdapter($view, $doc);
 
         $this->assertEquals(2, $docAdapter->getFileCount());
     }
@@ -73,7 +73,7 @@ class Review_Model_DocumentAdapterTest extends ControllerTestCase {
 
         $doc = new Opus_Document();
 
-        $docAdapter = new Review_Model_DocumentAdapter($view, $doc);
+        $docAdapter = new Util_DocumentAdapter($view, $doc);
 
         $this->assertEquals(0, $docAdapter->getFileCount());
     }
@@ -85,7 +85,7 @@ class Review_Model_DocumentAdapterTest extends ControllerTestCase {
 
         $doc->setBelongsToBibliography(true);
 
-        $docAdapter = new Review_Model_DocumentAdapter($view, $doc);
+        $docAdapter = new Util_DocumentAdapter($view, $doc);
 
         $this->assertTrue($docAdapter->isBelongsToBibliography());
     }
@@ -97,9 +97,9 @@ class Review_Model_DocumentAdapterTest extends ControllerTestCase {
 
         $doc->setBelongsToBibliography(false);
 
-        $docAdapter = new Review_Model_DocumentAdapter($view, $doc);
+        $docAdapter = new Util_DocumentAdapter($view, $doc);
 
         $this->assertFalse($docAdapter->isBelongsToBibliography());
     }
-
+    
 }
