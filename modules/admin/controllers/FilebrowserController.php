@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -57,6 +57,7 @@ class Admin_FilebrowserController extends Controller_Action {
 
         $importHelper = new Admin_Model_FileImport();
         $this->view->files = $importHelper->listFiles();
+        $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
         $this->view->document = $document;
     }
 

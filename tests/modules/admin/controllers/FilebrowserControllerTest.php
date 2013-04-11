@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -69,6 +69,16 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase {
         $this->dispatch('/admin/filebrowser/index/docId/' . $this->documentId);
         $this->assertResponseCode(200);
         $this->assertContains('<div id="filebrowser">', $this->getResponse()->getBody());
+    }
+    
+    public function testShowDocInfoOnIndexPage() {
+        $this->dispatch('/admin/filebrowser/index/docId/146');
+        $this->assertResponseCode(200);
+
+        // check for docinfo header
+        $this->assertQuery('div#docinfo', 'KOBV');
+        $this->assertQuery('div#docinfo', '146');
+        $this->assertQuery('div#docinfo', 'Doe, John');
     }
 
     public function testImportActionWithInvalidMethod() {
