@@ -41,7 +41,9 @@
         <span class="docid"><?=$this->document->getDocId()?></span> - 
         <span class="title"><?=$this->document->getMainTitle()?></span>
     </div>
+    <?PHP if (!empty($authors)) : ?>
     <div>
         <span class="author"><?=$authors[0]['name']?></span>
     </div>
+    <?PHP endif; ?>
 </div>

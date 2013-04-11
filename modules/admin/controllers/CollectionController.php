@@ -262,6 +262,8 @@ class Admin_CollectionController extends Controller_Action {
             // Collection ausgewählt: Subcollections anzeigen
             $this->prepareAssignSubPage($documentId, $collectionId);
         }
+        
+        $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $documentId);
     }
 
     private function prepareAssignStartPage($documentId) {

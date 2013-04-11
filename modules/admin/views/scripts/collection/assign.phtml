@@ -40,6 +40,8 @@
 
 <div class="adminContainer">
 
+    <?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
+
 <?php if (!empty($this->breadcrumb)) : ?>
 <div class="collection_breadcrumbs">
     <?= $this->translate('breadcrumb_title') ?>
@@ -60,7 +62,7 @@
     <?php endforeach; ?>
 </div>
 <?php endif ?>
-
+    
 <div>
 <a class="add" href="<?=$this->url(array('module' => 'admin', 'controller' => 'document', 'action' => 'edit', 'id' => $this->documentId, 'section' => 'collections'), null, true)?>"><?=$this->translate('admin_collections_collection_assign_abort')?></a>
 </div>

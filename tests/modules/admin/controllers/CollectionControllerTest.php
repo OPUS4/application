@@ -277,6 +277,26 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->assertNotContains('/admin/documents/edit/id/40', $body); // old link before fix ("documentS")
         $this->assertContains('/admin/document/edit/id/40/section/collections', $body);
     }
+    
+    public function testShowDocInfoOnAssignStartPage() {
+        $this->dispatch('/admin/collection/assign/document/146');
+        $this->assertResponseCode(200);
+        
+        // check for docinfo header
+        $this->assertQuery('div#docinfo', 'KOBV');
+        $this->assertQuery('div#docinfo', '146');
+        $this->assertQuery('div#docinfo', 'Doe, John');
+    }
 
+    public function testShowDocInfoOnAssignCollectionPage() {
+        $this->dispatch('/admin/collection/assign/id/2/document/146');
+        $this->assertResponseCode(200);
+        
+        // check for docinfo header
+        $this->assertQuery('div#docinfo', 'KOBV');
+        $this->assertQuery('div#docinfo', '146');
+        $this->assertQuery('div#docinfo', 'Doe, John');
+    }
+    
 }
 
