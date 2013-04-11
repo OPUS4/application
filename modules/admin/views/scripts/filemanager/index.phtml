@@ -49,16 +49,7 @@
         <?= $this->translate('admin_filemanager_index') ?>
     </div>
 
-<div style="padding: 1em; margin-left: 2em">
-    <div>
-        <span class="label"><?= $this->translate('DocumentId') ?></span>
-        <span class="value"><?= htmlspecialchars($this->docId) ?></span>
-    </div>
-    <div>
-        <span class="label"><?= $this->translate('TitleMain') ?></span>
-        <span class="value"><?= htmlspecialchars($this->document->getDocTitle()) ?></span>
-    </div>
-</div>
+    <?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
 
     <div class="actions" style="font-size: larger; text-align: center; padding: 0.5em">
         <a href="<?=$this->importUrl?>"><?=$this->translate('admin_filemanager_import_link')?></a>

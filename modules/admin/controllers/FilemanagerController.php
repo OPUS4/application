@@ -127,6 +127,7 @@ class Admin_FilemanagerController extends Controller_Action {
         $this->configureView($docId, $uploadForm);
         $document = $this->view->document->getDocument();
         $files = $this->getNumberedFiles($document);
+        $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
 
         $fileHelpers = array();
         if (!empty($files)) {

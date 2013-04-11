@@ -26,7 +26,7 @@
  *
  * @category    Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -251,5 +251,15 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertNotContains('Ingenieurwissenschaften 62', $this->getResponse()->getBody());
     }
     
+    public function testShowDocInfoOnIndex() {
+        $this->dispatch('/admin/document/index/id/146');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('document');
+        $this->assertAction('index');
+        $this->assertQuery('div#docinfo', 'KOBV');
+        $this->assertQuery('div#docinfo', '146');
+        $this->assertQuery('div#docinfo', 'Doe, John');
+    }
 
 }

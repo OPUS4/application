@@ -42,8 +42,13 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertModule('admin');
         $this->assertController('filemanager');
         $this->assertAction('index');
-    }
 
+        // check for docinfo header
+        $this->assertQuery('div#docinfo', 'This is a pdf test document');
+        $this->assertQuery('div#docinfo', '91');
+        $this->assertQuery('div#docinfo', 'Doe, John');
+    }
+    
     /**
      * Verifies that the MD5 hash value is displayed twice (ist, soll).
      */
