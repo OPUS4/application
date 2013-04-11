@@ -83,7 +83,7 @@ class Admin_DocumentController extends Controller_Action {
                     'documents', 'admin');
         }
     }
-
+    
     /**
      * Shows the edit page for a metadata section.
      */
@@ -616,7 +616,7 @@ class Admin_DocumentController extends Controller_Action {
         $actions = array();
 
         $docId = $model->getId();
-        $docHelper = new Review_Model_DocumentAdapter($this->view, $model);
+        $docHelper = new Util_DocumentAdapter($this->view, $model);
 
         $documentUrl = $this->view->documentUrl();
 
@@ -808,7 +808,7 @@ class Admin_DocumentController extends Controller_Action {
                 $section);
 
         $form = new Zend_Form('edit');
-
+        
         switch ($section) {
             case 'general':
             case 'misc':
