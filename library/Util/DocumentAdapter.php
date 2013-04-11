@@ -25,9 +25,9 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Review
+ * @package     Util
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -126,6 +126,26 @@ class Util_DocumentAdapter {
     }
     
     /**
+     * Returns title in document language.
+     */
+    public function getMainTitle() {
+        $titles = $this->document->getTitleMain();
+        $language = $this->document->getLanguage();
+        if (count($titles) > 0) {
+            foreach($titles as $title) {
+                if ($language === $title->getLanguage()) {
+                    return $title->getValue();
+                }
+            }
+            
+            return null; // $titles[0]->getValue();
+        }
+        else {
+            return $this->view->translate('document_no_title') . '(id = ' . $this->getDocId() . ')';
+        }
+    }
+    
+    /**
      * Returns document type.
      * @return string
      */
@@ -198,7 +218,7 @@ class Util_DocumentAdapter {
         $date = $this->getDate(true);
         return $date;
     }
-
+    
     /**
      * Return list of authors.
      * @return array
@@ -240,14 +260,19 @@ class Util_DocumentAdapter {
      * Returns the search URL for an author.
      */
     public function getAuthorUrl($author) {
-        $author = str_replace(' ', '+', $author);
-        $url = array(
-            'module' => 'solrsearch',
-            'controller' => 'index',
-            'action' => 'search',
-            'searchtype' => 'authorsearch',
-            'author' => '"' . $author . '"');
-        return $this->view->url($url, null, true);
+        if (!is_null($this->view)) {
+            $author = str_replace(' ', '+', $author);
+            $url = array(
+                'module' => 'solrsearch',
+                'controller' => 'index',
+                'action' => 'search',
+                'searchtype' => 'authorsearch',
+                'author' => '"' . $author . '"');
+            return $this->view->url($url, null, true);
+        }
+        else {
+            return null;
+        }
     }
 
     /**

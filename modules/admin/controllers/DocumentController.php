@@ -69,6 +69,7 @@ class Admin_DocumentController extends Controller_Action {
 
         if (isset($document)) {
             $this->view->document = $document;
+            $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
             $this->view->overviewHelper = new Admin_Model_DocumentHelper($document);
 
             $this->__prepareActionLinks($document);

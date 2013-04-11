@@ -102,4 +102,84 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
         $this->assertFalse($docAdapter->isBelongsToBibliography());
     }
     
+    /**
+     * Tests returning title in document language.
+     */
+    public function testGetMainTitle() {
+        $view = Zend_Registry::get('Opus_View');
+        
+        $doc = new Opus_Document();
+        
+        $title = new Opus_Title();
+        $title->setLanguage('deu');
+        $title->setValue('Deutscher Titel');
+        $doc->addTitleMain($title);
+        
+        $title = new Opus_Title();
+        $title->setLanguage('eng');
+        $title->setValue('Englischer Titel');
+        $doc->addTitleMain($title);
+        
+        $doc->setLanguage('eng');
+        
+        $docAdapter = new Util_DocumentAdapter($view, $doc);
+        
+        $this->assertEquals($docAdapter->getMainTitle(), 'Englischer Titel');
+    }
+    
+    public function testGetDocTitle() {
+        $view = Zend_Registry::get('Opus_View');
+        
+        $doc = new Opus_Document();
+        
+        $title = new Opus_Title();
+        $title->setLanguage('deu');
+        $title->setValue('Deutscher Titel');
+        $doc->addTitleMain($title);
+        
+        $title = new Opus_Title();
+        $title->setLanguage('eng');
+        $title->setValue('Englischer Titel');
+        $doc->addTitleMain($title);
+        
+        $doc->setLanguage('eng');
+        
+        $docAdapter = new Util_DocumentAdapter($view, $doc);
+        
+        $this->assertEquals($docAdapter->getDocTitle(), 'Deutscher Titel');
+    }
+    
+    public function testGetAuthors() {
+        $doc = new Opus_Document();
+        
+        $person = new Opus_Person();
+        $person->setLastName("Doe");
+        $doc->addPersonAuthor($person);
+        
+        $person = new Opus_Person();
+        $person->setLastName("Smith");
+        $person->setFirstName("Jane");
+        $doc->addPersonAuthor($person);
+        
+        $docAdapter = new Util_DocumentAdapter(null, $doc);
+        
+        $authors = $docAdapter->getAuthors();
+        
+        $this->assertEquals('Doe', $authors[0]['name']);
+        $this->assertEquals('Smith, Jane', $authors[1]['name']);
+    }
+        
+    public function testGetAuthorsForDocumentWithoutAuthors() {
+        $view = Zend_Registry::get('Opus_View');
+        
+        $doc = new Opus_Document();
+        
+        $docAdapter = new Util_DocumentAdapter($view, $doc);
+        
+        $authors = $docAdapter->getAuthors();
+        
+        $this->assertTrue(is_array($authors));
+        $this->assertEmpty($authors);
+    }
+    
 }

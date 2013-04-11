@@ -500,3 +500,22 @@ label.notification-option {
     color: red;
     font-style: italic;
 }
+
+.adminContainer #docinfo {
+    border: 1px dotted lightgray;
+    padding: 0.5em;
+}
+
+.adminContainer #docinfo span.docid {
+    font-size: 120%;   
+    font-weight: bold;
+}
+
+.adminContainer #docinfo span.title {
+    font-size: 120%;   
+}
+
+.adminContainer #docinfo span.author {
+    padding-left: 3em;
+    font-style: italic;
+}
