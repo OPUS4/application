@@ -307,6 +307,18 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
 
         $doc->deletePermanent();
     }
+    
+    public function testShowDocInfoOnConfirmationPage() {
+        $this->dispatch('/admin/workflow/changestate/docId/146/targetState/deleted');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('workflow');
+        $this->assertAction('changestate');
+        
+        $this->assertQueryContentContains('div#docinfo', 'KOBV');
+        $this->assertQueryContentContains('div#docinfo', '146');
+        $this->assertQueryContentContains('div#docinfo', 'Doe, John');
+    }
 
     private function enablePublishNotification() {
         $config = Zend_Registry::get('Zend_Config');        
@@ -336,5 +348,5 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
         $doc->store();
         return $doc;
     }
-
+    
 }

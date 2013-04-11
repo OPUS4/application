@@ -40,6 +40,8 @@
     <div class="breadcrumbsContainer">
         <?php echo $this->title?>
     </div>
+    
+    <?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
 
     <p>
     <?= $this->text ?>

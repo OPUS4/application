@@ -147,6 +147,7 @@ class Admin_WorkflowController extends Controller_Action {
         }
         
         // show confirmation page
+        $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
         $this->view->title = $this->view->translate('admin_workflow_' . $targetState);
         $this->view->text = $this->view->translate('admin_workflow_' . $targetState . '_sure', $docId);
         $this->view->form = $this->__getConfirmationForm($document, $targetState);
