@@ -76,6 +76,21 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $response = $this->getResponse()->getBody();
         $this->assertTrue(substr_count($response, $hash) == 2);
     }
+    
+    public function testShowConfirmPageOnDelete() {
+        $this->dispatch('/admin/filemanager/delete/docId/124/fileId/125');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('filemanager');
+        $this->assertAction('delete');
+        
+        // Check form
+        $this->assertQuery('input#sureyes');
+        $this->assertQuery('input#sureno');
+        
+        // check for docinfo header
+        $this->assertQuery('div#docinfo', '124');
+    }
 
 }
 

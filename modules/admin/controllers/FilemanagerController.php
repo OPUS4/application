@@ -207,7 +207,7 @@ class Admin_FilemanagerController extends Controller_Action {
                 $this->view->translate('admin_filemanager_error_filenotlinkedtodoc')), 'filemanager', 'admin', array('docId' => $docId));
         }
 
-        switch ($this->_confirm($docId, $fileId)) {
+        switch ($this->_confirm($document, $fileId)) {
             case 'YES':
                 try {
                     $this->_deleteFile($docId, $fileId);
@@ -294,11 +294,11 @@ class Admin_FilemanagerController extends Controller_Action {
      *
      * The return value null means that the confirmation page should be shown.
      *
-     * @param int $docId
+     * @param Opus_Document $document
      * @param int $fileId
      * @return string 'YES' if confirmed, 'NO' if denied, NULL otherwise
      */
-    protected function _confirm($docId, $fileId) {
+    protected function _confirm($document, $fileId) {
         $sureyes = $this->getRequest()->getPost('sureyes');
         $sureno = $this->getRequest()->getPost('sureno');
 
@@ -317,6 +317,7 @@ class Admin_FilemanagerController extends Controller_Action {
             $this->view->text = $this->view->translate('admin_filemanager_delete_sure', $fileId);
             $yesnoForm = $this->_getConfirmationForm($fileId, 'delete');
             $this->view->form = $yesnoForm;
+            $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
             $this->renderScript('document/confirm.phtml');
         }
     }
