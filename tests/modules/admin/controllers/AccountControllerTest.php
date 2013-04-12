@@ -24,9 +24,9 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -45,8 +45,17 @@ class Admin_AccountControllerTest extends ControllerTestCase {
         $this->assertModule('admin');
         $this->assertController('account');
         $this->assertAction('index');
-    }
 
+        // check information shown (Stichproben)
+        $this->assertQueryContentContains('td.accountname', 'admin');
+        $this->assertQueryContentContains('td.accountname', 'security4');
+        $this->assertQueryContentContains('td.fullname', 'Zugriff auf Review und Admin Modul, security4');
+        $this->assertQueryContentContains('td.email', 'security4@example.org');
+        $this->assertQueryContentContains('td.roles', 'reviewer');
+        $this->assertQueryContentContains('td.roles', 'fulladmin');
+        
+    }
+    
     /**
      * Tests showing an account.
      */
@@ -287,6 +296,8 @@ class Admin_AccountControllerTest extends ControllerTestCase {
         $user = new Opus_Account(null, null, 'admin');
         $this->assertNotNull($user);
     }
+    
+  
 
 }
 
