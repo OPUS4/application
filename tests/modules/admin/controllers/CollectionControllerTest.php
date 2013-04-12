@@ -302,7 +302,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->dispatch('/admin/collection/assign/document/146');
         $this->assertResponseCode(200);
         
-        $this->assertQueryContentContains('td.visible', 'Institutes');
+        $this->assertQueryContentContains('td.visible', 'Dewey Decimal Classification');
         $this->assertQueryContentContains('td.unvisible', 'default_collection_role_projects');
     }
     
