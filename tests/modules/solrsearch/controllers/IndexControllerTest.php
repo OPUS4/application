@@ -29,7 +29,7 @@
  * @package     Module_Solrsearch
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -268,7 +268,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     public function testLastPageUrlEqualsNextPageUrlDocTypeArticle() {
         $docFinder = new Opus_DocumentFinder();
         $docFinder->setType('article')->setServerState('published');
-        $this->assertEquals(20, $docFinder->count(), "Test data changed!");
+        $this->assertEquals(21, $docFinder->count(), "Test data changed!");
 
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article', null, null);
         $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/article/start/10/rows/10">'));
