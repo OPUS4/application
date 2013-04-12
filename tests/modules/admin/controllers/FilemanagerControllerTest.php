@@ -91,6 +91,30 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         // check for docinfo header
         $this->assertQuery('div#docinfo', '124');
     }
+    
+    /**
+     * Wenn die Dokument-ID unbekannt ist, wird auf die Startseite der Dokumentenverwaltung umgeleitet.
+     */
+    public function testConfirmDeleteRedirectForUnknownDocId() {
+        $this->dispatch('/admin/filemanager/delete/docId/400/fileId/125');
+        $this->assertRedirectTo('/admin/documents');
+    }
+    
+    /**
+     * Wenn die Datei-ID unbekannt ist, wird auf den Dateimanager für das Dokument umgeleitet.
+     */
+    public function testConfirmDeleteRedirectForUnknownFileId() {
+        $this->dispatch('/admin/filemanager/delete/docId/124/fileId/400');
+        $this->assertRedirectTo('/admin/filemanager/index/docId/124');
+    }
+    
+    /**
+     * Wenn die Datei nicht zu dem Dokument gehört, wird auf den Dateimanager für das Dokument umgeleitet.
+     */
+    public function testConfirmDeleteRedirectForDocIdMismatchFileId() {
+        $this->dispatch('/admin/filemanager/delete/docId/146/fileId/125');
+        $this->assertRedirectTo('/admin/filemanager/index/docId/146');
+    }
 
 }
 
