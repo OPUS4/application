@@ -28,7 +28,7 @@
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -296,6 +296,22 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->assertQuery('div#docinfo', 'KOBV');
         $this->assertQuery('div#docinfo', '146');
         $this->assertQuery('div#docinfo', 'Doe, John');
+    }
+    
+    public function testShowVisibilityOfRootCollections() {
+        $this->dispatch('/admin/collection/assign/document/146');
+        $this->assertResponseCode(200);
+        
+        $this->assertQueryContentContains('td.visible', 'Institutes');
+        $this->assertQueryContentContains('td.unvisible', 'default_collection_role_projects');
+    }
+    
+    public function testShowVisibilityOfCollections() {
+        $this->dispatch('/admin/collection/assign/id/4/document/146');
+        $this->assertResponseCode(200);
+        
+        $this->assertQueryContentContains('td.visible', '10 Philosophie');
+        $this->assertQueryContentContains('td.unvisible', '11 Metaphysik');
     }
     
 }

@@ -31,7 +31,7 @@
  * @author     	Thoralf Klein <thoralf.klein@zib.de>
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Tobias Tappe <tobias.tappe@uni-bielefeld.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -281,7 +281,9 @@ class Admin_CollectionController extends Controller_Action {
                     array(
                         'id' => $rootCollection->getId(),
                         'name' => $this->view->translate('default_collection_role_' . $collectionRole->getDisplayName()),
-                        'hasChildren' => $rootCollection->hasChildren()));
+                        'hasChildren' => $rootCollection->hasChildren(),
+                        'visible' => $rootCollection->getVisible()
+                    ));
         }
         $this->view->documentId = $documentId;
         $this->view->breadcrumb = array();
@@ -302,7 +304,9 @@ class Admin_CollectionController extends Controller_Action {
                     array(
                         'id' => $child->getId(),
                         'name' => $child->getNumberAndName(),
-                        'hasChildren' => $child->hasChildren()));
+                        'hasChildren' => $child->hasChildren(),
+                        'visible' => $child->getVisible()
+                    ));
         }
         $this->view->documentId = $documentId;
         $this->view->breadcrumb = array_reverse($collection->getParents());

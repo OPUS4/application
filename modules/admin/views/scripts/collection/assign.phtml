@@ -29,7 +29,7 @@
  * @package     Module_Admin
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -70,7 +70,7 @@
 <table class="collections">
     <?php foreach($this->collections as $i => $collection) : ?>
     <tr class="<?= ($i %2 == 0) ? 'even' : 'odd'?>">
-        <td>
+        <td class="<?= ($collection['visible'] === '1') ? 'visible' : 'unvisible' ?>">
             <?php if ($collection['hasChildren']) : ?>
                 <a href="<?=$this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'assign', 'id' => $collection['id'], 'document' => $this->documentId), null, true)?>"><?= htmlspecialchars($collection['name']) ?></a>
             <?php else : ?>
