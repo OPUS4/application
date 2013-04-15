@@ -2,7 +2,7 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 (120, NULL, 2011, NULL, NULL, NULL, 'article', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'published', NULL, 0),
 (121, NULL, 2011, NULL, NULL, NULL, 'article', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'published', NULL, 0),
 (122, NULL, 2011, NULL, NULL, NULL, 'article', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'published', NULL, 0),
-(160, NULL, 2011, NULL, NULL, NULL, 'article', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'published', NULL, 0);
+(160, NULL, 2011, NULL, NULL, NULL, 'article', NULL, NULL, 'deu', NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0);
 
 
 INSERT INTO `document_title_abstracts` (`id`, `document_id`, `type`, `value`, `language`) VALUES

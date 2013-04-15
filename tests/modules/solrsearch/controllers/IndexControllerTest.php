@@ -264,14 +264,16 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2144
+     * 
+     * IMPORTANT: Unit Test funktioniert nicht mehr, wenn die Zahl der Dokumente 20 übersteigt.
      */
     public function testLastPageUrlEqualsNextPageUrlDocTypeArticle() {
         $docFinder = new Opus_DocumentFinder();
         $docFinder->setType('article')->setServerState('published');
-        $this->assertEquals(21, $docFinder->count(), "Test data changed!");
-
+        $this->assertEquals(20, $docFinder->count(), "Test data changed!");
+        
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article', null, null);
-        $this->assertTrue(5 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/article/start/10/rows/10">'));
+        $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/article/start/10/rows/10">'));
         $this->assertNotContains('solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/19/rows/10">', $this->getResponse()->getBody());
         $this->assertContains('<h3>20', $this->getResponse()->getBody());
     }
