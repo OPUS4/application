@@ -63,7 +63,7 @@
             ?><?PHP endforeach; ?></td>
         <td>
             <a href="<?= $this->url(array('action' => 'edit', 'id' => $id)) ?>"><?= $this->translate('admin_account_action_edit')?></a>
-            <?PHP if ((Zend_Auth::getInstance()->getIdentity() !== strtolower($entry)) && ($entry !== 'admin')) : ?>
+            <?PHP if ((Zend_Auth::getInstance()->getIdentity() !== strtolower($entry->getLogin())) && ($entry->getLogin() !== 'admin')) : ?>
                 <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_account_action_delete')?></a>
             <?PHP endif; ?>
         </td>

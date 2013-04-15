@@ -26,7 +26,7 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -35,6 +35,8 @@
  * Base class for controller tests.
  */
 class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
+
+    private $securityEnabled;
 
     /**
      * Method to initialize Zend_Application for each test.
@@ -165,4 +167,18 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->assertNotNull($locationActual);
         $this->assertEquals($location, $locationActual);
     }
+    
+    protected function enableSecurity() {
+        $config = Zend_Registry::get('Zend_Config');
+        $this->securityEnabled = $config->security;
+        $config->security = '1';
+        Zend_Registry::set('Zend_Config', $config);
+    }
+    
+    protected function restoreSecuritySetting() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->security = $this->securityEnabled;
+        Zend_Registry::set('Zend_Config', $config);
+    }
+    
 }
