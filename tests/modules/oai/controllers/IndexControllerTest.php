@@ -935,7 +935,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->resetSecurity();
     }
 
-    private function enableSecurity() {
+    public function enableSecurity() {
         $r = Opus_UserRole::fetchByName('guest');
 
         $modules = $r->listAccessModules();

@@ -168,14 +168,14 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->assertEquals($location, $locationActual);
     }
     
-    protected function enableSecurity() {
+    public function enableSecurity() {
         $config = Zend_Registry::get('Zend_Config');
         $this->securityEnabled = $config->security;
         $config->security = '1';
         Zend_Registry::set('Zend_Config', $config);
     }
     
-    protected function restoreSecuritySetting() {
+    public function restoreSecuritySetting() {
         $config = Zend_Registry::get('Zend_Config');
         $config->security = $this->securityEnabled;
         Zend_Registry::set('Zend_Config', $config);
