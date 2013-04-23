@@ -30,7 +30,8 @@
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2009-2011, OPUS 4 development team
+ * @author      Jens schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2009-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -63,6 +64,7 @@ class Controller_Action extends Controller_ModuleAccess {
      * @return void
      */
     public function init() {
+        parent::init();
         $this->_logger = Zend_Registry::get('Zend_Log');
         $this->view->title = $this->_request->getModuleName() . '_' . $this->_request->getParam('controller') . '_' . $this->_request->getParam('action');
         $this->__redirector = $this->_helper->getHelper('Redirector');

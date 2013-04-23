@@ -28,7 +28,8 @@
  * @category    Application
  * @package     Controller
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2011-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -49,6 +50,14 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
     public function preDispatch() {
         parent::preDispatch();
         $this->checkAccessModulePermissions();
+    }
+    
+    public function init() {
+        parent::init();
+        
+        // Wählt Hauptmenueeintrag nach Modul aus
+        // Fuer einige Module muss das ueberschrieben werden (Review, Search).
+        $this->getHelper('MainMenu')->setActive($this->_request->getModuleName());
     }
 
     /**
