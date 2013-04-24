@@ -53,6 +53,10 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         'publicationDate', 'docType');
 
     protected $docOptions = array(/* 'all', */ 'unpublished', 'inprogress', 'audited', 'published', 'restricted', 'deleted');
+    
+    protected $_config;
+    
+    protected $_maxDocsDefault = 10;
 
     /**
      * Returns a filtered representation of the document.
@@ -74,13 +78,20 @@ class Admin_DocumentsController extends Controller_CRUDAction {
     public function init() {
         parent::init();
 
-        $config = Zend_Registry::get("Zend_Config");
+        $this->_config = Zend_Registry::get("Zend_Config");
 
-        if (isset($config->admin->documents->linkToAuthorSearch)) {
-            $this->view->linkToAuthorSearch = $config->admin->documents->linkToAuthorSearch;
+        if (isset($this->_config->admin->documents->linkToAuthorSearch)) {
+            $this->view->linkToAuthorSearch = $this->_config->admin->documents->linkToAuthorSearch;
         }
         else {
             $this->view->linkToAuthorSearch = 0;
+        }
+        
+        if (isset($this->_config->admin->documents->maxDocsDefault)) {
+            $this->_maxDocsDefault = $this->_config->admin->documents->maxDocsDefault;
+        }
+        else {
+            $this->_maxDocsDefault = 10;
         }
     }
 
@@ -220,7 +231,7 @@ class Admin_DocumentsController extends Controller_CRUDAction {
                 $hitsPerPage = $namespace->hitsPerPage;
             } 
             else {
-                $hitsPerPage = 10;
+                $hitsPerPage = $this->_maxDocsDefault;
             }            
         }
         
@@ -236,7 +247,14 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      * TODO Übersetzung
      */
     protected function _prepareItemCountLinks() {
-        $itemCountOptions = array('10', '50', '100', 'all');
+        if (isset($this->_config->admin->documents->maxdocsoptions)) {
+            $options = $this->_config->admin->documents->get('maxdocsoptions');
+        }
+        else {
+            $options ="10,50,100,all";
+        }
+        
+        $itemCountOptions = explode(',', $options);
 
         $itemCountLinks = array();
 
