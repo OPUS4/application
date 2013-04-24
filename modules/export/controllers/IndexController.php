@@ -28,6 +28,7 @@
  * @category    Application
  * @package     Module_Export
  * @author      Sascha Szott <szott@zib.de>
+ * @author      Gunar Maiwald <maiwald@zib.de>
  * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -157,6 +158,23 @@ class Export_IndexController extends Controller_Xml {
         }
         
         return $queryBuilder->createSearchQuery($queryBuilderInput);
+    }
+
+    public function publistAction() {
+        $stylesheetParam = $this->getRequest()->getParam('stylesheet');
+        if (is_null($stylesheetParam)) {
+            throw new Application_Exception('stylesheet is not specified');
+        }
+
+        $roleParam = $this->getRequest()->getParam('role');
+        if (is_null($roleParam)) {
+            throw new Application_Exception('role is not specified');
+        }
+
+        $numberParam = $this->getRequest()->getParam('number');
+        if (is_null($numberParam)) {
+            throw new Application_Exception('number is not specified');
+        }
     }
 
 }

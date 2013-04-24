@@ -413,5 +413,55 @@ class Export_IndexControllerTest extends ControllerTestCase {
 
         $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());
     }
+
+    /**
+     * begin: tests for OPUSVIER-2778
+     */
+
+    public function testPublistActionWithoutStylesheetParameter() {
+        $this->dispatch('/export/index/publist');
+        $this->assertResponseCode(500);
+        $response = $this->getResponse();
+        $this->assertContains('stylesheet is not specified', $response->getBody());
+    }
+
+    public function testPublistActionWithoutStylesheetArgument() {
+        $this->dispatch('/export/index/publist/stylesheet');
+        $this->assertResponseCode(500);
+        $response = $this->getResponse();
+        $this->assertContains('stylesheet is not specified', $response->getBody());
+    }
+
+    public function testPublistActionWithoutRoleParameter() {
+        $this->dispatch('/export/index/publist/stylesheet/default');
+        $this->assertResponseCode(500);
+        $response = $this->getResponse();
+        $this->assertContains('role is not specified', $response->getBody());
+    }
+
+    public function testPublistActionWithoutRoleArgument() {
+        $this->dispatch('/export/index/publist/stylesheet/default/role');
+        $this->assertResponseCode(500);
+        $response = $this->getResponse();
+        $this->assertContains('role is not specified', $response->getBody());
+    }
+
+    public function testPublistActionWithoutNumberParameter() {
+        $this->dispatch('/export/index/publist/stylesheet/default/role/publists');
+        $this->assertResponseCode(500);
+        $response = $this->getResponse();
+        $this->assertContains('number is not specified', $response->getBody());
+    }
+
+    public function testPublistActionWithoutNumberArgument() {
+        $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number');
+        $this->assertResponseCode(500);
+        $response = $this->getResponse();
+        $this->assertContains('number is not specified', $response->getBody());
+    }
+
+    /**
+     * end: tests for OPUSVIER-2778
+     */
 }
 
