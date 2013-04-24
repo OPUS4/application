@@ -81,7 +81,7 @@
     </xsl:template>
 
 
-    <xsl:template name="set_b">
+    <xsl:template name="set_div">
         <xsl:element name="div">
             <xsl:attribute name="id">publist</xsl:attribute>
             <!-- Navibar Year -->

@@ -505,9 +505,27 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('specified collection is invisible', $response->getBody());
     }
 
-    /**
-     * begin: tests for OPUSVIER-2780
-     */
+    public function testPublistActionWithVisibleCollection() {
+        $this->dispatch('/export/indtestSolrIndexIsNotUpToDateex/publist/stylesheet/default/role/publists/number/coll_visible');
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $response = $this->getResponse();
+        $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
+    }
+    
+    public function testPublistActionWithCollectionNumberIncludingWhiteSpace() {
+        $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number/coll%20whitespace');
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $response = $this->getResponse();
+        $this->assertContains('<h1>Publikationsliste mit Whitespace</h1>', $response->getBody());
+    }
+
+    public function testPublistActionWithCollectionNumberIncludingSlash() {
+        $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number/coll%2Fslash');
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $response = $this->getResponse();
+        $this->assertContains('<h1>Publikationsliste mit Slash</h1>', $response->getBody());
+    }
+
 
 }
 
