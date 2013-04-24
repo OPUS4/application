@@ -1,0 +1,22 @@
+
+body {
+    color: black;
+    font-family: Arial,Helvetica,Serif;
+    font-size: 95%;
+    text-align: left;
+}
+
+a {
+    color: #26517D;
+}
+
+table td {
+    border-bottom-color: silver;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    padding-bottom: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+} 
+

@@ -72,7 +72,7 @@
             <xsl:element name="link">
                 <xsl:attribute name="rel">stylesheet</xsl:attribute>
                 <xsl:attribute name="href">
-                    <xsl:value-of select="$baseurl" />
+                    <xsl:value-of select="$baseUrl" />
                     <xsl:text>/export/default/default.css</xsl:text>
                 </xsl:attribute>
                 <xsl:attribute name="type">text/css</xsl:attribute>
@@ -362,8 +362,15 @@
 
 
     <xsl:template match="TitleMain[position() =1]">
-        <xsl:element name="b">
-            <xsl:value-of select="@Value" />
+        <xsl:element name="a">
+            <xsl:attribute name="href">
+                <xsl:value-of select="$baseUrl"/>
+                <xsl:text>/frontdoor/index/index/docId/</xsl:text>
+                <xsl:value-of select="../@Id" />
+            </xsl:attribute>
+            <xsl:element name="b">
+                <xsl:value-of select="@Value" />
+            </xsl:element>
         </xsl:element>
     </xsl:template>
 
@@ -432,8 +439,8 @@
             <xsl:when test="@Type = 'masterthesis'">
                 <xsl:text>Masters thesis</xsl:text>
             </xsl:when>
-            <xsl:text>, </xsl:text>
         </xsl:choose>
+        <xsl:text>, </xsl:text>
     </xsl:template>
 
     <xsl:template name="VolumeIssue">
@@ -463,55 +470,34 @@
 
     <xsl:template name="render_links">
         <!-- Files -->
-        <xsl:apply-templates select="File" >
+        <xsl:apply-templates select="File[@VisibleInFrontdoor = '1']" >
             <xsl:sort select="@Label"/>
         </xsl:apply-templates>
-        <!-- Identifier: Doi, Arxiv, Urn, Pubmed ... -->
-        <xsl:apply-templates select="Identifier"/>
+        <br/>
         <!-- RIS, BibTeX -->
         <xsl:call-template name="CitationExport"/>
+        <!-- Identifier: Doi, Arxiv, Urn, Pubmed ... -->
+        <xsl:apply-templates select="Identifier"/>
     </xsl:template>
 
-    <xsl:template match="Identifier[@Type='arxiv' or @Type='doi' or @Type='pubmed' or @Type='urn']">
-        <xsl:if test="@Type='arxiv'">
-            <xsl:element name="a">
-                <xsl:attribute name="href">
-                    <xsl:text>http://arxiv.org/abs/</xsl:text>
-                    <xsl:value-of select="@Value" />
-                </xsl:attribute>
-                <xsl:text>ARXIV</xsl:text>
-            </xsl:element>
-        </xsl:if>
-        <xsl:if test="@Type='doi'">
-            <xsl:element name="a">
-                <xsl:attribute name="href">
-                    <xsl:text>http://dx.doi.org/</xsl:text>
-                    <xsl:value-of select="@Value" />
-                </xsl:attribute>
-                <xsl:text>DOI</xsl:text>
-            </xsl:element>
-        </xsl:if>
-       <xsl:if test="@Type='pubmed'">
-            <xsl:element name="a">
-                <xsl:attribute name="href">
-                    <xsl:text>http://www.ncbi.nlm.nih.gov/pubmed/</xsl:text>
-                    <xsl:value-of select="@Value" />
-                </xsl:attribute>
-                <xsl:text>PMID</xsl:text>
-            </xsl:element>
-        </xsl:if>
-       <xsl:if test="@Type='urn'">
-            <xsl:element name="a">
-                <xsl:attribute name="href">
-                    <xsl:text>http://nbn-resolving.de/urn/resolver.pl?</xsl:text>
-                    <xsl:value-of select="@Value" />
-                </xsl:attribute>
-                <xsl:text>URN</xsl:text>
-            </xsl:element>
-        </xsl:if>
-        <xsl:if test="position() != last()">
-            <xsl:text> | </xsl:text>
-        </xsl:if>
+    <xsl:template match="File">
+        <xsl:choose>
+            <xsl:when test="@MimeType='application/pdf'">
+                <xsl:element name="a">
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$baseUrl"/>
+                        <xsl:text>/files/</xsl:text>
+                        <xsl:value-of select="../@Id" />
+                        <xsl:text>/</xsl:text>
+                        <xsl:value-of select="@PathName" />
+                    </xsl:attribute>
+                    <xsl:element name="b">
+                        <xsl:text>PDF</xsl:text>
+                    </xsl:element>
+                    <xsl:text> </xsl:text>
+                </xsl:element>
+            </xsl:when>
+       </xsl:choose>
     </xsl:template>
 
     <xsl:template name="CitationExport">
@@ -532,21 +518,51 @@
             </xsl:attribute>
             <xsl:text>RIS</xsl:text>
         </xsl:element>
+        <br/>
     </xsl:template>
 
-    <xsl:template match="File">
-        <xsl:element name="a">
-            <xsl:attribute name="href">
-                <xsl:value-of select="$baseUrl"/>
-                <xsl:text>/files/</xsl:text>
-                <xsl:value-of select="../@Id" />
-                <xsl:text>/</xsl:text>
-                <xsl:value-of select="@PathName" />
-            </xsl:attribute>
-            <xsl:element name="b">
-                <xsl:text>PDF</xsl:text>
+
+    <xsl:template match="Identifier[@Type='arxiv' or @Type='doi' or @Type='pubmed' or @Type='urn']">
+        <xsl:if test="@Type='arxiv'">
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:text>http://arxiv.org/abs/</xsl:text>
+                    <xsl:value-of select="@Value" />
+                </xsl:attribute>
+                <xsl:text>ARXIV</xsl:text>
             </xsl:element>
-        </xsl:element>
+            <xsl:text> </xsl:text>
+        </xsl:if>
+        <xsl:if test="@Type='doi'">
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:text>http://dx.doi.org/</xsl:text>
+                    <xsl:value-of select="@Value" />
+                </xsl:attribute>
+                <xsl:text>DOI</xsl:text>
+            </xsl:element>
+            <xsl:text> </xsl:text>
+        </xsl:if>
+       <xsl:if test="@Type='pubmed'">
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:text>http://www.ncbi.nlm.nih.gov/pubmed/</xsl:text>
+                    <xsl:value-of select="@Value" />
+                </xsl:attribute>
+                <xsl:text>PMID</xsl:text>
+            </xsl:element>
+            <xsl:text> </xsl:text>
+        </xsl:if>
+       <xsl:if test="@Type='urn'">
+            <xsl:element name="a">
+                <xsl:attribute name="href">
+                    <xsl:text>http://nbn-resolving.de/urn/resolver.pl?</xsl:text>
+                    <xsl:value-of select="@Value" />
+                </xsl:attribute>
+                <xsl:text>URN</xsl:text>
+            </xsl:element>
+            <xsl:text> </xsl:text>
+        </xsl:if>
     </xsl:template>
 
 </xsl:stylesheet>
