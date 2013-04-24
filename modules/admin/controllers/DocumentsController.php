@@ -247,8 +247,8 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      * TODO Übersetzung
      */
     protected function _prepareItemCountLinks() {
-        if (isset($this->_config->admin->documents->maxdocsoptions)) {
-            $options = $this->_config->admin->documents->get('maxdocsoptions');
+        if (isset($this->_config->admin->documents->maxDocsOptions)) {
+            $options = $this->_config->admin->documents->maxDocsOptions;
         }
         else {
             $options ="10,50,100,all";

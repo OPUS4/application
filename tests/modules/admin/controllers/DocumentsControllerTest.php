@@ -151,5 +151,23 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertQueryCount('span.title', $unpublishedDocs);
     }
     
+    public function testConfigureDefaultHitsPerPage() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->admin->documents->maxDocsDefault = 7;
+        
+        $this->dispatch('/admin/documents');
+        $this->assertQueryCount('span.title', 7);
+    }
+    
+    public function testConfigureHitsPerPageOptions() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->admin->documents->maxDocsOptions = "20,60,all";
+        
+        $this->dispatch('/admin/documents');
+        $this->assertQueryContentContains("div#itemCountLinks a", '20');
+        $this->assertQueryContentContains('div#itemCountLinks a', '60');
+        $this->assertQueryCount("a[@href='" . $this->getRequest()->getBaseUrl() . "/admin/documents/index/hitsperpage/all']", 1);
+    }
+    
 }
 
