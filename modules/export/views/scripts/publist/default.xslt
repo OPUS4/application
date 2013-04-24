@@ -22,42 +22,52 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * details. You should have received a copy of the GNU General Public License 
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
  * @package     Module_Export
- * @author      Gunar Maiwald <maiwald@zib.de>
+ * @author      Sascha Szott <szott@zib.de>
  * @copyright   Copyright (c) 2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: filter.xslt 9112 2011-10-13 10:07:40Z gmaiwald $
+ * @version     $Id$
  */
 -->
+
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
-    <xsl:param name="author" select="defaultstring"/>
-
     <xsl:output method="xml" indent="yes" encoding="utf-8" />
 
-    <xsl:template match="/">
-        <xsl:apply-templates select="export"/>
-    </xsl:template>
+    <!--
+    Suppress output for all elements that don't have an explicit template.
+    -->
+    <xsl:template match="*" />
 
-    <xsl:template match="export">
+    <xsl:template match="/">
         <xsl:element name="export">
-            <xsl:choose>
-                <xsl:when test="$author">
-                    <xsl:apply-templates select="//PersonAuthor[contains(concat(@FirstName, ' ', @LastName), $author)]"/>
-                </xsl:when>
-            </xsl:choose>
+            <xsl:attribute name="timestamp">
+                <xsl:value-of select="$timestamp"/>
+            </xsl:attribute>
+            <xsl:attribute name="doccount">
+                <xsl:value-of select="$docCount"/>
+            </xsl:attribute>
+            <xsl:attribute name="queryhits">
+                <xsl:value-of select="$queryhits"/>
+            </xsl:attribute>
+            <xsl:apply-templates select="Documents"/>
         </xsl:element>
     </xsl:template>
 
-    <xsl:template match="PersonAuthor">
-	  <xsl:copy-of select=".." />
+    <xsl:template match="Documents">
+        <xsl:if test="count(Opus_Document) > 0">
+            <xsl:apply-templates select="Opus_Document" />
+        </xsl:if>
     </xsl:template>
 
+    <xsl:template match="Opus_Document">
+        <xsl:copy-of select="."/>
+    </xsl:template>    
 </xsl:stylesheet>
