@@ -29,7 +29,8 @@
  * @package     Module_Admin
  * @author      Henning Gerhardt (henning.gerhardt@slub-dresden.de)
  * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2009-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -38,6 +39,8 @@
  * Administrative work with document metadata.
  */
 class Admin_DocumentsController extends Controller_CRUDAction {
+    
+    const HITSPERPAGE_PARAM = 'hitsperpage';
 
     /**
      * The class of the model being administrated.
@@ -178,22 +181,75 @@ class Admin_DocumentsController extends Controller_CRUDAction {
         }
 
         $paginator = Zend_Paginator::factory($result);
-        if (array_key_exists('hitsPerPage', $data)) {
-        	if ($data['hitsPerPage'] === '0') {
-        	    $hitsPerPage = '10000';
-        	}
-            else {
-            	$hitsPerPage = $data['hitsPerPage'];
-            }
-            $paginator->setItemCountPerPage($hitsPerPage);
-        }
         $page = 1;
         if (array_key_exists('page', $data)) {
             // paginator
             $page = $data['page'];
         }
+        $this->view->maxHitsPerPage = $this->_getItemCountPerPage($data);
+        $paginator->setItemCountPerPage($this->view->maxHitsPerPage);
         $paginator->setCurrentPageNumber($page);
         $this->view->paginator = $paginator;
+        $this->_prepareItemCountLinks();
+    }
+    
+    /**
+     * Liefert die Zahl der Dokumente, die auf einer Seite angezeigt werden soll.
+     * 
+     * Der Wert wird aus verschiedenen Quellen ermittelt
+     * 
+     * - Request Parameter
+     * - Session
+     * - Konfiguration?
+     * - Default
+     */
+    protected function _getItemCountPerPage($data) {
+        $namespace = new Zend_Session_Namespace('Admin');
+        
+        if (array_key_exists(self::HITSPERPAGE_PARAM, $data)) {
+            $hitsPerPage = $data[self::HITSPERPAGE_PARAM];
+            if ($hitsPerPage === 'all' || !is_numeric($hitsPerPage) || $hitsPerPage < 0) {
+                $hitsPerPage = '0';
+            }
+            else {
+            	$hitsPerPage = $data[self::HITSPERPAGE_PARAM];
+            }
+        }
+        else {
+            if (isset($namespace->hitsPerPage)) {
+                $hitsPerPage = $namespace->hitsPerPage;
+            } 
+            else {
+                $hitsPerPage = 10;
+            }            
+        }
+        
+        $namespace->hitsPerPage = $hitsPerPage;
+        
+        return $hitsPerPage;
+    }
+    
+    /**
+     * Bereitet die Links für die Auswahl der Anzahl der Dokumente pro Seite vor.
+     * 
+     * TODO aus Konfiguration?
+     * TODO Übersetzung
+     */
+    protected function _prepareItemCountLinks() {
+        $itemCountOptions = array('10', '50', '100', 'all');
+
+        $itemCountLinks = array();
+
+        foreach ($itemCountOptions as $option) {
+            $link = array();
+            
+            $link['label'] = $option;
+            $link['url'] = $this->view->url(array(self::HITSPERPAGE_PARAM => $option), null, false);
+            
+            $itemCountLinks[$option] = $link;
+        }
+        
+        $this->view->itemCountLinks = $itemCountLinks;
     }
 
     protected function _prepareDocStateLinks() {

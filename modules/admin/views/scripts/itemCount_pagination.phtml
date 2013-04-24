@@ -31,7 +31,6 @@
  * @version     $Id$
  */
 ?>
-<div class ="paginationInfo">
     <span style="padding-right: 5em">
     <?PHP if ($this->totalItemCount > 1) : ?>
         <?= $this->translate("search_titles_resultlist", $this->totalItemCount) ?>
@@ -46,5 +45,4 @@
     <?PHP if ($this->pageCount > 1) : ?>
         <?= $this->translate("search_results_from_to", $this->firstItemNumber, $this->firstItemNumber + $this->currentItemCount - 1) ?>
     <?PHP endif; ?>
-    </span>
-</div>
+    </span>   

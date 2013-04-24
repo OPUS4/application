@@ -105,6 +105,51 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertContains('<b>52.00 Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</b>', $this->getResponse()->getBody());
         $this->assertNotContains('<b>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</b>', $this->getResponse()->getBody());
     }
-
+    
+    public function testShowHitsPerPageLinks() {
+        $this->dispatch('/admin/documents');
+        $this->assertQuery('div#itemCountLinks a');
+    }
+    
+    public function testShowHitsPerPageOptionAsLink() {
+        $this->dispatch('/admin/documents/index/hitsperpage/10');
+        
+        $this->assertQueryContentContains("div#itemCountLinks a", '50');
+        $this->assertQueryContentContains('div#itemCountLinks a', '100');
+    }
+    
+    public function testShowSelectedHitsPerPageOptionNotAsLink() {
+        $this->dispatch('/admin/documents/index/hitsperpage/10');
+        
+        echo $this->getResponse()->getBody();
+        
+        $this->assertQueryCount("a[@href='" . $this->getRequest()->getBaseUrl() . "/admin/documents/index/hitsperpage/10']", 0);
+    }
+    
+    public function testSelectHitsPerPage() {
+        $this->dispatch('/admin/documents/index/state/unpublished/hitsperpage/8');
+        $this->assertQueryCount('span.title', 8);
+    }
+    
+    public function testShowAllHits() {
+        $docFinder = new Opus_DocumentFinder();
+        $docFinder->setServerState('unpublished');
+        
+        $unpublishedDocs = $docFinder->count();
+        
+        $this->dispatch('/admin/documents/index/state/unpublished/hitsperpage/all');
+        $this->assertQueryCount('span.title', $unpublishedDocs);
+    }
+    
+    public function testHitsPerPageBadParameter() {
+        $docFinder = new Opus_DocumentFinder();
+        $docFinder->setServerState('unpublished');
+        
+        $unpublishedDocs = $docFinder->count();
+        
+        $this->dispatch('/admin/documents/index/state/unpublished/hitsperpage/dummy');
+        $this->assertQueryCount('span.title', $unpublishedDocs);
+    }
+    
 }
 
