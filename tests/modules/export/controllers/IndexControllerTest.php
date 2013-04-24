@@ -460,8 +460,21 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('number is not specified', $response->getBody());
     }
 
+
+    /**
+     * begin: tests for OPUSVIER-2779
+     */
+
+    public function testPublistActionWithNonexistentStylesheet() {
+        $this->dispatch('/export/index/publist/stylesheet/example/role/publists/number/coll_visible');
+        $this->assertResponseCode(500);
+        $response = $this->getResponse();
+        $this->assertContains('given stylesheet does not exist or is not readable', $response->getBody());
+    }
+
     /**
      * end: tests for OPUSVIER-2778
      */
+
 }
 

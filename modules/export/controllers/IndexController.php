@@ -37,6 +37,7 @@
 class Export_IndexController extends Controller_Xml {
 
     private $log;
+    private $stylesheetDirectory;
 
     public function init() {
         parent::init();
@@ -61,6 +62,7 @@ class Export_IndexController extends Controller_Xml {
 
         }
 
+        $this->stylesheetDirectory = 'stylesheets-custom';
         $this->prepareXml();
     }
 
@@ -87,7 +89,7 @@ class Export_IndexController extends Controller_Xml {
         if (!is_null($stylesheet)) {
 
             $stylesheetsAvailable = array();
-            $dir = new DirectoryIterator($this->view->getScriptPath('') . 'stylesheets-custom');
+            $dir = new DirectoryIterator($this->view->getScriptPath('') . $this->stylesheetDirectory);
             foreach ($dir as $file) {
                 if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
                     array_push($stylesheetsAvailable, $file->getBasename('.xslt'));
@@ -96,7 +98,7 @@ class Export_IndexController extends Controller_Xml {
 
             $pos = array_search($stylesheet, $stylesheetsAvailable);            
             if ($pos !== FALSE) {
-                $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets-custom' . DIRECTORY_SEPARATOR .  $stylesheetsAvailable[$pos] . '.xslt');
+                $this->loadStyleSheet($this->view->getScriptPath('') . $this->stylesheetDirectory . DIRECTORY_SEPARATOR .  $stylesheetsAvailable[$pos] . '.xslt');
                 return;
             }
             throw new Application_Exception('given stylesheet does not exist or is not readable');
@@ -175,6 +177,9 @@ class Export_IndexController extends Controller_Xml {
         if (is_null($numberParam)) {
             throw new Application_Exception('number is not specified');
         }
+
+        $this->stylesheetDirectory = 'publist';
+        $this->prepareXML();
     }
 
 }
