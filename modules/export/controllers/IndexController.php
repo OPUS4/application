@@ -178,8 +178,46 @@ class Export_IndexController extends Controller_Xml {
             throw new Application_Exception('number is not specified');
         }
 
+        $this->mapQuery();
+
         $this->stylesheetDirectory = 'publist';
         $this->prepareXML();
+    }
+
+
+    private function mapQuery() {
+
+        $roleParam = $this->getRequest()->getParam('role');
+        $numberParam = $this->getRequest()->getParam('number');
+
+        if (is_null(Opus_CollectionRole::fetchByName($roleParam))) {
+             throw new Application_Exception('specified role does not exist');
+        }
+
+        $role = Opus_CollectionRole::fetchByName($roleParam);
+        if ($role->getVisible() != '1') {
+            throw new Application_Exception('specified role is invisible');
+        }
+
+        if (count(Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam)) == 0) {
+             throw new Application_Exception('specified number does not exist for specified role');
+        }
+
+        $collection = null;
+        foreach (Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam) as $coll) {
+            if ($coll->getVisible() == '1' && is_null($collection)) {
+                $collection = $coll;
+            }
+        }
+
+        if (is_null($collection)) {
+            throw new Application_Exception('specified collection is invisible');
+        }
+
+        $this->getRequest()->setParam('searchtype', 'collection');
+        $this->getRequest()->setParam('id', $collection->getId());
+        $this->getRequest()->setParam('export', 'xml');
+
     }
 
 }

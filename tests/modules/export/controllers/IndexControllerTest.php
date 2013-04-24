@@ -473,7 +473,40 @@ class Export_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * end: tests for OPUSVIER-2778
+     * begin: tests for OPUSVIER-2780
+     */
+
+
+    public function testPublistActionWithNonexistentRole() {
+        $this->dispatch('/export/index/publist/stylesheet/default/role/nonexistent/number/coll_visible');
+        $this->assertResponseCode(500);
+        $response = $this->getResponse();
+        $this->assertContains('specified role does not exist', $response->getBody());
+    }
+
+    public function testPublistActionWithInvisibleRole() {
+        $this->dispatch('/export/index/publist/stylesheet/default/role/no-root-test/number/foo');
+        $this->assertResponseCode(500);
+        $response = $this->getResponse();
+        $this->assertContains('specified role is invisible', $response->getBody());
+    }
+
+    public function testPublistActionWithNonexistentNumber() {
+        $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number/nonexistent');
+        $this->assertResponseCode(500);
+        $response = $this->getResponse();
+        $this->assertContains('specified number does not exist', $response->getBody());
+    }
+
+    public function testPublistActionWithInvisibleCollection() {
+        $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number/coll_invisible');
+        $this->assertResponseCode(500);
+        $response = $this->getResponse();
+        $this->assertContains('specified collection is invisible', $response->getBody());
+    }
+
+    /**
+     * begin: tests for OPUSVIER-2780
      */
 
 }
