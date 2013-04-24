@@ -23,4 +23,6 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`, `lef
 (16208, 20, '2', 's-l coll entry B', 0, 4, 5, 16206, 1),
 (16209, 21, NULL, NULL, NULL, 1, 6, NULL, 1),
 (16210, 21, 'coll_visible', 'Sichtbare Publikationsliste', 0, 2, 3, 16209, 1),
-(16211, 21, 'coll_invisible', 'Unsichtbare Publikationsliste', 0, 4, 5, 16209, 0);
+(16211, 21, 'coll_invisible', 'Unsichtbare Publikationsliste', 0, 4, 5, 16209, 0),
+(16212, 21, 'coll whitespace', 'Publikationsliste mit Whitespace', 0, 6, 7, 16209, 1),
+(16213, 21, 'coll/slash', 'Publikationsliste mit Slash', 0, 8, 9, 16209, 1);
