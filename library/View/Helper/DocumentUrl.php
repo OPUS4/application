@@ -27,16 +27,15 @@
  * @category    Application
  * @package     View
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- *
  * This helper class defines only one method baseUrl() to retrieve the
  * application base url for absolute urls in views.
- *
  */
 class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
 
@@ -83,7 +82,16 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
         );
         return $this->view->url($url, 'default', true);
     }
-
+    
+    public function adminEdit($docId) {
+        $url = array(
+            'module'     => 'admin',
+            'controller' => 'document',
+            'action'     => 'index', // TODO change to edit action
+            'docid'      => $docId,
+        );
+        return $this->view->url($url, 'default', true);
+    }
 
     public function adminOldEdit($docId) {
         $url = array(

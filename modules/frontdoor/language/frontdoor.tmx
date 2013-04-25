@@ -184,12 +184,30 @@
         </tuv>
     </tu>
 
-    <tu tuid="frontdoor_edit_document">
+    <tu tuid="frontdoor_show_doc_in_admin">
         <tuv xml:lang="en">
-            <seg>Edit this document</seg>
+            <seg>Show in Administration</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Dieses Dokument bearbeiten</seg>
+            <seg>In Administration anzeigen</seg>
+        </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_edit_document">
+        <tuv xml:lang="en">
+            <seg>Edit Document</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dokument bearbeiten</seg>
+        </tuv>
+    </tu>
+    
+    <tu tuid="frontdoor_edit_docfiles">
+        <tuv xml:lang="en">
+            <seg>Manage Files</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dateien verwalten</seg>
         </tuv>
     </tu>
 
