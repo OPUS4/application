@@ -506,7 +506,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testPublistActionWithVisibleCollection() {
-        $this->dispatch('/export/indtestSolrIndexIsNotUpToDateex/publist/stylesheet/default/role/publists/number/coll_visible');
+        $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number/coll_visible');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
         $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
