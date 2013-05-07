@@ -73,22 +73,19 @@ class UpdateDocumentCacheTest extends CronTestCase {
         $licence = new Opus_Licence($licenceId);
         $licence->setNameLong('TestLicenceAltered');
         $licence->store();
-        
+
         $docXmlCacheResult = $documentCacheTable->find($this->document->getId(), '1');
 
         $this->assertTrue($docXmlCacheResult->count() == 0, 'Expected empty document xml cache');
 
-        $this->document = new Opus_Document($docId);
-        
-        
         $this->executeScript('cron-update-document-cache.php');
-        
-        $docXmlCacheAfter = $documentCacheTable->find($this->document->getId(), '1')->current()->xml_data;
+        $docXmlCacheAfter = $documentCacheTable->find($docId, '1')->current()->xml_data;
         $domDocAfter = new DomDocument();
         $domDocAfter->loadXML($docXmlCacheAfter);
         $licencesAfter = $domDocAfter->getElementsByTagName('Licence');
         $this->assertTrue($licencesAfter->length == 1, 'Expected one Licence element in dom.');
-        $licence->delete();
+        $licences = $this->document->getLicence();
+        $licences[0]->delete();
     }
 
 }
