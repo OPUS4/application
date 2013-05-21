@@ -58,6 +58,15 @@
                             <controller>document</controller>
                             <action>edit</action>
                         </edit>
+                        
+                        <!-- TODO Entfernen wenn neues Metadaten-Formular fertig ist und nach 'edit' verschoben wird. -->
+                        <edit2>
+                            <type>mvc</type>
+                            <label>admin_document_edit</label>
+                            <module>admin</module>
+                            <controller>document</controller>
+                            <action>edit2</action>
+                        </edit2>
 
                         <update>
                             <type>mvc</type>
