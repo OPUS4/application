@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+  <body>
+
+    <tu tuid="setup_title_help-page">
+        <tuv xml:lang="en">
+            <seg>edit FAQ</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>FAQ bearbeiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_help-page_index">
+        <tuv xml:lang="en">
+            <seg>edit FAQ</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>FAQ bearbeiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_help-page_error">
+        <tuv xml:lang="en">
+            <seg>Error</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Fehler</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_error_retry">
+        <tuv xml:lang="en">
+            <seg>Retry</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Erneut versuchen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_help-page_error_read-access">
+        <tuv xml:lang="en">
+            <seg>
+                '%1$s' is not readable.
+                Please make sure that the web server has read access to the respective directory.
+            </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>
+                '%1$s' kann nicht gelesen werden.
+                Bitte stellen Sie sicher, dass der Webserver Leserechte für das entsprechende Verzeichnis hat.
+            </seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_help-page_error_write-access">
+        <tuv xml:lang="en">
+            <seg>
+                '%1$s' is not writeable.
+                Please make sure that the web server has write access to the respective directory.
+            </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>
+                '%1$s' kann nicht geschrieben werden.
+                Bitte stellen Sie sicher, dass der Webserver Schreibrechte auf das entsprechende Verzeichnis hat.
+            </seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_help-page_error">
+        <tuv xml:lang="en">
+            <seg>
+                Es ist ein Fehler aufgetreten. Wenn dieses Problem weiterhin besteht, wenden Sie sich bitte an Ihren Systemadministrator.
+            </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>
+                An error occurred. If this problem persists, please contact your system administrator.
+            </seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_help-page_write-failed">
+        <tuv xml:lang="en">
+            <seg>
+                The changes could not be saved.
+                Please make sure that the web server has write access to the respective directories and files.
+            </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>
+                Die Änderungen konnten nicht gespeichert werden.
+                Bitte stellen Sie sicher, dass der Webserver Schreibrechte auf die entsprechenden Verzeichnisse und Dateien hat.
+            </seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_help-page_write-success">
+        <tuv xml:lang="en">
+            <seg>
+                The changes have been saved.
+            </seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>
+                Die Änderungen wurden gespeichert.
+            </seg>
+        </tuv>
+    </tu>
+
+  </body>
+</tmx>
