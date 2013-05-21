@@ -27,51 +27,134 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Description of Admin_Form_Document
- *
- * @author jens
+ * Formular fuer Metadaten eines Dokuments.
  */
 class Admin_Form_Document extends Zend_Form {
 
-    private $model;
-
-    private $includedFields;
-
-    /**
-     * Constructs form for Opus_Model_Abstract instance.
-     * @param <type> $model
-     * @param <type> $clear
-     */
-    public function __construct($model, $includedFields = null, $clear = false) {
-        $this->model = $model;
-        $this->includedFields = $includedFields;
-
-        $this->_init($clear);
+    // TODO review these constants and their purpose
+    const SAVE = 'save';
+    
+    const SAVE_AND_CONTINUE = 'saveAndContinue';
+    
+    const CANCEL = 'cancel';
+    
+    const SHOW = 'show';
+    
+    const SWITCH_TO = 'switch';
+    
+    public function init() {
+        parent::init();
+        
+        $this->addSubForm(new Admin_Form_DocumentGeneral(), 'General');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier'), 'identifiers');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPatent', 'Patent'), 'patents');
+        $this->addSubForm(new Admin_Form_DocumentLicences(), 'Licences');
+        $this->addSubForm(new Admin_Form_DocumentCollections(), 'Collections');
+        
+        $this->addElement('hash', 'opus_hash', array('salt' => 'unique'));
+        
+        $element = new Zend_Form_Element_Hidden('id');
+        $this->addElement($element);
+        
+        $element = new Zend_Form_Element_Submit('save');
+        $this->addElement($element);
+        
+        $element = new Zend_Form_Element_Submit('saveAndContinue');
+        $this->addElement($element);
+        
+        $element = new Zend_Form_Element_Submit('cancel');
+        $this->addElement($element);
     }
-
-    protected function _init($clear) {
-        foreach($this->includedFields as $fieldName) {
-            $field = $this->model->getField($fieldName);
-        }
-    }
+    
 
     /**
      * Populates form from model values.
      */
-    public function popluateFromModel() {
-
+    public function popluateFromModel($document) {
+        $this->getElement('id')->setValue($document->getId());
+        
+        $subforms = $this->getSubForms();
+        
+        foreach ($subforms as $form) {
+            $form->populateFromModel($document);
+        }
     }
-
+    
     /**
-     * Sets values in model instance.
+     * Aktualisiert Instanz von Opus_Document mit Formularwerten.
+     * @param Opus_Document $document
      */
-    public function populateModel() {
+    public function updateModel($document) {
+        $subforms = $this->getSubForms();
+        
+        foreach ($subforms as $form) {
+            $form->updateModel($document);
+        }
+    }
+    
+    /**
+     * Konstruiert Formular mit Unterformularen basierend auf POST Daten.
+     * @param array $data
+     */
+    public static function constructFromPost($data) {
+        $form = new Admin_Form_Document();
+        
+        $subforms = $form->getSubForms();
+        
+        foreach ($subforms as $name => $subform) {
+            if (array_key_exists($name, $data)) {
+                $subform->constructFromPost($data[$name]);
+            }
+        }
+        
+        return $form;
+    }
+    
+    /**
+     * Verarbeitet POST Request vom Formular.
+     * @param type $data
+     */
+    public function processPost($data) {
+        // Prüfen, ob "Speichern" geklickt wurde
+        if (array_key_exists('save', $data)) {
+            return self::SAVE;
+        }
+        else if (array_key_exists('saveAndContinue', $data)) {
+            return self::SAVE_AND_CONTINUE;
+        }
+        else if (array_key_exists('cancel', $data)) {
+            return self::CANCEL;
+        }
+        else {
+            // POST Daten an Unterformulare weiterreichen
+            $subforms = $this->getSubForms();
+            
+            foreach ($subforms as $name => $form) {
+                if (array_key_exists($name, $data)) {
+                    // TODO process return value (exit from loop if success)
+                    $result = $form->processPost($data[$name], $data);
+                    
+                    if (!is_null($result)) {
+                        return $result;
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    public function continueEdit($request) {
+        $subforms = $this->getSubForms();
+
+        foreach ($subforms as $name => $subform) {
+            $subform->continueEdit($request);
+        }
     }
 
 }
