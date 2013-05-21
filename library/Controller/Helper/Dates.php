@@ -75,7 +75,7 @@ class Controller_Helper_Dates extends Zend_Controller_Action_Helper_Abstract {
      * @return Opus_Date
      */
     public function getOpusDate($datestr) {
-        if ($this->isValid($datestr)) {
+        if (!is_null($datestr) && $this->isValid($datestr)) {
             $dateFormat = $this->__validator->getDateFormat();
 
             $date = new Zend_Date($datestr, $dateFormat);
@@ -96,7 +96,7 @@ class Controller_Helper_Dates extends Zend_Controller_Action_Helper_Abstract {
      */
     public function getDateString($date) {
         // Protect against invalid dates
-        if ($date->isValid()) {
+        if (!is_null($date) && $date->isValid()) {
             $dateFormat = $this->__validator->getDateFormat();
             $zendDate = $date->getZendDate();
             return $zendDate->get($dateFormat);
