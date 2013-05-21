@@ -58,8 +58,8 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
             foreach ($variants as $language => $text) {
                 if (substr($text, -4) == '.txt') {
                     $resultArray[$translationUnit][$language] = array();
-                    $this->addDataSource($this->contentBasepath . DIRECTORY_SEPARATOR . $text);
-                    $contentArray = $this->getData($this->contentBasepath . DIRECTORY_SEPARATOR . $text);
+                    $this->addContentSource($this->contentBasepath . DIRECTORY_SEPARATOR . $text);
+                    $contentArray = $this->getContent($this->contentBasepath . DIRECTORY_SEPARATOR . $text);
                     list($filename, $contents) = each($contentArray);
                     $resultArray[$translationUnit][$language]['filename'] = $text;
                     $resultArray[$translationUnit][$language]['contents'] = $contents;

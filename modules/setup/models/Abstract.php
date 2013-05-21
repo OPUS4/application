@@ -54,14 +54,20 @@ abstract class Setup_Model_Abstract {
     protected $tmxContents;
 
     /**
+     *  base path for contents
+     */
+    protected $contentBasepath = '';
+
+    
+    /**
      * Source paths for data resources
      */
-    protected $dataSources = array();
+    protected $contentSources = array();
 
     /**
-     * data resources
+     * content resources
      */
-    protected $dataContents = array();
+    protected $contentContents = array();
 
     /**
      * Zend_Log, can be set via @see setLog()
@@ -103,7 +109,7 @@ abstract class Setup_Model_Abstract {
     }
 
     /**
-     * Dump model data to array. 
+     * Dump model content to array. 
      * The output structure should match the input expected by @see fromArray().
      * 
      * @result array|false returns array on success, false on failure.
@@ -112,15 +118,15 @@ abstract class Setup_Model_Abstract {
     abstract public function toArray();
     
     /**
-     * Set model data from array.
+     * Set model content from array.
      * Expects input matching the structure 
      * of the result returned by @see toArray().
-     * @param array $array Array of model data.
+     * @param array $array Array of model content.
      */
     abstract public function fromArray(array $array);
     
     /**
-     * @param array $tmxSourcePaths Array of file paths used for reading tmx data
+     * @param array $tmxSourcePaths Array of file paths used for reading tmx content
      * 
      */
     public function setTranslationSources(array $tmxSourcePaths) {
@@ -128,56 +134,56 @@ abstract class Setup_Model_Abstract {
     }
 
     /**
-     * @param string $tmxPath file path used for writing tmx data.
+     * @param string $tmxPath file path used for writing tmx content.
      */
     public function setTranslationTarget($tmxTargetPath) {
         $this->verifyWriteAccess($tmxTargetPath);
         $this->tmxTarget = $tmxTargetPath;
     }
-
+    
     /**
-     * @param array $dataFiles  Array of file paths used for 
-     *                          reading and writing content data.
+     * @param array $contentFiles  Array of file paths used for 
+     *                          reading and writing content.
      * @throws Setup_Model_FileNotReadableException
      * @throws Setup_Model_FileNotWriteableException
      */
-    public function setDataSources(array $dataFiles) {
-        foreach ($dataFiles as $filename) {
-            $this->addDataSource($filename);
+    public function setContentSources(array $contentFiles) {
+        foreach ($contentFiles as $filename) {
+            $this->addContentSource($filename);
         }
     }
 
     /**
      * @param string $filename  full path of file used for 
-     *                          reading and writing content data.
+     *                          reading and writing content.
      * @throws Setup_Model_FileNotReadableException
      * @throws Setup_Model_FileNotWriteableException
      */
-    public function addDataSource($filename) {
+    public function addContentSource($filename) {
         $filePath = realpath($filename);
         $this->verifyReadAccess($filePath);
         $this->verifyWriteAccess($filePath);
-        if (!isset($this->dataSources[$filePath]))
-            $this->dataSources[$filePath] = null;
+        if (!isset($this->contentSources[$filePath]))
+            $this->contentSources[$filePath] = null;
     }
 
     /**
-     * @param string $filename      file path for content data.
+     * @param string $filename      file path for content.
      *                              If no file name is set, 
-     *                              all data is returned in an array.
+     *                              all content is returned in an array.
      * @throws Setup_Model_FileNotReadableException
-     * @return array|string Data found in file refered to by key.
+     * @return array|string Content found in file refered to by key.
      */
-    public function getData($filename = null) {
+    public function getContent($filename = null) {
         $result = array();
         if (is_null($filename)) {
-            foreach ($this->dataSources as $file) {
+            foreach ($this->contentSources as $file) {
                 $this->verifyReadAccess($file);
                 $result[$filePath] = file_get_contents($file);
             }
         } else {
             $filePath = realpath($filename);
-            if (!array_key_exists($filePath, $this->dataSources)) {
+            if (!array_key_exists($filePath, $this->contentSources)) {
                 throw new Setup_Model_Exception("$filePath is not a valid source file.");
             } 
             $result[$filePath] = file_get_contents($filePath);
@@ -186,16 +192,16 @@ abstract class Setup_Model_Abstract {
     }
 
     /**
-     * @param array $data   Array of key value pairs with values containing
-     *                      data to be stored in file refered to by keys.
+     * @param array $content   Array of key value pairs with values containing
+     *                      content to be stored in file refered to by keys.
      * @throws Setup_Model_FileNotReadableException
      * @throws Setup_Model_FileNotWriteableException
      */
-    public function setData(array $data) {
-        foreach ($data as $filename => $contents) {
-            if (!isset($this->dataSources[$filename])) {
-                $this->addDataSource($filename);
-                $this->dataSources[$filename] = $contents;
+    public function setContent(array $content) {
+        foreach ($content as $filename => $contents) {
+            if (!isset($this->contentSources[$filename])) {
+                $this->addContentSource($filename);
+                $this->contentSources[$filename] = $contents;
             }
         }
     }
@@ -219,15 +225,15 @@ abstract class Setup_Model_Abstract {
     }
 
     /**
-     * Set translation data to be stored (@see store)
-     * @param array $tmxData Data to be stored in tmx target file.
+     * Set translation content to be stored (@see store)
+     * @param array $tmxContent Content to be stored in tmx target file.
      */
     public function setTranslation(array $array) {
         $this->tmxContents = $array;
     }
 
     /**
-     * Store all tmx and content data that has been set.
+     * Store all tmx and content that has been set.
      * This is performed as a transaction, reverting 
      * changes already written if one write fails.
      * 
@@ -236,7 +242,7 @@ abstract class Setup_Model_Abstract {
     public function store() {
         $result = true;
 
-        $savedData = array();
+        $savedContent = array();
         try {
             if (!empty($this->tmxContents)) {
                 $this->verifyWriteAccess($this->tmxTarget);
@@ -248,11 +254,11 @@ abstract class Setup_Model_Abstract {
                 }
             }
 
-            foreach ($this->dataSources as $filename => $contents) {
+            foreach ($this->contentSources as $filename => $contents) {
                 if (!is_null($contents)) {
                     $this->verifyWriteAccess($filename);
-// backup stored data to restore in case a write operation fails
-                    $savedData[$filename] = file_get_contents($filename);
+// backup stored content to restore in case a write operation fails
+                    $savedContent[$filename] = file_get_contents($filename);
                     $result = (false !== file_put_contents($filename, $contents)) && $result;
                     if (!$result) {
                         throw new Setup_Exception("Saving File '$filename' failed");
@@ -260,8 +266,8 @@ abstract class Setup_Model_Abstract {
                 }
             }
         } catch (Setup_Exception $se) {
-            if (!empty($savedData)) {
-                foreach ($savedData as $filename => $contents) {
+            if (!empty($savedContent)) {
+                foreach ($savedContent as $filename => $contents) {
                     file_put_contents($filename, $contents);
                 }
             }

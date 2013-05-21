@@ -64,8 +64,8 @@ class Setup_Model_AbstractTest extends ControllerTestCase {
     public function testSetConfigWithValidParams() {
         chmod($this->testFile, 0600);
         file_put_contents($this->testFile, "Test Data");
-        $this->object->setConfig(array('dataSources' => array($this->testFile)));
-        $this->assertEquals(array($this->testFile => "Test Data"), $this->object->getData($this->testFile));
+        $this->object->setConfig(array('contentSources' => array($this->testFile)));
+        $this->assertEquals(array($this->testFile => "Test Data"), $this->object->getContent($this->testFile));
     }
 
     public function testVerifyReadAccess() {
@@ -102,8 +102,8 @@ class Setup_Model_AbstractTest extends ControllerTestCase {
 
     public function testWriteData() {
         chmod($this->testFile, 0600);
-        $this->object->addDataSource($this->testFile);
-        $this->object->setData(array($this->testFile => "Test Data"));
+        $this->object->addContentSource($this->testFile);
+        $this->object->setContent(array($this->testFile => "Test Data"));
         $this->object->store();
         $this->assertEquals('Test Data', file_get_contents($this->testFile));
     }
