@@ -181,4 +181,14 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         Zend_Registry::set('Zend_Config', $config);
     }
     
+    public function setUpGerman() {
+        $session = new Zend_Session_Namespace();
+        $session->language = 'de';
+    }
+
+    public function setUpEnglish() {
+        $session = new Zend_Session_Namespace();
+        $session->language = 'en';
+    }
+    
 }

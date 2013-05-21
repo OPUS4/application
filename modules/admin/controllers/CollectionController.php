@@ -31,6 +31,7 @@
  * @author     	Thoralf Klein <thoralf.klein@zib.de>
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Tobias Tappe <tobias.tappe@uni-bielefeld.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -244,14 +245,26 @@ class Admin_CollectionController extends Controller_Action {
 
         if ($this->getRequest()->isPost() === true) {
             // Zuordnung des Dokuments zur Collection ist erfolgt
-            $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
-            $collectionModel->addDocument($documentId);
+            $storeNow = $this->getRequest()->getParam('oldform', false);
+            
+            $colId = $this->getRequest()->getParam('id', '');
+            
+            if ($storeNow) {
+                // Speichere Collection sofort 
+                $collectionModel = new Admin_Model_Collection($colId);
+                $collectionModel->addDocument($documentId);
 
-            return $this->_redirectToAndExit(
-                    'edit',
-                    $this->view->translate('admin_document_add_collection_success', $collectionModel->getName()),
-                    'document', 'admin', array('id' => $documentId, 'section' => 'collections'));
+                return $this->_redirectToAndExit(
+                        'edit',
+                        $this->view->translate('admin_document_add_collection_success', $collectionModel->getName()),
+                        'document', 'admin', array('id' => $documentId, 'section' => 'collections'));
+            }
+            else {
+                return $this->_redirectToAndExit('edit2', null, 'document', 'admin', array('id' => $documentId, 
+                    'hash' => '123', 'continue' => 'addcol', 'colId' => $colId));
+            }
         }
+        
 
         $collectionId = $this->getRequest()->getParam('id');
         if (is_null($collectionId)) {
