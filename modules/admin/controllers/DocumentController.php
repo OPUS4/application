@@ -48,7 +48,32 @@ class Admin_DocumentController extends Controller_Action {
      * @var Controller_Helper_Dates
      */
     private $__dates;
+    
+    /**
+     * Name für allgemeinen Session Namespace.
+     * @var type 
+     */
+    private $__namespace = 'admin';
 
+    /**
+     * Allgemeiner Session Namespace.
+     * @Zend_Session_Namespace type 
+     */
+    private $__session;
+
+    /**
+     * Session Namespaces fuer einzelne Dokument.
+     * 
+     * Wenn beim Editieren der Metadaten eines Dokuments auf eine andere Seite gewechselt wird (Collections, Personen),
+     * wird der letzte POST in einem Namespace für eine Dokumenten-ID abgespeichert, um den Zustand des Formulares 
+     * wieder herstellen zu können, wenn zur Formularseite zurück gewechselt wird.
+     * 
+     * @var array
+     * 
+     * TODO Review solution (Wie funktioniert Namespace Bereinigung?)
+     */
+    private $__documentNamespaces = array();
+    
     /**
      * Initializes controller.
      */
@@ -122,6 +147,118 @@ class Admin_DocumentController extends Controller_Action {
                 $this->view->translate('admin_document_error_novalidid')),
                     'documents', 'admin');
         }
+    }
+
+    /**
+     * Zeigt Metadaten-Formular an bzw. verarbeitet POST Requests vom Formular.
+     * 
+     * TODO prüfen ob Form DocID mit URL DocID übereinstimmt
+     */
+    public function edit2Action() {
+        $docId = $this->getRequest()->getParam('id');
+
+        $document = $this->documentsHelper->getDocumentForId($docId);
+        
+        if (!isset($document)) {
+            return $this->_redirectTo('index', array('failure' =>
+                $this->view->translate('admin_document_error_novalidid')),
+                    'documents', 'admin');
+        }
+        else {
+            if ($this->getRequest()->isPost()) {
+                $data = $this->getRequest()->getPost();
+
+                $form = Admin_Form_Document::constructFromPost($data);
+                
+                $form->populate($data);
+                
+                // TODO use return value for decision how to continue
+                $result = $form->processPost($data);
+                
+                if (is_array($result)) {
+                    $target = $result['target']; // TODO check if present
+                    $result = $result['result']; // TODO check if present
+                }
+                
+                switch ($result) {
+                    case Admin_Form_Document::SAVE:
+                        if ($form->isValid($data)) {
+                            // Formular ist korrekt; aktualisiere Dokument
+                            $form->updateDocument($document);
+                        
+                            $document->store(); // TODO handle exceptions
+
+                            // TODO redirect to Übersicht/Browsing/???
+                            $message = $this->view->translate('admin_document_update_success');
+                            return $this->_redirectTo('index', $message, 'document', 'admin', array('id' => $docId));
+                        }
+                        else {
+                            $this->view->message = $this->view->translate('admin_document_error_validation');
+                        }
+                        break;
+                        
+                    case Admin_Form_Document::SAVE_AND_CONTINUE:
+                        if ($form->isValid($data)) {
+                            // Formular ist korrekt; aktualisiere Dokument
+                            $form->updateDocument($document);
+                        
+                            // TODO handle exceptions
+                            $document->store();
+                        }
+                        else {
+                            $this->view->message = $this->view->translate('admin_document_error_validation');
+                        }
+                        break;
+                        
+                    case Admin_Form_Document::CANCEL:
+                        // TODO redirect to origin page
+                        return $this->_redirectTo('index', null, 'document', 'admin', array('id' => $docId));
+                        break;
+                    
+                    case Admin_Form_Document::SWITCH_TO:
+                        $this->_storePost($data, $docId);
+                        
+                        return $this->_redirectTo($target['action'], null, $target['controller'], $target['module'],
+                                array('document' => $docId));
+                        break;
+                    
+                    default:
+                        // Zurueck zum Formular
+                        break;
+                }
+            }
+            else {
+                // GET zeige neues oder gespeichertes Formular an
+                $hash = $this->getRequest()->getParam('hash', null);
+                
+                // Hole gespeicherten POST aus Session 
+                $post = (!is_null($hash)) ? $post = $this->_retrievePost($docId) : null;
+                
+                if ($post) {
+                    // Initialisiere Formular vom gespeicherten POST
+                    $form = Admin_Form_Document::constructFromPost($post);
+                    $form->populate($post);
+                    
+                    // Führe Rücksprung aus
+                    $form->continueEdit($this->getRequest());
+                }
+                else {
+                    // Initialisiere Formular vom Dokument
+                    $form = new Admin_Form_Document();
+                    $form->popluateFromModel($document);
+                }
+                
+                $form->setAction('#current');
+            }
+            
+            $this->view->form = $form;
+        }
+        
+        $this->view->document = $document;
+        $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
+        
+        // Beim wechseln der Sprache würden Änderungen in editierten Felder verloren gehen
+        $this->view->languageSelectorDisabled = true;
     }
 
     /**
@@ -630,6 +767,12 @@ class Admin_DocumentController extends Controller_Action {
         $action['label'] = 'admin_document_files';
         $action['url'] = $documentUrl->adminFileManager($docId);
         $actions['files'] = $action;
+        
+        $actions['edit'] = array(
+            'label' => 'admin_document_edit',
+            'url' => $this->view->url(array('module' => 'admin', 'controller' => 'document', 'action' => 'edit2', 
+                'id' => $docId), 'default', true),
+        );
 
         // TODO implement docHelper method
         // TODO: Disabled, since feature is not usable for the user!
@@ -1361,6 +1504,61 @@ class Admin_DocumentController extends Controller_Action {
         $document->store();
 
         return $deletedCollectionName;
+    }
+    
+    
+    /**
+     * Speichert POST in session.
+     * @param array $post
+     */
+    protected function _storePost($post, $documentId) {
+        $namespace = $this->_getDocumentSessionNamespace($documentId);
+        
+        $namespace->lastPost = $post;
+    }
+    
+    /**
+     * Liefert gespeicherten POST.
+     * @param string $hash Hash für Formular
+     * @return array
+     */
+    protected function _retrievePost($documentId) {
+        $namespace = $this->_getDocumentSessionNamespace($documentId);
+        
+        $post = $namespace->lastPost;
+        $namespace->lastPost = null;
+        
+        return $post;
+    }
+    
+    /**
+     * Liefert Session Namespace fuer diesen Controller.
+     * @return Zend_Session_Namespace
+     */
+    protected function _getSessionNamespace() {
+        if (null === $this->__session) {
+            $this->__session = new Zend_Session_Namespace($this->__namespace);
+        }
+ 
+        return $this->__session;        
+    }
+    
+    /**
+     * Liefert Session Namespace fuer einzelnes Dokument.
+     * @return Zend_Session_Namespace
+     */
+    protected function _getDocumentSessionNamespace($documentId) {
+        $key = 'doc' . $documentId;
+        
+        if (!array_key_exists($key, $this->__documentNamespaces)) {
+            $namespace = new Zend_Session_Namespace($key);
+            $this->__documentNamespaces[$key] = $namespace;
+        }
+        else {
+            $namespace = $this->__documentNamespaces[$key];
+        }
+ 
+        return $namespace;        
     }
 
 }
