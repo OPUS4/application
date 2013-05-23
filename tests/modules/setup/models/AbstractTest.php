@@ -65,7 +65,7 @@ class Setup_Model_AbstractTest extends ControllerTestCase {
         chmod($this->testFile, 0600);
         file_put_contents($this->testFile, "Test Data");
         $this->object->setConfig(array('contentSources' => array($this->testFile)));
-        $this->assertEquals(array($this->testFile => "Test Data"), $this->object->getContent($this->testFile));
+        $this->assertEquals("Test Data", $this->object->getContent($this->testFile));
     }
 
     public function testVerifyReadAccess() {
@@ -122,12 +122,45 @@ class Setup_Model_AbstractTest extends ControllerTestCase {
         $tmxDom = new DomDocument();
         $tmxDom->load($tmxTargetFile);
         $tuElements = $tmxDom->getElementsByTagName('tu');
-        
+
         $this->assertEquals(3, $tuElements->length, "Expected 3 elements in DomNodeList");
         foreach ($tuElements as $tu) {
             $this->assertArrayHasKey($tu->attributes->getNamedItem('tuid')->nodeValue, $translationArray);
         }
         unlink($tmxTargetFile);
+    }
+
+    public function testGetTranslationDiff() {
+        $tmxSourceFile = APPLICATION_PATH . "/tests/test.tmx";
+        $tmxTargetFile = APPLICATION_PATH . "/tests/workspace/tmp/test.tmx";
+        $this->object->setTranslationSources(array($tmxSourceFile));
+        $this->object->setTranslationTarget($tmxTargetFile);
+
+
+        $changedTranslation = array('home_index_contact_pagetitle' => array(
+                'de' => 'Kontaktaufnahme',
+                ));
+
+        $expectedChangeDiff = array(
+            'home_index_contact_pagetitle' =>
+            array(
+                'en' => 'Contact',
+                'de' => 'Kontaktaufnahme',
+                ));
+
+        $this->assertEquals($expectedChangeDiff, $this->object->getTranslationDiff($changedTranslation));
+
+
+
+        $expectedAddDiff = $addedTranslation = array('test_unit' =>
+            array('de' => 'testen'),
+            array('en' => 'to test')
+        );
+
+        $this->assertEquals($expectedAddDiff, $this->object->getTranslationDiff($addedTranslation));
+
+//        var_export($this->object->getTranslationDiff($changed));
+//        var_export($this->object->getTranslationDiff(array('test_unit' => array('de' => 'fritz'))));
     }
 
 }
