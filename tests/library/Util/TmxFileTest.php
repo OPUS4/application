@@ -54,6 +54,23 @@ class TmxFileTest extends ControllerTestCase {
         $this->assertArrayHasKey('home_index_contact_title', $tmxArray);
     }
 
+    public function testLoadMultipleFiles() {
+        $file1Path = APPLICATION_PATH . DIRECTORY_SEPARATOR . "tests/workspace/tmp/test1.tmx";
+        $tmxFile1 = new Util_TmxFile($this->testFile);
+        $tmxFile1->setVariantSegment('test_unit', 'de', 'Testdaten');
+        $tmxFile1->setVariantSegment('test_unit', 'en', 'Test Data');
+        $tmxFile1->save($file1Path);
+
+        $tmxFile = new Util_TmxFile($this->testFile);
+        $tmxFile->load($file1Path);
+        $tmxArray = $tmxFile->toArray();
+
+        $this->assertArrayHasKey('home_index_contact_pagetitle', $tmxArray);
+        $this->assertArrayHasKey('home_index_contact_title', $tmxArray);
+        $this->assertArrayHasKey('test_unit', $tmxArray);
+        unlink($file1Path);
+    }
+
     public function testSave() {
         $tmpFilename = APPLICATION_PATH . "/tests/workspace/tmp/test.tmx";
         $tmxFile = new Util_TmxFile($this->testFile);
@@ -61,7 +78,6 @@ class TmxFileTest extends ControllerTestCase {
         $this->assertTrue(file_exists($tmpFilename));
         $savedFile = new Util_TmxFile($tmpFilename);
         $this->assertEquals($tmxFile->toArray(), $savedFile->toArray());
-
     }
 
     public function testToDomDocument() {
@@ -84,20 +100,41 @@ class TmxFileTest extends ControllerTestCase {
         $this->assertEquals(array('de', 'en'), array_keys($tmxArray['test_unit']));
         $this->assertEquals('Test Deutsch', $tmxArray['test_unit']['de']);
         $this->assertEquals('Test English', $tmxArray['test_unit']['en']);
-
     }
 
     public function testFromArray() {
-        $tmxFile = new Util_TmxFile($this->testFile);
+        $tmxSource = new Util_TmxFile($this->testFile);
 
-        $tmxArray = $tmxFile->toArray();
+        $tmxArray = $tmxSource->toArray();
 
         $this->assertArrayHasKey('home_index_contact_pagetitle', $tmxArray);
         $this->assertArrayHasKey('home_index_contact_title', $tmxArray);
 
+        $tmxFile = new Util_TmxFile();
+
         $tmxFile->fromArray($tmxArray);
 
         $this->assertEquals($tmxArray, $tmxFile->toArray());
+    }
+
+    public function testFromMultipleArrays() {
+        $tmxSource1 = new Util_TmxFile($this->testFile);
+        $tmxArray = $tmxSource1->toArray();
+        $this->assertArrayHasKey('home_index_contact_pagetitle', $tmxArray);
+        $this->assertArrayHasKey('home_index_contact_title', $tmxArray);
+
+        $tmxArray2 = array('test_unit' => array(
+                'de' => 'Test Deutsch',
+                'en' => 'Test English'
+                ));
+        $tmxFile = new Util_TmxFile();
+        $tmxFile->fromArray($tmxArray)
+                ->fromArray($tmxArray2);
+        
+        $tmxResultArray = $tmxFile->toArray();
+        $this->assertArrayHasKey('home_index_contact_pagetitle', $tmxResultArray);
+        $this->assertArrayHasKey('home_index_contact_title', $tmxResultArray);
+        $this->assertArrayHasKey('test_unit', $tmxResultArray);
     }
 
 }
