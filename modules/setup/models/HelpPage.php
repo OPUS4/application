@@ -38,20 +38,28 @@
  */
 class Setup_Model_HelpPage extends Setup_Model_Abstract {
 
+    /**
+     *  base path for content files
+     */
     protected $contentBasepath = '';
 
-    public function setcontentBasepath($basePath) {
-//        if (!(is_dir($basePath) && is_writable($basePath))) {
-//            throw new Setup_Model_Exception("directory '$basePath' does not exist or is not writeable");
-//        }
+    /**
+     * Path to directory containing content files. 
+     * 
+     * @param string $basePath name of directory used to read / write page content
+     */
+    public function setContentBasepath($basePath) {
         $path = realpath($basePath);
         $this->contentBasepath = $path;
     }
 
+    /**
+     * @see Description in abstract base class
+     */
     public function toArray() {
         $resultArray = array();
         $translationUnits = $this->getTranslation();
-        if($translationUnits === false) // error reading files, this should not happen
+        if ($translationUnits === false) // error reading files, this should not happen
             throw new Setup_Model_Exception('No tmx data found.');
         foreach ($translationUnits as $translationUnit => $variants) {
             $resultArray[$translationUnit] = array();
@@ -59,10 +67,8 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
                 if (substr($text, -4) == '.txt') {
                     $resultArray[$translationUnit][$language] = array();
                     $this->addContentSource($this->contentBasepath . DIRECTORY_SEPARATOR . $text);
-                    $contentArray = $this->getContent($this->contentBasepath . DIRECTORY_SEPARATOR . $text);
-                    list($filename, $contents) = each($contentArray);
                     $resultArray[$translationUnit][$language]['filename'] = $text;
-                    $resultArray[$translationUnit][$language]['contents'] = $contents;
+                    $resultArray[$translationUnit][$language]['contents'] = $this->getContent($this->contentBasepath . DIRECTORY_SEPARATOR . $text);
                 } else {
                     $resultArray[$translationUnit][$language] = $text;
                 }
@@ -71,6 +77,9 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
         return $resultArray;
     }
 
+    /**
+     * @see Description in abstract base class
+     */
     public function fromArray(array $data) {
         $resultData = array();
         $resultTmx = new Util_TmxFile();
@@ -87,7 +96,7 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
                 $resultTmx->setVariantSegment($translationUnit, $language, $contents);
             }
         }
-        $this->setData($resultData);
+        $this->setContent($resultData);
         $this->setTranslation($resultTmx->toArray());
     }
 

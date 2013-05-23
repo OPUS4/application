@@ -36,10 +36,41 @@
 /**
  * 
  */
-class Setup_Form_HelpPage extends Zend_Form {
-
-    public function init() {
-        $this->addSubForm(new Setup_Form_HelpPage_TmxData(), 'tmxData');
+class Setup_Form_HelpPage extends Zend_Form_SubForm {
+    
+    public function buildFromArray(array $array) {
+        if(isset($array[$this->getName()]))
+            $array = $array[$this->getName()];
+        foreach ($array as $translationUnit => $variants) {
+            $subForm = new Zend_Form_SubForm();
+            $this->addSubForm($subForm, $translationUnit);
+            foreach ($variants as $language => $text) {
+                if (is_array($text)) {
+                    if (!isset($text['filename']) || !isset($text['contents']))
+                        throw new Exception('Invalid data structure for HelpPage Form. Found'.var_export($array, true) );
+                    $langSubForm = new Zend_Form_SubForm();
+                    $langSubForm->addElement('hidden', 'filename');
+                    $langSubForm->addElement('textarea', 'contents', array('label' => $language));
+                    $subForm->addSubForm($langSubForm, $language);
+                } else {
+                    $subForm->addElement('text', $language, array('label' => $language, 'attribs' => array('size' => 90)));
+                }
+            }
+            $subForm->setLegend($translationUnit);
+        }
+        return $this;
     }
+    
+    public function isValid($data) {
+        $this->buildFromArray($data);
+        return parent::isValid($data);
+    }
+
+    public function populate(array $values) {
+        $this->buildFromArray($values);
+        parent::populate($values);
+    }
+    
+    
 
 }
