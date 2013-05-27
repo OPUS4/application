@@ -52,25 +52,25 @@ class Setup_HelpPageControllerTest extends ControllerTestCase {
 
     public function testIndexSucceedsWithAccessPermissions() {
         $this->setPermissions('0500', '0400', '0300');
-        $this->dispatch('/setup/help-page/index');
+        $this->dispatch('/setup/help-page/edit');
         $this->assertResponseCode(200);
     }
 
     public function testIndexFailsWithoutWritePermissions() {
         $this->setPermissions('0500', '0400', '0000');
-        $this->dispatch('/setup/help-page/index');
+        $this->dispatch('/setup/help-page/edit');
         $this->assertResponseCode(302);
     }
 
     public function testIndexFailsWithoutDataReadPermissions() {
         $this->setPermissions('0000', '0400', '0000');
-        $this->dispatch('/setup/help-page/index');
+        $this->dispatch('/setup/help-page/edit');
         $this->assertResponseCode(302);
     }
 
     public function testExceptionThrownWithoutTmxReadPermissions() {
         $this->setPermissions('0500', '0000', '0300');
-        $this->dispatch('/setup/help-page/index');
+        $this->dispatch('/setup/help-page/edit');
         $exceptions = $this->getResponse()->getExceptionByType('Setup_Model_Exception');
         $this->assertTrue(is_array($exceptions) && $exceptions[0] instanceOf Setup_Model_Exception);
         $this->assertEquals("No tmx data found.", $exceptions[0]->getMessage());

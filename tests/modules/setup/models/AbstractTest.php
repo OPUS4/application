@@ -116,13 +116,12 @@ class Setup_Model_AbstractTest extends ControllerTestCase {
         $translationArray = $this->object->getTranslation();
         $this->assertEquals(array('home_index_contact_pagetitle', 'home_index_contact_title'), array_keys($translationArray));
         $translationArray['test_key'] = array('de' => 'Test (deutsch)', 'en' => 'Test (english)');
-        $this->object->setTranslation($translationArray);
+        $this->object->setTranslation($translationArray, false);
         $this->object->store();
         $this->assertFileExists($tmxTargetFile);
         $tmxDom = new DomDocument();
         $tmxDom->load($tmxTargetFile);
         $tuElements = $tmxDom->getElementsByTagName('tu');
-
         $this->assertEquals(3, $tuElements->length, "Expected 3 elements in DomNodeList");
         foreach ($tuElements as $tu) {
             $this->assertArrayHasKey($tu->attributes->getNamedItem('tuid')->nodeValue, $translationArray);
