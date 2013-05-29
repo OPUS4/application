@@ -83,9 +83,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     public function populateFromModel($document) {
        $this->clearSubForms(); 
         
-       $field = $document->getField($this->_fieldName);
-       
-       $values = $field->getValue();
+       $values = $this->getFieldValues($document);
        
        $maxIndex = 0;
        
@@ -99,6 +97,12 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
        
        // Sicherstellen, daß Button zum Hinzufügen zuletzt angezeigt wird
        $this->getElement('add')->setOrder($maxIndex + 1);
+    }
+    
+    public function getFieldValues($document) {
+       $field = $document->getField($this->_fieldName);
+       
+       return $field->getValue();
     }
     
     /**
