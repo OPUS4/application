@@ -56,6 +56,7 @@ class Admin_Form_Document extends Zend_Form {
         $this->addSubForm(new Admin_Form_DocumentGeneral(), 'General');
         // $this->addSubForm(new Admin_Form_DocumentPersons(), 'Persons');
         
+        $this->addSubForm(new Admin_Form_DocumentTitles(), 'Titles');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentAbstract', 'TitleAbstract'), 'Abstracts');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier'), 'Identifiers');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPatent', 'Patent'), 'Patents');
