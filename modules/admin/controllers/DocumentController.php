@@ -184,7 +184,7 @@ class Admin_DocumentController extends Controller_Action {
                     case Admin_Form_Document::SAVE:
                         if ($form->isValid($data)) {
                             // Formular ist korrekt; aktualisiere Dokument
-                            $form->updateDocument($document);
+                            $form->updateModel($document);
                         
                             $document->store(); // TODO handle exceptions
 
@@ -200,7 +200,7 @@ class Admin_DocumentController extends Controller_Action {
                     case Admin_Form_Document::SAVE_AND_CONTINUE:
                         if ($form->isValid($data)) {
                             // Formular ist korrekt; aktualisiere Dokument
-                            $form->updateDocument($document);
+                            $form->updateModel($document);
                         
                             // TODO handle exceptions
                             $document->store();
@@ -218,8 +218,17 @@ class Admin_DocumentController extends Controller_Action {
                     case Admin_Form_Document::SWITCH_TO:
                         $this->_storePost($data, $docId);
                         
-                        return $this->_redirectTo($target['action'], null, $target['controller'], $target['module'],
-                                array('document' => $docId));
+                        // TODO Parameter in Unterarray 'params' => array() verlagern?
+                        $target['document'] = $docId;
+                        
+                        $action = $target['action'];
+                        unset($target['action']);
+                        $controller = $target['controller'];
+                        unset($target['controller']);
+                        $module = $target['module'];
+                        unset($target['module']);
+                        
+                        return $this->_redirectTo($action, null, $controller, $module, $target);
                         break;
                     
                     default:
@@ -229,10 +238,9 @@ class Admin_DocumentController extends Controller_Action {
             }
             else {
                 // GET zeige neues oder gespeichertes Formular an
-                $hash = $this->getRequest()->getParam('hash', null);
                 
                 // Hole gespeicherten POST aus Session 
-                $post = (!is_null($hash)) ? $post = $this->_retrievePost($docId) : null;
+                $post = $this->_retrievePost($docId);
                 
                 if ($post) {
                     // Initialisiere Formular vom gespeicherten POST
@@ -1525,10 +1533,14 @@ class Admin_DocumentController extends Controller_Action {
     protected function _retrievePost($documentId) {
         $namespace = $this->_getDocumentSessionNamespace($documentId);
         
-        $post = $namespace->lastPost;
-        $namespace->lastPost = null;
-        
-        return $post;
+        if (isset($namespace->lastPost)) {
+            $post = $namespace->lastPost;
+            $namespace->lastPost = null;
+            return $post;
+        }
+        else {
+            return null;
+        }
     }
     
     /**
