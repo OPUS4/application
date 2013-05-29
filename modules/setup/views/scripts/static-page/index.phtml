@@ -31,12 +31,15 @@
  * @version     $Id$
  */
 ?>
-<?php if (isset($this->messages)) : ?>
-    <div class="messages">
-        <?php foreach ($this->messages as $message) : ?>
-            <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
-        <?php endforeach ?>
-    </div>
-<?php endif ?>
 
-<?= $this->form ?>
+<div class="adminContainer">
+
+
+    <div id="adminMenuContainer">
+        <div>Dateinamen</div>
+        <? foreach ($this->pageNames as $pagename): ?>
+        <div><a href="<?= $this->url(array('action' => 'edit', 'page' => $pagename)) ?>"><?= ucfirst($pagename) ?></a></div>
+        <? endforeach ?>
+    </div>
+
+</div>

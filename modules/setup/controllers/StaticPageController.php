@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,19 +25,46 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @category    Application
+ * @package     Module_Setup
+ * @author      Edouard Simon <edouard.simon@zib.de>
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<?php if (isset($this->messages)) : ?>
-    <div class="messages">
-        <?php foreach ($this->messages as $message) : ?>
-            <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
-        <?php endforeach ?>
-    </div>
-<?php endif ?>
 
-<?= $this->form ?>
+/**
+ *
+ */
+class Setup_StaticPageController extends Controller_SetupAbstract {
+
+    protected $_config;
+    
+    public function init() {
+        $this->_config = new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'static-page');
+    }
+    
+    public function indexAction() {
+        $this->view->pageNames = $this->_config->pageNames;
+    }
+
+    protected function getModel() {
+        $pageName = $this->getRequest()->getParam('page');
+        return new Setup_Model_StaticPage($pageName, $this->_config);
+    }
+
+    protected function getForm() {
+        $pageName = $this->getRequest()->getParam('page');
+
+        switch($pageName) {
+            case 'home':
+                $form = new Setup_Form_HomePage();
+                break;
+            default:
+                $form = new Setup_Form_StaticPage();
+        }
+        return $form;
+    }
+
+}
+

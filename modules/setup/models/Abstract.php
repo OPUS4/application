@@ -248,8 +248,13 @@ abstract class Setup_Model_Abstract {
                     return $aReturn;
                 };
         $currentTranslation = $this->getTranslation();
-        $diffArray = $recursiveDiff($array, $currentTranslation);
-        return array_replace_recursive(array_intersect_key($currentTranslation, $diffArray), $diffArray);
+        if (empty($currentTranslation)) {
+            $result = $array;
+        } else {
+            $diffArray = $recursiveDiff($array, $currentTranslation);
+            $result = array_replace_recursive(array_intersect_key($currentTranslation, $diffArray), $diffArray);
+        }
+        return $result;
     }
 
     /**

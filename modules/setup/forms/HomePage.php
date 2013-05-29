@@ -1,5 +1,6 @@
 <?php
-/*
+
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,18 +26,32 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    TODO
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @package     TODO
+ * @author      Edouard Simon (edouard.simon@zib.de)
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
-<?php if (isset($this->messages)) : ?>
-    <div class="messages">
-        <?php foreach ($this->messages as $message) : ?>
-            <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
-        <?php endforeach ?>
-    </div>
-<?php endif ?>
 
-<?= $this->form ?>
+/**
+ * 
+ */
+class Setup_Form_HomePage extends Zend_Form_SubForm {
+
+    public function init() {
+
+        foreach (array('de', 'en') as $lang) {
+            $langForm = new Zend_Form_SubForm();
+            $keyForm = new Zend_Form_SubForm();
+
+            $keyForm->addElement('text', 'home_index_index_pagetitle', array('label' => 'home_index_index_pagetitle'));
+            $keyForm->addElement('text', 'home_index_index_title', array('label' => 'home_index_index_title'));
+            $keyForm->addElement('textarea', 'home_index_index_welcome', array('label' => 'home_index_index_welcome'));
+            $keyForm->addElement('textarea', 'home_index_index_instructions', array('label' => 'home_index_index_instructions'));
+            $langForm->addSubForm($keyForm, 'key');
+            $this->addSubForm($langForm, $lang);
+        }
+
+    }
+
+}

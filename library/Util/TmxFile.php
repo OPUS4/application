@@ -108,7 +108,7 @@ EOT;
      */
     public function load($fileName) {
         $dom = new DOMDocument();
-        $result = $dom->load($fileName);
+        $result = @$dom->load($fileName); // supress warning since return value is checked
         if ($result) {
             $newData = $this->_domToArray($dom);
             $this->data = array_replace_recursive($this->data, $newData);
