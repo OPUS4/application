@@ -51,13 +51,15 @@ class Admin_Form_Document extends Zend_Form {
     public function init() {
         parent::init();
         
+        $this->addElement('hash', 'opus_hash', array('salt' => 'unique'));
+        
         $this->addSubForm(new Admin_Form_DocumentGeneral(), 'General');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier'), 'identifiers');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPatent', 'Patent'), 'patents');
+        // $this->addSubForm(new Admin_Form_DocumentPersons(), 'Persons');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier'), 'Identifiers');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPatent', 'Patent'), 'Patents');
         $this->addSubForm(new Admin_Form_DocumentLicences(), 'Licences');
         $this->addSubForm(new Admin_Form_DocumentCollections(), 'Collections');
-        
-        $this->addElement('hash', 'opus_hash', array('salt' => 'unique'));
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentNote', 'Note'), 'Notes');
         
         $element = new Zend_Form_Element_Hidden('id');
         $this->addElement($element);
@@ -156,5 +158,5 @@ class Admin_Form_Document extends Zend_Form {
             $subform->continueEdit($request);
         }
     }
-
+    
 }
