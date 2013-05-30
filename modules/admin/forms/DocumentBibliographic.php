@@ -35,7 +35,7 @@
 /**
  * Unterformular fuer weitere Metadaten eines Dokuments.
  */
-class Admin_Form_DocumentBibliographic extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
 
     const ELEMENT_CONTRIBUTING_CORPORATION = 'ContributingCorporation';
     
@@ -96,7 +96,8 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_AbstractDocumentSubFor
         $element = $elementFactory->createYearElement(self::ELEMENT_THESIS_YEAR_ACCEPTED);
         $this->addElement($element);
 
-        // TODO Institute
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPublisher', 'ThesisPublisher'), 'Publishers');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentGrantor', 'ThesisGrantor'), 'Grantors');
         
         $element = new Zend_Form_Element_Checkbox(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY);
         $element->setLabel('BelongsToBibliography');
@@ -104,6 +105,8 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_AbstractDocumentSubFor
     }
     
     public function populateFromModel($document) {
+        parent::populateFromModel($document);
+        
         $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
         
         $this->getElement(self::ELEMENT_CONTRIBUTING_CORPORATION)->setValue($document->getContributingCorporation());
@@ -124,6 +127,8 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_AbstractDocumentSubFor
     }
     
     public function updateModel($document) {
+        parent::updateModel($document);
+        
         $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
         
         $document->setContributingCorporation($this->getElement(self::ELEMENT_CONTRIBUTING_CORPORATION)->getValue());
