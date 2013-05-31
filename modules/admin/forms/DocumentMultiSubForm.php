@@ -124,8 +124,6 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     /**
      * Verarbeitet POST Request fuer Formular.
      * 
-     * 
-     * 
      * @param array $data POST Daten für Unterformular
      * @param array $context POST Daten für gesamtes Formular
      * @return string Ergebnis der Verarbeitung
@@ -160,7 +158,24 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         }
     }
     
+    /**
+     * Aktualisiert das Dokument.
+     * 
+     * @param Opus_Document $document
+     */
     public function updateModel($document) {
+       $field = $document->getField($this->_fieldName);
+       
+       $values = $this->getSubFormModels();
+       
+       $field->setValue($values);
+    }
+    
+    /**
+     * Sammelt Werte (Modelle) von Unterformularen ein.
+     * @return array
+     */
+    public function getSubFormModels() {
         $subforms = $this->getSubForms();
         
         $values = array();
@@ -175,15 +190,18 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
             }
         }
         
-       $field = $document->getField($this->_fieldName);
-       
-       $field->setValue($values);
+        return $values;
     }
     
+    /**
+     * 
+     * @param type $position
+     * @return \_subFormClass
+     */
     protected function _addSubForm($position) {
         // TODO Zend_Debug::dump('Adding subform at position ' . $position);
         
-        $subForm = new $this->_subFormClass();
+        $subForm = $this->createSubForm();
         $subForm->setOrder($position);
 
         $element = new Zend_Form_Element_Submit('Remove');
@@ -193,6 +211,10 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         $this->addSubForm($subForm, $this->_fieldName . $position);
         
         return $subForm;
+    }
+    
+    public function createSubForm() {
+        return new $this->_subFormClass();
     }
 
     /**
@@ -234,6 +256,12 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         return $this->_addSubForm(count($subforms));
     }
     
+    /**
+     * TODO describe
+     * 
+     * @param type $removedPosition
+     * @return \Admin_Form_DocumentMultiSubForm
+     */
     protected function _determineSubFormForAnker($removedPosition) {
         $subforms = $this->getSubForms();
 
@@ -249,16 +277,18 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         }          
     }
     
+    /**
+     * Fuegt Anker fuer Positionierung des Formulars im Browser hinzu.
+     * 
+     * Durch den Anker springt der Browser nach einem POST zu der gewuenschten Stelle, zum Beispiel dem gerade neu
+     * hinzugefuegten Unterformular.
+     * 
+     * @param Zend_Form $subform
+     */
     protected function _addAnker($subform) {
         $subform->addDecorator(
                 array('currentAnker' => 'HtmlTag'), 
                 array('tag' => 'a', 'placement' => 'prepend', 'name' => 'current'));
     }
-        
-    public function removeValue() {
-    }
-    
-    public function addValue() {
-    }
-    
+            
 }
