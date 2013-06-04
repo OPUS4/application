@@ -114,4 +114,16 @@ class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
         return false;
     }
     
+    public function isEmpty() {
+        $elements = $this->getElements();
+        
+        foreach ($elements as $element) {
+            if ($element->getValue() == 1) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
 }

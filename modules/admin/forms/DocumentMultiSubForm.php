@@ -290,5 +290,9 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
                 array('currentAnker' => 'HtmlTag'), 
                 array('tag' => 'a', 'placement' => 'prepend', 'name' => 'current'));
     }
+    
+    public function isEmpty() {
+        return count($this->getSubForms()) == 0;
+    }
             
 }

@@ -54,18 +54,32 @@ class Admin_Form_Document extends Zend_Form {
         $this->addElement('hash', 'opus_hash', array('salt' => 'unique'));
         
         $this->addSubForm(new Admin_Form_DocumentGeneral(), 'General');
+        
         // $this->addSubForm(new Admin_Form_DocumentPersons(), 'Persons');
         
+        // Bibliographische Beschreibung
         $this->addSubForm(new Admin_Form_DocumentTitles(), 'Titles');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier'), 'Identifiers');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPatent', 'Patent'), 'Patents');
         $this->addSubForm(new Admin_Form_DocumentBibliographic(), 'Bibliographic');
-        $this->addSubForm(new Admin_Form_DocumentLicences(), 'Licences');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentSeries', 'Series'), 'Series');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentAbstract', 'TitleAbstract'), 'Abstracts');
-        $this->addSubForm(new Admin_Form_DocumentSubjects(), 'Subjects');
+        
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentEnrichment', 'Enrichment'), 
+                'Enrichments');
+
         $this->addSubForm(new Admin_Form_DocumentCollections(), 'Collections');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentEnrichment', 'Enrichment'), 'Enrichments');
+
+        // Inhaltliche Erschließung
+        
+        $subform = new Admin_Form_DocumentSection();
+        $subform->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentAbstract', 'TitleAbstract'), 
+                'Abstracts');
+        $subform->addSubForm(new Admin_Form_DocumentSubjects(), 'Subjects');
+        $this->addSubForm($subform, 'Content');
+        
+        // Weiteres Allgemeines
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier'), 
+                'Identifiers');
+        $this->addSubForm(new Admin_Form_DocumentLicences(), 'Licences');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPatent', 'Patent'), 'Patents');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentNote', 'Note'), 'Notes');
         
         $element = new Zend_Form_Element_Hidden('id');
@@ -85,7 +99,7 @@ class Admin_Form_Document extends Zend_Form {
     /**
      * Populates form from model values.
      */
-    public function popluateFromModel($document) {
+    public function populateFromModel($document) {
         $this->getElement('id')->setValue($document->getId());
         
         $subforms = $this->getSubForms();
@@ -163,6 +177,40 @@ class Admin_Form_Document extends Zend_Form {
 
         foreach ($subforms as $name => $subform) {
             $subform->continueEdit($request);
+        }
+    }
+    
+    /**
+     * TODO AbstractDocumentSubForm enthaelt die selbe funktion
+     */
+    public function prepareRenderingAsView() {
+        $this->_removeElements();
+        
+        $subforms = $this->getSubForms();
+        
+        foreach ($subforms as $subform) {
+            if (!$subform->isEmpty()) {
+                $subform->prepareRenderingAsView();
+            }
+            else {
+                $this->removeSubForm($subform->getName());
+            }
+        }
+    }
+    
+    /**
+     * TODO AbstractDocumentSubForm enthaelt die selbe funktion
+     */
+    protected function _removeElements() {
+        $elements = $this->getElements();
+        
+        foreach ($elements as $element) {
+            if ($element instanceof Zend_Form_Element_Button 
+                    || $element instanceof Zend_Form_Element_Submit 
+                    || is_null($element->getValue())
+                    ) {
+                $this->removeElement($element->getName());
+            }
         }
     }
     

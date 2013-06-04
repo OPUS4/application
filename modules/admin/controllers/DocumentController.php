@@ -96,7 +96,13 @@ class Admin_DocumentController extends Controller_Action {
             $this->view->document = $document;
             $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
             $this->view->overviewHelper = new Admin_Model_DocumentHelper($document);
-
+            
+            $form = new Admin_Form_Document();
+            $form->populateFromModel($document);
+            $form->prepareRenderingAsView();
+            
+            $this->view->form = $form;
+            
             $this->__prepareActionLinks($document);
             $this->__prepareSectionLinks($docId);
 
@@ -253,7 +259,7 @@ class Admin_DocumentController extends Controller_Action {
                 else {
                     // Initialisiere Formular vom Dokument
                     $form = new Admin_Form_Document();
-                    $form->popluateFromModel($document);
+                    $form->populateFromModel($document);
                 }
                 
                 $form->setAction('#current');

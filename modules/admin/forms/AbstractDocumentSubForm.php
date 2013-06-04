@@ -71,4 +71,63 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     public function continueEdit($request) {
     }
     
+    public function printValues() {
+        $elements = $this->getElements();
+        
+        foreach ($elements as $name => $element) {
+            Zend_Debug::dump($element->getValue(), $name);
+        }
+        
+        $subforms = $this->getSubForms();
+        
+        foreach ($subforms as $name => $subform) {
+            Zend_Debug::dump('Subform', $name);
+            $subform->printValues();
+        }
+    }
+    
+    public function isEmpty() {
+        return false;
+    }
+    
+    public function prepareRenderingAsView() {
+        $this->_removeElements();
+        
+        $subforms = $this->getSubForms();
+        
+        foreach ($subforms as $subform) {
+            $subform->prepareRenderingAsView();
+            if ($subform->isEmpty()) {
+                $this->removeSubForm($subform->getName());
+            }
+        }
+    }
+    
+    protected function _removeElements() {
+        $elements = $this->getElements();
+        
+        foreach ($elements as $element) {
+            $value = $element->getValue();
+        
+            if ($element instanceof Zend_Form_Element_Button 
+                    || $element instanceof Zend_Form_Element_Submit 
+                    || empty($value)
+                    ) {
+                $this->removeElement($element->getName());
+            }
+            else if ($element instanceof Zend_Form_Element_Text 
+                    || $element instanceof Zend_Form_Element_Textarea
+                    ) {
+                $element->setDecorators(array(array(
+                    'ViewScript', array('viewScript' => 'form/staticElement.phtml'))));
+            }
+            else if ($element instanceof Zend_Form_Element_Select) {
+                $element->setDecorators(array(array(
+                    'ViewScript', array('viewScript' => 'form/staticSelect.phtml'))));
+            }
+        }
+        
+    }
+    
+    
 }

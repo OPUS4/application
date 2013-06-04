@@ -81,7 +81,7 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
         
         // Iteriere über CollectionRole Namen für Dokument und erzeuge Unterformulare
         foreach ($collectionRoles as $roleName => $collections) {
-            $roleForm = new Zend_Form_SubForm();
+            $roleForm = new Admin_Form_DocumentSection();
             
             $roleForm->setLegend('default_collection_role_' . $roleName);
             
@@ -192,7 +192,7 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
      * TODO Sollte roleForm nur bei Bedarf hinzufügen.
      */
     protected function _addSubForm($roleName, $data) {
-        $roleForm = new Zend_Form_SubForm();
+        $roleForm = new Admin_Form_DocumentSection();
         
         $roleForm->setLegend('default_collection_role_' . $roleName);
 
@@ -229,7 +229,7 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
         $roleForm = $this->getSubForm($roleName);
         
         if (is_null($roleForm)) {
-            $roleForm = new Zend_Form_SubForm();
+            $roleForm = new Admin_Form_DocumentSection();
             
             $roleForm->setLegend('default_collection_role_' . $roleName);
             
@@ -237,6 +237,10 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
         }
         
         return $roleForm;
+    }
+    
+    public function isEmpty() {
+        return count($this->getSubForms()) == 0;
     }
         
 }
