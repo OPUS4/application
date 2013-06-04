@@ -111,4 +111,10 @@ class Admin_Form_DocumentSubject extends Admin_Form_AbstractModelSubForm {
         return $subject;
     }
     
+    public function loadDefaultDecorators() {
+        parent::loadDefaultDecorators();
+        
+        $this->removeDecorator('Fieldset');
+    }
+    
 }
