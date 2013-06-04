@@ -73,7 +73,13 @@ class Admin_Form_DocumentTitle extends Admin_Form_AbstractModelSubForm {
         // TODO create textarea from factory with proper dimensions
         $element = new Zend_Form_Element_Textarea(self::ELEMENT_VALUE);
         $element->setRequired(true);
-        $this->addElement($element);
+        $this->addElement($element);        
+    }
+    
+    public function loadDefaultDecorators() {
+        parent::loadDefaultDecorators();
+        
+        $this->removeDecorator('Fieldset');
     }
     
     public function populateFromModel($title) {

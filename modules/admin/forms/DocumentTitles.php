@@ -51,9 +51,9 @@ class Admin_Form_DocumentTitles extends Admin_Form_DocumentSection {
         $this->setLegend('Titles');
         
         $this->addSubForm(new Admin_Form_DocumentTitlesMain(), 'Main');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleAdditional'), 'Additional');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent'), 'Parent');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub'), 'Sub');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleAdditional'), 'Additional');
     }
     
 }
