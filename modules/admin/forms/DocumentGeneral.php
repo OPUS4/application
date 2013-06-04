@@ -56,6 +56,8 @@ class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
     public function init() {
         parent::init();
         
+        $this->setLegend('admin_document_section_general');
+        
         $elementFactory = new Admin_Model_FormElementFactory(); // TODO make controller helper
         
         // TODO Sprache
