@@ -82,9 +82,11 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
         $this->assertEquals('eng', $document->getLanguage());
         $this->assertEquals('masterthesis', $document->getType());
         
+        $this->assertNotNull($document->getPublishedDate());
         $this->assertEquals('2005/06/17', date('Y/m/d', $document->getPublishedDate()->getZendDate()->get()));
         $this->assertEquals('2006', $document->getPublishedYear());
 
+        $this->assertNotNull($document->getCompletedDate());
         $this->assertEquals('2006/07/03', date('Y/m/d', $document->getCompletedDate()->getZendDate()->get()));
         $this->assertEquals('2007', $document->getCompletedYear());
     }
