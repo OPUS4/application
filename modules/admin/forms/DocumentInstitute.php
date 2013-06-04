@@ -136,4 +136,10 @@ class Admin_Form_DocumentInstitute extends Admin_Form_AbstractModelSubForm {
         return $select;
     }
     
+    public function loadDefaultDecorators() {
+        parent::loadDefaultDecorators();
+        
+        $this->removeDecorator('Fieldset');
+    }
+    
 }
