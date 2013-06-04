@@ -51,6 +51,8 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
      * TODO use temporary Opus_Document instead of doc from test data
      */
     public function testPopulateFromModel() {
+        $this->setUpEnglish();
+        
         $document = new Opus_Document(146);
         
         $form = new Admin_Form_DocumentGeneral();
@@ -66,6 +68,8 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
+        $this->setUpEnglish();
+        
         $form = new Admin_Form_DocumentGeneral();
         
         $form->getElement('Language')->setValue('eng');
