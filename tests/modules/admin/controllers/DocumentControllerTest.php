@@ -101,20 +101,6 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertAction('show');
     }
 
-
-    public function testUnlinkCollectionAction() {
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'submit' => 'submit'
-                ));
-        $this->dispatch('/admin/document/unlinkcollection/id/1/role/2/collection/15');
-        $this->assertModule('admin');
-        $this->assertController('document');
-        $this->assertAction('unlinkcollection');
-        $this->assertRedirect('/admin/document/index');
-    }
-
     /**
      * Regression test for OPUSVIER-1757
      */
@@ -239,6 +225,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     }
 
     public function testDisplayCollectionNumberAndNameOnAssignmentPageForDDCCollection() {
+        $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
         $role = new Opus_CollectionRole(2);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
