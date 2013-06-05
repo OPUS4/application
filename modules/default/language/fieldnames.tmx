@@ -774,10 +774,10 @@
 
         <tu tuid="ServerDatePublished">
             <tuv xml:lang="en">
-                <seg>Date of the Publication (Server)</seg>
+                <seg>Release Date</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Datum der Publikation (Server)</seg>
+                <seg>Datum der Freischaltung</seg>
             </tuv>
         </tu>
 
