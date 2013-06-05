@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -37,8 +37,7 @@ class TranslationKeyDuplicatesTest extends ControllerTestCase {
     public function testDetectDuplicateKeys() {
         $modulesDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'modules';
         $output = shell_exec("find $modulesDir -name '*tmx' -print0 |xargs -r0 grep -h 'tuid=' |sed -e 's/^.*tuid=\"([^\"]+)\".*$/\1/g' |sort |uniq -d");
-        $this->assertNull($output);
+        $this->assertNull($output, $output);
     }
 
 }
-?>
