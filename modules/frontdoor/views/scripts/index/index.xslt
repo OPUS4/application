@@ -192,13 +192,15 @@
                 <xsl:when test="normalize-space(@PublishedYear) != '0000'">
                     <xsl:apply-templates select="@PublishedYear" />
                 </xsl:when>
-            </xsl:choose>
+            </xsl:choose>            
 
             <xsl:apply-templates select="ThesisPublisher" />
             <xsl:apply-templates select="ThesisGrantor" />
             <xsl:apply-templates select="ThesisDateAccepted" />
             <xsl:apply-templates select="@CreatingCorporation" />
             <xsl:apply-templates select="@ContributingCorporation" />
+
+            <xsl:apply-templates select="ServerDatePublished" />
 
             <!-- Subjects section:  New subjects must be introduced right here. -->
             <!-- we need to apply a hack (so called Muenchian grouping) here since XSLT's 2.0 for-each-group feature is currently not supported -->

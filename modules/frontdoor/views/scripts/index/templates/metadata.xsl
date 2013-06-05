@@ -71,7 +71,7 @@
                 <xsl:value-of select="." />
             </td>
         </tr>
-    </xsl:template>   
+    </xsl:template>
     
     <xsl:template match="@Language|@Type">
         <tr>
@@ -153,7 +153,7 @@
         </xsl:text>
     </xsl:template>
 
-    <xsl:template match="CompletedDate|PublishedDate|ThesisDateAccepted">
+    <xsl:template match="CompletedDate|PublishedDate|ThesisDateAccepted|ServerDatePublished">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateFieldname"/>
