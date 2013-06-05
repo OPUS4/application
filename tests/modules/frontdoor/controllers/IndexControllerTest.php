@@ -475,6 +475,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ThesisDateAccepted'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('CreatingCorporation'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ContributingCorporation'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('ServerDatePublished'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('subject_frontdoor_swd'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('subject_frontdoor_uncontrolled'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('Volume'));
