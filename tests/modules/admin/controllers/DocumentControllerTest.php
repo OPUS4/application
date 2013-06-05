@@ -185,6 +185,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     }
 
     public function testPreserveNewlinesForAbstract() {
+        $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
         $doc = new Opus_Document();
         $doc->setLanguage("eng");
 
@@ -202,6 +203,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     }
 
     public function testPreserveNewlinesForNote() {
+        $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
         $doc = new Opus_Document();
         $doc->setLanguage("eng");
         $doc->setServerState("published");
@@ -220,6 +222,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     }
 
     public function testDisplayCollectionNumberAndNameOnOverviewPageForDDCCollection() {
+        $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
         $role = new Opus_CollectionRole(2);
         $displayBrowsing = $role->getDisplayBrowsing();
         $role->setDisplayBrowsing('Name');
