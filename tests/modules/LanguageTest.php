@@ -52,5 +52,3 @@ class LanguageTest extends ControllerTestCase {
     }
 
 }
-
-?>
