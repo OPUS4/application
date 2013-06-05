@@ -38,16 +38,29 @@
  * Es werden die aktiven Lizenzen mit Checkboxen angezeigt, so daß man schnell die Lizenzen des Dokuments auswählen 
  * kann.
  * 
- * TODO show only active or all licences (What about doc connected to inactive licence?)
+ * Das Metadaten-Formular in der Administration zeigt alle Lizenzen, unabhängig davon ob sie aktiv sind, da bei 
+ * nachträglicher Deaktivierung einer Lizenz, immer noch Dokumente damit verknüpft sein können.
  */
 class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
     
-    const ELEMENT_NAME_PREFIX = 'id';
+    /**
+     * Name für Formularelement für ID der Lizenz.
+     */
+    const ELEMENT_NAME_PREFIX = 'licence';
     
+    /**
+     * CSS Klasse für aktive Lizenzen.
+     */
     const ACTIVE_CSS_CLASS = 'active';
     
+    /**
+     * CSS Klasse für inaktive Lizenzen.
+     */
     const INACTIVE_CSS_CLASS = 'disabled';
     
+    /**
+     * Erzeugt Checkbox Formularelemente für alle Lizenzen.
+     */
     public function init() {
         parent::init();
         
@@ -61,16 +74,20 @@ class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
             $this->addElement($element);
         }
         
-        $this->setLegend('Licence'); // TODO prefix translation key
+        $this->setLegend('admin_document_section_licences');
     }
     
+    /**
+     * Setzt die dem Dokument zugewiesenen Lizenzen als ausgewählt im Formular.
+     * @param Opus_Document $document
+     */
     public function populateFromModel($document) {
         $allLicences = Opus_Licence::getAll();
         
         foreach ($allLicences as $licence) {
             $element = $this->getElement(self::ELEMENT_NAME_PREFIX . $licence->getId());
 
-            $element->setChecked($this->_hasLicence($document, $licence));
+            $element->setChecked($this->hasLicence($document, $licence));
         }
     }
     
@@ -99,10 +116,8 @@ class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
      * @param Opus_Document $document
      * @param Opus_Licence $licence
      * @return boolean true - Lizenz zugewiesen; false - Lizenz nicht zugewiesen
-     * 
-     * TODO move somewhere else?
      */
-    protected function _hasLicence($document, $licence) {
+    public function hasLicence($document, $licence) {
         $licences = $document->getLicence();
         
         foreach ($licences as $docLicence) {
@@ -114,6 +129,14 @@ class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
         return false;
     }
     
+    /**
+     * Meldet, ob mindestens eine Lizenz ausgewählt ist.
+     * 
+     * Die Funktion wird für die Ausgabe des Metadaten-Formulars als Metadaten-Übersicht verwendet, um zu entscheiden,
+     * ob das Unterformular für Lizenzen angezeigt werden soll oder nicht.
+     * 
+     * @return boolean
+     */
     public function isEmpty() {
         $elements = $this->getElements();
         

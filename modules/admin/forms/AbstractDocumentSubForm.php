@@ -103,6 +103,11 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
         }
     }
     
+    /**
+     * Bereitet Formularelemente fuer statische Ausgabe in Metadaten-Übersicht vor.
+     * 
+     * TODO rename function 
+     */
     protected function _removeElements() {
         $elements = $this->getElements();
         
@@ -124,6 +129,10 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
             else if ($element instanceof Zend_Form_Element_Select) {
                 $element->setDecorators(array(array(
                     'ViewScript', array('viewScript' => 'form/staticSelect.phtml'))));
+            }
+            else if ($element instanceof Zend_Form_Element_Checkbox) {
+                $element->setDecorators(array(array(
+                    'ViewScript', array('viewScript' => 'form/staticCheckbox.phtml'))));
             }
         }
         
