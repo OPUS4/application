@@ -617,5 +617,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('</th><td>52.00</td></tr>', $this->getResponse()->getBody());
     }
 
+    public function testServerDatePublishedOnFrontdoor() {
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        // TODO Datumsangaben erfolgen bislang sprachunabhängig (keine Lokalisierung)
+        $this->assertContains('<td>03.01.2012</td>', $this->getResponse()->getBody());
+    }
+
     
 }
