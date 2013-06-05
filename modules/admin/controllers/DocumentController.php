@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -117,50 +117,11 @@ class Admin_DocumentController extends Controller_Action {
     }
     
     /**
-     * Shows the edit page for a metadata section.
-     */
-    public function editAction() {
-        $docId = $this->getRequest()->getParam('id');
-
-        $document = $this->documentsHelper->getDocumentForId($docId);
-
-        if (isset($document)) {
-            $section = $this->getRequest()->getParam('section');
-
-            if (Admin_Model_DocumentHelper::isValidGroup($section)) {
-                $this->view->section = $section;
-                $this->view->docId = $docId;
-
-                switch ($section) {
-                    case 'collections':
-                        $this->view->assignedCollections =
-                            $this->__prepareAssignedCollections($document);
-                        return $this->renderScript(
-                                'document/editCollections.phtml');
-                    default:
-                        $this->view->editForm = $this->__getEditForm($document,
-                                $section);
-                        return $this->renderScript('document/edit.phtml');
-                }
-            }
-            else {
-                return $this->_redirectTo('index', null, 'document', 'admin',
-                        array('id' => $docId));
-            }
-        }
-        else {
-            return $this->_redirectTo('index', array('failure' =>
-                $this->view->translate('admin_document_error_novalidid')),
-                    'documents', 'admin');
-        }
-    }
-
-    /**
      * Zeigt Metadaten-Formular an bzw. verarbeitet POST Requests vom Formular.
      * 
      * TODO prüfen ob Form DocID mit URL DocID übereinstimmt
      */
-    public function edit2Action() {
+    public function editAction() {
         $docId = $this->getRequest()->getParam('id');
 
         $document = $this->documentsHelper->getDocumentForId($docId);
@@ -784,7 +745,7 @@ class Admin_DocumentController extends Controller_Action {
         
         $actions['edit'] = array(
             'label' => 'admin_document_edit',
-            'url' => $this->view->url(array('module' => 'admin', 'controller' => 'document', 'action' => 'edit2', 
+            'url' => $this->view->url(array('module' => 'admin', 'controller' => 'document', 'action' => 'edit', 
                 'id' => $docId), 'default', true),
         );
 

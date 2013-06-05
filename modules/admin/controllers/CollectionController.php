@@ -260,7 +260,7 @@ class Admin_CollectionController extends Controller_Action {
                         'document', 'admin', array('id' => $documentId, 'section' => 'collections'));
             }
             else {
-                return $this->_redirectToAndExit('edit2', null, 'document', 'admin', array('id' => $documentId, 
+                return $this->_redirectToAndExit('edit', null, 'document', 'admin', array('id' => $documentId, 
                     'hash' => '123', 'continue' => 'addcol', 'colId' => $colId));
             }
         }
