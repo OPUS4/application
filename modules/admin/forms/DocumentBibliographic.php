@@ -74,15 +74,15 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
 
         $element = $this->addTextElement(self::ELEMENT_PAGE_COUNT);
         $element->addValidator('Int');
-        $element->addValidator(new Zend_Validate_GreaterThan(1));
+        $element->addValidator(new Zend_Validate_GreaterThan(0));
         
         $element = $this->addTextElement(self::ELEMENT_PAGE_FIRST);
         $element->addValidator('Int');
-        $element->addValidator(new Zend_Validate_GreaterThan(0));
+        $element->addValidator(new Zend_Validate_GreaterThan(-1));
         
         $element = $this->addTextElement(self::ELEMENT_PAGE_LAST);
         $element->addValidator('Int');
-        $element->addValidator(new Zend_Validate_GreaterThan(0));
+        $element->addValidator(new Zend_Validate_GreaterThan(-1));
         
         $this->addTextElement(self::ELEMENT_ISSUE);
         $this->addTextElement(self::ELEMENT_CONTRIBUTING_CORPORATION);
@@ -131,23 +131,23 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
         
         $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
         
-        $document->setContributingCorporation($this->getElement(self::ELEMENT_CONTRIBUTING_CORPORATION)->getValue());
-        $document->setCreatingCorporation($this->getElement(self::ELEMENT_CREATING_CORPORATION)->getValue());
-        $document->setEdition($this->getElement(self::ELEMENT_EDITION)->getValue());
-        $document->setIssue($this->getElement(self::ELEMENT_ISSUE)->getValue());
-        $document->setPageFirst($this->getElement(self::ELEMENT_PAGE_FIRST)->getValue());
-        $document->setPageLast($this->getElement(self::ELEMENT_PAGE_LAST)->getValue());
-        $document->setPageNumber($this->getElement(self::ELEMENT_PAGE_COUNT)->getValue());
-        $document->setPublisherName($this->getElement(self::ELEMENT_PUBLISHER_NAME)->getValue());
-        $document->setPublisherPlace($this->getElement(self::ELEMENT_PUBLISHER_PLACE)->getValue());
-        $document->setVolume($this->getElement(self::ELEMENT_VOLUME)->getValue());
+        $document->setContributingCorporation($this->getElementValue(self::ELEMENT_CONTRIBUTING_CORPORATION));
+        $document->setCreatingCorporation($this->getElementValue(self::ELEMENT_CREATING_CORPORATION));
+        $document->setEdition($this->getElementValue(self::ELEMENT_EDITION));
+        $document->setIssue($this->getElementValue(self::ELEMENT_ISSUE));
+        $document->setPageFirst($this->getElementValue(self::ELEMENT_PAGE_FIRST));
+        $document->setPageLast($this->getElementValue(self::ELEMENT_PAGE_LAST));
+        $document->setPageNumber($this->getElementValue(self::ELEMENT_PAGE_COUNT));
+        $document->setPublisherName($this->getElementValue(self::ELEMENT_PUBLISHER_NAME));
+        $document->setPublisherPlace($this->getElementValue(self::ELEMENT_PUBLISHER_PLACE));
+        $document->setVolume($this->getElementValue(self::ELEMENT_VOLUME));
         
-        $value = $this->getElement(self::ELEMENT_THESIS_DATE_ACCEPTED)->getValue();
-        $date = $datesHelper->getOpusDate($value);        
+        $value = $this->getElementValue(self::ELEMENT_THESIS_DATE_ACCEPTED);
+        $date = (is_null($value)) ? null : $datesHelper->getOpusDate($value);        
         $document->setThesisDateAccepted($date);
         
-        $document->setThesisYearAccepted($this->getElement(self::ELEMENT_THESIS_YEAR_ACCEPTED)->getValue());
-        $document->setBelongsToBibliography($this->getElement(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY)->getValue());
+        $document->setThesisYearAccepted($this->getElementValue(self::ELEMENT_THESIS_YEAR_ACCEPTED));
+        $document->setBelongsToBibliography($this->getElementValue(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY));
     }
     
     /**

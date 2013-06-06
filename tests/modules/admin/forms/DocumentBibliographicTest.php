@@ -129,9 +129,71 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
         $this->assertEquals(0, $model->getBelongsToBibliography());
     }
     
-    public function testValidation() {
+    public function testUpdateModelForEmptyFields() {
         $this->setUpEnglish();
         
+        $form = new Admin_Form_DocumentBibliographic();
+        
+        $form->getElement('ContributingCorporation')->setValue(' ');
+        $form->getElement('CreatingCorporation')->setValue(' ');
+        $form->getElement('Edition')->setValue(' ');
+        $form->getElement('Issue')->setValue(' ');
+        $form->getElement('PageFirst')->setValue(' ');
+        $form->getElement('PageLast')->setValue(' ');
+        $form->getElement('PageCount')->setValue(' ');
+        $form->getElement('PublisherName')->setValue(' ');
+        $form->getElement('PublisherPlace')->setValue(' ');
+        $form->getElement('Volume')->setValue(' ');
+        $form->getElement('ThesisDateAccepted')->setValue('  ');
+        $form->getElement('ThesisYearAccepted')->setValue('  ');
+        
+        $model = new Opus_Document();
+        $form->updateModel($model);
+        
+        $this->assertNull($model->getContributingCorporation(), 'ContributingCorporation not null');
+        $this->assertNull($model->getCreatingCorporation(), 'CreatingCorportation not null');
+        $this->assertNull($model->getEdition(), 'Edition not null');
+        $this->assertNull($model->getIssue(), 'Issue not null');
+        $this->assertNull($model->getPageFirst(), 'PageFirst not null');
+        $this->assertNull($model->getPageLast(), 'PageLast not null');
+        $this->assertNull($model->getPageNumber(), 'PageNumber not null');
+        $this->assertNull($model->getPublisherName(), 'PublisherName not null');
+        $this->assertNull($model->getPublisherPlace(), 'PublisherPlace not null');
+        $this->assertNull($model->getVolume(), 'Volume not null');
+        $this->assertNull($model->getThesisDateAccepted(), 'ThesisDateAccepted not null');
+        $this->assertNull($model->getThesisYearAccepted(), 'ThesisYearAccepted not null');
+    }
+    
+    public function testUpdateModelForValue0() {
+        $form = new Admin_Form_DocumentBibliographic();
+        
+        $form->getElement('ContributingCorporation')->setValue('0');
+        $form->getElement('CreatingCorporation')->setValue('0');
+        $form->getElement('Edition')->setValue('0');
+        $form->getElement('Issue')->setValue('0');
+        $form->getElement('PageFirst')->setValue('0');
+        $form->getElement('PageLast')->setValue('0');
+        $form->getElement('PublisherName')->setValue('0');
+        $form->getElement('PublisherPlace')->setValue('0');
+        $form->getElement('Volume')->setValue('0');
+        $form->getElement('ThesisYearAccepted')->setValue('0');
+        
+        $model = new Opus_Document();
+        $form->updateModel($model);
+        
+        $this->assertEquals('0', $model->getContributingCorporation());
+        $this->assertEquals('0', $model->getCreatingCorporation());
+        $this->assertEquals('0', $model->getEdition());
+        $this->assertEquals('0', $model->getIssue());
+        $this->assertEquals('0', $model->getPageFirst());
+        $this->assertEquals('0', $model->getPageLast());
+        $this->assertEquals('0', $model->getPublisherName());
+        $this->assertEquals('0', $model->getPublisherPlace());
+        $this->assertEquals('0', $model->getVolume());
+        $this->assertEquals('0', $model->getThesisYearAccepted());
+    }
+    
+    public function testValidation() {
         $form = new Admin_Form_DocumentBibliographic();
         
         $post = array(
