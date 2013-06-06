@@ -37,9 +37,12 @@ class Frontdoor_IndexController extends Controller_Action {
 
     const SERVER_STATE_DELETED = 'deleted';
     const SERVER_STATE_UNPUBLISHED = 'unpublished';
+
+    // functions
     const TRANSLATE_FUNCTION = 'Frontdoor_IndexController::translate';
     const TRANSLATE_DEFAULT_FUNCTION = 'Frontdoor_IndexController::translateWithDefault';
     const FILE_ACCESS_FUNCTION = 'Frontdoor_IndexController::checkIfUserHasFileAccess';
+    const FORMAT_DATE_FUNCTION = 'Frontdoor_IndexController::formatDate';
     
     /**
      * Displays the metadata of a document.
@@ -92,6 +95,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $proc->registerPHPFunctions(self::TRANSLATE_FUNCTION);
         $proc->registerPHPFunctions(self::TRANSLATE_DEFAULT_FUNCTION);
         $proc->registerPHPFunctions(self::FILE_ACCESS_FUNCTION);
+        $proc->registerPHPFunctions(self::FORMAT_DATE_FUNCTION);
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
 
@@ -350,6 +354,15 @@ class Frontdoor_IndexController extends Controller_Action {
             return $translate->_($key);
         }
         return $default;
+    }
+
+    static public function formatDate($day, $month, $year) {
+        $date = new DateTime();
+        $date->setDate($year, $month, $day);
+        $session = new Zend_Session_Namespace();
+        // TODO aktuell werden nur zwei Sprachen unterstützt
+        $formatPattern = ($session->language == 'de') ? 'd.m.Y' : 'Y/m/d';
+        return date_format($date, $formatPattern);
     }
 
 }

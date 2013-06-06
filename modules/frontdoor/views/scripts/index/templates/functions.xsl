@@ -125,4 +125,11 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
+
+    <xsl:template name="formatDate">
+        <xsl:param name="day"/>
+        <xsl:param name="month"/>
+        <xsl:param name="year"/>
+        <xsl:value-of select="php:functionString('Frontdoor_IndexController::formatDate', $day, $month, $year)" />
+    </xsl:template>
 </xsl:stylesheet>

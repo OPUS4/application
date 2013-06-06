@@ -159,7 +159,11 @@
                 <xsl:call-template name="translateFieldname"/>
             </th>
             <td>
-                <xsl:value-of select="concat(format-number(@Day,'00'),'.',format-number(@Month,'00'),'.',@Year)" />
+                <xsl:call-template name="formatDate">
+                    <xsl:with-param name="day"><xsl:value-of select="@Day"/></xsl:with-param>
+                    <xsl:with-param name="month"><xsl:value-of select="@Month"/></xsl:with-param>
+                    <xsl:with-param name="year"><xsl:value-of select="@Year"/></xsl:with-param>
+                </xsl:call-template>
             </td>
         </tr>
     </xsl:template>
