@@ -41,6 +41,9 @@
     <field name="PersonSubmitter" required="yes" formelement="text" datatype="Person" multiplicity="1">
         <default for="FirstName" value="John" edit="yes" public="yes"/>
         <default for="LastName" value="Doe" edit="yes" public="yes"/>
+        <subfield name="Email" required="yes" formelement="text" datatype="Email">
+            <default value="doe@example.org" edit="no" public="yes" />
+        </subfield>
     </field>
     <field name="validtestkey" required="no" formelement="text" datatype="Enrichment" multiplicity="*"/>
 
