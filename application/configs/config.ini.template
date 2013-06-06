@@ -156,6 +156,13 @@ oai.sample.identifier = oai:opus4.demo:90
 ; scripts/cron/cron-php-runner.sh
 runjobs.asynchronous = 0
 
+; SETUP CONFIGURATION SETTINGS
+; Define for which modules translation resources may be edited through
+; the web interface
+setup.translation.modules.allowed = default,publish
+
+
+
 ; The following is needed even if sections are empty.
 [staging : production]
 
