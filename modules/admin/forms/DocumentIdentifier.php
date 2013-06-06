@@ -109,5 +109,11 @@ class Admin_Form_DocumentIdentifier extends Admin_Form_AbstractModelSubForm {
                 
         return $identifier;
     }
+    
+    public function loadDefaultDecorators() {
+        parent::loadDefaultDecorators();
+        
+        $this->removeDecorator('Fieldset');
+    }
                 
 }
