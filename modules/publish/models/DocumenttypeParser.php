@@ -53,12 +53,6 @@ class Publish_Model_DocumenttypeParser {
      */
     public $formElements = array();
 
-    /**
-     *
-     * @var Publish_Model_FormElement
-     */
-    private $currentElement;
-
     private $log;
     private $session;
     private $postValues = array();
@@ -93,18 +87,18 @@ class Publish_Model_DocumenttypeParser {
     public function parse() {
         //parse root node for tags named 'field'
         foreach ($this->dom->getElementsByTagname('field') as $field) {
-            $this->currentElement = new Publish_Model_FormElement($this->form);
-            $this->currentElement->setAdditionalFields($this->additionalFields);
-            $this->_parseAttributes($field);
-            $this->_parseSubFields($field);
-            $this->_parseDefaultEntry($field);
-            $this->_parseRequiredIfFulltext($field);
-            $this->currentElement->setPostValues($this->postValues);            
-            $group = $this->currentElement->initGroup();            
+            $currentElement = new Publish_Model_FormElement($this->form);
+            $currentElement->setAdditionalFields($this->additionalFields);
+            $this->_parseAttributes($field, $currentElement);
+            $this->_parseSubFields($field, $currentElement);
+            $this->_parseDefaultEntry($currentElement, $field);
+            $this->_parseRequiredIfFulltext($field, $currentElement);
+            $currentElement->setPostValues($this->postValues);            
+            $group = $currentElement->initGroup();            
             $this->formElements[] = $group;
            
             if (!isset($group)) {
-                $element = $this->currentElement->transform();                
+                $element = $currentElement->transform();                
                 $this->formElements[] = $element;
             }
         }
@@ -116,7 +110,7 @@ class Publish_Model_DocumenttypeParser {
      * @param DomElement $field
      * @return false: field has no attributes
      */
-    private function _parseAttributes(DomElement $field) {
+    private function _parseAttributes(DomElement $field, $currentElement) {
 
         if ($field->hasAttributes()) {
             $elementName = $field->getAttribute('name');
@@ -131,22 +125,22 @@ class Publish_Model_DocumenttypeParser {
 
             if ($datatype == 'Collection' || $datatype == 'CollectionLeaf') {                
                 $collectionRole = $field->getAttribute('root');
-                $this->currentElement->setCollectionRole($collectionRole);
-                $this->currentElement->setCurrentCollectionId();
+                $currentElement->setCollectionRole($collectionRole);
+                $currentElement->setCurrentCollectionId();
             }
             
             $this->zendConformElementName($elementName);
                 
-            $this->currentElement->setElementName($elementName);
+            $currentElement->setElementName($elementName);
             
             if ($required === 'yes')
-                $this->currentElement->setRequired(true);
+                $currentElement->setRequired(true);
             else
-                $this->currentElement->setRequired(false);
+                $currentElement->setRequired(false);
 
-            $this->currentElement->setFormElement($formElement);
-            $this->currentElement->setDatatype($datatype);
-            $this->currentElement->setMultiplicity($multiplicity);
+            $currentElement->setFormElement($formElement);
+            $currentElement->setDatatype($datatype);
+            $currentElement->setMultiplicity($multiplicity);
         }
         // No Attributes found!
         else
@@ -159,7 +153,7 @@ class Publish_Model_DocumenttypeParser {
      * @param DomElement $field
      * @return false: no child nodes or no attributes have been found.
      */
-    private function _parseSubFields(DomElement $field) {
+    private function _parseSubFields(DomElement $field, $currentElement) {
 
         if ($field->hasChildNodes()) {
 
@@ -174,7 +168,7 @@ class Publish_Model_DocumenttypeParser {
                     $subFormElement = $subField->getAttribute('formelement');
                     $subDatatype = $subField->getAttribute('datatype');
 
-                    $currentSubField->setElementName($this->currentElement->getElementName() . $subElementName);
+                    $currentSubField->setElementName($currentElement->getElementName() . $subElementName);
                     if ($subRequired === 'yes')
                         $currentSubField->setRequired(true);
                     else
@@ -189,9 +183,9 @@ class Publish_Model_DocumenttypeParser {
                     return false;
 
                 if ($subField->hasChildNodes()) {
-                    $this->_parseDefaultEntry($subField, $currentSubField);
+                    $this->_parseDefaultEntry($currentElement, $subField, $currentSubField);
                 }
-                $this->currentElement->addSubFormElement($currentSubField->transform());
+                $currentElement->addSubFormElement($currentSubField->transform());
             }
 
             $options = array();
@@ -201,7 +195,7 @@ class Publish_Model_DocumenttypeParser {
                     $options[$value] = $value;
                 }
             }
-            $this->currentElement->setListOptions($options);
+            $currentElement->setListOptions($options);
         }
         //No Subfields found!
         else
@@ -215,7 +209,7 @@ class Publish_Model_DocumenttypeParser {
      * @param Publish_Model_FormElement $subfield
      * @return false if there are no child nodes
      */
-    private function _parseDefaultEntry(DOMElement $field, Publish_Model_FormElement $subfield=null) {
+    private function _parseDefaultEntry($currentElement, DOMElement $field, Publish_Model_FormElement $subfield = null) {
         if ($field->hasChildNodes()) {
             foreach ($field->getElementsByTagname('default') as $default) {
 
@@ -239,15 +233,16 @@ class Publish_Model_DocumenttypeParser {
                         $defaultArray['public'] = $public;
 
                     if (!isset($subfield)) {
-                        $this->currentElement->setDefaultValue($defaultArray);
+                        $currentElement->setDefaultValue($defaultArray);
                         $this->log->debug(__METHOD__ . " : " . $value);
                     }
                     else {
                         $subfield->setDefaultValue($defaultArray);
                     }
                 }
-                else
+                else {
                     return false;
+                }
             }
         }
     }
@@ -257,15 +252,15 @@ class Publish_Model_DocumenttypeParser {
      * Parses for specific child node "required-if-fulltext" and sets the value "required" to true in case a fulltext has been uploaded.
      * @param DomElement $field
      */
-    private function _parseRequiredIfFulltext(DomElement $field) {
+    private function _parseRequiredIfFulltext(DomElement $field, $currentElement) {
         if ($field->hasChildNodes()) {
             foreach ($field->getElementsByTagname('required-if-fulltext') as $fulltext) {
                 if ($this->session->fulltext === '1') {
-                    $this->currentElement->setRequired(true);
-                    $this->log->debug("currentElement : " . $this->currentElement->getElementName() . " and its required has been set to true!");
+                    $currentElement->setRequired(true);
+                    $this->log->debug("currentElement : " . $currentElement->getElementName() . " and its required has been set to true!");
                 }
                 else
-                    $this->log->debug("currentElement : " . $this->currentElement->getElementName() . " and its required hasn't been changed!");
+                    $this->log->debug("currentElement : " . $currentElement->getElementName() . " and its required hasn't been changed!");
             }
         }
     }
