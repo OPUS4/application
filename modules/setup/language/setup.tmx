@@ -24,15 +24,6 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_help-page_error">
-        <tuv xml:lang="en">
-            <seg>Error</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Fehler</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="setup_error_retry">
         <tuv xml:lang="en">
             <seg>Retry</seg>
@@ -110,6 +101,15 @@
             <seg>
                 Die Änderungen wurden gespeichert.
             </seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_button_back">
+        <tuv xml:lang="en">
+            <seg>Back</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Zurück</seg>
         </tuv>
     </tu>
 
