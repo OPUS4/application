@@ -84,7 +84,7 @@ abstract class Controller_SetupAbstract extends Controller_Action {
     }
 
     public function errorAction() {
-        $this->view->controller = $this->getRequest()->getControllerName();
+        $this->view->backLink = $this->view->url(array('controller' => $this->getRequest()->getControllerName(), 'action' => 'index'));
         $this->render('error', null, true);
     }
 
