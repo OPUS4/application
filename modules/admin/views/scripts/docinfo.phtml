@@ -32,10 +32,8 @@
  */
 ?>
 
-<?PHP
-    $authors = $this->document->getAuthors();
-?>
-
+<?PHP if (!is_null($this->document)) : ?>
+<?PHP $authors = $this->document->getAuthors(); ?>
 <div id="docinfo">
     <div>
         <span class="docid"><?=$this->document->getDocId()?></span> - 
@@ -47,3 +45,7 @@
     </div>
     <?PHP endif; ?>
 </div>
+<?PHP else : ?>
+<?PHP Zend_Registry::get('Zend_Log')->err('Use of partial \'docinfo.phtml\' without document = null.'); ?>
+<? endif; ?>
+
