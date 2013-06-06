@@ -83,5 +83,11 @@ class Admin_Form_DocumentNote extends Admin_Form_AbstractModelSubForm {
         
         return $note;
     }
+    
+    public function loadDefaultDecorators() {
+        parent::loadDefaultDecorators();
+        
+        $this->removeDecorator('Fieldset');
+    }
 
 }
