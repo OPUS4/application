@@ -43,5 +43,17 @@
         <default for="LastName" value="Doe" edit="yes" public="yes"/>
     </field>
     <field name="validtestkey" required="no" formelement="text" datatype="Enrichment" multiplicity="*"/>
+
+    <field name="ThesisGrantor" required="yes" formelement="Select" datatype="ThesisGrantor" multiplicity="1">
+        <default value="1" edit="no" public="yes" />
+    </field>
+
+    <field name="ThesisPublisher" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="1">
+        <default value="2" edit="no" public="yes" />
+    </field>
+
+    <field name="Licence" required="yes" formelement="Select" datatype="Licence" multiplicity="1">
+        <default value="3" edit="no" public="yes" />
+    </field>
     
 </documenttype>
