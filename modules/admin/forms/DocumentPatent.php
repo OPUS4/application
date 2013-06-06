@@ -151,5 +151,11 @@ class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
         
         return $patent;
     }
+    
+    public function loadDefaultDecorators() {
+        parent::loadDefaultDecorators();
+        
+        $this->removeDecorator('Fieldset');
+    }
 
 }
