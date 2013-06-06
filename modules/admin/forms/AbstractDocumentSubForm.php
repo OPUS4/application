@@ -115,24 +115,25 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
             $value = $element->getValue();
         
             if ($element instanceof Zend_Form_Element_Button 
-                    || $element instanceof Zend_Form_Element_Submit 
-                    || empty($value)
-                    ) {
+                    || $element instanceof Zend_Form_Element_Submit) {
+                $this->removeElement($element->getName());
+            }
+            else if (trim($value) === '') {
                 $this->removeElement($element->getName());
             }
             else if ($element instanceof Zend_Form_Element_Text 
                     || $element instanceof Zend_Form_Element_Textarea
                     ) {
-                $element->setDecorators(array(array(
-                    'ViewScript', array('viewScript' => 'form/staticElement.phtml'))));
+                $element->setDecorators(array(
+                    array('ViewScript', array('viewScript' => 'form/staticElement.phtml'))));
             }
             else if ($element instanceof Zend_Form_Element_Select) {
-                $element->setDecorators(array(array(
-                    'ViewScript', array('viewScript' => 'form/staticSelect.phtml'))));
+                $element->setDecorators(array(
+                    array('ViewScript', array('viewScript' => 'form/staticSelect.phtml'))));
             }
             else if ($element instanceof Zend_Form_Element_Checkbox) {
-                $element->setDecorators(array(array(
-                    'ViewScript', array('viewScript' => 'form/staticCheckbox.phtml'))));
+                $element->setDecorators(array(
+                    array('ViewScript', array('viewScript' => 'form/staticCheckbox.phtml'))));
             }
         }
         
