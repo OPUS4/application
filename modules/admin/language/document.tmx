@@ -111,7 +111,7 @@
         <seg>General</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Allgemein</seg>
+        <seg>Allgemeines</seg>
       </tuv>
     </tu>
 
@@ -126,10 +126,10 @@
 
     <tu tuid="admin_document_section_abstracts">
       <tuv xml:lang="en">
-        <seg>Abstract(s)</seg>
+        <seg>Abstracts</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Abstract(s)</seg>
+        <seg>Zusammenfassungen</seg>
       </tuv>
     </tu>
 
@@ -180,7 +180,7 @@
 
     <tu tuid="admin_document_section_licences">
       <tuv xml:lang="en">
-        <seg>Licence(s)</seg>
+        <seg>Licences</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Lizenzen</seg>
