@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,7 +24,8 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Application
+ * @package     Module_Setup
  * @author      Edouard Simon <edouard.simon@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -32,14 +33,56 @@
  */
 ?>
 
-<div class="adminContainer">
+<style>
 
+    table, th, td {
+        border: 1px solid grey;
+    }
 
-    <div id="adminMenuContainer">
-        <div>Dateinamen</div>
-        <? foreach ($this->pageNames as $pagename): ?>
-        <div><a href="<?= $this->url(array('action' => 'edit', 'page' => $pagename)) ?>"><?= ucfirst($pagename) ?></a></div>
+    th {
+        background-color:lightgrey;
+    }
+    
+    th.hilite {
+        background-color: highlight;
+    }
+
+    th, td {
+        padding: 5px;
+    }
+
+    span.hilite {
+        font-weight: bold;
+    }
+
+</style>
+
+<?= $this->form ?>
+
+<div id="adminMenuContainer">
+
+    <table >
+        <tr>
+            <? foreach ($this->sortKeys as $sortKey): ?>
+                <th class="<?= $sortKey == $this->currentSortKey ? 'hilite' : ''?>"><?= $this->translate('setup_language_'.$sortKey) ?></th>
+            <? endforeach ?>
+        </tr>
+        <?
+//        $keyPos = array_flip($this->sortKeys);
+        foreach ($this->translations as $row):
+            $writeable = ($row['directory'] == 'language_custom');
+            $file = $row['module'].DIRECTORY_SEPARATOR.$row['directory'].DIRECTORY_SEPARATOR.$row['filename'];
+            $key = array_shift($row);
+            ?>
+            <tr>
+                <td><?= empty($this->searchTerm) ? $key : str_replace($this->searchTerm, '<span class="hilite">' . $this->searchTerm . '</span>', $key) ?></td>
+                <? foreach ($row as $item): ?>
+                    <td><?= $item ?></td>
+                <? endforeach ?>
+                <td>
+                    <a href="<?= $this->url(array('action' => 'edit', 'file' => urlencode($file), 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey)) ?>" title="<?= $this->translate('setup_language_edit_hint', $key, $row['module'].DIRECTORY_SEPARATOR.'language_custom'.DIRECTORY_SEPARATOR.$row['filename'])?>"><?= ($writeable) ? 'bearbeiten' : 'übernehmen' ?></a>
+                </td>
+            </tr>
         <? endforeach ?>
-    </div>
 
-</div>
+    </table>
