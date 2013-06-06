@@ -138,5 +138,35 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
         
     }
     
+    /**
+     * Liefert den Wert eines Formularelements zurück.
+     * 
+     * Wenn das Formularelement einen leeren String enthält wird für Text und Textarea Elemente der Wert null zurück 
+     * geliefert.
+     * 
+     * @param string $name
+     * @return mixed
+     * 
+     * TODO Sind alle Fälle abgedeckt?
+     */
+    public function getElementValue($name) {
+        $element = $this->getElement($name);
+        if (!is_null($element)) {
+            $value = $element->getValue();
+            
+            if ($element instanceof Zend_Form_Element_Text || $element instanceof Zend_Form_Element_Textarea) {
+                return (trim($value) === '') ? null : $value;
+            }
+            else {
+                return $value;
+            }
+        }
+        else {
+            // Sollte nie passieren - Schreibe Fehlermeldung ins Log
+            Zend_Registry::get('Zend_Log')->err('Element \'' . $name . '\' in form \'' . $this->getName() .
+                    '\' not found.');
+        }
+    }
+    
     
 }
