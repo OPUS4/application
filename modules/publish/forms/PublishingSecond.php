@@ -106,10 +106,10 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $parser->parse();
         $parserElements = $parser->getFormElements();
                 
-        $this->log->info("DocumenttypeParser (doctype '" . $this->doctype . "') found: " . count($parserElements) . " elements.");
+        $this->log->debug("DocumenttypeParser (doctype '" . $this->doctype . "') found: " . count($parserElements) . " elements.");
         
-        $this->addElements($parserElements);
-        $this->addElements($this->getExternalElements());
+        $this->addElements($parserElements);        
+        $this->addElements($this->getExternalElements());       
         
         $this->addSubmitButton('button_label_send', 'send');
         $this->addSubmitButton('button_label_back', 'back');
