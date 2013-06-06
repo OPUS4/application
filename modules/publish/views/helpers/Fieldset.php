@@ -94,6 +94,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         $fieldset .= ' title="' . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . '"';
         if ($field['disabled'] === true) {
             $fieldset .= ' disabled="1" ';
+            // TODO warum wird hier nicht auch $this->disable = true gesetzt?
         }
         $fieldset .= '>' . "\n\t\t\t\t\t";
 
