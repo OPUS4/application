@@ -55,7 +55,7 @@ class Admin_Form_Document extends Zend_Form {
         
         $this->addSubForm(new Admin_Form_DocumentGeneral(), 'General');
         
-        // $this->addSubForm(new Admin_Form_DocumentPersons(), 'Persons');
+        $this->addSubForm(new Admin_Form_DocumentPersons(), 'Persons');
         
         // Bibliographische Beschreibung
         $this->addSubForm(new Admin_Form_DocumentTitles(), 'Titles');
@@ -185,33 +185,56 @@ class Admin_Form_Document extends Zend_Form {
      */
     public function prepareRenderingAsView() {
         $this->_removeElements();
+        $this->_prepareRenderingOfElements();
         
         $subforms = $this->getSubForms();
         
         foreach ($subforms as $subform) {
-            if (!$subform->isEmpty()) {
-                $subform->prepareRenderingAsView();
-            }
-            else {
+            $subform->prepareRenderingAsView();
+            if ($subform->isEmpty()) {
                 $this->removeSubForm($subform->getName());
             }
         }
     }
     
-    /**
-     * TODO AbstractDocumentSubForm enthaelt die selbe funktion
-     */
     protected function _removeElements() {
         $elements = $this->getElements();
         
         foreach ($elements as $element) {
+            $value = $element->getValue();
+        
             if ($element instanceof Zend_Form_Element_Button 
-                    || $element instanceof Zend_Form_Element_Submit 
-                    || is_null($element->getValue())
-                    ) {
+                    || $element instanceof Zend_Form_Element_Submit) {
                 $this->removeElement($element->getName());
+            }
+            else if (trim($value) === '') {
+                $this->removeElement($element->getName());
+            }
+            else if ($element instanceof Zend_Form_Element_Checkbox) {
+                if ($element->getValue() == 0) {
+                    $this->removeElement($element->getName());
+                }
             }
         }
     }
     
+    protected function _prepareRenderingOfElements() {
+        $elements = $this->getElements();
+        
+        foreach ($elements as $element) {
+           if ($element instanceof Zend_Form_Element_Text || $element instanceof Zend_Form_Element_Textarea) {
+                $element->setDecorators(array(
+                    array('ViewScript', array('viewScript' => 'form/staticElement.phtml'))));
+            }
+            else if ($element instanceof Zend_Form_Element_Select) {
+                $element->setDecorators(array(
+                    array('ViewScript', array('viewScript' => 'form/staticSelect.phtml'))));
+            }
+            else if ($element instanceof Zend_Form_Element_Checkbox) {
+                $element->setDecorators(array(
+                    array('ViewScript', array('viewScript' => 'form/staticCheckbox.phtml'))));
+            }
+        }
+    }
+        
 }

@@ -87,11 +87,12 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     }
     
     public function isEmpty() {
-        return false;
+        return (count($this->getElements()) == 0 && count($this->getSubforms()) == 0);
     }
     
     public function prepareRenderingAsView() {
         $this->_removeElements();
+        $this->_prepareRenderingOfElements();
         
         $subforms = $this->getSubForms();
         
@@ -121,9 +122,19 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
             else if (trim($value) === '') {
                 $this->removeElement($element->getName());
             }
-            else if ($element instanceof Zend_Form_Element_Text 
-                    || $element instanceof Zend_Form_Element_Textarea
-                    ) {
+            else if ($element instanceof Zend_Form_Element_Checkbox) {
+                if ($element->getValue() == 0) {
+                    $this->removeElement($element->getName());
+                }
+            }
+        }
+    }
+    
+    protected function _prepareRenderingOfElements() {
+        $elements = $this->getElements();
+        
+        foreach ($elements as $element) {
+           if ($element instanceof Zend_Form_Element_Text || $element instanceof Zend_Form_Element_Textarea) {
                 $element->setDecorators(array(
                     array('ViewScript', array('viewScript' => 'form/staticElement.phtml'))));
             }
@@ -136,7 +147,6 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
                     array('ViewScript', array('viewScript' => 'form/staticCheckbox.phtml'))));
             }
         }
-        
     }
     
     /**
