@@ -146,7 +146,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
 
                         $this->_addAnker($this->_determineSubFormForAnker($position));
                         
-                        return Admin_Form_Document::SHOW;
+                        return Admin_Form_Document::RESULT_SHOW;
                     }
                 }
                 else {

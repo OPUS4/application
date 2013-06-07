@@ -35,19 +35,42 @@
 /**
  * Formular fuer Metadaten eines Dokuments.
  */
-class Admin_Form_Document extends Zend_Form {
+class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
 
-    // TODO review these constants and their purpose
-    const SAVE = 'save';
+    /**
+     * Name für Button zum Speichern.
+     */
+    const ELEMENT_SAVE = 'save';
     
-    const SAVE_AND_CONTINUE = 'saveAndContinue';
+    /**
+     * Name für Button zum Speichern und im Metadaten-Formular bleiben.
+     */
+    const ELEMENT_SAVE_AND_CONTINUE = 'saveAndContinue';
     
-    const CANCEL = 'cancel';
+    /**
+     * Name für Button um das Editieren abzubrechen.
+     */
+    const ELEMENT_CANCEL = 'cancel';
     
-    const SHOW = 'show';
+    /**
+     * Ergebnis wenn keine weiteren Aktionen ausgeführt werden müssen.
+     * 
+     * Unterformulare, die einen POST erfolgreich abgearbeitet haben, zum Beispiel ein Unterformular entfernt oder 
+     * hinzugefügt haben melden dieses Signal, um zu zeigen, daß das Formular wieder ausgegeben werden kann.
+     */
+    const RESULT_SHOW = 'show';
     
-    const SWITCH_TO = 'switch';
+    /**
+     * Ergebnis von Unterformular, wenn die angezeigte Seite gewechselt werden soll.
+     * 
+     * Unterformulare, die Aufgrund des POST möchten, daß zu einer anderen Seite gewechselt wird schicken, dieses
+     * Ergebnis zusammen mit den notwendigen Informationen für den Seitenwechsel.
+     */
+    const RESULT_SWITCH_TO = 'switch';
     
+    /**
+     * Konstruiert das Metadaten-Formular aus verschiedenen Unterformularen und den Aktion Buttons.
+     */
     public function init() {
         parent::init();
         
@@ -55,7 +78,7 @@ class Admin_Form_Document extends Zend_Form {
         
         $this->addSubForm(new Admin_Form_DocumentGeneral(), 'General');
         
-        // $this->addSubForm(new Admin_Form_DocumentPersons(), 'Persons');
+        $this->addSubForm(new Admin_Form_DocumentPersons(), 'Persons');
         
         // Bibliographische Beschreibung
         $this->addSubForm(new Admin_Form_DocumentTitles(), 'Titles');
@@ -85,16 +108,15 @@ class Admin_Form_Document extends Zend_Form {
         $element = new Zend_Form_Element_Hidden('id');
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Submit('save');
+        $element = new Zend_Form_Element_Submit(self::ELEMENT_SAVE);
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Submit('saveAndContinue');
+        $element = new Zend_Form_Element_Submit(self::ELEMENT_SAVE_AND_CONTINUE);
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Submit('cancel');
+        $element = new Zend_Form_Element_Submit(self::ELEMENT_CANCEL);
         $this->addElement($element);
     }
-    
 
     /**
      * Populates form from model values.
@@ -120,12 +142,12 @@ class Admin_Form_Document extends Zend_Form {
             $form->updateModel($document);
         }
     }
-    
+ 
     /**
      * Konstruiert Formular mit Unterformularen basierend auf POST Daten.
      * @param array $data
      */
-    public static function constructFromPost($data) {
+    public static function getInstanceFromPost($data) {
         $form = new Admin_Form_Document();
         
         $subforms = $form->getSubForms();
@@ -143,7 +165,7 @@ class Admin_Form_Document extends Zend_Form {
      * Verarbeitet POST Request vom Formular.
      * @param type $data
      */
-    public function processPost($data) {
+    public function processPost($data, $context) {
         // Prüfen, ob "Speichern" geklickt wurde
         if (array_key_exists('save', $data)) {
             return self::SAVE;
@@ -180,61 +202,11 @@ class Admin_Form_Document extends Zend_Form {
         }
     }
     
-    /**
-     * TODO AbstractDocumentSubForm enthaelt die selbe funktion
-     */
-    public function prepareRenderingAsView() {
-        $this->_removeElements();
-        $this->_prepareRenderingOfElements();
+    public function loadDefaultDecorators() {
+        parent::loadDefaultDecorators();
         
-        $subforms = $this->getSubForms();
-        
-        foreach ($subforms as $subform) {
-            $subform->prepareRenderingAsView();
-            if ($subform->isEmpty()) {
-                $this->removeSubForm($subform->getName());
-            }
-        }
+        $this->removeDecorator('Fieldset');
+        $this->removeDecorator('DtDdWrapper');
     }
-    
-    protected function _removeElements() {
-        $elements = $this->getElements();
-        
-        foreach ($elements as $element) {
-            $value = $element->getValue();
-        
-            if ($element instanceof Zend_Form_Element_Button 
-                    || $element instanceof Zend_Form_Element_Submit) {
-                $this->removeElement($element->getName());
-            }
-            else if (trim($value) === '') {
-                $this->removeElement($element->getName());
-            }
-            else if ($element instanceof Zend_Form_Element_Checkbox) {
-                if ($element->getValue() == 0) {
-                    $this->removeElement($element->getName());
-                }
-            }
-        }
-    }
-    
-    protected function _prepareRenderingOfElements() {
-        $elements = $this->getElements();
-        
-        foreach ($elements as $element) {
-           if ($element instanceof Zend_Form_Element_Text || $element instanceof Zend_Form_Element_Textarea) {
-                $element->setDecorators(array(
-                    array('ViewScript', array('viewScript' => 'form/staticElement.phtml'))));
-            }
-            else if ($element instanceof Zend_Form_Element_Select) {
-                $element->setDecorators(array(
-                    array('ViewScript', array('viewScript' => 'form/staticSelect.phtml'))));
-            }
-            else if ($element instanceof Zend_Form_Element_Checkbox) {
-                $element->setDecorators(array(
-                    array('ViewScript', array('viewScript' => 'form/staticCheckbox.phtml'))));
-            }
-        }
-    }
-        
+            
 }

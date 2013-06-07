@@ -101,7 +101,7 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
     public function processPost($data, $context) {
         if (array_key_exists('add', $data)) {
             // Neue Sammlung zuweisen
-            return array( 'result' => Admin_Form_Document::SWITCH_TO, 
+            return array( 'result' => Admin_Form_Document::RESULT_SWITCH_TO, 
                 'target' => array(
                 'module' => 'admin',
                 'controller' => 'collection',

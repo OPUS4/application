@@ -101,7 +101,7 @@ class Admin_DocumentController extends Controller_Action {
             $form->populateFromModel($document);
             $form->prepareRenderingAsView();
             
-            $this->view->form = $form;
+            $this->view->form = new Admin_Form_Wrapper($form);
             
             $this->__prepareActionLinks($document);
 
@@ -133,13 +133,13 @@ class Admin_DocumentController extends Controller_Action {
         else {
             if ($this->getRequest()->isPost()) {
                 $data = $this->getRequest()->getPost();
-
-                $form = Admin_Form_Document::constructFromPost($data);
+                $data = $data['Document']; // 'Document' Form wraps actual metadata form
                 
+                $form = Admin_Form_Document::getInstanceFromPost($data);
                 $form->populate($data);
                 
                 // TODO use return value for decision how to continue
-                $result = $form->processPost($data);
+                $result = $form->processPost($data, $data);
                 
                 if (is_array($result)) {
                     $target = $result['target']; // TODO check if present
@@ -147,7 +147,7 @@ class Admin_DocumentController extends Controller_Action {
                 }
                 
                 switch ($result) {
-                    case Admin_Form_Document::SAVE:
+                    case Admin_Form_Document::ELEMENT_SAVE:
                         if ($form->isValid($data)) {
                             // Formular ist korrekt; aktualisiere Dokument
                             $form->updateModel($document);
@@ -163,7 +163,7 @@ class Admin_DocumentController extends Controller_Action {
                         }
                         break;
                         
-                    case Admin_Form_Document::SAVE_AND_CONTINUE:
+                    case Admin_Form_Document::ELEMENT_SAVE_AND_CONTINUE:
                         if ($form->isValid($data)) {
                             // Formular ist korrekt; aktualisiere Dokument
                             $form->updateModel($document);
@@ -176,12 +176,12 @@ class Admin_DocumentController extends Controller_Action {
                         }
                         break;
                         
-                    case Admin_Form_Document::CANCEL:
+                    case Admin_Form_Document::ELEMENT_CANCEL:
                         // TODO redirect to origin page
                         return $this->_redirectTo('index', null, 'document', 'admin', array('id' => $docId));
                         break;
                     
-                    case Admin_Form_Document::SWITCH_TO:
+                    case Admin_Form_Document::RESULT_SWITCH_TO:
                         $this->_storePost($data, $docId);
                         
                         // TODO Parameter in Unterarray 'params' => array() verlagern?
@@ -210,7 +210,7 @@ class Admin_DocumentController extends Controller_Action {
                 
                 if ($post) {
                     // Initialisiere Formular vom gespeicherten POST
-                    $form = Admin_Form_Document::constructFromPost($post);
+                    $form = Admin_Form_Document::getInstanceFromPost($post);
                     $form->populate($post);
                     
                     // Führe Rücksprung aus
@@ -222,10 +222,11 @@ class Admin_DocumentController extends Controller_Action {
                     $form->populateFromModel($document);
                 }
                 
-                $form->setAction('#current');
             }
             
-            $this->view->form = $form;
+            $wrappedForm = new Admin_Form_Wrapper($form);
+            $wrappedForm->setAction('#current');
+            $this->view->form = $wrappedForm;
         }
         
         $this->view->document = $document;
