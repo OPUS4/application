@@ -212,6 +212,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
      * Set values of view variables.
      */
     public function setViewValues() {
+        // TODO variable is not used
         $errors = $this->getMessages();
 
         //group fields and single fields for view placeholders

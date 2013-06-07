@@ -178,19 +178,24 @@ class Publish_Model_FormElement {
             case 'Subject':
             case 'Title' :
                 //creates two subfields: a value text field (subject, title) and language selection                
-                if ($this->isTitleElement())
-                    if ($this->isTextareaElement())
+                if ($this->isTitleElement()) {
+                    if ($this->isTextareaElement()) {
                         $value = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'textarea', 'Title');
-                    else
+                    }
+                    else {
                         $value = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'text', 'Title');
-                else
+                    }
+                }
+                else {
                     $value = new Publish_Model_FormElement($this->form, $this->elementName, $this->required, 'text', 'Subject');
+                }
                 $value->isSubField = false;
                 $value->setDefaultValue($this->default, self::VALUE);
                 $elementValue = $value->transform();
 
-                $lang = new Publish_Model_FormElement($this->form, $this->elementName . self::LANG, $this->required, 'select', 'Language');
+                $lang = new Publish_Model_FormElement($this->form, $this->elementName . self::LANG, false, 'select', 'Language');
                 $lang->isSubField = true;
+
                 $lang->setDefaultValue($this->default, self::LANG);
                 $elementLang = $lang->transform();
 
@@ -252,7 +257,6 @@ class Publish_Model_FormElement {
 
     public function transform() {
         if (isset($this->form)) {
-
             if (false === $this->isSelectElement()) {
                 $element = $this->form->createElement($this->formElement, $this->elementName);
                 $element->setDisableTranslator(true);                
