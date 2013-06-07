@@ -135,20 +135,12 @@ class Publish_Model_FormElement {
     }
 
     private function isGroup() {
-        if ($this->isTitleElement())
-            return true;
-        else if ($this->isPersonElement())
-            return true;
-        else if ($this->isSeriesElement())
-            return true;
-        else if ($this->isSubjectUElement())
-            return true;        
-        else if ($this->datatype == 'Collection')
-            return true;
-        else if ($this->multiplicity !== '1')
-            return true;
-        else
-            return false;
+        return $this->isTitleElement() ||
+                $this->isPersonElement() ||
+                $this->isSeriesElement() ||
+                $this->isSubjectUElement() ||
+                $this->datatype == 'Collection' ||
+                $this->multiplicity !== '1';
     }
 
     private function implicitFields($workflow) {
@@ -208,41 +200,27 @@ class Publish_Model_FormElement {
     }
 
     private function isTitleElement() {
-        if ($this->datatype === 'Title')
-            return true;
-        else
-            return false;
+        return $this->datatype === 'Title';
     }
 
     private function isSeriesElement() {
-        if ($this->datatype === 'Series')
-            return true;
-        else
-            return false;
+        return $this->datatype === 'Series';
     }
 
     /**
      * Subject field must have datatype "Subject" 
      * @return boolean 
      */ 
-    private function isSubjectElement() {
-        
-        if ($this->datatype === 'Subject')
-            return true;
-
-        return false;
+    private function isSubjectElement() {        
+        return $this->datatype === 'Subject';
     }
 
     /**
      * Subject field must have datatype "Subject" and can be a SWD or uncontrolled field (with or without languague)
      * @return boolean 
      */ 
-    private function isSubjectUElement() {
-        
-        if ($this->datatype === 'Subject' && !(strstr($this->elementName, 'Swd')))
-            return true;
-
-        return false;
+    private function isSubjectUElement() {        
+        return $this->datatype === 'Subject' && !(strstr($this->elementName, 'Swd'));
     }
     
     /**
@@ -250,28 +228,18 @@ class Publish_Model_FormElement {
      * @return type 
      */
     private function isPersonElement() {
-        if (($this->datatype === 'Person')
+        return $this->datatype === 'Person'
                 || strstr($this->elementName, 'Email')
                 || strstr($this->elementName, 'Birth')
-                || strstr($this->elementName, 'AcademicTitle'))
-            return true;
-
-        else
-            return false;
+                || strstr($this->elementName, 'AcademicTitle');
     }
 
     private function isSelectElement() {        
-        if ($this->formElement === 'select')
-            return true;
-        else
-            return false;
+        return $this->formElement === 'select';
     }
 
     private function isTextareaElement() {
-        if ($this->formElement === 'textarea')
-            return true;
-        else
-            return false;
+        return $this->formElement === 'textarea';
     }
 
     public function setPostValues($postValues) {
@@ -303,7 +271,7 @@ class Publish_Model_FormElement {
                     $element = $this->form->createElement('text', $this->elementName);
                     $element->setDisableTranslator(true);
                     $element->setDescription('hint_no_selection_' . $this->elementName);
-                    $element->setAttrib('disabled', true);
+                    $element->setAttrib('disabled', true);                    
                     $this->required = false;
                 }
                 else {
@@ -348,17 +316,16 @@ class Publish_Model_FormElement {
         if ($this->isPersonElement())
             return 'Person';
         
-        else if ($this->isTitleElement())
+        if ($this->isTitleElement())
             return 'Title';
         
-        else if ($this->isSeriesElement())
+        if ($this->isSeriesElement())
             return 'Series';
         
-        else if ($this->isSubjectElement())
-            return 'Subject';        
-        else 
-            return $this->datatype;
-        
+        if ($this->isSubjectElement())
+            return 'Subject';
+
+        return $this->datatype;
     }
 
     private function showSelectField($options, $datatype = null, $elementName = null) {
@@ -477,7 +444,6 @@ class Publish_Model_FormElement {
     }
 
     public function setDefaultValue($defaultValue, $forValue = null) {
-
         if (isset($forValue)) {
             foreach ($defaultValue AS $default) {
                 if ($default['for'] == $forValue) {
@@ -578,4 +544,3 @@ class Publish_Model_FormElement {
     }
 
 }
-
