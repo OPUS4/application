@@ -382,6 +382,7 @@
                             <xsl:with-param name="string">SeriesNumber</xsl:with-param>
                         </xsl:call-template>
                         <xsl:text>)</xsl:text>
+                        <xsl:text>:</xsl:text>
                     </th>
                 </xsl:when>
                 <xsl:otherwise>
