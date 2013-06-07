@@ -59,12 +59,16 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
      * @param <type> $data 
      */
     public function isValid($data) {
-        $extended = new Publish_Model_ExtendedValidation($this, $data);
-        $valid1 = $extended->validate();
+        $extended = new Publish_Model_ExtendedValidation($this, $data);                
+        $valid1 = $extended->validate();       
 
-        $valid2 = parent::isValid($extended->data);
-
+        $data = $this->getValues();
+        $valid2 = parent::isValid($data);
+        // undo changes through validation: restore values of disabled fields
+        $this->populate($data);
+        
         $valid3 = $extended->validate();
+        
         //inherit data changes during validation
         $this->populate($extended->data);
         $this->postData = $extended->data;
