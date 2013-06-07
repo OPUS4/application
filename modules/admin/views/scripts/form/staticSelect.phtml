@@ -39,6 +39,5 @@
  */
 ?>
 
-
 <dt><?= $this->element->getLabel() ?></dt>
-<dd><b><?= $this->element->getMultiOption($this->element->getValue()) ?></b></dd>
+<dd id="<?= $this->element->getId() ?>"><?= $this->element->getMultiOption($this->element->getValue()) ?></dd>
