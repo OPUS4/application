@@ -210,8 +210,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         // Prüfen, ob die richtigen Metadaten angezeigt werden
         
         // Lizenzen 
-        $this->assertQuery('dt#licence4');
-        $this->assertQueryCountMax('dt#licence2', 0);
+        $this->assertQuery('dt#Document-Licences-licence4');
+        $this->assertQueryCountMax('dt#Document-Licences-licence2', 0);
     }
 
 }
