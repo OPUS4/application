@@ -193,6 +193,7 @@ class Publish_Model_FormElement {
                 $value->setDefaultValue($this->default, self::VALUE);
                 $elementValue = $value->transform();
 
+                // die Sprache ist nicht verpflichtend: da als Default-Option immer die Dokumentsprache angenommen wird
                 $lang = new Publish_Model_FormElement($this->form, $this->elementName . self::LANG, false, 'select', 'Language');
                 $lang->isSubField = true;
 
@@ -378,6 +379,7 @@ class Publish_Model_FormElement {
                     $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('choose_valid_language')), $reorgOptions));
                 }
                 else {
+                    // bei allen Sprachfeldern (außer dem Feld für die Festlegung der Dokumentsprache) wird als Default-Option "Dokumentsprache" angeboten
                     $element->setMultiOptions(array_merge(array('' => $this->form->view->translate('inherit_document_language')), $reorgOptions));
                 }
                 break;
@@ -435,7 +437,7 @@ class Publish_Model_FormElement {
         return $this->collectionRole;
     }
 
-    public function setCurrentCollectionId($setRoot=false) {
+    public function setCurrentCollectionId($setRoot = false) {
         if (!$setRoot) {
             $collectionRole = Opus_CollectionRole::fetchByOaiName($this->collectionRole);
             if (!is_null($collectionRole)) {
