@@ -55,7 +55,7 @@ class Admin_Form_Document extends Zend_Form {
         
         $this->addSubForm(new Admin_Form_DocumentGeneral(), 'General');
         
-        $this->addSubForm(new Admin_Form_DocumentPersons(), 'Persons');
+        // $this->addSubForm(new Admin_Form_DocumentPersons(), 'Persons');
         
         // Bibliographische Beschreibung
         $this->addSubForm(new Admin_Form_DocumentTitles(), 'Titles');
