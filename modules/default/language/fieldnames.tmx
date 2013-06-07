@@ -1333,7 +1333,7 @@
 
         <tu tuid="DateGranted">
             <tuv xml:lang="en">
-                <seg>Date of Patent Granted</seg>
+                <seg>Patent Grant Date</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Datum der Patenterteilung</seg>
@@ -1387,7 +1387,7 @@
 
         <tu tuid="YearApplied">
             <tuv xml:lang="en">
-                <seg>Patent Year applied</seg>
+                <seg>Patent Application Year</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Jahr der Patentanmeldung</seg>
@@ -1400,6 +1400,15 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Patentanmeldung</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Patent.Number">
+            <tuv xml:lang="en">
+                <seg>Patent Number</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Patentnummer</seg>
             </tuv>
         </tu>
 
