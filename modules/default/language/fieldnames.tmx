@@ -1396,7 +1396,7 @@
 
         <tu tuid="Application">
             <tuv xml:lang="en">
-                <seg>PatentApplication</seg>
+                <seg>Patent Application</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Patentanmeldung</seg>
