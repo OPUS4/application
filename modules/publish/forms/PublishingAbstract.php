@@ -62,31 +62,39 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
                         
             if ($element->getType() === 'Zend_Form_Element_Checkbox') {
                 $elementAttributes['value'] = $element->getCheckedValue();
-                if ($element->isChecked())
+                if ($element->isChecked()) {
                     $elementAttributes['check'] = 'checked';
-                else
+                }
+                else {
                     $elementAttributes['check'] = '';
+                }
             }
 
             if ($element->getType() === 'Zend_Form_Element_Select') {
                 $elementAttributes["options"] = $element->getMultiOptions(); //array
             }
 
-            if ($element->isRequired())
+            if ($element->isRequired()) {
                 $elementAttributes['req'] = 'required';
-            else
+            }
+            else {
                 $elementAttributes['req'] = 'optional';
+            }
 
-            if ($element->getAttrib('isLeaf'))
+            if ($element->getAttrib('isLeaf')) {
                 $elementAttributes['isLeaf'] = true;
+            }
 
-            if ($element->getAttrib('subfield'))
+            if ($element->getAttrib('subfield')) {
                 $elementAttributes['subfield'] = true;
-            else 
+            }
+            else  {
                 $elementAttributes['subfield'] = false; 
-            
-            if ($element->getAttrib('DT_external'))
+            }
+
+            if ($element->getAttrib('DT_external')) {
                 $elementAttributes['DT_external'] = true;
+            }
         }
 
         return $elementAttributes;

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -33,16 +32,17 @@
  * @version     $Id$
  */
 class Publish_View_Helper_Element extends Publish_View_Helper_Fieldset {
-
     
     /**
-     * method to render specific elements of an form
-     * @param <type> $type element type that has to rendered
+     * method to render specific elements of a form
      * @param <type> $value value of element or Zend_Form_Element
+     * @param <type> $options TODO
+     * @param <type> $type element type that has to rendered     
      * @param <type> $name name of possible hidden element
+     * 
      * @return element to render in view
      */
-    public function element($value, $options = null, $type=null, $name = null) {
+    public function element($value, $options = null, $type = null, $name = null) {
         $this->view->count++;
         if ($name == null && $value == null) {
             $error_message = $this->view->translate('template_error_unknown_field');
@@ -56,8 +56,7 @@ class Publish_View_Helper_Element extends Publish_View_Helper_Fieldset {
         return $this->_renderElement($value, $options, $name);
     }
 
-    function _renderElement($field, $options=null, $name=null) {
-        
+    function _renderElement($field, $options = null, $name = null) {
         $fieldset = "<fieldset class='left-labels'>";
         $fieldset .= $this->getLegendFor($field['header']);
         $fieldset .= $this->getFieldsetHint($field['id']);
@@ -95,4 +94,3 @@ class Publish_View_Helper_Element extends Publish_View_Helper_Fieldset {
         return $fieldset;
     }
 }
-

@@ -107,7 +107,10 @@ class Publish_Model_DocumenttypeParser {
     /**
      * Allocates member variables of currentElement with found attributes in XML Documenttype for element "field".
      * Parses for top elements "field" and their atrributes.
+     * 
      * @param DomElement $field
+     * @param Publish_Model_FormElement $currentElement
+     * 
      * @return false: field has no attributes
      */
     private function _parseAttributes(DomElement $field, $currentElement) {
@@ -133,10 +136,12 @@ class Publish_Model_DocumenttypeParser {
                 
             $currentElement->setElementName($elementName);
             
-            if ($required === 'yes')
+            if ($required === 'yes') {
                 $currentElement->setRequired(true);
-            else
+            }
+            else {
                 $currentElement->setRequired(false);
+            }
 
             $currentElement->setFormElement($formElement);
             $currentElement->setDatatype($datatype);
@@ -169,10 +174,12 @@ class Publish_Model_DocumenttypeParser {
                     $subDatatype = $subField->getAttribute('datatype');
 
                     $currentSubField->setElementName($currentElement->getElementName() . $subElementName);
-                    if ($subRequired === 'yes')
+                    if ($subRequired === 'yes') {
                         $currentSubField->setRequired(true);
-                    else
+                    }
+                    else {
                         $currentSubField->setRequired(false);
+                    }
                     $currentSubField->setFormElement($subFormElement);
                     $currentSubField->setDatatype($subDatatype);
 

@@ -255,7 +255,7 @@ class Publish_Model_FormElement {
 
             if (false === $this->isSelectElement()) {
                 $element = $this->form->createElement($this->formElement, $this->elementName);
-                $element->setDisableTranslator(true);
+                $element->setDisableTranslator(true);                
             }
             else {
                 $options = null;
@@ -279,7 +279,10 @@ class Publish_Model_FormElement {
                 }
             }
 
-            $element->setRequired($this->required);            
+            $element->setRequired($this->required);
+            if ($this->required) {
+                $element->addValidator('NotEmpty', true, array('messages' => $this->form->view->translate('publish_validation_error_notempty_isempty')));
+            }
 
             if (isset($this->default[0]['value']) && !empty($this->default[0]['value'])) {
                 $element->setValue($this->default[0]['value']);
@@ -300,13 +303,16 @@ class Publish_Model_FormElement {
             
             $element->setAttrib('datatype', $this->realDatatype($element)); 
             
-            if ($this->isSubField == true)
+            if ($this->isSubField == true) {
                 $element->setAttrib('subfield', true);
-            else 
+            }
+            else {
                 $element->setAttrib('subfield', false);
+            }
             
-            if ($this->datatype == 'CollectionLeaf')
+            if ($this->datatype == 'CollectionLeaf') {
                 $element->setAttrib('collectionLeaf', true);
+            }
             
             return $element;
         }
