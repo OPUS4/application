@@ -36,7 +36,7 @@
  * Formular fuer das Editieren der Lizenzen eines Dokuments.
  * 
  * Es werden die aktiven Lizenzen mit Checkboxen angezeigt, so daß man schnell die Lizenzen des Dokuments auswählen 
- * kann.
+ * kann. Die Namen der Checkboxen entsprechen 'licence' + Lizenz-ID.
  * 
  * Das Metadaten-Formular in der Administration zeigt alle Lizenzen, unabhängig davon ob sie aktiv sind, da bei 
  * nachträglicher Deaktivierung einer Lizenz, immer noch Dokumente damit verknüpft sein können.
