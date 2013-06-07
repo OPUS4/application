@@ -39,6 +39,8 @@
     </div>
     
     <?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
+    
+    <?= $this->partial('docstatus.phtml', array( 'document' => $this->document)) ?>
 
     <div style="padding-top: 1.5em; padding-bottom: 1.5em">
         <div id="docMenu" class="docstateMenu" style="padding-bottom: 1em;" >
@@ -57,5 +59,7 @@
 			<?PHP endforeach; ?>
         </div>
     </div>
+    
     <?= $this->form ?>
+    
 </div>
