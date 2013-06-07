@@ -446,8 +446,63 @@
             </td>
         </tr>
     </xsl:template>
+
+    <xsl:template match="Patent">
+        <xsl:if test="@Number">
+            <xsl:call-template name="PatentData">
+                <xsl:with-param name="name">Patent.Number</xsl:with-param>
+                <xsl:with-param name="value"><xsl:value-of select="@Number"/></xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="@Countries">
+            <xsl:call-template name="PatentData">
+                <xsl:with-param name="name">Countries</xsl:with-param>
+                <xsl:with-param name="value"><xsl:value-of select="@Countries"/></xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="@YearApplied">
+            <xsl:call-template name="PatentData">
+                <xsl:with-param name="name">YearApplied</xsl:with-param>
+                <xsl:with-param name="value"><xsl:value-of select="@YearApplied"/></xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="@Application">
+            <xsl:call-template name="PatentData">
+                <xsl:with-param name="name">Application</xsl:with-param>
+                <xsl:with-param name="value"><xsl:value-of select="@Application"/></xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+        <xsl:if test="DateGranted">
+            <xsl:call-template name="PatentData">
+                <xsl:with-param name="name">DateGranted</xsl:with-param>
+                <xsl:with-param name="value">
+                    <xsl:call-template name="formatDate">
+                        <xsl:with-param name="year"><xsl:value-of select="DateGranted/@Year"/></xsl:with-param>
+                        <xsl:with-param name="month"><xsl:value-of select="DateGranted/@Month"/></xsl:with-param>
+                        <xsl:with-param name="day"><xsl:value-of select="DateGranted/@Day"/></xsl:with-param>
+                    </xsl:call-template>
+                </xsl:with-param>
+            </xsl:call-template>
+        </xsl:if>
+    </xsl:template>
  
-    <xsl:template match="Patent"/>
+    <xsl:template name="PatentData">
+        <xsl:param name="name"/>
+        <xsl:param name="value"/>
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateString">
+                    <xsl:with-param name="string">
+                        <xsl:value-of select="$name"/>
+                    </xsl:with-param>
+                </xsl:call-template>
+                <xsl:text>:</xsl:text>
+            </th>
+            <td>
+                <xsl:value-of select="$value"/>
+            </td>
+        </tr>
+    </xsl:template>
  
     <xsl:template match="ReferenceUrl">
         <tr>
