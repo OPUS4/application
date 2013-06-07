@@ -134,15 +134,6 @@
         </tuv>
     </tu>
 
-    <tu tuid="isEmpty">
-        <tuv xml:lang="en">
-            <seg>Value is required and can't be empty.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Der Wert wird benötigt und darf nicht leer bleiben.</seg>
-        </tuv>
-    </tu>
-
     <tu tuid="fileCountTooFew">
         <tuv xml:lang="en">
             <seg>Please upload at least one file.</seg>
