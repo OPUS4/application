@@ -167,14 +167,14 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      */
     public function processPost($data, $context) {
         // Prüfen, ob "Speichern" geklickt wurde
-        if (array_key_exists('save', $data)) {
-            return self::SAVE;
+        if (array_key_exists(self::ELEMENT_SAVE, $data)) {
+            return self::ELEMENT_SAVE;
         }
-        else if (array_key_exists('saveAndContinue', $data)) {
-            return self::SAVE_AND_CONTINUE;
+        else if (array_key_exists(self::ELEMENT_SAVE_AND_CONTINUE, $data)) {
+            return self::ELEMENT_SAVE_AND_CONTINUE;
         }
-        else if (array_key_exists('cancel', $data)) {
-            return self::CANCEL;
+        else if (array_key_exists(self::ELEMENT_CANCEL, $data)) {
+            return self::ELEMENT_CANCEL;
         }
         else {
             // POST Daten an Unterformulare weiterreichen
