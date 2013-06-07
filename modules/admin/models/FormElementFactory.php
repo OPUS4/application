@@ -49,6 +49,23 @@ class Admin_Model_FormElementFactory extends Admin_Model_AbstractModel {
     private $__translate;
     
     private $__translationPrefix = '';
+    
+    /**
+     *
+     * @var type 
+     * 
+     * TODO get from some other (model) class
+     */
+    private $personRoles =  array(
+        'author' => 'author',
+        'editor' => 'editor',
+        'translator' => 'translator',
+        'contributor' => 'contributor',
+        'other' => 'other',
+        'advisor' => 'advisor',
+        'referee' => 'referee',
+        'submitter' => 'submitter'
+    );
 
     /**
      * Constructs a Admin_Model_FormElementFactory.
@@ -155,7 +172,7 @@ class Admin_Model_FormElementFactory extends Admin_Model_AbstractModel {
         $name = $field->getName();
 
         $select = new Zend_Form_Element_Select($name);
-
+        
         // add possible values
         if ($name === 'Type' && $modelName === 'Opus_Document') {
             $docTypeHelper =
@@ -336,6 +353,26 @@ class Admin_Model_FormElementFactory extends Admin_Model_AbstractModel {
         $element->setValidators($validators, true);
         
         return $element;
+    }
+        
+    /**
+     * 
+     * @param type $name
+     * @return \Zend_Form_Element_Select
+     * 
+     * TODO Übersetzung
+     */
+    public function createPersonRoleSelect($name = 'Role') {
+        $options = $this->personRoles;
+        
+        $select = new Zend_Form_Element_Select($name);
+        
+        foreach ($options as $index => $language) {
+            $select->addMultiOption($index, $language);
+            $select->setDisableTranslator(false); // TODO Check for multiple translations
+        }
+        
+        return $select;
     }
 
 }
