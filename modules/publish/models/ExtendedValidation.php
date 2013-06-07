@@ -97,10 +97,7 @@ class Publish_Model_ExtendedValidation {
         //3) validate: no checkbox without mail
         $valid3 = $this->_validateEmailNotification();
 
-        if ($valid1 && $valid2 && $valid3)
-            return true;
-        else
-            return false;
+        return $valid1 && $valid2 && $valid3;
     }
 
     /**
@@ -242,9 +239,7 @@ class Publish_Model_ExtendedValidation {
      * Validate all given titles with different constraint checks.
      * @return <Bool> true, if all checks were positive, else false
      */
-    private function _validateTitles() {
-        $validTitles = true;
-
+    private function _validateTitles() {        
         //1) validate language Fields
         $validate1 = $this->_validateTitleLanguages();
 
@@ -257,9 +252,7 @@ class Publish_Model_ExtendedValidation {
         //4) validate usage of document language for main titles
         $validate4 = $this->_validateDocumentLanguageForMainTitles();
 
-        $validTitles = $validate1 && $validate2 && $validate3 && $validate4;
-
-        return $validTitles;
+        return $validate1 && $validate2 && $validate3 && $validate4;
     }
 
     /**
@@ -706,4 +699,3 @@ class Publish_Model_ExtendedValidation {
     }
 
 }
-
