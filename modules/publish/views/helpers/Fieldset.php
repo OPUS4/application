@@ -157,11 +157,12 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
      */
     function renderFieldsetErrors($field) {
         $fieldset = "";
-        if ( isset($field) && !empty($field) ) {
+        if (isset($field) && !empty($field)) {
             $fieldset .= "<div class='form-errors'><ul>";
-            foreach ($field AS $err)
-                $fieldset .= "\n\t\t\t<li>" . htmlspecialchars($err, ENT_QUOTES) . "</li>";
-            $fieldset .= "\n\t\t</ul></div>";
+            foreach ($field AS $err) {
+                $fieldset .= "\n<li>" . htmlspecialchars($err, ENT_QUOTES) . "</li>";
+            }
+            $fieldset .= "\n</ul></div>";
         }
         return $fieldset;
     }
