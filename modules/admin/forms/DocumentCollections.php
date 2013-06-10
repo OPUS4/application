@@ -176,7 +176,7 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
     }
     
     public function continueEdit($request) {
-        if ($request->getParam('continue', null) == 'coladd') {
+        if ($request->getParam('continue', null) == 'addcol') {
             $colId = $request->getParam('colId');
             
             $this->_addCollection($colId);
