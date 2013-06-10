@@ -124,7 +124,7 @@ class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
         $patent->setCountries($value);
         
         // YearApplied
-        $value = $this->getElement(self::ELEMENT_YEAR_APPLIED)->getValue();
+        $value = $this->getElementValue(self::ELEMENT_YEAR_APPLIED);
         $patent->setYearApplied($value);
         
         // Application
