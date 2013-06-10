@@ -200,8 +200,8 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
         
         $post = array(
             'PageFirst' => 'a', // nur Zahlen erlaubt
-            'PageLast' => 4, // korrekt
-            'PageCount' => -1, // muss groesser, gleich 1 sein
+            'PageLast' => '4', // korrekt
+            'PageCount' => '-1', // muss groesser, gleich 1 sein
             'ThesisDateAccepted' => '2010/02/31', // muss korrektes Datum sein
             'ThesisYearAccepted' => 'Jahr' // muss Zahl sein
         );
@@ -215,18 +215,18 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
         $this->assertContains('notGreaterThan', $form->getErrors('PageCount'));
         $this->assertContains('dateInvalidDate', $form->getErrors('ThesisDateAccepted'));
         $this->assertContains('notInt', $form->getErrors('ThesisYearAccepted'));
-        $this->assertContains('notGreaterThan', $form->getErrors('ThesisYearAccepted'));
         
         $post = array();
         
         $this->assertTrue($form->isValid($post)); // keine Pflichteingaben
         
         $post = array(
-            'ThesisDateAccepted' => '20. Feb 2010'
+            'ThesisDateAccepted' => '20. Feb 2010',
+            'ThesisYearAccepted' => '-1'
         );
 
         $this->assertFalse($form->isValid($post)); // keine Pflichteingaben
-        
+        $this->assertContains('notGreaterThan', $form->getErrors('ThesisYearAccepted'));
         $this->assertContains('dateFalseFormat', $form->getErrors('ThesisDateAccepted'));
     }
     
