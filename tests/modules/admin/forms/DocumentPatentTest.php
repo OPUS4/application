@@ -131,11 +131,50 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
         );
         
         $this->assertFalse($form->isValid($post));
-        
         $this->assertContains('isEmpty', $form->getErrors('Number'));
         $this->assertContains('notInt', $form->getErrors('YearApplied'));
-        $this->assertContains('notGreaterThan', $form->getErrors('YearApplied'));
         $this->assertContains('dateInvalidDate', $form->getErrors('DateGranted'));
+        
+        
+        $post = array(
+            'Number' => '1',
+            'YearApplied' => '-1'
+        );
+                
+        $this->assertFalse($form->isValid($post));
+        $this->assertContains('notGreaterThan', $form->getErrors('YearApplied'));
+    }
+    
+    public function testRegressionOpusvier2824() {
+        $this->setUpEnglish();
+
+        $this->setUpEnglish();
+        
+        $form = new Admin_Form_DocumentPatent();
+                
+        $form->getElement('Number')->setValue('323');
+        $form->getElement('YearApplied')->setValue(''); // Leeres Feld
+        
+        $patent = new Opus_Patent();
+        
+        $form->updateModel($patent);
+        
+        $document = new Opus_Document();
+        $document->addPatent($patent);
+        
+        $document->store();
+        
+        $documentId = $document->getId();
+        
+        $document = new Opus_Document($documentId);
+        
+        $patents = $document->getPatent();
+        $patent = $patents[0];
+        
+        $document->delete();
+        
+        $this->assertEquals('323', $patent->getNumber());
+        $this->assertNotEquals('0000', $patent->getYearApplied());
     }
     
 }
