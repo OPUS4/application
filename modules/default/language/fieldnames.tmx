@@ -1403,7 +1403,7 @@
             </tuv>
         </tu>
 
-        <tu tuid="Patent.Number">
+        <tu tuid="Opus_Patent_Number">
             <tuv xml:lang="en">
                 <seg>Patent Number</seg>
             </tuv>

@@ -451,7 +451,7 @@
     <xsl:template match="Patent">
         <xsl:if test="@Number">
             <xsl:call-template name="PatentData">
-                <xsl:with-param name="name">Patent.Number</xsl:with-param>
+                <xsl:with-param name="name">Opus_Patent_Number</xsl:with-param>
                 <xsl:with-param name="value"><xsl:value-of select="@Number"/></xsl:with-param>
             </xsl:call-template>
         </xsl:if>
