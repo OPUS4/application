@@ -344,7 +344,7 @@ class Admin_Model_FormElementFactory extends Admin_Model_AbstractModel {
         ));
         $validators[] = $validator;
         
-        $validator = new Zend_Validate_GreaterThan(0);
+        $validator = new Zend_Validate_GreaterThan(-1);
         $validator->setMessages(array(
             Zend_Validate_GreaterThan::NOT_GREATER => self::TRANSLATION_KEY_PREFIX . 'year_invalid'
         ));
