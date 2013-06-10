@@ -104,31 +104,31 @@ class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
         
     public function updateModel($document) {
         // Language
-        $value = $this->getElement(self::ELEMENT_LANGUAGE)->getValue();
+        $value = $this->getElementValue(self::ELEMENT_LANGUAGE);
         $document->setLanguage($value);
         
         // Type
-        $value = $this->getElement(self::ELEMENT_TYPE)->getValue();
+        $value = $this->getElementValue(self::ELEMENT_TYPE);
         $document->setType($value);
 
         $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
         
         // CompletedDate
-        $value = $this->getElement(self::ELEMENT_COMPLETED_DATE)->getValue();
+        $value = $this->getElementValue(self::ELEMENT_COMPLETED_DATE);
         $date = $datesHelper->getOpusDate($value);        
         $document->setCompletedDate($date);
         
         // CompletedYear
-        $value = $this->getElement(self::ELEMENT_COMPLETED_YEAR)->getValue();
+        $value = $this->getElementValue(self::ELEMENT_COMPLETED_YEAR);
         $document->setCompletedYear($value);
         
         // PublishedDate
-        $value = $this->getElement(self::ELEMENT_PUBLISHED_DATE)->getValue();
+        $value = $this->getElementValue(self::ELEMENT_PUBLISHED_DATE);
         $date = $datesHelper->getOpusDate($value);        
         $document->setPublishedDate($date);
         
         // PublishedYear
-        $value = $this->getElement(self::ELEMENT_PUBLISHED_YEAR)->getValue();
+        $value = $this->getElementValue(self::ELEMENT_PUBLISHED_YEAR);
         $document->setPublishedYear($value);
     }
     
