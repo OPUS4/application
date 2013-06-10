@@ -825,4 +825,65 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $doc->store();
         return $doc;
     }
+
+    public function testFacetSortLexicographicallyForInstituteFacet() {
+        // manipulate application configuration
+        $config = Zend_Registry::get('Zend_Config');
+        $sortCrit = null;
+        $oldConfig = null;
+        if (isset($config->searchengine->solr->sortcrit->institute)) {
+            $sortCrit = $config->searchengine->solr->sortcrit->institute;
+        }
+        else {
+            $config = new Zend_Config(array(
+                'searchengine' => array(
+                    'solr' => array(
+                        'sortcrit' => array(
+                            'institute' => 'lexi')))), true);
+            $oldConfig = Zend_Registry::get('Zend_Config');
+            // Include the above made configuration changes in the application configuration.
+            $config->merge(Zend_Registry::get('Zend_Config'));
+        }
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->dispatch('/solrsearch/index/search/searchtype/all');
+
+        // undo configuration manipulation
+        $config = Zend_Registry::get('Zend_Config');
+        if (!is_null($oldConfig)) {
+            $config = $oldConfig;
+        }
+        else {
+            $config->searchengine->solr->sortcrit->institute = $sortCrit;
+        }
+        Zend_Registry::set('Zend_Config', $config);
+        
+        $response = $this->getResponse()->getBody();
+
+        $startPos = strpos($response, 'id="institute_facet"');
+        $this->assertFalse($startPos === false);
+        $searchStrings = array(
+            'Abwasserwirtschaft und Gewässerschutz B-2',
+            'Bauwesen',
+            'Bibliothek',
+            'Biomechanik M-3',
+            'Bioprozess- und Biosystemtechnik V-1',
+            'Elektrotechnik und Informationstechnik',
+            'Entwerfen von Schiffen und Schiffssicherheit M-6',
+            'Fluiddynamik und Schiffstheorie M-8',
+            'Geotechnik und Baubetrieb B-5',
+            'Keramische Hochleistungswerkstoffe M-9');
+        $lastPos = $startPos;
+        $loopComplete = true;
+        for ($i = 0; $i < 10; $i++) {
+            $lastPos = strpos($response, $searchStrings[$i], $lastPos);
+            $this->assertFalse($lastPos === false);
+            if ($lastPos === false) {
+                break;
+                $loopComplete = false;
+            }
+        }
+        $this->assertTrue($loopComplete);
+    }
+
 }
