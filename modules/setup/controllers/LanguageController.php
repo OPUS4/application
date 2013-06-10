@@ -79,7 +79,7 @@ class Setup_LanguageController extends Controller_SetupAbstract {
             'action' => 'show'), null, true));
         $searchForm->addElement('hidden', 'search', array('value' => $searchTerm));
         $searchForm->addElement('hidden', 'sort', array('value' => $sortKey));
-        $searchForm->addElement('submit', $this->view->translate('setup_button_back'));
+        $searchForm->addElement('submit', $this->view->translate('setup_backlink'));
         $this->view->searchForm = $searchForm;
         $this->render('edit');
     }

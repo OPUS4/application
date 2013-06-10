@@ -104,7 +104,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="setup_button_back">
+    <tu tuid="setup_backlink">
         <tuv xml:lang="en">
             <seg>Back</seg>
         </tuv>

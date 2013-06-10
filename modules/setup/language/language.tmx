@@ -107,5 +107,14 @@
         </tuv>
     </tu>
 
+    <tu tuid="setup_language_translation_modules_missing">
+        <tuv xml:lang="en">
+            <seg>There are no modules available for editing. Please configure the modules you want to be editable.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Es sind keine Module für die Bearbeitung konfiguriert. Bitte konfgurieren Sie die zu bearbeitenden Module.</seg>
+        </tuv>
+    </tu>
+
   </body>
 </tmx>
