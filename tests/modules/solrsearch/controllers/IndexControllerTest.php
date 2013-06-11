@@ -877,7 +877,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $loopComplete = true;
         for ($i = 0; $i < 10; $i++) {
             $lastPos = strpos($response, $searchStrings[$i], $lastPos);
-            $this->assertFalse($lastPos === false);
+            $this->assertFalse($lastPos === false, $searchStrings[$i] . ' not found in institute facet list (iteration ' . $i . '): ' . $response);
             if ($lastPos === false) {
                 break;
                 $loopComplete = false;
