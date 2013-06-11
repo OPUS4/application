@@ -115,11 +115,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testWildcardAsteriskUppercaseQuerySearch() {
-        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/test+Docum*', null, null);        
+        $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/test+Docum*', null, null);
         $numberOfHitsUpper = substr_count($this->getResponse()->getBody(), 'result_box');
 
         $this->getResponse()->clearBody();
-        
+
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/test+docum*', null, null);
         $numberOfHitsLower = substr_count($this->getResponse()->getBody(), 'result_box');
 
@@ -264,14 +264,14 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Regression test for OPUSVIER-2144
-     * 
+     *
      * IMPORTANT: Unit Test funktioniert nicht mehr, wenn die Zahl der Dokumente 20 übersteigt.
      */
     public function testLastPageUrlEqualsNextPageUrlDocTypeArticle() {
         $docFinder = new Opus_DocumentFinder();
         $docFinder->setType('article')->setServerState('published');
         $this->assertEquals(20, $docFinder->count(), "Test data changed!");
-        
+
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article', null, null);
         $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/article/start/10/rows/10">'));
         $this->assertNotContains('solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/19/rows/10">', $this->getResponse()->getBody());
@@ -391,9 +391,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
     /**
      * series search related test cases
-     * 
+     *
      */
-    
+
     public function testSeriesSearchWithInvalidId() {
         $this->markTestSkipped('cannot be tested at the moment: method _redirectToAndExit does not work in test environment (see OPUSVIER-2315)');
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/12345');
@@ -424,10 +424,10 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
     public function testSeriesSearch() {
         $this->markTestSkipped('see OPUSVIER-2315');
-        
+
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/1');
         $this->assertResponseCode(200);
-        
+
         $docIds = array(146, 93, 92, 94, 91);
         foreach ($docIds as $docId) {
             $this->assertContains('/frontdoor/index/index/docId/' . $docId, $this->getResponse()->getBody());
@@ -442,7 +442,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
     public function testSeriesSearchPaginationAndSortingLinks() {
         $this->markTestSkipped('see OPUSVIER-2315');
-        
+
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/5');
         $this->assertResponseCode(200);
 
@@ -460,15 +460,15 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/title/sortorder/asc', $this->getResponse()->getBody());
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/title/sortorder/desc', $this->getResponse()->getBody());
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/author/sortorder/asc', $this->getResponse()->getBody());
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/author/sortorder/desc', $this->getResponse()->getBody());        
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/5/start/0/rows/10/sortfield/author/sortorder/desc', $this->getResponse()->getBody());
     }
 
     public function testSeriesSearchPaginationWorks() {
         $this->markTestSkipped('see OPUSVIER-2315');
-        
+
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/5/start/10/rows/10');
         $this->assertResponseCode(200);
-        
+
         $this->assertContains('/frontdoor/index/index/docId/3', $this->getResponse()->getBody());
         $this->assertContains('/frontdoor/index/index/docId/2', $this->getResponse()->getBody());
         $this->assertContains('/frontdoor/index/index/docId/1', $this->getResponse()->getBody());
@@ -484,7 +484,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
     public function testSeriesSearchRespectsDefaultDocSortOrder() {
         $this->markTestSkipped('see OPUSVIER-2315');
-        
+
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/1');
         $this->assertResponseCode(200);
 
@@ -504,7 +504,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
     public function testSeriesActionRespectsAscendingDocSortOrder() {
         $this->markTestSkipped('consult OPUSVIER-2315');
-        
+
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/asc');
         $this->assertResponseCode(200);
 
@@ -532,7 +532,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/asc" ', $responseBody);
         $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/desc" ', $responseBody);
-        
+
         $seriesIds = array(146, 93, 92, 94, 91);
         foreach ($seriesIds as $seriesId) {
             $pos = strpos($responseBody, '/frontdoor/index/index/docId/' . $seriesId);
@@ -546,13 +546,13 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      */
     public function testInvalidSearchQueryReturns500() {
         $this->requireSolrConfig();
-        
+
         $this->dispatch('/solrsearch/index/search/searchtype/simple/start/0/rows/10/query/"\""');
 
         $body = $this->getResponse()->getBody();
         $this->assertNotContains("exception 'Application_Exception' with message 'error_search_unavailable'", $body);
         $this->assertContains("exception 'Application_SearchException' with message 'error_search_invalidquery'", $body);
-        $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());        
+        $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());
     }
 
     public function testUnavailableSolrServerReturns503() {
@@ -584,7 +584,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      */
     public function testCatchAllSearchConsidersIdentifiers() {
         $this->requireSolrConfig();
-        
+
         // create a test doc with all available identifier types
         $doc = new Opus_Document();
         $doc->setServerState('published');
@@ -667,7 +667,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $p = new Opus_Person();
         $p->setLastName('personsubmitter-opusvier-2484');
         $doc->addPersonSubmitter($p);
-        
+
         $doc->store();
 
         // search for document based on persons
@@ -680,7 +680,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             'personother-opusvier-2484',
             'persontranslator-opusvier-2484',
         );
-        foreach ($persons as $person) {            
+        foreach ($persons as $person) {
             $this->dispatch('/solrsearch/index/search/searchtype/simple/query/' . $person);
 
             $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
@@ -695,19 +695,19 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
         // search should not return the test document
-        $this->assertNotContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());        
+        $this->assertNotContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());
 
         $doc->deletePermanent();
     }
 
     public function testFacetLimitWithDefaultSetting() {
         $config = Zend_Registry::get('Zend_Config');
-        
+
         $numOfSubjects = 20;
         $doc = $this->addSampleDocWithMultipleSubjects($numOfSubjects);
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610');
-        $doc->deletePermanent();        
+        $doc->deletePermanent();
 
         for ($index = 0; $index < $config->searchengine->solr->globalfacetlimit; $index++) {
             $path = '/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject';
@@ -722,7 +722,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
                 $path .= '0';
             }
             $this->assertNotContains($path . $index, $this->getResponse()->getBody());
-        }        
+        }
     }
 
     public function testFacetLimitWithGlobalSetting() {
@@ -741,7 +741,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610');
 
         $doc->deletePermanent();
-        
+
         // undo configuration manipulation
         $config = Zend_Registry::get('Zend_Config');
         $config->searchengine->solr->globalfacetlimit = $limit;
@@ -757,7 +757,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
     public function testFacetLimitWithLocalSettingForSubjectFacet() {
         // manipulate application configuration
-        $config = Zend_Registry::get('Zend_Config');        
+        $config = Zend_Registry::get('Zend_Config');
         $limit = null;
         $oldConfig = null;
         if (isset($config->searchengine->solr->facetlimit->subject)) {
@@ -779,9 +779,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $doc = $this->addSampleDocWithMultipleSubjects($numOfSubjects);
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610');
-        
+
         $doc->deletePermanent();
-        
+
         // undo configuration manipulation
         $config = Zend_Registry::get('Zend_Config');
         if (!is_null($oldConfig)) {
@@ -797,7 +797,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         }
         for ($index = 5; $index < $numOfSubjects; $index++) {
             $this->assertNotContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject0' . $index, $this->getResponse()->getBody());
-        }        
+        }
     }
 
     private function addSampleDocWithMultipleSubjects($numOfSubjects = 0) {
@@ -857,7 +857,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             $config->searchengine->solr->sortcrit->institute = $sortCrit;
         }
         Zend_Registry::set('Zend_Config', $config);
-        
+
         $response = $this->getResponse()->getBody();
 
         $startPos = strpos($response, 'id="institute_facet"');
@@ -886,4 +886,84 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertTrue($loopComplete);
     }
 
+    public function testFacetSortForYearInverted() {
+        // manipulate application configuration        
+        $oldConfig = Zend_Registry::get('Zend_Config');
+
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config->searchengine->solr->sortcrit->year_inverted)) {
+            $config->searchengine->solr->sortcrit->year_inverted = 'lexi';
+        }
+        else {
+            $config = new Zend_Config(array(
+                'searchengine' => array(
+                    'solr' => array(
+                        'sortcrit' => array(
+                            'year_inverted' => 'lexi')))), true);            
+            // Include the above made configuration changes in the application configuration.
+            $config->merge(Zend_Registry::get('Zend_Config'));            
+        }
+
+        if (isset($config->searchengine->solr->facets)) {
+            $config->searchengine->solr->facets = 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute';
+        }
+        else {
+            $config = new Zend_Config(array(
+                'searchengine' => array(
+                    'solr' => array(
+                        'facets' => 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute'))), true);
+            // Include the above made configuration changes in the application configuration.
+            $config->merge(Zend_Registry::get('Zend_Config'));            
+        }
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->dispatch('/solrsearch/index/search/searchtype/all');        
+
+        // undo configuration manipulation
+        Zend_Registry::set('Zend_Config', $oldConfig);
+
+        $searchStrings = array(
+            '2012',
+            '2011',
+            '2010',
+            '2009',
+            '2008',
+            '2007',
+            '2005',
+            '2004',
+            '2003',
+            '2002');
+        $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="year_facet"');
+
+        $this->dispatch('/solrsearch/index/search/searchtype/all');
+        $searchStrings = array(
+            '2011',
+            '2009',
+            '2010',
+            '1978',
+            '2008',
+            '2012',
+            '1979',
+            '1962',
+            '1963',
+            '1975');
+        $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="year_facet"');
+    }
+
+    private function assertPositions($response, $searchStrings, $startString) {
+        $startPos = strpos($response, $startString);
+        $this->assertFalse($startPos === false);
+        $lastPos = $startPos;
+        $loopComplete = true;
+        for ($i = 0; $i < 10; $i++) {
+            $lastPos = strpos($response, '>' . $searchStrings[$i] . '</a>', $lastPos);
+            $this->assertFalse($lastPos === false, "'" . $searchStrings[$i] . '\' not found in year facet list (iteration ' . $i . ')');
+            if ($lastPos === false) {
+                break;
+                $loopComplete = false;
+            }
+        }
+        $this->assertTrue($loopComplete);
+    }
+    
 }
