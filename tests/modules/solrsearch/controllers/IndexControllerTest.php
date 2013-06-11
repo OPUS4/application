@@ -828,11 +828,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
     public function testFacetSortLexicographicallyForInstituteFacet() {
         // manipulate application configuration
-        $config = Zend_Registry::get('Zend_Config');
-        $sortCrit = null;
-        $oldConfig = null;
+        $oldConfig = Zend_Registry::get('Zend_Config');
+        
+        $config = Zend_Registry::get('Zend_Config');       
         if (isset($config->searchengine->solr->sortcrit->institute)) {
-            $sortCrit = $config->searchengine->solr->sortcrit->institute;
+            $config->searchengine->solr->sortcrit->institute = 'lexi';
         }
         else {
             $config = new Zend_Config(array(
@@ -849,19 +849,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/index/search/searchtype/all');
 
         // undo configuration manipulation
-        $config = Zend_Registry::get('Zend_Config');
-        if (!is_null($oldConfig)) {
-            $config = $oldConfig;
-        }
-        else {
-            $config->searchengine->solr->sortcrit->institute = $sortCrit;
-        }
-        Zend_Registry::set('Zend_Config', $config);
+        Zend_Registry::set('Zend_Config', $oldConfig);
 
-        $response = $this->getResponse()->getBody();
-
-        $startPos = strpos($response, 'id="institute_facet"');
-        $this->assertFalse($startPos === false);
         $searchStrings = array(
             'Abwasserwirtschaft und Gewässerschutz B-2',
             'Bauwesen',
@@ -873,17 +862,22 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             'Fluiddynamik und Schiffstheorie M-8',
             'Geotechnik und Baubetrieb B-5',
             'Hochfrequenztechnik E-3');
-        $lastPos = $startPos;
-        $loopComplete = true;
-        for ($i = 0; $i < 10; $i++) {
-            $lastPos = strpos($response, $searchStrings[$i], $lastPos);
-            $this->assertFalse($lastPos === false, "'" . $searchStrings[$i] . '\' not found in institute facet list (iteration ' . $i . ')');
-            if ($lastPos === false) {
-                break;
-                $loopComplete = false;
-            }
-        }
-        $this->assertTrue($loopComplete);
+        $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="institute_facet"');
+
+        $this->dispatch('/solrsearch/index/search/searchtype/all');
+
+        $searchStrings = array(
+            'Technische Universität Hamburg-Harburg',
+            'Entwerfen von Schiffen und Schiffssicherheit M-6',
+            'Keramische Hochleistungswerkstoffe M-9',
+            'Bibliothek',
+            'Elektrotechnik und Informationstechnik',
+            'Maschinenbau',
+            'Abwasserwirtschaft und Gewässerschutz B-2',
+            'Bauwesen',
+            'Biomechanik M-3',
+            'Verfahrenstechnik');
+        $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="institute_facet"');
     }
 
     public function testFacetSortForYearInverted() {
