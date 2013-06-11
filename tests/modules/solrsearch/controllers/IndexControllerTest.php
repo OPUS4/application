@@ -872,12 +872,12 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             'Entwerfen von Schiffen und Schiffssicherheit M-6',
             'Fluiddynamik und Schiffstheorie M-8',
             'Geotechnik und Baubetrieb B-5',
-            'Keramische Hochleistungswerkstoffe M-9');
+            'Hochfrequenztechnik E-3');
         $lastPos = $startPos;
         $loopComplete = true;
         for ($i = 0; $i < 10; $i++) {
             $lastPos = strpos($response, $searchStrings[$i], $lastPos);
-            $this->assertFalse($lastPos === false, $searchStrings[$i] . ' not found in institute facet list (iteration ' . $i . '): ' . $response);
+            $this->assertFalse($lastPos === false, "'" . $searchStrings[$i] . '\' not found in institute facet list (iteration ' . $i . ')');
             if ($lastPos === false) {
                 break;
                 $loopComplete = false;
