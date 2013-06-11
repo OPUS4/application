@@ -92,6 +92,7 @@
             <xsl:apply-templates select="mods:part/mods:extent[@unit='page']/mods:end"/>
             <xsl:apply-templates select="mods:part/mods:detail[@type='volume']/mods:number"/>
             <xsl:apply-templates select="mods:part/mods:detail[@type='number']/mods:number"/>
+            <xsl:apply-templates select="mods:part/mods:detail[@type='issue']/mods:number"/>
             <xsl:apply-templates select="mods:part/mods:detail[@type='page']/mods:number"/>
 
             <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:name[@type='corporate']"/>
@@ -104,7 +105,15 @@
 
             
             <!--OPUSXML: ELEMENTE (required) -->
-            <xsl:apply-templates select="mods:titleInfo/mods:title"/>
+            <xsl:choose>
+                <xsl:when test="mods:titleInfo/mods:title != ''">
+                    <xsl:apply-templates select="mods:titleInfo/mods:title"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="mods:part/mods:detail[@type='chapter']/mods:number"/>
+                </xsl:otherwise>
+            </xsl:choose>
+            
             <xsl:apply-templates select="mods:relatedItem[@type='host']/mods:titleInfo/mods:title"/>
             <xsl:if test="mods:name[@type='personal'] or mods:relatedItem[@type='host']/mods:name[@type='personal']">
                 <xsl:element name="persons">
@@ -176,9 +185,18 @@
     </xsl:template>
 
     <xsl:template match="mods:originInfo/mods:publisher">
-        <xsl:attribute name="publisherName">
-            <xsl:value-of select="."/>
-        </xsl:attribute>
+        <xsl:choose>
+            <xsl:when test="../../mods:genre = 'instruction'">
+                 <xsl:attribute name="contributingCorporation">
+                    <xsl:value-of select="."/>
+                </xsl:attribute>              
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:attribute name="publisherName">
+                    <xsl:value-of select="."/>
+                </xsl:attribute>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="mods:originInfo/mods:place/mods:placeTerm">
@@ -217,7 +235,7 @@
         </xsl:attribute>
     </xsl:template>
 
-    <xsl:template match="mods:part/mods:detail[@type='number']/mods:number">
+    <xsl:template match="mods:part/mods:detail[@type='number' or @type='issue']/mods:number">
         <xsl:attribute name="issue">
             <xsl:value-of select="."/>
         </xsl:attribute>
@@ -227,6 +245,15 @@
         <xsl:attribute name="pageFirst">
             <xsl:value-of select="."/>
         </xsl:attribute>
+    </xsl:template>
+
+    <xsl:template match="mods:part/mods:detail[@type='chapter']/mods:number">
+        <xsl:element name="titlesMain">
+            <xsl:element name="titleMain">
+                <xsl:attribute name="language">deu</xsl:attribute>
+                <xsl:value-of select="."/>
+            </xsl:element>
+         </xsl:element>
     </xsl:template>
 
     <xsl:template match="mods:titleInfo/mods:title">
