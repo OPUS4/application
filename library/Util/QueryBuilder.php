@@ -55,6 +55,9 @@ class Util_QueryBuilder {
         $this->logger->debug("searchengine.solr.facets is set to $filters");
 
         foreach (explode(',', $filters) as $filterfield) {
+            if ($filterfield == 'year_inverted') {
+                $filterfield = 'year';
+            }
             array_push($this->filterFields, trim($filterfield));
         }
 
@@ -326,7 +329,7 @@ class Util_QueryBuilder {
     private function addFiltersToQuery($query, $input) {
         foreach($this->filterFields as $filterField) {
             $facetKey = $filterField . 'fq';
-            $facetValue = $input[$facetKey];
+            $facetValue = $input[$facetKey];        
             if ($facetValue !== '') {
                 $this->logger->debug("request has facet key: $facetKey - value is: $facetValue - corresponding facet is: $filterField");
                 $query->addFilterQuery($filterField, $facetValue);
