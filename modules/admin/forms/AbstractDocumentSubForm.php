@@ -178,8 +178,33 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
             // Sollte nie passieren - Schreibe Fehlermeldung ins Log
             Zend_Registry::get('Zend_Log')->err('Element \'' . $name . '\' in form \'' . $this->getName() .
                     '\' not found.');
+            return null;
         }
     }
     
+    /**
+     * Liefert Factory fuer das erzeugen von Formularelementen.
+     * 
+     * @return \Admin_Model_FormElementFactory
+     */
+    public function getFormElementFactory() {
+        return new Admin_Model_FormElementFactory();
+    }
+    
+    /**
+     * Liefert Helper fuer die Handhabung von Datumsangaben.
+     * 
+     * @return \Controller_Helper_Dates
+     */
+    public function getDatesHelper() {
+        return Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+    }
+    
+    /**
+     * Liefert Zend_Log Objekt zum Schreiben von Logeintraegen.
+     */
+    public function getLog() {
+        return Zend_Registry::get('Zend_Log');
+    }
     
 }
