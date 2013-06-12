@@ -915,8 +915,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertController('form');
         $this->assertAction('check');
 
-        var_dump($this->getResponse()->getBody());
-
         $this->assertNotContains('Undefined index: TitleAbstractLanguage_1', $this->getResponse()->getBody());        
     }
 
