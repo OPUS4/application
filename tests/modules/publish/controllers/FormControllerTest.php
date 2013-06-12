@@ -415,7 +415,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
             $oldval = $config->form->first->bibliographie;
         }
         $config->form->first->bibliographie = 0;
-        
+
         $this->request
                 ->setMethod('POST')
                   ->setPost(array(
@@ -565,7 +565,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
 
     private function addTestDocument($session, $documentType) {
         $doc = $this->createTemporaryDoc();
-        
+
         $session->documentType = $documentType;
         $session->documentId = $doc->getId();
         $session->additionalFields = array();
@@ -582,7 +582,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
             'PersonSubmitterLastName_1' => '',
             'PersonSubmitterEmail_1' => '',
             'TitleMain_1' => '',
-            'TitleMainLanguage_1' => '',            
+            'TitleMainLanguage_1' => '',
             'TitleAbstract_1' => '',
             'TitleAbstractLanguage_1' => '',
             'PersonAuthorFirstName_1' => '',
@@ -613,8 +613,8 @@ class Publish_FormControllerTest extends ControllerTestCase {
             ->setMethod('POST')
             ->setPost($data);
         $this->dispatch('/publish/form/check');
-        $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());        
-        
+        $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
+
         $this->assertEquals(3, count($session->additionalFields));
         $this->assertEquals('2', $session->additionalFields['TitleMain']);
         $this->assertEquals(1, $session->additionalFields['stepInstitute_1']);
@@ -626,7 +626,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
      */
     public function testCheckActionWithDeleteButton() {
         $session = new Zend_Session_Namespace('Publish');
-        $this->addTestDocument($session, 'preprint');        
+        $this->addTestDocument($session, 'preprint');
         $session->additionalFields['TitleMain'] = '2';
 
         $data = array(
@@ -636,7 +636,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
             'TitleMain_1' => '',
             'TitleMainLanguage_1' => '',
             'TitleMain_2' => '',
-            'TitleMainLanguage_2' => '',            
+            'TitleMainLanguage_2' => '',
             'TitleAbstract_1' => '',
             'TitleAbstractLanguage_1' => '',
             'PersonAuthorFirstName_1' => '',
@@ -680,7 +680,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
      */
     public function testCheckActionWithBrowseDownButton() {
         $session = new Zend_Session_Namespace('Publish');
-        $this->addTestDocument($session, 'preprint');        
+        $this->addTestDocument($session, 'preprint');
         $session->additionalFields['Institute'] = '1';
         $session->additionalFields['collId0Institute_1'] = '1';
         $session->additionalFields['stepInstitute_1'] = '1';
@@ -705,7 +705,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
             'PageNumber' => '',
             'SubjectUncontrolled_1' => '',
             'SubjectUncontrolledLanguage_1' => '',
-            'Institute_1' => '15994',            
+            'Institute_1' => '15994',
             'IdentifierUrn' => '',
             'Note' => '',
             'Language' => 'deu',
@@ -735,7 +735,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
      */
     public function testCheckActionWithBrowseUpButton() {
         $session = new Zend_Session_Namespace('Publish');
-        $this->addTestDocument($session, 'preprint');        
+        $this->addTestDocument($session, 'preprint');
         $session->additionalFields['Institute'] = '1';
         $session->additionalFields['collId0Institute_1'] = '1';
         $session->additionalFields['collId1Institute_1'] = '15994';
@@ -761,7 +761,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
             'PageNumber' => '',
             'SubjectUncontrolled_1' => '',
             'SubjectUncontrolledLanguage_1' => '',
-            'collId2Institute_1' => '15995',            
+            'collId2Institute_1' => '15995',
             'IdentifierUrn' => '',
             'Note' => '',
             'Language' => 'deu',
@@ -837,7 +837,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
             ->setPost($data);
         $this->dispatch('/publish/form/check');
         $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
-        
+
         //no button pressed, additionalFields still in intial state
         $this->assertEquals(9, count($session->additionalFields));
         $this->assertEquals('1', $session->additionalFields['PersonSubmitter']);
@@ -849,7 +849,76 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertEquals('1', $session->additionalFields['collId0Institute_1']);
         $this->assertEquals('1', $session->additionalFields['Institute']);
         $this->assertEquals('1', $session->additionalFields['Series']);
-    }  
+    }
+
+    public function testManipulatePostMissingTitleMainLanguage() {
+        $doc = $this->createTemporaryDoc();
+
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'preprint';
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonSubmitterLastName_1' => 'Doe',
+                    'PersonSubmitterEmail_1' => 'doe@example.org',
+                    'TitleMain_1' => 'Entenhausen',                    
+                    'PersonAuthorLastName_1' => 'AuthorLastName',
+                    'CompletedDate' => '22.01.2011',
+                    'Language' => 'deu',
+                    'Licence' => '4',
+                    'send' => 'Weiter zum nächsten Schritt'
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->deleteTemporaryDoc($doc);                
+
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
+
+        $this->assertNotContains('Undefined index: TitleMainLanguage_1', $this->getResponse()->getBody());
+        $this->assertContains("<div class='form-errors'>", $this->getResponse()->getBody());
+    }
+
+    public function testManipulatePostMissingTitleAbstractLanguage() {
+        $doc = $this->createTemporaryDoc();
+
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'preprint';
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonSubmitterLastName_1' => 'Doe',
+                    'PersonSubmitterEmail_1' => 'doe@example.org',
+                    'TitleMain_1' => 'Entenhausen',
+                    'TitleMainLanguage_1' => 'deu',
+                    'TitleAbstract_1' => 'Foo',
+                    'PersonAuthorLastName_1' => 'AuthorLastName',
+                    'CompletedDate' => '22.01.2011',
+                    'Language' => 'deu',
+                    'Licence' => '4',
+                    'send' => 'Weiter zum nächsten Schritt'
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->deleteTemporaryDoc($doc);                
+
+        $this->assertResponseCode(200);
+        $this->assertController('form');
+        $this->assertAction('check');
+
+        var_dump($this->getResponse()->getBody());
+
+        $this->assertNotContains('Undefined index: TitleAbstractLanguage_1', $this->getResponse()->getBody());        
+    }
 
 }
 
