@@ -323,6 +323,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_title_bibtexupload">
+      <tuv xml:lang="en">
+        <seg>Bibtex-Upload</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bibtex-Upload</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_bibtexupload_description">
+      <tuv xml:lang="en">
+        <seg>Import bibtex-files via upload.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bibtex via Upload importieren.</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>

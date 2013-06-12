@@ -122,6 +122,15 @@
                     <resource>reviewing</resource>
                 </review>
 
+                <upload>
+                    <type>mvc</type>
+                    <label>admin_title_bibtexupload</label>
+                    <description>admin_title_bibtexupload_description</description>
+                    <module>admin</module>
+                    <controller>bibtexupload</controller>
+                    <action>index</action>
+                </upload>
+
                 <accounts>
                     <type>mvc</type>
                     <label>admin_security_title_accounts</label>
