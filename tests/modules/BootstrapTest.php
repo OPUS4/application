@@ -43,12 +43,12 @@ class BootstrapTest extends ControllerTestCase {
             $count++;
             $this->setUp();
             if ($count % $iterations === 0) {
-                $delta = (microtime(true) - $runtime) / $iterations;
-                $runtime = microtime(true);
+                $delta = (microtime(true) - $runtime) / $iterations;                
                 $mem_now = round(memory_get_usage() / 1024 / 1024);
                 $mem_peak = round(memory_get_peak_usage() / 1024 / 1024);
                 echo date('Y-m-d H:i:s') . " memory $mem_now MB, peak memory $mem_peak MB\n";
-                echo "runtime per iteration (after $count iterations) (sec): $delta\n";                
+                echo "runtime per iteration (after $count iterations) (sec): $delta\n";
+                $runtime = microtime(true);
             }            
         }
     }
