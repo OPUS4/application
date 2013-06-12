@@ -208,7 +208,7 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
         
         $this->assertFalse($form->isValid($post));
         
-        var_dump($form->getErrors());
+        //var_dump($form->getErrors());
         
         $this->assertContains('notInt', $form->getErrors('PageFirst'));
         $this->assertEmpty($form->getErrors('PageLast'));
