@@ -42,6 +42,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      * Method to initialize Zend_Application for each test.
      */
     public function setUpWithEnv($applicationEnv) {
+        gc_collect_cycles();
+
         $this->closeLogfile();
 
         // Resetting singletons or other kinds of persistent objects.
@@ -88,6 +90,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->logoutUser();
 
         parent::tearDown();
+        gc_collect_cycles();
     }
 
     /**
