@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool"></header>
+    <body>
+
+    <tu tuid="setup_title_translation">
+        <tuv xml:lang="en">
+            <seg>Edit Translations</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersetzungen bearbeiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_title_translation_description">
+        <tuv xml:lang="en">
+            <seg>Adapt existing Translation Resources</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Vorhandene Übersetzungsressourcen anpassen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_choose">
+        <tuv xml:lang="en">
+            <seg>Choose Translation Resource</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersetzungsressource auswählen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_translation_edit">
+        <tuv xml:lang="en">
+            <seg>Edit Translation Resource</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersetzungsressource bearbeiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_title_static-page">
+        <tuv xml:lang="en">
+            <seg>Edit Static Page Contents</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Statische Seiteninhalte bearbeiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_title_static-page_description">
+        <tuv xml:lang="en">
+            <seg>Edit Home Page, Contact Information and Imprint</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Hauptseite, Kontaktinformationen und Impressum bearbeiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_static-page_edit_home">
+        <tuv xml:lang="en">
+            <seg>Edit Home Page</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Hauptseite bearbeiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_static-page_edit_imprint">
+        <tuv xml:lang="en">
+            <seg>Edit Imprint</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Impressum bearbeiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_static-page_edit_contact">
+        <tuv xml:lang="en">
+            <seg>Edit Contact Information</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Kontaktinformationen bearbeiten</seg>
+        </tuv>
+    </tu>
+
+
+
+    <tu tuid="setup_title_help-page">
+        <tuv xml:lang="en">
+            <seg>Edit FAQ-Page</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>FAQ-Seite bearbeiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_title_help-page_description">
+        <tuv xml:lang="en">
+            <seg>Edit Contents of FAQ</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Inhalte der FAQ bearbeiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_help-page_edit">
+        <tuv xml:lang="en">
+            <seg>Edit FAQ</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>FAQ bearbeiten</seg>
+        </tuv>
+    </tu>
+
+  </body>
+</tmx>

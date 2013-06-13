@@ -31,12 +31,19 @@
  * @version     $Id$
  */
 ?>
-<?php if (isset($this->messages)) : ?>
-    <div class="messages">
-        <?php foreach ($this->messages as $message) : ?>
-            <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
-        <?php endforeach ?>
-    </div>
-<?php endif ?>
+<div class="adminContainer">
 
-<?= $this->form ?>
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
+
+    <?php if (isset($this->messages)) : ?>
+        <div class="messages">
+            <?php foreach ($this->messages as $message) : ?>
+                <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+            <?php endforeach ?>
+        </div>
+    <?php endif ?>
+
+    <?= $this->form ?>
+</div>

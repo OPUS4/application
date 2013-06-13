@@ -31,14 +31,12 @@
  * @version     $Id$
  */
 ?>
+
+<div class="adminContainer">
     <div class="breadcrumbsContainer">
         <?= $this->navigation()->breadcrumbs() ?>
     </div>
 
-<div class="adminContainer">
-
-    <div id="adminMenuContainer">
-        <a href="<?= $this->backLink ?>"><?= $this->translate('setup_backlink') ?></a>
-    </div>
+    <a href="<?= $this->backLink ?>"><?= $this->translate('setup_backlink') ?></a>
 
 </div>

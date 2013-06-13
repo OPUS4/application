@@ -42,7 +42,7 @@
     th {
         background-color:lightgrey;
     }
-    
+
     th.hilite {
         background-color: highlight;
     }
@@ -57,21 +57,26 @@
 
 </style>
 
-<?= $this->form ?>
 
-<div id="adminMenuContainer">
+<div class="adminContainer">
+
+    <div class="breadcrumbsContainer">
+        <?= $this->navigation()->breadcrumbs() ?>
+    </div>
+    
+        <?= $this->form ?>
 
     <table >
         <tr>
             <? foreach ($this->sortKeys as $sortKey): ?>
-                <th class="<?= $sortKey == $this->currentSortKey ? 'hilite' : ''?>"><?= $this->translate('setup_language_'.$sortKey) ?></th>
+                <th class="<?= $sortKey == $this->currentSortKey ? 'hilite' : '' ?>"><?= $this->translate('setup_language_' . $sortKey) ?></th>
             <? endforeach ?>
         </tr>
         <?
 //        $keyPos = array_flip($this->sortKeys);
         foreach ($this->translations as $row):
             $writeable = ($row['directory'] == 'language_custom');
-            $file = $row['module'].DIRECTORY_SEPARATOR.$row['directory'].DIRECTORY_SEPARATOR.$row['filename'];
+            $file = $row['module'] . DIRECTORY_SEPARATOR . $row['directory'] . DIRECTORY_SEPARATOR . $row['filename'];
             $key = array_shift($row);
             ?>
             <tr>
@@ -80,9 +85,10 @@
                     <td><?= $item ?></td>
                 <? endforeach ?>
                 <td>
-                    <a href="<?= $this->url(array('action' => 'edit', 'file' => urlencode($file), 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey)) ?>" title="<?= $this->translate('setup_language_edit_hint', $key, $row['module'].DIRECTORY_SEPARATOR.'language_custom'.DIRECTORY_SEPARATOR.$row['filename'])?>"><?= ($writeable) ? 'bearbeiten' : 'übernehmen' ?></a>
+                    <a href="<?= $this->url(array('action' => 'edit', 'file' => urlencode($file), 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey)) ?>" title="<?= $this->translate('setup_language_edit_hint', $key, $row['module'] . DIRECTORY_SEPARATOR . 'language_custom' . DIRECTORY_SEPARATOR . $row['filename']) ?>"><?= ($writeable) ? 'bearbeiten' : 'übernehmen' ?></a>
                 </td>
             </tr>
         <? endforeach ?>
 
     </table>
+</div>

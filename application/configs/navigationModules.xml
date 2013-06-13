@@ -182,7 +182,7 @@
                     </pages>
                 </accounts>
 
-        	<security>
+                <security>
                     <type>mvc</type>
                     <label>admin_title_security</label>
                     <description>admin_title_security_description</description>
@@ -644,7 +644,7 @@
                     </pages>
                 </enrichmentKey>
 
-               	<info>
+                <info>
                     <type>mvc</type>
                     <label>admin_title_info</label>
                     <description>admin_title_info_description</description>
@@ -663,6 +663,104 @@
                     </pages>
 
                 </info>
+                
+                <translation>
+                    <type>mvc</type>
+                    <label>setup_title_translation</label>
+                    <description>setup_title_translation_description</description>
+                    <module>setup</module>
+                    <controller>language</controller>
+                    <action>index</action>
+                    <pages>
+                        <show>
+                            <type>mvc</type>
+                            <label>setup_translation_choose</label>
+                            <module>setup</module>
+                            <controller>language</controller>
+                            <action>show</action>
+                        </show>
+                        <edit>
+                            <type>mvc</type>
+                            <label>setup_translation_edit</label>
+                            <module>setup</module>
+                            <controller>language</controller>
+                            <action>edit</action>
+                        </edit>
+                        <error>
+                            <type>mvc</type>
+                            <label>setup_error</label>
+                            <module>setup</module>
+                            <controller>language</controller>
+                            <action>error</action>
+                        </error>
+                    </pages>
+                </translation>
+
+                <help-page>
+                    <type>mvc</type>
+                    <label>setup_title_help-page</label>
+                    <description>setup_title_help-page_description</description>
+                    <module>setup</module>
+                    <controller>help-page</controller>
+                    <action>index</action>
+                    <pages>
+                        <error>
+                            <type>mvc</type>
+                            <label>setup_error</label>
+                            <module>setup</module>
+                            <controller>language</controller>
+                            <action>error</action>
+                        </error>
+                    </pages>
+                </help-page>
+
+                <static-page>
+                    <type>mvc</type>
+                    <label>setup_title_static-page</label>
+                    <description>setup_title_static-page_description</description>
+                    <module>setup</module>
+                    <controller>static-page</controller>
+                    <action>index</action>
+                    <pages>
+                        <edit>
+                            <type>mvc</type>
+                            <label>setup_static-page_edit_contact</label>
+                            <module>setup</module>
+                            <controller>static-page</controller>
+                            <action>edit</action>
+                            <params>
+                                <page>contact</page>
+                            </params>
+                        </edit>
+                        <edit-home>
+                            <type>mvc</type>
+                            <label>setup_static-page_edit_imprint</label>
+                            <module>setup</module>
+                            <controller>static-page</controller>
+                            <action>edit</action>
+                            <params>
+                                <page>imprint</page>
+                            </params>
+                        </edit-home>
+                        <edit-imprint>
+                            <type>mvc</type>
+                            <label>setup_static-page_edit_home</label>
+                            <module>setup</module>
+                            <controller>static-page</controller>
+                            <action>edit</action>
+                            <params>
+                                <page>home</page>
+                            </params>
+                        </edit-imprint>
+                        <error>
+                            <type>mvc</type>
+                            <label>setup_error</label>
+                            <module>setup</module>
+                            <controller>static-page</controller>
+                            <action>error</action>
+                        </error>
+                    </pages>
+                </static-page>
 
             </pages>
         </administration>

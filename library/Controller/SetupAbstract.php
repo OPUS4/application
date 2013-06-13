@@ -61,9 +61,9 @@ abstract class Controller_SetupAbstract extends Controller_Action {
                     $stored = $model->store();
                     if (!$stored) {
                         $dataForm->populate($postData);
-                        $this->view->messages[] = array('level' => 'failure', 'message' => $this->view->translate('setup_help-page_write-failed'));
+                        $this->view->messages[] = array('level' => 'failure', 'message' => $this->view->translate('setup_message_write-failed'));
                     } else {
-                        $this->view->messages[] = array('level' => 'notice', 'message' => $this->view->translate('setup_help-page_write-success'));
+                        $this->view->messages[] = array('level' => 'notice', 'message' => $this->view->translate('setup_message_write-success'));
                         Zend_Translate::clearCache();
                     }
                 } else {
@@ -76,9 +76,11 @@ abstract class Controller_SetupAbstract extends Controller_Action {
 
             $this->view->form = $form;
         } catch (Setup_Model_FileNotReadableException $exc) {
-            $this->_redirectTo('error', array('failure' => $this->view->translate('setup_help-page_error_read-access', $exc->getMessage())));
+            $this->_redirectTo('error', array('failure' => $this->view->translate('setup_message_error_read-access', $exc->getMessage())));
         } catch (Setup_Model_FileNotWriteableException $exc) {
-            $this->_redirectTo('error', array('failure' => $this->view->translate('setup_help-page_error_write-access', $exc->getMessage())));
+            $this->_redirectTo('error', array('failure' => $this->view->translate('setup_message_error_write-access', $exc->getMessage())));
+        } catch (Setup_Model_FileNotFoundException $exc) {
+            $this->_redirectTo('error', array('failure' => $this->view->translate('setup_message_error_filenotfound', $exc->getMessage())));
         }
         $this->render('edit', null, true);
     }

@@ -40,7 +40,7 @@ class Setup_HelpPageController extends Controller_SetupAbstract {
 
 
     public function indexAction() {
-        $this->_redirectTo('edit');
+        $this->forward('edit');
     }
     
     protected function getForm() {

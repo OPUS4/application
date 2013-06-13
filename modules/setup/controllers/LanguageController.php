@@ -68,22 +68,6 @@ class Setup_LanguageController extends Controller_SetupAbstract {
         $this->view->form = $this->getSearchForm($searchTerm, $sortKey);
     }
 
-    public function editAction() {
-        parent::editAction();
-        $searchTerm = $this->_request->getParam('search');
-        $sortKey = $this->_request->getParam('sort');
-        $searchForm = new Zend_Form();
-        $searchForm->setAction($this->view->url(array(
-            'module' => $this->_request->getModuleName(),
-            'controller' => $this->_request->getControllerName(),
-            'action' => 'show'), null, true));
-        $searchForm->addElement('hidden', 'search', array('value' => $searchTerm));
-        $searchForm->addElement('hidden', 'sort', array('value' => $sortKey));
-        $searchForm->addElement('submit', $this->view->translate('setup_backlink'));
-        $this->view->searchForm = $searchForm;
-        $this->render('edit');
-    }
-
     protected function getForm() {
         $translationKey = $this->_request->getParam('key');
 
