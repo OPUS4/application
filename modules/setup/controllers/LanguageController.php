@@ -85,7 +85,7 @@ class Setup_LanguageController extends Controller_SetupAbstract {
     }
 
     protected function getForm() {
-        $translationKey = $this->getParam('key');
+        $translationKey = $this->_request->getParam('key');
 
         if (empty($translationKey))
             throw new Application_Exception('Parameters missing');
@@ -102,8 +102,8 @@ class Setup_LanguageController extends Controller_SetupAbstract {
     }
 
     protected function getModel() {
-        $translationKey = $this->getParam('key');
-        $sourceFileEncoded = $this->getParam('file');
+        $translationKey = $this->_request->getParam('key');
+        $sourceFileEncoded = $this->_request->getParam('file');
 
         if (empty($translationKey) || empty($sourceFileEncoded))
             throw new Application_Exception('Parameters missing');
