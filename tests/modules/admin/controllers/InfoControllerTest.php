@@ -87,6 +87,14 @@ class Admin_InfoControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertEquals('1', $this->_response->getBody(), 'Expected value 1');
     }
+    
+    public function testJobDetailsAction() {
+        $failedJobsUrl = '/admin/info/job-detail/label/testjob1/state/'.Opus_Job::STATE_FAILED;
+        $this->dispatch($failedJobsUrl);
+        $this->assertResponseCode(200);
+        $this->assertQueryContentContains('table.worker-jobs td div', 'task: get-me-a-coffee');
+        
+    }
 
 }
 
