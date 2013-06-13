@@ -42,29 +42,52 @@
  * - YearApplied
  * - Application
  * - ID (hidden)
- * 
- * TODO use constants for element names
  */
 class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
     
+    /**
+     * Name fuer Formularelement fuer ID von Opus_Patent.
+     */
     const ELEMENT_ID = 'Id';
     
+    /**
+     * Name fuer Formularelement fuer Feld Number.
+     */
     const ELEMENT_NUMBER = 'Number';
     
+    /**
+     * Name fuer Formularelement fuer Feld Countries.
+     */
     const ELEMENT_COUNTRIES = 'Countries';
     
+    /**
+     * Name fuer Formularelement fuer Feld YearApplied.
+     */
     const ELEMENT_YEAR_APPLIED = 'YearApplied';
     
+    /**
+     * Name fuer Formularelement fuer Feld Application.
+     */
     const ELEMENT_APPLICATION = 'Application';
     
+    /**
+     * Name fuer Formularelement fuer Feld DateGranted.
+     */
     const ELEMENT_DATE_GRANTED = 'DateGranted';
 
+    /**
+     * Präfix fuer Übersetzungsschlüssel (noch nicht verwendet).
+     * @var string
+     */
     protected $_translationPrefix = ''; // TODO OPUSVIER-1875 Sollte sein: 'Opus_Patent_';
     
+    /**
+     * Erzeugt die Formularelemente.
+     */
     public function init() {
         parent::init();
         
-        $elementFactory = new Admin_Model_FormElementFactory();
+        $elementFactory = $this->getFormElementFactory();
         
         $element = new Zend_Form_Element_Hidden(self::ELEMENT_ID);
         $this->addElement($element);
@@ -91,11 +114,14 @@ class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
         $element = $elementFactory->createDateElement(self::ELEMENT_DATE_GRANTED);
         $this->addElement($element);
     }
-    
+
+    /**
+     * Setzt die Formularelement entsprechend der Instanz von Opus_Patent.
+     * @param Opus_Patent $patent
+     */
     public function populateFromModel($patent) {
-        $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+        $datesHelper = $this->getDatesHelper();
         
-        // TODO check class of $patent
         $this->getElement(self::ELEMENT_ID)->setValue($patent->getId());
         $this->getElement(self::ELEMENT_NUMBER)->setValue($patent->getNumber());
         $this->getElement(self::ELEMENT_COUNTRIES)->setValue($patent->getCountries());
@@ -107,13 +133,11 @@ class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
     }
     
     /**
-     * 
+     * Aktualisiert Instanz von Opus_Patent mit Werten in Formular.
      * @param Opus_Patent $patent
-     * 
-     * TODO Prüfe ID match?
      */
     public function updateModel($patent) {
-        $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+        $datesHelper = $this->getDatesHelper();
         
         // Number
         $value = $this->getElement(self::ELEMENT_NUMBER)->getValue();
@@ -137,6 +161,14 @@ class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
         $patent->setDateGranted($date);
     }
     
+    /**
+     * Liefert Opus_Patent Instanz fuer das Formular.
+     * 
+     * Wenn das Formular eine existierende Opus_Patent Instanz repräsentiert (gesetztes ID Feld) wird diese Instanz
+     * zurück geliefert und ansonsten eine neue Instanz erzeugt.
+     * 
+     * @return \Opus_Patent
+     */
     public function getModel() {
         $patentId = $this->getElement(self::ELEMENT_ID)->getValue();
         
@@ -152,6 +184,11 @@ class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
         return $patent;
     }
     
+    /**
+     * Überschreibt Funktion fuer das Laden der Default-dekorators.
+     * 
+     * Der Fieldset Dekorator wird entfernt, damit nicht um jedes Patent ein weiteres Fieldset erzeugt wird.
+     */
     public function loadDefaultDecorators() {
         parent::loadDefaultDecorators();
         

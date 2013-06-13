@@ -143,6 +143,16 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
                 
         $this->assertFalse($form->isValid($post));
         $this->assertContains('notGreaterThan', $form->getErrors('YearApplied'));
+        
+        $post = array(
+            'Number' => '1',
+            'YearApplied' => '1980',
+            'Countries' => 'Deutschland',
+            'Application' => 'Meine tolle Erfindung',
+            'DateGranted' => '2000/03/25'
+        );
+        
+        $this->assertTrue($form->isValid($post));
     }
     
     public function testRegressionOpusvier2824() {
