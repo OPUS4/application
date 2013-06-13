@@ -43,7 +43,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      * Method to initialize Zend_Application for each test.
      */
     public function setUpWithEnv($applicationEnv) {
-        gc_collect_cycles();
+        // Reducing memory footprint by forcing garbage collection runs
+        // WARNING: Did not work on CI-System (PHP 5.3.14, PHPnit 3.5.13)
+        // gc_collect_cycles();
 
         $this->closeLogfile();
 
