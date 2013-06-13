@@ -50,6 +50,12 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         // FIXME Does it help with the mystery bug?
         Zend_Registry::_unsetInstance();
 
+        // Reset autoloader to fix huge memory/cpu-time leak
+        Zend_Loader_Autoloader::resetInstance();
+        $autoloader = Zend_Loader_Autoloader::getInstance();
+        $autoloader->suppressNotFoundWarnings(false);
+        $autoloader->setFallbackAutoloader(true);
+
         // Clean-up possible artifacts in $_SERVER of previous test.
         unset($_SERVER['REMOTE_ADDR']);
 
