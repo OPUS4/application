@@ -610,6 +610,47 @@ class Publish_Model_ExtendedValidation {
         $validSeries = true;
         $series = $this->fetchSeriesFields();
 
+        // in $series befinden sich auch die nicht vom Benutzer ausgefüllten Felder
+        $seriesWithoutDefaults = array();
+        foreach ($series as $key => $value) {
+            if ($value != '') {
+                $seriesWithoutDefaults[$key] = $value;
+            }
+        }
+        
+        if (count($seriesWithoutDefaults) == 0) {
+            return true; // es wurden keine Schriftenreihen / Bandnummern ausgewählt / eingegeben
+        }
+        
+        // prüfe, ob zu jedem Series-Select eine zugehörige Bandnummer existiert und umgekehrt
+        foreach ($seriesWithoutDefaults as $seriesElement => $value) {            
+            if (strpos($seriesElement, 'Series_') === 0) {
+                // Schriftenreihe gefunden: zugehörige Bandnummer erwartet
+                $key = str_replace('Series_', 'SeriesNumber_', $seriesElement);
+                $errorMsgPrefix = 'seriesnumber';
+            }
+            else if (strpos($seriesElement, 'SeriesNumber_') === 0) {
+                // Bandnummer gefunden: zugehörige Schriftenreihe erwartet
+                $key = str_replace('SeriesNumber_', 'Series_', $seriesElement);                
+                $errorMsgPrefix = 'seriesselect';
+            }
+            else {
+                $this->log->warn(__METHOD__ . " unbekanntes Schriftenreihen-Formularfeld: " . $seriesElement);
+                continue;
+            }            
+
+            if (!array_key_exists($key, $seriesWithoutDefaults)) {
+                // Mismatch gefunden: Validierungsfehlermeldung ausgeben
+                $element = $this->form->getElement($key);
+                if (!is_null($element)) {
+                    $element->clearErrorMessages();
+                    $element->addError($this->translate('publish_error_series_missing_' . $errorMsgPrefix));                    
+                }
+                $this->log->debug(__METHOD__ . " Feld $seriesElement ohne zugehöriges Feld $key");
+                $validSeries = false;
+            }
+        }
+
         foreach ($series AS $fieldname => $number) {
             $selectFieldName = str_replace('Number', '', $fieldname);
             if (key_exists($selectFieldName, $this->data)) {
@@ -626,15 +667,17 @@ class Publish_Model_ExtendedValidation {
                     $currSeries = new Opus_Series($seriesId);
                 }
                 catch (Opus_Model_Exception $e) {
-                    $this->log->err("could not instantiate Opus_Series with id $seriesId", $e);
+                    $this->log->err(__METHOD__ . " could not instantiate Opus_Series with id $seriesId", $e);
                     $validSeries = false;
                 }
 
                 if ($currSeries != null && !$currSeries->isNumberAvailable($number)) {
                     $this->log->debug(__METHOD__ . " : error for element " . $fieldname);
                     $element = $this->form->getElement($fieldname);
-                    $element->clearErrorMessages();
-                    $element->addError($this->translate('publish_error_seriesnumber_not_available'));
+                    if (!is_null($element)) {
+                        $element->clearErrorMessages();
+                        $element->addError($this->translate('publish_error_seriesnumber_not_available'));
+                    }
                     $validSeries = false;
                 }
             }
@@ -658,16 +701,20 @@ class Publish_Model_ExtendedValidation {
             $seriesId = $matches[1];
 
             //count how often the same series id has to be stored for the same document
-            if (isset($countSeries[$seriesId]))
+            if (isset($countSeries[$seriesId])) {
                 $countSeries[$seriesId] = $countSeries[$seriesId] + 1;
-            else
+            }
+            else {
                 $countSeries[$seriesId] = 1;
+            }
 
             if ($countSeries[$seriesId] > 1) {
                 $this->log->debug(__METHOD__ . " : error for element " . $fieldname);
                 $element = $this->form->getElement($fieldname);
-                $element->clearErrorMessages();
-                $element->addError($this->translate('publish_error_only_one_series_per_document'));
+                if (!is_null($element)) {
+                    $element->clearErrorMessages();
+                    $element->addError($this->translate('publish_error_only_one_series_per_document'));
+                }
                 $validSeries = false;
             }
         }

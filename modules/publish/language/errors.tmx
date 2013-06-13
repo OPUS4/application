@@ -434,12 +434,30 @@
       </tuv>
     </tu>
 
-	<tu tuid="publish_validation_error_email_invalid">
+    <tu tuid="publish_validation_error_email_invalid">
       <tuv xml:lang="en">
         <seg>Please check the mail address you provided.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Bitte überprüfen Sie die angegebene Email-Adresse!</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_error_series_missing_seriesnumber">
+      <tuv xml:lang="en">
+        <seg>Plese enter a serial number.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte geben Sie eine Bandnummer an.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="publish_error_series_missing_seriesselect">
+      <tuv xml:lang="en">
+        <seg>Plese choose a series.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bitte wählen Sie eine Schriftenreihe aus.</seg>
       </tuv>
     </tu>
 	
