@@ -387,7 +387,7 @@ class Publish_Model_Validation {
     }
 
     /**
-     * return all visible series from database or chache
+     * return all visible series from database or cache
      * @return <Array> sets
      */
     private function getSeries() {
