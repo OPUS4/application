@@ -95,10 +95,6 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
         $this->assertEquals('2007', $document->getCompletedYear());
     }
     
-    /**
-     * TODO Welche Validierung fuer Language?
-     * TODO Welche Validierung fuer Type? 
-     */
     public function testValidation() {
         $this->setUpEnglish();
         
@@ -115,10 +111,37 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
 
         $this->assertFalse($form->isValid($post));
         
+        $this->assertContains('isEmpty', $form->getErrors('Language'));
+        $this->assertContains('isEmpty', $form->getErrors('Type'));
         $this->assertContains('dateFalseFormat', $form->getErrors('PublishedDate'));
         $this->assertContains('notInt', $form->getErrors('PublishedYear'));
         $this->assertContains('dateInvalidDate', $form->getErrors('CompletedDate'));
         $this->assertContains('notGreaterThan', $form->getErrors('CompletedYear'));
+    }
+    
+    public function testValidationGerman() {
+        $this->setUpGerman();
+        
+        $form = new Admin_Form_DocumentGeneral();
+        
+        $post = array(
+            'Language' => 'deu', 
+            'Type' => 'demo',
+            'CompletedDate' => '30.01.2010', // korrektes Datum
+        );
+
+        $this->assertTrue($form->isValid($post));
+        
+        $post = array(
+            'Language' => 'bla', // ungültige Sprache
+            'Type' => 'unknown', // ungültiger Typ
+            'CompletedDate' => '30.02.2010', // ungültiges Datum
+        );
+        
+        $this->assertFalse($form->isValid($post));
+        $this->assertContains('notInArray', $form->getErrors('Language'));
+        $this->assertContains('notInArray', $form->getErrors('Type'));
+        $this->assertContains('dateInvalidDate', $form->getErrors('CompletedDate'));
     }
     
 }

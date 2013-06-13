@@ -39,35 +39,62 @@
  */
 class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
     
+    /**
+     * Name des Formularelements fuer die Sprache des Dokuments.
+     */
     const ELEMENT_LANGUAGE = 'Language';
     
+    /**
+     * Name des Formularelements fuer den Dokumententyp.
+     */
     const ELEMENT_TYPE = 'Type';
     
+    /**
+     * Name des Formularelements fuer das Feld PublishedDate.
+     */
     const ELEMENT_PUBLISHED_DATE = 'PublishedDate';
     
+    /**
+     * Name des Formularelements fuer das Feld PublishedYear.
+     */
     const ELEMENT_PUBLISHED_YEAR = 'PublishedYear';
     
+    /**
+     * Name des Formularelements fuer das Feld CompletedDate.
+     */
     const ELEMENT_COMPLETED_DATE = 'CompletedDate';
     
+    /**
+     * Name des Formularelements fuer das Feld CompletedYear.
+     */
     const ELEMENT_COMPLETED_YEAR = 'CompletedYear';
     
+    /**
+     * Präfix für Übersetzungsschlüssel (noch nicht genutzt).
+     * @var string  
+     */
     protected $_translationPrefix = '';
     
+    /**
+     * Erzeugt die Formularelemente.
+     */
     public function init() {
         parent::init();
         
         $this->setLegend('admin_document_section_general');
         
-        $elementFactory = new Admin_Model_FormElementFactory(); // TODO make controller helper
+        $elementFactory = $this->getFormElementFactory();
         
         // TODO Sprache
         $element = $elementFactory->createLanguageSelect(self::ELEMENT_LANGUAGE);
         $element->setLabel($this->_translationPrefix . self::ELEMENT_LANGUAGE);
+        $element->setRequired(true);
         $this->addElement($element);
         
         // TODO DocumentType
         $element = $elementFactory->createDocumentTypeSelect(self::ELEMENT_TYPE);
         $element->setLabel($this->_translationPrefix . self::ELEMENT_TYPE);
+        $element->setRequired(true);
         $this->addElement($element);
         
         // PublishedDate
@@ -87,8 +114,12 @@ class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
         $this->addElement($element);
     }
     
+    /**
+     * Befuellt das Formular anhand der Metadaten eines Dokuments.
+     * @param Opus_Document $document
+     */
     public function populateFromModel($document) {
-        $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+        $datesHelper = $this->getDatesHelper();
         
         $this->getElement(self::ELEMENT_LANGUAGE)->setValue($document->getLanguage());
         $this->getElement(self::ELEMENT_TYPE)->setValue($document->getType());
@@ -102,6 +133,10 @@ class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
         $this->getElement(self::ELEMENT_PUBLISHED_YEAR)->setValue($document->getPublishedYear());
     }
         
+    /**
+     * Aktualisiert ein Dokument mit den Werten im Formular.
+     * @param Opus_Document $document
+     */
     public function updateModel($document) {
         // Language
         $value = $this->getElementValue(self::ELEMENT_LANGUAGE);
@@ -111,7 +146,7 @@ class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
         $value = $this->getElementValue(self::ELEMENT_TYPE);
         $document->setType($value);
 
-        $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
+        $datesHelper = $this->getDatesHelper();
         
         // CompletedDate
         $value = $this->getElementValue(self::ELEMENT_COMPLETED_DATE);
