@@ -652,34 +652,36 @@ class Publish_Model_ExtendedValidation {
         }
 
         foreach ($series AS $fieldname => $number) {
-            $selectFieldName = str_replace('Number', '', $fieldname);
-            if (key_exists($selectFieldName, $this->data)) {
-                $selectFieldValue = $this->data[$selectFieldName];
+            if (strpos($fieldname, 'SeriesNumber_') === 0 && $number != '') {
+                $selectFieldName = str_replace('SeriesNumber_', 'Series_', $fieldname);
+                if (key_exists($selectFieldName, $this->data)) {
+                    $selectFieldValue = $this->data[$selectFieldName];
 
-                $matches = array();
-                if (preg_match('/^(\d+)$/', $selectFieldValue, $matches) == 0) {
-                    continue;
-                }
-
-                $seriesId = $matches[1];
-                $currSeries = null;
-                try {
-                    $currSeries = new Opus_Series($seriesId);
-                }
-                catch (Opus_Model_Exception $e) {
-                    $this->log->err(__METHOD__ . " could not instantiate Opus_Series with id $seriesId", $e);
-                    $validSeries = false;
-                }
-
-                if ($currSeries != null && !$currSeries->isNumberAvailable($number)) {
-                    $this->log->debug(__METHOD__ . " : error for element " . $fieldname);
-                    $element = $this->form->getElement($fieldname);
-                    if (!is_null($element)) {
-                        $element->clearErrorMessages();
-                        $element->addError($this->translate('publish_error_seriesnumber_not_available'));
+                    $matches = array();
+                    if (preg_match('/^(\d+)$/', $selectFieldValue, $matches) == 0) {
+                        continue;
                     }
-                    $validSeries = false;
-                }
+
+                    $seriesId = $matches[1];
+                    $currSeries = null;
+                    try {
+                        $currSeries = new Opus_Series($seriesId);
+                    }
+                    catch (Opus_Model_Exception $e) {
+                        $this->log->err(__METHOD__ . " could not instantiate Opus_Series with id $seriesId", $e);
+                        $validSeries = false;
+                    }
+
+                    if ($currSeries != null && !$currSeries->isNumberAvailable($number)) {
+                        $this->log->debug(__METHOD__ . " : error for element $fieldname : serial number $number not available");
+                        $element = $this->form->getElement($fieldname);
+                        if (!is_null($element)) {
+                            $element->clearErrorMessages();
+                            $element->addError($this->translate('publish_error_seriesnumber_not_available'));
+                        }
+                        $validSeries = false;
+                    }
+                }                
             }
         }
 
@@ -692,7 +694,6 @@ class Publish_Model_ExtendedValidation {
         $countSeries = array();
 
         foreach ($series AS $fieldname => $option) {
-
             $matches = array();
             if (preg_match('/^(\d+)$/', $option, $matches) == 0) {
                 continue;
@@ -709,7 +710,7 @@ class Publish_Model_ExtendedValidation {
             }
 
             if ($countSeries[$seriesId] > 1) {
-                $this->log->debug(__METHOD__ . " : error for element " . $fieldname);
+                $this->log->debug(__METHOD__ . " : error for element $fieldname : is used " . $countSeries[$seriesId] . ' times');
                 $element = $this->form->getElement($fieldname);
                 if (!is_null($element)) {
                     $element->clearErrorMessages();
