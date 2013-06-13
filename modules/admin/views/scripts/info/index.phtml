@@ -40,12 +40,12 @@
 
     <div id="adminMenuContainer">
         <dl>
-        <?PHP foreach ($this->info->getInfo() as $infoKey => $infoValue) : ?>
-            <dt id="<?=$infoKey?>"><?= $this->translate($infoKey) ?></dt>
-            <dd><?= $infoValue ?></dd>
-        <?PHP endforeach ?>
+            <?PHP foreach ($this->info->getInfo() as $infoKey => $infoValue) : ?>
+                <dt id="<?= $infoKey ?>"><?= $this->translate($infoKey) ?></dt>
+                <dd><?= $infoValue ?></dd>
+            <?PHP endforeach ?>
         </dl>
-        
+
         <fieldset>
             <legend><?= $this->translate('admin_info_section_upload') ?></legend>
 
@@ -77,28 +77,68 @@
             </table>
 
         </fieldset>
-        <? if(isset($this->failedJobCount)): ?>
-            <fieldset>
-                <legend><?= $this->translate('admin_info_index_failedjobs') ?></legend>
-            <? if(empty($this->failedJobCount)): ?>
-                <div><?= $this->translate('admin_info_index_nofailedjobs') ?></div>
-            <? else: ?>
+
+        <fieldset>
+            <legend><?= $this->translate('admin_info_index_async_description') ?></legend>
+            <? if ($this->asyncjobs): ?>
 
                 <table class="worker-jobs">
                     <tr>
-                        <th class="label"><?= $this->translate('admin_info_index_joblabel') ?></th>
-                        <th class="value"><?= $this->translate('admin_info_index_jobcount') ?></th>
+                        <th><?= $this->translate('admin_info_index_failedjobs') ?></th>
                     </tr>
-                    <? foreach ($this->failedJobCount as $label => $count) : ?>
+                    <? if ($this->failedJobCount && count($this->failedJobCount) > 0): ?>
+
+                        <? foreach ($this->failedJobCount as $label => $count) : ?>
+                            <tr>
+                                <td class="label"><?= $this->translate('admin_info_index_joblabel') ?></td>
+                                <td class="value"><?= $this->translate('admin_info_index_jobcount') ?></td>
+                            </tr>
+                            <tr>
+                                <td class="label">
+                                    <a href="<?= $this->url(array('action' => 'job-detail', 'label' => $label, 'state' => Opus_Job::STATE_FAILED)) ?>" title="<?=$this->translate('admin_info_index_job_detail_hint')?>"><?= $this->translate('admin_info_job_label-'.$label) ?></a>
+                                </td>
+                                <td class="value"><?= $count ?></td>
+                            </tr>
+                        <? endforeach ?>
+                    <? else: ?>
                         <tr>
-                            <td class="label"><?= $label ?></td>
-                            <td class="value"><?= $count ?></td>
+                            <td><?= $this->translate('admin_info_index_nofailedjobs') ?></td>
                         </tr>
-                    <? endforeach ?>
+                    <? endif ?>
                 </table>
-            </fieldset>
+
+                <table class="worker-jobs">
+                    <tr>
+                        <th><?= $this->translate('admin_info_index_unprocessedjobs') ?></th>
+                    </tr>
+                    <? if ($this->unprocessedJobCount && count($this->unprocessedJobCount) > 0): ?>
+
+                        <? foreach ($this->unprocessedJobCount as $label => $count) : ?>
+                            <tr>
+                                <td class="label"><?= $this->translate('admin_info_index_joblabel') ?></td>
+                                <td class="value"><?= $this->translate('admin_info_index_jobcount') ?></td>
+                            </tr>
+                            <tr>
+                                <td class="label">
+                                    <a href="<?= $this->url(array('action' => 'job-detail', 'label' => $label, 'state' => Opus_Job::STATE_UNDEFINED)) ?>" title="<?=$this->translate('admin_info_index_job_detail_hint')?>"><?= $this->translate('admin_info_job_label-'.$label) ?></a>
+
+                                </td>
+                                <td class="value"><?= $count ?></td>
+                            </tr>
+                        <? endforeach ?>
+                    <? else: ?>
+                        <tr>
+                            <td><?= $this->translate('admin_info_index_nounprocessedjobs') ?></td>
+                        </tr>
+                    <? endif ?>
+                </table>
+
+            <? else: ?>
+                <div><?= $this->translate('admin_info_index_async_disabled') ?></div>
             <? endif ?>
-        <? endif ?>
+
+        </fieldset>
+
     </div>
 
 </div>

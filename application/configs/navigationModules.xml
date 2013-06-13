@@ -130,7 +130,7 @@
                     <controller>bibtexupload</controller>
                     <action>index</action>
                 </upload>
-
+                
                 <accounts>
                     <type>mvc</type>
                     <label>admin_security_title_accounts</label>
@@ -652,6 +652,16 @@
                     <controller>info</controller>
                     <action>index</action>
                     <resource>systeminfo</resource>
+                    <pages>
+                        <job-detail>
+                            <type>mvc</type>
+                            <label>admin_info_job-detail</label>
+                            <module>admin</module>
+                            <controller>info</controller>
+                            <action>job-detail</action>
+                        </job-detail>
+                    </pages>
+
                 </info>
 
             </pages>
