@@ -4,16 +4,17 @@ h2. ======================== Release 4.4.0 2013-06-21 ========================
 
 h3. Anpassungen am Solr-Indexschema
 
-Es wurde ein neues Indexfeld year_inverted eingeführt. Damit diese Änderung
-wirksam wird, muss die Datei schema.xml (befindet sich im Verzeichnis
-solrconfig des Release-Tarballs) in das Solr-Konfigurationsverzeichnis conf
-übernommen werden. Wurde Solr über das Installskript installiert, so findet die
-Aktualisierung der Datei automatisch im Rahmen der Ausführung des Update-
-Skript statt.
+Es wurden zwei neue Indexfelder eingeführt: year_inverted und
+server_date_modified . Damit diese Änderung wirksam wird, muss die Datei
+schema.xml (befindet sich im Verzeichnis solrconfig des Release-Tarballs) in das
+Solr-Konfigurationsverzeichnis conf übernommen werden. Wurde Solr über das
+Installskript installiert, so findet die Aktualisierung der Datei automatisch im
+Rahmen der Ausführung des Update-Skript statt.
 
 In jedem Fall ist nach dem Update der Solr-Schemadatei und der Instanz auf die
-Version 4.4 eine Reindexierung aller Dokumente erforderlich, damit das neu
-eingeführte Indexfeld year_inverted für alle Dokumente angelegt wird.
+Version 4.4 eine Reindexierung aller Dokumente erforderlich, damit die beiden
+neu eingeführten Indexfelder year_inverted und server_date_modified für alle
+Dokumente angelegt werden.
 
 
 h2. ======================== Release 4.3.1 2013-02-21 ========================
