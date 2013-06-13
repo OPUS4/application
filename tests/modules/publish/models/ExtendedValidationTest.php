@@ -314,7 +314,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
 
         $val = new Publish_Model_ExtendedValidation($form, $data);
         $result = $val->validate();
-        $this->assertTrue($result);
+        $this->assertFalse($result);
     }
 }
 
