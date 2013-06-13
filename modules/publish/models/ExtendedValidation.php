@@ -503,7 +503,7 @@ class Publish_Model_ExtendedValidation {
     }
 
     private function _checkLanguageElement($languageKey) {
-        if (!array_key_exists($languageKey, $this->data) || is_null($this->data[$languageKey]) || empty($this->data[$languageKey])) {        
+        if (!array_key_exists($languageKey, $this->data) || is_null($this->data[$languageKey]) || empty($this->data[$languageKey])) {
             //set language value to the document language
             if (!is_null($this->documentLanguage)) {
                 $this->data[$languageKey] = $this->documentLanguage;
@@ -609,8 +609,6 @@ class Publish_Model_ExtendedValidation {
     private function _validateSeriesNumber() {
         $validSeries = true;
         $series = $this->fetchSeriesFields();
-        //$seriesSelects = $this->fetchSeriesFields(false);
-        //if (count($series) != count($))
 
         foreach ($series AS $fieldname => $number) {
             $selectFieldName = str_replace('Number', '', $fieldname);
