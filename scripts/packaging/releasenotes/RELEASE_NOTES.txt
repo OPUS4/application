@@ -11,6 +11,11 @@ solrconfig des Release-Tarballs) in das Solr-Konfigurationsverzeichnis conf
 Aktualisierung der Datei automatisch im Rahmen der Ausführung des Update-
 Skript statt.
 
+In jedem Fall ist nach dem Update der Solr-Schemadatei und der Instanz auf die
+Version 4.4 eine Reindexierung aller Dokumente erforderlich, damit das neu
+eingeführte Indexfeld year_inverted für alle Dokumente angelegt wird.
+
+
 h2. ======================== Release 4.3.1 2013-02-21 ========================
 
 h3. Bugfixes
