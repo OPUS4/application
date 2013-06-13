@@ -44,58 +44,13 @@ class Admin_Model_FormElementFactoryTest extends ControllerTestCase {
     public function testConstructor() {
         $factory = new Admin_Model_FormElementFactory();
     }
-
-    public function testCreateElementForCheckboxField() {
-        $doc = new Opus_Document();
-
-        $field = $doc->getField('BelongsToBibliography');
-
-        $element = $this->__factory->getElementForField($doc, $field);
-
-        $this->assertNotNull($element);
-        $this->assertTrue($element instanceOf Zend_Form_Element_Checkbox);
-        $this->assertEquals('BelongsToBibliography', $element->getName());
-    }
-
-    public function testCreateElementForTextField() {
-        $model = new Opus_Document();
-
-        $field = $model->getField('PageFirst');
-
-        $element = $this->__factory->getElementForField($model, $field);
-
-        $this->assertNotNull($element);
-        $this->assertTrue($element instanceOf Zend_Form_Element_Text);
-        $this->assertEquals('PageFirst', $element->getName());
-    }
-
-    public function testCreateElementForTextareaField() {
-        $model = new Opus_TitleAbstract();
-
-        $field = $model->getField('Value');
-
-        $element = $this->__factory->getElementForField($model, $field);
-
-        $this->assertNotNull($element);
-        $this->assertTrue($element instanceOf Zend_Form_Element_TextArea);
-        $this->assertEquals('Value', $element->getName());
-    }
-
-    public function testCreateElementForSelectField() {
-        $model = new Opus_Document();
-
-        $field = $model->getField('PublicationState');
-
-        $element = $this->__factory->getElementForField($model, $field);
-
-        $this->assertNotNull($element);
-        $this->assertTrue($element instanceOf Zend_Form_Element_Select);
-        $this->assertEquals('PublicationState', $element->getName());
-
-        $defaults = $field->getDefault();
-        $options = $element->getMultiOptions();
-
-        $this->assertEquals(count($defaults), count($options));
+    
+    public function testCreateDocumentTypeSelect() {
+        $docType = $this->__factory->createDocumentTypeSelect();
+        
+        $options = $docType->getMultiOptions();
+        
+        $this->assertEquals(4, count($options));
     }
 
 }
