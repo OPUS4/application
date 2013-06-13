@@ -49,6 +49,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
         $this->closeLogfile();
 
+        $this->closeDatabaseConnection();
+
         // Resetting singletons or other kinds of persistent objects.
         Opus_Db_TableGateway::clearInstances();
 
@@ -107,6 +109,13 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         if (isset($log)) {
             $log->__destruct();
             Zend_Registry::set('Zend_Log', null);
+        }
+    }
+
+    protected function closeDatabaseConnection() {
+        $adapter = Zend_Db_Table::getDefaultAdapter();
+        if ($adapter) {
+            $adapter->closeConnection();
         }
     }
 
