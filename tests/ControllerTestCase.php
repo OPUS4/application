@@ -26,6 +26,7 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -90,7 +91,6 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->logoutUser();
 
         parent::tearDown();
-        gc_collect_cycles();
     }
 
     /**
