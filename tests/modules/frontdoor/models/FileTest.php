@@ -40,19 +40,11 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
     const EXPECTED_EXCEPTION = "Test failed: expected Exception";
     
     public function setUp() {
-        parent::setUp();
         parent::setUpWithEnv('production');
         $this->assertEquals(1, Zend_Registry::get('Zend_Config')->security);
         $this->assertTrue(Zend_Registry::isRegistered('Opus_Acl'), 'Expected registry key Opus_Acl to be set');
         $acl = Zend_Registry::get('Opus_Acl');
         $this->assertTrue($acl instanceof Zend_Acl, 'Expected instance of Zend_Acl');
-        $acl->allow('guest', 'accounts');
-    }
-
-    public function tearDown() {
-        $acl = Zend_Registry::get('Opus_Acl');
-        $acl->deny('guest', 'accounts');
-        parent::tearDown();
     }
 
     public function testGetFileObjectSuccessfulCase() {
@@ -96,6 +88,15 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
 
         $this->assertTrue($opusFile instanceof Opus_File);
         $this->assertEquals(self::FILENAME_DELETED_DOC, $opusFile->getPathName());
+    }
+
+    public function testGetFileObjectAccessAllowedForUserWithAccessToDocumentsResource() {
+        $this->markTestSkipped('Funktioniert noch nicht, da beim Login die ACLs (für Nutzer) schon geladen sind.');
+        $this->loginUser('security8', 'security8pwd');
+        $file = new Frontdoor_Model_File(92, self::FILENAME);
+        $realm = new MockRealm(false, false); // sollte egal sein
+        $opusFile = $file->getFileObject($realm);
+        $this->assertTrue($opusFile instanceof Opus_File);
     }
 
     /**
