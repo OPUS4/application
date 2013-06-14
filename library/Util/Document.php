@@ -59,7 +59,9 @@ class Util_Document {
         if ($this->document->getServerState() === 'published') {
             return true;
         }
-        return Opus_Security_Realm::getInstance()->checkDocument($this->document->getId());
+        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        return Opus_Security_Realm::getInstance()->checkDocument($this->document->getId())
+                || $accessControl->accessAllowed('documents');
     }
 
     /**
