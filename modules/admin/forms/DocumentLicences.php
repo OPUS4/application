@@ -71,6 +71,7 @@ class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
             $element->setLabel($licence->getNameLong());
             $cssClass = ($licence->getActive()) ? self::ACTIVE_CSS_CLASS : self::INACTIVE_CSS_CLASS;
             $element->addDecorator('Label', array('class' => $cssClass));
+            $element->setCheckedValue($licence->getId());
             $this->addElement($element);
         }
         
@@ -82,12 +83,13 @@ class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
      * @param Opus_Document $document
      */
     public function populateFromModel($document) {
-        $allLicences = Opus_Licence::getAll();
+        $licences = $this->getElements();
         
-        foreach ($allLicences as $licence) {
-            $element = $this->getElement(self::ELEMENT_NAME_PREFIX . $licence->getId());
-
-            $element->setChecked($this->hasLicence($document, $licence));
+        foreach ($licences as $element) {
+            if ($element instanceof Zend_Form_Element_Checkbox) {
+                $licenceId = $element->getCheckedValue();
+                $element->setChecked($this->hasLicence($document, $licenceId));
+            }
         }
     }
     
@@ -96,14 +98,16 @@ class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
      * @param Opus_Document $document
      */
     public function updateModel($document) {
-        $licences = Opus_Licence::getAll();
+        $licences = $this->getElements();
         
         $docLicences = array();
         
-        foreach ($licences as $licence) {
-            $element = $this->getElement(self::ELEMENT_NAME_PREFIX . $licence->getId());
-            if (!is_null($element) && $element->getValue()) {
-                $docLicences[] = $licence;
+        foreach ($licences as $element) {
+            if ($element instanceof Zend_Form_Element_Checkbox) {
+                $licenceId = $element->getCheckedValue();
+                if ($element->getValue() !== '0') {
+                    $docLicences[] = new Opus_Licence($licenceId);
+                }
             }
         }
         
@@ -117,11 +121,11 @@ class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
      * @param Opus_Licence $licence
      * @return boolean true - Lizenz zugewiesen; false - Lizenz nicht zugewiesen
      */
-    public function hasLicence($document, $licence) {
+    public function hasLicence($document, $licenceId) {
         $licences = $document->getLicence();
         
         foreach ($licences as $docLicence) {
-            if ($docLicence->getModel()->getId() == $licence->getId()) {
+            if ($docLicence->getModel()->getId() == $licenceId) {
                 return true;
             }
         }
@@ -141,7 +145,7 @@ class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
         $elements = $this->getElements();
         
         foreach ($elements as $element) {
-            if ($element->getValue() == 1) {
+            if ($element->getValue() !== '0') {
                 return false;
             }
         }

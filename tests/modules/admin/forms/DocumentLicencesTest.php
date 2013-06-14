@@ -69,7 +69,7 @@ class DocumentLicencesTest extends ControllerTestCase {
 
             // Nur Lizenz mit ID = 4 ist gesetzt fuer Dokument 146
             if ($licence->getId() == 4) {
-                $this->assertEquals(1, $element->getValue(), 'Lizenz ' . $licence->getId() . ' nicht gesetzt.');
+                $this->assertEquals(4, $element->getValue(), 'Lizenz ' . $licence->getId() . ' nicht gesetzt.');
             }
             else {
                 $this->assertEquals(0, $element->getValue(),  'Lizenz ' . $licence->getId() . ' gesetzt.');
@@ -128,9 +128,8 @@ class DocumentLicencesTest extends ControllerTestCase {
         $form = new Admin_Form_DocumentLicences();
         
         $document = new Opus_Document(146);
-        $licence = new Opus_Licence(4);
         
-        $this->assertTrue($form->hasLicence($document, $licence));
+        $this->assertTrue($form->hasLicence($document, 4));
     }
     
     public function testPrepareRenderingAsView() {
