@@ -45,22 +45,25 @@
     else {
         // $person = new Opus_Person(); // TODO Fehler - Was nun?
     }
+    
+    // Vollständige ID für Formular ermitteln
+    $formId = $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->getId();
+    $formId = substr($formId, 0, strrpos($formId, '-') + 1);
 ?>
 
 <div class="person">
     <div class="person-info">
-        <span style="font-weight: bold">
-        <?= $person->getLastName()
-        ?><?PHP if (!is_null($person->getFirstName())) : 
-        ?>, <?= $person->getFirstName() 
-        ?><?PHP endif; 
-        ?></span><?PHP if (!is_null($person->getAcademicTitle())) : 
-        ?><span style="font-style: italic; color: gray">, <?= $person->getAcademicTitle() ?></span>
+        <span id="<?=$formId . 'LastName'?>"><?= $person->getLastName()?></span>
+        <?PHP if (!is_null($person->getFirstName())) : ?>, 
+            <span id="<?=$formId . 'FirstName'?>"><?= $person->getFirstName() ?></span>
+        <?PHP endif; ?>
+        <?PHP if (!is_null($person->getAcademicTitle())) : ?>
+            <span id="<?=$formId . 'AcademicTitle'?>">, <?= $person->getAcademicTitle() ?></span>
         <?PHP endif; ?>
         <?PHP if (!is_null($person->getEmail())) : ?>
         <div>
-            <?= $person->getEmail() ?>
-            -<?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT) ?> Contact Allowed
+            <span id="<?=$formId . 'Email'?>"><?= $person->getEmail() ?></span>
+            -<?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT) ?>
         </div>
         <?PHP endif; ?>
     </div>

@@ -43,18 +43,39 @@
  */
 class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
     
+    /**
+     * Name fuer Formularelement fuer Feld AllowEmailContact.
+     */
     const ELEMENT_ALLOW_CONTACT = 'AllowContact';
     
+    /**
+     * Name fuer Formularelement fuer Feld Role.
+     */
     const ELEMENT_ROLE = 'Role';
     
+    /**
+     * Name fuer Formularelement fuer Feld SortOrder.
+     */
     const ELEMENT_SORT_ORDER = 'SortOrder';
     
+    /**
+     * Name fuer Button zum Editieren der Person.
+     */
     const ELEMENT_EDIT = 'Edit';
     
+    /**
+     * Name fuer Button zum Entfernen der Person.
+     */
     const ELEMENT_REMOVE = 'Remove';
     
+    /**
+     * Konstante fuer das POST Ergebnis Person entfernen.
+     */
     const RESULT_REMOVE = 'remove';
     
+    /**
+     * Erzeugt die Formularelemente.
+     */
     public function init() {
         parent::init();
         
@@ -69,7 +90,7 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         
         $element = new Zend_Form_Element_Checkbox(self::ELEMENT_ALLOW_CONTACT);
         $element->setLabel('AllowEmailContact');
-        $element->setDecorators(array('ViewHelper'));
+        // $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
         // TODO Durch SELECT ersetzen?
@@ -100,10 +121,11 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
             $this->getElement(self::ELEMENT_ALLOW_CONTACT)->setValue($personLink->getAllowEmailContact());
             $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($personLink->getSortOrder());
             $this->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personLink->getModel()->getId());
-            // TODO Role?
+            $this->getElement(self::ELEMENT_ROLE)->setValue($personLink->getRole());
         }
         else {
-            // TODO problem?
+            $this->getLog()->err('populateFromModel called with object that is not instance of '
+                    . 'Opus_Model_Dependent_Link_DocumentPerson');
         }
     }
     
@@ -147,14 +169,16 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
     }
     
     public function updateModel($personLink) {
-        $personLink->setAllowEmailContact($this->getElement(self::ELEMENT_ALLOW_CONTACT)->getValue());
-        $personLink->setSortOrder($this->getElement(self::ELEMENT_SORT_ORDER)->getValue());
+        $personLink->setAllowEmailContact($this->getElementValue(self::ELEMENT_ALLOW_CONTACT));
+        $personLink->setSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
+        $personLink->setRole($this->getElementValue(self::ELEMENT_ROLE));
     }
     
     public function prepareRenderingAsView() {
         parent::prepareRenderingAsView();
         
         $this->removeElement(self::ELEMENT_SORT_ORDER);
+        $this->removeElement(self::ELEMENT_ROLE);
     }
 
 }
