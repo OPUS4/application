@@ -61,7 +61,9 @@ INSERT INTO `link_documents_collections` (`document_id`, `collection_id`, `role_
 
 INSERT INTO `link_documents_dnb_institutes` (`document_id`, `dnb_institute_id`, `role`) VALUES
 (146,1,'grantor'),
-(146,3,'publisher');
+(146,3,'publisher'),
+(146,2,'publisher'),
+(146,4,'grantor');
 
 INSERT INTO `link_documents_licences` (`document_id`, `licence_id`) VALUES
 (146,4);
