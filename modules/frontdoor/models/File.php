@@ -41,6 +41,8 @@ class Frontdoor_Model_File {
     
     private $docId;
     private $filename;
+    
+    private $accessControl;
 
     public function __construct($docId, $filename) {
         if (mb_strlen($docId) < 1 || preg_match('/^[\d]+$/', $docId) === 0 || $docId == null) {
@@ -51,6 +53,7 @@ class Frontdoor_Model_File {
         }
         $this->docId = $docId;
         $this->filename = $filename;
+        $this->accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
     }
 
     public function getFileObject($realm) {
@@ -76,7 +79,10 @@ class Frontdoor_Model_File {
                     // do nothing if in published state - access is granted!
                     break;
                 default:
-                    throw new Frontdoor_Model_DocumentAccessNotAllowedException();
+                    // Dateien dürfen bei Nutzer mit Zugriff auf "documents" heruntergeladen werden
+                    if (!$this->accessControl->accessAllowed('documents')) {
+                        throw new Frontdoor_Model_DocumentAccessNotAllowedException();
+                    }
                     break;
             }
         }
@@ -97,13 +103,14 @@ class Frontdoor_Model_File {
         if (!($realm instanceof Opus_Security_IRealm)) {
             return false;
         }
-        return $realm->checkDocument($docId);
+        return $realm->checkDocument($docId) || $this->accessControl->accessAllowed('documents');
     }
 
     function isFileAccessAllowed($fileId, $realm) {
         if (is_null($fileId) or !($realm instanceof Opus_Security_IRealm)) {
             return false;
         }
-        return $realm->checkFile($fileId);
+        return $realm->checkFile($fileId) || $this->accessControl->accessAllowed('documents');
     }
+      
 }
