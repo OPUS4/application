@@ -50,7 +50,7 @@ class Admin_Form_DocumentNote extends Admin_Form_AbstractModelSubForm {
         $this->addElement($element);
         
         $element = new Zend_Form_Element_Checkbox(self::ELEMENT_VISIBILITY);
-        $element->setLabel('Public'); // TODO translate
+        $element->setLabel('Opus_Note_Visibility_Value_Public'); // TODO translate
         $this->addElement($element);
         
         $element = new Zend_Form_Element_Textarea(self::ELEMENT_MESSAGE);
