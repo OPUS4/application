@@ -193,19 +193,16 @@ class Admin_FilemanagerController extends Controller_Action {
         $document = $documentsHelper->getDocumentForId($docId);
 
         if (!isset($document)) {
-            $this->_logger->err(__METHOD__ . " doc $docId does not exist or invalid");
             return $this->_redirectToAndExit('index', array('failure' =>
                 $this->view->translate('admin_document_error_novalidid')), 'documents', 'admin');
         }
 
         if (!$this->_isValidFileId($fileId)) {
-            $this->_logger->err(__METHOD__ . " doc $docId: file $fileId does not exist or invalid");
             return $this->_redirectToAndExit('index', array('failure' =>
                 $this->view->translate('admin_filemanager_error_novalidid')), 'filemanager', 'admin', array('docId' => $docId));
         }
 
         if (!$this->_isFileBelongsToDocument($docId, $fileId)) {
-            $this->_logger->err(__METHOD__ . " file $fileId for doc $docId does not exist");
             return $this->_redirectToAndExit('index', array('failure' =>
                 $this->view->translate('admin_filemanager_error_filenotlinkedtodoc')), 'filemanager', 'admin', array('docId' => $docId));
         }
