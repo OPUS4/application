@@ -126,8 +126,9 @@ class Opus3FileImport {
     public function loadFiles($id, $roleid = null) {
         $this->tmpPath = null;
         $this->tmpFiles = array();
+	$this->filesImported = array();
 
-        $this->tmpDoc = new Opus_Document($id);
+	$this->tmpDoc = new Opus_Document($id);
         $opus3Id = $this->tmpDoc->getIdentifierOpus3(0)->getValue();
 
         $this->roleId = $roleid;
