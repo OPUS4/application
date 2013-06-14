@@ -80,7 +80,8 @@ class Frontdoor_Model_File {
                     break;
                 default:
                     // Dateien dürfen bei Nutzer mit Zugriff auf "documents" heruntergeladen werden
-                    if (!$this->accessControl->accessAllowed('documents')) {
+                    
+                    if (!$this->accessControl->accessAllowed('documents') || !($realm instanceof Opus_Security_Realm)) {
                         throw new Frontdoor_Model_DocumentAccessNotAllowedException();
                     }
                     break;
@@ -110,6 +111,7 @@ class Frontdoor_Model_File {
         if (is_null($fileId) or !($realm instanceof Opus_Security_IRealm)) {
             return false;
         }
+        
         return $realm->checkFile($fileId) || $this->accessControl->accessAllowed('documents');
     }
       
