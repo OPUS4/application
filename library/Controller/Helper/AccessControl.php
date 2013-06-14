@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,41 +25,39 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     View
+ * @package     Controller_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Returns true is current user has access to a resource.
+ * Controller Helper für Access Control Nachfragen.
  */
-class View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
-
-    /**
-     * @var \Controller_Helper_AccessControl
-     */
-    private $accessControl;
+class Controller_Helper_AccessControl extends Zend_Controller_Action_Helper_Abstract {
     
-    /**
-     * Returns true if access to resource is allowed or resource does not exist.
-     * @param type $resource
-     * @return boolean
-     */
+    public function direct($resource) {
+        return $this->accessAllowed($resource);
+    }
+    
     public function accessAllowed($resource) {
-        return $this->getAccessControl()->accessAllowed($resource);
+        $acl = $this->getAcl();
+        
+        if (!is_null($resource) && !is_null($acl)) {
+            return $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, $resource);
+        }
+        else {
+            return true;
+        }
     }
     
     /**
      * Returns the Zend_Acl object or null.
      * @return Zend_Acl
      */
-    protected function getAccessControl() {
-        if (is_null($this->accessControl)) {
-            $this->accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
-        }
-        return $this->accessControl;
+    protected function getAcl() {
+        return Zend_Registry::isRegistered('Opus_Acl') ? Zend_Registry::get('Opus_Acl') : null;
     }
-
+    
 }

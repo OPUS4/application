@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,42 +24,45 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
+ * @category    Application Unit Test
+ * @package     Controller_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Returns true is current user has access to a resource.
+ * Unit Tests für Controller Helper für Zugriffsprüfungen.
  */
-class View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
-
-    /**
-     * @var \Controller_Helper_AccessControl
-     */
+class Controller_Helper_AccessControlTest extends ControllerTestCase {
+    
     private $accessControl;
-    
-    /**
-     * Returns true if access to resource is allowed or resource does not exist.
-     * @param type $resource
-     * @return boolean
-     */
-    public function accessAllowed($resource) {
-        return $this->getAccessControl()->accessAllowed($resource);
-    }
-    
-    /**
-     * Returns the Zend_Acl object or null.
-     * @return Zend_Acl
-     */
-    protected function getAccessControl() {
-        if (is_null($this->accessControl)) {
-            $this->accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
-        }
-        return $this->accessControl;
+
+    public function setUp() {
+        parent::setUp();
+        parent::setUpWithEnv('production');
+        $this->assertEquals(1, Zend_Registry::get('Zend_Config')->security);
+        $this->assertTrue(Zend_Registry::isRegistered('Opus_Acl'), 'Expected registry key Opus_Acl to be set');
+        $acl = Zend_Registry::get('Opus_Acl');
+        $this->assertTrue($acl instanceof Zend_Acl, 'Expected instance of Zend_Acl');
+        $acl->allow('guest', 'accounts');
+        $this->accessControl = new Controller_Helper_AccessControl();
     }
 
+    public function tearDown() {
+        $acl = Zend_Registry::get('Opus_Acl');
+        $acl->deny('guest', 'accounts');
+        parent::tearDown();
+    }
+
+    public function testAccessAllowed() {
+        $user = Zend_Auth::getInstance()->getIdentity();
+        $this->assertEquals('', $user, "expected no user to be set (should use default 'guest' as default)");
+        $allowedDocuments = $this->accessControl->accessAllowed('documents');
+        $this->assertFalse($allowedDocuments, "expected access denied to resource 'documents'");
+        $allowedAccount = $this->accessControl->accessAllowed('accounts');
+        $this->assertTrue($allowedAccount, "expected access allowed to module 'account'");
+    }
+    
 }
