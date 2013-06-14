@@ -88,5 +88,11 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
         $collection = new Opus_Collection($colId);
         $this->populateFromModel($collection);
     }
+    
+    public function loadDefaultDecorators() {
+        $this->setDecorators(array(array(
+            'ViewScript', array('viewScript' => 'form/collectionForm.phtml'))));
+    }
+    
             
 }
