@@ -76,7 +76,8 @@ INSERT INTO `persons` (`id`, `academic_title`, `date_of_birth`, `email`, `first_
 (261,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
 (262,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
 (263,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
-(264,'PhD','1970-01-01',NULL,'Jane','Doe','New York');
+(264,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
+(270,'PhD','1970-01-01',NULL,'Jane','Doe','New York');
 
 INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_order`, `allow_email_contact`) VALUES
 (258,146,'advisor',1,0),
@@ -85,7 +86,8 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_
 (261,146,'editor',1,0),
 (262,146,'referee',1,0),
 (263,146,'translator',1,0),
-(264,146,'submitter',1,0);
+(264,146,'submitter',1,0),
+(270,146,'other',1,0);
 
 INSERT INTO `document_patents` (`id`, `document_id`, `countries`, `date_granted`, `number`, `year_applied`, `application`) VALUES
 (1,146,'DDR','1970-1-1T0:00:00CET','1234',1970,'The foo machine.');
