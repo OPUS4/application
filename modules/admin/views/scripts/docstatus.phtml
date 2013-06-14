@@ -35,12 +35,12 @@
 <?PHP if (!is_null($this->document)) : ?>
 <div id="docstatus">
     <dl>
-        <dt><?= $this->translate('ServerState') ?></dt>
-        <dd><?= $this->translate('Opus_Document_ServerState_Value_' . ucfirst($this->document->getServerState())) ?></dd>
+        <dt id="Document-ServerState"><?= $this->translate('ServerState') ?></dt>
+        <dd id="Document-ServerState"><?= $this->translate('Opus_Document_ServerState_Value_' . ucfirst($this->document->getServerState())) ?></dd>
         <dt><?= $this->translate('ServerDatePublished') ?></dt>
-        <dd><?= $this->formatValue()->formatDate($this->document->getServerDatePublished()) ?></dd>
+        <dd id="Document-ServerDatePublished"><?= $this->formatValue()->formatDate($this->document->getServerDatePublished()) ?></dd>
         <dt><?= $this->translate('ServerDateModified') ?></dt>
-        <dd><?= $this->formatValue()->formatDate($this->document->getServerDateModified()) ?></dd>
+        <dd id="Document-ServerDateModified"><?= $this->formatValue()->formatDate($this->document->getServerDateModified()) ?></dd>
     </dl>
 </div>
 <?PHP else : ?>
