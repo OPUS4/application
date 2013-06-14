@@ -41,15 +41,12 @@ class Util_TmxFile {
      * template for new tmx files
      */
 
-    const template =
-            <<<'EOT'
-<?xml version="1.0" encoding="UTF-8"?>
+    const template = '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
     <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="Opus4"></header>
     <body></body>
-</tmx>
-EOT;
+</tmx>';
 
     /**
      * Internal representation of the file
