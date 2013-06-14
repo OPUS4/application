@@ -49,7 +49,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     * @return void
     */
    public function setUp() {
-      parent::setUp();
+      parent::setUpWithEnv('production');
+      $this->assertEquals(1, Zend_Registry::get('Zend_Config')->security);
+      $this->assertTrue(Zend_Registry::isRegistered('Opus_Acl'), 'Expected registry key Opus_Acl to be set');
+      $acl = Zend_Registry::get('Opus_Acl');
+      $this->assertTrue($acl instanceof Zend_Acl, 'Expected instance of Zend_Acl');
 
       $path = Zend_Registry::get('temp_dir') . '~localstat.xml';
       @unlink($path);
@@ -618,8 +622,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testServerDatePublishedOnFrontdoor() {
+        $this->setUpGerman();
         $this->dispatch('/frontdoor/index/index/docId/146');
-        // TODO Datumsangaben erfolgen bislang sprachunabhängig (keine Lokalisierung)
         $this->assertContains('<td>03.01.2012</td>', $this->getResponse()->getBody());
     }
 
