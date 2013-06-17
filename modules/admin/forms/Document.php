@@ -74,13 +74,15 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
     public function init() {
         parent::init();
         
-        $this->addElement('hash', 'opus_hash', array('salt' => 'unique'));
+        $this->setDecorators(array('FormElements'));
         
         $this->addSubForm(new Admin_Form_ActionBox(), 'ActionBox');
         
         $subform = new Admin_Form_InfoBox();
-        $subform->addDecorator('HtmlTag', 
+        $subform->addDecorator(array('wrapperDiv' => 'HtmlTag'), 
                 array('tag' => 'div', 'placement' => 'prepend', 'class' => 'wrapper', 'openOnly' => 'true'));
+        $subform->addDecorator(array('wrapperDl' => 'HtmlTag'), 
+                array('tag' => 'dl', 'placement' => 'append', 'openOnly' => 'true'));
         $this->addSubForm($subform, 'InfoBox');
         
         $this->addSubForm(new Admin_Form_DocumentGeneral(), 'General');
@@ -115,6 +117,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $element = new Zend_Form_Element_Hidden('id');
         $this->addElement($element);
         
+        $this->addElement('hash', 'opus_hash', array('salt' => 'unique')); // TODO salt?
+        
         $element = new Zend_Form_Element_Submit(self::ELEMENT_SAVE);
         $this->addElement($element);
         
@@ -124,6 +128,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $element = new Zend_Form_Element_Submit(self::ELEMENT_CANCEL);
         $this->addElement($element);
         
+        $element->addDecorator(array('wrapperDl' => 'HtmlTag'), 
+                array('tag' => 'dl', 'placement' => 'append', 'closeOnly' => 'true'));
         $element->addDecorator('HtmlTag',
                 array('tag' => 'div', 'placement' => 'append', 'closeOnly' => 'true'));
     }
