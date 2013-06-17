@@ -35,14 +35,9 @@
 <?PHP if (!is_null($this->document)) : ?>
 <?PHP $authors = $this->document->getAuthors(); ?>
 <div id="docinfo">
-    <div>
-        <span class="docid"><?=$this->document->getDocId()?></span> - 
-        <span class="title"><?=$this->document->getMainTitle()?></span>
-    </div>
+    <h2><span class="docid"><?=$this->document->getDocId()?></span> - <?=$this->document->getMainTitle()?></h2>
     <?PHP if (!empty($authors)) : ?>
-    <div>
-        <span class="author"><?=$authors[0]['name']?></span>
-    </div>
+    <p class="author"><?=$authors[0]['name']?></p>
     <?PHP endif; ?>
 </div>
 <?PHP else : ?>
