@@ -637,24 +637,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="add_PublishedYear">
-            <tuv xml:lang="en">
-                <seg>Add year of first Publication</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Jahr der Erstveröffentlichung hinzufügen</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="remove_PublishedYear">
-            <tuv xml:lang="en">
-                <seg>Remove year of first Publication</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Jahr der Erstveröffentlichung entfernen</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="PublishedDate">
             <tuv xml:lang="en">
                 <seg>Date of first Publication</seg>
@@ -664,48 +646,12 @@
             </tuv>
         </tu>
 
-        <tu tuid="add_PublishedDate">
-            <tuv xml:lang="en">
-                <seg>Add date of first Publication</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Datum der Erstveröffentlichung hinzufügen</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="remove_PublishedDate">
-            <tuv xml:lang="en">
-                <seg>Remove date of first Publication</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Datum der Erstveröffentlichung entfernen</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="CompletedDate">
             <tuv xml:lang="en">
                 <seg>Date of Publication (online)</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Datum der Veröffentlichung (online)</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="add_CompletedDate">
-            <tuv xml:lang="en">
-                <seg>Add date of Publication (online)</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Datum der Veröffentlichung (online) hinzufügen</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="remove_CompletedDate">
-            <tuv xml:lang="en">
-                <seg>Remove date of Publication (online)</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Datum der Veröffentlichung (online) entfernen</seg>
             </tuv>
         </tu>
 
@@ -720,10 +666,10 @@
 
         <tu tuid="ServerState">
             <tuv xml:lang="en">
-                <seg>State of publication process</seg>
+                <seg>State:</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Status des Publikationsprozesses</seg>
+                <seg>Status:</seg>
             </tuv>
         </tu>
 
@@ -745,39 +691,22 @@
             </tuv>
         </tu>
 
-        <tu tuid="add_ServerDateCreated">
-            <tuv xml:lang="en">
-                <seg>Add Date of Creation</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Datum der Erstellung hinzufügen</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="remove_ServerDateCreated">
-            <tuv xml:lang="en">
-                <seg>Remove Date of Creation</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Datum der Erstellung entfernen</seg>
-            </tuv>
-        </tu>
 
         <tu tuid="ServerDateModified">
             <tuv xml:lang="en">
-                <seg>Date of Last Modification (Server)</seg>
+                <seg>Last Modification on:</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Datum der letzen Änderung (Server)</seg>
+                <seg>Letzte Änderung am:</seg>
             </tuv>
         </tu>
 
         <tu tuid="ServerDatePublished">
             <tuv xml:lang="en">
-                <seg>Release Date</seg>
+                <seg>Release Date:</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Datum der Freischaltung</seg>
+                <seg>Publiziert am:</seg>
             </tuv>
         </tu>
 
@@ -787,24 +716,6 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Löschdatum</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="add_ServerDateDeleted">
-            <tuv xml:lang="en">
-                <seg>Add Date of Deletion</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Löschdatum hinzufügen</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="remove_ServerDateDeleted">
-            <tuv xml:lang="en">
-                <seg>Remove Date of Deletion</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Löschdatum entfernen</seg>
             </tuv>
         </tu>
 
