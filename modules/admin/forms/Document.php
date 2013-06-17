@@ -78,6 +78,11 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         
         $this->addSubForm(new Admin_Form_ActionBox(), 'ActionBox');
         
+        $subform = new Admin_Form_InfoBox();
+        $subform->addDecorator('HtmlTag', 
+                array('tag' => 'div', 'placement' => 'prepend', 'class' => 'wrapper', 'openOnly' => 'true'));
+        $this->addSubForm($subform, 'InfoBox');
+        
         $this->addSubForm(new Admin_Form_DocumentGeneral(), 'General');
         
         $this->addSubForm(new Admin_Form_DocumentPersons(), 'Persons');
@@ -118,6 +123,9 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         
         $element = new Zend_Form_Element_Submit(self::ELEMENT_CANCEL);
         $this->addElement($element);
+        
+        $element->addDecorator('HtmlTag',
+                array('tag' => 'div', 'placement' => 'append', 'closeOnly' => 'true'));
     }
 
     /**
