@@ -525,9 +525,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                 'testdata changed: document type changed');
         $this->assertEquals('published',      $doc->getServerState(),
                 'testdata changed: document state changed');
-        $this->assertEquals(1,                count($doc->getThesisGrantor()),
+        $this->assertEquals(2,                count($doc->getThesisGrantor()),
                 'testdata changed: thesis grantor added to document');
-        $this->assertEquals(1,                count($doc->getThesisPublisher()),
+        $this->assertEquals(2,                count($doc->getThesisPublisher()),
                 'testdata changed: thesis publisher added to document');
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
@@ -538,7 +538,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         // Regression test for OPUSVIER-2452 - existing thesis:grantor element
         $elements = $xpath->query('//thesis:degree/thesis:grantor');
-        $this->assertEquals(1, $elements->length, "Unexpected thesis:grantor count");
+        $this->assertEquals(2, $elements->length, "Unexpected thesis:grantor count");
 
         // Regression test for OPUSVIER-2523 - existing ddb:contact element
         $elements = $xpath->query('//ddb:contact/@ddb:contactID');
@@ -550,7 +550,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(1, $elements->length, "Unexpected thesis:level=='master' count");
 
         $elements = $xpath->query('//thesis:degree/thesis:grantor/cc:universityOrInstitution/cc:name');
-        $this->assertEquals(1, $elements->length, "Unexpected thesis:level=='master' count");
+        $this->assertEquals(2, $elements->length, "Unexpected thesis:level=='master' count");
     }
 
     /**
@@ -1310,7 +1310,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $xpath = $this->prepareXpathFromResultString($response->getBody());
 
         $grantorInstitution = $xpath->query('//xMetaDiss:xMetaDiss/thesis:degree/thesis:grantor/cc:universityOrInstitution/cc:name');
-        $this->assertEquals(1, $grantorInstitution->length, "Expected one grantor institution");
+        $this->assertEquals(2, $grantorInstitution->length, "Expected one grantor institution");
         $this->assertEquals('Foobar Universität', $grantorInstitution->item(0)->nodeValue);
 
         $grantorDepartment = $xpath->query('//xMetaDiss:xMetaDiss/thesis:degree/thesis:grantor/cc:universityOrInstitution/cc:department/cc:name');
