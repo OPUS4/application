@@ -1,6 +1,6 @@
 $(document).ready(function() {
 	// JavaScript detection
-	$("body").removeClass("no-js").addClass("js");
+	$("html").removeClass("no-js").addClass("js");
 	
 	// ActionBox
 	var $actionbox = $('#actionboxContainer');

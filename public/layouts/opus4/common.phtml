@@ -140,7 +140,7 @@ $languageSelectors = $this->languageSelector();
                 </div>
             </div>
 
-            <div id="content" class="opus <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
+            <div id="content" class="opus <?= ($this->moduleName == 'admin') ? 'adminContainer' : ''?> <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
                 <?php if (!is_null($this->flashMessenger)) : ?>
                 <div class="messages">
                     <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
@@ -149,9 +149,13 @@ $languageSelectors = $this->languageSelector();
                 </div>
                 <?php endif ?>
 
+                <?PHP if ($this->moduleName == 'admin') : ?>
+                    <?= $this->layout()->content ?>
+                <?PHP else : ?>
                 <div class="wrapper">
                     <?= $this->layout()->content ?>
                 </div>
+                <?PHP endif; ?>
             </div>
 
             <div id="page-footer">
