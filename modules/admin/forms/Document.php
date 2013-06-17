@@ -76,6 +76,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         
         $this->addElement('hash', 'opus_hash', array('salt' => 'unique'));
         
+        $this->addSubForm(new Admin_Form_ActionBox(), 'ActionBox');
+        
         $this->addSubForm(new Admin_Form_DocumentGeneral(), 'General');
         
         $this->addSubForm(new Admin_Form_DocumentPersons(), 'Persons');
