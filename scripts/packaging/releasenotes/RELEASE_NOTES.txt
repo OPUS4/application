@@ -4,17 +4,25 @@ h2. ======================== Release 4.4.0 2013-06-21 ========================
 
 h3. Anpassungen am Solr-Indexschema
 
-Es wurden zwei neue Indexfelder eingeführt: year_inverted und
-server_date_modified . Damit diese Änderung wirksam wird, muss die Datei
-schema.xml (befindet sich im Verzeichnis solrconfig des Release-Tarballs) in das
-Solr-Konfigurationsverzeichnis conf übernommen werden. Wurde Solr über das
-Installskript installiert, so findet die Aktualisierung der Datei automatisch im
-Rahmen der Ausführung des Update-Skript statt.
+Mit OPUS 4.4 werden vier neue Indexfelder eingeführt:
+
+  * year_inverted
+  * server_date_modified
+  * fulltext_id_success
+  * fulltext_id_failure
+
+Damit diese Änderung im Rahmen des Updates der Instanz wirksam wird, muss die
+Datei schema.xml (diese befindet sich im Verzeichnis solrconfig des Release-
+Tarballs) in das Solr-Konfigurationsverzeichnis conf übernommen werden. Wurde
+Solr über das Installskript installiert, so findet die Aktualisierung der Datei
+automatisch im Rahmen der Ausführung des Update-Skript statt.
+
+Nach der Aktualisierung der Solr-Schemadatei muss der Solr-Server neu gestartet
+werden.
 
 In jedem Fall ist nach dem Update der Solr-Schemadatei und der Instanz auf die
-Version 4.4 eine Reindexierung aller Dokumente erforderlich, damit die beiden
-neu eingeführten Indexfelder year_inverted und server_date_modified für alle
-Dokumente angelegt werden.
+Version 4.4 eine Reindexierung aller Dokumente erforderlich, damit die neu
+eingeführten Indexfelder für alle Indexdokumente angelegt werden.
 
 
 h2. ======================== Release 4.3.1 2013-02-21 ========================
