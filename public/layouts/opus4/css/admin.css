@@ -1,525 +1,253 @@
-/**
- * This file is part of OPUS. The software OPUS has been originally developed
- * at the University of Stuttgart with funding from the German Research Net,
- * the Federal Department of Higher Education and Research and the Ministry
- * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
- *
- * OPUS 4 is a complete rewrite of the original OPUS software and was developed
- * by the Stuttgart University Library, the Library Service Center
- * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
- * the Saarland University and State Library, the Saxon State Library -
- * Dresden State and University Library, the Bielefeld University Library and
- * the University Library of Hamburg University of Technology with funding from
- * the German Research Foundation and the European Regional Development Fund.
- *
- * LICENCE
- * OPUS is free software; you can redistribute it and/or modify it under the
- * terms of the GNU General Public License as published by the Free Software
- * Foundation; either version 2 of the Licence, or any later version.
- * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
- * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
- * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
- * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * @category    Application
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
- */
-
-.adminContainer .title {
-    font-weight: normal;
+/*@import url(admin-opus.css);*/
+.Document-Action li{
+   float: left;
+}
+.Document-save{
+   border-radius: 5px;
+   border: none;
+   background-color: black;
+   color: white;
+   padding: 6px 10px;
+   font: 1em Verdana, Arial, Helvetica, sans-serif;
+   cursor: pointer;
+}
+.cancel-element{
+   padding: 6px 0 6px 10px;
+   font: 0.875em Verdana, Arial, Helvetica, sans-serif;
+}
+.Document-cancel{
+   border: none;
+   background-color: transparent;
+   color: #26517B;
+   text-decoration: underline;
+   padding: 0;
+   cursor: pointer;
+}
+.Document-cancel:hover{
+   text-decoration: none;
+}
+/* @group DropDown */
+.dropdown{
+   position: relative;
+}
+.dropdown dd{
+   display: none;
+   position: absolute;
+   z-index: 90;
+}
+.dropdown-open dd,
+.no-js .dropdown:hover dd{
+   display: block;
+   min-width: 100%;
+}
+.dropdown ul,
+#actionboxContainer ul{
+   margin: 0;
+   padding: 0;
+   list-style: none;
+}
+.dropdown li{
+   padding: 4px 0;
 }
 
-.adminContainer .instruction {
-    font-weight: normal;
+/* @end */
+/* @group ActionBox */
+#actionboxContainer{
+   background: url(../img/theme/admin/bg_actionbox.png);
+   color: black;
+   width: 100%;
+   float: left;
+   padding: 0.8em 0;
+   box-shadow: 0 0 6px 0 #545454;
+
+}
+#actionboxContainer.fixed{
+   position: fixed;
+   top: 0;
+   z-index: 100;
+   background: url(../img/theme/admin/bg_actionbox-fixed.png);
+}
+#actionboxContainer .col{
+   float: left;
+
+}
+#actionboxContainer .col-1{
+   width: 24%;
+}
+#actionboxContainer .col-2{
+   width: 51%;
+}
+#actionboxContainer .col-3{
+   width: 25%;
+}
+#actionboxContainer .col dl{
+   margin: 0 15px 0 0;
+   padding: 0;
+}
+#actionboxContainer .col.col-2 dl{
+   margin: 0 30px 0 0;
+}
+#content #actionboxContainer dt{
+   font-size: 0.857em;
+}
+#actionboxContainer .dropdown dt a{
+   display: block;
+   border-radius: 5px;
+   border: none;
+   cursor: pointer;
+   font-size: 1.167em;
+}
+#actionboxContainer .dropdown.dropdown-open dt a{
+   border-radius: 5px 5px 0 0;
+}
+#actionboxContainer dd{
+   font-weight: bold;
+}
+#actionboxContainer .dropdown ul a{
+   color: white;
+   text-decoration: none;
+   display: block;
+}
+#actionboxContainer .dropdown ul a:hover{
+   text-decoration: underline;
+}
+#actionboxContainer .dropdown dd{
+   border-radius: 0 0 5px 5px;
+   font-size: 0.857em;
+   box-shadow: 0 0 12px 6px rgba(84, 84, 84, 0.45);
+}
+#Document-Goto.dropdown dt a{
+   background-color: #595A56;
+   color: white;
+   padding: 6px 28px 6px 10px;
+   position: relative;
+}
+#Document-Goto.dropdown dt a:after{
+    border-color: white transparent transparent;
+    border-style: solid;
+    border-width: 10px 5px 0;
+    top: 10px;
+    content: "";
+    height: 0;
+    right: 10px;
+    position: absolute;
+    width: 0;
+}
+#actionboxContainer #Document-Goto.dropdown dd{
+   background-color: #595a56;
+   color: white;
+   font-weight: normal;
+}
+#Document-Goto.dropdown ul a{
+   color: white;  
+}
+#Document-Goto dd ul{
+   padding: 0.3em 8px 0.8em 15px;
+}
+/* @end */
+/* @group Primary nav */
+#primary-nav #primary-nav-administration.active * {
+    color: white;
+}
+#primary-nav #primary-nav-administration.active a,
+#primary-nav #primary-nav-administration.active a:hover{
+   padding: 0 8px 0 0;
+}
+#primary-nav #primary-nav-administration.active a span{
+   padding-left: 15px;
+   padding-right: 15px;
+   background: #2d6093;
+   background: -moz-linear-gradient(top,  #2d6093 0%, #26517c 82%, #26517c 100%); /* FF3.6+ */
+   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2d6093), color-stop(82%,#26517c), color-stop(100%,#26517c)); /* Chrome,Safari4+ */
+   background: -webkit-linear-gradient(top,  #2d6093 0%,#26517c 82%,#26517c 100%); /* Chrome10+,Safari5.1+ */
+   background: -o-linear-gradient(top,  #2d6093 0%,#26517c 82%,#26517c 100%); /* Opera 11.10+ */
+   background: -ms-linear-gradient(top,  #2d6093 0%,#26517c 82%,#26517c 100%); /* IE10+ */
+   background: linear-gradient(to bottom,  #2d6093 0%,#26517c 82%,#26517c 100%); /* W3C */
+   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d6093', endColorstr='#26517c',GradientType=0 ); /* IE6-9 */
 }
 
-.adminContainer table.documents {
-    border-collapse: collapse;
-    border-top: 1px solid gray;
-    border-bottom: 1px solid gray;
-    font-size: small;
-    width: 100%;
-    margin: 0;
-    padding: 0;
+/* @end */
+#content.adminContainer{
+   background: url(../img/theme/admin/bg_page.png) repeat-x 50% 2px;
 }
-
-.adminContainer table.documents td {
-    vertical-align: top;
-    padding: 0.2em 0.5em;
+#content.adminContainer .wrapper{
+   font-size: 0.875em;
+   clear: both;
 }
-
-.adminContainer table.documents td.id {
-    text-align: right;
-}
-
-.adminContainer table.documents td.info {
-}
-
-.adminContainer table.documents td .authors {
-    font-style: italic;
-}
-
-.adminContainer table.documents td.info span.author {
-    font-style: italic;
-}
-
-.adminContainer table.documents td.actions {
-    white-space: inherit;
-}
-
-.adminContainer table tr.odd {
-    background: #f4f4f4;
-}
-
-.adminContainer table tr.even {
-    background: white;
-}
-
 .adminContainer .breadcrumbsContainer {
-    /*color: #333;*/
-    /*color: #1d4065;*/
-    color: #26517d;
-    background-color: #f3f6f8;
-    padding: 4px 10px;
-    border: solid #e2e6e9;
-    border-width: 0px 0 0px;
+   background: #2d6093; /* Old browsers */
+   background: -moz-linear-gradient(top,  #2d6093 0%, #26527d 79%, #26517c 100%); /* FF3.6+ */
+   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2d6093), color-stop(79%,#26527d), color-stop(100%,#26517c)); /* Chrome,Safari4+ */
+   background: -webkit-linear-gradient(top,  #2d6093 0%,#26527d 79%,#26517c 100%); /* Chrome10+,Safari5.1+ */
+   background: -o-linear-gradient(top,  #2d6093 0%,#26527d 79%,#26517c 100%); /* Opera 11.10+ */
+   background: -ms-linear-gradient(top,  #2d6093 0%,#26527d 79%,#26517c 100%); /* IE10+ */
+   background: linear-gradient(to bottom,  #2d6093 0%,#26527d 79%,#26517c 100%); /* W3C */
+   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d6093', endColorstr='#26517c',GradientType=0 ); /* IE6-9 */
+   font-size: 1.25em;
+   font-weight: normal;
+   margin-bottom: 0em;
+   padding: 6px 10px;
+}
+.adminContainer .breadcrumbsContainer *{
+   color: white;
+}
+#docinfo{
+   padding: 1.3em 0;
+}
+#docinfo p{
+   margin: 0;
+}
+.adminContainer #docinfo h2 {
+    background-color: transparent;
+    color: black;
+    font-size: 1.286em;
     font-weight: normal;
-    font-size: 1.7em;
-    margin-bottom: 0.5em;
-    clear: both;
-}
-
-.adminContainer div span.label {
-    display: table-cell;
-    width: 15em;
-    padding: 2px;
-    padding-left: 0.5em;
-    border-bottom: 2px solid white;
-    background-color: lightgray;
-}
-
-.adminContainer div span.value {
-    display: table-cell;
-    text-align: left;
-    padding: 2px;
-    padding-left: 0.5em;
-    border-bottom: 2px solid white;
-    background-color: #eeeeee;
-    width: 50em;
-}
-
-.adminContainer div span.value div span.label {
-    width: 10em;
-    border-bottom: 1px solid white;
-}
-
-.adminContainer div span.value div span.value {
-    width: 38em;
-    border-bottom: 1px solid white;
-}
-
-.adminContainer div span.value div:last-child span.label {
-    width: 10em;
-    border-bottom: none;
-}
-
-.adminContainer div span.value div:last-child span.value {
-    width: 38em;
-    border-bottom: none;
-}
-
-.adminContainer ul.sortingNavigation {
-    list-style-type: none;
     padding: 0;
-    margin: 0;
-    background-color: green;
+    margin: 0 0 0.3em;
 }
-
-.adminContainer ul.sortingNavigation li {
-    float: left;
-    margin: 0;
-    padding: 0;
-    padding-right: 2em;
+.adminContainer form dd,
+.adminContainer dd fieldset,
+#actionboxContainer dd{
+   margin: 0;
+   padding: 0;
+   border: none;
 }
-
-.adminContainer ul.sortingNavigation li a {
+.adminContainer dd legend{
+   border: none;
+   text-transform: none;
+   font: italic bold 1.143em Georgia, "Times New Roman", Times, serif;
+   color: #595955;
 }
-
-.adminContainer ul.sortingNavigation li.active {
-    font-weight: bold;
+.adminContainer form > dl > dd > fieldset > legend{
+   background-color: #595a56;
+   color: white;
+   display: block;
+   border-radius: 6px;
+   padding: 0.4em 1.2%;
+   width: 97.6%;
+   position: relative;
 }
-
-.adminContainer .paginationInfo {
-    clear: both;
-    padding: 0.5em;
-    text-align: center;
-}
-
-.adminContainer .paginationControl {
-    text-align: center;
-    margin: 4px 0px;
-    padding: 2px;
-    background-color: #b3c6d6;
-}
-
-.adminContainer .paginationControl a {
-    text-decoration: none;
-    color: black;
-}
-
-.adminContainer .paginationControl a:visited {
-    text-decoration: none;
-    color: black;
-}
-
-.adminContainer .paginationControl a:hover {
-    text-decoration: none;
-    color: blue;
-}
-
-.adminContainer .paginationControl span.currentPage {
-    font-weight: bold;
-}
-
-.adminContainer .paginationControl span.disabled {
-    color: gray;
-}
-
-.adminContainer .docstateMenu {
-    text-align: center;
-    padding: 0.1em 0em;
-    margin-bottom: 0.5em;
-}
-
-.adminContainer .docstateMenu span {
-    padding: 0 0.5em;
-}
-
-.adminContainer .docstateMenu span.active {
-    /* font-weight: bold; */
-}
-
-.adminContainer .docstateMenu a {
-    background-color: #dfefff;
-    color: black;
-    padding: 0px 6px;
-    padding-bottom: 1px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    text-decoration: none;
-}
-
-.adminContainer .docstateMenu a.workflow {
-    background-color: #26517D;
-    color: white;
-    padding: 0px 6px;
-    padding-bottom: 1px;
-    -moz-border-radius: 6px;
-    border-radius: 6px;
-    text-decoration: none;
-}
-
-.adminContainer .docstateMenu span.active a {
-    background-color: #0088bb;
-    color: white;
-}
-
-.adminContainer .documentOptions {
-    padding: 0.5em;
-    background-color: white; /* #efefef; */
-}
-
-.adminContainer dl.menu {
-    margin-left: 2em;
-}
-
-.adminContainer dl.menu dt {
-    font-size: 120%;
-    margin-left: 0em;
-}
-
-.adminContainer dl.menu dd {
-    margin-left: 0em;
-    color: gray;
-    font-style: italic;
-    margin-bottom: 0.5em;
-}
-
-.adminContainer .form dt {
-}
-
-.adminContainer .form dd {
-}
-
-.adminContainer #upload-form {
-    background-color: #f3f6f8;
-    padding: 0.5em 2em;
-}
-
-.adminContainer fieldset {
-    margin: 0px;
-    background: #f3f6f8;
-}
-
-.adminContainer fieldset.file {
-    margin: 0.5em;
-    border-width: 1px;
+.adminContainer form > dl > dd > fieldset > legend:after {
+    border-color: #595a56 transparent transparent;
     border-style: solid;
+    border-width: 11px 6px 0;
+    bottom: -11px;
+    content: "";
+    height: 0;
+    position: absolute;
+    left: 10px;
+    width: 0;
 }
-
-.adminContainer fieldset.file legend.filename {
-    font-size: large;
-    padding-left: 1em;
-    padding-right: 1em;
+.adminContainer form fieldset > dl > dd > fieldset{
+   border-top: 10px solid #BDBEBB;
 }
-
-.adminContainer fieldset.file .file-actions {
-    font-size: 110%;
-    padding: 0.5em;
+.adminContainer form fieldset > dl > dd > fieldset > legend{
+   padding: 0 1% 0.4% 0;
 }
-
-.adminContainer fieldset .form-item {
-    margin-bottom: 4px;
+.adminContainer form dl{
+   margin: 0;
+   padding: 1.15em 0 1.768em;
 }
-
-.adminContainer input.delete-button {
-    padding-top: 2px;
-    padding-bottom: 2px;
-}
-
-.adminContainer input.add-button {
-    padding-top: 2px;
-    padding-bottom: 2px;
-}
-
-.adminContainer div.collection_new {
-    margin: 3em 0;
-}
-
-.adminContainer table.collections td,
-.adminContainer table.series td {
-    padding: 1em;
-}
-
-.adminContainer table.collections td.visible,
-.adminContainer table.collections td.visible a,
-.adminContainer table.series td.visible,
-.adminContainer table.series td.visible a {
-    color: green;
-}
-
-.adminContainer table.collections td.unvisible,
-.adminContainer table.collections td.unvisible a,
-.adminContainer table.series td.unvisible,
-.adminContainer table.series td.unvisible a {
-    color: red;
-}
-
-.adminContainer a.add {
-    font-size: 80%;
-    color: #26517D;
-    border-style: solid;
-    border-width: 1px;
-    border-color: #26517D;
-    padding: .25em .5em;
-    text-decoration: none;
-}
-
-.adminContainer div.failure, .adminContainer ul.errors {
-    background-color: lightpink;
-    color: red;
-    font-family: monospace;
-    font-size: large;
-}
-
-.adminContainer ul.errors li {
-    margin: 1em;
-    list-style: none;
-    padding: .5em;
-}
-
-.adminContainer .collection_breadcrumbs {
-    padding: 1em .5em;
-    margin-bottom: 1em;
-    background-color: #dfefff;
-}
-
-.adminContainer table.collections,
-.adminContainer table.series {
-    margin: 2em 0;
-}
-
-.adminContainer #showdocmenu a {
-    padding: 0.2em 0.5em;
-    margin-right: 0.5em;
-}
-
-.adminContainer table.systeminfo {
-}
-
-.adminContainer table.systeminfo td {
-    padding: 2px 4px;
-}
-
-.adminContainer table.systeminfo td.label {
-}
-
-.adminContainer table.systeminfo td.value {
-}
-
-.adminContainer table.systeminfo td.location {
-}
-
-.adminContainer table.systeminfo td.description {
-}
-
-.adminContainer .unavailable {
-    color: gray;
-}
-
-.adminContainer #showdoc span.label {
-    background-color: inherit;
-    border: none;
-}
-
-.adminContainer #showdoc span.value {
-    background-color: inherit;
-    border: none;
-    font-weight: bold;
-}
-
-.adminContainer #showdoc fieldset {
-    margin-bottom: 1em;
-}
-
-.adminContainer #showdoc fieldset legend {
-    font-size: 1.5em;
-}
-
-.adminContainer #showdoc span.value span.label {
-    font-weight: normal;
-}
-
-.adminContainer .odd {
-    background: inherit;
-}
-
-.adminContainer .even {
-    background: #e9e9e9;
-}
-
-.adminContainer span.editLink {
-    font-size: 80%;
-    padding: 2px;
-    /* margin-left: 1em; */
-}
-
-.adminContainer span.editLink:before {
-    content: '<'
-}
-
-.adminContainer span.editLink:after {
-    content: '>'
-}
-
-.adminContainer fieldset.overview {
-    /* background: inherit; */
-}
-
-.adminContainer fieldset.overview legend {
-    text-transform: none;
-    border: none;
-}
-
-.adminContainer #filebrowser {
-    padding: 2em;
-}
-
-.adminContainer #filebrowser #headline {
-    margin-bottom: 1em;
-    font-size: medium;
-}
-
-.adminContainer #filebrowser #filelisting table th {
-    color: gray;
-}
-
-.adminContainer #filebrowser #filelisting table {
-    margin-bottom: 1em;    
-    min-width: 50%;
-    padding: .5em;
-    border: 1px solid #f4f4f4;
-}
-
-.adminContainer #filebrowser #filelisting table td {
-    padding: 5px;
-}
-
-.adminContainer #filebrowser #headline span {
-    color: blue;
-    font-weight: bold;
-}
-
-pre.abstractTextContainer, pre.noteTextContainer {
-    background: white;
-    border: 1px dotted lightgray;
-    padding: 3px;
-    font-weight: bold;    
-}
-
-form.inline {
-    display: inline!important;
-}
-
-label.option-not-available {    
-    color: gray;
-}
-
-label.notification-option {
-    padding-top: 1.5em;
-    padding-left: 1em;
-    display: block;
-}
-.adminFrame {
-	border-style:solid; 
-	border-width: 1px; 
-	border-color: #D4DDE6; 
-	padding: 1em;
-}
-
-.adminContainer .active_licence {
-    color: green;
-}
-
-.adminContainer .inactive_licence {
-    color: red;
-    font-style: italic;
-}
-
-.adminContainer #docinfo {
-    border: 1px dotted lightgray;
-    padding: 0.5em;
-}
-
-.adminContainer #docinfo span.docid {
-    font-size: 120%;   
-    font-weight: bold;
-}
-
-.adminContainer #docinfo span.title {
-    font-size: 120%;   
-}
-
-.adminContainer #docinfo span.author {
-    padding-left: 3em;
-    font-style: italic;
-}
-
-.adminContainer table#accounts td {
-    padding: 2px 4px;
+.adminContainer form dl:first-child{
+   padding-top: 0;
 }
