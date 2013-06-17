@@ -1,5 +1,4 @@
-@import url(admin-opus.css);
-
+/*@import url(admin-opus.css);*/
 .Document-Action li{
    float: left;
 }
@@ -27,6 +26,99 @@
 .Document-cancel:hover{
    text-decoration: none;
 }
+/* @group adminMenuContainer */
+#adminMenuContainer ul{
+   margin: 0;
+   padding: 0;
+   list-style: none;
+   max-width: 987px;
+}
+#adminMenuContainer li{
+   float: left;
+   width: 31.8135%;
+   margin: 0 1.5198% 9px 0;
+   font-size: 0.786em;
+
+}
+#adminMenuContainer .inactive strong{
+   background-image: url(../img/theme/admin/ic_inactive-corner.png);
+}
+#adminMenuContainer a,
+#adminMenuContainer li > strong{
+   display: block;
+   border: 3px solid #D7DFE7;
+   min-height: 100px;
+   padding: 12px;
+   text-decoration: none;
+   background: #C6C0B3 no-repeat right bottom;
+}
+#adminMenuContainer a{
+   color: #68604F;
+}
+#adminMenuContainer li br{
+   display: none;
+}
+#adminMenuContainer strong,
+#adminMenuContainer a strong{
+   display: block;
+   margin: 0 0 0.3em;
+   font-size: 1.636em;
+   color: black;
+   font-weight: normal;
+}
+#adminMenuContainer .group-olive *{
+   background-color: #455426;
+   color: #dee9cd;
+}
+#adminMenuContainer .group-black *{
+   background-color: black;
+   color: #dddddd;
+}
+#adminMenuContainer .group-tomato *{
+   background-color: #BE7069;
+   color: #EED9D7;
+}
+#adminMenuContainer .group-mint *{
+   background-color: #B7C4B9;
+   color: #415243;
+}
+#adminMenuContainer .group-meadow *{
+   background-color: #559266;
+   color: #e2efe5;
+}
+#adminMenuContainer .group-chocolate *{
+   background-color: #614A3B;
+   color: #decfc9;
+}
+#adminMenuContainer .group-cafelatte *{
+   background-color: #C6C0B3;
+   color: #635c4a;
+}
+#adminMenuContainer .group-cappuccino *{
+   background-color: #8F846D;
+   color: #ECEBE8;
+}
+#adminMenuContainer .group-sky *{
+   background-color: #5788C1;
+   color: #dee7f4;
+}
+
+#adminMenuContainer li.group-olive strong,
+#adminMenuContainer li.group-black strong,
+#adminMenuContainer li.group-sky strong,
+#adminMenuContainer li.group-cappuccino strong,
+#adminMenuContainer li.group-chocolate strong,
+#adminMenuContainer li.group-meadow strong,
+#adminMenuContainer li.group-tomato strong{
+   color: white;
+}
+
+#adminMenuContainer li.group-cafelatte strong,
+#adminMenuContainer li.group-mint strong{
+   color: black;
+}
+
+/* @end */
 /* @group DropDown */
 .dropdown{
    position: relative;
