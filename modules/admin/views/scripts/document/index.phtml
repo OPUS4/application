@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 ?>
-<div class="adminContainer">
+<div id="content" class="opus adminContainer">
 
     <div class="breadcrumbsContainer">
         <?= $this->navigation()->breadcrumbs() ?> (<?= $this->document->getId() ?>)
@@ -40,8 +40,6 @@
     
     <?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
     
-    <?= $this->partial('docstatus.phtml', array( 'document' => $this->document)) ?>
-
     <div style="padding-top: 1.5em; padding-bottom: 1.5em">
         <div id="docMenu" class="docstateMenu" style="padding-bottom: 1em;" >
             <?PHP foreach ($this->actions as $action) : ?>
