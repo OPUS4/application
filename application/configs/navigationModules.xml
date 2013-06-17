@@ -21,6 +21,7 @@
                     <type>mvc</type>
                     <label>admin_title_documents</label>
                     <description>admin_title_documents_description</description>
+                    <group>group-cappuccino</group>
                     <module>admin</module>
                     <controller>documents</controller>
                     <action>index</action>
@@ -116,6 +117,7 @@
                     <type>mvc</type>
                     <label>review_menu_label</label>
                     <description>review_menu_label_description</description>
+                    <group>group-cappuccino</group>
                     <module>review</module>
                     <controller>index</controller>
                     <action>index</action>
@@ -126,6 +128,7 @@
                     <type>mvc</type>
                     <label>admin_title_bibtexupload</label>
                     <description>admin_title_bibtexupload_description</description>
+                    <group></group>
                     <module>admin</module>
                     <controller>bibtexupload</controller>
                     <action>index</action>
@@ -135,6 +138,7 @@
                     <type>mvc</type>
                     <label>admin_security_title_accounts</label>
                     <description>admin_security_title_accounts_description</description>
+                    <group>group-tomato</group>
                     <module>admin</module>
                     <controller>account</controller>
                     <action>index</action>
@@ -186,6 +190,7 @@
                     <type>mvc</type>
                     <label>admin_title_security</label>
                     <description>admin_title_security_description</description>
+                    <group>group-tomato</group>
                     <module>admin</module>
                     <controller>security</controller>
                     <action>index</action>
@@ -313,6 +318,7 @@
                     <type>mvc</type>
                     <label>admin_title_licence</label>
                     <description>admin_title_licence_description</description>
+                    <group>group-sky</group>
                     <module>admin</module>
                     <controller>licence</controller>
                     <action>index</action>
@@ -364,6 +370,7 @@
                     <type>mvc</type>
                     <label>admin_title_collections</label>
                     <description>admin_title_collections_description</description>
+                    <group>group-sky</group>
                     <module>admin</module>
                     <controller>collectionroles</controller>
                     <action>index</action>
@@ -441,6 +448,7 @@
                     <type>mvc</type>
                     <label>admin_title_series</label>
                     <description>admin_title_series_description</description>
+                    <group>group-sky</group>
                     <module>admin</module>
                     <controller>series</controller>
                     <action>index</action>
@@ -474,6 +482,7 @@
                     <type>mvc</type>
                     <label>admin_title_languages</label>
                     <description>admin_title_languages_description</description>
+                    <group>group-sky</group>
                     <module>admin</module>
                     <controller>language</controller>
                     <action>index</action>
@@ -534,6 +543,7 @@
                     <type>mvc</type>
                     <label>admin_title_statistic</label>
                     <description>admin_title_statistic_description</description>
+                    <group>group-cafelatte</group>
                     <module>admin</module>
                     <controller>statistic</controller>
                     <action>index</action>
@@ -553,6 +563,7 @@
                     <type>mvc</type>
                     <label>admin_title_oailink</label>
                     <description>admin_title_oailink_description</description>
+                    <group>group-cafelatte</group>
                     <module>admin</module>
                     <controller>oailink</controller>
                     <action>index</action>
@@ -562,6 +573,7 @@
                     <type>mvc</type>
                     <label>admin_title_dnbinstitute</label>
                     <description>admin_title_dnbinstitute_description</description>
+                    <group>group-sky</group>
                     <module>admin</module>
                     <controller>dnbinstitute</controller>
                     <action>index</action>
@@ -605,6 +617,7 @@
                     <type>mvc</type>
                     <label>admin_title_enrichmentkey</label>
                     <description>admin_title_enrichmentkey_description</description>
+                    <group>group-sky</group>
                     <module>admin</module>
                     <controller>enrichmentkey</controller>
                     <action>index</action>
@@ -648,6 +661,7 @@
                     <type>mvc</type>
                     <label>admin_title_info</label>
                     <description>admin_title_info_description</description>
+                    <group></group>
                     <module>admin</module>
                     <controller>info</controller>
                     <action>index</action>
@@ -668,6 +682,7 @@
                     <type>mvc</type>
                     <label>setup_title_translation</label>
                     <description>setup_title_translation_description</description>
+                    <group></group>
                     <module>setup</module>
                     <controller>language</controller>
                     <action>index</action>
@@ -700,6 +715,7 @@
                     <type>mvc</type>
                     <label>setup_title_help-page</label>
                     <description>setup_title_help-page_description</description>
+                    <group></group>
                     <module>setup</module>
                     <controller>help-page</controller>
                     <action>index</action>
@@ -718,6 +734,7 @@
                     <type>mvc</type>
                     <label>setup_title_static-page</label>
                     <description>setup_title_static-page_description</description>
+                    <group></group>
                     <module>setup</module>
                     <controller>static-page</controller>
                     <action>index</action>

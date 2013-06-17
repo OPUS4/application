@@ -37,18 +37,17 @@
 <div class="adminContainer">
 
     <div class="breadcrumbsContainer">
-        <?= $this->translate($this->title) ?>
+        <div class="wrapper"><?= htmlspecialchars($this->translate($this->title)) ?></div>
     </div>
 
-    <div id="adminMenuContainer">
-        <?PHP
-        $partial = array('menu.phtml', 'admin');
-        $this->navigation()->menu()->setPartial($partial);
-        echo $this->navigation()->menu()->render();
-        $this->navigation()->menu()->setPartial(null); // prevents influencing main menu
-        ?>
+    <div class="wrapper">
+        <div id="adminMenuContainer">
+            <?PHP
+            $partial = array('menu.phtml', 'admin');
+            $this->navigation()->menu()->setPartial($partial);
+            echo $this->navigation()->menu()->render();
+            $this->navigation()->menu()->setPartial(null); // prevents influencing main menu
+            ?>
+        </div>
     </div>
-    
 </div>
-
-

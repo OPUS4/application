@@ -29,6 +29,9 @@
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
+ *
+ * 
+ * TODO $this->navigation()->menu()->htmlify($page)
  */
 ?>
 
@@ -44,14 +47,16 @@ else {
 ?>
 
 <?PHP if (!is_null($parent)) : ?>
-<dl class="menu">
+<ul class="menu">
     <?PHP foreach ($parent->getPages() as $page) : ?>
     <?PHP if (is_null($acl) || $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 
             $page->getResource(), $page->getPrivilege()) 
             || !$acl->has($page->getResource())) : ?>
-    <dt><?= $this->navigation()->menu()->htmlify($page) ?></dt>
-    <dd><?= $this->translate($page->description) ?></dd>
+    <li class="<?= $page->group ?>"><a href="<?= $page->getHref() ?>"><strong><?= $this->translate($page->label) ?></strong><br/>
+    <?= $this->translate($page->description) ?></a></li>
+    <?PHP else : ?>
+    <li class="<?= $page->group ?> inactive"><strong><?= $this->translate($page->label) ?></strong></li>
     <?PHP endif; ?>
     <?PHP endforeach; ?>
-</dl>
+</ul>
 <?PHP endif; ?>
