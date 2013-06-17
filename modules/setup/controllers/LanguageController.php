@@ -60,12 +60,14 @@ class Setup_LanguageController extends Controller_SetupAbstract {
         if (!empty($searchTerm)) {
             $translationManager->setFilter($searchTerm);
         }
+        
+        $this->view->form = $this->getSearchForm($searchTerm, $sortKey);
 
         $this->view->translations = $translationManager->getTranslations($sortKey);
         $this->view->sortKeys = $this->sortKeys;
         $this->view->currentSortKey = $sortKey;
         $this->view->searchTerm = $searchTerm;
-        $this->view->form = $this->getSearchForm($searchTerm, $sortKey);
+        
     }
 
     protected function getForm() {
@@ -74,13 +76,8 @@ class Setup_LanguageController extends Controller_SetupAbstract {
         if (empty($translationKey))
             throw new Application_Exception('Parameters missing');
 
-        $keyForm = new Zend_Form_SubForm();
-
-        $keyForm->addElement('textarea', 'en', array('label' => 'en'));
-        $keyForm->addElement('textarea', 'de', array('label' => 'de'));
-        $keyForm->addDisplayGroup(array('de', 'en'), $translationKey, array('legend' => $translationKey));
         $form = new Zend_Form_SubForm();
-        $form->addSubForm($keyForm, $translationKey);
+        $form->addSubForm(new Setup_Form_LanguageKey($translationKey), $translationKey);
 
         return $form;
     }
@@ -115,17 +112,18 @@ class Setup_LanguageController extends Controller_SetupAbstract {
 
     protected function getSearchForm($searchTerm = null, $sortKey = null) {
 
-        $form = new Zend_Form();
-
-        $form->addElement('text', 'search', array('label' => $this->view->translate('setup_language_searchTerm')));
-
         $sortKeysTranslated = array();
         foreach ($this->sortKeys as $option) {
             $sortKeysTranslated[$option] = $this->view->translate('setup_language_' . $option);
         }
+        
+        $form = new Setup_Form_LanguageSearch();
 
-        $form->addElement('select', 'sort', array('label' => $this->view->translate('setup_language_sortKey'), 'multiOptions' => $sortKeysTranslated));
-        $form->addElement('submit', 'Anzeigen');
+        $form->getElement('search')->setLabel($this->view->translate('setup_language_searchTerm'));
+        $form->getElement('sort')
+                ->setLabel($this->view->translate('setup_language_sortKey'))
+                ->setMultiOptions($sortKeysTranslated);
+
         $form->setAction($this->view->url(array('action' => 'show')));
 
         if (!empty($searchTerm))

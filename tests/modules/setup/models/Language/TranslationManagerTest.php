@@ -20,14 +20,6 @@ class Setup_Model_Language_TranslationManagerTest extends ControllerTestCase {
     }
 
     /**
-     * Tears down the fixture, for example, closes a network connection.
-     * This method is called after a test is executed.
-     */
-    public function tearDown() {
-        
-    }
-
-    /**
      * @todo Implement testGetFiles().
      */
     public function testGetFiles() {
