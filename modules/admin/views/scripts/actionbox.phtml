@@ -51,7 +51,7 @@
         <?PHP else : ?>
         <ul id="Document-ServerState">
             <?PHP foreach ($stateLinks as $label => $params) : ?>
-            <li><a href="<?= $this->url($params) ?>"><?= htmlspecialchars($this->translate($label)) ?></a></li>
+            <li><a id="State-Link-<?= $params['targetState'] ?>"href="<?= $this->url($params) ?>"><?= htmlspecialchars($this->translate($label)) ?></a></li>
             <?PHP endforeach; ?>
         </ul>
         <?PHP endif; ?>
