@@ -2,7 +2,8 @@
 .Document-Action li{
    float: left;
 }
-.Document-save{
+.save-element input,
+#save-element input{
    border-radius: 5px;
    border: none;
    background-color: black;
@@ -11,11 +12,13 @@
    font: 1em Verdana, Arial, Helvetica, sans-serif;
    cursor: pointer;
 }
-.cancel-element{
+.cancel-element,
+#cancel-element{
    padding: 6px 0 6px 10px;
    font: 0.875em Verdana, Arial, Helvetica, sans-serif;
 }
-.Document-cancel{
+.cancel-element input,
+#cancel-element input{
    border: none;
    background-color: transparent;
    color: #26517B;
@@ -23,10 +26,14 @@
    padding: 0;
    cursor: pointer;
 }
-.Document-cancel:hover{
+.cancel-element input:hover,
+#cancel-element input:hover{
    text-decoration: none;
 }
 /* @group adminMenuContainer */
+#adminMenuContainer{
+   padding-top: 1em;
+}
 #adminMenuContainer ul{
    margin: 0;
    padding: 0;
@@ -35,33 +42,48 @@
 }
 #adminMenuContainer li{
    float: left;
-   width: 31.8135%;
-   margin: 0 1.5198% 9px 0;
+   width: 32.8135%;
+   margin: 0 0.5198% 5px 0;
    font-size: 0.786em;
-
 }
-#adminMenuContainer .inactive strong{
+#adminMenuContainer li.cols-two{
+   width: 66.1468%;
+}
+#adminMenuContainer li.cols-one-half{
+   width: 49.48015%;
+}
+#adminMenuContainer li.cols-half{
+   width: 16.14685%;
+}
+#adminMenuContainer ul > li.inactive > strong,
+#adminMenuContainer ul > li > strong{
    background-image: url(../img/theme/admin/ic_inactive-corner.png);
 }
-#adminMenuContainer a,
-#adminMenuContainer li > strong{
+#adminMenuContainer ul > li > *{
    display: block;
    border: 3px solid #D7DFE7;
-   min-height: 100px;
-   padding: 12px;
+   padding: 8px 12px 10px;
    text-decoration: none;
    background: #C6C0B3 no-repeat right bottom;
+}
+.no-js #adminMenuContainer ul > li > *{
+   min-height: 85px;
 }
 #adminMenuContainer a{
    color: #68604F;
 }
+#adminMenuContainer a:hover{
+   border: 3px solid #a0c3e1;
+   -webkit-box-shadow:0 0 15px #a0c3e1; 
+   -moz-box-shadow: 0 0 15px #a0c3e1; 
+   box-shadow:0 0 15px #a0c2dd;
+}
 #adminMenuContainer li br{
    display: none;
 }
-#adminMenuContainer strong,
-#adminMenuContainer a strong{
+#adminMenuContainer strong{
    display: block;
-   margin: 0 0 0.3em;
+   padding: 0 0 0.3em;
    font-size: 1.636em;
    color: black;
    font-weight: normal;
@@ -165,10 +187,10 @@
 
 }
 #actionboxContainer .col-1{
-   width: 24%;
+   width: 23%;
 }
 #actionboxContainer .col-2{
-   width: 51%;
+   width: 52%;
 }
 #actionboxContainer .col-3{
    width: 25%;
@@ -179,6 +201,9 @@
 }
 #actionboxContainer .col.col-2 dl{
    margin: 0 30px 0 0;
+}
+#actionboxContainer #Document-Goto{
+   margin-right: 8px;
 }
 #content #actionboxContainer dt{
    font-size: 0.857em;
@@ -305,13 +330,16 @@
    padding: 0;
    border: none;
 }
+.adminContainer #docinfo + dl > dt:first-child{
+   display: none;
+}
 .adminContainer dd legend{
    border: none;
    text-transform: none;
    font: italic bold 1.143em Georgia, "Times New Roman", Times, serif;
    color: #595955;
 }
-.adminContainer form > dl > dd > fieldset > legend{
+.adminContainer form .wrapper > dl > dd > fieldset > legend{
    background-color: #595a56;
    color: white;
    display: block;
@@ -320,7 +348,7 @@
    width: 97.6%;
    position: relative;
 }
-.adminContainer form > dl > dd > fieldset > legend:after {
+.adminContainer form .wrapper > dl > dd > fieldset > legend:after {
     border-color: #595a56 transparent transparent;
     border-style: solid;
     border-width: 11px 6px 0;
@@ -341,6 +369,6 @@
    margin: 0;
    padding: 1.15em 0 1.768em;
 }
-.adminContainer form dl:first-child{
+.adminContainer form .wrapper > dl{
    padding-top: 0;
 }

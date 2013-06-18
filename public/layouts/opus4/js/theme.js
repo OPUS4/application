@@ -2,6 +2,15 @@ $(document).ready(function() {
 	// JavaScript detection
 	$("html").removeClass("no-js").addClass("js");
 	
+	// normalize box-heights
+    var max = 0;
+        $('#adminMenuContainer ul > li > *').each(function(){  
+			if($(this).height() > max){  
+			max = $(this).height();  
+        }
+    });    
+    $('#adminMenuContainer ul > li > *').height(max);
+
 	// ActionBox
 	var $actionbox = $('#actionboxContainer');
 	var $actionboxSpacer = $('<div />', {
