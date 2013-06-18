@@ -47,8 +47,10 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     /**
      * 
      * @param array $post
+     * 
+     *
      */
-    public function constructFromPost($post) {
+    public function constructFromPost($post, $document = null) {
     }
     
     /**

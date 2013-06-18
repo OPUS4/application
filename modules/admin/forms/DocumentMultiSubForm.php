@@ -108,9 +108,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     /**
      * Erzeugt Unterformulare basierend auf den Informationen in den POST Daten.
      */
-    public function constructFromPost($post) {
-        // TODO Zend_Debug::dump($post);
-        
+    public function constructFromPost($post, $document = null) {
         $keys = array_keys($post);
         
         foreach ($keys as $index => $key) {

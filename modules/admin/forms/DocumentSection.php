@@ -50,12 +50,19 @@ class Admin_Form_DocumentSection extends Admin_Form_AbstractDocumentSubForm {
         }
     }
     
-    public function constructFromPost($post) {
+    /**
+     * 
+     * @param type $post
+     * @param type $document
+     * 
+     * TODO move to base class
+     */
+    public function constructFromPost($post, $document = null) {
         $subforms = $this->getSubForms();
         
         foreach ($subforms as $name => $subform) {
             if (array_key_exists($name, $post)) {
-                $subform->constructFromPost($post[$name]);
+                $subform->constructFromPost($post[$name], $document);
             }
         }
     }

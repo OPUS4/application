@@ -67,6 +67,26 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
      * Name fuer Button zum Entfernen der Person.
      */
     const ELEMENT_REMOVE = 'Remove';
+
+    /**
+     * Name fuer Button um Person um eine Position nach oben zu verschieben.
+     */
+    const ELEMENT_UP = 'MoveUp';
+    
+    /**
+     * Name fuer Button um Person um eine Position nach unter zu verschieben.
+     */
+    const ELEMENT_DOWN = 'MoveDown';
+    
+    /**
+     * Name fuer Button um Person an die erste Stelle zu verschieben.
+     */
+    const ELEMENT_FIRST = 'MoveFirst';
+    
+    /**
+     * Name fuer Button um Person an die letzte Stelle zu verschieben.
+     */
+    const ELEMENT_LAST = 'MoveLast';
     
     /**
      * Konstante fuer das POST Ergebnis Person entfernen.
@@ -107,6 +127,22 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         $element = new Zend_Form_Element_Submit(self::ELEMENT_REMOVE);
         $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
+        
+        $element = new Zend_Form_Element_Submit(self::ELEMENT_FIRST);
+        $element->setDecorators(array('ViewHelper'));
+        $this->addElement($element);
+
+        $element = new Zend_Form_Element_Submit(self::ELEMENT_UP);
+        $element->setDecorators(array('ViewHelper'));
+        $this->addElement($element);
+        
+        $element = new Zend_Form_Element_Submit(self::ELEMENT_DOWN);
+        $element->setDecorators(array('ViewHelper'));
+        $this->addElement($element);
+        
+        $element = new Zend_Form_Element_Submit(self::ELEMENT_LAST);
+        $element->setDecorators(array('ViewHelper'));
+        $this->addElement($element);
     }
     
     public function initRendering() {
@@ -137,6 +173,7 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         if (array_key_exists(self::ELEMENT_REMOVE, $post)) {
             return self::RESULT_REMOVE;
         }
+        // if (array_key_exists(self::ELEMENT_UP, $post))
         else if (array_key_exists(self::ELEMENT_EDIT, $post)) {
             return array( 'result' => Admin_Form_Document::RESULT_SWITCH_TO, 
                 'target' => array(

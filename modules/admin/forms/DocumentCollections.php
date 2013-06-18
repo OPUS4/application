@@ -135,7 +135,7 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
     /**
      * Erzeugt Unterformulare basierend auf den Informationen in den POST Daten.
      */
-    public function constructFromPost($post) {
+    public function constructFromPost($post, $document = null) {
         foreach ($post as $roleName => $data) {
             // Prüfen ob Unterformluar (array) oder Feld
             if (is_array($data)) {

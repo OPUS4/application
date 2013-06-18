@@ -37,18 +37,22 @@
  */
 class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
     
+    /**
+     * Name fuer Button um Person hinzuzufuegen.
+     */
     const ELEMENT_ADD = 'Add';
-    
-    const ELEMENT_UP = 'MoveUp';
-    
-    const ELEMENT_DOWN = 'MoveDown';
-    
-    const ELEMENT_FIRST = 'MoveFirst';
-    
-    const ELEMENT_LAST = 'MoveLast';
-        
+            
+    /**
+     * Name der Rolle fuer Personen im Unterformular.
+     * @var type 
+     */
     private $__roleName;
 
+    /**
+     * Konstruiert Unterformular fuer Personen in einer Rolle.
+     * @param string $roleName
+     * @param mixed $options
+     */
     public function __construct($roleName, $options = null) {
         $this->__roleName = $roleName;
 
@@ -56,6 +60,17 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
         parent::__construct($options);
     }
     
+    /**
+     * Liefert Namen der Rolle fuer dieses Unterformular.
+     * @return string
+     */
+    public function getRoleName() {
+        return $this->__roleName;
+    }
+    
+    /**
+     * Erzeugt die Formularelemente. 
+     */
     public function init() {
         parent::init();
         
@@ -67,15 +82,19 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
         $this->addElement($element);
     }
     
+    /**
+     * Konfiguriert das Unterformlar entsprechend den Personen im Dokument.
+     * @param Opus_Document $document
+     */
     public function populateFromModel($document) {
-        $persons = $this->_getPersonsInRole($document, $this->__roleName);
+        $persons = $this->getPersonsInRole($document, $this->__roleName);
         
         foreach ($persons as $index => $person) {
             $this->_addPersonSubForm($index, $person);
         }
     }
     
-    public function constructFromPost($post) {
+    public function constructFromPost($post, $document = null) {
         foreach ($post as $key => $person) {
             if (is_array($person)) {
                 $this->_addSubFormFromPost($key, $person);
@@ -130,8 +149,8 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
      * 
      * @param type $document
      * 
-     * TODO Personen entfernen
-     * TODO SortOrder
+     * TODO Personen sortiert zurück liefern
+     * TODO Personen mit geänderter Rolle berücksichtigen
      */
     public function getPersons($document) {
         $subforms = $this->getSubForms();
@@ -152,8 +171,6 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
         
         $subform->populateFromPost($person);
 
-        $this->_addControls($subform);
-        
         $this->addSubForm($subform, $subFormName);
         
         return $subform;
@@ -165,29 +182,9 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
         $subform->initRendering();
         $subform->populateFromModel($person);
         
-        $this->_addControls($subform);
-        
         $this->addSubForm($subform, 'Person' . $index);
         
         return $subform;
-    }
-    
-    protected function _addControls($subform) {
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_FIRST);
-        $element->setDecorators(array('ViewHelper'));
-        $subform->addElement($element);
-
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_UP);
-        $element->setDecorators(array('ViewHelper'));
-        $subform->addElement($element);
-        
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_DOWN);
-        $element->setDecorators(array('ViewHelper'));
-        $subform->addElement($element);
-        
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_LAST);
-        $element->setDecorators(array('ViewHelper'));
-        $subform->addElement($element);
     }
     
     /**
@@ -198,7 +195,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
      * 
      * TODO wenn getPersonXXX Funktionen abgeschafft werden, muss diese Funktion umgeschrieben werden
      */
-    protected function _getPersonsInRole($document, $roleName) {
+    public function getPersonsInRole($document, $roleName) {
         $fieldName = 'Person' . ucfirst($roleName);
         
         $field = $document->getField($fieldName);

@@ -62,13 +62,16 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
     public function init() {
         parent::init();
         
-        $this->setLegend('Personen'); // TODO translate
+        $translator = Zend_Registry::get('Zend_Translate');
+        
+        $this->setLegend($translator->translate('admin_document_section_persons'));
 
         // TODO iteriere über Rollen und erzeuge Unterformulare
         foreach ($this->personRoles as $index => $roleName) {
             $subform = new Admin_Form_DocumentPersonRole($roleName);
             $this->addSubForm($subform, $roleName);
         }
+        
     }
     
     /**
@@ -90,10 +93,10 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
      * 
      * @param array $post
      */
-    public function constructFromPost($post) {
+    public function constructFromPost($post, $document = null) {
         foreach($post as $key => $data) {
             $subform = $this->getSubForm($key);
-            $subform->constructFromPost($data);
+            $subform->constructFromPost($data, $document);
         }
     }
 
@@ -113,6 +116,10 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
         }
     }
 
+    /**
+     * 
+     * @param type $document
+     */
     public function updateModel($document) {
         $subforms = $this->getSubForms();
         

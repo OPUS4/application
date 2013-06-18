@@ -135,7 +135,7 @@ class Admin_DocumentController extends Controller_Action {
                 $data = $this->getRequest()->getPost();
                 $data = $data['Document']; // 'Document' Form wraps actual metadata form
                 
-                $form = Admin_Form_Document::getInstanceFromPost($data);
+                $form = Admin_Form_Document::getInstanceFromPost($data, $document);
                 $form->populate($data);
                 
                 // TODO use return value for decision how to continue
@@ -210,7 +210,7 @@ class Admin_DocumentController extends Controller_Action {
                 
                 if ($post) {
                     // Initialisiere Formular vom gespeicherten POST
-                    $form = Admin_Form_Document::getInstanceFromPost($post);
+                    $form = Admin_Form_Document::getInstanceFromPost($post, $document);
                     $form->populate($post);
                     
                     // Führe Rücksprung aus

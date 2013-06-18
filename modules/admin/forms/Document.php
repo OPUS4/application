@@ -163,14 +163,14 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * Konstruiert Formular mit Unterformularen basierend auf POST Daten.
      * @param array $data
      */
-    public static function getInstanceFromPost($data) {
+    public static function getInstanceFromPost($data, $document = null) {
         $form = new Admin_Form_Document();
         
         $subforms = $form->getSubForms();
         
         foreach ($subforms as $name => $subform) {
             if (array_key_exists($name, $data)) {
-                $subform->constructFromPost($data[$name]);
+                $subform->constructFromPost($data[$name], $document);
             }
         }
         
