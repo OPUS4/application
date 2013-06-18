@@ -918,5 +918,95 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertNotContains('Undefined index: TitleAbstractLanguage_1', $this->getResponse()->getBody());        
     }
 
+    public function testManipulatePostMissingTitleParentLanguage() {
+        $doc = $this->createTemporaryDoc();
+
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'all';
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonSubmitterLastName_1' => 'Doe',
+                    'PersonSubmitterEmail_1' => 'doe@example.org',
+                    'TitleMain_1' => 'Entenhausen',
+                    'TitleMainLanguage_1' => 'deu',
+                    'TitleParent_1' => 'Foo',
+                    'PersonAuthorLastName_1' => 'AuthorLastName',
+                    'CompletedDate' => '22.01.2011',
+                    'Language' => 'deu',
+                    'Licence' => '4',
+                    'send' => 'Weiter zum nächsten Schritt'
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->deleteTemporaryDoc($doc);
+
+        $this->assertNotContains('Undefined index: TitleParentLanguage_1', $this->getResponse()->getBody());
+    }
+
+    public function testManipulatePostMissingTitleSubLanguage() {
+        $doc = $this->createTemporaryDoc();
+
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'all';
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonSubmitterLastName_1' => 'Doe',
+                    'PersonSubmitterEmail_1' => 'doe@example.org',
+                    'TitleMain_1' => 'Entenhausen',
+                    'TitleMainLanguage_1' => 'deu',
+                    'TitleSub_1' => 'Foo',
+                    'PersonAuthorLastName_1' => 'AuthorLastName',
+                    'CompletedDate' => '22.01.2011',
+                    'Language' => 'deu',
+                    'Licence' => '4',
+                    'send' => 'Weiter zum nächsten Schritt'
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->deleteTemporaryDoc($doc);
+
+        $this->assertNotContains('Undefined index: TitleSubLanguage_1', $this->getResponse()->getBody());
+    }
+
+    public function testManipulatePostMissingTitleAdditionalLanguage() {
+        $doc = $this->createTemporaryDoc();
+
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'all';
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array(
+                    'PersonSubmitterLastName_1' => 'Doe',
+                    'PersonSubmitterEmail_1' => 'doe@example.org',
+                    'TitleMain_1' => 'Entenhausen',
+                    'TitleMainLanguage_1' => 'deu',
+                    'TitleAdditional_1' => 'Foo',
+                    'PersonAuthorLastName_1' => 'AuthorLastName',
+                    'CompletedDate' => '22.01.2011',
+                    'Language' => 'deu',
+                    'Licence' => '4',
+                    'send' => 'Weiter zum nächsten Schritt'
+                ));
+
+        $this->dispatch('/publish/form/check');
+        $this->deleteTemporaryDoc($doc);
+
+        $this->assertNotContains('Undefined index: TitleAdditionalLanguage_1', $this->getResponse()->getBody());
+    }
+
 }
 
