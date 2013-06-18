@@ -117,10 +117,10 @@
 
     <tu tuid="admin_title_documents">
       <tuv xml:lang="en">
-        <seg>Manage Documents</seg>
+        <seg>Documents</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Dokumente verwalten</seg>
+        <seg>Dokumente</seg>
       </tuv>
     </tu>
 
