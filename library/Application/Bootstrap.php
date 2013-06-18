@@ -28,7 +28,8 @@
  * @package     Application
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @author      Simone Finkbeiner (simone.finkbeiner@ub.uni-stuttgart.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -154,6 +155,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         // Set path to shared view partials
         $view->addScriptPath($libRealPath . '/View/Partials');
+        $fieldsetHelper = new View_Helper_FieldsetWithAnker();
+        $view->registerHelper($fieldsetHelper, 'fieldset');
         
         $viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer($view);
 
@@ -220,7 +223,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      */
     protected function _initTranslation()  {
         $this->bootstrap(array('Session', 'Logging', 'ZendCache'));
-
+                
         $logger = $this->getResource('Logging');
         $sessiondata = $this->getResource('Session');
 
