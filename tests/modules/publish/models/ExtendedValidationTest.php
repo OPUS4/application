@@ -60,7 +60,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'Licence' => '4'
         );
 
-        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
         $this->assertFalse($result);
     }
@@ -83,7 +83,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'Licence' => '4'
         );
 
-        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
         $this->assertFalse($result);
     }
@@ -108,7 +108,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'Licence' => '4'
         );
 
-        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
         $this->assertTrue($result);
     }
@@ -133,7 +133,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'Licence' => '4'
         );
 
-        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
         $this->assertFalse($result);
     }
@@ -161,7 +161,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'Licence' => '4'
         );
 
-        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
         $this->assertFalse($result);
     }
@@ -189,7 +189,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'Licence' => '4'
         );
 
-        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
         $this->assertTrue($result);
     }
@@ -229,7 +229,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
         );
 
         $form->getExtendedForm($data, false); // method does not exist!
-        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
         $this->assertTrue($result);
     }
@@ -264,7 +264,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'Licence' => '4'
         );
 
-        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
         $this->assertTrue($result);
     }
@@ -288,7 +288,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'SeriesNumber_1' => '123'
         );
 
-        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
         $this->assertTrue($result);
     }
@@ -312,7 +312,7 @@ class Publish_Model_ExtendedValidationTest extends ControllerTestCase {
             'SeriesNumber_1' => '123'
         );
 
-        $val = new Publish_Model_ExtendedValidation($form, $data);
+        $val = new Publish_Model_ExtendedValidation($form, $data, $this->_logger, $session);
         $result = $val->validate();
         $this->assertFalse($result);
     }

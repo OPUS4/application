@@ -59,7 +59,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
      * @param <type> $data 
      */
     public function isValid($data) {
-        $extended = new Publish_Model_ExtendedValidation($this, $data);                
+        $extended = new Publish_Model_ExtendedValidation($this, $data, $this->log, $this->session);
         $valid1 = $extended->validate();       
 
         $data = $this->getValues();

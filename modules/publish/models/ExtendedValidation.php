@@ -43,12 +43,15 @@ class Publish_Model_ExtendedValidation {
     public $session;
     public $documentLanguage;
 
-    public function __construct(Publish_Form_PublishingSecond $form, $data) {
+    public function __construct(Publish_Form_PublishingSecond $form, $data, $log, $session) {
         $this->form = $form;
         $this->data = $data;
-        $this->log = Zend_Registry::get('Zend_Log');
-        $this->session = new Zend_Session_Namespace('Publish');
+        $this->log = $log;
+        $this->session = $session;
+        $this->initializeExtendedData();
+    }
 
+    private function initializeExtendedData() {
         foreach ($this->data AS $key => $value) {
             $element = $this->form->getElement($key);
             if (!is_null($element)) {
