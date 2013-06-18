@@ -68,6 +68,15 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
         $this->document = document;
     }
     
+    public function processPost($post, $context) {
+        if (array_key_exists(self::ELEMENT_SAVE, $post)) {
+            return Admin_Form_Document::RESULT_SAVE;
+        }
+        else if (array_key_exists(self::ELEMENT_CANCEL, $post)) {
+            return Admin_Form_Document::RESULT_CANCEL;
+        }
+    }
+    
     public function getDocument() {
         return $this->document;
     }

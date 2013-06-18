@@ -147,7 +147,7 @@ class Admin_DocumentController extends Controller_Action {
                 }
                 
                 switch ($result) {
-                    case Admin_Form_Document::ELEMENT_SAVE:
+                    case Admin_Form_Document::RESULT_SAVE:
                         if ($form->isValid($data)) {
                             // Formular ist korrekt; aktualisiere Dokument
                             $form->updateModel($document);
@@ -163,7 +163,7 @@ class Admin_DocumentController extends Controller_Action {
                         }
                         break;
                         
-                    case Admin_Form_Document::ELEMENT_SAVE_AND_CONTINUE:
+                    case Admin_Form_Document::RESULT_SAVE_AND_CONTINUE:
                         if ($form->isValid($data)) {
                             // Formular ist korrekt; aktualisiere Dokument
                             $form->updateModel($document);
@@ -176,7 +176,7 @@ class Admin_DocumentController extends Controller_Action {
                         }
                         break;
                         
-                    case Admin_Form_Document::ELEMENT_CANCEL:
+                    case Admin_Form_Document::RESULT_CANCEL:
                         // TODO redirect to origin page
                         return $this->_redirectTo('index', null, 'document', 'admin', array('id' => $docId));
                         break;

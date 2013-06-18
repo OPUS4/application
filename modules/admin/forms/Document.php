@@ -68,6 +68,12 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      */
     const RESULT_SWITCH_TO = 'switch';
     
+    const RESULT_SAVE = 'save';
+    
+    const RESULT_CANCEL = 'cancel';
+    
+    const RESULT_SAVE_AND_CONTINUE = 'saveAndContinue';
+    
     /**
      * Konstruiert das Metadaten-Formular aus verschiedenen Unterformularen und den Aktion Buttons.
      */
@@ -184,13 +190,13 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
     public function processPost($data, $context) {
         // Prüfen, ob "Speichern" geklickt wurde
         if (array_key_exists(self::ELEMENT_SAVE, $data)) {
-            return self::ELEMENT_SAVE;
+            return self::RESULT_SAVE;
         }
         else if (array_key_exists(self::ELEMENT_SAVE_AND_CONTINUE, $data)) {
-            return self::ELEMENT_SAVE_AND_CONTINUE;
+            return self::RESULT_SAVE_AND_CONTINUE;
         }
         else if (array_key_exists(self::ELEMENT_CANCEL, $data)) {
-            return self::ELEMENT_CANCEL;
+            return self::RESULT_CANCEL;
         }
         else {
             // POST Daten an Unterformulare weiterreichen
