@@ -43,8 +43,12 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm {
         $this->document = $document;
     }
     
-    public function getDocumentAdapter() {
-        return new Util_DocumentAdapter($this->view, $this->document);
+    public function constructFromPost($post, $document = null) {
+        $this->document = $document;
+    }
+    
+    public function getDocument() {
+        return $this->document;
     }
     
     public function loadDefaultDecorators() {

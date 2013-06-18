@@ -32,7 +32,7 @@
  */
 ?>
 
-<?PHP $document = $this->element->getDocumentAdapter() ?>
+<?PHP $document = new Util_DocumentAdapter($this, $this->element->getDocument()) ?>
 
 <?PHP if (!is_null($document)) : ?>
 <?PHP $authors = $document->getAuthors(); ?>
