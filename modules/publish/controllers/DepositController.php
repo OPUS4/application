@@ -33,9 +33,6 @@
  * @version     $Id$
  */
 
-/**
- * Main entry point for this module.
- */
 class Publish_DepositController extends Controller_Action {
 
     public $depositData = array();
@@ -97,7 +94,7 @@ class Publish_DepositController extends Controller_Action {
             unset($this->depositData['send']);
         }
 
-        $depositData = new Publish_Model_Deposit($this->depositData);
+        $depositData = new Publish_Model_Deposit($this->session, $this->log, $this->depositData);
         $this->document = $depositData->getDocument();
         $this->document->setServerState('unpublished');
         $this->session->documentId = $this->document->store();

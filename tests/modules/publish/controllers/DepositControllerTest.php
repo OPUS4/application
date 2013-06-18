@@ -211,9 +211,9 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $doc->setType('preprint');
         $session->documentId = $doc->store();
 
-        $deposit = new Publish_Model_Deposit();
+        $log = Zend_Registry::get('Zend_Log');
+        $deposit = new Publish_Model_Deposit($session, $log);
         $this->setExpectedException('Publish_Model_FormDocumentNotFoundException');
-
     }
 }
 

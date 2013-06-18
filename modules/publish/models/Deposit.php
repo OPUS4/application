@@ -40,19 +40,16 @@ class Publish_Model_Deposit {
     public $session;
     public $session2;
 
-    public function __construct($documentData = null) {
-
-        $this->log = Zend_Registry::get('Zend_Log');
-        $this->session = new Zend_Session_Namespace('Publish');
+    public function __construct($session, $log, $documentData = null) {
+        $this->log = $log;
+        $this->session = $session;
         $this->session2 = new Zend_Session_Namespace();
         $this->document = new Opus_Document($this->session->documentId);
         $this->documentData = $documentData;
-
         if ($this->document->getServerState() !== 'temporary') {
             $this->log->err('Could not find document: Tried to return document, which is not in state "temporary"');
             throw new Publish_Model_FormDocumentNotFoundException();
         }
-
         $this->_storeDocumentData();
     }
 
@@ -450,6 +447,7 @@ class Publish_Model_Deposit {
             $this->document->addIdentifierIsbn($identifier);
         }
         else if (strstr($dataKey, 'Urn')) {
+            // TODO hier kann eine Collision entstehen!
             $this->document->addIdentifierUrn($identifier);
         }
         else if (strstr($dataKey, 'StdDoi')) {

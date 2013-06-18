@@ -43,7 +43,8 @@ class Publish_Model_DepositTest extends ControllerTestCase {
         $document->setServerState('published');
         $session->documentId = $document->store();
 
-        $dep = new Publish_Model_Deposit();
+        $log = Zend_Registry::get('Zend_Log');
+        new Publish_Model_Deposit($session, $log);
     }
 
     public function testValidDocumentData() {
@@ -115,7 +116,8 @@ class Publish_Model_DepositTest extends ControllerTestCase {
             'Foo2Title' => array('value' => 'title as enrichment', 'datatype' => 'Enrichment', 'subfield' => '0'),
         );
 
-        $dep = new Publish_Model_Deposit($data);
+        $log = Zend_Registry::get('Zend_Log');
+        $dep = new Publish_Model_Deposit($session, $log, $data);
         $document = $dep->getDocument();
         $document->store();                               
         
