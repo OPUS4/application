@@ -34,17 +34,27 @@
 
 <?PHP
     $document = $this->element->getDocument();
-    $links = $this->element->getJumpLinks();
+    $jumpLinks = $this->element->getJumpLinks();
+    $stateLinks = $this->element->getStateLinks();
+    $actionLinks = $this->element->getViewActionLinks();
 ?>
 
 <?PHP if (!is_null($document)) : ?>
 <div id="actionboxContainer">
   <div class="wrapper">
       <div class="col col-1">
+        <?PHP if ($this->element->getMode() === Admin_Form_ActionBox::MODE_EDIT) : ?>  
         <dl id="Document-ServerState">
           <dt id="Document-ServerState"><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></dt>
           <dd id="Document-ServerState"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_' . ucfirst($document->getServerState()))) ?></dd>
         </dl>
+        <?PHP else : ?>
+        <ul id="Document-ServerState">
+            <?PHP foreach ($stateLinks as $label => $params) : ?>
+            <li><a href="<?= $this->url($params) ?>"><?= htmlspecialchars($this->translate($label)) ?></a></li>
+            <?PHP endforeach; ?>
+        </ul>
+        <?PHP endif; ?>
       </div>
       <div class="col col-2">
         <dl id="Document-ServerDatePublished" class="col">
@@ -59,7 +69,7 @@
           <dt><a><?= $this->translate('admin-actionbox-goto-section') ?></a></dt>
           <dd>
             <ul>
-              <?PHP foreach ($links as $href => $label) : ?> 
+              <?PHP foreach ($jumpLinks as $href => $label) : ?> 
               <li><a href="<?= $href ?>"><?= htmlspecialchars($this->translate($label)) ?></a></li>
               <?PHP endforeach; ?>
             </ul>
@@ -68,8 +78,14 @@
       </div>
       <div class="col col-3">
         <ul class="Document-Action">
+          <?PHP if ($this->element->getMode() === Admin_Form_ActionBox::MODE_EDIT) : ?>
           <li class="save-element"><?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_SAVE) ?></li>
           <li class="cancel-element"> oder <?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_CANCEL) ?></li>
+          <?PHP else : ?>
+          <?PHP foreach ($actionLinks as $label => $params) : ?>
+          <li><a href="<?= $this->url($params) ?>"><?= htmlspecialchars($this->translate($label)) ?></a></li>
+          <?PHP endforeach; ?>
+          <?PHP endif; ?>
         </ul>
       </div>
   </div>

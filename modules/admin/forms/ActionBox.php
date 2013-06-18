@@ -44,7 +44,13 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     
     const ELEMENT_CANCEL = 'Cancel';
     
+    const MODE_EDIT = 'edit';
+    
+    const MODE_VIEW = 'view';
+    
     private $document;
+    
+    private $mode = self::MODE_EDIT;
 
     public function init() {
         parent::init();
@@ -81,6 +87,10 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
         return $this->document;
     }
     
+    public function getMode() {
+        return $this->mode;
+    }
+    
     /**
      * 
      * @return string
@@ -104,13 +114,62 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
         return $links;
     }
     
+    public function getStateLinks() {
+        $links = array();
+        
+        $workflow = Zend_Controller_Action_HelperBroker::getStaticHelper('workflow');
+        
+        $targetStates = $workflow->getAllowedTargetStatesForDocument($this->document);
+
+        foreach ($targetStates as $targetState) {
+            $links['admin_workflow_' . $targetState] = array(
+                'module'     => 'admin',
+                'controller' => 'workflow',
+                'action'     => 'changestate',
+                'docId'      => $this->document->getId(),
+                'targetState' => $targetState
+            );
+        }
+
+        return $links;
+    }
+    
+    public function getViewActionLinks() {
+        $actions = array();
+
+        $docId = $this->document->getId();
+        
+        $actions['admin_document_edit'] = array(
+            'module' => 'admin', 
+            'controller' => 'document', 
+            'action' => 'edit', 
+            'id' => $docId
+        );
+        
+        $actions['admin_document_files'] = array(
+            'module'     => 'admin',
+            'controller' => 'filemanager',
+            'action'     => 'index',
+            'docId'      => $docId,
+        );
+
+        $actions['admin_documents_open_frontdoor'] = array(
+            'module'     => 'frontdoor',
+            'controller' => 'index',
+            'action'     => 'index',
+            'docId'      => $docId,
+        );
+        
+        return $actions;
+    }
+    
     public function loadDefaultDecorators() {
         $this->setDecorators(array(array(
             'ViewScript', array('viewScript' => 'actionbox.phtml'))));
     }
     
     public function prepareRenderingAsView() {
-        // do nothing
+        $this->mode = self::MODE_VIEW;
     }
     
 }

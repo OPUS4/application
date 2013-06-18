@@ -37,25 +37,7 @@
     <div class="breadcrumbsContainer">
         <?= $this->navigation()->breadcrumbs() ?> (<?= $this->document->getId() ?>)
     </div>
-    
-    <div style="padding-top: 1.5em; padding-bottom: 1.5em">
-        <div id="docMenu" class="docstateMenu" style="padding-bottom: 1em;" >
-            <?PHP foreach ($this->actions as $action) : ?>
-            <span>
-			<a href="<?=$action['url']?>"><?=$this->translate($action['label']) ?></a>
-            </span>
-			<?PHP endforeach; ?>
-        </div>
-
-        <div id="docstateMenu" class="docstateMenu">
-            <?PHP foreach ($this->workflowActions as $action) : ?>
-            <span>
-				<a href="<?=$action['url']?>"><?=$this->translate($action['label']) ?></a>
-         	</span>
-			<?PHP endforeach; ?>
-        </div>
-    </div>
-    
+        
     <?= $this->form ?>
     
 </div>
