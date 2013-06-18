@@ -34,6 +34,7 @@
 
 <?PHP
     $document = $this->element->getDocument();
+    $links = $this->element->getJumpLinks();
 ?>
 
 <?PHP if (!is_null($document)) : ?>
@@ -58,33 +59,17 @@
           <dt><a><?= $this->translate('admin-actionbox-goto-section') ?></a></dt>
           <dd>
             <ul>
-              <li><a href="#fieldset-General">Allgemeines</a></li>
-              <li><a href="#fieldset-Persons">Personen</a></li>
-              <li><a href="#fieldset-Titles">Titles</a></li>
-              <li><a href="#fieldset-Series">Schriftenreihe</a></li>
-              <li><a href="#fieldset-Enrichments">Erweiterung</a></li>
-              <li><a href="#fieldset-Collections">Collection</a></li>
-              <li><a href="#fieldset-Identifiers">Identifier</a></li>
-              <li><a href="#fieldset-Licences">Lizenzen</a></li>
-              <li><a href="#fieldset-Patents">Patentinformationen</a></li>
-              <li><a href="#fieldset-Notes">Bemerkung</a></li>
+              <?PHP foreach ($links as $href => $label) : ?> 
+              <li><a href="<?= $href ?>"><?= htmlspecialchars($this->translate($label)) ?></a></li>
+              <?PHP endforeach; ?>
             </ul>
           </dd>
         </dl>
       </div>
       <div class="col col-3">
         <ul class="Document-Action">
-          <li class="save-element">
-            <input type="submit" name="Document[save]" class="Document-save" value="Speichern" />
-          </li>
-          <!--
-        <li class="saveAndContinue-element">
-          <input type="submit" name="Document[saveAndContinue]" class="Document-saveAndContinue" value="saveAndContinue" />
-        </li>
-        -->
-          <li class="cancel-element"> oder
-            <input type="submit" name="Document[cancel]" class="Document-cancel" value="Abbrechen" />
-          </li>
+          <li class="save-element"><?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_SAVE) ?></li>
+          <li class="cancel-element"> oder <?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_CANCEL) ?></li>
         </ul>
       </div>
   </div>
