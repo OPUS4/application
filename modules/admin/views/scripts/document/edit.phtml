@@ -36,7 +36,9 @@
 
 
 <div class="breadcrumbsContainer">
-    <div class="wrapper"><?= $this->navigation()->breadcrumbs() ?></div>
+    <div class="wrapper"><?= $this->navigation()->breadcrumbs()->setMaxDepth(1)->setLinkLast(true) ?> &gt;
+        <?= $this->documentAdapter->getMainTitle() ?>
+        (<?= $this->document->getId() ?>) &gt; <?= $this->translate('admin_document_edit') ?></div>
 </div>
 
 <?php if (isset($this->message)) : ?>

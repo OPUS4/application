@@ -35,7 +35,9 @@
 <div id="content" class="opus adminContainer">
 
     <div class="breadcrumbsContainer">
-        <?= $this->navigation()->breadcrumbs() ?> (<?= $this->document->getId() ?>)
+        <div class="wrapper"><?= $this->navigation()->breadcrumbs()->setMaxDepth(1)->setLinkLast(true) ?> &gt;
+            <?= $this->documentAdapter->getMainTitle() ?>
+            (<?= $this->document->getId() ?>)</div>
     </div>
         
     <?= $this->form ?>
