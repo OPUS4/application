@@ -124,10 +124,6 @@ class Opus3FileImport {
      * @return integer
      */
     public function loadFiles($id, $roleid = null) {
-        $this->tmpPath = null;
-        $this->tmpFiles = array();
-	$this->filesImported = array();
-
 	$this->tmpDoc = new Opus_Document($id);
         $opus3Id = $this->tmpDoc->getIdentifierOpus3(0)->getValue();
 
@@ -355,7 +351,7 @@ class Opus3FileImport {
 
         // ERROR: File with same Basnemae already imported
         if (array_search(basename($f), $this->filesImported) !== false) {
-            $this->logger->log_error("Opus3FileImport", "File '" . basename($f) . "' already imported");
+            $this->logger->log_error("Opus3FileImport", "File '" . basename(dirname($f)) . "/" . basename($f) . "' already imported");
             return false;
 
         }

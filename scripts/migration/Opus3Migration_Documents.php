@@ -76,6 +76,7 @@ class Opus3Migration_Documents {
 
         if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
         if (array_key_exists('p', $options) !== false) { $this->fulltextPath = $options["p"]; }
+	//if (array_key_exists('q', $options) !== false) { $this->fulltextPathArray = $options["q"]; }
         if (array_key_exists('s', $options) !== false) { $this->start = $options["s"]; }
         if (array_key_exists('e', $options) !== false) { $this->end  = $options["e"]; }
         if (array_key_exists('l', $options) !== false) { $this->lockFile  = $options["l"]; }
@@ -120,10 +121,9 @@ class Opus3Migration_Documents {
    }
 
     private function load_fulltext() {
-
-        $fileImporter = new Opus3FileImport($this->fulltextPath);
- 
         foreach ($this->doclist as $id) {
+
+            $fileImporter = new Opus3FileImport($this->fulltextPath);
 
             $mem_now = round(memory_get_usage() / 1024 );
             $mem_peak = round(memory_get_peak_usage() / 1024);
@@ -194,7 +194,7 @@ $application = new Zend_Application(
 );
 $application->bootstrap(array('Configuration', 'Logging', 'Database'));
 
-$options = getopt("f:p:s:e:l:");
+$options = getopt("f:p:q:s:e:l:");
 
 // Start Opus3Migration
 $migration = new Opus3Migration_Documents($options);
