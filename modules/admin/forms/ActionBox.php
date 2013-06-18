@@ -65,7 +65,7 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     }
     
     public function constructFromPost($post, $document = null) {
-        $this->document = document;
+        $this->document = $document;
     }
     
     public function processPost($post, $context) {

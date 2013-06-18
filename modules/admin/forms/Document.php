@@ -178,6 +178,11 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
             if (array_key_exists($name, $data)) {
                 $subform->constructFromPost($data[$name], $document);
             }
+            else {
+                // ActionBox und InfoBox haben keine Element die im POST enthalten wären, müssen aber nach POST wieder
+                // neu initialisiert werden 
+                $subform->constructFromPost(array(), $document);
+            }
         }
         
         return $form;
