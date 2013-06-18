@@ -55,5 +55,13 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm {
         $this->setDecorators(array(array(
             'ViewScript', array('viewScript' => 'infobox.phtml'))));
     }
+    
+    public function isEmpty() {
+        return false;
+    }
+    
+    public function prepareRenderingAsView() {
+        // do nothing
+    }
 
 }

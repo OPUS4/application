@@ -38,8 +38,6 @@
         <?= $this->navigation()->breadcrumbs() ?> (<?= $this->document->getId() ?>)
     </div>
     
-    <?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
-    
     <div style="padding-top: 1.5em; padding-bottom: 1.5em">
         <div id="docMenu" class="docstateMenu" style="padding-bottom: 1em;" >
             <?PHP foreach ($this->actions as $action) : ?>

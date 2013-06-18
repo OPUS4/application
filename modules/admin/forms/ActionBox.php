@@ -109,4 +109,8 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
             'ViewScript', array('viewScript' => 'actionbox.phtml'))));
     }
     
+    public function prepareRenderingAsView() {
+        // do nothing
+    }
+    
 }
