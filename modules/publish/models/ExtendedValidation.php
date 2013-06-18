@@ -75,15 +75,16 @@ class Publish_Model_ExtendedValidation {
         else {
             $this->documentLanguage = null;
         }
-
-        $validPersons = $this->_validatePersons();
-        $validTitles = $this->_validateTitles();
-        $validCheckboxes = $this->_validateCheckboxes();
-        $validSubjectLanguages = $this->_validateSubjectLanguages();
-        $validCollection = $this->_validateCollectionLeafSelection();
-        $validSeriesNumber = $this->_validateSeriesNumber();
-        $validSeveralSeries = $this->_validateSeries();
-        return $validPersons && $validTitles && $validCheckboxes && $validSubjectLanguages && $validCollection && $validSeriesNumber && $validSeveralSeries;
+        
+        $result = $this->_validatePersons();
+        $result = $this->_validateTitles() && $result;
+        $result = $this->_validateCheckboxes() && $result;
+        $result = $this->_validateSubjectLanguages() && $result;
+        $result = $this->_validateCollectionLeafSelection() && $result;
+        $result = $this->_validateSeriesNumber() && $result;
+        $result = $this->_validateSeries() && $result;
+        $result = $this->_validateURN() && $result;
+        return $result;
     }
 
     /**
@@ -724,6 +725,35 @@ class Publish_Model_ExtendedValidation {
         }
 
         return $validSeries;
+    }
+
+    /**
+     * prevent URN collisions: check that given URN is unique (in our database)
+     */
+    private function _validateURN() {
+        if (!array_key_exists('IdentifierUrn', $this->extendedData)) {
+            return true;
+        }
+
+        $urn = $this->extendedData['IdentifierUrn'];
+        $value = $urn['value'];
+        if (trim($value) == '') {
+            return true;
+        }
+
+        // check URN $urn for collision
+        $finder = new Opus_DocumentFinder();
+        $finder->setIdentifierTypeValue('urn', $value);
+        if ($finder->count() == 0) {
+            return true;
+        }
+
+        $element = $this->form->getElement('IdentifierUrn');
+        if (!is_null($element)) {
+            $element->clearErrorMessages();
+            $element->addError($this->translate('publish_error_urn_collision'));
+        }
+        return false;
     }
 
     /**

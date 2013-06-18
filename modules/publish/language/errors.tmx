@@ -460,6 +460,16 @@
         <seg>Bitte wählen Sie eine Schriftenreihe aus.</seg>
       </tuv>
     </tu>
+
+    <tu tuid="publish_error_urn_collision">
+      <tuv xml:lang="en">
+        <seg>The given URN already exists, please choose another one.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die eingegebene URN existiert bereits. Bitte wählen Sie eine andere URN.</seg>
+      </tuv>
+    </tu>
+
 	
     </body>
 </tmx>
