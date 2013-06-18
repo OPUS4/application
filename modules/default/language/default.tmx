@@ -627,5 +627,13 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin-actionbox-goto-section">
+      <tuv xml:lang="en">
+        <seg>Jump to Section</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gehe zu Abschnitt</seg>
+      </tuv>
+    </tu>
     </body>
 </tmx>

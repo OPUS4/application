@@ -666,10 +666,20 @@
 
         <tu tuid="ServerState">
             <tuv xml:lang="en">
-                <seg>State:</seg>
+                <seg>State of publication process</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Status:</seg>
+                <seg>Status des Publikationsprozesses</seg>
+            </tuv>
+        </tu>
+        
+        <!-- Wird von ActionBox verwendet -->
+        <tu tuid="ServerState-short">
+            <tuv xml:lang="en">
+                <seg>State</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Status</seg>
             </tuv>
         </tu>
 
@@ -691,25 +701,44 @@
             </tuv>
         </tu>
 
-
         <tu tuid="ServerDateModified">
             <tuv xml:lang="en">
-                <seg>Last Modification on:</seg>
+                <seg>Date of Last Modification (Server)</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Letzte Änderung am:</seg>
+                <seg>Datum der letzen Änderung (Server)</seg>
             </tuv>
         </tu>
 
+        <!-- Wird von ActionBox verwendet -->
+        <tu tuid="ServerDateModified-short">
+            <tuv xml:lang="en">
+                <seg>Last Modified on</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Letzte Änderung am</seg>
+            </tuv>
+        </tu>
+        
         <tu tuid="ServerDatePublished">
             <tuv xml:lang="en">
-                <seg>Release Date:</seg>
+                <seg>Release Date</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Publiziert am:</seg>
+                <seg>Datum der Freischaltung</seg>
             </tuv>
         </tu>
 
+        <!-- Wird von ActionBox verwendet -->
+        <tu tuid="ServerDatePublished-short">
+            <tuv xml:lang="en">
+                <seg>Release Date</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Freigeschaltet am</seg>
+            </tuv>
+        </tu>
+        
         <tu tuid="ServerDateDeleted">
             <tuv xml:lang="en">
                 <seg>Date of Deletion</seg>

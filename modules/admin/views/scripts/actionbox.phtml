@@ -41,21 +41,21 @@
   <div class="wrapper">
       <div class="col col-1">
         <dl id="Document-ServerState">
-          <dt id="Document-ServerState"><?= htmlspecialchars($this->translate('ServerState')) ?></dt>
+          <dt id="Document-ServerState"><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></dt>
           <dd id="Document-ServerState"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_' . ucfirst($document->getServerState()))) ?></dd>
         </dl>
       </div>
       <div class="col col-2">
         <dl id="Document-ServerDatePublished" class="col">
-          <dt><?= $this->translate('ServerDatePublished') ?></dt>
+          <dt><?= $this->translate('ServerDatePublished-short') . ':'?></dt>
           <dd id="Document-ServerDatePublished"><?= $this->formatValue()->formatDate($document->getServerDatePublished()) ?></dd>
         </dl>
         <dl id="Document-ServerDateModified" class="col">
-          <dt><?= $this->translate('ServerDateModified') ?></dt>
+          <dt><?= $this->translate('ServerDateModified-short') . ':'?></dt>
           <dd id="Document-ServerDateModified"><?= $this->formatValue()->formatDate($document->getServerDateModified()) ?></dd>
         </dl>
         <dl id="Document-Goto" class="col dropdown">
-          <dt><a>Gehe zu Abschnitt</a></dt>
+          <dt><a><?= $this->translate('admin-actionbox-goto-section') ?></a></dt>
           <dd>
             <ul>
               <li><a href="#fieldset-General">Allgemeines</a></li>
