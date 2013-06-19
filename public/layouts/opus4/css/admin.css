@@ -1,6 +1,27 @@
 /*@import url(admin-opus.css);*/
 .Document-Action li{
    float: left;
+   margin-left: 5%;
+   padding: 6px 0;
+}
+.Document-Action li:first-child{
+   margin-left: 0;
+}
+.Document-Action li a{
+   text-decoration: none;
+   font-weight: bold;
+   font-size: 0.857em;
+}
+.Document-Action li a:hover{
+   text-decoration: underline;
+   color: #26517D;
+}
+li.edit a{
+   background: url(../img/theme/admin/sprite_icons.png) no-repeat -20px -19px;
+   padding-left: 16px;
+}
+.Document-Action li.save-element{
+   padding: 0;
 }
 .save-element input,
 #save-element input{
@@ -14,7 +35,7 @@
 }
 .cancel-element,
 #cancel-element{
-   padding: 6px 0 6px 10px;
+   /*padding: 6px 0;*/
    font: 0.875em Verdana, Arial, Helvetica, sans-serif;
 }
 .cancel-element input,
@@ -58,6 +79,9 @@
 #adminMenuContainer ul > li.inactive > strong,
 #adminMenuContainer ul > li > strong{
    background-image: url(../img/theme/admin/ic_inactive-corner.png);
+   background-color: #6C6C6C;
+   color: #525252;
+   text-shadow: 0 2px 3px #666666;
 }
 #adminMenuContainer ul > li > *{
    display: block;
@@ -168,7 +192,7 @@
 /* @end */
 /* @group ActionBox */
 #actionboxContainer{
-   background: url(../img/theme/admin/bg_actionbox.png);
+   background: url(../img/theme/admin/bg_actionbox-fixed.png);
    color: black;
    width: 100%;
    float: left;
@@ -180,30 +204,30 @@
    position: fixed;
    top: 0;
    z-index: 100;
-   background: url(../img/theme/admin/bg_actionbox-fixed.png);
 }
 #actionboxContainer .col{
    float: left;
 
 }
 #actionboxContainer .col-1{
-   width: 23%;
+   width: 21.4375%;
+   padding-right: 2.5625%;
 }
 #actionboxContainer .col-2{
-   width: 52%;
+   width: 49%;
 }
 #actionboxContainer .col-3{
-   width: 25%;
+   width: 27%;
 }
 #actionboxContainer .col dl{
-   margin: 0 15px 0 0;
+   margin: 0;
    padding: 0;
 }
 #actionboxContainer .col.col-2 dl{
-   margin: 0 30px 0 0;
+   margin: 0 6.1349% 0 0;
 }
 #actionboxContainer #Document-Goto{
-   margin-right: 8px;
+   margin-right: 2.003%;
 }
 #content #actionboxContainer dt{
    font-size: 0.857em;
@@ -215,7 +239,8 @@
    cursor: pointer;
    font-size: 1.167em;
 }
-#actionboxContainer .dropdown.dropdown-open dt a{
+#actionboxContainer .dropdown.dropdown-open dt a,
+.no-js #actionboxContainer .dropdown:hover dt a{
    border-radius: 5px 5px 0 0;
 }
 #actionboxContainer dd{
@@ -261,6 +286,85 @@
 }
 #Document-Goto dd ul{
    padding: 0.3em 8px 0.8em 15px;
+}
+#actionboxContainer #Document-ServerState.dropdown{
+   position: relative;
+   top: -0.1em;
+}
+#actionboxContainer #Document-ServerState.dropdown.dropdown-open{
+   border: none;
+}
+#actionboxContainer #Document-ServerState.dropdown dt a{
+   display: block;
+   height: 2.7em;
+   padding: 0.1em 5px 0;
+   font-size: 1em;
+   color: black;
+   position: relative;
+   z-index: 500; 
+   background: url(../img/theme/admin/transparent.png);/* IE Fix */
+}
+#actionboxContainer #Document-ServerState.dropdown dt a:after {
+    border-color: black transparent transparent;
+    border-style: solid;
+    border-width: 10px 5px 0;
+    content: "";
+    height: 0;
+    position: absolute;
+    right: 5px;
+    top: 1.1em;
+    width: 0;
+}
+#actionboxContainer #Document-ServerState.dropdown dd{
+   display: block;
+   width: 100%;
+   box-shadow: 0 0 0 0;
+   position: absolute;
+   top: 0;
+   z-index: 200;
+   font-size: 1em;
+   border: 1px solid #8c8d8a;
+   border-radius: 5px 5px 5px 5px;
+}
+#Document-ServerState.dropdown ul{
+   padding: 1em 5px 0;
+}
+#Document-ServerState.dropdown li{
+   display: none;
+   font-size: 0.857em;
+   padding-left: 5px;
+}
+#Document-ServerState.dropdown dd a{
+   color: black;
+   display: block;
+}
+#Document-ServerState.dropdown dd a:before{
+   /*content: '- ';*/
+}
+#Document-ServerState.dropdown dd a:hover{
+   text-decoration: underline;
+   color: #26517b;
+}
+#Document-ServerState.dropdown.dropdown-open li{
+   display: block;
+}
+#actionboxContainer #Document-ServerState.dropdown.dropdown-open dd{
+   background-color: white;
+   border-radius: 5px 5px 5px 5px;
+   padding: 0 0 0.5em;
+   font-weight: normal;
+   box-shadow: 0 10px 12px 3px rgba(84, 84, 84, 0.45);
+}
+#Document-ServerState.dropdown li.active{
+   display: block;
+   font-weight: bold;
+   font-size: 1em;
+   padding: 1px 0 3px;
+}
+#Document-ServerState.dropdown.dropdown-open li.active{
+   padding-bottom: 5px;
+   margin-bottom: 5px;
+   border-bottom: 1px dotted #8c8d8a;
 }
 /* @end */
 /* @group Primary nav */
