@@ -126,7 +126,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_document_section_abstracts">
+    <tu tuid="admin_document_section_titleabstract">
       <tuv xml:lang="en">
         <seg>Abstracts</seg>
       </tuv>
@@ -134,25 +134,124 @@
         <seg>Zusammenfassungen</seg>
       </tuv>
     </tu>
-
+    
+    <tu tuid="admin_document_section_titlemain">
+      <tuv xml:lang="en">
+        <seg>Titles</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_section_titleadditional">
+      <tuv xml:lang="en">
+        <seg>Translated Titles</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzte Titel</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_section_titleparent">
+      <tuv xml:lang="en">
+        <seg>Parent Titles</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel übergeordneter Werke</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_section_titlesub">
+      <tuv xml:lang="en">
+        <seg>Subtitles</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Untertitel</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="admin_document_section_persons">
       <tuv xml:lang="en">
-        <seg>Person(s)</seg>
+        <seg>Persons</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Personen</seg>
       </tuv>
     </tu>
-
-    <tu tuid="admin_document_section_dates">
+    
+    <tu tuid="admin_document_section_personauthor">
       <tuv xml:lang="en">
-        <seg>Dates</seg>
+        <seg>Authors</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Datumsangaben</seg>
+        <seg>Authoren</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_section_personeditor">
+      <tuv xml:lang="en">
+        <seg>Editors</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Herausgeber</seg>
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_section_personadvisor">
+      <tuv xml:lang="en">
+        <seg>Advisors</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Betreuer</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_section_personcontributor">
+      <tuv xml:lang="en">
+        <seg>Contributors</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sonstige beteiligte Personen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_personreferee">
+      <tuv xml:lang="en">
+        <seg>Referee</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gutachter</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_section_persontranslator">
+      <tuv xml:lang="en">
+        <seg>Translators</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Übersetzer</seg>
+      </tuv>
+    </tu>        
+    
+    <tu tuid="admin_document_section_personother">
+      <tuv xml:lang="en">
+        <seg>Other Persons</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Weitere Personen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_section_personsubmitter">
+      <tuv xml:lang="en">
+        <seg>Submitter</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Einsteller</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="admin_document_section_subjects">
       <tuv xml:lang="en">
         <seg>Subjects</seg>
@@ -161,22 +260,39 @@
         <seg>Schlagwörter</seg>
       </tuv>
     </tu>
+    <tu tuid="admin_document_section_subjectswd">
+      <tuv xml:lang="en">
+        <seg>GND Keywords</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>GND Schlagwörter</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_section_subjectpsyndex">
+      <tuv xml:lang="en">
+        <seg>PSyndex Keywords</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>PSyndex Schlagwörter</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_section_subjectuncontrolled">
+      <tuv xml:lang="en">
+        <seg>Tags</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Freie Schlagwörter / Tags</seg>
+      </tuv>
+    </tu>
 
-    <tu tuid="admin_document_section_identifiers">
+    <tu tuid="admin_document_section_identifier">
       <tuv xml:lang="en">
         <seg>Identifiers</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Identifier</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_document_section_references">
-      <tuv xml:lang="en">
-        <seg>References</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Referenzen</seg>
       </tuv>
     </tu>
 
@@ -189,7 +305,8 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_document_section_thesis">
+    <!-- TODO review -->
+    <tu tuid="admin_document_section_thesis"> 
       <tuv xml:lang="en">
         <seg>Thesis statement, DNB</seg>
       </tuv>
@@ -198,7 +315,8 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_document_section_collections">
+    <!-- TODO -->
+    <tu tuid="admin_document_section_collection">
       <tuv xml:lang="en">
         <seg>Collections</seg>
       </tuv>
@@ -206,6 +324,34 @@
         <seg>Sammlungen, Klassifikationen</seg>
       </tuv>
     </tu>
+    
+    <tu tuid="admin_document_section_content">
+      <tuv xml:lang="en">
+        <seg>Abstracts and Subjects</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Inhaltliche Erschließung</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_section_thesispublisher">
+      <tuv xml:lang="en">
+        <seg>Publishing Intitutions</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichende Institutionen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_section_thesisgrantor">
+      <tuv xml:lang="en">
+        <seg>Granting Institutions</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel verleihende Institutionen</seg>
+      </tuv>
+    </tu>
+    
 
     <tu tuid="admin_document_section_series">
       <tuv xml:lang="en">
@@ -225,7 +371,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_document_section_enrichments">
+    <tu tuid="admin_document_section_enrichment">
       <tuv xml:lang="en">
         <seg>Enrichments</seg>
       </tuv>
@@ -261,18 +407,27 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_document_section_patents">
+    <tu tuid="admin_document_section_patent">
       <tuv xml:lang="en">
-        <seg>Patent(s)</seg>
+        <seg>Patents</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Patente</seg>
       </tuv>
     </tu>
-
-    <tu tuid="admin_document_section_notes">
+    
+    <tu tuid="admin_document_section_bibliographic">
       <tuv xml:lang="en">
-        <seg>Note(s)</seg>
+        <seg>Bibliographic Information</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Bibliographische Informationen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_section_note">
+      <tuv xml:lang="en">
+        <seg>Notes</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Bemerkungen</seg>

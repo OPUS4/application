@@ -48,7 +48,7 @@ class Admin_Form_DocumentSubjectType extends Admin_Form_DocumentMultiSubForm {
     public function init() {
         parent::init();
                 
-        $this->setLegend('Opus_Subject_Type_Value_' . ucfirst($this->__subjectType)); // TODO Uebersetzungen
+        $this->setLegend('admin_document_section_subject' . $this->__subjectType); 
     }
     
     /**

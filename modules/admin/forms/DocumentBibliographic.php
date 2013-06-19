@@ -66,6 +66,8 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
     public function init() {
         parent::init();
         
+        $this->setLegend('admin_document_section_bibliographic');
+        
         // Label entsprechen den Namen der Elemente
         $this->addTextElement(self::ELEMENT_EDITION);
         $this->addTextElement(self::ELEMENT_VOLUME);

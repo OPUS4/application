@@ -74,7 +74,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
     public function init() {
         parent::init();
         
-        $this->setLegend($this->__roleName);
+        $this->setLegend('admin_document_section_person' . $this->__roleName);
 
         // Button zum Hinzufügen von Personen in Role
         $element = new Zend_Form_Element_Submit(self::ELEMENT_ADD);

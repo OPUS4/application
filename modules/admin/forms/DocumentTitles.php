@@ -48,7 +48,7 @@ class Admin_Form_DocumentTitles extends Admin_Form_DocumentSection {
     public function init() {
         parent::init();
         
-        $this->setLegend('Titles');
+        $this->setLegend('admin_document_section_titles');
         
         $this->addSubForm(new Admin_Form_DocumentTitlesMain(), 'Main');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleAdditional'), 'Additional');

@@ -72,7 +72,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         $element->setOrder(1000); // TODO only theoretically safe
         $this->addElement($element);
         
-        $this->setLegend($this->_fieldName); // TODO prefix translation key
+        $this->setLegend('admin_document_section_' . strtolower($this->_fieldName)); 
     }
     
     /**

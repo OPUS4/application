@@ -61,11 +61,9 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
      */
     public function init() {
         parent::init();
-        
-        $translator = Zend_Registry::get('Zend_Translate');
-        
-        $this->setLegend($translator->translate('admin_document_section_persons'));
 
+        $this->setLegend('admin_document_section_persons');
+        
         // TODO iteriere über Rollen und erzeuge Unterformulare
         foreach ($this->personRoles as $index => $roleName) {
             $subform = new Admin_Form_DocumentPersonRole($roleName);

@@ -65,7 +65,7 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
         $element->setOrder(1000); // TODO nicht sicher wenn 1000+ Collections zugewiesen sind
         $this->addElement($element);
         
-        $this->setLegend('Collection');
+        $this->setLegend('admin_document_section_collection');
     }
     
     /**

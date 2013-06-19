@@ -52,6 +52,10 @@ class Admin_Form_DocumentSubjects extends Admin_Form_DocumentSection {
         $this->addSubForm(new Admin_Form_DocumentSubjectType('psyndex'), 'Psyndex');
         $this->addSubForm(new Admin_Form_DocumentSubjectType('uncontrolled'), 'Uncontrolled');
         // TODO Unterformular fuer unbekannte Typen hinzufügen?
+        
+        $this->setDecorators(array(
+            'FormElements'
+            ));
     }
     
     /**
