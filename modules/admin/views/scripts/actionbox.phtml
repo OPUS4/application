@@ -51,7 +51,7 @@
         </dl>
         <?PHP else : ?>
           <dl id="Document-ServerState" class="dropdown">
-              <dt><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></dt>
+              <dt><a><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></a></dt>
               <dd>
                 <ul>
                     <li class="active"><?= htmlspecialchars($this->translate('admin_workflow_' . $currentState)) ?></li>
