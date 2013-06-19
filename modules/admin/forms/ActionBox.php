@@ -122,7 +122,7 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
         $targetStates = $workflow->getAllowedTargetStatesForDocument($this->document);
 
         foreach ($targetStates as $targetState) {
-            $links['admin_workflow_' . $targetState] = array(
+            $links[$targetState] = array(
                 'module'     => 'admin',
                 'controller' => 'workflow',
                 'action'     => 'changestate',
@@ -130,7 +130,7 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
                 'targetState' => $targetState
             );
         }
-
+        
         return $links;
     }
     
