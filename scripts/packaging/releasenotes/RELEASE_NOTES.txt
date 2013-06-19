@@ -24,6 +24,26 @@ In jedem Fall ist nach dem Update der Solr-Schemadatei und der Instanz auf die
 Version 4.4 eine Reindexierung aller Dokumente erforderlich, damit die neu
 eingeführten Indexfelder für alle Indexdokumente angelegt werden.
 
+h3. Verwendung des Felds 'IdentifierUrn' im Publikationsformular
+
+Mit der Version 4.4 wurde das optionale Feld IdentifierUrn in den ausgelieferten
+Dokumenttypen (sowohl in der XML-Typdefinition als auch den PHTML-Templates)
+vollständig entfernt. Hintergrund ist, dass wir bezogen auf URNs keine globalen
+Aussagen bezüglich der Kollisionsfreiheit machen können. Daher sollten URNs
+nach Möglichkeit nicht durch den allgemeinen Benutzer angegeben werden. Außerdem
+wird in OPUS standardmäßig eine URN erzeugt, sobald ein Dokument freigeschaltet
+wird (und es noch keine URN besitzt). Wir empfehlen daher, dass Feld im 
+Publikationsformular nicht mehr zu verwenden und stattdessen den automatischen
+Vergabemechanismus in OPUS 4 zu benutzen.
+
+Um die Abwärtskompatibilität sicherzustellen, wird das Feld aber weiterhin
+unterstützt. Der Benutzer kann in diesem Fall weiterhin eine URN im
+Publikationsformular eintragen. Für diese wird nun auch geprüft, ob sie lokal
+(d.h. bezüglich der in der OPUS-Instanz gespeicherten URNs) kollisionsfrei ist.
+Beim Freischalten des Dokuments ist durch den Administrator aber darauf zu
+achten, dass die URN aus dem eigenen Namensraum kommt (ansonsten kann keine
+Kollisionsfreiheit sichergestellt werden).
+
 
 h2. ======================== Release 4.3.1 2013-02-21 ========================
 
