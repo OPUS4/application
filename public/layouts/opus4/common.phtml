@@ -150,6 +150,9 @@ $languageSelectors = $this->languageSelector();
                 <?php endif ?>
 
                 <?PHP if ($this->moduleName == 'admin') : ?>
+                    <?PHP if ($this->breadcrumbsDisabled != true) : ?>
+                        <?= $this->navigation()->breadcrumbs() ?>
+                    <?PHP endif; ?>
                     <?= $this->layout()->content ?>
                 <?PHP else : ?>
                 <div class="wrapper">

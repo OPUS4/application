@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,20 +25,30 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Setup
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @package     View
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<?php if (isset($this->messages)) : ?>
-<div class="messages">
-    <?php foreach ($this->messages as $message) : ?>
-    <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
-    <?php endforeach ?>
-</div>
-<?php endif ?>
-
-<?= $this->form ?>
+/**
+ * View Helper um Breadcrumbs in Administration zu rendern.
+ */
+class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
+    
+    /**
+     * Rendert den kompletten Breadcrumbs Pfad für die aktuelle Seite.
+     * 
+     * @param Zend_Navigation_Container $container
+     * @return string
+     */
+    public function renderStraight(Zend_Navigation_Container $container = null) {
+        $html = parent::renderStraight($container);
+        
+        $html = '<div class="breadcrumbsContainer"><div class="wrapper">' . $html . '</div></div>';
+        
+        return strlen($html) ? $this->getIndent() . $html : '';
+    }
+    
+}

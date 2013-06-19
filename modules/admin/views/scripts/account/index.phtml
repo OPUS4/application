@@ -33,11 +33,6 @@
  * @version     $Id$
  */
 ?>
-<div class="adminContainer">
-
-<div class="breadcrumbsContainer">
-<?= $this->navigation()->breadcrumbs() ?>
-</div>
 
 <div>
 <a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_account_action_new')?></a>
@@ -70,5 +65,3 @@
     </tr>
 <? endforeach; ?>
 </table>
-
-</div>

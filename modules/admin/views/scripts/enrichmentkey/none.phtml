@@ -33,15 +33,7 @@
  */
 ?>
 
-<div class="adminContainer">
+<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_enrichmentkey_new') ?></a>
 
-    <div class="breadcrumbsContainer">
-        <?= $this->navigation()->breadcrumbs() ?>
-    </div>
-
-    <a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_enrichmentkey_new') ?></a>
-
-    <div><?= $this->translate('admin_enrichmentkey_none_defined') ?></div>
-
-</div>
+<div><?= $this->translate('admin_enrichmentkey_none_defined') ?></div>
 

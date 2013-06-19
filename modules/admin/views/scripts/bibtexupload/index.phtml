@@ -33,23 +33,14 @@
  */
 ?>
 
-<div class="adminContainer">
-
-    <div class="breadcrumbsContainer">
-        <?= $this->navigation()->breadcrumbs() ?>
+<? if(isset($this->message)): ?>
+    <div id="message">
+        <?= $this->message ?>
     </div>
+<? endif ?>
 
-    <? if(isset($this->message)): ?>
-        <div id="message">
-            <?= $this->message ?>
-        </div>
-    <? endif ?>
-
-    <? if(isset($this->form)): ?>
-        <div id="upload-form">
-            <?= $this->form ?>
-        </div>
-    <? endif ?>
-
-
-</div>
+<? if(isset($this->form)): ?>
+    <div id="upload-form">
+        <?= $this->form ?>
+    </div>
+<? endif ?>

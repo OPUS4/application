@@ -34,12 +34,6 @@
  */
 ?>
 
-<div class="adminContainer">
-
-<div class="breadcrumbsContainer">
-    <?= $this->navigation()->breadcrumbs() ?>
-</div>
-
 <a href="<?= $this->url(array('action' => 'new'))?>"><?= $this->translate('ButtonNew') ?></a>
 
 <table>
@@ -62,6 +56,4 @@
     <?=$this->translate('admin_licence_legend') ?>
     <span class="active_licence"><?= $this->translate('admin_licence_legend_active') ?></span>
     <span class="inactive_licence"><?= $this->translate('admin_licence_legend_inactive') ?></span>
-</div>
-
 </div>

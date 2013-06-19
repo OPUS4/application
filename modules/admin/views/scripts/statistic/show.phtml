@@ -24,70 +24,62 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    View Script
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 ?>
-<div class="adminContainer">
+<h2><?= $this->translate('Total_Number_Documents') ?> : <?= $this->totalNumber ?></h2>
 
-    <div class="breadcrumbsContainer">
-        <?= $this->navigation()->breadcrumbs() ?>
-    </div>
+<h2><?= $this->translate('Month_Overview_Title') ?></h2>
 
-    <h2><?= $this->translate('Total_Number_Documents') ?> : <?= $this->totalNumber ?></h2>
+<table>
+    <tr>
+        <th><?= $this->translate('Month_Title') ?></th>
+        <th><?= $this->translate('Count_Title') ?></th>
+    </tr>
+    <?php foreach ($this->monthStat as $month => $count) : ?>
+    <tr>
+        <td><?= $this->translate('Month_'.$month) ?></td>
+        <td><?= $count ?></td>
+    </tr>
+    <?php endforeach; ?>
+</table>
 
-    <h2><?= $this->translate('Month_Overview_Title') ?></h2>
+<br>
 
-    <table>
-        <tr>
-            <th><?= $this->translate('Month_Title') ?></th>
-            <th><?= $this->translate('Count_Title') ?></th>
-        </tr>
-        <?php foreach ($this->monthStat as $month => $count) : ?>
-        <tr>
-            <td><?= $this->translate('Month_'.$month) ?></td>
-            <td><?= $count ?></td>
-        </tr>
-        <?php endforeach; ?>
-    </table>
+<h2><?= $this->translate('Type_Overview_Title')?></h2>
 
-    <br>
+<table>
+    <tr>
+        <th><?= $this->translate('Doc_Type');?></th>
+        <th><?= $this->translate('Count_Title');?></th>
+    </tr>
+    <?php foreach ($this->typeStat as $type => $count) : ?>
+    <tr>
+        <td><?= htmlspecialchars($this->translate($type)) ?></td>
+        <td><?= $count ?></td>
+    </tr>
+    <?php endforeach;?>
+</table>
 
-    <h2><?= $this->translate('Type_Overview_Title')?></h2>
+<br>
 
-    <table>
-        <tr>
-            <th><?= $this->translate('Doc_Type');?></th>
-            <th><?= $this->translate('Count_Title');?></th>
-        </tr>
-        <?php foreach ($this->typeStat as $type => $count) : ?>
-        <tr>
-            <td><?= htmlspecialchars($this->translate($type)) ?></td>
-            <td><?= $count ?></td>
-        </tr>
-        <?php endforeach;?>
-    </table>
+<h2><?= $this->translate('Institute_Overview_Title') ?></h2>
 
-    <br>
+<table>
+    <tr>
+        <th><?= $this->translate('Institute_Title') ?></th>
+        <th><?= $this->translate('Count_Title') ?></th>
+    </tr>
+    <?php foreach ($this->instStat as $instName => $count) : ?>
+    <tr>
+        <td><?= htmlspecialchars($instName) ?></td>
+        <td><?= $count ?></td>
+    </tr>
+    <?php endforeach; ?>
+</table>
 
-    <h2><?= $this->translate('Institute_Overview_Title') ?></h2>
-
-    <table>
-        <tr>
-            <th><?= $this->translate('Institute_Title') ?></th>
-            <th><?= $this->translate('Count_Title') ?></th>
-        </tr>
-        <?php foreach ($this->instStat as $instName => $count) : ?>
-        <tr>
-            <td><?= htmlspecialchars($instName) ?></td>
-            <td><?= $count ?></td>
-        </tr>
-        <?php endforeach; ?>
-    </table>
-
-    <?= $this->form ?>
-
-</div>
+<?= $this->form ?>

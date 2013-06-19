@@ -157,6 +157,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $view->addScriptPath($libRealPath . '/View/Partials');
         $fieldsetHelper = new View_Helper_FieldsetWithAnker();
         $view->registerHelper($fieldsetHelper, 'fieldset');
+        $breadcrumbsHelper = new View_Helper_Breadcrumbs();
+        $view->registerHelper($breadcrumbsHelper, 'breadcrumbs');
         
         $viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer($view);
 

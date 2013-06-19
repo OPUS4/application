@@ -32,19 +32,9 @@
  */
 ?>
 
-
-
-<div class="adminContainer">
-    
-    <div class="breadcrumbsContainer">
-        <?= $this->navigation()->breadcrumbs() ?>
-    </div>
-
-    <div id="adminMenuContainer">
-        <h3><?= $this->translate('setup_static-page_choose_page') ?></h3>
-        <? foreach ($this->pageNames as $pagename): ?>
-        <div><a href="<?= $this->url(array('action' => 'edit', 'page' => $pagename)) ?>"><?= $this->translate('setup_static-page_edit_'.$pagename) ?></a></div>
-        <? endforeach ?>
-    </div>
-
+<div id="adminMenuContainer">
+    <h3><?= $this->translate('setup_static-page_choose_page') ?></h3>
+    <? foreach ($this->pageNames as $pagename): ?>
+    <div><a href="<?= $this->url(array('action' => 'edit', 'page' => $pagename)) ?>"><?= $this->translate('setup_static-page_edit_'.$pagename) ?></a></div>
+    <? endforeach ?>
 </div>

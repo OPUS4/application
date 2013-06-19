@@ -35,85 +35,79 @@
  */
 ?>
 
-<div class="adminContainer">
-    <div class="breadcrumbsContainer">
-        <?= $this->navigation()->breadcrumbs() ?>
-    </div>
-
-    <div class="collection_new">
-        <a class="add" href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'new')) ?>">
-        <?= $this->translate('admin_collections_role_new') ?>
-        </a>
-    </div>
-
-    <table class="collections">
-    <?php foreach ($this->collectionRoles as $i => $collectionRole) :
-        $translatelabel = 'default_collection_role_' . $collectionRole->getName();
-        $printname = '';
-        if ($translatelabel === $this->translate($translatelabel))
-            $printname = $collectionRole->getName();
-        else
-            $printname = $this->translate($translatelabel);
-        $translationInfoText = $this->translate('admin_collectionroles_translation_key') . ' ' . htmlspecialchars($translatelabel);
-    ?>
-    <tr class="<?= ($i % 2 === 0) ? 'even' : 'odd' ?>">
-        <td class="<?= ($collectionRole->getVisible() === '1') ? 'visible' : 'unvisible' ?>">
-        <?php if (is_null($collectionRole->getRootCollection())) : ?>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'role' => $collectionRole->getId()), null, true)?>" title="<?= $translationInfoText ?>"><?= htmlspecialchars($printname) ?></a>
-        <?php else : ?>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $collectionRole->getRootCollection()->getId()), null, true)?>" title="<?= $translationInfoText ?>"><?= htmlspecialchars($printname) ?></a>
-        <?php endif ?>
-        </td>
-        <td>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'edit', 'roleid' => $collectionRole->getId()), null, true) ?>">
-            <?= $this->translate('admin_collections_role_edit') ?>
-            </a>
-        </td>
-        <?php if ($collectionRole->getVisible() === '1') : ?>
-        <td>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'hide', 'roleid' => $collectionRole->getId()), null, true) ?>">
-            <?= $this->translate('admin_collections_role_hide') ?>
-            </a>
-        </td>
-        <?php else : ?>
-        <td>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'unhide', 'roleid' => $collectionRole->getId()), null, true) ?>">
-            <?= $this->translate('admin_collections_role_unhide') ?>
-            </a>
-        </td>
-        <?php endif ?>
-        <td>
-            <?php if ($i > 0) : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'move', 'roleid' => $collectionRole->getId(), 'pos' => $i), null, true) ?>">
-                <?= $this->translate('admin_collections_role_move_up') ?>
-                </a>
-            <?php endif ?>
-        </td>
-        <td>
-            <?php if ($i < count($this->collectionRoles) - 1) : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'move', 'roleid' => $collectionRole->getId(), 'pos' => $i + 2), null, true)?>">
-                <?= $this->translate('admin_collections_role_move_down') ?>
-                </a>
-            <?php endif ?>
-        </td>
-        <td>
-            <?php if (!is_null($collectionRole->getRootCollection()) && count($collectionRole->getRootCollection()->getDocumentIds()) > 0)  : ?>
-                <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'collectionid' => $collectionRole->getRootCollection()->getId()), null, true) ?>">
-                <?= $this->translate('admin_collections_role_show_associated') ?>
-                </a>
-            <?php else: ?>
-                <span class="unavailable"><?= $this->translate('admin_collections_no_associated') ?></span>
-            <?php endif ?>
-        </td>
-        <td>
-            <?php
-            $confirmKey = (is_null($collectionRole->getRootCollection()) || !$collectionRole->getRootCollection()->hasChildren()) ? 'confirm_deletion_empty' : 'confirm_deletion'
-            ?>
-            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'delete', 'roleid' => $collectionRole->getId()), null, true) ?>" onclick="return confirm('<?= $this->translate($confirmKey) ?>');">
-            <?= $this->translate('admin_collections_role_delete') ?>
-            </a>
-        </td>
-    </tr>
-    <?php endforeach ?>
-    </table>
+<div class="collection_new">
+    <a class="add" href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'new')) ?>">
+    <?= $this->translate('admin_collections_role_new') ?>
+    </a>
 </div>
+
+<table class="collections">
+<?php foreach ($this->collectionRoles as $i => $collectionRole) :
+    $translatelabel = 'default_collection_role_' . $collectionRole->getName();
+    $printname = '';
+    if ($translatelabel === $this->translate($translatelabel))
+        $printname = $collectionRole->getName();
+    else
+        $printname = $this->translate($translatelabel);
+    $translationInfoText = $this->translate('admin_collectionroles_translation_key') . ' ' . htmlspecialchars($translatelabel);
+?>
+<tr class="<?= ($i % 2 === 0) ? 'even' : 'odd' ?>">
+    <td class="<?= ($collectionRole->getVisible() === '1') ? 'visible' : 'unvisible' ?>">
+    <?php if (is_null($collectionRole->getRootCollection())) : ?>
+        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'role' => $collectionRole->getId()), null, true)?>" title="<?= $translationInfoText ?>"><?= htmlspecialchars($printname) ?></a>
+    <?php else : ?>
+        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $collectionRole->getRootCollection()->getId()), null, true)?>" title="<?= $translationInfoText ?>"><?= htmlspecialchars($printname) ?></a>
+    <?php endif ?>
+    </td>
+    <td>
+        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'edit', 'roleid' => $collectionRole->getId()), null, true) ?>">
+        <?= $this->translate('admin_collections_role_edit') ?>
+        </a>
+    </td>
+    <?php if ($collectionRole->getVisible() === '1') : ?>
+    <td>
+        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'hide', 'roleid' => $collectionRole->getId()), null, true) ?>">
+        <?= $this->translate('admin_collections_role_hide') ?>
+        </a>
+    </td>
+    <?php else : ?>
+    <td>
+        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'unhide', 'roleid' => $collectionRole->getId()), null, true) ?>">
+        <?= $this->translate('admin_collections_role_unhide') ?>
+        </a>
+    </td>
+    <?php endif ?>
+    <td>
+        <?php if ($i > 0) : ?>
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'move', 'roleid' => $collectionRole->getId(), 'pos' => $i), null, true) ?>">
+            <?= $this->translate('admin_collections_role_move_up') ?>
+            </a>
+        <?php endif ?>
+    </td>
+    <td>
+        <?php if ($i < count($this->collectionRoles) - 1) : ?>
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'move', 'roleid' => $collectionRole->getId(), 'pos' => $i + 2), null, true)?>">
+            <?= $this->translate('admin_collections_role_move_down') ?>
+            </a>
+        <?php endif ?>
+    </td>
+    <td>
+        <?php if (!is_null($collectionRole->getRootCollection()) && count($collectionRole->getRootCollection()->getDocumentIds()) > 0)  : ?>
+            <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'documents', 'action' => 'index', 'collectionid' => $collectionRole->getRootCollection()->getId()), null, true) ?>">
+            <?= $this->translate('admin_collections_role_show_associated') ?>
+            </a>
+        <?php else: ?>
+            <span class="unavailable"><?= $this->translate('admin_collections_no_associated') ?></span>
+        <?php endif ?>
+    </td>
+    <td>
+        <?php
+        $confirmKey = (is_null($collectionRole->getRootCollection()) || !$collectionRole->getRootCollection()->hasChildren()) ? 'confirm_deletion_empty' : 'confirm_deletion'
+        ?>
+        <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'delete', 'roleid' => $collectionRole->getId()), null, true) ?>" onclick="return confirm('<?= $this->translate($confirmKey) ?>');">
+        <?= $this->translate('admin_collections_role_delete') ?>
+        </a>
+    </td>
+</tr>
+<?php endforeach ?>
+</table>

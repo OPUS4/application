@@ -34,17 +34,9 @@
  */
 ?>
 
-<div class="adminContainer">
-
-    <div class="breadcrumbsContainer">
-        <?= $this->navigation()->breadcrumbs() ?>
-    </div>
-
 <table>
     <tr>
         <td><?= $this->translate('admin_role_label_name') ?></td>
         <td><?= htmlspecialchars($this->role->getDisplayName()) ?></td>
     </tr>
 </table>
-
-</div>

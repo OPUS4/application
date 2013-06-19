@@ -33,15 +33,9 @@
  */
 ?>
 
-<div class="adminContainer">
-
-    <div class="breadcrumbsContainer">
-    <?= $this->navigation()->breadcrumbs() ?>
-    </div>
-
-    <div>
-    <a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_enrichmentkey_new') ?></a>
-    </div>
+<div>
+<a href="<?= $this->url(array('action' => 'new')) ?>"><?= $this->translate('admin_enrichmentkey_new') ?></a>
+</div>
 
 <table>
     <? foreach($this->enrichmentkeys as $name => $enrichmentkey) : ?>
@@ -58,5 +52,3 @@
       </tr>
     <? endforeach; ?>
 </table>
-
-</div>

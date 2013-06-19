@@ -36,10 +36,6 @@
  */
 ?>
 
-<div class="breadcrumbsContainer">
-    <div class="wrapper"><?= $this->navigation()->breadcrumbs() ?></div>
-</div>
-
 <?PHP if (empty($this->collection) and empty($this->series)) : ?>
 <div style="text-align: center; margin: 0.1em 0em">
     <form action="<?= $this->url_call_id ?>" method="post" class="crud">

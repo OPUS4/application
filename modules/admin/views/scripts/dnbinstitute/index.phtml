@@ -33,13 +33,6 @@
  * @version     $Id$
  */
 ?>
-
-<div class="adminContainer">
-
-<div class="breadcrumbsContainer">
-<?= $this->navigation()->breadcrumbs() ?>
-</div>
-
 <table>
     <? foreach($this->entries as $id => $entry) : ?>
     <tr>
@@ -58,5 +51,3 @@
 <form action="<?= $this->url(array('action' => 'new')) ?>" class="crud" method="get">
   <input type='submit' value='<?= $this->translate('ButtonNew') ?>' class="crud">
 </form>
-
-</div>

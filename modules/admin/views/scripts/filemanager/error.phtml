@@ -32,12 +32,6 @@
  */
 ?>
 
-<div class="adminContainer">
-
-    <div class="breadcrumbsContainer">
-        <?= $this->navigation()->breadcrumbs() ?>
-    </div>
-
 <a href="<?= $this->editUrl ?>"><?= $this->translate('admin_documents_edit'); ?></a>
 
 <?= $this->uploadform ?>
@@ -45,5 +39,3 @@
 <?= $this->actionresult ?>
 
 <?= $this->noDocumentSelectedMessage ?>
-
-</div>

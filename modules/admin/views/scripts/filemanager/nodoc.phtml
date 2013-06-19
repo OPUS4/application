@@ -32,22 +32,14 @@
  */
 ?>
 
-<div class="adminContainer">
+<a href="<?= $this->editUrl ?>"><?= $this->translate('admin_documents_edit'); ?></a>
 
-    <div class="breadcrumbsContainer">
-        <?= $this->navigation()->breadcrumbs() ?>
-    </div>
+<div id="upload-form">
+<?= $this->uploadform ?>
+</div>
 
-    <a href="<?= $this->editUrl ?>"><?= $this->translate('admin_documents_edit'); ?></a>
+<?= $this->actionresult ?>
 
-    <div id="upload-form">
-    <?= $this->uploadform ?>
-    </div>
-
-    <?= $this->actionresult ?>
-
-    <div>
-        <?= $this->translate('admin_filemanager_no_files') ?>
-    </div>
-
+<div>
+    <?= $this->translate('admin_filemanager_no_files') ?>
 </div>
