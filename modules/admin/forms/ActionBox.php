@@ -51,6 +51,13 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     private $document;
     
     private $mode = self::MODE_EDIT;
+    
+    private $parentForm;
+    
+    public function __construct($parentForm, $options = null) {
+        parent::__construct($options);
+        $this->parentForm = $parentForm;
+    }
 
     public function init() {
         parent::init();
@@ -94,22 +101,27 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     /**
      * 
      * @return string
-     * 
-     * TODO Über clevere Lösung zum automatischen Generieren aus der Formularstruktur nachdenken.
      */
     public function getJumpLinks() {
         $links = array();
         
-        $links['#fieldset-General'] = 'Allgemeines';
-        $links['#fieldset-Persons'] = 'Personen';
-        $links['#fieldset-Titles'] = 'Titles';
-        $links['#fieldset-Series'] = 'Schriftenreihe';
-        $links['#fieldset-Enrichments'] = 'Erweiterung';
-        $links['#fieldset-Collections'] = 'Collection';
-        $links['#fieldset-Identifiers'] = 'Identifier';
-        $links['#fieldset-Licences'] = 'Lizenzen';
-        $links['#fieldset-Patents'] = 'Patentinformationen';
-        $links['#fieldset-Notes'] = 'Bemerkung';
+        if ($this->parentForm != null) {
+            $subforms = $this->parentForm->getSubForms();
+            
+            foreach ($subforms as $name => $subform) {
+                if (!is_null($subform->getDecorator('Fieldset'))) {
+                    // Unterformular mit Fieldset
+                    $legend = $subform->getLegend();
+                    if (!is_null($legend)) {
+                        $links['#fieldset-' . $name] = $legend;
+                    }
+                }
+            }
+        }
+        else {
+            // Sollte niemals passieren
+            Zend_Registry::get('Zend_Log')->err('ActionBox without parent form');
+        }
         
         return $links;
     }

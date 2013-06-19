@@ -82,7 +82,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         
         $this->setDecorators(array('FormElements'));
         
-        $this->addSubForm(new Admin_Form_ActionBox(), 'ActionBox');
+        $this->addSubForm(new Admin_Form_ActionBox($this), 'ActionBox');
         
         $subform = new Admin_Form_InfoBox();
         $subform->addDecorator(array('wrapperDiv' => 'HtmlTag'), 
