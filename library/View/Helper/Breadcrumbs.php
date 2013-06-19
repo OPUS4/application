@@ -37,6 +37,13 @@
  */
 class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
     
+    private $suffix = null;
+    
+    public function setSuffix($suffix) {
+        $this->suffix = $suffix;
+        return $this;
+    }
+    
     /**
      * Rendert den kompletten Breadcrumbs Pfad für die aktuelle Seite.
      * 
@@ -46,7 +53,13 @@ class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
     public function renderStraight(Zend_Navigation_Container $container = null) {
         $html = parent::renderStraight($container);
         
-        $html = '<div class="breadcrumbsContainer"><div class="wrapper">' . $html . '</div></div>';
+        $html = '<div class="breadcrumbsContainer"><div class="wrapper">' . $html;
+        
+        if (!is_null($this->suffix)) {
+            $html .= ' ' . $this->getSeparator() . ' ' . $this->suffix;
+        }
+        
+        $html .= '</div></div>';
         
         return strlen($html) ? $this->getIndent() . $html : '';
     }

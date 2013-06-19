@@ -35,11 +35,11 @@
 ?>
 
 
-<div class="breadcrumbsContainer">
-    <div class="wrapper"><?= $this->navigation()->breadcrumbs()->setMaxDepth(1)->setLinkLast(true) ?> &gt;
-        <?= htmlspecialchars($this->documentAdapter->getMainTitle()) ?>
-        (<?= $this->document->getId() ?>) &gt; <?= $this->translate('admin_document_edit') ?></div>
-</div>
+<?= $this->navigation()->breadcrumbs()->setMaxDepth(1)->setLinkLast(true)->setSuffix(
+        htmlspecialchars($this->documentAdapter->getMainTitle())
+        . ' (' . $this->document->getId() . ')' . ' ' 
+        . $this->navigation()->breadcrumbs()->getSeparator()
+        . ' ' . $this->translate('admin_document_edit')) ?> 
 
 <?php if (isset($this->message)) : ?>
     <div class="form-hint form-errors"><?= $this->message ?></div>

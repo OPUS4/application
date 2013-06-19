@@ -33,10 +33,7 @@
  */
 ?>
 
-<div class="breadcrumbsContainer">
-    <div class="wrapper"><?= $this->navigation()->breadcrumbs()->setMaxDepth(1)->setLinkLast(true) ?> &gt;
-        <?= htmlspecialchars($this->documentAdapter->getMainTitle()) ?>
-        (<?= $this->document->getId() ?>)</div>
-</div>
+<?= $this->navigation()->breadcrumbs()->setMaxDepth(1)->setLinkLast(true)->setSuffix(
+        htmlspecialchars($this->documentAdapter->getMainTitle()) . ' (' . $this->document->getId() . ')') ?>
 
 <?= $this->form ?>

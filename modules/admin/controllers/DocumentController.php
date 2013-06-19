@@ -102,6 +102,7 @@ class Admin_DocumentController extends Controller_Action {
             $form->prepareRenderingAsView();
             
             $this->view->form = new Admin_Form_Wrapper($form);
+            $this->view->breadcrumbsDisabled = true;
             
             return $document;
         }
@@ -232,6 +233,7 @@ class Admin_DocumentController extends Controller_Action {
         
         // Beim wechseln der Sprache würden Änderungen in editierten Felder verloren gehen
         $this->view->languageSelectorDisabled = true;
+        $this->view->breadcrumbsDisabled = true;
     }
 
     /**
