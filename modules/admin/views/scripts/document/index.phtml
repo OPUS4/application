@@ -32,14 +32,11 @@
  * @version     $Id$
  */
 ?>
-<div id="content" class="opus adminContainer">
 
-    <div class="breadcrumbsContainer">
-        <div class="wrapper"><?= $this->navigation()->breadcrumbs()->setMaxDepth(1)->setLinkLast(true) ?> &gt;
-            <?= htmlspecialchars($this->documentAdapter->getMainTitle()) ?>
-            (<?= $this->document->getId() ?>)</div>
-    </div>
-        
-    <?= $this->form ?>
-    
+<div class="breadcrumbsContainer">
+    <div class="wrapper"><?= $this->navigation()->breadcrumbs()->setMaxDepth(1)->setLinkLast(true) ?> &gt;
+        <?= htmlspecialchars($this->documentAdapter->getMainTitle()) ?>
+        (<?= $this->document->getId() ?>)</div>
 </div>
+
+<?= $this->form ?>
