@@ -56,7 +56,7 @@ else {
     <li class="<?= $page->group ?> <?= $page->colclass ?>"><a href="<?= $page->getHref() ?>"><strong><?= $this->translate($page->label) ?></strong><br/>
     <?= $this->translate($page->description) ?></a></li>
     <?PHP else : ?>
-    <li class="<?= $page->group ?> inactive"><strong><?= $this->translate($page->label) ?></strong></li>
+    <li class="<?= $page->group ?> <?= $page->colclass ?> inactive"><strong><?= $this->translate($page->label) ?></strong></li>
     <?PHP endif; ?>
     <?PHP endif; ?>
     <?PHP endforeach; ?>
