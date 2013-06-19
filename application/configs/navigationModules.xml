@@ -22,6 +22,7 @@
                     <label>admin_title_documents</label>
                     <description>admin_title_documents_description</description>
                     <group>group-cappuccino</group>
+                    <colclass>cols-one-half</colclass>
                     <module>admin</module>
                     <controller>documents</controller>
                     <action>index</action>
@@ -118,6 +119,7 @@
                     <label>review_menu_label</label>
                     <description>review_menu_label_description</description>
                     <group>group-cappuccino</group>
+                    <colclass>cols-one-half</colclass>
                     <module>review</module>
                     <controller>index</controller>
                     <action>index</action>
@@ -128,7 +130,7 @@
                     <type>mvc</type>
                     <label>admin_title_bibtexupload</label>
                     <description>admin_title_bibtexupload_description</description>
-                    <group></group>
+                    <group>hidden</group>
                     <module>admin</module>
                     <controller>bibtexupload</controller>
                     <action>index</action>

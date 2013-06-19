@@ -49,13 +49,15 @@ else {
 <?PHP if (!is_null($parent)) : ?>
 <ul class="menu">
     <?PHP foreach ($parent->getPages() as $page) : ?>
+    <?PHP if ($page->group !== 'hidden') : ?>
     <?PHP if (is_null($acl) || $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, 
             $page->getResource(), $page->getPrivilege()) 
             || !$acl->has($page->getResource())) : ?>
-    <li class="<?= $page->group ?>"><a href="<?= $page->getHref() ?>"><strong><?= $this->translate($page->label) ?></strong><br/>
+    <li class="<?= $page->group ?> <?= $page->colclass ?>"><a href="<?= $page->getHref() ?>"><strong><?= $this->translate($page->label) ?></strong><br/>
     <?= $this->translate($page->description) ?></a></li>
     <?PHP else : ?>
     <li class="<?= $page->group ?> inactive"><strong><?= $this->translate($page->label) ?></strong></li>
+    <?PHP endif; ?>
     <?PHP endif; ?>
     <?PHP endforeach; ?>
 </ul>
