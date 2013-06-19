@@ -21,7 +21,7 @@
                     <type>mvc</type>
                     <label>admin_title_documents</label>
                     <description>admin_title_documents_description</description>
-                    <group>group-cappuccino</group>
+                    <group>group-mint</group>
                     <colclass>cols-one-half</colclass>
                     <module>admin</module>
                     <controller>documents</controller>
@@ -118,7 +118,7 @@
                     <type>mvc</type>
                     <label>review_menu_label</label>
                     <description>review_menu_label_description</description>
-                    <group>group-cappuccino</group>
+                    <group>group-mint</group>
                     <colclass>cols-one-half</colclass>
                     <module>review</module>
                     <controller>index</controller>
@@ -126,6 +126,275 @@
                     <resource>reviewing</resource>
                 </review>
 
+                <collections>
+                    <type>mvc</type>
+                    <label>admin_title_collections</label>
+                    <description>admin_title_collections_description</description>
+                    <group>group-sky</group>
+                    <module>admin</module>
+                    <controller>collectionroles</controller>
+                    <action>index</action>
+                    <resource>collections</resource>
+                    <pages>
+                        <collection>
+                            <type>mvc</type>
+                            <label>admin_collection_index</label>
+                            <module>admin</module>
+                            <controller>collection</controller>
+                            <action>index</action>
+                            <pages>
+                                <new>
+                                    <type>mvc</type>
+                                    <label>admin_collection_new</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>new</action>
+                                </new>
+                                <edit>
+                                    <type>mvc</type>
+                                    <label>admin_collection_edit</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>edit</action>
+                                </edit>
+                                <move>
+                                    <type>mvc</type>
+                                    <label>admin_collection_move</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>move</action>
+                                </move>
+                                <hide>
+                                    <type>mvc</type>
+                                    <label>admin_collection_hide</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>hide</action>
+                                </hide>
+                                <unhide>
+                                    <type>mvc</type>
+                                    <label>admin_collection_unhide</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>unhide</action>
+                                </unhide>
+                                <delete>
+                                    <type>mvc</type>
+                                    <label>admin_collection_delete</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>delete</action>
+                                </delete>
+                                <show>
+                                    <type>mvc</type>
+                                    <label>admin_collection_show</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>show</action>
+                                </show>
+                                <create>
+                                    <type>mvc</type>
+                                    <label>admin_collection_create</label>
+                                    <module>admin</module>
+                                    <controller>collection</controller>
+                                    <action>create</action>
+                                </create>
+                            </pages>
+                        </collection>
+                    </pages>
+                </collections>
+                
+                <series>
+                    <type>mvc</type>
+                    <label>admin_title_series</label>
+                    <description>admin_title_series_description</description>
+                    <group>group-sky</group>
+                    <module>admin</module>
+                    <controller>series</controller>
+                    <action>index</action>
+                    <resource>series</resource>
+                    <pages>
+                        <show>
+                            <type>mvc</type>
+                            <label>admin_series_show</label>
+                            <module>admin</module>
+                            <controller>series</controller>
+                            <action>show</action>
+                        </show>
+                        <new>
+                            <type>mvc</type>
+                            <label>admin_series_show</label>
+                            <module>admin</module>
+                            <controller>series</controller>
+                            <action>new</action>
+                        </new>
+                        <edit>
+                            <type>mvc</type>
+                            <label>admin_series_show</label>
+                            <module>admin</module>
+                            <controller>series</controller>
+                            <action>edit</action>
+                        </edit>
+                    </pages>
+                </series>                
+
+                <licence>
+                    <type>mvc</type>
+                    <label>admin_title_licence</label>
+                    <description>admin_title_licence_description</description>
+                    <group>group-sky</group>
+                    <module>admin</module>
+                    <controller>licence</controller>
+                    <action>index</action>
+                    <resource>licences</resource>
+                    <pages>
+                        <show>
+                            <type>mvc</type>
+                            <label>admin_licence_show</label>
+                            <module>admin</module>
+                            <controller>licence</controller>
+                            <action>show</action>
+                        </show>
+
+                        <new>
+                            <type>mvc</type>
+                            <label>admin_licence_new</label>
+                            <module>admin</module>
+                            <controller>licence</controller>
+                            <action>new</action>
+                        </new>
+
+                        <create>
+                            <type>mvc</type>
+                            <label>admin_licence_new</label>
+                            <module>admin</module>
+                            <controller>licence</controller>
+                            <action>create</action>
+                        </create>
+
+                        <edit>
+                            <type>mvc</type>
+                            <label>admin_licence_edit</label>
+                            <module>admin</module>
+                            <controller>licence</controller>
+                            <action>edit</action>
+                        </edit>
+
+                        <update>
+                            <type>mvc</type>
+                            <label>admin_licence_edit</label>
+                            <module>admin</module>
+                            <controller>licence</controller>
+                            <action>update</action>
+                        </update>
+                    </pages>
+                </licence>
+
+                <languages>
+                    <type>mvc</type>
+                    <label>admin_title_languages</label>
+                    <description>admin_title_languages_description</description>
+                    <group>group-sky</group>
+                    <module>admin</module>
+                    <controller>language</controller>
+                    <action>index</action>
+                    <resource>languages</resource>
+                    <pages>                        
+                        <show>
+                            <type>mvc</type>
+                            <label>admin_language_show</label>
+                            <module>admin</module>
+                            <controller>language</controller>
+                            <action>show</action>
+                        </show>
+
+                        <new>
+                            <type>mvc</type>
+                            <label>admin_language_new</label>
+                            <module>admin</module>
+                            <controller>language</controller>
+                            <action>new</action>
+                        </new>
+
+                        <create>
+                            <type>mvc</type>
+                            <label>admin_language_new</label>
+                            <module>admin</module>
+                            <controller>language</controller>
+                            <action>create</action>
+                        </create>
+
+                        <edit>
+                            <type>mvc</type>
+                            <label>admin_language_edit</label>
+                            <module>admin</module>
+                            <controller>language</controller>
+                            <action>edit</action>
+                        </edit>
+
+                        <update>
+                            <type>mvc</type>
+                            <label>admin_language_edit</label>
+                            <module>admin</module>
+                            <controller>language</controller>
+                            <action>update</action>
+                        </update>
+                        
+                        <dispatch>
+                            <!-- Musste angelegt werden damit Breadcrumbs für Edit-Seite auftauchen -->
+                            <type>mvc</type>
+                            <label>admin_language_edit</label>
+                            <module>admin</module>
+                            <controller>language</controller>
+                            <action>dispatch</action>
+                        </dispatch>
+                    </pages>
+                </languages>
+
+                <dnbInstitute>
+                    <type>mvc</type>
+                    <label>admin_title_dnbinstitute</label>
+                    <description>admin_title_dnbinstitute_description</description>
+                    <group>group-sky</group>
+                    <module>admin</module>
+                    <controller>dnbinstitute</controller>
+                    <action>index</action>
+                    <resource>institutions</resource>
+                    <pages>
+                        <show>
+                            <type>mvc</type>
+                            <label>admin_dnbinstitute_show</label>
+                            <module>admin</module>
+                            <controller>dnbinstitute</controller>
+                            <action>show</action>
+                        </show>
+
+                        <new>
+                            <type>mvc</type>
+                            <label>admin_dnbinstitute_new</label>
+                            <module>admin</module>
+                            <controller>dnbinstitute</controller>
+                            <action>new</action>
+                        </new>
+
+                        <create>
+                            <type>mvc</type>
+                            <label>admin_dnbinstitute_new</label>
+                            <module>admin</module>
+                            <controller>dnbinstitute</controller>
+                            <action>create</action>
+                        </create>
+
+                        <edit>
+                            <type>mvc</type>
+                            <label>admin_dnbinstitute_edit</label>
+                            <module>admin</module>
+                            <controller>dnbinstitute</controller>
+                            <action>edit</action>
+                        </edit>
+                    </pages>
+                </dnbInstitute>
+                                                                                                
                 <upload>
                     <type>mvc</type>
                     <label>admin_title_bibtexupload</label>
@@ -135,59 +404,7 @@
                     <controller>bibtexupload</controller>
                     <action>index</action>
                 </upload>
-                
-                <accounts>
-                    <type>mvc</type>
-                    <label>admin_security_title_accounts</label>
-                    <description>admin_security_title_accounts_description</description>
-                    <group>group-tomato</group>
-                    <module>admin</module>
-                    <controller>account</controller>
-                    <action>index</action>
-                    <resource>accounts</resource>
-                    <pages>
-                        <show>
-                            <type>mvc</type>
-                            <label>admin_account_show</label>
-                            <module>admin</module>
-                            <controller>account</controller>
-                            <action>show</action>
-                        </show>
-
-                        <new>
-                            <type>mvc</type>
-                            <label>admin_account_new</label>
-                            <module>admin</module>
-                            <controller>account</controller>
-                            <action>new</action>
-                        </new>
-
-                        <create>
-                            <type>mvc</type>
-                            <label>admin_account_new</label>
-                            <module>admin</module>
-                            <controller>account</controller>
-                            <action>create</action>
-                        </create>
-
-                        <edit>
-                            <type>mvc</type>
-                            <label>admin_account_edit</label>
-                            <module>admin</module>
-                            <controller>account</controller>
-                            <action>edit</action>
-                        </edit>
-
-                        <update>
-                            <type>mvc</type>
-                            <label>admin_account_edit</label>
-                            <module>admin</module>
-                            <controller>account</controller>
-                            <action>update</action>
-                        </update>
-                    </pages>
-                </accounts>
-
+             
                 <security>
                     <type>mvc</type>
                     <label>admin_title_security</label>
@@ -198,6 +415,58 @@
                     <action>index</action>
                     <resource>security</resource>
                     <pages>
+                        <accounts>
+                            <type>mvc</type>
+                            <label>admin_security_title_accounts</label>
+                            <description>admin_security_title_accounts_description</description>
+                            <group>group-tomato</group>
+                            <module>admin</module>
+                            <controller>account</controller>
+                            <action>index</action>
+                            <resource>accounts</resource>
+                            <pages>
+                                <show>
+                                    <type>mvc</type>
+                                    <label>admin_account_show</label>
+                                    <module>admin</module>
+                                    <controller>account</controller>
+                                    <action>show</action>
+                                </show>
+
+                                <new>
+                                    <type>mvc</type>
+                                    <label>admin_account_new</label>
+                                    <module>admin</module>
+                                    <controller>account</controller>
+                                    <action>new</action>
+                                </new>
+
+                                <create>
+                                    <type>mvc</type>
+                                    <label>admin_account_new</label>
+                                    <module>admin</module>
+                                    <controller>account</controller>
+                                    <action>create</action>
+                                </create>
+
+                                <edit>
+                                    <type>mvc</type>
+                                    <label>admin_account_edit</label>
+                                    <module>admin</module>
+                                    <controller>account</controller>
+                                    <action>edit</action>
+                                </edit>
+
+                                <update>
+                                    <type>mvc</type>
+                                    <label>admin_account_edit</label>
+                                    <module>admin</module>
+                                    <controller>account</controller>
+                                    <action>update</action>
+                                </update>
+                            </pages>
+                        </accounts>
+                        
                         <roles>
                             <type>mvc</type>
                             <label>admin_security_title_roles</label>
@@ -315,472 +584,223 @@
                         </ipranges>
                     </pages>
                 </security>
-
-                <licence>
+                
+                <setup>
                     <type>mvc</type>
-                    <label>admin_title_licence</label>
-                    <description>admin_title_licence_description</description>
-                    <group>group-sky</group>
+                    <label>admin_title_setup</label>
+                    <description>admin_title_setup_description</description>
+                    <group>group-cafelatte</group>
                     <module>admin</module>
-                    <controller>licence</controller>
+                    <controller>setup</controller>
                     <action>index</action>
-                    <resource>licences</resource>
                     <pages>
-                        <show>
+                        <enrichmentKey>
                             <type>mvc</type>
-                            <label>admin_licence_show</label>
+                            <label>admin_title_enrichmentkey</label>
+                            <description>admin_title_enrichmentkey_description</description>
+                            <group>group-cafelatte</group>
                             <module>admin</module>
-                            <controller>licence</controller>
-                            <action>show</action>
-                        </show>
-
-                        <new>
-                            <type>mvc</type>
-                            <label>admin_licence_new</label>
-                            <module>admin</module>
-                            <controller>licence</controller>
-                            <action>new</action>
-                        </new>
-
-                        <create>
-                            <type>mvc</type>
-                            <label>admin_licence_new</label>
-                            <module>admin</module>
-                            <controller>licence</controller>
-                            <action>create</action>
-                        </create>
-
-                        <edit>
-                            <type>mvc</type>
-                            <label>admin_licence_edit</label>
-                            <module>admin</module>
-                            <controller>licence</controller>
-                            <action>edit</action>
-                        </edit>
-
-                        <update>
-                            <type>mvc</type>
-                            <label>admin_licence_edit</label>
-                            <module>admin</module>
-                            <controller>licence</controller>
-                            <action>update</action>
-                        </update>
-                    </pages>
-                </licence>
-
-                <collections>
-                    <type>mvc</type>
-                    <label>admin_title_collections</label>
-                    <description>admin_title_collections_description</description>
-                    <group>group-sky</group>
-                    <module>admin</module>
-                    <controller>collectionroles</controller>
-                    <action>index</action>
-                    <resource>collections</resource>
-                    <pages>
-                        <collection>
-                            <type>mvc</type>
-                            <label>admin_collection_index</label>
-                            <module>admin</module>
-                            <controller>collection</controller>
+                            <controller>enrichmentkey</controller>
                             <action>index</action>
+                            <resource>enrichments</resource>
                             <pages>
-                                <new>
-                                    <type>mvc</type>
-                                    <label>admin_collection_new</label>
-                                    <module>admin</module>
-                                    <controller>collection</controller>
-                                    <action>new</action>
-                                </new>
-                                <edit>
-                                    <type>mvc</type>
-                                    <label>admin_collection_edit</label>
-                                    <module>admin</module>
-                                    <controller>collection</controller>
-                                    <action>edit</action>
-                                </edit>
-                                <move>
-                                    <type>mvc</type>
-                                    <label>admin_collection_move</label>
-                                    <module>admin</module>
-                                    <controller>collection</controller>
-                                    <action>move</action>
-                                </move>
-                                <hide>
-                                    <type>mvc</type>
-                                    <label>admin_collection_hide</label>
-                                    <module>admin</module>
-                                    <controller>collection</controller>
-                                    <action>hide</action>
-                                </hide>
-                                <unhide>
-                                    <type>mvc</type>
-                                    <label>admin_collection_unhide</label>
-                                    <module>admin</module>
-                                    <controller>collection</controller>
-                                    <action>unhide</action>
-                                </unhide>
-                                <delete>
-                                    <type>mvc</type>
-                                    <label>admin_collection_delete</label>
-                                    <module>admin</module>
-                                    <controller>collection</controller>
-                                    <action>delete</action>
-                                </delete>
                                 <show>
                                     <type>mvc</type>
-                                    <label>admin_collection_show</label>
+                                    <label>admin_enrichmentkey_show</label>
                                     <module>admin</module>
-                                    <controller>collection</controller>
+                                    <controller>enrichmentkey</controller>
                                     <action>show</action>
                                 </show>
+
+                                <new>
+                                    <type>mvc</type>
+                                    <label>admin_enrichmentkey_new</label>
+                                    <module>admin</module>
+                                    <controller>enrichmentkey</controller>
+                                    <action>new</action>
+                                </new>
+
                                 <create>
                                     <type>mvc</type>
-                                    <label>admin_collection_create</label>
+                                    <label>admin_enrichmentkey_new</label>
                                     <module>admin</module>
-                                    <controller>collection</controller>
+                                    <controller>enrichmentkey</controller>
                                     <action>create</action>
                                 </create>
+
+                                <edit>
+                                    <type>mvc</type>
+                                    <label>admin_enrichmentkey_edit</label>
+                                    <module>admin</module>
+                                    <controller>enrichmentkey</controller>
+                                    <action>edit</action>
+                                </edit>
                             </pages>
-                        </collection>
-                    </pages>
-                </collections>
-
-                <series>
-                    <type>mvc</type>
-                    <label>admin_title_series</label>
-                    <description>admin_title_series_description</description>
-                    <group>group-sky</group>
-                    <module>admin</module>
-                    <controller>series</controller>
-                    <action>index</action>
-                    <resource>series</resource>
-                    <pages>
-                        <show>
-                            <type>mvc</type>
-                            <label>admin_series_show</label>
-                            <module>admin</module>
-                            <controller>series</controller>
-                            <action>show</action>
-                        </show>
-                        <new>
-                            <type>mvc</type>
-                            <label>admin_series_show</label>
-                            <module>admin</module>
-                            <controller>series</controller>
-                            <action>new</action>
-                        </new>
-                        <edit>
-                            <type>mvc</type>
-                            <label>admin_series_show</label>
-                            <module>admin</module>
-                            <controller>series</controller>
-                            <action>edit</action>
-                        </edit>
-                    </pages>
-                </series>
-
-                <languages>
-                    <type>mvc</type>
-                    <label>admin_title_languages</label>
-                    <description>admin_title_languages_description</description>
-                    <group>group-sky</group>
-                    <module>admin</module>
-                    <controller>language</controller>
-                    <action>index</action>
-                    <resource>languages</resource>
-                    <pages>                        
-                        <show>
-                            <type>mvc</type>
-                            <label>admin_language_show</label>
-                            <module>admin</module>
-                            <controller>language</controller>
-                            <action>show</action>
-                        </show>
-
-                        <new>
-                            <type>mvc</type>
-                            <label>admin_language_new</label>
-                            <module>admin</module>
-                            <controller>language</controller>
-                            <action>new</action>
-                        </new>
-
-                        <create>
-                            <type>mvc</type>
-                            <label>admin_language_new</label>
-                            <module>admin</module>
-                            <controller>language</controller>
-                            <action>create</action>
-                        </create>
-
-                        <edit>
-                            <type>mvc</type>
-                            <label>admin_language_edit</label>
-                            <module>admin</module>
-                            <controller>language</controller>
-                            <action>edit</action>
-                        </edit>
-
-                        <update>
-                            <type>mvc</type>
-                            <label>admin_language_edit</label>
-                            <module>admin</module>
-                            <controller>language</controller>
-                            <action>update</action>
-                        </update>
+                        </enrichmentKey>
                         
-                        <dispatch>
-                            <!-- Musste angelegt werden damit Breadcrumbs für Edit-Seite auftauchen -->
+                        <help-page>
                             <type>mvc</type>
-                            <label>admin_language_edit</label>
-                            <module>admin</module>
+                            <label>setup_title_help-page</label>
+                            <description>setup_title_help-page_description</description>
+                            <group>group-cafelatte</group>
+                            <module>setup</module>
+                            <controller>help-page</controller>
+                            <action>index</action>
+                            <pages>
+                                <error>
+                                    <type>mvc</type>
+                                    <label>setup_error</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>error</action>
+                                </error>
+                            </pages>
+                        </help-page>
+
+                        <static-page>
+                            <type>mvc</type>
+                            <label>setup_title_static-page</label>
+                            <description>setup_title_static-page_description</description>
+                            <group>group-cafelatte</group>
+                            <module>setup</module>
+                            <controller>static-page</controller>
+                            <action>index</action>
+                            <pages>
+                                <edit>
+                                    <type>mvc</type>
+                                    <label>setup_static-page_edit_contact</label>
+                                    <module>setup</module>
+                                    <controller>static-page</controller>
+                                    <action>edit</action>
+                                    <params>
+                                        <page>contact</page>
+                                    </params>
+                                </edit>
+                                <edit-home>
+                                    <type>mvc</type>
+                                    <label>setup_static-page_edit_imprint</label>
+                                    <module>setup</module>
+                                    <controller>static-page</controller>
+                                    <action>edit</action>
+                                    <params>
+                                        <page>imprint</page>
+                                    </params>
+                                </edit-home>
+                                <edit-imprint>
+                                    <type>mvc</type>
+                                    <label>setup_static-page_edit_home</label>
+                                    <module>setup</module>
+                                    <controller>static-page</controller>
+                                    <action>edit</action>
+                                    <params>
+                                        <page>home</page>
+                                    </params>
+                                </edit-imprint>
+                                <error>
+                                    <type>mvc</type>
+                                    <label>setup_error</label>
+                                    <module>setup</module>
+                                    <controller>static-page</controller>
+                                    <action>error</action>
+                                </error>
+                            </pages>
+                        </static-page>
+
+                        <translation>
+                            <type>mvc</type>
+                            <label>setup_title_translation</label>
+                            <description>setup_title_translation_description</description>
+                            <group>group-cafelatte</group>
+                            <module>setup</module>
                             <controller>language</controller>
-                            <action>dispatch</action>
-                        </dispatch>
+                            <action>index</action>
+                            <pages>
+                                <show>
+                                    <type>mvc</type>
+                                    <label>setup_translation_choose</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>show</action>
+                                </show>
+                                <edit>
+                                    <type>mvc</type>
+                                    <label>setup_translation_edit</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>edit</action>
+                                </edit>
+                                <error>
+                                    <type>mvc</type>
+                                    <label>setup_error</label>
+                                    <module>setup</module>
+                                    <controller>language</controller>
+                                    <action>error</action>
+                                </error>
+                            </pages>
+                        </translation>                        
                     </pages>
-                </languages>
-
-                <statistic>
-                    <type>mvc</type>
-                    <label>admin_title_statistic</label>
-                    <description>admin_title_statistic_description</description>
-                    <group>group-cafelatte</group>
-                    <module>admin</module>
-                    <controller>statistic</controller>
-                    <action>index</action>
-                    <resource>statistics</resource>
-                    <pages>
-                        <show>
-                            <type>mvc</type>
-                            <label>admin_statistic_show</label>
-                            <module>admin</module>
-                            <controller>statistic</controller>
-                            <action>show</action>
-                        </show>
-                    </pages>
-                </statistic>
-
-                <oailink>
-                    <type>mvc</type>
-                    <label>admin_title_oailink</label>
-                    <description>admin_title_oailink_description</description>
-                    <group>group-cafelatte</group>
-                    <module>admin</module>
-                    <controller>oailink</controller>
-                    <action>index</action>
-                </oailink>
-
-                <dnbInstitute>
-                    <type>mvc</type>
-                    <label>admin_title_dnbinstitute</label>
-                    <description>admin_title_dnbinstitute_description</description>
-                    <group>group-sky</group>
-                    <module>admin</module>
-                    <controller>dnbinstitute</controller>
-                    <action>index</action>
-                    <resource>institutions</resource>
-                    <pages>
-                        <show>
-                            <type>mvc</type>
-                            <label>admin_dnbinstitute_show</label>
-                            <module>admin</module>
-                            <controller>dnbinstitute</controller>
-                            <action>show</action>
-                        </show>
-
-                        <new>
-                            <type>mvc</type>
-                            <label>admin_dnbinstitute_new</label>
-                            <module>admin</module>
-                            <controller>dnbinstitute</controller>
-                            <action>new</action>
-                        </new>
-
-                        <create>
-                            <type>mvc</type>
-                            <label>admin_dnbinstitute_new</label>
-                            <module>admin</module>
-                            <controller>dnbinstitute</controller>
-                            <action>create</action>
-                        </create>
-
-                        <edit>
-                            <type>mvc</type>
-                            <label>admin_dnbinstitute_edit</label>
-                            <module>admin</module>
-                            <controller>dnbinstitute</controller>
-                            <action>edit</action>
-                        </edit>
-                    </pages>
-                </dnbInstitute>
-
-                <enrichmentKey>
-                    <type>mvc</type>
-                    <label>admin_title_enrichmentkey</label>
-                    <description>admin_title_enrichmentkey_description</description>
-                    <group>group-sky</group>
-                    <module>admin</module>
-                    <controller>enrichmentkey</controller>
-                    <action>index</action>
-                    <resource>enrichments</resource>
-                    <pages>
-                        <show>
-                            <type>mvc</type>
-                            <label>admin_enrichmentkey_show</label>
-                            <module>admin</module>
-                            <controller>enrichmentkey</controller>
-                            <action>show</action>
-                        </show>
-
-                        <new>
-                            <type>mvc</type>
-                            <label>admin_enrichmentkey_new</label>
-                            <module>admin</module>
-                            <controller>enrichmentkey</controller>
-                            <action>new</action>
-                        </new>
-
-                        <create>
-                            <type>mvc</type>
-                            <label>admin_enrichmentkey_new</label>
-                            <module>admin</module>
-                            <controller>enrichmentkey</controller>
-                            <action>create</action>
-                        </create>
-
-                        <edit>
-                            <type>mvc</type>
-                            <label>admin_enrichmentkey_edit</label>
-                            <module>admin</module>
-                            <controller>enrichmentkey</controller>
-                            <action>edit</action>
-                        </edit>
-                    </pages>
-                </enrichmentKey>
-
+                </setup>
+                
                 <info>
                     <type>mvc</type>
                     <label>admin_title_info</label>
                     <description>admin_title_info_description</description>
-                    <group></group>
+                    <group>group-chocolate</group>
                     <module>admin</module>
                     <controller>info</controller>
-                    <action>index</action>
-                    <resource>systeminfo</resource>
+                    <action>menu</action>
                     <pages>
-                        <job-detail>
+                        <sysinfo>
                             <type>mvc</type>
-                            <label>admin_info_job-detail</label>
+                            <label>admin_title_system_info</label>
+                            <description>admin_title_system_info_description</description>
+                            <group>group-chocolate</group>
                             <module>admin</module>
                             <controller>info</controller>
-                            <action>job-detail</action>
-                        </job-detail>
+                            <action>index</action>
+                            <resource>systeminfo</resource>
+                            <pages>
+                                <job-detail>
+                                    <type>mvc</type>
+                                    <label>admin_info_job-detail</label>
+                                    <module>admin</module>
+                                    <controller>info</controller>
+                                    <action>job-detail</action>
+                                </job-detail>
+                            </pages>
+                        </sysinfo>  
+                        
+                        <oailink>
+                            <type>mvc</type>
+                            <label>admin_title_oailink</label>
+                            <description>admin_title_oailink_description</description>
+                            <group>group-chocolate</group>
+                            <module>admin</module>
+                            <controller>oailink</controller>
+                            <action>index</action>
+                        </oailink>
+                        
+                        <statistic>
+                            <type>mvc</type>
+                            <label>admin_title_statistic</label>
+                            <description>admin_title_statistic_description</description>
+                            <group>group-chocolate</group>
+                            <module>admin</module>
+                            <controller>statistic</controller>
+                            <action>index</action>
+                            <resource>statistics</resource>
+                            <pages>
+                                <show>
+                                    <type>mvc</type>
+                                    <label>admin_statistic_show</label>
+                                    <module>admin</module>
+                                    <controller>statistic</controller>
+                                    <action>show</action>
+                                </show>
+                            </pages>
+                        </statistic>
                     </pages>
-
                 </info>
-                
-                <translation>
-                    <type>mvc</type>
-                    <label>setup_title_translation</label>
-                    <description>setup_title_translation_description</description>
-                    <group></group>
-                    <module>setup</module>
-                    <controller>language</controller>
-                    <action>index</action>
-                    <pages>
-                        <show>
-                            <type>mvc</type>
-                            <label>setup_translation_choose</label>
-                            <module>setup</module>
-                            <controller>language</controller>
-                            <action>show</action>
-                        </show>
-                        <edit>
-                            <type>mvc</type>
-                            <label>setup_translation_edit</label>
-                            <module>setup</module>
-                            <controller>language</controller>
-                            <action>edit</action>
-                        </edit>
-                        <error>
-                            <type>mvc</type>
-                            <label>setup_error</label>
-                            <module>setup</module>
-                            <controller>language</controller>
-                            <action>error</action>
-                        </error>
-                    </pages>
-                </translation>
-
-                <help-page>
-                    <type>mvc</type>
-                    <label>setup_title_help-page</label>
-                    <description>setup_title_help-page_description</description>
-                    <group></group>
-                    <module>setup</module>
-                    <controller>help-page</controller>
-                    <action>index</action>
-                    <pages>
-                        <error>
-                            <type>mvc</type>
-                            <label>setup_error</label>
-                            <module>setup</module>
-                            <controller>language</controller>
-                            <action>error</action>
-                        </error>
-                    </pages>
-                </help-page>
-
-                <static-page>
-                    <type>mvc</type>
-                    <label>setup_title_static-page</label>
-                    <description>setup_title_static-page_description</description>
-                    <group></group>
-                    <module>setup</module>
-                    <controller>static-page</controller>
-                    <action>index</action>
-                    <pages>
-                        <edit>
-                            <type>mvc</type>
-                            <label>setup_static-page_edit_contact</label>
-                            <module>setup</module>
-                            <controller>static-page</controller>
-                            <action>edit</action>
-                            <params>
-                                <page>contact</page>
-                            </params>
-                        </edit>
-                        <edit-home>
-                            <type>mvc</type>
-                            <label>setup_static-page_edit_imprint</label>
-                            <module>setup</module>
-                            <controller>static-page</controller>
-                            <action>edit</action>
-                            <params>
-                                <page>imprint</page>
-                            </params>
-                        </edit-home>
-                        <edit-imprint>
-                            <type>mvc</type>
-                            <label>setup_static-page_edit_home</label>
-                            <module>setup</module>
-                            <controller>static-page</controller>
-                            <action>edit</action>
-                            <params>
-                                <page>home</page>
-                            </params>
-                        </edit-imprint>
-                        <error>
-                            <type>mvc</type>
-                            <label>setup_error</label>
-                            <module>setup</module>
-                            <controller>static-page</controller>
-                            <action>error</action>
-                        </error>
-                    </pages>
-                </static-page>
-
             </pages>
         </administration>
     </nav>

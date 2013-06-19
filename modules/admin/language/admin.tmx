@@ -36,10 +36,10 @@
 
     <tu tuid="admin_title_collections">
       <tuv xml:lang="en">
-        <seg>Manage Collections</seg>
+        <seg>Collections</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sammlungen verwalten</seg>
+        <seg>Sammlungen</seg>
       </tuv>
     </tu>
 
@@ -54,10 +54,10 @@
 
     <tu tuid="admin_title_series">
       <tuv xml:lang="en">
-        <seg>Manage Series</seg>
+        <seg>Series</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Schriftenreihen verwalten</seg>
+        <seg>Schriftenreihen</seg>
       </tuv>
     </tu>
 
@@ -81,10 +81,10 @@
 
     <tu tuid="admin_title_licence">
       <tuv xml:lang="en">
-        <seg>Licence types</seg>
+        <seg>Licences</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Lizenzen verwalten</seg>
+        <seg>Lizenzen</seg>
       </tuv>
     </tu>
 
@@ -129,8 +129,8 @@
         <seg>Edit document metadata. Delete documents and manage files.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Metadaten der Dokumente und Zuweisungen zu Sammlungen, Klassifikationen, Lizenzen und Schriftenreihen editieren. 
-		Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
+        <seg>Metadaten und Zuweisungen zu Sammlungen, Klassifikationen, Lizenzen und Schriftenreihen bearbeiten.
+Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
       </tuv>
     </tu>
 
@@ -139,7 +139,7 @@
         <seg>Languages</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sprachen verwalten</seg>
+        <seg>Sprachen</seg>
       </tuv>
     </tu>
 
@@ -149,6 +149,24 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Sprachen hinzufügen, editieren, entfernen und ein- oder ausschalten.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_title_setup">
+      <tuv xml:lang="en">
+        <seg>Setup</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Oberflächenanpassungen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_setup_description">
+      <tuv xml:lang="en">
+        <seg>Enrichments, FAQ, Contacts, Translations, ...</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Benutzerdefinierte Felder, Informationen, Hilfe, Übersetzungen, ...</seg>
       </tuv>
     </tu>
 
@@ -172,10 +190,10 @@
 
     <tu tuid="admin_title_oailink">
       <tuv xml:lang="en">
-        <seg>OAI Link Information</seg>
+        <seg>OAI Links</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>OAI Link anzeigen</seg>
+        <seg>OAI Links</seg>
       </tuv>
     </tu>
 
@@ -190,19 +208,19 @@
 
     <tu tuid="admin_title_dnbinstitute">
       <tuv xml:lang="en">
-        <seg>Manage dispersive body and awarding institution</seg>
+        <seg>Information for DNB</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Verbreitende Stelle und Vergabeinstitution (DNB) verwalten</seg>
+        <seg>Informationen für DNB</seg>
       </tuv>
     </tu>
 
     <tu tuid="admin_title_dnbinstitute_description">
       <tuv xml:lang="en">
-        <seg>Add, edit, or remove Institutions, that serve as dispersive body for theses.</seg>
+        <seg>Manage Institutions for DNB, that serve as dispersive bodies for theses.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Institutionen hinzufügen, editieren oder löschen, die als verbreitende Stelle oder Vergabeinstitution für Hochschulschriften (DNB) fungieren.</seg>
+        <seg>Verbreitende Stellen und Vergabeinstitutionen.</seg>
       </tuv>
     </tu>
 
@@ -301,11 +319,29 @@
         <seg>System Information</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>System Informationen</seg>
+        <seg>Systeminformationen</seg>
       </tuv>
     </tu>
 
     <tu tuid="admin_title_info_description">
+      <tuv xml:lang="en">
+        <seg>Jobs, OAI Links, Parameters, Statistics, ...</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Jobs, OAI Informationen, Parameter, Statistiken, ...</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_title_system_info">
+      <tuv xml:lang="en">
+        <seg>System Parameters</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Systemparameter</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_system_info_description">
       <tuv xml:lang="en">
         <seg>Shows system and environment settings.</seg>
       </tuv>

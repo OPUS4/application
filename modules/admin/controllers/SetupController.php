@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -26,22 +26,22 @@
  *
  * @category    Application
  * @package     Module_Admin
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @author      Jens Schwidder (schwidder@zib.de)
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<div class="wrapper">
-    <div id="adminMenuContainer">
-        <?PHP
-        $partial = array('menu.phtml', 'admin');
-        $this->navigation()->menu()->setPartial($partial);
-        echo $this->navigation()->menu()->render();
-        $this->navigation()->menu()->setPartial(null); // prevents invluencing main menu
-        ?>
-    </div>
-</div>
+/**
+ * Controller für das Setup Menü in der Administration.
+ */
+class Admin_SetupController extends Controller_Action {
+    
+    /**
+     * Creates array with items for setup administration menu.
+     */
+    public function indexAction() {
+        $this->view->title = $this->view->translate('admin_title_setup');
+    }
+    
+}

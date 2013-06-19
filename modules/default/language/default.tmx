@@ -57,7 +57,7 @@
                 <seg>Release unpublished documents.</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Unveröffentlichte Dokumente freischalten.</seg>
+                <seg>Unveröffentlichte Dokumente freigeben.</seg>
             </tuv>
         </tu>
         <tu tuid="admin_menu_label">

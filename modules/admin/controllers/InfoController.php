@@ -1,6 +1,5 @@
 <?php
-
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -28,7 +27,7 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -59,6 +58,10 @@ class Admin_InfoController extends Controller_Action {
         } else {
             $this->view->asyncjobs = false;
         }
+    }
+    
+    public function menuAction() {
+        $this->view->title = $this->view->translate('admin_title_info');
     }
 
     /**
