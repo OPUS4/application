@@ -33,6 +33,8 @@
         <seg>Editieren</seg>
       </tuv>
     </tu>
+    
+    
 
     <tu tuid="admin_document_update">
       <tuv xml:lang="en">
@@ -247,6 +249,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Dateien</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_frontdoor">
+      <tuv xml:lang="en">
+        <seg>Frontdoor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Frontdoor</seg>
       </tuv>
     </tu>
 

@@ -90,8 +90,9 @@
           <li class="save-element"><?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_SAVE) ?></li>
           <li class="cancel-element"> oder <?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_CANCEL) ?></li>
           <?PHP else : ?>
-          <?PHP foreach ($actionLinks as $label => $params) : ?>
-          <li><a href="<?= $this->url($params) ?>"><?= htmlspecialchars($this->translate($label)) ?></a></li>
+          <?PHP foreach ($actionLinks as $action => $params) : ?>
+          <li class="<?= $action ?>"><a href="<?= $this->url($params) ?>"
+                                        ><?= htmlspecialchars($this->translate('admin_document_' .$action)) ?></a></li>
           <?PHP endforeach; ?>
           <?PHP endif; ?>
         </ul>

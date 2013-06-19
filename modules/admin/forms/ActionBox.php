@@ -151,21 +151,21 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
 
         $docId = $this->document->getId();
         
-        $actions['admin_document_edit'] = array(
+        $actions['edit'] = array(
             'module' => 'admin', 
             'controller' => 'document', 
             'action' => 'edit', 
             'id' => $docId
         );
         
-        $actions['admin_document_files'] = array(
+        $actions['files'] = array(
             'module'     => 'admin',
             'controller' => 'filemanager',
             'action'     => 'index',
             'docId'      => $docId,
         );
 
-        $actions['admin_documents_open_frontdoor'] = array(
+        $actions['frontdoor'] = array(
             'module'     => 'frontdoor',
             'controller' => 'index',
             'action'     => 'index',
