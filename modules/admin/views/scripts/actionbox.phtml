@@ -49,11 +49,16 @@
           <dd id="Document-ServerState"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_' . ucfirst($document->getServerState()))) ?></dd>
         </dl>
         <?PHP else : ?>
-        <ul id="Document-ServerState">
-            <?PHP foreach ($stateLinks as $label => $params) : ?>
-            <li><a id="State-Link-<?= $params['targetState'] ?>"href="<?= $this->url($params) ?>"><?= htmlspecialchars($this->translate($label)) ?></a></li>
-            <?PHP endforeach; ?>
-        </ul>
+          <dl id="Document-ServerState" class="dropdown">
+              <dt><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></dt>
+              <dd>
+                <ul>
+                    <?PHP foreach ($stateLinks as $label => $params) : ?>
+                    <li><a id="State-Link-<?= $params['targetState'] ?>"href="<?= $this->url($params) ?>"><?= htmlspecialchars($this->translate($label)) ?></a></li>
+                    <?PHP endforeach; ?>
+                </ul>
+              </dd>
+          </dl>
         <?PHP endif; ?>
       </div>
       <div class="col col-2">
