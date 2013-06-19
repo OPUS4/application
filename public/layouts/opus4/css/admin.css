@@ -35,7 +35,6 @@ li.edit a{
 }
 .cancel-element,
 #cancel-element{
-   /*padding: 6px 0;*/
    font: 0.875em Verdana, Arial, Helvetica, sans-serif;
 }
 .cancel-element input,
@@ -51,6 +50,21 @@ li.edit a{
 #cancel-element input:hover{
    text-decoration: none;
 }
+/* @group Form content */
+.adminContainer fieldset{
+   clear: both;
+}
+.adminContainer fieldset > dl > dt{
+   float: left;
+   clear: left;
+   width: 32.7083%;
+}
+.adminContainer fieldset > dl > dt,
+.adminContainer fieldset > dl > dd{
+   /*float: left;*/
+   margin-top: 0.5em;
+}
+/* @end */
 /* @group adminMenuContainer */
 #adminMenuContainer{
    padding-top: 1em;
@@ -291,7 +305,8 @@ li.edit a{
    position: relative;
    top: -0.1em;
 }
-#actionboxContainer #Document-ServerState.dropdown.dropdown-open{
+#actionboxContainer #Document-ServerState.dropdown.dropdown-open,
+.no-js #actionboxContainer #Document-ServerState.dropdown:hover{
    border: none;
 }
 #actionboxContainer #Document-ServerState.dropdown dt a{
@@ -338,17 +353,16 @@ li.edit a{
    color: black;
    display: block;
 }
-#Document-ServerState.dropdown dd a:before{
-   /*content: '- ';*/
-}
 #Document-ServerState.dropdown dd a:hover{
    text-decoration: underline;
    color: #26517b;
 }
-#Document-ServerState.dropdown.dropdown-open li{
+#Document-ServerState.dropdown.dropdown-open li,
+.no-js #Document-ServerState.dropdown:hover li{
    display: block;
 }
-#actionboxContainer #Document-ServerState.dropdown.dropdown-open dd{
+#actionboxContainer #Document-ServerState.dropdown.dropdown-open dd,
+.no-js #actionboxContainer #Document-ServerState.dropdown:hover dd{
    background-color: white;
    border-radius: 5px 5px 5px 5px;
    padding: 0 0 0.5em;
