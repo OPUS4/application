@@ -471,6 +471,7 @@
                             <type>mvc</type>
                             <label>admin_security_title_roles</label>
                             <description>admin_security_title_roles_description</description>
+                            <group>group-tomato</group>
                             <module>admin</module>
                             <controller>role</controller>
                             <action>index</action>
@@ -537,6 +538,7 @@
                             <type>mvc</type>
                             <label>admin_security_title_ipranges</label>
                             <description>admin_security_title_ipranges_description</description>
+                            <group>group-tomato</group>
                             <module>admin</module>
                             <controller>iprange</controller>
                             <action>index</action>
