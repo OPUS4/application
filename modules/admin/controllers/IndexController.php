@@ -52,6 +52,7 @@ class Admin_IndexController extends Controller_Action {
      */
     public function indexAction() {
         $this->view->title = 'admin_index_title';
+        $this->view->breadcrumbsDisabled = true;
     }
 
 }
