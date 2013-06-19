@@ -713,10 +713,10 @@
         <!-- Wird von ActionBox verwendet -->
         <tu tuid="ServerDateModified-short">
             <tuv xml:lang="en">
-                <seg>Last Modified on</seg>
+                <seg>Last Modified</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Letzte Änderung am</seg>
+                <seg>Letzte Änderung</seg>
             </tuv>
         </tu>
         
@@ -735,7 +735,7 @@
                 <seg>Release Date</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Freigeschaltet am</seg>
+                <seg>Freigeschaltet</seg>
             </tuv>
         </tu>
         
