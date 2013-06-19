@@ -27,7 +27,7 @@
  * @package     Application - Module Review
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -125,6 +125,8 @@ class Review_IndexController extends Controller_Action {
                 $finder->orderById($sort_reverse != 1);
         }
 
+        $this->view->breadcrumbsDisabled = true;
+        
         $result = $finder->ids();
         if (empty($result)) {
             $this->view->message = 'review_no_docs_found';

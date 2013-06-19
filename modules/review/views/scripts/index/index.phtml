@@ -32,39 +32,36 @@
  */
 ?>
 
-<div class="adminContainer">
+<?PHP $suffix = ' <span class="info">(' . $this->documentCount . ' ' 
+        . $this->translate('review_docs_found_short') . ')</span>' ?>
 
-    <div class="breadcrumbsContainer">
-    <?PHP if (true === Opus_Security_Realm::getInstance()->check('administrate')) : ?>
-        <?= $this->navigation()->breadcrumbs() ?>
-    <?PHP else : ?>
-        <?= $this->translate('review_index_title')?>
-    <?PHP endif; ?>
-    <span class="info">(<?= $this->documentCount ?>
-        <?= $this->translate('review_docs_found_short') ?>)</span>
-    </div>
+<?PHP if (true === Opus_Security_Realm::getInstance()->check('administrate')) : ?>
+    <?= $this->navigation()->breadcrumbs()->setSuffix($suffix)->setSuffixSeparatorDisabled(true) ?>
+<?PHP else : ?>
+    <?= $this->navigation()->breadcrumbs()->setReplacement($this->translate('review_index_title') . $suffix) ?>
+<?PHP endif; ?>
 
-    <?PHP if (isset($this->error)) : ?>
-    <div class="error">
-        <?= htmlspecialchars($this->error) ?>
-    </div>
+<?PHP if (isset($this->error)) : ?>
+<div class="error">
+    <?= htmlspecialchars($this->error) ?>
+</div>
 
-    <?PHP endif; ?>
+<?PHP endif; ?>
 
-    <form action="<?= $this->actionUrl ?>" method="post">
+<form action="<?= $this->actionUrl ?>" method="post">
 
-    <div style="text-align: center">
-        <?= $this->translate('review_sort_label') ?>:
-        <select name="sort_order">
-            <?PHP foreach ($this->sortOptions as $value => $label) : ?>
-            <option value="<?= $value ?>" <?= ($value == $this->sort_order) ? 'selected' : '' ?>><?= $label ?></option>
-            <?PHP endforeach; ?>
-        </select>
+<div style="text-align: center">
+    <?= $this->translate('review_sort_label') ?>:
+    <select name="sort_order">
+        <?PHP foreach ($this->sortOptions as $value => $label) : ?>
+        <option value="<?= $value ?>" <?= ($value == $this->sort_order) ? 'selected' : '' ?>><?= $label ?></option>
+        <?PHP endforeach; ?>
+    </select>
 
-        <input type="hidden" name="sort_reverse" value="<?= htmlspecialchars($this->sort_reverse) ?>" />
-        <input type="submit" name="buttonUp" value="<?= $this->translate('review_sort_up') ?>" />
-        <input type="submit" name="buttonDown" value="<?= $this->translate('review_sort_down') ?>" />
-    </div>
+    <input type="hidden" name="sort_reverse" value="<?= htmlspecialchars($this->sort_reverse) ?>" />
+    <input type="submit" name="buttonUp" value="<?= $this->translate('review_sort_up') ?>" />
+    <input type="submit" name="buttonDown" value="<?= $this->translate('review_sort_down') ?>" />
+</div>
 
 
 <?PHP echo $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml'); ?>
@@ -134,6 +131,4 @@
     </div>
 
     </form>
-
-</div>
 

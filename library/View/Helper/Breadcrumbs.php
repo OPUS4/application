@@ -37,10 +37,24 @@
  */
 class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
     
+    private $suffixSeparatorDisabled = false;
+    
     private $suffix = null;
+    
+    private $replacement = null; 
     
     public function setSuffix($suffix) {
         $this->suffix = $suffix;
+        return $this;
+    }
+    
+    public function setSuffixSeparatorDisabled($disabled) {
+        $this->suffixSeparatorDisabled = $disabled;
+        return $this;
+    }
+    
+    public function setReplacement($replacement) {
+        $this->replacement = $replacement;
         return $this;
     }
     
@@ -51,14 +65,22 @@ class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
      * @return string
      */
     public function renderStraight(Zend_Navigation_Container $container = null) {
-        $html = parent::renderStraight($container);
-        
-        $html = '<div class="breadcrumbsContainer"><div class="wrapper">' . $html;
-        
-        if (!is_null($this->suffix)) {
-            $html .= ' ' . $this->getSeparator() . ' ' . $this->suffix;
+        if (is_null($this->replacement)) {
+            $html = parent::renderStraight($container);
         }
-        
+        else {
+            $html = $this->replacement;
+        }
+
+        $html = '<div class="breadcrumbsContainer"><div class="wrapper">' . $html;
+
+        if (!is_null($this->suffix)) {
+            if ($this->suffixSeparatorDisabled !== true) {
+                $html .= ' ' . $this->getSeparator() . ' '; 
+            }
+            $html .= $this->suffix;
+        }
+
         $html .= '</div></div>';
         
         return strlen($html) ? $this->getIndent() . $html : '';
