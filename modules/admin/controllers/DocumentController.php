@@ -103,8 +103,6 @@ class Admin_DocumentController extends Controller_Action {
             
             $this->view->form = new Admin_Form_Wrapper($form);
             
-            $this->__prepareActionLinks($document);
-
             return $document;
         }
         else {
@@ -234,54 +232,6 @@ class Admin_DocumentController extends Controller_Action {
         
         // Beim wechseln der Sprache würden Änderungen in editierten Felder verloren gehen
         $this->view->languageSelectorDisabled = true;
-    }
-
-    /**
-     * Prepares URLs for action links, e.g frontdoor, delete, publish.
-     *
-     * TODO remove dependency on Review_Model_DocumentAdapter
-     */
-    private function __prepareActionLinks($model) {
-        $actions = array();
-
-        $docId = $model->getId();
-        $docHelper = new Util_DocumentAdapter($this->view, $model);
-
-        $documentUrl = $this->view->documentUrl();
-
-        $action = array();
-        $action['label'] = 'admin_documents_open_frontdoor';
-        $action['url'] = $documentUrl->frontdoor($docId);
-        $actions['frontdoor'] = $action;
-
-        $action = array();
-        $action['label'] = 'admin_document_files';
-        $action['url'] = $documentUrl->adminFileManager($docId);
-        $actions['files'] = $action;
-        
-        $actions['edit'] = array(
-            'label' => 'admin_document_edit',
-            'url' => $this->view->url(array('module' => 'admin', 'controller' => 'document', 'action' => 'edit', 
-                'id' => $docId), 'default', true),
-        );
-
-        $workflowActions = array();
-
-        $workflow = $this->_helper->getHelper('Workflow');
-
-        $targetStates = $workflow->getAllowedTargetStatesForDocument($model);
-
-        foreach ($targetStates as $targetState) {
-            $action = array();
-            $action['label'] = 'admin_workflow_' . $targetState;
-            $action['url'] = $documentUrl->adminChangeState($docId, $targetState);
-            $workflowActions[$targetState] = $action;
-        }
-
-        $this->view->workflowActions = $workflowActions;
-        $this->view->actions = $actions;
-
-        return $actions;
     }
 
     /**
