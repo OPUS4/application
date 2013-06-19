@@ -69,7 +69,6 @@
     <field name="SubjectUncontrolled" required="no" formelement="Text" datatype="Subject" multiplicity="5"/>
     <field name="Institute" required="no" formelement="Select" datatype="Collection" root="institutes" multiplicity="1"/>
     <field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
-    <field name="IdentifierUrn" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
     <field name="Note" required="no" formelement="Textarea" datatype="Note" multiplicity="1"/>
     <field name="Series" required="no" formelement="Select" datatype="Series" multiplicity="1"/>
     <field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>

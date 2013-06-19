@@ -78,7 +78,6 @@
     <field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1" />
     <field name="IdentifierIsbn" required="no" formelement="Text" datatype="Identifier" multiplicity="1" />
     <field name="IdentifierIssn" required="no" formelement="Text" datatype="Identifier" multiplicity="1" />
-    <field name="IdentifierUrn" required="no" formelement="Text" datatype="Identifier" multiplicity="1" />
     <field name="Note" required="no" formelement="Textarea" datatype="Note" multiplicity="1" />
     <field name="Series" required="no" formelement="Select" datatype="Series" multiplicity="1"/>
     <field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>

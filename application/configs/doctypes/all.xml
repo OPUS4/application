@@ -108,7 +108,7 @@
     <field name="IdentifierHandle" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
     <field name="IdentifierOpus3" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
     <field name="IdentifierIsbn" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
-    <field name="IdentifierIssn" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
+    <field name="IdentifierIssn" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>    
     <field name="IdentifierUrn" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
     <field name="IdentifierOpac" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
     <field name="IdentifierUrl" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
