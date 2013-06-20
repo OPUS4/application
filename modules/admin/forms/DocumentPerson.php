@@ -129,11 +129,23 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         
         $roles = $this->personRoles;
         
+        $subform = new Zend_Form_SubForm('Roles');
+        $subform->setDecorators(array(
+            'FormElements',
+            array('HtmlTag', array('tag' => 'ul'))
+        ));
+        
         foreach ($roles as $role) {
             $element = new Zend_Form_Element_Submit('Role' . ucfirst($role));
-            $element->setDecorators(array('ViewHelper'));
-            $this->addElement($element);
+            $element->setDecorators(array(
+                'ViewHelper',
+                array('HtmlTag', array('tag' => 'li'))
+                ));
+            
+            $subform->addElement($element);
         }
+        
+        $this->addSubForm($subform, 'Roles');
                 
         $element = new Zend_Form_Element_Checkbox(self::ELEMENT_ALLOW_CONTACT);
         $element->setLabel('AllowEmailContact');
@@ -175,7 +187,10 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
     
     public function initRendering() {
         $this->setDisableLoadDefaultDecorators(true);
-        $this->setDecorators(array(array('ViewScript', array('viewScript' => 'form/personForm.phtml'))));
+        $this->setDecorators(array(
+            'PrepareElements',
+            array('ViewScript', array('viewScript' => 'form/personForm.phtml'))
+        ));
     }
     
     public function populateFromModel($personLink) {
@@ -184,8 +199,7 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
             $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($personLink->getSortOrder());
             $this->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personLink->getModel()->getId());
             $role = $personLink->getRole();
-            $this->getElement('Role'. ucfirst($role))->setAttrib('disabled', 'disabled');
-            // TODO ist es notwendig die anderen Button explizit anzuschalten: NEIN, es sei denn?
+            // $this->removeElement('Role'. ucfirst($role));
         }
         else {
             $this->getLog()->err('populateFromModel called with object that is not instance of '

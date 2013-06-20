@@ -69,6 +69,9 @@
         <?PHP endif; ?>
     </div>
     <div class="person-actions">
+        <?PHP foreach ($this->element->getSubForms() as $subform) : ?>
+            <?= $subform ?>
+        <?PHP endforeach; ?>
         <?PHP foreach ($this->element->getElements() as $name => $element) : ?>
             <?PHP if ($name !== Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT) : ?>
                 <?= $element ?>
