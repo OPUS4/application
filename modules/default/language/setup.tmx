@@ -15,10 +15,10 @@
 
     <tu tuid="setup_title_translation_description">
         <tuv xml:lang="en">
-            <seg>Field names, Headlines, ...</seg>
+            <seg>Names, Headlines, Help for Fields</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Feldnamen, Überschriften, ...</seg>
+            <seg>Feldnamen, Feldüberschriften, Feldhilfen</seg>
         </tuv>
     </tu>
 

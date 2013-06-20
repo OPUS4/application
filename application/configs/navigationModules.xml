@@ -130,7 +130,7 @@
                     <type>mvc</type>
                     <label>admin_title_collections</label>
                     <description>admin_title_collections_description</description>
-                    <group>group-cafelatte</group>
+                    <group>group-mint</group>
                     <module>admin</module>
                     <controller>collectionroles</controller>
                     <action>index</action>
@@ -208,7 +208,7 @@
                     <type>mvc</type>
                     <label>admin_title_series</label>
                     <description>admin_title_series_description</description>
-                    <group>group-cafelatte</group>
+                    <group>group-mint</group>
                     <module>admin</module>
                     <controller>series</controller>
                     <action>index</action>
