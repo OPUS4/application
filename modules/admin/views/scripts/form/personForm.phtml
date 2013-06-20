@@ -69,14 +69,10 @@
         <?PHP endif; ?>
     </div>
     <div class="person-actions">
-        <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_EDIT) ?>
-        <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_REMOVE) ?>
-        <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_FIRST) ?>
-        <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_UP) ?>
-        <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_DOWN) ?>
-        <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_LAST) ?>
-        <?= $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID) ?>
-        <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER) ?>
-        <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE) ?>
+        <?PHP foreach ($this->element->getElements() as $name => $element) : ?>
+            <?PHP if ($name !== Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT) : ?>
+                <?= $element ?>
+            <?PHP endif; ?>
+        <?PHP endforeach; ?>
     </div>
 </dd>

@@ -93,6 +93,17 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
      */
     const RESULT_REMOVE = 'remove';
     
+    private $personRoles =  array(
+        'author' => 'author',
+        'editor' => 'editor',
+        'translator' => 'translator',
+        'contributor' => 'contributor',
+        'other' => 'other',
+        'advisor' => 'advisor',
+        'referee' => 'referee',
+        'submitter' => 'submitter'
+    );
+    
     /**
      * Erzeugt die Formularelemente.
      */
@@ -105,11 +116,14 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
-        $element = $elementFactory->createPersonRoleSelect(self::ELEMENT_ROLE);
-        $element->setLabel('Role');
-        $element->setDecorators(array('ViewHelper'));
-        $this->addElement($element);
+        $roles = $this->personRoles;
         
+        foreach ($roles as $role) {
+            $element = new Zend_Form_Element_Submit('Role' . ucfirst($role));
+            $element->setDecorators(array('ViewHelper'));
+            $this->addElement($element);
+        }
+                
         $element = new Zend_Form_Element_Checkbox(self::ELEMENT_ALLOW_CONTACT);
         $element->setLabel('AllowEmailContact');
         $element->setDecorators(array('ViewHelper'));
@@ -158,7 +172,7 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
             $this->getElement(self::ELEMENT_ALLOW_CONTACT)->setValue($personLink->getAllowEmailContact());
             $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($personLink->getSortOrder());
             $this->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personLink->getModel()->getId());
-            $this->getElement(self::ELEMENT_ROLE)->setValue($personLink->getRole());
+            // TODO $this->getElement(self::ELEMENT_ROLE)->setValue($personLink->getRole());
         }
         else {
             $this->getLog()->err('populateFromModel called with object that is not instance of '
@@ -199,7 +213,7 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
             $personLink = new Opus_Model_Dependent_Link_DocumentPerson();
             $person = new Opus_Person($personId);
             $personLink->setModel($person);
-            $personLink->setRole($personRole);
+            // TODO $personLink->setRole($personRole);
         }
         $this->updateModel($personLink); 
         
@@ -209,14 +223,14 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
     public function updateModel($personLink) {
         $personLink->setAllowEmailContact($this->getElementValue(self::ELEMENT_ALLOW_CONTACT));
         $personLink->setSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
-        $personLink->setRole($this->getElementValue(self::ELEMENT_ROLE));
+        // TODO $personLink->setRole($this->getElementValue(self::ELEMENT_ROLE));
     }
     
     public function prepareRenderingAsView() {
         parent::prepareRenderingAsView();
         
         $this->removeElement(self::ELEMENT_SORT_ORDER);
-        $this->removeElement(self::ELEMENT_ROLE);
+        // TODO $this->removeElement(self::ELEMENT_ROLE);
     }
 
 }
