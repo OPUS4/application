@@ -35,19 +35,9 @@
  */
 ?>
 
-<?php if ($this->accessAllowed('documents')) : ?>
-<div id="admin_doc_links">
-    <a href="<?= $this->documentUrl()->adminShow($this->docId) ?>" id="admin-show-document">
-        <?= $this->translate('frontdoor_show_doc_in_admin') ?>
-    </a>
-    <a href="<?= $this->documentUrl()->adminEdit($this->docId) ?>" id="admin-edit-document">
-        <?= $this->translate('frontdoor_edit_document') ?>
-    </a>
-    <a href="<?= $this->documentUrl()->adminFileManager($this->docId) ?>" id="admin-edit-docfiles">
-        <?= $this->translate('frontdoor_edit_docfiles') ?>
-    </a>
-</div>
-<?php endif ?>
+<?PHP if ($this->accessAllowed('documents') && !is_null($this->adminform)) : ?> 
+    <?= $this->adminform ?>
+<?PHP endif ?>
 
 <div class="frontdoor">
     <?= $this->frontdoor ?>

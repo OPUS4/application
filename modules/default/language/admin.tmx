@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+
+ <header/>
+
+  <body>
+
+    <tu tuid="admin_document_edit">
+      <tuv xml:lang="en">
+        <seg>Edit</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Editieren</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_files">
+      <tuv xml:lang="en">
+        <seg>Files</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dateien</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_frontdoor">
+      <tuv xml:lang="en">
+        <seg>Frontdoor</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Frontdoor</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_document_view">
+      <tuv xml:lang="en">
+        <seg>View in Administration</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Open Administration</seg>
+      </tuv>
+    </tu>
+
+  </body>
+
+</tmx>

@@ -54,7 +54,7 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     
     private $parentForm;
     
-    public function __construct($parentForm, $options = null) {
+    public function __construct($parentForm = null, $options = null) {
         parent::__construct($options);
         $this->parentForm = $parentForm;
     }
@@ -170,6 +170,21 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
             'controller' => 'index',
             'action'     => 'index',
             'docId'      => $docId,
+        );
+        
+        return $actions;
+    }
+    
+    public function getFrontdoorActionLinks() {
+        $actions = $this->getViewActionLinks();
+        
+        unset($actions['frontdoor']);
+        
+        $actions['view'] = array(
+            'module'     => 'admin',
+            'controller' => 'document',
+            'action'     => 'index',
+            'id'         => $this->document->getId()
         );
         
         return $actions;

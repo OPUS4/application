@@ -23,19 +23,8 @@
       <tuv xml:lang="de">
         <seg>Metadaten hinzufügen</seg>
       </tuv>
-    </tu>
-
-    <tu tuid="admin_document_edit">
-      <tuv xml:lang="en">
-        <seg>Edit</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Editieren</seg>
-      </tuv>
-    </tu>
+    </tu>    
     
-    
-
     <tu tuid="admin_document_update">
       <tuv xml:lang="en">
         <seg>Edit Metadata</seg>
@@ -386,24 +375,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Zugriffsrechte</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_document_files">
-      <tuv xml:lang="en">
-        <seg>Files</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Dateien</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="admin_document_frontdoor">
-      <tuv xml:lang="en">
-        <seg>Frontdoor</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Frontdoor</seg>
       </tuv>
     </tu>
 

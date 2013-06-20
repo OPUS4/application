@@ -135,6 +135,11 @@ class Frontdoor_IndexController extends Controller_Action {
         $this->view->title = $this->getFrontdoorTitle($document);
 
         $this->incrementStatisticsCounter($docId);
+        
+        $actionbox = new Admin_Form_ActionBox();
+        $actionbox->prepareRenderingAsView();
+        $actionbox->populateFromModel($document);
+        $this->view->adminform = $actionbox;
     }
 
     private function printDocumentError($message, $code) {
