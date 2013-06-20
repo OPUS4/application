@@ -34,14 +34,13 @@
 
 /**
  * Unterformular fuer die Buttons, um die Rolle einer Person zu ändern.
- * 
  */
 class Admin_Form_DocumentPersonRoles extends Admin_Form_AbstractDocumentSubForm {
     
     /**
      * Name fuer Formularelement fuer Feld Role.
      */
-    const ELEMENT_ROLE = 'Role';
+    const ELEMENT_PREFIX_ROLE = 'Role';
             
     /**
      * Mögliche Rollen für eine Person.
@@ -60,8 +59,15 @@ class Admin_Form_DocumentPersonRoles extends Admin_Form_AbstractDocumentSubForm 
         'submitter' => 'submitter'
     );
     
+    public function __construct($role = null, $options = null) {
+        parent::__construct($options);
+        if (!is_null($role)) {
+            $this->removeElement($this->getRoleElementName($role));
+        }
+    }
+    
     /**
-     * Erzeugt die Formularelemente.
+     * Erzeugt Buttons für sämtliche Rollen und kümmert sich um Dekoratoren.
      */
     public function init() {
         parent::init();
@@ -74,7 +80,7 @@ class Admin_Form_DocumentPersonRoles extends Admin_Form_AbstractDocumentSubForm 
         ));
         
         foreach ($roles as $role) {
-            $element = new Zend_Form_Element_Submit('Role' . ucfirst($role));
+            $element = new Zend_Form_Element_Submit($this->getRoleElementName($role));
             $element->setDecorators(array(
                 'ViewHelper',
                 array('HtmlTag', array('tag' => 'li'))
@@ -84,19 +90,33 @@ class Admin_Form_DocumentPersonRoles extends Admin_Form_AbstractDocumentSubForm 
         }
     }
     
+    /**
+     * Prüft ob in einem POST einer der Rollen-Buttons geklickt wurde.
+     * @param array $post POST Daten für Formular
+     * @param array $context POST Daten für gesamtes Formular
+     * @return array
+     */
     public function processPost($post, $context) {
         // Prüfen, ob Button für Rollenänderung ausgewählt wurde
         foreach ($this->personRoles as $role) {
-            if (array_key_exists('Role' . ucfirst($role), $post)) {
-                // Role ändern
+            if (array_key_exists($this->getRoleElementName($role), $post)) {
                 return array(
-                    'result' => self::RESULT_CHANGE_ROLE,
+                    'result' => Admin_Form_DocumentPerson::RESULT_CHANGE_ROLE,
                     'role' => $role
                 );
             }
         }
         
         return null;
+    }
+    
+    /**
+     * Liefert Namen des Elements für eine Rolle.
+     * @param string $role
+     * @return string
+     */
+    public function getRoleElementName($role) {
+        return self::ELEMENT_PREFIX_ROLE . ucfirst($role);
     }
     
     public function populateFromModel($personLink) {

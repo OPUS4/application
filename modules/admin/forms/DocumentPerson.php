@@ -110,8 +110,6 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
-        $this->addSubForm(new Admin_Form_DocumentPersonRoles(), 'Roles');
-                
         $element = new Zend_Form_Element_Checkbox(self::ELEMENT_ALLOW_CONTACT);
         $element->setLabel('AllowEmailContact');
         $element->setDecorators(array('ViewHelper'));
@@ -191,20 +189,8 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
                 )
             );
         }
-        else {
-            // Prüfen, ob Button für Rollenänderung ausgewählt wurde
-            foreach ($this->personRoles as $role) {
-                if (array_key_exists('Role' . ucfirst($role), $post)) {
-                    // Role ändern
-                    return array(
-                        'result' => self::RESULT_CHANGE_ROLE,
-                        'role' => $role
-                    );
-                }
-            }
-        }
         
-        return null;
+        return parent::processPost($post, $context);
     }
     
     public function getLinkModel($documentId, $personRole) {

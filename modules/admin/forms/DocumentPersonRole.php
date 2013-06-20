@@ -132,9 +132,15 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
                 if (!is_null($subform)) {
                     $result = $subform->processPost($personPost, $context);
                     if (!is_null($result)) {
-                        switch ($result) {
+                        $action = (is_array($result)) ? $result['result'] : result;
+                        
+                        switch ($action) {
                             case Admin_Form_DocumentPerson::RESULT_REMOVE:
                                 $this->removeSubForm($subform->getName());
+                                break;
+                            case Admin_Form_DocumentPerson::RESULT_CHANGE_ROLE:
+                                $result['subformName'] = $subFormName;
+                                return $result;
                                 break;
                             default:
                                 $result['target']['role'] = $this->__roleName;
@@ -178,6 +184,9 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
 
     protected function _addSubFormFromPost($subFormName, $person) {
         $subform = new Admin_Form_DocumentPerson();
+        $rolesForm = new Admin_Form_DocumentPersonRoles($this->__roleName);
+        $subform->addSubForm($rolesForm, 'Roles');
+        
         $subform->initRendering();
         
         $subform->populateFromPost($person);
@@ -187,9 +196,18 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
         return $subform;
     }
     
+    public function addSubFormForPerson($subForm) {
+        $rolesForm = new Admin_Form_DocumentPersonRoles($this->__roleName);
+        $subForm->addSubForm($rolesForm, 'Roles');
+        $this->addSubForm($subForm, 'Person' . count($this->getSubForms()));
+    }
+    
     protected function _addPersonSubForm($index, $person) {
         // TODO add subform for person
         $subform = new Admin_Form_DocumentPerson();
+        $rolesForm = new Admin_Form_DocumentPersonRoles($this->__roleName);
+        $subform->addSubForm($rolesForm, 'Roles');
+        
         $subform->initRendering();
         $subform->populateFromModel($person);
         
@@ -247,5 +265,5 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
     public function isEmpty() {
         return count($this->getSubForms()) == 0;
     }
-
+    
 }

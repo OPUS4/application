@@ -109,9 +109,24 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
             $result = $subform->processPost($data, $context);
             
             if (!is_null($result)) {
-                return $result;
+                $action = (is_array($result)) ? $result['result'] : result;#
+                
+                switch ($action) {
+                    case Admin_Form_DocumentPerson::RESULT_CHANGE_ROLE:
+                        $role = $result['role'];
+                        $subFormName = $result['subformName'];
+                        $personForm = $subform->getSubForm($subFormName);
+                        $subform->removeSubForm($subFormName);
+                        $this->getSubForm($role)->addSubFormForPerson($personForm); // TODO Seiteneffekte
+                        break;
+                    default:
+                        return $result;
+                        break;
+                }
             }
         }
+        
+        return null;
     }
 
     /**
