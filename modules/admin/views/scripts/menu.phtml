@@ -54,7 +54,9 @@ else {
             $page->getResource(), $page->getPrivilege()) 
             || !$acl->has($page->getResource())) : ?>
     <li class="<?= $page->group ?> <?= $page->colclass ?>"><a href="<?= $page->getHref() ?>"><strong><?= $this->translate($page->label) ?></strong><br/>
-    <?= $this->translate($page->description) ?></a></li>
+    <?PHP if (!is_null($page->description) && $this->translate()->getTranslator()->isTranslated($page->description)) : ?>
+        <?= $this->translate($page->description) ?>
+    <?PHP endif; ?></a></li>
     <?PHP else : ?>
     <li class="<?= $page->group ?> <?= $page->colclass ?> inactive"><strong><?= $this->translate($page->label) ?></strong></li>
     <?PHP endif; ?>

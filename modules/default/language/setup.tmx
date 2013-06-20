@@ -6,19 +6,19 @@
 
     <tu tuid="setup_title_translation">
         <tuv xml:lang="en">
-            <seg>Edit Translations</seg>
+            <seg>Translations</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Übersetzungen bearbeiten</seg>
+            <seg>Übersetzungen</seg>
         </tuv>
     </tu>
 
     <tu tuid="setup_title_translation_description">
         <tuv xml:lang="en">
-            <seg>Adapt existing Translation Resources</seg>
+            <seg>Field names, Headlines, ...</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Vorhandene Übersetzungsressourcen anpassen</seg>
+            <seg>Feldnamen, Überschriften, ...</seg>
         </tuv>
     </tu>
 
@@ -42,19 +42,19 @@
 
     <tu tuid="setup_title_static-page">
         <tuv xml:lang="en">
-            <seg>Edit Static Page Contents</seg>
+            <seg>Information Pages</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Statische Seiteninhalte bearbeiten</seg>
+            <seg>Statische Seiten</seg>
         </tuv>
     </tu>
 
     <tu tuid="setup_title_static-page_description">
         <tuv xml:lang="en">
-            <seg>Edit Home Page, Contact Information and Imprint</seg>
+            <seg>Home Page, Contact Information, Imprint</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Hauptseite, Kontaktinformationen und Impressum bearbeiten</seg>
+            <seg>Hauptseite, Kontaktinformationen, Impressum</seg>
         </tuv>
     </tu>
 
@@ -85,23 +85,12 @@
         </tuv>
     </tu>
 
-
-
     <tu tuid="setup_title_help-page">
         <tuv xml:lang="en">
-            <seg>Edit FAQ-Page</seg>
+            <seg>FAQ-Page</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>FAQ-Seite bearbeiten</seg>
-        </tuv>
-    </tu>
-
-    <tu tuid="setup_title_help-page_description">
-        <tuv xml:lang="en">
-            <seg>Edit Contents of FAQ</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Inhalte der FAQ bearbeiten</seg>
+            <seg>FAQ-Seite</seg>
         </tuv>
     </tu>
 

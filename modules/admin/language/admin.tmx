@@ -45,10 +45,10 @@
 
     <tu tuid="admin_title_collections_description">
       <tuv xml:lang="en">
-        <seg>Create, edit, and delete collections.</seg>
+        <seg>Institutes, Classifications, Publication Lists, ...</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sammlungen erstellen, editieren und löschen.</seg>
+        <seg>Institute, Klassifikationen, Publikationslisten, ...</seg>
       </tuv>
     </tu>
 
@@ -58,15 +58,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Schriftenreihen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_title_series_description">
-      <tuv xml:lang="en">
-        <seg>Create, edit, and delete series.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Schriftenreihen erstellen, editieren und löschen.</seg>
       </tuv>
     </tu>
 
@@ -85,15 +76,6 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Lizenzen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_title_licence_description">
-      <tuv xml:lang="en">
-        <seg>Add, edit or remove licences.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Lizenzen hinzfügen, editieren, oder löschen.</seg>
       </tuv>
     </tu>
 
@@ -142,15 +124,6 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
         <seg>Sprachen</seg>
       </tuv>
     </tu>
-
-    <tu tuid="admin_title_languages_description">
-      <tuv xml:lang="en">
-        <seg>Add, edit or remove languages. Activate or deactivate languages.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sprachen hinzufügen, editieren, entfernen und ein- oder ausschalten.</seg>
-      </tuv>
-    </tu>
     
     <tu tuid="admin_title_setup">
       <tuv xml:lang="en">
@@ -158,15 +131,6 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Oberflächenanpassungen</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_title_setup_description">
-      <tuv xml:lang="en">
-        <seg>Enrichments, FAQ, Contacts, Translations, ...</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Benutzerdefinierte Felder, Informationen, Hilfe, Übersetzungen, ...</seg>
       </tuv>
     </tu>
 
@@ -179,30 +143,12 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
       </tuv>
     </tu>
 
-    <tu tuid="admin_title_statistic_description">
-      <tuv xml:lang="en">
-        <seg>Shows publication statistics for individual years.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Zeigt Veröffentlichungsstatistiken für einzelne Jahre.</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="admin_title_oailink">
       <tuv xml:lang="en">
         <seg>OAI Links</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>OAI Links</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_title_oailink_description">
-      <tuv xml:lang="en">
-        <seg>Base URL for OAI requests and examples.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>URL für OAI Anfragen und Beispiele.</seg>
+        <seg>OAI-Links</seg>
       </tuv>
     </tu>
 
@@ -220,7 +166,7 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
         <seg>Manage Institutions for DNB, that serve as dispersive bodies for theses.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Verbreitende Stellen und Vergabeinstitutionen.</seg>
+        <seg>Verbreitende Stelle und Vergabeinstitution.</seg>
       </tuv>
     </tu>
 
@@ -229,16 +175,7 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
         <seg>Manage Enrichmentkeys</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Benutzerdefinierte Felder (Enrichments) verwalten</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_title_enrichmentkey_description">
-      <tuv xml:lang="en">
-        <seg>Add, edit, or remove Enrichmentkeys.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Benutzerdefinierte Felder hinzufügen, editieren oder löschen.</seg>
+        <seg>Benutzerdefinierte Felder (Enrichments)</seg>
       </tuv>
     </tu>
 
@@ -248,15 +185,6 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Zugriffskontrolle</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_title_security_description">
-      <tuv xml:lang="en">
-        <seg>Manage IP ranges and user roles and their privileges.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Nutzerrollen und IP Bereiche erstellen, editieren oder löschen.</seg>
       </tuv>
     </tu>
 
@@ -322,15 +250,6 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
         <seg>Systeminformationen</seg>
       </tuv>
     </tu>
-
-    <tu tuid="admin_title_info_description">
-      <tuv xml:lang="en">
-        <seg>Jobs, OAI Links, Parameters, Statistics, ...</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Jobs, OAI Informationen, Parameter, Statistiken, ...</seg>
-      </tuv>
-    </tu>
     
     <tu tuid="admin_title_system_info">
       <tuv xml:lang="en">
@@ -338,15 +257,6 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Systemparameter</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="admin_title_system_info_description">
-      <tuv xml:lang="en">
-        <seg>Shows system and environment settings.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Zeigt wichtige System und Umgebungseinstellungen.</seg>
       </tuv>
     </tu>
 
