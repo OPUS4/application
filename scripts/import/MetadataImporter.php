@@ -64,7 +64,13 @@ class MetadataImporter {
         $xml = $this->loadAndValidateInputFile($options[1]);
 
         $importer = new Opus_Util_MetadataImport($xml, $this->console, $this->logfile);
-        $importer->run();
+        try {
+            $importer->run();
+        } catch (Opus_Util_MetadataImportInvalidXmlException $e) {
+            //
+        } catch (Opus_Util_MetadataImportSkippedDocumentsException $e) {
+            //
+        }
      }
 
   
@@ -85,17 +91,6 @@ class MetadataImporter {
         $xml = new DOMDocument();
         if (true !== $xml->load($filename)) {
             $this->console->log("... ERROR: Cannot load XML document $filename: make sure it is well-formed.");
-            exit();
-        }
-        $this->console->log('... OK');
-
-        // Enable user error handling while validating input file
-        libxml_clear_errors();
-        libxml_use_internal_errors(true);
-
-        $this->console->log("Validate XML file '$filename' ...");
-        if (!$xml->schemaValidate(__DIR__ . DIRECTORY_SEPARATOR . 'opus_import.xsd')) {
-            $this->console->log("... ERROR: XML document $filename is not valid: " . $this->getErrorMessage());
             exit();
         }
         $this->console->log('... OK');
