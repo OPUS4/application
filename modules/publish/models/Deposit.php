@@ -44,6 +44,7 @@ class Publish_Model_Deposit {
         $this->log = $log;
         $this->session = $session;
         $this->session2 = new Zend_Session_Namespace();
+        // TODO missing exception handling
         $this->document = new Opus_Document($this->session->documentId);
         $this->documentData = $documentData;
         if ($this->document->getServerState() !== 'temporary') {
