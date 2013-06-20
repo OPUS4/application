@@ -93,6 +93,17 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
      */
     const RESULT_REMOVE = 'remove';
     
+    /**
+     * Konstante für das Ändern der Rolle für eine Person.
+     */
+    const RESULT_CHANGE_ROLE = 'changeRole';
+    
+    /**
+     * Mögliche Rollen für eine Person.
+     * @var array
+     * 
+     * TODO centralize
+     */
     private $personRoles =  array(
         'author' => 'author',
         'editor' => 'editor',
@@ -172,7 +183,9 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
             $this->getElement(self::ELEMENT_ALLOW_CONTACT)->setValue($personLink->getAllowEmailContact());
             $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($personLink->getSortOrder());
             $this->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personLink->getModel()->getId());
-            // TODO $this->getElement(self::ELEMENT_ROLE)->setValue($personLink->getRole());
+            $role = $personLink->getRole();
+            $this->getElement('Role'. ucfirst($role))->setAttrib('disabled', 'disabled');
+            // TODO ist es notwendig die anderen Button explizit anzuschalten: NEIN, es sei denn?
         }
         else {
             $this->getLog()->err('populateFromModel called with object that is not instance of '
@@ -198,6 +211,18 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
                 'personId' => $this->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->getValue()
                 )
             );
+        }
+        else {
+            // Prüfen, ob Button für Rollenänderung ausgewählt wurde
+            foreach ($this->personRoles as $role) {
+                if (array_key_exists('Role' . ucfirst($role), $post)) {
+                    // Role ändern
+                    return array(
+                        'result' => self::RESULT_CHANGE_ROLE,
+                        'role' => $role
+                    );
+                }
+            }
         }
         
         return null;
