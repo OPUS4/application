@@ -28,32 +28,26 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 ?>
 
-<div class="adminContainer">
+<? $this->navigation()->breadcrumbs()->setReplacement($this->title) ?>
 
-    <div class="breadcrumbsContainer">
-        <?php echo $this->title?>
-    </div>
-    
-    <?PHP if (isset($this->documentAdapter)) : ?>
-    <?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
-    <?PHP endif; ?>
+<?PHP if (isset($this->documentAdapter)) : ?>
+<?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
+<?PHP endif; ?>
 
-    <p>
-    <?= $this->text ?>
-    </p>
+<p>
+<?= $this->text ?>
+</p>
 
-    <?php if (isset($this->removeObject)) : ?>
-        <?= $this->showModel($this->removeObject); ?>
-    <?php endif; ?>
+<?php if (isset($this->removeObject)) : ?>
+    <?= $this->showModel($this->removeObject); ?>
+<?php endif; ?>
 
-    <?= $this->form ?>
-
-</div>
+<?= $this->form ?>
 
 
