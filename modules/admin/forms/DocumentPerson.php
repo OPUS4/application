@@ -102,20 +102,23 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         $elementFactory = new Admin_Model_FormElementFactory();
                 
         $element = new Zend_Form_Element_Hidden(Admin_Form_Person::ELEMENT_PERSON_ID);
+        $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
         $element = $elementFactory->createPersonRoleSelect(self::ELEMENT_ROLE);
         $element->setLabel('Role');
+        $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
         $element = new Zend_Form_Element_Checkbox(self::ELEMENT_ALLOW_CONTACT);
         $element->setLabel('AllowEmailContact');
-        // $element->setDecorators(array('ViewHelper'));
+        $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
         // TODO Durch SELECT ersetzen?
         $element = new Zend_Form_Element_Text(self::ELEMENT_SORT_ORDER);
         $element->setLabel('SortOrder');
+        $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
         // Edit Button
@@ -147,9 +150,7 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
     
     public function initRendering() {
         $this->setDisableLoadDefaultDecorators(true);
-        
-        $this->setDecorators(array(array(
-            'ViewScript', array('viewScript' => 'form/personForm.phtml'))));
+        $this->setDecorators(array(array('ViewScript', array('viewScript' => 'form/personForm.phtml'))));
     }
     
     public function populateFromModel($personLink) {

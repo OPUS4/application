@@ -51,7 +51,8 @@
     $formId = substr($formId, 0, strrpos($formId, '-') + 1);
 ?>
 
-<div class="person">
+<dt id="<?= $this->element->getName() . '-label' ?>">&#160;</dt>
+<dd id="<?= $this->element->getName() . '-element' ?>">
     <div class="person-info">
         <span id="<?=$formId . 'LastName'?>"><?= $person->getLastName()?></span>
         <?PHP if (!is_null($person->getFirstName())) : ?>, 
@@ -77,5 +78,5 @@
         <?= $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID) ?>
         <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER) ?>
         <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE) ?>
-    </div>        
-</div>
+    </div>
+</dd>
