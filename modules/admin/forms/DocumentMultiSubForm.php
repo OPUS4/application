@@ -69,7 +69,8 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     public function init() {
         $element = new Zend_Form_Element_Submit('add'); // TODO translate depending on $_subFormClass
         $element->removeDecorator('DtDdWrapper');
-        $element->addDecorator('HtmlTag', 
+        $element->addDecorator(array('div' => 'HtmlTag'), array('tag' => 'div', 'class' => 'add-element'));
+        $element->addDecorator(array('closeDl' => 'HtmlTag'), 
                 array('tag' => 'dl', 'closeOnly' => true, 'placement' => 'prepend')); // schliesst DL vor Add button
         $element->setLabel('Hinzufügen');
         $element->setOrder(1000); // TODO only theoretically safe
