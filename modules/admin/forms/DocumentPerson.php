@@ -97,24 +97,7 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
      * Konstante für das Ändern der Rolle für eine Person.
      */
     const RESULT_CHANGE_ROLE = 'changeRole';
-    
-    /**
-     * Mögliche Rollen für eine Person.
-     * @var array
-     * 
-     * TODO centralize
-     */
-    private $personRoles =  array(
-        'author' => 'author',
-        'editor' => 'editor',
-        'translator' => 'translator',
-        'contributor' => 'contributor',
-        'other' => 'other',
-        'advisor' => 'advisor',
-        'referee' => 'referee',
-        'submitter' => 'submitter'
-    );
-    
+        
     /**
      * Erzeugt die Formularelemente.
      */
@@ -127,25 +110,7 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
-        $roles = $this->personRoles;
-        
-        $subform = new Zend_Form_SubForm('Roles');
-        $subform->setDecorators(array(
-            'FormElements',
-            array('HtmlTag', array('tag' => 'ul'))
-        ));
-        
-        foreach ($roles as $role) {
-            $element = new Zend_Form_Element_Submit('Role' . ucfirst($role));
-            $element->setDecorators(array(
-                'ViewHelper',
-                array('HtmlTag', array('tag' => 'li'))
-                ));
-            
-            $subform->addElement($element);
-        }
-        
-        $this->addSubForm($subform, 'Roles');
+        $this->addSubForm(new Admin_Form_DocumentPersonRoles(), 'Roles');
                 
         $element = new Zend_Form_Element_Checkbox(self::ELEMENT_ALLOW_CONTACT);
         $element->setLabel('AllowEmailContact');
