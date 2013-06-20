@@ -35,18 +35,12 @@
  */
 ?>
 
-<div class="adminContainer">
-
-    <div class="breadcrumbsContainer">
-        <?php echo $this->title?>
-    </div>
+<?PHP $this->navigation()->breadcrumbs()->setReplacement($this->title) ?>
     
-    <?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
+<?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
 
-    <p>
-    <?= $this->text ?>
-    </p>
+<p>
+<?= $this->text ?>
+</p>
 
-    <?= $this->form ?>
-
-</div>
+<?= $this->form ?>
