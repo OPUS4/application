@@ -6,4 +6,5 @@ INSERT INTO `enrichmentkeys` (`name`) VALUES
 ('Country'),
 ('Event'),
 ('SourceSwb'),
-('SourceTitle');
+('SourceTitle'),
+('foobarbaz');
