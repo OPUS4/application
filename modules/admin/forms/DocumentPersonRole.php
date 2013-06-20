@@ -132,7 +132,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
                 if (!is_null($subform)) {
                     $result = $subform->processPost($personPost, $context);
                     if (!is_null($result)) {
-                        $action = (is_array($result)) ? $result['result'] : result;
+                        $action = (is_array($result)) ? $result['result'] : $result;
                         
                         switch ($action) {
                             case Admin_Form_DocumentPerson::RESULT_REMOVE:
