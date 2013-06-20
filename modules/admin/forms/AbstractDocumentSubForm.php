@@ -56,12 +56,28 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     /**
      * Verarbeitet POST Request vom Formular.
      * 
+     * Das Defaultverhalten ist das weiterleiten des POST an die Unterformulare.
+     * 
      * @param $data POST Daten fuer Unterformular
      * @param $context POST Daten vom gesamten Request
      * 
      * TODO Modifiziere zu $context = null um context optional zu machen?
      */
     public function processPost($data, $context) {
+        $subforms = $this->getSubForms();
+
+        foreach ($subforms as $name => $form) {
+            if (array_key_exists($name, $data)) {
+                // TODO process return value (exit from loop if success)
+                $result = $form->processPost($data[$name], $data);
+
+                if (!is_null($result)) {
+                    return $result;
+                }
+            }
+        }
+        
+        return null;
     }
     
     /**
