@@ -82,7 +82,7 @@ class Admin_Model_FormElementFactory extends Admin_Model_AbstractModel {
      * TODO Validierung hinzufügen?
      */
     public function getIdentifierTypeSelect($name = 'Type') {
-        $select = new Zend_Form_Element_Select($name);
+        $select = new Form_Element_Select($name);
         
         $types = $this->_getIdentifierTypes();
         
@@ -107,7 +107,7 @@ class Admin_Model_FormElementFactory extends Admin_Model_AbstractModel {
     public function createLanguageSelect($name = 'Language') {
         $languages = Zend_Registry::get('Available_Languages');
         
-        $select = new Zend_Form_Element_Select($name);
+        $select = new Form_Element_Select($name);
         
         foreach ($languages as $index => $language) {
             $select->addMultiOption($index, $language);
@@ -122,7 +122,7 @@ class Admin_Model_FormElementFactory extends Admin_Model_AbstractModel {
         
         $options = $docTypeHelper->getDocumentTypes();
         
-        $select = new Zend_Form_Element_Select($name);
+        $select = new Form_Element_Select($name);
         
         foreach ($options as $index => $type) {
             $select->addMultiOption($index, $type);
@@ -149,7 +149,7 @@ class Admin_Model_FormElementFactory extends Admin_Model_AbstractModel {
      * @return \Zend_Form_Element_Text
      */
     public function createDateElement($name) {
-        $element = new Zend_Form_Element_Text($name);
+        $element = new Form_Element_Text($name);
         $element->setLabel($this->__translationPrefix . $name);
 
         $validator = new Form_Validate_Date();
@@ -174,7 +174,7 @@ class Admin_Model_FormElementFactory extends Admin_Model_AbstractModel {
      * TODO Validierung so konfigurieren, daß nur eine Meldung angezeigt wird?
      */
     public function createYearElement($name) {
-        $element = new Zend_Form_Element_Text($name);
+        $element = new Form_Element_Text($name);
         $element->setLabel($this->__translationPrefix . $name);
         $validators = array();
         

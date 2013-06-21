@@ -37,6 +37,19 @@
  */
 abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     
+    public function init() {
+        parent::init();
+        
+        // TODO needed? $this->addElementPrefixPath('Form_Decorator', 'Form/Decorator', 'decorator');
+        
+        $this->setDisableLoadDefaultDecorators(true);
+        $this->setDecorators(array(
+            'FormElements',
+            'Fieldset',
+            array('divWrapper' => 'HtmlTag', array('tag' => 'div', 'class' => 'subform'))
+        ));
+    }
+    
     /**
      * Initialisiert das Formular mit den Werten des Models.
      * 
