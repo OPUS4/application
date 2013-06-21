@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,7 +27,7 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -38,24 +37,24 @@ class Publish_Model_Deposit {
     public $documentData;
     public $log;
     public $session;
-    public $session2;
+    private $docId;
 
     public function __construct($session, $log, $documentData = null) {
         $this->log = $log;
         $this->session = $session;
-        $this->session2 = new Zend_Session_Namespace();
+        $this->docId = $this->session->documentId;
 
         try {
-            $this->document = new Opus_Document($this->session->documentId);
+            $this->document = new Opus_Document($this->docId);
         }
         catch (Opus_Model_NotFoundException $e) {
-            $this->log->err('Could not find document ' . $this->session->documentId . ' in database');
+            $this->log->err('Could not find document ' . $this->docId . ' in database');
             throw new Publish_Model_FormDocumentNotFoundException();
         }
         
         $this->documentData = $documentData;
         if ($this->document->getServerState() !== 'temporary') {
-            $this->log->err('unexpected state: document ' . $this->session->documentId . ' is not in ServerState "temporary"');
+            $this->log->err('unexpected state: document ' . $this->docId . ' is not in ServerState "temporary"');
             throw new Publish_Model_FormDocumentNotFoundException();
         }
         
@@ -66,6 +65,9 @@ class Publish_Model_Deposit {
         return $this->document;
     }
 
+    /**
+     * @throws Publish_Model_Exception if a requested OPUS_Model does not exist in database
+     */
     private function _storeDocumentData() {
 
         foreach ($this->documentData as $dataKey => $dataEntry) {                        
@@ -124,11 +126,16 @@ class Publish_Model_Deposit {
         }
 
         //external Field
-        if ($this->document->hasMultipleValueField($dataKey)) {
-                       
-            $function = "add" . $dataKey;            
-            $addedValue = $this->document->$function();
-            $addedValue->setValue($dataValue);            
+        if ($this->document->hasMultipleValueField($dataKey)) {                       
+            $function = "add" . $dataKey;
+            try {
+                $addedValue = $this->document->$function();
+                $addedValue->setValue($dataValue);
+            }
+            catch (Opus_Model_Exception $e) {
+                $this->log->err("could not add field $dataKey with value $dataValue to document " . $this->docId . " : " . $e->getMessage());
+                throw new Publish_Model_Exception();
+            }            
         }
         //internal Fiels
         else { 
@@ -139,8 +146,14 @@ class Publish_Model_Deposit {
                 }
             } 
             
-            $function = "set" . $dataKey;            
-            $this->document->$function($dataValue);            
+            $function = "set" . $dataKey;
+            try {
+                $this->document->$function($dataValue);
+            }
+            catch (Opus_Model_Exception $e) {
+                $this->log->err("could not set field $dataKey with value $dataValue to document " . $this->docId . " : " . $e->getMessage());
+                throw new Publish_Model_Exception();
+            }
         }
     }
         
@@ -225,8 +238,14 @@ class Publish_Model_Deposit {
             $this->log->debug("counter: " . $counter);
 
             $addFunction = 'add' . $type;
-            $person = $this->document->$addFunction(new Opus_Person());
-
+            try {
+                $person = $this->document->$addFunction(new Opus_Person());
+            }
+            catch (Opus_Model_Exception $e) {
+                $this->log->err("could not add person of type $type to document " . $this->docId . " : " . $e->getMessage());
+                throw new Publish_Model_Exception();
+            }
+            
             // person model            
             $this->storePersonAttribute($person, $type, 'FirstName', 'first', $counter);
             $this->storePersonAttribute($person, $type, 'LastName', 'last', $counter);
@@ -304,7 +323,13 @@ class Publish_Model_Deposit {
         $this->log->debug("counter: " . $counter);
         $this->storeTitleValue($title, $type, $counter);
         $this->storeTitleLanguage($title, $type, 'Language', $counter);
-        $this->document->$addFunction($title);        
+        try {
+            $this->document->$addFunction($title);
+        }
+        catch (Opus_Model_Exception $e) {
+            $this->log->err("could not add title of type $type to document " . $this->docId . " : " . $e->getMessage());
+            throw new Publish_Model_Exception();
+        }
     }
 
     private function storeTitleValue($title, $type, $counter) {
@@ -371,8 +396,14 @@ class Publish_Model_Deposit {
         }
                         
         $subject->setValue($dataValue);
-        $subject->setType(strtolower($type));        
-        $this->document->addSubject($subject);    
+        $subject->setType(strtolower($type));
+        try {
+            $this->document->addSubject($subject);
+        }
+        catch (Opus_Model_Exception $e) {
+            $this->log->err("could not add subject of type $dataKey with value $dataValue to document " . $this->docId . " : " . $e->getMessage());
+            throw new Publish_Model_Exception();
+        }
     }
 
     /**
@@ -383,7 +414,13 @@ class Publish_Model_Deposit {
         $note = new Opus_Note();
         $note->setMessage($dataValue);
         $note->setVisibility("private");
-        $this->document->addNote($note);
+        try {
+            $this->document->addNote($note);
+        }
+        catch (Opus_Model_Exception $e) {
+            $this->log->err("could not add note with message $dataValue to document " . $this->docId . " : " . $e->getMessage());
+            throw new Publish_Model_Exception();
+        }
     }
 
     /**
@@ -391,9 +428,21 @@ class Publish_Model_Deposit {
      * @param type $dataValue Collection ID
      */
     private function storeCollectionObject($dataValue) {
-        //store a simple collection
-        // TODO exception handling?
-        $this->document->addCollection(new Opus_Collection($dataValue));        
+        try {
+            $collection = new Opus_Collection($dataValue);
+        }
+        catch (Opus_Model_NotFoundException $e) {
+            $this->log->err('Could not find collection #' . $dataValue . ' in database');
+            throw new Publish_Model_Exception();
+        }
+
+        try {
+            $this->document->addCollection($collection);
+        }
+        catch (Opus_Model_Exception $e) {
+            $this->log->err("could not add collection #$dataValue to document " . $this->docId . " : " . $e->getMessage());
+            throw new Publish_Model_Exception();
+        }
     }
 
     /**
@@ -407,11 +456,21 @@ class Publish_Model_Deposit {
         $seriesId = $this->documentData[$id]['value'];
         $this->log->debug('Deposit: ' . $dataKey . ' and ' . $id . ' = ' . $seriesId);
 
-        // TODO exception handling?
-        $s = new Opus_Series($seriesId);
-        
-        //store a simple collection
-        $this->document->addSeries($s)->setNumber($dataValue);                      
+        try {
+            $s = new Opus_Series($seriesId);
+        }
+        catch (Opus_Model_Exception $e) {
+            $this->log->err('Could not find series #' . $dataValue . ' in database');
+            throw new Publish_Model_Exception();            
+        }
+
+        try {
+            $this->document->addSeries($s)->setNumber($dataValue);
+        }
+        catch (Opus_Model_Exception $e) {
+            $this->log->err("could not add series #$seriesId with number $dataValue to document " . $this->docId . " : " . $e->getMessage());
+            throw new Publish_Model_Exception();
+        }        
     }
 
     /**
@@ -419,9 +478,21 @@ class Publish_Model_Deposit {
      * @param <type> $dataValue Licence ID
      */
     private function storeLicenceObject($dataValue) {
-        // TODO exception handling?
-        $licence = new Opus_Licence($dataValue);
-        $this->document->addLicence($licence);
+        try {
+            $licence = new Opus_Licence($dataValue);
+        }
+        catch (Opus_Model_Exception $e) {
+            $this->log->err('Could not find licence #' . $dataValue . ' in database');
+            throw new Publish_Model_Exception();
+        }
+
+        try {
+            $this->document->addLicence($licence);
+        }
+        catch (Opus_Model_Exception $e) {
+            $this->log->err("could not add licence #$dataValue to document " . $this->docId . " : " . $e->getMessage());
+            throw new Publish_Model_Exception();
+        }        
     }
 
     /**
@@ -430,73 +501,95 @@ class Publish_Model_Deposit {
      * @param <type> $dataValue
      */
     private function storeThesisObject($dataValue, $grantor=false) {
-        // TODO exception handling?
-        $thesis = new Opus_DnbInstitute($dataValue);
-        if ($grantor) {
-            $this->document->addThesisGrantor($thesis);
+        try {
+            $thesis = new Opus_DnbInstitute($dataValue);
         }
-        else {
-            $this->document->addThesisPublisher($thesis);
+        catch (Opus_Model_Exception $e) {
+            $this->log->err('Could not find DnbInstitute #' . $dataValue . ' in database');
+            throw new Publish_Model_Exception();
+        }
+        
+        try {
+            if ($grantor) {
+                $this->document->addThesisGrantor($thesis);
+            }
+            else {
+                $this->document->addThesisPublisher($thesis);
+            }
+        }
+        catch (Opus_Model_Exception $e) {
+            $function = ($grantor) ? 'grantor' : 'publisher';
+            $this->log->err("could not add DnbInstitute #$dataValue as $function to document " . $this->docId . " : " . $e->getMessage());
+            throw new Publish_Model_Exception();
         }
     }        
 
     private function storeIdentifierObject($dataKey, $dataValue) {        
         $identifier = new Opus_Identifier();
         $identifier->setValue($dataValue);
-        if (strstr($dataKey, 'Old')) {
-            $this->document->addIdentifierOld($identifier);
+        try {
+            if (strstr($dataKey, 'Old')) {
+                $this->document->addIdentifierOld($identifier);
+            }
+            else if (strstr($dataKey, 'Serial')) {
+                $this->document->addIdentifierSerial($identifier);
+            }
+            else if (strstr($dataKey, 'Uuid')) {
+                $this->document->addIdentifierUuid($identifier);
+            }
+            else if (strstr($dataKey, 'Isbn')) {
+                $this->document->addIdentifierIsbn($identifier);
+            }
+            else if (strstr($dataKey, 'Urn')) {
+                $this->document->addIdentifierUrn($identifier);
+            }
+            else if (strstr($dataKey, 'StdDoi')) {
+                $this->document->addIdentifierStdDoi($identifier);
+            }
+            else if (strstr($dataKey, 'Doi')) {
+                $this->document->addIdentifierDoi($identifier);
+            }
+            else if (strstr($dataKey, 'Handle')) {
+                $this->document->addIdentifierHandle($identifier);
+            }
+            else if (strstr($dataKey, 'SplashUrl')) {
+                $this->document->addIdentifierSplashUrl($identifier);
+            }
+            else if (strstr($dataKey, 'Url')) {
+                $this->document->addIdentifierUrl($identifier);
+            }
+            else if (strstr($dataKey, 'Issn')) {
+                $this->document->addIdentifierIssn($identifier);
+            }
+            else if (strstr($dataKey, 'CrisLink')) {
+                $this->document->addIdentifierCrisLink($identifier);
+            }
+            else if (strstr($dataKey, 'SplashUrl')) {
+                $this->document->addIdentifierSplashUrl($identifier);
+            }
+            else if (strstr($dataKey, 'Opus3')) {
+                $this->document->addIdentifierOpus3($identifier);
+            }
+            else if (strstr($dataKey, 'Opac')) {
+                $this->document->addIdentifierOpac($identifier);
+            }
+            else if (strstr($dataKey, 'Arxiv')) {
+                $this->document->addIdentifierArxiv($identifier);
+            }
+            else if (strstr($dataKey, 'Pubmed')) {
+                $this->document->addIdentifierPubmed($identifier);
+            }
         }
-        else if (strstr($dataKey, 'Serial')) {
-            $this->document->addIdentifierSerial($identifier);
-        }
-        else if (strstr($dataKey, 'Uuid')) {
-            $this->document->addIdentifierUuid($identifier);
-        }
-        else if (strstr($dataKey, 'Isbn')) {
-            $this->document->addIdentifierIsbn($identifier);
-        }
-        else if (strstr($dataKey, 'Urn')) {
-            // TODO hier kann eine Collision entstehen!
-            $this->document->addIdentifierUrn($identifier);
-        }
-        else if (strstr($dataKey, 'StdDoi')) {
-            $this->document->addIdentifierStdDoi($identifier);
-        }
-        else if (strstr($dataKey, 'Doi')) {
-            $this->document->addIdentifierDoi($identifier);
-        }
-        else if (strstr($dataKey, 'Handle')) {
-            $this->document->addIdentifierHandle($identifier);
-        }
-        else if (strstr($dataKey, 'SplashUrl')) {
-            $this->document->addIdentifierSplashUrl($identifier);
-        }
-        else if (strstr($dataKey, 'Url')) {
-            $this->document->addIdentifierUrl($identifier);
-        }
-        else if (strstr($dataKey, 'Issn')) {
-            $this->document->addIdentifierIssn($identifier);
-        }        
-        else if (strstr($dataKey, 'CrisLink')) {
-            $this->document->addIdentifierCrisLink($identifier);
-        }
-        else if (strstr($dataKey, 'SplashUrl')) {
-            $this->document->addIdentifierSplashUrl($identifier);
-        }
-        else if (strstr($dataKey, 'Opus3')) {
-            $this->document->addIdentifierOpus3($identifier);
-        }
-        else if (strstr($dataKey, 'Opac')) {
-            $this->document->addIdentifierOpac($identifier);
-        }
-        else if (strstr($dataKey, 'Arxiv')) {
-            $this->document->addIdentifierArxiv($identifier);
-        }
-        else if (strstr($dataKey, 'Pubmed')) {
-            $this->document->addIdentifierPubmed($identifier);
+        catch (Opus_Model_Exception $e) {
+            $this->log->err("could not add identifier of type $dataKey with value $dataValue to document " . $this->docId . " : " . $e->getMessage());
+            throw new Publish_Model_Exception();
         }
     }
 
+    /**
+     *
+     * @deprecated
+     */
     private function storeReferenceObject($dataKey, $dataValue) {
         //TODO: probably no valid storing possible because a label is missing
         //a reference should be a new datatype with implicit fields value and label
@@ -504,33 +597,38 @@ class Publish_Model_Deposit {
         $reference = new Opus_Reference();
         $reference->setValue($dataValue);
         $reference->setLabel("no Label given");
-
-        if (strstr($dataKey, 'Isbn')) {
-            $this->document->addReferenceIsbn($reference);
+        try {
+            if (strstr($dataKey, 'Isbn')) {
+                $this->document->addReferenceIsbn($reference);
+            }
+            else if (strstr($dataKey, 'Urn')) {
+                $this->document->addReferenceUrn($reference);
+            }
+            else if (strstr($dataKey, 'Doi')) {
+                $this->document->addReferenceDoi($reference);
+            }
+            else if (strstr($dataKey, 'Handle')) {
+                $this->document->addReferenceHandle($reference);
+            }
+            else if (strstr($dataKey, 'Url')) {
+                $this->document->addReferenceUrl($reference);
+            }
+            else if (strstr($dataKey, 'Issn')) {
+                $this->document->addReferenceIssn($reference);
+            }
+            else if (strstr($dataKey, 'StdDoi')) {
+                $this->document->addReferenceStdDoi($reference);
+            }
+            else if (strstr($dataKey, 'CrisLink')) {
+                $this->document->addReferenceCrisLink($reference);
+            }
+            else if (strstr($dataKey, 'SplashUrl')) {
+                $this->document->addReferenceSplashUrl($reference);
+            }
         }
-        else if (strstr($dataKey, 'Urn')) {
-            $this->document->addReferenceUrn($reference);
-        }
-        else if (strstr($dataKey, 'Doi')) {
-            $this->document->addReferenceDoi($reference);
-        }
-        else if (strstr($dataKey, 'Handle')) {
-            $this->document->addReferenceHandle($reference);
-        }
-        else if (strstr($dataKey, 'Url')) {
-            $this->document->addReferenceUrl($reference);
-        }
-        else if (strstr($dataKey, 'Issn')) {
-            $this->document->addReferenceIssn($reference);
-        }
-        else if (strstr($dataKey, 'StdDoi')) {
-            $this->document->addReferenceStdDoi($reference);
-        }
-        else if (strstr($dataKey, 'CrisLink')) {
-            $this->document->addReferenceCrisLink($reference);
-        }
-        else if (strstr($dataKey, 'SplashUrl')) {
-            $this->document->addReferenceSplashUrl($reference);
+        catch (Opus_Model_Exception $e) {
+            $this->log->err("could not add reference of type $dataKey with value $dataValue to document " . $this->docId . " : " . $e->getMessage());
+            throw new Publish_Model_Exception();
         }
     }
 
@@ -548,7 +646,13 @@ class Publish_Model_Deposit {
         $enrichment->setValue($dataValue);
         $enrichment->setKeyName($keyName);
 
-        $this->document->addEnrichment($enrichment);
+        try {
+            $this->document->addEnrichment($enrichment);
+        }
+        catch (Opus_Model_Exception $e) {
+            $this->log->err("could not add enrichment key $keyName with value $dataValue to document " . $this->docId . " : " . $e->getMessage());
+            throw new Publish_Model_Exception();
+        }        
     }
 
 }
