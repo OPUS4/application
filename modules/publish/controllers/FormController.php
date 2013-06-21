@@ -55,7 +55,7 @@ class Publish_FormController extends Controller_Action {
         $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
         $this->view->subtitle = $this->view->translate('publish_controller_index_sub');
 
-        if ($this->getRequest()->isPost() !== true) {            
+        if ($this->getRequest()->isPost() !== true) {
             return $this->_redirectTo('index', '', 'index');
         }
 
@@ -68,7 +68,7 @@ class Publish_FormController extends Controller_Action {
         if (!$indexForm->enableUpload) {
             $this->view->subtitle = $this->view->translate('publish_controller_index_sub_without_file');
         }
-        
+
         if (is_array($postData) && count($postData) === 0) {
             $this->_logger->err('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
             return $this->_redirectTo('index', $this->view->translate('error_empty_post_array'), 'index');
@@ -80,12 +80,12 @@ class Publish_FormController extends Controller_Action {
 
         $indexForm->populate($postData);
         $this->_initializeDocument($postData);
-        
+
         $files = $this->document->getFile();
         if (!empty($files)) {
             $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
         }
-        
+
         // validate fileupload (if the current form contains a file upload field and file upload is enabled in application config)
         if ($indexForm->enableUpload) {
             if ($indexForm->getElement('fileupload') != null && !$indexForm->getElement('fileupload')->isValid($postData)) {
@@ -93,7 +93,7 @@ class Publish_FormController extends Controller_Action {
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
             }
             else {
-                //file valid-> store file                
+                //file valid-> store file
                 $this->view->uploadSuccess = $this->_storeUploadedFiles($postData);
                 if ($this->view->uploadSuccess) {
                     $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
@@ -101,17 +101,17 @@ class Publish_FormController extends Controller_Action {
                 // TODO warum wird hier nochmal eine Form instanziiert und nicht die weiter oben bereits erzeugte verwendet?
                 $indexForm = new Publish_Form_PublishingFirst($this->view);
                 $indexForm->populate($postData);
-                $indexForm->setViewValues();                
+                $indexForm->setViewValues();
 
                 if (array_key_exists('addAnotherFile', $postData)) {
                     $postData['uploadComment'] = "";
                     return $this->renderScript('index/index.phtml');
-                }                
+                }
             }
         }
 
         //validate whole form
-        if (!$indexForm->isValid($postData)) {            
+        if (!$indexForm->isValid($postData)) {
             $indexForm->setViewValues();
             $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
             return $this->renderScript('index/index.phtml');
@@ -119,9 +119,6 @@ class Publish_FormController extends Controller_Action {
 
         //form entries are valid: store data
         $this->_storeBibliography($postData, $config);
-
-        //call the appropriate template
-        $this->_helper->viewRenderer($this->session->documentType);
 
         try {
             $publishForm = $this->createPublishingSecondForm();
@@ -131,7 +128,9 @@ class Publish_FormController extends Controller_Action {
             return $this->_redirectTo('index', '', 'index');
         }
 
-        return $this->showTemplate($publishForm);
+        $this->showTemplate($publishForm);
+
+        return $this->renderDocumenttypeForm();
     }
 
     private function createPublishingSecondForm($postData = null) {
@@ -166,7 +165,7 @@ class Publish_FormController extends Controller_Action {
     /**
      * Method displays and checks the second form page. It also concerns for extending and reducing form fields.
      * After correct validation the user is redirected to deposit controller for storing data.
-     * 
+     *
      * @return different types of redirect
      */
     public function checkAction() {
@@ -179,7 +178,7 @@ class Publish_FormController extends Controller_Action {
 
         $this->view->requiredHint = $this->view->translate('publish_controller_required_hint');
 
-        if ($this->getRequest()->isPost() === true) {           
+        if ($this->getRequest()->isPost() === true) {
 
             $postData = $this->getRequest()->getPost();
             if (!is_null($this->session->additionalFields)) {
@@ -201,15 +200,14 @@ class Publish_FormController extends Controller_Action {
             }
 
             //go back and change data
-            if (array_key_exists('back', $postData)) {                
+            if (array_key_exists('back', $postData)) {
                 if (isset($this->session->elements))
                     foreach ($this->session->elements AS $element)
                         $postData[$element['name']] = $element['value'];
             }
 
             if (!array_key_exists('send', $postData) || array_key_exists('back', $postData)) {
-                // A button (not SEND) was pressed => add / remove fields or browse fields (both in form step 2) OR back button (in form step 3)
-                $this->_helper->viewRenderer($this->session->documentType);
+                // A button (not SEND) was pressed => add / remove fields or browse fields (both in form step 2) OR back button (in form step 3)                
 
                 if (!array_key_exists('back', $postData)) {
                     // die Session muss nur dann manipuliert werden, wenn im zweiten Schritt ADD/DELETE/BROWSE durchgeführt wurde
@@ -229,16 +227,18 @@ class Publish_FormController extends Controller_Action {
                     // Session timed out.
                     return $this->_redirectTo('index', '', 'index');
                 }
-                
+
                 $this->setViewValues('form', 'check', '#current', $form);
-                
+
                 if (array_key_exists('LegalNotices', $postData) && $postData['LegalNotices'] != '1') {
                     $legalNotices = $form->getElement('LegalNotices');
                     $legalNotices->setChecked(false);
                 }
+                
+                $this->renderDocumenttypeForm();
                 return;
             }
-            
+
             // SEND was pressed => check the form
 
             // der nachfolgende Schritt ist erforderlich, da die Selectbox der obersten Ebene einer Collection-Gruppe
@@ -264,7 +264,8 @@ class Publish_FormController extends Controller_Action {
                 $form->setViewValues();
                 $this->view->form = $form;
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
-                return $this->_helper->viewRenderer($this->session->documentType);
+                $this->renderDocumenttypeForm();
+                return;
             }
 
             // form is valid: move to third form step (confirmation page)
@@ -286,7 +287,7 @@ class Publish_FormController extends Controller_Action {
         if (!isset($this->session->documentId) || $this->session->documentId == '') {
             $this->_logger->info(__METHOD__ . ' documentType = ' . $documentType);
             $this->document = $docModel->createDocument($documentType);
-            $this->session->documentId = $this->document->store();            
+            $this->session->documentId = $this->document->store();
             $this->_logger->info(__METHOD__ . ' The corresponding document ID is: ' . $this->session->documentId);
         }
         else {
@@ -340,7 +341,7 @@ class Publish_FormController extends Controller_Action {
                 $docfile = $this->document->addFile();
                 //$docfile->setFromPost($fileValues);
                 $docfile->setLabel(urldecode($fileValues['name']));
-                $docfile->setComment($comment);                
+                $docfile->setComment($comment);
                 $docfile->setPathName(urldecode($fileValues['name']));
                 $docfile->setMimeType($fileValues['type']);
                 $docfile->setTempFile($fileValues['tmp_name']);
@@ -361,7 +362,7 @@ class Publish_FormController extends Controller_Action {
         if (!isset($config->form->first->bibliographie) || $config->form->first->bibliographie != '1') {
             return;
         }
-        
+
         if (isset($data['bibliographie']) && $data['bibliographie'] === '1') {
             $this->_logger->debug("Bibliographie is set -> store it!");
             //store the document internal field BelongsToBibliography
@@ -372,7 +373,7 @@ class Publish_FormController extends Controller_Action {
 
     /**
      * Prepare view template (second form step) for the given document type.
-     * 
+     *
      * @param Publish_Form_PublishingSecond $form
      */
     private function showTemplate($form) {
@@ -383,7 +384,7 @@ class Publish_FormController extends Controller_Action {
 
     /**
      * Prepare confirmation page (third form step) for the current document.
-     * 
+     *
      * @param Publish_Form_PublishingSecond $form
      */
     private function showCheckPage($form) {
@@ -404,7 +405,7 @@ class Publish_FormController extends Controller_Action {
     }
 
     private function manipulateSession($postData) {
-        $this->view->currentAnchor = "";       
+        $this->view->currentAnchor = "";
 
         //find out which button was pressed
         $pressedButtonName = $this->_getPressedButton($postData);
@@ -484,7 +485,7 @@ class Publish_FormController extends Controller_Action {
      * @param array $post array of POST request values
      * @return <String> name of button
      */
-    private function _getPressedButton($post) {        
+    private function _getPressedButton($post) {
         foreach ($post AS $name => $value) {
             if (strstr($name, self::BUTTON_ADD) ||
                     strstr($name, self::BUTTON_DELETE) ||
@@ -535,7 +536,7 @@ class Publish_FormController extends Controller_Action {
 
         if ($level == 1) {
             // Root Node
-            if (isset($post[$field . '_' . $value]) && $post[$field . '_' . $value] !== '') {                
+            if (isset($post[$field . '_' . $value]) && $post[$field . '_' . $value] !== '') {
                 $this->session->additionalFields['collId1' . $field . '_' . $value] = $post[$field . '_' . $value];
             }
         }
@@ -548,5 +549,28 @@ class Publish_FormController extends Controller_Action {
 
         return $level;
     }
-    
+
+    private function renderDocumenttypeForm() {
+        $config = Zend_Registry::get('Zend_Config');
+
+        if (!isset($config->publish->path->documenttemplates)) {
+            throw new Application_Exception('invalid configuration: publish.path.documenttemplates is not defined');
+        }
+
+        $path = $config->publish->path->documenttemplates;
+        if (!is_dir($path)) {
+            throw new Application_Exception('invalid configuration: publish.path.documenttemplates does not refer to a directory');
+        }
+
+        // TODO security? Woher kommt der Inhalt von $this->session->documentType
+        $templateFileName = $path . DIRECTORY_SEPARATOR . $this->session->documentType . '.phtml';
+        if (!is_readable($templateFileName)) {
+            throw new Application_Exception('invalid configuration: template for document type ' . $this->session->documentType . ' is not readable');
+        }
+
+        $this->view->addScriptPath($path);
+        // TODO getTemplateName in Controller_Helper_DocumentTypes auswerten
+        $this->renderScript($this->session->documentType . '.phtml');
+    }
+
 }
