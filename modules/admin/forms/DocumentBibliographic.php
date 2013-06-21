@@ -101,7 +101,7 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPublisher', 'ThesisPublisher'), 'Publishers');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentGrantor', 'ThesisGrantor'), 'Grantors');
         
-        $element = new Zend_Form_Element_Checkbox(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY);
+        $element = new Form_Element_Checkbox(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY);
         $element->setLabel('BelongsToBibliography');
         $this->addElement($element);
     }
@@ -165,7 +165,7 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
             $label = $name;
         }
         
-        $element = new Zend_Form_Element_Text($name);
+        $element = new Form_Element_Text($name);
         $element->setLabel($label);
         $this->addElement($element);
         

@@ -46,13 +46,13 @@ class Admin_Form_DocumentEnrichment extends Admin_Form_AbstractModelSubForm {
     public function init() {
         parent::init();
         
-        $element = new Zend_Form_Element_Hidden(self::ELEMENT_ID);
+        $element = new Form_Element_Hidden(self::ELEMENT_ID);
         $this->addElement($element);
         
         $element = $this->_createEnrichmentKeySelect(self::ELEMENT_KEY_NAME);
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Text(self::ELEMENT_VALUE);
+        $element = new Form_Element_Text(self::ELEMENT_VALUE);
         $element->setRequired(true);
         $this->addElement($element);
     }
@@ -83,7 +83,7 @@ class Admin_Form_DocumentEnrichment extends Admin_Form_AbstractModelSubForm {
     }
     
     protected function _createEnrichmentKeySelect($name = 'KeyName') {
-        $select = new Zend_Form_Element_Select($name);
+        $select = new Form_Element_Select($name);
         
         $enrichment = new Opus_Enrichment();
         $options = $enrichment->getField('KeyName')->getDefault();

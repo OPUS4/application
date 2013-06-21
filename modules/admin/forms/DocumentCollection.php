@@ -45,13 +45,13 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
     const ELEMENT_REMOVE = 'Remove';
         
     public function init() {
-        $element = new Zend_Form_Element_Hidden(self::ELEMENT_ID);
+        $element = new Form_Element_Hidden(self::ELEMENT_ID);
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_EDIT);
+        $element = new Form_Element_Submit(self::ELEMENT_EDIT);
         $this->addElement($element);
 
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_REMOVE);
+        $element = new Form_Element_Submit(self::ELEMENT_REMOVE);
         $this->addElement($element);
     }
     

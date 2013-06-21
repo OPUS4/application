@@ -60,7 +60,7 @@ class Admin_Form_DocumentSubject extends Admin_Form_AbstractModelSubForm {
         
         $elementFactory = new Admin_Model_FormElementFactory();
         
-        $element = new Zend_Form_Element_Hidden(self::ELEMENT_ID);
+        $element = new Form_Element_Hidden(self::ELEMENT_ID);
         $this->addElement($element);
         
         if (is_null($this->__language)) {
@@ -68,17 +68,17 @@ class Admin_Form_DocumentSubject extends Admin_Form_AbstractModelSubForm {
             $element->setLabel('Language');
         }
         else {
-            $element = new Zend_Form_Element_Hidden(self::ELEMENT_LANGUAGE);
+            $element = new Form_Element_Hidden(self::ELEMENT_LANGUAGE);
             $element->setValue($this->__language);
         }
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Text(self::ELEMENT_VALUE);
+        $element = new Form_Element_Text(self::ELEMENT_VALUE);
         $element->setRequired(true);
         $element->setLabel('Value');
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Text(self::ELEMENT_EXTERNAL_KEY);
+        $element = new Form_Element_Text(self::ELEMENT_EXTERNAL_KEY);
         $element->setLabel('ExternalKey');
         $this->addElement($element);
     }

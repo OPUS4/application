@@ -48,14 +48,14 @@ class Admin_Form_DocumentAbstract extends Admin_Form_AbstractModelSubForm {
         
         $elementFactory = new Admin_Model_FormElementFactory();
         
-        $element = new Zend_Form_Element_Hidden(self::ELEMENT_ID);
+        $element = new Form_Element_Hidden(self::ELEMENT_ID);
         $this->addElement($element);
         
         $element = $elementFactory->createLanguageSelect(self::ELEMENT_LANGUAGE);
         $element->setLabel('Language'); // TODO translate
         $this->addElement($element); 
         
-        $element = new Zend_Form_Element_Textarea(self::ELEMENT_VALUE);
+        $element = new Form_Element_Textarea(self::ELEMENT_VALUE);
         $element->setLabel('Text');
         $element->setRequired(true);
         $this->addElement($element);

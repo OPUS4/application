@@ -89,10 +89,10 @@ class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
         
         $elementFactory = $this->getFormElementFactory();
         
-        $element = new Zend_Form_Element_Hidden(self::ELEMENT_ID);
+        $element = new Form_Element_Hidden(self::ELEMENT_ID);
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Text(self::ELEMENT_NUMBER);
+        $element = new Form_Element_Text(self::ELEMENT_NUMBER);
         $element->setLabel($this->_translationPrefix . self::ELEMENT_NUMBER);
         $element->setRequired(true);
         $element->setValidators(array(
@@ -100,14 +100,14 @@ class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
         ));
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Text(self::ELEMENT_COUNTRIES);
+        $element = new Form_Element_Text(self::ELEMENT_COUNTRIES);
         $element->setLabel($this->_translationPrefix . self::ELEMENT_COUNTRIES);
         $this->addElement($element);
         
         $element = $elementFactory->createYearElement(self::ELEMENT_YEAR_APPLIED);
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Text(self::ELEMENT_APPLICATION);
+        $element = new Form_Element_Text(self::ELEMENT_APPLICATION);
         $element->setLabel($this->_translationPrefix . self::ELEMENT_APPLICATION);
         $this->addElement($element);
         

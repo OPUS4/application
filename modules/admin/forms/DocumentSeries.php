@@ -51,7 +51,7 @@ class Admin_Form_DocumentSeries extends Admin_Form_AbstractModelSubForm {
         parent::init();
         
         // Schluessel fuer Link Objekte ist Dokument-ID + Series-ID
-        $element = new Zend_Form_Element_Hidden(self::ELEMENT_DOC_ID);
+        $element = new Form_Element_Hidden(self::ELEMENT_DOC_ID);
         $this->addElement($element);
         
         $element = $this->_createSeriesSelect(self::ELEMENT_SERIES_ID);
@@ -59,11 +59,11 @@ class Admin_Form_DocumentSeries extends Admin_Form_AbstractModelSubForm {
         $element->setRequired(true);
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Text(self::ELEMENT_NUMBER);
+        $element = new Form_Element_Text(self::ELEMENT_NUMBER);
         $element->setRequired(true);
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Text(self::ELEMENT_SORT_ORDER);
+        $element = new Form_Element_Text(self::ELEMENT_SORT_ORDER);
         $element->addValidator('Int');
         $this->addElement($element);
     }

@@ -55,7 +55,7 @@ class Admin_Form_DocumentInstitute extends Admin_Form_AbstractModelSubForm {
     public function init() {
         parent::init();
         
-        $element = new Zend_Form_Element_Hidden(self::ELEMENT_DOC_ID);
+        $element = new Form_Element_Hidden(self::ELEMENT_DOC_ID);
         $this->addElement($element);
         
         $element = $this->createInstituteSelect(self::ELEMENT_INSTITUTE);

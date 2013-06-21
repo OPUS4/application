@@ -64,11 +64,11 @@ class Admin_Form_DocumentIdentifier extends Admin_Form_AbstractModelSubForm {
         $select->setRequired(true);
         $this->addElement($select);
         
-        $element = new Zend_Form_Element_Text(self::ELEMENT_VALUE);
+        $element = new Form_Element_Text(self::ELEMENT_VALUE);
         $element->setRequired(true);
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Hidden(self::ELEMENT_ID);
+        $element = new Form_Element_Hidden(self::ELEMENT_ID);
         $this->addElement($element);
     }
     

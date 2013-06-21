@@ -80,7 +80,7 @@ class Admin_Form_DocumentPersonRoles extends Admin_Form_AbstractDocumentSubForm 
         ));
         
         foreach ($roles as $role) {
-            $element = new Zend_Form_Element_Submit($this->getRoleElementName($role));
+            $element = new Form_Element_Submit($this->getRoleElementName($role));
             $element->setDecorators(array(
                 'ViewHelper',
                 array('HtmlTag', array('tag' => 'li'))

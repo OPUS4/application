@@ -97,7 +97,7 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
      * Konstante für das Ändern der Rolle für eine Person.
      */
     const RESULT_CHANGE_ROLE = 'changeRole';
-        
+    
     /**
      * Erzeugt die Formularelemente.
      */
@@ -106,44 +106,44 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         
         $elementFactory = new Admin_Model_FormElementFactory();
                 
-        $element = new Zend_Form_Element_Hidden(Admin_Form_Person::ELEMENT_PERSON_ID);
+        $element = new Form_Element_Hidden(Admin_Form_Person::ELEMENT_PERSON_ID);
         $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Checkbox(self::ELEMENT_ALLOW_CONTACT);
+        $element = new Form_Element_Checkbox(self::ELEMENT_ALLOW_CONTACT);
         $element->setLabel('AllowEmailContact');
         $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
         // TODO Durch SELECT ersetzen?
-        $element = new Zend_Form_Element_Text(self::ELEMENT_SORT_ORDER);
+        $element = new Form_Element_Text(self::ELEMENT_SORT_ORDER);
         $element->setLabel('SortOrder');
         $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
         // Edit Button
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_EDIT);
+        $element = new Form_Element_Submit(self::ELEMENT_EDIT);
         $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
         // Remove Button
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_REMOVE);
+        $element = new Form_Element_Submit(self::ELEMENT_REMOVE);
         $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_FIRST);
+        $element = new Form_Element_Submit(self::ELEMENT_FIRST);
         $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
 
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_UP);
+        $element = new Form_Element_Submit(self::ELEMENT_UP);
         $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_DOWN);
+        $element = new Form_Element_Submit(self::ELEMENT_DOWN);
         $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_LAST);
+        $element = new Form_Element_Submit(self::ELEMENT_LAST);
         $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
     }
@@ -178,7 +178,18 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         if (array_key_exists(self::ELEMENT_REMOVE, $post)) {
             return self::RESULT_REMOVE;
         }
-        // if (array_key_exists(self::ELEMENT_UP, $post))
+        else if (array_key_exists(self::ELEMENT_UP, $post)) {
+            return self::RESULT_MOVE_UP;
+        }
+        else if (array_key_exists(self::ELEMENT_DOWN, $host)) {
+            return self::RESULT_MOVE_DOWN;
+        }
+        else if (array_key_exists(self::ELEMENT_FIRST, $host)) {
+            return self::RESULT_MOVE_FIRST;
+        }
+        else if (array_key_exists(self::ELEMENT_LAST, $host)) {
+            return self::RESULT_MOVE_LAST;
+        }
         else if (array_key_exists(self::ELEMENT_EDIT, $post)) {
             return array( 'result' => Admin_Form_Document::RESULT_SWITCH_TO, 
                 'target' => array(
