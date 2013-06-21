@@ -1042,3 +1042,7 @@ pre.preserve-spaces {
     font-family: Arial, Helvetica, sans-serif;    
     white-space: pre-wrap;
 }
+
+#appmode-production {
+    display: none;
+}

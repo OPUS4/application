@@ -173,7 +173,7 @@ $languageSelectors = $this->languageSelector();
             </div>
         </div>
 
-        <div class="debug revision">
+        <div id="appmode-<?= Zend_Controller_Front::getInstance()->getParam('bootstrap')->getEnvironment() ?>" class="debug revision">
             <hr/>
             <div class="wrapper">
                 <?php /* do not edit: revision number gets updated automatically */ ?>
