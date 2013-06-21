@@ -38,6 +38,7 @@ class Export_IndexController extends Controller_Xml {
 
     private $log;
     private $stylesheetDirectory;
+    private $stylesheet;
 
     public function init() {
         parent::init();
@@ -62,12 +63,13 @@ class Export_IndexController extends Controller_Xml {
 
         }
 
+        $this->stylesheet = $this->getRequest()->getParam('stylesheet');
         $this->stylesheetDirectory = 'stylesheets-custom';
         $this->prepareXml();
     }
 
     private function prepareXml() {
-        $this->setStylesheet($this->getRequest()->getParam('stylesheet'));
+        $this->setStylesheet();
 
         try {
             $searcher = new Opus_SolrSearch_Searcher();
@@ -82,11 +84,10 @@ class Export_IndexController extends Controller_Xml {
 
     /**
      *
-     * @param string $stylesheet
      * @return void
      */
-    private function setStylesheet($stylesheet = null) {
-        if (!is_null($stylesheet)) {
+    private function setStylesheet() {
+        if (!is_null($this->stylesheet)) {
 
             $stylesheetsAvailable = array();
             $dir = new DirectoryIterator($this->view->getScriptPath('') . $this->stylesheetDirectory);
@@ -96,7 +97,7 @@ class Export_IndexController extends Controller_Xml {
                 }
             }            
 
-            $pos = array_search($stylesheet, $stylesheetsAvailable);            
+            $pos = array_search($this->stylesheet, $stylesheetsAvailable);
             if ($pos !== FALSE) {
                 $this->loadStyleSheet($this->view->getScriptPath('') . $this->stylesheetDirectory . DIRECTORY_SEPARATOR .  $stylesheetsAvailable[$pos] . '.xslt');
                 return;
@@ -167,6 +168,8 @@ class Export_IndexController extends Controller_Xml {
         if (is_null($stylesheetParam)) {
             throw new Application_Exception('stylesheet is not specified');
         }
+        $this->stylesheet = $this->getRequest()->getParam('stylesheet');
+        $this->stylesheetDirectory = 'publist';
 
         $roleParam = $this->getRequest()->getParam('role');
         if (is_null($roleParam)) {
@@ -184,8 +187,7 @@ class Export_IndexController extends Controller_Xml {
         $this->_proc->registerPHPFunctions('max');
         $this->_proc->setParameter('', 'baseUrl', $this->getRequest()->getBaseUrl());
         $this->_proc->setParameter('', 'fullPage', $fullPage);
-    
-        $this->stylesheetDirectory = 'publist';
+            
         $this->prepareXML();
     }
 
