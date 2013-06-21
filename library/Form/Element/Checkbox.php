@@ -42,7 +42,7 @@ class Form_Element_Checkbox extends Zend_Form_Element_Checkbox {
             'ViewHelper', 
             'Errors',
             'Description',
-            array('HtmlTag', array('tag' => 'div', 'id' => array('callback' => array('Form_Element_Checkbox', 'resolveElementId')))),
+            array('HtmlTag', array('tag' => 'div')),
             array('Label', array('tag' => 'div'))
             
         ));

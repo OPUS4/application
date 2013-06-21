@@ -42,7 +42,7 @@ class Form_Element_Select extends Zend_Form_Element_Select {
             'ViewHelper', 
             'Errors',
             'Description',
-            array('HtmlTag', array('tag' => 'div', 'id' => array('callback' => array('Form_Element_Select', 'resolveElementId')))),
+            array('HtmlTag', array('tag' => 'div')),
             array('Label', array('tag' => 'div'))
         ));
     }

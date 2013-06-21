@@ -40,7 +40,7 @@ class Form_Element_Submit extends Zend_Form_Element_Submit {
     public function loadDefaultDecorators() {
         $this->setDecorators(array(
             'ViewHelper', 
-            array('HtmlTag', array('tag' => 'div', 'id' => array('callback' => array('Form_Element_Submit', 'resolveElementId'))))
+            array('HtmlTag', array('tag' => 'div'))
         ));
     }
     

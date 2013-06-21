@@ -41,7 +41,7 @@ class Form_Element_Hash extends Zend_Form_Element_Hash {
         $this->setDecorators(array(
             'ViewHelper', 
             'Errors',
-            array('HtmlTag', array('tag' => 'div', 'id' => array('callback' => array('Form_Element_Hash', 'resolveElementId'))))
+            array('HtmlTag', array('tag' => 'div'))
         ));
     }
     
