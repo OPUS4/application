@@ -41,7 +41,7 @@ class Form_Element_Hidden extends Zend_Form_Element_Hidden {
         $this->setDecorators(array(
             'ViewHelper', 
             'Errors',
-            array('HtmlTag', array('tag' => 'div', 'id' => array('callback' => array('Form_Element_Select', 'resolveElementId'))))
+            array('HtmlTag', array('tag' => 'div', 'id' => array('callback' => array('Form_Element_Hidden', 'resolveElementId'))))
         ));
     }
     
