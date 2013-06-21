@@ -836,7 +836,10 @@ class Publish_FormControllerTest extends ControllerTestCase {
             ->setMethod('POST')
             ->setPost($data);
         $this->dispatch('/publish/form/check');
-        $this->assertEquals('200', $this->getResponse()->getHttpResponseCode());
+
+        $response = $this->getResponse();
+        $this->assertEquals('500', $response->getHttpResponseCode());
+        $this->assertContains('Application_Exception', $response->getBody());
 
         //no button pressed, additionalFields still in intial state
         $this->assertEquals(9, count($session->additionalFields));
