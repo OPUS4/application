@@ -33,16 +33,14 @@
  */
 class Publish_Model_Deposit {
 
-    public $document;
-    public $documentData;
-    public $log;
-    public $session;
+    private $document;
+    private $documentData;
+    private $log;
     private $docId;
 
-    public function __construct($session, $log, $documentData = null) {
+    public function __construct($docId, $log, $documentData = null) {
         $this->log = $log;
-        $this->session = $session;
-        $this->docId = $this->session->documentId;
+        $this->docId = $docId;
 
         try {
             $this->document = new Opus_Document($this->docId);
