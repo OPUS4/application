@@ -58,7 +58,7 @@ class Publish_Model_DocumenttypeParserTest extends ControllerTestCase {
     }
 
     /**
-     * @expectedException Publish_Model_FormSessionTimeoutException
+     * @expectedException Application_Exception
      */
     public function testConstructorWithCorrectDomAndWrongForm() {
         $session = new Zend_Session_Namespace('Publish');
