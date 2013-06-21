@@ -45,7 +45,7 @@
 
     <xsl:param name="baseUrl" />
     <xsl:param name="collName" />
-    <xsl:param name="snippet" />
+    <xsl:param name="fullPage" />
 
     <xsl:template match="/">
         <xsl:apply-templates select="Documents"/>
@@ -54,12 +54,20 @@
     <xsl:key name="year" match="Opus_Document" use="php:functionString('max', PublishedDate/@Year, @PublishedYear)"/>
 
     <xsl:template match="Documents">
-        <xsl:element name="html">
-            <xsl:call-template name="set_header"/>
-            <xsl:element name="body">
+        <xsl:choose>
+            <xsl:when test="$fullPage = 'yes'">
+                <xsl:element name="html">
+                    <xsl:call-template name="set_header"/>
+                    <xsl:element name="body">
+                        <xsl:call-template name="set_div"/>
+                    </xsl:element>
+                </xsl:element>
+            </xsl:when>
+            <xsl:otherwise>
                 <xsl:call-template name="set_div"/>
-            </xsl:element>
-        </xsl:element>
+            </xsl:otherwise>
+        </xsl:choose>
+
     </xsl:template>
 
 

@@ -527,5 +527,25 @@ class Export_IndexControllerTest extends ControllerTestCase {
     }
 
 
+    /**
+     * begin: tests for OPUSVIER-2865
+     */
+
+    public function testPublistActionFullPageParam() {
+        $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number/coll_visible/fullpage/yes');
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $response = $this->getResponse();
+        echo $response->getBody();
+        $this->assertContains('<html xmlns="http://www.w3.org/1999/xhtml">', $response->getBody());
+    }
+
+    public function testPublistActionNoFullPageParam() {
+        $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number/coll_visible');
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $response = $this->getResponse();
+        $this->assertNotContains('<html>', $response->getBody());
+    }
+
+
 }
 
