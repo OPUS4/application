@@ -41,8 +41,8 @@ $(document).ready(function() {
 	});
 	$(".dropdown > dd a").click(function(event) {
 		$(this).closest(".dropdown").toggleClass("dropdown-open");
-		event.preventDefault();
 		$('html,body').animate({scrollTop:$(this.hash).offset().top - ($actionbox.outerHeight() + 10)}, 0);
+		event.preventDefault();
 	});
 	$(document).mouseup(function(event) {
 		if ($(".dropdown-open") && !$(event.target).parents().hasClass("dropdown-open")) {
