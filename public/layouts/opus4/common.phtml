@@ -155,6 +155,9 @@ $languageSelectors = $this->languageSelector();
                     <?PHP endif; ?>
                     <?= $this->layout()->content ?>
                 <?PHP else : ?>
+                <?PHP if ($this->accessAllowed('documents') && !is_null($this->adminform)) : ?> 
+                    <?= $this->adminform ?>
+                <?PHP endif ?>
                 <div class="wrapper">
                     <?= $this->layout()->content ?>
                 </div>
