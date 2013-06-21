@@ -122,7 +122,7 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
     }
 
     public function testGetDocumentThrowsSchemaInvalidException() {
-        $this->setExpectedException('Exception');
+        $this->setExpectedException('Application_Exception');
         $this->docTypeHelper->getDocument('demo_invalid');
     }
 
