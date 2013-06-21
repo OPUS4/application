@@ -140,9 +140,9 @@ class Opus3Migration_Documents {
             if ($numberOfFiles > 0) {
                 $this->logger->log_debug("Opus3Migration_Documents", $numberOfFiles . " file(s) have been imported successfully for document ID " . $id . " -- memory $mem_now (KB), peak memory $mem_peak (KB)");
             }
+            $fileImporter->finalize();
         }
-
-        $fileImporter->finalize();
+        
     }
 
     public function getStatus() {
