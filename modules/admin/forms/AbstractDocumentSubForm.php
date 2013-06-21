@@ -40,14 +40,15 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     public function init() {
         parent::init();
         
-        // TODO needed? $this->addElementPrefixPath('Form_Decorator', 'Form/Decorator', 'decorator');
-        // $this->addElementPrefixPath('Form_Element', 'Form/Element', Zend_Form::ELEMENT);
+        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Form', 'Form'); // '_Element' wird anscheinend automatisch dran gehängt
         
         $this->setDisableLoadDefaultDecorators(true);
         $this->setDecorators(array(
             'FormElements',
+            array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
             'Fieldset',
-            array('divWrapper' => 'HtmlTag', array('tag' => 'div', 'class' => 'subform'))
+            array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
         ));
     }
     

@@ -42,8 +42,12 @@ class Form_Element_Text extends Zend_Form_Element_Text {
             'ViewHelper', 
             'Errors',
             'Description',
-            array('HtmlTag', array('tag' => 'div')),
-            array('Label', array('tag' => 'div'))
+            array(array('fieldWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'field')),
+            array('Label', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
+            array(array('dataWrapperOpen' => 'HtmlTagWithId'), 
+                array('tag' => 'div', 'class' => 'data-wrapper', 'openOnly' => true, 'placement' => 'prepend')),
+            array(array('dataWrapperClose' => 'HtmlTag'), 
+                array('tag' => 'div', 'class' => 'data-wrapper', 'closeOnly' => true, 'placement' => 'append'))
         ));
     }
     

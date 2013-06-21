@@ -126,17 +126,13 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         
         $this->addElement('hash', 'opus_hash', array('salt' => 'unique')); // TODO salt?
         
-        $element = $this->createSubmit(self::ELEMENT_SAVE);
-        $this->addElement($element);
+        $this->addElement('submit', self::ELEMENT_SAVE);
         
         $element = $this->createSubmit(self::ELEMENT_SAVE_AND_CONTINUE);
         $this->addElement($element);
         
         $element = $this->createSubmit(self::ELEMENT_CANCEL);
         $this->addElement($element);
-        
-//        $element->addDecorator(array('wrapperDiv' => 'HtmlTag',
-//                array('tag' => 'div', 'placement' => 'append', 'closeOnly' => 'true')));
     }
 
     /**
