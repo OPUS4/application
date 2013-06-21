@@ -212,7 +212,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $session->documentId = $doc->store();
 
         $log = Zend_Registry::get('Zend_Log');
-        $deposit = new Publish_Model_Deposit($session, $log);
+        $deposit = new Publish_Model_Deposit($session->documentId, $log);
         $this->setExpectedException('Publish_Model_FormDocumentNotFoundException');
     }
 }
