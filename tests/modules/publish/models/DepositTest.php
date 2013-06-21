@@ -38,20 +38,18 @@ class Publish_Model_DepositTest extends ControllerTestCase {
      * @expectedException Publish_Model_FormDocumentNotFoundException
      */
     public function testInvalidDocumentState() {
-        $session = new Zend_Session_Namespace('Publish');
         $document = new Opus_Document();
         $document->setServerState('published');
-        $session->documentId = $document->store();
+        $docId = $document->store();
 
         $log = Zend_Registry::get('Zend_Log');
-        new Publish_Model_Deposit($session->documentId, $log);
+        new Publish_Model_Deposit($docId, $log);
     }
 
     public function testValidDocumentData() {
-        $session = new Zend_Session_Namespace('Publish');
         $document = new Opus_Document();
         $document->setServerState('temporary');
-        $session->documentId = $document->store();
+        $docId = $document->store();
         
         $enrichment = new Opus_EnrichmentKey();
         $enrichment->setName('Foo2Title');
@@ -117,7 +115,7 @@ class Publish_Model_DepositTest extends ControllerTestCase {
         );
 
         $log = Zend_Registry::get('Zend_Log');
-        $dep = new Publish_Model_Deposit($session->documentId, $log, $data);
+        $dep = new Publish_Model_Deposit($docId, $log, $data);
         $document = $dep->getDocument();
         $document->store();                               
         
