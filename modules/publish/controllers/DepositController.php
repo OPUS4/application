@@ -94,12 +94,27 @@ class Publish_DepositController extends Controller_Action {
             unset($this->depositData['send']);
         }
 
-        $depositData = new Publish_Model_Deposit($this->session, $this->log, $this->depositData);
+        try {
+            $depositData = new Publish_Model_Deposit($this->session, $this->log, $this->depositData);
+        }
+        catch (Publish_Model_Exception $e) {
+            throw new Application_Exception('publish_error_unexpected');
+        }
+        
         $this->document = $depositData->getDocument();
         $this->document->setServerState('unpublished');
-        $this->session->documentId = $this->document->store();
-        $docId = $this->session->documentId;  
-        $this->log->info("Document $docId was successfully stored!");        
+
+        try {
+            $docId = $this->document->store();
+        }
+        catch (Exception $e) {
+            // TODO wie sollte die Exception sinnvoll behandelt werden?
+            $this->log->err("Document $docId could not stored successfully: " . $e->getMessage());
+            throw new Application_Exception('publish_error_unexpected');
+        }        
+
+        $this->log->info("Document $docId was successfully stored!");
+        $this->session->documentId = $docId;
       
         // Prepare redirect to confirmation action.
         $this->session->depositConfirmDocumentId = $docId;

@@ -470,6 +470,14 @@
       </tuv>
     </tu>
 
+    <tu tuid="publish_error_unexpected">
+      <tuv xml:lang="en">
+        <seg>An unexpected error occurred: your input is lost. Please try again or contact the administrator.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Es ist ein unerwarteter Fehler aufgetreten. Ihre Eingaben sind gelöscht. Bitte versuchen Sie es erneut oder wenden Sie sich an den Administrator.</seg>
+      </tuv>
+    </tu>
 	
     </body>
 </tmx>

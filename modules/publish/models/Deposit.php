@@ -44,13 +44,21 @@ class Publish_Model_Deposit {
         $this->log = $log;
         $this->session = $session;
         $this->session2 = new Zend_Session_Namespace();
-        // TODO missing exception handling
-        $this->document = new Opus_Document($this->session->documentId);
-        $this->documentData = $documentData;
-        if ($this->document->getServerState() !== 'temporary') {
-            $this->log->err('Could not find document: Tried to return document, which is not in state "temporary"');
+
+        try {
+            $this->document = new Opus_Document($this->session->documentId);
+        }
+        catch (Opus_Model_NotFoundException $e) {
+            $this->log->err('Could not find document ' . $this->session->documentId . ' in database');
             throw new Publish_Model_FormDocumentNotFoundException();
         }
+        
+        $this->documentData = $documentData;
+        if ($this->document->getServerState() !== 'temporary') {
+            $this->log->err('unexpected state: document ' . $this->session->documentId . ' is not in ServerState "temporary"');
+            throw new Publish_Model_FormDocumentNotFoundException();
+        }
+        
         $this->_storeDocumentData();
     }
 
