@@ -77,20 +77,9 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
         $this->setLegend('admin_document_section_person' . $this->__roleName);
 
         // Button zum Hinzufügen von Personen in Role
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_ADD);
-        $element->removeDecorator('DtDdWrapper');
-        $element->addDecorator(array('div' => 'HtmlTag'), array('tag' => 'div', 'class' => 'add-element'));
-        $element->addDecorator(array('closeDl' => 'HtmlTag'), 
-                array('tag' => 'dl', 'closeOnly' => true, 'placement' => 'prepend')); // schliesst DL vor Add button
+        $element = $this->createSubmit(self::ELEMENT_ADD);
         $element->setOrder(1000); // TODO not 100% safe
         $this->addElement($element);
-        
-        $this->setDecorators(array(
-            'FormElements',
-            array('HtmlTag', array('tag' => 'dl', 'openOnly' => true)), // fängt DL nach Legend an
-            'Fieldset',
-            'DtDdWrapper'
-        ));
     }
     
     /**

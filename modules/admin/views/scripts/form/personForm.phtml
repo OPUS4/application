@@ -51,8 +51,7 @@
     $formId = substr($formId, 0, strrpos($formId, '-') + 1);
 ?>
 
-<dt id="<?= $this->element->getName() . '-label' ?>">&#160;</dt>
-<dd id="<?= $this->element->getName() . '-element' ?>">
+<div id="<?= $this->element->getName() . '-element' ?>">
     <div class="person-info">
         <span id="<?=$formId . 'LastName'?>"><?= $person->getLastName()?></span>
         <?PHP if (!is_null($person->getFirstName())) : ?>, 
@@ -78,4 +77,4 @@
             <?PHP endif; ?>
         <?PHP endforeach; ?>
     </div>
-</dd>
+</div>

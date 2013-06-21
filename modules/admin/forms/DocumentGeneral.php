@@ -80,18 +80,18 @@ class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
      */
     public function init() {
         parent::init();
-        
+                
         $this->setLegend('admin_document_section_general');
         
         $elementFactory = $this->getFormElementFactory();
         
-        // TODO Sprache
+        // Sprache
         $element = $elementFactory->createLanguageSelect(self::ELEMENT_LANGUAGE);
         $element->setLabel($this->_translationPrefix . self::ELEMENT_LANGUAGE);
         $element->setRequired(true);
         $this->addElement($element);
         
-        // TODO DocumentType
+        // DocumentType
         $element = $elementFactory->createDocumentTypeSelect(self::ELEMENT_TYPE);
         $element->setLabel($this->_translationPrefix . self::ELEMENT_TYPE);
         $element->setRequired(true);

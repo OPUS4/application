@@ -68,22 +68,11 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
      */
     public function init() {
         $element = new Zend_Form_Element_Submit('add'); // TODO translate depending on $_subFormClass
-        $element->removeDecorator('DtDdWrapper');
-        $element->addDecorator(array('div' => 'HtmlTag'), array('tag' => 'div', 'class' => 'add-element'));
-        $element->addDecorator(array('closeDl' => 'HtmlTag'), 
-                array('tag' => 'dl', 'closeOnly' => true, 'placement' => 'prepend')); // schliesst DL vor Add button
         $element->setLabel('Hinzufügen');
         $element->setOrder(1000); // TODO only theoretically safe
         $this->addElement($element);
         
         $this->setLegend('admin_document_section_' . strtolower($this->_fieldName)); 
-        
-        $this->setDecorators(array(
-            'FormElements',
-            array('HtmlTag', array('tag' => 'dl', 'openOnly' => true)), // fängt DL nach Legend an
-            'Fieldset',
-            'DtDdWrapper'
-        ));
     }
     
     /**
@@ -309,53 +298,3 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     }
             
 }
-
-/*
- * array(4) {
-  ["Zend_Form_Decorator_FormElements"] => object(Zend_Form_Decorator_FormElements)#687 (4) {
-    ["_placement":protected] => string(6) "APPEND"
-    ["_element":protected] => NULL
-    ["_options":protected] => array(0) {
-    }
-    ["_separator":protected] => string(1) "
-"
-  }
-  ["Zend_Form_Decorator_HtmlTag"] => object(Zend_Form_Decorator_HtmlTag)#688 (7) {
-    ["_encoding":protected] => NULL
-    ["_placement":protected] => NULL
-    ["_tag":protected] => NULL
-    ["_tagFilter":protected] => NULL
-    ["_element":protected] => NULL
-    ["_options":protected] => array(1) {
-      ["tag"] => string(2) "dl"
-    }
-    ["_separator":protected] => string(1) "
-"
-  }
-  ["Zend_Form_Decorator_Fieldset"] => object(Zend_Form_Decorator_Fieldset)#689 (6) {
-    ["stripAttribs"] => array(6) {
-      [0] => string(6) "action"
-      [1] => string(7) "enctype"
-      [2] => string(6) "helper"
-      [3] => string(6) "method"
-      [4] => string(4) "name"
-      [5] => string(14) "accept-charset"
-    }
-    ["_legend":protected] => NULL
-    ["_placement":protected] => NULL
-    ["_element":protected] => NULL
-    ["_options":protected] => array(0) {
-    }
-    ["_separator":protected] => string(1) "
-"
-  }
-  ["Zend_Form_Decorator_DtDdWrapper"] => object(Zend_Form_Decorator_DtDdWrapper)#690 (4) {
-    ["_placement":protected] => NULL
-    ["_element":protected] => NULL
-    ["_options":protected] => array(0) {
-    }
-    ["_separator":protected] => string(1) "
-"
-  }
-}
- */

@@ -41,6 +41,7 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
         parent::init();
         
         // TODO needed? $this->addElementPrefixPath('Form_Decorator', 'Form/Decorator', 'decorator');
+        // $this->addElementPrefixPath('Form_Element', 'Form/Element', Zend_Form::ELEMENT);
         
         $this->setDisableLoadDefaultDecorators(true);
         $this->setDecorators(array(
@@ -237,5 +238,13 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     public function getLog() {
         return Zend_Registry::get('Zend_Log');
     }
+    
+    public function createSubmit($name) {
+        return new Form_Element_Submit($name);
+    } 
+    
+    public function createHidden($name) {
+        return new Form_Element_Hidden($name);
+    } 
     
 }
