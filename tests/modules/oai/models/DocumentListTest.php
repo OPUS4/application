@@ -38,7 +38,7 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
      * Test list document ids, metadataPrefix=XMetaDissPlus, different intervals
      * list possible intervals containing "2010-06-05"
      */
-    public function testQuerieWithDoc3() {
+    public function testQueryWithDoc3() {
         $intervals = array(
             array(),
             array('from'=>'2010-06-04'),
