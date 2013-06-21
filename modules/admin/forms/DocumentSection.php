@@ -75,22 +75,6 @@ class Admin_Form_DocumentSection extends Admin_Form_AbstractDocumentSubForm {
         }
     }
 
-    public function processPost($post, $context) {
-        $subforms = $this->getSubForms();
-        
-        foreach ($subforms as $name => $subform) {
-            if (array_key_exists($name, $post)) {
-                $result = $subform->processPost($post[$name], $context);
-            
-                if (!is_null($result)) {
-                    return $result;
-                }
-            }   
-        }
-        
-        return null;
-    }
-
     public function updateModel($model) {
         $subforms = $this->getSubForms();
         
