@@ -158,7 +158,7 @@ class Admin_DocumentController extends Controller_Action {
                             return $this->_redirectTo('index', $message, 'document', 'admin', array('id' => $docId));
                         }
                         else {
-                            $this->view->message = $this->view->translate('admin_document_error_validation');
+                            $form->setMessage($this->view->translate('admin_document_error_validation'));
                         }
                         break;
                         
@@ -171,7 +171,7 @@ class Admin_DocumentController extends Controller_Action {
                             $document->store();
                         }
                         else {
-                            $this->view->message = $this->view->translate('admin_document_error_validation');
+                            $form->setMessage($this->view->translate('admin_document_error_validation'));
                         }
                         break;
                         

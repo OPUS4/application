@@ -74,6 +74,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
     
     const RESULT_SAVE_AND_CONTINUE = 'saveAndContinue';
     
+    private $message = null;
+    
     /**
      * Konstruiert das Metadaten-Formular aus verschiedenen Unterformularen und den Aktion Buttons.
      */
@@ -235,6 +237,14 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         
         $this->removeDecorator('Fieldset');
         $this->removeDecorator('DtDdWrapper');
+    }
+    
+    public function setMessage($message) {
+        $this->message = $message;
+    }
+    
+    public function getMessage() {
+        return $this->message;
     }
             
 }

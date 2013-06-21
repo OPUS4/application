@@ -98,11 +98,12 @@
         </ul>
       </div>
   </div>
-  <?php if (isset($this->message)) : ?>
+  <?PHP $message = $this->element->getMessage() ?> 
+  <?PHP if (!is_null($message)) : ?>
   <div class="messagesContainer">
-    <div class="messages"><?= $this->message ?></div>
+    <div class="messages"><?= $message ?></div>
   </div>      
-  <?php endif; ?>
+  <?PHP endif; ?>
 </div>
 <?PHP else : ?>
 <?PHP Zend_Registry::get('Zend_Log')->err('Use of partial \'docstatus.phtml\' without document = null.'); ?>
