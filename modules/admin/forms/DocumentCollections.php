@@ -61,7 +61,8 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
      * Initialisiert Elemente für gesamtes Collections Formular.
      */
     public function init() {
-        $element = new Zend_Form_Element_Submit('add'); // TODO translate
+        parent::init();
+        $element = new Form_Element_Submit('add'); // TODO translate
         $element->setOrder(1000); // TODO nicht sicher wenn 1000+ Collections zugewiesen sind
         $this->addElement($element);
         

@@ -67,6 +67,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
      * 
      */
     public function init() {
+        parent::init();
         $element = new Zend_Form_Element_Submit('add'); // TODO translate depending on $_subFormClass
         $element->setLabel('Hinzufügen');
         $element->setOrder(1000); // TODO only theoretically safe
