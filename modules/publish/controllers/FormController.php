@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,7 +27,7 @@
  * @category    Application
  * @package     Module_Publish
  * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -123,24 +122,42 @@ class Publish_FormController extends Controller_Action {
 
         //call the appropriate template
         $this->_helper->viewRenderer($this->session->documentType);
-        $publishForm = null;
+
         try {
-            $publishForm = new Publish_Form_PublishingSecond($this->_logger);
+            $publishForm = $this->createPublishingSecondForm();
         }
         catch (Publish_Model_FormSessionTimeoutException $e) {
-            // Session timed out.            
+            // Session timed out.
             return $this->_redirectTo('index', '', 'index');
-        }
-        catch (Publish_Model_FormIncorrectFieldNameException $e) {
-            $this->view->translateKey = preg_replace('/%value%/', $e->fieldName, $this->view->translate($e->getTranslateKey()));
-            return $this->render('error');
-        }
-        catch (Publish_Model_FormIncorrectEnrichmentKeyException $e) {
-            $this->view->translateKey = preg_replace('/%value%/', $e->enrichmentKey, $this->view->translate($e->getTranslateKey()));
-            return $this->render('error');
         }
 
         return $this->showTemplate($publishForm);
+    }
+
+    private function createPublishingSecondForm($postData = null) {
+        try {
+            return new Publish_Form_PublishingSecond($this->_logger, $postData);
+        }
+        catch (Publish_Model_FormSessionTimeoutException $e) {
+            $this->_logger->info('Session Timeout beim Verarbeiten des zweiten Formularschritts');
+            throw $e; // unmittelbarer Redirect erfolgt in Action-Methode
+        }
+        catch (Publish_Model_FormIncorrectFieldNameException $e) {
+            $this->_logger->err('invalider Feldname ' . $e->fieldName);
+            throw new Application_Exception(preg_replace('/%value%/', htmlspecialchars($e->fieldName), $this->view->translate($e->getTranslateKey())));
+        }
+        catch (Publish_Model_FormIncorrectEnrichmentKeyException $e) {
+            $this->_logger->err('invalider EnrichmentKey ' . $e->enrichmentKey);
+            throw new Application_Exception(preg_replace('/%value%/', htmlspecialchars($e->enrichmentKey), $this->view->translate($e->getTranslateKey())));
+        }
+        catch (Publish_Model_FormException $e) {
+            $this->_logger->err('Exception bei der Erzeugung des zweiten Formulars: ' . $e->enrichmentKey);
+            throw new Application_Exception($e->getTranslateKey());
+        }
+        catch (Exception $e) {
+            $this->_logger->err('unerwartete Exception bei der Erzeugung des zweiten Formulars: ' . $e->getMessage());
+            throw new Application_Exception('publish_error_unexpected');
+        }
     }
 
     /**
@@ -193,19 +210,20 @@ class Publish_FormController extends Controller_Action {
 
                 if (!array_key_exists('back', $postData)) {
                     // die Session muss nur dann manipuliert werden, wenn im zweiten Schritt ADD/DELETE/BROWSE durchgeführt wurde
-                    $this->manipulateSession($postData);
-
-                    if (isset($this->view->translateKey)) {
-                        return $this->render('error');
+                    try {
+                        $this->manipulateSession($postData);
+                    }
+                    catch (Publish_Model_FormNoButtonFoundException $e) {
+                        throw new Application_Exception($e->getTranslateKey());
                     }
                 }
 
                 //now create a new form with extended fields
-                $form = null;
                 try {
-                    $form = new Publish_Form_PublishingSecond($this->_logger, $postData);
+                    $form = $this->createPublishingSecondForm($postData);
                 }
                 catch (Publish_Model_FormSessionTimeoutException $e) {
+                    // Session timed out.
                     return $this->_redirectTo('index', '', 'index');
                 }
                 
@@ -231,9 +249,8 @@ class Publish_FormController extends Controller_Action {
                 }
             }
 
-            $form = null;
             try {
-                $form = new Publish_Form_PublishingSecond($this->_logger, $postData);
+                $form = $this->createPublishingSecondForm($postData);
             }
             catch (Publish_Model_FormSessionTimeoutException $e) {
                 // Session timed out.
@@ -386,13 +403,8 @@ class Publish_FormController extends Controller_Action {
     private function manipulateSession($postData) {
         $this->view->currentAnchor = "";       
 
-        try {
-            //find out which button was pressed
-            $pressedButtonName = $this->_getPressedButton($postData);
-        } catch (Publish_Model_FormNoButtonFoundException $e) {
-            $this->view->translateKey = $e->getTranslateKey();
-            return null;
-        }
+        //find out which button was pressed
+        $pressedButtonName = $this->_getPressedButton($postData);
 
         //find out the resulting workflow and the field to extend
         $result = $this->_workflowAndFieldFor($pressedButtonName);
