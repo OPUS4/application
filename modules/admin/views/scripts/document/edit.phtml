@@ -40,10 +40,6 @@
         . ' (' . $this->document->getId() . ')' . ' ' 
         . $this->navigation()->breadcrumbs()->getSeparator()
         . ' ' . $this->translate('admin_document_edit')) ?> 
-
-<?php if (isset($this->message)) : ?>
-    <div class="form-hint form-errors"><?= $this->message ?></div>
-<?php endif; ?>
    
 <div id="metadata-form">
     <?= $this->form ?>
