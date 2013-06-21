@@ -80,10 +80,9 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     public function processPost($data, $context) {
         $subforms = $this->getSubForms();
 
-        foreach ($subforms as $name => $form) {
+        foreach ($subforms as $name => $subform) {
             if (array_key_exists($name, $data)) {
-                // TODO process return value (exit from loop if success)
-                $result = $form->processPost($data[$name], $data);
+                $result = $subform->processPost($data[$name], $context);
 
                 if (!is_null($result)) {
                     return $result;
@@ -246,5 +245,9 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     public function createHidden($name) {
         return new Form_Element_Hidden($name);
     } 
+    
+    public function createTextarea($name) {
+        return new Form_Element_Textarea($name);
+    }
     
 }
