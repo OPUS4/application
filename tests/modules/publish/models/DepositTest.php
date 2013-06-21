@@ -44,7 +44,7 @@ class Publish_Model_DepositTest extends ControllerTestCase {
         $session->documentId = $document->store();
 
         $log = Zend_Registry::get('Zend_Log');
-        new Publish_Model_Deposit($session, $log);
+        new Publish_Model_Deposit($session->documentId, $log);
     }
 
     public function testValidDocumentData() {
@@ -117,7 +117,7 @@ class Publish_Model_DepositTest extends ControllerTestCase {
         );
 
         $log = Zend_Registry::get('Zend_Log');
-        $dep = new Publish_Model_Deposit($session, $log, $data);
+        $dep = new Publish_Model_Deposit($session->documentId, $log, $data);
         $document = $dep->getDocument();
         $document->store();                               
         
