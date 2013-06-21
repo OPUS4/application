@@ -121,22 +121,22 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPatent', 'Patent'), 'Patents');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentNote', 'Note'), 'Notes');
         
-        $element = new Zend_Form_Element_Hidden('id');
+        $element = $this->createHidden('id');
         $this->addElement($element);
         
         $this->addElement('hash', 'opus_hash', array('salt' => 'unique')); // TODO salt?
         
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_SAVE);
+        $element = $this->createSubmit(self::ELEMENT_SAVE);
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_SAVE_AND_CONTINUE);
+        $element = $this->createSubmit(self::ELEMENT_SAVE_AND_CONTINUE);
         $this->addElement($element);
         
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_CANCEL);
+        $element = $this->createSubmit(self::ELEMENT_CANCEL);
         $this->addElement($element);
         
-        $element->addDecorator('HtmlTag',
-                array('tag' => 'div', 'placement' => 'append', 'closeOnly' => 'true'));
+//        $element->addDecorator(array('wrapperDiv' => 'HtmlTag',
+//                array('tag' => 'div', 'placement' => 'append', 'closeOnly' => 'true')));
     }
 
     /**
@@ -232,7 +232,6 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         parent::loadDefaultDecorators();
         
         $this->removeDecorator('Fieldset');
-        $this->removeDecorator('DtDdWrapper');
     }
     
     public function setMessage($message) {
