@@ -99,9 +99,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         }
         catch (Application_Exception $e) {
             $this->log->err("Unable to load document type '" . $this->doctype . "'");
-
-            // TODO: Need another exception class?
-            throw new Publish_Model_FormSessionTimeoutException();
+            throw $e;
         }
 
         $this->additionalFields = $this->session->additionalFields;

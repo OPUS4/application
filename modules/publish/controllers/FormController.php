@@ -154,6 +154,9 @@ class Publish_FormController extends Controller_Action {
             $this->_logger->err('Exception bei der Erzeugung des zweiten Formulars: ' . $e->enrichmentKey);
             throw new Application_Exception($e->getTranslateKey());
         }
+        catch (Application_Exception $e) {
+            throw $e;
+        }
         catch (Exception $e) {
             $this->_logger->err('unerwartete Exception bei der Erzeugung des zweiten Formulars: ' . $e->getMessage());
             throw new Application_Exception('publish_error_unexpected');

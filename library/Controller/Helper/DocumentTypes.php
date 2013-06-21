@@ -123,7 +123,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
 
         if (!$dom->schemaValidate(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'Opus' .  DIRECTORY_SEPARATOR . 'Document' . DIRECTORY_SEPARATOR . 'documenttype.xsd')) {
             libxml_clear_errors();
-            throw new Exception('given xml document type definition for document type ' . $documentType . ' is not valid');
+            throw new Application_Exception('given xml document type definition for document type ' . $documentType . ' is not valid');
         }
 
         return $dom;
@@ -167,8 +167,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         }
 
         if (empty($path)) {
-            throw new Application_Exception(
-                    'Path to document types not configured.');
+            throw new Application_Exception('Path to document types not configured.');
         }
 
         return $path;
@@ -184,7 +183,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         $docTypesPath = $this::getDocTypesPath();
 
         if (!is_dir($docTypesPath) || !is_readable($docTypesPath)) {
-            throw new Exception('could not read document type definitions');
+            throw new Application_Exception('could not read document type definitions');
         }
 
         $files = array();
