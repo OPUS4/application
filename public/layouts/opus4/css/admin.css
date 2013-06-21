@@ -1,27 +1,44 @@
 /*@import url(admin-opus.css);*/
-.Document-Action li{
-   float: left;
-   margin-left: 5%;
-   padding: 6px 0;
+/* @group Global admin styles */
+.adminContainer .dropdown dt a:after{
+    border-color: black transparent transparent;
+    border-style: solid;
+    border-width: 10px 5px 0;
+    content: "";
+    height: 0;
+    position: absolute;
+    width: 0;
 }
-.Document-Action li:first-child{
-   margin-left: 0;
+.adminContainer .dropdown dt a{
+   cursor: pointer;
+   display: block;
 }
-.Document-Action li a{
-   text-decoration: none;
-   font-weight: bold;
-   font-size: 0.857em;
+.adminContainer dl.dropdown.dropdown-open > dd,
+.no-js .adminContainer dl.dropdown:hover > dd{
+   position: absolute;
+   -moz-box-shadow:0px 4px 5px rgba(0,0,0,0.2);
+   -webkit-box-shadow:0px 4px 5px rgba(0,0,0,0.2);
+   box-shadow:0px 4px 5px rgba(0,0,0,0.2);
+   -ms-filter:"progid:DXImageTransform.Microsoft.dropshadow(OffX=0,OffY=4,Color=#33000000,Positive=true)";
+   filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=0,OffY=4,Color=#33000000,Positive=true);
 }
-.Document-Action li a:hover{
-   text-decoration: underline;
-   color: #26517D;
+.adminContainer .dropdown p.label{
+   border-bottom: 1px solid #BDBEBB;
 }
-li.edit a{
-   background: url(../img/theme/admin/sprite_icons.png) no-repeat -20px -19px;
+li.edit a,
+li.edit input{
+   background: url(../img/theme/admin/sprite_icons.png) no-repeat -20px -224px;
    padding-left: 16px;
 }
-.Document-Action li.save-element{
-   padding: 0;
+li.edit input{
+   border: none;
+   color: #26517B;
+   background-color: transparent;
+   font: bold 0.857em Verdana, Arial, Helvetica, sans-serif;
+   cursor: pointer;
+}
+li.edit input:hover{
+   text-decoration: underline;
 }
 .save-element input,
 #save-element input{
@@ -50,6 +67,29 @@ li.edit a{
 #cancel-element input:hover{
    text-decoration: none;
 }
+
+/* @end */
+
+.Document-Action li{
+   float: left;
+   margin-left: 5%;
+   padding: 6px 0;
+}
+.Document-Action li:first-child{
+   margin-left: 0;
+}
+.Document-Action li a{
+   text-decoration: none;
+   font-weight: bold;
+   font-size: 0.857em;
+}
+.Document-Action li a:hover{
+   text-decoration: underline;
+   color: #26517D;
+}
+.Document-Action li.save-element{
+   padding: 0;
+}
 /* @group Form content */
 .adminContainer fieldset{
    clear: both;
@@ -61,8 +101,115 @@ li.edit a{
 }
 .adminContainer fieldset > dl > dt,
 .adminContainer fieldset > dl > dd{
-   /*float: left;*/
    margin-top: 0.5em;
+}
+.adminContainer #fieldset-Persons > dl > dd > fieldset > dl > dt{
+   display: none;
+}
+.adminContainer ul.buttons{
+   margin: 0;
+   padding: 0;
+   list-style: none;
+}
+.adminContainer ul.buttons li{
+   float: left;
+}
+.adminContainer dl.sort.dropdown{
+   position: relative;
+   width: 9.4%;
+}
+.adminContainer #fieldset-Persons dl.sort,
+.adminContainer #fieldset-Persons .person-info{
+   float: left;
+   padding: 0;
+   margin: 0;
+}
+.adminContainer #fieldset-Persons .person-info{
+   max-width: 64%;
+}
+.adminContainer #fieldset-Persons .person-actions{
+   float: right;
+   width: 25%;
+}
+.adminContainer #fieldset-Persons .person-actions > *{
+   white-space: nowrap;
+   display: inline-block;
+}
+.adminContainer #fieldset-Persons .person-actions dl{
+   float: left;
+   padding: 0;
+   margin: 0 1em 0 0;
+}
+.adminContainer dl.sort.dropdown dt,
+.adminContainer dl.settings.dropdown dt{
+   border: 1px solid #e1e4e0;
+   border-radius: 5px;
+   display: inline-block;
+   position: relative;
+   /*width: 6.25%;*/
+}
+.adminContainer dl.sort.dropdown dt{
+   padding: 0.3em 1.6em 0.3em 0.2em;
+}
+.adminContainer dl.settings.dropdown dt{
+   padding: 0;
+}
+.adminContainer dl.settings.dropdown dt a{
+   padding: 0.6em 1.6em 0.6em 0.5em;
+   color: #3E3E3A;
+   font-family: Arial, Helvetica, sans-serif;
+}
+.adminContainer dl.settings.dropdown dt a:after{
+   right: 6px;
+   top: 12px;
+
+}
+.adminContainer dl.settings.dropdown.dropdown-open dt{
+   background-color: #E1E4E0;
+   border-radius: 5px 5px 0 0;
+}
+.adminContainer dl.settings.dropdown dd{
+   /*display: block;*/
+   border: solid #E1E4E0;
+   border-width: 5px 1px 1px;
+   position: absolute;
+   right: 0;
+   min-width: 10em;
+   padding: 10px;
+   background-color:rgb(255,255,255);
+}
+.adminContainer dl.sort.dropdown dt input{
+   color: #595A56;
+   background-color: transparent;
+   font: 1.714em Arial, Helvetica, sans-serif;
+   width: 2em;
+   text-align: center;
+   border: 1px solid;
+   border-color: white #acacac white white;
+}
+.adminContainer dl.sort.dropdown dt a{
+   position: absolute;
+   overflow: hidden;
+   top: 0;
+   right: 0;
+   height: 100%;
+   width: 1.6em;
+   text-indent: 9999px;
+}
+.adminContainer dl.sort.dropdown dt a:after {
+    right: 7px;
+    top: 1.1em;
+}
+.adminContainer dl.sort.dropdown dt:hover input{
+   border: 1px inset #595A56;
+}
+.adminContainer #fieldset-Persons .person-info ul{
+   margin: 0;
+   padding: 0;
+   list-style: none;
+}
+.adminContainer .add-element{
+   clear: both;
 }
 /* @end */
 /* @group adminMenuContainer */
@@ -205,14 +352,29 @@ li.edit a{
 
 /* @end */
 /* @group ActionBox */
+#actionboxContainer .messagesContainer{
+   float: left;
+   width: 100%;
+   background-color: rgba(255, 255, 255, 0.6);
+   padding: 0.5em 0;
+}
+#actionboxContainer .messages{
+   color: #285837;
+}
 #actionboxContainer{
    background: url(../img/theme/admin/bg_actionbox-fixed.png);
    color: black;
    width: 100%;
    float: left;
-   padding: 0.8em 0;
+   padding: 0.8em 0 0;
    box-shadow: 0 0 6px 0 #545454;
 
+}
+#actionboxContainer .wrapper:after{
+   content: '';
+   display: block;
+   clear: both;
+   padding-bottom: 0.95em;
 }
 #actionboxContainer.fixed{
    position: fixed;
@@ -224,11 +386,11 @@ li.edit a{
 
 }
 #actionboxContainer .col-1{
-   width: 21.4375%;
-   padding-right: 2.5625%;
+   width: 24.4375%;
+   padding-right: 1.5625%;
 }
 #actionboxContainer .col-2{
-   width: 49%;
+   width: 47%;
 }
 #actionboxContainer .col-3{
    width: 27%;
@@ -238,7 +400,7 @@ li.edit a{
    padding: 0;
 }
 #actionboxContainer .col.col-2 dl{
-   margin: 0 6.1349% 0 0;
+   margin: 0 5.1349% 0 0;
 }
 #actionboxContainer #Document-Goto{
    margin-right: 2.003%;
@@ -247,10 +409,8 @@ li.edit a{
    font-size: 0.857em;
 }
 #actionboxContainer .dropdown dt a{
-   display: block;
    border-radius: 5px;
    border: none;
-   cursor: pointer;
    font-size: 1.167em;
 }
 #actionboxContainer .dropdown.dropdown-open dt a,
@@ -271,7 +431,7 @@ li.edit a{
 #actionboxContainer .dropdown dd{
    border-radius: 0 0 5px 5px;
    font-size: 0.857em;
-   box-shadow: 0 0 12px 6px rgba(84, 84, 84, 0.45);
+   /*box-shadow: 0 0 12px 6px rgba(84, 84, 84, 0.45);*/
 }
 #Document-Goto.dropdown dt a{
    background-color: #595A56;
@@ -281,14 +441,8 @@ li.edit a{
 }
 #Document-Goto.dropdown dt a:after{
     border-color: white transparent transparent;
-    border-style: solid;
-    border-width: 10px 5px 0;
     top: 10px;
-    content: "";
-    height: 0;
     right: 10px;
-    position: absolute;
-    width: 0;
 }
 #actionboxContainer #Document-Goto.dropdown dd{
    background-color: #595a56;
@@ -320,20 +474,13 @@ li.edit a{
    background: url(../img/theme/admin/transparent.png);/* IE Fix */
 }
 #actionboxContainer #Document-ServerState.dropdown dt a:after {
-    border-color: black transparent transparent;
-    border-style: solid;
-    border-width: 10px 5px 0;
-    content: "";
-    height: 0;
-    position: absolute;
     right: 5px;
     top: 1.1em;
-    width: 0;
 }
 #actionboxContainer #Document-ServerState.dropdown dd{
    display: block;
    width: 100%;
-   box-shadow: 0 0 0 0;
+   /*box-shadow: 0 0 0 0;*/
    position: absolute;
    top: 0;
    z-index: 200;
@@ -367,13 +514,13 @@ li.edit a{
    border-radius: 5px 5px 5px 5px;
    padding: 0 0 0.5em;
    font-weight: normal;
-   box-shadow: 0 10px 12px 3px rgba(84, 84, 84, 0.45);
+   /*box-shadow: 0 10px 12px 3px rgba(84, 84, 84, 0.45);*/
 }
 #Document-ServerState.dropdown li.active{
    display: block;
    font-weight: bold;
    font-size: 1em;
-   padding: 1px 0 3px;
+   padding: 1px 12px 3px 0;
 }
 #Document-ServerState.dropdown.dropdown-open li.active{
    padding-bottom: 5px;
@@ -468,13 +615,13 @@ li.edit a{
 }
 .adminContainer form .wrapper > dl > dd > fieldset > legend:after {
     border-color: #595a56 transparent transparent;
-    border-style: solid;
     border-width: 11px 6px 0;
     bottom: -11px;
+    left: 10px;
+    border-style: solid;
     content: "";
     height: 0;
     position: absolute;
-    left: 10px;
     width: 0;
 }
 .adminContainer form fieldset > dl > dd > fieldset{
