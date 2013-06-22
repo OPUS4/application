@@ -103,7 +103,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
     }
 
     /**
-     * Returm DOMDocument for document type.
+     * Returns DOMDocument for document type.
      *
      * @param string $documentType
      * @return DOMDocument
