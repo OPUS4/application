@@ -45,6 +45,8 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
     const ELEMENT_REMOVE = 'Remove';
         
     public function init() {
+        parent::init();
+        
         $element = new Form_Element_Hidden(self::ELEMENT_ID);
         $this->addElement($element);
         
