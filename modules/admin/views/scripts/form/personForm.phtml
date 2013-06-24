@@ -83,6 +83,7 @@
                     <dt><a>Actionen</a></dt>
                     <dd>
                         <p class="label"><i>Rolle ändern</i></p>
+                        <?= $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID) ?>
                         <?= $this->element->getSubForm('Roles') ?>
                         <p class="label"><i>oder Person</i></p>
                         <ul class="buttons">
