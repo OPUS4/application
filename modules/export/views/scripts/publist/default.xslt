@@ -45,7 +45,6 @@
 
     <xsl:param name="baseUrl" />
     <xsl:param name="collName" />
-    <xsl:param name="fullPage" />
 
     <xsl:template match="/">
         <xsl:apply-templates select="Documents"/>
@@ -54,40 +53,8 @@
     <xsl:key name="year" match="Opus_Document" use="php:functionString('max', PublishedDate/@Year, @PublishedYear)"/>
 
     <xsl:template match="Documents">
-        <xsl:choose>
-            <xsl:when test="$fullPage = 'yes'">
-                <xsl:element name="html">
-                    <xsl:call-template name="set_header"/>
-                    <xsl:element name="body">
-                        <xsl:call-template name="set_div"/>
-                    </xsl:element>
-                </xsl:element>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:call-template name="set_div"/>
-            </xsl:otherwise>
-        </xsl:choose>
-
+        <xsl:call-template name="set_div"/>
     </xsl:template>
-
-
-    <xsl:template name="set_header">
-        <xsl:element name="head">
-            <xsl:element name="meta">
-                <xsl:attribute name="http-equiv">Content-Type</xsl:attribute>
-                <xsl:attribute name="content">text/html; charset=utf-8</xsl:attribute>
-            </xsl:element>
-            <xsl:element name="link">
-                <xsl:attribute name="rel">stylesheet</xsl:attribute>
-                <xsl:attribute name="href">
-                    <xsl:value-of select="$baseUrl" />
-                    <xsl:text>/export/default/default.css</xsl:text>
-                </xsl:attribute>
-                <xsl:attribute name="type">text/css</xsl:attribute>
-            </xsl:element>
-        </xsl:element>
-    </xsl:template>
-
 
     <xsl:template name="set_div">
         <xsl:element name="div">

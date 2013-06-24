@@ -185,12 +185,9 @@ class Export_IndexController extends Controller_Xml {
             throw new Application_Exception('number is not specified');
         }
 
-        $fullPage =  $this->getRequest()->getParam('fullpage');
-
         $this->mapQuery();
         $this->_proc->registerPHPFunctions('max');
         $this->_proc->setParameter('', 'baseUrl', $this->getRequest()->getBaseUrl());
-        $this->_proc->setParameter('', 'fullPage', $fullPage);
             
         $this->prepareXML();
     }
