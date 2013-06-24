@@ -38,6 +38,10 @@
  * TODO improv positioning of anker (move within identifiable block)
  */
 class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm {
+    
+    const ELEMENT_ADD = 'Add';
+    
+    const ELEMENT_REMOVE = 'Remove';
 
     /**
      * Klasse für Unterformulare.
@@ -68,8 +72,8 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
      */
     public function init() {
         parent::init();
-        $element = new Zend_Form_Element_Submit('add'); // TODO translate depending on $_subFormClass
-        $element->setLabel('Hinzufügen');
+        $element = $this->createElement('submit', self::ELEMENT_ADD); 
+        $element->setLabel('Hinzufügen'); // TODO translate depending on $_subFormClass
         $element->setOrder(1000); // TODO only theoretically safe
         $this->addElement($element);
         
@@ -97,7 +101,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
        }
        
        // Sicherstellen, daß Button zum Hinzufügen zuletzt angezeigt wird
-       $this->getElement('add')->setOrder($maxIndex + 1);
+       $this->getElement(self::ELEMENT_ADD)->setOrder($maxIndex + 1);
     }
     
     public function getFieldValues($document) {
@@ -129,7 +133,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
      */
     public function processPost($data, $context) {
         // Prüfen ob "Hinzufügen" geklickt wurde
-        if (array_key_exists('add', $data)) {
+        if (array_key_exists(self::ELEMENT_ADD, $data)) {
             $subform = $this->_appendSubForm();
             $this->_addAnker($subform);
         }
@@ -139,7 +143,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
             
             foreach ($keys as $key) {
                 if ($this->getSubForm($key)) {
-                    if (array_key_exists('Remove', $data[$key])) {
+                    if (array_key_exists(self::ELEMENT_REMOVE, $data[$key])) {
                         // TODO separate function for getting position?
                         $position = $this->_removeSubForm($key);
 
@@ -203,8 +207,8 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         $subForm = $this->createSubForm();
         $subForm->setOrder($position);
 
-        $element = new Zend_Form_Element_Submit('Remove');
-        $element->setValue('Remove');
+        $element = $this->createElement('submit', self::ELEMENT_REMOVE);
+        $element->setValue('Remove'); // TODO translation
         $subForm->addElement($element);
 
         $this->addSubForm($subForm, $this->_fieldName . $position);
