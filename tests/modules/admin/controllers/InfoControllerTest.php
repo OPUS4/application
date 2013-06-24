@@ -34,66 +34,10 @@
  */
 class Admin_InfoControllerTest extends ControllerTestCase {
 
-    private $__configBackup;
-    private $jobIds = array();
-
-    public function setUp() {
-        parent::setUp();
-        $config = Zend_Registry::get('Zend_Config');
-        $this->__configBackup = $config;
-        $config->merge(new Zend_Config(array('runjobs' => array('asynchronous' => true))));
-
-        $this->assertEquals(0, Opus_Job::getCount(Opus_Job::STATE_FAILED), 'test data changed.');
-
-        for ($i = 0; $i < 10; $i++) {
-            $job = new Opus_Job();
-            $job->setLabel('testjob' . ($i < 5 ? 1 : 2));
-            $job->setData(array(
-                'documentId' => $i,
-                'task' => 'get-me-a-coffee'));
-            $job->setState(Opus_Job::STATE_FAILED);
-            $this->jobIds[] = $job->store();
-        }
-    }
-
-    protected function tearDown() {
-
-        $testJobs = Opus_Job::getAll($this->jobIds);
-        foreach ($testJobs as $job) {
-            $job->delete();
-        }
-
-        Zend_Registry::set('Zend_Config', $this->__configBackup);
-        parent::tearDown();
-    }
-    
     public function testIndexDisplayVersion() {
         $this->dispatch('admin/info');
         $this->assertResponseCode(200);
         $this->assertQuery('dt#admin_info_version');
-    }
-
-    public function testIndexDisplayFailedWorkerJobs() {
-
-        $this->dispatch('/admin/info');
-        $this->assertResponseCode(200);
-        $this->assertQueryContentContains('table.worker-jobs td', 'testjob1');
-        $this->assertQueryContentContains('table.worker-jobs td', 'testjob2');
-    }
-
-    public function testMonitorFailedWorkerJobs() {
-
-        $this->dispatch('/admin/info/worker-monitor');
-        $this->assertResponseCode(200);
-        $this->assertEquals('1', $this->_response->getBody(), 'Expected value 1');
-    }
-    
-    public function testJobDetailsAction() {
-        $failedJobsUrl = '/admin/info/job-detail/label/testjob1/state/'.Opus_Job::STATE_FAILED;
-        $this->dispatch($failedJobsUrl);
-        $this->assertResponseCode(200);
-        $this->assertQueryContentContains('table.worker-jobs td div', 'task: get-me-a-coffee');
-        
     }
 
 }

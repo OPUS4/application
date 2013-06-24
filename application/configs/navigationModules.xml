@@ -801,6 +801,25 @@
                                 </show>
                             </pages>
                         </statistic>
+                        <job>
+                            <type>mvc</type>
+                            <label>admin_title_job</label>
+                            <description>admin_title_job_description</description>
+                            <group>group-chocolate</group>
+                            <module>admin</module>
+                            <controller>job</controller>
+                            <action>index</action>
+                            <pages>
+                                <detail>
+                                    <type>mvc</type>
+                                    <label>admin_info_job-detail</label>
+                                    <module>admin</module>
+                                    <controller>job</controller>
+                                    <action>detail</action>
+                                </detail>
+                            </pages>
+                        </job>
+
                     </pages>
                 </info>
             </pages>
