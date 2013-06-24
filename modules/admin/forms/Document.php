@@ -36,21 +36,6 @@
  * Formular fuer Metadaten eines Dokuments.
  */
 class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
-
-    /**
-     * Name für Button zum Speichern.
-     */
-    const ELEMENT_SAVE = 'save';
-    
-    /**
-     * Name für Button zum Speichern und im Metadaten-Formular bleiben.
-     */
-    const ELEMENT_SAVE_AND_CONTINUE = 'saveAndContinue';
-    
-    /**
-     * Name für Button um das Editieren abzubrechen.
-     */
-    const ELEMENT_CANCEL = 'cancel';
     
     /**
      * Ergebnis wenn keine weiteren Aktionen ausgeführt werden müssen.
@@ -120,27 +105,14 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $this->addSubForm(new Admin_Form_DocumentLicences(), 'Licences');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPatent', 'Patent'), 'Patents');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentNote', 'Note'), 'Notes');
-        
-        $element = $this->createHidden('id');
-        $this->addElement($element);
-        
-        $this->addElement('hash', 'opus_hash', array('salt' => 'unique')); // TODO salt?
-        
-        $this->addElement('submit', self::ELEMENT_SAVE);
-        
-        $element = $this->createSubmit(self::ELEMENT_SAVE_AND_CONTINUE);
-        $this->addElement($element);
-        
-        $element = $this->createSubmit(self::ELEMENT_CANCEL);
-        $this->addElement($element);
+    
+        $this->addSubForm(new Admin_Form_DocumentActions(), 'Actions');
     }
 
     /**
      * Populates form from model values.
      */
     public function populateFromModel($document) {
-        $this->getElement('id')->setValue($document->getId());
-        
         $subforms = $this->getSubForms();
         
         foreach ($subforms as $form) {
@@ -188,32 +160,21 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * @param type $data
      */
     public function processPost($data, $context) {
-        // Prüfen, ob "Speichern" geklickt wurde
-        if (array_key_exists(self::ELEMENT_SAVE, $data)) {
-            return self::RESULT_SAVE;
-        }
-        else if (array_key_exists(self::ELEMENT_SAVE_AND_CONTINUE, $data)) {
-            return self::RESULT_SAVE_AND_CONTINUE;
-        }
-        else if (array_key_exists(self::ELEMENT_CANCEL, $data)) {
-            return self::RESULT_CANCEL;
-        }
-        else {
-            // POST Daten an Unterformulare weiterreichen
-            $subforms = $this->getSubForms();
-            
-            foreach ($subforms as $name => $form) {
-                if (array_key_exists($name, $data)) {
-                    // TODO process return value (exit from loop if success)
-                    $result = $form->processPost($data[$name], $data);
-                    
-                    if (!is_null($result)) {
-                        return $result;
-                    }
+        // POST Daten an Unterformulare weiterreichen
+        $subforms = $this->getSubForms();
+
+        foreach ($subforms as $name => $form) {
+            if (array_key_exists($name, $data)) {
+                // TODO process return value (exit from loop if success)
+                $result = $form->processPost($data[$name], $data);
+
+                if (!is_null($result)) {
+                    return $result;
                 }
             }
         }
-        
+
+        return null;
     }
     
     public function continueEdit($request) {
