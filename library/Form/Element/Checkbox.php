@@ -42,12 +42,9 @@ class Form_Element_Checkbox extends Zend_Form_Element_Checkbox {
             'ViewHelper', 
             'Errors',
             'Description',
-            array(array('fieldWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'field')),
+            'ElementHtmlTag',
             array('Label', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-            array(array('dataWrapperOpen' => 'HtmlTagWithId'), 
-                array('tag' => 'div', 'class' => 'data-wrapper', 'openOnly' => true, 'placement' => 'prepend')),
-            array(array('dataWrapperClose' => 'HtmlTag'), 
-                array('tag' => 'div', 'class' => 'data-wrapper', 'closeOnly' => true, 'placement' => 'append'))
+            array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
         ));
     }
     
