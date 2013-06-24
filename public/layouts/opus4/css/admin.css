@@ -1,6 +1,12 @@
 /*@import url(admin-opus.css);*/
+/**
+ * utf-8 encoded!
+ */
 /* @group Global admin styles */
-.adminContainer .dropdown dt a:after{
+.blur{
+   color: #666;
+}
+.dropdown dt a:after{
     border-color: black transparent transparent;
     border-style: solid;
     border-width: 10px 5px 0;
@@ -9,21 +15,52 @@
     position: absolute;
     width: 0;
 }
-.adminContainer .dropdown dt a{
+.dropdown dt a{
    cursor: pointer;
    display: block;
 }
-.adminContainer dl.dropdown.dropdown-open > dd,
-.no-js .adminContainer dl.dropdown:hover > dd{
+dl.dropdown.dropdown-open > dd,
+.no-js dl.dropdown:hover > dd{
    position: absolute;
+   border-radius: 0 0 5px 5px;
    -moz-box-shadow:0px 4px 5px rgba(0,0,0,0.2);
    -webkit-box-shadow:0px 4px 5px rgba(0,0,0,0.2);
    box-shadow:0px 4px 5px rgba(0,0,0,0.2);
    -ms-filter:"progid:DXImageTransform.Microsoft.dropshadow(OffX=0,OffY=4,Color=#33000000,Positive=true)";
    filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=0,OffY=4,Color=#33000000,Positive=true);
 }
-.adminContainer .dropdown p.label{
+.adminContainer ul.links,
+.adminContainer ul.buttons{
+   margin: 0;
+   padding: 0;
+   list-style: none;
+}
+ul.links input{
+   border: none;
+   background-color: transparent;
+   color: #26517a;
+   cursor: pointer;
+   padding: 0;
+   font: 1em Verdana, Arial, Helvetica, sans-serif;
+}
+ul.links input:hover{
+   text-decoration: underline;
+}
+.adminContainer .dropdown > dd p.label{
    border-bottom: 1px solid #BDBEBB;
+   text-align: center;
+   font-size: 0.857em;
+   margin: 0 0 1em;
+   padding: 0 0.4em;
+}
+.adminContainer .dropdown > dd p.label i{
+   font-style: normal;
+   background-color: white;
+   color: #595955;
+   display: inline-block;
+   padding: 0 0.6em;
+   position: relative;
+   top: 0.5em;
 }
 li.edit a,
 li.edit input{
@@ -32,7 +69,7 @@ li.edit input{
 }
 li.edit input{
    border: none;
-   color: #26517B;
+   color: #26517a;
    background-color: transparent;
    font: bold 0.857em Verdana, Arial, Helvetica, sans-serif;
    cursor: pointer;
@@ -41,6 +78,7 @@ li.edit input:hover{
    text-decoration: underline;
 }
 .save-element input,
+.save-data input,
 #save-element input{
    border-radius: 5px;
    border: none;
@@ -51,28 +89,33 @@ li.edit input:hover{
    cursor: pointer;
 }
 .cancel-element,
+.cancel-data,
 #cancel-element{
    font: 0.875em Verdana, Arial, Helvetica, sans-serif;
 }
 .cancel-element input,
+.cancel-data input,
 #cancel-element input{
    border: none;
    background-color: transparent;
-   color: #26517B;
+   color: #26517a;
    text-decoration: underline;
    padding: 0;
    cursor: pointer;
 }
 .cancel-element input:hover,
+.cancel-data input:hover,
 #cancel-element input:hover{
    text-decoration: none;
 }
 
 /* @end */
-
+.Document-Action{
+   float: right;
+}
 .Document-Action li{
    float: left;
-   margin-left: 5%;
+   margin-left: 1em;
    padding: 6px 0;
 }
 .Document-Action li:first-child{
@@ -85,35 +128,207 @@ li.edit input:hover{
 }
 .Document-Action li a:hover{
    text-decoration: underline;
-   color: #26517D;
+   color: #26517a;
 }
 .Document-Action li.save-element{
    padding: 0;
 }
 /* @group Form content */
-.adminContainer fieldset{
-   clear: both;
+#docinfo{
+   padding: 1.5em 0 0;
 }
-.adminContainer fieldset > dl > dt{
+#docinfo p{
+   margin: 0;
+}
+.adminContainer .data-wrapper{
+   float: left;
+   width: 100%;
+   padding: 0.3em 0;
+}
+.adminContainer #fieldset-Licences .data-wrapper{
+   position: relative;
+}
+.adminContainer #fieldset-Licences .data-wrapper .field{
+   position: absolute;
+   left: 0;
+}
+.adminContainer #fieldset-Licences .data-wrapper .label{
+   padding-left: 2em;
+   width: 80%;
+}
+#fieldset-Persons .data-wrapper{
+   width: 100%;
+}
+.adminContainer .multiple-wrapper .data-wrapper,
+#fieldset-Persons .multiple-wrapper .data-wrapper{
+   /*padding: 0;*/
+   float: left;
+}
+/*.adminContainer .data-wrapper.multiple-data .data-wrapper{
+   width: auto;   
+}*/
+.adminContainer .data-wrapper.multiple-data{
+   width: 85%;
+   padding: 0;
+}
+.adminContainer .multiple-wrapper .data-wrapper.Remove-data{
+   max-width: 15%;
+   width: auto;
+   float: right;  
+}
+.adminContainer .multiple-wrapper{
+   float: left;
+   width: 100%;
+   background: url(../img/theme/admin/bg_data-separator.png) no-repeat bottom center;  
+   padding: 0.3em 0;
+}
+/*.adminContainer .multiple-wrapper.even{
+   background-color: #f2f2f2;
+}*/
+.adminContainer .data-wrapper.Add-data,
+.adminContainer #fieldset-Persons .data-wrapper.Add-data{
+   padding: 0.6em 0;
+}
+.adminContainer .multiple-wrapper:first-child{
+   /*background: none;
+   padding-top: 0;*/
+}
+.adminContainer .Add-data input,
+.adminContainer .Remove-data input{
+   border: 1px solid;
+   border-radius: 5px;
+   background: url(../img/theme/admin/sprite_icons.png) no-repeat;
+   padding: 2px 5px 2px 24px;
+   font-family: 1em Arial, Helvetica, sans-serif;
+}
+.adminContainer .Remove-data input{
+   border-color: #C7CBC5;
+   background-color: #E1E4E0;
+   color: #3E3E3C;
+   background-position: -16px -186px;
+   
+}
+.adminContainer .Add-data input{
+   border-color: #333331;
+   background-color: #595A56;
+   color: white;
+   background-position: -16px -152px;   
+}
+
+.adminContainer #docinfo h2 {
+    background-color: transparent;
+    color: black;
+    font-size: 1.286em;
+    font-weight: normal;
+    padding: 0;
+    margin: 0 0 0.3em;
+}
+.adminContainer form dd,
+.adminContainer dd fieldset,
+#actionboxContainer dd,
+.adminContainer form .subform,
+.adminContainer .subform fieldset,
+#actionboxContainer dd{
+   margin: 0;
+   padding: 0;
+   border: none;
+}
+/*.adminContainer #docinfo + dl > dt:first-child{
+   display: none;
+}*/
+.adminContainer dd legend,
+.adminContainer .subform legend{
+   border: none;
+   text-transform: none;
+   font: italic bold 1.143em Georgia, "Times New Roman", Times, serif;
+   color: #595955;
+}
+/*.adminContainer form .wrapper > dl > dd > fieldset > legend,*/
+.adminContainer form .wrapper > .subform > fieldset > legend{
+   background-color: #595a56;
+   color: white;
+   display: block;
+   border-radius: 6px;
+   padding: 0.4em 1.2%;
+   width: 97.6%;
+   position: relative;
+}
+.adminContainer form .wrapper > .subform > fieldset > legend:after {
+    border-color: #595a56 transparent transparent;
+    border-width: 11px 6px 0;
+    bottom: -11px;
+    left: 10px;
+    border-style: solid;
+    content: "";
+    height: 0;
+    position: absolute;
+    width: 0;
+}
+.adminContainer form .wrapper .subform .subform fieldset,
+.adminContainer form .wrapper fieldset#fieldset-Save-data{
+   border-top: 10px solid #BDBEBB;
+}
+.adminContainer form .subform .subform fieldset > legend{
+   padding: 0 1% 0.4% 0;
+}
+.adminContainer form .wrapper fieldset#fieldset-Save-data legend{
+   display: none;
+}
+/*.adminContainer form dl,*/
+.adminContainer form .wrapper .subform{
+   margin: 0;
+   padding: 1.3em 0 0;
+   float: left;
+   width: 100%;
+}
+.adminContainer form .wrapper .fields-wrapper > .subform:first-child{
+   padding-top: 0;
+}
+/*.adminContainer form .wrapper > dl,*/
+/*.adminContainer form .wrapper > .subform,
+.adminContainer form .wrapper > .subform .subform{
+   padding: 1.15em 0;
+}*/
+.adminContainer fieldset > dl > dt,
+.adminContainer fieldset .data-wrapper > div.label{
    float: left;
    clear: left;
    width: 32.7083%;
 }
-.adminContainer fieldset > dl > dt,
+.adminContainer fieldset .multiple-data .data-wrapper > div.label{
+   width: 38.4803%;
+}
+.adminContainer .field{
+   /*float: left;
+   width: 67.2917%;*/
+}
+.adminContainer .field textarea{
+  max-width: 60%;
+}
+.adminContainer fieldset .multiple-data .field{
+  /* width: 61.5197%;*/
+}
+.adminContainer .fields-wrapper{
+   margin: 1.3em 0 0;
+   float: left;
+   width: 100%;
+}
+.adminContainer .subform .subform .fields-wrapper{
+   margin: 0;
+}
+.adminContainer fieldset{
+   clear: both;
+}
+/*.adminContainer fieldset > dl > dt,
 .adminContainer fieldset > dl > dd{
    margin-top: 0.5em;
-}
-.adminContainer #fieldset-Persons > dl > dd > fieldset > dl > dt{
+}*/
+/*.adminContainer #fieldset-Persons > dl > dd > fieldset > dl > dt{
    display: none;
-}
-.adminContainer ul.buttons{
-   margin: 0;
-   padding: 0;
-   list-style: none;
-}
-.adminContainer ul.buttons li{
+}*/
+/*.adminContainer ul.buttons li{
    float: left;
-}
+}*/
 .adminContainer dl.sort.dropdown{
    position: relative;
    width: 9.4%;
@@ -125,20 +340,25 @@ li.edit input:hover{
    margin: 0;
 }
 .adminContainer #fieldset-Persons .person-info{
-   max-width: 64%;
+   max-width: 65%;
 }
 .adminContainer #fieldset-Persons .person-actions{
    float: right;
-   width: 25%;
+   width: 24%;
+   text-align: right;
+}
+.adminContainer #fieldset-Persons .person-actions > ul.links {
+   margin-top: 0.5em;
 }
 .adminContainer #fieldset-Persons .person-actions > *{
    white-space: nowrap;
    display: inline-block;
 }
 .adminContainer #fieldset-Persons .person-actions dl{
-   float: left;
+   /*float: left;*/
    padding: 0;
    margin: 0 1em 0 0;
+   text-align: left;
 }
 .adminContainer dl.sort.dropdown dt,
 .adminContainer dl.settings.dropdown dt{
@@ -146,11 +366,30 @@ li.edit input:hover{
    border-radius: 5px;
    display: inline-block;
    position: relative;
+   background-color: white;
    /*width: 6.25%;*/
 }
 .adminContainer dl.sort.dropdown dt{
-   padding: 0.3em 1.6em 0.3em 0.2em;
+   padding: 0.3em 1.6em 0.3em 0.3em;
 }
+.adminContainer dl.sort ul.links li{
+   background: url(../img/theme/admin/sprite_icons.png) no-repeat;
+   padding-left: 16px;
+   font-size: 0.857em;
+}
+.adminContainer dl.sort ul.links li.move-first{
+   background-position: -20px -117px;
+}
+.adminContainer dl.sort ul.links li.move-up{
+   background-position: -20px -83px;
+}
+.adminContainer dl.sort ul.links li.move-down{
+   background-position: -20px -47px;
+}
+.adminContainer dl.sort ul.links li.move-last{
+   background-position: -20px -13px;
+}
+
 .adminContainer dl.settings.dropdown dt{
    padding: 0;
 }
@@ -162,27 +401,39 @@ li.edit input:hover{
 .adminContainer dl.settings.dropdown dt a:after{
    right: 6px;
    top: 12px;
-
 }
-.adminContainer dl.settings.dropdown.dropdown-open dt{
+.adminContainer .subform .dropdown.dropdown-open dt,
+.no-js .adminContainer .subform .dropdown:hover dt{
    background-color: #E1E4E0;
    border-radius: 5px 5px 0 0;
 }
 .adminContainer dl.settings.dropdown dd{
-   /*display: block;*/
-   border: solid #E1E4E0;
-   border-width: 5px 1px 1px;
-   position: absolute;
    right: 0;
    min-width: 10em;
+}
+/*.adminContainer dl.settings ul.links li:before{
+   content: "?";
+   color: #595955;
+}*/
+.adminContainer dl.sort.dropdown dd{
+   left: 0;
+   min-width: 8em;
+}
+/*.adminContainer dl.settings.dropdown dd,
+.adminContainer dl.sort.dropdown dd{
+   display: block;
+}*/
+.adminContainer .subform .dropdown dd{
+   background-color: white;
+   border: solid #E1E4E0;
+   border-width: 5px 1px 1px;
    padding: 10px;
-   background-color:rgb(255,255,255);
 }
 .adminContainer dl.sort.dropdown dt input{
    color: #595A56;
-   background-color: transparent;
+   background-color: white;
    font: 1.714em Arial, Helvetica, sans-serif;
-   width: 2em;
+   width: 1.9em;
    text-align: center;
    border: 1px solid;
    border-color: white #acacac white white;
@@ -200,7 +451,9 @@ li.edit input:hover{
     right: 7px;
     top: 1.1em;
 }
-.adminContainer dl.sort.dropdown dt:hover input{
+.adminContainer dl.sort.dropdown dt:hover input,
+.adminContainer dl.sort.dropdown.dropdown-open dt input,
+.adminContainer dl.sort.dropdown dt input:focus{
    border: 1px inset #595A56;
 }
 .adminContainer #fieldset-Persons .person-info ul{
@@ -239,10 +492,14 @@ li.edit input:hover{
 }
 #adminMenuContainer ul > li.inactive > strong,
 #adminMenuContainer ul > li > strong{
-   background-image: url(../img/theme/admin/ic_inactive-corner.png);
-   background-color: #6C6C6C;
+   background-image: url(../img/theme/admin/ic_inactive-corner_light.png);
+   /*background-color: #6C6C6C;
    color: #525252;
-   text-shadow: 0 2px 3px #666666;
+   text-shadow: 0 2px 3px #666666;*/
+   background-color: #f5f7fa;
+   color: #D7DFE7;
+   /*text-shadow: 0 2px 3px #dddddd;*/
+
 }
 #adminMenuContainer ul > li > *{
    display: block;
@@ -341,7 +598,8 @@ li.edit input:hover{
    min-width: 100%;
 }
 .dropdown ul,
-#actionboxContainer ul{
+#actionboxContainer ul,
+ul.Document-Action{
    margin: 0;
    padding: 0;
    list-style: none;
@@ -349,7 +607,9 @@ li.edit input:hover{
 .dropdown li{
    padding: 4px 0;
 }
-
+.dropdown li.Remove-data{
+   text-align: center;
+}
 /* @end */
 /* @group ActionBox */
 #actionboxContainer .messagesContainer{
@@ -502,7 +762,7 @@ li.edit input:hover{
 }
 #Document-ServerState.dropdown dd a:hover{
    text-decoration: underline;
-   color: #26517b;
+   color: #26517a;
 }
 #Document-ServerState.dropdown.dropdown-open li,
 .no-js #Document-ServerState.dropdown:hover li{
@@ -553,7 +813,8 @@ li.edit input:hover{
 #content.adminContainer{
    background: url(../img/theme/admin/bg_page.png) repeat-x 50% 2px;
 }
-#content.adminContainer .wrapper{
+#content.adminContainer .wrapper,
+#content #actionboxContainer .wrapper{
    font-size: 0.875em;
    clear: both;
 }
@@ -573,67 +834,4 @@ li.edit input:hover{
 }
 .adminContainer .breadcrumbsContainer *{
    color: white;
-}
-#docinfo{
-   padding: 1.3em 0;
-}
-#docinfo p{
-   margin: 0;
-}
-.adminContainer #docinfo h2 {
-    background-color: transparent;
-    color: black;
-    font-size: 1.286em;
-    font-weight: normal;
-    padding: 0;
-    margin: 0 0 0.3em;
-}
-.adminContainer form dd,
-.adminContainer dd fieldset,
-#actionboxContainer dd{
-   margin: 0;
-   padding: 0;
-   border: none;
-}
-.adminContainer #docinfo + dl > dt:first-child{
-   display: none;
-}
-.adminContainer dd legend{
-   border: none;
-   text-transform: none;
-   font: italic bold 1.143em Georgia, "Times New Roman", Times, serif;
-   color: #595955;
-}
-.adminContainer form .wrapper > dl > dd > fieldset > legend{
-   background-color: #595a56;
-   color: white;
-   display: block;
-   border-radius: 6px;
-   padding: 0.4em 1.2%;
-   width: 97.6%;
-   position: relative;
-}
-.adminContainer form .wrapper > dl > dd > fieldset > legend:after {
-    border-color: #595a56 transparent transparent;
-    border-width: 11px 6px 0;
-    bottom: -11px;
-    left: 10px;
-    border-style: solid;
-    content: "";
-    height: 0;
-    position: absolute;
-    width: 0;
-}
-.adminContainer form fieldset > dl > dd > fieldset{
-   border-top: 10px solid #BDBEBB;
-}
-.adminContainer form fieldset > dl > dd > fieldset > legend{
-   padding: 0 1% 0.4% 0;
-}
-.adminContainer form dl{
-   margin: 0;
-   padding: 1.15em 0 1.768em;
-}
-.adminContainer form .wrapper > dl{
-   padding-top: 0;
 }
