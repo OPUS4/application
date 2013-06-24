@@ -53,9 +53,6 @@ class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm 
     
     public function __construct($position = null, $options = null) {
         parent::__construct($options);
-        if (!is_null($role)) {
-            $this->removeElement($this->getRoleElementName($role));
-        }
     }
     
     /**
