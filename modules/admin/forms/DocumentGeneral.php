@@ -102,16 +102,14 @@ class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
         $this->addElement($element);
         
         // PublishedYear
-        $element = $elementFactory->createYearElement(self::ELEMENT_PUBLISHED_YEAR);
-        $this->addElement($element);
+        $this->addElement('Year', self::ELEMENT_PUBLISHED_YEAR);
         
         // CompletedDate
         $element = $elementFactory->createDateElement(self::ELEMENT_COMPLETED_DATE);
         $this->addElement($element);
         
         // CompletedYear
-        $element = $elementFactory->createYearElement(self::ELEMENT_COMPLETED_YEAR);
-        $this->addElement($element);
+        $this->addElement('Year', self::ELEMENT_COMPLETED_YEAR);
     }
     
     /**
