@@ -39,9 +39,7 @@ class Form_Element_Hidden extends Zend_Form_Element_Hidden {
     
     public function loadDefaultDecorators() {
         $this->setDecorators(array(
-            'ViewHelper', 
-            'ElementHtmlTag',
-            array(array('dataWrapperOpen' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
+            'ViewHelper'
         ));
     }
     

@@ -39,9 +39,7 @@ class Form_Element_Hash extends Zend_Form_Element_Hash {
     
     public function loadDefaultDecorators() {
         $this->setDecorators(array(
-            'ViewHelper', 
-            'ElementHtmlTag',
-            array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
+            'ViewHelper'
         ));
     }
     
