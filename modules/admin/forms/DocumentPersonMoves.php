@@ -70,7 +70,7 @@ class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm 
             $element = new Form_Element_Submit($move);
             $element->setDecorators(array(
                 'ViewHelper',
-                array('HtmlTag', array('tag' => 'li'))
+                array('HtmlTag', array('tag' => 'li', 'class' => 'move-' . strtolower($move)))
                 ));
             
             $this->addElement($element);
