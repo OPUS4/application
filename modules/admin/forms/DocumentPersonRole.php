@@ -77,7 +77,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
         $this->setLegend('admin_document_section_person' . $this->__roleName);
 
         // Button zum Hinzufügen von Personen in Role
-        $element = $this->createSubmit(self::ELEMENT_ADD);
+        $element = $this->createElement('submit', self::ELEMENT_ADD);
         $element->setOrder(1000); // TODO not 100% safe
         $this->addElement($element);
     }

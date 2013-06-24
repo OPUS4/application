@@ -41,6 +41,7 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
         parent::init();
         
         $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+        // $this->addElementPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
         $this->addPrefixPath('Form', 'Form'); // '_Element' wird anscheinend automatisch dran gehängt
         
         $this->setDisableLoadDefaultDecorators(true);
@@ -238,17 +239,5 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     public function getLog() {
         return Zend_Registry::get('Zend_Log');
     }
-    
-    public function createSubmit($name) {
-        return new Form_Element_Submit($name);
-    } 
-    
-    public function createHidden($name) {
-        return new Form_Element_Hidden($name);
-    } 
-    
-    public function createTextarea($name) {
-        return new Form_Element_Textarea($name);
-    }
-    
+            
 }
