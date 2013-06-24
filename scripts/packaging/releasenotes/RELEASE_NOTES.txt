@@ -44,6 +44,18 @@ Beim Freischalten des Dokuments ist durch den Administrator aber darauf zu
 achten, dass die URN aus dem eigenen Namensraum kommt (ansonsten kann keine
 Kollisionsfreiheit sichergestellt werden).
 
+h3. Konfiguration der bearbeitbaren Übersetzungsressourcen
+
+Für die Bearbeitung von Übersetzungsressourcen über die Administration
+muss in der config.ini festgelegt werden, welche Module bearbeitbar sein sollen.
+Das geschieht über den Parameter setup.translation.modules.allowed, der eine
+durch Kommata getrennte Liste aller zur Bearbeitung freigegebenen Module enthält.
+
+Wird dieser Schlüssel nicht angegeben, dann ist die Bearbeitung der
+Übersetzungsressourcen über die Administrationsoberfläche nicht möglich.
+
+Als Vorgabe werden in der Datei config.ini.template die Module "default" und 
+"publish" freigegeben.
 
 h2. ======================== Release 4.3.1 2013-02-21 ========================
 
