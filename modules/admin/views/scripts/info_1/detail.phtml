@@ -35,15 +35,15 @@
 <div id="adminMenuContainer">
 
     <fieldset>
-        <legend><?= $this->translate('admin_info_job-detail_description') ?>: <?= $this->translate('admin_info_job_label-' . $this->label) ?></legend>
+        <legend><?= $this->translate('admin_job_job-detail_description') ?>: <?= $this->translate('admin_job_label-' . $this->label) ?></legend>
 
         <table class="worker-jobs">
             <tr>
-                <td><?=$this->translate('admin_info_job_id')?></td>
-                <td><?=$this->translate('admin_info_job_sha1_id')?></td>
-                <td><?=$this->translate('admin_info_job_state')?></td>
-                <td><?=$this->translate('admin_info_job_data')?></td>
-                <td><?=$this->translate('admin_info_job_errors')?></td>
+                <td><?=$this->translate('admin_job_id')?></td>
+                <td><?=$this->translate('admin_job_sha1_id')?></td>
+                <td><?=$this->translate('admin_job_state')?></td>
+                <td><?=$this->translate('admin_job_data')?></td>
+                <td><?=$this->translate('admin_job_errors')?></td>
             </tr>
 
             <? if ($this->jobs && count($this->jobs) > 0): ?>
@@ -52,7 +52,7 @@
                     <tr>
                         <td><?= $job->getId() ?></td>
                         <td><?= $job->getSha1Id()?></td>
-                        <td><?= $this->translate('admin_info_job_state-'.($job->getState() ? : 'unprocessed')) ?></td>
+                        <td><?= $this->translate('admin_job_state-'.($job->getState() ? : 'unprocessed')) ?></td>
                         <td>
                             <? foreach ((array) $job->getData() as $key => $value): ?>
                                 <div><?= $key ?>: <?= $value ?></div>
@@ -64,15 +64,15 @@
                             if (!empty($error)):
                                 $errorObject = json_decode($error);
                                 ?>
-                                <div><?= $this->translate('admin_info_job_exception_classname') ?>: <?= $errorObject->exception ?></div>
-                                <div><?= $this->translate('admin_info_job_exception_message') ?>: <?= $errorObject->message ?></div>
+                                <div><?= $this->translate('admin_job_exception_classname') ?>: <?= $errorObject->exception ?></div>
+                                <div><?= $this->translate('admin_job_exception_message') ?>: <?= $errorObject->message ?></div>
                             <? endif ?>
                         </td>
                     </tr>
                 <? endforeach ?>
             <? else: ?>
                 <tr>
-                    <td><?= $this->translate('admin_info_index_nofailedjobs') ?></td>
+                    <td><?= $this->translate('admin_job_index_nofailedjobs') ?></td>
                 </tr>
             <? endif ?>
         </table>
