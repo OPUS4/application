@@ -70,7 +70,8 @@ class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
             $element = new Form_Element_Checkbox(self::ELEMENT_NAME_PREFIX . $licence->getId());
             $element->setLabel($licence->getNameLong());
             $cssClass = ($licence->getActive()) ? self::ACTIVE_CSS_CLASS : self::INACTIVE_CSS_CLASS;
-            $element->addDecorator('Label', array('class' => $cssClass));
+            $labelDecorator = $element->getDecorator('Label');
+            $labelDecorator->setOption('class', $cssClass);
             $element->setCheckedValue($licence->getId());
             $this->addElement($element);
         }
