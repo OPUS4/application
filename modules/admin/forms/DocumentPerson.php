@@ -165,13 +165,13 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         else if (array_key_exists(self::ELEMENT_UP, $post)) {
             return self::RESULT_MOVE_UP;
         }
-        else if (array_key_exists(self::ELEMENT_DOWN, $host)) {
+        else if (array_key_exists(self::ELEMENT_DOWN, $post)) {
             return self::RESULT_MOVE_DOWN;
         }
-        else if (array_key_exists(self::ELEMENT_FIRST, $host)) {
+        else if (array_key_exists(self::ELEMENT_FIRST, $post)) {
             return self::RESULT_MOVE_FIRST;
         }
-        else if (array_key_exists(self::ELEMENT_LAST, $host)) {
+        else if (array_key_exists(self::ELEMENT_LAST, $post)) {
             return self::RESULT_MOVE_LAST;
         }
         else if (array_key_exists(self::ELEMENT_EDIT, $post)) {
