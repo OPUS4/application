@@ -59,8 +59,6 @@ class Admin_Form_DocumentActions extends Admin_Form_AbstractDocumentSubForm {
     public function init() {
         parent::init();
         
-        $this->setLegend('Save');
-        
         $this->addElement('hidden', self::ELEMENT_ID);
         $this->addElement('hash', self::ELEMENT_HASH, array('salt' => 'unique')); // TODO salt?
         $this->addElement('submit', self::ELEMENT_SAVE, array('decorators' => array('ViewHelper')));
@@ -71,8 +69,7 @@ class Admin_Form_DocumentActions extends Admin_Form_AbstractDocumentSubForm {
             'PrepareElements',
             array('ViewScript', array('viewScript' => 'form/documentActions.phtml')),
             array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
-            'Fieldset',
-            array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
+            array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform', 'id' => 'subform-Actions'))
         ));
     }
     
