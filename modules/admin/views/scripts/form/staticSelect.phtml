@@ -32,5 +32,7 @@
  */
 ?>
 
-<div><?= $this->element->getLabel() ?></div>
-<div id="<?= $this->element->getId() ?>"><?= $this->element->getMultiOption($this->element->getValue()) ?></div>
+<div class="data-wrapper">
+<div class="label"><?= $this->element->getLabel() ?></div>
+<div id="<?= $this->element->getId() ?>" class="field"><?= $this->element->getMultiOption($this->element->getValue()) ?></div>
+</div>

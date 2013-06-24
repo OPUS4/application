@@ -32,5 +32,7 @@
  */
 ?>
 
-<div><?= $this->element->getLabel() ?></div>
-<div id="<?= $this->element->getId() ?>"><?= $this->translate($this->element->getValue()) ?></div>
+<div class="data-wrapper">
+<div class="label"><?= $this->element->getLabel() ?></div>
+<div id="<?= $this->element->getId() ?>" class="field"><?= $this->translate($this->element->getValue()) ?></div>
+</div>
