@@ -172,16 +172,9 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
     }
 
     protected function _addSubFormFromPost($subFormName, $person) {
-        $subform = new Admin_Form_DocumentPerson();
-        $rolesForm = new Admin_Form_DocumentPersonRoles($this->__roleName);
-        $subform->addSubForm($rolesForm, 'Roles');
-        
-        $subform->initRendering();
-        
+        $subform = $this->createSubForm();
         $subform->populateFromPost($person);
-
         $this->addSubForm($subform, $subFormName);
-        
         return $subform;
     }
     
@@ -193,14 +186,22 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
     
     protected function _addPersonSubForm($index, $person) {
         // TODO add subform for person
+        $subform = $this->createSubForm();
+        $subform->populateFromModel($person);
+        $this->addSubForm($subform, 'Person' . $index);
+        return $subform;
+    }
+    
+    protected function createSubForm() {
         $subform = new Admin_Form_DocumentPerson();
+        
         $rolesForm = new Admin_Form_DocumentPersonRoles($this->__roleName);
         $subform->addSubForm($rolesForm, 'Roles');
         
+        $movesForm = new Admin_Form_DocumentPersonMoves();
+        $subform->addSubForm($movesForm, 'Moves');
+                        
         $subform->initRendering();
-        $subform->populateFromModel($person);
-        
-        $this->addSubForm($subform, 'Person' . $index);
         
         return $subform;
     }

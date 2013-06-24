@@ -51,30 +51,49 @@
     $formId = substr($formId, 0, strrpos($formId, '-') + 1);
 ?>
 
-<div id="<?= $this->element->getName() . '-element' ?>">
-    <div class="person-info">
-        <span id="<?=$formId . 'LastName'?>"><?= $person->getLastName()?></span>
-        <?PHP if (!is_null($person->getFirstName())) : ?>, 
-            <span id="<?=$formId . 'FirstName'?>"><?= $person->getFirstName() ?></span>
-        <?PHP endif; ?>
-        <?PHP if (!is_null($person->getAcademicTitle())) : ?>
-            <span id="<?=$formId . 'AcademicTitle'?>">, <?= $person->getAcademicTitle() ?></span>
-        <?PHP endif; ?>
-        <?PHP if (!is_null($person->getEmail())) : ?>
-        <div>
-            <span id="<?=$formId . 'Email'?>"><?= $person->getEmail() ?></span>
-            -<?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT) ?>
+<div class="multiple-wrapper">
+    <div class="data-wrapper multiple-data">
+        <div id="<?= $this->element->getName() . '-element' ?>">
+            <dl class="sort dropdown">
+                <dt>
+                    <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER) ?>
+                    <a>Move</a></dt>
+                    <dd>
+                        <p class="label"><i>Verschieben</i></p>
+                        <?= $this->element->getSubForm('Moves') ?>
+                    </dd>
+            </dl>
+            <div class="person-info">
+                <span id="<?=$formId . 'LastName'?>"><?= $person->getLastName()?></span>
+                <?PHP if (!is_null($person->getFirstName())) : ?>, 
+                    <span id="<?=$formId . 'FirstName'?>"><?= $person->getFirstName() ?></span>
+                <?PHP endif; ?>
+                <?PHP if (!is_null($person->getAcademicTitle())) : ?>
+                    <span id="<?=$formId . 'AcademicTitle'?>">, <?= $person->getAcademicTitle() ?></span>
+                <?PHP endif; ?>
+                <?PHP if (!is_null($person->getEmail())) : ?>
+                <div>
+                    <span id="<?=$formId . 'Email'?>"><?= $person->getEmail() ?></span>
+                    -<?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT) ?>
+                </div>
+                <?PHP endif; ?>
+            </div>
+            <div class="person-actions">
+                <dl class="settings col dropdown">
+                    <dt><a>Actionen</a></dt>
+                    <dd>
+                        <p class="label"><i>Rolle ändern</i></p>
+                        <?= $this->element->getSubForm('Roles') ?>
+                        <p class="label"><i>oder Person</i></p>
+                        <ul class="buttons">
+                            <li class="Remove-data"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_REMOVE) ?></li>
+                        </ul>
+                    </dd>
+                </dl>
+                <ul class="links">
+                    <li class="edit"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_EDIT) ?></li>
+                </ul>
+            </div>
         </div>
-        <?PHP endif; ?>
-    </div>
-    <div class="person-actions">
-        <?PHP foreach ($this->element->getSubForms() as $subform) : ?>
-            <?= $subform ?>
-        <?PHP endforeach; ?>
-        <?PHP foreach ($this->element->getElements() as $name => $element) : ?>
-            <?PHP if ($name !== Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT) : ?>
-                <?= $element ?>
-            <?PHP endif; ?>
-        <?PHP endforeach; ?>
     </div>
 </div>

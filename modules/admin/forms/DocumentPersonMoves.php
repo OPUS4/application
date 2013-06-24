@@ -66,7 +66,7 @@ class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm 
         
         $this->setDecorators(array(
             'FormElements',
-            array('HtmlTag', array('tag' => 'ul'))
+            array('HtmlTag', array('tag' => 'ul', 'class' => 'links'))
         ));
         
         foreach ($this->moves as $move) {

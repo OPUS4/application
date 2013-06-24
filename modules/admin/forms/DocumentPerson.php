@@ -130,22 +130,6 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         $element = new Form_Element_Submit(self::ELEMENT_REMOVE);
         $element->setDecorators(array('ViewHelper'));
         $this->addElement($element);
-        
-        $element = new Form_Element_Submit(self::ELEMENT_FIRST);
-        $element->setDecorators(array('ViewHelper'));
-        $this->addElement($element);
-
-        $element = new Form_Element_Submit(self::ELEMENT_UP);
-        $element->setDecorators(array('ViewHelper'));
-        $this->addElement($element);
-        
-        $element = new Form_Element_Submit(self::ELEMENT_DOWN);
-        $element->setDecorators(array('ViewHelper'));
-        $this->addElement($element);
-        
-        $element = new Form_Element_Submit(self::ELEMENT_LAST);
-        $element->setDecorators(array('ViewHelper'));
-        $this->addElement($element);
     }
     
     public function initRendering() {
