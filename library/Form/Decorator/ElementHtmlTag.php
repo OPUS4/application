@@ -1,4 +1,4 @@
-<?PHP
+<?PHP 
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -33,24 +33,29 @@
  */
 
 /**
- * Ein Text INPUT Element für OPUS Formulare.
+ * Renders DIV Tag Wrapper um Formularelement.
  * 
- * Zur Zeit nur vom Metadaten-Formular genutzt.
+ * Die Klasse dient dazu die Decoratorkonfiguration für einzelne Elemente zu vereinfachen.
  */
-class Form_Element_Text extends Zend_Form_Element_Text {
-    
+class Form_Decorator_ElementHtmlTag extends Zend_Form_Decorator_HtmlTag {
+
     /**
-     * Lädt die Defaultdekoratoren für ein Textelement.
+     * Tag Attribute vorbereiten.
+     * 
+     * Das 'class' Attribute wird auf 'field' gesetzt und die 'id' auf die Element-ID plus '-element'.
+     * 
+     * @param array $attribs
+     * @return array
      */
-    public function loadDefaultDecorators() {
-        $this->setDecorators(array(
-            'ViewHelper', 
-            'Errors',
-            'Description',
-            array('ElementHtmlTag'),
-            array('Label', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-            array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-        ));
+    protected function _htmlAttribs(array $attribs) {
+        if (is_null($attribs)) {
+            $attribs = array();
+        }
+        
+        $attribs['class'] = 'field';
+        $attribs['id'] = $this->getElement()->getId() . '-element';
+        
+        return parent::_htmlAttribs($attribs);;
     }
     
 }
