@@ -35,10 +35,10 @@
 
     <tu tuid="admin_document_view">
       <tuv xml:lang="en">
-        <seg>View in Administration</seg>
+        <seg>Administration</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Open Administration</seg>
+        <seg>Administration</seg>
       </tuv>
     </tu>
 
