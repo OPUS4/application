@@ -82,13 +82,13 @@ class Admin_Form_DocumentActions extends Admin_Form_AbstractDocumentSubForm {
     
     public function processPost($post, $context) {
         // Prüfen, ob "Speichern" geklickt wurde
-        if (array_key_exists(self::ELEMENT_SAVE, $data)) {
+        if (array_key_exists(self::ELEMENT_SAVE, $post)) {
             return Admin_Form_Document::RESULT_SAVE;
         }
-        else if (array_key_exists(self::ELEMENT_SAVE_AND_CONTINUE, $data)) {
+        else if (array_key_exists(self::ELEMENT_SAVE_AND_CONTINUE, $post)) {
             return Admin_Form_Document::RESULT_SAVE_AND_CONTINUE;
         }
-        else if (array_key_exists(self::ELEMENT_CANCEL, $data)) {
+        else if (array_key_exists(self::ELEMENT_CANCEL, $post)) {
             return Admin_Form_Document::RESULT_CANCEL;
         }
         
