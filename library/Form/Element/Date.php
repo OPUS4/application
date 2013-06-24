@@ -33,32 +33,24 @@
  */
 
 /**
- * Eingabefeld für Jahreszahlen.
+ * Eingabefeld für Datumsangaben.
  */
-class Form_Element_Year extends Form_Element_Text {
+class Form_Element_Date extends Form_Element_Text {
 
     public function init() {
         parent::init();
         
-        $this->setLabel($this->getName()); // TODO use prefix for translation
-        
-        $validators = array();
-        
-        $validator = new Zend_Validate_Int();
+        $this->setLabel($this->getName());
+
+        $validator = new Form_Validate_Date();
         $validator->setMessages(array(
-            Zend_Validate_Int::NOT_INT => 'year_invalid'
+            Zend_Validate_Date::INVALID => 'date_invalid',
+            Zend_Validate_Date::INVALID_DATE => 'date_invaliddate',
+            Zend_Validate_Date::FALSEFORMAT => 'date_falseformat'
         ));
-        $validators[] = $validator;
+        $this->setValidators(array($validator));
         
-        $validator = new Zend_Validate_GreaterThan(-1);
-        $validator->setMessages(array(
-            Zend_Validate_GreaterThan::NOT_GREATER => 'year_invalid'
-        ));
-        $validators[] = $validator;
-        
-        $this->setAttrib('placeholder', 'YYYY'); // TODO translate
-        
-        $this->setValidators($validators, true);
+        $this->setAttrib('placeholder', 'YYYY/MM/DD'); // TODO translate
     }
     
 }

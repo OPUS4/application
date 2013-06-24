@@ -33,32 +33,25 @@
  */
 
 /**
- * Eingabefeld für Jahreszahlen.
+ * 
  */
-class Form_Element_Year extends Form_Element_Text {
-
+class Form_Element_DocumentType extends Form_Element_Select {
+    
     public function init() {
         parent::init();
         
-        $this->setLabel($this->getName()); // TODO use prefix for translation
+        $this->setLabel($this->getName());
+        $this->setRequired(true);
         
-        $validators = array();
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
         
-        $validator = new Zend_Validate_Int();
-        $validator->setMessages(array(
-            Zend_Validate_Int::NOT_INT => 'year_invalid'
-        ));
-        $validators[] = $validator;
+        $options = $docTypeHelper->getDocumentTypes();
         
-        $validator = new Zend_Validate_GreaterThan(-1);
-        $validator->setMessages(array(
-            Zend_Validate_GreaterThan::NOT_GREATER => 'year_invalid'
-        ));
-        $validators[] = $validator;
+        foreach ($options as $index => $type) {
+            $this->addMultiOption($index, $type);
+        }
         
-        $this->setAttrib('placeholder', 'YYYY'); // TODO translate
-        
-        $this->setValidators($validators, true);
+        $this->setDisableTranslator(false); // TODO Check for multiple translations
     }
     
 }
