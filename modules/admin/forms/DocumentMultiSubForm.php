@@ -75,9 +75,23 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         $element = $this->createElement('submit', self::ELEMENT_ADD); 
         $element->setLabel('Hinzufügen'); // TODO translate depending on $_subFormClass
         $element->setOrder(1000); // TODO only theoretically safe
+        $element->addDecorator(
+                array('multipleWrapperClose' => 'HtmlTag'), 
+                array('tag' => 'div', 'closeOnly' => true, 'placement' => 'prepend'));
+
         $this->addElement($element);
         
         $this->setLegend('admin_document_section_' . strtolower($this->_fieldName)); 
+        
+        $this->setDecorators(array(
+            'FormElements',
+            array(array('multipleWrapperOpen' => 'HtmlTag'), 
+                array('tag' => 'div', 'class' => 'multiple-wrapper', 'openOnly' => true)),
+            array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
+            'Fieldset',
+            array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
+        ));
+
     }
     
     /**
