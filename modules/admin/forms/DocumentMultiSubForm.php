@@ -207,8 +207,15 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         
         $subForm = $this->createSubForm();
         $subForm->setOrder($position);
-
-
+        
+        $multiWrapper = $subForm->getDecorator('multiWrapper');
+        
+        if (!is_null($multiWrapper) && $multiWrapper instanceof Zend_Form_Decorator_HtmlTag) {
+            $multiClass = $multiWrapper->getOption('class');
+            $multiClass .= ($position % 2 == 0) ? ' even' : ' odd';
+            $multiWrapper->setOption('class', $multiClass);
+        }
+        
         $this->addSubForm($subForm, $this->_fieldName . $position);
         
         return $subForm;
