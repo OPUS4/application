@@ -161,6 +161,10 @@ runjobs.asynchronous = 0
 ; the web interface
 setup.translation.modules.allowed = default,publish
 
+; PUBLICATION LIST SETTINGS
+; Here you can define which stylesheet is used for rendering publication lists.
+; If you don't set publist.stylesheet the default stylesheet is used.
+; publist.stylesheet =
 
 
 ; The following is needed even if sections are empty.

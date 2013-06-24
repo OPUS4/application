@@ -164,13 +164,17 @@ class Export_IndexController extends Controller_Xml {
     }
 
     public function publistAction() {
-        $stylesheetParam = $this->getRequest()->getParam('stylesheet');
-        if (is_null($stylesheetParam)) {
-            throw new Application_Exception('stylesheet is not specified');
+	$this->stylesheet = 'default';
+	$this->stylesheetDirectory = 'publist';
+        
+	$config = Zend_Registry::get('Zend_Config');
+	if (isset($config->publist->stylesheet)) {
+            $this->stylesheet = $config->publist->stylesheet;
+	}
+        if (!is_null($this->getRequest()->getParam('stylesheet'))) {
+            $this->stylesheet = $this->getRequest()->getParam('stylesheet');
         }
-        $this->stylesheet = $this->getRequest()->getParam('stylesheet');
-        $this->stylesheetDirectory = 'publist';
-
+        
         $roleParam = $this->getRequest()->getParam('role');
         if (is_null($roleParam)) {
             throw new Application_Exception('role is not specified');
