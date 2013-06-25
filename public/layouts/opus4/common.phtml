@@ -141,18 +141,19 @@ $languageSelectors = $this->languageSelector();
             </div>
 
             <div id="content" class="opus <?= (in_array($this->moduleName, array('admin', 'review', 'setup'))) ? 'adminContainer' : ''?> <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
-                <?php if (!is_null($this->flashMessenger)) : ?>
-                <div class="messages">
-                    <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
-                        <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
-                    <?php endforeach ?>
-                </div>
-                <?php endif ?>
-
                 <?PHP if (in_array($this->moduleName, array('admin', 'review', 'setup'))) : ?>
                     <?PHP if ($this->breadcrumbsDisabled !== true) : ?>
                         <?= $this->navigation()->breadcrumbs() ?>
                     <?PHP endif; ?>
+                
+                    <?php if (!is_null($this->flashMessenger)) : ?>
+                    <div class="messages">
+                        <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
+                            <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                        <?php endforeach ?>
+                    </div>
+                    <?php endif ?>
+                
                     <?PHP if ($this->contentWrapperDisabled !== true && $this->breadcrumbsDisabled !== true) : ?>
                     <div class="wrapper">
                         <?= $this->layout()->content ?>
@@ -161,12 +162,21 @@ $languageSelectors = $this->languageSelector();
                     <?= $this->layout()->content ?>
                     <?PHP endif; ?>
                 <?PHP else : ?>
-                <?PHP if ($this->accessAllowed('documents') && !is_null($this->adminform)) : ?> 
-                    <?= $this->adminform ?>
-                <?PHP endif ?>
-                <div class="wrapper">
-                    <?= $this->layout()->content ?>
-                </div>
+                    <?PHP if ($this->accessAllowed('documents') && !is_null($this->adminform)) : ?> 
+                        <?= $this->adminform ?>
+                    <?PHP endif ?>
+                
+                    <?php if (!is_null($this->flashMessenger)) : ?>
+                    <div class="messages">
+                        <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
+                            <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
+                        <?php endforeach ?>
+                    </div>
+                    <?php endif ?>
+                
+                    <div class="wrapper">
+                        <?= $this->layout()->content ?>
+                    </div>
                 <?PHP endif; ?>
             </div>
 
