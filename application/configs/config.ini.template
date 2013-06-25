@@ -162,9 +162,13 @@ runjobs.asynchronous = 0
 setup.translation.modules.allowed = default,publish
 
 ; PUBLICATION LIST SETTINGS
-; Here you can define which stylesheet is used for rendering publication lists.
-; If you don't set publist.stylesheet the default stylesheet is used.
+; Per default publication lists are rendered by the default stylehseet.
+; Here you can define your own stylesheet for rendering publication lists:
 ; publist.stylesheet =
+;
+; Per default publications are grouped by 'published year'.
+; Here you can switch grouping to 'completed year':
+; publist.groupby.completedyear = 1
 
 
 ; The following is needed even if sections are empty.

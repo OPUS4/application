@@ -45,12 +45,14 @@
 
     <xsl:param name="baseUrl" />
     <xsl:param name="collName" />
+    <xsl:param name="groupBy" />
 
     <xsl:template match="/">
         <xsl:apply-templates select="Documents"/>
     </xsl:template>
 
-    <xsl:key name="year" match="Opus_Document" use="php:functionString('max', PublishedDate/@Year, @PublishedYear)"/>
+    <xsl:key name="published_year" match="Opus_Document" use="php:functionString('max', PublishedDate/@Year, @PublishedYear)"/>
+    <xsl:key name="completed_year" match="Opus_Document" use="php:functionString('max', CompletedDate/@Year, @CompletedYear)"/>
 
     <xsl:template match="Documents">
         <xsl:call-template name="set_div"/>
@@ -70,19 +72,35 @@
   <xsl:template name="render_header">
     <div id="header">
       <xsl:element name="h1">
-          <xsl:value-of select="$name" />
+          <xsl:value-of select="$collName" />
       </xsl:element>
     </div>
   </xsl:template>
 
-
-
     <xsl:template name="render_navibar">
-        <xsl:for-each select="Opus_Document[count(. | key('year', php:functionString('max', PublishedDate/@Year, @PublishedYear))[1]) = 1]">
-            <xsl:sort select="php:functionString('max', PublishedDate/@Year, @PublishedYear)" order="descending"/>
-            <xsl:variable name="year">
-                <xsl:value-of select="php:functionString('max', PublishedDate/@Year, @PublishedYear)" />
-            </xsl:variable>
+        <xsl:choose>
+            <xsl:when test="$groupBy = 'publishedYear'">
+                <xsl:for-each select="Opus_Document[count(. | key('published_year', php:functionString('max', PublishedDate/@Year, @PublishedYear))[1]) = 1]">
+                    <xsl:sort select="php:functionString('max', PublishedDate/@Year, @PublishedYear)" order="descending"/>
+                    <xsl:call-template name="render_navibar_link">
+                        <xsl:with-param name="year" select="php:functionString('max', PublishedDate/@Year, @PublishedYear)"/>
+                    </xsl:call-template>
+                </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+               <xsl:for-each select="Opus_Document[count(. | key('completed_year', php:functionString('max', CompletedDate/@Year, @CompletedYear))[1]) = 1]">
+                    <xsl:sort select="php:functionString('max', CompletedDate/@Year, @CompletedYear)" order="descending"/>
+                    <xsl:call-template name="render_navibar_link">
+                        <xsl:with-param name="year" select="php:functionString('max', CompletedDate/@Year, @CompletedYear)"/>
+                    </xsl:call-template>
+                </xsl:for-each>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+
+    <xsl:template name="render_navibar_link">
+        <xsl:param name="year" required="yes" />
             <xsl:element name="span">
                 <xsl:text> </xsl:text>
             </xsl:element>
@@ -98,18 +116,35 @@
                     <xsl:text> | </xsl:text>
                 </xsl:element>
             </xsl:if>
-        </xsl:for-each>
     </xsl:template>
 
 
     <xsl:template name="render_table">
         <xsl:element name="table">
             <xsl:attribute name="cellspacing">0</xsl:attribute>
-            <xsl:for-each select="Opus_Document[generate-id()=generate-id(key('year',php:functionString('max', PublishedDate/@Year, @PublishedYear))[1])]">
-                <xsl:sort select="php:functionString('max', PublisheDate/@Year, @PublishedYear)" order="descending"/>
-                <xsl:variable name="year">
-                    <xsl:value-of select="php:functionString('max', PublishedDate/@Year, @PublishedYear)" />
-                </xsl:variable>
+            <xsl:choose>
+                <xsl:when test="$groupBy = 'publishedYear'">
+                    <xsl:for-each select="Opus_Document[generate-id()=generate-id(key('published_year',php:functionString('max', PublishedDate/@Year, @PublishedYear))[1])]">
+                        <xsl:sort select="php:functionString('max', PublishedDate/@Year, @PublishedYear)" order="descending"/>
+                        <xsl:call-template name="render_table_row">
+                            <xsl:with-param name="year" select="php:functionString('max', PublishedDate/@Year, @PublishedYear)"/>
+                        </xsl:call-template>
+                    </xsl:for-each>
+               </xsl:when>
+               <xsl:otherwise>
+                     <xsl:for-each select="Opus_Document[generate-id()=generate-id(key('completed_year',php:functionString('max', CompletedDate/@Year, @CompletedYear))[1])]">
+                        <xsl:sort select="php:functionString('max', CompletedDate/@Year, @CompletedYear)" order="descending"/>
+                        <xsl:call-template name="render_table_row">
+                            <xsl:with-param name="year" select="php:functionString('max', CompletedDate/@Year, @CompletedYear)"/>
+                        </xsl:call-template>
+                    </xsl:for-each>
+               </xsl:otherwise>
+            </xsl:choose>
+        </xsl:element>
+    </xsl:template>
+
+    <xsl:template name="render_table_row">
+        <xsl:param name="year" required="yes" />
                 <xsl:element name="tr">
                     <xsl:attribute name="class">year</xsl:attribute>
                     <xsl:element name="td">
@@ -123,12 +158,20 @@
                         </xsl:element>
                     </xsl:element>
                 </xsl:element>
-                <xsl:for-each select="key('year', $year)">
+        <xsl:choose>
+            <xsl:when test="$groupBy = 'publishedYear'">
+                <xsl:for-each select="key('published_year', $year)">
                     <xsl:sort select="TitleMain/@Value" order="ascending"/>
                     <xsl:apply-templates select="."/>
                 </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:for-each select="key('completed_year', $year)">
+                    <xsl:sort select="TitleMain/@Value" order="ascending"/>
+                    <xsl:apply-templates select="."/>
             </xsl:for-each>
-        </xsl:element>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
 
@@ -437,7 +480,15 @@
     </xsl:template>
 
     <xsl:template name="Year">
+        <xsl:choose>
+            <xsl:when test="$groupBy = 'publishedYear'">
         <xsl:value-of select="php:functionString('max', PublishedDate/@Year, @PublishedYear)" />
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="php:functionString('max', CompletedDate/@Year, @CompletedYear)" />
+            </xsl:otherwise>
+        </xsl:choose>
+
     </xsl:template>
 
 

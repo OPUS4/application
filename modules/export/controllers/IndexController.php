@@ -185,9 +185,15 @@ class Export_IndexController extends Controller_Xml {
             throw new Application_Exception('number is not specified');
         }
 
+        $groupBy = 'publishedYear';
+	if (isset($config->publist->groupby->completedyear)) {
+            $groupBy = 'completedYear';
+	}
+
         $this->mapQuery();
         $this->_proc->registerPHPFunctions('max');
         $this->_proc->setParameter('', 'baseUrl', $this->getRequest()->getBaseUrl());
+        $this->_proc->setParameter('', 'groupBy', $groupBy);
             
         $this->prepareXML();
     }
@@ -226,7 +232,7 @@ class Export_IndexController extends Controller_Xml {
         $this->getRequest()->setParam('id', $collection->getId());
         $this->getRequest()->setParam('export', 'xml');
 
-        $this->_proc->setParameter('', 'name', $collection->getName());
+        $this->_proc->setParameter('', 'collName', $collection->getName());
     }
 
 }

@@ -562,7 +562,47 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $response = $this->getResponse();
         $this->assertContains('given stylesheet does not exist or is not readable', $response->getBody());
     }
-    
- 
+
+   /**
+    * begin: tests for OPUSVIER-2867
+    */
+
+
+    public function testPublistActionGroupedByPublishedYear() {
+        $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $response = $this->getResponse();
+        $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
+        $this->assertContains('<h4 id="L2010">2010</h4>', $response->getBody());
+    }
+
+    public function testPublistActionGroupedByCompletedYear() {
+        // manipulate application configuration
+        $oldConfig = Zend_Registry::get('Zend_Config');
+
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config->publist->groupby->completedyear)) {
+            $config->publist->groupby->completedyear = '1';
+        }
+        else {
+            $config = new Zend_Config(array(
+                'publist' => array('groupby' =>  array('completedyear' => '1'))), true);
+            $oldConfig = Zend_Registry::get('Zend_Config');
+            // Include the above made configuration changes in the application configuration.
+            $config->merge(Zend_Registry::get('Zend_Config'));
+        }
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
+
+        // undo configuration manipulation
+        Zend_Registry::set('Zend_Config', $oldConfig);
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $response = $this->getResponse();
+        $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
+        $this->assertContains('<h4 id="L2011">2011</h4>', $response->getBody());
+    }
+
+
 }
 
