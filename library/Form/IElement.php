@@ -1,4 +1,4 @@
-<?PHP 
+<?php
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -33,20 +33,10 @@
  */
 
 /**
- * 
+ * Interface fuer OPUS Form Element Klassen.
  */
-class Form_Decorator_HtmlTagWithId extends Zend_Form_Decorator_HtmlTag {
+interface Form_IElement {
     
-    protected function _htmlAttribs(array $attribs) {
-        if (!is_null($attribs) && isset($attribs['class'])) {
-            $attribs['class'] = $attribs['class'] . ' ' . $this->getElement()->getName() . '-data';
-        }
-        else {
-            $attribs = array();
-            $attribs['class'] = $this->getElement()->getName() . '-data';
-        }
-        
-        return parent::_htmlAttribs($attribs);;
-    }
+    public function getHint();
     
 }

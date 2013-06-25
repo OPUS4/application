@@ -37,7 +37,9 @@
  * 
  * Zur Zeit nur vom Metadaten-Formular genutzt.
  */
-class Form_Element_Text extends Zend_Form_Element_Text {
+class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement {
+    
+    private $hint;
     
     /**
      * Lädt die Defaultdekoratoren für ein Textelement.
@@ -46,12 +48,21 @@ class Form_Element_Text extends Zend_Form_Element_Text {
         $this->setDecorators(array(
             'ViewHelper', 
             'Placeholder',
-            'Errors',
             'Description',
+            'ElementHint',
+            'Errors',
             'ElementHtmlTag',
             array('Label', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
             array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
         ));
+    }
+    
+    public function setHint($hint) {
+        $this->hint = $hint;
+    }
+    
+    public function getHint() {
+        return $this->hint;
     }
     
 }

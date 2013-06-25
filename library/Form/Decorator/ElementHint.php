@@ -1,4 +1,4 @@
-<?PHP 
+<?php
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -33,20 +33,22 @@
  */
 
 /**
+ * Zeit List mit Hinweisen zum Feld an.
  * 
+ * TODO customizable class
  */
-class Form_Decorator_HtmlTagWithId extends Zend_Form_Decorator_HtmlTag {
+class Form_Decorator_ElementHint extends Zend_Form_Decorator_Abstract {
     
-    protected function _htmlAttribs(array $attribs) {
-        if (!is_null($attribs) && isset($attribs['class'])) {
-            $attribs['class'] = $attribs['class'] . ' ' . $this->getElement()->getName() . '-data';
+    public function render($content) {
+        $element = $this->getElement();
+        
+        if ($element instanceof Form_IElement) {
+            $hint = $element->getHint();
+            return (!is_null($hint)) ? $content . '<p class="datahint">' . $hint . '</p>' : $content;
         }
         else {
-            $attribs = array();
-            $attribs['class'] = $this->getElement()->getName() . '-data';
+            return $content;
         }
-        
-        return parent::_htmlAttribs($attribs);;
     }
     
 }
