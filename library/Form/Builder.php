@@ -57,13 +57,15 @@ class Form_Builder {
 		$this->DEBUG = (bool) $config->debug;
 
         // Construct base form
-        $form = new Zend_Form;
+        $form = new Zend_Form();
+        $form->setDecorators(array(
+            'FormElements',
+            'Form'
+        ));
         $form->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
         $form->addElementPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
         $form->addPrefixPath('Form', 'Form'); // '_Element' wird anscheinend automatisch dran gehängt
         
-//        $form->removeDecorator('DtDdWrapper');
-//        $form->removeDecorator('HtmlTag');
         // Construct subform for model
         $subForm = $this->__buildModelForm($model);
         $subForm->setDecorators(array(
