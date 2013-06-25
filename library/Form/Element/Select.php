@@ -43,7 +43,7 @@ class Form_Element_Select extends Zend_Form_Element_Select {
             'Errors',
             'Description',
             'ElementHtmlTag',
-            array('Label', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
+            array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
             array(array('dataWrapperOpen' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
         ));
     }

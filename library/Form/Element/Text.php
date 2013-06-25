@@ -52,11 +52,11 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
             'ElementHint',
             'Errors',
             'ElementHtmlTag',
-            array('Label', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
+            array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
             array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
         ));
-    }
-    
+        }
+        
     public function setHint($hint) {
         $this->hint = $hint;
     }

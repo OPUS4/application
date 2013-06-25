@@ -43,7 +43,7 @@ class Form_Element_Textarea extends Zend_Form_Element_Textarea {
             'Errors',
             'Description',
             'ElementHtmlTag',
-            array('Label', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
+            array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
             array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
         ));
     }
