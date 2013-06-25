@@ -37,22 +37,6 @@
                             <action>index</action>
                         </show>
 
-                        <add>
-                            <type>mvc</type>
-                            <label>admin_document_add</label>
-                            <module>admin</module>
-                            <controller>document</controller>
-                            <action>add</action>
-                        </add>
-
-                        <create>
-                            <type>mvc</type>
-                            <label>admin_document_add</label>
-                            <module>admin</module>
-                            <controller>document</controller>
-                            <action>create</action>
-                        </create>
-
                         <edit>
                             <type>mvc</type>
                             <label>admin_document_edit</label>
@@ -61,14 +45,6 @@
                             <action>edit</action>
                         </edit>
                         
-                        <update>
-                            <type>mvc</type>
-                            <label>admin_document_edit</label>
-                            <module>admin</module>
-                            <controller>document</controller>
-                            <action>update</action>
-                        </update>
-
                         <filemanager>
                             <type>mvc</type>
                             <label>admin_filemanager_index</label>
