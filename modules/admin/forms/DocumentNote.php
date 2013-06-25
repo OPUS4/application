@@ -53,10 +53,7 @@ class Admin_Form_DocumentNote extends Admin_Form_AbstractModelSubForm {
         $element->setLabel('Opus_Note_Visibility_Value_Public'); // TODO translate
         $this->addElement($element);
         
-        $element = new Form_Element_Textarea(self::ELEMENT_MESSAGE);
-        $element->setLabel('Message'); // TODO translate
-        $element->setRequired(true);
-        $this->addElement($element);
+        $this->addElement('textarea', self::ELEMENT_MESSAGE, array('required' => true, 'rows' => 4));
     }
     
     public function populateFromModel($note) {

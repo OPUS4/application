@@ -70,10 +70,7 @@ class Admin_Form_DocumentTitle extends Admin_Form_AbstractModelSubForm {
         $element = $elementFactory->createLanguageSelect(self::ELEMENT_LANGUAGE); // TODO required
         $this->addElement($element);
         
-        // TODO create textarea from factory with proper dimensions
-        $element = new Form_Element_Textarea(self::ELEMENT_VALUE);
-        $element->setRequired(true);
-        $this->addElement($element);        
+        $this->addElement('textarea', self::ELEMENT_VALUE, array('required' => true, 'rows' => '4'));        
     }
     
     public function loadDefaultDecorators() {
