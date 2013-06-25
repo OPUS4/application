@@ -50,11 +50,13 @@
     // Vollständige ID für Formular ermitteln
     $formId = $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->getId();
     $formId = substr($formId, 0, strrpos($formId, '-') + 1);
+    $mode = $this->element->getViewMode();
 ?>
 
 <div class="multiple-wrapper">
     <div class="data-wrapper multiple-data">
         <div id="<?= $this->element->getName() . '-element' ?>">
+            <?PHP if (!$this->element->isViewModeEnabled()) : ?>
             <dl class="sort dropdown">
                 <dt>
                     <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->renderViewHelper() ?>
@@ -64,6 +66,7 @@
                         <?= $this->element->getSubForm('Moves') ?>
                     </dd>
             </dl>
+            <?PHP endif; ?>
             <div class="person-info">
                 <span id="<?=$formId . 'LastName'?>"><?= $person->getLastName()?></span>
                 <?PHP if (!is_null($person->getFirstName())) : ?>, 
@@ -75,11 +78,14 @@
                 <?PHP if (!is_null($person->getEmail())) : ?>
                 <div>
                     <span id="<?=$formId . 'Email'?>"><?= $person->getEmail() ?></span>
+                    <?PHP if (!$this->element->isViewModeEnabled()) : ?>
                     -<?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->renderViewHelper() ?>
                     <?= $this->translate('AllowEmailContact') ?>
+                    <?PHP endif; ?>
                 </div>
                 <?PHP endif; ?>
             </div>
+            <?PHP if (!$this->element->isViewModeEnabled()) : ?>
             <div class="person-actions">
                 <dl class="settings col dropdown">
                     <dt><a><?= $this->translate('admin_document_person_actions_label') ?></a></dt>
@@ -97,6 +103,7 @@
                     <li class="edit"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_EDIT)->renderViewHelper() ?></li>
                 </ul>
             </div>
+            <?PHP endif; ?>
         </div>
     </div>
 </div>
