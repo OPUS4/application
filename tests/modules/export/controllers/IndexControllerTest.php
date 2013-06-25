@@ -419,19 +419,17 @@ class Export_IndexControllerTest extends ControllerTestCase {
      */
 
     public function testPublistActionWithoutStylesheetParameter() {
-        $this->markTestIncomplete();
         $this->dispatch('/export/index/publist');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('stylesheet is not specified', $response->getBody());
+        $this->assertContains('role is not specified', $response->getBody());
     }
 
     public function testPublistActionWithoutStylesheetArgument() {
-        $this->markTestIncomplete();
         $this->dispatch('/export/index/publist/stylesheet');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
-        $this->assertContains('stylesheet is not specified', $response->getBody());
+        $this->assertContains('role is not specified', $response->getBody());
     }
 
     public function testPublistActionWithoutRoleParameter() {
@@ -528,6 +526,43 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<h1>Publikationsliste mit Slash</h1>', $response->getBody());
     }
 
+   /**
+    * begin: tests for OPUSVIER-2866
+    */
 
+    public function testPublistActionWithoutStylesheetParameterInUrl() {
+        $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $response = $this->getResponse();
+        $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
+    }
+
+    public function testPublistActionWithoutStylesheetParameterInUrlAndInvalidConfigParameter() {
+        // manipulate application configuration
+        $oldConfig = Zend_Registry::get('Zend_Config');
+
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config->publist->stylesheet)) {
+            $config->publist->stylesheet = 'invalid';
+        }
+        else {
+            $config = new Zend_Config(array(
+                'publist' => array('stylesheet' =>  'invalid')), true);
+            $oldConfig = Zend_Registry::get('Zend_Config');
+            // Include the above made configuration changes in the application configuration.
+            $config->merge(Zend_Registry::get('Zend_Config'));
+        }
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
+
+        // undo configuration manipulation
+        Zend_Registry::set('Zend_Config', $oldConfig);
+        $this->assertResponseCode(500);
+        $response = $this->getResponse();
+        $this->assertContains('given stylesheet does not exist or is not readable', $response->getBody());
+    }
+    
+ 
 }
 
