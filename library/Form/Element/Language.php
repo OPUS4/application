@@ -40,8 +40,8 @@ class Form_Element_Language extends Form_Element_Select {
     public function init() {
         parent::init();
         
-        $this->setLabel($this->getName());
-        $this->setRequired(true);
+        // $this->setLabel($this->getName()); // TODO remove
+        // $this->setRequired(true); // TODO remove
         
         $languages = Zend_Registry::get('Available_Languages');
         

@@ -77,15 +77,14 @@ class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
                 
         $this->setLegend('admin_document_section_general');
         
-        $this->addElement('Language', self::ELEMENT_LANGUAGE);
-        
+        $this->addElement('Language', self::ELEMENT_LANGUAGE);        
         $this->addElement('DocumentType', self::ELEMENT_TYPE);
         
         $this->addElement('Date', self::ELEMENT_PUBLISHED_DATE);
         $this->addElement('Year', self::ELEMENT_PUBLISHED_YEAR);
         
         $this->addElement('Date', self::ELEMENT_COMPLETED_DATE);
-        $this->addElement('Year', self::ELEMENT_COMPLETED_YEAR);
+        $this->addElement('Year', self::ELEMENT_COMPLETED_YEAR);        
     }
     
     /**
