@@ -41,6 +41,15 @@
         <seg>Administration</seg>
       </tuv>
     </tu>
+    
+    <tu tuid="admin_title_setup">
+      <tuv xml:lang="en">
+        <seg>Setup</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Oberflächenanpassungen</seg>
+      </tuv>
+    </tu>
 
   </body>
 

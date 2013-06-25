@@ -125,15 +125,6 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
       </tuv>
     </tu>
     
-    <tu tuid="admin_title_setup">
-      <tuv xml:lang="en">
-        <seg>Setup</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Oberflächenanpassungen</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="admin_title_statistic">
       <tuv xml:lang="en">
         <seg>Publication statistics</seg>
