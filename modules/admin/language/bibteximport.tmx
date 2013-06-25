@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+ 
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+ 
+  <body>
+
+    <tu tuid="bibtex_import_binary_not_installed">
+      <tuv xml:lang="en">
+        <seg>bib2xml is not installed</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>bib2xml ist nicht installiert</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="bibtex_import_file_not_readable">
+      <tuv xml:lang="en">
+        <seg>File is not readable</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei ist nicht lesbar</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="bibtex_import_file_not_utf8">
+      <tuv xml:lang="en">
+        <seg>File is not UTF-8 endcoded</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei ist nicht UTF-8-kodiert</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="bibtex_import_file_not_bibtex">
+      <tuv xml:lang="en">
+        <seg>File contains no BibTex</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datei enthält kein BibTex</seg>
+      </tuv>
+    </tu>
+
+
+     <tu tuid="bibtex_import_record_without_id">
+      <tuv xml:lang="en">
+        <seg>This record has no identifier:  %1$s</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dieser Datensatz hat keinen Identifier: %1$s</seg>
+      </tuv>
+    </tu>
+
+
+    <tu tuid="bibtex_import_duplicate_id">
+      <tuv xml:lang="en">
+        <seg>Multiple records with this identifier:  %1$s</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Mehrere Datensätze mit diesem Identifier:  %1$s</seg>
+      </tuv>
+    </tu>
+
+
+    <tu tuid="bibtex_import_bibtex_mods_error">
+      <tuv xml:lang="en">
+        <seg>Incorrect record(s) with identifie: %1$s</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehlerhafte(r) Datensatz/-sätze mit Identifier: %1$s</seg>
+      </tuv>
+    </tu>
+
+
+    <tu tuid="bibtex_import_mods_xml_error">
+      <tuv xml:lang="en">
+        <seg>Incorrect record(s) with identifier: %1$s</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehlerhafte(r) Datensatz/-sätze mit Identifier: %1$s</seg>
+      </tuv>
+    </tu>
+
+
+    <tu tuid="bibtex_import_invalid_xml_error">
+      <tuv xml:lang="en">
+        <seg>Incorrect record(s) with identifier: %1$s</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehlerhafte(r) Datensatz/-sätze mit Identifier: %1$s</seg>
+      </tuv>
+    </tu>
+    
+
+    <tu tuid="bibtex_import_success">
+      <tuv xml:lang="en">
+        <seg>%1$s record(s) was successfully uploaded</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>%1$s Datensatz/-sätze wurde(n) erfolgreich hochgeladen</seg>
+      </tuv>
+    </tu>
+
+
+  </body>
+  
+</tmx>

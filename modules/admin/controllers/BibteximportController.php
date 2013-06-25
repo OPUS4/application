@@ -34,7 +34,7 @@
  * @version     $Id$
  */
 
-class Admin_BibtexuploadController extends Controller_Action {
+class Admin_BibteximportController extends Controller_Action {
 
      public function indexAction() {
         $uploadForm = new Admin_Form_BibtexUpload();
@@ -45,9 +45,7 @@ class Admin_BibtexuploadController extends Controller_Action {
 
     public function uploadAction() {
 
-        $config = Zend_Registry::get('Zend_Config');
-        $tmpDirectory = $config->workspacePath . DIRECTORY_SEPARATOR . "tmp";
-
+        $this->log = Zend_Registry::get('Zend_Log');
         if (!$this->getRequest()->isPost()) {
             $this->_redirectTo('index');
         }
@@ -60,8 +58,10 @@ class Admin_BibtexuploadController extends Controller_Action {
             $postMaxSize = ini_get('post_max_size');
             $uploadMaxFilesize = ini_get('upload_max_filesize');
             $maxSize = ($postMaxSize > $uploadMaxFilesize) ? $uploadMaxFilesize : $postMaxSize;
-            
+            // TODO: Eigene Tranlsation Keys verwenden??
+ 
             $message = $this->view->translate('admin_filemanager_error_upload', '>' . $maxSize);
+
             $this->_redirectTo('index', array('failure' => $message));
         }
 
@@ -73,51 +73,46 @@ class Admin_BibtexuploadController extends Controller_Action {
                 /* Fehler: Keine Datei ausgewählt */
                 $message = $this->view->translate('admin_filemanager_error_nofile');
             }
-
             $this->_redirectTo('index', array('failure' => $message));
         }
+        
 
         try {
             $uploadForm->fileupload->receive();
         } catch (Opus_Model_Exception $e) {
-            $this->_logger->warn("File upload failed: " . $e);
-            $message = $this->view->translate('error_uploaded_files');
+            $message = $this->view->translate('admin_filemanager_error_upload');
             $this->_redirectTo('index', array('failure' => $message));
         }
 
         $location = $uploadForm->fileupload->getFileName();
-        
+
 
         $import = null;
-        $numberOfOpusDocuments;
+        $numberOfOpusDocuments = 0;
 
         try {
-            $import = new Admin_Model_BibtexImport($location, $tmpDirectory);
+            $import = new Admin_Model_BibtexImport($location);
             $numberOfOpusDocuments = $import->convertBibtexToOpusxml();
-        } catch (Admin_Model_Exception $e) {
-            $this->_logger->warn("Warning: " . $e);
-            $message = $this->view->translate('error_import_bibtex');
-            $this->_redirectTo('index', array('failure' => $message));           
-        }
+        } catch (Admin_Model_BibtexImportException $e) {
+            $message = $this->view->translate($e->mapTranslationKey($e->getCode()), $e->getMessage());
+            $this->_redirectTo('index', array('failure' => $message));
+        } 
 
-        $hash = @hash_file('md5', $import->getXmlFilename());
-        if ($this->__createMetadataImportJob($import->getXmlFilename(), $hash)) {
-            $message = $this->view->translate($numberOfOpusDocuments . " bibtex records imported");
-            $this->_redirectTo('index', array('success' => $message));
-        }
+	foreach ($import->getXml()->getElementsByTagName('opusDocument') as $doc) {
+            $this->__createMetadataImportJob($doc);
+	}
 
-        $message = $this->view->translate('error_import_bibtex');
-        $this->_redirectTo('index', array('failure' => $message));
-
+        $message = $this->view->translate('bibtex_import_success', $numberOfOpusDocuments);
+        $this->_redirectTo('index', array('success' => $message));
     }
 
 
-    private function __createMetadataImportJob($filename, $hash) {
+    private function __createMetadataImportJob($xml) {
         $config = Zend_Registry::get('Zend_Config');
 
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_MetadataImport::LABEL);
-        $job->setData(array( 'filename' =>  $filename, 'md5_hash' => $hash));
+        $job->setData(array( 'xml' =>  $xml));
 
         if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
             // Queue job (execute asynchronously)
