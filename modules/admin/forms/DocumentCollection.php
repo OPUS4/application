@@ -65,7 +65,7 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
         
         $this->addElement('hidden', self::ELEMENT_ID);
         $this->addElement('submit', self::ELEMENT_EDIT);
-        $this->addElement('submit', self::ELEMENT_REMOVE);
+        $this->addElement('submit', self::ELEMENT_REMOVE, array('label' => 'admin_button_remove'));
     }
     
     /**
