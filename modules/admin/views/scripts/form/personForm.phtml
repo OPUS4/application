@@ -33,7 +33,8 @@
 
 /**
  * TODO htmlspecialchars
- * TODO layout (?)
+ * TODO Übersetzungen
+ * TODO für Metadaten-Übersicht anpassen
  */
 ?>
 
@@ -56,10 +57,10 @@
         <div id="<?= $this->element->getName() . '-element' ?>">
             <dl class="sort dropdown">
                 <dt>
-                    <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER) ?>
+                    <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->renderViewHelper() ?>
                     <a>Move</a></dt>
                     <dd>
-                        <p class="label"><i>Verschieben</i></p>
+                        <p class="label"><i><?= $this->translate('admin_document_person_move_label') ?></i></p>
                         <?= $this->element->getSubForm('Moves') ?>
                     </dd>
             </dl>
@@ -74,25 +75,26 @@
                 <?PHP if (!is_null($person->getEmail())) : ?>
                 <div>
                     <span id="<?=$formId . 'Email'?>"><?= $person->getEmail() ?></span>
-                    -<?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT) ?>
+                    -<?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->renderViewHelper() ?>
+                    <?= $this->translate('AllowEmailContact') ?>
                 </div>
                 <?PHP endif; ?>
             </div>
             <div class="person-actions">
                 <dl class="settings col dropdown">
-                    <dt><a>Actionen</a></dt>
+                    <dt><a><?= $this->translate('admin_document_person_actions_label') ?></a></dt>
                     <dd>
-                        <p class="label"><i>Rolle ändern</i></p>
-                        <?= $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID) ?>
+                        <p class="label"><i><?= $this->translate('admin_document_person_roles_label') ?></i></p>
+                        <?= $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->renderViewHelper() ?>
                         <?= $this->element->getSubForm('Roles') ?>
-                        <p class="label"><i>oder Person</i></p>
+                        <p class="label"><i><?= $this->translate('admin_document_person_remove_label') ?></i></p>
                         <ul class="buttons">
-                            <li class="Remove-data"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_REMOVE) ?></li>
+                            <li class="Remove-data"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_REMOVE)->renderViewHelper() ?></li>
                         </ul>
                     </dd>
                 </dl>
                 <ul class="links">
-                    <li class="edit"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_EDIT) ?></li>
+                    <li class="edit"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_EDIT)->renderViewHelper() ?></li>
                 </ul>
             </div>
         </div>
