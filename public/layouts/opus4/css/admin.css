@@ -64,17 +64,18 @@ ul.links input:hover{
 }
 li.edit a,
 li.edit input{
-   background: url(../img/theme/admin/sprite_icons.png) no-repeat -20px -224px;
+   background: url(../img/theme/admin/sprite_icons.png) no-repeat -20px -256px;
    padding-left: 16px;
 }
 li.edit input{
    border: none;
    color: #26517a;
    background-color: transparent;
-   font: bold 0.857em Verdana, Arial, Helvetica, sans-serif;
+   font: 0.857em Verdana, Arial, Helvetica, sans-serif;
    cursor: pointer;
 }
-li.edit input:hover{
+li.edit input:hover,
+.adminContainer .Add-data input:hover{
    text-decoration: underline;
 }
 .save-element input,
@@ -169,25 +170,38 @@ li.edit input:hover{
 }*/
 .adminContainer .data-wrapper.multiple-data{
    width: 85%;
-   padding: 0;
 }
 .adminContainer .multiple-wrapper .data-wrapper.Remove-data{
    max-width: 15%;
    width: auto;
-   float: right;  
+   /*float: right;*/ 
+   position: absolute;
+   right: 0.6em;
+   bottom: 0.6em; 
 }
 .adminContainer .multiple-wrapper{
    float: left;
-   width: 100%;
-   background: url(../img/theme/admin/bg_data-separator.png) no-repeat bottom center;  
-   padding: 0.3em 0;
+   width: 99%;
+   /*background: url(../img/theme/admin/bg_data-separator.png) no-repeat bottom center;  */
+   padding: 0.3em 0.5%;
 }
-/*.adminContainer .multiple-wrapper.even{
+.adminContainer .multiple-wrapper.odd{
    background-color: #f2f2f2;
-}*/
-.adminContainer .data-wrapper.Add-data,
+}
+.adminContainer .subform .data-wrapper.Add-data{
+   position: absolute;
+   right: 0.6em;
+   top: 0em;
+   width: auto;
+}
+.adminContainer .subform .subform .data-wrapper.Add-data,
 .adminContainer #fieldset-Persons .data-wrapper.Add-data{
-   padding: 0.6em 0;
+   /*padding: 0.6em 0;*/
+   position: absolute;
+   top: -0.8em;
+   right: 0;
+   width: auto;
+   padding: 0;
 }
 .adminContainer .multiple-wrapper:first-child{
    /*background: none;
@@ -195,24 +209,39 @@ li.edit input:hover{
 }
 .adminContainer .Add-data input,
 .adminContainer .Remove-data input{
+   background: url(../img/theme/admin/sprite_icons.png) no-repeat;  
+   padding: 2px 5px 2px 24px;
    border: 1px solid;
    border-radius: 5px;
-   background: url(../img/theme/admin/sprite_icons.png) no-repeat;
-   padding: 2px 5px 2px 24px;
-   font-family: 1em Arial, Helvetica, sans-serif;
+
 }
 .adminContainer .Remove-data input{
    border-color: #C7CBC5;
    background-color: #E1E4E0;
    color: #3E3E3C;
-   background-position: -16px -186px;
-   
+   background-position: -16px -220px;
+   font-family: 1em Arial, Helvetica, sans-serif;   
 }
-.adminContainer .Add-data input{
-   border-color: #333331;
-   background-color: #595A56;
+.adminContainer .subform .Add-data input{
+   border: none;
+   background-color: transparent;
    color: white;
-   background-position: -16px -152px;   
+   border-radius: 0;
+   background-position: -14px -17px;
+   font-weight: normal;
+   font: 0.857em Verdana, Arial, Helvetica, sans-serif;
+   cursor: pointer; 
+}
+.adminContainer .subform .subform .Add-data input{
+   /*border-color: #333331;
+   background-color: #595A56;*/
+   border-color: white;
+   color: #595A56;
+   background-color: white;
+   background-position: -14px -187px;
+   font-weight: normal;
+   font: 0.857em Verdana, Arial, Helvetica, sans-serif;
+   cursor: pointer; 
 }
 
 .adminContainer #docinfo h2 {
@@ -252,6 +281,7 @@ li.edit input:hover{
    padding: 0.4em 1.2%;
    width: 97.6%;
    position: relative;
+   margin: 0 0 1.3em;
 }
 .adminContainer form .wrapper > .subform > fieldset > legend:after {
     border-color: #595a56 transparent transparent;
@@ -265,24 +295,35 @@ li.edit input:hover{
     width: 0;
 }
 .adminContainer form .wrapper .subform .subform fieldset,
-.adminContainer form .wrapper fieldset#fieldset-Save-data{
+.adminContainer fieldset#fieldset-Actions{
    border-top: 10px solid #BDBEBB;
 }
 .adminContainer form .subform .subform fieldset > legend{
-   padding: 0 1% 0.4% 0;
+   /*padding: 0 1% 0.4% 0;*/
+  /* border: solid white;
+   border-width: 0 1px 0 0;*/
+   /*padding: 0;*/
+   padding: 0 10px 0.4% 0;
 }
-.adminContainer form .wrapper fieldset#fieldset-Save-data legend{
+.adminContainer fieldset#fieldset-Actions legend{
    display: none;
+}
+.adminContainer fieldset#fieldset-Actions .fields-wrapper{
+   padding: 1em 0 2em;
 }
 /*.adminContainer form dl,*/
 .adminContainer form .wrapper .subform{
-   margin: 0;
-   padding: 1.3em 0 0;
+   margin: 1.3em 0 0;
+   /*padding: 0 0 1.3em;*/
    float: left;
    width: 100%;
 }
+/*.adminContainer .subform .subform{
+   position: relative;
+}*/
 .adminContainer form .wrapper .fields-wrapper > .subform:first-child{
-   padding-top: 0;
+   /*padding-top: 0;*/
+   margin: 0;
 }
 /*.adminContainer form .wrapper > dl,*/
 /*.adminContainer form .wrapper > .subform,
@@ -309,7 +350,8 @@ li.edit input:hover{
   /* width: 61.5197%;*/
 }
 .adminContainer .fields-wrapper{
-   margin: 1.3em 0 0;
+   /*margin: 1.3em 0 0;*/
+   margin: 0;
    float: left;
    width: 100%;
 }
@@ -318,6 +360,7 @@ li.edit input:hover{
 }
 .adminContainer fieldset{
    clear: both;
+   position: relative;
 }
 /*.adminContainer fieldset > dl > dt,
 .adminContainer fieldset > dl > dd{
@@ -378,16 +421,16 @@ li.edit input:hover{
    font-size: 0.857em;
 }
 .adminContainer dl.sort ul.links li.move-first{
-   background-position: -20px -117px;
+   background-position: -20px -152px;
 }
 .adminContainer dl.sort ul.links li.move-up{
-   background-position: -20px -83px;
+   background-position: -20px -117px;
 }
 .adminContainer dl.sort ul.links li.move-down{
-   background-position: -20px -47px;
+   background-position: -20px -82px;
 }
 .adminContainer dl.sort ul.links li.move-last{
-   background-position: -20px -13px;
+   background-position: -20px -49px;
 }
 
 .adminContainer dl.settings.dropdown dt{
@@ -612,6 +655,7 @@ ul.Document-Action{
 }
 /* @end */
 /* @group ActionBox */
+
 #actionboxContainer .messagesContainer{
    float: left;
    width: 100%;
@@ -627,8 +671,12 @@ ul.Document-Action{
    width: 100%;
    float: left;
    padding: 0.8em 0 0;
-   box-shadow: 0 0 6px 0 #545454;
-
+   /*box-shadow: 0 0 6px 0 #545454;*/
+   -moz-box-shadow: 0px 2px 1px rgba(54,54,54,0.4);
+   -webkit-box-shadow: 0px 2px 1px rgba(54,54,54,0.4);
+   box-shadow: 0px 2px 1px rgba(54,54,54,0.4);
+   -ms-filter:"progid:DXImageTransform.Microsoft.dropshadow(OffX=2,OffY=1,Color=#66545454,Positive=true)";
+   filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2,OffY=1,Color=#66545454,Positive=true);
 }
 #actionboxContainer .wrapper:after{
    content: '';
@@ -817,6 +865,12 @@ ul.Document-Action{
 #content #actionboxContainer .wrapper{
    font-size: 0.875em;
    clear: both;
+}
+#content.frontdoor .wrapper{
+   clear: both;
+}
+#actionboxContainer + .wrapper > .frontdoor {
+    padding-top: 0.1em;
 }
 .adminContainer .breadcrumbsContainer {
    background: #2d6093; /* Old browsers */
