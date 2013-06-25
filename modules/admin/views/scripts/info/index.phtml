@@ -32,44 +32,41 @@
  */
 ?>
 
-<div id="adminMenuContainer">
-    <dl>
-        <?PHP foreach ($this->info->getInfo() as $infoKey => $infoValue) : ?>
-            <dt id="<?= $infoKey ?>"><?= $this->translate($infoKey) ?></dt>
-            <dd><?= $infoValue ?></dd>
-        <?PHP endforeach ?>
-    </dl>
+<dl>
+    <?PHP foreach ($this->info->getInfo() as $infoKey => $infoValue) : ?>
+        <dt id="<?= $infoKey ?>"><?= $this->translate($infoKey) ?></dt>
+        <dd><?= $infoValue ?></dd>
+    <?PHP endforeach ?>
+</dl>
 
-    <fieldset>
-        <legend><?= $this->translate('admin_info_section_upload') ?></legend>
+<fieldset>
+    <legend><?= $this->translate('admin_info_section_upload') ?></legend>
 
-        <table class="systeminfo">
-            <tr>
-                <th class="label"><?= $this->translate('admin_info_column_setting') ?></th>
-                <th class="value"><?= $this->translate('admin_info_column_value') ?></th>
-                <th class="location"><?= $this->translate('admin_info_column_location') ?></th>
-                <th class="description"><?= $this->translate('admin_info_column_description') ?></th>
-            </tr>
-            <tr>
-                <td class="label">publish.maxfilesize</td>
-                <td class="value"><?= htmlspecialchars($this->maxfilesize) ?></td>
-                <td class="location">config.ini</td>
-                <td class="description"><?= $this->translate('admin_info_maxfilesize_description') ?></td>
-            </tr>
-            <tr>
-                <td class="label">upload_max_filesize</td>
-                <td class="value"><?= htmlspecialchars($this->uploadMaxFilesize) ?></td>
-                <td class="location">php.ini</td>
-                <td class="description"><?= $this->translate('admin_info_uploadmaxfilesize_description') ?></td>
-            </tr>
-            <tr>
-                <td class="label">post_max_size</td>
-                <td class="value"><?= htmlspecialchars($this->postMaxSize) ?></td>
-                <td class="location">php.ini</td>
-                <td class="description"><?= $this->translate('admin_info_postmaxsize_description') ?></td>
-            </tr>
-        </table>
+    <table class="systeminfo">
+        <tr>
+            <th class="label"><?= $this->translate('admin_info_column_setting') ?></th>
+            <th class="value"><?= $this->translate('admin_info_column_value') ?></th>
+            <th class="location"><?= $this->translate('admin_info_column_location') ?></th>
+            <th class="description"><?= $this->translate('admin_info_column_description') ?></th>
+        </tr>
+        <tr>
+            <td class="label">publish.maxfilesize</td>
+            <td class="value"><?= htmlspecialchars($this->maxfilesize) ?></td>
+            <td class="location">config.ini</td>
+            <td class="description"><?= $this->translate('admin_info_maxfilesize_description') ?></td>
+        </tr>
+        <tr>
+            <td class="label">upload_max_filesize</td>
+            <td class="value"><?= htmlspecialchars($this->uploadMaxFilesize) ?></td>
+            <td class="location">php.ini</td>
+            <td class="description"><?= $this->translate('admin_info_uploadmaxfilesize_description') ?></td>
+        </tr>
+        <tr>
+            <td class="label">post_max_size</td>
+            <td class="value"><?= htmlspecialchars($this->postMaxSize) ?></td>
+            <td class="location">php.ini</td>
+            <td class="description"><?= $this->translate('admin_info_postmaxsize_description') ?></td>
+        </tr>
+    </table>
 
-    </fieldset>
-
-</div>
+</fieldset>
