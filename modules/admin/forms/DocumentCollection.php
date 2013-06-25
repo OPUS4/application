@@ -38,30 +38,52 @@
  */
 class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
     
+    /**
+     * Name von Formularelement fuer Collection-ID.
+     */
     const ELEMENT_ID = 'Id';
     
+    /**
+     * Name von Formularelement fuer das Editieren der Collection-Zuweisung zum Dokument.
+     * 
+     * Ein Klick auf diesen Button zeigt die zugewiesene Collection in der Hierarchy an und erlaubt es dem Nutzer eine
+     * andere beliebige Collection auszuwählen. Die alte Zuweisung wird durch die neue ersetzt. Der Use Case für diese
+     * Funktion sind fast richtige Zuweisungen durch Einsteller, die vom Bearbeiter korrigiert werden müssen.
+     */
     const ELEMENT_EDIT = 'Edit';
     
+    /**
+     * Name von Formularelement fuer das Enfernen der Collection vom Dokument.
+     */
     const ELEMENT_REMOVE = 'Remove';
         
+    /**
+     * Erzeugt die Formularelemente.
+     */
     public function init() {
         parent::init();
         
-        $element = new Form_Element_Hidden(self::ELEMENT_ID);
-        $this->addElement($element);
-        
-        $element = new Form_Element_Submit(self::ELEMENT_EDIT);
-        $this->addElement($element);
-
-        $element = new Form_Element_Submit(self::ELEMENT_REMOVE);
-        $this->addElement($element);
+        $this->addElement('hidden', self::ELEMENT_ID);
+        $this->addElement('submit', self::ELEMENT_EDIT);
+        $this->addElement('submit', self::ELEMENT_REMOVE);
     }
     
+    /**
+     * Initialisiert das Formular mit einer Collection.
+     * @param Opus_Collection $collection
+     */
     public function populateFromModel($collection) {
         $this->getElement(self::ELEMENT_ID)->setValue($collection->getId());
+        $this->getElement(self::ELEMENT_EDIT)->setLabel($collection->getDisplayName());
         $this->setLegend($collection->getDisplayName());
     }
 
+    /**
+     * Verarbeitet einen POST Request für das Formular.
+     * @param array $data POST Daten für Unterformular
+     * @param array $context POST Daten für gesamtes Metadaten-Formular
+     * @return string Ergebnis der Verarbeitung oder NULL
+     */
     public function processPost($data, $context) {
         if (array_key_exists(self::ELEMENT_REMOVE, $data)) {
             return 'remove';
@@ -86,7 +108,7 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
      * TODO catch bad POST
      */
     public function populateFromPost($post) {
-        $colId = $post['Id'];
+        $colId = $post[self::ELEMENT_ID];
         $collection = new Opus_Collection($colId);
         $this->populateFromModel($collection);
     }
@@ -95,6 +117,5 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
         $this->setDecorators(array(array(
             'ViewScript', array('viewScript' => 'form/collectionForm.phtml'))));
     }
-    
             
 }

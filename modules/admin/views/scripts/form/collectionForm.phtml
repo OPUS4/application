@@ -43,7 +43,10 @@
     $formId = substr($formId, 0, strrpos($formId, '-') + 1);
 ?>
 
-<li id="<?=$formId . 'Name'?>"><?= $this->element->getLegend() ?>
-<?= $this->element->getElement(Admin_Form_DocumentCollection::ELEMENT_ID) ?>
-<?= $this->element->getElement(Admin_Form_DocumentCollection::ELEMENT_REMOVE) ?>
-</li>
+<div class="multiple-wrapper">
+    <div class="data-wrapper multiple-data">
+        <?= $this->element->getelement(Admin_Form_DocumentCollection::ELEMENT_EDIT) ?>    
+        <?= $this->element->getElement(Admin_Form_DocumentCollection::ELEMENT_ID) ?>
+    </div>
+    <?= $this->element->getElement(Admin_Form_DocumentCollection::ELEMENT_REMOVE) ?>
+</div>
