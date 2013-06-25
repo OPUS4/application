@@ -1,4 +1,4 @@
-<?PHP
+<?php
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -32,26 +32,12 @@
  * @version     $Id$
  */
 
-/**
- * Ein Text INPUT Element für OPUS Formulare.
- * 
- * Zur Zeit nur vom Metadaten-Formular genutzt.
- */
-class Form_Element_Text extends Zend_Form_Element_Text {
+class Form_Decorator_Placeholder extends Zend_Form_Decorator_Abstract {
     
-    /**
-     * Lädt die Defaultdekoratoren für ein Textelement.
-     */
-    public function loadDefaultDecorators() {
-        $this->setDecorators(array(
-            'ViewHelper', 
-            'Placeholder',
-            'Errors',
-            'Description',
-            'ElementHtmlTag',
-            array('Label', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-            array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-        ));
+    public function render($content) {
+        $placeholder = $this->getElement()->getAttrib('placeholder');
+        
+        return (!is_null($placeholder)) ? $content . '<i class="placeholder">' . $placeholder . '</i>' : $content;
     }
     
 }
