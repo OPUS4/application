@@ -42,13 +42,13 @@ class Form_Builder_Helper_Date extends Form_Builder_Helper_Default {
         $fieldName = 'date';
 
         $fieldForm = new Zend_Form_SubForm;
-        $fieldForm->removeDecorator('HtmlTag');
-        $fieldForm->removeDecorator('DtDdWrapper');
+//        $fieldForm->removeDecorator('HtmlTag');
+//        $fieldForm->removeDecorator('DtDdWrapper');
         $fieldForm->setLegend($fieldName);
 
-        $widget = new Zend_Form_Element_Text(strVal(1));
-        $widget->getDecorator('Label')->setOption('tag','div');
-        $widget->removeDecorator('HtmlTag');
+        $widget = new Form_Element_Text(strVal(1));
+//        $widget->getDecorator('Label')->setOption('tag','div');
+//        $widget->removeDecorator('HtmlTag');
 
         $fieldValue = $model->getZendDate();
 

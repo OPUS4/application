@@ -58,14 +58,23 @@ class Form_Builder {
 
         // Construct base form
         $form = new Zend_Form;
-        $form->removeDecorator('DtDdWrapper');
-        $form->removeDecorator('HtmlTag');
+        $form->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+        $form->addElementPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+        $form->addPrefixPath('Form', 'Form'); // '_Element' wird anscheinend automatisch dran gehängt
+        
+//        $form->removeDecorator('DtDdWrapper');
+//        $form->removeDecorator('HtmlTag');
         // Construct subform for model
         $subForm = $this->__buildModelForm($model);
+        $subForm->setDecorators(array(
+            'FormElements',
+            array(array('fieldsWrapper' => 'HtmlTag'), array('class' => 'fields-wrapper'))
+        ));
         $form->addSubForm($subForm, get_class($model));
+        
         // Add submit button to form
-        $element = new Zend_Form_Element_Submit('submit');
-        $element->removeDecorator('DtDdWrapper');
+        $element = new Form_Element_Submit('submit');
+//        $element->removeDecorator('DtDdWrapper');
         $element->setLabel('transmit');
         $form->addElement($element);
         return $form;
@@ -219,10 +228,10 @@ class Form_Builder {
 
         // Add Id when necessary
         if ($model instanceof Opus_Model_AbstractDb) {
-            $idElement = new Zend_Form_Element_Hidden('Id');
-            $idElement->removeDecorator('HtmlTag');
-            $idElement->removeDecorator('Label');
-            $idElement->removeDecorator('DtDdWrapper');
+            $idElement = new Form_Element_Hidden('Id');
+//            $idElement->removeDecorator('HtmlTag');
+//            $idElement->removeDecorator('Label');
+//            $idElement->removeDecorator('DtDdWrapper');
             $idElement->setAttrib('class', 'identifier');
             $id = $model->getId();
             if (true === is_array($id)) $id = implode(',', $id);
@@ -257,9 +266,9 @@ class Form_Builder {
         $fieldForm->removeDecorator('DtDdWrapper');
         $fieldForm->setLegend($fieldName);
 
-        $widget = new Zend_Form_Element_Text(strVal(1));
-        $widget->getDecorator('Label')->setOption('tag','div');
-        $widget->removeDecorator('HtmlTag');
+        $widget = new Form_Element_Text(strVal(1));
+//        $widget->getDecorator('Label')->setOption('tag','div');
+//        $widget->removeDecorator('HtmlTag');
 
         $fieldValue = $model->getZendDate();
 
@@ -320,7 +329,7 @@ class Form_Builder {
 
         if (empty($valueModelClass) !== true) {
             // add an empty element to allow help- and hint texts for whole subfields
-            $helpElement = new Zend_Form_Element_Hidden('nothing');
+            $helpElement = new Form_Element_Hidden('nothing');
             $helpElement->setAttrib('class', 'hiddenelement');
             $this->__addDescription( $modelName . '_' . $fieldName . '_field', $helpElement);
             $fieldForm->addElement($helpElement);
@@ -353,8 +362,8 @@ class Form_Builder {
 
                 // Create button to remove value when appropriate.
                 if (1 < count($fieldValues) or (false === $field->isMandatory() and false === is_null($valueModelClass))) {
-                    $element = new Zend_Form_Element_Submit('remove_' . strVal($i + 1));
-                    $element->removeDecorator('DtDdWrapper');
+                    $element = new Form_Element_Submit('remove_' . strVal($i + 1));
+//                    $element->removeDecorator('DtDdWrapper');
                     $element->setBelongsTo('Actions');
                     $element->setLabel('remove_' . $fieldName);
                     $element->setAttrib('class', 'button remove');
@@ -375,14 +384,14 @@ class Form_Builder {
         $validator = $field->getValidator();
         // If value is simple, build corresponding widget
         if ($field->isTextarea()) {
-            $widget = new Zend_Form_Element_Textarea(strVal($i + 1));
+            $widget = new Form_Element_Textarea(strVal($i + 1));
         }
         else if ($field->isCheckbox()) {
-            $widget = new Zend_Form_Element_Checkbox(strVal($i + 1));
+            $widget = new Form_Element_Checkbox(strVal($i + 1));
         }
         else if ($field->isSelection()) {
             $options = $field->getDefault();
-            $widget = new Zend_Form_Element_Select(strVal($i + 1));
+            $widget = new Form_Element_Select(strVal($i + 1));
             $message = Zend_Registry::get('Zend_Translate')->_('choose_option') . ' ' . Zend_Registry::get('Zend_Translate')->_($fieldName);
             $widget->addMultiOption('', $message);
             foreach ($field->getDefault() as $key => $option) {
@@ -390,11 +399,11 @@ class Form_Builder {
             }
         }
         else {
-            $widget = new Zend_Form_Element_Text(strVal($i + 1));
+            $widget = new Form_Element_Text(strVal($i + 1));
         }
-        $widget->getDecorator('Label')->setOption('tag','div');
+//        $widget->getDecorator('Label')->setOption('tag','div');
 
-        $widget->removeDecorator('HtmlTag');
+//        $widget->removeDecorator('HtmlTag');
         $widget->setValue($fieldValue);
         $widget->setLabel(Zend_Controller_Action_HelperBroker::getStaticHelper('Translation')->getKeyForField($modelName, $fieldName));
         $widget->setRequired($field->isMandatory());
@@ -412,7 +421,7 @@ class Form_Builder {
         // If value is a selection of models, build selection widget
         $fieldName = $field->getName();
 
-        $widget = new Zend_Form_Element_Select(strVal($i + 1));
+        $widget = new Form_Element_Select(strVal($i + 1));
         $widget->setRequired($field->isMandatory());
 
         $message = Zend_Registry::get('Zend_Translate')->_('choose_option') . ' ' . Zend_Registry::get('Zend_Translate')->_($fieldName);
@@ -425,7 +434,7 @@ class Form_Builder {
 
         $widget->setValue($fieldValue->getId());
         $widget->getDecorator('Label')->setTag(null);
-        $widget->removeDecorator('HtmlTag');
+//        $widget->removeDecorator('HtmlTag');
         $widget->setAttrib('class', $fieldName);
         $this->__addDescription($modelName . '_' . $fieldName, $widget);
         $fieldForm->addElement($widget);
@@ -491,13 +500,13 @@ class Form_Builder {
         // Create button to add value when appropriate.
         if (count($fieldValues) < $field->getMultiplicity() or '*' === $field->getMultiplicity()) {
             // add an empty element to allow help- and hint texts for whole subfields
-            $helpElement = new Zend_Form_Element_Hidden('nothing');
+            $helpElement = new Form_Element_Hidden('nothing');
             $helpElement->setAttrib('class', 'hiddenelement');
             $this->__addDescription($modelName . '_' . $fieldName . '_field', $helpElement);
             $fieldForm->addElement($helpElement);
 
-            $element = new Zend_Form_Element_Submit('add');
-            $element->removeDecorator('DtDdWrapper');
+            $element = new Form_Element_Submit('add');
+//            $element->removeDecorator('DtDdWrapper');
             $element->setBelongsTo('Actions');
             $element->setLabel('add_' . $fieldName);
             $element->setAttrib('name', 'Action');
