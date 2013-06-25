@@ -150,6 +150,9 @@ li.edit input:hover,
    font-size: 0.857em;
    font-style: normal;
 }
+.js .adminContainer .field i.placeholder{
+   display: none;
+}
 .adminContainer .field i.placeholder,
 .adminContainer .field .hint{
    color: #666;
@@ -267,9 +270,8 @@ li.edit input:hover,
    width: auto;
    padding: 0;
 }
-.adminContainer .multiple-wrapper:first-child{
-   /*background: none;
-   padding-top: 0;*/
+.adminContainer .multiple-wrapper{
+   position: relative;
 }
 .adminContainer .Add-data input,
 .adminContainer .Remove-data input{
@@ -359,8 +361,11 @@ li.edit input:hover,
     width: 0;
 }
 .adminContainer form .wrapper .subform .subform fieldset,
-.adminContainer fieldset#fieldset-Actions{
+.adminContainer #subform-Actions{
    border-top: 10px solid #BDBEBB;
+}
+.adminContainer #subform-Actions{
+   padding: 1.3em 0;
 }
 .adminContainer form .subform .subform fieldset > legend{
    /*padding: 0 1% 0.4% 0;*/
@@ -368,9 +373,6 @@ li.edit input:hover,
    border-width: 0 1px 0 0;*/
    /*padding: 0;*/
    padding: 0 10px 0.4% 0;
-}
-.adminContainer fieldset#fieldset-Actions legend{
-   display: none;
 }
 .adminContainer fieldset#fieldset-Actions .fields-wrapper{
    padding: 1em 0 2em;
