@@ -150,6 +150,13 @@
                                     <controller>collection</controller>
                                     <action>new</action>
                                 </new>
+                                <newrole>
+                                    <type>mvc</type>
+                                    <label>admin_collections_role_new</label>
+                                    <module>admin</module>
+                                    <controller>collectionroles</controller>
+                                    <action>new</action>
+                                </newrole>
                                 <edit>
                                     <type>mvc</type>
                                     <label>admin_collection_edit</label>
