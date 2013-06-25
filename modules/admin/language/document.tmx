@@ -872,6 +872,42 @@
         <seg>Fehler beim Entfernen.</seg>
       </tuv>
     </tu>
+    
+    <tu tuid="admin_document_person_move_label">
+      <tuv xml:lang="en">
+        <seg>Move</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verschieben</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_person_actions_label">
+      <tuv xml:lang="en">
+        <seg>Actions</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Aktionen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_person_roles_label">
+      <tuv xml:lang="en">
+        <seg>Change role</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Rolle ändern</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_person_remove_label">
+      <tuv xml:lang="en">
+        <seg>or</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>oder Person</seg>
+      </tuv>
+    </tu>
 
   </body>
 

@@ -50,7 +50,70 @@
         <seg>Oberflächenanpassungen</seg>
       </tuv>
     </tu>
+    
+    <tu tuid="admin_button_add">
+      <tuv xml:lang="en">
+        <seg>Add</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hinzufügen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_button_remove">
+      <tuv xml:lang="en">
+        <seg>Remove</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Entfernen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_button_edit">
+      <tuv xml:lang="en">
+        <seg>Edit</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Editieren</seg>
+      </tuv>
+    </tu>
 
+    <tu tuid="admin_button_move_first">
+      <tuv xml:lang="en">
+        <seg>First</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Erster</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_button_move_up">
+      <tuv xml:lang="en">
+        <seg>Up</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Hoch</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_button_move_down">
+      <tuv xml:lang="en">
+        <seg>Down</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Runter</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_button_move_last">
+      <tuv xml:lang="en">
+        <seg>Last</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Letzter</seg>
+      </tuv>
+    </tu>
+    
   </body>
 
 </tmx>

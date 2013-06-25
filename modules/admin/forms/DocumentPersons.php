@@ -68,8 +68,7 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
         foreach ($this->personRoles as $index => $roleName) {
             $subform = new Admin_Form_DocumentPersonRole($roleName);
             $this->addSubForm($subform, $roleName);
-        }
-        
+        }        
     }
     
     /**

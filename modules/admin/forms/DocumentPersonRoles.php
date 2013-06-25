@@ -80,13 +80,10 @@ class Admin_Form_DocumentPersonRoles extends Admin_Form_AbstractDocumentSubForm 
         ));
         
         foreach ($roles as $role) {
-            $element = new Form_Element_Submit($this->getRoleElementName($role));
-            $element->setDecorators(array(
-                'ViewHelper',
-                array('HtmlTag', array('tag' => 'li'))
-                ));
-            
-            $this->addElement($element);
+            $this->addElement('submit', $this->getRoleElementName($role), array(
+                'decorators' => array('ViewHelper', array('HtmlTag', array('tag' => 'li'))),
+                'label' => 'Opus_Person_Role_Value_' . ucfirst($role)
+            ));
         }
     }
     

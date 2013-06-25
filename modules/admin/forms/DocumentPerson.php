@@ -104,32 +104,11 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
     public function init() {
         parent::init();
         
-        $elementFactory = new Admin_Model_FormElementFactory();
-                
-        $element = new Form_Element_Hidden(Admin_Form_Person::ELEMENT_PERSON_ID);
-        $element->setDecorators(array('ViewHelper'));
-        $this->addElement($element);
-        
-        $element = new Form_Element_Checkbox(self::ELEMENT_ALLOW_CONTACT);
-        $element->setLabel('AllowEmailContact');
-        $element->setDecorators(array('ViewHelper'));
-        $this->addElement($element);
-        
-        // TODO Durch SELECT ersetzen?
-        $element = new Form_Element_Text(self::ELEMENT_SORT_ORDER);
-        $element->setLabel('SortOrder');
-        $element->setDecorators(array('ViewHelper'));
-        $this->addElement($element);
-        
-        // Edit Button
-        $element = new Form_Element_Submit(self::ELEMENT_EDIT);
-        $element->setDecorators(array('ViewHelper'));
-        $this->addElement($element);
-        
-        // Remove Button
-        $element = new Form_Element_Submit(self::ELEMENT_REMOVE);
-        $element->setDecorators(array('ViewHelper'));
-        $this->addElement($element);
+        $this->addElement('hidden', Admin_Form_Person::ELEMENT_PERSON_ID);
+        $this->addElement('checkbox', self::ELEMENT_ALLOW_CONTACT, array('label' => 'AllowEmailContact'));
+        $this->addElement('text', self::ELEMENT_SORT_ORDER, array('label' => 'SortOrder'));
+        $this->addElement('submit', self::ELEMENT_EDIT, array('label' => 'admin_button_edit'));
+        $this->addElement('submit', self::ELEMENT_REMOVE, array('label' => 'admin_button_remove'));
     }
     
     public function initRendering() {

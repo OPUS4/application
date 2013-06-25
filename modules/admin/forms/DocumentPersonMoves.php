@@ -67,13 +67,12 @@ class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm 
         ));
         
         foreach ($this->moves as $move) {
-            $element = new Form_Element_Submit($move);
-            $element->setDecorators(array(
-                'ViewHelper',
-                array('HtmlTag', array('tag' => 'li', 'class' => 'move-' . strtolower($move)))
-                ));
-            
-            $this->addElement($element);
+            $lower = strtolower($move);
+            $this->addElement('submit', $move, array(
+                'decorators' => array('ViewHelper',
+                    array('HtmlTag', array('tag' => 'li', 'class' => 'move-' . $lower))),
+                'label' => 'admin_button_move_' . $lower
+            ));
         }
     }
     
