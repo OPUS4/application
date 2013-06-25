@@ -78,12 +78,6 @@ class Admin_Form_DocumentSubject extends Admin_Form_AbstractModelSubForm {
         $element->setLabel('Value');
         $this->addElement($element);
         
-        // TODO IMPORTANT remove before release
-        $this->getElement(self::ELEMENT_VALUE)
-                ->setDescription('Tag für das Dokument (Beispieltext).')
-                ->setHint('Die ISBN Nummer ist ungültig (Beispieltext).');
-        
-        
         $element = new Form_Element_Text(self::ELEMENT_EXTERNAL_KEY);
         $element->setLabel('ExternalKey');
         $this->addElement($element);
