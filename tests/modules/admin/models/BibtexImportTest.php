@@ -143,6 +143,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $number = $this->__import();
         
         $this->assertEquals('1', $number);
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('article', $this->doc->getType());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Adams', $this->doc->getPersonAuthor(0)->getLastName());
@@ -168,6 +169,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('2', $number);
 
         $this->assertEquals('article', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('John', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Doe', $this->doc->getPersonAuthor(0)->getLastName());
         $this->assertEquals('The title of first article', $this->doc->getTitleMain(0)->getValue());
@@ -195,6 +197,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 }", $this->doc->getEnrichment(0)->getValue());
 
         $this->assertEquals('article', $this->doc2->getType());
+        $this->assertEquals('unpublished', $this->doc2->getServerState());
         $this->assertEquals('Jane', $this->doc2->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Roe', $this->doc2->getPersonAuthor(0)->getLastName());
         $this->assertEquals('The title of second article', $this->doc2->getTitleMain(0)->getValue());
@@ -230,6 +233,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('article', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('P', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Adams', $this->doc->getPersonAuthor(0)->getLastName());
         $this->assertEquals('J', $this->doc->getPersonAuthor(1)->getFirstName());
@@ -252,6 +256,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('article', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Adams', $this->doc->getPersonAuthor(0)->getLastName());
         $this->assertEquals('John', $this->doc->getPersonAuthor(1)->getFirstName());
@@ -273,6 +278,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('article', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Adams', $this->doc->getPersonAuthor(0)->getLastName());
         $this->assertEquals('John', $this->doc->getPersonAuthor(1)->getFirstName());
@@ -295,6 +301,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('book', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Babington', $this->doc->getPersonAuthor(0)->getLastName());
         $this->assertEquals('The title of the @-book', $this->doc->getTitleMain(0)->getValue());
@@ -320,6 +327,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('book', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('The title of the booklet', $this->doc->getTitleMain(0)->getValue());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Caxton', $this->doc->getPersonAuthor(0)->getLastName());
@@ -339,6 +347,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('bookpart', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('The title of the book', $this->doc->getTitleParent(0)->getValue());
         $this->assertEquals('8', $this->doc->getTitleMain(0)->getValue());
@@ -364,6 +373,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('bookpart', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Farindon', $this->doc->getPersonAuthor(0)->getLastName());
         $this->assertEquals('The title of the bookpart', $this->doc->getTitleMain(0)->getValue());
@@ -390,6 +400,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('conferenceobject', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Draper', $this->doc->getPersonAuthor(0)->getLastName());
         $this->assertEquals('The title of the inproceedings', $this->doc->getTitleMain(0)->getValue());
@@ -417,6 +428,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('other', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('The address of the publisher', $this->doc->getPublisherPlace());
         $this->assertEquals('The title of the manual', $this->doc->getTitleMain(0)->getValue());
         $this->assertEquals('1999', $this->doc->getPublishedYear());
@@ -439,6 +451,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('masterthesis', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Harwood', $this->doc->getPersonAuthor(0)->getLastName());
         $this->assertEquals('The title of the mastersthesis', $this->doc->getTitleMain(0)->getValue());
@@ -460,6 +473,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('other', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Isley', $this->doc->getPersonAuthor(0)->getLastName());
         $this->assertEquals('The title of the misc', $this->doc->getTitleMain(0)->getValue());
@@ -479,6 +493,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('doctoralthesis', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Joslin', $this->doc->getPersonAuthor(0)->getLastName());
         $this->assertEquals('The title of the phdthesis', $this->doc->getTitleMain(0)->getValue());
@@ -500,6 +515,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('conferenceobject', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('The title of the conference', $this->doc->getTitleMain(0)->getValue());
         $this->assertEquals('2003', $this->doc->getPublishedYear());
         $this->assertEquals('Peter', $this->doc->getPersonEditor(0)->getFirstName());
@@ -523,6 +539,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('report', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Lambert', $this->doc->getPersonAuthor(0)->getLastName());
         $this->assertEquals('The title of the techreport', $this->doc->getTitleMain(0)->getValue());
@@ -544,6 +561,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1', $number);
 
         $this->assertEquals('other', $this->doc->getType());
+        $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Marcheford', $this->doc->getPersonAuthor(0)->getLastName());
         $this->assertEquals('The title of the unpublished work', $this->doc->getTitleMain(0)->getValue());

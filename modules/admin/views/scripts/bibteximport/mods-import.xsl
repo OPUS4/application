@@ -79,7 +79,7 @@
                 </xsl:choose>
             </xsl:attribute>
 
-            <xsl:attribute name="serverState">published</xsl:attribute>
+            <xsl:attribute name="serverState">unpublished</xsl:attribute>
 
             <!--OPUSXML: ATTRIBUTE (optional) -->
             <xsl:apply-templates select="mods:name[@type='corporate']"/>
