@@ -41,9 +41,11 @@ class Admin_Model_BibtexImportException extends Exception {
     const FILE_NOT_READABLE = 2;
     const FILE_NOT_UTF8 = 3;
     const FILE_NOT_BIBTEX = 4;
-    const BIBTEX_MODS_ERROR = 5; 
-    const MODS_XML_ERROR = 6; 
-    const INVALID_XML_ERROR = 7; 
+    const RECORD_WITHOUT_ID = 5;
+    const DUPLICATE_ID = 6;  
+    const BIBTEX_MODS_ERROR = 7;
+    const MODS_XML_ERROR = 8;
+    const INVALID_XML_ERROR = 9;
 
 
     /**
@@ -54,9 +56,11 @@ class Admin_Model_BibtexImportException extends Exception {
         self::FILE_NOT_READABLE => 'bibtex_import_file_not_readable',
         self::FILE_NOT_UTF8 => 'bibtex_import_file_not_utf8',
         self::FILE_NOT_BIBTEX => 'bibtex_import_file_not_bibtex',
+	self::RECORD_WITHOUT_ID => 'bibtex_import_record_without_id',
+	self::DUPLICATE_ID => 'bibtex_import_duplicate_id',
         self::BIBTEX_MODS_ERROR => 'bibtex_import_bibtex_mods_error',
         self::MODS_XML_ERROR => 'bibtex_import_mods_xml_error',
-        self::INVALID_XML_ERROR => 'bibtex_import_invalid_xml_error',
+        self::INVALID_XML_ERROR => 'bibtex_import_invalid_xml_error'
     );
 
 

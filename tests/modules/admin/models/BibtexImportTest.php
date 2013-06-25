@@ -35,30 +35,25 @@
 
 class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
-    private static $script;
-    private static $bibdir;
+    private $log;
+    
+    private $bibdir;
 
-    private $importer;
-
-    private $doc;
+    private $doc1;
+    
     private $doc2;
 
-
-    public static function setUpBeforeClass() {
-        self::$script = dirname(dirname(dirname(dirname(dirname(__FILE__))))) . '/scripts/import/MetadataImporter.php';
-        self::$bibdir = dirname(dirname(dirname(dirname(__FILE__)))) . '/import/bibtex/';
-    }
-
+    private $filename;
 
     public function setUp() {
         parent::setUp();
+        $this->bibdir = dirname(dirname(dirname(dirname(__FILE__)))) . '/import/bibtex/';
         $this->doc = null;
         $this->doc2 = null;
     }
-    
+
 
     public function tearDown() {
-
         if (!is_null($this->doc)) {
             $this->doc->deletePermanent();
         }
@@ -66,29 +61,21 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         if (!is_null($this->doc2)) {
             $this->doc2->deletePermanent();
         }
-
-        if (!is_null($this->importer)) {
-            if (file_exists($this->importer->getXmlFilename())) {
-                unlink($this->importer->getXmlFilename());
-            }
-        }
         parent::tearDown();
     }
 
 
-    private function __import($filename) {
-        $config = Zend_Registry::get('Zend_Config');
-        $tmpDirectory = $config->workspacePath . DIRECTORY_SEPARATOR . "tmp";
+    private function __import() {
+        $bibtexImporter = new Admin_Model_BibtexImport($this->bibdir . $this->filename);
+        $numOpusDocuments = $bibtexImporter->convertBibtexToOpusxml();
+        $xml = $bibtexImporter->getXml();
 
-        $this->importer = new Admin_Model_BibtexImport(self::$bibdir . $filename, $tmpDirectory);
-        $this->importer->convertBibtexToOpusxml();
-        $numberOfOpusDocuments = $this->importer->convertBibtexToOpusxml();
-
-        exec("php " . self::$script . " " . $this->importer->getXmlFilename());
+        $metadataImporter = new Opus_Util_MetadataImport($xml);
+        $metadataImporter->run();
 
         $ids = Opus_Document::getAllIds();
 
-        if($numberOfOpusDocuments === 2) {
+        if($numOpusDocuments === 2) {
             $last_id = array_pop($ids);
             $this->doc2 = new Opus_Document($last_id);
         }
@@ -96,44 +83,66 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $last_id = array_pop($ids);
         $this->doc = new Opus_Document($last_id);
  
-        return $numberOfOpusDocuments;
-    }
-
-    public function testFileIsNotReadable() {
-        $config = Zend_Registry::get('Zend_Config');
-        $directory = $config->workspacePath . DIRECTORY_SEPARATOR . "tmp";
-        $filename = 'non_existing.bib';
-        $this->assertFalse(is_file( self::$bibdir . $filename ));
-
-        $this->setExpectedException('Admin_Model_Exception', self::$bibdir . $filename . ' is not readable' );
-        $import = new Admin_Model_BibtexImport(self::$bibdir . $filename, $directory);
+        return $numOpusDocuments;
     }
 
 
-    public function testDirectoryIsNotWriteable() {
-        $config = Zend_Registry::get('Zend_Config');
-        $directory = $config->workspacePath . DIRECTORY_SEPARATOR . "tmp/non_existing_directory";
-        $filename = "article.bib";
-        $this->assertFalse(is_writable( $directory ));
+    /* Exception Tests: 3 Exceptions without message  */
+
+    public function testFileNotReadableException() {
+        $this->filename = 'non_existing.bib';
+        $this->assertFalse(is_file( $this->bibdir . $this->filename ));
+        $this->setExpectedException('Admin_Model_BibtexImportException', null, Admin_Model_BibtexImportException::FILE_NOT_READABLE);
+        $this->__import();
+    }
+
+    public function testFileNotUtf8Exception() {
+        $this->filename = 'misc.bib.iso';
+        $this->setExpectedException('Admin_Model_BibtexImportException', null, Admin_Model_BibtexImportException::FILE_NOT_UTF8);
+        $this->__import();
+      }
+    
+
+    public function testFileNotBibtexEception() {
+        $this->filename = 'miscNoOpeningSign.bib';
+        $this->setExpectedException('Admin_Model_BibtexImportException', null, Admin_Model_BibtexImportException::FILE_NOT_BIBTEX);
+        $this->__import();
+    }
+
+    /* Exception Tests: 3 Exceptions with message  */
 
 
-        $this->setExpectedException('Admin_Model_Exception', $directory . ' is not writeable');
-        $import = new Admin_Model_BibtexImport(self::$bibdir . $filename, $directory);
+    public function testRecordWithoutIdException() {
+        $this->filename = 'bookNoID.bib';
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
+        $this->setExpectedException('Admin_Model_BibtexImportException', $record, Admin_Model_BibtexImportException::RECORD_WITHOUT_ID);
+        $this->__import();
     }
 
 
-    public function testNoValidMetadataFile() {
-        $filename = "malformed.bib";
-
-        $this->setExpectedException('Admin_Model_Exception', self::$bibdir . $filename . ' contains no valid metadata');
-        $this->__import("malformed.bib");
+    public function testDuplicateIdException() {
+        $this->filename = 'articleTwoDocumentsDuplicateID.bib';
+        $id = 'articleID';
+        $this->setExpectedException('Admin_Model_BibtexImportException', $id, Admin_Model_BibtexImportException::DUPLICATE_ID);
+        $this->__import();
     }
 
+
+    public function testInvalidXmlException() {
+        $this->filename = 'articleWithoutTitle.bib';
+        $id = 'article_ID';
+        $this->setExpectedException('Admin_Model_BibtexImportException', $id, Admin_Model_BibtexImportException::INVALID_XML_ERROR);
+        $this->__import();
+    }
+
+
+    /* Mapping Tests */
 
     public function testImportArticle() {
-        $number = $this->__import("article.bib");
+        $this->filename = 'article.bib';
+        $number = $this->__import();
+        
         $this->assertEquals('1', $number);
-
         $this->assertEquals('article', $this->doc->getType());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Adams', $this->doc->getPersonAuthor(0)->getLastName());
@@ -147,24 +156,15 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('An optional note', $this->doc->getNote(0)->getMessage());
         $this->assertEquals('public', $this->doc->getNote(0)->getVisibility());
 
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@article{article,
-  author  = {Peter Adams},
-  title   = {The title of the article},
-  journal = {The name of the journal},
-  year    = 1993,
-  volume  = 4,
-  number  = 2,
-  pages   = {101-113},
-  month   = 7,
-  note    = {An optional note},
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
 
     public function testImportArticleTwoDocuments() {
-        $number = $this->__import("articleTwoDocuments.bib");
+        $this->filename = 'articleTwoDocuments.bib';
+        $number = $this->__import();
         $this->assertEquals('2', $number);
 
         $this->assertEquals('article', $this->doc->getType());
@@ -225,7 +225,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
 
     public function testImportArticleAuthorAbbrev() {
-        $number = $this->__import("articleAuthorAbbrev.bib");
+        $this->filename = 'articleAuthorAbbrev.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
 
         $this->assertEquals('article', $this->doc->getType());
@@ -239,19 +240,15 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('The name of the journal', $this->doc->getTitleParent(0)->getValue());
         $this->assertEquals('1993', $this->doc->getPublishedYear());
 
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@article{article,
-  author  = {P. Adams and J. Doe and M. Musterman },
-  title   = {The title of the article},
-  journal = {The name of the journal},
-  year    = 1993,
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
 
     public function testImportArticleAuthorCommaSeparated() {
-        $number = $this->__import("articleAuthorCommaSeparated.bib");
+        $this->filename = 'articleAuthorCommaSeparated.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
 
         $this->assertEquals('article', $this->doc->getType());
@@ -265,18 +262,14 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('The name of the journal', $this->doc->getTitleParent(0)->getValue());
         $this->assertEquals('1993', $this->doc->getPublishedYear());
 
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@article{article,
-  author  = {Adams, Peter and Doe, John and Musterman, Max },
-  title   = {The title of the article},
-  journal = {The name of the journal},
-  year    = 1993,
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
     public function testImportArticleManyAuthors() {
-        $number = $this->__import("articleManyAuthors.bib");
+        $this->filename = 'articleManyAuthors.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
 
         $this->assertEquals('article', $this->doc->getType());
@@ -290,19 +283,15 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('The name of the journal', $this->doc->getTitleParent(0)->getValue());
         $this->assertEquals('1993', $this->doc->getPublishedYear());
 
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@article{article,
-  author  = {Peter Adams and John Doe and Max Musterman },
-  title   = {The title of the article},
-  journal = {The name of the journal},
-  year    = 1993,
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
 
     public function testImportBook() {
-        $number = $this->__import("book.bib");
+        $this->filename = 'book.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
 
         $this->assertEquals('book', $this->doc->getType());
@@ -319,26 +308,15 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('public', $this->doc->getNote(0)->getVisibility());
         $this->assertEquals('3257227892', $this->doc->getIdentifierIsbn(0)->getValue());
         
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@book{book,
-  author    = {Peter Babington},
-  title     = {The title of the @-book},
-  publisher = {The name of the publisher},
-  year      = 1994,
-  volume    = 4,
-  series    = 10,
-  address   = {The address},
-  edition   = 3,
-  month     = 7,
-  note      = {An optional note},
-  isbn      = {3257227892}
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
 
     public function testImportBooklet() {
-        $number = $this->__import("booklet.bib");
+        $this->filename = 'booklet.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
 
         $this->assertEquals('book', $this->doc->getType());
@@ -348,22 +326,16 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('1995', $this->doc->getPublishedYear());
         $this->assertEquals('The address of the publisher', $this->doc->getPublisherPlace());
         $this->assertEquals('An optional note', $this->doc->getNote(0)->getMessage());
+
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@booklet{booklet,
-  title        = {The title of the booklet},
-  author       = {Peter Caxton},
-  howpublished = {How it was published},
-  address      = {The address of the publisher},
-  month        = 7,
-  year         = 1995,
-  note         = {An optional note}
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
 
     public function testImportInbook() {
-        $number = $this->__import("inbook.bib");
+        $this->filename = 'inbook.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
 
         $this->assertEquals('bookpart', $this->doc->getType());
@@ -379,28 +351,16 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('12', $this->doc->getEdition());
         $this->assertEquals('An optional note', $this->doc->getNote(0)->getMessage());
         $this->assertEquals('public', $this->doc->getNote(0)->getVisibility());
+
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@inbook{inbook,
-  author       = {Peter Eston},
-  title        = {The title of the book},
-  chapter      = 8,
-  pages        = {201-213},
-  publisher    = {The name of the publisher},
-  year         = 1996,
-  volume       = 4,
-  series       = 5,
-  type         = {type of inbook},
-  address      = {The address of the publisher},
-  edition      = 12,
-  month        = 7,
-  note         = {An optional note}
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
 
     public function testImportIncollection() {
-        $number = $this->__import("incollection.bib");
+        $this->filename = 'incollection.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
 
         $this->assertEquals('bookpart', $this->doc->getType());
@@ -417,30 +377,16 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('13', $this->doc->getEdition());
         $this->assertEquals('An optional note', $this->doc->getNote(0)->getMessage());
         $this->assertEquals('public', $this->doc->getNote(0)->getVisibility());
+
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@incollection{incollection,
-  author       = {Peter Farindon},
-  title        = {The title of the bookpart},
-  booktitle    = {The title of the book},
-  publisher    = {The name of the publisher},
-  year         = 1997,
-  editor       = {The editor},
-  volume       = 4,
-  series       = 5,
-  type         = {Type of incollection},
-  chapter      = 8,
-  pages        = {301-313},
-  address      = {The address of the publisher},
-  edition      = 13,
-  month        = 7,
-  note         = {An optional note}
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
 
     public function testImportInproceedings() {
-        $number = $this->__import("inproceedings.bib");
+        $this->filename = 'inproceedings.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
 
         $this->assertEquals('conferenceobject', $this->doc->getType());
@@ -459,27 +405,15 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('The publisher', $this->doc->getPublisherName());
         $this->assertEquals('An optional note', $this->doc->getNote(0)->getMessage());
         $this->assertEquals('public', $this->doc->getNote(0)->getVisibility());
+
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@inproceedings{inproceedings,
-  author       = {Peter Draper},
-  title        = {The title of the inproceedings},
-  booktitle    = {The title of the conference},
-  year         = 1998,
-  editor       = {The editor},
-  volume       = 41,
-  series       = 5,
-  pages        = 413,
-  address      = {The address of publisher},
-  month        = 7,
-  organization = {The organization},
-  publisher    = {The publisher},
-  note         = {An optional note}
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
     public function testImportManual() {
-        $number = $this->__import("manual.bib");
+        $this->filename = 'manual.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
 
         $this->assertEquals('other', $this->doc->getType());
@@ -492,23 +426,16 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals( '23', $this->doc->getEdition());
         $this->assertEquals('An optional note', $this->doc->getNote(0)->getMessage());
         $this->assertEquals('public', $this->doc->getNote(0)->getVisibility());
+
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@manual{manual,
-  address      = {The address of the publisher},
-  title        = {The title of the manual},
-  year         = 1999,
-  author       = {Peter Gainsford},
-  organization = {The organization},
-  edition      = 23,
-  month        = 7,
-  note         = {An optional note}
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
 
     public function testImportMastersthesis() {
-        $number = $this->__import("mastersthesis.bib");
+        $this->filename = 'mastersthesis.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
 
         $this->assertEquals('masterthesis', $this->doc->getType());
@@ -520,25 +447,17 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('The address of the publisher', $this->doc->getPublisherPlace());
         $this->assertEquals('An optional note', $this->doc->getNote(0)->getMessage());
         $this->assertEquals('public', $this->doc->getNote(0)->getVisibility());
+
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@mastersthesis{mastersthesis,
-  author       = {Peter Harwood},
-  title        = {The title of the mastersthesis},
-  school       = {The school where the thesis was written},
-  year         = 2000,
-  type         = {Type of thesis},
-  address      = {The address of the publisher},
-  month        = 7,
-  note         = {An optional note}
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
 
     public function testImportMisc() {
-        $number = $this->__import("misc.bib");
+        $this->filename = 'misc.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
-
 
         $this->assertEquals('other', $this->doc->getType());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
@@ -547,21 +466,16 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('2001', $this->doc->getPublishedYear());
         $this->assertEquals('An optional note', $this->doc->getNote(0)->getMessage());
         $this->assertEquals('public', $this->doc->getNote(0)->getVisibility());
+
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@misc{misc,
-  author       = {Peter Isley},
-  title        = {The title of the misc},
-  howpublished = {How it was published},
-  month        = 7,
-  year         = 2001,
-  note         = {An optional note}
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
 
     public function testImportPhdthesis() {
-        $number = $this->__import("phdthesis.bib");
+        $this->filename = 'phdthesis.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
 
         $this->assertEquals('doctoralthesis', $this->doc->getType());
@@ -573,23 +487,16 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('The address of the publisher', $this->doc->getPublisherPlace());
         $this->assertEquals('An optional note', $this->doc->getNote(0)->getMessage());
         $this->assertEquals('public', $this->doc->getNote(0)->getVisibility());
+
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@phdthesis{phdthesis,
-  author       = {Peter Joslin},
-  title        = {The title of the phdthesis},
-  school       = {The school where the thesis was written},
-  year         = 2002,
-  type         = {The type of thesis},
-  address      = {The address of the publisher},
-  month        = 7,
-  note         = {An optional note}
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
 
     public function testImportProceedings() {
-        $number = $this->__import("proceedings.bib");
+        $this->filename = 'proceedings.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
 
         $this->assertEquals('conferenceobject', $this->doc->getType());
@@ -603,25 +510,16 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('The name of the publisher', $this->doc->getPublisherName());
         $this->assertEquals('An optional note', $this->doc->getNote(0)->getMessage());
         $this->assertEquals('public', $this->doc->getNote(0)->getVisibility());
+
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@proceedings{proceedings,
-  title        = {The title of the conference},
-  year         = 2003,
-  editor       = {Peter Kidwelly},
-  volume       = 44,
-  series       = 5,
-  address      = {The address of the publisher},
-  month        = 7,
-  organization = {The organization},
-  publisher    = {The name of the publisher},
-  note         = {An optional note}
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
 
     public function testImportTechreport() {
-        $number = $this->__import("techreport.bib");
+        $this->filename = 'techreport.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
 
         $this->assertEquals('report', $this->doc->getType());
@@ -633,25 +531,18 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('An optional note', $this->doc->getNote(0)->getMessage());
         $this->assertEquals('public', $this->doc->getNote(0)->getVisibility());
         $this->assertEquals('The address of the publisher', $this->doc->getPublisherPlace());
+
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@techreport{techreport,
-  author       = {Peter Lambert},
-  title        = {The title of the techreport},
-  institution  = {The institution that published},
-  year         = 2004,
-  number       = 2,
-  address      = {The address of the publisher},
-  month        = 7,
-  note         = {An optional note}
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
 
     public function testImportUnpublished() {
-        $number = $this->__import("unpublished.bib");
+        $this->filename = 'unpublished.bib';
+        $number = $this->__import();
         $this->assertEquals('1', $number);
-        
+
         $this->assertEquals('other', $this->doc->getType());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Marcheford', $this->doc->getPersonAuthor(0)->getLastName());
@@ -659,15 +550,10 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('An optional note', $this->doc->getNote(0)->getMessage());
         $this->assertEquals('public', $this->doc->getNote(0)->getVisibility());
         $this->assertEquals('2005', $this->doc->getPublishedYear());
+
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
-        $this->assertEquals(
-"@unpublished{unpublished,
-  author       = {Peter Marcheford},
-  title        = {The title of the unpublished work},
-  note         = {An optional note},
-  month        = 7,
-  year         = 2005
-}", $this->doc->getEnrichment(0)->getValue());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
 
 }
