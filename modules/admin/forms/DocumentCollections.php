@@ -57,15 +57,15 @@
  */
 class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm {
     
+    const ELEMENT_ADD = 'Add';
+    
     /**
      * Initialisiert Elemente für gesamtes Collections Formular.
      */
     public function init() {
         parent::init();
-        $element = new Form_Element_Submit('add'); // TODO translate
-        $element->setOrder(1000); // TODO nicht sicher wenn 1000+ Collections zugewiesen sind
-        $this->addElement($element);
         
+        $this->addElement('submit', self::ELEMENT_ADD, array('order' => 1000, 'label' => 'admin_button_add'));
         $this->setLegend('admin_document_section_collection');
     }
     
@@ -100,7 +100,7 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
     }
         
     public function processPost($data, $context) {
-        if (array_key_exists('add', $data)) {
+        if (array_key_exists(self::ELEMENT_ADD, $data)) {
             // Neue Sammlung zuweisen
             return array( 'result' => Admin_Form_Document::RESULT_SWITCH_TO, 
                 'target' => array(
