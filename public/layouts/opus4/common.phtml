@@ -153,7 +153,13 @@ $languageSelectors = $this->languageSelector();
                     <?PHP if ($this->breadcrumbsDisabled !== true) : ?>
                         <?= $this->navigation()->breadcrumbs() ?>
                     <?PHP endif; ?>
+                    <?PHP if ($this->contentWrapperDisabled !== true && $this->breadcrumbsDisabled !== true) : ?>
+                    <div class="wrapper">
+                        <?= $this->layout()->content ?>
+                    </div>
+                    <?PHP else : ?>
                     <?= $this->layout()->content ?>
+                    <?PHP endif; ?>
                 <?PHP else : ?>
                 <?PHP if ($this->accessAllowed('documents') && !is_null($this->adminform)) : ?> 
                     <?= $this->adminform ?>
