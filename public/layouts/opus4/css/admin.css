@@ -135,6 +135,70 @@ li.edit input:hover,
    padding: 0;
 }
 /* @group Form content */
+.adminContainer .required{
+   /*color: #595a56;*/
+   font-weight: bold;
+   color: inherit;
+}
+/*.adminContainer .required:after{
+   content: "*";
+}*/
+.adminContainer .field i.placeholder,
+.adminContainer .field .datahint,
+.adminContainer .field .errors,
+.adminContainer .field .hint{
+   font-size: 0.857em;
+   font-style: normal;
+}
+.adminContainer .field i.placeholder,
+.adminContainer .field .hint{
+   color: #666;
+}
+.adminContainer .field .errors{
+   list-style: none;
+}
+.adminContainer .field .hint{
+   margin:0;
+   padding: 3px 0 0;
+}
+.adminContainer .field .errors,
+.adminContainer .field .datahint{
+   margin:13px 0 0;
+   padding: 5px 8px;
+   position: relative;
+   /*display: inline-block;*/
+   float: left;
+   clear: left;
+}
+.adminContainer .field ul.errors{
+   background-color: #FFD4D4;
+   color: #A40000;
+}
+.adminContainer .field p.datahint{
+   background-color: #dcd7cf;
+   color: #595A56;
+}
+.adminContainer .field ul.errors + p.datahint,
+.adminContainer .field p.datahint + ul.errors{
+   margin-top: 10px;
+}
+.adminContainer .field .errors:before,
+.adminContainer .field .datahint:before{
+    border-style: solid;
+    border-width: 0 5px 10px;
+    content: "";
+    height: 0;
+    position: absolute;
+    width: 0;
+    top: -10px;
+    left: 20px;
+}
+.adminContainer .field .errors:before{
+    border-color:  transparent transparent #FFD4D4;
+}
+.adminContainer .field .datahint:before{
+    border-color:  transparent transparent #dcd7cf;
+}
 #docinfo{
    padding: 1.5em 0 0;
 }
@@ -336,18 +400,18 @@ li.edit input:hover,
    clear: left;
    width: 32.7083%;
 }
-.adminContainer fieldset .multiple-data .data-wrapper > div.label{
+.adminContainer .multiple-data .data-wrapper > div.label{
    width: 38.4803%;
 }
 .adminContainer .field{
-   /*float: left;
-   width: 67.2917%;*/
+   float: left;
+   width: 67%;
 }
 .adminContainer .field textarea{
-  max-width: 60%;
+  max-width: 100%;
 }
-.adminContainer fieldset .multiple-data .field{
-  /* width: 61.5197%;*/
+.adminContainer .multiple-data .field{
+  width: 61.5197%;
 }
 .adminContainer .fields-wrapper{
    /*margin: 1.3em 0 0;*/
