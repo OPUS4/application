@@ -98,6 +98,12 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
      */
     const RESULT_CHANGE_ROLE = 'changeRole';
     
+    const MODE_VIEW = 'view';
+    
+    const MODE_FORM = 'form';
+    
+    private $mode = self::MODE_FORM;
+    
     /**
      * Erzeugt die Formularelemente.
      */
@@ -195,6 +201,16 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         
         $this->removeElement(self::ELEMENT_SORT_ORDER);
         // TODO $this->removeElement(self::ELEMENT_ROLE);
+        
+        $this->mode = self::MODE_VIEW;
+    }
+    
+    public function getViewMode() {
+        return $this->mode;
+    }
+    
+    public function isViewModeEnabled() {
+        return ($this->mode == self::MODE_VIEW);
     }
 
 }
