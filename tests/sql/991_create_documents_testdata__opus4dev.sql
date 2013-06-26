@@ -208,3 +208,10 @@ INSERT INTO `link_documents_series` (`document_id`, `series_id`, `number`, `doc_
 --
 INSERT INTO `link_documents_dnb_institutes` (`document_id`, `dnb_institute_id`, `role`) VALUES
 (93,2,'publisher');
+
+
+--
+-- Daten für Tabelle `link_documents_collections`
+--
+INSERT INTO `link_documents_collections` (`document_id`, `collection_id`, `role_id`) VALUES
+(92, 16210,21);
