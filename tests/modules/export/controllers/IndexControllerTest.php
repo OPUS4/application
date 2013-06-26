@@ -604,6 +604,17 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertRegExp('/<h4 id="L2011">2011<\/h4>.*<h4 id="L2009">2009<\/h4>/', $normalizedResponseBody);
     }
 
+    /*
+     * OPUSVIER: 2888
+     */
+
+    public function testPublistActionAbsoluteUrls() {
+        $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $response = $this->getResponse();
+        $this->assertRegexp('/<a href="http:\/\/.*\/frontdoor\/index\/index\/docId\/113">/', $response->getBody());
+    }
+
 
 }
 

@@ -43,7 +43,7 @@
 
     <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" />
 
-    <xsl:param name="baseUrl" />
+    <xsl:param name="fullUrl" />
     <xsl:param name="collName" />
     <xsl:param name="groupBy" />
 
@@ -382,7 +382,7 @@
     <xsl:template match="TitleMain[position() =1]">
         <xsl:element name="a">
             <xsl:attribute name="href">
-                <xsl:value-of select="$baseUrl"/>
+                <xsl:value-of select="$fullUrl"/>
                 <xsl:text>/frontdoor/index/index/docId/</xsl:text>
                 <xsl:value-of select="../@Id" />
             </xsl:attribute>
@@ -511,7 +511,7 @@
             <xsl:when test="@MimeType='application/pdf'">
                 <xsl:element name="a">
                     <xsl:attribute name="href">
-                        <xsl:value-of select="$baseUrl"/>
+                        <xsl:value-of select="$fullUrl"/>
                         <xsl:text>/files/</xsl:text>
                         <xsl:value-of select="../@Id" />
                         <xsl:text>/</xsl:text>
@@ -529,7 +529,7 @@
     <xsl:template name="CitationExport">
         <xsl:element name="a">
             <xsl:attribute name="href">
-                <xsl:value-of select="$baseUrl"/>
+                <xsl:value-of select="$fullUrl"/>
                 <xsl:text>/citationExport/index/download/output/bibtex/docId/</xsl:text>
                 <xsl:value-of select="@Id" />
             </xsl:attribute>
@@ -538,7 +538,7 @@
         <xsl:text> | </xsl:text>
         <xsl:element name="a">
             <xsl:attribute name="href">
-                <xsl:value-of select="$baseUrl"/>
+                <xsl:value-of select="$fullUrl"/>
                 <xsl:text>/citationExport/index/download/output/ris/docId/</xsl:text>
                 <xsl:value-of select="@Id" />
             </xsl:attribute>
