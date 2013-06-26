@@ -87,8 +87,8 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
         $url = array(
             'module'     => 'admin',
             'controller' => 'document',
-            'action'     => 'index', // TODO change to edit action
-            'docid'      => $docId,
+            'action'     => 'edit',
+            'id'      => $docId,
         );
         return $this->view->url($url, 'default', true);
     }

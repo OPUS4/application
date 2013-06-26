@@ -154,8 +154,8 @@
             <span class=""><?= $document->getDocState() ?></span>
         </td>
         <?PHP endif; ?>
-        <td class="actions">
-            <a href="<?= $this->documentUrl()->adminShow($docId) ?>"><?= $this->translate('docs_show') ?></a>
+        <td class="edit">
+            <a href="<?= $this->documentUrl()->adminEdit($docId) ?>"><?= $this->translate('admin_button_edit') ?></a>
         </td>
     </tr>
     <?PHP endforeach; ?>
