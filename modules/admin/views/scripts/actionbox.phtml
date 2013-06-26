@@ -54,7 +54,7 @@
               <dt><a><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></a></dt>
               <dd>
                 <ul>
-                    <li class="active"><?= htmlspecialchars($this->translate('admin_workflow_' . $currentState)) ?></li>
+                    <li class="active"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_' . ucfirst($currentState))) ?></li>
                     <?PHP foreach ($stateLinks as $targetState => $params) : ?>
                     <li><a id="State-Link-<?= $targetState ?>"href="<?= $this->url($params) ?>"
                            ><?= htmlspecialchars($this->translate('admin_workflow_' . $targetState)) ?></a></li>
