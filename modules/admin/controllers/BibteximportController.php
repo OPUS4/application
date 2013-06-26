@@ -86,7 +86,7 @@ class Admin_BibteximportController extends Controller_Action {
 
         $location = $uploadForm->fileupload->getFileName();
 
-
+      
         $import = null;
         $numberOfOpusDocuments = 0;
 
@@ -96,10 +96,14 @@ class Admin_BibteximportController extends Controller_Action {
         } catch (Admin_Model_BibtexImportException $e) {
             $message = $this->view->translate($e->mapTranslationKey($e->getCode()), $e->getMessage());
             $this->_redirectTo('index', array('failure' => $message));
-        } 
+        }
 
 	foreach ($import->getXml()->getElementsByTagName('opusDocument') as $doc) {
-            $this->__createMetadataImportJob($doc);
+            $dom = new DomDocument;
+            $el = new DOMElement('import');
+            $dom->appendChild($el);
+            $el->appendChild($dom->importNode($doc, true));
+            $this->__createMetadataImportJob($dom->saveXML());
 	}
 
         $message = $this->view->translate('bibtex_import_success', $numberOfOpusDocuments);
