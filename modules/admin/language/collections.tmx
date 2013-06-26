@@ -114,10 +114,10 @@
 
         <tu tuid="admin_collections_role_show_associated">
                         <tuv xml:lang="en">
-                                <seg>Show Associated Documents</seg>
+                                <seg>Associated Documents</seg>
                         </tuv>
                         <tuv xml:lang="de">
-                                <seg>Zeige verknüpfte Dokumente</seg>
+                                <seg>Verknüpfte Dokumente</seg>
                         </tuv>
         </tu>
 
@@ -258,10 +258,10 @@
 
         <tu tuid="admin_collections_no_associated">
                         <tuv xml:lang="en">
-                                <seg>No associated documents available</seg>
+                                <seg>No Associated Documents</seg>
                         </tuv>
                         <tuv xml:lang="de">
-                                <seg>Keine verknüpften Dokumente vorhanden</seg>
+                                <seg>Keine verknüpften Dokumente</seg>
                         </tuv>
         </tu>
 
