@@ -35,8 +35,35 @@
                             <controller>document</controller>
                             <resource>documents</resource>
                             <action>index</action>
+                            <pages>
+                                <filemanager>
+                                    <type>mvc</type>
+                                    <label>admin_filemanager_index</label>
+                                    <module>admin</module>
+                                    <controller>filemanager</controller>
+                                    <action>index</action>
+                                    <pages>
+                                        <filebrowser>
+                                            <type>mvc</type>
+                                            <label>admin_filebrowser_index</label>
+                                            <module>admin</module>
+                                            <controller>filebrowser</controller>
+                                            <action>index</action>
+                                            <pages>
+                                                <import>
+                                                    <type>mvc</type>
+                                                    <label>admin_filebrowser_import</label>
+                                                    <module>admin</module>
+                                                    <controller>filebrowser</controller>
+                                                    <action>import</action>
+                                                </import>
+                                            </pages>
+                                        </filebrowser>
+                                    </pages>
+                                </filemanager>
+                            </pages>
                         </show>
-
+                                
                         <edit>
                             <type>mvc</type>
                             <label>admin_document_edit</label>
@@ -44,33 +71,7 @@
                             <controller>document</controller>
                             <action>edit</action>
                         </edit>
-                        
-                        <filemanager>
-                            <type>mvc</type>
-                            <label>admin_filemanager_index</label>
-                            <module>admin</module>
-                            <controller>filemanager</controller>
-                            <action>index</action>
-                            <pages>
-                                <filebrowser>
-                                    <type>mvc</type>
-                                    <label>admin_filebrowser_index</label>
-                                    <module>admin</module>
-                                    <controller>filebrowser</controller>
-                                    <action>index</action>
-                                    <pages>
-                                        <import>
-                                            <type>mvc</type>
-                                            <label>admin_filebrowser_import</label>
-                                            <module>admin</module>
-                                            <controller>filebrowser</controller>
-                                            <action>import</action>
-                                        </import>
-                                    </pages>
-                                </filebrowser>
-                            </pages>
-                        </filemanager>
-                        
+                                                
                         <workflow>
                             <type>mvc</type>
                             <label>admin_workflow_index</label>

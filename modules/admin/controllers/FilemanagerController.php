@@ -58,6 +58,10 @@ class Admin_FilemanagerController extends Controller_Action {
 
         $this->view->importUrl = $importUrl;
         $this->view->baseUrl = $this->getRequest()->getBaseUrl();
+        
+        $page = $this->view->navigation()->findOneBy('label', 'admin_document_index');
+        $page->setLabel($this->view->translate('admin_document_index') . ' ('. $docId . ')');
+        $page->setParam('id', $docId);
     }
 
     public function uploadAction() {
