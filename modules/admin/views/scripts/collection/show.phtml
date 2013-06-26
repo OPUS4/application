@@ -81,11 +81,11 @@
                 </a>
             </td>
 
-            <td>
-                <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'edit', 'id' => $collection->getId()), null, true) ?>"><?=$this->translate('admin_collections_collection_edit')?></a>
+            <td class="edit">
+                <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'edit', 'id' => $collection->getId()), null, true) ?>"><?=$this->translate('admin_button_edit')?></a>
             </td>
 
-            <td>
+            <td class="hide">
                 <?php if ($collection->getVisible() === '1') : ?>
                     <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'hide', 'id' => $collection->getId()), null, true) ?>"><?=$this->translate('admin_collections_collection_hide')?></a>
                 <?php else : ?>
@@ -93,18 +93,18 @@
                 <?php endif ?>
             </td>
 
-            <td>
+            <td class="move-up">
                 <?php if ($i > 0) : ?>
                     <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'move', 'id' => $collection->getId(), 'pos' => $i), null, true) ?>">
-                    <?= $this->translate('admin_collections_role_move_up') ?>
+                    <?= $this->translate('admin_button_move_up') ?>
                     </a>
                 <?php endif ?>
             </td>
 
-            <td>
+            <td class="move-down">
                 <?php if ($i < count($this->collections) - 1) : ?>
                     <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'move', 'id' => $collection->getId(), 'pos' => $i + 2), null, true)?>">
-                    <?= $this->translate('admin_collections_role_move_down') ?>
+                    <?= $this->translate('admin_button_move_down') ?>
                     </a>
                 <?php endif ?>
             </td>
