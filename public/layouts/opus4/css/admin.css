@@ -6,6 +6,16 @@
 .blur{
    color: #666;
 }
+.adminContainer .collection_new a.add,
+.adminContainer table a.add,
+.adminContainer td.edit a,
+.adminContainer td.move-up a,
+.adminContainer td.move-down a,
+.adminContainer td.linked a,
+.adminContainer table .insert a,
+.adminContainer table a.insert{
+   background: url(../img/theme/admin/sprite_icons.png) no-repeat;
+}
 .adminContainer a{
    text-decoration: none;
    color: #26517a;
@@ -158,14 +168,6 @@ li.edit input:hover,
 .adminContainer .wrapper table tbody tr:hover{
    background-color: #b7cde7;
 }
-.adminContainer .collection_new a.add,
-.adminContainer table a.add,
-.adminContainer td.edit a,
-.adminContainer td.move-up a,
-.adminContainer td.move-down a,
-.adminContainer td.linked a{
-   background: url(../img/theme/admin/sprite_icons.png) no-repeat;
-}
 .adminContainer td.edit a{
    background-position: -20px -257px;
    padding-left: 19px; 
@@ -196,6 +198,16 @@ li.edit input:hover,
    display: inline-block;
    margin-left: 1em;
 }
+.adminContainer .wrapper table td.insert{
+   padding: 2px 8px;
+   background-color: #e3ecf5;
+}
+.adminContainer table .insert a,
+.adminContainer table a.insert{
+   background-position: -20px -319px;
+   padding: 2px 0 2px 18px;
+   display: inline-block;
+}
 .adminContainer table a.add:hover{
    text-decoration: none;
    -webkit-box-shadow:0 0 15px #a0c3e1; 
@@ -203,8 +215,8 @@ li.edit input:hover,
    box-shadow:0 0 8px 2px #a0c2dd;
 
 }
-.adminContainer .wrapper table a.add{
-   font-size: 0.857em;
+.adminContainer .wrapper table thead a.add{
+   font-size: 0.8em;
 }
 /* @end */
 .Document-Action{
@@ -406,13 +418,14 @@ li.edit input:hover,
    font: 0.857em Verdana, Arial, Helvetica, sans-serif;
    cursor: pointer; 
 }
-
-.adminContainer #docinfo h2 {
-    background-color: transparent;
+.adminContainer h2{
+     background-color: transparent;
     color: black;
     font-size: 1.286em;
     font-weight: normal;
     padding: 0;
+}
+.adminContainer #docinfo h2 {
     margin: 0 0 0.3em;
 }
 .adminContainer form dd,
