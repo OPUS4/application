@@ -19,3 +19,6 @@ INSERT INTO `document_title_abstracts` (`id`, `document_id`, `type`, `value`, `l
 (258, 118, 'main', 'Dokument mit CompletedYear=0000 ohne (CompletedDate, PublishedYear und PublishedDate)', 'deu'),
 (259, 119, 'main', 'Dokument mit {CompletedYear,PublishedYear}=0000 ohne (CompletedDate und PublishedDate)', 'deu');
 
+
+INSERT INTO `link_documents_collections` (`document_id`, `collection_id`, `role_id`) VALUES
+(113, 16210,21);
