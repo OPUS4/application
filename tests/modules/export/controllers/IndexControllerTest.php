@@ -548,7 +548,6 @@ class Export_IndexControllerTest extends ControllerTestCase {
         else {
             $config = new Zend_Config(array(
                 'publist' => array('stylesheet' =>  'invalid')), true);
-            $oldConfig = Zend_Registry::get('Zend_Config');
             // Include the above made configuration changes in the application configuration.
             $config->merge(Zend_Registry::get('Zend_Config'));
         }
@@ -587,7 +586,6 @@ class Export_IndexControllerTest extends ControllerTestCase {
         else {
             $config = new Zend_Config(array(
                 'publist' => array('groupby' =>  array('completedyear' => '1'))), true);
-            $oldConfig = Zend_Registry::get('Zend_Config');
             // Include the above made configuration changes in the application configuration.
             $config->merge(Zend_Registry::get('Zend_Config'));
         }
