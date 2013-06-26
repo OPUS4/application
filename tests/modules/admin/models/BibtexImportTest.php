@@ -39,7 +39,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
     
     private $bibdir;
 
-    private $doc1;
+    private $doc;
     
     private $doc2;
 
