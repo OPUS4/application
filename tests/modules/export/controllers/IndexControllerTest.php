@@ -537,7 +537,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
     }
 
-    public function testPublistActionWithoutStylesheetParameterInUrlAndInvalidConfigParameter() {
+     public function testPublistActionWithoutStylesheetParameterInUrlAndInvalidConfigParameter() {
         // manipulate application configuration
         $oldConfig = Zend_Registry::get('Zend_Config');
 
@@ -561,6 +561,43 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $response = $this->getResponse();
         $this->assertContains('given stylesheet does not exist or is not readable', $response->getBody());
     }
+
+    public function testPublistActionWithValidStylesheetInConfig() {
+        // manipulate application configuration
+        $oldConfig = Zend_Registry::get('Zend_Config');
+
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config->publist->stylesheet)) {
+            $config->publist->stylesheet = 'example';
+        }
+        else {
+            $config = new Zend_Config(array(
+                'publist' => array('stylesheet' =>  'example')), true);
+            // Include the above made configuration changes in the application configuration.
+            $config->merge(Zend_Registry::get('Zend_Config'));
+        }
+
+        if (isset($config->publist->stylesheetDirectory)) {
+            $config->publist->stylesheetDirectory = 'stylesheets-custom';
+        }
+        else {
+            $config = new Zend_Config(array(
+                'publist' => array('stylesheetDirectory' =>  'stylesheets-custom')), true);
+            // Include the above made configuration changes in the application configuration.
+            $config->merge(Zend_Registry::get('Zend_Config'));
+        }
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
+
+        // undo configuration manipulation
+        Zend_Registry::set('Zend_Config', $oldConfig);
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertContains('<export-example>', $response->getBody());
+    }
+
+
 
    /**
     * begin: tests for OPUSVIER-2867

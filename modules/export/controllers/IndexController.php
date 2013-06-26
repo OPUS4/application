@@ -164,10 +164,11 @@ class Export_IndexController extends Controller_Xml {
     }
 
     public function publistAction() {
-	$this->stylesheet = 'default';
-	$this->stylesheetDirectory = 'publist';
-        
-	$config = Zend_Registry::get('Zend_Config');
+        $config = Zend_Registry::get('Zend_Config');
+	if (isset($config->publist->stylesheetDirectory)) {
+            $this->stylesheetDirectory = $config->publist->stylesheetDirectory;
+	}
+
 	if (isset($config->publist->stylesheet)) {
             $this->stylesheet = $config->publist->stylesheet;
 	}
