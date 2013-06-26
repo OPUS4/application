@@ -6,6 +6,15 @@
 .blur{
    color: #666;
 }
+.adminContainer a{
+   text-decoration: none;
+   color: #26517a;
+}
+.adminContainer a:hover{
+   text-decoration: underline;
+   color: #26517a;
+}
+
 .dropdown dt a:after{
     border-color: black transparent transparent;
     border-style: solid;
@@ -110,6 +119,91 @@ li.edit input:hover,
    text-decoration: none;
 }
 
+/* @end */
+
+/* @group Table layout */
+.adminContainer .wrapper table{
+   border-collapse: separate;
+   border-spacing: 0;
+   margin: 1.5em 0;
+   width: 100%;
+}
+.adminContainer .wrapper table a{
+   /*text-decoration: none;*/
+}
+.adminContainer .wrapper table th,
+.adminContainer .wrapper table td{
+   padding: 8px;
+}
+.adminContainer .wrapper table thead th{
+   border-bottom: 3px solid #5788c1;
+   text-align: left;
+   font-weight: normal;
+   font-size: 1.167em;
+}
+.adminContainer .wrapper table td,
+.adminContainer .wrapper table tbody th{
+   border-top: 1px solid #b7cde7;
+   font-size: 0.857em;
+   text-align: left;
+}
+.adminContainer .wrapper table tbody > tr:first-child > *{
+   border-top: none;
+}
+.adminContainer .wrapper table tbody th{
+   font-weight: bold;
+}
+.adminContainer .wrapper table tbody tr:hover{
+   background-color: #b7cde7;
+}
+.adminContainer .collection_new a.add,
+.adminContainer table a.add,
+.adminContainer td.edit a,
+.adminContainer td.move-up a,
+.adminContainer td.move-down a,
+.adminContainer td.linked a{
+   background: url(../img/theme/admin/sprite_icons.png) no-repeat;
+}
+.adminContainer td.edit a{
+   background-position: -20px -257px;
+   padding-left: 19px; 
+}
+.adminContainer td.move-up a{
+   background-position: -20px -122px;
+   padding-left: 16px; 
+}
+.adminContainer td.move-down a{
+   background-position: -20px -87px;
+   padding-left: 16px; 
+}
+.adminContainer td.linked a{
+   background-position: -20px -288px;
+   padding-left: 18px;
+}
+.adminContainer .collection_new a.add,
+.adminContainer table a.add{
+   background-position: -17px -16px;
+   /*padding-left: 19px*/;
+   border-radius: 5px;
+   background-color: #595955;
+   color: white;
+   padding: 3px 5px 3px 24px;
+   border: 1px solid #43433f;
+   border-radius: 5px;
+   font: 1em Arial, Helvetica, sans-serif;
+   display: inline-block;
+   margin-left: 1em;
+}
+.adminContainer table a.add:hover{
+   text-decoration: none;
+   -webkit-box-shadow:0 0 15px #a0c3e1; 
+   -moz-box-shadow: 0 0 15px #a0c3e1; 
+   box-shadow:0 0 8px 2px #a0c2dd;
+
+}
+.adminContainer .wrapper table a.add{
+   font-size: 0.857em;
+}
 /* @end */
 .Document-Action{
    float: right;
@@ -298,6 +392,7 @@ li.edit input:hover,
    font: 0.857em Verdana, Arial, Helvetica, sans-serif;
    cursor: pointer; 
 }
+
 .adminContainer .subform .subform .Add-data input{
    /*border-color: #333331;
    background-color: #595A56;*/
@@ -575,9 +670,9 @@ li.edit input:hover,
 }
 /* @end */
 /* @group adminMenuContainer */
-#adminMenuContainer{
+/*#adminMenuContainer{
    padding-top: 1em;
-}
+}*/
 #adminMenuContainer ul{
    margin: 0;
    padding: 0;
@@ -602,13 +697,8 @@ li.edit input:hover,
 #adminMenuContainer ul > li.inactive > strong,
 #adminMenuContainer ul > li > strong{
    background-image: url(../img/theme/admin/ic_inactive-corner_light.png);
-   /*background-color: #6C6C6C;
-   color: #525252;
-   text-shadow: 0 2px 3px #666666;*/
    background-color: #f5f7fa;
    color: #D7DFE7;
-   /*text-shadow: 0 2px 3px #dddddd;*/
-
 }
 #adminMenuContainer ul > li > *{
    display: block;
@@ -931,6 +1021,9 @@ ul.Document-Action{
 #content #actionboxContainer .wrapper{
    font-size: 0.875em;
    clear: both;
+}
+#content.adminContainer > .wrapper{
+   padding-top: 1.3em;
 }
 #content.frontdoor .wrapper{
    clear: both;
