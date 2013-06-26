@@ -57,6 +57,7 @@ class Admin_CollectionrolesController extends Controller_Action {
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $this->view->form = $this->getRoleForm($collectionRoleModel->getObject());
+            $this->setCollectionBreadcrumb('default_collection_role_' . $collectionRoleModel->getObject()->getName());
         }
         catch (Application_Exception $e) {
             return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
@@ -82,6 +83,13 @@ class Admin_CollectionrolesController extends Controller_Action {
         }
         catch (Application_Exception $e) {
             return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
+        }
+    }
+    
+    public function setCollectionBreadcrumb($name) {
+        $page = $this->view->navigation()->findOneBy('label', 'admin_collection_index');
+        if (!is_null($page)) {
+            $page->setLabel($name);
         }
     }
 

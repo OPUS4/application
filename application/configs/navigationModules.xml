@@ -133,6 +133,13 @@
                                     <controller>collectionroles</controller>
                                     <action>new</action>
                                 </newrole>
+                                <editrole>
+                                    <type>mvc</type>
+                                    <label>admin_collections_role_edit</label>
+                                    <module>admin</module>
+                                    <controller>collectionroles</controller>
+                                    <action>edit</action>
+                                </editrole>
                                 <edit>
                                     <type>mvc</type>
                                     <label>admin_collection_edit</label>
