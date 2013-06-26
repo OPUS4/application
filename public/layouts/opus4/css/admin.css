@@ -128,8 +128,10 @@ li.edit input:hover,
    margin: 1.5em 0;
    width: 100%;
 }
-.adminContainer .wrapper table a{
-   /*text-decoration: none;*/
+.adminContainer .wrapper .invisible a,
+.adminContainer .wrapper a.invisible,
+.adminContainer .wrapper td.unhide a{
+   color: #ff6347;
 }
 .adminContainer .wrapper table th,
 .adminContainer .wrapper table td{
@@ -1046,5 +1048,9 @@ ul.Document-Action{
    padding: 6px 10px;
 }
 .adminContainer .breadcrumbsContainer *{
+   color: white;
+}
+.adminContainer .breadcrumbsContainer a{
+   text-decoration: underline;
    color: white;
 }
