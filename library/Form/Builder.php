@@ -76,8 +76,13 @@ class Form_Builder {
         
         // Add submit button to form
         $element = new Form_Element_Submit('submit');
-//        $element->removeDecorator('DtDdWrapper');
         $element->setLabel('transmit');
+        $element->setDecorators(array(
+            'ViewHelper',
+            array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li', 'class' => 'save-element')),
+            array(array('ulWrapper' => 'HtmlTag'), array('tag' => 'ul', 'class' => 'form-action')),
+            array(array('divWrapper' => 'HtmlTag'), array('id' => 'form-action'))
+        ));
         $form->addElement($element);
         return $form;
     }
