@@ -105,7 +105,7 @@ class Admin_PersonController extends Controller_Action {
                         return $this->_redirectToAndExit('edit', null, 'document', 'admin', array('id' => $docId,
                             'continue' => 'addperson', 
                             'person' => $person->getId(), 
-                            'role' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->getValue(),
+                            // 'role' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->getValue(),
                             'contact' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->getValue(),
                             'order' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->getValue()
                             ));
@@ -144,9 +144,9 @@ class Admin_PersonController extends Controller_Action {
             
             $personLink = new Opus_Model_Dependent_Link_DocumentPerson(array($personId, $docId, $role));
             
-            $form->populateFromModel($personLink);
+            $form->populateFromModel($personLink->getModel());
 
-            $form->getSubForm('link')->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->setValue($role);
+            // $form->getSubForm('link')->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->setValue($role);
 
             $this->view->form = $form;
         }
@@ -169,7 +169,7 @@ class Admin_PersonController extends Controller_Action {
                         return $this->_redirectToAndExit('edit', null, 'document', 'admin', array('id' => $docId,
                             'continue' => 'updateperson', 
                             'person' => $person->getId(), 
-                            'role' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->getValue(),
+                            // 'role' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->getValue(),
                             'contact' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->getValue(),
                             'order' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->getValue()
                             ));
@@ -195,10 +195,13 @@ class Admin_PersonController extends Controller_Action {
         
         $linkForm = new Admin_Form_DocumentPerson();
         
+        $linkForm->removeElement(Admin_Form_Person::ELEMENT_PERSON_ID);
         $linkForm->removeElement(Admin_Form_DocumentPerson::ELEMENT_EDIT);
         $linkForm->removeElement(Admin_Form_DocumentPerson::ELEMENT_REMOVE);
         
         $form->addSubForm($linkForm, 'link');
+        
+        // Zend_Debug::dump($linkForm->getElements());
         
         return $form;
     }

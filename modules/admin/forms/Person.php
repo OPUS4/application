@@ -32,100 +32,112 @@
  * @version     $Id$
  */
 
+/**
+ * Formular zum Editieren einer Person (Opus_Person).
+ * 
+ * Dieses Formular beruecksichtigt nicht die Felder, die bei der Verknuepfung einer Person mit einem Dokument in dem
+ * Link Objekt hinzukommen.
+ */
 class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
 
+    /**
+     * Name fuer Formularelement fuer Feld ID von Opus_Person.
+     */
     const ELEMENT_PERSON_ID = 'PersonId';
         
+    /**
+     * Name fuer Formularelement fuer Feld AcademicTitle.
+     */
     const ELEMENT_ACADEMIC_TITLE = 'AcademicTitle';
     
+    /**
+     * Name fuer Formularelement fuer Feld LastName.
+     */
     const ELEMENT_LAST_NAME = 'LastName';
     
+    /**
+     * Name fuer Formularelement fuer Feld FirstName.
+     */
     const ELEMENT_FIRST_NAME = 'FirstName';
     
+    /**
+     * Name fuer Formularelement fuer Feld Email.
+     */
     const ELEMENT_EMAIL = 'Email';
     
+    /**
+     * Name fuer Formularelement fuer Feld PlaceOfBirth.
+     */
     const ELEMENT_PLACE_OF_BIRTH = 'PlaceOfBirth';
     
+    /**
+     * Name fuer Formularelement fuer Feld DateOfBirth.
+     */
     const ELEMENT_DATE_OF_BIRTH = 'DateOfBirth';
         
+    /**
+     * Name fuer Button zum Speichern.
+     */
     const ELEMENT_SAVE = 'Save';
     
+    /**
+     * Name fuer Button zum Abbrechen.
+     */
     const ELEMENT_CANCEL = 'Cancel';
     
+    /**
+     * Konstante fuer POST Ergebnis 'abspeichern'.
+     */
     const RESULT_SAVE = 'save';
     
+    /**
+     * Konstante fuer POST Ergebnis 'abbrechen'.
+     */
     const RESULT_CANCEL = 'cancel';
     
+    /**
+     * Erzeugt die Formularelemente.
+     */
     public function init() {
         parent::init();
         
-        $elementFactory = new Admin_Model_FormElementFactory();
-                
-        // Person-ID
-        $element = new Zend_Form_Element_Hidden(self::ELEMENT_PERSON_ID);
-        $this->addElement($element);
-                                
-        $element = new Zend_Form_Element_Text(self::ELEMENT_ACADEMIC_TITLE);
-        $element->setLabel('AcademicTitle');
-        $this->addElement($element);
+        $this->addElement('hidden', self::ELEMENT_PERSON_ID);
+        $this->addElement('text', self::ELEMENT_ACADEMIC_TITLE, array('label' => 'AcademicTitle'));
+        $this->addElement('text', self::ELEMENT_LAST_NAME, array('label' => 'LastName', 'required' => true));
+        $this->addElement('text', self::ELEMENT_FIRST_NAME, array('label' => 'FirstName'));
+        $this->addElement('text', self::ELEMENT_EMAIL, array('label' => 'Email'));
+        $this->addElement('text', self::ELEMENT_PLACE_OF_BIRTH, array('label' => 'PlaceOfBirth'));
+        $this->addElement('date', self::ELEMENT_DATE_OF_BIRTH, array('label' => 'DateOfBirth'));
         
-        $element = new Zend_Form_Element_Text(self::ELEMENT_LAST_NAME);
-        $element->setLabel('LastName');
-        $element->setRequired(true);
-        $this->addElement($element);
-        
-        $element = new Zend_Form_Element_Text(self::ELEMENT_FIRST_NAME);
-        $element->setLabel('FirstName');
-        $this->addElement($element);
-        
-        $element = new Zend_Form_Element_Text(self::ELEMENT_EMAIL);
-        $element->setLabel('Email');
-        // TODO email validation
-        $this->addElement($element);
-                
-        $element = new Zend_Form_Element_Text(self::ELEMENT_PLACE_OF_BIRTH);
-        $element->setLabel('PlaceOfBirth');
-        $this->addElement($element);
-        
-        $element = $elementFactory->createDateElement(self::ELEMENT_DATE_OF_BIRTH);
-        $this->addElement($element);
-        
-        
-        // Move to parent form SinglePerson
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_SAVE);
-        $this->addElement($element);
-        
-        $element = new Zend_Form_Element_Submit(self::ELEMENT_CANCEL);
-        $this->addElement($element);
+        $actions = new Admin_Form_ActionSubForm();
+        $actions->addElement('submit', self::ELEMENT_SAVE);
+        $actions->addElement('submit', self::ELEMENT_CANCEL);
+        $this->addSubForm($actions, 'actions');
     }
     
     /**
-     * 
-     * @param Opus_Model_Dependent_Link_DocumentPerson $model
-     * 
-     * TODO ELEMENT_ROLE
+     * Setzt die Werte der Formularelmente entsprechend der uebergebenen Opus_Person Instanz.
+     * @param Opus_Person $model
      */
-    public function populateFromModel($personLink) {
-        $this->populateFromPerson($personLink->getModel());
-    }
-    
-    public function populateFromPerson($person) {
+    public function populateFromModel($person) {
+        $datesHelper = $this->getDatesHelper();
+        
         $this->getElement(self::ELEMENT_PERSON_ID)->setValue($person->getId());
         $this->getElement(self::ELEMENT_ACADEMIC_TITLE)->setValue($person->getAcademicTitle());
         $this->getElement(self::ELEMENT_FIRST_NAME)->setValue($person->getFirstName());
         $this->getElement(self::ELEMENT_LAST_NAME)->setValue($person->getLastName());
         $this->getElement(self::ELEMENT_PLACE_OF_BIRTH)->setValue($person->getPlaceOfBirth());
-        $date = $person->getDateOfBirth(); // TODO format date
-        $this->getElement(self::ELEMENT_DATE_OF_BIRTH)->setValue($date);
+        $date = $person->getDateOfBirth();
+        $this->getElement(self::ELEMENT_DATE_OF_BIRTH)->setValue($datesHelper->getDateString($date));
         $this->getElement(self::ELEMENT_EMAIL)->setValue($person->getEmail());
     }
-    
-    public function populateFromPost($post) {
-        $personId = $post[self::ELEMENT_PERSON_ID];
-        $person = new Opus_Person($personId);
-        $this->populateFromPerson($person);
-    }
-    
+        
+    /**
+     * Ermittelt bei einem Post welcher Button geklickt wurde, also welche Aktion gewünscht ist.
+     * @param array $post
+     * @param array $context
+     * @return string String fuer gewuenschte Operation
+     */
     public function processPost($post, $context) {
         if (array_key_exists(self::ELEMENT_SAVE, $post)) {
             return self::RESULT_SAVE;
@@ -135,6 +147,10 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
         }
     }
 
+    /**
+     * Setzt die Felder einer Opus_Person Instanz entsprechend dem Formularinhalt.
+     * @param Opus_Person $model
+     */
     public function updateModel($model) {
         if ($model instanceof Opus_Person) {
             $model->setAcademicTitle($this->getElementValue(self::ELEMENT_ACADEMIC_TITLE));
@@ -142,20 +158,20 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
             $model->setFirstName($this->getElementValue(self::ELEMENT_FIRST_NAME));
             $model->setEmail($this->getElementValue(self::ELEMENT_EMAIL));
             $model->setPlaceOfBirth($this->getElementValue(self::ELEMENT_PLACE_OF_BIRTH));
-            // TODO DateOfBirth
+            $datesHelper = $this->getDatesHelper();
+            $model->setDateOfBirth($datesHelper->getOpusDate($this->getElementValue(self::ELEMENT_DATE_OF_BIRTH)));
         }
-        else if ($model instanceof Opus_Model_Dependent_Link_DocumentPerson) {
-            
+        else {
+            $this->getLog()->err('updateModel called with object that is not instance of Opus_Person');
         }
     }
     
     /**
      * Liefert Instanz von Opus_Person zurueck.
-     * 
-     * @return /Opus_Person
+     * @return \Opus_Person
      */
     public function getModel() {
-       $personId = $this->getElement(self::ELEMENT_PERSON_ID)->getValue();
+       $personId = $this->getElementValue(self::ELEMENT_PERSON_ID);
        
        if (is_numeric($personId)) {
            $person = new Opus_Person($personId);
@@ -165,8 +181,6 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
        }
        
        $this->updateModel($person);
-       
-       Zend_Debug::dump($person);
        
        return $person;
     }
