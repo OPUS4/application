@@ -7,6 +7,15 @@
  
   <body>
 
+    <tu tuid="admin_bibteximport_index">
+      <tuv xml:lang="en">
+        <seg>BibTeX-Import</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>BibTeX-Import</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="bibtex_import_binary_not_installed">
       <tuv xml:lang="en">
         <seg>bib2xml is not installed</seg>
@@ -36,10 +45,10 @@
 
     <tu tuid="bibtex_import_file_not_bibtex">
       <tuv xml:lang="en">
-        <seg>File contains no BibTex</seg>
+        <seg>File contains no BibTeX</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Datei enthält kein BibTex</seg>
+        <seg>Datei enthält kein BibTeX</seg>
       </tuv>
     </tu>
 
@@ -66,7 +75,7 @@
 
     <tu tuid="bibtex_import_bibtex_mods_error">
       <tuv xml:lang="en">
-        <seg>Incorrect record(s) with identifie: %1$s</seg>
+        <seg>Incorrect record(s) with identifier: %1$s</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Fehlerhafte(r) Datensatz/-sätze mit Identifier: %1$s</seg>
@@ -96,19 +105,19 @@
 
     <tu tuid="bibtex_import_success_upload">
       <tuv xml:lang="en">
-        <seg>%1$s record(s) was successfully uploaded</seg>
+        <seg>%1$s record(s) successfully uploaded</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>%1$s Datensatz/-sätze wurde(n) erfolgreich hochgeladen</seg>
+        <seg>%1$s Datensatz/-sätze erfolgreich hochgeladen</seg>
       </tuv>
     </tu>
 
     <tu tuid="bibtex_import_success_import">
       <tuv xml:lang="en">
-        <seg>%1$s record(s) was successfully imported</seg>
+        <seg>%1$s record(s) successfully imported</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>%1$s Datensatz/-sätze wurde(n) erfolgreich importiert</seg>
+        <seg>%1$s Datensatz/-sätze erfolgreich importiert</seg>
       </tuv>
     </tu>
 

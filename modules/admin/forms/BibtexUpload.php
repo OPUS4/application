@@ -40,14 +40,14 @@ class Admin_Form_BibtexUpload extends Zend_Form {
         $this->setMethod('post');
 
         $fileupload = new Zend_Form_Element_File('fileupload');
-        $fileupload->setLabel('File to upload:')
+        $fileupload->setLabel('FileToUpload')
             ->setRequired(true)
             ->addValidator('NotEmpty')
             ->addValidator('Count', false, 1);
         $this->addElement($fileupload);
 
         $this->addElement('submit', 'uploadsubmit', array(
-            'label'    => 'Upload',
+            'label'    => 'Process',
             'ignore'   => true
         ));
     }
