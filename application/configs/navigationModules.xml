@@ -118,7 +118,7 @@
                             <label>admin_collection_index</label>
                             <module>admin</module>
                             <controller>collection</controller>
-                            <action>index</action>
+                            <action>show</action>
                             <pages>
                                 <new>
                                     <type>mvc</type>

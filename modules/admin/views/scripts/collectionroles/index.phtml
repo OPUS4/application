@@ -67,7 +67,7 @@
     <?php else : ?>
         <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'show', 'id' => $collectionRole->getRootCollection()->getId()), null, true)?>" title="<?= $translationInfoText ?>"><?= htmlspecialchars($printname) ?></a>
     <?php endif ?>
-    </td>
+    </th>
     <td class="edit">
         <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'edit', 'roleid' => $collectionRole->getId()), null, true) ?>">
         <?= $this->translate('admin_button_edit') ?>

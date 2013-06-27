@@ -86,7 +86,7 @@ class Admin_CollectionController extends Controller_Action {
     public function editAction() {
         $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('id', ''));
         $this->view->form = $this->getForm($collectionModel->getObject());
-        $this->setCollectionBreadcrumb('default_collection_role_' . $collectionModel->getObject()->getRole()->getName());
+        $this->setCollectionBreadcrumb($collectionModel->getObject()->getRole());
     }
 
     /**
@@ -172,13 +172,14 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->role_id    = $role->getId();
         $this->view->role_name  = $role->getDisplayName();
         
-        $this->setCollectionBreadcrumb('default_collection_role_' . $role->getName());
+        $this->setCollectionBreadcrumb($role);
     }
     
-    public function setCollectionBreadcrumb($name) {
+    public function setCollectionBreadcrumb($role) {
         $page = $this->view->navigation()->findOneBy('label', 'admin_collection_index');
-        if (!is_null($page)) {
-            $page->setLabel($name);
+        if (!is_null($page) && !is_null($role)) {
+            $page->setLabel('default_collection_role_' . $role->getName());
+            $page->setParam('id', $role->getId());
         }
     }
 

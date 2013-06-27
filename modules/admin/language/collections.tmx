@@ -258,10 +258,10 @@
 
         <tu tuid="admin_collections_no_associated">
                         <tuv xml:lang="en">
-                                <seg>No Associated Documents</seg>
+                                <seg>None</seg>
                         </tuv>
                         <tuv xml:lang="de">
-                                <seg>Keine verknüpften Dokumente</seg>
+                                <seg>Keine</seg>
                         </tuv>
         </tu>
 
