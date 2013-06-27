@@ -7,6 +7,22 @@
 .blur{
    color: #666;
 }
+.print-links{
+   display: none;
+}
+.documentOptions{
+   float: left;
+   width: 100%;
+   margin: 1em 0;
+}
+.documentOptions dl.dropdown{
+   width: 30%;
+   margin-right: 3%;
+   float: left;
+}
+.documentOptions .docstateMenu dl.dropdown dd{
+   border-color: #767676;
+}
 .adminContainer .collection_new a.add,
 .adminContainer table a.add,
 .adminContainer td.edit a,
@@ -204,24 +220,21 @@ li.edit input:hover,
    margin-left: 1em;
 }
 .adminContainer .wrapper table td.insert{
-   /*padding: 2px 8px;
-   background-color: #e3ecf5;*/
    display: block;
    position: relative;
    border: none;
    padding: 0;
    height: 0;
+   background: none;
 }
 .adminContainer table .insert a,
 .adminContainer table a.insert{
    background-position: -20px -319px;
-   /*padding: 2px 0 2px 18px;
-   display: inline-block;*/
    position: absolute;
-   left: -20px;
-   top: -9px;
-   padding: 0 0 0 14px;
-   height: 14px;
+   left: -23px;
+   top: -10px;
+   padding: 0 0 0 23px;
+   height: 20px;
    width: 0;
    overflow: hidden;
 }
@@ -452,7 +465,8 @@ li.edit input:hover,
 #actionboxContainer dd,
 .adminContainer form .subform,
 .adminContainer .subform fieldset,
-#actionboxContainer dd{
+#actionboxContainer dd,
+.docstateMenu dd{
    margin: 0;
    padding: 0;
    border: none;
@@ -902,6 +916,7 @@ ul.form-action{
 #actionboxContainer .col-3{
    width: 27%;
 }
+.docstateMenu dl,
 #actionboxContainer .col dl{
    margin: 0;
    padding: 0;
@@ -912,6 +927,7 @@ ul.form-action{
 #actionboxContainer #Document-Goto{
    margin-right: 2.003%;
 }
+.docstateMenu dt,
 #content #actionboxContainer dt{
    font-size: 0.857em;
 }
@@ -920,7 +936,9 @@ ul.form-action{
    border: none;
    font-size: 1.167em;
 }
+.docstateMenu dl.dropdown.dropdown-open dt a,
 #actionboxContainer .dropdown.dropdown-open dt a,
+.no-js .docstateMenu dl.dropdown:hover dt a,
 .no-js #actionboxContainer .dropdown:hover dt a{
    border-radius: 5px 5px 0 0;
 }
@@ -932,9 +950,11 @@ ul.form-action{
    text-decoration: none;
    display: block;
 }
+.docstateMenu dl.dropdown ul a:hover,
 #actionboxContainer .dropdown ul a:hover{
    text-decoration: underline;
 }
+.docstateMenu dl.dropdown dd,
 #actionboxContainer .dropdown dd{
    border-radius: 0 0 5px 5px;
    font-size: 0.857em;
@@ -962,14 +982,18 @@ ul.form-action{
 #Document-Goto dd ul{
    padding: 0.3em 8px 0.8em 15px;
 }
+.docstateMenu dl.dropdown,
 #actionboxContainer #Document-ServerState.dropdown{
    position: relative;
    top: -0.1em;
 }
+.docstateMenu dl.dropdown.dropdown-open,
 #actionboxContainer #Document-ServerState.dropdown.dropdown-open,
+.no-js .docstateMenu dl.dropdown:hover,
 .no-js #actionboxContainer #Document-ServerState.dropdown:hover{
    border: none;
 }
+.docstateMenu dl.dropdown dt a,
 #actionboxContainer #Document-ServerState.dropdown dt a{
    display: block;
    height: 2.7em;
@@ -980,10 +1004,12 @@ ul.form-action{
    z-index: 500; 
    background: url(../img/theme/admin/transparent.png);/* IE Fix */
 }
+.docstateMenu dl.dropdown dt a:after,
 #actionboxContainer #Document-ServerState.dropdown dt a:after {
     right: 5px;
     top: 1.1em;
 }
+.docstateMenu dl.dropdown dd,
 #actionboxContainer #Document-ServerState.dropdown dd{
    display: block;
    width: 100%;
@@ -995,27 +1021,35 @@ ul.form-action{
    border: 1px solid #8c8d8a;
    border-radius: 5px 5px 5px 5px;
 }
+.docstateMenu dl.dropdown ul,
 #Document-ServerState.dropdown ul{
    padding: 1em 5px 0;
 }
+.docstateMenu dl.dropdown li,
 #Document-ServerState.dropdown li{
    display: none;
    font-size: 0.857em;
    padding-left: 5px;
 }
+.docstateMenu dl.dropdown dd a,
 #Document-ServerState.dropdown dd a{
    color: black;
    display: block;
 }
+.docstateMenu dl.dropdown dd a:hover,
 #Document-ServerState.dropdown dd a:hover{
    text-decoration: underline;
    color: #26517a;
 }
+.docstateMenu dl.dropdown.dropdown-open li,
 #Document-ServerState.dropdown.dropdown-open li,
+.no-js .docstateMenu dl.dropdown:hover li,
 .no-js #Document-ServerState.dropdown:hover li{
    display: block;
 }
+.docstateMenu dl.dropdown.dropdown-open dd,
 #actionboxContainer #Document-ServerState.dropdown.dropdown-open dd,
+.no-js .docstateMenu dl.dropdown:hover dd,
 .no-js #actionboxContainer #Document-ServerState.dropdown:hover dd{
    background-color: white;
    border-radius: 5px 5px 5px 5px;
@@ -1023,12 +1057,14 @@ ul.form-action{
    font-weight: normal;
    /*box-shadow: 0 10px 12px 3px rgba(84, 84, 84, 0.45);*/
 }
+.docstateMenu dl.dropdown li.active,
 #Document-ServerState.dropdown li.active{
    display: block;
    font-weight: bold;
    font-size: 1em;
    padding: 1px 12px 3px 0;
 }
+.docstateMenu dl.dropdown.dropdown-open li.active,
 #Document-ServerState.dropdown.dropdown-open li.active{
    padding-bottom: 5px;
    margin-bottom: 5px;

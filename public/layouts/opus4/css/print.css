@@ -14,7 +14,10 @@ a {
    padding-left: 0;
    margin-left: 2em;
 }
-#content a:after{
+.print-links{
+   display: block;
+}
+.print-links a:after{
    content: " (" attr(href) ")";
 }
 html,
