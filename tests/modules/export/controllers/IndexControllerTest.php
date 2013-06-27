@@ -568,21 +568,21 @@ class Export_IndexControllerTest extends ControllerTestCase {
 
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->publist->stylesheet)) {
-            $config->publist->stylesheet = 'example';
+            $config->publist->stylesheet = 'raw';
         }
         else {
             $config = new Zend_Config(array(
-                'publist' => array('stylesheet' =>  'example')), true);
+                'publist' => array('stylesheet' =>  'raw')), true);
             // Include the above made configuration changes in the application configuration.
             $config->merge(Zend_Registry::get('Zend_Config'));
         }
 
         if (isset($config->publist->stylesheetDirectory)) {
-            $config->publist->stylesheetDirectory = 'stylesheets-custom';
+            $config->publist->stylesheetDirectory = 'stylesheets';
         }
         else {
             $config = new Zend_Config(array(
-                'publist' => array('stylesheetDirectory' =>  'stylesheets-custom')), true);
+                'publist' => array('stylesheetDirectory' =>  'stylesheets')), true);
             // Include the above made configuration changes in the application configuration.
             $config->merge(Zend_Registry::get('Zend_Config'));
         }
@@ -594,7 +594,8 @@ class Export_IndexControllerTest extends ControllerTestCase {
         Zend_Registry::set('Zend_Config', $oldConfig);
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertContains('<export-example>', $response->getBody());
+        $this->assertContains('<export timestamp=', $response->getBody());
+        $this->assertContains('</export>', $response->getBody());
     }
 
 
