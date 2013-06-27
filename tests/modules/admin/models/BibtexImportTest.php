@@ -45,6 +45,9 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     private $filename;
 
+    private $numDocuments;
+
+
     public function setUp() {
         parent::setUp();
         $this->bibdir = dirname(dirname(dirname(dirname(__FILE__)))) . '/import/bibtex/';
@@ -67,23 +70,19 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     private function __import() {
         $bibtexImporter = new Admin_Model_BibtexImport($this->bibdir . $this->filename);
-        $numOpusDocuments = $bibtexImporter->convertBibtexToOpusxml();
-        $xml = $bibtexImporter->getXml();
-
-        $metadataImporter = new Opus_Util_MetadataImport($xml);
-        $metadataImporter->run();
+        $bibtexImporter->import();
+        $this->numDocuments = $bibtexImporter->getNumDocuments();
 
         $ids = Opus_Document::getAllIds();
 
-        if($numOpusDocuments === 2) {
+        if($this->numDocuments  === 2) {
             $last_id = array_pop($ids);
             $this->doc2 = new Opus_Document($last_id);
         }
 
         $last_id = array_pop($ids);
         $this->doc = new Opus_Document($last_id);
- 
-        return $numOpusDocuments;
+
     }
 
 
@@ -135,14 +134,21 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->__import();
     }
 
+    public function testInvalidXmlExceptionTwoDocuments() {
+        $this->filename = 'articlesWithTwoErrors.bib';
+        $ids = 'article_ID_3, article_ID_5';
+        $this->setExpectedException('Admin_Model_BibtexImportException', $ids, Admin_Model_BibtexImportException::INVALID_XML_ERROR);
+        $this->__import();
+    }
+
 
     /* Mapping Tests */
 
     public function testImportArticle() {
         $this->filename = 'article.bib';
-        $number = $this->__import();
+        $this->__import();
         
-        $this->assertEquals('1', $number);
+        $this->assertEquals('1', $this->numDocuments);
         $this->assertEquals('unpublished', $this->doc->getServerState());
         $this->assertEquals('article', $this->doc->getType());
         $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
@@ -165,8 +171,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportArticleTwoDocuments() {
         $this->filename = 'articleTwoDocuments.bib';
-        $number = $this->__import();
-        $this->assertEquals('2', $number);
+        $this->__import();
+        $this->assertEquals('2', $this->numDocuments);
 
         $this->assertEquals('article', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -229,8 +235,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportArticleAuthorAbbrev() {
         $this->filename = 'articleAuthorAbbrev.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('article', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -252,8 +258,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportArticleAuthorCommaSeparated() {
         $this->filename = 'articleAuthorCommaSeparated.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('article', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -274,8 +280,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportArticleManyAuthors() {
         $this->filename = 'articleManyAuthors.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('article', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -297,8 +303,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportBook() {
         $this->filename = 'book.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('book', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -323,8 +329,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportBooklet() {
         $this->filename = 'booklet.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('book', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -343,8 +349,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportInbook() {
         $this->filename = 'inbook.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('bookpart', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -369,8 +375,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportIncollection() {
         $this->filename = 'incollection.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('bookpart', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -396,8 +402,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportInproceedings() {
         $this->filename = 'inproceedings.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('conferenceobject', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -424,8 +430,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportManual() {
         $this->filename = 'manual.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('other', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -447,8 +453,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportMastersthesis() {
         $this->filename = 'mastersthesis.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('masterthesis', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -469,8 +475,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportMisc() {
         $this->filename = 'misc.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('other', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -489,8 +495,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportPhdthesis() {
         $this->filename = 'phdthesis.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('doctoralthesis', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -511,8 +517,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportProceedings() {
         $this->filename = 'proceedings.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('conferenceobject', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -535,8 +541,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportTechreport() {
         $this->filename = 'techreport.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('report', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
@@ -557,8 +563,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function testImportUnpublished() {
         $this->filename = 'unpublished.bib';
-        $number = $this->__import();
-        $this->assertEquals('1', $number);
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
 
         $this->assertEquals('other', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());

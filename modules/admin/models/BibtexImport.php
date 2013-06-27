@@ -70,6 +70,20 @@ class Admin_Model_BibtexImport {
      */
     private $xml;
 
+    /**
+     *
+     * @var int
+     */
+    private $numDocuments;
+
+     /**
+     * OpusXml-Array
+     *
+     * @var Array
+     */
+    private $documents;
+
+
     public function __construct($filename = null) {
         $this->log = Zend_Registry::get('Zend_Log');
         $this->binary = "bib2xml";
@@ -93,10 +107,24 @@ class Admin_Model_BibtexImport {
 
         $this->xsl = dirname(dirname(__FILE__)) . '/views/scripts/bibteximport/mods-import.xsl';
         $this->xml = new DOMDocument();
+
+        $this->numDocuments = 0;
+        $this->documents = array();
     }
 
 
-    public function convertBibtexToOpusxml() {
+    public function import() {
+        $this->__convertBibtexToOpusxml();
+        $this->__createMetadataImportJobs();
+    }
+
+    
+    public function getNumDocuments() {
+        return $this->numDocuments;
+    }
+    
+
+    private function __convertBibtexToOpusxml() {
 	$bibtexRecords = array();
 	$bibtexRecords = $this->__getBibTexRecords();
 	$numBibtexRecords = count($bibtexRecords);
@@ -179,6 +207,8 @@ class Admin_Model_BibtexImport {
             } catch(Opus_Util_MetadataImportInvalidXmlException $e) {
                 array_push($invalidIds, $id);
             }
+
+            array_push($this->documents, $doc);
         }
 
         if (count($invalidIds) > 0) {
@@ -186,12 +216,7 @@ class Admin_Model_BibtexImport {
             throw new Admin_Model_BibtexImportException($message, Admin_Model_BibtexImportException::INVALID_XML_ERROR);
         }
    
-        return $numOpusDocuments;
-    }
-
-
-    public function getXml() {
-        return $this->xml;
+        $this->numDocuments = $numOpusDocuments;
     }
 
 
@@ -270,5 +295,35 @@ class Admin_Model_BibtexImport {
         $record = "@" . array_pop($hits);
 	
         return $record;
+    }
+
+    
+
+    private function __createMetadataImportJobs() {
+        $config = Zend_Registry::get('Zend_Config');
+
+        foreach ($this->documents as $doc) {
+
+            $job = new Opus_Job();
+            $job->setLabel(Opus_Job_Worker_MetadataImport::LABEL);
+            $job->setData(array( 'xml' =>  $doc->saveXML()));
+
+            if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
+                // Queue job (execute asynchronously)
+                // skip creating job if equal job already exists
+                if (true === $job->isUniqueInQueue()) {
+                    $job->store();
+                }
+            }
+
+            // Execute job immediately (synchronously)
+            try {
+                $import = new Opus_Job_Worker_MetadataImport($this->log);
+                $import->work($job);
+            } catch(Exception $exc) {
+                $this->log->err($exc);
+            }
+        }
+
     }
 }

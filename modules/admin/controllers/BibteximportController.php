@@ -86,57 +86,22 @@ class Admin_BibteximportController extends Controller_Action {
 
         $location = $uploadForm->fileupload->getFileName();
 
-      
-        $import = null;
-        $numberOfOpusDocuments = 0;
-
         try {
             $import = new Admin_Model_BibtexImport($location);
-            $numberOfOpusDocuments = $import->convertBibtexToOpusxml();
+            $import->import();
         } catch (Admin_Model_BibtexImportException $e) {
             $message = $this->view->translate($e->mapTranslationKey($e->getCode()), $e->getMessage());
             $this->_redirectTo('index', array('failure' => $message));
         }
 
-	foreach ($import->getXml()->getElementsByTagName('opusDocument') as $doc) {
-            $dom = new DomDocument;
-            $el = new DOMElement('import');
-            $dom->appendChild($el);
-            $el->appendChild($dom->importNode($doc, true));
-            $this->__createMetadataImportJob($dom->saveXML());
-	}
-
-        $message = $this->view->translate('bibtex_import_success', $numberOfOpusDocuments);
-        $this->_redirectTo('index', array('success' => $message));
-    }
-
-
-    private function __createMetadataImportJob($xml) {
         $config = Zend_Registry::get('Zend_Config');
-
-        $job = new Opus_Job();
-        $job->setLabel(Opus_Job_Worker_MetadataImport::LABEL);
-        $job->setData(array( 'xml' =>  $xml));
-
         if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
-            // Queue job (execute asynchronously)
-            // skip creating job if equal job already exists
-            if (true === $job->isUniqueInQueue()) {
-                $job->store();
-            }
-            return true;
-        }
- 
-        // Execute job immediately (synchronously)
-        try {
-            $import = new Opus_Job_Worker_MetadataImport($this->_logger);
-            $import->work($job);
-        } catch(Exception $exc) {
-            $this->_logger->err($exc);
-            return false;
+            $message = $this->view->translate('bibtex_import_success_upload', $import->getNumDocuments());
+        } else {
+            $message = $this->view->translate('bibtex_import_success_import', $import->getNumDocuments());
         }
 
-        return true;
+        $this->_redirectTo('index', array('success' => $message));
     }
 
 }
