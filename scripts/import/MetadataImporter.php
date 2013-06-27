@@ -64,13 +64,7 @@ class MetadataImporter {
         $xmlFile = $options[1];
 
         $importer = new Opus_Util_MetadataImport($xmlFile, true, $this->console, $this->logfile);
-        try {
-            $importer->run();
-        } catch (Opus_Util_MetadataImportInvalidXmlException $e) {
-            //
-        } catch (Opus_Util_MetadataImportSkippedDocumentsException $e) {
-            //
-        }
+        $importer->run();
      }
 }
 
