@@ -53,27 +53,48 @@
         <?= $this->translate('Opus_Series') ?>: <b><?=htmlspecialchars($this->series->getTitle())?></b>
     <?PHP else : ?>
     <div class="docstateMenu">
-        <span><?= $this->translate('admin_documents_show_docs') ?></span>
-        <?php foreach ($this->registers as $state => $link) : ?>
-        <span class="<?= ($this->state === $state) ? 'active' : '' ?>">
-            <a href="<?= $link ?>"><?= $this->translate('admin_documents_state_' . $state) ?></a>
-        </span>
-        <?php endforeach; ?>
+        <dl class="dropdown">
+            <dt><a><?= $this->translate('admin_documents_show_docs') ?></a></dt>
+            <dd>
+                <ul>
+                    <li class="active"><?= $this->translate('admin_documents_state_' . $this->state) ?></li>    
+                    <?PHP foreach ($this->registers as $state => $link) : ?>
+                        <?PHP if ($this->state !== $state) : ?>
+                            <li><a href="<?= $link ?>"><?= $this->translate('admin_documents_state_' . $state) ?></a></li>
+                        <?PHP endif; ?>
+                    <?PHP endforeach; ?>
+                </ul>
+            </dd>
+        </dl>
     </div>
 
     <div class="docstateMenu">
-        <span><?= $this->translate('docs_sortorder') ?></span>
-        <?PHP foreach ($this->sortingLinks as $key => $link) : ?>
-        <span class="<?= ($this->sort_order === $key) ? 'active' : '' ?>">
-            <a href="<?= $link ?>"><?= $this->translate('admin_documents_sortby_' . $key) ?></a>
-        </span>
-        <?PHP endforeach; ?>
-        <span>-</span>
-        <?PHP foreach ($this->directionLinks as $key => $link) : ?>
-        <span class="<?= ($key === $this->sortDirection) ? 'active' : '' ?>">
-            <a href="<?= $link ?>"><?= $this->translate('admin_documents_sort_' . $key) ?></a>
-        </span>
-        <?PHP endforeach; ?>
+        <dl class="dropdown">
+            <dt><a><?= $this->translate('docs_sortorder') ?></a></dt>
+            <dd>
+                <ul>
+                    <li class="active"><?= $this->translate('admin_documents_sortby_' . $this->sort_order) ?></li>    
+                    <?PHP foreach ($this->sortingLinks as $key => $link) : ?>
+                    <?PHP if ($this->sort_order !== $key) : ?>
+                        <li><a href="<?= $link ?>"><?= $this->translate('admin_documents_sortby_' . $key) ?></a></li>
+                    <?PHP endif; ?>
+                    <?PHP endforeach; ?>
+                </ul>
+            </dd>
+        </dl>
+        <dl class="dropdown">
+            <dt><a><?= $this->translate('docs_sortorder') ?></a></dt>
+            <dd>
+                <ul>
+                    <li class="active"><?= $this->translate('admin_documents_sort_' . $this->sortDirection) ?></a></li>
+                    <?PHP foreach ($this->directionLinks as $key => $link) : ?>
+                        <?PHP if ($key !== $this->sortDirection) : ?>
+                    <li><a href="<?= $link ?>"><?= $this->translate('admin_documents_sort_' . $key) ?></a></li>
+                        <?PHP endif; ?>
+                    <?PHP endforeach; ?>
+                </ul>
+            </dd>
+        </dl>
     </div>
     <?PHP endif; ?>
 </div>
