@@ -1,4 +1,5 @@
 /*@import url(admin-opus.css);*/
+@import url(print.css) print;
 /**
  * utf-8 encoded!
  */
@@ -37,6 +38,10 @@
 .dropdown dt a{
    cursor: pointer;
    display: block;
+   text-decoration: none;
+}
+.dropdown dt a:hover{
+   text-decoration: none;
 }
 dl.dropdown.dropdown-open > dd,
 .no-js dl.dropdown:hover > dd{
@@ -199,14 +204,26 @@ li.edit input:hover,
    margin-left: 1em;
 }
 .adminContainer .wrapper table td.insert{
-   padding: 2px 8px;
-   background-color: #e3ecf5;
+   /*padding: 2px 8px;
+   background-color: #e3ecf5;*/
+   display: block;
+   position: relative;
+   border: none;
+   padding: 0;
+   height: 0;
 }
 .adminContainer table .insert a,
 .adminContainer table a.insert{
    background-position: -20px -319px;
-   padding: 2px 0 2px 18px;
-   display: inline-block;
+   /*padding: 2px 0 2px 18px;
+   display: inline-block;*/
+   position: absolute;
+   left: -20px;
+   top: -9px;
+   padding: 0 0 0 14px;
+   height: 14px;
+   width: 0;
+   overflow: hidden;
 }
 .adminContainer table a.add:hover{
    text-decoration: none;
@@ -219,28 +236,31 @@ li.edit input:hover,
    font-size: 0.8em;
 }
 /* @end */
-.Document-Action{
+.form-action{
    float: right;
 }
-.Document-Action li{
+.form-action li{
    float: left;
    margin-left: 1em;
    padding: 6px 0;
 }
-.Document-Action li:first-child{
+.form-action li:first-child{
    margin-left: 0;
 }
-.Document-Action li a{
+.form-action li a{
    text-decoration: none;
    font-weight: bold;
    font-size: 0.857em;
 }
-.Document-Action li a:hover{
+.form-action li a:hover{
    text-decoration: underline;
    color: #26517a;
 }
-.Document-Action li.save-element{
+.form-action li.save-element{
    padding: 0;
+}
+.adminContainer label{
+   padding-right: 0.8em;
 }
 /* @group Form content */
 .adminContainer .required{
@@ -248,9 +268,6 @@ li.edit input:hover,
    font-weight: bold;
    color: inherit;
 }
-/*.adminContainer .required:after{
-   content: "*";
-}*/
 .adminContainer .field i.placeholder,
 .adminContainer .field .datahint,
 .adminContainer .field .errors,
@@ -419,14 +436,16 @@ li.edit input:hover,
    cursor: pointer; 
 }
 .adminContainer h2{
-     background-color: transparent;
+    background-color: transparent;
     color: black;
     font-size: 1.286em;
     font-weight: normal;
-    padding: 0;
+    padding: 0 0 1em;
 }
 .adminContainer #docinfo h2 {
     margin: 0 0 0.3em;
+    padding: 0;
+    border: none;
 }
 .adminContainer form dd,
 .adminContainer dd fieldset,
@@ -471,11 +490,20 @@ li.edit input:hover,
     width: 0;
 }
 .adminContainer form .wrapper .subform .subform fieldset,
-.adminContainer #subform-Actions{
+.adminContainer #subform-Actions,
+.adminContainer .submit-data,
+.adminContainer #form-action{
    border-top: 10px solid #BDBEBB;
 }
-.adminContainer #subform-Actions{
+.adminContainer #subform-Actions,
+.adminContainer .submit-data,
+.adminContainer #form-action{
    padding: 1.3em 0;
+   margin-top: 1.3em;
+}
+.adminContainer #form-action{
+   float: left;
+   width: 100%;
 }
 .adminContainer form .subform .subform fieldset > legend{
    /*padding: 0 1% 0.4% 0;*/
@@ -507,7 +535,7 @@ li.edit input:hover,
    padding: 1.15em 0;
 }*/
 .adminContainer fieldset > dl > dt,
-.adminContainer fieldset .data-wrapper > div.label{
+.adminContainer .data-wrapper > div.label{
    float: left;
    clear: left;
    width: 32.7083%;
@@ -813,7 +841,7 @@ li.edit input:hover,
 }
 .dropdown ul,
 #actionboxContainer ul,
-ul.Document-Action{
+ul.form-action{
    margin: 0;
    padding: 0;
    list-style: none;
