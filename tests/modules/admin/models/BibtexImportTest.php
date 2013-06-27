@@ -64,6 +64,12 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         if (!is_null($this->doc2)) {
             $this->doc2->deletePermanent();
         }
+        
+        $jobs = Opus_Job::getAll();
+        foreach ($jobs as $job) { 
+            $job->delete();
+        }
+
         parent::tearDown();
     }
 
@@ -139,6 +145,36 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $ids = 'article_ID_3, article_ID_5';
         $this->setExpectedException('Admin_Model_BibtexImportException', $ids, Admin_Model_BibtexImportException::INVALID_XML_ERROR);
         $this->__import();
+    }
+
+    /* 
+     * OPUSVIER 2896
+     */
+
+    public function testJobCreatedWhenAsynchronous() {
+        // manipulate application configuration
+        $oldConfig = Zend_Registry::get('Zend_Config');
+
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config->runjobs->asynchronous)) {
+            $config->runjobs->asynchronous = 1;
+        }
+        else {
+            $config = new Zend_Config(array(
+                'runjobs' => array('asynchronous' =>  1)), true);
+            // Include the above made configuration changes in the application configuration.
+            $config->merge(Zend_Registry::get('Zend_Config'));
+        }
+        Zend_Registry::set('Zend_Config', $config);
+
+        $this->filename = 'article.bib';
+        $bibtexImporter = new Admin_Model_BibtexImport($this->bibdir . $this->filename);
+        $bibtexImporter->import();
+        $jobs = Opus_Job::getByLabels(array(Opus_Job_Worker_MetadataImport::LABEL), null, Opus_Job::STATE_UNDEFINED);
+
+        // undo configuration manipulation
+        Zend_Registry::set('Zend_Config', $oldConfig);
+        $this->assertEquals(1, count($jobs), 'Expected on job in queue');
     }
 
 
