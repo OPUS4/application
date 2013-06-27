@@ -60,10 +60,10 @@ class MetadataImporter {
             $logfilePath = $options[2];
         }
         $this->logfile = Log::factory('file', $logfilePath, '', $logfileConf, PEAR_LOG_INFO);
+        
+        $xmlFile = $options[1];
 
-        $xml = $this->loadAndValidateInputFile($options[1]);
-
-        $importer = new Opus_Util_MetadataImport($xml, $this->console, $this->logfile);
+        $importer = new Opus_Util_MetadataImport($xmlFile, true, $this->console, $this->logfile);
         try {
             $importer->run();
         } catch (Opus_Util_MetadataImportInvalidXmlException $e) {
@@ -72,31 +72,6 @@ class MetadataImporter {
             //
         }
      }
-
-  
-    /**
-     * Load and validate XML document
-     *
-     * @param string $filename
-     * @return DOMDocument
-     */
-    private function loadAndValidateInputFile($filename) {
-        $this->console->log("Loading XML file '$filename' ...");
-        
-        if (!is_readable($filename)) {
-            $this->console->log("XML file $filename does not exist or is not readable.");
-            exit();
-        }
-
-        $xml = new DOMDocument();
-        if (true !== $xml->load($filename)) {
-            $this->console->log("... ERROR: Cannot load XML document $filename: make sure it is well-formed.");
-            exit();
-        }
-        $this->console->log('... OK');
-
-        return $xml;
-    }
 }
 
 try {
