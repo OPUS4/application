@@ -36,10 +36,10 @@
 -->
 
 <xsl:stylesheet version="1.0"
-    xmlns="http://www.w3.org/1999/xhtml"
     xmlns:php="http://php.net/xsl"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    exclude-result-prefixes="php xsl xsi">
 
     <xsl:output method="xml" indent="yes" omit-xml-declaration="yes" />
 

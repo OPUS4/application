@@ -652,6 +652,20 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertRegexp('/<a href="http:\/\/.*\/frontdoor\/index\/index\/docId\/113">/', $response->getBody());
     }
 
+    /*
+     * OPUSVIER: 2892
+     */
+    public function testNoNamespaceDefinitonsInDefaultLayout() {
+        $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $response = $this->getResponse();
+        $this->assertNotContains(' xmlns=', $response->getBody());
+        $this->assertNotContains(' xmlns:php=', $response->getBody());
+        $this->assertNotContains(' xmlns:xsi=', $response->getBody());
+        $this->assertNotContains(' xmlns:xsl=', $response->getBody());
+    }
+
+
 
 }
 
