@@ -136,7 +136,7 @@
     
     <!-- Enrichment fields NeuesFeld and NeuesSelect can be used after they 
         were created in administration -> Enrichments.
-        Do not forget to update template /modules/publish/views/scripts/form/all.phtml with 
+        Do not forget to update template $BASEDIR/opus4/application/configs/doctypes_templates/all.phtml with
         <?= $this->group($this->groupNeuesFeld); ?> and <?= $this->group($this->groupNeuesSelect); ?>
         
     <field name="NeuesFeld" required="no" formelement="Text" datatype="Enrichment" multiplicity="*"/>      
