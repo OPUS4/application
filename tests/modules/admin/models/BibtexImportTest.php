@@ -34,8 +34,6 @@
 
 
 class Admin_Model_BibtexImportTest extends ControllerTestCase {
-
-    private $log;
     
     private $bibdir;
 
