@@ -131,6 +131,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
 
     /**
      * Returns name of PHML template file for document type.
+     * This method does NOT check if the corresponding PHTML file exist or is readable.
      *
      * @param string $documentType
      * @return
