@@ -130,7 +130,7 @@ class Publish_FormController extends Controller_Action {
 
         $this->showTemplate($publishForm);
 
-        return $this->renderDocumenttypeForm();
+        $this->renderDocumenttypeForm();
     }
 
     private function createPublishingSecondForm($postData = null) {
