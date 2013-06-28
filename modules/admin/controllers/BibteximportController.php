@@ -45,7 +45,7 @@ class Admin_BibteximportController extends Controller_Action {
 
     public function uploadAction() {
         if (!$this->getRequest()->isPost()) {
-            $this->_redirectTo('index');
+            return $this->_redirectTo('index');
         }
 
         $postData = $this->getRequest()->getPost();
@@ -60,7 +60,7 @@ class Admin_BibteximportController extends Controller_Action {
  
             $message = $this->view->translate('admin_filemanager_error_upload', '>' . $maxSize);
 
-            $this->_redirectTo('index', array('failure' => $message));
+            return $this->_redirectTo('index', array('failure' => $message));
         }
 
         if (!$uploadForm->isValid($postData)) {
@@ -71,7 +71,7 @@ class Admin_BibteximportController extends Controller_Action {
                 /* Fehler: Keine Datei ausgewählt */
                 $message = $this->view->translate('admin_filemanager_error_nofile');
             }
-            $this->_redirectTo('index', array('failure' => $message));
+            return $this->_redirectTo('index', array('failure' => $message));
         }
         
 
@@ -79,17 +79,16 @@ class Admin_BibteximportController extends Controller_Action {
             $uploadForm->fileupload->receive();
         } catch (Opus_Model_Exception $e) {
             $message = $this->view->translate('admin_filemanager_error_upload');
-            $this->_redirectTo('index', array('failure' => $message));
+            return $this->_redirectTo('index', array('failure' => $message));
         }
 
         $location = $uploadForm->fileupload->getFileName();
-
         try {
             $import = new Admin_Model_BibtexImport($location);
             $import->import();
         } catch (Admin_Model_BibtexImportException $e) {
             $message = $this->view->translate($e->mapTranslationKey($e->getCode()), $e->getMessage());
-            $this->_redirectTo('index', array('failure' => $message));
+            return $this->_redirectTo('index', array('failure' => $message));
         }
 
         $config = Zend_Registry::get('Zend_Config');
