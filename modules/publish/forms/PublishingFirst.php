@@ -116,10 +116,8 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      * @return <Zend_Element> 
      */
     private function _createDocumentTypeField() {
-        $documentTypes = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-
         $optionsSorted = array();
-        foreach ($documentTypes->getDocumentTypes() as $value) {
+        foreach ($this->documentTypesHelper->getDocumentTypes() as $value) {
             $optionsSorted[$value] = $this->view->translate($value);
         }        
         asort($optionsSorted);

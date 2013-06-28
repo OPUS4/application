@@ -95,7 +95,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $dom = null;
         try {
             // Fetch the current XML DOM structure of the documenttype.
-            $dom = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes')->getDocument($this->doctype);
+            $dom = $this->documentTypesHelper->getDocument($this->doctype);
         }
         catch (Application_Exception $e) {
             $this->log->err("Unable to load document type '" . $this->doctype . "'");

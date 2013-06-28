@@ -36,11 +36,13 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
 
     protected $config;
     protected $session;
+    protected $documentTypesHelper;
     public $view;
 
     public function __construct() {
         $this->session = new Zend_Session_Namespace('Publish');
         $this->config = Zend_Registry::get('Zend_Config');
+        $this->documentTypesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
         $this->view = $this->getView();
         parent::__construct();        
     }
