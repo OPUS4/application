@@ -515,8 +515,8 @@
                         <xsl:text>/files/</xsl:text>
                         <xsl:value-of select="../@Id" />
                         <xsl:text>/</xsl:text>
-                        <xsl:value-of select="@PathName" />
-                    </xsl:attribute>
+                        <xsl:value-of select="php:function('urlencode',string(@PathName))"/>
+                     </xsl:attribute>
                     <xsl:element name="b">
                         <xsl:text>PDF</xsl:text>
                     </xsl:element>
