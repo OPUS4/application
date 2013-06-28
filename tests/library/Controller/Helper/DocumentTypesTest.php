@@ -63,12 +63,14 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         $this->assertNotNull($documentTypes);
-        $this->assertEquals(5, count($documentTypes));
+        $this->assertEquals(7, count($documentTypes));
         $this->assertArrayHasKey('all', $documentTypes);
         $this->assertArrayHasKey('preprint', $documentTypes);
         $this->assertArrayHasKey('demo_invalid', $documentTypes);
         $this->assertArrayHasKey('demo', $documentTypes);
         $this->assertArrayHasKey('foobar', $documentTypes);
+        $this->assertArrayHasKey('barbaz', $documentTypes);
+        $this->assertArrayHasKey('bazbar', $documentTypes);
         $this->assertArrayNotHasKey('article', $documentTypes);
     }
 
@@ -184,14 +186,14 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
      * Check if all document types can be translated.
      */
     public function testTranslationOfDocumentTypes() {
+        $excludeFromTranslationCheck = array('demo_invalid', 'foobar', 'barbaz', 'bazbar');
         $translate = Zend_Registry::get('Zend_Translate');
 
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         foreach ($documentTypes as $docType) {
-            if ($docType !== 'demo_invalid' && $docType !== 'foobar') {
-                $this->assertNotEquals($docType, $translate->translate($docType),
-                        'Could not translate document type: ' . $docType);
+            if (!in_array($docType, $excludeFromTranslationCheck)) {
+                $this->assertNotEquals($docType, $translate->translate($docType), 'Could not translate document type: ' . $docType);
             }
         }
     }

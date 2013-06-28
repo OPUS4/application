@@ -562,16 +562,20 @@ class Publish_FormController extends Controller_Action {
             throw new Application_Exception('invalid configuration: publish.path.documenttemplates does not refer to a directory');
         }
 
-        // TODO Security!!! Inhalt von $this->session->documentType kommt aus dem POST
-        $templateFileName = $path . DIRECTORY_SEPARATOR . $this->session->documentType . '.phtml';
+        $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+        $templateName = $docTypeHelper->getTemplateName($this->session->documentType);
+        
+        if (is_null($templateName)) {
+            throw new Application_Exception('invalid configuration: could not get template name for requested document type');
+        }
+
+        $templateFileName = $path . DIRECTORY_SEPARATOR . $templateName . '.phtml';
         if (!is_readable($templateFileName)) {
-            throw new Application_Exception('invalid configuration: template for document type ' . $this->session->documentType . ' is not readable');
+            throw new Application_Exception('invalid configuration: template file ' . $templateName . '.phtml is not readable or does not exist');
         }
 
         $this->view->setScriptPath($path);
-        // TODO getTemplateName in Controller_Helper_DocumentTypes auswerten?
-        // ein PHTML kann so von mehreren XMLs verwendet werdens
-        $this->renderScript($this->session->documentType . '.phtml');
+        $this->renderScript($templateName . '.phtml');
     }
 
 }

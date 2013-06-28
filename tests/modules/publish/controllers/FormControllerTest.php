@@ -1011,5 +1011,64 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertNotContains('Undefined index: TitleAdditionalLanguage_1', $this->getResponse()->getBody());
     }
 
+    public function testBarfooTemplateIsRenderedForDoctypeFoobar() {
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'foobar';
+        $doc = $this->createTemporaryDoc();
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request->setMethod('POST');
+        $this->request->setPost(array('browseUpInstitute' => 'ignore'));
+
+        $this->dispatch('/publish/form/check');
+        $this->deleteTemporaryDoc($doc);
+
+        $respBody = $this->getResponse()->getBody();        
+        $this->assertContains("<label for='Language'>", $respBody);
+        $this->assertContains('>foobar</h3>', $respBody);
+    }
+
+    public function testApplicationErrorForDoctypeBarbaz() {
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'barbaz';
+        $doc = $this->createTemporaryDoc();
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request->setMethod('POST');
+
+        try {
+            $this->dispatch('/publish/form/check');
+        }
+        catch (Exception $e) {
+            $this->deleteTemporaryDoc($doc);
+            $this->assertTrue($e instanceof Application_Exception);
+            $this->assertEquals('invalid configuration: template file barbaz.phtml is not readable', $e->getMessage());
+        }        
+    }
+
+    public function testApplicationErrorForDoctypeBazbar() {
+        $session = new Zend_Session_Namespace('Publish');
+        $session->documentType = 'bazbar';
+        $doc = $this->createTemporaryDoc();
+        $session->documentId = $doc->getId();
+        $session->fulltext = '0';
+        $session->additionalFields = array();
+
+        $this->request->setMethod('POST');
+
+        try {
+            $this->dispatch('/publish/form/check');
+        }
+        catch (Exception $e) {
+            $this->deleteTemporaryDoc($doc);
+            $this->assertTrue($e instanceof Application_Exception);
+            $this->assertEquals('invalid configuration: template file barbaz.phtml is not readable', $e->getMessage());
+        }
+    }
+
 }
 

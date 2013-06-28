@@ -130,7 +130,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
     }
 
     /**
-     * Returns name of template for document type.
+     * Returns name of PHML template file for document type.
      *
      * @param string $documentType
      * @return
