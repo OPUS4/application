@@ -85,3 +85,25 @@ table.frontdoordata td,
 .frontdoordata caption {
     padding-left: 0;
 }
+.adminContainer form .wrapper > .subform > fieldset > legend:after {
+    display: none;
+}
+.adminContainer form .wrapper > .subform > fieldset > legend {
+    background-color: white;
+    border-radius: 0;
+    color: Black;
+    display: block;
+    margin: 0 0 1.3em;
+    padding: 3pt 1.2%;
+    position: relative;
+    width: 97.6%;
+    border: 1px solid black;
+}
+.adminContainer .subform legend {
+    color: #595955;
+    font: italic bold 1.143em Georgia,"Times New Roman",Times,serif;
+    text-transform: none;
+}
+.adminContainer form .wrapper .subform .subform fieldset{
+    border-top: 2px solid black !important;
+}

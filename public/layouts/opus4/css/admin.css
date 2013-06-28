@@ -3,6 +3,64 @@
 /**
  * utf-8 encoded!
  */
+/* @group ID-specific form styles */
+/* 2-column layout, label aligned */
+#fieldset-Titles .data-wrapper.Language-data,
+#fieldset-Enrichments .data-wrapper.KeyName-data,
+#fieldset-Identifiers .data-wrapper.Type-data,
+#fieldset-Abstracts .data-wrapper.Language-data,
+#fieldset-Swd .data-wrapper.Value-data,
+#fieldset-Notes .data-wrapper.Visibility-data{
+   float: left;
+   width: 38.4803%;
+}
+/* 2-column layout, field aligned */
+#fieldset-Enrichments .data-wrapper.Value-data,
+#fieldset-Identifiers .data-wrapper.Value-data,
+#fieldset-Titles .data-wrapper.Value-data,
+#fieldset-Abstracts .data-wrapper.Value-data,
+#fieldset-Swd .data-wrapper.ExternalKey-data,
+#fieldset-Notes .data-wrapper.Message-data{
+   float: left;
+   width: 61%;
+}
+#fieldset-Abstracts .data-wrapper.Value-data .label,
+#fieldset-Swd .data-wrapper.Value-data .label,
+#fieldset-Swd .data-wrapper.ExternalKey-data .label,
+#fieldset-Psyndex .data-wrapper > .label,
+#fieldset-Uncontrolled .data-wrapper > .label,
+#fieldset-Psyndex .data-wrapper > .field,
+#fieldset-Uncontrolled .data-wrapper > .field,
+#fieldset-Notes .data-wrapper.Visibility-data .label{
+   width: auto;
+}
+#fieldset-Titles .data-wrapper.Value-data textarea,
+#fieldset-Abstracts .data-wrapper.Value-data textarea,
+#fieldset-Identifiers .data-wrapper.Value-data input,
+#fieldset-Notes .data-wrapper.Message-data textarea{
+   max-width: 100%;
+}
+/* 3-column layout */
+#fieldset-Series .multiple-data .data-wrapper,
+#fieldset-Series .multiple-data dd,
+/*#fieldset-Psyndex .data-wrapper,
+#fieldset-Uncontrolled .data-wrapper,*/
+#fieldset-Psyndex .multiple-data .data-wrapper,
+#fieldset-Uncontrolled .multiple-data .data-wrapper{
+   float: left;
+   width: 33%;
+}
+/* override field-widths for all column layouts */
+#fieldset-Titles .field,
+#fieldset-Series .multiple-data .field,
+#fieldset-Enrichments .multiple-data .field,
+#fieldset-Identifiers .multiple-data .field,
+#fieldset-Abstracts .multiple-data .field,
+#fieldset-Enrichments .data-wrapper.Value-data input,
+#fieldset-Notes .data-wrapper.Message-data .field{
+   width: 100%;
+}
+/* @end */
 /* @group Global admin styles */
 .blur{
    color: #666;
@@ -367,19 +425,14 @@ li.edit input:hover,
 }
 .adminContainer .multiple-wrapper .data-wrapper,
 #fieldset-Persons .multiple-wrapper .data-wrapper{
-   /*padding: 0;*/
    float: left;
 }
-/*.adminContainer .data-wrapper.multiple-data .data-wrapper{
-   width: auto;   
-}*/
 .adminContainer .data-wrapper.multiple-data{
    width: 85%;
 }
 .adminContainer .multiple-wrapper .data-wrapper.Remove-data{
    max-width: 15%;
    width: auto;
-   /*float: right;*/ 
    position: absolute;
    right: 0.6em;
    bottom: 0.6em; 
@@ -387,7 +440,6 @@ li.edit input:hover,
 .adminContainer .multiple-wrapper{
    float: left;
    width: 99%;
-   /*background: url(../img/theme/admin/bg_data-separator.png) no-repeat bottom center;  */
    padding: 0.3em 0.5%;
 }
 .adminContainer .multiple-wrapper.odd{
@@ -401,7 +453,6 @@ li.edit input:hover,
 }
 .adminContainer .subform .subform .data-wrapper.Add-data,
 .adminContainer #fieldset-Persons .data-wrapper.Add-data{
-   /*padding: 0.6em 0;*/
    position: absolute;
    top: -0.8em;
    right: 0;
@@ -438,8 +489,6 @@ li.edit input:hover,
 }
 
 .adminContainer .subform .subform .Add-data input{
-   /*border-color: #333331;
-   background-color: #595A56;*/
    border-color: white;
    color: #595A56;
    background-color: white;
@@ -471,9 +520,6 @@ li.edit input:hover,
    padding: 0;
    border: none;
 }
-/*.adminContainer #docinfo + dl > dt:first-child{
-   display: none;
-}*/
 .adminContainer dd legend,
 .adminContainer .subform legend{
    border: none;
@@ -481,7 +527,6 @@ li.edit input:hover,
    font: italic bold 1.143em Georgia, "Times New Roman", Times, serif;
    color: #595955;
 }
-/*.adminContainer form .wrapper > dl > dd > fieldset > legend,*/
 .adminContainer form .wrapper > .subform > fieldset > legend{
    background-color: #595a56;
    color: white;
@@ -520,34 +565,25 @@ li.edit input:hover,
    width: 100%;
 }
 .adminContainer form .subform .subform fieldset > legend{
-   /*padding: 0 1% 0.4% 0;*/
-  /* border: solid white;
-   border-width: 0 1px 0 0;*/
-   /*padding: 0;*/
    padding: 0 10px 0.4% 0;
 }
 .adminContainer fieldset#fieldset-Actions .fields-wrapper{
    padding: 1em 0 2em;
 }
-/*.adminContainer form dl,*/
-.adminContainer form .wrapper .subform{
+.adminContainer .wrapper .subform{
    margin: 1.3em 0 0;
-   /*padding: 0 0 1.3em;*/
    float: left;
    width: 100%;
 }
-/*.adminContainer .subform .subform{
-   position: relative;
-}*/
+.adminContainer .subform + .data-wrapper{
+   margin-top: 1.3em;
+}
+.adminContainer .subform + .data-wrapper.Add-data{
+   margin-top: 0;
+}
 .adminContainer form .wrapper .fields-wrapper > .subform:first-child{
-   /*padding-top: 0;*/
    margin: 0;
 }
-/*.adminContainer form .wrapper > dl,*/
-/*.adminContainer form .wrapper > .subform,
-.adminContainer form .wrapper > .subform .subform{
-   padding: 1.15em 0;
-}*/
 .adminContainer fieldset > dl > dt,
 .adminContainer .data-wrapper > div.label{
    float: left;
@@ -568,7 +604,6 @@ li.edit input:hover,
   width: 61.5197%;
 }
 .adminContainer .fields-wrapper{
-   /*margin: 1.3em 0 0;*/
    margin: 0;
    float: left;
    width: 100%;
@@ -580,16 +615,6 @@ li.edit input:hover,
    clear: both;
    position: relative;
 }
-/*.adminContainer fieldset > dl > dt,
-.adminContainer fieldset > dl > dd{
-   margin-top: 0.5em;
-}*/
-/*.adminContainer #fieldset-Persons > dl > dd > fieldset > dl > dt{
-   display: none;
-}*/
-/*.adminContainer ul.buttons li{
-   float: left;
-}*/
 .adminContainer dl.sort.dropdown{
    position: relative;
    width: 9.4%;
@@ -615,8 +640,14 @@ li.edit input:hover,
    white-space: nowrap;
    display: inline-block;
 }
+.adminContainer .person-actions > ul .Remove-data input{
+   font-size: 0.9em;
+   text-decoration: none;
+}
+/*.adminContainer #fieldset-Persons .person-actions > ul.links li {
+   float: left;
+}*/
 .adminContainer #fieldset-Persons .person-actions dl{
-   /*float: left;*/
    padding: 0;
    margin: 0 1em 0 0;
    text-align: left;
@@ -628,7 +659,6 @@ li.edit input:hover,
    display: inline-block;
    position: relative;
    background-color: white;
-   /*width: 6.25%;*/
 }
 .adminContainer dl.sort.dropdown dt{
    padding: 0.3em 1.6em 0.3em 0.3em;
@@ -672,18 +702,10 @@ li.edit input:hover,
    right: 0;
    min-width: 10em;
 }
-/*.adminContainer dl.settings ul.links li:before{
-   content: "?";
-   color: #595955;
-}*/
 .adminContainer dl.sort.dropdown dd{
    left: 0;
    min-width: 8em;
 }
-/*.adminContainer dl.settings.dropdown dd,
-.adminContainer dl.sort.dropdown dd{
-   display: block;
-}*/
 .adminContainer .subform .dropdown dd{
    background-color: white;
    border: solid #E1E4E0;
@@ -727,9 +749,6 @@ li.edit input:hover,
 }
 /* @end */
 /* @group adminMenuContainer */
-/*#adminMenuContainer{
-   padding-top: 1em;
-}*/
 #adminMenuContainer ul{
    margin: 0;
    padding: 0;
@@ -863,7 +882,8 @@ ul.form-action{
 .dropdown li{
    padding: 4px 0;
 }
-.dropdown li.Remove-data{
+.dropdown li.Remove-data,
+.dropdown li.edit{
    text-align: center;
 }
 /* @end */
@@ -958,7 +978,6 @@ ul.form-action{
 #actionboxContainer .dropdown dd{
    border-radius: 0 0 5px 5px;
    font-size: 0.857em;
-   /*box-shadow: 0 0 12px 6px rgba(84, 84, 84, 0.45);*/
 }
 #Document-Goto.dropdown dt a{
    background-color: #595A56;
@@ -1013,7 +1032,6 @@ ul.form-action{
 #actionboxContainer #Document-ServerState.dropdown dd{
    display: block;
    width: 100%;
-   /*box-shadow: 0 0 0 0;*/
    position: absolute;
    top: 0;
    z-index: 200;
@@ -1055,7 +1073,6 @@ ul.form-action{
    border-radius: 5px 5px 5px 5px;
    padding: 0 0 0.5em;
    font-weight: normal;
-   /*box-shadow: 0 10px 12px 3px rgba(84, 84, 84, 0.45);*/
 }
 .docstateMenu dl.dropdown li.active,
 #Document-ServerState.dropdown li.active{
