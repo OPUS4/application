@@ -156,7 +156,7 @@ class Admin_Model_BibtexImport {
 
 
         $xml = new DOMDocument();
-        $xml->loadXML(shell_exec($this->binary . " " .  $this->bibtexFilename . " 2> /dev/null"));
+        $xml->loadXML(shell_exec($this->binary . " -i unicode " .  $this->bibtexFilename . " 2> /dev/null"));
 
         $numXmlDocuments = $xml->getElementsByTagName('mods')->length;
         $idsXmlDocuments = array();

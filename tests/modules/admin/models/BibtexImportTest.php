@@ -175,6 +175,33 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals(1, count($jobs), 'Expected on job in queue');
     }
 
+    /*
+     * OPUSVIER xxx
+     */
+
+    public function testImportGermanUmlauts() {
+        $this->filename = 'articleWithUmlauts.bib';
+        $this->__import();
+
+        $this->assertEquals('1', $this->numDocuments);
+        $this->assertEquals('unpublished', $this->doc->getServerState());
+        $this->assertEquals('article', $this->doc->getType());
+        $this->assertEquals('Jürgen', $this->doc->getPersonAuthor(0)->getFirstName());
+        $this->assertEquals('Bäckerß', $this->doc->getPersonAuthor(0)->getLastName());
+        $this->assertEquals('Änderungen über Möglichkeiten', $this->doc->getTitleMain(0)->getValue());
+        $this->assertEquals('The name of the journal', $this->doc->getTitleParent(0)->getValue());
+        $this->assertEquals('1993', $this->doc->getPublishedYear());
+        $this->assertEquals('4', $this->doc->getVolume());
+        $this->assertEquals('2', $this->doc->getIssue());
+        $this->assertEquals('101', $this->doc->getPageFirst());
+        $this->assertEquals('113', $this->doc->getPageLast());
+        $this->assertEquals('An optional note', $this->doc->getNote(0)->getMessage());
+        $this->assertEquals('public', $this->doc->getNote(0)->getVisibility());
+
+        $record = trim(file_get_contents($this->bibdir . $this->filename));
+        $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
+        $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
+    }
 
     /* Mapping Tests */
 
