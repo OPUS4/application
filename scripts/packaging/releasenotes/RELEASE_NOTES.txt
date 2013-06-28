@@ -44,6 +44,7 @@ Beim Freischalten des Dokuments ist durch den Administrator aber darauf zu
 achten, dass die URN aus dem eigenen Namensraum kommt (ansonsten kann keine
 Kollisionsfreiheit sichergestellt werden).
 
+
 h3. Konfiguration der bearbeitbaren Übersetzungsressourcen
 
 Für die Bearbeitung von Übersetzungsressourcen über die Administration
@@ -56,6 +57,16 @@ Wird dieser Schlüssel nicht angegeben, dann ist die Bearbeitung der
 
 Als Vorgabe werden in der Datei config.ini.template die Module "default" und 
 "publish" freigegeben.
+
+
+h3. Verschiebung der PHTML-Templates für die Dokumenttypen
+
+Die PHTML-Templates wurden verschoben von modules/publish/views/scripts/form
+nach application/configs/doctypes_templates. Wird das Update-Skript zur 
+Aktualisierung der Instanz verwendet, so werden die bestehenden PHTML-Templates
+automatisch in das neue Verzeichnis übernommen (ggf. mit Rückfrage, wenn für
+einen Dokumenttyp eine "Differenz" zum Standard-PHTML-Template besteht).
+
 
 h2. ======================== Release 4.3.1 2013-02-21 ========================
 
