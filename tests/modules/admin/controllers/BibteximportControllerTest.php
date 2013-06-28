@@ -35,13 +35,47 @@
 
 class Admin_BibteximportControllerTest extends ControllerTestCase {
 
+
     public function testIndexAction() {
         $this->dispatch('/admin/bibteximport/index');
+        $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('bibteximport');
         $this->assertAction('index');
         $this->assertContains('<input type="file" name="fileupload" id="fileupload" />', $this->getResponse()->getBody());
     }
-
     
+
+    public function testUploadActionWithInvalidGetMethod() {
+        $this->request->setMethod('GET');
+        $this->dispatch('/admin/bibteximport/upload');
+        $response = $this->getResponse()->getBody();
+        $this->assertResponseCode(302);
+     }
+
+
+     public function testUploadActionWithoutPostData() {
+        $postData = array();
+        $this->request
+                ->setMethod('POST')
+                ->setPost($postData);
+
+        $this->dispatch('/admin/bibteximport/upload');
+        $this->assertResponseCode(302);
+     }
+
+
+     public function testUploadActionWithInvalidParamType() {
+        $postData = array(
+                    'uploadsubmit' => 'foo',
+                    'fileupload' => 'foo');
+
+        $this->request
+                ->setMethod('POST')
+                ->setPost($postData);
+  
+        $this->dispatch('/admin/bibteximport/upload');
+        $this->assertResponseCode(302);
+    }
+ 
 }
