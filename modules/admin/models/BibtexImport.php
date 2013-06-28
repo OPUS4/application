@@ -153,10 +153,18 @@ class Admin_Model_BibtexImport {
             $idsBibtexRecords[$id] = $r;
 	}
 
+        $exec_output = array();
+        $exec_return = -1;
+        $exec_statement = $this->binary . " -i unicode " .  $this->bibtexFilename . " 2> /dev/null";
 
+        exec ($exec_statement, $exec_output, $exec_return);
+        if ($exec_return != 0) {
+            $this->log->err(' bibtex record with duplicate id:' . $message);
+            throw new Admin_Model_BibtexImportException($message, Admin_Model_BibtexImportException::BINARY_NOT_INSTALLED);
+        }
 
         $xml = new DOMDocument();
-        $xml->loadXML(shell_exec($this->binary . " -i unicode " .  $this->bibtexFilename . " 2> /dev/null"));
+        $xml->loadXML(implode("\n", $exec_output));
 
         $numXmlDocuments = $xml->getElementsByTagName('mods')->length;
         $idsXmlDocuments = array();
@@ -221,8 +229,11 @@ class Admin_Model_BibtexImport {
 
 
     private function __isBinaryInstalled() {
-        $returnVal = shell_exec("which " . $this->binary);
-        return (empty($returnVal) ? false : true);
+        $exec_output = array();
+        $exec_return = -1;
+        $exec_statement = "which " . $this->binary;
+        exec ($exec_statement, $exec_output, $exec_return);
+        return ($exec_return != 0 ? false : true);
     }
 
 
