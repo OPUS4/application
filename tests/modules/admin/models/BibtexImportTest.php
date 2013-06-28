@@ -159,9 +159,11 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
             $config->runjobs->asynchronous = 0;
         }
         Zend_Registry::set('Zend_Config', $config);
-
-        $numOfRowsInJobTable = count(Opus_Job::getAll());
-        $numOfRowsInDocumentTable =  count(Opus_Document::getAll());
+        
+        $docFinder = new Opus_DocumentFinder();
+        $numOfRowsInJobTable = Opus_Job::getCount();
+        $numOfImportJobs = count(Opus_Job::getByLabels(array(Opus_Job_Worker_MetadataImport::LABEL)));
+        $numOfRowsInDocumentTable =  $docFinder->count();
 
         $this->filename = 'article.bib';
         $bibtexImporter = new Admin_Model_BibtexImport($this->bibdir . $this->filename);
@@ -170,10 +172,12 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         // undo configuration manipulation
         Zend_Registry::set('Zend_Config', $oldConfig);
 
-        $currNumOfRowsInJobTable = count(Opus_Job::getAll());
-        $currNumOfRowsInDocumentTable =  count(Opus_Document::getAll());
+        $currNumOfRowsInJobTable = Opus_Job::getCount();
+        $currNumOfImportJobs = count(Opus_Job::getByLabels(array(Opus_Job_Worker_MetadataImport::LABEL)));
+        $currNumOfRowsInDocumentTable = $docFinder->count();
 
         $this->assertEquals($numOfRowsInJobTable, $currNumOfRowsInJobTable, 'Expected no job in queue');
+        $this->assertEquals($numOfImportJobs, $currNumOfImportJobs, 'Expected no import job in queue');
         $this->assertEquals($numOfRowsInDocumentTable + 1, $currNumOfRowsInDocumentTable, 'Expected additional document in database');
     }
 
@@ -193,8 +197,10 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         }
         Zend_Registry::set('Zend_Config', $config);
 
-        $numOfRowsInJobTable = count(Opus_Job::getAll());
-        $numOfRowsInDocumentTable =  count(Opus_Document::getAll());
+        $docFinder = new Opus_DocumentFinder();
+        $numOfRowsInJobTable = Opus_Job::getCount();
+        $numOfImportJobs = count(Opus_Job::getByLabels(array(Opus_Job_Worker_MetadataImport::LABEL)));
+        $numOfRowsInDocumentTable = $docFinder->count();
 
         $this->filename = 'article.bib';
         $bibtexImporter = new Admin_Model_BibtexImport($this->bibdir . $this->filename);
@@ -203,10 +209,12 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         // undo configuration manipulation
         Zend_Registry::set('Zend_Config', $oldConfig);
 
-        $currNumOfRowsInJobTable = count(Opus_Job::getAll());
-        $currNumOfRowsInDocumentTable =  count(Opus_Document::getAll());
+        $currNumOfRowsInJobTable = Opus_Job::getCount();
+        $currNumOfImportJobs = count(Opus_Job::getByLabels(array(Opus_Job_Worker_MetadataImport::LABEL)));
+        $currNumOfRowsInDocumentTable = $docFinder->count();
 
         $this->assertEquals($numOfRowsInJobTable + 1, $currNumOfRowsInJobTable, 'Expected 1 more jobs in queue');
+        $this->assertEquals($numOfImportJobs + 1, $currNumOfImportJobs, 'Expected 1 more import job in queue');
         $this->assertEquals($numOfRowsInDocumentTable, $currNumOfRowsInDocumentTable, 'Expected no document in database');
     }
 
