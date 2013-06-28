@@ -315,13 +315,15 @@ class Admin_Model_BibtexImport {
                     $job->store();
                 }
             }
-
+                
             // Execute job immediately (synchronously)
-            try {
-                $import = new Opus_Job_Worker_MetadataImport($this->log);
-                $import->work($job);
-            } catch(Exception $exc) {
-                $this->log->err($exc);
+            else {
+                try {
+                    $import = new Opus_Job_Worker_MetadataImport($this->log);
+                    $import->work($job);
+                } catch(Exception $exc) {
+                    $this->log->err($exc);
+                }
             }
         }
 

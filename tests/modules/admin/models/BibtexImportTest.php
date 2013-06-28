@@ -206,7 +206,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $currNumOfRowsInJobTable = count(Opus_Job::getAll());
         $currNumOfRowsInDocumentTable =  count(Opus_Document::getAll());
 
-        $this->assertEquals($numOfRowsInJobTable + 2, $currNumOfRowsInJobTable, 'Expected 2 more jobs in queue');
+        $this->assertEquals($numOfRowsInJobTable + 1, $currNumOfRowsInJobTable, 'Expected 1 more jobs in queue');
         $this->assertEquals($numOfRowsInDocumentTable, $currNumOfRowsInDocumentTable, 'Expected no document in database');
     }
 
