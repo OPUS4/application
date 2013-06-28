@@ -44,8 +44,6 @@ class Admin_BibteximportController extends Controller_Action {
     }
 
     public function uploadAction() {
-
-        $this->log = Zend_Registry::get('Zend_Log');
         if (!$this->getRequest()->isPost()) {
             $this->_redirectTo('index');
         }
