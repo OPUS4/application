@@ -103,8 +103,9 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->filename = 'misc.bib.iso';
         $this->setExpectedException('Admin_Model_BibtexImportException', null, Admin_Model_BibtexImportException::FILE_NOT_UTF8);
         $this->__import();
-      }
-    
+    }
+
+
 
     public function testFileNotBibtexEception() {
         $this->filename = 'miscNoOpeningSign.bib';
@@ -149,6 +150,33 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
      * OPUSVIER 2896
      */
 
+    public function testJobCreatedWhenSynchronous() {
+        // manipulate application configuration
+        $oldConfig = Zend_Registry::get('Zend_Config');
+
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config->runjobs->asynchronous)) {
+            $config->runjobs->asynchronous = 0;
+        }
+        Zend_Registry::set('Zend_Config', $config);
+
+        $numOfRowsInJobTable = count(Opus_Job::getAll());
+        $numOfRowsInDocumentTable =  count(Opus_Document::getAll());
+
+        $this->filename = 'article.bib';
+        $bibtexImporter = new Admin_Model_BibtexImport($this->bibdir . $this->filename);
+        $bibtexImporter->import();
+
+        // undo configuration manipulation
+        Zend_Registry::set('Zend_Config', $oldConfig);
+
+        $currNumOfRowsInJobTable = count(Opus_Job::getAll());
+        $currNumOfRowsInDocumentTable =  count(Opus_Document::getAll());
+
+        $this->assertEquals($numOfRowsInJobTable, $currNumOfRowsInJobTable, 'Expected no job in queue');
+        $this->assertEquals($numOfRowsInDocumentTable + 1, $currNumOfRowsInDocumentTable, 'Expected additional document in database');
+    }
+
     public function testJobCreatedWhenAsynchronous() {
         // manipulate application configuration
         $oldConfig = Zend_Registry::get('Zend_Config');
@@ -165,18 +193,25 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         }
         Zend_Registry::set('Zend_Config', $config);
 
+        $numOfRowsInJobTable = count(Opus_Job::getAll());
+        $numOfRowsInDocumentTable =  count(Opus_Document::getAll());
+
         $this->filename = 'article.bib';
         $bibtexImporter = new Admin_Model_BibtexImport($this->bibdir . $this->filename);
         $bibtexImporter->import();
-        $jobs = Opus_Job::getByLabels(array(Opus_Job_Worker_MetadataImport::LABEL), null, Opus_Job::STATE_UNDEFINED);
 
         // undo configuration manipulation
         Zend_Registry::set('Zend_Config', $oldConfig);
-        $this->assertEquals(1, count($jobs), 'Expected on job in queue');
+
+        $currNumOfRowsInJobTable = count(Opus_Job::getAll());
+        $currNumOfRowsInDocumentTable =  count(Opus_Document::getAll());
+
+        $this->assertEquals($numOfRowsInJobTable + 2, $currNumOfRowsInJobTable, 'Expected 2 more jobs in queue');
+        $this->assertEquals($numOfRowsInDocumentTable, $currNumOfRowsInDocumentTable, 'Expected no document in database');
     }
 
     /*
-     * OPUSVIER xxx
+     * OPUSVIER 2900
      */
 
     public function testImportGermanUmlauts() {
