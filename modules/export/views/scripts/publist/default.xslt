@@ -533,7 +533,7 @@
                 <xsl:text>/citationExport/index/download/output/bibtex/docId/</xsl:text>
                 <xsl:value-of select="@Id" />
             </xsl:attribute>
-            <xsl:text>BibTex</xsl:text>
+            <xsl:text>BibTeX</xsl:text>
         </xsl:element>
         <xsl:text> | </xsl:text>
         <xsl:element name="a">
