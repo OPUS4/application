@@ -63,11 +63,12 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         $this->assertNotNull($documentTypes);
-        $this->assertEquals(4, count($documentTypes));
+        $this->assertEquals(5, count($documentTypes));
         $this->assertArrayHasKey('all', $documentTypes);
         $this->assertArrayHasKey('preprint', $documentTypes);
         $this->assertArrayHasKey('demo_invalid', $documentTypes);
         $this->assertArrayHasKey('demo', $documentTypes);
+        $this->assertArrayHasKey('foobar', $documentTypes);
         $this->assertArrayNotHasKey('article', $documentTypes);
     }
 
@@ -87,10 +88,10 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
      * The custom template name is configured in *tests.ini*.
      */
     public function testGetCustomTemplateName() {
-        $template = $this->docTypeHelper->getTemplateName('all');
+        $template = $this->docTypeHelper->getTemplateName('foobar');
 
         $this->assertNotNull($template);
-        $this->assertEquals('all_default', $template);
+        $this->assertEquals('barfoo', $template);
     }
 
     /**
@@ -188,7 +189,7 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         foreach ($documentTypes as $docType) {
-            if ($docType !== 'demo_invalid') {
+            if ($docType !== 'demo_invalid' && $docType !== 'foobar') {
                 $this->assertNotEquals($docType, $translate->translate($docType),
                         'Could not translate document type: ' . $docType);
             }
