@@ -232,6 +232,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         libxml_use_internal_errors(true);
         
         $dom = new DOMDocument();
+        // $dom->validateOnParse = true; TODO Loading of DTD fails
         $dom->loadXML($body);
         
         $errors = libxml_get_errors();
