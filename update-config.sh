@@ -39,6 +39,7 @@ DEST="$BASEDIR/opus4/application/configs"
 MD5PATH=opus4/application/configs
 SRC="$BASE_SOURCE/$MD5PATH"
 UPDATE_DOCTYPES_LOG="$BASEDIR/UPDATE-documenttypes.log"
+UPDATE_DOCTEMPLATES_LOG="$BASEDIR/UPDATE-documenttemplates.log"
 
 echo "Updating configuration files ..."
 
@@ -112,6 +113,7 @@ if [[ "$VERSION_OLD" < "4.4" && "$VERSION_NEW" > "4.4" ]]; then
         echo "Moving PHTML doctype templates from $PHTML_FILES_MODULES to $PHMTL_FILES_CONFIGS ..."
         find "$PHTML_FILES_MODULES" -type f \( -name "*.phtml" ! -name "check.phtml" \) -print0 | while read -r -d $'\0' FILE_PATH; do
             FILE=$(basename "$FILE_PATH")
+            echo "moving PHTML document view template '$FILE' from '$PHTML_FILES_MODULES' to '$PHTML_FILES_CONFIGS'" >> "$UPDATE_DOCTEMPLATES_LOG"
             moveFile "$PHTML_FILES_MODULES/$FILE" "$PHTML_FILES_CONFIGS/$FILE"
         done
         echo 'done'
