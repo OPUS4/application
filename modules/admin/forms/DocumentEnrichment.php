@@ -37,37 +37,55 @@
  */
 class Admin_Form_DocumentEnrichment extends Admin_Form_AbstractModelSubForm {
     
+    /**
+     * Name von Formularelement für Enrichment-ID.
+     */
     const ELEMENT_ID = 'Id';
     
+    /**
+     * Name von Formularelement für Auswahl von EnrichmentKey.
+     */
     const ELEMENT_KEY_NAME = 'KeyName';
     
+    /**
+     * Name von Formularelement für Enrichment Wert.
+     */
     const ELEMENT_VALUE = 'Value';
     
+    /**
+     * Erzeugt die Formularelemente.
+     */
     public function init() {
         parent::init();
         
-        $element = new Form_Element_Hidden(self::ELEMENT_ID);
-        $this->addElement($element);
-        
-        $element = $this->_createEnrichmentKeySelect(self::ELEMENT_KEY_NAME);
-        $this->addElement($element);
-        
-        $element = new Form_Element_Text(self::ELEMENT_VALUE);
-        $element->setRequired(true);
-        $this->addElement($element);
+        $this->addElement('Hidden', self::ELEMENT_ID);
+        $this->addElement('EnrichmentKey', self::ELEMENT_KEY_NAME);
+        $this->addElement('Text', self::ELEMENT_VALUE, array('required' => true));
     }
     
+    /**
+     * Initialisiert Formular mit den Werten in Enrichment Modell.
+     * @param Opus_Enrichment $enrichment
+     */
     public function populateFromModel($enrichment) {
         $this->getElement(self::ELEMENT_ID)->setValue($enrichment->getId());
         $this->getElement(self::ELEMENT_KEY_NAME)->setValue($enrichment->getKeyName());
         $this->getElement(self::ELEMENT_VALUE)->setValue($enrichment->getValue());
     }
     
+    /**
+     * Aktualisiert Enrichment Modell mit Werten im Formular.
+     * @param Opus_Enrichment $enrichment
+     */
     public function updateModel($enrichment) {
         $enrichment->setKeyName($this->getElement(self::ELEMENT_KEY_NAME)->getValue());
         $enrichment->setValue($this->getElement(self::ELEMENT_VALUE)->getValue());
     }
 
+    /**
+     * Liefert angezeigtes oder neues (hinzuzufügendes) Enrichment Modell.
+     * @return \Opus_Enrichment
+     */
     public function getModel() {
         $enrichmentId = $this->getElement(self::ELEMENT_ID)->getValue();
         
@@ -81,20 +99,12 @@ class Admin_Form_DocumentEnrichment extends Admin_Form_AbstractModelSubForm {
         
         return $enrichment;
     }
-    
-    protected function _createEnrichmentKeySelect($name = 'KeyName') {
-        $select = new Form_Element_Select($name);
         
-        $enrichment = new Opus_Enrichment();
-        $options = $enrichment->getField('KeyName')->getDefault();
-        
-        foreach ($options as $index => $option) {
-            $select->addMultiOption($option->getName(), $option->getName());
-        }
-        
-        return $select;
-    }
-    
+    /**
+     * Lädt die Dekoratoren für dieses Formular.
+     * 
+     * TODO Bessere Lösung?
+     */
     public function loadDefaultDecorators() {
         parent::loadDefaultDecorators();
         
