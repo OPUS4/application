@@ -32,37 +32,28 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Setup_HelpPageControllerTest extends ControllerTestCase {
+
+class Setup_HelpPageControllerTest extends Setup_ControllerTestCase {
 
     /**
      * original file modes, needed for restoring after test
      */
     protected $origFileModes = array();
-    protected $config;
+    protected $configSection = 'help';
 
-    public function setUp() {
-        parent::setUp();
-        $this->config = new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'help');
-    }
-
-    public function tearDown() {
-        parent::tearDown();
-        $this->resetFileModes();
-    }
-
-    public function testIndexSucceedsWithAccessPermissions() {
+    public function testEditSucceedsWithAccessPermissions() {
         $this->setPermissions('0500', '0400', '0300');
         $this->dispatch('/setup/help-page/edit');
         $this->assertResponseCode(200);
     }
 
-    public function testIndexFailsWithoutWritePermissions() {
+    public function testEditFailsWithoutWritePermissions() {
         $this->setPermissions('0500', '0400', '0000');
         $this->dispatch('/setup/help-page/edit');
         $this->assertResponseCode(302);
     }
 
-    public function testIndexFailsWithoutDataReadPermissions() {
+    public function testEditFailsWithoutDataReadPermissions() {
         $this->setPermissions('0000', '0400', '0000');
         $this->dispatch('/setup/help-page/edit');
         $this->assertResponseCode(302);
@@ -77,37 +68,5 @@ class Setup_HelpPageControllerTest extends ControllerTestCase {
         $this->assertResponseCode(500);
     }
 
-    /**
-     * Set permissions for data base dir, translations sources and translation target dir
-     */
-    protected function setPermissions($contentBasepathPerms, $translationSourcesPerms, $translationTargetPerms) {
-        $this->changeFileMode($this->config->contentBasepath, "$contentBasepathPerms");
-        foreach ($this->config->translationSources->toArray() as $tmxSource) {
-            if (file_exists($tmxSource))
-                $this->changeFileMode($tmxSource, "$translationSourcesPerms");
-        }
-        // target file should not exist, make sure parent directory is accessible
-        $this->assertFileNotExists($this->config->translationTarget, 'test data changed');
-        $targetDir = dirname($this->config->translationTarget);
-        $this->assertFileExists($targetDir);
-        $this->changeFileMode($targetDir, "$translationTargetPerms");
-    }
-
-    protected function changeFileMode($path, $mode) {
-        if (!(is_file($path) || is_dir($path))) {
-            $this->fail("File or Directory $path not found");
-        }
-        if (!isset($this->origFileModes[$path]))
-            $this->origFileModes[$path] = substr(decoct(fileperms($path)), -4);
-        @chmod($path, octdec("$mode"));
-        clearstatcache();
-        $this->assertEquals("$mode", substr(decoct(fileperms($path)), -4), "Failed setting mode $mode for $path");
-    }
-
-    protected function resetFileModes() {
-        foreach ($this->origFileModes as $path => $mode) {
-            $this->changeFileMode($path, $mode);
-        }
-    }
 
 }
