@@ -37,6 +37,20 @@ require_once 'Opus3ImportLogger.php';
 
 class Opus3FileImport {
    /**
+    * Holds id for this document
+    *
+    * @var int
+    */
+    protected $id = null;
+
+   /**
+    * Holds opus3-id for this document
+    *
+    * @var int
+    */
+    protected $opus3Id = null;
+
+   /**
     * Holds Zend-Configurationfile
     *
     * @var file
@@ -107,11 +121,14 @@ class Opus3FileImport {
      * @param string $fulltextPath Path to the Opus3-fulltexts
      * @return void
      */
-    public function __construct($fulltextPath)  {
+    public function __construct($id, $fulltextPath, $roleId = null)  {
         $this->config = Zend_Registry::get('Zend_Config');
         $this->logger = new Opus3ImportLogger();
-        $this->path = $fulltextPath;
-    }
+	
+        $this->id = $id;
+	$this->path = $fulltextPath;
+	$this->roleId = $roleId;	
+   }
 
     public function finalize() {
         $this->logger->finalize();
@@ -123,12 +140,10 @@ class Opus3FileImport {
      * @param $document-id, $roleid
      * @return integer
      */
-    public function loadFiles($id, $roleid = null) {
-	$this->tmpDoc = new Opus_Document($id);
-        $opus3Id = $this->tmpDoc->getIdentifierOpus3(0)->getValue();
-
-        $this->roleId = $roleid;
-        $this->tmpPath = $this->searchDir($this->path, $opus3Id);
+    public function loadFiles() {
+	$this->tmpDoc = new Opus_Document($this->id);
+        $this->opus3Id = $this->tmpDoc->getIdentifierOpus3(0)->getValue();
+        $this->tmpPath = $this->searchDir($this->path);
 
         if (is_null($this->tmpPath)) { return 0; }
 
@@ -159,14 +174,14 @@ class Opus3FileImport {
      * @return string
      */
 
-    private function searchDir($root, $id) {
+    private function searchDir($root) {
         $seeds = array('.', 'campus', 'incoming');
     	foreach ($seeds as $s) {
             foreach (scandir($root. "/" . $s) as $year) {
                 if (!preg_match('/^[0-9]{4}$/', $year)) { continue; }
                 foreach (scandir($root. "/" . $s . "/" . $year) as $i) {
-                    if ($i == $id) {
-                        $this->logger->log_debug("Opus3FileImport", "Directory for Opus3Id '" . $id . "' : '" . $root . "/" . $s . "/" . $year . "/" . $i  . "'");
+                    if ($i == $this->opus3Id) {
+                        $this->logger->log_debug("Opus3FileImport", "Directory for Opus3Id '" . $this->opus3Id . "' : '" . $root . "/" . $s . "/" . $year . "/" . $i  . "'");
                         return $root . "/" . $s . "/" . $year . "/" . $i;
                     }
                 }
@@ -351,7 +366,7 @@ class Opus3FileImport {
 
         // ERROR: File with same Basnemae already imported
         if (array_search(basename($f), $this->filesImported) !== false) {
-            $this->logger->log_error("Opus3FileImport", "File '" . basename(dirname($f)) . "/" . basename($f) . "' already imported");
+            $this->logger->log_error("Opus3FileImport", "File '" . basename(dirname($f)) . "/" . basename($f) . "' already imported for Opus3-Id '" . $this->opus3Id . "'");
             return false;
 
         }
