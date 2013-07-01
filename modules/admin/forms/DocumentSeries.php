@@ -39,35 +39,45 @@
  */
 class Admin_Form_DocumentSeries extends Admin_Form_AbstractModelSubForm {
     
+    /**
+     * Name von Formelement für Dokument-ID (Teil des Schlüssels für Link DocumentSeries).
+     */
     const ELEMENT_DOC_ID = 'Id';
     
+    /**
+     * Name von Formelement für Series-ID. 
+     */
     const ELEMENT_SERIES_ID = 'SeriesId';
     
+    /**
+     * Name von Formelement für Label/Nummer des Dokuments in Schriftenreihe.
+     */
     const ELEMENT_NUMBER = 'Number';
     
+    /**
+     * Name von Formelement für die Sortierposition in Schriftenreihe.
+     */
     const ELEMENT_SORT_ORDER = 'SortOrder';
     
+    /**
+     * Erzeugt die Formulareelemente.
+     */
     public function init() {
         parent::init();
         
         // Schluessel fuer Link Objekte ist Dokument-ID + Series-ID
-        $element = new Form_Element_Hidden(self::ELEMENT_DOC_ID);
-        $this->addElement($element);
-        
-        $element = $this->_createSeriesSelect(self::ELEMENT_SERIES_ID);
-        $element->addValidator('Int');
-        $element->setRequired(true);
-        $this->addElement($element);
-        
-        $element = new Form_Element_Text(self::ELEMENT_NUMBER);
-        $element->setRequired(true);
-        $this->addElement($element);
-        
-        $element = new Form_Element_Text(self::ELEMENT_SORT_ORDER);
-        $element->addValidator('Int');
-        $this->addElement($element);
+        $this->addElement('Hidden', self::ELEMENT_DOC_ID);
+
+        $this->addElement('Series', self::ELEMENT_SERIES_ID);
+        $this->addElement('text', self::ELEMENT_NUMBER, array('required' => true));
+        $this->addElement('SortOrder', self::ELEMENT_SORT_ORDER);
     }
     
+    /**
+     * Initialisiert das Formular mit den Werten im Modell.
+     * 
+     * @param Opus_Model_Dependent_Link_DocumentSeries $seriesLink
+     */
     public function populateFromModel($seriesLink) {
         $linkId = $seriesLink->getId();
         $this->getElement(self::ELEMENT_DOC_ID)->setValue($linkId[0]);
@@ -77,6 +87,10 @@ class Admin_Form_DocumentSeries extends Admin_Form_AbstractModelSubForm {
         $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($seriesLink->getDocSortOrder());
     }
     
+    /**
+     * Aktualisiert das Modell mit den Werten im Formular.
+     * @param type $seriesLink
+     */
     public function updateModel($seriesLink) {
         $seriesId = $this->getElement(self::ELEMENT_SERIES_ID)->getValue();
         $series = new Opus_Series($seriesId);
@@ -85,6 +99,10 @@ class Admin_Form_DocumentSeries extends Admin_Form_AbstractModelSubForm {
         $seriesLink->setDocSortOrder($this->getElement(self::ELEMENT_SORT_ORDER)->getValue());
     }
 
+    /**
+     * Liefert das angezeigte Modell oder ein neues für hinzugefügte Verknüpfungen.
+     * @return \Opus_Model_Dependent_Link_DocumentSeries
+     */
     public function getModel() {
         $docId = $this->getElement(self::ELEMENT_DOC_ID)->getValue();
         
@@ -108,22 +126,4 @@ class Admin_Form_DocumentSeries extends Admin_Form_AbstractModelSubForm {
         return $seriesLink;
     }
     
-    /**
-     * 
-     * @param type $name
-     * @return \Zend_Form_Element_Select
-     * TODO move somewhere else?
-     */
-    protected function _createSeriesSelect($name) {
-        $select = new Zend_Form_Element_Select($name);
-        
-        $options = Opus_Series::getAll();
-        
-        foreach ($options as $option) {
-            $select->addMultiOption($option->getId(), $option->getTitle());
-        }
-        
-        return $select;
-    }
-
 }
