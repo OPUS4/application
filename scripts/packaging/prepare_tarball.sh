@@ -47,3 +47,16 @@ echo
 echo "files included in tarball:"
 cd $2
 tar czvf ../$(basename $2).tgz opus4 workspace libs solrconfig apacheconf install testdata CHANGES.txt RELEASE_NOTES.txt MD5SUMS VERSION.txt gpl-3.0.txt releases opus_dokumentation_de.pdf
+
+
+#
+# Compute MD5 and SHA512 hashes
+#
+
+cd ..
+md5sum $(basename $2).tgz > $(basename $2).md5
+echo "created '$(basename $2).md5' -- do not forget to upload this file to Typo3 CMS"
+
+sha512sum $(basename $2).tgz > $(basename $2).sha512
+echo "created '$(basename $2).sha512' -- do not forget to upload this file to Typo3 CMS"
+
