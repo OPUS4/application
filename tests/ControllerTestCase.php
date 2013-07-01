@@ -200,15 +200,51 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $config->security = $this->securityEnabled;
         Zend_Registry::set('Zend_Config', $config);
     }
-    
+
+    /**
+     * Setzt Session Attribut für Deutsch.
+     * 
+     * Dies beeinflusst momentan nicht die verwendete Sprache bei Übersetzungen, sondern wirkt sich nur auf Klassen aus,
+     * die dieses Session-Attribut verwenden.
+     */
     public function setUpGerman() {
         $session = new Zend_Session_Namespace();
         $session->language = 'de';
     }
 
+    /**
+     * Setzt Session-Attribut für Englisch.
+     * 
+     * Dies beeinflusst momentan nicht die verwendete Sprache bei Übersetzungen, sondern wirkt sich nur auf Klassen aus,
+     * die dieses Session-Attribut verwenden.
+     */
     public function setUpEnglish() {
         $session = new Zend_Session_Namespace();
         $session->language = 'en';
+    }
+    
+    /**
+     * Prüft, ob das XHTML valide ist.
+     * @param string $body
+     */
+    public function validateXHTML($body) {
+        libxml_clear_errors();
+        libxml_use_internal_errors(true);
+        
+        $dom = new DOMDocument();
+        $dom->loadXML($body);
+        
+        $errors = libxml_get_errors();
+        
+        // Array mit Fehlern ausgeben
+        if (count($errors) !== 0) {
+            Zend_Debug::dump($errors);
+        }
+        
+        $this->assertEquals(0, count($errors), 'XHTML Schemaverletzungen gefunden (' . count($errors) . ')');
+        
+        libxml_use_internal_errors(false);
+        libxml_clear_errors();
     }
     
 }
