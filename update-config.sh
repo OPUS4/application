@@ -61,7 +61,13 @@ updateFile "$SRC" "$DEST" "$MD5PATH" "navigationModules.xml"
 # Update document types
 # copyFile "$SRC/doctypes/all.xml" "$DEST/doctypes/all.xml" # TODO remove
 
-echo "Updating document types ... "
+echo "Updating document types ..."
+
+# =============================================================================
+# Updating of XML document type definitions
+# =============================================================================
+
+echo "Step 1: Updating XML document type definitions ..."
 
 FILES=$(getFiles "$SRC/doctypes")
 
@@ -80,6 +86,46 @@ if [[ "$VERSION_OLD" < "4.2" && "$VERSION_NEW" > "4.2" ]]; then
         "$SCRIPTPATH/update-documenttypes.php" "$DEST/doctypes/$FILE" "$BASE_SOURCE/opus4/library/Opus/Document/documenttype.xsd" >> "$UPDATE_DOCTYPES_LOG"
     done
 fi
+
+# =============================================================================
+# Updating & moving of PHTML template files
+# when updating from version < 4.4.0 to version >= 4.4.0
+# =============================================================================
+
+echo "Step 2: Updating PHTML document type templates ..."
+
+# hint: 4.4.0 > 4.4 is true in lexicographic ordering
+if [[ "$VERSION_OLD" < "4.4" && "$VERSION_NEW" > "4.4" ]]; then
+
+    # PHTML doctype templates should be moved from 'modules' to 'configs'
+    PHTML_FILES_MODULES="$BASEDIR/opus4/modules/publish/views/scripts/form"
+    PHMTL_FILES_CONFIGS="$BASEDIR/opus4/application/configs/doctypes_templates"
+
+    # Create target folder if necessary
+    if [[ ! -d $PHMTL_FILES_CONFIGS ]]; then
+        createFolder "$PHMTL_FILES_CONFIGS"
+    fi
+
+    # Copy files if old folder is present (version prior to 4.4.0)
+    # check.phtml should remain in PHTML_FILES_MODULES
+    if [[ -d $PHTML_FILES_MODULES ]]; then
+        echo "Moving PHTML doctype templates from $PHTML_FILES_MODULES to $PHMTL_FILES_CONFIGS ..."
+        find "$PHTML_FILES_MODULES" -type f \( -name "*.phtml" ! -name "check.phtml" \) -print0 | while read -r -d $'\0' FILE_PATH; do
+            FILE=$(basename "$FILE_PATH")
+            moveFile "$PHTML_FILES_MODULES/$FILE" "$PHTML_FILES_CONFIGS/$FILE"
+        done
+        echo 'done'
+    fi
+
+fi
+
+FILES=$(getFiles "$SRC/doctypes_templates")
+
+for FILE in $FILES; do
+    updateFile "$SRC/doctypes_templates" "$PHTML_FILES_CONFIGS" "$MD5PATH/doctypes_templates" "$FILE" backup
+done
+
+echo "Update of document types completed."
 
 # =============================================================================
 # Updating help files
@@ -111,40 +157,4 @@ FILES=$(getFiles "$SRC/help")
 
 for FILE in $FILES; do
     updateFile "$SRC/help" "$HELP_FILES_CONFIGS" "$MD5PATH/help" "$FILE" backup
-done
-
-# =============================================================================
-# Updating & moving of PHTML template files
-# when updating from version < 4.4.0 to version >= 4.4.0
-# =============================================================================
-
-# hint: 4.4.0 > 4.4 is true in lexicographic ordering
-if [[ "$VERSION_OLD" < "4.4" && "$VERSION_NEW" > "4.4" ]]; then
-
-    # PHTML doctype templates should be moved from 'modules' to 'configs'
-    PHTML_FILES_MODULES="$BASEDIR/opus4/modules/publish/views/scripts/form"
-    PHMTL_FILES_CONFIGS="$BASEDIR/opus4/application/configs/doctypes_templates"
-
-    # Create target folder if necessary
-    if [[ ! -d $PHMTL_FILES_CONFIGS ]]; then
-        createFolder "$PHMTL_FILES_CONFIGS"
-    fi
-
-    # Copy files if old folder is present (version prior to 4.4.0)
-    # check.phtml should remain in PHTML_FILES_MODULES
-    if [[ -d $PHTML_FILES_MODULES ]]; then
-        echo "Moving PHTML doctype templates from $PHTML_FILES_MODULES to $PHMTL_FILES_CONFIGS ..."
-        find "$PHTML_FILES_MODULES" -type f \( -name "*.phtml" ! -name "check.phtml" \) -print0 | while read -r -d $'\0' FILE_PATH; do
-            FILE=$(basename "$FILE_PATH")
-            moveFile "$PHTML_FILES_MODULES/$FILE" "$PHTML_FILES_CONFIGS/$FILE"
-        done
-        echo 'done'
-    fi
-
-fi
-
-FILES=$(getFiles "$SRC/doctypes_templates")
-
-for FILE in $FILES; do
-    updateFile "$SRC/doctypes_templates" "$PHTML_FILES_CONFIGS" "$MD5PATH/doctypes_templates" "$FILE" backup
 done
