@@ -186,7 +186,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
         // TODO add subform for person
         $subform = $this->createSubForm();
         $subform->populateFromModel($person);
-        $this->addSubForm($subform, 'Person' . $index);
+        $this->addSubForm($subform, ucfirst($this->__roleName) . 'Person' . $index);
         return $subform;
     }
     

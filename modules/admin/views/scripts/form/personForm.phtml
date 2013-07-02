@@ -55,7 +55,7 @@
 
 <div class="multiple-wrapper">
     <div class="data-wrapper multiple-data">
-        <div id="<?= $this->element->getName() . '-element' ?>">
+        <div id="<?= $this->element->getId() . '-element' ?>"> <!-- TODO include Role in ID -->
             <?PHP if (!$this->element->isViewModeEnabled()) : ?>
             <dl class="sort dropdown">
                 <dt>
