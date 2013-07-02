@@ -35,7 +35,19 @@
 /**
  * SubForm um mehrere Unterformulare (z.B. Patente) zu verwalten.
  * 
+ * Die Unterformularhierarchy sieht folgendermaßen aus:
+ * 
+ * DocumentMultiSubForm
+ * +- SubForm0
+ * |  +- 
+ * |
+ * |
+ * +- SubForm1
+ * +- ...
+ * +- Add Button
+ * 
  * TODO improv positioning of anker (move within identifiable block)
+ * TODO Unterformular um alle Unterformuler herum? (für Decorator dataWrapper)
  */
 class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm {
     
@@ -314,6 +326,20 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     
     public function loadDefaultDecorators() {
         parent::loadDefaultDecorators();
+    }
+    
+    public function prepareRenderingAsView() {
+        parent::prepareRenderingAsView();
+
+        // da Remove Button entfernt wird muss DIV wieder geschlossen werden.
+        $subforms = $this->getSubForms();
+        
+        foreach ($subforms as $subform) {
+            $dataWrapper = $subform->getDecorator('dataWrapperOpen');
+            if (!is_null($dataWrapper) && $dataWrapper instanceof Zend_Form_Decorator_HtmlTag) {
+                $dataWrapper->setOption('openOnly', false);
+            }
+        }
     }
             
 }
