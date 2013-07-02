@@ -82,7 +82,7 @@
                         
                         <collection>
                             <type>mvc</type>
-                            <label>admin_collection_asign</label>
+                            <label>admin_collection_assign</label>
                             <module>admin</module>
                             <controller>collection</controller>
                             <action>assign</action>
