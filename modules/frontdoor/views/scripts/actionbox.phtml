@@ -43,7 +43,7 @@
 <div id="actionboxContainer">
   <div class="wrapper">
       <div class="col col-1">
-        <?PHP if ($this->element->getMode() === Admin_Form_ActionBox::MODE_EDIT || count($stateLinks) == 0) : ?>  
+        <?PHP if (!$this->element->isViewMode() || count($stateLinks) == 0) : ?>  
         <dl id="Document-ServerState">
           <dt id="Document-ServerState"><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></dt>
           <dd id="Document-ServerState"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_' . ucfirst($document->getServerState()))) ?></dd>
@@ -74,7 +74,7 @@
         </dl>
       </div>
       <div class="col col-3">
-        <ul class="Document-Action">
+        <ul class="form-action">
           <?PHP foreach ($actionLinks as $action => $params) : ?>
           <li class="<?= $action ?>"><a href="<?= $this->url($params) ?>"
                                         ><?= htmlspecialchars($this->translate('admin_document_' .$action)) ?></a></li>

@@ -44,13 +44,7 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     
     const ELEMENT_CANCEL = 'Cancel';
     
-    const MODE_EDIT = 'edit';
-    
-    const MODE_VIEW = 'view';
-    
     private $document;
-    
-    private $mode = self::MODE_EDIT;
     
     private $parentForm;
     
@@ -96,10 +90,6 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     
     public function getMessage() {
         return ($this->parentForm instanceof Admin_Form_Document) ? $this->parentForm->getMessage() : null;
-    }
-    
-    public function getMode() {
-        return $this->mode;
     }
     
     /**
@@ -200,7 +190,7 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     }
     
     public function prepareRenderingAsView() {
-        $this->mode = self::MODE_VIEW;
+        $this->setViewModeEnabled();
     }
     
 }

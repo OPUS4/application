@@ -37,6 +37,8 @@
  */
 abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     
+    private $viewMode = false;
+    
     public function init() {
         parent::init();
         
@@ -126,6 +128,7 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     }
     
     public function prepareRenderingAsView() {
+        $this->setViewModeEnabled();
         $this->_removeElements();
         $this->_prepareRenderingOfElements();
         
@@ -229,6 +232,14 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
      */
     public function getLog() {
         return Zend_Registry::get('Zend_Log');
+    }
+    
+    public function isViewMode() {
+        return $this->viewMode;
+    }
+    
+    public function setViewModeEnabled() {
+        $this->viewMode = true;
     }
             
 }
