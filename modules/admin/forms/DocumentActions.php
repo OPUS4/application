@@ -91,5 +91,9 @@ class Admin_Form_DocumentActions extends Admin_Form_AbstractDocumentSubForm {
         
         return null;
     }
+    
+    public function isEmpty() {
+        return true;
+    }
 
 }
