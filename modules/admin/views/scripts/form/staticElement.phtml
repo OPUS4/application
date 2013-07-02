@@ -32,7 +32,14 @@
  */
 ?>
 
-<div class="data-wrapper">
-<div class="label"><?= $this->element->getLabel() ?></div>
-<div id="<?= $this->element->getId() ?>" class="field"><?= $this->translate($this->element->getValue()) ?></div>
+<?PHP
+    $label = $this->element->getLabel();
+    $name = $this->element->getName();
+?>
+
+<div class="data-wrapper <?= $name . '-data' ?>">
+    <?PHP if (strlen(trim($label)) > 0) : ?>    
+    <div class="label"><?= htmlspecialchars($label) ?></div>
+    <?PHP endif; ?>
+    <div id="<?= $this->element->getId() ?>" class="field"><?= $this->translate($this->element->getValue()) ?></div>
 </div>
