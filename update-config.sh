@@ -100,17 +100,17 @@ if [[ "$VERSION_OLD" < "4.4" && "$VERSION_NEW" > "4.4" ]]; then
 
     # PHTML doctype templates should be moved from 'modules' to 'configs'
     PHTML_FILES_MODULES="$BASEDIR/opus4/modules/publish/views/scripts/form"
-    PHMTL_FILES_CONFIGS="$BASEDIR/opus4/application/configs/doctypes_templates"
+    PHTML_FILES_CONFIGS="$BASEDIR/opus4/application/configs/doctypes_templates"
 
     # Create target folder if necessary
-    if [[ ! -d $PHMTL_FILES_CONFIGS ]]; then
-        createFolder "$PHMTL_FILES_CONFIGS"
+    if [[ ! -d $PHTML_FILES_CONFIGS ]]; then
+        createFolder "$PHTML_FILES_CONFIGS"
     fi
 
     # Copy files if old folder is present (version prior to 4.4.0)
     # check.phtml should remain in PHTML_FILES_MODULES
     if [[ -d $PHTML_FILES_MODULES ]]; then
-        echo "Moving PHTML doctype templates from $PHTML_FILES_MODULES to $PHMTL_FILES_CONFIGS ..."
+        echo "Moving PHTML doctype templates from $PHTML_FILES_MODULES to $PHTML_FILES_CONFIGS ..."
         find "$PHTML_FILES_MODULES" -type f \( -name "*.phtml" ! -name "check.phtml" \) -print0 | while read -r -d $'\0' FILE_PATH; do
             FILE=$(basename "$FILE_PATH")
             echo "moving PHTML document view template '$FILE' from '$PHTML_FILES_MODULES' to '$PHTML_FILES_CONFIGS'" >> "$UPDATE_DOCTEMPLATES_LOG"
