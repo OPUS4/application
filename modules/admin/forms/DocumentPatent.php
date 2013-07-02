@@ -111,8 +111,7 @@ class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
         $element->setLabel($this->_translationPrefix . self::ELEMENT_APPLICATION);
         $this->addElement($element);
         
-        $element = $elementFactory->createDateElement(self::ELEMENT_DATE_GRANTED);
-        $this->addElement($element);
+        $this->addElement('Date', self::ELEMENT_DATE_GRANTED);
     }
 
     /**

@@ -58,29 +58,18 @@ class Admin_Form_DocumentSubject extends Admin_Form_AbstractModelSubForm {
     public function init() {
         parent::init();
         
-        $elementFactory = new Admin_Model_FormElementFactory();
-        
-        $element = new Form_Element_Hidden(self::ELEMENT_ID);
-        $this->addElement($element);
+        $this->addElement('Hidden', self::ELEMENT_ID);
         
         if (is_null($this->__language)) {
-            $element = $elementFactory->createLanguageSelect(self::ELEMENT_LANGUAGE);
-            $element->setLabel('Language');
+            $element = $this->createElement('Language', self::ELEMENT_LANGUAGE, array('label' => 'Language'));
         }
         else {
-            $element = new Form_Element_Hidden(self::ELEMENT_LANGUAGE);
-            $element->setValue($this->__language);
+            $element = $this->createElement('Hidden', self::ELEMENT_LANGUAGE, array('value' => $this->__language));
         }
         $this->addElement($element);
         
-        $element = new Form_Element_Text(self::ELEMENT_VALUE);
-        $element->setRequired(true);
-        $element->setLabel('Value');
-        $this->addElement($element);
-        
-        $element = new Form_Element_Text(self::ELEMENT_EXTERNAL_KEY);
-        $element->setLabel('ExternalKey');
-        $this->addElement($element);
+        $this->addElement('Text', self::ELEMENT_VALUE, array('required' => true, 'label' => 'Value'));
+        $this->addElement('Text', self::ELEMENT_EXTERNAL_KEY, array('label' => 'ExternalKey'));
     }
     
     public function populateFromModel($subject) {

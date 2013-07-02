@@ -58,18 +58,9 @@ class Admin_Form_DocumentTitle extends Admin_Form_AbstractModelSubForm {
     public function init() {
         parent::init();
         
-        $elementFactory = new Admin_Model_FormElementFactory();
-        
-        $element = new Form_Element_Hidden(self::ELEMENT_ID);
-        $this->addElement($element);
-        
-        // Der Typ eines Titels ist nicht editierbar.
-        $element = new Form_Element_Hidden(self::ELEMENT_TYPE);
-        $this->addElement($element);
-        
-        $element = $elementFactory->createLanguageSelect(self::ELEMENT_LANGUAGE); // TODO required
-        $this->addElement($element);
-        
+        $this->addElement('Hidden', self::ELEMENT_ID);
+        $this->addElement('Hidden', self::ELEMENT_TYPE); // Der Typ eines Titels ist nicht editierbar
+        $this->addElement('Language', self::ELEMENT_LANGUAGE, array('required' => true));
         $this->addElement('textarea', self::ELEMENT_VALUE, array('required' => true, 'rows' => '4'));        
     }
     

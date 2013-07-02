@@ -46,13 +46,9 @@ class Admin_Form_DocumentAbstract extends Admin_Form_AbstractModelSubForm {
     public function init() {
         parent::init();
         
-        $elementFactory = new Admin_Model_FormElementFactory();
-        
-        $element = new Form_Element_Hidden(self::ELEMENT_ID);
-        $this->addElement($element);
-        
-        $this->addElement('language', self::ELEMENT_LANGUAGE); 
-        $this->addElement('textarea', self::ELEMENT_VALUE, array('required' => true, 'rows' => 12));
+        $this->addElement('Hidden', self::ELEMENT_ID);
+        $this->addElement('Language', self::ELEMENT_LANGUAGE); 
+        $this->addElement('Textarea', self::ELEMENT_VALUE, array('required' => true, 'rows' => 12));
    }
     
     public function populateFromModel($abstract) {

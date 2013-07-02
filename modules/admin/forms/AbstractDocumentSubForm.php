@@ -214,16 +214,7 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
             return null;
         }
     }
-    
-    /**
-     * Liefert Factory fuer das erzeugen von Formularelementen.
-     * 
-     * @return \Admin_Model_FormElementFactory
-     */
-    public function getFormElementFactory() {
-        return new Admin_Model_FormElementFactory();
-    }
-    
+        
     /**
      * Liefert Helper fuer die Handhabung von Datumsangaben.
      * 

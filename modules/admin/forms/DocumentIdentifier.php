@@ -58,12 +58,7 @@ class Admin_Form_DocumentIdentifier extends Admin_Form_AbstractModelSubForm {
     public function init() {
         parent::init();
         
-        $elementFactory = new Admin_Model_FormElementFactory();
-        
-        $select = $elementFactory->getIdentifierTypeSelect(self::ELEMENT_TYPE);
-        $select->setRequired(true);
-        $this->addElement($select);
-        
+        $this->addElement('Identifier', self::ELEMENT_TYPE, array('required' => true));
         $this->addElement('text', self::ELEMENT_VALUE, array('required' => true));
         $this->addElement('hidden', self::ELEMENT_ID);
     }

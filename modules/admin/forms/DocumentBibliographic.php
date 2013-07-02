@@ -90,13 +90,8 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
         $this->addTextElement(self::ELEMENT_CONTRIBUTING_CORPORATION);
         $this->addTextElement(self::ELEMENT_CREATING_CORPORATION);
         
-        $elementFactory = new Admin_Model_FormElementFactory();
-        
-        $element = $elementFactory->createDateElement(self::ELEMENT_THESIS_DATE_ACCEPTED);
-        $this->addElement($element);
-        
-        $element = $elementFactory->createYearElement(self::ELEMENT_THESIS_YEAR_ACCEPTED);
-        $this->addElement($element);
+        $this->addElement('Date', self::ELEMENT_THESIS_DATE_ACCEPTED);
+        $this->addElement('Year', self::ELEMENT_THESIS_YEAR_ACCEPTED);
 
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPublisher', 'ThesisPublisher'), 'Publishers');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentGrantor', 'ThesisGrantor'), 'Grantors');
