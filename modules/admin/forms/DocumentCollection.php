@@ -114,8 +114,11 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
     }
     
     public function loadDefaultDecorators() {
-        $this->setDecorators(array(array(
-            'ViewScript', array('viewScript' => 'form/collectionForm.phtml'))));
+        $this->setDecorators(array(
+            'PrepareElements',
+            array('ViewScript', array('viewScript' => 'form/collectionForm.phtml')),
+            array(array('multiWrapper' => 'HtmlTag'), array('class' => 'multiple-wrapper'))
+        ));
     }
             
 }
