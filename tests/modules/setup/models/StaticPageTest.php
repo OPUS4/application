@@ -63,7 +63,8 @@ class Setup_Model_StaticPageTest extends ControllerTestCase {
         foreach ($this->contentFiles as $contentFile) {
             unlink(APPLICATION_PATH . DIRECTORY_SEPARATOR . $this->contentBasepath . DIRECTORY_SEPARATOR . $contentFile);
         }
-        unlink(APPLICATION_PATH . DIRECTORY_SEPARATOR . $this->tmxTarget);
+        if (is_file(APPLICATION_PATH . DIRECTORY_SEPARATOR . $this->tmxTarget))
+            unlink(APPLICATION_PATH . DIRECTORY_SEPARATOR . $this->tmxTarget);
     }
 
     public function testToArray() {
@@ -115,8 +116,8 @@ class Setup_Model_StaticPageTest extends ControllerTestCase {
                 ),
             ),
         );
-            $this->object->fromArray($data);
-        
+        $this->object->fromArray($data);
+
         if (!$this->object->store()) {
             $this->fail("storing failed");
         }
@@ -130,6 +131,19 @@ class Setup_Model_StaticPageTest extends ControllerTestCase {
 
         $this->assertEquals('Testdaten', file_get_contents(APPLICATION_PATH . DIRECTORY_SEPARATOR . $this->contentBasepath . DIRECTORY_SEPARATOR . 'test.de.txt'));
         $this->assertEquals('Test Data', file_get_contents(APPLICATION_PATH . DIRECTORY_SEPARATOR . $this->contentBasepath . DIRECTORY_SEPARATOR . 'test.en.txt'));
+    }
+
+    /**
+     * Regression Test for OPUSVIER-2908
+     */
+    public function testUnsetUseContentFile() {
+        $fileArray = $this->object->toArray();
+        $this->assertTrue(isset($fileArray['en']['file']));
+        $this->assertTrue(isset($fileArray['de']['file']));
+        $this->object->setUseContentFile(false);
+        $noFileArray = $this->object->toArray();
+        $this->assertFalse(isset($noFileArray['en']['file']));
+        $this->assertFalse(isset($noFileArray['de']['file']));
     }
 
     protected function createFile($name) {
