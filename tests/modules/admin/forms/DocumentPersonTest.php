@@ -39,7 +39,7 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
     public function testCreateForm() {
         $form = new Admin_Form_DocumentPerson();
         
-        $this->assertEquals(9, count($form->getElements()));
+        $this->assertEquals(5, count($form->getElements()));
         
         $this->assertNotNull($form->getElement('PersonId'));
         $this->assertNotNull($form->getElement('AllowContact'));
@@ -48,10 +48,6 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
         
         $this->assertNotNull($form->getElement('Edit'));
         $this->assertNotNull($form->getElement('Remove'));
-        $this->assertNotNull($form->getElement('MoveUp'));
-        $this->assertNotNull($form->getElement('MoveDown'));
-        $this->assertNotNull($form->getElement('MoveFirst'));
-        $this->assertNotNull($form->getElement('MoveLast'));
     }
     
     public function testPopulateFromModel() {
