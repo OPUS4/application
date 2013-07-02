@@ -66,13 +66,19 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      */
     public function init() {
         parent::init();
-        
-        $this->setDecorators(array('FormElements'));
+
+        $this->setDecorators(array(
+            'FormElements',
+            array(
+                array('wrapperDivClose' => 'HtmlTag'), 
+                array('tag' => 'div', 'closeOnly' => 'true', 'placement' => 'append')
+            )
+        ));
         
         $this->addSubForm(new Admin_Form_ActionBox($this), 'ActionBox');
         
         $subform = new Admin_Form_InfoBox();
-        $subform->addDecorator(array('wrapperDiv' => 'HtmlTag'), 
+        $subform->addDecorator(array('wrapperDivOpen' => 'HtmlTag'), 
                 array('tag' => 'div', 'placement' => 'prepend', 'class' => 'wrapper', 'openOnly' => 'true'));
         $this->addSubForm($subform, 'InfoBox');
         
