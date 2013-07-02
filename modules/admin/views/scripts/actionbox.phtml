@@ -46,8 +46,8 @@
       <div class="col col-1">
         <?PHP if ($this->element->getMode() === Admin_Form_ActionBox::MODE_EDIT || count($stateLinks) == 0) : ?>  
         <dl id="Document-ServerState">
-          <dt id="Document-ServerState"><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></dt>
-          <dd id="Document-ServerState"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_' . ucfirst($document->getServerState()))) ?></dd>
+          <dt id="Document-ServerState-label"><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></dt>
+          <dd id="Document-ServerState-value"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_' . ucfirst($document->getServerState()))) ?></dd>
         </dl>
         <?PHP else : ?>
           <dl id="Document-ServerState" class="dropdown">
@@ -56,7 +56,7 @@
                 <ul>
                     <li class="active"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_' . ucfirst($currentState))) ?></li>
                     <?PHP foreach ($stateLinks as $targetState => $params) : ?>
-                    <li><a id="State-Link-<?= $targetState ?>"href="<?= $this->url($params) ?>"
+                    <li><a id="State-Link-<?= $targetState ?>" href="<?= $this->url($params) ?>"
                            ><?= htmlspecialchars($this->translate('admin_workflow_' . $targetState)) ?></a></li>
                     <?PHP endforeach; ?>
                 </ul>
@@ -65,13 +65,13 @@
         <?PHP endif; ?>
       </div>
       <div class="col col-2">
-        <dl id="Document-ServerDatePublished" class="col">
+        <dl class="col">
           <dt><?= $this->translate('ServerDatePublished-short') . ':'?></dt>
-          <dd id="Document-ServerDatePublished"><?= $this->formatValue()->formatDate($document->getServerDatePublished()) ?></dd>
+          <dd id="Document-ServerDatePublished-value"><?= $this->formatValue()->formatDate($document->getServerDatePublished()) ?></dd>
         </dl>
-        <dl id="Document-ServerDateModified" class="col">
+        <dl class="col">
           <dt><?= $this->translate('ServerDateModified-short') . ':'?></dt>
-          <dd id="Document-ServerDateModified"><?= $this->formatValue()->formatDate($document->getServerDateModified()) ?></dd>
+          <dd id="Document-ServerDateModified-value"><?= $this->formatValue()->formatDate($document->getServerDateModified()) ?></dd>
         </dl>
         <dl id="Document-Goto" class="col dropdown">
           <dt><a><?= $this->translate('admin-actionbox-goto-section') ?></a></dt>
