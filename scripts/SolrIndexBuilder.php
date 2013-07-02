@@ -45,6 +45,7 @@ class SolrIndexBuilder {
     private $start = null;
     private $end = null;
     private $deleteAllDocs = false;
+    private $syncMode = true;
 
     /**
      * Prints a help message to the console.
@@ -90,6 +91,7 @@ class SolrIndexBuilder {
             exit;
         }
         $this->evaluateArguments($argc, $argv);
+        $this->forceSyncMode();        
         $docIds = Opus_Document::getAllPublishedIds($this->start, $this->end);
         $indexer = new Opus_SolrSearch_Index_Indexer($this->deleteAllDocs);
         //$indexer = new Opus_SolrSearch_Index_Indexer();
@@ -98,7 +100,13 @@ class SolrIndexBuilder {
         $runtime = microtime(true);
         foreach ($docIds as $docId) {
             $time_start = microtime(true);
-            $indexer->addDocumentToEntryIndex(new Opus_Document($docId));
+
+            $doc = new Opus_Document($docId);
+            
+            // dirty hack: disable implicit reindexing of documents in case of cache misses
+            $doc->unregisterPlugin('Opus_Document_Plugin_Index');            
+            
+            $indexer->addDocumentToEntryIndex($doc);
             $time_delta = microtime(true) - $time_start;
             if ($time_delta > 30) {
                echo date('Y-m-d H:i:s') . " WARNING: Indexing document $docId took $time_delta seconds.\n";
@@ -117,7 +125,25 @@ class SolrIndexBuilder {
         $runtime = microtime(true) - $runtime;
         echo "\n" . date('Y-m-d H:i:s') . " Finished indexing.\n";
         $indexer->commit();
+        $this->resetMode();
         return $runtime;
+    }
+
+    private function forceSyncMode() {
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
+            $this->syncMode = false;
+            $config->runjobs->asynchronous = 0;
+            Zend_Registry::set('Zend_Config', $config);
+        }
+    }
+
+    private function resetMode() {
+        if (!$this->syncMode) {
+            $config = Zend_Registry::get('Zend_Config');
+            $config->runjobs->asynchronous = 1;
+            Zend_Registry::set('Zend_Config', $config);
+        }
     }
 }
 
