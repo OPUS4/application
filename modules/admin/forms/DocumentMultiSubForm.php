@@ -230,7 +230,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     }
     
     public function createSubForm() {
-        $subform = new $this->_subFormClass();
+        $subform = $this->createNewSubFormInstance();
 
         $subform->setDecorators(array(
             'FormElements',
@@ -244,6 +244,10 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         $subform->addElement($element);
         
         return $subform;
+    }
+    
+    public function createNewSubFormInstance() {
+        return new $this->_subFormClass();
     }
 
     /**

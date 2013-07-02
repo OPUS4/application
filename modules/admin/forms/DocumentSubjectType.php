@@ -65,10 +65,10 @@ class Admin_Form_DocumentSubjectType extends Admin_Form_DocumentMultiSubForm {
     }
     
     /**
-     * Erzeugt neues Unterformular konfiguriert fuer den entsprechenden Schlagworttyp.
+     * Erzeugt neues Unterformular Instanz fuer den entsprechenden Schlagworttyp.
      * @return \Admin_Form_DocumentSubject
      */
-    public function createSubForm() {
+    public function createNewSubFormInstance() {
         if ($this->__subjectType == 'swd') {
             return new Admin_Form_DocumentSubject('swd', 'deu');
         } 
