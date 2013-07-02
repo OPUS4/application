@@ -87,8 +87,6 @@ class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
     public function init() {
         parent::init();
         
-        $elementFactory = $this->getFormElementFactory();
-        
         $element = new Form_Element_Hidden(self::ELEMENT_ID);
         $this->addElement($element);
         
@@ -104,8 +102,7 @@ class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
         $element->setLabel($this->_translationPrefix . self::ELEMENT_COUNTRIES);
         $this->addElement($element);
         
-        $element = $elementFactory->createYearElement(self::ELEMENT_YEAR_APPLIED);
-        $this->addElement($element);
+        $this->addElement('Year', self::ELEMENT_YEAR_APPLIED);
         
         $element = new Form_Element_Text(self::ELEMENT_APPLICATION);
         $element->setLabel($this->_translationPrefix . self::ELEMENT_APPLICATION);
