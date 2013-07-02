@@ -55,13 +55,20 @@ class Admin_Form_DocumentInstitute extends Admin_Form_AbstractModelSubForm {
     public function init() {
         parent::init();
         
-        $element = new Form_Element_Hidden(self::ELEMENT_DOC_ID);
-        $this->addElement($element);
+        $this->addElement('Hidden', self::ELEMENT_DOC_ID);
         
-        $element = $this->createInstituteSelect(self::ELEMENT_INSTITUTE);
-        $element->setRequired(true);
-        $element->addValidator('Int');
-        $this->addElement($element);
+        switch ($this->__role) {
+            case self::ROLE_PUBLISHER:
+                $this->addElement('Publisher', self::ELEMENT_INSTITUTE);
+                break;
+            case self::ROLE_GRANTOR:
+                $this->addElement('Grantor', self::ELEMENT_INSTITUTE);
+                break;
+            default:
+                // TODO should never happen
+                $options = null;
+                break;
+        }
     }
 
     public function populateFromModel($link) {
@@ -103,37 +110,6 @@ class Admin_Form_DocumentInstitute extends Admin_Form_AbstractModelSubForm {
         $this->updateModel($link);
         
         return $link;
-    }
-
-    /**
-     * 
-     * @param type $name
-     * @return \Zend_Form_Element_Select
-     * 
-     * TODO move?
-     * TODO Unit Test
-     */
-    public function createInstituteSelect($name = 'Institute') {
-        $select = new Zend_Form_Element_Select($name);
-        
-        switch ($this->__role) {
-            case self::ROLE_PUBLISHER:
-                $options = Opus_DnbInstitute::getPublishers();
-                break;
-            case self::ROLE_GRANTOR:
-                $options = Opus_DnbInstitute::getGrantors(); 
-                break;
-            default:
-                // TODO should never happen
-                $options = null;
-                break;
-        }
-        
-        foreach ($options as $option) {
-            $select->addMultiOption($option->getId(), $option->getName());
-        }
-                
-        return $select;
     }
     
     public function loadDefaultDecorators() {
