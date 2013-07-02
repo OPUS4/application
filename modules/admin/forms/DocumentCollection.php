@@ -56,6 +56,8 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
      * Name von Formularelement fuer das Enfernen der Collection vom Dokument.
      */
     const ELEMENT_REMOVE = 'Remove';
+    
+    private $collectionName = null;
         
     /**
      * Erzeugt die Formularelemente.
@@ -119,6 +121,15 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
             array('ViewScript', array('viewScript' => 'form/collectionForm.phtml')),
             array(array('multiWrapper' => 'HtmlTag'), array('class' => 'multiple-wrapper'))
         ));
+    }
+    
+    public function _removeElements() {
+        $this->collectionName = $this->getElement(self::ELEMENT_EDIT)->getLabel();
+        parent::_removeElements();
+    }
+    
+    public function getCollectionName() {
+        return $this->collectionName;
     }
             
 }
