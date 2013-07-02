@@ -226,26 +226,84 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     /**
      * Prüft, ob das XHTML valide ist.
      * @param string $body
+     * 
+     * TODO die DTD von W3C zu holen ist sehr langsam; sollte aus lokaler Datei geladen werden
      */
-    public function validateXHTML($body) {
+    public function validateXHTML($body) {        
         libxml_clear_errors();
         libxml_use_internal_errors(true);
         
         $dom = new DOMDocument();
-        // $dom->validateOnParse = true; TODO Loading of DTD fails
+        
+        // Setze HTTP Header damit W3C Request nicht verweigert
+        $opts = array(
+            'http' => array(
+                'user_agent' => 'PHP libxml agent',
+            )
+        );
+
+        
+        $context = stream_context_create($opts);
+        libxml_set_streams_context($context);
+
+        $mapping = array(
+             'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd' => 'xhtml1-strict.dtd'
+        );        
+        
+        /* TODO erst ab PHP >= 5.4.0 unterstützt; Alternative Lösung?
+        libxml_set_external_entity_loader(
+            function ($public, $system, $context) use ($mapping) {
+                if (is_file($system)) {
+                    return $system;
+                }
+
+                if (isset($mapping[$system])) {
+                    return APPICATION_PATH . DIRECTORY_SEPARATOR . 'schema' . DIRECTORY_SEPARATOR . $mapping[$system];
+                }
+
+                $message = sprintf(
+                    "Failed to load external entity: Public: %s; System: %s; Context: %s",
+                    var_export($public, 1), var_export($system, 1),
+                    strtr(var_export($context, 1), array(" (\n  " => '(', "\n " => '', "\n" => ''))
+                );
+
+                throw new RuntimeException($message);
+            }
+        );*/
+
+        $dom->validateOnParse = true;
         $dom->loadXML($body);
         
         $errors = libxml_get_errors();
         
-        // Array mit Fehlern ausgeben
-        if (count($errors) !== 0) {
-            Zend_Debug::dump($errors);
+        $ignored = array(
+            'No declaration for attribute class of element html',
+            'No declaration for attribute placeholder of element input'
+        );
+        
+        $filteredErrors = array();
+        
+        foreach ($errors as $error) {
+            if (!in_array(trim($error->message), $ignored)) {
+                $filteredErrors[] = $error;
+            }
         }
         
-        $this->assertEquals(0, count($errors), 'XHTML Schemaverletzungen gefunden (' . count($errors) . ')');
+        $errors = $filteredErrors;
+        
+        // Array mit Fehlern ausgeben
+        if (count($errors) !== 0) {
+            $output = Zend_Debug::dump($errors, 'XHTML Fehler', false);
+        }
+        else {
+            $output = '';
+        }
+        
+        $this->assertEquals(0, count($errors), 'XHTML Schemaverletzungen gefunden (' . count($errors) . ')' . PHP_EOL 
+                . $output);
         
         libxml_use_internal_errors(false);
         libxml_clear_errors();
     }
-    
+        
 }
