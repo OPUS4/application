@@ -53,7 +53,6 @@
  * der Session gespeichert werden muß und eine neue URL (zum Zuweisen der Collection) angesprungen werden soll. 
  * 
  * TODO eliminiere redundanten Code fuer CollectionRole SubForm (separate Klasse?) (vergl. mit MultiSubForm Klasse)
- * TODO Sollten collection sofort entfernt und gespeichert werden oder erst mit "Save"
  */
 class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm {
     
@@ -86,12 +85,12 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
             
             $roleForm->setLegend('default_collection_role_' . $roleName);
             
+            $position = 0;
+            
             // Iteriere über Collections für CollectionRole und erzeuge Unterformulare
             foreach ($collections as $index => $collection) {
-                $collectionForm = new Admin_Form_DocumentCollection();
-                
+                $collectionForm = $this->createCollectionForm($position++);
                 $collectionForm->populateFromModel($collection);
-                
                 $roleForm->addSubForm($collectionForm, 'collection' . $index);
             }
             
@@ -196,12 +195,12 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
         $roleForm = new Admin_Form_DocumentSection();
         
         $roleForm->setLegend('default_collection_role_' . $roleName);
+        
+        $position = 0;
 
         foreach ($data as $index => $collection) {
-            $collectionForm = new Admin_Form_DocumentCollection();
-
+            $collectionForm = $this->createCollectionForm($position++);
             $collectionForm->populateFromPost($collection);
-
             $roleForm->addSubForm($collectionForm, $index);
         }
 
@@ -242,6 +241,20 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
     
     public function isEmpty() {
         return count($this->getSubForms()) == 0;
+    }
+    
+    public function createCollectionForm($position) {
+        $subform = new Admin_Form_DocumentCollection();
+        
+        $multiWrapper = $subform->getDecorator('multiWrapper');
+
+        if (!is_null($multiWrapper) && $multiWrapper instanceof Zend_Form_Decorator_HtmlTag) {
+            $multiClass = $multiWrapper->getOption('class');
+            $multiClass .= ($position % 2 == 0) ? ' even' : ' odd';
+            $multiWrapper->setOption('class', $multiClass);
+        }
+        
+        return $subform;
     }
         
 }
