@@ -37,19 +37,6 @@
 class Admin_DocumentControllerTest extends ControllerTestCase {
 
     /**
-     * Test edit action.
-     */
-    public function testEditAction() {
-        $this->markTestSkipped("needs to be adapted");
-
-        $this->dispatch('/admin/documents/edit/id/1');
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('documents');
-        $this->assertAction('edit');
-    }
-
-    /**
      * Regression test for OPUSVIER-1757
      */
     public function testEditLinkForEmptySectionIsNotDisplayed() {
@@ -90,7 +77,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-1843.
      */
-    public function test() {
+    public function testRegression1843() {
         $this->markTestSkipped('not working yet');
         
         $this->request
@@ -200,18 +187,26 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('div#docinfo', 'Doe, John');
     }
     
-    public function testIndexAction() {
+    public function testIndexActionValidXHTML() {
         $this->dispatch('/admin/document/index/id/146');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('document');
         $this->assertAction('index');
         
-        // Prüfen, ob die richtigen Metadaten angezeigt werden
-        
-        // Lizenzen 
-        $this->assertQuery('dt#Document-Licences-licence4');
-        $this->assertQueryCountMax('dt#Document-Licences-licence2', 0);
+        // Prüfen, ob XHTML valid ist
+        $this->validateXHTML($this->getResponse()->getBody());
     }
-
+    
+    public function testEditActionValidXHTML() {
+        $this->dispatch('/admin/document/edit/id/146');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('document');
+        $this->assertAction('edit');
+        
+        // Prüfen, ob XHTML valid ist
+        $this->validateXHTML($this->getResponse()->getBody());
+    }
+    
 }
