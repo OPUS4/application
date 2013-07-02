@@ -33,7 +33,7 @@
  * @version     $Id$
  */
 
-class Setup_HelpPageControllerTest extends Setup_ControllerTestCase {
+class Setup_HelpPageControllerTest extends SetupControllerTestCase {
 
     /**
      * original file modes, needed for restoring after test

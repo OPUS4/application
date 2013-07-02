@@ -32,7 +32,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-abstract class Setup_ControllerTestCase extends ControllerTestCase {
+abstract class SetupControllerTestCase extends ControllerTestCase {
 
     /**
      * original file modes, needed for restoring after test

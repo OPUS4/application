@@ -51,7 +51,9 @@ class Setup_StaticPageController extends Controller_SetupAbstract {
 
     protected function getModel() {
         $pageName = $this->getRequest()->getParam('page');
-        return new Setup_Model_StaticPage($pageName, $this->_config);
+        $config = $this->_config->toArray();
+        $config['useContentFile'] = ($pageName != 'home');
+        return new Setup_Model_StaticPage($pageName, $config);
     }
 
     protected function getForm() {

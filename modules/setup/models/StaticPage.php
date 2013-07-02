@@ -49,6 +49,12 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
     protected $contentBasepath;
 
     /**
+     * decide wether to use external content file (as in contact, imprint)
+     * or save content data in tmx file (as in home page) 
+     */
+    protected $useContentFile = true;
+
+    /**
      * @param string $pageName          Name of the page
      * @param Zend_Config|array $config Object or Array containing configuration
      *                                  parameters (@see setConfig() for details).
@@ -73,6 +79,16 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
      */
     public function setTranslationTargetPath($tmxTargetPath) {
         $this->setTranslationTarget($tmxTargetPath . DIRECTORY_SEPARATOR . $this->pageName . '.tmx');
+    }
+
+    /**
+     * Set usage of external content file. If true, content data is saved to
+     * external file (@see $useContentFile).
+     * 
+     * @param string $tmxTargetPath directory path used to write tmx content
+     */
+    public function setUseContentFile($bool = true) {
+        $this->useContentFile = $bool;
     }
 
     /**
@@ -110,7 +126,7 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
         $translationUnits = $this->getTranslation();
         foreach ($languages as $language) {
             $resultArray[$language] = array();
-            if (!is_null($this->contentBasepath)) {
+            if ($this->useContentFile) {
                 $fileName = "{$this->pageName}.$language.txt";
                 $filePath = $this->contentBasepath . DIRECTORY_SEPARATOR . $fileName;
                 $this->addContentSource($filePath);

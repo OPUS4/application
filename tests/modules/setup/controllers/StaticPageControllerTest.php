@@ -33,7 +33,7 @@
  * @version     $Id$
  */
 
-class Setup_StaticpPageControllerTest extends Setup_ControllerTestCase {
+class Setup_StaticpPageControllerTest extends SetupControllerTestCase {
 
     /**
      * original file modes, needed for restoring after test
