@@ -1,7 +1,5 @@
 <?php
 /**
- * Index Controller for all actions dealing with encryption and signatures
- *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
