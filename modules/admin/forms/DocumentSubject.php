@@ -61,15 +61,15 @@ class Admin_Form_DocumentSubject extends Admin_Form_AbstractModelSubForm {
         $this->addElement('Hidden', self::ELEMENT_ID);
         
         if (is_null($this->__language)) {
-            $element = $this->createElement('Language', self::ELEMENT_LANGUAGE, array('label' => 'Language'));
+            $element = $this->createElement('Language', self::ELEMENT_LANGUAGE);
         }
         else {
             $element = $this->createElement('Hidden', self::ELEMENT_LANGUAGE, array('value' => $this->__language));
         }
         $this->addElement($element);
         
-        $this->addElement('Text', self::ELEMENT_VALUE, array('required' => true, 'label' => 'Value'));
-        $this->addElement('Text', self::ELEMENT_EXTERNAL_KEY, array('label' => 'ExternalKey'));
+        $this->addElement('Text', self::ELEMENT_VALUE, array('required' => true, 'size' => 30));
+        $this->addElement('Text', self::ELEMENT_EXTERNAL_KEY);
     }
     
     public function populateFromModel($subject) {
