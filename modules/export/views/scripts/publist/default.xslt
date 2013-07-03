@@ -60,7 +60,7 @@
 
     <xsl:template name="set_div">
         <xsl:element name="div">
-            <xsl:attribute name="id">publist</xsl:attribute>
+            <xsl:attribute name="id">opus-publist</xsl:attribute>
             <!-- Navibar Year -->
             <xsl:call-template name="render_header"/>
             <xsl:call-template name="render_navibar"/>
@@ -70,7 +70,7 @@
 
   <!-- Template for Header -->
   <xsl:template name="render_header">
-    <div id="header">
+    <div id="opus-header">
       <xsl:element name="h1">
           <xsl:value-of select="$collName" />
       </xsl:element>
@@ -106,7 +106,7 @@
             </xsl:element>
             <xsl:element name="a">
                 <xsl:attribute name="href">
-                    <xsl:text>#L</xsl:text>
+                    <xsl:text>#opus-year-</xsl:text>
                     <xsl:value-of select="$year" />
                 </xsl:attribute>
                 <xsl:value-of select="$year" />
@@ -146,12 +146,12 @@
     <xsl:template name="render_table_row">
         <xsl:param name="year" required="yes" />
                 <xsl:element name="tr">
-                    <xsl:attribute name="class">year</xsl:attribute>
+                    <xsl:attribute name="class">opus-year</xsl:attribute>
                     <xsl:element name="td">
                     <xsl:attribute name="colspan">4</xsl:attribute>
                         <xsl:element name="h4">
                             <xsl:attribute name="id">
-                                <xsl:text>L</xsl:text>
+                                <xsl:text>opus-year-</xsl:text>
                                 <xsl:value-of select="$year" />
                             </xsl:attribute>
                             <xsl:value-of select="$year" />
@@ -178,7 +178,7 @@
     <xsl:template match="Opus_Document">
         <xsl:element name="tr">
             <xsl:element name="td">
-                <xsl:attribute name="class">persons</xsl:attribute>
+                <xsl:attribute name="class">opus-persons</xsl:attribute>
                 <xsl:attribute name="valign">top</xsl:attribute>
                 <xsl:choose>
                     <xsl:when test="@Type = 'book'">
@@ -190,12 +190,12 @@
                 </xsl:choose>
             </xsl:element>
             <xsl:element name="td">
-                <xsl:attribute name="class">title</xsl:attribute>
+                <xsl:attribute name="class">opus-title</xsl:attribute>
                 <xsl:attribute name="valign">top</xsl:attribute>
                 <xsl:apply-templates select="TitleMain" />
             </xsl:element>
             <xsl:element name="td">
-                <xsl:attribute name="class">metadata</xsl:attribute>
+                <xsl:attribute name="class">opus-metadata</xsl:attribute>
                 <xsl:attribute name="valign">top</xsl:attribute>
                 <xsl:choose>
                     <xsl:when test="@Type = 'article'">
@@ -234,7 +234,7 @@
                 </xsl:choose>
             </xsl:element>
             <xsl:element name="td">
-                <xsl:attribute name="class">links</xsl:attribute>
+                <xsl:attribute name="class">opus-links</xsl:attribute>
                 <xsl:attribute name="valign">top</xsl:attribute>
                 <xsl:call-template name="render_links"/>
             </xsl:element>
