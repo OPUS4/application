@@ -227,7 +227,7 @@ class Opus3FileImport {
         $pathName = $this->getPathName($subdir, basename($f));
         
         if ($pathName != iconv("UTF-8", "UTF-8//IGNORE", $pathName)) {
-            $this->logger->log_error("Opus3FileImport", "Filename '" . $pathName . "' is corrupt. Changed to '" . utf8_encode($pathName) . "'.");
+            $this->logger->log_error("Opus3FileImport", "Filename '" . $pathName . "' of OPUS3-Id '" . $this->opus3Id . "' is corrupt. Changed to '" . utf8_encode($pathName) . "'.");
             $pathName = utf8_encode($pathName);
         }
 
@@ -282,7 +282,7 @@ class Opus3FileImport {
         if (!is_null($this->roleId)) {
             $role = new Opus_UserRole($this->roleId);
             $role->appendAccessFile($file->getId());
-            $this->logger->log_debug("Opus3FileImport", "Role '" . $role . "' for File '" . $file->getPathName() . "'");
+            $this->logger->log_debug("Opus3FileImport", "Role '" . $role . "' for File '" . $file->getPathName() . "' of OPUS3-Id '" . $this->opus3Id . '"');
             $role->store();
         }
     }
@@ -360,7 +360,7 @@ class Opus3FileImport {
     private function isValidFile($f)  {
         // Exclude 'index.html' and files starting with '.'
         if (basename($f) == 'index.html' || strpos(basename($f), '.') === 0) {
-            $this->logger->log_debug("Opus3FileImport", "Skipped File '" . basename($f) . "'");
+            $this->logger->log_debug("Opus3FileImport", "Skipped File '" . basename($f) . "' of OPUS3-Id '" . $this->opus3Id . "'");
             return false;
         }
 
@@ -373,7 +373,7 @@ class Opus3FileImport {
 
         // ERROR: Filename has no Extension
         if (strrchr ($f, ".") === false) {
-            $this->logger->log_error("Opus3FileImport", "File '" . basename($f) . "' has no extension and will be ignored");
+            $this->logger->log_error("Opus3FileImport", "File '" . basename($f) . "' of OPUS3-Id '" . $this->opus3Id . "' has no extension and will be ignored");
             return false;
         }
 
