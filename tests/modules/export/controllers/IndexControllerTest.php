@@ -665,6 +665,43 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains(' xmlns:xsi=', $response->getBody());
         $this->assertNotContains(' xmlns:xsl=', $response->getBody());
     }
+    
+     /*
+     * OPUSVIER: 2889
+     */
+    public function testPrefixesForIdClassAndAnchorInDefaultLayout() {
+        $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $response = $this->getResponse();
+	
+	/* id */
+	$this->assertContains(' id="opus-publist"', $response->getBody());
+	$this->assertContains(' id="opus-header"', $response->getBody());
+        $this->assertNotContains(' id="header"', $response->getBody());
+        $this->assertNotContains(' id="publist"', $response->getBody());
+        $this->assertNotRegExp('/ id="[a-z]+"/', $response->getBody());	
+	
+	/* class */
+	$this->assertContains(' class="opus-persons"', $response->getBody());
+	$this->assertContains(' class="opus-year"', $response->getBody());
+	$this->assertContains(' class="opus-title"', $response->getBody());
+	$this->assertContains(' class="opus-metadata"', $response->getBody());
+	$this->assertContains(' class="opus-links"', $response->getBody());	
+	$this->assertNotContains(' class="persons"', $response->getBody());
+	$this->assertNotContains(' class="year"', $response->getBody());
+	$this->assertNotContains(' class="title"', $response->getBody());
+	$this->assertNotContains(' class="metadata"', $response->getBody());
+	$this->assertNotContains(' class="links"', $response->getBody());
+        $this->assertNotRegExp('/ class="[a-z]+"/', $response->getBody());	
+	
+	/* anchor */
+	$this->assertContains(' href="#opus-year-2010"', $response->getBody());
+	$this->assertContains(' id="opus-year-2010"', $response->getBody());
+	$this->assertNotContains(' href="#L2010', $response->getBody());
+	$this->assertNotContains(' id="L2010"', $response->getBody());
+	$this->assertNotRegExp('/ href="#L[0-9]{4}"/', $response->getBody());	
+	$this->assertNotRegExp('/ id="L[0-9]{4}"/', $response->getBody());	
+       }   
 
 
 
