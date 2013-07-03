@@ -44,10 +44,10 @@
     
     <tu tuid="admin_title_setup">
       <tuv xml:lang="en">
-        <seg>Setup</seg>
+        <seg>Setup (Beta)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Oberflächenanpassungen</seg>
+        <seg>Oberflächenanpassungen (Beta)</seg>
       </tuv>
     </tu>
     
