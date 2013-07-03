@@ -33,14 +33,13 @@
 
 /**
  * TODO htmlspecialchars
- * TODO Übersetzungen
- * TODO für Metadaten-Übersicht anpassen
  */
 ?>
 
 <?PHP 
     $personId = $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->getValue();
-    if (!is_null($personId)) {
+    $person = $this->element->getModel();
+    if (is_null($person) && !is_null($personId)) {
         $person = new Opus_Person($personId);
     }
     else {
@@ -81,6 +80,8 @@
                     <?PHP if (!$this->element->isViewModeEnabled()) : ?>
                     -<?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->renderViewHelper() ?>
                     <?= $this->translate('AllowEmailContact') ?>
+                    <?PHP elseif ($person->getAllowEmailContact()) : ?>
+                    <span id="<?= $formId . 'AllowContact'?>">(<?= $this->translate('AllowEmailContact') ?>)</span>
                     <?PHP endif; ?>
                 </div>
                 <?PHP endif; ?>

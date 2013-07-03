@@ -104,6 +104,8 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
     
     private $mode = self::MODE_FORM;
     
+    private $model = null;
+    
     /**
      * Erzeugt die Formularelemente.
      */
@@ -132,6 +134,7 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
             $this->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personLink->getModel()->getId());
             $role = $personLink->getRole();
             // $this->removeElement('Role'. ucfirst($role));
+            $this->model = $personLink;
         }
         else {
             $this->getLog()->err('populateFromModel called with object that is not instance of '
@@ -171,6 +174,10 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         }
         
         return parent::processPost($post, $context);
+    }
+    
+    public function getModel() {
+        return $this->model;
     }
     
     public function getLinkModel($documentId, $personRole) {
