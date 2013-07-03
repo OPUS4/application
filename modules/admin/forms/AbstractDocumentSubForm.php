@@ -234,7 +234,7 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
         return Zend_Registry::get('Zend_Log');
     }
     
-    public function isViewMode() {
+    public function isViewModeEnabled() {
         return $this->viewMode;
     }
     

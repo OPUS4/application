@@ -44,7 +44,7 @@
 <div id="actionboxContainer">
   <div class="wrapper">
       <div class="col col-1">
-        <?PHP if (!$this->element->isViewMode() || count($stateLinks) == 0) : ?>  
+        <?PHP if (!$this->element->isViewModeEnabled() || count($stateLinks) == 0) : ?>  
         <dl id="Document-ServerState">
           <dt id="Document-ServerState-label"><?= htmlspecialchars($this->translate('ServerState-short')) . ':'?></dt>
           <dd id="Document-ServerState-value"><?= htmlspecialchars($this->translate('Opus_Document_ServerState_Value_' . ucfirst($document->getServerState()))) ?></dd>
@@ -86,7 +86,7 @@
       </div>
       <div class="col col-3">
         <ul class="form-action">
-          <?PHP if (!$this->element->isViewMode()) : ?>
+          <?PHP if (!$this->element->isViewModeEnabled()) : ?>
           <li class="save-element"><?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_SAVE) ?></li>
           <li class="cancel-element"> oder <?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_CANCEL) ?></li>
           <?PHP else : ?>

@@ -43,7 +43,7 @@
     $formId = substr($formId, 0, strrpos($formId, '-') + 1);
 ?>
 
-<?PHP if ($this->element->isViewMode()) : ?>
+<?PHP if ($this->element->isViewModeEnabled()) : ?>
 <div class="data-wrapper multiple-data">
     <div id="<?= $formId . 'Name' ?>"><?= htmlspecialchars($this->element->getCollectionName()) ?></div>    
     <?= $this->element->getElement(Admin_Form_DocumentCollection::ELEMENT_ID) ?>
