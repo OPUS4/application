@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,8 +32,17 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Oai_Model_DocumentListTest extends ControllerTestCase {
+
+    public function setUp() {
+        parent::setUp();
+        
+        // make sure server_date_modified is not changed
+        $document3 = new Opus_Document(3);
+        $serverDateModified = $document3->getServerDateModified();
+
+        $this->assertEquals('2010-06-04T02:30:37Z', (string) $serverDateModified, 'Test Data changed. Unexpected ServerDateModified');
+    }
 
     /**
      * Test list document ids, metadataPrefix=XMetaDissPlus, different intervals
@@ -41,27 +51,27 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
     public function testQueryWithDoc3() {
         $intervals = array(
             array(),
-            array('from'=>'2010-06-04'),
-            array('until'=>'2010-06-04'),
-            array('from'=>'2010-06-03'),
-            array('until'=>'2010-06-05'),
-            array('from'=>'2010-06-04', 'until'=>'2010-06-04'),
-            array('from'=>'2010-06-03', 'until'=>'2010-06-04'),
-            array('from'=>'2010-06-04', 'until'=>'2010-06-05'),
-            array('from'=>'2010-06-03', 'until'=>'2010-06-04'),
+            array('from' => '2010-06-04'),
+            array('until' => '2010-06-04'),
+            array('from' => '2010-06-03'),
+            array('until' => '2010-06-05'),
+            array('from' => '2010-06-04', 'until' => '2010-06-04'),
+            array('from' => '2010-06-03', 'until' => '2010-06-04'),
+            array('from' => '2010-06-04', 'until' => '2010-06-05'),
+            array('from' => '2010-06-03', 'until' => '2010-06-04'),
         );
 
         foreach ($intervals AS $interval) {
-            $oaiRequest = array('verb'=>'ListRecords', 'metadataPrefix'=>'XMetaDissPlus');
+            $oaiRequest = array('verb' => 'ListRecords', 'metadataPrefix' => 'XMetaDissPlus');
             $oaiRequest = array_merge($interval, $oaiRequest);
-            
+
             $docListModel = new Oai_Model_DocumentList();
             $docListModel->_deliveringDocumentStates = array('published', 'deleted');
             $docListModel->_xMetaDissRestriction = array();
             $docIds = $docListModel->query($oaiRequest);
 
-            $this->assertContains(3, $docIds,
-               "Response must contain document id 3: " . var_export($interval, true));
+            $this->assertTrue(in_array(3, $docIds), 
+                                "Response must contain document id 3: " . var_export($interval, true));
         }
     }
 
@@ -71,14 +81,14 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
      */
     public function testQueryWithoutDoc3() {
         $intervals = array(
-            array('from'=>'2010-06-05'),
-            array('until'=>'2010-06-03'),
-            array('from'=>'2010-06-05', 'until'=>'2010-06-06'),
-            array('from'=>'2010-06-02', 'until'=>'2010-06-03'),
+            array('from' => '2010-06-05'),
+            array('until' => '2010-06-03'),
+            array('from' => '2010-06-05', 'until' => '2010-06-06'),
+            array('from' => '2010-06-02', 'until' => '2010-06-03'),
         );
 
         foreach ($intervals AS $interval) {
-            $oaiRequest = array('verb'=>'ListRecords', 'metadataPrefix'=>'XMetaDissPlus');
+            $oaiRequest = array('verb' => 'ListRecords', 'metadataPrefix' => 'XMetaDissPlus');
             $oaiRequest = array_merge($interval, $oaiRequest);
 
             $docListModel = new Oai_Model_DocumentList();
@@ -86,8 +96,8 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
             $docListModel->_xMetaDissRestriction = array();
             $docIds = $docListModel->query($oaiRequest);
 
-            $this->assertNotContains(3, $docIds,
-               "Response must NOT contain document id 3: " . var_export($interval, true));
+            $this->assertFalse(in_array(3, $docIds), 
+                                "Response must NOT contain document id 3: " . var_export($interval, true));
         }
     }
 
