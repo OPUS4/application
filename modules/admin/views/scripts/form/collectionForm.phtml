@@ -45,7 +45,7 @@
 
 <?PHP if ($this->element->isViewMode()) : ?>
 <div class="data-wrapper multiple-data">
-    <?= htmlspecialchars($this->element->getCollectionName()) ?>    
+    <div id="<?= $formId . 'Name' ?>"><?= htmlspecialchars($this->element->getCollectionName()) ?></div>    
     <?= $this->element->getElement(Admin_Form_DocumentCollection::ELEMENT_ID) ?>
 </div>
 <?PHP else : ?>
