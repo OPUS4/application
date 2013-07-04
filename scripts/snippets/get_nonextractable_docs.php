@@ -73,11 +73,6 @@ foreach ($docFinder->ids() as $id) {
             echo "error while extracting full text for document # " . $d->getId() . " (file name : " . $file->getPath() . " )\n";
             $numOfNonExtractableFulltexts++;
             continue;
-        }        
-        if ($response->getHttpStatus() != 200) {
-            echo "error while extracting full text for document # " . $d->getId() . " (file name : " . $file->getPath() . " )\n";
-            $numOfNonExtractableFulltexts++;
-            continue;
         }
         if (is_null($response->getRawResponse()) || strlen(trim($response->getRawResponse())) == 0) {
             echo "non-extractable full text for document # " . $d->getId() . " (file name: " . $file->getPath() . " )\n";
