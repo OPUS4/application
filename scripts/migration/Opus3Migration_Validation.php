@@ -44,15 +44,25 @@ class Opus3Migration_Validation {
 
     private $logger;
     private $importFile;
+    private $type;
 
     function __construct($options) {
         if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
-
+	if (array_key_exists('t', $options) !== false) { $this->type = $options["t"]; }
         $this->logger = new Opus3ImportLogger();
+    }
+    
+    public function validate() {
+	if ($this->type === 'validate') {
+		$this->validateImportFile();
+	}
+	if ($this->type === 'consistency') {
+		$this->checkConsistencyOfImportFile();
+	}	
     }
 
 
-    public function validateImportFile() {
+    private function validateImportFile() {
         libxml_use_internal_errors(true);
         $file = file_get_contents($this->importFile, true);
         $xml = simplexml_load_string($file);
@@ -73,6 +83,23 @@ class Opus3Migration_Validation {
 
     public function log_error($string) {
         $this->logger->log_error("Opus3Migration_Validation", $string);
+    }
+    
+    private function checkConsistencyOfImportFile() {
+	$xml = new DOMDocument;
+	$xml->load($this->importFile);
+
+	$xsl = new DOMDocument;
+	$xsl->load('stylesheets/check.xslt');
+
+	$proc = new XSLTProcessor;
+	$proc->importStyleSheet($xsl);
+	
+	$result = $proc->transformToXML($xml);
+        if (strlen($result) > 0) {
+	    echo $result;
+            throw new Exception("XML-Dump-File is not consistent.");
+        }	
     }
     
 
@@ -100,12 +127,12 @@ $application = new Zend_Application(
 );
 $application->bootstrap(array('Configuration', 'Logging', 'Database'));
 
-$options = getopt("f:");
+$options = getopt("f:t:");
 
 // Start Opus3Migration_Validation
 $validation = new Opus3Migration_Validation($options);
 try {
-    $validation->validateImportFile();
+    $validation->validate();
 }
 catch (Exception $e) {
     $validation->log_error($e->getMessage());

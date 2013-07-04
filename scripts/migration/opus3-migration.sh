@@ -86,12 +86,11 @@ cd "$db_dir"
 
 echo "Validation of Opus3-XML-Dumpfile"
 cd "$migration_dir"
-php Opus3Migration_Validation.php -f "$xml_file" || { echo "Aborting migration: Opus3Migration_Validation.php FAILED"; exit -1; }
+php Opus3Migration_Validation.php -f "$xml_file" -t "validation"|| { echo "Aborting migration: Opus3Migration_Validation.php FAILED"; exit -1; }
 
 echo "Validation of Consistency of Opus3-XML-Dumpfile"
 cd "$migration_dir"
-check=`php ../xslt.php stylesheets/check.xslt "$xml_file"`
-[[ -z $check ]] || { echo "Aborting migration: Consistency check of Opus3-Dump FAILED"; echo $check; exit -1; }
+php Opus3Migration_Validation.php -f "$xml_file" -t "consistency"|| { echo "Aborting migration: Consistency check of Opus3-Dump FAILED"; exit -1; }
 
 APPLICATION_ENV=production;
 [ "$testing" -eq "1" ] && APPLICATION_ENV=testing;
