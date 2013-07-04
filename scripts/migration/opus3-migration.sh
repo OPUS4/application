@@ -19,13 +19,12 @@ testing=0
 
 while getopts f:p:z:int o
 do	case "$o" in
-	f)	xmlfile="$OPTARG";;
 	p)	fulltextpath="$OPTARG";;
         z)	stepsize="$OPTARG";;
         i)      buildindex=1;;
         n)      iteration=0;;
         t)      testing=1;;
-	[?])	print "Usage: $0 [-f xmlfile] [-p fulltextpath] [-z stepsize for looping] [-i ] [ -n ]"
+	[?])	print "Usage: $0 [-p fulltextpath] [-z stepsize for looping] [-i ] [ -n ]"
 		exit 1;;
 	esac
 done
@@ -58,9 +57,6 @@ migration_config_ini=$config_dir/migration_config.ini
 
 [ ! -f "$migration_config_ini" -o ! -r "$migration_config_ini" ] && echo "Aborting migration: Configurationfile '`readlink -f $migration_config_ini`' does not exist or is not readable." && exit -1
 
-[ ! -f "$xmlfile" -o ! -r "$xmlfile" ] && echo "Aborting migration: Opus3-XML-Dumpfile '$xmlfile' does not exist or is not readable." && exit -1
-xml_file="$(readlink -f "$xmlfile")"
-
 [ ! -d "$fulltextpath" -o ! -r "$fulltextpath" ] && echo "Aborting migration: Opus3-Fulltextpath '$fulltextpath' does not exist or is not readable." && exit -1
 fulltext_path="$(readlink -f "$fulltextpath")"
 
@@ -86,25 +82,25 @@ cd "$db_dir"
 
 echo "Validation of Opus3-XML-Dumpfile"
 cd "$migration_dir"
-php Opus3Migration_Validation.php -f "$xml_file" -t "validation"|| { echo "Aborting migration: Opus3Migration_Validation.php FAILED"; exit -1; }
+php Opus3Migration_Validation.php -t "validation"|| { echo "Aborting migration: Opus3Migration_Validation.php FAILED"; exit -1; }
 
 echo "Validation of Consistency of Opus3-XML-Dumpfile"
 cd "$migration_dir"
-php Opus3Migration_Validation.php -f "$xml_file" -t "consistency"|| { echo "Aborting migration: Consistency check of Opus3-Dump FAILED"; exit -1; }
+php Opus3Migration_Validation.php -t "consistency"|| { echo "Aborting migration: Consistency check of Opus3-Dump FAILED"; exit -1; }
 
 APPLICATION_ENV=production;
 [ "$testing" -eq "1" ] && APPLICATION_ENV=testing;
 export APPLICATION_ENV;
 
 echo "Import institutes, collections and licenses"
-php Opus3Migration_ICL.php -f "$xml_file" || { echo "Aborting migration: Opus3Migration_ICL.php FAILED"; exit -1; }
+php Opus3Migration_ICL.php || { echo "Aborting migration: Opus3Migration_ICL.php FAILED"; exit -1; }
 
 echo "Import metadata and fulltext"
 start=1
 end=`expr $start + $stepsize - 1`
 
 touch "$migration_lock_file"
-php Opus3Migration_Documents.php -f "$xml_file" -p "$fulltext_path" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
+php Opus3Migration_Documents.php -p "$fulltext_path" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
 
 while [ -f "$migration_lock_file" ] && [ "$iteration" -eq "1" ]
 do
@@ -116,7 +112,7 @@ do
         php SolrIndexBuilder.php || { echo "Aborting migration: SolrIndexBuilder.php  FAILED"; exit -1; }
         cd "$migration_dir"
     fi
-    php Opus3Migration_Documents.php -f "$xml_file" -p "$fulltext_path" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
+    php Opus3Migration_Documents.php -p "$fulltext_path" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
 done
 
 cd "$script_dir"
