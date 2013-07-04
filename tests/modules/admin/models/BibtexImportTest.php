@@ -150,7 +150,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
      * OPUSVIER 2896
      */
 
-    public function testJobNotCreatedWhenSynchronous() {
+    public function testJobIsNotCreatedWhenSynchronous() {
         // manipulate application configuration
         $oldConfig = Zend_Registry::get('Zend_Config');
 
@@ -208,14 +208,27 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
         // undo configuration manipulation
         Zend_Registry::set('Zend_Config', $oldConfig);
-
+	
         $currNumOfRowsInJobTable = Opus_Job::getCount();
         $currNumOfImportJobs = count(Opus_Job::getByLabels(array(Opus_Job_Worker_MetadataImport::LABEL)));
         $currNumOfRowsInDocumentTable = $docFinder->count();
-
+	
         $this->assertEquals($numOfRowsInJobTable + 1, $currNumOfRowsInJobTable, 'Expected 1 more jobs in queue');
         $this->assertEquals($numOfImportJobs + 1, $currNumOfImportJobs, 'Expected 1 more import job in queue');
         $this->assertEquals($numOfRowsInDocumentTable, $currNumOfRowsInDocumentTable, 'Expected no document in database');
+		
+	// Check, if Metadata-ImportWorker works correctly on this job
+	$worker = new Opus_Job_Worker_MetadataImport();
+	$jobs = Opus_Job::getByLabels(array(Opus_Job_Worker_MetadataImport::LABEL));
+	$worker->work(array_pop($jobs));
+
+        $newNumOfRowsInDocumentTable = $docFinder->count();	
+        $this->assertEquals($currNumOfRowsInDocumentTable + 1, $newNumOfRowsInDocumentTable, 'Expected 1 more document in database');
+
+	// Document must be instantiated dto delete it while teardown
+	$ids = Opus_Document::getAllIds();
+	$last_id = array_pop($ids);
+        $this->doc = new Opus_Document($last_id);
     }
 
     /*
