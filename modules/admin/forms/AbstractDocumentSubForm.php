@@ -50,6 +50,7 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
         $this->setDecorators(array(
             'FormElements',
             array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
+            array('FormErrors', array('placement' => 'prepend', 'ignoreSubForms' => true)),
             'Fieldset',
             array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
         ));
@@ -63,14 +64,15 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     abstract function populateFromModel($model);
     
     /**
+     * Erzeugt Unterformularstruktur anhand der POST Hierarchy.
      * 
      * @param array $post
      * 
-     *
+     * TODO Möglich mit populate() zu verschmelzen?
      */
     public function constructFromPost($post, $document = null) {
     }
-    
+        
     /**
      * Verarbeitet POST Request vom Formular.
      * 
@@ -121,6 +123,28 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
             Zend_Debug::dump('Subform', $name);
             $subform->printValues();
         }
+    }
+    
+    /**
+     * Zusätzlich Validierungsfunktion für Prüfungen über mehrere Unterformulare hinweg.
+     * 
+     * Bei dieser Funktion werden die POST Daten für das gesamte Formular mit heruntergereicht, um dann einen Abgleich
+     * mit beliebigen Teilen des gesamten Formulars durchführen zu können.
+     * 
+     * @param array $data
+     * @param array $globalContext
+     * @return boolean true - wenn alle Abhängigkeiten erfüllt sind
+     */
+    public function isDependenciesValid($data, $globalContext) {
+        $result = true;
+        
+        foreach ($this->getSubForms() as $name => $subform) {
+            if (array_key_exists($name, $data) && !$subform->isDependenciesValid($data[$name], $globalContext)) {
+                $result = false; // trotzdem Validierung über alle Unterformulare um auch mehrere Meldungen anzuzeigen
+            }
+        }
+        
+        return $result;
     }
     
     public function isEmpty() {

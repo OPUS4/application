@@ -191,6 +191,23 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         }
     }
     
+    /**
+     * Validiert POST Daten.
+     * 
+     * Die überschriebene Function führt einmal die normale Validierung aus und ruft dann eine zweite Funktion auf,
+     * die sich mit Validierungen befasst, die mehrere Unterformulare betreffen können. Beispiele sind:
+     * 
+     * - ein TitleMain in Document-Language muss vorhanden sein (DocumentGeneral und DocumentTitleMain)
+     * 
+     * @param array $data
+     * @param array $context
+     */
+    public function isValid($data, $context = null) {
+        $result = parent::isValid($data, $context);
+        
+        return $result & $this->isDependenciesValid($data, $data);
+    }
+    
     public function loadDefaultDecorators() {
         parent::loadDefaultDecorators();
         
