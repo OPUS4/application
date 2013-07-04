@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+    </header>
+
+    <body>
+        <tu tuid="admin_indexmaintenance_title">
+            <tuv xml:lang="en">
+                <seg>Solr Index Maintenance</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Verwaltung des Solr-Index</seg>
+            </tuv>
+        </tu>
+        
+        <tu tuid="admin_indexmaintenance_index">
+            <tuv xml:lang="en">
+                <seg>Solr Index Maintenance</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Verwaltung des Solr-Index</seg>
+            </tuv>
+        </tu>        
+        
+                
+        <tu tuid="admin_indexmaintenance_inprogress">
+            <tuv xml:lang="en">
+                <seg>Operation is still in progress. Come back later to see results.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Die Operation befindet sich momentan in der Ausführung. Die Ergebnisse werden angezeigt, sobald die Operation beendet wurde.</seg>
+            </tuv>
+        </tu>
+
+
+        <tu tuid="admin_indexmaintenance_consistencycheck_name">
+            <tuv xml:lang="en">
+                <seg>Perform Consistency Check</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Überprüfung der Konsistenz</seg>
+            </tuv>
+        </tu>
+        
+        <tu tuid="admin_indexmaintenance_consistencycheck_description">
+            <tuv xml:lang="en">
+                <seg>add a short description</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>kurze Beschreibung hinzufügen</seg>
+            </tuv>
+        </tu>
+        
+        
+        <tu tuid="admin_indexmaintenance_fulltextextractioncheck_name">
+            <tuv xml:lang="en">
+                <seg>Perform Fulltext Extraction Check</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Überprüfung der Volltextextraktion</seg>
+            </tuv>
+        </tu>
+        
+        <tu tuid="admin_indexmaintenance_fulltextextractioncheck_description">
+            <tuv xml:lang="en">
+                <seg>add a short description</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>kurze Beschreibung hinzufügen</seg>
+            </tuv>
+        </tu>
+        
+        
+        <tu tuid="admin_indexmaintenance_indexoptimize_name">
+            <tuv xml:lang="en">
+                <seg>Perform Index Optimization</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Durchführung einer Indexoptimierung</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_indexmaintenance_indexoptimize_description">
+            <tuv xml:lang="en">
+                <seg>add a short description</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>kurze Beschreibung hinzufügen</seg>
+            </tuv>
+        </tu>
+
+
+        <tu tuid="admin_indexmaintenance_runjob">
+            <tuv xml:lang="en">
+                <seg>Run Job</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Starten</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_indexmaintenance_joboutput">
+            <tuv xml:lang="en">
+                <seg>Log Output of Last Run</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Protokoll der letzen Ausführung</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_indexmaintenance_jobcompletiontime">
+            <tuv xml:lang="en">
+                <seg>Completion Time</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Verarbeitungszeit</seg>
+            </tuv>
+        </tu>
+        
+        <tu tuid="admin_indexmaintenance_jobsumitted">
+            <tuv xml:lang="en">
+                <seg>Job %1s was successfully submitted to queue.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Job %1s wurde erfolgreich in der Warteschlange abgelegt.</seg>
+            </tuv>
+        </tu>
+        
+
+    </body>
+
+</tmx>
