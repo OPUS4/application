@@ -54,8 +54,7 @@ class Admin_BibteximportController extends Controller_Action {
             $postMaxSize = ini_get('post_max_size');
             $uploadMaxFilesize = ini_get('upload_max_filesize');
             $maxSize = ($postMaxSize > $uploadMaxFilesize) ? $uploadMaxFilesize : $postMaxSize;
-            // TODO: Eigene Tranlsation Keys verwenden??
- 
+   
             $message = $this->view->translate('admin_filemanager_error_upload', '>' . $maxSize);
 
             return $this->_redirectTo('index', array('failure' => $message));
