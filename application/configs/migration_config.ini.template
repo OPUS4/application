@@ -29,6 +29,7 @@
 ; @version     $Id$
 
 [production]
+;migration.file =
 
 migration.doctype.1 = "report"
 migration.doctype.2 = "article"
