@@ -79,6 +79,8 @@ class Admin_BibteximportController extends Controller_Action {
             $message = $this->view->translate('admin_filemanager_error_upload');
             return $this->_redirectTo('index', array('failure' => $message));
         }
+	
+	register_shutdown_function(array($this, "shutdown"));	
 
         $location = $uploadForm->fileupload->getFileName();
         try {
@@ -98,5 +100,19 @@ class Admin_BibteximportController extends Controller_Action {
 
         $this->_redirectTo('index', array('success' => $message));
     }
+    
+    
+	function catchError($errno, $errstr){
+
+	}    
+    
+    
+	function shutdown() {
+	    $last_error = error_get_last();
+	    if ($last_error['type'] === E_ERROR) {
+		$message = $this->view->translate('bibtex_import_error_upload');
+		return $this->_redirectTo('index', array('failure' => $message));
+	    }
+	}    
 
 }
