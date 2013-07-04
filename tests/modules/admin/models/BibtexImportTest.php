@@ -150,7 +150,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
      * OPUSVIER 2896
      */
 
-    public function testJobCreatedWhenSynchronous() {
+    public function testJobNotCreatedWhenSynchronous() {
         // manipulate application configuration
         $oldConfig = Zend_Registry::get('Zend_Config');
 
