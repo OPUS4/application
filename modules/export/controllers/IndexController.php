@@ -191,7 +191,8 @@ class Export_IndexController extends Controller_Xml {
             $groupBy = 'completedYear';
 	}
 
-        $fullUrl = $this->view->serverUrl() . $this->getRequest()->getBaseUrl();
+	$viewHelper = new View_Helper_BaseUrl();
+        $fullUrl = $viewHelper->fullUrl();
 
         $this->mapQuery();
         $this->_proc->registerPHPFunctions('max');
