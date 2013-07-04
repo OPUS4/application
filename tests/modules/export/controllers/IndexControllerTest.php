@@ -610,8 +610,8 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $response = $this->getResponse();
         $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
         $normalizedResponseBody = preg_replace('/\n/', "", $response->getBody());
-        $this->assertRegExp('/<a href="#L2010">2010<\/a>.*<a href="#L2009">2009<\/a>/', $normalizedResponseBody);
-        $this->assertRegExp('/<h4 id="L2010">2010<\/h4>.*<h4 id="L2009">2009<\/h4>/', $normalizedResponseBody);
+        $this->assertRegExp('/<a href="#opus-year-2010">2010<\/a>.*<a href="#opus-year-2009">2009<\/a>/', $normalizedResponseBody);
+        $this->assertRegExp('/<h4 id="opus-year-2010">2010<\/h4>.*<h4 id="opus-year-2009">2009<\/h4>/', $normalizedResponseBody);
     }
 
     public function testPublistActionGroupedByCompletedYear() {
@@ -638,8 +638,8 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $response = $this->getResponse();
         $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
         $normalizedResponseBody = preg_replace('/\n/', "", $response->getBody());
-        $this->assertRegExp('/<a href="#L2011">2011<\/a>.*<a href="#L2009">2009<\/a>/', $normalizedResponseBody);
-        $this->assertRegExp('/<h4 id="L2011">2011<\/h4>.*<h4 id="L2009">2009<\/h4>/', $normalizedResponseBody);
+        $this->assertRegExp('/<a href="#opus-year-2011">2011<\/a>.*<a href="#opus-year-2009">2009<\/a>/', $normalizedResponseBody);
+        $this->assertRegExp('/<h4 id="opus-year-2011">2011<\/h4>.*<h4 id="opus-year-2009">2009<\/h4>/', $normalizedResponseBody);
     }
 
     /*
