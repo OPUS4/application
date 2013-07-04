@@ -45,14 +45,21 @@ class Opus3Migration_Validation {
     private $logger;
     private $importFile;
     private $type;
+    private $config;
 
     function __construct($options) {
-        if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
+	$this->config = Zend_Registry::get('Zend_Config');
+        if (isset($this->config->migration->file)) {
+            $this->importFile = $this->config->migration->file;
+        }
 	if (array_key_exists('t', $options) !== false) { $this->type = $options["t"]; }
         $this->logger = new Opus3ImportLogger();
+
     }
     
     public function validate() {
+	echo "VALIDATE: " . $this->importFile . "\n";
+    
 	if ($this->type === 'validate') {
 		$this->validateImportFile();
 	}
@@ -64,7 +71,7 @@ class Opus3Migration_Validation {
 
     private function validateImportFile() {
         libxml_use_internal_errors(true);
-        $file = file_get_contents($this->importFile, true);
+	$file = file_get_contents($this->importFile, true);
         $xml = simplexml_load_string($file);
         $xmlstr = explode("\n", $file);
 
@@ -127,7 +134,7 @@ $application = new Zend_Application(
 );
 $application->bootstrap(array('Configuration', 'Logging', 'Database'));
 
-$options = getopt("f:t:");
+$options = getopt("t:");
 
 // Start Opus3Migration_Validation
 $validation = new Opus3Migration_Validation($options);

@@ -60,6 +60,7 @@ class Opus3Migration_Documents {
     private $doclist = array();
     private $role = array();
     private $lockFile;
+    private $config;
 
     private $status;
     
@@ -72,9 +73,12 @@ class Opus3Migration_Documents {
      * @param array $options Array with input options.
      */
     function __construct($options) {
-         $this->logger = new Opus3ImportLogger();
+        $this->logger = new Opus3ImportLogger();
+	$this->config = Zend_Registry::get('Zend_Config');
+        if (isset($this->config->migration->file)) {
+            $this->importFile = $this->config->migration->file;
+        }	 
 
-        if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
         if (array_key_exists('p', $options) !== false) { $this->fulltextPath = $options["p"]; }
         if (array_key_exists('s', $options) !== false) { $this->start = $options["s"]; }
         if (array_key_exists('e', $options) !== false) { $this->end  = $options["e"]; }
@@ -194,7 +198,7 @@ $application = new Zend_Application(
 );
 $application->bootstrap(array('Configuration', 'Logging', 'Database'));
 
-$options = getopt("f:p:s:e:l:");
+$options = getopt("p:s:e:l:");
 
 // Start Opus3Migration
 $migration = new Opus3Migration_Documents($options);
