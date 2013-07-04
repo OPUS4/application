@@ -50,4 +50,19 @@ class View_Helper_BaseUrl {
         $request=$fc->getRequest();
         return $request->getBaseUrl();
     }
+    
+    /**
+     * Return the full url (servername + baseUrl)
+     *
+     * @return Full url string.
+     */
+    public function fullUrl() {
+        $view = new Zend_View();
+	return $view->serverUrl() . $this->baseUrl();
+    }
+        
+	
+
+    
+
 }
