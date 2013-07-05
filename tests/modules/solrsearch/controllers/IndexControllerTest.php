@@ -251,7 +251,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      */
     public function testPaginationBarContainsOverallNumberOfHitsInCollectionBrowsing() {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/collection/id/74', null, null);
-        $this->assertContains('<h3>75', $this->getResponse()->getBody());
+        $this->assertEquals(75, $this->getNumOfHits());
     }
 
     /**
@@ -259,7 +259,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      */
     public function testPaginationBarContainsOverallNumberOfHitsInDoctypeBrowsing() {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/report', null, null);
-        $this->assertContains('<h3>51', $this->getResponse()->getBody());
+        $this->assertEquals(51, $this->getNumOfHits());
     }
 
     /**
@@ -275,7 +275,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article', null, null);
         $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/article/start/10/rows/10">'));
         $this->assertNotContains('solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/19/rows/10">', $this->getResponse()->getBody());
-        $this->assertContains('<h3>20', $this->getResponse()->getBody());
+        $this->assertEquals(20, $this->getNumOfHits());
     }
 
     /**
@@ -285,7 +285,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/doctoralthesis', null, null);
         $this->assertTrue(4 == substr_count($this->getResponse()->getBody(), '/solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/10/rows/10">'));
         $this->assertNotContains('solrsearch/index/search/searchtype/simple/query/%2A%3A%2A/browsing/true/doctypefq/doctoralthesis/start/17/rows/10">', $this->getResponse()->getBody());
-        $this->assertContains('<h3>18', $this->getResponse()->getBody());
+        $this->assertEquals(18, $this->getNumOfHits());
     }
 
     /**
@@ -317,8 +317,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         // check that each catch all search for given query terms returns one hit
         foreach ($queries as $query) {
             $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/start/0/rows/10/query/' . $query, null, null);
-            $this->assertTrue(substr_count($this->getResponse()->getBody(), '<strong>1</strong>') == 4);
-            $this->assertContains('<h3>1', $this->getResponse()->getBody());
+            $hits = $this->getNumOfHits();
+            $this->assertTrue(substr_count($this->getResponse()->getBody(), '<strong>1</strong>') == 4, $query . " (hits = '$hits')");
+            $this->assertEquals(1, $hits);
             $this->getResponse()->clearBody();
         }
 
@@ -958,6 +959,13 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             }
         }
         $this->assertTrue($loopComplete);
+    }
+    
+    private function getNumOfHits() {
+        $document = new DOMDocument();
+        $document->loadHTML($this->getResponse()->getBody());
+        $element = $document->getElementById('search-result-numofhits');
+        return $element->firstChild->textContent;
     }
     
 }
