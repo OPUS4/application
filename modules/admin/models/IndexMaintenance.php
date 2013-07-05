@@ -78,7 +78,7 @@ class Admin_Model_IndexMaintenance {
 
         $content = file_get_contents($logfilePath);
 
-        if ($content === false) {
+        if ($content === false || trim($content) == '') {
             // ignore: nothing to read
             return null;
         }
