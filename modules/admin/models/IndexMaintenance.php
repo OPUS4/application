@@ -68,14 +68,44 @@ class Admin_Model_IndexMaintenance {
         }
         return false;
     }
-
-    public function readLogFile() {
+    
+    public function getProcessingState() {
+        
+        if (!isset($this->config->workspacePath) || trim($this->config->workspacePath) == '') {
+            $this->logger->err('configuration key \'workspacePath\' is not set');
+            return null; // unable to determine processing state
+        }
+        
         $logfilePath = $this->config->workspacePath . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'opus_consistency-check.log';
-
-        if (!is_readable($logfilePath)) {
-            return null;
+        
+        if (file_exists($logfilePath . '.lock')) {
+            return 'inprogress'; // Operation is still in progress
         }
 
+        if (!file_exists($logfilePath)) {
+            return 'initial'; // Operation was never started before
+        }
+        
+        if (!is_readable($logfilePath)) {
+            $this->logger->err("Log File $logfilePath exists but is not readable: this might indicate a permission problem");
+            return null;
+        }
+        
+        if (!$this->allowConsistencyCheck()) {
+            return 'scheduled'; // Operation was not started yet
+        }
+        
+        return 'completed';        
+    }
+
+    public function readLogFile() {
+        if (!isset($this->config->workspacePath) || trim($this->config->workspacePath) == '') {
+            $this->logger->err('configuration key \'workspacePath\' is not set');
+            return null;
+        }        
+        
+        $logfilePath = $this->config->workspacePath . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'opus_consistency-check.log';
+        
         $content = file_get_contents($logfilePath);
 
         if ($content === false || trim($content) == '') {

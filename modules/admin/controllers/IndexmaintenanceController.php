@@ -50,10 +50,17 @@ class Admin_IndexmaintenanceController extends Controller_Action {
     }
 
     public function indexAction() {
-        $data = $this->model->readLogFile();
-        if (!is_null($data)) {
-            $this->view->content = array('consistencycheck' => $data->getContent());
-            $this->view->contentLastModTime = array('consistencycheck' => $data->getModifiedDate());
+        $state = $this->model->getProcessingState();
+        $this->view->state = array('consistencycheck' => $state);
+        if ($state == 'scheduled' || $state == 'completed') {
+            $data = $this->model->readLogFile();
+            if (!is_null($data)) {
+                $this->view->content = array('consistencycheck' => $data->getContent());
+                $this->view->contentLastModTime = array('consistencycheck' => $data->getModifiedDate());
+            }            
+        }
+        if (is_null($state)) {
+            $this->view->error = array('consistencycheck' => true);
         }
     }
 

@@ -45,7 +45,11 @@
             </form>
         </div>
     <?php else : ?>
-        <div class="opprogress"><?= $this->translate('admin_indexmaintenance_inprogress') ?></div>
+        <?php if (isset($this->error) && array_key_exists('consistencycheck', $this->error)) : ?>
+            <div class="opprogress"><?= $this->translate('admin_indexmaintenance_error') ?></div>
+        <?php else : ?>
+            <div class="opprogress"><?= $this->translate('admin_indexmaintenance_' . $this->state['consistencycheck']) ?></div>
+        <?php endif ?>
     <?php endif ?>
 
     <?php if (isset($this->content) && array_key_exists('consistencycheck', $this->content)) : ?>
@@ -71,7 +75,7 @@
             </form>
         </div>
     <?php else : ?>
-        <div class="opprogress"><?= $this->translate('admin_indexmaintenance_inprogress') ?></div>
+        <div class="opprogress"><?= $this->translate('admin_indexmaintenance_' . $this->state['fulltextextractioncheck']) ?></div>
     <?php endif ?>
         
     <?php if (isset($this->content) && array_key_exists('fulltextextractioncheck', $this->content)) : ?>
@@ -80,7 +84,7 @@
 
 <? /* DO NOT INDENT pre ELEMENT */ ?>
 <pre class="opoutput">
-<?= $this->content->fulltextextractioncheck ?>
+<?= $this->content['fulltextextractioncheck'] ?>
 </pre>
         
         </div>
@@ -97,7 +101,7 @@
             </form>
         </div>
     <?php else : ?>
-        <div class="opprogress"><?= $this->translate('admin_indexmaintenance_inprogress') ?></div>
+        <div class="opprogress"><?= $this->translate('admin_indexmaintenance_' . $this->state['indexoptimize']) ?></div>
     <?php endif ?>
         
     <?php if (isset($this->content) && array_key_exists('indexoptimize', $this->content)) : ?>
@@ -106,7 +110,7 @@
 
 <? /* DO NOT INDENT pre ELEMENT */ ?>
 <pre class="opoutput">
-<?= $this->content->indexoptimize ?>
+<?= $this->content['indexoptimize'] ?>
 </pre>
         
         </div>
