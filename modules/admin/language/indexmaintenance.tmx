@@ -6,7 +6,7 @@
     </header>
 
     <body>
-        <tu tuid="admin_indexmaintenance_title">
+        <tu tuid="admin_title_indexmaintenance">
             <tuv xml:lang="en">
                 <seg>Solr Index Maintenance</seg>
             </tuv>

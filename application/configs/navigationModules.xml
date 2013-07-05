@@ -810,7 +810,15 @@
                                 </detail>
                             </pages>
                         </job>
-
+                        <indexmaintenance>
+                            <type>mvc</type>
+                            <label>admin_title_indexmaintenance</label>
+                            <description>admin_title_indexmaintenance_description</description>
+                            <group>group-chocolate</group>
+                            <module>admin</module>
+                            <controller>indexmaintenance</controller>
+                            <action>index</action>
+                        </indexmaintenance>
                     </pages>
                 </info>
             </pages>
