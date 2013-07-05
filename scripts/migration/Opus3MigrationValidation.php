@@ -62,8 +62,11 @@ class Opus3MigrationValidation {
 
     private function validateImportFile() {
     	print "Validation of Opus3-XML-Dumpfile\n";
+        
+        libxml_clear_errors();
         libxml_use_internal_errors(true);
-	$file = file_get_contents($this->importFile, true);
+	
+        $file = file_get_contents($this->importFile, true);
         $xml = simplexml_load_string($file);
         $xmlstr = explode("\n", $file);
 
