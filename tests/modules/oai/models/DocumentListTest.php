@@ -33,32 +33,45 @@
  * @version     $Id$
  */
 class Oai_Model_DocumentListTest extends ControllerTestCase {
-
-    public function setUp() {
-        parent::setUp();
-        
-        // make sure server_date_modified is not changed
-        $document3 = new Opus_Document(3);
-        $serverDateModified = $document3->getServerDateModified();
-
-        $this->assertEquals('2010-06-04T02:30:37Z', (string) $serverDateModified, 'Test Data changed. Unexpected ServerDateModified');
-    }
-
+    
     /**
      * Test list document ids, metadataPrefix=XMetaDissPlus, different intervals
      * list possible intervals containing "2010-06-05"
      */
-    public function testQueryWithDoc3() {
+    public function testIntervalOAIPMHQueries() {
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $docId = $doc->store();
+        
+        $doc = new Opus_Document($docId);        
+        $serverDateModified = $doc->getServerDateModified();
+        
+        $today = new DateTime();
+        $today->setDate(
+                $serverDateModified->getYear(),
+                $serverDateModified->getMonth(),
+                $serverDateModified->getDay());
+        
+        $yesterday = clone $today;
+        $yesterday->modify('-1 day');
+        
+        $tomorrow = clone $today;
+        $tomorrow->modify('+1 day');
+        
+        $todayStr = date_format($today, 'Y-m-d');
+        $yesterdayStr = date_format($yesterday, 'Y-m-d');
+        $tomorrowStr = date_format($tomorrow, 'Y-m-d');         
+
         $intervals = array(
             array(),
-            array('from' => '2010-06-04'),
-            array('until' => '2010-06-04'),
-            array('from' => '2010-06-03'),
-            array('until' => '2010-06-05'),
-            array('from' => '2010-06-04', 'until' => '2010-06-04'),
-            array('from' => '2010-06-03', 'until' => '2010-06-04'),
-            array('from' => '2010-06-04', 'until' => '2010-06-05'),
-            array('from' => '2010-06-03', 'until' => '2010-06-04'),
+            array('from' => $todayStr),
+            array('until' => $todayStr),
+            array('from' => $yesterdayStr),
+            array('until' => $tomorrowStr),
+            array('from' => $todayStr, 'until' => $todayStr),
+            array('from' => $yesterdayStr, 'until' => $todayStr),
+            array('from' => $todayStr, 'until' => $tomorrowStr),
+            array('from' => $yesterdayStr, 'until' => $tomorrowStr),
         );
 
         foreach ($intervals AS $interval) {
@@ -70,21 +83,54 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
             $docListModel->_xMetaDissRestriction = array();
             $docIds = $docListModel->query($oaiRequest);
 
-            $this->assertTrue(in_array(3, $docIds), 
-                                "Response must contain document id 3: " . var_export($interval, true));
+            $this->assertTrue(in_array($docId, $docIds), "Response must contain document id $docId: " . var_export($interval, true));
         }
+        
+        // cleanup
+        $doc = new Opus_Document($docId);
+        $doc->deletePermanent();
     }
 
     /**
      * Test list document ids, metadataPrefix=XMetaDissPlus, different intervals
      * list possible intervals *NOT* containing "2010-06-05"
      */
-    public function testQueryWithoutDoc3() {
+    public function testIntervalOAIPMHQueryWithoutTestDoc() {
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $docId = $doc->store();
+        
+        $doc = new Opus_Document($docId);        
+        $serverDateModified = $doc->getServerDateModified();
+        
+        $today = new DateTime();
+        $today->setDate(
+                $serverDateModified->getYear(),
+                $serverDateModified->getMonth(),
+                $serverDateModified->getDay());
+        
+        $yesterday = clone $today;
+        $yesterday->modify('-1 day');
+        
+        $dayBeforeYesterday = clone $yesterday;
+        $dayBeforeYesterday->modify('-1 day');
+        
+        $tomorrow = clone $today;
+        $tomorrow->modify('+1 day');
+        
+        $dayAfterTomorrow = clone $tomorrow;
+        $dayAfterTomorrow->modify('+1 day');        
+        
+        $yesterdayStr = date_format($yesterday, 'Y-m-d');
+        $dayBeforeYesterdayStr = date_format($dayBeforeYesterday, 'Y-m-d');
+        $tomorrowStr = date_format($tomorrow, 'Y-m-d');        
+        $dayAfterTomorrowStr = date_format($dayAfterTomorrow, 'Y-m-d');
+        
         $intervals = array(
-            array('from' => '2010-06-05'),
-            array('until' => '2010-06-03'),
-            array('from' => '2010-06-05', 'until' => '2010-06-06'),
-            array('from' => '2010-06-02', 'until' => '2010-06-03'),
+            array('from' => $tomorrowStr),
+            array('until' => $yesterdayStr),
+            array('from' => $tomorrowStr, 'until' => $dayAfterTomorrowStr),
+            array('from' => $dayBeforeYesterdayStr, 'until' => $yesterdayStr),
         );
 
         foreach ($intervals AS $interval) {
@@ -96,9 +142,12 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
             $docListModel->_xMetaDissRestriction = array();
             $docIds = $docListModel->query($oaiRequest);
 
-            $this->assertFalse(in_array(3, $docIds), 
-                                "Response must NOT contain document id 3: " . var_export($interval, true));
+            $this->assertFalse(in_array($docId, $docIds), "Response must NOT contain document id $docId: " . var_export($interval, true));
         }
+        
+        // cleanup
+        $doc = new Opus_Document($docId);
+        $doc->deletePermanent();        
     }
 
 }
