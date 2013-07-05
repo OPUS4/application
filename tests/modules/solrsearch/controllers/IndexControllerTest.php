@@ -37,11 +37,17 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
     private function doStandardControllerTest($url, $controller, $action) {
         $this->dispatch($url);
+        
         $this->assertResponseCode(200);
-        if($controller != null)
+        
+        if (!is_null($controller)) {
             $this->assertController($controller);
-        if($action != null)
+        }
+        if (!is_null($action)) {
             $this->assertAction($action);
+        }
+        
+        $this->assertNotEquals('', trim($this->getResponse()->getBody()), 'HTTP Response Body is empty');
     }
 
     public function testIndexAction() {
@@ -965,6 +971,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $document = new DOMDocument();
         $document->loadHTML($this->getResponse()->getBody());
         $element = $document->getElementById('search-result-numofhits');
+        $this->assertNotNull($element, '#search-result-numofhits does not exist in response body');
+        $this->assertNotNull($element->firstChild, 'first child does not exist in response body');
         return $element->firstChild->textContent;
     }
     
