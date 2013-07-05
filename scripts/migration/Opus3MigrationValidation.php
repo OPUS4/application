@@ -40,14 +40,14 @@ set_include_path('.' . PATH_SEPARATOR
 
 require_once 'Opus3ImportLogger.php';
 
-class Opus3Migration_Validation {
+class Opus3MigrationValidation {
 
     private $logger;
     private $importFile;
     private $type;
     private $config;
 
-    function __construct($options) {
+    function __construct() {
 	$this->config = Zend_Registry::get('Zend_Config');
         if (isset($this->config->migration->file)) {
             $this->importFile = $this->config->migration->file;
@@ -90,7 +90,7 @@ class Opus3Migration_Validation {
 	$xml->load($this->importFile);
 
 	$xsl = new DOMDocument;
-	$xsl->load('stylesheets/check.xslt');
+	$xsl->load(realpath(dirname(__FILE__)). '/stylesheets/check.xslt');
 
 	$proc = new XSLTProcessor;
 	$proc->importStyleSheet($xsl);
