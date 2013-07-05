@@ -1,4 +1,4 @@
-@import url(admin-opus.css);
+/*@import url(admin-opus.css);*/
 @import url(print.css) print;
 /**
  * utf-8 encoded!
@@ -1147,4 +1147,48 @@ ul.form-action{
 .adminContainer .breadcrumbsContainer a{
    text-decoration: underline;
    color: white;
+}
+
+
+
+/** 
+ * CSS rule set for indexmaintenance views (were NOT added by web designer)
+ */
+
+.admin_indexmaintenance .operation {
+    margin-top: 2em;
+    padding: 1em;
+    background-color: #e2e6e9;
+}
+
+.admin_indexmaintenance .opname {
+    font-weight: bold;
+    font-size: 120%;
+    margin-bottom: 1em;
+}
+
+.admin_indexmaintenance .opdescription {
+    font-style: italic;
+    margin-bottom: 1em;
+}
+
+.admin_indexmaintenance .opprogress {
+    font-weight: bold;
+    color: green;
+    margin-bottom: 1em;
+}
+
+.admin_indexmaintenance .oprun {
+    margin-bottom: 1em;
+}
+
+.admin_indexmaintenance .oprun input {
+    font-size: 110%;
+    padding: .5em;
+}
+
+.admin_indexmaintenance .opoutput {
+    background-color: white;
+    padding: 1em;
+    border: 1px #a9a9a9 solid;
 }
