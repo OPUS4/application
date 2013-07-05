@@ -140,7 +140,7 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $numOfDocs = $element->firstChild->textContent;
 
         // Sollte nicht passieren, aber wenn doch zeige die Dokument-IDs an die nicht in Index und Datenbank sind
-        if ($numOfDocs == $numOfHits) {
+        if ($numOfDocs !== $numOfHits) {
             // get IDs from Index
             $searcher = new Opus_SolrSearch_Searcher();
             $query = new Opus_SolrSearch_Query();
