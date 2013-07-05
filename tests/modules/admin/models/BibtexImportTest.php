@@ -229,6 +229,21 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 	$ids = Opus_Document::getAllIds();
 	$last_id = array_pop($ids);
         $this->doc = new Opus_Document($last_id);
+	
+        $this->assertEquals('unpublished', $this->doc->getServerState());
+        $this->assertEquals('article', $this->doc->getType());
+        $this->assertEquals('Peter', $this->doc->getPersonAuthor(0)->getFirstName());
+        $this->assertEquals('Adams', $this->doc->getPersonAuthor(0)->getLastName());
+        $this->assertEquals('The title of the article', $this->doc->getTitleMain(0)->getValue());
+        $this->assertEquals('The name of the journal', $this->doc->getTitleParent(0)->getValue());
+        $this->assertEquals('1993', $this->doc->getPublishedYear());
+        $this->assertEquals('4', $this->doc->getVolume());
+        $this->assertEquals('2', $this->doc->getIssue());
+        $this->assertEquals('101', $this->doc->getPageFirst());
+        $this->assertEquals('113', $this->doc->getPageLast());
+        $this->assertEquals('An optional note', $this->doc->getNote(0)->getMessage());
+        $this->assertEquals('public', $this->doc->getNote(0)->getVisibility());
+	
     }
 
     /*
