@@ -111,4 +111,20 @@ class Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstract {
         return true;
     }
     
+    /**
+     * Liefert Position für Validator.
+     * @return int
+     */
+    public function getPosition() {
+        return $this->position;
+    }
+    
+    /**
+     * Liefert Array mit ausgewählten Sprachen aller Unterformulare.
+     * @return array
+     */
+    public function getLanguages() { 
+        return $this->languages;
+    }
+    
 }

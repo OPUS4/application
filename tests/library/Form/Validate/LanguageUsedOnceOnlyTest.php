@@ -92,4 +92,16 @@ class Form_Validate_LanguageUsedOnceOnlyTest extends ControllerTestCase {
         $this->assertFalse($validator->isValid('deu'));
     }
     
+    public function testGetPosition() {
+        $validator = new Form_Validate_LanguageUsedOnceOnly(array('eng', 'deu', 'spa'), 4);
+        
+        $this->assertEquals(4, $validator->getPosition());
+    }
+    
+    public function testGetLanguages() {
+        $validator = new Form_Validate_LanguageUsedOnceOnly(array('eng', 'deu', 'spa'), 4);
+        
+        $this->assertEquals(array('eng', 'deu', 'spa'), $validator->getLanguages());
+    }
+    
 }
