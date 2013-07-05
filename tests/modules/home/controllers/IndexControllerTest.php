@@ -117,6 +117,14 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertController('index');
         $this->assertAction('notice');
     }
+    
+    private function getNumOfDocsInSearchIndex($checkConsistency = true) {
+        $searcher = new Opus_SolrSearch_Searcher();
+        $query = new Opus_SolrSearch_Query();
+        $query->setCatchAll("*:*");
+        $resultList = $searcher->search($query, $checkConsistency);        
+        return $resultList->getNumberOfHits();        
+    }
 
     /**
      * Regression test for OPUSVIER-849
@@ -129,6 +137,8 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $document->loadHTML($this->getResponse()->getBody());
         $element = $document->getElementById('search-result-numofhits');
         $numOfHits = $element->firstChild->textContent;
+        
+        $this->assertEquals($this->getNumOfDocsInSearchIndex(), $numOfHits);
 
         $this->getResponse()->clearBody();
 
@@ -138,39 +148,9 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $document->loadHTML($this->getResponse()->getBody());
         $element = $document->getElementById('solrsearch-totalnumofdocs');
         $numOfDocs = $element->firstChild->textContent;
-
-        // Sollte nicht passieren, aber wenn doch zeige die Dokument-IDs an die nicht in Index und Datenbank sind
-        if ($numOfDocs !== $numOfHits) {
-            // get IDs from Index
-            $searcher = new Opus_SolrSearch_Searcher();
-            $query = new Opus_SolrSearch_Query();
-            $query->setCatchAll("*:*");
-            $resultList = $searcher->search($query);
-            $this->assertEquals($numOfHits, $resultList->getNumberOfHits());
-            $results = $resultList->getResults();
-            
-            $indexIds = array();
-
-            foreach ($results as $result) {
-                $indexIds[] = $result->getId();             
-            }
-            
-            // get IDs from Database
-            $documentFinder = new Opus_DocumentFinder();
-            $documentFinder->setServerState('published');
-            
-            $dbIds = $documentFinder->ids();
-            $this->assertEquals($numOfDocs, count($dbIds));
-            
-            $diffIds = array_diff($indexIds, $dbIds);
-            
-            $output = Zend_Debug::dump($diffIds, "Doc-Ids not in Index and Database", false);
-            
-            $this->assertEquals(0, count($diffIds), $output);
-        }
         
-        // Prüfen, das Link existiert
+        $this->assertEquals($this->getNumOfDocsInSearchIndex(), $numOfHits);
         $this->assertQueryContentContains('a#link-solrsearch-all-documents', "$numOfHits", $numOfHits);        
     }
+    
 }
-
