@@ -77,9 +77,10 @@ class Opus3Migration_Documents {
 	$this->config = Zend_Registry::get('Zend_Config');
         if (isset($this->config->migration->file)) {
             $this->importFile = $this->config->migration->file;
-        }	 
-
-        if (array_key_exists('p', $options) !== false) { $this->fulltextPath = $options["p"]; }
+        }	
+        if (isset($this->config->migration->path)) {
+            $this->fulltextPath = $this->config->migration->path;
+        }	
         if (array_key_exists('s', $options) !== false) { $this->start = $options["s"]; }
         if (array_key_exists('e', $options) !== false) { $this->end  = $options["e"]; }
         if (array_key_exists('l', $options) !== false) { $this->lockFile  = $options["l"]; }
@@ -198,7 +199,7 @@ $application = new Zend_Application(
 );
 $application->bootstrap(array('Configuration', 'Logging', 'Database'));
 
-$options = getopt("p:s:e:l:");
+$options = getopt("s:e:l:");
 
 // Start Opus3Migration
 $migration = new Opus3Migration_Documents($options);

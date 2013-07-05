@@ -4,8 +4,6 @@ set -e
 
 ##
 ## Call This Skript with paramaters:
-## -f OPUS3-XML-database export file (e.g. /usr/local/opus/complete_database.xml)
-## -p Path your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte)
 ## -z Stepsize for looping
 ## -n No iteration after first looping
 ## -i Build Index after each loop
@@ -19,12 +17,11 @@ testing=0
 
 while getopts f:p:z:int o
 do	case "$o" in
-	p)	fulltextpath="$OPTARG";;
         z)	stepsize="$OPTARG";;
         i)      buildindex=1;;
         n)      iteration=0;;
         t)      testing=1;;
-	[?])	print "Usage: $0 [-p fulltextpath] [-z stepsize for looping] [-i ] [ -n ]"
+	[?])	print "Usage: $0 [-z stepsize for looping] [-i ] [ -n ]"
 		exit 1;;
 	esac
 done
@@ -56,9 +53,6 @@ migration_config_ini=$config_dir/migration_config.ini
 [ ! -f "$migration_ini" -o ! -r "$migration_ini" ] && echo "Aborting migration: Configurationfile '`readlink -f $migration_ini`' does not exist or is not readable." && exit -1
 
 [ ! -f "$migration_config_ini" -o ! -r "$migration_config_ini" ] && echo "Aborting migration: Configurationfile '`readlink -f $migration_config_ini`' does not exist or is not readable." && exit -1
-
-[ ! -d "$fulltextpath" -o ! -r "$fulltextpath" ] && echo "Aborting migration: Opus3-Fulltextpath '$fulltextpath' does not exist or is not readable." && exit -1
-fulltext_path="$(readlink -f "$fulltextpath")"
 
 [ -z "${stepsize##*[!0-9]*}" ] && echo "Aborting migration: Stepsize '$stepsize' is not a valid number." && exit -1
 
@@ -100,7 +94,7 @@ start=1
 end=`expr $start + $stepsize - 1`
 
 touch "$migration_lock_file"
-php Opus3Migration_Documents.php -p "$fulltext_path" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
+php Opus3Migration_Documents.php -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
 
 while [ -f "$migration_lock_file" ] && [ "$iteration" -eq "1" ]
 do
@@ -112,7 +106,7 @@ do
         php SolrIndexBuilder.php || { echo "Aborting migration: SolrIndexBuilder.php  FAILED"; exit -1; }
         cd "$migration_dir"
     fi
-    php Opus3Migration_Documents.php -p "$fulltext_path" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
+    php Opus3Migration_Documents.php -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
 done
 
 cd "$script_dir"
