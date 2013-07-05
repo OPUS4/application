@@ -47,21 +47,18 @@ class View_Helper_BaseUrl {
      */
     public function baseUrl() {
         $fc = Zend_Controller_Front::getInstance();
-        $request=$fc->getRequest();
-        return $request->getBaseUrl();
+        return $fc->getRequest()->getBaseUrl();
     }
     
     /**
-     * Return the full url (servername + baseUrl)
-     *
+     * Return the full url (server name followed by base URL).
+     * This method might by useful when constructing absolute URLs.
+     * 
+     * @param Zend_View $view instance of Zend_View
      * @return Full url string.
      */
-    public function fullUrl($zv) {
-	return $zv->serverUrl() . $this->baseUrl();
+    public function fullUrl($view) {
+	return $view->serverUrl() . $this->baseUrl();
     }
-        
-	
-
-    
 
 }
