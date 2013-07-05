@@ -179,7 +179,6 @@
         <xsl:element name="tr">
             <xsl:element name="td">
                 <xsl:attribute name="class">opus-persons</xsl:attribute>
-                <xsl:attribute name="valign">top</xsl:attribute>
                 <xsl:choose>
                     <xsl:when test="@Type = 'book'">
                         <xsl:apply-templates select="Person" />
@@ -191,12 +190,10 @@
             </xsl:element>
             <xsl:element name="td">
                 <xsl:attribute name="class">opus-title</xsl:attribute>
-                <xsl:attribute name="valign">top</xsl:attribute>
                 <xsl:apply-templates select="TitleMain" />
             </xsl:element>
             <xsl:element name="td">
                 <xsl:attribute name="class">opus-metadata</xsl:attribute>
-                <xsl:attribute name="valign">top</xsl:attribute>
                 <xsl:choose>
                     <xsl:when test="@Type = 'article'">
                         <xsl:call-template name="render_article"/>
@@ -235,7 +232,6 @@
             </xsl:element>
             <xsl:element name="td">
                 <xsl:attribute name="class">opus-links</xsl:attribute>
-                <xsl:attribute name="valign">top</xsl:attribute>
                 <xsl:call-template name="render_links"/>
             </xsl:element>
         </xsl:element>
