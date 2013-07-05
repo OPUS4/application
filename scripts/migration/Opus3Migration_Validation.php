@@ -69,8 +69,9 @@ class Opus3Migration_Validation {
         $xml = simplexml_load_string($file);
         $xmlstr = explode("\n", $file);
 
-        if (count(libxml_get_errors()) > 0) {
-            foreach (libxml_get_errors() as $error) {
+        $errors = libxml_get_errors();
+        if (count($errors) > 0) {
+            foreach ($errors as $error) {
                 $this->displayErrorLine($xmlstr[$error->line - 1], $error);
             }
             libxml_clear_errors();
