@@ -148,13 +148,11 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $document->loadHTML($this->getResponse()->getBody());
         $element = $document->getElementById('solrsearch-totalnumofdocs');
         $numOfDocs = $element->firstChild->textContent;
-        
-        $this->assertEquals($this->getNumOfDocsInSearchIndex(), $numOfDocs);
 
-	$element = $document->getElementById('link-solrsearch-all-documents');
-        $numOfDocsLink = $element->firstChild->textContent;
-	
-	$this->assertEquals($numOfDocs, $numOfDocsLink);
+	$docFinder = new Opus_DocumentFinder();
+	$docFinder->setServerState('published');
+        
+        $this->assertEquals($docFinder->count(), $numOfDocs);
     }
     
 }
