@@ -56,9 +56,8 @@ class View_Helper_BaseUrl {
      *
      * @return Full url string.
      */
-    public function fullUrl() {
-        $view = new Zend_View();
-	return $view->serverUrl() . $this->baseUrl();
+    public function fullUrl($zv) {
+	return $zv->serverUrl() . $this->baseUrl();
     }
         
 	

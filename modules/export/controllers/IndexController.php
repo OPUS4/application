@@ -192,7 +192,7 @@ class Export_IndexController extends Controller_Xml {
 	}
 
 	$viewHelper = new View_Helper_BaseUrl();
-        $fullUrl = $viewHelper->fullUrl();
+        $fullUrl = $viewHelper->fullUrl($this->view);
 
         $this->mapQuery();
         $this->_proc->registerPHPFunctions('max');
