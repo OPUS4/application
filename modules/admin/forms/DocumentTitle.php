@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -34,9 +34,14 @@
 
 /**
  * Unterformular fuer das Editieren von Titeln. 
+ * 
+ * Für das Metadaten-Formular wurde vereinbart, daß der Typ eines Titels nicht mehr verändert werden kann.
  */
 class Admin_Form_DocumentTitle extends Admin_Form_AbstractModelSubForm {
     
+    /**
+     * Name von Formularelement fuer ID von Opus_Title Objekt.
+     */
     const ELEMENT_ID = 'Id';
     
     /**
@@ -54,7 +59,9 @@ class Admin_Form_DocumentTitle extends Admin_Form_AbstractModelSubForm {
      */
     const ELEMENT_VALUE = 'Value';
    
-    
+    /**
+     * Erzeugt die Formularelemente.
+     */
     public function init() {
         parent::init();
         
@@ -64,12 +71,22 @@ class Admin_Form_DocumentTitle extends Admin_Form_AbstractModelSubForm {
         $this->addElement('textarea', self::ELEMENT_VALUE, array('required' => true, 'rows' => '4'));        
     }
     
+    /**
+     * Lädt die Decoratoren für das Formular.
+     * 
+     * Der Fieldset Dekorator wird wieder entfernt, so fern vorhanden.
+     */
     public function loadDefaultDecorators() {
         parent::loadDefaultDecorators();
         
         $this->removeDecorator('Fieldset');
     }
     
+    /**
+     * Initialisiert das Formular mit den Werten im Modell.
+     * 
+     * @param \Opus_Title $title
+     */
     public function populateFromModel($title) {
         $this->getElement(self::ELEMENT_ID)->setValue($title->getId());
         $this->getElement(self::ELEMENT_TYPE)->setValue($title->getType());
@@ -77,19 +94,23 @@ class Admin_Form_DocumentTitle extends Admin_Form_AbstractModelSubForm {
         $this->getElement(self::ELEMENT_VALUE)->setValue($title->getValue());
     }
     
+    /**
+     * Aktualisiert Modell mit den Werten im Formular.
+     * 
+     * @param \Opus_Title $title
+     */
     public function updateModel($title) {
-        $title->setLanguage($this->getElement(self::ELEMENT_LANGUAGE)->getValue());
-        $title->setType($this->getElement(self::ELEMENT_TYPE)->getValue());
-        $title->setValue($this->getElement(self::ELEMENT_VALUE)->getValue());
+        $title->setLanguage($this->getElementValue(self::ELEMENT_LANGUAGE));
+        $title->setType($this->getElementValue(self::ELEMENT_TYPE));
+        $title->setValue($this->getElementValue(self::ELEMENT_VALUE));
     }
     
+    /**
+     * Liefert das angezeigte Objekt bzw. eine neue Instanz für Titel die im Formular hinzugefügt wurden.
+     * @return \Opus_Title
+     */
     public function getModel() {
-        $titleId = $this->getElement(self::ELEMENT_ID)->getValue();
-        
-        // TODO empty not sufficient
-        if (empty($titleId)) {
-            $titleId = null;
-        }
+        $titleId = $this->getElementValue(self::ELEMENT_ID);
         
         $title = new Opus_Title($titleId);
         
@@ -97,24 +118,5 @@ class Admin_Form_DocumentTitle extends Admin_Form_AbstractModelSubForm {
         
         return $title;
     }
-    
-    protected function _createTitleTypeSelect($name = 'Type') {
-        $select = new Zend_Form_Element_Select($name);
-        
-        $options = array(
-            'main' => 'main',
-            'parent' => 'parent',
-            'sub' => 'sub',
-            'additional' => 'additional'
-        );
-        
-        foreach ($options as $index => $language) {
-            $select->addMultiOption($index, $language);
-        }
-        
-        return $select;
-    }
-    
-    
 
 }

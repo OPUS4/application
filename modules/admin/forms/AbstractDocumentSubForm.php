@@ -227,7 +227,8 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
         if (!is_null($element)) {
             $value = $element->getValue();
             
-            if ($element instanceof Zend_Form_Element_Text || $element instanceof Zend_Form_Element_Textarea) {
+            if ($element instanceof Zend_Form_Element_Text || $element instanceof Zend_Form_Element_Textarea
+                    || $element instanceof Zend_Form_Element_Hidden) {
                 return (trim($value) === '') ? null : $value;
             }
             else {
