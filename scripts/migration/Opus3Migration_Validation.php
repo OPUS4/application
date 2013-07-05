@@ -40,32 +40,30 @@ set_include_path('.' . PATH_SEPARATOR
 
 require_once 'Opus3ImportLogger.php';
 
-class Opus3MigrationValidation {
+class Opus3Migration_Validation {
 
     private $logger;
     private $importFile;
     private $type;
-    private $config;
 
-    function __construct() {
-	$this->config = Zend_Registry::get('Zend_Config');
-        if (isset($this->config->migration->file)) {
-            $this->importFile = $this->config->migration->file;
-        }
+    function __construct($options) {
+        if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
+	if (array_key_exists('t', $options) !== false) { $this->type = $options["t"]; }
         $this->logger = new Opus3ImportLogger();
     }
     
-    public function run() {
-	$this->validateImportFile();
-	$this->checkConsistencyOfImportFile();
+    public function validate() {
+	if ($this->type === 'validate') {
+		$this->validateImportFile();
+	}
+	if ($this->type === 'consistency') {
+		$this->checkConsistencyOfImportFile();
+	}	
     }
 
+
     private function validateImportFile() {
-    	print "Validation of Opus3-XML-Dumpfile\n";
-        
-        libxml_clear_errors();
         libxml_use_internal_errors(true);
-	
         $file = file_get_contents($this->importFile, true);
         $xml = simplexml_load_string($file);
         $xmlstr = explode("\n", $file);
@@ -88,12 +86,11 @@ class Opus3MigrationValidation {
     }
     
     private function checkConsistencyOfImportFile() {
-	print "Validation of Consistency of Opus3-XML-Dumpfile\n";
 	$xml = new DOMDocument;
 	$xml->load($this->importFile);
 
 	$xsl = new DOMDocument;
-	$xsl->load(realpath(dirname(__FILE__)). '/stylesheets/check.xslt');
+	$xsl->load('stylesheets/check.xslt');
 
 	$proc = new XSLTProcessor;
 	$proc->importStyleSheet($xsl);
@@ -115,3 +112,31 @@ class Opus3MigrationValidation {
 	}
     }
 }
+
+// Bootstrap application.
+$application = new Zend_Application(
+    APPLICATION_ENV,
+    array(
+        "config"=>array(
+            APPLICATION_PATH . '/application/configs/application.ini',
+            APPLICATION_PATH . '/application/configs/config.ini',
+            APPLICATION_PATH . '/application/configs/migration.ini',
+            APPLICATION_PATH . '/application/configs/migration_config.ini'
+        )
+    )
+);
+$application->bootstrap(array('Configuration', 'Logging', 'Database'));
+
+$options = getopt("f:t:");
+
+// Start Opus3Migration_Validation
+$validation = new Opus3Migration_Validation($options);
+try {
+    $validation->validate();
+}
+catch (Exception $e) {
+    $validation->log_error($e->getMessage());
+    exit(-1);
+}
+
+
