@@ -72,7 +72,7 @@ class Opus3Migration_Documents {
      *
      * @param array $options Array with input options.
      */
-    function __construct($options) {
+    function __construct($start, $end) {
         $this->logger = new Opus3ImportLogger();
 	$this->config = Zend_Registry::get('Zend_Config');
         if (isset($this->config->migration->file)) {
@@ -81,9 +81,9 @@ class Opus3Migration_Documents {
         if (isset($this->config->migration->path)) {
             $this->fulltextPath = $this->config->migration->path;
         }	
-        if (array_key_exists('s', $options) !== false) { $this->start = $options["s"]; }
-        if (array_key_exists('e', $options) !== false) { $this->end  = $options["e"]; }
-        if (array_key_exists('l', $options) !== false) { $this->lockFile  = $options["l"]; }
+	$this->start = $start;
+	$this->end = $end;
+	if (array_key_exists('l', $options) !== false) { $this->lockFile  = $options["l"]; }
     }
 
    // Import Documents
@@ -185,26 +185,6 @@ class Opus3Migration_Documents {
 
 }
 
-// Bootstrap application.
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/migration.ini',
-            APPLICATION_PATH . '/application/configs/migration_config.ini'
-        )
-    )
-);
-$application->bootstrap(array('Configuration', 'Logging', 'Database'));
-
-$options = getopt("s:e:l:");
-
-// Start Opus3Migration
-$migration = new Opus3Migration_Documents($options);
-$migration->run();
-
-if ($migration->getStatus() === Opus3Migration_Documents::_FINISHED) {
+/*'if ($migration->getStatus() === Opus3Migration_Documents::_FINISHED) {
     $migration->unlinkLockFile();
-}
+}*/

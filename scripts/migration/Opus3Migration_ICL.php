@@ -176,23 +176,3 @@ class Opus3Migration_ICL {
         $this->load_roles();
     }
 }
-
-echo "Run Opus3Migration_ICL"."\n";
-
-// Bootstrap application.
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/migration.ini',
-            APPLICATION_PATH . '/application/configs/migration_config.ini'
-        )
-    )
-);
-$application->bootstrap(array('Configuration', 'Logging', 'Database'));
-
-// Start Opus3Migration
-$migration = new Opus3Migration_ICL();
-$migration->run();
