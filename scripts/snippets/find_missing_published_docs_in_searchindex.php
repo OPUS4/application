@@ -49,6 +49,7 @@ foreach ($finder->ids() as $docId) {
     $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::DOC_ID);
     $query->setField('id', $docId);
     $query->setReturnIdsOnly(true);
+    $query->setRows(Opus_SolrSearch_Query::MAX_ROWS);
     $searcher = new Opus_SolrSearch_Searcher();
 
     if ($searcher->search($query)->getNumberOfHits() != 1) {
