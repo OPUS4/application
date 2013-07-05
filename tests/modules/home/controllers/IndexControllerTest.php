@@ -124,22 +124,19 @@ class Home_IndexControllerTest extends ControllerTestCase {
     public function testStartPageContainsTotalNumOfDocs() {
         // get total number of documents from all doc search
         $this->dispatch('/solrsearch/index/search/searchtype/all');
-
-        // a very ugly way of extracting number of hits (please do not copy and paste!)
-        $startPos = strpos($this->getResponse()->getBody(), '<div class="breadcrumb_results">');
-        $endPos = strpos($this->getResponse()->getBody(), '<div class="results_pagination">');
-        $this->assertTrue($startPos !== FALSE);
-        $this->assertTrue($endPos !== FALSE);
-
-        $numOfHits = substr($this->getResponse()->getBody(), $startPos + 32, $endPos - $startPos);
-        $numOfHits = str_replace('<h3>', '', $numOfHits);
-        $numOfHits = str_replace('</h3>', '', $numOfHits);
-        $numOfHits = preg_replace("/[^0-9]/", '', $numOfHits);
+        
+        $body = $this->getResponse()->getBody();
+        
+        $document = new DOMDocument();
+        $document->loadHTML($body);
+        $element = $document->getElementById('search-result-numofhits');
+        $numOfHits = $element->firstChild->textContent;
 
         $this->getResponse()->clearBody();
 
         $this->dispatch('/home');
-        $this->assertContains("($numOfHits)", $this->getResponse()->getBody());
+        
+        $this->assertQueryContentContains('a#link-solrsearch-all-documents', "($numOfHits)", $numOfHits);
     }
 }
 

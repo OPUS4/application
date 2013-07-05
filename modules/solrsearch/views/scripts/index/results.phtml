@@ -71,7 +71,7 @@ if($this->jQueryEnabled()) {
     <div id="searchbar">
         <div class="breadcrumb_results">
             <?php if (!isset($this->specialTitle) || $this->browsing) : ?>
-                <h3><?= $this->numOfHits . ' ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h3>
+                <h3><span id="search-result-numofhits"><?= $this->numOfHits . '</span> ' . ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?></h3>
             <?php endif ?>
             <?php if (!$this->isSimpleList) include('pagination.phtml'); ?>
         </div>
