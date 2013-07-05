@@ -145,7 +145,7 @@ class Home_IndexControllerTest extends ControllerTestCase {
             $searcher = new Opus_SolrSearch_Searcher();
             $query = new Opus_SolrSearch_Query();
             $query->setCatchAll("*:*");
-            $resultList = $searcher->search($query, false);
+            $resultList = $searcher->search($query);
             $this->assertEquals($numOfHits, $resultList->getNumberOfHits());
             $results = $resultList->getResults();
             
