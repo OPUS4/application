@@ -149,8 +149,12 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $element = $document->getElementById('solrsearch-totalnumofdocs');
         $numOfDocs = $element->firstChild->textContent;
         
-        $this->assertEquals($this->getNumOfDocsInSearchIndex(), $numOfHits);
-        $this->assertQueryContentContains('a#link-solrsearch-all-documents', "$numOfHits", $numOfHits);        
+        $this->assertEquals($this->getNumOfDocsInSearchIndex(), $numOfDocs);
+
+	$element = $document->getElementById('link-solrsearch-all-documents');
+        $numOfDocsLink = $element->firstChild->textContent;
+	
+	$this->assertEquals($numOfDocs, $numOfDocsLink);
     }
     
 }
