@@ -38,9 +38,18 @@ class Admin_Model_IndexMaintenance {
     
     private $logger;
     
+    private $consistencyCheckLogfilePath = null;
+    
     public function __construct($logger) {
         $this->config = Zend_Registry::get('Zend_Config');
         $this->logger = $logger;
+
+        if (!isset($this->config->workspacePath) || trim($this->config->workspacePath) == '') {
+            $this->logger->err('configuration key \'workspacePath\' is not set correctly');
+        }
+        else {
+            $this->consistencyCheckLogfilePath = $this->config->workspacePath . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'opus_consistency-check.log';
+        }
     }
 
     public function createJob() {
@@ -70,24 +79,20 @@ class Admin_Model_IndexMaintenance {
     }
     
     public function getProcessingState() {
-        
-        if (!isset($this->config->workspacePath) || trim($this->config->workspacePath) == '') {
-            $this->logger->err('configuration key \'workspacePath\' is not set');
+        if (is_null($this->consistencyCheckLogfilePath)) {
             return null; // unable to determine processing state
         }
-        
-        $logfilePath = $this->config->workspacePath . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'opus_consistency-check.log';
-        
-        if (file_exists($logfilePath . '.lock')) {
+                
+        if (file_exists($this->consistencyCheckLogfilePath . '.lock')) {
             return 'inprogress'; // Operation is still in progress
         }
 
-        if (!file_exists($logfilePath)) {
+        if (!file_exists($this->consistencyCheckLogfilePath)) {
             return 'initial'; // Operation was never started before
         }
         
-        if (!is_readable($logfilePath)) {
-            $this->logger->err("Log File $logfilePath exists but is not readable: this might indicate a permission problem");
+        if (!is_readable($this->consistencyCheckLogfilePath)) {
+            $this->logger->err("Log File $this->consistencyCheckLogfilePath exists but is not readable: this might indicate a permission problem");
             return null;
         }
         
@@ -99,14 +104,11 @@ class Admin_Model_IndexMaintenance {
     }
 
     public function readLogFile() {
-        if (!isset($this->config->workspacePath) || trim($this->config->workspacePath) == '') {
-            $this->logger->err('configuration key \'workspacePath\' is not set');
+        if (is_null($this->consistencyCheckLogfilePath) || !is_readable($this->consistencyCheckLogfilePath)) {
             return null;
-        }        
-        
-        $logfilePath = $this->config->workspacePath . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'opus_consistency-check.log';
-        
-        $content = file_get_contents($logfilePath);
+        }
+
+        $content = file_get_contents($this->consistencyCheckLogfilePath);
 
         if ($content === false || trim($content) == '') {
             // ignore: nothing to read
@@ -115,7 +117,7 @@ class Admin_Model_IndexMaintenance {
         
         $logdata = new Admin_Model_IndexMaintenanceLogData();
         $logdata->setContent($content);
-        $lastModTime = filemtime($logfilePath);
+        $lastModTime = filemtime($this->consistencyCheckLogfilePath);
         $logdata->setModifiedDate(date("d-m-y H:i:s", $lastModTime));
         return $logdata;
     }
