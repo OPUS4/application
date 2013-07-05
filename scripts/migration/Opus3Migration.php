@@ -40,66 +40,7 @@ set_include_path('.' . PATH_SEPARATOR
         . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/importer'
         . PATH_SEPARATOR . get_include_path());
 
-require_once 'Opus3Migration_Validation.php';
-require_once 'Opus3Migration_ICL.php';
-require_once 'Opus3Migration_Documents.php';
-
-class Opus3Migration {
-
-
-	public function run() {
-		$stepsize=50;
-		
-		try {
-			$this->checkParameter();	
-		} catch (Exception $e)  {
-			print "Aborting migration: " . $e->getMessage() . "\n"; 
-			exit(1);
-		}
-		
-
-		exec("./opus3-migration-clean.sh", $output, $exec_return);
-		print implode("\n", $output) ."\n";
-		if ($exec_return != 0) {
-			exit(1);
-		}
-			
-		$validation = new Opus3Migration_Validation();
-		try {					
-			$validation->run();
-		} catch (Exception $e)  {
-			print "Aborting migration: " . $e->getMessage() . "\n"; 
-			exit(1);
-		}
-
-		$migration = new Opus3Migration_ICL();
-		$migration->run();
-		
-		$start=1;
-		$end = $start + $stepsize - 1;
-			
-		$status = 1;
-		while ($status == 1) {
-			$migration = new Opus3Migration_Documents($start, $end);
-			$migration->run();
-			$start = $end+1;
-			$end = $start + $stepsize - 1;
-			$status = $migration->getStatus();
-		}
-	}
-	
-	private function checkParameter() {
-	        $config = Zend_Registry::get('Zend_Config');
-		$filename = $config->migration->file;
-		 if (!is_readable($filename)) {
-			throw new Exception("Opus3-XML-Dumpfile '$filename' does not exist or is not readable.");
-		}
-		$path = $config->migration->path;
-		if (!is_readable($path)) {		
-			throw new Exception("Opus3-Fulltextpath '$path' does not exist or is not readable.");
-		}
-	}
-}
+require_once 'Opus3MigrationBatch.php';
 
 // Bootstrap application.
 $application = new Zend_Application(
@@ -116,7 +57,7 @@ $application = new Zend_Application(
 $application->bootstrap(array('Configuration', 'Logging', 'Database'));
 
 // Start Opus3Migration
-$migration = new Opus3Migration();
+$migration = new Opus3MigrationBatch();
 $migration->run();
 
 
