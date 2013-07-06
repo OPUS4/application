@@ -6,6 +6,7 @@ set -e
 ## Call This Skript with paramaters:
 ## -f OPUS3-XML-database export file (e.g. /usr/local/opus/complete_database.xml)
 ## -p Path your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte)
+## -q Path to multiple OPUS3 fulltext paths (e.g. "/usr/local/opus/htdocs/volltexte /usr/local/opus/htdocs/volltexte_restricted")
 ## -z Stepsize for looping
 ## -n No iteration after first looping
 ## -i Build Index after each loop
@@ -17,10 +18,11 @@ iteration=1
 buildindex=0
 testing=0
 
-while getopts f:p:z:int o
+while getopts f:p:q:z:int o
 do	case "$o" in
 	f)	xmlfile="$OPTARG";;
 	p)	fulltextpath="$OPTARG";;
+	q)	fulltextpathmulti="$OPTARG";;
         z)	stepsize="$OPTARG";;
         i)      buildindex=1;;
         n)      iteration=0;;
@@ -61,8 +63,16 @@ migration_config_ini=$config_dir/migration_config.ini
 [ ! -f "$xmlfile" -o ! -r "$xmlfile" ] && echo "Aborting migration: Opus3-XML-Dumpfile '$xmlfile' does not exist or is not readable." && exit -1
 xml_file="$(readlink -f "$xmlfile")"
 
-[ ! -d "$fulltextpath" -o ! -r "$fulltextpath" ] && echo "Aborting migration: Opus3-Fulltextpath '$fulltextpath' does not exist or is not readable." && exit -1
-fulltext_path="$(readlink -f "$fulltextpath")"
+[ -z "$fulltextpath" ] && [ -z "$fulltextpathmulti" ] && echo "Aborting migration: Neiter -p nor -q is specified." && exit -1
+[ ! -z "$fulltextpath" ] && [ ! -z "$fulltextpathmulti" ] && echo "Aborting migration: Only -p or -q is allowed." && exit -1
+
+[ ! -z "$fulltextpath" ] && [ ! -d "$fulltextpath" -o ! -r "$fulltextpath" ] && echo "Aborting migration: Opus3-Fulltextpath '$fulltextpath' does not exist or is not readable." && exit -1
+[ ! -z "$fulltextpath" ] && fulltext_path="$(readlink -f "$fulltextpath")"
+
+for path in $fulltextpathmulti; do
+	[ ! -d "$path" -o ! -r "$path" ] && echo "Aborting migration: Opus3-Fulltextpath '$path' does not exist or is not readable." && exit -1
+	fulltext_path_multi="$fulltext_path_multi $(readlink -f "$path")"
+done
 
 [ -z "${stepsize##*[!0-9]*}" ] && echo "Aborting migration: Stepsize '$stepsize' is not a valid number." && exit -1
 
@@ -104,7 +114,13 @@ start=1
 end=`expr $start + $stepsize - 1`
 
 touch "$migration_lock_file"
-php Opus3Migration_Documents.php -f "$xml_file" -p "$fulltext_path" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
+
+if [  ! -z "$fulltextpath" ]
+then
+	php Opus3Migration_Documents.php -f "$xml_file" -p "$fulltext_path" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
+else
+	php Opus3Migration_Documents.php -f "$xml_file" -q "$fulltext_path_multi" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
+fi
 
 while [ -f "$migration_lock_file" ] && [ "$iteration" -eq "1" ]
 do
@@ -116,7 +132,12 @@ do
         php SolrIndexBuilder.php || { echo "Aborting migration: SolrIndexBuilder.php  FAILED"; exit -1; }
         cd "$migration_dir"
     fi
-    php Opus3Migration_Documents.php -f "$xml_file" -p "$fulltext_path" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
+	if [  ! -z "$fulltextpath" ]
+	then
+		php Opus3Migration_Documents.php -f "$xml_file" -p "$fulltext_path" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
+	else
+		php Opus3Migration_Documents.php -f "$xml_file" -q "$fulltext_path_multi" -s $start -e $end -l "$migration_lock_file" || { echo "Aborting migration: Opus3Migration_Documents.php FAILED"; exit -1; }
+	fi    
 done
 
 cd "$script_dir"
