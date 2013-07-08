@@ -167,10 +167,7 @@ class Home_IndexControllerTest extends ControllerTestCase {
         // und Suchindex (das sollte im Rahmen der Tests eigentlich nicht auftreten)
         
         if ($numOfDbDocs != $numOfIndexDocs) {
-            echo "\n";
-            echo "num of index documents: $numOfIndexDocs\n";
-            echo "num of database documents: $numOfDbDocs\n";
-            
+
             // ermittle die Doc-IDs, die im Index, aber nicht in der DB existieren 
             // bzw. die in der DB, aber nicht im Index existieren
             $idsIndex = array();
@@ -182,13 +179,14 @@ class Home_IndexControllerTest extends ControllerTestCase {
             $idsDb = $docFinder->ids();
             
             $idsIndexOnly = array_diff($idsIndex, $idsDb);
-            $this->assertEquals(0, count($idsIndexOnly), 'Document IDs in search index, but not in database: ' . var_dump($idsIndexOnly));
+            $this->assertEquals(0, count($idsIndexOnly), 'Document IDs in search index, but not in database: ' . var_export($idsIndexOnly, true));
             
             $idsDbOnly = array_diff($idsDb, $idsIndex);
-            $this->assertEquals(0, count($idsDbOnly), 'Document IDs in database, but not in search index: ' . var_dump($idsDbOnly));
+            $this->assertEquals(0, count($idsDbOnly), 'Document IDs in database, but not in search index: ' . var_export($idsDbOnly, true));
+            
+            $this->assertEquals($numOfDbDocs, $numOfIndexDocs, "number of docs in database ($numOfDbDocs) and search index ($numOfIndexDocs) differ from each other");        
         }
         
-        $this->assertEquals($numOfDbDocs, $numOfIndexDocs);        
         $this->assertEquals($numOfDocs, $numOfHits);
         
     }
