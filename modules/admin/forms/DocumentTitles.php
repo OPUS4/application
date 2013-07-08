@@ -45,15 +45,23 @@
  */
 class Admin_Form_DocumentTitles extends Admin_Form_DocumentSection {
     
+    /**
+     * Initialisiert das Formular und erzeugt die Unterformulare für die Titeltypen.
+     */
     public function init() {
         parent::init();
         
         $this->setLegend('admin_document_section_titles');
         
         $this->addSubForm(new Admin_Form_DocumentTitlesMain(), 'Main');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleAdditional'), 'Additional');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent'), 'Parent');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub'), 'Sub');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleAdditional',
+                new Form_Validate_MultiSubForm_RepeatedLanguages()), 'Additional');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent',
+                new Form_Validate_MultiSubForm_RepeatedLanguages()), 'Parent');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub',
+                new Form_Validate_MultiSubForm_RepeatedLanguages()), 'Sub');
+        
+        $this->removeDecorator('FormErrors'); // Fehler für Titel werdne in Unterformularen angezeigt
     }
     
 }

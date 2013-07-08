@@ -35,9 +35,8 @@
 /**
  * Unterformular fuer Haupttitel eines Dokuments.
  * 
- * Sorgt dafuer, dass der Titel in der Dokumentensprache zuerst angezeigt wird.
- * 
- * TODO Update der Positionen wenn 'saveAndContinue' geklickt wird und sich dadurch der Dokumentensprache aendert?
+ * Die Basisklasse wurde erweitert um dafür zu sorgen, dass der Titel in der Dokumentensprache zuerst angezeigt wird.
+ * Außerdem wird zusätzlich bei der Validierung geprüft, ob ein Titel in der Dokumentsprache existiert.
  */
 class Admin_Form_DocumentTitlesMain extends Admin_Form_DocumentMultiSubForm {
     
@@ -45,9 +44,38 @@ class Admin_Form_DocumentTitlesMain extends Admin_Form_DocumentMultiSubForm {
      * Konstruiert Unterformular fuer die Haupttitel eines Dokuments.
      */
     public function __construct() {
-        parent::__construct('Admin_Form_DocumentTitle', 'TitleMain');
+        parent::__construct('Admin_Form_DocumentTitle', 'TitleMain', 
+                new Form_Validate_MultiSubForm_RepeatedLanguages());
     }
-    
+            
+    /**
+     * Prüft Abhängigkeiten zu anderen Unterformularen.
+     * 
+     * Es wird geprüft, ob ein Titel in der Sprache des Dokuments vorhanden ist. Das ist technisch notwendig für die 
+     * Indizierung und für die Anzeige an vielen Stellen.
+     * 
+     * @param array $data
+     * @param array $globalContext Daten für das gesamte Metadaten-Formular
+     * @return boolean true - wenn keine Abhängigkeiten verletzt wurden
+     */
+    public function isDependenciesValid($data, $globalContext) {
+        $result = parent::isDependenciesValid($data, $globalContext);
+        
+        $language = $globalContext['General']['Language']; // TODO kann das dynamisch ermittelt werden
+
+        $validator = new Form_Validate_ValuePresentInSubforms('Language');
+        
+        if (!$validator->isValid($language, $data)) {
+            $translator = $this->getTranslator();
+            $this->addErrorMessage(vsprintf(
+                    $translator->translate('admin_document_error_NoTitleInDocumentLanguage'), 
+                    array($translator->translate($language))));
+            
+            $result = false;
+        }
+        return $result;
+    }
+        
     /**
      * Liefert Array mit Haupttiteln des Dokuments.
      * 
