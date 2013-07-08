@@ -53,14 +53,18 @@ class Opus3Migration_ICL {
     private $importData;
     private $stylesheet;
     private $xslt;
+    private $config;
 
     /**
      * Constructur.
      *
      * @param array $options Array with input options.
      */
-    function __construct($options) {
-        if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
+    function __construct() {
+    	$this->config = Zend_Registry::get('Zend_Config');
+        if (isset($this->config->migration->file)) {
+            $this->importFile = $this->config->migration->file;
+        }
     }
 
     // Create Collections
@@ -172,26 +176,3 @@ class Opus3Migration_ICL {
         $this->load_roles();
     }
 }
-
-echo "Run Opus3Migration_ICL"."\n";
-
-// Bootstrap application.
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/migration.ini',
-            APPLICATION_PATH . '/application/configs/migration_config.ini'
-        )
-    )
-);
-$application->bootstrap(array('Configuration', 'Logging', 'Database'));
-
-
-$options = getopt("f:");
-
-// Start Opus3Migration
-$migration = new Opus3Migration_ICL($options);
-$migration->run();
