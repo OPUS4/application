@@ -52,15 +52,14 @@ class Opus3Migration_Validation {
         $this->logger = new Opus3ImportLogger();
     }
     
-    public function validate() {
-	if ($this->type === 'validate') {
+    public function validate() {        
+	if ($this->type === 'validation') {
 		$this->validateImportFile();
 	}
 	if ($this->type === 'consistency') {
 		$this->checkConsistencyOfImportFile();
 	}	
     }
-
 
     private function validateImportFile() {
         libxml_clear_errors();
@@ -140,5 +139,3 @@ catch (Exception $e) {
     $validation->log_error($e->getMessage());
     exit(-1);
 }
-
-
