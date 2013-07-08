@@ -773,6 +773,33 @@
         <seg>Die Dokument-ID existiert nicht.</seg>
       </tuv>
     </tu>
+    
+    <tu tuid="admin_document_error_validation">
+      <tuv xml:lang="en">
+        <seg>Document cannot be saved, because some input is not valid.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Das Dokument kann nicht gespeichert werden, da Eingaben nicht gültig sind.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_error_NoTitleInDocumentLanguage">
+      <tuv xml:lang="en">
+        <seg>A title in the document language '%1$s' is required.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Ein Titel in der Dokumentensprache '%1$s' ist notwendig.</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_document_error_MoreThanOneTitleInLanguage">
+      <tuv xml:lang="en">
+        <seg>Languages can only be used once.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprachen dürfen nur einmal verwendet werden.</seg>
+      </tuv>
+    </tu>
 
     <tu tuid="admin_document_create">
       <tuv xml:lang="en">
