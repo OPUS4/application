@@ -53,13 +53,14 @@ class Opus3Migration_Documents {
     private $importFile;
     private $importData;
     private $stylesheet;
-    private $fulltextPath = array();
+    private $fulltextPath;
     private $xslt;
     private $start = null;
     private $end = null;
     private $doclist = array();
     private $role = array();
     private $lockFile;
+    private $config;
 
     private $status;
     
@@ -71,15 +72,18 @@ class Opus3Migration_Documents {
      *
      * @param array $options Array with input options.
      */
-    function __construct($options) {
-         $this->logger = new Opus3ImportLogger();
-
-        if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
-        if (array_key_exists('p', $options) !== false) { array_push($this->fulltextPath, $options["p"]); }
-        if (array_key_exists('q', $options) !== false) { $this->fulltextPath = preg_split('/\s+/', $options["q"]); }	
-        if (array_key_exists('s', $options) !== false) { $this->start = $options["s"]; }
-        if (array_key_exists('e', $options) !== false) { $this->end  = $options["e"]; }
-        if (array_key_exists('l', $options) !== false) { $this->lockFile  = $options["l"]; }
+    function __construct($start, $end) {
+        $this->logger = new Opus3ImportLogger();
+	$this->config = Zend_Registry::get('Zend_Config');
+        if (isset($this->config->migration->file)) {
+            $this->importFile = $this->config->migration->file;
+        }	
+        if (isset($this->config->migration->path)) {
+            $this->fulltextPath = $this->config->migration->path;
+        }	
+	$this->start = $start;
+	$this->end = $end;
+	if (array_key_exists('l', $options) !== false) { $this->lockFile  = $options["l"]; }
     }
 
    // Import Documents
@@ -122,26 +126,26 @@ class Opus3Migration_Documents {
 
     private function load_fulltext() {
         foreach ($this->doclist as $id) {
+	
 	    $role = null;
 	    if (array_key_exists($id, $this->role)) {
 		$role = $this->role[$id];
 	    }
-	    foreach ($this->fulltextPath as $path) {
-		    $fileImporter = new Opus3FileImport($id, $path, $role);
 
-		    $mem_now = round(memory_get_usage() / 1024 );
-		    $mem_peak = round(memory_get_peak_usage() / 1024);
+            $fileImporter = new Opus3FileImport($id, $this->fulltextPath, $role);
 
-		    $numberOfFiles = $fileImporter->loadFiles();
+            $mem_now = round(memory_get_usage() / 1024 );
+            $mem_peak = round(memory_get_peak_usage() / 1024);
 
-		    $mem_now = round(memory_get_usage() / 1024 );
-		    $mem_peak = round(memory_get_peak_usage() / 1024 );
+            $numberOfFiles = $fileImporter->loadFiles();
 
-		    if ($numberOfFiles > 0) {
-			$this->logger->log_debug("Opus3Migration_Documents", $numberOfFiles . " file(s) have been imported successfully for document ID " . $id . " -- memory $mem_now (KB), peak memory $mem_peak (KB)");
-		    }
-		    $fileImporter->finalize();
-		}
+            $mem_now = round(memory_get_usage() / 1024 );
+            $mem_peak = round(memory_get_peak_usage() / 1024 );
+
+            if ($numberOfFiles > 0) {
+                $this->logger->log_debug("Opus3Migration_Documents", $numberOfFiles . " file(s) have been imported successfully for document ID " . $id . " -- memory $mem_now (KB), peak memory $mem_peak (KB)");
+            }
+            $fileImporter->finalize();
         }
         
     }
@@ -181,26 +185,6 @@ class Opus3Migration_Documents {
 
 }
 
-// Bootstrap application.
-$application = new Zend_Application(
-    APPLICATION_ENV,
-    array(
-        "config"=>array(
-            APPLICATION_PATH . '/application/configs/application.ini',
-            APPLICATION_PATH . '/application/configs/config.ini',
-            APPLICATION_PATH . '/application/configs/migration.ini',
-            APPLICATION_PATH . '/application/configs/migration_config.ini'
-        )
-    )
-);
-$application->bootstrap(array('Configuration', 'Logging', 'Database'));
-
-$options = getopt("f:p:q:s:e:l:");
-
-// Start Opus3Migration
-$migration = new Opus3Migration_Documents($options);
-$migration->run();
-
-if ($migration->getStatus() === Opus3Migration_Documents::_FINISHED) {
+/*'if ($migration->getStatus() === Opus3Migration_Documents::_FINISHED) {
     $migration->unlinkLockFile();
-}
+}*/
