@@ -167,5 +167,16 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $this->assertQueryCount("a[@href='" . $this->getRequest()->getBaseUrl() . "/admin/documents/index/hitsperpage/all']", 1);
     }
     
+    public function testShowEditLink() {
+        $this->dispatch('/admin/documents');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('documents');
+        $this->assertAction('index');
+        
+        $this->assertQueryCount("td.edit/a", 10);
+        $this->assertXpathCount('//a[contains(@href, "/admin/document/edit/id/")]', 10);
+    }
+    
 }
 
