@@ -45,14 +45,17 @@
  * +- SubForm1
  * +- ...
  * +- Add Button
- * 
- * TODO improv positioning of anker (move within identifiable block)
- * TODO Unterformular um alle Unterformuler herum? (für Decorator dataWrapper)
  */
 class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm {
     
+    /**
+     * Name von Button zum Hinzufügen eines Unterformulars (z.B. Enrichment).
+     */
     const ELEMENT_ADD = 'Add';
     
+    /**
+     * Name von Button zum Entfernen eines Unterformulars (z.B. Identifier).
+     */
     const ELEMENT_REMOVE = 'Remove';
 
     /**
@@ -68,19 +71,36 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     private $_fieldName;
     
     /**
+     * Validierungsextension für die Unterformulare.
+     * @var type 
+     */
+    private $_subformValidator;
+    
+    /**
+     * Konstruiert Instanz von Fomular.
      * 
-     * @param String $_subFormClass
+     * @param string $subFormClass Name der Klasse für Unterformulare
+     * @param string $fieldName Name des Opus_Document Feldes, dass angezeigt werden soll
+     * @param string $validator Object für Validierungen über Unterformulare hinweg
      * @param multi $options
      */
-    public function __construct($subFormClass, $fieldName, $options = null) {
+    public function __construct($subFormClass, $fieldName, $validator = null, $options = null) {
         $this->_subFormClass = $subFormClass;
         $this->_fieldName = $fieldName;
+        
+        if (is_null($validator) || $validator instanceof Form_Validate_IMultiSubForm) {
+            $this->_subformValidator = $validator;
+        }
+        else {
+            throw new Application_Exception('Fehler beim Instanzieren von ' . __CLASS__ 
+                    . '. Validator ist keine Instanz von Form_Validate_IMultiSubForm.');
+        }
         
         parent::__construct($options);
     }
     
     /**
-     * 
+     * Erzeugt die Formularelemente.
      */
     public function init() {
         parent::init();
@@ -113,6 +133,11 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
        $this->getElement(self::ELEMENT_ADD)->setOrder($maxIndex + 1);
     }
     
+    /**
+     * Holt vom Dokument den Wert des konfigurierten Feldes.
+     * @param Opus_Document $document
+     * @return array
+     */
     public function getFieldValues($document) {
        $field = $document->getField($this->_fieldName);
        
@@ -136,6 +161,9 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     /**
      * Verarbeitet POST Request fuer Formular.
      * 
+     * Der POST wird nicht an die Unterformulare weitergeleitet. Bei der bisherigen Verwendung der Klasse ist das 
+     * nicht notwendig.
+     * 
      * @param array $data POST Daten für Unterformular
      * @param array $context POST Daten für gesamtes Formular
      * @return string Ergebnis der Verarbeitung
@@ -143,8 +171,9 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     public function processPost($data, $context) {
         // Prüfen ob "Hinzufügen" geklickt wurde
         if (array_key_exists(self::ELEMENT_ADD, $data)) {
-            $subform = $this->_appendSubForm();
+            $subform = $this->appendSubForm();
             $this->_addAnker($subform);
+            return Admin_Form_Document::RESULT_SHOW;
         }
         else {
             // Prüfen ob in einem Unterformular "Entfernen" geklickt wurde
@@ -156,17 +185,15 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
                         // TODO separate function for getting position?
                         $position = $this->_removeSubForm($key);
 
-                        $this->_addAnker($this->_determineSubFormForAnker($position));
+                        $this->_addAnker($this->determineSubFormForAnker($position));
                         
                         return Admin_Form_Document::RESULT_SHOW;
                     }
                 }
                 else {
-                    // TODO debug output should never happen
+                    $this->getLogger()->err(__METHOD__ . ': Subform with name ' . $key . ' does not exits.');
                 }
             }
-            
-            // TODO call processPost for all subforms ? (not used yet)
         }
     }
     
@@ -206,13 +233,12 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     }
     
     /**
+     * Fügt ein Unterformular an der gewünschten Position hinzu.
      * 
-     * @param type $position
+     * @param int $position
      * @return \_subFormClass
      */
     protected function _addSubForm($position) {
-        // TODO Zend_Debug::dump('Adding subform at position ' . $position);
-        
         $subForm = $this->createSubForm();
         $subForm->setOrder($position);
         
@@ -229,6 +255,10 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         return $subForm;
     }
     
+    /**
+     * Erzeugt neues Unterformular zum Hinzufügen.
+     * @return \_subFormClass
+     */
     public function createSubForm() {
         $subform = $this->createNewSubFormInstance();
 
@@ -246,15 +276,17 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         return $subform;
     }
     
+    /**
+     * Erzeugt neue Instanz der Unterformklasse.
+     * @return \_subFormClass
+     */
     public function createNewSubFormInstance() {
         return new $this->_subFormClass();
     }
 
     /**
      * Entfernt Unterformular mit dem übergebenen Namen.
-     * @param string $name
-     * 
-     * TODO what does this function if the name is bad?
+     * @param string $name Name des Unterformulars das entfernt werden sollte
      */
     protected function _removeSubForm($name) {
         $order = $this->getSubForm($name)->getOrder();
@@ -271,43 +303,56 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     protected function _removeGapsInSubFormOrder() {
         $subforms = $this->getSubForms();
 
+        $renamedSubforms = array();
+        
         $pos = 0;
 
         foreach ($subforms as $index => $subform) {
             $subform->setOrder($pos);
-            $subform->setName($this->_fieldName . $pos);
+            $name = $this->_fieldName . $pos;
+            $subform->setName($name);
             $pos++;
+            $renamedSubforms[$name] = $subform;
         }
+        
+        $this->setSubForms($renamedSubforms);
     }
     
     /**
      * Erzeugt ein weiteres Unterformular an letzter Stelle.
      */
-    protected function _appendSubForm() {
+    public function appendSubForm() {
         $subforms = $this->getSubForms();
         
         return $this->_addSubForm(count($subforms));
     }
     
     /**
-     * TODO describe
+     * Ermittelt an welchem Unterformular der Sprungankor plaziert werden sollte.
+     * 
+     * Wenn es keine Unterformulare mehr gibt, kommt der Anker ans übergeordnete Formular. Ansonsten kommt der Ankor an
+     * das nächste Formular, daß aufgerutscht ist oder wenn das letzte Unterformular entfernt wurde, kommt der Ankor an
+     * das neue letzte Formular.
      * 
      * @param type $removedPosition
      * @return \Admin_Form_DocumentMultiSubForm
      */
-    protected function _determineSubFormForAnker($removedPosition) {
+    public function determineSubFormForAnker($removedPosition) {
         $subforms = $this->getSubForms();
-
-        $index = ($removedPosition > 0) ? $removedPosition - 1 : 0;
-
-        if (count($subforms) > 0) {
+        
+        $subformCount = count($subforms);
+        
+        if ($subformCount == 0) {
+            return $this;
+        }
+        else if ($removedPosition < $subformCount) {
             $keys = array_keys($subforms);
-            $name = $keys[$index];
-            return $this->getSubForm($name);
+            return $this->getSubForm($keys[$removedPosition]);
         }
         else {
-            return $this;
-        }          
+            $keys = array_keys($subforms);
+            return $this->getSubForm($keys[$subformCount - 1]);
+        }
     }
     
     /**
@@ -324,20 +369,50 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
                 array('tag' => 'a', 'placement' => 'prepend', 'name' => 'current'));
     }
     
+    /**
+     * Validiere TitleMain eingaben im Formular.
+     * 
+     * Zusätzlich zu den normalen Validierungen für Formularelemente wird geprüft, ob eine Sprache zweimal ausgewählt
+     * wurde.
+     * 
+     * @param array $data
+     * @return boolean
+     */
+    public function isValid($data, $context = null) {
+        // wird immer aufgerufen um gegebenenfalls weitere Nachrichten anzuzeigen
+        $result = true;
+        
+        if (!is_null($this->_subformValidator)) {
+            if (array_key_exists($this->getName(), $data)) {
+                $this->_subformValidator->prepareValidation($this, $data[$this->getName()], $context);
+                $result = $this->_subformValidator->isValid($data[$this->getName()], $context);
+            }
+        }
+        
+        return $result && parent::isValid($data);
+    }
+    
+    /**
+     * Ermittelt, ob das Formular leer ist.
+     * 
+     * Das Formular ist leer, wenn es keine Unterformulare gibt, als keine Modelle angezeigt werden (z.B. Identifier).
+     * 
+     * @return boolean TRUE - wenn keine Unterformulare
+     */
     public function isEmpty() {
         return count($this->getSubForms()) == 0;
     }
     
-    public function loadDefaultDecorators() {
-        parent::loadDefaultDecorators();
-    }
-    
+    /**
+     * Bereitet Formular und Unterformulare für die Anzeige in der Metadaten-Übersicht vor.
+     */
     public function prepareRenderingAsView() {
         parent::prepareRenderingAsView();
 
         // da Remove Button entfernt wird muss DIV wieder geschlossen werden.
         $subforms = $this->getSubForms();
         
+        // TODO Gibt es einen besseren Weg durch die Verwendung von DisplayGroup?
         foreach ($subforms as $subform) {
             $dataWrapper = $subform->getDecorator('dataWrapperOpen');
             if (!is_null($dataWrapper) && $dataWrapper instanceof Zend_Form_Decorator_HtmlTag) {
@@ -345,5 +420,5 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
             }
         }
     }
-            
+                
 }
