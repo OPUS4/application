@@ -118,12 +118,13 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertAction('notice');
     }
     
-    private function getNumOfDocsInSearchIndex($checkConsistency = true) {
+    private function getDocsInSearchIndex($checkConsistency = true) {
         $searcher = new Opus_SolrSearch_Searcher();
         $query = new Opus_SolrSearch_Query();
         $query->setCatchAll("*:*");
+        $query->setRows(Opus_SolrSearch_Query::MAX_ROWS);
         $resultList = $searcher->search($query, $checkConsistency);        
-        return $resultList->getNumberOfHits();        
+        return $resultList;        
     }
 
     /**
@@ -138,7 +139,9 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $element = $document->getElementById('search-result-numofhits');
         $numOfHits = $element->firstChild->textContent;
         
-        $this->assertEquals($this->getNumOfDocsInSearchIndex(), $numOfHits);
+        $docsInIndex = $this->getDocsInSearchIndex();
+        $numOfIndexDocs = $docsInIndex->getNumberOfHits();
+        $this->assertEquals($numOfIndexDocs, $numOfHits);
 
         $this->getResponse()->clearBody();
 
@@ -152,7 +155,42 @@ class Home_IndexControllerTest extends ControllerTestCase {
 	$docFinder = new Opus_DocumentFinder();
 	$docFinder->setServerState('published');
         
-        $this->assertEquals($docFinder->count(), $numOfDocs);
+        $numOfDbDocs = $docFinder->count();
+        $this->assertEquals($numOfDbDocs, $numOfDocs);
+        
+        // kurze Erklärung des Vorhabens: die Dokumentanzahl bei der Catch-All-Suche
+        // wird auf Basis einer Indexsuche ermittelt; die Anzahl der Dokument, die
+        // auf der Startseite erscheint, wird dagegen über den DocumentFinder
+        // ermittelt: im Idealfall sollten diese beiden Zahlen nicht voneinander
+        // abweichen
+        // wenn sie abweichen, dann aufgrund einer Inkonsistenz zwischen Datenbank
+        // und Suchindex (das sollte im Rahmen der Tests eigentlich nicht auftreten)
+        
+        if ($numOfDbDocs != $numOfDbDocs) {
+            echo "\n";
+            echo "num of index documents: $numOfIndexDocs\n";
+            echo "num of database documents: $numOfDbDocs\n";
+            
+            // ermittle die Doc-IDs, die im Index, aber nicht in der DB existieren 
+            // bzw. die in der DB, aber nicht im Index existieren
+            $idsIndex = array();
+            $results = $docsInIndex->getResults();
+            foreach ($results as $result) {
+                array_push($idsIndex, $result->getId());
+            }
+            
+            $idsDb = $docFinder->ids();
+            
+            $idsIndexOnly = array_diff($idsIndex, $idsDb);
+            $this->assertEquals(0, count($idsIndexOnly), 'Document IDs in search index, but not in database: ' . var_dump($idsIndexOnly));
+            
+            $idsDbOnly = array_diff($idsDb, $idsIndex);
+            $this->assertEquals(0, count($idsDbOnly), 'Document IDs in database, but not in search index: ' . var_dump($idsDbOnly));
+        }
+        
+        $this->assertEquals($numOfDbDocs, $numOfIndexDocs);        
+        $this->assertEquals($numOfDocs, $numOfHits);
+        
     }
     
 }
