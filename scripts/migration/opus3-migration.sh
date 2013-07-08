@@ -6,7 +6,7 @@ set -e
 ## Call This Skript with paramaters:
 ## -f OPUS3-XML-database export file (e.g. /usr/local/opus/complete_database.xml)
 ## -p Path your OPUS3 fulltext files (e.g. /usr/local/opus/htdocs/volltexte)
-## -q Path to multiple OPUS3 fulltext paths (e.g. "/usr/local/opus/htdocs/volltexte /usr/local/opus/htdocs/volltexte_restricted")
+## -q Multiple OPUS3 fulltext paths separated by whitespace (e.g. "/usr/local/opus/htdocs/volltexte /usr/local/opus/htdocs/volltexte_restricted")
 ## -z Stepsize for looping
 ## -n No iteration after first looping
 ## -i Build Index after each loop
