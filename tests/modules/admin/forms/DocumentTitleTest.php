@@ -129,7 +129,7 @@ class Admin_Form_DocumentTitleTest extends ControllerTestCase {
         
         $this->assertFalse($form->isValid($post));
         
-        $this->assertContains('isEmpty', $form->getErrors('Value'));
+        $this->assertContains('admin_validate_error_notempty', $form->getErrors('Value'));
     }
     
 }
