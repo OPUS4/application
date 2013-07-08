@@ -35,13 +35,10 @@
 
 <h1><?= $this->translate($this->title) ?></h1>
 
-<div class="adminContainer">
-    
-    <?php if (isset($this->message)) : ?>
-    <div class="failure">
-        <?= $this->message ?>
-    </div>
-    <?php endif ?>
-
-    <?= $this->form ?>
+<?php if (isset($this->message)) : ?>
+<div class="failure">
+    <?= $this->message ?>
 </div>
+<?php endif ?>
+
+<?= $this->form ?>

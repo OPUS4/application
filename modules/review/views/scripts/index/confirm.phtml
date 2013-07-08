@@ -33,56 +33,52 @@
  */
 ?>
 
-<div class="adminContainer">
+<h2><?= $this->translate($this->title) ?>
+    <span class="info">(<?= $this->documentCount ?> <?= $this->translate('review_selected_document_count') ?>)</span>
+</h2>
 
-    <h2><?= $this->translate($this->title) ?>
-        <span class="info">(<?= $this->documentCount ?> <?= $this->translate('review_selected_document_count') ?>)</span>
-    </h2>
+<form action="<?= $this->actionUrl ?>" method="post" style="margin: 1em 2em">
 
-    <form action="<?= $this->actionUrl ?>" method="post" style="margin: 1em 2em">
+    <div>
+        <?PHP if (isset($this->error)) : ?>
+        <div class="error"><?= $this->error ?></div>
+        <?PHP endif; ?>
+    </div>
 
-        <div>
-            <?PHP if (isset($this->error)) : ?>
-            <div class="error"><?= $this->error ?></div>
-            <?PHP endif; ?>
-        </div>
+    <div class="instruction">
+        <?= $this->translate( $this->instruction ) ?>
+    </div>
 
-        <div class="instruction">
-            <?= $this->translate( $this->instruction ) ?>
-        </div>
-
-        <table style="margin-left: 2em;">
-            <tr>
-                <td>&nbsp;</td>
-                <td>
-                    <input type="submit" name="sureyes" value="<?= $this->translate('answer_yes') ?>" />
-                    <input type="submit" name="sureno" value="<?= $this->translate('answer_no') ?>" />
-                </td>
-            </tr>
-        </table>
-
-        <h3><?= $this->translate('review_selected_documents_list') ?></h3>
-
-        <table style="margin-left: 2em">
-        <?PHP foreach( $this->selected as $index => $docId ) : ?>
-            <tr>
-            <?PHP $document = new Util_DocumentAdapter($this, $docId); ?>
-            <td style="vertical-align: top; padding-right: 1em"><?= $docId ?></td>
+    <table style="margin-left: 2em;">
+        <tr>
+            <td>&nbsp;</td>
             <td>
-                <div class="title" style="font-weight: bold"><?= htmlspecialchars($document->getDocTitle()) ?></div>
-                <div class="authors">
-                    <?PHP $authorsCount = count($document->getAuthors()) - 1; ?>
-                    <?PHP foreach($document->getAuthors() as $count => $author) : ?>
-                        <?= $author['name'] ?>
-                        <?= ($count < $authorsCount) ? ';' : ''?>
-                    <?PHP endforeach; ?>
-                </div>
-                <input type="hidden" name="selected[]" value="<?= $document->getDocId() ?>" />
+                <input type="submit" name="sureyes" value="<?= $this->translate('answer_yes') ?>" />
+                <input type="submit" name="sureno" value="<?= $this->translate('answer_no') ?>" />
             </td>
-            </tr>
-        <?PHP endforeach; ?>
-        </table>
+        </tr>
+    </table>
 
-    </form>
+    <h3><?= $this->translate('review_selected_documents_list') ?></h3>
 
-</div>
+    <table style="margin-left: 2em">
+    <?PHP foreach( $this->selected as $index => $docId ) : ?>
+        <tr>
+        <?PHP $document = new Util_DocumentAdapter($this, $docId); ?>
+        <td style="vertical-align: top; padding-right: 1em"><?= $docId ?></td>
+        <td>
+            <div class="title" style="font-weight: bold"><?= htmlspecialchars($document->getDocTitle()) ?></div>
+            <div class="authors">
+                <?PHP $authorsCount = count($document->getAuthors()) - 1; ?>
+                <?PHP foreach($document->getAuthors() as $count => $author) : ?>
+                    <?= $author['name'] ?>
+                    <?= ($count < $authorsCount) ? ';' : ''?>
+                <?PHP endforeach; ?>
+            </div>
+            <input type="hidden" name="selected[]" value="<?= $document->getDocId() ?>" />
+        </td>
+        </tr>
+    <?PHP endforeach; ?>
+    </table>
+
+</form>

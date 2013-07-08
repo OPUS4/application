@@ -35,12 +35,9 @@
  */
 ?>
 
-
 <h1><?=$this->translate('admin_title_collections') ?></h1>
 
-<div class="adminContainer">
-
-    <?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
+<?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
 
 <?php if (!empty($this->breadcrumb)) : ?>
 <div class="collection_breadcrumbs">
@@ -85,5 +82,3 @@
     </tr>
     <? endforeach; ?>
 </table>
-
-</div>
