@@ -166,7 +166,7 @@ class Home_IndexControllerTest extends ControllerTestCase {
         // wenn sie abweichen, dann aufgrund einer Inkonsistenz zwischen Datenbank
         // und Suchindex (das sollte im Rahmen der Tests eigentlich nicht auftreten)
         
-        if ($numOfDbDocs != $numOfDbDocs) {
+        if ($numOfDbDocs != $numOfIndexDocs) {
             echo "\n";
             echo "num of index documents: $numOfIndexDocs\n";
             echo "num of database documents: $numOfDbDocs\n";
