@@ -69,6 +69,7 @@ class Admin_Form_DocumentTitle extends Admin_Form_AbstractModelSubForm {
         $this->addElement('Hidden', self::ELEMENT_TYPE); // Der Typ eines Titels ist nicht editierbar
         $this->addElement('Language', self::ELEMENT_LANGUAGE, array('required' => true));
         $this->addElement('textarea', self::ELEMENT_VALUE, array('required' => true, 'rows' => '4'));        
+        $this->getElement(self::ELEMENT_VALUE)->setErrorMessages(array('isEmpty' => 'admin_validate_error_notempty'));
     }
     
     /**
