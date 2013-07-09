@@ -157,8 +157,6 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
     
     public function testRegressionOpusvier2824() {
         $this->setUpEnglish();
-
-        $this->setUpEnglish();
         
         $form = new Admin_Form_DocumentPatent();
                 
@@ -185,6 +183,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
         
         $this->assertEquals('323', $patent->getNumber());
         $this->assertNotEquals('0000', $patent->getYearApplied());
+        $this->assertNull($patent->getYearApplied());
     }
     
 }
