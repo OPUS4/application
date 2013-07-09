@@ -75,9 +75,6 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         $doc->setServerState('unpublished');
         $doc->store();
         $this->dispatch('/oai/container/index/docId/' . $doc->getId());
-        $this->assertResponseCode(500);
-        $this->assertContains('access to requested document is forbidden',
-                $this->getResponse()->getBody());
 
         // cleanup
         $doc->deletePermanent();
@@ -90,6 +87,9 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         // restore security settings
         $config->security = $security;
         Zend_Registry::set('Zend_Config', $config);
+        
+        $this->assertResponseCode(500);
+        $this->assertContains('access to requested document is forbidden', $this->getResponse()->getBody());        
     }
 
     public function testRequestPublishedDocWithoutAssociatedFiles() {
@@ -97,10 +97,10 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         $doc->setServerState('published');
         $doc->store();
         $this->dispatch('/oai/container/index/docId/' . $doc->getId());
-        $this->assertResponseCode(500);
-        $this->assertContains('requested document does not have any associated readable files',
-                $this->getResponse()->getBody());
         $doc->deletePermanent();
+        
+        $this->assertResponseCode(500);
+        $this->assertContains('requested document does not have any associated readable files', $this->getResponse()->getBody());        
     }
 
     public function testRequestPublishedDocWithInaccessibleFile() {
@@ -122,14 +122,14 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/oai/container/index/docId/' . $doc->getId());
-        $this->assertResponseCode(500);
-        $this->assertContains('access denied on all files that are associated to the requested document',
-                $this->getResponse()->getBody());
 
         // cleanup
         $file->delete();
         $doc->deletePermanent();
         Opus_Util_File::deleteDirectory($path);
+        
+        $this->assertResponseCode(500);
+        $this->assertContains('access denied on all files that are associated to the requested document', $this->getResponse()->getBody());        
     }
 
     public function testRequestPublishedDocWithAccessibleFile() {
@@ -152,12 +152,13 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         $doc->addFile($file);
         $doc->store();
 
-        $this->dispatch('/oai/container/index/docId/' . $doc->getId());
-        $this->assertResponseCode(200);        
+        $this->dispatch('/oai/container/index/docId/' . $doc->getId());        
 
         // cleanup
         $file->delete();
         $doc->deletePermanent();
         Opus_Util_File::deleteDirectory($path);
+        
+        $this->assertResponseCode(200);
     }
 }
