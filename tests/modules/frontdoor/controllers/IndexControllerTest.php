@@ -209,13 +209,15 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $d->store();
 
       $this->dispatch('/frontdoor/index/index/docId/146');
-      $this->assertContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
-      $this->assertNotContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
 
       // restore language
       $d = new Opus_Document(146);
       $d->setLanguage($lang);
       $d->store();
+      
+      $this->assertContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
+      $this->assertNotContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
+
    }
 
    /**
@@ -232,13 +234,14 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $d->store();
 
       $this->dispatch('/frontdoor/index/index/docId/146');
-      $this->assertNotContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
-      $this->assertContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
 
       // restore language
       $d = new Opus_Document(146);
       $d->setLanguage($lang);
       $d->store();
+      
+      $this->assertNotContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
+      $this->assertContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());      
    }
 
    /**
@@ -254,14 +257,15 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $d->store();
 
       $this->dispatch('/frontdoor/index/index/docId/146');
-      $this->assertNotContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
-      $this->assertNotContains('<title>OPUS 4 | VBKO</title>', $this->getResponse()->getBody());
-      $this->assertContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
 
       // restore titles
       $d = new Opus_Document(146);
       $d->setTitleMain($titles);
       $d->store();
+      
+      $this->assertNotContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
+      $this->assertNotContains('<title>OPUS 4 | VBKO</title>', $this->getResponse()->getBody());
+      $this->assertContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());      
    }
 
    /**
@@ -273,7 +277,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $identifier = $identifiers[0];
       $this->assertEquals('www.myexampledomain.de/myexamplepath', $identifier->getValue());
       $this->dispatch('/frontdoor/index/index/docId/91');
-      $this->assertTrue(2 == substr_count($this->getResponse()->getBody(), 'http://www.myexampledomain.de/myexamplepath'));
+      $this->assertEquals(2, substr_count($this->getResponse()->getBody(), 'http://www.myexampledomain.de/myexamplepath'));
    }
 
    /**
@@ -285,7 +289,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $identifier = $identifiers[0];
       $this->assertEquals('http://www.myexampledomain.de/myexamplepath', $identifier->getValue());
       $this->dispatch('/frontdoor/index/index/docId/92');
-      $this->assertTrue(2 == substr_count($this->getResponse()->getBody(), 'http://www.myexampledomain.de/myexamplepath'));
+      $this->assertEquals(2, substr_count($this->getResponse()->getBody(), 'http://www.myexampledomain.de/myexamplepath'));
    }
 
    /**
@@ -526,9 +530,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/frontdoor/index/index/docId/' . $doc->getId());
-        $this->assertContains('<div class="abstract"><pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre></div>", $this->getResponse()->getBody());
-
+        
         $doc->deletePermanent();
+        
+        $this->assertContains('<div class="abstract"><pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre></div>", $this->getResponse()->getBody());        
     }
 
     public function testNotePerserveSpace() {
@@ -544,9 +549,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/frontdoor/index/index/docId/' . $doc->getId());
-        $this->assertContains('<pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre>", $this->getResponse()->getBody());
-
+        
         $doc->deletePermanent();
+        
+        $this->assertContains('<pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre>", $this->getResponse()->getBody());        
     }
 
     /**
