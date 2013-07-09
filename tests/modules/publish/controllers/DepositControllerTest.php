@@ -142,11 +142,12 @@ class Publish_DepositControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/deposit/deposit');
+        
+        $doc->deletePermanent();
+        
         $this->assertResponseCode(302);
         $this->assertController('deposit');
-        $this->assertAction('deposit');
-
-        $doc->deletePermanent();
+        $this->assertAction('deposit');        
     }
 
     public function testConfirmAction() {
@@ -196,6 +197,9 @@ class Publish_DepositControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/deposit/deposit');
+        
+        $doc->deletePermanent();
+        
         $this->assertResponseCode(302);
         $this->assertController('deposit');
         $this->assertAction('deposit');
@@ -211,8 +215,18 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $docId = $doc->store();
 
         $log = Zend_Registry::get('Zend_Log');
-        $deposit = new Publish_Model_Deposit($docId, $log);
-        $this->setExpectedException('Publish_Model_FormDocumentNotFoundException');
+        $e = null;
+        try {
+            $deposit = new Publish_Model_Deposit($docId, $log);
+        }
+        catch (Exception $ex) {
+            $e = $ex;
+        }
+        
+        $doc->deletePermanent();
+        
+        $this->assertNotNull($e);
+        $this->assertTrue($e instanceof Publish_Model_FormDocumentNotFoundException);                
     }
 }
 
