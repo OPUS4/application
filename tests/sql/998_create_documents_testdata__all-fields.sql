@@ -74,8 +74,8 @@ INSERT INTO `link_documents_series` (`document_id`, `series_id`, `number`, `doc_
 INSERT INTO `persons` (`id`, `academic_title`, `date_of_birth`, `email`, `first_name`, `last_name`, `place_of_birth`) VALUES
 (258,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
 (259,NULL,NULL,'doe@example.org','John','Doe',NULL),
-(260,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
-(261,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
+(260,'PhD','1970-01-02',NULL,'Jane','Doe', NULL),
+(261,'PhD', NULL,NULL,'Jane','Doe','London'),
 (262,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
 (263,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
 (264,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),

@@ -61,6 +61,33 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_person_assign_document">
+      <tuv xml:lang="en">
+        <seg>Add Person to Document</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Person zum Dokument hinzufügen</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_person_born">
+      <tuv xml:lang="en">
+        <seg>Born</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Geboren</seg>
+      </tuv>
+    </tu>
+    
+    <tu tuid="admin_person_born_in">
+      <tuv xml:lang="en">
+          <seg>in</seg>
+      </tuv>
+      <tuv xml:lang="de">
+          <seg>in</seg>
+      </tuv>
+    </tu>
+    
   </body>
   
 </tmx>
