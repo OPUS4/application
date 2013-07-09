@@ -33,6 +33,24 @@
  */
 
 class Publish_DepositControllerTest extends ControllerTestCase {
+    
+    private $docId = null;
+    
+    protected function tearDown() {
+        if (!is_null($this->docId)) {
+            $delete = true;
+            try {
+                $doc = new Opus_Document($this->docId);
+            }
+            catch (Opus_Model_NotFoundException $e) {
+                $delete = false;
+            }
+            if ($delete) {
+                $doc->deletePermanent();
+            }            
+        }        
+        parent::tearDown();
+    }
 
     /**
      * Method tests the deposit action with GET request which leads to a redirect (code 302)
@@ -133,7 +151,8 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $doc = new Opus_Document();
         $doc->setServerState('temporary');
         $doc->setType('preprint');
-        $session->documentId = $doc->store();
+        $this->docId = $doc->store();
+        $session->documentId = $this->docId;
 
         $this->request
                 ->setMethod('POST')
@@ -141,9 +160,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
                     'send' => 'Save document'
                 ));
 
-        $this->dispatch('/publish/deposit/deposit');
-        
-        $doc->deletePermanent();
+        $this->dispatch('/publish/deposit/deposit');                
         
         $this->assertResponseCode(302);
         $this->assertController('deposit');
@@ -188,7 +205,8 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $doc = new Opus_Document();
         $doc->setServerState('temporary');
         $doc->setType('preprint');
-        $session->documentId = $doc->store();
+        $this->docId = $doc->store();
+        $session->documentId = $this->docId;        
 
         $this->request
                 ->setMethod('POST')
@@ -196,18 +214,13 @@ class Publish_DepositControllerTest extends ControllerTestCase {
                     'abort' => ''
                 ));
 
-        $this->dispatch('/publish/deposit/deposit');
-        
-        $doc->deletePermanent();
+        $this->dispatch('/publish/deposit/deposit');       
         
         $this->assertResponseCode(302);
         $this->assertController('deposit');
         $this->assertAction('deposit');
     }
 
-        /**
-     * @expectedException Publish_Model_FormDocumentNotFoundException
-     */
     public function testStoreExistingDocument() {
         $doc = new Opus_Document();
         $doc->setServerState('published');
@@ -217,13 +230,11 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $log = Zend_Registry::get('Zend_Log');
         $e = null;
         try {
-            $deposit = new Publish_Model_Deposit($docId, $log);
+            new Publish_Model_Deposit($docId, $log);
         }
         catch (Exception $ex) {
             $e = $ex;
-        }
-        
-        $doc->deletePermanent();
+        }       
         
         $this->assertNotNull($e);
         $this->assertTrue($e instanceof Publish_Model_FormDocumentNotFoundException);                
