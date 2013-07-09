@@ -37,6 +37,15 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     private $_security;
     private $_addOaiModuleAccess;
+    private $docIds = array();
+    
+    protected function tearDown() {
+        foreach ($this->docIds as $docId) {
+            $doc = new Opus_Document($docId);
+            $doc->deletePermanent();         
+        }
+        parent::tearDown();
+    }
 
     /**
      * Method to check response for "bad" strings.
@@ -823,12 +832,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $file = new Opus_File();
         $file->setVisibleInOai(true);
         $file->setPathName('foobar.pdf');
-        $doc->addFile($file);
-        $doc->store();
+        $doc->addFile($file);       
+        $this->docIds[] = $doc->store();
 
-        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
-        
-        $doc->deletePermanent();
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());                
         
         $this->assertResponseCode(200);
         $this->assertContains('<ddb:transfer', $this->getResponse()->getBody());
@@ -838,11 +845,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     public function testTransferUrlIsNotPresent() {
         $doc = new Opus_Document();
         $doc->setServerState("published");
-        $doc->store();
+        $this->docIds[] = $doc->store();
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
-        
-        $doc->deletePermanent();
-        
+                        
         $this->assertResponseCode(200);
         $this->assertNotContains('<ddb:transfer ddb:type="dcterms:URI">', $this->getResponse()->getBody());        
     }
@@ -901,13 +906,11 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $f2->setVisibleInOai(false);
         $d->addFile($f2);
 
-        $d->store();
+        $this->docIds[] = $d->store();
         $id = $d->getId();
 
         //oai query of that document
-        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::' . $id);        
-        
-        $d->deletePermanent();
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::' . $id);                        
         
         $response = $this->getResponse()->getBody();
         $this->assertContains('<Opus_Document xmlns="" Id="' . $id . '"', $response);
@@ -982,11 +985,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $file->setVisibleInOai(true);
         $file->setPathName('foobar.pdf');
         $doc->addFile($file);
-        $doc->store();
+        $this->docIds[] = $doc->store();
 
-        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
-        
-        $doc->deletePermanent();
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());                
         
         $this->assertResponseCode(200);
         $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $this->getResponse()->getBody());
@@ -1007,11 +1008,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $file->setVisibleInOai(true);
         $file->setPathName('bar.pdf');
         $doc->addFile($file);
-        $doc->store();
+        $this->docIds[] = $doc->store();
 
-        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
-        
-        $doc->deletePermanent();
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());                
         
         $this->assertResponseCode(200);
         $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $this->getResponse()->getBody());
@@ -1035,7 +1034,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $file->setPathName('bar.pdf');
         $doc1->addFile($file);
         $doc1->addCollection($collection);
-        $doc1->store();
+        $this->docIds[] = $doc1->store();
 
         $doc2 = new Opus_Document();
         $doc2->setServerState('published');
@@ -1044,12 +1043,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $file->setPathName('baz.pdf');
         $doc2->addFile($file);
         $doc2->addCollection($collection);
-        $doc2->store();
+        $this->docIds[] = $doc2->store();
 
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');
-
-        $doc1->deletePermanent();
-        $doc2->deletePermanent();
         
         $body = $this->getResponse()->getBody();
         $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
@@ -1075,7 +1071,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $file->setPathName('bar.pdf');
         $doc1->addFile($file);
         $doc1->addCollection($collection);
-        $doc1->store();
+        $this->docIds[] = $doc1->store();
 
         $doc2 = new Opus_Document();
         $doc2->setServerState('published');
@@ -1085,12 +1081,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $file->setPathName('baz.pdf');
         $doc2->addFile($file);
         $doc2->addCollection($collection);
-        $doc2->store();
+        $this->docIds[] = $doc2->store();
 
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDiss&set=ddc:000');
-
-        $doc1->deletePermanent();
-        $doc2->deletePermanent();        
         
         $body = $this->getResponse()->getBody();
         $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
@@ -1115,7 +1108,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $file->setPathName('bar.pdf');
         $doc1->addFile($file);
         $doc1->addCollection($collection);
-        $doc1->store();
+        $this->docIds[] = $doc1->store();
 
         $doc2 = new Opus_Document();
         $doc2->setServerState('published');
@@ -1124,18 +1117,14 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $file->setPathName('baz.pdf');
         $doc2->addFile($file);
         $doc2->addCollection($collection);
-        $doc2->store();
+        $this->docIds[] = $doc2->store();
 
         $doc3 = new Opus_Document();
         $doc3->setServerState('published');
         $doc3->addCollection($collection);
-        $doc3->store();
+        $this->docIds[] = $doc3->store();
 
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');
-
-        $doc1->deletePermanent();
-        $doc2->deletePermanent();
-        $doc3->deletePermanent();        
         
         $body = $this->getResponse()->getBody();
         $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
@@ -1158,11 +1147,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc = new Opus_Document();
         $doc->setServerState('published');
         $doc->addCollection($collection);
-        $doc->store();
+        $this->docIds[] = $doc->store();
 
-        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');
-        
-        $doc->deletePermanent();
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');       
         
         $body = $this->getResponse()->getBody();
         $this->assertNotContains('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
@@ -1179,11 +1166,9 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc->setServerState('published');
         $doc->setType('doctoralthesis'); // xMetaDiss liefert nur Doktorarbeiten und Habilitationen aus
         $doc->addCollection($collection);
-        $doc->store();
+        $this->docIds[] = $doc->store();
 
-        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDiss&set=ddc:000');
-        
-        $doc->deletePermanent();
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDiss&set=ddc:000');       
         
         $body = $this->getResponse()->getBody();
         $this->assertNotContains('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
@@ -1278,11 +1263,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 //      $refereeId = $referee->store();
       $document->addPersonReferee($referee);
 
-      $document->store();
+      $this->docIds[] = $document->store();
 
       $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $document->getId());
       
-      $document->deletePermanent();
       $author->delete();
       $advisor->delete();
       $referee->delete();
