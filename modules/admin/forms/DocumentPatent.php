@@ -87,27 +87,11 @@ class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
     public function init() {
         parent::init();
         
-        $element = new Form_Element_Hidden(self::ELEMENT_ID);
-        $this->addElement($element);
-        
-        $element = new Form_Element_Text(self::ELEMENT_NUMBER);
-        $element->setLabel($this->_translationPrefix . self::ELEMENT_NUMBER);
-        $element->setRequired(true);
-        $element->setValidators(array(
-           new Zend_Validate_NotEmpty() 
-        ));
-        $this->addElement($element);
-        
-        $element = new Form_Element_Text(self::ELEMENT_COUNTRIES);
-        $element->setLabel($this->_translationPrefix . self::ELEMENT_COUNTRIES);
-        $this->addElement($element);
-        
+        $this->addElement('hidden', self::ELEMENT_ID);
+        $this->addElement('text', self::ELEMENT_NUMBER, array('required' => true, 'label' => 'Number'));
+        $this->addElement('text', self::ELEMENT_COUNTRIES, array('label' => 'Countries'));
         $this->addElement('Year', self::ELEMENT_YEAR_APPLIED);
-        
-        $element = new Form_Element_Text(self::ELEMENT_APPLICATION);
-        $element->setLabel($this->_translationPrefix . self::ELEMENT_APPLICATION);
-        $this->addElement($element);
-        
+        $this->addElement('text', self::ELEMENT_APPLICATION, array('label' => 'Application'));
         $this->addElement('Date', self::ELEMENT_DATE_GRANTED);
     }
 
@@ -135,23 +119,11 @@ class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
     public function updateModel($patent) {
         $datesHelper = $this->getDatesHelper();
         
-        // Number
-        $value = $this->getElement(self::ELEMENT_NUMBER)->getValue();
-        $patent->setNumber($value); 
+        $patent->setNumber($this->getElementValue(self::ELEMENT_NUMBER)); 
+        $patent->setCountries($this->getElementValue(self::ELEMENT_COUNTRIES));
+        $patent->setYearApplied($this->getElementValue(self::ELEMENT_YEAR_APPLIED));
+        $patent->setApplication($this->getElementValue(self::ELEMENT_APPLICATION));
         
-        // Countries
-        $value = $this->getElement(self::ELEMENT_COUNTRIES)->getValue();
-        $patent->setCountries($value);
-        
-        // YearApplied
-        $value = $this->getElementValue(self::ELEMENT_YEAR_APPLIED);
-        $patent->setYearApplied($value);
-        
-        // Application
-        $value = $this->getElement(self::ELEMENT_APPLICATION)->getValue();
-        $patent->setApplication($value);
-        
-        // DateGranted
         $value = $this->getElement(self::ELEMENT_DATE_GRANTED)->getValue();
         $date = $datesHelper->getOpusDate($value);
         $patent->setDateGranted($date);
@@ -168,18 +140,25 @@ class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
     public function getModel() {
         $patentId = $this->getElement(self::ELEMENT_ID)->getValue();
         
-        // TODO empty not suffiecient (e.g. '00' is empty)
-        if (empty($patentId)) {
+        if (strlen(trim($patentId)) == 0 || !is_numeric($patentId)) {
             $patentId = null;
         }
         
-        $patent = new Opus_Patent($patentId);
+        try {
+            $patent = new Opus_Patent($patentId);
+        }
+        catch (Opus_Model_NotFoundException $omnfe) {
+            // kann eigentlich nur bei manipuliertem POST passieren
+            $this->getLog()->err($omnfe);
+            // bei ungültiger ID wird Patentwie neu hinzugefügt behandelt
+            $patent = new Opus_Patent(); 
+        }
         
         $this->updateModel($patent);
         
         return $patent;
     }
-    
+        
     /**
      * Überschreibt Funktion fuer das Laden der Default-dekorators.
      * 
