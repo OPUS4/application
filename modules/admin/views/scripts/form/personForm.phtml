@@ -67,16 +67,25 @@
             </dl>
             <?PHP endif; ?>
             <div class="person-info">
-                <span id="<?=$formId . 'LastName'?>"><?= $person->getLastName()?></span>
-                <?PHP if (!is_null($person->getFirstName())) : ?>, 
-                    <span id="<?=$formId . 'FirstName'?>"><?= $person->getFirstName() ?></span>
+                <span id="<?=$formId . 'LastName'?>" class="person-lastname"><?= $person->getLastName()?></span
+                ><?PHP if (!is_null($person->getFirstName())) : ?>, 
+                    <span id="<?=$formId . 'FirstName'?>" class="person-firstname"><?= $person->getFirstName() ?></span>
                 <?PHP endif; ?>
                 <?PHP if (!is_null($person->getAcademicTitle())) : ?>
-                    <span id="<?=$formId . 'AcademicTitle'?>">, <?= $person->getAcademicTitle() ?></span>
+                    <span id="<?=$formId . 'AcademicTitle'?>" class="person-academictitle">, <?= $person->getAcademicTitle() ?></span>
+                <?PHP endif; ?>
+                <?PHP if (!is_null($person->getDateOfBirth()) || !is_null($person->getPlaceOfBirth())) : ?>    
+                    (* <span id="<?= $formId . 'DateOfBirth' ?>" class="person-born-date"
+                          ><?= $this->formatValue()->formatDate($person->getDateOfBirth()) ?></span
+                    ><?PHP if (!is_null($person->getPlaceOfBirth())) : 
+                        ?><?= (is_null($person->getDateOfBirth())) ? '' : ', ' 
+                            ?><span id="<?= $formId . 'PlaceOfBirth' ?>" class="person-born-place"
+                              ><?= $person->getPlaceOfBirth() ?></span
+                    ><?PHP endif; ?>)
                 <?PHP endif; ?>
                 <?PHP if (!is_null($person->getEmail())) : ?>
                 <div>
-                    <span id="<?=$formId . 'Email'?>"><?= $person->getEmail() ?></span>
+                    <span id="<?=$formId . 'Email'?>" class="person-email"><?= $person->getEmail() ?></span>
                     <?PHP if (!$this->element->isViewModeEnabled()) : ?>
                     -<?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->renderViewHelper() ?>
                     <?= $this->translate('AllowEmailContact') ?>
@@ -84,18 +93,6 @@
                     <span id="<?= $formId . 'AllowContact'?>">(<?= $this->translate('AllowEmailContact') ?>)</span>
                     <?PHP endif; ?>
                 </div>
-                <?PHP endif; ?>
-                <?PHP if (!is_null($person->getDateOfBirth()) || !is_null($person->getPlaceOfBirth())) : ?>    
-                    <div>
-                        <?= $this->translate('admin_person_born') ?>
-                        <span id="<?= $formId . 'DateOfBirth' ?>" class="person-born-date"
-                              ><?= $this->formatValue()->formatDate($person->getDateOfBirth()) ?></span>
-                        <?PHP if (!is_null($person->getPlaceOfBirth())) : ?>
-                            <?= $this->translate('admin_person_born_in') ?>
-                            <span id="<?= $formId . 'PlaceOfBirth' ?>" class="person-born-date"
-                                  ><?= $person->getPlaceOfBirth() ?></span>
-                        <?PHP endif; ?>
-                    </div>
                 <?PHP endif; ?>
             </div>
             <?PHP if (!$this->element->isViewModeEnabled()) : ?>

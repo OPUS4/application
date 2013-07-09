@@ -1149,7 +1149,29 @@ ul.form-action{
    color: white;
 }
 
+/**
+ * Ergänzungen für Anzeige von Informationen einer Person
+ */ 
 
+.adminContainer #fieldset-Persons .person-info .person-born-date {
+    color: black;
+}
+
+.adminContainer #fieldset-Persons .person-info .person-born-place {
+    color: black;
+}
+
+.adminContainer #fieldset-Persons .person-info .person-lastname {
+    font-weight: bold;
+}
+
+.adminContainer #fieldset-Persons .person-info .person-firstname {
+    font-weight: bold;
+}
+
+.adminContainer #fieldset-Persons .person-info .person-academictitle {
+    font-style: italic;
+}
 
 /** 
  * CSS rule set for indexmaintenance views (were NOT added by web designer)
