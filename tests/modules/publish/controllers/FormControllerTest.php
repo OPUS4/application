@@ -1038,25 +1038,18 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $session->documentType = 'barbaz';
         $doc = $this->createTemporaryDoc();
         $session->documentId = $doc->getId();
-        $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->fulltext = '0';        
+        $session->additionalFields = array('browseUpInstitute' => 'hoch',);
 
         $this->request->setMethod('POST');
-
-        $ex = null;
-        try {
-            $this->dispatch('/publish/form/check');
-        }
-        catch (Exception $e) {
-            $ex = $e;
-        }
+        
+        $this->dispatch('/publish/form/check');
         
         $this->deleteTemporaryDoc($doc);
         
-        $this->assertNotNull($ex);
-        $this->assertTrue($ex instanceof Application_Exception);
-        $this->assertEquals('invalid configuration: template file barbaz.phtml is not readable', $ex->getMessage());
-        
+        $this->assertResponseCode(500);
+        $this->assertContains('Application_Exception', $this->getResponse()->getBody());
+        $this->assertContains('invalid configuration: template file barbaz.phtml is not readable or does not exist', $this->getResponse()->getBody());        
     }
 
     public function testApplicationErrorForDoctypeBazbar() {
@@ -1064,24 +1057,18 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $session->documentType = 'bazbar';
         $doc = $this->createTemporaryDoc();
         $session->documentId = $doc->getId();
-        $session->fulltext = '0';
-        $session->additionalFields = array();
+        $session->fulltext = '0';        
+        $session->additionalFields = array('browseUpInstitute' => 'hoch',);
 
         $this->request->setMethod('POST');
-
-        $ex = null;
-        try {
-            $this->dispatch('/publish/form/check');
-        }
-        catch (Exception $e) {
-            $ex = $e;
-        }
+        
+        $this->dispatch('/publish/form/check');
         
         $this->deleteTemporaryDoc($doc);
         
-        $this->assertNotNull($ex);
-        $this->assertTrue($ex instanceof Application_Exception);
-        $this->assertEquals('invalid configuration: template file barbaz.phtml is not readable', $ex->getMessage());
+        $this->assertResponseCode(500);
+        $this->assertContains('Application_Exception', $this->getResponse()->getBody());
+        $this->assertContains('invalid configuration: template file barbaz.phtml is not readable or does not exist', $this->getResponse()->getBody());
     }
 
 }
