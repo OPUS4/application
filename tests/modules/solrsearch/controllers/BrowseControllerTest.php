@@ -88,11 +88,13 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $d->store();
 
         $this->dispatch('/solrsearch/browse/series');
-        $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');
 
         $this->restoreSeriesVisibility($visibilities);
-        $d->deletePermanent();        
+        $d->deletePermanent();
+        $s->delete();
+        
+        $this->assertRedirect();
+        $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');        
     }
 
     public function testSeriesActionWithOneVisibleSeriesWithOnePublishedDocument() {
@@ -110,16 +112,16 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $d->store();
 
         $this->dispatch('/solrsearch/browse/series');
-        $this->assertContains('/solrsearch/index/search/searchtype/series/id/7', $this->getResponse()->getBody());
-        foreach (Opus_Series::getAll() as $series) {
-            if ($series->getId() != 7) {
-                $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/' . $series->getId(), $this->getResponse()->getBody());
-            }
-        }                
-        $this->assertResponseCode(200);
-
+        
         $this->restoreSeriesVisibility($visibilities);
         $d->deletePermanent();
+        $s->delete();
+        
+        $this->assertContains('/solrsearch/index/search/searchtype/series/id/7', $this->getResponse()->getBody());
+        foreach (Opus_Series::getAll() as $series) {
+            $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/' . $series->getId(), $this->getResponse()->getBody());
+        }                
+        $this->assertResponseCode(200);
     }
 
     private function setAllSeriesToUnvisible() {
