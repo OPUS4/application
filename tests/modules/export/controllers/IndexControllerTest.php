@@ -251,6 +251,8 @@ class Export_IndexControllerTest extends ControllerTestCase {
         // make search index up to date
         $indexer->removeDocumentFromEntryIndexById($docId2);
         $indexer->commit();
+        
+        $doc1->deletePermanent();
 
         $body = $this->getResponse()->getBody();
 
@@ -262,9 +264,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
 
         $this->assertContains(' doccount="1"', $body); // only the first document can be instantiated (xml output does not contain the second document although it exists in search index)
         $this->assertContains(' queryhits="2"', $body); // both documents exist in search index, but only the first one exists in database (queryhits contains the number of search hits)
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
-
-        $doc1->deletePermanent();
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());        
     }
 
     /**
