@@ -827,11 +827,12 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
+        
+        $doc->deletePermanent();
+        
         $this->assertResponseCode(200);
         $this->assertContains('<ddb:transfer', $this->getResponse()->getBody());
-        $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());
-
-        $doc->deletePermanent();
+        $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());        
     }
 
     public function testTransferUrlIsNotPresent() {
@@ -839,9 +840,11 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc->setServerState("published");
         $doc->store();
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
-        $this->assertResponseCode(200);
-        $this->assertNotContains('<ddb:transfer ddb:type="dcterms:URI">', $this->getResponse()->getBody());
+        
         $doc->deletePermanent();
+        
+        $this->assertResponseCode(200);
+        $this->assertNotContains('<ddb:transfer ddb:type="dcterms:URI">', $this->getResponse()->getBody());        
     }
 
     /**
@@ -902,7 +905,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $id = $d->getId();
 
         //oai query of that document
-        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::' . $id);
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=copy_xml&identifier=oai::' . $id);        
+        
+        $d->deletePermanent();
+        
         $response = $this->getResponse()->getBody();
         $this->assertContains('<Opus_Document xmlns="" Id="' . $id . '"', $response);
         $this->assertNotContains('<File', $response);
@@ -979,11 +985,12 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
+        
+        $doc->deletePermanent();
+        
         $this->assertResponseCode(200);
         $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $this->getResponse()->getBody());
-        $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());
-
-        $doc->deletePermanent();
+        $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());        
     }
 
     /**
@@ -1003,11 +1010,12 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
+        
+        $doc->deletePermanent();
+        
         $this->assertResponseCode(200);
         $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $this->getResponse()->getBody());
-        $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());
-
-        $doc->deletePermanent();
+        $this->assertContains($this->getRequest()->getBaseUrl() . '/oai/container/index/docId/' . $doc->getId() . '</ddb:transfer>', $this->getResponse()->getBody());        
     }
 
     /**
@@ -1039,13 +1047,14 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc2->store();
 
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');
+
+        $doc1->deletePermanent();
+        $doc2->deletePermanent();
+        
         $body = $this->getResponse()->getBody();
         $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
         $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $body);
         $this->assertNotContains('<ddb:fileNumber>3</ddb:fileNumber>', $body);
-
-        $doc1->deletePermanent();
-        $doc2->deletePermanent();
     }
 
     /**
@@ -1079,13 +1088,14 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc2->store();
 
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDiss&set=ddc:000');
+
+        $doc1->deletePermanent();
+        $doc2->deletePermanent();        
+        
         $body = $this->getResponse()->getBody();
         $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
         $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $body);
         $this->assertNotContains('<ddb:fileNumber>3</ddb:fileNumber>', $body);
-
-        $doc1->deletePermanent();
-        $doc2->deletePermanent();
     }
 
     /**
@@ -1122,6 +1132,11 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc3->store();
 
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');
+
+        $doc1->deletePermanent();
+        $doc2->deletePermanent();
+        $doc3->deletePermanent();        
+        
         $body = $this->getResponse()->getBody();
         $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
         $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $body);
@@ -1132,10 +1147,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<ddb:transfer ddb:type="dcterms:URI">http:///oai/container/index/docId/' . $doc1->getId() . '</ddb:transfer>', $body);
         $this->assertContains('<ddb:transfer ddb:type="dcterms:URI">http:///oai/container/index/docId/' . $doc2->getId() . '</ddb:transfer>', $body);
         $this->assertNotContains('<ddb:transfer ddb:type="dcterms:URI">http:///oai/container/index/docId/' . $doc3->getId() . '</ddb:transfer>', $body);
-
-        $doc1->deletePermanent();
-        $doc2->deletePermanent();
-        $doc3->deletePermanent();
     }
 
     /**
@@ -1150,11 +1161,12 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');
-        $body = $this->getResponse()->getBody();
-        $this->assertNotContains('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
-        $this->assertContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);
         
         $doc->deletePermanent();
+        
+        $body = $this->getResponse()->getBody();
+        $this->assertNotContains('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
+        $this->assertContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);               
     }
 
     /**
@@ -1170,11 +1182,12 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDiss&set=ddc:000');
+        
+        $doc->deletePermanent();
+        
         $body = $this->getResponse()->getBody();
         $this->assertNotContains('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
-        $this->assertContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);
-
-        $doc->deletePermanent();
+        $this->assertContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);        
     }
 
     /**
@@ -1268,6 +1281,12 @@ class Oai_IndexControllerTest extends ControllerTestCase {
       $document->store();
 
       $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $document->getId());
+      
+      $document->deletePermanent();
+      $author->delete();
+      $advisor->delete();
+      $referee->delete();
+      
       $this->assertResponseCode(200);
       $response = $this->getResponse();
       $xpath = $this->prepareXpathFromResultString($response->getBody());
@@ -1292,11 +1311,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
       $this->assertEquals(0, $refereeFirstName->length);
       $refereeLastName = $xpath->query('//xMetaDiss:xMetaDiss/dc:contributor[@thesis:role="referee"]/pc:person/pc:name/pc:surName');
       $this->assertEquals(1, $refereeLastName->length);
-
-      $document->deletePermanent();
-      $author->delete();
-      $advisor->delete();
-      $referee->delete();
    }
    
     /**
