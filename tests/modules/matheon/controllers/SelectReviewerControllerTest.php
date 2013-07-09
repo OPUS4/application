@@ -43,8 +43,12 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
                 ->setValue($loggedUserId);
 
         return $document->store();
-
     }
+    
+    private function deleteDocument($docId) {
+        $doc = new Opus_Document($docId);
+        $doc->deletePermanent();
+    }        
 
     public function testFormWithoutDocumentId() {
         $session = new Zend_Session_Namespace('Publish');
@@ -72,7 +76,8 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
         $session = new Zend_Session_Namespace('Publish');
         $session->depositConfirmDocumentId = $docId;
 
-        $this->dispatch('/matheon/select-reviewer/form');
+        $this->dispatch('/matheon/select-reviewer/form');       
+        $this->deleteDocument($docId);
         $this->assertResponseCode(200);
     }
 
@@ -92,10 +97,8 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/matheon/select-reviewer/form');
+        $this->deleteDocument($docId);
         $this->assertResponseCode(200);
-
-        $response = $this->getResponse();
-        //echo $response->getBody();
 
         $this->assertQueryContentContains('div#content', 'has been notified');
     }
@@ -116,6 +119,7 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/matheon/select-reviewer/form');
+        $this->deleteDocument($docId);
         $this->assertResponseCode(200);
 
         // Check, that right privilege has been set.
