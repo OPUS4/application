@@ -56,7 +56,9 @@ class Form_Element_Year extends Form_Element_Text {
         ));
         $validators[] = $validator;
         
-        $this->setAttrib('placeholder', 'YYYY'); // TODO translate
+        $this->setAttrib('placeholder', $this->getTranslator()->translate('year_format'));
+        $this->setAttrib('size', 6);
+        $this->setAttrib('maxlength', 4);
         
         $this->setValidators($validators, true);
     }

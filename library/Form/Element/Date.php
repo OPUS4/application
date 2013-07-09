@@ -50,7 +50,9 @@ class Form_Element_Date extends Form_Element_Text {
         ));
         $this->setValidators(array($validator));
         
-        $this->setAttrib('placeholder', 'YYYY/MM/DD'); // TODO translate
+        $this->setAttrib('placeholder', $this->getTranslator()->translate('date_format'));
+        $this->setAttrib('size', 12); 
+        $this->setAttrib('maxlength', 10); 
     }
     
 }

@@ -21,6 +21,26 @@
     </header>
 
     <body>
+        
+        <!-- Hier ist das Datumsformat definiert. TODO überall verwenden -->
+        <tu tuid="date_format">
+            <tuv xml:lang="en">
+                <seg>YYYY/MM/DD</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>TT.MM.JJJJ</seg>
+            </tuv>
+        </tu>
+        
+        <!-- Hier ist das Jahresformat definiert. TODO überall verwenden -->
+        <tu tuid="year_format">
+            <tuv xml:lang="en">
+                <seg>YYYY</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>JJJJ</seg>
+            </tuv>
+        </tu>
 
         <tu tuid="Opus_Document_ServerState_Value_Unpublished">
             <tuv xml:lang="en">
