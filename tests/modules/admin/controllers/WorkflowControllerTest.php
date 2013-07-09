@@ -221,53 +221,53 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
     public function testNotificationIsNotSupported() {
         $doc = $this->createDocWithSubmitterAndAuthor('submitter@localhost.de', 'author@localhost.de');
         $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
+        $doc->deletePermanent();
         $this->assertNotContains('submitter@localhost.de', $this->getResponse()->getBody());
         $this->assertNotContains('author@localhost.de', $this->getResponse()->getBody());
         $this->assertNotContains('<input type="checkbox" name="submitter" id="submitter"', $this->getResponse()->getBody());
-        $this->assertNotContains('<input type="checkbox" name="author_1" id="author_1"', $this->getResponse()->getBody());
-        $doc->deletePermanent();
+        $this->assertNotContains('<input type="checkbox" name="author_1" id="author_1"', $this->getResponse()->getBody());        
     }
 
     public function testSubmitterNotificationIsAvailable() {        
         $this->enablePublishNotification();
         $doc = $this->createDocWithSubmitterAndAuthor('submitter@localhost.de', 'author@localhost.de');
-        $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');        
+        $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
+        $doc->deletePermanent();
         $this->assertContains('submitter@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('author@localhost.de', $this->getResponse()->getBody());
-        $this->assertContains('<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"', $this->getResponse()->getBody());        
-        $doc->deletePermanent();
+        $this->assertContains('<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"', $this->getResponse()->getBody());                
     }
 
     public function testAuthorNotificationIsAvailable() {
         $this->enablePublishNotification();
         $doc = $this->createDocWithSubmitterAndAuthor('submitter@localhost.de', 'author@localhost.de');
         $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
+        $doc->deletePermanent();
         $this->assertContains('submitter@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('author@localhost.de', $this->getResponse()->getBody());
-        $this->assertContains('<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"', $this->getResponse()->getBody());
-        $doc->deletePermanent();
+        $this->assertContains('<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"', $this->getResponse()->getBody());        
     }
 
     public function testSubmitterNotificationIsNotAvailable() {
         $this->enablePublishNotification();
         $doc = $this->createDocWithSubmitterAndAuthor('', 'author@localhost.de');
         $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
+        $doc->deletePermanent();
         $this->assertNotContains('submitter@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('author@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('<input type="checkbox" name="submitter" id="submitter" value="1" disabled="1"', $this->getResponse()->getBody());
-        $this->assertContains('<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"', $this->getResponse()->getBody());
-        $doc->deletePermanent();
+        $this->assertContains('<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"', $this->getResponse()->getBody());        
     }
 
     public function testAuthorNotificationIsNotAvailable() {
         $this->enablePublishNotification();
         $doc = $this->createDocWithSubmitterAndAuthor('submitter@localhost.de', '');
         $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
+        $doc->deletePermanent();
         $this->assertContains('submitter@localhost.de', $this->getResponse()->getBody());
         $this->assertNotContains('author@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"', $this->getResponse()->getBody());
-        $this->assertContains('<input type="checkbox" name="author_1" id="author_1" value="1" disabled="1"', $this->getResponse()->getBody());        
-        $doc->deletePermanent();
+        $this->assertContains('<input type="checkbox" name="author_1" id="author_1" value="1" disabled="1"', $this->getResponse()->getBody());                
     }
 
     public function testAuthorNotificationForMultipleAuthors() {
@@ -294,6 +294,9 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
+        
+        $doc->deletePermanent();
+        
         $this->assertContains('submitter@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('author@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('A@localhost.de', $this->getResponse()->getBody());
@@ -303,9 +306,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
         $this->assertContains('<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"', $this->getResponse()->getBody());
         $this->assertContains('<input type="checkbox" name="author_2" id="author_2" value="1" checked="checked"', $this->getResponse()->getBody());
         $this->assertContains('<input type="checkbox" name="author_3" id="author_3" value="1" disabled="1"', $this->getResponse()->getBody());
-        $this->assertContains('<input type="checkbox" name="author_4" id="author_4" value="1" checked="checked"', $this->getResponse()->getBody());
-
-        $doc->deletePermanent();
+        $this->assertContains('<input type="checkbox" name="author_4" id="author_4" value="1" checked="checked"', $this->getResponse()->getBody());        
     }
     
     public function testShowDocInfoOnConfirmationPage() {
