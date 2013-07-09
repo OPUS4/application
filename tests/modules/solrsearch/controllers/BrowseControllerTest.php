@@ -91,7 +91,6 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
 
         $this->restoreSeriesVisibility($visibilities);
         $d->deletePermanent();
-        $s->delete();
         
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');        
@@ -111,15 +110,16 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $d->addSeries($s)->setNumber('testSeriesAction-7');
         $d->store();
 
-        $this->dispatch('/solrsearch/browse/series');
-        
+        $this->dispatch('/solrsearch/browse/series');               
+                
+        $d->deletePermanent(); 
         $this->restoreSeriesVisibility($visibilities);
-        $d->deletePermanent();
-        $s->delete();
         
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/7', $this->getResponse()->getBody());
         foreach (Opus_Series::getAll() as $series) {
-            $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/' . $series->getId(), $this->getResponse()->getBody());
+            if ($series->getId() != 7) {
+                $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/' . $series->getId(), $this->getResponse()->getBody());
+            }
         }                
         $this->assertResponseCode(200);
     }
