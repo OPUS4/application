@@ -34,6 +34,16 @@
  */
 
 class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
+    
+    private $docId = null;
+    
+    protected function tearDown() {
+        if (!is_null($this->docId)) {
+            $doc = new Opus_Document($this->docId);
+            $doc->deletePermanent();
+        }
+        parent::tearDown();
+    }
 
     private function createValidDocument($loggedUserId) {
         $document = new Opus_Document();
@@ -45,11 +55,6 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
         return $document->store();
     }
     
-    private function deleteDocument($docId) {
-        $doc = new Opus_Document($docId);
-        $doc->deletePermanent();
-    }        
-
     public function testFormWithoutDocumentId() {
         $session = new Zend_Session_Namespace('Publish');
         $session->unsetAll();
@@ -72,12 +77,11 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
         $loggedUserModel = new Publish_Model_LoggedUser();
         $loggedUserId = $loggedUserModel->getUserId();
 
-        $docId = $this->createValidDocument($loggedUserId);
+        $this->docId = $this->createValidDocument($loggedUserId);
         $session = new Zend_Session_Namespace('Publish');
-        $session->depositConfirmDocumentId = $docId;
+        $session->depositConfirmDocumentId = $this->docId;
 
-        $this->dispatch('/matheon/select-reviewer/form');       
-        $this->deleteDocument($docId);
+        $this->dispatch('/matheon/select-reviewer/form');
         $this->assertResponseCode(200);
     }
 
@@ -86,9 +90,9 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
         $loggedUserModel = new Publish_Model_LoggedUser();
         $loggedUserId = $loggedUserModel->getUserId();
 
-        $docId = $this->createValidDocument($loggedUserId);
+        $this->docId = $this->createValidDocument($loggedUserId);
         $session = new Zend_Session_Namespace('Publish');
-        $session->depositConfirmDocumentId = $docId;
+        $session->depositConfirmDocumentId = $this->docId;
 
         $this->request->setMethod('POST')
                 ->setPost(array(
@@ -97,7 +101,6 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/matheon/select-reviewer/form');
-        $this->deleteDocument($docId);
         $this->assertResponseCode(200);
 
         $this->assertQueryContentContains('div#content', 'has been notified');
@@ -108,9 +111,9 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
         $loggedUserModel = new Publish_Model_LoggedUser();
         $loggedUserId = $loggedUserModel->getUserId();
 
-        $docId = $this->createValidDocument($loggedUserId);
+        $this->docId = $this->createValidDocument($loggedUserId);
         $session = new Zend_Session_Namespace('Publish');
-        $session->depositConfirmDocumentId = $docId;
+        $session->depositConfirmDocumentId = $this->docId;
 
         $this->request->setMethod('POST')
                 ->setPost(array(
@@ -118,13 +121,12 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
                     'submit'     => 'Send',
                 ));
 
-        $this->dispatch('/matheon/select-reviewer/form');
-        $this->deleteDocument($docId);
+        $this->dispatch('/matheon/select-reviewer/form');       
         $this->assertResponseCode(200);
 
         // Check, that right privilege has been set.
         $reviewer = Opus_UserRole::fetchByName('reviewer');
-        $this->assertContains($docId, $reviewer->listAccessDocuments());
+        $this->assertContains($this->docId, $reviewer->listAccessDocuments());
     }
 
     public function testEmptyForm() {
