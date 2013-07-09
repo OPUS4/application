@@ -72,7 +72,8 @@
                     <span id="<?=$formId . 'FirstName'?>" class="person-firstname"><?= $person->getFirstName() ?></span>
                 <?PHP endif; ?>
                 <?PHP if (!is_null($person->getAcademicTitle())) : ?>
-                    <span id="<?=$formId . 'AcademicTitle'?>" class="person-academictitle">, <?= $person->getAcademicTitle() ?></span>
+                    <span id="<?=$formId . 'AcademicTitle'?>" class="person-academictitle">,
+                        <?= $person->getAcademicTitle() ?></span>
                 <?PHP endif; ?>
                 <?PHP if (!is_null($person->getDateOfBirth()) || !is_null($person->getPlaceOfBirth())) : ?>    
                     (* <span id="<?= $formId . 'DateOfBirth' ?>" class="person-born-date"
@@ -87,7 +88,8 @@
                 <div>
                     <span id="<?=$formId . 'Email'?>" class="person-email"><?= $person->getEmail() ?></span>
                     <?PHP if (!$this->element->isViewModeEnabled()) : ?>
-                    -<?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->renderViewHelper() ?>
+                    -<?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT
+                            )->renderViewHelper() ?>
                     <?= $this->translate('AllowEmailContact') ?>
                     <?PHP elseif ($person->getAllowEmailContact()) : ?>
                     <span id="<?= $formId . 'AllowContact'?>">(<?= $this->translate('AllowEmailContact') ?>)</span>
@@ -105,12 +107,14 @@
                         <?= $this->element->getSubForm('Roles') ?>
                         <p class="label"><i><?= $this->translate('admin_document_person_remove_label') ?></i></p>
                         <ul class="buttons">
-                            <li class="Remove-data"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_REMOVE)->renderViewHelper() ?></li>
+                            <li class="edit"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_EDIT
+                                    )->renderViewHelper() ?></li>
                         </ul>
                     </dd>
                 </dl>
                 <ul class="links">
-                    <li class="edit"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_EDIT)->renderViewHelper() ?></li>
+                    <li class="Remove-data"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_REMOVE
+                            )->renderViewHelper() ?></li>
                 </ul>
             </div>
             <?PHP endif; ?>
