@@ -325,7 +325,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $d->setPublisherPlace('testcatchallsearch_publisher_place');
         $d->setCreatingCorporation('testcatchallsearch_creating_corporation');
         $d->setContributingCorporation('testcatchallsearch_contributing_corporation');
-        $d->store();
+        $this->docId = $d->store();
 
         $queries = array(
             'testcatchallsearch_title_parent',
@@ -345,9 +345,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             $this->assertEquals(1, $hits);
             $this->getResponse()->clearBody();
         }
-
-        // cleanup
-        $d->deletePermanent();
     }
 
     public function testRssLinkIsDisplayedForSimpleSearch() {
@@ -627,7 +624,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
                 ->setType($identifierType)
                 ->setValue($identifierType . '-opusvier-2475');
         }
-        $doc->store();
+        $this->docId = $doc->store();
 
         // search for document based on identifiers
         foreach ($identifierTypes as $identifierType) {
@@ -639,9 +636,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
             $this->getResponse()->clearAllHeaders();
             $this->getResponse()->clearBody();
-        }
-
-        $doc->deletePermanent();
+        }      
     }
 
     /**
@@ -692,7 +687,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $p->setLastName('personsubmitter-opusvier-2484');
         $doc->addPersonSubmitter($p);
 
-        $doc->store();
+        $this->docId = $doc->store();
 
         // search for document based on persons
         $persons = array(
@@ -719,9 +714,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
         // search should not return the test document
-        $this->assertNotContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());
-
-        $doc->deletePermanent();
+        $this->assertNotContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());        
     }
 
     public function testFacetLimitWithDefaultSetting() {
