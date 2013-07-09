@@ -34,6 +34,16 @@
  * @version     $Id$
  */
 class Solrsearch_IndexControllerTest extends ControllerTestCase {
+    
+    private $docId = null;
+    
+    protected function tearDown() {
+        if (!is_null($this->docId)) {
+            $doc = new Opus_Document($this->docId);
+            $doc->deletePermanent();
+        }
+        parent::tearDown();
+    }
 
     private function doStandardControllerTest($url, $controller, $action) {
         $this->dispatch($url);
@@ -145,78 +155,85 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertTrue($numberOfHitsLower > 0);
         $this->assertEquals($numberOfHitsLower, $numberOfHitsUpper);
     }
-
-    public function testPhraseQueriesWithWildcards() {
+    
+    private function createPublishedTestDoc() {
         $d = new Opus_Document();
         $d->setServerState('published');
         $d->setLanguage('eng');
         $d->addTitleMain()->setValue('testphrasequerieswithwildcard*s')->setLanguage('eng');
-        $d->store();
+        $this->docId = $d->store();        
+    }    
 
-        $testCnt = 1;
-
-        $this->getResponse()->clearBody();
+    public function testPhraseQueriesWithWildcards1() {
+        $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"testphrasequerieswith*"', null, null);
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 0, "($testCnt) result is not empty");
-        $testCnt++;
-
-        $this->getResponse()->clearBody();
+        $this->assertEquals(0, substr_count($this->getResponse()->getBody(), 'result_box'), "result is not empty");
+    }
+    
+    public function testPhraseQueriesWithWildcards2() {
+        $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"testphrasequerieswithwildcard*"', null, null);
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
-        $testCnt++;
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+    }
 
-        $this->getResponse()->clearBody();
+    public function testPhraseQueriesWithWildcards3() {
+        $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"testphrasequerieswithwildcard*s"', null, null);
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
-        $testCnt++;
-
-        $this->getResponse()->clearBody();
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+    }
+    
+    public function testPhraseQueriesWithWildcards4() {
+        $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"TESTPHRASEQUERIESWITH*"', null, null);
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 0, "($testCnt) result is not empty");
-        $testCnt++;
+        $this->assertEquals(0, substr_count($this->getResponse()->getBody(), 'result_box'), "result is not empty");        
+    }
 
-        $this->getResponse()->clearBody();
+    public function testPhraseQueriesWithWildcards5() {
+        $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"TESTPHRASEQUERIESWITHWILDCARD*"', null, null);
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
-        $testCnt++;
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");
+    }
 
-        $this->getResponse()->clearBody();
+    public function testPhraseQueriesWithWildcards6() {
+        $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"TESTPHRASEQUERIESWITHWILDCARD*S"', null, null);
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
-        $testCnt++;
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+    }
 
-        $this->getResponse()->clearBody();
+    public function testPhraseQueriesWithWildcards7() {
+        $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/testphrasequerieswith*', null, null);
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
-        $testCnt++;
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+    }
 
-        $this->getResponse()->clearBody();
+    public function testPhraseQueriesWithWildcards8() {
+        $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/testphrasequerieswithwildcard*', null, null);
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
-        $testCnt++;
-
-        $this->getResponse()->clearBody();
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+    }
+    
+    public function testPhraseQueriesWithWildcards9() {
+        $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/testphrasequerieswithwildcard*s', null, null);
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
-        $testCnt++;
-
-        $this->getResponse()->clearBody();
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+    }
+    
+    public function testPhraseQueriesWithWildcards10() {
+        $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/TESTPHRASEQUERIESWITH*', null, null);
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
-        $testCnt++;
-
-        $this->getResponse()->clearBody();
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+    }
+    
+    public function testPhraseQueriesWithWildcards11() {
+        $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/TESTPHRASEQUERIESWITHWILDCARD*', null, null);
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
-        $testCnt++;
-
-        $this->getResponse()->clearBody();
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+    }
+    
+    public function testPhraseQueriesWithWildcards12() {
+        $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/TESTPHRASEQUERIESWITHWILDCARD*S', null, null);
-        $this->assertTrue(substr_count($this->getResponse()->getBody(), 'result_box') == 1, "($testCnt) result is empty");
-        $testCnt++;
-
-        // cleanup
-        $d->deletePermanent();
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
     }
 
     public function testInvalidsearchtermAction() {
