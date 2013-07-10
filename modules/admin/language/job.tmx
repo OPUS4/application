@@ -25,6 +25,24 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_job_detail">
+      <tuv xml:lang="en">
+        <seg>Details</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Details</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_job-detail">
+      <tuv xml:lang="en">
+        <seg>Details</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Details</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_job_index_async_description">
       <tuv xml:lang="en">
         <seg>Job Processing</seg>
