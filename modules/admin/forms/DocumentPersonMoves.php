@@ -37,10 +37,19 @@
  */
 class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm {
     
+    /**
+     * Konstante für Person an erster Stelle.
+     */
     const POSITION_FIRST = 'first';
     
+    /**
+     * Konstante für Person an letzter Stelle.
+     */
     const POSITION_LAST = 'last';
     
+    /**
+     * Konstante für POST Ergebnis das signalisiert, daß Person verschoben werden soll.
+     */
     const RESULT_MOVE = 'move';
     
     /**
@@ -51,7 +60,19 @@ class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm 
      */
     private $moves =  array('First', 'Up', 'Down', 'Last');
     
+    /**
+     * Flag für spezielle Position, erste oder letzte Stelle.
+     * @var string
+     */
+    private $position;
+    
+    /**
+     * Konstruiert Formular.
+     * @param string $position Parameter für besondere Position, z.B. erste oder letzte Stelle
+     * @param mixed $options
+     */
     public function __construct($position = null, $options = null) {
+        $this->position = $position;
         parent::__construct($options);
     }
     
@@ -65,6 +86,18 @@ class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm 
             'FormElements',
             array('HtmlTag', array('tag' => 'ul', 'class' => 'links'))
         ));
+        
+        switch ($this->position) {
+            case self::POSITION_FIRST:
+                $this->moves = array('Down', 'Last');
+                break;
+            case self::POSITION_LAST:
+                $this->moves = array('First', 'Up');
+                break;
+            default:
+                // do nothing
+                break;
+        }
         
         foreach ($this->moves as $move) {
             $lower = strtolower($move);
@@ -96,6 +129,9 @@ class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm 
         return null;
     }
         
+    /**
+     * Wird für dieses Formular nicht benötigt und tut nichts.
+     */
     public function populateFromModel($personLink) {
     }
     
