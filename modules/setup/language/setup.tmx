@@ -5,6 +5,50 @@
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
   <body>
+    <tu tuid="setup_help-page_index">
+        <tuv xml:lang="en">
+            <seg>Edit FAQ</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>FAQ-Seite bearbeiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_static-page_index">
+        <tuv xml:lang="en">
+            <seg>Static Pages</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Statische Seiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_static-page_edit">
+        <tuv xml:lang="en">
+            <seg>Edit Static Pages</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Statische Seiten bearbeiten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_show">
+        <tuv xml:lang="en">
+            <seg>Show Translation Resources</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersetzungsresourcen Anzeigen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_index">
+        <tuv xml:lang="en">
+            <seg>Translations</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Übersetzungen</seg>
+        </tuv>
+    </tu>
 
     <tu tuid="setup_error_retry">
         <tuv xml:lang="en">
