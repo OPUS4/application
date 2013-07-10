@@ -59,11 +59,18 @@ class Admin_Form_DocumentPersonRoles extends Admin_Form_AbstractDocumentSubForm 
         'submitter' => 'submitter'
     );
     
+    /**
+     * Konstruiert Formular zum Ändern der Rolle einer Person.
+     * 
+     * @param string $role Name der aktuellen Rolle
+     * @param mixed $options
+     */
     public function __construct($role = null, $options = null) {
-        parent::__construct($options);
-        if (!is_null($role)) {
-            $this->removeElement($this->getRoleElementName($role));
+        if (!is_null($role) && isset($this->personRoles[$role])) {
+            unset($this->personRoles[$role]);
         }
+        
+        parent::__construct($options);
     }
     
     /**
@@ -116,6 +123,9 @@ class Admin_Form_DocumentPersonRoles extends Admin_Form_AbstractDocumentSubForm 
         return self::ELEMENT_PREFIX_ROLE . ucfirst($role);
     }
     
+    /**
+     * Funktion wird für dieses Formular nicht benötigt.
+     */
     public function populateFromModel($personLink) {
     }
     
