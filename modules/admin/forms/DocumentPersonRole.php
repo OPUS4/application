@@ -190,12 +190,13 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
         $subforms = $this->getSubForms();
         
         $digitsOrder = strlen(count($subforms));
-        $digitsSortOrder = strlen($this->getMaxSortOrder($subforms));
+        $maxSortOrder = $this->getMaxSortOrder($subforms);
+        $digitsSortOrder = strlen($maxSortOrder + 1); // damit bei 99 auch 100 noch verarbeitet werden kann
         
         $sorted = array();
         
         foreach ($subforms as $name => $subform) {
-            $sortKey = $this->getSortKey($subform, $digitsSortOrder, $digitsOrder);
+            $sortKey = $this->getSortKey($subform, $maxSortOrder, $digitsSortOrder, $digitsOrder);
             $sorted[$subform->getName()] = $sortKey; 
         }
         
@@ -239,12 +240,16 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
      * Um beliebig viele Unterfomulare oder beliebig große SortOrder Werte zu unterstützen werden diese mit einer festen
      * Länge, gegebenfalls mit 0 aufgefüllt ausgegeben. Die Anzahl der Digits wird übergeben, damit die Berechnung nicht
      * für jeden Schlüssel erfolgen muss.
+     * 
+     * Wenn der SortOrder Wert leer ist wird er auf $maxSortOrder + 1 gesetzt, damit diese Unterformular nach ganz 
+     * hinten kommen. Das muss bei der Berechnung der Digits berücksichtig werden (99 + 1 = 100).
      *
      * @param type $subform
      * @return type
      */
-    public function getSortKey($subform, $digitsSortOrder = 2, $digitsOrder = 2) {
+    public function getSortKey($subform, $maxSortOrder, $digitsSortOrder = 2,  $digitsOrder = 2) {
         $sortOrder = $subform->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->getValue();
+        $sortOrder = ($sortOrder == null) ? $maxSortOrder + 1 : $sortOrder;
         $order = $subform->getOrder() + 1;
         $modified = ($sortOrder == $order) ? 1 : 0; // NICHT MODIFIZIERT (1) : MODIFIZIERT (0)
         return sprintf('%1$0' . $digitsSortOrder. 'd_%2$d_%3$0' . $digitsOrder. 'd', $sortOrder, $modified, $order);

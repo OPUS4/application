@@ -430,6 +430,18 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
         $this->verifyExpectedOrder($form, array(312, 310, 311));
     }
         
+    public function testSortSubFormsBySortOrderEmptyValues() {
+        $form = $this->getFormForSorting();
+        
+        $form->getSubForm('PersonAuthor0')->getElement('SortOrder')->setValue(null);
+        $form->getSubForm('PersonAuthor1')->getElement('SortOrder')->setValue(2);
+        $form->getSubForm('PersonAuthor2')->getElement('SortOrder')->setValue(null);
+        
+        $form->sortSubFormsBySortOrder();
+
+        $this->verifyExpectedOrder($form, array(311, 310, 312));
+    }
+    
     protected function verifyExpectedOrder($form, $expected) {
         foreach ($expected as $index => $personId) {
             $this->assertEquals($personId, $form->getSubForm('PersonAuthor' . $index)->getElement(
