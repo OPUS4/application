@@ -184,9 +184,10 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         $this->assertEquals(Admin_Form_Document::RESULT_SHOW, $form->processPost($post, $post));
         
         $this->assertEquals(1, count($form->getSubForms()));
-        $this->assertNotNull($form->getSubForm('TitleSub0')); // Aus TitleSub1 wird TitleSub0
+        $this->assertNotNull($form->getSubForm('TitleSub0'), 'Formular TitleSub0 fehlt.'); // TitleSub1 wird TitleSub0
         $this->assertEquals('Service Center', $form->getSubForm('TitleSub0')->getElementValue('Value'));
-        $this->assertNotNull($form->getSubForm('TitleSub0')->getDecorator('CurrentAnker'));
+        $this->assertNotNull($form->getSubForm('TitleSub0')->getDecorator('CurrentAnker'), 
+                'Dekorator \'CurrentAnker\' fehlt.');
     }
     
     public function testUpdateModel() {
@@ -327,6 +328,11 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         $form->appendSubForm();
         
         $this->assertFalse($form->isEmpty());
+    }
+    
+    public function testGetSubFormBaseName() {
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier');
+        $this->assertEquals('Identifier', $form->getSubFormBaseName());
     }
     
 }
