@@ -44,7 +44,7 @@
         $person = new Opus_Person($personId);
     }
     else {
-        // $person = new Opus_Person(); // TODO Fehler - Was nun?
+        // TODO err output
     }
     
     // Vollständige ID für Formular ermitteln
@@ -52,72 +52,72 @@
     $formId = substr($formId, 0, strrpos($formId, '-') + 1);
 ?>
 
-<div class="multiple-wrapper">
+<div class="multiple-wrapper <?= ($this->element->getOrder() % 2) ? 'odd' : 'even' ?>">
     <div class="data-wrapper multiple-data">
-        <div id="<?= $this->element->getId() . '-element' ?>"> <!-- TODO include Role in ID -->
+<div id="<?= $this->element->getId() . '-element' ?>"> <!-- TODO include Role in ID -->
+    <?PHP if (!$this->element->isViewModeEnabled()) : ?>
+    <dl class="sort dropdown">
+        <dt>
+            <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->renderViewHelper() ?>
+            <a>Move</a></dt>
+            <dd>
+                <p class="label"><i><?= $this->translate('admin_document_person_move_label') ?></i></p>
+                <?= $this->element->getSubForm('Moves') ?>
+            </dd>
+    </dl>
+    <?PHP endif; ?>
+    <div class="person-info">
+        <span id="<?=$formId . 'LastName'?>" class="person-lastname"><?= $person->getLastName()?></span
+        ><?PHP if (!is_null($person->getFirstName())) : ?>, 
+            <span id="<?=$formId . 'FirstName'?>" class="person-firstname"><?= $person->getFirstName() ?></span>
+        <?PHP endif; ?>
+        <?PHP if (!is_null($person->getAcademicTitle())) : ?>
+            <span id="<?=$formId . 'AcademicTitle'?>" class="person-academictitle">,
+                <?= $person->getAcademicTitle() ?></span>
+        <?PHP endif; ?>
+        <?PHP if (!is_null($person->getDateOfBirth()) || !is_null($person->getPlaceOfBirth())) : ?>    
+            (* <span id="<?= $formId . 'DateOfBirth' ?>" class="person-born-date"
+                  ><?= $this->formatValue()->formatDate($person->getDateOfBirth()) ?></span
+            ><?PHP if (!is_null($person->getPlaceOfBirth())) : 
+                ?><?= (is_null($person->getDateOfBirth())) ? '' : ', ' 
+                    ?><span id="<?= $formId . 'PlaceOfBirth' ?>" class="person-born-place"
+                      ><?= $person->getPlaceOfBirth() ?></span
+            ><?PHP endif; ?>)
+        <?PHP endif; ?>
+        <?PHP if (!is_null($person->getEmail())) : ?>
+        <div>
+            <span id="<?=$formId . 'Email'?>" class="person-email"><?= $person->getEmail() ?></span>
             <?PHP if (!$this->element->isViewModeEnabled()) : ?>
-            <dl class="sort dropdown">
-                <dt>
-                    <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->renderViewHelper() ?>
-                    <a>Move</a></dt>
-                    <dd>
-                        <p class="label"><i><?= $this->translate('admin_document_person_move_label') ?></i></p>
-                        <?= $this->element->getSubForm('Moves') ?>
-                    </dd>
-            </dl>
-            <?PHP endif; ?>
-            <div class="person-info">
-                <span id="<?=$formId . 'LastName'?>" class="person-lastname"><?= $person->getLastName()?></span
-                ><?PHP if (!is_null($person->getFirstName())) : ?>, 
-                    <span id="<?=$formId . 'FirstName'?>" class="person-firstname"><?= $person->getFirstName() ?></span>
-                <?PHP endif; ?>
-                <?PHP if (!is_null($person->getAcademicTitle())) : ?>
-                    <span id="<?=$formId . 'AcademicTitle'?>" class="person-academictitle">,
-                        <?= $person->getAcademicTitle() ?></span>
-                <?PHP endif; ?>
-                <?PHP if (!is_null($person->getDateOfBirth()) || !is_null($person->getPlaceOfBirth())) : ?>    
-                    (* <span id="<?= $formId . 'DateOfBirth' ?>" class="person-born-date"
-                          ><?= $this->formatValue()->formatDate($person->getDateOfBirth()) ?></span
-                    ><?PHP if (!is_null($person->getPlaceOfBirth())) : 
-                        ?><?= (is_null($person->getDateOfBirth())) ? '' : ', ' 
-                            ?><span id="<?= $formId . 'PlaceOfBirth' ?>" class="person-born-place"
-                              ><?= $person->getPlaceOfBirth() ?></span
-                    ><?PHP endif; ?>)
-                <?PHP endif; ?>
-                <?PHP if (!is_null($person->getEmail())) : ?>
-                <div>
-                    <span id="<?=$formId . 'Email'?>" class="person-email"><?= $person->getEmail() ?></span>
-                    <?PHP if (!$this->element->isViewModeEnabled()) : ?>
-                    -<?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT
-                            )->renderViewHelper() ?>
-                    <?= $this->translate('AllowEmailContact') ?>
-                    <?PHP elseif ($person->getAllowEmailContact()) : ?>
-                    <span id="<?= $formId . 'AllowContact'?>">(<?= $this->translate('AllowEmailContact') ?>)</span>
-                    <?PHP endif; ?>
-                </div>
-                <?PHP endif; ?>
-            </div>
-            <?PHP if (!$this->element->isViewModeEnabled()) : ?>
-            <div class="person-actions">
-                <dl class="settings col dropdown">
-                    <dt><a><?= $this->translate('admin_document_person_actions_label') ?></a></dt>
-                    <dd>
-                        <p class="label"><i><?= $this->translate('admin_document_person_roles_label') ?></i></p>
-                        <?= $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->renderViewHelper() ?>
-                        <?= $this->element->getSubForm('Roles') ?>
-                        <p class="label"><i><?= $this->translate('admin_document_person_remove_label') ?></i></p>
-                        <ul class="buttons">
-                            <li class="edit"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_EDIT
-                                    )->renderViewHelper() ?></li>
-                        </ul>
-                    </dd>
-                </dl>
-                <ul class="links">
-                    <li class="Remove-data"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_REMOVE
-                            )->renderViewHelper() ?></li>
-                </ul>
-            </div>
+            -<?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT
+                    )->renderViewHelper() ?>
+            <?= $this->translate('AllowEmailContact') ?>
+            <?PHP elseif ($person->getAllowEmailContact()) : ?>
+            <span id="<?= $formId . 'AllowContact'?>">(<?= $this->translate('AllowEmailContact') ?>)</span>
             <?PHP endif; ?>
         </div>
+        <?PHP endif; ?>
+    </div>
+    <?PHP if (!$this->element->isViewModeEnabled()) : ?>
+    <div class="person-actions">
+        <dl class="settings col dropdown">
+            <dt><a><?= $this->translate('admin_document_person_actions_label') ?></a></dt>
+            <dd>
+                <p class="label"><i><?= $this->translate('admin_document_person_roles_label') ?></i></p>
+                <?= $this->element->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->renderViewHelper() ?>
+                <?= $this->element->getSubForm('Roles') ?>
+                <p class="label"><i><?= $this->translate('admin_document_person_remove_label') ?></i></p>
+                <ul class="buttons">
+                    <li class="edit"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_EDIT
+                            )->renderViewHelper() ?></li>
+                </ul>
+            </dd>
+        </dl>
+        <ul class="links">
+            <li class="Remove-data"><?= $this->element->getElement(Admin_Form_DocumentMultiSubForm::ELEMENT_REMOVE
+                    )->renderViewHelper() ?></li>
+        </ul>
+    </div>
+    <?PHP endif; ?>
+</div>
     </div>
 </div>

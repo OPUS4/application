@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,14 +25,33 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<h2><?= $this->translate('admin_person_assign_document') ?></h2>
-
-<?= $this->form ?>
+/**
+ * Select Element für Role einer Person.
+ */
+class Form_Element_PersonRole extends Form_Element_Select {
+    
+    public function init() {
+        parent::init();
+        
+        $this->setRequired(true);
+        $this->addValidator('Int');
+                
+        $options = $this->getSelectOptions();
+        
+        foreach ($options as $option) {
+            $this->addMultiOption($option, $option);
+        }
+    }
+    
+    public function getSelectOptions() {
+        return Admin_Form_DocumentPersons::getRoles();
+    }
+    
+}

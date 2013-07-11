@@ -41,6 +41,11 @@ class Admin_Form_DocumentPersonRoles extends Admin_Form_AbstractDocumentSubForm 
      * Name fuer Formularelement fuer Feld Role.
      */
     const ELEMENT_PREFIX_ROLE = 'Role';
+    
+    /**
+     * Konstante für das Ändern der Rolle für eine Person.
+     */
+    const RESULT_CHANGE_ROLE = 'changeRole';
             
     /**
      * Mögliche Rollen für eine Person.
@@ -105,7 +110,7 @@ class Admin_Form_DocumentPersonRoles extends Admin_Form_AbstractDocumentSubForm 
         foreach ($this->personRoles as $role) {
             if (array_key_exists($this->getRoleElementName($role), $post)) {
                 return array(
-                    'result' => Admin_Form_DocumentPerson::RESULT_CHANGE_ROLE,
+                    'result' => Admin_Form_DocumentPersonRoles::RESULT_CHANGE_ROLE,
                     'role' => $role
                 );
             }

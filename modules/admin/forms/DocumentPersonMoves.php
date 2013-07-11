@@ -48,6 +48,11 @@ class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm 
     const POSITION_LAST = 'last';
     
     /**
+     * Konstante für Person in mittlerer Position.
+     */
+    const POSITION_DEFAULT = null;
+    
+    /**
      * Konstante für POST Ergebnis das signalisiert, daß Person verschoben werden soll.
      */
     const RESULT_MOVE = 'move';
@@ -58,7 +63,7 @@ class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm 
      * 
      * TODO centralize
      */
-    private $moves =  array('First', 'Up', 'Down', 'Last');
+    private $moves;
     
     /**
      * Flag für spezielle Position, erste oder letzte Stelle.
@@ -87,6 +92,10 @@ class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm 
             array('HtmlTag', array('tag' => 'ul', 'class' => 'links'))
         ));
         
+        $this->createButtons();
+    }
+    
+    private function createButtons() {
         switch ($this->position) {
             case self::POSITION_FIRST:
                 $this->moves = array('Down', 'Last');
@@ -95,7 +104,7 @@ class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm 
                 $this->moves = array('First', 'Up');
                 break;
             default:
-                // do nothing
+                $this->moves = array('First', 'Up', 'Down', 'Last');
                 break;
         }
         
@@ -107,6 +116,15 @@ class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm 
                 'label' => 'admin_button_move_' . $lower
             ));
         }
+    }
+    
+    public function changePosition($position) {
+        if ($this->position !== $position) {
+            $this->position = $position;
+            
+            $this->clearElements();
+            $this->createButtons();
+        }    
     }
     
     /**

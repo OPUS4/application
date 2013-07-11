@@ -38,20 +38,11 @@
 class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
     
     /**
-     * Erlaubte Rollen für einem Dokument zugewiesene Personen.
+     * Bestimmt die Reihenfolge der Sektionen für die einzelnen Rollen.
      * @var array
-     * 
-     * TODO get from somewhere
      */
-    private $personRoles =  array(
-        'author' => 'author',
-        'editor' => 'editor',
-        'translator' => 'translator',
-        'contributor' => 'contributor',
-        'other' => 'other',
-        'advisor' => 'advisor',
-        'referee' => 'referee',
-        'submitter' => 'submitter'
+    private static $personRoles =  array(
+        'author', 'editor', 'translator', 'contributor', 'other', 'advisor', 'referee', 'submitter'
     );
 
     /**
@@ -64,11 +55,14 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
 
         $this->setLegend('admin_document_section_persons');
         
-        // TODO iteriere über Rollen und erzeuge Unterformulare
-        foreach ($this->personRoles as $index => $roleName) {
+        $this->addElement('submit', 'Sort', array('label' => 'Sort'));
+        
+        foreach (self::$personRoles as $roleName) {
             $subform = new Admin_Form_DocumentPersonRole($roleName);
             $this->addSubForm($subform, $roleName);
         }        
+        
+        // TODO add button für alle Rollen?
     }
     
     /**
@@ -93,7 +87,9 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
     public function constructFromPost($post, $document = null) {
         foreach($post as $key => $data) {
             $subform = $this->getSubForm($key);
-            $subform->constructFromPost($data, $document);
+            if (!is_null($subform)) {
+                $subform->constructFromPost($data, $document);
+            }
         }
     }
 
@@ -105,22 +101,25 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
     public function processPost($post, $context) {
         foreach ($post as $index => $data) {
             $subform = $this->getSubForm($index);
-            $result = $subform->processPost($data, $context);
-            
-            if (!is_null($result)) {
-                $action = (is_array($result)) ? $result['result'] : result;#
-                
-                switch ($action) {
-                    case Admin_Form_DocumentPerson::RESULT_CHANGE_ROLE:
-                        $role = $result['role'];
-                        $subFormName = $result['subformName'];
-                        $personForm = $subform->getSubForm($subFormName);
-                        $subform->removeSubForm($subFormName);
-                        $this->getSubForm($role)->addSubFormForPerson($personForm); // TODO Seiteneffekte
-                        break;
-                    default:
-                        return $result;
-                        break;
+            if (!is_null($subform)) {
+                $result = $subform->processPost($data, $context);
+
+                if (!is_null($result)) {
+                    $action = (is_array($result)) ? $result['result'] : $result;
+
+                    switch ($action) {
+                        case Admin_Form_DocumentPersonRoles::RESULT_CHANGE_ROLE:
+                            $role = $result['role'];
+                            $subFormName = $result['subformName'];
+                            $personForm = $subform->getSubForm($subFormName);
+                            $subform->removeSubForm($subFormName);
+                            $this->getSubForm($role)->addSubFormForPerson($personForm); // TODO Seiteneffekte?
+                            return Admin_Form_Document::RESULT_SHOW;
+                            break;
+                        default:
+                            return $result;
+                            break;
+                    }
                 }
             }
         }
@@ -151,6 +150,10 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
         foreach ($subforms as $name => $subform) {
             $subform->continueEdit($request);
         }
+    }
+    
+    public static function getRoles() {
+        return self::$personRoles;
     }
 
 }

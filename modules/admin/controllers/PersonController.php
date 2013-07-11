@@ -33,14 +33,18 @@
  */
 
 /**
- * Controller for showing and editing a document in the administration.
+ * Controller fuer die Verwaltung von Personen.
+ * 
+ * Dieser Controller enthaelt Funktionen fuer das Anlegung und Editieren von Personen. Er wird im Zusammespiel mit dem
+ * DocumentController verwendet um Personen für ein Dokument zu manipulieren.
+ * 
+ * TODO Erweitern um Personen in Datenbank zu verwalten (z.B. Deduplizieren) (OPUSVIER-nnnn, noch kein Ticket)
  */
 class Admin_PersonController extends Controller_Action {
 
     private $__documentsHelper;
     
     private $__datesHelper;
-    
     
     /**
      * Initializes controller.
@@ -82,7 +86,7 @@ class Admin_PersonController extends Controller_Action {
             
             $role = $this->getRequest()->getParam('role', 'author');
 
-            $form->getSubForm('link')->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->setValue($role);
+            // $form->getSubForm('link')->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->setValue($role);
 
             $this->view->form = $form;
         }
@@ -193,15 +197,13 @@ class Admin_PersonController extends Controller_Action {
         
         $form->addDecorator('Form');
         
-        $linkForm = new Admin_Form_DocumentPerson();
+        $linkForm = new Admin_Form_PersonLink();
         
         $linkForm->removeElement(Admin_Form_Person::ELEMENT_PERSON_ID);
         $linkForm->removeElement(Admin_Form_DocumentPerson::ELEMENT_EDIT);
         $linkForm->removeElement(Admin_Form_DocumentPerson::ELEMENT_REMOVE);
         
         $form->addSubForm($linkForm, 'link');
-        
-        // Zend_Debug::dump($linkForm->getElements());
         
         return $form;
     }

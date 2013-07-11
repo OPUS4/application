@@ -34,135 +34,41 @@
 
 /**
  * Unterformular fuer eine einem Dokument zugewiesene Person im Metadaten-Formular.
- * 
- * TODO Ausgabe über Partial (einschließlich aller Personen Informationen)
- * TODO Verarbeitung Edit
- * TODO Verarbeitung Remove
- * TODO Verarbeitung Sortierung
- * TODO Aktualisierung Modell
  */
-class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
-    
-    /**
-     * Name fuer Formularelement fuer Feld AllowEmailContact.
-     */
-    const ELEMENT_ALLOW_CONTACT = 'AllowContact';
-    
-    /**
-     * Name fuer Formularelement fuer Feld Role.
-     */
-    const ELEMENT_ROLE = 'Role';
-    
-    /**
-     * Name fuer Formularelement fuer Feld SortOrder.
-     */
-    const ELEMENT_SORT_ORDER = 'SortOrder';
+class Admin_Form_DocumentPerson extends Admin_Form_PersonLink {
     
     /**
      * Name fuer Button zum Editieren der Person.
      */
     const ELEMENT_EDIT = 'Edit';
-    
-    /**
-     * Name fuer Button zum Entfernen der Person.
-     */
-    const ELEMENT_REMOVE = 'Remove';
-
-    /**
-     * Name fuer Button um Person um eine Position nach oben zu verschieben.
-     */
-    const ELEMENT_UP = 'MoveUp';
-    
-    /**
-     * Name fuer Button um Person um eine Position nach unter zu verschieben.
-     */
-    const ELEMENT_DOWN = 'MoveDown';
-    
-    /**
-     * Name fuer Button um Person an die erste Stelle zu verschieben.
-     */
-    const ELEMENT_FIRST = 'MoveFirst';
-    
-    /**
-     * Name fuer Button um Person an die letzte Stelle zu verschieben.
-     */
-    const ELEMENT_LAST = 'MoveLast';
-    
-    /**
-     * Konstante fuer das POST Ergebnis Person entfernen.
-     */
-    const RESULT_REMOVE = 'remove';
-    
-    /**
-     * Konstante für das Ändern der Rolle für eine Person.
-     */
-    const RESULT_CHANGE_ROLE = 'changeRole';
-    
-    const MODE_VIEW = 'view';
-    
-    const MODE_FORM = 'form';
-    
-    private $mode = self::MODE_FORM;
-    
-    private $model = null;
-    
+                
     /**
      * Erzeugt die Formularelemente.
      */
     public function init() {
         parent::init();
-        
-        $this->addElement('hidden', Admin_Form_Person::ELEMENT_PERSON_ID);
-        $this->addElement('checkbox', self::ELEMENT_ALLOW_CONTACT, array('label' => 'AllowEmailContact'));
-        $this->addElement('text', self::ELEMENT_SORT_ORDER, array('label' => 'SortOrder'));
+
+        $this->removeElement(self::ELEMENT_ROLE);
         $this->addElement('submit', self::ELEMENT_EDIT, array('label' => 'admin_button_edit'));
-        $this->addElement('submit', self::ELEMENT_REMOVE, array('label' => 'admin_button_remove'));
-    }
-    
-    public function initRendering() {
-        $this->setDisableLoadDefaultDecorators(true);
+
         $this->setDecorators(array(
             'PrepareElements',
             array('ViewScript', array('viewScript' => 'form/personForm.phtml'))
         ));
     }
-    
-    public function populateFromModel($personLink) {
-        if ($personLink instanceof Opus_Model_Dependent_Link_DocumentPerson) {
-            $this->getElement(self::ELEMENT_ALLOW_CONTACT)->setValue($personLink->getAllowEmailContact());
-            $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($personLink->getSortOrder());
-            $this->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personLink->getModel()->getId());
-            $role = $personLink->getRole();
-            // $this->removeElement('Role'. ucfirst($role));
-            $this->model = $personLink;
-        }
-        else {
-            $this->getLog()->err('populateFromModel called with object that is not instance of '
-                    . 'Opus_Model_Dependent_Link_DocumentPerson');
-        }
-    }
-    
+        
     public function populateFromPost($post) {
         // TODO needed?
     }
     
+    /**
+     * Verarbeitet POST Daten für Formular.
+     * @param array $post
+     * @param array $context
+     * @return string
+     */
     public function processPost($post, $context) {
-        if (array_key_exists(self::ELEMENT_REMOVE, $post)) {
-            return self::RESULT_REMOVE;
-        }
-        else if (array_key_exists(self::ELEMENT_UP, $post)) {
-            return self::RESULT_MOVE_UP;
-        }
-        else if (array_key_exists(self::ELEMENT_DOWN, $post)) {
-            return self::RESULT_MOVE_DOWN;
-        }
-        else if (array_key_exists(self::ELEMENT_FIRST, $post)) {
-            return self::RESULT_MOVE_FIRST;
-        }
-        else if (array_key_exists(self::ELEMENT_LAST, $post)) {
-            return self::RESULT_MOVE_LAST;
-        }
-        else if (array_key_exists(self::ELEMENT_EDIT, $post)) {
+        if (array_key_exists(self::ELEMENT_EDIT, $post)) {
             return array( 'result' => Admin_Form_Document::RESULT_SWITCH_TO, 
                 'target' => array(
                 'module' => 'admin',
@@ -174,10 +80,6 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         }
         
         return parent::processPost($post, $context);
-    }
-    
-    public function getModel() {
-        return $this->model;
     }
     
     public function getLinkModel($documentId, $personRole) {
@@ -208,16 +110,11 @@ class Admin_Form_DocumentPerson extends Admin_Form_AbstractDocumentSubForm {
         
         $this->removeElement(self::ELEMENT_SORT_ORDER);
         // TODO $this->removeElement(self::ELEMENT_ROLE);
-        
-        $this->mode = self::MODE_VIEW;
     }
     
-    public function getViewMode() {
-        return $this->mode;
-    }
-    
-    public function isViewModeEnabled() {
-        return ($this->mode == self::MODE_VIEW);
+    public function setOrder($order) {
+        parent::setOrder($order);
+        $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($order + 1);
     }
 
 }

@@ -35,7 +35,7 @@
 /**
  * Unterformular für die Personen in einer bestimmten Role für ein Dokument.
  */
-class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
     
     /**
      * Name fuer Button um Person hinzuzufuegen.
@@ -57,7 +57,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
         $this->__roleName = $roleName;
 
         // __construct ruft init Funktion auf
-        parent::__construct($options);
+        parent::__construct('Admin_Form_DocumentPerson', 'Person' . ucfirst($roleName), null, $options);
     }
     
     /**
@@ -67,86 +67,207 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
     public function getRoleName() {
         return $this->__roleName;
     }
-    
-    /**
-     * Erzeugt die Formularelemente. 
-     */
-    public function init() {
-        parent::init();
-        
-        $this->setLegend('admin_document_section_person' . $this->__roleName);
 
-        // Button zum Hinzufügen von Personen in Role
-        $this->addElement('submit', self::ELEMENT_ADD, array('order' => 1000, 'label' => 'admin_button_add'));
-    }
-    
     /**
-     * Konfiguriert das Unterformlar entsprechend den Personen im Dokument.
-     * @param Opus_Document $document
+     * Verarbeitet die POST Daten für dieses Formular.
+     * @param array $post
+     * @param array $context
+     * @return string
      */
-    public function populateFromModel($document) {
-        $persons = $this->getPersonsInRole($document, $this->__roleName);
-        
-        foreach ($persons as $index => $person) {
-            $this->_addPersonSubForm($index, $person);
-        }
-    }
-    
-    public function constructFromPost($post, $document = null) {
-        foreach ($post as $key => $person) {
-            if (is_array($person)) {
-                $this->_addSubFormFromPost($key, $person);
-            }
-        }
-    }
-
     public function processPost($post, $context) {
-        // Prüfe, ob hinzufügen geklickt wurde
-        if (array_key_exists(self::ELEMENT_ADD, $post)) {
-            // Hinzufuegen wurde ausgewaehlt
-            return array( 'result' => Admin_Form_Document::RESULT_SWITCH_TO, 
-                'target' => array(
-                'module' => 'admin',
-                'controller' => 'person',
-                'action' => 'assign',
-                'role' => $this->__roleName)
-            );
-        }
-        else {
-            // Reiche POST an Personenformulare weiter
-            foreach ($post as $subFormName => $personPost) {
-                $subform = $this->getSubForm($subFormName);
-                if (!is_null($subform)) {
-                    $result = $subform->processPost($personPost, $context);
-                    if (!is_null($result)) {
-                        $action = (is_array($result)) ? $result['result'] : $result;
-                        
-                        switch ($action) {
-                            case Admin_Form_DocumentPerson::RESULT_REMOVE:
-                                $this->removeSubForm($subform->getName());
-                                break;
-                            case Admin_Form_DocumentPerson::RESULT_CHANGE_ROLE:
-                                $result['subformName'] = $subFormName;
-                                return $result;
-                                break;
-                            default:
-                                $result['target']['role'] = $this->__roleName;
-                                return $result;
-                                break;
-                        }
-                    }
-                }
-                else {
-                    // TODO log bad POST warning
-                }
+        $result = parent::processPost($post, $context);
+        
+        if (!is_null($result)) {
+            $action = (is_array($result)) ? $result['result'] : $result;
+
+            switch ($action) {
+                case Admin_Form_DocumentPersonMoves::RESULT_MOVE:
+                    $move = $result['move'];
+                    $subFormName = $result['subformName'];
+                    $this->moveSubForm($subFormName, $move);
+                    $result = Admin_Form_Document::RESULT_SHOW;
+                    break;
+                case Admin_Form_Document::RESULT_SWITCH_TO:
+                    // Ergebnis (Edit) mit Rolle anreichern
+                    $result['target']['role'] = $this->__roleName;
+                    break;
+                default:
+                    // do nothing
+                    break;
             }
         }
+        
+        $this->sortSubFormsBySortOrder();
+        
+        return $result;
+    }
+    
+    /**
+     * Manipuliert das Unterformular, so daß es bei der Sortierung an der gewünschten Position landet.
+     * 
+     * Nach der POST Verarbeitung werden die Unterformulare sortiert. Wenn eine Person verschoben werden soll, wird
+     * vor der Sortierung der SortOrder Wert auf die Zielposition gesetzt, bzw. bei "Down" auf eine Position weiter, 
+     * und die ursprüngliche Position (Order) wird auf -1 gesetzt. 
+     * @param string $subFormName
+     * @param string $direction
+     */
+    public function moveSubForm($subFormName, $direction) {
+        $subform = $this->getSubForm($subFormName);
+        
+        switch ($direction) {
+            case 'First':
+                $position = 0;
+                break;
+            case 'Up':
+                $position = $subform->getOrder() - 1;
+                if ($position < 0) {
+                    $position = 0;
+                }
+                break;
+            case 'Down':
+                $position = $subform->getOrder() + 2;
+                $subFormCount = $this->getSubForms();
+                if ($position > count($subFormCount)) {
+                    $position = $subFormCount();
+                }
+                break;
+            case 'Last':
+                $position = count($this->getSubForms());
+                break;
+        }
+        
+        $subform->setOrder(-1);
+        $subform->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->setValue($position + 1);
+    }
+        
+    public function insertSubForm($newSubForm, $position) {
+        $subFormCount = count($this->getSubForms());
+        
+        if ($position > $subFormCount) {
+            $position = $subFormCount;
+        }
+        else if ($position < 0) {
+            $position = 0;
+        }
+        
+        $subforms = $this->getSubForms();
+        
+        $renamedSubForms = array();
+        
+        $pos = 0;
+
+        foreach ($subforms as $index => $subform) {
+            if ($pos == $position) {
+                $pos++;
+            }
+            $subform->setOrder($pos);
+            $name = $this->getSubFormBaseName() . $pos;
+            $renamedSubForms[$name] = $subform;
+            $pos++;
+        }
+        
+        $newSubForm->setOrder($position);
+        $name = $this->getSubFormBaseName() . $position;
+        $renamedSubForms[$name] = $newSubForm;
+        
+        // Formulare Sortieren 
+        uksort($renamedSubForms, function($value1, $value2) {
+            return $value1 < $value2 ? -1 : 1;
+        });
+        
+        $this->setSubForms($renamedSubForms);
+    }    
+    
+    /**
+     * Sortiert die Personen Unterformulare anhand der SortOrder Werte.
+     * 
+     * Es muss ein Unterschied gemacht werden zwischen einem modifizierten SortOrder Wert und einem Wert der gleich der
+     * Order des Unterformulars ist ($form->getOrder() == SortOrder-Value). Wenn ich bei einer Person, z.B. der 4-ten,
+     * das SortOrder Feld auf 2 setze, heißt das, daß diese Person auf die Position 2 wechseln soll und alle Personen
+     * ab dort einen Schritt nach unten rutschen.
+     */
+    public function sortSubFormsBySortOrder() {
+        $subforms = $this->getSubForms();
+        
+        $digitsOrder = strlen(count($subforms));
+        $digitsSortOrder = strlen($this->getMaxSortOrder($subforms));
+        
+        $sorted = array();
+        
+        foreach ($subforms as $name => $subform) {
+            $sortKey = $this->getSortKey($subform, $digitsSortOrder, $digitsOrder);
+            $sorted[$subform->getName()] = $sortKey; 
+        }
+        
+        asort($sorted);
+
+        $pos = 0;
+        
+        $subforms = array();
+        
+        foreach ($sorted as $name => $order) {
+            $subform = $this->getSubForm($name);
+            $subform->setOrder($pos);
+            $subforms[$this->getSubFormBaseName() . $pos] = $subform;
+            $pos++;
+        }
+        
+        $this->setSubForms($subforms);
+    }
+    
+    public function getMaxSortOrder($subforms) {
+        $maxSortOrder = 0;
+        foreach ($subforms as $subform) {
+            $sortOrder = $subform->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->getValue();
+            if ($sortOrder > $maxSortOrder) {
+                $maxSortOrder = $sortOrder;
+            }
+        }
+        return $maxSortOrder;
     }
 
     /**
-     * @param Opus_Document $model
+     * Konstruiert einen Schlüssel für die Sortierung der Personen Formulare.
+     * 
+     * Der Schlüssel hat folgende Struktur. 
+     * 
+     * SORTORDER_MODIFIED_OLDPOSITION
+     * 
+     * Zuerst kommt die gewünscht SortOrder, dann kommt ein Flag, ob die SortOrder modifiziert wurde, also nicht mehr
+     * der aktuellen Position entspricht, und zum Schluss kommt die alte Position. 
+     * 
+     * Um beliebig viele Unterfomulare oder beliebig große SortOrder Werte zu unterstützen werden diese mit einer festen
+     * Länge, gegebenfalls mit 0 aufgefüllt ausgegeben. Die Anzahl der Digits wird übergeben, damit die Berechnung nicht
+     * für jeden Schlüssel erfolgen muss.
+     *
+     * @param type $subform
+     * @return type
      */
-    public function updateModel($model) {
+    public function getSortKey($subform, $digitsSortOrder = 2, $digitsOrder = 2) {
+        $sortOrder = $subform->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->getValue();
+        $order = $subform->getOrder() + 1;
+        $modified = ($sortOrder == $order) ? 1 : 0; // NICHT MODIFIZIERT (1) : MODIFIZIERT (0)
+        return sprintf('%1$0' . $digitsSortOrder. 'd_%2$d_%3$0' . $digitsOrder. 'd', $sortOrder, $modified, $order);
+    }
+    
+    /**
+     * Verarbeitet Klick auf Add Button für Personen.
+     * 
+     * Die Funktion von Admin_Form_DocumentMultiSubForm wurde überschrieben, damit ein anderes Ergebnis an den 
+     * Controller weitergegeben werden kann und ein Wechsel auf eine andere Seite erfolgt, um eine Person hinzufügen 
+     * zu können.
+     * 
+     * @return array
+     */
+    protected function processPostAdd() {
+        // Hinzufuegen wurde ausgewaehlt
+        return array( 'result' => Admin_Form_Document::RESULT_SWITCH_TO, 
+            'target' => array(
+            'module' => 'admin',
+            'controller' => 'person',
+            'action' => 'assign',
+            'role' => $this->__roleName)
+        );
     }
     
     /**
@@ -156,7 +277,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
      * TODO Personen sortiert zurück liefern
      * TODO Personen mit geänderter Rolle berücksichtigen
      */
-    public function getPersons($document) {
+    public function getSubFormModels($document = null) {
         $subforms = $this->getSubForms();
         
         $persons = array();
@@ -168,29 +289,41 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
         
         return $persons;
     }
-
-    protected function _addSubFormFromPost($subFormName, $person) {
-        $subform = $this->createSubForm();
-        $subform->populateFromPost($person);
-        $this->addSubForm($subform, $subFormName);
-        return $subform;
-    }
     
+    /**
+     * Fügt ein Person-SubForm hinzu, daß vorher eine andere Rolle hatte.
+     * 
+     * @param type $subForm
+     */
     public function addSubFormForPerson($subForm) {
+        // Unterformular vorbereiten
         $rolesForm = new Admin_Form_DocumentPersonRoles($this->__roleName);
         $subForm->addSubForm($rolesForm, 'Roles');
-        $this->addSubForm($subForm, 'Person' . count($this->getSubForms()));
+
+        // Unterformular einfügen
+        $position = count($this->getSubForms());
+        $subForm->setOrder($position);
+        $this->_setOddEven($subForm);
+        $this->addSubForm($subForm, $this->getSubFormBaseName() . $position);
+    }
+                         
+    protected function prepareSubFormDecorators($subform) {
+        // do nothing
     }
     
-    protected function _addPersonSubForm($index, $person) {
-        // TODO add subform for person
-        $subform = $this->createSubForm();
-        $subform->populateFromModel($person);
-        $this->addSubForm($subform, ucfirst($this->__roleName) . 'Person' . $index);
-        return $subform;
+    /**
+     * Überschrieben, damit die Unterformular Elemente nicht gruppiert werden.
+     * @param type $subform
+     */
+    protected function addRemoveButton($subform) {
+        $subform->addElement($this->createRemoveButton());
     }
-    
-    protected function createSubForm() {
+        
+    /**
+     * Erzeugt neues Unterformular für eine Person.
+     * @return \Admin_Form_DocumentPerson
+     */
+    public function createNewSubFormInstance() {
         $subform = new Admin_Form_DocumentPerson();
         
         $rolesForm = new Admin_Form_DocumentPersonRoles($this->__roleName);
@@ -199,29 +332,14 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
         $movesForm = new Admin_Form_DocumentPersonMoves();
         $subform->addSubForm($movesForm, 'Moves');
                         
-        $subform->initRendering();
-        
         return $subform;
     }
-    
+        
     /**
-     * Liefert die Personen eines Dokuments in einer bestimmten Role zurück.
+     * Wird nach dem Rücksprung von Add/Edit Seite für Person aufgerufen, um das Ergebnis ins Formular einzubringen.
      * 
-     * @param Opus_Document $document
-     * @param string $roleName
-     * 
-     * TODO wenn getPersonXXX Funktionen abgeschafft werden, muss diese Funktion umgeschrieben werden
+     * @param type $request
      */
-    public function getPersonsInRole($document, $roleName) {
-        $fieldName = 'Person' . ucfirst($roleName);
-        
-        $field = $document->getField($fieldName);
-        
-        $persons = $field->getValue();
-        
-        return $persons;
-    }
-    
     public function continueEdit($request) {
         $role = $request->getParam('role', null);
         
@@ -233,7 +351,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
             if (!is_null($personId) && $action !== 'updateperson') {
                 $person = new Opus_Person($personId);
 
-                $subform = $this->_addPersonSubForm(count($this->getSubForms()), $person);
+                $subform = $this->addPersonSubForm(count($this->getSubForms()), $person);
                 $subform->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->setValue($role);
                 
                 $order = $request->getParam('order', null);
@@ -248,10 +366,6 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_AbstractDocumentSubForm {
                 // TODO deal with it
             }
         }
-    }
-    
-    public function isEmpty() {
-        return count($this->getSubForms()) == 0;
     }
     
 }

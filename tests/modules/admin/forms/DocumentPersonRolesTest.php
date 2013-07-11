@@ -92,7 +92,7 @@ class Admin_Form_DocumentPersonRolesTest extends ControllerTestCase {
         
         $this->assertNotNull($result);
         $this->assertArrayHasKey('result', $result);
-        $this->assertEquals(Admin_Form_DocumentPerson::RESULT_CHANGE_ROLE, $result['result']);
+        $this->assertEquals(Admin_Form_DocumentPersonRoles::RESULT_CHANGE_ROLE, $result['result']);
         $this->assertArrayHasKey('role', $result);
         $this->assertEquals('contributor', $result['role']);
     }

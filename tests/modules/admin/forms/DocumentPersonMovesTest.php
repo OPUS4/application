@@ -77,6 +77,28 @@ class Admin_Form_DocumentPersonMovesTest extends ControllerTestCase {
         $this->assertArrayHasKey('move', $result);
         $this->assertEquals('First', $result['move']);
     }
+    
+    public function testChangePosition() {
+        $form = new Admin_Form_DocumentPersonMoves();
+        
+        $this->assertEquals(4, count($form->getElements()));
+        
+        $form->changePosition(Admin_Form_DocumentPersonMoves::POSITION_FIRST);
+        
+        $this->assertEquals(2, count($form->getElements()));
+        $this->assertNotNull($form->getElement('Down'));
+        $this->assertNotNull($form->getElement('Last'));
+        
+        $form->changePosition(Admin_Form_DocumentPersonMoves::POSITION_LAST);
+       
+        $this->assertEquals(2, count($form->getElements()));
+        $this->assertNotNull($form->getElement('First'));
+        $this->assertNotNull($form->getElement('Up'));
+        
+        $form->changePosition(Admin_Form_DocumentPersonMoves::POSITION_DEFAULT);
+       
+        $this->assertEquals(4, count($form->getElements()));
+    }
         
     public function testProcessPostEmpty() {
         $form = new Admin_Form_DocumentPersonMoves();
