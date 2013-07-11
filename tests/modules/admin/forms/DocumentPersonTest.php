@@ -39,7 +39,7 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
     public function testCreateForm() {
         $form = new Admin_Form_DocumentPerson();
         
-        $this->assertEquals(5, count($form->getElements()));
+        $this->assertEquals(4, count($form->getElements()));
         
         $this->assertNotNull($form->getElement('PersonId'));
         $this->assertNotNull($form->getElement('AllowContact'));
@@ -47,7 +47,6 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('SortOrder'));
         
         $this->assertNotNull($form->getElement('Edit'));
-        $this->assertNotNull($form->getElement('Remove'));
     }
     
     public function testPopulateFromModel() {
@@ -123,22 +122,13 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
         $this->assertArrayHasKey('personId', $target);
         $this->assertEquals('1234', $target['personId']);
     }
-    
-    public function testProcessPostRemove() {
-        $form = new Admin_Form_DocumentPerson();
         
-        $post = array(
-            'Remove' => 'Entfernen'
-        );
-        
-        $this->assertEquals(Admin_Form_DocumentPerson::RESULT_REMOVE, $form->processPost($post, null));
-    }
-    
     public function testGetLinkModel() {
+        // TODO implement
     }
     
     public function testValidation() {
-        
+        // TODO implement
     }
     
     public function testPrepareRenderingAsView() {
