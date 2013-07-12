@@ -37,11 +37,17 @@
  * 
  * Das sind folgende Felder.
  * 
+ * - PersonId
  * - Role
  * - AllowEmailContact
  * - SortOrder
  */
 class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm {
+    
+    /**
+     * Nachricht für Funktionsaufruf mit falschem Model Parameter.
+     */
+    const BAD_MODEL_MESSAGE = ' Called with object that is not instance of Opus_Model_Dependent_Link_DocumentPerson';
     
     /**
      * Name fuer Formularelement fuer Feld AllowEmailContact.
@@ -58,6 +64,10 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm {
      */
     const ELEMENT_SORT_ORDER = 'SortOrder';
     
+    /**
+     * Link-Model das angezeigt wird.
+     * @var \Opus_Model_Dependent_Link_DocumentPerson 
+     */
     private $model = null;
     
     /**
@@ -66,27 +76,49 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm {
     public function init() {
         parent::init();
         
-        $this->addElement('hidden', Admin_Form_Person::ELEMENT_PERSON_ID);
+        $this->addElement('hidden', Admin_Form_Person::ELEMENT_PERSON_ID, array('required' => true,
+            'validators' => array('Int')));
         $this->addElement('checkbox', self::ELEMENT_ALLOW_CONTACT, array('label' => 'AllowEmailContact'));
         $this->addElement('text', self::ELEMENT_SORT_ORDER, array('label' => 'SortOrder'));
         $this->addElement('PersonRole', self::ELEMENT_ROLE, array('label' => 'Role'));
     }
     
+    /**
+     * Initialisiert Formular mit Werten aus Model.
+     * @param Opus_Model_Dependent_Link_DocumentPerson $personLink
+     */
     public function populateFromModel($personLink) {
         if ($personLink instanceof Opus_Model_Dependent_Link_DocumentPerson) {
             $this->getElement(self::ELEMENT_ALLOW_CONTACT)->setValue($personLink->getAllowEmailContact());
             $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($personLink->getSortOrder());
             $this->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personLink->getModel()->getId());
-            $role = $personLink->getRole();
-            // $this->removeElement('Role'. ucfirst($role));
+            $this->getElement(self::ELEMENT_ROLE)->setValue($personLink->getRole());
             $this->model = $personLink;
         }
         else {
-            $this->getLog()->err('populateFromModel called with object that is not instance of '
-                    . 'Opus_Model_Dependent_Link_DocumentPerson');
+            $this->getLog()->err(__METHOD__ . self::BAD_MODEL_MESSAGE);
+        }
+    }
+   
+    /**
+     * Setzt Werte im Model mit dem Inhalt der Formularelemente.
+     * @param Opus_Model_Dependent_Link_DocumentPerson $personLink
+     */
+    public function updateModel($personLink) {
+        if ($personLink instanceof Opus_Model_Dependent_Link_DocumentPerson) {
+            $personLink->setAllowEmailContact($this->getElementValue(self::ELEMENT_ALLOW_CONTACT));
+            $personLink->setSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
+            $personLink->setRole($this->getElementValue(self::ELEMENT_ROLE));
+        }
+        else {
+            $this->getLog()->err(__METHOD__ . self::BAD_MODEL_MESSAGE);
         }
     }
     
+    /**
+     * Liefert angezeigtes Model.
+     * @return \Opus_Model_Dependent_Link_DocumentPerson 
+     */
     public function getModel() {
         return $this->model;
     }

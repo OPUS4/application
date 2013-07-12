@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Element
+ * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -33,31 +33,29 @@
  */
 
 /**
- * Select Element für Role einer Person.
+ * Unit Tests for SELECT Element für die Rolle einer Person.
  */
-class Form_Element_PersonRole extends Form_Element_Select {
-    
-    /**
-     * Initialisiert Formularelement.
-     */
-    public function init() {
-        parent::init();
+class Form_Element_PersonRoleTest extends ControllerTestCase {
+
+    public function testConstruct() {
+        $element = new Form_Element_PersonRole('Role');
         
-        $this->setRequired(true);
-                
-        $options = $this->getSelectOptions();
-        
-        foreach ($options as $option) {
-            $this->addMultiOption($option, $option);
-        }
+        $this->assertEquals('Role', $element->getName());
+        $this->assertTrue($element->isRequired());
+        $this->assertEquals(8, count($element->getMultiOptions()));
     }
     
-    /**
-     * Liefert die erlaubten Rollen für die Optionen im Formularelement.
-     * @return array
-     */
-    public function getSelectOptions() {
-        return Admin_Form_DocumentPersons::getRoles();
+    public function testGetSelectOptions() {
+        $element = new Form_Element_PersonRole('Role');
+
+        $options = $element->getSelectOptions();
+       
+        $this->assertEquals(8, count($options));
+        
+        $result = array_diff($options, array('author', 'editor', 'translator', 'contributor', 'other', 'advisor', 
+            'referee', 'submitter'));
+        
+        $this->assertEmpty($result, 'Die Optionen (Rollen) entsprechen nicht der Erwartung.');
     }
-    
+        
 }

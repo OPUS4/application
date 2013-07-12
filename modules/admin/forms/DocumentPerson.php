@@ -48,7 +48,6 @@ class Admin_Form_DocumentPerson extends Admin_Form_PersonLink {
     public function init() {
         parent::init();
 
-        $this->removeElement(self::ELEMENT_ROLE);
         $this->addElement('submit', self::ELEMENT_EDIT, array('label' => 'admin_button_edit'));
 
         $this->setDecorators(array(
@@ -56,9 +55,15 @@ class Admin_Form_DocumentPerson extends Admin_Form_PersonLink {
             array('ViewScript', array('viewScript' => 'form/personForm.phtml'))
         ));
     }
-        
+
+    /**
+     * Initialisiert Formular nach Post.
+     * 
+     * Wird für dieses Formular nicht benötigt.
+     * 
+     * @param array $post
+     */
     public function populateFromPost($post) {
-        // TODO needed?
     }
     
     /**
@@ -82,36 +87,57 @@ class Admin_Form_DocumentPerson extends Admin_Form_PersonLink {
         return parent::processPost($post, $context);
     }
     
-    public function getLinkModel($documentId, $personRole) {
-        $personId = $this->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->getValue();
+    /**
+     * Liefert angezeigtes Model.
+     * 
+     * Die ID für ein Opus_Model_Dependent_Link_DocumentPerson Objekt setzt sich aus Dokument-ID, Person-ID und Rolle
+     * zusammen.
+     * 
+     * @param int $documentId Identifier für das Dokument
+     * @return \Opus_Model_Dependent_Link_DocumentPerson
+     * 
+     * TODO rename in getModel() !!!Konflikt mit getModel in PersonLink auflösen
+     * TODO personId darf nicht null sein
+     */
+    public function getLinkModel($documentId) {
+        $personId = $this->getElementValue(Admin_Form_Person::ELEMENT_PERSON_ID); 
+        $role = $this->getElementValue(self::ELEMENT_ROLE);
         
         try {
-            $personLink = new Opus_Model_Dependent_Link_DocumentPerson(array($personId, $documentId, $personRole));
+            $personLink = new Opus_Model_Dependent_Link_DocumentPerson(array($personId, $documentId, $role));
         }
         catch (Opus_Model_NotFoundException $opnfe) {
             $personLink = new Opus_Model_Dependent_Link_DocumentPerson();
             $person = new Opus_Person($personId);
             $personLink->setModel($person);
-            // TODO $personLink->setRole($personRole);
         }
+        
         $this->updateModel($personLink); 
         
         return $personLink;
     }
     
-    public function updateModel($personLink) {
-        $personLink->setAllowEmailContact($this->getElementValue(self::ELEMENT_ALLOW_CONTACT));
-        $personLink->setSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
-        // TODO $personLink->setRole($this->getElementValue(self::ELEMENT_ROLE));
-    }
-    
+    /**
+     * Bereitet Formular für Anzeige in Metadaten-Übersicht vor.
+     * 
+     * Die Elemente 'SortOrder' und 'Role' sollen nicht angezeigt werden, auch wenn sie einen Wert haben. Leere
+     * Elemente werden durch die Implementation in der Basisklasse automatisch entfernt.
+     */
     public function prepareRenderingAsView() {
         parent::prepareRenderingAsView();
         
         $this->removeElement(self::ELEMENT_SORT_ORDER);
-        // TODO $this->removeElement(self::ELEMENT_ROLE);
+        $this->removeElement(self::ELEMENT_ROLE);
     }
     
+    /**
+     * Überschreibt setOrder damit das Feld 'SortOrder' auf den gleichen Wert + 1 gesetzt wird. 
+     * 
+     * Bei jedem POST werden die Personen in die richtige Reihenfolge gebracht, dadurch entspriche der Wert von 
+     * 'SortOrder' dem Wert von Order (0..n) der Unterformulare erhöht um Eins. 
+     * 
+     * @param int $order
+     */
     public function setOrder($order) {
         parent::setOrder($order);
         $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($order + 1);
