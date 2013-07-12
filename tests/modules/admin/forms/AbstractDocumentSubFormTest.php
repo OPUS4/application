@@ -54,6 +54,16 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase {
         $this->assertInstanceOf('Controller_Helper_Dates', $form->getDatesHelper());
     }
     
+    public function testSetLog() {
+        $form = $this->getForm();
+        
+        $logger = new MockLogger();
+        
+        $form->setLog($logger);
+        
+        $this->assertEquals($logger, $form->getLog());
+    }
+    
     public function testGetLog() {
         $form = $this->getForm();
         

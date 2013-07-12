@@ -108,6 +108,21 @@ class Admin_Form_PersonTest extends ControllerTestCase {
         $this->assertEquals('1990/02/01', $datesHelper->getDateString($person->getDateOfBirth()));
     }
     
+    public function testUpdateModelBadModel() {
+        $form = new Admin_Form_Person();
+        
+        $logger = new MockLogger();
+        
+        $form->setLog($logger);
+        
+        $form->updateModel(new Opus_Document());
+        
+        $messages = $logger->getMessages();
+        
+        $this->assertEquals(1, count($messages));
+        $this->assertContains('not instance of Opus_Person', $messages[0]);
+    }
+    
     public function testGetModel() {
         $this->setUpEnglish();
         
@@ -201,7 +216,7 @@ class Admin_Form_PersonTest extends ControllerTestCase {
         $this->assertTrue($form->isValid($post));
     }
     
-    public function testProcessPost() {
+    public function testProcessPostSave() {
         $form = new Admin_Form_Person();
         
         $post = array(
@@ -209,12 +224,22 @@ class Admin_Form_PersonTest extends ControllerTestCase {
         );
         
         $this->assertEquals('save', $form->processPost($post, null));
+    }
+    
+    public function testProcessPostCancel() {
+        $form = new Admin_Form_Person();
         
         $post = array(
             'Cancel' => 'Abbrechen'
         );
         
         $this->assertEquals('cancel', $form->processPost($post, null));
+    }
+    
+    public function testProcessPostEmpty() {
+        $form = new Admin_Form_Person();
+        
+        $this->assertNull($form->processPost(array(), null));
     }
     
 }

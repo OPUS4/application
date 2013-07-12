@@ -145,6 +145,8 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
         else if (array_key_exists(self::ELEMENT_CANCEL, $post)) {
             return self::RESULT_CANCEL;
         }
+        
+        return null;
     }
 
     /**
@@ -162,7 +164,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
             $model->setDateOfBirth($datesHelper->getOpusDate($this->getElementValue(self::ELEMENT_DATE_OF_BIRTH)));
         }
         else {
-            $this->getLog()->err('updateModel called with object that is not instance of Opus_Person');
+            $this->getLog()->err(__METHOD__ . ' called with object that is not instance of Opus_Person');
         }
     }
     

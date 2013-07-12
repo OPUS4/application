@@ -39,6 +39,8 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     
     private $viewMode = false;
     
+    private $logger;
+    
     public function init() {
         parent::init();
         
@@ -243,7 +245,7 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
         }
         else {
             // Sollte nie passieren - Schreibe Fehlermeldung ins Log
-            Zend_Registry::get('Zend_Log')->err('Element \'' . $name . '\' in form \'' . $this->getName() .
+            $this->getLog()->err('Element \'' . $name . '\' in form \'' . $this->getName() .
                     '\' not found.');
             return null;
         }
@@ -262,7 +264,15 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
      * Liefert Zend_Log Objekt zum Schreiben von Logeintraegen.
      */
     public function getLog() {
-        return Zend_Registry::get('Zend_Log');
+        if (is_null($this->logger)) {
+            $this->logger = Zend_Registry::get('Zend_Log');
+        }
+        
+        return $this->logger;
+    }
+    
+    public function setLog($logger) {
+        $this->logger = $logger;
     }
     
     public function isViewModeEnabled() {
