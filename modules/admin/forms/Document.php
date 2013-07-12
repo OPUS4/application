@@ -125,19 +125,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
             $form->populateFromModel($document);
         }
     }
-    
-    /**
-     * Aktualisiert Instanz von Opus_Document mit Formularwerten.
-     * @param Opus_Document $document
-     */
-    public function updateModel($document) {
-        $subforms = $this->getSubForms();
-        
-        foreach ($subforms as $form) {
-            $form->updateModel($document);
-        }
-    }
- 
+     
     /**
      * Konstruiert Formular mit Unterformularen basierend auf POST Daten.
      * @param array $data
