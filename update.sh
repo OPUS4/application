@@ -270,6 +270,10 @@ export OPUS_UPDATE_SCRIPTPATH=$SCRIPTPATH     # TODO necessary? Different way?
 export OPUS_UPDATE_USERNAME=$OPUS4_USERNAME
 export OPUS_UPDATE_GROUPNAME=$OPUS4_GROUPNAME
 
+
+# Update Zend Framework
+"$SCRIPTPATH"/update-zend.sh 
+
 # Update configuration
 "$SCRIPTPATH"/update-config.sh
 
