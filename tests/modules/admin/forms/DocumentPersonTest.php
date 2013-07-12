@@ -39,11 +39,11 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
     public function testCreateForm() {
         $form = new Admin_Form_DocumentPerson();
         
-        $this->assertEquals(4, count($form->getElements()));
+        $this->assertEquals(5, count($form->getElements()));
         
         $this->assertNotNull($form->getElement('PersonId'));
         $this->assertNotNull($form->getElement('AllowContact'));
-        // $this->assertNotNull($form->getElement('Role'));
+        $this->assertNotNull($form->getElement('Role'));
         $this->assertNotNull($form->getElement('SortOrder'));
         
         $this->assertNotNull($form->getElement('Edit'));
@@ -82,12 +82,10 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
         $this->assertEquals('author', $model->getRole());
     }
     
-    public function testProcessPost() {
+    public function testProcessPostEmpty() {
         $form = new Admin_Form_DocumentPerson();
 
-        $post = array();
-        
-        $this->assertNull($form->processPost($post, null));
+        $this->assertNull($form->processPost(array(), null));
     }
     
     public function testProcessPostEdit() {
@@ -124,13 +122,37 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
     }
         
     public function testGetLinkModel() {
-        // TODO implement
+        $form = new Admin_Form_DocumentPerson();
+        
+        $document = new Opus_Document(146);
+        
+        $authors = $document->getPersonAuthor();
+        
+        $form->populateFromModel($authors[0]);
+        
+        $person = $form->getLinkModel(146);
+        
+        // getLinkModel instanziert Object, sollte identisch zu dem für populateFromModel sein
+        $this->assertEquals($person, $authors[0]);
     }
     
-    public function testValidation() {
-        // TODO implement
+    public function testGetLinkModelNew() {
+        $form = new Admin_Form_DocumentPerson();
+        
+        $form->getElement('PersonId')->setValue(310);
+        $form->getElement('Role')->setValue('submitter');
+        $form->getElement('SortOrder')->setValue(3);
+        $form->getElement('AllowContact')->setChecked(true);
+        
+        $person = $form->getLinkModel(146);
+        
+        $this->assertNull($person->getId());
+        $this->assertEquals(310, $person->getModel()->getId());
+        $this->assertEquals(3, $person->getSortOrder());
+        $this->assertEquals(1, $person->getAllowEmailContact());
+        $this->assertEquals('submitter', $person->getRole());
     }
-    
+        
     public function testPrepareRenderingAsView() {
         $form = new Admin_Form_DocumentPerson();
         
@@ -139,6 +161,15 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
         $form->prepareRenderingAsView();
         
         $this->assertNull($form->getElement('SortOrder'));
+    }
+    
+    public function testSetOrder() {
+        $form = new Admin_Form_DocumentPerson();
+        
+        $form->setOrder(5);
+        
+        $this->assertEquals(5, $form->getOrder());
+        $this->assertEquals(6, $form->getElementValue('SortOrder'));
     }
     
 }
