@@ -56,6 +56,9 @@
  */
 class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm {
     
+    /**
+     * Name für Button zum Hinzufügen von Collections.
+     */
     const ELEMENT_ADD = 'Add';
     
     /**

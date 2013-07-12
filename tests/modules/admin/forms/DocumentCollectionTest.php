@@ -40,6 +40,8 @@ class DocumentCollectionTest extends ControllerTestCase {
     public function createForm() {
         $form = new Admin_Form_DocumentCollection();
         
+        $this->assertEquals(3, count($form->getElements()));
+        
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('Edit'));
         $this->assertNotNull($form->getElement('Remove'));
@@ -56,16 +58,26 @@ class DocumentCollectionTest extends ControllerTestCase {
         $this->assertEquals($collection->getId(), $form->getElement('Id')->getValue());
     }
     
-    public function testProcessPost() {
+    public function testProcessPostRemove() {
         $form = new Admin_Form_DocumentCollection();
         
         $post = array('Id' => '499', 'Remove' => 'Remove Collection');
         
         $this->assertEquals('remove', $form->processPost($post, null));
+    }
+    
+    public function testProcessPostEdit() {
+        $form = new Admin_Form_DocumentCollection();
         
         $post = array('Id' => '499', 'Edit' => 'Edit Collection');
         
         $this->assertEquals('edit', $form->processPost($post, null));
+    }
+    
+    public function testProcessPostEmpty() {
+        $form = new Admin_Form_DocumentCollection();
+
+        $this->assertNull($form->processPost(array(), null));
     }
     
     public function testGetModel() {

@@ -95,8 +95,15 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
             // TODO Seitenwechel, POST sichern, Return value
             return 'edit';
         }
+        
+        return null;
     }
     
+    /**
+     * Liefert das Model für die angezeigte Collection.
+     * 
+     * @return \Opus_Collection
+     */
     public function getModel() {
         $colId = $this->getElement(self::ELEMENT_ID)->getValue();
         
@@ -104,10 +111,15 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
     }
     
     /**
+     * Initialisiert das Formular basierend auf POST Daten.
+     * 
+     * Der POST enthält nur die ID der Collection, damit der Name im Formular angezeigt werden kann,
+     * muss die Collection instanziert werden.
      * 
      * @param type $post
      * 
      * TODO catch bad POST
+     * TODO catch unknown Collection
      */
     public function populateFromPost($post) {
         $colId = $post[self::ELEMENT_ID];
@@ -115,6 +127,9 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
         $this->populateFromModel($collection);
     }
     
+    /**
+     * Setzt die Decoratoren für das Formular.
+     */
     public function loadDefaultDecorators() {
         $this->setDecorators(array(
             'PrepareElements',
@@ -123,11 +138,19 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
         ));
     }
     
+    /**
+     * Überschreibt Funktion zum Entfernen aller Formularelemente für die Metadaten-Übersicht, um den Namen der 
+     * Collection im Formular zu speichern.
+     */
     public function _removeElements() {
         $this->collectionName = $this->getElement(self::ELEMENT_EDIT)->getLabel();
         parent::_removeElements();
     }
     
+    /**
+     * Liefert den Namen der angezeigten Collection.
+     * @return string
+     */
     public function getCollectionName() {
         return $this->collectionName;
     }
