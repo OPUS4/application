@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -47,6 +47,10 @@ class Admin_Form_DocumentPerson extends Admin_Form_PersonLink {
      */
     public function init() {
         parent::init();
+        
+        // Element 'Role' ist im Metadaten-Formular nicht required; Role wird durch 
+        // übergeordnetes Unterformular (für die Rolle) bestimmt
+        $this->getElement(self::ELEMENT_ROLE)->setRequired(false);
 
         $this->addElement('submit', self::ELEMENT_EDIT, array('label' => 'admin_button_edit'));
 
@@ -99,9 +103,8 @@ class Admin_Form_DocumentPerson extends Admin_Form_PersonLink {
      * TODO rename in getModel() !!!Konflikt mit getModel in PersonLink auflösen
      * TODO personId darf nicht null sein
      */
-    public function getLinkModel($documentId) {
+    public function getLinkModel($documentId, $role) {
         $personId = $this->getElementValue(Admin_Form_Person::ELEMENT_PERSON_ID); 
-        $role = $this->getElementValue(self::ELEMENT_ROLE);
         
         try {
             $personLink = new Opus_Model_Dependent_Link_DocumentPerson(array($personId, $documentId, $role));
@@ -113,7 +116,18 @@ class Admin_Form_DocumentPerson extends Admin_Form_PersonLink {
         }
         
         $this->updateModel($personLink); 
+        $personLink->setRole($role);
         
+        if (Zend_Registry::get('LOG_LEVEL') >= Zend_Log::DEBUG) {
+            $log = $this->getLog();
+            $log->debug(Zend_Debug::dump($personLink->getId(), 'DocumentPerson-ID', false));
+            $log->debug(Zend_Debug::dump($personLink->getRole(), 'DocumentPerson-Role', false));
+            $log->debug(Zend_Debug::dump($personLink->getSortOrder(), 'DocumentPerson-SortOrder', false));
+            $log->debug(Zend_Debug::dump($personLink->getAllowEmailContact(), 'DocumentPerson->AllowEmailContact', 
+                    false));
+            $log->debug(Zend_Debug::dump($personLink->getModel()->getId(), 'DocumentPerson-Model-ID', false));
+        }
+       
         return $personLink;
     }
     

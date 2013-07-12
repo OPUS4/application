@@ -442,6 +442,36 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
         $this->verifyExpectedOrder($form, array(311, 310, 312));
     }
     
+    public function testGetSubFormModels() {
+        $form = $this->getFormForSorting();
+        
+        $doc = new Opus_Document(250);
+        
+        $authors = $form->getSubFormModels($doc);        
+        
+        $this->assertEquals(3, count($authors));
+        
+        $this->assertEquals(310, $authors[0]->getModel()->getId());
+        $this->assertEquals(311, $authors[1]->getModel()->getId());
+        $this->assertEquals(312, $authors[2]->getModel()->getId());
+    }
+    
+    public function testUpdateModel() {
+        $form = $this->getFormForSorting();
+        
+        $doc = new Opus_Document(250);
+        
+        $form->updateModel($doc);        
+        
+        $authors = $doc->getPersonAuthor();
+        
+        $this->assertEquals(3, count($authors));
+        
+        $this->assertEquals(310, $authors[0]->getModel()->getId());
+        $this->assertEquals(311, $authors[1]->getModel()->getId());
+        $this->assertEquals(312, $authors[2]->getModel()->getId());
+    }
+    
     protected function verifyExpectedOrder($form, $expected) {
         foreach ($expected as $index => $personId) {
             $this->assertEquals($personId, $form->getSubForm('PersonAuthor' . $index)->getElement(

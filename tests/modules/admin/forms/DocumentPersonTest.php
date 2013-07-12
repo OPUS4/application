@@ -129,22 +129,24 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
         $authors = $document->getPersonAuthor();
         
         $form->populateFromModel($authors[0]);
+        $form->getElement('Role')->setValue(null); // nicht teil des POST beim Metadaten-Formular
         
-        $person = $form->getLinkModel(146);
+        $person = $form->getLinkModel(146, 'author');
         
-        // getLinkModel instanziert Object, sollte identisch zu dem für populateFromModel sein
-        $this->assertEquals($person, $authors[0]);
+        $this->assertEquals($person->getId(), $authors[0]->getId());
+        $this->assertNotNull($person->getModel());
+        $this->assertEquals('author', $person->getRole());
     }
     
     public function testGetLinkModelNew() {
         $form = new Admin_Form_DocumentPerson();
         
         $form->getElement('PersonId')->setValue(310);
-        $form->getElement('Role')->setValue('submitter');
+        // $form->getElement('Role')->setValue('submitter'); // nicht teil des POST beim Metadaten-Formular
         $form->getElement('SortOrder')->setValue(3);
         $form->getElement('AllowContact')->setChecked(true);
         
-        $person = $form->getLinkModel(146);
+        $person = $form->getLinkModel(146, 'submitter');
         
         $this->assertNull($person->getId());
         $this->assertEquals(310, $person->getModel()->getId());
