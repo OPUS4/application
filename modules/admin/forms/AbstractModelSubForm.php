@@ -34,9 +34,23 @@
 
 /**
  * Abstrakte Klasse fuer Unterformulare fuer Model Klassen.
+ * 
+ * Diese Klassen aktualisieren Opus_Document nicht direkt, sondern geben das von ihnen angezeigte Model an das 
+ * übergeordnete Formular weiter. Dadurch kann Admin_Form_DocumentMultiSubForm zum Beispiel die Modelle aller Patente
+ * im Formular einsammeln und dann die Funktion setPatent verwenden, um das Feld in Opus_Document zu setzen.
+ * 
+ * Die updateModel Funktionen in diesen Klassen erwarten nicht Opus_Document als Parameter, sondern das entsprechende
+ * Model wie zum Beispiel Opus_Identifier oder Opus_Title.
  */
 abstract class Admin_Form_AbstractModelSubForm extends Admin_Form_AbstractDocumentSubForm {
     
+    /**
+     * Liefert angezeigtes Model oder eine neue Instanz für gerade hinzugefügte Modelle.
+     * 
+     * Wird zum Beispiel vom Formular ein existierender Identifier Eintrag angezeigt, sollte diese Funktion das Model
+     * für den in der Datenbank gespeicherten Identifier zurück liefern. Ist der Identifier im Formular hinzugefügt 
+     * worden muss eine new Model Instanz zurück gegeben werden bei der der Wert vom ID-Feld noch null ist. 
+     */
     abstract function getModel();
     
 }
