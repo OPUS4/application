@@ -36,42 +36,181 @@
  */
 class Admin_Form_DocumentPersonsTest extends ControllerTestCase {
     
+    private $roles;
+    
+    public function setUp() {
+        parent::setUp();
+        
+        $this->roles = Admin_Form_DocumentPersons::getRoles();
+    }
+    
     public function testCreateForm() {
         $form = new Admin_Form_DocumentPersons();
         
         $this->assertEquals(8, count($form->getSubForms()));
-        $this->assertArrayHasKey('author', $form->getSubForms());
+        
+        foreach ($this->roles as $role) {
+            $this->assertNotNull($form->getSubForm($role), "Unterformular '$role' fehlt.");
+        }
+        
+        $this->assertNotNull($form->getElement(Admin_Form_DocumentPersons::ELEMENT_SORT));
+        
+        $this->assertNotNull($form->getLegend());
     }
     
     public function testPopulateFromModel() {
         $form = new Admin_Form_DocumentPersons();
         
-        $document = new Opus_Document(146);
-        $authors = $document->getPersonAuthor();
-        $author = $authors[0];
+        $document = new Opus_Document(146); // 1 Person in jeder Rolle
         
         $form->populateFromModel($document);
         
-        $personForm = $form->getSubForm('author')->getSubForm('PersonAuthor0');
-        
-        $this->assertNotNull($personForm);
-        $this->assertEquals($author->getModel()->getId(), $personForm->getElement('PersonId')->getValue());
+        foreach ($this->roles as $role) {
+            $subform = $form->getSubForm($role);
+            $this->assertNotNull($subform, "Unterformular '$role' fehlt.");
+            $this->assertEquals(1, count($subform->getSubForms()), 
+                    "Unterformular '$role' sollte ein Unterformlar haben.");
+        }
     }
     
     public function testConstructFromPost() {
-        $this->markTestIncomplete();
+        $form = new Admin_Form_DocumentPersons();
+        
+        $post = array(
+            'author' => array(
+                'PersonAuthor0' => array(
+                    'PersonId' => '310'
+                ),
+                'PersonAuthor1' => array(
+                    'PersonId' => '311'
+                )
+            ),
+            'advisor' => array(
+                'PersonAdvisor0' => array(
+                    'PersonId' => '312'
+                )
+            )
+        );
+        
+        $form->constructFromPost($post);
+        
+        $this->assertEquals(2, count($form->getSubForm('author')->getSubForms()));
+        $this->assertEquals(0, count($form->getSubForm('editor')->getSubForms()));
+        $this->assertEquals(0, count($form->getSubForm('translator')->getSubForms()));
+        $this->assertEquals(0, count($form->getSubForm('contributor')->getSubForms()));
+        $this->assertEquals(0, count($form->getSubForm('other')->getSubForms()));
+        $this->assertEquals(1, count($form->getSubForm('advisor')->getSubForms()));
+        $this->assertEquals(0, count($form->getSubForm('referee')->getSubForms()));
+        $this->assertEquals(0, count($form->getSubForm('submitter')->getSubForms()));
     }
     
-    public function testUpdateModel() {
-        $this->markTestIncomplete();
+    /**
+     * TODO Was sollte passieren wenn PersonId is missing? (Manipulierter Post)
+     */
+    public function testConstructFromPostWithMissingPersonId() {
+        $this->markTestIncomplete('Ist das dir richtige Stelle für den Test?');
+        $form = new Admin_Form_DocumentPersons();
+        
+        $post = array(
+            'author' => array(
+                'PersonAuthor0' => array(
+                    'PersonId' => '310'
+                ),
+                'PersonAuthor1' => array(
+                )
+            ),
+            'advisor' => array(
+                'PersonAdvisor0' => array(
+                    'PersonId' => '312'
+                )
+            )
+        );
+        
+        $form->constructFromPost($post);
+        
+        $this->assertEquals(1, count($form->getSubForm('author')->getSubForms()));
+        $this->assertEquals(0, count($form->getSubForm('editor')->getSubForms()));
+        $this->assertEquals(0, count($form->getSubForm('translator')->getSubForms()));
+        $this->assertEquals(0, count($form->getSubForm('contributor')->getSubForms()));
+        $this->assertEquals(0, count($form->getSubForm('other')->getSubForms()));
+        $this->assertEquals(1, count($form->getSubForm('advisor')->getSubForms()));
+        $this->assertEquals(0, count($form->getSubForm('referee')->getSubForms()));
+        $this->assertEquals(0, count($form->getSubForm('submitter')->getSubForms()));    
     }
-    
+        
     public function testContinueEdit() {
-        $this->markTestIncomplete();
+        $this->markTestIncomplete('Funktionalität muss noch fertiggestellt werden.');
     }
     
-    public function testProcessPost() {
-        $this->markTestIncomplete();
+    public function testProcessPostChangeRole() {
+        $form = new Admin_Form_DocumentPersons();
+        
+        $document = new Opus_Document(250);
+        
+        $form->populateFromModel($document);
+        
+        $this->assertEquals(3, count($form->getSubForm('author')->getSubForms()));
+        $this->assertEquals(0, count($form->getSubForm('advisor')->getSubForms()));
+
+        $post = array(
+            'author' => array(
+                'PersonAuthor0' => array(
+                    'PersonId' => '310',
+                    'Roles' => array(
+                        'RoleAdvisor' => 'Advisor'
+                    )
+                )
+            )
+        );
+        
+        $this->assertEquals(Admin_Form_Document::RESULT_SHOW, $form->processPost($post, null));
+        
+        // ein Autor weniger
+        $this->assertEquals(2, count($form->getSubForm('author')->getSubForms()));
+        $this->assertNotNull($form->getSubForm('author')->getSubForm('PersonAuthor0'));
+        $this->assertNotNull($form->getSubForm('author')->getSubForm('PersonAuthor1'));
+
+        // jetzt ein Advisor
+        $this->assertEquals(1, count($form->getSubForm('advisor')->getSubForms()));
+        $this->assertNotNull($form->getSubForm('advisor')->getSubForm('PersonAdvisor0'));
+        $this->assertEquals(310, 
+                $form->getSubForm('advisor')->getSubForm('PersonAdvisor0')->getElementValue('PersonId'));
+    }
+    
+    public function testProcessPostSort() {
+        $form = new Admin_Form_DocumentPersons();
+        
+        $document = new Opus_Document(146);
+        
+        $form->populateFromModel($document);
+        
+        $post = array(
+            'Sort' => 'Sortieren'
+        );
+        
+        $this->assertEquals(Admin_Form_Document::RESULT_SHOW, $form->processPost($post, null));
+    }
+    
+    public function testProcessPostWithoutSubforms() {
+        $form = new Admin_Form_DocumentPersons();
+        
+        $this->assertNull($form->processPost(array(), null));
+    }
+    
+    public function testProcessPostEmpty() {
+        $form = new Admin_Form_DocumentPersons();
+        
+        $document = new Opus_Document(146);
+        
+        $form->populateFromModel($document);
+        
+        $this->assertNull($form->processPost(array(), null));
+    }
+    
+    public function testGetRoles() {
+        $roles = Admin_Form_DocumentPersons::getRoles();
+        
+        $this->assertEquals(8, count($roles));
     }
     
 }

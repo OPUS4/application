@@ -137,6 +137,12 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
             }
         }
         
+        // Wenn 'Sort' Button geklickt wurde, kann die POST verarbeitung nachdem die Unterformulare sortiert wurden
+        // hier abgebrochen werden.
+        if (array_key_exists(self::ELEMENT_SORT, $post)) {
+            return Admin_Form_Document::RESULT_SHOW;
+        }
+        
         return null;
     }
     
