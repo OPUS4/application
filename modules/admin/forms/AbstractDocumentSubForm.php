@@ -103,8 +103,14 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
      * Aktualisiert die Instanz von Opus_Document durch Formularwerte.
      * 
      * TODO consider options for ChangeLog
+     * @param Opus_Document $document
      */
     public function updateModel($model) {
+        $subforms = $this->getSubForms();
+        
+        foreach ($subforms as $form) {
+            $form->updateModel($model);
+        }
     }
     
     public function continueEdit($request) {

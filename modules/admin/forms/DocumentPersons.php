@@ -36,6 +36,19 @@
  * Unterformular fuer die mit einem Dokument verknuepften Personen.
  */
 class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
+
+    /**
+     * Button, um die Sortierung der Personen auszulösen nachdem die SortOrder Werte editiert wurden.
+     * 
+     * Der Button muss nicht verwendet werden, dient aber dazu dem Nutzer eine Möglichkeit zu geben das Ergebnis der 
+     * Sortierung zu überprüfen, bevor das Dokument gespeichert wird.
+     */
+    const ELEMENT_SORT = 'Sort';
+    
+    /**
+     * Button zum Hinzufügen einer Person zum Dokument.
+     */
+    const ELEMENT_ADD = 'Add';
     
     /**
      * Bestimmt die Reihenfolge der Sektionen für die einzelnen Rollen.
@@ -44,7 +57,7 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
     private static $personRoles =  array(
         'author', 'editor', 'translator', 'contributor', 'other', 'advisor', 'referee', 'submitter'
     );
-
+    
     /**
      * Erzeugt Unterformular für Personen.
      * 
@@ -126,24 +139,14 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
         
         return null;
     }
-
-    /**
-     * 
-     * @param type $document
-     */
-    public function updateModel($document) {
-        $subforms = $this->getSubForms();
-        
-        $persons = array();
-        
-        foreach ($subforms as $subform) {
-            $personsInRole = $subform->getPersons($document);
-            $persons = array_merge($persons, $personsInRole);
-        }
-        
-        $document->setPerson($persons);
-    }
     
+    /**
+     * Wird nach dem Hinzufügen oder Editieren einer Person aufgerufen um das Ergebnis im Formular umzusetzen.
+     * 
+     * Request werden an die Unterformulare für die Rollen weitergeleitet.
+     * 
+     * @param type $request
+     */
     public function continueEdit($request) {        
         $subforms = $this->getSubForms();
         
@@ -152,6 +155,12 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
         }
     }
     
+    /**
+     * Liefert Array mit vom Datemmodell erlaubten Rollen.
+     * @return array
+     * 
+     * TODO wohin?
+     */
     public static function getRoles() {
         return self::$personRoles;
     }
