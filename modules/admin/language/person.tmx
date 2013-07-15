@@ -97,6 +97,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_person_editlinked">
+      <tuv xml:lang="en">
+          <seg>Edit Person</seg>
+      </tuv>
+      <tuv xml:lang="de">
+          <seg>Person editieren</seg>
+      </tuv>
+    </tu>
+    
     <tu tuid="admin_person_assign_document_options">
       <tuv xml:lang="en">
           <seg>Document Options</seg>

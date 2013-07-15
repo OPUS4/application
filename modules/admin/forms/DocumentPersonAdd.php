@@ -61,7 +61,6 @@ class Admin_Form_DocumentPersonAdd extends Admin_Form_Person {
     public function init() {
         parent::init();
         
-        $this->addDecorator('Form');
         $this->removeDecorator('FormErrors');
         
         $linkForm = new Admin_Form_PersonLink();

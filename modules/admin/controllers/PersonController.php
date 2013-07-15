@@ -150,27 +150,33 @@ class Admin_PersonController extends Controller_Action {
                 $this->view->translate('admin_document_error_novalidid')),
                     'documents', 'admin');
         }
+ 
+        $form = new Admin_Form_Person();
         
         if (!$this->getRequest()->isPost()) {
             // Formular anzeigen
-            $form = $this->_getPersonForm();
+            $personId = $this->getRequest()->getParam('personId');
             
-            $role = $this->getRequest()->getParam('role');
-            $personId = $this->getRequest()->getParam('person');
+            if (is_null($personId)) {
+                // TODO error log
+                return $this->returnToMetadataForm($docId);
+            }
             
-            $personLink = new Opus_Model_Dependent_Link_DocumentPerson(array($personId, $docId, $role));
+            try {
+                $person = new Opus_Person($personId);
+            }
+            catch (Opus_Model_NotFoundException $omnfe) {
+                // TODO error log
+                return $this->returnToMetadataForm($docId);
+            }
             
-            $form->populateFromModel($personLink->getModel());
-
-            // $form->getSubForm('link')->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->setValue($role);
+            $form->populateFromModel($person);
 
             $this->view->form = $form;
         }
         else {
             // POST verarbeiten
             $post = $this->getRequest()->getPost();
-            
-            $form = $this->_getPersonForm();
             
             $form->populate($post);
             
@@ -181,20 +187,18 @@ class Admin_PersonController extends Controller_Action {
                     if ($form->isValid($post)) {
                         $person = $form->getModel();
                         $person->store();
-                        $linkForm = $form->getSubForm('link');
                         return $this->_redirectToAndExit('edit', null, 'document', 'admin', array('id' => $docId,
                             'continue' => 'updateperson', 
-                            'person' => $person->getId(), 
-                            'role' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->getValue(),
-                            'contact' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->getValue(),
-                            'order' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->getValue()
+                            'person' => $person->getId() 
                             ));
                     }
-                    // TODO Validierungsfehlernachricht für Formular anzeigen
+                    else {
+                        // TODO Validierungsfehlernachricht für Formular anzeigen
+                    }
                     break;
                 case Admin_Form_Person::RESULT_CANCEL:
                     // Person nicht speichern
-                    return $this->_redirectToAndExit('edit', null, 'document', 'admin', array('id' => $docId));
+                    return $this->returnToMetadataForm($docId);
                     break;
                 default:
                     break;
@@ -202,6 +206,10 @@ class Admin_PersonController extends Controller_Action {
             
             $this->view->form = $form;
         }
+    }
+    
+    public function returnToMetadataForm($docId, $action = null) {
+        return $this->_redirectToAndExit('edit', null, 'document', 'admin', array('id' => $docId));
     }
         
 }

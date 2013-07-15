@@ -71,13 +71,20 @@
                             <controller>document</controller>
                             <action>edit</action>
                             <pages>
-                                <person>
+                                <addperson>
                                     <type>mvc</type>
                                     <label>admin_person_assign</label>
                                     <module>admin</module>
                                     <controller>person</controller>
                                     <action>assign</action>
-                                </person>
+                                </addperson>
+                                <editperson>
+                                    <type>mvc</type>
+                                    <label>admin_person_editlinked</label>
+                                    <module>admin</module>
+                                    <controller>person</controller>
+                                    <action>editlinked</action>
+                                </editperson>
                             </pages>
                         </edit>
                                                 
