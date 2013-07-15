@@ -41,7 +41,9 @@ class Form_Element_SortOrder extends Form_Element_Text {
     
     public function init() {
         parent::init();
-        
+        if (is_null($this->getAttrib('size'))) {
+            $this->setAttrib('size', 6);
+        }
         $this->addValidator('Int');
     }
     
