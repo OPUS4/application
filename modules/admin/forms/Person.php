@@ -101,18 +101,44 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
     public function init() {
         parent::init();
         
-        $this->addElement('hidden', self::ELEMENT_PERSON_ID);
-        $this->addElement('text', self::ELEMENT_ACADEMIC_TITLE, array('label' => 'AcademicTitle'));
-        $this->addElement('text', self::ELEMENT_LAST_NAME, array('label' => 'LastName', 'required' => true));
-        $this->addElement('text', self::ELEMENT_FIRST_NAME, array('label' => 'FirstName'));
-        $this->addElement('text', self::ELEMENT_EMAIL, array('label' => 'Email'));
-        $this->addElement('text', self::ELEMENT_PLACE_OF_BIRTH, array('label' => 'PlaceOfBirth'));
-        $this->addElement('date', self::ELEMENT_DATE_OF_BIRTH, array('label' => 'DateOfBirth'));
+        $this->setDecorators(array(
+            'FormElements',
+            array('FormErrors', array('placement' => 'prepend', 'ignoreSubForms' => true)),
+            'Fieldset',
+            array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
+        ));
         
-        $actions = new Admin_Form_ActionSubForm();
-        $actions->addElement('submit', self::ELEMENT_SAVE);
-        $actions->addElement('submit', self::ELEMENT_CANCEL);
-        $this->addSubForm($actions, 'actions');
+        $this->addElement('hidden', self::ELEMENT_PERSON_ID, array('size' => '40'));
+        $this->addElement('text', self::ELEMENT_ACADEMIC_TITLE, array('label' => 'AcademicTitle'));
+        $this->addElement('text', self::ELEMENT_LAST_NAME, array('label' => 'LastName', 'required' => true, 
+            'size' => 50));
+        $this->addElement('text', self::ELEMENT_FIRST_NAME, array('label' => 'FirstName', 'size' => 50));
+        $this->addElement('Email', self::ELEMENT_EMAIL, array('label' => 'Email'));
+        $this->addElement('text', self::ELEMENT_PLACE_OF_BIRTH, array('label' => 'PlaceOfBirth', 'size' => 40));
+        $this->addElement('date', self::ELEMENT_DATE_OF_BIRTH, array('label' => 'DateOfBirth'));
+        $this->addDisplayGroup($this->getElements(), 'fields', array(
+            'decorators' => array(
+                'FormElements',
+                array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
+            )
+        ));
+        
+        $this->addElement('submit', self::ELEMENT_SAVE, array('decorators' => array(
+            'ViewHelper',
+            array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li', 'class' => 'save-element')),
+        )));
+        $this->addElement('submit', self::ELEMENT_CANCEL, array('decorators' => array(
+            'ViewHelper',
+            array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li', 'class' => 'cancel-element')),
+        )));
+        $this->addDisplayGroup(array(self::ELEMENT_SAVE, self::ELEMENT_CANCEL), 'actions', array(
+            'order' => 100,
+            'decorators' => array(
+                'FormElements',
+                array(array('ulWrapper' => 'HtmlTag'), array('tag' => 'ul', 'class' => 'form-action')),
+                array(array('divWrapper' => 'HtmlTag'), array('id' => 'form-action'))
+            )
+        ));
     }
     
     /**

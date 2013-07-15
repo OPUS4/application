@@ -78,9 +78,9 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm {
         
         $this->addElement('hidden', Admin_Form_Person::ELEMENT_PERSON_ID, array('required' => true,
             'validators' => array('Int')));
-        $this->addElement('checkbox', self::ELEMENT_ALLOW_CONTACT, array('label' => 'AllowEmailContact'));
-        $this->addElement('text', self::ELEMENT_SORT_ORDER, array('label' => 'SortOrder'));
         $this->addElement('PersonRole', self::ELEMENT_ROLE, array('label' => 'Role'));
+        $this->addElement('checkbox', self::ELEMENT_ALLOW_CONTACT, array('label' => 'AllowEmailContact'));
+        $this->addElement('SortOrder', self::ELEMENT_SORT_ORDER, array('label' => 'SortOrder'));
     }
     
     /**
