@@ -1213,4 +1213,10 @@ ul.form-action{
     background-color: white;
     padding: 1em;
     border: 1px #a9a9a9 solid;
+    height: auto;
+    overflow: auto;
+    max-height: 400px;
+    word-break: normal;
+    word-wrap: normal;
+    white-space: pre;
 }
