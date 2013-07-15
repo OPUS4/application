@@ -115,7 +115,7 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
         }
     }
     
-    public function continueEdit($request) {
+    public function continueEdit($request, $session = null) {
     }
     
     public function printValues() {

@@ -44,8 +44,6 @@ class Admin_PersonController extends Controller_Action {
 
     private $__documentsHelper;
     
-    private $__datesHelper;
-    
     /**
      * Initializes controller.
      */
@@ -57,13 +55,6 @@ class Admin_PersonController extends Controller_Action {
     
     /**
      * Fuegt Person zu Dokument hinzu.
-     * 
-     * TODO Formular anzeigen
-     * TODO Rolle vorauswählen
-     * TODO Person speichern
-     * TODO Zum MetadatenFormular zurückspringen (dabei person, contact, usw. übergeben)
-     * TODO validierung
-     * TODO cancel (zurück zum Metadaten Formular)
      * 
      * HTTP Parameter:
      * - Dokument-ID (document)
@@ -81,12 +72,11 @@ class Admin_PersonController extends Controller_Action {
         }
         
         if (!$this->getRequest()->isPost()) {
-            // Formular anzeigen
-            $form = $this->_getPersonForm();
+            // Neues Formular anzeigen
+            $form = new Admin_Form_DocumentPersonAdd();
             
             $role = $this->getRequest()->getParam('role', 'author');
-
-            // $form->getSubForm('link')->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->setValue($role);
+            $form->setSelectedRole($role);
 
             $this->view->form = $form;
         }
@@ -94,32 +84,54 @@ class Admin_PersonController extends Controller_Action {
             // POST verarbeiten
             $post = $this->getRequest()->getPost();
             
-            $form = $this->_getPersonForm();
+            $form = new Admin_Form_DocumentPersonAdd();
             
             $form->populate($post);
             
             $result = $form->processPost($post, $post);
             
             switch ($result) {
-                case Admin_Form_Person::RESULT_SAVE:
+                case Admin_Form_DocumentPersonAdd::RESULT_SAVE:
+                case Admin_Form_DocumentPersonAdd::RESULT_NEXT:
                     if ($form->isValid($post)) {
                         $person = $form->getModel();
                         $person->store();
-                        $linkForm = $form->getSubForm('link');
-                        return $this->_redirectToAndExit('edit', null, 'document', 'admin', array('id' => $docId,
-                            'continue' => 'addperson', 
-                            'person' => $person->getId(), 
-                            // 'role' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->getValue(),
-                            'contact' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->getValue(),
-                            'order' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->getValue()
-                            ));
+
+                        $linkProps = $form->getPersonLinkProperties($person->getId());
+                        $editSession = new Admin_Model_DocumentEditSession($docId);
+                    
+                        if ($result == Admin_Form_DocumentPersonAdd::RESULT_SAVE) {
+                            // Zurück zum Metadaten-Formular springen
+                            if ($editSession->getPersonCount() > 0) {
+                                // Link Informationen durch Session übermitteln
+                                $editSession->addPerson($linkProps);
+                                return $this->_redirectToAndExit('edit', null, 'document', 'admin', array(
+                                    'id' => $docId, 'continue' => 'addperson'));
+                            }
+                            else {
+                                // Link Informationen direkt als Parameter übergeben
+                                return $this->_redirectToAndExit('edit', null, 'document', 'admin', array_merge(array(
+                                    'id' => $docId, 'continue' => 'addperson'), $linkProps));
+                            }
+                        } 
+                        else {
+                            // Person in Session merken
+                            $editSession->addPerson($linkProps);
+                            // Neues Formular erzeugen
+                            $role = $form->getSelectedRole();
+                            $form = new Admin_Form_DocumentPersonAdd();
+                            $form->setSelectedRole($role);
+                        }
                     }
-                    // TODO Validierungsfehlernachricht für Formular anzeigen
+                    else {
+                        // TODO Validierungsfehlernachricht für Formular anzeigen
+                        $form->addError($this->view->translate('admin_document_error_validation'));
+                    }
                     break;
-                case Admin_Form_Person::RESULT_CANCEL:
-                    // Person nicht speichern
-                    return $this->_redirectToAndExit('edit', null, 'document', 'admin', array('id' => $docId));
-                    break;
+                case Admin_Form_DocumentPersonAdd::RESULT_CANCEL:
+                    // Aktuelle Person nicht speichern, aber eventuell gemerkte Personen hinzufügen
+                    return $this->_redirectToAndExit('edit', null, 'document', 'admin', array(
+                        'id' => $docId, 'continue' => 'addperson'));
                 default:
                     break;
             }
@@ -127,7 +139,7 @@ class Admin_PersonController extends Controller_Action {
             $this->view->form = $form;
         }
     }
-    
+            
     public function editlinkedAction() {
         $docId = $this->getRequest()->getParam('document');
 
@@ -173,7 +185,7 @@ class Admin_PersonController extends Controller_Action {
                         return $this->_redirectToAndExit('edit', null, 'document', 'admin', array('id' => $docId,
                             'continue' => 'updateperson', 
                             'person' => $person->getId(), 
-                            // 'role' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->getValue(),
+                            'role' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->getValue(),
                             'contact' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->getValue(),
                             'order' => $linkForm->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->getValue()
                             ));
@@ -191,21 +203,5 @@ class Admin_PersonController extends Controller_Action {
             $this->view->form = $form;
         }
     }
-    
-    protected function _getPersonForm() {
-        $form = new Admin_Form_Person();
         
-        $form->addDecorator('Form');
-        
-        $linkForm = new Admin_Form_PersonLink();
-        
-        $linkForm->removeElement(Admin_Form_Person::ELEMENT_PERSON_ID);
-        $linkForm->removeElement(Admin_Form_DocumentPerson::ELEMENT_EDIT);
-        $linkForm->removeElement(Admin_Form_DocumentPerson::ELEMENT_REMOVE);
-        
-        $form->addSubForm($linkForm, 'link');
-        
-        return $form;
-    }
-    
 }

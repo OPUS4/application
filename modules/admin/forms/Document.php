@@ -171,11 +171,11 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         return null;
     }
     
-    public function continueEdit($request) {
+    public function continueEdit($request, $session = null) {
         $subforms = $this->getSubForms();
 
         foreach ($subforms as $name => $subform) {
-            $subform->continueEdit($request);
+            $subform->continueEdit($request, $session);
         }
     }
     

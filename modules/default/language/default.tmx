@@ -384,12 +384,21 @@
           </tuv>
         </tu>
 
-		<tu tuid="Save">
+        <tu tuid="Save">
           <tuv xml:lang="en">
             <seg>Save</seg>
           </tuv>
           <tuv xml:lang="de">
             <seg>Speichern</seg>
+          </tuv>
+        </tu>
+        
+        <tu tuid="Next">
+          <tuv xml:lang="en">
+            <seg>Next</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Weitere</seg>
           </tuv>
         </tu>
 		

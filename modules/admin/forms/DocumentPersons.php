@@ -147,18 +147,51 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
     }
     
     /**
-     * Wird nach dem Hinzufügen oder Editieren einer Person aufgerufen um das Ergebnis im Formular umzusetzen.
-     * 
-     * Request werden an die Unterformulare für die Rollen weitergeleitet.
+     * Wird nach dem Rücksprung von Add/Edit Seite für Person aufgerufen, um das Ergebnis ins Formular einzubringen.
      * 
      * @param type $request
+     * @param Admin_Model_DocumentEditSession $session
      */
-    public function continueEdit($request) {        
-        $subforms = $this->getSubForms();
+    public function continueEdit($request, $session = null) {
+        $addedPersons = $session->retrievePersons();
         
-        foreach ($subforms as $name => $subform) {
-            $subform->continueEdit($request);
+        if (count($addedPersons) == 0) {
+            $action = $request->getParam('continue', null);
+            $personId = $request->getParam('person', null);
+
+            if (!is_null($personId) && $action === 'addperson') {
+                $addedPersons[] = array(
+                    'person' => $personId,
+                    'role' => $request->getParam('role', 'author'),
+                    'contact' => $request->getParam('contact', 'false'),
+                    'order' => $request->getParam('order', null)
+                );
+            }
+        }      
+        
+        foreach ($addedPersons as $person) {
+            $this->addPerson($person);
         }
+    }
+    
+    /**
+     * 
+     * @param array $person
+     * 
+     * TODO error handling
+     */
+    public function addPerson($personProps) {
+        $role = (isset($personProps['role'])) ? $personProps['role'] : 'other';
+        
+        $subform = $this->getSubFormForRole($role);
+        
+        if ($subform != null) {
+            $subform->addPerson($personProps);
+        }
+    }
+    
+    public function getSubFormForRole($role) {
+        return $this->getSubForm($role);
     }
     
     /**

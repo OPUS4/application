@@ -73,7 +73,7 @@
                             <pages>
                                 <person>
                                     <type>mvc</type>
-                                    <label>admin_document_person_add</label>
+                                    <label>admin_person_assign</label>
                                     <module>admin</module>
                                     <controller>person</controller>
                                     <action>assign</action>

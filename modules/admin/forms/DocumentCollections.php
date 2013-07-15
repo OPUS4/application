@@ -178,7 +178,7 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
        $field->setValue($values);
     }
     
-    public function continueEdit($request) {
+    public function continueEdit($request, $session = null) {
         if ($request->getParam('continue', null) == 'addcol') {
             $colId = $request->getParam('colId');
             

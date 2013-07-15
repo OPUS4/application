@@ -149,33 +149,10 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
         else if ($position < 0) {
             $position = 0;
         }
-        
-        $subforms = $this->getSubForms();
-        
-        $renamedSubForms = array();
-        
-        $pos = 0;
 
-        foreach ($subforms as $index => $subform) {
-            if ($pos == $position) {
-                $pos++;
-            }
-            $subform->setOrder($pos);
-            $name = $this->getSubFormBaseName() . $pos;
-            $renamedSubForms[$name] = $subform;
-            $pos++;
-        }
-        
-        $newSubForm->setOrder($position);
-        $name = $this->getSubFormBaseName() . $position;
-        $renamedSubForms[$name] = $newSubForm;
-        
-        // Formulare Sortieren 
-        uksort($renamedSubForms, function($value1, $value2) {
-            return $value1 < $value2 ? -1 : 1;
-        });
-        
-        $this->setSubForms($renamedSubForms);
+        $newSubForm->setOrder(-1);
+
+        $this->addSubForm($newSubForm, $this->getSubFormBaseName() . $subFormCount);
     }    
     
     /**
@@ -339,38 +316,23 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
                         
         return $subform;
     }
+    
+    public function addPerson($personProps) {
+        $personId = $personProps['person'];
+        $allowContact = $personProps['contact'];
+        $sortOrder = $personProps['order'];
         
-    /**
-     * Wird nach dem Rücksprung von Add/Edit Seite für Person aufgerufen, um das Ergebnis ins Formular einzubringen.
-     * 
-     * @param type $request
-     */
-    public function continueEdit($request) {
-        $role = $request->getParam('role', null);
+        $form = $this->createSubForm();
         
-        if (!is_null($role) && $role == $this->__roleName) {
-            $personId = $request->getParam('person', null);
-            
-            $action = $request->getParam('continue', null);
-
-            if (!is_null($personId) && $action !== 'updateperson') {
-                $person = new Opus_Person($personId);
-
-                $subform = $this->addPersonSubForm(count($this->getSubForms()), $person);
-                $subform->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->setValue($role);
-                
-                $order = $request->getParam('order', null);
-                $subform->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->setValue($order);
-                
-                $allow = $request->getParam('contact', null);
-                $subform->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->setValue($allow);
-                
-                $subform->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personId);
-            }
-            else {
-                // TODO deal with it
-            }
-        }
+        $form->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personId);
+        $form->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->setValue($this->__roleName);
+        $form->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->setValue($allowContact);
+        $form->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->setValue($sortOrder + 1);
+        
+        $form->setOrder(-1);
+        $this->insertSubForm($form, $sortOrder);
+        
+        $this->sortSubFormsBySortOrder();
     }
     
 }
