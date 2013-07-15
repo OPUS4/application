@@ -70,7 +70,7 @@ class CronTestCase extends ControllerTestCase {
         return $result;
     }
 
-    protected function createJob($label, $data) {
+    protected function createJob($label, $data = array()) {
         $job = new Opus_Job();
         $job->setLabel($label);
         $job->setData($data);
