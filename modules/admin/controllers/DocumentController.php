@@ -42,45 +42,13 @@ class Admin_DocumentController extends Controller_Action {
      * @var Controller_Helper_Documents
      */
     private $documentsHelper;
-
-    /**
-     * Controller helper for handling dates.
-     * @var Controller_Helper_Dates
-     */
-    private $__dates;
-    
-    /**
-     * Name für allgemeinen Session Namespace.
-     * @var type 
-     */
-    private $__namespace = 'admin';
-
-    /**
-     * Allgemeiner Session Namespace.
-     * @Zend_Session_Namespace type 
-     */
-    private $__session;
-
-    /**
-     * Session Namespaces fuer einzelne Dokument.
-     * 
-     * Wenn beim Editieren der Metadaten eines Dokuments auf eine andere Seite gewechselt wird (Collections, Personen),
-     * wird der letzte POST in einem Namespace für eine Dokumenten-ID abgespeichert, um den Zustand des Formulares 
-     * wieder herstellen zu können, wenn zur Formularseite zurück gewechselt wird.
-     * 
-     * @var array
-     * 
-     * TODO Review solution (Wie funktioniert Namespace Bereinigung?)
-     */
-    private $__documentNamespaces = array();
-    
+        
     /**
      * Initializes controller.
      */
     public function init() {
         parent::init();
         $this->documentsHelper = $this->_helper->getHelper('Documents');
-        $this->__dates = $this->_helper->getHelper('Dates');
     }
 
     /**
@@ -130,6 +98,8 @@ class Admin_DocumentController extends Controller_Action {
                     'documents', 'admin');
         }
         else {
+            $editSession = new Admin_Model_DocumentEditSession($docId);
+            
             if ($this->getRequest()->isPost()) {
                 $data = $this->getRequest()->getPost();
                 $data = $data['Document']; // 'Document' Form wraps actual metadata form
@@ -137,7 +107,7 @@ class Admin_DocumentController extends Controller_Action {
                 $form = Admin_Form_Document::getInstanceFromPost($data, $document);
                 $form->populate($data);
                 
-                // TODO use return value for decision how to continue
+                // Use return value for decision how to continue
                 $result = $form->processPost($data, $data);
                 
                 if (is_array($result)) {
@@ -176,12 +146,13 @@ class Admin_DocumentController extends Controller_Action {
                         break;
                         
                     case Admin_Form_Document::RESULT_CANCEL:
-                        // TODO redirect to origin page
+                        // TODO redirect to origin page (Store in Session oder Form?)
+                        // Possible Rücksprungziele: Frontdoor, Metadaten-Übersicht, Suchergebnisse (Documents, ?)
                         return $this->_redirectTo('index', null, 'document', 'admin', array('id' => $docId));
                         break;
                     
                     case Admin_Form_Document::RESULT_SWITCH_TO:
-                        $this->_storePost($data, $docId);
+                        $editSession->storePost($data, $docId);
                         
                         // TODO Parameter in Unterarray 'params' => array() verlagern?
                         $target['document'] = $docId;
@@ -205,7 +176,7 @@ class Admin_DocumentController extends Controller_Action {
                 // GET zeige neues oder gespeichertes Formular an
                 
                 // Hole gespeicherten POST aus Session 
-                $post = $this->_retrievePost($docId);
+                $post = $editSession->retrievePost($docId);
                 
                 if ($post) {
                     // Initialisiere Formular vom gespeicherten POST
@@ -213,7 +184,7 @@ class Admin_DocumentController extends Controller_Action {
                     $form->populate($post);
                     
                     // Führe Rücksprung aus
-                    $form->continueEdit($this->getRequest());
+                    $form->continueEdit($this->getRequest(), $editSession);
                 }
                 else {
                     // Initialisiere Formular vom Dokument
@@ -234,64 +205,6 @@ class Admin_DocumentController extends Controller_Action {
         // Beim wechseln der Sprache würden Änderungen in editierten Felder verloren gehen
         $this->view->languageSelectorDisabled = true;
         $this->view->breadcrumbsDisabled = true;
-    }
-
-    /**
-     * Speichert POST in session.
-     * @param array $post
-     */
-    protected function _storePost($post, $documentId) {
-        $namespace = $this->_getDocumentSessionNamespace($documentId);
-        
-        $namespace->lastPost = $post;
-    }
-    
-    /**
-     * Liefert gespeicherten POST.
-     * @param string $hash Hash für Formular
-     * @return array
-     */
-    protected function _retrievePost($documentId) {
-        $namespace = $this->_getDocumentSessionNamespace($documentId);
-        
-        if (isset($namespace->lastPost)) {
-            $post = $namespace->lastPost;
-            $namespace->lastPost = null;
-            return $post;
-        }
-        else {
-            return null;
-        }
-    }
-    
-    /**
-     * Liefert Session Namespace fuer diesen Controller.
-     * @return Zend_Session_Namespace
-     */
-    protected function _getSessionNamespace() {
-        if (null === $this->__session) {
-            $this->__session = new Zend_Session_Namespace($this->__namespace);
-        }
- 
-        return $this->__session;        
-    }
-    
-    /**
-     * Liefert Session Namespace fuer einzelnes Dokument.
-     * @return Zend_Session_Namespace
-     */
-    protected function _getDocumentSessionNamespace($documentId) {
-        $key = 'doc' . $documentId;
-        
-        if (!array_key_exists($key, $this->__documentNamespaces)) {
-            $namespace = new Zend_Session_Namespace($key);
-            $this->__documentNamespaces[$key] = $namespace;
-        }
-        else {
-            $namespace = $this->__documentNamespaces[$key];
-        }
- 
-        return $namespace;        
     }
 
 }
