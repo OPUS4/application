@@ -40,9 +40,16 @@ class Admin_Model_IndexMaintenance {
     
     private $consistencyCheckLogfilePath = null;
     
+    private $featureDisabled = true;
+    
     public function __construct($logger) {
         $this->config = Zend_Registry::get('Zend_Config');
         $this->logger = $logger;
+        $this->setFeatureDisabled();
+        
+        if ($this->featureDisabled) {
+            return; // abort initialization
+        }
 
         if (!isset($this->config->workspacePath) || trim($this->config->workspacePath) == '') {
             $this->logger->err('configuration key \'workspacePath\' is not set correctly');
@@ -50,6 +57,17 @@ class Admin_Model_IndexMaintenance {
         else {
             $this->consistencyCheckLogfilePath = $this->config->workspacePath . DIRECTORY_SEPARATOR . 'log' . DIRECTORY_SEPARATOR . 'opus_consistency-check.log';
         }
+    }
+    
+    private function setFeatureDisabled() {
+        $this->featureDisabled = 
+                (!isset($this->config->runjobs->asynchronous) && !isset($this->config->runjobs->asynchronous->indexmaintenance))
+                || (isset($this->config->runjobs->asynchronous->indexmaintenance) && !$this->config->runjobs->asynchronous->indexmaintenance)
+                || (isset($this->config->runjobs->asynchronous) && !$this->config->runjobs->asynchronous);        
+    }
+    
+    public function getFeatureDisabled() {
+        return $this->featureDisabled;
     }
 
     public function createJob() {

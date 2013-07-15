@@ -1220,3 +1220,9 @@ ul.form-action{
     word-wrap: normal;
     white-space: pre;
 }
+
+.admin_indexmaintenance .featuredisabled {
+    font-size: 120%;    
+    color: blue;
+    padding: 2em;   
+}

@@ -38,40 +38,48 @@ class Admin_IndexmaintenanceController extends Controller_Action {
      * @var Admin_Model_IndexMaintenance
      */
     private $model;
-
+    
     public function init() {
-        parent::init();
-        
+        parent::init();                
         $this->model = new Admin_Model_IndexMaintenance($this->_logger);
         
-        $this->view->allowConsistencyCheck = $this->model->allowConsistencyCheck();       
-        $this->view->allowFulltextExtractionCheck = $this->model->allowFulltextExtractionCheck();
-        $this->view->allowIndexOptimization = $this->model->allowIndexOptimization();
-    }
+        if ($this->model->getFeatureDisabled()) {
+            $this->view->featureDisabled = true;         
+        }
+        else {
+            $this->view->allowConsistencyCheck = $this->model->allowConsistencyCheck();       
+            $this->view->allowFulltextExtractionCheck = $this->model->allowFulltextExtractionCheck();
+            $this->view->allowIndexOptimization = $this->model->allowIndexOptimization();            
+        }        
+    }   
 
     public function indexAction() {
-        $state = $this->model->getProcessingState();
-        $this->view->state = array('consistencycheck' => $state);
-        if ($state == 'scheduled' || $state == 'completed') {
-            $data = $this->model->readLogFile();
-            if (!is_null($data)) {
-                $this->view->content = array('consistencycheck' => $data->getContent());
-                $this->view->contentLastModTime = array('consistencycheck' => $data->getModifiedDate());
+        if (!$this->model->getFeatureDisabled()) {
+            $state = $this->model->getProcessingState();
+            $this->view->state = array('consistencycheck' => $state);
+            if ($state == 'scheduled' || $state == 'completed') {
+                $data = $this->model->readLogFile();
+                if (!is_null($data)) {
+                    $this->view->content = array('consistencycheck' => $data->getContent());
+                    $this->view->contentLastModTime = array('consistencycheck' => $data->getModifiedDate());
+                }            
+            }
+            if (is_null($state)) {
+                $this->view->error = array('consistencycheck' => true);
             }            
-        }
-        if (is_null($state)) {
-            $this->view->error = array('consistencycheck' => true);
         }
     }
 
-    public function checkconsistencyAction() {                
-        if ($this->getRequest()->isPost()) {
-            $jobId = $this->model->createJob();
-            if (!is_null($jobId)) {
-                return $this->_redirectToAndExit('index', $this->view->translate('admin_indexmaintenance_jobsumitted', $jobId));
-            }            
+    public function checkconsistencyAction() {
+        if (!$this->model->getFeatureDisabled()) {
+            if ($this->getRequest()->isPost()) {
+                $jobId = $this->model->createJob();
+                if (!is_null($jobId)) {
+                    return $this->_redirectToAndExit('index', $this->view->translate('admin_indexmaintenance_jobsumitted', $jobId));
+                }            
+            }
+            return $this->_redirectToAndExit('index');            
         }
-        return $this->_redirectToAndExit('index');
     }
 
     /**
@@ -79,10 +87,12 @@ class Admin_IndexmaintenanceController extends Controller_Action {
      * TODO implementation needed
      */
     public function optimizeindexAction() {
-        if ($this->getRequest()->isPost()) {
-            // add a job
+        if (!$this->model->getFeatureDisabled()) {
+            if ($this->getRequest()->isPost()) {
+                // add a job
+            }
+            return $this->_redirectToAndExit('index');            
         }
-        return $this->_redirectToAndExit('index');
     }
 
     /**
@@ -90,10 +100,12 @@ class Admin_IndexmaintenanceController extends Controller_Action {
      * TODO implementation needed
      */    
     public function checkfulltextsAction() {
-        if ($this->getRequest()->isPost()) {
-            // add a job
+        if (!$this->model->getFeatureDisabled()) {
+            if ($this->getRequest()->isPost()) {
+                // add a job
+            }
+            return $this->_redirectToAndExit('index');            
         }
-        return $this->_redirectToAndExit('index');
     }
     
 }

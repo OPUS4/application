@@ -145,6 +145,20 @@
             </tuv>
         </tu>
         
+        <tu tuid="admin_indexmaintenance_disabled">
+            <tuv xml:lang="en">
+                <seg>
+                    This feature is currently disabled. It is supported only if asynchronous job execution was enabled in OPUS4 configuration.
+                    Consult the documentation for more information.
+                </seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>
+                    Diese Funktion ist momentan deaktiviert. Sie kann nur verwendet werden, wenn die asynchrone Jobverarbeitung in der OPUS4-Konfiguration aktiviert wurde.
+                    Weitere Hinweise dazu finden Sie in der Dokumentation.
+                </seg>
+            </tuv>
+        </tu>        
 
     </body>
 
