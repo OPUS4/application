@@ -155,6 +155,9 @@ oai.sample.identifier = oai:opus4.demo:90
 ; You will need to set up appropriate cron jobs for 
 ; scripts/cron/cron-php-runner.sh
 runjobs.asynchronous = 0
+; configuration of specific jobs
+; asynchronous execution of index maintenance jobs
+runjobs.asynchronous.indexmaintenance = 0
 
 ; SETUP CONFIGURATION SETTINGS
 ; Define for which modules translation resources may be edited through
