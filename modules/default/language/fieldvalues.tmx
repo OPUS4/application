@@ -41,6 +41,16 @@
                 <seg>JJJJ</seg>
             </tuv>
         </tu>
+        
+        <tu tuid="email_format">
+            <tuv xml:lang="en">
+                <seg>local-part@hostname</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>name@servername</seg>
+            </tuv>
+        </tu>
+        
 
         <tu tuid="Opus_Document_ServerState_Value_Unpublished">
             <tuv xml:lang="en">
