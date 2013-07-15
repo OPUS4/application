@@ -48,7 +48,7 @@ class Form_Element_PersonRole extends Form_Element_Select {
         $options = $this->getSelectOptions();
         
         foreach ($options as $option) {
-            $this->addMultiOption($option, $option);
+            $this->addMultiOption($option, 'Opus_Person_Role_Value_' . ucfirst($option));
         }
     }
     
