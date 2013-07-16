@@ -54,6 +54,8 @@ class IndexMaintenanceTest extends CronTestCase {
         $this->assertFalse(strpos($contents, 'checking 137 published documents for consistency.') === false, 'Logfile opus_consistency-check.log does not contain expected message');
         $this->assertFalse(strpos($contents, 'No inconsistency was detected.') === false, 'Logfile opus_consistency-check.log does not contain expected message');
         $this->assertFalse(strpos($contents, 'Completed operation after') === false, 'Logfile opus_consistency-check.log does not contain expected message');
+        
+        unlink($logPath . 'opus_consistency-check.log');
     }
     
     public function testJobSuccessWithInconsistency() {
@@ -81,6 +83,8 @@ class IndexMaintenanceTest extends CronTestCase {
         $this->assertFalse(strpos($contents, '137 inconsistencies were detected: 137 of them were resolved.') === false, 'Logfile opus_consistency-check.log does not contain expected message');
         $this->assertFalse(strpos($contents, 'number of updates: 137') === false, 'Logfile opus_consistency-check.log does not contain expected message');
         $this->assertFalse(strpos($contents, 'number of deletions: 0') === false, 'Logfile opus_consistency-check.log does not contain expected message');
-        $this->assertFalse(strpos($contents, 'Completed operation after') === false, 'Logfile opus_consistency-check.log does not contain expected message');        
+        $this->assertFalse(strpos($contents, 'Completed operation after') === false, 'Logfile opus_consistency-check.log does not contain expected message');
+        
+        unlink($logPath . 'opus_consistency-check.log');
     }
 }
