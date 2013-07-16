@@ -42,7 +42,16 @@
                 <seg>Die Operation ist zur Ausführung vermerkt. Die Ergebnisse werden angezeigt, sobald die Operation beendet wurde.</seg>
             </tuv>
         </tu>
-        
+
+        <tu tuid="admin_indexmaintenance_initial">
+            <tuv xml:lang="en">
+                <seg>Operation is scheduled for execution the first time. Come back later to see results.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Die Operation ist das erste Mal zur Ausführung vermerkt. Die Ergebnisse werden angezeigt, sobald die Operation beendet wurde.</seg>
+            </tuv>
+        </tu>        
+                        
         <tu tuid="admin_indexmaintenance_error">
             <tuv xml:lang="en">
                 <seg>Could not determine processing state. This might indicate a misconfiguration issue.</seg>
