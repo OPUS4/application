@@ -195,8 +195,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase {
     public function testCheckconsistencyActionResult() {
         $this->enableAsyncIndexmaintenanceMode();
         
-        $numOfJobs = Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL);
-        $this->assertEquals(0, $numOfJobs);
+        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL), 'missing cleanup of jobs table');
         
         $this->getRequest()->setMethod('POST');
         $this->dispatch('/admin/indexmaintenance/checkconsistency');
@@ -204,7 +203,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase {
         $this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');
         
-        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL));
+        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL), 'consistency check job was not stored in database');
         
         /*
          * check if job was scheduled for execution
@@ -231,7 +230,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase {
         $jobrunner->registerWorker($worker);
         $jobrunner->run();        
         
-        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL));
+        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL), 'consistency check job was not removed from database after execution');
 
         $this->resetResponse();
         $this->resetRequest();
