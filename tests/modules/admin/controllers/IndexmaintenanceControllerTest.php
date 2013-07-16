@@ -109,4 +109,37 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase {
         Zend_Registry::set('Zend_Config', $config);        
     }
     
+    public function testCheckconsistencyActionWithDisabledFeature() {
+        $this->dispatch('/admin/indexmaintenance/checkconsistency');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');
+    }
+    
+    public function testOptimizeindexActionWithDisabledFeature() {
+        $this->dispatch('/admin/indexmaintenance/optimizeindex');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');        
+    }
+    
+    public function testCheckfulltextsActionWithDisabledFeature() {
+        $this->dispatch('/admin/indexmaintenance/checkfulltexts');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');        
+    }
+
+    public function testCheckconsistencyActionWithGet() {
+        $this->enableAsyncIndexmaintenanceMode();
+        $this->dispatch('/admin/indexmaintenance/checkconsistency');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');
+    }
+    
+    public function testOptimizeindexActionWithGet() {
+        $this->enableAsyncIndexmaintenanceMode();
+        $this->dispatch('/admin/indexmaintenance/optimizeindex');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');        
+    }
+    
+    public function testCheckfulltextsActionWithGet() {
+        $this->enableAsyncIndexmaintenanceMode();
+        $this->dispatch('/admin/indexmaintenance/checkfulltexts');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');        
+    }        
+    
 }
