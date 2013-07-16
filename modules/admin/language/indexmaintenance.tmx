@@ -72,10 +72,17 @@
         
         <tu tuid="admin_indexmaintenance_consistencycheck_description">
             <tuv xml:lang="en">
-                <seg>add a short description</seg>
+                <seg>
+                    Checks for each published document if it exists in database and search index. 
+                    Furthermore, checks if both versions agree with each other.
+                    Any inconsistencies found will be resolved immediately.
+                </seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>kurze Beschreibung hinzufügen</seg>
+                <seg>
+                    Prüft für jedes publizierte Dokument, ob es sich in der gleichen Version sowohl in der Datenbank als auch im Suchindex befindet.
+                    Gefundende Inkonsistenzen werden sofort aufgelöst.
+                </seg>
             </tuv>
         </tu>
         
@@ -91,20 +98,20 @@
         
         <tu tuid="admin_indexmaintenance_fulltextextractioncheck_description">
             <tuv xml:lang="en">
-                <seg>add a short description</seg>
+                <seg>TODO add a short description</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>kurze Beschreibung hinzufügen</seg>
+                <seg>TODO kurze Beschreibung hinzufügen</seg>
             </tuv>
         </tu>
         
         
         <tu tuid="admin_indexmaintenance_indexoptimize_name">
             <tuv xml:lang="en">
-                <seg>Perform Index Optimization</seg>
+                <seg>TODO Perform Index Optimization</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Durchführung einer Indexoptimierung</seg>
+                <seg>TODO Durchführung einer Indexoptimierung</seg>
             </tuv>
         </tu>
 
