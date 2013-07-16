@@ -61,8 +61,8 @@ class Admin_Model_IndexMaintenance {
     
     private function setFeatureDisabled() {
         $this->featureDisabled = 
-                (!isset($this->config->runjobs->asynchronous) && !isset($this->config->runjobs->asynchronous->indexmaintenance))
-                || (isset($this->config->runjobs->asynchronous->indexmaintenance) && !$this->config->runjobs->asynchronous->indexmaintenance)
+                (!isset($this->config->runjobs->asynchronous) && !isset($this->config->runjobs->indexmaintenance->asynchronous))
+                || (isset($this->config->runjobs->indexmaintenance->asynchronous) && !$this->config->runjobs->indexmaintenance->asynchronous)
                 || (isset($this->config->runjobs->asynchronous) && !$this->config->runjobs->asynchronous);        
     }
     

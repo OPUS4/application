@@ -99,11 +99,11 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase {
         $this->config = Zend_Registry::get('Zend_Config');
 
         $config = Zend_Registry::get('Zend_Config');        
-        if (isset($config->runjobs->asynchronous->indexmaintenance)) {
-            $config->runjobs->asynchronous->indexmaintenance = 1;
+        if (isset($config->runjobs->indexmaintenance->asynchronous)) {
+            $config->runjobs->indexmaintenance->asynchronous = 1;
         }
         else {
-            $config = new Zend_Config(array('runjobs' => array('asynchronous' =>  array('indexmaintenance' => 1))), true);
+            $config = new Zend_Config(array('runjobs' => array('indexmaintenance' => array('asynchronous' => 1))), true);
             $config->merge(Zend_Registry::get('Zend_Config'));
         }
         Zend_Registry::set('Zend_Config', $config);        
