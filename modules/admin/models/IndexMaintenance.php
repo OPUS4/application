@@ -42,9 +42,9 @@ class Admin_Model_IndexMaintenance {
     
     private $featureDisabled = true;
     
-    public function __construct($logger) {
-        $this->config = Zend_Registry::get('Zend_Config');
-        $this->logger = $logger;
+    public function __construct($logger = null) {
+        $this->config = Zend_Registry::get('Zend_Config');        
+        $this->logger = (is_null($logger)) ? Zend_Registry::get('Zend_Log') : $logger;
         $this->setFeatureDisabled();
         
         if ($this->featureDisabled) {
