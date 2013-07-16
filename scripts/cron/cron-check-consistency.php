@@ -42,8 +42,6 @@ $jobrunner->setDelay(0);
 // set a limit of 100 index jobs per run
 $jobrunner->setLimit(100);
 
-$importWorker = new Opus_Job_Worker_ConsistencyCheck();
-
-$jobrunner->registerWorker($importWorker);
-
+$worker = new Opus_Job_Worker_ConsistencyCheck();
+$jobrunner->registerWorker($worker);
 $jobrunner->run();
