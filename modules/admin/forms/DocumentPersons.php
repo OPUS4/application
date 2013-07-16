@@ -75,7 +75,7 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
             $this->addSubForm($subform, $roleName);
         }        
         
-        // TODO add button für alle Rollen?
+        // TODO 'Add' button für alle Rollen?
     }
     
     /**
@@ -157,15 +157,21 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
         
         if (count($addedPersons) == 0) {
             $action = $request->getParam('continue', null);
-            $personId = $request->getParam('person', null);
+            
+            if ($action === 'addperson') {
+                $personId = $request->getParam('person', null);
 
-            if (!is_null($personId) && $action === 'addperson') {
-                $addedPersons[] = array(
-                    'person' => $personId,
-                    'role' => $request->getParam('role', 'author'),
-                    'contact' => $request->getParam('contact', 'false'),
-                    'order' => $request->getParam('order', null)
-                );
+                if (!is_null($personId)) {
+                    $addedPersons[] = array(
+                        'person' => $personId,
+                        'role' => $request->getParam('role', 'author'),
+                        'contact' => $request->getParam('contact', 'false'),
+                        'order' => $request->getParam('order', null)
+                    );
+                }
+                else {
+                    $this->getLog()->err(__METHOD__ . ' Attempt to add person without ID.');
+                }
             }
         }      
         
@@ -175,10 +181,11 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
     }
     
     /**
+     * Fügt ein neues Unterformular für eine Person zu einem der Rollenunterformulare hinzu. 
+     * 
+     * Wenn keine Rolle angegeben wurde, wird 'other' verwendet. Das war eine willkürliche Entscheidung.
      * 
      * @param array $person
-     * 
-     * TODO error handling
      */
     public function addPerson($personProps) {
         $role = (isset($personProps['role'])) ? $personProps['role'] : 'other';
@@ -190,6 +197,11 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
         }
     }
     
+    /**
+     * Liefert das Unterformular für eine Rolle.
+     * @param string $role
+     * @return Admin_Form_DocumentPersonRole
+     */
     public function getSubFormForRole($role) {
         return $this->getSubForm($role);
     }

@@ -472,6 +472,69 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
         $this->assertEquals(312, $authors[2]->getModel()->getId());
     }
     
+    public function testAddPerson() {
+        $form = new Admin_Form_DocumentPersonRole('author');
+        
+        $form->addPerson(array('person' => '310'));
+        $form->addPerson(array('person' => '311'));
+        $form->addPerson(array('person' => '312'));
+ 
+        $this->assertEquals(3, count($form->getSubForms()));
+        
+        $this->assertEquals(310, $form->getSubForm('PersonAuthor0')->getElementValue('PersonId'));
+        $this->assertEquals(311, $form->getSubForm('PersonAuthor1')->getElementValue('PersonId'));
+        $this->assertEquals(312, $form->getSubForm('PersonAuthor2')->getElementValue('PersonId'));
+    }
+    
+    public function testAttemptToAddPersonTwiceInSameRole() {
+        $form = new Admin_Form_DocumentPersonRole('author');
+        
+        $form->addPerson(array('person' => '310'));
+        $form->addPerson(array('person' => '310'));
+ 
+        $this->assertEquals(1, count($form->getSubForms()));
+        
+        $this->assertEquals(310, $form->getSubForm('PersonAuthor0')->getElementValue('PersonId'));
+    }
+    
+    public function testAddPersonWithoutId() {
+        $form = new Admin_Form_DocumentPersonRole('author');
+        
+        $logger = new MockLogger();
+        
+        $form->setLog($logger);
+        
+        $form->addPerson(array());
+ 
+        $this->assertEquals(0, count($form->getSubForms()));
+        
+        $messages = $logger->getMessages();
+        
+        $this->assertEquals(1, count($messages));
+        $this->assertContains('Attempt to add person without ID.', $messages[0]);
+    }
+    
+    public function testIsValidSubFormTrue() {
+        $form = new Admin_Form_DocumentPersonRole('author');
+        
+        $this->assertTrue($form->isValidSubForm(array('PersonId' => 310)));
+    }
+    
+    public function testIsValidSubFormFalse() {
+        $form = new Admin_Form_DocumentPersonRole('author');
+        
+        $this->assertFalse($form->isValidSubForm(array()));
+    }
+    
+    public function testGetSubFormForPerson() {
+        $form = new Admin_Form_DocumentPersonRole('author');
+        
+        $form->addPerson(array('person' => '312'));
+        
+        $this->assertNotNull($form->getSubFormForPerson(312));
+        $this->assertEquals(312, $form->getSubFormForPerson(312)->getElementValue('PersonId'));
+    }
+    
     protected function verifyExpectedOrder($form, $expected) {
         foreach ($expected as $index => $personId) {
             $this->assertEquals($personId, $form->getSubForm('PersonAuthor' . $index)->getElement(

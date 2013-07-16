@@ -106,9 +106,14 @@ class Admin_Form_DocumentPersonsTest extends ControllerTestCase {
     
     /**
      * TODO Was sollte passieren wenn PersonId is missing? (Manipulierter Post)
+     * 
+     * Es sollte eine Meldung ins Log geschrieben werden und das Unterformular entweder erst garnicht angelegt werden
+     * oder aufgrund des fehlens einer Person-ID an späterer Stelle wieder entfernt werden. Es wird das 
+     * constructFromPost in Admin_Form_DocumentMultiSubForm verwendet.
+     * 
+     * TODO test Logging
      */
     public function testConstructFromPostWithMissingPersonId() {
-        $this->markTestIncomplete('Ist das dir richtige Stelle für den Test?');
         $form = new Admin_Form_DocumentPersons();
         
         $post = array(
@@ -116,7 +121,7 @@ class Admin_Form_DocumentPersonsTest extends ControllerTestCase {
                 'PersonAuthor0' => array(
                     'PersonId' => '310'
                 ),
-                'PersonAuthor1' => array(
+                'PersonAuthor1' => array( // Es wird kein Unterformular angelegt
                 )
             ),
             'advisor' => array(
@@ -139,7 +144,97 @@ class Admin_Form_DocumentPersonsTest extends ControllerTestCase {
     }
         
     public function testContinueEdit() {
-        $this->markTestIncomplete('Funktionalität muss noch fertiggestellt werden.');
+        $form = new Admin_Form_DocumentPersons();
+        
+        $request = $this->getRequest();
+        $request->setParams(array(
+            'continue' => 'addperson',
+            'person' => '310',
+            'role' => 'editor',
+            'order' => '2',
+            'contact' => '0'
+        ));
+        
+        $session = new Admin_Model_DocumentEditSession(100);
+        
+        $this->assertEquals(0, count($form->getSubForm('editor')->getSubForms()));
+        
+        $form->continueEdit($request, $session);
+        
+        $this->assertEquals(1, count($form->getSubForm('editor')->getSubForms()));
+
+        $subform = $form->getSubForm('editor')->getSubForm('PersonEditor0');
+        
+        $this->assertNotNull($subform);
+        $this->assertEquals(310, $subform->getElementValue('PersonId'));
+        $this->assertEquals(1, $subform->getElementValue('SortOrder')); // nur ein Editor
+        $this->assertEquals(0, $subform->getElementValue('AllowContact'));
+    }
+    
+    public function testContinueEditWithoutPersonId() {
+        $form = new Admin_Form_DocumentPersons();
+        
+        $logger = new MockLogger();
+        
+        $form->setLog($logger);
+        
+        $request = $this->getRequest();
+        $request->setParams(array(
+            'continue' => 'addperson',
+            'role' => 'editor',
+            'order' => '2',
+            'contact' => '0'
+        ));
+        
+        $session = new Admin_Model_DocumentEditSession(100);
+        
+        $this->assertEquals(0, count($form->getSubForm('editor')->getSubForms()));
+        
+        $form->continueEdit($request, $session);
+        
+        $this->assertEquals(0, count($form->getSubForm('editor')->getSubForms()));
+        
+        $messages = $logger->getMessages();
+        
+        $this->assertEquals(1, count($messages));
+        $this->assertContains('Attempt to add person without ID.' , $messages[0]);
+    }    
+    
+    public function testContinueEditAddTwoPersons() {
+        $form = new Admin_Form_DocumentPersons();
+        
+        $request = $this->getRequest();
+        $request->setParams(array(
+            'continue' => 'addperson'
+        ));
+        
+        $session = new Admin_Model_DocumentEditSession(100);
+        $session->addPerson(array(
+            'person' => 310,
+            'role' => 'author'
+        ));
+        $session->addPerson(array(
+            'person' => 311,
+            'role' => 'editor'
+        ));
+        
+        $this->assertEquals(0, count($form->getSubForm('author')->getSubForms()));
+        $this->assertEquals(0, count($form->getSubForm('editor')->getSubForms()));
+        
+        $form->continueEdit($request, $session);
+        
+        $this->assertEquals(1, count($form->getSubForm('author')->getSubForms()));
+        $this->assertEquals(1, count($form->getSubForm('editor')->getSubForms()));
+
+        $author = $form->getSubForm('author')->getSubForm('PersonAuthor0');
+        
+        $this->assertNotNull($author);
+        $this->assertEquals(310, $author->getElementValue('PersonId'));
+        
+        $editor = $form->getSubForm('editor')->getSubForm('PersonEditor0');
+        
+        $this->assertNotNull($editor);
+        $this->assertEquals(311, $editor->getElementValue('PersonId'));
     }
     
     public function testProcessPostChangeRole() {
@@ -211,6 +306,40 @@ class Admin_Form_DocumentPersonsTest extends ControllerTestCase {
         $roles = Admin_Form_DocumentPersons::getRoles();
         
         $this->assertEquals(8, count($roles));
+    }
+    
+    public function testGetSubFormForRole() {
+        $form = new Admin_Form_DocumentPersons();
+        
+        foreach (Admin_Form_DocumentPersons::getRoles() as $role) {
+            $this->assertNotNull($form->getSubFormForRole($role));
+        }
+        
+        $this->assertNull($form->getSubFormForRole('unknown'));
+    }
+    
+    public function testAddPerson() {
+        $form = new Admin_Form_DocumentPersons();
+        
+        $person = array(
+            'person' => 310, // von Document 250
+            'order' => 2,
+            'role' => 'editor',
+            'contact' => 1
+        );
+
+        $this->assertEquals(0, count($form->getSubForm('editor')->getSubForms()), 'Es sollte keinen Editor geben.');
+        
+        $form->addPerson($person);
+        
+        $this->assertEquals(1, count($form->getSubForm('editor')->getSubForms()), 'Es sollte einen Editor geben.');
+        
+        $subform = $form->getSubForm('editor')->getSubForm('PersonEditor0');
+        
+        $this->assertNotNull($subform);
+        $this->assertEquals(310, $subform->getElementValue('PersonId'));
+        $this->assertEquals(1, $subform->getElementValue('SortOrder')); // nur ein Editor
+        $this->assertEquals(1, $subform->getElementValue('AllowContact'));
     }
     
 }

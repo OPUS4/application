@@ -327,21 +327,40 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
     }
     
     public function addPerson($personProps) {
+        if (!array_key_exists('person', $personProps)) {
+            $this->getLog()->err(__METHOD__ . " Attempt to add person without ID.");
+            return;
+        }
+        
         $personId = $personProps['person'];
-        $allowContact = (array_key_exists('contact', $personProps)) ? $personProps['contact'] : 0;
-        $sortOrder = (array_key_exists('order', $personProps)) ? $personProps['order'] : count($this->getSubForms());
         
-        $form = $this->createSubForm();
+        if (is_null($this->getSubFormForPerson($personId))) {
+            $allowContact = (array_key_exists('contact', $personProps)) ? $personProps['contact'] : 0;
+            $sortOrder = 
+                    (array_key_exists('order', $personProps)) ? $personProps['order'] : count($this->getSubForms());
+
+            $form = $this->createSubForm();
+
+            $form->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personId);
+            $form->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->setValue($this->__roleName);
+            $form->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->setValue($allowContact);
+            $form->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->setValue($sortOrder + 1);
+
+            $form->setOrder(-1);
+            $this->insertSubForm($form, $sortOrder);
+
+            $this->sortSubFormsBySortOrder();
+        }
+    }
+    
+    public function getSubFormForPerson($personId) {
+        foreach ($this->getSubForms() as $subform) {
+            if ($personId == $subform->getElementValue('PersonId')) {
+                return $subform;
+            }
+        }
         
-        $form->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personId);
-        $form->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->setValue($this->__roleName);
-        $form->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->setValue($allowContact);
-        $form->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->setValue($sortOrder + 1);
-        
-        $form->setOrder(-1);
-        $this->insertSubForm($form, $sortOrder);
-        
-        $this->sortSubFormsBySortOrder();
+        return null;
     }
     
     public function isValidSubForm($post) {
