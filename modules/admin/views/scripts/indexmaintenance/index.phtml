@@ -70,8 +70,8 @@
     <?php endif ?>
 </div>
 
-<!-- TODO will be implemented in a later version -->
-<!--
+<!-- TODO feature will be implemented in a later version OPUSVIER-2955 -->
+<?php if (!$this->disabledFeatureFulltextExtractionCheck) : ?>
 <div class="operation">
     <div class="opname"><?= $this->translate('admin_indexmaintenance_fulltextextractioncheck_name') ?></div>    
     <div class="opdescription"><?= $this->translate('admin_indexmaintenance_fulltextextractioncheck_description') ?></div>
@@ -97,10 +97,10 @@
         </div>
     <?php endif ?>        
 </div>
--->
+<?php endif ?>
 
-<!-- TODO will be implemented in a later version -->
-<!--
+<!-- TODO feature will be implemented in a later version OPUSVIER-2956 -->
+<?php if (!$this->disabledFeatureIndexOptimization) : ?>
 <div class="operation">    
     <div class="opname"><?= $this->translate('admin_indexmaintenance_indexoptimize_name') ?></div>        
     <div class="opdescription"><?= $this->translate('admin_indexmaintenance_indexoptimize_description') ?></div>
@@ -126,6 +126,6 @@
         </div>
     <?php endif ?>        
 </div>
--->
+<?php endif ?>
 
 <?php endif ?>

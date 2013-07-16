@@ -43,6 +43,12 @@ class Admin_IndexmaintenanceController extends Controller_Action {
         parent::init();                
         $this->model = new Admin_Model_IndexMaintenance($this->_logger);
         
+        
+        // TODO features will be enabled in later version
+        $this->view->disabledFeatureFulltextExtractionCheck = true; // TODO OPUSVIER-2955
+        $this->view->disabledFeatureIndexOptimization = true; // TODO OPUSVIER-2956
+        
+        
         if ($this->model->getFeatureDisabled()) {
             $this->view->featureDisabled = true;
         }
@@ -82,7 +88,7 @@ class Admin_IndexmaintenanceController extends Controller_Action {
 
     /**
      * 
-     * TODO implementation needed
+     * TODO implementation needed OPUSVIER-2956
      */
     public function optimizeindexAction() {
         if (!$this->model->getFeatureDisabled() && $this->getRequest()->isPost()) {
@@ -93,7 +99,7 @@ class Admin_IndexmaintenanceController extends Controller_Action {
 
     /**
      * 
-     * TODO implementation needed
+     * TODO implementation needed OPUSVIER-2955
      */    
     public function checkfulltextsAction() {
         if (!$this->model->getFeatureDisabled() && $this->getRequest()->isPost()) {

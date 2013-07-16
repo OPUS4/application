@@ -145,10 +145,10 @@ class Admin_Model_IndexMaintenance {
     }
     
     public function allowFulltextExtractionCheck() {
-        return true; // TODO
+        return false; // TODO OPUSVIER-2955
     }
     
     public function allowIndexOptimization() {
-        return true; // TODO
+        return false; // TODO OPUSVIER-2956
     }
 }
