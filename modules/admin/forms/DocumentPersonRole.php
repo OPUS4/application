@@ -203,7 +203,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
         }
         return $maxSortOrder;
     }
-
+    
     /**
      * Konstruiert einen Schlüssel für die Sortierung der Personen Formulare.
      * 
@@ -230,6 +230,15 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
         $order = $subform->getOrder() + 1;
         $modified = ($sortOrder == $order) ? 1 : 0; // NICHT MODIFIZIERT (1) : MODIFIZIERT (0)
         return sprintf('%1$0' . $digitsSortOrder. 'd_%2$d_%3$0' . $digitsOrder. 'd', $sortOrder, $modified, $order);
+    }
+    
+    /**
+     * Überschreibt updateModel damit vorher die SortOrder berücksichtigt werden kann.
+     * @param \Opus_Document $document
+     */
+    public function updateModel($document) {
+        $this->sortSubFormsBySortOrder();
+        parent::updateModel($document);
     }
     
     /**
@@ -319,8 +328,8 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
     
     public function addPerson($personProps) {
         $personId = $personProps['person'];
-        $allowContact = $personProps['contact'];
-        $sortOrder = $personProps['order'];
+        $allowContact = (array_key_exists('contact', $personProps)) ? $personProps['contact'] : 0;
+        $sortOrder = (array_key_exists('order', $personProps)) ? $personProps['order'] : count($this->getSubForms());
         
         $form = $this->createSubForm();
         
@@ -333,6 +342,15 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
         $this->insertSubForm($form, $sortOrder);
         
         $this->sortSubFormsBySortOrder();
+    }
+    
+    public function isValidSubForm($post) {
+        if (array_key_exists('PersonId', $post)) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
     
 }

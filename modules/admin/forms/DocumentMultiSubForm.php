@@ -160,10 +160,22 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         
         foreach ($keys as $index => $key) {
             // Prüfen ob Unterformluar (array) oder Feld
-            if (is_array($post[$key])) {
+            if (is_array($post[$key]) && $this->isValidSubForm($post[$key])) {
                 $this->_addSubForm($index);
             }
         }
+    }
+    
+    /**
+     * Prüft, ob die POST Daten verwendet werden können, um Unterformular anzulegen.
+     * 
+     * Die Standardimplementation liefert immer TRUE zurück.
+     * 
+     * @param array $post
+     * @return boolean TRUE - valides Unterformular; FALSE - ungültiges Unterformular 
+     */
+    public function isValidSubForm($post) {
+        return true;
     }
     
     /**
