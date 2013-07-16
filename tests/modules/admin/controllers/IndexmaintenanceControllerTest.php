@@ -111,35 +111,134 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase {
     
     public function testCheckconsistencyActionWithDisabledFeature() {
         $this->dispatch('/admin/indexmaintenance/checkconsistency');
+        $this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');
     }
     
     public function testOptimizeindexActionWithDisabledFeature() {
         $this->dispatch('/admin/indexmaintenance/optimizeindex');
+        $this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');        
     }
     
     public function testCheckfulltextsActionWithDisabledFeature() {
         $this->dispatch('/admin/indexmaintenance/checkfulltexts');
+        $this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');        
     }
 
     public function testCheckconsistencyActionWithGet() {
         $this->enableAsyncIndexmaintenanceMode();
         $this->dispatch('/admin/indexmaintenance/checkconsistency');
+        $this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');
     }
     
     public function testOptimizeindexActionWithGet() {
         $this->enableAsyncIndexmaintenanceMode();
         $this->dispatch('/admin/indexmaintenance/optimizeindex');
+        $this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');        
     }
     
     public function testCheckfulltextsActionWithGet() {
         $this->enableAsyncIndexmaintenanceMode();
         $this->dispatch('/admin/indexmaintenance/checkfulltexts');
+        $this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');        
-    }        
+    }
     
+    public function testCheckconsistencyActionWithEnabledFeature() {
+        $this->enableAsyncIndexmaintenanceMode();
+        
+        $numOfJobs = Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL);
+        $this->assertEquals(0, $numOfJobs);
+        
+        $this->getRequest()->setMethod('POST');
+        $this->dispatch('/admin/indexmaintenance/checkconsistency');
+        
+        $this->assertResponseCode(302);
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');
+        
+        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL));
+        
+        $jobs = Opus_Job::getByLabels(array(Opus_Job_Worker_ConsistencyCheck::LABEL));
+        $jobs[0]->delete();
+        
+        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL));
+    }
+    
+    public function testCheckconsistencyActionResult() {
+        $this->enableAsyncIndexmaintenanceMode();
+        
+        $numOfJobs = Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL);
+        $this->assertEquals(0, $numOfJobs);
+        
+        $this->getRequest()->setMethod('POST');
+        $this->dispatch('/admin/indexmaintenance/checkconsistency');
+        
+        $this->assertResponseCode(302);
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');
+        
+        $this->assertEquals(1, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL));
+        
+        /*
+         * check if job was scheduled for execution
+         */        
+        $this->resetResponse();
+        $this->resetRequest();
+        $this->dispatch('/admin/indexmaintenance/index');
+                
+        $this->assertResponseCode(200, 'foo');
+        
+        $baseUrl = $this->getRequest()->getBaseUrl();
+        $body = $this->getResponse()->getBody();        
+        $this->assertContains('div class="opprogress"', $body);
+        $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
+        $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
+        $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);
+        
+        /*
+         * run job immediately and check for result
+         */
+        $jobrunner = new Opus_Job_Runner;
+        $jobrunner->setLogger(Zend_Registry::get('Zend_Log'));
+        $worker = new Opus_Job_Worker_ConsistencyCheck();       
+        $jobrunner->registerWorker($worker);
+        $jobrunner->run();        
+        
+        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL));
+
+        $this->resetResponse();
+        $this->resetRequest();
+        $this->dispatch('/admin/indexmaintenance/index');
+                       
+        $this->assertResponseCode(200, 'bar');
+                        
+        $baseUrl = $this->getRequest()->getBaseUrl();
+        $body = $this->getResponse()->getBody();        
+        $this->assertNotContains('div class="opprogress"', $body);
+        $this->assertContains('pre class="opoutput"', $body);
+        $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
+        $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
+        $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);        
+    }
+    
+    public function testOptimizeindexActionWithEnabledFeature() {
+        $this->enableAsyncIndexmaintenanceMode();
+        $this->getRequest()->setMethod('POST');
+        $this->dispatch('/admin/indexmaintenance/optimizeindex');
+        
+        // TODO currently not implemented
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');        
+    }
+    
+    public function testCheckfulltextsActionWithEnabledFeature() {        
+        $this->enableAsyncIndexmaintenanceMode();
+        $this->getRequest()->setMethod('POST');
+        $this->dispatch('/admin/indexmaintenance/checkfulltexts');
+        
+        // TODO currently not implemented
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');        
+    }
 }

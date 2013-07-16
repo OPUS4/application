@@ -74,7 +74,7 @@ class Admin_Model_IndexMaintenance {
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_ConsistencyCheck::LABEL);
 
-        if (isset($this->config->runjobs->asynchronous) && $this->config->runjobs->asynchronous) {
+        if (!$this->featureDisabled) {
             // Queue job (execute asynchronously)
             // skip creating job if equal job already exists
             if (true === $job->isUniqueInQueue()) {
@@ -84,7 +84,7 @@ class Admin_Model_IndexMaintenance {
             return true;
         }
 
-        // Execute job immediately (synchronously)
+        // Execute job immediately (synchronously): currently NOT supported
         try {
             $worker = new Opus_Job_Worker_ConsistencyCheck();
             $worker->setLogger($this->logger);

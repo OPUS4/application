@@ -44,7 +44,7 @@ class Admin_IndexmaintenanceController extends Controller_Action {
         $this->model = new Admin_Model_IndexMaintenance($this->_logger);
         
         if ($this->model->getFeatureDisabled()) {
-            $this->view->featureDisabled = true;         
+            $this->view->featureDisabled = true;
         }
         else {
             $this->view->allowConsistencyCheck = $this->model->allowConsistencyCheck();       
@@ -71,15 +71,13 @@ class Admin_IndexmaintenanceController extends Controller_Action {
     }
 
     public function checkconsistencyAction() {
-        if (!$this->model->getFeatureDisabled()) {
-            if ($this->getRequest()->isPost()) {
-                $jobId = $this->model->createJob();
-                if (!is_null($jobId)) {
-                    return $this->_redirectToAndExit('index', $this->view->translate('admin_indexmaintenance_jobsumitted', $jobId));
-                }            
-            }
-            return $this->_redirectToAndExit('index');            
+        if (!$this->model->getFeatureDisabled() && $this->getRequest()->isPost()) {
+            $jobId = $this->model->createJob();
+            if (!is_null($jobId)) {
+                return $this->_redirectToAndExit('index', $this->view->translate('admin_indexmaintenance_jobsumitted', $jobId));
+            }            
         }
+        return $this->_redirectToAndExit('index');
     }
 
     /**
@@ -87,12 +85,10 @@ class Admin_IndexmaintenanceController extends Controller_Action {
      * TODO implementation needed
      */
     public function optimizeindexAction() {
-        if (!$this->model->getFeatureDisabled()) {
-            if ($this->getRequest()->isPost()) {
-                // add a job
-            }
-            return $this->_redirectToAndExit('index');            
+        if (!$this->model->getFeatureDisabled() && $this->getRequest()->isPost()) {
+            // add a job
         }
+        return $this->_redirectToAndExit('index');
     }
 
     /**
@@ -100,12 +96,10 @@ class Admin_IndexmaintenanceController extends Controller_Action {
      * TODO implementation needed
      */    
     public function checkfulltextsAction() {
-        if (!$this->model->getFeatureDisabled()) {
-            if ($this->getRequest()->isPost()) {
-                // add a job
-            }
-            return $this->_redirectToAndExit('index');            
+        if (!$this->model->getFeatureDisabled() && $this->getRequest()->isPost()) {
+            // add a job
         }
+        return $this->_redirectToAndExit('index');
     }
     
 }
