@@ -24,53 +24,43 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
+ * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Unterformular fuer Subjects im Metadaten-Formular.
- * 
- * Dieses Formular enthaelt die Unterformulare fuer die verschiedenen Schlagwort-Typen und ist dafuer verantwortlich
- * das Feld "Subject" im Dokument zu aktualisieren.
- * 
- * TODO Umgang mit alten Schlagwörtern mit unbekanntem Typ (siehe auch OPUSVIER-2604)
- */
-class Admin_Form_DocumentSubjects extends Admin_Form_DocumentSection {
+class Admin_Form_DocumentSubjectsTest extends ControllerTestCase {
     
-    /**
-     * Initialisiert Formular und fuegt Unterformulare fuer Schlagworttypen hinzu.
-     */
-    public function init() {
-        parent::init();
+    public function testConstructForm() {
+        $form = new Admin_Form_DocumentSubjects();
         
-        $this->addSubForm(new Admin_Form_DocumentSubjectType('swd'), 'Swd');
-        $this->addSubForm(new Admin_Form_DocumentSubjectType('psyndex'), 'Psyndex');
-        $this->addSubForm(new Admin_Form_DocumentSubjectType('uncontrolled'), 'Uncontrolled');
-        // TODO Unterformular fuer unbekannte Typen hinzufügen?
+        $this->assertEquals(3, count($form->getSubForms()));
+        $this->assertNotNull($form->getSubForm('Swd'));
+        $this->assertNotNull($form->getSubForm('Psyndex'));
+        $this->assertNotNull($form->getSubForm('Uncontrolled'));
         
-        $this->setDecorators(array('FormElements'));
+        $this->assertEquals(1, count($form->getDecorators()));
+        $this->assertNotNull($form->getDecorator('FormElements'));
     }
     
-    /**
-     * Sammelt Schlagwoerter von Unterformularen ein und aktualisiert Dokument.
-     * @param Opus_Document $document
-     */
-    public function updateModel($document) {
-        $subforms = $this->getSubForms();
+    public function testUpdateModel() {
+        $form = new Admin_Form_DocumentSubjects();
         
-        $subjects = array();
+        $document = new Opus_Document();
         
-        foreach ($subforms as $subform) {
-            $subjectsWithType = $subform->getSubFormModels();
-            $subjects = array_merge($subjects, $subjectsWithType);
-        }
+        $form->populateFromModel(new Opus_Document(146)); // zwei Schlagwörter
         
-        $document->setSubject($subjects);
+        $form->updateModel($document);
+        
+        $subjects = $document->getSubject();
+        
+        $this->assertEquals(2, count($subjects));
+        
+        // Reihenfolge sollte gleich bleiben, solange IDs in Testdaten nicht geändert werden
+        $this->assertEquals('swd', $subjects[0]->getType());
+        $this->assertEquals('uncontrolled', $subjects[1]->getType());
     }
     
 }

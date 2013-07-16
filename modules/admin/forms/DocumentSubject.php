@@ -37,29 +37,70 @@
  */
 class Admin_Form_DocumentSubject extends Admin_Form_AbstractModelSubForm {
 
+    /**
+     * Name von Formularelement für Schlagwort-ID in Datenbank.
+     */
     const ELEMENT_ID = 'Id';
     
+    /**
+     * Name von Formularelement für Sprache von Schlagwort.
+     */
     const ELEMENT_LANGUAGE = 'Language';
     
+    /**
+     * Name von Formularelement für Wert von Schlagwort.
+     */
     const ELEMENT_VALUE = 'Value';
     
+    /**
+     * Name von Formularelement für externen Schlüssel für Schlagwort.
+     */
     const ELEMENT_EXTERNAL_KEY = 'ExternalKey';
     
+    /**
+     * Typ des angezeigten Schlagworts.
+     * 
+     * Der Typ eines Schlagworts kann nachträglich nicht mehr geändert werden, deshalb gibt es dafür kein 
+     * Formularelement.
+     * 
+     * @var string
+     */
     private $__subjectType;
     
+    /**
+     * Sprache des Schlagworts.
+     * 
+     * GND Schlagwörter sind immer Deutsch. Für sie wird die Sprache in dieser Variable gespeichert und kein 
+     * Formularelement angezeigt.
+     * 
+     * @var string
+     */
     private $__language;
     
+    /**
+     * Konstruiert das Formular.
+     * 
+     * Der Typ kommt vom übergeordneten Formular und muss daher auch nicht beim POST mit übermittelt werden.
+     * 
+     * @param string $type Typ des Schlagwortes
+     * @param string $language Sprache für das Schlagwort, wenn nicht editierbar
+     * @param array $options Weitere Optionen (für Zend_Form_SubForm)
+     */
     public function __construct($type, $language = null, $options = null) {
         $this->__subjectType = $type;
         $this->__language = $language;
         parent::__construct($options);
     }
     
+    /**
+     * Initialsiert die Formularelemente.
+     */
     public function init() {
         parent::init();
         
         $this->addElement('Hidden', self::ELEMENT_ID);
         
+        // wenn die Sprache gesetzt wurde wird kein sichtbares Formularelement erzeugt
         if (is_null($this->__language)) {
             $element = $this->createElement('Language', self::ELEMENT_LANGUAGE);
         }
@@ -71,7 +112,11 @@ class Admin_Form_DocumentSubject extends Admin_Form_AbstractModelSubForm {
         $this->addElement('Text', self::ELEMENT_VALUE, array('required' => true, 'size' => 30));
         $this->addElement('Text', self::ELEMENT_EXTERNAL_KEY);
     }
-    
+
+    /**
+     * Initialisiert das Formular mit den Werten in einem Opus_Subject Objekt.
+     * @param \Opus_Subject $subject
+     */
     public function populateFromModel($subject) {
         $this->getElement(self::ELEMENT_ID)->setValue($subject->getId());
         $this->getElement(self::ELEMENT_LANGUAGE)->setValue($subject->getLanguage());
@@ -79,13 +124,24 @@ class Admin_Form_DocumentSubject extends Admin_Form_AbstractModelSubForm {
         $this->getElement(self::ELEMENT_EXTERNAL_KEY)->setValue($subject->getExternalKey());
     }
     
+    /**
+     * Überträgt die Werte im Formular in ein Opus_Subject Objekt.
+     * @param \Opus_Subject $subject
+     */
     public function updateModel($subject) {
-        $subject->setLanguage($this->getElement(self::ELEMENT_LANGUAGE)->getValue());
-        $subject->setValue($this->getElement(self::ELEMENT_VALUE)->getValue());
-        $subject->setExternalKey($this->getElement(self::ELEMENT_EXTERNAL_KEY)->getValue());
+        $subject->setLanguage($this->getElementValue(self::ELEMENT_LANGUAGE));
+        $subject->setValue($this->getElementValue(self::ELEMENT_VALUE));
+        $subject->setExternalKey($this->getElementValue(self::ELEMENT_EXTERNAL_KEY));
         $subject->setType($this->__subjectType);
     }
 
+    /**
+     * Liefert das angezeigt Model zurück.
+     * 
+     * Wenn ein neues Subject zum Formular hinzugefügt wurde wird ein new Opus_Subject Objekt ohne ID zurückgeliefert.
+     * 
+     * @return \Opus_Subject
+     */
     public function getModel() {
         $subjectId = $this->getElement(self::ELEMENT_ID)->getValue();
         
@@ -100,6 +156,11 @@ class Admin_Form_DocumentSubject extends Admin_Form_AbstractModelSubForm {
         return $subject;
     }
     
+    /**
+     * Lädt die notwendigen Dekoratoren.
+     * 
+     * Der 'FieldSet' Dekorator wird entfernt, damit nicht um jedes einzelne Subject ein Fieldset angezeigt wird.
+     */
     public function loadDefaultDecorators() {
         parent::loadDefaultDecorators();
         
