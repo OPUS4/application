@@ -34,7 +34,7 @@
 
 require_once('CronTestCase.php');
 
-class IndexMaintenanceTest extends CronTestCase {
+class ConsistencyCheckTest extends CronTestCase {
     
     public function testJobSuccess() {
         $this->createJob(Opus_Job_Worker_ConsistencyCheck::LABEL);
