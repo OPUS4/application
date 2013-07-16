@@ -37,6 +37,10 @@
  */
 class Admin_Model_DocumentEditSession extends Admin_Model_AbstractModel {
     
+    /**
+     * Dokument-ID.
+     * @var int 
+     */
     private $docId;
     
     /**
@@ -64,14 +68,24 @@ class Admin_Model_DocumentEditSession extends Admin_Model_AbstractModel {
      */
     private $__documentNamespaces = array();
     
+    /**
+     * Konstruiert Model für Zugriff auf Edit Session eines Dokuments.
+     * @param int $documentId Dokument-ID 
+     * @throws InvalidArgumentException Wenn $documentId keine Zahl oder kleiner als 1 ist.
+     */
     public function __construct($documentId) {
-        $this->docId = $documentId;
+        if (is_numeric($documentId) && $documentId > 0) {
+            $this->docId = $documentId;
+        }
+        else {
+            // should never happen
+            throw new InvalidArgumentException(__CLASS__ . " mit document ID '$documentId' aufgerufen.");
+        }
     }
-    
     
     /**
      * Fügt eine Person zur List der Personen, die dem Metadaten-Formular hinzugefügt werden müssen.
-     * @param type $form
+     * @param array $form
      */
     public function addPerson($linkProps) {
         $namespace = $this->getDocumentSessionNamespace();
@@ -105,6 +119,10 @@ class Admin_Model_DocumentEditSession extends Admin_Model_AbstractModel {
         return $persons;
     }
     
+    /**
+     * Liefert die Anzahl der in der Session gespeicherten Personen-Links.
+     * @return int
+     */
     public function getPersonCount() {
         $namespace = $this->getDocumentSessionNamespace();
         
@@ -172,6 +190,14 @@ class Admin_Model_DocumentEditSession extends Admin_Model_AbstractModel {
         }
  
         return $namespace;        
+    }
+    
+    /**
+     * Gibt die Dokument-ID für das Model zurück.
+     * @return int
+     */
+    public function getDocumentId() {
+        return $this->docId;
     }
     
 }
