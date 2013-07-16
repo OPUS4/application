@@ -51,4 +51,8 @@ class MockLogger {
         return $this->messages;
     }
     
+    public function clear() {
+        $this->messages = array();
+    }
+    
 }
