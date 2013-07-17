@@ -307,36 +307,49 @@ class Admin_Model_BibtexImport {
 	
         return $record;
     }
-
+    
     
 
     private function __createMetadataImportJobs() {
         $config = Zend_Registry::get('Zend_Config');
 
-        foreach ($this->documents as $doc) {
+	// Start transaction
+	$table  = Opus_Db_TableGateway::getInstance("Opus_Db_Jobs");
+	$dbadapter = $table->getAdapter();
+	$dbadapter->beginTransaction();
+	
+	try {
+		 foreach ($this->documents as $doc) {
 
-            $job = new Opus_Job();
-            $job->setLabel(Opus_Job_Worker_MetadataImport::LABEL);
-            $job->setData(array( 'xml' =>  $doc->saveXML()));
+		    $job = new Opus_Job();
+		    $job->setLabel(Opus_Job_Worker_MetadataImport::LABEL);
+		    $job->setData(array( 'xml' =>  $doc->saveXML()));
 
-            if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
-                // Queue job (execute asynchronously)
-                // skip creating job if equal job already exists
-                if (true === $job->isUniqueInQueue()) {
-                    $job->store();
-                }
-            }
-                
-            // Execute job immediately (synchronously)
-            else {
-                try {
-                    $import = new Opus_Job_Worker_MetadataImport($this->log);
-                    $import->work($job);
-                } catch(Exception $exc) {
-                    $this->log->err($exc);
-                }
-            }
+		    if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
+			// Queue job (execute asynchronously)
+			// skip creating job if equal job already exists
+			if (true === $job->isUniqueInQueue()) {
+			    $job->store();
+			}
+		    }
+			
+		    // Execute job immediately (synchronously)
+		    else {
+			try {
+			    $import = new Opus_Job_Worker_MetadataImport($this->log);
+			    $import->work($job);
+			} catch(Exception $exc) {
+			    $this->log->err($exc);
+			}
+		    }
+		}
+	} catch (Exception $e) {
+           $dbadapter->rollBack();
+           throw new Admin_Model_BibtexImportException($message, Admin_Model_BibtexImportException::STORE_ERROR);
         }
+
+        // commit transaction
+        $dbadapter->commit();
 
     }
 }

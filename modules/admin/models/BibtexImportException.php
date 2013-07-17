@@ -46,6 +46,7 @@ class Admin_Model_BibtexImportException extends Exception {
     const BIBTEX_MODS_ERROR = 7;
     const MODS_XML_ERROR = 8;
     const INVALID_XML_ERROR = 9;
+    const STORE_ERROR = 10;
 
 
     /**
@@ -60,7 +61,8 @@ class Admin_Model_BibtexImportException extends Exception {
 	self::DUPLICATE_ID => 'bibtex_import_duplicate_id',
         self::BIBTEX_MODS_ERROR => 'bibtex_import_bibtex_mods_error',
         self::MODS_XML_ERROR => 'bibtex_import_mods_xml_error',
-        self::INVALID_XML_ERROR => 'bibtex_import_invalid_xml_error'
+        self::INVALID_XML_ERROR => 'bibtex_import_invalid_xml_error',
+        self::STORE_ERROR => 'bibtex_import_store_error'
     );
 
 
