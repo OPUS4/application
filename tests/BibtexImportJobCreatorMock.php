@@ -37,6 +37,6 @@ class BibtexImportJobCreatorMock {
     public function createJob($doc, $config, $log) {        
         $model = new Admin_Model_BibtexImportJobCreator();
         $model->createJob($doc, $config, $log);
-        throw new Exception();        
+        throw new Exception();
     }
 }

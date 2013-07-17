@@ -693,7 +693,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
     
-    public function testRollbackTransaction() {
+    public function testRollbackTransactionInAsyncMode() {
         $this->enableAsyncMode();
         
         Admin_Model_BibtexImport::$creatorClass = 'BibtexImportJobCreatorMock';
@@ -714,6 +714,32 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         Admin_Model_BibtexImport::$creatorClass = 'Admin_Model_BibtexImportJobCreator';
     }
     
+    public function testRollbackTransactionInSyncMode() {
+        $this->disableAsyncMode();
+        
+        Admin_Model_BibtexImport::$creatorClass = 'BibtexImportJobCreatorMock';
+        $bibtexImporter = new Admin_Model_BibtexImport($this->bibdir . 'articleTwoDocuments.bib');
+        
+        $finder = new Opus_DocumentFinder();
+        $numOfDocs = $finder->count();
+        
+        $ex = null;
+        try {
+            $bibtexImporter->import();
+        }
+        catch (Admin_Model_BibtexImportException $e) {
+            $ex = $e;
+        }
+        $this->assertNotNull($ex, 'expected exception Admin_Model_BibtexImportException was not thrown');
+        $this->assertEquals(Admin_Model_BibtexImportException::STORE_ERROR, $ex->getCode(), 'unexpected exception code');
+        
+        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_MetadataImport::LABEL), 'rollback was not successful');
+        
+        $this->assertEquals($numOfDocs, $finder->count(), 'rollback of documents was not successful');
+        
+        Admin_Model_BibtexImport::$creatorClass = 'Admin_Model_BibtexImportJobCreator';
+    }    
+    
     private function enableAsyncMode() {
         $this->setAsyncMode(1);
     }
@@ -730,7 +756,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
             $config->runjobs->asynchronous = $value;
         }
         else {
-            $config = new Zend_Config(array('runjobs' => array('asynchronous' =>  1)), true);
+            $config = new Zend_Config(array('runjobs' => array('asynchronous' =>  $value)), true);
             $config->merge(Zend_Registry::get('Zend_Config'));
         }
         Zend_Registry::set('Zend_Config', $config);        
