@@ -34,12 +34,15 @@
 
 class Admin_IndexmaintenanceControllerTest extends ControllerTestCase {
     
-    private $config = null;
+    private $config;
+    
+    public function setUp() {
+        parent::setUp();
+        $this->config = Zend_Registry::get('Zend_Config');
+    }
     
     protected function tearDown() {
-        if (!is_null($this->config)) {
-            Zend_Registry::set('Zend_Config', $this->config);
-        }
+        Zend_Registry::set('Zend_Config', $this->config);
         
         // Cleanup of Log File        
         $config = Zend_Registry::get('Zend_Config');
@@ -67,67 +70,118 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase {
         parent::tearDown();
     }
 
-    public function testIndexActionWithDisabledFeature() {
+    public function testIndexActionWithDisabledFeature1() {
         $this->dispatch('/admin/indexmaintenance/index');
-        
-        $this->assertResponseCode(200);
-        
-        $baseUrl = $this->getRequest()->getBaseUrl();
-        $body = $this->getResponse()->getBody();
-        $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
-        // TODO $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
-        // TODO $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);
+        $this->checkIfUnavailable();
     }
     
-    public function testIndexActionWithEnabledFeature() {
+    public function testIndexActionWithDisabledFeature2() {
+        $this->disableAsyncIndexmaintenanceMode();
         $this->enableAsyncMode();
         $this->dispatch('/admin/indexmaintenance/index');
-                
-        $this->assertResponseCode(200);
-        
-        $baseUrl = $this->getRequest()->getBaseUrl();
-        $body = $this->getResponse()->getBody();                                
-        $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
-        // TOOD $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
-        // TODO $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);
+        $this->checkIfUnavailable();
     }
     
-    public function testIndexActionWithEnabledFeatureAlt() {
-        $this->enableAsyncIndexmaintenanceMode();
+    public function testIndexActionWithDisabledFeature3() {
+        $this->disableAsyncIndexmaintenanceMode();
         $this->dispatch('/admin/indexmaintenance/index');
-                
+        $this->checkIfUnavailable();
+    }    
+
+    public function testIndexActionWithDisabledFeature4() {
+        $this->disableAsyncMode();
+        $this->dispatch('/admin/indexmaintenance/index');
+        $this->checkIfUnavailable();
+    }    
+    
+    public function testIndexActionWithDisabledFeature5() {
+        $this->disableAsyncMode();
+        $this->disableAsyncIndexmaintenanceMode();
+        $this->dispatch('/admin/indexmaintenance/index');
+        $this->checkIfUnavailable();
+    }        
+    
+    public function testIndexActionWithEnabledFeature1() {
+        $this->enableAsyncMode();
+        $this->dispatch('/admin/indexmaintenance/index');        
+        $this->checkIfAvailable();                
+    }
+    
+    public function testIndexActionWithEnabledFeature2() {
+        $this->enableAsyncIndexmaintenanceMode();
+        $this->dispatch('/admin/indexmaintenance/index');        
+        $this->checkIfAvailable();                
+    }
+    
+    public function testIndexActionWithEnabledFeature3() {
+        $this->enableAsyncIndexmaintenanceMode();
+        $this->disableAsyncMode();
+        $this->dispatch('/admin/indexmaintenance/index');        
+        $this->checkIfAvailable();                
+    }    
+    
+    public function testIndexActionWithEnabledFeature4() {
+        $this->enableAsyncMode();
+        $this->enableAsyncIndexmaintenanceMode();
+        $this->dispatch('/admin/indexmaintenance/index');        
+        $this->checkIfAvailable();                
+    }
+    
+    private function checkIfAvailable() {
         $this->assertResponseCode(200);
         
         $baseUrl = $this->getRequest()->getBaseUrl();
         $body = $this->getResponse()->getBody();        
         $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
         // TODO $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
-        // TODO $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);
+        // TODO $this->assertContains("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);        
+    }
+    
+    private function checkIfUnavailable() {
+        $this->assertResponseCode(200);
+        
+        $baseUrl = $this->getRequest()->getBaseUrl();
+        $body = $this->getResponse()->getBody();
+        $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/checkconsistency\"", $body);
+        // TODO $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/checkfulltexts\"", $body);
+        // TODO $this->assertNotContains("action=\"$baseUrl/admin/indexmaintenance/optimizeindex\"", $body);        
+    }
+        
+    private function enableAsyncMode() {
+        $this->setAsyncMode(1);
+    }
+
+    private function disableAsyncMode() {
+        $this->setAsyncMode(0);
     }    
     
-    private function enableAsyncMode() {
-        $this->config = Zend_Registry::get('Zend_Config');
-
+    private function setAsyncMode($value) {
         $config = Zend_Registry::get('Zend_Config');        
         if (isset($config->runjobs->asynchronous)) {
-            $config->runjobs->asynchronous = 1;
+            $config->runjobs->asynchronous = $value;
         }
         else {
-            $config = new Zend_Config(array('runjobs' => array('asynchronous' =>  1)), true);
+            $config = new Zend_Config(array('runjobs' => array('asynchronous' =>  $value)), true);
             $config->merge(Zend_Registry::get('Zend_Config'));
         }
-        Zend_Registry::set('Zend_Config', $config);       
+        Zend_Registry::set('Zend_Config', $config);        
     }
     
     private function enableAsyncIndexmaintenanceMode() {
-        $this->config = Zend_Registry::get('Zend_Config');
-
-        $config = Zend_Registry::get('Zend_Config');        
+        $this->setAsyncIndexmaintenanceMode(1);
+    }
+    
+    private function disableAsyncIndexmaintenanceMode() {
+        $this->setAsyncIndexmaintenanceMode(0);
+    }
+    
+    private function setAsyncIndexmaintenanceMode($value) {
+        $config = Zend_Registry::get('Zend_Config');      
         if (isset($config->runjobs->indexmaintenance->asynchronous)) {
-            $config->runjobs->indexmaintenance->asynchronous = 1;
+            $config->runjobs->indexmaintenance->asynchronous = $value;
         }
         else {
-            $config = new Zend_Config(array('runjobs' => array('indexmaintenance' => array('asynchronous' => 1))), true);
+            $config = new Zend_Config(array('runjobs' => array('indexmaintenance' => array('asynchronous' => $value))), true);
             $config->merge(Zend_Registry::get('Zend_Config'));
         }
         Zend_Registry::set('Zend_Config', $config);        
