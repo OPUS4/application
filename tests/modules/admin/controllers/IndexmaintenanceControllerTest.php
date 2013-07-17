@@ -202,7 +202,7 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase {
         
         $this->assertResponseCode(302);
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/indexmaintenance');
-        
+                              
         $this->assertEquals(1, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL), 'consistency check job was not stored in database');
         
         /*
@@ -224,11 +224,23 @@ class Admin_IndexmaintenanceControllerTest extends ControllerTestCase {
         /*
          * run job immediately and check for result
          */
-        $jobrunner = new Opus_Job_Runner;
+        $jobrunner = new Opus_Job_Runner();
         $jobrunner->setLogger(Zend_Registry::get('Zend_Log'));
         $worker = new Opus_Job_Worker_ConsistencyCheck();       
         $jobrunner->registerWorker($worker);
         $jobrunner->run();        
+                
+        $jobs = Opus_Job::getByLabels(array(Opus_Job_Worker_ConsistencyCheck::LABEL));        
+        if (count($jobs) > 0) {
+            $job = $jobs[0];            
+            $message = 'at least one unexpected job found (Label: \'%s\', State: \'%s\', Data: \'%s\', Errors: \'%s\, SHA1 Hash: \'%s\')';
+            $label = $job->getLabel();
+            $state = $job->getState();
+            $data = $job->getData();
+            $errors = $job->getErrors();
+            $hash = $job->getSha1Id();
+            $this->fail(sprintf($message, $label, $state, $data, $errors, $hash));
+        }        
         
         $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_ConsistencyCheck::LABEL), 'consistency check job was not removed from database after execution');
 
