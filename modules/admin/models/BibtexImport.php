@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,7 +32,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Admin_Model_BibtexImport {
 
     /**
@@ -40,7 +40,6 @@ class Admin_Model_BibtexImport {
      * @var Zend_Log
      */
     private $log;
-
 
     /**
      * Binary
@@ -63,7 +62,7 @@ class Admin_Model_BibtexImport {
      */
     private $xsl;
 
-     /**
+    /**
      * OpusXml
      *
      * @var DOMDocument
@@ -76,29 +75,30 @@ class Admin_Model_BibtexImport {
      */
     private $numDocuments;
 
-     /**
+    /**
      * OpusXml-Array
      *
      * @var Array
      */
     private $documents;
-
+    
+    public static $creatorClass = 'Admin_Model_BibtexImportJobCreator';
 
     public function __construct($filename = null) {
         $this->log = Zend_Registry::get('Zend_Log');
         $this->binary = "bib2xml";
 
-        if(!$this->__isBinaryInstalled()) {
+        if (!$this->__isBinaryInstalled()) {
             $this->log->err($this->binary . ' is not installed');
             throw new Admin_Model_BibtexImportException(null, Admin_Model_BibtexImportException::BINARY_NOT_INSTALLED);
         }
 
-        if(!is_readable($filename)) {
+        if (!is_readable($filename)) {
             $this->log->err($filename . ' is not readable');
             throw new Admin_Model_BibtexImportException(null, Admin_Model_BibtexImportException::FILE_NOT_READABLE);
         }
-        
-        if(!$this->__isUtf8Encoded($filename)) {
+
+        if (!$this->__isUtf8Encoded($filename)) {
             $this->log->err($filename . ' is not utf8-endoded');
             throw new Admin_Model_BibtexImportException(null, Admin_Model_BibtexImportException::FILE_NOT_UTF8);
         }
@@ -112,52 +112,49 @@ class Admin_Model_BibtexImport {
         $this->documents = array();
     }
 
-
     public function import() {
         $this->__convertBibtexToOpusxml();
         $this->__createMetadataImportJobs();
     }
 
-    
     public function getNumDocuments() {
         return $this->numDocuments;
     }
-    
 
     private function __convertBibtexToOpusxml() {
-	$bibtexRecords = array();
-	$bibtexRecords = $this->__getBibTexRecords();
-	$numBibtexRecords = count($bibtexRecords);
-	
+        $bibtexRecords = array();
+        $bibtexRecords = $this->__getBibTexRecords();
+        $numBibtexRecords = count($bibtexRecords);
+
         if ($numBibtexRecords === 0) {
             $this->log->err($this->bibtexFilename . ' contains no valid bibtex');
             throw new Admin_Model_BibtexImportException(null, Admin_Model_BibtexImportException::FILE_NOT_BIBTEX);
-        }	
-	
-	
-	$idsBibtexRecords = array();
-	foreach ($bibtexRecords as $r) {
+        }
+
+
+        $idsBibtexRecords = array();
+        foreach ($bibtexRecords as $r) {
             $id = null;
             $id = $this->__getIdFromBibtexRecord($r);
             if (strlen($id) === 0) {
                 $message = trim($r);
-		$this->log->err(' bibtex-record without id:' . $message);
+                $this->log->err(' bibtex-record without id:' . $message);
                 throw new Admin_Model_BibtexImportException($message, Admin_Model_BibtexImportException::RECORD_WITHOUT_ID);
             }
 
             if (array_key_exists($id, $idsBibtexRecords)) {
-		$message = $id;
+                $message = $id;
                 $this->log->err(' bibtex record with duplicate id:' . $message);
                 throw new Admin_Model_BibtexImportException($message, Admin_Model_BibtexImportException::DUPLICATE_ID);
             }
             $idsBibtexRecords[$id] = $r;
-	}
+        }
 
         $exec_output = array();
         $exec_return = -1;
-        $exec_statement = $this->binary . " -i unicode " .  $this->bibtexFilename . " 2> /dev/null";
+        $exec_statement = $this->binary . " -i unicode " . $this->bibtexFilename . " 2> /dev/null";
 
-        exec ($exec_statement, $exec_output, $exec_return);
+        exec($exec_statement, $exec_output, $exec_return);
         if ($exec_return != 0) {
             $this->log->err(' bibtex record with duplicate id:' . $message);
             throw new Admin_Model_BibtexImportException($message, Admin_Model_BibtexImportException::BINARY_NOT_INSTALLED);
@@ -173,10 +170,10 @@ class Admin_Model_BibtexImport {
         }
 
         if ($numXmlDocuments !== $numBibtexRecords) {
-            $message = implode(', ', array_diff(array_keys($idsBibtexRecords),  $idsXmlDocuments));
+            $message = implode(', ', array_diff(array_keys($idsBibtexRecords), $idsXmlDocuments));
             $this->log->err('numbibtex: ' . $numBibtexRecords . ' and numMods:' . $numXmlDocuments);
             throw new Admin_Model_BibtexImportException($message, Admin_Model_BibtexImportException::BIBTEX_MODS_ERROR);
-	}
+        }
 
         $xsl = new DOMDocument();
         $xsl->load($this->xsl);
@@ -184,7 +181,7 @@ class Admin_Model_BibtexImport {
         $xslt = new XSLTProcessor();
         $xslt->importStylesheet($xsl);
 
-        $this->xml->loadXML($xslt->transformToXML( $xml ));
+        $this->xml->loadXML($xslt->transformToXML($xml));
 
         $numOpusDocuments = $this->xml->getElementsByTagName('opusDocument')->length;
         $idsOpusDocuments = array();
@@ -198,10 +195,10 @@ class Admin_Model_BibtexImport {
             throw new Admin_Model_BibtexImportException($message, Admin_Model_BibtexImportException::MODS_XML_ERROR);
         }
 
-       $this->__addBibtexRecordAsEnrichment();
+        $this->__addBibtexRecordAsEnrichment();
 
-       $invalidIds = array();
-       foreach ($this->xml->getElementsByTagName('opusDocument') as $node) {
+        $invalidIds = array();
+        foreach ($this->xml->getElementsByTagName('opusDocument') as $node) {
             $id = $node->getAttribute('oldId');
 
             $doc = new DomDocument;
@@ -210,9 +207,10 @@ class Admin_Model_BibtexImport {
             $import->appendChild($doc->importNode($node, true));
             $validator = new Opus_Util_MetadataImportXmlValidation($doc);
 
-	    try {
+            try {
                 $validator->checkValidXml();
-            } catch(Opus_Util_MetadataImportInvalidXmlException $e) {
+            }
+            catch (Opus_Util_MetadataImportInvalidXmlException $e) {
                 array_push($invalidIds, $id);
             }
 
@@ -223,133 +221,103 @@ class Admin_Model_BibtexImport {
             $message = implode(', ', $invalidIds);
             throw new Admin_Model_BibtexImportException($message, Admin_Model_BibtexImportException::INVALID_XML_ERROR);
         }
-   
+
         $this->numDocuments = $numOpusDocuments;
     }
-
 
     private function __isBinaryInstalled() {
         $exec_output = array();
         $exec_return = -1;
         $exec_statement = "which " . $this->binary;
-        exec ($exec_statement, $exec_output, $exec_return);
+        exec($exec_statement, $exec_output, $exec_return);
         return ($exec_return != 0 ? false : true);
     }
-
 
     private function __isUtf8Encoded($filename) {
         $output = file_get_contents($filename);
         return (mb_check_encoding($output, 'UTF-8') ? true : false);
     }
 
-
     private function __getBibtexRecords() {
-	$bom = pack("CCC", 0xef, 0xbb, 0xbf);
+        $bom = pack("CCC", 0xef, 0xbb, 0xbf);
 
-	$content = "";
-	foreach (file($this->bibtexFilename) as $line) {
-            if (preg_match ( "/%/" , $line) ) {
-                    continue;
+        $content = "";
+        foreach (file($this->bibtexFilename) as $line) {
+            if (preg_match("/%/", $line)) {
+                continue;
             }
-            if (preg_match ( "/^\n$/" , $line) ) {
-                    continue;
+            if (preg_match("/^\n$/", $line)) {
+                continue;
             }
             if (0 == strncmp($line, $bom, 3)) {
-                    $line = substr($line, 3);
+                $line = substr($line, 3);
             }
             $content .= $line;
-	}
+        }
 
-        if (!preg_match("/@/", $content)) { return array(); }
+        if (!preg_match("/@/", $content)) {
+            return array();
+        }
 
         return preg_split("/\n\s*@/", $content);
     }
-    
-    
+
     private function __getIdFromBibtexRecord($record) {
-	$id = current(preg_split("/\n/", $record));
-	$id = trim(strstr($id, '{'));
-	$id = preg_replace("/^{/", "", $id);
-	$id = preg_replace("/,$/", "", $id);
- 	return trim($id);
+        $id = current(preg_split("/\n/", $record));
+        $id = trim(strstr($id, '{'));
+        $id = preg_replace("/^{/", "", $id);
+        $id = preg_replace("/,$/", "", $id);
+        return trim($id);
     }
 
-
-
     private function __addBibtexRecordAsEnrichment() {
-        $docs =  $this->xml->getElementsByTagName('opusDocument');
+        $docs = $this->xml->getElementsByTagName('opusDocument');
         foreach ($docs as $d) {
             $id = $d->getAttribute("oldId");
             $bibtex = $this->__getBibTexRecordById($id);
 
             $e = $d->appendChild(new DOMElement('enrichments'));
             $enr = $e->appendChild(new DOMElement('enrichment'));
-	    $enr->setAttributeNode(new DOMAttr('key', 'BibtexRecord'));
+            $enr->setAttributeNode(new DOMAttr('key', 'BibtexRecord'));
             $enr->appendChild($this->xml->createTextNode($bibtex));
         }
     }
 
-
-
-
     private function __getBibTexRecordById($id) {
-	$filtered_content = "\n";
-	
-	foreach (file($this->bibtexFilename) as $line) {
-            if (!preg_match ( "/%/" , $line) ) {
-                    $filtered_content .= $line;
+        $filtered_content = "\n";
+
+        foreach (file($this->bibtexFilename) as $line) {
+            if (!preg_match("/%/", $line)) {
+                $filtered_content .= $line;
             }
-	}
-	
-        $records = explode ( "\n@", $filtered_content);
-        $hits = preg_grep ( "/$id/" , $records);
+        }
+
+        $records = explode("\n@", $filtered_content);
+        $hits = preg_grep("/$id/", $records);
         $record = "@" . array_pop($hits);
-	
+
         return $record;
     }
-    
-    
 
     private function __createMetadataImportJobs() {
         $config = Zend_Registry::get('Zend_Config');
 
-	// Start transaction
-	$table  = Opus_Db_TableGateway::getInstance("Opus_Db_Jobs");
-	$dbadapter = $table->getAdapter();
-	$dbadapter->beginTransaction();
-	
-	try {
-		 foreach ($this->documents as $doc) {
+        $table = Opus_Db_TableGateway::getInstance("Opus_Db_Jobs");
+        $dbadapter = $table->getAdapter();
+        $dbadapter->beginTransaction();
 
-		    $job = new Opus_Job();
-		    $job->setLabel(Opus_Job_Worker_MetadataImport::LABEL);
-		    $job->setData(array( 'xml' =>  $doc->saveXML()));
-
-		    if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
-			// Queue job (execute asynchronously)
-			// skip creating job if equal job already exists
-			if (true === $job->isUniqueInQueue()) {
-			    $job->store();
-			}
-		    }
-			
-		    // Execute job immediately (synchronously)
-		    else {
-			try {
-			    $import = new Opus_Job_Worker_MetadataImport($this->log);
-			    $import->work($job);
-			} catch(Exception $exc) {
-			    $this->log->err($exc);
-			}
-		    }
-		}
-	} catch (Exception $e) {
-           $dbadapter->rollBack();
-           throw new Admin_Model_BibtexImportException($message, Admin_Model_BibtexImportException::STORE_ERROR);
+        $jobCreator = new self::$creatorClass;
+        try {            
+            foreach ($this->documents as $doc) {
+                $jobCreator->createJob($doc, $config, $this->log);
+            }
+        }
+        catch (Exception $e) {
+            $dbadapter->rollBack();
+            throw new Admin_Model_BibtexImportException($e->getMessage(), Admin_Model_BibtexImportException::STORE_ERROR);
         }
 
-        // commit transaction
         $dbadapter->commit();
-
     }
+
 }

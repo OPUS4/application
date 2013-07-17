@@ -44,7 +44,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
     private $filename;
 
     private $numDocuments;
-
+    
+    private $config = null;    
 
     public function setUp() {
         parent::setUp();
@@ -66,6 +67,10 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $jobs = Opus_Job::getAll();
         foreach ($jobs as $job) { 
             $job->delete();
+        }
+        
+        if (!is_null($this->config)) {
+            Zend_Registry::set('Zend_Config', $this->config);
         }
 
         parent::tearDown();
@@ -711,5 +716,40 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->assertEquals('BibtexRecord', $this->doc->getEnrichment(0)->getKeyName());
         $this->assertEquals($record, $this->doc->getEnrichment(0)->getValue());
     }
+    
+    public function testRollbackTransaction() {
+        $this->enableAsyncMode();
+        
+        Admin_Model_BibtexImport::$creatorClass = 'BibtexImportJobCreatorMock';
+        $bibtexImporter = new Admin_Model_BibtexImport($this->bibdir . 'articleTwoDocuments.bib');        
+        
+        $ex = null;
+        try {
+            $bibtexImporter->import();
+        }
+        catch (Admin_Model_BibtexImportException $e) {
+            $ex = $e;
+        }
+        $this->assertNotNull($ex, 'expected exception Admin_Model_BibtexImportException was not thrown');
+        $this->assertEquals(Admin_Model_BibtexImportException::STORE_ERROR, $ex->getCode(), 'unexpected exception code');
+        
+        $this->assertEquals(0, Opus_Job::getCountForLabel(Opus_Job_Worker_MetadataImport::LABEL), 'rollback was not successful');
+        
+        Admin_Model_BibtexImport::$creatorClass = 'Admin_Model_BibtexImportJobCreator';
+    }
+    
+    private function enableAsyncMode() {
+        $this->config = Zend_Registry::get('Zend_Config');
 
+        $config = Zend_Registry::get('Zend_Config');        
+        if (isset($config->runjobs->asynchronous)) {
+            $config->runjobs->asynchronous = 1;
+        }
+        else {
+            $config = new Zend_Config(array('runjobs' => array('asynchronous' =>  1)), true);
+            $config->merge(Zend_Registry::get('Zend_Config'));
+        }
+        Zend_Registry::set('Zend_Config', $config);       
+    }
+    
 }
