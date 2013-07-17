@@ -156,6 +156,7 @@ cd -
 #
 
 rsync -rv --exclude=.svn $fulltext_dir/ $workspace_files_dir
+rsync -rv --exclude=.svn $fulltext_dir/ $workspace_test_dir/files
 
 
 #
