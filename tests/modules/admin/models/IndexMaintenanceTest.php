@@ -249,10 +249,10 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase {
         $this->assertNotNull($logdata);
         $this->assertNotNull($logdata->getContent());
         $this->assertNotNull($logdata->getModifiedDate());
-        
-        $this->assertContains('checking 137 published documents for consistency.', $logdata->getContent());
+                
+        $this->assertContains('checking 137 published documents for consistency.', $logdata->getContent(), "content of logfile:\n" . $logdata->getContent());
         $this->assertContains('No inconsistency was detected.', $logdata->getContent());
-        $this->assertContains('Completed operation after ', $logdata->getContent());       
+        $this->assertContains('Completed operation after ', $logdata->getContent());        
     }
     
     private function touchLogfile($lock = false) {
