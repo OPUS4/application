@@ -154,16 +154,8 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
     /* 
      * OPUSVIER 2896
      */
-
     public function testJobIsNotCreatedWhenSynchronous() {
-        // manipulate application configuration
-        $oldConfig = Zend_Registry::get('Zend_Config');
-
-        $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->runjobs->asynchronous)) {
-            $config->runjobs->asynchronous = 0;
-        }
-        Zend_Registry::set('Zend_Config', $config);
+        $this->disableAsyncMode();
         
         $docFinder = new Opus_DocumentFinder();
         $numOfRowsInJobTable = Opus_Job::getCount();
@@ -173,9 +165,6 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $this->filename = 'article.bib';
         $bibtexImporter = new Admin_Model_BibtexImport($this->bibdir . $this->filename);
         $bibtexImporter->import();
-
-        // undo configuration manipulation
-        Zend_Registry::set('Zend_Config', $oldConfig);
 
         $currNumOfRowsInJobTable = Opus_Job::getCount();
         $currNumOfImportJobs = count(Opus_Job::getByLabels(array(Opus_Job_Worker_MetadataImport::LABEL)));
@@ -187,20 +176,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
     }
 
     public function testJobCreatedWhenAsynchronous() {
-        // manipulate application configuration
-        $oldConfig = Zend_Registry::get('Zend_Config');
-
-        $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->runjobs->asynchronous)) {
-            $config->runjobs->asynchronous = 1;
-        }
-        else {
-            $config = new Zend_Config(array(
-                'runjobs' => array('asynchronous' =>  1)), true);
-            // Include the above made configuration changes in the application configuration.
-            $config->merge(Zend_Registry::get('Zend_Config'));
-        }
-        Zend_Registry::set('Zend_Config', $config);
+        $this->enableAsyncMode();
 
         $docFinder = new Opus_DocumentFinder();
         $numOfRowsInJobTable = Opus_Job::getCount();
@@ -212,7 +188,7 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         $bibtexImporter->import();
 
         // undo configuration manipulation
-        Zend_Registry::set('Zend_Config', $oldConfig);
+        Zend_Registry::set('Zend_Config', $this->config);
 	
         $currNumOfRowsInJobTable = Opus_Job::getCount();
         $currNumOfImportJobs = count(Opus_Job::getByLabels(array(Opus_Job_Worker_MetadataImport::LABEL)));
@@ -739,17 +715,25 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
     }
     
     private function enableAsyncMode() {
+        $this->setAsyncMode(1);
+    }
+    
+    private function disableAsyncMode() {
+        $this->setAsyncMode(0);
+    }
+    
+    private function setAsyncMode($value) {
         $this->config = Zend_Registry::get('Zend_Config');
 
         $config = Zend_Registry::get('Zend_Config');        
         if (isset($config->runjobs->asynchronous)) {
-            $config->runjobs->asynchronous = 1;
+            $config->runjobs->asynchronous = $value;
         }
         else {
             $config = new Zend_Config(array('runjobs' => array('asynchronous' =>  1)), true);
             $config->merge(Zend_Registry::get('Zend_Config'));
         }
-        Zend_Registry::set('Zend_Config', $config);       
+        Zend_Registry::set('Zend_Config', $config);        
     }
     
 }
