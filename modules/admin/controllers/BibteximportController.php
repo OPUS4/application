@@ -102,16 +102,20 @@ class Admin_BibteximportController extends Controller_Action {
     
     
 	function catchError($errno, $errstr){
-
+            // TODO
 	}    
-    
     
 	function shutdown() {
 	    $last_error = error_get_last();
-	    if ($last_error['type'] === E_ERROR) {
-		$message = $this->view->translate('bibtex_import_error_upload');
-		return $this->_redirectTo('index', array('failure' => $message));
-	    }
+            if (!is_null($last_error)) {
+                $this->_logger->info('an error occurred: ' . var_export($last_error, true));
+                
+                if ($last_error['type'] === E_ERROR) {
+                    $message = $this->view->translate('bibtex_import_error_upload');
+                    $this->_redirectTo('index', array('failure' => $message));
+                    exit();
+                }                
+            }
 	}    
 
 }
