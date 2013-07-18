@@ -393,6 +393,15 @@
           </tuv>
         </tu>
         
+        <tu tuid="Cancel">
+          <tuv xml:lang="en">
+            <seg>Cancel</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Abbrechen</seg>
+          </tuv>
+        </tu>        
+        
         <tu tuid="Next">
           <tuv xml:lang="en">
             <seg>Next</seg>

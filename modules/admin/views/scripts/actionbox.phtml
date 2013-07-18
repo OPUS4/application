@@ -88,7 +88,7 @@
         <ul class="form-action">
           <?PHP if (!$this->element->isViewModeEnabled()) : ?>
           <li class="save-element"><?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_SAVE) ?></li>
-          <li class="cancel-element"> oder <?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_CANCEL) ?></li>
+          <li class="cancel-element"><?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_CANCEL) ?></li>
           <?PHP else : ?>
           <?PHP foreach ($actionLinks as $action => $params) : ?>
           <li class="<?= $action ?>"><a href="<?= $this->url($params) ?>"
