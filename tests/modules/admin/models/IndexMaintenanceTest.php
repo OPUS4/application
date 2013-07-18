@@ -238,6 +238,10 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase {
     
     public function testReadLogfileWithNonEmptyFile() {
         $this->enableAsyncMode();
+        
+        $finder = new Opus_DocumentFinder();
+        $finder->setServerState('published');
+        $numOfPublishedDocs = $finder->count();
                 
         $model = new Admin_Model_IndexMaintenance();
         $model->createJob();
@@ -250,7 +254,7 @@ class Admin_Model_IndexMaintenanceTest extends ControllerTestCase {
         $this->assertNotNull($logdata->getContent());
         $this->assertNotNull($logdata->getModifiedDate());
                 
-        $this->assertContains('checking 137 published documents for consistency.', $logdata->getContent(), "content of logfile:\n" . $logdata->getContent());
+        $this->assertContains("checking $numOfPublishedDocs published documents for consistency.", $logdata->getContent(), "content of logfile:\n" . $logdata->getContent());
         $this->assertContains('No inconsistency was detected.', $logdata->getContent());
         $this->assertContains('Completed operation after ', $logdata->getContent());        
     }
