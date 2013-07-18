@@ -2,6 +2,15 @@ h1. OPUS 4 Release Notes
 
 h2. ======================== Release 4.4.0 2013-06-21 ========================
 
+h3. Anpassung der benötigten Version des Zend Frameworks
+
+Mit OPUS 4.4 ändert sich die Versionsabhängig auf das Zend Framework von 1.10.6
+auf 1.12.3. Sofern Sie die Instanz mit dem Update-Skript aktualisieren, wird
+das Zend Framework automatisch auf die neue Version aktualisiert. Andernfalls
+konsultieren Sie bitte die Dokumentation (Abschnitt 6.3.1) und führen die
+Änderungen manuell durch.
+
+
 h3. Anpassungen am Solr-Indexschema
 
 Mit OPUS 4.4 werden vier neue Indexfelder eingeführt:
@@ -23,6 +32,7 @@ werden.
 In jedem Fall ist nach dem Update der Solr-Schemadatei und der Instanz auf die
 Version 4.4 eine Reindexierung aller Dokumente erforderlich, damit die neu
 eingeführten Indexfelder für alle Indexdokumente angelegt werden.
+
 
 h3. Verwendung des Felds 'IdentifierUrn' im Publikationsformular
 
