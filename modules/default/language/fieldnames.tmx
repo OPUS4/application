@@ -564,6 +564,15 @@
                 <seg>Seitenzahl</seg>
             </tuv>
         </tu>
+        
+        <tu tuid="PageCount">
+            <tuv xml:lang="en">
+                <seg>Number of Pages</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Anzahl der Seiten</seg>
+            </tuv>
+        </tu>        
 
         <tu tuid="CompletedYear">
             <tuv xml:lang="en">
