@@ -68,7 +68,7 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
 
         $this->setLegend('admin_document_section_persons');
         
-        $this->addElement('submit', 'Sort', array('label' => 'Sort'));
+        $this->addElement('submit', 'Sort', array('label' => 'admin_button_sort'));
         
         foreach (self::$personRoles as $roleName) {
             $subform = new Admin_Form_DocumentPersonRole($roleName);

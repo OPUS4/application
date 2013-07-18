@@ -114,6 +114,15 @@
       </tuv>
     </tu>
     
+    <tu tuid="admin_button_sort">
+      <tuv xml:lang="en">
+        <seg>Accept Sort Order</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sortierung übernehmen</seg>
+      </tuv>
+    </tu>    
+    
   </body>
 
 </tmx>
