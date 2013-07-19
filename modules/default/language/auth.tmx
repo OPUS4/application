@@ -11,17 +11,16 @@
         <seg>User Login</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Benutzer-Anmeldung</seg>
+        <seg>Anmeldung</seg>
       </tuv>
     </tu>
-
 
     <tu tuid="auth_pagetitle">
       <tuv xml:lang="en">
         <seg>User Login</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Benutzer-Anmeldung</seg>
+        <seg>Anmeldung</seg>
       </tuv>
     </tu>
 
@@ -30,7 +29,7 @@
         <seg>User Login</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Benutzer-Anmeldung</seg>
+        <seg>Anmeldung</seg>
       </tuv>
     </tu>
 
@@ -45,10 +44,10 @@
 
     <tu tuid="auth_field_login">
       <tuv xml:lang="en">
-        <seg>User name</seg>
+        <seg>Username</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Benutzer-Name</seg>
+        <seg>Name</seg>
       </tuv>
     </tu>
 
