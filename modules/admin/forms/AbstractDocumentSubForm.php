@@ -290,12 +290,6 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
             $notEmptyValidator->setMessage('admin_validate_error_notempty');
             $element = $this->getElement($name);
             $element->addValidator($notEmptyValidator);
-        }
-        
-        if ($element == 'Email' && !is_null($name)) {
-            $element = $this->getElement($name);
-            $element->addErrorMessage('admin_validate_error_email');
-        }                  
-        
+        }                
     }            
 }

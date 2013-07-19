@@ -44,7 +44,9 @@ class Form_Element_Email extends Form_Element_Text {
         parent::init();
         $this->setAttrib('placeholder', $this->getTranslator()->translate('email_format'));
         $this->setAttrib('size', 60);
-        $this->addValidator('EmailAddress');
+        $validator = new Zend_Validate_EmailAddress();
+        $validator->setMessage('admin_validate_error_email');
+        $this->addValidator($validator);
     }
     
 }
