@@ -47,6 +47,17 @@ class Admin_Form_DocumentTitlesMain extends Admin_Form_DocumentMultiSubForm {
         parent::__construct('Admin_Form_DocumentTitle', 'TitleMain', 
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
     }
+    
+    public function init() {
+        parent::init();
+        $this->setDecorators(array(
+            'FormElements',
+            array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
+            array('FormErrors', array('placement' => 'prepend', 'ignoreSubForms' => true)),
+            'Fieldset',
+            array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
+        ));        
+    }
             
     /**
      * Prüft Abhängigkeiten zu anderen Unterformularen.

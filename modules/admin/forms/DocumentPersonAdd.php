@@ -59,9 +59,7 @@ class Admin_Form_DocumentPersonAdd extends Admin_Form_Person {
      * Die Informationen für den Link mit dem Dokument werden als Unterformular hinzugefügt.
      */
     public function init() {
-        parent::init();
-        
-        $this->removeDecorator('FormErrors');
+        parent::init();                
         
         $linkForm = new Admin_Form_PersonLink();
         $linkForm->setLegend('admin_person_assign_document_options');

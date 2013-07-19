@@ -52,7 +52,6 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
         $this->setDecorators(array(
             'FormElements',
             array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
-            array('FormErrors', array('placement' => 'prepend', 'ignoreSubForms' => true)),
             'Fieldset',
             array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
         ));
