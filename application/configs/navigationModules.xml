@@ -609,6 +609,7 @@
                     <module>admin</module>
                     <controller>setup</controller>
                     <action>index</action>
+                    <resource>setup</resource>
                     <pages>
                         <enrichmentKey>
                             <type>mvc</type>
@@ -671,6 +672,7 @@
                                     <action>error</action>
                                 </error>
                             </pages>
+                            <resource>helppages</resource>
                         </help-page>
 
                         <static-page>
@@ -720,6 +722,7 @@
                                     <action>error</action>
                                 </error>
                             </pages>
+                            <resource>staticpages</resource>
                         </static-page>
 
                         <translation>
@@ -753,6 +756,7 @@
                                     <action>error</action>
                                 </error>
                             </pages>
+                            <resource>translations</resource>
                         </translation>                        
                     </pages>
                 </setup>
@@ -832,6 +836,7 @@
                                     <action>detail</action>
                                 </detail>
                             </pages>
+                            <resource>job</resource>
                         </job>
                         <indexmaintenance>
                             <type>mvc</type>
@@ -841,6 +846,7 @@
                             <module>admin</module>
                             <controller>indexmaintenance</controller>
                             <action>index</action>
+                            <resource>indexmaintenance</resource>
                         </indexmaintenance>
                     </pages>
                 </info>

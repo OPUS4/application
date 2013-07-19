@@ -63,10 +63,15 @@ class Application_Security_AclProvider {
             'statistics',
             'institutions',
             'enrichments',
-            'systeminfo'),
+            'systeminfo',
+            'indexmaintenance',
+            'job'),
         'review' => array(
-            'reviewing'
-            )
+            'reviewing'),
+        'setup' => array(
+            'helppages',
+            'staticpages',
+            'translations')        
     );
     
     /**

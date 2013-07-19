@@ -132,7 +132,52 @@
         <seg>Erlaube Übergang von '%1$s' zu '%2$s'.</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="acl_resource_indexmaintenance">
+      <tuv xml:lang="en">
+          <seg>Perform Search Index Maintenance</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verwaltung des Suchindex</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_job">
+      <tuv xml:lang="en">
+          <seg>Management of Job Execution</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verwaltung der Job-Verarbeitung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_helppages">
+      <tuv xml:lang="en">
+          <seg>Management of FAQ pages</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verwaltung der FAQ-Seiten</seg>
+      </tuv>
+    </tu>
+                
+    <tu tuid="acl_resource_staticpages">
+      <tuv xml:lang="en">
+          <seg>Management of Static Pages</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verwaltung der statischen Seiten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="acl_resource_translations">
+      <tuv xml:lang="en">
+          <seg>Management of Translation Resources</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verwaltung der Übersetzungsressourcen</seg>
+      </tuv>
+    </tu>
+                            
   </body>
 
 </tmx>
