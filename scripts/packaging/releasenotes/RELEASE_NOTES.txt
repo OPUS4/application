@@ -2,6 +2,32 @@ h1. OPUS 4 Release Notes
 
 h2. ======================== Release 4.4.0 2013-06-21 ========================
 
+h3. Zugriff auf neue Funktionen innerhalb der Administration
+
+OPUS 4.4 bietet innerhalb der Administration folgende zusätzliche Funktionen an
+
+  unter der Rubrik "Systeminformationen"
+
+  * Verwaltung des Solr-Suchindex
+  * Verwaltung der Job-Ausführung (sofern in der Konfiguration aktiviert)
+
+  unter der Rubrik "Oberflächenanpassungen" (aktuell Beta)
+
+  * Verwaltung der Einträge in der FAQ-Seite
+  * Verwaltung von statischen Seiten (Haupt-, Kontakt-, Impressumsseite)
+  * Verwaltung von Übersetzungsressourcen
+
+Für den Zugriff auf die Funktionen sind entsprechende Rechte erforderlich. Für
+den Zugriff auf die ersten beiden Funktionen muss der Rolle das Recht 
+"Suchindex verwalten" bzw. "Job-Verarbeitung verwalten" zugeordnet werden.
+
+Für den Zugriff auf die drei letzten Funktionen ist entweder das Recht für das
+Modul "setup" zu gewähren oder einzeln das Recht "FAQ-Seiten verwalten",
+"Statischen Seiten verwalten" bzw. "Übersetzungsressourcen verwalten"
+zuzuweisen. Bitte beachten Sie, dass Benutzer, die der Role administrator
+zugeordnet sind, bereits automatisch über diese neuen Zugriffsrechte verfügen.
+
+
 h3. Anpassung der benötigten Version des Zend Frameworks
 
 Mit OPUS 4.4 ändert sich die Versionsabhängig auf das Zend Framework von 1.10.6
