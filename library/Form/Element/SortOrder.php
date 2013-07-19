@@ -44,7 +44,9 @@ class Form_Element_SortOrder extends Form_Element_Text {
         if (is_null($this->getAttrib('size'))) {
             $this->setAttrib('size', 6);
         }
-        $this->addValidator('Int');
+        $validator = new Zend_Validate_Int();
+        $validator->setMessage('validation_error_int');
+        $this->addValidator($validator);
     }
     
 }

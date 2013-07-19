@@ -41,7 +41,11 @@ class Form_Element_Publisher extends Form_Element_Select {
         parent::init();
         
         $this->setRequired(true);
-        $this->addValidator('Int');
+        
+        $validator = new Zend_Validate_Int();
+        $validator->setMessage('validation_error_int');
+        $this->addValidator($validator);
+
                 
         $options = Opus_DnbInstitute::getPublishers();
         

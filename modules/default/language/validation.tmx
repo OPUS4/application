@@ -52,6 +52,14 @@
         </tuv>
     </tu>    
     
+    <tu tuid="validation_error_int">
+        <tuv xml:lang="en">
+            <seg>Please provide a number.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte geben Sie eine Zahl ein.</seg>
+        </tuv>
+    </tu>    
 
   </body>
 
