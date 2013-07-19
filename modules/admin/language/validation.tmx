@@ -98,6 +98,16 @@
                 <seg>Es muss ein Wert eingeben werden.</seg>
             </tuv>
         </tu>
+        
+        <tu tuid="admin_validate_error_email">
+            <tuv xml:lang="en">
+                <seg>Invalid Email Address</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Ungültige E-Mail-Adresse</seg>
+            </tuv>
+        </tu>
+        
     </body>
 
 </tmx>
