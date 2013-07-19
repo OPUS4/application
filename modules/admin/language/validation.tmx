@@ -116,7 +116,15 @@
                 <seg>Ungültige Datumsangabe</seg>
             </tuv>
         </tu>
-        
+
+        <tu tuid="admin_validate_error_year">
+            <tuv xml:lang="en">
+                <seg>Invalid Year</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Ungültige Jahresangabe</seg>
+            </tuv>
+        </tu>        
         
     </body>
 
