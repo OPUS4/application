@@ -282,5 +282,15 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     public function setViewModeEnabled() {
         $this->viewMode = true;
     }
+    
+    public function addElement($element, $name = null, $options = null) {
+        parent::addElement($element, $name, $options);
+        if (!is_null($name) && !is_null($options) && array_key_exists('required', $options) && $options['required']) {
+            $notEmptyValidator = new Zend_Validate_NotEmpty();
+            $notEmptyValidator->setMessage('admin_validate_error_notempty');
+            $element = $this->getElement($name);
+            $element->addValidators(array($notEmptyValidator));
+        }
+    }
             
 }
