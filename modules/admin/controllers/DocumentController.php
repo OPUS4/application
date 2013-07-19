@@ -174,11 +174,13 @@ class Admin_DocumentController extends Controller_Action {
             }
             else {
                 // GET zeige neues oder gespeichertes Formular an
-                
+
                 // Hole gespeicherten POST aus Session 
                 $post = $editSession->retrievePost($docId);
                 
-                if ($post) {
+                $continue = $this->getRequest()->getParam('continue', null);
+                
+                if ($post && !is_null($continue)) {
                     // Initialisiere Formular vom gespeicherten POST
                     $form = Admin_Form_Document::getInstanceFromPost($post, $document);
                     $form->populate($post);
