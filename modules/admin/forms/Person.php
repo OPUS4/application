@@ -102,8 +102,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
         parent::init();
         
         $this->setDecorators(array(
-            'FormElements',
-            array('FormErrors', array('placement' => 'prepend', 'ignoreSubForms' => true)),
+            'FormElements',            
             'Fieldset',
             array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform')),
             'Form'
