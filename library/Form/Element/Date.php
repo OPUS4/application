@@ -44,9 +44,9 @@ class Form_Element_Date extends Form_Element_Text {
 
         $validator = new Form_Validate_Date();
         $validator->setMessages(array(
-            Zend_Validate_Date::INVALID => 'date_invalid',
-            Zend_Validate_Date::INVALID_DATE => 'date_invaliddate',
-            Zend_Validate_Date::FALSEFORMAT => 'date_falseformat'
+            Zend_Validate_Date::INVALID => 'validation_error_date_invalid',
+            Zend_Validate_Date::INVALID_DATE => 'validation_error_date_invaliddate',
+            Zend_Validate_Date::FALSEFORMAT => 'validation_error_date_falseformat'
         ));
         $this->setValidators(array($validator));
         

@@ -33,6 +33,25 @@
             <seg>Bitte ändern Sie %value% in das Datumsformat %format%.</seg>
         </tuv>
     </tu>
+    
+    <tu tuid="validation_error_year_invalid_format">
+        <tuv xml:lang="en">
+            <seg>Please provide a valid year value.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte geben Sie eine gültige Jahreszahl an.</seg>
+        </tuv>
+    </tu>    
+    
+    <tu tuid="validation_error_year_invalid_negative">
+        <tuv xml:lang="en">
+            <seg>Please provide a positive year value.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte geben Sie eine positive Jahreszahl an.</seg>
+        </tuv>
+    </tu>    
+    
 
   </body>
 
