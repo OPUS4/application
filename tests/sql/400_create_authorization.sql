@@ -6,7 +6,11 @@ INSERT INTO `user_roles` (`id`, `name`) VALUES
 (13, 'docsadmin'),
 (14, 'collectionsadmin'),
 (15, 'securityadmin'),
-(16, 'accesstest');
+(16, 'accesstest'),
+(17, 'setup module access'),
+(18, 'helppage controller access'),
+(19, 'staticpage controller access'),
+(20, 'translation controller access');
 
 # Rollen mit Rechten verknüpfen
 INSERT INTO `access_modules` (`role_id`, `module_name`) VALUES 
@@ -27,11 +31,18 @@ INSERT INTO `access_modules` (`role_id`, `module_name`) VALUES
 (16, 'admin'),
 (16, 'account'),
 (16, 'resource_collections'),
-(16, 'workflow_unpublished_published');
+(16, 'workflow_unpublished_published'),
+(17, 'setup'), -- darf auf Modul setup und alle Controller zugreifen
+(18, 'setup'),
+(18, 'resource_helppages'), -- darf nur auf Controller helpPage im Modul setup zugreifen
+(19, 'setup'),
+(19, 'resource_staticpages'), -- darf nur auf Controller staticPage im Modul setup zugreifen
+(20, 'setup'),
+(20, 'resource_translations'); -- darf nur auf Controller language im Modul setup zugreifen
 
 # Accounts anlegen
 INSERT INTO `accounts` (`id`, `login`,`password`,`email`,`first_name`,`last_name`) VALUES
-(10, 'security1', sha1('security1pwd'), 'security1@example.org', 'security1', 'Zugriff auf admin Modul'),
+(10, 'security1', sha1('security1pwd'), 'security1@example.org', 'security1', 'Zugriff auf Admin Modul'),
 (11, 'security2', sha1('security2pwd'), 'security2@example.org', 'security2', 'Zugriff auf Lizenzen'),
 (12, 'security3', sha1('security3pwd'), 'security3@example.org', 'security3', 'Zugriff auf Review und nicht Admin Modul'),
 (13, 'security4', sha1('security4pwd'), 'security4@example.org', 'security4', 'Zugriff auf Review und Admin Modul'),
@@ -40,7 +51,12 @@ INSERT INTO `accounts` (`id`, `login`,`password`,`email`,`first_name`,`last_name
 (16, 'security7', sha1('security7pwd'), 'security7@example.org', 'security7', 'Zugriff auf Account Modul.'),
 (17, 'security8', sha1('security8pwd'), 'security8@example.org', 'security8', 'Dokumente editieren.'),
 (18, 'security9', sha1('security9pwd'), 'security9@example.org', 'security9', 'Collections editieren.'),
-(19, 'security10', sha1('security10pwd'), 'security10@example.org', 'security10', 'Accounts, Rollen, IP Ranges editieren.');
+(19, 'security10', sha1('security10pwd'), 'security10@example.org', 'security10', 'Accounts, Rollen, IP Ranges editieren.'),
+(20, 'security11', sha1('security11pwd'), 'security11@example.org', 'security11', 'Zugriff auf Admin und Setup Modul'),
+(21, 'security12', sha1('security12pwd'), 'security12@example.org', 'security12', 'Zugriff auf Setup Modul'),
+(22, 'security13', sha1('security13pwd'), 'security13@example.org', 'security13', 'Zugriff auf Controller HelpPage im Setup Modul'),
+(23, 'security14', sha1('security14pwd'), 'security14@example.org', 'security14', 'Zugriff auf Controller StaticPage im Setup Modul'),
+(24, 'security15', sha1('security15pwd'), 'security15@example.org', 'security15', 'Zugriff auf Controller Language im Setup Modul');
 
 # Accounts und Rollen verknüpfen
 INSERT INTO `link_accounts_roles` (`account_id`, `role_id`) VALUES
@@ -56,7 +72,13 @@ INSERT INTO `link_accounts_roles` (`account_id`, `role_id`) VALUES
 (16, 12),
 (17, 13),
 (18, 14),
-(19, 15);
+(19, 15),
+(20, 10),
+(20, 17),
+(21, 17),
+(22, 18),
+(23, 19),
+(24, 20);
 
 # Dokument fuer Workflow Test anlegen
 INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing_corporation`, `creating_corporation`, `thesis_date_accepted`, `type`, `edition`, `issue`, `language`, `page_first`, `page_last`, `page_number`, `publication_state`, `published_date`, `published_year`, `publisher_name`, `publisher_place`, `server_date_modified`, `server_date_published`, `server_state`, `volume`, `belongs_to_bibliography`) VALUES
