@@ -296,6 +296,11 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
             $element = $this->getElement($name);
             $element->addErrorMessage('admin_validate_error_email');
         }
+        
+        if ($element == 'date' && !is_null($name)) {
+            $element = $this->getElement($name);
+            $element->addErrorMessage('admin_validate_error_date');
+        }
     }    
             
 }

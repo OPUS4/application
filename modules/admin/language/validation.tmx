@@ -108,6 +108,16 @@
             </tuv>
         </tu>
         
+        <tu tuid="admin_validate_error_date">
+            <tuv xml:lang="en">
+                <seg>Invalid Date</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Ungültige Datumsangabe</seg>
+            </tuv>
+        </tu>
+        
+        
     </body>
 
 </tmx>
