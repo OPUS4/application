@@ -668,7 +668,7 @@
                                     <type>mvc</type>
                                     <label>setup_error</label>
                                     <module>setup</module>
-                                    <controller>language</controller>
+                                    <controller>help-page</controller>
                                     <action>error</action>
                                 </error>
                             </pages>
