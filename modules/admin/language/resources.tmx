@@ -135,46 +135,46 @@
 
     <tu tuid="acl_resource_indexmaintenance">
       <tuv xml:lang="en">
-          <seg>Perform Search Index Maintenance</seg>
+          <seg>Manage Search Index</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Verwaltung des Suchindex</seg>
+        <seg>Suchindex verwalten</seg>
       </tuv>
     </tu>
 
     <tu tuid="acl_resource_job">
       <tuv xml:lang="en">
-          <seg>Management of Job Execution</seg>
+          <seg>Manage Job Execution</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Verwaltung der Job-Verarbeitung</seg>
+        <seg>Job-Verarbeitung verwalten</seg>
       </tuv>
     </tu>
 
     <tu tuid="acl_resource_helppages">
       <tuv xml:lang="en">
-          <seg>Management of FAQ pages</seg>
+          <seg>Manage FAQ pages</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Verwaltung der FAQ-Seiten</seg>
+        <seg>FAQ-Seiten verwalten</seg>
       </tuv>
     </tu>
                 
     <tu tuid="acl_resource_staticpages">
       <tuv xml:lang="en">
-          <seg>Management of Static Pages</seg>
+          <seg>Manage Static Pages</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Verwaltung der statischen Seiten</seg>
+        <seg>Statischen Seiten verwalten</seg>
       </tuv>
     </tu>
 
     <tu tuid="acl_resource_translations">
       <tuv xml:lang="en">
-          <seg>Management of Translation Resources</seg>
+          <seg>Manage Translation Resources</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Verwaltung der Übersetzungsressourcen</seg>
+        <seg>Übersetzungsressourcen verwalten</seg>
       </tuv>
     </tu>
                             
