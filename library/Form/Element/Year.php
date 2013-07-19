@@ -45,9 +45,7 @@ class Form_Element_Year extends Form_Element_Text {
         $validators = array();
         
         $validator = new Zend_Validate_Int();
-        $validator->setMessages(array(
-            Zend_Validate_Int::NOT_INT => 'validation_error_year_invalid_format'
-        ));
+        $validator->setMessage('validation_error_year_invalid_format');
         $validators[] = $validator;
         
         $validator = new Zend_Validate_GreaterThan(-1);
