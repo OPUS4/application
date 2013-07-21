@@ -609,7 +609,6 @@
                     <module>admin</module>
                     <controller>setup</controller>
                     <action>index</action>
-                    <resource>setup</resource>
                     <pages>
                         <enrichmentKey>
                             <type>mvc</type>
