@@ -359,7 +359,7 @@ function updateFolder() {
     provideFileNamesInArray "$SRC"
     
     # Check if target folder exists
-    if [[ ! -d $DEST ]]; then
+    if [[ ! -d "$DEST" ]]; then
         # Create target folder if it does not exist already
         createFolder "$DEST"
     fi
