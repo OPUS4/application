@@ -92,7 +92,7 @@ function provideFileNamesInArray() {
     unset i
     while IFS= read -r -d '' file; do
         GLOBAL_FILENAMES_ARRAY[i++]="$file"
-    done < <(find "$1" -type f -print0)
+    done < <(find "$1" -maxdepth 1 -type f -print0)
 }
 
 
