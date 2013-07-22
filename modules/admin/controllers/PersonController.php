@@ -213,6 +213,13 @@ class Admin_PersonController extends Controller_Action {
             
             $this->view->form = $form;
         }
+        
+        $this->view->document = $document;
+        $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
+
+        // Beim wechseln der Sprache würden Änderungen in editierten Felder verloren gehen
+        $this->view->languageSelectorDisabled = true;
+        $this->view->breadcrumbsDisabled = true;
     }
     
     public function returnToMetadataForm($docId, $action = null) {
