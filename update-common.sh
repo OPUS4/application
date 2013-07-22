@@ -392,10 +392,11 @@ function deleteFiles() {
     if [[ ! -z $3 ]] && [[ $3 = 'flat' ]]; then
         local FLAT=1
     fi
-    local DEST_FILES=$(ls $DEST)
+    provideFileNamesInArray "$SRC"
+    # local DEST_FILES=$(ls $DEST)
     # Iterate through destination files
     local FILE
-    for FILE in $DEST_FILES; do
+    for FILE in "${GLOBAL_FILENAMES_ARRAY[@]}"; do
         # Check if folder
         if [[ -d $DEST/$FILE ]]; then
             # Check if folder exists in source folder
