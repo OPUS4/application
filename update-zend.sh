@@ -20,7 +20,6 @@
 
 set -o errexit
 
-OPUS_UPDATE_BASEDIR="/home/edouard/tmp"
 DOWNLOADS_DIR="$OPUS_UPDATE_BASEDIR"/downloads 
 LIB_DIR="$OPUS_UPDATE_BASEDIR"/libs
 NEW_ZEND_FOLDER='ZendFramework-1.12.3-minimal'
