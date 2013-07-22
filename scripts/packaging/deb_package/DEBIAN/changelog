@@ -1,3 +1,15 @@
+opus (4.4.0) distribution; urgency=low
+
+ * Minor Release: see CHANGES.txt for details
+
+-- OPUS 4 developer team <opus4@kobv.de> Mon, 22 Jul 2013 00:00:00 UTC
+
+opus (4.3.1) distribution; urgency=low
+
+ * Minor Bugfix Release: see CHANGES.txt for details
+
+-- OPUS 4 developer team <opus4@kobv.de> Thu, 21 Feb 2013 00:00:00 UTC
+
 opus (4.3.0) distribution; urgency=low
 
  * Minor Release: see CHANGES.txt for details
