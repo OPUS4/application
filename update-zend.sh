@@ -19,6 +19,8 @@
 # Updates the ZendFramework library to Version 1.12.3
 
 set -o errexit
+
+OPUS_UPDATE_BASEDIR="/home/edouard/tmp"
 DOWNLOADS_DIR="$OPUS_UPDATE_BASEDIR"/downloads 
 LIB_DIR="$OPUS_UPDATE_BASEDIR"/libs
 NEW_ZEND_FOLDER='ZendFramework-1.12.3-minimal'
@@ -31,27 +33,27 @@ if [ ! -d "$DOWNLOADS_DIR" ];
 then
     echo "Download directory $DOWNLOADS_DIR not found. Please check."
     echo "NOT updating Zend-Framework!"
-    exit
+    exit 1
 fi
 
 if [ ! -d "$LIB_DIR" ];
 then
     echo "Library directory $LIB_DIR not found. Please check."
     echo "NOT updating Zend-Framework!"
-    exit
+    exit 1
 fi
 
 echo "$LIB_DIR/$NEW_ZEND_FOLDER"
 if [ -d "$LIB_DIR/$NEW_ZEND_FOLDER" ];
 then
   echo "Zend-Framework Version 1.12.3 already installed. Nothing to do here."
-  exit
+  exit 1
 fi
 
 echo "Downloading Zend-Framework Version 1.12.3"
 
-wget -O "$DOWNLOADS_DIR"/zend.tar.gz "$ZEND_LIB_URL"
-if [ ! -f "$DOWNLOADS_DIR"/zend.tar.gz ]
+
+if ! wget -O "$DOWNLOADS_DIR"/zend.tar.gz "$ZEND_LIB_URL";
 then
   echo "Unable to download $ZEND_LIB_URL"
   exit 1
@@ -65,3 +67,4 @@ rm ZendFramework
 ln -svf ZendFramework-1.12.3-minimal ZendFramework
 
 echo "done"
+exit 0
