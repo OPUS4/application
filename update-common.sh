@@ -81,7 +81,7 @@ function DRYRUN() {
 # Returns list of files names from folder
 function getFiles() {
     local FOLDER=$1
-    find "$FOLDER" -type f -print0 | while read -r -d $'\0' FILE_PATH; do
+    find "$FOLDER" -maxdepth 1 -type f -print0 | while read -r -d $'\0' FILE_PATH; do
         echo $(basename "$FILE_PATH")
     done
 }
@@ -353,6 +353,8 @@ function updateFolder() {
         createFolder "$DEST"
     fi
     # Iterate through files and folders
+    SAVEIFS=$IFS
+    IFS=$'\n'
     local FILE
     for FILE in $SRC_FILES; do
         # Check that it is not a link
@@ -366,6 +368,7 @@ function updateFolder() {
             fi
         fi
     done
+    IFS=$SAFEIFS
     return 0 # TODO see comments for deleteFiles
 }
 
