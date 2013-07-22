@@ -7,10 +7,13 @@ INSERT INTO `user_roles` (`id`, `name`) VALUES
 (14, 'collectionsadmin'),
 (15, 'securityadmin'),
 (16, 'accesstest'),
-(17, 'setup module access'),
-(18, 'helppage controller access'),
-(19, 'staticpage controller access'),
-(20, 'translation controller access');
+(17, 'setupmoduleaccess'),
+(18, 'helppagecontrolleraccess'),
+(19, 'staticpagecontrolleraccess'),
+(20, 'translationcontrolleraccess'),
+(21, 'helppageandadmin'),
+(22, 'staticpageandadmin'),
+(23, 'languageandadmin');
 
 # Rollen mit Rechten verknüpfen
 INSERT INTO `access_modules` (`role_id`, `module_name`) VALUES 
@@ -34,11 +37,17 @@ INSERT INTO `access_modules` (`role_id`, `module_name`) VALUES
 (16, 'workflow_unpublished_published'),
 (17, 'setup'), -- darf auf Modul setup und alle Controller zugreifen
 (18, 'setup'),
-(18, 'resource_helppages'), -- darf nur auf Controller helpPage im Modul setup zugreifen
+(18, 'resource_helppages'),    -- darf nur auf Controller helpPage im Modul setup zugreifen
 (19, 'setup'),
-(19, 'resource_staticpages'), -- darf nur auf Controller staticPage im Modul setup zugreifen
-(20, 'setup'),
-(20, 'resource_translations'); -- darf nur auf Controller language im Modul setup zugreifen
+(19, 'resource_staticpages'),  -- darf nur auf Controller staticPage im Modul setup zugreifen
+(20, 'setup'), 
+(20, 'resource_translations'), -- darf nur auf Controller language im Modul setup zugreifen
+(21, 'admin'),
+(21, 'resource_helppages'),    -- darf auf Module admin und Controller helpPage im Modul setup zugreifen
+(22, 'admin'),
+(22, 'resource_staticpages'),  -- darf auf Module admin und Controller staticPage im Modul setup zugreifen
+(23, 'admin'),
+(23, 'resource_translations'); -- darf auf Module admin und Controller language im Modul setup zugreifen
 
 # Accounts anlegen
 INSERT INTO `accounts` (`id`, `login`,`password`,`email`,`first_name`,`last_name`) VALUES
@@ -56,7 +65,11 @@ INSERT INTO `accounts` (`id`, `login`,`password`,`email`,`first_name`,`last_name
 (21, 'security12', sha1('security12pwd'), 'security12@example.org', 'security12', 'Zugriff auf Setup Modul'),
 (22, 'security13', sha1('security13pwd'), 'security13@example.org', 'security13', 'Zugriff auf Controller HelpPage im Setup Modul'),
 (23, 'security14', sha1('security14pwd'), 'security14@example.org', 'security14', 'Zugriff auf Controller StaticPage im Setup Modul'),
-(24, 'security15', sha1('security15pwd'), 'security15@example.org', 'security15', 'Zugriff auf Controller Language im Setup Modul');
+(24, 'security15', sha1('security15pwd'), 'security15@example.org', 'security15', 'Zugriff auf Controller Language im Setup Modul'),
+(25, 'security16', sha1('security16pwd'), 'security16@example.org', 'security16', 'Zugriff auf Controller HelpPage im Setup Modul und Admin Modul'),
+(26, 'security17', sha1('security17pwd'), 'security17@example.org', 'security17', 'Zugriff auf Controller StaticPage im Setup Modul und Admin Modul'),
+(27, 'security18', sha1('security18pwd'), 'security18@example.org', 'security18', 'Zugriff auf Controller Language im Setup Modul und Admin Modul');
+
 
 # Accounts und Rollen verknüpfen
 INSERT INTO `link_accounts_roles` (`account_id`, `role_id`) VALUES
@@ -78,7 +91,10 @@ INSERT INTO `link_accounts_roles` (`account_id`, `role_id`) VALUES
 (21, 17),
 (22, 18),
 (23, 19),
-(24, 20);
+(24, 20),
+(25, 21),
+(26, 22),
+(27, 23);
 
 # Dokument fuer Workflow Test anlegen
 INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing_corporation`, `creating_corporation`, `thesis_date_accepted`, `type`, `edition`, `issue`, `language`, `page_first`, `page_last`, `page_number`, `publication_state`, `published_date`, `published_year`, `publisher_name`, `publisher_place`, `server_date_modified`, `server_date_published`, `server_state`, `volume`, `belongs_to_bibliography`) VALUES
