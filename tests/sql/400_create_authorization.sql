@@ -1,4 +1,5 @@
 # Rollen anlegen
+# beachte, dass Werte des Attributs 'name' nur Ziffern und Buchstaben enthalten dürfen
 INSERT INTO `user_roles` (`id`, `name`) VALUES 
 (10, 'fulladmin'),
 (11, 'licenceadmin'),
@@ -10,10 +11,7 @@ INSERT INTO `user_roles` (`id`, `name`) VALUES
 (17, 'setupmoduleaccess'),
 (18, 'helppagecontrolleraccess'),
 (19, 'staticpagecontrolleraccess'),
-(20, 'translationcontrolleraccess'),
-(21, 'helppageandadmin'),
-(22, 'staticpageandadmin'),
-(23, 'languageandadmin');
+(20, 'translationcontrolleraccess');
 
 # Rollen mit Rechten verknüpfen
 INSERT INTO `access_modules` (`role_id`, `module_name`) VALUES 
@@ -41,13 +39,7 @@ INSERT INTO `access_modules` (`role_id`, `module_name`) VALUES
 (19, 'setup'),
 (19, 'resource_staticpages'),  -- darf nur auf Controller staticPage im Modul setup zugreifen
 (20, 'setup'), 
-(20, 'resource_translations'), -- darf nur auf Controller language im Modul setup zugreifen
-(21, 'admin'),
-(21, 'resource_helppages'),    -- darf auf Module admin und Controller helpPage im Modul setup zugreifen
-(22, 'admin'),
-(22, 'resource_staticpages'),  -- darf auf Module admin und Controller staticPage im Modul setup zugreifen
-(23, 'admin'),
-(23, 'resource_translations'); -- darf auf Module admin und Controller language im Modul setup zugreifen
+(20, 'resource_translations'); -- darf nur auf Controller language im Modul setup zugreifen
 
 # Accounts anlegen
 INSERT INTO `accounts` (`id`, `login`,`password`,`email`,`first_name`,`last_name`) VALUES
@@ -92,9 +84,12 @@ INSERT INTO `link_accounts_roles` (`account_id`, `role_id`) VALUES
 (22, 18),
 (23, 19),
 (24, 20),
-(25, 21),
-(26, 22),
-(27, 23);
+(25, 18),
+(25, 10),
+(26, 19),
+(26, 10),
+(27, 20),
+(27, 10);
 
 # Dokument fuer Workflow Test anlegen
 INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing_corporation`, `creating_corporation`, `thesis_date_accepted`, `type`, `edition`, `issue`, `language`, `page_first`, `page_last`, `page_number`, `publication_state`, `published_date`, `published_year`, `publisher_name`, `publisher_place`, `server_date_modified`, `server_date_published`, `server_state`, `volume`, `belongs_to_bibliography`) VALUES
