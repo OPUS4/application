@@ -119,13 +119,21 @@ if [[ "$VERSION_OLD" < "4.4" && "$VERSION_NEW" > "4.4" ]]; then
         echo 'done'
     fi
 
+    FILES=$(getFiles "$SRC/doctypes_templates")
+
+    for FILE in $FILES; do
+        updateFile "$SRC/doctypes_templates" "$PHTML_FILES_CONFIGS" "opus4/modules/publish/views/scripts/form" "$FILE" backup
+    done
+
+else
+
+    FILES=$(getFiles "$SRC/doctypes_templates")
+
+    for FILE in $FILES; do
+        updateFile "$SRC/doctypes_templates" "$PHTML_FILES_CONFIGS" "$MD5PATH/doctypes_templates" "$FILE" backup
+    done
+
 fi
-
-FILES=$(getFiles "$SRC/doctypes_templates")
-
-for FILE in $FILES; do
-    updateFile "$SRC/doctypes_templates" "$PHTML_FILES_CONFIGS" "$MD5PATH/doctypes_templates" "$FILE" backup
-done
 
 echo "Update of document types completed."
 
