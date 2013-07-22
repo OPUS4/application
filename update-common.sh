@@ -86,6 +86,16 @@ function getFiles() {
     done
 }
 
+# Set global array GLOBAL_FILENAMES_ARRAY of file names from folder (given as argument)
+function provideFileNamesInArray() {
+    unset GLOBAL_FILENAMES_ARRAY
+    unset i
+    while IFS= read -r -d '' file; do
+        GLOBAL_FILENAMES_ARRAY[i++]="$file"
+    done < <(find "$1" -type f -print0)
+}
+
+
 # Gets value of property from file
 # @param $1 Path to file containing property
 # @param $2 Name of property
@@ -346,7 +356,8 @@ function updateFolder() {
     fi
     DEBUG "Update folder $DEST from $SRC"
     # Get files and folders in source directory
-    local SRC_FILES=$(ls $SRC)
+    provideFileNamesInArray "$SRC"
+    
     # Check if target folder exists
     if [[ ! -d $DEST ]]; then
         # Create target folder if it does not exist already
@@ -354,11 +365,11 @@ function updateFolder() {
     fi
     # Iterate through files and folders
     local FILE
-    for FILE in $SRC_FILES; do
+    for FILE in "${GLOBAL_FILENAMES_ARRAY[@]}"; do
         # Check that it is not a link
-        if [[ ! -L $SRC/$FILE ]]; then
+        if [[ ! -L "$SRC/$FILE" ]]; then
             # Check if folder
-            if [[ -d $SRC/$FILE ]]; then
+            if [[ -d "$SRC/$FILE" ]]; then
                 # Call updateFolder recursively
                 [[ "$FLAT" -eq 0 ]] && updateFolder "$SRC/$FILE" "$DEST/$FILE"
             else
