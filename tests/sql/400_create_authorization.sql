@@ -11,7 +11,9 @@ INSERT INTO `user_roles` (`id`, `name`) VALUES
 (17, 'setupmoduleaccess'),
 (18, 'helppagecontrolleraccess'),
 (19, 'staticpagecontrolleraccess'),
-(20, 'translationcontrolleraccess');
+(20, 'translationcontrolleraccess'),
+(21, 'indexmaintenanceaccess'),
+(22, 'jobaccess');
 
 # Rollen mit Rechten verknüpfen
 INSERT INTO `access_modules` (`role_id`, `module_name`) VALUES 
@@ -39,7 +41,11 @@ INSERT INTO `access_modules` (`role_id`, `module_name`) VALUES
 (19, 'setup'),
 (19, 'resource_staticpages'),  -- darf nur auf Controller staticPage im Modul setup zugreifen
 (20, 'setup'), 
-(20, 'resource_translations'); -- darf nur auf Controller language im Modul setup zugreifen
+(20, 'resource_translations'), -- darf nur auf Controller language im Modul setup zugreifen
+(21, 'admin'),
+(21, 'resource_indexmaintenance'),
+(22, 'admin'),
+(22, 'resource_job');
 
 # Accounts anlegen
 INSERT INTO `accounts` (`id`, `login`,`password`,`email`,`first_name`,`last_name`) VALUES
@@ -60,7 +66,9 @@ INSERT INTO `accounts` (`id`, `login`,`password`,`email`,`first_name`,`last_name
 (24, 'security15', sha1('security15pwd'), 'security15@example.org', 'security15', 'Zugriff auf Controller Language im Setup Modul'),
 (25, 'security16', sha1('security16pwd'), 'security16@example.org', 'security16', 'Zugriff auf Controller HelpPage im Setup Modul und Admin Modul'),
 (26, 'security17', sha1('security17pwd'), 'security17@example.org', 'security17', 'Zugriff auf Controller StaticPage im Setup Modul und Admin Modul'),
-(27, 'security18', sha1('security18pwd'), 'security18@example.org', 'security18', 'Zugriff auf Controller Language im Setup Modul und Admin Modul');
+(27, 'security18', sha1('security18pwd'), 'security18@example.org', 'security18', 'Zugriff auf Controller Language im Setup Modul und Admin Modul'),
+(28, 'security19', sha1('security19pwd'), 'security19@example.org', 'security19', 'Zugriff auf Solr-Verwaltung'),
+(29, 'security20', sha1('security20pwd'), 'security20@example.org', 'security20', 'Zugriff auf Jobverwaltung');
 
 
 # Accounts und Rollen verknüpfen
@@ -89,7 +97,9 @@ INSERT INTO `link_accounts_roles` (`account_id`, `role_id`) VALUES
 (26, 19),
 (26, 10),
 (27, 20),
-(27, 10);
+(27, 10),
+(28, 21),
+(29, 22);
 
 # Dokument fuer Workflow Test anlegen
 INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing_corporation`, `creating_corporation`, `thesis_date_accepted`, `type`, `edition`, `issue`, `language`, `page_first`, `page_last`, `page_number`, `publication_state`, `published_date`, `published_year`, `publisher_name`, `publisher_place`, `server_date_modified`, `server_date_published`, `server_state`, `volume`, `belongs_to_bibliography`) VALUES
