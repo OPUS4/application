@@ -353,8 +353,6 @@ function updateFolder() {
         createFolder "$DEST"
     fi
     # Iterate through files and folders
-    SAVEIFS=$IFS
-    IFS=$'\n'
     local FILE
     for FILE in $SRC_FILES; do
         # Check that it is not a link
@@ -368,7 +366,6 @@ function updateFolder() {
             fi
         fi
     done
-    IFS=$SAFEIFS
     return 0 # TODO see comments for deleteFiles
 }
 
