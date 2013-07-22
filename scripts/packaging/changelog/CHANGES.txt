@@ -1,5 +1,161 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.4.0 2013-07-22 ========================
+
+h3. Bugs
+
+* [OPUSVIER-1666] - XML-Cache wird nach Collection/CollectionRole-Update (Umbenennung, Unsichtbarmachung, Löschung, Änderung von Eigenschaften) nicht geupdated
+* [OPUSVIER-1681] - XML-Cache bekommt von Änderungen an Dateien eines Dokuments nichts mit
+* [OPUSVIER-1687] - Design des XML-Cache überarbeiten: Cacheeintrag eines Dokuments wird nur aktualisiert, wenn nach Änderung store()-Methode auf dem Dokument gerufen wird -- indirekte Änderungen werden ignoriert
+* [OPUSVIER-1688] - XML-Cache bekommt von den Änderungen in Sprache, Licence, Dateien und DNB-Institutionen nichts mit
+* [OPUSVIER-1739] - Änderungen an Dateien über den Admin-Bereich aktualisiert XML-Cache nicht
+* [OPUSVIER-1820] - Patentinformationen werden nicht auf der Frontdoor angezeigt
+* [OPUSVIER-2124] - Dokumenttyp-Templates und View-Templates sollten nicht in einem Verzeichnis liegen: sonst sind die Dokumenttypbezeichnungen check und error nicht erlaubt
+* [OPUSVIER-2611] - Fehler beim Löschen eines Browsingfeldes im Publish-Formular
+* [OPUSVIER-2616] - OPUS4 kann sinnvoll nur mit Cookies benutzt werden (sowohl von Admin als auch normalem Benutzer)
+* [OPUSVIER-2740] - Dokumentübersicht zeigt nur maximal eine titelverleihende bzw. veröffentlichende Stelle pro Dokument an
+* [OPUSVIER-2759] - Auswahl bei einstufigen Collections im Publish-Formular wird nicht übernommen, wenn man "Browse Down"-Button verwendet
+* [OPUSVIER-2760] - Performanz des Exports für Publikationslisten nicht ausreichend
+* [OPUSVIER-2776] - Admin Eintrag im Hauptmenu wird für untergeordnete Seiten in der Administration nicht hervorgehoben
+* [OPUSVIER-2783] - Nicht editierbare Felder im Publish-Formular werden nicht mit abgespeichert
+* [OPUSVIER-2800] - Migration von unterschiedlichen Dokumenten mit gleichen Dateinamen zulassen, sonst gehen Daten verloren
+* [OPUSVIER-2813] - Keine Lokalisierung des Ausgabeformats für Datumsfelder auf der Frontdoor
+* [OPUSVIER-2819] - Fehlermeldung bei nicht gefüllten "required fields" wird nicht übersetzt
+* [OPUSVIER-2824] - beim Anlegen eines Patents unter ausschließlicher Angabe einer Nummer wird automatisch für das YearApplied der Wert 0000 gespeichert
+* [OPUSVIER-2835] - "Undefined index: TitleMainLanguage_1" bzw. "Undefined index: TitleAbstractLanguage_1", wenn das Publikationsformular manipuliert wird
+* [OPUSVIER-2837] - Eintrag von Bandnummer ohne Auswahl Schriftenreihe im Publish-Formular erzeugt Anwendungsfehler nach Prüfung und Speichern
+* [OPUSVIER-2839] - Auswahl einer Schriftenreihe ohne Angabe einer Bandnummer im Publish-Formular erzeugt keinen Validierungsfehler
+* [OPUSVIER-2843] - Enthält eine Schriftenreihe eine Bandnummer, die mit der ID der Schriftenreihe übereinstimmt, so kann im Publish diese Schriftenreihe nicht mehr ausgewählt werden
+* [OPUSVIER-2845] - CI-Target opus4servercontrolleronly zeigt Status "grün", obwohl zwei Tests fehlschlagen
+* [OPUSVIER-2848] - Labelvergabe bei migrierten Dateien ist fehlerhaft
+* [OPUSVIER-2850] - URN_Collision löst keinen Validierungsfehler aus, sondern tritt erst beim Versuch des Abspeicherns im dritten Formularschritt ein
+* [OPUSVIER-2852] - Beim Abspeichern des Opus_Document im Formularschritt 3 (Deposit) erfolgt kein ExceptionHandling
+* [OPUSVIER-2861] - keine Fehlerbehandlung beim Instanziieren von Model-Klassen im Publish_Model_Deposit
+* [OPUSVIER-2882] - Ungeeignete und fehlende Übesersetzungen  beim Import von Bibtex-Daten
+* [OPUSVIER-2897] - Auswertung der Konfigurationsschlüssel documentTypes.templates.* findet nicht statt
+* [OPUSVIER-2908] - Fehler beim Bearbeiten der Homepage
+* [OPUSVIER-2916] - Store auf einem Document mit Titel, ändert ServerDateModified für alle Dokumente
+* [OPUSVIER-2920] - Ausgabe von XML-Kommentaren mit den Namen von unsichtbaren Collections bzw. Collection Roles in der Frontdoor: härten oder entfernen
+* [OPUSVIER-2934] - Migrationtest Opus3Migration_CorruptXmlDumpTest::testCorruptXmlDump läuft auf CI-System nicht durch
+* [OPUSVIER-2935] - Überschreiben der delete()-Methode in Opus_Collection(Role) verhindert korrektes Funktionieren des Plugin-Mechanismus
+* [OPUSVIER-2936] - Revision History für die Dateien Opus3Migration_ICL.php und Opus3Migration_Documents.php wiederherstellen
+* [OPUSVIER-2970] - ACL-Ressourcen für neu hinzugefügte Admin-Funktionalitäten konfigurieren
+* [OPUSVIER-2976] - Opus_File::_createHashValues härten gegen den Fall, dass zwar in der Datenbank eine Referenz auf eine Datei angegeben wurde, diese aber nicht im Dateisystem existiert
+
+h3. Aufgaben
+
+* [OPUSVIER-2722] - server_date_published (Datum der Publikation (Server)) auf der Frontdoor anzeigen
+* [OPUSVIER-2158] - Automatisches Testen des Migrationsskripts
+* [OPUSVIER-2658] - Mechanismus zum Verwalten der Übersetzungsressourcen in der Administration spezifizieren
+* [OPUSVIER-2729] - Codeanpassungen bei der Administration der Lizenzen eines Dokuments in Zusammenhang mit OPUSVIER-2727
+* [OPUSVIER-2730] - Codeanpassungen bei der Administration der DNB-Institute eines Dokuments in Zusammenhang mit OPUSVIER-2728
+* [OPUSVIER-2763] - Immer Aktivierungsstatus einer Lizenz auf der Ansichtsseite der Lizenz anzeigen
+* [OPUSVIER-2766] - Klasse Review_Model_DocumentAdapter in library verschieben, da sie von zwei Modulen verwendet wird
+* [OPUSVIER-2769] - Index Seite des AccountControllers mit weiteren Informationen anreichen
+* [OPUSVIER-2797] - Einbindung eines Tracking-Codes dokumentieren
+* [OPUSVIER-2810] - jpgraph zu den Build Target im CI System hinzufügen
+* [OPUSVIER-2811] - Änderung des Übersetzungsschlüssels ServerDatePublished (für Administration und Frontdoor)
+* [OPUSVIER-2812] - Anpassung der Dokumentation: Text und ggf. auch Screenshots
+* [OPUSVIER-2821] - Konfiguration von nicht-editierbaren Default-Werten im Publikationsformular dokumentieren
+* [OPUSVIER-2823] - CruiseControl-Konfigurationsdateien ins SVN laden
+* [OPUSVIER-2831] - Konfigurierbarkeit des Sortierkriteriums für Facettenwerte
+* [OPUSVIER-2832] - Spezialsortierkriterium für Facette year umsetzen, so dass absteigende Sortierung (mit dem neuesten Jahr zuerst) möglich ist
+* [OPUSVIER-2833] - Konfiguration des Sortierkriteriums für die Facette year dokumentieren
+* [OPUSVIER-2834] - Verwendung des Opus_Document-Cache aktivieren
+* [OPUSVIER-2844] - Zusätzlichen Kommandozeilen-Parameter des Migrationsskriptes in die Doku aufnehmen. 
+* [OPUSVIER-2847] - Beim Neuanlegen eines Cache-Eintrags für ein Dokument gleichzeitig eine Reindexierung für das Dokument anfordern
+* [OPUSVIER-2849] - Neuaufbau von fehlenden Cache-Einträgen im Hintergrund über Cronjob auslösen
+* [OPUSVIER-2851] - Bereitstellung des MetadatenImports im Framework
+* [OPUSVIER-2854] - Hinweis zum Feld IdentifierUrn im Publikationsformular in die Doku aufnehmen
+* [OPUSVIER-2855] - Das Feld IdentiferUrn sollte aufgrund der Abhängigkeiten zur DNB nicht mehr in den Publish-Template benutzt werden
+* [OPUSVIER-2856] - Dokumentation des Features Publikationslisten
+* [OPUSVIER-2859] - Indexierung beim Aufruf von store() auf dem Dokument sollte immer synchron erfolgen
+* [OPUSVIER-2860] - Ursache für das Brechen der Selenium-Tests 'testSyntaxInvalidDocIdErrorMessage' bzw. 'testFileDoesNotBelongToDocErrorMessage' auf dem CI-System ermitteln
+* [OPUSVIER-2862] - Revision Number im Seitenfooter per CSS verstecken, wenn die Instanz im Production-Mode betrieben wird
+* [OPUSVIER-2864] - Möglichkeit in Selenium-Tests schaffen, den Application-Mode abzufragen
+* [OPUSVIER-2868] - einheitliche Fehlerbehandlung bei Model_Exceptions im Module_Publish sicherstellen
+* [OPUSVIER-2869] - Dokumenttyp-Templates sollen aus modules-Verzeichnis in configs-Verzeichnis verschoben werden
+* [OPUSVIER-2870] - Aktualisierung auf Zend 1.12.3 zum Update Script hinzufügen
+* [OPUSVIER-2874] - Dokumentation Config-Parameter publist.stylesheet
+* [OPUSVIER-2875] - Dokumentation Config-Parameter publist.groupby.completedyear
+* [OPUSVIER-2881] - Overview Link in Documents Liste in Edit Link umwandeln
+* [OPUSVIER-2898] - Verzeichnisbaum in der Dokumentation in Kap. 5.1 aktualisieren
+* [OPUSVIER-2899] - Typo in der Dokumentation
+* [OPUSVIER-2902] - Anpassung der Dokumentation in Zusammenhang mit der Verschiebung der PHTML-Template-Dateien
+* [OPUSVIER-2903] - Erweiterung des Update-Skripts: Behandlung der Verschiebung der PHTML-Template-Files
+* [OPUSVIER-2905] - Anpassung des roten Hinweiskasten in Kap. 8.4.6: Verwendung von Unterstrichen im Dokumenttypnamen
+* [OPUSVIER-2906] - Veröffentlichung von Prüfsummen für den OPUS4-Release-Tarball
+* [OPUSVIER-2907] - Kann die Datei pl.css aus layouts/opus4/css entfernt werden?
+* [OPUSVIER-2913] - SolrIndexBuilder sollte unabhängig von der Konfiguration die Indexierung immer unmittelbar ausführen
+* [OPUSVIER-2914] - Markierung der Bearbeitung von Übersetzungsressourcen als Beta
+* [OPUSVIER-2932] - Diagnose für Test Home_IndexControllerTest::testStartPageContainsTotalNumOfDocs erleichtern
+* [OPUSVIER-2947] - Aktualisierung des Install-Skripts auf das aktuelle Zend Framework
+* [OPUSVIER-2957] - Watchdog für php_error_log auf opus4ci einrichten
+* [OPUSVIER-2958] - Anpassung der Dokumentation: Abhängigkeit auf Version des Zend Frameworks hat sich verändert
+* [OPUSVIER-343] - Add button to administration to trigger indexing of database
+* [OPUSVIER-485] - Konfigurierbarkeit der Sortierreihenfolge von Facetten
+* [OPUSVIER-851] - Anzahl der Dokumente pro Seite
+* [OPUSVIER-1107] - Collection-Änderungen: Update aller zugeordneten Dokumente
+* [OPUSVIER-1690] - Bei der Zuweisung von Collections zu einem Dokument im Adminbereich die Sichtbarkeit farblich kennzeichnen
+* [OPUSVIER-1774] - Editierbarkeit der TMX-Sprachdateien innerhalb des Administrationsbereiches ermöglichen
+* [OPUSVIER-1817] - FileManager sollte nachfragen bevor eine Datei gelöscht wird
+* [OPUSVIER-1824] - Anforderungsanalyse für Publikationslisten
+* [OPUSVIER-1903] - Klasse zum Lesen und Schreiben von TMX Dateien
+* [OPUSVIER-2089] - PHP Warning im Zusammenhang mit der Library JpGraph in Logfile auf dem CI-System
+* [OPUSVIER-2321] - Editieren der Lizenzen über eine Liste von Checkboxen
+* [OPUSVIER-2371] - Administrations-Seite erstellen, die den Status der Dokumente im Index auflistet
+* [OPUSVIER-2372] - neues Indexfeld server_date_modified einführen
+* [OPUSVIER-2486] - neues mehrwertiges Indexfeld fulltext_indexed anlegen, in dem die Namen der Volltextdateien abgelegt werden, die mit nicht-leerem Ergebnis extrahiert wurde
+* [OPUSVIER-2585] - Aktiv-Status der Lizenzen bereits auf Übersichtsseite farblich (rot/grün) kennzeichnen
+* [OPUSVIER-2724] - leeres DB-Update-Skript db/schema/update-4.3.1-to-4.4.0.sql anlegen
+* [OPUSVIER-2727] - Abfrage auf Tabelle document_licences beim Instanziieren eines Opus_Document eliminieren
+* [OPUSVIER-2728] - zwei Abfragen auf Tabelle dnb_institutes beim Instanziieren eines Opus_Document eliminieren
+* [OPUSVIER-2750] - Icons für die Sortierung von Personen, Schriftenreihen, ...
+* [OPUSVIER-2751] - Hauptmenü für Administration neu gestalten
+* [OPUSVIER-2778] - Url-Parameter-Check für Publikationslisten
+* [OPUSVIER-2779] - Separate Stylesheet-Directories für den Export und die Publikationslisten
+* [OPUSVIER-2780] - Mapping der URL-Parameter 'role' und 'number' auf Suchanfrage
+* [OPUSVIER-2785] - Bearbeiten der Einträge auf der Hilfeseite
+* [OPUSVIER-2789] - Lizenzen editieren
+* [OPUSVIER-2790] - Patente editieren
+* [OPUSVIER-2791] - Allgemeine Metadaten editieren
+* [OPUSVIER-2796] - Bearbeitung der Einträge auf statischen Seiten
+* [OPUSVIER-2801] - Titel editieren im neuen Metadaten-Formular
+* [OPUSVIER-2827] - Implementierung eines MetadatenImport-Workers
+* [OPUSVIER-2840] - Anzeige der Opus_Job-Queue in der Administration
+* [OPUSVIER-2841] - Integration des Setup-Moduls in die Navigation
+* [OPUSVIER-2866] - Auswahl des Stylesheets um Config-Parameter erweiteren 
+* [OPUSVIER-2867] - Gruppierung der Dokumente einer Publikationsliste konfigurierbar machen 
+* [OPUSVIER-2883] - Implementierung von Unit-Tests für den BibTeX-Import-Controller 
+* [OPUSVIER-2888] - Absolute Urls statt relativer Urls im Default-Layout
+* [OPUSVIER-2889] - Prefix für attribute 'id' und 'class' sowie die Anker im Default-Layout einführen
+* [OPUSVIER-2892] - Unterbindung von Namespaces im Default-Layout
+* [OPUSVIER-2896] - Verschiebung der Job-Erzeugung beim BibTeX-Import vom Controller in das Modell 
+* [OPUSVIER-2900] - Import von BibTeX-Dateien mit deutschen Umlauten
+* [OPUSVIER-2912] - Selenium Tests für neues HTML gefixt
+* [OPUSVIER-2918] - Util-Klasse implementieren, die einen Konsistenzcheck bezüglich Datenbank und Suchindex durchführt und Inkonsistenzen auflöst
+* [OPUSVIER-2919] - Job-Worker-Klasse und zugehöriges Cron-Skript für die Ausführung des Consistency Checks implementieren
+* [OPUSVIER-2923] - Validierung von Titeln im Metadaten-Formular
+* [OPUSVIER-2925] - Konsistenzprüfung in Administration
+* [OPUSVIER-2937] - Beim implizites Löschen von Collection-Bäumen wird das server_date_modified nicht aktualisiert
+* [OPUSVIER-2941] - Restlichen adminContainer von PHTML Skripten entfernen
+* [OPUSVIER-2949] - Einführung eines spezifischen Konfigurationsparameters für die asynchrone Ausführung der Index-Maintenance
+* [OPUSVIER-2954] - Dokumentation des neuen Features Konsistenzprüfung
+
+h3. Dokumentation
+
+* [OPUSVIER-2678] - Dokumentation der asynchronen Jobverarbeitung
+* [OPUSVIER-2725] - Korrektur in Kapitel 5.1 (Workspace Permissions)
+* [OPUSVIER-2735] - Direktverlinkungen in den FAQ
+* [OPUSVIER-2829] - Cronjob zur Cache-Revalidierung
+* [OPUSVIER-2830] - Bearbeitung von Übersetzungsressourcen und statischen Inhalten
+* [OPUSVIER-2898] - Verzeichnisbaum in der Dokumentation in Kap. 5.1 aktualisieren 
+
+h3. Spezifikation
+
+* [OPUSVIER-1684] - Hinzufügen von mehreren Informationen gleichen Types ist mühsam
+
+
 h2. ======================== Release 4.3.1 2013-02-21 ========================
 
 h3. Bugs
@@ -22,6 +178,7 @@ h3. Dokumentation
 
 * [OPUSVIER-2723] - Anforderungen an Mail-Server (SMTP) in der Dokumentation präzisieren
 * [OPUSVIER-2736] - Abhängigkeit zwischen PHTML-Template und XML-Dokumenttypdefinition: Schreibweise des Wertes des Attributs name
+
 
 h2. ======================== Release 4.3.0 2012-12-20 ========================
 
@@ -261,6 +418,7 @@ h3. Documentation
 * [OPUSVIER-2566] - Kapitel 2.6 Export: Der Parameter heißt "stylesheets"
 * [OPUSVIER-2567] - Hilfe Index wird in "help.ini" statt "help.phtml" konfiguriert
 * [OPUSVIER-2569] - Nur noch "all-lower-case" Loginnamen verwenden
+
 
 h2. ======================== Release 4.2.1 2012-03-01 ========================
 
@@ -912,7 +1070,7 @@ h3. Bugfixes
 * [OPUSVIER-1439] - Deb-Package: Unnötige Dependencies "subversion", "curl", "php-crypt-gpg", "xdebug"
 * [OPUSVIER-1444] - Werte im Publish-Formular werden doppelt-escaped in Datenbank gespeichert
 * [OPUSVIER-1446] - Schlagwortsprache wird nicht im Publish-Formular abgefragt
-* [OPUSVIER-1452] - $Id$-Keyword im OPUS-Prolog wird bei einigen Dateien aufgrund nicht gesetzter svn:keywords Eigenschaft nicht gesetzt
+* [OPUSVIER-1452] - \$Id\$-Keyword im OPUS-Prolog wird bei einigen Dateien aufgrund nicht gesetzter svn:keywords Eigenschaft nicht gesetzt
 * [OPUSVIER-1458] - Abbrechen-Aktion im zweiten Formularschritt führt kein Cleanup durch
 * [OPUSVIER-1462] - createdb.sh.template stirbt, wenn Passwort Leerzeichen enthält
 * [OPUSVIER-1468] - Publish-Formulare: Feld "ServerDateUnlocking" muss entfernt werden
