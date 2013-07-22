@@ -27,6 +27,15 @@ Modul "setup" zu gewähren oder einzeln das Recht "FAQ-Seiten verwalten",
 zuzuweisen. Bitte beachten Sie, dass Benutzer, die der Role administrator
 zugeordnet sind, bereits automatisch über diese neuen Zugriffsrechte verfügen.
 
+Bitte beachten Sie:
+
+Soll der Benutzer neben dem Zugriff auf einzelne im Modul "setup" enthaltene
+Funktionen auch Zugriff auf das Modul "admin" erhalten, so müssen dem Benutzer
+dafür zwei getrennte Rollen zugewiesen werden. Es ist aktuell nicht möglich nur
+eine Rolle zu definieren, die gleichzeitig den Zugriff auf das Modul "admin" und
+auf eine oder mehrere der Funktionen "FAQ-Seiten verwalten", "Statischen Seiten
+verwalten" bzw. "Übersetzungsressourcen verwalten" erlaubt.
+
 
 h3. Anpassung der benötigten Version des Zend Frameworks
 
