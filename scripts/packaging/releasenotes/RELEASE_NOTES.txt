@@ -24,7 +24,7 @@ den Zugriff auf die ersten beiden Funktionen muss der Rolle das Recht
 Für den Zugriff auf die drei letzten Funktionen ist entweder das Recht für das
 Modul "setup" zu gewähren oder einzeln das Recht "FAQ-Seiten verwalten",
 "Statischen Seiten verwalten" bzw. "Übersetzungsressourcen verwalten"
-zuzuweisen. Bitte beachten Sie, dass Benutzer, die der Role administrator
+zuzuweisen. Bitte beachten Sie, dass Benutzer, die der Rolle administrator
 zugeordnet sind, bereits automatisch über diese neuen Zugriffsrechte verfügen.
 
 Bitte beachten Sie:
@@ -39,11 +39,11 @@ verwalten" bzw. "Übersetzungsressourcen verwalten" erlaubt.
 
 h3. Anpassung der benötigten Version des Zend Frameworks
 
-Mit OPUS 4.4 ändert sich die Versionsabhängig auf das Zend Framework von 1.10.6
-auf 1.12.3. Sofern Sie die Instanz mit dem Update-Skript aktualisieren, wird
-das Zend Framework automatisch auf die neue Version aktualisiert. Andernfalls
-konsultieren Sie bitte die Dokumentation (Abschnitt 6.3.1) und führen die
-Änderungen manuell durch.
+Mit OPUS 4.4 ändert sich die Versionsabhängigkeit auf das Zend Framework von
+1.10.6 auf 1.12.3. Sofern Sie die Instanz mit dem Update-Skript aktualisieren,
+wird das Zend Framework automatisch auf die neue Version aktualisiert.
+Andernfalls konsultieren Sie bitte die Dokumentation (Abschnitt 6.3.1) und führen
+die Änderungen manuell durch.
 
 
 h3. Anpassungen am Solr-Indexschema
