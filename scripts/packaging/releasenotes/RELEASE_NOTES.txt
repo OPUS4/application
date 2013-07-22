@@ -1,6 +1,6 @@
 h1. OPUS 4 Release Notes
 
-h2. ======================== Release 4.4.0 2013-06-21 ========================
+h2. ======================== Release 4.4.0 2013-07-22 ========================
 
 h3. Zugriff auf neue Funktionen innerhalb der Administration
 
