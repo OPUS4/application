@@ -127,12 +127,14 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
                             $personForm = $subform->getSubForm($subFormName);
                             $subform->removeSubForm($subFormName);
                             $this->getSubForm($role)->addSubFormForPerson($personForm); // TODO Seiteneffekte?
-                            return Admin_Form_Document::RESULT_SHOW;
+                            $result = Admin_Form_Document::RESULT_SHOW;
                             break;
                         default:
-                            return $result;
+                            // tue nichts für unbekannte Ergebnisse
                             break;
                     }
+
+                    return $result;
                 }
             }
         }

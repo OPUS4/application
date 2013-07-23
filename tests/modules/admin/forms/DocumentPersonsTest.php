@@ -301,7 +301,27 @@ class Admin_Form_DocumentPersonsTest extends ControllerTestCase {
         
         $this->assertNull($form->processPost(array(), null));
     }
-    
+
+    /**
+     * Dieser POST wird von Unterformular verarbeitet und das Ergebnis von Admin_Form_DocumentPersons nur
+     * durchgereicht.
+     */
+    public function testProcessPostAddPersonInSubform() {
+        $form = new Admin_Form_DocumentPersons();
+
+        $post = array(
+            'author' => array(
+                'Add' => 'Hinzufügen'
+            )
+        );
+
+        $result = $form->processPost($post, null);
+
+        $this->assertNotNull($result);
+        $this->assertArrayHasKey('result', $result);
+        $this->assertEquals(Admin_Form_Document::RESULT_SWITCH_TO, $result['result']);
+    }
+
     public function testGetRoles() {
         $roles = Admin_Form_DocumentPersons::getRoles();
         
