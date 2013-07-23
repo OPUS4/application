@@ -50,7 +50,7 @@ class Setup_LanguageController extends Controller_SetupAbstract {
         $sortKey = $this->_request->getParam('sort', 'unit');
         $config = Zend_Registry::get('Zend_Config')->toArray();
         if(!isset($config['setup']['translation']['modules']['allowed']))
-            $this->_redirectTo ('error', array('failure' => $this->view->translate('setup_language_translation_modules_missing')));
+            $this->_redirectTo ('error', $this->view->translate('setup_language_translation_modules_missing'));
 
         
         $moduleNames = explode(',', $config['setup']['translation']['modules']['allowed']);
