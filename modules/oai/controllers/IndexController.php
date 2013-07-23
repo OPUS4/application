@@ -94,28 +94,7 @@ class Oai_IndexController extends Controller_Xml {
             return;
         }
         catch (Oai_Model_Exception $e) {
-            switch ($e->getCode()) {
-                case Oai_Model_Error::BADVERB:
-                    $errorCode = 'badVerb';
-                    break;
-                case Oai_Model_Error::BADARGUMENT:
-                    $errorCode = 'badArgument';
-                    break;
-                case Oai_Model_Error::NORECORDSMATCH:
-                    $errorCode = 'noRecordsMatch';
-                    break;
-                    case Oai_Model_Error::CANNOTDISSEMINATEFORMAT:
-                    $errorCode = 'cannotDisseminateFormat';
-                    break;
-                case Oai_Model_Error::BADRESUMPTIONTOKEN:
-                    $errorCode = 'badResumptionToken';
-                    break;
-                case Oai_Model_Error::IDDOESNOTEXIST:
-                    $errorCode = 'idDoesNotExist';
-                    break;
-                default:
-                    $errorCode = 'unknown';
-            }
+            $errorCode = Oai_Model_Error::mapCode($e->getCode());
             Zend_Registry::get('Zend_Log')->err($errorCode);
             $this->_proc->setParameter('', 'oai_error_code', $errorCode);
             Zend_Registry::get('Zend_Log')->err($e->getMessage());
