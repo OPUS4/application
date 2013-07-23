@@ -48,40 +48,7 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
         
         $this->assertNotNull($form->getElement('Edit'));
     }
-    
-    public function testPopulateFromModel() {
-        $this->markTestSkipped('Muss noch angepasst werden wenn Formular fertig.');
-        $form = new Admin_Form_DocumentPerson();
-        
-        $document = new Opus_Document(146);
-        $persons = $document->getPersonAuthor();
-        $personLink = $persons[0];
-        
-        $form->populateFromModel($personLink);
-        
-        $this->assertEquals($personLink->getModel()->getId(), $form->getElement('PersonId')->getValue());
-        $this->assertEquals(1, $personLink->getAllowEmailContact());
-        $this->assertEquals($personLink->getAllowEmailContact(), $form->getElement('AllowContact')->getValue());
-        $this->assertEquals($personLink->getSortOrder(), $form->getElement('SortOrder')->getValue());
-        $this->assertEquals($personLink->getRole(), $form->getElement('Role')->getValue());
-    }
-    
-    public function testUpdateModel() {
-        $this->markTestSkipped('Muss noch angepasst werden wenn Formular fertig.');
-        
-        $form = new Admin_Form_DocumentPerson();
-        
-        $form->getElement('AllowContact')->setChecked(true);
-        $form->getElement('Role')->setValue('author');
-        
-        $model = new Opus_Model_Dependent_Link_DocumentPerson();
-        
-        $form->updateModel($model);
 
-        $this->assertEquals('1', $model->getAllowEmailContact());
-        $this->assertEquals('author', $model->getRole());
-    }
-    
     public function testProcessPostEmpty() {
         $form = new Admin_Form_DocumentPerson();
 

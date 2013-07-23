@@ -61,16 +61,6 @@ class Admin_Form_DocumentPerson extends Admin_Form_PersonLink {
     }
 
     /**
-     * Initialisiert Formular nach Post.
-     * 
-     * Wird für dieses Formular nicht benötigt.
-     * 
-     * @param array $post
-     */
-    public function populateFromPost($post) {
-    }
-    
-    /**
      * Verarbeitet POST Daten für Formular.
      * @param array $post
      * @param array $context
