@@ -267,7 +267,23 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
         
         $this->verifyExpectedOrder($form, array(310, 312, 311));
     }
-    
+
+    public function testProcessPostMoveUpForFirst() {
+        $form = $this->getFormForSorting();
+
+        $post = array(
+            'PersonAuthor0' => array(
+                'Moves' => array(
+                    'Up' => 'Hoch'
+                )
+            )
+        );
+
+        $form->processPost($post, null);
+
+        $this->verifyExpectedOrder($form, array(310, 311, 312));
+    }
+
     public function testProcessPostMoveUpAndSortBySortOrder() {
         $form = $this->getFormForSorting();
         
@@ -287,10 +303,10 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
 
         $this->verifyExpectedOrder($form, array(310, 312, 311));
     }
-    
+
     public function testProcessPostMoveDown() {
         $form = $this->getFormForSorting();
-        
+
         $post = array(
             'PersonAuthor1' => array(
                 'Moves' => array(
@@ -298,12 +314,28 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
                 )
             )
         );
-        
+
         $form->processPost($post, null);
 
         $this->verifyExpectedOrder($form, array(310, 312, 311));
     }
-            
+
+    public function testProcessPostMoveDownForLast() {
+        $form = $this->getFormForSorting();
+
+        $post = array(
+            'PersonAuthor2' => array(
+                'Moves' => array(
+                    'Down' => 'Runter'
+                )
+            )
+        );
+
+        $form->processPost($post, null);
+
+        $this->verifyExpectedOrder($form, array(310, 311, 312));
+    }
+
     public function testProcessPostMoveDownAndSortBySortOrder() {
         $form = $this->getFormForSorting();
         
@@ -344,11 +376,7 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
         $this->verifyExpectedOrder($form, array(310, 311, 312));
         // $this->verifyExpectedOrder($form, array(312, 310, 311)); // TODO was wäre die sinnvollste Erwartung?
     }
-        
-    public function testContinueEdit() {
-        $this->markTestIncomplete();
-    }
-    
+
     public function testCreateSubForm() {
         $form = new Admin_Form_DocumentPersonRole('author');
         
@@ -472,7 +500,7 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
         $this->assertEquals(312, $authors[2]->getModel()->getId());
     }
     
-    public function testAddPerson() {
+    public function testAddPersonLastPosition() {
         $form = new Admin_Form_DocumentPersonRole('author');
         
         $form->addPerson(array('person' => '310'));
@@ -480,12 +508,50 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
         $form->addPerson(array('person' => '312'));
  
         $this->assertEquals(3, count($form->getSubForms()));
-        
-        $this->assertEquals(310, $form->getSubForm('PersonAuthor0')->getElementValue('PersonId'));
-        $this->assertEquals(311, $form->getSubForm('PersonAuthor1')->getElementValue('PersonId'));
-        $this->assertEquals(312, $form->getSubForm('PersonAuthor2')->getElementValue('PersonId'));
+
+        $this->verifyExpectedOrder($form, array(310, 311, 312));
     }
-    
+
+    public function testAddPersonLastPosition2() {
+        $form = $this->getFormForSorting(); // form with three authors
+
+        $form->addPerson(array('person' => '259', 'order' => '4')); // Autor von Dokument 146
+
+        $this->verifyExpectedOrder($form, array(310, 311, 312, 259));
+    }
+
+    public function testAddPersonLastPosition3() {
+        $form = $this->getFormForSorting(); // form with three authors
+
+        $form->addPerson(array('person' => '259', 'order' => '99')); // Autor von Dokument 146
+
+        $this->verifyExpectedOrder($form, array(310, 311, 312, 259));
+    }
+
+    public function testAddPersonFirstPosition() {
+        $form = $this->getFormForSorting(); // form with three authors
+
+        $form->addPerson(array('person' => '259', 'order' => '1')); // Autor von Dokument 146
+
+        $this->verifyExpectedOrder($form, array(259, 310, 311, 312));
+    }
+
+    public function testAddPersonFirstPosition2() {
+        $form = $this->getFormForSorting(); // form with three authors
+
+        $form->addPerson(array('person' => '259', 'order' => '0')); // Autor von Dokument 146
+
+        $this->verifyExpectedOrder($form, array(259, 310, 311, 312));
+    }
+
+    public function testAddPersonMiddlePosition() {
+        $form = $this->getFormForSorting(); // form with three authors
+
+        $form->addPerson(array('person' => '259', 'order' => '2')); // Autor von Dokument 146
+
+        $this->verifyExpectedOrder($form, array(310, 259, 311, 312));
+    }
+
     public function testAttemptToAddPersonTwiceInSameRole() {
         $form = new Admin_Form_DocumentPersonRole('author');
         
@@ -534,7 +600,7 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
         $this->assertNotNull($form->getSubFormForPerson(312));
         $this->assertEquals(312, $form->getSubFormForPerson(312)->getElementValue('PersonId'));
     }
-    
+
     protected function verifyExpectedOrder($form, $expected) {
         foreach ($expected as $index => $personId) {
             $this->assertEquals($personId, $form->getSubForm('PersonAuthor' . $index)->getElement(
