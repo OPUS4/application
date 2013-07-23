@@ -211,7 +211,7 @@ class Oai_IndexController extends Controller_Xml {
         $document = null;
         try {
             $document = new Opus_Document($docId);
-        } catch (Exception $ex) {
+        } catch (Opus_Model_NotFoundException $ex) {
             throw new Oai_Model_Exception('The value of the identifier argument is unknown or illegal in this repository.', Oai_Model_Error::IDDOESNOTEXIST);
         }
 
