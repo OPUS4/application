@@ -127,11 +127,5 @@ class Admin_Form_DocumentPersonRoles extends Admin_Form_AbstractDocumentSubForm 
     public function getRoleElementName($role) {
         return self::ELEMENT_PREFIX_ROLE . ucfirst($role);
     }
-    
-    /**
-     * Funktion wird für dieses Formular nicht benötigt.
-     */
-    public function populateFromModel($personLink) {
-    }
-    
+
 }

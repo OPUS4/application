@@ -62,7 +62,9 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
      * 
      * @param $model
      */
-    abstract function populateFromModel($model);
+    public function populateFromModel($model) {
+        // leere Implementation
+    }
     
     /**
      * Erzeugt Unterformularstruktur anhand der POST Hierarchy.

@@ -146,11 +146,5 @@ class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm 
         
         return null;
     }
-        
-    /**
-     * Wird für dieses Formular nicht benötigt und tut nichts.
-     */
-    public function populateFromModel($personLink) {
-    }
-    
+
 }
