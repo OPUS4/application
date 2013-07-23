@@ -86,9 +86,7 @@ class Oai_IndexController extends Controller_Xml {
         // remove parameters which are "safe" to remove
         $safeRemoveParameters = array('module', 'controller', 'action', 'role');
         foreach ($safeRemoveParameters as $parameter) {
-            if (true === array_key_exists($parameter, $oaiRequest)) {
-                unset($oaiRequest[$parameter]);
-            }
+            unset($oaiRequest[$parameter]);
         }
 
         try {
@@ -194,7 +192,7 @@ class Oai_IndexController extends Controller_Xml {
                 break;
 
             case 'Identify':
-                $this->__handleIdentify($oaiRequest);
+                $this->__handleIdentify();
                 break;
 
             case 'ListIdentifiers':
@@ -202,7 +200,7 @@ class Oai_IndexController extends Controller_Xml {
                 break;
 
             case 'ListMetadataFormats':
-                $this->__handleListMetadataFormats($oaiRequest);
+                $this->__handleListMetadataFormats();
                 break;
 
             case 'ListRecords':
@@ -210,7 +208,7 @@ class Oai_IndexController extends Controller_Xml {
                 break;
 
             case 'ListSets':
-                $this->__handleListSets($oaiRequest);
+                $this->__handleListSets();
                 break;
 
             default:
@@ -254,7 +252,7 @@ class Oai_IndexController extends Controller_Xml {
         }
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
 
-        $this->createXmlRecord($document, $metadataPrefix);
+        $this->createXmlRecord($document);
     }
 
     /**
@@ -263,7 +261,7 @@ class Oai_IndexController extends Controller_Xml {
      * @param  array &$oaiRequest Contains full request information
      * @return void
      */
-    private function __handleIdentify(array &$oaiRequest) {
+    private function __handleIdentify() {
 
         $email = $this->_configuration->getEmailContact();
         $repName = $this->_configuration->getRepositoryName();
@@ -307,7 +305,7 @@ class Oai_IndexController extends Controller_Xml {
      * @param  array &$oaiRequest Contains full request information
      * @return void
      */
-    private function __handleListMetadataFormats(array &$oaiRequest) {
+    private function __handleListMetadataFormats() {
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
 
     }
@@ -331,7 +329,7 @@ class Oai_IndexController extends Controller_Xml {
      * @param  array &$oaiRequest Contains full request information
      * @return void
      */
-    private function __handleListSets(array &$oaiRequest) {
+    private function __handleListSets() {
         $repIdentifier = $this->_configuration->getRepositoryIdentifier();
 
         $this->_proc->setParameter('', 'repIdentifier', $repIdentifier);
@@ -455,7 +453,7 @@ class Oai_IndexController extends Controller_Xml {
      * @param  string        $metadataPrefix
      * @return void
      */
-    private function createXmlRecord(Opus_Document $document, $metadataPrefix) {
+    private function createXmlRecord(Opus_Document $document) {
         $docId = $document->getId();
         $domNode = $this->getDocumentXmlDomNode($document);
 
@@ -472,6 +470,9 @@ class Oai_IndexController extends Controller_Xml {
         $filenodes_list = array();
         foreach ($filenodes as $filenode) {
             $filenodes_list[] = $filenode;
+
+            // add file download urls
+            $this->_addFileUrlAttribute($filenode, $docId, $filenode->getAttribute('PathName'));
         }
 
         // remove file elements which should not be exported through OAI
@@ -482,12 +483,6 @@ class Oai_IndexController extends Controller_Xml {
             }
         }
         
-        // add file download urls
-        $filenodes = $domNode->getElementsByTagName('File');
-        foreach ($filenodes as $filenode) {
-            $this->_addFileUrlAttribute($filenode, $docId, $filenode->getAttribute('PathName'));
-        }
-
         $node = $this->_xml->importNode($domNode, true);
 
         $type = $document->getType();
@@ -640,18 +635,13 @@ class Oai_IndexController extends Controller_Xml {
         // do some initialisation
         $cursor = 0;
         $totalIds = 0;
-        $res = '';
-        $resParam = '';
         $start = $max_records + 1;
-        $restIds = array();
         $reldocIds = array();
 
         $metadataPrefix = null;
         if (true === array_key_exists('metadataPrefix', $oaiRequest)) {
             $metadataPrefix = $oaiRequest['metadataPrefix'];
         }
-
-        $token = new Oai_Model_Resumptiontoken;
 
         $tokenWorker = new Oai_Model_Resumptiontokens;
         $tokenWorker->setResumptionPath($tempPath);
@@ -679,6 +669,7 @@ class Oai_IndexController extends Controller_Xml {
             $docListModel->_deliveringDocumentStates = $this->_deliveringDocumentStates;
             $docListModel->_xMetaDissRestriction = $this->_xMetaDissRestriction;
             $reldocIds = $docListModel->query($oaiRequest);
+            $totalIds = count($reldocIds);
         }
 
         // handling of document ids
@@ -686,7 +677,7 @@ class Oai_IndexController extends Controller_Xml {
         $workIds = array_splice($restIds, 0, $max_records);
         foreach ($workIds as $docId) {
             $document = new Opus_Document($docId);
-            $this->createXmlRecord($document, $metadataPrefix);
+            $this->createXmlRecord($document);
         }
 
         // no records returned
@@ -697,10 +688,8 @@ class Oai_IndexController extends Controller_Xml {
         // store the further Ids in a resumption-file
         $countRestIds = count($restIds);
         if ($countRestIds > 0) {
-            if (0 === $totalIds) {
-                $totalIds = $max_records + $countRestIds;
-            }
 
+            $token = new Oai_Model_Resumptiontoken;
             $token->setStartPosition($start);
             $token->setTotalIds($totalIds);
             $token->setDocumentIds($restIds);
@@ -708,11 +697,8 @@ class Oai_IndexController extends Controller_Xml {
 
             $tokenWorker->storeResumptionToken($token);
 
+            // set parameters for the resumptionToken-node
             $res = $token->getResumptionId();
-        }
-
-        // set parameters for the resumptionToken-node
-        if ((false === empty($resParam)) || ($countRestIds > 0)) {
             $this->setParamResumption($res, $cursor, $totalIds);
         }
     }

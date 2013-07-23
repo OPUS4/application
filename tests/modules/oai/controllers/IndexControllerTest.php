@@ -1313,7 +1313,47 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $grantorDepartment = $xpath->query('//xMetaDiss:xMetaDiss/thesis:degree/thesis:grantor/cc:universityOrInstitution/cc:department/cc:name');
         $this->assertEquals(0, $grantorDepartment->length, "Expected no grantor department");
+
+    }
+
+    public function testListRecordsWithResumptionToken() {
+        $max_records = 2;
         
+        $config = Zend_Registry::get('Zend_Config');
+        $config->oai->max->listrecords = $max_records;
+
+        // first request: fetch documents list and expect resumption code
+        $this->dispatch("/oai?verb=ListRecords&metadataPrefix=oai_dc");
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Error", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+        $recordElements = $xpath->query('//oai:ListRecords/oai:record');
+        $this->assertEquals($max_records, $recordElements->length);
+
+        $rsTokenElement = $xpath->query('//oai:ListRecords/oai:resumptionToken[@cursor="0"]');
+        $this->assertEquals(1, $rsTokenElement->length, 'foobar');
+        $rsToken = $rsTokenElement->item(0)->textContent;
+        $this->assertNotEmpty($rsToken);
+
+        // next request: continue document list with resumption token
+        $this->resetRequest();
+        $this->dispatch("/oai?verb=ListRecords&resumptionToken=$rsToken");
+        $this->assertResponseCode(200);
+
+        $response = $this->getResponse();
+        $badStrings = array("Exception", "Stacktrace", "badVerb", "badArgument");
+        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+        $recordElements = $xpath->query('//oai:ListRecords/oai:record');
+        $this->assertEquals($max_records, $recordElements->length);
+
+        $rsTokenElement = $xpath->query('//oai:ListRecords/oai:resumptionToken[@cursor="'.$max_records.'"]');
+        $this->assertEquals(1, $rsTokenElement->length, 'foobar');
     }
 
 }
