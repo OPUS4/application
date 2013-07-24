@@ -291,6 +291,19 @@ class Admin_Form_DocumentPersonsTest extends ControllerTestCase {
         
         $this->assertNull($form->processPost(array(), null));
     }
+
+    /**
+     * Unbekannte Unterformulare werden ignoriert.
+     */
+    public function testProcessPostWithUnknownSubform() {
+        $form = new Admin_Form_DocumentPersons();
+
+        $this->assertNull($form->processPost(array(
+            'unknown' => array( // unbekannter Name für Unterformular (sollte Rolle für Person sein, z.B. 'author')
+                'key' => 'value'
+            )
+        ), null));
+    }
     
     public function testProcessPostEmpty() {
         $form = new Admin_Form_DocumentPersons();
