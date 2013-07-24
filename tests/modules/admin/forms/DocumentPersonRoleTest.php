@@ -320,6 +320,20 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
         $this->verifyExpectedOrder($form, array(310, 312, 311));
     }
 
+    /**
+     * Für unbekannte Richtungen tue nichts.
+     */
+    public function testMoveSubFormUnknownDirection() {
+        $form = $this->getFormForSorting();
+
+        $method = $this->getMethod('Admin_Form_DocumentPersonRole', 'moveSubForm');
+
+        $method->invokeArgs($form, array('PersonAuthor1', 'left'));
+
+        $this->assertNotEquals(-1, $form->getSubForm('PersonAuthor1')->getOrder(), "Formular wurde modifiziert.");
+        $this->assertEquals(1, $form->getSubForm('PersonAuthor1')->getOrder());
+    }
+
     public function testProcessPostMoveDownForLast() {
         $form = $this->getFormForSorting();
 
@@ -544,6 +558,14 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
         $this->verifyExpectedOrder($form, array(259, 310, 311, 312));
     }
 
+    public function testAddPersonFirstPosition3() {
+        $form = $this->getFormForSorting(); // form with three authors
+
+        $form->addPerson(array('person' => '259', 'order' => '-1')); // Autor von Dokument 146
+
+        $this->verifyExpectedOrder($form, array(259, 310, 311, 312));
+    }
+
     public function testAddPersonMiddlePosition() {
         $form = $this->getFormForSorting(); // form with three authors
 
@@ -624,5 +646,12 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
         
         return $form;
     }
-        
+
+    private function getMethod($className, $methodName) {
+        $class = new ReflectionClass($className);
+        $method = $class->getMethod($methodName);
+        $method->setAccessible(true);
+        return $method;
+    }
+
 }

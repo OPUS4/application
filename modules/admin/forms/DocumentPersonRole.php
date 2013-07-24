@@ -137,7 +137,8 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
                 $position = count($this->getSubForms());
                 break;
             default:
-                // '0' ist bereits Wert für $position
+                // für unbekannte Richtung, verändere garnichts
+                return;
                 break;
         }
 
@@ -154,8 +155,6 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
         else if ($position < 0) {
             $position = 1;
         }
-
-        Zend_Debug::dump($position);
 
         $subForm->setOrder(-1);
         $subForm->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->setValue($position);
