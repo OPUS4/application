@@ -166,5 +166,21 @@ class Admin_Form_DocumentSubject extends Admin_Form_AbstractModelSubForm {
         
         $this->removeDecorator('Fieldset');
     }
+
+    /**
+     * Liefert den Schlagworttyp für dieses Unterformular zurück.
+     * @return string Schlagworttyp
+     */
+    public function getSubjectType() {
+        return $this->__subjectType;
+    }
+
+    /**
+     * Liefert die festgelegte Sprache (bei SWD/GND) für dieses Unterformular zurück.
+     * @return null|string Sprache
+     */
+    public function getLanguage() {
+        return $this->__language;
+    }
     
 }

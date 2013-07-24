@@ -35,16 +35,39 @@
  * Unit Tests fuer Unterformular fuer ein Subject im Metadaten-Formular.
  */
 class Admin_Form_DocumentSubjectTest extends ControllerTestCase {
-    
+
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentSubject('swd', 'deu');
-        
+        $form = new Admin_Form_DocumentSubject('psyndex');
+
+        $this->assertEquals(4, count($form->getElements()));
+
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('Value'));
         $this->assertNotNull($form->getElement('ExternalKey'));
         $this->assertNotNull($form->getElement('Language'));
+
+        $this->assertEquals('psyndex', $form->getSubjectType());
+        $this->assertNull($form->getLanguage());
     }
-    
+
+    public function testCreateFormWithLanguage() {
+        $form = new Admin_Form_DocumentSubject('swd', 'deu');
+
+        $this->assertEquals(4, count($form->getElements()));
+
+        $this->assertNotNull($form->getElement('Id'));
+        $this->assertNotNull($form->getElement('Value'));
+        $this->assertNotNull($form->getElement('ExternalKey'));
+
+        $language = $form->getElement('Language');
+        $this->assertNotNull($language);
+        $this->assertInstanceOf('Zend_Form_Element_Hidden', $language);
+        $this->assertEquals('deu', $language->getValue());
+
+        $this->assertEquals('swd', $form->getSubjectType());
+        $this->assertEquals('deu', $form->getLanguage());
+    }
+
     public function testPopulateFromModel() {
         $form = new Admin_Form_DocumentSubject('swd', 'deu');
         

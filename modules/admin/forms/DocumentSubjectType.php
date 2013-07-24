@@ -34,21 +34,46 @@
 
 /**
  * Unterformular fuer Subjects eines bestimmten Typs im Metadaten-Formular.
+ *
+ * Diese Klasse überschreibt ein paar Funktion von Admin_Form_DocumentMultiSubForm um Unterformulare vom richtigen Typ
+ * zu verwenden und die richtigen Werte aus dem Modell zu holen.
  */
 class Admin_Form_DocumentSubjectType extends Admin_Form_DocumentMultiSubForm {
 
+    /**
+     * Der Schlagworttyp für den dieses Unterformular verwendet wird.
+     * @var string
+     */
     private $__subjectType;
-    
+
+    /**
+     * Konstruiert ein Unterformular für Schlagwörter eines bestimmten Typs.
+     * @param string $type Schlagworttyp (z.B. 'swd', 'psyndex' usw.)
+     * @param mixed $options
+     */
     public function __construct($type, $options = null) {
         $this->__subjectType = $type;
         
         parent::__construct(null, 'Subject', $options);
     }
-    
+
+    /**
+     * Initialisiert die Formularelemente.
+     *
+     * Setzt die Legende für das Unterformular.
+     */
     public function init() {
         parent::init();
                 
         $this->setLegend('admin_document_section_subject' . $this->__subjectType); 
+    }
+
+    /**
+     * Liefert den Schlagworttyp für das Formular zurück.
+     * @return string Schlagworttyp
+     */
+    public function getSubjectType() {
+        return $this->__subjectType;
     }
     
     /**
