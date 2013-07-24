@@ -96,9 +96,9 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
                     break;
             }
         }
-        
+
         $this->sortSubFormsBySortOrder();
-        
+
         return $result;
     }
     
@@ -107,7 +107,11 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
      * 
      * Nach der POST Verarbeitung werden die Unterformulare sortiert. Wenn eine Person verschoben werden soll, wird
      * vor der Sortierung der SortOrder Wert auf die Zielposition gesetzt, bzw. bei "Down" auf eine Position weiter, 
-     * und die ursprüngliche Position (Order) wird auf -1 gesetzt. 
+     * und die ursprüngliche Position (Order) wird auf -1 gesetzt.
+     *
+     * Nach dem ausführen dieser Funktion muss $this->sortSubFormsBySortOrder() ausgeführt werden bevor das Formular
+     * verwendet wird, damit alle Unterformulare an der richtigen Position stehen.
+     *
      * @param string $subFormName
      * @param string $direction
      */
@@ -146,6 +150,15 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
         $subform->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->setValue($position + 1);
     }
 
+    /**
+     * Fügt ein Unterformular an der gewünschten Position ein.
+     *
+     * Nach dem ausführen dieser Funktion muss $this->sortSubFormsBySortOrder() ausgeführt werden bevor das Formular
+     * verwendet wird, damit alle Unterformulare an der richtigen Position stehen.
+     *
+     * @param \Admin_Form_DocumentPerson $subForm Unterformular, daß eingefügt werden soll
+     * @param int $position SortOrder/Position für neues Formular
+     */
     protected function insertSubForm($subForm, $position) {
         $subFormCount = count($this->getSubForms());
 
