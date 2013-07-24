@@ -63,7 +63,16 @@ class Admin_Form_DocumentPersonAddTest extends ControllerTestCase {
         
         $this->assertEquals(Admin_Form_DocumentPersonAdd::RESULT_NEXT, $form->processPost($post, null));
     }
-    
+
+    public function testGetSelectedRole() {
+        $form = new Admin_Form_DocumentPersonAdd();
+
+        $form->getSubForm(Admin_Form_DocumentPersonAdd::SUBFORM_DOCUMENT)->getElement(
+            Admin_Form_PersonLink::ELEMENT_ROLE)->setValue('contributor');
+
+        $this->assertEquals('contributor', $form->getSelectedRole());
+    }
+
     public function testSetSelectedRole() {
         $form = new Admin_Form_DocumentPersonAdd();
         
@@ -128,5 +137,49 @@ class Admin_Form_DocumentPersonAddTest extends ControllerTestCase {
         
         $this->assertTrue($form->isValid($post));
     }
-    
+
+    public function testGetPersonLinkProperties() {
+        $form = new Admin_Form_DocumentPersonAdd();
+
+        $subform = $form->getSubForm(Admin_Form_DocumentPersonAdd::SUBFORM_DOCUMENT);
+
+        $subform->getElement('Role')->setValue('advisor');
+        $subform->getElement('AllowContact')->setChecked(true);
+        $subform->getElement('SortOrder')->setValue(4);
+
+        $personProps = $form->getPersonLinkProperties(312);
+
+        $this->assertNotNull($personProps);
+        $this->assertEquals(4, count($personProps));
+        $this->assertArrayHasKey('person', $personProps);
+        $this->assertEquals(312, $personProps['person']);
+        $this->assertArrayHasKey('role', $personProps);
+        $this->assertEquals('advisor', $personProps['role']);
+        $this->assertArrayHasKey('contact', $personProps);
+        $this->assertEquals(1, $personProps['contact']);
+        $this->assertArrayHasKey('order', $personProps);
+        $this->assertEquals(4, $personProps['order']);
+    }
+
+    public function testGetPersonLinkProperties2() {
+        $form = new Admin_Form_DocumentPersonAdd();
+
+        $subform = $form->getSubForm(Admin_Form_DocumentPersonAdd::SUBFORM_DOCUMENT);
+
+        $subform->getElement('Role')->setValue('advisor');
+        $subform->getElement('AllowContact')->setChecked(false);
+
+        $personProps = $form->getPersonLinkProperties(312);
+
+        $this->assertNotNull($personProps);
+        $this->assertEquals(4, count($personProps));
+        $this->assertArrayHasKey('person', $personProps);
+        $this->assertEquals(312, $personProps['person']);
+        $this->assertArrayHasKey('role', $personProps);
+        $this->assertEquals('advisor', $personProps['role']);
+        $this->assertArrayHasKey('contact', $personProps);
+        $this->assertEquals(0, $personProps['contact']);
+        $this->assertArrayHasKey('order', $personProps);
+        $this->assertNull($personProps['order']);
+    }
 }
