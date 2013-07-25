@@ -245,6 +245,54 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $this->assertContains('admin_document_error_NoTitleInDocumentLanguage', $subform->getErrorMessages());
     }
 
+    /**
+     * Prüft ob Dependency Validierung ausgeführt wird, wenn normale Validierung fehlschlägt.
+     */
+    public function testIsValidFalseDependency2() {
+        $form = new Admin_Form_Document();
+
+        $document = new Opus_Document();
+
+        $document = new Opus_Document();
+        $document->addTitleMain(new Opus_Title());
+        $document->addTitleMain(new Opus_Title());
+
+        $form->populateFromModel($document);
+
+        $post = array(
+            'General' => array(
+                'Language' => 'deu',
+                'Type' => 'all'
+            ),
+            'Titles' => array(
+                'Main' => array(
+                    'TitleMain0' => array(
+                        'Language' => 'eng',
+                        'Value' => 'English Title'
+                    ),
+                    'TitleMain1' => array(
+                        'Language' => 'rus',
+                        'Value' => ''
+                    )
+                )
+            ),
+            'Actions' => array(
+                'OpusHash' => $this->getHash($form)
+            )
+        );
+
+        $result = $form->isValid($post, $post);
+
+        $this->assertFalse($result);
+
+        $errors = $form->getErrors('Titles');
+        $this->assertContains('admin_validate_error_notempty', $errors['Main']['TitleMain1']['Value']);
+
+        $subform = $form->getSubForm('Titles')->getSubForm('Main');
+        $this->assertEquals(1, count($subform->getErrorMessages()), 'Dependency-Validierung wurde nicht ausgeführt.');
+        $this->assertContains('admin_document_error_NoTitleInDocumentLanguage', $subform->getErrorMessages());
+    }
+
     public function testSetGetMessage() {
         $form = new Admin_Form_Document();
 

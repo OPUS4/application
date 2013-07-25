@@ -223,7 +223,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
     public function isValid($data, $context = null) {
         $result = parent::isValid($data, $context);
         
-        return $result && $this->isDependenciesValid($data, $data);
+        return ($result & $this->isDependenciesValid($data, $data)) == 1;
     }
 
     /**
