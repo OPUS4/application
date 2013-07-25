@@ -78,9 +78,7 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
     public function populateFromModel($document) {
         $this->clearSubForms();
         
-        $docHelper = new Admin_Model_DocumentHelper($document);
-        
-        $collectionRoles = $docHelper->getGroupedCollections();
+        $collectionRoles = $this->getGroupedCollections($document);
         
         // Iteriere über CollectionRole Namen für Dokument und erzeuge Unterformulare
         foreach ($collectionRoles as $roleName => $collections) {
@@ -259,6 +257,31 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
         
         return $subform;
     }
-        
+
+    /**
+     * Returns the collections grouped by CollectionRole.
+     * @return array Collections grouped by CollectionRole
+     */
+    public function getGroupedCollections($document) {
+        $groupedCollections = array();
+
+        foreach($document->getCollection() as $collection) {
+
+            $roleName = $collection->getRoleName();
+
+            if (!isset($groupedCollections[$roleName])) {
+                $groupedCollections[$roleName] = array();
+            }
+
+            $collections = $groupedCollections[$roleName];
+
+            $collections[] = $collection;
+
+            $groupedCollections[$roleName] = $collections;
+        }
+
+        return $groupedCollections;
+    }
+
 }
 
