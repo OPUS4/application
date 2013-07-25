@@ -1,5 +1,5 @@
-<?PHP
-/*
+<?php
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,47 +24,44 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
+ * @category    Application Unit Test
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Angepasste Form Element Klasse für Submit Buttons.
+ * Unit Test für Form Element Submit Button.
+ *
+ * Die Funktion loadDefaultDecorators wird bereits während der Konstruktion einer Instanz aufgerufen.
  */
-class Form_Element_Submit extends Zend_Form_Element_Submit {
+class Form_Element_SubmitTest extends ControllerTestCase {
 
-    /**
-     * Initialisiert Formularelement.
-     *
-     * Fügt Prefix-Path für Decorator hinzu, damit 'ElementHtmlTag' verwendet werden kann.
-     */
-    public function init() {
-        parent::init();
+    public function testLoadDefaultDecoratorsDisabled() {
+        $element = new Form_Element_Submit('submit', array('disableLoadDefaultDecorators' => true));
 
-        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+        $this->assertEquals(0, count($element->getDecorators()));
     }
 
-    /**
-     * Lädt die Dekoratoren für Button Element.
-     * @return $this|Zend_Form_Element_Submit
-     */
-    public function loadDefaultDecorators() {
-        if ($this->loadDefaultDecoratorsIsDisabled()) {
-            return $this;
-        }
+    public function testLoadDefaultDecoratorsPresetDecorator() {
+        $element = new Form_Element_Submit('submit', array('disableLoadDefaultDecorators' => false));
+        $element->setDecorators(array('ViewHelper'));
 
-        $decorators = $this->getDecorators();
-        if (empty($decorators)) {
-            $this->addDecorator('ViewHelper')
-                 ->addDecorator('ElementHtmlTag')
-                 ->addDecorator(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'));
-        } 
-        
-        return $this;
+        $element->loadDefaultDecorators();
+
+        $this->assertEquals(1, count($element->getDecorators()));
+        $this->assertNotNull($element->getDecorator('ViewHelper'));
     }
-        
+
+    public function testLoadDefaultDecorators() {
+        $element = new Form_Element_Submit('submit');
+
+        $this->assertEquals(3, count($element->getDecorators()));
+        $this->assertNotNull($element->getDecorator('ViewHelper'));
+        $this->assertNotNull($element->getDecorator('ElementHtmlTag'));
+        $this->assertNotNull($element->getDecorator('dataWrapper'));
+    }
+
 }

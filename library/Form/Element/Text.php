@@ -38,8 +38,30 @@
  * Zur Zeit nur vom Metadaten-Formular genutzt.
  */
 class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement {
-    
+
+    /**
+     * Hinweis, der mit dem Feld angezeigt werden sollte.
+     *
+     * Ein Hinweis entspricht keinem Fehler und auch nicht der Feldbeschreibung. Ein Hinweis kann benutzt werden um den
+     * Nutzer zu signalisieren, daß ein Wert (z.B. ISBN) nicht korrekt ist, aber trotzdem in der Datenbank gespeichert
+     * werden kann. Also für zusätzliche Validierungen, die Warnungen erzeugen, aber nicht das Speichern verhindern.
+     *
+     * Der Hinweis wird vom Dekorator 'ElementHint' ausgegeben.
+     *
+     * @var string
+     */
     private $hint;
+
+    /**
+     * Initialisiert das Formularelement.
+     *
+     * Fügt PrefixPath für angepasste OPUS Dekoratoren hinzu.
+     */
+    public function init() {
+        parent::init();
+
+        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+    }
     
     /**
      * Lädt die Defaultdekoratoren für ein Textelement.
@@ -55,12 +77,20 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
             array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
             array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
         ));
-        }
-        
+    }
+
+    /**
+     * Setzt den Hinweis für das Formularelement.
+     * @param $hint Hinweis
+     */
     public function setHint($hint) {
         $this->hint = $hint;
     }
-    
+
+    /**
+     * Liefert den Hinweis für das Formularelement.
+     * @return string
+     */
     public function getHint() {
         return $this->hint;
     }
