@@ -45,9 +45,9 @@ class Form_Decorator_StaticViewTest extends ControllerTestCase {
 
         $output = $decorator->render('');
 
-        $this->assertEquals($output,
+        $this->assertEquals(
             '<div class="data-wrapper name-data"><div class="label">Label:</div>'
-            . '<div id="name" class="field">Value</div></div>');
+            . '<div id="name" class="field">Value</div></div>', $output);
     }
 
     public function testRenderWithoutLabel() {
@@ -60,8 +60,8 @@ class Form_Decorator_StaticViewTest extends ControllerTestCase {
 
         $output = $decorator->render('');
 
-        $this->assertEquals($output,
-            '<div class="data-wrapper name-data"><div id="name" class="field">Value</div></div>');
+        $this->assertEquals(
+            '<div class="data-wrapper name-data"><div id="name" class="field">Value</div></div>', $output);
     }
 
     public function testRenderRequired() {
@@ -76,9 +76,9 @@ class Form_Decorator_StaticViewTest extends ControllerTestCase {
 
         $output = $decorator->render('');
 
-        $this->assertEquals($output,
+        $this->assertEquals(
             '<div class="data-wrapper name-data"><div class="label required">Label:</div>'
-            . '<div id="name" class="field">Value</div></div>');
+            . '<div id="name" class="field">Value</div></div>', $output);
     }
 
 }

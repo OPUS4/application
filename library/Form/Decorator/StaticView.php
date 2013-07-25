@@ -66,7 +66,7 @@ class Form_Decorator_StaticView extends Zend_Form_Decorator_Abstract {
     }
 
     public function getValue() {
-        return  $this->getElement()->getTranslator()->translate($this->getElement()->getValue());
+        return $this->getElement()->getValue();
     }
 
 }
