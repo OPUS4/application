@@ -179,23 +179,17 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase {
         $decorators = $form->getElement('textfull')->getDecorators();
         
         $this->assertEquals(1, count($decorators));
-        $this->assertArrayHasKey('Zend_Form_Decorator_ViewScript', $decorators);
-        $options = $decorators['Zend_Form_Decorator_ViewScript']->getOptions();
-        $this->assertEquals('form/staticElement.phtml', $options['viewScript']);
+        $this->assertArrayHasKey('Form_Decorator_StaticView', $decorators);
 
         $decorators = $form->getElement('checkboxtrue')->getDecorators();
         
         $this->assertEquals(1, count($decorators));
-        $this->assertArrayHasKey('Zend_Form_Decorator_ViewScript', $decorators);
-        $options = $decorators['Zend_Form_Decorator_ViewScript']->getOptions();
-        $this->assertEquals('form/staticCheckbox.phtml', $options['viewScript']);
-        
+        $this->assertArrayHasKey('Form_Decorator_StaticViewCheckbox', $decorators);
+
         $decorators = $form->getElement('select')->getDecorators();
         
         $this->assertEquals(1, count($decorators));
-        $this->assertArrayHasKey('Zend_Form_Decorator_ViewScript', $decorators);
-        $options = $decorators['Zend_Form_Decorator_ViewScript']->getOptions();
-        $this->assertEquals('form/staticSelect.phtml', $options['viewScript']);
+        $this->assertArrayHasKey('Form_Decorator_StaticViewSelect', $decorators);
     }
     
 }

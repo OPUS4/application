@@ -205,17 +205,17 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
         $elements = $this->getElements();
         
         foreach ($elements as $element) {
-           if ($element instanceof Zend_Form_Element_Text || $element instanceof Zend_Form_Element_Textarea) {
-                $element->setDecorators(array(
-                    array('ViewScript', array('viewScript' => 'form/staticElement.phtml'))));
+            if ($element instanceof Form_IElement) {
+                $element->prepareRenderingAsView();
+            }
+            else if ($element instanceof Zend_Form_Element_Text || $element instanceof Zend_Form_Element_Textarea) {
+                $element->setDecorators(array('StaticView'));
             }
             else if ($element instanceof Zend_Form_Element_Select) {
-                $element->setDecorators(array(
-                    array('ViewScript', array('viewScript' => 'form/staticSelect.phtml'))));
+                $element->setDecorators(array('StaticViewSelect'));
             }
             else if ($element instanceof Zend_Form_Element_Checkbox) {
-                $element->setDecorators(array(
-                    array('ViewScript', array('viewScript' => 'form/staticCheckbox.phtml'))));
+                $element->setDecorators(array('StaticViewCheckbox'));
             }
         }
     }

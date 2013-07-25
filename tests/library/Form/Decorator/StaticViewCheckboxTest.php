@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,35 +24,41 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
+ * @category    Application Unit Test
+ * @package     Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Interface fuer OPUS Form Element Klassen.
- */
-interface Form_IElement {
+class Form_Decorator_StaticViewCheckboxTest extends ControllerTestCase {
+
+    public function testGetLabel() {
+        $element = new Zend_Form_Element_Checkbox('checkbox');
+        $element->setLabel('Public Access');
+        $element->setValue('public');
+        $element->setChecked(true);
+
+        $decorator = new Form_Decorator_StaticViewCheckbox();
+        $decorator->setElement($element);
+
+        $this->assertNull($decorator->getLabel());
+    }
 
     /**
-     * Liefert Hinweis zum Element-Value, z.B. das eine ISBN ungültig ist.
-     *
-     * Hinweise sind wie Validierungsfehler, die aber das Abspeichern nicht verhindern und schon beim Aufruf des
-     * Formulars für existierende Werte berechnet werden.
-     *
-     * @return string
+     * Bei der statischen Ausgabe einer Checkbox wird das Label als "Value" verwendet.
      */
-    public function getHint();
+    public function testGetValue() {
+        $element = new Zend_Form_Element_Checkbox('checkbox');
+        $element->setLabel('Public Access');
+        $element->setValue('public');
+        $element->setChecked(true);
 
-    /**
-     * Ändert die Ausgabe (Dekoratoren) des Elements so, daß es als statischer View statt Formularelement ausgegeben
-     * wird.
-     *
-     * Statt eines Input-Tags könnte zum Beispiel nur der Wert als einfacher Text ausgegeben werden.
-     */
-    public function prepareRenderingAsView();
-    
+        $decorator = new Form_Decorator_StaticViewCheckbox();
+        $decorator->setElement($element);
+
+        $this->assertEquals('Public Access', $decorator->getValue());
+    }
+
 }

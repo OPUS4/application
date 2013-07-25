@@ -33,10 +33,21 @@
  */
 
 /**
- * 
+ * Angepasste Klasse für SELECT Formularelemente.
  */
 class Form_Element_Select extends Zend_Form_Element_Select {
-    
+
+    /**
+     * Initialisiert das Formularelement.
+     *
+     * Fügt PrefixPath für angepasste OPUS Dekoratoren hinzu.
+     */
+    public function init() {
+        parent::init();
+
+        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+    }
+
     public function loadDefaultDecorators() {
         $this->setDecorators(array(
             'ViewHelper', 
@@ -47,5 +58,12 @@ class Form_Element_Select extends Zend_Form_Element_Select {
             array(array('dataWrapperOpen' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
         ));
     }
-    
+
+    /**
+     * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
+     */
+    public function prepareRenderingAsView() {
+        $this->setDecorators(array('StaticView'));
+    }
+
 }

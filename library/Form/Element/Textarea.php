@@ -33,10 +33,21 @@
  */
 
 /**
- * 
+ * Angepasste Klasse für Textarea Formularelemente.
  */
-class Form_Element_Textarea extends Zend_Form_Element_Textarea {
-    
+class Form_Element_Textarea extends Zend_Form_Element_Textarea implements Form_IElement {
+
+    /**
+     * Initialisiert das Formularelement.
+     *
+     * Fügt PrefixPath für angepasste OPUS Dekoratoren hinzu.
+     */
+    public function init() {
+        parent::init();
+
+        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+    }
+
     public function loadDefaultDecorators() {
         $this->setDecorators(array(
             'ViewHelper', 
@@ -46,6 +57,17 @@ class Form_Element_Textarea extends Zend_Form_Element_Textarea {
             array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
             array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
         ));
+    }
+
+    public function getHint() {
+        return null; // kein Textarea bekannt das Hints benötigen würde
+    }
+
+    /**
+     * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
+     */
+    public function prepareRenderingAsView() {
+        $this->setDecorators(array('StaticView'));
     }
     
 }

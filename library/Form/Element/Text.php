@@ -94,5 +94,12 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
     public function getHint() {
         return $this->hint;
     }
-    
+
+    /**
+     * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
+     */
+    public function prepareRenderingAsView() {
+        $this->setDecorators(array('StaticView'));
+    }
+
 }
