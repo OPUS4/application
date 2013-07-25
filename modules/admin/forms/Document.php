@@ -52,13 +52,38 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * Ergebnis zusammen mit den notwendigen Informationen für den Seitenwechsel.
      */
     const RESULT_SWITCH_TO = 'switch';
-    
+
+    /**
+     * POST Ergebnis für Klick auf Speichern-Button.
+     *
+     * Es gibt zwei Buttons in den Unterformularen 'ActionBox' und 'Actions'. Bei beiden liefert processPost dieses
+     * Ergebnis zurück, wenn auf 'Speichern' geklickt wurde.
+     */
     const RESULT_SAVE = 'save';
-    
+
+    /**
+     * POST Ergebnis für Klick auf Abbrechen-Button.
+     *
+     * Es gibt zwei Buttons in den Unterformularen 'ActionBox' und 'Actions'. Bei beiden liefert processPost dieses
+     * Ergebnis zurück, wenn auf 'Abbrechen' geklickt wurde.
+     */
     const RESULT_CANCEL = 'cancel';
-    
+
+    /**
+     * POST Ergebnis für das Abspeichern und weiter editieren des selben Dokuments.
+     *
+     * TODO Button wird zur Zeit nicht angezeigt (Designentscheidung)
+     */
     const RESULT_SAVE_AND_CONTINUE = 'saveAndContinue';
-    
+
+    /**
+     * Globale Nachricht für das Formular.
+     *
+     * Wird in der ActionBox angezeigt und wird zum Beispiel bei Validierungsfehlern für eine allgemeine Nachricht
+     * eingesetzt.
+     *
+     * @var string
+     */
     private $message = null;
     
     /**
@@ -170,7 +195,12 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
 
         return null;
     }
-    
+
+    /**
+     * Setzt das Editieren eines Documents nach dem Hinzufügen einer Person/Collection auf einer anderen Seite fort.
+     * @param $request
+     * @param null $session
+     */
     public function continueEdit($request, $session = null) {
         $subforms = $this->getSubForms();
 
@@ -193,19 +223,35 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
     public function isValid($data, $context = null) {
         $result = parent::isValid($data, $context);
         
-        return $result & $this->isDependenciesValid($data, $data);
+        return $result && $this->isDependenciesValid($data, $data);
     }
-    
+
+    /**
+     * Lädt die Dekoratoren.
+     *
+     * Der 'Fieldset' Decorator wird entfernt, damit das gesamte Formular nicht auch noch eine extra Überschrift
+     * bekommt.
+     *
+     * @return void|Zend_Form_SubForm
+     */
     public function loadDefaultDecorators() {
         parent::loadDefaultDecorators();
         
         $this->removeDecorator('Fieldset');
     }
-    
+
+    /**
+     * Setzt die globale Nachricht für das Formular.
+     * @param $message Nachricht
+     */
     public function setMessage($message) {
         $this->message = $message;
     }
-    
+
+    /**
+     * Liefert die globale Nachricht für das Formular.
+     * @return null|string
+     */
     public function getMessage() {
         return $this->message;
     }

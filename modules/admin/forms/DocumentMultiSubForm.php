@@ -154,6 +154,8 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     
     /**
      * Erzeugt Unterformulare basierend auf den Informationen in den POST Daten.
+     *
+     * TODO was passiert wenn ein invalides Formular auftaucht beim anschließenden $form->populate()?
      */
     public function constructFromPost($post, $document = null) {
         $keys = array_keys($post);
@@ -161,7 +163,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         foreach ($keys as $index => $key) {
             // Prüfen ob Unterformluar (array) oder Feld
             if (is_array($post[$key]) && $this->isValidSubForm($post[$key])) {
-                $this->_addSubForm($index);
+                $this->_addSubForm($index); // TODO sollte statt $index vielleicht $key verwendet werden
             }
         }
     }
