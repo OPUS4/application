@@ -286,7 +286,7 @@ class Admin_Form_DocumentPersonsTest extends ControllerTestCase {
         $this->assertEquals(Admin_Form_Document::RESULT_SHOW, $form->processPost($post, null));
     }
     
-    public function testProcessPostWithoutSubforms() {
+    public function testProcessPostEmptyWithoutPersons() {
         $form = new Admin_Form_DocumentPersons();
         
         $this->assertNull($form->processPost(array(), null));
@@ -305,14 +305,30 @@ class Admin_Form_DocumentPersonsTest extends ControllerTestCase {
         ), null));
     }
     
-    public function testProcessPostEmpty() {
+    public function testProcessPostEmptyWithPersons() {
         $form = new Admin_Form_DocumentPersons();
-        
+
         $document = new Opus_Document(146);
-        
+
         $form->populateFromModel($document);
-        
+
         $this->assertNull($form->processPost(array(), null));
+    }
+
+    public function testProcessPostResultNull() {
+        $form = new Admin_Form_DocumentPersons();
+
+        $document = new Opus_Document(146);
+
+        Zend_Debug::dump(array_keys($form->getSubForms()));
+
+        $form->populateFromModel($document);
+
+        $post = array(
+            'author' => array(),
+        );
+
+        $this->assertNull($form->processPost($post, null));
     }
 
     /**
