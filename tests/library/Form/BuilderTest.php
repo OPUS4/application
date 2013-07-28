@@ -72,7 +72,7 @@ class Form_BuilderTest extends ControllerTestCase {
     public function testCreateFormFromDocument() {
         $this->markTestSkipped('Needs fixing.');
         $form = $this->_builder->build($this->_model);
-        $this->assertType('Zend_Form', $form);
+        $this->assertInstanceOf('Zend_Form', $form);
         $elements = $form->getElements();
         $this->assertArrayHasKey('SimpleField', $elements, 'Field "SimpleField" is missing in form.');
     }
@@ -141,7 +141,7 @@ class Form_BuilderTest extends ControllerTestCase {
         $field->setValidator(new Zend_Validate_Alnum());
         $form = $this->_builder->build($this->_model);
         $value = $form->getElement('SimpleField')->getValidator('Zend_Validate_Alnum');
-        $this->assertType('Zend_Validate_Alnum', $value, 'Field does not have correct validator.');
+        $this->assertInstanceOf('Zend_Validate_Alnum', $value, 'Field does not have correct validator.');
     }
 
     /**
@@ -537,7 +537,7 @@ class Form_BuilderTest extends ControllerTestCase {
         $field->setFilter(new Zend_Filter_StringTrim());
         $form = $this->_builder->build($this->_model);
         $value = $form->getElement('SimpleField')->getFilter('Zend_Filter_StringTrim');
-        $this->assertType('Zend_Filter_StringTrim', $value, 'Field does not have correct filter.');
+        $this->assertInstanceOf('Zend_Filter_StringTrim', $value, 'Field does not have correct filter.');
 
     }
 

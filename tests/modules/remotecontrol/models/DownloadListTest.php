@@ -72,7 +72,7 @@ class Remotecontrol_Model_DownloadListTest extends ControllerTestCase {
         catch (Exception $e) {
             $exception = $e;
         }
-        $this->assertType('Remotecontrol_Model_Exception', $e);
+        $this->assertInstanceOf('Remotecontrol_Model_Exception', $e);
         $this->assertFalse($e->collectionIsNotUnique());
         $this->assertTrue($e->getPrevious() instanceof Opus_SolrSearch_Exception);
         $this->assertEquals($e->getPrevious()->getCode(), Opus_SolrSearch_Exception::SERVER_UNREACHABLE);
@@ -104,7 +104,7 @@ class Remotecontrol_Model_DownloadListTest extends ControllerTestCase {
         }
 
         $this->assertNotNull($exception);
-        $this->assertType('Opus_SolrSearch_Exception', $exception);
+        $this->assertInstanceOf('Opus_SolrSearch_Exception', $exception);
         $this->assertEquals($exception->getCode(), Opus_SolrSearch_Exception::INVALID_QUERY);
     }
 
@@ -135,7 +135,7 @@ class Remotecontrol_Model_DownloadListTest extends ControllerTestCase {
             $exception = $e;
         }
         $this->assertNotNull($exception);
-        $this->assertType('Opus_SolrSearch_Exception', $exception);
+        $this->assertInstanceOf('Opus_SolrSearch_Exception', $exception);
         $this->assertEquals($exception->getCode(), Opus_SolrSearch_Exception::SERVER_UNREACHABLE);
 
         // restore configuration

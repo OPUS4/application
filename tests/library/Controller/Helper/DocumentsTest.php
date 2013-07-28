@@ -47,7 +47,7 @@ class Controller_Helper_DocumentsTest extends ControllerTestCase {
         $document = $this->documents->getDocumentForId($docId);
 
         $this->assertNotNull($document);
-        $this->assertType('Opus_Document', $document);
+        $this->assertInstanceOf('Opus_Document', $document);
     }
 
     public function testGetDocumentForIdForEmptyValue() {
