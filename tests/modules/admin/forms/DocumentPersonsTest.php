@@ -320,8 +320,6 @@ class Admin_Form_DocumentPersonsTest extends ControllerTestCase {
 
         $document = new Opus_Document(146);
 
-        Zend_Debug::dump(array_keys($form->getSubForms()));
-
         $form->populateFromModel($document);
 
         $post = array(
