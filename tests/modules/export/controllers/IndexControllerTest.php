@@ -703,7 +703,14 @@ class Export_IndexControllerTest extends ControllerTestCase {
 	$this->assertNotRegExp('/ id="L[0-9]{4}"/', $response->getBody());	
        }   
 
-
+    /**
+     * Regression Test for OPUSVIER-2998 and OPUSVIER-2999
+     */
+    public function testPublistActionDisplaysUrlencodedFiles() {
+        $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
+        $response = $this->getResponse();
+        $this->assertContains('/files/92/test.xhtml', $response->getBody());
+        $this->assertNotContains("Warning: XSLTProcessor::transformToXml(): Not allowed to call handler 'urlencode()'", $response->getBody());
+    }
 
 }
-
