@@ -37,6 +37,11 @@
  */
 class Admin_LanguageTest extends ControllerTestCase {
 
+    public function setUp() {
+        parent::setUp();
+        $this->verifyCommandAvailable('xmllint');
+    }
+    
     public function testTmxFilesValid() {
         $dir = APPLICATION_PATH . '/modules/admin/language';
         $filesIter = new DirectoryIterator($dir);

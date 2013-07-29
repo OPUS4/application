@@ -305,5 +305,41 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         libxml_use_internal_errors(false);
         libxml_clear_errors();
     }
+    
+    /**
+     * Prüft, ob ein Kommando auf den System existiert (Mac OS-X, Linux)
+     * @param string $command Name des Kommandos
+     * @return boolean TRUE - wenn Kommando existiert
+     */
+    public function isCommandAvailable($command) {
+        $result = shell_exec("which $command");
+        return (empty($result) ? false : true);
+    }
+    
+    /**
+     * Prüft, ob Kommando existiert und markiert Test als Fail oder Skipped.
+     * 
+     * @param string $command Name des Kommandos
+     */
+    public function verifyCommandAvailable($command) {
+        if (!$this->isCommandAvailable($command)) {
+            if ($this->isFailTestOnMissingCommand()) {
+                $this->fail("Command '$command' not installed.");
+            }
+            else {
+                $this->markTestSkipped("Skipped because '$command' is not installed.");
+            }
+        }
+    }
+    
+    /**
+     * Liefert true wenn Tests mit fehlenden Kommandos mit Fail markiert werden sollten.
+     * @return boolean
+     */
+    public function isFailTestOnMissingCommand() {
+        $config = Zend_Registry::get('Zend_Config');
+        return (isset($config->tests->failTestOnMissingCommand) &&
+                $config->tests->failTestOnMissingCommand) ? true : false;
+    }
         
 }

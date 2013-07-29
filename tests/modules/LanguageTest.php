@@ -36,6 +36,11 @@
  * @author Jens Schwidder <schwidder(at)zib.de>
  */
 class LanguageTest extends ControllerTestCase {
+    
+    public function setUp() {
+        parent::setUp();
+        $this->verifyCommandAvailable('xmllint');
+    }
 
     public function testAllTmxFiles() {
         $this->markTestIncomplete("Die Datei 'frontdoor/language/messages.tmx' enthält Tags in den Strings. Das wird als Fehler gemeldet. Daher kann dieser Unit Test noch nicht eingesetzt werden.");
