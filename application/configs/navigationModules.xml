@@ -237,14 +237,21 @@
                         </show>
                         <new>
                             <type>mvc</type>
-                            <label>admin_series_show</label>
+                            <label>admin_series_new</label>
                             <module>admin</module>
                             <controller>series</controller>
                             <action>new</action>
                         </new>
+                        <create>
+                            <type>mvc</type>
+                            <label>admin_series_edit</label>
+                            <module>admin</module>
+                            <controller>series</controller>
+                            <action>create</action>
+                        </create>
                         <edit>
                             <type>mvc</type>
-                            <label>admin_series_show</label>
+                            <label>admin_series_edit</label>
                             <module>admin</module>
                             <controller>series</controller>
                             <action>edit</action>

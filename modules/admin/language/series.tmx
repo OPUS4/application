@@ -34,6 +34,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="admin_series_edit">
+            <tuv xml:lang="en">
+                <seg>Edit Series</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Schriftenreihe editieren</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="admin_series_link_showdocuments">
             <tuv xml:lang="en">
                 <seg>Show documents</seg>
