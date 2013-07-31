@@ -65,7 +65,7 @@ class Controller_Action extends Controller_ModuleAccess {
      */
     public function init() {
         parent::init();
-        $this->_logger = Zend_Registry::get('Zend_Log');
+        $this->_logger = $this->getLogger(); // TODO find all usages of _logger and replace with getLogger()
         $this->view->title = $this->_request->getModuleName() . '_' . $this->_request->getParam('controller') . '_' . $this->_request->getParam('action');
         $this->__redirector = $this->_helper->getHelper('Redirector');
         $this->__flashMessenger = $this->_helper->getHelper('FlashMessenger');

@@ -43,6 +43,12 @@
 class Controller_ModuleAccess extends Zend_Controller_Action {
     
     const ACCESS_DENIED_ACTION = 'module-access-denied';
+
+    /**
+     * Objekt für Logging.
+     * @var \Zend_Log
+     */
+    private $logger = null;
     
     /**
      * Use pre-dispatch to check user access rights *before* action is called.
@@ -66,7 +72,7 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
      * @return void
      */
     protected function checkAccessModulePermissions() {
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = $this->getLogger();
         $module = $this->_request->getModuleName();
 
         $action = $this->_request->getActionName();
@@ -110,7 +116,7 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
      * TODO Kann ein Teil davon vielleicht schon im Bootstrap passieren?
      */
     protected function checkPermissions() {
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = $this->getLogger();
         
         $navigation = $this->view->getHelper('navigation');
         $acl = $navigation->getAcl();
@@ -205,6 +211,32 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
      */
     public function moduleAccessDeniedAction() {
         $this->_forward('login', 'auth', 'default');
+    }
+
+    /**
+     * Liefert den gesetzten Logger oder holt bei Bedarf Logger aus Zend_Registry.
+     * @return Zend_Log
+     */
+    public function getLogger() {
+        if (is_null($this->logger)) {
+            $this->logger = Zend_Registry::get('Zend_Log');
+            if (is_null($this->logger)) {
+                throw new Application_Exception('No logger found in Zend_Registry.');
+            }
+        }
+
+        return $this->logger;
+    }
+
+    /**
+     * Setzt den Logger für die Klasse.
+     *
+     * Diese Funktion kann insbesondere in Unit Tests mit einem MockLogger verwendet werden.
+     *
+     * @param Zend_Log
+     */
+    public function setLogger($logger) {
+        $this->logger = $logger;
     }
 
 }
