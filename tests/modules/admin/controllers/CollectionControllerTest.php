@@ -313,6 +313,23 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('td.visible', '10 Philosophie');
         $this->assertQueryContentContains('td.unvisible', '11 Metaphysik');
     }
+
+    public function testTooltipForInsertLinks() {
+        $this->dispatch('/admin/collection/show/id/2485');
+        $this->assertResponseCode(200);
+
+        $document = new DOMDocument();
+        $document->loadHTML($this->getResponse()->getBody());
+        $elements = $document->getElementsByTagName('a');
+
+        foreach ($elements as $element) {
+            $classValue = $element->getAttribute('class');
+            if (strpos($classValue, 'insert') !== false) {
+                $title = $element->getAttribute('title');
+                $this->assertNotEmpty($title, 'Insert Link ohne Tooltip!');
+            }
+        }
+    }
     
 }
 
