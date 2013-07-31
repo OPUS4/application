@@ -707,10 +707,17 @@ class Export_IndexControllerTest extends ControllerTestCase {
      * Regression Test for OPUSVIER-2998 and OPUSVIER-2999
      */
     public function testPublistActionDisplaysUrlencodedFiles() {
+        Zend_Registry::get('Zend_Config')->merge(
+                new Zend_Config(array(
+                    'publist' => array(
+                        'file' => array(
+                            'allow' => array(
+                                'mimetype' => array('application/xhtml+xml' => 'HTML')))))));
+
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
         $response = $this->getResponse();
         $this->assertContains('/files/92/test.xhtml', $response->getBody());
         $this->assertNotContains("Warning: XSLTProcessor::transformToXml(): Not allowed to call handler 'urlencode()'", $response->getBody());
     }
-
+       
 }
