@@ -2,8 +2,13 @@ h1. OPUS 4 Release Notes
 
 h2. ======================== Release 4.4.1 2013-08-30 ========================
 
+h3. Neue Konfigurationsoption für Dateien in Publikationslisten
 
-h3. 
+Im neu in 4.4.0 eingeführten Feature der Publikationslisten war im
+ausgelieferten Stylesheet default.xslt nur die Anzeige von PDF-Dateien
+vorgesehen. Nun ist es möglich, über entsprechende Konfigurationsoptionen
+die Anzeige verschiedener Dateitypen zuzulassen. Wenn hier kein Wert für die
+Anzeige gesetzt ist, werden keine Dateien in der Liste ausgegeben.
 
 h2. ======================== Release 4.4.0 2013-07-22 ========================
 
