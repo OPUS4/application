@@ -1,8 +1,8 @@
 ﻿<p>+++++++++++++++      Muster      +++++++++++++++</p>
 
 <p>Musterinstitut 
-<br>Musterstraße 1
-<br>00000 Musterstadt</p>
+<br />Musterstraße 1
+<br />00000 Musterstadt</p>
 
 <p>Telefon: </p>
 <p>Fax: </p>

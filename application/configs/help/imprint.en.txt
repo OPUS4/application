@@ -1,7 +1,7 @@
 ﻿<p>+++++++++++++++      Example      +++++++++++++++</p>
 
 <p><i>Institute</i> 
-<br><i>Address</i></p>
+<br /><i>Address</i></p>
 
 <p>Telephone: </p>
 <p>Fax: </p>
@@ -15,4 +15,4 @@
 
 <p><i>Jane Doe</i> of <i>institute</i> is responsible for editorial and database maintenance as defined by § 55 paragraph 2 RStV (Germany). (See ..> <i>Contact</i>)</p>
 
-<p>The care of the hardware and software of this server is up to <i>institute.</p>
+<p>The care of the hardware and software of this server is up to <i>institute</i>.</p>

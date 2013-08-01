@@ -47,6 +47,7 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertModule('home');
         $this->assertController('index');
         $this->assertAction('index');
+        $this->validateXHTML();
     }
 
     /**
@@ -67,6 +68,7 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertModule('home');
         $this->assertController('index');
         $this->assertAction('help');
+        // $this->validateXHTML(); TODO viele Anpassungen in Hilfedateien (DE, EN)
     }
 
     public function testHelpActionSeparate() {
@@ -89,6 +91,7 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertModule('home');
         $this->assertController('index');
         $this->assertAction('contact');
+        $this->validateXHTML();
     }
 
     /**
@@ -100,6 +103,7 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertModule('home');
         $this->assertController('index');
         $this->assertAction('imprint');
+        $this->validateXHTML();
     }
 
     public function testFailureAction() {
@@ -152,8 +156,8 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $element = $document->getElementById('solrsearch-totalnumofdocs');
         $numOfDocs = $element->firstChild->textContent;
 
-	$docFinder = new Opus_DocumentFinder();
-	$docFinder->setServerState('published');
+        $docFinder = new Opus_DocumentFinder();
+        $docFinder->setServerState('published');
         
         $numOfDbDocs = $docFinder->count();
         $this->assertEquals($numOfDbDocs, $numOfDocs);
@@ -179,16 +183,18 @@ class Home_IndexControllerTest extends ControllerTestCase {
             $idsDb = $docFinder->ids();
             
             $idsIndexOnly = array_diff($idsIndex, $idsDb);
-            $this->assertEquals(0, count($idsIndexOnly), 'Document IDs in search index, but not in database: ' . var_export($idsIndexOnly, true));
+            $this->assertEquals(0, count($idsIndexOnly), 'Document IDs in search index, but not in database: '
+                . var_export($idsIndexOnly, true));
             
             $idsDbOnly = array_diff($idsDb, $idsIndex);
-            $this->assertEquals(0, count($idsDbOnly), 'Document IDs in database, but not in search index: ' . var_export($idsDbOnly, true));
+            $this->assertEquals(0, count($idsDbOnly), 'Document IDs in database, but not in search index: '
+                . var_export($idsDbOnly, true));
             
-            $this->assertEquals($numOfDbDocs, $numOfIndexDocs, "number of docs in database ($numOfDbDocs) and search index ($numOfIndexDocs) differ from each other");        
+            $this->assertEquals($numOfDbDocs, $numOfIndexDocs,
+                "number of docs in database ($numOfDbDocs) and search index ($numOfIndexDocs) differ from each other");
         }
         
         $this->assertEquals($numOfDocs, $numOfHits);
-        
     }
     
 }
