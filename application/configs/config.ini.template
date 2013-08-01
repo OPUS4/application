@@ -173,6 +173,12 @@ setup.translation.modules.allowed = default,publish
 ; Here you can switch grouping to 'completed year':
 ; publist.groupby.completedyear = 1
 
+; You can allow files of a certain mime type to be exported in publication lists.
+; For each mime type you must set the text to be displayed in the download link.
+; publist.file.allow.mimetype[application/pdf]=PDF
+; publist.file.allow.mimetype[application/postscript]=PS
+; publist.file.allow.mimetype[text/html]=HTML
+; publist.file.allow.mimetype[application/xhtml+xml]=HTML
 
 ; The following is needed even if sections are empty.
 [staging : production]

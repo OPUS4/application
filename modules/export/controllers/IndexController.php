@@ -196,6 +196,8 @@ class Export_IndexController extends Controller_Xml {
 
         $this->mapQuery();
         $this->_proc->registerPHPFunctions('max');
+        $this->_proc->registerPHPFunctions('urlencode');
+        $this->_proc->registerPHPFunctions('Export_Model_PublicationList::getMimeTypeDisplayName');
         $this->_proc->setParameter('', 'fullUrl', $fullUrl);
         $this->_proc->setParameter('', 'groupBy', $groupBy);
             

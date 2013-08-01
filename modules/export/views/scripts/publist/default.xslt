@@ -29,6 +29,7 @@
  * @category    Application
  * @package     Module_Export
  * @author      Gunar Maiwald <maiwald@zib.de>
+ * @author      Edouard Simon <edouard.simon@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -503,8 +504,9 @@
     </xsl:template>
 
     <xsl:template match="File">
+        <xsl:variable name="MimeTypeDisplayName" select="php:function('Export_Model_PublicationList::getMimeTypeDisplayName', string(@MimeType))" />
         <xsl:choose>
-            <xsl:when test="@MimeType='application/pdf'">
+            <xsl:when test="$MimeTypeDisplayName != ''">
                 <xsl:element name="a">
                     <xsl:attribute name="href">
                         <xsl:value-of select="$fullUrl"/>
@@ -512,14 +514,14 @@
                         <xsl:value-of select="../@Id" />
                         <xsl:text>/</xsl:text>
                         <xsl:value-of select="php:function('urlencode',string(@PathName))"/>
-                     </xsl:attribute>
+                    </xsl:attribute>
                     <xsl:element name="b">
-                        <xsl:text>PDF</xsl:text>
+                        <xsl:value-of select="$MimeTypeDisplayName"/>
                     </xsl:element>
                     <xsl:text> </xsl:text>
                 </xsl:element>
             </xsl:when>
-       </xsl:choose>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template name="CitationExport">
