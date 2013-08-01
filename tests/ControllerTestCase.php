@@ -229,7 +229,16 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      * 
      * TODO die DTD von W3C zu holen ist sehr langsam; sollte aus lokaler Datei geladen werden
      */
-    public function validateXHTML($body) {        
+    public function validateXHTML($body = null) {
+        if (is_null($body)) {
+            $body = $this->getResponse()->getBody();
+        }
+
+        if (is_null($body) || strlen(trim($body)) === 0) {
+            $this->fail('No XHTML Body to validate.');
+            return;
+        }
+
         libxml_clear_errors();
         libxml_use_internal_errors(true);
         
