@@ -66,15 +66,20 @@
 <?php if (0 === count($this->collections)) : ?>
     <tr>
         <td>
-            <a class="add" href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'new', 'id' => $this->collection_id, 'type' => 'child'), null, true)?>">
-            <?= $this->translate('admin_collections_collection_add') ?>
+            <a class="add" href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection',
+                'action' => 'new', 'id' => $this->collection_id, 'type' => 'child'), null, true)?>"
+               title="<?=$this->translate('admin_collections_collection_add')?>"
+                ><?= $this->translate('admin_collections_collection_add') ?>
             </a>
         </td>
     </tr>
 <?php else : ?>
     <tr>
         <td colspan="7" class="insert">
-            <a class="insert" href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'new', 'id' => $this->collection_id, 'type' => 'child'), null, true) ?>"><?=$this->translate('admin_collections_collection_add')?></a>
+            <a class="insert" href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection',
+                'action' => 'new', 'id' => $this->collection_id, 'type' => 'child'), null, true) ?>"
+               title="<?=$this->translate('admin_collections_collection_add')?>"
+                ><?=$this->translate('admin_collections_collection_add')?></a>
         </td>
     </tr>
     <?php foreach ($this->collections as $i => $collection) : ?>
@@ -130,7 +135,10 @@
     </tr>
     <tr>
         <td colspan="7" class="insert">
-            <a class="insert" href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'new', 'id' => $collection->getId(), 'type' => 'sibling'), null, true) ?>"><?=$this->translate('admin_collections_collection_add')?></a>
+            <a class="insert" href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection',
+                'action' => 'new', 'id' => $collection->getId(), 'type' => 'sibling'), null, true) ?>"
+               title="<?=$this->translate('admin_collections_collection_add')?>"
+                ><?=$this->translate('admin_collections_collection_add')?></a>
         </td>
     </tr>
     <?php endforeach; ?>
