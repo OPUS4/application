@@ -714,6 +714,11 @@ class Export_IndexControllerTest extends ControllerTestCase {
                             'allow' => array(
                                 'mimetype' => array('application/xhtml+xml' => 'HTML')))))));
 
+        $doc = new Opus_Document(92);
+        $file = $doc->getFile(0);
+        $this->assertTrue($file instanceOf Opus_File, 'Test setup has changed.');
+        $this->assertEquals('test.xhtml', $file->getPathName(), 'Test setup has changed.');
+        
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
         $response = $this->getResponse();
         $this->assertContains('/files/92/test.xhtml', $response->getBody());
