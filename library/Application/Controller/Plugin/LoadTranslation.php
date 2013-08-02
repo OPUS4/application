@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,42 +25,34 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Tests
+ * @package     Controller
+ * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Mock Klasse für Logging.
- * 
- * TODO Funktionen für weitere Log-Level hinzufügen
- * TODO Unterscheidung von Nachrichten in Log-Leveln?
- * TODO Wo sollten unsere Mock Klassen plaziert werden?
+ * Loads languages from modules.  When registered as FrontController plugin
+ * it hooks into dispatchLoopStartup().
  */
-class MockLogger {
-    
-    private $messages = array();
+class Application_Controller_Plugin_LoadTranslation extends Zend_Controller_Plugin_Abstract {
 
-    public function err($message) {
-        $this->messages[] = $message;
+    /**
+     * Hooks into preDispatch to setup include path for every request.
+     *
+     * @param Zend_Controller_Request_Abstract $request The request passed to the FrontController.
+     * @return void
+     */
+    public function preDispatch(Zend_Controller_Request_Abstract $request) {
+        $current_module = $request->getModuleName();
+
+        // Add translation
+        if ($current_module !== 'default') {
+            Application_LanguageSupport::getInstance()->loadModule($current_module);
+        }
     }
 
-    public function warn($message) {
-        $this->messages[] = $message;
-    }
-
-    public function notice($message) {
-        $this->messages[] = $message;
-    }
-    
-    public function getMessages() {
-        return $this->messages;
-    }
-    
-    public function clear() {
-        $this->messages = array();
-    }
-    
 }

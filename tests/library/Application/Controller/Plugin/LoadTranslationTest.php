@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,43 +24,55 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
+ * @category    Application Unit Test
+ * @package     Application_Controller_Plugin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Mock Klasse für Logging.
- * 
- * TODO Funktionen für weitere Log-Level hinzufügen
- * TODO Unterscheidung von Nachrichten in Log-Leveln?
- * TODO Wo sollten unsere Mock Klassen plaziert werden?
- */
-class MockLogger {
-    
-    private $messages = array();
+class Application_Controller_Plugin_LoadTranslationTest extends ControllerTestCase {
 
-    public function err($message) {
-        $this->messages[] = $message;
+    public function testPreDispatch() {
+        $plugin = new Application_Controller_Plugin_LoadTranslation();
+
+        $translator = Zend_Registry::get('Zend_Translate');
+
+        $this->assertTrue($translator->isTranslated('eng'));
+        $this->assertFalse($translator->isTranslated('admin_document_index'));
+
+        $request = $this->getRequest();
+        $request->setModuleName('admin');
+
+        $plugin->preDispatch($request);
+
+        $this->assertTrue($translator->isTranslated('admin_document_index'));
     }
 
-    public function warn($message) {
-        $this->messages[] = $message;
+    /**
+     * Das default-Modul wird schon im Bootstrap geladen.
+     */
+    public function testPreDispatchDefault() {
+        $plugin = new Application_Controller_Plugin_LoadTranslation();
+
+        $translator = Zend_Registry::get('Zend_Translate');
+
+        $this->assertTrue($translator->isTranslated('eng'));
+        $this->assertTrue($translator->isTranslated('home_menu_label'));
+
+        Application_LanguageSupport::getInstance()->init(); // Reset Zend_Translate
+
+        $translator = Zend_Registry::get('Zend_Translate');
+
+        $this->assertFalse($translator->isTranslated('eng'));
+
+        $request = $this->getRequest();
+        $request->setModuleName('default');
+
+        $plugin->preDispatch($request);
+
+        $this->assertFalse($translator->isTranslated('eng'));
     }
 
-    public function notice($message) {
-        $this->messages[] = $message;
-    }
-    
-    public function getMessages() {
-        return $this->messages;
-    }
-    
-    public function clear() {
-        $this->messages = array();
-    }
-    
 }
