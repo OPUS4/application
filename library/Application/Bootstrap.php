@@ -35,17 +35,8 @@
  */
 
 /**
- * Autoloader not yet initialized.
- */
-// require_once 'Opus/Bootstrap/Base.php';
-
-/**
  * Provide methods to setup and run the application. It also provides a couple of static
  * variables for quicker access to application components like the front controller.
- *
- * @category    Application
- * @package     Application
- *
  */
 class Application_Bootstrap extends Opus_Bootstrap_Base {
 
@@ -54,7 +45,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * directory.
      *
      * @return void
-     *
      */
     protected function _initOpusFrontController() {
         $this->bootstrap(array('LanguageList', 'frontController'));
@@ -65,7 +55,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
          * Add a custom front controller plugin for setting up an appropriate
          * include path to the form classes of modules.
          */
-        $moduleprepare = new Controller_Plugin_ModulePrepare(APPLICATION_PATH . '/modules');
+        $moduleprepare = new Application_Controller_Plugin_LoadTranslation();
         $frontController->registerPlugin($moduleprepare);
 
         // Add security realm initialization
@@ -79,39 +69,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         // Get Name of Module, Controller and Action for Use in View
         $viewSetup = new Controller_Plugin_ViewSetup();
         $frontController->registerPlugin($viewSetup);
-
-//        $documentRoute = new Zend_Controller_Router_Route_Regex(
-//            '^document/(\d+)/?$',
-//            array(
-//                'module'     => 'frontdoor',
-//                'controller' => 'index',
-//                'action'     => 'index',
-//                'docId'      => 1,
-//            ),
-//            array(
-//                1 => 'docId',
-//            ),
-//            'document/%s'
-//        );
-//        $frontController->getRouter()->addRoute('document', $documentRoute);
-//
-//        $fileRoute = new Zend_Controller_Router_Route_Regex(
-//            '^document/(\d+)/(.*)$',
-//            array(
-//                'module'     => 'frontdoor',
-//                'controller' => 'deliver',
-//                'action'     => 'index',
-//                'docId'      => 1,
-//                'file'       => 2,
-//            ),
-//            array(
-//                1 => 'docId',
-//                2 => 'file',
-//            ),
-//            'document/%s/%s'
-//        );
-//        $frontController->getRouter()->addRoute('file', $fileRoute);
-
     }
     
     /**
@@ -119,7 +76,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * The Zend_Layout component also gets initialized here.
      *
      * @return void
-     *
      */
     protected function _initView() {
         $this->bootstrap(array('Configuration','OpusFrontController'));
@@ -154,9 +110,14 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $view->addHelperPath($libRealPath . '/View/Helper', 'View_Helper');
 
         // Set path to shared view partials
+        // TODO für nächstes Ticket $view->addScriptPath($libRealPath . '/Application/View/Partial');
         $view->addScriptPath($libRealPath . '/View/Partials');
+        
+        // Fieldset View Helper global ersetzen
         $fieldsetHelper = new View_Helper_FieldsetWithAnker();
         $view->registerHelper($fieldsetHelper, 'fieldset');
+        
+        // Breadcrumbs View Helper global ersetzen
         $breadcrumbsHelper = new View_Helper_Breadcrumbs();
         $view->registerHelper($breadcrumbsHelper, 'breadcrumbs');
         
@@ -174,7 +135,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * Setup Zend_Cache for caching application data and register under 'Zend_Cache_Page'.
      *
      * @return void
-     *
      */
     protected function _setupPageCache() {
         $config = $this->getResource('Configuration');
@@ -221,7 +181,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *         ...
      *
      * @return void
-     *
      */
     protected function _initTranslation()  {
         $this->bootstrap(array('Session', 'Logging', 'ZendCache'));
@@ -229,26 +188,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $logger = $this->getResource('Logging');
         $sessiondata = $this->getResource('Session');
 
-        $options = array(
-            'logUntranslated' => true,
-            'logMessage' => "Unable to translate key '%message%' into locale '%locale%'",
-            'log' => $logger,
-
-            'adapter' => Zend_Translate::AN_TMX,
-            'locale' => 'auto',
-            'clear' => false,
-            'scan' => Zend_Translate::LOCALE_FILENAME,
-            'ignore' => '.',
-            'disableNotices' => true
-        );
-        $translate = new Zend_Translate(array_merge(array(
-            'content' => APPLICATION_PATH . '/modules/default/language/default.tmx',
-        ), $options));
-        Zend_Registry::set('Zend_Translate', $translate);
-
-        $moduleDir = APPLICATION_PATH . '/modules/default/';
-        $this->_loadLanguageDirectory("$moduleDir/language/");
-        $this->_loadLanguageDirectory("$moduleDir/language_custom/");
+        Application_LanguageSupport::getInstance(true)->loadModule('default');
 
         $sessiondata = new Zend_Session_Namespace();
         if (empty($sessiondata->language)) {
@@ -272,58 +212,13 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             $sessiondata->language = $language;
         }
         $logger->debug('Set language to "' . $sessiondata->language . '".');
+
+        $translate = Zend_Registry::get('Zend_Translate');
         $translate->setLocale($sessiondata->language);
+
         $this->translate = $translate;
 
         return $translate;
-    }
-
-    /**
-     * Load the given language directory.
-     *
-     * @param string $directory
-     * @return boolean
-     *
-     * TODO: Outsource to somewhere else.
-     */
-    protected function _loadLanguageDirectory($directory) {
-        $directory = realpath($directory);
-        if (($directory === false) or (!is_dir($directory)) or (!is_readable($directory))) {
-            return false;
-        }
-
-        $handle = opendir($directory);
-        if (!$handle) {
-            return false;
-        }
-
-        $translate = Zend_Registry::get('Zend_Translate');
-        $options = array(
-            'adapter' => Zend_Translate::AN_TMX,
-            'locale' => 'auto',
-            'clear' => false,
-            'scan' => Zend_Translate::LOCALE_FILENAME,
-            'ignore' => '.',
-            'disableNotices' => true
-        );
-
-        while (false !== ($file = readdir($handle))) {
-            // Ignore directories.
-            if (!is_file($directory . DIRECTORY_SEPARATOR . $file)) {
-                continue;
-            }
-
-            // Ignore files with leading dot and files without extension tmx.
-            if (preg_match('/^[^.].*\.tmx$/', $file) === 0) {
-                continue;
-            }
-
-            $translate->addTranslation(array_merge(array(
-                        'content' => $directory . DIRECTORY_SEPARATOR . $file,
-            ), $options));
-        }
-
-        return true;
     }
 
     /**

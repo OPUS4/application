@@ -89,8 +89,8 @@ class Application_LanguageSupport {
      * Liefert Instanz von Singleton Application_LanguageSupport zurück.
      * @return Application_LanguageSupport
      */
-    public static function getInstance() {
-        if (is_null(self::$instance)) {
+    public static function getInstance($init = false) {
+        if (is_null(self::$instance) || $init) {
             self::$instance = new Application_LanguageSupport();
             self::$instance->init();
         }
