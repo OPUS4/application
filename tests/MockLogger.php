@@ -38,8 +38,9 @@
  * TODO Funktionen für weitere Log-Level hinzufügen
  * TODO Unterscheidung von Nachrichten in Log-Leveln?
  * TODO Wo sollten unsere Mock Klassen plaziert werden?
+ * TODO weiter ausbauen oder existierende Klasse finden
  */
-class MockLogger {
+class MockLogger extends Zend_Log {
     
     private $messages = array();
 
@@ -55,6 +56,19 @@ class MockLogger {
         $this->messages[] = $message;
     }
     
+    public function debug($message) {
+        $this->messages[] = $message;
+    }
+    
+    public function log($message, $priority, $extras = null) {
+        switch ($priority) {
+            case self::DEBUG:
+                $this->debug($message);
+                break;
+            default:
+        }
+    }
+     
     public function getMessages() {
         return $this->messages;
     }

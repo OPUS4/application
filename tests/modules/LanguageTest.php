@@ -55,5 +55,25 @@ class LanguageTest extends ControllerTestCase {
             $this->assertEquals('0', $xmllintFeedback, "File '$filePath' not valid. (Check with 'xmllint'!)");
         }
     }
+    
+    /**
+     * Test für das Umschalten der Sprache in Unit Tests.
+     */
+    public function testSetLanguage() {
+        $translator = Zend_Registry::get('Zend_Translate');
+        
+        $this->useGerman();
+        
+        $this->assertEquals('Startseite', $translator->translate('home_menu_label'));
+        
+        $this->useEnglish();
+       
+        $this->assertEquals('Home', $translator->translate('home_menu_label'));
+        
+        $this->useGerman();
+       
+        $this->assertEquals('Startseite', $translator->translate('home_menu_label'));        
+    }    
+
 
 }

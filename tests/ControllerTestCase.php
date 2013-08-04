@@ -202,25 +202,35 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     }
 
     /**
-     * Setzt Session Attribut für Deutsch.
-     * 
-     * Dies beeinflusst momentan nicht die verwendete Sprache bei Übersetzungen, sondern wirkt sich nur auf Klassen aus,
-     * die dieses Session-Attribut verwenden.
+     * @deprecated Use 'useGerman' instead
      */
     public function setUpGerman() {
-        $session = new Zend_Session_Namespace();
-        $session->language = 'de';
+        $this->useGerman();
     }
 
     /**
-     * Setzt Session-Attribut für Englisch.
-     * 
-     * Dies beeinflusst momentan nicht die verwendete Sprache bei Übersetzungen, sondern wirkt sich nur auf Klassen aus,
-     * die dieses Session-Attribut verwenden.
+     * @deprecated Use 'useEnglish' instead
      */
     public function setUpEnglish() {
+        $this->useEnglish();
+    }
+    
+    /**
+     * Stellt die Übersetzungen auf Deutsch um.
+     */
+    public function useGerman() {
+        $session = new Zend_Session_Namespace();
+        $session->language = 'de';
+        Zend_Registry::get('Zend_Translate')->setLocale('de');
+    }
+    
+    /**
+     * Stellt die Übersetzungen auf English um.
+     */
+    public function useEnglish() {
         $session = new Zend_Session_Namespace();
         $session->language = 'en';
+        Zend_Registry::get('Zend_Translate')->setLocale('en');
     }
     
     /**
@@ -259,7 +269,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
              'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd' => 'xhtml1-strict.dtd'
         );        
         
-        /* TODO erst ab PHP >= 5.4.0 unterstützt; Alternative Lösung?
+        /* TODO erst ab PHP >= 5.4.0 unterstützt; Alternative Lösung? 
+         * - momentan verwenden wir xmlcatalog für lokales Caching
         libxml_set_external_entity_loader(
             function ($public, $system, $context) use ($mapping) {
                 if (is_file($system)) {

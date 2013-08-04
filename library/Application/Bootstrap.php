@@ -37,14 +37,18 @@
 /**
  * Provide methods to setup and run the application. It also provides a couple of static
  * variables for quicker access to application components like the front controller.
+ * 
+ * TODO unit test bootstrap
  */
 class Application_Bootstrap extends Opus_Bootstrap_Base {
-
+    
     /**
      * Setup a front controller instance with error options and module
      * directory.
      *
      * @return void
+     * 
+     * TODO rename to _initControllerPlugins
      */
     protected function _initOpusFrontController() {
         $this->bootstrap(array('LanguageList', 'frontController'));
@@ -75,7 +79,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * Configure view with UTF-8 options and ViewRenderer action helper.
      * The Zend_Layout component also gets initialized here.
      *
-     * @return void
+     * @return Zend_View
      */
     protected function _initView() {
         $this->bootstrap(array('Configuration','OpusFrontController'));
@@ -180,47 +184,47 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      *         loginform.tmx
      *         ...
      *
-     * @return void
+     * Sprache verwenden
+     * - Session (if supported)
+     * - Locale (if supported)
+     * - Default
+     * 
+     * @return Zend_Translate
      */
     protected function _initTranslation()  {
-        $this->bootstrap(array('Session', 'Logging', 'ZendCache'));
-                
+        $this->bootstrap(array('Configuration', 'Session', 'Logging', 'ZendCache'));
+        
         $logger = $this->getResource('Logging');
-        $sessiondata = $this->getResource('Session');
 
-        Application_LanguageSupport::getInstance(true)->loadModule('default');
+        $translate = new Application_Translate();
+        
+        Zend_Registry::set(Application_Translate::REGISTRY_KEY, $translate);
 
-        $sessiondata = new Zend_Session_Namespace();
-        if (empty($sessiondata->language)) {
-            $language = 'en';
-            $logger->debug("language need to be set");
-            $supportedLanguages = array();
-            $config = $this->getResource('configuration');
-            if (isset($config->supportedLanguages)) {
-                $supportedLanguages = explode(",", $config->supportedLanguages);
-                $logger->debug(count($supportedLanguages) . " supported languages: " . $config->supportedLanguages);
+        $configHelper = new Application_Configuration();
+        
+        $session = $this->getResource('Session');
+
+        $language = $session->language;
+        
+        // check if language is supported; if not, use language from locale
+        if (!$configHelper->isLanguageSupported($language)) {
+            $locale = new Zend_Locale();
+            $language = $locale->getLanguage();
+            $logger->debug("Current locale = '$language'");
+            // check if locale is supported; if not, use default language
+            if (!$configHelper->isLanguageSupported($language)) {
+                $language = Application_Configuration::DEFAULT_LANGUAGE;
             }
-            $currentLocale = new Zend_Locale();
-            $currentLanguage = $currentLocale->getLanguage();
-            $logger->debug("current locale: " . $currentLocale);
-            foreach ($supportedLanguages as $supportedLanguage) {
-                if ($currentLanguage === $supportedLanguage) {
-                    $language = $currentLanguage;
-                    break;
-                }
-            }
-            $sessiondata->language = $language;
         }
-        $logger->debug('Set language to "' . $sessiondata->language . '".');
-
-        $translate = Zend_Registry::get('Zend_Translate');
-        $translate->setLocale($sessiondata->language);
-
-        $this->translate = $translate;
-
+        
+        $logger->debug("Language set to '$language'.");
+        $session->language = $language;
+        $translate->setLocale($language);
+        $translate->loadModule('default'); // immer die Übersetzungen aus Default-Modul laden
+        
         return $translate;
     }
-
+    
     /**
      * Setup session.
      *
@@ -235,6 +239,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * Setup language list.
      *
      * @return void
+     * 
+     * TODO move out (wird nicht für jeden Request benötigt)
      */
     protected function _initLanguageList() {
         $this->bootstrap(array('Translation', 'Backend'));
@@ -253,6 +259,8 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * Initializes general navigation as configured in navigationModules.xml'
      *
      * @return void
+     * 
+     * TODO possible to cache? performance improvement?
      */
     protected function _initNavigation() {
         $this->bootstrap('Logging', 'View');

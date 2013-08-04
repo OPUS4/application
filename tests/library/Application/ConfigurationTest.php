@@ -25,50 +25,62 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Test
- * @package     Application_Controller_Plugin
+ * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Application_Controller_Plugin_LoadTranslationTest extends ControllerTestCase {
-
-    public function testPreDispatch() {
-        $plugin = new Application_Controller_Plugin_LoadTranslation();
-
-        $translate = Zend_Registry::get('Zend_Translate');
-
-        $this->assertTrue($translate->isTranslated('eng'));
-        $this->assertFalse($translate->isTranslated('admin_document_index'));
-
-        $request = $this->getRequest();
-        $request->setModuleName('admin');
-
-        $plugin->preDispatch($request);
-
-        $this->assertTrue($translate->isTranslated('eng'));
-        $this->assertTrue($translate->isTranslated('admin_document_index'));
+class Application_ConfigurationTest extends ControllerTestCase {
+    
+    private $config;
+    
+    public function setUp() {
+        parent::setUp();
+        $this->config = new Application_Configuration();
     }
 
-    /**
-     * Das default-Modul wird schon im Bootstrap geladen.
-     */
-    public function testPreDispatchDefault() {
-        $plugin = new Application_Controller_Plugin_LoadTranslation();
-
-        $translate = new Application_Translate();
-        
-        Zend_Registry::set('Zend_Translate', $translate);
-        
-        $this->assertFalse($translate->isTranslated('eng'));
-
-        $request = $this->getRequest();
-        $request->setModuleName('default');
-
-        $plugin->preDispatch($request);
-
-        $this->assertFalse($translate->isTranslated('eng'));
+    public function testGetConfig() {
+        $zendConfig = $this->config->getConfig();
+        $this->assertNotNull($zendConfig);
+        $this->assertInstanceOf('Zend_Config', $zendConfig);
     }
 
+    public function testGetLogger() {
+        $logger = $this->config->getLogger();
+
+        $this->assertNotNull($logger);
+        $this->assertInstanceOf('Zend_Log', $logger);
+    }
+
+    public function testSetLogger() {
+        $logger = new MockLogger();
+
+        $this->config->setLogger($logger);
+
+        $this->assertNotNull($this->config->getLogger());
+        $this->assertInstanceOf('MockLogger', $this->config->getLogger());
+    }
+
+    public function testGetSupportedLanguages() {
+        $this->assertEquals(array('de', 'en'), $this->config->getSupportedLanguages());
+    }
+    
+    public function testIsLanguageSupportedTrue() {
+        $this->assertTrue($this->config->isLanguageSupported('en'));
+    }
+    
+    public function testIsLanguageSupportedFalse() {
+        $this->assertFalse($this->config->isLanguageSupported('ru'));
+    }
+    
+    public function testIsLanguageSupportedFalseNull() {
+        $this->assertFalse($this->config->isLanguageSupported(null));
+    }
+
+    public function testIsLanguageSupportedFalseEmpty() {
+        $this->assertFalse($this->config->isLanguageSupported(''));
+    }
+    
 }
