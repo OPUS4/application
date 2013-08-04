@@ -35,6 +35,11 @@
  */
 class Publish_FormControllerTest extends ControllerTestCase {
 
+    public function setUp() {
+        parent::setUp();
+        $this->useGerman();
+    }
+    
     /**
      * Test GET on upload action
      */
@@ -74,10 +79,12 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertController('form');
         $this->assertAction('upload');
+        
+        $body = $this->getResponse()->getBody();
 
-        $this->assertContains('Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.', $this->getResponse()->getBody());
-        $this->assertContains('Bitte wählen Sie einen Dokumenttyp aus der Liste aus.', $this->getResponse()->getBody());
-        $this->assertContains("<div class='form-errors'>", $this->getResponse()->getBody());
+        $this->assertContains('Es sind Fehler aufgetreten. Bitte beachten Sie die Fehlermeldungen an den Formularfeldern.', $body);
+        $this->assertContains('Bitte wählen Sie einen Dokumenttyp aus der Liste aus.', $body);
+        $this->assertContains("<div class='form-errors'>", $body);
     }
 
     /**
@@ -123,12 +130,14 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->assertController('form');
         $this->assertAction('check');
 
-        $this->assertContains('TitleMain_1', $this->getResponse()->getBody());
-        $this->assertContains('TitleMainLanguage_1', $this->getResponse()->getBody());
-        $this->assertContains('TitleMain_2', $this->getResponse()->getBody());
-        $this->assertContains('TitleMainLanguage_2', $this->getResponse()->getBody());
+        $body = $this->getResponse()->getBody();
+        
+        $this->assertContains('TitleMain_1', $body);
+        $this->assertContains('TitleMainLanguage_1', $body);
+        $this->assertContains('TitleMain_2', $body);
+        $this->assertContains('TitleMainLanguage_2', $body);
 
-        $this->assertNotContains("<div class='form-errors'>", $this->getResponse()->getBody());
+        $this->assertNotContains("<div class='form-errors'>", $body);
     }
 
     /**
