@@ -707,6 +707,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
      * Regression Test for OPUSVIER-2998 and OPUSVIER-2999
      */
     public function testPublistActionDisplaysUrlencodedFiles() {
+        
         Zend_Registry::get('Zend_Config')->merge(
                 new Zend_Config(array(
                     'publist' => array(
@@ -714,12 +715,24 @@ class Export_IndexControllerTest extends ControllerTestCase {
                             'allow' => array(
                                 'mimetype' => array('application/xhtml+xml' => 'HTML')))))));
 
+        $config = Zend_Registry::get('Zend_Config');
+        $this->assertTrue(isset($config->publist->file->allow->mimetype), 'Failed setting configuration option');
+        $this->assertEquals(array('application/xhtml+xml' => 'HTML'), $config->publist->file->allow->mimetype->toArray(), 'Failed setting configuration option');
+        
         $doc = new Opus_Document(92);
         $file = $doc->getFile(0);
         $this->assertTrue($file instanceOf Opus_File, 'Test setup has changed.');
         $this->assertEquals('test.xhtml', $file->getPathName(), 'Test setup has changed.');
+
+        $collection = $doc->getCollection(0);
+        
+        $this->assertEquals('coll_visible', $collection->getNumber(), 'Test setup has changed');
+        $this->assertEquals(1, $collection->getVisible(), 'Test setup has changed');
         
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
+
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        
         $response = $this->getResponse();
         $this->assertContains('/files/92/test.xhtml', $response->getBody());
         $this->assertNotContains("Warning: XSLTProcessor::transformToXml(): Not allowed to call handler 'urlencode()'", $response->getBody());
