@@ -614,6 +614,13 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertRegExp('/<h4 id="opus-year-2010">2010<\/h4>.*<h4 id="opus-year-2009">2009<\/h4>/', $normalizedResponseBody);
     }
 
+    /**
+     * TODO: Fix manipulation of Zend_Config:
+     * 1. $oldConfig and $config are references to the same object
+     * 2. Undoing changes are not necessary, as Zend_Config is initialized per test.
+     * May apply to other tests as well.
+     */
+    
     public function testPublistActionGroupedByCompletedYear() {
         // manipulate application configuration
         $oldConfig = Zend_Registry::get('Zend_Config');
@@ -715,6 +722,11 @@ class Export_IndexControllerTest extends ControllerTestCase {
                             'allow' => array(
                                 'mimetype' => array('application/xhtml+xml' => 'HTML')))))));
 
+        // explicitly re-initialize mime type config to apply changes in Zend_Config
+        // This is necessary due to static variable in Export_Model_PublicationList
+        // which is not reset between tests.
+        Export_Model_PublicationList::initMimeTypes();
+        
         $config = Zend_Registry::get('Zend_Config');
         $this->assertTrue(isset($config->publist->file->allow->mimetype), 'Failed setting configuration option');
         $this->assertEquals(array('application/xhtml+xml' => 'HTML'), $config->publist->file->allow->mimetype->toArray(), 'Failed setting configuration option');
@@ -728,6 +740,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
         
         $this->assertEquals('coll_visible', $collection->getNumber(), 'Test setup has changed');
         $this->assertEquals(1, $collection->getVisible(), 'Test setup has changed');
+
         
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
 

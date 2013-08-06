@@ -37,10 +37,24 @@ class Export_Model_PublicationList {
 
     protected static $allowedMimeTypes;
     
+    /**
+     * Initialize the mime types from configuration
+     */
+    public static function initMimeTypes() {
+        $config = Zend_Registry::get('Zend_Config');
+        self::$allowedMimeTypes = isset($config->publist->file->allow->mimetype) ? $config->publist->file->allow->mimetype->toArray() : array();
+    }
+    
+    /**
+     * Return the display name as configured for a specific mime type
+     * @param string $mimeType Mime type to get display name for. 
+     * If mime type is not configured, an empty string is returned.
+     * 
+     * @result string display name for mime type
+     */
     public static function getMimeTypeDisplayName($mimeType) {
         if(!is_array(self::$allowedMimeTypes)) {
-            $config = Zend_Registry::get('Zend_Config');
-            self::$allowedMimeTypes = isset($config->publist->file->allow->mimetype) ? $config->publist->file->allow->mimetype->toArray() : array();
+            self::initMimeTypes();
         }
         return isset(self::$allowedMimeTypes[$mimeType]) ? self::$allowedMimeTypes[$mimeType] : '';
     }
