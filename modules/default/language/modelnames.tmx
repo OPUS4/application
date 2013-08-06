@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de"
+            o-tmf="abc" creationtool="XYZTool"></header>
+
+    <body>
+
+        <!-- Übersetzungen für Modelklassen.
+
+            Diese Übersetzungen werden vorallem für Application_Form_Confirmation verwendet, um Model-spezifische
+            Überschriften und Meldungen zu generieren.
+        -->
+
+        <tu tuid="Opus_Language">
+            <tuv xml:lang="en">
+                <seg>Language</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sprache</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_DnbInstitute">
+            <tuv xml:lang="en">
+                <seg>Institute</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Institut</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_EnrichmentKey">
+            <tuv xml:lang="en">
+                <seg>EnrichmentKey</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Erweiterungsfeld</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Account">
+            <tuv xml:lang="en">
+                <seg>Account</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Nutzerkonto</seg>
+            </tuv>
+        </tu>
+
+
+        <tu tuid="Opus_UserRole">
+            <tuv xml:lang="en">
+                <seg>Userrole</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Nutzerrolle</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Iprange">
+            <tuv xml:lang="en">
+                <seg>IP Range</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>IP Bereich</seg>
+            </tuv>
+        </tu>
+
+    </body>
+
+</tmx>

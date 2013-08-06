@@ -23,6 +23,11 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Provide methods to setup and run the application. It also provides a couple of static
+ * variables for quicker access to application components like the front controller.
  *
  * @category    Application
  * @package     Application
@@ -32,12 +37,7 @@
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
- */
-
-/**
- * Provide methods to setup and run the application. It also provides a couple of static
- * variables for quicker access to application components like the front controller.
- * 
+ *
  * TODO unit test bootstrap
  */
 class Application_Bootstrap extends Opus_Bootstrap_Base {
@@ -114,7 +114,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $view->addHelperPath($libRealPath . '/View/Helper', 'View_Helper');
 
         // Set path to shared view partials
-        // TODO für nächstes Ticket $view->addScriptPath($libRealPath . '/Application/View/Partial');
+        $view->addScriptPath($libRealPath . '/Application/View/Partial');
         $view->addScriptPath($libRealPath . '/View/Partials');
         
         // Fieldset View Helper global ersetzen

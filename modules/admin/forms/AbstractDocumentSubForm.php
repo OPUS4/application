@@ -23,6 +23,10 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Abstraktes Unterformular (SubForm) fuer Metadaten-Formular.
  *
  * @category    Application
  * @package     Module_Admin
@@ -31,23 +35,11 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_AbstractViewable {
 
-/**
- * Abstraktes Unterformular (SubForm) fuer Metadaten-Formular.
- */
-abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
-    
-    private $viewMode = false;
-    
-    private $logger;
-    
     public function init() {
         parent::init();
-        
-        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
-        // $this->addElementPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
-        $this->addPrefixPath('Form', 'Form'); // '_Element' wird anscheinend automatisch dran gehängt
-        
+
         $this->setDisableLoadDefaultDecorators(true);
         $this->setDecorators(array(
             'FormElements',
@@ -115,25 +107,17 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
             $form->updateModel($model);
         }
     }
-    
+
+    /**
+     * Funktion wird aufgerufen, wenn nach dem Hinzufügen einer Person oder Collection das Metadaten-Formular wieder
+     * angezeigt wird.
+     *
+     * @param $request
+     * @param null $session
+     */
     public function continueEdit($request, $session = null) {
     }
-    
-    public function printValues() {
-        $elements = $this->getElements();
-        
-        foreach ($elements as $name => $element) {
-            Zend_Debug::dump($element->getValue(), $name);
-        }
-        
-        $subforms = $this->getSubForms();
-        
-        foreach ($subforms as $name => $subform) {
-            Zend_Debug::dump('Subform', $name);
-            $subform->printValues();
-        }
-    }
-    
+
     /**
      * Zusätzlich Validierungsfunktion für Prüfungen über mehrere Unterformulare hinweg.
      * 
@@ -155,103 +139,7 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
         
         return $result;
     }
-    
-    public function isEmpty() {
-        return (count($this->getElements()) == 0 && count($this->getSubforms()) == 0);
-    }
-    
-    public function prepareRenderingAsView() {
-        $this->setViewModeEnabled();
-        $this->_removeElements();
-        $this->_prepareRenderingOfElements();
-        
-        $subforms = $this->getSubForms();
-        
-        foreach ($subforms as $subform) {
-            $subform->prepareRenderingAsView();
-            if ($subform->isEmpty()) {
-                $this->removeSubForm($subform->getName());
-            }
-        }
-    }
-    
-    /**
-     * Bereitet Formularelemente fuer statische Ausgabe in Metadaten-Übersicht vor.
-     * 
-     * TODO rename function 
-     */
-    protected function _removeElements() {
-        $elements = $this->getElements();
-        
-        foreach ($elements as $element) {
-            $value = $element->getValue();
-        
-            if ($element instanceof Zend_Form_Element_Button 
-                    || $element instanceof Zend_Form_Element_Submit) {
-                $this->removeElement($element->getName());
-            }
-            else if (trim($value) === '') {
-                $this->removeElement($element->getName());
-            }
-            else if ($element instanceof Zend_Form_Element_Checkbox) {
-                if ($element->getValue() == 0) {
-                    $this->removeElement($element->getName());
-                }
-            }
-        }
-    }
-    
-    protected function _prepareRenderingOfElements() {
-        $elements = $this->getElements();
-        
-        foreach ($elements as $element) {
-            if ($element instanceof Form_IElement) {
-                $element->prepareRenderingAsView();
-            }
-            else if ($element instanceof Zend_Form_Element_Text || $element instanceof Zend_Form_Element_Textarea) {
-                $element->setDecorators(array('StaticView'));
-            }
-            else if ($element instanceof Zend_Form_Element_Select) {
-                $element->setDecorators(array('StaticViewSelect'));
-            }
-            else if ($element instanceof Zend_Form_Element_Checkbox) {
-                $element->setDecorators(array('StaticViewCheckbox'));
-            }
-        }
-    }
-    
-    /**
-     * Liefert den Wert eines Formularelements zurück.
-     * 
-     * Wenn das Formularelement einen leeren String enthält wird für Text und Textarea Elemente der Wert null zurück 
-     * geliefert.
-     * 
-     * @param string $name
-     * @return mixed
-     * 
-     * TODO Sind alle Fälle abgedeckt?
-     */
-    public function getElementValue($name) {
-        $element = $this->getElement($name);
-        if (!is_null($element)) {
-            $value = $element->getValue();
-            
-            if ($element instanceof Zend_Form_Element_Text || $element instanceof Zend_Form_Element_Textarea
-                    || $element instanceof Zend_Form_Element_Hidden) {
-                return (trim($value) === '') ? null : $value;
-            }
-            else {
-                return $value;
-            }
-        }
-        else {
-            // Sollte nie passieren - Schreibe Fehlermeldung ins Log
-            $this->getLog()->err('Element \'' . $name . '\' in form \'' . $this->getName() .
-                    '\' not found.');
-            return null;
-        }
-    }
-        
+
     /**
      * Liefert Helper fuer die Handhabung von Datumsangaben.
      * 
@@ -260,37 +148,5 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Zend_Form_SubForm {
     public function getDatesHelper() {
         return Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
     }
-    
-    /**
-     * Liefert Zend_Log Objekt zum Schreiben von Logeintraegen.
-     */
-    public function getLog() {
-        if (is_null($this->logger)) {
-            $this->logger = Zend_Registry::get('Zend_Log');
-        }
-        
-        return $this->logger;
-    }
-    
-    public function setLog($logger) {
-        $this->logger = $logger;
-    }
-    
-    public function isViewModeEnabled() {
-        return $this->viewMode;
-    }
-    
-    public function setViewModeEnabled() {
-        $this->viewMode = true;
-    }
-    
-    public function addElement($element, $name = null, $options = null) {
-        parent::addElement($element, $name, $options);
-        if (!is_null($name) && !is_null($options) && array_key_exists('required', $options) && $options['required']) {
-            $notEmptyValidator = new Zend_Validate_NotEmpty();
-            $notEmptyValidator->setMessage('admin_validate_error_notempty');
-            $element = $this->getElement($name);
-            $element->addValidator($notEmptyValidator);
-        }                
-    }            
+
 }
