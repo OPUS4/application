@@ -2,9 +2,9 @@
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
 
- <header/>
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool" />
 
-  <body>
+    <body>
 
     <tu tuid="admin_document_edit">
       <tuv xml:lang="en">
@@ -121,8 +121,26 @@
       <tuv xml:lang="de">
         <seg>Sortierung übernehmen</seg>
       </tuv>
-    </tu>    
-    
+    </tu>
+
+    <tu tuid="confirmation_title_default">
+      <tuv xml:lang="en">
+        <seg>Delete %1$s</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>%1$s Löschen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="confirmation_question_default">
+      <tuv xml:lang="en">
+        <seg>Do you really want to delete %1$s "%2$s"?</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Wollen Sie wirklich %1$s "%2$s" löschen?</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>
