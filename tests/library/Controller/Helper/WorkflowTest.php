@@ -199,8 +199,9 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
     }
 
     public function testWorkflowTranslationsForStates() {
-        $this->markTestSkipped('Not working yet because resources are not in default module.');
         $states = Controller_Helper_Workflow::getAllStates();
+
+        Zend_Registry::get('Zend_Translate')->loadModule('admin');
 
         $translate = Zend_Registry::get('Zend_Translate');
 
