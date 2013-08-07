@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool" />
+
+    <body>
+
+        <tu tuid="controller_crud_save_success">
+            <tuv xml:lang="en">
+                <seg>Saved successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Erfolgreich abgespeichert.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="controller_crud_save_failure">
+            <tuv xml:lang="en">
+                <seg>Error saving.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Fehler beim Abspeichern.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="controller_crud_delete_success">
+            <tuv xml:lang="en">
+                <seg>Deleted successfully.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Erfolgreich gelöscht.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="controller_crud_delete_failure">
+            <tuv xml:lang="en">
+                <seg>Error deleting.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Fehler beim Löschen.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="controller_crud_invalid_id">
+            <tuv xml:lang="en">
+                <seg>Invalid model identifier.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Ungültige Model-ID.</seg>
+            </tuv>
+        </tu>
+
+  </body>
+
+</tmx>

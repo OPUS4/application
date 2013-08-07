@@ -24,7 +24,9 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
+ */
+
+/**
  * @category    Application
  * @package     Controller
  * @author      Thoralf Klein <thoralf.klein@zib.de>
@@ -159,6 +161,34 @@ class Controller_Action extends Controller_ModuleAccess {
         // Forward to module auth
         $this->__flashMessenger->addMessage(array('level' => 'failure', 'message' => $errorcode));
         $this->__redirector->gotoSimple('index', 'auth', 'default');
+    }
+
+    /**
+     * Gibt das Formular aus wenn kein ViewScript vorhanden ist.
+     *
+     * Durch diese Funktion können die ganzen View Scripte, die nur ein Formular ausgeben eingespart werden. Der
+     * Controller ruft einfach diese Funktion auf, wenn ein Formular ausgegeben werde sollte. Wenn doch ein View
+     * Skript für die Action existiert, dann wird das Formular in der View Variable 'form' gespeichert und kann
+     * im View Script verwendet werden.
+     *
+     * @param $form
+     */
+    protected function renderForm($form) {
+        if ($this->isViewScriptPresent() === false) {
+            $this->_helper->viewRenderer->setNoRender(true);
+            echo $form;
+        }
+        else {
+            $this->view->form = $form;
+        }
+    }
+
+    /**
+     * Prueft, ob fuer die Action ein View Script existiert.
+     * @return bool
+     */
+    protected function isViewScriptPresent() {
+        return (!$this->view->getScriptPath($this->_helper->viewRenderer->getViewScript())) ? false : true;
     }
 
 }

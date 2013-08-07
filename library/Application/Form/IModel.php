@@ -24,6 +24,10 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Interface fuer Formulare die Model-Instanzen anzeigen.
  *
  * @category    Application
  * @package     Application_Form
@@ -32,15 +36,43 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-/**
- */
 interface Application_Form_IModel {
-    
+
+    /**
+     * Erzeugt Model-Instanz fuer Formular, entweder neue oder existierende.
+     * @return mixed
+     */
+    public function getModel();
+
+    /**
+     * Liefert die gesetzte Modelklasse fuer das Formular.
+     * @return mixed
+     */
+    public function getModelClass();
+
+    /**
+     * Verarbeitet POST Daten.
+     * @param $post POST Daten fuer Formular
+     * @param $context POST Daten fuer gesamten Request
+     * @return mixed
+     */
+    public function processPost($post, $context);
+
+    /**
+     * Initialisiert das Formular mit Werten einer Model-Instanz.
+     * @param $model
+     */
     public function populateFromModel($model);
-    
+
+    /**
+     * Aktualsiert Model-Instanz mit Werten im Formular.
+     * @param $model
+     */
     public function updateModel($model);
-    
+
+    /**
+     * Bereitet das Formular fuer die Anzeige als View vor.
+     */
     public function prepareRenderingAsView();
     
 }
