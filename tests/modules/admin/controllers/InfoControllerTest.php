@@ -34,10 +34,40 @@
  */
 class Admin_InfoControllerTest extends ControllerTestCase {
 
+    private $deleteVersionFile = false;
+    
+    private $version = null;
+    
+    private $versionFile = null; 
+
+    public function setUp() {
+        parent::setUp();
+        
+        $this->versionFile = APPLICATION_PATH . '/VERSION.txt';
+        
+        $this->version = 'OPUS-4-DEV';
+        
+        if(!is_file($this->versionFile)) {
+            // Create VERSION.txt for testing
+            file_put_contents($this->versionFile, $this->version);
+            $this->deleteVersionFile = true;
+        } 
+        else {
+            $this->version = trim(file_get_contents($this->versionFile));
+        }        
+    }
+    
+    public function tearDown() {
+        if($this->deleteVersionFile) {
+            unlink ($this->versionFile);
+        }
+    }
+    
     public function testIndexDisplayVersion() {
         $this->dispatch('admin/info');
         $this->assertResponseCode(200);
         $this->assertQuery('dt#admin_info_version');
+        $this->assertQueryContentContains("//dt[@id='admin_info_version']/following-sibling::dd", 'OPUS-4-DEV');
     }
 
 }

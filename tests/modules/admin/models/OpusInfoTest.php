@@ -23,27 +23,55 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; >if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * @category    Application Unit Tests
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Unit Tests for Admin_Model_OpusInfo.
+ * 
+ * @category    Application Unit Tests
+ * @package     Admin_Model
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
  */
 class Admin_Model_OpusInfoTest extends ControllerTestCase {
+    
+    private $deleteVersionFile = false;
+    
+    private $version = null;
+    
+    private $versionFile = null; 
 
-    public function testGetVersion() {
-        $this->markTestIncomplete("Wie kann APPLICATION_PATH/VERSION.txt in Unit Tests gehandhabt werden?");
+    public function setUp() {
+        parent::setUp();
         
+        $this->versionFile = APPLICATION_PATH . '/VERSION.txt';
+        
+        $this->version = 'UNKNOWN';
+        
+        if(!is_file($this->versionFile)) {
+            // Create VERSION.txt for testing
+            file_put_contents($this->versionFile, $this->version);
+            $this->deleteVersionFile = true;
+        } 
+        else {
+            $this->version = trim(file_get_contents($this->versionFile));
+        }        
+    }
+    
+    public function tearDown() {
+        if($this->deleteVersionFile) {
+            unlink ($this->versionFile);
+        }
+    }
+    
+    public function testGetVersion() {
         $info = new Admin_Model_OpusInfo();
         
         $version = $info->getVersion();
         
-        // TODO $this->assertEquals("???", $version);
+        $this->assertEquals('UNKNOWN', $version);
     }
     
     public function testGetInfo() {
@@ -53,8 +81,7 @@ class Admin_Model_OpusInfoTest extends ControllerTestCase {
         
         $this->assertInternalType('array', $data);
         $this->assertArrayHasKey('admin_info_version', $data);
-    }
+        $this->assertEquals('UNKNOWN', $data['admin_info_version']);
+    }    
     
 }
-
-?>
