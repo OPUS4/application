@@ -246,4 +246,15 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
         $this->assertEquals('German', $this->form->renderQuestion());
     }
 
+    public function testRenderQuestionEscaped() {
+        $licence = new Opus_Licence();
+
+        $licence->setNameLong('<h1>Name mit Tags</h1>');
+
+        $this->form->setModel($licence);
+
+        $this->assertNotContains('<h1>Name mit Tags</h1>', $this->form->renderQuestion());
+        $this->assertContains('&lt;h1&gt;Name mit Tags&lt;/h1&gt;', $this->form->renderQuestion());
+    }
+
 }

@@ -242,11 +242,9 @@ class Application_Form_Confirmation extends Application_Form_Abstract {
     public function renderQuestion() {
         $question = $this->getTranslator()->translate($this->getQuestion());
 
-        $displayName = $this->getModelDisplayName();
-
         return sprintf($question,
             $this->getModelClassName(),
-            '<span class="displayname">' .$this->getModelDisplayName() . '</span>');
+            '<span class="displayname">' . htmlspecialchars($this->getModelDisplayName()) . '</span>');
     }
 
 }
