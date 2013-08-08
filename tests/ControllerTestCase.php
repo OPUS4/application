@@ -426,13 +426,18 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
         foreach ($pages as $page) {
             if ($page->getController() == $controller && $page->getAction() == $action) {
-                $breadcrumbDefined = true;
+                if (!$breadcrumbDefined) {
+                    $breadcrumbDefined = true;
 
-                $translate = Zend_Registry::get('Zend_Translate');
-                $translate->loadModule($module);
+                    $translate = Zend_Registry::get('Zend_Translate');
+                    $translate->loadModule($module);
 
-                $this->assertTrue($translate->isTranslated($page->getLabel()),
-                    "Label für Seite '$location' nicht übersetzt.");
+                    $this->assertTrue($translate->isTranslated($page->getLabel()),
+                        "Label für Seite '$location' nicht übersetzt.");
+                }
+                else {
+                    $this->fail("Seite '$location' mehr als einmal in navigationModules.xml definiert.");
+                }
             };
         }
 
