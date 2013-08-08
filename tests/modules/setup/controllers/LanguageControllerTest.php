@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -36,7 +35,7 @@
 /**
  * 
  */
-class LanguageControllerTest extends ControllerTestCase {
+class Setup_LanguageControllerTest extends ControllerTestCase {
 
     /**
      * Regression Test for OPUSVIER-2971
@@ -55,15 +54,8 @@ class LanguageControllerTest extends ControllerTestCase {
         $this->assertResponseCode(302);
         
         $this->assertRedirectTo('/setup/language/error');
-        
-        $flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
-        $flashMessages = $flashMessenger->getCurrentMessages();
 
-        $this->assertEquals(1, count($flashMessages), 'expected one flash message in queue');
-        $flashMessage = $flashMessages[0];
-
-        $this->assertEquals(Zend_Registry::get('Zend_Translate')->translate('setup_language_translation_modules_missing'), $flashMessage['message']);
-        $this->assertEquals('failure', $flashMessage['level']);
+        $this->verifyFlashMessage('setup_language_translation_modules_missing');
     }
 
 }
