@@ -51,6 +51,7 @@ class Admin_Form_DocumentNote extends Admin_Form_AbstractModelSubForm {
         
         $element = new Form_Element_Checkbox(self::ELEMENT_VISIBILITY);
         $element->setLabel('Opus_Note_Visibility_Value_Public'); // TODO translate
+        $element->setViewDecorator('StaticViewCheckbox');
         $this->addElement($element);
         
         $this->addElement('textarea', self::ELEMENT_MESSAGE, array('required' => true, 'rows' => 4));

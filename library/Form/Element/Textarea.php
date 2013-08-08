@@ -45,6 +45,15 @@ class Form_Element_Textarea extends Zend_Form_Element_Textarea implements Form_I
     public function init() {
         parent::init();
 
+        // TODO move to setDefaultAttribs()
+        if (is_null($this->getAttrib('rows'))) {
+            $this->setAttrib('rows', 6);
+        }
+
+        if (is_null($this->getAttrib('cols'))) {
+            $this->setAttrib('cols', 70);
+        }
+
         $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
     }
 
@@ -67,7 +76,7 @@ class Form_Element_Textarea extends Zend_Form_Element_Textarea implements Form_I
      * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
      */
     public function prepareRenderingAsView() {
-        $this->setDecorators(array('StaticView'));
+        $this->setDecorators(array('StaticViewTextarea'));
     }
     
 }

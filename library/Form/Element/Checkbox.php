@@ -33,9 +33,15 @@
  */
 
 /**
- * 
+ * Angepasste Klasse für Checkbox Formularelemente.
  */
-class Form_Element_Checkbox extends Zend_Form_Element_Checkbox {
+class Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Form_IElement {
+
+    private $viewDecorator = 'StaticView';
+
+    public function init() {
+        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+    }
     
     public function loadDefaultDecorators() {
         $this->setDecorators(array(
@@ -47,5 +53,29 @@ class Form_Element_Checkbox extends Zend_Form_Element_Checkbox {
             array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
         ));
     }
-    
+
+    public function prepareRenderingAsView() {
+        $this->setDecorators(array($this->viewDecorator));
+        $this->setCheckedValue($this->getTranslator()->translate('Field_Value_True'));
+        $this->setUncheckedValue($this->getTranslator()->translate('Field_Value_False'));
+        $this->setChecked($this->getValue());
+    }
+
+    /**
+     * Liefert Hinweis zum Element-Value, z.B. das eine ISBN ungültig ist.
+     *
+     * Hinweise sind wie Validierungsfehler, die aber das Abspeichern nicht verhindern und schon beim Aufruf des
+     * Formulars für existierende Werte berechnet werden.
+     *
+     * @return string
+     */
+    public function getHint() {
+        return null;
+    }
+
+    public function setViewDecorator($decorator) {
+        $this->viewDecorator = $decorator;
+    }
+
+
 }

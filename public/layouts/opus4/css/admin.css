@@ -1226,3 +1226,7 @@ ul.form-action{
     color: blue;
     padding: 2em;   
 }
+
+.textarea {
+    white-space: pre-wrap; /* wird für Ausgabe von Textarea in View verwendet */
+}

@@ -23,6 +23,10 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Rendering von Textarea Formularelementen in einer Viewansicht.
  *
  * @category    Application
  * @package     Form_Decorator
@@ -31,55 +35,10 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-/**
- * Gibt ein Formularelement als statischen Text aus, anstelle eines INPUT-Tags.
- */
-class Form_Decorator_StaticView extends Zend_Form_Decorator_Abstract {
-
-    /**
-     * Gibt Formularelement mit Label und Wert aus.
-     *
-     * Die Ausgabe erfolgt in der selben DIV Structure wie im Formular, nur das statt eines INPUT Tags einfach nur der
-     * Wert des Elements ausgegeben wird.
-     *
-     * @param string $content
-     * @return string
-     */
-    public function render($content) {
-        $element = $this->getElement();
-
-        $output = '<div class="data-wrapper ' . $element->getName() . '-data">';
-
-        $label = $this->getLabel();
-        if (!is_null($label)) {
-            $output .= sprintf('<div class="%1$s">%2$s</div>', $element->isRequired() ? 'label required' : 'label',
-                htmlspecialchars($label));
-        }
-
-        return $output . sprintf('<div id="%1$s" class="%3$s">%2$s</div></div>', $element->getId(), $this->getValue(),
-            $this->getFieldClass());
-    }
-
-    public function getLabel() {
-        $label = $this->getElement()->getLabel();
-        return (strlen(trim($label)) > 0) ? $label : null;
-    }
+class Form_Decorator_StaticViewTextarea extends Form_Decorator_StaticView {
 
     public function getFieldClass() {
-        return 'field';
-    }
-
-    /**
-     * Liefert den Wert des Feldes.
-     *
-     * Die Werte von Feldern muessen escaped werden.Damit eventuell enthaltener HTML/Javascript Code nicht ausgeführt
-     * wird.
-     *
-     * @return string
-     */
-    public function getValue() {
-        return htmlspecialchars($this->getElement()->getValue());
+        return parent::getFieldClass() . ' textarea';
     }
 
 }
