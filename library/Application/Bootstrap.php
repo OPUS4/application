@@ -111,6 +111,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         // modules too.
         $libRealPath = realpath(APPLICATION_PATH . '/library');
 
+        $view->addHelperPath($libRealPath . '/Application/View/Helper', 'Application_View_Helper');
         $view->addHelperPath($libRealPath . '/View/Helper', 'View_Helper');
 
         // Set path to shared view partials
