@@ -23,40 +23,30 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * @category    Application
- * @package     Module_Licence
- * @author      Wolfgang Filter (wolfgang.filter@ub.uni-stuttgart.de)
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * Main entry point for this module.
+ * Controller für Verwaltung von Lizenzen.
  *
  * @category    Application
- * @package     Module_Licence
+ * @package     Module_Admin
+ * @author      Wolfgang Filter (wolfgang.filter@ub.uni-stuttgart.de)
+ * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
  */
-class Admin_LicenceController extends Controller_CRUDAction {
+class Admin_LicenceController extends Application_Controller_ActionCRUD {
 
     /**
-     * The class of the model being administrated.
+     * Initialisiert den Controller.
      *
-     * @var Opus_Model_Abstract
+     * Setzt die Formularklasse fuer Lizenzen.
      */
-    protected $_modelclass = 'Opus_Licence';
-
-    /**
-     * Setup list of licences for rendering.
-     */
-    public function indexAction() {
-        $entries = Opus_Licence::getAll();
-        $this->view->entries = array();
-        foreach ($entries as $entry) {
-            $this->view->entries[$entry->getId()] = $entry;
-        }
+    public function init() {
+        $this->setFormClass('Admin_Form_Licence');
+        parent::init();
     }
 
 }

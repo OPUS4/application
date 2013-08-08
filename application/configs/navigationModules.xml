@@ -285,14 +285,6 @@
                             <action>new</action>
                         </new>
 
-                        <create>
-                            <type>mvc</type>
-                            <label>admin_licence_new</label>
-                            <module>admin</module>
-                            <controller>licence</controller>
-                            <action>create</action>
-                        </create>
-
                         <edit>
                             <type>mvc</type>
                             <label>admin_licence_edit</label>
@@ -301,13 +293,13 @@
                             <action>edit</action>
                         </edit>
 
-                        <update>
+                        <delete>
                             <type>mvc</type>
-                            <label>admin_licence_edit</label>
+                            <label>admin_licence_delete</label>
                             <module>admin</module>
                             <controller>licence</controller>
-                            <action>update</action>
-                        </update>
+                            <action>delete</action>
+                        </delete>
                     </pages>
                 </licence>
 

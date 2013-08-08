@@ -1631,42 +1631,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="admin_licence_edit">
-            <tuv xml:lang="en">
-                <seg>Edit Licence</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Lizenz ändern</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="admin_licence_new">
-            <tuv xml:lang="en">
-                <seg>New Licence</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Neue Lizenz</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="admin_licence_show">
-            <tuv xml:lang="en">
-                <seg>Show Licence</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Lizenz anzeigen</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="admin_licence_index">
-            <tuv xml:lang="en">
-                <seg>Admin Licences</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Lizenzen verwalten</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="admin_person_edit">
             <tuv xml:lang="en">
                 <seg>Edit Person</seg>

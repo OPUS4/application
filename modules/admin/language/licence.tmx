@@ -6,34 +6,52 @@
 </header>
  
 <body>
-  
-    <tu tuid="admin_licence_legend">
+
+    <tu tuid="admin_licence_index">
+        <tuv xml:lang="en">
+            <seg>Admin Licences</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Lizenzen verwalten</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_licence_show">
+        <tuv xml:lang="en">
+            <seg>Show Licence</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Lizenz anzeigen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_licence_new">
+        <tuv xml:lang="en">
+            <seg>New Licence</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Neue Lizenz</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_licence_edit">
+        <tuv xml:lang="en">
+            <seg>Edit Licence</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Lizenz ändern</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_licence_delete">
       <tuv xml:lang="en">
-        <seg>Legend:</seg>
+        <seg>Delete Licence</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Legende:</seg>
+        <seg>Lizenz löschen</seg>
       </tuv>
     </tu>
 
-    <tu tuid="admin_licence_legend_active">
-      <tuv xml:lang="en">
-        <seg>Active</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Aktiviert</seg>
-      </tuv>
-    </tu>
-    
-    <tu tuid="admin_licence_legend_inactive">
-      <tuv xml:lang="en">
-        <seg>Disabled</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Deaktiviert</seg>
-      </tuv>
-    </tu>
-    
 </body>
   
 </tmx>

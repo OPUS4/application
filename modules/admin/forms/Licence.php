@@ -26,7 +26,10 @@
  */
 
 /**
- * Klasse für Lizenz-Formular.
+ * Formular fuer das Editieren und Anzeigen einer Lizenz.
+ *
+ * Die Klasse Opus_Licence enthaelt auch noch das Feld 'LinkSign'. Es gibt Ticket OPUSVIER-1492 fuer das Entfernen
+ * dieses Feldes, daher wurde es in diesem Formular nicht mehr verwendet. TODO Kommentar entfernen
  *
  * @category    Application
  * @package     Admin_Form
@@ -34,35 +37,67 @@
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
- *
- * TODO rendering of Active und PodAllowed mit Wert (Ja/Nein)
  */
 class Admin_Form_Licence extends Application_Form_Model_Abstract {
 
+    /**
+     * Name von Formularelement fuer Aktivierungsstatus einer Lizenz.
+     */
     const ELEMENT_ACTIVE = 'Active';
 
+    /**
+     * Name von Formularelement fuer interne Kommentare zur Lizenz (Feld: CommentInternal).
+     */
     const ELEMENT_COMMENT_INTERNAL = 'CommentInternal';
 
+    /**
+     * Name von Formularelement fuer Feld 'DescMarkup' von Opus_Licence.
+     */
     const ELEMENT_DESC_MARKUP = 'DescMarkup';
 
+    /**
+     * Name von Formularelement fuer Feld 'DescText' von Opus_Licence.
+     */
     const ELEMENT_DESC_TEXT = 'DescText';
 
+    /**
+     * Name von Formularelement fuer Feld 'Language' von Opus_Licence.
+     */
     const ELEMENT_LANGUAGE = 'Language';
 
+    /**
+     * Name von Formularelement fuer Feld 'LinkLicence' von Opus_Licence.
+     */
     const ELEMENT_LINK_LICENCE = 'LinkLicence';
 
+    /**
+     * Name von Formularelement fuer Feld 'LinkLogo' von Opus_Licence.
+     */
     const ELEMENT_LINK_LOGO = 'LinkLogo';
 
-    const ELEMENT_LINK_SIGN = 'LinkSign';
-
+    /**
+     * Name von Formularelement fuer Feld 'MimeType' von Opus_Licence.
+     */
     const ELEMENT_MIME_TYPE = 'MimeType';
 
+    /**
+     * Name von Formularelement fuer Feld 'NameLong' von Opus_Licence.
+     */
     const ELEMENT_NAME_LONG = 'NameLong';
 
+    /**
+     * Name von Formularelement fuer Feld 'SortOrder' von Opus_Licence.
+     */
     const ELEMENT_SORT_ORDER = 'SortOrder';
 
+    /**
+     * Name von Formularelement fuer Feld 'PodAllowed' von Opus_Licence.
+     */
     const ELEMENT_POD_ALLOWED = 'PodAllowed';
 
+    /**
+     * Erzeugt die Formularelemente.
+     */
     public function init() {
         parent::init();
 
@@ -75,7 +110,6 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
         $this->addElement('Language', self::ELEMENT_LANGUAGE, array('required' => true));
         $this->addElement('text', self::ELEMENT_LINK_LICENCE, array('required' => true));
         $this->addElement('text', self::ELEMENT_LINK_LOGO);
-        $this->addElement('text', self::ELEMENT_LINK_SIGN);
         $this->addElement('textarea', self::ELEMENT_DESC_TEXT);
         $this->addElement('textarea', self::ELEMENT_DESC_MARKUP);
         $this->addElement('textarea', self::ELEMENT_COMMENT_INTERNAL);
@@ -84,6 +118,10 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
         $this->addElement('SortOrder', self::ELEMENT_SORT_ORDER);
     }
 
+    /**
+     * Initialisiert Formular von Opus_Licence Instanz.
+     * @param Opus_Model_Licence $licence
+     */
     public function populateFromModel($licence) {
         $this->getElement(self::ELEMENT_MODEL_ID)->setValue($licence->getId());
         $this->getElement(self::ELEMENT_ACTIVE)->setValue($licence->getActive());
@@ -93,13 +131,16 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
         $this->getElement(self::ELEMENT_LANGUAGE)->setValue($licence->getLanguage());
         $this->getElement(self::ELEMENT_LINK_LICENCE)->setValue($licence->getLinkLicence());
         $this->getElement(self::ELEMENT_LINK_LOGO)->setValue($licence->getLinkLogo());
-        $this->getElement(self::ELEMENT_LINK_SIGN)->setValue($licence->getLinkSign());
         $this->getElement(self::ELEMENT_MIME_TYPE)->setValue($licence->getMimeType());
         $this->getElement(self::ELEMENT_NAME_LONG)->setValue($licence->getNameLong());
         $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($licence->getSortOrder());
         $this->getElement(self::ELEMENT_POD_ALLOWED)->setValue($licence->getPodAllowed());
     }
 
+    /**
+     * Aktualisiert Instanz von Opus_Licence mit Werte aus Formular.
+     * @param Opus_Model_AbstractDb $licence
+     */
     public function updateModel($licence) {
         $licence->setActive($this->getElementValue(self::ELEMENT_ACTIVE));
         $licence->setCommentInternal($this->getElementValue(self::ELEMENT_COMMENT_INTERNAL));
@@ -108,7 +149,6 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
         $licence->setLanguage($this->getElementValue(self::ELEMENT_LANGUAGE));
         $licence->setLinkLicence($this->getElementValue(self::ELEMENT_LINK_LICENCE));
         $licence->setLinkLogo($this->getElementValue(self::ELEMENT_LINK_LOGO));
-        $licence->setLinkSign($this->getElementValue(self::ELEMENT_LINK_SIGN));
         $licence->setMimeType($this->getElementValue(self::ELEMENT_MIME_TYPE));
         $licence->setNameLong($this->getElementValue(self::ELEMENT_NAME_LONG));
         $licence->setSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
