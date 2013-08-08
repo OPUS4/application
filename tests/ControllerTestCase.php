@@ -384,4 +384,59 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->assertEquals($level, $flashMessage['level']);
     }
 
+    /**
+     * Liefert den Inhalt des Response Location Header.
+     * @return string|null
+     */
+    public function getLocation() {
+        $headers = $this->getResponse()->getHeaders();
+        foreach ($headers as $header) {
+            if (isset($header['name']) && $header['name'] == 'Location') {
+                return isset($header['value']) ? $header['value'] : null;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Prueft, ob eine Seite in navigationModules.xml definiert wurde.
+     *
+     *
+     * @param null $location
+     */
+    public function verifyBreadcrumbDefined($location = null) {
+        if (is_null($location)) {
+            $location = $this->getLocation();
+        }
+
+        $view = Zend_Registry::get('Opus_View');
+
+        $path = explode('/', $location);
+
+        array_shift($path);
+        $module = array_shift($path);
+        $controller = array_shift($path);
+        $action = array_shift($path);
+
+        $navigation = $view->navigation()->getContainer();
+
+        $pages = $navigation->findAllByModule($module);
+
+        $breadcrumbDefined = false;
+
+        foreach ($pages as $page) {
+            if ($page->getController() == $controller && $page->getAction() == $action) {
+                $breadcrumbDefined = true;
+
+                $translate = Zend_Registry::get('Zend_Translate');
+                $translate->loadModule($module);
+
+                $this->assertTrue($translate->isTranslated($page->getLabel()),
+                    "Label für Seite '$location' nicht übersetzt.");
+            };
+        }
+
+        $this->assertTrue($breadcrumbDefined, "Seite '$location' nicht in navigationModules.xml definiert.");
+    }
+
 }
