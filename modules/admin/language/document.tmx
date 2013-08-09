@@ -405,6 +405,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_document_section_files">
+      <tuv xml:lang="en">
+        <seg>Files</seg>
+      </tuv>
+      <tuv xml:lang="de">
+         <seg>Dateien</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_document_breadcrumb_add">
       <tuv xml:lang="en">
         <seg>Add Metadata</seg>

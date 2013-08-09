@@ -24,56 +24,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
+ * @category    Application Unit Test
+ * @package     Admin_Form_Document
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Admin_Form_Document_FileTest extends ControllerTestCase {
 
-class Admin_Form_Document_Files extends Admin_Form_AbstractDocumentSubForm {
-
-    private $header = array(
-        array('label' => null, 'class' => 'file'),
-        array('label' => 'files_column_size', 'class' => 'size'),
-        array('label' => 'files_column_mimetype', 'class' => 'mimetype'),
-        array('label' => 'files_column_language', 'class' => 'language'),
-        array('label' => 'files_column_frontdoor', 'class' => 'visiblefrontdoor'),
-        array('label' => 'files_column_oai', 'class' => 'visibleoai')
-    );
-    
-    public function init() {
-        parent::init();
-        
-        $this->setLegend('admin_document_section_files');
-
-        $header = new Application_Form_TableHeader($this->header);
-
-        $this->addSubForm($header, 'Header');
-
-        $this->setDecorators(array(
-            'FormElements',
-            array(array('table' => 'HtmlTag'), array('tag' => 'table')),
-            array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
-            'Fieldset',
-            array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
-        ));
-    }
-
-    public function populateFromModel($document) {
-        foreach ($document->getFile() as $file) {
-            $this->addFileSubForm($file);
-        }
-    }
-
-    protected function addFileSubForm($file) {
+    public function testConstructForm() {
         $form = new Admin_Form_Document_File();
-        $form->populateFromModel($file);
-        $index = count($this->getSubForms()) - 1;
-        $form->setOrder($index + 1);
-        $this->addSubForm($form, 'File' . $index);
+
+        $this->assertEquals(0, count($form->getElements()));
+        $this->assertEquals(0, count($form->getSubForms()));
+        $this->assertEquals(1, count($form->getDecorators()));
+        $this->assertNotNull($form->getDecorator('ViewScript'));
     }
 
+    public function testPopulateFromModel() {
+        $form = new Admin_Form_Document_File();
+
+        $file = new Opus_File();
+
+        $this->assertNull($form->getModel());
+
+        $form->populateFromModel($file);
+
+        $this->assertEquals($file, $form->getModel());
+    }
 
 }

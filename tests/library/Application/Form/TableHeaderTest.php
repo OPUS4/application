@@ -24,56 +24,74 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
+ * @category    Application Unit Test
+ * @package     Application_Form
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Application_Form_TableHeaderTest extends ControllerTestCase {
 
-class Admin_Form_Document_Files extends Admin_Form_AbstractDocumentSubForm {
+    private $form = null;
 
-    private $header = array(
+    private $columns = array(
         array('label' => null, 'class' => 'file'),
         array('label' => 'files_column_size', 'class' => 'size'),
-        array('label' => 'files_column_mimetype', 'class' => 'mimetype'),
         array('label' => 'files_column_language', 'class' => 'language'),
         array('label' => 'files_column_frontdoor', 'class' => 'visiblefrontdoor'),
         array('label' => 'files_column_oai', 'class' => 'visibleoai')
     );
-    
-    public function init() {
-        parent::init();
-        
-        $this->setLegend('admin_document_section_files');
 
-        $header = new Application_Form_TableHeader($this->header);
+    public function setUp() {
+        parent::setUp();
 
-        $this->addSubForm($header, 'Header');
-
-        $this->setDecorators(array(
-            'FormElements',
-            array(array('table' => 'HtmlTag'), array('tag' => 'table')),
-            array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
-            'Fieldset',
-            array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
-        ));
+        $this->form = new Application_Form_TableHeader($this->columns);
     }
 
-    public function populateFromModel($document) {
-        foreach ($document->getFile() as $file) {
-            $this->addFileSubForm($file);
-        }
+    public function testConstructForm() {
+        $this->assertEquals($this->columns, $this->form->getColumns());
     }
 
-    protected function addFileSubForm($file) {
-        $form = new Admin_Form_Document_File();
-        $form->populateFromModel($file);
-        $index = count($this->getSubForms()) - 1;
-        $form->setOrder($index + 1);
-        $this->addSubForm($form, 'File' . $index);
+    public function testInit() {
+        $this->assertEquals(1, count($this->form->getDecorators()));
+        $this->assertNotNull($this->form->getDecorator('ViewScript'));
     }
 
+    /**
+     * @expectedException Application_Exception
+     * @expectedExceptionMessage Parameter 'columns' must be array.
+     */
+    public function testConstructFormNull() {
+        new Application_Form_TableHeader(null);
+    }
+
+    /**
+     * @expectedException Application_Exception
+     * @expectedExceptionMessage Parameter 'columns' must be array.
+     */
+    public function testConstructFormNotArray() {
+        new Application_Form_TableHeader('notAnArray');
+    }
+
+    public function testGetColumnCount() {
+        $this->assertEquals(5, $this->form->getColumnCount());
+    }
+
+    public function testGetColumnLabel() {
+        $this->assertEquals('&nbsp;', $this->form->getColumnLabel(0));
+        $this->assertEquals('files_column_size', $this->form->getColumnLabel(1));
+        $this->assertEquals('files_column_language', $this->form->getColumnLabel(2));
+        $this->assertEquals('files_column_frontdoor', $this->form->getColumnLabel(3));
+        $this->assertEquals('files_column_oai', $this->form->getColumnLabel(4));
+    }
+
+    public function testGetColumnClass() {
+        $this->assertEquals('file', $this->form->getColumnClass(0));
+        $this->assertEquals('size', $this->form->getColumnClass(1));
+        $this->assertEquals('language', $this->form->getColumnClass(2));
+        $this->assertEquals('visiblefrontdoor', $this->form->getColumnClass(3));
+        $this->assertEquals('visibleoai', $this->form->getColumnClass(4));
+    }
 
 }

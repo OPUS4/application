@@ -85,6 +85,11 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * @var string
      */
     private $message = null;
+
+    /**
+     * @var Opus_Document
+     */
+    private $document;
     
     /**
      * Konstruiert das Metadaten-Formular aus verschiedenen Unterformularen und den Aktion Buttons.
@@ -144,6 +149,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * Populates form from model values.
      */
     public function populateFromModel($document) {
+        $this->document = $document;
+
         $subforms = $this->getSubForms();
         
         foreach ($subforms as $form) {
@@ -255,5 +262,23 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
     public function getMessage() {
         return $this->message;
     }
-            
+
+    /**
+     * Bereitet Formular fuer Anzeige als View vor.
+     *
+     * Fuegt Unterformular fuer Dateien hinzu. Dateien sind nicht Teil des Metadaten-Formulars, werden aber in der
+     * Metadaten-Übersicht mit aufgelistet.
+     */
+    public function prepareRenderingAsView() {
+        parent::prepareRenderingAsView();
+
+        if (!is_null($this->document)) {
+            if (count($this->document->getFile()) > 0) {
+                $subform = new Admin_Form_Document_Files();
+                $subform->populateFromModel($this->document);
+                $this->addSubForm($subform, 'Files');
+            }
+        }
+    }
+
 }

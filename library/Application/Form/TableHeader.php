@@ -23,57 +23,65 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Formular fuer das Rendern eines Tabellenkopfes.
  *
  * @category    Application
- * @package     Module_Admin
+ * @package     Application_Form
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Application_Form_TableHeader extends Application_Form_Abstract {
 
-class Admin_Form_Document_Files extends Admin_Form_AbstractDocumentSubForm {
+    private $columns = null;
 
-    private $header = array(
-        array('label' => null, 'class' => 'file'),
-        array('label' => 'files_column_size', 'class' => 'size'),
-        array('label' => 'files_column_mimetype', 'class' => 'mimetype'),
-        array('label' => 'files_column_language', 'class' => 'language'),
-        array('label' => 'files_column_frontdoor', 'class' => 'visiblefrontdoor'),
-        array('label' => 'files_column_oai', 'class' => 'visibleoai')
-    );
-    
+    public function __construct($columns, $options = null) {
+        if (!is_array($columns)) {
+            throw new Application_Exception(__METHOD__ . ' Parameter \'columns\' must be array.');
+        }
+
+        $this->columns = $columns;
+
+        parent::__construct($options);
+    }
+
     public function init() {
         parent::init();
-        
-        $this->setLegend('admin_document_section_files');
-
-        $header = new Application_Form_TableHeader($this->header);
-
-        $this->addSubForm($header, 'Header');
 
         $this->setDecorators(array(
-            'FormElements',
-            array(array('table' => 'HtmlTag'), array('tag' => 'table')),
-            array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
-            'Fieldset',
-            array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
+            array('ViewScript', array('viewScript' => 'tableheader.phtml'))
         ));
     }
 
-    public function populateFromModel($document) {
-        foreach ($document->getFile() as $file) {
-            $this->addFileSubForm($file);
+    public function getColumnLabel($index) {
+        if (isset($this->columns[$index]) && isset($this->columns[$index]['label'])) {
+            return $this->columns[$index]['label'];
+        }
+        else {
+            return '&nbsp;';
         }
     }
 
-    protected function addFileSubForm($file) {
-        $form = new Admin_Form_Document_File();
-        $form->populateFromModel($file);
-        $index = count($this->getSubForms()) - 1;
-        $form->setOrder($index + 1);
-        $this->addSubForm($form, 'File' . $index);
+    public function getColumnClass($index) {
+        if (isset($this->columns[$index]) && isset($this->columns[$index]['class'])) {
+            return $this->columns[$index]['class'];
+        }
+        else {
+            return '';
+        }
+
     }
 
+    public function getColumnCount() {
+        return count($this->columns);
+    }
+
+    public function getColumns() {
+        return $this->columns;
+    }
 
 }

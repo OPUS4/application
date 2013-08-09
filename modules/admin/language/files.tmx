@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+ 
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool" />
+
+    <body>
+
+        <tu tuid="files_column_size">
+            <tuv xml:lang="en">
+                <seg>Size</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Größe</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="files_column_mimetype">
+            <tuv xml:lang="en">
+                <seg>MIME-Type</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>MIME-Typ</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="files_column_language">
+            <tuv xml:lang="en">
+                <seg>Language</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sprache</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="files_column_frontdoor">
+            <tuv xml:lang="en">
+                <seg>Frontdoor</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Frontdoor</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="files_column_oai">
+            <tuv xml:lang="en">
+                <seg>OAI</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>OAI</seg>
+            </tuv>
+        </tu>
+
+  </body>
+  
+</tmx>

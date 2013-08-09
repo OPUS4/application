@@ -326,7 +326,19 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
             'Licences',
             'Patents',
             'Notes',
+            'Files'
         ));
+    }
+
+    public function testPrepareRenderingAsViewDocumentWithoutFiles() {
+        $form = new Admin_Form_Document();
+
+        $document = new Opus_Document(200);
+
+        $form->populateFromModel($document);
+        $form->prepareRenderingAsView();
+
+        $this->assertNull($form->getSubForm('Files'));
     }
 
     /**
