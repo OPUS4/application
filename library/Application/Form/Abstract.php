@@ -51,6 +51,12 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
     private $useNameAsLabel = false;
 
     /**
+     * Prefix fuer automatische Label.
+     * @var string
+     */
+    private $labelPrefix;
+
+    /**
      * Initialisiert das Formular.
      */
     public function init() {
@@ -107,7 +113,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      */
     public function addElement($element, $name = null, $options = null) {
         if ($this->isUseNameAsLabel()) {
-            $labelOption = array('label' => $name);
+            $labelOption = array('label' => is_null($this->labelPrefix) ? $name : $this->labelPrefix . $name);
             $options = (is_array($options)) ? array_merge($labelOption, $options) : $labelOption;
         }
 
@@ -188,6 +194,23 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      */
     public function setUseNameAsLabel($useNameAsLabel) {
         $this->useNameAsLabel = $useNameAsLabel;
+    }
+
+    /**
+     * Liefert den gesetzten Prefix fuer automatisch generierte Label.
+     * @return string
+     */
+    public function getLabelPrefix() {
+        return $this->labelPrefix;
+    }
+
+    /**
+     * Setzt den Prefix der fuer automatische Label verwendet werden soll.
+     *
+     * @param $prefix
+     */
+    public function setLabelPrefix($prefix) {
+        $this->labelPrefix = $prefix;
     }
 
 }

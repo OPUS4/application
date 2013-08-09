@@ -126,11 +126,19 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->assertEquals('textelement', $this->form->getElement('textelement')->getLabel());
     }
 
-    public function testAddElementAutomaticLabelOnWithLabelOption() {
+    public function testAddElementAutomaticLabelOnWithCustomLabel() {
         $this->form->setUseNameAsLabel(true);
         $this->form->addElement('text', 'textelement', array('label' => 'customlabel'));
         $this->assertNotNull($this->form->getElement('textelement'));
         $this->assertEquals('customlabel', $this->form->getElement('textelement')->getLabel());
+    }
+
+    public function testAddElementAutomaticLabelOnWithPrefix() {
+        $this->form->setUseNameAsLabel(true);
+        $this->form->setLabelPrefix('Opus_Model_');
+        $this->form->addElement('text', 'textelement');
+        $this->assertNotNull($this->form->getElement('textelement'));
+        $this->assertEquals('Opus_Model_textelement', $this->form->getElement('textelement')->getLabel());
     }
 
     public function testAddElementAutomaticLabelOff() {
@@ -198,6 +206,12 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->form->setUseNameAsLabel(false);
 
         $this->assertFalse($this->form->isUseNameAsLabel());
+    }
+
+    public function testLabelPrefixSetting() {
+        $this->assertNull($this->form->getLabelPrefix());
+        $this->form->setLabelPrefix('Opus_File_');
+        $this->assertEquals('Opus_File_', $this->form->getLabelPrefix());
     }
 
 }
