@@ -120,18 +120,6 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
     }
 
     /**
-     * Initialisierung des Formulars mit den Werten in einer Model-Instanz.
-     * @param Opus_Model_AbstractDb $model
-     */
-    // abstract public function populateFromModel($model);
-
-    /**
-     * Update einer Model-Instanz mit den Werten im Formular.
-     * @param Opus_Model_AbstractDb $model
-     */
-    // abstract public function updateModel($model);
-
-    /**
      * Instanziert und aktualisiert vom Formular angezeigtes Model.
      *
      * @throws Application_Exception
