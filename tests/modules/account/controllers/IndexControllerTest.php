@@ -85,8 +85,7 @@ class Account_IndexControllerTest extends ControllerTestCase {
 
         $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/account');
-        $this->assertNotResponseCode(200);
-        $this->assertRedirect('/default/auth/index');
+        $this->assertRedirectTo('/auth');
     }
 
     /**
@@ -95,7 +94,7 @@ class Account_IndexControllerTest extends ControllerTestCase {
     public function testIndexWithoutLoginAction() {
         $this->dispatch('/account');
         $this->assertNotResponseCode(200);
-        $this->assertRedirect('/default/auth/index');
+        $this->assertRedirectTo('/auth/index/rmodule/account/rcontroller/index/raction/index');
     }
 
     public function testChangePasswordFailsOnMissingInputAction() {
