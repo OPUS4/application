@@ -132,8 +132,11 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
             if ($element instanceof Form_IElement) {
                 $element->prepareRenderingAsView();
             }
-            else if ($element instanceof Zend_Form_Element_Text || $element instanceof Zend_Form_Element_Textarea) {
+            else if ($element instanceof Zend_Form_Element_Text) {
                 $element->setDecorators(array('StaticView'));
+            }
+            else if ($element instanceof Zend_Form_Element_Textarea) {
+                $element->setDecorators(array('StaticViewTextarea'));
             }
             else if ($element instanceof Zend_Form_Element_Select) {
                 $element->setDecorators(array('StaticViewSelect'));
