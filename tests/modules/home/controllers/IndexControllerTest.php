@@ -108,7 +108,7 @@ class Home_IndexControllerTest extends ControllerTestCase {
 
     public function testFailureAction() {
         $this->dispatch('/home/index/failure');
-        $this->assertRedirect('/home/index/index');
+        $this->assertRedirectTo('/home');
         $this->assertModule('home');
         $this->assertController('index');
         $this->assertAction('failure');
@@ -116,7 +116,7 @@ class Home_IndexControllerTest extends ControllerTestCase {
 
     public function testNoticeAction() {
         $this->dispatch('/home/index/notice');
-        $this->assertRedirect('/home/index/index');
+        $this->assertRedirectTo('/home');
         $this->assertModule('home');
         $this->assertController('index');
         $this->assertAction('notice');
