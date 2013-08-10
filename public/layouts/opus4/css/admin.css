@@ -1228,5 +1228,7 @@ ul.form-action{
 }
 
 .textarea {
-    white-space: pre-wrap; /* wird für Ausgabe von Textarea in View verwendet */
+    white-space: pre-wrap;  /* wird für Ausgabe von Textarea in View verwendet */
+    word-wrap: break-word;
+    word-break: normal;
 }
