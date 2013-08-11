@@ -38,6 +38,10 @@
 class Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Form_IElement {
 
     private $viewDecorator = 'StaticView';
+    
+    private $viewCheckedValue = 'Field_Value_True';
+    
+    private $viewUncheckedValue = 'Field_Value_False';
 
     public function init() {
         $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
@@ -56,8 +60,8 @@ class Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Form_I
 
     public function prepareRenderingAsView() {
         $this->setDecorators(array($this->viewDecorator));
-        $this->setCheckedValue($this->getTranslator()->translate('Field_Value_True'));
-        $this->setUncheckedValue($this->getTranslator()->translate('Field_Value_False'));
+        $this->setCheckedValue($this->getTranslator()->translate($this->viewCheckedValue));
+        $this->setUncheckedValue($this->getTranslator()->translate($this->viewUncheckedValue));
         $this->setChecked($this->getValue());
     }
 
@@ -75,7 +79,17 @@ class Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Form_I
 
     public function setViewDecorator($decorator) {
         $this->viewDecorator = $decorator;
+        return $this;
+    }
+    
+    public function setViewCheckedValue($value) {
+        $this->viewCheckedValue = $value;
+        return $this;
     }
 
+    public function setViewUncheckedValue($value) {
+        $this->viewUncheckedValue = $value;
+        return $this;
+    }
 
 }

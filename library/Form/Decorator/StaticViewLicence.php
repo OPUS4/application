@@ -32,10 +32,14 @@
  * @version     $Id$
  */
 
-class Form_Decorator_StaticViewCheckbox extends Form_Decorator_StaticView {
+class Form_Decorator_StaticViewLicence extends Form_Decorator_StaticView {
 
     public function getLabel() {
         return null;
+    }
+    
+    public function getValue() {
+        return $this->getElement()->getLabel();
     }
 
 }

@@ -353,7 +353,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $form->populateFromModel($document);
         $form->prepareRenderingAsView();
 
-        $this->verifySubForms($form, array('ActionBox', 'InfoBox'));
+        $this->verifySubForms($form, array('ActionBox', 'InfoBox', 'Bibliographic'));
     }
 
     protected function verifySubForms($form, $names) {

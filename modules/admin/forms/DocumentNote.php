@@ -23,38 +23,37 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
+ */
+
+/**
+ * Unterformular fuer Bemerkungen/Notizen.
+ * 
  * @category    Application
- * @package     Module_Admin
+ * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-/**
- * Unterformular fuer Bemerkungen/Notizen.
- */
 class Admin_Form_DocumentNote extends Admin_Form_AbstractModelSubForm {
 
     const ELEMENT_ID = 'Id';
-    
     const ELEMENT_VISIBILITY = 'Visibility';
-    
     const ELEMENT_MESSAGE = 'Message';
     
     public function init() {
         parent::init();
         
-        $element = new Form_Element_Hidden(self::ELEMENT_ID);
-        $this->addElement($element);
-        
-        $element = new Form_Element_Checkbox(self::ELEMENT_VISIBILITY);
-        $element->setLabel('Opus_Note_Visibility_Value_Public'); // TODO translate
-        $element->setViewDecorator('StaticViewCheckbox');
-        $this->addElement($element);
-        
+        $this->addElement('hidden', self::ELEMENT_ID);
+        $this->addElement('checkbox', self::ELEMENT_VISIBILITY, array('label' => 'Opus_Note_Visibility_Value_Public'));
         $this->addElement('textarea', self::ELEMENT_MESSAGE, array('required' => true, 'rows' => 4));
+        
+        $this->getElement(self::ELEMENT_VISIBILITY)
+                ->setViewDecorator('StaticViewCheckbox')
+                ->setViewCheckedValue('Opus_Note_Visibility_Value_Public')
+                ->setViewUncheckedValue('Opus_Note_Visibility_Value_Private');
+        
+        $this->setRemoveEmptyCheckbox(false);
     }
     
     public function populateFromModel($note) {
@@ -87,5 +86,5 @@ class Admin_Form_DocumentNote extends Admin_Form_AbstractModelSubForm {
         
         $this->removeDecorator('Fieldset');
     }
-
+    
 }

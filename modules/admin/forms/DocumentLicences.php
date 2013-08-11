@@ -68,7 +68,7 @@ class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
 
         foreach ($licences as $licence) {
             $element = new Form_Element_Checkbox(self::ELEMENT_NAME_PREFIX . $licence->getId());
-            $element->setViewDecorator('StaticViewCheckbox');
+            $element->setViewDecorator('StaticViewLicence');
             $element->setLabel($licence->getNameLong());
             $cssClass = ($licence->getActive()) ? self::ACTIVE_CSS_CLASS : self::INACTIVE_CSS_CLASS;
             $labelDecorator = $element->getDecorator('Label');

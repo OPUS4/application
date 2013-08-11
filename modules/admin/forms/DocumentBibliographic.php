@@ -99,6 +99,8 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
         $element = new Form_Element_Checkbox(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY);
         $element->setLabel('BelongsToBibliography');
         $this->addElement($element);
+        
+        $this->setRemoveEmptyCheckbox(false);
     }
     
     public function populateFromModel($document) {
