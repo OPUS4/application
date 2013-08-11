@@ -61,6 +61,8 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
         
     /**
      * Erzeugt die Formularelemente.
+     * 
+     * TODO disable translation für EDIT Element
      */
     public function init() {
         parent::init();
@@ -76,8 +78,26 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
      */
     public function populateFromModel($collection) {
         $this->getElement(self::ELEMENT_ID)->setValue($collection->getId());
-        $this->getElement(self::ELEMENT_EDIT)->setLabel($collection->getDisplayName());
-        $this->setLegend($collection->getDisplayName());
+        $displayName = $this->getDisplayNameForCollection($collection);
+        $this->getElement(self::ELEMENT_EDIT)->setLabel($displayName);
+        $this->setLegend($displayName);
+    }
+    
+    /**
+     * Ermittelt Anzeigenamen fuer Sammlung.
+     * 
+     * Root-Collections haben keinen Namen. In diesem Fall wird der Name der CollectionRole angezeigt. Da Collections
+     * normalerweise nicht übersetzt werden, muss der Name der CollectionRole hier separate übersetzt werden.
+     * 
+     * @param type $collection
+     * @return type
+     */
+    protected function getDisplayNameForCollection($collection) {
+        $displayName = $collection->getDisplayName();
+        if (strlen(trim($displayName)) == 0 && $collection->isRoot()) {
+            $displayName = $this->getTranslator()->translate('default_collection_role_' . $collection->getRoleName());
+        }
+        return $displayName;
     }
 
     /**
