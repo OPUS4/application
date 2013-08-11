@@ -58,6 +58,21 @@ class DocumentCollectionTest extends ControllerTestCase {
         $this->assertEquals($collection->getId(), $form->getElement('Id')->getValue());
     }
     
+    public function testPopulateFromModelWithRootCollectionWithoutName() {
+        $this->useEnglish();
+        
+        $form = new Admin_Form_DocumentCollection();
+        
+        $collection = new Opus_Collection(2); // Root-Collection DDC-Klassifikation
+        
+        $form->populateFromModel($collection);
+        
+        $this->assertEquals(2, $form->getElement('Id')->getValue());
+        $this->assertNotEmpty($form->getLegend());
+        $this->assertNotEmpty($form->getElement('Edit')->getLabel());
+        $this->assertEquals('Dewey Decimal Classification', $form->getElement('Edit')->getLabel());
+    }
+    
     public function testProcessPostRemove() {
         $form = new Admin_Form_DocumentCollection();
         
