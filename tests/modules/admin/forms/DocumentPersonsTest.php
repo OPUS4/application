@@ -389,4 +389,33 @@ class Admin_Form_DocumentPersonsTest extends ControllerTestCase {
         $this->assertEquals(1, $subform->getElementValue('AllowContact'));
     }
     
+    public function testAddPersonSortOrderEqualsExistingPersonCount() {
+        $form = new Admin_Form_DocumentPersons();
+        
+        $this->assertEquals(0, count($form->getSubForm('editor')->getSubForms()), 'Es sollte keinen Editor geben.');
+        
+        $form->addPerson(array('person' => 310, 'role' => 'editor'));
+        $form->addPerson(array('person' => 311, 'role' => 'editor'));
+        
+        $this->assertEquals(2, count($form->getSubForm('editor')->getSubForms()), 'Es sollte zwei Personen geben.');
+        
+        $subform = $form->getSubForm('editor')->getSubForm('PersonEditor0');
+        
+        $this->assertNotNull($subform);
+        $this->assertEquals(310, $subform->getElementValue('PersonId'));
+        
+        $subform = $form->getSubForm('editor')->getSubForm('PersonEditor1');
+        
+        $this->assertNotNull($subform);
+        $this->assertEquals(311, $subform->getElementValue('PersonId'));
+        
+        $form->addPerson(array('person' => 312, 'role' => 'editor', 'order' => 2));
+        
+        $this->assertEquals(310, $form->getSubForm('editor')->getSubForm('PersonEditor0')->getElementValue('PersonId'));
+        $this->assertEquals(312, $form->getSubForm('editor')->getSubForm('PersonEditor1')->getElementValue('PersonId'));
+        $this->assertEquals(311, $form->getSubForm('editor')->getSubForm('PersonEditor2')->getElementValue('PersonId'));
+    }
+    
+    
+    
 }

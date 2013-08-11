@@ -541,6 +541,14 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
 
         $this->verifyExpectedOrder($form, array(310, 311, 312, 259));
     }
+    
+    public function testAddPersonPositionEqualsFormCount() {
+        $form = $this->getFormForSorting(); // form with three authors
+
+        $form->addPerson(array('person' => '259', 'order' => '3')); // Autor von Dokument 146
+
+        $this->verifyExpectedOrder($form, array(310, 311, 259, 312));
+    }
 
     public function testAddPersonFirstPosition() {
         $form = $this->getFormForSorting(); // form with three authors
