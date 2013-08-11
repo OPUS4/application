@@ -162,7 +162,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
     protected function insertSubForm($subForm, $position) {
         $subFormCount = count($this->getSubForms());
 
-        if ($position >=  $subFormCount) {
+        if ($position > $subFormCount) {
             $position = $subFormCount + 1;
         }
         else if ($position < 0) {
@@ -370,7 +370,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
         if (is_null($this->getSubFormForPerson($personId))) {
             $allowContact = (array_key_exists('contact', $personProps)) ? $personProps['contact'] : 0;
             $sortOrder = (array_key_exists('order', $personProps)) ? $personProps['order'] : null;
-            $sortOrder = (is_null($sortOrder)) ? count($this->getSubForms()) : $sortOrder;
+            $sortOrder = (is_null($sortOrder)) ? count($this->getSubForms()) + 1 : $sortOrder;
 
             $form = $this->createSubForm();
 
