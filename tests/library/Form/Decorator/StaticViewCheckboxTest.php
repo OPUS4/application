@@ -46,19 +46,4 @@ class Form_Decorator_StaticViewCheckboxTest extends ControllerTestCase {
         $this->assertNull($decorator->getLabel());
     }
 
-    /**
-     * Bei der statischen Ausgabe einer Checkbox wird das Label als "Value" verwendet.
-     */
-    public function testGetValue() {
-        $element = new Zend_Form_Element_Checkbox('checkbox');
-        $element->setLabel('Public Access');
-        $element->setValue('public');
-        $element->setChecked(true);
-
-        $decorator = new Form_Decorator_StaticViewCheckbox();
-        $decorator->setElement($element);
-
-        $this->assertEquals('Public Access', $decorator->getValue());
-    }
-
 }
