@@ -23,28 +23,56 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Unit Tests fuer View Helper zum Rendern von Datei-Links.
  *
  * @category    Application
- * @package     Application_View_Partial
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
- *
- * TODO 'Document-Files' dynamisch bestimmen? Bezieht sich auf Position in Unterformularhierarchie.
  */
-?>
+class Application_View_Helper_FileLinkTest extends ControllerTestCase {
 
-<?PHP $file = $this->element->getModel() ?>
-<?PHP $formId = 'Document-Files-' . $this->element->getId() . '-' ?>
+    /**
+     * Keine serverUrl und keine baseUrl in Unit Tests, daher "http:///files/...".
+     */
+    public function testFileLink() {
+        $helper = new Application_View_Helper_FileLink();
 
-<tr class="file <?= $this->element->getOrder() % 2 == 0 ? 'even' : 'odd' ?>">
-    <td id="<?= $formId . 'Label' ?>" class="label"><?= $this->fileLink($file) ?></td>
-    <td id="<?= $formId . 'FileSize' ?>" class="filesize"><?= $this->fileSize($file->getFileSize()) ?></td>
-    <td id="<?= $formId . 'MimeType' ?>" class="mimetype"><?= htmlspecialchars($file->getMimeType()) ?></td>
-    <td id="<?= $formId . 'Language' ?>" class="language"><?= $this->translate($file->getLanguage()) ?></td>
-    <td id="<?= $formId . 'VisibleInFrontdoor' ?>" class="visiblefrontdoor"
-        ><?= $this->translate($file->getVisibleInFrontdoor() ? 'Field_Value_True' : 'Field_Value_False') ?></td>
-    <td id="<?= $formId . 'VisibleInOai' ?>" class="visibleoai"
-        ><?= $this->translate($file->getVisibleInOai() ? 'Field_Value_True' : 'Field_Value_False') ?></td>
-</tr>
+        $helper->setView(Zend_Registry::get('Opus_View'));
+
+        $file = new Opus_File(126);
+
+        $this->assertEquals('<a href="http:///files/146/test.pdf">foo-pdf</a>', $helper->fileLink($file));
+    }
+
+    public function testFileLinkSpecialCharacters() {
+        $helper = new Application_View_Helper_FileLink();
+
+        $helper->setView(Zend_Registry::get('Opus_View'));
+
+        $file = new Opus_File(130);
+
+        $this->assertEquals(
+            '<a href="http:///files/147/special-chars-%25-%22-%23-%26.pdf">Dateiname-mit-Sonderzeichen.pdf</a>',
+            $helper->fileLink($file));
+    }
+
+    public function testFileLinkSpacesAndQuotes() {
+        $helper = new Application_View_Helper_FileLink();
+
+        $helper->setView(Zend_Registry::get('Opus_View'));
+
+        $file = new Opus_File(131);
+
+        $this->assertEquals(
+            '<a href="http:///files/147/%27many%27++-++spaces++and++quotes.pdf">'
+            . 'Dateiname-mit-vielen-Spaces-und-Quotes.pdf</a>',
+            $helper->fileLink($file));
+    }
+
+}
