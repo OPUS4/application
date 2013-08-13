@@ -50,14 +50,6 @@ class Admin_InfoController extends Controller_Action {
 
         $this->view->postMaxSize = ini_get('post_max_size');
         $this->view->uploadMaxFilesize = ini_get('upload_max_filesize');
-
-        if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
-            $this->view->asyncjobs = true;
-            $this->view->failedJobCount = Opus_Job::getCountPerLabel(Opus_Job::STATE_FAILED);
-            $this->view->unprocessedJobCount = Opus_Job::getCountPerLabel(Opus_Job::STATE_UNDEFINED);
-        } else {
-            $this->view->asyncjobs = false;
-        }
     }
     
     public function menuAction() {
@@ -70,29 +62,4 @@ class Admin_InfoController extends Controller_Action {
     public function phpinfoAction() {
         $this->_helper->layout()->disableLayout();
     }
-
-    /**
-     * TODO review functionality and create ticket
-     */
-    public function workerMonitorAction() {
-        $config = Zend_Registry::get('Zend_Config');
-        $this->_helper->layout()->disableLayout();
-        if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
-            $this->view->failedJobCount = Opus_Job::getCount(Opus_Job::STATE_FAILED);
-        } else {
-            $this->view->failedJobCount = 0;
-        }
-    }
-
-    public function jobDetailAction() {
-        $this->view->state = $this->_request->getParam('state');
-        $this->view->label = $this->_request->getParam('label');
-
-        if (empty($this->view->state) || empty($this->view->label)) {
-            throw new Application_Exception('Invalid arguments');
-        }
-        
-        $this->view->jobs = Opus_Job::getByLabels(array($this->view->label), null, $this->view->state);
-    }
-
 }
