@@ -67,16 +67,18 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
      * Lädt die Defaultdekoratoren für ein Textelement.
      */
     public function loadDefaultDecorators() {
-        $this->setDecorators(array(
-            'ViewHelper', 
-            'Placeholder',
-            'Description',
-            'ElementHint',
-            'Errors',
-            'ElementHtmlTag',
-            array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-            array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-        ));
+        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+            $this->setDecorators(array(
+                'ViewHelper',
+                'Placeholder',
+                'Description',
+                'ElementHint',
+                'Errors',
+                'ElementHtmlTag',
+                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
+                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
+            ));
+        }
     }
 
     /**
