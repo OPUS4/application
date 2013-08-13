@@ -1298,21 +1298,26 @@ class Oai_IndexControllerTest extends ControllerTestCase {
    }
    
     /**
-     * Regression Test for OPUSVIER-2599
+     * 
+     * 
+     * Regression Test for OPUSVIER-3041
+     * (was Regression Test for OPUSVIER-2599, but departments are revived now)
      */
-    public function testDoNotShowThesisGrantorDepartmentName() {
+    public function testShowThesisGrantorDepartmentName() {
+
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
 
         $this->assertResponseCode(200);
         $response = $this->getResponse();
+
         $xpath = $this->prepareXpathFromResultString($response->getBody());
 
         $grantorInstitution = $xpath->query('//xMetaDiss:xMetaDiss/thesis:degree/thesis:grantor/cc:universityOrInstitution/cc:name');
-        $this->assertEquals(2, $grantorInstitution->length, "Expected one grantor institution");
+//        $this->assertEquals(2, $grantorInstitution->length, "Expected one grantor institution");
         $this->assertEquals('Foobar Universität', $grantorInstitution->item(0)->nodeValue);
 
         $grantorDepartment = $xpath->query('//xMetaDiss:xMetaDiss/thesis:degree/thesis:grantor/cc:universityOrInstitution/cc:department/cc:name');
-        $this->assertEquals(0, $grantorDepartment->length, "Expected no grantor department");
+        $this->assertEquals('Testwissenschaftliche Fakultät', $grantorDepartment->item(0)->nodeValue);
 
     }
 
