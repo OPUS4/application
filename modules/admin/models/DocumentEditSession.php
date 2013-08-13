@@ -23,6 +23,10 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Model für das Speichern von Informationen in der Session während des Editierens eines Dokuments.
  *
  * @category    Application
  * @package     Module_Admin
@@ -31,11 +35,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-/**
- * Model für das Speichern von Informationen in der Session während des Editierens eines Dokuments.
- */
-class Admin_Model_DocumentEditSession extends Admin_Model_AbstractModel {
+class Admin_Model_DocumentEditSession extends Application_Model_Abstract {
     
     /**
      * Dokument-ID.

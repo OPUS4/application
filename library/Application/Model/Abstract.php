@@ -23,19 +23,19 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * @category    Application
- * @package     Module_Admin
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
- * Abstract base class for admin module model classes.
+ * Abstract base class for model classes.
+ * 
+ * @category    Application
+ * @package     Application_Model
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
  */
-abstract class Admin_Model_AbstractModel {
+abstract class Application_Model_Abstract {
 
     /**
      * Logger for this class.
@@ -56,7 +56,7 @@ abstract class Admin_Model_AbstractModel {
      * @return Zend_Log
      */
     public function getLogger() {
-        if (empty($this->__logger)) {
+        if (is_null($this->__logger)) {
             $this->__logger = Zend_Registry::get('Zend_Log');
         }
 
