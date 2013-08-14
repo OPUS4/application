@@ -38,35 +38,25 @@
 class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
 
     const ELEMENT_CONTRIBUTING_CORPORATION = 'ContributingCorporation';
-    
     const ELEMENT_CREATING_CORPORATION = 'CreatingCorporation';
-    
     const ELEMENT_EDITION = 'Edition';
-    
     const ELEMENT_ISSUE = 'Issue';
-    
     const ELEMENT_PAGE_FIRST = 'PageFirst';
-    
     const ELEMENT_PAGE_LAST = 'PageLast';
-    
     const ELEMENT_PAGE_COUNT = 'PageCount';
-    
     const ELEMENT_PUBLISHER_NAME = 'PublisherName';
-    
     const ELEMENT_PUBLISHER_PLACE = 'PublisherPlace';
-    
     const ELEMENT_VOLUME = 'Volume';
-    
     const ELEMENT_THESIS_DATE_ACCEPTED = 'ThesisDateAccepted';
-    
     const ELEMENT_THESIS_YEAR_ACCEPTED = 'ThesisYearAccepted';
-    
     const ELEMENT_BELONGS_TO_BIBLIOGRAPHY = 'BelongsToBibliography';
     
     public function init() {
         parent::init();
         
         $this->setLegend('admin_document_section_bibliographic');
+
+        $this->setUseNameAsLabel(true);
         
         // Label entsprechen den Namen der Elemente
         $this->addTextElement(self::ELEMENT_EDITION);
@@ -74,18 +64,10 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
         $this->addTextElement(self::ELEMENT_PUBLISHER_NAME);
         $this->addTextElement(self::ELEMENT_PUBLISHER_PLACE);
 
-        $element = $this->addTextElement(self::ELEMENT_PAGE_COUNT);
-        $element->addValidator('Int');
-        $element->addValidator(new Zend_Validate_GreaterThan(0));
-        
-        $element = $this->addTextElement(self::ELEMENT_PAGE_FIRST);
-        $element->addValidator('Int');
-        $element->addValidator(new Zend_Validate_GreaterThan(-1));
-        
-        $element = $this->addTextElement(self::ELEMENT_PAGE_LAST);
-        $element->addValidator('Int');
-        $element->addValidator(new Zend_Validate_GreaterThan(-1));
-        
+        $this->addElement('text', self::ELEMENT_PAGE_COUNT);
+        $this->addElement('text', self::ELEMENT_PAGE_FIRST);
+        $this->addElement('text', self::ELEMENT_PAGE_LAST);
+
         $this->addTextElement(self::ELEMENT_ISSUE);
         $this->addTextElement(self::ELEMENT_CONTRIBUTING_CORPORATION);
         $this->addTextElement(self::ELEMENT_CREATING_CORPORATION);

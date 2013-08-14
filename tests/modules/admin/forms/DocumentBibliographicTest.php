@@ -199,20 +199,12 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
         $form = new Admin_Form_DocumentBibliographic();
         
         $post = array(
-            'PageFirst' => 'a', // nur Zahlen erlaubt
-            'PageLast' => '4', // korrekt
-            'PageCount' => '-1', // muss groesser, gleich 1 sein
             'ThesisDateAccepted' => '2010/02/31', // muss korrektes Datum sein
             'ThesisYearAccepted' => 'Jahr' // muss Zahl sein
         );
         
         $this->assertFalse($form->isValid($post));
         
-        //var_dump($form->getErrors());
-        
-        $this->assertContains('notInt', $form->getErrors('PageFirst'));
-        $this->assertEmpty($form->getErrors('PageLast'));
-        $this->assertContains('notGreaterThan', $form->getErrors('PageCount'));
         $this->assertContains('dateInvalidDate', $form->getErrors('ThesisDateAccepted'));
         $this->assertContains('notInt', $form->getErrors('ThesisYearAccepted'));
         
