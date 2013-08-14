@@ -55,19 +55,7 @@
             <!-- dc:title -->
             <xsl:apply-templates select="TitleMain" mode="oai_dc" />
             <!-- dc:creator -->
-            <!-- Creator: Autor (falls vorhanden), sonst Herausgeber (falls vorhanden), sonst Urhebende Koerperschaft  -->
-            <xsl:choose>
-              <xsl:when test="PersonAuthor">
-                    <xsl:apply-templates select="PersonAuthor" mode="oai_dc" />
-              </xsl:when>
-              <xsl:when test="PersonEditor">
-                    <xsl:apply-templates select="PersonEditor" mode="oai_dc" />
-              </xsl:when>
-              <xsl:otherwise>
-                    <xsl:apply-templates select="@CreatingCorporation" mode="oai_dc" />
-              </xsl:otherwise>
-            </xsl:choose>
-            <!--<xsl:apply-templates select="PersonAuthor" mode="oai_dc" />-->
+            <xsl:apply-templates select="PersonAuthor" mode="oai_dc" />
             <!-- dc:contributor -->
             <xsl:apply-templates select="PersonContributor" mode="oai_dc" />
             <!-- dc:subject -->
@@ -190,27 +178,9 @@
     </xsl:template>
 
     <xsl:template match="@Type" mode="oai_dc">
-        <xsl:choose>
-            <xsl:when test=".='habilitation'" >
-                <dc:type>
-                    <xsl:text>doctoralthesis</xsl:text>
-                </dc:type>
-                <dc:type>
-                    <xsl:text>doc-type:doctoralthesis</xsl:text>
-                </dc:type>
-            </xsl:when>
-	    <xsl:otherwise>
-                <dc:type>
-                    <xsl:value-of select="." />
-                </dc:type>
-                <dc:type>
-                    <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
-                </dc:type>
-	    </xsl:otherwise>
-	</xsl:choose>
-        <!--        <dc:type>
+        <dc:type>
             <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
-        </dc:type>-->
+        </dc:type>
     </xsl:template>
 
     <xsl:template match="@ContributingCorporation" mode="oai_dc">
