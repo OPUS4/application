@@ -1475,4 +1475,20 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         
     }
 
+    /**
+     * Regression Test for OPUSVIER-2762
+     */
+    public function testHabilitationIsDcTypeDoctoralthesis() {
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::80');
+
+        $response = $this->getResponse();
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+
+        $docType = $xpath->query('//oai_dc:dc/dc:type');
+        $this->assertContains('doctoralthesis', $docType->item(0)->nodeValue);
+        
+        
+    }
+
 }
