@@ -194,7 +194,7 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
     }
     
     public function testValidation() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_DocumentBibliographic();
         
@@ -228,6 +228,18 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
         $this->assertFalse($form->isValid($post)); // keine Pflichteingaben
         $this->assertContains('notGreaterThan', $form->getErrors('ThesisYearAccepted'));
         $this->assertContains('dateFalseFormat', $form->getErrors('ThesisDateAccepted'));
+    }
+
+    public function testRegression3046AlphanumericPageFirstLastAndNumberValues() {
+        $form = new Admin_Form_DocumentBibliographic();
+
+        $post = array(
+            'PageFirst' => 'XI',
+            'PageLast' => '12',
+            'PageCount' => 'iiv'
+        );
+
+        $this->assertTrue($form->isValid($post));
     }
     
 }
