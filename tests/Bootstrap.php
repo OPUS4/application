@@ -24,9 +24,10 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Tests
+ * @category    Application Tests
  * @author      Ralf Claussnitzer <ralf.claussnitzer@slub-dresden.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -39,15 +40,17 @@ defined('APPLICATION_PATH')
         || define('APPLICATION_PATH', realpath(dirname(dirname(__FILE__))));
 
 // Define application environment (use 'production' by default)
-define('APPLICATION_ENV', 'testing');
+defined('APPLICATION_ENV')
+        || define('APPLICATION_ENV', 'testing');
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
-            realpath(dirname(__FILE__)),
-            realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library', // tests/library
-            realpath(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library'), // Server library
-            get_include_path()
-        )));
+    realpath(dirname(__FILE__)),
+    realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'support', // Support-Klassen fuer Tests
+    realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library', // tests/library
+    realpath(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library'), // Server library
+    get_include_path()
+)));
 
 // enable fallback autoloader for testing
 require_once 'Zend/Loader/Autoloader.php';
