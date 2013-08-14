@@ -332,7 +332,9 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
      * @param type $subform
      */
     protected function addRemoveButton($subform) {
-        $subform->addElement($this->createRemoveButton());
+        $button = $this->createRemoveButton();
+        $button->setDecorators(array('ViewHelper'));
+        $subform->addElement($button);
     }
         
     /**
