@@ -247,6 +247,13 @@
                                 <cc:place>
                                     <xsl:value-of select="@City" />
                                 </cc:place>
+                                <xsl:if test="normalize-space(@Department)">
+                                    <cc:department>
+                                        <cc:name>
+                                            <xsl:value-of select="@Department" />
+                                        </cc:name>
+                                    </cc:department>
+                                </xsl:if>
                             </cc:universityOrInstitution>
                         </thesis:grantor>
                     </xsl:for-each>
