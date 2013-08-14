@@ -242,6 +242,13 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         
         $this->assertNotNull($subform);
         $this->assertNotNull($subform->getElement('Remove'));
+        $this->assertEmpty($subform->getElement('Remove')->getDecorators());
+
+        $this->assertEquals(4, count($subform->getDecorators()));
+        $this->assertNotNull($subform->getDecorator('FormElements'));
+        $this->assertNotNull($subform->getDecorator('RemoveButton'));
+        $this->assertNotNull($subform->getDecorator('dataWrapper'));
+        $this->assertNotNull($subform->getDecorator('multiWrapper'));
     }
     
     public function testCreateNewSubFormInstance() {
@@ -334,5 +341,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier');
         $this->assertEquals('Identifier', $form->getSubFormBaseName());
     }
+
+
     
 }

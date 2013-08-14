@@ -25,22 +25,23 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Test
- * @package     Form_Element
+ * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Admin_Form_AbstractModelSubFormTest extends ControllerTestCase {
 
-/**
- * Unit Test für Form Element Submit Button.
- *
- * Die Funktion loadDefaultDecorators wird bereits während der Konstruktion einer Instanz aufgerufen.
- */
-class Form_Element_SubmitTest extends FormElementTestCase {
+      public function testConstructForm() {
+          $form = $this->getMockForAbstractClass('Admin_Form_AbstractModelSubForm');
 
-    protected $_formElementClass = "Form_Element_Submit";
+          $this->assertInstanceOf('Zend_Form', $form);
 
-    protected $_expectedDecoratorCount = 3;
+          $this->assertEquals(0, count($form->getElements()));
+          $this->assertEquals(0, count($form->getSubForms()));
+          $this->assertEquals(1, count($form->getDecorators()));
+          $this->assertNotNull($form->getDecorator('FormElements'));
+      }
 
 }

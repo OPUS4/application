@@ -23,24 +23,42 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Decorator fuer die Ausgabe eines Remove-Buttons fuer ein Unterformular.
  *
- * @category    Application Unit Test
- * @package     Form_Element
+ * Der Decorator wird dem Formular zugewiesen und er sorgt dafür, dass ein
+ * Input-Feld fuer den Remove-Button ausgegeben wird.
+ *
+ * @category    Application
+ * @package     Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract {
 
-/**
- * Unit Test für Form Element Submit Button.
- *
- * Die Funktion loadDefaultDecorators wird bereits während der Konstruktion einer Instanz aufgerufen.
- */
-class Form_Element_SubmitTest extends FormElementTestCase {
+    public function render($content) {
+        $button = $this->getElement()->getElement(Admin_Form_DocumentMultiSubForm::ELEMENT_REMOVE);
 
-    protected $_formElementClass = "Form_Element_Submit";
+        if (is_null($button)) {
+            return $content;
+        }
 
-    protected $_expectedDecoratorCount = 3;
+        $formId = $button->getId();
+        $formName = $button->getFullyQualifiedName();
+
+        $markup = '<div class="data-wrapper Remove-data">';
+        $markup .= "<div class=\"field\" id=\"$formId\">";
+        $markup .= "<input type=\"submit\" name=\"$formName\" id=\"$formId\" value=\"Remove\">";
+        $markup .= '</div></div>';
+
+        return $content . $markup;
+    }
 
 }
+
+
+

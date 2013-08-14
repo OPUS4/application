@@ -23,17 +23,17 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * @category    Application
- * @package     View
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 /**
  * Angepasste Form Element Klasse für Submit Buttons.
+ *
+ * @category    Application
+ * @package     Form_Element
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
  */
 class Form_Element_Submit extends Zend_Form_Element_Submit {
 
@@ -53,17 +53,13 @@ class Form_Element_Submit extends Zend_Form_Element_Submit {
      * @return $this|Zend_Form_Element_Submit
      */
     public function loadDefaultDecorators() {
-        if ($this->loadDefaultDecoratorsIsDisabled()) {
-            return $this;
+        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+            $this->setDecorators(array(
+                'ViewHelper',
+                'ElementHtmlTag',
+                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
+            ));
         }
-
-        $decorators = $this->getDecorators();
-        if (empty($decorators)) {
-            $this->addDecorator('ViewHelper')
-                 ->addDecorator('ElementHtmlTag')
-                 ->addDecorator(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'));
-        } 
-        
         return $this;
     }
         

@@ -45,9 +45,6 @@
  * +- SubForm1
  * +- ...
  * +- Add Button
- * 
- * TODO gibt es möglichkeit die Decoratoren vom Unterformular zu übernehmen und trotzdem die gewünschte Abtrennung für 
- *      Remove zu erreichen (zusätzliche Unterformularebene für Remove?)
  */
 class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm {
     
@@ -78,7 +75,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
      * @var type 
      */
     private $_subformValidator;
-    
+
     /**
      * Konstruiert Instanz von Fomular.
      * 
@@ -108,8 +105,13 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     public function init() {
         parent::init();
 
-        $this->addElement('submit', self::ELEMENT_ADD, array('order' => 1000, 'label' => 'admin_button_add')); 
+        $this->initButton();
+
         $this->setLegend('admin_document_section_' . strtolower($this->_fieldName));
+    }
+
+    protected function initButton() {
+        $this->addElement('submit', self::ELEMENT_ADD, array('order' => 1000, 'label' => 'admin_button_add'));
     }
     
     /**
@@ -148,7 +150,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
             return $field->getValue();
        }
        else {
-           $this->getLog()->err(__METHOD__ . " Feld $this->__fieldName nicht gefunden.");
+           $this->getLogger()->err(__METHOD__ . " Feld $this->__fieldName nicht gefunden.");
        }
     }
     
@@ -219,7 +221,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
                     }
                 }
                 else {
-                    $this->getLog()->err(__METHOD__ . ': Subform with name ' . $subFormName . ' does not exits.');
+                    $this->getLogger()->err(__METHOD__ . ': Subform with name ' . $subFormName . ' does not exits.');
                 }
             }
         }
@@ -318,7 +320,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
 
         $this->prepareSubFormDecorators($subform);
         $this->addRemoveButton($subform);
-        
+
         return $subform;
     }
 
@@ -328,25 +330,28 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
      * @param type $subform
      */
     protected function prepareSubFormDecorators($subform) {
-        $subform->setDecorators(array(
-            'FormElements',
-            array(array('multiWrapper' => 'HtmlTag'), array('class' => 'multiple-wrapper'))
-        ));
+        $subform
+            ->addDecorator('RemoveButton')
+            ->addDecorator(array('dataWrapper' => 'HtmlTag'), array('class' => 'data-wrapper multiple-data'))
+            ->addDecorator(array('multiWrapper' => 'HtmlTag'), array('class' => 'multiple-wrapper'));
     }
 
     protected function addRemoveButton($subform) {
         $subform->addElement($this->createRemoveButton());
-        
-        $elements = $subform->getElements();
-        
-        $subform->addDisplayGroup($elements, 'subFormData', array('decorators' => array(
-            'FormElements',
-            array('HtmlTag', array('class' => 'data-wrapper multiple-data'))
-        )));
     }
-    
+
+    /**
+     * Erzeugt den Button fuer das Entfernen eines Unterformulars.
+     *
+     * Der Button hat keine Dekoratoren. Das heisst er kann dem Unterformular hinzugefuegt werden ohne dort die
+     * Ausgabe zu beeinflussen. Das INPUT Element fuer den Button wird ueber einen Dekorator fuer das Formular
+     * ausgegeben.
+     *
+     * @return Zend_Form_Element
+     */
     protected function createRemoveButton() {
-        return $this->createElement('submit', self::ELEMENT_REMOVE, array('label' => 'admin_button_remove'));
+        return $this->createElement('submit', self::ELEMENT_REMOVE, array('label' => 'admin_button_remove',
+            'decorators' => array(), 'disableLoadDefaultDecorators' => true));
     }
     
     /**
@@ -500,5 +505,5 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
             }
         }
     }
-                
+
 }

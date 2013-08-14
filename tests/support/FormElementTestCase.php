@@ -25,22 +25,54 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Test
- * @package     Form_Element
+ * @package     Test_Support
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+abstract class FormElementTestCase extends ControllerTestCase {
 
-/**
- * Unit Test für Form Element Submit Button.
- *
- * Die Funktion loadDefaultDecorators wird bereits während der Konstruktion einer Instanz aufgerufen.
- */
-class Form_Element_SubmitTest extends FormElementTestCase {
+    protected $_formElementClass = null;
 
-    protected $_formElementClass = "Form_Element_Submit";
+    protected $_expectedDecoratorCount = -1;
 
-    protected $_expectedDecoratorCount = 3;
+    protected $_expectedDecorators = array('ViewHelper');
+
+    public function setUp() {
+        parent::setUp();
+
+        $this->assertNotNull($this->_formElementClass, 'No form element class configured.');
+        $this->assertNotEquals(-1, $this->_expectedDecorators, 'Expected decorator count not configured.');
+    }
+
+    public function testLoadDefaultDecorators() {
+        $element = new $this->_formElementClass('name');
+
+        $element->setDecorators(array());
+
+        $this->assertEmpty($element->getDecorators());
+
+        $element->loadDefaultDecorators();
+
+        $this->assertEquals($this->_expectedDecoratorCount, count($element->getDecorators()));
+
+        foreach ($this->_expectedDecorators as $decorator) {
+            $this->assertNotNull($element->getDecorator($decorator));
+        }
+    }
+
+    public function testLoadDefaultDecoratorsDisabled() {
+        $element = new $this->_formElementClass('name', array('disableLoadDefaultDecorators' => true));
+
+        $this->assertEmpty($element->getDecorators());
+    }
+
+    public function testLoadDefaultDecoratorsCustomDecorators() {
+        $element = new $this->_formElementClass('name', array('decorators' => array('ViewHelper')));
+
+        $this->assertEquals(1, count($element->getDecorators()));
+        $this->assertNotNull($element->getDecorator('ViewHelper'));
+    }
 
 }

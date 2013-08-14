@@ -23,24 +23,36 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Unit Tests fuer Klasse, die Remove-Button ausgibt.
  *
  * @category    Application Unit Test
- * @package     Form_Element
+ * @package     Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Form_Decorator_RemoveButtonTest extends ControllerTestCase {
 
-/**
- * Unit Test für Form Element Submit Button.
- *
- * Die Funktion loadDefaultDecorators wird bereits während der Konstruktion einer Instanz aufgerufen.
- */
-class Form_Element_SubmitTest extends FormElementTestCase {
+    public function testRender() {
+        $form = new Zend_Form();
+        $form->setName('Test');
+        $form->addElement('submit', 'Remove');
 
-    protected $_formElementClass = "Form_Element_Submit";
+        $decorator = new Form_Decorator_RemoveButton();
+        $decorator->setElement($form);
 
-    protected $_expectedDecoratorCount = 3;
+        $output = $decorator->render('content'); // Output wird an content dran gehängt
+
+        $this->assertEquals(
+            'content'
+            . '<div class="data-wrapper Remove-data">'
+            . '<div class="field" id="Remove">'
+            . '<input type="submit" name="Remove" id="Remove" value="Remove">'
+            . '</div></div>', $output);
+    }
 
 }

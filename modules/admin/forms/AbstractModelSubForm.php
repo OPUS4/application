@@ -43,7 +43,15 @@
  * Model wie zum Beispiel Opus_Identifier oder Opus_Title.
  */
 abstract class Admin_Form_AbstractModelSubForm extends Admin_Form_AbstractDocumentSubForm {
-    
+
+    public function init() {
+        parent::init();
+
+        $this->setDecorators(array(
+            'FormElements'
+        ));
+    }
+
     /**
      * Liefert angezeigtes Model oder eine neue Instanz für gerade hinzugefügte Modelle.
      * 
