@@ -51,8 +51,8 @@ class Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract {
         $formName = $button->getFullyQualifiedName();
 
         $markup = '<div class="data-wrapper Remove-data">';
-        $markup .= "<div class=\"field\" id=\"$formId\">";
-        $markup .= "<input type=\"submit\" name=\"$formName\" id=\"$formId\" value=\"Remove\">";
+        $markup .= "<div class=\"field\" id=\"$formId-element\">";
+        $markup .= "<input type=\"submit\" name=\"$formName\" id=\"$formId\" value=\"Remove\" />";
         $markup .= '</div></div>';
 
         return $content . $markup;
