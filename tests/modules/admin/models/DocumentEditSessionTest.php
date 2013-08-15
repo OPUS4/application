@@ -102,6 +102,23 @@ class Admin_Model_DocumentEditSessionTest extends ControllerTestCase {
         // retrievePost removes variable from session
         $this->assertNull($model->retrievePost());
     }
+
+    public function testStoreRetrievePostWithName() {
+        $model = new Admin_Model_DocumentEditSession(146);
+
+        $post = array(
+            'key1' => 'value1',
+            'key2' => 'value2',
+            'subform1' => array(
+                'key1' => 'value1',
+                'key2' => 'value2'
+            )
+        );
+
+        $model->storePost($post, 'files');
+
+        $this->assertEquals($post, $model->retrievePost('files'));
+    }
     
     public function testGetSessionNamespace() {
         $model = new Admin_Model_DocumentEditSession(146);

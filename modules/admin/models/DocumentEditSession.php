@@ -138,10 +138,14 @@ class Admin_Model_DocumentEditSession extends Application_Model_Abstract {
      * Speichert POST in session.
      * @param array $post
      */
-    public function storePost($post) {
+    public function storePost($post, $name = null) {
         $namespace = $this->getDocumentSessionNamespace();
-        
-        $namespace->lastPost = $post;
+
+        if (is_null($name)) {
+            $name = 'lastPost';
+        }
+
+        $namespace->$name = $post;
     }
     
     /**
@@ -149,12 +153,16 @@ class Admin_Model_DocumentEditSession extends Application_Model_Abstract {
      * @param string $hash Hash für Formular
      * @return array
      */
-    public function retrievePost() {
+    public function retrievePost($name = null) {
         $namespace = $this->getDocumentSessionNamespace();
-        
-        if (isset($namespace->lastPost)) {
-            $post = $namespace->lastPost;
-            $namespace->lastPost = null;
+
+        if (is_null($name)) {
+            $name = 'lastPost';
+        }
+
+        if (isset($namespace->$name)) {
+            $post = $namespace->$name;
+            $namespace->$name = null;
             return $post;
         }
         else {
