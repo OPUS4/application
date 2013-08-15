@@ -83,6 +83,11 @@
             <!-- dc:contributor -->
             <xsl:apply-templates select="PersonAdvisor" mode="xmetadissplus" />
             <xsl:apply-templates select="PersonReferee" mode="xmetadissplus" />
+            <!-- dc:source -->
+            <xsl:apply-templates select="TitleParent" mode="xmetadissplus" />
+
+            <!-- dcterms:isPartOf -->
+            <xsl:apply-templates select="Series" mode="xmetadissplus" />
 
             <xsl:choose>
                 <xsl:when test="ThesisDateAccepted">
@@ -454,4 +459,17 @@
         </ddb:identifier>
     </xsl:template>
 
+    <xsl:template match="TitleParent" mode="xmetadissplus">
+        <dc:source xsi:type="ddb:noScheme">
+            <xsl:value-of select="@Value" />
+        </dc:source> 
+    </xsl:template>
+
+    <xsl:template match="Series" mode="xmetadissplus">
+        <dcterms:isPartOf xsi:type="ddb:noScheme">
+            <xsl:value-of select="@Title" />
+        </dcterms:isPartOf> 
+    </xsl:template>
+    
+    
 </xsl:stylesheet>
