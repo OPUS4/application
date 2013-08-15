@@ -75,4 +75,15 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
             $helper->fileLink($file));
     }
 
+    public function testFileLinkNoLabel() {
+        $helper = new Application_View_Helper_FileLink();
+
+        $helper->setView(Zend_Registry::get('Opus_View'));
+
+        $file = new Opus_File(126);
+        $file->setLabel(null);
+
+        $this->assertEquals('<a href="http:///files/146/test.pdf">test.pdf</a>', $helper->fileLink($file));
+    }
+
 }
