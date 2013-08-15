@@ -406,7 +406,11 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      */
     public function verifyBreadcrumbDefined($location = null) {
         if (is_null($location)) {
-            $location = $this->getLocation();
+            $location = $this->getLocation(); // liefert null wenn es kein redirect war
+            if (is_null($location)) {
+                // ansonsten Request-URI verwenden
+                $location = $this->getRequest()->getRequestUri();
+            }
         }
 
         $view = Zend_Registry::get('Opus_View');
