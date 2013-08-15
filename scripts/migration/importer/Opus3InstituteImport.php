@@ -239,7 +239,11 @@ class Opus3InstituteImport {
 
             /* Create a DNB-Institute for Faculty */
             $fac = new Opus_DnbInstitute();
-            $fac->setName($this->uniname.",".$class['fakultaet']);
+            $fac->setName($this->uniname);
+            /* Changed since Opus 4.4.1: faculty is stored in distinct field 'department'
+             * See Issue #OPUSVIER-3041
+             */
+            $fac->setDepartment($class['fakultaet']);
             $fac->setCity($this->unicity);
             $fac->setIsGrantor('1');
             $fac->store();
