@@ -1488,7 +1488,42 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $docType = $xpath->query('//oai_dc:dc/dc:type');
         $this->assertContains('doctoralthesis', $docType->item(0)->nodeValue);
         
+    }
+    
+    public function testXMetaDissPlusDcsourceContainsTitleParent() {
+        
+        $doc = new Opus_Document(146);
+        $parentTitle = $doc->getTitleParent();
+        $this->assertFalse(empty($parentTitle), 'Test Data modified: Expected non-empty value for TitleParent');
+        
+        
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
+        $response = $this->getResponse();
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+        $dcSource = $xpath->query('//xMetaDiss:xMetaDiss/dc:source');
+        
+        $this->assertEquals(1, $dcSource->length);
+
+        $this->assertEquals($parentTitle[0]->getValue(), $dcSource->item(0)->nodeValue);
+
         
     }
+
+    public function testXMetaDissPlusDctermsispartofContainsSeries() {
+        
+        $doc = new Opus_Document(146);
+        $series = $doc->getSeries();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
+        $response = $this->getResponse();
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+        $dctermsIspartof = $xpath->query('//xMetaDiss:xMetaDiss/dcterms:isPartOf');
+        
+        $this->assertEquals(1, $dctermsIspartof->length);
+        
+        $this->assertEquals($series[0]->getTitle(), $dctermsIspartof->item(0)->nodeValue);
+
+    }
+            
 
 }
