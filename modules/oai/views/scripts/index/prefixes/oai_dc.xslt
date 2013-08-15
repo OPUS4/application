@@ -192,9 +192,24 @@
     </xsl:template>
 
     <xsl:template match="@Type" mode="oai_dc">
-        <dc:type>
-            <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
-        </dc:type>
+        <xsl:choose>
+            <xsl:when test=".='habilitation'" >
+                <dc:type>
+                    <xsl:text>doctoralthesis</xsl:text>
+                </dc:type>
+                <dc:type>
+                    <xsl:text>doc-type:doctoralthesis</xsl:text>
+                </dc:type>
+            </xsl:when>
+	    <xsl:otherwise>
+                <dc:type>
+                    <xsl:value-of select="." />
+                </dc:type>
+                <dc:type>
+                    <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
+                </dc:type>
+	    </xsl:otherwise>
+	</xsl:choose>
     </xsl:template>
 
     <xsl:template match="@ContributingCorporation" mode="oai_dc">
