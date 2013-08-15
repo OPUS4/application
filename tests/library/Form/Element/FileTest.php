@@ -1,5 +1,5 @@
-<?PHP
-/*
+<?php
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -23,26 +23,29 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * Angepasstes Formularelement fuer HIDDEN Input Felder.
  *
- * @category    Application
- * @package     View
+ * @category    Application Unit Test
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Element_Hidden extends Zend_Form_Element_Hidden {
-    
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(array(
-                'ViewHelper'
-            ));
-        }
+class Form_Element_FileTest extends FormElementTestCase {
+
+    public function setUp() {
+        $this->_formElementClass = 'Form_Element_File';
+        $this->_expectedDecoratorCount = 5;
+        $this->_expectedDecorators = array('File', 'Errors', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+
+        parent::setUp();
     }
-    
+
+    public function testDecoratorPath() {
+        $element = new $this->_formElementClass('name');
+        $paths = $element->getPluginLoader(Zend_Form::DECORATOR)->getPaths();
+        $this->assertArrayHasKey('Form_Decorator_', $paths);
+        $this->assertContains('Form/Decorator/', $paths['Form_Decorator_']);
+    }
+
 }

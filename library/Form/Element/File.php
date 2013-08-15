@@ -1,5 +1,5 @@
-<?PHP
-/*
+<?php
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -26,23 +26,34 @@
  */
 
 /**
- * Angepasstes Formularelement fuer HIDDEN Input Felder.
+ * Formularelement fuer den Upload einer Datei.
  *
  * @category    Application
- * @package     View
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Element_Hidden extends Zend_Form_Element_Hidden {
-    
+class Form_Element_File extends Zend_Form_Element_File {
+
+    public function init() {
+        parent::init();
+
+        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+    }
+
     public function loadDefaultDecorators() {
         if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(array(
-                'ViewHelper'
+                'File',
+                'Errors',
+                'ElementHtmlTag',
+                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
+                array(array('dataWrapperOpen' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
             ));
         }
     }
-    
+
 }
+
