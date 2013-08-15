@@ -50,8 +50,8 @@ class Form_Decorator_RemoveButtonTest extends ControllerTestCase {
         $this->assertEquals(
             'content'
             . '<div class="data-wrapper Remove-data">'
-            . '<div class="field" id="Remove">'
-            . '<input type="submit" name="Remove" id="Remove" value="Remove">'
+            . '<div class="field" id="Remove-element">'
+            . '<input type="submit" name="Remove" id="Remove" value="Remove" />'
             . '</div></div>', $output);
     }
 
