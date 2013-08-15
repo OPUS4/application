@@ -55,7 +55,21 @@
             <!-- dc:title -->
             <xsl:apply-templates select="TitleMain" mode="oai_dc" />
             <!-- dc:creator -->
-            <xsl:apply-templates select="PersonAuthor" mode="oai_dc" />
+            <!-- Creator: Autor (falls vorhanden), sonst Herausgeber (falls vorhanden), sonst Urhebende Koerperschaft  -->
+            <xsl:choose>
+                <xsl:when test="PersonAuthor">
+                    <xsl:apply-templates select="PersonAuthor" mode="oai_dc" />
+                </xsl:when>
+                <xsl:when test="PersonEditor">
+                    <xsl:apply-templates select="PersonEditor" mode="oai_dc" />
+                </xsl:when>
+                <xsl:when test="@CreatingCorporation">
+                    <dc:creator>
+                        <xsl:value-of select="@CreatingCorporation" />
+                    </dc:creator>
+                </xsl:when>
+            </xsl:choose>
+            <!--<xsl:apply-templates select="PersonAuthor" mode="oai_dc" />-->
             <!-- dc:contributor -->
             <xsl:apply-templates select="PersonContributor" mode="oai_dc" />
             <!-- dc:subject -->
@@ -121,7 +135,7 @@
         </dc:title>
     </xsl:template>
 
-    <xsl:template match="PersonAuthor" mode="oai_dc">
+    <xsl:template match="PersonAuthor|PersonEditor" mode="oai_dc">
         <dc:creator>
             <xsl:value-of select="@LastName" />
             <xsl:if test="@FirstName != ''" >
