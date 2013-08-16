@@ -238,3 +238,18 @@ setPropertyInShellScript "$FILE" "port" "$CREATEDB_PORT"
 setPropertyInShellScript "$FILE" "dbname" "$CREATEDB_DBNAME"
 setPropertyInShellScript "$FILE" "mysql_bin" "$CREATEDB_MYSQL_BIN"
 setPropertyInShellScript "$FILE" "master_dir" "$CREATEDB_MASTER_DIR"
+
+
+
+# =============================================================================
+# Updating DnbInstitute Data
+# Splitting Name to Name and newly created Name and Department
+# when updating from version < 4.4.1 to version >= 4.4.1
+# =============================================================================
+
+
+if [[ "$VERSION_OLD" < "4.4.1" ]]; then
+    UPDATE_DNBINSTITUTES_LOG="$BASEDIR/UPDATE-dnbinstitutes.log"
+    echo "Updating DNB Institutes"
+    "$SCRIPTPATH/update-dnbinstitutes.php" --host=$HOST --port=$PORT --dbname=$DBNAME --user=$USER --password=$PASSWORD >> "$UPDATE_DNBINSTITUTES_LOG"
+fi
