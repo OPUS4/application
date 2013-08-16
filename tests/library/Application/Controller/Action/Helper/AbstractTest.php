@@ -24,31 +24,33 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Default
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @author      Simone Finkbeiner (simone.finkbeiner@ub.uni-stuttgart.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @category    Application Unit Test
+ * @package     Application_Controller_Action_Helper
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Application_Controller_Action_HelperAbstractTest extends ControllerTestCase {
 
-class Default_Bootstrap extends Zend_Application_Module_Bootstrap {
+    public function testSetGetLogger()  {
+        $helper = $this->getMockForAbstractClass('Application_Controller_Action_Helper_Abstract');
 
-    /**
-     * Add prefix for custom controller helper.
-     *
-     * This method is called for all modules. The application bootstrap process
-     * bundles all the init methods from the different module bootstraps.
-     */
-    public function _initControllerHelpers() {
-        Zend_Controller_Action_HelperBroker::addPrefix('Application_Controller_Action_Helper');
-        Zend_Controller_Action_HelperBroker::addPrefix('Controller_Helper');
+        $logger = new MockLogger();
+
+        $helper->setLogger($logger);
+        $this->assertEquals($logger, $helper->getLogger());
     }
-    
-    public function _initValidationNamespaces() {
-        Zend_Validate::addDefaultNamespaces('Form_Validate');
+
+    public function testGetLogger() {
+        $helper = $this->getMockForAbstractClass('Application_Controller_Action_Helper_Abstract');
+
+        $logger = $helper->getLogger();
+
+        $this->assertInstanceOf('Zend_Log', $logger);
+        $this->assertEquals(Zend_Registry::get('Zend_Log'), $logger);
     }
+
+
 
 }
-
