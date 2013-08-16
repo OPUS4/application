@@ -61,6 +61,12 @@ class Controller_Action extends Controller_ModuleAccess {
     protected $_logger;
 
     /**
+     * Helper fuer Breadcrumbs.
+     * @var null
+     */
+    protected $_breadcrumbs = null;
+
+    /**
      * Do some initialization on startup of every action
      *
      * @return void
@@ -72,6 +78,7 @@ class Controller_Action extends Controller_ModuleAccess {
         $this->__redirector = $this->_helper->getHelper('Redirector');
         $this->__flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $this->view->flashMessenger = $this->__flashMessenger;
+        $this->_breadcrumbs = $this->_helper->getHelper('breadcrumbs');
     }
 
     /**
