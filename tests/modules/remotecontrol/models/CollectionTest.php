@@ -50,6 +50,10 @@ class Remotecontrol_Model_CollectionTest extends ControllerTestCase {
 
     public function testNewModelOnCollectionRoleWithoutRoot() {
         // In our test data, this role does not have any associated collections.
+        
+        $role = Opus_CollectionRole::fetchByName('no-root-test');
+        $root = $role->getRootCollection();
+        $this->assertNull($root, 'CollectionRole "no-root-test" should not have a root collection.');
 
         $this->setExpectedException('Remotecontrol_Model_Exception');
         new Remotecontrol_Model_Collection('no-root-test');

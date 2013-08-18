@@ -44,12 +44,13 @@ class Remotecontrol_Model_Collection {
             throw new Remotecontrol_Model_Exception("Model_Collection: Role with name '$role_name' not found");
         }
 
-        if (is_null($this->role->getRootCollection())) {
+        $root = $this->role->getRootCollection();
+        if (is_null($root)) {
             throw new Remotecontrol_Model_Exception("Model_Collection: Root Collection for role '$role_name' does not exist.");
         }
 
         if (!isset($collection_number)) {
-            $this->collection = $this->role->getRootCollection();
+            $this->collection = $root;
         }
         else {
             $this->collection = $this->findByNumber($collection_number);
