@@ -245,6 +245,8 @@ class Admin_CollectionController extends Controller_Action {
 
     /**
      * Assign a document to a collection (used in document administration)
+     * 
+     * 
      *
      * @return void
      */
@@ -290,6 +292,15 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $documentId);
     }
 
+    /**
+     * Bereitet die Einstiegseite für das Zuweisen von einer Collection zu einem Dokument vor.
+     * 
+     * Auf der Einstiegsseite werden die CollectionRoles mit Root-Collections aufgelistet. Da ein Dokument nur einer
+     * Collection zugewiesen werden kann wird die Sichtbarkeit der Root-Collection als Kriterium für die Markierung
+     * als sichtbare oder unsichtbare Collection verwendet.
+     * 
+     * @param int $documentId
+     */
     private function prepareAssignStartPage($documentId) {
         $collectionRoles = Opus_CollectionRole::fetchAll();
         $this->view->collections = array();
