@@ -271,7 +271,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
     /**
      * Anti-Regression Test for bug ticket OPUSVIER-1889.
      */
-    public function testCancelAssignCollection() {
+    public function testCancelLinkAssignCollection() {
         $this->dispatch('/admin/collection/assign/document/40');
         $body = $this->getResponse()->getBody();
         $this->assertNotContains('/admin/documents/edit/id/40', $body); // old link before fix ("documentS")
@@ -303,7 +303,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         
         $this->assertQueryContentContains('td.visible', 'default_collection_role_reports');
-        $this->assertQueryContentContains('td.unvisible', 'default_collection_role_projects');
+        $this->assertQueryContentContains('td.unvisible', 'default_collection_role_invisible-collection');
     }
     
     public function testShowVisibilityOfCollections() {
@@ -331,5 +331,10 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         }
     }
     
+    public function testRegression3054DoNotShowCollectionRoleWithoutRoot() {
+        $this->dispatch('/admin/collection/assign/document/40');
+        $this->assertNotQueryContentContains('table.collections', 'default_collection_role_no-root-test');
+    }
+        
 }
 

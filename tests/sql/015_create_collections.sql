@@ -3,11 +3,12 @@ INSERT INTO `collections_roles` (`id`, `name`, `oai_name`, `position`, `visible`
 (9, 'collections', 'collections', 9, 1, 1, 'Name', 1, 'Name', 1),
 (11, 'reports', 'reports', 11, 1, 1, 'Number, Name', 1, 'Number, Name', 1),
 (15, 'projects', 'projects', 12, 1, 1, 'Number, Name', 1, 'Number, Name', 1),
-(17, 'no-root-test', 'no-root-test', 13, 0, 1, 'Name', 1, 'Name', 1),
+(17, 'no-root-test', 'no-root-test', 13, 0, 0, 'Name', 1, 'Name', 1),
 (18, 'frontdoor-test-1', 'frontdoor-test-1', 14, 1, 1, 'Name', 1, 'Name', 1),
 (19, 'frontdoor-test-2', 'frontdoor-test-2', 15, 1, 1, 'Name', 1, 'Name', 1),
 (20, 'single-level collection', 'single-level collection', 16, 1, 1, 'Name', 1, 'Name', 1),
-(21, 'publists', 'publists', 17, 1, 1, 'Name', 1, 'Name', 1);
+(21, 'publists', 'publists', 17, 1, 1, 'Name', 1, 'Name', 1),
+(22, 'invisible-collection', 'invisible collection', 18, 0, 0, 'Name', 0, 'Name', 0);
 
 INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`, `left_id`, `right_id`, `parent_id`, `visible`) VALUES
 (1, 1, NULL, NULL, NULL, 1, 2, NULL, 1),
@@ -25,4 +26,5 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`, `lef
 (16210, 21, 'coll_visible', 'Sichtbare Publikationsliste', 0, 2, 3, 16209, 1),
 (16211, 21, 'coll_invisible', 'Unsichtbare Publikationsliste', 0, 4, 5, 16209, 0),
 (16212, 21, 'coll whitespace', 'Publikationsliste mit Whitespace', 0, 6, 7, 16209, 1),
-(16213, 21, 'coll/slash', 'Publikationsliste mit Slash', 0, 8, 9, 16209, 1);
+(16213, 21, 'coll/slash', 'Publikationsliste mit Slash', 0, 8, 9, 16209, 1),
+(16214, 22, null, null, null, 1, 2, null, 0);

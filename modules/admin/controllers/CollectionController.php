@@ -295,19 +295,14 @@ class Admin_CollectionController extends Controller_Action {
         $this->view->collections = array();
         foreach ($collectionRoles as $collectionRole) {
             $rootCollection = $collectionRole->getRootCollection();
-            if (is_null($rootCollection)) {
-                // create empty root collection
-                $rootCollection = $collectionRole->addRootCollection();
-                $rootCollection->store();
+            if (!is_null($rootCollection)) {
+                array_push($this->view->collections, array(
+                    'id' => $rootCollection->getId(),
+                    'name' => $this->view->translate('default_collection_role_' . $collectionRole->getDisplayName()),
+                    'hasChildren' => $rootCollection->hasChildren(),
+                    'visible' => $rootCollection->getVisible()
+                ));
             }
-
-            array_push($this->view->collections,
-                    array(
-                        'id' => $rootCollection->getId(),
-                        'name' => $this->view->translate('default_collection_role_' . $collectionRole->getDisplayName()),
-                        'hasChildren' => $rootCollection->hasChildren(),
-                        'visible' => $rootCollection->getVisible()
-                    ));
         }
         $this->view->documentId = $documentId;
         $this->view->breadcrumb = array();
