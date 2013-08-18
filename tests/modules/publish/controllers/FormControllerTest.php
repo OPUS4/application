@@ -231,7 +231,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
 
         $this->assertContains('<b>Haupttitel</b>', $this->getResponse()->getBody());
         $this->assertContains('<td>Entenhausen</td>', $this->getResponse()->getBody());
-        $this->assertContains('<td>Deutsch</td>', $this->getResponse()->getBody());
+        $this->assertQueryContentRegex('td', '/German|Deutsch/');
 
         $this->assertContains('<b>Autor(en)</b>', $this->getResponse()->getBody());
         $this->assertContains('<td>AuthorLastName</td>', $this->getResponse()->getBody());
