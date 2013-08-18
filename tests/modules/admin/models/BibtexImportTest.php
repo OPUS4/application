@@ -49,9 +49,10 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     public function setUp() {
         parent::setUp();
-        $this->bibdir = dirname(dirname(dirname(dirname(__FILE__)))) . '/import/bibtex/';
+        $this->bibdir = APPLICATION_PATH . '/tests/import/bibtex/';
         $this->doc = null;
         $this->doc2 = null;
+        $this->verifyCommandAvailable('bib2xml');
     }
 
 
