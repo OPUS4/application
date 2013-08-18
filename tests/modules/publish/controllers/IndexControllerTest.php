@@ -35,7 +35,11 @@
  */
 
 class Publish_IndexControllerTest extends ControllerTestCase{
-
+    
+    public function setUp() {
+        parent::setUp();
+        $this->useGerman();
+    }
     
     public function testIndexAction() {
         $this->dispatch('/publish');  
@@ -70,7 +74,7 @@ class Publish_IndexControllerTest extends ControllerTestCase{
 
         $this->assertContains('<h3 class="document-type">Dokumenttyp und Datei wählen</h3>', $this->getResponse()->getBody());
         $this->assertContains('<legend>Dokument(e) hochladen</legend>', $this->getResponse()->getBody());
-        $this->assertContains("<input type='hidden' name='MAX_FILE_SIZE' id='MAX_FILE_SIZE' value='10240000' />", $this->getResponse()->getBody());
+        $this->assertContains("<input type='hidden' name='MAX_FILE_SIZE' id='MAX_FILE_SIZE' value='1024000' />", $this->getResponse()->getBody());
         $this->assertContains("<label for='fileupload'>Datei wählen</label>", $this->getResponse()->getBody());
         $this->assertContains("<input type='file' name='fileupload' id='fileupload' enctype='multipart/form-data' title='Bitte wählen Sie eine Datei, die Sie hochladen möchten ' size='30' />", $this->getResponse()->getBody());
         $this->assertContains("<label for='uploadComment'>Kommentar</label>", $this->getResponse()->getBody());
