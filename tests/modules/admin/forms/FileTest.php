@@ -24,33 +24,40 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @category    Application Unit Test
+ * @package     Admin_Form
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Admin_Form_FileTest extends ControllerTestCase {
 
-/**
- * form to show the search mask
- */
-class Admin_Form_SignatureForm extends Zend_Form {
-
-    /**
-     * Build easy upload form
-     *
-     * @return void
-     */
-    public function init() {
-        $keyupload = new Zend_Form_Element_Password('password');
-        $keyupload->setLabel('keyPassword');
-
-        $fileToSign = new Zend_Form_Element_Hidden('FileObject');
-
-        $submit = new Zend_Form_Element_Submit('signsubmit');
-        $submit->setLabel('pkm_signFile');
-
-        $this->addElements(array($keyupload, $fileToSign, $submit));
+    public function testConstructForm() {
+        $form = new Admin_Form_File();
     }
+
+    public function testPopulateFromModel() {
+        $form = new Admin_Form_File();
+
+        $file = new Opus_File(126); // hängt an Testdokument 146
+
+        $form->populateFromModel($file);
+
+        $this->assertEquals('test.pdf', $form->getElement('PathName')->getValue());
+        $this->assertEquals(8817, $form->getElement('FileSize')->getValue());
+        $this->assertEquals('deu', $form->getElement('Language')->getValue());
+        $this->assertEquals('foo-pdf', $form->getElement('Label')->getValue());
+        $this->assertEquals('foo-pdf file', $form->getElement('Comment')->getValue());
+
+        $this->assertEquals(array('frontdoor', 'oai'), $form->getElement('VisibleIn')->getValue());
+
+        $this->assertEquals(array('administrator', 'guest', 'reviewer'), $form->getElement('Roles')->getValue());
+
+        // TODO hashes
+    }
+
+    public function testUpdateModel() {
+    }
+
 }

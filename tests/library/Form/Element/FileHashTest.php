@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -23,20 +23,50 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Unit Test fuer Formularelement zur Anzeige eines File Hashes.
  *
- * @category    Applicaton Unit Test
+ * @category    Application Unit Test
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Form_Element_FileHashTest extends FormElementTestCase {
 
-class Admin_Form_SignatureFormTest extends ControllerTestCase {
+    protected $_formElementClass = 'Form_Element_FileHash';
 
-    public function testCreateForm() {
-        $form = new Admin_Form_SignatureForm();
-        $this->assertNotNull($form);
+    protected $_expectedDecoratorCount = 4;
+
+    protected $_expectedDecorators = array('FileHash', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+
+    public function testGetLabel() {
+        $this->useEnglish();
+        Zend_Registry::get('Zend_Translate')->loadModule('admin');
+
+        $element = new Form_Element_FileHash('filehash');
+
+        $file = new Opus_File(116);
+        $hashes = $file->getHashValue();
+        $hash = $hashes[0];
+
+        $this->assertEquals('MD5', $hash->getType());
+
+        $element->setValue($hash);
+        $element->setFile($file);
+
+        $this->assertEquals('Checksum - MD5', $element->getLabel());
     }
-    
-}
 
+    public function testSetGetValue() {
+
+    }
+
+    public function tesSetGetFile() {
+
+    }
+
+}

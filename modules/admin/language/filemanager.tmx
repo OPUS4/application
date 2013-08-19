@@ -16,6 +16,15 @@
       </tuv>
     </tu>
 
+      <tu tuid="admin_filemanager_upload">
+          <tuv xml:lang="en">
+              <seg>Upload File</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Datei einbringen</seg>
+          </tuv>
+      </tu>
+
     <tu tuid="admin_filemanager_nofiles">
       <tuv xml:lang="en">
         <seg>No files available for this document!</seg>
@@ -25,23 +34,41 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_filemanager_uploadsuccess">
-      <tuv xml:lang="en">
-        <seg>Upload successful!</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Datei erfolgreich hochgeladen!</seg>
-      </tuv>
-    </tu>
+      <tu tuid="admin_filemanager_upload_success">
+          <tuv xml:lang="en">
+              <seg>File uploaded successfully!</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Datei erfolgreich abgespeichert!</seg>
+          </tuv>
+      </tu>
 
-    <tu tuid="admin_filemanager_uploadfailure">
-      <tuv xml:lang="en">
-        <seg>Upload NOT successful - please check write permissions for file directory!</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Datei konnte nicht erfolgreich hochgeladen werden - bitte prüfen Sie die Schreibberchtigung im Dokumentverzeichnis.</seg>
-      </tuv>
-    </tu>
+      <tu tuid="admin_filemanager_upload_failure">
+          <tuv xml:lang="en">
+              <seg>Upload NOT successful - please check write permissions for file directory!</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Datei konnte nicht erfolgreich hochgeladen werden - bitte prüfen Sie die Schreibberchtigung im Dokumentverzeichnis.</seg>
+          </tuv>
+      </tu>
+
+      <tu tuid="admin_filemanager_save_success">
+          <tuv xml:lang="en">
+              <seg>File information successfully stored!</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Dateiinformationen erfolgreich abgespeichert!</seg>
+          </tuv>
+      </tu>
+
+      <tu tuid="admin_filemanager_save_failure">
+          <tuv xml:lang="en">
+              <seg>Error saving file information.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Fehler beim Abspeichern der Dateiinformationen.</seg>
+          </tuv>
+      </tu>
 
     <tu tuid="admin_filemanager_signsuccess">
       <tuv xml:lang="en">
@@ -79,14 +106,23 @@
       </tuv>
     </tu>
 
-    <tu tuid="admin_filemanager_legend_fileroles">
-      <tuv xml:lang="en">
-        <seg>Accessible for Roles</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Lesbar für Nutzerrollen</seg>
-      </tuv>
-    </tu>
+      <tu tuid="admin_filemanager_file_roles">
+          <tuv xml:lang="en">
+              <seg>Access Permissions</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Zugriffsrechte</seg>
+          </tuv>
+      </tu>
+
+      <tu tuid="admin_filemanager_file_visibility">
+          <tuv xml:lang="en">
+              <seg>Visiblity</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Sichtbarkeit</seg>
+          </tuv>
+      </tu>
 
     <tu tuid="admin_filemanager_no_files">
       <tuv xml:lang="en">
@@ -231,6 +267,15 @@
         <seg>Die Datei gehört nicht zu dem angegebenen Dokument.</seg>
       </tuv>
     </tu>
+
+      <tu tuid="admin_filemanager_element_file">
+          <tuv xml:lang="en">
+              <seg>File to upload</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Einzubringende Datei</seg>
+          </tuv>
+      </tu>
 
   </body>
 

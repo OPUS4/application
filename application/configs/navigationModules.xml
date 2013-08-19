@@ -43,6 +43,13 @@
                                     <controller>filemanager</controller>
                                     <action>index</action>
                                     <pages>
+                                        <upload>
+                                            <type>mvc</type>
+                                            <label>admin_filemanager_upload</label>
+                                            <module>admin</module>
+                                            <controller>filemanager</controller>
+                                            <action>upload</action>
+                                        </upload>
                                         <filebrowser>
                                             <type>mvc</type>
                                             <label>admin_filebrowser_index</label>

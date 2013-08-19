@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -23,23 +23,67 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Formularelement fuer Anzeige von File Hashes.
  *
  * @category    Application
+ * @package     Form_Element_FileHash
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
+class Form_Element_FileHash extends Zend_Form_Element_Xhtml {
 
-<a href="<?= $this->editUrl ?>"><?= $this->translate('admin_documents_edit'); ?></a>
+    private $hash;
 
-<div id="upload-form">
-<?= $this->uploadform ?>
-</div>
+    private $file;
 
-<?= $this->actionresult ?>
+    public function init() {
+        parent::init();
 
-<div>
-    <?= $this->translate('admin_filemanager_no_files') ?>
-</div>
+        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+
+        $this->setLabel($this->getTranslator()->translate('admin_filemanager_checksum') . ' - ');
+    }
+
+    public function loadDefaultDecorators() {
+        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+            $this->setDecorators(array(
+                'FileHash',
+                array('ElementHtmlTag'),
+                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
+                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
+            ));
+        }
+    }
+
+    public function setFile($file) {
+        $this->file = $file;
+    }
+
+    public function getFile() {
+        return $this->file;
+    }
+
+    public function setValue($hash) {
+        if ($hash instanceof Opus_HashValues) {
+            $this->hash = $hash;
+        }
+        else if (is_array($hash)) {
+
+        }
+    }
+
+    public function getValue() {
+        return $this->hash;
+    }
+
+    public function getLabel() {
+        return parent::getLabel() . $this->getTranslator()->translate($this->hash->getType());
+    }
+
+}
+

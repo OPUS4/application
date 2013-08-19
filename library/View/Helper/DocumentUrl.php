@@ -68,7 +68,7 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
             'module'     => 'admin',
             'controller' => 'filemanager',
             'action'     => 'index',
-            'docId'      => $docId,
+            'id'         => $docId,
         );
         return $this->view->url($url, 'default', true);
     }
@@ -89,16 +89,6 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
             'controller' => 'document',
             'action'     => 'edit',
             'id'      => $docId,
-        );
-        return $this->view->url($url, 'default', true);
-    }
-
-    public function adminOldEdit($docId) {
-        $url = array(
-            'module'     => 'admin',
-            'controller' => 'documents',
-            'action'     => 'edit',
-            'id'         => $docId,
         );
         return $this->view->url($url, 'default', true);
     }

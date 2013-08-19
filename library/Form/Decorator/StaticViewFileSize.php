@@ -7,12 +7,11 @@
  *
  * OPUS 4 is a complete rewrite of the original OPUS software and was developed
  * by the Stuttgart University Library, the Library Service Center
- * Baden-Wuerttemberg, the North Rhine-Westphalian Library Service Center,
- * the Cooperative Library Network Berlin-Brandenburg, the Saarland University
- * and State Library, the Saxon State Library - Dresden State and University
- * Library, the Bielefeld University Library and the University Library of
- * Hamburg University of Technology with funding from the German Research
- * Foundation and the European Regional Development Fund.
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
  *
  * LICENCE
  * OPUS is free software; you can redistribute it and/or modify it under the
@@ -26,28 +25,28 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
+ * @package     Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2009-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<? $this->navigation()->breadcrumbs()->setReplacement($this->title) ?>
+/**
+ * Gibt ein Formularelement als statischen Text aus, anstelle eines INPUT-Tags.
+ */
+class Form_Decorator_StaticViewFileSize extends Form_Decorator_StaticView {
 
-<?PHP if (isset($this->documentAdapter)) : ?>
-<?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
-<?PHP endif; ?>
+    /**
+     * Liefert den Wert des Feldes.
+     *
+     * Die Werte von Feldern muessen escaped werden.Damit eventuell enthaltener HTML/Javascript Code nicht ausgeführt
+     * wird.
+     *
+     * @return string
+     */
+    public function getValue() {
+        return htmlspecialchars($this->getElement()->getView()->fileSize($this->getElement()->getValue()));
+    }
 
-<p>
-<?= $this->text ?>
-</p>
-
-<?php if (isset($this->removeObject)) : ?>
-    <?= $this->showModel($this->removeObject); ?>
-<?php endif; ?>
-
-<?= $this->form ?>
-
-
+}

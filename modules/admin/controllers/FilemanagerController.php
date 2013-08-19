@@ -23,429 +23,232 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- *
- * @category    Application
- * @package     Module_Admin
- * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
- * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
+/**
+ * Controller fuer die Verwaltung der Dateien eines Dokuments.
+ *
+ * @category    Application
+ * @package     Admin
+ * @author      Oliver Marahrens <o.marahrens@tu-harburg.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2009-2013, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
+ *
+ * TODO Import über /admin/filebrowser/index/id/[docId] - admin-filemanager-import-link
+ * TODO link zur Datei
+ * TODO erlaubte Dateitypen
+ * TODO nach Datei hinzufügen editierte Werte im Formular wieder herstellen
+ * TODO Breadcrumbs (Document Title usw.)
+ * TODO redundanter Code mit DocumentController
+ */
 class Admin_FilemanagerController extends Controller_Action {
 
+    const PARAM_DOCUMENT_ID = 'id';
+
     /**
-     * Just to be there. No actions taken.
-     *
-     * @return void
-     *
+     * Zeigt Upload-Formular und Formulare fuer Dateien an.
      */
     public function indexAction() {
-        $docId = $this->_prepareView();
+        $docId = $this->getRequest()->getParam(self::PARAM_DOCUMENT_ID);
+        $document = $this->getHelper('documents')->getDocumentForId($docId);
 
-        if (empty($docId)) {
-            return $this->renderScript('filemanager/nodoc.phtml');
-        }
+        $form = null;
 
-        $importUrl = $this->view->url(array(
-            'module' => 'admin',
-            'controller' => 'filebrowser',
-            'action' => 'index',
-            'docId' => $docId
-        ));
+        if (isset($document)) {
+            $editSession = new Admin_Model_DocumentEditSession($docId);
 
-        $this->view->importUrl = $importUrl;
-        $this->view->baseUrl = $this->getRequest()->getBaseUrl();
-        
-        $page = $this->view->navigation()->findOneBy('label', 'admin_document_index');
-        $page->setLabel($this->view->translate('admin_document_index') . ' ('. $docId . ')');
-        $page->setParam('id', $docId);
-    }
+            if ($this->getRequest()->isPost()) {
+                $post = $this->getRequest()->getPost();
 
-    public function uploadAction() {
+                $form = new Admin_Form_FileManager();
 
-        $data = $this->_request->getPost();
+                $data = $post[$form->getName()]; // TODO
 
-        $uploadForm = $this->_getUploadForm();
+                $form->constructFromPost($data, $document);
+                $form->populate($post);
+                $result = $form->processPost($data, $data);
 
-        $docId = $this->getRequest()->getParam('docId');
+                if (is_array($result)) {
+                    $target = $result['target']; // TODO check if present
+                    $result = $result['result']; // TODO check if present
+                }
 
-        $this->view->docId = $docId;
+                switch ($result) {
+                    case Admin_Form_FileManager::RESULT_SAVE:
+                        if ($form->isValid($post)) {
+                            $form->updateModel($document);
+                            try {
+                                $document->store();
+                            }
+                            catch (Opus_Mode_Exception $e) {
+                                // TODO error
+                                return $this->_redirectTo('index', 'admin_filemanager_save_failure', 'document', 'admin',
+                                    array('id' => $docId));
+                            }
 
-        // store uploaded data in application temp dir
-        if (true === array_key_exists('uploadsubmit', $data)) {
-            if ($uploadForm->isValid($data) === true) {
-                $this->_storeUpload($docId, $uploadForm);
-                $this->_redirectTo('index', $this->view->actionresult, 'filemanager', 'admin', array('docId' => $docId));
+                            return $this->_redirectTo('index', 'admin_filemanager_save_success', 'document', 'admin',
+                                array('id' => $docId));
+                        }
+                        else {
+                            // TODO not valid
+                        }
+                        break;
+
+                    case Admin_Form_FileManager::RESULT_CANCEL:
+                        // TODO Rücksprung zur Ursprungsseite
+                        return $this->_redirectTo('index', null, 'document', 'admin', array('id' => $docId));
+                        break;
+
+                    case Admin_Form_Document::RESULT_SWITCH_TO:
+                        $editSession->storePost($data, 'files');
+
+                        // TODO Parameter in Unterarray 'params' => array() verlagern?
+                        $target[self::PARAM_DOCUMENT_ID] = $docId;
+
+                        $action = $target['action'];
+                        unset($target['action']);
+                        $controller = $target['controller'];
+                        unset($target['controller']);
+                        $module = $target['module'];
+                        unset($target['module']);
+
+                        return $this->_redirectTo($action, null, $controller, $module, $target);
+                        break;
+
+                    case Admin_Form_Document::RESULT_SHOW:
+                    default:
+                        // $form->populate($post);
+                        break;
+                }
+
             }
             else {
-                $this->_prepareView();
+                // GET-Request; Neues Formular anzeigen bzw. Editieren fortsetzen
+                $form = new Admin_Form_FileManager();
+                $form->populateFromModel($document);
 
-                // invalid form, populate with transmitted data
-                $uploadForm->populate($data);
-                $this->view->form = $uploadForm;
-                $this->view->actionresult = 'Invalid form input.';
-                $message = $this->view->translate('admin_filemanager_invalid_upload');
-                // Because of redirect below errors are not passed to new page
-                // Only important error is missing file
-                $errors = $uploadForm->getErrors('fileupload');
-                if (!empty($errors)) {
-                    $message = $this->view->translate('admin_filemanager_error_nofile');
+                $post = $editSession->retrievePost('files');
+
+                if ($this->getRequest()->getParam('continue') && !is_null($post)) {
+                    $form->updateFromPost($post);
+
                 }
-                $this->_redirectTo('index', array('failure' => $message), 'filemanager', 'admin', array('docId' => $docId));
             }
         }
         else {
-            if (!empty($docId)) {
-                $postMaxSize = ini_get('post_max_size');
-                $uploadMaxFilesize = ini_get('upload_max_filesize');
-
-                $maxSize = ($postMaxSize > $uploadMaxFilesize) ? $uploadMaxFilesize : $postMaxSize;
-
-                $message = $this->view->translate('admin_filemanager_error_upload', '>' . $maxSize);
-                $this->_redirectTo('index', array('failure' => $message), 'filemanager', 'admin', array('docId' => $docId));
-            }
-            else {
-                $this->_redirectTo('index', null, 'documents', 'admin');
-            }
+            // missing or bad parameter => go back to main page
+            return $this->_redirectTo('index', array('failure' => 'admin_document_error_novalidid'),
+                'documents', 'admin');
         }
+
+        // Set dynamic breadcrumb
+        $this->_breadcrumbs->setDocumentBreadcrumb($document);
+
+        $this->view->languageSelectorDisabled = true;
+        $this->view->contentWrapperDisabled = true; // wrapper wird innerhalb des Formulars gerendert
+
+        $this->renderForm($form);
     }
 
-    protected function _getUploadForm() {
-        $uploadForm = new Admin_Form_FileUpload();
+    /**
+     * Zeigt und verarbeitet Formular zum Hochladen von Dateien.
+     *
+     * Wenn eine Datei hochgeladen wird, die zu groß ist, wird der Upload nicht vollständig entgegen genommen und das
+     * Submit-Feld am Ende fehlt.
+     *
+     * TODO es muss erkannt werden ob upload zu groß war
+     */
+    public function uploadAction() {
+        $docId = $this->getRequest()->getParam(self::PARAM_DOCUMENT_ID);
 
-        $actionUrl = $this->view->url(array('controller' => 'filemanager', 'action' => 'upload'));
-
-        $uploadForm->setAction($actionUrl);
-
-        return $uploadForm;
-    }
-
-    protected function _prepareView() {
-
-        $data = $this->_request->getPost();
-        $docId = $this->getRequest()->getParam('docId');
-        $uploadForm = $this->_getUploadForm();
-        $this->configureView($docId, $uploadForm);
-        $document = $this->view->document->getDocument();
-        $files = $this->getNumberedFiles($document);
-        $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
-
-        $fileHelpers = array();
-        if (!empty($files)) {
-            foreach ($files as $file) {
-                try {
-                    $fileHelpers[] = new Admin_Model_FileHelper($this->view, $document, $file);
-                }
-                catch (Exception $e) {
-                    $this->view->noDocumentSelectedMessage = $e->getMessage();
-                    // TODO collect multiple error messages?
-                    return $this->renderScript('filemanager/error.phtml');
-                }
-            }
-        }
-        $this->view->fileHelpers = $fileHelpers;
-        return $docId;
-    }
-
-    private function configureView($docId, $uploadForm) {
-        $this->view->title = 'admin_filemanager_index';
-        $this->view->docId = $docId;
-        $this->view->editUrl = $this->view->url(array('module' => 'admin',
-            'controller' => 'documents', 'action' => 'edit', 'id' => $docId),
-                null, true);
-        $this->view->uploadform = $uploadForm;
-        $this->view->document = new Util_DocumentAdapter($this->view, $docId);
-        $this->view->verifyResult = array();
-    }
-
-    private function getNumberedFiles($document) {
-        $files = $document->getFile();
-        if (true === is_array($files)) {
-            $this->view->fileNumber = count($files);
-        }
-        return $files;
-    }
-
-    public function accessAction() {
-        $docId = $this->getRequest()->getParam('docId');
+        $document = $this->getHelper('documents')->getDocumentForId($docId);
 
         if ($this->getRequest()->isPost()) {
-            $postData = $this->getRequest()->getPost();
-            $this->_processAccessSubmit($postData);
-        }
+            // POST verarbeiten
+            $post = $this->getRequest()->getPost();
 
-        $this->_redirectTo('index', null, 'filemanager', 'admin', array('docId' => $docId));
-    }
+            $form = new Admin_Form_File_Upload();
 
-    /**
-     * Action for deleting a file.
-     *
-     * The action redirects the request to a confirmation form bevor actually
-     * deleting the file.
-     *
-     * TODO catch invalid file IDs
-     */
-    public function deleteAction() {
-        $docId = $this->getRequest()->getParam('docId');
-        $fileId = $this->getRequest()->getParam('fileId');
+            $form->populate($post);
+            $result = $form->processPost($post, $post);
 
-        $documentsHelper = $this->_helper->getHelper('Documents');
+            switch ($result) {
+                case Admin_Form_File_Upload::RESULT_SAVE:
+                    if ($form->isValid($post)) {
+                        $form->updateModel($document);
+                        try {
+                            $document->store();
+                        }
+                        catch (Opus_Model_Exception $e) {
+                            $this->getLogger()->err("Storing document with new files failed" . $e);
+                            // TODO fix redirect
+                            $this->_redirectTo('index', array('failure' => 'error_uploaded_files'), 'filemanager',
+                                'admin', array(self::PARAM_DOCUMENT_ID => $docId));
+                        }
 
-        $document = $documentsHelper->getDocumentForId($docId);
+                        $this->_redirectTo('index', 'admin_filemanager_upload_success', 'filemanager', 'admin', array(
+                            self::PARAM_DOCUMENT_ID => $docId));
+                    }
+                    else {
+                        // Formular wieder anzeigen
+                        $form->populate($post);
+                        // TODO show message in formular (admin_filemanager_invalid_upload)
+                    }
+                    break;
 
-        if (!isset($document)) {
-            return $this->_redirectToAndExit('index', array('failure' =>
-                $this->view->translate('admin_document_error_novalidid')), 'documents', 'admin');
-        }
+                case Admin_Form_File_Upload::RESULT_CANCEL:
+                    $this->_redirectTo('index', null, 'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId,
+                        'continue' => 'true'));
+                    break;
 
-        if (!$this->_isValidFileId($fileId)) {
-            return $this->_redirectToAndExit('index', array('failure' =>
-                $this->view->translate('admin_filemanager_error_novalidid')), 'filemanager', 'admin', array('docId' => $docId));
-        }
-
-        if (!$this->_isFileBelongsToDocument($docId, $fileId)) {
-            return $this->_redirectToAndExit('index', array('failure' =>
-                $this->view->translate('admin_filemanager_error_filenotlinkedtodoc')), 'filemanager', 'admin', array('docId' => $docId));
-        }
-
-        switch ($this->_confirm($document, $fileId)) {
-            case 'YES':
-                try {
-                    $this->_deleteFile($docId, $fileId);
-                    $message = $this->view->translate('admin_filemanager_delete_success');
-                }
-                catch (Opus_Model_Exception $e) {
-                    $this->_logger->debug($e->getMessage());
-                    $message = array('failure' => $this->view->translate('admin_filemanager_delete_failure'));
-                }
-
-                $this->_redirectTo('index', $message, 'filemanager', 'admin', array('docId' => $docId));
-                break;
-            case 'NO':
-                $this->_redirectTo('index', null, 'filemanager', 'admin', array('docId' => $docId));
-                break;
-            default:
-                break;
-        }
-    }
-
-    /**
-     * Deletes a single file from a document.
-     * @param type $docId
-     * @param type $fileId
-     * @return type
-     */
-    protected function _deleteFile($docId, $fileId) {
-        $doc = new Opus_Document($docId);
-        $keepFiles = array();
-        $files = $doc->getFile();
-        foreach($files as $index => $file) {
-            if ($file->getId() !== $fileId) {
-                $keepFiles[] = $file;
+                default:
+                    break;
             }
         }
-        $doc->setFile($keepFiles);
-        $doc->store();
-    }
-
-    /**
-     * Checks if a file id is formally correct and file exists.
-     * @param string $fileId
-     * @return boolean True if file ID is valid
-     */
-    protected function _isValidFileId($fileId) {
-        if (empty($fileId) || !is_numeric($fileId)) {
-            return false;
-        }
-
-        $file = null;
-
-        try {
-            $file = new Opus_File($fileId);
-        }
-        catch (Opus_Model_NotFoundException $omnfe) {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Checks if a file ID is linked to a document.
-     * @param int $docId
-     * @param int $fileId
-     * @return boolean True - if the file is linked to the document
-     */
-    protected function _isFileBelongsToDocument($docId, $fileId) {
-        $doc = new Opus_Document($docId);
-
-        $files = $doc->getFile();
-
-        foreach ($files as $file) {
-            if ($file->getId() === $fileId) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Handles confirmation of action.
-     *
-     * The return value null means that the confirmation page should be shown.
-     *
-     * @param Opus_Document $document
-     * @param int $fileId
-     * @return string 'YES' if confirmed, 'NO' if denied, NULL otherwise
-     */
-    protected function _confirm($document, $fileId) {
-        $sureyes = $this->getRequest()->getPost('sureyes');
-        $sureno = $this->getRequest()->getPost('sureno');
-
-        if (isset($sureyes) === true or isset($sureno) === true) {
-            // Safety question answered, deleting
-            if (isset($sureyes) === true) {
-                return 'YES';
+        else {
+            // Formular anzeigen
+            if (isset($document)) {
+                $form = new Admin_Form_File_Upload();
+                $form->populateFromModel($document);
             }
             else {
-                return 'NO';
+                // missing or bad parameter => go back to main page
+                return $this->_redirectTo('index', array('failure' => 'admin_document_error_novalidid'),
+                    'documents', 'admin');
             }
+        }
+
+        $this->_breadcrumbs->setDocumentBreadcrumb($document);
+        $this->_breadcrumbs->setParameters('admin_filemanager_index', array(self::PARAM_DOCUMENT_ID => $docId));
+
+        $this->renderForm($form);
+    }
+
+/* TODO reintegrate this code?
+        // invalid form, populate with transmitted data
+        // Because of redirect below errors are not passed to new page
+        // Only important error is missing file
+        $errors = $uploadForm->getErrors('fileupload');
+        if (!empty($errors)) {
+            $message = $this->view->translate('admin_filemanager_error_nofile');
+        }
+    }
+    else {
+        if (!empty($docId)) {
+            TODO überlange Uploads
+            $postMaxSize = ini_get('post_max_size');
+            $uploadMaxFilesize = ini_get('upload_max_filesize');
+
+            $maxSize = ($postMaxSize > $uploadMaxFilesize) ? $uploadMaxFilesize : $postMaxSize;
+
+            $message = $this->view->translate('admin_filemanager_error_upload', '>' . $maxSize);
+            $this->_redirectTo('index', array('failure' => $message), 'filemanager', 'admin', array('docId' => $docId));
         }
         else {
-            // show safety question
-            $this->view->title = $this->view->translate('admin_filemanager_delete');
-            $this->view->text = $this->view->translate('admin_filemanager_delete_sure', $fileId);
-            $yesnoForm = $this->_getConfirmationForm($fileId, 'delete');
-            $this->view->form = $yesnoForm;
-            $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
-            $this->renderScript('document/confirm.phtml');
+            $this->_redirectTo('index', null, 'documents', 'admin');
         }
-    }
-
-    /**
-     * Returns form for asking yes/no question like 'Delete file?'.
-     *
-     * @param type $id
-     * @param type $action
-     * @return Admin_Form_YesNoForm
-     */
-    protected function _getConfirmationForm($id, $action) {
-        $yesnoForm = new Admin_Form_YesNoForm();
-        $idElement = new Zend_Form_Element_Hidden('id');
-        $idElement->setValue($id);
-        $yesnoForm->addElement($idElement);
-        $yesnoForm->setAction($this->view->url(array(
-            "controller" => "filemanager",
-            "action" => $action)));
-        $yesnoForm->setMethod('post');
-        return $yesnoForm;
-    }
-
-    /**
-     *
-     * @param <type> $postData
-     *
-     * TODO use Zend validation
-     */
-    protected function _processAccessSubmit($postData) {
-        $log = Zend_Registry::get('Zend_Log');
-
-        if (isset($postData['FileObject'])) {
-            $fileId = $postData['FileObject'];
-
-            $file = new Opus_File(( int )$fileId);
-
-            if (!$file->exists()) {
-                throw new Exception('file ' . $fileId . ' does not exist.');
-            }
-
-            $comment = $postData['comment'];
-            $file->setComment($comment);
-
-            $label = $postData['label'];
-            $file->setLabel($label);
-
-            $file->setLanguage($postData['language']);
-
-            $visibleInFrontdoor = $postData['visibleInFrontdoor'];
-            $file->setVisibleInFrontdoor($visibleInFrontdoor);
-
-            $visibleInOai = $postData['visibleInOai'];
-            $file->setVisibleInOai($visibleInOai);
-
-            $file->store();
-
-            $currentRoleNames = Admin_Model_FileHelper::getRolesForFile($file->getId());
-
-            $selectedRoleNames = Admin_Form_FileAccess::parseSelectedRoleNames($postData);
-
-            // remove roles that are not selected
-            foreach ($currentRoleNames as $index => $roleName) {
-                if (!in_array($roleName, $selectedRoleNames)) {
-                    $role = Opus_UserRole::fetchByName($roleName);
-                    $role->removeAccessFile($file->getId());
-                    $role->store();
-                }
-            }
-
-            // add selected roles
-            foreach ($selectedRoleNames as $roleName) {
-                $role = Opus_UserRole::fetchByName($roleName);
-                if (in_array($roleName, $currentRoleNames)) {
-                    $log->debug('readFile for role ' . $roleName . ' already set');
-                }
-                else {
-                    $log->debug('add readFile to role ' . $roleName);
-                    $role->appendAccessFile($file->getId());
-                    $role->store();
-                }
-            }
-        }
-        else {
-            // TODO error message?
-        }
-    }
-
-    protected function _storeUpload($docId, $uploadForm) {
-        $log = Zend_Registry::get('Zend_Log');
-        $upload = new Zend_File_Transfer_Adapter_Http();
-        $files = $upload->getFileInfo();
-
-        $document = new Opus_Document($docId);
-
-        // save each file
-        foreach ($files as $file) {
-            /* TODO: Uncaught exception 'Zend_File_Transfer_Exception' with message '"fileupload" not found by file transfer adapter
-            * if (!$upload->isValid($file)) {
-            *    $this->view->message = 'Upload failed: Not a valid file!';
-            *    break;
-            * }
-            */
-            $docfile = $document->addFile();
-            $docfile->setLabel($uploadForm->getValue('label'));
-            $docfile->setComment($uploadForm->getValue('comment'));
-            $docfile->setLanguage($uploadForm->getValue('language'));
-            $docfile->setPathName(urldecode($file['name']));
-            $docfile->setMimeType($file['type']);
-            $docfile->setTempFile($file['tmp_name']);
-        }
-
-        try {
-            $document->store();
-            $this->view->actionresult = $this->view->translate('admin_filemanager_uploadsuccess');
-        }
-        catch (Opus_Model_Exception $e) {
-            $log->warn("File upload failed: " . $e);
-            $this->view->actionresult = array(
-                'failure' => $this->view->translate('error_uploaded_files'));
-        }
-
-        // reset input values fo re-displaying
-        $uploadForm->reset();
-        // re-insert document id
-        $uploadForm->DocumentId->setValue($document->getId());
-    }
+    }    */
 
 }

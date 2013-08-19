@@ -156,14 +156,14 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
             'module'     => 'admin',
             'controller' => 'filemanager',
             'action'     => 'index',
-            'docId'      => $docId,
+            'id'         => $docId,
         );
 
         $actions['frontdoor'] = array(
             'module'     => 'frontdoor',
             'controller' => 'index',
             'action'     => 'index',
-            'docId'      => $docId,
+            'docId'         => $docId,
         );
         
         return $actions;

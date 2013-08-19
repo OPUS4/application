@@ -141,6 +141,24 @@
       </tuv>
     </tu>
 
+        <tu tuid="button_upload">
+            <tuv xml:lang="en">
+                <seg>Upload</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Einbringen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="button_file_import">
+            <tuv xml:lang="en">
+                <seg>Import</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Importieren</seg>
+            </tuv>
+        </tu>
+
   </body>
 
 </tmx>

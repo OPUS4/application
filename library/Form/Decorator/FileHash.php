@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -23,19 +23,54 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Decorator fuer die Ausgabe eines Datei-Hashes (Form_Element_FileHash).
  *
- * @category    Application Unit Test
+ * @category    Application
+ * @package     Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract {
 
-class Admin_Form_DeleteFormTest extends ControllerTestCase {
+    public function render($content) {
+        $element = $this->getElement();
 
-    public function testCreateForm() {
-        $form = new Admin_Form_DeleteForm();
-        $this->assertNotNull($form);
+        if (!$element instanceof Form_Element_FileHash) {
+            return $content;
+        }
+
+        $view = $element->getView();
+
+        if (!$view instanceof Zend_View_Interface) {
+            return $content;
+        }
+
+        $hash = new Admin_Model_Hash($element->getFile(), $element->getValue());
+
+        $hashSoll = $hash->getSoll();
+        $hashIst = $hash->getIst();
+
+        $markup = '<div class="textarea hashsoll">' . htmlspecialchars($hashSoll) . '</div>';
+
+        $markup .= $view->formHidden($element->getFullyQualifiedName() . '[Soll]', $hashSoll);
+
+        if ($hashSoll !== $hashIst) {
+            $markup .= '<div class="textarea hashist">'. htmlspecialchars($hashIst) . '</div>';
+            $markup .= $view->formHidden($element->getFullyQualifiedName() . '[Ist]', $hashIst);
+        }
+
+        switch ($this->getPlacement()) {
+            case self::PREPEND:
+                return $markup . $content;
+            case self::APPEND:
+            default:
+                return $content . $markup;
+        }
     }
 
 }

@@ -83,7 +83,10 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
             'Form'
         ));
 
-        $this->addElement('hidden', self::ELEMENT_MODEL_ID);
+        $this->addElement('hidden', self::ELEMENT_MODEL_ID, array('decorators' => array(
+            'ViewHelper',
+            array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li'))
+        )));
 
         $this->addElement('submit', self::ELEMENT_SAVE, array('decorators' => array(
             'ViewHelper',
@@ -95,7 +98,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
             array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li', 'class' => 'cancel-element'))
         )));
 
-        $this->addDisplayGroup(array(self::ELEMENT_SAVE, self::ELEMENT_CANCEL), 'actions',
+        $this->addDisplayGroup(array(self::ELEMENT_MODEL_ID, self::ELEMENT_SAVE, self::ELEMENT_CANCEL), 'actions',
             array('order' => 1000, 'decorators' => array(
                 'FormElements',
                 array(array('ulWrapper' => 'HtmlTag'), array('tag' => 'ul', 'class' => 'form-action')),

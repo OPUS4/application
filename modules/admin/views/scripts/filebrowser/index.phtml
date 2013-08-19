@@ -33,14 +33,6 @@
  */
 ?>
 
-<div class="breadcrumbsContainer" style="font-size: medium">
-    <?= $this->navigation()->breadcrumbs()
-             ->setMaxDepth(1)
-             ->setMinDepth(0)
-             ->setLinkLast(true) ?>
-    <?= $this->translate('admin_filebrowser_index') ?>
-</div>
-
 <?= $this->partial('docinfo.phtml', array( 'document' => $this->documentAdapter)) ?>
 
 <div id="filebrowser">
@@ -69,7 +61,7 @@
             <?php endforeach; ?>
             </table>
         </div>
-        <input type="hidden" name="docId" value="<?= $this->document->getId() ?>"/>
+        <input type="hidden" name="id" value="<?= $this->document->getId() ?>"/>
         <input type="submit" value="<?= $this->translate('admin_filebrowser_submit') ?>" />
     </form>
     <?php else : ?>

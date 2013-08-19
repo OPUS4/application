@@ -37,18 +37,81 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
      * Basic unit test checks that error controller is not called.
      */
     public function testIndexAction() {
-        $this->dispatch('/admin/filemanager/index/docId/91');
+        $this->dispatch('/admin/filemanager/index/id/91');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('filemanager');
         $this->assertAction('index');
 
-        // check for docinfo header
+        $this->validateXHTML();
+        $this->verifyBreadcrumbDefined();
+
+
+        // TODO DocInfo
+        /*
         $this->assertQuery('div#docinfo', 'This is a pdf test document');
         $this->assertQuery('div#docinfo', '91');
         $this->assertQuery('div#docinfo', 'Doe, John');
+        */
+
+        // TODO Formular
+
     }
-    
+
+    public function testIndexActionBadId() {
+        $this->dispatch('/admin/filemanager/index/id/bla');
+        $this->assertRedirectTo('/admin/documents');
+        $this->verifyFlashMessage('admin_document_error_novalidid');
+    }
+
+    public function testIndexActionUnknownId() {
+        $this->dispatch('/admin/filemanager/index/id/1000');
+        $this->assertRedirectTo('/admin/documents');
+        $this->verifyFlashMessage('admin_document_error_novalidid');
+    }
+
+    public function testIndexActionNoId() {
+        $this->dispatch('/admin/filemanager/index');
+        $this->assertRedirectTo('/admin/documents');
+        $this->verifyFlashMessage('admin_document_error_novalidid');
+    }
+
+    public function testUploadAction() {
+        $this->dispatch('/admin/filemanager/upload/id/91');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('filemanager');
+        $this->assertAction('upload');
+
+        $this->validateXHTML();
+        $this->verifyBreadcrumbDefined();
+    }
+
+    public function testUploadActionBadId() {
+        $this->dispatch('/admin/filemanager/upload/id/bla');
+        $this->assertRedirectTo('/admin/documents');
+        $this->verifyFlashMessage('admin_document_error_novalidid');
+    }
+
+    public function testUploadActionUnknownId() {
+        $this->dispatch('/admin/filemanager/upload/id/1000');
+        $this->assertRedirectTo('/admin/documents');
+        $this->verifyFlashMessage('admin_document_error_novalidid');
+    }
+
+    public function testUploadActionNoId() {
+        $this->dispatch('/admin/filemanager/upload');
+        $this->assertRedirectTo('/admin/documents');
+        $this->verifyFlashMessage('admin_document_error_novalidid');
+    }
+
+
+
+
+
+    // TODO review/modify following tests
+
+
     /**
      * Verifies that the MD5 hash value is displayed twice (ist, soll).
      */
@@ -75,45 +138,6 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertAction('index');
         $response = $this->getResponse()->getBody();
         $this->assertTrue(substr_count($response, $hash) == 2);
-    }
-    
-    public function testShowConfirmPageOnDelete() {
-        $this->dispatch('/admin/filemanager/delete/docId/124/fileId/125');
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('filemanager');
-        $this->assertAction('delete');
-        
-        // Check form
-        $this->assertQuery('input#sureyes');
-        $this->assertQuery('input#sureno');
-        
-        // check for docinfo header
-        $this->assertQuery('div#docinfo', '124');
-    }
-    
-    /**
-     * Wenn die Dokument-ID unbekannt ist, wird auf die Startseite der Dokumentenverwaltung umgeleitet.
-     */
-    public function testConfirmDeleteRedirectForUnknownDocId() {
-        $this->dispatch('/admin/filemanager/delete/docId/400/fileId/125');
-        $this->assertRedirectTo('/admin/documents');
-    }
-    
-    /**
-     * Wenn die Datei-ID unbekannt ist, wird auf den Dateimanager für das Dokument umgeleitet.
-     */
-    public function testConfirmDeleteRedirectForUnknownFileId() {
-        $this->dispatch('/admin/filemanager/delete/docId/124/fileId/400');
-        $this->assertRedirectTo('/admin/filemanager/index/docId/124');
-    }
-    
-    /**
-     * Wenn die Datei nicht zu dem Dokument gehört, wird auf den Dateimanager für das Dokument umgeleitet.
-     */
-    public function testConfirmDeleteRedirectForDocIdMismatchFileId() {
-        $this->dispatch('/admin/filemanager/delete/docId/146/fileId/125');
-        $this->assertRedirectTo('/admin/filemanager/index/docId/146');
     }
 
 }

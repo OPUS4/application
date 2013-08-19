@@ -38,11 +38,13 @@
  */
 class Admin_FilebrowserController extends Controller_Action {
 
+    const PARAM_DOCUMENT_ID = 'id';
+
     /**
      * Shows files in import folder.
      */
     public function indexAction() {
-        $docId = $this->getRequest()->getParam('docId');
+        $docId = $this->getRequest()->getParam(self::PARAM_DOCUMENT_ID);
         if (is_null($docId)) {
             throw new Application_Exception('missing parameter docId');
         }
@@ -54,6 +56,9 @@ class Admin_FilebrowserController extends Controller_Action {
         catch (Opus_Model_NotFoundException $e) {
             throw new Application_Exception('no document found for id ' . $docId, null, $e);
         }
+
+        $this->_breadcrumbs->setDocumentBreadcrumb($document);
+        $this->_breadcrumbs->setParameters('admin_filemanager_index', array(self::PARAM_DOCUMENT_ID => $docId));
 
         $importHelper = new Admin_Model_FileImport();
         $this->view->files = $importHelper->listFiles();
@@ -69,14 +74,15 @@ class Admin_FilebrowserController extends Controller_Action {
             throw new Application_Exception('unsupported HTTP method');
         }
 
-        $docId = $this->getRequest()->getPost('docId');
+        $docId = $this->getRequest()->getPost(self::PARAM_DOCUMENT_ID);
         if (is_null($docId)) {
             throw new Application_Exception('missing parameter docId');
         }
 
         $files = $this->getRequest()->getPost('file');
         if (is_null($files) || is_array($files) && empty($files)) {
-            return $this->_redirectToAndExit('index', null, 'filebrowser', 'admin', array('docId' => $docId));
+            return $this->_redirectToAndExit('index', null, 'filebrowser', 'admin',
+                array(self::PARAM_DOCUMENT_ID => $docId));
         }
 
         if (!is_array($files)) {
@@ -85,6 +91,7 @@ class Admin_FilebrowserController extends Controller_Action {
 
         $fileImportModel = new Admin_Model_FileImport();
         $fileImportModel->addFilesToDocument($docId, $files);
-        return $this->_redirectToAndExit('index', null, 'filemanager', 'admin', array('docId' => $docId));
+        return $this->_redirectToAndExit('index', null, 'filemanager', 'admin',
+            array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true'));
     }
 }

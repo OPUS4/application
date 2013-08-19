@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -23,19 +23,37 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Unit Tests fuer Unterformular, das Dateien in FileManager auflistet.
  *
- * @category    Application
+ * @category    Application Unit Test
+ * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
+class Admin_Form_FilesTest extends ControllerTestCase {
 
-<a href="<?= $this->editUrl ?>"><?= $this->translate('admin_documents_edit'); ?></a>
+    public function testProcessPostAdd() {
+        $form = new Admin_Form_Files();
 
-<?= $this->uploadform ?>
+        $post = array(
+            'Add' => 'Upload'
+        );
 
-<?= $this->actionresult ?>
+        $result = $form->processPost($post, null);
 
-<?= $this->noDocumentSelectedMessage ?>
+        $this->assertEquals(array(
+            'result' => 'switch',
+            'target' => array(
+                'module' => 'admin',
+                'controller' => 'filemanager',
+                'action' => 'upload'
+            )
+        ), $result);
+    }
+
+}

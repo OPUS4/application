@@ -60,19 +60,19 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase {
     }
 
     public function testIndexActionWithInvalidDocId() {
-        $this->dispatch('/admin/filebrowser/index/docId/invaliddocid');
+        $this->dispatch('/admin/filebrowser/index/id/invaliddocid');
         $this->assertResponseCode(500);
         $this->assertContains('no document found for id invaliddocid', $this->getResponse()->getBody());
     }
 
     public function testIndexAction() {
-        $this->dispatch('/admin/filebrowser/index/docId/' . $this->documentId);
+        $this->dispatch('/admin/filebrowser/index/id/' . $this->documentId);
         $this->assertResponseCode(200);
         $this->assertContains('<div id="filebrowser">', $this->getResponse()->getBody());
     }
     
     public function testShowDocInfoOnIndexPage() {
-        $this->dispatch('/admin/filebrowser/index/docId/146');
+        $this->dispatch('/admin/filebrowser/index/id/146');
         $this->assertResponseCode(200);
 
         // check for docinfo header
@@ -99,24 +99,24 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase {
     public function testImportActionWithInvalidDocId() {
         $this->request
                 ->setMethod('POST')
-                ->setPost(array('docId' => 'invaliddocid'));
+                ->setPost(array('id' => 'invaliddocid'));
         $this->dispatch('/admin/filebrowser/import');
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/filebrowser/index/docId/invaliddocid');
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/filebrowser/index/id/invaliddocid');
     }
 
     public function testImportActionWithEmptySelection() {
         $this->request
                 ->setMethod('POST')
-                ->setPost(array('docId' => $this->documentId));
+                ->setPost(array('id' => $this->documentId));
         $this->dispatch('/admin/filebrowser/import');
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/filebrowser/index/docId/' . $this->documentId);
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/filebrowser/index/id/' . $this->documentId);
     }
 
     public function testImportActionWithInvalidParamType() {
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
-                        'docId' => $this->documentId,
+                        'id' => $this->documentId,
                         'file' => 'invalid'));
         $this->dispatch('/admin/filebrowser/import');
         $this->assertResponseCode(500);

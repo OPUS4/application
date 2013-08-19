@@ -2060,9 +2060,92 @@
 
         <tu tuid="Opus_Model_Dependent_Link_DocumentSeries_SortOrder">
             <tuv xml:lang="en">
-                <seg>Sort Order</seg>           </tuv>
+                <seg>Sort Order</seg>
+            </tuv>
             <tuv xml:lang="de">
                 <seg>Sortierreihenfolge</seg>
+            </tuv>
+        </tu>
+
+        <!-- Opus_File -->
+        <tu tuid="Opus_File">
+            <tuv xml:lang="en">
+                <seg>File</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Datei</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_File_PathName">
+            <tuv xml:lang="en">
+                <seg>Filename</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Dateiname</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_File_Label">
+            <tuv xml:lang="en">
+                <seg>Display Name</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Anzeigename</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_File_FileSize">
+            <tuv xml:lang="en">
+                <seg>Size</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Dateigröße</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_File_Comment">
+            <tuv xml:lang="en">
+                <seg>Comment</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Kommentar</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_File_VisibleInFrontdoor">
+            <tuv xml:lang="en">
+                <seg>File visible in Frontdoor</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Datei in Frontdoor anzeigen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_File_VisibleInOai">
+            <tuv xml:lang="en">
+                <seg>File visible in OAI</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Datei in OAI anzeigen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_File_">
+            <tuv xml:lang="en">
+                <seg></seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg></seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_File_">
+            <tuv xml:lang="en">
+                <seg></seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg></seg>
             </tuv>
         </tu>
 

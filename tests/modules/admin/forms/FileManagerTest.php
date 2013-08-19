@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -21,47 +21,41 @@
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
  * details. You should have received a copy of the GNU General Public License
- * along with OPUS; >if not, write to the Free Software Foundation, Inc., 51
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Unit Test fuer FileManager Formular.
  *
- * @category    TODO
+ * @category    Application Unit Test
+ * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Admin_Form_FileManagerTest extends ControllerTestCase {
 
-class Admin_Model_FileHelperTest extends ControllerTestCase {
+    public function testConstructForm() {
+        $form = new Admin_Form_FileManager();
 
-    protected function _getFileHelper() {
-        $document = new Opus_Document(91);
+        $this->assertEquals(3, count($form->getElements()));
+        $this->assertNotNull($form->getElement('Id'));
+        $this->assertNotNull($form->getElement('Save'));
+        $this->assertNotNull($form->getElement('Cancel'));
 
-        $files = $document->getFile();
-        if(count($files) === 0) {
-            $this->markTestSkipped('Test document (docId = 91) does not have file.');
-        }
+        $this->assertEquals(3, count($form->getSubForms()));
+        $this->assertNotNull($form->getSubForm('Action'));
+        $this->assertNotNull($form->getSubForm('Info'));
+        $this->assertNotNull($form->getSubForm('Files'));
 
-        $view = $this->bootstrap->getBootstrap()->getResource('view');
-        return new Admin_Model_FileHelper($view, $document, $files[0]);
-    }
+        $this->assertEquals(3, count($form->getDecorators()));
+        $this->assertNotNull($form->getDecorator('FormElements'));
+        $this->assertNotNull($form->getDecorator('HtmlTag'));
+        $this->assertNotNull($form->getDecorator('Form'));
 
-    public function testCreateFileHelper() {
-        $fileHelper = $this->_getFileHelper();
-
-        $this->assertNotNull($fileHelper);
-    }
-
-    public function testGetFileName() {
-        $fileHelper = $this->_getFileHelper();
-
-        $this->assertNotNull($fileHelper->getFileName());
-    }
-
-    public function testGetHashes() {
-        $fileHelper = $this->_getFileHelper();
-
-        $this->assertNotNull($fileHelper->getHashes());
+        $this->assertEquals('FileManager', $form->getName());
     }
 
 }
-

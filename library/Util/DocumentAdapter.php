@@ -121,7 +121,7 @@ class Util_DocumentAdapter {
             return $titles[0]->getValue();
         }
         else {
-            return $this->view->translate('document_no_title') . '(id = ' . $this->getDocId() . ')';
+            return Zend_Registry::get('Zend_Translate')->translate('document_no_title') . '(id = ' . $this->getDocId() . ')';
         }
     }
     
@@ -141,7 +141,7 @@ class Util_DocumentAdapter {
             return null; // $titles[0]->getValue();
         }
         else {
-            return $this->view->translate('document_no_title') . '(id = ' . $this->getDocId() . ')';
+            return Zend_Registry::get('Zend_Translate')->translate('document_no_title') . '(id = ' . $this->getDocId() . ')';
         }
     }
     
