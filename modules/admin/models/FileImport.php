@@ -92,7 +92,7 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
     /**
      * Lists files in import folder.
      */
-    private function listFiles() {
+    public function listFiles() {
         return Zend_Controller_Action_HelperBroker::getStaticHelper('Files')->listFiles($this->__importFolder, true);
     }
 
