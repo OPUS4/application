@@ -67,11 +67,11 @@ class Admin_DocumentController extends Controller_Action {
             $form = new Admin_Form_Document();
             $form->populateFromModel($document);
             $form->prepareRenderingAsView();
-            
-            $this->view->form = new Admin_Form_Wrapper($form);
-            $this->view->breadcrumbsDisabled = true;
-            
-            return $document;
+
+            $this->view->contentWrapperDisabled = true;
+            $this->_helper->breadcrumbs()->setDocumentBreadcrumb($document);
+
+            $this->renderForm(new Admin_Form_Wrapper($form));
         }
         else {
             // missing or bad parameter => go back to main page
@@ -205,7 +205,10 @@ class Admin_DocumentController extends Controller_Action {
         
         // Beim wechseln der Sprache würden Änderungen in editierten Felder verloren gehen
         $this->view->languageSelectorDisabled = true;
-        $this->view->breadcrumbsDisabled = true;
+        $this->view->contentWrapperDisabled = true;
+        $this->_helper->breadcrumbs()->setDocumentBreadcrumb($document);
+
+        $this->renderForm($this->view->form);
     }
 
 }

@@ -119,4 +119,16 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $this->assertContains('Page with label \'admin_filemanager_index2\' not found.', $messages[0]);
     }
 
+    public function testGetDocumentTitle() {
+        $document = new Opus_Document();
+
+        $title = new Opus_Title();
+        $title->setLanguage('deu');
+        $title->setValue('01234567890123456789012345678901234567890123456789'); // 50 Zeichen lang
+
+        $document->addTitleMain($title);
+
+        $this->assertEquals('0123456789012345678901234567890123456789 ...', $this->helper->getDocumentTitle($document));
+    }
+
 }

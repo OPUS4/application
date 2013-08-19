@@ -57,7 +57,11 @@ class Admin_Form_Wrapper extends Zend_Form {
     public function loadDefaultDecorators() {
         parent::loadDefaultDecorators();
         
-        $this->setDecorators(array('FormElements', 'Form'));
+        $this->setDecorators(array(
+            'FormElements',
+            'Form',
+            array('HtmlTag', array('tag' => 'div', 'class' => 'metadata-form'))
+        ));
     }
         
     public function getWrappedForm() {

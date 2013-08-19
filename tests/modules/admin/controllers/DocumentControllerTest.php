@@ -80,8 +80,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-1843.
      */
     public function testRegression1843() {
-        $this->markTestSkipped('not working yet');
-        
+        $this->markTestSkipped('Replace - War für altes Metadaten-Formular.');
+
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
@@ -200,6 +200,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         
         // Prüfen, ob XHTML valid ist
         $this->validateXHTML($this->getResponse()->getBody());
+        $this->assertQueryContentContains('div.breadcrumbsContainer', 'KOBV (146)');
     }
     
     public function testEditActionValidXHTML() {
@@ -211,6 +212,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         
         // Prüfen, ob XHTML valid ist
         $this->validateXHTML($this->getResponse()->getBody());
+        $this->verifyBreadcrumbDefined();
     }
     
 }

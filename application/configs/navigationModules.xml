@@ -36,6 +36,30 @@
                             <resource>documents</resource>
                             <action>index</action>
                             <pages>
+                                <edit>
+                                    <type>mvc</type>
+                                    <label>admin_document_edit</label>
+                                    <module>admin</module>
+                                    <controller>document</controller>
+                                    <action>edit</action>
+                                    <pages>
+                                        <addperson>
+                                            <type>mvc</type>
+                                            <label>admin_person_assign</label>
+                                            <module>admin</module>
+                                            <controller>person</controller>
+                                            <action>assign</action>
+                                        </addperson>
+                                        <editperson>
+                                            <type>mvc</type>
+                                            <label>admin_person_editlinked</label>
+                                            <module>admin</module>
+                                            <controller>person</controller>
+                                            <action>editlinked</action>
+                                        </editperson>
+                                    </pages>
+                                </edit>
+
                                 <filemanager>
                                     <type>mvc</type>
                                     <label>admin_filemanager_index</label>
@@ -70,31 +94,7 @@
                                 </filemanager>
                             </pages>
                         </show>
-                                
-                        <edit>
-                            <type>mvc</type>
-                            <label>admin_document_edit</label>
-                            <module>admin</module>
-                            <controller>document</controller>
-                            <action>edit</action>
-                            <pages>
-                                <addperson>
-                                    <type>mvc</type>
-                                    <label>admin_person_assign</label>
-                                    <module>admin</module>
-                                    <controller>person</controller>
-                                    <action>assign</action>
-                                </addperson>
-                                <editperson>
-                                    <type>mvc</type>
-                                    <label>admin_person_editlinked</label>
-                                    <module>admin</module>
-                                    <controller>person</controller>
-                                    <action>editlinked</action>
-                                </editperson>
-                            </pages>
-                        </edit>
-                                                
+
                         <workflow>
                             <type>mvc</type>
                             <label>admin_workflow_index</label>
