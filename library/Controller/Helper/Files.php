@@ -37,6 +37,7 @@
  *
  * Can be used to list files in a directory matching a pattern.
  *
+ * TODO implement as Controller Helper (nicht soviel static)
  */
 class Controller_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
 
@@ -49,9 +50,9 @@ class Controller_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
      * @param boolean $ignoreAllowedFiletypes
      * @return array
      */
-    static public function listFiles($folder, $ignoreAllowedFiletypes = false) {
+    public function listFiles($folder, $ignoreAllowedFiletypes = false) {
         if (!is_dir($folder) || !is_readable($folder)) {
-            throw new Application_Exception('given directory is not readable');
+            throw new Application_Exception("Directory '$folder' is not readable.");
         }
 
         $result = array();
@@ -66,7 +67,7 @@ class Controller_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
         return $result;
     }
 
-    static private function getAllowedFileTypes() {
+    private function getAllowedFileTypes() {
         $config = Zend_Registry::get('Zend_Config');
 
         if (!isset($config->publish->filetypes->allowed)) {
@@ -78,7 +79,7 @@ class Controller_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
         return $allowed;
     }
 
-    static private function checkFile($file, $ignoreAllowedFiletypes) {
+    private function checkFile($file, $ignoreAllowedFiletypes) {
         $log = Zend_Registry::get('Zend_Log');
         $logMessage = 'check for file: ' . $file->getPathname();
 

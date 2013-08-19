@@ -448,4 +448,11 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->assertTrue($breadcrumbDefined, "Seite '$location' nicht in navigationModules.xml definiert.");
     }
 
+    /**
+     * TODO add configuration parameter to enabled/disable (default = false)
+     */
+    public function dumpBody() {
+        Zend_Debug::dump($this->getResponse()->getBody());
+    }
+
 }

@@ -37,15 +37,12 @@
  *
  * TODO make __importFolder configurable
  */
-class Admin_Model_FileImport {
+class Admin_Model_FileImport extends Application_Model_Abstract {
 
-    private $__importFolder = '../workspace/incoming';
+    private $__importFolder = null;
 
-    /**
-     * Lists files in import folder.
-     */
-    public function listFiles() {
-        return Controller_Helper_Files::listFiles($this->__importFolder, true);
+    public function __construct() {
+        $this->__importFolder = APPLICATION_PATH . '/workspace/incoming';
     }
 
     /**
@@ -63,7 +60,7 @@ class Admin_Model_FileImport {
             throw new Application_Exception('no document found for id ' . $docId, null, $e);
         }
 
-        $log = Zend_Registry::get('Zend_Log');
+        $log = $this->getLogger();
         $validFilenames = $this->getNamesOfIncomingFiles();
 
         foreach ($files as $file) {
@@ -92,12 +89,27 @@ class Admin_Model_FileImport {
         }
     }
 
+    /**
+     * Lists files in import folder.
+     */
+    private function listFiles() {
+        return Zend_Controller_Action_HelperBroker::getStaticHelper('Files')->listFiles($this->__importFolder, true);
+    }
+
     private function getNamesOfIncomingFiles() {
         $incomingFilenames = array();
         foreach ($this->listFiles() as $file) {
             array_push($incomingFilenames, $file['name']);            
         }
         return $incomingFilenames;
+    }
+
+    public function setImportFolder($path) {
+        $this->__importFolder = $path;
+    }
+
+    public function getImportFolder() {
+        return $this->__importFolder;
     }
 
 }
