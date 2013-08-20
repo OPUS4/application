@@ -54,7 +54,8 @@ class Form_Element_FileHash extends Zend_Form_Element_Xhtml {
             $this->setDecorators(array(
                 'FileHash',
                 array('ElementHtmlTag'),
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
+                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
+                    'disableFor' => true)),
                 array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
             ));
         }

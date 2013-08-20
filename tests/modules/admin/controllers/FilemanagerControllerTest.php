@@ -105,19 +105,12 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-
-
-
-
-    // TODO review/modify following tests
-
-
     /**
      * Verifies that the MD5 hash value is displayed twice (ist, soll).
      */
     public function testMd5HashValuesPresent() {
         $hash = '1ba50dc8abc619cea3ba39f77c75c0fe';
-        $this->dispatch('/admin/filemanager/index/docId/91');
+        $this->dispatch('/admin/filemanager/index/id/91');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('filemanager');
@@ -131,7 +124,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
      */
     public function testSha512HashValuesPresent() {
         $hash = '24bb2209810bacb3f9c05e08a08aec9ead4ac606fdc7c9d6c5fadffcf66f1e56396fdf46424cf52ef916f9e51f8178fb618c787f952d35aaf6d9079bbc9a50ad';
-        $this->dispatch('/admin/filemanager/index/docId/91');
+        $this->dispatch('/admin/filemanager/index/id/91');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('filemanager');
