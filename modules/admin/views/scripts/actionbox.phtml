@@ -35,7 +35,6 @@
 <?PHP
     $document = $this->element->getDocument();
     $currentState = $document->getServerState();
-    $jumpLinks = $this->element->getJumpLinks();
     $stateLinks = $this->element->getStateLinks();
     $actionLinks = $this->element->getViewActionLinks();
 ?>
@@ -73,16 +72,14 @@
           <dt><?= $this->translate('ServerDateModified-short') . ':'?></dt>
           <dd id="Document-ServerDateModified-value"><?= $this->formatValue()->formatDate($document->getServerDateModified()) ?></dd>
         </dl>
+        <?PHP if ($this->element->isNavigationEnabled()) : ?>
         <dl id="Document-Goto" class="col dropdown">
           <dt><a><?= $this->translate('admin-actionbox-goto-section') ?></a></dt>
           <dd>
-            <ul>
-              <?PHP foreach ($jumpLinks as $href => $label) : ?> 
-              <li><a href="<?= $href ?>"><?= htmlspecialchars($this->translate($label)) ?></a></li>
-              <?PHP endforeach; ?>
-            </ul>
+            <?= $this->linkList($this->element->getJumpLinks()) ?>
           </dd>
         </dl>
+        <?PHP endif; ?>
       </div>
       <div class="col col-3">
         <ul class="form-action">

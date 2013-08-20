@@ -47,7 +47,7 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     private $document;
     
     private $parentForm;
-    
+
     public function __construct($parentForm = null, $options = null) {
         parent::__construct($options);
         $this->parentForm = $parentForm;
@@ -192,5 +192,10 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     public function prepareRenderingAsView() {
         $this->setViewModeEnabled();
     }
+
+    public function isNavigationEnabled() {
+        return !is_null($this->parentForm);
+    }
+
     
 }
