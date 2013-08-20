@@ -26,34 +26,52 @@
  */
 
 /**
- * Formularelement fuer den Upload einer Datei.
+ * Dekorator für die Ausgabe eines Tabellenkopfes.
  *
  * @category    Application
- * @package     Form_Element
+ * @package     Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Element_File extends Zend_Form_Element_File {
+class Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstract {
 
-    public function init() {
-        parent::init();
+    private $columns = null;
 
-        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+    public function render($content) {
+        // Zeige Tabellenkopf nur wenn es Einträge (Unterformulare) gibt
+        if (count($this->getElement()->getSubForms()) == 0) {
+            return $content;
+        }
+
+        $markup = '<thead><tr>';
+
+        foreach ($this->getColumns() as $column) {
+            $label = isset($column['label']) ? $column['label'] : '&nbsp;';
+            $cssClass = isset($column['class']) ? $column['class'] : null;
+            $markup .= "<th class=\"$cssClass\">$label</th>";
+        }
+
+        $markup .= '</tr></thead>';
+
+        return $markup . $content;
     }
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(array(
-                'File',
-                'Errors',
-                'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-            ));
+    public function setColumns($columns) {
+        $this->columns = $columns;
+    }
+
+    public function getColumns() {
+        $columns = $this->getOption('columns');
+        if (!is_null($columns)) {
+            $this->removeOption('columns');
         }
+        else {
+            $columns = $this->columns;
+        }
+
+        return $columns;
     }
 
 }
-

@@ -23,37 +23,59 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * Formularelement fuer den Upload einer Datei.
  *
  * @category    Application
- * @package     Form_Element
+ * @package     Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Element_File extends Zend_Form_Element_File {
+class Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelper {
 
-    public function init() {
-        parent::init();
+    private $viewOnlyEnabled = false;
 
-        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
-    }
+    public function render($content) {
+        if ($this->isViewOnlyEnabled()) {
+            $element = $this->getElement();
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(array(
-                'File',
-                'Errors',
-                'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-            ));
+            $markup = sprintf('<div id="%1$s" class="%3$s">%2$s</div>', $element->getId(), $this->getEscapedValue(),
+                $this->getFieldClass());
+
+            switch ($this->getPlacement()) {
+                case self::PREPEND:
+                    return $markup . $content;
+                case self::APPEND:
+                default:
+                    return $content . $markup;
+            }
+        }
+        else {
+            return parent::render($content);
         }
     }
 
-}
+    public function setViewOnlyEnabled($enabled) {
+        $this->viewOnlyEnabled = $enabled;
+    }
 
+    public function isViewOnlyEnabled() {
+        $enabled = $this->getOption('viewOnlyEnabled');
+
+        if (!is_null($enabled)) {
+            $this->removeOption('viewOnlyEnabled');
+            $this->viewOnlyEnabled = $enabled;
+        }
+
+        return $this->viewOnlyEnabled;
+    }
+
+    public function getEscapedValue() {
+        return htmlspecialchars($this->getElement()->getValue());
+    }
+
+    public function getFieldClass() {
+        return 'field';
+    }
+
+}

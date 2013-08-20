@@ -76,6 +76,10 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
      */
     private $_subformValidator;
 
+    private $renderAsTableEnabled = false;
+
+    private $columns;
+
     /**
      * Konstruiert Instanz von Fomular.
      * 
@@ -108,10 +112,24 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         $this->initButton();
 
         $this->setLegend('admin_document_section_' . strtolower($this->_fieldName));
+
+        if (!is_null($this->getColumns())) {
+            $this->setRenderAsTableEnabled(true);
+            $this->setDecorators(array(
+                'FormElements',
+                array('TableHeader', array('columns' => $this->getColumns())),
+                'TableWrapper',
+                array(array('addButton' => 'Button'), array('name' => self::ELEMENT_ADD)),
+                array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
+                'Fieldset',
+                array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
+            ));
+        }
     }
 
     protected function initButton() {
-        $this->addElement('submit', self::ELEMENT_ADD, array('order' => 1000, 'label' => 'admin_button_add'));
+        $this->addElement('submit', self::ELEMENT_ADD, array('order' => 1000, 'label' => 'admin_button_add',
+            'decorators' => array(), 'disableLoadDefaultDecorators' => true));
     }
     
     /**
@@ -318,8 +336,8 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     public function createSubForm() {
         $subform = $this->createNewSubFormInstance();
 
-        $this->prepareSubFormDecorators($subform);
         $this->addRemoveButton($subform);
+        $this->prepareSubFormDecorators($subform);
 
         return $subform;
     }
@@ -328,16 +346,50 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
      * Bereites die Dekoratoren für das Unterformular vor.
      * 
      * @param type $subform
+     *
+     * TODO odd/even in table
      */
     protected function prepareSubFormDecorators($subform) {
-        $subform
-            ->addDecorator('RemoveButton')
-            ->addDecorator(array('dataWrapper' => 'HtmlTag'), array('class' => 'data-wrapper multiple-data'))
-            ->addDecorator(array('multiWrapper' => 'HtmlTag'), array('class' => 'multiple-wrapper'));
+        if ($this->isRenderAsTableEnabled()) {
+            $subform->addDecorator(array('tableRowWrapper' => 'HtmlTag'), array('tag' => 'tr'));
+            $this->applyDecoratorsToElements($subform->getElements());
+        }
+        else {
+            $subform
+                ->addDecorator(array('removeButton' => 'Button'), array('name' => 'Remove'))
+                ->addDecorator(array('dataWrapper' => 'HtmlTag'), array('class' => 'data-wrapper multiple-data'))
+                ->addDecorator(array('multiWrapper' => 'HtmlTag'), array('class' => 'multiple-wrapper'));
+        }
+    }
+
+    /**
+     * @param $elements
+     * TODO Remove button (zusätzliche Spalte)
+     * TODO
+     */
+    protected function applyDecoratorsToElements($elements) {
+        foreach ($elements as $element) {
+            if (!$element instanceof Zend_Form_Element_Hidden) {
+                $element->removeDecorator('dataWrapper');
+                $element->removeDecorator('LabelNotEmpty');
+                $element->removeDecorator('ElementHtmlTag');
+                $element->addDecorator(array('tableCellWrapper' => 'HtmlTag'), array('tag' => 'td'));
+            }
+            else {
+                $element->setDecorators(array());
+                $element->loadDefaultDecoratorsIsDisabled(true);
+            }
+        }
     }
 
     protected function addRemoveButton($subform) {
-        $subform->addElement($this->createRemoveButton());
+        $button = $this->createRemoveButton();
+        $subform->addElement($button);
+
+        if ($this->isRenderAsTableEnabled()) {
+            $idElement = $subform->getElement('Id'); // TODO make sure it exists (Design)
+            $button->addDecorator('RemoveButton', array('element' => $idElement));
+        }
     }
 
     /**
@@ -487,23 +539,36 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     public function isEmpty() {
         return count($this->getSubForms()) == 0;
     }
-    
-    /**
-     * Bereitet Formular und Unterformulare für die Anzeige in der Metadaten-Übersicht vor.
-     */
-    public function prepareRenderingAsView() {
-        parent::prepareRenderingAsView();
 
-        // da Remove Button entfernt wird muss DIV wieder geschlossen werden.
-        $subforms = $this->getSubForms();
-        
-        // TODO Gibt es einen besseren Weg durch die Verwendung von DisplayGroup?
-        foreach ($subforms as $subform) {
-            $dataWrapper = $subform->getDecorator('dataWrapperOpen');
-            if (!is_null($dataWrapper) && $dataWrapper instanceof Zend_Form_Decorator_HtmlTag) {
-                $dataWrapper->setOption('openOnly', false);
-            }
-        }
+    public function setColumns($columns) {
+        $this->columns = $columns;
     }
+
+    public function getColumns() {
+        $columns = $this->columns;
+
+        if (!is_null($columns)) {
+            $columns[] = array('class' => 'Remove'); // Extra Spalte für Remove-Button
+        }
+
+        return $columns ;
+    }
+
+    public function setOptions(array $options) {
+        if (isset($options['columns'])) {
+            $this->setColumns($options['columns']);
+            unset($options['columns']);
+        }
+
+        parent::setOptions($options);
+    }
+
+   public function setRenderAsTableEnabled($enabled) {
+       $this->renderAsTableEnabled = $enabled;
+   }
+
+   public function isRenderAsTableEnabled() {
+       return $this->renderAsTableEnabled;
+   }
 
 }

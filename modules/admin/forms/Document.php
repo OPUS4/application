@@ -119,10 +119,14 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         // Bibliographische Beschreibung
         $this->addSubForm(new Admin_Form_DocumentTitles(), 'Titles');
         $this->addSubForm(new Admin_Form_DocumentBibliographic(), 'Bibliographic');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentSeries', 'Series'), 'Series');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentSeries', 'Series', null, array(
+            'columns' => array(array(), array('label' => 'Number'), array('label' => 'SortOrder'))
+        )), 'Series');
         
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentEnrichment', 'Enrichment'), 
-                'Enrichments');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentEnrichment', 'Enrichment', null,
+                array(
+                    'columns' => array(array('label' => 'Key'), array('label' => 'Value'))
+                )), 'Enrichments');
 
         $this->addSubForm(new Admin_Form_DocumentCollections(), 'Collections');
 
@@ -136,8 +140,10 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $this->addSubForm($subform, 'Content');
         
         // Weiteres Allgemeines
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier'), 
-                'Identifiers');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier', null,
+            array('columns' => array(
+                array('label' => 'Typ'), array('label' => 'Text')
+            ))), 'Identifiers');
         $this->addSubForm(new Admin_Form_DocumentLicences(), 'Licences');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPatent', 'Patent'), 'Patents');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentNote', 'Note'), 'Notes');

@@ -40,23 +40,72 @@
  */
 class Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract {
 
+    private $element;
+
     public function render($content) {
-        $button = $this->getElement()->getElement(Admin_Form_DocumentMultiSubForm::ELEMENT_REMOVE);
+        $button = $this->getElement();
+
+        if ($button instanceof Zend_Form) {
+            $button = $button->getElement(Admin_Form_DocumentMultiSubForm::ELEMENT_REMOVE);
+        }
 
         if (is_null($button)) {
             return $content;
         }
 
-        $formId = $button->getId();
-        $formName = $button->getFullyQualifiedName();
+        $view = $button->getView();
 
-        $markup = '<div class="data-wrapper Remove-data">';
-        $markup .= "<div class=\"field\" id=\"$formId-element\">";
-        $markup .= "<input type=\"submit\" name=\"$formName\" id=\"$formId\" value=\"Remove\" />";
-        $markup .= '</div></div>';
+        if (!$view instanceof Zend_View_Interface) {
+            return $content;
+        }
+
+        $markup = $this->renderElement($button);
+
+        if (!is_null($this->getSecondElement())) {
+            $markup = $this->renderElement($this->getSecondElement(), 'hidden') . $markup;
+        }
 
         return $content . $markup;
     }
+
+    /**
+     * @param $element
+     * @return string
+     * TODO ViewHelper?
+     */
+    public function renderElement($element, $type = 'submit') {
+        $buttonId = $element->getId();
+        $buttonFullName = $element->getFullyQualifiedName();
+        $buttonName = $element->getName();
+
+        // TODO hack (find transparent solution)
+        if ($type === 'submit') {
+            $value = 'Remove';
+        }
+        else {
+            $value = $element->getValue();
+        }
+
+        $markup = "<input type=\"$type\" name=\"$buttonFullName\" id=\"$buttonId\" value=\"$value\" />";
+
+        return $markup;
+    }
+
+    public function setSecondElement($element) {
+        $this->columns = $element;
+    }
+
+    public function getSecondElement() {
+        $element = $this->getOption('element');
+
+        if (!is_null($element)) {
+            $this->removeOption('element');
+            $this->element = $element;
+        }
+
+        return $this->element;
+    }
+
 
 }
 

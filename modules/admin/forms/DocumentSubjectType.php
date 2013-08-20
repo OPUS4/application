@@ -54,7 +54,7 @@ class Admin_Form_DocumentSubjectType extends Admin_Form_DocumentMultiSubForm {
     public function __construct($type, $options = null) {
         $this->__subjectType = $type;
         
-        parent::__construct(null, 'Subject', $options);
+        parent::__construct(null, 'Subject', null, $options);
     }
 
     /**

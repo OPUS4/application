@@ -140,6 +140,7 @@ class Admin_DocumentController extends Controller_Action {
                             $document->store();
                         }
                         else {
+                            // Zend_Debug::dump($form->getErrors());
                             $form->setMessage($this->view->translate('admin_document_error_validation'));
                         }
                         break;

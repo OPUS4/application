@@ -23,37 +23,23 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * Formularelement fuer den Upload einer Datei.
  *
  * @category    Application
- * @package     Form_Element
+ * @package     Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Element_File extends Zend_Form_Element_File {
+class Form_Decorator_TableWrapper extends Zend_Form_Decorator_Abstract {
 
-    public function init() {
-        parent::init();
-
-        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
-    }
-
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(array(
-                'File',
-                'Errors',
-                'ElementHtmlTag',
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-            ));
+    public function render($content) {
+        // Render Tabellen Tags nur wenn es Einträge (Unterformulare) gibt
+        if (count($this->getElement()->getSubForms()) == 0) {
+            return $content;
         }
+
+        return '<table>' . $content . '</table>';
     }
 
 }
-

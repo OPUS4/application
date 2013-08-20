@@ -202,7 +202,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->validateXHTML($this->getResponse()->getBody());
         $this->assertQueryContentContains('div.breadcrumbsContainer', 'KOBV (146)');
     }
-    
+
     public function testEditActionValidXHTML() {
         $this->dispatch('/admin/document/edit/id/146');
         $this->assertResponseCode(200);

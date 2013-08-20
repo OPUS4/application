@@ -49,16 +49,16 @@ class Form_Decorator_StaticView extends Zend_Form_Decorator_Abstract {
     public function render($content) {
         $element = $this->getElement();
 
-        $output = '<div class="data-wrapper ' . $element->getName() . '-data">';
-
-        $label = $this->getLabel();
-        if (!is_null($label)) {
-            $output .= sprintf('<div class="%1$s">%2$s</div>', $element->isRequired() ? 'label required' : 'label',
-                htmlspecialchars($label));
-        }
-
-        return $output . sprintf('<div id="%1$s" class="%3$s">%2$s</div></div>', $element->getId(), $this->getValue(),
+        $markup = sprintf('<div id="%1$s" class="%3$s">%2$s</div>', $element->getId(), $this->getValue(),
             $this->getFieldClass());
+
+        switch ($this->getPlacement()) {
+            case self::PREPEND:
+                return $markup . $content;
+            case self::APPEND:
+            default:
+                return $content . $markup;
+        }
     }
 
     public function getLabel() {

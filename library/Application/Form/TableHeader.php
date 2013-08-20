@@ -73,7 +73,6 @@ class Application_Form_TableHeader extends Application_Form_Abstract {
         else {
             return '';
         }
-
     }
 
     public function getColumnCount() {

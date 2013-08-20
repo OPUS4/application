@@ -101,7 +101,10 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
      * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
      */
     public function prepareRenderingAsView() {
-        $this->setDecorators(array('StaticView'));
+        $viewHelper = $this->getDecorator('ViewHelper');
+        if ($viewHelper instanceof Form_Decorator_ViewHelper) {
+            $viewHelper->setViewOnlyEnabled(true);
+        }
     }
 
 }

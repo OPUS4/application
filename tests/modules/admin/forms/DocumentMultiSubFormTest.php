@@ -342,6 +342,20 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         $this->assertEquals('Identifier', $form->getSubFormBaseName());
     }
 
+    public function testConstructWithTableHeader() {
+        $columns = array(
+            array(),
+            array('label' => 'Number'),
+            array('label' => 'SortOrder')
+        );
+
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentSeries', 'Series', null, array(
+            'columns' => $columns
+        ));
+
+        $this->assertEquals($columns, $form->getColumns());
+    }
+
 
     
 }

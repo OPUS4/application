@@ -35,7 +35,7 @@
 /**
  * Angepasste Klasse für SELECT Formularelemente.
  */
-class Form_Element_Select extends Zend_Form_Element_Select {
+class Form_Element_Select extends Zend_Form_Element_Select implements Form_IElement {
 
     /**
      * Initialisiert das Formularelement.
@@ -49,21 +49,38 @@ class Form_Element_Select extends Zend_Form_Element_Select {
     }
 
     public function loadDefaultDecorators() {
-        $this->setDecorators(array(
-            'ViewHelper', 
-            'Errors',
-            'Description',
-            'ElementHtmlTag',
-            array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-            array(array('dataWrapperOpen' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-        ));
+        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+            $this->setDecorators(array(
+                'ViewHelper',
+                'Errors',
+                'Description',
+                'ElementHtmlTag',
+                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
+                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
+            ));
+        }
     }
 
     /**
      * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
      */
     public function prepareRenderingAsView() {
-        $this->setDecorators(array('StaticView'));
+        $viewHelper = $this->getDecorator('ViewHelper');
+        if ($viewHelper instanceof Form_Decorator_ViewHelper) {
+            $viewHelper->setViewOnlyEnabled(true);
+        }
+    }
+
+    /**
+     * Liefert Hinweis zum Element-Value, z.B. das eine ISBN ungültig ist.
+     *
+     * Hinweise sind wie Validierungsfehler, die aber das Abspeichern nicht verhindern und schon beim Aufruf des
+     * Formulars für existierende Werte berechnet werden.
+     *
+     * @return string
+     */
+    public function getHint() {
+        return null; // TODO: Implement getHint() method.
     }
 
 }
