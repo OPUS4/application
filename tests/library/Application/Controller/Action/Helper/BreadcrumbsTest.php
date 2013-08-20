@@ -122,6 +122,8 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
     public function testGetDocumentTitle() {
         $document = new Opus_Document();
 
+        $document->setLanguage('deu');
+
         $title = new Opus_Title();
         $title->setLanguage('deu');
         $title->setValue('01234567890123456789012345678901234567890123456789'); // 50 Zeichen lang
