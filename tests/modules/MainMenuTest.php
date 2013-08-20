@@ -52,7 +52,7 @@ class MainMenuTest extends ControllerTestCase {
     }
     
     function testAdminFileManager() {
-        $this->dispatch("/admin/filemanager/index/docId/146");
+        $this->dispatch("/admin/filemanager/index/id/146");
         $this->assertQuery('li.active[@id="primary-nav-administration"]', "Admin Eintrag sollte aktiviert sein.");
     }
     
