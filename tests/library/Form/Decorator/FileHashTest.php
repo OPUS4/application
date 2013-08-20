@@ -66,7 +66,7 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
         $output = $decorator->render('content');
 
         $this->assertEquals('content'
-            . '<div class="textarea hashsoll">1ba50dc8abc619cea3ba39f77c75c0fe</div>', $output);
+            . '<div class="textarea hashsoll">1ba50dc8abc619cea3ba39f77c75c0fe</div><input type="hidden" name="name[Soll]" value="1ba50dc8abc619cea3ba39f77c75c0fe" id="name-Soll" />', $output);
     }
 
     public function testRenderWithIst() {
@@ -91,7 +91,10 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
 
         $this->assertEquals('content'
             . '<div class="textarea hashsoll">1ba50dc8abc619cea3ba39f77c75c0ff</div>'
-            . '<div class="textarea hashist">1ba50dc8abc619cea3ba39f77c75c0fe</div>', $output);
+            . '<input type="hidden" name="name[Soll]" value="1ba50dc8abc619cea3ba39f77c75c0ff" id="name-Soll" />'
+            . '<div class="textarea hashist">1ba50dc8abc619cea3ba39f77c75c0fe</div>'
+            . '<input type="hidden" name="name[Ist]" value="1ba50dc8abc619cea3ba39f77c75c0fe" id="name-Ist" />'
+            , $output);
 
     }
 
