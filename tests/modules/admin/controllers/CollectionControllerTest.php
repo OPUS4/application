@@ -303,7 +303,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         
         $this->assertQueryContentContains('td.visible', 'default_collection_role_reports');
-        $this->assertQueryContentContains('td.unvisible', 'default_collection_role_invisible-collection');
+        $this->assertQueryContentContains('td.invisible', 'default_collection_role_invisible-collection');
     }
     
     public function testShowVisibilityOfCollections() {
@@ -311,7 +311,7 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         
         $this->assertQueryContentContains('td.visible', '10 Philosophie');
-        $this->assertQueryContentContains('td.unvisible', '11 Metaphysik');
+        $this->assertQueryContentContains('td.invisible', '11 Metaphysik');
     }
 
     public function testTooltipForInsertLinks() {
