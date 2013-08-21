@@ -64,14 +64,18 @@ class Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstract {
 
     public function getColumns() {
         $columns = $this->getOption('columns');
+
         if (!is_null($columns)) {
             $this->removeOption('columns');
+            $this->columns = $columns;
         }
         else {
-            $columns = $this->columns;
+            if (method_exists($this->getElement(), 'getColumns')) {
+                $this->columns = $this->getElement()->getColumns();
+            }
         }
 
-        return $columns;
+        return $this->columns;
     }
 
 }

@@ -58,14 +58,16 @@ class Form_Element_Textarea extends Zend_Form_Element_Textarea implements Form_I
     }
 
     public function loadDefaultDecorators() {
-        $this->setDecorators(array(
-            'ViewHelper', 
-            'Errors',
-            'Description',
-            'ElementHtmlTag',
-            array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-            array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-        ));
+        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+            $this->setDecorators(array(
+                'ViewHelper',
+                'Errors',
+                'Description',
+                'ElementHtmlTag',
+                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
+                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
+            ));
+        }
     }
 
     public function getHint() {
@@ -76,7 +78,14 @@ class Form_Element_Textarea extends Zend_Form_Element_Textarea implements Form_I
      * Sorgt dafür, daß nur der Text ausgeben wird und kein INPUT-Tag.
      */
     public function prepareRenderingAsView() {
-        $this->setDecorators(array('StaticViewTextarea'));
+        $viewHelper = $this->getDecorator('ViewHelper');
+        if ($viewHelper instanceof Form_Decorator_ViewHelper) {
+            $viewHelper->setViewOnlyEnabled(true);
+        }
+    }
+
+    public function getStaticViewHelper() {
+        return 'viewFormTextarea';
     }
     
 }

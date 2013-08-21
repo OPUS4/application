@@ -25,25 +25,30 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Test
- * @package     Form_Decorator
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Application_View_Helper_ViewFormSelectTest extends ControllerTestCase {
 
-class Form_Decorator_StaticViewCheckboxTest extends ControllerTestCase {
+    public function testViewFormSelect() {
+        $helper = new Application_View_Helper_ViewFormSelect();
+        $helper->setView(new Zend_View());
 
-    public function testGetLabel() {
-        $element = new Zend_Form_Element_Checkbox('checkbox');
-        $element->setLabel('Public Access');
-        $element->setValue('public');
-        $element->setChecked(true);
+        $markup = $helper->viewFormSelect('testName', '1', null, array('Value1', 'Value2', 'Value3'));
 
-        $decorator = new Form_Decorator_StaticViewCheckbox();
-        $decorator->setElement($element);
+        $this->assertEquals('<div name="testName" id="testName" class="field">Value2</div>', $markup);
+    }
 
-        $this->assertNull($decorator->getLabel());
+    public function testViewFormSelectEscaping() {
+        $helper = new Application_View_Helper_ViewFormSelect();
+        $helper->setView(new Zend_View());
+
+        $markup = $helper->viewFormSelect('testName', '1', null, array('Value1', '<h1>Value2</h1>', 'Value3'));
+
+        $this->assertEquals('<div name="testName" id="testName" class="field">&lt;h1&gt;Value2&lt;/h1&gt;</div>', $markup);
     }
 
 }

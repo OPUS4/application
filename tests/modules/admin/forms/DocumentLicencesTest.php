@@ -143,6 +143,11 @@ class DocumentLicencesTest extends ControllerTestCase {
         $this->assertEquals(2, count($form->getElements()));
         $this->assertNotNull($form->getElement('licence4'));
         $this->assertNotNull($form->getElement('licence2'));
+
+        $element = $form->getElement('licence4');
+
+        $this->assertFalse($element->getDecorator('ViewHelper'));
+        $this->assertFalse($element->getDecorator('ElementHtmlTag'));
     }
     
 }

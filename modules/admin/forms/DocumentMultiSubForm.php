@@ -117,7 +117,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
             $this->setRenderAsTableEnabled(true);
             $this->setDecorators(array(
                 'FormElements',
-                array('TableHeader', array('columns' => $this->getColumns())),
+                'TableHeader',
                 'TableWrapper',
                 array(array('addButton' => 'Button'), array('name' => self::ELEMENT_ADD)),
                 array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
@@ -369,7 +369,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
      */
     protected function applyDecoratorsToElements($elements) {
         foreach ($elements as $element) {
-            if (!$element instanceof Zend_Form_Element_Hidden) {
+            if ($element->getName() !== 'Id') {
                 $element->removeDecorator('dataWrapper');
                 $element->removeDecorator('LabelNotEmpty');
                 $element->removeDecorator('ElementHtmlTag');
@@ -547,7 +547,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
     public function getColumns() {
         $columns = $this->columns;
 
-        if (!is_null($columns)) {
+        if (!is_null($columns) && !$this->isViewModeEnabled()) {
             $columns[] = array('class' => 'Remove'); // Extra Spalte für Remove-Button
         }
 

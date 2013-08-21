@@ -23,22 +23,62 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * Rendering von Textarea Formularelementen in einer Viewansicht.
  *
- * @category    Application
+ * @category    Application Unit Test
  * @package     Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Decorator_StaticViewTextarea extends Form_Decorator_StaticView {
+class Form_Decorator_ViewHelperTest extends ControllerTestCase {
 
-    public function getFieldClass() {
-        return parent::getFieldClass() . ' textarea';
+    public function testGetHelper() {
+        $decorator = new Form_Decorator_ViewHelper();
+
+        $decorator->setElement(new Form_Element_Select('select'));
+
+        $this->assertEquals('formSelect', $decorator->getHelper());
+
+        $decorator->setViewOnlyEnabled(true);
+
+        $this->assertEquals('viewFormSelect', $decorator->getHelper());
+    }
+
+    public function testGetHelperDefault() {
+        $decorator = new Form_Decorator_ViewHelper();
+
+        $decorator->setElement(new Form_Element_Text('name'));
+
+        $decorator->setViewOnlyEnabled(true);
+
+        $this->assertEquals('viewFormDefault', $decorator->getHelper());
+    }
+
+    public function testGetHelperForHidden() {
+        $decorator = new Form_Decorator_ViewHelper();
+
+        $decorator->setElement(new Form_Element_Hidden('name'));
+
+        $decorator->setViewOnlyEnabled(true);
+
+        $this->assertEquals('formHidden', $decorator->getHelper());
+    }
+
+    public function testSetIsViewOnlyEnabled() {
+        $decorator = new Form_Decorator_ViewHelper();
+
+        $this->assertFalse($decorator->isViewOnlyEnabled());
+
+        $decorator->setViewOnlyEnabled(true);
+
+        $this->assertTrue($decorator->isViewOnlyEnabled());
+    }
+
+    public function testSetViewOnlyEnabledOption() {
+        $decorator = new Form_Decorator_ViewHelper(array('viewOnlyEnabled' => true));
+
+        $this->assertTrue($decorator->isViewOnlyEnabled());
     }
 
 }

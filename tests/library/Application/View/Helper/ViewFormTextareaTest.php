@@ -24,28 +24,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
- * @package     TODO
+ * @category    Application Unit Test
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Application_View_Helper_ViewFormTextareaTest extends ControllerTestCase {
 
-class Form_Decorator_StaticViewSelectTest extends ControllerTestCase {
+    public function testViewFormTextarea() {
+        $helper = new Application_View_Helper_ViewFormTextarea();
+        $helper->setView(new Zend_View());
 
-    public function testGetValue() {
-        $element = new Zend_Form_Element_Select('select');
+        $this->assertContains('class="field textarea"', $helper->viewFormTextarea('testName', 'testValue', array(
+            'id' => '10'
+        )));
+    }
 
-        $element->addMultiOption('value1', 'label1');
-        $element->addMultiOption('value2', 'label2');
-        $element->addMultiOption('value3', 'label3');
-        $element->setValue('value2');
+    public function testGetElementClass() {
+        $helper = new Application_View_Helper_ViewFormTextarea();
 
-        $decorator = new Form_Decorator_StaticViewSelect();
-        $decorator->setElement($element);
-
-        $this->assertEquals('label2', $decorator->getValue());
+        $this->assertEquals('field textarea', $helper->getElementClass());
     }
 
 }

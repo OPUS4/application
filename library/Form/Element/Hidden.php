@@ -36,13 +36,21 @@
  * @version     $Id$
  */
 class Form_Element_Hidden extends Zend_Form_Element_Hidden {
-    
+
+    public function init() {
+        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+    }
+
     public function loadDefaultDecorators() {
         if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(array(
                 'ViewHelper'
             ));
         }
+    }
+
+    public function getStaticViewHelper() {
+        return 'formHidden';
     }
     
 }

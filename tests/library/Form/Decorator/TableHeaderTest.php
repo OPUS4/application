@@ -44,7 +44,6 @@ class Form_Decorator_TableHeaderTest extends ControllerTestCase {
         )
     );
 
-
     public function testConstruct() {
         $decorator = new Form_Decorator_TableHeader(array('placement' => 'prepend', 'columns' => $this->columns));
 
@@ -52,10 +51,18 @@ class Form_Decorator_TableHeaderTest extends ControllerTestCase {
         $this->assertEquals($this->columns, $decorator->getColumns());
     }
 
-    public function testSetOption() {
+    public function testSetOptionColumns() {
         $decorator = new Form_Decorator_TableHeader();
 
         $decorator->setOption('columns', $this->columns);
+
+        $this->assertEquals($this->columns, $decorator->getColumns());
+    }
+
+    public function testSetGetColumns() {
+        $decorator = new Form_Decorator_TableHeader();
+
+        $decorator->setColumns($this->columns);
 
         $this->assertEquals($this->columns, $decorator->getColumns());
     }

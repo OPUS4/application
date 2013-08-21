@@ -49,7 +49,6 @@ class Admin_Form_DocumentNote extends Admin_Form_AbstractModelSubForm {
         $this->addElement('textarea', self::ELEMENT_MESSAGE, array('required' => true, 'rows' => 4));
         
         $this->getElement(self::ELEMENT_VISIBILITY)
-                ->setViewDecorator('StaticViewCheckbox')
                 ->setViewCheckedValue('Opus_Note_Visibility_Value_Public')
                 ->setViewUncheckedValue('Opus_Note_Visibility_Value_Private');
         
@@ -85,6 +84,11 @@ class Admin_Form_DocumentNote extends Admin_Form_AbstractModelSubForm {
         parent::loadDefaultDecorators();
         
         $this->removeDecorator('Fieldset');
+    }
+
+    public function prepareRenderingAsView() {
+        parent::prepareRenderingAsView();
+        $this->getElement(self::ELEMENT_VISIBILITY)->removeDecorator('Label');
     }
     
 }

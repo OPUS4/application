@@ -83,4 +83,8 @@ class Form_Element_Select extends Zend_Form_Element_Select implements Form_IElem
         return null; // TODO: Implement getHint() method.
     }
 
+    public function getStaticViewHelper() {
+        return 'viewFormSelect';
+    }
+
 }

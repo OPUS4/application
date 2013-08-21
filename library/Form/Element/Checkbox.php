@@ -37,8 +37,6 @@
  */
 class Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Form_IElement {
 
-    private $viewDecorator = 'StaticView';
-    
     private $viewCheckedValue = 'Field_Value_True';
     
     private $viewUncheckedValue = 'Field_Value_False';
@@ -48,18 +46,23 @@ class Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Form_I
     }
     
     public function loadDefaultDecorators() {
-        $this->setDecorators(array(
-            'ViewHelper', 
-            'Errors',
-            'Description',
-            'ElementHtmlTag',
-            array('Label', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
-            array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-        ));
+        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+            $this->setDecorators(array(
+                'ViewHelper',
+                'Errors',
+                'Description',
+                'ElementHtmlTag',
+                array('Label', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
+                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
+            ));
+        }
     }
 
     public function prepareRenderingAsView() {
-        $this->setDecorators(array($this->viewDecorator));
+        $viewHelper = $this->getDecorator('ViewHelper');
+        if ($viewHelper instanceof Form_Decorator_ViewHelper) {
+            $viewHelper->setViewOnlyEnabled(true);
+        }
         $this->setCheckedValue($this->getTranslator()->translate($this->viewCheckedValue));
         $this->setUncheckedValue($this->getTranslator()->translate($this->viewUncheckedValue));
         $this->setChecked($this->getValue());
@@ -77,14 +80,17 @@ class Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Form_I
         return null;
     }
 
-    public function setViewDecorator($decorator) {
-        $this->viewDecorator = $decorator;
-        return $this;
+    public function getViewCheckedValue() {
+        return $this->viewCheckedValue;
     }
-    
+
     public function setViewCheckedValue($value) {
         $this->viewCheckedValue = $value;
         return $this;
+    }
+
+    public function getViewUncheckedValue() {
+        return $this->viewUncheckedValue;
     }
 
     public function setViewUncheckedValue($value) {

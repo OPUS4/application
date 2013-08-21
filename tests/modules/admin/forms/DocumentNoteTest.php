@@ -128,5 +128,19 @@ class Admin_Form_DocumentNoteTest extends ControllerTestCase {
         
         $this->assertContains('isEmpty', $form->getErrors('Message'));
     }
+
+    public function testPrepareRenderingAsView() {
+        $form = new Admin_Form_DocumentNote();
+
+        $note = new Opus_Note();
+        $note->setMessage('Message1');
+        $note->setVisibility('public');
+
+        $form->populateFromModel($note);
+
+        $form->prepareRenderingAsView();
+
+        $this->assertFalse($form->getElement('Visibility')->getDecorator('Label'));
+    }
     
 }

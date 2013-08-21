@@ -23,6 +23,13 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Gibt Formularelement als DIV-Tags aus.
+ *
+ * Ersetzt den normalen ViewHelper Dekorator, um statt INPUT-Elementen, einfach nur den Wert des Formularelements in
+ * einem DIV auszugeben. Das wird für die statische Ansicht von Formularen, z.B. Metadaten-Übersicht verwendet.
  *
  * @category    Application
  * @package     Form_Decorator
@@ -35,23 +42,31 @@ class Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelper {
 
     private $viewOnlyEnabled = false;
 
-    public function render($content) {
+    public function getHelper() {
         if ($this->isViewOnlyEnabled()) {
             $element = $this->getElement();
 
-            $markup = sprintf('<div id="%1$s" class="%3$s">%2$s</div>', $element->getId(), $this->getEscapedValue(),
-                $this->getFieldClass());
-
-            switch ($this->getPlacement()) {
-                case self::PREPEND:
-                    return $markup . $content;
-                case self::APPEND:
-                default:
-                    return $content . $markup;
+            if (method_exists($element, 'getStaticViewHelper')) {
+                $helper = $element->getStaticViewHelper();
             }
+            else {
+                $type = $element->getType();
+                if ($pos = strrpos($type, '_')) {
+                    $type = substr($type, $pos + 1);
+                }
+                $helper = 'viewForm' . ucfirst($type);
+                try {
+                    $element->getView()->getHelper($helper);
+                }
+                catch (Zend_Loader_PluginLoader_Exception $zlpe) {
+                    $helper = 'viewFormDefault';
+                }
+            }
+            $this->setHelper($helper);
+            return $this->_helper;
         }
         else {
-            return parent::render($content);
+            return parent::getHelper();
         }
     }
 
@@ -68,14 +83,6 @@ class Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelper {
         }
 
         return $this->viewOnlyEnabled;
-    }
-
-    public function getEscapedValue() {
-        return htmlspecialchars($this->getElement()->getValue());
-    }
-
-    public function getFieldClass() {
-        return 'field';
     }
 
 }

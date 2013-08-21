@@ -105,6 +105,7 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
         if ($viewHelper instanceof Form_Decorator_ViewHelper) {
             $viewHelper->setViewOnlyEnabled(true);
         }
+        $this->removeDecorator('Placeholder');
     }
 
 }

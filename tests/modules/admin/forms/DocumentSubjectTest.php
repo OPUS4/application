@@ -142,7 +142,7 @@ class Admin_Form_DocumentSubjectTest extends ControllerTestCase {
     
     public function testValidation() {
         $form = new Admin_Form_DocumentSubject('swd', 'deu');
-        
+
         $post = array(
             'Value' => '' // darf nicht leer sein
         );
@@ -150,6 +150,18 @@ class Admin_Form_DocumentSubjectTest extends ControllerTestCase {
         $this->assertFalse($form->isValid($post));
         
         $this->assertContains('isEmpty', $form->getErrors('Value'));
+    }
+
+    public function testPrepareRenderingAsView() {
+        $form = new Admin_Form_DocumentSubject('swd', 'deu');
+
+        $form->prepareRenderingAsView();
+
+        $this->assertNotNull($form->getElement('Id'));
+        $this->assertNotNull($form->getElement('Language'));
+        $this->assertNotNull($form->getElement('Value'));
+        $this->assertNotNull($form->getElement('ExternalKey'));
+        $this->assertNull($form->getElement('Remove'));
     }
     
 }

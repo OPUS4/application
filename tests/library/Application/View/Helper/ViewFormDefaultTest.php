@@ -24,24 +24,46 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Decorator
+ * @category    Application Unit Test
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Application_View_Helper_ViewFormDefaultTest extends ControllerTestCase {
 
-class Form_Decorator_StaticViewLicence extends Form_Decorator_StaticView {
+    public function testViewFormDefault() {
+        $helper = new Application_View_Helper_ViewFormDefault();
+        $helper->setView(new Zend_View());
 
-    public function getLabel() {
-        return null;
+        $markup = $helper->viewFormDefault('testName', 'testValue', array('id' => '10'));
+
+        $this->assertEquals('<div name="testName" id="10" class="field">testValue</div>', $markup);
     }
-    
-    public function getValue() {
-        return $this->getElement()->getLabel();
+
+    public function testViewFormDefaultOnlyName() {
+        $helper = new Application_View_Helper_ViewFormDefault();
+        $helper->setView(new Zend_View());
+
+        $markup = $helper->viewFormDefault('testName');
+
+        $this->assertEquals('<div name="testName" id="testName" class="field"></div>', $markup);
+    }
+
+    public function testViewFormDefaultEscaping() {
+        $helper = new Application_View_Helper_ViewFormDefault();
+        $helper->setView(new Zend_View());
+
+        $markup = $helper->viewFormDefault('testName', '<h1>HTML</h1>', array('id' => '10'));
+
+        $this->assertEquals('<div name="testName" id="10" class="field">&lt;h1&gt;HTML&lt;/h1&gt;</div>', $markup);
+    }
+
+    public function testGetElementClass() {
+        $helper = new Application_View_Helper_ViewFormDefault();
+
+        $this->assertEquals('field', $helper->getElementClass());
     }
 
 }
-
-

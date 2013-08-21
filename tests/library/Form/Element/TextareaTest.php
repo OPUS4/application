@@ -24,20 +24,22 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Decorator
+ * @category    Application Unit Test
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Form_Element_TextareaTest extends FormElementTestCase {
 
-class Form_Decorator_StaticViewCheckbox extends Form_Decorator_StaticView {
-
-    public function getLabel() {
-        return null;
+    public function setUp() {
+        $this->_formElementClass = 'Form_Element_Textarea';
+        $this->_expectedDecoratorCount = 6;
+        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
+            'dataWrapper');
+        $this->_staticViewHelper = 'viewFormTextarea';
+        parent::setUp();
     }
 
 }
-
-

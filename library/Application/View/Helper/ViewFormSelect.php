@@ -23,62 +23,32 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Gibt Select-Element als Ansicht aus (nur Wert).
  *
- * @category    Application Unit Test
- * @package     Form_Decorator
+ * @category    Application
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Application_View_Helper_ViewFormSelect extends Zend_View_Helper_FormSelect {
 
-class Form_Decorator_StaticViewTest extends ControllerTestCase {
+    public function viewFormSelect($name, $value = null, $attribs = null, $options = null, $listsep = "<br />\n") {
+        $info = $this->_getInfo($name, $value, $attribs, $options, $listsep);
+        extract($info);
 
-    public function testRender() {
-        $element = new Zend_Form_Element_Text('name');
+        $markup = '<div'
+            . ' name="' . $this->view->escape($name) . '"'
+            . ' id="' . $this->view->escape($id) . '"'
+            . ' class="field">'
+            . $this->view->escape($options[$value])
+            . '</div>';
 
-        $element->setLabel('Label:');
-        $element->setValue('Value');
-
-        $decorator = new Form_Decorator_StaticView();
-        $decorator->setElement($element);
-
-        $output = $decorator->render('');
-
-        $this->assertEquals(
-            '<div class="data-wrapper name-data"><div class="label">Label:</div>'
-            . '<div id="name" class="field">Value</div></div>', $output);
-    }
-
-    public function testRenderWithoutLabel() {
-        $element = new Zend_Form_Element_Text('name');
-
-        $element->setValue('Value');
-
-        $decorator = new Form_Decorator_StaticView();
-        $decorator->setElement($element);
-
-        $output = $decorator->render('');
-
-        $this->assertEquals(
-            '<div class="data-wrapper name-data"><div id="name" class="field">Value</div></div>', $output);
-    }
-
-    public function testRenderRequired() {
-        $element = new Zend_Form_Element_Text('name');
-
-        $element->setRequired(true);
-        $element->setLabel('Label:');
-        $element->setValue('Value');
-
-        $decorator = new Form_Decorator_StaticView();
-        $decorator->setElement($element);
-
-        $output = $decorator->render('');
-
-        $this->assertEquals(
-            '<div class="data-wrapper name-data"><div class="label required">Label:</div>'
-            . '<div id="name" class="field">Value</div></div>', $output);
+        return $markup;
     }
 
 }

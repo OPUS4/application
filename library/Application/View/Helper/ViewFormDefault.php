@@ -25,61 +25,30 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Decorator
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Application_View_Helper_ViewFormDefault extends Zend_View_Helper_FormElement {
 
-/**
- * Gibt ein Formularelement als statischen Text aus, anstelle eines INPUT-Tags.
- */
-class Form_Decorator_StaticView extends Zend_Form_Decorator_Abstract {
+    public function viewFormDefault($name, $value = null, $attribs = null) {
+        $info = $this->_getInfo($name, $value, $attribs);
+        extract($info);
 
-    /**
-     * Gibt Formularelement mit Label und Wert aus.
-     *
-     * Die Ausgabe erfolgt in der selben DIV Structure wie im Formular, nur das statt eines INPUT Tags einfach nur der
-     * Wert des Elements ausgegeben wird.
-     *
-     * @param string $content
-     * @return string
-     */
-    public function render($content) {
-        $element = $this->getElement();
+        $markup = '<div'
+            . ' name="' . $this->view->escape($name) . '"'
+            . ' id="' . $this->view->escape($id) . '"'
+            . ' class="' . $this->getElementClass() . '">'
+            . $this->view->escape($value)
+            . '</div>';
 
-        $markup = sprintf('<div id="%1$s" class="%3$s">%2$s</div>', $element->getId(), $this->getValue(),
-            $this->getFieldClass());
-
-        switch ($this->getPlacement()) {
-            case self::PREPEND:
-                return $markup . $content;
-            case self::APPEND:
-            default:
-                return $content . $markup;
-        }
+        return $markup;
     }
 
-    public function getLabel() {
-        $label = $this->getElement()->getLabel();
-        return (strlen(trim($label)) > 0) ? $label : null;
-    }
-
-    public function getFieldClass() {
+    public function getElementClass() {
         return 'field';
-    }
-
-    /**
-     * Liefert den Wert des Feldes.
-     *
-     * Die Werte von Feldern muessen escaped werden.Damit eventuell enthaltener HTML/Javascript Code nicht ausgeführt
-     * wird.
-     *
-     * @return string
-     */
-    public function getValue() {
-        return htmlspecialchars($this->getElement()->getValue());
     }
 
 }

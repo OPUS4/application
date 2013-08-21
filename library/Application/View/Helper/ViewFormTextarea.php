@@ -24,29 +24,21 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Decorator
+ * @category    Applicaton
+ * @package     Application_View_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Application_View_Helper_ViewFormTextarea extends Application_View_Helper_ViewFormDefault {
 
-/**
- * Gibt ein Formularelement als statischen Text aus, anstelle eines INPUT-Tags.
- */
-class Form_Decorator_StaticViewFileSize extends Form_Decorator_StaticView {
+    public function viewFormTextarea($name, $value = null, $attribs = null) {
+        return $this->viewFormDefault($name, $value, $attribs);
+    }
 
-    /**
-     * Liefert den Wert des Feldes.
-     *
-     * Die Werte von Feldern muessen escaped werden.Damit eventuell enthaltener HTML/Javascript Code nicht ausgeführt
-     * wird.
-     *
-     * @return string
-     */
-    public function getValue() {
-        return htmlspecialchars($this->getElement()->getView()->fileSize($this->getElement()->getValue()));
+    public function getElementClass() {
+        return parent::getElementClass() . ' textarea';
     }
 
 }

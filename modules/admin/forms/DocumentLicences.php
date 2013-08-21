@@ -68,7 +68,6 @@ class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
 
         foreach ($licences as $licence) {
             $element = new Form_Element_Checkbox(self::ELEMENT_NAME_PREFIX . $licence->getId());
-            $element->setViewDecorator('StaticViewLicence');
             $element->setLabel($licence->getNameLong());
             $cssClass = ($licence->getActive()) ? self::ACTIVE_CSS_CLASS : self::INACTIVE_CSS_CLASS;
             $labelDecorator = $element->getDecorator('Label');
@@ -153,6 +152,22 @@ class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
         }
         
         return true;
+    }
+
+    /**
+     * Bereits Anzeige in Metadaten-Übersicht vor.
+     *
+     * Durch das Entfernen der Dekoratoren wird nur noch das Label der ausgewählten Lizenzen ausgegeben.
+     */
+    public function prepareRenderingAsView() {
+        parent::prepareRenderingAsView();
+
+        $elements = $this->getElements();
+
+        foreach ($elements as $element) {
+            $element->removeDecorator('ViewHelper');
+            $element->removeDecorator('ElementHtmlTag');
+        }
     }
 
 }

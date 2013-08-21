@@ -39,6 +39,8 @@ abstract class FormElementTestCase extends ControllerTestCase {
 
     protected $_expectedDecorators = array('ViewHelper');
 
+    protected $_staticViewHelper;
+
     public function setUp() {
         parent::setUp();
 
@@ -46,8 +48,12 @@ abstract class FormElementTestCase extends ControllerTestCase {
         $this->assertNotEquals(-1, $this->_expectedDecorators, 'Expected decorator count not configured.');
     }
 
+    protected function getElement($options = null) {
+        return new $this->_formElementClass('name', $options);
+    }
+
     public function testLoadDefaultDecorators() {
-        $element = new $this->_formElementClass('name');
+        $element = $this->getElement();
 
         $element->setDecorators(array());
 
@@ -57,22 +63,58 @@ abstract class FormElementTestCase extends ControllerTestCase {
 
         $this->assertEquals($this->_expectedDecoratorCount, count($element->getDecorators()));
 
+        $this->assertEquals($this->_expectedDecoratorCount, count($this->_expectedDecorators),
+            'Configured expected decorators do not match expected count.');
+
         foreach ($this->_expectedDecorators as $decorator) {
-            $this->assertNotNull($element->getDecorator($decorator));
+            $this->assertTrue($element->getDecorator($decorator) !== FALSE,
+                "Decorator '$decorator' fehlt.'");
         }
     }
 
     public function testLoadDefaultDecoratorsDisabled() {
-        $element = new $this->_formElementClass('name', array('disableLoadDefaultDecorators' => true));
+        $element = $this->getElement(array('disableLoadDefaultDecorators' => true));
 
         $this->assertEmpty($element->getDecorators());
     }
 
     public function testLoadDefaultDecoratorsCustomDecorators() {
-        $element = new $this->_formElementClass('name', array('decorators' => array('ViewHelper')));
+        $element = $this->getElement(array('decorators' => array('ViewHelper')));
 
         $this->assertEquals(1, count($element->getDecorators()));
         $this->assertNotNull($element->getDecorator('ViewHelper'));
+    }
+
+    public function testPrepareRenderingAsView() {
+        $element = $this->getElement();
+
+        if ($element instanceof Form_IElement) {
+            $element->prepareRenderingAsView();
+
+            $this->assertNotNull($element->getDecorator('ViewHelper'));
+            $this->assertInstanceOf('Form_Decorator_ViewHelper', $element->getDecorator('ViewHelper'));
+            $this->assertTrue($element->getDecorator('ViewHelper')->isViewOnlyEnabled());
+        }
+    }
+
+    public function testConstruct() {
+        $element = $this->getElement();
+
+        $paths = $element->getPluginLoader(Zend_Form::DECORATOR)->getPaths();
+        $this->assertArrayHasKey('Form_Decorator_', $paths);
+        $this->assertContains('Form/Decorator/', $paths['Form_Decorator_']);
+    }
+
+    public function testGetStaticViewHelper() {
+        $element = $this->getElement();
+
+        if (isset($this->_staticViewHelper)) {
+            $this->assertEquals($this->_staticViewHelper, $element->getStaticViewHelper());
+        }
+        else {
+            $this->assertFalse(method_exists($element, 'getStaticViewHelper'),
+                'Need to configure \'_staticViewHelper\' in class ' . __CLASS__ . '.');
+        }
     }
 
 }

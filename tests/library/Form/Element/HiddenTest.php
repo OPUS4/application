@@ -37,6 +37,7 @@ class Form_Element_HiddenTest extends FormElementTestCase {
         $this->_formElementClass = 'Form_Element_Hidden';
         $this->_expectedDecoratorCount = 1;
         $this->_expectedDecorators = array('ViewHelper');
+        $this->_staticViewHelper = 'formHidden';
 
         parent::setUp();
     }

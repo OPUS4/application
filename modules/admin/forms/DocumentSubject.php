@@ -182,5 +182,9 @@ class Admin_Form_DocumentSubject extends Admin_Form_AbstractModelSubForm {
     public function getLanguage() {
         return $this->__language;
     }
+
+    protected function _removeElements() {
+        $this->removeElement(Admin_Form_DocumentMultiSubForm::ELEMENT_REMOVE);
+    }
     
 }

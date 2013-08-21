@@ -31,18 +31,14 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-/**
- * Unit Test für Form Element Submit Button.
- *
- * Die Funktion loadDefaultDecorators wird bereits während der Konstruktion einer Instanz aufgerufen.
- */
-class Form_Element_SubmitTest extends FormElementTestCase {
+class Form_Element_SelectTest extends FormElementTestCase {
 
     public function setUp() {
-        $this->_formElementClass = "Form_Element_Submit";
-        $this->_expectedDecoratorCount = 3;
-        $this->_expectedDecorators = array('ViewHelper', 'ElementHtmlTag', 'dataWrapper');
+        $this->_formElementClass = 'Form_Element_Select';
+        $this->_expectedDecoratorCount = 6;
+        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
+            'dataWrapper');
+        $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
 

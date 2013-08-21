@@ -122,8 +122,8 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
     /**
      * Bereitet Formularelement für die Ausgabe als View vor.
      *
-     * Die Dekoratoren für Elemente werden modifiziert, so daß nur noch die Daten aber keine Formular-Tags mehr
-     * ausgegeben werden.
+     * Es wird Form_Decorator_ViewHelper verwendet, um Elemente als "View" ausgeben zu können.
+     *
      */
     protected function _prepareRenderingOfElements() {
         $elements = $this->getElements();
@@ -132,17 +132,11 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
             if ($element instanceof Form_IElement) {
                 $element->prepareRenderingAsView();
             }
-            else if ($element instanceof Zend_Form_Element_Text) {
-                $element->setDecorators(array('StaticView'));
-            }
-            else if ($element instanceof Zend_Form_Element_Textarea) {
-                $element->setDecorators(array('StaticViewTextarea'));
-            }
-            else if ($element instanceof Zend_Form_Element_Select) {
-                $element->setDecorators(array('StaticViewSelect'));
-            }
-            else if ($element instanceof Zend_Form_Element_Checkbox) {
-                $element->setDecorators(array('StaticViewCheckbox'));
+            else {
+                $decorator = $element->getDecorator('ViewHelper');
+                if ($decorator instanceof Form_Decorator_ViewHelper) {
+                    $decorator->setViewOnlyEnabled(true);
+                }
             }
         }
     }

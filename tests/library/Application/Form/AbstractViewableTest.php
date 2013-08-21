@@ -101,18 +101,21 @@ class Application_Form_AbstractViewableTest extends ControllerTestCase {
         // Decorators ueberpruefen
         $decorators = $form->getElement('textfull')->getDecorators();
 
-        $this->assertEquals(1, count($decorators));
-        $this->assertArrayHasKey('Form_Decorator_StaticView', $decorators);
+        $this->assertEquals(5, count($decorators));
+        $this->assertArrayHasKey('Form_Decorator_ViewHelper', $decorators);
+        $this->assertTrue($form->getElement('textfull')->getDecorator('ViewHelper')->isViewOnlyEnabled());
 
         $decorators = $form->getElement('checkboxtrue')->getDecorators();
 
-        $this->assertEquals(1, count($decorators));
-        $this->assertArrayHasKey('Form_Decorator_StaticViewCheckbox', $decorators);
+        $this->assertEquals(5, count($decorators));
+        $this->assertArrayHasKey('Form_Decorator_ViewHelper', $decorators);
+        $this->assertTrue($form->getElement('checkboxtrue')->getDecorator('ViewHelper')->isViewOnlyEnabled());
 
         $decorators = $form->getElement('select')->getDecorators();
 
-        $this->assertEquals(1, count($decorators));
-        $this->assertArrayHasKey('Form_Decorator_StaticViewSelect', $decorators);
+        $this->assertEquals(5, count($decorators));
+        $this->assertArrayHasKey('Form_Decorator_ViewHelper', $decorators);
+        $this->assertTrue($form->getElement('select')->getDecorator('ViewHelper')->isViewOnlyEnabled());
     }
 
     public function testIsEmptyTrue() {
