@@ -42,10 +42,9 @@ class Application_View_Helper_ViewFormSelect extends Zend_View_Helper_FormSelect
         extract($info);
 
         $markup = '<div'
-            . ' name="' . $this->view->escape($name) . '"'
             . ' id="' . $this->view->escape($id) . '"'
             . ' class="field">'
-            . $this->view->escape($options[$value])
+            . $this->view->escape(isset($options[$value]) ? $options[$value] : $value)
             . '</div>';
 
         return $markup;

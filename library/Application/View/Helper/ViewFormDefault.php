@@ -38,7 +38,6 @@ class Application_View_Helper_ViewFormDefault extends Zend_View_Helper_FormEleme
         extract($info);
 
         $markup = '<div'
-            . ' name="' . $this->view->escape($name) . '"'
             . ' id="' . $this->view->escape($id) . '"'
             . ' class="' . $this->getElementClass() . '">'
             . $this->view->escape($value)

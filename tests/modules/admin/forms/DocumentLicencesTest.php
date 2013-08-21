@@ -148,6 +148,7 @@ class DocumentLicencesTest extends ControllerTestCase {
 
         $this->assertFalse($element->getDecorator('ViewHelper'));
         $this->assertFalse($element->getDecorator('ElementHtmlTag'));
+        $this->assertTrue($element->getDecorator('Label')->getOption('disableFor'));
     }
     
 }

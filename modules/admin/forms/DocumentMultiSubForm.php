@@ -114,7 +114,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         $this->setLegend('admin_document_section_' . strtolower($this->_fieldName));
 
         if (!is_null($this->getColumns())) {
-            $this->setRenderAsTableEnabled(true);
+            $this->renderAsTableEnabled = true;
             $this->setDecorators(array(
                 'FormElements',
                 'TableHeader',
@@ -387,8 +387,13 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         $subform->addElement($button);
 
         if ($this->isRenderAsTableEnabled()) {
-            $idElement = $subform->getElement('Id'); // TODO make sure it exists (Design)
-            $button->addDecorator('RemoveButton', array('element' => $idElement));
+            $idElement = $subform->getElement('Id');
+            if (!is_null($idElement)) {
+                $button->addDecorator('RemoveButton', array('element' => $idElement));
+            }
+            else {
+                $this->getLogger()->err(__METHOD__ . 'Subform does not have element \'Id\'.');
+            }
         }
     }
 
@@ -562,10 +567,6 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
 
         parent::setOptions($options);
     }
-
-   public function setRenderAsTableEnabled($enabled) {
-       $this->renderAsTableEnabled = $enabled;
-   }
 
    public function isRenderAsTableEnabled() {
        return $this->renderAsTableEnabled;

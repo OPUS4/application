@@ -167,6 +167,7 @@ class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
         foreach ($elements as $element) {
             $element->removeDecorator('ViewHelper');
             $element->removeDecorator('ElementHtmlTag');
+            $element->getDecorator('Label')->setOption('disableFor', true);
         }
     }
 

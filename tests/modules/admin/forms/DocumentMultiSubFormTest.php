@@ -42,6 +42,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('Add'));
         $this->assertNotNull($form->getLegend());
         $this->assertEquals($form->getLegend(), 'admin_document_section_identifier');
+        $this->assertFalse($form->isRenderAsTableEnabled());
     }
     
     public function testConstructFormWithValidator() {
@@ -51,6 +52,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('Add'));
         $this->assertNotNull($form->getLegend());
         $this->assertEquals($form->getLegend(), 'admin_document_section_titleparent');
+        $this->assertFalse($form->isRenderAsTableEnabled());
     }
     
     /**
@@ -353,9 +355,88 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
             'columns' => $columns
         ));
 
+        $columns[] = array('class' => 'Remove');
+
         $this->assertEquals($columns, $form->getColumns());
+        $this->assertTrue($form->isRenderAsTableEnabled());
+
+        $decorators = $form->getDecorators();
+
+        $this->assertEquals(7, count($decorators));
+        $this->assertNotNull($form->getDecorator('TableHeader'));
+        $this->assertNotNull($form->getDecorator('TableWrapper'));
     }
 
+    public function testPrepareSubFormDecoratorsForTableRendering() {
+        $method = new ReflectionMethod('Admin_Form_DocumentMultiSubForm', 'prepareSubFormDecorators');
+        $method->setAccessible(true);
 
-    
+        $columns = array(
+            array(),
+            array('label' => 'Number'),
+            array('label' => 'SortOrder')
+        );
+
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentSeries', 'Series', null, array(
+            'columns' => $columns
+        ));
+
+        $subform = new Zend_Form_SubForm();
+        $subform->setDecorators(array());
+        $subform->addElement('text', 'test', array('decorators' => array(
+            array('dataWrapper' => 'HtmlTag'),
+            array('LabelNotEmpty' => 'HtmlTag'),
+            array('ElementHtmlTag' => 'HtmlTag')
+        )));
+        $subform->addElement('hidden', 'Id');
+
+        $method->invoke($form, $subform);
+
+        $this->assertEquals(1, count($subform->getDecorators()));
+        $this->assertNotNull($subform->getDecorator('tableRowWrapper'));
+
+        $element = $subform->getElement('test');
+
+        $this->assertFalse($element->getDecorator('dataWrapper'));
+        $this->assertFalse($element->getDecorator('LabelNotEmpty'));
+        $this->assertFalse($element->getDecorator('ElementHtmlTag'));
+        $this->assertNotNull($element->getDecorator('tableCellWrapper'));
+
+        $this->assertEquals(0, count($subform->getElement('Id')->getDecorators()));
+    }
+
+    public function testAddRemoveButtonForTableRendering() {
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentSeries', 'Series', null, array(
+            'columns' => array(array())
+        ));
+
+        $method = new ReflectionMethod('Admin_Form_DocumentMultiSubForm', 'addRemoveButton');
+        $method->setAccessible(true);
+
+        $subform = new Zend_Form_SubForm();
+        $subform->addElement('hidden', 'Id');
+
+        $method->invoke($form, $subform);
+
+        $element = $subform->getElement('Remove');
+
+        $this->assertNotNull($element);
+        $this->assertNotNull($element->getDecorator('RemoveButton'));
+        $this->assertEquals($subform->getElement('Id'), $element->getDecorator('RemoveButton')->getOption('element'));
+    }
+
+    public function testIsRenderAsTableEnabledTrue() {
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentSeries', 'Series', null, array(
+            'columns' => array(array())
+        ));
+
+        $this->assertTrue($form->isRenderAsTableEnabled());
+    }
+
+    public function testIsRenderAsTableEnabledFalse() {
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentSeries', 'Series');
+
+        $this->assertFalse($form->isRenderAsTableEnabled());
+    }
+
 }

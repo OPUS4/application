@@ -39,7 +39,7 @@ class Application_View_Helper_ViewFormSelectTest extends ControllerTestCase {
 
         $markup = $helper->viewFormSelect('testName', '1', null, array('Value1', 'Value2', 'Value3'));
 
-        $this->assertEquals('<div name="testName" id="testName" class="field">Value2</div>', $markup);
+        $this->assertEquals('<div id="testName" class="field">Value2</div>', $markup);
     }
 
     public function testViewFormSelectEscaping() {
@@ -48,7 +48,7 @@ class Application_View_Helper_ViewFormSelectTest extends ControllerTestCase {
 
         $markup = $helper->viewFormSelect('testName', '1', null, array('Value1', '<h1>Value2</h1>', 'Value3'));
 
-        $this->assertEquals('<div name="testName" id="testName" class="field">&lt;h1&gt;Value2&lt;/h1&gt;</div>', $markup);
+        $this->assertEquals('<div id="testName" class="field">&lt;h1&gt;Value2&lt;/h1&gt;</div>', $markup);
     }
 
 }

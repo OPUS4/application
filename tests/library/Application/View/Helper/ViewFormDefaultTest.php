@@ -39,7 +39,7 @@ class Application_View_Helper_ViewFormDefaultTest extends ControllerTestCase {
 
         $markup = $helper->viewFormDefault('testName', 'testValue', array('id' => '10'));
 
-        $this->assertEquals('<div name="testName" id="10" class="field">testValue</div>', $markup);
+        $this->assertEquals('<div id="10" class="field">testValue</div>', $markup);
     }
 
     public function testViewFormDefaultOnlyName() {
@@ -48,7 +48,7 @@ class Application_View_Helper_ViewFormDefaultTest extends ControllerTestCase {
 
         $markup = $helper->viewFormDefault('testName');
 
-        $this->assertEquals('<div name="testName" id="testName" class="field"></div>', $markup);
+        $this->assertEquals('<div id="testName" class="field"></div>', $markup);
     }
 
     public function testViewFormDefaultEscaping() {
@@ -57,7 +57,7 @@ class Application_View_Helper_ViewFormDefaultTest extends ControllerTestCase {
 
         $markup = $helper->viewFormDefault('testName', '<h1>HTML</h1>', array('id' => '10'));
 
-        $this->assertEquals('<div name="testName" id="10" class="field">&lt;h1&gt;HTML&lt;/h1&gt;</div>', $markup);
+        $this->assertEquals('<div id="10" class="field">&lt;h1&gt;HTML&lt;/h1&gt;</div>', $markup);
     }
 
     public function testGetElementClass() {
