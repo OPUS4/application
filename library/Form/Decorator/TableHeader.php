@@ -45,12 +45,18 @@ class Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstract {
             return $content;
         }
 
+        $view = $this->getElement()->getView();
+
+        if (!$view instanceof Zend_View_Interface) {
+            return $content;
+        }
+
         $markup = '<thead><tr>';
 
         foreach ($this->getColumns() as $column) {
             $label = isset($column['label']) ? $column['label'] : '&nbsp;';
             $cssClass = isset($column['class']) ? $column['class'] : null;
-            $markup .= "<th class=\"$cssClass\">$label</th>";
+            $markup .= "<th class=\"$cssClass\">" . $view->escape($view->translate($label)) . "</th>";
         }
 
         $markup .= '</tr></thead>';

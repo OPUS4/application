@@ -1931,6 +1931,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="Opus_Subject_Value">
+            <tuv xml:lang="en">
+                <seg>Subject</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Schlagwort</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="ExternalKey">
             <tuv xml:lang="en">
                 <seg>External Key</seg>

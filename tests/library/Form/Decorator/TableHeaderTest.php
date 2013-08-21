@@ -67,4 +67,54 @@ class Form_Decorator_TableHeaderTest extends ControllerTestCase {
         $this->assertEquals($this->columns, $decorator->getColumns());
     }
 
+    public function testRender() {
+        $decorator = new Form_Decorator_TableHeader();
+
+        $decorator->setColumns($this->columns);
+
+        $form = new Zend_Form();
+        $form->addSubForm(new Zend_Form_SubForm(), 'subform1');
+
+        $decorator->setElement($form);
+
+        $markup = $decorator->render('content');
+
+        $this->assertEquals(
+            '<thead><tr><th class="name">column1</th><th class="size">column2</th></tr></thead>content', $markup);
+    }
+
+    public function testRenderEscape() {
+        $decorator = new Form_Decorator_TableHeader();
+
+        $decorator->setColumns(array(array('label' => '<h1>HTML</h1>')));
+
+        $form = new Zend_Form();
+        $form->addSubForm(new Zend_Form_SubForm(), 'subform1');
+
+        $decorator->setElement($form);
+
+        $markup = $decorator->render('content');
+
+        $this->assertEquals(
+            '<thead><tr><th class="">&lt;h1&gt;HTML&lt;/h1&gt;</th></tr></thead>content', $markup);
+    }
+
+    public function testRenderTranslate() {
+        $this->useGerman();
+
+        $decorator = new Form_Decorator_TableHeader();
+
+        $decorator->setColumns(array(array('label' => 'Value')));
+
+        $form = new Zend_Form();
+        $form->addSubForm(new Zend_Form_SubForm(), 'subform1');
+
+        $decorator->setElement($form);
+
+        $markup = $decorator->render('content');
+
+        $this->assertEquals(
+            '<thead><tr><th class="">Text</th></tr></thead>content', $markup);
+    }
+
 }
