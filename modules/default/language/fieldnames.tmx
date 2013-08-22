@@ -2140,24 +2140,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="Opus_File_">
-            <tuv xml:lang="en">
-                <seg></seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg></seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="Opus_File_">
-            <tuv xml:lang="en">
-                <seg></seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg></seg>
-            </tuv>
-        </tu>
-
     </body>
 
 </tmx>

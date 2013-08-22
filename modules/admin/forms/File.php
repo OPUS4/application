@@ -76,8 +76,14 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
 
         $this->addElement('hidden', self::ELEMENT_ID);
 
-        $this->addElement('text', self::ELEMENT_PATH_NAME, array('decorators' => array('StaticView')));
-        $this->addElement('text', self::ELEMENT_FILE_SIZE, array('decorators' => array('StaticViewFileSize')));
+        $element = $this->createElement('text', self::ELEMENT_PATH_NAME);
+        $element->getDecorator('ViewHelper')->setViewOnlyEnabled(true);
+        $this->addElement($element);
+
+        $element = $this->createElement('text', self::ELEMENT_FILE_SIZE);
+        $element->getDecorator('ViewHelper')->setViewOnlyEnabled(true);
+        $this->addElement($element);
+
         $this->addElement('Language', self::ELEMENT_LANGUAGE, array('label' => 'Language', 'required' => true));
         $this->addElement('text', self::ELEMENT_LABEL);
         $this->addElement('textarea', self::ELEMENT_COMMENT);
