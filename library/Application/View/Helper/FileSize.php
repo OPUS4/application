@@ -40,15 +40,15 @@ class Application_View_Helper_FileSize extends Zend_View_Helper_Abstract {
      *
      * @return Base url string.
      */
-    public function fileSize($size) {
+    public function fileSize($name, $value = 0, $options = null) {
         $labelIndex = 0;
         $maxIndex = count($this->labels) - 1;
-        while ($size >= 1024 && $labelIndex < $maxIndex) {
+        while ($value >= 1024 && $labelIndex < $maxIndex) {
             $labelIndex++;
-            $size = $size / 1024;
+            $value = $value / 1024;
         }
 
-        return sprintf('%1$s %2$s', round($size, 2), $this->labels[$labelIndex]);
+        return sprintf('%1$s %2$s', round($value, 2), $this->labels[$labelIndex]);
     }
 
 }

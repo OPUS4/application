@@ -52,6 +52,8 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
      */
     private $hint;
 
+    private $staticViewHelper = 'viewFormDefault';
+
     /**
      * Initialisiert das Formularelement.
      *
@@ -106,6 +108,14 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
             $viewHelper->setViewOnlyEnabled(true);
         }
         $this->removeDecorator('Placeholder');
+    }
+
+    public function getStaticViewHelper() {
+        return $this->staticViewHelper;
+    }
+
+    public function setStaticViewHelper($viewHelper) {
+        $this->staticViewHelper = $viewHelper;
     }
 
 }

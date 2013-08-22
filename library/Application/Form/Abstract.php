@@ -77,6 +77,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * @return mixed
      *
      * TODO Sind alle Fälle abgedeckt?
+     * TODO replace with filter or override getValue($name)
      */
     public function getElementValue($name) {
         $element = $this->getElement($name);
@@ -111,19 +112,19 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * @param null $options
      * @return void|Zend_Form
      */
-    public function addElement($element, $name = null, $options = null) {
+    public function createElement($element, $name , $options = null) {
         if ($this->isUseNameAsLabel()) {
             $labelOption = array('label' => is_null($this->labelPrefix) ? $name : $this->labelPrefix . $name);
             $options = (is_array($options)) ? array_merge($labelOption, $options) : $labelOption;
         }
 
-        parent::addElement($element, $name, $options);
-
-        $element = $this->getElement($name);
+        $element = parent::createElement($element, $name, $options);
 
         if (!is_null($element)) {
             $this->applyCustomMessages($element);
         }
+
+        return $element;
     }
 
     /**

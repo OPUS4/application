@@ -78,10 +78,12 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
 
         $element = $this->createElement('text', self::ELEMENT_PATH_NAME);
         $element->getDecorator('ViewHelper')->setViewOnlyEnabled(true);
+        // $element->setStaticViewHelper('fileLink');
         $this->addElement($element);
 
         $element = $this->createElement('text', self::ELEMENT_FILE_SIZE);
         $element->getDecorator('ViewHelper')->setViewOnlyEnabled(true);
+        $element->setStaticViewHelper('fileSize');
         $this->addElement($element);
 
         $this->addElement('Language', self::ELEMENT_LANGUAGE, array('label' => 'Language', 'required' => true));
@@ -109,7 +111,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
     public function populateFromModel($file) {
         $this->getElement(self::ELEMENT_ID)->setValue($file->getId());
         $this->getElement(self::ELEMENT_PATH_NAME)->setValue($file->getPathName());
-        $this->getElement(self::ELEMENT_PATH_NAME)->setHint('Datei nicht gefunden');
+        // TODO $this->getElement(self::ELEMENT_PATH_NAME)->setHint('Datei nicht gefunden');
         $this->getElement(self::ELEMENT_LABEL)->setValue($file->getLabel());
         $this->getElement(self::ELEMENT_FILE_SIZE)->setValue($file->getFileSize());
         $this->getElement(self::ELEMENT_LANGUAGE)->setValue($file->getLanguage());

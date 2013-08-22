@@ -39,6 +39,7 @@ class Form_Element_TextTest extends FormElementTestCase {
         $this->_expectedDecoratorCount = 8;
         $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
             'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_staticViewHelper = 'viewFormDefault';
         parent::setUp();
     }
 

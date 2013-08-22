@@ -40,7 +40,7 @@
 
 <tr class="file <?= $this->element->getOrder() % 2 == 0 ? 'even' : 'odd' ?>">
     <td id="<?= $formId . 'Label' ?>" class="label"><?= $this->fileLink($file) ?></td>
-    <td id="<?= $formId . 'FileSize' ?>" class="filesize"><?= $this->fileSize($file->getFileSize()) ?></td>
+    <td id="<?= $formId . 'FileSize' ?>" class="filesize"><?= $this->fileSize(null, $file->getFileSize()) ?></td>
     <td id="<?= $formId . 'MimeType' ?>" class="mimetype"><?= htmlspecialchars($file->getMimeType()) ?></td>
     <td id="<?= $formId . 'Language' ?>" class="language"><?= $this->translate($file->getLanguage()) ?></td>
     <td id="<?= $formId . 'VisibleInFrontdoor' ?>" class="visiblefrontdoor"
