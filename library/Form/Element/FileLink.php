@@ -33,6 +33,16 @@
  */
 class Form_Element_FileLink extends Form_Element_Text {
 
+    public function loadDefaultDecorators() {
+        parent::loadDefaultDecorators();
+
+        $label = $this->getDecorator('LabelNotEmpty');
+
+        if ($label !== FALSE) {
+            $label->setOption('disableFor', true);
+        }
+    }
+
     public function getStaticViewHelper() {
         return 'fileLink';
     }

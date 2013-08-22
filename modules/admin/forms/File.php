@@ -82,6 +82,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
 
         $element = $this->createElement('text', self::ELEMENT_FILE_SIZE);
         $element->getDecorator('ViewHelper')->setViewOnlyEnabled(true);
+        $element->getDecorator('LabelNotEmpty')->setOption('disableFor', true);
         $element->setStaticViewHelper('fileSize');
         $this->addElement($element);
 

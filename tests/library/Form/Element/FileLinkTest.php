@@ -42,4 +42,10 @@ class Form_Element_FileLinkTest extends FormElementTestCase {
         parent::setUp();
     }
 
+    public function testDisableLabelFor() {
+        $element = $this->getElement();
+
+        $this->assertTrue($element->getDecorator('LabelNotEmpty')->getOption('disableFor'));
+    }
+
 }
