@@ -213,6 +213,45 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         // Prüfen, ob XHTML valid ist
         $this->validateXHTML($this->getResponse()->getBody());
         $this->verifyBreadcrumbDefined();
+
+        // Check Add-Buttons
+        $addButtons = array(
+            'input#Document-Persons-author-Add',
+            'input#Document-Persons-editor-Add',
+            'input#Document-Persons-translator-Add',
+            'input#Document-Persons-contributor-Add',
+            'input#Document-Persons-other-Add',
+            'input#Document-Persons-advisor-Add',
+            'input#Document-Persons-referee-Add',
+            'input#Document-Persons-submitter-Add',
+
+            'input#Document-Titles-Main-Add',
+            'input#Document-Titles-Additional-Add',
+            'input#Document-Titles-Parent-Add',
+            'input#Document-Titles-Sub-Add',
+
+            'input#Document-Bibliographic-Publishers-Add',
+            'input#Document-Bibliographic-Grantors-Add',
+
+            'input#Document-Series-Add',
+            'input#Document-Enrichments-Add',
+            'input#Document-Collections-Add',
+
+            'input#Document-Content-Abstracts-Add',
+            'input#Document-Content-Subjects-Swd-Add',
+            'input#Document-Content-Subjects-Psyndex-Add',
+            'input#Document-Content-Subjects-Uncontrolled-Add',
+
+            'input#Document-Identifiers-Add',
+            'input#Document-Patents-Add',
+            'input#Document-Notes-Add',
+        );
+
+        $this->assertQueryCount('input[@value="Add"]', count($addButtons), 'Not enough add buttons.');
+
+        foreach ($addButtons as $button) {
+            $this->assertQuery($button);
+        }
     }
     
 }
