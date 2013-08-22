@@ -136,6 +136,8 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
 
         $doc = new Opus_Document(100);
         $this->assertEquals('published', $doc->getServerState());
+        $doc->setServerState('unpublished');
+        $doc->store();
     }
 
     /**
