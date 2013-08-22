@@ -140,7 +140,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         // get path to store files
         $tempPath = $this->config->form->first->temp;
         if (true === empty($tempPath))
-            $tempPath = '../workspace/tmp/';
+            $tempPath = APPLICATION_PATH . '/workspace/tmp/';
 
         // get allowed filetypes
         $filetypes = $this->config->publish->filetypes->allowed;
