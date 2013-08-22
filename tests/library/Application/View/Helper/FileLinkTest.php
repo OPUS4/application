@@ -43,23 +43,24 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
     public function testFileLink() {
         $helper = new Application_View_Helper_FileLink();
 
-        $helper->setView(Zend_Registry::get('Opus_View'));
+        $helper->setView(new Zend_View());
 
         $file = new Opus_File(126);
 
-        $this->assertEquals('<a href="http:///files/146/test.pdf">foo-pdf</a>', $helper->fileLink($file));
+        $this->assertEquals('<a href="http:///files/146/test.pdf">foo-pdf</a>', $helper->fileLink(null, $file,
+            array('useFileLabel' => true)));
     }
 
     public function testFileLinkSpecialCharacters() {
         $helper = new Application_View_Helper_FileLink();
 
-        $helper->setView(Zend_Registry::get('Opus_View'));
+        $helper->setView(new Zend_View());
 
         $file = new Opus_File(130);
 
         $this->assertEquals(
             '<a href="http:///files/147/special-chars-%25-%22-%23-%26.pdf">Dateiname-mit-Sonderzeichen.pdf</a>',
-            $helper->fileLink($file));
+            $helper->fileLink(null, $file, array('useFileLabel' => true)));
     }
 
     public function testFileLinkSpacesAndQuotes() {
@@ -72,7 +73,7 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
         $this->assertEquals(
             '<a href="http:///files/147/%27many%27++-++spaces++and++quotes.pdf">'
             . 'Dateiname-mit-vielen-Spaces-und-Quotes.pdf</a>',
-            $helper->fileLink($file));
+            $helper->fileLink(null, $file, array('useFileLabel' => true)));
     }
 
     public function testFileLinkNoLabel() {
@@ -83,7 +84,8 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
         $file = new Opus_File(126);
         $file->setLabel(null);
 
-        $this->assertEquals('<a href="http:///files/146/test.pdf">test.pdf</a>', $helper->fileLink($file));
+        $this->assertEquals('<a href="http:///files/146/test.pdf">test.pdf</a>', $helper->fileLink(null, $file,
+            array('useFileLabel' => true)));
     }
 
 }

@@ -72,6 +72,7 @@ class Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelper {
 
     public function setViewOnlyEnabled($enabled) {
         $this->viewOnlyEnabled = $enabled;
+        return $this;
     }
 
     public function isViewOnlyEnabled() {

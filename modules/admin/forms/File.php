@@ -44,7 +44,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
      * Name fuer die Formularelemente.
      */
     const ELEMENT_ID                    = 'Id';
-    const ELEMENT_PATH_NAME             = 'PathName'; // nicht editierbar
+    const ELEMENT_FILE_LINK             = 'PathName'; // nicht editierbar
     const ELEMENT_LABEL                 = 'Label';
     const ELEMENT_COMMENT               = 'Comment';
     const ELEMENT_MIME_TYPE             = 'MimeType'; // nicht editierbar
@@ -76,9 +76,8 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
 
         $this->addElement('hidden', self::ELEMENT_ID);
 
-        $element = $this->createElement('text', self::ELEMENT_PATH_NAME);
+        $element = $this->createElement('FileLink', self::ELEMENT_FILE_LINK);
         $element->getDecorator('ViewHelper')->setViewOnlyEnabled(true);
-        // $element->setStaticViewHelper('fileLink');
         $this->addElement($element);
 
         $element = $this->createElement('text', self::ELEMENT_FILE_SIZE);
@@ -110,8 +109,8 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
      */
     public function populateFromModel($file) {
         $this->getElement(self::ELEMENT_ID)->setValue($file->getId());
-        $this->getElement(self::ELEMENT_PATH_NAME)->setValue($file->getPathName());
-        // TODO $this->getElement(self::ELEMENT_PATH_NAME)->setHint('Datei nicht gefunden');
+        $this->getElement(self::ELEMENT_FILE_LINK)->setValue($file);
+        // TODO $this->getElement(self::ELEMENT_FILE_LINK)->setHint('Datei nicht gefunden');
         $this->getElement(self::ELEMENT_LABEL)->setValue($file->getLabel());
         $this->getElement(self::ELEMENT_FILE_SIZE)->setValue($file->getFileSize());
         $this->getElement(self::ELEMENT_LANGUAGE)->setValue($file->getLanguage());

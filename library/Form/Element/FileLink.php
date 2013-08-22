@@ -23,37 +23,18 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * View Helper fuer Link zu Datei.
- *
- * Wird in der Dateientabelle in der Metadaten-Übersicht verwendet.
  *
  * @category    Application
- * @package     Application_View_Helper
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_View_Helper_FileLink extends Zend_View_Helper_Abstract {
+class Form_Element_FileLink extends Form_Element_Text {
 
-    /**
-     * Rendert Link fuer Datei.
-     *
-     * @param $file Opus_File
-     * @return string HTML output
-     */
-    public function fileLink($name, $file = null, $options = null) {
-        $fileName = $file->getPathName();
-        if (isset($options['useFileLabel']) && $options['useFileLabel']) {
-            $fileName = $file->getLabel();
-        }
-        $fileName = (strlen(trim($fileName)) == 0) ? $file->getPathName() : $fileName;
-        $fileUrl = $this->view->serverUrl() . $this->view->baseUrl . "/files/" . $file->getParentId() .
-                "/" . urlencode($file->getPathName());
-        return '<a href="' . $fileUrl . '">' .htmlspecialchars($fileName) . '</a>';
+    public function getStaticViewHelper() {
+        return 'fileLink';
     }
 
 }
