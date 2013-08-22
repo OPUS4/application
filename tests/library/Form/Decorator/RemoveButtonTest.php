@@ -47,12 +47,37 @@ class Form_Decorator_RemoveButtonTest extends ControllerTestCase {
 
         $output = $decorator->render('content'); // Output wird an content dran gehängt
 
-        $this->assertEquals(
-            'content'
-            . '<div class="data-wrapper Remove-data">'
-            . '<div class="field" id="Remove-element">'
-            . '<input type="submit" name="Remove" id="Remove" value="Remove" />'
-            . '</div></div>', $output);
+        $this->assertEquals('content<input type="submit" name="Remove" id="Remove" value="Remove" />', $output);
+    }
+
+    public function testRenderWithHidden() {
+        $form = new Zend_Form();
+        $form->setName('Test');
+        $form->addElement('submit', 'Remove');
+        $element = $form->createElement('hidden', 'Id');
+        $element->setValue(10);
+        $form->addElement($element);
+
+        $decorator = new Form_Decorator_RemoveButton();
+        $decorator->setElement($form);
+        $decorator->setSecondElement($element);
+
+        $output = $decorator->render('content'); // Output wird an content dran gehängt
+
+        $this->assertEquals('content'
+            . '<input type="hidden" name="Id" id="Id" value="10" />'
+            . '<input type="submit" name="Remove" id="Remove" value="Remove" />',
+            $output);
+    }
+
+    public function testSetSecondElementOption() {
+        $element = new Form_Element_Hidden('name');
+        $decorator = new Form_Decorator_RemoveButton(array('element' => $element));
+
+        $this->assertEquals($element, $decorator->getSecondElement());
+        $this->assertEquals($element, $decorator->getSecondElement()); // works 2nd time as well
+
+
     }
 
 }

@@ -37,10 +37,12 @@
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
+ *
+ * TODO find better solution that is more generic
  */
 class Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract {
 
-    private $element;
+    private $secondElement;
 
     public function render($content) {
         $button = $this->getElement();
@@ -71,7 +73,6 @@ class Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract {
     /**
      * @param $element
      * @return string
-     * TODO ViewHelper?
      */
     public function renderElement($element, $type = 'submit') {
         $buttonId = $element->getId();
@@ -92,7 +93,7 @@ class Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract {
     }
 
     public function setSecondElement($element) {
-        $this->columns = $element;
+        $this->secondElement = $element;
     }
 
     public function getSecondElement() {
@@ -100,10 +101,10 @@ class Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract {
 
         if (!is_null($element)) {
             $this->removeOption('element');
-            $this->element = $element;
+            $this->secondElement = $element;
         }
 
-        return $this->element;
+        return $this->secondElement;
     }
 
 
