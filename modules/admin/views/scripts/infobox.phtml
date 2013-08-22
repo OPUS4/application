@@ -37,7 +37,7 @@
 <?PHP if (!is_null($document)) : ?>
 <?PHP $authors = $document->getAuthors(); ?>
 <div id="docinfo">
-    <h2><span class="docid"><?=$document->getDocId()?></span> - <?=$document->getMainTitle()?></h2>
+    <h2><span class="docid"><?=$document->getDocId()?></span> - <?= $this->escape($document->getMainTitle()) ?></h2>
     <?PHP if (!empty($authors)) : ?>
     <p class="author"><?= htmlspecialchars($authors[0]['name'])?></p>
     <?PHP endif; ?>
