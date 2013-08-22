@@ -70,7 +70,7 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
             $title = $this->getDocumentTitle($document);
             $page = $this->getNavigation()->findOneBy('label', 'admin_document_index');
             if (!is_null($page)) {
-                $page->setLabel(htmlspecialchars($title) . ' ('. $document->getId() . ')');
+                $page->setLabel($title . ' ('. $document->getId() . ')');
                 $page->setParam(self::PARAM_DOCUMENT_ID, $document->getId());
             }
             else {
