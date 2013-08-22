@@ -124,12 +124,12 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
                 'Fieldset',
                 array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
             ));
+            $this->getElement(self::ELEMENT_ADD)->setDecorators(array())->setDisableLoadDefaultDecorators(true);
         }
     }
 
     protected function initButton() {
-        $this->addElement('submit', self::ELEMENT_ADD, array('order' => 1000, 'label' => 'admin_button_add',
-            'decorators' => array(), 'disableLoadDefaultDecorators' => true));
+        $this->addElement('submit', self::ELEMENT_ADD, array('order' => 1000, 'label' => 'admin_button_add'));
     }
     
     /**
