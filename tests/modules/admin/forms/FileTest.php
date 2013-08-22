@@ -44,7 +44,7 @@ class Admin_Form_FileTest extends ControllerTestCase {
 
         $form->populateFromModel($file);
 
-        $this->assertEquals('test.pdf', $form->getElement('PathName')->getValue());
+        $this->assertEquals($file, $form->getElement('PathName')->getValue());
         $this->assertEquals(8817, $form->getElement('FileSize')->getValue());
         $this->assertEquals('deu', $form->getElement('Language')->getValue());
         $this->assertEquals('foo-pdf', $form->getElement('Label')->getValue());
