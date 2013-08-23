@@ -52,7 +52,7 @@ class ConsistencyCheckTest extends CronTestCase {
         
         $contents = file_get_contents($logPath . 'opus_consistency-check.log');
         $this->assertFalse(strpos($contents, 'checking 137 published documents for consistency.') === false,
-            'Logfile opus_consistency-check.log does not contain "checking 137...".');
+            "Logfile opus_consistency-check.log does not contain 'checking 137...' [$contents].");
         $this->assertFalse(strpos($contents, 'No inconsistency was detected.') === false,
             'Logfile opus_consistency-check.log does not contain "No inconsistenty ...".');
         $this->assertFalse(strpos($contents, 'Completed operation after') === false,
@@ -81,7 +81,7 @@ class ConsistencyCheckTest extends CronTestCase {
         
         $contents = file_get_contents($logPath . 'opus_consistency-check.log');
         $this->assertFalse(strpos($contents, 'checking 137 published documents for consistency.') === false,
-            'Logfile opus_consistency-check.log does not contain "checking 137 ...".');
+            "Logfile opus_consistency-check.log does not contain 'checking 137 ...' [$contents].");
         $this->assertFalse(strpos($contents, 'inconsistency found for document 1: document is in database, but is not in Solr index.') === false,
             'Logfile opus_consistency-check.log does not contain "inconsistency found for document 1: ...".');
         $this->assertFalse(strpos($contents, 'inconsistency found for document 200: document is in database, but is not in Solr index.') === false,
