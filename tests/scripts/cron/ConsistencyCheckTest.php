@@ -51,9 +51,12 @@ class ConsistencyCheckTest extends CronTestCase {
         $this->assertFileNotExists($logPath . 'opus_consistency-check.log.lock', 'Lockfile opus_consistency-check.log.lock was not removed');
         
         $contents = file_get_contents($logPath . 'opus_consistency-check.log');
-        $this->assertFalse(strpos($contents, 'checking 137 published documents for consistency.') === false, 'Logfile opus_consistency-check.log does not contain expected message');
-        $this->assertFalse(strpos($contents, 'No inconsistency was detected.') === false, 'Logfile opus_consistency-check.log does not contain expected message');
-        $this->assertFalse(strpos($contents, 'Completed operation after') === false, 'Logfile opus_consistency-check.log does not contain expected message');
+        $this->assertFalse(strpos($contents, 'checking 137 published documents for consistency.') === false,
+            'Logfile opus_consistency-check.log does not contain "checking 137...".');
+        $this->assertFalse(strpos($contents, 'No inconsistency was detected.') === false,
+            'Logfile opus_consistency-check.log does not contain "No inconsistenty ...".');
+        $this->assertFalse(strpos($contents, 'Completed operation after') === false,
+            'Logfile opus_consistency-check.log does not contain "Completed operation after".');
         
         unlink($logPath . 'opus_consistency-check.log');
     }
@@ -77,13 +80,20 @@ class ConsistencyCheckTest extends CronTestCase {
         $this->assertFileNotExists($logPath . 'opus_consistency-check.log.lock', 'Lockfile opus_consistency-check.log.lock was not removed');
         
         $contents = file_get_contents($logPath . 'opus_consistency-check.log');
-        $this->assertFalse(strpos($contents, 'checking 137 published documents for consistency.') === false, 'Logfile opus_consistency-check.log does not contain expected message');
-        $this->assertFalse(strpos($contents, 'inconsistency found for document 1: document is in database, but is not in Solr index.') === false, 'Logfile opus_consistency-check.log does not contain expected message');
-        $this->assertFalse(strpos($contents, 'inconsistency found for document 200: document is in database, but is not in Solr index.') === false, 'Logfile opus_consistency-check.log does not contain expected message');
-        $this->assertFalse(strpos($contents, '137 inconsistencies were detected: 137 of them were resolved.') === false, 'Logfile opus_consistency-check.log does not contain expected message');
-        $this->assertFalse(strpos($contents, 'number of updates: 137') === false, 'Logfile opus_consistency-check.log does not contain expected message');
-        $this->assertFalse(strpos($contents, 'number of deletions: 0') === false, 'Logfile opus_consistency-check.log does not contain expected message');
-        $this->assertFalse(strpos($contents, 'Completed operation after') === false, 'Logfile opus_consistency-check.log does not contain expected message');
+        $this->assertFalse(strpos($contents, 'checking 137 published documents for consistency.') === false,
+            'Logfile opus_consistency-check.log does not contain "checking 137 ...".');
+        $this->assertFalse(strpos($contents, 'inconsistency found for document 1: document is in database, but is not in Solr index.') === false,
+            'Logfile opus_consistency-check.log does not contain "inconsistency found for document 1: ...".');
+        $this->assertFalse(strpos($contents, 'inconsistency found for document 200: document is in database, but is not in Solr index.') === false,
+            'Logfile opus_consistency-check.log does not contain "inconsistency found for doucment 200: ...".');
+        $this->assertFalse(strpos($contents, '137 inconsistencies were detected: 137 of them were resolved.') === false,
+            'Logfile opus_consistency-check.log does not contain "137 inconsistencies ...".');
+        $this->assertFalse(strpos($contents, 'number of updates: 137') === false,
+            'Logfile opus_consistency-check.log does not contain "number of updates: 137".');
+        $this->assertFalse(strpos($contents, 'number of deletions: 0') === false,
+            'Logfile opus_consistency-check.log does not contain "number of deletions: 0".');
+        $this->assertFalse(strpos($contents, 'Completed operation after') === false,
+            'Logfile opus_consistency-check.log does not contain "Completed operation after".');
         
         unlink($logPath . 'opus_consistency-check.log');
     }
