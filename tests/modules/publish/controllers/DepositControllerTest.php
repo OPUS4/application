@@ -221,23 +221,17 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $this->assertAction('deposit');
     }
 
+    /**
+     * @expectedException Publish_Model_FormDocumentNotFoundException
+     */
     public function testStoreExistingDocument() {
         $doc = new Opus_Document();
         $doc->setServerState('published');
         $doc->setType('preprint');
-        $docId = $doc->store();
+        $this->docId = $doc->store();
 
         $log = Zend_Registry::get('Zend_Log');
-        $e = null;
-        try {
-            new Publish_Model_Deposit($docId, $log);
-        }
-        catch (Exception $ex) {
-            $e = $ex;
-        }       
-        
-        $this->assertNotNull($e);
-        $this->assertTrue($e instanceof Publish_Model_FormDocumentNotFoundException);                
+        new Publish_Model_Deposit($this->docId, $log);
     }
 }
 
