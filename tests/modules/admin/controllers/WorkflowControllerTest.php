@@ -36,6 +36,17 @@
 
 class Admin_WorkflowControllerTest extends ControllerTestCase {
 
+    private $documentId;
+
+    public function tearDown() {
+        if (!is_null($this->documentId)) {
+            $document = new Opus_Document($this->documentId);
+            $document->deletePermanent();
+        }
+
+        parent::tearDown();
+    }
+
     /**
      * Tests deleting a document.
      */
@@ -88,13 +99,15 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Tests permanently deleting a document.
-     *
-     * @depends testDeleteActionConfirmYes
+     * Tests showing confirmation for permanently deleting a document.
      */
     public function testPermanentDeleteAction() {
-        $this->markTestSkipped('setup new test document for deleting');
-        $this->dispatch('/admin/workflow/changestate/docId/25/targetState/removed');
+        $document = new Opus_Document();
+        $document->setServerState('deleted');
+        $this->documentId = $document->store();
+
+        $this->dispatch('/admin/workflow/changestate/docId/' . $this->documentId . '/targetState/removed');
+
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('workflow');
@@ -103,22 +116,24 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
 
     /**
      * Tests user answering no in permanent delete confirmation form.
-     *
-     * @depends testPermanentDeleteAction
      */
     public function testPermanentDeleteActionConfirmNo() {
+        $document = new Opus_Document();
+        $document->setServerState('deleted');
+        $this->documentId = $document->store();
+
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
                     'sureno' => 'sureno'
                 ));
-        $this->dispatch('/admin/workflow/changestate/docId/24/targetState/removed');
+        $this->dispatch('/admin/workflow/changestate/docId/' . $this->documentId . '/targetState/removed');
         $this->assertModule('admin');
         $this->assertController('workflow');
         $this->assertAction('changestate');
         $this->assertRedirect('/admin/document/index');
 
-        $doc = new Opus_Document(25);
+        $doc = new Opus_Document($this->documentId);
         $this->assertEquals('deleted', $doc->getServerState());
     }
 
