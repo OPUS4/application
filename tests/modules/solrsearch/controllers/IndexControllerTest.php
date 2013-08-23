@@ -946,6 +946,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             '2002');
         $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="year_facet"');
 
+        $this->resetResponse();
         $this->dispatch('/solrsearch/index/search/searchtype/all');
         $searchStrings = array(
             '2011',
@@ -959,6 +960,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             '1963',
             '1975');
         $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="year_facet"');
+
     }
 
     private function assertPositions($response, $searchStrings, $startString) {

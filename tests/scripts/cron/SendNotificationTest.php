@@ -35,7 +35,13 @@
 require_once('CronTestCase.php');
 
 /**
- * 
+ * Dieser Test benötigt das opus-smtp-dumpserver.php ausgeführt wird, um prüfen zu können, ob Nachrichten verschickt
+ * werden (Siehe Dokumentation im Wiki).
+ *
+ * php opus-smtp-dumpserver.php 2>&1 >> opus-smtp-dumpserver.log &
+ *
+ * TODO kann man das besser automatisieren
+ *
  */
 class SendNotificationTest extends CronTestCase {
 
