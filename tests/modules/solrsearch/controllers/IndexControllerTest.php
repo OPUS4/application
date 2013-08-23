@@ -959,8 +959,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             '1962',
             '1963',
             '1975');
-        $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="year_facet"');
 
+        // Wenn es hier bei den Tests Probleme gibt AssumptionChecker für die Diagnose verwenden (in tests/support).
+        $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="year_facet"');
     }
 
     private function assertPositions($response, $searchStrings, $startString) {
