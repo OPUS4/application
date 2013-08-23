@@ -34,16 +34,27 @@
  */
 class Publish_Model_DepositTest extends ControllerTestCase {
 
+    private $documentId = null;
+
+    public function tearDown() {
+        if (!is_null($this->documentId)) {
+            $doc = new Opus_Document($this->documentId);
+            $doc->deletePermanent();
+        }
+
+        parent::tearDown();
+    }
+
     /**
      * @expectedException Publish_Model_FormDocumentNotFoundException
      */
     public function testInvalidDocumentState() {
         $document = new Opus_Document();
         $document->setServerState('published');
-        $docId = $document->store();
+        $this->documentId = $document->store();
 
         $log = Zend_Registry::get('Zend_Log');
-        new Publish_Model_Deposit($docId, $log);
+        new Publish_Model_Deposit($this->documentId, $log);
     }
 
     public function testValidDocumentData() {
