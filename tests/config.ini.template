@@ -35,8 +35,8 @@
 [production]
 ; db.params.host     = localhost
 ; db.params.port     = 3306
-db.params.username =
-db.params.password =
+db.params.username = @db.user.name@
+db.params.password = @db.user.password@
 db.params.dbname   = @db.name@
 
 ; Admin access for is used to create or rebuild the database.
@@ -52,12 +52,12 @@ workspacePath = APPLICATION_PATH "/tests/workspace"
 path.workspace.temp = APPLICATION_PATH "/tests/workspace/tmp"
 
 ;SEARCH ENGINE SETTINGS
-searchengine.index.host =
-searchengine.index.port =
-searchengine.index.app =
-searchengine.extract.host =
-searchengine.extract.port =
-searchengine.extract.app =
+searchengine.index.host = @searchengine.index.host@
+searchengine.index.port = @searchengine.index.port@
+searchengine.index.app = @searchengine.index.app@
+searchengine.extract.host = @searchengine.extract.host@
+searchengine.extract.port = @searchengine.extract.port@
+searchengine.extract.app = @searchengine.extract.app@
 
 ;DUMMY MAIL SERVER -- Run "./scripts/opus-smtp-dumpserver.php"
 ; mail.opus.smtp = localhost
