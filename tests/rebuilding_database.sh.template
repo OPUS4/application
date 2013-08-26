@@ -27,16 +27,15 @@
 set -e
 script_dir=$(cd `dirname $0` && pwd)
 
-#
-# begin editable part
-#
+config_ini=$script_dir/config.ini
 
+# Read database parameters from tests/config.ini
 # user should has rights to drop and create a database (grant rights)
-user=
-password=
-# host=localhost
-# port=3306
-dbname=opus400
+user=$(sed -n 's/^db\.params\.admin\.name *= *\([^ ]*.*\)/\1/p' < $config_ini)
+password=$(sed -n 's/^db\.params\.admin\.password *= *\([^ ]*.*\)/\1/p' < $config_ini)
+host=$(sed -n 's/^db\.params\.host *= *\([^ ]*.*\)/\1/p' < $config_ini)
+port=$(sed -n 's/^db\.params\.port *= *\([^ ]*.*\)/\1/p' < $config_ini)
+dbname=$(sed -n 's/^db\.params\.dbname *= *\([^ ]*.*\)/\1/p' < $config_ini)
 
 # path to mysql binary
 mysql_bin=/usr/bin/mysql
@@ -78,7 +77,7 @@ test_series_logos_dir=$script_dir/series_logos
 
 #
 # end editable part
-# 
+#
 
 mysql="${mysql_bin} --default-character-set=utf8 --user=${user} --host=${host}"
 
