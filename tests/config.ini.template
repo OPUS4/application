@@ -37,11 +37,11 @@
 ; db.params.port     = 3306
 db.params.username =
 db.params.password =
-db.params.dbname   =
+db.params.dbname   = @db.name@
 
 ; Admin access for is used to create or rebuild the database.
-db.params.admin.name =
-db.params.admin.password =
+db.params.admin.name = @db.admin.name@
+db.params.admin.password = @db.admin.password@
 
 ;PHP SETTINGS - enable error reporting
 phpSettings.display_startup_errors = 1
