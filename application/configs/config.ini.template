@@ -41,23 +41,23 @@
 ;
 ; db.params.host = localhost
 ; db.params.port = 3306
-db.params.username =
-db.params.password =
-db.params.dbname =
+db.params.username = @db.user.name@
+db.params.password = @db.user.password@
+db.params.dbname   = @db.name@
 
 ;SEARCH ENGINE SETTINGS
 ; OPUS4 uses a solr server for search and browsing.
 ; The solr server can run on the same or on a different host.
 ; Please enter the credentials to connect to your solr server.
-searchengine.index.host =
-searchengine.index.port =
-searchengine.index.app =
+searchengine.index.host = @searchengine.index.host@
+searchengine.index.port = @searchengine.index.port@
+searchengine.index.app = @searchengine.index.app@
 ; The text extraction can run on a different solr server as the metadata indexer
 ; doese. You can also use the same solr server, then you would have to enter
 ; the same credentials as above.
-searchengine.extract.host =
-searchengine.extract.port =
-searchengine.extract.app =
+searchengine.extract.host = @searchengine.extract.host@
+searchengine.extract.port = @searchengine.extract.port@
+searchengine.extract.app = @searchengine.extract.app@
 ; Facets fields to be considered.
 ;searchengine.solr.facets = author_facet,year,doctype,language,has_fulltext,belongs_to_bibliography,subject,institute
 
