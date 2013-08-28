@@ -3,107 +3,113 @@
 
     <property environment="env" />
     <property name="workspace" value="${env.WORKSPACE}" />
-    <property name="serverdir" value="${workspace}/server" />
-    <property name="sourcedir" value="${serverdir}" />
+    <property name="configfile" value="${workspace}/../opus-config.properties" />
     <property name="libsdir" value="/home/opus4ci/libs" />
+    <property name="testpath" value="" />
 
-    <target name="build" depends="clean,prepare,lint,php-documentor,php-codesniffer,phpmd,phpcpd,pdepend,phpunit"
+    <target name="analyse-code" depends="php-codesniffer,phpmd,phpcpd,pdepend" />
+    
+    <target name="build" depends="clean,prepare,lint,php-documentor,phpunit,analyse-code"
             description="" />
-
-    <target name="build-fast" depends="clean,prepare,phpunit-fast" description="" />
-
-    <target name="clean">
-        <!-- Remove old log files -->
-        <delete dir="${basedir}/build/logs" />
-
-        <!-- Remove old api documentation -->
-        <!--delete>
-          <fileset dir="${basedir}/build/api" includes="**.*" />
-        </delete-->
-
-        <!-- Remove old coverage report -->
-        <delete dir="${basedir}/build/coverage" />
-
-        <!-- Remove old workspace temp file backups -->
-        <!--delete includeemptydirs="true">
-          <fileset dir="${basedir}/source/workspace/tmp" />
-        </delete-->
-
-        <!-- clean up temp files from last run -->
-        <!--exec executable="bash" dir="${basedir}/source/workspace/cache" failonerror="off">
-          <arg line="-c &quot;find . -maxdepth 1 -type f -name '*cache*-*' -print0 |xargs -r0 rm &quot;"/>
-        </exec>
-        <exec executable="bash" dir="${basedir}/source/tests/workspace/cache" failonerror="off">
-          <arg line="-c &quot;find . -maxdepth 1 -type f -name '*cache*-*' -print0 |xargs -r0 rm &quot;"/>
-        </exec>
-        <exec executable="bash" dir="${basedir}/source/workspace/tmp" failonerror="off">
-          <arg line="-c &quot;find . -maxdepth 1 -type d -name 'old-*' -print0 |xargs -r0 rm -r &quot;"/>
-        </exec-->
+    
+    <target name="build-parallel">
+        <!-- TODO -->            
     </target>
 
-    <target name="prepare" depends="prepare-config">
+    <target name="build-fast" depends="clean,prepare,lint,phpunit-fast" description="" />
+
+    <target name="clean">
+        <delete dir="${basedir}/build/logs" />
+        <delete dir="${basedir}/build/api" />
+        <delete dir="${basedir}/build/coverage" />
+        <delete dir="${basedir}/build/pdepend" />
+
+        <delete>
+            <fileset dir="${basedir}/workspace/cache" includes="*cache*-*" />
+        </delete>
+        <delete>
+            <fileset dir="${basedir}/workspace/tmp" includes="old-*" />
+        </delete>
+        <delete> 
+            <fileset dir="${basedir}/tests/workspace/cache" includes="*cache*-*" />
+        </delete>
+
+        <delete includeemptydirs="true" dir="${basedir}/workspace/tmp" />
+    </target>
+    
+    <target name="setup" depends="prepare-dependencies,prepare-config" />
+
+    <target name="prepare">
         <mkdir dir="${basedir}/build/logs" />
         <mkdir dir="${basedir}/build/coverage" />
+        <mkdir dir="${basedir}/build/api" />
+        <mkdir dir="${basedir}/build/pdepend" />
     </target>
 
     <target name="prepare-dependencies">
-        <symlink link="${sourcedir}/db/schema" resource="${workspace}/framework/db/schema" overwrite="true" />
-        <symlink link="${sourcedir}/library/Opus" resource="${workspace}/framework/library/Opus" overwrite="true" />
-        <symlink link="${sourcedir}/library/Zend" resource="${libsdir}/ZendFramework/library/Zend" overwrite="true" />
-        <symlink link="${sourcedir}/library/Apache" resource="${libsdir}/SolrPhpClient/Apache" overwrite="true" />
-        <symlink link="${sourcedir}/library/jpgraph" resource="${libsdir}/jpgraph/src" overwrite="true" />
+        <symlink link="${basedir}/db/schema" resource="${workspace}/framework/db/schema" failonerror="false" />
+        <symlink link="${basedir}/library/Opus" resource="${workspace}/framework/library/Opus" failonerror="false" />
+        <symlink link="${basedir}/library/Zend" resource="${libsdir}/ZendFramework/library/Zend" failonerror="false" />
+        <symlink link="${basedir}/library/Apache" resource="${libsdir}/SolrPhpClient/Apache" failonerror="false" />
+        <symlink link="${basedir}/library/jpgraph" resource="${libsdir}/jpgraph/src" failonerror="false" />
     </target>
 
     <target name="prepare-config" description="Prepares the configuration files">
         <!-- Prepare script for rebuilding database. -->
-        <copy file="${workspace}/server/tests/rebuilding_database.sh.template"
-              toFile="${workspace}/server/tests/rebuilding_database.sh" />
-        <chmod file="${workspace}/server/tests/rebuilding_database.sh" perm="+x" />
+        <copy file="${basedir}/tests/rebuilding_database.sh.template"
+              toFile="${basedir}/tests/rebuilding_database.sh" />
+        <chmod file="${basedir}/tests/rebuilding_database.sh" perm="+x" />
 
         <!-- Prepare test configuration. -->
-        <copy file="${workspace}/server/tests/config.ini.template" toFile="${workspace}/server/tests/config.ini"
-              filtering="true">
-            <filterset filtersFile="${workspace}/../opus-config.properties" />
+        <copy file="${basedir}/tests/config.ini.template" toFile="${basedir}/tests/config.ini" filtering="true">
+            <filterset filtersFile="${configfile}" />
         </copy>
 
         <!-- Prepare main configuration. Needed for scripts like SolrIndexBuilder. -->
-        <copy file="${workspace}/server/application/configs/config.ini.template"
-              toFile="${workspace}/server/application/configs/config.ini" filtering="true">
+        <copy file="${basedir}/application/configs/config.ini.template"
+              toFile="${basedir}/application/configs/config.ini" filtering="true">
             <filterset filtersFile="${workspace}/../opus-config.properties" />
         </copy>
     </target>
 
     <target name="lint" description="Prüft, ob PHP Dateien Syntaxfehler enthalten.">
-        <apply executable="php" dir="${sourcedir}" failonerror="on" logerror="on">
+        <apply executable="php" dir="${basedir}" failonerror="on" logerror="on">
             <arg line="-l"/>
-            <fileset dir="${sourcedir}" followsymlinks="false">
+            <fileset dir="${basedir}" followsymlinks="false">
                 <include name="**/*.php"/>
-                <exclude name="tests/**/*"/>
+                <exclude name="tests/**/*"/> <!-- TODO Warum nicht für Testdateien? -->
                 <modified />
             </fileset>
         </apply>
     </target>
 
-    <target name="php-documentor" depends="lint">
-        <exec executable="phpdoc" dir="${basedir}/source" logerror="on">
-            <arg line="--title '${ant.project.name}' -ue on -t ${basedir}/build/api -d modules -tb '/home/opus4ci/pear/data/phpUnderControl/data/phpdoc' -o HTML:Phpuc:phpuc"/>
+    <target name="php-documentor">
+        <exec executable="phpdoc" dir="${basedir}" logerror="on">
+            <arg line="--title '${ant.project.name}'" />
+            <arg line="-ue on" />
+            <arg line="-t ${basedir}/build/api" />
+            <arg line="-d modules" /> <!-- TODO library, tests ? -->
+            <arg line="-tb '/home/opus4ci/pear/data/phpUnderControl/data/phpdoc'" /> <!-- TODO pfad -->
+            <arg line="-o HTML:Phpuc:phpuc" />
         </exec>
     </target>
 
-    <target name="php-codesniffer" depends="lint">
-        <exec executable="/home/opus4ci/pear/phpcs" dir="${basedir}/source" output="${basedir}/build/logs/checkstyle-ignored.xml" error="/tmp/checkstyle.error.log">
-            <arg line="--report=checkstyle --standard=PEAR ."/>
+    <target name="php-codesniffer">
+        <exec executable="phpcs" dir="${basedir}" 
+              output="${basedir}/build/logs/checkstyle-ignored.xml" error="${basedir}/build/logs/checkstyle.error.log"> <!-- TODO log why to tmp? -->
+            <arg line="--report=checkstyle" />
+            <arg line="--standard=PEAR ." />
         </exec>
     </target>
 
-    <target name="phpmd" depends="lint">
-        <exec executable="phpmd" dir="${basedir}/source" logerror="on" output="${basedir}/build/logs/phpunit-pmd.xml" >
-            <arg line="--exclude tests . xml codesize,unusedcode,naming,design "/>
+    <target name="phpmd">
+        <exec executable="phpmd" dir="${basedir}" logerror="on" output="${basedir}/build/logs/phpunit-pmd.xml" >
+            <arg line="--exclude tests . xml codesize,unusedcode,naming,design" />
         </exec>
     </target>
 
-    <target name="phpcpd" depends="lint">
-        <exec executable="phpcpd" dir="${basedir}/source" logerror="on" >
+    <target name="phpcpd">
+        <exec executable="phpcpd" dir="${basedir}" logerror="on" >
             <arg line="--min-lines 3" />
             <arg line="--min-tokens 30" />
             <arg line="--log-pmd ${basedir}/build/logs/phpunit-cpd-details.xml" />
@@ -111,8 +117,7 @@
         </exec>
     </target>
 
-    <target name="pdepend" depends="lint,phpunit" description="Generates software metrics charts.">
-        <mkdir dir="${basedir}/build/pdepend" />
+    <target name="pdepend" depends="phpunit" description="Generates software metrics charts.">
         <exec executable="pdepend" dir="${basedir}" logerror="on">
             <arg line="--coverage-report=${basedir}/build/logs/phpunit.coverage.xml" />
             <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
@@ -121,41 +126,46 @@
             <arg line="--suffix=php,phtml" />
             <arg line="--coderank-mode=inheritance,property,method" />
             <arg line="--ignore=tests" />
-            <arg line="${basedir}/source/library,${basedir}/source/modules,${basedir}/source/scripts,${basedir}/source/import" />
+            <arg line="${basedir}/library,${basedir}/modules,${basedir}/scripts,${basedir}/import" />
         </exec>
     </target>
 
-    <target name="rebuild-database" depends="lint">
-        <exec executable="./rebuilding_database.sh" dir="${sourcedir}/tests" failonerror="on" />
-        <exec executable="php" dir="${sourcedir}/scripts" failonerror="on">
+    <target name="rebuild-database">
+        <exec executable="./rebuilding_database.sh" dir="${basedir}/tests" failonerror="on" />
+    </target>
+    
+    <target name="rebuild-index">
+        <exec executable="php" dir="${basedir}/scripts" failonerror="on">
             <arg line="SolrIndexBuilder.php" />
         </exec>
     </target>
-
-    <target name="phpunit" depends="rebuild-database,lint" description="Runs unit tests with coverage">
-        <exec executable="phpunit" dir="${workspace}/server/tests" failonerror="true">
+    
+    <target name="phpunit" depends="rebuild-database,rebuild-index" description="Runs unit tests with coverage">
+        <exec executable="phpunit" dir="${basedir}/tests" failonerror="true">
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
             <arg line="--coverage-clover ${basedir}/build/logs/phpunit.coverage.xml" />
             <arg line="--coverage-html ${basedir}/build/coverage" />
             <arg line="--configuration phpunit.xml"/>
-            <arg line="modules/admin/controllers/DocumentControllerTest.php" />
+            <arg line="${testpath}" />
         </exec>
     </target>
 
-    <target name="phpunit-fast" depends="rebuild-database,lint" description="Runs unit tests without coverage">
-        <exec executable="phpunit" dir="${serverdir}/tests" failonerror="on">
+    <target name="phpunit-fast" depends="rebuild-database,rebuild-index" description="Runs unit tests without coverage">
+        <exec executable="phpunit" dir="${basedir}/tests" failonerror="on">
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
             <arg line="--configuration phpunit.xml" />
-            <arg line="modules/admin/controllers/DocumentControllerTest.php" />
+            <arg line="${testpath}" />
         </exec>
     </target>
 
+    <!-- TODO fix, setup in Jenkins -->
     <target name="watchdog_start">
         <exec executable="/home/opus4ci/cc-configs/php_error_log_watchdog.sh">
             <arg line=" buildStart"/>
         </exec>
     </target>
 
+    <!-- TODO fix setup in Jenkins -->
     <target name="watchdog_stop">
         <exec executable="/home/opus4ci/cc-configs/php_error_log_watchdog.sh">
             <arg line=" buildStop"/>
