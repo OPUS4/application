@@ -7,11 +7,11 @@ set -e
 #
 
 # user should has rights to drop and create a database (grant rights)
-user= @db.admin.name@
-password= @db.admin.password@
+user=@db.admin.name@
+password=@db.admin.password@
 # host=localhost
 # port=3306
-dbname= @db.name@
+dbname=@db.name@
 
 # path to mysql binary
 mysql_bin=/usr/bin/mysql
