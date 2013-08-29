@@ -2,7 +2,7 @@
 <project name="opus4server" default="build">
 
     <property environment="env" />
-    <property name="workspace" value="${env.WORKSPACE}" />
+    <property name="workspace" value="${env.WORKSPACE}" /><!-- Wird von Jenkins gesetzt. -->
     <property name="frameworkdir" location="${basedir}/../framework" />
     <property name="configfile" location="${workspace}/../opus-config.properties" />
     <property name="libsdir" location="/home/opus4ci/libs" />
@@ -91,7 +91,6 @@
             <arg line="-l"/>
             <fileset dir="${basedir}" followsymlinks="false">
                 <include name="**/*.php"/>
-                <exclude name="tests/**/*"/> <!-- TODO Warum nicht für Testdateien? -->
                 <modified />
             </fileset>
         </apply>
