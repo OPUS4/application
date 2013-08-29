@@ -28,7 +28,7 @@
         <delete>
             <fileset dir="${basedir}/workspace/cache" includes="*cache*-*" />
         </delete>
-        <delete>
+        <delete> <!-- TODO necessary? unten wird alles gelöscht -->
             <fileset dir="${basedir}/workspace/tmp" includes="old-*" />
         </delete>
         <delete> 
