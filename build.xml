@@ -116,7 +116,7 @@
             <arg line="--min-lines 3" />
             <arg line="--min-tokens 30" />
             <arg line="--log-pmd ${basedir}/build/logs/phpunit-cpd-details.xml" />
-            <arg line="./library ./modules ./scripts ./import" />
+            <arg line="./library ./modules ./scripts" />
         </exec>
     </target>
 
@@ -158,20 +158,6 @@
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
             <arg line="--configuration phpunit.xml" />
             <arg line="${testpath}" />
-        </exec>
-    </target>
-
-    <!-- TODO fix, setup in Jenkins -->
-    <target name="watchdog_start">
-        <exec executable="/home/opus4ci/cc-configs/php_error_log_watchdog.sh">
-            <arg line=" buildStart"/>
-        </exec>
-    </target>
-
-    <!-- TODO fix setup in Jenkins -->
-    <target name="watchdog_stop">
-        <exec executable="/home/opus4ci/cc-configs/php_error_log_watchdog.sh">
-            <arg line=" buildStop"/>
         </exec>
     </target>
 
