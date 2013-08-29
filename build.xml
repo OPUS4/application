@@ -3,6 +3,7 @@
 
     <property environment="env" />
     <property name="workspace" value="${env.WORKSPACE}" />
+    <property name="frameworkdir" value="${basedir}/../framework" />
     <property name="configfile" value="${workspace}/../opus-config.properties" />
     <property name="libsdir" value="/home/opus4ci/libs" />
     <property name="testpath" value="" />
@@ -47,8 +48,8 @@
     </target>
 
     <target name="prepare-dependencies">
-        <symlink link="${basedir}/db/schema" resource="${workspace}/framework/db/schema" failonerror="false" />
-        <symlink link="${basedir}/library/Opus" resource="${workspace}/framework/library/Opus" failonerror="false" />
+        <symlink link="${basedir}/db/schema" resource="${frameworkdir}/db/schema" failonerror="false" />
+        <symlink link="${basedir}/library/Opus" resource="${frameworkdir}/library/Opus" failonerror="false" />
         <symlink link="${basedir}/library/Zend" resource="${libsdir}/ZendFramework/library/Zend" failonerror="false" />
         <symlink link="${basedir}/library/Apache" resource="${libsdir}/SolrPhpClient/Apache" failonerror="false" />
         <symlink link="${basedir}/library/jpgraph" resource="${libsdir}/jpgraph/src" failonerror="false" />
@@ -68,7 +69,7 @@
         <!-- Prepare main configuration. Needed for scripts like SolrIndexBuilder. -->
         <copy file="${basedir}/application/configs/config.ini.template"
               toFile="${basedir}/application/configs/config.ini" filtering="true">
-            <filterset filtersFile="${workspace}/../opus-config.properties" />
+            <filterset filtersFile="${configfile}" />
         </copy>
     </target>
 
