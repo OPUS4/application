@@ -8,17 +8,28 @@
     <property name="libsdir" location="/home/opus4ci/libs" />
     <property name="testpath" value="" />
 
-    <target name="analyse-code" depends="php-codesniffer,phpmd,phpcpd,pdepend" />
+    <target name="analyse-code" depends="phpcs,phpmd,phpcpd,pdepend" />
     
-    <target name="build" depends="clean,prepare,lint,php-documentor,phpunit,analyse-code"
+    <target name="build" depends="clean,prepare,lint,phpdoc,phpunit,analyse-code"
             description="" />
     
-    <target name="build-parallel">
-        <!-- TODO -->            
-    </target>
-
+    <target name="build-parallel" depends="prepare,tools-parallel" />
+    
     <target name="build-fast" depends="clean,prepare,lint,phpunit-fast" description="" />
 
+    <target name="tools-parallel">
+        <parallel threadCount="2">
+            <sequential>
+                <antcall target="pdepend" />
+                <antcall target="phpmd" />
+            </sequential>
+            <antcall target="phpcpd" />
+            <antcall target="phpcs" />
+            <antcall target="phploc" />
+            <antcall target="phpdoc" />
+        </parallel>
+    </target>
+    
     <target name="clean">
         <delete dir="${basedir}/build/logs" />
         <delete dir="${basedir}/build/api" />
@@ -85,8 +96,16 @@
             </fileset>
         </apply>
     </target>
+    
+    <target name="phploc" description="">
+        <exec executable="phploc">
+            <arg value="--log-csv" />
+            <arg value="${basedir}/build/logs/phploc.csv" />
+            <arg path="${basedir}/modules" />
+        </exec>            
+    </target>
 
-    <target name="php-documentor">
+    <target name="phpdoc">
         <exec executable="phpdoc" dir="${basedir}" logerror="on">
             <arg line="--title '${ant.project.name}'" />
             <arg line="-ue on" />
@@ -97,7 +116,7 @@
         </exec>
     </target>
 
-    <target name="php-codesniffer">
+    <target name="phpcs">
         <exec executable="phpcs" dir="${basedir}" 
               output="${basedir}/build/logs/checkstyle-ignored.xml" error="${basedir}/build/logs/checkstyle.error.log"> <!-- TODO log why to tmp? -->
             <arg line="--report=checkstyle" />
