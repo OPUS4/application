@@ -35,6 +35,17 @@ class Admin_Form_FileTest extends ControllerTestCase {
 
     public function testConstructForm() {
         $form = new Admin_Form_File();
+
+        $this->assertEquals(8, count($form->getElements()));
+
+        $elements = array('Id', 'FileLink', 'FileSize', 'Language', 'Label', 'Comment', 'VisibleIn', 'Roles');
+
+        foreach ($elements as $element) {
+            $this->assertNotNull($form->getElement($element), "Element '$element' is missing.");
+        }
+
+        $this->assertEquals(1, count($form->getSubForms()));
+        $this->assertNotNull($form->getSubForm('Hashes'));
     }
 
     public function testPopulateFromModel() {
@@ -44,7 +55,8 @@ class Admin_Form_FileTest extends ControllerTestCase {
 
         $form->populateFromModel($file);
 
-        $this->assertEquals($file, $form->getElement('PathName')->getValue());
+        $this->assertEquals(126, $form->getElementValue('Id'));
+        $this->assertEquals($file, $form->getElementValue('FileLink'));
         $this->assertEquals(8817, $form->getElement('FileSize')->getValue());
         $this->assertEquals('deu', $form->getElement('Language')->getValue());
         $this->assertEquals('foo-pdf', $form->getElement('Label')->getValue());
@@ -54,6 +66,7 @@ class Admin_Form_FileTest extends ControllerTestCase {
 
         $this->assertEquals(array('administrator', 'guest', 'reviewer'), $form->getElement('Roles')->getValue());
 
+        $hashes = $form->getSubForm('Hashes');
         // TODO hashes
     }
 
