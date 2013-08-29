@@ -3,9 +3,9 @@
 
     <property environment="env" />
     <property name="workspace" value="${env.WORKSPACE}" />
-    <property name="frameworkdir" value="${basedir}/../framework" />
-    <property name="configfile" value="${workspace}/../opus-config.properties" />
-    <property name="libsdir" value="/home/opus4ci/libs" />
+    <property name="frameworkdir" location="${basedir}/../framework" />
+    <property name="configfile" location="${workspace}/../opus-config.properties" />
+    <property name="libsdir" location="/home/opus4ci/libs" />
     <property name="testpath" value="" />
 
     <target name="analyse-code" depends="php-codesniffer,phpmd,phpcpd,pdepend" />
