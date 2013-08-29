@@ -35,7 +35,9 @@
             <fileset dir="${basedir}/tests/workspace/cache" includes="*cache*-*" />
         </delete>
 
-        <delete includeemptydirs="true" dir="${basedir}/workspace/tmp" />
+        <delete includeemptydirs="true">
+            <fileset dir="${basedir}/workspace/tmp" includes="**/*" />
+        </delete>
     </target>
     
     <target name="setup" depends="prepare-dependencies,prepare-config" />
