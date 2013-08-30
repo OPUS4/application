@@ -1,7 +1,13 @@
 $(document).ready(function() {
 	// JavaScript detection
 	$("html").removeClass("no-js").addClass("js");
-	
+
+	// New window selector
+	$('a.new-window').each(function () {
+	if (!$(this).attr('target', '_blank'))
+	  $(this).attr('target', '_blank');
+	})
+
 	// normalize box-heights
     var max = 0;
         $('#adminMenuContainer ul > li > *').each(function(){  
@@ -32,6 +38,7 @@ $(document).ready(function() {
 				$actionboxSpacer.remove();
 			}
 		});
+		$(window).trigger("scroll");
 	}
 	
 	// DropDown behaviour
