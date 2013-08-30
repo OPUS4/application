@@ -82,7 +82,7 @@
 
         <!-- Prepare main configuration. Needed for scripts like SolrIndexBuilder. -->
         <copy file="${basedir}/application/configs/config.ini.template"
-              toFile="${basedir}/application/configs/config.ini" filtering="true" overwrite="true">
+              toFile="${basedir}/application/configs/config.ini" filtering="true" overwrite="false"> <!-- TODO still manuel configuration needed -->
             <filterset filtersFile="${configfile}" />
         </copy>
     </target>
