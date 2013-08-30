@@ -69,19 +69,20 @@
     </target>
 
     <target name="prepare-config" description="Prepares the configuration files">
-        <!-- Prepare script for rebuilding database. -->
+        <!-- Prepare script for rebuilding database. --> <!-- TODO not really necessary anymore -->
         <copy file="${basedir}/tests/rebuilding_database.sh.template"
               toFile="${basedir}/tests/rebuilding_database.sh" />
         <chmod file="${basedir}/tests/rebuilding_database.sh" perm="+x" />
 
         <!-- Prepare test configuration. -->
-        <copy file="${basedir}/tests/config.ini.template" toFile="${basedir}/tests/config.ini" filtering="true">
+        <copy file="${basedir}/tests/config.ini.template" toFile="${basedir}/tests/config.ini" filtering="true"
+                overwrite="true">
             <filterset filtersFile="${configfile}" />
         </copy>
 
         <!-- Prepare main configuration. Needed for scripts like SolrIndexBuilder. -->
         <copy file="${basedir}/application/configs/config.ini.template"
-              toFile="${basedir}/application/configs/config.ini" filtering="true">
+              toFile="${basedir}/application/configs/config.ini" filtering="true" overwrite="true">
             <filterset filtersFile="${configfile}" />
         </copy>
     </target>
