@@ -83,7 +83,7 @@
 
         <!-- Prepare main configuration. Needed for scripts like SolrIndexBuilder. -->
         <copy file="${basedir}/application/configs/config.ini.template"
-              toFile="${basedir}/application/configs/config.ini" filtering="true" overwrite="false"> <!-- TODO still manuel configuration needed -->
+              toFile="${basedir}/application/configs/config.ini" filtering="true" overwrite="true">
             <filterset filtersFile="${configfile}" />
         </copy>
     </target>
@@ -121,7 +121,11 @@
               error="${basedir}/build/logs/checkstyle-error.log">
             <arg value="--report=checkstyle" />
             <arg value="--standard=${codingstandard}" />
+            <arg value="--ignore=${basedir}/Opus,${basedir}/Zend" />
             <arg path="${basedir}/modules" />
+            <arg path="${basedir}/library" />
+            <arg path="${basedir}/scripts" />
+
         </exec>
     </target>
 
