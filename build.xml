@@ -54,7 +54,7 @@
     
     <target name="setup" depends="prepare-dependencies,prepare-config" />
 
-    <target name="prepare">
+    <target name="prepare" depends="clean">
         <mkdir dir="${basedir}/build/logs" />
         <mkdir dir="${basedir}/build/coverage" />
         <mkdir dir="${basedir}/build/api" />
@@ -126,7 +126,7 @@
     </target>
 
     <target name="phpmd">
-        <exec executable="phpmd" dir="${basedir}" logerror="on" output="${basedir}/build/logs/phpunit-pmd.xml" >
+        <exec executable="phpmd" dir="${basedir}" logerror="on" output="${basedir}/build/logs/pmd.xml" >
             <arg line="--exclude tests . xml codesize,unusedcode,naming,design" />
         </exec>
     </target>
