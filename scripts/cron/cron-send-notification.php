@@ -31,7 +31,10 @@
  * @version     $Id$
  */
 
-define('APPLICATION_ENV', 'production');
+// Define application environment (use 'production' by default)
+defined('APPLICATION_ENV')
+    || define('APPLICATION_ENV',
+        (getenv('APPLICATION_ENV') ? getenv('APPLICATION_ENV') : 'production'));
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
