@@ -7,10 +7,11 @@
     <property name="configfile" location="${workspace}/../opus-config.properties" />
     <property name="libsdir" location="/home/opus4ci/libs" />
     <property name="testpath" value="" />
+    <property name="codingstandard" location="${libsdir}/opus4cs/ruleset.xml" />
 
-    <target name="analyse-code" depends="phpcs,phpmd,phpcpd,pdepend" />
+    <target name="analyse-code" depends="phpcs,phpmd,phpcpd,phploc" />
     
-    <target name="build" depends="clean,prepare,lint,phpdoc,phpunit,analyse-code"
+    <target name="build" depends="clean,prepare,lint,pdepend,analyse-code,phpdoc"
             description="" />
     
     <target name="build-parallel" depends="prepare,tools-parallel" />
@@ -30,24 +31,24 @@
         </parallel>
     </target>
     
-    <target name="clean">
+    <target name="clean" depends="clean-cache">
         <delete dir="${basedir}/build/logs" />
         <delete dir="${basedir}/build/api" />
         <delete dir="${basedir}/build/coverage" />
         <delete dir="${basedir}/build/pdepend" />
-
-        <delete>
-            <fileset dir="${basedir}/workspace/cache" includes="*cache*-*" />
-        </delete>
-        <delete> <!-- TODO necessary? unten wird alles gelöscht -->
-            <fileset dir="${basedir}/workspace/tmp" includes="old-*" />
-        </delete>
-        <delete> 
-            <fileset dir="${basedir}/tests/workspace/cache" includes="*cache*-*" />
-        </delete>
+        <delete dir="${basedir}/build/code-browser" />
 
         <delete includeemptydirs="true">
             <fileset dir="${basedir}/workspace/tmp" includes="**/*" />
+        </delete>
+    </target>
+
+    <target name="clean-cache">
+        <delete>
+            <fileset dir="${basedir}/workspace/cache" includes="*cache*-*" />
+        </delete>
+        <delete>
+            <fileset dir="${basedir}/tests/workspace/cache" includes="*cache*-*" />
         </delete>
     </target>
     
@@ -101,26 +102,26 @@
         <exec executable="phploc">
             <arg value="--log-csv" />
             <arg value="${basedir}/build/logs/phploc.csv" />
-            <arg path="${basedir}/modules" />
+            <arg path="${basedir}/modules" /> <!-- TODO library code -->
         </exec>            
     </target>
 
     <target name="phpdoc">
         <exec executable="phpdoc" dir="${basedir}" logerror="on">
-            <arg line="--title '${ant.project.name}'" />
-            <arg line="-ue on" />
-            <arg line="-t ${basedir}/build/api" />
-            <arg line="-d modules" /> <!-- TODO library, tests ? -->
-            <arg line="-tb '/home/opus4ci/pear/data/phpUnderControl/data/phpdoc'" /> <!-- TODO pfad -->
-            <arg line="-o HTML:Phpuc:phpuc" />
+            <arg value="--directory" />
+            <arg path="${basedir}/modules" />
+            <arg value="--target" />
+            <arg path="${basedir}/build/api" />
         </exec>
     </target>
 
     <target name="phpcs">
-        <exec executable="phpcs" dir="${basedir}" 
-              output="${basedir}/build/logs/checkstyle-ignored.xml" error="${basedir}/build/logs/checkstyle.error.log"> <!-- TODO log why to tmp? -->
-            <arg line="--report=checkstyle" />
-            <arg line="--standard=PEAR ." />
+        <echo message="Coding Standard = '${codingstandard}'" />
+        <exec executable="phpcs" dir="${basedir}" output="${basedir}/build/logs/checkstyle.xml"
+              error="${basedir}/build/logs/checkstyle-error.log">
+            <arg value="--report=checkstyle" />
+            <arg value="--standard=${codingstandard}" />
+            <arg path="${basedir}/modules" />
         </exec>
     </target>
 
@@ -134,7 +135,7 @@
         <exec executable="phpcpd" dir="${basedir}" logerror="on" >
             <arg line="--min-lines 3" />
             <arg line="--min-tokens 30" />
-            <arg line="--log-pmd ${basedir}/build/logs/phpunit-cpd-details.xml" />
+            <arg line="--log-pmd ${basedir}/build/logs/pmd-cpd.xml" />
             <arg line="./library ./modules ./scripts" />
         </exec>
     </target>
@@ -143,12 +144,23 @@
         <exec executable="pdepend" dir="${basedir}" logerror="on">
             <arg line="--coverage-report=${basedir}/build/logs/phpunit.coverage.xml" />
             <arg line="--jdepend-xml=${basedir}/build/logs/jdepend.xml" />
-            <arg line="--jdepend-chart=${basedir}/build/pdepend/20-dependencies.svg" />
-            <arg line="--overview-pyramid=${basedir}/build/pdepend/21-overview-pyramid.svg" />
+            <arg line="--jdepend-chart=${basedir}/build/pdepend/dependencies.svg" />
+            <arg line="--overview-pyramid=${basedir}/build/pdepend/overview-pyramid.svg" />
             <arg line="--suffix=php,phtml" />
             <arg line="--coderank-mode=inheritance,property,method" />
             <arg line="--ignore=tests" />
             <arg line="${basedir}/library,${basedir}/modules,${basedir}/scripts,${basedir}/import" />
+        </exec>
+    </target>
+
+    <target name="phpcb" description="Aggregates tool output with PHP_CodeBrowser.">
+        <exec executable="phpcb">
+            <arg value="--log" />
+            <arg path="${basedir}/build/logs" />
+            <arg value="--source" />
+            <arg path="${basedir}/modules" />
+            <arg value="--output" />
+            <arg path="${basedir}/build/code-browser" />
         </exec>
     </target>
 
