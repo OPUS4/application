@@ -64,8 +64,10 @@ class CronTestCase extends ControllerTestCase {
 
     protected function executeScript($fileName) {
         $command = self::$scriptPath . 'cron-php-runner.sh ' . self::$scriptPath . $fileName . ' ' . self::$lockDir;
+        $savedApplicationEnv = getenv('APPLICATION_ENV');
         putenv('APPLICATION_ENV=' . APPLICATION_ENV);
         $result = shell_exec($command);
+        putenv('APPLICATION_ENV=' . $savedApplicationEnv);
         $this->assertNotNull($result, "Script execution failed:\n".$command);
         $this->assertContains("job '" . self::$scriptPath . $fileName . "' done", $result);
         return $result;
