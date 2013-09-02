@@ -64,8 +64,8 @@ searchengine.extract.app = @searchengine.extract.app@
 ;MAIL SETTINGS
 ; mail.opus.smtp = localhost; SMTP server for sending email
 ; mail.opus.port = 25 ; SMTP server port for sending email
-mail.opus.address = ; email address of administrator
-mail.opus.name = ; Name of administrator
+; mail.opus.address = ; email address of administrator
+; mail.opus.name = ; Name of administrator
 
 ;NOTIFICATION SETTINGS
 ; comma separated list of email addresses that should receive a submission notification email
