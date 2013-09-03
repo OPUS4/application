@@ -153,7 +153,7 @@
             <arg line="--suffix=php,phtml" />
             <arg line="--coderank-mode=inheritance,property,method" />
             <arg line="--ignore=tests" />
-            <arg line="${basedir}/library,${basedir}/modules,${basedir}/scripts,${basedir}/import" />
+            <arg line="${basedir}/library,${basedir}/modules,${basedir}/scripts" />
         </exec>
     </target>
 
