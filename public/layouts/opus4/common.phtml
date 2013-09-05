@@ -141,14 +141,17 @@ $languageSelectors = $this->languageSelector();
             </div>
 
             <div id="content" class="opus <?= (in_array($this->moduleName, array('admin', 'review', 'setup'))) ? 'adminContainer' : ''?> <?= $this->moduleName ?><?php if ($this->moduleName === 'publish') : ?>"><?php else : ?><?= ($this->controllerName === 'index' ? '' : '_'.$this->controllerName)?><?= ($this->actionName === 'index' ? '' : '_'.$this->actionName)?><?= ($this->searchType === 'collection' || $this->searchType === 'latest' ? ' '.$this->searchType : '') ?>"><?php  endif; ?>
+
+                <?PHP $messages = !is_null($this->flashMessenger) ? $this->flashMessenger->getMessages() : null ?>
+
                 <?PHP if (in_array($this->moduleName, array('admin', 'review', 'setup'))) : ?>
                     <?PHP if ($this->breadcrumbsDisabled !== true) : ?>
                         <?= $this->navigation()->breadcrumbs() ?>
                     <?PHP endif; ?>
-                
-                    <?php if (!is_null($this->flashMessenger)) : ?>
+
+                    <?php if (!empty($messages)) : ?>
                     <div class="messages">
-                        <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
+                        <?php foreach ($messages as $message) : ?>
                             <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>
                         <?php endforeach ?>
                     </div>
@@ -166,7 +169,7 @@ $languageSelectors = $this->languageSelector();
                         <?= $this->adminform ?>
                     <?PHP endif ?>
                 
-                    <?php if (!is_null($this->flashMessenger)) : ?>
+                    <?php if (!empty($messages)) : ?>
                     <div class="messages">
                         <?php foreach ($this->flashMessenger->getMessages() as $message) : ?>
                             <div class="<?= $message['level'] ?>"><?= htmlspecialchars($this->translate($message['message'])) ?></div>

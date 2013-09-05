@@ -196,5 +196,11 @@ class Home_IndexControllerTest extends ControllerTestCase {
         
         $this->assertEquals($numOfDocs, $numOfHits);
     }
+
+    public function testFlashMessengerDivNotDisplayedWithoutMessages() {
+        $this->dispatch('/home');
+        $this->assertResponseCode(200);
+        $this->assertNotQuery("div#content/div.messages");
+    }
     
 }
