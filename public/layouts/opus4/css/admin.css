@@ -3,6 +3,56 @@
 /**
  * utf-8 encoded!
  */
+*{
+   /*border-radius: 0px !important;*/
+   /*background-image: none !important;*/
+}
+/* @group breadcrumbs section */
+.adminContainer .breadcrumbsContainer {
+   background: #2d6093; /* Old browsers */
+   background: -moz-linear-gradient(top,  #2d6093 0%, #26527d 79%, #26517c 100%); /* FF3.6+ */
+   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2d6093), color-stop(79%,#26527d), color-stop(100%,#26517c)); /* Chrome,Safari4+ */
+   background: -webkit-linear-gradient(top,  #2d6093 0%,#26527d 79%,#26517c 100%); /* Chrome10+,Safari5.1+ */
+   background: -o-linear-gradient(top,  #2d6093 0%,#26527d 79%,#26517c 100%); /* Opera 11.10+ */
+   background: -ms-linear-gradient(top,  #2d6093 0%,#26527d 79%,#26517c 100%); /* IE10+ */
+   background: linear-gradient(to bottom,  #2d6093 0%,#26527d 79%,#26517c 100%); /* W3C */
+   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d6093', endColorstr='#26517c',GradientType=0 ); /* IE6-9 */
+   font-size: 1.25em;
+   font-weight: normal;
+   margin-bottom: 0em;
+   padding: 6px 10px;
+}
+.adminContainer .breadcrumbsContainer *{
+   color: white;
+}
+.adminContainer .breadcrumbsContainer a{
+   text-decoration: underline;
+   color: white;
+}
+.adminContainer .breadcrumbsContainer .admin-help {
+    float: right;
+    margin-left: 15px;
+}
+.adminContainer .breadcrumbsContainer .admin-help img{
+   display: block;
+}
+/* @end */
+/* @group Messages */
+.adminContainer .messages > div:first-child{
+   margin-top: 1em;
+}
+/* Bessere Lösung, wenn der leere DIV-Container entfernt wird:
+.adminContainer .messages{
+   margin-top: 1em;
+}
+*/
+/* @end */
+/* @group External link */
+.new-window{
+   background: url(../img/theme/admin/ic_new-window.png) no-repeat right center;
+   padding-right: 13px;
+}
+/* @end */
 /* @group ID-specific form styles */
 /* 2-column layout, label aligned */
 #fieldset-Titles .data-wrapper.Language-data,
@@ -73,12 +123,40 @@
    width: 100%;
    margin: 1em 0;
 }
-.documentOptions dl.dropdown{
-   width: 30%;
+.documentOptions dl.dropdown,
+.documentOptions .crud-wrapper{
+   width: 22.25%;
    margin-right: 3%;
    float: left;
 }
-.documentOptions .docstateMenu dl.dropdown dd{
+.documentOptions div.crud-wrapper{
+   margin-right: 0;
+   border: 1px solid;
+   border-radius: 4px;
+   background-color: white;
+   position: relative;
+   line-height: 2.45em;
+}
+.documentOptions .crud-wrapper input[type="text"]{
+   border: none;
+   font-size: 1.2em;
+   padding: 2px 0 2px 10px;
+}
+.documentOptions .crud-wrapper input[type="submit"]{
+   position: absolute;
+   right: 4px;
+   top: 4px;
+   background-color: #7D7E7A;
+   color: white;
+   border: 1px solid #7d7e7a;
+   border-radius: 4px;
+   padding: 2px 4px;
+   font-size: 1.1em;
+   cursor: pointer;
+}
+
+.documentOptions .docstateMenu dl.dropdown dd,
+.documentOptions .crud-wrapper{
    border-color: #767676;
 }
 .adminContainer .collection_new a.add,
@@ -91,6 +169,25 @@
 .adminContainer table a.insert{
    background: url(../img/theme/admin/sprite_icons.png) no-repeat;
 }
+/* @group Pagination control */
+.paginationInfo ul,
+.paginationControl ul{
+   margin: 0;
+   padding: 0;
+   list-style: none;
+}
+.resultInfo,
+.paginationInfo li,
+.paginationControl li{
+   float: left;
+}
+.itemCountLinks{
+   float: right;
+}
+.paginationControl{
+   clear: both;
+}
+/* @end */
 .adminContainer a{
    text-decoration: none;
    color: #26517a;
@@ -170,11 +267,14 @@ li.edit input{
    color: #26517a;
    background-color: transparent;
    font: 0.857em Verdana, Arial, Helvetica, sans-serif;
-   cursor: pointer;
 }
 li.edit input:hover,
-.adminContainer .Add-data input:hover{
+.adminContainer .Add-data input:hover,
+.adminContainer .Import-data input:hover,
+.adminContainer .Remove-data input:hover,
+.adminContainer .Sort-data input:hover{
    text-decoration: underline;
+   cursor: pointer;
 }
 .save-element input,
 .save-data input,
@@ -339,17 +439,17 @@ li.edit input:hover,
    font-weight: bold;
    color: inherit;
 }
-.adminContainer .field i.placeholder,
+.adminContainer i.placeholder,
 .adminContainer .field .datahint,
 .adminContainer .field .errors,
 .adminContainer .field .hint{
    font-size: 0.857em;
    font-style: normal;
 }
-.js .adminContainer .field i.placeholder{
+.js .adminContainer i.placeholder{
    display: none;
 }
-.adminContainer .field i.placeholder,
+.adminContainer i.placeholder,
 .adminContainer .field .hint{
    color: #666;
 }
@@ -365,11 +465,10 @@ li.edit input:hover,
    margin:13px 0 0;
    padding: 5px 8px;
    position: relative;
-   /*display: inline-block;*/
-   float: left;
-   clear: left;
+   display: table;
 }
-.adminContainer .field ul.errors{
+.adminContainer .field ul.errors,
+#actionboxContainer .messagesContainer{
    background-color: #FFD4D4;
    color: #A40000;
 }
@@ -377,6 +476,15 @@ li.edit input:hover,
    background-color: #dcd7cf;
    color: #595A56;
 }
+#actionboxContainer .messagesContainer{
+   float: left;
+   width: 100%;
+   padding: 0.5em 0;
+}
+/*#actionboxContainer .messages{
+   color: #285837;
+}*/
+
 .adminContainer .field ul.errors + p.datahint,
 .adminContainer .field p.datahint + ul.errors{
    margin-top: 10px;
@@ -399,7 +507,7 @@ li.edit input:hover,
     border-color:  transparent transparent #dcd7cf;
 }
 #docinfo{
-   padding: 1.5em 0 0;
+   padding: 1.5em 0;
 }
 #docinfo p{
    margin: 0;
@@ -435,8 +543,12 @@ li.edit input:hover,
    width: auto;
    position: absolute;
    right: 0.6em;
-   bottom: 0.6em; 
+   /*bottom: 0.6em; */
 }
+/*.adminContainer #FileManager .multiple-wrapper .data-wrapper.Remove-data,
+#content.adminContainer .data-wrapper.Remove-data{
+   bottom: auto;
+}*/
 .adminContainer .multiple-wrapper{
    float: left;
    width: 99%;
@@ -445,50 +557,95 @@ li.edit input:hover,
 .adminContainer .multiple-wrapper.odd{
    background-color: #f2f2f2;
 }
-.adminContainer .subform .data-wrapper.Add-data{
+.adminContainer .subform .Add-Import-wrapper,
+.adminContainer .subform .data-wrapper.Add-data,
+.adminContainer #fieldset-Persons .data-wrapper.Add-data,
+.adminContainer #fieldset-Persons .data-wrapper.Sort-data{
    position: absolute;
-   right: 0.6em;
+   right: 0;
    top: 0em;
    width: auto;
+   background-color: #7d7e7a;
+   color: white;
+   line-height: 1.85em;
+   border-radius: 0 4px 4px 0;  
+   padding: 0;
 }
-.adminContainer .subform .subform .data-wrapper.Add-data,
+/*.adminContainer .subform .data-wrapper.Add-data,
+.adminContainer .subform .data-wrapper.Import-data,
+.adminContainer .subform .data-wrapper.Sort-data{
+   background-color: #7d7e7a;
+   color: white;
+   line-height: 1.85em;
+   border-radius: 0 5px 5px 0;
+   padding: 0;
+
+}*/
+.adminContainer .subform .fields-wrapper .Add-Import-wrapper .data-wrapper{
+   position: static;
+   float: left;
+   width: auto;
+   line-height: 1.85em;
+   border-left: 1px solid #595A56;
+   padding: 0;
+}
+/*.adminContainer .subform .subform .data-wrapper.Add-data,
 .adminContainer #fieldset-Persons .data-wrapper.Add-data{
    position: absolute;
    top: -0.8em;
    right: 0;
    width: auto;
    padding: 0;
-}
+   width: auto;
+}*/
 .adminContainer .multiple-wrapper{
    position: relative;
 }
 .adminContainer .Add-data input,
-.adminContainer .Remove-data input{
+.adminContainer .Remove-data input,
+.adminContainer .Import-data input,
+.adminContainer .Sort-data input{
    background: url(../img/theme/admin/sprite_icons.png) no-repeat;  
    padding: 2px 5px 2px 24px;
    border: 1px solid;
-   border-radius: 5px;
+   border-radius: 4px;
 
 }
 .adminContainer .Remove-data input{
-   border-color: #C7CBC5;
-   background-color: #E1E4E0;
+   /*border-color: #C7CBC5;*/
+   border-color: #dcd7cf;
+   /*background-color: #E1E4E0;*/
+   background-color: white;
    color: #3E3E3C;
    background-position: -16px -220px;
-   font-family: 1em Arial, Helvetica, sans-serif;   
+   font-family: 1em Verdana, Arial, Helvetica, sans-serif;   
 }
-.adminContainer .subform .Add-data input{
+.adminContainer .subform .Add-data input,
+.adminContainer .subform .Import-data input,
+.adminContainer .subform .Sort-data input,
+.adminContainer #FileManager-Files-Add-element input{
    border: none;
    background-color: transparent;
    color: white;
-   border-radius: 0;
-   background-position: -14px -17px;
    font-weight: normal;
    font: 0.857em Verdana, Arial, Helvetica, sans-serif;
    cursor: pointer; 
+   width: auto;
 }
 
-.adminContainer .subform .subform .Add-data input{
+.adminContainer .subform .Add-data input{
+   background-position: -14px -17px;   
+}
+.adminContainer .subform .Import-data input{
+   background-position: -14px -353px;   
+}
+.adminContainer .subform .Sort-data input{
+   background-position: -14px -426px;   
+}
+.adminContainer #FileManager-Files-Add-element input{
+   background-position: -14px -391px;   
+}
+/*.adminContainer .subform .subform .Add-data input{
    border-color: white;
    color: #595A56;
    background-color: white;
@@ -496,13 +653,16 @@ li.edit input:hover,
    font-weight: normal;
    font: 0.857em Verdana, Arial, Helvetica, sans-serif;
    cursor: pointer; 
-}
-.adminContainer h2{
+}*/
+.adminContainer h2,
+.adminContainer .headline{
     background-color: transparent;
     color: black;
     font-size: 1.286em;
     font-weight: normal;
     padding: 0 0 1em;
+    border: none;
+    text-transform: none;
 }
 .adminContainer #docinfo h2 {
     margin: 0 0 0.3em;
@@ -510,9 +670,10 @@ li.edit input:hover,
     border: none;
 }
 .adminContainer form dd,
-.adminContainer dd fieldset,
+/*.adminContainer dd fieldset,*/
 #actionboxContainer dd,
-.adminContainer form .subform,
+/*.adminContainer form .fields-wrapper .subform,*/
+.adminContainer fieldset,
 .adminContainer .subform fieldset,
 #actionboxContainer dd,
 .docstateMenu dd{
@@ -520,20 +681,27 @@ li.edit input:hover,
    padding: 0;
    border: none;
 }
-.adminContainer dd legend,
 .adminContainer .subform legend{
    border: none;
    text-transform: none;
-   font: italic bold 1.143em Georgia, "Times New Roman", Times, serif;
+   font: italic 1.143em Georgia, "Times New Roman", Times, serif;
    color: #595955;
-}
-.adminContainer form .wrapper > .subform > fieldset > legend{
-   background-color: #595a56;
-   color: white;
-   display: block;
-   border-radius: 6px;
-   padding: 0.4em 1.2%;
+   background: url(../img/theme/admin/bg_sub-legend.png);
+   border-radius: 4px;
+   padding: 0 1.2%;
+   line-height: 1.65em;
    width: 97.6%;
+   display: block;
+}
+
+.adminContainer form .wrapper > .subform > fieldset > legend{
+   background: #595a56;
+   color: white;
+   /*display: block;*/
+   /*border-radius: 4px;*/
+   /*padding: 0 1.2%;*/
+   /*line-height: 1.65em;*/
+   /*width: 97.6%;*/
    position: relative;
    margin: 0 0 1.3em;
 }
@@ -541,18 +709,19 @@ li.edit input:hover,
     border-color: #595a56 transparent transparent;
     border-width: 11px 6px 0;
     bottom: -11px;
-    left: 10px;
+    left: 8px;
     border-style: solid;
     content: "";
     height: 0;
     position: absolute;
     width: 0;
 }
-.adminContainer form .wrapper .subform .subform fieldset,
+/*.adminContainer form .wrapper .subform .subform fieldset,*/
 .adminContainer #subform-Actions,
 .adminContainer .submit-data,
 .adminContainer #form-action{
-   border-top: 10px solid #BDBEBB;
+  border-top: 8px solid #BDBEBB;
+  /*background: url(../img/theme/admin/bg_sub-legend.png) repeat-x;*/
 }
 .adminContainer #subform-Actions,
 .adminContainer .submit-data,
@@ -564,16 +733,19 @@ li.edit input:hover,
    float: left;
    width: 100%;
 }
-.adminContainer form .subform .subform fieldset > legend{
+/*.adminContainer form .subform .subform fieldset > legend{
    padding: 0 10px 0.4% 0;
-}
+}*/
 .adminContainer fieldset#fieldset-Actions .fields-wrapper{
    padding: 1em 0 2em;
 }
 .adminContainer .wrapper .subform{
-   margin: 1.3em 0 0;
+   /*margin: 1.3em 0 0;*/
    float: left;
    width: 100%;
+}
+.adminContainer .subform .fields-wrapper{
+   margin: 0 0 0.5em;
 }
 .adminContainer .subform + .data-wrapper{
    margin-top: 1.3em;
@@ -608,9 +780,6 @@ li.edit input:hover,
    float: left;
    width: 100%;
 }
-.adminContainer .subform .subform .fields-wrapper{
-   margin: 0;
-}
 .adminContainer fieldset{
    clear: both;
    position: relative;
@@ -642,7 +811,7 @@ li.edit input:hover,
 }
 .adminContainer .person-actions > ul .Remove-data input{
    font-size: 0.9em;
-   text-decoration: none;
+   /*text-decoration: none;*/
 }
 /*.adminContainer #fieldset-Persons .person-actions > ul.links li {
    float: left;
@@ -655,7 +824,7 @@ li.edit input:hover,
 .adminContainer dl.sort.dropdown dt,
 .adminContainer dl.settings.dropdown dt{
    border: 1px solid #e1e4e0;
-   border-radius: 5px;
+   border-radius: 4px;
    display: inline-block;
    position: relative;
    background-color: white;
@@ -696,7 +865,7 @@ li.edit input:hover,
 .adminContainer .subform .dropdown.dropdown-open dt,
 .no-js .adminContainer .subform .dropdown:hover dt{
    background-color: #E1E4E0;
-   border-radius: 5px 5px 0 0;
+   border-radius: 4px 4px 0 0;
 }
 .adminContainer dl.settings.dropdown dd{
    right: 0;
@@ -711,6 +880,8 @@ li.edit input:hover,
    border: solid #E1E4E0;
    border-width: 5px 1px 1px;
    padding: 10px;
+   margin-left: 0;
+   margin-right: 0;
 }
 .adminContainer dl.sort.dropdown dt input{
    color: #595A56;
@@ -889,15 +1060,6 @@ ul.form-action{
 /* @end */
 /* @group ActionBox */
 
-#actionboxContainer .messagesContainer{
-   float: left;
-   width: 100%;
-   background-color: rgba(255, 255, 255, 0.6);
-   padding: 0.5em 0;
-}
-#actionboxContainer .messages{
-   color: #285837;
-}
 #actionboxContainer{
    background: url(../img/theme/admin/bg_actionbox-fixed.png);
    color: black;
@@ -910,6 +1072,9 @@ ul.form-action{
    box-shadow: 0px 2px 1px rgba(54,54,54,0.4);
    -ms-filter:"progid:DXImageTransform.Microsoft.dropshadow(OffX=2,OffY=1,Color=#66545454,Positive=true)";
    filter:progid:DXImageTransform.Microsoft.dropshadow(OffX=2,OffY=1,Color=#66545454,Positive=true);
+}
+.frontdoor #actionboxContainer{
+   margin-bottom: 1.3em;
 }
 #actionboxContainer .wrapper:after{
    content: '';
@@ -931,10 +1096,10 @@ ul.form-action{
    padding-right: 1.5625%;
 }
 #actionboxContainer .col-2{
-   width: 47%;
+   width: 40%;
 }
 #actionboxContainer .col-3{
-   width: 27%;
+   width: 34%;
 }
 .docstateMenu dl,
 #actionboxContainer .col dl{
@@ -952,7 +1117,7 @@ ul.form-action{
    font-size: 0.857em;
 }
 #actionboxContainer .dropdown dt a{
-   border-radius: 5px;
+   border-radius: 4px;
    border: none;
    font-size: 1.167em;
 }
@@ -960,7 +1125,7 @@ ul.form-action{
 #actionboxContainer .dropdown.dropdown-open dt a,
 .no-js .docstateMenu dl.dropdown:hover dt a,
 .no-js #actionboxContainer .dropdown:hover dt a{
-   border-radius: 5px 5px 0 0;
+   border-radius: 4px 4px 0 0;
 }
 #actionboxContainer dd{
    font-weight: bold;
@@ -976,7 +1141,7 @@ ul.form-action{
 }
 .docstateMenu dl.dropdown dd,
 #actionboxContainer .dropdown dd{
-   border-radius: 0 0 5px 5px;
+   border-radius: 0 0 4px 4px;
    font-size: 0.857em;
 }
 #Document-Goto.dropdown dt a{
@@ -991,15 +1156,17 @@ ul.form-action{
     right: 10px;
 }
 #actionboxContainer #Document-Goto.dropdown dd{
-   background-color: #595a56;
+   border-top: 5px solid #595a56;
+   background-color: #767676;
    color: white;
    font-weight: normal;
+   min-width: 250px;
 }
 #Document-Goto.dropdown ul a{
    color: white;  
 }
 #Document-Goto dd ul{
-   padding: 0.3em 8px 0.8em 15px;
+   padding: 0.3em 15px 0.8em;
 }
 .docstateMenu dl.dropdown,
 #actionboxContainer #Document-ServerState.dropdown{
@@ -1037,7 +1204,7 @@ ul.form-action{
    z-index: 200;
    font-size: 1em;
    border: 1px solid #8c8d8a;
-   border-radius: 5px 5px 5px 5px;
+   border-radius: 4px;
 }
 .docstateMenu dl.dropdown ul,
 #Document-ServerState.dropdown ul{
@@ -1070,7 +1237,7 @@ ul.form-action{
 .no-js .docstateMenu dl.dropdown:hover dd,
 .no-js #actionboxContainer #Document-ServerState.dropdown:hover dd{
    background-color: white;
-   border-radius: 5px 5px 5px 5px;
+   border-radius: 4px;
    padding: 0 0 0.5em;
    font-weight: normal;
 }
@@ -1127,27 +1294,6 @@ ul.form-action{
 #actionboxContainer + .wrapper > .frontdoor {
     padding-top: 0.1em;
 }
-.adminContainer .breadcrumbsContainer {
-   background: #2d6093; /* Old browsers */
-   background: -moz-linear-gradient(top,  #2d6093 0%, #26527d 79%, #26517c 100%); /* FF3.6+ */
-   background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#2d6093), color-stop(79%,#26527d), color-stop(100%,#26517c)); /* Chrome,Safari4+ */
-   background: -webkit-linear-gradient(top,  #2d6093 0%,#26527d 79%,#26517c 100%); /* Chrome10+,Safari5.1+ */
-   background: -o-linear-gradient(top,  #2d6093 0%,#26527d 79%,#26517c 100%); /* Opera 11.10+ */
-   background: -ms-linear-gradient(top,  #2d6093 0%,#26527d 79%,#26517c 100%); /* IE10+ */
-   background: linear-gradient(to bottom,  #2d6093 0%,#26527d 79%,#26517c 100%); /* W3C */
-   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2d6093', endColorstr='#26517c',GradientType=0 ); /* IE6-9 */
-   font-size: 1.25em;
-   font-weight: normal;
-   margin-bottom: 0em;
-   padding: 6px 10px;
-}
-.adminContainer .breadcrumbsContainer *{
-   color: white;
-}
-.adminContainer .breadcrumbsContainer a{
-   text-decoration: underline;
-   color: white;
-}
 
 /**
  * Ergänzungen für Anzeige von Informationen einer Person
@@ -1173,10 +1319,7 @@ ul.form-action{
     font-style: italic;
 }
 
-/** 
- * CSS rule set for indexmaintenance views (were NOT added by web designer)
- */
-
+/* @group indexmaintenance views (were NOT added by web designer) */
 .admin_indexmaintenance .operation {
     margin-top: 2em;
     padding: 1em;
@@ -1226,9 +1369,12 @@ ul.form-action{
     color: blue;
     padding: 2em;   
 }
+/* @end */
 
-.textarea {
-    white-space: pre-wrap;  /* wird für Ausgabe von Textarea in View verwendet */
-    word-wrap: break-word;
-    word-break: normal;
+.textarea{
+   word-wrap: break-word;
+   overflow-wrap: break-word;
+}
+#content.adminContainer .data-wrapper .field .textarea{
+   width: 490px; /* break-word braucht eine fixe Breite */
 }
