@@ -36,16 +36,6 @@
  */
 ?>
 
-<?PHP if (empty($this->collection) and empty($this->series)) : ?>
-<div style="text-align: center; margin: 0.1em 0em">
-    <form action="<?= $this->url_call_id ?>" method="post" class="crud">
-         <?= $this->translate('docs_call_id_label') ?>
-         <input type="text" name="id" size="5" />
-         <input type="submit" value="<?= $this->translate('docs_call_id') ?>" />
-    </form>
-</div>
-<?PHP endif; ?>
-
 <div class="documentOptions">
     <?PHP if (!empty($this->collection)) : ?>
         <?=$this->translate('admin_documents_label_collection')?>: <b><?=htmlspecialchars($this->collectionName)?></b>
@@ -95,6 +85,16 @@
                 </ul>
             </dd>
         </dl>
+    </div>
+
+    <div class="crud-wrapper">
+        <form action="<?= $this->url_call_id ?>" method="post" class="crud">
+            <div>
+                <input type="text" name="id" size="5" placeholder="Document-ID"/>
+                <i class="placeholder"><?= $this->translate('docs_call_id_label') ?></i>
+                <input type="submit" value="<?= $this->translate('docs_call_id') ?>" />
+            </div>
+        </form>
     </div>
     <?PHP endif; ?>
 </div>
