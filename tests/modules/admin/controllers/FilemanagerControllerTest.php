@@ -109,6 +109,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
      * Verifies that the MD5 hash value is displayed twice (ist, soll).
      */
     public function testMd5HashValuesPresent() {
+        $this->markTestSkipped('Entgültiges HTML muss noch geklärt werden (OPUSVIER-3095).');
         $hash = '1ba50dc8abc619cea3ba39f77c75c0fe';
         $this->dispatch('/admin/filemanager/index/id/91');
         $this->assertResponseCode(200);
@@ -123,6 +124,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
      * Verifies that the SHA512 hash value is displayed twice (ist, soll).
      */
     public function testSha512HashValuesPresent() {
+        $this->markTestSkipped('Entgültiges HTML muss noch geklärt werden (OPUSVIER-3095).');
         $hash = '24bb2209810bacb3f9c05e08a08aec9ead4ac606fdc7c9d6c5fadffcf66f1e56396fdf46424cf52ef916f9e51f8178fb618c787f952d35aaf6d9079bbc9a50ad';
         $this->dispatch('/admin/filemanager/index/id/91');
         $this->assertResponseCode(200);

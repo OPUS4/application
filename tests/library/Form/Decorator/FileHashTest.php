@@ -48,6 +48,7 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
     }
 
     public function testRender() {
+        $this->markTestSkipped('Entgültiges HTML muss noch geklärt werden (OPUSVIER-3095).');
         $element = new Form_Element_FileHash('name');
 
         $file = new Opus_File(116);
@@ -70,6 +71,7 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
     }
 
     public function testRenderWithIst() {
+        $this->markTestSkipped('Entgültiges HTML muss noch geklärt werden (OPUSVIER-3095).');
         $element = new Form_Element_FileHash('name');
 
         $file = new Opus_File(116);
