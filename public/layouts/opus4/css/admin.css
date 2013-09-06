@@ -29,6 +29,10 @@
    text-decoration: underline;
    color: white;
 }
+.adminContainer .breadcrumbsContainer a:hover{
+   text-decoration: none;
+   color: white;
+}
 .adminContainer .breadcrumbsContainer .admin-help {
     float: right;
     margin-left: 15px;
@@ -38,14 +42,16 @@
 }
 /* @end */
 /* @group Messages */
-.adminContainer .messages > div:first-child{
+/*.adminContainer .messages > div:first-child{
    margin-top: 1em;
-}
-/* Bessere Lösung, wenn der leere DIV-Container entfernt wird:
+}*/
+/* Bessere Lösung, wenn der leere DIV-Container entfernt wird:*/
 .adminContainer .messages{
    margin-top: 1em;
 }
-*/
+#actionboxContainer .messages{
+   margin-top: 0;
+}
 /* @end */
 /* @group External link */
 .new-window{
@@ -169,23 +175,56 @@
 .adminContainer table a.insert{
    background: url(../img/theme/admin/sprite_icons.png) no-repeat;
 }
-/* @group Pagination control */
+/* @group Pagination */
+.adminContainer .wrapper table.documents{
+   margin: 0;
+}
 .paginationInfo ul,
+.itemCountLinks ul,
 .paginationControl ul{
    margin: 0;
    padding: 0;
    list-style: none;
 }
 .resultInfo,
-.paginationInfo li,
 .paginationControl li{
    float: left;
 }
 .itemCountLinks{
    float: right;
 }
+.itemCountLinks *{
+   display: inline;
+}
+.itemCountLinks li{
+   padding: 0 0.3em;
+}
 .paginationControl{
    clear: both;
+   background-color: #b7cde7;
+   color: black;
+   float: left;
+   width: 100%;
+   text-align: center;
+   margin: 0.4em 0;
+}
+table + .paginationControl{
+   margin-bottom: 2em;
+}
+.paginationControl ul{
+   display: inline-block;
+}
+.paginationControl li{
+   padding: 0.4em 0.7em;
+   border-left: 1px solid #dae5f3;
+   font-size: 0.9em;
+}
+.paginationControl li.currentPage{
+   background-color: #2d6093;
+   color: white;
+}
+.paginationControl li:first-child{
+   border: none;
 }
 /* @end */
 .adminContainer a{
@@ -262,13 +301,15 @@ li.edit input{
    background: url(../img/theme/admin/sprite_icons.png) no-repeat -20px -256px;
    padding-left: 16px;
 }
-li.edit input{
+li.edit input,
+.data-wrapper.Edit-data input{
    border: none;
    color: #26517a;
    background-color: transparent;
    font: 0.857em Verdana, Arial, Helvetica, sans-serif;
 }
 li.edit input:hover,
+.data-wrapper.Edit-data input:hover,
 .adminContainer .Add-data input:hover,
 .adminContainer .Import-data input:hover,
 .adminContainer .Remove-data input:hover,
@@ -442,9 +483,10 @@ li.edit input:hover,
 .adminContainer i.placeholder,
 .adminContainer .field .datahint,
 .adminContainer .field .errors,
-.adminContainer .field .hint{
-   font-size: 0.857em;
+.adminContainer .field .hint,
+.adminContainer .messages{
    font-style: normal;
+   font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
 }
 .js .adminContainer i.placeholder{
    display: none;
@@ -468,9 +510,22 @@ li.edit input:hover,
    display: table;
 }
 .adminContainer .field ul.errors,
-#actionboxContainer .messagesContainer{
+#actionboxContainer .messagesContainer,
+.adminContainer .wrapper div.form-errors,
+.adminContainer .wrapper div.form-errors ul,
+.adminContainer .wrapper div.form-errors p{
    background-color: #FFD4D4;
    color: #A40000;
+}
+.adminContainer .wrapper div.form-errors ul,
+.adminContainer .wrapper div.form-errors p{
+   margin: 0;
+}
+.adminContainer .wrapper div.form-errors{
+   margin: 0.4em 0;
+   padding: 0.5em 1.2%;
+   border-radius: 4px;
+   background-image: none;
 }
 .adminContainer .field p.datahint{
    background-color: #dcd7cf;
@@ -528,6 +583,31 @@ li.edit input:hover,
    padding-left: 2em;
    width: 80%;
 }
+/* @group Metadaten-Übersicht */
+.adminContainer.admin_document #fieldset-Licences .data-wrapper .label{
+   background: url(../img/theme/admin/ic_checked.png) no-repeat 0.4em 0.2em;
+}
+.adminContainer.admin_document .multiple-wrapper.odd{
+   background-color: transparent;
+}
+.adminContainer.admin_document .multiple-wrapper{
+   padding: 0;
+}
+.adminContainer.admin_document .required,
+.adminContainer.admin_document .data-wrapper label{
+   font-weight: normal;
+}
+.adminContainer.admin_document .field,
+.adminContainer.admin_document table td,
+.adminContainer.admin_document .data-wrapper,
+.adminContainer.admin_document #fieldset-Licences .data-wrapper label{
+   font-weight: bold;
+}
+.adminContainer.admin_document .wrapper .fields-wrapper th{
+   font-weight: normal;
+   font-size: 0.9em;
+}
+/* @end */
 #fieldset-Persons .data-wrapper{
    width: 100%;
 }
@@ -632,7 +712,42 @@ li.edit input:hover,
    cursor: pointer; 
    width: auto;
 }
-
+/* @group Metadaten Tabellen-Style */
+.adminContainer .wrapper td.Remove-data{
+   text-align: right;
+   min-width: 15%;
+   padding-right: 0;
+}
+.adminContainer .wrapper td.Language-data{
+   min-width: 17%;
+}
+.adminContainer .wrapper .fields-wrapper table{
+   margin: 0;
+}
+.adminContainer .wrapper .fields-wrapper thead th{
+   border-bottom: 1px solid #7D7E7A;
+}
+.adminContainer .wrapper .fields-wrapper tbody tr:hover{
+   background: none;
+}
+.adminContainer .wrapper .fields-wrapper th{
+   font-size: 0.8em;
+   font-weight: bold;
+}
+.adminContainer .wrapper .fields-wrapper td{
+   border-top: 1px dotted #c2c2c2;
+}
+.adminContainer .wrapper .fields-wrapper th.visibleoai,
+.adminContainer .wrapper .fields-wrapper td.visibleoai{
+   width: 4em;
+   text-align: center;
+}
+.adminContainer .wrapper .fields-wrapper th.visiblefrontdoor,
+.adminContainer .wrapper .fields-wrapper td.visiblefrontdoor{
+   width: 8em;
+   text-align: center;
+}
+/* @end */
 .adminContainer .subform .Add-data input{
    background-position: -14px -17px;   
 }
@@ -1377,4 +1492,8 @@ ul.form-action{
 }
 #content.adminContainer .data-wrapper .field .textarea{
    width: 490px; /* break-word braucht eine fixe Breite */
+}
+#fieldset-ddc .Edit-data{
+   overflow: auto;
+   max-width: 800px;
 }
