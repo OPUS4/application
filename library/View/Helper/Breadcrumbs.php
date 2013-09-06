@@ -65,14 +65,26 @@ class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
      * @return string
      */
     public function renderStraight(Zend_Navigation_Container $container = null) {
-        if (is_null($this->replacement)) {
-            $html = parent::renderStraight($container);
-        }
-        else {
-            $html = $this->replacement;
+        $helpPage = true; // TODO determine based on navigation-modules.xml
+
+        $html = '<div class="breadcrumbsContainer"><div class="wrapper">';
+
+        if ($helpPage) {
+            $iconUrl = $this->view->layoutPath() . '/img/theme/admin/ic_help.png';
+            $pageUrl = 'http://opus4.kobv.de'; // TODO get from navigation-modules.xml
+            $html .= '<a href="'
+                . $pageUrl
+                . '" class="admin-help"><img src="'
+                . $iconUrl
+                . '" width="25" height="20" alt="Help" title="Help"/></a>';
         }
 
-        $html = '<div class="breadcrumbsContainer"><div class="wrapper">' . $html;
+        if (is_null($this->replacement)) {
+            $html .= parent::renderStraight($container);
+        }
+        else {
+            $html .= $this->replacement;
+        }
 
         if (!is_null($this->suffix)) {
             if ($this->suffixSeparatorDisabled !== true) {
@@ -87,3 +99,5 @@ class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
     }
     
 }
+
+
