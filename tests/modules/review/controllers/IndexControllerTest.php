@@ -68,6 +68,8 @@ class Review_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertController('index');
         $this->assertAction('index');
+
+        $this->assertQueryCount('//table.documents//a[@class="new-window"]', 10);
     }
 
     public function testClearActionWithoutPost() {
