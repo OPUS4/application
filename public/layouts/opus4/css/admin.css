@@ -686,10 +686,12 @@ li.edit input:hover,
 .adminContainer .Import-data input,
 .adminContainer .Sort-data input{
    background: url(../img/theme/admin/sprite_icons.png) no-repeat;  
-   padding: 2px 5px 2px 24px;
+   padding: 3px 5px 3px 24px;
    border: 1px solid;
    border-radius: 4px;
-
+}
+#content.adminContainer .Remove-data input{
+   background: url(../img/theme/admin/ic_remove.png) no-repeat 4px 50%;  
 }
 .adminContainer .Remove-data input{
    /*border-color: #C7CBC5;*/
@@ -1494,6 +1496,11 @@ ul.form-action{
    width: 490px; /* break-word braucht eine fixe Breite */
 }
 #fieldset-ddc .Edit-data{
-   overflow: auto;
-   max-width: 800px;
+  /* overflow: auto;
+   max-width: 800px;*/
+}
+#fieldset-ddc .Edit-data input{
+   display: block;
+   text-align: left;
+   white-space: normal;
 }
