@@ -362,7 +362,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
 
         $decorators = $form->getDecorators();
 
-        $this->assertEquals(7, count($decorators));
+        $this->assertEquals(6, count($decorators));
         $this->assertNotNull($form->getDecorator('TableHeader'));
         $this->assertNotNull($form->getDecorator('TableWrapper'));
     }

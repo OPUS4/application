@@ -24,8 +24,8 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
- * @package     TODO
+ * @category    Application
+ * @package     Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -103,15 +103,19 @@ class Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator_Fieldset {
         return $legend . $markup;
     }
 
+    /**
+     * @param $button
+     * @return string
+     */
     protected function renderButton($button) {
         $name = $button->getName();
         $elementId = $button->getId();
         $decorator = new Zend_Form_Decorator_ViewHelper();
         $decorator->setElement($button);
-        $markup = "<div class=\"data-wrapper $name-data\">"
-            . "<div class=\"field\" id=\"$elementId-element\">"
+        $markup = "<span class=\"data-wrapper $name-data\">"
+            . "<span class=\"field\" id=\"$elementId-element\">"
             . $decorator->render(null)
-            . '</div></div>';
+            . '</span></span>';
         return $markup;
     }
 
