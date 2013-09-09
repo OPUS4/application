@@ -91,12 +91,14 @@ class Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator_Fieldset {
         $markup = '';
 
         if (!empty($buttons)) {
+            $markup .= '<span class="button-group">';
             foreach ($buttons as $button) {
                 $button = $element->getElement($button);
                 if (!is_null($button)) {
                     $markup .= $this->renderButton($button);
                 }
             }
+            $markup .= '</span>';
         }
 
 
@@ -112,7 +114,8 @@ class Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator_Fieldset {
         $elementId = $button->getId();
         $decorator = new Zend_Form_Decorator_ViewHelper();
         $decorator->setElement($button);
-        $markup = "<span class=\"data-wrapper $name-data\">"
+        $markup =
+            "<span class=\"data-wrapper $name-data\">"
             . "<span class=\"field\" id=\"$elementId-element\">"
             . $decorator->render(null)
             . '</span></span>';
