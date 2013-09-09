@@ -372,11 +372,13 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
      */
     protected function applyDecoratorsToElements($elements) {
         foreach ($elements as $element) {
-            if ($element->getName() !== 'Id') {
+            $name = $element->getName();
+            if ($name !== 'Id') {
                 $element->removeDecorator('dataWrapper');
                 $element->removeDecorator('LabelNotEmpty');
                 $element->removeDecorator('ElementHtmlTag');
-                $element->addDecorator(array('tableCellWrapper' => 'HtmlTag'), array('tag' => 'td'));
+                $element->addDecorator(array('tableCellWrapper' => 'HtmlTag'), array('tag' => 'td',
+                    'class' => "$name-data"));
             }
             else {
                 $element->setDecorators(array());
