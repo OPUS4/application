@@ -67,8 +67,11 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
     public function init() {
         parent::init();
         
-        $this->addElement('submit', self::ELEMENT_ADD, array('order' => 1000, 'label' => 'admin_button_add'));
+        $this->addElement('submit', self::ELEMENT_ADD, array('order' => 1000, 'label' => 'admin_button_add',
+            'decorators' => array(), 'disableLoadDefaultDecorators' => true));
         $this->setLegend('admin_document_section_collection');
+
+        $this->getDecorator('FieldsetWithButtons')->setLegendButtons(self::ELEMENT_ADD);
     }
     
     /**

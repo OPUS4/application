@@ -113,18 +113,21 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
 
         $this->setLegend('admin_document_section_' . strtolower($this->_fieldName));
 
+        $this->getElement(self::ELEMENT_ADD)->setDecorators(array())->setDisableLoadDefaultDecorators(true);
+
         if (!is_null($this->getColumns())) {
             $this->renderAsTableEnabled = true;
             $this->setDecorators(array(
                 'FormElements',
                 'TableHeader',
                 'TableWrapper',
-                array(array('addButton' => 'Button'), array('name' => self::ELEMENT_ADD)),
                 array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
-                'Fieldset',
+                array('FieldsetWithButtons', array('legendButtons' => self::ELEMENT_ADD)),
                 array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
             ));
-            $this->getElement(self::ELEMENT_ADD)->setDecorators(array())->setDisableLoadDefaultDecorators(true);
+        }
+        else {
+            $this->getDecorator('FieldsetWithButtons')->setLegendButtons(self::ELEMENT_ADD);
         }
     }
 

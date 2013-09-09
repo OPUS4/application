@@ -117,11 +117,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         // Set path to shared view partials
         $view->addScriptPath($libRealPath . '/Application/View/Partial');
         $view->addScriptPath($libRealPath . '/View/Partials');
-        
-        // Fieldset View Helper global ersetzen
-        $fieldsetHelper = new View_Helper_FieldsetWithAnker();
-        $view->registerHelper($fieldsetHelper, 'fieldset');
-        
+
         // Breadcrumbs View Helper global ersetzen
         $breadcrumbsHelper = new View_Helper_Breadcrumbs();
         $view->registerHelper($breadcrumbsHelper, 'breadcrumbs');

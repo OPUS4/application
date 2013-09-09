@@ -58,7 +58,7 @@ class Admin_Form_DocumentTitlesMain extends Admin_Form_DocumentMultiSubForm {
                 'ignoreSubForms' => true,
                 'markupListItemStart' => '',
                 'markupListItemEnd' => '')),
-            'Fieldset',
+            array('FieldsetWithButtons', array('legendButtons' => self::ELEMENT_ADD)),
             array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
         ));        
     }
