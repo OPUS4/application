@@ -35,24 +35,19 @@
  */
 
 /**
- * Main entry point for this module.
+ * Main menu for administration module.
  *
  * @category    Application
  * @package     Module_Admin
- *
- * TODO could the array be generated once for each language?
- * TODO could this be made more readable (dynamic list, methods, XML)
  */
 class Admin_IndexController extends Controller_Action {
 
     /**
-     * Creates array with items for administration menu.
-     *
-     * @return void
+     * Shows main menu.
      */
     public function indexAction() {
         $this->view->title = 'admin_index_title';
-        $this->view->breadcrumbsDisabled = true;
+        $this->view->navigation()->breadcrumbs()->setMinDepth(0);
     }
 
 }

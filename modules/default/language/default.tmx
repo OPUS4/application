@@ -644,5 +644,14 @@
         <seg>Gehe zu Abschnitt</seg>
       </tuv>
     </tu>
+
+        <tu tuid="page-help-link-title">
+            <tuv xml:lang="en">
+                <seg>Help</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Hilfe</seg>
+            </tuv>
+        </tu>
     </body>
 </tmx>

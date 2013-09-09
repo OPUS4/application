@@ -41,18 +41,35 @@ class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
     
     private $suffix = null;
     
-    private $replacement = null; 
-    
+    private $replacement = null;
+
+    /**
+     * Setze String, der an die Breadcrumbs gehängt wird.
+     *
+     * @param $suffix
+     * @return $this
+     */
     public function setSuffix($suffix) {
         $this->suffix = $suffix;
         return $this;
     }
-    
+
+    /**
+     * Disable Trennzeichen zum Suffix.
+     *
+     * @param $disabled
+     * @return $this
+     */
     public function setSuffixSeparatorDisabled($disabled) {
         $this->suffixSeparatorDisabled = $disabled;
         return $this;
     }
-    
+
+    /**
+     * Ersetze den Breadcrumbs Text komplett mit gesetztem Wert.
+     * @param $replacement
+     * @return $this
+     */
     public function setReplacement($replacement) {
         $this->replacement = $replacement;
         return $this;
@@ -65,19 +82,34 @@ class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
      * @return string
      */
     public function renderStraight(Zend_Navigation_Container $container = null) {
-        $helpPage = true; // TODO determine based on navigation-modules.xml
+        if (null === $container) {
+            $container = $this->getContainer();
+        }
+
+        $active = $this->findActive($container, 0);
+
+        if ($active) {
+            $page = $active['page'];
+            $helpPage = $page->helpUrl;
+        }
+        else {
+            $helpPage = null;
+        }
 
         $html = '<div class="breadcrumbsContainer"><div class="wrapper">';
 
-        if ($helpPage) {
+        if (!is_null($helpPage)) {
+            $title = $this->view->translate('page-help-link-title');
+
             $iconUrl = $this->view->layoutPath() . '/img/theme/admin/ic_help.png';
-            $pageUrl = 'http://opus4.kobv.de'; // TODO get from navigation-modules.xml
+            $pageUrl = $helpPage; // TODO evtl. baseUrl verwenden und helpUrl durch helpUri ersetzen
             $html .= '<a href="'
                 . $pageUrl
                 . '" class="admin-help"><img src="'
                 . $iconUrl
-                . '" width="25" height="20" alt="Help" title="Help"/></a>';
+                . '" width="25" height="20" alt="' . $title . '" title="' . $title . '"/></a>';
         }
+
 
         if (is_null($this->replacement)) {
             $html .= parent::renderStraight($container);
@@ -88,7 +120,7 @@ class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
 
         if (!is_null($this->suffix)) {
             if ($this->suffixSeparatorDisabled !== true) {
-                $html .= ' ' . $this->getSeparator() . ' '; 
+                $html .= $this->getSeparator();
             }
             $html .= $this->suffix;
         }
