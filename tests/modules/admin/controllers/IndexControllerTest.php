@@ -44,6 +44,8 @@ class Admin_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertController('index');
         $this->assertAction('index');
+
+        $this->validateXHTML();
     }
 
 }

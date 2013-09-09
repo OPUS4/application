@@ -301,7 +301,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         
         $ignored = array(
             'No declaration for attribute class of element html',
-            'No declaration for attribute placeholder of element input'
+            'No declaration for attribute placeholder of element input',
+            'No declaration for attribute target of element a'
         );
         
         $filteredErrors = array();

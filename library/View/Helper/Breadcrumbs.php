@@ -105,7 +105,7 @@ class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
             $pageUrl = $helpPage; // TODO evtl. baseUrl verwenden und helpUrl durch helpUri ersetzen
             $html .= '<a href="'
                 . $pageUrl
-                . '" class="admin-help"><img src="'
+                . '" class="admin-help" target="_blank"><img src="'
                 . $iconUrl
                 . '" width="25" height="20" alt="' . $title . '" title="' . $title . '"/></a>';
         }
