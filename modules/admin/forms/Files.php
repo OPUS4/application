@@ -47,11 +47,14 @@ class Admin_Form_Files extends Admin_Form_DocumentMultiSubForm {
         parent::init();
 
         $this->setLegend('admin_document_section_files');
+
+        $this->getDecorator('FieldsetWithButtons')->setLegendButtons(array(self::ELEMENT_IMPORT, self::ELEMENT_ADD));
     }
 
     protected function initButton() {
         parent::initButton();
-        $this->addElement('submit', self::ELEMENT_IMPORT, array('order' => 1002, 'label' => 'button_file_import'));
+        $this->addElement('submit', self::ELEMENT_IMPORT, array('order' => 1002, 'label' => 'button_file_import',
+            'decorators' => array(), 'disableLoadDefaultDecorators' => true));
     }
 
     public function processPost($post, $context) {

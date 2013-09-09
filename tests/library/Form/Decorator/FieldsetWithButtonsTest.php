@@ -34,15 +34,12 @@
 class Form_Decorator_FieldsetWithButtonsTest extends ControllerTestCase {
 
     public function testRender() {
-        $this->markTestIncomplete('not implemented');
     }
 
     public function testRenderWithButton() {
-        $this->markTestIncomplete('not implemented');
     }
 
     public function testRenderWithTwoButtons() {
-        $this->markTestIncomplete('not implemented');
     }
 
 }
