@@ -144,7 +144,8 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
     public function testDeleteAction() {
         $this->dispatch('/admin/collection/delete/id/' . $this->collection->getId());
         $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/' . $this->rootCollection->getId());        
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/' 
+                . $this->rootCollection->getId());        
     }
 
     public function testDeleteActionWithMissingParam() {
@@ -176,7 +177,8 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
     public function testHideAction() {
         $this->dispatch('/admin/collection/hide/id/' . $this->collection->getId());
         $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/' . $this->rootCollection->getId());
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/' 
+                . $this->rootCollection->getId());
     }
 
     public function testHideActionWithMissingParam() {
@@ -188,7 +190,8 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
     public function testUnhideAction() {
         $this->dispatch('/admin/collection/unhide/id/' . $this->collection->getId());
         $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/' . $this->rootCollection->getId());
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/' 
+                . $this->rootCollection->getId());
     }
 
     public function testUnhideActionWithMissingParam() {
@@ -236,17 +239,20 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
     public function testMoveActionDownmove() {
         $this->dispatch('/admin/collection/move/id/' . $this->collection->getId() . '/pos/2');
         $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/' . $this->rootCollection->getId());
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/' 
+                . $this->rootCollection->getId());
     }
 
     public function testMoveActionUpmove() {
         $this->dispatch('/admin/collection/move/id/' . $this->anotherCollection->getId() . '/pos/1');
         $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/' . $this->rootCollection->getId());
+        $this->assertResponseLocationHeader($this->getResponse(), '/admin/collection/show/id/' 
+                . $this->rootCollection->getId());
     }
 
     public function testMoveActionWithRootCollection() {
-        $this->dispatch('/admin/collection/move/id/' . $this->nonEmptyCollectionRole->getRootCollection()->getId() . '/pos/1');
+        $this->dispatch('/admin/collection/move/id/' . $this->nonEmptyCollectionRole->getRootCollection()->getId() 
+                . '/pos/1');
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/admin/collectionroles');
     }
@@ -256,7 +262,8 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
      */
     public function testCollectionRoleGetsTranslatedAsLink() {
         $this->dispatch('/admin/collection/show/id/' . $this->collection->getId());
-        $this->assertContains('<a href="/admin/collection/show/id/' . $this->rootCollection->getId() . '">default_collection_role_test2role</a>', $this->getResponse()->getBody());
+        $this->assertContains('<a href="/admin/collection/show/id/' . $this->rootCollection->getId() 
+                . '">default_collection_role_test2role</a>', $this->getResponse()->getBody());
     }
 
     /**
@@ -264,8 +271,9 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
      */
     public function testCollectionRoleGetsTranslatedAsText() {
         $this->dispatch('/admin/collection/show/id/' . $this->rootCollection->getId());
-        $this->assertContains('default_collection_role_test2role', $this->getResponse()->getBody());
-        $this->assertNotContains('<a href="/admin/collection/show/id/' . $this->rootCollection->getId() . '">default_collection_role_test2role</a>', $this->getResponse()->getBody());
+        $this->assertQueryContentContains('//div[@class="breadcrumbsContainer"]//a[@href="/admin/collection/show/id/'
+                . $this->rootCollection->getId() . '"]',
+                'default_collection_role_test2role', $this->getResponse()->getBody());
     }
 
     /**
