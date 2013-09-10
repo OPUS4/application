@@ -24,8 +24,8 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Tests
+ * @category    Application Unit Test
+ * @package     Module_Admin
  * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
@@ -335,6 +335,14 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
         $this->dispatch('/admin/collection/assign/document/40');
         $this->assertNotQueryContentContains('table.collections', 'default_collection_role_no-root-test');
     }
+    
+    public function testCollectionBreadcrumbTranslatedAndLinked() {
+        $this->useEnglish();
+        $this->dispatch('/admin/collection/new/id/2/type/child'); // add entry to DDC
+        $this->assertResponseCode(200);
+        $this->assertQueryContentContains(
+                '//div[@class="breadcrumbsContainer"]//a[@href="/admin/collection/show/id/2"]', 
+                'Dewey Decimal Classification');
+    }
         
 }
-
