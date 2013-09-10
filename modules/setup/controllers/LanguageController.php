@@ -40,6 +40,12 @@ class Setup_LanguageController extends Controller_SetupAbstract {
 
     protected $sortKeys = array('unit', 'module', 'directory', 'filename', 'language', 'variant');
 
+    public function init() {
+        parent::init();
+
+        $this->getHelper('MainMenu')->setActive('admin');
+    }
+
     public function indexAction() {
         $this->view->form = $this->getSearchForm();
     }

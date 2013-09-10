@@ -39,10 +39,11 @@
 class Setup_StaticPageController extends Controller_SetupAbstract {
 
     protected $_config;
-    
+
     public function init() {
         parent::init();
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'static-page');
+        $this->getHelper('MainMenu')->setActive('admin');
     }
     
     public function indexAction() {

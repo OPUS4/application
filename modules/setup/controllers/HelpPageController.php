@@ -38,6 +38,11 @@
  */
 class Setup_HelpPageController extends Controller_SetupAbstract {
 
+    public function init() {
+        parent::init();
+
+        $this->getHelper('MainMenu')->setActive('admin');
+    }
 
     public function indexAction() {
         $this->forward('edit');
