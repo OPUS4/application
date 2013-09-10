@@ -34,8 +34,6 @@
 
 /**
  * Model for importing files from a specific folder.
- *
- * TODO make __importFolder configurable
  */
 class Admin_Model_FileImport extends Application_Model_Abstract {
 
@@ -52,6 +50,10 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
      * @throws Application_Exception in case database contains no document with id $docID
      */
     public function addFilesToDocument($docId, $files) {
+        if (empty($files)) {
+            throw new Application_Exception('no files for import');
+        }
+        
         $document = null;
         try {
             $document = new Opus_Document($docId);
@@ -96,7 +98,7 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
         return Zend_Controller_Action_HelperBroker::getStaticHelper('Files')->listFiles($this->__importFolder, true);
     }
 
-    private function getNamesOfIncomingFiles() {
+    public function getNamesOfIncomingFiles() {
         $incomingFilenames = array();
         foreach ($this->listFiles() as $file) {
             array_push($incomingFilenames, $file['name']);            
