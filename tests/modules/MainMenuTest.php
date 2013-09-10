@@ -63,6 +63,9 @@ class MainMenuTest extends ControllerTestCase {
     
     function testAdminControllerIndexPages() {
         $pages = array(
+            "/setup/help-page",
+            "/setup/static-page",
+            "/setup/language",
             "/admin/account",
             "/admin/licence",
             "/admin/collectionroles",
@@ -78,7 +81,8 @@ class MainMenuTest extends ControllerTestCase {
         
         foreach ($pages as $page) {
             $this->dispatch($page);
-            $this->assertQuery('li.active[@id="primary-nav-administration"]', "Admin Eintrag sollte aktiviert sein.");
+            $this->assertQuery('li.active[@id="primary-nav-administration"]',
+                "Admin Eintrag sollte für '$page' aktiviert sein.");
         }
     } 
     
@@ -106,5 +110,5 @@ class MainMenuTest extends ControllerTestCase {
         $this->dispatch("/home/index/help");
         $this->assertQuery('li.active[@id="primary-nav-help"]', "FAQ Eintrag sollte aktiviert sein.");
     }
-    
+
 }
