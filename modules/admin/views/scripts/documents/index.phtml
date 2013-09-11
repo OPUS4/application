@@ -101,26 +101,24 @@
 
 <div class ="paginationInfo">
     <?= $this->paginationControl($this->paginator, NULL, 'itemCount_pagination.phtml') ?>
-    <div id="itemCountLinks" style="float: right">
-        <?PHP foreach ($this->itemCountLinks as $link) : ?>
-        <?PHP if ($link['label'] != $this->maxHitsPerPage && ($link['label'] !== 'all' || $this->maxHitsPerPage != 0)) : 
-        ?><a href="<?= $link['url'] ?>"
-           ><?PHP if ($link['label'] === 'all') : 
-               ?><?= $this->translate('admin_documents_maxhitsperpage_all') 
-            ?><?PHP else : 
-                ?><?= $link['label'] 
-            ?><?PHP endif; ?></a>        
-        <?PHP else : 
-            ?><?PHP if ($link['label'] === 'all') : 
-                ?><?= $this->translate('admin_documents_maxhitsperpage_all') 
-            ?><?PHP else : 
-                ?><?= $link['label'] 
-            ?><?PHP endif; 
-        ?><?PHP endif; ?>
-        <?PHP endforeach; ?>
-    </div>
 </div>
 
+<div class="itemCountLinks">
+    <p><?= $this->translate('admin_documents_maxhitsperpage') ?></p>
+    <ul>
+<?PHP foreach ($this->itemCountLinks as $link) : ?>
+<?PHP if ($link['label'] != $this->maxHitsPerPage && ($link['label'] !== 'all' || $this->maxHitsPerPage != 0)) : ?>
+        <li><a href="<?= $link['url'] ?>"><?PHP if ($link['label'] === 'all') : ?>
+<?= $this->translate('admin_documents_maxhitsperpage_all') ?><?PHP else : ?><?= $link['label'] ?>
+<?PHP endif; ?></a><?PHP else : ?>
+<?PHP if ($link['label'] === 'all') : ?><?= $this->translate('admin_documents_maxhitsperpage_all') ?>
+<?PHP else : ?>
+        <li class="current"><?= $link['label'] ?>
+<?PHP endif; ?>
+<?PHP endif; ?></li>
+<?PHP endforeach; ?>
+    </ul>
+</div>
 <?= $this->paginationControl($this->paginator, 'Sliding', 'results_pagination.phtml') ?>
 
 <table class="documents">
