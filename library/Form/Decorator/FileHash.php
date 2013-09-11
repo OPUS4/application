@@ -56,13 +56,15 @@ class Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract {
         $hashIst = $hash->getIst();
 
         // TODO fix: label nur anzeigen wenn soll und ist angezeigt werden
-        $markup = '<span class="hash-label">Soll:</span><div class="textarea hashsoll">' . htmlspecialchars($hashSoll) . '</div>';
+        $markup = '<div class="textarea hashsoll"><span class="hash-label">Soll: </span>'
+            . htmlspecialchars($hashSoll) . '</div>';
 
         $markup .= $view->formHidden($element->getFullyQualifiedName() . '[Soll]', $hashSoll);
 
         // TODO fix: ist nur anzeigen wenn Abweichung
         if ($hashSoll == $hashIst) {
-            $markup .= '<span class="hash-label">Ist:</span><div class="textarea hashist">'. htmlspecialchars($hashIst) . '</div>';
+            $markup .= '<div class="textarea hashist"><span class="hash-label">Ist: </span>'
+                . htmlspecialchars($hashIst) . '</div>';
             $markup .= $view->formHidden($element->getFullyQualifiedName() . '[Ist]', $hashIst);
         }
 
@@ -76,4 +78,3 @@ class Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract {
     }
 
 }
-
