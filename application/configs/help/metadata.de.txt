@@ -10,7 +10,7 @@ Bibliotheken können als eine Form von Metadaten gesehen werden.
 <p>
 Als Grundlage für die Metadaten auf diesem Dokumentenserver soll das aus fünfzehn Basiselementen
 bestehende <a href="http://dublincore.org/" target="_blank">Dublin Core Metedata Element Set</A> 
-(kurz Dublin Core bzw. DC) dienen. Dublin Core ist das Ergebnis internationalen Bemühungen, einen 
+(kurz Dublin Core bzw. DC) dienen. Dublin Core ist das Ergebnis internationaler Bemühungen, einen 
 gemeinsamen Konsens bei der Beschreibung elektronischer Objekte (im weitesten Sinne) zu finden. 
 Die Library of Congress (LoC), das Online Cataloging Library Center (OCLC) und eine Reihe von 
 Nationalbibliotheken setzen sich in Projekten mit Dublin Core auseinander bzw. stehen kurz vor dessen 

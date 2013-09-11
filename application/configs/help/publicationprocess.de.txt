@@ -13,6 +13,6 @@ Zum Beispiel werden erfasst:<br/>
 <li>die Sprache des Dokuments (aus einer Liste auszuwählen)</li>
 <li>die Lizenz, unter der Sie Ihr Dokument veröffentlichen wollen (aus einer Liste auszuwählen)</li>
 </ul>
-Wenn Sie nicht wissen, was Sie in einem Formularfeld eintragen sollen, fahren Sie bitte mit dem Coursor über das Eingabefeld. Es wird ein erläuternder Hilfetext eingeblendet (Tooltip).<br/>
+Wenn Sie nicht wissen, was Sie in einem Formularfeld eintragen sollen, fahren Sie bitte mit dem Cursor über das Eingabefeld. Es wird ein erläuternder Hilfetext eingeblendet (Tooltip).<br/>
 Zum Abschluss der Datenerfassung werden Ihnen Ihre Eingaben noch einmal angezeigt und Sie haben drei Möglichkeiten: Sie können die Eingaben zu Ihrem Dokument gegebenenfalls korrigieren, 
 es einer Sammlung (Collection) hinzufügen oder direkt abspeichern.
