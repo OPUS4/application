@@ -108,14 +108,15 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
     
     public function testShowHitsPerPageLinks() {
         $this->dispatch('/admin/documents');
-        $this->assertQuery('div#itemCountLinks a');
+        $this->assertQueryCount('div.itemCountLinks//li', 4);
+        $this->assertQueryCount('div.itemCountLinks//a', 3); // einer ist aktiv und kein Link
     }
     
     public function testShowHitsPerPageOptionAsLink() {
         $this->dispatch('/admin/documents/index/hitsperpage/10');
         
-        $this->assertQueryContentContains("div#itemCountLinks a", '50');
-        $this->assertQueryContentContains('div#itemCountLinks a', '100');
+        $this->assertQueryContentContains("div.itemCountLinks//a", '50');
+        $this->assertQueryContentContains('div.itemCountLinks//a', '100');
     }
     
     public function testShowSelectedHitsPerPageOptionNotAsLink() {
@@ -162,8 +163,8 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
         $config->admin->documents->maxDocsOptions = "20,60,all";
         
         $this->dispatch('/admin/documents');
-        $this->assertQueryContentContains("div#itemCountLinks a", '20');
-        $this->assertQueryContentContains('div#itemCountLinks a', '60');
+        $this->assertQueryContentContains("div.itemCountLinks//a", '20');
+        $this->assertQueryContentContains('div.itemCountLinks//a', '60');
         $this->assertQueryCount("a[@href='" . $this->getRequest()->getBaseUrl() . "/admin/documents/index/hitsperpage/all']", 1);
     }
     
