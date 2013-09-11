@@ -15,4 +15,6 @@ Zum Beispiel werden erfasst:<br/>
 </ul>
 Wenn Sie nicht wissen, was Sie in einem Formularfeld eintragen sollen, fahren Sie bitte mit dem Cursor über das Eingabefeld. Es wird ein erläuternder Hilfetext eingeblendet (Tooltip).<br/>
 Zum Abschluss der Datenerfassung werden Ihnen Ihre Eingaben noch einmal angezeigt und Sie haben drei Möglichkeiten: Sie können die Eingaben zu Ihrem Dokument gegebenenfalls korrigieren, 
-es einer Sammlung (Collection) hinzufügen oder direkt abspeichern.
+es einer Sammlung (Collection) hinzufügen oder direkt abspeichern.<br><br/>
+<b>Hinweis:</b><br/>
+Cookies müssen im Webbrowser eingeschaltet sein, um Dokumente über das Veröffentlichungsformular einstellen zu können.
