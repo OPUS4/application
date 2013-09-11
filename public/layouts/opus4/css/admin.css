@@ -620,6 +620,9 @@ li.edit input:hover,
 .adminContainer.admin_document #fieldset-Licences .data-wrapper label{
    font-weight: bold;
 }
+.adminContainer.admin_document #fieldset-Identifiers td:first-child{
+   width: 32%;
+}
 .adminContainer.admin_document .wrapper .fields-wrapper th{
    font-weight: normal;
    font-size: 0.9em;
