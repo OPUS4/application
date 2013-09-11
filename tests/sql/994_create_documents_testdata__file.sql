@@ -17,3 +17,7 @@ INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `mime_t
 (122, 121, 'Dateiname_ohne_Dateilabel.pdf', NULL, 'application/pdf', 'eng', 72603, 1, 1),
 (123, 122, 'Datei_unsichtaber_in_Frontdoor.pdf', 'Datei_unsichtaber_in_Frontdoor.pdf', 'application/pdf', 'eng', 72603, 0, 1),
 (140, 160, 'deleteme.pdf', 'Datei_zum_loeschen.pdf', 'application/pdf', 'eng', 8817, 1, 1);
+
+INSERT INTO `file_hashvalues` (`file_id`, `type`, `value`) VALUES
+(122,'md5','1ba50dc8abc619cea3ba39f77c75c0fe'),
+(122,'sha512','24bb2209810bacb3f9c05e08a08aec9ead4ac606fdc7c9d6c5fadffcf66f1e56396fdf46424cf52ef916f9e51f8178fb618c787f952d35aaf6d9079bbc9a50ad');

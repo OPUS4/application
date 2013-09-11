@@ -55,17 +55,23 @@ class Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract {
         $hashSoll = $hash->getSoll();
         $hashIst = $hash->getIst();
 
-        // TODO fix: label nur anzeigen wenn soll und ist angezeigt werden
-        $markup = '<div class="textarea hashsoll"><span class="hash-label">Soll: </span>'
-            . htmlspecialchars($hashSoll) . '</div>';
 
-        $markup .= $view->formHidden($element->getFullyQualifiedName() . '[Soll]', $hashSoll);
+        if ($hashSoll != $hashIst) {
+            $markup = '<div class="textarea hashsoll"><span class="hash-label">'
+                . $view->translate('frontdoor_fixpoint')
+                . ':</span>'
+                . htmlspecialchars($hashSoll) . '</div>';
+            $markup .= $view->formHidden($element->getFullyQualifiedName() . '[Soll]', $hashSoll);
 
-        // TODO fix: ist nur anzeigen wenn Abweichung
-        if ($hashSoll == $hashIst) {
-            $markup .= '<div class="textarea hashist"><span class="hash-label">Ist: </span>'
+            $markup .= '<div class="textarea hashist"><span class="hash-label">'
+                . $view->translate('frontdoor_current')
+                . ':</span>'
                 . htmlspecialchars($hashIst) . '</div>';
             $markup .= $view->formHidden($element->getFullyQualifiedName() . '[Ist]', $hashIst);
+        }
+        else {
+            $markup = '<div class="textarea hashsoll">' . htmlspecialchars($hashSoll) . '</div>';
+            $markup .= $view->formHidden($element->getFullyQualifiedName() . '[Soll]', $hashSoll);
         }
 
         switch ($this->getPlacement()) {

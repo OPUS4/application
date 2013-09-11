@@ -48,7 +48,6 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
     }
 
     public function testRender() {
-        $this->markTestSkipped('Entgültiges HTML muss noch geklärt werden (OPUSVIER-3095).');
         $element = new Form_Element_FileHash('name');
 
         $file = new Opus_File(116);
@@ -67,11 +66,13 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
         $output = $decorator->render('content');
 
         $this->assertEquals('content'
-            . '<div class="textarea hashsoll">1ba50dc8abc619cea3ba39f77c75c0fe</div><input type="hidden" name="name[Soll]" value="1ba50dc8abc619cea3ba39f77c75c0fe" id="name-Soll" />', $output);
+            . '<div class="textarea hashsoll">1ba50dc8abc619cea3ba39f77c75c0fe</div>'
+            . '<input type="hidden" name="name[Soll]" value="1ba50dc8abc619cea3ba39f77c75c0fe" id="name-Soll" />',
+            $output);
     }
 
     public function testRenderWithIst() {
-        $this->markTestSkipped('Entgültiges HTML muss noch geklärt werden (OPUSVIER-3095).');
+        $this->useEnglish();
         $element = new Form_Element_FileHash('name');
 
         $file = new Opus_File(116);
@@ -92,9 +93,9 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
         $output = $decorator->render('content');
 
         $this->assertEquals('content'
-            . '<div class="textarea hashsoll">1ba50dc8abc619cea3ba39f77c75c0ff</div>'
+            . '<div class="textarea hashsoll"><span class="hash-label">Expected:</span>1ba50dc8abc619cea3ba39f77c75c0ff</div>'
             . '<input type="hidden" name="name[Soll]" value="1ba50dc8abc619cea3ba39f77c75c0ff" id="name-Soll" />'
-            . '<div class="textarea hashist">1ba50dc8abc619cea3ba39f77c75c0fe</div>'
+            . '<div class="textarea hashist"><span class="hash-label">Actual:</span>1ba50dc8abc619cea3ba39f77c75c0fe</div>'
             . '<input type="hidden" name="name[Ist]" value="1ba50dc8abc619cea3ba39f77c75c0fe" id="name-Ist" />'
             , $output);
 

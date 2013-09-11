@@ -332,7 +332,7 @@
 
         <tu tuid="frontdoor_fixpoint">
           <tuv xml:lang="en">
-            <seg>Fixpoint</seg>
+            <seg>Expected</seg>
           </tuv>
           <tuv xml:lang="de">
             <seg>Sollwert</seg>
@@ -341,7 +341,7 @@
 
         <tu tuid="frontdoor_current">
           <tuv xml:lang="en">
-            <seg>Current value</seg>
+            <seg>Actual</seg>
           </tuv>
           <tuv xml:lang="de">
             <seg>Istwert</seg>

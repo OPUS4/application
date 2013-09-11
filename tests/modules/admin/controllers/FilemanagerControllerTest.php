@@ -105,34 +105,44 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->verifyFlashMessage('admin_document_error_novalidid');
     }
 
-    /**
-     * Verifies that the MD5 hash value is displayed twice (ist, soll).
-     */
     public function testMd5HashValuesPresent() {
-        $this->markTestSkipped('Entgültiges HTML muss noch geklärt werden (OPUSVIER-3095).');
         $hash = '1ba50dc8abc619cea3ba39f77c75c0fe';
         $this->dispatch('/admin/filemanager/index/id/91');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('filemanager');
         $this->assertAction('index');
-        $response = $this->getResponse()->getBody();
-        $this->assertTrue(substr_count($response, $hash) == 2);
+        $this->assertQueryContentContains('//div.Hash0-data', $hash);
+        $this->assertNotQuery('//div.Hash0-data//div.hashsoll/span.hash-label');
+        $this->assertNotQuery('//div.hashist');
     }
 
-    /**
-     * Verifies that the SHA512 hash value is displayed twice (ist, soll).
-     */
     public function testSha512HashValuesPresent() {
-        $this->markTestSkipped('Entgültiges HTML muss noch geklärt werden (OPUSVIER-3095).');
         $hash = '24bb2209810bacb3f9c05e08a08aec9ead4ac606fdc7c9d6c5fadffcf66f1e56396fdf46424cf52ef916f9e51f8178fb618c787f952d35aaf6d9079bbc9a50ad';
         $this->dispatch('/admin/filemanager/index/id/91');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('filemanager');
         $this->assertAction('index');
-        $response = $this->getResponse()->getBody();
-        $this->assertTrue(substr_count($response, $hash) == 2);
+        $this->assertQueryContentContains('//div.Hash1-data', $hash);
+        $this->assertNotQuery('//div.Hash1-data//div.hashsoll/span.hash-label');
+        $this->assertNotQuery('//div.hashist');
+    }
+
+    /**
+     * Wenn beim Hash Fehler auftreten, werden Soll und Ist mit Labeln angezeigt.
+     */
+    public function testHashErrorShown() {
+        $this->dispatch('/admin/filemanager/index/id/121');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('filemanager');
+        $this->assertAction('index');
+
+        $this->assertQuery('//div.Hash0-data//div.hashsoll/span.hash-label');
+        $this->assertQuery('//div.Hash0-data//div.hashist/span.hash-label');
+        $this->assertQuery('//div.Hash1-data//div.hashsoll/span.hash-label');
+        $this->assertQuery('//div.Hash1-data//div.hashist/span.hash-label');
     }
 
 }
