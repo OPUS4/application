@@ -78,6 +78,8 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
 
         $element = $this->createElement('FileLink', self::ELEMENT_FILE_LINK);
         $element->getDecorator('ViewHelper')->setViewOnlyEnabled(true);
+        $element->setLabel(null);
+        $element->addError('Datei nicht gefunden.'); // TODO remove - it is just for testing
         $this->addElement($element);
 
         $element = $this->createElement('text', self::ELEMENT_FILE_SIZE);
