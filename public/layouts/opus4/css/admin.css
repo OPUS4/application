@@ -1491,7 +1491,9 @@ ul.form-action{
 .textarea.hashist span{
    position: absolute;
    top: 0;
-   left: -3.5em;
+   left: -5em;
+   width: 4.6em;
+   text-align: right;
 }
 .textarea.hashist{
    color:  #dc143c;
