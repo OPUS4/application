@@ -1499,6 +1499,13 @@ ul.form-action{
    color:  #dc143c;
    background-color: transparent;
 }
+.FileLink-data .field a{
+   background: url(../img/theme/admin/ic_file.png) no-repeat left center;
+   padding: 4px 0 4px 35px;
+   position: relative;
+   left: -35px;
+   font-weight: bold;
+}
 #content.adminContainer .data-wrapper .field .textarea{
    width: 490px; /* break-word braucht eine fixe Breite */
 }
