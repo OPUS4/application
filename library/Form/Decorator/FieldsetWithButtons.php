@@ -84,13 +84,13 @@ class Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator_Fieldset {
 
         $buttons = $this->getLegendButtons();
 
-        if (!is_array($buttons)) {
+        if (!is_null($buttons) && !is_array($buttons)) {
             $buttons = array($buttons);
         }
 
         $markup = '';
 
-        if (!empty($buttons)) {
+        if (!is_null($buttons) && count($buttons) >= 1) {
             $markup .= '<span class="button-group">';
             foreach ($buttons as $button) {
                 $button = $element->getElement($button);
@@ -100,7 +100,6 @@ class Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator_Fieldset {
             }
             $markup .= '</span>';
         }
-
 
         return $legend . $markup;
     }

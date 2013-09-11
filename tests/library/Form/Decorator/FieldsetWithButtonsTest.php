@@ -33,13 +33,54 @@
  */
 class Form_Decorator_FieldsetWithButtonsTest extends ControllerTestCase {
 
+    private $decorator = null;
+
+    private $form = null;
+
+    public function setUp() {
+        parent::setUp();
+
+        $this->form = new Zend_Form_SubForm();
+        $this->form->setView(new Zend_View());
+        $this->form->setLegend('Test');
+
+        $this->decorator = new Form_Decorator_FieldsetWithButtons();
+        $this->decorator->setElement($this->form);
+    }
+
     public function testRender() {
+        $this->assertEquals('<fieldset><legend>Test</legend>' . PHP_EOL . 'content</fieldset>',
+            $this->decorator->render('content'));
     }
 
     public function testRenderWithButton() {
+        $this->form->addElement('submit', 'Add');
+
+        $this->decorator->setLegendButtons('Add');
+
+        $this->assertEquals('<fieldset><legend>Test<span class="button-group">'
+            . '<span class="data-wrapper Add-data">'
+            . '<span class="field" id="Add-element">' . PHP_EOL
+            . '<input type="submit" name="Add" id="Add" value="Add" /></span></span>'
+            . '</span></legend>' . PHP_EOL . 'content</fieldset>',
+            $this->decorator->render('content'));
     }
 
     public function testRenderWithTwoButtons() {
+        $this->form->addElement('submit', 'Add');
+        $this->form->addElement('submit', 'Import');
+
+        $this->decorator->setLegendButtons(array('Import', 'Add'));
+
+        $this->assertEquals('<fieldset><legend>Test<span class="button-group">'
+            . '<span class="data-wrapper Import-data">'
+            . '<span class="field" id="Import-element">' . PHP_EOL
+            . '<input type="submit" name="Import" id="Import" value="Import" /></span></span>'
+            . '<span class="data-wrapper Add-data">'
+            . '<span class="field" id="Add-element">' . PHP_EOL
+            . '<input type="submit" name="Add" id="Add" value="Add" /></span></span>'
+            . '</span></legend>' . PHP_EOL . 'content</fieldset>',
+            $this->decorator->render('content'));
     }
 
 }
