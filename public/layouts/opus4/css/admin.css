@@ -132,8 +132,25 @@
 .documentOptions dl.dropdown,
 .documentOptions .crud-wrapper{
    width: 22.25%;
-   margin-right: 3%;
+   margin-right: 2%;
+
+}
+.documentOptions dl.dropdown{
    float: left;
+   width: 25%;
+}
+.documentOptions .crud-wrapper{
+   width: 16%;
+   float: right;
+   position: relative;
+}
+.documentOptions .crud-wrapper input[type="text"]{
+   width: 4em;
+}
+.no-js .documentOptions .crud-wrapper .placeholder{
+   position: absolute;
+   left: 0;
+   top: -2em;
 }
 .documentOptions div.crud-wrapper{
    margin-right: 0;
@@ -637,80 +654,60 @@ li.edit input:hover,
 .adminContainer .multiple-wrapper.odd{
    background-color: #f2f2f2;
 }
-.adminContainer .subform .Add-Import-wrapper,
-.adminContainer .subform .data-wrapper.Add-data,
-.adminContainer #fieldset-Persons .data-wrapper.Add-data,
-.adminContainer #fieldset-Persons .data-wrapper.Sort-data{
-   position: absolute;
+.adminContainer .subform .button-group{
+   /*position: absolute;
    right: 0;
-   top: 0em;
+   top: 0em;*/
+   float: right;
    width: auto;
    background-color: #7d7e7a;
    color: white;
-   line-height: 1.85em;
+   /*line-height: 1.85em;*/
    border-radius: 0 4px 4px 0;  
    padding: 0;
 }
-/*.adminContainer .subform .data-wrapper.Add-data,
-.adminContainer .subform .data-wrapper.Import-data,
-.adminContainer .subform .data-wrapper.Sort-data{
-   background-color: #7d7e7a;
-   color: white;
-   line-height: 1.85em;
-   border-radius: 0 5px 5px 0;
-   padding: 0;
-
-}*/
-.adminContainer .subform .fields-wrapper .Add-Import-wrapper .data-wrapper{
-   position: static;
+.adminContainer .subform legend .button-group .data-wrapper{
+   /*position: static;*/
    float: left;
    width: auto;
-   line-height: 1.85em;
    border-left: 1px solid #595A56;
    padding: 0;
 }
-/*.adminContainer .subform .subform .data-wrapper.Add-data,
-.adminContainer #fieldset-Persons .data-wrapper.Add-data{
-   position: absolute;
-   top: -0.8em;
-   right: 0;
-   width: auto;
-   padding: 0;
-   width: auto;
-}*/
+.adminContainer .subform legend .button-group .data-wrapper:first-child{
+   border: none;
+}
 .adminContainer .multiple-wrapper{
    position: relative;
 }
+.adminContainer .button-group input,
+.adminContainer .Remove-data input{
+   padding: 3px 5px 3px 24px;
+   border-radius: 4px;
+}
+.adminContainer .Remove-data input{
+   border: 1px solid;
+}
 .adminContainer .Add-data input,
-.adminContainer .Remove-data input,
 .adminContainer .Import-data input,
 .adminContainer .Sort-data input{
    background: url(../img/theme/admin/sprite_icons.png) no-repeat;  
-   padding: 3px 5px 3px 24px;
-   border: 1px solid;
-   border-radius: 4px;
-}
-#content.adminContainer .Remove-data input{
-   background: url(../img/theme/admin/ic_remove.png) no-repeat 4px 50%;  
 }
 .adminContainer .Remove-data input{
-   /*border-color: #C7CBC5;*/
    border-color: #dcd7cf;
-   /*background-color: #E1E4E0;*/
    background-color: white;
    color: #3E3E3C;
-   background-position: -16px -220px;
-   font-family: 1em Verdana, Arial, Helvetica, sans-serif;   
+   background: white url(../img/theme/admin/ic_remove.png) no-repeat 4px 50%;
+   /*font-family: 1em Verdana, Arial, Helvetica, sans-serif;  */ 
 }
-.adminContainer .subform .Add-data input,
-.adminContainer .subform .Import-data input,
-.adminContainer .subform .Sort-data input,
-.adminContainer #FileManager-Files-Add-element input{
+.adminContainer legend .Add-data input,
+.adminContainer legend .Import-data input,
+.adminContainer legend .Sort-data input/*,
+.adminContainer #FileManager-Files-Add-element input*/{
    border: none;
    background-color: transparent;
    color: white;
    font-weight: normal;
-   font: 0.857em Verdana, Arial, Helvetica, sans-serif;
+   font: 0.8em Verdana, Arial, Helvetica, sans-serif;
    cursor: pointer; 
    width: auto;
 }
@@ -718,10 +715,9 @@ li.edit input:hover,
 .adminContainer .wrapper td.Remove-data{
    text-align: right;
    min-width: 15%;
-   padding-right: 0;
 }
 .adminContainer .wrapper td.Language-data{
-   min-width: 17%;
+   width: 19%;
 }
 .adminContainer .wrapper .fields-wrapper table{
    margin: 0;
@@ -751,7 +747,7 @@ li.edit input:hover,
 }
 /* @end */
 .adminContainer .subform .Add-data input{
-   background-position: -14px -17px;   
+   background-position: -14px -16px;   
 }
 .adminContainer .subform .Import-data input{
    background-position: -14px -353px;   
@@ -805,20 +801,15 @@ li.edit input:hover,
    color: #595955;
    background: url(../img/theme/admin/bg_sub-legend.png);
    border-radius: 4px;
-   padding: 0 1.2%;
-   line-height: 1.65em;
-   width: 97.6%;
+   padding: 0 0 0 1.2%;
+   line-height: 1.7em;
+   width: 98.8%;
    display: block;
 }
 
 .adminContainer form .wrapper > .subform > fieldset > legend{
    background: #595a56;
    color: white;
-   /*display: block;*/
-   /*border-radius: 4px;*/
-   /*padding: 0 1.2%;*/
-   /*line-height: 1.65em;*/
-   /*width: 97.6%;*/
    position: relative;
    margin: 0 0 1.3em;
 }
@@ -1491,6 +1482,20 @@ ul.form-action{
 .textarea{
    word-wrap: break-word;
    overflow-wrap: break-word;
+}
+.textarea.hashsoll,
+.textarea.hashist{
+   position: relative;
+}
+.textarea.hashsoll span,
+.textarea.hashist span{
+   position: absolute;
+   top: 0;
+   left: -3.5em;
+}
+.textarea.hashist{
+   color:  #dc143c;
+   background-color: transparent;
 }
 #content.adminContainer .data-wrapper .field .textarea{
    width: 490px; /* break-word braucht eine fixe Breite */
