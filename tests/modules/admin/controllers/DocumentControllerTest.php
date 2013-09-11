@@ -203,6 +203,18 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('div.breadcrumbsContainer', 'KOBV (146)');
     }
 
+    public function testIndexActionCollectionRolesTranslated() {
+        $this->useEnglish();
+
+        $this->dispatch('/admin/document/index/id/146');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('document');
+        $this->assertAction('index');
+
+        $this->assertQueryContentContains('//fieldset#fieldset-ddc/legend', 'Dewey Decimal Classification');
+    }
+
     public function testEditActionValidXHTML() {
         $this->dispatch('/admin/document/edit/id/146');
         $this->assertResponseCode(200);
