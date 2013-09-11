@@ -676,7 +676,7 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`, `sor
 (658, 2, '616', 'Krankheiten', '616', 0, 1228, 1229, 73, 0),
 (659, 2, '617', 'Chirurgie und verwandte medizinische Fachrichtungen', '617', 0, 1230, 1231, 73, 0),
 (660, 2, '618', 'Gynäkologie, Geburtsmedizin, Pädiatrie, Geriatrie', '618', 0, 1232, 1233, 73, 0),
-(661, 2, '620', 'Ingenieurwissenschaften und zugeordnete Tätigkeitenn', '620', 0, 1236, 1237, 74, 0),
+(661, 2, '620', 'Ingenieurwissenschaften und zugeordnete Tätigkeiten', '620', 0, 1236, 1237, 74, 0),
 (662, 2, '621', 'Angewandte Physik', '621', 0, 1238, 1239, 74, 0),
 (663, 2, '622', 'Bergbau und verwandte Tätigkeiten', '622', 0, 1240, 1241, 74, 0),
 (664, 2, '623', 'Militär- und Schiffstechnik', '623', 0, 1242, 1243, 74, 0),
