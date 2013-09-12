@@ -439,4 +439,94 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         $this->assertFalse($form->isRenderAsTableEnabled());
     }
 
+    public function testOddEven() {
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent');
+
+        $document = new Opus_Document();
+
+        $title = new Opus_Title();
+        $title->setValue('Titel1');
+        $title->setLanguage('deu');
+        $document->addTitleParent($title);
+
+        $title = new Opus_Title();
+        $title->setValue('Titel2');
+        $title->setLanguage('eng');
+        $document->addTitleParent($title);
+
+        $title = new Opus_Title();
+        $title->setValue('Titel3');
+        $title->setLanguage('rus');
+        $document->addTitleParent($title);
+
+        $form->populateFromModel($document);
+
+        $this->assertNotNull($form->getSubform('TitleParent0'));
+        $this->assertEquals('multiple-wrapper even',
+            $form->getSubform('TitleParent0')->getDecorator('multiWrapper')->getOption('class'));
+        $this->assertEquals('multiple-wrapper odd',
+            $form->getSubform('TitleParent1')->getDecorator('multiWrapper')->getOption('class'));
+        $this->assertEquals('multiple-wrapper even',
+            $form->getSubform('TitleParent2')->getDecorator('multiWrapper')->getOption('class'));
+    }
+
+    public function testOddEvenAfterRemove() {
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent');
+
+        $document = new Opus_Document();
+
+        $title = new Opus_Title();
+        $title->setValue('Titel1');
+        $title->setLanguage('deu');
+        $document->addTitleParent($title);
+
+        $title = new Opus_Title();
+        $title->setValue('Titel2');
+        $title->setLanguage('eng');
+        $document->addTitleParent($title);
+
+        $title = new Opus_Title();
+        $title->setValue('Titel3');
+        $title->setLanguage('rus');
+        $document->addTitleParent($title);
+
+        $form->populateFromModel($document);
+
+        $post = array(
+            'TitleParent2' => array(
+                'Remove' => 'Entfernen'
+            )
+        );
+
+        $form->processPost($post, $post);
+
+        $this->assertEquals(2, count($form->getSubForms()));
+
+        $this->assertEquals('multiple-wrapper even',
+            $form->getSubform('TitleParent0')->getDecorator('multiWrapper')->getOption('class'));
+        $this->assertEquals('multiple-wrapper odd',
+            $form->getSubform('TitleParent1')->getDecorator('multiWrapper')->getOption('class'));
+    }
+
+    public function testRegression3106ConstructFromAddPost() {
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent');
+
+        $post = array(
+            'Add' => 'Hinzufügen',
+            'TitleMain0' => array(
+                'Id' => 224,
+                'Type' => 'main',
+                'Language' => 'eng',
+                'Value' => 'Test Title'
+            )
+        );
+
+        $form->constructFromPost($post, null);
+
+        $this->assertEquals(1, count($form->getSubForms()));
+        $this->assertNotNull($form->getSubForm('TitleMain0'));
+        $subforms = $form->getSubForms();
+        $this->assertEquals('TitleMain0', $subforms[0]->getName());
+    }
+
 }
