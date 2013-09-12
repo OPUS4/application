@@ -128,6 +128,20 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         $this->getSubForm(self::SUBFORM_HASHES)->populateFromModel($file);
     }
 
+    public function setDefaults(array $post) {
+        parent::setDefaults($post);
+
+        if (isset($post[$this->getName()])) {
+            $fileId = $post[$this->getName()][self::ELEMENT_ID];
+            $file = new Opus_File($fileId);
+            $this->getSubForm(self::SUBFORM_HASHES)->populateFromModel($file);
+            $this->getElement(self::ELEMENT_FILE_SIZE)->setValue($file->getFileSize());
+        }
+        else {
+            $this->getLogger()->err('No POST data for subform \'' . $this->getName() . '\'.');
+        }
+    }
+
     /**
      * Update einer Model-Instanz mit den Werten im Formular.
      * @param Opus_Model_AbstractDb $model

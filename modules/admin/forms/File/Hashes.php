@@ -28,8 +28,11 @@
 /**
  * Formular fuer die Anzeige der Hash-Werte einer Datei.
  *
- *
  * Anzahl und Typen der Hashes sind dynamisch (theoretisch),
+ *
+ * Anzeige:
+ *
+ * Hash Typ      Wert
  *
  * @category    Application
  * @package     Admin_Form_File
@@ -37,13 +40,6 @@
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
- *
- * TODO frontdoor_no_hash
- * TODO HashValue
- *
- * Anzeige:
- *
- * Hash Typ      Wert
  */
 class Admin_Form_File_Hashes extends Admin_Form_AbstractDocumentSubForm {
 
@@ -72,10 +68,6 @@ class Admin_Form_File_Hashes extends Admin_Form_AbstractDocumentSubForm {
 
     /**
      * @param $hash
-     *
-     * TODO $this->translate('HashValue')?> - <?= $hash->getHashType(
-     * TODO frontdoor_fixpoint => $hash->getSoll()
-     * TODO frontdoor_current =>
      */
     public function addHashElement($file, $hash) {
         $index = count($this->getElements());
@@ -85,46 +77,4 @@ class Admin_Form_File_Hashes extends Admin_Form_AbstractDocumentSubForm {
         $this->addElement($element);
     }
 
-    public function calculateHash($hash) {
-        $real_hash_value = null;
-
-        if (!$hash->checkFileExists()) {
-            // TODO admin_filemanager_file_does_not_exist
-        }
-        else if (!$hash->checkFilePermission()) {
-            // TODO admin_filemanager_file_permission_denied
-        }
-        else if (!$hash->canVerify()) {
-            // TODO frontdoor_file_too_big
-        }
-        else {
-            $real_hash_value = $hash->getIst();
-            $real_hash_value != NULL ? $real_hash_value : 'null';
-        }
-
-        return $real_hash_value;
-    }
-
 }
-
-/**
- *     public function getHashes() {
-if (!$this->file->exists()) {
-return array();
-}
-
-$hashHelpers = array();
-
-$hashes = $this->file->getHashValue();
-
-if (is_array($hashes)) {
-foreach ($hashes as $hash) {
-$hashHelper = new Admin_Model_Hash($this->file, $hash);
-$hashHelpers[] = $hashHelper;
-}
-}
-
-return $hashHelpers;
-}
-
- */

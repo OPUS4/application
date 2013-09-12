@@ -97,7 +97,6 @@ class Admin_Form_FileManager extends Application_Form_Model_Abstract {
     public function constructFromPost($post, $document = null) {
         $this->getSubForm(self::SUBFORM_ACTION)->populateFromModel($document);
         $this->getSubForm(self::SUBFORM_INFO)->populateFromModel($document);
-
         $this->getSubForm(self::SUBFORM_FILES)->constructFromPost($post[self::SUBFORM_FILES]);
     }
 

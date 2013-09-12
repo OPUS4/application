@@ -23,65 +23,36 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * Formularelement fuer Anzeige von File Hashes.
  *
- * @category    Application
- * @package     Form_Element_FileHash
+ * @category    Application Unit Test
+ * @package     Admin_Form_File
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Element_FileHash extends Zend_Form_Element_Xhtml {
+class Admin_Form_File_HashesTest extends ControllerTestCase {
 
-    private $hash;
+    public function testPopulateFromModel() {
+        $form = new Admin_Form_File_Hashes();
 
-    private $file;
+        $file = new Opus_File(116); // MD5 und SHA512
 
-    public function init() {
-        parent::init();
+        $form->populateFromModel($file);
 
-        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
-
-        $this->setLabel($this->getTranslator()->translate('admin_filemanager_checksum') . ' - ');
+        $this->assertEquals(2, count($form->getElements()));
+        $this->assertNotNull($form->getElement('Hash0'));
+        $this->assertNotNull($form->getElement('Hash1'));
     }
 
-    public function loadDefaultDecorators() {
-        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(array(
-                'FileHash',
-                array('ElementHtmlTag'),
-                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
-                    'disableFor' => true)),
-                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-            ));
-        }
-    }
+    public function testPopulateFromModelNoHashes() {
+        $form = new Admin_Form_File_Hashes();
 
-    public function setFile($file) {
-        $this->file = $file;
-    }
+        $file = new Opus_File(121); // keine Hashes
 
-    public function getFile() {
-        return $this->file;
-    }
+        $form->populateFromModel($file);
 
-    public function setValue($hash) {
-        if ($hash instanceof Opus_HashValues) {
-            $this->hash = $hash;
-        }
-    }
-
-    public function getValue() {
-        return $this->hash;
-    }
-
-    public function getLabel() {
-        return parent::getLabel() . $this->getTranslator()->translate($this->hash->getType());
+        $this->assertEquals(0, count($form->getElements()));
     }
 
 }
-
