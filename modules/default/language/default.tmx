@@ -638,10 +638,10 @@
 
     <tu tuid="admin-actionbox-goto-section">
       <tuv xml:lang="en">
-        <seg>Jump to Section</seg>
+        <seg>Jump to</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Gehe zu Abschnitt</seg>
+        <seg>Gehe zu</seg>
       </tuv>
     </tu>
 
