@@ -513,7 +513,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
 
         $post = array(
             'Add' => 'Hinzufügen',
-            'TitleMain0' => array(
+            'TitleParent0' => array(
                 'Id' => 224,
                 'Type' => 'main',
                 'Language' => 'eng',
@@ -524,9 +524,9 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         $form->constructFromPost($post, null);
 
         $this->assertEquals(1, count($form->getSubForms()));
-        $this->assertNotNull($form->getSubForm('TitleMain0'));
+        $this->assertNotNull($form->getSubForm('TitleParent0'));
         $subforms = $form->getSubForms();
-        $this->assertEquals('TitleMain0', $subforms[0]->getName());
+        $this->assertEquals('TitleParent0', $subforms['TitleParent0']->getName());
     }
 
 }

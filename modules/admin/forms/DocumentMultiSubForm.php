@@ -182,11 +182,14 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
      */
     public function constructFromPost($post, $document = null) {
         $keys = array_keys($post);
-        
+
+        $position = 0;
+
         foreach ($keys as $index => $key) {
             // Prüfen ob Unterformluar (array) oder Feld
             if (is_array($post[$key]) && $this->isValidSubForm($post[$key])) {
-                $this->_addSubForm($index); // TODO sollte statt $index vielleicht $key verwendet werden
+                $this->_addSubForm($position);
+                $position++;
             }
         }
     }
@@ -367,8 +370,6 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
 
     /**
      * @param $elements
-     * TODO Remove button (zusätzliche Spalte)
-     * TODO
      */
     protected function applyDecoratorsToElements($elements) {
         foreach ($elements as $element) {
