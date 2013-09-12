@@ -106,7 +106,7 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
                 if (!is_null($subform->getDecorator('Fieldset'))) {
                     // Unterformular mit Fieldset
                     $legend = $subform->getLegend();
-                    if (!is_null($legend)) {
+                    if (!is_null($legend) && strlen(trim($legend)) !== 0) {
                         $links['#fieldset-' . $name] = $legend;
                     }
                 }

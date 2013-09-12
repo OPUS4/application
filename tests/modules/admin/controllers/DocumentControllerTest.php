@@ -36,6 +36,29 @@
  */
 class Admin_DocumentControllerTest extends ControllerTestCase {
 
+    private $expectedNavigationLinks;
+
+    public function setUp() {
+        parent::setUp();
+
+        // Die Links werden aus den Fieldset Legenden der Unterformulare generiert (nur 1. Ebene)
+        $this->expectedNavigationLinks = array(
+            '#fieldset-General' => 'Allgemeines',
+            '#fieldset-Persons' => 'Personen',
+            '#fieldset-Titles' => 'Titelinformationen',
+            '#fieldset-Bibliographic' => 'Bibliographische Informationen',
+            '#fieldset-Series' => 'Schriftenreihen',
+            '#fieldset-Enrichments' => 'Benutzerdefinierte Felder (Enrichments)',
+            '#fieldset-Collections' => 'Sammlungen, Klassifikationen',
+            '#fieldset-Content' => 'Inhaltliche Erschließung',
+            '#fieldset-Identifiers' => 'Identifier',
+            '#fieldset-Licences' => 'Lizenzen',
+            '#fieldset-Patents' => 'Patente',
+            '#fieldset-Notes' => 'Bemerkungen',
+            '#fieldset-Files' => 'Dateien',
+        );
+    }
+
     /**
      * Regression test for OPUSVIER-1757
      */
@@ -213,6 +236,37 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertAction('index');
 
         $this->assertQueryContentContains('//fieldset#fieldset-ddc/legend', 'Dewey Decimal Classification');
+    }
+
+    public function testIndexActionNavigationLinksPresent() {
+        $this->useGerman();
+
+        $this->dispatch('/admin/document/index/id/146');
+        $this->assertResponseCode(200);
+
+        $this->verifyNavigationLinks($this->expectedNavigationLinks);
+    }
+
+    public function testEditActionNavigationLinksPresent() {
+        $this->useGerman();
+
+        $this->dispatch('/admin/document/edit/id/146');
+        $this->assertResponseCode(200);
+
+        // Dateien werden nicht im Metadaten-Formular editiert
+        unset($this->expectedNavigationLinks['#fieldset-Files']);
+
+        $this->verifyNavigationLinks($this->expectedNavigationLinks);
+    }
+
+    protected function verifyNavigationLinks($expectedLinks) {
+        $this->assertQuery('//dl#Document-Goto');
+        $this->assertQueryCount('//dl#Document-Goto//li/a', count($expectedLinks));
+
+        foreach ($expectedLinks as $link => $label) {
+            $this->assertXpathContentContains("//dl[@id=\"Document-Goto\"]//li/a[@href=\"$link\"]", $label,
+                "Link '$link' mit Label '$label' is missing from navigation.");
+        }
     }
 
     public function testEditActionValidXHTML() {
