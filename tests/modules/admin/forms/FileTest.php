@@ -57,6 +57,7 @@ class Admin_Form_FileTest extends ControllerTestCase {
 
         $this->assertEquals(126, $form->getElementValue('Id'));
         $this->assertEquals($file, $form->getElementValue('FileLink'));
+        $this->assertEmpty($form->getElement('FileLink')->getErrorMessages()); // Datei existiert
         $this->assertEquals(8817, $form->getElement('FileSize')->getValue());
         $this->assertEquals('deu', $form->getElement('Language')->getValue());
         $this->assertEquals('foo-pdf', $form->getElement('Label')->getValue());
@@ -68,6 +69,22 @@ class Admin_Form_FileTest extends ControllerTestCase {
 
         $hashes = $form->getSubForm('Hashes');
         // TODO hashes
+    }
+
+    public function testPopulateFromModelFileDoesNotExist() {
+        $form = new Admin_Form_File();
+
+        $file = new Opus_File(123); // von Dokument 122
+
+        $form->populateFromModel($file);
+
+        $this->assertFalse($file->exists(), 'Datei mit ID = 123 sollte in den Testdaten nicht existieren.');
+        $this->assertEquals(123, $form->getElementValue('Id'));
+
+        $errorMessages = $form->getElement('FileLink')->getErrorMessages();
+
+        $this->assertEquals(1, count($errorMessages));
+        $this->assertEquals('admin_filemanager_file_does_not_exist', $errorMessages[0]);
     }
 
     public function testUpdateModel() {

@@ -145,5 +145,28 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertQuery('//div.Hash1-data//div.hashist/span.hash-label');
     }
 
+    public function testShowMissingFileError() {
+        $this->useEnglish();
+
+        $this->dispatch('/admin/filemanager/index/id/122'); // Datei 123 fuer Dokument 122 fehlt in Testdaten
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('filemanager');
+        $this->assertAction('index');
+
+        $this->assertQueryContentContains('//div#FileManager-Files-File0-FileLink-element//li',
+            'File does not exist!');
+    }
+
+    public function testDontShowMissingFileError() {
+        $this->dispatch('/admin/filemanager/index/id/121');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('filemanager');
+        $this->assertAction('index');
+
+        $this->assertNotQuery('//div#FileManager-Files-File0-FileLink-element//ul[@class="errors"]');
+    }
+
 }
 

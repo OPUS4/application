@@ -34,9 +34,6 @@
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
- *
- * TODO admin_filemanager_file_does_not_exist
- * TODO
  */
 class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
 
@@ -79,7 +76,6 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         $element = $this->createElement('FileLink', self::ELEMENT_FILE_LINK);
         $element->getDecorator('ViewHelper')->setViewOnlyEnabled(true);
         $element->setLabel(null);
-        $element->addError('Datei nicht gefunden.'); // TODO remove - it is just for testing
         $this->addElement($element);
 
         $element = $this->createElement('text', self::ELEMENT_FILE_SIZE);
@@ -103,7 +99,6 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         ));
 
         $this->addElement('Roles', self::ELEMENT_ROLES, array('label' => 'admin_filemanager_file_roles'));
-
     }
 
     /**
