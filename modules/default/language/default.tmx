@@ -350,11 +350,20 @@
 
         <tu tuid="frontdoor_file_too_big">
           <tuv xml:lang="en">
-            <seg>Checksum cannot be verified - file too large.  Size has been limited by server config.</seg>
+            <seg>Checksum cannot verified. File exceeds configured size limit for hashing.</seg>
           </tuv>
           <tuv xml:lang="de">
-            <seg>Prüfsumme konnte nicht geprüft werden - Datei ist zu groß.  Die Größe wird wurde durch den Server-Admin beschränkt.</seg>
+            <seg>Prüfsumme konnte nicht geprüft werden. Die Dateigröße übersteigt die konfigurierte Grenze für die Hash-Kalkulation.</seg>
           </tuv>
+        </tu>
+
+        <tu tuid="frontdoor_checksum_not_verified">
+            <tuv xml:lang="en">
+                <seg>Checksum could not be verified.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Prüfsumme konnte nicht geprüft werden.</seg>
+            </tuv>
         </tu>
 
         <tu tuid="Comment">

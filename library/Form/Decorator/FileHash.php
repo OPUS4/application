@@ -50,7 +50,9 @@ class Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract {
             return $content;
         }
 
-        $hash = new Admin_Model_Hash($element->getFile(), $element->getValue());
+        $file = $element->getFile();
+
+        $hash = new Admin_Model_Hash($file, $element->getValue());
 
         $hashSoll = $hash->getSoll();
         $hashIst = $hash->getIst();
@@ -65,9 +67,20 @@ class Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract {
 
             $markup .= '<div class="textarea hashist"><span class="hash-label">'
                 . $view->translate('frontdoor_current')
-                . ':</span>'
-                . htmlspecialchars($hashIst) . '</div>';
-            $markup .= $view->formHidden($element->getFullyQualifiedName() . '[Ist]', $hashIst);
+                . ':</span>';
+
+            if (strlen(trim($hashIst)) !== 0) {
+                $markup .= htmlspecialchars($hashIst) . '</div>';
+                $markup .= $view->formHidden($element->getFullyQualifiedName() . '[Ist]', $hashIst);
+            }
+            else {
+                if ($file->exists() && !$file->canVerify()) {
+                    $markup .= $view->translate('frontdoor_file_too_big') . '</div>';
+                }
+                else {
+                    $markup .= $view->translate('frontdoor_checksum_not_verified') . '</div>';
+                }
+            }
         }
         else {
             $markup = '<div class="textarea hashsoll">' . htmlspecialchars($hashSoll) . '</div>';

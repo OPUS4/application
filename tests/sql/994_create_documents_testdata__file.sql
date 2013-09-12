@@ -20,4 +20,6 @@ INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `mime_t
 
 INSERT INTO `file_hashvalues` (`file_id`, `type`, `value`) VALUES
 (122,'md5','1ba50dc8abc619cea3ba39f77c75c0fe'),
-(122,'sha512','24bb2209810bacb3f9c05e08a08aec9ead4ac606fdc7c9d6c5fadffcf66f1e56396fdf46424cf52ef916f9e51f8178fb618c787f952d35aaf6d9079bbc9a50ad');
+(122,'sha512','24bb2209810bacb3f9c05e08a08aec9ead4ac606fdc7c9d6c5fadffcf66f1e56396fdf46424cf52ef916f9e51f8178fb618c787f952d35aaf6d9079bbc9a50ad'),
+(123,'md5','1ba50dc8abc619cea3ba39f77c75c0fe'),
+(123,'sha512','24bb2209810bacb3f9c05e08a08aec9ead4ac606fdc7c9d6c5fadffcf66f1e56396fdf46424cf52ef916f9e51f8178fb618c787f952d35aaf6d9079bbc9a50ad');
