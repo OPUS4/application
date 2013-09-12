@@ -90,4 +90,24 @@ class Admin_Form_FileTest extends ControllerTestCase {
     public function testUpdateModel() {
     }
 
+    public function testSetDefaults() {
+        $form = new Admin_Form_File();
+        $form->setName('File0');
+
+        $post = array(
+            'File0' => array(
+                'Id' => 116
+            )
+        );
+
+        $form->setDefaults($post);
+
+        $this->assertEquals(116, $form->getElementValue('Id'));
+        $this->assertEquals('6970', $form->getElementValue('FileSize'));
+
+        $hashes = $form->getSubForm('Hashes');
+
+        $this->assertEquals(2, count($hashes->getElements()));
+    }
+
 }
