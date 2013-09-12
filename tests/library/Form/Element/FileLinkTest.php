@@ -48,4 +48,48 @@ class Form_Element_FileLinkTest extends FormElementTestCase {
         $this->assertTrue($element->getDecorator('LabelNotEmpty')->getOption('disableFor'));
     }
 
+    public function testSetValueWithFile() {
+        $file = new Opus_File(130);
+
+        $element = $this->getElement();
+
+        $element->setValue($file);
+
+        $this->assertEquals($file, $element->getValue());
+    }
+
+    public function testSetValueWithFileId() {
+        $element = $this->getElement();
+
+        $element->setValue(130);
+
+        $file = $element->getValue();
+
+        $this->assertInstanceOf('Opus_File', $file);
+        $this->assertEquals(130, $file->getId());
+    }
+
+    public function testSetValueWithMissingFile() {
+        $file = new Opus_File(123);
+
+        $element = $this->getElement();
+
+        $element->setValue($file);
+
+        $messages = $element->getErrorMessages();
+
+        $this->assertEquals(1, count($messages));
+        $this->assertEquals('admin_filemanager_file_does_not_exist', $messages[0]);
+    }
+
+    /**
+     * @expectedException Application_Exception
+     * @expectedExceptionMessage File with ID = 5555 not found.
+     */
+    public function testSetValueWithUnknownFileId() {
+        $element = $this->getElement();
+
+        $element->setValue(5555);
+    }
+
 }

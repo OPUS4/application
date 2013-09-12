@@ -47,4 +47,20 @@ class Form_Element_FileLink extends Form_Element_Text {
         return 'fileLink';
     }
 
+    public function setValue($file) {
+        if (!$file instanceof Opus_File) {
+            try {
+                $file = new Opus_File($file);
+            }
+            catch (Opus_Model_NotFoundException $omnfe) {
+                throw new Application_Exception("File with ID = $file not found.");
+            }
+        }
+
+        if (!$file->exists()) {
+            $this->addError('admin_filemanager_file_does_not_exist');
+        }
+        parent::setValue($file);
+    }
+
 }
