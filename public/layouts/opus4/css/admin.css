@@ -382,7 +382,7 @@ li.edit input:hover,
    color: #ff6347;
 }
 .adminContainer .wrapper th.invisible {
-    font-weight: normal;
+     font-weight: normal;
 }
 .adminContainer .wrapper table th,
 .adminContainer .wrapper table td{
@@ -1493,9 +1493,11 @@ ul.form-action{
 }
 /* @end */
 
-.textarea{
+#content.adminContainer .data-wrapper .field .textarea{
    word-wrap: break-word;
    overflow-wrap: break-word;
+   white-space: pre-line;
+   width: 490px;  break-word braucht eine fixe Breite
 }
 .textarea.hashsoll,
 .textarea.hashist{
@@ -1519,9 +1521,6 @@ ul.form-action{
    position: relative;
    left: -35px;
    font-weight: bold;
-}
-#content.adminContainer .data-wrapper .field .textarea{
-   width: 490px; /* break-word braucht eine fixe Breite */
 }
 #fieldset-ddc .Edit-data{
   /* overflow: auto;
