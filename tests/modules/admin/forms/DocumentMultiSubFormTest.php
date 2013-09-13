@@ -493,7 +493,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         $form->populateFromModel($document);
 
         $post = array(
-            'TitleParent2' => array(
+            'TitleParent1' => array(
                 'Remove' => 'Entfernen'
             )
         );
