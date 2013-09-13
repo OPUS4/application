@@ -230,6 +230,7 @@ table + .paginationControl{
 }
 .paginationControl ul{
    display: inline-block;
+   vertical-align: bottom;
 }
 .paginationControl li{
    padding: 0.4em 0.7em;
@@ -867,11 +868,18 @@ li.edit input:hover,
 .adminContainer form .wrapper .fields-wrapper > .subform:first-child{
    margin: 0;
 }
-.adminContainer fieldset > dl > dt,
+/*.adminContainer fieldset > dl > dt,*/
 .adminContainer .data-wrapper > div.label{
    float: left;
    clear: left;
-   width: 32.7083%;
+
+}
+.adminContainer .data-wrapper > div.label{
+   width: 32.7083%;   
+}
+.adminContainer td.SeriesId-data,
+.adminContainer td.KeyName-data{
+   width: 32%;   
 }
 .adminContainer .multiple-data .data-wrapper > div.label{
    width: 38.4803%;
