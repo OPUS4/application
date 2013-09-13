@@ -173,5 +173,37 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $containsEnglishTitle = strpos($this->getResponse()->getBody(), '<title>OPUS 4 | Collection Properties</title>');
         $this->assertTrue($containsGermanTitle || $containsEnglishTitle);
     }
+
+    public function testRegression3109CollectionRoleAddBreadcrumb() {
+        $this->useGerman();
+
+        $this->dispatch('/admin/collectionroles/new');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('collectionroles');
+        $this->assertAction('new');
+
+        $this->assertNotQueryContentContains('//div.breadcrumbsContainer', 'admin_collection_index');
+        $this->assertQueryCount('//div.breadcrumbsContainer//a', 2); // nur 2 Breadcrumbs mit Links
+        $this->assertQueryContentContains('//div.breadcrumbsContainer//a', 'Administration');
+        $this->assertQueryContentContains('//div.breadcrumbsContainer//a', 'Sammlungen');
+        $this->assertQueryContentContains('//div.breadcrumbsContainer', 'Eine neue Sammlung anlegen');
+    }
+
+    public function testRegression3109CollectionRoleEditBreadcrumb() {
+        $this->useGerman();
+
+        $this->dispatch('/admin/collectionroles/edit/roleid/2');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('collectionroles');
+        $this->assertAction('edit');
+
+        $this->assertNotQueryContentContains('//div.breadcrumbsContainer', 'admin_collection_index');
+        $this->assertQueryCount('//div.breadcrumbsContainer//a', 2); // nur 2 Breadcrumbs mit Links
+        $this->assertQueryContentContains('//div.breadcrumbsContainer//a', 'Administration');
+        $this->assertQueryContentContains('//div.breadcrumbsContainer//a', 'Sammlungen');
+        $this->assertQueryContentContains('//div.breadcrumbsContainer', 'Sammlungseinstellungen');
+    }
 }
 
