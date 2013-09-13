@@ -529,4 +529,28 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         $this->assertEquals('TitleParent0', $subforms['TitleParent0']->getName());
     }
 
+    public function testCssClassForTableCellsSet() {
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentSeries', 'Series', null, array(
+            'columns' => array(array())
+        ));
+
+        $form->appendSubForm();
+
+        $this->assertEquals(1, count($form->getSubForms()));
+        $this->assertNotNull($form->getSubForm('Series0'));
+
+        $subform = $form->getSubForm('Series0');
+
+        foreach ($subform->getElements() as $element) {
+            $name = $element->getName();
+            if ($name !== 'Id') {
+                $this->assertTrue($element->getDecorator('tableCellWrapper') !== false,
+                    "Element '$name' does not have 'tableCellWrapper'.");
+                $decorator = $element->getDecorator('tableCellWrapper');
+                $this->assertEquals("$name-data", $decorator->getOption('class'),
+                    "CSS class for element '$name' not set to '$name-data'.");
+            }
+        }
+    }
+
 }
