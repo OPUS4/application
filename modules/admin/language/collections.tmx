@@ -78,7 +78,7 @@
 
         <tu tuid="admin_collections_role_delete">
 			<tuv xml:lang="en">
-				<seg>Delete</seg>
+				<seg>Remove</seg>
 			</tuv>
 			<tuv xml:lang="de">
 				<seg>Entfernen</seg>
