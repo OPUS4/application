@@ -381,6 +381,9 @@ li.edit input:hover,
 .adminContainer .wrapper td.unhide a{
    color: #ff6347;
 }
+.adminContainer .wrapper th.invisible {
+    font-weight: normal;
+}
 .adminContainer .wrapper table th,
 .adminContainer .wrapper table td{
    padding: 8px;
