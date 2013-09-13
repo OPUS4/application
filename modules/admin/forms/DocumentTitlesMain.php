@@ -56,8 +56,12 @@ class Admin_Form_DocumentTitlesMain extends Admin_Form_DocumentMultiSubForm {
             array('FormErrors', array(
                 'placement' => 'prepend', 
                 'ignoreSubForms' => true,
+                'onlyCustomFormErrors' => true,
+                'markupListStart' => '<div class="form-errors">',
                 'markupListItemStart' => '',
-                'markupListItemEnd' => '')),
+                'markupListItemEnd' => '',
+                'markupListEnd' => '</div>'
+            )),
             array('FieldsetWithButtons', array('legendButtons' => self::ELEMENT_ADD)),
             array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
         ));        

@@ -34,7 +34,7 @@
 /**
  * Unit Tests fuer das Unterformular fuer die Haupttitel eines Dokuments.
  */
-class DocumentTitlesMainTest extends ControllerTestCase {
+class Admin_Form_DocumentTitlesMainTest extends ControllerTestCase {
 
     /**
      * Prueft, das der Titel in der Dokumentensprache an erste Position zurueckgegeben wird.
