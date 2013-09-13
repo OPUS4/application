@@ -74,13 +74,13 @@
         </a>
     </td>
     <?php if ($collectionRole->getVisible() === '1') : ?>
-    <td class="hide">
+    <td class="hide visible">
         <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'hide', 'roleid' => $collectionRole->getId()), null, true) ?>">
         <?= $this->translate('admin_collections_role_hide') ?>
         </a>
     </td>
     <?php else : ?>
-    <td class="hide">
+    <td class="hide invisible">
         <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collectionroles', 'action' => 'unhide', 'roleid' => $collectionRole->getId()), null, true) ?>">
         <?= $this->translate('admin_collections_role_unhide') ?>
         </a>

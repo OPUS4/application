@@ -71,13 +71,28 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         }
         parent::tearDown();
     }
-    
+
     public function testIndexAction() {
         $this->dispatch('/admin/collectionroles');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('collectionroles');
         $this->assertAction('index');
+    }
+
+    public function testIndexActionInvisibleCssClass() {
+        $this->useEnglish();
+
+        $this->dispatch('/admin/collectionroles');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('collectionroles');
+        $this->assertAction('index');
+
+        $this->assertXpathCount('//td[@class="edit"]', 20); // 18 in Testdaten, +2 in setUp
+        $this->assertXpathContentContains('//td[@class="hide invisible"]/a', 'Unhide');
+        $this->assertXpathCount('//td[@class="hide invisible"]/a', 4); // 2 in Testdaten, +2 in setUp
+        $this->assertXpathCount('//th[@class="invisible"]/a', 4); // 2 in Testdaten, +2 in setUp
     }
 
     public function testEditAction() {

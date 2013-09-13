@@ -94,7 +94,7 @@
             <a href="<?= $this->url(array('module'=>'admin', 'controller'=>'collection', 'action' => 'edit', 'id' => $collection->getId()), null, true) ?>"><?=$this->translate('admin_button_edit')?></a>
         </td>
 
-        <td class="hide">
+        <td class="hide <?= ($collection->getVisible() === '1') ? 'visible' : 'invisible' ?>">
             <?php if ($collection->getVisible() === '1') : ?>
                 <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'hide', 'id' => $collection->getId()), null, true) ?>"><?=$this->translate('admin_collections_collection_hide')?></a>
             <?php else : ?>
