@@ -771,7 +771,7 @@ li.edit input:hover,
    cursor: pointer; 
 }*/
 .adminContainer h2,
-.adminContainer .headline{
+.adminContainer fieldset.headline > legend{
     background-color: transparent;
     color: black;
     font-size: 1.286em;
