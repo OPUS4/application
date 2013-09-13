@@ -109,7 +109,7 @@ class Application_Form_Confirmation extends Application_Form_Abstract {
 
         $this->setDecorators(array(
             array('ViewScript', array('viewScript' => 'confirmation.phtml')),
-            'Fieldset',
+            array('Fieldset', array('class' => 'headline')),
             'Form'
         ));
     }

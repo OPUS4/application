@@ -67,6 +67,8 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
         $this->assertNotNull($form->getDecorator('ViewScript'));
         $this->assertNotNull($form->getDecorator('Fieldset'));
         $this->assertNotNull($form->getDecorator('Form'));
+
+        $this->assertEquals('headline', $form->getDecorator('Fieldset')->getOption('class'));
     }
 
     /**
