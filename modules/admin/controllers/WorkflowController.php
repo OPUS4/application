@@ -50,6 +50,8 @@ class Admin_WorkflowController extends Controller_Action {
      */
     private $__workflowHelper;
 
+    private $__confirmChanges = true;
+
     /**
      * Initializes controller.
      */
@@ -57,8 +59,16 @@ class Admin_WorkflowController extends Controller_Action {
         parent::init();
         $this->__documentsHelper = $this->_helper->getHelper('Documents');
         $this->__workflowHelper = $this->_helper->getHelper('Workflow');
-    }
 
+        $config = Zend_Registry::get('Zend_Config');
+
+        if (isset($config->confirmation->document->statechange->enabled)) {
+            $this->__confirmChanges = ($config->confirmation->document->statechange->enabled == 1) ? true : false;
+        }
+        else {
+            $this->__confirmChanges = true;
+        }
+    }
 
     /**
      * Switches the status of a document to target state.
@@ -98,63 +108,82 @@ class Admin_WorkflowController extends Controller_Action {
                 'document', 'admin', array('id' => $docId));
         }
 
-        if ($this->getRequest()->isPost()) {
-            $form = $this->__getConfirmationForm($document, $targetState);
-            $sureyes = $this->getRequest()->getPost('sureyes');
-            if ($form->isValid($this->getRequest()->getPost()) && isset($sureyes) === true) {
-                try {
-                    $this->__workflowHelper->changeState($document, $targetState);
-                    if ($targetState == 'published') {
-                        $notification = new Util_Notification();
-                        $url = $this->view->url(
-                            array(
-                                "module" => "frontdoor",
-                                "controller" => "index",
-                                "action" => "index",
-                                "docId" => $document->getId()
-                            ),
-                            null,
-                            true);
-
-                        $authorsBitmask = array();
-                        foreach ($form->getValues() as $key => $val) {
-                            $pos = strpos($key, 'author_');
-                            if ($pos !== false && $pos === 0) {
-                                array_push($authorsBitmask, $val == '1');
-                            }
-                        }
-
-                        $notification->prepareMail(
-                                $document,
-                                Util_Notification::PUBLICATION,
-                                $this->view->serverUrl() . $url,
-                                $form->getValue('submitter') == '1',
-                                $authorsBitmask);
-                    }
+        if ($this->__confirmChanges) {
+            if ($this->getRequest()->isPost()) {
+                $form = $this->_getConfirmationForm($document, $targetState);
+                $sureyes = $this->getRequest()->getPost('sureyes');
+                if ($form->isValid($this->getRequest()->getPost()) && isset($sureyes) === true) {
+                    return $this->_changeState($document, $targetState, $form);
                 }
-                catch (Exception $e) {
-                    $this->_redirectTo('index', array('failure' => $e->getMessage()), 'documents', 'admin');
-                }
-
-                $key = 'admin_workflow_' . $targetState . '_success';
-                if (!$this->view->translate()->getTranslator()->isTranslated($key)) {
-                    $key = 'admin_workflow_success';
-                }
-                $message = $this->view->translate($key, $docId, $targetState);
-
-                if ($targetState === 'removed') {
-                    return $this->_redirectTo('index', $message, 'documents', 'admin');
-                }
-                return $this->_redirectTo('index', $message, 'document', 'admin', array('id' => $docId));
+                return $this->_redirectTo('index', null, 'document', 'admin', array('id' => $docId));
             }
-            return $this->_redirectTo('index', null, 'document', 'admin', array('id' => $docId));
+
+            // show confirmation page
+            $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
+            $this->view->title = $this->view->translate('admin_workflow_' . $targetState);
+            $this->view->text = $this->view->translate('admin_workflow_' . $targetState . '_sure', $docId);
+            $this->view->form = $this->_getConfirmationForm($document, $targetState);
         }
-        
-        // show confirmation page
-        $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
-        $this->view->title = $this->view->translate('admin_workflow_' . $targetState);
-        $this->view->text = $this->view->translate('admin_workflow_' . $targetState . '_sure', $docId);
-        $this->view->form = $this->__getConfirmationForm($document, $targetState);
+        else {
+            return $this->_changeState($document, $targetState);
+        }
+    }
+
+    private function _changeState($document, $targetState, $form = null) {
+        try {
+            $this->__workflowHelper->changeState($document, $targetState);
+
+            if ($targetState == 'published') {
+                $this->_sendNotification($document, $form);
+            }
+        }
+        catch (Exception $e) {
+            return $this->_redirectTo('index', array('failure' => $e->getMessage()), 'documents', 'admin');
+        }
+
+        $key = 'admin_workflow_' . $targetState . '_success';
+        if (!$this->view->translate()->getTranslator()->isTranslated($key)) {
+            $key = 'admin_workflow_success';
+        }
+        $message = $this->view->translate($key, $document->getId(), $targetState);
+
+        if ($targetState === 'removed') {
+            return $this->_redirectTo('index', $message, 'documents', 'admin');
+        }
+        return $this->_redirectTo('index', $message, 'document', 'admin', array('id' => $document->getId()));
+    }
+
+    private function _sendNotification($document, $form = null) {
+        $notification = new Util_Notification();
+        $url = $this->view->url(
+            array(
+                "module" => "frontdoor",
+                "controller" => "index",
+                "action" => "index",
+                "docId" => $document->getId()
+            ),
+            null,
+            true);
+
+        $authorsBitmask = array();
+        $notifySubmitter = true;
+
+        if (!is_null($form)) {
+            foreach ($form->getValues() as $key => $val) {
+                $pos = strpos($key, 'author_');
+                if ($pos !== false && $pos === 0) {
+                    array_push($authorsBitmask, $val == '1');
+                }
+            }
+            $notifySubmitter = $form->getValue('submitter') == '1';
+        }
+
+        $notification->prepareMail(
+            $document,
+            Util_Notification::PUBLICATION,
+            $this->view->serverUrl() . $url,
+            $notifySubmitter,
+            $authorsBitmask);
     }
 
     /**
@@ -164,7 +193,7 @@ class Admin_WorkflowController extends Controller_Action {
      * @param string $action Target action that needs to be confirmed
      * @return Admin_Form_YesNoForm
      */
-    private function __getConfirmationForm($document, $targetState) {
+    private function _getConfirmationForm($document, $targetState) {
         $form = new Admin_Form_YesNoForm();
         $form->setAction($this->view->url(array('controller' => 'workflow', 'action' => 'changestate',
             'targetState' => $targetState)));
@@ -177,7 +206,7 @@ class Admin_WorkflowController extends Controller_Action {
         $config = Zend_Registry::get('Zend_Config');
         if ($targetState == 'published' && isset($config->notification->document->published->enabled)
             && $config->notification->document->published->enabled == 1) {
-            $this->addPublishNotificationSelection($document, $form);
+            $this->_addPublishNotificationSelection($document, $form);
         }
         return $form;
     }
@@ -190,7 +219,7 @@ class Admin_WorkflowController extends Controller_Action {
      * @param Zend_Form $form
      * 
      */
-    private function addPublishNotificationSelection($document, $form) {
+    private function _addPublishNotificationSelection($document, $form) {
         $form->addElement('hidden', 'plaintext',
             array(
                 'description' => '<br/><p><strong>' . $this->view->translate('admin_workflow_notification_headline')

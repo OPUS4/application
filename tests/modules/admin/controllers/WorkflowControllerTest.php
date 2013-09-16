@@ -47,6 +47,35 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
         parent::tearDown();
     }
 
+    private function enablePublishNotification() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->notification->document->published->enabled = 1;
+        $config->notification->document->published->email = "published@localhost";
+    }
+
+    private function createDocWithSubmitterAndAuthor($submitterMail, $authorMail) {
+        $doc = new Opus_Document();
+
+        $author = new Opus_Person();
+        $author->setFirstName("John");
+        $author->setLastName("Doe");
+        if ($author != '') {
+            $author->setEmail($authorMail);
+        }
+        $doc->addPersonAuthor($author);
+
+        $submitter = new Opus_Person();
+        $submitter->setFirstName("John");
+        $submitter->setLastName("Submitter");
+        if ($submitterMail != '') {
+            $submitter->setEmail($submitterMail);
+        }
+        $doc->addPersonSubmitter($submitter);
+
+        $doc->store();
+        return $doc;
+    }
+
     /**
      * Tests deleting a document.
      */
@@ -341,33 +370,18 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('div#docinfo', 'Doe, John');
     }
 
-    private function enablePublishNotification() {
-        $config = Zend_Registry::get('Zend_Config');        
-        $config->notification->document->published->enabled = 1;        
-        $config->notification->document->published->email = "published@localhost";
-    }
+    public function testConfirmationDisabled() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->merge(new Zend_Config(array('confirmation' => array('document' => array('statechange' => array(
+            'enabled' => '0'))))));
 
-    private function createDocWithSubmitterAndAuthor($submitterMail, $authorMail) {
-        $doc = new Opus_Document();
+        $this->dispatch('/admin/workflow/changestate/docId/102/targetState/deleted');
+        $this->assertRedirectTo('/admin/document/index/id/102'); // Änderung wird sofort durchgefuehrt
 
-        $author = new Opus_Person();
-        $author->setFirstName("John");
-        $author->setLastName("Doe");
-        if ($author != '') {
-            $author->setEmail($authorMail);
-        }
-        $doc->addPersonAuthor($author);
-
-        $submitter = new Opus_Person();
-        $submitter->setFirstName("John");
-        $submitter->setLastName("Submitter");
-        if ($submitterMail != '') {
-            $submitter->setEmail($submitterMail);
-        }
-        $doc->addPersonSubmitter($submitter);
-
+        $doc = new Opus_Document(102);
+        $this->assertEquals('deleted', $doc->getServerState());
+        $doc->setServerState('unpublished');
         $doc->store();
-        return $doc;
     }
-    
+
 }
