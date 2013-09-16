@@ -75,8 +75,12 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
         $this->addElement('Date', self::ELEMENT_THESIS_DATE_ACCEPTED);
         $this->addElement('Year', self::ELEMENT_THESIS_YEAR_ACCEPTED);
 
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPublisher', 'ThesisPublisher'), 'Publishers');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentGrantor', 'ThesisGrantor'), 'Grantors');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPublisher', 'ThesisPublisher',
+            new Form_Validate_MultiSubForm_RepeatedValues(Admin_Form_DocumentInstitute::ELEMENT_INSTITUTE,
+                'admin_document_error_repeated_institute')), 'Publishers');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentGrantor', 'ThesisGrantor',
+            new Form_Validate_MultiSubForm_RepeatedValues(Admin_Form_DocumentInstitute::ELEMENT_INSTITUTE,
+                'admin_document_error_repeated_institute')), 'Grantors');
         
         $element = new Form_Element_Checkbox(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY);
         $element->setLabel('BelongsToBibliography');

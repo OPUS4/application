@@ -25,6 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Test
+ * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -117,5 +118,5 @@ class Admin_Form_DocumentInstituteTest extends ControllerTestCase {
         $this->assertFalse($form->isValid($post));
         $this->assertContains('notInt', $form->getErrors('Institute'));
     }
-    
+
 }

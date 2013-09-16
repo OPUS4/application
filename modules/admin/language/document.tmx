@@ -810,6 +810,15 @@
       </tuv>
     </tu>
 
+      <tu tuid="admin_document_error_repeated_institute">
+          <tuv xml:lang="en">
+              <seg>An institute can only be assigned once to a document.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Ein Institut kann dem Dokument nur einmal zugewiesen werden.</seg>
+          </tuv>
+      </tu>
+
     <tu tuid="admin_document_create">
       <tuv xml:lang="en">
         <seg>Add metadata</seg>

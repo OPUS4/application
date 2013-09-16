@@ -38,6 +38,8 @@
  * Dieser Validator wird an ein Language Element gehängt, damit dort auch die entsprechende Meldung erscheint. Für die
  * Validierung wird dieser Validator mit einem Array mit den ausgewählten Sprachen in allen Unterformularen versorgt.
  * Er prüft dann, ob bei den vorher plazierten Formularen die Sprache schon einmal ausgewählt wurde.
+ *
+ * TODO Redundanz mit DuplicateValue eliminieren
  */
 class Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstract {
     

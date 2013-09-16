@@ -36,64 +36,47 @@
  */
 class Form_Validate_DuplicateValueTest extends ControllerTestCase {
 
-    public function testIsSelectionValidTrue() {
-        $context = array(
-            array('Language' => 'deu'),
-            array('Language' => 'eng')
-            );
+    public function testConstruct() {
+        $validator = new Form_Validate_DuplicateValue(array('deu', 'eng'), 1, 'testmessage');
 
-        $validator = new Form_Validate_DuplicateValue('Language');
-        $this->assertTrue($validator->isValid(null, $context));
+        $this->assertEquals(array('deu', 'eng'), $validator->getValues());
+        $this->assertEquals(1, $validator->getPosition());
+        $messageTemplates = $validator->getMessageTemplates();
+        $this->assertInternalType('array', $messageTemplates);
+        $this->assertArrayHasKey('notValid', $messageTemplates);
+        $this->assertEquals('testmessage', $messageTemplates['notValid']);
+    }
+
+    public function testIsSelectionValidTrue() {
+        $values = array('deu', 'eng');
+
+        $validator = new Form_Validate_DuplicateValue($values, 0); // erstes Unterformular
+
+        $this->assertTrue($validator->isValid('deu'));
+    }
+
+    public function testIsSelectionValidTrueForFirstOccurence() {
+        $values = array('deu', 'deu');
+
+        $validator = new Form_Validate_DuplicateValue($values, 0); // erstes Unterformular
+
+        $this->assertTrue($validator->isValid('deu'));
     }
 
     public function testIsSelectionValidFalse() {
-        $context = array(
-            array('Language' => 'deu'),
-            array('Language' => 'deu')
-            );
+        $values = array('deu', 'deu');
 
-        $validator = new Form_Validate_DuplicateValue('Language');
-        $this->assertFalse($validator->isValid(null, $context));
+        $validator = new Form_Validate_DuplicateValue($values, 1); // zweites Unterformular
+
+        $this->assertFalse($validator->isValid('deu'));
     }
 
-    public function testIsSelectionValidBadPost() {
-        $context = array(
-            array('Language' => 'deu'),
-            array('Language2' => 'deu')
-            );
+    public function testIsSelectionValidFalseForSecondOccurence() {
+        $values = array('deu', 'deu', 'deu');
 
-        $validator = new Form_Validate_DuplicateValue('Language');
-        $this->assertTrue($validator->isValid(null, $context));
-    }
+        $validator = new Form_Validate_DuplicateValue($values, 2); // drittes Unterformular
 
-    public function testIsSelectionValidBadPost2() {
-        $context = array();
-
-        $validator = new Form_Validate_DuplicateValue('Language');
-        $this->assertTrue($validator->isValid(null, $context));
-    }
-
-    public function testIsSelectionValidBadPost3() {
-        $context = array(
-            'save' => 'save',
-            array('Language' => 'deu'),
-            array()
-            );
-
-        $validator = new Form_Validate_DuplicateValue('Language');
-        $this->assertTrue($validator->isValid(null, $context));
-    }
-
-    public function testIsSelectionValidBadPost4() {
-        $context = array(
-            'save' => 'save',
-            array('Language' => 'deu'),
-            array(),
-            array('Language' => 'deu')
-            );
-
-        $validator = new Form_Validate_DuplicateValue('Language');
-        $this->assertFalse($validator->isValid(null, $context));
+        $this->assertFalse($validator->isValid('deu'));
     }
 
 }

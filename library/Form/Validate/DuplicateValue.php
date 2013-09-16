@@ -46,6 +46,8 @@
  * TitleMain form (array)
  *   +-> title main 1 form (array)
  *   +-> title main 2 form (array)
+ *
+ * TODO Basisklasse mit getLogger
  */
 class Form_Validate_DuplicateValue extends Zend_Validate_Abstract {
 
@@ -55,27 +57,42 @@ class Form_Validate_DuplicateValue extends Zend_Validate_Abstract {
     const NOT_VALID = 'notValid';
 
     /**
-     * Name of element that will be checked in subforms.
-     * @var string
+     * Werte fuer Feld in benachbarten Formularen.
+     * @var
      */
-    private $elementName;
+    private $_values;
 
     /**
-     * Constructs a validator for duplicate entries.
-     * @param type $elementName
+     * Position des Unterformulares.
+     *
+     * Die Position ist wichtig damit nicht mit nachfolgenden Werten verglichen wird. Dadurch gibt es keine
+     * Fehlermeldung beim ersten auftreten eines Wertes.
+     *
+     * @var int
      */
-    public function __construct($elementName) {
-        $this->elementName = $elementName;
-    }
+    private $_position;
 
     /**
      * Error messages.
-     *
-     * TOOD figure this out
      */
     protected $_messageTemplates = array(
-        self::NOT_VALID => 'admin_validate_error_language_duplicated',
+        self::NOT_VALID => 'admin_validate_error_duplicated_value',
     );
+
+    /**
+     * Konstruiert Validator.
+     *
+     * @param $values Werte der benachbarten Unterformulare
+     * @param $position Position des Unterformulars
+     * @param null $message Fehlermeldung
+     */
+    public function __construct($values, $position, $message = null) {
+        $this->_values = $values;
+        $this->_position = $position;
+        if (!is_null($message)) {
+            $this->setMessage($message, self::NOT_VALID);
+        }
+    }
 
     /**
      * Checks if the elements of subforms have same value.
@@ -90,25 +107,35 @@ class Form_Validate_DuplicateValue extends Zend_Validate_Abstract {
         $value = (string) $value;
         $this->_setValue($value);
 
-        if (!is_null($context)) {
+        $valueCount = count($this->_values);
 
-            $selectedLanguages = array();
+        if (!($this->_position < $valueCount)) {
+            Zend_Registry::get('Zend_Log')->err(__CLASS__ .
+                ' mit Position > count(values) konstruiert.');
+        }
 
-            foreach($context as $index => $entry) {
-                if (isset($entry[$this->elementName])) {
-                    $language = $entry[$this->elementName];
-                    if (in_array($language, $selectedLanguages)) {
-                        $this->_error(self::NOT_VALID);
-                        return false;
-                    }
-                    else {
-                        $selectedLanguages[] = $language;
-                    }
+
+        if (!is_null($this->_values)) {
+            for ($index = 0; $index < $this->_position && $index < $valueCount; $index++) {
+                if ($value == $this->_values[$index]) {
+                    $this->_error(self::NOT_VALID);
+                    return false;
                 }
             }
         }
+        else {
+            Zend_Registry::get('Zend_Log')->err(__CLASS__ . ' mit Values = NULL konstruiert.');
+        }
 
         return true;
+    }
+
+    public function getPosition() {
+        return $this->_position;
+    }
+
+    public function getValues() {
+        return $this->_values;
     }
 
 }
