@@ -43,7 +43,7 @@
         <?= $this->translate('Opus_Series') ?>: <b><?=htmlspecialchars($this->series->getTitle())?></b>
     <?PHP else : ?>
     <div class="docstateMenu">
-        <dl class="dropdown">
+        <dl class="dropdown" id="stateOption">
             <dt><a><?= $this->translate('admin_documents_show_docs') ?></a></dt>
             <dd>
                 <ul>
@@ -56,10 +56,7 @@
                 </ul>
             </dd>
         </dl>
-    </div>
-
-    <div class="docstateMenu">
-        <dl class="dropdown">
+        <dl class="dropdown" id="sortByOption">
             <dt><a><?= $this->translate('docs_sortorder') ?></a></dt>
             <dd>
                 <ul>
@@ -72,7 +69,7 @@
                 </ul>
             </dd>
         </dl>
-        <dl class="dropdown">
+        <dl class="dropdown" id="sortDownOption">
             <dt><a><?= $this->translate('docs_sortorder') ?></a></dt>
             <dd>
                 <ul>

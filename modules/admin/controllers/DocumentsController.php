@@ -240,7 +240,7 @@ class Admin_DocumentsController extends Controller_Action {
     protected function getSortingDirection($params) {
         $value = $this->getOption(self::PARAM_SORT_DIRECTION, $params);
 
-        if (!is_numeric($value)) {
+        if (!is_bool($value) && !is_numeric($value)) {
             $value = false;
         }
         else {
