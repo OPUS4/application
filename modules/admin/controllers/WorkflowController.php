@@ -71,17 +71,20 @@ class Admin_WorkflowController extends Controller_Action {
 
         // Check if document identifier is valid
         if (!isset($document)) {
-            return $this->_redirectTo('index', array('failure' => $this->view->translate('admin_document_error_novalidid')), 'documents', 'admin');
+            return $this->_redirectTo('index', array('failure' => $this->view->translate(
+                'admin_document_error_novalidid')), 'documents', 'admin');
         }
 
         // Check if valid target state
         if (!$this->__workflowHelper->isValidState($targetState)) {
-            return $this->_redirectTo('index', array('failure' => $this->view->translate('admin_workflow_error_invalidstate')), 'document', 'admin', array('id' => $docId));
+            return $this->_redirectTo('index', array('failure' => $this->view->translate(
+                'admin_workflow_error_invalidstate')), 'document', 'admin', array('id' => $docId));
         }
 
         // Check if allowed target state
         if (!$this->__workflowHelper->isTransitionAllowed($document, $targetState)) {
-            return $this->_redirectTo('index', array('failure' => $this->view->translate('admin_workflow_error_illegal_transition', $targetState)), 'document', 'admin', array('id' => $docId));
+            return $this->_redirectTo('index', array('failure' => $this->view->translate(
+                'admin_workflow_error_illegal_transition', $targetState)), 'document', 'admin', array('id' => $docId));
         }
 
         // Check if document is already in target state
@@ -91,7 +94,8 @@ class Admin_WorkflowController extends Controller_Action {
             if (!$this->view->translate()->getTranslator()->isTranslated($key)) {
                 $key = 'admin_workflow_error_alreadyinstate';
             }
-            return $this->_redirectTo('index', array('failure' => $this->view->translate($key, $targetState)), 'document', 'admin', array('id' => $docId));
+            return $this->_redirectTo('index', array('failure' => $this->view->translate($key, $targetState)),
+                'document', 'admin', array('id' => $docId));
         }
 
         if ($this->getRequest()->isPost()) {
@@ -162,7 +166,8 @@ class Admin_WorkflowController extends Controller_Action {
      */
     private function __getConfirmationForm($document, $targetState) {
         $form = new Admin_Form_YesNoForm();
-        $form->setAction($this->view->url(array('controller' => 'workflow', 'action' => 'changestate', 'targetState' => $targetState)));
+        $form->setAction($this->view->url(array('controller' => 'workflow', 'action' => 'changestate',
+            'targetState' => $targetState)));
         $form->setMethod('post');
 
         $idElement = new Zend_Form_Element_Hidden('id');
@@ -170,7 +175,8 @@ class Admin_WorkflowController extends Controller_Action {
         $form->addElement($idElement);
 
         $config = Zend_Registry::get('Zend_Config');
-        if ($targetState == 'published' && isset($config->notification->document->published->enabled) && $config->notification->document->published->enabled == 1) {
+        if ($targetState == 'published' && isset($config->notification->document->published->enabled)
+            && $config->notification->document->published->enabled == 1) {
             $this->addPublishNotificationSelection($document, $form);
         }
         return $form;
@@ -187,8 +193,9 @@ class Admin_WorkflowController extends Controller_Action {
     private function addPublishNotificationSelection($document, $form) {
         $form->addElement('hidden', 'plaintext',
             array(
-                'description' => '<br/><p><strong>' . $this->view->translate('admin_workflow_notification_headline') . '</strong></p>' .
-                                 '<p>' . $this->view->translate('admin_workflow_notification_description') . '</p>',
+                'description' => '<br/><p><strong>' . $this->view->translate('admin_workflow_notification_headline')
+                    . '</strong></p>'
+                    . '<p>' . $this->view->translate('admin_workflow_notification_description') . '</p>',
                 'ignore' => true,
                 'decorators' => array(array('Description', array('escape' => false, 'tag' => '')))
             )
@@ -196,12 +203,14 @@ class Admin_WorkflowController extends Controller_Action {
 
         $submitters = $document->getPersonSubmitter();
         if (!is_null($submitters) && count($submitters) > 0) {
-            $label = $this->view->translate('admin_workflow_notification_submitter') . ' ' . trim($submitters[0]->getLastName()) . ", " . trim($submitters[0]->getFirstName());
+            $label = $this->view->translate('admin_workflow_notification_submitter') . ' '
+                . trim($submitters[0]->getLastName()) . ", " . trim($submitters[0]->getFirstName());
             $element = null;
             if (trim($submitters[0]->getEmail()) == '') {
                 // email notification is not possible since no email address is specified for submitter
                 $label .= ' (' . $this->view->translate('admin_workflow_notification_noemail') . ')';
-                $element = new Zend_Form_Element_Checkbox('submitter', array('checked' => false, 'disabled' => true, 'label' => $label));
+                $element = new Zend_Form_Element_Checkbox('submitter', array('checked' => false, 'disabled' => true,
+                    'label' => $label));
                 $element->getDecorator('Label')->setOption('class', 'notification-option option-not-available');
             }
             else {
@@ -217,17 +226,20 @@ class Admin_WorkflowController extends Controller_Action {
             $index = 1;
             foreach ($authors as $author) {
                 $id = 'author_' . $index;
-                $label = $index . '. ' . $this->view->translate('admin_workflow_notification_author') . ' ' . trim($author->getLastName()) . ", " . trim($author->getFirstName());
+                $label = $index . '. ' . $this->view->translate('admin_workflow_notification_author') . ' '
+                    . trim($author->getLastName()) . ", " . trim($author->getFirstName());
                 $element = null;
                 if (trim($author->getEmail()) == '') {
                     // email notification is not possible since no email address is specified for author
                     $label .= ' (' . $this->view->translate('admin_workflow_notification_noemail') . ')';
-                    $element = new Zend_Form_Element_Checkbox($id, array('checked' => false, 'disabled' => true, 'label' => $label));
+                    $element = new Zend_Form_Element_Checkbox($id, array('checked' => false, 'disabled' => true,
+                        'label' => $label));
                     $element->getDecorator('Label')->setOption('class', 'notification-option option-not-available');
                 }
                 else {
                     $label .= ' (' . trim($author->getEmail()) . ')';
-                    $element = new Zend_Form_Element_Checkbox($id, array('checked' => true, 'label' => 'foo', 'label' => $label));
+                    $element = new Zend_Form_Element_Checkbox($id, array('checked' => true, 'label' => 'foo',
+                        'label' => $label));
                     $element->getDecorator('Label')->setOption('class', 'notification-option');
                 }                
                 $form->addElement($element);                
