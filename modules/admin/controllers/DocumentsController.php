@@ -40,23 +40,22 @@
  */
 class Admin_DocumentsController extends Controller_Action {
     
-    const HITSPERPAGE_PARAM = 'hitsperpage';
-
-    /**
-     * The class of the model being administrated.
-     *
-     * @var Opus_Model_Abstract
-     */
-    protected $_modelclass = 'Opus_Document';
+    const PARAM_HITSPERPAGE = 'hitsperpage';
+    const PARAM_STATE = 'state';
+    const PARAM_SORT_BY = 'sort_order';
+    const PARAM_SORT_DIRECTION = 'sort_reverse';
 
     protected $sortingOptions = array('id', 'title', 'author', 'publicationDate', 'docType');
 
-    protected $docOptions = array(/* 'all', */ 'unpublished', 'inprogress', 'audited', 'published', 'restricted',
-        'deleted');
+    protected $docOptions = array('unpublished', 'inprogress', 'audited', 'published', 'restricted', 'deleted');
     
-    protected $_config;
-    
-    protected $_maxDocsDefault = 10;
+    private $_maxDocsDefault = 10;
+    private $_stateOptionDefault = 'unpublished';
+    private $_sortingOptionDefault = 'id';
+
+    private $_config;
+
+    private $namespace;
 
     public function init() {
         parent::init();
@@ -76,6 +75,14 @@ class Admin_DocumentsController extends Controller_Action {
         else {
             $this->_maxDocsDefault = 10;
         }
+
+        if (isset($this->_config->admin->documents->defaultview)) {
+            $default = $this->_config->admin->documents->defaultview;
+            if (!in_array($default, $this->docOptions)) {
+                $this->getLogger()->err("Option 'admin.documents.defaultview' hat ungegueltigen Wert '$default'.");
+            }
+            $this->_stateOptionDefault = $default;
+        }
     }
 
     /**
@@ -86,7 +93,7 @@ class Admin_DocumentsController extends Controller_Action {
     public function indexAction() {
     	$this->view->title = 'admin_documents_index';
 
-        $this->_prepareDocStateLinks();
+        $this->prepareDocStateLinks();
 
         $url_call_id = array(
             'module' => 'admin',
@@ -95,7 +102,7 @@ class Admin_DocumentsController extends Controller_Action {
         );
         $this->view->url_call_id = $this->view->url($url_call_id, 'default', true);
 
-        $this->_prepareSortingLinks();
+        $this->prepareSortingLinks();
 
         $data = $this->_request->getParams();
         $filter = $this->_getParam("filter");
@@ -118,36 +125,14 @@ class Admin_DocumentsController extends Controller_Action {
             $seriesId = $data['seriesid'];
         }
 
-        // Default Ordering...
-        $sort_reverse = '0';
-        if (true === array_key_exists('sort_reverse', $data)) {
-           $sort_reverse = $data['sort_reverse'];
-        }
+        $sort_reverse = $this->getSortingDirection($data);
         $this->view->sort_reverse = $sort_reverse;
         $this->view->sortDirection = ($sort_reverse) ? 'descending' : 'ascending';
 
-        $config = Zend_Registry::get('Zend_Config');
-
-        $state = 'unpublished';
-
-        if (true === array_key_exists('state', $data)) {
-            $state = $data['state'];
-        }
-        else if (isset($config->admin->documents->defaultview)) {
-            $state = $config->admin->documents->defaultview;
-        }
-
-        if (!empty($state) && !in_array($state, $this->docOptions)) {
-            $state = 'unpublished';
-        }
-
+        $state = $this->getStateOption($data);
         $this->view->state = $state;
 
-        $sort_order = 'id';
-        if (true === array_key_exists('sort_order', $data)) {
-            $sort_order = $data['sort_order'];
-        }
-
+        $sort_order = $this->getSortingOption($data);
         $this->view->sort_order = $sort_order;
 
         if (!empty($collectionId)) {
@@ -180,11 +165,11 @@ class Admin_DocumentsController extends Controller_Action {
             // paginator
             $page = $data['page'];
         }
-        $this->view->maxHitsPerPage = $this->_getItemCountPerPage($data);
+        $this->view->maxHitsPerPage = $this->getItemCountPerPage($data);
         $paginator->setItemCountPerPage($this->view->maxHitsPerPage);
         $paginator->setCurrentPageNumber($page);
         $this->view->paginator = $paginator;
-        $this->_prepareItemCountLinks();
+        $this->prepareItemCountLinks();
     }
     
     /**
@@ -197,39 +182,122 @@ class Admin_DocumentsController extends Controller_Action {
      * - Konfiguration?
      * - Default
      */
-    protected function _getItemCountPerPage($data) {
-        $namespace = new Zend_Session_Namespace('Admin');
+    protected function getItemCountPerPage($params) {
+        $value = $this->getOption(self::PARAM_HITSPERPAGE, $params);
+
+        if ($value === 'all' || $value < 0) {
+            $value = 0;
+        }
+
+        if (!is_numeric($value)) {
+            $value = $this->_maxDocsDefault;
+        }
+
+        $this->setOption(self::PARAM_HITSPERPAGE, $value);
         
-        if (array_key_exists(self::HITSPERPAGE_PARAM, $data)) {
-            $hitsPerPage = $data[self::HITSPERPAGE_PARAM];
-            if ($hitsPerPage === 'all' || !is_numeric($hitsPerPage) || $hitsPerPage < 0) {
-                $hitsPerPage = '0';
-            }
-            else {
-            	$hitsPerPage = $data[self::HITSPERPAGE_PARAM];
-            }
+        return $value;
+    }
+
+    /**
+     * Ermittelt in welchem Status die angezeigten Dokumente sein sollen.
+     * @param $params Request parameter
+     * @return string
+     */
+    protected function getStateOption($params) {
+        $value = $this->getOption(self::PARAM_STATE, $params);
+
+        if (!in_array($value, $this->docOptions)) {
+            $value = $this->_stateOptionDefault;
+        }
+
+        $this->setOption(self::PARAM_STATE, $value);
+
+        return $value;
+    }
+
+    /**
+     * Ermittelt wonach die Dokumente sortiert werden sollen.
+     * @param $params Request Parameter
+     * @return string
+     */
+    protected function getSortingOption($params) {
+        $value = $this->getOption(self::PARAM_SORT_BY, $params);
+
+        if (!in_array($value, $this->sortingOptions)) {
+            $value = $this->_sortingOptionDefault;
+        }
+
+        $this->setOption(self::PARAM_SORT_BY, $value);
+
+        return $value;
+    }
+
+    /**
+     * Ermittelt die Sortierrrichtung (aufwaerts/abwaerts).
+     * @param $params Request Parameter
+     * @return bool
+     */
+    protected function getSortingDirection($params) {
+        $value = $this->getOption(self::PARAM_SORT_DIRECTION, $params);
+
+        if (!is_numeric($value)) {
+            $value = false;
         }
         else {
-            if (isset($namespace->hitsPerPage)) {
-                $hitsPerPage = $namespace->hitsPerPage;
-            } 
-            else {
-                $hitsPerPage = $this->_maxDocsDefault;
-            }            
+            $value = ($value) ? true : false;
         }
-        
-        $namespace->hitsPerPage = $hitsPerPage;
-        
-        return $hitsPerPage;
+
+        $this->setOption(self::PARAM_SORT_DIRECTION, $value);
+
+        return $value;
+    }
+
+    /**
+     * Holt eine Option vom Request oder der Session.
+     * @param $name Name der Option
+     * @param $params Request Parameter
+     * @return mixed|null
+     */
+    protected function getOption($name, $params) {
+        $namespace = $this->getSession();
+
+        if (array_key_exists($name, $params)) {
+            $value = $params[$name];
+        }
+        else {
+            $value = (isset($namespace->$name)) ? $namespace->$name : null;
+        }
+
+        return $value;
+    }
+
+    /**
+     * Setzt Option in der Session.
+     *
+     * @param $name Name der Option
+     * @param $value Optionswert
+     */
+    protected function setOption($name, $value) {
+        $namespace = $this->getSession();
+        $namespace->$name = $value;
+    }
+
+    /**
+     * Liefert die Session für diesen Controller.
+     * @return Zend_Session_Namespace
+     */
+    protected function getSession() {
+        if (is_null($this->namespace)) {
+            $this->namespace = new Zend_Session_Namespace('Admin');
+        }
+
+        return $this->namespace;
     }
     
     /**
      * Bereitet die Links für die Auswahl der Anzahl der Dokumente pro Seite vor.
-     * 
-     * TODO aus Konfiguration?
-     * TODO Übersetzung
      */
-    protected function _prepareItemCountLinks() {
+    protected function prepareItemCountLinks() {
         if (isset($this->_config->admin->documents->maxDocsOptions)) {
             $options = $this->_config->admin->documents->maxDocsOptions;
         }
@@ -245,7 +313,7 @@ class Admin_DocumentsController extends Controller_Action {
             $link = array();
             
             $link['label'] = $option;
-            $link['url'] = $this->view->url(array(self::HITSPERPAGE_PARAM => $option), null, false);
+            $link['url'] = $this->view->url(array(self::PARAM_HITSPERPAGE => $option), null, false);
             
             $itemCountLinks[$option] = $link;
         }
@@ -253,7 +321,10 @@ class Admin_DocumentsController extends Controller_Action {
         $this->view->itemCountLinks = $itemCountLinks;
     }
 
-    protected function _prepareDocStateLinks() {
+    /**
+     * Bereitet die Links für Status Optionen vor.
+     */
+    protected function prepareDocStateLinks() {
         $registers = array();
 
         foreach ($this->docOptions as $name) {
@@ -268,7 +339,10 @@ class Admin_DocumentsController extends Controller_Action {
         $this->view->registers = $registers;
     }
 
-    protected function _prepareSortingLinks() {
+    /**
+     * Bereitet die Links für die Sortier Optionen vor.
+     */
+    protected function prepareSortingLinks() {
         $sortingLinks = array();
 
         foreach ($this->sortingOptions as $name) {

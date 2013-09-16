@@ -142,12 +142,9 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
     
     public function testHitsPerPageBadParameter() {
         $docFinder = new Opus_DocumentFinder();
-        $docFinder->setServerState('unpublished');
-        
-        $unpublishedDocs = $docFinder->count();
-        
+
         $this->dispatch('/admin/documents/index/state/unpublished/hitsperpage/dummy');
-        $this->assertQueryCount('span.title', $unpublishedDocs);
+        $this->assertQueryCount('span.title', 10); // default
     }
     
     public function testConfigureDefaultHitsPerPage() {
