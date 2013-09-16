@@ -38,7 +38,7 @@
 /**
  * Administrative work with document metadata.
  */
-class Admin_DocumentsController extends Controller_CRUDAction {
+class Admin_DocumentsController extends Controller_Action {
     
     const HITSPERPAGE_PARAM = 'hitsperpage';
 
@@ -49,31 +49,14 @@ class Admin_DocumentsController extends Controller_CRUDAction {
      */
     protected $_modelclass = 'Opus_Document';
 
-    protected $sortingOptions = array('id', 'title', 'author',
-        'publicationDate', 'docType');
+    protected $sortingOptions = array('id', 'title', 'author', 'publicationDate', 'docType');
 
-    protected $docOptions = array(/* 'all', */ 'unpublished', 'inprogress', 'audited', 'published', 'restricted', 'deleted');
+    protected $docOptions = array(/* 'all', */ 'unpublished', 'inprogress', 'audited', 'published', 'restricted',
+        'deleted');
     
     protected $_config;
     
     protected $_maxDocsDefault = 10;
-
-    /**
-     * Returns a filtered representation of the document.
-     *
-     * @param  Opus_Document  $document The document to be filtered.
-     * @return Opus_Model_Filter The filtered document.
-     */
-    private function __createFilter(Opus_Document $document, $page = null) {
-        $filter = new Opus_Model_Filter();
-        $filter->setModel($document);
-        $blacklist = array('Collection', 'IdentifierOpus3', 'Source', 'File',
-            'ServerState', 'ServerDatePublished', 'ServerDateModified',
-            'Type', 'PublicationState');
-        $filter->setBlacklist($blacklist);
-        // $filter->setSortOrder($type->getAdminFormSortOrder());
-        return $filter;
-    }
 
     public function init() {
         parent::init();
