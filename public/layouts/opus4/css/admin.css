@@ -22,6 +22,11 @@
    margin-bottom: 0em;
    padding: 6px 10px;
 }
+.adminContainer .breadcrumbsContainer .wrapper{
+   max-width: 930px;
+   min-width: 770px;
+   padding: 0 50px 0 20px;
+}
 .adminContainer .breadcrumbsContainer *{
    color: white;
 }
@@ -36,6 +41,7 @@
 .adminContainer .breadcrumbsContainer .admin-help {
     float: right;
     margin-left: 15px;
+    margin-right: -30px;
 }
 .adminContainer .breadcrumbsContainer .admin-help img{
    display: block;
@@ -1497,7 +1503,7 @@ ul.form-action{
    word-wrap: break-word;
    overflow-wrap: break-word;
    white-space: pre-line;
-   width: 490px;  break-word braucht eine fixe Breite
+   width: 545px;  /*break-word braucht eine fixe Breite*/
 }
 .textarea.hashsoll,
 .textarea.hashist{
