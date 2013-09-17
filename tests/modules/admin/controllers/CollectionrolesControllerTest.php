@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -31,7 +32,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Admin_CollectionrolesControllerTest extends ControllerTestCase {
 
     private $emptyCollectionRole = null;
@@ -62,7 +62,7 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $rootCollection->store();
     }
 
-    public function tearDown() {        
+    public function tearDown() {
         if (!is_null($this->nonEmptyCollectionRole) && !is_null($this->nonEmptyCollectionRole->getId())) {
             $this->nonEmptyCollectionRole->delete();
         }
@@ -205,5 +205,37 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//div.breadcrumbsContainer//a', 'Sammlungen');
         $this->assertQueryContentContains('//div.breadcrumbsContainer', 'Sammlungseinstellungen');
     }
-}
 
+    /**
+     * Regression Test for OPUSVIER-3051
+     */
+    public function testDocumentServerDateModifiedNotUpdatedWhenCollectionSortOrderChanged() {
+
+        // check for expected test data
+
+        $collectionRole1 = new Opus_CollectionRole(1);
+        $this->assertEquals(1, $collectionRole1->getPosition(), 'Test setup changed');
+        $collectionRole2 = new Opus_CollectionRole(2);
+        $this->assertEquals(2, $collectionRole2->getPosition(), 'Test setup changed');
+
+        $docfinder = new Opus_DocumentFinder();
+        $docfinder->setCollectionRoleId(2);
+        $collectionRoleDocs = $docfinder->ids();
+
+        $this->assertTrue(in_array(146, $collectionRoleDocs), 'Test setup changed');
+
+        // test if server_date_modified is altered
+
+        $docBefore = new Opus_Document(146);
+        $this->dispatch('/admin/collectionroles/move/roleid/1/pos/2');
+        $docAfter = new Opus_Document(146);
+
+        // revert change in test data
+        $this->resetRequest();
+        $this->resetResponse();
+        $this->dispatch('/admin/collectionroles/move/roleid/1/pos/1');
+
+        $this->assertEquals((string) $docBefore->getServerDateModified(), (string) $docAfter->getServerDateModified());
+    }
+
+}
