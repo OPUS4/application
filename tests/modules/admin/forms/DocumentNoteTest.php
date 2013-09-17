@@ -38,10 +38,14 @@ class Admin_Form_DocumentNoteTest extends ControllerTestCase {
     
     public function testCreateForm() {
         $form = new Admin_Form_DocumentNote();
-        
+
+        $this->assertEquals(3, count($form->getElements()));
+
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('Visibility'));
         $this->assertNotNull($form->getELement('Message'));
+
+        $this->assertFalse($form->getDecorator('Fieldset'));
     }
     
     public function testPopulateFromModel() {
