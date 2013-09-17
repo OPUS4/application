@@ -119,12 +119,19 @@ class Admin_DocumentController extends Controller_Action {
                         if ($form->isValid($data)) {
                             // Formular ist korrekt; aktualisiere Dokument
                             $form->updateModel($document);
-                        
-                            $document->store(); // TODO handle exceptions
 
-                            // TODO redirect to Übersicht/Browsing/???
-                            $message = $this->view->translate('admin_document_update_success');
-                            return $this->_redirectTo('index', $message, 'document', 'admin', array('id' => $docId));
+                            try {
+                                $document->store();
+
+                                // TODO redirect to Übersicht/Browsing/???
+                                $message = $this->view->translate('admin_document_update_success');
+                                return $this->_redirectTo('index', $message, 'document', 'admin', array('id' => $docId));
+                            }
+                            catch (Exception $ex) {
+                                $message = $this->view->translate('admin_document_error_exception_storing');
+                                $message = sprintf($message, $ex->getMessage());
+                                $form->setMessage($message);
+                            }
                         }
                         else {
                             $form->setMessage($this->view->translate('admin_document_error_validation'));

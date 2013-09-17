@@ -98,7 +98,7 @@
   <?PHP $message = $this->element->getMessage() ?> 
   <?PHP if (!is_null($message)) : ?>
   <div class="messagesContainer">
-    <div class="messages"><?= $message ?></div>
+    <div class="messages"><?= $this->escape($message) ?></div>
   </div>      
   <?PHP endif; ?>
 </div>
