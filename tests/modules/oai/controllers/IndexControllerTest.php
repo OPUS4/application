@@ -1486,7 +1486,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $xpath = $this->prepareXpathFromResultString($response->getBody());
 
         $docType = $xpath->query('//oai_dc:dc/dc:type');
-        $this->assertContains('doctoralthesis', $docType->item(0)->nodeValue);
+        $this->assertEquals('doctoralthesis', $docType->item(0)->nodeValue);
         
     }
     
