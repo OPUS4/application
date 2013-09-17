@@ -45,10 +45,15 @@ class Form_Decorator_Button extends Zend_Form_Decorator_Abstract {
         $buttonId = $button->getId();
         $buttonFullName = $button->getFullyQualifiedName();
         $buttonName = $button->getName();
+        $buttonValue = $button->getLabel();
+
+        if (strlen(trim($buttonValue)) == 0) {
+            $buttonValue = $buttonName;
+        }
 
         $markup = "<div class=\"data-wrapper $buttonName-data\">";
         $markup .= "<div class=\"field\" id=\"$buttonId-element\">";
-        $markup .= "<input type=\"submit\" name=\"$buttonFullName\" id=\"$buttonId\" value=\"$buttonName\" />";
+        $markup .= "<input type=\"submit\" name=\"$buttonFullName\" id=\"$buttonId\" value=\"$buttonValue\" />";
         $markup .= '</div></div>';
 
         return $content . $markup;

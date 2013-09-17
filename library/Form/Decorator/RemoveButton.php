@@ -80,10 +80,9 @@ class Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract {
         $buttonName = $element->getName();
 
         // TODO hack (find transparent solution)
-        if ($type === 'submit') {
-            $value = 'Remove';
-        }
-        else {
+        $value = ($type === 'submit') ? $element->getLabel() : null;
+
+        if (strlen(trim($value)) == 0) {
             $value = $element->getValue();
         }
 

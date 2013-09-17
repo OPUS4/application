@@ -364,8 +364,6 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
      * Bereites die Dekoratoren für das Unterformular vor.
      * 
      * @param type $subform
-     *
-     * TODO odd/even in table
      */
     protected function prepareSubFormDecorators($subform) {
         if ($this->isRenderAsTableEnabled()) {
