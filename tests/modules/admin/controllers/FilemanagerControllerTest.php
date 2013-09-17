@@ -44,8 +44,11 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertAction('index');
 
         $this->validateXHTML();
-        $this->verifyBreadcrumbDefined();
 
+        // check breadcrumbs
+        $this->verifyBreadcrumbDefined();
+        $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/document/index/id/91"]',
+            'This is a pdf test document (91)');
 
         // TODO DocInfo
         /*
@@ -77,6 +80,8 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
     }
 
     public function testUploadAction() {
+        $this->useGerman();
+
         $this->dispatch('/admin/filemanager/upload/id/91');
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -84,7 +89,13 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertAction('upload');
 
         $this->validateXHTML();
+
+        // check breadcrumbs
         $this->verifyBreadcrumbDefined();
+        $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/document/index/id/91"]',
+            'This is a pdf test document (91)');
+        $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/filemanager/index/id/91"]',
+            'Dateien');
     }
 
     public function testUploadActionBadId() {

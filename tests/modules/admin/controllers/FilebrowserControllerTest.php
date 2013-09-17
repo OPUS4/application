@@ -66,9 +66,20 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase {
     }
 
     public function testIndexAction() {
+        $this->useGerman();
+
         $this->dispatch('/admin/filebrowser/index/id/' . $this->documentId);
         $this->assertResponseCode(200);
         $this->assertContains('<div id="filebrowser">', $this->getResponse()->getBody());
+
+        // check breadcrumbs
+        $this->verifyBreadcrumbDefined();
+        $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/document/index/id/'
+            . $this->documentId . '"]',
+            'Kein Titel angegeben für Dokument ID (i ... (' . $this->documentId . ')');
+        $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/filemanager/index/id/'
+            . $this->documentId . '"]',
+            'Dateien');
     }
     
     public function testShowDocInfoOnIndexPage() {
