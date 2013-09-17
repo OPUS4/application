@@ -39,9 +39,18 @@ class Admin_Form_DocumentInstituteTest extends ControllerTestCase {
     
     public function testCreateForm() {
         $form = new Admin_Form_DocumentInstitute(Admin_Form_DocumentInstitute::ROLE_PUBLISHER);
-        
+
+        $this->assertEquals(2, count($form->getElements()));
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('Institute'));
+    }
+
+    /**
+     * @expectedException Application_Exception
+     * @expectedExceptionMessage Unknown role 'unknown_role'.
+     */
+    public function testCreateFormBadRole() {
+        $form = new Admin_Form_DocumentInstitute('unknown_role');
     }
     
     public function testPopulateFromModel() {
@@ -102,7 +111,7 @@ class Admin_Form_DocumentInstituteTest extends ControllerTestCase {
         $this->assertNull($model->getId());
         $this->assertEquals(3, $model->getModel()->getId());
     }
-    
+
     public function testValidation() {
         $form = new Admin_Form_DocumentInstitute(Admin_Form_DocumentInstitute::ROLE_PUBLISHER);
 

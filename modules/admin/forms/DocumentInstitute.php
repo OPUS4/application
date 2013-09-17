@@ -44,7 +44,10 @@ class Admin_Form_DocumentInstitute extends Admin_Form_AbstractModelSubForm {
     const ELEMENT_DOC_ID = 'Id';
     
     const ELEMENT_INSTITUTE = 'Institute';
-    
+
+    /**
+     * @var ROLE_GRANTOR or ROLE_PUBLISHER
+     */
     private $__role;
     
     public function __construct($role, $options = null) {
@@ -65,8 +68,7 @@ class Admin_Form_DocumentInstitute extends Admin_Form_AbstractModelSubForm {
                 $this->addElement('Grantor', self::ELEMENT_INSTITUTE);
                 break;
             default:
-                // TODO should never happen
-                $options = null;
+                throw new Application_Exception(__METHOD__ . ' Unknown role \'' . $this->__role . '\'.');
                 break;
         }
     }
@@ -78,15 +80,18 @@ class Admin_Form_DocumentInstitute extends Admin_Form_AbstractModelSubForm {
     }
     
     /**
-     * 
      * @param type $model
-     * 
-     * TODO handle unknown ID
      */
     public function updateModel($link) {
         $instituteId = $this->getElement(self::ELEMENT_INSTITUTE)->getValue();
-        $institute = new Opus_DnbInstitute($instituteId);
-        $link->setModel($institute);
+        try {
+            $institute = new Opus_DnbInstitute($instituteId);
+
+            $link->setModel($institute);
+        }
+        catch (Opus_Model_NotFoundException $omnfe) {
+            $this->getLogger()->err(__METHOD__ . " Unknown institute ID = '$instituteId'.");
+        }
     }
     
     public function getModel() {
@@ -108,7 +113,7 @@ class Admin_Form_DocumentInstitute extends Admin_Form_AbstractModelSubForm {
         }
         
         $this->updateModel($link);
-        
+
         return $link;
     }
     
