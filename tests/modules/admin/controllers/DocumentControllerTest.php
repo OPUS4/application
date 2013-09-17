@@ -319,5 +319,28 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
             $this->assertQuery($button);
         }
     }
-    
+
+    public function testRemoveButtonsTranslated() {
+        $this->useGerman();
+
+        $this->dispatch('/admin/document/edit/id/146');
+        $this->assertResponseCode(200);
+        $this->assertModule('admin');
+        $this->assertController('document');
+        $this->assertAction('edit');
+
+        $document = new DOMDocument();
+        $document->loadHTML($this->getResponse()->getBody());
+        $elements = $document->getElementsByTagName('input');
+
+        foreach ($elements as $element) {
+            if ($element->getAttribute('type') === 'submit') {
+                $elementId = $element->getAttribute('id');
+                if (strpos($elementId, 'Remove') !== false) {
+                    $this->assertEquals('Entfernen', $element->getAttribute('value'));
+                }
+            }
+        }
+    }
+
 }
