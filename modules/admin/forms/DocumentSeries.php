@@ -92,11 +92,11 @@ class Admin_Form_DocumentSeries extends Admin_Form_AbstractModelSubForm {
      * @param type $seriesLink
      */
     public function updateModel($seriesLink) {
-        $seriesId = $this->getElement(self::ELEMENT_SERIES_ID)->getValue();
+        $seriesId = $this->getElementValue(self::ELEMENT_SERIES_ID);
         $series = new Opus_Series($seriesId);
         $seriesLink->setModel($series);
-        $seriesLink->setNumber($this->getElement(self::ELEMENT_NUMBER)->getValue());
-        $seriesLink->setDocSortOrder($this->getElement(self::ELEMENT_SORT_ORDER)->getValue());
+        $seriesLink->setNumber($this->getElementValue(self::ELEMENT_NUMBER));
+        $seriesLink->setDocSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
     }
 
     /**
@@ -122,7 +122,7 @@ class Admin_Form_DocumentSeries extends Admin_Form_AbstractModelSubForm {
         }
         
         $this->updateModel($seriesLink);
-        
+
         return $seriesLink;
     }
     

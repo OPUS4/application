@@ -111,6 +111,20 @@ class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
         $this->assertEquals('VI', $model->getNumber());
         $this->assertEquals(2, $model->getDocSortOrder());
     }
+
+    public function testGetModelWithoutSortOrder() {
+        $form = new Admin_Form_DocumentSeries();
+
+        $form->getElement('SeriesId')->setValue(3);
+        $form->getElement('Number')->setValue('VI');
+
+        $model = $form->getModel();
+
+        $this->assertNull($model->getId());
+        $this->assertEquals(3, $model->getModel()->getId());
+        $this->assertEquals('VI', $model->getNumber());
+        $this->assertNull($model->getDocSortOrder());
+    }
     
     public function testValidation() {
         $form = new Admin_Form_DocumentSeries();
