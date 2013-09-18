@@ -139,8 +139,11 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         
         $subform = new Admin_Form_DocumentSection();
         $subform->setLegend('admin_document_section_content');
-        $subform->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentAbstract', 'TitleAbstract'), 
-                'Abstracts');
+        $subform->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentAbstract', 'TitleAbstract',
+            new Form_Validate_MultiSubForm_RepeatedValues('Language',
+                'admin_document_error_MoreThanOneTitleInLanguage')),
+            'Abstracts'
+        );
         $subform->addSubForm(new Admin_Form_DocumentSubjects(), 'Subjects');
         $this->addSubForm($subform, 'Content');
         
