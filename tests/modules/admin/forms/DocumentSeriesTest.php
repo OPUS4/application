@@ -39,6 +39,7 @@ class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
     public function testCreateForm() {
         $form = new Admin_Form_DocumentSeries();
 
+        $this->assertEquals(4, count($form->getElements()));
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('SeriesId'));
         $this->assertNotNull($form->getElement('Number'));
@@ -173,4 +174,30 @@ class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
 
         $this->assertContains('notInt', $form->getErrors('SeriesId'));
     }
+
+    public function testValidationAlreadyUsedNumber() {
+        $form = new Admin_Form_DocumentSeries();
+
+        $post = array(
+            'Id' => '250',
+            'SeriesId' => '1',
+            'Number' => '5/5' // used by document ID = 146
+        );
+
+        $this->assertFalse($form->isValid($post));
+        $this->assertContains('notAvailable', $form->getErrors('Number'));
+    }
+
+    public function testValidationNumberCurrentDocument() {
+        $form = new Admin_Form_DocumentSeries();
+
+        $post = array(
+            'Id' => '146',
+            'SeriesId' => '1',
+            'Number' => '5/5' // used by document ID = 146
+        );
+
+        $this->assertTrue($form->isValid($post));
+    }
+
 }
