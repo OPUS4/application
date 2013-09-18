@@ -38,7 +38,8 @@ class Admin_Form_DocumentAbstractTest extends ControllerTestCase {
     
     public function testCreateForm() {
         $form = new Admin_Form_DocumentAbstract();
-        
+
+        $this->assertEquals(3, count($form->getElements()));
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('Language'));
         $this->assertNotNull($form->getElement('Value'));
@@ -58,6 +59,8 @@ class Admin_Form_DocumentAbstractTest extends ControllerTestCase {
         $this->assertEquals($abstract->getId(), $form->getElement('Id')->getValue());
         $this->assertEquals($abstract->getLanguage(), $form->getElement('Language')->getValue());
         $this->assertEquals($abstract->getValue(), $form->getElement('Value')->getValue());
+
+        $this->assertFalse($form->getDecorator('Fieldset'));
     }
     
     public function testUpdateModel() {
@@ -105,18 +108,53 @@ class Admin_Form_DocumentAbstractTest extends ControllerTestCase {
         $this->assertEquals('eng', $model->getLanguage());
         $this->assertEquals('Test Zusammenfassung!', $model->getValue());
     }
-    
+
+    public function testGetModelBadId() {
+        $form = new Admin_Form_DocumentAbstract();
+        $form->getElement('Id')->setValue('bad');
+        $form->getElement('Language')->setValue('eng');
+        $form->getElement('Value')->setValue('Test Zusammenfassung!');
+
+        $model = $form->getModel();
+
+        $this->assertNull($model->getId());
+        $this->assertEquals('eng', $model->getLanguage());
+        $this->assertEquals('Test Zusammenfassung!', $model->getValue());
+    }
+
+    public function testGetModelUnknownId() {
+        $form = new Admin_Form_DocumentAbstract();
+
+        $logger = new MockLogger();
+
+        $form->setLogger($logger);
+        $form->getElement('Id')->setValue(9999);
+        $form->getElement('Language')->setValue('eng');
+        $form->getElement('Value')->setValue('Test Zusammenfassung!');
+
+        $model = $form->getModel();
+
+        $this->assertNull($model->getId());
+        $this->assertEquals('eng', $model->getLanguage());
+        $this->assertEquals('Test Zusammenfassung!', $model->getValue());
+
+        $messages = $logger->getMessages();
+
+        $this->assertEquals(1, count($messages));
+        $this->assertContains('Unknown ID = \'9999\'', $messages[0]);
+    }
+
     public function testValidation() {
         $form = new Admin_Form_DocumentAbstract();
         
         $post = array(
             'Language' => 'rus',
-            'Value' => ''
+            'Value' => ' '
         );
         
         $this->assertFalse($form->isValid($post));
         
         $this->assertContains('isEmpty', $form->getErrors('Value'));
     }
-    
+
 }

@@ -58,18 +58,24 @@ class Admin_Form_DocumentAbstract extends Admin_Form_AbstractModelSubForm {
     }
     
     public function updateModel($abstract) {
-        $abstract->setLanguage($this->getElement(self::ELEMENT_LANGUAGE)->getValue());
-        $abstract->setValue($this->getElement(self::ELEMENT_VALUE)->getValue());
+        $abstract->setLanguage($this->getElementValue(self::ELEMENT_LANGUAGE));
+        $abstract->setValue($this->getElementValue(self::ELEMENT_VALUE));
     }
 
     public function getModel() {
         $abstractId = $this->getElement(self::ELEMENT_ID)->getValue();
         
-        if (empty($abstractId)) {
+        if (empty($abstractId) || !is_numeric($abstractId)) {
             $abstractId = null;
         }
-        
-        $abstract = new Opus_TitleAbstract($abstractId);
+
+        try {
+            $abstract = new Opus_TitleAbstract($abstractId);
+        }
+        catch (Opus_Model_NotFoundException $omnfe) {
+            $this->getLogger()->err(__METHOD__ . " Unknown ID = '$abstractId' (" . $omnfe->getMessage() . ').');
+            $abstract = new Opus_TitleAbstract();
+        }
         
         $this->updateModel($abstract);
         
