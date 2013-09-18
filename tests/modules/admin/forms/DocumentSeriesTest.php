@@ -126,23 +126,49 @@ class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
         $this->assertNull($model->getDocSortOrder());
     }
     
-    public function testValidation() {
+    public function testValidationRequired() {
         $form = new Admin_Form_DocumentSeries();
-        
+
         $post = array(
-            'Number' => '',
-            'SeriesId' => ''
+            'Number' => ' ',
+            'SeriesId' => ' '
         );
         
         $this->assertFalse($form->isValid($post));
         
         $this->assertContains('isEmpty', $form->getErrors('Number'));
         $this->assertContains('isEmpty', $form->getErrors('SeriesId'));
-        
+    }
+
+    public function testValidationSortOrder() {
+        $form = new Admin_Form_DocumentSeries();
+
         $post = array(
-            'SeriesId' => 'a'
+            'SortOrder' => '1st'
         );
-        
+
+        $this->assertFalse($form->isValid($post));
+
+        $this->assertContains('notInt', $form->getErrors('SortOrder'));
+
+        $post = array(
+            'SeriesId' => '2', // required
+            'Number' => '800', // required
+            'SortOrder' => '-1'
+        );
+
+        $this->assertFalse($form->isValid($post));
+
+        $this->assertContains('notGreaterThan', $form->getErrors('SortOrder'));
+    }
+
+    public function testValidationSeriesId() {
+        $form = new Admin_Form_DocumentSeries();
+
+        $post = array(
+            'SeriesId' => 'a',
+        );
+
         $this->assertFalse($form->isValid($post));
 
         $this->assertContains('notInt', $form->getErrors('SeriesId'));

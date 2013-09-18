@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,35 +24,51 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Eingabefeld für SortOrder Werte.
- * 
- * x >= 0 oder NULL
- */
-class Form_Element_SortOrder extends Form_Element_Text {
-    
-    public function init() {
-        parent::init();
 
-        if (is_null($this->getAttrib('size'))) {
-            $this->setAttrib('size', 6);
-        }
+class Form_Element_SortOrderTest extends FormElementTestCase {
 
-        $validator = new Zend_Validate_Int();
-        $validator->setMessage('validation_error_int');
-        $this->addValidator($validator);
-
-        $validator = new Zend_Validate_GreaterThan(-1);
-        $validator->setMessage('validation_error_negative_number');
-        $this->addValidator($validator);
+    public function setUp() {
+        $this->_formElementClass = 'Form_Element_SortOrder';
+        $this->_expectedDecoratorCount = 8;
+        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_staticViewHelper = 'viewFormDefault';
+        parent::setUp();
     }
-    
+
+    public function testValidation() {
+        $element = $this->getElement();
+
+        $this->assertTrue($element->getValidator('Int') !== false, 'Validator Int is missing.');
+        $this->assertTrue($element->getValidator('GreaterThan') !== false, 'Validator GreaterThan is missing.');
+        $this->assertEquals(-1, $element->getValidator('GreaterThan')->getMin());
+    }
+
+    public function testDefaultSize() {
+        $element = $this->getElement();
+
+        $this->assertEquals(6, $element->getAttrib('size'));
+    }
+
+    public function testCustomSize() {
+        $element = $this->getElement(array('size' => 10));
+
+        $this->assertEquals(10, $element->getAttrib('size'));
+    }
+
+    public function testMessagesTranslated() {
+        $translator = Zend_Registry::get('Zend_Translate');
+
+        $this->assertTrue($translator->isTranslated('validation_error_int'));
+        $this->assertTrue($translator->isTranslated('validation_error_negative_number'));
+    }
+
 }

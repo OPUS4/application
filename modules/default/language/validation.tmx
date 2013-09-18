@@ -59,7 +59,16 @@
         <tuv xml:lang="de">
             <seg>Bitte geben Sie eine Zahl ein.</seg>
         </tuv>
-    </tu>    
+    </tu>
+
+    <tu tuid="validation_error_negative_number">
+        <tuv xml:lang="en">
+            <seg>Please provide a positive number (0...n).</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte geben Sie eine positive Zahl ein (0..n).</seg>
+        </tuv>
+    </tu>
 
   </body>
 
