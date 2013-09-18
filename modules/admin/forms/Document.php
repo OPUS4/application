@@ -119,7 +119,8 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         // Bibliographische Beschreibung
         $this->addSubForm(new Admin_Form_DocumentTitles(), 'Titles');
         $this->addSubForm(new Admin_Form_DocumentBibliographic(), 'Bibliographic');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentSeries', 'Series', null, array(
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentSeries', 'Series',
+            new Form_Validate_MultiSubForm_RepeatedValues('SeriesId', 'admin_document_error_repeated_series'), array(
             'columns' => array(
                 array(),
                 array('label' => 'Opus_Model_Dependent_Link_DocumentSeries_Number'),

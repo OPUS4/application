@@ -828,6 +828,15 @@
           </tuv>
       </tu>
 
+      <tu tuid="admin_document_error_repeated_series">
+          <tuv xml:lang="en">
+              <seg>Document can be assigned to a series only once.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Dokument kann einer Schriftenreihe nur einmal zugewiesen werden.</seg>
+          </tuv>
+      </tu>
+
     <tu tuid="admin_document_create">
       <tuv xml:lang="en">
         <seg>Add metadata</seg>
