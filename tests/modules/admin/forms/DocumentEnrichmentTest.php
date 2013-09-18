@@ -38,10 +38,13 @@ class Admin_Form_DocumentEnrichmentTest extends ControllerTestCase {
     
     public function testCreateForm() {
         $form = new Admin_Form_DocumentEnrichment();
-        
+
+        $this->assertEquals(3, count($form->getElements()));
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('KeyName'));
         $this->assertNotNull($form->getElement('Value'));
+
+        $this->assertFalse($form->getDecorator('Fieldset'));
     }
     
     public function testPopulateFromModel() {
@@ -111,19 +114,64 @@ class Admin_Form_DocumentEnrichmentTest extends ControllerTestCase {
         $this->assertEquals($keyName, $model->getKeyName());
         $this->assertEquals('Test Enrichment Value', $model->getValue());
     }
-    
+
+    public function testGetModelUnknownId() {
+        $form = new Admin_Form_DocumentEnrichment();
+
+        $enrichment = new Opus_Enrichment();
+        $keyNames = $enrichment->getField('KeyName')->getDefault();
+        $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
+
+        $logger = new MockLogger();
+
+        $form->setLogger($logger);
+        $form->getElement('Id')->setValue(9999);
+        $form->getElement('KeyName')->setValue($keyName);
+        $form->getElement('Value')->setValue('Test Enrichment Value');
+
+        $model = $form->getModel();
+
+        $this->assertNull($model->getId());
+        $this->assertEquals($keyName, $model->getKeyName());
+        $this->assertEquals('Test Enrichment Value', $model->getValue());
+
+        $messages = $logger->getMessages();
+
+        $this->assertEquals(1, count($messages));
+        $this->assertContains('Unknown enrichment ID = \'9999\'', $messages[0]);
+    }
+
+    public function testGetModelBadId() {
+        $form = new Admin_Form_DocumentEnrichment();
+
+        $enrichment = new Opus_Enrichment();
+        $keyNames = $enrichment->getField('KeyName')->getDefault();
+        $keyName = $keyNames[1]->getName(); // Geht davon aus, dass mindestens 2 Enrichment Keys existieren
+
+        $form->getElement('Id')->setValue('bad');
+        $form->getElement('KeyName')->setValue($keyName);
+        $form->getElement('Value')->setValue('Test Enrichment Value');
+
+        $model = $form->getModel();
+
+        $this->assertNull($model->getId());
+        $this->assertEquals($keyName, $model->getKeyName());
+        $this->assertEquals('Test Enrichment Value', $model->getValue());
+    }
+
     /**
-     * TODO Validierung erweitern
      */
     public function testValidation() {
         $form = new Admin_Form_DocumentEnrichment();
         
         $post = array(
-            'Value' => ''
+            'KeyName' => ' ',
+            'Value' => ' '
         );
         
         $this->assertFalse($form->isValid($post));
-        
+
+        $this->assertContains('isEmpty', $form->getErrors('KeyName'));
         $this->assertContains('isEmpty', $form->getErrors('Value'));
     }
     

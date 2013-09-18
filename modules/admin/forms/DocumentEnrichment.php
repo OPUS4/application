@@ -59,7 +59,7 @@ class Admin_Form_DocumentEnrichment extends Admin_Form_AbstractModelSubForm {
         parent::init();
         
         $this->addElement('Hidden', self::ELEMENT_ID);
-        $this->addElement('EnrichmentKey', self::ELEMENT_KEY_NAME);
+        $this->addElement('EnrichmentKey', self::ELEMENT_KEY_NAME, array('required' => true));
         $this->addElement('Text', self::ELEMENT_VALUE, array('required' => true));
     }
     
@@ -78,8 +78,8 @@ class Admin_Form_DocumentEnrichment extends Admin_Form_AbstractModelSubForm {
      * @param Opus_Enrichment $enrichment
      */
     public function updateModel($enrichment) {
-        $enrichment->setKeyName($this->getElement(self::ELEMENT_KEY_NAME)->getValue());
-        $enrichment->setValue($this->getElement(self::ELEMENT_VALUE)->getValue());
+        $enrichment->setKeyName($this->getElementValue(self::ELEMENT_KEY_NAME));
+        $enrichment->setValue($this->getElementValue(self::ELEMENT_VALUE));
     }
 
     /**
@@ -89,11 +89,18 @@ class Admin_Form_DocumentEnrichment extends Admin_Form_AbstractModelSubForm {
     public function getModel() {
         $enrichmentId = $this->getElement(self::ELEMENT_ID)->getValue();
         
-        if (empty($enrichmentId)) {
+        if (empty($enrichmentId) && !is_numeric($enrichmentId)) {
             $enrichmentId = null;
         }
-        
-        $enrichment = new Opus_Enrichment($enrichmentId);
+
+        try {
+            $enrichment = new Opus_Enrichment($enrichmentId);
+        }
+        catch (Opus_Model_NotFoundException $omnfe) {
+            $this->getLogger()->err(__METHOD__ . " Unknown enrichment ID = '$enrichmentId' (" . $omnfe->getMessage()
+                . ').');
+            $enrichment = new Opus_Enrichment();
+        }
         
         $this->updateModel($enrichment);
         
@@ -102,8 +109,6 @@ class Admin_Form_DocumentEnrichment extends Admin_Form_AbstractModelSubForm {
         
     /**
      * Lädt die Dekoratoren für dieses Formular.
-     * 
-     * TODO Bessere Lösung?
      */
     public function loadDefaultDecorators() {
         parent::loadDefaultDecorators();

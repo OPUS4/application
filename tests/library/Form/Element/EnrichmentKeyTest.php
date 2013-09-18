@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,34 +24,48 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Formularelement für die Auswahl eines EnrichmentKeys.
- */
-class Form_Element_EnrichmentKey extends Form_Element_Select {
-    
-    public function init() {
-        parent::init();
-        
-        $options = Opus_EnrichmentKey::getAll();
+class Form_Element_EnrichmentKeyTest extends FormElementTestCase {
 
-        $values = array();
-        
-        foreach ($options as $index => $option) {
-            $values[] = $option->getName();
-            $this->addMultiOption($option->getName(), $option->getName());
-        }
-
-        $validator = new Zend_Validate_InArray($values);
-        $validator->setMessage('validation_error_unknown_enrichmentkey');
-        $this->addValidator($validator);
+    public function setUp() {
+        $this->_formElementClass = 'Form_Element_EnrichmentKey';
+        $this->_expectedDecoratorCount = 6;
+        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
+            'dataWrapper');
+        $this->_staticViewHelper = 'viewFormSelect';
+        parent::setUp();
     }
-   
+
+    public function testOptions() {
+        $element = $this->getElement();
+
+        $allOptions = Opus_EnrichmentKey::getAll();
+
+        $this->assertEquals(count($allOptions), count($element->getMultiOptions()));
+    }
+
+    public function testValidation() {
+        $element = $this->getElement();
+
+        $this->assertTrue($element->getValidator('InArray') !== false);
+
+        $validator = $element->getValidator('InArray');
+
+        $this->assertTrue($element->isValid('City'));
+        $this->assertFalse($element->isValid('UnknownEnrichmentKey'));
+    }
+
+    public function testMessageTranslated() {
+        $translator = Zend_Registry::get('Zend_Translate');
+
+        $this->assertTrue($translator->isTranslated('validation_error_unknown_enrichmentkey'));
+    }
+
 }

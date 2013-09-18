@@ -70,6 +70,15 @@
         </tuv>
     </tu>
 
+      <tu tuid="validation_error_unknown_enrichmentkey">
+          <tuv xml:lang="en">
+              <seg>Unknown enrichment key.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Unbekannter Enrichment-Schlüssel.</seg>
+          </tuv>
+      </tu>
+
   </body>
 
 </tmx>
