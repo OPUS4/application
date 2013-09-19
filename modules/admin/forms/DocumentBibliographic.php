@@ -59,18 +59,18 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
         $this->setUseNameAsLabel(true);
         
         // Label entsprechen den Namen der Elemente
-        $this->addTextElement(self::ELEMENT_EDITION);
-        $this->addTextElement(self::ELEMENT_VOLUME);
-        $this->addTextElement(self::ELEMENT_PUBLISHER_NAME);
-        $this->addTextElement(self::ELEMENT_PUBLISHER_PLACE);
+        $this->addElement('text', self::ELEMENT_EDITION, array('size' => 30));
+        $this->addElement('text', self::ELEMENT_VOLUME, array('size' => 30));
+        $this->addElement('text', self::ELEMENT_PUBLISHER_NAME, array('size' => 30));
+        $this->addElement('text', self::ELEMENT_PUBLISHER_PLACE, array('size' => 30));
 
-        $this->addElement('text', self::ELEMENT_PAGE_COUNT);
-        $this->addElement('text', self::ELEMENT_PAGE_FIRST);
-        $this->addElement('text', self::ELEMENT_PAGE_LAST);
+        $this->addElement('text', self::ELEMENT_PAGE_COUNT, array('size' => 15));
+        $this->addElement('text', self::ELEMENT_PAGE_FIRST, array('size' => 15));
+        $this->addElement('text', self::ELEMENT_PAGE_LAST, array('size' => 15));
 
-        $this->addTextElement(self::ELEMENT_ISSUE);
-        $this->addTextElement(self::ELEMENT_CONTRIBUTING_CORPORATION);
-        $this->addTextElement(self::ELEMENT_CREATING_CORPORATION);
+        $this->addElement('text', self::ELEMENT_ISSUE, array('size' => 30));
+        $this->addElement('text', self::ELEMENT_CONTRIBUTING_CORPORATION, array('size' => 30));
+        $this->addElement('text', self::ELEMENT_CREATING_CORPORATION, array('size' => 30));
         
         $this->addElement('Date', self::ELEMENT_THESIS_DATE_ACCEPTED);
         $this->addElement('Year', self::ELEMENT_THESIS_YEAR_ACCEPTED);
@@ -82,9 +82,7 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
             new Form_Validate_MultiSubForm_RepeatedValues(Admin_Form_DocumentInstitute::ELEMENT_INSTITUTE,
                 'admin_document_error_repeated_institute')), 'Grantors');
         
-        $element = new Form_Element_Checkbox(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY);
-        $element->setLabel('BelongsToBibliography');
-        $this->addElement($element);
+        $this->addElement('checkbox', self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY);
         
         $this->setRemoveEmptyCheckbox(false);
     }
@@ -133,26 +131,6 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
         
         $document->setThesisYearAccepted($this->getElementValue(self::ELEMENT_THESIS_YEAR_ACCEPTED));
         $document->setBelongsToBibliography($this->getElementValue(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY));
-    }
-    
-    /**
-     * 
-     * @param type $name
-     * @param type $label
-     * @return \Zend_Form_Element_Text
-     * 
-     * TODO move to parent/other class?
-     */
-    public function addTextElement($name, $label = null) {
-        if (is_null($label)) {
-            $label = $name;
-        }
-        
-        $element = new Form_Element_Text($name);
-        $element->setLabel($label);
-        $this->addElement($element);
-        
-        return $element;
     }
 
 }

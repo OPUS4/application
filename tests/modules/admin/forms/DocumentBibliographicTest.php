@@ -38,20 +38,35 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
     
     public function testCreateForm() {
         $form = new Admin_Form_DocumentBibliographic();
-        
-        $this->assertNotNull($form->getElement('ContributingCorporation'));
-        $this->assertNotNull($form->getElement('CreatingCorporation'));
-        $this->assertNotNull($form->getElement('Edition'));
-        $this->assertNotNull($form->getElement('Issue'));
-        $this->assertNotNull($form->getElement('PageFirst'));
-        $this->assertNotNull($form->getElement('PageLast'));
-        $this->assertNotNull($form->getElement('PageCount'));
-        $this->assertNotNull($form->getElement('PublisherName'));
-        $this->assertNotNull($form->getElement('PublisherPlace'));
-        $this->assertNotNull($form->getElement('Volume'));
-        $this->assertNotNull($form->getElement('ThesisDateAccepted'));
-        $this->assertNotNull($form->getElement('ThesisYearAccepted'));
-        $this->assertNotNull($form->getElement('BelongsToBibliography'));
+
+        $elements = array(
+            'ContributingCorporation',
+            'CreatingCorporation',
+            'Edition',
+            'Issue',
+            'PageFirst',
+            'PageLast',
+            'PageCount',
+            'PublisherName',
+            'PublisherPlace',
+            'Volume',
+            'ThesisDateAccepted',
+            'ThesisYearAccepted',
+            'BelongsToBibliography'
+        );
+
+        $this->assertEquals(count($elements), count($form->getElements()));
+
+        foreach ($elements as $element) {
+            $this->assertNotNull($form->getElement($element), "Element '$element' is missing.");
+        }
+
+        $this->assertEquals('admin_document_section_bibliographic', $form->getLegend());
+
+        $this->assertEquals(2, count($form->getSubForms()));
+
+        $this->assertNotNull($form->getSubForm('Publishers'));
+        $this->assertNotNull($form->getSubForm('Grantors'));
     }
     
     public function testPopulateFromModel() {
@@ -82,7 +97,7 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_DocumentBibliographic();
         
@@ -130,7 +145,7 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
     }
     
     public function testUpdateModelForEmptyFields() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_DocumentBibliographic();
         
