@@ -614,11 +614,12 @@ li.edit input:hover,
 .adminContainer.admin_document #fieldset-Licences .data-wrapper .label{
    background: url(../img/theme/admin/ic_checked.png) no-repeat 0.4em 0.2em;
 }
-.adminContainer.admin_document .multiple-wrapper.odd{
+/*.adminContainer.admin_document .multiple-wrapper.odd{
    background-color: transparent;
-}
+}*/
 .adminContainer.admin_document .multiple-wrapper{
-   padding: 0;
+   padding-top: 0;
+   padding-bottom: 0;
 }
 .adminContainer.admin_document .required,
 .adminContainer.admin_document .data-wrapper label{
@@ -867,6 +868,9 @@ li.edit input:hover,
 }
 .adminContainer .subform .fields-wrapper{
    margin: 0 0 0.5em;
+}
+.adminContainer .data-wrapper + .subform{
+   margin: 0.5em 0 0;
 }
 .adminContainer .subform + .data-wrapper{
    margin-top: 1.3em;
