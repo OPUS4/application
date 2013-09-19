@@ -844,7 +844,13 @@ li.edit input:hover,
    background: #595a56;
    color: white;
    position: relative;
-   margin: 0 0 1.3em;
+   /*margin: 0 0 1.3em;*/
+   margin: 0;
+  
+}
+.adminContainer form .wrapper > .subform > fieldset > legend + *{
+   margin-top: 1.3em;
+   -webkit-margin-top-collapse: separate;
 }
 .adminContainer form .wrapper > .subform > fieldset > legend:after {
     border-color: #595a56 transparent transparent;
@@ -938,6 +944,7 @@ li.edit input:hover,
 .adminContainer dl.sort.dropdown{
    position: relative;
    width: 9.4%;
+   min-width: 6em;
 }
 .adminContainer #fieldset-Persons dl.sort,
 .adminContainer #fieldset-Persons .person-info{
