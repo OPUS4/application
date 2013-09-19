@@ -394,6 +394,9 @@ li.edit input:hover,
 .adminContainer .wrapper table td{
    padding: 8px;
 }
+.adminContainer .wrapper table td{
+   vertical-align: text-top;
+}
 .adminContainer .wrapper table thead th{
    border-bottom: 3px solid #5788c1;
    text-align: left;
@@ -511,6 +514,9 @@ li.edit input:hover,
 .adminContainer .field .datahint,
 .adminContainer .field .errors,
 .adminContainer .field .hint,
+.adminContainer td .datahint,
+.adminContainer td .errors,
+.adminContainer td .hint,
 .adminContainer .messages{
    font-style: normal;
    font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
@@ -519,24 +525,30 @@ li.edit input:hover,
    display: none;
 }
 .adminContainer i.placeholder,
-.adminContainer .field .hint{
+.adminContainer .field .hint,
+.adminContainer td .hint{
    color: #666;
 }
-.adminContainer .field .errors{
+.adminContainer .field .errors,
+.adminContainer td .errors{
    list-style: none;
 }
-.adminContainer .field .hint{
+.adminContainer .field .hint,
+.adminContainer td .hint{
    margin:0;
    padding: 3px 0 0;
 }
 .adminContainer .field .errors,
-.adminContainer .field .datahint{
+.adminContainer .field .datahint,
+.adminContainer td .errors,
+.adminContainer td .datahint{
    margin:13px 0 0;
    padding: 5px 8px;
    position: relative;
    display: table;
 }
 .adminContainer .field ul.errors,
+.adminContainer td ul.errors,
 #actionboxContainer .messagesContainer,
 .adminContainer .wrapper div.form-errors,
 .adminContainer .wrapper div.form-errors ul,
@@ -554,7 +566,8 @@ li.edit input:hover,
    border-radius: 4px;
    background-image: none;
 }
-.adminContainer .field p.datahint{
+.adminContainer .field p.datahint,
+.adminContainer td p.datahint{
    background-color: #dcd7cf;
    color: #595A56;
 }
@@ -568,11 +581,15 @@ li.edit input:hover,
 }*/
 
 .adminContainer .field ul.errors + p.datahint,
-.adminContainer .field p.datahint + ul.errors{
+.adminContainer .field p.datahint + ul.errors,
+.adminContainer td ul.errors + p.datahint,
+.adminContainer td p.datahint + ul.errors{
    margin-top: 10px;
 }
 .adminContainer .field .errors:before,
-.adminContainer .field .datahint:before{
+.adminContainer .field .datahint:before,
+.adminContainer td .errors:before,
+.adminContainer td .datahint:before{
     border-style: solid;
     border-width: 0 5px 10px;
     content: "";
@@ -582,10 +599,12 @@ li.edit input:hover,
     top: -10px;
     left: 20px;
 }
-.adminContainer .field .errors:before{
+.adminContainer .field .errors:before,
+.adminContainer td .errors:before{
     border-color:  transparent transparent #FFD4D4;
 }
-.adminContainer .field .datahint:before{
+.adminContainer .field .datahint:before,
+.adminContainer td .datahint:before{
     border-color:  transparent transparent #dcd7cf;
 }
 #docinfo{
