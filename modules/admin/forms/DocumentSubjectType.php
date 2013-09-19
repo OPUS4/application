@@ -53,8 +53,20 @@ class Admin_Form_DocumentSubjectType extends Admin_Form_DocumentMultiSubForm {
      */
     public function __construct($type, $options = null) {
         $this->__subjectType = $type;
+
+        $validator = null;
+
+        switch ($type) {
+            case 'swd':
+                $validator = new Form_Validate_MultiSubForm_RepeatedValues('Value',
+                    'admin_document_error_repeated_subject');
+                break;
+            default:
+                break;
+        }
+
         
-        parent::__construct(null, 'Subject', null, $options);
+        parent::__construct(null, 'Subject', $validator, $options);
     }
 
     /**

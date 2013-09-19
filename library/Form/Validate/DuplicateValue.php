@@ -114,10 +114,9 @@ class Form_Validate_DuplicateValue extends Zend_Validate_Abstract {
                 ' mit Position > count(values) konstruiert.');
         }
 
-
         if (!is_null($this->_values)) {
             for ($index = 0; $index < $this->_position && $index < $valueCount; $index++) {
-                if ($value == $this->_values[$index]) {
+                if ($this->isEqual($value, $context, $this->_values[$index])) {
                     $this->_error(self::NOT_VALID);
                     return false;
                 }
@@ -128,6 +127,10 @@ class Form_Validate_DuplicateValue extends Zend_Validate_Abstract {
         }
 
         return true;
+    }
+
+    protected function isEqual($value, $context, $other) {
+        return $value == $other;
     }
 
     public function getPosition() {

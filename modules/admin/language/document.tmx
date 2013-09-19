@@ -837,6 +837,15 @@
           </tuv>
       </tu>
 
+      <tu tuid="admin_document_error_repeated_subject">
+          <tuv xml:lang="en">
+              <seg>Subject already assigned.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Schlagwort wurde bereits zugewiesen.</seg>
+          </tuv>
+      </tu>
+
     <tu tuid="admin_document_create">
       <tuv xml:lang="en">
         <seg>Add metadata</seg>

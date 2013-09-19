@@ -145,11 +145,17 @@ class Admin_Form_DocumentSubject extends Admin_Form_AbstractModelSubForm {
     public function getModel() {
         $subjectId = $this->getElement(self::ELEMENT_ID)->getValue();
         
-        if (empty($subjectId)) {
+        if (strlen(trim($subjectId)) == 0 || !is_numeric($subjectId)) {
             $subjectId = null;
         }
-        
-        $subject = new Opus_Subject($subjectId);
+
+        try {
+            $subject = new Opus_Subject($subjectId);
+        }
+        catch (Opus_Model_NotFoundException $omnfe) {
+            $this->getLogger()->err(__METHOD__ . " Unknown subject ID = '$subjectId'.");
+            $subject = new Opus_Subject();
+        }
 
         $this->updateModel($subject);
                 

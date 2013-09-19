@@ -139,12 +139,54 @@ class Admin_Form_DocumentSubjectTest extends ControllerTestCase {
         $this->assertEquals('Test Key', $model->getExternalKey());
         $this->assertEquals('swd', $model->getType());
     }
-    
+
+    public function testGetModelUnknownId() {
+        $form = new Admin_Form_DocumentSubject('uncontrolled');
+
+        $form->getElement('Id')->setValue('7777');
+        $form->getElement('Language')->setValue('rus');
+        $form->getElement('Value')->setValue('Test Schlagwort');
+        $form->getElement('ExternalKey')->setValue('Test Key');
+
+        $logger = new MockLogger();
+        $form->setLogger($logger);
+
+        $model = $form->getModel();
+
+        $this->assertNull($model->getId());
+        $this->assertEquals('rus', $model->getLanguage());
+        $this->assertEquals('Test Schlagwort', $model->getValue());
+        $this->assertEquals('Test Key', $model->getExternalKey());
+        $this->assertEquals('uncontrolled', $model->getType());
+
+        $messages = $logger->getMessages();
+
+        $this->assertEquals(1, count($messages));
+        $this->assertContains('Unknown subject ID = \'7777\'.', $messages[0]);
+    }
+
+    public function testGetModelBadId() {
+        $form = new Admin_Form_DocumentSubject('uncontrolled');
+
+        $form->getElement('Id')->setValue('bad');
+        $form->getElement('Language')->setValue('rus');
+        $form->getElement('Value')->setValue('Test Schlagwort');
+        $form->getElement('ExternalKey')->setValue('Test Key');
+
+        $model = $form->getModel();
+
+        $this->assertNull($model->getId());
+        $this->assertEquals('rus', $model->getLanguage());
+        $this->assertEquals('Test Schlagwort', $model->getValue());
+        $this->assertEquals('Test Key', $model->getExternalKey());
+        $this->assertEquals('uncontrolled', $model->getType());
+    }
+
     public function testValidation() {
         $form = new Admin_Form_DocumentSubject('swd', 'deu');
 
         $post = array(
-            'Value' => '' // darf nicht leer sein
+            'Value' => ' ' // darf nicht leer sein
         );
         
         $this->assertFalse($form->isValid($post));
