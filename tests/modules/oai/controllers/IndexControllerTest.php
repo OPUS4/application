@@ -1139,7 +1139,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Regression test for OPUSVIER-2509
+     *  Regression Test for OPUSVIER-3072 (was Regression test for OPUSVIER-2509)
      */
     public function testForDDCSubjectTypeForXMetaDissPlus() {
         $collection = new Opus_Collection(112);
@@ -1152,12 +1152,12 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');       
         
         $body = $this->getResponse()->getBody();
-        $this->assertNotContains('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
-        $this->assertContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);               
+        $this->assertNotContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);        
+        $this->assertContains('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
     }
 
     /**
-     * Regression test for OPUSVIER-2509 and OPUSVIER-2510
+     *  Regression Test for OPUSVIER-3072 (was Regression test for OPUSVIER-2509 and OPUSVIER-2510)
      */
     public function testForDDCSubjectTypeForXMetaDiss() {
         $collection = new Opus_Collection(112);
@@ -1171,8 +1171,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDiss&set=ddc:000');       
         
         $body = $this->getResponse()->getBody();
-        $this->assertNotContains('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
-        $this->assertContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);        
+        $this->assertNotContains('<dc:subject xsi:type="dcterms:DDC">000</dc:subject>', $body);        
+        $this->assertContains('<dc:subject xsi:type="xMetaDiss:DDC-SG">000</dc:subject>', $body);
     }
 
     /**
