@@ -206,7 +206,7 @@
 
     <xsl:template match="Collection[@RoleName='ddc' and @Visible=1]" mode="xmetadiss">
         <xsl:element name="dc:subject">
-            <xsl:attribute name="xsi:type"><xsl:text>dcterms:DDC</xsl:text></xsl:attribute>
+            <xsl:attribute name="xsi:type"><xsl:text>xMetaDiss:DDC-SG</xsl:text></xsl:attribute>
             <xsl:value-of select="@Number" />
         </xsl:element>
     </xsl:template>
