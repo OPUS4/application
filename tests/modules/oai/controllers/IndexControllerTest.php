@@ -401,12 +401,12 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $xpath = $this->prepareXpathFromResultString($response->getBody());
 
         // Regression test for OPUSVIER-1788 (show DDC 51)
-        $elements = $xpath->query('//xMetaDiss:xMetaDiss/dc:subject[@xsi:type="dcterms:DDC" and text()="51"]');
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/dc:subject[@xsi:type="xMetaDiss:DDC-SG" and text()="51"]');
         $this->assertEquals(1, $elements->length,
                 "Unexpected count for ddc:51 (should be visible)");
 
         // Regression test for OPUSVIER-1788 (dont show DDC 28)
-        $elements = $xpath->query('//xMetaDiss:xMetaDiss/dc:subject[@xsi:type="dcterms:DDC" and text()="28"]');
+        $elements = $xpath->query('//xMetaDiss:xMetaDiss/dc:subject[@xsi:type="xMetaDiss:DDC-SG" and text()="28"]');
         $this->assertEquals(0, $elements->length,
                 "Unexpected count for ddc:28 (should be invisible)");
     }
