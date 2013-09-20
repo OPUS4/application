@@ -944,16 +944,16 @@ li.edit input:hover,
 .adminContainer dl.sort.dropdown{
    position: relative;
    /*width: 9.4%;*/
-   width: 90px;
+   /*width: 90px;*/
 }
 .adminContainer #fieldset-Persons dl.sort,
 .adminContainer #fieldset-Persons .person-info{
    float: left;
-   padding: 0;
    margin: 0;
 }
 .adminContainer #fieldset-Persons .person-info{
-   max-width: 65%;
+  /* max-width: 65%;*/
+  padding-left: 10px;
 }
 .adminContainer #fieldset-Persons .person-actions{
    float: right;
