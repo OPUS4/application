@@ -943,8 +943,8 @@ li.edit input:hover,
 }
 .adminContainer dl.sort.dropdown{
    position: relative;
-   width: 9.4%;
-   min-width: 6em;
+   /*width: 9.4%;*/
+   width: 90px;
 }
 .adminContainer #fieldset-Persons dl.sort,
 .adminContainer #fieldset-Persons .person-info{
@@ -988,7 +988,8 @@ li.edit input:hover,
    background-color: white;
 }
 .adminContainer dl.sort.dropdown dt{
-   padding: 0.3em 1.6em 0.3em 0.3em;
+   /*padding: 0.3em 1.6em 0.3em 0.3em;*/
+   padding: 0.3em 23px 0.3em 4px;
 }
 .adminContainer dl.sort ul.links li{
    background: url(../img/theme/admin/sprite_icons.png) no-repeat;
@@ -1045,7 +1046,8 @@ li.edit input:hover,
    color: #595A56;
    background-color: white;
    font: 1.714em Arial, Helvetica, sans-serif;
-   width: 1.9em;
+   /*width: 1.9em;*/
+   width: 46px;
    text-align: center;
    border: 1px solid;
    border-color: white #acacac white white;
