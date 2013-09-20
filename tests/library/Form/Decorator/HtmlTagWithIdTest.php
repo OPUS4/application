@@ -1,5 +1,5 @@
-<?PHP 
-/*
+<?php
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,33 +24,39 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
+ * @category    Application Unit Test
+ * @package     Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * TODO rename
- */
-class Form_Decorator_HtmlTagWithId extends Zend_Form_Decorator_HtmlTag {
-    
-    protected function _htmlAttribs(array $attribs) {
-        $element = $this->getElement();
+class Form_Decorator_HtmlTagWithIdTest extends ControllerTestCase {
 
-        if (!is_null($element)) {
-            if (!is_null($attribs) && isset($attribs['class'])) {
-                $attribs['class'] = $attribs['class'] . ' ' . $this->getElement()->getName() . '-data';
-            }
-            else {
-                $attribs = array();
-                $attribs['class'] = $this->getElement()->getName() . '-data';
-            }
-        }
-        
-        return parent::_htmlAttribs($attribs);;
+    public function testRenderWithoutElement() {
+        $decorator = new Form_Decorator_HtmlTagWithId();
+
+        $this->assertEquals('<div>content</div>', $decorator->render('content'));
     }
-    
+
+    public function testRender() {
+        $decorator = new Form_Decorator_HtmlTagWithId();
+
+        $element = new Zend_Form_Element_Text('Value');
+        $decorator->setElement($element);
+
+        $this->assertEquals('<div class="Value-data">content</div>', $decorator->render('content'));
+    }
+
+    public function testRenderWithClass() {
+        $decorator = new Form_Decorator_HtmlTagWithId();
+        $decorator->setOption('class', 'wrapper');
+
+        $element = new Zend_Form_Element_Text('Value');
+        $decorator->setElement($element);
+
+        $this->assertEquals('<div class="wrapper Value-data">content</div>', $decorator->render('content'));
+    }
+
 }

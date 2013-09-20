@@ -382,6 +382,8 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         ));
 
         $subform = new Zend_Form_SubForm();
+        $subform->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+
         $subform->setDecorators(array());
         $subform->addElement('text', 'test', array('decorators' => array(
             array('dataWrapper' => 'HtmlTag'),

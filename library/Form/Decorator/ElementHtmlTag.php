@@ -51,9 +51,16 @@ class Form_Decorator_ElementHtmlTag extends Zend_Form_Decorator_HtmlTag {
         if (is_null($attribs)) {
             $attribs = array();
         }
-        
-        $attribs['class'] = 'field';
-        $attribs['id'] = $this->getElement()->getId() . '-element';
+
+        if (!isset($attribs['class'])) {
+            $attribs['class'] = 'field';
+        }
+
+        $element = $this->getElement();
+
+        if (!is_null($element)) {
+            $attribs['id'] = $element->getId() . '-element';
+        }
         
         return parent::_htmlAttribs($attribs);;
     }

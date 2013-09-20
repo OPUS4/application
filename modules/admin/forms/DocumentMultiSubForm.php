@@ -388,7 +388,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
                 $element->removeDecorator('dataWrapper');
                 $element->removeDecorator('LabelNotEmpty');
                 $element->removeDecorator('ElementHtmlTag');
-                $element->addDecorator(array('tableCellWrapper' => 'HtmlTag'), array('tag' => 'td',
+                $element->addDecorator(array('tableCellWrapper' => 'ElementHtmlTag'), array('tag' => 'td',
                     'class' => "$name-data"));
             }
             else {
