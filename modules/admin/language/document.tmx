@@ -837,6 +837,15 @@
           </tuv>
       </tu>
 
+      <tu tuid="admin_document_error_repeated_identifier">
+          <tuv xml:lang="en">
+              <seg>Identifier already exists for document.</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>Identifier bereits für das Dokument vergeben.</seg>
+          </tuv>
+      </tu>
+
       <tu tuid="admin_document_error_repeated_subject">
           <tuv xml:lang="en">
               <seg>Subject already assigned.</seg>
