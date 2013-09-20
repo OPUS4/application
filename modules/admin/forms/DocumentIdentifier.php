@@ -86,13 +86,20 @@ class Admin_Form_DocumentIdentifier extends Admin_Form_AbstractModelSubForm {
     }
     
     public function getModel() {
-        $id = $this->getElement(self::ELEMENT_ID)->getValue();
+        $modelId = $this->getElement(self::ELEMENT_ID)->getValue();
+
+        $identifier = null;
                 
-        // TODO empty Funktion ist nicht ausreichen ("00" ist empty)
-        if (!empty($id)) {
-            $identifier = new Opus_Identifier($id);
+        if (strlen(trim($modelId)) > 0) {
+            try {
+                $identifier = new Opus_Identifier($modelId);
+            }
+            catch (Opus_Model_NotFoundException $omnfe) {
+                $this->getLogger()->err(__METHOD__ . " Unknown identifier ID = '$modelId'.");
+            }
         }
-        else {
+
+        if (is_null($identifier)) {
             $identifier = new Opus_Identifier();
         }
         

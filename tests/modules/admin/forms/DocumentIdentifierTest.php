@@ -38,10 +38,14 @@ class Admin_Form_DocumentIdentifierTest extends ControllerTestCase {
     
     public function testCreateForm() {
         $form = new Admin_Form_DocumentIdentifier();
-        
+
+        $this->assertEquals(3, count($form->getElements()));
+
         $this->assertNotNull($form->getElement('Value'));
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('Type'));
+
+        $this->assertFalse($form->getDecorator('Fieldset'));
     }
     
     /**
@@ -114,6 +118,50 @@ class Admin_Form_DocumentIdentifierTest extends ControllerTestCase {
         $this->assertEquals($identifierId, $identifier->getId());
         $this->assertEquals('url', $identifier->getType());
         $this->assertEquals('test-urn-1', $identifier->getValue());
+    }
+
+    public function testGetModelBadId() {
+        $form = new Admin_Form_DocumentIdentifier();
+
+        $form->getElement('Id')->setValue('bad');
+        $form->getElement('Type')->setValue('url');
+        $form->getElement('Value')->setValue('test-urn-1');
+
+        $logger = new MockLogger();
+        $form->setLogger($logger);
+
+        $identifier = $form->getModel();
+
+        $this->assertNull($identifier->getId());
+        $this->assertEquals('url', $identifier->getType());
+        $this->assertEquals('test-urn-1', $identifier->getValue());
+
+        $messages = $logger->getMessages();
+
+        $this->assertEquals(1, count($messages));
+        $this->assertContains('Unknown identifier ID = \'bad\'.', $messages[0]);
+    }
+
+    public function testGetModelUnknownId() {
+        $form = new Admin_Form_DocumentIdentifier();
+
+        $form->getElement('Id')->setValue('7777');
+        $form->getElement('Type')->setValue('url');
+        $form->getElement('Value')->setValue('test-urn-1');
+
+        $logger = new MockLogger();
+        $form->setLogger($logger);
+
+        $identifier = $form->getModel();
+
+        $this->assertNull($identifier->getId());
+        $this->assertEquals('url', $identifier->getType());
+        $this->assertEquals('test-urn-1', $identifier->getValue());
+
+        $messages = $logger->getMessages();
+
+        $this->assertEquals(1, count($messages));
+        $this->assertContains('Unknown identifier ID = \'7777\'.', $messages[0]);
     }
     
 }
