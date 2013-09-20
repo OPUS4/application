@@ -1366,37 +1366,13 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      */
     public function testDcCreatorIsAuthorIfExists() {
 
-        $document = new Opus_Document();
-        $document->setServerState('published');
-
-        $author = new Opus_Person();
-        $author->setLastName('Author');
-        $author->setDateOfBirth('1900-01-01');
-        $author->setPlaceOfBirth('Berlin');
-//      $authorId = $author->store();
-        $document->addPersonAuthor($author);
-
-        $editor = new Opus_Person();
-        $editor->setLastName('Editor');
-        $editor->setDateOfBirth('1900-01-01');
-        $editor->setPlaceOfBirth('Berlin');
-//      $editorId = $editor->store();
-        $document->addPersonEditor($editor);
-
-        $document->addCreatingCorporation('CreatingCorporation');
-
-        $docId = $document->store();
-
-        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::' . $docId);
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::302');
         $response = $this->getResponse();
         $xpath = $this->prepareXpathFromResultString($response->getBody());
 
         $dcCreator = $xpath->query('//oai_dc:dc/dc:creator');
         $this->assertEquals(1, $dcCreator->length);
         $this->assertEquals('Author', $dcCreator->item(0)->nodeValue);
-        
-        $document->deletePermanent();
-
         
     }
     
@@ -1405,29 +1381,14 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      */
     public function testDcCreatorIsEditorIfAuthorNotExists() {
         
-        $document = new Opus_Document();
-        $document->setServerState('published');
-
-        $editor = new Opus_Person();
-        $editor->setLastName('Editor');
-        $editor->setDateOfBirth('1900-01-01');
-        $editor->setPlaceOfBirth('Berlin');
-        $document->addPersonEditor($editor);
-
-        $document->addCreatingCorporation('CreatingCorporation');
-
-        $docId = $document->store();
-
-        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::' . $docId);
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::303');
         $response = $this->getResponse();
         $xpath = $this->prepareXpathFromResultString($response->getBody());
 
         $dcCreator = $xpath->query('//oai_dc:dc/dc:creator');
         $this->assertEquals(1, $dcCreator->length);
         $this->assertEquals('Editor', $dcCreator->item(0)->nodeValue);
-
-        $document->deletePermanent();
-        
+       
     }
 
     /**
@@ -1435,13 +1396,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      */
     public function testDcCreatorIsCreatingCorporationIfAuthorAndEditorNotExist() {
 
-        $document = new Opus_Document();
-        $document->setServerState('published');
-        $document->addCreatingCorporation('CreatingCorporation');
-
-        $docId = $document->store();
-
-        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::' . $docId);
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::304');
 
         $response = $this->getResponse();
         $xpath = $this->prepareXpathFromResultString($response->getBody());
@@ -1449,8 +1404,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $dcCreator = $xpath->query('//oai_dc:dc/dc:creator');
         $this->assertEquals(1, $dcCreator->length);
         $this->assertEquals('CreatingCorporation', $dcCreator->item(0)->nodeValue);
-        
-        $document->deletePermanent();
     }
     
     /**
@@ -1458,21 +1411,13 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      */
     public function testDcCreatorIsOmittedIfNoValidEntrySupplied() {
 
-        $document = new Opus_Document();
-        $document->setServerState('published');
-
-        $docId = $document->store();
-
-        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::' . $docId);
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=oai_dc&identifier=oai::305');
 
         $response = $this->getResponse();
         $xpath = $this->prepareXpathFromResultString($response->getBody());
 
         $dcCreator = $xpath->query('//oai_dc:dc/dc:creator');
         $this->assertEquals(0, $dcCreator->length);
-        
-        $document->deletePermanent();
-        
     }
 
     /**
