@@ -69,6 +69,8 @@ pre.preserve-spaces{
    border-bottom: 2px solid black;
    padding-left: 0;
    padding-right: 0;
+   font: normal bold 12pt Arial, Helvetica, sans-serif;
+   text-transform: none;
 }
 #titlemain-wrapper h2,
 #titlemain-wrapper h3{
@@ -85,25 +87,29 @@ table.frontdoordata td,
 .frontdoordata caption {
     padding-left: 0;
 }
-.adminContainer form .wrapper > .subform > fieldset > legend:after {
+.adminContainer form .wrapper > .subform > fieldset > legend:after,
+.adminContainer form .wrapper .subform legend .button-group{
     display: none;
 }
 .adminContainer form .wrapper > .subform > fieldset > legend {
-    background-color: white;
-    border-radius: 0;
-    color: Black;
-    display: block;
-    margin: 0 0 1.3em;
-    padding: 3pt 1.2%;
-    position: relative;
-    width: 97.6%;
+    font: normal bold 1.1em Arial, Helvetica, sans-serif;
+    margin: 1em 0 0;
     border: 1px solid black;
-}
-.adminContainer .subform legend {
-    color: #595955;
-    font: italic bold 1.143em Georgia,"Times New Roman",Times,serif;
+    padding: 5pt
+ }
+.adminContainer form .wrapper .subform legend {
+    color: Black;
+    font: normal bold 1em Arial, Helvetica, sans-serif;
     text-transform: none;
+    background-color: white;
+    padding: 0 0 2pt 0;
+    margin-left: 0.5%;
+    border-radius: 0;
+    border-bottom: 1px solid black;
+    line-height: normal;
+    display: block;
+    position: static;
 }
-.adminContainer form .wrapper .subform .subform fieldset{
+/*.adminContainer form .wrapper .subform .subform fieldset{
     border-top: 2px solid black !important;
-}
+}*/
