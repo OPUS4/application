@@ -39,7 +39,9 @@ class Form_Validate_MultiSubForm_RepeatedValues implements Form_Validate_IMultiS
 
     private $_message;
 
-    public function __construct($elementName, $message) {
+    private $_otherElements;
+
+    public function __construct($elementName, $message, $otherElements = null) {
         if (is_null($elementName) || strlen(trim($elementName)) == 0) {
             throw new Application_Exception(__METHOD__ . ' #1 argument must not be null or empty.');
         }
@@ -48,7 +50,12 @@ class Form_Validate_MultiSubForm_RepeatedValues implements Form_Validate_IMultiS
             throw new Application_Exception(__METHOD__ . ' #2 argument must not be null or empty.');
         }
 
+        if (!is_null($otherElements) && !is_array($otherElements)) {
+            $otherElements = array($otherElements);
+        }
+
         $this->_elementName = $elementName;
+        $this->_otherElements = $otherElements;
         $this->_message = $message;
     }
 
@@ -65,7 +72,14 @@ class Form_Validate_MultiSubForm_RepeatedValues implements Form_Validate_IMultiS
             if (array_key_exists($name, $data)) {
                 $element = $subform->getElement($this->_elementName);
                 if (!is_null($element)) {
-                    $element->addValidator(new Form_Validate_DuplicateValue($values, $position++, $this->_message));
+                    if (is_null($this->_otherElements)) {
+                        $element->addValidator(new Form_Validate_DuplicateValue($values, $position++,
+                            $this->_message));
+                    }
+                    else {
+                        $element->addValidator(new Form_Validate_DuplicateMultiValue($values, $position++,
+                            $this->_message, $this->_otherElements));
+                    }
                 }
             }
         }
@@ -75,8 +89,31 @@ class Form_Validate_MultiSubForm_RepeatedValues implements Form_Validate_IMultiS
         $values = array();
 
         foreach ($context as $index => $subform) {
-            if (isset($subform[$name])) {
-                $values[] = $subform[$name];
+            $value = null;
+
+            if (is_null($this->_otherElements)) {
+                // einfache Werte aus einem Feld
+                if (isset($subform[$name])) {
+                    $value = $subform[$name];
+                }
+            }
+            else {
+                // komplexe Werte aus mehreren Feldern
+                $value = array();
+
+                foreach ($this->_otherElements as $element) {
+                    if (isset($subform[$element])) {
+                        $value[] = $subform[$element];
+                    }
+                }
+
+                if (isset($subform[$name])) {
+                    $value[] = $subform[$name];
+                }
+            }
+
+            if (!is_null($value)) {
+                $values[] = $value;
             }
         }
 
@@ -89,6 +126,10 @@ class Form_Validate_MultiSubForm_RepeatedValues implements Form_Validate_IMultiS
 
     public function getMessage() {
         return $this->_message;
+    }
+
+    public function getOtherElements() {
+        return $this->_otherElements;
     }
 
 }

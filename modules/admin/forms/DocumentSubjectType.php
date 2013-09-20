@@ -62,10 +62,11 @@ class Admin_Form_DocumentSubjectType extends Admin_Form_DocumentMultiSubForm {
                     'admin_document_error_repeated_subject');
                 break;
             default:
+                $validator = new Form_Validate_MultiSubForm_RepeatedValues('Value',
+                    'admin_document_error_repeated_subject', 'Language');
                 break;
         }
 
-        
         parent::__construct(null, 'Subject', $validator, $options);
     }
 
