@@ -732,9 +732,9 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(array('application/xhtml+xml' => 'HTML'), $config->publist->file->allow->mimetype->toArray(), 'Failed setting configuration option');
         
         $doc = new Opus_Document(92);
-        $file = $doc->getFile(0);
+        $file = $doc->getFile(1);
         $this->assertTrue($file instanceOf Opus_File, 'Test setup has changed.');
-        $this->assertEquals('test.xhtml', $file->getPathName(), 'Test setup has changed.');
+        $this->assertEquals('datei mit unüblichem Namen.xhtml', $file->getPathName(), 'Test setup has changed.');
 
         $collection = $doc->getCollection(0);
         
@@ -747,8 +747,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         
         $response = $this->getResponse();
-        $this->assertContains('/files/92/test.xhtml', $response->getBody());
-        $this->assertNotContains("Warning: XSLTProcessor::transformToXml(): Not allowed to call handler 'urlencode()'", $response->getBody());
+        $this->assertContains(urlencode('datei mit unüblichem Namen.xhtml'), $response->getBody());
     }
        
 }
