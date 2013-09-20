@@ -76,8 +76,8 @@
       <div class="col col-3">
         <ul class="form-action">
           <?PHP foreach ($actionLinks as $action => $params) : ?>
-          <li class="<?= $action ?>"><a href="<?= $this->url($params) ?>"
-                                        ><?= htmlspecialchars($this->translate('admin_document_' .$action)) ?></a></li>
+          <li class="<?= $action ?>"><a href="<?= $this->url($params, null, true) ?>"
+                  ><?= htmlspecialchars($this->translate('admin_document_' .$action)) ?></a></li>
           <?PHP endforeach; ?>
         </ul>
       </div>
