@@ -1439,8 +1439,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         
         $doc = new Opus_Document(146);
         $parentTitle = $doc->getTitleParent();
-        $this->assertFalse(empty($parentTitle), 'Test Data modified: Expected non-empty value for TitleParent');
+        $this->assertFalse(empty($parentTitle), 'Test Data modified: Expected TitleParent');
         
+        $parentTitleValue = $parentTitle[0]->getValue();
+        $this->assertFalse(empty($parentTitleValue), 'Test Data modified: Expected non-empty value for TitleParent');
         
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
         $response = $this->getResponse();
@@ -1449,7 +1451,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         
         $this->assertEquals(1, $dcSource->length);
 
-        $this->assertEquals($parentTitle[0]->getValue(), $dcSource->item(0)->nodeValue);
+        $this->assertEquals($parentTitleValue, $dcSource->item(0)->nodeValue);
 
         
     }
