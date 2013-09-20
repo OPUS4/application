@@ -161,25 +161,28 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
     }
 
     /**
-     * Liefert angezeigtes Model oder eine neue Instanz für gerade hinzugefügte Modelle.
-     *
-     * Wird zum Beispiel vom Formular ein existierender Identifier Eintrag angezeigt, sollte diese Funktion das Model
-     * für den in der Datenbank gespeicherten Identifier zurück liefern. Ist der Identifier im Formular hinzugefügt
-     * worden muss eine new Model Instanz zurück gegeben werden bei der der Wert vom ID-Feld noch null ist.
+     * Liefert angezeigte Datei.
      */
     function getModel() {
         $fileId = $this->getElementValue(self::ELEMENT_ID);
 
-        if (!is_null($fileId)) {
-            $file = new Opus_File($fileId);
+        if (strlen(trim($fileId)) > 0 && is_numeric($fileId)) {
+            try {
+                $file = new Opus_File($fileId);
+            }
+            catch (Opus_Model_NotFoundException $omnfe) {
+                $this->getLogger()->err(__METHOD__ . " Unknown file ID = '$fileId'.");
+                throw new Application_Exception("Unknown file ID = '$fileId'.");
+            }
+
             $this->updateModel($file);
+
             return $file;
         }
         else {
-            // TODO should not happen
+            $this->getLogger()->err(__METHOD__ . " Bad file ID = '$fileId'.");
+            throw new Application_Exception("Bad file ID = '$fileId'.");
         }
-
-
 
         return null;
     }

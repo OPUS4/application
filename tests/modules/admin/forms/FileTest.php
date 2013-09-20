@@ -88,6 +88,69 @@ class Admin_Form_FileTest extends ControllerTestCase {
     }
 
     public function testUpdateModel() {
+        $this->markTestIncomplete('funktioniert noch nicht und ist nicht fertig');
+        $form = new Admin_Form_File();
+
+        $form->getElement('Language')->setValue('fra');
+        $form->getElement('Label')->setValue('Testlabel');
+        $form->getElement('Comment')->setValue('Testkommentar');
+        $form->getElement('VisibleIn')->setValue(array('frontdoor', 'oai'));
+        $form->getElement('Roles')->setValue(array('reviewer', 'docsadmin'));
+
+        $file = new Opus_File();
+
+        $form->updateModel($file);
+
+        $this->assertEquals('fra', $file->getLanguage());
+        $this->assertEquals('Testlabel', $file->getLabel());
+        $this->assertEquals('Testkommentar', $file->getComment());
+        $this->assertEquals(1, $file->getVisibleInFrontdoor());
+        $this->assertEquals(1, $file->getVisibleInOai());
+
+
+    }
+
+    public function testUpdateModelNoRoles() {
+        // TODO
+    }
+
+    public function testGetModel() {
+        $this->markTestIncomplete('does not work yet and is not complete');
+
+        $form = new Admin_Form_File();
+
+        $form->getElement('Id')->setValue(126); // Datei 'test.pdf' von Dokument 146
+
+        $model = $form->getModel();
+
+        $this->assertInstanceOf('Opus_File', $model);
+        $this->assertEquals(126, $model->getId());
+
+        // TODO more checks
+    }
+
+    /**
+     * @expectedException Application_Exception
+     * @expectedExceptionMessage Bad file ID = 'bla'.
+     */
+    public function testGetModelBadId() {
+        $form = new Admin_Form_File();
+
+        $form->getElement('Id')->setValue('bla');
+
+        $form->getModel();
+    }
+
+    /**
+     * @expectedException Application_Exception
+     * @expectedExceptionMessage Unknown file ID = '8888'.
+     */
+    public function testGetModelUnknownID() {
+        $form = new Admin_Form_File();
+
+        $form->getElement('Id')->setValue('8888');
+
+        $form->getModel();
     }
 
     public function testSetDefaults() {

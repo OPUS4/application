@@ -37,7 +37,6 @@
  * @version     $Id$
  *
  * TODO Import über /admin/filebrowser/index/id/[docId] - admin-filemanager-import-link
- * TODO link zur Datei
  * TODO erlaubte Dateitypen
  * TODO nach Datei hinzufügen editierte Werte im Formular wieder herstellen
  * TODO Breadcrumbs (Document Title usw.)

@@ -56,4 +56,10 @@ class Admin_Form_FilesTest extends ControllerTestCase {
         ), $result);
     }
 
+    public function testProcessPostRemove() {
+        $this->markTestIncomplete('not implemented yet');
+
+        $form = new Admin_Form_Files();
+    }
+
 }
