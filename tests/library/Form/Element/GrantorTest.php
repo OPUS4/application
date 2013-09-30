@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,33 +24,45 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
+ * @category    Application Unit Test
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Select Element für Thesis Publisher Institute.
- */
-class Form_Element_Publisher extends Form_Element_Select {
-    
-    public function init() {
-        parent::init();
-        
-        $this->setRequired(true);
-        
-        $validator = new Zend_Validate_Int();
-        $validator->setMessage('validation_error_int');
-        $this->addValidator($validator);
+class Form_Element_GrantorTest extends FormElementTestCase {
 
-        $options = Opus_DnbInstitute::getPublishers();
-        
-        foreach ($options as $option) {
-            $this->addMultiOption($option->getId(), $option->getDisplayName());
+    public function setUp() {
+        $this->_formElementClass = 'Form_Element_Grantor';
+        $this->_expectedDecoratorCount = 6;
+        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
+            'dataWrapper');
+        $this->_staticViewHelper = 'viewFormSelect';
+        parent::setUp();
+    }
+
+    public function testOptions() {
+        $element = $this->getElement();
+
+        $grantors = Opus_DnbInstitute::getGrantors();
+
+        $this->assertEquals(count($grantors), count($element->getMultiOptions()));
+
+        $index = 0;
+
+        foreach ($element->getMultiOptions() as $modelId => $label) {
+            $this->assertEquals($grantors[$index]->getId(), $modelId);
+            $this->assertEquals($grantors[$index]->getDisplayName(), $label);
+            $index++;
         }
     }
-    
+
+    public function testValidator() {
+        $element = $this->getElement();
+
+        $this->assertTrue($element->getValidator('Int') !== false);
+    }
+
 }

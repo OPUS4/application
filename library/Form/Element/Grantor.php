@@ -49,7 +49,7 @@ class Form_Element_Grantor extends Form_Element_Select {
         $options = Opus_DnbInstitute::getGrantors();
         
         foreach ($options as $option) {
-            $this->addMultiOption($option->getId(), $option->getName());
+            $this->addMultiOption($option->getId(), $option->getDisplayName());
         }
     }
     
