@@ -934,6 +934,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         Zend_Registry::set('Zend_Config', $oldConfig);
 
         $searchStrings = array(
+            '2013',
             '2012',
             '2011',
             '2010',
@@ -942,8 +943,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             '2007',
             '2005',
             '2004',
-            '2003',
-            '2002');
+            '2003');
         $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="year_facet"');
 
         $this->resetResponse();

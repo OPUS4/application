@@ -7,19 +7,19 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 -- 
 -- Oai_IndexControllerTest::testDcCreatorIsAuthorIfExists
 -- 
-(302,NULL,NULL,NULL,'CreatingCorporation',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,'draft',NULL,NULL,'',NULL,'2013-09-20T12:27:40+02:00','2013-09-20T12:27:40+02:00','2013-09-20T12:27:40+02:00',NULL,'published',NULL,0),
+(302,NULL,NULL,NULL,'CreatingCorporation',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,'draft',NULL,'2013','',NULL,'2013-09-20T12:27:40+02:00','2013-09-20T12:27:40+02:00','2013-09-20T12:27:40+02:00',NULL,'published',NULL,0),
 -- 
 -- Oai_IndexControllerTest::testDcCreatorIsEditorIfAuthorNotExists
 -- 
-(303,NULL,NULL,NULL,'CreatingCorporation',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,'draft',NULL,NULL,'',NULL,'2013-09-20T12:36:08+02:00','2013-09-20T12:36:08+02:00','2013-09-20T12:36:08+02:00',NULL,'published',NULL,0),
+(303,NULL,NULL,NULL,'CreatingCorporation',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,'draft',NULL,'2013','',NULL,'2013-09-20T12:36:08+02:00','2013-09-20T12:36:08+02:00','2013-09-20T12:36:08+02:00',NULL,'published',NULL,0),
 -- 
 -- Oai_IndexControllerTest::testDcCreatorIsCreatingCorporationIfAuthorAndEditorNotExist
 -- 
-(304,NULL,NULL,NULL,'CreatingCorporation',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,'draft',NULL,NULL,'',NULL,'2013-09-20T12:37:49+02:00','2013-09-20T12:37:49+02:00','2013-09-20T12:37:49+02:00',NULL,'published',NULL,0),
+(304,NULL,NULL,NULL,'CreatingCorporation',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,'draft',NULL,'2013','',NULL,'2013-09-20T12:37:49+02:00','2013-09-20T12:37:49+02:00','2013-09-20T12:37:49+02:00',NULL,'published',NULL,0),
 -- 
 -- Oai_IndexControllerTest::testDcCreatorIsOmittedIfNoValidEntrySupplied
 -- 
-(305,NULL,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,'draft',NULL,NULL,'',NULL,'2013-09-20T12:39:25+02:00','2013-09-20T12:39:25+02:00','2013-09-20T12:39:25+02:00',NULL,'published',NULL,0);
+(305,NULL,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,'draft',NULL,'2013','',NULL,'2013-09-20T12:39:25+02:00','2013-09-20T12:39:25+02:00','2013-09-20T12:39:25+02:00',NULL,'published',NULL,0);
 
 INSERT INTO `persons` (`id`, `academic_title`, `date_of_birth`, `email`, `first_name`, `last_name`, `place_of_birth`) VALUES
 (314,NULL,'1900-01-01',NULL,NULL,'Author','Berlin'),
