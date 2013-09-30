@@ -89,7 +89,7 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     }
     
     public function getMessage() {
-        return ($this->parentForm instanceof Admin_Form_Document) ? $this->parentForm->getMessage() : null;
+        return (method_exists($this->parentForm, 'getMessage')) ? $this->parentForm->getMessage() : null;
     }
     
     /**

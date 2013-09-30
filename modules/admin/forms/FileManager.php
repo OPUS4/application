@@ -38,10 +38,12 @@ class Admin_Form_FileManager extends Application_Form_Model_Abstract {
     const SUBFORM_INFO = 'Info';
     const SUBFORM_ACTION = 'Action';
 
+    private $message;
+
     public function init() {
         parent::init();
 
-        $this->addSubForm(new Admin_Form_ActionBox(), self::SUBFORM_ACTION);
+        $this->addSubForm(new Admin_Form_ActionBox($this), self::SUBFORM_ACTION);
         $this->addSubForm(new Admin_Form_InfoBox(), self::SUBFORM_INFO);
 
         $this->getSubForm(self::SUBFORM_INFO)->addDecorator(
@@ -108,6 +110,14 @@ class Admin_Form_FileManager extends Application_Form_Model_Abstract {
         $form = new Admin_Form_FileManager();
         $form->constructFromPost($post, $document);
         return $form;
+    }
+
+    public function setMessage($message) {
+        $this->message = $message;
+    }
+
+    public function getMessage() {
+        return $this->message;
     }
 
 

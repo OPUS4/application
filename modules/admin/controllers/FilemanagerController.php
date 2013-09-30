@@ -81,8 +81,9 @@ class Admin_FilemanagerController extends Controller_Action {
                             try {
                                 $document->store();
                             }
-                            catch (Opus_Mode_Exception $e) {
-                                // TODO error
+                            catch (Opus_Mode_Exception $ome) {
+                                $this->getLogger()->err(__METHOD__ . ' Error saving file metadata: '
+                                    . $ome->getMessage());
                                 return $this->_redirectTo('index', 'admin_filemanager_save_failure', 'document', 'admin',
                                     array('id' => $docId));
                             }
@@ -91,7 +92,7 @@ class Admin_FilemanagerController extends Controller_Action {
                                 array('id' => $docId));
                         }
                         else {
-                            // TODO not valid
+                            $form->setMessage($this->view->translate('admin_filemanager_error_validation'));
                         }
                         break;
 
