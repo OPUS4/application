@@ -173,4 +173,21 @@ class Admin_Form_FileTest extends ControllerTestCase {
         $this->assertEquals(2, count($hashes->getElements()));
     }
 
+    public function testValidation() {
+        $form = new Admin_Form_File();
+
+        $post = array(
+            'FileLink' => 123,
+            'Language' => 'deu'
+        );
+
+        $result = $form->isValid($post);
+
+        $this->assertTrue($result);
+    }
+
+    public function testValidationUnknownFileLink() {
+        $this->markTestIncomplete('not implemented');
+    }
+
 }

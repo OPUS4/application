@@ -92,4 +92,31 @@ class Form_Element_FileLinkTest extends FormElementTestCase {
         $element->setValue(5555);
     }
 
+    /**
+     * @expectedException Application_Exception
+     * @expectedExceptionMessage Value must not be null.
+     */
+    public function testSetValueNull() {
+        $element = $this->getElement();
+
+        $element->setValue(null);
+    }
+
+    public function testIsValid() {
+        $element = $this->getElement();
+
+        $this->assertTrue($element->isValid(123)); // File 123 exists in database, but file is missing (document 122)
+        $this->assertTrue($element->isValid(116)); // File 116 exists (document 91)
+    }
+
+    /**
+     * @expectedException Application_Exception
+     * @expectedExceptionMessage File with ID = 5555 not found.
+     */
+    public function testIsValidUnknownId() {
+        $element = $this->getElement();
+
+        $this->assertFalse($element->isValid(5555)); // File 5555 does not exist
+    }
+
 }

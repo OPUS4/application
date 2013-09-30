@@ -23,6 +23,12 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Formularelement für die Anzeige eines Download Links für ein Opus_File Objekt.
+ *
+ * Das Formularelement kann nur mit gültigen IDs für Opus_File verwendet werden.
  *
  * @category    Application
  * @package     Form_Element
@@ -48,6 +54,10 @@ class Form_Element_FileLink extends Form_Element_Text {
     }
 
     public function setValue($file) {
+        if (is_null($file)) {
+            throw new Application_Exception(__METHOD__ . " Value must not be null.");
+        }
+
         if (!$file instanceof Opus_File) {
             try {
                 $file = new Opus_File($file);
@@ -61,6 +71,26 @@ class Form_Element_FileLink extends Form_Element_Text {
             $this->addError('admin_filemanager_file_does_not_exist');
         }
         parent::setValue($file);
+    }
+
+    /**
+     * Validierung ist erfolgreich, wenn Opus_File mit ID existiert.
+     *
+     * Wenn die ID nicht existiert wird in setValue eine Application_Exception geworfen.
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    public function isValid($value) {
+        $this->setValue($value);
+        $file = $this->getValue();
+
+        if ($file instanceof Opus_File) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 }
