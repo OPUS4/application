@@ -52,7 +52,7 @@
         </delete>
     </target>
     
-    <target name="setup" depends="prepare-dependencies,prepare-config" />
+    <target name="setup" depends="prepare-dependencies,prepare-javascript,prepare-config" />
 
     <target name="prepare" depends="clean">
         <mkdir dir="${basedir}/build/logs" />
@@ -67,6 +67,11 @@
         <symlink link="${basedir}/library/Zend" resource="${libsdir}/ZendFramework/library/Zend" failonerror="false" />
         <symlink link="${basedir}/library/Apache" resource="${libsdir}/SolrPhpClient/Apache" failonerror="false" />
         <symlink link="${basedir}/library/jpgraph" resource="${libsdir}/jpgraph/src" failonerror="false" />
+    </target>
+
+    <target name="prepare-javascript">
+        <mkdir dir="${basedir}/public/js" />
+        <symlink link="${basedir}/public/js/jquery.js" resource="${libsdir}/jquery.js" failonerror="false" />
     </target>
 
     <target name="prepare-config" description="Prepares the configuration files">
