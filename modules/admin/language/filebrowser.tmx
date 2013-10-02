@@ -59,5 +59,14 @@
           </tuv>
         </tu>
 
+        <tu tuid="admin_filebrowser_cancel">
+            <tuv xml:lang="en">
+                <seg>Cancel</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Abbrechen</seg>
+            </tuv>
+        </tu>
+
     </body>
 </tmx>

@@ -43,7 +43,8 @@
 
     <div id="filelisting">
     <?php if (count($this->files) > 0) : ?>
-    <form action="<?= $this->url(array('module' => 'admin', 'controller' => 'filebrowser', 'action' => 'import'), null, true); ?>" method="POST">
+    <form action="<?= $this->url(array('module' => 'admin', 'controller' => 'filebrowser', 'action' => 'import'),
+        null, true); ?>" method="POST">
         <div>
             <table>
                 <tr>
@@ -62,10 +63,19 @@
             </table>
         </div>
         <input type="hidden" name="id" value="<?= $this->document->getId() ?>"/>
-        <input type="submit" value="<?= $this->translate('admin_filebrowser_submit') ?>" />
+        <input type="submit" id="save" value="<?= $this->translate('admin_filebrowser_submit') ?>" />
+        <input type="submit" id="Cancel" name="Cancel" value="<?= $this->translate('admin_filebrowser_cancel') ?>" />
     </form>
     <?php else : ?>
-        <?= $this->translate('admin_filebrowser_noFilesToSelect') ?>
+        <form action="<?= $this->url(array('module' => 'admin', 'controller' => 'filebrowser', 'action' => 'import'),
+            null, true); ?>" method="POST">
+            <?= $this->translate('admin_filebrowser_noFilesToSelect') ?>
+            <div>
+            <input type="hidden" name="id" value="<?= $this->document->getId() ?>"/>
+            <input type="submit" name="Cancel" id="Cancel"
+                   value="<?= $this->translate('admin_filebrowser_cancel') ?>" />
+            </div>
+        </form>
     <?php endif ?>
     </div>
 </div>

@@ -58,7 +58,8 @@ class Admin_FilebrowserController extends Controller_Action {
         }
 
         $this->_breadcrumbs->setDocumentBreadcrumb($document);
-        $this->_breadcrumbs->setParameters('admin_filemanager_index', array(self::PARAM_DOCUMENT_ID => $docId));
+        $this->_breadcrumbs->setParameters('admin_filemanager_index', array(self::PARAM_DOCUMENT_ID => $docId,
+            'continue' => true));
 
         $importHelper = new Admin_Model_FileImport();
         $this->view->files = $importHelper->listFiles();
@@ -77,6 +78,13 @@ class Admin_FilebrowserController extends Controller_Action {
         $docId = $this->getRequest()->getPost(self::PARAM_DOCUMENT_ID);
         if (is_null($docId)) {
             throw new Application_Exception('missing parameter docId');
+        }
+
+        $post = $this->getRequest()->getPost();
+
+        if (isset($post['Cancel'])) {
+            return $this->_redirectToAndExit('index', null, 'filemanager', 'admin',
+                array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true'));
         }
 
         $files = $this->getRequest()->getPost('file');
