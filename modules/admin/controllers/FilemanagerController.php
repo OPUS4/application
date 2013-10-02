@@ -183,13 +183,13 @@ class Admin_FilemanagerController extends Controller_Action {
                         }
                         catch (Opus_Model_Exception $e) {
                             $this->getLogger()->err("Storing document with new files failed" . $e);
-                            // TODO fix redirect
                             return $this->_redirectTo('index', array('failure' => 'error_uploaded_files'),
-                                'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId));
+                                'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId,
+                                'continue' => 'true'));
                         }
 
                         $this->_redirectTo('index', 'admin_filemanager_upload_success', 'filemanager', 'admin', array(
-                            self::PARAM_DOCUMENT_ID => $docId));
+                            self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true'));
                     }
                     else {
                         // Formular wieder anzeigen
