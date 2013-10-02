@@ -76,9 +76,15 @@ class Application_Form_Confirmation extends Application_Form_Abstract {
 
     /**
      * Klasse für Model.
-     * @var null
+     * @var string
      */
     private $modelClass = null;
+
+    /**
+     * Angepasster Anzeigename für Model;
+     * @var string
+     */
+    private $_modelDisplayName = null;
 
     /**
      * Konstruiert Formular.
@@ -204,9 +210,19 @@ class Application_Form_Confirmation extends Application_Form_Abstract {
      * @return string
      */
     public function getModelDisplayName() {
-        if (!is_null($this->model)) {
+        if (!is_null($this->_modelDisplayName)) {
+            return $this->_modelDisplayName;
+        }
+        else if (!is_null($this->model)) {
             return $this->model->getDisplayName();
         }
+        else {
+            return '';
+        }
+    }
+
+    public function setModelDisplayName($displayName) {
+        $this->_modelDisplayName = $displayName;
     }
 
     /**

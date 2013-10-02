@@ -117,7 +117,21 @@ class Application_Form_ConfirmationTest extends ControllerTestCase {
 
     public function testGetModelDisplayNameNoModel() {
         $form = new Application_Form_Confirmation('Opus_Licence');
-        $this->assertNull($form->getModelDisplayName());
+        $this->assertEquals('', $form->getModelDisplayName());
+    }
+
+    public function testSetGetModelDisplayName() {
+        $form = new Application_Form_Confirmation('Opus_Licence');
+        $form->setModel(new Opus_Licence(4));
+        $this->assertEquals('Creative Commons - Namensnennung', $form->getModelDisplayName());
+
+        $form->setModelDisplayName('custom display name');
+
+        $this->assertEquals('custom display name', $form->getModelDisplayName());
+
+        $form->setModelDisplayName(null);
+
+        $this->assertEquals('Creative Commons - Namensnennung', $form->getModelDisplayName());
     }
 
     public function testIsConfirmedYes() {
