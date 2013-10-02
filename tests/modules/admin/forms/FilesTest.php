@@ -37,6 +37,23 @@
  */
 class Admin_Form_FilesTest extends ControllerTestCase {
 
+    public function testConstructForm() {
+        $form = new Admin_Form_Files();
+
+        $this->assertEquals('admin_document_section_files', $form->getLegend());
+        $this->assertNotNull($form->getDecorator('FieldsetWithButtons'));
+
+        $this->assertEquals(2, count($form->getElements()));
+        $this->assertNotNull($form->getElement('Add'));
+        $this->assertNotNull($form->getElement('Import'));
+
+        $this->assertEmpty($form->getElement('Import')->getDecorators());
+
+        $decorator = $form->getDecorator('FieldsetWithButtons');
+
+        $this->assertEquals(array('Import', 'Add'), $decorator->getLegendButtons());
+    }
+
     public function testProcessPostAdd() {
         $form = new Admin_Form_Files();
 
@@ -79,6 +96,105 @@ class Admin_Form_FilesTest extends ControllerTestCase {
                 'fileId' => '5555'
             )
         ), $result);
+    }
+
+    public function testProcessPostImport() {
+        $form = new Admin_Form_Files();
+
+        $post = array(
+            'Import' => 'Import'
+        );
+
+        $result = $form->processPost($post, null);
+
+        $this->assertEquals(array(
+            'result' => 'switch',
+            'target' => array(
+                'module' => 'admin',
+                'controller' => 'filebrowser',
+                'action' => 'index'
+            )
+        ), $result);
+    }
+
+    public function testContinueEdit() {
+        $form = new Admin_Form_Files();
+
+        $document = new Opus_Document(91);
+
+        $form->populateFromModel($document);
+
+        $this->assertEquals(4, count($form->getSubForms()));
+
+        $form->continueEdit($this->getRequest(), null);
+    }
+
+    public function testContinueEditRemoveSubForm() {
+        $form = new Admin_Form_Files();
+
+        $document = new Opus_Document(91);
+
+        $form->populateFromModel($document);
+
+        $this->assertEquals(4, count($form->getSubForms()));
+
+        $request = $this->getRequest();
+        $request->setParam('fileId', 116);
+
+        $post = null;
+
+        $form->continueEdit($request, $post);
+
+        $this->assertEquals(3, count($form->getSubForms()));
+    }
+
+    public function testContinueEditRemoveSubFormAndUpdate() {
+        $form = new Admin_Form_Files();
+
+        $document = new Opus_Document(91);
+
+        $form->populateFromModel($document);
+
+        $this->assertEquals(4, count($form->getSubForms()));
+
+        $request = $this->getRequest();
+        $request->setParam('fileId', 116);
+
+        $this->assertEmpty($form->getSubForm('File1')->getElementValue('Comment'));
+
+        $post = array(
+            'File0' => array(
+                'Id' => '116'
+            ),
+            'File1' => array(
+                'Id' => '127',
+                'Comment' => 'Testkommentar'
+            )
+        );
+
+        $form->continueEdit($request, $post);
+
+        $this->assertEquals(3, count($form->getSubForms()));
+
+        $this->assertEquals($form->getSubForm('File0')->getElementValue('Id'), '127');
+        $this->assertEquals($form->getSubForm('File0')->getElementValue('Comment'), 'Testkommentar');
+    }
+
+    public function testGetSubFormForId() {
+        $form = new Admin_Form_Files();
+
+        $document = new Opus_Document(91);
+
+        $form->populateFromModel($document);
+
+        $this->assertEquals(4, count($form->getSubForms()));
+
+        $subform = $form->getSubFormForId(116);
+
+        $this->assertEquals('File0', $subform->getName());
+        $this->assertEquals(116, $subform->getElementValue('Id'));
+
+        $this->assertNull($form->getSubFormForId(5555));
     }
 
 }

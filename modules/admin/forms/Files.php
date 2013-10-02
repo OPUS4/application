@@ -113,16 +113,25 @@ class Admin_Form_Files extends Admin_Form_DocumentMultiSubForm {
     public function continueEdit($request, $post = null) {
         $removedFileId = $request->getParam('fileId'); // TODO make robuster
 
-        foreach ($post as $file) {
-            $fileId = $file['Id'];
-            $subform = $this->getSubFormForId($fileId);
+        if (is_array($post)) {
+            foreach ($post as $file) {
+                $fileId = $file['Id'];
+                $subform = $this->getSubFormForId($fileId);
+                if (!is_null($subform)) {
+                    if ($fileId != $removedFileId) {
+                        $subform->populate($file);
+                    }
+                    else {
+                        $this->removeSubForm($subform->getName());
+                    }
+                }
+            }
+        }
+        else {
+            $subform = $this->getSubFormForId($removedFileId);
+
             if (!is_null($subform)) {
-                if ($fileId !== $removedFileId) {
-                    $subform->populate($file);
-                }
-                else {
-                    $this->removeSubForm($subform->getName());
-                }
+                $this->removeSubForm($subform->getName());
             }
         }
     }
@@ -137,57 +146,3 @@ class Admin_Form_Files extends Admin_Form_DocumentMultiSubForm {
     }
 
 }
-
-/*
-     /**
-     * Action for deleting a file.
-     *
-     * The action redirects the request to a confirmation form bevor actually
-     * deleting the file.
-     *
-     * TODO catch invalid file IDs
-     *
-public function deleteAction() {
-    $docId = $this->getRequest()->getParam('docId');
-    $fileId = $this->getRequest()->getParam('fileId');
-
-    $documentsHelper = $this->_helper->getHelper('Documents');
-
-    $document = $documentsHelper->getDocumentForId($docId);
-
-    if (!isset($document)) {
-        return $this->_redirectToAndExit('index', array('failure' =>
-        $this->view->translate('admin_document_error_novalidid')), 'documents', 'admin');
-    }
-
-    if (!$this->_isValidFileId($fileId)) {
-        return $this->_redirectToAndExit('index', array('failure' =>
-        $this->view->translate('admin_filemanager_error_novalidid')), 'filemanager', 'admin', array('docId' => $docId));
-    }
-
-    if (!$this->_isFileBelongsToDocument($docId, $fileId)) {
-        return $this->_redirectToAndExit('index', array('failure' =>
-        $this->view->translate('admin_filemanager_error_filenotlinkedtodoc')), 'filemanager', 'admin', array('docId' => $docId));
-    }
-
-    switch ($this->_confirm($document, $fileId)) {
-        case 'YES':
-            try {
-                $this->_deleteFile($docId, $fileId);
-                $message = $this->view->translate('admin_filemanager_delete_success');
-            }
-            catch (Opus_Model_Exception $e) {
-                $this->_logger->debug($e->getMessage());
-                $message = array('failure' => $this->view->translate('admin_filemanager_delete_failure'));
-            }
-
-            $this->_redirectTo('index', $message, 'filemanager', 'admin', array('docId' => $docId));
-            break;
-        case 'NO':
-            $this->_redirectTo('index', null, 'filemanager', 'admin', array('docId' => $docId));
-            break;
-        default:
-            break;
-    }
-}
-*/
