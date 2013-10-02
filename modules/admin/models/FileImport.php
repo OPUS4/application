@@ -34,6 +34,8 @@
 
 /**
  * Model for importing files from a specific folder.
+ *
+ * TODO umbenennen für allgemeinen Dateisupport
  */
 class Admin_Model_FileImport extends Application_Model_Abstract {
 
@@ -112,6 +114,76 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
 
     public function getImportFolder() {
         return $this->__importFolder;
+    }
+
+    /**
+     * Deletes a single file from a document.
+     * @param type $docId
+     * @param type $fileId
+     * @return type
+     */
+    public function deleteFile($docId, $fileId) {
+        $doc = new Opus_Document($docId);
+
+        $keepFiles = array();
+
+        $files = $doc->getFile();
+
+        foreach($files as $index => $file) {
+            if ($file->getId() !== $fileId) {
+                $keepFiles[] = $file;
+            }
+        }
+
+        $doc->setFile($keepFiles);
+
+        $doc->store();
+    }
+
+    /**
+     * Checks if a file id is formally correct and file exists.
+     * @param string $fileId
+     * @return boolean True if file ID is valid
+     */
+    public function isValidFileId($fileId) {
+        if (empty($fileId) || !is_numeric($fileId)) {
+            return false;
+        }
+
+        $file = null;
+
+        try {
+            $file = new Opus_File($fileId);
+        }
+        catch (Opus_Model_NotFoundException $omnfe) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Checks if a file ID is linked to a document.
+     * @param int $docId
+     * @param int $fileId
+     * @return boolean True - if the file is linked to the document
+     */
+    public function isFileBelongsToDocument($docId, $fileId) {
+        if (empty($fileId) || !is_numeric($fileId)) {
+            return false;
+        }
+
+        $doc = new Opus_Document($docId);
+
+        $files = $doc->getFile();
+
+        foreach ($files as $file) {
+            if ($file->getId() == $fileId) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
 }
