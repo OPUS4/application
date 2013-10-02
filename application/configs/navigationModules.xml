@@ -74,6 +74,13 @@
                                             <controller>filemanager</controller>
                                             <action>upload</action>
                                         </upload>
+                                        <delete>
+                                            <type>mvc</type>
+                                            <label>admin_filemanager_delete</label>
+                                            <module>admin</module>
+                                            <controller>filemanager</controller>
+                                            <action>delete</action>
+                                        </delete>
                                         <filebrowser>
                                             <type>mvc</type>
                                             <label>admin_filebrowser_index</label>

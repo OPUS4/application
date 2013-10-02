@@ -76,6 +76,28 @@ class Admin_Form_Files extends Admin_Form_DocumentMultiSubForm {
         return $result;
     }
 
+    protected function processPostRemove($subFormName, $subdata) {
+        if (isset($subdata[Admin_Form_File::ELEMENT_ID])) {
+            $fileId = $subdata[Admin_Form_File::ELEMENT_ID];
+        }
+        else {
+            // no fileId specified (manipulated POST)
+            // TODO error message
+            return Admin_Form_Document::RESULT_SHOW;
+        }
+
+        // Hinzufuegen wurde ausgewaehlt
+        return array(
+            'result' => Admin_Form_Document::RESULT_SWITCH_TO,
+            'target' => array(
+                'module' => 'admin',
+                'controller' => 'filemanager',
+                'action' => 'delete',
+                'fileId' => $fileId
+            )
+        );
+    }
+
     protected function processPostAdd() {
         // Hinzufuegen wurde ausgewaehlt
         return array(
@@ -88,12 +110,19 @@ class Admin_Form_Files extends Admin_Form_DocumentMultiSubForm {
         );
     }
 
-    public function updateFromPost($post) {
+    public function continueEdit($request, $post = null) {
+        $removedFileId = $request->getParam('fileId'); // TODO make robuster
+
         foreach ($post as $file) {
             $fileId = $file['Id'];
             $subform = $this->getSubFormForId($fileId);
             if (!is_null($subform)) {
-                $subform->populate($post);
+                if ($fileId !== $removedFileId) {
+                    $subform->populate($file);
+                }
+                else {
+                    $this->removeSubForm($subform->getName());
+                }
             }
         }
     }
@@ -161,66 +190,4 @@ public function deleteAction() {
             break;
     }
 }
-
-/**
- * Deletes a single file from a document.
- * @param type $docId
- * @param type $fileId
- * @return type
- *
-protected function _deleteFile($docId, $fileId) {
-    $doc = new Opus_Document($docId);
-    $keepFiles = array();
-    $files = $doc->getFile();
-    foreach($files as $index => $file) {
-        if ($file->getId() !== $fileId) {
-            $keepFiles[] = $file;
-        }
-    }
-    $doc->setFile($keepFiles);
-    $doc->store();
-}
-
-/**
- * Checks if a file id is formally correct and file exists.
- * @param string $fileId
- * @return boolean True if file ID is valid
- *
-protected function _isValidFileId($fileId) {
-    if (empty($fileId) || !is_numeric($fileId)) {
-        return false;
-    }
-
-    $file = null;
-
-    try {
-        $file = new Opus_File($fileId);
-    }
-    catch (Opus_Model_NotFoundException $omnfe) {
-        return false;
-    }
-
-    return true;
-}
-
-/**
- * Checks if a file ID is linked to a document.
- * @param int $docId
- * @param int $fileId
- * @return boolean True - if the file is linked to the document
- *
-protected function _isFileBelongsToDocument($docId, $fileId) {
-    $doc = new Opus_Document($docId);
-
-    $files = $doc->getFile();
-
-    foreach ($files as $file) {
-        if ($file->getId() === $fileId) {
-            return true;
-        }
-    }
-
-    return false;
-}
-
- */
+*/

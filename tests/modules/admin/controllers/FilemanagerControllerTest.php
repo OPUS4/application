@@ -179,5 +179,44 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertNotQuery('//div#FileManager-Files-File0-FileLink-element//ul[@class="errors"]');
     }
 
+    public function testDeleteActionBadDocIdErrorMessage() {
+        $this->dispatch('/admin/filemanager/delete/id/9999/fileId/125');
+
+        $this->verifyFlashMessage('admin_document_error_novalidid');
+    }
+
+    public function testDeleteActionSyntaxInvalidDocIdErrorMessage() {
+        $this->dispatch('/admin/filemanager/delete/id/foo/fileId/125');
+
+        $this->verifyFlashMessage('admin_document_error_novalidid');
+    }
+
+    public function testDeleteActionBadFileIdErrorMessage() {
+        $this->dispatch('/admin/filemanager/delete/id/124/fileId/400');
+
+        $this->verifyFlashMessage('admin_filemanager_error_novalidid');
+    }
+
+    public function testDeleteActionSyntaxInvalidFileIdErrorMessage() {
+        $this->dispatch('/admin/filemanager/delete/id/124/fileId/foo');
+
+        $this->verifyFlashMessage('admin_filemanager_error_novalidid');
+    }
+
+    public function testDeleteActionFileDoesNotBelongToDocErrorMessage() {
+        $this->dispatch('/admin/filemanager/delete/id/146/fileId/125');
+
+        $this->verifyFlashMessage('admin_filemanager_error_filenotlinkedtodoc');
+    }
+
+    public function testDeleteAction() {
+        $this->dispatch('/admin/filemanager/delete/id/91/fileId/116');
+
+        $this->validateXHTML();
+        $this->verifyBreadcrumbDefined();
+        $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/document/index/id/91"]',
+            'This is a pdf test document (91)');
+    }
+
 }
 

@@ -39,12 +39,13 @@
  * TODO Import über /admin/filebrowser/index/id/[docId] - admin-filemanager-import-link
  * TODO erlaubte Dateitypen
  * TODO nach Datei hinzufügen editierte Werte im Formular wieder herstellen
- * TODO Breadcrumbs (Document Title usw.)
  * TODO redundanter Code mit DocumentController
  */
 class Admin_FilemanagerController extends Controller_Action {
 
     const PARAM_DOCUMENT_ID = 'id';
+
+    const PARAM_FILE_ID = 'fileId';
 
     /**
      * Zeigt Upload-Formular und Formulare fuer Dateien an.
@@ -132,8 +133,7 @@ class Admin_FilemanagerController extends Controller_Action {
                 $post = $editSession->retrievePost('files');
 
                 if ($this->getRequest()->getParam('continue') && !is_null($post)) {
-                    $form->updateFromPost($post);
-
+                    $form->continueEdit($this->getRequest(), $post);
                 }
             }
         }
@@ -184,8 +184,8 @@ class Admin_FilemanagerController extends Controller_Action {
                         catch (Opus_Model_Exception $e) {
                             $this->getLogger()->err("Storing document with new files failed" . $e);
                             // TODO fix redirect
-                            $this->_redirectTo('index', array('failure' => 'error_uploaded_files'), 'filemanager',
-                                'admin', array(self::PARAM_DOCUMENT_ID => $docId));
+                            return $this->_redirectTo('index', array('failure' => 'error_uploaded_files'),
+                                'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId));
                         }
 
                         $this->_redirectTo('index', 'admin_filemanager_upload_success', 'filemanager', 'admin', array(
@@ -218,6 +218,74 @@ class Admin_FilemanagerController extends Controller_Action {
                 return $this->_redirectTo('index', array('failure' => 'admin_document_error_novalidid'),
                     'documents', 'admin');
             }
+        }
+
+        $this->_breadcrumbs->setDocumentBreadcrumb($document);
+        $this->_breadcrumbs->setParameters('admin_filemanager_index', array(self::PARAM_DOCUMENT_ID => $docId));
+
+        $this->renderForm($form);
+    }
+
+    public function deleteAction() {
+        $request = $this->getRequest();
+
+        $docId = $this->getRequest()->getParam(self::PARAM_DOCUMENT_ID);
+        $document = $this->getHelper('documents')->getDocumentForId($docId);
+
+        if (!isset($document)) {
+            // missing or bad parameter => go back to main page
+            return $this->_redirectTo('index', array('failure' => 'admin_document_error_novalidid'),
+                'documents', 'admin');
+        }
+
+        $fileId = $this->getRequest()->getParam(self::PARAM_FILE_ID);
+
+        $fileHelper = new Admin_Model_FileImport();
+
+        if (!$fileHelper->isValidFileId($fileId)) {
+            return $this->_redirectTo('index', array('failure' => 'admin_filemanager_error_novalidid'),
+                'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId));
+        }
+
+        if (!$fileHelper->isFileBelongsToDocument($docId, $fileId)) {
+            return $this->_redirectTo('index', array('failure' => 'admin_filemanager_error_filenotlinkedtodoc'),
+                'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId));
+        }
+
+        $form = new Application_Form_Confirmation('Opus_File');
+
+        if ($request->isPost()) {
+            $post = $request->getPost();
+
+            if ($form->isConfirmed($post)) {
+                // Delete file
+                $fileId = $form->getModelId();
+
+                try {
+                    $fileHelper->deleteFile($docId, $fileId);
+                }
+                catch (Opus_Model_Exception $ome) {
+                    $this->getLogger()->err(__METHOD__ . ' Error deleting file. (' . $ome->getMessage . ')');
+                    return $this->_redirectTo('index', array('failure' => 'admin_filemanager_delete_failure'),
+                        'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true'));
+                }
+
+                return $this->_redirectTo('index', 'admin_filemanager_delete_success', 'filemanager', 'admin',
+                    array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true', self::PARAM_FILE_ID => $fileId));
+            }
+            else {
+                // Delete cancelled
+                return $this->_redirectTo('index', null, 'filemanager', 'admin',
+                    array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true'));
+            }
+        }
+        else {
+            // Show confirmation page
+            $file = new Opus_File($fileId);
+
+            $form->setModel($file);
+            $form->setModelDisplayName($file->getPathName());
+
         }
 
         $this->_breadcrumbs->setDocumentBreadcrumb($document);

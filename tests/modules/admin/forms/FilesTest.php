@@ -57,9 +57,28 @@ class Admin_Form_FilesTest extends ControllerTestCase {
     }
 
     public function testProcessPostRemove() {
-        $this->markTestIncomplete('not implemented yet');
-
         $form = new Admin_Form_Files();
+
+        $form->appendSubForm();
+
+        $post = array(
+            'File0' => array(
+                'Id' => '5555',
+                'Remove' => 'Entfernen'
+            )
+        );
+
+        $result = $form->processPost($post, null);
+
+        $this->assertEquals(array(
+            'result' => 'switch',
+            'target' => array(
+                'module' => 'admin',
+                'controller' => 'filemanager',
+                'action' => 'delete',
+                'fileId' => '5555'
+            )
+        ), $result);
     }
 
 }

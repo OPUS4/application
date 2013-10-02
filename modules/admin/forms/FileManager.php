@@ -102,8 +102,8 @@ class Admin_Form_FileManager extends Application_Form_Model_Abstract {
         $this->getSubForm(self::SUBFORM_FILES)->constructFromPost($post[self::SUBFORM_FILES]);
     }
 
-    public function updateFromPost($post) {
-        $this->getSubForm(self::SUBFORM_FILES)->updateFromPost($post[self::SUBFORM_FILES]);
+    public function continueEdit($request, $post) {
+        $this->getSubForm(self::SUBFORM_FILES)->continueEdit($request, $post[self::SUBFORM_FILES]);
     }
 
     static public function getInstanceFromPost($post, $document) {
@@ -119,6 +119,5 @@ class Admin_Form_FileManager extends Application_Form_Model_Abstract {
     public function getMessage() {
         return $this->message;
     }
-
 
 }

@@ -227,12 +227,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
                 $subform = $this->getSubForm($subFormName);
                 if (!is_null($subform)) {
                     if (array_key_exists(self::ELEMENT_REMOVE, $subdata)) {
-                        // TODO separate function for getting position?
-                        $position = $this->_removeSubForm($subFormName);
-
-                        $this->_addAnker($this->determineSubFormForAnker($position));
-                        
-                        return Admin_Form_Document::RESULT_SHOW;
+                        return $this->processPostRemove($subFormName, $subdata);
                     }
                     else {
                         $result = $subform->processPost($subdata, $context);
@@ -251,6 +246,15 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
         }
         
         return null;
+    }
+
+    protected function processPostRemove($subFormName, $subdata) {
+        // TODO separate function for getting position?
+        $position = $this->_removeSubForm($subFormName);
+
+        $this->_addAnker($this->determineSubFormForAnker($position));
+
+        return Admin_Form_Document::RESULT_SHOW;
     }
     
     protected function processPostAdd() {
