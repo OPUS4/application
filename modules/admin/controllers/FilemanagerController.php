@@ -36,9 +36,6 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  *
- * TODO Import über /admin/filebrowser/index/id/[docId] - admin-filemanager-import-link
- * TODO erlaubte Dateitypen
- * TODO nach Datei hinzufügen editierte Werte im Formular wieder herstellen
  * TODO redundanter Code mit DocumentController
  */
 class Admin_FilemanagerController extends Controller_Action {
@@ -148,6 +145,9 @@ class Admin_FilemanagerController extends Controller_Action {
 
         $this->view->languageSelectorDisabled = true;
         $this->view->contentWrapperDisabled = true; // wrapper wird innerhalb des Formulars gerendert
+
+        $form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager',
+            'action' => 'index', self::PARAM_DOCUMENT_ID => $document->getId()), null, true));
 
         $this->renderForm($form);
     }

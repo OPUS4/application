@@ -218,5 +218,12 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
             'This is a pdf test document (91)');
     }
 
+    public function testResetFormAction() {
+        $this->dispatch('/admin/filemanager/index/id/91/continue/1');
+
+        $this->assertNotQuery('//form[@action="/admin/filemanager/index/id/91/continue/1"]');
+        $this->assertQuery('//form[@action="/admin/filemanager/index/id/91"]');
+    }
+
 }
 
