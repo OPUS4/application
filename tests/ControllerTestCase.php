@@ -124,6 +124,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
     /**
      * Method to check response for "bad" strings.
+     *
+     * TODO mache $body optional (als zweiten Parameter) - hole aktuallen Body automatisch
+     * TODO erlaube einfachen String als $badStrings Parameter
      */
     protected function checkForCustomBadStringsInHtml($body, array $badStrings) {
         $bodyLowerCase = strtolower($body);
@@ -136,6 +139,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
     /**
      * Method to check response for "bad" strings.
+     *
+     * TODO mache $body optional
      */
     protected function checkForBadStringsInHtml($body) {
         $badStrings = array("Exception", "Error", "Fehler", "Stacktrace", "badVerb");
