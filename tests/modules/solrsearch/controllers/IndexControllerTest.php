@@ -989,4 +989,12 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         return $element->firstChild->textContent;
     }
     
+    /**
+     * Regression Test for OPUSVIER-3131
+     */
+    public function testInvalidSearchRequestPageTitle() {
+        $this->dispatch('/solrsearch/index/invalidsearchterm/searchtype/simple');
+        $this->assertNotContains('solrsearch_title_invalidsearchterm', $this->getResponse()->getBody());
+    }
+    
 }
