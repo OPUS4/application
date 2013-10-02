@@ -78,7 +78,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase {
             . $this->documentId . '"]',
             'Kein Titel angegeben für Dokument ID (i ... (' . $this->documentId . ')');
         $this->assertQueryContentContains('//div.breadcrumbsContainer//a[@href="/admin/filemanager/index/id/'
-            . $this->documentId . '"]',
+            . $this->documentId . '/continue/1"]',
             'Dateien');
     }
     
