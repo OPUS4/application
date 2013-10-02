@@ -58,4 +58,30 @@ class Admin_Form_FileManagerTest extends ControllerTestCase {
         $this->assertEquals('FileManager', $form->getName());
     }
 
+    public function testUpdateModel() {
+        $this->markTestIncomplete('not tested');
+    }
+
+    public function testProcessPost() {
+        $this->markTestIncomplete('not tested');
+    }
+
+    public function testConstructFromPost() {
+        $this->markTestIncomplete('not tested');
+    }
+
+    public function testContinueEdit() {
+        $this->markTestIncomplete('not tested');
+    }
+
+    public function testSetGetMessage() {
+        $form = new Admin_Form_FileManager();
+
+        $this->assertNull($form->getMessage());
+
+        $form->setMessage('Test');
+
+        $this->assertEquals('Test', $form->getMessage());
+    }
+
 }
