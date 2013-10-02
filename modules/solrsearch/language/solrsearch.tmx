@@ -400,6 +400,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="solrsearch_title_invalidsearchterm">
+            <tuv xml:lang="en">
+                <seg>Invalid Search Request</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Ungültige Suchanfrage</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="solrsearch_advancedsearch_field_author">
             <tuv xml:lang="en">
                 <seg>Author(s)</seg>
