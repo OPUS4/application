@@ -78,7 +78,9 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
         $this->addElement('Language', self::ELEMENT_LANGUAGE, array('label' => 'Language', 'required' => true));
         $this->addElement('text', self::ELEMENT_LABEL);
         $this->addElement('textarea', self::ELEMENT_COMMENT);
-        $this->addElement('hash', self::ELEMENT_HASH, array('salt' => 'unique'));
+        $hash = $this->createElement('hash', self::ELEMENT_HASH, array('salt' => 'unique'));
+        $hash->addDecorator('HtmlTag', array('tag' => 'div'));
+        $this->addElement($hash);
 
         $this->getElement(self::ELEMENT_MODEL_ID)->setRequired(true);
     }
