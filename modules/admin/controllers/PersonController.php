@@ -66,8 +66,7 @@ class Admin_PersonController extends Controller_Action {
         $document = $this->__documentsHelper->getDocumentForId($docId);
         
         if (!isset($document)) {
-            return $this->_redirectTo('index', array('failure' =>
-                $this->view->translate('admin_document_error_novalidid')),
+            return $this->_redirectTo('index', array('failure' => 'admin_document_error_novalidid'),
                     'documents', 'admin');
         }
         
@@ -153,8 +152,7 @@ class Admin_PersonController extends Controller_Action {
         $document = $this->__documentsHelper->getDocumentForId($docId);
         
         if (!isset($document)) {
-            return $this->_redirectTo('index', array('failure' =>
-                $this->view->translate('admin_document_error_novalidid')),
+            return $this->_redirectTo('index', array('failure' => 'admin_document_error_novalidid'),
                     'documents', 'admin');
         }
  
@@ -164,8 +162,13 @@ class Admin_PersonController extends Controller_Action {
             // Formular anzeigen
             $personId = $this->getRequest()->getParam('personId');
             
-            if (is_null($personId)) {
-                // TODO error log
+            if (strlen(trim($personId)) == 0 || is_null($personId)) {
+                $this->getLogger()->err(__METHOD__ . ' No personId parameter.');
+                return $this->returnToMetadataForm($docId);
+            }
+
+            if (!is_numeric($personId)) {
+                $this->getLogger()->err(__METHOD__ . " Bad personId = '$personId' parameter.");
                 return $this->returnToMetadataForm($docId);
             }
             
@@ -173,9 +176,11 @@ class Admin_PersonController extends Controller_Action {
                 $person = new Opus_Person($personId);
             }
             catch (Opus_Model_NotFoundException $omnfe) {
-                // TODO error log
+                $this->getLogger()->err(__METHOD__ . ' ' . $omnfe->getMessage());
                 return $this->returnToMetadataForm($docId);
             }
+
+
             
             $form->populateFromModel($person);
 
@@ -200,7 +205,7 @@ class Admin_PersonController extends Controller_Action {
                             ));
                     }
                     else {
-                        // TODO Validierungsfehlernachricht für Formular anzeigen
+                        // TODO Validierungsfehlernachricht für Formular anzeigen (notwendig?)
                     }
                     break;
                 case Admin_Form_Person::RESULT_CANCEL:
@@ -223,7 +228,8 @@ class Admin_PersonController extends Controller_Action {
     }
     
     public function returnToMetadataForm($docId, $action = null) {
-        return $this->_redirectToAndExit('edit', null, 'document', 'admin', array('id' => $docId));
+        return $this->_redirectToAndExit('edit', null, 'document', 'admin', array('id' => $docId,
+            'continue' => 'true'));
     }
         
 }
