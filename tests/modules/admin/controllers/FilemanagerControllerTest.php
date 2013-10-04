@@ -29,6 +29,8 @@
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
+ *
+ * TODO einiges durch Selenium abgedeckt; Unit Tests vielleicht möglich
  */
 
 class Admin_FilemanagerControllerTest extends ControllerTestCase {
