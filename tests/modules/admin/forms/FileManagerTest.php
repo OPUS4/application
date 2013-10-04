@@ -59,19 +59,82 @@ class Admin_Form_FileManagerTest extends ControllerTestCase {
     }
 
     public function testUpdateModel() {
-        $this->markTestIncomplete('not tested');
+        $this->markTestIncomplete('Use Mocking Framework to make sure subform function is called.');
     }
 
     public function testProcessPost() {
-        $this->markTestIncomplete('not tested');
+        $form = new Admin_Form_FileManager();
+
+        $this->assertNull($form->processPost(array(), null));
+
+        $this->assertNull($form->processPost(array(
+            'Files' => array(
+                'File0' => array(
+                    'Id' => 5555
+                )
+            )
+        ), null));
+
+        $post = array(
+            'Files' => array(
+                'File0' => array(
+                    'Id' => 5555,
+                    'Remove' => 'Entfernen'
+                )
+            ));
+
+        $form->constructFromPost($post, null);
+
+        $this->assertEquals(array(
+            'result' => 'switch',
+            'target' => array(
+                'module' => 'admin',
+                'controller' => 'filemanager',
+                'action' => 'delete',
+                'fileId' => '5555'
+            )
+        ), $form->processPost($post, null));
+
+        // alles weitere wird in den Unterformularen getestet
+    }
+
+    public function testConstructFromPostEmptyAndNoDocument() {
+        $form = new Admin_Form_FileManager();
+
+        $form->constructFromPost(array(), null);
+
+        $this->assertEquals(0, count($form->getSubForm('Files')->getSubForms()));
     }
 
     public function testConstructFromPost() {
-        $this->markTestIncomplete('not tested');
+        $document = new Opus_Document(146);
+
+        $post = array(
+            'Files' => array(
+                'File0' => array(
+                    'Id' => 126
+                ),
+                'File1' => array(
+                    'Id' => 116
+                )
+            )
+        );
+
+        $form = new Admin_Form_FileManager();
+
+        $form->constructFromPost($post, $document);
+
+        $this->assertInstanceOf('Admin_Form_FileManager', $form);
+        $this->assertEquals(2, count($form->getSubForm('Files')->getSubForms()));
+
+        $fileForm = $form->getSubForm('Files')->getSubForm('File0');
+
+        $this->assertNotNull($fileForm);
+        $this->assertNull($fileForm->getElementValue('Id')); // Formular noch nicht befüllt
     }
 
     public function testContinueEdit() {
-        $this->markTestIncomplete('not tested');
+        $this->markTestIncomplete('Use Mocking Framework to make sure subform function is called.');
     }
 
     public function testSetGetMessage() {
@@ -82,6 +145,28 @@ class Admin_Form_FileManagerTest extends ControllerTestCase {
         $form->setMessage('Test');
 
         $this->assertEquals('Test', $form->getMessage());
+    }
+
+    public function testGetInstanceFromPost() {
+        $document = new Opus_Document(146);
+
+        $post = array(
+            'Files' => array(
+                'File0' => array(
+                    'Id' => 126
+                )
+            )
+        );
+
+        $form = Admin_Form_FileManager::getInstanceFromPost($post, $document);
+
+        $this->assertInstanceOf('Admin_Form_FileManager', $form);
+        $this->assertEquals(1, count($form->getSubForm('Files')->getSubForms()));
+
+        $fileForm = $form->getSubForm('Files')->getSubForm('File0');
+
+        $this->assertNotNull($fileForm);
+        $this->assertNull($fileForm->getElementValue('Id')); // Formular noch nicht befüllt
     }
 
 }
