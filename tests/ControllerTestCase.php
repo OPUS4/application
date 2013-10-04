@@ -463,4 +463,17 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         Zend_Debug::dump($this->getResponse()->getBody());
     }
 
+    public function removeDocument($documentId) {
+        if (!is_null($documentId)) {
+            try {
+                $document = new Opus_Document($documentId);
+
+                $document->deletePermanent();
+            }
+            catch (Opus_Model_NotFoundException $omnfe) {
+                // Model nicht gefunden -> alles gut (hoffentlich)
+            }
+        }
+    }
+
 }

@@ -33,13 +33,119 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Admin_Form_File_UploadTest extends ControllerTestCase {
+
+    private $documentId;
+
+    public function tearDown() {
+        $this->removeDocument($this->documentId);
+
+        parent::tearDown();
+    }
 
     public function testCreateForm() {
         $form = new Admin_Form_File_Upload();
-        $this->assertNotNull($form);
+
+        $elements = array('Id', 'File', 'Label', 'Comment', 'Language', 'Save', 'Cancel', 'OpusHash');
+
+        $this->assertEquals(count($elements), count($form->getElements()));
+
+        foreach ($elements as $element) {
+            $this->assertNotNull($form->getElement($element), "Element '$element' is missing.'");
+        }
+
+        $this->assertEquals(1, count($form->getSubForms()));
+        $this->assertNotNull($form->getSubForm('Info'));
+
+        $this->assertEquals('admin_filemanager_upload', $form->getLegend());
     }
+
+    public function testPopulateFromModel() {
+        $document = new Opus_Document(146);
+
+        $form = new Admin_Form_File_Upload();
+
+        $form->populateFromModel($document);
+
+        $this->assertEquals(146, $form->getElementValue('Id'));
+
+        $infoForm = $form->getSubForm('Info');
+
+        $this->assertEquals($document, $infoForm->getDocument());
+    }
+
+    public function testValidation() {
+        $form = new Admin_Form_File_Upload();
+
+        $post = array();
+
+        $result = $form->isValid($post);
+
+        $this->assertFalse($result);
+
+        $this->assertContains('isEmpty', $form->getErrors('Id'));
+        $this->assertContains('isEmpty', $form->getErrors('Language'));
+        $this->assertContains('notInArray', $form->getErrors('Language'));
+        $this->assertContains('missingToken', $form->getErrors('OpusHash'));
+    }
+
+    public function testUpdateModel() {
+        $form = new Admin_Form_File_Upload();
+
+        $form->getElement('Label')->setValue('Testlabel');
+        $form->getElement('Comment')->setValue('Testkommentar');
+        $form->getElement('Language')->setValue('rus');
+
+        $document = new Opus_Document();
+
+        $fileInfo = array(
+            array(
+                'name' => 'test%202.txt',
+                'type' => 'text/plain',
+                'tmp_name' => 'test'
+            )
+        );
+
+        $form->setFileInfo($fileInfo);
+        $form->updateModel($document);
+
+        $files = $document->getFile();
+
+        $this->assertEquals(1, count($files));
+
+        $file = $files[0];
+
+        $this->assertEquals('Testlabel', $file->getLabel());
+        $this->assertEquals('Testkommentar', $file->getComment());
+        $this->assertEquals('rus', $file->getLanguage());
+        $this->assertEquals('test 2.txt', $file->getPathName()); // urldecode
+        $this->assertEquals('text/plain', $file->getMimeType());
+        $this->assertEquals('test', $file->getTempFile());
+    }
+
+    public function testGetFileInfo() {
+        $form = new Admin_Form_File_Upload();
+
+        $fileInfo = $form->getFileInfo();
+
+        $this->assertInternalType('array', $fileInfo);
+        $this->assertEquals(0, count($fileInfo));
+    }
+
+    public function testSetGetFileInfo() {
+        $form = new Admin_Form_File_Upload();
+
+        // entspricht nicht der richtige Struktur, reicht aber für Test
+        $fileInfo = array(
+            array('file')
+        );
+
+        $form->setFileInfo($fileInfo);
+
+        $this->assertEquals($fileInfo, $form->getFileInfo());
+    }
+
+
 
 }
 

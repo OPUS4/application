@@ -48,6 +48,7 @@
  */
 class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
 
+    const ELEMENT_HASH      = 'OpusHash';
     const ELEMENT_FILE      = 'File';
     const ELEMENT_LABEL     = 'Label';
     const ELEMENT_COMMENT   = 'Comment';
@@ -63,7 +64,7 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
         $this->addSubForm(new Admin_Form_InfoBox(), self::SUBFORM_DOCINFO);
 
         $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
-        $this->setLegend('Upload File'); // TODO translate
+        $this->setLegend('admin_filemanager_upload');
         $this->setLabelPrefix('Opus_File_');
         $this->setUseNameAsLabel(true);
 
@@ -77,6 +78,9 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
         $this->addElement('Language', self::ELEMENT_LANGUAGE, array('label' => 'Language', 'required' => true));
         $this->addElement('text', self::ELEMENT_LABEL);
         $this->addElement('textarea', self::ELEMENT_COMMENT);
+        $this->addElement('hash', self::ELEMENT_HASH, array('salt' => 'unique'));
+
+        $this->getElement(self::ELEMENT_MODEL_ID)->setRequired(true);
     }
 
     public function populateFromModel($document) {
@@ -91,8 +95,6 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
      */
     public function updateModel($document) {
         $files = $this->getFileInfo();
-
-        // TODO verify only one file
 
         foreach ($files as $file) {
             /* TODO: Uncaught exception 'Zend_File_Transfer_Exception' with message '"fileupload" not found by file transfer adapter
