@@ -152,6 +152,8 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         $file->setComment($this->getElementValue(self::ELEMENT_COMMENT));
 
         $visibility = $this->getElementValue(self::ELEMENT_VISIBILITY);
+        $visibility = (is_array($visibility)) ? $visibility : array($visibility);
+
         $file->setVisibleInFrontdoor(in_array('frontdoor', $visibility));
         $file->setVisibleInOai(in_array('oai', $visibility));
 
@@ -204,27 +206,41 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
     }
 
     public function updateFileRoles($file, $selectedRoles) {
-        $currentRoleNames = $this->getRolesForFile($file->getId());
+        $selectedRoles = (is_array($selectedRoles)) ? $selectedRoles : array($selectedRoles);
+
+        $fileId = $file->getId();
+
+        $currentRoleNames = $this->getRolesForFile($fileId);
 
         // remove roles that are not selected
         foreach ($currentRoleNames as $index => $roleName) {
             if (!in_array($roleName, $selectedRoles)) {
                 $role = Opus_UserRole::fetchByName($roleName);
-                $role->removeAccessFile($file->getId());
+                $role->removeAccessFile($fileId);
                 $role->store();
+                $this->getLogger()->debug("File ID = $fileId access for role '$roleName' removed.");
             }
+        }
+
+        if (count($selectedRoles) == 1 && is_null($selectedRoles[0])) {
+            return;
         }
 
         // add selected roles
         foreach ($selectedRoles as $roleName) {
             $role = Opus_UserRole::fetchByName($roleName);
-            if (!in_array($roleName, $currentRoleNames)) {
-                $this->getLogger()->debug('File access for role ' . $roleName . ' added.');
-                $role->appendAccessFile($file->getId());
-                $role->store();
+            if (!is_null($role)) {
+                if (!in_array($roleName, $currentRoleNames)) {
+                    $role->appendAccessFile($fileId);
+                    $role->store();
+                    $this->getLogger()->debug("File ID = $fileId access for role '$roleName' added.");
+                }
+                else {
+                    $this->getLogger()->debug("File ID = $fileId access for role '$roleName' already permitted.");
+                }
             }
             else {
-                $this->getLogger()->debug('File access for role ' . $roleName . ' already permitted.');
+                $this->getLogger()->err(__METHOD__ . " Unknown role '$roleName'.'");
             }
         }
 

@@ -33,6 +33,23 @@
  */
 class Admin_Form_FileTest extends ControllerTestCase {
 
+    private $documentId = null;
+
+    public function tearDown() {
+        if (!is_null($this->documentId)) {
+            try {
+                $document = new Opus_Document($this->documentId);
+
+                $document->deletePermanent();
+            }
+            catch (Opus_Model_NotFoundException $omnfe) {
+                // Model nicht gefunden -> alles gut (hoffentlich)
+            }
+        }
+
+        parent::tearDown();
+    }
+
     public function testConstructForm() {
         $form = new Admin_Form_File();
 
@@ -88,7 +105,6 @@ class Admin_Form_FileTest extends ControllerTestCase {
     }
 
     public function testUpdateModel() {
-        $this->markTestIncomplete('funktioniert noch nicht und ist nicht fertig');
         $form = new Admin_Form_File();
 
         $form->getElement('Language')->setValue('fra');
@@ -97,36 +113,90 @@ class Admin_Form_FileTest extends ControllerTestCase {
         $form->getElement('VisibleIn')->setValue(array('frontdoor', 'oai'));
         $form->getElement('Roles')->setValue(array('reviewer', 'docsadmin'));
 
-        $file = new Opus_File();
+        $document = new Opus_Document();
+
+        $file = $document->addFile();
+        $file->setPathName('test.pdf');
+
+        $this->documentId = $document->store();
 
         $form->updateModel($file);
 
         $this->assertEquals('fra', $file->getLanguage());
         $this->assertEquals('Testlabel', $file->getLabel());
         $this->assertEquals('Testkommentar', $file->getComment());
-        $this->assertEquals(1, $file->getVisibleInFrontdoor());
-        $this->assertEquals(1, $file->getVisibleInOai());
+        $this->assertTrue($file->getVisibleInFrontdoor());
+        $this->assertTrue($file->getVisibleInOai());
 
+        $roles = $form->getRolesForFile($file->getId());
 
+        $this->assertEquals(2, count($roles));
+        $this->assertContains('reviewer', $roles);
+        $this->assertContains('docsadmin', $roles);
+
+        $form->getElement('VisibleIn')->setValue(array('oai'));
+        $form->getElement('Roles')->setValue(array('reviewer', 'guest'));
+
+        $form->updateModel($file);
+
+        $this->assertFalse($file->getVisibleInFrontdoor());
+        $this->assertTrue($file->getVisibleInOai());
+
+        $roles = $form->getRolesForFile($file->getId());
+
+        $this->assertEquals(2, count($roles));
+        $this->assertContains('reviewer', $roles);
+        $this->assertContains('guest', $roles);
     }
 
-    public function testUpdateModelNoRoles() {
-        // TODO
+    public function testUpdateModelSingleValues() {
+        $form = new Admin_Form_File();
+
+        $form->getElement('VisibleIn')->setValue('frontdoor');
+        $form->getElement('Roles')->setValue('reviewer');
+
+        $document = new Opus_Document();
+
+        $file = $document->addFile();
+        $file->setPathName('test.pdf');
+
+        $this->documentId = $document->store();
+
+        $form->updateModel($file);
+
+        $this->assertTrue($file->getVisibleInFrontdoor());
+        $this->assertFalse($file->getVisibleInOai());
+
+        $roles = $form->getRolesForFile($file->getId());
+
+        $this->assertInternalType('array', $roles);
+        $this->assertEquals(1, count($roles));
+        $this->assertContains('reviewer', $roles);
     }
 
     public function testGetModel() {
-        $this->markTestIncomplete('does not work yet and is not complete');
-
         $form = new Admin_Form_File();
 
         $form->getElement('Id')->setValue(126); // Datei 'test.pdf' von Dokument 146
+
+        $file = new Opus_File(126);
+
+        $form->populateFromModel($file);
+
+        $form->getElement('Comment')->setValue('Testkommentar');
 
         $model = $form->getModel();
 
         $this->assertInstanceOf('Opus_File', $model);
         $this->assertEquals(126, $model->getId());
+        $this->assertEquals('Testkommentar', $model->getComment());
 
-        // TODO more checks
+        $roles = $form->getRolesForFile($model->getId());
+
+        $this->assertEquals(3, count($roles));
+        $this->assertContains('administrator', $roles);
+        $this->assertContains('guest', $roles);
+        $this->assertContains('reviewer', $roles);
     }
 
     /**
@@ -186,8 +256,109 @@ class Admin_Form_FileTest extends ControllerTestCase {
         $this->assertTrue($result);
     }
 
+    /**
+     * @expectedException Application_Exception
+     * @expectedExceptionMessage File with ID = 5555 not found.
+     */
     public function testValidationUnknownFileLink() {
-        $this->markTestIncomplete('not implemented');
+        $form = new Admin_Form_File();
+
+        $post = array(
+            'FileLink' => '5555',
+            'Language' => 'eng'
+        );
+
+        $result = $form->isValid($post);
+    }
+
+    public function testUpdateFileRoles() {
+        $form = new Admin_Form_File();
+
+        $logger = new MockLogger();
+
+        $form->setLogger($logger);
+
+        $document = new Opus_Document();
+
+        $file = $document->addFile();
+        $file->setPathName('test.pdf');
+
+        $this->documentId = $document->store();
+
+        $form->updateFileRoles($file, array('administrator', 'reviewer'));
+
+        $fileId = $file->getId();
+
+        $messages = $logger->getMessages();
+
+        $this->assertEquals(2, count($messages));
+        $this->assertContains("File ID = $fileId access for role 'administrator' added.", $messages[0]);
+        $this->assertContains("File ID = $fileId access for role 'reviewer' added.", $messages[1]);
+
+        $roles = $form->getRolesForFile($fileId);
+
+        $this->assertEquals(2, count($roles));
+        $this->assertContains('administrator', $roles);
+        $this->assertContains('reviewer', $roles);
+
+        $logger->clear();
+
+        $form->updateFileRoles($file, array('guest', 'reviewer'));
+
+        $messages = $logger->getMessages();
+
+        $this->assertEquals(3, count($messages));
+        $this->assertContains("File ID = $fileId access for role 'administrator' removed.", $messages[0]);
+        $this->assertContains("File ID = $fileId access for role 'guest' added.", $messages[1]);
+        $this->assertContains("File ID = $fileId access for role 'reviewer' already permitted.", $messages[2]);
+
+        $roles = $form->getRolesForFile($fileId);
+
+        $this->assertEquals(2, count($roles));
+        $this->assertContains('guest', $roles);
+        $this->assertContains('reviewer', $roles);
+
+        $logger->clear();
+
+        $form->updateFileRoles($file, 'docsadmin');
+
+        $messages = $logger->getMessages();
+
+        $this->assertEquals(3, count($messages));
+        $this->assertContains("File ID = $fileId access for role 'guest' removed.", $messages[0]);
+        $this->assertContains("File ID = $fileId access for role 'reviewer' removed.", $messages[1]);
+        $this->assertContains("File ID = $fileId access for role 'docsadmin' added.", $messages[2]);
+
+        $roles = $form->getRolesForFile($fileId);
+
+        $this->assertEquals(1, count($roles));
+        $this->assertContains('docsadmin', $roles);
+
+        $logger->clear();
+
+        $form->updateFileRoles($file, null);
+
+        $messages = $logger->getMessages();
+
+        $this->assertEquals(1, count($messages));
+        $this->assertContains("File ID = $fileId access for role 'docsadmin' removed.", $messages[0]);
+
+        $roles = $form->getRolesForFile($fileId);
+
+        $this->assertEquals(0, count($roles));
+
+        $logger->clear();
+
+        $form->updateFileRoles($file, 'unknownrole');
+
+        $messages = $logger->getMessages();
+
+        $this->assertEquals(1, count($messages));
+        $this->assertContains("Unknown role 'unknownrole'.", $messages[0]);
+
+        $roles = $form->getRolesForFile($fileId);
+
+        $this->assertEquals(0, count($roles));
     }
 
 }
