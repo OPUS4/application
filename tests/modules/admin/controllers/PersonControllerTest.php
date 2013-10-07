@@ -33,6 +33,14 @@
  */
 class PersonControllerTest extends ControllerTestCase {
 
+    private $documentId;
+
+    public function tearDown() {
+        $this->removeDocument($this->documentId);
+
+        parent::tearDown();
+    }
+
     public function testAssignAction() {
         $this->dispatch('/admin/person/assign/document/146');
 
@@ -65,6 +73,47 @@ class PersonControllerTest extends ControllerTestCase {
 
         $this->assertNotXpath('//option[@value="author" and @selected="selected"]');
         $this->assertXpath('//option[@value="translator" and @selected="selected"]');
+    }
+
+    public function testAssignActionCancel() {
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'Cancel' => 'Abbrechen'
+        ));
+
+        $this->dispatch('/admin/person/assign/document/146/role/advisor');
+        $this->assertRedirectTo('/admin/document/edit/id/146/continue/addperson');
+    }
+
+    public function testAssignActionAddPerson() {
+        $document = new Opus_Document();
+
+        $this->documentId = $document->store();
+
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'LastName' => 'Testy-AssignAction',
+            'Document' => array(
+                'Role' => 'translator'
+            ),
+            'Save' => 'Speichern'
+        ));
+
+        $this->dispatch('/admin/person/assign/document/' . $this->documentId . '/role/translator');
+
+        $location = $this->getLocation();
+
+        $this->assertTrue(strpos($location, '/admin/document/edit/id/'
+            . $this->documentId . '/continue/addperson') === 0);
+
+
+        $matches = array();
+        preg_match('/person\/(\d+)\//', $location, $matches);
+        $personId = $matches[1];
+
+        $person = new Opus_Person($personId);
+
+        $this->assertEquals('Testy-AssignAction', $person->getLastName());
+
+        $person->delete();
     }
 
     public function testEditlinkedAction() {
@@ -100,6 +149,11 @@ class PersonControllerTest extends ControllerTestCase {
         $this->assertRedirectTo('/admin/document/edit/id/146/continue/true');
     }
 
+    public function testEditlinkedActionUnknownPersonId() {
+        $this->dispatch('/admin/person/editlinked/document/146/personId/7777');
+        $this->assertRedirectTo('/admin/document/edit/id/146/continue/true');
+    }
+
     public function testEditlinkedActionBadPersonId() {
         $this->dispatch('/admin/person/editlinked/document/146/personId/bad');
         $this->assertRedirectTo('/admin/document/edit/id/146/continue/true');
@@ -110,5 +164,49 @@ class PersonControllerTest extends ControllerTestCase {
         $this->dispatch('/admin/person/editlinked/document/146/personId/253');
         $this->assertRedirectTo('/admin/document/edit/id/146/continue/true');
     }
+
+    public function testEditlinkedActionCancel() {
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'Cancel' => 'Abbrechen'
+        ));
+
+        $this->dispatch('/admin/person/editlinked/document/146/personId/259');
+        $this->assertRedirectTo('/admin/document/edit/id/146/continue/true');
+    }
+
+    public function testEditlinkedActionSave() {
+        $document = new Opus_Document();
+
+        $person = new Opus_Person();
+        $person->setLastName('Testy-EditlinkedAction');
+
+        $person = $document->addPersonTranslator($person);
+
+        $this->documentId = $document->store();
+
+        $personId = $person->getModel()->getId();
+
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'PersonId' => $personId,
+            'LastName' => 'Testy',
+            'FirstName' => 'Simone',
+            'Document' => array(
+                'Role' => 'translator'
+            ),
+            'Save' => 'Speichern'
+        ));
+
+        $this->dispatch('/admin/person/editlinked/personId/' . $personId . '/role/translator/document/'
+            . $this->documentId);
+
+        $this->assertRedirectTo('/admin/document/edit/id/' . $this->documentId
+            . '/continue/updateperson/person/' . $personId);
+
+        $person = new Opus_Person($personId);
+
+        $this->assertEquals('Testy', $person->getLastName());
+        $this->assertEquals('Simone', $person->getFirstName());
+    }
+
 
 }
