@@ -16,4 +16,4 @@ If you are unsure what to fill in certain form fields, you can point the cursor 
 After you have finished the form, all data will be displayed once again for a check-up and you then have three possibilities: you can correct them if necessary, add your document to a 
 collection or simply safe it directly.<br><br/>
 <b>Note:</b><br/>
-In oder to publish your work cookies has to be enabled for the web browser.
+In oder to publish your work cookies have to be enabled in your web browser.
