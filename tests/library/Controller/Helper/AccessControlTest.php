@@ -59,10 +59,36 @@ class Controller_Helper_AccessControlTest extends ControllerTestCase {
     public function testAccessAllowed() {
         $user = Zend_Auth::getInstance()->getIdentity();
         $this->assertEquals('', $user, "expected no user to be set (should use default 'guest' as default)");
+
         $allowedDocuments = $this->accessControl->accessAllowed('documents');
         $this->assertFalse($allowedDocuments, "expected access denied to resource 'documents'");
+
         $allowedAccount = $this->accessControl->accessAllowed('accounts');
         $this->assertTrue($allowedAccount, "expected access allowed to module 'account'");
     }
-    
+
+    /**
+     * @expectedException Application_Exception
+     * @expectedExceptionMessage #1 argument must not be empty|null
+     */
+    public function testAccessAllowedForEmptyResource() {
+        $this->accessControl->accessAllowed('  ');
+    }
+
+    /**
+     * @expectedException Application_Exception
+     * @expectedExceptionMessage #1 argument must not be empty|null
+     */
+    public function testAccessAllowedForNullResource() {
+        $this->accessControl->accessAllowed(null);
+    }
+
+    /**
+     * @expectedException Zend_Acl_Exception
+     * @expectedExceptionMessage Resource 'unknown' not found
+     */
+    public function testAccessAllowedForUnknownResource() {
+        $this->assertFalse($this->accessControl->accessAllowed('unknown'));
+    }
+
 }
