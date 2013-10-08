@@ -91,9 +91,9 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
     }
 
     public function testGetFileObjectAccessAllowedForUserWithAccessToDocumentsResource() {
-        $this->markTestSkipped('Funktioniert noch nicht, da beim Login die ACLs (für Nutzer) schon geladen sind.');
         $this->loginUser('security8', 'security8pwd');
         $file = new Frontdoor_Model_File(92, self::FILENAME);
+        $file->setAclHelper(new MockAccessControl(true));
         $realm = new MockRealm(false, false); // sollte egal sein
         $opusFile = $file->getFileObject($realm);
         $this->assertTrue($opusFile instanceof Opus_File);
@@ -198,37 +198,31 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
         $realm = 'this is an invalid realm object';
         $opusFile = $file->getFileObject($realm);
     }
+
+    public function testGetAclHelper() {
+        $file = new Frontdoor_Model_File(92, self::FILENAME);
+
+        $helper = $file->getAclHelper();
+
+        $this->assertNotNull($helper);
+        $this->assertInstanceOf('Controller_Helper_AccessControl', $helper);
+    }
+
+    public function testSetAclHelper() {
+        $file = new Frontdoor_Model_File(92, self::FILENAME);
+
+        $mock = new MockAccessControl();
+
+        $file->setAclHelper($mock);
+
+        $this->assertEquals($mock, $file->getAclHelper());
+
+        $file->setAclHelper(null);
+
+        $helper = $file->getAclHelper();
+
+        $this->assertNotNull($helper);
+        $this->assertInstanceOf('Controller_Helper_AccessControl', $helper);
+    }
+
 }
-
-class MockRealm implements Opus_Security_IRealm {
-
-    private $fileAllowed;
-    private $docAllowed;
-
-    public function  __construct($fileAllowed, $docAllowed) {
-        $this->fileAllowed = $fileAllowed;
-        $this->docAllowed = $docAllowed;
-    }
-
-    public function checkDocument($document_id = null) {
-        return $this->docAllowed;
-    }
-
-    public function checkFile($file_id = null) {
-        return $this->fileAllowed;
-    }
-
-    public function checkModule($module_name = null) {
-        return true;
-    }
-
-    public function getRoles() {
-        return array('guest');
-    }
-
-    public function setUser($username){}
-    public function setIp($ipaddress){}
-    public function check($privilege, $documentServerState = null, $fileId = null){}
-    
-}
-

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,40 +25,16 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Controller_Helper
+ * @package     Application_Security
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Controller Helper für Access Control Nachfragen.
- */
-class Controller_Helper_AccessControl extends Zend_Controller_Action_Helper_Abstract
-    implements Application_Security_AccessControl {
-    
-    public function direct($resource) {
-        return $this->accessAllowed($resource);
-    }
-    
-    public function accessAllowed($resource) {
-        $acl = $this->getAcl();
-        
-        if (!is_null($resource) && !is_null($acl)) {
-            return $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, $resource);
-        }
-        else {
-            return true;
-        }
-    }
-    
-    /**
-     * Returns the Zend_Acl object or null.
-     * @return Zend_Acl
-     */
-    protected function getAcl() {
-        return Zend_Registry::isRegistered('Opus_Acl') ? Zend_Registry::get('Opus_Acl') : null;
-    }
-    
+
+interface Application_Security_AccessControl {
+
+    public function accessAllowed($resource);
+
 }

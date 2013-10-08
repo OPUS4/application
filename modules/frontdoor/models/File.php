@@ -53,7 +53,6 @@ class Frontdoor_Model_File {
         }
         $this->docId = $docId;
         $this->filename = $filename;
-        $this->accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
     }
 
     public function getFileObject($realm) {
@@ -81,7 +80,7 @@ class Frontdoor_Model_File {
                 default:
                     // Dateien dürfen bei Nutzer mit Zugriff auf "documents" heruntergeladen werden
                     
-                    if (!$this->accessControl->accessAllowed('documents') || !($realm instanceof Opus_Security_Realm)) {
+                    if (!$this->getAclHelper()->accessAllowed('documents') || !($realm instanceof Opus_Security_Realm)) {
                         throw new Frontdoor_Model_DocumentAccessNotAllowedException();
                     }
                     break;
@@ -104,7 +103,7 @@ class Frontdoor_Model_File {
         if (!($realm instanceof Opus_Security_IRealm)) {
             return false;
         }
-        return $realm->checkDocument($docId) || $this->accessControl->accessAllowed('documents');
+        return $realm->checkDocument($docId) || $this->getAclHelper()->accessAllowed('documents');
     }
 
     function isFileAccessAllowed($fileId, $realm) {
@@ -112,7 +111,25 @@ class Frontdoor_Model_File {
             return false;
         }
         
-        return $realm->checkFile($fileId) || $this->accessControl->accessAllowed('documents');
+        return $realm->checkFile($fileId) || $this->getAclHelper()->accessAllowed('documents');
+    }
+
+    public function getAclHelper() {
+        if (is_null($this->accessControl)) {
+            $this->accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        }
+
+        return $this->accessControl;
+    }
+
+    public function setAclHelper($helper) {
+        if ($helper instanceof Application_Security_AccessControl || is_null($helper)) {
+            $this->accessControl = $helper;
+        }
+        else {
+            throw new Application_Exception('#1 argument must be of type Application_Security_AccessControl (not \''
+                . get_class($helper) . '\')');
+        }
     }
       
 }
