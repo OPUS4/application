@@ -91,12 +91,21 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
     }
 
     public function testGetFileObjectAccessAllowedForUserWithAccessToDocumentsResource() {
-        $this->loginUser('security8', 'security8pwd');
         $file = new Frontdoor_Model_File(92, self::FILENAME);
         $file->setAclHelper(new MockAccessControl(true));
         $realm = new MockRealm(false, false); // sollte egal sein
         $opusFile = $file->getFileObject($realm);
         $this->assertTrue($opusFile instanceof Opus_File);
+    }
+
+    /**
+     * @expectedException Frontdoor_Model_FileAccessNotAllowedException
+     */
+    public function testGetFileObjectAccessNotAllowedForUser() {
+        $file = new Frontdoor_Model_File(92, self::FILENAME);
+        $file->setAclHelper(new MockAccessControl(false));
+        $realm = new MockRealm(false, false); // sollte egal sein
+        $opusFile = $file->getFileObject($realm);
     }
 
     /**
