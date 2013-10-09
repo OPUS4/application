@@ -326,7 +326,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                     "Output contains '$badNS', which indicates bad namespaces.");
         }
     }
-
+    
     /**
      * Regression test for OPUSVIER-2193
      */
@@ -809,6 +809,19 @@ class Oai_IndexControllerTest extends ControllerTestCase {
                 "Response must contain '<record>'");
     }
 
+    /**
+     * Regression Test for OPUSVIER-3142
+     */
+    public function testListRecordsXMetaDissPlusDocumentsWithFilesOnly() {
+
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus');
+
+        $responseBody = $this->getResponse()->getBody();
+
+        $this->assertNotContains('<ddb:fileNumber>0</ddb:fileNumber>', $responseBody,
+        "Response must not contain records without files");
+    }
+    
     /**
      * Test that proves the bugfix for OPUSVIER-1710 is working as intended.
      */
