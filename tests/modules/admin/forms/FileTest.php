@@ -283,7 +283,7 @@ class Admin_Form_FileTest extends ControllerTestCase {
         $file = $document->addFile();
         $file->setPathName('test.pdf');
 
-        $this->documentId = $document->store();
+        $this->documentId = $document->store(); // setzt automatisch 'guest' Zugriff für Datei
 
         $form->updateFileRoles($file, array('administrator', 'reviewer'));
 
@@ -291,9 +291,12 @@ class Admin_Form_FileTest extends ControllerTestCase {
 
         $messages = $logger->getMessages();
 
-        $this->assertEquals(2, count($messages));
-        $this->assertContains("File ID = $fileId access for role 'administrator' added.", $messages[0]);
-        $this->assertContains("File ID = $fileId access for role 'reviewer' added.", $messages[1]);
+        Zend_Debug::dump($messages);
+
+        $this->assertEquals(3, count($messages));
+        $this->assertContains("File ID = $fileId access for role 'guest' removed.", $messages[0]);
+        $this->assertContains("File ID = $fileId access for role 'administrator' added.", $messages[1]);
+        $this->assertContains("File ID = $fileId access for role 'reviewer' added.", $messages[2]);
 
         $roles = $form->getRolesForFile($fileId);
 
