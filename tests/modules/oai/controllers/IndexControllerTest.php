@@ -1150,7 +1150,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $body = $this->getResponse()->getBody();
         $this->assertContains('<ddb:fileNumber>2</ddb:fileNumber>', $body);
         $this->assertContains('<ddb:fileNumber>1</ddb:fileNumber>', $body);
-        $this->assertContains('<ddb:fileNumber>0</ddb:fileNumber>', $body);
+        // docs without files are not longer output; see OPUSVIER-3142
+//        $this->assertContains('<ddb:fileNumber>0</ddb:fileNumber>', $body);
         $this->assertNotContains('<ddb:fileNumber>3</ddb:fileNumber>', $body);
 
         // TODO host name and instance name are empty in test environment (OPUSVIER-2511)
@@ -1168,6 +1169,13 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc = new Opus_Document();
         $doc->setServerState('published');
         $doc->addCollection($collection);
+        
+        // fixing test for OPUSVIER-3142
+        $visibleFile = new Opus_File();
+        $visibleFile->setPathName('visible_file.txt');
+        $visibleFile->setVisibleInOai(true);
+        $doc->addFile($visibleFile);
+        
         $this->docIds[] = $doc->store();
 
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus&set=ddc:000');       
@@ -1187,6 +1195,13 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc->setServerState('published');
         $doc->setType('doctoralthesis'); // xMetaDiss liefert nur Doktorarbeiten und Habilitationen aus
         $doc->addCollection($collection);
+        
+        // fixing test for OPUSVIER-3142
+        $visibleFile = new Opus_File();
+        $visibleFile->setPathName('visible_file.txt');
+        $visibleFile->setVisibleInOai(true);
+        $doc->addFile($visibleFile);
+        
         $this->docIds[] = $doc->store();
 
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDiss&set=ddc:000');       
