@@ -35,6 +35,13 @@
 
 class Admin_FilemanagerControllerTest extends ControllerTestCase {
 
+    private $documentId;
+
+    public function tearDown() {
+        $this->removeDocument($this->documentId);
+        parent::tearDown();
+    }
+
     /**
      * Basic unit test checks that error controller is not called.
      */
@@ -225,6 +232,43 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
 
         $this->assertNotQuery('//form[@action="/admin/filemanager/index/id/91/continue/1"]');
         $this->assertQuery('//form[@action="/admin/filemanager/index/id/91"]');
+    }
+
+    public function testRemoveGuestAccess() {
+        $document = new Opus_Document();
+        $file = $document->addFile();
+        $file->setPathName('testdatei.txt');
+        $this->documentId = $document->store();
+
+        $document = new Opus_Document($this->documentId);
+
+        $fileId = $document->getFile(0)->getId();
+
+        $roleGuest = Opus_UserRole::fetchByName('guest');
+        $files = $roleGuest->listAccessFiles();
+        $this->assertContains($fileId, $files);
+
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'FileManager' => array(
+                'Files' => array(
+                    'File0' => array(
+                        'Id' => $fileId,
+                        'FileLink' => $fileId,
+                        'Language' => 'deu',
+                        'Comment' => 'Testkommentar',
+                        'Roles' => array('administrator')
+                    )
+                ),
+                'Save' => 'Speichern'
+            )
+        ));
+
+        $this->dispatch('/admin/filemanager/index/id/' . $this->documentId);
+        $this->assertRedirectTo('/admin/document/index/id/' . $this->documentId);
+
+        $roleGuest = Opus_UserRole::fetchByName('guest');
+        $files = $roleGuest->listAccessFiles();
+        $this->assertNotContains($fileId, $files);
     }
 
 }
