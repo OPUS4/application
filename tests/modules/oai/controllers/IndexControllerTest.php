@@ -813,11 +813,19 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      * Regression Test for OPUSVIER-3142
      */
     public function testListRecordsXMetaDissPlusDocumentsWithFilesOnly() {
-
+        
+        Zend_Registry::get('Zend_Config')->merge(
+                new Zend_Config(array(
+                    'oai' => array(
+                        'max' => array(
+                            'listrecords' => 100,
+                            'listidentifiers' => 200,
+                        )
+                    ))));
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=xMetaDissPlus');
 
         $responseBody = $this->getResponse()->getBody();
-
+        
         $this->assertNotContains('<ddb:fileNumber>0</ddb:fileNumber>', $responseBody,
         "Response must not contain records without files");
     }
