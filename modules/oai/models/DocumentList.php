@@ -63,6 +63,10 @@ class Oai_Model_DocumentList {
         $finder->setServerStateInList($this->_deliveringDocumentStates);
 
         $metadataPrefix = $oaiRequest['metadataPrefix'];
+        if ('xMetaDissPlus' === $metadataPrefix 
+            || 'xMetaDiss' === $metadataPrefix) {
+            $finder->setFilesVisibleInOai();
+        }
         if ('xMetaDiss' === $metadataPrefix) {
             $finder->setTypeInList($this->_xMetaDissRestriction);
         }
