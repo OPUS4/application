@@ -291,8 +291,6 @@ class Admin_Form_FileTest extends ControllerTestCase {
 
         $messages = $logger->getMessages();
 
-        Zend_Debug::dump($messages);
-
         $this->assertEquals(3, count($messages));
         $this->assertContains("File ID = $fileId access for role 'guest' removed.", $messages[0]);
         $this->assertContains("File ID = $fileId access for role 'administrator' added.", $messages[1]);
