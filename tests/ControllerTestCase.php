@@ -159,6 +159,11 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $auth = Zend_Auth::getInstance();
         $result = $auth->authenticate($adapter);
         $this->assertTrue($auth->hasIdentity());
+        /*
+        $config = Zend_Registry::get('Zend_Config');
+        if ($config->security) {
+            Application_Security_AclProvider::init();
+        }*/
     }
 
     public function logoutUser() {
@@ -463,12 +468,12 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         Zend_Debug::dump($this->getResponse()->getBody());
     }
 
-    public function removeDocument($documentId) {
-        if (!is_null($documentId)) {
+    public function removeDocument($document) {
+        if (!is_null($document)) {
             try {
-                $document = new Opus_Document($documentId);
+                $doc = ($document instanceof Opus_Document) ? $document : new Opus_Document($document);
 
-                $document->deletePermanent();
+                $doc->deletePermanent();
             }
             catch (Opus_Model_NotFoundException $omnfe) {
                 // Model nicht gefunden -> alles gut (hoffentlich)

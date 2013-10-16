@@ -40,6 +40,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     * @var Opus_Document
     */
    protected $_document = null;
+   protected $_document_col = null;
    protected $_security_backup = null;
 
    /**
@@ -71,6 +72,18 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $config = Zend_Registry::get('Zend_Config');
       $this->_security_backup = $config->security;
       $config->security = '1';
+
+      // create collection test document
+      $this->_document_col = new Opus_Document();
+      $this->_document_col->addCollection(new Opus_Collection(40)); // invisible collection
+      $this->_document_col->addCollection(new Opus_Collection(16214)); // visible collection with invisible collection role
+      $this->_document_col->addCollection(new Opus_Collection(1031)); // visible collection with visible collection role
+
+      // collection role ID = 10 (sichbar)
+      $this->_document_col->addCollection(new Opus_Collection(16136)); // versteckte Collection (Role = 10)
+      $this->_document_col->addCollection(new Opus_Collection(15991)); // sichbare Collection (Role = 10);
+      $this->_document_col->setServerState('published');
+      $this->_document_col->store();
    }
 
    protected function tearDown() {
@@ -79,9 +92,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $config->security = $this->_security_backup;
       Zend_Registry::set('Zend_Config', $config);
 
-      if ($this->_document instanceof Opus_Document) {
-         $this->_document->deletePermanent();
-      }
+      $this->removeDocument($this->_document);
+      $this->removeDocument($this->_document_col);
       parent::tearDown();
    }
 
@@ -444,11 +456,13 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
    /**
     * Regression test for OPUSVIER-1951
+    *
+    * TODO ausbauen und aktivieren
     */
    public function testDisplayAllDocumentFields() {
 
        $this->markTestSkipped('Postponed due to encoding problem.');
-       
+
       $this->dispatch('/frontdoor/index/index/docId/146');
       $translate = Zend_Registry::getInstance()->get('Zend_Translate');
       
@@ -533,7 +547,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         
         $doc->deletePermanent();
         
-        $this->assertContains('<div class="abstract"><pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre></div>", $this->getResponse()->getBody());        
+        $this->assertContains('<div class="abstract"><pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre></div>",
+            $this->getResponse()->getBody());
     }
 
     public function testNotePerserveSpace() {
@@ -552,7 +567,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         
         $doc->deletePermanent();
         
-        $this->assertContains('<pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre>", $this->getResponse()->getBody());        
+        $this->assertContains('<pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre>",
+            $this->getResponse()->getBody());
     }
 
     /**
@@ -570,7 +586,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $role->setDisplayBrowsing($displayFrontdoor);
         $role->store();
 
-        $this->assertContains('</th><td>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines 52.00</td></tr>', $this->getResponse()->getBody());
+        $this->assertContains('</th><td>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines 52.00</td></tr>',
+            $this->getResponse()->getBody());
     }
 
     /**
@@ -606,7 +623,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $role->setDisplayBrowsing($displayFrontdoor);
         $role->store();        
 
-        $this->assertContains('</th><td>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</td></tr>', $this->getResponse()->getBody());
+        $this->assertContains('</th><td>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</td></tr>',
+            $this->getResponse()->getBody());
     }
 
     /**
@@ -627,11 +645,54 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('</th><td>52.00</td></tr>', $this->getResponse()->getBody());
     }
 
+    public function testCollectionDisplayed() {
+        $this->useEnglish();
+
+        $this->dispatch('/frontdoor/index/index/docId/' . $this->_document_col->getId());
+
+        // Sichtbare Collection mit sichtbarer CollectionRole wird angezeigt (Visible = 1, RoleVisibleFrontdoor = true)
+        $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'CCS-Classification:');
+        $this->assertQueryContentContains('td', 'B. Hardware');
+    }
+
+    public function testRegression3148InvisibleCollectionRoleNotDisplayed() {
+        $this->useEnglish();
+
+        $this->dispatch('/frontdoor/index/index/docId/' . $this->_document_col->getId());
+
+        // Unsichtbare CollectionRole (Visible = 0, RoleVisibleFrontdoor = false)
+        $this->assertNotQueryContentContains('table.result-data.frontdoordata th.name', 'invisible-collection:');
+    }
+
+    public function testRegression3148InvisibleCollectionNotDisplayed() {
+        $this->useEnglish();
+
+        $this->dispatch('/frontdoor/index/index/docId/' . $this->_document_col->getId());
+
+        // Unsichtbare Collection
+        $this->assertNotQueryContentContains('td', '28 Christliche Konfessionen');
+
+        // CollectionRole wird nicht angezeigt, da keine sichtbare Collection vorhanden ist
+        $this->assertNotQueryContentContains('table.result-data.frontdoordata th.name',
+            'Dewey Decimal Classification:');
+    }
+
+    public function testRegression3148DisplayCollectionRoleWithVisibleAndInvisibleCollections() {
+        $this->useEnglish();
+
+        $this->dispatch('/frontdoor/index/index/docId/' . $this->_document_col->getId());
+
+        // CollectionRole wird angezeigt
+        $this->assertQueryContentContains('table.result-data.frontdoordata th.name', 'series:');
+
+        $this->assertQueryContentContains('td', 'Schriftenreihe Schiffbau');
+        $this->assertNotQueryContentContains('td', 'Band 363');
+    }
+
     public function testServerDatePublishedOnFrontdoor() {
-        $this->setUpGerman();
+        $this->useGerman();
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertContains('<td>03.01.2012</td>', $this->getResponse()->getBody());
     }
 
-    
 }
