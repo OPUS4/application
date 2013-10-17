@@ -1,5 +1,181 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.4.1 2013-10-17 ========================
+
+h3. Bugs
+
+* [OPUSVIER-1542] - Administration-Tab im Menü ist nicht mehr aktiv, sofern eine Admin-Action ausgewählt wird
+* [OPUSVIER-1773] - fehlende Übersetzung der CollectionRoles bei Zuweisung über bzw. Anzeige in Dokument-Metadatenverwaltung
+* [OPUSVIER-1841] - Fehlermeldung bei der Anzeige des Geburtstages einer Person in der Metadatenverwaltung eines Dokuments
+* [OPUSVIER-1890] - Nach dem Hinzufügen eines Patentes wird das Feld YearApplied mit dem Wert '0000' angezeigt
+* [OPUSVIER-2163] - Sammlungsübersicht für ein Dokument zeigt CollectionRole-Verknüpfung nicht an, wenn gleichzeitig eine Verknüpfung für eine Collection der CollectionRole besteht
+* [OPUSVIER-2178] - Layout: unschöner Umbruch des Links "Einen neuen Sammlungseintrag hier einfügen"
+* [OPUSVIER-2318] - Typ (main, parent, ...) eines Titels kann nicht mehr geändert werden
+* [OPUSVIER-2575] - Breadcrumb-Leiste verschwindet nach dem Abschicken eines leeren Formulars beim Anelgen einer neuen Serie
+* [OPUSVIER-2814] - Nutzer mit Rechten zur Dokumentenverwaltung kann von nicht publizierten Dokumenten die Dateien nicht ansehen
+* [OPUSVIER-2838] - Dokumentsprache ändert sich nicht, wenn Sprache des Abstracts und / oder Titels geändert wird
+* [OPUSVIER-2971] - Fehlermeldung erscheint grün statt rot
+* [OPUSVIER-2972] - POST aus Session bei der Metadatenadministration für ein Dokument nur verwenden, wenn es tatsächlich einen Rücksprung z.B. aus der PersonForm gab
+* [OPUSVIER-2975] - Update Skript kommt mit Testdateien mit Spaces im Namen nicht klar
+* [OPUSVIER-2982] - Hinzufügen eines Institutes zu einem Dokument modifiziert ServerDateModified bei anderem Dokument
+* [OPUSVIER-2986] - OPUS4 Bayreuth: OAI Schnittstelle, XMetaDissPlus testen
+* [OPUSVIER-2987] - OPUS 4 Bamberg: Test OAI-Schnittstelle
+* [OPUSVIER-2998] - Funktion urlencode in modules/export/views/scripts/publist/default.xslt wird nicht im Controller registriert
+* [OPUSVIER-2999] - Dateiausgabe ist auf PDF beschränkt in modules/export/views/scripts/publist/default.xslt
+* [OPUSVIER-3010] - Navigation im Formular für "Sammlungseintrag hinzufügen" fehlerhaft
+* [OPUSVIER-3036] - Aufruf der Lizenz-Seite auf dem Testserver produziert Fehlermeldung
+* [OPUSVIER-3037] - Person mit SortOrder = Anzahl der vorhandenen Personen landet an letzter Stelle beim Hinzufügen
+* [OPUSVIER-3044] - Schreibfehler in DDC-Klassifikation 620
+* [OPUSVIER-3046] - Metadaten-Formular erlaubt keine alphanumerischen Werte für PageFirst, -Last, und -Number
+* [OPUSVIER-3050] - Zend Framework Version 1.12.3 fehlt im Release-Tarball
+* [OPUSVIER-3054] - CollectionRole ohne Root-Collection auf Assign-Collection Seite nicht anzeigen
+* [OPUSVIER-3055] - Start Page für Collection Assignment verwendet sichtbarkeit von Root-Collection und nicht der Collection Role
+* [OPUSVIER-3106] - Fehler beim Hinzufügen von neuen Unterformularen in Metadaten-Verwaltung
+* [OPUSVIER-3107] - Beim Entfernen eines Unterformulars wird ODD/EVEN nicht aktualisiert
+* [OPUSVIER-3109] - Breadcrumbs für CollectionRoles Formular werden nicht richtig angezeigt
+* [OPUSVIER-3118] - Fehlerhafte Anzeige des Status eines Dokuments in der ActionBox für die Frontdoor
+* [OPUSVIER-3120] - Speichern von Dokument 122 schlägt fehl
+* [OPUSVIER-3126] - Fix aktuell gebrochene Server Unit Tests
+* [OPUSVIER-3131] - fehlender Übersetzungsschlüssel solrsearch_title_invalidsearchterm
+* [OPUSVIER-3142] - Über XMetaDissPlus nur Dokumente mit Volltexten ausliefern
+* [OPUSVIER-3143] - Zugriffsrecht "guest" für eine Datei kann nicht entfernt werden
+* [OPUSVIER-3145] - Bug beim Speichern geänderter Felder in Opus_Collection
+
+h3. Feature Request
+
+* [OPUSVIER-1818] - Anzeige einer Warnmeldung im Filemanager, wenn Hash-Ist und Hash-Soll nicht übereinstimmen
+
+h3. Aufgaben
+
+* [OPUSVIER-1742] - XML-Cache rauswerfen oder wieder aktivieren
+* [OPUSVIER-3007] - OAI-Schnittstelle - Anforderungen der DNB umsetzen
+* [OPUSVIER-2663] - Möglichkeit schaffen aufwendigeren Debug Code zu überspringen
+* [OPUSVIER-2771] - Links für Dokumentenverwaltung direkt in Frontdoor
+* [OPUSVIER-2774] - Bestätigungsseite für Statusänderungen optional machen
+* [OPUSVIER-2863] - Ausgabe der Revision Nummer im Seitenfooter: Anpassung der Doku nach Veränderung des Verhaltens
+* [OPUSVIER-2884] - Hinweis zur Verwendung von Cookies in FAQ und Hilfeseiten einbauen
+* [OPUSVIER-2911] - Funktion zur Validierung von XHTML zu ControllerTestCase hinzufügen
+* [OPUSVIER-2988] - View Scripte für "configuration" entfernen
+* [OPUSVIER-2989] - Ungenutzte View Scripte für PersonController entfernen
+* [OPUSVIER-3001] - Metadaten-Übersicht um Liste von Dateien ergänzen
+* [OPUSVIER-3003] - Alle Option für die "Documents" Anzeige in der Administration in Session speichern
+* [OPUSVIER-3005] - Textarea Felder so in der Übersicht rendern, daß Zeilenumbrüche erhalten bleiben
+* [OPUSVIER-3006] - Vor Ausführung von 'xmllint' Tests prüfen, ob Kommando vorhanden ist
+* [OPUSVIER-3009] - Logger Funktion zu Controller_ModuleAccess hinzufügen
+* [OPUSVIER-3011] - Wiederverwendbares Confirmation Formular implementieren
+* [OPUSVIER-3017] - Gezielte Auswahl der Sprache für Unit Tests ermöglichen
+* [OPUSVIER-3018] - Klasse für das Management von konfigurierbaren Nachrichten implementieren
+* [OPUSVIER-3019] - Code zum Laden von Übersetzungen für Module in separate Klasse auslagern
+* [OPUSVIER-3026] - Formular für die Anzeige der Modelliste (indexAction) des CRUD Controllers
+* [OPUSVIER-3029] - Standardtexte enthalten Schreibfehler - Rückmeldung Hosting-Kunde BBAW
+* [OPUSVIER-3032] - Funktion zum Prüfen von FlashMessenger Nachrichten zu ControllerTestCase hinzufügen
+* [OPUSVIER-3033] - Funktion zum Prüfen, ob ein Breadcrumb definiert wurde zu ControllerTestCase hinzufügen
+* [OPUSVIER-3035] - Support für Prefix für automatische Label zu Application_Form_Abstract hinzufügen
+* [OPUSVIER-3039] - Download links für Dateien in der Metadaten-Übersicht
+* [OPUSVIER-3042] - Basisklasse für Modelle in Library anlegen (ersetzt Basisklasse in Admin Modul)
+* [OPUSVIER-3045] - In Admin_Form_DocumentMultiSubForm Unterformulare ohne DisplayGroup rendern
+* [OPUSVIER-3047] - Neuen Ordner fuer Support-Klasse fuer Unit Tests anlegen
+* [OPUSVIER-3049] - Admin_Model_DocumentEditSession so erweitern, daß mehrere Posts gespeichert werden können
+* [OPUSVIER-3051] - Update von ServerDateModified nur bei relevanten Änderungen an Dependent-Modellen
+* [OPUSVIER-3052] - Controller Helper für Manipulation von Breadcrumbs implementieren
+* [OPUSVIER-3053] - Admin_Model_FileImport und Controller_Helper_Files für Unit Tests modifizieren
+* [OPUSVIER-3056] - Vor der Ausführung der Bibtex Import Tests prüfen, ob "bib2xml" Kommando verfügbar ist
+* [OPUSVIER-3057] - Breadcrumb für ein Dokument kürzen
+* [OPUSVIER-3058] - Formularelement für die Auswahl von Rollen implementieren
+* [OPUSVIER-3059] - Mehrspaltige Ausgabe in Metadaten-Formular über HTML Tabellen realisieren
+* [OPUSVIER-3064] - Verwende Pfad relativ zu APPLICATION_PATH für temporäre Dateien in Publish
+* [OPUSVIER-3066] - Unit Test Fixes für neues CI-System
+* [OPUSVIER-3102] - Fehlermeldung bei fehlenden Dateien
+* [OPUSVIER-3103] - FileLink Element muss HIDDEN Feld erzeugen für populate-Funktion nach einem POST
+* [OPUSVIER-3104] - Fehlermeldung für den Fall das der Hash nicht ermittelt werden konnte
+* [OPUSVIER-3105] - FileHash und FileSize Elemente nach POST mit Werten setzen
+* [OPUSVIER-3111] - Konfigurationsparameter zum Abschalten der Bestätigungsseite für Statusänderungen in Dokumentation aufnehmen
+* [OPUSVIER-3112] - Alle Remove Buttons im Metadaten-Formular müssen übersetzt werden ('Entfernen')
+* [OPUSVIER-3113] - Suche nach Dokument-ID mit Schriftenreihen Nummer
+* [OPUSVIER-3116] - Tabellenzellen in Metadaten-Formular und Übersicht mit ID markieren um Tests zu vereinfachen
+* [OPUSVIER-3127] - Selenium DeleteFileTest an neuen FileManager anpassen
+* [OPUSVIER-3128] - Sofortiges Löschen von Dateien mit Nachfrage
+* [OPUSVIER-3130] - Javascript theme.js für die Administration sollte nur gezielt eingebunden werden
+* [OPUSVIER-3133] - Button zum Abbrechen zur Import Seite hinzufügen
+* [OPUSVIER-3135] - Überarbeiten der Dokumentation
+* [OPUSVIER-3152] - Manuelle Update Tests vor dem 4.4.1 Release
+* [OPUSVIER-308] - Add little icon that shows that frontdoor view will be opened in different window in clearance module
+* [OPUSVIER-1335] - Meldung nach dem Abspeichern von Änderungen
+* [OPUSVIER-1533] - Felder ThesisPublisher und ThesisGrantor wiederholbar im Adminformular
+* [OPUSVIER-1777] - Sprachzuordnung bei SWD-Schlagwörtern in der Metadatenverwaltung entfernen, da diese nur in deutscher Sprache vorliegen
+* [OPUSVIER-1784] - Implementierung eines Standard-Layouts
+* [OPUSVIER-1980] - Zuordnung von Dokumenten zu einer Schriftenreihe
+* [OPUSVIER-2083] - Selenium Test der Probleme in OPSUVIER-1841 abdeckt
+* [OPUSVIER-2161] - Unit Test für die Anzeige eines vollständig besetzten Dokumentes
+* [OPUSVIER-2305] - Sortierung von Personen im Formular (verstecktes SortOrder Feld)
+* [OPUSVIER-2320] - Eingabe von identischen Subjects (duplicate) sollte verhindert werden
+* [OPUSVIER-2335] - Skript für das Tagging eines Releases erstellen
+* [OPUSVIER-2360] - Hinzufügen von Titeln in einer bereits vergebenen Sprache verhindern
+* [OPUSVIER-2396] - Usability beim Hinzufügen neuer Autoren im Admin-Formular
+* [OPUSVIER-2741] - leeres DB-Update-Skript db/schema/update-4.4.0-to-4.4.1.sql anlegen
+* [OPUSVIER-2748] - Metadaten Übersicht für einzelne Dokumente
+* [OPUSVIER-2752] - Druckansicht für Metadaten Übersicht
+* [OPUSVIER-2753] - Metadaten Editieren
+* [OPUSVIER-2754] - CSS für Dateimanager
+* [OPUSVIER-2755] - Druckansicht für Frontdoor
+* [OPUSVIER-2757] - Anzeige der installierten Version in der Administration
+* [OPUSVIER-2761] - DC-Ausgabe des Dokumenttyps für Habilitationen ist nicht standardkonform
+* [OPUSVIER-2762] - fehlendes creator-Element in xMetaDiss-Ausgabe, wenn Datensatz keinen Autor, aber dafür andere Personen oder Körperschaften besitzt
+* [OPUSVIER-2765] - Farben und evtl. Icon für Aktive/Inaktive oder Visible/Hidden Lizenzen, Collections, ...
+* [OPUSVIER-2792] - Identifier eines Dokuments editieren
+* [OPUSVIER-2793] - Metadaten in Sektionen anzeigen und navigieren
+* [OPUSVIER-2794] - Code für alte Metadaten-Formulare entfernen
+* [OPUSVIER-2798] - Notizen editieren
+* [OPUSVIER-2799] - Zusammenfassungen (abstracts) editieren
+* [OPUSVIER-2802] - Editieren von Enrichments im Metadaten-Formular
+* [OPUSVIER-2803] - Bibliographische Informationen editieren im Metadaten-Formular
+* [OPUSVIER-2804] - Schriftenreihen editieren im Metadaten-Formular
+* [OPUSVIER-2806] - Schlagwörter editieren im Metadaten-Formular
+* [OPUSVIER-2809] - Rendering des Metadaten-Formulars als statische Übersicht
+* [OPUSVIER-2817] - Tests für altes Formular anpassen bzw. entfernen
+* [OPUSVIER-2858] - Breadcrumbs in der Administration anpassen
+* [OPUSVIER-2880] - Anpassungen an Seiten für Sammlungen in der Administration
+* [OPUSVIER-2885] - Breadcrumbs für Filemanager anpassen
+* [OPUSVIER-2890] - Anpassungen für Hauptseite Documents (Liste) in Administration
+* [OPUSVIER-2983] - OPUS 4 Bamberg: DNB Hinweise zur OAI-Schnittstelle
+* [OPUSVIER-2984] - OPUS4 Bayreuth: DNB Hinweise zur OAI-Schnittstelle
+* [OPUSVIER-2991] - CRUDAction Controller so erweitern, daß das Formular explizit gesetzt werden kann
+* [OPUSVIER-2994] - Formularklasse für Opus_Licence implementieren
+* [OPUSVIER-3008] - Zeitschriften in Bayreuth
+* [OPUSVIER-3040] - OPUS4 KU Eichstätt: DNB Hinweise zur OAI-Schnittstelle
+* [OPUSVIER-3072] - OPUS4 TU Berlin: DNB Hinweise zur OAI-Schnittstelle
+* [OPUSVIER-3089] - Ausgabe des FlashMessenger Containers verhindern wenn leer
+* [OPUSVIER-3090] - Positionierung von Import und Upload Button im FileManager
+* [OPUSVIER-3091] - HTML für Breadcrumbs-Leiste anpassen um Hilfslink zu integrieren
+* [OPUSVIER-3092] - Legend Tags die als Überschriften (für Formulare) angezeigt werden sollen mit "headline" CSS-class markieren
+* [OPUSVIER-3094] - Anzeige des direkten Aufrufs eines Dokuments in "Documents" ändern
+* [OPUSVIER-3095] - Anzeige von Ist und Soll im Filemanager wenn ungleich
+* [OPUSVIER-3099] - CSS Klassen für Tabellenspalten in Metadaten-Formular anpassen
+* [OPUSVIER-3101] - Anzeige der Paginierung für Dokumente-Liste
+* [OPUSVIER-3108] - Anpassung HTML für Sektionsfehlermeldungen
+
+h3. Dokumentation
+
+* [OPUSVIER-2891] - Kapitel 9 Administration grundlegend überarbeiten
+* [OPUSVIER-3031] - Dokumentation 4.4 S. 193: "Contribution" anstelle von "Contribution to a Periodical"
+* [OPUSVIER-1990] - Title werden jetzt in TextArea Feldern eingegeben
+* [OPUSVIER-2960] - Kapitel Administration, 9.1 Dokumente
+* [OPUSVIER-2961] - Kapitel Administration, 9.2 Freischalten
+* [OPUSVIER-2962] - Kapitel Administration, 9.3 Sammlungen
+* [OPUSVIER-2963] - Kapitel Administration, 9.4 Schriftenreihen
+* [OPUSVIER-2964] - Kapitel Administration, 9.5 Lizenzen
+* [OPUSVIER-2965] - Kapitel Administration, 9.6 Sprachen
+* [OPUSVIER-2966] - Kapitel Administration, 9.7 Informationen
+* [OPUSVIER-2967] - Kapitel Administration, 9.8 Zugriffskontrolle
+* [OPUSVIER-2968] - Kapitel Administration, 9.9 Oberflächenanpassung
+* [OPUSVIER-2969] - Kapitel Administration, 9.10 Systeminformationen
+* [OPUSVIER-3119] - Dokumentation für Dateimanager anpassen
+* [OPUSVIER-2856] - Dokumentation des Features Publikationslisten
+
+h3. Spezifikation
+
+* [OPUSVIER-12] - Bibtex-Import
+
 h2. ======================== Release 4.4.0 2013-07-22 ========================
 
 h3. Bugs

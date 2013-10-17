@@ -1,6 +1,6 @@
 h1. OPUS 4 Release Notes
 
-h2. ======================== Release 4.4.1 2013-08-30 ========================
+h2. ======================== Release 4.4.1 2013-10-17 ========================
 
 h3. Neue Konfigurationsoption für Dateien in Publikationslisten
 
@@ -9,6 +9,26 @@ ausgelieferten Stylesheet default.xslt nur die Anzeige von PDF-Dateien
 vorgesehen. Nun ist es möglich, über entsprechende Konfigurationsoptionen
 die Anzeige verschiedener Dateitypen zuzulassen. Wenn hier kein Wert für die
 Anzeige gesetzt ist, werden keine Dateien in der Liste ausgegeben.
+
+h3. Umbau Administration
+
+Der Umbau der Administration wurde weiter fortgesetzt, insbesondere wurde der
+Dateimanager überarbeitet.
+
+h3. Bekannte Probleme
+
+h4. Editieren von Collections eines Dokuments
+
+Das Editieren, als ersetzen einer Collection hat es nicht mehr in diesen
+Release geschafft. Um eine Collection zu ersetzen muss weiterhin die alte
+entfernt und eine neue zugewiesen werden.
+
+h4. Positionierung des Metadaten-Formulars
+
+Nach dem Hinzufügen oder Entfernen eines Objekts im Metadaten-Formulars sollte
+der Browser wieder in die Nähe der usprünglichen Position springen. Das ist
+leider noch nicht konsequent für das gesamte Formular umgesetzt, insbesondere
+die Collections.
 
 h2. ======================== Release 4.4.0 2013-07-22 ========================
 
