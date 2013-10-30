@@ -118,7 +118,7 @@ done
 # =============================================================================
 
 # Iterate through found empty folders
-find "$OLD_MODULES" -type d -empty -print0 | while read -r -d $'\0' FILE_PATH; do
+find "$OLD_MODULES" -name '.svn' -prune -o -type d -empty -print0 | while read -r -d $'\0' FILE_PATH; do
     FILE=$(echo "$FILE_PATH" | sed -e "s|$OLD_MODULES/||") 
     DEBUG "Empty folder $FILE found"
     # Delete empty folders
