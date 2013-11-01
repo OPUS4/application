@@ -741,6 +741,19 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
         Admin_Model_BibtexImport::$creatorClass = 'Admin_Model_BibtexImportJobCreator';
     }    
     
+    /**
+     * Regression Test for OPUSVIER-3164
+     */
+    public function testImportTitleWithOptionalSubtitle() {
+
+        $this->filename = 'articleWithColonInTitle.bib';
+        $this->__import();
+        $this->assertEquals('1', $this->numDocuments);
+
+        $this->assertEquals('Scalaris: Reliable Transactional P2P Key/Value Store', $this->doc->getTitleMain(0)->getValue());
+
+    }
+    
     private function enableAsyncMode() {
         $this->setAsyncMode(1);
     }
