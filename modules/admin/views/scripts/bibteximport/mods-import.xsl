@@ -146,7 +146,13 @@
                 <xsl:value-of select="mods:role/mods:roleTerm"/>
             </xsl:attribute>
             <xsl:attribute name="firstName">
-                <xsl:value-of select="mods:namePart[@type='given']"/>
+                <xsl:for-each select="mods:namePart[@type='given']">
+                    <xsl:value-of select="."/>
+                    <xsl:if test="string-length(.) = 1">
+                        <xsl:text>.</xsl:text>
+                    </xsl:if>
+                    <xsl:text> </xsl:text>
+                </xsl:for-each>
             </xsl:attribute>
             <xsl:attribute name="lastName">
                 <xsl:value-of select="mods:namePart[@type='family']"/>
@@ -187,7 +193,7 @@
     <xsl:template match="mods:originInfo/mods:publisher">
         <xsl:choose>
             <xsl:when test="../../mods:genre = 'instruction'">
-                 <xsl:attribute name="contributingCorporation">
+                <xsl:attribute name="contributingCorporation">
                     <xsl:value-of select="."/>
                 </xsl:attribute>              
             </xsl:when>
@@ -253,7 +259,7 @@
                 <xsl:attribute name="language">deu</xsl:attribute>
                 <xsl:value-of select="."/>
             </xsl:element>
-         </xsl:element>
+        </xsl:element>
     </xsl:template>
 
     <xsl:template match="mods:titleInfo/mods:title">
@@ -266,8 +272,8 @@
                     <xsl:value-of select="../mods:subTitle" />
                 </xsl:if>
             </xsl:element>
-         </xsl:element>
-     </xsl:template>
+        </xsl:element>
+    </xsl:template>
 
     <xsl:template match="mods:relatedItem[@type='host']/mods:titleInfo/mods:title">
         <xsl:element name="titles">
