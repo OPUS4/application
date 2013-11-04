@@ -346,6 +346,9 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
     }
 
+    /**
+     * Regression Test for OPUSVIER-3166
+     */
 
     public function testImportArticleAuthorAbbrev() {
         $this->filename = 'articleAuthorAbbrev.bib';
@@ -354,11 +357,11 @@ class Admin_Model_BibtexImportTest extends ControllerTestCase {
 
         $this->assertEquals('article', $this->doc->getType());
         $this->assertEquals('unpublished', $this->doc->getServerState());
-        $this->assertEquals('P', $this->doc->getPersonAuthor(0)->getFirstName());
+        $this->assertEquals('P. J.', $this->doc->getPersonAuthor(0)->getFirstName());
         $this->assertEquals('Adams', $this->doc->getPersonAuthor(0)->getLastName());
-        $this->assertEquals('J', $this->doc->getPersonAuthor(1)->getFirstName());
+        $this->assertEquals('J.', $this->doc->getPersonAuthor(1)->getFirstName());
         $this->assertEquals('Doe', $this->doc->getPersonAuthor(1)->getLastName());
-        $this->assertEquals('M', $this->doc->getPersonAuthor(2)->getFirstName());
+        $this->assertEquals('M.', $this->doc->getPersonAuthor(2)->getFirstName());
         $this->assertEquals('Musterman', $this->doc->getPersonAuthor(2)->getLastName());
         $this->assertEquals('The title of the article', $this->doc->getTitleMain(0)->getValue());
         $this->assertEquals('The name of the journal', $this->doc->getTitleParent(0)->getValue());
