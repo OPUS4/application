@@ -261,6 +261,10 @@
             <xsl:element name="titleMain">
                 <xsl:attribute name="language">deu</xsl:attribute>
                 <xsl:value-of select="."/>
+                <xsl:if test="../mods:subTitle != ''">
+                    <xsl:text>: </xsl:text>
+                    <xsl:value-of select="../mods:subTitle" />
+                </xsl:if>
             </xsl:element>
          </xsl:element>
      </xsl:template>
