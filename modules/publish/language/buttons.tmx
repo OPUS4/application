@@ -480,7 +480,7 @@
 	
 	<tu tuid="button_label_add_one_moreSubjectSwd">
         <tuv xml:lang="en">
-            <seg>Add one more GND-Keyword</seg>
+            <seg>Add one more GND Keyword</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Ein weiteres GND-Schlagwort hinzufügen</seg>
@@ -489,7 +489,7 @@
 
 	<tu tuid="button_label_deleteSubjectSwd">
         <tuv xml:lang="en">
-            <seg>Delete the last GND-Keyword</seg>
+            <seg>Delete the last GND Keyword</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Das letzte GND-Schlagwort löschen</seg>

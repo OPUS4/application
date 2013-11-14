@@ -573,7 +573,7 @@
 
      <tu tuid="subject_frontdoor_swd">
       <tuv xml:lang="en">
-        <seg>GND-Keyword</seg>
+        <seg>GND Keyword</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>GND-Schlagwort</seg>

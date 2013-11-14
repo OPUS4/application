@@ -502,7 +502,7 @@
 
         <tu tuid="Opus_Subject_Type_Value_Swd">
             <tuv xml:lang="en">
-                <seg>GND-Keyword</seg>
+                <seg>GND Keyword</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>GND-Schlagwort</seg>

@@ -423,7 +423,7 @@
 
         <tu tuid="SubjectSwd">
             <tuv xml:lang="en">
-                <seg>GND-Keyword</seg>
+                <seg>GND Keyword</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>GND-Schlagwort</seg>
@@ -1069,7 +1069,7 @@
                 <seg>GND Keywords</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>GND Schlagwörter</seg>
+                <seg>GND-Schlagwörter</seg>
             </tuv>
         </tu>
 
