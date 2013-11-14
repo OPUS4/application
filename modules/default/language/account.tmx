@@ -11,7 +11,7 @@
         <seg>Login:</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Login:</seg>
+        <seg>Benutzername:</seg>
       </tuv>
     </tu>
 
@@ -28,7 +28,7 @@
         <seg>Lastname:</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Nachnahme:</seg>
+        <seg>Nachname:</seg>
       </tuv>
     </tu>
 
@@ -55,7 +55,7 @@
         <seg>Confirm password:</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Passwort bestaetigen:</seg>
+        <seg>Passwort bestätigen:</seg>
       </tuv>
     </tu>
 
@@ -64,16 +64,16 @@
         <seg>Login name already used.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Der Login Name existiert bereits.</seg>
+        <seg>Der Benutzername existiert bereits.</seg>
       </tuv>
     </tu>
 	
 	<tu tuid="admin_account_error_password_tooshort">
       <tuv xml:lang="en">
-        <seg>The password is less than 6 characters long.</seg>
+        <seg>The password must be at least 6 characters long.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Das Password ist kürzer als 6 Zeichen.</seg>
+        <seg>Das Passwort muss mindestens 6 Zeichen lang sein.</seg>
       </tuv>
     </tu>
 	
