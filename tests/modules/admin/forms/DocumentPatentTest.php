@@ -51,7 +51,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
     }
     
     public function testPopulateFromModel() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_DocumentPatent();
 
@@ -73,7 +73,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_DocumentPatent();
         
@@ -97,7 +97,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
     }
     
     public function testGetModelNew() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_DocumentPatent();
         
@@ -120,7 +120,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
     }
     
     public function testGetModel() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $document = new Opus_Document(146);
         $patents = $document->getPatent();
@@ -153,7 +153,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
      * Ungültige IDs werden ignoriert und Patent wie ein neues behandelt.
      */
     public function testGetModelInvalidId() {
-        $this->setUpEnglish();
+        $this->useEnglish();
 
         $form = new Admin_Form_DocumentPatent();
         
@@ -180,7 +180,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
     
     
     public function testValidation() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_DocumentPatent();
 
@@ -216,7 +216,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
     }
     
     public function testRegressionOpusvier2824() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_DocumentPatent();
                 
