@@ -107,14 +107,14 @@ class View_Helper_LoginBar extends Zend_View_Helper_Abstract {
      * Return view helper output. Depending on if a user is logged on, an login link or an logout link
      * is returned respectivly.
      *
-     * @return unknown
+     * @return string
      */
     public function __toString() {
         $returnParams = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
         $identity = Zend_Auth::getInstance()->getIdentity();
         if (empty($identity) === true) {
             $url = $this->view->url(array_merge($this->_login_url, $returnParams->getReturnParameters()));
-            return '<a rel="nofollow" href="' . $url . '">Login</a>';
+            return '<a rel="nofollow" href="' . $url . '">' . $this->view->translate('default_auth_index') . '</a>';
         }
 
         // Default setting for edit own account: allow and add link.
@@ -132,12 +132,13 @@ class View_Helper_LoginBar extends Zend_View_Helper_Abstract {
         }
 
         $url = $this->view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
-        $logoutLink = '<a rel="nofollow" href="' . $url . '">Logout (' . htmlspecialchars($identity) . ')</a>';
+        $logoutLink = '<a rel="nofollow" href="' . $url . '">' . $this->view->translate('default_auth_logout')
+            . ' (' . htmlspecialchars($identity) . ')</a>';
 
         if ($addAccountLink) {
             $accountUrl = $this->view->url(array('module' => 'account'), null, true);
             return '<a rel="nofollow" style="padding-right: 1em" href="' . $accountUrl .
-            '">Account</a> ' . $logoutLink;
+            '">' . $this->view->translate('default_auth_account') . '</a> ' . $logoutLink;
         }
 
         return $logoutLink;

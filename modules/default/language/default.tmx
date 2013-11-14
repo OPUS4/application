@@ -614,7 +614,25 @@
                 <seg>Login</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Einloggen</seg>
+                <seg>Anmelden</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="default_auth_logout">
+            <tuv xml:lang="en">
+                <seg>Logout</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Abmelden</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="default_auth_account">
+            <tuv xml:lang="en">
+                <seg>Account</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Konto</seg>
             </tuv>
         </tu>
 
