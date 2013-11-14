@@ -59,18 +59,18 @@ class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
         $this->setUseNameAsLabel(true);
         
         // Label entsprechen den Namen der Elemente
-        $this->addElement('text', self::ELEMENT_EDITION, array('size' => 30));
+        $this->addElement('text', self::ELEMENT_EDITION, array('size' => 70));
         $this->addElement('text', self::ELEMENT_VOLUME, array('size' => 30));
-        $this->addElement('text', self::ELEMENT_PUBLISHER_NAME, array('size' => 30));
-        $this->addElement('text', self::ELEMENT_PUBLISHER_PLACE, array('size' => 30));
+        $this->addElement('text', self::ELEMENT_PUBLISHER_NAME, array('size' => 70));
+        $this->addElement('text', self::ELEMENT_PUBLISHER_PLACE, array('size' => 70));
 
         $this->addElement('text', self::ELEMENT_PAGE_COUNT, array('size' => 15));
         $this->addElement('text', self::ELEMENT_PAGE_FIRST, array('size' => 15));
         $this->addElement('text', self::ELEMENT_PAGE_LAST, array('size' => 15));
 
         $this->addElement('text', self::ELEMENT_ISSUE, array('size' => 30));
-        $this->addElement('text', self::ELEMENT_CONTRIBUTING_CORPORATION, array('size' => 30));
-        $this->addElement('text', self::ELEMENT_CREATING_CORPORATION, array('size' => 30));
+        $this->addElement('text', self::ELEMENT_CONTRIBUTING_CORPORATION, array('size' => 70));
+        $this->addElement('text', self::ELEMENT_CREATING_CORPORATION, array('size' => 70));
         
         $this->addElement('Date', self::ELEMENT_THESIS_DATE_ACCEPTED);
         $this->addElement('Year', self::ELEMENT_THESIS_YEAR_ACCEPTED);
