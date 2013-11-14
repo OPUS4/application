@@ -106,14 +106,14 @@ class Admin_Form_Licence extends Application_Form_Model_Abstract {
         $this->setModelClass('Opus_Licence');
 
         $this->addElement('checkbox', self::ELEMENT_ACTIVE);
-        $this->addElement('text', self::ELEMENT_NAME_LONG, array('required' => true));
+        $this->addElement('text', self::ELEMENT_NAME_LONG, array('required' => true, 'size' => 70));
         $this->addElement('Language', self::ELEMENT_LANGUAGE, array('required' => true));
-        $this->addElement('text', self::ELEMENT_LINK_LICENCE, array('required' => true));
-        $this->addElement('text', self::ELEMENT_LINK_LOGO);
+        $this->addElement('text', self::ELEMENT_LINK_LICENCE, array('required' => true, 'size' => 70));
+        $this->addElement('text', self::ELEMENT_LINK_LOGO, array('size' => 70));
         $this->addElement('textarea', self::ELEMENT_DESC_TEXT);
         $this->addElement('textarea', self::ELEMENT_DESC_MARKUP);
         $this->addElement('textarea', self::ELEMENT_COMMENT_INTERNAL);
-        $this->addElement('text', self::ELEMENT_MIME_TYPE);
+        $this->addElement('text', self::ELEMENT_MIME_TYPE, array('size' => 30));
         $this->addElement('checkbox', self::ELEMENT_POD_ALLOWED);
         $this->addElement('SortOrder', self::ELEMENT_SORT_ORDER);
     }
