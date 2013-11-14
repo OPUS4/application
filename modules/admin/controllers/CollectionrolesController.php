@@ -176,6 +176,15 @@ class Admin_CollectionrolesController extends Controller_Action {
     private function getRoleForm(Opus_CollectionRole $collectionRole) {
         $form_builder = new Form_Builder();
         $collectionForm = $form_builder->build($this->__createRoleFilter($collectionRole));
+
+        // Fix length of 'Name' Element
+        $element = $collectionForm->getSubForm('Opus_Model_Filter')->getSubForm('Name')->getElement('1');
+        $element->setAttrib('size', 70);
+
+        // Fix length of 'OaiName' Element
+        $element = $collectionForm->getSubForm('Opus_Model_Filter')->getSubForm('OaiName')->getElement('1');
+        $element->setAttrib('size', 30);
+
         if ($collectionRole->isNewRecord()) {
             $collectionForm->setAction($this->view->url(array('action' => 'create')));
         }
