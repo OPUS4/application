@@ -60,7 +60,7 @@ class Admin_Form_DocumentEnrichment extends Admin_Form_AbstractModelSubForm {
         
         $this->addElement('Hidden', self::ELEMENT_ID);
         $this->addElement('EnrichmentKey', self::ELEMENT_KEY_NAME, array('required' => true));
-        $this->addElement('Text', self::ELEMENT_VALUE, array('required' => true));
+        $this->addElement('Text', self::ELEMENT_VALUE, array('required' => true, 'size' => 60));
     }
     
     /**
