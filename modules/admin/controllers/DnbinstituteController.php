@@ -36,4 +36,43 @@ class Admin_DnbinstituteController extends Controller_CRUDAction {
 
     protected $_modelclass = 'Opus_DnbInstitute';
 
+    protected function adaptForm($form) {
+        $subform = $form->getSubform('Opus_DnbInstitute');
+
+        // Fix length of input field for 'Name' of DnbInstitute
+        $subform->getSubForm('Name')->getElement('1')->setAttrib('size', 70);
+        $subform->getSubForm('Department')->getElement('1')->setAttrib('size', 70);
+        $subform->getSubForm('Address')->getElement('1')->setAttrib('size', 50);
+        $subform->getSubForm('City')->getElement('1')->setAttrib('size', 50);
+    }
+
+    public function newAction() {
+        parent::newAction();
+        $this->adaptForm($this->view->form);
+    }
+
+    /**
+     * Creates a new series.
+     */
+    public function createAction() {
+        parent::createAction();
+        $this->adaptForm($this->view->form);
+    }
+
+    /**
+     * Show series for editing.
+     */
+    public function editAction() {
+        parent::editAction();
+        $this->adaptForm($this->view->form);
+    }
+
+    /**
+     * Updates fields of a series.
+     */
+    public function updateAction() {
+        parent::updateAction();
+        $this->adaptForm($this->view->form);
+    }
+
 }
