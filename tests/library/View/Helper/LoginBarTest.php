@@ -46,5 +46,33 @@ class View_Helper_LoginBarTest extends ControllerTestCase {
         $loginBar->setLogoutAction('logout', 'auth', 'default');
     }
 
+    public function testGermanAnmelden() {
+        $this->useGerman();
+        $this->dispatch('/home');
+        $this->assertQueryContentContains('#login-bar', 'Anmelden');
+    }
+
+    public function testEnglishLogin() {
+        $this->useEnglish();
+        $this->dispatch('/home');
+        $this->assertQueryContentContains('#login-bar', 'Login');
+    }
+
+    public function testGermanAbmelden() {
+        $this->useGerman();
+        $this->loginUser('admin', 'adminadmin');
+        $this->dispatch('/home');
+        $this->assertQueryContentContains('#login-bar', 'Konto');
+        $this->assertQueryContentContains('#login-bar', 'Abmelden (admin)');
+    }
+
+    public function testEnglishLogout() {
+        $this->useEnglish();
+        $this->loginUser('admin', 'adminadmin');
+        $this->dispatch('/home');
+        $this->assertQueryContentContains('#login-bar', 'Account');
+        $this->assertQueryContentContains('#login-bar', 'Logout (admin)');
+    }
+
 }
 
