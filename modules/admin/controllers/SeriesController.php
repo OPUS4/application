@@ -57,6 +57,10 @@ class Admin_SeriesController extends Controller_CRUDAction {
         $subform = $form->getSubform('Opus_Series');
         $sortOrder = $subform->getSubform('SortOrder');
         $sortOrder->getElement('1')->setRequired(true);
+
+        // Fix length of input field for 'Title'
+        $element = $subform->getSubForm('Title')->getElement('1');
+        $element->setAttrib('size', 70);
     }
 
     public function newAction() {
