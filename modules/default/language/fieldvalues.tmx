@@ -502,10 +502,10 @@
 
         <tu tuid="Opus_Subject_Type_Value_Swd">
             <tuv xml:lang="en">
-                <seg>SWD-Keyword</seg>
+                <seg>GND-Keyword</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>SWD-Schlagwort</seg>
+                <seg>GND-Schlagwort</seg>
             </tuv>
         </tu>
 

@@ -1108,20 +1108,20 @@ Beispieleingabe: "17.08" (für Semiotik)</seg>
 <!-- SubjectSwd ************************************************** -->
 	<tu tuid="hint_groupSubjectSwd">
         <tuv xml:lang="en">
-            <seg>Please enter SWD keywords of the document. You may add more keywords by clicking on the button (or delete them).</seg>
+            <seg>Please enter GND keywords of the document. You may add more keywords by clicking on the button (or delete them).</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie hier bitte SWD Schlagwörter zu Ihrem Dokument ein. Sie können durch Klicken auf den Button weitere Schlagwörter hinzufügen (oder wieder löschen).
-			Hilfe zur Auswahl bekommen Sie in der OSWD des BSZ: <a href="http://swb.bsz-bw.de/DB=2.104/" target="tab" >http://swb.bsz-bw.de/DB=2.104/</a></seg>
+            <seg>Tragen Sie hier bitte GND Schlagwörter zu Ihrem Dokument ein. Sie können durch Klicken auf den Button weitere Schlagwörter hinzufügen (oder wieder löschen).
+			Hilfe zur Auswahl bekommen Sie in der OGND des BSZ: <a href="http://swb.bsz-bw.de/DB=2.104/" target="tab" >http://swb.bsz-bw.de/DB=2.104/</a></seg>
         </tuv>
     </tu>
 
     <tu tuid="hint_SubjectSwd">
         <tuv xml:lang="en">
-            <seg>Please enter a SWD subject.</seg>
+            <seg>Please enter a GND subject.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Tragen Sie bitte ein SWD Schlagwort ein.</seg>
+            <seg>Tragen Sie bitte ein GND Schlagwort ein.</seg>
         </tuv>
     </tu>
 	

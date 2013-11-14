@@ -207,10 +207,10 @@
     
     <tu tuid="SubjectSwdLanguage">
       <tuv xml:lang="en">
-        <seg>SWD Language</seg>
+        <seg>GND Language</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>SWD Sprache</seg>
+        <seg>GND Sprache</seg>
       </tuv>
     </tu>  
 
