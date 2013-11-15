@@ -694,5 +694,17 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertContains('<td>03.01.2012</td>', $this->getResponse()->getBody());
     }
+    
+    /**
+     * Regression Test for OPUSVIER-3159
+     */
+    public function testGrantorDepartmentVisibleInFrontdoor() {
+        $this->useGerman();
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertContains(
+                '<tr><th class="name">Titel verleihende Institution:</th><td>Foobar Universität, Testwissenschaftliche Fakultät</td></tr>',
+                $this->getResponse()->getBody());
+        
+    }
 
 }
