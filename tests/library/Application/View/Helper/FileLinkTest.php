@@ -91,4 +91,23 @@ class Application_View_Helper_FileLinkTest extends ControllerTestCase {
             $helper->fileLink(null, $file, array('useFileLabel' => true)));
     }
 
+    /**
+     * Regression Test fuer OPUSVIER-3192.
+     */
+    public function testBaseUrlUsedForFileLinks() {
+        $helper = new Application_View_Helper_FileLink();
+
+        $view = new Zend_View();
+
+        $view->getHelper('BaseUrl')->setBaseUrl('/testbase');
+
+        $helper->setView($view);
+
+        $file = new Opus_File(126);
+
+        $this->assertEquals('<a href="http:///testbase/files/146/test.pdf">foo-pdf</a>'
+        . '<input type="hidden" name="" value="126" id="" />', $helper->fileLink(null, $file,
+            array('useFileLabel' => true)));
+    }
+
 }
