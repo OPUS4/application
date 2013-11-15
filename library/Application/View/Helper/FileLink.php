@@ -57,7 +57,7 @@ class Application_View_Helper_FileLink extends Zend_View_Helper_Abstract {
         }
 
         $fileName = (strlen(trim($fileName)) == 0) ? $file->getPathName() : $fileName;
-        $fileUrl = $this->view->serverUrl() . $this->view->baseUrl . "/files/" . $file->getParentId() .
+        $fileUrl = $this->view->serverUrl() . $this->view->baseUrl() . "/files/" . $file->getParentId() .
                 "/" . urlencode($file->getPathName());
 
         return '<a href="' . $fileUrl . '">' .htmlspecialchars($fileName) . '</a>'
