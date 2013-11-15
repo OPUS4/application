@@ -189,9 +189,9 @@ fi
 if [ 3306 != "$MYSQLPORT" ]; then
   sed -i -e "s!^; db.params.port = 3306!db.params.port = '$MYSQLPORT_ESC'!" config.ini
 fi
-sed -i -e "s!^db.params.username =!db.params.username = '$WEBAPP_USER_ESC'!" \
-       -e "s!^db.params.password =!db.params.password = '$WEBAPP_USER_PASSWORD_ESC'!" \
-       -e "s!^db.params.dbname =!db.params.dbname = '$DBNAME_ESC'!" config.ini
+sed -i -e "s!@db.user.name@!'$WEBAPP_USER_ESC'!" \
+       -e "s!@db.user.password@!'$WEBAPP_USER_PASSWORD_ESC'!" \
+       -e "s!@db.name@!'$DBNAME_ESC'!" config.ini
 
 # create createdb.sh and set database related parameters
 cd "$BASEDIR/opus4/db"
@@ -202,9 +202,9 @@ fi
 if [ 3306 != "$MYSQLPORT" ]; then
   sed -i -e "s!^# port=3306!port='$MYSQLPORT_ESC'!" createdb.sh
 fi
-sed -i -e "s!^user=!user='$ADMIN_ESC'!" \
-       -e "s!^password=!password='$ADMIN_PASSWORD_ESC'!" \
-       -e "s!^dbname=!dbname='$DBNAME_ESC'!" createdb.sh
+sed -i -e "s!@db.admin.name@!'$ADMIN_ESC'!" \
+       -e "s!@db.admin.password@!'$ADMIN_PASSWORD_ESC'!" \
+       -e "s!@db.name@!'$DBNAME_ESC'!" createdb.sh
 chmod +x createdb.sh
 ./createdb.sh
 

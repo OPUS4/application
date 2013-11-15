@@ -26,12 +26,12 @@ SOLR_EXTRACT_HOST="`echo "$5" |sed 's/\!/\\\!/g'`"
 SOLR_EXTRACT_PORT="`echo "$6" |sed 's/\!/\\\!/g'`"
 SOLR_EXTRACT_APP="`echo "$7" |sed 's/\!/\\\!/g'`"
 
-sed -e "s!^searchengine.index.host =!searchengine.index.host = '$SOLR_INDEX_HOST'!" \
-    -e "s!^searchengine.index.port =!searchengine.index.port = '$SOLR_INDEX_PORT'!" \
-    -e "s!^searchengine.index.app =!searchengine.index.app = '$SOLR_INDEX_APP'!" \
-    -e "s!^searchengine.extract.host =!searchengine.extract.host = '$SOLR_EXTRACT_HOST'!" \
-    -e "s!^searchengine.extract.port =!searchengine.extract.port = '$SOLR_EXTRACT_PORT'!" \
-    -e "s!^searchengine.extract.app =!searchengine.extract.app = '$SOLR_EXTRACT_APP'!" \
+sed -e "s!@searchengine.index.host@!'$SOLR_INDEX_HOST'!" \
+    -e "s!@searchengine.index.port@!'$SOLR_INDEX_PORT'!" \
+    -e "s!@searchengine.index.app@!'$SOLR_INDEX_APP'!" \
+    -e "s!@searchengine.extract.host@!'$SOLR_EXTRACT_HOST'!" \
+    -e "s!@searchengine.extract.port@!'$SOLR_EXTRACT_PORT'!" \
+    -e "s!@searchengine.extract.app@!'$SOLR_EXTRACT_APP'!" \
     -i "$CONFIG_INI"
 
 exit 0;
