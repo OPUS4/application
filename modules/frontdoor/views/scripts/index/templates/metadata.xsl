@@ -516,6 +516,7 @@
             </th>
             <td>
                 <xsl:value-of select="@Name" />
+                <xsl:if test="@Department">, <xsl:value-of select="@Department" /></xsl:if>
             </td>
         </tr>
     </xsl:template>
