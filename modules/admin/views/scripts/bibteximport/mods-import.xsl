@@ -122,13 +122,11 @@
                 </xsl:element>
             </xsl:if>
             <xsl:apply-templates select="mods:originInfo/mods:dateIssued"/>
-
-            <xsl:element name="identifiers">
-                <xsl:apply-templates select="@ID"/>
-                <xsl:if test="mods:identifier[@type='isbn']">
-                        <xsl:apply-templates select="mods:identifier[@type='isbn']"/>
-                </xsl:if>
-            </xsl:element>
+            <xsl:if test="mods:identifier[@type='isbn']">
+                <xsl:element name="identifiers">
+                    <xsl:apply-templates select="mods:identifier[@type='isbn']"/>
+                </xsl:element>
+            </xsl:if>
             <xsl:apply-templates select="mods:note"/>
 
         </xsl:element>
@@ -138,13 +136,6 @@
     <xsl:template match="mods:identifier[@type='isbn']">
         <xsl:element name="identifier">
             <xsl:attribute name="type">isbn</xsl:attribute>
-            <xsl:value-of select="."/>
-        </xsl:element>
-    </xsl:template>
-    
-    <xsl:template match="@ID">
-        <xsl:element name="identifier">
-            <xsl:attribute name="type">old</xsl:attribute>
             <xsl:value-of select="."/>
         </xsl:element>
     </xsl:template>
@@ -160,9 +151,7 @@
                     <xsl:if test="string-length(.) = 1">
                         <xsl:text>.</xsl:text>
                     </xsl:if>
-                    <xsl:if test="position() != last()">
-                        <xsl:text> </xsl:text>
-                    </xsl:if>
+                    <xsl:text> </xsl:text>
                 </xsl:for-each>
             </xsl:attribute>
             <xsl:attribute name="lastName">
