@@ -1,5 +1,5 @@
 -- 
--- Test fixture for Issue OPUSVIER-2762 
+-- Test fixture for Issue OPUSVIER-2762 and OPUSVIER-3162 (Doc #302)
 -- 
 -- Oai_IndexControllerTest::testDcCreatorIsAuthorIfExists
 -- 
@@ -7,7 +7,7 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 -- 
 -- Oai_IndexControllerTest::testDcCreatorIsAuthorIfExists
 -- 
-(302,NULL,NULL,NULL,'CreatingCorporation',NULL,NULL,'',NULL,NULL,NULL,NULL,NULL,NULL,'draft',NULL,'2013','',NULL,'2013-09-20T12:27:40+02:00','2013-09-20T12:27:40+02:00','2013-09-20T12:27:40+02:00',NULL,'published',NULL,0),
+(302,NULL,NULL,NULL,'CreatingCorporation',NULL,NULL,'',NULL,NULL,'fra',NULL,NULL,NULL,'draft',NULL,'2013','',NULL,'2013-09-20T12:27:40+02:00','2013-09-20T12:27:40+02:00','2013-09-20T12:27:40+02:00',NULL,'published',NULL,0),
 -- 
 -- Oai_IndexControllerTest::testDcCreatorIsEditorIfAuthorNotExists
 -- 

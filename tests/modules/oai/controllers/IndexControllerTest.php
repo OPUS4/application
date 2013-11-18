@@ -1357,6 +1357,18 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     }
 
+    /**
+     * Regression Test for OPUSVIER-3162
+     */
+    public function testXMetaDissPlusOutputLanguageCode() {
+    
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::302');
+        $xpath = $this->prepareXpathFromResultString($this->getResponse()->getBody());
+        $language = $xpath->query('//xMetaDiss:xMetaDiss/dc:language')->item(0);
+        $this->assertEquals('fre', $language->nodeValue);
+    }
+
+    
     public function testListRecordsWithResumptionToken() {
         $max_records = 2;
         
