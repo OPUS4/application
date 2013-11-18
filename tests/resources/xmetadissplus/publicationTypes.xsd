@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="info:eu-repo/semantics/" elementFormDefault="qualified">
+	<xsd:annotation>
+		<xsd:documentation>
+		The Publication type vocabulary listed below has a deep history from within the European repository community. 
+		It is a combination of the types DARE uses from DC guidelines, types listed in the DINI certificate and the e-Prints publication types Vocabulary of the Eprints Application Profile (Scholarly Works Application Profile - SWAP) http://www.ukoln.ac.uk/repositories/digirep/index/Eprints_Type_Vocabulary_Encoding_Scheme.
+		</xsd:documentation>
+	</xsd:annotation>
+    <xsd:simpleType name="PUBLICATIONType">
+    	<xsd:union>
+            <xsd:simpleType>
+    	   		<xsd:restriction base="xsd:Name">
+		    		<xsd:enumeration value="article">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+			    		     Article or an editorial published in a journal
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="bachelorThesis">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		     	Lowest level of a thesis (normally after three years of study). 
+		    		     	See also http://en.wikipedia.org/wiki/Diplom
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="masterThesis">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		     Intermediate level of a thesis (normally after four or five years of study). 
+		    		     See also http://en.wikipedia.org/wiki/Diplom This also refers to theses of the pre-Bologna period for degrees that are at the same level as what now is known as a master degree. 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="doctoralThesis">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		     Highest level of a thesis normally after more than four or five years of study. 
+		    		     See also http://en.wikipedia.org/wiki/Diplom Also everything equal and higher then a Doctoral thesis, that does not follow the "Bologna Convention", will be put in the category doctoralThesis. A free text field will Provide the opportunity to specify this further. 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="book">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		     Book or monograph 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="bookPart">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		     Part or chapter of a book 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="review">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		     Review of a book or article 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="conferenceObject">
+			    		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		     All kind of documents related to a conference, p.e. conference papers, conference reports, conference lecture, papers published in conference proceedings, conference contributions, reports of abstracts of conference papers and conference posters. 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="lecture">
+		    		  	<xsd:annotation>
+		    		     <xsd:documentation>
+		    		     Lecture or presentation presented during an academic event, e.g., inaugural lecture. Excluded is a conference lecture (see conferenceItem). 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="workingPaper">
+			   		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		     a preliminary scientific or technical paper that is published in a series of the institution where the research is done. 
+		    		     Also known as research paper, research memorandum or discussion paper. The difference with a preprint is that a workingPaper is published in a institutional series. Examples are: working papers, research papers, research memoranda and discussion papers. 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="preprint">
+	   		 		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		     like a workingPaper this is a preliminary scientific or technical paper, but it is not published in a institutional series. 
+		    		     The paper is intended to be published in a scientific journal or as a chapter in a book. 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="report">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		     	This is a more or less a rest category and covers commission reports, memoranda, external research reports, internal reports, statistical report, reports to funding agency, technical documentation, project deliverables etc. Excluded are conference reports (See conferenceItem). 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="annotation">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		     Note to a legal judgment 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="contributionToPeriodical">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		     Contribution to a newspaper, weekly magazine or another non-academic periodical 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="patent">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		     Patent
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="other">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		     Especially meant for non-publication data like research data, audio-visual materials, animations etc. 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+    	   		</xsd:restriction>
+    	   </xsd:simpleType>
+        </xsd:union>
+    </xsd:simpleType>
+
+</xsd:schema>

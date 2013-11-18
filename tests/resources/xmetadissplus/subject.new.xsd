@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Definition von complexTypes verschiedener Thesauri und Klassifikationen, die nicht in dcterms.xsd enthalten sind -->
+<!-- Copyright 2006 Deutsche Nationalbibliothek -->
+<!-- Version 1.3 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dc="http://purl.org/dc/elements/1.1/">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd"/>
+	<xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd"/>
+	<xs:complexType name="BK">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="RVK">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="NLM">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="CCS1998">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ZDM">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="MSC1991">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="MSC2000">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="PACS2003">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="SWD">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="UMLS">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="DDC-SG">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="noScheme">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string"/>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>

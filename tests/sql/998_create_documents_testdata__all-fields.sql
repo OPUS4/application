@@ -16,7 +16,7 @@ INSERT INTO `document_identifiers` (`id`, `document_id`, `type`, `value`) VALUES
 (500,146,'serial','123'),
 (501,146,'uuid','123'),
 (502,146,'isbn','123'),
-(503,146,'urn','123'),
+(503,146,'urn','urn:nbn:op:123'),
 (504,146,'doi','123'),
 (505,146,'handle','123'),
 (506,146,'url','123'),

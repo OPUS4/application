@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!-- cc: Metadaten  Deutsche  Nationalbibliothek fuer Institutionen; Corporate Core -->
+	<!-- Copyright 2006 Deutsche Nationalbibliothek -->
+	<!-- Version xMetaDissPlus 2.1 -->
+<xs:schema targetNamespace="http://www.d-nb.de/standards/cc/" elementFormDefault="qualified"
+	attributeFormDefault="unqualified" xmlns:ddb="http://www.d-nb.de/standards/ddb/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="http://www.d-nb.de/standards/cc/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/" >
+	<!-- Folgende Importe werden benoetigt, da Elemente aus den zugehoerigen Namespaces benutzt werden. -->
+	<xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd"/>
+	<xs:import namespace="http://www.d-nb.de/standards/ddb/" schemaLocation="ddb.xsd"/>
+	<!-- Folgende Inklusion wird fuer die Definition des unqualifizierten Attributs countryCode benoetigt.(kein ddb Type) -->
+	<xs:include schemaLocation="iso3166.xsd"/>
+	<xs:element name="universityOrInstitution">
+		<xs:annotation>
+			<xs:documentation xml:lang="de">CC Corporate Core: institutionelle Metadaten der
+				Deutschen Nationalbibliothek, Speicherung in der GKD </xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="name" type="xs:string" maxOccurs="unbounded"/>
+				<xs:element name="place" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+				<xs:element name="department" type="deptType" minOccurs="0" maxOccurs="unbounded"/>
+			</xs:sequence>
+			<xs:attribute name="GKD-Nr" type="xs:string" form="qualified" use="optional"/>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="address">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="Scheme" type="xs:string" use="optional" form="qualified"/>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:complexType name="deptType">
+		<xs:sequence>
+			<xs:element name="name" type="xs:string"/>
+			<xs:element name="place" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="Corporate">
+		<xs:sequence>
+			<xs:element ref="universityOrInstitution"/>
+		</xs:sequence>
+		<xs:attribute name="countryCode" type="countryList"/>
+		<xs:attribute name="type" default="dcterms:ISO3166" use="optional"/>
+	</xs:complexType>
+	<xs:complexType name="Publisher">
+		<xs:complexContent mixed="true">
+			<xs:extension base="dc:SimpleLiteral">
+				<xs:sequence>
+					<xs:element ref="universityOrInstitution"/>
+					<xs:element ref="address"/>
+				</xs:sequence>
+				<xs:attribute name="countryCode" type="countryList"/>
+				<xs:attribute name="type" default="dcterms:ISO3166" use="optional"/>
+				<xs:attribute ref="ddb:role" use="optional"/>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+</xs:schema>

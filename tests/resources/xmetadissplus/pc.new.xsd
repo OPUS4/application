@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- pc: Metadaten fuer Personen;  Personal Core -->
+<!-- Copyright 2006  Deutsche Nationalbibliothek -->
+<!-- Version 1.4 - Schema wurde um erweitert, um auch eine Koerperschaft als Urheber nennen zu koennen -->
+<xs:schema targetNamespace="http://www.d-nb.de/standards/pc/" xmlns="http://www.d-nb.de/standards/pc/"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:dcterms="http://purl.org/dc/terms/"
+    xmlns:thesis="http://www.ndltd.org/standards/metadata/etdms/1.0/"
+    xmlns:ddb="http://www.d-nb.de/standards/ddb/" 
+    xmlns:cc="http://www.d-nb.de/standards/cc/"
+    elementFormDefault="qualified" attributeFormDefault="unqualified">
+    <!-- Folgende Importe werden benoetigt, da Elemente aus den zugehoerigen Namespaces benutzt werden. -->
+    <xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd"/>
+    <xs:import namespace="http://purl.org/dc/terms/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcterms.xsd"/>
+    <xs:import namespace="http://www.ndltd.org/standards/metadata/etdms/1.0/"
+        schemaLocation="thesis.xsd"/>	
+    <xs:import namespace="http://www.d-nb.de/standards/ddb/" schemaLocation="ddb.xsd"></xs:import>
+    <xs:import namespace="http://www.d-nb.de/standards/cc/" schemaLocation="cc.xsd"/>
+    <xs:include schemaLocation="mime.xsd"/>
+    <!-- Folgende Inklusion wird fuer die Definition des unqualifizierten Attributs countryCode benoetigt (kein ddb Type) -->
+    <xs:include schemaLocation="iso3166.xsd"/>
+    <xs:element name="person">
+        <xs:annotation>
+            <xs:documentation xml:lang="de">PC Personal Core: Personenmetadaten  Deutsche
+                Nationalbibliothek, Speicherung in der PND </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="name" type="nameType" maxOccurs="unbounded"/>
+                <xs:element name="academicTitle" type="xs:string" minOccurs="0"
+                    maxOccurs="unbounded"/>
+                <xs:element name="dateOfBirth" type="dcterms:W3CDTF" minOccurs="0"/>
+                <xs:choice minOccurs="0">
+                    <xs:element name="placeOfBirth" type="SchemeType"/>
+                    <xs:element name="nativePlace" type="SchemeType" maxOccurs="3"/>
+                </xs:choice>
+                <xs:element name="profession" type="SWDType" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="workingFields" type="SWDType" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="countryPubl"  minOccurs="0"
+                    maxOccurs="unbounded">
+                    <xs:complexType>
+                        <xs:attribute name="countryCode" type="countryList" use="required"/>
+                        <xs:attribute name="type" use="required">
+                            <xs:simpleType>
+                                <xs:restriction base="xs:string">
+                                    <xs:enumeration value="dcterms:ISO3166"/>
+                                </xs:restriction>
+                            </xs:simpleType>
+                        </xs:attribute>
+                    </xs:complexType>
+                </xs:element>
+                <xs:element name="fieldOfStudy" type="SWDType" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="affiliation" type="instType" minOccurs="0"/>
+                <xs:element name="note" type="mime" minOccurs="0"/>
+                <xs:element name="publications" type="publType" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="homePage" type="mime" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="email" type="xs:string" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element name="address" type="SchemeType" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="gender" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="f"/>
+                        <xs:enumeration value="m"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="PND-Nr" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+    <xs:complexType name="nameType">
+        <xs:sequence>
+            <xs:choice>
+                <xs:sequence>
+                    <xs:element name="foreName" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="de">Vorname des Autors</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="surName" type="xs:string">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="de">Nachname des Autors</xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+                <xs:element name="personEnteredUnderGivenName" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Name unter dem der Autor bekannt
+                            ist</xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="organisationName" type="xs:string">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="de">Name der Organisation als Urheber
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:choice>
+            <xs:element name="prefix" type="xs:string" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">Praefix zum Namen des Autors</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="titleOfNobility" type="xs:string" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="de">Adelstitel des Autors</xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="type" use="required">
+            <xs:annotation>
+                <xs:documentation xml:lang="de">Beschreibung des Namenstyps: vom Autor
+                    verwendeterName bzw. andere Namen </xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="nameUsedByThePerson"/>
+                    <xs:enumeration value="otherName"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="otherNameType" use="optional">
+            <xs:annotation>
+                <xs:documentation xml:lang="de">Bei Verwendung von anderen Namen (otherName),
+                    weitere Spezifizierung und um Organisation als Urheber angeben zu koennen</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="pseudonym"/>
+                    <xs:enumeration value="earlier"/>
+                    <xs:enumeration value="latest"/>
+                    <xs:enumeration value="fullerName"/>
+                    <xs:enumeration value="realName"/>
+                    <xs:enumeration value="variants"/>
+                    <xs:enumeration value="organisation"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+        <xs:attribute name="Scheme" type="xs:string" use="optional"/>
+    </xs:complexType>
+    <xs:complexType name="SchemeType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="Scheme" type="xs:string" use="optional"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="SWDType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="Scheme" use="optional" default="SWD"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+    <xs:complexType name="instType">
+        <xs:sequence>
+            <xs:element ref="cc:universityOrInstitution" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="publType">
+        <xs:sequence>
+            <xs:element ref="dc:title"/>
+            <xs:element ref="dcterms:bibliographicCitation" minOccurs="0"/>
+            <xs:element ref="dcterms:issued"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="mime">
+        <xs:complexContent>
+            <xs:extension base="dcterms:URI">
+                <xs:attribute name="type" type="xs:string" default="dcterms:URI"/>
+                <xs:attribute name="kind" type="xs:string" default="dcterms:IMT"/>
+                <xs:attribute name="encoding" type="mimeList" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="MetaPers">
+        <xs:complexContent mixed="true">
+            <xs:extension base="dc:SimpleLiteral">
+                <xs:sequence>
+                    <xs:element ref="person"/>
+                </xs:sequence>
+                <xs:attribute name="countryCode" type="countryList" use="optional"/>
+                <xs:attribute name="type" default="dcterms:3166" use="optional"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <!-- Contributor von MetaPers durch Erweiterung abgeleitet. -->
+    <xs:complexType name="Contributor">
+        <xs:complexContent mixed="true">
+            <xs:extension base="MetaPers">
+                <xs:attribute ref="thesis:role" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+</xs:schema>

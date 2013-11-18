@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" targetNamespace="info:eu-repo/semantics/" elementFormDefault="qualified">
+	<xsd:annotation>
+		<xsd:documentation>
+          The version vocabulary is derived from http://www.lse.ac.uk/library/versions/, which is a JISC funded project called VERSIONS (Versions of Eprints - a user Requirements Study and Investigation Of the Need for Standards). This project addresses the issues and uncertainties relating to versions of academic papers in digital repositories. VERSIONS aims to help build trust in open access repository content among all stakeholders and has developed a toolkit that can be found at: http://www.lse.ac.uk/library/versions/VERSIONS_Toolkit_v1_final.pdf
+		</xsd:documentation>
+	</xsd:annotation>
+    <xsd:simpleType name="VERSIONType">
+    	<xsd:union>
+            <xsd:simpleType>
+    	   		<xsd:restriction base="xsd:Name">
+		    		<xsd:enumeration value="draft">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+                            Early version circulated as work in progress
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="submittedVersion">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+                            The version that has been submitted to a journal for peer review 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="acceptedVersion">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+                            The author-created version that incorporates referee comments and is the accepted for publication version 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="publishedVersion">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+                            The publisher created published version 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+		    		<xsd:enumeration value="updatedVersion">
+		    		  <xsd:annotation>
+		    		     <xsd:documentation>
+		    		        A version updated since publication 
+		    		     </xsd:documentation>
+		    		  </xsd:annotation>
+		    		</xsd:enumeration>
+    	   		</xsd:restriction>
+    	   </xsd:simpleType>
+        </xsd:union>
+    </xsd:simpleType>
+</xsd:schema>

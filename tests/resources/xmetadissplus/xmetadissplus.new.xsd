@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- xMetaDissPlus: Metadatenformat Deutsche Nationalbibliothek fuer Online-Hochschulschriften -->
+<!-- Copyright 2010 Deutsche Nationalbibliothek -->
+<!-- Version 2.2 -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+
+	targetNamespace="http://www.d-nb.de/standards/xmetadissplus/"
+	xmlns="http://www.d-nb.de/standards/xmetadissplus/"
+	xmlns:cc="http://www.d-nb.de/standards/cc/"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:dini="http://www.d-nb.de/standards/xmetadissplus/type/"
+	xmlns:ddb="http://www.d-nb.de/standards/ddb/"
+	xmlns:doi="http://www.d-nb.de/standards/doi/"
+	xmlns:hdl="http://www.d-nb.de/standards/hdl/"
+	xmlns:pc="http://www.d-nb.de/standards/pc/"
+	xmlns:thesis="http://www.ndltd.org/standards/metadata/etdms/1.0/"
+	xmlns:urn="http://www.d-nb.de/standards/urn/"
+
+	elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+
+	<!-- XSD Imports start -->
+	<!-- cc -->
+	<xs:import namespace="http://www.d-nb.de/standards/cc/"
+		schemaLocation="http://files.dnb.de/standards/xmetadiss/cc.xsd" />
+	<!-- dc -->
+	<xs:import namespace="http://purl.org/dc/elements/1.1/"
+		schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd" />
+	<!-- dcterms -->
+	<xs:import namespace="http://purl.org/dc/terms/"
+		schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcterms.xsd" />
+	<!-- dini -->
+	<xs:import namespace="http://www.d-nb.de/standards/xmetadissplus/type/"
+		schemaLocation="http://files.dnb.de/standards/xmetadissplus/xmetadissplustype.xsd" />
+
+	<!-- ddb aktualisiert -->
+	<xs:import namespace="http://www.d-nb.de/standards/ddb/"
+		schemaLocation="http://files.dnb.de/standards/xmetadiss/ddb.xsd" />
+
+	<!-- hdl -->
+	<xs:import namespace="http://www.d-nb.de/standards/hdl/"
+		schemaLocation="http://files.dnb.de/standards/xmetadissplus/hdl.xsd" />
+
+	<!-- doi -->
+	<xs:import namespace="http://www.d-nb.de/standards/doi/"
+		schemaLocation="http://files.dnb.de/standards/xmetadissplus/doi.xsd" />
+
+	<!-- thesis aktualisiert -->
+	<xs:import namespace="http://www.ndltd.org/standards/metadata/etdms/1.0/"
+		schemaLocation="http://files.dnb.de/standards/xmetadiss/thesis.xsd" />
+
+	<!-- pc -->
+	<xs:import namespace="http://www.d-nb.de/standards/pc/"
+		schemaLocation="http://files.dnb.de/standards/xmetadiss/pc.xsd" />
+
+	<!-- urn -->
+	<xs:import namespace="http://www.d-nb.de/standards/urn/"
+		schemaLocation="http://files.dnb.de/standards/xmetadiss/urn.xsd" />
+
+	<!-- Inklusion fuer Typen wie DDC-SG etc-->
+	<xs:include schemaLocation="http://files.dnb.de/standards/xmetadiss/subject.xsd" />
+	<!-- XSD Imports end -->
+	<xs:element name="xMetaDiss">
+		<xs:annotation>
+			<xs:documentation xml:lang="de">XmetaDissPlus 2.0 ist eine Erweiterung des Metadatenformat XMetaDiss 1.3 fuer Online-Hochschulschriften aufbauend auf DublinCore, ETD-MS und interen Metadaten in der Deutschen Nationalbibliothek wie pc Personal Core, cc Corporate Core und ddb fuer administrative und technische Elemente. 
+				Das Format XMetaDiss wurde auf XMetaDissPlus erweitert, wie es das BSZ bereits eingefuehrt hat: Ueber die Definition eines Vokabulars von Publikationstypen, das im Rahmen eines XML-Schemas definiert ist, sind weitere Dokumentarten darstellbar.
+				Die Schemata fuer das erweiterte Metadatenformat wurden von Makram Sakji (BSZ) erstellt, vorhandene Schemata wurden z. T. erweitert.
+				In der Version 2.1. wurde die Checksumme als weiteres Element ergaenzt und die Kardinalitaet fuer die Transfer-URL angepasst.
+				In der Version 2.2 wurde die Kardinalitaet 1 fuer das Element fileProperties aufgehoben. 
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="dc:title" maxOccurs="unbounded" />
+				<xs:element ref="dc:creator" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="dc:subject" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="dcterms:tableOfContents" minOccurs="0"
+					maxOccurs="unbounded" />
+				<xs:element ref="dcterms:abstract" minOccurs="0"
+					maxOccurs="unbounded" />
+				<xs:element ref="dc:publisher" maxOccurs="unbounded" />
+				<xs:element ref="dc:contributor" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="dcterms:created" minOccurs="0" />
+				<xs:element ref="dcterms:dateSubmitted" minOccurs="0" />
+				<xs:choice minOccurs="1" maxOccurs="2">
+					<xs:element ref="dcterms:dateAccepted" />
+					<xs:element ref="dcterms:issued" />
+				</xs:choice>
+				<xs:element ref="dcterms:modified" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="dc:type"  minOccurs="1" maxOccurs="unbounded"/>
+				<xs:element ref="dini:version_driver" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="dc:identifier" />
+				<xs:element ref="dcterms:extent" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="dcterms:medium" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="dcterms:bibliographicCitation"
+					minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="dc:source" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="dc:language" maxOccurs="unbounded" />
+				<xs:element ref="dc:relation" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="dc:coverage" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="dc:rights" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="thesis:degree" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="ddb:contact" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="ddb:fileNumber" />				
+				<xs:element ref="ddb:fileProperties" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="ddb:checksum" minOccurs="0" maxOccurs="1" />
+				<xs:element ref="ddb:transfer" minOccurs="1" maxOccurs="unbounded" />
+				<xs:element ref="ddb:identifier" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="ddb:rights" />
+				<xs:element ref="ddb:note" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="ddb:server" minOccurs="0" maxOccurs="unbounded" />
+				<xs:element ref="ddb:dateDelivered" minOccurs="0"
+					maxOccurs="unbounded" />
+				<xs:element ref="ddb:useRestrictionInfo" minOccurs="0"
+					maxOccurs="unbounded" />
+				<xs:element ref="ddb:annotation" minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+		<xs:group name="date">
+			<xs:sequence>
+				<xs:element ref="dcterms:dateAccepted" minOccurs="0" maxOccurs="1"/>
+				<xs:element ref="dcterms:issued" minOccurs="0" maxOccurs="1"/>
+			</xs:sequence>
+	</xs:group>
+</xs:schema>

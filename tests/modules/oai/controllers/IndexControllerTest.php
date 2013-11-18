@@ -1367,8 +1367,26 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $language = $xpath->query('//xMetaDiss:xMetaDiss/dc:language')->item(0);
         $this->assertEquals('fre', $language->nodeValue);
     }
-
     
+
+   /**
+    * XMetaDissPlus Schema validation (see OPUSVIER-3165)
+    */
+   public function testXMetaDissPlusIsSchemaValid() {
+        libxml_use_internal_errors(true);
+        
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
+        $xpath = $this->prepareXpathFromResultString($this->getResponse()->getBody());
+       $xMetaDissNode = $xpath->query('//xMetaDiss:xMetaDiss')->item(0);
+       $metadataDocument = new DOMDocument();
+       $importedNode = $metadataDocument->importNode($xMetaDissNode, true);
+       $metadataDocument->appendChild($importedNode);
+        
+        $valid = $metadataDocument->schemaValidate('resources/xmetadissplus/xmetadissplus.xsd');
+
+        $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');
+    }
+
     public function testListRecordsWithResumptionToken() {
         $max_records = 2;
         

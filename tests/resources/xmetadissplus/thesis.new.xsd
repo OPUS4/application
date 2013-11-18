@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!--
+		thesis: Metadaten Deutsche Nationalbibliothek in Anlehnung an ETD-MS
+	-->
+	<!-- Copyright 2010  Deutsche Nationalbibliothek -->
+	<!-- Version xMetaDissPlus 2.0 angepasst fuer Version 2.1-->
+<xs:schema targetNamespace="http://www.ndltd.org/standards/metadata/etdms/1.0/"
+	elementFormDefault="qualified" attributeFormDefault="qualified"
+	xmlns="http://www.ndltd.org/standards/metadata/etdms/1.0/"
+	xmlns:cc="http://www.d-nb.de/standards/cc/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema">
+	<xs:import namespace="http://www.d-nb.de/standards/cc/"
+	schemaLocation="http://files.dnb.de/standards/xmetadiss/cc.xsd" />
+	<xs:annotation>
+		<xs:documentation xml:lang="de">In der Version 2.1. im Element 8 der "editor" als weiterer "contributor" aufgenommen.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:element name="degree">
+		<xs:annotation>
+			<xs:documentation xml:lang="de">Specifications about academic level and institution of awarding. 2010: Anpassungen im Schema thesis.xsd fÃ¼r die Erweiterung von xMetaDiss 1.3 auf xMetaDissPlus 2.0: Das Element thesis:level wurde um die folgenden Werte erweitert: Staatsexamen, Diplom, Lizentiat, M.A.
+			</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="level" type="levelType" maxOccurs="unbounded" />
+				<xs:element name="grantor" type="cc:Corporate" maxOccurs="unbounded" />
+				<xs:element name="discipline" type="xs:string" minOccurs="0"
+					maxOccurs="unbounded" />
+				<xs:element name="name" type="xs:string" minOccurs="0"
+					maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:attribute name="role">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="advisor" />
+				<xs:enumeration value="referee" />
+				<xs:enumeration value="committeeMember" />
+				<xs:enumeration value="chair" />
+				<xs:enumeration value="co-chair" />
+				<xs:enumeration value="editor" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:simpleType name="levelType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="thesis.doctoral">
+				<xs:annotation>
+					<xs:documentation>Term fuer Dissertation</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="thesis.habilitation">
+				<xs:annotation>
+					<xs:documentation>Term fuer Habilitation</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="bachelor">
+				<xs:annotation>
+					<xs:documentation>Term fuer Abschlussarbeit Bachelor</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="master">
+				<xs:annotation>
+					<xs:documentation>Term fuer Abschlussarbeit Master</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="post-doctoral">
+				<xs:annotation>
+					<xs:documentation>Im englischsprachigen Raum verwendeter Term fuer Habilitationsschrift</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Staatsexamen">
+				<xs:annotation>
+					<xs:documentation>Term fuer Abschlussarbeit Staatsexamen</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="M.A.">
+				<xs:annotation>
+					<xs:documentation>Term fuer Abschlussarbeit Magister</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Diplom">
+				<xs:annotation>
+					<xs:documentation>Term fuer Abschlussarbeit Diplom</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="Lizentiat">
+				<xs:annotation>
+					<xs:documentation>Term fuer Abschlussarbeit Lizentiat</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+			<xs:enumeration value="other">
+				<xs:annotation>
+					<xs:documentation>Fuer Abschlussarbeiten, die nicht unter die oben genannten Terme abgedeckt werden</xs:documentation>
+				</xs:annotation>
+			</xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+</xs:schema>

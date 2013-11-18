@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="UTF-8"?>
+	<!-- ddb: administrative und technische Metadaten Deutsche Nationalbibliothek -->
+	<!-- Copyright 2010  Deutsche Nationalbibliothek -->
+	<!-- Version xMetaDissPlus 2.1 fuer Version 2.2 angepasst -->
+<xs:schema targetNamespace="http://www.d-nb.de/standards/ddb/"
+	elementFormDefault="qualified"
+	attributeFormDefault="qualified"
+	xmlns="http://www.d-nb.de/standards/ddb/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:dc="http://purl.org/dc/elements/1.1/"
+	xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:iso639-2="http://lcweb.loc.gov/standards/iso639-2/">
+	<!--
+		Folgende Importe werden benötigt, da Elemente aus den zugehörigen
+		Namespaces benutzt werden.
+	-->
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace"
+		schemaLocation="http://www.w3.org/2001/03/xml.xsd" />
+	<xs:import namespace="http://purl.org/dc/elements/1.1/"
+		schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd" />
+	<xs:import namespace="http://purl.org/dc/terms/"
+		schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcterms.xsd" />
+	<xs:import namespace="http://lcweb.loc.gov/standards/iso639-2/"
+		schemaLocation="http://www.d-nb.de/standards/xmetadiss/iso639-2.xsd" />
+	<xs:annotation>
+		<xs:documentation xml:lang="de">2010: Anpassungen im Schema ddb.xsd für die Erweiterung von xMetaDiss 1.3 auf xMetaDissPlus 2.1:
+			Das Schema wurde um das Element "checksum" ergänzt.
+			2011: Anpassungen im Schema ddb.xsd für die Erweiterung von xMetaDiss 2.1 auf xMetaDissPlus 2.2:
+			Die Attribute ZS-Ausgabe, ZS-Volume und ZS-Issue wurden ergänzt für die Publikationstypen article, PeriodicalPart und contributionToPeriodical.
+			Das Attribut ZSTitelID wurde ergänzt als weiterer Identifier für die Verknüpfung von Zeitschriftentitel und Zeitschriftenlieferungen.
+			Das Attribut ISSN wurde unter ddb:identifier für den Publikationstyp Periodical ergänzt.
+		</xs:documentation>
+	</xs:annotation>
+	<xs:element name="contact">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="empty">
+					<xs:attribute name="contactID" use="required" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="fileNumber" type="xs:string" />
+	<xs:element name="fileProperties">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="fileName" type="xs:string" use="required" />
+					<xs:attribute name="fileID" type="xs:string" use="optional" />
+					<xs:attribute name="format" type="xs:string" use="optional" />
+					<xs:attribute name="characterSet" type="xs:string"
+					use="optional" />
+					<xs:attribute name="fileSize" type="xs:string" use="optional" />
+					<xs:attribute name="fileDirectory" type="xs:string"
+						use="optional" />
+					<xs:attribute name="creation" type="xs:string" use="optional" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="checksum">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="type" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="MD5"/>
+								<xs:enumeration value="SHA1"/>
+								<xs:enumeration value="SHA256"/>
+								<xs:enumeration value="SHA512"/>
+								<xs:enumeration value="CRC32"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	
+	<xs:element name="transfer">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:anyURI">
+					<xs:attribute name="type" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="dcterms:URI" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="identifier">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:anyURI">
+					<xs:attribute name="type" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="URN" />
+								<xs:enumeration value="URL" />
+								<xs:enumeration value="DOI" />
+								<xs:enumeration value="handle" />
+								<xs:enumeration value="VG-Wort-Pixel" />
+								<xs:enumeration value="Erstkat-ID" />
+								<xs:enumeration value="URL_Frontdoor" />
+								<xs:enumeration value="URL_Publikation" />
+								<xs:enumeration value="ISSN" />
+								<xs:enumeration value="other" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="rights">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute ref="kind" use="required" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="note" type="xs:string" />
+	<xs:element name="server">
+		<xs:complexType mixed="true">
+			<xs:sequence>
+				<xs:element name="description" type="xs:string"
+					minOccurs="0" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="dateDelivered" type="dcterms:W3CDTF" />
+	<xs:element name="useRestrictionInfo">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="type" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:string">
+								<xs:enumeration value="passwd" />
+								<xs:enumeration value="copy_prot" />
+								<xs:enumeration value="print_prot" />
+								<xs:enumeration value="other" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="annotation" type="xs:string" />
+	<xs:simpleType name="empty">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:attribute name="role" type="xs:string" />
+	<xs:attribute name="kind">
+		<xs:simpleType>
+			<xs:restriction base="xs:string">
+				<xs:enumeration value="blocked" />
+				<xs:enumeration value="domain" />
+				<xs:enumeration value="free" />
+				<xs:enumeration value="unknown" />
+			</xs:restriction>
+		</xs:simpleType>
+	</xs:attribute>
+	<xs:complexType name="titleISO639-2">
+		<!--
+			Als neue Verfeinerung implementiert, da alte Version nicht gültig.
+		-->
+		<xs:complexContent mixed="true">
+			<xs:extension base="dc:SimpleLiteral">
+				<xs:attribute name="type" type="titleType" use="optional" />
+				<xs:attribute name="lang" type="iso639-2:BibliographicCodeType"
+					form="unqualified" use="required" />
+				<xs:attribute ref="xml:lang" use="prohibited" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="talternativeISO639-2">
+		<!--
+			Als neue Verfeinerung implementiert, da alte Version nicht gültig.
+		-->
+		<xs:complexContent mixed="true">
+			<xs:extension base="dc:SimpleLiteral">
+				<xs:attribute name="type" type="alttitleType" use="optional" />
+				<xs:attribute name="lang" type="iso639-2:BibliographicCodeType"
+					form="unqualified" use="required" />
+				<xs:attribute ref="xml:lang" use="prohibited" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="contentISO639-2">
+		<!--
+			Als neue Verfeinerung implementiert, da alte Version nicht gültig.
+		-->
+		<xs:complexContent mixed="true">
+			<xs:extension base="dc:SimpleLiteral">
+				<xs:attribute name="type" use="optional">
+					<xs:simpleType>
+						<xs:restriction base="xs:string">
+							<xs:enumeration value="noScheme" />
+							<xs:enumeration value="dcterms:URI" />
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:attribute>
+				<xs:attribute name="lang" type="iso639-2:BibliographicCodeType"
+					form="unqualified" use="required" />
+				<xs:attribute ref="xml:lang" use="prohibited" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="access">
+		<xs:complexContent mixed="true">
+			<xs:extension base="dc:SimpleLiteral">
+				<xs:attribute ref="kind" use="required" />
+				<xs:attribute name="type" type="accessType" use="required" />
+				<xs:attribute ref="xml:lang" use="prohibited" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:simpleType name="accessType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="dcterms:URI" />
+			<xs:enumeration value="ddb:noScheme" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="titleType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="translated" />
+			<xs:enumeration value="authorizedHeading" />
+			<xs:enumeration value="other" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="alttitleType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="translated" />
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name="encoding">
+		<xs:complexContent mixed="true">
+			<xs:extension base="dc:SimpleLiteral">
+				<xs:attribute name="Scheme" type="xs:string" use="required" />
+				<xs:attribute ref="xml:lang" use="prohibited" />
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+	<xs:complexType name="ISBN">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string" />
+				</xs:simpleType>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="noScheme">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string" />
+				</xs:simpleType>				
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="DNB_ZSTitelID">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string" />
+				</xs:simpleType>				
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="Erstkat-ID">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string" />
+				</xs:simpleType>				
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	
+	<!-- Hier wurden vier Attribute für die Ablieferung von Zeitschriftenlieferungen ergänzt. -->
+	
+	<xs:complexType name="ZSTitelID">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string" />
+				</xs:simpleType>				
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ZS-Ausgabe">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string" />
+				</xs:simpleType>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ZS-Volume">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string" />
+				</xs:simpleType>				
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ZS-Issue">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string" />
+				</xs:simpleType>				
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+	<xs:complexType name="ISSN">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string" />
+				</xs:simpleType>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+
+	<!--
+		DCMIType kennt keine ElectronicThesisandDissertation. 
+		Daher ist es notwendig ein eigenes Typ-Vokabular anzulegen. 
+		Die Angabe dieses Publikationstyps ist im Rahmen der Abwärtskompatibilität (XMetaDiss - XMetaDissPlus)
+		für eine Übergangszeit weiterhin möglich.
+	-->
+	<xs:complexType name="PublType">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:union>
+						<xs:simpleType>
+							<xs:restriction base="xs:Name">
+								<xs:enumeration value="ElectronicThesisandDissertation" />
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:union>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited" />
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>

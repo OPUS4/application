@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- DOI: complexType zu The Digital Object Identifier System siehe http://www.doi.org-->
+<!-- Copyright 2010  Deutsche Nationalbibliothek -->
+<!-- Version xMetaDissPlus 2.1 -->
+<xs:schema targetNamespace="http://www.d-nb.de/standards/doi/" elementFormDefault="qualified"
+	attributeFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:doi="http://www.d-nb.de/standards/doi/">
+	<!-- Folgende Importe werden benoetigt, da Elemente aus den zugehoerigen Namespaces benutzt werden. -->
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace" schemaLocation="http://www.w3.org/2001/03/xml.xsd"/>
+	<xs:import namespace="http://purl.org/dc/elements/1.1/" schemaLocation="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd"/>
+	<xs:complexType name="doi">
+		<xs:simpleContent>
+			<xs:restriction base="dc:SimpleLiteral">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="10.[0-9]+/.*"/>
+					</xs:restriction>
+				</xs:simpleType>
+				<xs:attribute ref="xml:lang" use="prohibited"/>
+			</xs:restriction>
+		</xs:simpleContent>
+	</xs:complexType>
+</xs:schema>
