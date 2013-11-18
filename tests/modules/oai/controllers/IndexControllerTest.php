@@ -605,7 +605,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals('Baz University',  $elements->item(1)->nodeValue, 'dc:contributor field changed');
 
         // Regression test for OPUSVIER-2393 (show dc:identifier)
-        $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="http://nbn-resolving.de/urn/resolver.pl?123"]');
+        $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="http://nbn-resolving.de/urn/resolver.pl?urn:nbn:op:123"]');
         $this->assertEquals(1, $elements->length, 'dc:identifier URN count changed');
 
         $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="123"]');
@@ -1373,6 +1373,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     * XMetaDissPlus Schema validation (see OPUSVIER-3165)
     */
    public function testXMetaDissPlusIsSchemaValid() {
+       $xmlCatalog = getenv('XML_CATALOG_FILES');
+       putenv('XML_CATALOG_FILES=resources/xmetadissplus-catalog.xml');
         libxml_use_internal_errors(true);
         
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
@@ -1385,6 +1387,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $valid = $metadataDocument->schemaValidate('resources/xmetadissplus/xmetadissplus.xsd');
 
         $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');
+        putenv("XML_CATALOG_FILES=$xmlCatalog");
     }
 
     public function testListRecordsWithResumptionToken() {
