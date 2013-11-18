@@ -38,8 +38,6 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:php="http://php.net/xsl"
-                xmlns:dc="http://purl.org/dc/elements/1.1/"
-                xmlns:xml="http://www.w3.org/XML/1998/namespace"
                 exclude-result-prefixes="php">
    
     <!-- Additional Templates with auxilliary functions. -->

@@ -41,8 +41,6 @@
 <xsl:stylesheet version="1.0"
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:php="http://php.net/xsl"
-                xmlns:dc="http://purl.org/dc/elements/1.1/"
-                xmlns:xml="http://www.w3.org/XML/1998/namespace"
                 exclude-result-prefixes="php">
    
    <xsl:include href="templates/services.xsl"/>
@@ -138,10 +136,10 @@
                   <xsl:with-param name="string">frontdoor_additional_options</xsl:with-param>
                </xsl:call-template>
             </h3>
-            <ul>
+            <div>
                <xsl:call-template name="AdditionalServices"/>
                <xsl:call-template name="MailToAuthor"/>
-            </ul>
+            </div>
          </div>
       </div>
 
