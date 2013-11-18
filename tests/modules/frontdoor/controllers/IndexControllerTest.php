@@ -707,4 +707,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         
     }
 
+    public function testValidateXHTML() {
+        $this->dispatch('/frontdoor/index/index/docId/92');
+        $this->assertResponseCode(200);
+        $this->validateXHTML();
+    }
+
 }
