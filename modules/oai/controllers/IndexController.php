@@ -143,6 +143,9 @@ class Oai_IndexController extends Controller_Xml {
         // Setup stylesheet
         $this->loadStyleSheet($this->view->getScriptPath('index') . '/oai-pmh.xslt');
 
+        $this->_proc->registerPHPFunctions('Oai_IndexController::getLanguageCode');
+
+        
         // Set response time
         $this->_proc->setParameter('', 'dateTime', str_replace('+00:00', 'Z', Zend_Date::now()->setTimeZone('UTC')->getIso()));
 
@@ -680,5 +683,10 @@ class Oai_IndexController extends Controller_Xml {
             $res = $token->getResumptionId();
             $this->setParamResumption($res, $cursor, $totalIds);
         }
+    }
+    
+    public static function getLanguageCode($code, $inPart='part2_t', $outPart='part2_b') {
+        $result = Opus_Language::getByPart2T($code);
+        return empty($result) ? $code : $result['part2_b'];
     }
 }
