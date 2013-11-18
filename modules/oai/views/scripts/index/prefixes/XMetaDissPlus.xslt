@@ -58,7 +58,9 @@
     xmlns:dini="http://www.d-nb.de/standards/xmetadissplus/type/"
     xmlns="http://www.d-nb.de/standards/subject/"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.d-nb.de/standards/xmetadissplus/ http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd">
+    xmlns:php="http://php.net/xsl"
+    xsi:schemaLocation="http://www.d-nb.de/standards/xmetadissplus/ http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd"
+    exclude-result-prefixes="php">
 
     <xsl:output method="xml" indent="yes" />
 
@@ -83,11 +85,7 @@
             <!-- dc:contributor -->
             <xsl:apply-templates select="PersonAdvisor" mode="xmetadissplus" />
             <xsl:apply-templates select="PersonReferee" mode="xmetadissplus" />
-            <!-- dc:source -->
-            <xsl:apply-templates select="TitleParent" mode="xmetadissplus" />
 
-            <!-- dcterms:isPartOf -->
-            <xsl:apply-templates select="Series" mode="xmetadissplus" />
 
             <xsl:choose>
                 <xsl:when test="ThesisDateAccepted">
@@ -196,7 +194,8 @@
                    </xsl:otherwise>    
                  </xsl:choose>  
             </dc:type>
-
+            
+            <!-- dc:identifier -->
             <xsl:apply-templates select="IdentifierUrn" mode="xmetadissplus" />
 
             <!-- weird DNB constraint: dcterms:medium must appear after dc:identifier -->
@@ -207,17 +206,18 @@
                 </dcterms:medium>
             </xsl:for-each>
 
+            <!-- dc:source must appear after dc:identifier -->
+            <xsl:apply-templates select="TitleParent" mode="xmetadissplus" />
+
+
             <!-- weird DNB constraint: dc:language must appear after dcterms:medium -->
             <dc:language xsi:type="dcterms:ISO639-2">
-                 <xsl:choose>
-                   <xsl:when test="@Language='deu'">
-                      <xsl:text>ger</xsl:text>
-                    </xsl:when>
-                    <xsl:otherwise>     
-                       <xsl:value-of select="@Language" />
-                    </xsl:otherwise>
-                 </xsl:choose>
+                <xsl:value-of select="php:functionString('Oai_IndexController::getLanguageCode', @Language)" />
             </dc:language >
+
+            <!-- dcterms:isPartOf -->
+            <xsl:apply-templates select="Series" mode="xmetadissplus" />
+
             <xsl:apply-templates select="Licence" mode="xmetadissplus" />
 
             <!--  thesis.degree only, if type doctoral or habilitation -->
@@ -278,13 +278,16 @@
             <xsl:if test="File">
                 <xsl:apply-templates select="TransferUrl" mode="xmetadissplus" />
             </xsl:if>
+
             <xsl:apply-templates select="IdentifierUrl" mode="xmetadissplus" />
+
             <ddb:identifier ddb:type="URL">
                <xsl:value-of select="@frontdoorurl" />
             </ddb:identifier>
 
             <ddb:rights ddb:kind="free" />
-         </xMetaDiss:xMetaDiss>
+
+        </xMetaDiss:xMetaDiss>
     </xsl:template>
 
     <xsl:template match="TitleMain" mode="xmetadissplus">
