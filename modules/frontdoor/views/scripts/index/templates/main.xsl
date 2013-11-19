@@ -85,20 +85,20 @@
             <div class="abstract">
                 <xsl:choose>
                     <xsl:when test="$numOfShortAbstractChars = '0' or string-length(@Value) &lt; $numOfShortAbstractChars">
-                       <pre class="preserve-spaces"><xsl:value-of select="@Value" /></pre>
+                       <span class="preserve-spaces"><xsl:value-of select="@Value" /></span>
                     </xsl:when>
                     <xsl:otherwise>
-                        <span>
+                        <span class="preserve-spaces">
                             <xsl:attribute name="id">abstractShort_<xsl:value-of select="@Id"/>
                             </xsl:attribute>
                             <xsl:attribute name="class">abstractShort</xsl:attribute>
-                            <pre class="preserve-spaces"><xsl:value-of select="substring(@Value, 1, $numOfShortAbstractChars)"/></pre>
+                            <xsl:value-of select="substring(@Value, 1, $numOfShortAbstractChars)"/>
                         </span>
-                        <span>
+                        <span class="preserve-spaces">
                             <xsl:attribute name="id">abstractFull_<xsl:value-of select="@Id"/>
                             </xsl:attribute>
                             <xsl:attribute name="class">abstractFull</xsl:attribute>
-                            <pre class="preserve-spaces"><xsl:value-of select="@Value"/></pre>
+                            <xsl:value-of select="@Value"/>
                         </span>
                         <span>
                             <xsl:attribute name="id">abstractThreeDots_<xsl:value-of select="@Id" />

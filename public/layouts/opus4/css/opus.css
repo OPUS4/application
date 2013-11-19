@@ -185,6 +185,7 @@ table.result-data {
 .frontdoor .abstract {
 	background: url(../img/theme/icon-abstract-frontdoor.gif) no-repeat 3px 0;
 	line-height: 1.4em;
+    padding-bottom: 1.4em; /* Damit GIF vollständig zu sehen ist. */
 }
 
 .frontdoor .abstractShort {
@@ -201,7 +202,11 @@ table.result-data {
 }
 
 .frontdoor .abstractButton {
-    display: none;    
+    display: none;
+    /* Soll verhindern, das der Zeilenabstand für Short und Full sich durch das Bild verändert. */
+    position: relative;
+    top: 3px;
+    margin-top: -3px;
 }
 
 /* form styles
