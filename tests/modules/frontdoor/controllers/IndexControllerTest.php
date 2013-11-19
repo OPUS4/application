@@ -713,4 +713,14 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->validateXHTML();
     }
 
+    public function testValidateXHTMLWithShortendAbstracts() {
+        // Aktiviere Kürzung von Abstrakten
+        $config = Zend_Registry::get('Zend_Config');
+        $config->merge(new Zend_Config(array('frontdoor' => array('numOfShortAbstractChars' => 200))));
+
+        $this->dispatch('/frontdoor/index/index/docId/92');
+        $this->assertResponseCode(200);
+        $this->validateXHTML();
+    }
+
 }
