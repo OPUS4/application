@@ -168,3 +168,21 @@ FILES=$(getFiles "$SRC/help")
 for FILE in $FILES; do
     updateFile "$SRC/help" "$HELP_FILES_CONFIGS" "$MD5PATH/help" "$FILE" backup
 done
+
+# =============================================================================
+# Updating Mail Template Files
+# =============================================================================
+
+MAIL_TEMPLATES_DIR="$BASEDIR/opus4/application/configs/mail_templates"
+
+if [[ ! -d $MAIL_TEMPLATES_DIR ]]; then
+    createFolder "$MAIL_TEMPLATES_DIR"
+fi
+
+# Update mail template files, but ask user for every modified file
+FILES=$(getFiles "$SRC/mail_templates")
+
+for FILE in $FILES; do
+    updateFile "$SRC/mail_templates" "$MAIL_TEMPLATES_DIR" "$MD5PATH/mail_templates" "$FILE" backup
+done
+
