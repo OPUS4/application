@@ -547,7 +547,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         
         $doc->deletePermanent();
         
-        $this->assertContains('<div class="abstract"><pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre></div>",
+        $this->assertContains('<div class="abstract"><span class="preserve-spaces">' . "foo\nbar\n\nbaz</span></div>",
             $this->getResponse()->getBody());
     }
 
