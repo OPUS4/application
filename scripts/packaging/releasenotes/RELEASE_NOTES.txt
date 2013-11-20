@@ -1,5 +1,12 @@
 h1. OPUS 4 Release Notes
 
+h2. ======================== Release 4.4.2 2013-11-22 ========================
+
+h3. Update Skript
+
+Das Update Skript funktioniert nur mit BASH Versionen ab 4.0. Die Version wird
+jetzt am Anfang des Update-Skript geprüft.
+
 h2. ======================== Release 4.4.1 2013-10-17 ========================
 
 h3. Neue Konfigurationsoption für Dateien in Publikationslisten
