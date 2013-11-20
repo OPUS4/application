@@ -686,7 +686,7 @@ class Oai_IndexController extends Controller_Xml {
     }
     
     public static function getLanguageCode($code, $inPart='part2_t', $outPart='part2_b') {
-        $result = Opus_Language::getByPart2T($code);
+        $result = Opus_Language::getPropertiesByPart2T($code);
         return empty($result) ? $code : $result['part2_b'];
     }
 }
