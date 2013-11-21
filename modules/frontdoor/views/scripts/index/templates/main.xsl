@@ -81,20 +81,21 @@
     </xsl:template>
 
     <xsl:template name="Abstract">
+        <ul>
         <xsl:for-each select="TitleAbstract">
-            <div class="abstract">
+            <li class="abstract preserve-spaces">
                 <xsl:choose>
                     <xsl:when test="$numOfShortAbstractChars = '0' or string-length(@Value) &lt; $numOfShortAbstractChars">
-                       <span class="preserve-spaces"><xsl:value-of select="@Value" /></span>
+                       <xsl:value-of select="@Value" />
                     </xsl:when>
                     <xsl:otherwise>
-                        <span class="preserve-spaces">
+                        <span>
                             <xsl:attribute name="id">abstractShort_<xsl:value-of select="@Id"/>
                             </xsl:attribute>
                             <xsl:attribute name="class">abstractShort</xsl:attribute>
                             <xsl:value-of select="substring(@Value, 1, $numOfShortAbstractChars)"/>
                         </span>
-                        <span class="preserve-spaces">
+                        <span>
                             <xsl:attribute name="id">abstractFull_<xsl:value-of select="@Id"/>
                             </xsl:attribute>
                             <xsl:attribute name="class">abstractFull</xsl:attribute>
@@ -146,8 +147,9 @@
                         </img>
                     </xsl:otherwise>
                 </xsl:choose>
-            </div>
+            </li>
         </xsl:for-each>
+        </ul>
     </xsl:template>
 
    
