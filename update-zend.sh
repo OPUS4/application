@@ -27,20 +27,6 @@ ZEND_LIB_URL='https://packages.zendframework.com/releases/ZendFramework-1.12.3/Z
 
 echo "Updating Zend-Framework to Version 1.12.3"
 
-if [ ! -d "$DOWNLOADS_DIR" ];
-then
-    echo "Download directory $DOWNLOADS_DIR not found. Please check."
-    echo "NOT updating Zend-Framework!"
-    exit 0
-fi
-
-if [ ! -d "$LIB_DIR" ];
-then
-    echo "Library directory $LIB_DIR not found. Please check."
-    echo "NOT updating Zend-Framework!"
-    exit 0
-fi
-
 echo "$LIB_DIR/$NEW_ZEND_FOLDER"
 if [ -d "$LIB_DIR/$NEW_ZEND_FOLDER" ];
 then
@@ -48,8 +34,19 @@ then
   exit 0
 fi
 
-echo "Downloading Zend-Framework Version 1.12.3"
+if [ ! -d "$DOWNLOADS_DIR" ];
+then
+    mkdir "$DOWNLOADS_DIR"
+fi
 
+if [ ! -d "$LIB_DIR" ];
+then
+    echo "Library directory $LIB_DIR not found. Please check."
+    echo "NOT updating Zend-Framework!"
+    exit 1
+fi
+
+echo "Downloading Zend-Framework Version 1.12.3"
 
 if ! wget -O "$DOWNLOADS_DIR"/zend.tar.gz "$ZEND_LIB_URL";
 then
