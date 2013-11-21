@@ -2,6 +2,14 @@ h1. OPUS 4 Release Notes
 
 h2. ======================== Release 4.4.2 2013-11-22 ========================
 
+h3. Frontdoor Layout & CSS
+
+Die Zusammenfassungen werden jetzt als HTML Liste (UL) ausgegeben, um valides
+XHTML zu generieren. Dafür wurde auch das CSS in opus.css angepasst. Daher
+müssen unter Umständen Anpassungen am CSS für Ihre OPUS Instanzen vorgenommen
+werden. Die Probleme mit dem Einklappen von Zusammenfassungen sollten durch
+diese Änderungen behoben sein.
+
 h3. Update Skript
 
 Das Update Skript funktioniert nur mit BASH Versionen ab 4.0. Die Version wird
