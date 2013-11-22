@@ -7,7 +7,7 @@ h3. XMetaDiss Plus Änderungen
 Es gab einige Anpassungen, um den Standard besser zu unterstützen. Dazu wird
 unter anderem bei Sprachen jetzt der Wert von Feld "Part2B" verwendet, so
 dass zum Beispiel 'ger' anstelle von bisher 'deu' verwendet wird. Weitere
-Hinweise zu den Sprachen gibt es in Kapitel 9.6 der Dokumentation.
+Hinweise dazu gibt es in Kapitel 9.6 der Dokumentation.
 
 h3. Datenmodel Änderungen
 
@@ -17,8 +17,8 @@ wurde auf 255 Zeichen erhöht.
 h3. Frontdoor Layout & CSS
 
 Die Zusammenfassungen werden jetzt als HTML Liste (UL) ausgegeben, um valides
-XHTML zu generieren. Dafür wurde auch das CSS in opus.css angepasst. Daher
-müssen unter Umständen Anpassungen am CSS für Ihre OPUS Instanzen vorgenommen
+XHTML zu generieren. Dafür wurde auch das CSS in opus.css angepasst. Unter
+Umständen müssen daher Anpassungen am CSS für Ihre OPUS Instanzen vorgenommen
 werden. Die Probleme mit dem Einklappen von Zusammenfassungen sollten durch
 diese Änderungen behoben sein.
 
