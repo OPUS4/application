@@ -2,6 +2,18 @@ h1. OPUS 4 Release Notes
 
 h2. ======================== Release 4.4.2 2013-11-22 ========================
 
+h3. XMetaDiss Plus Änderungen
+
+Es gab einige Anpassungen, um den Standard besser zu unterstützen. Dazu wird
+unter anderem bei Sprachen jetzt der Wert von Feld "Part2B" verwendet, so
+dass zum Beispiel 'ger' anstelle von bisher 'deu' verwendet wird. Weitere
+Hinweise zu den Sprachen gibt es in Kapitel 9.6 der Dokumentation.
+
+h3. Datenmodel Änderungen
+
+Die maximale Länge der Felder "edition", "issue", und "volume" von Dokumenten
+wurde auf 255 Zeichen erhöht.
+
 h3. Frontdoor Layout & CSS
 
 Die Zusammenfassungen werden jetzt als HTML Liste (UL) ausgegeben, um valides
