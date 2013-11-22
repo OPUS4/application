@@ -1,5 +1,43 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.4.2 2013-11-22 ========================
+
+h3. Bugs
+
+* [OPUSVIER-3114] - Konfiguration der Felder, die beim Speichern eines Models kein Update des ServerDateModified bewirken sollen.
+* [OPUSVIER-3129] - Keine einfache und erweiterte Suche unter IE8  und IE 9 möglich
+* [OPUSVIER-3148] - Attribute "visible" für Collections wird in der Frontdoor nicht berücksichtigt
+* [OPUSVIER-3153] - Update Skript bricht ab, wenn Zend nicht aktualisiert werden muss
+* [OPUSVIER-3156] - Rechtschreibfehler im Account Formular
+* [OPUSVIER-3159] - Ausgabe der titelverleihenden Institution auf der Frontdoor
+* [OPUSVIER-3160] - Update-Skript löscht leere Unterverzeichnisse von .svn
+* [OPUSVIER-3161] - Auf- und einklappen von Abstracts mit Chrome als Browser funktioniert nicht richtig
+* [OPUSVIER-3162] - XMetaDissplus: Ausgabe von Sprachcodes wird von der DNB bemängelt
+* [OPUSVIER-3163] - XMetaDissPluss: Reihenfolge der Elemente ist nicht korrekt
+* [OPUSVIER-3168] - Bug beim Installieren von OPUS 4.4.1
+* [OPUSVIER-3187] - Menuezeile oben Konto statt Account
+* [OPUSVIER-3192] - Links für Dateidownload in der Administration ohne Pfadname für Instanz
+* [OPUSVIER-3196] - Frontdoor sollte valides XHTML produzieren
+* [OPUSVIER-3202] - Update Script berücksichtigt Benachrichtigungsfunktion nicht richtig - Ordner mail_templates wird nicht angelegt
+* [OPUSVIER-3203] - InvalidateDocumentCache::preDelete nur ausführen, wenn Model-ID gesetzt
+
+h3. Feature Request
+
+* [OPUSVIER-2720] - Feldlänge von edition von varchar(25) auf edition varchar(255) erweitern
+
+h3. Aufgaben
+
+* [OPUSVIER-2846] - Opus_Document.ServerDateModified aktualisieren, wenn "dependent models", an denen das Dokument hängt, modifiziert oder gelöscht werden
+* [OPUSVIER-3136] - Term SWD im Publishformular durch GND ersetzen
+* [OPUSVIER-3155] - Längere Eingabefelder in Formularen im Adminbereich (Namen u.a.)
+* [OPUSVIER-3157] - zusätzliche Prüfung auf Bash-Versionsnummer in Update-Skript einbauen
+* [OPUSVIER-3172] - 'SWD' im Publish Formular  in 'GND' ändern (Übersetzungen)
+* [OPUSVIER-3207] -  Beschreibung wie implizierte Felder als Pflichtfeld deklariert werden können
+
+h3. Dokumentation
+
+* [OPUSVIER-3206] - Hinweis auf Abhängigkeit von XMetaDissPlus auf Spracheinstellungen
+
 h2. ======================== Release 4.4.1 2013-10-17 ========================
 
 h3. Bugs
