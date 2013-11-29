@@ -129,8 +129,8 @@ urn.nss = de:kobv:test-opus
 ;form.first.enable_upload = 0
 ; States, if the upload-fields are required to enter the second form.
 ;form.first.require_upload = 1
-; States, if a checkbox for the institutions legal notices is shown.
-;form.first.show_rights_checkbox = 1
+; Checkbox for the institutions legal notices is by default shown. Comment out to hide checkbox.
+;form.first.show_rights_checkbox = 0
 
 ;REFEREES
 ; reviewer.collections.ddc.66[] = 'admin'
