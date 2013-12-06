@@ -73,7 +73,8 @@ ln -svf jpgraph-3.0.7 jpgraph
 cp -r "$BASEDIR/downloads/SolrPhpClient_r36" .
 ln -svf "SolrPhpClient_r36" SolrPhpClient
 
-cp "$BASEDIR/downloads/jquery.js" "$BASEDIR/opus4/public/js"
+mkdir -p "$BASEDIR/opus4/public/js"
+cp "$BASEDIR/downloads/jquery.js" "$BASEDIR/opus4/public/js/"
 
 cd "$BASEDIR"
 
