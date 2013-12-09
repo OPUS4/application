@@ -41,6 +41,8 @@
  */
 class Controller_Helper_AccessControl extends Zend_Controller_Action_Helper_Abstract
     implements Application_Security_AccessControl {
+
+    private $_acl;
     
     public function direct($resource) {
         return $this->accessAllowed($resource);
@@ -77,7 +79,14 @@ class Controller_Helper_AccessControl extends Zend_Controller_Action_Helper_Abst
      * @return Zend_Acl
      */
     protected function getAcl() {
-        return Zend_Registry::isRegistered('Opus_Acl') ? Zend_Registry::get('Opus_Acl') : null;
+        if (is_null($this->_acl)) {
+            $this->_acl = Zend_Registry::isRegistered('Opus_Acl') ? Zend_Registry::get('Opus_Acl') : null;
+        }
+        return $this->_acl;
+    }
+
+    public function setAcl($acl) {
+        $this->_acl = $acl;
     }
     
 }

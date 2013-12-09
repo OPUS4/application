@@ -159,11 +159,10 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $auth = Zend_Auth::getInstance();
         $result = $auth->authenticate($adapter);
         $this->assertTrue($auth->hasIdentity());
-        /*
         $config = Zend_Registry::get('Zend_Config');
         if ($config->security) {
             Application_Security_AclProvider::init();
-        }*/
+        }
     }
 
     public function logoutUser() {

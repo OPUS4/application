@@ -48,6 +48,8 @@ class Application_Security_AclProvider {
      */
     const ACTIVE_ROLE = '_user';
 
+    private $_logger;
+
     /**
      * Ressourcen, die in Datei application/configs/navigationModules.xml referenziert werden.
      */
@@ -73,12 +75,26 @@ class Application_Security_AclProvider {
             'staticpages',
             'translations')        
     );
+
+    public static function init() {
+        $aclProvider = new Application_Security_AclProvider();
+
+        $acl = $aclProvider->getAcls();
+
+        $aclProvider->getLogger()->debug('ACL: bootrapping');
+
+        Zend_Registry::set('Opus_Acl', $acl);
+
+        Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl($acl);
+        Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(
+            Application_Security_AclProvider::ACTIVE_ROLE);
+    }
     
     /**
-     * Liefert ein Zend_Acl Objekt für den aktuellen Nutzer zurück.
+    Zend_Debug::dump   * Liefert ein Zend_Acl Objekt für den aktuellen Nutzer zurück.
      */
     public function getAcls() {
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = $this->getLogger();
         
         $acl = new Zend_Acl();
         
@@ -170,6 +186,17 @@ class Application_Security_AclProvider {
             
             $roleConfig->applyPermissions($acl);
         }
+    }
+
+    public function getLogger() {
+        if (is_null($this->_logger)) {
+            $this->_logger = Zend_Registry::get('Zend_Log');
+        }
+        return $this->_logger;
+    }
+
+    public function setLogger($logger) {
+        $this->_logger = $logger;
     }
         
 }

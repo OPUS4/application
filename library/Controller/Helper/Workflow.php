@@ -45,6 +45,8 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
      */
     private static $__workflowConfig;
 
+    private $_acl;
+
     /**
      * Gets called when helper is used like method of the broker.
      * @param Opus_Document $document
@@ -88,11 +90,10 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
         $currentState = $document->getServerState();
         
         $targetStates = self::getTargetStates($currentState);
-                
-        if (Zend_Registry::isRegistered('Opus_Acl')) {
-            
-            $acl = Zend_Registry::get('Opus_Acl');
 
+        $acl = $this->getAcl();
+                
+        if (!is_null($acl)) {
             $logger->debug("ACL: got instance");
 
             if (!is_null($acl)) {
@@ -202,6 +203,21 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
         }
 
         return Controller_Helper_Workflow::$__workflowConfig;
+    }
+
+    /**
+     * Returns the Zend_Acl object or null.
+     * @return Zend_Acl
+     */
+    public function getAcl() {
+        if (is_null($this->_acl)) {
+            $this->_acl = Zend_Registry::isRegistered('Opus_Acl') ? Zend_Registry::get('Opus_Acl') : null;
+        }
+        return $this->_acl;
+    }
+
+    public function setAcl($acl) {
+        $this->_acl = $acl;
     }
 
 }
