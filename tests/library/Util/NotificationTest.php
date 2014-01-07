@@ -286,6 +286,27 @@ class Util_NotificationTest extends ControllerTestCase {
         $this->assertEquals(0, count($recipients));
     }
 
+    public function testGetRecipientsForPublicationContextWithoutPublishedMailConfigButWithAuthors() {
+        $this->config->notification->document->published->email = "";
+        $doc = new Opus_Document();
+        $doc->store();
+
+        $authors = array(
+            array ( "name" => "Doe, John", "address" => "doe@localhost" ),
+            array ( "name" => "Doe, Jane", "address" => "jane.doe@localhost" )
+        );
+
+        $method = $this->getMethod('getRecipients');
+        $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, $authors, $doc));
+        $doc->deletePermanent();
+
+        $this->assertEquals(2, count($recipients));
+        $this->assertEquals($recipients[0]['name'], "Doe, John");
+        $this->assertEquals($recipients[0]['address'], "doe@localhost");
+        $this->assertEquals($recipients[1]['name'], "Doe, Jane");
+        $this->assertEquals($recipients[1]['address'], "jane.doe@localhost");
+    }
+
     public function testGetRecipientsForPublicationContextAndMultipleAddressesWithoutAuthorsAsRecipents() {
         $this->config->notification->document->published->email = "published@localhost,publ@host.tld";
         $doc = new Opus_Document();
