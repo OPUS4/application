@@ -599,6 +599,105 @@
             </tuv>
         </tu>
 
+        <tu tuid="Opus_Language_Scope_Value_Null">
+            <tuv xml:lang="en">
+                <seg>-</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>-</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Language_Scope_Value_I">
+            <tuv xml:lang="en">
+                <seg>Individual</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Individuell</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Language_Scope_Value_M">
+            <tuv xml:lang="en">
+                <seg>Macrolanguage</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Macrosprache</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Language_Scope_Value_S">
+            <tuv xml:lang="en">
+                <seg>Special</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Spezial</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Language_Type_Value_Null">
+            <tuv xml:lang="en">
+                <seg>-</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>-</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Language_Type_Value_A">
+            <tuv xml:lang="en">
+                <seg>Ancient</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Antik</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Language_Type_Value_C">
+            <tuv xml:lang="en">
+                <seg>Constructed</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Konstruiert</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Language_Type_Value_E">
+            <tuv xml:lang="en">
+                <seg>Extinct</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Ausgestorben</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Language_Type_Value_H">
+            <tuv xml:lang="en">
+                <seg>Historical</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Historisch</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Language_Type_Value_L">
+            <tuv xml:lang="en">
+                <seg>Living</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Lebend</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Language_Type_Value_S">
+            <tuv xml:lang="en">
+                <seg>Special</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Spezial</seg>
+            </tuv>
+        </tu>
+
     </body>
 
 </tmx>

@@ -21,7 +21,7 @@
         <seg>639-2 Identifier (terminology code)</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>639-2 Bezeichner ((Terminologie-Code)</seg>
+        <seg>639-2 Bezeichner (Terminologie-Code)</seg>
       </tuv>
     </tu>
 
@@ -36,19 +36,19 @@
 
     <tu tuid="Opus_Language_Scope">
       <tuv xml:lang="en">
-        <seg>I(ndividual), M(acrolanguage), S(pecial)</seg>
+        <seg>Scope</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>I(ndividuell), M(acrosprache), S(pecial)</seg>
+        <seg>Umfang</seg>
       </tuv>
     </tu>
 
     <tu tuid="Opus_Language_Type">
       <tuv xml:lang="en">
-        <seg>A(ncient), C(onstructed), E(xtinct), H(istorical), L(iving), S(pecial)</seg>
+        <seg>Type</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>A(ntik), C(onstruiert), E(ausgestorben), H(istorisch), L(ebend), S(pecial)</seg>
+        <seg>Typ</seg>
       </tuv>
     </tu>
 
@@ -72,10 +72,10 @@
 
     <tu tuid="Opus_Language_Active">
       <tuv xml:lang="en">
-        <seg>active</seg>
+        <seg>Active</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>aktiv</seg>
+        <seg>Aktiv</seg>
       </tuv>
     </tu>
 
