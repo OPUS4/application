@@ -1595,42 +1595,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="admin_language_edit">
-            <tuv xml:lang="en">
-                <seg>Edit Language</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Sprache ändern</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="admin_language_new">
-            <tuv xml:lang="en">
-                <seg>New Language</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Neue Sprache</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="admin_language_index">
-            <tuv xml:lang="en">
-                <seg>Admin Languages</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Sprachen verwalten</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="admin_language_show">
-            <tuv xml:lang="en">
-                <seg>Show Language</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Sprache anzeigen</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="admin_person_edit">
             <tuv xml:lang="en">
                 <seg>Edit Person</seg>

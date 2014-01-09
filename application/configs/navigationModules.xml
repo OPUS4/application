@@ -343,14 +343,6 @@
                             <action>new</action>
                         </new>
 
-                        <create>
-                            <type>mvc</type>
-                            <label>admin_language_new</label>
-                            <module>admin</module>
-                            <controller>language</controller>
-                            <action>create</action>
-                        </create>
-
                         <edit>
                             <type>mvc</type>
                             <label>admin_language_edit</label>
@@ -359,22 +351,13 @@
                             <action>edit</action>
                         </edit>
 
-                        <update>
+                        <delete>
                             <type>mvc</type>
-                            <label>admin_language_edit</label>
+                            <label>admin_language_delete</label>
                             <module>admin</module>
                             <controller>language</controller>
-                            <action>update</action>
-                        </update>
-                        
-                        <dispatch>
-                            <!-- Musste angelegt werden damit Breadcrumbs für Edit-Seite auftauchen -->
-                            <type>mvc</type>
-                            <label>admin_language_edit</label>
-                            <module>admin</module>
-                            <controller>language</controller>
-                            <action>dispatch</action>
-                        </dispatch>
+                            <action>delete</action>
+                        </delete>
                     </pages>
                 </languages>
 

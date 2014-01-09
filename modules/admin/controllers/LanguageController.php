@@ -39,27 +39,16 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_LanguageController extends Controller_CRUDAction {
-
-    /**
-     * The class of the model being administrated.
-     *
-     * @var Opus_Model_Abstract
-     */
-    protected $_modelclass = 'Opus_Language';
+class Admin_LanguageController extends Application_Controller_ActionCRUD {
 
     /**
      * List all available collection role instances
      *
      * @return void
      */
-    public function indexAction() {
-        $entries = Opus_Language::getAll();
-        $this->view->entries = array();
-        foreach ($entries as $entry) {
-            //$this->view->entries[$entry->getId()] = $entry->getPart2T();
-            $this->view->entries[$entry->getId()] = $entry->getRefName();            
-        }
+    public function init() {
+        $this->setFormClass('Admin_Form_Language');
+        parent::init();
     }
 
 }
