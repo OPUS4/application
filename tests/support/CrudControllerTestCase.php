@@ -42,7 +42,7 @@ abstract class CrudControllerTestCase extends ControllerTestCase {
 
     private $controllerPath;
 
-    private $createsModels;
+    protected $createsModels;
 
     public function setModule($value) {
         $this->module = $value;
