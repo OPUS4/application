@@ -45,7 +45,7 @@
     <? foreach($this->element->getModels() as $model) : ?>
         <tr>
             <td><a href="<?= $this->url(array('action' => 'show', 'id' => $model->getId())) ?>"
-                class="displayname<?= $model->getActive() ? '' : ' invisible'?>"
+                class="displayname<?= (is_null($model->getField('Active')) || $model->getActive()) ? '' : ' invisible'?>"
                     ><?= htmlspecialchars($model->getDisplayName()) ?></a></td>
             <td class="edit">
                 <a href="<?= $this->url(array('action' => 'edit', 'id' => $model->getId())) ?>"
