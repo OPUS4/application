@@ -31,52 +31,202 @@
  * @version     $Id$
  */
 
-class Admin_DnbinstituteControllerTest extends ControllerTestCase {
+class Admin_DnbinstituteControllerTest extends CrudControllerTestCase {
 
-    /**
-     * Test showing index page.
-     */
-    public function testIndexAction() {
-        $this->dispatch('/admin/dnbinstitute');
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('dnbinstitute');
-        $this->assertAction('index');
+    public function setUp() {
+        $this->setController('dnbinstitute');
+        parent::setUp();
     }
 
-    /**
-     * Test show DnbInstitute information.
-     */
+    public function getModels() {
+        return Opus_DnbInstitute::getAll();
+    }
+
+    public function createNewModel() {
+        $model = new Opus_DnbInstitute();
+
+        $model->setName('TestName');
+        $model->setCity('TestCity');
+        $model->setDepartment('TestDepartment');
+        $model->setAddress('TestAddress');
+        $model->setPhone('TestPhone');
+        $model->setDnbContactId('TestDnbContactId');
+        $model->setIsGrantor(true);
+        $model->setIsPublisher(false);
+
+        return $model->store();
+    }
+
+    public function getModel($identifier) {
+        return new Opus_DnbInstitute($identifier);
+    }
+
+    private function verifyShow() {
+        $this->assertQueryContentContains('div#Name', 'TestName');
+        $this->assertQueryContentContains('div#Department', 'TestDepartment');
+        $this->assertQueryContentContains('div#City', 'TestCity');
+        $this->assertQueryContentContains('div#Address', 'TestAddress');
+        $this->assertQueryContentContains('div#Phone', 'TestPhone');
+        $this->assertQueryContentContains('div#DnbContactId', 'TestDnbContactId');
+        $this->assertQueryContentRegex('div#IsGrantor', '/Yes|Ja/');
+        $this->assertQueryContentRegex('div#IsPublisher', '/No|Nein/');
+    }
+
     public function testShowAction() {
-        $this->markTestIncomplete();
-        $this->dispatch('/admin/dnbinstitute/show/id/1');
+        $this->createsModels= true;
+
+        $modelId = $this->createNewModel();
+
+        $this->dispatch('/admin/dnbinstitute/show/id/' . $modelId);
+
+
+        $model = $this->getModel($modelId);
+        $model->delete();
+
         $this->assertResponseCode(200);
         $this->assertModule('admin');
         $this->assertController('dnbinstitute');
         $this->assertAction('show');
+
+        $this->verifyShow();
+        // TODO $this->validateXHTML();
     }
 
-    /**
-     * Test showing form for new DnbInstitute.
-     */
-    public function testNewAction() {
+    public function testNewActionSave() {
+        $this->createsModels = true;
+
+        $post = array(
+            'Name' => 'TestName',
+            'Department' => 'TestDepartment',
+            'City' => 'TestCity',
+            'Address' => 'TestAddress',
+            'Phone' => 'TestPhone',
+            'DnbContactId' => 'TestDnbContactId',
+            'IsGrantor' => '1',
+            'IsPublisher' => '0',
+            'Save' => 'Speichern',
+        );
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+
         $this->dispatch('/admin/dnbinstitute/new');
+
+        $this->assertRedirect('Should be a redirect to show action.');
+        $this->assertRedirectRegex('/^\/admin\/dnbinstitute\/show/'); // Regex weil danach noch '/id/xxx' kommt
+        $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
+
+        // Neue Lizenz anzeigen
+        $location = $this->getLocation();
+
+        $this->resetRequest();
+        $this->resetResponse();
+
+        $this->dispatch($location);
         $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('dnbinstitute');
-        $this->assertAction('new');
+
+        $this->verifyShow();
     }
 
-    /**
-     * Test showing form for editing DnbInstitute.
-     */
-    public function testEditAction() {
-        $this->markTestIncomplete();
+    public function testNewActionCancel() {
+        $this->createsModels = true;
+
+        $modelCount = count($this->getModels());
+
+        $post = array(
+            'Name' => 'TestName',
+            'City' => 'TestCity',
+            'Cancel' => 'Abbrechen'
+        );
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+
+        $this->dispatch('/admin/dnbinstitute/new');
+
+        $this->assertRedirectTo('/admin/dnbinstitute', 'Should be a redirect to index action.');
+
+        $this->assertEquals($modelCount, count(Opus_DnbInstitute::getAll()),
+            'Es sollte keine neue Sprache geben.');
+    }
+
+    public function testEditActionShowForm() {
         $this->dispatch('/admin/dnbinstitute/edit/id/1');
         $this->assertResponseCode(200);
-        $this->assertModule('admin');
         $this->assertController('dnbinstitute');
         $this->assertAction('edit');
+
+        $this->assertQueryContentContains('div#Name-element', 'Foobar Universität');
+        $this->assertQuery('li.save-element');
+        $this->assertQuery('li.cancel-element');
+        $this->assertQueryCount(1, 'input#Id');
+    }
+
+    public function testEditActionSave() {
+        $this->createsModels = true;
+
+        $modelId = $this->createNewModel();
+
+        $post = array(
+            'Id' => $modelId,
+            'Name' => 'NameModified',
+            'Department' => 'DepartmentModified',
+            'Address' => 'AddressModified',
+            'City' => 'CityModified',
+            'Phone' => 'PhoneModified',
+            'DnbContactId' => 'DnbContactIdModified',
+            'IsGrantor' => '0',
+            'IsPublisher' => '1',
+            'Save' => 'Speichern'
+        );
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+
+        $this->dispatch('/admin/dnbinstitute/edit');
+
+        $this->assertRedirectTo('/admin/dnbinstitute/show/id/' . $modelId);
+        $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
+
+        $model = $this->getModel($modelId);
+
+        $this->assertEquals('NameModified', $model->getName());
+        $this->assertEquals('DepartmentModified', $model->getDepartment());
+        $this->assertEquals('AddressModified', $model->getAddress());
+        $this->assertEquals('CityModified', $model->getCity());
+        $this->assertEquals('PhoneModified', $model->getPhone());
+        $this->assertEquals('DnbContactIdModified', $model->getDnbContactId());
+        $this->assertEquals('0', $model->getIsGrantor());
+        $this->assertEquals('1', $model->getIsPublisher());
+    }
+
+    public function testEditActionCancel() {
+        $this->createsModels = true;
+
+        $modelId = $this->createNewModel();
+
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'Id' => $modelId,
+            'Name' => 'NameModified',
+            'City' => 'Berlin',
+            'Cancel' => 'Abbrechen'
+        ));
+
+        $this->dispatch('/admin/dnbinstitute/edit');
+        $this->assertRedirectTo('/admin/dnbinstitute');
+
+        $model = $this->getModel($modelId);
+
+        $this->assertEquals('TestName', $model->getName());
+        $this->assertEquals('TestCity', $model->getCity());
+    }
+
+    public function testDeleteActionShowForm() {
+        $this->useEnglish();
+
+        $this->dispatch('/admin/dnbinstitute/delete/id/1');
+
+        $this->assertQueryContentContains('legend', 'Delete Institute');
+        $this->assertQueryContentContains('span.displayname', 'Foobar Universität, Testwissenschaftliche Fakultät');
+        $this->assertQuery('input#ConfirmYes');
+        $this->assertQuery('input#ConfirmNo');
     }
 
 }

@@ -47,14 +47,14 @@ class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract {
         parent::init();
 
         $this->setRemoveEmptyCheckbox(false);
-        $this->setLabelPrefix('Opus_DnbInstitute_');
+        // TODO $this->setLabelPrefix('Opus_DnbInstitute_');
         $this->setUseNameAsLabel(true);
         $this->setModelClass('Opus_DnbInstitute');
 
         $this->addElement('text', self::ELEMENT_NAME, array('required' => true, 'size' => 70));
         $this->addElement('text', self::ELEMENT_DEPARTMENT, array('size' => 70));
         $this->addElement('textarea', self::ELEMENT_ADDRESS);
-        $this->addElement('text', self::ELEMENT_CITY, array('required' => true));
+        $this->addElement('text', self::ELEMENT_CITY, array('required' => true, 'size' => 50));
         $this->addElement('text', self::ELEMENT_PHONE);
         $this->addElement('text', self::ELEMENT_DNB_CONTACT_ID);
         $this->addElement('checkbox', self::ELEMENT_IS_GRANTOR);

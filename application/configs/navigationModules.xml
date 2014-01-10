@@ -387,13 +387,13 @@
                             <action>new</action>
                         </new>
 
-                        <create>
+                        <delete>
                             <type>mvc</type>
-                            <label>admin_dnbinstitute_new</label>
+                            <label>admin_dnbinstitute_delete</label>
                             <module>admin</module>
                             <controller>dnbinstitute</controller>
-                            <action>create</action>
-                        </create>
+                            <action>delete</action>
+                        </delete>
 
                         <edit>
                             <type>mvc</type>

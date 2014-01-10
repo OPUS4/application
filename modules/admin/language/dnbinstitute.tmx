@@ -43,6 +43,15 @@
       </tuv>
     </tu>
 
+      <tu tuid="admin_dnbinstitute_delete">
+          <tuv xml:lang="en">
+              <seg>Delete DNB Institution</seg>
+          </tuv>
+          <tuv xml:lang="de">
+              <seg>DNB Institution löschen</seg>
+          </tuv>
+      </tu>
+
   </body>
   
 </tmx>
