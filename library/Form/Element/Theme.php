@@ -37,8 +37,7 @@ class Form_Element_Theme extends Form_Element_SelectWithNull {
     public function init() {
         parent::init();
 
-        $model = new Opus_Collection();
-        $values = $model->getField('Theme')->getDefault();
+        $values = $this->getThemes();
 
         $this->addMultiOption('Null', '-');
 
@@ -46,5 +45,51 @@ class Form_Element_Theme extends Form_Element_SelectWithNull {
             $this->addMultiOption($value, $value);
         }
     }
+
+    /**
+     * Path to location of available themes.
+     *
+     * @var string
+     */
+    private static $_themesPath = '';
+
+    /**
+     * Available themes from directory self::$_themesPath.
+     *
+     * @var array
+     */
+    private static $_themes = null;
+
+    private function getThemes() {
+        if (is_null(self::$_themes)) {
+            $this->findThemes(APPLICATION_PATH . '/public/layouts'); // TODO configurable
+        }
+
+        return self::$_themes;
+    }
+
+    /**
+     * Set location of available themes.
+     *
+     * @param  string $path
+     */
+    public static function findThemes($path) {
+        if (is_dir($path) === false) {
+            throw new InvalidArgumentException("Argument should be a valid path.");
+        }
+
+        $themes = array();
+        foreach (glob($path . '/*') as $entry) {
+            if (true === is_dir($entry)) {
+                $theme = basename($entry);
+                $themes[$theme] = $theme;
+            }
+        }
+
+        self::$_themesPath = $path;
+        self::$_themes = $themes;
+    }
+
+
 
 }
