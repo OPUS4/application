@@ -24,56 +24,49 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Form_Element
+ * @category    Application
+ * @package     Admin_Form
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Form_Element_ThemeTest extends FormElementTestCase {
+class Admin_Form_Collection extends Application_Form_Model_Abstract {
 
-    public function setUp() {
-        $this->_formElementClass = 'Form_Element_Theme';
-        $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
-            'dataWrapper');
-        $this->_staticViewHelper = 'viewFormSelect';
-        parent::setUp();
+    const ELEMENT_NAME = 'Name';
+    const ELEMENT_NUMBER = 'Number';
+    const ELEMENT_VISIBLE = 'Visible';
+    const ELEMENT_OAI_SUBSET = 'OaiSubset';
+    const ELEMENT_THEME = 'Theme';
+
+    public function init() {
+        parent::init();
+
+        $this->setUseNameAsLabel(true);
+
+        $this->addElement('text', self::ELEMENT_NAME, array('size' => 70));
+        $this->addElement('text', self::ELEMENT_NUMBER, array('size' => 30));
+        $this->addElement('checkbox', self::ELEMENT_VISIBLE);
+        $this->addElement('text', self::ELEMENT_OAI_SUBSET, array('size' => 50));
+        $this->addElement('Theme', self::ELEMENT_THEME);
     }
 
-    public function testOptions() {
-        $element = $this->getElement();
-
-        $options = $element->getMultiOptions();
-
-        $this->assertArrayHasKey('opus4', $options);
-        $this->assertEquals('opus4', $options['opus4']);
-        $this->assertArrayHasKey('opus4-matheon', $options);
-        $this->assertEquals('opus4-matheon', $options['opus4-matheon']);
-        $this->assertArrayHasKey('plain', $options);
-        $this->assertEquals('plain', $options['plain']);
+    public function populateFromModel($collection) {
+        $this->getElement(self::ELEMENT_MODEL_ID)->setValue($collection->getId());
+        $this->getElement(self::ELEMENT_NAME)->setValue($collection->getName());
+        $this->getElement(self::ELEMENT_NUMBER)->setValue($collection->getNumber());
+        $this->getElement(self::ELEMENT_VISIBLE)->setValue($collection->getVisible());
+        $this->getElement(self::ELEMENT_OAI_SUBSET)->setValue($collection->getOaiSubset());
+        $this->getElement(self::ELEMENT_THEME)->setValue($collection->getTheme());
     }
 
-    public function testSetValue() {
-        $element = $this->getElement();
-
-        $this->assertNull($element->getValue());
-
-        $element->setValue('opus4');
-
-        $this->assertEquals('opus4', $element->getValue());
-    }
-
-    public function testSetUnknownValue() {
-        $element = $this->getElement();
-
-        $this->assertNull($element->getValue());
-
-        $element->setValue('opus4-unknown');
-
-        $this->assertNull($element->getValue());
+    public function updateModel($collection) {
+        $collection->setName($this->getElementValue(self::ELEMENT_NAME));
+        $collection->setNumber($this->getElementValue(self::ELEMENT_NUMBER));
+        $collection->setVisible($this->getElementValue(self::ELEMENT_VISIBLE));
+        $collection->setOaiSubset($this->getElementValue(self::ELEMENT_OAI_SUBSET));
+        $collection->setTheme($this->getElementValue(self::ELEMENT_THEME));
     }
 
 }

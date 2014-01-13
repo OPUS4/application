@@ -46,6 +46,15 @@ class Form_Element_Theme extends Form_Element_SelectWithNull {
         }
     }
 
+    public function setValue($value) {
+        if (!array_key_exists($value, $this->getMultiOptions())) {
+            parent::setValue('Null');
+        }
+        else {
+            parent::setValue($value);
+        }
+    }
+
     /**
      * Path to location of available themes.
      *
@@ -89,7 +98,5 @@ class Form_Element_Theme extends Form_Element_SelectWithNull {
         self::$_themesPath = $path;
         self::$_themes = $themes;
     }
-
-
 
 }

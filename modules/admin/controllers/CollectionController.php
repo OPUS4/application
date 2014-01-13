@@ -50,7 +50,6 @@ class Admin_CollectionController extends Controller_Action {
      */
     public function init() {
         parent::init();
-        Opus_Collection::setThemesPath(APPLICATION_PATH . '/public/layouts');
     }
 
     public function indexAction() {
@@ -190,51 +189,66 @@ class Admin_CollectionController extends Controller_Action {
             return $this->_redirectToAndExit('index', '', 'collectionroles');
         }
 
-        $data = $this->_request->getPost();
+        $data = $this->getRequest()->getPost();
         $collectionModel = new Admin_Model_Collection($this->getRequest()->getParam('oid'));
         $collection = $collectionModel->getObject();
 
-        $form_builder = new Form_Builder();
-        $form_builder->buildModelFromPostData($collection, $data['Opus_Model_Filter']);
-        $form = $form_builder->build($this->__createFilter($collection));
+        $form = new Admin_Form_Collection();
 
         if (!$form->isValid($data)) {
             if ($collection->isNewRecord()) {
-                $form->setAction($this->view->url(array('action' => 'create', 'id' => $this->getRequest()->getParam('id'), 'type' => $this->getRequest()->getParam('type'))));
+                $form->setAction($this->view->url(array('action' => 'create',
+                    'id' => $this->getRequest()->getParam('id'), 'type' => $this->getRequest()->getParam('type'))));
                 $this->view->title = 'admin_collections_collection_new';
             }
             else {
-                $form->setAction($this->view->url(array('action' => 'create', 'oid' => $collection->getId(), 'id' => $this->getRequest()->getParam('id'), 'type' => $this->getRequest()->getParam('type'))));
+                $form->setAction($this->view->url(array('action' => 'create', 'oid' => $collection->getId(),
+                    'id' => $this->getRequest()->getParam('id'), 'type' => $this->getRequest()->getParam('type'))));
                 $this->view->title = 'admin_collections_collection_edit';
             }
+            $form->populate($data);
             $this->view->form = $form;
             return;
         }
+
+        $form->updateModel($collection);
+
         if (true === $collection->isNewRecord()) {
             $id = $this->getRequest()->getParam('id');
-            $type = $this->getRequest()->getParam('type');
             if (is_null($id)) {
-                return $this->_redirectToAndExit('index', array('failure' => 'id parameter is missing'), 'collectionroles');
+                return $this->_redirectToAndExit('index', array('failure' => 'id parameter is missing'),
+                    'collectionroles');
             }
+
+            $type = $this->getRequest()->getParam('type');
             if (is_null($type)) {
-                return $this->_redirectToAndExit('index', array('failure' => 'type parameter is missing'), 'collectionroles');
+                return $this->_redirectToAndExit('index', array('failure' => 'type parameter is missing'),
+                    'collectionroles');
             }
-            if ($type === 'child') {
-                $refCollection = new Opus_Collection($id);
-                $refCollection->addFirstChild($collection);
-                $refCollection->store();
-                $message = $this->view->translate('admin_collections_add', $collectionModel->getName());
-                return $this->_redirectTo('show', $message, 'collection', 'admin', array('id' => $collection->getId()));
+
+            switch ($type) {
+                case 'child':
+                    $refCollection = new Opus_Collection($id);
+                    $refCollection->addFirstChild($collection);
+                    $refCollection->store();
+                    $message = $this->view->translate('admin_collections_add', $collectionModel->getName());
+                    break;
+
+                case 'sibling':
+                    $refCollection = new Opus_Collection($id);
+                    $refCollection->addNextSibling($collection);
+                    $refCollection->store();
+                    $message = $this->view->translate('admin_collections_add', $collectionModel->getName());
+                    break;
+
+                default:
+                    return $this->_redirectToAndExit('index', array('failure' => 'type paramter invalid'),
+                        'collectionroles');
             }
-            if ($type === 'sibling') {
-                $refCollection = new Opus_Collection($id);
-                $refCollection->addNextSibling($collection);
-                $refCollection->store();
-                $message = $this->view->translate('admin_collections_add', $collectionModel->getName());
-                return $this->_redirectTo('show', $message, 'collection', 'admin', array('id' => $collection->getId()));
-            }
-            return $this->_redirectToAndExit('index', array('failure' => 'type paramter invalid'), 'collectionroles');
+
+            return $this->_redirectTo('show', $message, 'collection', 'admin', array('id' => $collection->getId()));
         }
+
         // nur Änderungen        
         $collection->store();
         $message = $this->view->translate('admin_collections_edit', $collectionModel->getName());
@@ -255,7 +269,8 @@ class Admin_CollectionController extends Controller_Action {
     public function assignAction() {
         $documentId = $this->getRequest()->getParam('document');
         if (is_null($documentId)) {
-            return $this->_redirectToAndExit('index', array('failure' => 'document parameter missing'), 'collectionroles');
+            return $this->_redirectToAndExit('index', array('failure' => 'document parameter missing'),
+                'collectionroles');
         }
 
         if ($this->getRequest()->isPost() === true) {
@@ -327,7 +342,9 @@ class Admin_CollectionController extends Controller_Action {
         $children = $collection->getChildren();
         if (count($children) === 0) {
             // zurück zur Ausgangsansicht
-            $this->_redirectToAndExit('assign', array('failure' => 'specified collection does not have any subcollections'), 'collection', 'admin', array('document' => $documentId));
+            $this->_redirectToAndExit('assign',
+                array('failure' => 'specified collection does not have any subcollections'), 'collection', 'admin',
+                array('document' => $documentId));
             return;
         }
         $this->view->collections = array();
@@ -346,28 +363,17 @@ class Admin_CollectionController extends Controller_Action {
     }
 
     private function getForm($collection, $id = null, $type = null) {
-        $form_builder = new Form_Builder();
-        $collectionForm = $form_builder->build($this->__createFilter($collection));
+        $form = new Admin_Form_Collection();
+        $form->populateFromModel($collection);
+
         if ($collection->isNewRecord()) {
-            $collectionForm->setAction($this->view->url(array('action' => 'create', 'id' => $id, 'type' => $type)));
+            $form->setAction($this->view->url(array('action' => 'create', 'id' => $id, 'type' => $type)));
         }
         else {
-            $collectionForm->setAction($this->view->url(array('action' => 'create', 'oid' => $collection->getId(), 'id' => $id, 'type' => $type)));
+            $form->setAction($this->view->url(array('action' => 'create', 'oid' => $collection->getId(), 'id' => $id,
+                'type' => $type)));
         }
-        return $collectionForm;
+        return $form;
     }
 
-    /**
-     * Returns a filtered representation of the collection.
-     *
-     * @param  Opus_Model_Abstract $collection The collection to be filtered.
-     * @return Opus_Model_Filter The filtered collection.
-     */
-    private function __createFilter(Opus_Model_Abstract $collection) {
-        $filter = new Opus_Model_Filter();
-        $filter->setModel($collection);
-        $filter->setBlacklist(array('Parents', 'Children', 'PendingNodes', 'RoleId', 'RoleName', 'RoleDisplayFrontdoor', 'RoleVisibleFrontdoor', 'PositionKey', 'PositionId', 'SortOrder'));
-        $filter->setSortOrder(array('Name', 'Number', 'Visible'));
-        return $filter;
-    }
 }
