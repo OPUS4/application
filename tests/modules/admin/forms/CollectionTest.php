@@ -37,7 +37,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
     public function testConstructForm() {
         $form = new Admin_Form_Collection();
 
-        $this->assertEquals('8', count($form->getElements()));
+        $this->assertEquals('7', count($form->getElements()));
 
         $this->assertNotNull($form->getElement('Name'));
         $this->assertNotNull($form->getElement('Number'));
@@ -46,7 +46,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('Theme'));
 
         $this->assertNotNull($form->getElement('Save'));
-        $this->assertNotNull($form->getElement('Cancel'));
+        $this->assertNull($form->getElement('Cancel'));
         $this->assertNotNull($form->getElement('Id'));
     }
 

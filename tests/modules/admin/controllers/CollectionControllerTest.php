@@ -359,5 +359,17 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
                 '//div[@class="breadcrumbsContainer"]//a[@href="/admin/collection/show/id/2"]', 
                 'Dewey Decimal Classification');
     }
+
+    public function testCreateCollectionCancel() {
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'Name' => 'TestCollection',
+            'Visible' => '1',
+            'Cancel' => 'Abbrechen'
+        ));
+
+        $this->dispatch('/admin/collection/create/id/16216/type/child');
+
+
+    }
         
 }

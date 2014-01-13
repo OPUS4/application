@@ -50,6 +50,8 @@ class Admin_Form_Collection extends Application_Form_Model_Abstract {
         $this->addElement('checkbox', self::ELEMENT_VISIBLE);
         $this->addElement('text', self::ELEMENT_OAI_SUBSET, array('size' => 50));
         $this->addElement('Theme', self::ELEMENT_THEME);
+
+        $this->removeElement('Cancel');
     }
 
     public function populateFromModel($collection) {
