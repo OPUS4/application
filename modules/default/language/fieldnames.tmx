@@ -1307,6 +1307,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="Name">
+            <tuv xml:lang="en">
+                <seg>Name</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Name</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="Number">
             <tuv xml:lang="en">
                 <seg>Number</seg>
