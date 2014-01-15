@@ -265,15 +265,6 @@
                         </tuv>
         </tu>
 
-        <tu tuid="Name">
-			<tuv xml:lang="en">
-				<seg>Name</seg>
-			</tuv>
-			<tuv xml:lang="de">
-				<seg>Name</seg>
-			</tuv>
-        </tu>
-
         <tu tuid="OaiName">
 			<tuv xml:lang="en">
 				<seg>Name of oai set</seg>

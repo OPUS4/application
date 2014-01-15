@@ -552,15 +552,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="name">
-      <tuv xml:lang="en">
-        <seg>Name</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Name</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="size">
       <tuv xml:lang="en">
         <seg>File size</seg>
