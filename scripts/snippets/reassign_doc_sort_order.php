@@ -92,7 +92,8 @@ foreach (Opus_Series::getAll() as $series) {
         $doc = new Opus_Document($docId);
         $allSeries = $doc->getSeries();
         $doc->setSeries(array());
-        foreach ($allSeries as $docSeries) {            
+        $doc->store();
+        foreach ($allSeries as $docSeries) {
             $seriesInstance = $docSeries->getModel();
             if ($seriesInstance->getId() === $series->getId()) {
                 echo "reassign doc_sort_order for doc #" . $doc->getId() . " (series number: " . $docSeries->getNumber() . ") -- old / new doc_sort_order: " . $docSeries->getDocSortOrder() . " / " . $seriesCounter . "\n";
