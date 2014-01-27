@@ -481,6 +481,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="admin_collectionroles_last_position">
+            <tuv xml:lang="en">
+                <seg>Last</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Letzte</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="admin_collectionroles_move">
             <tuv xml:lang="en">
                 <seg>Collection role '%1$s' was moved successfully.</seg>
