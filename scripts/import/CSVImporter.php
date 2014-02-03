@@ -47,7 +47,7 @@ require_once 'Log.php';
 class CSVImporter {
     // das ist aktuell nur eine Auswahl der Metadatenfelder (speziell für Fromm zugeschnitten)
 
-    const NUM_OF_COLUMNS = 32;
+    const NUM_OF_COLUMNS = 33;
 
     const OLD_ID = 0;
     const LANGUAGE = 1;
@@ -71,17 +71,18 @@ class CSVImporter {
     const NOTE_VALUE = 19;
     const COLLECTION_ID = 20;
     const SERIES_ID = 21;
-    const LICENCE_ID = 22;
-    const ENRICHMENTS = 23; // wird aktuell ignoriert
+    const VOL_ID = 22;
+    const LICENCE_ID = 23;
+    const ENRICHMENTS = 24; // wird aktuell ignoriert
     //TODO bei Fromm gibt es 7 Enrichmentkeys
-    const ENRICHMENT_AVAILABILITY = 24;
-    const ENRICHMENT_FORMAT = 25;
-    const ENRICHMENT_KINDOFPUBLICATION = 26;
-    const ENRICHMENT_IDNO = 27;
-    const ENRICHMENT_COPYRIGHTPRINT = 28;
-    const ENRICHMENT_COPYRIGHTEBOOK = 29;
-    const ENRICHMENT_RELEVANCE = 30;
-    const FILENAME = 31;
+    const ENRICHMENT_AVAILABILITY = 25;
+    const ENRICHMENT_FORMAT = 26;
+    const ENRICHMENT_KINDOFPUBLICATION = 27;
+    const ENRICHMENT_IDNO = 28;
+    const ENRICHMENT_COPYRIGHTPRINT = 29;
+    const ENRICHMENT_COPYRIGHTEBOOK = 30;
+    const ENRICHMENT_RELEVANCE = 31;
+    const FILENAME = 32;
 
     private $seriesIdsMap = array();
     private $fulltextDir = null;
@@ -163,6 +164,7 @@ class CSVImporter {
             // Dokumenttyp muss kleingeschrieben werden (bei Fromm aber groß)
             $doc->setType(lcfirst(trim($row[self::TYPE])));
             $doc->setServerState(trim($row[self::SERVER_STATE]));
+            $doc->setVolume(trim($row[self::VOL_ID]));
 
             // speichere die oldId als Identifier old ab, so dass später nach dieser gesucht werden kann
             // und die Verbindung zwischen Ausgangsdatensatz und importiertem Datensatz erhalten bleibt
@@ -171,12 +173,12 @@ class CSVImporter {
             $this->processTitlesAndAbstract($row, $doc, $oldId);
             $this->processDate($row, $doc, $oldId);
             $this->processIdentifier($row, $doc, $oldId);
-            $this->processNote($row, $doc);
+            $this->processNote($row, $doc, $oldId);
             $this->processCollections($row, $doc);
             $this->processLicence($row, $doc, $oldId);
             $this->processSeries($row, $doc);
             $this->processEnrichmentKindofpublication($row, $doc, $oldId);
-
+			
             // TODO Fromm verwendet aktuell sieben Enrichments (muss noch generalisiert werden)
             $enrichementkeys = array(
                 self::ENRICHMENT_AVAILABILITY,
@@ -363,13 +365,18 @@ class CSVImporter {
         $doc->$method($identifier);
     }
 
-    private function processNote($row, $doc) {
+    private function processNote($row, $doc, $oldId) {
         // TODO aktuell nur Unterstützung für *eine* Note
         // ist kein Pflichtfeld
-        if (trim($row[self::NOTE_VISIBILITY]) != '') {
+        if(trim($row[self::NOTE_VALUE]) != '') {
             $n = $doc->addNote();
             $n->setMessage(trim($row[self::NOTE_VALUE]));
-            $n->setVisibility($row[self::NOTE_VISIBILITY]);
+            $visibility = trim($row[self::NOTE_VISIBILITY]);
+            if(empty($visibility)) {
+               $visibility = 'private';
+               echo "Dokument $oldId: Sichtbarkeit des Bemerkungsfelds nicht angegeben, wird auf 'private' gesetzt.\n";
+            }
+            $n->setVisibility($visibility);
         }
     }
 
@@ -442,7 +449,7 @@ class CSVImporter {
         }
     }
 
-    private function processEnrichment($enrichmentkey, $row, $doc, $oldId) {
+    private function processEnrichment($enrichmentkey, $row, $doc, $oldId=null) {
         // aktuell hat der Feldinhalt die Struktur '{ ekey: evalue }'
         // TODO das ist natürlich redundant, da innerhalb einer Spalte immer
         // nur Enrichments eines Enrichmentkeys stehen
@@ -473,19 +480,19 @@ class CSVImporter {
         }
     }
 
-    private function processEnrichmentKindofpublication($row, $doc, $oldId) {
-        // Spezial-Workaround fuer Fromm, um die Inhalte aus der
-        // Spalte 26 (Enrichment: kindofpublication) in das Identifierfeld serial zu schreiben
-        $value = trim($row[self::ENRICHMENT_KINDOFPUBLICATION]);
-        if ($value != '') {
-            preg_match('/^{([A-Za-z]+):(.+)}$/', $value, $matches);
+	private function processEnrichmentKindofpublication ($row, $doc, $oldId=null) {
+		// Spezial-Workaround fuer Fromm, um die Inhalte aus der 
+		// Spalte 26 (Enrichment: kindofpublication) in das Identifierfeld serial zu schreiben
+		$value = trim($row[self::ENRICHMENT_KINDOFPUBLICATION]);
+		if ($value != '') {
+			preg_match('/^{([A-Za-z]+):(.+)}$/', $value, $matches);
             if (count($matches) != 3) {
-                throw new Exception("unerwarteter Wert '$value' fuer Enrichment in Spalte kindofpublication");
+                throw new Exception("unerwarteter Wert '$value' fuer Enrichment in Spalte $enrichmentkey");
             }
-            $this->addIdentifier($doc, 'serial', trim($matches[2]));
-        }
-    }
-
+			$this->addIdentifier($doc, 'serial', trim($matches[2]));
+		}
+	}
+	
     private function processSeries($row, $doc) {
         // ist kein Pflichtfeld
         if (trim($row[self::SERIES_ID]) != '') {
@@ -538,7 +545,10 @@ class CSVImporter {
 
         // nur bei den Keywords 'to download' und 'upon request' wird überhaupt eine Datei erwartet
         if ($filename == '' && (!(strpos($format, 'to download') === false) || !(strpos($format, 'upon request') === false))) {
-            echo "Dokument $oldId: [ERR003] Dateiname erwartet, aber leeren Inhalt in Spalte für Dateinamen vorgefunden -- Datei wird nicht importiert\n";
+	   // bei 'xerox upon request' wird keine Datei erwartet
+	   if(strpos($format, 'xerox upon request') === false) {
+               echo "Dokument $oldId: [ERR003] Dateiname erwartet, aber leeren Inhalt in Spalte für Dateinamen vorgefunden -- Datei wird nicht importiert\n";
+	    }
             return null;
         }
 
