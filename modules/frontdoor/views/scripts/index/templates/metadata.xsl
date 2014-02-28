@@ -110,7 +110,7 @@
                 </xsl:otherwise>
             </xsl:choose>
             <td>
-                <xsl:call-template name="checkdisplay"/>
+                <xsl:value-of select="@DisplayFrontdoor" />
             </td>
         </tr>
     </xsl:template>
