@@ -746,4 +746,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('td', 'Technische Universität Hamburg-Harburg / Bauwesen / Abwasserwirtschaft und Gewässerschutz B-2');
     }
 
+    public function testDisplayCollectionLink() {
+        $this->useGerman();
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertContains('<a href="/solrsearch/index/search/searchtype/collection/id/16007" title="frontdoor_collection_link">Technische Universität Hamburg-Harburg / Bauwesen / Abwasserwirtschaft und Gewässerschutz B-2</a>',
+                $this->getResponse()->getBody());
+    }
+
 }
