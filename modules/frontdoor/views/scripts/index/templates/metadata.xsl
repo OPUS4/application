@@ -110,7 +110,20 @@
                 </xsl:otherwise>
             </xsl:choose>
             <td>
-                <xsl:value-of select="@DisplayFrontdoor" />
+                <a>
+                    <xsl:attribute name="href">
+                        <xsl:value-of select="$baseUrl"/>
+                        <xsl:text>/solrsearch/index/search/searchtype/collection/id/</xsl:text>
+                        <xsl:value-of select="@Id" />
+                    </xsl:attribute>
+
+                    <xsl:attribute name="title">
+                        <xsl:call-template name="translateString">
+                            <xsl:with-param name="string">frontdoor_collection_link</xsl:with-param>
+                        </xsl:call-template>
+                    </xsl:attribute>
+                    <xsl:value-of select="@DisplayFrontdoor" />
+                </a>
             </td>
         </tr>
     </xsl:template>
