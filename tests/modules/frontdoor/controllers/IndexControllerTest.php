@@ -206,7 +206,19 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     */
 
    public function testFrontdoorTitleRespectsDocumentLanguageDeu() {
+      $d = new Opus_Document(146);
+      $lang = $d->getLanguage();
+      $d->setLanguage('deu');
+      $d->store();
+       
       $this->dispatch('/frontdoor/index/index/docId/146');
+
+      // restore language
+      $d = new Opus_Document(146);
+      $d->setLanguage($lang);
+      $d->store();
+
+      
       $this->assertNotContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
       $this->assertContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
    }
@@ -264,14 +276,18 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     */
    public function testFrontdoorTitleRespectsDocumentLanguageMultipleCandidates() {
       $d = new Opus_Document(146);
+      $lang = $d->getLanguage();
+      $d->setLanguage('deu');
       $titles = $d->getTitleMain();
       $d->addTitleMain()->setValue('VBOK')->setLanguage('deu');
       $d->store();
 
       $this->dispatch('/frontdoor/index/index/docId/146');
 
+      // restore language
       // restore titles
       $d = new Opus_Document(146);
+      $d->setLanguage($lang);
       $d->setTitleMain($titles);
       $d->store();
       
@@ -586,7 +602,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $role->setDisplayBrowsing($displayFrontdoor);
         $role->store();
 
-        $this->assertContains('</th><td>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines 52.00</td></tr>',
+        $this->assertQueryContentContains('td', 'Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines 52.00',
             $this->getResponse()->getBody());
     }
 
@@ -605,7 +621,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $role->setDisplayBrowsing($displayFrontdoor);
         $role->store();
 
-        $this->assertContains('</th><td>52.00 Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</td></tr>', $this->getResponse()->getBody());
+        $this->assertQueryContentContains('td', '52.00 Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines', $this->getResponse()->getBody());
     }
 
     /**
@@ -623,8 +639,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $role->setDisplayBrowsing($displayFrontdoor);
         $role->store();        
 
-        $this->assertContains('</th><td>Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines</td></tr>',
-            $this->getResponse()->getBody());
+        $this->assertNotQueryContentContains('td', '52.00', $this->getResponse()->getBody());
+        $this->assertQueryContentContains('td', 'Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines', $this->getResponse()->getBody());
     }
 
     /**
@@ -642,7 +658,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $role->setDisplayBrowsing($displayFrontdoor);
         $role->store();
 
-        $this->assertContains('</th><td>52.00</td></tr>', $this->getResponse()->getBody());
+        $this->assertQueryContentContains('td', '52.00', $this->getResponse()->getBody());
+        $this->assertNotQueryContentContains('td', 'Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines', $this->getResponse()->getBody());
     }
 
     public function testCollectionDisplayed() {
