@@ -722,5 +722,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->validateXHTML();
     }
+    
+    public function testDisplayFullCollectionName() {
+        $this->useGerman();
+        $this->dispatch('/frontdoor/index/index/docId/146');
+        $this->assertQueryContentContains('td', 'Technische Universität Hamburg-Harburg / Bauwesen / Abwasserwirtschaft und Gewässerschutz B-2');
+    }
 
 }
