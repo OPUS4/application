@@ -1374,22 +1374,22 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     */
    public function testXMetaDissPlusIsSchemaValid() {
        $xmlCatalog = getenv('XML_CATALOG_FILES');
-       putenv('XML_CATALOG_FILES=resources/xmetadissplus-catalog.xml');
+        if(!strpos($xmlCatalog, 'xmetadissplus-catalog.xml')) {
+            $this->fail('Environment Variable XML_CATALOG_FILES not set correctly. It should point to resources/xmetadissplus-catalog.xml.');
+        }
         libxml_use_internal_errors(true);
-        
+
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai::146');
         $xpath = $this->prepareXpathFromResultString($this->getResponse()->getBody());
-       $xMetaDissNode = $xpath->query('//xMetaDiss:xMetaDiss')->item(0);
-       $metadataDocument = new DOMDocument();
-       $importedNode = $metadataDocument->importNode($xMetaDissNode, true);
-       $metadataDocument->appendChild($importedNode);
-        
-        $valid = $metadataDocument->schemaValidate(APPLICATION_PATH
-            . '/tests/resources/xmetadissplus/xmetadissplus.xsd');
+        $xMetaDissNode = $xpath->query('//xMetaDiss:xMetaDiss')->item(0);
+        $metadataDocument = new DOMDocument();
+        $importedNode = $metadataDocument->importNode($xMetaDissNode, true);
+        $metadataDocument->appendChild($importedNode);
 
-        $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');
-        putenv("XML_CATALOG_FILES=$xmlCatalog");
-    }
+        $valid = $metadataDocument->schemaValidate(APPLICATION_PATH
+                . '/tests/resources/xmetadissplus/xmetadissplus.xsd');
+
+        $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');    }
 
     public function testListRecordsWithResumptionToken() {
         $max_records = 2;
