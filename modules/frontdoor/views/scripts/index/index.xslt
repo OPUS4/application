@@ -57,7 +57,7 @@
     <xsl:param name="numOfShortAbstractChars" />
 
     <xsl:key name="list" match="/Opus/Opus_Document/Subject[@Type='uncontrolled']" use="@Language"/>
-    <xsl:key name="userCollections-by-roleId" match="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel' and @Visible='1' and @RoleVisibleFrontdoor='true']" use="@RoleId"/>
+    <xsl:key name="userCollections-by-roleId" match="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel']" use="@RoleId"/>
 
     <xsl:template match="/">
         <div about="{/Opus/Opus_Document/TitleMain/@Value}">
@@ -258,16 +258,16 @@
 			
             <!-- Collection Roles Section: add the collection roles keys that have to be displayed in frontdoor -->
             <xsl:apply-templates select="Collection[@RoleName='institutes']" /> 
-           <xsl:apply-templates select="Collection[@RoleName='projects']" />
+            <xsl:apply-templates select="Collection[@RoleName='projects']" />
 
-            <xsl:apply-templates select="Collection[@RoleName='ccs' and @Visible='1' and @RoleVisibleFrontdoor='true']" />
-            <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible='1' and @RoleVisibleFrontdoor='true']" />
-            <xsl:apply-templates select="Collection[@RoleName='msc' and @Visible='1' and @RoleVisibleFrontdoor='true']" >
+            <xsl:apply-templates select="Collection[@RoleName='ccs']" />
+            <xsl:apply-templates select="Collection[@RoleName='ddc']" />
+            <xsl:apply-templates select="Collection[@RoleName='msc']" >
                 <xsl:sort select="@Number"/>
             </xsl:apply-templates>
-            <xsl:apply-templates select="Collection[@RoleName='pacs' and @Visible='1' and @RoleVisibleFrontdoor='true']" />
-            <xsl:apply-templates select="Collection[@RoleName='bk' and @Visible='1' and @RoleVisibleFrontdoor='true']" />
-            <xsl:apply-templates select="Collection[@RoleName='jel' and @Visible='1' and @RoleVisibleFrontdoor='true']" />
+            <xsl:apply-templates select="Collection[@RoleName='pacs']" />
+            <xsl:apply-templates select="Collection[@RoleName='bk']" />
+            <xsl:apply-templates select="Collection[@RoleName='jel']" />
             <xsl:apply-templates select="IdentifierSerial" />
 
             <xsl:for-each select="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel'][count(. | key('userCollections-by-roleId', @RoleId)[1]) = 1]">

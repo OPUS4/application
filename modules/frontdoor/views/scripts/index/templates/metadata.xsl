@@ -90,7 +90,7 @@
     <!-- -->
     <!-- Templates for "external fields". -->
     <!-- -->
-    <xsl:template match="Collection">
+    <xsl:template match="Collection[@Visible='1' and @RoleVisibleFrontdoor='true']">
         <tr>
             <xsl:choose>
                 <xsl:when test="position()=1">
