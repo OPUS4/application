@@ -281,12 +281,17 @@ class Opus3InstituteImport {
         $classification = $this->transferOpusClassification($data);
 
         foreach ($classification as $class) {
-            if (array_key_exists('fakultaet', $class) === false) { continue; }
-            if (array_key_exists('name', $class) === false) { continue; }
-            if (array_key_exists('nr', $class) === false) { continue; }
+            if (array_key_exists('fakultaet', $class) === false || array_key_exists('name', $class) === false || array_key_exists('nr', $class) === false) {
+                $invalidInstitute = '';
+                foreach ($class as $key => $val) {
+                    $invalidInstitute .= "[$key:'$val'] ";
+                }
+                $this->logger->log_error("Opus3InstituteImport", "Invalid entry for Institute will be ignored: '" . $invalidInstitute);
+                continue;
+            }
 
             if (array_key_exists($class['fakultaet'], $pColls) === false) {
-                $this->logger->log_error("Opus3InstituteImport", "No Faculty with Opus3-Id '" . $class['fakultaet']);
+                $this->logger->log_error("Opus3InstituteImport", "No Faculty with ID '" . $class['fakultaet'] . "' for Institute with ID '" . $class['nr'] ."'");
                 continue;
             }
 
