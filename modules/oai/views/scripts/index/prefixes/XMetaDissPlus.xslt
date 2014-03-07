@@ -180,7 +180,7 @@
                        <xsl:text>review</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='sound'">
-                       <xsl:text>sound</xsl:text>
+                       <xsl:text>Sound</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='studythesis'">
                        <xsl:text>StudyThesis</xsl:text>
