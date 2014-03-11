@@ -186,3 +186,20 @@ for FILE in $FILES; do
     updateFile "$SRC/mail_templates" "$MAIL_TEMPLATES_DIR" "$MD5PATH/mail_templates" "$FILE" backup
 done
 
+
+# =============================================================================
+# Updating solr.xslt file
+# =============================================================================
+
+XSLT_DIR="$BASEDIR/opus4/application/configs/solr"
+OLD_XSLT_FILE="$BASEDIR/opus4/server/library/Opus/SolrSearch/index/solr.xslt"
+
+if [[ ! -d  $XSLT_DIR ]]; then
+    createFolder "$XSLT_DIR"
+fi
+
+if [[ -f $OLD_XSLT_FILE ]]; then
+    moveFile "$OLD_XSLT_FILE" "$XSLT_DIR/solr.xslt"
+fi
+
+updateFile "$SRC/solr" "$XSLT_DIR" "$MD5PATH/solr" "solr.xslt" backup
