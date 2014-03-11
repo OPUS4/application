@@ -192,7 +192,7 @@ done
 # =============================================================================
 
 XSLT_DIR="$BASEDIR/opus4/application/configs/solr"
-OLD_XSLT_FILE="$BASEDIR/opus4/server/library/Opus/SolrSearch/index/solr.xslt"
+OLD_XSLT_FILE="$BASEDIR/opus4/library/Opus/SolrSearch/Index/solr.xslt"
 
 if [[ ! -d  $XSLT_DIR ]]; then
     createFolder "$XSLT_DIR"
