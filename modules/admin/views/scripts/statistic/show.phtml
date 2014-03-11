@@ -67,12 +67,12 @@
 
 <br>
 
-<h2><?= $this->translate('Institute_Overview_Title') ?></h2>
+<h2><?= $this->showInstHeadline ?></h2>
 
 <table>
     <tr>
-        <th><?= $this->translate('Institute_Title') ?></th>
-        <th><?= $this->translate('Count_Title') ?></th>
+        <th><?= $this->showInstTitle ?></th>
+        <th><?= $this->showInstCount ?></th>
     </tr>
     <?php foreach ($this->instStat as $instName => $count) : ?>
     <tr>
