@@ -67,12 +67,13 @@
 
 <br>
 
-<h2><?= $this->showInstHeadline ?></h2>
+<?php if ($this->view->institutesExist) : ?>
+<h2><?= $this->view->translate('Institute_Overview_Title') ?></h2>
 
 <table>
     <tr>
-        <th><?= $this->showInstTitle ?></th>
-        <th><?= $this->showInstCount ?></th>
+        <th><?= $this->view->translate('Institute_Title') ?></th>
+        <th><?= $this->view->translate('Count_Title') ?></th>
     </tr>
     <?php foreach ($this->instStat as $instName => $count) : ?>
     <tr>
@@ -81,5 +82,4 @@
     </tr>
     <?php endforeach; ?>
 </table>
-
-<?= $this->form ?>
+<?php endif; ?>

@@ -147,9 +147,6 @@ class Admin_StatisticController extends Controller_Action {
         //$institutes = new Opus_OrganisationalUnits;
         $role = Opus_CollectionRole::fetchByName('institutes');
         if (isset($role)) {
-            $this->view->showInstHeadline = $this->view->translate('Institute_Overview_Title');
-            $this->view->showInstTitle = $this->view->translate('Institute_Title');
-            $this->view->showInstCount = $this->view->translate('Count_Title');
             $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
             //$institutes = Opus_CollectionRole::fetchByName('institutes');
             $instStat = array();
@@ -165,8 +162,8 @@ class Admin_StatisticController extends Controller_Action {
                     YEAR(d.server_date_published) = ?)";
                  *
                  */
-                $query = "SELECT COUNT(d.id) AS entries FROM link_documents_collections AS l JOIN documents AS d ON d.id =
-                    l.document_id WHERE l.collection_id IN (SELECT id FROM collections WHERE `left_id` >=
+                $query = "SELECT COUNT(d.id) AS entries FROM link_documents_collections AS l JOIN documents AS d
+                    ON d.id = l.document_id WHERE l.collection_id IN (SELECT id FROM collections WHERE `left_id` >=
                     (SELECT `left_id` FROM collections WHERE id = ?) AND `right_id` <=
                     (SELECT `right_id` FROM collections WHERE id = ?)AND
                     YEAR(d.server_date_published) = ? and server_state = 'published' )";
@@ -174,6 +171,11 @@ class Admin_StatisticController extends Controller_Action {
                 $instStat[$institut->getDisplayName()] = $res[0]['entries'];
             }
             $this->view->instStat = $instStat;
+            $this->view->institutesExist = true;
+
+        }
+        else {
+            $this->view->institutesExist = false;
         }
     }
 
