@@ -409,7 +409,19 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('series    = {' . $s->getTitle() . '},', $response->getBody());
         $this->assertNotContains('number    = {SeriesNumber},', $response->getBody());
     }
-
+    
+    /** Regression Test for OPUSVIER-3251 */
+    public function testIndexActionBibtexEnrichmentVisibleAsNote() {
+      $bibtexConfArray = array('citationExport' =>
+            array('bibtex' => array(
+                    'enrichment' => 'SourceTitle')));
+        $bibtexConf = new Zend_Config($bibtexConfArray);
+      Zend_Registry::getInstance()->get('Zend_Config')->merge($bibtexConf);
+      $this->dispatch('/citationExport/index/index/output/bibtex/docId/146');
+      $this->assertResponseCode(200);
+      $response = $this->getResponse();
+      $this->assertContains('note        = {Dieses Dokument ist auch erschienen als ...}', $response->getBody());
+    }
 
     /* DOWNLOAD - TESTS */
 
