@@ -184,9 +184,18 @@ class CitationExport_IndexController extends Controller_Action {
         $xslt = new DomDocument;
         $xslt->load($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $template);
 
+        // find Enrichment that should be included in bibtex-output as note
+        $enrichmentNote = null;
+        $config = Zend_Registry::get('Zend_Config');
+        if(isset($config->citationExport->bibtex->enrichment)
+                && !empty($config->citationExport->bibtex->enrichment)) {
+            $enrichmentNote = $config->citationExport->bibtex->enrichment;
+        }
+        
         // Set up XSLT-Processor
         try {
             $proc = new XSLTProcessor;
+            $proc->setParameter('', 'enrichment_note', $enrichmentNote);
             $proc->setParameter('', 'url_prefix', $this->view->serverUrl() . $this->getRequest()->getBaseUrl());
             $proc->registerPHPFunctions();
             $proc->importStyleSheet($xslt);

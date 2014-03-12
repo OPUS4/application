@@ -149,6 +149,11 @@
         <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">year       </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select="$year" /></xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">note       </xsl:with-param>             
+            <xsl:with-param name="value"><xsl:value-of select="Enrichment[@KeyName=$enrichment_note]/@Value" /></xsl:with-param>         
         </xsl:call-template>
 <xsl:text>}</xsl:text>
      </xsl:template>
