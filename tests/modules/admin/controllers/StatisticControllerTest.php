@@ -52,5 +52,35 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
         $this->assertAction('show');
     }
 
+    public function testShowActionWithWrongYear() {
+        $this->request
+            ->setMethod('POST')
+            ->setPost(array('selectedYear' => '1337'));
+        $this->dispatch('/admin/statistic/index');
+        $this->assertAction('index');
+    }
+
+    public function testStatisticControllersWithEmptyCollections() {
+        $this->request
+            ->setMethod('POST')
+            ->setPost(array('selectedYear' => '2010'));
+        $statistics = new Admin_Model_Statistics();
+        $this->assertCollectionNotEmpty($statistics->getInstituteStatistics(2010), 'There are no institutes set.');
+        $this->assertCollectionNotEmpty($statistics->getMonthStatistics(2010), 'There is no month collection returned');
+        $this->assertCollectionNotEmpty($statistics->getTypeStatistics(2010), 'There is no type collection returned');
+    }
+
+    private function assertCollectionNotEmpty($collection, $message = '') {
+
+        $this->_incrementAssertionCount();
+        if (!isset($collection)) {
+            $msg = sprintf('Failed asserting collection is not null', $collection);
+            if (!empty($message)) {
+                $msg = $message . "\n" . $msg;
+            }
+            $this->fail($msg);
+        }
+    }
+
 }
 

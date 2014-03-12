@@ -35,143 +35,53 @@
 
 class Admin_StatisticController extends Controller_Action {
 
+    private $statisticsModel = null;
+
+    public function init() {
+        parent::init();
+        $this->statisticsModel = new Admin_Model_Statistics();
+    }
+
     public function indexAction() {
         $this->view->title = $this->view->translate('Statistic_Controller');
 
-        $documents = new Opus_Db_Documents();
-        $select = $documents->select()->from('documents', array('year' => 'YEAR(server_date_published)'))
-        ->distinct()
-        ->order('year');
-        $result = $documents->fetchAll($select);
-        foreach($result as $row) {
-            $years[$row->year] = $row->year;
-        }
-        /*$years = array_values($result->toArray());
-         print_r($result->toArray());
-         print("<br>");
-         print_r(array_values($result->toArray()));*/
-        //print_r($years);
+        $years = $this->statisticsModel->getYears();
 
-        //$selectYear = new Zend_Form_Element_Text('selectedYear');
         $highest = max($years);
 
-        $selectYear = new Zend_Form_Element_Select('selectedYear', array("multiOptions" => $years, "value" => $highest));
-
-        //$selectYear = new Zend_Form_Element_Select();
+        $selectYear = new Zend_Form_Element_Select('selectedYear',
+            array("multiOptions" => $years, "value" => $highest));
 
         $selectYear->setRequired(true)
-        ->setLabel($this->view->translate('Select_Year_Label'));
+            ->setLabel($this->view->translate('Select_Year_Label'));
 
         $submit = new Zend_Form_Element_Submit('submit');
         $submit->setLabel($this->view->translate('Submit_Button_Label'));
 
         $form = new Zend_Form();
-        $action_url = $this->view->url(array("controller" => "statistic", "action" => "show"));
-        $form->setAction($action_url);
+        $form->setAction($this->view->url(array("controller" => "statistic", "action" => "show")));
         $form->addElements(array($selectYear, $submit));
 
         $this->view->form = $form;
     }
 
     public function showAction() {
-        $selectedYear = $this->getRequest()->getParam('selectedYear', null);
-        if (is_null($selectedYear)) {
+        $selectedYear =  $this->getRequest()->getParam('selectedYear', null);
+
+        if (is_null($selectedYear) || !in_array($selectedYear, $this->statisticsModel->getYears())) {
             return $this->_redirectToAndExit('index');
         }
 
         $this->view->languageSelectorDisabled = true;
-        $documents = new Opus_Db_Documents();
-        // get month overview from database
 
-
-        /* iteration with 12 db select queries, replaced by join with subqueries
-         *
-         * for ($i = 1; $i<13; $i++) {
-         *
-         * $select = $documents->select()->from('documents', array('c' => 'count(*)'))
-         * ->where('YEAR(server_date_published) = ?', $selectedYear)
-         * ->where('MONTH(server_date_published) = ?', $i);
-         * $monthStat[$i] = $documents->fetchRow($select)->c;
-         * }
-         */
-
-
-        // TODO: use tokens to reduce redundancy of inserting year twice
-        $select = $documents->getAdapter()->query("SELECT months.m as mon, count(d.id) as c
-            FROM
-                (SELECT id, MONTH(`server_date_published`) as m
-                    FROM `documents`
-                    WHERE YEAR(`server_date_published`) = ? AND server_state = 'published' )
-                d,
-                (SELECT DISTINCT MONTH(`server_date_published`) as m
-                    FROM `documents`
-                    WHERE YEAR(`server_date_published`) = ? AND server_state = 'published' )
-                months
-            WHERE months.m = d.m
-            GROUP BY months.m",
-        array($selectedYear, $selectedYear));
-
-        $result = $select->fetchAll();
-        foreach($result as $row) {
-            $monthStat[$row['mon']] = $row['c'];
-        }
-
-        for($i = 1; $i<13; $i++) {
-            if (isset($monthStat[$i]) === FALSE) {
-                $monthStat[$i] = 0;
-            }
-        }
-        ksort($monthStat);
+        $monthStat = $this->statisticsModel->getMonthStatistics($selectedYear);
 
         $this->view->totalNumber = array_sum($monthStat);
         $this->view->title = $this->view->translate('Statistic_Controller') . ' (' . $selectedYear . ')';
         $this->view->monthStat = $monthStat;
 
+        $this->view->typeStat = $this->statisticsModel->getTypeStatistics($selectedYear);
 
-        // get document type overview from database
-        $select = $documents->getAdapter()->query("SELECT t.type as ty, count(d.id) as c
-          FROM (SELECT DISTINCT type FROM documents) t
-          LEFT OUTER JOIN
-          (SELECT id, type FROM documents WHERE YEAR(server_date_published) = ? AND server_state = 'published') d
-          ON t.type = d.type
-          GROUP BY t.type", $selectedYear);
-        $result = $select->fetchAll();
-        foreach($result as $row) {
-            $typeStat[$row['ty']] = $row['c'];
-        }
-
-        $this->view->typeStat = $typeStat;
-
-
-        // institution statistics
-        //$institutes = new Opus_OrganisationalUnits;
-        $role = Opus_CollectionRole::fetchByName('institutes');
-        if (isset($role)) {
-            $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
-            //$institutes = Opus_CollectionRole::fetchByName('institutes');
-            $instStat = array();
-            $db = Zend_Registry::get('db_adapter');
-            //foreach ($institutes->getSubCollection() as $institut) {
-            foreach ($colls as $institut) {
-                //$institut = $c->getName();
-                /*
-                $query = "SELECT COUNT(d.id) AS entries FROM link_documents_collections_1 AS l JOIN documents AS d ON d.id =
-                    l.documents_id WHERE l.collections_id IN (SELECT collections_id FROM collections_structure_1 WHERE
-                    `left` >= (SELECT `left` FROM collections_structure_1 WHERE collections_id = ?) AND `right` <=
-                    (SELECT `right` FROM collections_structure_1 WHERE collections_id = ?)AND
-                    YEAR(d.server_date_published) = ?)";
-                 *
-                 */
-                $query = "SELECT COUNT(d.id) AS entries FROM link_documents_collections AS l JOIN documents AS d
-                    ON d.id = l.document_id WHERE l.collection_id IN (SELECT id FROM collections WHERE `left_id` >=
-                    (SELECT `left_id` FROM collections WHERE id = ?) AND `right_id` <=
-                    (SELECT `right_id` FROM collections WHERE id = ?)AND
-                    YEAR(d.server_date_published) = ? and server_state = 'published' )";
-                $res = $db->query($query, array($institut->getId(), $institut->getId(), $selectedYear))->fetchAll();
-                $instStat[$institut->getDisplayName()] = $res[0]['entries'];
-            }
-            $this->view->instStat = $instStat;
-        }
+        $this->view->instStat = $this->statisticsModel->getInstituteStatistics($selectedYear);
     }
-
 }
