@@ -171,11 +171,6 @@ class Admin_StatisticController extends Controller_Action {
                 $instStat[$institut->getDisplayName()] = $res[0]['entries'];
             }
             $this->view->instStat = $instStat;
-            $this->view->institutesExist = true;
-
-        }
-        else {
-            $this->view->institutesExist = false;
         }
     }
 

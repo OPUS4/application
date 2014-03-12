@@ -65,21 +65,21 @@
     <?php endforeach;?>
 </table>
 
-<br>
 
-<?php if ($this->view->institutesExist) : ?>
-<h2><?= $this->view->translate('Institute_Overview_Title') ?></h2>
+<?php if (isset($this->instStat)) : ?>
+    <br>
+    <h2><?= $this->translate('Institute_Overview_Title') ?></h2>
 
-<table>
-    <tr>
-        <th><?= $this->view->translate('Institute_Title') ?></th>
-        <th><?= $this->view->translate('Count_Title') ?></th>
-    </tr>
-    <?php foreach ($this->instStat as $instName => $count) : ?>
-    <tr>
-        <td><?= htmlspecialchars($instName) ?></td>
-        <td><?= $count ?></td>
-    </tr>
-    <?php endforeach; ?>
-</table>
+    <table>
+        <tr>
+            <th><?= $this->translate('Institute_Title') ?></th>
+            <th><?= $this->translate('Count_Title') ?></th>
+        </tr>
+        <?php foreach ($this->instStat as $instName => $count) : ?>
+        <tr>
+            <td><?= htmlspecialchars($instName) ?></td>
+            <td><?= $count ?></td>
+        </tr>
+        <?php endforeach; ?>
+    </table>
 <?php endif; ?>
