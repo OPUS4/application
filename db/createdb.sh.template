@@ -50,3 +50,5 @@ if [ -d "${master_dir}" ] ; then
     done
 fi
 
+chmod -x createdb.sh
+echo "Set createdb.sh to not executable"
