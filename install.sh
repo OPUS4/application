@@ -206,8 +206,8 @@ fi
 sed -i -e "s!@db.admin.name@!'$ADMIN_ESC'!" \
        -e "s!@db.admin.password@!'$ADMIN_PASSWORD_ESC'!" \
        -e "s!@db.name@!'$DBNAME_ESC'!" createdb.sh
-chmod +x createdb.sh
-./createdb.sh
+
+sh createdb.sh
 
 # install and configure Solr search server
 cd "$BASEDIR"
