@@ -92,7 +92,7 @@ find "$workspace_files_dir" -maxdepth 1 -type d -name [0-9]* -exec rm -r {} \;
 
 echo "Clean database"
 cd "$db_dir"
-./createdb.sh || { echo "Aborting migration: creatdb.sh FAILED."; exit -1; }
+sh createdb.sh || { echo "Aborting migration: creatdb.sh FAILED."; exit -1; }
 
 echo "Validation of Opus3-XML-Dumpfile"
 cd "$migration_dir"
