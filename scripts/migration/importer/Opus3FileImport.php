@@ -33,8 +33,6 @@
  * @version     $Id$
  */
 
-require_once 'Opus3ImportLogger.php';
-
 class Opus3FileImport {
    /**
     * Holds id for this document
@@ -123,16 +121,12 @@ class Opus3FileImport {
      */
     public function __construct($id, $fulltextPath, $roleId = null)  {
         $this->config = Zend_Registry::get('Zend_Config');
-        $this->logger = new Opus3ImportLogger();
+        $this->logger = Zend_Registry::get('Zend_Log');
 	
         $this->id = $id;
 	$this->path = $fulltextPath;
 	$this->roleId = $roleId;	
    }
-
-    public function finalize() {
-        $this->logger->finalize();
-    }    
 
     /**
      * Loads an old Opus ID
@@ -181,7 +175,8 @@ class Opus3FileImport {
                 if (!preg_match('/^[0-9]{4}$/', $year)) { continue; }
                 foreach (scandir($root. "/" . $s . "/" . $year) as $i) {
                     if ($i == $this->opus3Id) {
-                        $this->logger->log_debug("Opus3FileImport", "Directory for Opus3Id '" . $this->opus3Id . "' : '" . $root . "/" . $s . "/" . $year . "/" . $i  . "'");
+                        $this->logger->log("Opus3FileImport", "Directory for Opus3Id '" . $this->opus3Id . "' : '"
+                            . $root . "/" . $s . "/" . $year . "/" . $i  . "'", Zend_Log::DEBUG);
                         return $root . "/" . $s . "/" . $year . "/" . $i;
                     }
                 }
@@ -227,13 +222,14 @@ class Opus3FileImport {
         $pathName = $this->getPathName($subdir, basename($f));
         
         if ($pathName != iconv("UTF-8", "UTF-8//IGNORE", $pathName)) {
-            $this->logger->log_error("Opus3FileImport", "Filename '" . $pathName . "' of OPUS3-Id '" . $this->opus3Id . "' is corrupt. Changed to '" . utf8_encode($pathName) . "'.");
+            $this->logger->log("Opus3FileImport", "Filename '" . $pathName . "' of OPUS3-Id '" . $this->opus3Id
+                . "' is corrupt. Changed to '" . utf8_encode($pathName) . "'.", Zend_Log::ERR);
             $pathName = utf8_encode($pathName);
         }
 
-        $this->logger->log_debug("Opus3FileImport", "Import '" . $pathName . "'");
+        $this->logger->log("Opus3FileImport", "Import '" . $pathName . "'", Zend_Log::DEBUG);
         if ($visibleInFrontdoor) {
-            $this->logger->log_debug("Opus3FileImport", "File '" . $pathName . "' visible");
+            $this->logger->log("Opus3FileImport", "File '" . $pathName . "' visible", Zend_Log::DEBUG);
             $label = $this->getLabel($f);
         }
         $comment = $this->getComment($f);
@@ -282,7 +278,8 @@ class Opus3FileImport {
         if (!is_null($this->roleId)) {
             $role = new Opus_UserRole($this->roleId);
             $role->appendAccessFile($file->getId());
-            $this->logger->log_debug("Opus3FileImport", "Role '" . $role . "' for File '" . $file->getPathName() . "' of OPUS3-Id '" . $this->opus3Id . '"');
+            $this->logger->log("Opus3FileImport", "Role '" . $role . "' for File '" . $file->getPathName()
+                . "' of OPUS3-Id '" . $this->opus3Id . '"', Zend_Log::DEBUG);
             $role->store();
         }
     }
@@ -363,20 +360,23 @@ class Opus3FileImport {
     private function isValidFile($f)  {
         // Exclude 'index.html' and files starting with '.'
         if (basename($f) == 'index.html' || strpos(basename($f), '.') === 0) {
-            $this->logger->log_debug("Opus3FileImport", "Skipped File '" . basename($f) . "' of OPUS3-Id '" . $this->opus3Id . "'");
+            $this->logger->log("Opus3FileImport", "Skipped File '" . basename($f) . "' of OPUS3-Id '"
+                . $this->opus3Id . "'", Zend_Log::DEBUG);
             return false;
         }
 
         // ERROR: File with same Basnemae already imported
         if (array_search(basename($f), $this->filesImported) !== false) {
-            $this->logger->log_error("Opus3FileImport", "File '" . basename(dirname($f)) . "/" . basename($f) . "' already imported for Opus3-Id '" . $this->opus3Id . "'");
+            $this->logger->log("Opus3FileImport", "File '" . basename(dirname($f)) . "/" . basename($f)
+                . "' already imported for Opus3-Id '" . $this->opus3Id . "'", Zend_Log::ERR);
             return false;
 
         }
 
         // ERROR: Filename has no Extension
         if (strrchr ($f, ".") === false) {
-            $this->logger->log_error("Opus3FileImport", "File '" . basename($f) . "' of OPUS3-Id '" . $this->opus3Id . "' has no extension and will be ignored");
+            $this->logger->log("Opus3FileImport", "File '" . basename($f) . "' of OPUS3-Id '"
+                . $this->opus3Id . "' has no extension and will be ignored", Zend_Log::ERR);
             return false;
         }
 

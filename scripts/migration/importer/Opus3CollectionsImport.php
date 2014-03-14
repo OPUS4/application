@@ -33,8 +33,6 @@
  * @version     $Id$
  */
 
-require_once 'Opus3ImportLogger.php';
-
 class Opus3CollectionsImport {
 
    /**
@@ -67,7 +65,7 @@ class Opus3CollectionsImport {
     public function __construct($data) {
 
         $this->config = Zend_Registry::get('Zend_Config');
-        $this->logger = new Opus3ImportLogger();
+        $this->logger = Zend_Registry::get('Zend_Log');
         $this->data = $data;
 
     }
@@ -84,23 +82,12 @@ class Opus3CollectionsImport {
         $collRole = Opus_CollectionRole::fetchByName('collections');
 
         $doclist = $this->data->getElementsByTagName('table_data');
-	foreach ($doclist as $document)	{
-            if ($document->getAttribute('name') === 'collections') {
-                $this->importCollectionsDirectly($document, $collRole);
-            }
-	}
+        foreach ($doclist as $document)	{
+                if ($document->getAttribute('name') === 'collections') {
+                    $this->importCollectionsDirectly($document, $collRole);
+                }
+        }
     }
-
-    /**
-     * Finalisation of Object
-     *
-     * @param void
-     * @return void
-     *
-     */
-    public function finalize() {
-        $this->logger->finalize();
-    }    
 
    /**
      * Imports Collections from Opus3 to Opus4 directly (from DB-table to DB-tables)
@@ -117,7 +104,7 @@ class Opus3CollectionsImport {
                 throw new Exception("Could not create '" . $mf . "' for Collections");
             }
         } catch (Exception $e){
-            $this->logger->log_error("Opus3CollectionsImport", $e->getMessage());
+            $this->logger->log("Opus3CollectionsImport", $e->getMessage(), Zend_Log::ERR);
             return;
         }
 
@@ -209,12 +196,12 @@ class Opus3CollectionsImport {
                 $new_collection->store();
                 $previousRight = $row['rgt'];
 
-                $this->logger->log_debug("Opus3CollectionsImport", "Collection imported: " . $row['coll_name']);
+                $this->logger->log("Opus3CollectionsImport", "Collection imported: " . $row['coll_name'], Zend_Log::DEBUG);
 
                 fputs($fp, $row['coll_id'] . ' ' . $new_collection->getId() . "\n");
             }
         } catch (Exception $e) {
-            $this->logger->log_error("Opus3CollectionsImport", $e->getMessage());
+            $this->logger->log("Opus3CollectionsImport", $e->getMessage(), Zend_Log::ERR);
         }
 	fclose($fp);
 

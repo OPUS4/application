@@ -32,8 +32,6 @@
  * @version     $Id: Opus3SeriesImport.php 9682 2012-01-06 12:06:34Z gmaiwald $
  */
 
-require_once 'Opus3ImportLogger.php';
-
 class Opus3SeriesImport {
 
    /**
@@ -65,7 +63,7 @@ class Opus3SeriesImport {
     public function __construct($data) {
 
         $this->config = Zend_Registry::get('Zend_Config');
-        $this->logger = new Opus3ImportLogger();
+        $this->logger = Zend_Registry::get('Zend_Log');
         $this->data = $data;
 
     }
@@ -88,19 +86,6 @@ class Opus3SeriesImport {
 	}
     }
 
-    /**
-     * Finalisation of Object
-     *
-     * @param void
-     * @return void
-     *
-     */
-    public function finalize() {
-        $this->logger->finalize();
-    }    
-
- 
-
 
     /**
      * Imports Series from Opus3 to Opus4 in alphabetical order
@@ -113,7 +98,7 @@ class Opus3SeriesImport {
         $fp = null;
         $fp = @fopen($mf, 'w');
         if (!$fp) {
-            $this->logger->log_error("Opus3SeriesImport", "Could not create '" . $mf . "' for Series");
+            $this->logger->log("Opus3SeriesImport", "Could not create '" . $mf . "' for Series", Zend_Log::ERR);
             return;
         }
              
@@ -129,7 +114,7 @@ class Opus3SeriesImport {
             $sr->setSortOrder($sort_order++);
             $sr->store();
 
-            $this->logger->log_debug("Opus3SeriesImport","Series imported: " . $s['name']);
+            $this->logger->log("Opus3SeriesImport","Series imported: " . $s['name'], Zend_Log::DEBUG);
 
             fputs($fp, $s['sr_id'] . ' ' . $sr->getId() . "\n");
         }

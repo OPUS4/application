@@ -32,8 +32,6 @@
  * @version     $Id: Opus3RoleImport.php 8423 2011-05-27 16:58:20Z sszott $
  */
 
-require_once 'Opus3ImportLogger.php';
-
 class Opus3RoleImport {
 
    /**
@@ -65,7 +63,7 @@ class Opus3RoleImport {
     
     public function __construct() {
         $this->config = Zend_Registry::get('Zend_Config');
-        $this->logger = new Opus3ImportLogger();
+        $this->logger = Zend_Registry::get('Zend_Log');
         $this->ips = $this->config->migration->ip;
         $this->roles = $this->config->migration->role;
     }
@@ -82,18 +80,6 @@ class Opus3RoleImport {
         $this->storeIps();
         $this->mapRoles();
     }
-
-    /**
-     * Finalisation of Object
-     *
-     * @param void
-     * @return void
-     *
-     */
-    public function finalize() {
-        $this->logger->finalize();
-    }
-   
 
     private function storeIps() {
         try {
@@ -136,7 +122,7 @@ class Opus3RoleImport {
                 throw new Exception("ERROR Opus3RoleImport: Could not create '".$mf."' for Roles.\n");
             }
         } catch (Exception $e){
-            $this->logger->log_error("Opus3RoleImport", $e->getMessage());
+            $this->logger->log("Opus3RoleImport", $e->getMessage(), Zend_Log::ERR);
             return;
         }
 
@@ -149,12 +135,12 @@ class Opus3RoleImport {
                     $role = null;
                     if (Opus_UserRole::fetchByname($name)) {
                         $role = Opus_UserRole::fetchByname($name);
-                        $this->logger->log_debug("Opus3RoleImport", "Role in DB found: " . $r->name);
+                        $this->logger->log("Opus3RoleImport", "Role in DB found: " . $r->name, Zend_Log::DEBUG);
                     } else {
                         $role = new Opus_UserRole();
                         $role->setName($r->name);
                         $role->store();
-                        $this->logger->log_debug("Opus3RoleImport", "Role imported: " . $r->name);
+                        $this->logger->log("Opus3RoleImport", "Role imported: " . $r->name, Zend_Log::DEBUG);
                     }
 
                     $db_ips = array();
@@ -180,7 +166,7 @@ class Opus3RoleImport {
                 }
            }
         }  catch (Exception $e){
-            $this->logger->log_error("Opus3RoleImport", $e->getMessage());
+            $this->logger->log("Opus3RoleImport", $e->getMessage(), Zend_Log::ERR);
         }
 
         fclose($fp);

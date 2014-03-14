@@ -33,8 +33,6 @@
  * @version     $Id$
  */
 
-require_once 'Opus3ImportLogger.php';
-
 class Opus3LicenceImport {
 
    /**
@@ -80,7 +78,7 @@ class Opus3LicenceImport {
      */
     public function __construct($data) {
         $this->config = Zend_Registry::get('Zend_Config');
-        $this->logger = new Opus3ImportLogger();
+        $this->logger = Zend_Registry::get('Zend_Log');
         $this->mapping['language'] =  array('old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->config->migration->language);
         $this->data = $data;
 
@@ -108,16 +106,6 @@ class Opus3LicenceImport {
         }
     }
 
-    /**
-     * Finalisation of Object
-     *
-     * @param void
-     * @return void
-     *
-     */
-    public function finalize() {
-        $this->logger->finalize();
-    }
 
     /**
      * transfers any OPUS3-conform classification System into an array
@@ -188,7 +176,7 @@ class Opus3LicenceImport {
                 throw new Exception("Could not create '".$mf."' for Licences");
             }
         } catch (Exception $e){
-            $this->logger->log_error("Opus3LicenceImport", $e->getMessage());
+            $this->logger->log("Opus3LicenceImport", $e->getMessage(), Zend_Log::ERR);
             return;
         }
         $licenses = $this->transferOpus3Licence($data);
@@ -196,7 +184,7 @@ class Opus3LicenceImport {
             
             $id = $licence->store();
 
-            $this->logger->log_debug("Opus3LicenceImport", "Licence imported: " . $key);
+            $this->logger->log("Opus3LicenceImport", "Licence imported: " . $key, Zend_Log::DEBUG);
             fputs($fp, $key . ' ' . $id . "\n");
 	}
 	fclose($fp);
@@ -204,7 +192,7 @@ class Opus3LicenceImport {
 
      protected function checkMandatoryFields($lic, $name) {
          if (is_null($lic->getActive())) {
-             $this->logger->log_error("Opus3LicenceImport", "No Attribute 'active' for " . $name );
+             $this->logger->log("Opus3LicenceImport", "No Attribute 'active' for " . $name, Zend_Log::ERR);
              if (!is_null($this->config->migration->licence->active)) {
                 $lic->setActive($this->config->migration->licence->active);
                 $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'active' to default value '" . $lic->getActive() ."' for " .$name );
@@ -212,42 +200,47 @@ class Opus3LicenceImport {
          }
 
          if (is_null($lic->getLanguage())) {
-             $this->logger->log_error("Opus3LicenceImport", "No Attribute 'language' for " . $name);
+             $this->logger->log("Opus3LicenceImport", "No Attribute 'language' for " . $name, Zend_Log::ERR);
              if (!is_null($this->config->migration->licence->language)) {
                 $lic->setLanguage($this->config->migration->licence->language);
-                $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'language' to default value '" . $lic->getLanguage() . "' for " .$name );
+                $this->logger->log("Opus3LicenceImport", "Set Attribute 'language' to default value '" .
+                    $lic->getLanguage() . "' for " .$name, Zend_Log::ERR);
              }
          }
 
          if (is_null($lic->getLinkLicence())) {
-             $this->logger->log_error("Opus3LicenceImport", "No Attribute 'link_licence' for " . $name);
+             $this->logger->log("Opus3LicenceImport", "No Attribute 'link_licence' for " . $name, Zend_Log::ERR);
              if (!is_null($this->config->migration->licence->link_licence)) {
                 $lic->setLinkLicence($this->config->migration->licence->link_licence);
-                $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'link_licence' to default value '" . $lic->getLinkLicence() ."' for " .$name );
+                $this->logger->log("Opus3LicenceImport", "Set Attribute 'link_licence' to default value '" .
+                    $lic->getLinkLicence() ."' for " .$name, Zend_Log::ERR);
              }
          }
 
          if (is_null($lic->getMimeType())) {
-             $this->logger->log_error("Opus3LicenceImport", "No Attribute 'mime_type' for " . $name);
+             $this->logger->log("Opus3LicenceImport", "No Attribute 'mime_type' for " . $name, Zend_Log::ERR);
              if (!is_null($this->config->migration->licence->mime_type)) {
                 $lic->setMimeType($this->config->migration->licence->mime_type);
-                $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'mime_type' to default value '" . $lic->getMimeType() ."' for " .$name );
+                $this->logger->log("Opus3LicenceImport", "Set Attribute 'mime_type' to default value '" .
+                    $lic->getMimeType() ."' for " .$name, Zend_Log::ERR);
              }
          }
 
          if (is_null($lic->getNameLong())) {
-             $this->logger->log_error("Opus3LicenceImport", "No Attribute 'name_long' for " . $name);
+             $this->logger->log("Opus3LicenceImport", "No Attribute 'name_long' for " . $name, Zend_Log::ERR);
              if (!is_null($this->config->migration->licence->name_long)) {
                 $lic->setNameLong($this->config->migration->licence->name_long);
-                $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'name_long' to default value '" . $lic->getNameLong() ."' for " .$name );
+                $this->logger->log("Opus3LicenceImport", "Set Attribute 'name_long' to default value '" .
+                    $lic->getNameLong() ."' for " .$name, Zend_Log::ERR);
              }
          }
 
          if (is_null($lic->getPodAllowed())) {
-             $this->logger->log_error("Opus3LicenceImport", "No Attribute 'pod_allowed' for " . $name);
+             $this->logger->log("Opus3LicenceImport", "No Attribute 'pod_allowed' for " . $name, Zend_Log::ERR);
              if (!is_null($this->config->migration->licence->pod_allowed)) {
                 $lic->setPodAllowed($this->config->migration->licence->pod_allowed);
-                $this->logger->log_error("Opus3LicenceImport", "Set Attribute 'pod_allowed' to default value '" . $lic->getPodAllowed() ."' for " .$name );
+                $this->logger->log("Opus3LicenceImport", "Set Attribute 'pod_allowed' to default value '" .
+                    $lic->getPodAllowed() ."' for " .$name, Zend_Log::ERR);
              }
          }
 

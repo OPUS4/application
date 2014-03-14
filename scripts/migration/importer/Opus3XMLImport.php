@@ -34,8 +34,6 @@
  * @version     $Id$
  */
 
-require_once 'Opus3ImportLogger.php';
-
 class Opus3XMLImport {
     
    /**
@@ -144,7 +142,7 @@ class Opus3XMLImport {
     public function __construct($xslt, $stylesheetPath) {
         // Initialize member variables.
         $this->config = Zend_Registry::get('Zend_Config');
-        $this->logger = new Opus3ImportLogger();
+        $this->logger = Zend_Registry::get('Zend_Log');
 
         $this->_xml = new DomDocument;
         $this->_xslt = new DomDocument;
@@ -169,10 +167,6 @@ class Opus3XMLImport {
         array_push($this->thesistypes, 'habilitation');
         array_push($this->thesistypes, 'masterthesis');
         array_push($this->thesistypes, 'studythesis');
-    }
-
-    public function finalize() {
-        $this->logger->finalize();
     }
 
     public function initImportFile($data) {
@@ -324,7 +318,8 @@ class Opus3XMLImport {
             $elements = $this->document->getElementsByTagName($r[0]);
             foreach ($elements as $e) {
                 if (trim($e->getAttribute($r[1])) == "") {
-                    $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : '" . $r[0] . "' with empty '" . $r[1] . "' will not be imported");
+                    $this->logger->log("Opus3XMLImport", "Old ID '" . $this->oldId . "' : '" . $r[0] . "' with empty '" .
+                        $r[1] . "' will not be imported", Zend_Log::ERR);
                     $this->document->removeChild($e);
                 }
             }
@@ -343,12 +338,15 @@ class Opus3XMLImport {
                 if ($oa['config']->$old_value) {
                     $new_value = $oa['config']->$old_value;
                 } else {
-                    $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : No Mapping for 'language' in '" . $tag . "' with value '" . $old_value . "' found. Set to default-Value '" .  $oa['config']->default . "'");
+                    $this->logger->log("Opus3XMLImport", "Old ID '" .
+                        $this->oldId . "' : No Mapping for 'language' in '" . $tag . "' with value '" . $old_value .
+                        "' found. Set to default-Value '" .  $oa['config']->default . "'", Zend_Log::ERR);
                     $new_value = $oa['config']->default;
                 }
                 /* Check for TitleElements with duplicated Languages */
                 if (in_array($new_value, $language)) {
-                    $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : This document has two '" . $tag . "' with equal language. Document will not be indexed");
+                    $this->logger->log("Opus3XMLImport", "Old ID '" . $this->oldId . "' : This document has two '" .
+                        $tag . "' with equal language. Document will not be indexed", Zend_Log::ERR);
                 } else {
                     array_push($language, $new_value);
                 }
@@ -359,7 +357,8 @@ class Opus3XMLImport {
     private function checkTitleAdditional() {
         $elements = $this->document->getElementsByTagName('TitleAdditional');
         foreach ($elements as $e) {
-            $this->logger->log_warn("Opus3XMLImport", "Old ID '" . $this->oldId . "' : 'title_en' or 'title_de' mapped to 'TitleAdditional' to prevent 'TitleMain' with duplicate language");
+            $this->logger->log("Opus3XMLImport", "Old ID '" . $this->oldId . "' : 'title_en' or 'title_de' mapped to".
+                "'TitleAdditional' to prevent 'TitleMain' with duplicate language", Zend_Log::WARN);
         }
      }
 
@@ -371,7 +370,9 @@ class Opus3XMLImport {
         foreach ($elements as $e) {
             if (trim($e->getAttribute('Email')) != "") {
                 if (!($validator->isValid($e->getAttribute('Email')))) {
-                    $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : Invalid Email-Address '" . $e->getAttribute('Email') . "' will be imported as 'InvalidVerification'-Enrichment");
+                    $this->logger->log("Opus3XMLImport", "Old ID '" . $this->oldId . "' : Invalid Email-Address '"
+                        . $e->getAttribute('Email') . "' will be imported as 'InvalidVerification'-Enrichment",
+                        Zend_Log::ERR);
                     $enrichment =  $this->document->appendChild(new DOMElement('Enrichment'));
                     $enrichment->setAttributeNode(new DOMAttr('KeyName', 'InvalidVerification'));
                     $enrichment->setAttributeNode(new DOMAttr('Value', $e->getAttribute('Email')));
@@ -390,7 +391,9 @@ class Opus3XMLImport {
             if ($oa['config']->$old_value) {
                 $new_value = $oa['config']->$old_value;
             } else {
-                $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : No Mapping for '" . $m . "' in Document with value '" . $old_value . "' found. Set to default-Value '" .  $oa['config']->default . "'");
+                $this->logger->log("Opus3XMLImport", "Old ID '" . $this->oldId . "' : No Mapping for '" . $m .
+                    "' in Document with value '" . $old_value . "' found. Set to default-Value '" .
+                    $oa['config']->default . "'", Zend_Log::ERR);
                 $new_value = $oa['config']->default;
             }
             $this->document->removeAttribute($oa['old']);
@@ -408,7 +411,9 @@ class Opus3XMLImport {
                 if ($oa['config']->$old_value) {
                     $new_value = $oa['config']->$old_value;
                 } else {
-                    $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : No Mapping for '" . $m . "' in '" . $tag . "' with value '" . $old_value . "' found. Set to default-Value '" .  $oa['config']->default . "'");
+                    $this->logger->log("Opus3XMLImport", "Old ID '" . $this->oldId . "' : No Mapping for '" . $m .
+                        "' in '" . $tag . "' with value '" . $old_value . "' found. Set to default-Value '" .
+                        $oa['config']->default . "'", Zend_Log::ERR);
                     $new_value = $oa['config']->default;
                 }
                 $e->removeAttribute($oa['old']);
@@ -443,7 +448,8 @@ class Opus3XMLImport {
                     }
                 }
                 else {
-                    $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : Document not added to '" . $oa['role'] . "' '" . $value . "'");
+                    $this->logger->log("Opus3XMLImport", "Old ID '" . $this->oldId . "' : Document not added to '" .
+                        $oa['role'] . "' '" . $value . "'", Zend_Log::ERR);
                 }
                 $this->document->removeChild($e);
             }
@@ -476,7 +482,8 @@ class Opus3XMLImport {
 
                 }
                 else {
-                    $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : ('$m'): No valid Mapping in '" . $oa['mapping'] . "' for '" . $old_value . "'");
+                    $this->logger->log("Opus3XMLImport", "Old ID '" . $this->oldId . "' : ('$m'): No valid Mapping in '"
+                        . $oa['mapping'] . "' for '" . $old_value . "'", Zend_Log::ERR);
                 }
 
                 $this->document->removeChild($e);
@@ -505,7 +512,8 @@ class Opus3XMLImport {
                     //$this->logger->log_debug("Opus3XMLImport", "Found Mapping in " . $oa['mapping'] . ": '" .$old_value . "' --> '" .$new_value . "'");
                 }
                 else {
-                    $this->logger->log_error("Opus3XMLImport", "Old ID '" . $this->oldId . "' : ('$m'): No valid Mapping in '" . $oa['mapping'] . "' for '" . $old_value . "'");
+                    $this->logger->log("Opus3XMLImport", "Old ID '" . $this->oldId . "' : ('$m'): No valid Mapping in '"
+                        . $oa['mapping'] . "' for '" . $old_value . "'", Zend_Log::ERR);
                 }
 
                 $this->document->removeChild($e);
@@ -541,7 +549,7 @@ class Opus3XMLImport {
      private function getMapping($mappingFile, $id) {
         /* TODO: CHECK if File exists , echo ERROR and return null if not*/
         if (!is_readable($mappingFile)) {
-            $this->logger->log_error("Opus3XMLImport", "MappingFile '" . $mappingFile . "' is not readable");
+            $this->logger->log("Opus3XMLImport", "MappingFile '" . $mappingFile . "' is not readable", Zend_Log::ERR);
             return null;
         }
         $fp = file($mappingFile);

@@ -61,6 +61,7 @@ class Opus3Migration_ICL {
      */
     function __construct($options) {
         if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
+        $this->configMigrationLogger();
     }
 
     // Create Collections
@@ -91,7 +92,32 @@ class Opus3Migration_ICL {
         $role = Opus_CollectionRole::fetchByName('institutes');
         $root = $role->addRootCollection()->setVisible(1);
         $root->store();
+    }
 
+    public function configMigrationLogger() {
+        $writer = $this->createWriter($this->config->migration->error->logfile);
+        $writer->addFilter(new Zend_Log_Filter_Priority (Zend_Log::ERR, '<='));
+        $logger = new Zend_Log($writer);
+
+        $writer = $this->createWriter($this->config->migration->debug->logfile);
+        $writer->addFilter(new Zend_Log_Filter_Priority (Zend_Log::WARN, '>='));
+        $logger->addWriter($writer);
+
+        Zend_Registry::set('Zend_Log', $logger);
+    }
+
+    private function createWriter($logfilePath) {
+        $logfile = @fopen($logfilePath, 'a', false);
+        if ( $logfile === false ) {
+            // TODO use Opus exception
+            throw new Exception('Failed to open logging file:' . $logfilePath);
+        }
+        $GLOBALS['id_string'] = uniqid(); // Write ID string to global variables, so we can identify/match individual runs.
+        $format = '%timestamp% %priorityName% (%priority%, ID '.$GLOBALS['id_string'].'): %message%' . PHP_EOL;
+        $formatter = new Zend_Log_Formatter_Simple($format);
+        $writer = new Zend_Log_Writer_Stream($logfile);
+        $writer->setFormatter($formatter);
+        return $writer;
     }
 
     private function setStylesheet() {
@@ -103,35 +129,30 @@ class Opus3Migration_ICL {
     private function load_collections() {
         $import = new Opus3CollectionsImport($this->importData);
         $import->start();
-        $import->finalize();
     }
 
     // Import series
     private function load_series() {
         $import = new Opus3SeriesImport($this->importData);
         $import->start();
-        $import->finalize();
     }
 
     // Import faculties and institutes
     private function load_institutes() {
         $import = new Opus3InstituteImport($this->importData, $this->stylesheet, $this->xslt);
         $import->start();
-        $import->finalize();
     }
 
     // Import Licences
     private function load_licences() {
         $import= new Opus3LicenceImport($this->importData);
         $import->start();
-        $import->finalize();
     }
 
     // Import UserRoles
     private function load_roles() {
         $import= new Opus3RoleImport();
         $import->start();
-        $import->finalize();
     }
 
     // Import Fulltexts
