@@ -222,7 +222,7 @@ class Opus3FileImport {
 	$subdir = $this->getSubdir($f);
 	$label = null;
 	
-	$visibleInOai = $this->getVisibilityInOai();
+	$visibleInOai = $this->getVisibilityInOai($subdir);
         $visibleInFrontdoor = $this->getVisibilityInFrontdoor($subdir);
         $pathName = $this->getPathName($subdir, basename($f));
         
@@ -307,7 +307,10 @@ class Opus3FileImport {
     * @return boolean
     */
 
-    private function getVisibilityInOai()  {
+    private function getVisibilityInOai($subdir)  {
+	if (strpos($subdir , "original") === 0) {
+            return false;
+	}    
         if (!is_null($this->roleId)) {
             $role = new Opus_UserRole($this->roleId);
             if ($role->getName() == 'guest') {
