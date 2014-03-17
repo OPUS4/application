@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `collections` (
   `right_id` int(10) unsigned NOT NULL,
   `parent_id` int(10) unsigned DEFAULT NULL,
   `visible` tinyint(1) unsigned NOT NULL,
+  `visible_publish` tinyint(1) unsigned NOT NULL DEFAULT 1 COMMENT 'Show collection in publish form',
 
   PRIMARY KEY (`id`),
   KEY `role_id` (`role_id`,`id`),
