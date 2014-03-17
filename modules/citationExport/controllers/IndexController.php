@@ -35,6 +35,13 @@
 
 class CitationExport_IndexController extends Controller_Action {
 
+    protected $viewHelper;
+
+    public function init() {
+        parent::init();
+        $this->viewHelper = new View_Helper_BaseUrl();
+    }
+
     /**
      * Output data to index view
      *
@@ -196,7 +203,7 @@ class CitationExport_IndexController extends Controller_Action {
         try {
             $proc = new XSLTProcessor;
             $proc->setParameter('', 'enrichment_note', $enrichmentNote);
-            $proc->setParameter('', 'url_prefix', $this->view->serverUrl() . $this->getRequest()->getBaseUrl());
+            $proc->setParameter('', 'url_prefix', $this->viewHelper->fullUrl($this->view));
             $proc->registerPHPFunctions();
             $proc->importStyleSheet($xslt);
         	

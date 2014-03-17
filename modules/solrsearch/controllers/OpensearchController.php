@@ -35,16 +35,18 @@
 class Solrsearch_OpensearchController extends Controller_Xml {
 
     private $log;
+    private $viewHelper;
 
     public function init() {
         parent::init();
         $this->log = Zend_Registry::get('Zend_Log');
+        $this->viewHelper = new View_Helper_BaseUrl();
     }
 
     public function indexAction() {
         $this->_proc->setParameter('',
                 'searchBaseUrl',
-                $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/solrsearch/index/search/searchtype/simple/query/{searchTerms}');
+                $this->viewHelper->fullUrl($this->view) . '/solrsearch/index/search/searchtype/simple/query/{searchTerms}');
         $this->_proc->setParameter('',
                 'faviconUrl',
                 $this->view->serverUrl() . $this->view->layoutPath() . '/img/logo/favicon.ico');

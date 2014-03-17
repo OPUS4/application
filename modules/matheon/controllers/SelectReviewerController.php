@@ -34,9 +34,12 @@
  */
 class Matheon_SelectReviewerController extends Controller_Action {
 
+    protected $viewHelper;
+
     public function init() {
         parent::init();
         $this->getHelper('MainMenu')->setActive('publish');
+        $this->viewHelper = new View_Helper_BaseUrl();
     }
 
     public function formAction() {
@@ -98,15 +101,13 @@ class Matheon_SelectReviewerController extends Controller_Action {
      */
     private function __sendPublishNotification($document, $recipient) {
         $config = Zend_Registry::getInstance()->get('Zend_Config');
-        $serverUrl = $this->view->serverUrl();
-        $baseUrlServer = $serverUrl . $this->getRequest()->getBaseUrl();
-        $baseUrlFiles = $serverUrl . '/opus4-matheon/files';
+        $baseUrlFiles = $this->view->serverUrl() . '/opus4-matheon/files';
 
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
         $job->setData(array(
             'subject' => $document->renderPublishMailSubject(),
-            'message' => $document->renderPublishMailBody($baseUrlServer, $baseUrlFiles),
+            'message' => $document->renderPublishMailBody($this->viewHelper->fullUrl($this->view), $baseUrlFiles),
             'users' => $recipient
         ));
 

@@ -43,7 +43,13 @@ class Frontdoor_IndexController extends Controller_Action {
     const TRANSLATE_DEFAULT_FUNCTION = 'Frontdoor_IndexController::translateWithDefault';
     const FILE_ACCESS_FUNCTION = 'Frontdoor_IndexController::checkIfUserHasFileAccess';
     const FORMAT_DATE_FUNCTION = 'Frontdoor_IndexController::formatDate';
-    
+
+    private $viewHelper;
+
+    public function init() {
+        parent::init();
+        $this->viewHelper = new View_Helper_BaseUrl();
+    }
     /**
      * Displays the metadata of a document.
      * @return void
@@ -103,7 +109,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $layoutPath = 'layouts/' . (isset($config, $config->theme) ? $config->theme : '');
         $numOfShortAbstractChars = isset($config, $config->frontdoor->numOfShortAbstractChars) ? $config->frontdoor->numOfShortAbstractChars : '0';
 
-        $proc->setParameter('', 'baseUrlServer', $this->getFullServerUrl());
+        $proc->setParameter('', 'baseUrlServer', $this->viewHelper->fullUrl($this->view));
         $proc->setParameter('', 'baseUrl', $baseUrl);
         $proc->setParameter('', 'layoutPath', $baseUrl . '/' . $layoutPath);
         $proc->setParameter('', 'isMailPossible', $this->isMailPossible($document));
@@ -157,9 +163,6 @@ class Frontdoor_IndexController extends Controller_Action {
         return count($authors->getContactableAuthors()) > 0;
     }
 
-    private function getFullServerUrl() {
-        return $this->view->serverUrl() . $this->getRequest()->getBaseUrl();
-    }
 
     /**
      * Static function to be called from XSLT script to check file permission.
@@ -219,7 +222,6 @@ class Frontdoor_IndexController extends Controller_Action {
     private function createMetaTagsForDocument($document) {
         $config = Zend_Registry::getInstance()->get('Zend_Config');
         $serverUrl = $this->view->serverUrl();
-        $baseUrlServer = $this->getFullServerUrl();
         $baseUrlFiles = $serverUrl . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents');
 
         $metas = array();
@@ -281,7 +283,7 @@ class Frontdoor_IndexController extends Controller_Action {
             }
             $metas[] = array('DC.Identifier', $identifierValue);
         }
-        $metas[] = array('DC.Identifier', $baseUrlServer . '/frontdoor/index/index/docId/'. $document->getId());
+        $metas[] = array('DC.Identifier', $this->viewHelper->fullUrl($this->view) . '/frontdoor/index/index/docId/'. $document->getId());
 
         foreach ($document->getFile() AS $file) {
             if (!$file->exists() or ($file->getVisibleInFrontdoor() !== '1') ) {
