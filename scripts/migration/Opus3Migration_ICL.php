@@ -96,11 +96,11 @@ class Opus3Migration_ICL {
 
     public function configMigrationLogger() {
         $writer = $this->createWriter($this->config->migration->error->logfile);
-        $writer->addFilter(new Zend_Log_Filter_Priority (Zend_Log::ERR, '<='));
+        $writer->addFilter(new Zend_Log_Filter_Priority (Zend_Log::WARN, '<='));
         $logger = new Zend_Log($writer);
 
         $writer = $this->createWriter($this->config->migration->debug->logfile);
-        $writer->addFilter(new Zend_Log_Filter_Priority (Zend_Log::WARN, '>='));
+        $writer->addFilter(new Zend_Log_Filter_Priority (Zend_Log::DEBUG, '<='));
         $logger->addWriter($writer);
 
         Zend_Registry::set('Zend_Log', $logger);
