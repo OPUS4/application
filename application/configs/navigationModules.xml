@@ -421,8 +421,8 @@
                     <description>admin_title_security_description</description>
                     <group>group-tomato</group>
                     <module>admin</module>
-                    <controller>security</controller>
-                    <action>index</action>
+                    <controller>index</controller>
+                    <action>security</action>
                     <resource>security</resource>
                     <pages>
                         <accounts>
@@ -603,8 +603,8 @@
                     <description>admin_title_setup_description</description>
                     <group>group-cafelatte</group>
                     <module>admin</module>
-                    <controller>setup</controller>
-                    <action>index</action>
+                    <controller>index</controller>
+                    <action>setup</action>
                     <pages>
                         <enrichmentKey>
                             <type>mvc</type>
@@ -762,8 +762,8 @@
                     <description>admin_title_info_description</description>
                     <group>group-chocolate</group>
                     <module>admin</module>
-                    <controller>info</controller>
-                    <action>menu</action>
+                    <controller>index</controller>
+                    <action>info</action>
                     <pages>
                         <sysinfo>
                             <type>mvc</type>

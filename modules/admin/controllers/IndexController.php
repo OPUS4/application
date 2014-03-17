@@ -50,4 +50,15 @@ class Admin_IndexController extends Controller_Action {
         $this->view->navigation()->breadcrumbs()->setMinDepth(0);
     }
 
+    public function setupAction() {
+        $this->view->title = $this->view->translate('admin_title_setup');
+    }
+
+    public function securityAction() {
+        $this->view->title = $this->view->translate('admin_title_security');
+    }
+
+    public function infoAction() {
+        $this->view->title = $this->view->translate('admin_title_info');
+    }
 }
