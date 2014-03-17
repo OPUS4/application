@@ -9,10 +9,10 @@
   
     <tu tuid="Statistic_Controller">
       <tuv xml:lang="en">
-        <seg>Admin: Number of publications</seg>
+        <seg>Number of publications</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Admin: Veröffentlichungstatistik</seg>
+        <seg>Veröffentlichungstatistik</seg>
       </tuv>
     </tu>
 
