@@ -36,13 +36,13 @@
 
 class Export_IndexController extends Controller_Xml {
 
-    private $log;
     private $stylesheetDirectory;
     private $stylesheet;
+    private $exportModel;
 
     public function init() {
         parent::init();
-        $this->log = Zend_Registry::get('Zend_Log');
+        $this->exportModel = new Export_Model_XMLExport();
     }    
 
     public function indexAction() {
@@ -60,32 +60,15 @@ class Export_IndexController extends Controller_Xml {
         // non-administrative users can only reference user-defined stylesheets
         if (is_null($this->getRequest()->getParam('stylesheet')) && !Opus_Security_Realm::getInstance()->checkModule('admin')) {
             throw new Application_Exception('missing parameter stylesheet');
-
         }
 
         $this->stylesheet = $this->getRequest()->getParam('stylesheet');
         $this->stylesheetDirectory = 'stylesheets-custom';
-        $this->prepareXml();
-    }
 
-    private function prepareXml() {
         $this->setStylesheet();
-
-        try {
-            $searcher = new Opus_SolrSearch_Searcher();
-            $resultList = $searcher->search($this->buildQuery());
-            $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits());
-        }
-        catch (Opus_SolrSearch_Exception $e) {
-            $this->log->err(__METHOD__ . ' : ' . $e);
-            throw new Application_SearchException($e, true);
-        }        
+        $this->exportModel->prepareXml($this->_xml, $this->_proc, $this->getRequest());
     }
 
-    /**
-     *
-     * @return void
-     */
     private function setStylesheet() {
         if (!is_null($this->stylesheet)) {
 
@@ -95,8 +78,7 @@ class Export_IndexController extends Controller_Xml {
                 if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
                     array_push($stylesheetsAvailable, $file->getBasename('.xslt'));
                 }
-            }            
-
+            }
             $pos = array_search($this->stylesheet, $stylesheetsAvailable);
             if ($pos !== FALSE) {
                 $this->loadStyleSheet($this->view->getScriptPath('') . $this->stylesheetDirectory . DIRECTORY_SEPARATOR .  $stylesheetsAvailable[$pos] . '.xslt');
@@ -107,75 +89,19 @@ class Export_IndexController extends Controller_Xml {
         $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'raw.xslt');
     }
 
-    /**
-     *
-     * @param array $results An array of Opus_SolrSearch_Result objects.
-     */
-    private function handleResults($results, $numOfHits) {
-        $this->_proc->setParameter('', 'timestamp', str_replace('+00:00', 'Z', Zend_Date::now()->setTimeZone('UTC')->getIso()));
-        $this->_proc->setParameter('', 'docCount', count($results));
-        $this->_proc->setParameter('', 'queryhits', $numOfHits);
-        $this->_xml->appendChild($this->_xml->createElement('Documents'));
-        
-        $resultIds = array();
-        foreach ($results as $result) {
-            $resultIds[] = $result->getId();
-        }
-        if(!empty($resultIds)) {
-            $documentCacheTable = new Opus_Db_DocumentXmlCache();
-            $docXmlCache = $documentCacheTable->fetchAll($documentCacheTable->select()->where('document_id IN (?)', $resultIds));//->find($this->document->getId(), '1')->current()->xml_data;
-
-            $processedIds = array();
-            
-            foreach($docXmlCache as $row) {
-                $fragment = new DomDocument();
-                $fragment->loadXML($row->xml_data);
-                $domNode = $this->_xml->importNode($fragment->getElementsByTagName('Opus_Document')->item(0), true);
-                $this->_xml->documentElement->appendChild($domNode);
-                $processedIds[] = $row->document_id;
-            }
-            
-            // create and append cache for documents without cache
-            $unprocessedIds = array_diff($resultIds, $processedIds);
-            
-            if(!empty($unprocessedIds)) {
-                foreach($unprocessedIds as $docId) {
-                    $document = new Opus_Document($docId);
-                    $documentXml = new Util_Document($document);
-                    $domNode = $this->_xml->importNode($documentXml->getNode(), true);
-                    $this->_xml->documentElement->appendChild($domNode);
-                }
-            }
-        }
-    }
-
-    private function buildQuery() {
-        $queryBuilder = new Util_QueryBuilder($this->log, true);
-        $queryBuilderInput = array();
-        try {
-            $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($this->getRequest());
-        }
-        catch (Util_QueryBuilderException $e) {
-            $this->log->err(__METHOD__ . ' : ' . $e->getMessage());
-            throw new Application_Exception($e->getMessage());
-        }
-        
-        return $queryBuilder->createSearchQuery($queryBuilderInput);
-    }
-
     public function publistAction() {
         $config = Zend_Registry::get('Zend_Config');
-	if (isset($config->publist->stylesheetDirectory)) {
-            $this->stylesheetDirectory = $config->publist->stylesheetDirectory;
-	}
+        if (isset($config->publist->stylesheetDirectory)) {
+                $this->stylesheetDirectory = $config->publist->stylesheetDirectory;
+        }
 
-	if (isset($config->publist->stylesheet)) {
-            $this->stylesheet = $config->publist->stylesheet;
-	}
+        if (isset($config->publist->stylesheet)) {
+                $this->stylesheet = $config->publist->stylesheet;
+        }
         if (!is_null($this->getRequest()->getParam('stylesheet'))) {
             $this->stylesheet = $this->getRequest()->getParam('stylesheet');
         }
-        
+
         $roleParam = $this->getRequest()->getParam('role');
         if (is_null($roleParam)) {
             throw new Application_Exception('role is not specified');
@@ -187,59 +113,27 @@ class Export_IndexController extends Controller_Xml {
         }
 
         $groupBy = 'publishedYear';
-	if (isset($config->publist->groupby->completedyear)) {
+        if (isset($config->publist->groupby->completedyear)) {
             $groupBy = 'completedYear';
-	}
+        }
 
-	$viewHelper = new View_Helper_BaseUrl();
+        $viewHelper = new View_Helper_BaseUrl();
         $fullUrl = $viewHelper->fullUrl($this->view);
 
-        $this->mapQuery();
+        $collection = $this->exportModel->mapQuery($this->getRequest()->getParam('role'), $this->getRequest()->getParam('number'));
+        $this->getRequest()->setParam('searchtype', 'collection');
+        $this->getRequest()->setParam('id', $collection->getId());
+        $this->getRequest()->setParam('export', 'xml');
+        $this->_proc->setParameter('', 'collName', $collection->getName());
+
         $this->_proc->registerPHPFunctions('max');
         $this->_proc->registerPHPFunctions('urlencode');
         $this->_proc->registerPHPFunctions('Export_Model_PublicationList::getMimeTypeDisplayName');
         $this->_proc->setParameter('', 'fullUrl', $fullUrl);
         $this->_proc->setParameter('', 'groupBy', $groupBy);
-            
-        $this->prepareXML();
+
+        $this->setStylesheet();
+        $this->exportModel->prepareXml($this->_xml, $this->_proc, $this->getRequest());
     }
-
-
-    private function mapQuery() {
-
-        $roleParam = $this->getRequest()->getParam('role');
-        $numberParam = $this->getRequest()->getParam('number');
-
-        if (is_null(Opus_CollectionRole::fetchByName($roleParam))) {
-             throw new Application_Exception('specified role does not exist');
-        }
-
-        $role = Opus_CollectionRole::fetchByName($roleParam);
-        if ($role->getVisible() != '1') {
-            throw new Application_Exception('specified role is invisible');
-        }
-
-        if (count(Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam)) == 0) {
-             throw new Application_Exception('specified number does not exist for specified role');
-        }
-
-        $collection = null;
-        foreach (Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam) as $coll) {
-            if ($coll->getVisible() == '1' && is_null($collection)) {
-                $collection = $coll;
-            }
-        }
-
-        if (is_null($collection)) {
-            throw new Application_Exception('specified collection is invisible');
-        }
-
-        $this->getRequest()->setParam('searchtype', 'collection');
-        $this->getRequest()->setParam('id', $collection->getId());
-        $this->getRequest()->setParam('export', 'xml');
-
-        $this->_proc->setParameter('', 'collName', $collection->getName());
-    }
-
 }
 
