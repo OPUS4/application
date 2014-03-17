@@ -117,4 +117,14 @@ class Admin_Model_Statistics {
         return $years;
     }
 
+    public function getNumDocsUntil($thresholdYear) {
+        $result = 0;
+        foreach ($this->getYears() as $year) {
+            if ($year <= $thresholdYear) {
+                $result += array_sum($this->getMonthStatistics($year));
+            }
+        }
+        return $result;
+    }
+
 }

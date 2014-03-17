@@ -33,6 +33,15 @@
         <seg>Gesamtzahl Dokumente</seg>
       </tuv>
     </tu>
+
+    <tu tuid="Number_Documents_Until">
+      <tuv xml:lang="en">
+        <seg>Total number of documents until</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Gesamtzahl Dokumente bis</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="Month_Overview_Title">
       <tuv xml:lang="en">

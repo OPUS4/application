@@ -74,6 +74,9 @@ class Admin_StatisticController extends Controller_Action {
 
         $this->view->languageSelectorDisabled = true;
 
+        $this->view->selectedYear = $selectedYear;
+        $this->view->sumDocsUntil = $this->statisticsModel->getNumDocsUntil($selectedYear);
+
         $monthStat = $this->statisticsModel->getMonthStatistics($selectedYear);
 
         $this->view->totalNumber = array_sum($monthStat);
@@ -81,7 +84,6 @@ class Admin_StatisticController extends Controller_Action {
         $this->view->monthStat = $monthStat;
 
         $this->view->typeStat = $this->statisticsModel->getTypeStatistics($selectedYear);
-
         $this->view->instStat = $this->statisticsModel->getInstituteStatistics($selectedYear);
     }
 }
