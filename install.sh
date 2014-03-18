@@ -74,7 +74,13 @@ cp -r "$BASEDIR/downloads/SolrPhpClient_r36" .
 ln -svf "SolrPhpClient_r36" SolrPhpClient
 
 mkdir -p "$BASEDIR/opus4/public/js"
-cp "$BASEDIR/downloads/jquery.js" "$BASEDIR/opus4/public/js/"
+if [[ $? -eq 0 ]]; then
+    cp "$BASEDIR/downloads/jquery.js" "$BASEDIR/opus4/public/js/"
+else
+    mv "$BASEDIR/opus4/public/js" "$BASEDIR/opus4/public/js_bak"
+    mkdir -p "$BASEDIR/opus4/public/js"
+    cp "$BASEDIR/downloads/jquery.js" "$BASEDIR/opus4/public/js/"
+fi
 
 cd "$BASEDIR"
 
