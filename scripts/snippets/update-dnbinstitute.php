@@ -83,6 +83,10 @@ _log(count($docIds) . " documents " . ($documentType != false ? "of type '$docum
 foreach ($docIds as $docId) {
     try {
         $doc = new Opus_Document($docId);
+        if(count($doc->getFile()) == 0) {
+            _log("Document <$docId> has no files, skipping..");
+            continue;
+        }
         if (!is_null($thesisPublisherId)) {
             $thesisPublisher = $doc->getThesisPublisher();
             if (empty($thesisPublisher)) {
