@@ -51,7 +51,6 @@ class LicencesAdminTest extends ControllerTestCase {
      * Prüft, das nicht auf die Seite zur Verwaltung von Dokumenten zugegriffen werden kann.
      */
     public function testNoAccessDocumentsController() {
-        $this->useEnglish();
         $this->dispatch('/admin/documents');
         $this->assertRedirectTo('/auth');
     }
@@ -66,19 +65,16 @@ class LicencesAdminTest extends ControllerTestCase {
     }
 
     public function testNoAccessFilebrowserController() {
-        $this->useEnglish();
         $this->dispatch('/admin/filebrowser/index/docId/92');
         $this->assertRedirectTo('/auth');
     }
 
     public function testNoAccessWorkflowController() {
-        $this->useEnglish();
         $this->dispatch('/admin/workflow/changestate/docId/300/targetState/deleted');
         $this->assertRedirectTo('/auth');
     }
 
     public function testNoAccessAccessController() {
-        $this->useEnglish();
         $this->dispatch('/admin/access/listmodule/roleid/2');
         $this->assertRedirectTo('/auth');
     }
