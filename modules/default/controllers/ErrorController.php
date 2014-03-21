@@ -73,6 +73,7 @@ class ErrorController extends Controller_Action
                 $this->getResponse()->setHttpResponseCode(404);
                 $this->view->title = 'error_page_not_found';
                 $this->view->message = $this->view->translate('error_page_not_found');
+                $this->view->errorMessage = $this->view->translate('error_msg_page_not_found');
                 break;
             default:
                 // application error

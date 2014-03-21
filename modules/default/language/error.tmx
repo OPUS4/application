@@ -43,6 +43,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="error_msg_page_not_found">
+        <tuv xml:lang="en">
+            <seg>The accessed url was not valid.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die angegebende Url ist nicht gültig.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="error_application">
         <tuv xml:lang="en">
             <seg>Application error</seg>
