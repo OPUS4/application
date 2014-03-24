@@ -33,9 +33,22 @@
 
 class Admin_DnbinstituteControllerTest extends CrudControllerTestCase {
 
+    private $roleId;
+    private $userId;
+
     public function setUp() {
         $this->setController('dnbinstitute');
         parent::setUp();
+    }
+
+    public function tearDown() {
+        if (isset ($this->roleId) && isset($this->userId)) {
+            $testRole = new Opus_UserRole($this->roleId);
+            $testRole->delete();
+            $userAccount = new Opus_Account($this->userId);
+            $userAccount->delete();
+        }
+        parent::tearDown();
     }
 
     public function getModels() {
@@ -229,5 +242,56 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase {
         $this->assertQuery('input#ConfirmNo');
     }
 
+    /*
+     * Testet, ob der Benutzer auf DNB-Institute zugreifen kann, wenn ihm Rechte dazu verliehen wurden.
+     */
+    public function testUserAccessToInstituteWithInstituteRights() {
+        $testRole = new Opus_UserRole();
+        $testRole->setName('TestRole');
+        $testRole->appendAccessModule('admin');
+        $testRole->appendAccessModule('resource_institutions');
+        $this->roleId = $testRole->store();
+
+        $userAccount = new Opus_Account();
+        $userAccount->setLogin('role_tester')
+                ->setPassword('role_tester');
+        $userAccount->setRole($testRole);
+        $this->userId = $userAccount->store();
+
+        $this->enableSecurity();
+        $this->loginUser('role_tester', 'role_tester');
+        $this->useEnglish();
+
+        $this->dispatch('/admin/dnbinstitute/edit/id/1');
+        $this->assertQueryContentContains('//label', 'Department', 'User is not able to edit dnb-institutions, '.
+            'although he has the right to do it');
+        $this->assertNotRedirectTo('/auth', 'User is not able to edit dnb-institutions, '.
+            'although he has the right to do it');
+    }
+
+
+    /*
+     * Testet, ob der Benutzer auf DNB-Institute zugreifen kann, wenn ihm keine Rechte dazu verliehen wurden.
+     */
+    public function testUserAccessToInstituteWithoutInstituteRights() {
+        $testRole = new Opus_UserRole();
+        $testRole->setName('TestRole');
+        $testRole->appendAccessModule('admin');
+        $testRole->appendAccessModule('resource_languages');
+        $this->roleId = $testRole->store();
+
+        $userAccount = new Opus_Account();
+        $userAccount->setLogin('role_tester')
+            ->setPassword('role_tester');
+        $userAccount->setRole($testRole);
+        $this->userId = $userAccount->store();
+
+        $this->enableSecurity();
+        $this->loginUser('role_tester', 'role_tester');
+        $this->useEnglish();
+
+        $this->dispatch('/admin/dnbinstitute/edit/id/1');
+        $this->assertRedirectTo('/auth', 'User is able to edit dnb-institutes, although he has no rights');
+    }
 }
 
