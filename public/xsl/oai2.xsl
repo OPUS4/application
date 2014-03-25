@@ -174,7 +174,7 @@ p.intro {
 <xsl:template name="quicklinks">
     <ul class="quicklinks">
       <li><a href="?verb=Identify">Identify</a> | </li> 
-      <li><a href="?verb=ListRecords&amp;metadataPrefix=oai_dc">ListRecords</a> | </li>
+      <li><a href="?verb=ListRecords&amp;metadataPrefix=epicur">ListRecords</a> | </li>
       <li><a href="?verb=ListSets">ListSets</a> | </li>
       <li><a href="?verb=ListMetadataFormats">ListMetadataFormats</a> | </li>
       <li><a href="?verb=ListIdentifiers&amp;metadataPrefix=oai_dc">ListIdentifiers</a></li>
