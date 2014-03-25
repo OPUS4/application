@@ -34,6 +34,43 @@
  */
 class Oai_Model_DocumentListTest extends ControllerTestCase {
     
+    private $docWithUrnId;
+    private $docWoUrnId;
+
+    public function tearDown() {
+        // cleanup
+        $doc = new Opus_Document($this->docWithUrnId);
+        $doc->deletePermanent();
+        $doc = new Opus_Document($this->docWoUrnId);
+        $doc->deletePermanent();
+        parent::tearDown();
+    }
+
+    /*
+     * Testet, ob beim MetaDataPrefix epicur Dokumente ohne Urn ausgegeben werden.
+     */
+    public function testDocumentOutputUrn() {
+        $docWithUrn = new Opus_Document();
+        $docWithUrn->setServerState('published');
+        $identifier = new Opus_Identifier();
+        $identifier->setValue('urn_value1');
+        $identifier->setType('urn');
+        $docWithUrn->addIdentifier($identifier);
+        $this->docWithUrnId = $docWithUrn->store();
+
+        $docWoUrn = new Opus_Document();
+        $docWoUrn->setServerState('published');
+        $this->docWoUrnId = $docWoUrn->store();
+
+        $oaiRequest = array('metadataPrefix' => 'epicur');
+        $docListModel = new Oai_Model_DocumentList();
+        $docListModel->_deliveringDocumentStates = array('published');
+        $docIds = $docListModel->query($oaiRequest);
+
+        $this->assertTrue(in_array($this->docWithUrnId, $docIds), 'failed assert document with urn is returned');
+        $this->assertFalse(in_array($this->docWoUrnId, $docIds), 'failed assert document without urn is returned');
+    }
+
     /**
      * Test list document ids, metadataPrefix=XMetaDissPlus, different intervals
      * list possible intervals containing "2010-06-05"
@@ -41,9 +78,9 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
     public function testIntervalOAIPMHQueries() {
         $doc = new Opus_Document();
         $doc->setServerState('published');
-        $docId = $doc->store();
+        $this->docId = $doc->store();
         
-        $doc = new Opus_Document($docId);        
+        $doc = new Opus_Document($this->docId);        
         $serverDateModified = $doc->getServerDateModified();
         
         $today = new DateTime();
@@ -83,12 +120,8 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
             $docListModel->_xMetaDissRestriction = array();
             $docIds = $docListModel->query($oaiRequest);
 
-            $this->assertTrue(in_array($docId, $docIds), "Response must contain document id $docId: " . var_export($interval, true));
+            $this->assertTrue(in_array($this->docId, $docIds), "Response must contain document id $this->docId: " . var_export($interval, true));
         }
-        
-        // cleanup
-        $doc = new Opus_Document($docId);
-        $doc->deletePermanent();
     }
 
     /**
@@ -98,9 +131,9 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
     public function testIntervalOAIPMHQueryWithoutTestDoc() {
         $doc = new Opus_Document();
         $doc->setServerState('published');
-        $docId = $doc->store();
+        $this->docId = $doc->store();
         
-        $doc = new Opus_Document($docId);        
+        $doc = new Opus_Document($this->docId);        
         $serverDateModified = $doc->getServerDateModified();
         
         $today = new DateTime();
@@ -142,12 +175,8 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
             $docListModel->_xMetaDissRestriction = array();
             $docIds = $docListModel->query($oaiRequest);
 
-            $this->assertFalse(in_array($docId, $docIds), "Response must NOT contain document id $docId: " . var_export($interval, true));
+            $this->assertFalse(in_array($this->docId, $docIds), "Response must NOT contain document id $this->docId: " . var_export($interval, true));
         }
-        
-        // cleanup
-        $doc = new Opus_Document($docId);
-        $doc->deletePermanent();        
     }
 
 }
