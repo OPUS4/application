@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS `collections` (
   `number` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `oai_subset` varchar(255) DEFAULT NULL,
-  `sort_order` INT(11) UNSIGNED NOT NULL,
 
   `left_id` int(10) unsigned NOT NULL,
   `right_id` int(10) unsigned NOT NULL,
