@@ -134,11 +134,9 @@ class Admin_Model_Collection {
             throw new Admin_Model_Exception('cannot move collection to position ' . $newPosition);
         }
 
-        // assing sortOrder value to all collections at the same hierarchy level
+        // find current position of collection
         $oldPosition = 0;
         foreach ($siblings as $position => $sibling) {
-            $sibling->setSortOrder($position);
-            $sibling->store();
             if ($sibling->getId() === $this->collection->getId()) {
                 $oldPosition = $position;
             }
@@ -154,15 +152,11 @@ class Admin_Model_Collection {
             throw new Admin_Model_Exception('cannot move collection to position ' . $newPosition);
         }
 
-        // perform move operation
-        if ($oldPosition !== $newPosition) {
-            $siblings[$oldPosition]->setSortOrder($newPosition);
-            $siblings[$newPosition]->setSortOrder($oldPosition);
-
-            $siblings[$oldPosition]->store();
-            $siblings[$newPosition]->store();
+        if($newPosition > $oldPosition) {
+            $this->collection->moveAfterNextSibling();
+        } else if($newPosition < $oldPosition) {
+            $this->collection->moveBeforePrevSibling();
         }
-
         return $parents[1]->getId();
     }
 }
