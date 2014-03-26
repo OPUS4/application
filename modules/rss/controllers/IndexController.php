@@ -79,7 +79,7 @@ class Rss_IndexController extends Controller_Xml {
         }
         catch (Opus_SolrSearch_Exception $e) {
             $this->log->err(__METHOD__ . ' : ' . $e);
-            throw new Application_SearchException($e, true);
+            $this->redirect('/rss/error/error');
         }
         
         $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'rss2_0.xslt');
