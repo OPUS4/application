@@ -159,6 +159,15 @@
         <seg>Untertitel</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_document_section_titlesource">
+      <tuv xml:lang="en">
+        <seg>Source</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Quelle</seg>
+      </tuv>
+    </tu>
     
     <tu tuid="admin_document_section_persons">
       <tuv xml:lang="en">

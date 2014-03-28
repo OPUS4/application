@@ -858,6 +858,15 @@
             <seg>Tragen Sie hier bitte den übersetzten Titel des Dokuments ein.</seg>
         </tuv>
     </tu>
+
+    <tu tuid="hint_groupTitleSource">
+        <tuv xml:lang="en">
+            <seg>Please enter the documents source title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte den Titel der Quelle des Dokuments ein.</seg>
+        </tuv>
+    </tu>
 	
 	<tu tuid="hint_TitleAdditional">
         <tuv xml:lang="en">
@@ -865,6 +874,15 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie hier bitte den übersetzten Titel des Dokuments ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_TitleSource">
+        <tuv xml:lang="en">
+            <seg>Please enter the documents source title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte den Titel der Quelle des Dokuments ein.</seg>
         </tuv>
     </tu>
 	
@@ -876,7 +894,16 @@
             <seg>Bitte wählen Sie die Sprache des übersetzten Titels aus.</seg>
         </tuv>
     </tu>
-	
+
+	<tu tuid="hint_TitleSourcelLanguage">
+        <tuv xml:lang="en">
+            <seg>Please choose the language of the source title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte wählen Sie die Sprache des Titels der Quelle aus.</seg>
+        </tuv>
+    </tu>
+
 	<tu tuid="hint_groupTitleParent">
         <tuv xml:lang="en">
             <seg>Please enter the parent work's title (i.e. Journal, Compilation, Anthology).</seg>
@@ -1574,13 +1601,22 @@ END OF COMMENT -->
     </tu>
 
     <tu tuid="hint_Opus_Model_Filter_TitleAdditional">
-            <tuv xml:lang="en">
-                <seg>Please insert a translated Title.</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Geben Sie bitte einen übersetzten Titel ein.</seg>
-            </tuv>
-        </tu>
+        <tuv xml:lang="en">
+            <seg>Please insert a translated Title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Geben Sie bitte einen übersetzten Titel ein.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="hint_Opus_Model_Filter_TitleSource">
+        <tuv xml:lang="en">
+            <seg>Please insert a source Title.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Geben Sie bitte einen Titel der Quelle ein.</seg>
+        </tuv>
+    </tu>
 
     <tu tuid="hint_FirstName">
       <tuv xml:lang="en">

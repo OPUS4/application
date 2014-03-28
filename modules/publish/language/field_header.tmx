@@ -275,6 +275,15 @@ END OF COMMENT -->
       </tuv>
     </tu>
 
+	<tu tuid="groupTitleSource">
+      <tuv xml:lang="en">
+        <seg>Title Source</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel der Quelle</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="groupSubjectMSC">
       <tuv xml:lang="en">
         <seg>MSC Classification</seg>

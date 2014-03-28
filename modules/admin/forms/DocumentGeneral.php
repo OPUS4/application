@@ -100,7 +100,7 @@ class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
         $date = $datesHelper->getDateString($document->getCompletedDate());
         $this->getElement(self::ELEMENT_COMPLETED_DATE)->setValue($date);
         $this->getElement(self::ELEMENT_COMPLETED_YEAR)->setValue($document->getCompletedYear());
-        
+
         $date = $datesHelper->getDateString($document->getPublishedDate());
         $this->getElement(self::ELEMENT_PUBLISHED_DATE)->setValue($date);
         $this->getElement(self::ELEMENT_PUBLISHED_YEAR)->setValue($document->getPublishedYear());

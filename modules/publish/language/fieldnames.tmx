@@ -267,6 +267,15 @@
         <seg>Sprache</seg>
       </tuv>
     </tu>
+
+    <tu tuid="TitleSourceLanguage">
+      <tuv xml:lang="en">
+        <seg>Language</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sprache</seg>
+      </tuv>
+    </tu>
                     
     <tu tuid="PersonEditorLastName">
       <tuv xml:lang="en">

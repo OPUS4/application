@@ -58,6 +58,7 @@
     <field name="TitleSub" required="no" formelement="text" datatype="Title" multiplicity="1"/>
     <field name="TitleAdditional" required="no" formelement="Text" datatype="Title" multiplicity="1"/>
     <field name="TitleParent" required="no" formelement="text" datatype="Title" multiplicity="1"/>
+    <field name="TitleSource" required="no" formelement="text" datatype="Title" multiplicity="1"/>
 
     <field name="PublicationState" required="no" formelement="Select" datatype="List" multiplicity="1" >
         <option value="draft" />

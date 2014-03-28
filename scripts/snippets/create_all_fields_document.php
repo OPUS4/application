@@ -68,6 +68,10 @@ $titleAdditional = $doc->addTitleAdditional();
 $titleAdditional->setValue('OAI-Schnittstellen empirisch testen am Beispiel von OPUS 4.0');
 $titleAdditional->setLanguage('deu');
 
+$titleSource = $doc->addTitleSource();
+$titleSource->setValue('OAI-Schnittstellen empirisch testen am Beispiel von OPUS 4.0');
+$titleSource->setValue('deu');
+
 $titleParent = $doc->addTitleParent();
 $titleParent->setValue('Tester interface d\'OAI en OPUS 4.0');
 $titleParent->setLanguage('fra');
