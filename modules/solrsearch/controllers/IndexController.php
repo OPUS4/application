@@ -119,6 +119,7 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->_logger->debug('performing search');
         try {
             $searcher = new Opus_SolrSearch_Searcher();
+            $searcher->setFacetArray($this->facetNumberChanger());
             $this->resultList = $searcher->search($this->query);
         }
         catch (Opus_SolrSearch_Exception $e) {
@@ -126,6 +127,35 @@ class Solrsearch_IndexController extends Controller_Action {
             throw new Application_SearchException($e);
         }
         $this->numOfHits = $this->resultList->getNumberOfHits();
+    }
+
+    private function facetNumberChanger() {
+        $facetArray = array();
+        if (!is_null($this->_request->getParam('facetNumber_author_facet'))) {
+            $facetArray['author_facet'] = $this->_request->getParam('facetNumber_author_facet');
+        }
+        if (!is_null($this->_request->getParam('facetNumber_year'))) {
+            $facetArray['year'] = $this->_request->getParam('facetNumber_year');
+        }
+        if (!is_null($this->_request->getParam('facetNumber_doctype'))) {
+            $facetArray['doctype'] = $this->_request->getParam('facetNumber_doctype');
+        }
+        if (!is_null($this->_request->getParam('facetNumber_language'))) {
+            $facetArray['language'] = $this->_request->getParam('facetNumber_language');
+        }
+        if (!is_null($this->_request->getParam('facetNumber_has_fulltext'))) {
+            $facetArray['has_fulltext'] = $this->_request->getParam('facetNumber_has_fulltext');
+        }
+        if (!is_null($this->_request->getParam('facetNumber_belongs_to_bibliography'))) {
+            $facetArray['belongs_to_bibliography'] = $this->_request->getParam('facetNumber_belongs_to_bibliography');
+        }
+        if (!is_null($this->_request->getParam('facetNumber_subject'))) {
+            $facetArray['subject'] = $this->_request->getParam('facetNumber_subject');
+        }
+        if (!is_null($this->_request->getParam('facetNumber_institute'))) {
+            $facetArray['institute'] = $this->_request->getParam('facetNumber_institute');
+        }
+        return $facetArray;
     }
 
     private function setViewValues() {
@@ -226,10 +256,11 @@ class Solrsearch_IndexController extends Controller_Action {
         $facets = $this->resultList->getFacets();
         $facetArray = array();
         $selectedFacets = array();
+        $this->view->facetNumberContainer = array();
 
         foreach($facets as $key=>$facet) {
             $this->_logger->debug("found $key facet in search results");
-
+            $this->view->facetNumberContainer[$key] = sizeof($facet);
             $facetValue = $this->getRequest()->getParam($key . 'fq','');
             if($facetValue !== '') {
                 $selectedFacets[$key] = $facetValue;
@@ -239,7 +270,7 @@ class Solrsearch_IndexController extends Controller_Action {
                 $facetArray[$key] = $facet;
             }
         }
-        
+
         $this->view->facets = $facetArray;
         $this->view->selectedFacets = $selectedFacets;
     }

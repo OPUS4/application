@@ -34,10 +34,13 @@
 ?>
 
 <div id="facets" class="results_facets">
-    <h3><?= $this->translate('facets_menu_title') ?></h3>
+    <h3><?= $this->translate('facets_menu_title')  ?> </h3>
     <?php foreach($this->facets as $key => $facet) : ?>
         <div id="<?= $key ?>_facet" class="facet">
-            <h4><?= $this->translate($key."_facet_heading") ?></h4>
+            <?php $facetUrl = $this->firstPage;
+            $facetUrl["facetNumber_" . $key] = ($this->facetNumberContainer[$key] + 1);
+            ?>
+            <h4><?= $this->translate($key."_facet_heading") ?> <a href="<?=  $this->url($facetUrl) ?>"> <img src="<?= $this->layoutPath() ?>/img/plus.png" height="12" width="12"></a></h4>
             <ul>
                 <?php foreach($facet as $facetItem) :
                     $fqUrl = $this->firstPage;
