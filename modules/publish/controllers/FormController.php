@@ -388,7 +388,7 @@ class Publish_FormController extends Controller_Action {
      * @param Publish_Form_PublishingSecond $form
      */
     private function showCheckPage($form) {
-        $this->view->subtitle = $this->view->translate('publish_controller_check2');
+        $this->view->hint = $this->view->translate('publish_controller_check2');
         $this->view->header = $this->view->translate('publish_controller_changes');
         $this->setViewValues('deposit', 'deposit', '', $form, true);
     }
