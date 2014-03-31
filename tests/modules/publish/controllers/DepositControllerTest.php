@@ -197,7 +197,9 @@ class Publish_DepositControllerTest extends ControllerTestCase {
             3 => array('name' => 'PersonSubmitterEmail_1', 'value' => 'test@mail.com'),
             4 => array('name' => 'CompletedDate', 'value' => '2011/03/03'),
             5 => array('name' => 'TitleMain_1', 'value' => 'Irgendwas'),
-            6 => array('name' => 'TitleMainLanguage_1', 'value' => 'deu')
+            6 => array('name' => 'TitleMainLanguage_1', 'value' => 'deu'),
+            7 => array('name' => 'TitleSource_1', 'value' => 'sourceTitle'),
+            8 => array('name' => 'TitleSourceLanguage_1', 'value' => 'deu')
         );
 
         $session->elements = $elemente;
