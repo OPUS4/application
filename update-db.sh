@@ -175,10 +175,49 @@ function runDbBackup() {
     $MYSQLDUMP >"$BACKUP_FILENAME"
 }
 
+## hook for pre update scripts
+function runDbPreUpdateScripts() {
+    
+    runDbUpdateHook "pre-update-db" "$1" "$2"
+
+}
+
+## hook for post update scripts
+function runDbPostUpdateScripts() {
+    
+    runDbUpdateHook "post-update-db" "$1" "$2"
+
+}
+
+# Called by runDbPreUpdateScripts and runDbPostUpdateScripts
+function runDbUpdateHook() {
+
+    UPDATE_HOOK=$1
+    VERSION_OLD=$2
+    VERSION_NEW=$3
+
+    for UPDATE_SCRIPT_DIR in "update-scripts/$UPDATE_HOOK"/*
+    do
+        if [[ -d "$UPDATE_SCRIPT_DIR" ]]; then
+            VERSION_DIR=`basename "$UPDATE_SCRIPT_DIR"`
+            if [[ "$VERSION_OLD" < "$VERSION_DIR" && ("$VERSION_NEW" == "$VERSION_DIR" || "$VERSION_NEW" > "$VERSION_DIR") ]]; then
+                for f in "$UPDATE_SCRIPT_DIR"/*.sh # only shell scripts allowed
+                do
+                    [[ -f "$f" ]] &&  source "$f"
+                done
+            fi
+        fi
+    done
+
+}
 
 echo "Backing up database..."
 runDbBackup "$VERSION_OLD"
 echo "Backing up database... done."
+
+echo "Running pre-update scripts (if any)"
+runDbPreUpdate "$VERSION_OLD" "$VERSION_NEW"
+echo "Finished pre-update procedures"
 
 echo "Database is updating now..."
 dbScript "$VERSION_OLD" "$VERSION_NEW"
@@ -239,17 +278,6 @@ setPropertyInShellScript "$FILE" "dbname" "$CREATEDB_DBNAME"
 setPropertyInShellScript "$FILE" "mysql_bin" "$CREATEDB_MYSQL_BIN"
 setPropertyInShellScript "$FILE" "master_dir" "$CREATEDB_MASTER_DIR"
 
-
-
-# =============================================================================
-# Updating DnbInstitute Data
-# Splitting Name to Name and newly created Name and Department
-# when updating from version < 4.4.1 to version >= 4.4.1
-# =============================================================================
-
-
-if [[ "$VERSION_OLD" < "4.4.1" ]]; then
-    UPDATE_DNBINSTITUTES_LOG="$BASEDIR/UPDATE-dnbinstitutes.log"
-    echo "Updating DNB Institutes"
-    "$SCRIPTPATH/update-dnbinstitutes.php" --host=$HOST --port=$PORT --dbname=$DBNAME --user=$USER --password=$PASSWORD >> "$UPDATE_DNBINSTITUTES_LOG"
-fi
+echo "Running post-update scripts (if any)"
+runDbPostUpdate "$VERSION_OLD" "$VERSION_NEW"
+echo "Finished post-update procedures"
