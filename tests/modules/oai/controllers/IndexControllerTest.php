@@ -1375,7 +1375,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
    public function testXMetaDissPlusIsSchemaValid() {
        $xmlCatalog = getenv('XML_CATALOG_FILES');
         if(!strpos($xmlCatalog, 'xmetadissplus-catalog.xml')) {
-            $this->fail('Environment Variable XML_CATALOG_FILES not set correctly. It should point to resources/xmetadissplus-catalog.xml.');
+            $this->markTestSkipped('Environment Variable XML_CATALOG_FILES not set correctly. It should point to resources/xmetadissplus-catalog.xml.');
         }
         libxml_use_internal_errors(true);
 
