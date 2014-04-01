@@ -301,11 +301,18 @@ class Frontdoor_IndexController extends Controller_Action {
 
         $datePublished = $document->getPublishedDate();
         if (!is_null($datePublished)) {
-            // $date = new Opus_Date();
+
             $dateString = $datePublished->getZendDate()->get('yyyy-MM-dd');
 
             $metas[] = array("citation_date", $dateString);
             $metas[] = array("DC.Date", $dateString);
+        } else {
+            $yearPublished = $document->getPublishedYear();
+            if(!is_null($yearPublished)) {
+
+                $metas[] = array("citation_date", $yearPublished);
+                $metas[] = array("DC.Date", $yearPublished);
+            }
         }
 
         return $metas;
