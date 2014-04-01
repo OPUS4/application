@@ -752,5 +752,15 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<a href="/solrsearch/index/search/searchtype/collection/id/16007" title="frontdoor_collection_link">Technische Universität Hamburg-Harburg / Bauwesen / Abwasserwirtschaft und Gewässerschutz B-2</a>',
                 $this->getResponse()->getBody());
     }
+    
+    /**
+     * Regression Test for OPUSVIER-2414
+     */
+    public function testIncludeMetaDateCitationDateIfPublishedYearSet() {
+        $this->dispatch('/frontdoor/index/index/docId/145');
+        $this->assertContains('<meta name="citation_date" content="2011" />',
+                $this->getResponse()->getBody());
+        
+    }
 
 }
