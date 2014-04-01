@@ -88,7 +88,7 @@ class Util_QueryBuilder {
         $input = array(
             'searchtype' => $request->getParam('searchtype'),
             'start' => $request->getParam('start', Opus_SolrSearch_Query::DEFAULT_START),
-            'rows' => $request->getParam('rows', Opus_SolrSearch_Query::DEFAULT_ROWS),
+            'rows' => $request->getParam('rows', Opus_SolrSearch_Query::getDefaultRows()),
             'sortField' => $request->getParam('sortfield', Opus_SolrSearch_Query::DEFAULT_SORTFIELD),
             'sortOrder' => $request->getParam('sortorder', Opus_SolrSearch_Query::DEFAULT_SORTORDER),
             'query' => $request->getParam('query', '*:*')

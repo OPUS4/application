@@ -60,6 +60,8 @@ searchengine.extract.port = @searchengine.extract.port@
 searchengine.extract.app = @searchengine.extract.app@
 ; Facets fields to be considered.
 ;searchengine.solr.facets = author_facet,year,doctype,language,has_fulltext,belongs_to_bibliography,subject,institute
+; Number of default search results
+; searchengine.solr.numberOfDefaultSearchResults = 10
 
 ;MAIL SETTINGS
 ; mail.opus.smtp = localhost; SMTP server for sending email
