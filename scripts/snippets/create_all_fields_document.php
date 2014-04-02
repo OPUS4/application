@@ -31,7 +31,7 @@
  * @version     $Id$
  */
 
-$doc = $this->createTestDocument();
+$doc = new Opus_Document();
 $doc->setType('all');
 $doc->setServerState('published');
 $doc->setServerDatePublished('1900-01-01');

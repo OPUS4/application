@@ -37,7 +37,7 @@
 
 for ($i = 1; $i < 10000; $i++) {
 
-  $d = $this->createTestDocument();
+  $d = new Opus_Document();
   $d->setServerState('published');
   $d->setType('preprint');
   $d->setLanguage('deu');

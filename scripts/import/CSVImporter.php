@@ -155,7 +155,7 @@ class CSVImporter {
     }
 
     private function processRow($row) {
-        $doc = $this->createTestDocument();
+        $doc = new Opus_Document();
 
         $oldId = $row[self::OLD_ID];
 
