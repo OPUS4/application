@@ -55,6 +55,16 @@ class Frontdoor_IndexController extends Controller_Action {
      * @return void
      */
     public function indexAction() {
+        if (!is_null($this->getRequest()->getParam('export'))) {
+
+            $params = $this->getRequest()->getParams();
+            // export module ignores pagination parameters
+            unset($params['rows']);
+            unset($params['start']);
+
+            return $this->_redirectToAndExit('index', null, 'index', 'export', $params);
+        }
+
         $this->view->title = $this->view->translate('frontdoor_title');
         $request = $this->getRequest();
         $docId = $request->getParam('docId', '');

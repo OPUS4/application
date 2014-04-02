@@ -749,5 +749,22 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $response = $this->getResponse();
         $this->assertContains(urlencode('datei mit unüblichem Namen.xhtml'), $response->getBody());
     }
-       
+
+
+    public function testXMLExportForFrontdoor() {
+        $document = new Opus_Document();
+        $docId = $document->store();
+
+        $this->dispatch('/export/index/index/docId/' . $docId . '/export/xmlFd/stylesheet/example');
+
+        $document = null;
+        $document = new Opus_Document($docId);
+        $document->deletePermanent();
+
+        $this->assertResponseCode(200, $this->getResponse()->getBody());
+        $response = $this->getResponse();
+        $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());
+        $this->assertContains('<export-example>', $response->getBody());
+        $this->assertContains($docId, $response->getBody());
+    }
 }

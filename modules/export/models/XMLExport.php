@@ -28,6 +28,24 @@ class Export_Model_XMLExport {
         }
     }
 
+    public function prepareXmlForFrontdoor($xml, $proc, $request) {
+        $docId = $request->getParam('docId', '');
+        if ($docId == '') {
+            $this->printDocumentError("frontdoor_doc_id_missing_in_url", 404);
+            return;
+        }
+        try {
+            $document = new Opus_Document($docId);
+            $results = null;
+            $results[0] = $document;
+            $this->handleResults($results, 1, $xml, $proc);
+        }
+        catch (Opus_Model_NotFoundException $e) {
+            $this->printDocumentError("frontdoor_doc_id_not_found_in_db", 404);
+            return;
+        }
+    }
+
     /**
      *
      * @param array $results An array of Opus_SolrSearch_Result objects.
