@@ -35,9 +35,13 @@
 
 $config = Zend_Registry::get('Zend_Config');
 
+$this->versionFile = APPLICATION_PATH .DIRECTORY_SEPARATOR . "VERSION.txt";
+$this->opusVersion = (file_exists($this->versionFile)) ? $version = trim(file_get_contents($this->versionFile)) : null;
+
 $this->headMeta()
     ->appendHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
-    ->appendHttpEquiv('Content-Language', 'de-DE');
+    ->appendHttpEquiv('Content-Language', 'de-DE')
+    ->appendName('Opus-Version', $this->opusVersion);
 
 $this->headTitle('OPUS 4')
     ->setSeparator(' | ');
