@@ -85,7 +85,7 @@ class PersonControllerTest extends ControllerTestCase {
     }
 
     public function testAssignActionAddPerson() {
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
 
         $this->documentId = $document->store();
 
@@ -175,7 +175,7 @@ class PersonControllerTest extends ControllerTestCase {
     }
 
     public function testEditlinkedActionSave() {
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
 
         $person = new Opus_Person();
         $person->setLastName('Testy-EditlinkedAction');

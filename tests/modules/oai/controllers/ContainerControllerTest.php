@@ -71,7 +71,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         $config->security = '1';
         Zend_Registry::set('Zend_Config', $config);
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
         $doc->store();
         $this->dispatch('/oai/container/index/docId/' . $doc->getId());
@@ -93,7 +93,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
     }
 
     public function testRequestPublishedDocWithoutAssociatedFiles() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->store();
         $this->dispatch('/oai/container/index/docId/' . $doc->getId());
@@ -111,7 +111,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         $filepath = $path . DIRECTORY_SEPARATOR . 'test.pdf';
         touch($filepath);
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');        
 
         $file = new Opus_File();
@@ -142,7 +142,7 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         $filepath = $path . DIRECTORY_SEPARATOR . 'test.pdf';
         touch($filepath);
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
 
         $file = new Opus_File();

@@ -42,7 +42,7 @@ class Admin_Form_DocumentSectionTest extends ControllerTestCase {
     public function testPopulateFromModel() {
         $form = new Admin_Form_DocumentSection();
         
-        $model = new Opus_Document();
+        $model = $this->createTestDocument();
         
         $form->populateFromModel($model);
     }
@@ -74,7 +74,7 @@ class Admin_Form_DocumentSectionTest extends ControllerTestCase {
     public function testUpdateModel() {
         $form = new Admin_Form_DocumentSection();
         
-        $model = new Opus_Document();
+        $model = $this->createTestDocument();
         
         $form->updateModel($model);
     }

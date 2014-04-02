@@ -51,7 +51,7 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
     public function testHasFilesFalse() {
         $view = Zend_Registry::get('Opus_View');
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $docAdapter = new Util_DocumentAdapter($view, $doc);
 
@@ -71,7 +71,7 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
     public function testGetFileCountZero() {
         $view = Zend_Registry::get('Opus_View');
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $docAdapter = new Util_DocumentAdapter($view, $doc);
 
@@ -81,7 +81,7 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
     public function testIsBelongsToBibliographyTrue() {
         $view = Zend_Registry::get('Opus_View');
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $doc->setBelongsToBibliography(true);
 
@@ -93,7 +93,7 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
     public function testIsBelongsToBibliographyFalse() {
         $view = Zend_Registry::get('Opus_View');
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $doc->setBelongsToBibliography(false);
 
@@ -108,7 +108,7 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
     public function testGetMainTitle() {
         $view = Zend_Registry::get('Opus_View');
         
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         
         $title = new Opus_Title();
         $title->setLanguage('deu');
@@ -130,7 +130,7 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
     public function testGetDocTitle() {
         $view = Zend_Registry::get('Opus_View');
         
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         
         $title = new Opus_Title();
         $title->setLanguage('deu');
@@ -150,7 +150,7 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
     }
     
     public function testGetAuthors() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         
         $person = new Opus_Person();
         $person->setLastName("Doe");
@@ -172,7 +172,7 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
     public function testGetAuthorsForDocumentWithoutAuthors() {
         $view = Zend_Registry::get('Opus_View');
         
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         
         $docAdapter = new Util_DocumentAdapter($view, $doc);
         

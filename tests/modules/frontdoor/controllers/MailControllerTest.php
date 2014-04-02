@@ -41,7 +41,7 @@ class Frontdoor_MailControllerTest extends ControllerTestCase {
 
     public function setUp() {
         parent::setUp();
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->setServerState('published');
         $document->setType('baz');
 
@@ -52,7 +52,7 @@ class Frontdoor_MailControllerTest extends ControllerTestCase {
         $this->documentId = $document->store();
         $this->assertNotNull($this->documentId);
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->setServerState('published');
         $document->setType('baz');
 

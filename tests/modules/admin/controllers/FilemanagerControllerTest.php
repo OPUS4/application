@@ -235,7 +235,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
     }
 
     public function testRemoveGuestAccess() {
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $file = $document->addFile();
         $file->setPathName('testdatei.txt');
         $this->documentId = $document->store();

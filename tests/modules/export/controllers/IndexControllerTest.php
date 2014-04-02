@@ -207,7 +207,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-1726
      */
     public function testSolrIndexIsNotUpToDate() {
-        $doc1 = new Opus_Document();
+        $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
         $doc1->setLanguage('eng');
         $title = new Opus_Title();
@@ -218,7 +218,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $docId1 = $doc1->getId();
 
         // add a document to the search index that is not stored in database
-        $doc2 = new Opus_Document();
+        $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
         $doc2->setLanguage('eng');
         $title = new Opus_Title();
@@ -273,7 +273,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
     private function helperForOPUSVIER2488($url, $numOfTestDocs, $rows, $start = 0) {
         $docs = array();
         for ($i = 0; $i < $numOfTestDocs; $i++) {
-            $doc = new Opus_Document();
+            $doc = $this->createTestDocument();
             $doc->setServerState('published');
             $doc->setLanguage('eng');
             $title = new Opus_Title();
@@ -752,7 +752,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
 
 
     public function testXMLExportForFrontdoor() {
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $docId = $document->store();
 
         $this->dispatch('/export/index/index/docId/' . $docId . '/export/xmlFd/stylesheet/example');

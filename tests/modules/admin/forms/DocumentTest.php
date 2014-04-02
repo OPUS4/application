@@ -137,7 +137,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
     public function testIsValidTrue() {
         $form = new Admin_Form_Document();
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->addTitleMain(new Opus_Title());
 
         $form->populateFromModel($document);
@@ -171,9 +171,9 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
     public function testIsValidFalse() {
         $form = new Admin_Form_Document();
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->addTitleMain(new Opus_Title());
 
         $form->populateFromModel($document);
@@ -211,9 +211,9 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
     public function testIsValidFalseDependency() {
         $form = new Admin_Form_Document();
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->addTitleMain(new Opus_Title());
 
         $form->populateFromModel($document);
@@ -251,9 +251,9 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
     public function testIsValidFalseDependency2() {
         $form = new Admin_Form_Document();
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->addTitleMain(new Opus_Title());
         $document->addTitleMain(new Opus_Title());
 
@@ -348,7 +348,7 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
     public function testPrepareRenderingAsViewForEmptyDocument() {
         $form = new Admin_Form_Document();
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
 
         $form->populateFromModel($document);
         $form->prepareRenderingAsView();

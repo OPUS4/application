@@ -61,7 +61,7 @@ class Util_NotificationTest extends ControllerTestCase {
      * der Funktion prepareMail durchlaufen werden.
      */
     public function testPrepareMailForSubmissionContext() {       
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
         $title = new Opus_Title();
@@ -79,7 +79,7 @@ class Util_NotificationTest extends ControllerTestCase {
      * der Funktion prepareMail durchlaufen werden.
      */
     public function testPrepareMailForPublicationContext() {        
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
         $title = new Opus_Title();
@@ -269,7 +269,7 @@ class Util_NotificationTest extends ControllerTestCase {
     }
 
     public function testGetRecipientsForPublicationContextWithoutAuthorsAsRecipents() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->store();
         $method = $this->getMethod('getRecipients');
         $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, array(), $doc));
@@ -288,7 +288,7 @@ class Util_NotificationTest extends ControllerTestCase {
 
     public function testGetRecipientsForPublicationContextWithoutPublishedMailConfigButWithAuthors() {
         $this->config->notification->document->published->email = "";
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->store();
 
         $authors = array(
@@ -309,7 +309,7 @@ class Util_NotificationTest extends ControllerTestCase {
 
     public function testGetRecipientsForPublicationContextAndMultipleAddressesWithoutAuthorsAsRecipents() {
         $this->config->notification->document->published->email = "published@localhost,publ@host.tld";
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->store();
         $method = $this->getMethod('getRecipients');
         $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, array(), $doc));
@@ -323,7 +323,7 @@ class Util_NotificationTest extends ControllerTestCase {
 
     public function testGetRecipientsForPublicationContextWithAuthorsAsRecipents() {
         $this->config->notification->document->published->email = "published@localhost";
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->store();
 
         $authors = array( 
@@ -345,7 +345,7 @@ class Util_NotificationTest extends ControllerTestCase {
 
     public function testGetRecipientsForPublicationContextWithSubmitterAsRecipient() {
         $this->config->notification->document->published->email = "published@localhost";
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $submitter = new Opus_Person();
         $submitter->setFirstName('John');
         $submitter->setLastName('Submitter');
@@ -375,7 +375,7 @@ class Util_NotificationTest extends ControllerTestCase {
 
     public function testGetRecipientsForPublicationContextWithSubmitterWithoutMailAddressAsRecipient() {
         $this->config->notification->document->published->email = "published@localhost";
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $submitter = new Opus_Person();
         $submitter->setFirstName('John');
         $submitter->setLastName('Submitter');        
@@ -396,7 +396,7 @@ class Util_NotificationTest extends ControllerTestCase {
      * der Funktion prepareMail durchlaufen werden.
      */
     public function testPrepareMailWithTwoOptionalArgs() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
         $title = new Opus_Title();
@@ -428,7 +428,7 @@ class Util_NotificationTest extends ControllerTestCase {
     }
 
     public function testGetRecipientsForPublicationContextWithoutSubmitter() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
         $title = new Opus_Title();
@@ -458,7 +458,7 @@ class Util_NotificationTest extends ControllerTestCase {
         $this->config->merge(new Zend_Config(array('runjobs' => array('asynchronous' => 1))));
         $this->assertEquals(0, Opus_Job::getCount(), 'test data changed.');
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
         $title = new Opus_Title();

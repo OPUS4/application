@@ -76,7 +76,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-1841.
      */
     public function testWarningDisplayingDateOfBirth() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $person = new Opus_Person();
         $person->setFirstName("Johnny");
@@ -132,7 +132,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
     public function testPreserveNewlinesForAbstract() {
         $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
         $abstract = new Opus_Title();
@@ -151,7 +151,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
     public function testPreserveNewlinesForNote() {
         $this->markTestIncomplete("Muss fuer OPUS 4.4 angepasst werden."); // TODO OPUSVIER-2794
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
         $doc->setServerState("published");
 

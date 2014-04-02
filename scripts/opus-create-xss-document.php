@@ -54,7 +54,7 @@ $old_error_handler = set_error_handler("myErrorHandler");
 //
 // Creating document, filling static fields.
 //
-$doc = new Opus_Document();
+$doc = $this->createTestDocument();
 $doc->setType(randString($counter++));
 $doc->setServerState('published');
 $doc->setServerDatePublished('01.01.1900');

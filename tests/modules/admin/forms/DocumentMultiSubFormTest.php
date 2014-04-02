@@ -89,7 +89,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub', 
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
         
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         
         $form->populateFromModel($document);
         
@@ -204,7 +204,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         $form->getSubForm('TitleSub1')->getElement('Language')->setValue('eng');
         $form->getSubForm('TitleSub1')->getElement('Value')->setValue('Title 2');
         
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         
         $form->updateModel($document);
         
@@ -444,7 +444,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     public function testOddEven() {
         $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent');
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
 
         $title = new Opus_Title();
         $title->setValue('Titel1');
@@ -475,7 +475,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     public function testOddEvenAfterRemove() {
         $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent');
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
 
         $title = new Opus_Title();
         $title->setValue('Titel1');

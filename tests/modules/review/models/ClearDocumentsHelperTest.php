@@ -39,7 +39,7 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase {
     public function setUp() {
         parent::setUp();
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->setServerState('unpublished');
         $document->setPersonReferee(array());
         $document->setEnrichment(array());

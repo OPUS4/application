@@ -54,7 +54,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
     }
 
     private function createDocWithSubmitterAndAuthor($submitterMail, $authorMail) {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $author = new Opus_Person();
         $author->setFirstName("John");
@@ -131,7 +131,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
      * Tests showing confirmation for permanently deleting a document.
      */
     public function testPermanentDeleteAction() {
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->setServerState('deleted');
         $this->documentId = $document->store();
 
@@ -147,7 +147,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
      * Tests user answering no in permanent delete confirmation form.
      */
     public function testPermanentDeleteActionConfirmNo() {
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->setServerState('deleted');
         $this->documentId = $document->store();
 

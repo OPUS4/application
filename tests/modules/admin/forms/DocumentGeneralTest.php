@@ -79,7 +79,7 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
         $form->getElement('CompletedDate')->setValue('2006/07/03');
         $form->getElement('CompletedYear')->setValue('2007');
         
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         
         $form->updateModel($document);
         

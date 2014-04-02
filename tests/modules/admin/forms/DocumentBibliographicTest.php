@@ -115,7 +115,7 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
         $form->getElement('ThesisYearAccepted')->setValue('2010');
         $form->getElement('BelongsToBibliography')->setValue(true);
         
-        $model = new Opus_Document();
+        $model = $this->createTestDocument();
         
         $form->updateModel($model);
         
@@ -162,7 +162,7 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
         $form->getElement('ThesisDateAccepted')->setValue('  ');
         $form->getElement('ThesisYearAccepted')->setValue('  ');
         
-        $model = new Opus_Document();
+        $model = $this->createTestDocument();
         $form->updateModel($model);
         
         $this->assertNull($model->getContributingCorporation(), 'ContributingCorporation not null');
@@ -193,7 +193,7 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
         $form->getElement('Volume')->setValue('0');
         $form->getElement('ThesisYearAccepted')->setValue('0');
         
-        $model = new Opus_Document();
+        $model = $this->createTestDocument();
         $form->updateModel($model);
         
         $this->assertEquals('0', $model->getContributingCorporation());

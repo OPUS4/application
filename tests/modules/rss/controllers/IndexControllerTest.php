@@ -75,7 +75,7 @@ class Rss_IndexControllerTest extends ControllerTestCase {
      */
     public function testSolrIndexIsNotUpToDate() {
         // add a document to the search index that is not stored in database
-        $doc1 = new Opus_Document();
+        $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
         $doc1->setLanguage('eng');
         $title = new Opus_Title();
@@ -108,7 +108,7 @@ class Rss_IndexControllerTest extends ControllerTestCase {
 
         sleep(2); // make sure $doc2 do not get the same value for server_date_published
         
-        $doc2 = new Opus_Document();
+        $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
         $doc2->setLanguage('eng');
         $title = new Opus_Title();

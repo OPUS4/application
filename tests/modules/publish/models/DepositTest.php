@@ -49,7 +49,7 @@ class Publish_Model_DepositTest extends ControllerTestCase {
      * @expectedException Publish_Model_FormDocumentNotFoundException
      */
     public function testInvalidDocumentState() {
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->setServerState('published');
         $this->documentId = $document->store();
 
@@ -58,7 +58,7 @@ class Publish_Model_DepositTest extends ControllerTestCase {
     }
 
     public function testValidDocumentData() {
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->setServerState('temporary');
         $docId = $document->store();
         

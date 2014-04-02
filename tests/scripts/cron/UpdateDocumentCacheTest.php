@@ -43,7 +43,7 @@ class UpdateDocumentCacheTest extends CronTestCase {
 
     public function setUp() {
         parent::setUp();
-        $this->document = new Opus_Document();
+        $this->document = $this->createTestDocument();
         $this->document->store();
     }
 

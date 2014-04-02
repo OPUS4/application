@@ -43,7 +43,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
 
     public function setUp() {
         parent::setUp();
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->setServerState('published');
         $document->setType('testtype');
 
@@ -100,7 +100,7 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
         $this->assertNotNull($this->author4Id);
         $this->assertNotEquals('', $this->author4Id);
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->setServerState('unpublished');
         $this->unpublishedDocumentId = $document->store();
         $this->assertNotNull($this->unpublishedDocumentId);

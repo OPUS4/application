@@ -848,7 +848,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testTransferUrlIsPresent() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = new Opus_File();
         $file->setVisibleInOai(true);
@@ -864,7 +864,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testTransferUrlIsNotPresent() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState("published");
         $this->docIds[] = $doc->store();
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=xMetaDissPlus&identifier=oai::' . $doc->getId());
@@ -914,7 +914,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     public function testDifferentFilesVisibilityOfOneDoc() {
 
         //create document with two files
-        $d = new Opus_Document();
+        $d = $this->createTestDocument();
         $d->setServerState('published');
 
         $f1 = new Opus_File();
@@ -1000,7 +1000,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-2450
      */
     public function testDdbFileNumberForSingleDocumentAndSingleFile() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = new Opus_File();
         $file->setVisibleInOai(true);
@@ -1019,7 +1019,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-2450
      */
     public function testDdbFileNumberForSingleDocumentAndMultipleFiles() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = new Opus_File();
         $file->setVisibleInOai(true);
@@ -1044,7 +1044,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     public function testDdbFileNumberForMultipleDocumentsForXMetaDissPlus() {
         $collection = new Opus_Collection(112);
 
-        $doc1 = new Opus_Document();
+        $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
         $file = new Opus_File();
         $file->setVisibleInOai(true);
@@ -1057,7 +1057,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc1->addCollection($collection);
         $this->docIds[] = $doc1->store();
 
-        $doc2 = new Opus_Document();
+        $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
         $file = new Opus_File();
         $file->setVisibleInOai(true);
@@ -1080,7 +1080,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     public function testDdbFileNumberForMultipleDocumentsForXMetaDiss() {
         $collection = new Opus_Collection(112);
 
-        $doc1 = new Opus_Document();
+        $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
         $doc1->setType('habilitation'); // xMetaDiss liefert nur Doktorarbeiten und Habilitationen aus
         $file = new Opus_File();
@@ -1094,7 +1094,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc1->addCollection($collection);
         $this->docIds[] = $doc1->store();
 
-        $doc2 = new Opus_Document();
+        $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
         $doc2->setType('doctoralthesis'); // xMetaDiss liefert nur Doktorarbeiten und Habilitationen aus
         $file = new Opus_File();
@@ -1118,7 +1118,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     public function testTransferUrlIsIOnlyGivenForDocsWithFulltext() {
         $collection = new Opus_Collection(112);
 
-        $doc1 = new Opus_Document();
+        $doc1 = $this->createTestDocument();
         $doc1->setServerState('published');
         $file = new Opus_File();
         $file->setVisibleInOai(true);
@@ -1131,7 +1131,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc1->addCollection($collection);
         $this->docIds[] = $doc1->store();
 
-        $doc2 = new Opus_Document();
+        $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
         $file = new Opus_File();
         $file->setVisibleInOai(true);
@@ -1140,7 +1140,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $doc2->addCollection($collection);
         $this->docIds[] = $doc2->store();
 
-        $doc3 = new Opus_Document();
+        $doc3 = $this->createTestDocument();
         $doc3->setServerState('published');
         $doc3->addCollection($collection);
         $this->docIds[] = $doc3->store();
@@ -1166,7 +1166,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     public function testForDDCSubjectTypeForXMetaDissPlus() {
         $collection = new Opus_Collection(112);
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addCollection($collection);
         
@@ -1191,7 +1191,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     public function testForDDCSubjectTypeForXMetaDiss() {
         $collection = new Opus_Collection(112);
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setType('doctoralthesis'); // xMetaDiss liefert nur Doktorarbeiten und Habilitationen aus
         $doc->addCollection($collection);
@@ -1275,7 +1275,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      */
     public function testXMetaDissPlusOmitPersonSurnameIfEmpty() {
 
-      $document = new Opus_Document();
+      $document = $this->createTestDocument();
       $document->setServerState('published');
 
       $author = new Opus_Person();

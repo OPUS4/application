@@ -227,7 +227,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
         
         $form->updateModel($patent);
         
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->addPatent($patent);
         
         $document->store();

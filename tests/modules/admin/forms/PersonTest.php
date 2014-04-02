@@ -115,7 +115,7 @@ class Admin_Form_PersonTest extends ControllerTestCase {
         
         $form->setLog($logger);
         
-        $form->updateModel(new Opus_Document());
+        $form->updateModel($this->createTestDocument());
         
         $messages = $logger->getMessages();
         

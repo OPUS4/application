@@ -94,7 +94,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $config->security = '1';
         Zend_Registry::set('Zend_Config', $config);
         
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
         $doc->store();
 
@@ -122,7 +122,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
     }
 
     public function testConstructorWithPublishedDocumentWithoutAnyFiles() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->store();
 
@@ -141,7 +141,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
     }
 
     public function testFunctionGetName() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = new Opus_File();
         $file->setPathName('foo.pdf');
@@ -159,7 +159,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
     public function testDocumentWithRestrictedFile() {
         $filepath = $this->createTestFile('foo.pdf');
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = new Opus_File();
         $file->setPathName(basename($filepath));
@@ -186,7 +186,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
     }
 
     public function testDocumentWithNonExistentFile() {       
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = new Opus_File();
         $file->setPathName('test.pdf');
@@ -211,7 +211,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
     public function testDocumentWithSingleUnrestrictedFile() {
         $filepath = $this->createTestFile('test.txt');
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = new Opus_File();
         $file->setPathName(basename($filepath));
@@ -239,7 +239,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $filepath1 = $this->createTestFile('foo.pdf');
         $filepath2 = $this->createTestFile('bar.pdf');        
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = new Opus_File();
         $file->setPathName(basename($filepath1));
@@ -274,7 +274,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $filepath1 = $this->createTestFile('test.pdf');
         $filepath2 = $this->createTestFile('foo.html');
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = new Opus_File();
         $file->setPathName(basename($filepath1));
@@ -307,7 +307,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
     public function testDeleteContainerSingleFile() {
         $filepath1 = $this->createTestFile('test.pdf');
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = new Opus_File();
         $file->setPathName(basename($filepath1));

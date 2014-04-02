@@ -120,7 +120,7 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
     }
 
     public function testGetDocumentTitle() {
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
 
         $document->setLanguage('deu');
 

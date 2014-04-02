@@ -63,7 +63,7 @@ class View_Helper_FormatValueTest extends ControllerTestCase {
     }
 
     public function testFormatValueForSelectField() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $field = $doc->getField('Language');
 
@@ -75,7 +75,7 @@ class View_Helper_FormatValueTest extends ControllerTestCase {
     }
 
     public function testFormatValueForYear() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $field = $doc->getField('PublishedYear');
 
@@ -103,7 +103,7 @@ class View_Helper_FormatValueTest extends ControllerTestCase {
     }
 
     public function testFormatValueForInvalidDate() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $doc->setPublishedDate(new Opus_Date('2005'));
 

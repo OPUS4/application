@@ -76,7 +76,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
     public function testSeriesActionWithOneVisibleSeriesWithoutAnyPublishedDocument() {
         $visibilities = $this->setAllSeriesToUnvisible();
 
-        $d = new Opus_Document();
+        $d = $this->createTestDocument();
         $d->setServerState('unpublished');
         $d->store();
 
@@ -99,7 +99,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
     public function testSeriesActionWithOneVisibleSeriesWithOnePublishedDocument() {
         $visibilities = $this->setAllSeriesToUnvisible();
 
-        $d = new Opus_Document();
+        $d = $this->createTestDocument();
         $d->setServerState('published');
         $d->store();
 

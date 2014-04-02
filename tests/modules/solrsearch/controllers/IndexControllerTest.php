@@ -157,7 +157,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
     
     private function createPublishedTestDoc() {
-        $d = new Opus_Document();
+        $d = $this->createTestDocument();
         $d->setServerState('published');
         $d->setLanguage('eng');
         $d->addTitleMain()->setValue('testphrasequerieswithwildcard*s')->setLanguage('eng');
@@ -315,7 +315,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-2134
      */
     public function testCatchAllSearch() {
-        $d = new Opus_Document();
+        $d = $this->createTestDocument();
         $d->setServerState('published');
         $d->setLanguage('eng');
         $d->addTitleParent()->setValue('testcatchallsearch_title_parent')->setLanguage('eng');
@@ -607,7 +607,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->requireSolrConfig();
 
         // create a test doc with all available identifier types
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setLanguage('eng');
         $title = new Opus_Title();
@@ -646,7 +646,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->requireSolrConfig();
 
         // create a test doc with all available person types
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setLanguage('eng');
         $title = new Opus_Title();
@@ -818,7 +818,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     private function addSampleDocWithMultipleSubjects($numOfSubjects = 0) {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setLanguage('eng');
         $title = new Opus_Title();

@@ -59,7 +59,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $path = Zend_Registry::get('temp_dir') . '~localstat.xml';
       @unlink($path);
 
-      $this->_document = new Opus_Document();
+      $this->_document = $this->createTestDocument();
       $this->_document->setType("doctoral_thesis");
       $this->_document->store();
 
@@ -74,7 +74,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $config->security = '1';
 
       // create collection test document
-      $this->_document_col = new Opus_Document();
+      $this->_document_col = $this->createTestDocument();
       $this->_document_col->addCollection(new Opus_Collection(40)); // invisible collection
       $this->_document_col->addCollection(new Opus_Collection(16214)); // visible collection with invisible collection role
       $this->_document_col->addCollection(new Opus_Collection(1031)); // visible collection with visible collection role
@@ -548,7 +548,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
    }
 
     public function testAbstractPreserveSpace() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
         $doc->setServerState("published");
 
@@ -568,7 +568,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testNotePerserveSpace() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
         $doc->setServerState("published");
         

@@ -459,7 +459,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
      * @return Opus_Document
      */
     private function createTemporaryDoc() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('temporary');
         $doc->store();
         return $doc;

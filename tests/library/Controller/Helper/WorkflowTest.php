@@ -74,7 +74,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
     }
 
     public function testGetAllowedTargetStatesForDocument() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $doc->setServerState('unpublished');
 
@@ -104,7 +104,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
     }
 
     public function testChangeStateToPublished() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $doc->setServerState('unpublished');
 
@@ -124,7 +124,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
     }
 
     public function testChangeStateToDeleted() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $doc->setServerState('published');
 
@@ -143,7 +143,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
     }
 
     public function testChangeStateToRemoved() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $doc->setServerState('published');
 
@@ -162,7 +162,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
      * TODO unit test must be modified as soon as 'unpublish' is forbidden
      */
     public function testChangeStateToUnpublished() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $doc->setServerState('published');
 
@@ -181,7 +181,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
     }
 
     public function testIsAllowedTransitionTrue() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $doc->setServerState('unpublished');
 
@@ -190,7 +190,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
     }
 
     public function testIsAllowedTransitionFalse() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
 
         $doc->setServerState('published');
 

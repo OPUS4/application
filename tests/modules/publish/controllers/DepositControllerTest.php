@@ -148,7 +148,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
 
         $session->elements = $elemente;
         $session->documentType = 'preprint';
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('temporary');
         $doc->setType('preprint');
         $this->docId = $doc->store();
@@ -204,7 +204,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
 
         $session->elements = $elemente;
         $session->documentType = 'preprint';
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('temporary');
         $doc->setType('preprint');
         $this->docId = $doc->store();
@@ -227,7 +227,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
      * @expectedException Publish_Model_FormDocumentNotFoundException
      */
     public function testStoreExistingDocument() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setType('preprint');
         $this->docId = $doc->store();

@@ -87,7 +87,7 @@ class Controller_Helper_TranslationTest extends ControllerTestCase {
     }
 
     public function testTranslationOfServerStateValues() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $values = $doc->getField('ServerState')->getDefault();
 
         foreach ($values as $value) {
@@ -175,7 +175,7 @@ class Controller_Helper_TranslationTest extends ControllerTestCase {
     }
 
     public function testTranslationOfOpusDocumentFields() {
-        $model = new Opus_Document();
+        $model = $this->createTestDocument();
 
         $fieldNames = $model->describe();
 

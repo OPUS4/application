@@ -52,7 +52,7 @@ class Matheon_Model_DocumentTest extends ControllerTestCase {
     }
 
     public function testStoreEnrichmentKeyValueSkipDuplicate() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $docId = $doc->store();
         $this->assertEquals(0, count($doc->getEnrichment()));
 

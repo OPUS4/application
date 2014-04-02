@@ -39,7 +39,7 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase {
     public function setUp() {
         parent::setUp();
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->setServerState('published');
 
         $this->documentId = $document->store();

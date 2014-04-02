@@ -76,7 +76,7 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase {
         
         $form->setLog($logger);
         
-        $form->populateFromModel(new Opus_Document());
+        $form->populateFromModel($this->createTestDocument());
         
         $messages = $logger->getMessages();
         
@@ -165,7 +165,7 @@ class Admin_Form_PersonLinkTest extends ControllerTestCase {
         
         $form->setLog($logger);
         
-        $form->updateModel(new Opus_Document());
+        $form->updateModel($this->createTestDocument());
         
         $messages = $logger->getMessages();
         

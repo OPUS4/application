@@ -84,7 +84,7 @@ class Admin_Form_DocumentTitlesMainTest extends ControllerTestCase {
     }
     
     protected function getTestDocument() {
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         
         $document->setLanguage('deu');
         

@@ -96,7 +96,7 @@ class Admin_Form_File_UploadTest extends ControllerTestCase {
         $form->getElement('Comment')->setValue('Testkommentar');
         $form->getElement('Language')->setValue('rus');
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
 
         $fileInfo = array(
             array(

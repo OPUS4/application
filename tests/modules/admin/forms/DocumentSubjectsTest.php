@@ -48,7 +48,7 @@ class Admin_Form_DocumentSubjectsTest extends ControllerTestCase {
     public function testUpdateModel() {
         $form = new Admin_Form_DocumentSubjects();
         
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         
         $form->populateFromModel(new Opus_Document(146)); // zwei Schlagwörter
         

@@ -113,7 +113,7 @@ class Admin_Form_FileTest extends ControllerTestCase {
         $form->getElement('VisibleIn')->setValue(array('frontdoor', 'oai'));
         $form->getElement('Roles')->setValue(array('reviewer', 'docsadmin'));
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
 
         $file = $document->addFile();
         $file->setPathName('test.pdf');
@@ -155,7 +155,7 @@ class Admin_Form_FileTest extends ControllerTestCase {
         $form->getElement('VisibleIn')->setValue('frontdoor');
         $form->getElement('Roles')->setValue('reviewer');
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
 
         $file = $document->addFile();
         $file->setPathName('test.pdf');
@@ -278,7 +278,7 @@ class Admin_Form_FileTest extends ControllerTestCase {
 
         $form->setLogger($logger);
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
 
         $file = $document->addFile();
         $file->setPathName('test.pdf');

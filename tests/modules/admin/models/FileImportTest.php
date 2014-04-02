@@ -79,7 +79,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase {           #
     }
     
     public function testAddFilesToDocument() {
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         
         $this->documentId = $document->store();
 
@@ -161,7 +161,7 @@ class Admin_Model_FileImportTest extends ControllerTestCase {           #
     public function testDeleteFile() {
         $this->model->setImportFolder($this->importFolder);
 
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $this->documentId = $document->store();
 
         $filePath1 = $this->importFolder . '/test1.txt';

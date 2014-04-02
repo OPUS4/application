@@ -38,6 +38,7 @@
 class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
     private $securityEnabled;
+    private $testDocuments;
 
     const MESSAGE_LEVEL_NOTICE = 'notice';
     const MESSAGE_LEVEL_FAILURE = 'failure';
@@ -89,6 +90,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
     public function setUp() {
         $this->setUpWithEnv(APPLICATION_ENV);
+        $this->testDocuments = array();
     }
 
     /**
@@ -96,7 +98,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      */
     protected function tearDown() {
         $this->logoutUser();
-
+        $this->deleteTestDocuments();
         parent::tearDown();
     }
 
@@ -480,4 +482,20 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         }
     }
 
+    private function deleteTestDocuments() {
+        foreach ($this->testDocuments as $key => $doc) {
+            try {
+                $this->removeDocument($doc);
+                unset ($this->testDocuments[$key]);
+            }
+            catch (Exception $e) {
+            }
+        }
+    }
+
+    protected function createTestDocument() {
+        $doc = new Opus_Document ();
+        array_push($this->testDocuments, $doc);
+        return $doc;
+    }
 }

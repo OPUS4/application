@@ -50,7 +50,7 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
      * Testet, ob beim MetaDataPrefix epicur Dokumente ohne Urn ausgegeben werden.
      */
     public function testDocumentOutputUrn() {
-        $docWithUrn = new Opus_Document();
+        $docWithUrn = $this->createTestDocument();
         $docWithUrn->setServerState('published');
         $identifier = new Opus_Identifier();
         $identifier->setValue('urn_value1');
@@ -58,7 +58,7 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
         $docWithUrn->addIdentifier($identifier);
         $this->docWithUrnId = $docWithUrn->store();
 
-        $docWoUrn = new Opus_Document();
+        $docWoUrn = $this->createTestDocument();
         $docWoUrn->setServerState('published');
         $this->docWoUrnId = $docWoUrn->store();
 
@@ -76,7 +76,7 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
      * list possible intervals containing "2010-06-05"
      */
     public function testIntervalOAIPMHQueries() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $this->docId = $doc->store();
         
@@ -129,7 +129,7 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
      * list possible intervals *NOT* containing "2010-06-05"
      */
     public function testIntervalOAIPMHQueryWithoutTestDoc() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $this->docId = $doc->store();
         

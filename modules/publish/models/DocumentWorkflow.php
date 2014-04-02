@@ -48,7 +48,7 @@ class Publish_Model_DocumentWorkflow {
      * @return Opus_Document 
      */
     public function createDocument($documentType) {
-        $this->document = new Opus_Document();
+        $this->document = $this->createTestDocument();
         $this->document->setServerState(self::DOCUMENT_STATE)
             ->setType($documentType);
 

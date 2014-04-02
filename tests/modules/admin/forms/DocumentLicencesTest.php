@@ -83,7 +83,7 @@ class DocumentLicencesTest extends ControllerTestCase {
         $form->getElement('licence4')->setChecked(true);
         $form->getElement('licence2')->setChecked(true);
         
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         
         $form->updateModel($document);
         

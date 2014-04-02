@@ -46,7 +46,7 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
     }
 
     private function createValidDocument($loggedUserId) {
-        $document = new Opus_Document();
+        $document = $this->createTestDocument();
         $document->setServerState('unpublished');
         $document->addEnrichment()
                 ->setKeyName('submitter.user_id')
