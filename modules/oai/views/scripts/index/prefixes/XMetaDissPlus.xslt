@@ -470,7 +470,9 @@
     <xsl:template match="Series" mode="xmetadissplus">
         <dcterms:isPartOf xsi:type="ddb:noScheme">
             <xsl:value-of select="@Title" />
-        </dcterms:isPartOf> 
+            <xsl:text> ; </xsl:text>
+            <xsl:value-of select="@Number" />
+        </dcterms:isPartOf>
     </xsl:template>
     
     
