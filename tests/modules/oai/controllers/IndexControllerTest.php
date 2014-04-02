@@ -1526,7 +1526,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         
     }
 
-    public function testXMetaDissPlusDctermsispartofContainsSeries() {
+    public function testXMetaDissPlusDctermsispartofContainsSeriesTitleAndNumber() {
         
         $doc = new Opus_Document(146);
         $series = $doc->getSeries();
@@ -1538,7 +1538,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         
         $this->assertEquals(1, $dctermsIspartof->length);
         
-        $this->assertEquals($series[0]->getTitle(), $dctermsIspartof->item(0)->nodeValue);
+        $this->assertEquals($series[0]->getTitle().' ; '.$series[0]->getNumber(), $dctermsIspartof->item(0)->nodeValue);
 
     }
             
