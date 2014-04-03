@@ -50,6 +50,8 @@ class Admin_InfoController extends Controller_Action {
 
         $this->view->postMaxSize = ini_get('post_max_size');
         $this->view->uploadMaxFilesize = ini_get('upload_max_filesize');
+
+        $this->view->versionLabel = $this->compareVersion();
     }
 
     /**
@@ -57,5 +59,30 @@ class Admin_InfoController extends Controller_Action {
      */
     public function phpinfoAction() {
         $this->_helper->layout()->disableLayout();
+    }
+
+
+    private function compareVersion() {
+        $this->versionFile = APPLICATION_PATH .DIRECTORY_SEPARATOR . "VERSION.txt";
+        $localVersion = (file_exists($this->versionFile)) ? $version = trim(file_get_contents($this->versionFile)) : null;
+        $latestVersion = 'Opus 4.4.2'; //file_get_contents('http://opus4.kobv.de/update');
+        $this->view->versionUpdate = '';
+
+        if (is_null($localVersion)) {
+            return '';
+        }
+
+        if (is_null($latestVersion)) {
+            return '';
+        }
+
+        if ($localVersion == $latestVersion) {
+            return 'version_latest';
+        }
+        else {
+            $this->view->versionUpdate = 'version_get_Update';
+            return 'version_outdated';
+        }
+
     }
 }

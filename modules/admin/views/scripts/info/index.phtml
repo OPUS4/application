@@ -39,6 +39,16 @@
     <?PHP endforeach ?>
 </dl>
 
+<dl>
+    <?= $this->translate($this->versionLabel) ?>
+    <a href="http://www.kobv.de/opus4/software/">
+        <?php
+        if ($this->versionUpdate != '')
+            echo $this->translate($this->versionUpdate);
+        ?>
+    </a>
+</dl>
+
 <fieldset>
     <legend><?= $this->translate('admin_info_section_upload') ?></legend>
 

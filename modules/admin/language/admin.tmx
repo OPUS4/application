@@ -296,15 +296,6 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
       </tuv>
     </tu>
 
-    <tu tuid="version_unknown">
-      <tuv xml:lang="en">
-        <seg>Your Opus version is not supported or known.</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Sie benutzen eine unbekannte Opus-Version.</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="version_get_Update">
       <tuv xml:lang="en">
         <seg> Get the latest version here.</seg>

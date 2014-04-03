@@ -42,33 +42,12 @@
  */
 class Admin_IndexController extends Controller_Action {
 
-    private $versions = array(
-        'Opus 4.0.0',
-        'Opus 4.0.1',
-        'Opus 4.0.2',
-        'Opus 4.0.3',
-        'Opus 4.1.0',
-        'Opus 4.1.1',
-        'Opus 4.1.2',
-        'Opus 4.1.3',
-        'Opus 4.1.4',
-        'Opus 4.2.0',
-        'Opus 4.2.1',
-        'Opus 4.2.2',
-        'Opus 4.3.0',
-        'Opus 4.3.1',
-        'Opus 4.4.0',
-        'Opus 4.4.1',
-        'Opus 4.4.2'
-    );
-
     /**
      * Shows main menu.
      */
     public function indexAction() {
         $this->view->title = 'admin_index_title';
         $this->view->navigation()->breadcrumbs()->setMinDepth(0);
-        $this->view->versionLabel = $this->compareVersion();
     }
 
     public function setupAction() {
@@ -83,29 +62,4 @@ class Admin_IndexController extends Controller_Action {
         $this->view->title = $this->view->translate('admin_title_info');
     }
 
-    private function compareVersion() {
-        $this->versionFile = APPLICATION_PATH .DIRECTORY_SEPARATOR . "VERSION.txt";
-        $localVersion = (file_exists($this->versionFile)) ? $version = trim(file_get_contents($this->versionFile)) : null;
-        $latestVersion = 'Opus 4.4.2'; //file_get_contents('http://opus4.kobv.de/update');
-        $this->view->versionUpdate = '';
-
-        if (is_null($localVersion)) {
-            throw Exception ('Local version file not found');
-        }
-
-        if (is_null($latestVersion)) {
-            return '';
-        }
-
-        if ($localVersion == $latestVersion) {
-            return 'version_latest';
-        }
-        $this->view->versionUpdate = 'version_get_Update';
-        if (in_array($localVersion, $this->versions)) {
-            return 'version_outdated';
-        }
-        else {
-            return 'version_unkown';
-        }
-    }
 }
