@@ -34,6 +34,7 @@
  * @version     $Id$
  */
 ?>
+
 <div id="adminMenuContainer">
     <?PHP
     $partial = array('menu.phtml', 'admin');
@@ -42,3 +43,13 @@
     $this->navigation()->menu()->setPartial(null); // prevents influencing main menu
     ?>
 </div>
+
+<?= $this->translate($this->versionLabel) ?>
+
+
+<a href="http://www.kobv.de/opus4/software/">
+    <?php
+        if ($this->versionUpdate != '')
+        echo $this->translate($this->versionUpdate);
+    ?>
+</a>
