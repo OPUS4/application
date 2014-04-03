@@ -303,9 +303,124 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
       <tuv xml:lang="de">
         <seg> Sie bekommen die neueste Version hier.</seg>
       </tuv>
-
     </tu>
 
+    <tu tuid="admin_title_doctype">
+      <tuv xml:lang="en">
+        <seg>Document type validation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Validierung der Dokumenttypen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_title_doctype_description">
+      <tuv xml:lang="en">
+        <seg>Assert that the document types are valid.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Überprüfen Sie, ob die Dokumenttypen validiert sind.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_errors">
+      <tuv xml:lang="en">
+        <seg>The red-marked document types are not valid.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die rot-marktierten Dokumenttypen konnten nicht validiert werden.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_noerrors">
+      <tuv xml:lang="en">
+        <seg>All document types are valid.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Alle Dokumenttypen konnten validiert werden.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_document">
+      <tuv xml:lang="en">
+        <seg>title of document type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Titel des Dokumenttyps</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_status">
+      <tuv xml:lang="en">
+        <seg>Status of document type</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Status des Dokumenttyps</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_active">
+      <tuv xml:lang="en">
+        <seg>active</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>aktiv</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_inactive">
+      <tuv xml:lang="en">
+        <seg>inactive</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>inaktiv</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_error">
+      <tuv xml:lang="en">
+        <seg>Error</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehler</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_errorMsg">
+      <tuv xml:lang="en">
+        <seg>Error message</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehlermeldung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_show_message">
+      <tuv xml:lang="en">
+        <seg>Error message of document type </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehlermeldung des Dokumenttyps </seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_index">
+      <tuv xml:lang="en">
+        <seg>Document type validation</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumenttypvalidierung</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_show">
+      <tuv xml:lang="en">
+        <seg>Error message</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehlermeldung</seg>
+      </tuv>
+    </tu>
   </body>
 
 </tmx>

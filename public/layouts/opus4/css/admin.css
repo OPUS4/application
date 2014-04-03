@@ -1540,4 +1540,12 @@ table + .paginationControl{
     color: blue;
     padding: 2em;   
 }
+
+.admin_doctype {
+    color: #26517a;
+}
+
+.admin_doctype_fail {
+    background-color: red;
+}
 /* @end */

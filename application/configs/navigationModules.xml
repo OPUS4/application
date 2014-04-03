@@ -794,7 +794,7 @@
                             <controller>oailink</controller>
                             <action>index</action>
                         </oailink>
-                        
+
                         <statistic>
                             <type>mvc</type>
                             <label>admin_title_statistic</label>
@@ -843,6 +843,24 @@
                             <action>index</action>
                             <resource>indexmaintenance</resource>
                         </indexmaintenance>
+                        <doctype>
+                            <type>mvc</type>
+                            <label>admin_title_doctype</label>
+                            <description>admin_title_doctype_description</description>
+                            <group>group-chocolate</group>
+                            <module>admin</module>
+                            <controller>doctype</controller>
+                            <action>index</action>
+                            <pages>
+                                <detail>
+                                    <type>mvc</type>
+                                    <label>admin_doctype_show</label>
+                                    <module>admin</module>
+                                    <controller>doctype</controller>
+                                    <action>show</action>
+                                </detail>
+                            </pages>
+                        </doctype>
                     </pages>
                 </info>
             </pages>
