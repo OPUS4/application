@@ -96,6 +96,7 @@
     <field name="PublishedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
     <field name="PublishedDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
     <field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
+    <field name="EmbargoDate" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
     
     <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
         <default value="today" edit="yes" public="yes" />

@@ -356,6 +356,15 @@ END OF COMMENT -->
       </tuv>
     </tu>
 
+    <tu tuid="header_EmbargoDate">
+      <tuv xml:lang="en">
+        <seg>Embargo Date</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Embargo Datum</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="header_Volume">
       <tuv xml:lang="en">
         <seg>Volume</seg>
@@ -719,6 +728,15 @@ END OF COMMENT -->
     </tu>
 
     <tu tuid="header_PublicationState">
+      <tuv xml:lang="en">
+        <seg>Publication: State</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Veröffentlichung: Zustand</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="group_dc_date">
       <tuv xml:lang="en">
         <seg>Publication: State</seg>
       </tuv>

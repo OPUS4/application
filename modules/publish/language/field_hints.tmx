@@ -1196,7 +1196,16 @@ Beispieleingabe: "17.08" (für Semiotik)</seg>
             <seg>Tragen Sie bitte die Nummer der letzten Seite des Dokuments ein.</seg>
         </tuv>
     </tu>
-	
+
+	<tu tuid="hint_EmbargoDate">
+        <tuv xml:lang="en">
+            <seg>Please enter the date until the document's files are embargoed.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte das Datum ein, bis zu die Dateien des Dokuments gesperrt sind.</seg>
+        </tuv>
+    </tu>
+
 	<tu tuid="hint_PublishedDate">
         <tuv xml:lang="en">
             <seg>Please enter the date of the documents first publishing in the format YYYY/MM/DD.</seg>
