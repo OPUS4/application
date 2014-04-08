@@ -151,6 +151,15 @@
         </tuv>
    </tu>
    
+   <tu tuid="periodicalpart">
+        <tuv xml:lang="en">
+            <seg>Part of Periodical</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Ausgabe (Heft) zu einer Zeitschrift</seg>
+        </tuv>
+   </tu>
+   
    <tu tuid="preprint">
         <tuv xml:lang="en">
             <seg>Preprint</seg>

@@ -29,7 +29,7 @@
  * @author      Doreen Thiede <thiede@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: periodical.phtml 11710 2013-06-21 19:49:34Z sszott $
  */
 ?>
 
@@ -49,18 +49,22 @@
             <?= $this->group($this->groupPersonSubmitter); ?>
             <?= $this->group($this->groupTitleMain); ?>
             <?= $this->group($this->groupTitleAbstract); ?>
-            <?= $this->element($this->CompletedYear); ?>
-			<?= $this->element($this->CompletedDate); ?>
-		    <?= $this->group($this->groupThesisPublisher); ?>
-			<?= $this->group($this->groupPersonAuthor); ?>
+            <?= $this->element($this->CompletedDate); ?>
+			<?= $this->group($this->groupThesisPublisher); ?>
+            <?= $this->element($this->PageNumber); ?>
+            <?= $this->group($this->groupPersonEditor); ?>
             <?= $this->group($this->groupPersonContributor); ?>
-            <?= $this->element($this->CreatingCorporation); ?>
-            <?= $this->element($this->ContributingCorporation); ?>           
+			<?= $this->element($this->PublisherName); ?>
+            <?= $this->element($this->PublisherPlace); ?>
+            <?= $this->element($this->IdentifierIssn); ?>
+            <?= $this->element($this->PublishedDate); ?>          
+            <?= $this->group($this->groupSubjectSwd); ?>
             <?= $this->group($this->groupSubjectUncontrolled); ?>
             <?= $this->group($this->groupInstitute); ?>
             <?= $this->element($this->Note); ?>
             <?= $this->element($this->Language); ?>
             <?= $this->element($this->Licence); ?>
+            <?= $this->element($this->CompletedYear); ?>
             <?= $this->group($this->groupSeries); ?>
 
             <div class="button-wrapper">

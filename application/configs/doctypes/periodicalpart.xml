@@ -54,6 +54,7 @@
         <default value="today" edit="yes" public="yes" />
     </field>
 	<field name="ThesisPublisher" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
+	<field name="Series" required="yes" formelement="Select" datatype="Series" multiplicity="1"/>
     
 <!-- unrequired fields -->
     <field name="PersonContributor" required="no" formelement="Text" datatype="Person" multiplicity="*" />
@@ -68,6 +69,6 @@
     <field name="IdentifierIssn" required="no" formelement="Text" datatype="Identifier" multiplicity="1" />
     <field name="Note" required="no" formelement="Textarea" datatype="Note" multiplicity="1" />
     <field name="CompletedYear" required="no" formelement="Text" datatype="Year" multiplicity="1"/>
-    <field name="Series" required="no" formelement="Select" datatype="Series" multiplicity="1"/>
+    
   
 </documenttype>

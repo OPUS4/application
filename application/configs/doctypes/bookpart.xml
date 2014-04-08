@@ -61,6 +61,7 @@
     <field name="CompletedDate" required="yes" formelement="Text" datatype="Date" multiplicity="1">
         <default value="today" edit="yes" public="yes" />
     </field>
+	<field name="ThesisPublisher" required="yes" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>
 
 <!-- unrequired fields -->
     <field name="TitleParent" required="no" formelement="Text" datatype="Title" multiplicity="1" />
