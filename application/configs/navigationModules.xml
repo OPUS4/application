@@ -720,6 +720,7 @@
                             <resource>staticpages</resource>
                         </static-page>
 
+                        <!--
                         <translation>
                             <type>mvc</type>
                             <label>setup_title_translation</label>
@@ -752,7 +753,8 @@
                                 </error>
                             </pages>
                             <resource>translations</resource>
-                        </translation>                        
+                        </translation>
+-->
                     </pages>
                 </setup>
                 
