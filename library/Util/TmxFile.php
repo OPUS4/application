@@ -105,6 +105,7 @@ class Util_TmxFile {
      */
     public function load($fileName) {
         $dom = new DOMDocument();
+        $dom->substituteEntities = false;
         $result = @$dom->load($fileName); // supress warning since return value is checked
         if ($result) {
             $newData = $this->_domToArray($dom);
@@ -144,10 +145,11 @@ class Util_TmxFile {
     }
 
     protected function _domToArray($domDocument) {
+        $xPath = new DOMXPath($domDocument);
         $tuElements = $domDocument->getElementsByTagName('tu');
         $translationUnits = array();
         foreach ($tuElements as $tu) {
-            $key = $tu->attributes->getNamedItem('tuid')->nodeValue;
+            $key = $tu->attributes->getNamedItem('tuid')->textContent;
             $translationUnits[$key] = array();
             foreach ($tu->getElementsByTagName('tuv') as $child) {
                 $translationUnits[$key][$child->attributes->getNamedItem('lang')->nodeValue] = $child->getElementsByTagName('seg')->item(0)->nodeValue;
@@ -158,6 +160,9 @@ class Util_TmxFile {
 
     protected function _arrayToDom($array) {
         $dom = new DOMDocument();
+        $dom->preserveWhiteSpace = false;
+        $dom->formatOutput = true;
+        $dom->substituteEntities = false;
         $dom->loadXML(self::template);
         foreach ($array as $unitName => $variants) {
             $tuElement = $dom->createElement('tu');
@@ -170,7 +175,8 @@ class Util_TmxFile {
                 $segElement = $dom->createElement('seg');
                 $tuvNode = $tuNode->appendChild($tuvElement);
                 $segNode = $tuvNode->appendChild($segElement);
-                $segNode->nodeValue = $text;
+                $textNode = $dom->createCDATASection($text);
+                $segNode->appendChild($textNode);
             }
         }
         return $dom;
