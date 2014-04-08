@@ -41,9 +41,18 @@ if (basename(__FILE__) !== basename($argv[0])) {
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$options = getopt('', array('dryrun'));
+$options = getopt('', array('dryrun', 'type:'));
 
 $dryrun = isset($options['dryrun']);
+
+if(!isset($options['type']) || empty($options['type'])) {
+    echo "Usage: {$argv[0]} --type <type of title> (--dryrun)\n";
+    echo "type of title must be provided (e. g. source, parent).\n";
+    exit;
+}
+
+$getType = 'getTitle'.ucfirst(strtolower($options['type']));
+$addType = 'addTitle'.ucfirst(strtolower($options['type']));
 
 if ($dryrun)
     _log("TEST RUN: NO DATA WILL BE MODIFIED");
@@ -59,7 +68,7 @@ foreach ($docIds as $docId) {
     foreach ($enrichments as $enrichment) {
         $enrichmentArray = $enrichment->toArray();
         if ($enrichmentArray['KeyName'] == 'SourceTitle') {
-            $sourceTitles = $doc->getTitleSource();
+            $sourceTitles = $doc->{$getType}();
             $titleExists = false;
             foreach ($sourceTitles as $sourceTitle) {
                 if ($sourceTitle->getValue() == $enrichmentArray['Value']) {
@@ -69,7 +78,7 @@ foreach ($docIds as $docId) {
                 }
             }
             if (!$titleExists) {
-                $titleSource = $doc->addTitleSource();
+                $titleSource = $doc->{$addType}();
                 $titleSource->setValue($enrichmentArray['Value']);
                 if (!$dryrun)
                     $doc->store();
