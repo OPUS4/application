@@ -90,7 +90,6 @@
             <xsl:apply-templates select="TitleParent"/>
             <xsl:apply-templates select="TitleSub"/>
             <xsl:apply-templates select="TitleAdditional"/>
-            <xsl:apply-templates select="TitleSource"/>
 
             <xsl:apply-templates select="Identifier"/>
             <xsl:apply-templates select="Note"/>
@@ -137,13 +136,6 @@
 
     <xsl:template match="TitleAdditional">
         <xsl:element name="additionalTitle">
-            <xsl:attribute name="language"><xsl:value-of select="@Language"/></xsl:attribute>
-            <xsl:value-of select="@Value"/>
-        </xsl:element>
-    </xsl:template>
-
-    <xsl:template match="TitleSource">
-        <xsl:element name="sourceTitle">
             <xsl:attribute name="language"><xsl:value-of select="@Language"/></xsl:attribute>
             <xsl:value-of select="@Value"/>
         </xsl:element>

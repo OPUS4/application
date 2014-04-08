@@ -43,9 +43,9 @@ class Admin_Form_DocumentTitlesTest extends ControllerTestCase {
         $this->assertNotNull($form->getSubForm('Parent'));
         $this->assertNotNull($form->getSubForm('Sub'));
         $this->assertNotNull($form->getSubForm('Additional'));
-        $this->assertNotNull($form->getSubForm('Source'));
         
         $this->assertNotNull($form->getLegend()); // Formular hat Überschrift
         $this->assertFalse($form->getDecorator('FormErrors')); // Formular soll selber keine Fehler anzeigen
     }
+    
 }

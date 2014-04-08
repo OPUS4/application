@@ -937,15 +937,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="TitleSource">
-            <tuv xml:lang="en">
-                <seg>Title Source</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Quellentitel</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="TitleSub">
             <tuv xml:lang="en">
                 <seg>Subtitle</seg>

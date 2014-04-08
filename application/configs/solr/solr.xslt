@@ -290,14 +290,6 @@
                         <xsl:value-of select="@Value" />
                     </xsl:element>
                 </xsl:for-each>
-
-                <!-- title source -->
-                <xsl:for-each select="/Opus/Opus_Document/TitleSource">
-                    <xsl:element name="field">
-                        <xsl:attribute name="name">title_source</xsl:attribute>
-                        <xsl:value-of select="@Value" />
-                    </xsl:element>
-                </xsl:for-each>
                 
                 <!-- series ids and series number per id (modeled as dynamic field) -->
                 <xsl:for-each select="/Opus/Opus_Document/Series">

@@ -333,7 +333,7 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="IdentifierIsbn|IdentifierIssn|IdentifierSerial|ReferenceIsbn|ReferenceIssn|ReferenceHandle|TitleParent|TitleSub|TitleSource|TitleAdditional">
+    <xsl:template match="IdentifierIsbn|IdentifierIssn|IdentifierSerial|ReferenceIsbn|ReferenceIssn|ReferenceHandle|TitleParent|TitleSub|TitleAdditional">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateFieldname"/>

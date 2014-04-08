@@ -130,7 +130,7 @@ $doc->addPersonContributor($contributor);
 //
 // Titles
 //
-foreach (array('addTitleMain', 'addTitleAbstract', 'addTitleParent', 'addTitleSub', 'addTitleAdditional', 'addTitleSource') AS $titleMethod) {
+foreach (array('addTitleMain', 'addTitleAbstract', 'addTitleParent', 'addTitleSub', 'addTitleAdditional') AS $titleMethod) {
    $doc->$titleMethod()
       ->setValue(randString($counter++))
       ->setLanguage(randString($counter++));

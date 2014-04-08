@@ -275,15 +275,6 @@ END OF COMMENT -->
       </tuv>
     </tu>
 
-	<tu tuid="groupTitleSource">
-      <tuv xml:lang="en">
-        <seg>Title Source</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Titel der Quelle</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="groupSubjectMSC">
       <tuv xml:lang="en">
         <seg>MSC Classification</seg>
@@ -353,15 +344,6 @@ END OF COMMENT -->
       </tuv>
       <tuv xml:lang="de">
         <seg>Letzte Seite</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="header_EmbargoDate">
-      <tuv xml:lang="en">
-        <seg>Embargo Date</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Embargo Datum</seg>
       </tuv>
     </tu>
 
@@ -728,15 +710,6 @@ END OF COMMENT -->
     </tu>
 
     <tu tuid="header_PublicationState">
-      <tuv xml:lang="en">
-        <seg>Publication: State</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Veröffentlichung: Zustand</seg>
-      </tuv>
-    </tu>
-
-    <tu tuid="group_dc_date">
       <tuv xml:lang="en">
         <seg>Publication: State</seg>
       </tuv>

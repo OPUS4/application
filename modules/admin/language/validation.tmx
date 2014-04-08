@@ -81,15 +81,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="admin_validate_error_language_duplicated_TitleSource">
-            <tuv xml:lang="en">
-                <seg>The same language has been selected for more than one source title.</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Die selbe Sprache wurde für mehrere Quellentitel ausgewählt.</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="admin_validate_error_language_duplicated_TitleAbstract">
             <tuv xml:lang="en">
                 <seg>The same language has been selected for more than one abstract.</seg>

@@ -161,7 +161,6 @@
             <xsl:apply-templates select="TitleParent" />
             <xsl:apply-templates select="TitleSub" />
             <xsl:apply-templates select="TitleAdditional" />
-            <xsl:apply-templates select="TitleSource" />
             <xsl:apply-templates select="Series[@Visible=1]" >
                 <xsl:sort select="@SortOrder"/>
             </xsl:apply-templates>

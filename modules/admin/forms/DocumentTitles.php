@@ -59,9 +59,7 @@ class Admin_Form_DocumentTitles extends Admin_Form_DocumentSection {
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent',
                 new Form_Validate_MultiSubForm_RepeatedLanguages()), 'Parent');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub',
-                new Form_Validate_MultiSubForm_RepeatedLanguages()), 'Sub');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSource',
-                new Form_Validate_MultiSubForm_RepeatedLanguages()), 'Source');
+                new Form_Validate_MultiSubForm_RepeatedLanguages()), 'Sub');        
     }
     
 }

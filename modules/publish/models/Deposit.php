@@ -212,9 +212,7 @@ class Publish_Model_Deposit {
         else if (strstr($dataKey, 'additional'))
                 return 'Additional';
         else if (strstr($dataKey, 'parent'))
-                return 'Parent';
-        else if (strstr($dataKey, 'source'))
-                return 'Source';
+                return 'Parent';        
     }
     
     /**
