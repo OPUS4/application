@@ -39,6 +39,7 @@
 class Setup_Form_HelpPage extends Zend_Form_SubForm {
     
     public function buildFromArray(array $array) {
+        $translator = $this->getTranslator();
         if(isset($array[$this->getName()]))
             $array = $array[$this->getName()];
         foreach ($array as $translationUnit => $variants) {
@@ -47,13 +48,13 @@ class Setup_Form_HelpPage extends Zend_Form_SubForm {
             foreach ($variants as $language => $text) {
                 if (is_array($text)) {
                     if (!isset($text['filename']) || !isset($text['contents']))
-                        throw new Exception('Invalid data structure for HelpPage Form. Found'.var_export($array, true) );
+                        throw new Exception('Invalid data structure for HelpPage Form' );
                     $langSubForm = new Zend_Form_SubForm();
                     $langSubForm->addElement('hidden', 'filename');
-                    $langSubForm->addElement('textarea', 'contents', array('label' => $language));
+                    $langSubForm->addElement('textarea', 'contents', array('label' => $translator->translate("setup_language_$language")));
                     $subForm->addSubForm($langSubForm, $language);
                 } else {
-                    $subForm->addElement('text', $language, array('label' => $language, 'attribs' => array('size' => 90)));
+                    $subForm->addElement('text', $language, array('label' => $translator->translate("setup_language_$language"), 'attribs' => array('size' => 90)));
                 }
             }
             $subForm->setLegend($translationUnit);

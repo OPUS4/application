@@ -78,6 +78,28 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
     }
 
     /**
+     * Return translations according to definition in help.ini.
+     */
+    public function getTranslation() {
+        // load translations in order specified in help.ini
+        $helpConfig = new Zend_Config_Ini(APPLICATION_PATH . '/application/configs/help/help.ini');
+        $helpConfigArray = $helpConfig->toArray();
+        $tmxData = parent::getTranslation();
+        $filteredTmxData = array();
+        foreach ($helpConfigArray as $helpKey => $helpContents) {
+            if (isset($tmxData[$helpKey]))
+                $filteredTmxData[$helpKey] = $tmxData[$helpKey];
+            foreach ($helpContents as $value) {
+                if (isset($tmxData["help_title_$value"]))
+                    $filteredTmxData["help_title_$value"] = $tmxData["help_title_$value"];
+                if (isset($tmxData["help_content_$value"]))
+                    $filteredTmxData["help_content_$value"] = $tmxData["help_content_$value"];
+            }
+        }
+        return $filteredTmxData;
+    }
+
+    /**
      * @see Description in abstract base class
      */
     public function fromArray(array $data) {
@@ -86,9 +108,7 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
 
         foreach ($data as $translationUnit => $variants) {
             foreach ($variants as $language => $contents) {
-                if (is_array($contents)
-                        && isset($contents['filename'])
-                        && isset($contents['contents'])) {
+                if (is_array($contents) && isset($contents['filename']) && isset($contents['contents'])) {
                     $filePath = $this->contentBasepath . DIRECTORY_SEPARATOR . $contents['filename'];
                     $resultData[$filePath] = $contents['contents'];
                     $contents = $contents['filename'];

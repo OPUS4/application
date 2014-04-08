@@ -197,6 +197,118 @@
         </tuv>
     </tu>
 
+    <!-- page specific translations -->
+
+    <tu tuid="setup_page_content">
+        <tuv xml:lang="en">
+            <seg>page content</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Seiteninhalt</seg>
+        </tuv>
+    </tu>
+
+
+    <!-- home page -->
+    <tu tuid="setup_home_index_index_pagetitle">
+        <tuv xml:lang="en">
+            <seg>Title in the web browser's page / tab</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Titel der Seite bzw. des Reiters im Web-Browser</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_home_index_index_title">
+        <tuv xml:lang="en">
+            <seg>Title on the page</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Titel auf der Seite</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_home_index_index_welcome">
+        <tuv xml:lang="en">
+            <seg>Text on the left side</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Text auf der linken Seite</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_home_index_index_instructions">
+        <tuv xml:lang="en">
+            <seg>Text on the right side</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Text auf der rechten Seite</seg>
+        </tuv>
+    </tu>
+
+    <!-- imprint page -->
+
+    <tu tuid="setup_home_index_imprint_pagetitle">
+        <tuv xml:lang="en">
+            <seg>Title in the web browser's page / tab</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Titel der Seite bzw. des Reiters im Web-Browser</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_home_index_imprint_title">
+        <tuv xml:lang="en">
+            <seg>Title on the page</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Titel auf der Seite</seg>
+        </tuv>
+    </tu>
+
+    <!-- contact page -->
+    
+    <tu tuid="setup_home_index_contact_pagetitle">
+        <tuv xml:lang="en">
+            <seg>Title in the web browser's page / tab</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Titel der Seite bzw. des Reiters im Web-Browser</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_home_index_contact_title">
+        <tuv xml:lang="en">
+            <seg>Title on the page</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Titel auf der Seite</seg>
+        </tuv>
+    </tu>
+    
+
+    <!-- translation of language names -->
+    <!-- NOTE: This must be updated according to the languages used -->
+    
+    
+    <tu tuid="setup_language_de">
+        <tuv xml:lang="en">
+            <seg>german translation</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>deutsche Übersetzung</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="setup_language_en">
+        <tuv xml:lang="en">
+            <seg>english translation</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>englische Übersetzung</seg>
+        </tuv>
+    </tu>
+
 
 
   </body>

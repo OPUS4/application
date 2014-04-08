@@ -39,11 +39,12 @@
 class Setup_Form_StaticPage extends Zend_Form_SubForm {
 
     public function buildFromArray(array $array) {
-//        if (isset($array[$this->getName()]))
-//            $array = $array[$this->getName()];
+        
+        $translator = $this->getTranslator();
 
         foreach ($array as $language => $data) {
             $languageForm = new Zend_Form_SubForm();
+            $languageForm->setLegend($translator->translate("setup_language_$language"));
             $this->addSubForm($languageForm, $language);
             foreach ($data as $key => $values) {
                 switch ($key) {
@@ -51,15 +52,14 @@ class Setup_Form_StaticPage extends Zend_Form_SubForm {
                         $fileForm = new Zend_Form_SubForm();
                         $languageForm->addSubForm($fileForm, 'file');
                         $fileForm->addElement('hidden', 'filename');
-                        $fileForm->addElement('textarea', 'contents');
+                        $fileForm->addElement('textarea', 'contents', array('label' => $translator->translate('setup_page_content')));
                         break;
                     case 'key':
                         $keyForm = new Zend_Form_SubForm();
                         $languageForm->addSubForm($keyForm, 'key');
                         $translationUnits = array_keys($values);
                         foreach ($translationUnits as $translationUnit) {
-                            $keyForm->addElement('text', $translationUnit);
-                            $keyForm->getElement($translationUnit)->setLabel($translationUnit);
+                            $keyForm->addElement('text', $translationUnit, array('label' => $translator->translate("setup_$translationUnit"), 'size' => 90));
                         }
                         break;
                 }
