@@ -85,12 +85,13 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         // if not set messages are written to opus-console.log
         $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.0';
 
+        $this->testDocuments = array();
+
         parent::setUp();
     }
 
     public function setUp() {
         $this->setUpWithEnv(APPLICATION_ENV);
-        $this->testDocuments = array();
     }
 
     /**
