@@ -79,7 +79,9 @@ class Rss_IndexController extends Controller_Xml {
         }
         catch (Opus_SolrSearch_Exception $e) {
             $this->log->err(__METHOD__ . ' : ' . $e);
+
             $this->redirect('/rss/error/error');
+            return;
         }
         
         $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'rss2_0.xslt');
@@ -126,5 +128,6 @@ class Rss_IndexController extends Controller_Xml {
     private function setFrontdoorBaseUrl() {
         $this->_proc->setParameter('', 'frontdoorBaseUrl', $this->view->serverUrl() . $this->viewHelper->fullUrl($this->view) . '/frontdoor/index/index/docId/');
     }
+
 }
 
