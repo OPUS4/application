@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class AccessModuleAdminOneResourceOnlyTest extends ControllerTestCase {
+abstract class AccessModuleAdminOneResourceOnlyTest extends ControllerTestCase {
 
     protected $username;
     protected $password;

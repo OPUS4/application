@@ -7,7 +7,7 @@
  * To change this template use File | Settings | File Templates.
  */
 
-class AccessModuleSetupAndAdminTest extends ControllerTestCase {
+abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
 
     protected $acls = array(
         'module_admin' => false,
