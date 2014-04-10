@@ -477,7 +477,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     */
    public function testDisplayAllDocumentFields() {
 
-       $this->markTestSkipped('Postponed due to encoding problem.');
+       //$this->markTestSkipped('Postponed due to encoding problem.');
 
       $this->dispatch('/frontdoor/index/index/docId/146');
       $translate = Zend_Registry::getInstance()->get('Zend_Translate');
@@ -493,6 +493,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierIssn'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierArxiv'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierPubmed'));
+      $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierEu'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('TitleParent'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('TitleSub'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('TitleAdditional'));

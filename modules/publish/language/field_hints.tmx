@@ -1251,7 +1251,16 @@ Beispieleingabe: "17.08" (für Semiotik)</seg>
             <seg>Tragen Sie bitte die ISBN ein.</seg>
         </tuv>
     </tu>
-	
+
+	<tu tuid="hint_IdentifierEu">
+        <tuv xml:lang="en">
+            <seg>Please enter the Funder / Funding Program / Project Number / Jurisdiction / Project Name / Project Acronym of the funded EU project. The first three parts are mandatory.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie hier bitte Förderer / Förderungsprogramm / Projektnummer / Rechtssystem / Projektname / Akronym des EU-geförderten Projektes ein. Die ersten drei Felder sind Pflichtfelder.</seg>
+        </tuv>
+    </tu>
+
 	<tu tuid="hint_IdentifierIssn">
         <tuv xml:lang="en">
             <seg>Please enter the ISSN.</seg>

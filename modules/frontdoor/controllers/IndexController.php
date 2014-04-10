@@ -286,6 +286,14 @@ class Frontdoor_IndexController extends Controller_Action {
             $metas[] = array('keywords', implode(", ", $subjectsArray));
         }
 
+        foreach ($document->getIdentifierEu() as $identifier) {
+            $identifierValue = trim($identifier->getValue());
+            if (empty($identifierValue)) {
+                continue;
+            }
+            $metas[] = array('EU.Identifier', $identifierValue);
+        }
+
         foreach ($document->getIdentifierUrn() AS $identifier) {
             $identifierValue = trim($identifier->getValue());
             if (empty($identifierValue)) {
