@@ -103,7 +103,7 @@
                 </xsl:choose>
             </dc:date>
             <!-- dc:type -->
-            <xsl:apply-templates select="@Type" mode="oai_dc" /> 
+            <xsl:apply-templates select="@Type" mode="oai_dc" />
             <!-- dc:format -->
             <xsl:apply-templates select="File/@MimeType" mode="oai_dc" />
             <!-- dc:identifier -->

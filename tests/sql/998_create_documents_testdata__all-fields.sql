@@ -27,7 +27,9 @@ INSERT INTO `document_identifiers` (`id`, `document_id`, `type`, `value`) VALUES
 (511,146,'opus3-id','123'),
 (512,146,'opac-id','123'),
 (513,146,'pmid','123'),
-(514,146,'arxiv','123');
+(514,146,'arxiv','123'),
+(616,146,'eu','eu / funder / nr1'),
+(617,145,'eu','eu / funder / nr2');
 
 INSERT INTO `document_notes` (`id`, `document_id`, `message`, `visibility`) VALUES
 (17,146,'Für die Öffentlichkeit','public'),
@@ -57,7 +59,9 @@ INSERT INTO `link_documents_collections` (`document_id`, `collection_id`, `role_
 (146,2930,4),
 (146,6719,5),
 (146,7871,6),
-(146,13944,7);
+(146,13944,7),
+(145,16216,23),
+(146,16216,23);
 
 INSERT INTO `link_documents_dnb_institutes` (`document_id`, `dnb_institute_id`, `role`) VALUES
 (146,1,'grantor'),
