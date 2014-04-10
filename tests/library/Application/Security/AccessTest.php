@@ -45,15 +45,15 @@ class Application_Security_AccessTest extends ControllerTestCase {
         $this->restoreSecuritySetting();
 
         $this->assertQuery('//a[@href="/admin/licence"]');
-        $this->assertQuery('//a[@href="/admin/setup"]');
-        $this->assertQuery('//a[@href="/admin/info/menu"]');
+        $this->assertQuery('//a[@href="/admin/index/setup"]');
+        $this->assertQuery('//a[@href="/admin/index/info"]');
 
         $this->assertNotQuery('//a[@href="/admin/documents"]');
         $this->assertNotQuery('//a[@href="/review"]');
         $this->assertNotQuery('//a[@href="/admin/collectionroles"]');
         $this->assertNotQuery('//a[@href="/admin/series"]');
         $this->assertNotQuery('//a[@href="/admin/language"]');
-        $this->assertNotQuery('//a[@href="/admin/security"]');
+        $this->assertNotQuery('//a[@href="/admin/index/security"]');
         $this->assertNotQuery('//a[@href="/admin/dnbinstitute"]');
     }
 
