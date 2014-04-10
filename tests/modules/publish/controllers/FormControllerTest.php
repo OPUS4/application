@@ -211,6 +211,7 @@ class Publish_FormControllerTest extends ControllerTestCase {
                     'CompletedDate' => '22.01.2011',
                     'Language' => 'deu',
                     'Licence' => '4',
+                    'ThesisPublisher_1' => '2',
                     'send' => 'Weiter zum nächsten Schritt'
                 ));
 
