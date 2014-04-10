@@ -85,8 +85,6 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         // if not set messages are written to opus-console.log
         $_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.0';
 
-        $this->testDocuments = array();
-
         parent::setUp();
     }
 
@@ -495,6 +493,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     }
 
     protected function createTestDocument() {
+        if (!isset($this->testDocuments)) {
+            $this->testDocuments = array();
+        }
         $doc = new Opus_Document ();
         array_push($this->testDocuments, $doc);
         return $doc;
