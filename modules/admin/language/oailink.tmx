@@ -79,6 +79,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_oailink_example_open_aire">
+      <tuv xml:lang="en">
+        <seg>OAI request with verb ListRecords (with Open Aire set)</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>OAI Anfrage mit dem Verb ListRecords (mit Open-Aire-Set)</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_oailink_example_listsets">
       <tuv xml:lang="en">
         <seg>OAI request with verb ListSets</seg>

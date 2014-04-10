@@ -44,6 +44,7 @@
 
     <!-- add include here for each new metadata format    -->
 
+    <xsl:include href="prefixes/open_aire.xslt" />
     <xsl:include href="prefixes/oai_dc.xslt"/>
     <xsl:include href="prefixes/oai_pp.xslt"/>
     <xsl:include href="prefixes/epicur.xslt"/>
@@ -119,7 +120,7 @@
             </xsl:if>
             
     <!--create the rest of oai response depending on oai_verb -->
-                <xsl:choose>
+        <xsl:choose>
                 <xsl:when test="$oai_verb='GetRecord'">
                     <xsl:apply-templates select="Documents" mode="GetRecord" />
                 </xsl:when>
@@ -210,7 +211,7 @@
     <xsl:template match="Documents" mode="ListIdentifiers">
         <xsl:if test="count(Opus_Document) > 0">
             <ListIdentifiers>
-                <xsl:apply-templates select="Opus_Document" /> 
+                <xsl:apply-templates select="Opus_Document" />
                 <xsl:if test="$totalIds > 0">
                     <resumptionToken>
                         <xsl:attribute name="expirationDate"><xsl:value-of select="$dateDelete"/></xsl:attribute>
@@ -270,7 +271,7 @@
            </record>
          </xsl:otherwise>
       </xsl:choose>
-    </xsl:template>       
+    </xsl:template>
 
 
     <xsl:template name="Opus_Document_Data">
@@ -289,21 +290,21 @@
                 <identifier>
                     <xsl:value-of select="$oai_identifier" />
                 </identifier>
-              </xsl:when>  
-              <xsl:otherwise>  
+              </xsl:when>
+              <xsl:otherwise>
                 <identifier>
                     <xsl:text>oai:</xsl:text><xsl:value-of select="$repIdentifier" /><xsl:text>:</xsl:text><xsl:value-of select="@Id" />
                 </identifier>
-               </xsl:otherwise> 
+               </xsl:otherwise>
             </xsl:choose>
                 <datestamp>
                   <xsl:choose>
                     <xsl:when test="./ServerDateModified">
-                        <xsl:value-of select="ServerDateModified/@Year"/>-<xsl:value-of select="format-number(ServerDateModified/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDateModified/@Day,'00')"/>    
-                    </xsl:when>  
+                        <xsl:value-of select="ServerDateModified/@Year"/>-<xsl:value-of select="format-number(ServerDateModified/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDateModified/@Day,'00')"/>
+                    </xsl:when>
                     <xsl:otherwise>
-                        <xsl:value-of select="ServerDatePublished/@Year"/>-<xsl:value-of select="format-number(ServerDatePublished/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDatePublished/@Day,'00')"/> 
-                    </xsl:otherwise>   
+                        <xsl:value-of select="ServerDatePublished/@Year"/>-<xsl:value-of select="format-number(ServerDatePublished/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDatePublished/@Day,'00')"/>
+                    </xsl:otherwise>
                   </xsl:choose>
                 </datestamp>
             <xsl:apply-templates select="SetSpec" />
@@ -311,7 +312,7 @@
             <!-- choose the corresponding template depending on metadataPrefix -->
             <!-- not, when verb=ListIdentifiers -->
             <xsl:choose>
-                 <xsl:when test="$oai_verb!='ListIdentifiers' and @ServerState!='deleted'">  
+                 <xsl:when test="$oai_verb!='ListIdentifiers' and @ServerState!='deleted'">
                  <metadata>
                  <xsl:choose>
                     <xsl:when test="$oai_metadataPrefix='XMetaDissPlus'">
@@ -335,16 +336,18 @@
                     <xsl:when test="$oai_metadataPrefix='copy_xml'">
                        <xsl:apply-templates select="." mode="copy_xml" />
                     </xsl:when>
+                    <xsl:when test="$oai_metadataPrefix='open_aire'">
+                        <xsl:apply-templates select="." mode="open_aire" />
+                    </xsl:when>
                  </xsl:choose>
                  </metadata>
-            
+
             </xsl:when>
-            </xsl:choose>            
+            </xsl:choose>
     </xsl:template>
     
     <xsl:template match="SetSpec">
        <setSpec><xsl:value-of select="@Value"/></setSpec>
-    </xsl:template>         
-    
+    </xsl:template>
 
 </xsl:stylesheet>

@@ -448,6 +448,9 @@ class Oai_IndexController extends Controller_Xml {
         // add ddb transfer element
         $this->_addDdbTransferElement($domNode, $docId);
 
+        // add access rights to element
+        $this->_addAccessRights($domNode, $document);
+
         // remove file elements which should not be exported through OAI
         // Iterating over DOMNodeList is only save for readonly-operations; 
         // copy element-by-element before removing!
@@ -562,6 +565,27 @@ class Oai_IndexController extends Controller_Xml {
         $fileElement = $document->ownerDocument->createElement('TransferUrl');
         $fileElement->setAttribute('PathName', $url);
         $document->appendChild($fileElement);
+    }
+
+    private function _addAccessRights(DOMNode $domNode, Opus_Document $doc) {
+        $visible = 0;
+        if (sizeof($doc->getFile()) > 0) {
+            foreach ($doc->getFile() as $file) {
+                if ($file->getField('VisibleInOai')->getValue() && $file->getField('VisibleInFrontdoor')->getValue()) {
+                    $visible = 1;
+                }
+            }
+        } else {
+            $visible = 1;
+        }
+        $fileElement = $domNode->ownerDocument->createElement('Rights');
+        switch ($visible) {
+            case 0: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/closedAccess'); break;
+            case 1: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/openAccess'); break;
+            case 2: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/embargoedAccess'); break;
+            case 3: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/restrictedAccess'); break;
+        }
+        $domNode->appendChild($fileElement);
     }
 
     /**
