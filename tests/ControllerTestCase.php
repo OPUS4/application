@@ -482,12 +482,13 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     }
 
     private function deleteTestDocuments() {
-        foreach ($this->testDocuments as $key => $doc) {
-            try {
-                $this->removeDocument($doc);
-                unset ($this->testDocuments[$key]);
-            }
-            catch (Exception $e) {
+        if (isset($this->testDocuments)) {
+            foreach ($this->testDocuments as $key => $doc) {
+                try {
+                    $this->removeDocument($doc);
+                    unset ($this->testDocuments[$key]);
+                } catch (Exception $e) {
+                }
             }
         }
     }
