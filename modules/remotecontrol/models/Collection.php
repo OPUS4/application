@@ -81,16 +81,9 @@ class Remotecontrol_Model_Collection {
             throw new Remotecontrol_Model_Exception("Model_Collection: Collection with number '$number' already exists.");
         }
 
-        $lastSortNumber = 0;
-        foreach ($this->collection->getChildren() AS $child) {
-            $thisSortNumber = $child->getSortOrder();
-            $lastSortNumber = $thisSortNumber > $lastSortNumber ? $thisSortNumber : $lastSortNumber;
-        }
-
         $newChild = $this->collection->addLastChild();
         $newChild->setNumber($number)
                 ->setName($title)
-                ->setSortOrder($lastSortNumber + 1)
                 ->setVisible(1)
                 ->store();
 
