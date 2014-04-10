@@ -164,7 +164,7 @@
 
     <tu tuid="fileExtensionFalse">
         <tuv xml:lang="en">
-            <seg>File '%value%' has a forbidden extension. Plaese choose another file.</seg>
+            <seg>File '%value%' has a forbidden extension. Please choose another file.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Die Datei '%value%' hat eine unerlaubte Dateiendung. Bitte wählen Sie eine andere Datei.</seg>
