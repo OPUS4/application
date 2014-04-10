@@ -48,5 +48,35 @@ class Admin_IndexControllerTest extends ControllerTestCase {
         $this->validateXHTML();
     }
 
+    /**
+     * Test routing and successfull execution of 'index' action.
+     */
+    public function testSecurityAction() {
+        $this->dispatch('/admin/index/security');
+        $this->assertResponseCode(200);
+        $this->assertController('index');
+        $this->assertAction('security');
+    }
+
+    /**
+     * Test routing and successfull execution of 'index' action.
+     */
+    public function testSetupAction() {
+        $this->dispatch('/admin/index/setup');
+        $this->assertResponseCode(200);
+        $this->assertController('index');
+        $this->assertAction('setup');
+    }
+
+    /**
+     * Test routing and successfull execution of 'index' action.
+     */
+    public function testInfoAction() {
+        $this->dispatch('/admin/index/info');
+        $this->assertResponseCode(200);
+        $this->assertController('index');
+        $this->assertAction('info');
+    }
+
 }
 
