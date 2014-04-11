@@ -263,7 +263,7 @@ class Opus3InstituteImport {
                 throw new Exception("ERROR Opus3InstituteImport: Could not create '".$mf."' for Institutes.\n");
             }
         } catch (Exception $e){
-            $this->logger->log_error($e->getMessage());
+            $this->logger->log($e->getMessage(), Zend_Log::ERR);
             return;
         }
 
