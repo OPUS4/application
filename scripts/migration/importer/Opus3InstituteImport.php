@@ -146,7 +146,7 @@ class Opus3InstituteImport {
                 throw new Exception("Could not create '".$mf."' for Universities.\n");
             }
         } catch (Exception $e){
-            $this->logger->log("Opus3InstituteImport", $e->getMessage(), Zend_Log::ERR);
+            $this->logger->log($e->getMessage(), Zend_Log::ERR);
             return;
         }
 
@@ -170,7 +170,7 @@ class Opus3InstituteImport {
             $uni->setIsPublisher('1');
             $uni->store();
 
-            $this->logger->log("Opus3InstituteImport", "University imported: " .
+            $this->logger->log("University imported: " .
                 $class['universitaet_anzeige'], Zend_Log::DEBUG);
             fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' .  $uni->getId() . "\n");
         }
@@ -194,7 +194,7 @@ class Opus3InstituteImport {
                 throw new Exception("Could not create '".$mf1."' for Faculties.\n");
             }
         } catch (Exception $e){
-            $this->logger->log("Opus3InstituteImport", $e->getMessage(), Zend_Log::ERR);
+            $this->logger->log($e->getMessage(), Zend_Log::ERR);
             return;
         }
 
@@ -206,7 +206,7 @@ class Opus3InstituteImport {
                 throw new Exception("Could not create '".$mf2."' for Grantors.\n");
             }
         } catch (Exception $e){
-            $this->logger->log("Opus3InstituteImport", $e->getMessage(), Zend_Log::ERR);
+            $this->logger->log($e->getMessage(), Zend_Log::ERR);
             fclose($fp1);
             return;
         }
@@ -237,7 +237,7 @@ class Opus3InstituteImport {
             $fac->setIsGrantor('1');
             $fac->store();
 
-            $this->logger->log("Opus3InstituteImport", "Faculty imported: " . $class['fakultaet'], Zend_Log::DEBUG);
+            $this->logger->log("Faculty imported: " . $class['fakultaet'], Zend_Log::DEBUG);
             //echo "Faculty imported: " . $class['fakultaet'] ."\t" . $class['nr'] . "\t" . $subcoll[$class["nr"]] . "\n";
             fputs($fp1, $class['nr'] . ' ' . $subcoll[$class["nr"]] . "\n");
             fputs($fp2, $class['nr'] . ' ' . $fac->getId() . "\n");
@@ -263,7 +263,7 @@ class Opus3InstituteImport {
                 throw new Exception("ERROR Opus3InstituteImport: Could not create '".$mf."' for Institutes.\n");
             }
         } catch (Exception $e){
-            $this->logger->log_error("Opus3InstituteImport", $e->getMessage());
+            $this->logger->log_error($e->getMessage());
             return;
         }
 
@@ -275,13 +275,13 @@ class Opus3InstituteImport {
                 foreach ($class as $key => $val) {
                     $invalidInstitute .= "[$key:'$val'] ";
                 }
-                $this->logger->log("Opus3InstituteImport", "Invalid entry for Institute will be ignored: '"
+                $this->logger->log("Invalid entry for Institute will be ignored: '"
                     . $invalidInstitute, Zend_Log::ERR);
                 continue;
             }
 
             if (array_key_exists($class['fakultaet'], $pColls) === false) {
-                $this->logger->log("Opus3InstituteImport", "No Faculty with ID '" . $class['fakultaet'] .
+                $this->logger->log("No Faculty with ID '" . $class['fakultaet'] .
                     "' for Institute with ID '" . $class['nr'] ."'", Zend_Log::ERR);
                 continue;
             }
@@ -293,7 +293,7 @@ class Opus3InstituteImport {
 	    $coll->setVisible(1);
 	    $root->store();
 
-            $this->logger->log("Opus3InstituteImport", "Institute imported: " . $class['name'], Zend_Log::DEBUG);
+            $this->logger->log("Institute imported: " . $class['name'], Zend_Log::DEBUG);
             fputs($fp, $class['nr'] . ' ' . $coll->getId() . "\n");
         }
         fclose($fp);

@@ -98,7 +98,7 @@ class Opus3SeriesImport {
         $fp = null;
         $fp = @fopen($mf, 'w');
         if (!$fp) {
-            $this->logger->log("Opus3SeriesImport", "Could not create '" . $mf . "' for Series", Zend_Log::ERR);
+            $this->logger->log("Could not create '" . $mf . "' for Series", Zend_Log::ERR);
             return;
         }
              
@@ -114,7 +114,7 @@ class Opus3SeriesImport {
             $sr->setSortOrder($sort_order++);
             $sr->store();
 
-            $this->logger->log("Opus3SeriesImport","Series imported: " . $s['name'], Zend_Log::DEBUG);
+            $this->logger->log("Series imported: " . $s['name'], Zend_Log::DEBUG);
 
             fputs($fp, $s['sr_id'] . ' ' . $sr->getId() . "\n");
         }

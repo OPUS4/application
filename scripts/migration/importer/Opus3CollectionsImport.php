@@ -104,7 +104,7 @@ class Opus3CollectionsImport {
                 throw new Exception("Could not create '" . $mf . "' for Collections");
             }
         } catch (Exception $e){
-            $this->logger->log("Opus3CollectionsImport", $e->getMessage(), Zend_Log::ERR);
+            $this->logger->log($e->getMessage(), Zend_Log::ERR);
             return;
         }
 
@@ -196,12 +196,12 @@ class Opus3CollectionsImport {
                 $new_collection->store();
                 $previousRight = $row['rgt'];
 
-                $this->logger->log("Opus3CollectionsImport", "Collection imported: " . $row['coll_name'], Zend_Log::DEBUG);
+                $this->logger->log("Collection imported: " . $row['coll_name'], Zend_Log::DEBUG);
 
                 fputs($fp, $row['coll_id'] . ' ' . $new_collection->getId() . "\n");
             }
         } catch (Exception $e) {
-            $this->logger->log("Opus3CollectionsImport", $e->getMessage(), Zend_Log::ERR);
+            $this->logger->log($e->getMessage(), Zend_Log::ERR);
         }
 	fclose($fp);
 

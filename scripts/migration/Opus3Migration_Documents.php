@@ -72,7 +72,7 @@ class Opus3Migration_Documents {
      * @param array $options Array with input options.
      */
     function __construct($options) {
-         $this->logger = new Opus3ImportLogger();
+        $this->logger = Zend_Registry::get('Zend_Log');
 
         if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
         if (array_key_exists('p', $options) !== false) { array_push($this->fulltextPath, $options["p"]); }
@@ -103,13 +103,13 @@ class Opus3Migration_Documents {
 
             $result = $xmlImporter->import($document);
             if ($result['result'] === 'success') {
-                $this->logger->log_debug("Opus3Migration_Documents", "Successfully imported old ID '" . $result['oldid'] . "' with new ID '" . $result['newid'] . "' -- memory $mem_now (KB), peak memory $mem_peak (KB)");
+                $this->logger->log("Successfully imported old ID '" . $result['oldid'] . "' with new ID '" . $result['newid'] . "' -- memory $mem_now (KB), peak memory $mem_peak (KB)", Zend_Log::DEBUG);
                 array_push($this->doclist, $result['newid']);
                 if (array_key_exists('roleid', $result))  {
                     $this->role[$result['newid']] = $result['roleid'];
                 }
             } else if ($result['result'] === 'failure') {
-                $this->logger->log_error("Opus3Migration_Documents", $result['message'] . " for old ID '" . $result['oldid'] . "'\n" . $result['entry']);
+                $this->logger->log($result['message'] . " for old ID '" . $result['oldid'] . "'\n" . $result['entry'], Zend_Log::ERR);
             }
         }
 
@@ -122,26 +122,26 @@ class Opus3Migration_Documents {
 
     private function load_fulltext() {
         foreach ($this->doclist as $id) {
-	    $role = null;
-	    if (array_key_exists($id, $this->role)) {
-		$role = $this->role[$id];
-	    }
-	    foreach ($this->fulltextPath as $path) {
-		    $fileImporter = new Opus3FileImport($id, $path, $role);
+            $role = null;
+            if (array_key_exists($id, $this->role)) {
+            $role = $this->role[$id];
+            }
+            foreach ($this->fulltextPath as $path) {
+                $fileImporter = new Opus3FileImport($id, $path, $role);
 
-		    $mem_now = round(memory_get_usage() / 1024 );
-		    $mem_peak = round(memory_get_peak_usage() / 1024);
+                $mem_now = round(memory_get_usage() / 1024 );
+                $mem_peak = round(memory_get_peak_usage() / 1024);
 
-		    $numberOfFiles = $fileImporter->loadFiles();
+                $numberOfFiles = $fileImporter->loadFiles();
 
-		    $mem_now = round(memory_get_usage() / 1024 );
-		    $mem_peak = round(memory_get_peak_usage() / 1024 );
+                $mem_now = round(memory_get_usage() / 1024 );
+                $mem_peak = round(memory_get_peak_usage() / 1024 );
 
-		    if ($numberOfFiles > 0) {
-			$this->logger->log_debug("Opus3Migration_Documents", $numberOfFiles . " file(s) have been imported successfully for document ID " . $id . " -- memory $mem_now (KB), peak memory $mem_peak (KB)");
-		    }
-		    $fileImporter->finalize();
-		}
+                if ($numberOfFiles > 0) {
+                $this->logger->log($numberOfFiles . " file(s) have been imported successfully for document ID " . $id . " -- memory $mem_now (KB), peak memory $mem_peak (KB)", Zend_Log::DEBUG);
+                }
+                $fileImporter->finalize();
+            }
         }
         
     }

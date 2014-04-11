@@ -122,7 +122,7 @@ class Opus3RoleImport {
                 throw new Exception("ERROR Opus3RoleImport: Could not create '".$mf."' for Roles.\n");
             }
         } catch (Exception $e){
-            $this->logger->log("Opus3RoleImport", $e->getMessage(), Zend_Log::ERR);
+            $this->logger->log($e->getMessage(), Zend_Log::ERR);
             return;
         }
 
@@ -135,12 +135,12 @@ class Opus3RoleImport {
                     $role = null;
                     if (Opus_UserRole::fetchByname($name)) {
                         $role = Opus_UserRole::fetchByname($name);
-                        $this->logger->log("Opus3RoleImport", "Role in DB found: " . $r->name, Zend_Log::DEBUG);
+                        $this->logger->log("Role in DB found: " . $r->name, Zend_Log::DEBUG);
                     } else {
                         $role = new Opus_UserRole();
                         $role->setName($r->name);
                         $role->store();
-                        $this->logger->log("Opus3RoleImport", "Role imported: " . $r->name, Zend_Log::DEBUG);
+                        $this->logger->log("Role imported: " . $r->name, Zend_Log::DEBUG);
                     }
 
                     $db_ips = array();
@@ -167,7 +167,7 @@ class Opus3RoleImport {
            }
         }
         catch (Exception $e){
-            $this->logger->log("Opus3RoleImport", $e->getMessage(), Zend_Log::ERR);
+            $this->logger->log($e->getMessage(), Zend_Log::ERR);
         }
 
         fclose($fp);

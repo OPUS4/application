@@ -38,8 +38,6 @@ set_include_path('.' . PATH_SEPARATOR
         . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/importer'
         . PATH_SEPARATOR . get_include_path());
 
-require_once 'Opus3ImportLogger.php';
-
 class Opus3Migration_Validation {
 
     private $logger;
@@ -83,7 +81,7 @@ class Opus3Migration_Validation {
     }
 
     public function log_error($string) {
-        $this->logger->log_error("Opus3Migration_Validation", $string);
+        $this->logger->log($string, Zend_Log::ERR);
     }
     
     private function checkConsistencyOfImportFile() {
