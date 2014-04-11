@@ -116,7 +116,6 @@ class Opus3Migration_Documents {
             $this->status = self::_FINISHED;
         }
 
-        $xmlImporter->finalize();
    }
 
     private function load_fulltext() {
@@ -139,7 +138,6 @@ class Opus3Migration_Documents {
                 if ($numberOfFiles > 0) {
                 $this->logger->log($numberOfFiles . " file(s) have been imported successfully for document ID " . $id . " -- memory $mem_now (KB), peak memory $mem_peak (KB)", Zend_Log::DEBUG);
                 }
-                $fileImporter->finalize();
             }
         }
         
