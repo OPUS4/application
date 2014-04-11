@@ -9,10 +9,10 @@
 
     <tu tuid="error_search_unavailable">
         <tuv xml:lang="en">
-            <seg>The search service is currently not available</seg>
+            <seg>The search service is currently not available.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Der Suchdienst ist im Moment nicht verfügbar</seg>
+            <seg>Der Suchdienst ist im Moment nicht verfügbar.</seg>
         </tuv>
     </tu>
 

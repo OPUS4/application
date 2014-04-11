@@ -33,30 +33,5 @@
  */
 ?>
 <div class="errorPage">
-    <h2><?= $this->message ?></h2>
-
-
-    <?PHP if ($this->showException) : ?>
-        <div class="stacktrace">
-            <h3>Stacktrace</h3>
-            <?PHP /* note: do not use indentation here */ ?>
-            <pre>
-<?= htmlspecialchars($this->exception) ?>
-</pre>
-        </div>
-    <?PHP else : ?>
-        <div class="exceptionMessage">
-            <?= $this->errorMessage ?>
-        </div>
-    <?PHP endif; ?>
-
-    <?PHP if (isset($this->errorRequest)) : ?>
-        <div class="request">
-            <h3>Request</h3>
-            <?PHP /* note: do not use indentation here */ ?>
-            <pre>
-<?= htmlspecialchars(var_export($this->errorRequest, TRUE)) ?>
-</pre>
-        </div>
-    <?PHP endif; ?>
+    <?= $this->errorMessage ?>
 </div>

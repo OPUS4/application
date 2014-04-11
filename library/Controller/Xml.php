@@ -84,12 +84,14 @@ class Controller_Xml extends Controller_ModuleAccess {
      * @return void
      */
     public function postDispatch() {
-        // Send Xml response.
-        $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
-        if (false === is_null($this->_xslt)) {
-            $this->getResponse()->setBody($this->_proc->transformToXML($this->_xml));
-        } else {
-            $this->getResponse()->setBody($this->_xml->saveXml());
+        if (!isset($this->view->errorMessage)) {
+            // Send Xml response.
+            $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
+            if (false === is_null($this->_xslt)) {
+                $this->getResponse()->setBody($this->_proc->transformToXML($this->_xml));
+            } else {
+                $this->getResponse()->setBody($this->_xml->saveXml());
+            }
         }
         parent::postDispatch();
     }

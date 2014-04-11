@@ -60,7 +60,7 @@ class Rss_IndexControllerTest extends ControllerTestCase {
 
         $body = $this->getResponse()->getBody();
         $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);        
-        $this->assertContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $body);
+        $this->assertContains("The search service is currently not available.", $body);
 
         $this->assertResponseCode(503);
 
@@ -150,7 +150,7 @@ class Rss_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/rss/index/index/searchtype/simple/start/0/rows/10/query/%22%5C%22%22');
 
-        $this->assertContains("exception 'Application_SearchException' with message 'search query is invalid -- check syntax'", $this->getResponse()->getBody());
+        $this->assertContains("The given search query is not supported", $this->getResponse()->getBody());
         $this->assertNotContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $this->getResponse()->getBody());
         
         $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());

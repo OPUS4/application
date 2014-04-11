@@ -77,18 +77,30 @@ class Rss_IndexController extends Controller_Xml {
             $searcher = new Opus_SolrSearch_Searcher();
             $resultList = $searcher->search($queryBuilder->createSearchQuery($params));
         }
-        catch (Opus_SolrSearch_Exception $e) {
-            $this->log->err(__METHOD__ . ' : ' . $e);
-
-            $this->redirect('/rss/error/error');
-            return;
+        catch (Opus_SolrSearch_Exception $exception) {
+            return $this->handleSolrError($exception);
         }
-        
+
         $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'rss2_0.xslt');
         $this->setLink();
         $this->setDates($resultList);
         $this->setItems($resultList);
         $this->setFrontdoorBaseUrl();
+    }
+
+    private function handleSolrError(Opus_SolrSearch_Exception $exception) {
+        $this->log->err(__METHOD__ . ' : ' . $exception);
+        if ($exception->isServerUnreachable()) {
+            $this->view->errorMessage = $this->view->translate('error_search_unavailable');
+            $this->getResponse()->setHttpResponseCode(503);
+        } elseif ($exception->isInvalidQuery()) {
+            $this->view->errorMessage = $this->view->translate('error_search_invalidquery');
+            $this->getResponse()->setHttpResponseCode(500);
+        } else {
+            $this->view->errorMessage = $this->view->translate('error_search_unknown');
+            $this->getResponse()->setHttpResponseCode(500);
+        }
+        $this->renderScript('index/error.phtml');
     }
 
     private function setLink() {
