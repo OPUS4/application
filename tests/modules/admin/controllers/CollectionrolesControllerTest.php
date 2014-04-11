@@ -89,10 +89,10 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->assertController('collectionroles');
         $this->assertAction('index');
 
-        $this->assertXpathCount('//td[@class="edit"]', 20); // 18 in Testdaten, +2 in setUp
+        $this->assertXpathCount('//td[@class="edit"]', 21); // 19 in Testdaten, +2 in setUp
         $this->assertXpathContentContains('//td[@class="hide invisible"]/a', 'Unhide');
-        $this->assertXpathCount('//td[@class="hide invisible"]/a', 4); // 2 in Testdaten, +2 in setUp
-        $this->assertXpathCount('//th[@class="invisible"]/a', 4); // 2 in Testdaten, +2 in setUp
+        $this->assertXpathCount('//td[@class="hide invisible"]/a', 5); // 3 in Testdaten, +2 in setUp
+        $this->assertXpathCount('//th[@class="invisible"]/a', 5); // 3 in Testdaten, +2 in setUp
     }
 
     public function testEditAction() {
