@@ -195,7 +195,7 @@ class Opus3LicenceImport {
              $this->logger->log("No Attribute 'active' for " . $name, Zend_Log::ERR);
              if (!is_null($this->config->migration->licence->active)) {
                 $lic->setActive($this->config->migration->licence->active);
-                $this->logger->log_error("Set Attribute 'active' to default value '" . $lic->getActive() ."' for " .$name );
+                $this->logger->log("Set Attribute 'active' to default value '" . $lic->getActive() ."' for " .$name, Zend_Log::ERR);
              }
          }
 
