@@ -54,6 +54,8 @@ class Opus3Migration_ICL {
     private $stylesheet;
     private $xslt;
 
+    private $config;
+
     /**
      * Constructur.
      *
@@ -61,6 +63,7 @@ class Opus3Migration_ICL {
      */
     function __construct($options) {
         if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
+        $this->config = Zend_Registry::get('Zend_Config');
         $this->configMigrationLogger();
     }
 
