@@ -43,7 +43,6 @@ set_include_path('.' . PATH_SEPARATOR
 
 require_once 'Opus3XMLImport.php';
 require_once 'Opus3FileImport.php';
-require_once 'Opus3ImportLogger.php';
 
 
 class Opus3Migration_Documents {

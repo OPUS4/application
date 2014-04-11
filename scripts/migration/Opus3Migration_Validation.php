@@ -47,7 +47,7 @@ class Opus3Migration_Validation {
     function __construct($options) {
         if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
 	if (array_key_exists('t', $options) !== false) { $this->type = $options["t"]; }
-        $this->logger = new Opus3ImportLogger();
+        $this->logger = Zend_Registry::get('Zend_Log');
     }
     
     public function validate() {        
