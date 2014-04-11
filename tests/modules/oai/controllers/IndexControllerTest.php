@@ -1553,19 +1553,13 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $badStrings = array("Exception", "Stacktrace", "badVerb");
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
-        $this->assertContains('<dc:rights>', $response->getBody(),
-                "Response must contain '<dc:rights>'");
-        $this->assertContains('<dc:relation>', $response->getBody(),
-                "Response must contain '<dc:relation>'");
-        $this->assertContains('eu / funder / nr2', $response->getBody(),
-                "<dc:relation> must contain 'eu / funder / nr2'");
-        $this->assertContains('info:eu-repo/semantics/closedAccess', $response->getBody(),
-                "<dc:rights> must contain 'info:eu-repo/semantics/closedAccess'");
-        $this->assertContains('eu / funder / nr1', $response->getBody(),
-                "<dc:relation> must contain 'eu / funder / nr1'");
+        $this->assertContains('<dc:rights>', $response->getBody(), "Response must contain '<dc:rights>'");
+        $this->assertContains('<dc:relation>', $response->getBody(), "Response must contain '<dc:relation>'");
+        $this->assertContains('eu / funder / nr2', $response->getBody(), "<dc:relation> must contain 'eu / funder / nr2'");
         $this->assertContains('info:eu-repo/semantics/openAccess', $response->getBody(),
-                "<dc:rights> must contain 'info:eu-repo/semantics/openAccess'");
+            "<dc:rights> must contain 'info:eu-repo/semantics/closedAccess'");
+        $this->assertContains('eu / funder / nr1', $response->getBody(), "<dc:relation> must contain 'eu / funder / nr1'");
+        $this->assertContains('info:eu-repo/semantics/openAccess', $response->getBody(),
+            "<dc:rights> must contain 'info:eu-repo/semantics/openAccess'");
     }
-
-
 }
