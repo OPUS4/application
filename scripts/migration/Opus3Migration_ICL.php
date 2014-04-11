@@ -98,12 +98,14 @@ class Opus3Migration_ICL {
     }
 
     public function configMigrationLogger() {
+        $logger = new Zend_Log();
+
         $writer = $this->createWriter($this->config->migration->error->logfile);
-        $writer->addFilter(new Zend_Log_Filter_Priority (Zend_Log::WARN, '<='));
-        $logger = new Zend_Log($writer);
+        $writer->addFilter(new Zend_Log_Filter_Priority(Zend_Log::WARN));
+        $logger->addWriter($writer);
 
         $writer = $this->createWriter($this->config->migration->debug->logfile);
-        $writer->addFilter(new Zend_Log_Filter_Priority (Zend_Log::DEBUG, '<='));
+        // $writer->addFilter(new Zend_Log_Filter_Priority(Zend_Log::DEBUG));
         $logger->addWriter($writer);
 
         Zend_Registry::set('Zend_Log', $logger);
@@ -116,7 +118,7 @@ class Opus3Migration_ICL {
             throw new Exception('Failed to open logging file:' . $logfilePath);
         }
         $GLOBALS['id_string'] = uniqid(); // Write ID string to global variables, so we can identify/match individual runs.
-        $format = '%timestamp% %priorityName% (%priority%, ID '.$GLOBALS['id_string'].'): %message%' . PHP_EOL;
+        $format = '%timestamp% %priorityName% (%priority%, ID ' . $GLOBALS['id_string'] . '): %message%' . PHP_EOL;
         $formatter = new Zend_Log_Formatter_Simple($format);
         $writer = new Zend_Log_Writer_Stream($logfile);
         $writer->setFormatter($formatter);

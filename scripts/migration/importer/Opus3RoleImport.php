@@ -165,7 +165,8 @@ class Opus3RoleImport {
 
                 }
            }
-        }  catch (Exception $e){
+        }
+        catch (Exception $e){
             $this->logger->log("Opus3RoleImport", $e->getMessage(), Zend_Log::ERR);
         }
 
