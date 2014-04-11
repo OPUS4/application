@@ -134,6 +134,6 @@ try {
     $validation->validate();
 }
 catch (Exception $e) {
-    $validation->log($e->getMessage(), Zend_Log::ERR);
+    $validation->log_error($e->getMessage());
     exit(-1);
 }
