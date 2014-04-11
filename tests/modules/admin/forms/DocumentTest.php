@@ -73,8 +73,8 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $form->populateFromModel($document);
 
         $this->assertEquals(1, count($form->getSubForm('Persons')->getSubForm('author')->getSubForms()));
-        $this->assertEquals(16, count($form->getSubForm('Identifiers')->getSubForms()));
-        $this->assertEquals(7, count($form->getSubForm('Collections')->getSubForms()));
+        $this->assertEquals(17, count($form->getSubForm('Identifiers')->getSubForms()));
+        $this->assertEquals(8, count($form->getSubForm('Collections')->getSubForms()));
     }
 
     public function testGetInstanceFromPost() {
