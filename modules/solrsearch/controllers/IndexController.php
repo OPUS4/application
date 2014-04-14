@@ -155,7 +155,12 @@ class Solrsearch_IndexController extends Controller_Action {
         if (!is_null($this->_request->getParam('facetNumber_institute'))) {
             $facetArray['institute'] = $this->_request->getParam('facetNumber_institute');
         }
-        return $facetArray;
+        if (sizeof($facetArray) == 0) {
+            return null;
+        }
+        else {
+            return $facetArray;
+        }
     }
 
     private function setViewValues() {
