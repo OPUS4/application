@@ -91,13 +91,13 @@ class Rss_IndexController extends Controller_Xml {
     private function handleSolrError(Opus_SolrSearch_Exception $exception) {
         $this->log->err(__METHOD__ . ' : ' . $exception);
         if ($exception->isServerUnreachable()) {
-            $this->view->errorMessage = $this->view->translate('error_search_unavailable');
+            $this->view->errorMessage = $this->view->translate('error_search_unavailable') . $exception->getMessage();
             $this->getResponse()->setHttpResponseCode(503);
         } elseif ($exception->isInvalidQuery()) {
-            $this->view->errorMessage = $this->view->translate('error_search_invalidquery');
+            $this->view->errorMessage = $this->view->translate('error_search_invalidquery') . $exception->getMessage();
             $this->getResponse()->setHttpResponseCode(500);
         } else {
-            $this->view->errorMessage = $this->view->translate('error_search_unknown');
+            $this->view->errorMessage = $this->view->translate('error_search_unknown') . $exception->getMessage();
             $this->getResponse()->setHttpResponseCode(500);
         }
         $this->renderScript('index/error.phtml');
