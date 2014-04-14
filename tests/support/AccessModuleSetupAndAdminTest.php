@@ -105,6 +105,7 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
     /**
      * Überprüft Zugriff auf Language Controller im Setup Modul
      */
+    /* TODO OPUSVIER-3268 - Menü Eintrag wurde versteckt
     public function testAccessSetupModuleTranslations() {
         $this->useEnglish();
         $this->dispatch('/setup/language');
@@ -115,6 +116,7 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
             $this->assertRedirectTo('/auth', 'assert redirect from /admin/language to auth failed');
         }
     }
+    */
 
     /**
      * Überprüft Zugriff auf StaticPage Controller im Setup Modul
@@ -156,7 +158,9 @@ abstract class AccessModuleSetupAndAdminTest extends ControllerTestCase {
             $this->assertElement('//a[@href="/admin/enrichmentkey"]', $this->acls['module_admin']);
             $this->assertElement('//a[@href="/setup/help-page"]', $this->acls['module_admin'] && ($this->acls['module_setup'] || $this->acls['controller_helppage']));
             $this->assertElement('//a[@href="/setup/static-page"]', $this->acls['module_admin'] && ($this->acls['module_setup'] || $this->acls['controller_staticpage']));
-            $this->assertElement('//a[@href="/setup/language"]', $this->acls['module_admin'] && ($this->acls['module_setup'] || $this->acls['controller_language']));
+            /* TODO OPUSVIER-3268 - Menu Eintrag wurde versteckt.
+             $this->assertElement('//a[@href="/setup/language"]', $this->acls['module_admin'] && ($this->acls['module_setup'] || $this->acls['controller_language']));
+            */
         }
         else {
             $this->assertRedirectTo('/auth', 'assert redirect from /admin to auth failed');
