@@ -1840,6 +1840,33 @@
             </tuv>
         </tu>
 
+        <tu tuid="IdentifierOrcid">
+            <tuv xml:lang="en">
+                <seg>ORCID</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>ORCID</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="IdentifierGnd">
+            <tuv xml:lang="en">
+                <seg>GND</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>GND</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="IdentifierMisc">
+            <tuv xml:lang="en">
+                <seg>Internal</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Intern</seg>
+            </tuv>
+        </tu>
+
         <!-- Keys for Opus_Identifier -->
 
         <tu tuid="Opus_Identifier">
