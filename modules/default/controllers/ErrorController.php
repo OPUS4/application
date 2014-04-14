@@ -86,6 +86,7 @@ class ErrorController extends Controller_Action
                 }
                 $this->view->title = 'error_application';
                 $this->view->message = $this->view->translate('error_application');
+                $this->view->errorMessage = $this->view->translate($errors->exception->getMessage());
                 break;
         }
 
@@ -106,7 +107,7 @@ class ErrorController extends Controller_Action
             $logger->info('ErrorController mail feature not configured.');
             return;
         }
-        
+
         try {
             $this->_sendErrorMail(
                     $config,
