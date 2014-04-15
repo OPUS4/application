@@ -357,7 +357,7 @@ class Opus3XMLImport {
     private function checkTitleAdditional() {
         $elements = $this->document->getElementsByTagName('TitleAdditional');
         foreach ($elements as $e) {
-            $this->logger->log("Old ID '" . $this->oldId . "' : 'title_en' or 'title_de' mapped to".
+            $this->logger->log("Old ID '" . $this->oldId . "' : 'title_en' or 'title_de' mapped to ".
                 "'TitleAdditional' to prevent 'TitleMain' with duplicate language", Zend_Log::WARN);
         }
      }
