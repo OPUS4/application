@@ -33,17 +33,15 @@
  * @version     $Id$
  */
 
-set_include_path('.' . PATH_SEPARATOR
-        . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/importer'
-        . PATH_SEPARATOR . get_include_path());
+
 class Opus3Migration_Base {
 
     protected $logger;
     protected $config;
 
     function __construct () {
-        $this->configMigrationLogger();
         $this->config = Zend_Registry::get('Zend_Config');
+        $this->configMigrationLogger();
     }
 
     public function configMigrationLogger() {
