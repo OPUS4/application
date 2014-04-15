@@ -46,13 +46,6 @@ class Account_ModuleAccessTest extends ControllerTestCase {
         $this->assertQueryContentContains("//div[@id='login-bar']", 'Account');
     }
 
-    public function testHideAccountLinkForUsersWithoutModuleAccess() {
-        $this->useEnglish();
-        $this->loginUser("security1", "security1pwd");
-        $this->dispatch('/home');
-        $this->assertNotQueryContentContains("//div[@id='login-bar']", 'Account');
-    }
-
     public function testAccessAccountModule() {
         $this->useEnglish();
         $this->loginUser("security7", "security7pwd");
@@ -60,15 +53,5 @@ class Account_ModuleAccessTest extends ControllerTestCase {
         $this->assertQueryContentContains('//html/head/title', 'Account');
         $this->assertQueryContentContains("//div", 'security7');
     }
-
-    public function testNoAccessAccountModule() {
-        $this->useEnglish();
-        $this->loginUser("security1", "security1pwd");
-        $this->dispatch('/account');
-        $this->assertQueryContentContains('//html/head/title', 'Login');
-        $this->assertQueryContentContains('//html/body', 'Logout security1');
-    }
-    
-
 }
  
