@@ -33,7 +33,7 @@
  */
 
 
-class IndexControllerTest extends ControllerTestCase {
+class Admin_SeriesIndexControllerTest extends ControllerTestCase {
 
     public function testShowSeries() {
         $this->loginUser('admin', 'adminadmin');
