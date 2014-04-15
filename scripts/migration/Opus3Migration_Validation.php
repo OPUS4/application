@@ -33,7 +33,7 @@
 
 // Configure include path
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
-require_once 'Opus3Migration_Base.php';require_once 'Opus3Migration_Base.php';
+require_once 'Opus3Migration_Base.php';
 
 set_include_path('.' . PATH_SEPARATOR
         . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/importer'
