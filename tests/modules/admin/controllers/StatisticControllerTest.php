@@ -82,5 +82,23 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
         }
     }
 
+    /**
+     * Regression test for OPUSVIER-1770.
+     */
+    public function testRedirectToIndexForShowWithoutSelectedYear() {
+        $this->loginUser('admin', 'adminadmin');
+        $this->useEnglish();
+
+        // check output
+        $this->dispatch('/admin/statistic/show');
+
+        $this->assertNotQueryContentContains('//div', 'Undefined index: selectedYear');
+
+        // Test for form elements on 'index' page
+        $this->assertQueryContentContains('//dt', 'submit');
+        $this->assertQueryContentContains('//dt', 'selectedYear');
+    }
+
+
 }
 
