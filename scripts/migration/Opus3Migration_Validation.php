@@ -33,21 +33,21 @@
 
 // Configure include path
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
+require_once 'Opus3Migration_Base.php';require_once 'Opus3Migration_Base.php';
 
 set_include_path('.' . PATH_SEPARATOR
         . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/importer'
         . PATH_SEPARATOR . get_include_path());
 
-class Opus3Migration_Validation {
+class Opus3Migration_Validation extends Opus3Migration_Base {
 
-    private $logger;
     private $importFile;
     private $type;
 
     function __construct($options) {
+        parent::__construct();
         if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
-	if (array_key_exists('t', $options) !== false) { $this->type = $options["t"]; }
-        $this->logger = Zend_Registry::get('Zend_Log');
+	    if (array_key_exists('t', $options) !== false) { $this->type = $options["t"]; }
     }
     
     public function validate() {        

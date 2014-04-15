@@ -36,6 +36,7 @@
 
 // Configure include path
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
+require_once 'Opus3Migration_Base.php';
 
 set_include_path('.' . PATH_SEPARATOR
         . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/importer'
@@ -45,9 +46,7 @@ require_once 'Opus3XMLImport.php';
 require_once 'Opus3FileImport.php';
 
 
-class Opus3Migration_Documents {
-
-    private $logger = null;
+class Opus3Migration_Documents extends Opus3Migration_Base {
 
     private $importFile;
     private $importData;
@@ -71,7 +70,7 @@ class Opus3Migration_Documents {
      * @param array $options Array with input options.
      */
     function __construct($options) {
-        $this->logger = Zend_Registry::get('Zend_Log');
+        parent::__construct();
 
         if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
         if (array_key_exists('p', $options) !== false) { array_push($this->fulltextPath, $options["p"]); }
