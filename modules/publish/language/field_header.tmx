@@ -437,6 +437,15 @@ END OF COMMENT -->
       </tuv>
     </tu>
 
+    <tu tuid="header_EmbargoDate">
+      <tuv xml:lang="en">
+        <seg>File embargo date</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum des Datei-Embargos</seg>
+      </tuv>
+    </tu>
+
 	<!-- Beginn IDENTIFIER ************************************************** -->
     <tu tuid="header_IdentifierOpus3">
       <tuv xml:lang="en">

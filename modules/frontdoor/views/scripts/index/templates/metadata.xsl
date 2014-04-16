@@ -44,8 +44,25 @@
    <xsl:template name="MetaData">
     </xsl:template>
 
-   
-   
+
+    <xsl:template match="EmbargoDate">
+        <div id="embargo" class="services">
+            <h3>
+                <xsl:call-template name="translateString">
+                    <xsl:with-param name="string">frontdoor_embargo_date</xsl:with-param>
+                </xsl:call-template>
+            </h3>
+            <div>
+                <xsl:call-template name="formatDate">
+                    <xsl:with-param name="day"><xsl:value-of select="@Day"/></xsl:with-param>
+                    <xsl:with-param name="month"><xsl:value-of select="@Month"/></xsl:with-param>
+                    <xsl:with-param name="year"><xsl:value-of select="@Year"/></xsl:with-param>
+                </xsl:call-template>
+            </div>
+        </div>
+    </xsl:template>
+
+
     <!--  -->
     <!-- Templates for "internal fields". -->
     <!--  -->

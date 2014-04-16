@@ -68,6 +68,11 @@ class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
      * Name des Formularelements fuer das Feld CompletedYear.
      */
     const ELEMENT_COMPLETED_YEAR = 'CompletedYear';
+
+    /**
+     * Name des Formularelements fuer das Feld EmbargoDate.
+     */
+    const ELEMENT_EMBARGO_DATE = 'EmbargoDate';
         
     /**
      * Erzeugt die Formularelemente.
@@ -84,7 +89,9 @@ class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
         $this->addElement('Year', self::ELEMENT_PUBLISHED_YEAR);
         
         $this->addElement('Date', self::ELEMENT_COMPLETED_DATE);
-        $this->addElement('Year', self::ELEMENT_COMPLETED_YEAR);        
+        $this->addElement('Year', self::ELEMENT_COMPLETED_YEAR);
+
+        $this->addElement('Date', self::ELEMENT_EMBARGO_DATE);
     }
     
     /**
@@ -104,6 +111,9 @@ class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
         $date = $datesHelper->getDateString($document->getPublishedDate());
         $this->getElement(self::ELEMENT_PUBLISHED_DATE)->setValue($date);
         $this->getElement(self::ELEMENT_PUBLISHED_YEAR)->setValue($document->getPublishedYear());
+
+        $date = $datesHelper->getDateString($document->getEmbargoDate());
+        $this->getElement(self::ELEMENT_EMBARGO_DATE)->setValue($date);
     }
         
     /**
@@ -138,6 +148,10 @@ class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
         // PublishedYear
         $value = $this->getElementValue(self::ELEMENT_PUBLISHED_YEAR);
         $document->setPublishedYear($value);
+
+        $value = $this->getElementValue(self::ELEMENT_EMBARGO_DATE);
+        $date = $datesHelper->getOpusDate($value);
+        $document->setEmbargoDate($date);
     }
     
 }

@@ -43,6 +43,7 @@ class Frontdoor_IndexController extends Controller_Action {
     const TRANSLATE_DEFAULT_FUNCTION = 'Frontdoor_IndexController::translateWithDefault';
     const FILE_ACCESS_FUNCTION = 'Frontdoor_IndexController::checkIfUserHasFileAccess';
     const FORMAT_DATE_FUNCTION = 'Frontdoor_IndexController::formatDate';
+    const EMBARGO_ACCESS_FUNCTION = 'Frontdoor_IndexController::checkIfFileEmbargoHasPassed';
 
     private $viewHelper;
 
@@ -112,6 +113,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $proc->registerPHPFunctions(self::TRANSLATE_DEFAULT_FUNCTION);
         $proc->registerPHPFunctions(self::FILE_ACCESS_FUNCTION);
         $proc->registerPHPFunctions(self::FORMAT_DATE_FUNCTION);
+        $proc->registerPHPFunctions(self::EMBARGO_ACCESS_FUNCTION);
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
 
@@ -187,6 +189,26 @@ class Frontdoor_IndexController extends Controller_Action {
 
         $realm = Opus_Security_Realm::getInstance();
         return $realm->checkFile($file_id);
+    }
+
+    public static function checkIfFileEmbargoHasPassed($docId) {
+        $doc = new Opus_Document($docId);
+        $date = $doc->getEmbargoDate();
+        // no embargo set
+        if (is_null($date)) {
+            return true;
+        }
+        $embargoDate = new Zend_Date();
+        $embargoDate->setDay($date->getDay());
+        $embargoDate->setMonth($date->getMonth());
+        $embargoDate->setYear($date->getYear());
+
+        if (mktime(time()) > mktime($embargoDate->get())) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /**

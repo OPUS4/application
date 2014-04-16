@@ -1196,6 +1196,15 @@ Beispieleingabe: "17.08" (für Semiotik)</seg>
             <seg>Tragen Sie bitte das Veröffentlichungsdatum (online) des Dokuments im Format TT.MM.JJJJ ein.</seg>
         </tuv>
     </tu>
+
+	<tu tuid="hint_EmbargoDate">
+        <tuv xml:lang="en">
+            <seg>Please enter the date of the expiring of the file embargo in the format YYYY/MM/DD.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Tragen Sie bitte das Auslaufdatum des Datei-Embargos im Format TT.MM.JJJJ ein.</seg>
+        </tuv>
+    </tu>
 	
 	<tu tuid="hint_CompletedYear">
         <tuv xml:lang="en">

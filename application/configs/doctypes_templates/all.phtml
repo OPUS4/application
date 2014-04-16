@@ -76,6 +76,7 @@
             <?= $this->element($this->PublisherPlace); ?>
             <?= $this->element($this->CompletedYear); ?>
             <?= $this->element($this->CompletedDate); ?>
+            <?= $this->element($this->EmbargoDate); ?>
             <?= $this->element($this->IdentifierOpus3); ?>
             <?= $this->element($this->IdentifierUrn); ?>
             <?= $this->element($this->IdentifierIsbn); ?>
@@ -108,7 +109,6 @@
             <?= $this->group($this->groupSubjectUncontrolled); ?>
             <?= $this->element($this->Note); ?>
             <?= $this->element($this->Licence); ?>
-            <?= $this->element($this->EmbargoDate); ?>
 
             <?= $this->legalNotices($this->form); ?>
         

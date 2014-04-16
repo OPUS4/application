@@ -92,18 +92,26 @@
       <!-- service templates defined in templates/services.xsl -->
       <div id="services" class="services-menu">
          <xsl:if test="normalize-space(File/@PathName) and File[@VisibleInFrontdoor='1']">
-            <div id="download-fulltext" class="services">
-               <h3>
-                  <xsl:call-template name="translateString">
-                     <xsl:with-param name="string">frontdoor_download_options</xsl:with-param>
-                  </xsl:call-template>
-               </h3>
-               <ul>
-                  <xsl:apply-templates select="File[@VisibleInFrontdoor='1']">
-                     <xsl:sort select="@Label"/>
-                  </xsl:apply-templates>
-               </ul>
-            </div>
+             <xsl:choose>
+                <xsl:when test="php:functionString('Frontdoor_IndexController::checkIfFileEmbargoHasPassed', @Id)">
+                    <div id="download-fulltext" class="services">
+                       <h3>
+                          <xsl:call-template name="translateString">
+                             <xsl:with-param name="string">frontdoor_download_options</xsl:with-param>
+                          </xsl:call-template>
+                       </h3>
+                       <ul>
+                          <xsl:apply-templates select="File[@VisibleInFrontdoor='1']">
+                             <xsl:sort select="@Label"/>
+                          </xsl:apply-templates>
+                       </ul>
+                    </div>
+                </xsl:when>
+                <xsl:otherwise>
+                     <xsl:apply-templates select="EmbargoDate" />
+                </xsl:otherwise>
+
+             </xsl:choose>
          </xsl:if>
 
          <div id="export" class="services">
@@ -149,6 +157,7 @@
             <colgroup class="angaben">
                 <col class="name"/>
             </colgroup>
+
             <xsl:apply-templates select="PersonAuthor" />
             <xsl:apply-templates select="IdentifierUrn" />
             <xsl:apply-templates select="IdentifierEu" />

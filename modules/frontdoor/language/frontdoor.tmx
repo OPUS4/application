@@ -132,6 +132,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="frontdoor_embargo_date">
+        <tuv xml:lang="en">
+            <seg>This document is embargoed until:</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Dieses Dokument ist gesperrt bis:</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="frontdoor_download_options">
         <tuv xml:lang="en">
             <seg>Download full text files</seg>
