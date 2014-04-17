@@ -196,6 +196,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_filemanager_label_ServerDateSubmitted">
+      <tuv xml:lang="en">
+        <seg>Date of upload</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Datum des Hochladens</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_filemanager_import_link">
       <tuv xml:lang="en">
         <seg>Import File</seg>

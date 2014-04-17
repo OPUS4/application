@@ -2122,6 +2122,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="Opus_File_ServerDateSubmitted">
+            <tuv xml:lang="en">
+                <seg>Date of upload</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Datum des Hochladens</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="Opus_File_FileSize">
             <tuv xml:lang="en">
                 <seg>Size</seg>

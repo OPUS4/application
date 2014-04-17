@@ -48,6 +48,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
     const ELEMENT_LANGUAGE              = 'Language';
     const ELEMENT_FILE_SIZE             = 'FileSize'; // nicht editierbar
     const ELEMENT_VISIBILITY            = 'VisibleIn';
+    const ELEMENT_SERVER_DATE_SUBMITTED = 'ServerDateSubmitted';
 
     /**
      * Namen der Formularelemente fuer Hashes aus der Datenbank. (nicht editierbar)
@@ -84,6 +85,10 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         $element->setStaticViewHelper('fileSize');
         $this->addElement($element);
 
+        $element = $this->createElement('date', self::ELEMENT_SERVER_DATE_SUBMITTED);
+        $element->getDecorator('ViewHelper')->setViewOnlyEnabled(true);
+        $this->addElement($element);
+
         $this->addElement('Language', self::ELEMENT_LANGUAGE, array('label' => 'Language', 'required' => true));
         $this->addElement('text', self::ELEMENT_LABEL);
         $this->addElement('textarea', self::ELEMENT_COMMENT);
@@ -112,6 +117,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         $this->getElement(self::ELEMENT_FILE_SIZE)->setValue($file->getFileSize());
         $this->getElement(self::ELEMENT_LANGUAGE)->setValue($file->getLanguage());
         $this->getElement(self::ELEMENT_COMMENT)->setValue($file->getComment());
+        $this->getElement(self::ELEMENT_SERVER_DATE_SUBMITTED)->setValue($this->getView()->formatValue()->formatDate($file->getServerDateSubmitted()));
 
         $visibility = array();
 
