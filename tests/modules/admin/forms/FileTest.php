@@ -53,9 +53,9 @@ class Admin_Form_FileTest extends ControllerTestCase {
     public function testConstructForm() {
         $form = new Admin_Form_File();
 
-        $this->assertEquals(8, count($form->getElements()));
+        $this->assertEquals(10, count($form->getElements()));
 
-        $elements = array('Id', 'FileLink', 'FileSize', 'Language', 'Label', 'Comment', 'VisibleIn', 'Roles');
+        $elements = array('Id', 'FileLink', 'FileSize', 'Language', 'Label', 'Comment', 'VisibleIn', 'Roles', 'ServerDateSubmitted', 'SortOrder');
 
         foreach ($elements as $element) {
             $this->assertNotNull($form->getElement($element), "Element '$element' is missing.");
