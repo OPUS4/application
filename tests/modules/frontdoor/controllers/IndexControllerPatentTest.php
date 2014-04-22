@@ -94,6 +94,7 @@ class Frontdoor_IndexControllerPatentTest extends ControllerTestCase {
 
     public function testRegression3118() {
         $this->useEnglish();
+        $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
 
         $this->dispatch('/frontdoor/index/index/docId/146');
@@ -101,5 +102,30 @@ class Frontdoor_IndexControllerPatentTest extends ControllerTestCase {
         $this->assertNotQueryContentContains('//dl[@id="Document-ServerState"]//li[@class="active"]', 'Publish document');
         $this->assertQueryContentContains('//dl[@id="Document-ServerState"]//li[@class="active"]', 'Published');
     }
+    
+    /**
+     * Regression Tests for OPUSVIER-2813
+     */
+
+    public function testDateFormatGerman() {
+        $this->useGerman();
+
+        $this->dispatch("/frontdoor/index/index/docId/91");
+        $this->assertQueryContentContains('//th', 'Datum der Abschlussprüfung');
+        $this->assertQueryContentContains('//tr', '26.02.2010');
+        $this->assertQueryContentContains('//th', 'Datum der Freischaltung');
+        $this->assertQueryContentContains('//tr', '05.03.2010');
+    }
+
+    public function testDateFormatEnglish() {
+        $this->useEnglish();
+        
+        $this->dispatch("/frontdoor/index/index/docId/91");
+        $this->assertQueryContentContains('//th', 'Date of final exam');
+        $this->assertQueryContentContains('//tr', '2010/02/26');
+        $this->assertQueryContentContains('//th', 'Release Date');
+        $this->assertQueryContentContains('//tr', '2010/03/05');
+    }
+
 }
  

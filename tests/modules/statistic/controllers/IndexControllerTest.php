@@ -46,5 +46,13 @@ class Statistic_IndexControllerTest extends ControllerTestCase {
         $this->assertAction('index');
     }
 
+    /**
+     * Regression test for OPUSVIER-1770.
+     */
+    public function testRedirectToIndexForShowWithoutSelectedYear() {
+        $this->loginUser('admin', 'adminadmin');
+        $this->dispatch('/admin/statistic/show');
+        $this->assertRedirectTo('/admin/statistic');
+    }
 }
 

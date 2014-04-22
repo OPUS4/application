@@ -271,5 +271,55 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertNotContains($fileId, $files);
     }
 
+    public function testBadDocIdNotDisplayedOnPage() {
+        $this->dispatch('/admin/filemanager/delete/id/dummyDocId/fileId/125');
+        $this->assertRedirectTo('/admin/documents');
+    }
+
+    public function testBadFileIdNotDisplayedOnPage() {
+        $this->dispatch('/admin/filemanager/delete/id/124/fileId/dummyFileId');
+        $this->assertRedirectTo('/admin/filemanager/index/id/124');
+    }
+
+    /**
+     * Prüft ob das upload-Datum der Datei gesetzt ist
+     */
+    public function testFileUploadDate() {
+        $this->enableSecurity();
+        $this->loginUser('admin', 'adminadmin');
+        $this->useGerman();
+        $filepath = $this->createTestFile('foo.pdf');
+        $file = new Opus_File();
+        $file->setPathName(basename($filepath));
+        $file->setTempFile($filepath);
+        $file->setVisibleInOai(false);
+
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $doc->addFile($file);
+
+        $docId = $doc->store();
+
+        $dateNow = new Opus_Date();
+        $dateNow->setNow();
+
+        $this->dispatch('admin/filemanager/index/id/' . $docId);
+    //    $this->assertQueryContentContains('//label', 'Datum des Hochladens'); // auskommentiert, weil die Übersetzungsdatei nicht funktioniert
+        $this->assertQueryContentContains('//div', $dateNow->getDay() . '.'. $dateNow->getMonth() . '.' . $dateNow->getYear());
+    }
+
+    private function createTestFile($filename) {
+        $config = Zend_Registry::get('Zend_Config');
+        if (!isset($config->workspacePath)) {
+            throw new Exception("config key 'workspacePath' not defined in config file");
+        }
+
+        $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
+        mkdir($path, 0777, true);
+        $filepath = $path . DIRECTORY_SEPARATOR . $filename;
+        touch($filepath);
+        $this->assertTrue(is_readable($filepath));
+        return $filepath;
+    }
 }
 
