@@ -578,6 +578,9 @@ class Oai_IndexController extends Controller_Xml {
         } else {
             $visible = 1;
         }
+        if (!$doc->hasEmbargoPassed()) {
+            $visible = 2;
+        }
         $fileElement = $domNode->ownerDocument->createElement('Rights');
         switch ($visible) {
             case 0: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/closedAccess'); break;

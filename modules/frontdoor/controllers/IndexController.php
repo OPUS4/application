@@ -193,22 +193,7 @@ class Frontdoor_IndexController extends Controller_Action {
 
     public static function checkIfFileEmbargoHasPassed($docId) {
         $doc = new Opus_Document($docId);
-        $date = $doc->getEmbargoDate();
-        // no embargo set
-        if (is_null($date)) {
-            return true;
-        }
-        $embargoDate = new Zend_Date();
-        $embargoDate->setDay($date->getDay());
-        $embargoDate->setMonth($date->getMonth());
-        $embargoDate->setYear($date->getYear());
-
-        if (mktime(time()) > mktime($embargoDate->get())) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return $doc->hasEmbargoPassed();
     }
 
     /**

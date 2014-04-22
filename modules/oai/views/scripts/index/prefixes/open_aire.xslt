@@ -85,6 +85,9 @@
                        (?? aus oai_dc.xslt kopiert)-->
             <dc:date>
                 <xsl:choose>
+                    <xsl:when test="EmbargoDate">
+                        <xsl:value-of select="EmbargoDate/@Year"/>-<xsl:value-of select="format-number(EmbargoDate/@Month,'00')"/>-<xsl:value-of select="format-number(EmbargoDate/@Day,'00')"/>
+                    </xsl:when>
                     <xsl:when test="PublishedDate">
                         <xsl:value-of select="PublishedDate/@Year"/>-<xsl:value-of select="format-number(PublishedDate/@Month,'00')"/>-<xsl:value-of select="format-number(PublishedDate/@Day,'00')"/>
                     </xsl:when>
