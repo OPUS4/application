@@ -1,0 +1,79 @@
+<?xml version="1.0"?>
+<!-- Catalog file taken from https://github.com/tklein23/validate-oai-xmetadissplus, written by Thoralf Klein, 2012-2013 -->
+<!DOCTYPE catalog PUBLIC "-//OASIS//DTD Entity Resolution XML Catalog V1.0//EN"
+        "http://www.oasis-open.org/committees/entity/release/1.0/catalog.dtd">
+<catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="public">
+    <uri name="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcterms.xsd" uri="xmetadissplus/dcterms.xsd"/>
+    <uri name="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dc.xsd" uri="xmetadissplus/dc.xsd"/>
+    <uri name="http://dublincore.org/schemas/xmls/qdc/2006/01/06/dcmitype.xsd" uri="xmetadissplus/dcmitype.xsd"/>
+
+    <uri name="http://purl.org/info:eu-repo/schemas/xmls/2010/05/07/versionTypes.xsd"
+         uri="xmetadissplus/versionTypes.xsd"/>
+    <uri name="http://purl.org/info:eu-repo/schemas/xmls/2010/04/15/publicationTypes.xsd"
+         uri="xmetadissplus/publicationTypes.xsd"/>
+    <uri name="http://files.dnb.de/standards/xmetadiss/iso639-2.xsd" uri="xmetadissplus/iso639-2.xsd"/>
+
+    <uri name="http://files.dnb.de/standards/xmetadissplus/xmetadissplus.xsd" uri="xmetadissplus/xmetadissplus.xsd"/>
+    <uri name="http://files.dnb.de/standards/xmetadiss/cc.xsd" uri="xmetadissplus/cc.xsd"/>
+    <uri name="http://files.dnb.de/standards/xmetadissplus/xmetadissplustype.xsd"
+         uri="xmetadissplus/xmetadissplustype.xsd"/>
+    <uri name="http://files.dnb.de/standards/xmetadiss/ddb.xsd" uri="xmetadissplus/ddb.xsd"/>
+    <uri name="http://files.dnb.de/standards/xmetadissplus/hdl.xsd" uri="xmetadissplus/hdl.xsd"/>
+    <uri name="http://files.dnb.de/standards/xmetadissplus/doi.xsd" uri="xmetadissplus/doi.xsd"/>
+    <uri name="http://files.dnb.de/standards/xmetadiss/thesis.xsd" uri="xmetadissplus/thesis.xsd"/>
+    <uri name="http://files.dnb.de/standards/xmetadiss/pc.xsd" uri="xmetadissplus/pc.xsd"/>
+    <uri name="http://files.dnb.de/standards/xmetadiss/urn.xsd" uri="xmetadissplus/urn.xsd"/>
+    <uri name="http://files.dnb.de/standards/xmetadiss/subject.xsd" uri="xmetadissplus/subject.xsd"/>
+    <uri name="http://files.dnb.de/standards/xmetadiss/iso3166.xsd" uri="xmetadissplus/iso3166.xsd"/>
+    <uri name="http://files.dnb.de/standards/xmetadiss/mime.xsd" uri="xmetadissplus/mime.xsd"/>
+    <uri name="http://files.dnb.de/standards/xmetadiss/iso639-2.xsd" uri="xmetadissplus/iso639-2.xsd"/>
+
+    <uri name="http://www.d-nb.de/standards/xmetadissplus/xmetadissplus.xsd" uri="xmetadissplus/xmetadissplus.new.xsd"/>
+    <uri name="http://www.d-nb.de/standards/xmetadiss/cc.xsd" uri="xmetadissplus/cc.new.xsd"/>
+    <uri name="http://www.d-nb.de/standards/xmetadissplus/xmetadissplustype.xsd"
+         uri="xmetadissplus/xmetadissplustype.new.xsd"/>
+    <uri name="http://www.d-nb.de/standards/xmetadiss/ddb.xsd" uri="xmetadissplus/ddb.new.xsd"/>
+    <uri name="http://www.d-nb.de/standards/xmetadissplus/hdl.xsd" uri="xmetadissplus/hdl.new.xsd"/>
+    <uri name="http://www.d-nb.de/standards/xmetadissplus/doi.xsd" uri="xmetadissplus/doi.new.xsd"/>
+    <uri name="http://www.d-nb.de/standards/xmetadiss/thesis.xsd" uri="xmetadissplus/thesis.new.xsd"/>
+    <uri name="http://www.d-nb.de/standards/xmetadiss/pc.xsd" uri="xmetadissplus/pc.new.xsd"/>
+    <uri name="http://www.d-nb.de/standards/xmetadiss/urn.xsd" uri="xmetadissplus/urn.new.xsd"/>
+    <uri name="http://www.d-nb.de/standards/xmetadiss/subject.xsd" uri="xmetadissplus/subject.new.xsd"/>
+    <uri name="http://www.d-nb.de/standards/xmetadiss/iso3166.xsd" uri="xmetadissplus/iso3166.new.xsd"/>
+    <uri name="http://www.d-nb.de/standards/xmetadiss/mime.xsd" uri="xmetadissplus/mime.new.xsd"/>
+    <uri name="http://www.d-nb.de/standards/xmetadiss/iso639-2.xsd" uri="xmetadissplus/iso639-2.new.xsd"/>
+
+    <uri name="http://www.w3.org/2001/03/xml.xsd" uri="xmetadissplus/xml.xsd"/>
+
+    <!-- XHTML Validierung -->
+    <uri name="http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd" uri="xhtml/xhtml1-strict.dtd"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd" uri="xhtml/xhtml-rdfa-1.dtd"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-datatypes-1.mod" uri="xhtml/xhtml-datatypes-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-metaAttributes-1.mod" uri="xhtml/xhtml-metaAttributes-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-inlstyle-1.mod" uri="xhtml/xhtml-inlstyle-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-rdfa-model-1.mod" uri="xhtml/xhtml-rdfa-model-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-framework-1.mod" uri="xhtml/xhtml-framework-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-text-1.mod" uri="xhtml/xhtml-text-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-hypertext-1.mod" uri="xhtml/xhtml-hypertext-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-list-1.mod" uri="xhtml/xhtml-list-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-edit-1.mod" uri="xhtml/xhtml-edit-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-bdo-1.mod" uri="xhtml/xhtml-bdo-1.mod"/>
+    <uri name="http://www.w3.org/TR/ruby/xhtml-ruby-1.mod" uri="xhtml/xhtml-ruby-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-pres-1.mod" uri="xhtml/xhtml-pres-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-link-1.mod" uri="xhtml/xhtml-link-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-meta-1.mod" uri="xhtml/xhtml-meta-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-base-1.mod" uri="xhtml/xhtml-base-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-script-1.mod" uri="xhtml/xhtml-script-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-style-1.mod" uri="xhtml/xhtml-style-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-image-1.mod" uri="xhtml/xhtml-image-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-csismap-1.mod" uri="xhtml/xhtml-csismap-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-ssismap-1.mod" uri="xhtml/xhtml-ssismap-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-param-1.mod" uri="xhtml/xhtml-param-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-object-1.mod" uri="xhtml/xhtml-object-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-table-1.mod" uri="xhtml/xhtml-table-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-form-1.mod" uri="xhtml/xhtml-form-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-target-1.mod" uri="xhtml/xhtml-target-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-legacy-1.mod" uri="xhtml/xhtml-legacy-1.mod"/>
+    <uri name="http://www.w3.org/MarkUp/DTD/xhtml-struct-1.mod" uri="xhtml/xhtml-struct-1.mod"/>
+
+</catalog>
