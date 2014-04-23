@@ -343,4 +343,561 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         }
     }
 
+    /**
+     * Test for OPUSVIER-1841.
+     */
+    public function testRegression1841() {
+        $this->useEnglish();
+        $this->loginUser('admin', 'adminadmin');
+
+        // Display metadata overview for test document (fully populated)
+        $this->dispatch('/admin/document/index/id/146');
+
+        // Checks
+        $this->assertNotQueryContentContains('//div', 'Warning:');
+        $this->assertNotQueryContentContains('//div', 'htmlspecialchars');
+        $this->assertQueryContentContains('//div', '1970/01/01');
+    }
+
+      // document/overviewTests
+    public function testIndexActionGerman() {
+        $this->useGerman();
+        $this->enableSecurity();
+        $this->loginUser('admin', 'adminadmin');
+
+        $this->dispatch('/admin/document/index/id/146');
+
+        // Information in Actionbox
+        $this->assertQueryContentContains('//*[@id="Document-ServerState"]/dd/ul/li[1]', 'Freigegeben');
+        $this->assertQueryContentContains('//dd[@id="Document-ServerDatePublished-value"]', '03.01.2012');
+        $this->assertQuery('//dd[@id="Document-ServerDateModified-value"]');
+        $this->assertQueryContentContains('//dd[@id="Document-ServerDateModified-value"]', '03.01.2012');
+
+        // General
+        $this->assertQueryContentContains('//*[@id="Document-General-Language"]', 'Deutsch');
+        $this->assertQueryContentContains('//*[@id="Document-General-Type"]', 'Masterarbeit');
+        $this->assertQueryContentContains('//*[@id="Document-General-PublishedDate"]', '30.04.2007');
+        $this->assertQueryContentContains('//*[@id="Document-General-PublishedYear"]', '2008');
+        $this->assertQueryContentContains('//*[@id="Document-General-CompletedDate"]', '01.12.2011');
+        $this->assertQueryContentContains('//*[@id="Document-General-CompletedYear"]', '2009');
+        
+        // Persons
+        $this->assertQueryContentContains('//*[@id="Document-Persons-author-PersonAuthor0-FirstName"]', 'John');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-author-PersonAuthor0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-author-PersonAuthor0-Email"]', 'doe@example.org');
+        $this->assertQuery('//*[@id="Document-Persons-author-PersonAuthor0-AllowContact"]');
+
+        $this->assertQueryContentContains('//*[@id="Document-Persons-editor-PersonEditor0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-editor-PersonEditor0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-editor-PersonEditor0-AcademicTitle"]', 'PhD');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-editor-PersonEditor0-PlaceOfBirth"]', 'London');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-AcademicTitle"]', 'PhD');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-DateOfBirth"]', '01.01.1970');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-PlaceOfBirth"]', 'New York');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-AcademicTitle"]', 'PhD');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-DateOfBirth"]', '02.01.1970');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Persons-other-PersonOther0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-other-PersonOther0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-other-PersonOther0-AcademicTitle"]', 'PhD');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Persons-advisor-PersonAdvisor0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-advisor-PersonAdvisor0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-advisor-PersonAdvisor0-AcademicTitle"]', 'PhD');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Persons-referee-PersonReferee0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-referee-PersonReferee0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-referee-PersonReferee0-AcademicTitle"]', 'PhD');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Persons-submitter-PersonSubmitter0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-submitter-PersonSubmitter0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-submitter-PersonSubmitter0-AcademicTitle"]', 'PhD');
+        
+        // Titles
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Main-TitleMain0-Language"]', 'Deutsch');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Main-TitleMain0-Value"]', 'KOBV');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Main-TitleMain1-Language"]', 'Englisch');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Main-TitleMain1-Value"]', 'COLN');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Additional-TitleAdditional0-Language"]', 'Deutsch');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Additional-TitleAdditional0-Value"]', 
+                'Kooperativer Biblioheksverbund Berlin-Brandenburg');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Parent-TitleParent0-Language"]', 'Deutsch');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Parent-TitleParent0-Value"]', 'Parent Title');
+
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Sub-TitleSub0-Language"]', 'Deutsch');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Sub-TitleSub0-Value"]', 'Service-Zentrale');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Sub-TitleSub1-Language"]', 'Englisch');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Sub-TitleSub1-Value"]', 'Service Center');
+        
+        // Bibliographische Informationen
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Edition"]', '1');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Volume"]', '2');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PublisherName"]', 'Foo Publishing');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PublisherPlace"]', 'Timbuktu');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageCount"]', '4');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageFirst"]', '1');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageLast"]', '4');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Issue"]', '3');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ContributingCorporation"]', 'Baz University');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-CreatingCorporation"]', 'Bar University');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ThesisDateAccepted"]', '02.11.2010');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ThesisYearAccepted"]', '1999');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-BelongsToBibliography"]', 'Ja');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Publishers-ThesisPublisher0-Institute"]', 'Foobar Universitätsbibliothek');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Publishers-ThesisPublisher1-Institute"]', 'Institute with DNB contact ID');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Grantors-ThesisGrantor0-Institute"]', 'Foobar Universität, Testwissenschaftliche Fakultät');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Grantors-ThesisGrantor1-Institute"]', 'School of Life');
+        
+        // Series
+        $this->assertQueryContentContains('//*[@id="Document-Series-Series0-SeriesId"]', 'MySeries');
+        $this->assertQueryContentContains('//*[@id="Document-Series-Series0-Number"]', '5/5');
+        $this->assertQueryContentContains('//*[@id="Document-Series-Series0-SortOrder"]', '6');
+        
+        // Enrichments
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment0-KeyName"]', 'validtestkey');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment0-Value"]', 'Köln');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment1-KeyName"]', 'SourceSwb');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment1-Value"]', 'http://www.test.de');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment2-KeyName"]', 'SourceTitle');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment2-Value"]', 'Dieses Dokument ist auch erschienen als ...');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment3-KeyName"]', 'ClassRvk');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment3-Value"]', 'LI 99660');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment4-KeyName"]', 'ContributorsName');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment4-Value"]', 'John Doe (Foreword) and Jane Doe (Illustration)');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment5-KeyName"]', 'Event');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment5-Value"]', 'Opus4 OAI-Event');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment6-KeyName"]', 'City');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment6-Value"]', 'Opus4 OAI-City');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment7-KeyName"]', 'Country');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment7-Value"]', 'Opus4 OAI-Country');
+        
+        // Collections
+        $this->assertQueryContentContains('//*[@id="Document-Collections-ddc-collection0-Name"]', 'DDC-Klassifikation'); // Verknüpfung mit Root-Collection
+        $this->assertQueryContentContains('//*[@id="Document-Collections-ddc-collection1-Name"]', '28 Christliche Konfessionen');
+        $this->assertQueryContentContains('//*[@id="Document-Collections-ddc-collection2-Name"]', '51 Mathematik');
+        $this->assertQueryContentContains('//*[@id="Document-Collections-ddc-collection3-Name"]', '433 Deutsche Wörterbücher');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Collections-ccs-collection0-Name"]', 'CCS-Klassifikation'); // Verknüpfung mit Root-Collection
+        
+        $this->assertQueryContentContains('//*[@id="Document-Collections-pacs-collection0-Name"]', '12.15.Hh Determination of Kobayashi-Maskawa matrix elements');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Collections-jel-collection0-Name"]', 'JEL-Klassifikation'); // Verknüpfung mit Root-Collection
+        
+        $this->assertQueryContentContains('//*[@id="Document-Collections-msc-collection0-Name"]', '05-XX COMBINATORICS (For finite fields, see 11Txx)');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Collections-bk-collection0-Name"]', '08.20 Geschichte der westlichen Philosophie: Allgemeines');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Collections-institutes-collection0-Name"]', 'Abwasserwirtschaft und Gewässerschutz B-2');
+        
+        
+        // Abstracts
+        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract0-Language"]', 'Deutsch');
+        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract0-Value"]', 
+                'Die KOBV-Zentrale in Berlin-Dahlem.');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract1-Language"]', 'Englisch');
+        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract1-Value"]', 
+                'Lorem impsum.');
+        
+        // Subjects
+        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Swd-Subject0-Value"]', 'Berlin');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Language"]', 'Deutsch');
+        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
+        
+        // Identifier
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier0-Type"]', 'DOI');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier0-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier1-Type"]', 'Handle');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier1-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier2-Type"]', 'URN');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier2-Value"]', 'urn:nbn:op:123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier3-Type"]', 'STD-DOI');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier3-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier4-Type"]', 'URL');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier4-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier5-Type"]', 'CRIS-Link');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier5-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier6-Type"]', 'SplashURL');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier6-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier7-Type"]', 'ISBN');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier7-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier8-Type"]', 'ISSN');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier8-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier9-Type"]', 'OPUS 3 Id');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier9-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier10-Type"]', 'Opac Id');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier10-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier11-Type"]', 'Uuid');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier11-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier12-Type"]', 'Sequenznummer');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier12-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier13-Type"]', 'alter Identifier');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier13-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier14-Type"]', 'Pubmed-Id');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier14-Value"]', '123');
+
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier15-Type"]', 'ArXiv-Id');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier15-Value"]', '123');
+
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier16-Type"]', 'EU-Projekt');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier16-Value"]', 'eu / funder / nr1');
+        
+        // Lizenzen
+        $this->assertQueryContentContains('//fieldset[@id="fieldset-Licences"]/legend', 'Lizenzen');
+        $this->assertQueryContentContains('//*[@id="Document-Licences-licence4-label"]', 'Creative Commons - Namensnennung');
+        
+        // Patents
+        $this->assertQueryContentContains('//*[@id="Document-Patents-Patent0-Number"]', '1234');
+        $this->assertQueryContentContains('//*[@id="Document-Patents-Patent0-Countries"]', 'DDR');
+        $this->assertQueryContentContains('//*[@id="Document-Patents-Patent0-YearApplied"]', '1970');
+        $this->assertQueryContentContains('//*[@id="Document-Patents-Patent0-Application"]', 'The foo machine.');
+        $this->assertQueryContentContains('//*[@id="Document-Patents-Patent0-DateGranted"]', '01.01.1970');
+
+        // Notes
+        $this->assertQueryContentContains('//*[@id="Document-Notes-Note0-Visibility"]', 'Öffentlich');
+        $this->assertQueryContentContains('//*[@id="Document-Notes-Note0-Message"]', 'Für die Öffentlichkeit');
+        $this->assertQueryContentContains('//*[@id="Document-Notes-Note1-Visibility"]', 'Intern');
+        $this->assertQueryContentContains('//*[@id="Document-Notes-Note1-Message"]', 'Für den Admin');
+
+        // Files
+        $this->assertQueryContentContains('//*[@id="Document-Files-File0-Label"]/a', 'foo-pdf');
+        $this->assertQueryContentContains('//*[@id="Document-Files-File0-FileSize"]', '8.61 KB');
+        $this->assertQueryContentContains('//*[@id="Document-Files-File0-MimeType"]', 'application/pdf');
+        $this->assertQueryContentContains('//*[@id="Document-Files-File0-Language"]', 'Deutsch');
+        $this->assertQueryContentContains('//*[@id="Document-Files-File0-VisibleInFrontdoor"]', 'Ja');
+        $this->assertQueryContentContains('//*[@id="Document-Files-File0-VisibleInOai"]', 'Ja');
+    }
+    
+    public function testIndexActionEnglish() {
+        $this->useEnglish();
+        $this->enableSecurity();
+        $this->loginUser('admin', 'adminadmin');
+        
+        $this->dispatch('/admin/document/index/id/146');
+        
+        // Information in Actionbox
+        $this->assertQueryContentContains('//*[@id="Document-ServerState"]/dd/ul/li[1]', 'Published');
+        $this->assertQueryContentContains('//dd[@id="Document-ServerDatePublished-value"]', '2012/01/03');
+        $this->assertQuery('//dd[@id="Document-ServerDateModified-value"]');
+        $this->assertQueryContentContains('//dd[@id="Document-ServerDateModified-value"]', '2012/01/03');
+
+        // General
+        $this->assertQueryContentContains('//*[@id="Document-General-Language"]', 'German');
+        $this->assertQueryContentContains('//*[@id="Document-General-Type"]', 'Master\'s Thesis');
+        $this->assertQueryContentContains('//*[@id="Document-General-PublishedDate"]', '2007/04/30');
+        $this->assertQueryContentContains('//*[@id="Document-General-PublishedYear"]', '2008');
+        $this->assertQueryContentContains('//*[@id="Document-General-CompletedDate"]', '2011/12/01');
+        $this->assertQueryContentContains('//*[@id="Document-General-CompletedYear"]', '2009');
+        
+        // Persons
+        $this->assertQueryContentContains('//*[@id="Document-Persons-author-PersonAuthor0-FirstName"]', 'John');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-author-PersonAuthor0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-author-PersonAuthor0-Email"]', 'doe@example.org');
+        $this->assertNotQuery('//*[@id="Document-Persons-author-PersonAuthor0-DateOfBirth"]');
+        $this->assertNotQuery('//*[@id="Document-Persons-author-PersonAuthor0-PlaceOfBirth"]');
+        $this->assertQuery('//*[@id="Document-Persons-author-PersonAuthor0-AllowContact"]');
+
+        $this->assertQueryContentContains('//*[@id="Document-Persons-editor-PersonEditor0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-editor-PersonEditor0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-editor-PersonEditor0-AcademicTitle"]', 'PhD');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-editor-PersonEditor0-PlaceOfBirth"]', 'London');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-AcademicTitle"]', 'PhD');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-DateOfBirth"]', '1970/01/01');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-translator-PersonTranslator0-PlaceOfBirth"]', 'New York');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-AcademicTitle"]', 'PhD');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-contributor-PersonContributor0-DateOfBirth"]', '1970/01/02');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Persons-other-PersonOther0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-other-PersonOther0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-other-PersonOther0-AcademicTitle"]', 'PhD');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Persons-advisor-PersonAdvisor0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-advisor-PersonAdvisor0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-advisor-PersonAdvisor0-AcademicTitle"]', 'PhD');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Persons-referee-PersonReferee0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-referee-PersonReferee0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-referee-PersonReferee0-AcademicTitle"]', 'PhD');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Persons-submitter-PersonSubmitter0-FirstName"]', 'Jane');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-submitter-PersonSubmitter0-LastName"]', 'Doe');
+        $this->assertQueryContentContains('//*[@id="Document-Persons-submitter-PersonSubmitter0-AcademicTitle"]', 'PhD');
+        
+        // Titles
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Main-TitleMain0-Language"]', 'German');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Main-TitleMain0-Value"]', 'KOBV');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Main-TitleMain1-Language"]', 'English');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Main-TitleMain1-Value"]', 'COLN');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Additional-TitleAdditional0-Language"]', 'German');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Additional-TitleAdditional0-Value"]', 
+                'Kooperativer Biblioheksverbund Berlin-Brandenburg');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Parent-TitleParent0-Language"]', 'German');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Parent-TitleParent0-Value"]', 'Parent Title');
+
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Sub-TitleSub0-Language"]', 'German');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Sub-TitleSub0-Value"]', 'Service-Zentrale');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Sub-TitleSub1-Language"]', 'English');
+        $this->assertQueryContentContains('//*[@id="Document-Titles-Sub-TitleSub1-Value"]', 'Service Center');
+        
+        // Bibliographische Informationen
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Edition"]', '1');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Volume"]', '2');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PublisherName"]', 'Foo Publishing');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PublisherPlace"]', 'Timbuktu');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageCount"]', '4');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageFirst"]', '1');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-PageLast"]', '4');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Issue"]', '3');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ContributingCorporation"]', 'Baz University');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-CreatingCorporation"]', 'Bar University');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ThesisDateAccepted"]', '2010/11/02');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-ThesisYearAccepted"]', '1999');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-BelongsToBibliography"]', 'Yes');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Publishers-ThesisPublisher0-Institute"]', 'Foobar Universitätsbibliothek');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Publishers-ThesisPublisher1-Institute"]', 'Institute with DNB contact ID');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Grantors-ThesisGrantor0-Institute"]', 'Foobar Universität');
+        $this->assertQueryContentContains('//*[@id="Document-Bibliographic-Grantors-ThesisGrantor1-Institute"]', 'School of Life');
+        
+        // Series
+        $this->assertQueryContentContains('//*[@id="Document-Series-Series0-SeriesId"]', 'MySeries');
+        $this->assertQueryContentContains('//*[@id="Document-Series-Series0-Number"]', '5/5');
+        $this->assertQueryContentContains('//*[@id="Document-Series-Series0-SortOrder"]', '6');
+        
+        // Enrichments
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment0-KeyName"]', 'validtestkey');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment0-Value"]', 'Köln');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment1-KeyName"]', 'SourceSwb');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment1-Value"]', 'http://www.test.de');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment2-KeyName"]', 'SourceTitle');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment2-Value"]', 'Dieses Dokument ist auch erschienen als ...');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment3-KeyName"]', 'ClassRvk');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment3-Value"]', 'LI 99660');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment4-KeyName"]', 'ContributorsName');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment4-Value"]', 'John Doe (Foreword) and Jane Doe (Illustration)');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment5-KeyName"]', 'Event');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment5-Value"]', 'Opus4 OAI-Event');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment6-KeyName"]', 'City');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment6-Value"]', 'Opus4 OAI-City');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment7-KeyName"]', 'Country');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment7-Value"]', 'Opus4 OAI-Country');
+        
+        // Collections
+        $this->assertQueryContentContains('//*[@id="Document-Collections-ddc-collection0-Name"]', 'Dewey Decimal Classification'); // Verknüpfung mit Root-Collection
+        $this->assertQueryContentContains('//*[@id="Document-Collections-ddc-collection1-Name"]', '28 Christliche Konfessionen');
+        $this->assertQueryContentContains('//*[@id="Document-Collections-ddc-collection2-Name"]', '51 Mathematik');
+        $this->assertQueryContentContains('//*[@id="Document-Collections-ddc-collection3-Name"]', '433 Deutsche Wörterbücher');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Collections-ccs-collection0-Name"]', 'CCS-Classification'); // Verknüpfung mit Root-Collection
+        
+        $this->assertQueryContentContains('//*[@id="Document-Collections-pacs-collection0-Name"]', '12.15.Hh Determination of Kobayashi-Maskawa matrix elements');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Collections-jel-collection0-Name"]', 'JEL-Classification'); // Verknüpfung mit Root-Collection
+        
+        $this->assertQueryContentContains('//*[@id="Document-Collections-msc-collection0-Name"]', '05-XX COMBINATORICS (For finite fields, see 11Txx)');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Collections-bk-collection0-Name"]', '08.20 Geschichte der westlichen Philosophie: Allgemeines');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Collections-institutes-collection0-Name"]', 'Abwasserwirtschaft und Gewässerschutz B-2');
+        
+        
+        // Abstracts
+        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract0-Language"]', 'German');
+        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract0-Value"]', 
+                'Die KOBV-Zentrale in Berlin-Dahlem.');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract1-Language"]', 'English');
+        $this->assertQueryContentContains('//*[@id="Document-Content-Abstracts-TitleAbstract1-Value"]', 
+                'Lorem impsum.');
+        
+        // Subjects
+        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Swd-Subject0-Value"]', 'Berlin');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Language"]', 'German');
+        $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
+        
+        // Identifier
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier0-Type"]', 'DOI');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier0-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier1-Type"]', 'Handle');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier1-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier2-Type"]', 'URN');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier2-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier3-Type"]', 'STD-DOI');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier3-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier4-Type"]', 'URL');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier4-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier5-Type"]', 'CRIS-Link');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier5-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier6-Type"]', 'SplashURL');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier6-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier7-Type"]', 'ISBN');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier7-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier8-Type"]', 'ISSN');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier8-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier9-Type"]', 'Opus3 Id');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier9-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier10-Type"]', 'Opac Id');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier10-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier11-Type"]', 'Uuid');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier11-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier12-Type"]', 'Serial Number');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier12-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier13-Type"]', 'old Identifier');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier13-Value"]', '123');
+        
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier14-Type"]', 'Pubmed Id');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier14-Value"]', '123');
+
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier15-Type"]', 'ArXiv Id');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier15-Value"]', '123');
+
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier16-Type"]', 'EU-Project');
+        $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier16-Value"]', 'eu / funder / nr1');
+        
+        // Lizenzen (Name der Lizenz nicht übersetzt)
+        $this->assertQueryContentContains('//fieldset[@id="fieldset-Licences"]/legend', 'Licences');
+        $this->assertQueryContentContains('//*[@id="Document-Licences-licence4-label"]', 'Creative Commons - Namensnennung');
+        
+        // Patents
+        $this->assertQueryContentContains('//*[@id="Document-Patents-Patent0-Number"]', '1234');
+        $this->assertQueryContentContains('//*[@id="Document-Patents-Patent0-Countries"]', 'DDR');
+        $this->assertQueryContentContains('//*[@id="Document-Patents-Patent0-YearApplied"]', '1970');
+        $this->assertQueryContentContains('//*[@id="Document-Patents-Patent0-Application"]', 'The foo machine.');
+        $this->assertQueryContentContains('//*[@id="Document-Patents-Patent0-DateGranted"]', '1970/01/01');
+
+        // Notes
+        $this->assertQueryContentContains('//*[@id="Document-Notes-Note0-Visibility"]', 'Public');
+        $this->assertQueryContentContains('//*[@id="Document-Notes-Note0-Message"]', 'Für die Öffentlichkeit');
+        $this->assertQueryContentContains('//*[@id="Document-Notes-Note1-Visibility"]', 'Private');
+        $this->assertQueryContentContains('//*[@id="Document-Notes-Note1-Message"]', 'Für den Admin');
+
+        // Files
+        $this->assertQueryContentContains('//*[@id="Document-Files-File0-Label"]/a', 'foo-pdf');
+        $this->assertQueryContentContains('//*[@id="Document-Files-File0-FileSize"]', '8.61 KB');
+        $this->assertQueryContentContains('//*[@id="Document-Files-File0-MimeType"]', 'application/pdf');
+        $this->assertQueryContentContains('//*[@id="Document-Files-File0-Language"]', 'German');
+        $this->assertQueryContentContains('//*[@id="Document-Files-File0-VisibleInFrontdoor"]', 'Yes');
+        $this->assertQueryContentContains('//*[@id="Document-Files-File0-VisibleInOai"]', 'Yes');
+    }
+    
+    public function testEmbargoDatePassed() {
+        $this->useEnglish();
+        $filepath = $this->createTestFile('foo.pdf');
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $file = new Opus_File();
+        $file->setPathName(basename($filepath));
+        $file->setTempFile($filepath);
+        $file->setVisibleInOai(false);
+        $doc->addFile($file);
+
+        $date = new Opus_Date();
+        $date->setYear('2000')->setMonth('00')->setDay('01');
+        $doc->setEmbargoDate($date);
+
+        $docId = $doc->store();
+
+        $this->dispatch('frontdoor/index/index/docId/' . $docId);
+        $this->assertQueryContentContains('//*', '/files/'.$docId.'/foo.pdf');
+        $this->assertNotQueryContentContains('//*', 'This document is embargoed until:');
+    }
+
+    public function testEmbargoDateHasNotPassed() {
+        $this->useEnglish();
+        $filepath = $this->createTestFile('foo.pdf');
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $file = new Opus_File();
+        $file->setPathName(basename($filepath));
+        $file->setTempFile($filepath);
+        $file->setVisibleInOai(false);
+        $doc->addFile($file);
+
+        $date = new Opus_Date();
+        $date->setYear('2100')->setMonth('00')->setDay('01');
+        $doc->setEmbargoDate($date);
+
+        $docId = $doc->store();
+
+        $this->dispatch('frontdoor/index/index/docId/' . $docId);
+        $this->assertNotQueryContentContains('//*', '/files/'.$docId.'/foo.pdf');
+        $this->assertQueryContentContains('//*', 'This document is embargoed until:');
+    }
+
+    private function createTestFile($filename) {
+        $config = Zend_Registry::get('Zend_Config');
+        if (!isset($config->workspacePath)) {
+            throw new Exception("config key 'workspacePath' not defined in config file");
+        }
+
+        $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
+        mkdir($path, 0777, true);
+        $filepath = $path . DIRECTORY_SEPARATOR . $filename;
+        touch($filepath);
+        $this->assertTrue(is_readable($filepath));
+        return $filepath;
+    }
+
 }

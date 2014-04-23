@@ -1527,7 +1527,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testXMetaDissPlusDctermsispartofContainsSeriesTitleAndNumber() {
-        
         $doc = new Opus_Document(146);
         $series = $doc->getSeries();
 
@@ -1537,7 +1536,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $dctermsIspartof = $xpath->query('//xMetaDiss:xMetaDiss/dcterms:isPartOf');
         
         $this->assertEquals(1, $dctermsIspartof->length);
-        
+
         $this->assertEquals($series[0]->getTitle().' ; '.$series[0]->getNumber(), $dctermsIspartof->item(0)->nodeValue);
 
     }
@@ -1546,6 +1545,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      * Test verb=ListRecords, metadataPrefix=open_aire.
      */
     public function testListRecordsForOpenAireCompliance() {
+        $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=open_aire&set=open_aire');
         $this->assertResponseCode(200);
 
@@ -1556,10 +1556,15 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<dc:rights>', $response->getBody(), "Response must contain '<dc:rights>'");
         $this->assertContains('<dc:relation>', $response->getBody(), "Response must contain '<dc:relation>'");
         $this->assertContains('eu / funder / nr2', $response->getBody(), "<dc:relation> must contain 'eu / funder / nr2'");
-        $this->assertContains('info:eu-repo/semantics/openAccess', $response->getBody(),
-            "<dc:rights> must contain 'info:eu-repo/semantics/closedAccess'");
         $this->assertContains('eu / funder / nr1', $response->getBody(), "<dc:relation> must contain 'eu / funder / nr1'");
-        $this->assertContains('info:eu-repo/semantics/openAccess', $response->getBody(),
-            "<dc:rights> must contain 'info:eu-repo/semantics/openAccess'");
+
+        $xpath = $this->prepareXpathFromResultString($response->getBody());
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:rights");
+        $this->assertEquals($queryResponse->item(1)->nodeValue, 'info:eu-repo/semantics/openAccess',
+            "Document 146: <dc:rights> must contain 'info:eu-repo/semantics/openAccess'");
+
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:rights");
+        $this->assertEquals($queryResponse->item(0)->nodeValue, 'info:eu-repo/semantics/embargoedAccess',
+            "Document 145: <dc:rights> must contain 'info:eu-repo/semantics/embargoedAccess'");
     }
 }
