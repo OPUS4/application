@@ -63,7 +63,7 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         $documentTypes = $this->docTypeHelper->getDocumentTypes();
 
         $this->assertNotNull($documentTypes);
-        $this->assertEquals(7, count($documentTypes));
+        $this->assertEquals(8, count($documentTypes));
         $this->assertArrayHasKey('all', $documentTypes);
         $this->assertArrayHasKey('preprint', $documentTypes);
         $this->assertArrayHasKey('demo_invalid', $documentTypes);
@@ -71,6 +71,7 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         $this->assertArrayHasKey('foobar', $documentTypes);
         $this->assertArrayHasKey('barbaz', $documentTypes);
         $this->assertArrayHasKey('bazbar', $documentTypes);
+        $this->assertArrayHasKey('masterthesis', $documentTypes);
         $this->assertArrayNotHasKey('article', $documentTypes);
     }
 
