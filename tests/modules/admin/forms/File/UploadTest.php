@@ -46,7 +46,7 @@ class Admin_Form_File_UploadTest extends ControllerTestCase {
     public function testCreateForm() {
         $form = new Admin_Form_File_Upload();
 
-        $elements = array('Id', 'File', 'Label', 'Comment', 'Language', 'Save', 'Cancel', 'OpusHash');
+        $elements = array('Id', 'File', 'Label', 'Comment', 'Language', 'Save', 'Cancel', 'OpusHash', 'SortOrder');
 
         $this->assertEquals(count($elements), count($form->getElements()));
 
