@@ -44,10 +44,8 @@ class Form_Element_Language extends Form_Element_Select {
         
         // $this->setLabel($this->getName()); // TODO remove
         // $this->setRequired(true); // TODO remove
-        
-        $languages = Zend_Registry::get('Available_Languages');
-        
-        foreach ($languages as $index => $language) {
+
+        foreach ($this->getLanguageList() as $index => $language) {
             $this->addMultiOption($index, $language);
         }
 
@@ -60,7 +58,6 @@ class Form_Element_Language extends Form_Element_Select {
         }
         return self::$languageList;
     }
-
 
     /**
      * Setup language list.
