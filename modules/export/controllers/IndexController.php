@@ -42,9 +42,12 @@ class Export_IndexController extends Controller_Xml {
 
     public function init() {
         parent::init();
-        $this->exportModel = new Export_Model_XMLExport();
+        $this->exportModel = new Export_Model_XmlExport();
     }    
 
+    /*
+     * called by frontdoor or solr search results. returns the results in xml format
+     */
     public function indexAction() {
         $exportParam = $this->getRequest()->getParam('export');
         if (is_null($exportParam)) {
@@ -65,7 +68,8 @@ class Export_IndexController extends Controller_Xml {
         $this->stylesheet = $this->getRequest()->getParam('stylesheet');
         $this->stylesheetDirectory = 'stylesheets-custom';
 
-        $this->setStylesheet();
+        $this->loadStyleSheet($this->exportModel->buildStylesheetPath($this->stylesheet,
+            $this->view->getScriptPath('') . $this->stylesheetDirectory));
 
         if ($exportParam == 'xml') {
             $this->exportModel->prepareXml($this->_xml, $this->_proc, $this->getRequest());
@@ -75,26 +79,9 @@ class Export_IndexController extends Controller_Xml {
         }
     }
 
-    private function setStylesheet() {
-        if (!is_null($this->stylesheet)) {
-
-            $stylesheetsAvailable = array();
-            $dir = new DirectoryIterator($this->view->getScriptPath('') . $this->stylesheetDirectory);
-            foreach ($dir as $file) {
-                if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
-                    array_push($stylesheetsAvailable, $file->getBasename('.xslt'));
-                }
-            }
-            $pos = array_search($this->stylesheet, $stylesheetsAvailable);
-            if ($pos !== FALSE) {
-                $this->loadStyleSheet($this->view->getScriptPath('') . $this->stylesheetDirectory . DIRECTORY_SEPARATOR .  $stylesheetsAvailable[$pos] . '.xslt');
-                return;
-            }
-            throw new Application_Exception('given stylesheet does not exist or is not readable');
-        }
-        $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'raw.xslt');
-    }
-
+    /*
+     * exports the publication list
+     */
     public function publistAction() {
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->publist->stylesheetDirectory)) {
@@ -138,7 +125,9 @@ class Export_IndexController extends Controller_Xml {
         $this->_proc->setParameter('', 'fullUrl', $fullUrl);
         $this->_proc->setParameter('', 'groupBy', $groupBy);
 
-        $this->setStylesheet();
+        $this->loadStyleSheet($this->exportModel->buildStylesheetPath($this->stylesheet,
+            $this->view->getScriptPath('') . $this->stylesheetDirectory));
+
         $this->exportModel->prepareXml($this->_xml, $this->_proc, $this->getRequest());
     }
 }
