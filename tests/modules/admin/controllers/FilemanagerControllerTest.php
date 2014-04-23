@@ -294,7 +294,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $file->setTempFile($filepath);
         $file->setVisibleInOai(false);
 
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file);
 
