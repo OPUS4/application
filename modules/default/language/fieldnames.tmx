@@ -2131,6 +2131,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="Opus_File_SortOrder">
+            <tuv xml:lang="en">
+                <seg>Sort order</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Reihenfolge</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="Opus_File_FileSize">
             <tuv xml:lang="en">
                 <seg>Size</seg>

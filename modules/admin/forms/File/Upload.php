@@ -46,13 +46,14 @@
  */
 class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
 
-    const ELEMENT_HASH      = 'OpusHash';
-    const ELEMENT_FILE      = 'File';
-    const ELEMENT_LABEL     = 'Label';
-    const ELEMENT_COMMENT   = 'Comment';
-    const ELEMENT_LANGUAGE  = 'Language';
+    const ELEMENT_HASH       = 'OpusHash';
+    const ELEMENT_FILE       = 'File';
+    const ELEMENT_LABEL      = 'Label';
+    const ELEMENT_COMMENT    = 'Comment';
+    const ELEMENT_LANGUAGE   = 'Language';
+    const ELEMENT_SORT_ORDER = 'SortOrder';
 
-    const SUBFORM_DOCINFO   = 'Info';
+    const SUBFORM_DOCINFO    = 'Info';
 
     private $fileInfo = null;
 
@@ -79,6 +80,8 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
         $hash = $this->createElement('hash', self::ELEMENT_HASH, array('salt' => 'unique'));
         $hash->addDecorator('HtmlTag', array('tag' => 'div'));
         $this->addElement($hash);
+
+        $this->addElement('text', self::ELEMENT_SORT_ORDER);
 
         $this->getElement(self::ELEMENT_MODEL_ID)->setRequired(true);
     }
@@ -108,6 +111,7 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
             $docfile->setLabel($this->getElementValue(self::ELEMENT_LABEL));
             $docfile->setComment($this->getElementValue(self::ELEMENT_COMMENT));
             $docfile->setLanguage($this->getElementValue(self::ELEMENT_LANGUAGE));
+            $docfile->setSortOrder($this->getElementValue(self::ELEMENT_SORT_ORDER));
 
             $docfile->setPathName(urldecode($file['name']));
             $docfile->setMimeType($file['type']);

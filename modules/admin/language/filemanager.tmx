@@ -205,6 +205,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_filemanager_label_SortOrder">
+      <tuv xml:lang="en">
+        <seg>Sort order of files</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Reihenfolge der Dateien</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_filemanager_import_link">
       <tuv xml:lang="en">
         <seg>Import File</seg>
