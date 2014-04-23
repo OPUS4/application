@@ -235,6 +235,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $session = new Zend_Session_Namespace();
         $session->language = 'de';
         Zend_Registry::get('Zend_Translate')->setLocale('de');
+        Form_Element_Language::initLanguageList();
     }
     
     /**
@@ -244,6 +245,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $session = new Zend_Session_Namespace();
         $session->language = 'en';
         Zend_Registry::get('Zend_Translate')->setLocale('en');
+        Form_Element_Language::initLanguageList();
     }
     
     /**

@@ -232,24 +232,10 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         return new Zend_Session_Namespace();
     }
 
-    /**
-     * Setup language list.
-     *
-     * @return void
-     * 
-     * TODO move out (wird nicht für jeden Request benötigt)
-     */
+
     protected function _initLanguageList() {
         $this->bootstrap(array('Translation', 'Backend'));
-        $translate = $this->getResource('Translation');
-
-        $languages = array();
-        foreach (Opus_Language::getAllActiveTable() as $languageRow) {
-            $ref_name = $languageRow['ref_name'];
-            $part2_t = $languageRow['part2_t'];
-            $languages[$part2_t] = $translate->translate($part2_t);
-        }
-        Zend_Registry::set('Available_Languages', $languages);
+        Form_Element_Language::initLanguageList();
     }
 
     /**

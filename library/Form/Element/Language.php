@@ -36,7 +36,9 @@
  * 
  */
 class Form_Element_Language extends Form_Element_Select {
-    
+
+    private static $languageList;
+
     public function init() {
         parent::init();
         
@@ -48,8 +50,34 @@ class Form_Element_Language extends Form_Element_Select {
         foreach ($languages as $index => $language) {
             $this->addMultiOption($index, $language);
         }
-        
+
         $this->setDisableTranslator(false); // TODO Check for multiple translations
     }
-    
+
+    public static function getLanguageList() {
+        if (is_null(self::$languageList)) {
+            self::initLanguageList();
+        }
+        return self::$languageList;
+    }
+
+
+    /**
+     * Setup language list.
+     *
+     * @return void
+     *
+     * TODO move out (wird nicht für jeden Request benötigt)
+     */
+    public static function initLanguageList() {
+        $translate = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
+        $languages = array();
+        foreach (Opus_Language::getAllActiveTable() as $languageRow) {
+            $ref_name = $languageRow['ref_name'];
+            $part2_t = $languageRow['part2_t'];
+            $languages[$part2_t] = $translate->translate($part2_t);
+        }
+        self::$languageList = $languages;
+        Zend_Registry::set('Available_Languages', $languages);
+    }
 }

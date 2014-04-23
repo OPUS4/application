@@ -343,27 +343,9 @@ class Publish_Model_Validation {
      * return the available languages from registry, database or chache
      * @return <Array> languages
      */
-    private function getLanguages() {
-        $languages = array();
-        if (empty($this->languages)) {
-            if (Zend_Registry::isRegistered('Available_Languages') === true) {
-                $languages = Zend_Registry::get('Available_Languages');
-                $this->languages = $languages;
-                return $languages;
-            } else {
-                // TODO is this code ever used (see setup in Bootstrap)
-                $dbLanguages = Opus_Language::getAllActive();
-                if (isset($dbLanguages) || count($dbLanguages) >= 1) {
-                    foreach ($dbLanguages as $lan)
-                        $languages[$lan->getPart2T()] = $lan->getDisplayName();
-                    $this->languages = $languages;
 
-                    return $languages;
-                } else
-                    return null;
-            }
-        } else
-            return $this->languages;
+    private function getLanguages() {
+        return Form_Element_Language::getLanguageList();
     }
 
     /**
