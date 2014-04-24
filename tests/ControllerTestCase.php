@@ -173,7 +173,6 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         if (!is_null($instance)) {
             $instance->clearIdentity();
         }
-        Opus_Security_Realm::clearInstance();
     }
 
     /**
