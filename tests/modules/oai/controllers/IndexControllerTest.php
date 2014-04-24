@@ -38,14 +38,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     private $_security;
     private $_addOaiModuleAccess;
     private $docIds = array();
-    
-    protected function tearDown() {
-        foreach ($this->docIds as $docId) {
-            $doc = new Opus_Document($docId);
-            $doc->deletePermanent();         
-        }
-        parent::tearDown();
-    }
 
     /**
      * Method to check response for "bad" strings.
@@ -1545,7 +1537,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      * Test verb=ListRecords, metadataPrefix=open_aire.
      */
     public function testListRecordsForOpenAireCompliance() {
-        $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=open_aire&set=open_aire');
         $this->assertResponseCode(200);
 
