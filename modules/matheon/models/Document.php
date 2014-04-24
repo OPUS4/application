@@ -245,7 +245,8 @@ class Matheon_Model_Document {
         }
 
         $template = new Matheon_Model_Template();
-        $template->template = getcwd() . '/../modules/matheon/models/confirmation-mail.template';
+        $template->template = APPLICATION_PATH . '/modules/matheon/models/confirmation-mail.template';
+
         return $template->render(array(
            'baseUrlServer'   => $baseUrlServer,
            'baseUrlFiles'    => $baseUrlFiles,
