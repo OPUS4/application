@@ -107,9 +107,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
             $this->assertEquals('access to requested document is forbidden', $e->getMessage());
         }
         $this->assertTrue(is_null($tarball));
-
-        // cleanup
-        $doc->deletePermanent();
         
         if ($addOaiModuleAccess) {
             $r->removeAccessModule('oai');
@@ -135,9 +132,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
             $this->assertEquals('requested document does not have any associated readable files', $e->getMessage());
         }
         $this->assertTrue(is_null($tarball));
-
-        // cleanup
-        $doc->deletePermanent();
     }
 
     public function testFunctionGetName() {
@@ -151,9 +145,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
 
         $container = new Oai_Model_Container($doc->getId());
         $this->assertEquals($doc->getId(), $container->getName());
-
-        // cleanup
-        $doc->deletePermanent();
     }
 
     public function testDocumentWithRestrictedFile() {
@@ -179,9 +170,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
             $this->assertEquals('access denied on all files that are associated to the requested document', $e->getMessage());
         }
         $this->assertTrue(is_null($tarball));
-
-        // cleanup
-        $doc->deletePermanent();
         Opus_Util_File::deleteDirectory(dirname($filepath));
     }
 
@@ -203,9 +191,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
             $this->assertEquals('requested document does not have any associated readable files', $e->getMessage());
         }
         $this->assertTrue(is_null($tarball));
-
-        //cleanup
-        $doc->deletePermanent();
     }
 
     public function testDocumentWithSingleUnrestrictedFile() {
@@ -229,8 +214,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         // TODO OPUSVIER-2503
         $this->assertTrue($file->getMimeType() == 'application/x-empty' || $file->getMimeType() == 'inode/x-empty');
 
-        // cleanup
-        $doc->deletePermanent();
         Opus_Util_File::deleteDirectory(dirname($filepath));
         unlink($file->getPath());
     }
@@ -262,8 +245,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->assertEquals('.tar', $file->getExtension());
         $this->assertEquals('application/x-tar', $file->getMimeType());
 
-        // cleanup
-        $doc->deletePermanent();
         Opus_Util_File::deleteDirectory(dirname($filepath1));
         Opus_Util_File::deleteDirectory(dirname($filepath2));
         unlink($file->getPath());
@@ -298,8 +279,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $tarball->delete();
         $this->assertFalse(file_exists($tarball->getPath()));
 
-        // cleanup
-        $doc->deletePermanent();
         Opus_Util_File::deleteDirectory(dirname($filepath1));
         Opus_Util_File::deleteDirectory(dirname($filepath2));
     }
@@ -325,8 +304,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $tarball->delete();
         $this->assertFalse(file_exists($tarball->getPath()));
 
-        // cleanup
-        $doc->deletePermanent();
         Opus_Util_File::deleteDirectory(dirname($filepath1));
     }
 

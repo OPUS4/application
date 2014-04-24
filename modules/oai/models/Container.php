@@ -83,9 +83,18 @@ class Oai_Model_Container {
      */
     private function getAccessibleFiles() {
         $realm = Opus_Security_Realm::getInstance();
-        if ($this->doc->getServerState() !== 'published' && !$realm->checkDocument($this->docId)) {
-            $this->logErrorMessage('document with id ' . $this->docId . ' is not in server state published');
-            throw new Oai_Model_Exception('access to requested document is forbidden');
+        if ($this->doc->getServerState() !== 'published') {
+            if (!$realm->checkDocument($this->docId)) {
+                Zend_Debug::dump("passt");
+                $this->logErrorMessage('document with id ' . $this->docId . ' is not in server state published');
+                throw new Oai_Model_Exception('access to requested document is forbidden');
+            }
+            else {
+                Zend_Debug::dump('checkDocument: ' . $realm->checkDocument($this->docId));
+            }
+        }
+        else {
+            Zend_Debug::dump('Document server state: ' . $this->doc->getServerState());
         }
 
         $files = array();
