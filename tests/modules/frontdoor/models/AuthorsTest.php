@@ -107,6 +107,9 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
     }
 
     public function tearDown() {
+        $document = new Opus_Document($this->documentId);
+        $document->deletePermanent();
+
         $person = new Opus_Person($this->author1Id);
         $person->delete();
 
@@ -118,6 +121,9 @@ class Frontdoor_Model_AuthorsTest extends ControllerTestCase {
 
         $person = new Opus_Person($this->author4Id);
         $person->delete();
+
+        $document = new Opus_Document ($this->unpublishedDocumentId);
+        $document->deletePermanent();
 
         parent::tearDown();
     }
