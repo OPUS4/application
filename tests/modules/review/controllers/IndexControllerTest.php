@@ -52,13 +52,6 @@ class Review_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(0, count($document->getEnrichment()));
     }
 
-    protected function tearDown() {
-        $document = new Opus_Document($this->documentId);
-        $document->deletePermanent();
-
-        parent::tearDown();
-    }
-
     /**
      * Basic tests dispatching and executing 'index' action.
      */

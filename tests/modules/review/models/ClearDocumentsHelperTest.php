@@ -55,13 +55,6 @@ class Review_Model_ClearDocumentsHelperTest extends ControllerTestCase {
         $this->person = $person;
     }
 
-    protected function tearDown() {
-        $document = new Opus_Document($this->documentId);
-        $document->deletePermanent();
-
-        parent::tearDown();
-    }
-
     public function testClearDocument() {
         $helper = new Review_Model_ClearDocumentsHelper();
         $helper->clear(array($this->documentId), 23, $this->person);

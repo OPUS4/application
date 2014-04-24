@@ -46,13 +46,6 @@ class Admin_FilebrowserControllerTest extends ControllerTestCase {
         $this->assertNotNull($this->documentId);
     }
 
-    protected function tearDown() {
-        $document = new Opus_Document($this->documentId);
-        $document->deletePermanent();
-
-        parent::tearDown();
-    }
-
     public function testIndexActionWithMissingParam() {
         $this->dispatch('/admin/filebrowser/index');
         $this->assertResponseCode(500);

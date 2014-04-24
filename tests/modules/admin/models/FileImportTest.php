@@ -49,14 +49,6 @@ class Admin_Model_FileImportTest extends ControllerTestCase {           #
     }
     
     public function tearDown() {
-        if (isset($documentId)) {
-            try {
-                $document = new Opus_Document($this->documentId);
-                $document->deletePermanent();
-            }
-            catch (Opus_Model_NotFoundException $omnfe) {
-            }
-        }
         $this->_clearImportFolder();
         parent::tearDown();
     }

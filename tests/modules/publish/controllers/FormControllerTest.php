@@ -124,7 +124,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);
 
         $this->assertResponseCode(200);
         $this->assertController('form');
@@ -182,7 +181,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);
 
         $this->assertResponseCode(200);
         $this->assertController('form');
@@ -216,7 +214,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);
 
         $this->assertResponseCode(200);
         $this->assertController('form');
@@ -272,7 +269,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);
 
         // undo config changes
         if (is_null($oldval)) {
@@ -314,7 +310,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);
 
         // undo config changes
         if (is_null($oldval)) {
@@ -356,7 +351,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);
 
         // undo config changes
         if (is_null($oldval)) {
@@ -399,7 +393,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);
 
         // undo config changes
         if (is_null($oldval)) {
@@ -447,9 +440,8 @@ class Publish_FormControllerTest extends ControllerTestCase {
             $config->form->first->bibliographie = $oldval;
         }
         
-        $doc = new Opus_Document($session->documentId);
+        $doc = $this->createTestDocument($session->documentId);
         $belongsToBibliography = $doc->getBelongsToBibliography();
-        $doc->deletePermanent();    
         
         $this->assertResponseCode(200);
         $this->assertNotContains("Es sind Fehler aufgetreten.", $this->response->getBody());
@@ -464,14 +456,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $doc->setServerState('temporary');
         $doc->store();
         return $doc;
-    }
-
-    /**
-     *
-     * @param Opus_Document $doc
-     */
-    private function deleteTemporaryDoc($doc) {
-        $doc->deletePermanent();
     }
 
     public function testDoNotShowFileNoticeOnSecondFormPageIfFileUploadIsDisabled() {
@@ -533,7 +517,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);
 
         // undo config changes
         if (is_null($oldval)) {
@@ -566,7 +549,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);
 
         // undo config changes
         if (is_null($oldval)) {
@@ -890,7 +872,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);                
 
         $this->assertResponseCode(200);
         $this->assertController('form');
@@ -925,7 +906,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);                
 
         $this->assertResponseCode(200);
         $this->assertController('form');
@@ -959,7 +939,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);
 
         $this->assertNotContains('Undefined index: TitleParentLanguage_1', $this->getResponse()->getBody());
     }
@@ -989,7 +968,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);
 
         $this->assertNotContains('Undefined index: TitleSubLanguage_1', $this->getResponse()->getBody());
     }
@@ -1019,7 +997,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
                 ));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);
 
         $this->assertNotContains('Undefined index: TitleAdditionalLanguage_1', $this->getResponse()->getBody());
     }
@@ -1036,7 +1013,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->request->setPost(array('browseUpInstitute' => 'ignore'));
 
         $this->dispatch('/publish/form/check');
-        $this->deleteTemporaryDoc($doc);
 
         $respBody = $this->getResponse()->getBody();        
         $this->assertContains("<label for='Language'>", $respBody);
@@ -1055,8 +1031,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
         
         $this->dispatch('/publish/form/check');
         
-        $this->deleteTemporaryDoc($doc);
-        
         $this->assertResponseCode(500);
         $this->assertContains('Application_Exception', $this->getResponse()->getBody());
         $this->assertContains('invalid configuration: template file barbaz.phtml is not readable or does not exist', $this->getResponse()->getBody());        
@@ -1073,8 +1047,6 @@ class Publish_FormControllerTest extends ControllerTestCase {
         $this->request->setMethod('POST');
         
         $this->dispatch('/publish/form/check');
-        
-        $this->deleteTemporaryDoc($doc);
         
         $this->assertResponseCode(500);
         $this->assertContains('Application_Exception', $this->getResponse()->getBody());

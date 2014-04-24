@@ -47,17 +47,6 @@ class SolrUpdateTest extends CronTestCase {
         $this->document->store();
     }
 
-    public function tearDown() {
-        if ($this->document instanceof Opus_Document) {
-            try {
-                $this->document->deletePermanent();
-            } catch (Exception $exc) {
-                
-            }
-        }
-        parent::tearDown();
-    }
-
     public function testSolrUpdateIndex() {
         $this->createJob(Opus_Job_Worker_IndexOpusDocument::LABEL, array(
             'documentId' => $this->document->getId(),

@@ -38,15 +38,6 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
 
     private $documentId;
 
-    public function tearDown() {
-        if (!is_null($this->documentId)) {
-            $document = new Opus_Document($this->documentId);
-            $document->deletePermanent();
-        }
-
-        parent::tearDown();
-    }
-
     private function enablePublishNotification() {
         $config = Zend_Registry::get('Zend_Config');
         $config->notification->document->published->enabled = 1;
@@ -270,7 +261,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
     public function testNotificationIsNotSupported() {
         $doc = $this->createDocWithSubmitterAndAuthor('submitter@localhost.de', 'author@localhost.de');
         $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
-        $doc->deletePermanent();
+
         $this->assertNotContains('submitter@localhost.de', $this->getResponse()->getBody());
         $this->assertNotContains('author@localhost.de', $this->getResponse()->getBody());
         $this->assertNotContains('<input type="checkbox" name="submitter" id="submitter"', $this->getResponse()->getBody());
@@ -281,7 +272,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
         $this->enablePublishNotification();
         $doc = $this->createDocWithSubmitterAndAuthor('submitter@localhost.de', 'author@localhost.de');
         $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
-        $doc->deletePermanent();
+
         $this->assertContains('submitter@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('author@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"', $this->getResponse()->getBody());                
@@ -291,7 +282,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
         $this->enablePublishNotification();
         $doc = $this->createDocWithSubmitterAndAuthor('submitter@localhost.de', 'author@localhost.de');
         $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
-        $doc->deletePermanent();
+
         $this->assertContains('submitter@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('author@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('<input type="checkbox" name="author_1" id="author_1" value="1" checked="checked"', $this->getResponse()->getBody());        
@@ -301,7 +292,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
         $this->enablePublishNotification();
         $doc = $this->createDocWithSubmitterAndAuthor('', 'author@localhost.de');
         $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
-        $doc->deletePermanent();
+
         $this->assertNotContains('submitter@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('author@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('<input type="checkbox" name="submitter" id="submitter" value="1" disabled="1"', $this->getResponse()->getBody());
@@ -312,7 +303,7 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
         $this->enablePublishNotification();
         $doc = $this->createDocWithSubmitterAndAuthor('submitter@localhost.de', '');
         $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
-        $doc->deletePermanent();
+
         $this->assertContains('submitter@localhost.de', $this->getResponse()->getBody());
         $this->assertNotContains('author@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('<input type="checkbox" name="submitter" id="submitter" value="1" checked="checked"', $this->getResponse()->getBody());
@@ -343,8 +334,6 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/admin/workflow/changestate/docId/' . $doc->getId() . '/targetState/published');
-        
-        $doc->deletePermanent();
         
         $this->assertContains('submitter@localhost.de', $this->getResponse()->getBody());
         $this->assertContains('author@localhost.de', $this->getResponse()->getBody());

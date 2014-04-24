@@ -71,7 +71,6 @@ class Util_NotificationTest extends ControllerTestCase {
 
         $doc->store();
         $this->notification->prepareMail($doc, Util_Notification::SUBMISSION, 'http://localhost/foo/1');
-        $doc->deletePermanent();        
     }
 
     /**
@@ -106,7 +105,6 @@ class Util_NotificationTest extends ControllerTestCase {
 
         $doc->store();
         $this->notification->prepareMail($doc, Util_Notification::PUBLICATION, 'http://localhost/foo/1');
-        $doc->deletePermanent();
     }
 
     public function testValidateContextWithSubmissionContext() {
@@ -273,7 +271,6 @@ class Util_NotificationTest extends ControllerTestCase {
         $doc->store();
         $method = $this->getMethod('getRecipients');
         $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, array(), $doc));
-        $doc->deletePermanent();
         $this->assertEquals(1, count($recipients));
         $this->assertEquals($recipients[0]['name'], "published@localhost");
         $this->assertEquals($recipients[0]['address'], "published@localhost");
@@ -298,7 +295,6 @@ class Util_NotificationTest extends ControllerTestCase {
 
         $method = $this->getMethod('getRecipients');
         $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, $authors, $doc));
-        $doc->deletePermanent();
 
         $this->assertEquals(2, count($recipients));
         $this->assertEquals($recipients[0]['name'], "Doe, John");
@@ -313,7 +309,7 @@ class Util_NotificationTest extends ControllerTestCase {
         $doc->store();
         $method = $this->getMethod('getRecipients');
         $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, array(), $doc));
-        $doc->deletePermanent();
+
         $this->assertEquals(2, count($recipients));
         $this->assertEquals($recipients[0]['name'], "published@localhost");
         $this->assertEquals($recipients[0]['address'], "published@localhost");
@@ -333,7 +329,7 @@ class Util_NotificationTest extends ControllerTestCase {
 
         $method = $this->getMethod('getRecipients');
         $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, $authors, $doc));
-        $doc->deletePermanent();
+
         $this->assertEquals(3, count($recipients));
         $this->assertEquals($recipients[0]['name'], "published@localhost");
         $this->assertEquals($recipients[0]['address'], "published@localhost");
@@ -360,8 +356,7 @@ class Util_NotificationTest extends ControllerTestCase {
 
         $method = $this->getMethod('getRecipients');
         $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, $authors, $doc));
-        $doc->deletePermanent();
-        
+
         $this->assertEquals(4, count($recipients));
         $this->assertEquals($recipients[0]['name'], "published@localhost");
         $this->assertEquals($recipients[0]['address'], "published@localhost");
@@ -384,7 +379,6 @@ class Util_NotificationTest extends ControllerTestCase {
 
         $method = $this->getMethod('getRecipients');
         $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, array(), $doc));
-        $doc->deletePermanent();
 
         $this->assertEquals(1, count($recipients));
         $this->assertEquals($recipients[0]['name'], "published@localhost");
@@ -424,7 +418,6 @@ class Util_NotificationTest extends ControllerTestCase {
 
         $doc->store();
         $this->notification->prepareMail($doc, Util_Notification::PUBLICATION, 'http://localhost/foo/1', false, array(false, true));
-        $doc->deletePermanent();
     }
 
     public function testGetRecipientsForPublicationContextWithoutSubmitter() {
@@ -450,8 +443,6 @@ class Util_NotificationTest extends ControllerTestCase {
         $this->assertEquals("published@localhost", $recipients[0]["address"]);
         $this->assertEquals("foo", $recipients[1]["name"]);
         $this->assertEquals("foo@localhost", $recipients[1]["address"]);
-        $doc->deletePermanent();
-        
     }
     
     public function testCreateWorkerJobIfAsyncEnabled() {
@@ -468,7 +459,6 @@ class Util_NotificationTest extends ControllerTestCase {
 
         $doc->store();
         $this->notification->prepareMail($doc, Util_Notification::SUBMISSION, 'http://localhost/foo/1');
-        $doc->deletePermanent();        
 
         $mailJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_MailNotification::LABEL));
         

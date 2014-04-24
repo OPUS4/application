@@ -90,7 +90,6 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/browse/series');
 
         $this->restoreSeriesVisibility($visibilities);
-        $d->deletePermanent();
         
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');        
@@ -110,9 +109,8 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $d->addSeries($s)->setNumber('testSeriesAction-7');
         $d->store();
 
-        $this->dispatch('/solrsearch/browse/series');               
-                
-        $d->deletePermanent(); 
+        $this->dispatch('/solrsearch/browse/series');
+
         $this->restoreSeriesVisibility($visibilities);
         
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/7', $this->getResponse()->getBody());

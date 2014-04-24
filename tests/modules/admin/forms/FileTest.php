@@ -35,21 +35,6 @@ class Admin_Form_FileTest extends ControllerTestCase {
 
     private $documentId = null;
 
-    public function tearDown() {
-        if (!is_null($this->documentId)) {
-            try {
-                $document = new Opus_Document($this->documentId);
-
-                $document->deletePermanent();
-            }
-            catch (Opus_Model_NotFoundException $omnfe) {
-                // Model nicht gefunden -> alles gut (hoffentlich)
-            }
-        }
-
-        parent::tearDown();
-    }
-
     public function testConstructForm() {
         $form = new Admin_Form_File();
 

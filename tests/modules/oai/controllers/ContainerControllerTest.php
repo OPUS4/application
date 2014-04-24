@@ -76,9 +76,6 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         $doc->store();
         $this->dispatch('/oai/container/index/docId/' . $doc->getId());
 
-        // cleanup
-        $doc->deletePermanent();
-
         if ($addOaiModuleAccess) {
             $r->removeAccessModule('oai');
             $r->store();
@@ -97,7 +94,6 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
         $doc->setServerState('published');
         $doc->store();
         $this->dispatch('/oai/container/index/docId/' . $doc->getId());
-        $doc->deletePermanent();
         
         $this->assertResponseCode(500);
         $this->assertContains('requested document does not have any associated readable files', $this->getResponse()->getBody());        
@@ -125,7 +121,6 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
 
         // cleanup
         $file->delete();
-        $doc->deletePermanent();
         Opus_Util_File::deleteDirectory($path);
         
         $this->assertResponseCode(500);
@@ -156,7 +151,6 @@ class Oai_ContainerControllerTest extends ControllerTestCase {
 
         // cleanup
         $file->delete();
-        $doc->deletePermanent();
         Opus_Util_File::deleteDirectory($path);
         
         $this->assertResponseCode(200);

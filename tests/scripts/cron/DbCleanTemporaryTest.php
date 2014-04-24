@@ -49,10 +49,6 @@ class DbCleanTemporaryTest extends CronTestCase {
         $this->doc->store();
     }
     
-    public function tearDown() {
-        parent::tearDown();
-    }
-    
     public function testCleanUpDocumentOlderThan2Days() {
         $this->changeDocumentDateModified(3);
         $this->executeScript('cron-db-clean-temporary.php');

@@ -757,10 +757,6 @@ class Export_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/export/index/index/docId/' . $docId . '/export/xmlFd/stylesheet/example');
 
-        $document = null;
-        $document = new Opus_Document($docId);
-        $document->deletePermanent();
-
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
         $this->assertContains('<?xml version="1.0" encoding="utf-8"?>', $response->getBody());

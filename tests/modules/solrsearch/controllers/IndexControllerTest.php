@@ -36,14 +36,6 @@
 class Solrsearch_IndexControllerTest extends ControllerTestCase {
     
     private $docId = null;
-    
-    protected function tearDown() {
-        if (!is_null($this->docId)) {
-            $doc = new Opus_Document($this->docId);
-            $doc->deletePermanent();
-        }
-        parent::tearDown();
-    }
 
     private function doStandardControllerTest($url, $controller, $action) {
         $this->dispatch($url);
@@ -724,7 +716,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $doc = $this->addSampleDocWithMultipleSubjects($numOfSubjects);
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610');
-        $doc->deletePermanent();
 
         for ($index = 0; $index < $config->searchengine->solr->globalfacetlimit; $index++) {
             $path = '/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject';
@@ -756,8 +747,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $doc = $this->addSampleDocWithMultipleSubjects($numOfSubjects);
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610');
-
-        $doc->deletePermanent();
 
         // undo configuration manipulation
         $config = Zend_Registry::get('Zend_Config');
@@ -796,8 +785,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $doc = $this->addSampleDocWithMultipleSubjects($numOfSubjects);
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610');
-
-        $doc->deletePermanent();
 
         // undo configuration manipulation
         $config = Zend_Registry::get('Zend_Config');

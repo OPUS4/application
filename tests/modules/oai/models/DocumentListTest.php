@@ -37,15 +37,6 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
     private $docWithUrnId;
     private $docWoUrnId;
 
-    public function tearDown() {
-        // cleanup
-        $doc = new Opus_Document($this->docWithUrnId);
-        $doc->deletePermanent();
-        $doc = new Opus_Document($this->docWoUrnId);
-        $doc->deletePermanent();
-        parent::tearDown();
-    }
-
     /*
      * Testet, ob beim MetaDataPrefix epicur Dokumente ohne Urn ausgegeben werden.
      */

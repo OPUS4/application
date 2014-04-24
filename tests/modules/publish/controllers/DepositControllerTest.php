@@ -35,22 +35,6 @@
 class Publish_DepositControllerTest extends ControllerTestCase {
     
     private $docId = null;
-    
-    protected function tearDown() {
-        if (!is_null($this->docId)) {
-            $delete = true;
-            try {
-                $doc = new Opus_Document($this->docId);
-            }
-            catch (Opus_Model_NotFoundException $e) {
-                $delete = false;
-            }
-            if ($delete) {
-                $doc->deletePermanent();
-            }            
-        }        
-        parent::tearDown();
-    }
 
     /**
      * Method tests the deposit action with GET request which leads to a redirect (code 302)

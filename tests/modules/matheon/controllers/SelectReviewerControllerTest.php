@@ -36,14 +36,6 @@
 class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
     
     private $docId = null;
-    
-    protected function tearDown() {
-        if (!is_null($this->docId)) {
-            $doc = new Opus_Document($this->docId);
-            $doc->deletePermanent();
-        }
-        parent::tearDown();
-    }
 
     private function createValidDocument($loggedUserId) {
         $document = $this->createTestDocument();

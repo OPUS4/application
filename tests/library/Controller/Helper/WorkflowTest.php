@@ -118,9 +118,6 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
 
         $this->assertEquals('published', $doc->getServerState());
         $this->assertNotNull($doc->getServerDatePublished());
-
-        $doc->delete();
-        $doc->deletePermanent();
     }
 
     public function testChangeStateToDeleted() {
@@ -137,9 +134,6 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
         $doc = new Opus_Document($docId);
 
         $this->assertEquals('deleted', $doc->getServerState());
-
-        $doc->delete();
-        $doc->deletePermanent();
     }
 
     public function testChangeStateToRemoved() {
@@ -175,9 +169,6 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
         $doc = new Opus_Document($docId);
 
         $this->assertEquals('unpublished', $doc->getServerState());
-
-        $doc->delete();
-        $doc->deletePermanent();
     }
 
     public function testIsAllowedTransitionTrue() {

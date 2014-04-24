@@ -46,13 +46,6 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $this->assertNotNull($this->documentId);
     }
 
-    protected function tearDown() {
-        $document = new Opus_Document($this->documentId);
-        $document->deletePermanent();
-
-        parent::tearDown();
-    }
-
     /* Regression-Test OPUSVIER-2738 */
      public function testMultipleIdentifiersInRis() {
         $this->dispatch('/citationExport/index/index/output/ris/docId/153');

@@ -239,8 +239,6 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
         $patents = $document->getPatent();
         $patent = $patents[0];
         
-        $document->deletePermanent();
-        
         $this->assertEquals('323', $patent->getNumber());
         $this->assertNotEquals('0000', $patent->getYearApplied());
         $this->assertNull($patent->getYearApplied());

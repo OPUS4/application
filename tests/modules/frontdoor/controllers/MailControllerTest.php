@@ -75,12 +75,6 @@ class Frontdoor_MailControllerTest extends ControllerTestCase {
     }
 
     protected function tearDown() {
-        $document = new Opus_Document($this->documentId);
-        $document->deletePermanent();
-
-        $document = new Opus_Document($this->authorDocumentId);
-        $document->deletePermanent();
-
         $person = new Opus_Person($this->authorId);
         $person->delete();
         

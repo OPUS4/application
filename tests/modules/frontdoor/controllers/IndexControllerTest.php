@@ -562,8 +562,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/frontdoor/index/index/docId/' . $doc->getId());
         
-        $doc->deletePermanent();
-        
         $this->assertContains('<li class="abstract preserve-spaces">' . "foo\nbar\n\nbaz</li>",
             $this->getResponse()->getBody());
     }
@@ -581,8 +579,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/frontdoor/index/index/docId/' . $doc->getId());
-        
-        $doc->deletePermanent();
         
         $this->assertContains('<pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre>",
             $this->getResponse()->getBody());

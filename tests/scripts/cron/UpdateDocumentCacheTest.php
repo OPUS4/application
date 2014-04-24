@@ -47,11 +47,6 @@ class UpdateDocumentCacheTest extends CronTestCase {
         $this->document->store();
     }
 
-    public function tearDown() {
-        $this->document->deletePermanent();
-        parent::tearDown();
-    }
-
     public function testUpdateOnLicenceChange() {
 
         $documentCacheTable = new Opus_Db_DocumentXmlCache();

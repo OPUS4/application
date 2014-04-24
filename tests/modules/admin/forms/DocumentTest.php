@@ -172,8 +172,6 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
-
-        $document = $this->createTestDocument();
         $document->addTitleMain(new Opus_Title());
 
         $form->populateFromModel($document);
@@ -212,8 +210,6 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
         $form = new Admin_Form_Document();
 
         $document = $this->createTestDocument();
-
-        $document = $this->createTestDocument();
         $document->addTitleMain(new Opus_Title());
 
         $form->populateFromModel($document);
@@ -250,8 +246,6 @@ class Admin_Form_DocumentTest extends ControllerTestCase {
      */
     public function testIsValidFalseDependency2() {
         $form = new Admin_Form_Document();
-
-        $document = $this->createTestDocument();
 
         $document = $this->createTestDocument();
         $document->addTitleMain(new Opus_Title());
