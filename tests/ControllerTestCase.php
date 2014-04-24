@@ -97,7 +97,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      */
     protected function tearDown() {
         $this->logoutUser();
-        $this->deleteTestDocuments();
+        if (!is_null($this->testDocuments)) {
+            $this->deleteTestDocuments();
+        }
         parent::tearDown();
     }
 
@@ -171,6 +173,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         if (!is_null($instance)) {
             $instance->clearIdentity();
         }
+        Opus_Security_Realm::clearInstance();
     }
 
     /**
@@ -484,19 +487,17 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     }
 
     private function deleteTestDocuments() {
-        if (isset($this->testDocuments)) {
-            foreach ($this->testDocuments as $key => $doc) {
-                try {
-                    $this->removeDocument($doc);
-                    unset ($this->testDocuments[$key]);
-                } catch (Exception $e) {
-                }
+        foreach ($this->testDocuments as $key => $doc) {
+            try {
+                $this->removeDocument($doc);
+                unset ($this->testDocuments[$key]);
+            } catch (Exception $e) {
             }
         }
     }
 
     protected function createTestDocument() {
-        if (!isset($this->testDocuments)) {
+        if (is_null($this->testDocuments)) {
             $this->testDocuments = array();
         }
         $doc = new Opus_Document ();
