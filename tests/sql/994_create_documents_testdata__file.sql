@@ -12,11 +12,11 @@ INSERT INTO `document_title_abstracts` (`id`, `document_id`, `type`, `value`, `l
 (450, 160, 'main', 'Dokument mit Datei zum Löschen beim Testen (Selenium)', 'deu');
 
 
-INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `mime_type`, `language`, `file_size`, `visible_in_frontdoor`, `visible_in_oai`) VALUES
-(121, 120, 'Dies_ist_ein_ganz_besonders_langer_Dateiname.pdf', 'Dies_ist_ein_ganz_besonders_langer_Dateiname.pdf', 'application/pdf', 'eng', 72603, 1, 1),
-(122, 121, 'Dateiname_ohne_Dateilabel.pdf', NULL, 'application/pdf', 'eng', 72603, 1, 1),
-(123, 122, 'Datei_unsichtaber_in_Frontdoor.pdf', 'Datei_unsichtaber_in_Frontdoor.pdf', 'application/pdf', 'eng', 72603, 0, 1),
-(140, 160, 'deleteme.pdf', 'Datei_zum_loeschen.pdf', 'application/pdf', 'eng', 8817, 1, 1);
+INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `mime_type`, `language`, `file_size`, `visible_in_frontdoor`, `visible_in_oai`, `server_date_submitted`) VALUES
+(121, 120, 'Dies_ist_ein_ganz_besonders_langer_Dateiname.pdf', 'Dies_ist_ein_ganz_besonders_langer_Dateiname.pdf', 'application/pdf', 'eng', 72603, 1, 1, NOW() ),
+(122, 121, 'Dateiname_ohne_Dateilabel.pdf', NULL, 'application/pdf', 'eng', 72603, 1, 1, NOW() ),
+(123, 122, 'Datei_unsichtaber_in_Frontdoor.pdf', 'Datei_unsichtaber_in_Frontdoor.pdf', 'application/pdf', 'eng', 72603, 0, 1, NOW() ),
+(140, 160, 'deleteme.pdf', 'Datei_zum_loeschen.pdf', 'application/pdf', 'eng', 8817, 1, 1, NOW() );
 
 INSERT INTO `file_hashvalues` (`file_id`, `type`, `value`) VALUES
 (122,'md5','1ba50dc8abc619cea3ba39f77c75c0fe'),

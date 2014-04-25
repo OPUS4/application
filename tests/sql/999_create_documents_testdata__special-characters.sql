@@ -9,9 +9,9 @@ INSERT INTO `document_title_abstracts` (`document_id`, `type`, `value`, `languag
 (150, 'main', 'Autoren mit einem, zwei und drei LaTex-Umlauten, die in den Urls auf der Frontdoor korrekt escaped werden müssen, siehe auch Ticket OPUSVIER-2435.', 'deu'),
 (152, 'main', 'Dokumenttitel mit Sonderzeichen %-"-#-&,  vgl. OPUSVIER-2716.', 'deu');
 
-INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `mime_type`, `language`, `file_size`, `visible_in_frontdoor`, `visible_in_oai`) VALUES
-(130, 147, 'special-chars-%-"-#-&.pdf', 'Dateiname-mit-Sonderzeichen.pdf', 'application/pdf', 'eng', 1, 1, 1),
-(131, 147, '\'many\'  -  spaces  and  quotes.pdf', 'Dateiname-mit-vielen-Spaces-und-Quotes.pdf', 'application/pdf', 'eng', 1, 1, 1);
+INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `mime_type`, `language`, `file_size`, `visible_in_frontdoor`, `visible_in_oai`, `server_date_submitted`) VALUES
+(130, 147, 'special-chars-%-"-#-&.pdf', 'Dateiname-mit-Sonderzeichen.pdf', 'application/pdf', 'eng', 1, 1, 1, NOW() ),
+(131, 147, '\'many\'  -  spaces  and  quotes.pdf', 'Dateiname-mit-vielen-Spaces-und-Quotes.pdf', 'application/pdf', 'eng', 1, 1, 1, NOW() );
 
 INSERT INTO `access_files` (`role_id`, `file_id`) VALUES
 (2,130),
