@@ -82,6 +82,11 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
         }
     }
 
+    public function setStatisticYearBreadcrumb($year) {
+        $page = $this->getNavigation()->findOneBy('label', 'admin_statistic_show');
+        $page->setLabel($year);
+    }
+
     /**
      * Setzt Parameter fuer einen Breadcrumb.
      *

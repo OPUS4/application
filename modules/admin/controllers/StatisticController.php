@@ -85,5 +85,7 @@ class Admin_StatisticController extends Controller_Action {
 
         $this->view->typeStat = $this->statisticsModel->getTypeStatistics($selectedYear);
         $this->view->instStat = $this->statisticsModel->getInstituteStatistics($selectedYear);
+
+        $this->_breadcrumbs->setStatisticYearBreadcrumb($selectedYear);
     }
 }

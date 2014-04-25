@@ -67,5 +67,16 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//dt', 'Please select year:');
         $this->assertNotQueryContentContains('//h2', 'Month overview');
     }
+
+    public function testDisplayCurrentYear() {
+        $this->useGerman();
+        $this->request
+                ->setMethod('POST')
+                ->setPost(array('selectedYear' => '2010'));
+        $this->dispatch('/admin/statistic/show');
+        $this->assertQueryContentContains('//div[@class="breadcrumbsContainer"]', '2010', 'breadcrumbsContainer does ' .
+            'not contain the current year');
+        $this->assertQueryContentContains('//h1', 'Veröffentlichungstatistik (2010)');
+    }
 }
 
