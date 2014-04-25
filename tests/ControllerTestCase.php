@@ -478,8 +478,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     public function removeDocument($document) {
         if (!is_null($document)) {
             try {
-                $doc = ($document instanceof Opus_Document) ? $document : new Opus_Document($document);
-
+                $doc = ($document instanceof Opus_Document) ? new Opus_Document($document->getId()) : new Opus_Document($document);
                 $doc->deletePermanent();
             }
             catch (Opus_Model_NotFoundException $omnfe) {
