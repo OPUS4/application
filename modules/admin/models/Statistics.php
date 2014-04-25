@@ -22,7 +22,7 @@ class Admin_Model_Statistics {
     }
 
     private function fillResultArray($select, $name) {
-
+        $statistics = array();
         $result = $select->fetchAll();
         foreach($result as $row) {
             $statistics[$row[$name]] = $row['c'];

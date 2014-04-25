@@ -24,48 +24,48 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
- * @author      Jens Schwidder <schwidder@zib.de>
+ * @author      Michael Lang <lang@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Admin_StatisticControllerTest extends ControllerTestCase {
+class Admin_Model_StatisticsTest extends ControllerTestCase {
 
-    public function testIndexAction() {
-        $this->dispatch('/admin/statistic');
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('statistic');
-        $this->assertAction('index');
-    }
-
-    public function testShowAction() {
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array('selectedYear' => '2010'));
-        $this->dispatch('/admin/statistic/show');
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('statistic');
-        $this->assertAction('show');
+    /*
+     * tests, if publication count of institute statistics is correct
+     */
+    public function testInstituteStatistics() {
+        $statistics = new Admin_Model_Statistics();
+        $institutes = $statistics->getInstituteStatistics(2010);
+        $this->assertTrue( $institutes['Technische Universität Hamburg-Harburg'] == 94, 'wrong publication count of Technische Universität Hamburg-Harburg returned' );
     }
 
     /*
-     * Fragt ab, ob bei einem falschen Jahr die Indexseite angezeigt wird
+     * tests, if publication count of month statistics is correct
      */
-    public function testIndexActionWithWrongYear() {
-        $this->request
-            ->setMethod('POST')
-            ->setPost(array('selectedYear' => '1337'));
-        $this->dispatch('/admin/statistic/index');
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
-        $this->assertController('statistic');
-        $this->assertAction('index');
-        $this->assertQueryContentContains('//dt', 'Please select year:');
-        $this->assertNotQueryContentContains('//h2', 'Month overview');
+    public function testMonthStatistics() {
+        $statistics = new Admin_Model_Statistics();
+        $months = $statistics->getMonthStatistics(2010);
+        $this->assertTrue( $months[1] == 16, 'wrong publication count of month Jan returned');
+    }
+
+    /*
+     * tests, if publication count of type statistics is correct
+     */
+    public function testTypeStatistics() {
+        $statistics = new Admin_Model_Statistics();
+        $types = $statistics->getTypeStatistics(2010);
+        $this->assertTrue( $types['article'] == 15, 'wrong publication count of Article returned' );
+    }
+
+    /*
+     * tests, if the right number of documents has been published until 2010
+     */
+    public function testNumDocsUntil() {
+        $statistics = new Admin_Model_Statistics();
+        $numOfDocsUntil2010 = $statistics->getNumDocsUntil(2010);
+        $this->assertTrue( $numOfDocsUntil2010 == 107, 'wrong publication count of documents from the first year to 2010');
     }
 }
-
+ 
