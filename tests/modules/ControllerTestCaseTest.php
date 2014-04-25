@@ -32,16 +32,22 @@
  */
 class ControllerTestCaseTest extends ControllerTestCase {
 
+    public function tearDown() {
+        $this->restoreSecuritySetting();
+        parent::tearDown();
+    }
+
     /**
      * Prüft, ob der User eingeloggt wurde.
      *
      * Dient der Vorbereitung von Test "testTearDownDidLogout".
      */
     public function testLoginAdmin() {
+        $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
         $realm = Opus_Security_Realm::getInstance();
 
-        $this->assertContains('administrator', $realm->getRoles());
+        $this->assertContains('administrator', $realm->getRoles(), Zend_Debug::dump($realm->getRoles(), null, false));
     }
 
     /**
@@ -50,8 +56,9 @@ class ControllerTestCaseTest extends ControllerTestCase {
      * Regression Test für OPUSVIER-3283
      */
     public function testTearDownDidLogout() {
+        $this->enableSecurity();
         $realm = Opus_Security_Realm::getInstance();
         $this->assertNotContains('administrator', $realm->getRoles());
     }
-    
+
 }
