@@ -274,11 +274,10 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         $domDoc = new DOMDocument();
         $domDoc->load($this::getDocTypesPath() . '/' . $filename . '.xml');
         $isValid = 0;
-        $schemaFile = 'https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd';
         libxml_clear_errors();
         libxml_use_internal_errors(true);
         try {
-            $isValid = $domDoc->schemaValidate($schemaFile);
+            $isValid = $domDoc->schemaValidate(APPLICATION_PATH . $this->config->doctype->validation->schema);
             $this->errors[$filename] = libxml_get_errors();
         }
         catch (Exception $e) {
