@@ -56,12 +56,12 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
     /*
      * Testet, ob die Validierung der Dokumenttypen korrekt ist.
      */
-    public function testDoctypeModel() {
-        $validationArray = $this->docTypeHelper->getDocumentValidation();
+    public function testDoctypeValidation() {
+        $validationArray = $this->docTypeHelper->validateDocuments();
         $this->assertTrue($validationArray['foobar'], 1);
         $this->assertTrue($validationArray['bazbar'], 1);
-        $this->assertTrue($validationArray['demo_invalidfieldname'] === 0);
-        $this->assertTrue($validationArray['demo_invalid'] === 0);
+        $this->assertFalse($validationArray['demo_invalidfieldname']);
+        $this->assertFalse($validationArray['demo_invalid']);
     }
 
     /*
@@ -80,10 +80,13 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
      * Testet, ob die korrekte Fehlermeldung ausgegeben wird, wenn das Dokument nicht validiert werden kann
      */
     public function testErrorMessage() {
-        $this->docTypeHelper->getValidation('demo_invalid');
+        $this->docTypeHelper->validate('demo_invalid');
         $errors = $this->docTypeHelper->getErrors();
-        $this->assertTrue($errors['demo_invalid'] === "DOMDocument::schemaValidate(): Element ".
-            "'{http://schemas.opus.org/documenttype}field', attribute 'dataType': The attribute 'dataType' is not allowed.");
+        $demoInvalidErrors = $errors['demo_invalid'];
+        $this->assertEquals($demoInvalidErrors[0]->message, "Element '{http://schemas.opus.org/documenttype}field', ".
+            "attribute 'dataType': The attribute 'dataType' is not allowed.\n");
+        $this->assertEquals($demoInvalidErrors[1]->message, "Element '{http://schemas.opus.org/documenttype}default', ".
+            "attribute 'Value': The attribute 'Value' is not allowed.\n");
     }
 
     /**

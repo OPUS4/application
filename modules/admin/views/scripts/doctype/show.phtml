@@ -34,4 +34,6 @@
 
 <h2><?= $this->translate('admin_doctype_show_message').$this->doctypeName ?></h2>
 
-<?= $this->err ?>
+<?PHP foreach ($this->errorArray as $error) : ?>
+    <?= $error->message ?> <br> <br>
+<?PHP endforeach ?>

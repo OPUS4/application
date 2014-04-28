@@ -245,29 +245,41 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         return $result;
     }
 
-    public function getDocumentValidation() {
+    /*
+     * validates all document types in folder getDocTypesPath()
+     * returns an array ($filename => bool)
+     */
+    public function validateDocuments() {
         $documents = array();
         if ($handle = opendir($this::getDocTypesPath())) {
             while(false !== ($file = readdir($handle))) {
                 $fileInfo = explode('.', $file);
                 if (strlen($file) >= 4 && $fileInfo[1] == 'xml') {
-                    $documents[$fileInfo[0]] = $this->getValidation($fileInfo[0]);
+                    $documents[$fileInfo[0]] = $this->validate($fileInfo[0]);
                 }
             }
         }
         return $documents;
     }
 
-    public function getValidation($filename) {
+    /*
+     * validates a single file
+     * writes errors into array $this->errors ($filename, libXMLError)
+     * returns bool
+     */
+    public function validate($filename) {
         if (is_null($this->errors)) {
             $this->errors = array();
         }
         $domDoc = new DOMDocument();
         $domDoc->load($this::getDocTypesPath() . '/' . $filename . '.xml');
         $isValid = 0;
+        $schemaFile = 'https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd';
+        libxml_clear_errors();
+        libxml_use_internal_errors(true);
         try {
-            $isValid = $domDoc->schemaValidate(
-                'https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd');
+            $isValid = $domDoc->schemaValidate($schemaFile);
+            $this->errors[$filename] = libxml_get_errors();
         }
         catch (Exception $e) {
             $this->errors[$filename] = $e->getMessage();

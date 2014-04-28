@@ -45,7 +45,7 @@ class Admin_DoctypeController extends Controller_Action {
     }
 
     public function indexAction() {
-        $validationArray = $this->documentTypesHelper->getDocumentValidation();
+        $validationArray = $this->documentTypesHelper->validateDocuments();
         ksort($validationArray);
         $this->view->content = $validationArray;
         $this->view->activeDoctypes = $this->documentTypesHelper->getDocumentTypes();
@@ -60,7 +60,9 @@ class Admin_DoctypeController extends Controller_Action {
     public function showAction() {
         $document = $this->getRequest()->getParam('document');
         $this->view->doctypeName = $document . ':';
-        $this->view->err = $this->documentTypesHelper->getValidation($document);
+        $this->documentTypesHelper->validate($document);
+        $errors = $this->documentTypesHelper->getErrors();
+        $this->view->errorArray = $errors[$document];
         $this->view->title = $document;
         $this->_breadcrumbs->setDoctypeValidationShow($document);
     }
