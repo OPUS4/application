@@ -87,6 +87,11 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
         $page->setLabel($year);
     }
 
+    public function setDoctypeValidationShow($doctype) {
+        $page = $this->getNavigation()->findOneBy('label', 'admin_doctype_show');
+        $page->setLabel($doctype);
+    }
+
     /**
      * Setzt Parameter fuer einen Breadcrumb.
      *

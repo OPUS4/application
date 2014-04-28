@@ -31,21 +31,30 @@
  * @version     $Id$
  */
 ?>
-<? $this->title = $this->translate('admin_doctype_index'); ?>
-<?= $this->translate((!in_array(0, $this->content)) ? 'admin_doctype_noerrors' : 'admin_doctype_errors') ?>
+<h4>
+    <?= $this->numDocs ?> <br>
+    <?= $this->numActiveDocs ?>
+</h4>
+<?= $this->errorStatus ?>
 
-<table>
-    <tr>
-        <th><?= $this->translate('admin_doctype_document') ?></th>
-        <th><?= $this->translate('admin_doctype_status') ?></th>
-        <th><?= $this->translate('admin_doctype_error') ?></th>
-    </tr>
+<table class="collections">
+    <thead>
+        <tr>
+            <th><?= $this->translate('admin_doctype_document') ?></th>
+            <th><?= $this->translate('admin_doctype_status') ?></th>
+            <th><?= $this->translate('admin_doctype_error') ?></th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
 
     <?PHP foreach ($this->content as $document => $validation) : ?>
-        <tr id="<?= $document ?>" class="admin_doctype <?= ($validation) ? '' : 'admin_doctype_fail' ?>" >
+        <tr id="<?= $document ?>" class="admin_doctype <?= ($validation) ? '' : 'admin_doctype_fail' ?>
+                                               <?= in_array($document, $this->activeDoctypes) ? '' : 'invisible' ?>" >
             <td><?= $document ?></td>
-            <td><?= in_array($document, $this->activeDoctypes) ? $this->translate('admin_doctype_active') : $this->translate('admin_doctype_inactive') ?></td>
-            <td><a href="<?= 'doctype/show/document/' . $document?>"><?= ($validation) ? '' : $this->translate('admin_doctype_errorMsg')?></a></td>
+            <td><?= in_array($document, $this->activeDoctypes) ? $this->translate('admin_doctype_active') :
+                    $this->translate('admin_doctype_inactive') ?></td>
+            <td><a href="<?= 'doctype/show/document/' . $document?>"><?= ($validation) ? '' :
+                        $this->translate('admin_doctype_errorMsg')?></a></td>
         </tr>
     <?PHP endforeach ?>
 </table>

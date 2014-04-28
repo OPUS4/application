@@ -848,7 +848,6 @@
                         <doctype>
                             <type>mvc</type>
                             <label>admin_title_doctype</label>
-                            <description>admin_title_doctype_description</description>
                             <group>group-chocolate</group>
                             <module>admin</module>
                             <controller>doctype</controller>

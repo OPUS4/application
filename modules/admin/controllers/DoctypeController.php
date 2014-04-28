@@ -26,34 +26,42 @@
  */
 
 /**
- * Controller für die Anzeige von Validierung von Dokumenten.
+ * Dieser Controller zeigt alle Dokumenttypen an und deren Validierungsstatus (einschließlich möglicher Fehlermeldungen).
  *
  * @category    Application
  * @package     Module_Admin
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 class Admin_DoctypeController extends Controller_Action {
 
-    private $doctypeModel;
+    private $documentTypesHelper;
 
     public function init() {
         parent::init();
-        $this->doctypeModel = new Admin_Model_Doctypes(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'application/configs/doctypes/');
+        $this->documentTypesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
     }
 
     public function indexAction() {
-        $validationArray = $this->doctypeModel->getDocumentValidation();
+        $validationArray = $this->documentTypesHelper->getDocumentValidation();
         ksort($validationArray);
         $this->view->content = $validationArray;
-        $this->view->activeDoctypes = $this->doctypeModel->getActiveDoctypes();
+        $this->view->activeDoctypes = $this->documentTypesHelper->getDocumentTypes();
+        $this->view->title = $this->view->translate('admin_doctype_index');
+        $this->view->numDocs = $this->view->translate('admin_doctype_numDocs') . ": " . sizeof($validationArray);
+        $this->view->numActiveDocs = $this->view->translate('admin_doctype_numActiveDocs') . ": " .
+            sizeof($this->view->activeDoctypes);
+        $this->view->errorStatus = $this->view->translate((!in_array(0, $validationArray)) ?
+            '' : 'admin_doctype_errors');
     }
 
     public function showAction() {
         $document = $this->getRequest()->getParam('document');
         $this->view->doctypeName = $document . ':';
-        $this->view->err = $this->doctypeModel->getValidation($document);
+        $this->view->err = $this->documentTypesHelper->getValidation($document);
+        $this->view->title = $document;
+        $this->_breadcrumbs->setDoctypeValidationShow($document);
     }
 }

@@ -52,6 +52,12 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
     private $docTypes;
 
     /**
+     * Variable to store errors of document-type validation
+     * @var array ($documentType => $errorMessage)
+     */
+    private $errors;
+
+    /**
      * Constructs instances.
      */
     public function __construct() {
@@ -121,9 +127,11 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         libxml_clear_errors();
         libxml_use_internal_errors(true);
 
-        if (!$dom->schemaValidate(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'Opus' .  DIRECTORY_SEPARATOR . 'Document' . DIRECTORY_SEPARATOR . 'documenttype.xsd')) {
+        if (!$dom->schemaValidate(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'Opus' .
+                DIRECTORY_SEPARATOR . 'Document' . DIRECTORY_SEPARATOR . 'documenttype.xsd')) {
             libxml_clear_errors();
-            throw new Application_Exception('given xml document type definition for document type ' . $documentType . ' is not valid');
+            throw new Application_Exception('given xml document type definition for document type ' . $documentType .
+                ' is not valid');
         }
 
         return $dom;
@@ -235,6 +243,41 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         $result = explode(',', $str);
         Util_Array::trim($result);
         return $result;
+    }
+
+    public function getDocumentValidation() {
+        $documents = array();
+        if ($handle = opendir($this::getDocTypesPath())) {
+            while(false !== ($file = readdir($handle))) {
+                $fileInfo = explode('.', $file);
+                if (strlen($file) >= 4 && $fileInfo[1] == 'xml') {
+                    $documents[$fileInfo[0]] = $this->getValidation($fileInfo[0]);
+                }
+            }
+        }
+        return $documents;
+    }
+
+    public function getValidation($filename) {
+        if (is_null($this->errors)) {
+            $this->errors = array();
+        }
+        $domDoc = new DOMDocument();
+        $domDoc->load($this::getDocTypesPath() . '/' . $filename . '.xml');
+        $isValid = 0;
+        try {
+            $isValid = $domDoc->schemaValidate(
+                'https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd');
+        }
+        catch (Exception $e) {
+            $this->errors[$filename] = $e->getMessage();
+            return 0;
+        }
+        return $isValid;
+    }
+
+    public function getErrors () {
+        return $this->errors;
     }
 
 }

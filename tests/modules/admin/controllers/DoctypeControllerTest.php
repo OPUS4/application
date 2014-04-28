@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -23,62 +23,35 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * Klasse fuer die Handhabung von Datei-Hashes.
  *
- * @category    Application
- * @package     Admin_Model
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_Model_Doctypes {
+class Admin_DoctypeControllerTest extends ControllerTestCase {
 
-    private $path;
-    private $errors;
-    private $documentTypesHelper;
-
-    public function __construct($path) {
-        $this->path = $path;
-        $this->documentTypesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-        $this->errors = array();
+    /*
+     * Ruft die Dokumenttyp-Validierungsseite auf und prüft ob diese korrekt angezeigt wird
+     */
+    public function testDoctypePage() {
+        $this->useEnglish();
+        $this->dispatch('/admin/doctype/index');
+        $this->assertResponseCode(200);
+        $this->assertQuery('//a[@href="doctype/show/document/demo_invalid"]');
+        $this->assertQueryContentContains('//div', 'The red-marked document types are not valid.');
+        $this->assertQueryContentContains('//td', 'article');
+        $this->assertQueryContentContains('//td', 'active');
     }
 
-    public function getDocumentValidation() {
-        $documents = array();
-        if ($handle = opendir($this->path)) {
-            while(false !== ($file = readdir($handle))) {
-                $fileInfo = explode('.', $file);
-                if (strlen($file) >= 4 && $fileInfo[1] == 'xml') {
-                    $documents[$fileInfo[0]] = $this->getValidation($fileInfo[0]);
-                }
-            }
-        }
-        return $documents;
-    }
-
-    public function getValidation($filename) {
-        $domDoc = new DOMDocument();
-        $domDoc->load($this->path . $filename . '.xml');
-        $isValid = 0;
-        try {
-            $isValid = $domDoc->schemaValidate('https://svn.zib.de/opus4dev/framework/trunk/library/Opus/Document/documenttype.xsd');
-        }
-        catch (Exception $e) {
-            $this->errors[$filename] = $e->getMessage();
-            return 0;
-        }
-        return $isValid;
-    }
-
-    public function getErrors () {
-        return $this->errors;
-    }
-
-    public function getActiveDoctypes() {
-        return $this->documentTypesHelper->getDocumentTypes();
+    /*
+     * Ruft die Fehlerseite für einzelne Dokumenttypen auf und prüft ob diese korrekt angezeigt wird
+     */
+    public function testDoctypeErrorMessagePage() {
+        $this->useEnglish();
+        $this->dispatch('/admin/doctype/show/document/demo_invalid');
+        $this->assertResponseCode(200);
+        $this->assertQueryContentContains('//h2', 'Error message of document type demo_invalid:');
     }
 }
+ 

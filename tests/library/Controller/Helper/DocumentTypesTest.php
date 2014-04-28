@@ -49,9 +49,41 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
      */
     public function setUp() {
         parent::setUp();
+        $this->docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+    }
 
-        $this->docTypeHelper =
-                Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+
+    /*
+     * Testet, ob die Validierung der Dokumenttypen korrekt ist.
+     */
+    public function testDoctypeModel() {
+        $validationArray = $this->docTypeHelper->getDocumentValidation();
+        $this->assertTrue($validationArray['foobar'], 1);
+        $this->assertTrue($validationArray['bazbar'], 1);
+        $this->assertTrue($validationArray['demo_invalidfieldname'] === 0);
+        $this->assertTrue($validationArray['demo_invalid'] === 0);
+    }
+
+    /*
+     * Testet, ob die Dokumenttypen, die inkludiert oder exkludiert sind, ausgegeben werden
+     */
+    public function testActiveDoctypes() {
+        $validationArray = $this->docTypeHelper->getDocumentTypes();
+        $this->assertTrue(in_array('all', $validationArray));
+        $this->assertTrue(in_array('preprint', $validationArray));
+        $this->assertTrue(in_array('demo_invalid', $validationArray));
+        $this->assertTrue(in_array('foobar', $validationArray));
+        $this->assertFalse(in_array('article', $validationArray));
+    }
+
+    /*
+     * Testet, ob die korrekte Fehlermeldung ausgegeben wird, wenn das Dokument nicht validiert werden kann
+     */
+    public function testErrorMessage() {
+        $this->docTypeHelper->getValidation('demo_invalid');
+        $errors = $this->docTypeHelper->getErrors();
+        $this->assertTrue($errors['demo_invalid'] === "DOMDocument::schemaValidate(): Element ".
+            "'{http://schemas.opus.org/documenttype}field', attribute 'dataType': The attribute 'dataType' is not allowed.");
     }
 
     /**
@@ -204,15 +236,15 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
      */
     public function testValidateAllXMLDocumentTypeDefinitions() {
         $iterator = new DirectoryIterator($this->docTypeHelper->getDocTypesPath());
-        
+
         // Enable user error handling while validating input file
         libxml_clear_errors();
         libxml_use_internal_errors(true);
-        
+
         foreach ($iterator as $fileinfo) {
             if ($fileinfo->isFile()) {
                 $this->assertTrue($fileinfo->isReadable(), $fileinfo->getFilename() . ' is not readable');
-                
+
                 $xml = new DOMDocument();
                 $xml->load($fileinfo->getPathname());
 		$result = $xml->schemaValidate(APPLICATION_PATH . '/library/Opus/Document/documenttype.xsd');
