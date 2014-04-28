@@ -307,6 +307,34 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         Opus_Util_File::deleteDirectory(dirname($filepath1));
     }
 
+    public function testRegression3281() {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('unpublished');
+        $docId = $doc->store();
+
+        $this->buildContainerWithoutAccess($docId);
+
+        $doc = new Opus_Document($docId);
+        $doc->setServerState('publish');
+        $this->enableSecurity();
+
+        $this->buildContainerWithoutAccess($docId);
+    }
+
+    private function buildContainerWithoutAccess($docId) {
+        $model = new Oai_Model_Container($docId);
+        $tarball = null;
+        $exceptionMessage = null;
+        try {
+            $tarball = $model->getFileHandle();
+        }
+        catch (Oai_Model_Exception $e) {
+            $exceptionMessage = $e->getMessage();
+        }
+        $this->assertEquals('access to requested document is forbidden', $exceptionMessage);
+
+    }
+
     private function createTestFile($filename) {        
         $path = $this->workspacePath . DIRECTORY_SEPARATOR . uniqid();
         mkdir($path, 0777, true);
