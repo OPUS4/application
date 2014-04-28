@@ -42,15 +42,10 @@ echo
 
 #
 # Build tarball
-# The tmp-file is a workaround, because it is not possible in a tar command to have a colon both in filename and in the compressed files
 #
-
 echo "files included in tarball:"
-tar czvf tmp.tgz $(basename $2)
-mv tmp.tgz $(basename $2).tgz
-#cd $2
-#tar czvf ../$(basename $2).tgz opus4 workspace libs solrconfig apacheconf install testdata CHANGES.txt RELEASE_NOTES.txt MD5SUMS VERSION.txt gpl-3.0.txt releases opus_dokumentation_de.pdf
-
+filename=$(basename $2)
+tar czvf "$filename".tgz "$filename"
 
 #
 # Compute MD5 and SHA512 hashes
