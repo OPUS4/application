@@ -39,7 +39,6 @@ class Admin_InfoController extends Controller_Action {
 
     public function indexAction() {
         $this->view->info = new Admin_Model_OpusInfo();
-
         $config = Zend_Registry::get('Zend_Config');
 
         if (isset($config->publish->maxfilesize)) {
@@ -47,20 +46,10 @@ class Admin_InfoController extends Controller_Action {
         } else {
             $this->view->maxfilesize = $this->view->translate('admin_info_error_not_set');
         }
-
         $this->view->postMaxSize = ini_get('post_max_size');
         $this->view->uploadMaxFilesize = ini_get('upload_max_filesize');
-
         $this->view->versionLabel = $this->compareVersion();
     }
-
-    /**
-     * TODO review functionality and create ticket
-     */
-    public function phpinfoAction() {
-        $this->_helper->layout()->disableLayout();
-    }
-
 
     private function compareVersion() {
         $this->versionFile = APPLICATION_PATH .DIRECTORY_SEPARATOR . "VERSION.txt";
@@ -71,11 +60,9 @@ class Admin_InfoController extends Controller_Action {
         if (is_null($localVersion)) {
             return '';
         }
-
         if (is_null($latestVersion)) {
             return '';
         }
-
         if ($localVersion == $latestVersion) {
             return 'version_latest';
         }
@@ -83,6 +70,5 @@ class Admin_InfoController extends Controller_Action {
             $this->view->versionUpdate = 'version_get_Update';
             return 'version_outdated';
         }
-
     }
 }
