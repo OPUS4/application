@@ -148,18 +148,16 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
     }
 
     public function testDocumentWithRestrictedFile() {
-        $filepath = $this->createTestFile('foo.pdf');
+        $filename = 'foo.pdf';
+        $file = $this->createTestFile($filename);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new Opus_File();
-        $file->setPathName(basename($filepath));
-        $file->setTempFile($filepath);
         $file->setVisibleInOai(false);
         $doc->addFile($file);
         $doc->store();
 
-        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($filepath)));
+        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($this->testFiles[$filename])));
 
         $model = new Oai_Model_Container($doc->getId());
         $tarball = null;
@@ -170,7 +168,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
             $this->assertEquals('access denied on all files that are associated to the requested document', $e->getMessage());
         }
         $this->assertTrue(is_null($tarball));
-        Opus_Util_File::deleteDirectory(dirname($filepath));
+        Opus_Util_File::deleteDirectory(dirname($this->testFiles[$filename]));
     }
 
     public function testDocumentWithNonExistentFile() {       
@@ -194,18 +192,16 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
     }
 
     public function testDocumentWithSingleUnrestrictedFile() {
-        $filepath = $this->createTestFile('test.txt');
+        $filename = 'test.txt';
+        $file = $this->createTestFile($filename);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new Opus_File();
-        $file->setPathName(basename($filepath));
-        $file->setTempFile($filepath);
         $file->setVisibleInOai(true);
         $doc->addFile($file);
         $doc->store();
 
-        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($filepath)));
+        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($this->testFiles[$filename])));
 
         $model = new Oai_Model_Container($doc->getId());
         $file = $model->getFileHandle();
@@ -214,30 +210,28 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         // TODO OPUSVIER-2503
         $this->assertTrue($file->getMimeType() == 'application/x-empty' || $file->getMimeType() == 'inode/x-empty');
 
-        Opus_Util_File::deleteDirectory(dirname($filepath));
+        Opus_Util_File::deleteDirectory(dirname($this->testFiles[$filename]));
         unlink($file->getPath());
     }
 
     public function testDocumentWithTwoUnrestrictedFiles() {
-        $filepath1 = $this->createTestFile('foo.pdf');
-        $filepath2 = $this->createTestFile('bar.pdf');        
+        $filename1 = 'foo.pdf';
+        $filename2 = 'bar.pdf';
+
+        $file = $this->createTestFile($filename1);
+        $file->setVisibleInOai(true);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new Opus_File();
-        $file->setPathName(basename($filepath1));
-        $file->setTempFile($filepath1);
-        $file->setVisibleInOai(true);
         $doc->addFile($file);
-        $file = new Opus_File();
-        $file->setPathName(basename($filepath2));
-        $file->setTempFile($filepath2);
+
+        $file = $this->createTestFile($filename2);
         $file->setVisibleInOai(true);
         $doc->addFile($file);
         $doc->store();
 
-        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($filepath1)));
-        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($filepath2)));
+        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($this->testFiles[$filename1])));
+        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($this->testFiles[$filename2])));
 
         $model = new Oai_Model_Container($doc->getId());
         $file = $model->getFileHandle();
@@ -245,32 +239,27 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->assertEquals('.tar', $file->getExtension());
         $this->assertEquals('application/x-tar', $file->getMimeType());
 
-        Opus_Util_File::deleteDirectory(dirname($filepath1));
-        Opus_Util_File::deleteDirectory(dirname($filepath2));
         unlink($file->getPath());
-        
     }
 
     public function testDeleteContainerTarFile() {
-        $filepath1 = $this->createTestFile('test.pdf');
-        $filepath2 = $this->createTestFile('foo.html');
+        $filename1 = 'test.pdf';
+        $filename2 = 'foo.html';
+
+        $file = $this->createTestFile($filename1);
+        $file->setVisibleInOai(true);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new Opus_File();
-        $file->setPathName(basename($filepath1));
-        $file->setTempFile($filepath1);
-        $file->setVisibleInOai(true);
         $doc->addFile($file);
-        $file = new Opus_File();
-        $file->setPathName(basename($filepath2));
-        $file->setTempFile($filepath2);
+
+        $file = $this->createTestFile($filename2);
         $file->setVisibleInOai(true);
         $doc->addFile($file);
         $doc->store();
 
-        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($filepath1)));
-        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($filepath2)));
+        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($this->testFiles[$filename1])));
+        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($this->testFiles[$filename2])));
 
         $model = new Oai_Model_Container($doc->getId());
         $tarball = $model->getFileHandle();
@@ -278,24 +267,20 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
 
         $tarball->delete();
         $this->assertFalse(file_exists($tarball->getPath()));
-
-        Opus_Util_File::deleteDirectory(dirname($filepath1));
-        Opus_Util_File::deleteDirectory(dirname($filepath2));
     }
 
     public function testDeleteContainerSingleFile() {
-        $filepath1 = $this->createTestFile('test.pdf');
+        $filename1 = 'test.pdf';
+
+        $file = $this->createTestFile($filename1);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new Opus_File();
-        $file->setPathName(basename($filepath1));
-        $file->setTempFile($filepath1);
         $file->setVisibleInOai(true);
         $doc->addFile($file);
         $doc->store();
 
-        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($filepath1)));
+        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($this->testFiles[$filename1])));
 
         $model = new Oai_Model_Container($doc->getId());
         $tarball = $model->getFileHandle();
@@ -303,8 +288,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
 
         $tarball->delete();
         $this->assertFalse(file_exists($tarball->getPath()));
-
-        Opus_Util_File::deleteDirectory(dirname($filepath1));
     }
 
     public function testRegression3281() {
@@ -333,15 +316,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         }
         $this->assertEquals('access to requested document is forbidden', $exceptionMessage);
 
-    }
-
-    private function createTestFile($filename) {        
-        $path = $this->workspacePath . DIRECTORY_SEPARATOR . uniqid();
-        mkdir($path, 0777, true);
-        $filepath = $path . DIRECTORY_SEPARATOR . $filename;
-        touch($filepath);
-        $this->assertTrue(is_readable($filepath));
-        return $filepath;
     }
 
 }

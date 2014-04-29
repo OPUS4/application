@@ -513,7 +513,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Language"]', 'Deutsch');
         $this->assertQueryContentContains('//*[@id="Document-Content-Subjects-Uncontrolled-Subject0-Value"]', 'Palmöl');
-        
+
         // Identifier
         $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier0-Type"]', 'DOI');
         $this->assertQueryContentContains('//*[@id="Document-Identifiers-Identifier0-Value"]', '123');
@@ -834,13 +834,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     
     public function testEmbargoDatePassed() {
         $this->useEnglish();
-        $filepath = $this->createTestFile('foo.pdf');
+        $file = $this->createTestFile('foo.pdf');
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new Opus_File();
-        $file->setPathName(basename($filepath));
-        $file->setTempFile($filepath);
         $file->setVisibleInOai(false);
         $doc->addFile($file);
 
@@ -857,13 +854,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
     public function testEmbargoDateHasNotPassed() {
         $this->useEnglish();
-        $filepath = $this->createTestFile('foo.pdf');
+        $file = $this->createTestFile('foo.pdf');
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file = new Opus_File();
-        $file->setPathName(basename($filepath));
-        $file->setTempFile($filepath);
         $file->setVisibleInOai(false);
         $doc->addFile($file);
 
@@ -877,19 +871,4 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertNotQueryContentContains('//*', '/files/'.$docId.'/foo.pdf');
         $this->assertQueryContentContains('//*', 'This document is embargoed until:');
     }
-
-    private function createTestFile($filename) {
-        $config = Zend_Registry::get('Zend_Config');
-        if (!isset($config->workspacePath)) {
-            throw new Exception("config key 'workspacePath' not defined in config file");
-        }
-
-        $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
-        mkdir($path, 0777, true);
-        $filepath = $path . DIRECTORY_SEPARATOR . $filename;
-        touch($filepath);
-        $this->assertTrue(is_readable($filepath));
-        return $filepath;
-    }
-
 }

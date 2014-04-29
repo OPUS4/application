@@ -39,6 +39,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
     private $securityEnabled;
     private $testDocuments;
+    protected $testFiles;
 
     const MESSAGE_LEVEL_NOTICE = 'notice';
     const MESSAGE_LEVEL_FAILURE = 'failure';
@@ -99,6 +100,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->logoutUser();
         if (!is_null($this->testDocuments)) {
             $this->deleteTestDocuments();
+        }
+        if (!is_null($this->testFiles)) {
+            $this->deleteTestFiles();
         }
         parent::tearDown();
     }
@@ -504,5 +508,38 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $doc = new Opus_Document ();
         array_push($this->testDocuments, $doc);
         return $doc;
+    }
+
+    protected function createTestFile($filename) {
+        if (is_null($this->testFiles)) {
+            $this->testFiles = array();
+        }
+        $config = Zend_Registry::get('Zend_Config');
+        if (!isset($config->workspacePath)) {
+            throw new Exception("config key 'workspacePath' not defined in config file");
+        }
+
+        $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
+        mkdir($path, 0777, true);
+        $filepath = $path . DIRECTORY_SEPARATOR . $filename;
+        touch($filepath);
+        $this->assertTrue(is_readable($filepath));
+        $file = new Opus_File();
+        $file->setPathName(basename($filepath));
+        $file->setTempFile($filepath);
+        if (array_key_exists($filename, $this->testFiles)) {
+            throw Exception ('filenames should be unique');
+        }
+        $this->testFiles[$filename] = $filepath;
+        return $file;
+    }
+
+    private function deleteTestFiles() {
+        foreach ($this->testFiles as $key => $filepath) {
+            try {
+                Opus_Util_File::deleteDirectory(dirname($filepath));
+            } catch (Exception $e) {
+            }
+        }
     }
 }

@@ -288,10 +288,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
         $this->useGerman();
-        $filepath = $this->createTestFile('foo.pdf');
-        $file = new Opus_File();
-        $file->setPathName(basename($filepath));
-        $file->setTempFile($filepath);
+        $file = $this->createTestFile('foo.pdf');
         $file->setVisibleInOai(false);
 
         $doc = $this->createTestDocument();
@@ -308,18 +305,5 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//div', $dateNow->getDay() . '.'. $dateNow->getMonth() . '.' . $dateNow->getYear());
     }
 
-    private function createTestFile($filename) {
-        $config = Zend_Registry::get('Zend_Config');
-        if (!isset($config->workspacePath)) {
-            throw new Exception("config key 'workspacePath' not defined in config file");
-        }
-
-        $path = $config->workspacePath . DIRECTORY_SEPARATOR . uniqid();
-        mkdir($path, 0777, true);
-        $filepath = $path . DIRECTORY_SEPARATOR . $filename;
-        touch($filepath);
-        $this->assertTrue(is_readable($filepath));
-        return $filepath;
-    }
 }
 
