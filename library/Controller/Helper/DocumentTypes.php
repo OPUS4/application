@@ -277,7 +277,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         libxml_clear_errors();
         libxml_use_internal_errors(true);
         try {
-            $isValid = $domDoc->schemaValidate(APPLICATION_PATH . $this->config->doctype->validation->schema);
+            $isValid = $domDoc->schemaValidate($this->config->documentTypes->xmlSchema);
             $this->errors[$filename] = libxml_get_errors();
         }
         catch (Exception $e) {
