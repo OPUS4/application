@@ -232,7 +232,11 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         return new Zend_Session_Namespace();
     }
 
-
+    /**
+     * Initialize translated list of languages.
+     *
+     * TODO used by framework classes as default values; remove to reduce bootstrap overhead
+     */
     protected function _initLanguageList() {
         $this->bootstrap(array('Translation', 'Backend'));
         Form_Element_Language::initLanguageList();
