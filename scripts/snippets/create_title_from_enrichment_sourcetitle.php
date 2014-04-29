@@ -45,14 +45,14 @@ $options = getopt('', array('dryrun', 'type:'));
 
 $dryrun = isset($options['dryrun']);
 
-if(!isset($options['type']) || empty($options['type'])) {
+if (!isset($options['type']) || empty($options['type'])) {
     echo "Usage: {$argv[0]} --type <type of title> (--dryrun)\n";
     echo "type of title must be provided (e. g. source, parent).\n";
     exit;
 }
 
-$getType = 'getTitle'.ucfirst(strtolower($options['type']));
-$addType = 'addTitle'.ucfirst(strtolower($options['type']));
+$getType = 'getTitle' . ucfirst(strtolower($options['type']));
+$addType = 'addTitle' . ucfirst(strtolower($options['type']));
 
 if ($dryrun)
     _log("TEST RUN: NO DATA WILL BE MODIFIED");
@@ -69,15 +69,9 @@ foreach ($docIds as $docId) {
         $enrichmentArray = $enrichment->toArray();
         if ($enrichmentArray['KeyName'] == 'SourceTitle') {
             $sourceTitles = $doc->{$getType}();
-            $titleExists = false;
-            foreach ($sourceTitles as $sourceTitle) {
-                if ($sourceTitle->getValue() == $enrichmentArray['Value']) {
-                    $titleExists = true;
-                    _log('TitleSource already exists for Document #' . $docId . '. Skipping.. ');
-                    break;
-                }
-            }
-            if (!$titleExists) {
+            if (count($sourceTitles) > 0) {
+                _log('Title ' . ucfirst(strtolower($options['type'])) . ' already exists for Document #' . $docId . '. Skipping.. ');
+            } else {
                 $titleSource = $doc->{$addType}();
                 $titleSource->setValue($enrichmentArray['Value']);
                 if (!$dryrun)
