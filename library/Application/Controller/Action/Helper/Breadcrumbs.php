@@ -82,14 +82,12 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
         }
     }
 
-    public function setStatisticYearBreadcrumb($year) {
-        $page = $this->getNavigation()->findOneBy('label', 'admin_statistic_show');
-        $page->setLabel($year);
-    }
-
-    public function setDoctypeValidationShow($doctype) {
-        $page = $this->getNavigation()->findOneBy('label', 'admin_doctype_show');
-        $page->setLabel($doctype);
+    /*
+     * sets $label as $value in breadcrumbs
+     */
+    public function setLabelFor($value, $label) {
+        $page = $this->getNavigation()->findOneBy('label', $label);
+        $page->setLabel($value);
     }
 
     /**

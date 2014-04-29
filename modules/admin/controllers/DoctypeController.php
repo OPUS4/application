@@ -64,6 +64,6 @@ class Admin_DoctypeController extends Controller_Action {
         $errors = $this->documentTypesHelper->getErrors();
         $this->view->errorArray = $errors[$document];
         $this->view->title = $document;
-        $this->_breadcrumbs->setDoctypeValidationShow($document);
+        $this->_breadcrumbs->setLabelFor($document, 'admin_doctype_show');
     }
 }
