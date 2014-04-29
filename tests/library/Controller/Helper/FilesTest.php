@@ -39,7 +39,7 @@ class Controller_Helper_FilesTest extends ControllerTestCase {
 
     private $folder;
 
-    private $testFiles = array('test.pdf', 'test.txt', 'test.png');
+    private $localTestFiles = array('test.pdf', 'test.txt', 'test.png');
 
     public function setUp() {
         parent::setUp();
@@ -50,13 +50,13 @@ class Controller_Helper_FilesTest extends ControllerTestCase {
 
         $this->folder = APPLICATION_PATH . '/tests/workspace/incoming';
 
-        foreach ($this->testFiles as $file) {
+        foreach ($this->localTestFiles as $file) {
             file_put_contents($this->folder . '/' . $file, $file);
         }
     }
 
     public function tearDown() {
-        foreach ($this->testFiles as $file) {
+        foreach ($this->localTestFiles as $file) {
             unlink($this->folder . '/' . $file);
         }
 
@@ -83,7 +83,7 @@ class Controller_Helper_FilesTest extends ControllerTestCase {
 
         foreach ($files as $file) {
             $fileName = $file['name'];
-            $this->assertContains($fileName, $this->testFiles, "Unexpected file '$fileName'.");
+            $this->assertContains($fileName, $this->localTestFiles, "Unexpected file '$fileName'.");
         }
     }
 
