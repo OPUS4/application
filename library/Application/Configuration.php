@@ -115,7 +115,7 @@ class Application_Configuration {
      */
     public static function getOpusVersion() {
         $filepath = APPLICATION_PATH . DIRECTORY_SEPARATOR . "VERSION.txt";
-        return (file_exists($filepath)) ? $version = trim(file_get_contents($filepath)) : null;
+        return (file_exists($filepath)) ? $version = trim(file_get_contents($filepath)) : 'unknown';
     }
 
     /**
