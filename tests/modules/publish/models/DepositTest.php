@@ -34,19 +34,16 @@
  */
 class Publish_Model_DepositTest extends ControllerTestCase {
 
-    private $documentId = null;
-
-
     /**
      * @expectedException Publish_Model_FormDocumentNotFoundException
      */
     public function testInvalidDocumentState() {
         $document = $this->createTestDocument();
         $document->setServerState('published');
-        $this->documentId = $document->store();
+        $documentId = $document->store();
 
         $log = Zend_Registry::get('Zend_Log');
-        new Publish_Model_Deposit($this->documentId, $log);
+        new Publish_Model_Deposit($documentId, $log);
     }
 
     public function testValidDocumentData() {

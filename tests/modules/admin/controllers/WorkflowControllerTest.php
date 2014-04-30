@@ -36,8 +36,6 @@
 
 class Admin_WorkflowControllerTest extends ControllerTestCase {
 
-    private $documentId;
-
     private function enablePublishNotification() {
         $config = Zend_Registry::get('Zend_Config');
         $config->notification->document->published->enabled = 1;
@@ -124,9 +122,9 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
     public function testPermanentDeleteAction() {
         $document = $this->createTestDocument();
         $document->setServerState('deleted');
-        $this->documentId = $document->store();
+        $documentId = $document->store();
 
-        $this->dispatch('/admin/workflow/changestate/docId/' . $this->documentId . '/targetState/removed');
+        $this->dispatch('/admin/workflow/changestate/docId/' . $documentId . '/targetState/removed');
 
         $this->assertResponseCode(200);
         $this->assertModule('admin');
@@ -140,20 +138,20 @@ class Admin_WorkflowControllerTest extends ControllerTestCase {
     public function testPermanentDeleteActionConfirmNo() {
         $document = $this->createTestDocument();
         $document->setServerState('deleted');
-        $this->documentId = $document->store();
+        $documentId = $document->store();
 
         $this->request
                 ->setMethod('POST')
                 ->setPost(array(
                     'sureno' => 'sureno'
                 ));
-        $this->dispatch('/admin/workflow/changestate/docId/' . $this->documentId . '/targetState/removed');
+        $this->dispatch('/admin/workflow/changestate/docId/' . $documentId . '/targetState/removed');
         $this->assertModule('admin');
         $this->assertController('workflow');
         $this->assertAction('changestate');
         $this->assertRedirect('/admin/document/index');
 
-        $doc = new Opus_Document($this->documentId);
+        $doc = new Opus_Document($documentId);
         $this->assertEquals('deleted', $doc->getServerState());
     }
 

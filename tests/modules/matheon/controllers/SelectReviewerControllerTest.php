@@ -34,8 +34,6 @@
  */
 
 class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
-    
-    private $docId = null;
 
     private function createValidDocument($loggedUserId) {
         $document = $this->createTestDocument();
@@ -69,9 +67,8 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
         $loggedUserModel = new Publish_Model_LoggedUser();
         $loggedUserId = $loggedUserModel->getUserId();
 
-        $this->docId = $this->createValidDocument($loggedUserId);
         $session = new Zend_Session_Namespace('Publish');
-        $session->depositConfirmDocumentId = $this->docId;
+        $session->depositConfirmDocumentId = $this->createValidDocument($loggedUserId);
 
         $this->dispatch('/matheon/select-reviewer/form');
         $this->assertResponseCode(200);
@@ -82,9 +79,8 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
         $loggedUserModel = new Publish_Model_LoggedUser();
         $loggedUserId = $loggedUserModel->getUserId();
 
-        $this->docId = $this->createValidDocument($loggedUserId);
         $session = new Zend_Session_Namespace('Publish');
-        $session->depositConfirmDocumentId = $this->docId;
+        $session->depositConfirmDocumentId = $this->createValidDocument($loggedUserId);
 
         $this->request->setMethod('POST')
                 ->setPost(array(
@@ -103,9 +99,9 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
         $loggedUserModel = new Publish_Model_LoggedUser();
         $loggedUserId = $loggedUserModel->getUserId();
 
-        $this->docId = $this->createValidDocument($loggedUserId);
+        $docId = $this->createValidDocument($loggedUserId);
         $session = new Zend_Session_Namespace('Publish');
-        $session->depositConfirmDocumentId = $this->docId;
+        $session->depositConfirmDocumentId = $docId;
 
         $this->request->setMethod('POST')
                 ->setPost(array(
@@ -118,7 +114,7 @@ class Matheon_SelectReviewerControllerTest extends ControllerTestCase {
 
         // Check, that right privilege has been set.
         $reviewer = Opus_UserRole::fetchByName('reviewer');
-        $this->assertContains($this->docId, $reviewer->listAccessDocuments());
+        $this->assertContains($docId, $reviewer->listAccessDocuments());
     }
 
     public function testEmptyForm() {

@@ -440,9 +440,10 @@ class Publish_FormControllerTest extends ControllerTestCase {
             $config->form->first->bibliographie = $oldval;
         }
         
-        $doc = $this->createTestDocument($session->documentId);
+        $doc = new Opus_Document($session->documentId);
         $belongsToBibliography = $doc->getBelongsToBibliography();
-        
+        $doc->deletePermanent();
+
         $this->assertResponseCode(200);
         $this->assertNotContains("Es sind Fehler aufgetreten.", $this->response->getBody());
         $this->assertFalse((boolean) $belongsToBibliography, 'Expected that document does not belong to bibliography');        

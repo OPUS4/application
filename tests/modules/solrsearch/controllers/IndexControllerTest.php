@@ -35,8 +35,6 @@
  */
 class Solrsearch_IndexControllerTest extends ControllerTestCase {
     
-    private $docId = null;
-
     private function doStandardControllerTest($url, $controller, $action) {
         $this->dispatch($url);
         
@@ -149,11 +147,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
     
     private function createPublishedTestDoc() {
-        $d = $this->createTestDocument();
-        $d->setServerState('published');
-        $d->setLanguage('eng');
-        $d->addTitleMain()->setValue('testphrasequerieswithwildcard*s')->setLanguage('eng');
-        $this->docId = $d->store();        
+        $document = $this->createTestDocument();
+        $document->setServerState('published');
+        $document->setLanguage('eng');
+        $document->addTitleMain()->setValue('testphrasequerieswithwildcard*s')->setLanguage('eng');
+        $document->store();        
     }    
 
     public function testPhraseQueriesWithWildcards1() {
@@ -307,17 +305,17 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-2134
      */
     public function testCatchAllSearch() {
-        $d = $this->createTestDocument();
-        $d->setServerState('published');
-        $d->setLanguage('eng');
-        $d->addTitleParent()->setValue('testcatchallsearch_title_parent')->setLanguage('eng');
-        $d->addTitleAdditional()->setValue('testcatchallsearch_title_additional')->setLanguage('eng');
-        $d->addTitleAdditional()->setValue('testcatchallsearch_title_sub')->setLanguage('eng');
-        $d->setPublisherName('testcatchallsearch_publisher_name');
-        $d->setPublisherPlace('testcatchallsearch_publisher_place');
-        $d->setCreatingCorporation('testcatchallsearch_creating_corporation');
-        $d->setContributingCorporation('testcatchallsearch_contributing_corporation');
-        $this->docId = $d->store();
+        $document = $this->createTestDocument();
+        $document->setServerState('published');
+        $document->setLanguage('eng');
+        $document->addTitleParent()->setValue('testcatchallsearch_title_parent')->setLanguage('eng');
+        $document->addTitleAdditional()->setValue('testcatchallsearch_title_additional')->setLanguage('eng');
+        $document->addTitleAdditional()->setValue('testcatchallsearch_title_sub')->setLanguage('eng');
+        $document->setPublisherName('testcatchallsearch_publisher_name');
+        $document->setPublisherPlace('testcatchallsearch_publisher_place');
+        $document->setCreatingCorporation('testcatchallsearch_creating_corporation');
+        $document->setContributingCorporation('testcatchallsearch_contributing_corporation');
+        $document->store();
 
         $queries = array(
             'testcatchallsearch_title_parent',
@@ -616,7 +614,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
                 ->setType($identifierType)
                 ->setValue($identifierType . '-opusvier-2475');
         }
-        $this->docId = $doc->store();
+        $doc->store();
 
         // search for document based on identifiers
         foreach ($identifierTypes as $identifierType) {
@@ -646,40 +644,40 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $title->setLanguage('eng');
         $doc->setTitleMain($title);
 
-        $p = new Opus_Person();
-        $p->setLastName('personauthor-opusvier-2484');
-        $doc->addPersonAuthor($p);
+        $person = new Opus_Person();
+        $person->setLastName('personauthor-opusvier-2484');
+        $doc->addPersonAuthor($person);
 
-        $p = new Opus_Person();
-        $p->setLastName('personadvisor-opusvier-2484');
-        $doc->addPersonAdvisor($p);
+        $person = new Opus_Person();
+        $person->setLastName('personadvisor-opusvier-2484');
+        $doc->addPersonAdvisor($person);
 
-        $p = new Opus_Person();
-        $p->setLastName('personcontributor-opusvier-2484');
-        $doc->addPersonContributor($p);
+        $person = new Opus_Person();
+        $person->setLastName('personcontributor-opusvier-2484');
+        $doc->addPersonContributor($person);
 
-        $p = new Opus_Person();
-        $p->setLastName('personeditor-opusvier-2484');
-        $doc->addPersonEditor($p);
+        $person = new Opus_Person();
+        $person->setLastName('personeditor-opusvier-2484');
+        $doc->addPersonEditor($person);
 
-        $p = new Opus_Person();
-        $p->setLastName('personreferee-opusvier-2484');
-        $doc->addPersonReferee($p);
+        $person = new Opus_Person();
+        $person->setLastName('personreferee-opusvier-2484');
+        $doc->addPersonReferee($person);
 
-        $p = new Opus_Person();
-        $p->setLastName('personother-opusvier-2484');
-        $doc->addPersonOther($p);
+        $person = new Opus_Person();
+        $person->setLastName('personother-opusvier-2484');
+        $doc->addPersonOther($person);
 
-        $p = new Opus_Person();
-        $p->setLastName('persontranslator-opusvier-2484');
-        $doc->addPersonTranslator($p);
+        $person = new Opus_Person();
+        $person->setLastName('persontranslator-opusvier-2484');
+        $doc->addPersonTranslator($person);
 
         // nach Submitter kann nicht gesucht werden
-        $p = new Opus_Person();
-        $p->setLastName('personsubmitter-opusvier-2484');
-        $doc->addPersonSubmitter($p);
+        $person = new Opus_Person();
+        $person->setLastName('personsubmitter-opusvier-2484');
+        $doc->addPersonSubmitter($person);
 
-        $this->docId = $doc->store();
+        $doc->store();
 
         // search for document based on persons
         $persons = array(

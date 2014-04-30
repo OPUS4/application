@@ -33,8 +33,6 @@
  */
 class Admin_Form_FileTest extends ControllerTestCase {
 
-    private $documentId = null;
-
     public function testConstructForm() {
         $form = new Admin_Form_File();
 
@@ -103,7 +101,7 @@ class Admin_Form_FileTest extends ControllerTestCase {
         $file = $document->addFile();
         $file->setPathName('test.pdf');
 
-        $this->documentId = $document->store();
+        $document->store();
 
         $form->updateModel($file);
 
@@ -145,7 +143,7 @@ class Admin_Form_FileTest extends ControllerTestCase {
         $file = $document->addFile();
         $file->setPathName('test.pdf');
 
-        $this->documentId = $document->store();
+        $document->store();
 
         $form->updateModel($file);
 
@@ -268,7 +266,7 @@ class Admin_Form_FileTest extends ControllerTestCase {
         $file = $document->addFile();
         $file->setPathName('test.pdf');
 
-        $this->documentId = $document->store(); // setzt automatisch 'guest' Zugriff für Datei
+        $document->store(); // setzt automatisch 'guest' Zugriff für Datei
 
         $form->updateFileRoles($file, array('administrator', 'reviewer'));
 

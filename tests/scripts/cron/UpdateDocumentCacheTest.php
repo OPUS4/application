@@ -39,19 +39,13 @@ require_once('CronTestCase.php');
  */
 class UpdateDocumentCacheTest extends CronTestCase {
 
-    private $document;
-
-    public function setUp() {
-        parent::setUp();
-        $this->document = $this->createTestDocument();
-        $this->document->store();
-    }
-
     public function testUpdateOnLicenceChange() {
+        $document = $this->createTestDocument();
+        $document->store();
 
         $documentCacheTable = new Opus_Db_DocumentXmlCache();
 
-        $docXmlCache = $documentCacheTable->find($this->document->getId(), '1')->current()->xml_data;
+        $docXmlCache = $documentCacheTable->find($document->getId(), '1')->current()->xml_data;
         $domDoc = new DomDocument();
         $domDoc->loadXML($docXmlCache);
         $licences = $domDoc->getElementsByTagName('Licence');
@@ -61,15 +55,15 @@ class UpdateDocumentCacheTest extends CronTestCase {
         $licence->setNameLong('TestLicence');
         $licence->setLinkLicence('http://example.org/licence');
         $licenceId = $licence->store();
-        $this->document->setServerState('published');
-        $this->document->setLicence($licence);
-        $docId = $this->document->store();
+        $document->setServerState('published');
+        $document->setLicence($licence);
+        $docId = $document->store();
 
         $licence = new Opus_Licence($licenceId);
         $licence->setNameLong('TestLicenceAltered');
         $licence->store();
 
-        $docXmlCacheResult = $documentCacheTable->find($this->document->getId(), '1');
+        $docXmlCacheResult = $documentCacheTable->find($document->getId(), '1');
 
         $this->assertTrue($docXmlCacheResult->count() == 0, 'Expected empty document xml cache');
 
@@ -79,7 +73,7 @@ class UpdateDocumentCacheTest extends CronTestCase {
         $domDocAfter->loadXML($docXmlCacheAfter);
         $licencesAfter = $domDocAfter->getElementsByTagName('Licence');
         $this->assertTrue($licencesAfter->length == 1, 'Expected one Licence element in dom.');
-        $licences = $this->document->getLicence();
+        $licences = $document->getLicence();
         $licences[0]->delete();
     }
 

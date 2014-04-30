@@ -33,8 +33,6 @@
  */
 
 class Publish_DepositControllerTest extends ControllerTestCase {
-    
-    private $docId = null;
 
     /**
      * Method tests the deposit action with GET request which leads to a redirect (code 302)
@@ -135,8 +133,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $doc = $this->createTestDocument();
         $doc->setServerState('temporary');
         $doc->setType('preprint');
-        $this->docId = $doc->store();
-        $session->documentId = $this->docId;
+        $session->documentId = $doc->store();
 
         $this->request
                 ->setMethod('POST')
@@ -189,8 +186,7 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $doc = $this->createTestDocument();
         $doc->setServerState('temporary');
         $doc->setType('preprint');
-        $this->docId = $doc->store();
-        $session->documentId = $this->docId;        
+        $session->documentId = $doc->store();
 
         $this->request
                 ->setMethod('POST')
@@ -212,10 +208,9 @@ class Publish_DepositControllerTest extends ControllerTestCase {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setType('preprint');
-        $this->docId = $doc->store();
 
         $log = Zend_Registry::get('Zend_Log');
-        new Publish_Model_Deposit($this->docId, $log);
+        new Publish_Model_Deposit($doc->store(), $log);
     }
 }
 
