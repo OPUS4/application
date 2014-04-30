@@ -27,7 +27,7 @@
  * @category    Application
  * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -63,8 +63,6 @@ class Form_Element_Language extends Form_Element_Select {
      * Setup language list.
      *
      * @return void
-     *
-     * TODO move out (wird nicht für jeden Request benötigt)
      */
     public static function initLanguageList() {
         $translate = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
