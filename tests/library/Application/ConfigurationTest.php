@@ -27,7 +27,8 @@
  * @category    Application Unit Test
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -82,5 +83,49 @@ class Application_ConfigurationTest extends ControllerTestCase {
     public function testIsLanguageSupportedFalseEmpty() {
         $this->assertFalse($this->config->isLanguageSupported(''));
     }
-    
+
+    public function testGetOpusVersion()  {
+        $versionFile = APPLICATION_PATH . '/VERSION.txt';
+        $versionFromFile = 'UNKNOWN';
+        if(!is_file($versionFile)) {
+            // Create VERSION.txt for testing
+            file_put_contents($versionFile, $versionFromFile);
+            $deleteVersionFile = true;
+        }
+        else {
+            $versionFromFile = trim(file_get_contents($versionFile));
+            $deleteVersionFile = false;
+        }
+
+        $version = Application_Configuration::getOpusVersion();
+        // clean up
+        if ($deleteVersionFile) {
+            unlink ($versionFile);
+        }
+
+        $this->assertEquals($versionFromFile, $version);
+    }
+
+    public function testGetOpusInfo() {
+        $versionFile = APPLICATION_PATH . '/VERSION.txt';
+        $versionFromFile = 'UNKNOWN';
+        if(!is_file($versionFile)) {
+            // Create VERSION.txt for testing
+            file_put_contents($versionFile, $versionFromFile);
+            $deleteVersionFile = true;
+        }
+        else {
+            $versionFromFile = trim(file_get_contents($versionFile));
+            $deleteVersionFile = false;
+        }
+
+        $data = Application_Configuration::getOpusInfo();
+        //clean up
+        if ($this->deleteVersionFile) {
+            unlink ($this->versionFile);
+        }
+        $this->assertInternalType('array', $data);
+        $this->assertArrayHasKey('admin_info_version', $data);
+        $this->assertEquals($versionFromFile, $data['admin_info_version']);
+    }
 }

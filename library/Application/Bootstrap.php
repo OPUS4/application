@@ -34,7 +34,8 @@
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @author      Simone Finkbeiner (simone.finkbeiner@ub.uni-stuttgart.de)
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  *
@@ -325,5 +326,15 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         // return $container;
     }
+
+    /*
+     * writes Opus-Version in html header
+     */
+    protected  function _initVersionInfo() {
+        $this->bootstrap('View');
+        $view = $this->getResource('View');
+        $view->headMeta()->appendName('Opus-Version', Application_Configuration::getOpusVersion());
+    }
+
 
 }

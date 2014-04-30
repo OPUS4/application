@@ -26,14 +26,15 @@
  *
  * @category    TODO
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 ?>
 
 <dl>
-    <?PHP foreach ($this->info->getInfo() as $infoKey => $infoValue) : ?>
+    <?PHP foreach (Application_Configuration::getOpusInfo() as $infoKey => $infoValue) : ?>
         <dt id="<?= $infoKey ?>"><?= $this->translate($infoKey) ?></dt>
         <dd><?= $infoValue ?></dd>
     <?PHP endforeach ?>
