@@ -9,7 +9,7 @@
   
     <tu tuid="Statistic_Controller">
       <tuv xml:lang="en">
-        <seg>Number of publications</seg>
+        <seg>Publications for</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Veröffentlichungstatistik</seg>
@@ -18,7 +18,7 @@
 
     <tu tuid="admin_statistic_show">
       <tuv xml:lang="en">
-        <seg>Number of Publications</seg>
+        <seg>Publications for</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Veröffentlichungstatistik</seg>

@@ -80,7 +80,7 @@ class Admin_StatisticController extends Controller_Action {
         $monthStat = $this->statisticsModel->getMonthStatistics($selectedYear);
 
         $this->view->totalNumber = array_sum($monthStat);
-        $this->view->title = $this->view->translate('Statistic_Controller') . ' (' . $selectedYear . ')';
+        $this->view->title = $this->view->translate('Statistic_Controller') . ' ' . $selectedYear;
         $this->view->monthStat = $monthStat;
 
         $this->view->typeStat = $this->statisticsModel->getTypeStatistics($selectedYear);
