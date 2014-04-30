@@ -9,28 +9,28 @@
 
     <tu tuid="error_search_unavailable">
         <tuv xml:lang="en">
-            <seg>The search service is currently not available. Messge: </seg>
+            <seg>The search service is currently not available.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Der Suchdienst ist im Moment nicht verfügbar. Fehlermeldung: </seg>
+            <seg>Der Suchdienst ist im Moment nicht verfügbar.</seg>
         </tuv>
     </tu>
 
     <tu tuid="error_search_invalidquery">
         <tuv xml:lang="en">
-            <seg>The given search query is not supported. Messge: </seg>
+            <seg>The given search query is not supported.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Die angegebene Suchanfrage wird nicht unterstützt. Fehlermeldung: </seg>
+            <seg>Die angegebene Suchanfrage wird nicht unterstützt.</seg>
         </tuv>
     </tu>
 
     <tu tuid="error_search_unknown">
         <tuv xml:lang="en">
-            <seg>An unknown error occurred when trying to execute search. Message: </seg>
+            <seg>An unknown error occurred when trying to execute search.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Die Suche konnte aufgrund eines Fehlers nicht ausgeführt werden. Fehlermeldung: </seg>
+            <seg>Die Suche konnte aufgrund eines Fehlers nicht ausgeführt werden.</seg>
         </tuv>
     </tu>
 
@@ -45,10 +45,10 @@
 
     <tu tuid="error_msg_page_not_found">
         <tuv xml:lang="en">
-            <seg>The accessed url was not valid.</seg>
+            <seg>The accessed URL was not valid.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Die angegebende Url ist nicht gültig.</seg>
+            <seg>Die angegebende URL ist nicht gültig.</seg>
         </tuv>
     </tu>
 
