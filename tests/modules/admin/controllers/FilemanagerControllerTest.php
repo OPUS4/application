@@ -273,12 +273,12 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
 
     public function testBadDocIdNotDisplayedOnPage() {
         $this->dispatch('/admin/filemanager/delete/id/dummyDocId/fileId/125');
-        $this->assertRedirectTo('/admin/documents');
+        $this->verifyNotFlashMessage('dummyDocId');
     }
 
     public function testBadFileIdNotDisplayedOnPage() {
         $this->dispatch('/admin/filemanager/delete/id/124/fileId/dummyFileId');
-        $this->assertRedirectTo('/admin/filemanager/index/id/124');
+        $this->verifyNotFlashMessage('dummyFieldId');
     }
 
     /**

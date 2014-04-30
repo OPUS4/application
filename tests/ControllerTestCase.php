@@ -407,6 +407,25 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     }
 
     /**
+     * Funktion zum Prüfen von FlashMessenger Nachrichten.
+     *
+     * Fuer gruene Nachrichten Level muss self::MESSAGE_LEVEL_NOTICE verwendet werden.
+     *
+     * @param $message Übersetzungsschlüssel bzw. Nachricht
+     * @param string $level 'notice' oder 'failure'
+     */
+    public function verifyNotFlashMessage($message, $level = self::MESSAGE_LEVEL_FAILURE) {
+        $flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
+        $flashMessages = $flashMessenger->getCurrentMessages();
+
+        $this->assertEquals(1, count($flashMessages), 'Expected one flash message in queue.');
+        $flashMessage = $flashMessages[0];
+
+        $this->assertNotContains($message, $flashMessage['message']);
+        $this->assertEquals($level, $flashMessage['level']);
+    }
+
+    /**
      * Liefert den Inhalt des Response Location Header.
      * @return string|null
      */

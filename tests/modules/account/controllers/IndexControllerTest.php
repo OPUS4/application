@@ -232,4 +232,19 @@ class Account_IndexControllerTest extends ControllerTestCase {
         $this->deleteUser('john2');
     }
 
+    public function testAccessAccountModule() {
+        $this->useEnglish();
+        $this->enableSecurity();
+        $this->loginUser("security7", "security7pwd");
+        $this->dispatch('/account');
+        $this->assertQueryContentContains('//html/head/title', 'Account');
+        $this->assertQueryContentContains("//div", 'security7');
+    }
+
+    public function testNoAccessAccountModule() {
+        $this->enableSecurity();
+        $this->loginUser("security1", "security1pwd");
+        $this->dispatch('/account');
+        $this->assertRedirectTo('/auth');
+    }
 }

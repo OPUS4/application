@@ -33,12 +33,10 @@
  */
 
 
-class Admin_SeriesIndexControllerTest extends ControllerTestCase {
+class Admin_SeriesControllerTest extends ControllerTestCase {
 
     public function testShowSeries() {
-        $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/admin/series/show/id/1');
-
         $this->assertQuery("//div[@class='Id']");
         $this->assertQuery("//div[@class='Title']");
         $this->assertQuery("//div[@class='Visible']");
@@ -46,9 +44,7 @@ class Admin_SeriesIndexControllerTest extends ControllerTestCase {
     }
 
     public function testHideDocumentsLinkForSeriesWithoutDocuments() {
-        $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/admin/series');
-
         $this->assertQuery("//a[@href='/admin/documents/index/seriesid/1']");
         $this->assertQuery("//a[@href='/admin/documents/index/seriesid/2']");
         $this->assertQuery("//a[@href='/admin/documents/index/seriesid/3']");
@@ -60,9 +56,7 @@ class Admin_SeriesIndexControllerTest extends ControllerTestCase {
     }
 
     public function testSeriesVisibilityIsDisplayedCorrectly() {
-        $this->loginUser('admin', 'adminadmin');
         $this->dispatch('/admin/series');
-
         foreach (array(1, 2, 4, 5, 6, 8) as $visibleId) {
             $this->assertQuery('//td[@class="visible"]/a[@href="/admin/series/show/id/' . $visibleId . '"]');
         }

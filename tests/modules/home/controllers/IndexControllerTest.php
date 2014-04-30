@@ -202,5 +202,23 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertNotQuery("div#content/div.messages");
     }
-    
+
+    /**
+     * Prüft, ob nur die erlaubten Einträge im Admin Menu angezeigt werden.
+     */
+    public function testShowAccountLinkForUsersWithModuleAccess() {
+        $this->useEnglish();
+        $this->enableSecurity();
+        $this->loginUser("security7", "security7pwd");
+        $this->dispatch('/home');
+        $this->assertQueryContentContains("//div[@id='login-bar']", 'Account');
+    }
+
+    public function testHideAccountLinkForUsersWithoutModuleAccess() {
+        $this->useEnglish();
+        $this->enableSecurity();
+        $this->loginUser("security1", "security1pwd");
+        $this->dispatch('/home');
+        $this->assertNotQueryContentContains("//div[@id='login-bar']", 'Account');
+    }
 }

@@ -180,9 +180,6 @@ class Admin_DocumentsControllerTest extends ControllerTestCase {
      * Regression test for OPUSVIER-2401.
      */
     public function testLinkForStateAuditedPresent() {
-        $this->loginUser('admin', 'adminadmin');
-
-        // check output $this->assertQuery('//a[@href="/admin/licence"]');
         $this->dispatch('/admin/documents');
         $this->assertQuery("//a[@href='/admin/documents/index/state/published']");
         $this->assertQuery("//a[@href='/admin/documents/index/state/audited']");
