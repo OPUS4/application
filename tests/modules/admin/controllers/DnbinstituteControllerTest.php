@@ -263,9 +263,9 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase {
         $this->useEnglish();
 
         $this->dispatch('/admin/dnbinstitute/edit/id/1');
+        $this->assertResponseCode(200);
+        $this->assertNotRedirectTo('/auth', 'User is not able to edit dnb-institutions, although he has the right to do it');
         $this->assertQueryContentContains('//label', 'Department', 'User is not able to edit dnb-institutions, '.
-            'although he has the right to do it');
-        $this->assertNotRedirectTo('/auth', 'User is not able to edit dnb-institutions, '.
             'although he has the right to do it');
     }
 
@@ -291,6 +291,7 @@ class Admin_DnbinstituteControllerTest extends CrudControllerTestCase {
         $this->useEnglish();
 
         $this->dispatch('/admin/dnbinstitute/edit/id/1');
+        $this->assertResponseCode(302);
         $this->assertRedirectTo('/auth', 'User is able to edit dnb-institutes, although he has no rights');
     }
 }
