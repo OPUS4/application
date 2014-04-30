@@ -74,8 +74,8 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
                 ->setMethod('POST')
                 ->setPost(array('selectedYear' => '2010'));
         $this->dispatch('/admin/statistic/show');
-        $this->assertQueryContentContains('//div[@class="breadcrumbsContainer"]', '2010', 'breadcrumbsContainer does ' .
-            'not contain the current year');
+        $this->assertQueryContentContains('//div[@class="breadcrumbsContainer"]', '2010',
+            'breadcrumbsContainer does not contain the current year');
         $this->assertQueryContentContains('//h1', 'Veröffentlichungstatistik 2010');
     }
 }

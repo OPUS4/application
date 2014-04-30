@@ -11,16 +11,18 @@ class Admin_Model_Statistics {
 
     private $documents = null;
 
-    public function __construct($controller = null) {
-
+    public function __construct() {
         $this->documents = new Opus_Db_Documents();
     }
 
     public function getSelectedYear() {
-
         return $this->selectedYear;
     }
 
+    /*
+     * helper-function
+     * builds up the result array for the statistic-functions
+     */
     private function fillResultArray($select, $name) {
         $statistics = array();
         $result = $select->fetchAll();
@@ -30,8 +32,11 @@ class Admin_Model_Statistics {
         return $statistics;
     }
 
+    /*
+     * builds month statistics
+     * returns sum of published documents sorted by month
+     */
     public function getMonthStatistics($selectedYear) {
-
         // TODO: use tokens to reduce redundancy of inserting year twice
         $select = $this->documents->getAdapter()->query("SELECT months.m as mon, count(d.id) as c
             FROM
@@ -58,8 +63,11 @@ class Admin_Model_Statistics {
         return $monthStat;
     }
 
+    /*
+     * builds type statistics
+     * returns sum of published documents sorted by document types
+     */
     public function getTypeStatistics($selectedYear) {
-
         // get document type overview from database
         $select = $this->documents->getAdapter()->query("SELECT t.type as ty, count(d.id) as c
           FROM (SELECT DISTINCT type FROM documents) t
@@ -70,8 +78,11 @@ class Admin_Model_Statistics {
         return $this->fillResultArray($select, 'ty');
     }
 
+    /*
+     * builds institute statistics
+     * returns sum of published documents sorted by institutes
+     */
     public function getInstituteStatistics($selectedYear) {
-
         // institution statistics
         //$institutes = new Opus_OrganisationalUnits;
         $role = Opus_CollectionRole::fetchByName('institutes');
@@ -104,8 +115,10 @@ class Admin_Model_Statistics {
         return null;
     }
 
+    /*
+     * returns all years in which documents were published
+     */
     public function getYears() {
-
         $documents = new Opus_Db_Documents();
         $select = $documents->select()->from('documents', array('year' => 'YEAR(server_date_published)'))
             ->distinct()
@@ -117,6 +130,9 @@ class Admin_Model_Statistics {
         return $years;
     }
 
+    /*
+     * returns sum of all documents published befor the $thresholdYear
+     */
     public function getNumDocsUntil($thresholdYear) {
         $result = 0;
         foreach ($this->getYears() as $year) {
