@@ -87,6 +87,7 @@ class Application_ConfigurationTest extends ControllerTestCase {
     public function testGetOpusVersion()  {
         $versionFile = APPLICATION_PATH . '/VERSION.txt';
         $versionFromFile = 'UNKNOWN';
+        //tests existence of local version file for local test environments
         if(!is_file($versionFile)) {
             // Create VERSION.txt for testing
             file_put_contents($versionFile, $versionFromFile);
@@ -109,6 +110,7 @@ class Application_ConfigurationTest extends ControllerTestCase {
     public function testGetOpusInfo() {
         $versionFile = APPLICATION_PATH . '/VERSION.txt';
         $versionFromFile = 'UNKNOWN';
+        //tests existence of local version file for local test environments
         if(!is_file($versionFile)) {
             // Create VERSION.txt for testing
             file_put_contents($versionFile, $versionFromFile);
@@ -121,7 +123,7 @@ class Application_ConfigurationTest extends ControllerTestCase {
 
         $data = Application_Configuration::getOpusInfo();
         //clean up
-        if ($this->deleteVersionFile) {
+        if ($deleteVersionFile) {
             unlink ($this->versionFile);
         }
         $this->assertInternalType('array', $data);
