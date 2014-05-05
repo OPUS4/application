@@ -27,7 +27,8 @@
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -98,12 +99,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      */
     protected function tearDown() {
         $this->logoutUser();
-        if (!is_null($this->testDocuments)) {
-            $this->deleteTestDocuments();
-        }
-        if (!is_null($this->testFiles)) {
-            $this->deleteTestFiles();
-        }
+        $this->deleteTestDocuments();
+        $this->deleteTestFiles();
         parent::tearDown();
     }
 
@@ -511,11 +508,13 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     }
 
     private function deleteTestDocuments() {
-        foreach ($this->testDocuments as $key => $doc) {
-            try {
-                $this->removeDocument($doc);
-                unset ($this->testDocuments[$key]);
-            } catch (Exception $e) {
+        if (!is_null($this->testDocuments)) {
+            foreach ($this->testDocuments as $key => $doc) {
+                try {
+                    $this->removeDocument($doc);
+                    unset ($this->testDocuments[$key]);
+                } catch (Exception $e) {
+                }
             }
         }
     }
@@ -554,10 +553,12 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     }
 
     private function deleteTestFiles() {
-        foreach ($this->testFiles as $key => $filepath) {
-            try {
-                Opus_Util_File::deleteDirectory(dirname($filepath));
-            } catch (Exception $e) {
+        if (!is_null($this->testFiles)) {
+            foreach ($this->testFiles as $key => $filepath) {
+                try {
+                    Opus_Util_File::deleteDirectory(dirname($filepath));
+                } catch (Exception $e) {
+                }
             }
         }
     }

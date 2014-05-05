@@ -27,7 +27,8 @@
  * @category    Application
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -35,6 +36,8 @@
 class Oai_Model_ContainerTest extends ControllerTestCase {
 
     private $workspacePath;
+    private $roleId;
+    private $userId;
 
     public function  setUp() {
         parent::setUp();
@@ -43,6 +46,16 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
             throw new Exception("config key 'workspacePath' not defined in config file");
         }
         $this->workspacePath = $config->workspacePath;        
+    }
+
+    public function tearDown() {
+        if (!is_null($this->userId)) {
+            $testRole = new Opus_UserRole($this->roleId);
+            $testRole->delete();
+            $userAccount = new Opus_Account($this->userId);
+            $userAccount->delete();
+        }
+        parent::tearDown();
     }
 
     public function testConstructorWithNullArgument() {
@@ -290,21 +303,65 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->assertFalse(file_exists($tarball->getPath()));
     }
 
+    /*
+     * tests document access for three user roles (admin, user with access rights, user without access rights)
+     */
     public function testRegression3281() {
-        $doc = $this->createTestDocument();
-        $doc->setServerState('unpublished');
-        $docId = $doc->store();
-
-        $this->buildContainerWithoutAccess($docId);
-
-        $doc = new Opus_Document($docId);
-        $doc->setServerState('publish');
         $this->enableSecurity();
 
-        $this->buildContainerWithoutAccess($docId);
+        // test document access as admin
+        $this->loginUser('admin', 'adminadmin');
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $docId = $doc->store();
+        $this->tryAccessForDocument($docId, true);
+
+        $doc = new Opus_Document($docId);
+        $doc->setServerState('unpublished');
+        $docId = $doc->store();
+        $this->tryAccessForDocument($docId, true);
+
+        $this->logoutUser();
+
+        // test document access as user with document access rights
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $publishedDocId = $doc->store();
+        $doc = new Opus_Document($docId);
+        $doc->setServerState('unpublished');
+        $unpublishedDocId = $doc->store();
+
+        $testRole = new Opus_UserRole();
+        $testRole->setName('test_access');
+        $testRole->appendAccessDocument($unpublishedDocId);
+        $testRole->appendAccessDocument($publishedDocId);
+        $this->roleId = $testRole->store();
+
+        $userAccount = new Opus_Account();
+        $userAccount->setLogin('test_account')
+                ->setPassword('role_tester_user2');
+        $userAccount->setRole($testRole);
+        $this->userId = $userAccount->store();
+
+        $this->loginUser('test_account', 'role_tester_user2');
+        $this->tryAccessForDocument($publishedDocId, true);
+        $this->tryAccessForDocument($unpublishedDocId, false);
+        $this->logoutUser();
+
+        // test document access as user without access rights
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $docId = $doc->store();
+        $this->tryAccessForDocument($docId, false);
+
+        $doc = new Opus_Document($docId);
+        $doc->setServerState('unpublished');
+        $docId = $doc->store();
+        $this->tryAccessForDocument($docId, false);
     }
 
-    private function buildContainerWithoutAccess($docId) {
+    private function tryAccessForDocument($docId, $accessAllowed) {
         $model = new Oai_Model_Container($docId);
         $tarball = null;
         $exceptionMessage = null;
@@ -314,8 +371,11 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         catch (Oai_Model_Exception $e) {
             $exceptionMessage = $e->getMessage();
         }
-        $this->assertEquals('access to requested document is forbidden', $exceptionMessage);
-
+        if ($accessAllowed === true) {
+            $this->assertEquals('requested document does not have any associated readable files', $exceptionMessage);
+        }
+        else {
+            $this->assertEquals('access to requested document is forbidden', $exceptionMessage);
+        }
     }
-
 }

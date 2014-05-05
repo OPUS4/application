@@ -27,7 +27,8 @@
  * @category    Application
  * @package     Module_Oai
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -83,9 +84,23 @@ class Oai_Model_Container {
      */
     private function getAccessibleFiles() {
         $realm = Opus_Security_Realm::getInstance();
-        if ($this->doc->getServerState() !== 'published' || !$realm->checkDocument($this->docId)) {
-            $this->logErrorMessage('document with id ' . $this->docId . ' is not in server state published');
-            throw new Oai_Model_Exception('access to requested document is forbidden');
+
+        // admins sollen immer durchgelassen werden, nutzer nur wenn das doc im publizierten Zustand ist
+        if (!$realm->checkDocument($this->docId) ) {
+            if ($this->doc->getServerState() !== 'published') {
+                $this->logErrorMessage('document with id ' . $this->docId . ' is not in server state published');
+                throw new Oai_Model_Exception('access to requested document is forbidden');
+            }
+            else {
+                $this->logErrorMessage('access to document with id ' . $this->docId . ' is not allowed for current user');
+                throw new Oai_Model_Exception('access to requested document is forbidden');
+            }
+        }
+        else {
+            if (!$realm->skipSecurityChecks() && $this->doc->getServerState() !== 'published') {
+                $this->logErrorMessage('document with id ' . $this->docId . ' is not in server state published');
+                throw new Oai_Model_Exception('access to requested document is forbidden');
+            }
         }
 
         $files = array();
