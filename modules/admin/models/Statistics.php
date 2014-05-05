@@ -15,10 +15,6 @@ class Admin_Model_Statistics {
         $this->documents = new Opus_Db_Documents();
     }
 
-    public function getSelectedYear() {
-        return $this->selectedYear;
-    }
-
     /*
      * helper-function
      * builds up the result array for the statistic-functions
@@ -83,6 +79,7 @@ class Admin_Model_Statistics {
      * returns sum of published documents sorted by institutes
      */
     public function getInstituteStatistics($selectedYear) {
+        $instStat = null;
         // institution statistics
         //$institutes = new Opus_OrganisationalUnits;
         $role = Opus_CollectionRole::fetchByName('institutes');
@@ -110,9 +107,8 @@ class Admin_Model_Statistics {
                 $res = $db->query($query, array($institut->getId(), $institut->getId(), $selectedYear))->fetchAll();
                 $instStat[$institut->getDisplayName()] = $res[0]['entries'];
             }
-            return $instStat;
         }
-        return null;
+        return $instStat;
     }
 
     /*
