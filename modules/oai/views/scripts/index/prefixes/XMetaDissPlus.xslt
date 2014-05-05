@@ -215,7 +215,14 @@
             </dc:language >
 
             <!-- dcterms:isPartOf -->
-            <xsl:apply-templates select="Series" mode="xmetadissplus" />
+            <xsl:choose>
+                <xsl:when test="@Type='periodicalpart'">
+                    <xsl:apply-templates select="Series" mode="xmetadissplusPeriodicalPart" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="Series" mode="xmetadissplus" />
+                </xsl:otherwise>
+            </xsl:choose>
 
             <xsl:apply-templates select="Licence" mode="xmetadissplus" />
 
@@ -474,6 +481,16 @@
             <xsl:value-of select="@Number" />
         </dcterms:isPartOf>
     </xsl:template>
-    
-    
+
+    <xsl:template match="Series" mode="xmetadissplusPeriodicalPart">
+        <dcterms:isPartOf xsi:type="ddb:noScheme">
+            <dcterms:isPartOf xsi:type="ddb:ZSTitelID">
+                <xsl:value-of select="@Id" />
+            </dcterms:isPartOf>
+            <dcterms:isPartOf xsi:type="ddb:ZS-Ausgabe">
+                <xsl:value-of select="@Number" />
+            </dcterms:isPartOf>
+        </dcterms:isPartOf>
+    </xsl:template>
+
 </xsl:stylesheet>

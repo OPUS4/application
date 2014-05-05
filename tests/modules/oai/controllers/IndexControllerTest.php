@@ -1558,4 +1558,21 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals($queryResponse->item(0)->nodeValue, 'info:eu-repo/semantics/embargoedAccess',
             "Document 145: <dc:rights> must contain 'info:eu-repo/semantics/embargoedAccess'");
     }
+
+    public function testXMetaDissPlusForPeriodicalParts() {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setType('periodicalpart');
+        $series = new Opus_Series(7);
+        $doc->addSeries($series)->setNumber('hallohallo');
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai:opus4.demo:' . $docId);
+
+        $this->assertTrue(strpos($this->_response->getBody(), 'hallohallo') > 0,
+            'tested document does not contain the expected series information: Series-Number');
+        $this->assertTrue(strpos($this->_response->getBody(), 'xsi:type="ddb:ZSTitelID">7') > 0,
+            'tested document does not contain the expected series information: Series-Title');
+    }
+
 }
