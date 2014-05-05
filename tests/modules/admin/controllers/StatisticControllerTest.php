@@ -39,6 +39,7 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
         $this->assertModule('admin');
         $this->assertController('statistic');
         $this->assertAction('index');
+        $this->validateXHTML();
     }
 
     public function testShowAction() {
@@ -50,6 +51,7 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
         $this->assertModule('admin');
         $this->assertController('statistic');
         $this->assertAction('show');
+        $this->validateXHTML();
     }
 
     /*
