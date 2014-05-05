@@ -124,7 +124,7 @@ class Application_ConfigurationTest extends ControllerTestCase {
         $data = Application_Configuration::getOpusInfo();
         //clean up
         if ($deleteVersionFile) {
-            unlink ($this->versionFile);
+            unlink ($versionFile);
         }
         $this->assertInternalType('array', $data);
         $this->assertArrayHasKey('admin_info_version', $data);
