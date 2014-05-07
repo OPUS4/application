@@ -1546,6 +1546,6 @@ table + .paginationControl{
 }
 
 .admin_doctype_fail {
-    background-color: red;
+    background-color: #FFD4D4;
 }
 /* @end */

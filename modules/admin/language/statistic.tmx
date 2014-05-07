@@ -27,25 +27,25 @@
     
     <tu tuid="Total_Number_Documents">
       <tuv xml:lang="en">
-        <seg>Total number of documents</seg>
+        <seg>Published Documents</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Gesamtzahl Dokumente</seg>
+        <seg>Publizierte Dokumente</seg>
       </tuv>
     </tu>
 
     <tu tuid="Number_Documents_Until">
       <tuv xml:lang="en">
-        <seg>Total number of documents until</seg>
+        <seg>Total Number of Documents until</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Gesamtzahl Dokumente bis</seg>
+        <seg>Gesamtzahl der Dokumente bis zum</seg>
       </tuv>
     </tu>
     
     <tu tuid="Month_Overview_Title">
       <tuv xml:lang="en">
-        <seg>Month overview</seg>
+        <seg>Month Overview</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Monatsübersicht</seg>
@@ -54,7 +54,7 @@
     
     <tu tuid="Type_Overview_Title">
       <tuv xml:lang="en">
-        <seg>Overview by document type</seg>
+        <seg>Overview by Document Type</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumenttyp-Übersicht</seg>
@@ -63,7 +63,7 @@
     
     <tu tuid="Institute_Overview_Title">
       <tuv xml:lang="en">
-        <seg>Overview by institute</seg>
+        <seg>Overview by Institute</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Institut-Übersicht</seg>
@@ -117,7 +117,7 @@
     
     <tu tuid="Submit_Button_Label">
       <tuv xml:lang="en">
-        <seg>Show statistic</seg>
+        <seg>Show Statistic</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Statistik anzeigen</seg>

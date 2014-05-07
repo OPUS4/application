@@ -127,7 +127,7 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
     
     <tu tuid="admin_title_statistic">
       <tuv xml:lang="en">
-        <seg>Publication statistics</seg>
+        <seg>Publication Statistics</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Veröffentlichungsstatistik</seg>
@@ -307,7 +307,7 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
 
     <tu tuid="admin_title_doctype">
       <tuv xml:lang="en">
-        <seg>Document types</seg>
+        <seg>Document Types</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumenttypen</seg>
@@ -370,7 +370,7 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
 
     <tu tuid="admin_doctype_errorMsg">
       <tuv xml:lang="en">
-        <seg>Error message</seg>
+        <seg>Error Message</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Fehlermeldung</seg>
@@ -379,7 +379,7 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
 
     <tu tuid="admin_doctype_show_message">
       <tuv xml:lang="en">
-        <seg>Error message of document type </seg>
+        <seg>Error Message of Document Type </seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Fehlermeldung des Dokumenttyps </seg>
@@ -397,19 +397,19 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
 
     <tu tuid="admin_doctype_numDocs">
       <tuv xml:lang="en">
-        <seg>Number of document types</seg>
+        <seg>Document Types</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Anzahl der Dokumenttypen</seg>
+        <seg>Verschiedene Dokumenttypen</seg>
       </tuv>
     </tu>
 
     <tu tuid="admin_doctype_numActiveDocs">
       <tuv xml:lang="en">
-        <seg>Number of active documents</seg>
+        <seg>Active documents</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Anzahl der aktiven Dokumenttypen</seg>
+        <seg>Aktive Dokumenttypen</seg>
       </tuv>
     </tu>
 
