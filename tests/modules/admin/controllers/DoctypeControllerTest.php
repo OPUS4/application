@@ -51,7 +51,7 @@ class Admin_DoctypeControllerTest extends ControllerTestCase {
         $this->useEnglish();
         $this->dispatch('/admin/doctype/show/document/demo_invalid');
         $this->assertResponseCode(200);
-        $this->assertQueryContentContains('//h2', 'Error message of document type demo_invalid:');
+        $this->assertQueryContentContains('//h2', 'Error Message of Document Type demo_invalid:');
     }
 }
  
