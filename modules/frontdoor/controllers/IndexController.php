@@ -27,7 +27,8 @@
  * @category    Application
  * @package     Module_Frontdoor
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  *
@@ -44,6 +45,7 @@ class Frontdoor_IndexController extends Controller_Action {
     const FILE_ACCESS_FUNCTION = 'Frontdoor_IndexController::checkIfUserHasFileAccess';
     const FORMAT_DATE_FUNCTION = 'Frontdoor_IndexController::formatDate';
     const EMBARGO_ACCESS_FUNCTION = 'Frontdoor_IndexController::checkIfFileEmbargoHasPassed';
+    const SORT_ORDER_FUNCTION = 'Frontdoor_IndexController::useSortOrder';
 
     private $viewHelper;
 
@@ -114,6 +116,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $proc->registerPHPFunctions(self::FILE_ACCESS_FUNCTION);
         $proc->registerPHPFunctions(self::FORMAT_DATE_FUNCTION);
         $proc->registerPHPFunctions(self::EMBARGO_ACCESS_FUNCTION);
+        $proc->registerPHPFunctions(self::SORT_ORDER_FUNCTION);
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
 
@@ -194,6 +197,26 @@ class Frontdoor_IndexController extends Controller_Action {
     public static function checkIfFileEmbargoHasPassed($docId) {
         $doc = new Opus_Document($docId);
         return $doc->hasEmbargoPassed();
+    }
+
+    /*
+     * if the sortorder-value of any attached file is set, this function returns the files in the correct sortorder
+     * otherwise files are returned in attached order
+     */
+    public static function useSortOrder($docId) {
+        $doc = new Opus_Document($docId);
+        $files = $doc->getFile();
+        if (sizeof($files > 1)) {
+            foreach ($files as $file) {
+                if (!is_null($file->getSortOrder())) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        else {
+            return false;
+        }
     }
 
     /**

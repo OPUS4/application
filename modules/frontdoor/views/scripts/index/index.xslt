@@ -28,11 +28,12 @@
  *
  * @category    Application
  * @package     Module_Frontdoor
+ * @author      Michael Lang <lang@zib.de>
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de> 
  * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de> 
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2009-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2009-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -101,9 +102,18 @@
                           </xsl:call-template>
                        </h3>
                        <ul>
-                          <xsl:apply-templates select="File[@VisibleInFrontdoor='1']">
-                             <xsl:sort select="@Label"/>
-                          </xsl:apply-templates>
+                           <xsl:choose>
+                               <xsl:when test="php:functionString('Frontdoor_IndexController::useSortOrder', @Id)">
+                                  <xsl:apply-templates select="File[@VisibleInFrontdoor='1']">
+                                     <xsl:sort select="@SortOrder"/>
+                                  </xsl:apply-templates>
+                               </xsl:when>
+                               <xsl:otherwise>
+                                   <xsl:apply-templates select="File[@VisibleInFrontdoor='1']">
+                                     <xsl:sort select="@Label"/>
+                                  </xsl:apply-templates>
+                               </xsl:otherwise>
+                           </xsl:choose>
                        </ul>
                     </div>
                 </xsl:when>

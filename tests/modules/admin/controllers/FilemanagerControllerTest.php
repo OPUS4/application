@@ -26,7 +26,8 @@
  *
  * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  *
@@ -305,5 +306,33 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//div', $dateNow->getDay() . '.'. $dateNow->getMonth() . '.' . $dateNow->getYear());
     }
 
+    /*
+     * asserts that document files are displayed up in the correct order, if the sort order field is set
+     */
+    public function testFileSortOrder() {
+        $this->dispatch('/admin/filemanager/index/id/91');
+        $body = $this->_response->getBody();
+        $positionFile1 = strpos($body, 'oai_invisible.txt');
+        $positionFile2 = strpos($body, 'test.txt');
+        $positionFile3 = strpos($body, 'test.pdf');
+        $positionFile4 = strpos($body, 'frontdoor_invisible.txt');
+        $this->assertTrue($positionFile1 < $positionFile2);
+        $this->assertTrue($positionFile1 < $positionFile3);
+        $this->assertTrue($positionFile1 < $positionFile4);
+        $this->assertTrue($positionFile2 < $positionFile3);
+        $this->assertTrue($positionFile2 < $positionFile4);
+        $this->assertTrue($positionFile3 < $positionFile4);
+    }
+
+    /*
+     * asserts that document files are displayed up in the correct order, if the sort order field is NOT set
+     */
+    public function testDocumentFilesWithoutSortOrder() {
+        $this->dispatch('/admin/filemanager/index/id/92');
+        $body = $this->_response->getBody();
+        $positionFile1 = strpos($body, 'datei mit unüblichem Namen.xhtml');
+        $positionFile2 = strpos($body, 'test.xhtml');
+        $this->assertTrue($positionFile1 < $positionFile2);
+    }
 }
 
