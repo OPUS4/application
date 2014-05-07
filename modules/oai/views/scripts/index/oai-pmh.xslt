@@ -44,7 +44,7 @@
 
     <!-- add include here for each new metadata format    -->
 
-    <xsl:include href="prefixes/open_aire.xslt" />
+    <xsl:include href="prefixes/ec_fundedresources.xslt" />
     <xsl:include href="prefixes/oai_dc.xslt"/>
     <xsl:include href="prefixes/oai_pp.xslt"/>
     <xsl:include href="prefixes/epicur.xslt"/>
@@ -336,7 +336,7 @@
                     <xsl:when test="$oai_metadataPrefix='copy_xml'">
                        <xsl:apply-templates select="." mode="copy_xml" />
                     </xsl:when>
-                    <xsl:when test="$oai_metadataPrefix='open_aire'">
+                    <xsl:when test="$oai_metadataPrefix='ec_fundedresources'">
                         <xsl:apply-templates select="." mode="open_aire" />
                     </xsl:when>
                  </xsl:choose>

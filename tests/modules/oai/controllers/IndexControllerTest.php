@@ -1537,7 +1537,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      * Test verb=ListRecords, metadataPrefix=open_aire.
      */
     public function testListRecordsForOpenAireCompliance() {
-        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=open_aire&set=open_aire');
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=ec_fundedresources&set=ec_fundedresources');
         $this->assertResponseCode(200);
 
         $response = $this->getResponse();
