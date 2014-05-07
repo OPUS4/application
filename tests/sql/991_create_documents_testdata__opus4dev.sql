@@ -37,22 +37,27 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 (107, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
 (108, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
 (109, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
-(110, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0);
+(110, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
+(155, NULL, 2010, NULL, NULL, '2010-02-26', 'report', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'published', NULL, 1);
 
 --
 -- Daten für Tabelle `document_files`
 --
 
 INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `mime_type`, `language`, `file_size`, `visible_in_frontdoor`, `visible_in_oai`, `server_date_submitted`, `sort_order`) VALUES
-(116, 91, 'test.pdf', 'test.pdf', 'application/pdf', 'eng', 6970, 1, 1, NOW(), 3 ),
-(117, 92, 'test.xhtml', 'test.xhtml', 'application/xhtml+xml', 'eng', 125, 1, 1, NOW(), 14),
-(118, 93, 'test.txt', 'test.txt', 'text/plain', 'eng', 591, 1, 1, NOW(), 18 ),
-(119, 94, 'test.ps', 'test.ps', 'application/postscript', 'eng', 22041, 1, 1, NOW(), 22 ),
-(120, 95, 'test.html', 'test.html', 'text/html', 'eng', 847, 1, 1, NOW(), 4 ),
-(127, 91, 'test.txt', 'test.txt', 'text/plain', 'eng', 591, 1, 1, NOW(), 2 ),
-(128, 91, 'frontdoor_invisible.txt', 'frontdoor_invisible.txt', 'text/plain', 'eng', 591, 0, 1, NOW(), 177 ),
+(116, 91, 'test.pdf', 'test.pdf', 'application/pdf', 'eng', 6970, 1, 1, NOW(), null ),
+(117, 92, 'test.xhtml', 'test.xhtml', 'application/xhtml+xml', 'eng', 125, 1, 1, NOW(), null),
+(118, 93, 'test.txt', 'test.txt', 'text/plain', 'eng', 591, 1, 1, NOW(), null ),
+(119, 94, 'test.ps', 'test.ps', 'application/postscript', 'eng', 22041, 1, 1, NOW(), null ),
+(120, 95, 'test.html', 'test.html', 'text/html', 'eng', 847, 1, 1, NOW(), null ),
+(127, 91, 'test.txt', 'test.txt', 'text/plain', 'eng', 591, 1, 1, NOW(), null ),
+(128, 91, 'frontdoor_invisible.txt', 'frontdoor_invisible.txt', 'text/plain', 'eng', 591, 0, 1, NOW(), null ),
 (129, 91, 'oai_invisible.txt', 'oai_invisible.txt', 'text/plain', 'eng', 591, 1, 0, NOW(), null ),
-(132, 92, 'datei mit unüblichem Namen.xhtml', 'datei mit unüblichem Namen.xhtml', 'application/xhtml+xml', 'eng', 125, 1, 1, NOW(), 6 );
+(132, 92, 'datei mit unüblichem Namen.xhtml', 'datei mit unüblichem Namen.xhtml', 'application/xhtml+xml', 'eng', 125, 1, 1, NOW(), null ),
+(133, 155, 'test.pdf', 'test.pdf', 'application/pdf', 'eng', 6970, 1, 1, NOW(), 3 ),
+(134, 155, 'test.txt', 'test.txt', 'text/plain', 'eng', 591, 1, 1, NOW(), 2 ),
+(135, 155, 'frontdoor_invisible.txt', 'frontdoor_invisible.txt', 'text/plain', 'eng', 591, 0, 1, NOW(), 177 ),
+(136, 155, 'oai_invisible.txt', 'oai_invisible.txt', 'text/plain', 'eng', 591, 1, 0, NOW(), null );
 
 INSERT INTO `file_hashvalues` (`file_id`, `type`, `value`) VALUES
 (116, 'MD5', '1ba50dc8abc619cea3ba39f77c75c0fe'),

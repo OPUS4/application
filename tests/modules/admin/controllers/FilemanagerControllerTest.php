@@ -306,11 +306,11 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//div', $dateNow->getDay() . '.'. $dateNow->getMonth() . '.' . $dateNow->getYear());
     }
 
-    /*
-     * asserts that document files are displayed up in the correct order, if the sort order field is set
+    /**
+     * Asserts that document files are displayed up in the correct order, if the sort order field is set.
      */
     public function testFileSortOrder() {
-        $this->dispatch('/admin/filemanager/index/id/91');
+        $this->dispatch('/admin/filemanager/index/id/155');
         $body = $this->_response->getBody();
         $positionFile1 = strpos($body, 'oai_invisible.txt');
         $positionFile2 = strpos($body, 'test.txt');
@@ -324,14 +324,14 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $this->assertTrue($positionFile3 < $positionFile4);
     }
 
-    /*
-     * asserts that document files are displayed up in the correct order, if the sort order field is NOT set
+    /**
+     * Asserts that document files are displayed up in the correct order, if the sort order field is NOT set.
      */
     public function testDocumentFilesWithoutSortOrder() {
         $this->dispatch('/admin/filemanager/index/id/92');
         $body = $this->_response->getBody();
-        $positionFile1 = strpos($body, 'datei mit unüblichem Namen.xhtml');
-        $positionFile2 = strpos($body, 'test.xhtml');
+        $positionFile1 = strpos($body, 'test.xhtml');
+        $positionFile2 = strpos($body, 'datei mit unüblichem Namen.xhtml');
         $this->assertTrue($positionFile1 < $positionFile2);
     }
 }

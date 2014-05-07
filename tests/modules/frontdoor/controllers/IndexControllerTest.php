@@ -843,11 +843,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//tr', '2010/03/05');
     }
 
-    /*
-     * asserts that document files are displayed up in the correct order, if the sort order field is set
+    /**
+     * Asserts that document files are displayed up in the correct order, if the sort order field is set.
      */
     public function testFilesSortOrder() {
-        $this->dispatch('/frontdoor/index/index/id/91/docId/91');
+        $this->dispatch('/frontdoor/index/index/id/155/docId/155');
         $body = $this->_response->getBody();
         $positionFile1 = strpos($body, 'oai_invisible.txt (1 KB)');
         $positionFile2 = strpos($body, 'test.txt (1 KB)');
@@ -858,14 +858,14 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
     }
 
-    /*
-     * asserts that document files are displayed up in the correct order, if the sort order field is NOT set
+    /**
+     * Asserts that document files are displayed up in the correct order, if the sort order field is NOT set.
      */
     public function testDocumentFilesWithoutSortOrder() {
         $this->dispatch('/frontdoor/index/index/id/92/docId/92');
         $body = $this->_response->getBody();
-        $positionFile1 = strpos($body, 'datei mit unüblichem Namen.xhtml');
-        $positionFile2 = strpos($body, 'test.xhtml');
+        $positionFile1 = strpos($body, 'datei mit unüblichem Namen.xhtml (0 KB)');
+        $positionFile2 = strpos($body, 'test.xhtml (0 KB)');
         $this->assertTrue($positionFile1 < $positionFile2);
     }
 }
