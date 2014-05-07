@@ -68,6 +68,7 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
         $this->assertAction('index');
         $this->assertQueryContentContains('//dt', 'Please select year:');
         $this->assertNotQueryContentContains('//h2', 'Month overview');
+        $this->checkForCustomBadStringsInHtml($this->getResponse()->getBody(), array('1337'));
     }
 
     public function testDisplayCurrentYear() {
