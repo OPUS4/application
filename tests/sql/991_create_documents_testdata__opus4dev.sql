@@ -38,7 +38,7 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 (108, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
 (109, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
 (110, NULL, 2008, NULL, NULL, '2010-09-26', 'article', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2008, '', NULL, '2010-06-04T02:36:53Z', '2010-03-05T09:47:22Z', 'unpublished', NULL, 0),
-(155, NULL, 2011, NULL, NULL, '2011-02-26', 'report', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, '2011-06-04T02:36:53Z', '2011-03-05T09:47:22Z', 'unpublished', NULL, 1);
+(155, NULL, 2011, NULL, NULL, '2011-02-26', 'report', NULL, NULL, 'eng', NULL, NULL, NULL, 'draft', NULL, 2010, '', NULL, '2011-06-04T02:36:53Z', '2011-03-05T09:47:22Z', 'published', NULL, 1);
 
 --
 -- Daten für Tabelle `document_files`

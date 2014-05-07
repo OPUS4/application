@@ -272,7 +272,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      */
     public function testPaginationBarContainsOverallNumberOfHitsInDoctypeBrowsing() {
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/report', null, null);
-        $this->assertEquals(51, $this->getNumOfHits());
+        $this->assertEquals(52, $this->getNumOfHits());
     }
 
     /**
