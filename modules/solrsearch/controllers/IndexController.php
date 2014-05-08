@@ -28,7 +28,8 @@
  * @package     Module_Solrsearch
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -129,6 +130,10 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->numOfHits = $this->resultList->getNumberOfHits();
     }
 
+    /**
+     * Resolves the facet-options from URL and builds a result array with the number of facets to display.
+     * @return array result[facet_name] = number
+     */
     private function facetNumberChanger() {
         $facetArray = array();
         if (!is_null($this->_request->getParam('facetNumber_author_facet'))) {

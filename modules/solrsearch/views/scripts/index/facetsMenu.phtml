@@ -27,7 +27,8 @@
  * @category    Application
  * @package     Module_Solrsearch
  * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -38,9 +39,9 @@
     <?php foreach($this->facets as $key => $facet) : ?>
         <div id="<?= $key ?>_facet" class="facet">
             <?php $facetUrl = $this->firstPage;
-            $facetUrl["facetNumber_" . $key] = ($this->facetNumberContainer[$key] + 1);
-            ?>
-            <h4><?= $this->translate($key."_facet_heading") ?> <a href="<?=  $this->url($facetUrl) ?>"> <img src="<?= $this->layoutPath() ?>/img/plus.png" height="12" width="12"></a></h4>
+                $facetUrl["facetNumber_" . $key] = ($this->facetNumberContainer[$key] + 1); ?>
+            <h4><?= $this->translate($key."_facet_heading") ?> <a href="<?=  $this->url($facetUrl) ?>">
+                    <img src="<?= $this->layoutPath() ?>/img/plus.png" height="12" width="12"></a></h4>
             <ul>
                 <?php foreach($facet as $facetItem) :
                     $fqUrl = $this->firstPage;
