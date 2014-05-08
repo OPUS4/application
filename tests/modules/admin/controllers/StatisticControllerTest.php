@@ -81,5 +81,13 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
             'breadcrumbsContainer does not contain the current year');
         $this->assertQueryContentContains('//h1', 'Veröffentlichungstatistik 2010');
     }
+
+    /**
+     * Regression test for OPUSVIER-1770.
+     */
+    public function testRedirectToIndexForShowWithoutSelectedYear() {
+        $this->dispatch('/admin/statistic/show');
+        $this->assertRedirectTo('/admin/statistic');
+    }
 }
 
