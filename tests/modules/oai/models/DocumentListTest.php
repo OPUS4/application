@@ -28,16 +28,14 @@
  * @category    Application
  * @package     Tests
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2012, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 class Oai_Model_DocumentListTest extends ControllerTestCase {
-    
-    private $docWithUrnId;
-    private $docWoUrnId;
 
-    /*
+    /**
      * Testet, ob beim MetaDataPrefix epicur Dokumente ohne Urn ausgegeben werden.
      */
     public function testDocumentOutputUrn() {
@@ -47,19 +45,19 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
         $identifier->setValue('urn_value1');
         $identifier->setType('urn');
         $docWithUrn->addIdentifier($identifier);
-        $this->docWithUrnId = $docWithUrn->store();
+        $docWithUrnId = $docWithUrn->store();
 
         $docWoUrn = $this->createTestDocument();
         $docWoUrn->setServerState('published');
-        $this->docWoUrnId = $docWoUrn->store();
+        $docWoUrnId = $docWoUrn->store();
 
         $oaiRequest = array('metadataPrefix' => 'epicur');
         $docListModel = new Oai_Model_DocumentList();
         $docListModel->_deliveringDocumentStates = array('published');
         $docIds = $docListModel->query($oaiRequest);
 
-        $this->assertTrue(in_array($this->docWithUrnId, $docIds), 'failed assert document with urn is returned');
-        $this->assertFalse(in_array($this->docWoUrnId, $docIds), 'failed assert document without urn is returned');
+        $this->assertTrue(in_array($docWithUrnId, $docIds), 'failed assert document with urn is returned');
+        $this->assertFalse(in_array($docWoUrnId, $docIds), 'failed assert document without urn is returned');
     }
 
     /**
