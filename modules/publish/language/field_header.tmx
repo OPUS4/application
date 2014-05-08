@@ -439,7 +439,7 @@ END OF COMMENT -->
 
     <tu tuid="header_EmbargoDate">
       <tuv xml:lang="en">
-        <seg>File embargo date</seg>
+        <seg>File Embargo Date</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Datum des Datei-Embargos</seg>

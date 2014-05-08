@@ -200,9 +200,9 @@ class Frontdoor_IndexController extends Controller_Action {
         return $doc->hasEmbargoPassed();
     }
 
-    /*
-     * if the sortorder-value of any attached file is set, this function returns the files in the correct sortorder
-     * otherwise files are returned in attached order
+    /**
+     * If the sortorder-value of any attached file is set, this function returns the files in the correct sortorder;
+     * otherwise files are returned in attached order.
      */
     public static function useSortOrder($docId) {
         $doc = new Opus_Document($docId);
