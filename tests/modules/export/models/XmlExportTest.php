@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Module_Export
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -83,6 +83,34 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $count = $result->length;
 
         $this->assertEquals('Deutscher Titel', $result->item(--$count)->childNodes->item(3)->attributes->item(2)->nodeValue);
+    }
+
+    public function testXmlPreparationForFrontdoorWithWrongId() {
+        $docId = 199293;
+        $xml = new DomDocument;
+        $proc = new XSLTProcessor;
+
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'docId' => ++$docId,
+            'searchtype' => 'all'
+        ));
+        $xmlExportModel = new Export_Model_XmlExport();
+
+        $this->setExpectedException('Application_Exception');
+        $xmlExportModel->prepareXmlForFrontdoor($xml, $proc, $this->getRequest());
+    }
+
+    public function testXmlPreparationForFrontdoorWithoutId() {
+        $xml = new DomDocument;
+        $proc = new XSLTProcessor;
+
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'searchtype' => 'all'
+        ));
+        $xmlExportModel = new Export_Model_XmlExport();
+
+        $this->setExpectedException('Application_Exception');
+        $xmlExportModel->prepareXmlForFrontdoor($xml, $proc, $this->getRequest());
     }
 }
  

@@ -58,6 +58,7 @@ class Frontdoor_IndexController extends Controller_Action {
      * @return void
      */
     public function indexAction() {
+        // call export index-action, if parameter is set
         if (!is_null($this->getRequest()->getParam('export'))) {
 
             $params = $this->getRequest()->getParams();

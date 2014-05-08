@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Module_Export
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -35,8 +35,8 @@
 
 class Export_Model_XmlExport extends Application_Model_Abstract {
 
-    /*
-     * prepares xml for solr search results
+    /**
+     * Prepares xml export for solr search results.
      */
     public function prepareXml($xml, $proc, $request) {
         try {
@@ -50,29 +50,27 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
         }
     }
 
-    /*
-     * prepares xml for frontdoor documents
+    /**
+     * Prepares xml export for frontdoor documents.
      */
     public function prepareXmlForFrontdoor($xml, $proc, $request) {
         $docId = $request->getParam('docId', '');
-        if ($docId == '') {
-            $this->printDocumentError("frontdoor_doc_id_missing_in_url", 404);
-            return;
+        if (is_null($docId) || $docId == '') {
+            throw new Application_Exception("No document id provided.", 404);
         }
         try {
             $document = new Opus_Document($docId);
-            $results = null;
+            $results = array();
             $results[0] = $document;
             $this->handleResults($results, 1, $xml, $proc);
         }
         catch (Opus_Model_NotFoundException $e) {
-            $this->printDocumentError("frontdoor_doc_id_not_found_in_db", 404);
-            return;
+            throw new Application_Exception("The document for id $docId is not found.", 404);
         }
     }
 
     /**
-     *
+     * Sets up an xml document out of the result list.
      * @param array $results An array of Opus_SolrSearch_Result objects.
      */
     private function handleResults($results, $numOfHits, $xml, $proc) {
@@ -113,8 +111,8 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
         }
     }
 
-    /*
-     * sets up the xml query
+    /**
+     * Sets up the xml query.
      */
     private function buildQuery($request) {
         $queryBuilder = new Util_QueryBuilder($this->getLogger(), true);
@@ -130,8 +128,8 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
         return $queryBuilder->createSearchQuery($queryBuilderInput);
     }
 
-    /*
-     * maps query for publist action
+    /**
+     * Maps query for publist action.
      */
     public function mapQuery($roleParam, $numberParam) {
         if (is_null(Opus_CollectionRole::fetchByName($roleParam))) {
@@ -161,8 +159,8 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
         return $collection;
     }
 
-    /*
-     * searches for available stylesheets and builds the path of the selected stylesheet
+    /**
+     * Searches for available stylesheets and builds the path of the selected stylesheet.
      */
     public function buildStylesheetPath($stylesheet, $path) {
         if (!is_null($stylesheet)) {
