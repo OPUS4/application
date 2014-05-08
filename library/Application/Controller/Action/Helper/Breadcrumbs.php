@@ -31,7 +31,8 @@
  * @category    Application
  * @package     Application_Controller_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -83,9 +84,9 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
     }
 
     /*
-     * sets $label as $value in breadcrumbs
+     * setzt das Label eines Breadcrumbs auf den Wert von $value
      */
-    public function setLabelFor($value, $label) {
+    public function setLabelFor($label, $value) {
         $page = $this->getNavigation()->findOneBy('label', $label);
         $page->setLabel($value);
     }

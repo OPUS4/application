@@ -28,7 +28,8 @@
  * @package     Module_Admin
  * @author      Tobias Leidinger (tobias.leidinger@gmail.com
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -86,6 +87,6 @@ class Admin_StatisticController extends Controller_Action {
         $this->view->typeStat = $this->statisticsModel->getTypeStatistics($selectedYear);
         $this->view->instStat = $this->statisticsModel->getInstituteStatistics($selectedYear);
 
-        $this->_breadcrumbs->setLabelFor($selectedYear, 'admin_statistic_show');
+        $this->_breadcrumbs->setLabelFor('admin_statistic_show', $selectedYear);
     }
 }
