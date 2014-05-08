@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -30,19 +29,18 @@
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Michael Lang <lang@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 
 /**
  * This controller is called on every error or exception.
  *
  * @package     Module_Default
  */
-class ErrorController extends Controller_Action
-{
+class ErrorController extends Controller_Action {
 
     /**
      * Always allow access to this controller; Override check in parent method.
@@ -54,8 +52,7 @@ class ErrorController extends Controller_Action
      *
      * @return void
      */
-    public function errorAction()
-    {
+    public function errorAction() {
         $config = Zend_Registry::get('Zend_Config');
         $logger = Zend_Registry::get('Zend_Log');
 
@@ -219,7 +216,6 @@ class ErrorController extends Controller_Action
         );
 
         return true;
-
     }
 
 }
