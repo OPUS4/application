@@ -66,13 +66,16 @@
     </xsl:template>
 
     <xsl:template name="Title">
+        <xsl:variable name="docLang" select="@Language" />
         <xsl:for-each select="TitleMain">
-            <xsl:if test="position() = 1">
+            <xsl:if test="@Language = $docLang">
                 <h2 class="titlemain">
                     <xsl:value-of select="@Value" />
                 </h2>
             </xsl:if>
-            <xsl:if test="position() > 1">
+        </xsl:for-each>
+        <xsl:for-each select="TitleMain">
+            <xsl:if test="@Language != $docLang">
                 <h3 class="titlemain">
                     <xsl:value-of select="@Value" />
                 </h3>

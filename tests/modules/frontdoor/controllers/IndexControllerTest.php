@@ -868,4 +868,15 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $positionFile2 = strpos($body, 'test.xhtml (0 KB)');
         $this->assertTrue($positionFile1 < $positionFile2);
     }
+
+    /**
+     * Checks, whether the document language title is printed before other titles
+     * OPUSVIER-1752
+     */
+    public function testMainTitleSortOrder() {
+        $this->dispatch('/frontdoor/index/index/id/146/docId/146');
+        $title1 = strpos($this->_response->getBody(), 'KOBV');
+        $title2 = strpos($this->_response->getBody(), 'COLN');
+        $this->assertTrue($title1 > $title2);
+    }
 }
