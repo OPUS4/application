@@ -875,8 +875,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      */
     public function testMainTitleSortOrder() {
         $this->dispatch('/frontdoor/index/index/id/146/docId/146');
-        $title1 = strpos($this->_response->getBody(), 'KOBV');
-        $title2 = strpos($this->_response->getBody(), 'COLN');
-        $this->assertTrue($title1 > $title2);
+        $title1 = strpos($this->_response->getBody(), '<h2 class="titlemain">KOBV</h2>');
+        $title2 = strpos($this->_response->getBody(), '<h3 class="titlemain">COLN</h3>');
+        $this->assertTrue($title1 < $title2);
     }
 }
