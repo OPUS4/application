@@ -65,6 +65,7 @@
     <uri name="http://www.w3.org/MarkUp/DTD/xhtml-base-1.mod" uri="xhtml/xhtml-base-1.mod"/>
     <uri name="http://www.w3.org/MarkUp/DTD/xhtml-script-1.mod" uri="xhtml/xhtml-script-1.mod"/>
     <uri name="http://www.w3.org/MarkUp/DTD/xhtml-style-1.mod" uri="xhtml/xhtml-style-1.mod"/>
+    <uri name="http://www.w3.org/TR/xhtml1/DTD/xhtml-symbol.ent" uri="xhtml/xhtml-symbol.ent"/>
     <uri name="http://www.w3.org/MarkUp/DTD/xhtml-image-1.mod" uri="xhtml/xhtml-image-1.mod"/>
     <uri name="http://www.w3.org/MarkUp/DTD/xhtml-csismap-1.mod" uri="xhtml/xhtml-csismap-1.mod"/>
     <uri name="http://www.w3.org/MarkUp/DTD/xhtml-ssismap-1.mod" uri="xhtml/xhtml-ssismap-1.mod"/>
