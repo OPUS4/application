@@ -981,5 +981,27 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/index/invalidsearchterm/searchtype/simple');
         $this->assertNotContains('solrsearch_title_invalidsearchterm', $this->getResponse()->getBody());
     }
-    
+
+    /**
+     * Asserts, that in browsing the documents are sorted by server_date_published.
+     */
+    public function testSortOrderOfDocumentsInBrowsing() {
+        $olderDoc = $this->createTestDocument();
+        $olderDoc->setServerState('published');
+        $olderDoc->setType('article');
+        $olderDocId = $olderDoc->store();
+        // store takes time -> the next doc is created one second later
+        $olderDoc = new Opus_Document($olderDocId);
+        $olderDocId = $olderDoc->store();
+
+        $newerDoc = $this->createTestDocument();
+        $newerDoc->setServerState('published');
+        $newerDoc->setType('article');
+        $newerDocId = $newerDoc->store();
+
+        $this->dispatch('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article');
+        $olderDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $olderDocId);
+        $newerDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $newerDocId);
+        $this->assertTrue($newerDocPosition < $olderDocPosition);
+    }
 }

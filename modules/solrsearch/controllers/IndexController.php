@@ -299,7 +299,9 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->_logger->err(__METHOD__ . ' : ' . $e->getMessage());
             return $this->_redirectToAndExit('index');
         }
-
+        if ($this->getRequest()->getParam('browsing') || $this->_request->getParam('searchtype') == 'collection') {
+            $queryBuilderInput['sortField'] = 'server_date_published';
+        }
         $this->searchtype = $this->getRequest()->getParam('searchtype');
         if ($this->searchtype === Util_Searchtypes::LATEST_SEARCH) {
             return $queryBuilder->createSearchQuery($this->validateInput($queryBuilderInput, 10, 100));
