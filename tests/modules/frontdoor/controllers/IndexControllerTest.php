@@ -725,7 +725,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     public function testValidateXHTML() {
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertResponseCode(200);
-    //    $this->validateXHTML();
+        $this->validateXHTML();
     }
 
     public function testValidateXHTMLWithShortendAbstracts() {
@@ -735,7 +735,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/frontdoor/index/index/docId/92');
         $this->assertResponseCode(200);
-   //     $this->validateXHTML();
+        $this->validateXHTML();
     }
     
     public function testDisplayFullCollectionName() {
