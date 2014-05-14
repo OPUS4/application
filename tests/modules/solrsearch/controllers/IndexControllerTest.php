@@ -988,10 +988,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     public function testSortOrderOfDocumentsInBrowsing() {
         $olderDoc = $this->createTestDocument();
         $olderDoc->setServerState('published');
+        $date = new Opus_Date();
+        $date->setNow();
+        $date->setDay($date->getDay() - 1);
+        $olderDoc->setServerDatePublished($date);
         $olderDoc->setType('article');
-        $olderDocId = $olderDoc->store();
-        // store takes time -> the next doc is created one second later
-        $olderDoc = new Opus_Document($olderDocId);
         $olderDocId = $olderDoc->store();
 
         $newerDoc = $this->createTestDocument();
