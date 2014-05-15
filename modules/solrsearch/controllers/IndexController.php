@@ -72,21 +72,45 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->_forward('index', 'dispatch');
     }
 
+    /**
+     * Redirects to the Export Module.
+     * @param $params Parameters for url
+     */
+    private function redirectToExport($params) {
+        unset($params['start']);
+        if ($params['searchtype'] != 'latest') {
+            unset($params['rows']);
+        }
+        else {
+            if (!array_key_exists('rows', $params)) {
+                $params['rows'] = 10;
+            }
+        }
+
+        if ($this->getRequest()->getParam('export') === 'rss') {
+            unset($params['export']);
+            unset($params['sortfield']);
+            unset($params['sortorder']);
+            return $this->_redirectToAndExit('index', null, 'index', 'rss', $params);
+        }
+
+        return $this->_redirectToAndExit('index', null, 'index', 'export', $params);
+    }
+
     public function searchAction() {
+        // check if searchtype = latest and params parsed incorrect
+        if (strpos($this->getRequest()->getParam('searchtype'), 'latest/export') !== false) {
+            $paramArray = explode('/', $this->getParam('searchtype'));
+            $params = $this->getRequest()->getParams();
+            $params['searchtype'] = 'latest';
+            $params['export'] = $paramArray[2];
+            $params['stylesheet'] = $paramArray[4];
+            $this->redirectToExport($params);
+        }
         if (!is_null($this->getRequest()->getParam('export'))) {
-            
             $params = $this->getRequest()->getParams();
             // export module ignores pagination parameters
-            unset($params['rows']);
-            unset($params['start']);
-
-            if ($this->getRequest()->getParam('export') === 'rss') {
-                unset($params['export']);
-                unset($params['sortfield']);
-                unset($params['sortorder']);
-                return $this->_redirectToAndExit('index', null, 'index', 'rss', $params);
-            }
-            return $this->_redirectToAndExit('index', null, 'index', 'export', $params);
+            $this->redirectToExport($params);
         }
 
         $this->query = $this->buildQuery();

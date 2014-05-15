@@ -27,7 +27,8 @@
  * @category    Application
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -763,4 +764,33 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<export-example>', $response->getBody());
         $this->assertContains($docId, $response->getBody());
     }
+
+    /**
+     * Parameter 'searchtype' should not be interpreted as 'latest/export/xml/stylesheet/example'.
+     * Regressiontest für OPUSVIER-2742.
+     */
+    public function testRedirectToExportFromSearchtypeLatest() {
+        $this->markTestSkipped('cannot be tested at the moment: (1) special chars in dispatch' . "\n"
+                .' (2) method _redirectToAndExit does not work in test environment (see OPUSVIER-2315)');
+        $this->dispatch('/solrsearch/index/search?rows=10&searchtype=latest/export/xml/stylesheet/example');
+        $this->assertRedirectTo('/export/index/index/rows/10/searchtype/latest/export/xml/stylesheet/example');
+    }
+
+    /**
+     * Important: parameter 'rows' should not be deleted (OPUSVIER-2742).
+     */
+    public function testRedirectToExportWithRowsParameter() {
+        $this->dispatch('/solrsearch/index/search/searchtype/latest/start/0/rows/10/export/xml/stylesheet/example');
+        $this->assertRedirectTo('/export/index/index/searchtype/latest/rows/10/export/xml/stylesheet/example');
+    }
+
+    /**
+     * Important: parameter 'rows' should be appended (OPUSVIER-2742).
+     */
+    public function testRedirectToExportWithoutRowsParameter() {
+        $this->dispatch('/solrsearch/index/search/searchtype/latest/export/xml/stylesheet/example');
+        $this->assertRedirectTo('/export/index/index/searchtype/latest/export/xml/stylesheet/example/rows/10');
+    }
+
+
 }
