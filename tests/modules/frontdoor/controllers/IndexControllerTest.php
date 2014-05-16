@@ -921,4 +921,36 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $title2 = strpos($this->_response->getBody(), '<h3 class="titlemain">deutscher Titel</h3>', $startPosition);
         $this->assertTrue($title1 < $title2);
     }
+
+    /**
+     * Tests, whether the current language of a document's file is shown behind the link as flag.
+     */
+    public function testFileFlagOfDocument() {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $file = $this->createTestFile('eng');
+        $file->setLanguage('eng');
+        $doc->addFile($file);
+        $file = $this->createTestFile('deu');
+        $file->setLanguage('deu');
+        $doc->addFile($file);
+        $file = $this->createTestFile('spa');
+        $file->setLanguage('spa');
+        $doc->addFile($file);
+        $file = $this->createTestFile('fra');
+        $file->setLanguage('fra');
+        $doc->addFile($file);
+        $file = $this->createTestFile('rus');
+        $file->setLanguage('rus');
+        $doc->addFile($file);
+        $docId = $doc->store();
+
+        $this->dispatch('/frontdoor/index/index/docId/' . $docId);
+        $body = $this->_response->getBody();
+        $this->assertContains('<img width="16" height="11" src="/layouts/opus4/img/flag/eng.png" alt="eng"/>', $body);
+        $this->assertContains('<img width="16" height="11" src="/layouts/opus4/img/flag/deu.png" alt="deu"/>', $body);
+        $this->assertContains('<img width="16" height="11" src="/layouts/opus4/img/flag/spa.png" alt="spa"/>', $body);
+        $this->assertContains('<img width="16" height="11" src="/layouts/opus4/img/flag/fra.png" alt="fra"/>', $body);
+        $this->assertContains('<img width="16" height="11" src="/layouts/opus4/img/flag/rus.png" alt="rus"/>', $body);
+    }
 }

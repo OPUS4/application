@@ -29,6 +29,7 @@
  * @category    Application
  * @package     Module_Frontdoor
  * @author      Edouard Simon <edouard.simon@zib.de>
+ * @author      Michael Lang <lang@zib.de>
  * @copyright   Copyright (c) 2009-2011, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -59,6 +60,24 @@
                </xsl:attribute>
             </img>
          </xsl:variable>
+
+          <xsl:variable name="flagIcon">
+              <img width="16" height="11">
+                  <xsl:attribute name="src">
+                      <xsl:value-of select="$layoutPath"/>
+                      <xsl:text>/img/flag/</xsl:text>
+                      <xsl:call-template name="replaceCharsInString">
+                          <xsl:with-param name="stringIn" select="string(@Language)"/>
+                          <xsl:with-param name="charsIn" select="'/'"/>
+                          <xsl:with-param name="charsOut" select="'_'"/>
+                      </xsl:call-template>
+                      <xsl:text>.png</xsl:text>
+                  </xsl:attribute>
+                  <xsl:attribute name="alt">
+                      <xsl:value-of select="@Language"/>
+                  </xsl:attribute>
+              </img>
+          </xsl:variable>
 
          <xsl:variable name="fileLink">
             <xsl:value-of select="$baseUrl"/>
@@ -111,6 +130,8 @@
                      </xsl:attribute>
                      <xsl:copy-of select="$fileLinkText" />
                   </xsl:element>
+                  <xsl:text> </xsl:text>
+                  <xsl:copy-of select="$flagIcon" />
                </div>
             </xsl:when>
             <xsl:otherwise>
@@ -123,6 +144,8 @@
                   <xsl:copy-of select="$fileIcon" />
                   <xsl:text> </xsl:text>
                   <xsl:copy-of select="$fileLinkText" />
+                  <xsl:text> </xsl:text>
+                  <xsl:copy-of select="$flagIcon" />
                </div>
             </xsl:otherwise>
          </xsl:choose>
@@ -133,6 +156,7 @@
                <xsl:value-of select="@Comment" />
             </p>
          </xsl:if>
+
       </li>
    </xsl:template>
    
