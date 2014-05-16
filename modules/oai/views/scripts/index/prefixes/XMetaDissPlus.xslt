@@ -483,13 +483,11 @@
     </xsl:template>
 
     <xsl:template match="Series" mode="xmetadissplusPeriodicalPart">
-        <dcterms:isPartOf xsi:type="ddb:noScheme">
-            <dcterms:isPartOf xsi:type="ddb:ZSTitelID">
-                <xsl:value-of select="@Id" />
-            </dcterms:isPartOf>
-            <dcterms:isPartOf xsi:type="ddb:ZS-Ausgabe">
-                <xsl:value-of select="@Number" />
-            </dcterms:isPartOf>
+        <dcterms:isPartOf xsi:type="ddb:ZSTitelID">
+            <xsl:value-of select="@Id" />
+        </dcterms:isPartOf>
+        <dcterms:isPartOf xsi:type="ddb:ZS-Ausgabe">
+            <xsl:value-of select="@Number" />
         </dcterms:isPartOf>
     </xsl:template>
 
