@@ -13,7 +13,8 @@
 #
 # @author      Thoralf Klein <thoralf.klein@zib.de>
 # @author      Sascha Szott <szott@zib.de>
-# @copyright   Copyright (c) 2010-2011, OPUS 4 development team
+# @author      Michael Lang <lang@zib.de>
+# @copyright   Copyright (c) 2010-2014, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 # @version     $Id$
 
@@ -88,7 +89,7 @@ fi
 
 rm -rv opus4/{nbproject,tests,workspace}
 rm -rvf opus4/public/layouts/{opus33,opus34,darker,matheon,plain,opus4-matheon}
-rm -f opus4/public/layouts/opus4/js/LaTeXMathML.js
+rm -f opus4/public/js/LaTeXMathML.js
 rm -rf opus4/public/layouts/opus4/img/flag
 
 # exclude XML-definitions for test document types
