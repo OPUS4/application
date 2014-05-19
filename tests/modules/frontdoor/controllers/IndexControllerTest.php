@@ -953,4 +953,38 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<img width="16" height="11" src="/layouts/opus4/img/flag/fra.png" alt="fra"/>', $body);
         $this->assertContains('<img width="16" height="11" src="/layouts/opus4/img/flag/rus.png" alt="rus"/>', $body);
     }
+
+    public function testMe() {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $file = $this->createTestFile('eng');
+        $file->setLanguage('eng');
+        $doc->addFile($file);
+        $file = $this->createTestFile('deu');
+        $file->setLanguage('deu');
+        $doc->addFile($file);
+        $file = $this->createTestFile('spa');
+        $file->setLanguage('spa');
+        $doc->addFile($file);
+        $file = $this->createTestFile('fra');
+        $file->setLanguage('fra');
+        $doc->addFile($file);
+        $file = $this->createTestFile('rus');
+        $file->setLanguage('rus');
+        $doc->addFile($file);
+        $docId = $doc->store();
+
+        $oldPath = APPLICATION_PATH . '/public/layouts/opus4/img/flag/';
+        $bupPath = APPLICATION_PATH . '/public/layouts/opus4/img/flag_bup/';
+        rename($oldPath, $bupPath);
+        $this->dispatch('/frontdoor/index/index/docId/' . $docId);
+        rename($bupPath, $oldPath);
+        $body = $this->_response->getBody();
+
+        $this->assertNotContains('<img width="16" height="11" src="/layouts/opus4/img/flag/eng.png" alt="eng"/>', $body);
+        $this->assertNotContains('<img width="16" height="11" src="/layouts/opus4/img/flag/deu.png" alt="deu"/>', $body);
+        $this->assertNotContains('<img width="16" height="11" src="/layouts/opus4/img/flag/spa.png" alt="spa"/>', $body);
+        $this->assertNotContains('<img width="16" height="11" src="/layouts/opus4/img/flag/fra.png" alt="fra"/>', $body);
+        $this->assertNotContains('<img width="16" height="11" src="/layouts/opus4/img/flag/rus.png" alt="rus"/>', $body);
+    }
 }

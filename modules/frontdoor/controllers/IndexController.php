@@ -46,6 +46,7 @@ class Frontdoor_IndexController extends Controller_Action {
     const FORMAT_DATE_FUNCTION = 'Frontdoor_IndexController::formatDate';
     const EMBARGO_ACCESS_FUNCTION = 'Frontdoor_IndexController::checkIfFileEmbargoHasPassed';
     const SORT_ORDER_FUNCTION = 'Frontdoor_IndexController::useSortOrder';
+    const CHECK_LANGUAGE_FILE_FUNCTION = 'Frontdoor_IndexController::checkLanguageFile';
 
     private $viewHelper;
 
@@ -123,6 +124,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $proc->registerPHPFunctions(self::FORMAT_DATE_FUNCTION);
         $proc->registerPHPFunctions(self::EMBARGO_ACCESS_FUNCTION);
         $proc->registerPHPFunctions(self::SORT_ORDER_FUNCTION);
+        $proc->registerPHPFunctions(self::CHECK_LANGUAGE_FILE_FUNCTION);
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
 
@@ -207,6 +209,20 @@ class Frontdoor_IndexController extends Controller_Action {
     public static function checkIfFileEmbargoHasPassed($docId) {
         $doc = new Opus_Document($docId);
         return $doc->hasEmbargoPassed();
+    }
+
+    /**
+     * Checks existence of language sign for services.xsl
+     * @param $filename
+     * @return bool
+     */
+    public static function checkLanguageFile($language) {
+        if (file_exists(APPLICATION_PATH . '/public/layouts/opus4/img/flag/' . $language . '.png')) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
     /**

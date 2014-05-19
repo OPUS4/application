@@ -62,21 +62,25 @@
          </xsl:variable>
 
           <xsl:variable name="flagIcon">
-              <img width="16" height="11">
-                  <xsl:attribute name="src">
-                      <xsl:value-of select="$layoutPath"/>
-                      <xsl:text>/img/flag/</xsl:text>
-                      <xsl:call-template name="replaceCharsInString">
-                          <xsl:with-param name="stringIn" select="string(@Language)"/>
-                          <xsl:with-param name="charsIn" select="'/'"/>
-                          <xsl:with-param name="charsOut" select="'_'"/>
-                      </xsl:call-template>
-                      <xsl:text>.png</xsl:text>
-                  </xsl:attribute>
-                  <xsl:attribute name="alt">
-                      <xsl:value-of select="@Language"/>
-                  </xsl:attribute>
-              </img>
+              <xsl:choose>
+                  <xsl:when test="php:functionString('Frontdoor_IndexController::checkLanguageFile', @Language)">
+                      <img width="16" height="11">
+                          <xsl:attribute name="src">
+                              <xsl:value-of select="$layoutPath"/>
+                              <xsl:text>/img/flag/</xsl:text>
+                              <xsl:call-template name="replaceCharsInString">
+                                  <xsl:with-param name="stringIn" select="string(@Language)"/>
+                                  <xsl:with-param name="charsIn" select="'/'"/>
+                                  <xsl:with-param name="charsOut" select="'_'"/>
+                              </xsl:call-template>
+                              <xsl:text>.png</xsl:text>
+                          </xsl:attribute>
+                          <xsl:attribute name="alt">
+                              <xsl:value-of select="@Language"/>
+                          </xsl:attribute>
+                      </img>
+                  </xsl:when>
+              </xsl:choose>
           </xsl:variable>
 
          <xsl:variable name="fileLink">
