@@ -88,6 +88,8 @@ fi
 
 rm -rv opus4/{nbproject,tests,workspace}
 rm -rvf opus4/public/layouts/{opus33,opus34,darker,matheon,plain,opus4-matheon}
+rm -f opus4/public/layouts/opus4/js/LaTeXMathML.js
+rm -rf opus4/public/layouts/opus4/img/flag
 
 # exclude XML-definitions for test document types
 rm -v opus4/application/configs/doctypes/preprintmatheon.xml
