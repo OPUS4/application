@@ -160,6 +160,7 @@ class Frontdoor_IndexController extends Controller_Action {
         }
         $this->addMetaTagsForDocument($document);
         $this->view->title = $this->getFrontdoorTitle($document);
+        $this->view->headScript()->appendFile($this->view->layoutPath() . '/js/LaTeXMathML.js', 'text/javascript');
 
         $this->incrementStatisticsCounter($docId);
         

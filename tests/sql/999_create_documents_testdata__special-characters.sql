@@ -7,7 +7,8 @@ INSERT INTO `documents` (`id`, `completed_date`, `completed_year`, `contributing
 INSERT INTO `document_title_abstracts` (`document_id`, `type`, `value`, `language`) VALUES
 (147, 'main', 'Sonderzeichen, die in der Frontdoor korrekt escaped werden müssen, siehe auch Ticket OPUSVIER-1647.', 'deu'),
 (150, 'main', 'Autoren mit einem, zwei und drei LaTex-Umlauten, die in den Urls auf der Frontdoor korrekt escaped werden müssen, siehe auch Ticket OPUSVIER-2435.', 'deu'),
-(152, 'main', 'Dokumenttitel mit Sonderzeichen %-"-#-&,  vgl. OPUSVIER-2716.', 'deu');
+(152, 'main', 'Dokumenttitel mit Sonderzeichen %-"-#-&,  vgl. OPUSVIER-2716.', 'deu'),
+(305, 'abstract', 'LaTeX $plug in$ test', 'deu');
 
 INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `mime_type`, `language`, `file_size`, `visible_in_frontdoor`, `visible_in_oai`, `server_date_submitted`) VALUES
 (130, 147, 'special-chars-%-"-#-&.pdf', 'Dateiname-mit-Sonderzeichen.pdf', 'application/pdf', 'eng', 1, 1, 1, NOW() ),
