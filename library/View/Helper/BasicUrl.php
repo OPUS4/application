@@ -37,7 +37,8 @@
  * 
  * This helper class defines only one method baseUrl() to retrieve the
  * application base url for absolute urls in views.
- * 
+ *
+ * TODO rename to View_Helper_FullUrl
  */
 class View_Helper_BasicUrl extends Zend_View_Helper_Abstract {
 
@@ -49,6 +50,8 @@ class View_Helper_BasicUrl extends Zend_View_Helper_Abstract {
      * Return the base url of the application.
      *
      * @return Base url string.
+     *
+     * TODO remove; use Zend_View_Helper_BaseUrl instead
      */
     public function partialUrl() {
         $fc = Zend_Controller_Front::getInstance();
