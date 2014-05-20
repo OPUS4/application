@@ -29,7 +29,8 @@
  * @package     Module_Export
  * @author      Sascha Szott <szott@zib.de>
  * @author      Gunar Maiwald <maiwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -110,9 +111,6 @@ class Export_IndexController extends Controller_Xml {
             $groupBy = 'completedYear';
         }
 
-        $viewHelper = new View_Helper_BaseUrl();
-        $fullUrl = $viewHelper->fullUrl($this->view);
-
         $collection = $this->exportModel->mapQuery($this->getRequest()->getParam('role'), $this->getRequest()->getParam('number'));
         $this->getRequest()->setParam('searchtype', 'collection');
         $this->getRequest()->setParam('id', $collection->getId());
@@ -122,7 +120,7 @@ class Export_IndexController extends Controller_Xml {
         $this->_proc->registerPHPFunctions('max');
         $this->_proc->registerPHPFunctions('urlencode');
         $this->_proc->registerPHPFunctions('Export_Model_PublicationList::getMimeTypeDisplayName');
-        $this->_proc->setParameter('', 'fullUrl', $fullUrl);
+        $this->_proc->setParameter('', 'fullUrl', $this->view->basicUrl->fullUrl());
         $this->_proc->setParameter('', 'groupBy', $groupBy);
 
         $this->loadStyleSheet($this->exportModel->buildStylesheetPath($this->stylesheet,
