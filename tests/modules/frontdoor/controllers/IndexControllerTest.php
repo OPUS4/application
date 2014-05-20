@@ -954,7 +954,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<img width="16" height="11" src="/layouts/opus4/img/flag/rus.png" alt="rus"/>', $body);
     }
 
-    public function testMe() {
+    /**
+     * Asserts, that there are no language-flags, if the corresponding flag file is not present.
+     */
+    public function testFlagsWithoutFile() {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $file = $this->createTestFile('eng');
