@@ -48,12 +48,6 @@ class Frontdoor_IndexController extends Controller_Action {
     const SORT_ORDER_FUNCTION = 'Frontdoor_IndexController::useSortOrder';
     const CHECK_LANGUAGE_FILE_FUNCTION = 'Frontdoor_IndexController::checkLanguageFile';
 
-    private $viewHelper;
-
-    public function init() {
-        parent::init();
-        $this->viewHelper = new View_Helper_BaseUrl();
-    }
     /**
      * Displays the metadata of a document.
      * @return void
@@ -132,7 +126,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $layoutPath = 'layouts/' . (isset($config, $config->theme) ? $config->theme : '');
         $numOfShortAbstractChars = isset($config, $config->frontdoor->numOfShortAbstractChars) ? $config->frontdoor->numOfShortAbstractChars : '0';
 
-        $proc->setParameter('', 'baseUrlServer', $this->viewHelper->fullUrl($this->view));
+        $proc->setParameter('', 'baseUrlServer', $this->view->basicUrl()->fullUrl());
         $proc->setParameter('', 'baseUrl', $baseUrl);
         $proc->setParameter('', 'layoutPath', $baseUrl . '/' . $layoutPath);
         $proc->setParameter('', 'isMailPossible', $this->isMailPossible($document));
@@ -357,7 +351,7 @@ class Frontdoor_IndexController extends Controller_Action {
             }
             $metas[] = array('DC.Identifier', $identifierValue);
         }
-        $metas[] = array('DC.Identifier', $this->viewHelper->fullUrl($this->view) . '/frontdoor/index/index/docId/'. $document->getId());
+        $metas[] = array('DC.Identifier', $this->view->basicUrl()->fullUrl() . '/frontdoor/index/index/docId/'. $document->getId());
 
         foreach ($document->getFile() AS $file) {
             if (!$file->exists() or ($file->getVisibleInFrontdoor() !== '1') ) {

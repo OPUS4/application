@@ -30,8 +30,9 @@
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
  * @author      Henning Gerhardt <henning.gerhardt@slub-dresden.de>
+ * @author      Michael Lang <lang@zib.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2009 - 2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2009 - 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -60,8 +61,6 @@ class Oai_IndexController extends Controller_Xml {
      */
     protected $_configuration = null;
 
-    private $viewHelper;
-
     /**
      * Gather configuration before action handling.
      *
@@ -74,7 +73,6 @@ class Oai_IndexController extends Controller_Xml {
         $config = $registry->get('Zend_Config');
 
         $this->_configuration = new Oai_Model_Configuration($config);
-        $this->viewHelper = new View_Helper_BaseUrl();
     }
 
     /**
@@ -518,7 +516,7 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function _addFrontdoorUrlAttribute(DOMNode $document, $docid) {
-        $url = $this->viewHelper->fullUrl($this->view) . '/frontdoor/index/index/docId/' . $docid;
+        $url = $this->view->basicUrl()->fullUrl() . '/frontdoor/index/index/docId/' . $docid;
         
         $owner = $document->ownerDocument;
         $attr = $owner->createAttribute('frontdoorurl');
@@ -535,7 +533,7 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */  
     private function _addFileUrlAttribute(DOMNode $file, $docid, $filename) {
-        $url = $this->viewHelper->fullUrl($this->view) . '/files/' . $docid . '/' . rawurlencode($filename);
+        $url = $this->view->basicUrl()->fullUrl() . '/files/' . $docid . '/' . rawurlencode($filename);
 
         $owner = $file->ownerDocument;
         $attr = $owner->createAttribute('url');

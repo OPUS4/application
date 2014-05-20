@@ -27,7 +27,8 @@
  * @category    Application
  * @package     View
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008 - 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -38,18 +39,22 @@
  * application base url for absolute urls in views.
  * 
  */
-class View_Helper_BaseUrl {
+class View_Helper_BasicUrl extends Zend_View_Helper_Abstract {
+
+    public function basicUrl() {
+        return $this;
+    }
 
     /**
      * Return the base url of the application.
      *
      * @return Base url string.
      */
-    public function baseUrl() {
+    public function partialUrl() {
         $fc = Zend_Controller_Front::getInstance();
         return $fc->getRequest()->getBaseUrl();
     }
-    
+
     /**
      * Return the full url (server name followed by base URL).
      * This method might by useful when constructing absolute URLs.
@@ -57,8 +62,8 @@ class View_Helper_BaseUrl {
      * @param Zend_View $view instance of Zend_View
      * @return Full url string.
      */
-    public function fullUrl($view) {
-	return $view->serverUrl() . $this->baseUrl();
+    public function fullUrl() {
+	    return $this->view->serverUrl() . $this->partialUrl();
     }
 
 }

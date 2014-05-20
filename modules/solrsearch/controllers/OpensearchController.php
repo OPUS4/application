@@ -27,7 +27,8 @@
  * @category    Application
  * @package     Module_Solrsearch
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -35,18 +36,16 @@
 class Solrsearch_OpensearchController extends Controller_Xml {
 
     private $log;
-    private $viewHelper;
 
     public function init() {
         parent::init();
         $this->log = Zend_Registry::get('Zend_Log');
-        $this->viewHelper = new View_Helper_BaseUrl();
     }
 
     public function indexAction() {
         $this->_proc->setParameter('',
                 'searchBaseUrl',
-                $this->viewHelper->fullUrl($this->view) . '/solrsearch/index/search/searchtype/simple/query/{searchTerms}');
+                $this->view->basicUrl()->fullUrl() . '/solrsearch/index/search/searchtype/simple/query/{searchTerms}');
         $this->_proc->setParameter('',
                 'faviconUrl',
                 $this->view->serverUrl() . $this->view->layoutPath() . '/img/logo/favicon.ico');

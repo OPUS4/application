@@ -28,18 +28,16 @@
  * @category    Application
  * @package     Module_Matheon
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 class Matheon_SelectReviewerController extends Controller_Action {
 
-    protected $viewHelper;
-
     public function init() {
         parent::init();
         $this->getHelper('MainMenu')->setActive('publish');
-        $this->viewHelper = new View_Helper_BaseUrl();
     }
 
     public function formAction() {
@@ -107,7 +105,7 @@ class Matheon_SelectReviewerController extends Controller_Action {
         $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
         $job->setData(array(
             'subject' => $document->renderPublishMailSubject(),
-            'message' => $document->renderPublishMailBody($this->viewHelper->fullUrl($this->view), $baseUrlFiles),
+            'message' => $document->renderPublishMailBody($this->view->basicUrl()->fullUrl(), $baseUrlFiles),
             'users' => $recipient
         ));
 

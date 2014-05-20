@@ -27,20 +27,14 @@
  * @category    Application
  * @package     Module_CitationExport
  * @author      Sascha Szott <szott@zib.de>
+ * @author      Michael Lang <lang@zib.de>
  * @author      Pascal-Nicolas Becker <becker@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 class CitationExport_IndexController extends Controller_Action {
-
-    protected $viewHelper;
-
-    public function init() {
-        parent::init();
-        $this->viewHelper = new View_Helper_BaseUrl();
-    }
 
     /**
      * Output data to index view
@@ -203,7 +197,7 @@ class CitationExport_IndexController extends Controller_Action {
         try {
             $proc = new XSLTProcessor;
             $proc->setParameter('', 'enrichment_note', $enrichmentNote);
-            $proc->setParameter('', 'url_prefix', $this->viewHelper->fullUrl($this->view));
+            $proc->setParameter('', 'url_prefix', $this->view->basicUrl()->fullUrl());
             $proc->registerPHPFunctions();
             $proc->importStyleSheet($xslt);
         	

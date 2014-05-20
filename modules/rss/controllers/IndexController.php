@@ -28,7 +28,8 @@
  * @category    Application
  * @package     Module_Rss
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -36,7 +37,6 @@
 class Rss_IndexController extends Controller_Xml {
 
     private $log;
-    private $viewHelper;
     const NUM_OF_ITEMS_PER_FEED = '25';
     const RSS_SORT_FIELD = 'server_date_published';
     const RSS_SORT_ORDER = 'desc';
@@ -44,7 +44,6 @@ class Rss_IndexController extends Controller_Xml {
     public function init() {
         parent::init();
         $this->log = Zend_Registry::get('Zend_Log');
-        $this->viewHelper = new View_Helper_BaseUrl();
     }
 
     public function indexAction() {
@@ -138,7 +137,7 @@ class Rss_IndexController extends Controller_Xml {
     }
 
     private function setFrontdoorBaseUrl() {
-        $this->_proc->setParameter('', 'frontdoorBaseUrl', $this->view->serverUrl() . $this->viewHelper->fullUrl($this->view) . '/frontdoor/index/index/docId/');
+        $this->_proc->setParameter('', 'frontdoorBaseUrl', $this->view->basicUrl()->fullUrl() . '/frontdoor/index/index/docId/');
     }
 
 }
