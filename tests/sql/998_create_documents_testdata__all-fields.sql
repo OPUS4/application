@@ -9,7 +9,9 @@ INSERT INTO `document_enrichments` (`id`, `document_id`, `key_name`, `value`) VA
 (7, 146, 'ContributorsName', 'John Doe (Foreword) and Jane Doe (Illustration)'),
 (8, 146, 'Event', 'Opus4 OAI-Event'),
 (9, 146, 'City', 'Opus4 OAI-City'),
-(10, 146, 'Country', 'Opus4 OAI-Country');
+(10, 146, 'Country', 'Opus4 OAI-Country'),
+(11, 146, 'Relation', 'info:eu-repo/grantAgreement/EC/FP7/12345/EU//OpenAIRE'),
+(12, 145, 'Relation', 'info:eu-repo/grantAgreement/EC/FP7/12345');
 
 INSERT INTO `document_identifiers` (`id`, `document_id`, `type`, `value`) VALUES
 (499,146,'old','123'),

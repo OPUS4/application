@@ -1748,6 +1748,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="EnrichmentRelation">
+            <tuv xml:lang="en">
+                <seg>EU-Project Identifier</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>EU-Projekt Id</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="EnrichmentClassRvk">
             <tuv xml:lang="en">
                 <seg>RVK - Regensburg Classification</seg>

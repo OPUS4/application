@@ -266,6 +266,7 @@
             
             <!-- Enrichment Section: add the enrichment keys that have to be displayed in frontdoor -->
             <xsl:apply-templates select="Enrichment[@KeyName='Event']" />
+            <xsl:apply-templates select="Enrichment[@KeyName='Relation']" />
             <xsl:apply-templates select="Enrichment[@KeyName='City']" />
             <xsl:apply-templates select="Enrichment[@KeyName='Country']" />
             <!-- Enrichment Fields for Opus3 Documents -->

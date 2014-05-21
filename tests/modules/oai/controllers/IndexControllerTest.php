@@ -1534,7 +1534,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Test verb=ListRecords, metadataPrefix=open_aire.
+     * Test verb=ListRecords, metadataPrefix=ec_fundedresources, set=ec_fundedresources.
      */
     public function testListRecordsForOpenAireCompliance() {
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=ec_fundedresources&set=ec_fundedresources');
@@ -1544,10 +1544,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $badStrings = array("Exception", "Stacktrace", "badVerb");
         $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
 
-        $this->assertContains('<dc:rights>', $response->getBody(), "Response must contain '<dc:rights>'");
-        $this->assertContains('<dc:relation>', $response->getBody(), "Response must contain '<dc:relation>'");
-        $this->assertContains('eu / funder / nr2', $response->getBody(), "<dc:relation> must contain 'eu / funder / nr2'");
-        $this->assertContains('eu / funder / nr1', $response->getBody(), "<dc:relation> must contain 'eu / funder / nr1'");
+        $this->assertContains('<dc:relation>info:eu-repo/grantAgreement/EC/FP7/12345/EU//OpenAIRE</dc:relation>',
+                $response->getBody(), "<dc:relation> must contain 'info:eu-repo/grantAgreement/EC/FP7/12345/EU//OpenAIRE'");
+        $this->assertContains('<dc:relation>info:eu-repo/grantAgreement/EC/FP7/12345</dc:relation>', $response->getBody(),
+                "<dc:relation> must contain 'info:eu-repo/grantAgreement/EC/FP7/12345'");
 
         $xpath = $this->prepareXpathFromResultString($response->getBody());
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:rights");

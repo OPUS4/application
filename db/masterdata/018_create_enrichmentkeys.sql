@@ -7,4 +7,5 @@ INSERT INTO `enrichmentkeys` (`name`) VALUES
 ('reviewer.user_id'),
 ('review.rejected_by'),
 ('review.accepted_by'),
-('BibtexRecord');
+('BibtexRecord'),
+('Relation');

@@ -128,6 +128,8 @@
             <xsl:apply-templates select="Licence" mode="open_aire" />
             <!-- open aire -->
             <xsl:apply-templates select="IdentifierEu" mode="open_aire" />
+            <xsl:apply-templates select="Enrichment" mode="open_aire" />
+
             <xsl:apply-templates select="Rights" mode="open_aire" />
         </oai_dc:dc>
     </xsl:template>
@@ -264,7 +266,7 @@
         </dc:rights>
     </xsl:template>
 
-    <xsl:template match="IdentifierEu" mode="open_aire">
+    <xsl:template match="Enrichment[@KeyName='Relation']" mode="open_aire">
         <dc:relation>
             <xsl:value-of select="@Value" />
         </dc:relation>
