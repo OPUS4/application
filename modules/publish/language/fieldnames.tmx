@@ -268,15 +268,6 @@
       </tuv>
     </tu>
 
-    <tu tuid="IdentifierEu">
-      <tuv xml:lang="en">
-        <seg>Identifier of EU funded project</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Id zum EU-geförderten Projekt</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="EmbargoDate">
         <tuv xml:lang="en">
             <seg>Embargo Date</seg>

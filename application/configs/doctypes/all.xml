@@ -119,7 +119,6 @@
     <field name="IdentifierSplashUrl" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
     <field name="IdentifierPubmed" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
     <field name="IdentifierArxiv" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
-    <field name="IdentifierEu" required="no" formelement="Text" datatype="Identifier" multiplicity="1"/>
 
     <field name="ThesisDateAccepted" required="no" formelement="Text" datatype="Date" multiplicity="1"/>
     <field name="ThesisPublisher" required="no" formelement="Select" datatype="ThesisPublisher" multiplicity="*"/>

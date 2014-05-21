@@ -29,9 +29,7 @@ INSERT INTO `document_identifiers` (`id`, `document_id`, `type`, `value`) VALUES
 (511,146,'opus3-id','123'),
 (512,146,'opac-id','123'),
 (513,146,'pmid','123'),
-(514,146,'arxiv','123'),
-(616,146,'eu','eu / funder / nr1'),
-(617,145,'eu','eu / funder / nr2');
+(514,146,'arxiv','123');
 
 INSERT INTO `document_notes` (`id`, `document_id`, `message`, `visibility`) VALUES
 (17,146,'Für die Öffentlichkeit','public'),

@@ -274,15 +274,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="Opus_Identifier_Type_Value_Eu">
-            <tuv xml:lang="en">
-                <seg>EU-Project</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>EU-Projekt</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="Opus_Identifier_Type_Value_Isbn">
             <tuv xml:lang="en">
                 <seg>ISBN</seg>

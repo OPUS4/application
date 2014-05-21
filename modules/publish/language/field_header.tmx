@@ -492,15 +492,6 @@ END OF COMMENT -->
       </tuv>
     </tu>
 
-    <tu tuid="header_IdentifierEu">
-      <tuv xml:lang="en">
-        <seg>Grand Agreement Information</seg>
-      </tuv>
-      <tuv xml:lang="de">
-        <seg>Grand Agreement Information</seg>
-      </tuv>
-    </tu>
-
     <tu tuid="header_IdentifierIssn">
       <tuv xml:lang="en">
         <seg>ISSN of document</seg>

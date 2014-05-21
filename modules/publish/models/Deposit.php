@@ -577,9 +577,6 @@ class Publish_Model_Deposit {
             else if (strstr($dataKey, 'Pubmed')) {
                 $this->document->addIdentifierPubmed($identifier);
             }
-            else if (strstr($dataKey, 'Eu')) {
-                $this->document->addIdentifierEu($identifier);
-            }
         }
         catch (Opus_Model_Exception $e) {
             $this->log->err("could not add identifier of type $dataKey with value $dataValue to document " . $this->docId . " : " . $e->getMessage());

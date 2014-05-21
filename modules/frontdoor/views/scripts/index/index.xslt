@@ -170,7 +170,6 @@
 
             <xsl:apply-templates select="PersonAuthor" />
             <xsl:apply-templates select="IdentifierUrn" />
-            <xsl:apply-templates select="IdentifierEu" />
             <xsl:apply-templates select="IdentifierUrl" />
             <xsl:apply-templates select="IdentifierHandle" />
             <xsl:apply-templates select="IdentifierDoi" />
