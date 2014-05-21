@@ -127,9 +127,7 @@
             <!-- dc:rights -->
             <xsl:apply-templates select="Licence" mode="open_aire" />
             <!-- open aire -->
-            <xsl:apply-templates select="IdentifierEu" mode="open_aire" />
             <xsl:apply-templates select="Enrichment" mode="open_aire" />
-
             <xsl:apply-templates select="Rights" mode="open_aire" />
         </oai_dc:dc>
     </xsl:template>
