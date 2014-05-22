@@ -1361,13 +1361,14 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
     
 
-   /**
-    * XMetaDissPlus Schema validation (see OPUSVIER-3165)
-    */
-   public function testXMetaDissPlusIsSchemaValid() {
-       $xmlCatalog = getenv('XML_CATALOG_FILES');
+    /**
+     * XMetaDissPlus Schema validation (see OPUSVIER-3165)
+     */
+    public function testXMetaDissPlusIsSchemaValid() {
+        $xmlCatalog = getenv('XML_CATALOG_FILES');
         if(!strpos($xmlCatalog, 'opus4-catalog.xml')) {
-            $this->markTestSkipped('Environment Variable XML_CATALOG_FILES not set correctly. It should point to resources/opus4-catalog.xml.');
+            $this->markTestSkipped(
+                'Environment Variable XML_CATALOG_FILES not set for resources/opus4-catalog.xml.');
         }
         libxml_use_internal_errors(true);
 
@@ -1381,7 +1382,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $valid = $metadataDocument->schemaValidate(APPLICATION_PATH
                 . '/tests/resources/xmetadissplus/xmetadissplus.xsd');
 
-        $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');    }
+        $this->assertTrue($valid, 'XML Schema validation failed for XMetaDissPlus');
+    }
 
     public function testListRecordsWithResumptionToken() {
         $max_records = 2;
