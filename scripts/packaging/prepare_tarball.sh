@@ -48,7 +48,7 @@ if [ "$1" == "trunk" ]; then
 else
   opusVersion=${1:16}
 fi
-sed -i.bak "s/version = .*/version = $opusVersion/g" $2/opus4/application/configs/application.ini
+sed -i.bak "s/version = .*/version = $opusVersion/g" "$2/opus4/application/configs/application.ini"
 
 #
 # Build tarball
