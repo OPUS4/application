@@ -67,7 +67,7 @@ class Admin_InfoControllerTest extends ControllerTestCase {
         $this->dispatch('admin/info');
         $this->assertResponseCode(200);
         $this->assertQuery('dt#admin_info_version');
-        $this->assertQueryContentContains("//dt[@id='admin_info_version']/following-sibling::dd", 'OPUS-4-DEV');
+        $this->assertQueryContentContains("//dt[@id='admin_info_version']/following-sibling::dd", $this->version);
     }
 
 }
