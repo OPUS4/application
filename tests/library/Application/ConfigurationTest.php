@@ -85,49 +85,15 @@ class Application_ConfigurationTest extends ControllerTestCase {
     }
 
     public function testGetOpusVersion()  {
-        $versionFile = APPLICATION_PATH . '/VERSION.txt';
-        $versionFromFile = 'UNKNOWN';
-        //tests existence of local version file for local test environments
-        if(!is_file($versionFile)) {
-            // Create VERSION.txt for testing
-            file_put_contents($versionFile, $versionFromFile);
-            $deleteVersionFile = true;
-        }
-        else {
-            $versionFromFile = trim(file_get_contents($versionFile));
-            $deleteVersionFile = false;
-        }
-
-        $version = Application_Configuration::getOpusVersion();
-        // clean up
-        if ($deleteVersionFile) {
-            unlink ($versionFile);
-        }
-
-        $this->assertEquals($versionFromFile, $version);
+        $config = Zend_Registry::get('Zend_Config');
+        $this->assertEquals($config->version, Application_Configuration::getOpusVersion());
     }
 
     public function testGetOpusInfo() {
-        $versionFile = APPLICATION_PATH . '/VERSION.txt';
-        $versionFromFile = 'UNKNOWN';
-        //tests existence of local version file for local test environments
-        if(!is_file($versionFile)) {
-            // Create VERSION.txt for testing
-            file_put_contents($versionFile, $versionFromFile);
-            $deleteVersionFile = true;
-        }
-        else {
-            $versionFromFile = trim(file_get_contents($versionFile));
-            $deleteVersionFile = false;
-        }
-
         $data = Application_Configuration::getOpusInfo();
-        //clean up
-        if ($deleteVersionFile) {
-            unlink ($versionFile);
-        }
+        $config = Zend_Registry::get('Zend_Config');
         $this->assertInternalType('array', $data);
         $this->assertArrayHasKey('admin_info_version', $data);
-        $this->assertEquals($versionFromFile, $data['admin_info_version']);
+        $this->assertEquals($config->version, $data['admin_info_version']);
     }
 }
