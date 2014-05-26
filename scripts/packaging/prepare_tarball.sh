@@ -12,7 +12,8 @@
 # GNU General Public License for more details.
 #
 # @author      Thoralf Klein <thoralf.klein@zib.de>
-# @copyright   Copyright (c) 2010, OPUS 4 development team
+# @author      Michael Lang <lang@zib.de>
+# @copyright   Copyright (c) 2010-2014, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 # @version     $Id$
 
@@ -39,6 +40,10 @@ echo -e "\nempty files included in tarball:"
 find $2 -size 0
 echo
 
+#
+# write Version to application.ini
+#
+sed -i.bak "s/opus.version.*/opus.version = $2/g" $2/opus4/application/configs/application.ini
 
 #
 # Build tarball

@@ -28,7 +28,7 @@
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang   <lang@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -114,8 +114,9 @@ class Application_Configuration {
      * Liest Inhalt von VERSION.txt um die installierte Opusversion zu ermitteln.
      */
     public static function getOpusVersion() {
-        $filepath = APPLICATION_PATH . DIRECTORY_SEPARATOR . "VERSION.txt";
-        return (file_exists($filepath)) ? $version = trim(file_get_contents($filepath)) : 'unknown';
+        $config = Zend_Registry::get('Zend_Config');
+        $localVersion = $config->version;
+        return (is_null($localVersion)) ? 'unknown' : $version = $localVersion;
     }
 
     /**
