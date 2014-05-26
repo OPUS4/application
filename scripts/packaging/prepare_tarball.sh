@@ -43,7 +43,7 @@ echo
 #
 # write Version to application.ini
 #
-sed -i.bak "s/opus.version.*/opus.version = $2/g" $2/opus4/application/configs/application.ini
+sed -i.bak "s/version = Opus.*/version = $2/g" $2/opus4/application/configs/application.ini
 
 #
 # Build tarball
