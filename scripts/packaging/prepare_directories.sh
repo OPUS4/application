@@ -164,7 +164,7 @@ chmod +x install/install.sh
 chmod +x install/uninstall.sh
 chmod +x install/update*.sh
 chmod +x install/opus4-solr-jetty
-chmod -x db/createdb.sh.template
+chmod -x opus4/db/createdb.sh.template
 
 #
 # create VERSION.txt
