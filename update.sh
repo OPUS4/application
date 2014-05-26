@@ -34,7 +34,6 @@
 
 # TODO IMPORTANT prevent downgrade
 # TODO add backup script
-# TODO add generic function for YES/NO questions?
 # TODO add function for abort? Including cleanup script?
 # TODO add batch mode (no questions asked)?
 # TODO Make it possible to revert update if something fails? (Keep old files until done?)
