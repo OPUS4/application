@@ -51,6 +51,11 @@ echo "Updating $OLD_MODULES ..."
 # Update or delete existing files
 # =============================================================================
 
+# Hinweise zum Update des "modules" Verzeichnisses.
+# In frontdoor/view/scripts/index kann es eine Datei index_custom.xslt geben,
+# die beim Update nicht gelöscht werden darf. Die Datei wird von Nutzern lokal
+# angelegt.
+
 # Iterate through module files
 find "$OLD_MODULES" -type f -print0 | while read -r -d $'\0' FILE_PATH; do
     FILE=$(echo "$FILE_PATH" | sed -e "s|$OLD_MODULES/||") 
