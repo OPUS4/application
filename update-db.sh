@@ -216,7 +216,7 @@ runDbBackup "$VERSION_OLD"
 echo "Backing up database... done."
 
 echo "Running pre-update scripts (if any)"
-runDbPreUpdate "$VERSION_OLD" "$VERSION_NEW"
+runDbPreUpdateScripts "$VERSION_OLD" "$VERSION_NEW"
 echo "Finished pre-update procedures"
 
 echo "Database is updating now..."
@@ -279,5 +279,5 @@ setPropertyInShellScript "$FILE" "mysql_bin" "$CREATEDB_MYSQL_BIN"
 setPropertyInShellScript "$FILE" "master_dir" "$CREATEDB_MASTER_DIR"
 
 echo "Running post-update scripts (if any)"
-runDbPostUpdate "$VERSION_OLD" "$VERSION_NEW"
+runDbPostUpdateScripts "$VERSION_OLD" "$VERSION_NEW"
 echo "Finished post-update procedures"
