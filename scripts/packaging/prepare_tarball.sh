@@ -42,6 +42,7 @@ echo
 
 #
 # write Version to application.ini
+# TODO zu prepare_directories.sh verschieben
 #
 if [ "$1" == "trunk" ]; then
   opusVersion=trunk
