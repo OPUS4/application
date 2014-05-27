@@ -307,7 +307,14 @@
                     </xsl:otherwise>
                   </xsl:choose>
                 </datestamp>
-            <xsl:apply-templates select="SetSpec" />
+            <xsl:choose>
+                <xsl:when test="$oai_metadataPrefix='ec_fundedresources'">
+                    <setSpec>EC_fundedresources</setSpec>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:apply-templates select="SetSpec" />
+                </xsl:otherwise>
+            </xsl:choose>
             </header>
             <!-- choose the corresponding template depending on metadataPrefix -->
             <!-- not, when verb=ListIdentifiers -->
