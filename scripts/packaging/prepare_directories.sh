@@ -180,3 +180,14 @@ fi
 #
 find . -type f -not -name MD5SUMS -print0 | xargs -0 md5sum >> MD5SUMS
 
+
+#
+# write Version to application.ini
+#
+if [ "$TAG" == "trunk" ]; then
+  opusVersion=trunk
+else
+  opusVersion=${TAG:16}
+fi
+sed -i.bak "s/version = .*/version = $opusVersion/g" "opus4/application/configs/application.ini"
+

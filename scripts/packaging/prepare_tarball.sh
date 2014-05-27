@@ -40,16 +40,7 @@ echo -e "\nempty files included in tarball:"
 find $2 -size 0
 echo
 
-#
-# write Version to application.ini
-# TODO zu prepare_directories.sh verschieben
-#
-if [ "$1" == "trunk" ]; then
-  opusVersion=trunk
-else
-  opusVersion=${1:16}
-fi
-sed -i.bak "s/version = .*/version = $opusVersion/g" "$2/opus4/application/configs/application.ini"
+
 
 #
 # Build tarball

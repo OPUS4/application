@@ -51,6 +51,8 @@ class Admin_InfoController extends Controller_Action {
         $this->view->versionLabel = $this->compareVersion();
     }
 
+    // TODO OPUSVIER-1386 (update check, prüfung von seitenaufbau trennen)
+    // TODO clean up code
     private function compareVersion() {
         $config = Zend_Registry::get('Zend_Config');
         $localVersion = $config->version;
