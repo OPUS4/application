@@ -19,6 +19,6 @@
 
 BASEDIR=$1;
 
-SCRIPT_PATH="$BASEDIR/scripts/update/fix-collections-sortorder.php"
+SCRIPT_PATH="$BASEDIR/opus4/scripts/update/fix-collections-sortorder.php"
 
 [[ -f "$SCRIPT_PATH" ]] && php "$SCRIPT_PATH" || echo "Could not find update script $SCRIPT_PATH" && exit 1
