@@ -104,13 +104,9 @@ class Frontdoor_IndexController extends Controller_Action {
         $documentNode = $documentXml->getNode();
 
         /* XSLT transformation. */
-        $xslt = new DomDocument;
-        $xsltFileName = $this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . 'index';
-        if (file_exists($xsltFileName . '_custom.xslt')) {
-            $xslt->load($xsltFileName . '_custom.xslt');
-        } else {
-            $xslt->load($xsltFileName . '.xslt');
-        }
+        $docBuilder = new Frontdoor_Model_DocumentBuilder();
+        $xslt = $docBuilder->buildDomDocument($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . 'index');
+
         $proc = new XSLTProcessor;
         $proc->registerPHPFunctions(self::TRANSLATE_FUNCTION);
         $proc->registerPHPFunctions(self::TRANSLATE_DEFAULT_FUNCTION);
