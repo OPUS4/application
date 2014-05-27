@@ -203,7 +203,7 @@ function runDbUpdateHook() {
             if [[ "$VERSION_OLD" < "$VERSION_DIR" && ("$VERSION_NEW" == "$VERSION_DIR" || "$VERSION_NEW" > "$VERSION_DIR") ]]; then
                 for f in "$UPDATE_SCRIPT_DIR"/*.sh # only shell scripts allowed
                 do
-                    [[ -f "$f" ]] &&  source "$f"
+                    [[ -f "$f" ]] &&  source "$f" $BASEDIR
                 done
             fi
         fi
