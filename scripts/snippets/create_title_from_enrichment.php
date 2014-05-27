@@ -27,12 +27,21 @@
  *
  * @category    Application
  * @author      Edouard Simon (edouard.simon@zib.de)
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Michael Lang  (lang@zib.de)
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id: update-thesispublisher.php 11775 2013-06-25 14:28:41Z tklein $
  */
+
 /**
+ * This script searches for values of the provided enrichment field (--enrichment). These values are saved
+ * as title (--type). The script is executed for all documents of the specified type (--doctype). If no document type
+ * is provided, the script runs for all documents.
  *
+ * @param enrichment
+ * @param type
+ * @param doctype
+ * @param dryrun
  */
 if (basename(__FILE__) !== basename($argv[0])) {
     echo "script must be executed directy (not via opus-console)\n";
@@ -41,14 +50,13 @@ if (basename(__FILE__) !== basename($argv[0])) {
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$options = getopt('', array('dryrun', 'type:', 'doctype:'));
+$options = getopt('', array('dryrun', 'type:', 'doctype:', 'enrichment'));
 
 $dryrun = isset($options['dryrun']);
 
 $doctype = '';
 if (is_null($options['doctype'])) {
-    echo 'parameter --doctype not set; function will now exit';
-    exit;
+    echo 'parameter --doctype not specified; function will be executed for all document types';
 }
 else {
     $doctype = $options['doctype'];
@@ -56,8 +64,17 @@ else {
 
 if (!isset($options['type']) || empty($options['type'])) {
     echo "Usage: {$argv[0]} --type <type of title> (--dryrun)\n";
-    echo "type of title must be provided (e. g. source, parent).\n";
+    echo "type of title must be provided (e. g. parent).\n";
     exit;
+}
+
+$enrichmentField = '';
+if (is_null($options['enrichment'])) {
+    echo 'parameter --enrichment has to be specified';
+    exit;
+}
+else {
+    $enrichmentField = $options['enrichment'];
 }
 
 $getType = 'getTitle' . ucfirst(strtolower($options['type']));
@@ -67,23 +84,23 @@ if ($dryrun)
     _log("TEST RUN: NO DATA WILL BE MODIFIED");
 
 $docFinder = new Opus_DocumentFinder();
-$docIds = $docFinder->setEnrichmentKeyExists('SourceTitle')->ids();
+$docIds = $docFinder->setEnrichmentKeyExists($enrichmentField)->ids();
 
 _log(count($docIds) . " documents found");
 
 foreach ($docIds as $docId) {
     $doc = new Opus_Document($docId);
-    if ($doc->getType() == $doctype) {
+    if ($doc->getType() == $doctype || $doctype == '') {
         $enrichments = $doc->getEnrichment();
         foreach ($enrichments as $enrichment) {
             $enrichmentArray = $enrichment->toArray();
-            if ($enrichmentArray['KeyName'] == 'SourceTitle') {
-                $sourceTitles = $doc->{$getType}();
-                if (count($sourceTitles) > 0) {
+            if ($enrichmentArray['KeyName'] == $enrichmentField) {
+                $titles = $doc->{$getType}();
+                if (count($titles) > 0) {
                     _log('Title ' . ucfirst(strtolower($options['type'])) . ' already exists for Document #' . $docId . '. Skipping.. ');
                 } else {
-                    $titleSource = $doc->{$addType}();
-                    $titleSource->setValue($enrichmentArray['Value']);
+                    $title = $doc->{$addType}();
+                    $title->setValue($enrichmentArray['Value']);
                     if (!$dryrun)
                         $doc->store();
                     _log('Document #' . $docId . ' updated');
