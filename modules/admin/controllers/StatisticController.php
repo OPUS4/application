@@ -29,11 +29,11 @@
  * @author      Tobias Leidinger (tobias.leidinger@gmail.com
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2014, OPUS 4 development team
+   @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Admin_StatisticController extends Controller_Action {
 
     private $statisticsModel = null;
@@ -44,7 +44,7 @@ class Admin_StatisticController extends Controller_Action {
     }
 
     public function indexAction() {
-        $this->view->title = $this->view->translate('Statistic_Controller');
+        $this->view->title = 'admin_title_statistic';
 
         $years = $this->statisticsModel->getYears();
 
