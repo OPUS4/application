@@ -1,5 +1,15 @@
 h1. OPUS 4 Release Notes
 
+h2. ======================== Release 4.4.3 2014-06-03 ========================
+
+h3. ServerDatePublished
+
+Ändert sich der ServerState eines Dokuments von 'published' zu einem anderen
+Zustand wird das Feld ServerDatePublished gelöscht, so daß dieses Dokument
+auch nicht mehr in der Veröffentlichungsstatistik auftaucht. Wird das Dokument
+anschließend wieder veröffentlich, wird ServerDatePublished auf das neue Datum
+gesetzt.
+
 h2. ======================== Release 4.4.2 2013-11-22 ========================
 
 h3. XMetaDiss Plus Änderungen
@@ -26,11 +36,6 @@ h3. Update Skript
 
 Das Update Skript funktioniert nur mit BASH Versionen ab 4.0. Die Version wird
 jetzt am Anfang des Update-Skript geprüft.
-
-h3. ServerState-Change
-
-Ändert sich der ServerState von 'published' zu irgendetwas anderem wird nun
-das serverStatePublished gelöscht.
 
 h2. ======================== Release 4.4.1 2013-10-17 ========================
 
