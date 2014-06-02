@@ -88,6 +88,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
 
         $element = $this->createElement('date', self::ELEMENT_SERVER_DATE_SUBMITTED);
         $element->getDecorator('ViewHelper')->setViewOnlyEnabled(true);
+        $element->setLabel('Opus_File_' . self::ELEMENT_SERVER_DATE_SUBMITTED);
         $this->addElement($element);
 
         $element = $this->createElement('text', self::ELEMENT_SORT_ORDER);
