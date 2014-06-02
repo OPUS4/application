@@ -34,6 +34,8 @@
 
 /**
  * Eingabefeld für Datumsangaben.
+ *
+ * TODO Was wenn in den Optionen ein Label spezifiziert wurde? Aktuell wird es immer überschrieben.
  */
 class Form_Element_Date extends Form_Element_Text {
 
