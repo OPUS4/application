@@ -36,7 +36,7 @@
 class Oai_Model_DocumentListTest extends ControllerTestCase {
 
     /**
-     * Testet, ob beim MetaDataPrefix epicur Dokumente ohne Urn ausgegeben werden.
+     * Testet, ob beim MetaDataPrefix "epicur" nur Dokumente mit URN ausgegeben werden.
      */
     public function testDocumentOutputUrn() {
         $docWithUrn = $this->createTestDocument();
@@ -56,8 +56,8 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
         $docListModel->_deliveringDocumentStates = array('published');
         $docIds = $docListModel->query($oaiRequest);
 
-        $this->assertTrue(in_array($docWithUrnId, $docIds), 'failed assert document with urn is returned');
-        $this->assertFalse(in_array($docWoUrnId, $docIds), 'failed assert document without urn is returned');
+        $this->assertTrue(in_array($docWithUrnId, $docIds), 'Document with URN is not returned.');
+        $this->assertFalse(in_array($docWoUrnId, $docIds), 'Document without URN is returned.');
     }
 
     /**
