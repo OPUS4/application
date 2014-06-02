@@ -50,13 +50,13 @@ if (basename(__FILE__) !== basename($argv[0])) {
 
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-$options = getopt('', array('dryrun', 'type:', 'doctype:', 'enrichment'));
+$options = getopt('', array('dryrun', 'type:', 'doctype:', 'enrichment:'));
 
 $dryrun = isset($options['dryrun']);
 
 $doctype = '';
 if (is_null($options['doctype'])) {
-    echo 'parameter --doctype not specified; function will be executed for all document types';
+    echo "parameter --doctype not specified; function will be executed for all document types \n";
 }
 else {
     $doctype = $options['doctype'];
@@ -70,7 +70,7 @@ if (!isset($options['type']) || empty($options['type'])) {
 
 $enrichmentField = '';
 if (is_null($options['enrichment'])) {
-    echo 'parameter --enrichment has to be specified';
+    echo "parameter --enrichment not specified; function will now exit \n";
     exit;
 }
 else {
