@@ -98,8 +98,8 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_
 INSERT INTO `document_patents` (`id`, `document_id`, `countries`, `date_granted`, `number`, `year_applied`, `application`) VALUES
 (1,146,'DDR','1970-1-1T0:00:00CET','1234',1970,'The foo machine.');
 
-INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `comment`, `mime_type`, `language`, `file_size`, `visible_in_frontdoor`, `visible_in_oai`) VALUES
-(126,146,'test.pdf','foo-pdf','foo-pdf file','application/pdf','deu',8817,1,1);
+INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `comment`, `mime_type`, `language`, `file_size`, `visible_in_frontdoor`, `visible_in_oai`, `server_date_submitted`) VALUES
+(126,146,'test.pdf','foo-pdf','foo-pdf file','application/pdf','deu',8817,1,1,'2013-12-10');
 
 
 INSERT INTO `file_hashvalues` (`file_id`, `type`, `value`) VALUES

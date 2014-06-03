@@ -62,6 +62,7 @@ class Admin_Form_FileTest extends ControllerTestCase {
         $this->assertEquals('deu', $form->getElement('Language')->getValue());
         $this->assertEquals('foo-pdf', $form->getElement('Label')->getValue());
         $this->assertEquals('foo-pdf file', $form->getElement('Comment')->getValue());
+        $this->assertEquals('2013/12/10', $form->getElement('ServerDateSubmitted')->getValue());
 
         $this->assertEquals(array('frontdoor', 'oai'), $form->getElement('VisibleIn')->getValue());
 
