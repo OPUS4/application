@@ -1,12 +1,35 @@
 <?php
-/**
- * Created by IntelliJ IDEA.
- * User: michael
- * Date: 3/12/14
- * Time: 12:09 PM
- * To change this template use File | Settings | File Templates.
+/*
+ * This file is part of OPUS. The software OPUS has been originally developed
+ * at the University of Stuttgart with funding from the German Research Net,
+ * the Federal Department of Higher Education and Research and the Ministry
+ * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
+ *
+ * OPUS 4 is a complete rewrite of the original OPUS software and was developed
+ * by the Stuttgart University Library, the Library Service Center
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
+ *
+ * LICENCE
+ * OPUS is free software; you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation; either version 2 of the Licence, or any later version.
+ * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
+ * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ *
+ * @category    Application Unit Test
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @license     http://www.gnu.org/licenses/gpl.html General Public License
+ * @version     $Id$
  */
-
 class Admin_Model_Statistics {
 
     private $documents = null;
@@ -15,7 +38,7 @@ class Admin_Model_Statistics {
         $this->documents = new Opus_Db_Documents();
     }
 
-    /*
+    /**
      * helper-function
      * builds up the result array for the statistic-functions
      */
@@ -28,7 +51,7 @@ class Admin_Model_Statistics {
         return $statistics;
     }
 
-    /*
+    /**
      * builds month statistics
      * returns sum of published documents sorted by month
      */
@@ -59,9 +82,10 @@ class Admin_Model_Statistics {
         return $monthStat;
     }
 
-    /*
-     * builds type statistics
-     * returns sum of published documents sorted by document types
+    /**
+     * Builds type statistics.
+     *
+     * Returns sum of published documents sorted by document types.
      */
     public function getTypeStatistics($selectedYear) {
         // get document type overview from database
@@ -74,9 +98,10 @@ class Admin_Model_Statistics {
         return $this->fillResultArray($select, 'ty');
     }
 
-    /*
-     * builds institute statistics
-     * returns sum of published documents sorted by institutes
+    /**
+     * Builds institute statistics.
+     *
+     * Returns sum of published documents sorted by institutes.
      */
     public function getInstituteStatistics($selectedYear) {
         $instStat = null;
@@ -111,8 +136,8 @@ class Admin_Model_Statistics {
         return $instStat;
     }
 
-    /*
-     * returns all years in which documents were published
+    /**
+     * Returns all years in which documents were published.
      */
     public function getYears() {
         $documents = new Opus_Db_Documents();
@@ -126,8 +151,10 @@ class Admin_Model_Statistics {
         return $years;
     }
 
-    /*
-     * returns sum of all documents published befor the $thresholdYear
+    /**
+     * Returns sum of all documents published before the $thresholdYear.
+     *
+     * TODO use one SQL query for result
      */
     public function getNumDocsUntil($thresholdYear) {
         $result = 0;
