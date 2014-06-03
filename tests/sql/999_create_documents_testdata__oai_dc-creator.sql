@@ -35,3 +35,6 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_
 -- Oai_IndexControllerTest::testDcCreatorIsEditorIfAuthorNotExists
 -- 
 (315,303,'editor',1,0);
+
+INSERT INTO `document_files` (`id`, `document_id`, `path_name`, `label`, `mime_type`, `language`, `file_size`, `visible_in_frontdoor`, `visible_in_oai`, `server_date_submitted`) VALUES
+(141, 305, 'server_date_submitted-test.pdf', 'server_date_submitted-test-pdf', 'application/pdf', 'deu', 8817, 1, 1, '2013-12-10' );

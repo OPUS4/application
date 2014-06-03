@@ -283,11 +283,9 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Prüft ob das upload-Datum der Datei gesetzt ist
+     * Prüft ob das Upload-Datum der Datei bei der Erstellung gesetzt wird.
      */
     public function testFileUploadDate() {
-        $this->enableSecurity();
-        $this->loginUser('admin', 'adminadmin');
         $this->useGerman();
         $file = $this->createTestFile('foo.pdf');
         $file->setVisibleInOai(false);
@@ -302,8 +300,23 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $dateNow->setNow();
 
         $this->dispatch('admin/filemanager/index/id/' . $docId);
-    //    $this->assertQueryContentContains('//label', 'Datum des Hochladens'); // auskommentiert, weil die Übersetzungsdatei nicht funktioniert
+        $this->assertQueryContentContains('//label', 'Datum des Hochladens');
         $this->assertQueryContentContains('//div', $dateNow->getDay() . '.'. $dateNow->getMonth() . '.' . $dateNow->getYear());
+    }
+
+    /**
+     * Nach einer Änderung in der Datei soll das ursprüngliche Upload-Datum gesetzt bleiben.
+     */
+    public function testFileUploadDateAfterModification() {
+        $this->useGerman();
+        $doc = new Opus_Document(305);
+
+        foreach ($doc->getFile() as $file) {
+            $file->setComment(rand());
+        }
+        $docId = $doc->store();
+        $this->dispatch('admin/filemanager/index/id/' . $docId);
+        $this->assertQueryContentContains('//div', '10.12.2013');
     }
 
     /**
