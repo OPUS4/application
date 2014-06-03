@@ -2176,33 +2176,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="IdentifierGnd">
-            <tuv xml:lang="en">
-                <seg>Identifier Gnd</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Gnd-Nummer</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="IdentifierOrcid">
-            <tuv xml:lang="en">
-                <seg>Identifier Orcid</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Orcid-Nummer</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="IdentifierMisc">
-            <tuv xml:lang="en">
-                <seg>alternative Identifier</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>alternative Nummer</seg>
-            </tuv>
-        </tu>
-
     </body>
 
 </tmx>
