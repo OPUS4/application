@@ -27,7 +27,8 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -94,7 +95,22 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
      * Konstante fuer POST Ergebnis 'abbrechen'.
      */
     const RESULT_CANCEL = 'cancel';
-    
+
+    /**
+     * Konstante für Identifier Gnd
+     */
+    const ELEMENT_IDENTIFIER_GND = 'IdentifierGnd';
+
+    /**
+     * Konstante für Identifier OrcId
+     */
+    const ELEMENT_IDENTIFIER_ORC = 'IdentifierOrcid';
+
+    /**
+     * Konstante für Identifier Misc
+     */
+    const ELEMENT_IDENTIFIER_MISC = 'IdentifierMisc';
+
     /**
      * Erzeugt die Formularelemente.
      */
@@ -107,15 +123,18 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
             array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform')),
             'Form'
         ));
-        
+
         $this->addElement('hidden', self::ELEMENT_PERSON_ID, array('size' => '40'));
         $this->addElement('text', self::ELEMENT_ACADEMIC_TITLE, array('label' => 'AcademicTitle'));
-        $this->addElement('text', self::ELEMENT_LAST_NAME, array('label' => 'LastName', 'required' => true, 
+        $this->addElement('text', self::ELEMENT_LAST_NAME, array('label' => 'LastName', 'required' => true,
             'size' => 50));
         $this->addElement('text', self::ELEMENT_FIRST_NAME, array('label' => 'FirstName', 'size' => 50));
         $this->addElement('Email', self::ELEMENT_EMAIL, array('label' => 'Email'));
         $this->addElement('text', self::ELEMENT_PLACE_OF_BIRTH, array('label' => 'PlaceOfBirth', 'size' => 40));
         $this->addElement('date', self::ELEMENT_DATE_OF_BIRTH, array('label' => 'DateOfBirth'));
+        $this->addElement('text', self::ELEMENT_IDENTIFIER_GND, array('label' => 'IdentifierGND'));
+        $this->addElement('text', self::ELEMENT_IDENTIFIER_ORC, array('label' => 'IdentifierOrcid'));
+        $this->addElement('text', self::ELEMENT_IDENTIFIER_MISC, array('label' => 'IdentifierMisc'));
         $this->addDisplayGroup($this->getElements(), 'fields', array(
             'decorators' => array(
                 'FormElements',
@@ -154,6 +173,9 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
         $this->getElement(self::ELEMENT_LAST_NAME)->setValue($person->getLastName());
         $this->getElement(self::ELEMENT_PLACE_OF_BIRTH)->setValue($person->getPlaceOfBirth());
         $date = $person->getDateOfBirth();
+        $this->getElement(self::ELEMENT_IDENTIFIER_GND)->setValue($person->getIdentifierGnd());
+        $this->getElement(self::ELEMENT_IDENTIFIER_ORC)->setValue($person->getIdentifierOrcid());
+        $this->getElement(self::ELEMENT_IDENTIFIER_MISC)->setValue($person->getIdentifierMisc());
         $this->getElement(self::ELEMENT_DATE_OF_BIRTH)->setValue($datesHelper->getDateString($date));
         $this->getElement(self::ELEMENT_EMAIL)->setValue($person->getEmail());
     }
@@ -186,6 +208,9 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
             $model->setFirstName($this->getElementValue(self::ELEMENT_FIRST_NAME));
             $model->setEmail($this->getElementValue(self::ELEMENT_EMAIL));
             $model->setPlaceOfBirth($this->getElementValue(self::ELEMENT_PLACE_OF_BIRTH));
+            $model->setIdentifierGnd($this->getElementValue(self::ELEMENT_IDENTIFIER_GND));
+            $model->setIdentifierOrcid($this->getElementValue(self::ELEMENT_IDENTIFIER_ORC));
+            $model->setIdentifierMisc($this->getElementValue(self::ELEMENT_IDENTIFIER_MISC));
             $datesHelper = $this->getDatesHelper();
             $model->setDateOfBirth($datesHelper->getOpusDate($this->getElementValue(self::ELEMENT_DATE_OF_BIRTH)));
         }
