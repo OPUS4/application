@@ -26,7 +26,8 @@
  *
  * @category    Application Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2013-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -46,6 +47,9 @@ class Admin_Form_PersonTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('Email'));
         $this->assertNotNull($form->getElement('PlaceOfBirth'));
         $this->assertNotNull($form->getElement('DateOfBirth'));
+        $this->assertNotNull($form->getElement('IdentifierGnd'));
+        $this->assertNotNull($form->getElement('IdentifierOrcid'));
+        $this->assertNotNull($form->getElement('IdentifierMisc'));
     }
 
     public function testPopulateFromModel() {
@@ -64,7 +68,11 @@ class Admin_Form_PersonTest extends ControllerTestCase {
         
         $person->setDateOfBirth($datesHelper->getOpusDate('1990/01/01'));
         $person->setEmail('john@example.org');
-        
+
+        $person->setIdentifierGnd('1234');
+        $person->setIdentifierOrcid('3456');
+        $person->setIdentifierMisc('5678');
+
         $person->store();
         
         $form->populateFromModel($person);
@@ -79,6 +87,9 @@ class Admin_Form_PersonTest extends ControllerTestCase {
         $this->assertEquals($person->getEmail(), $form->getElement('Email')->getValue());
         $this->assertEquals($person->getPlaceOfBirth(), $form->getElement('PlaceOfBirth')->getValue());
         $this->assertEquals('1990/01/01', $form->getElement('DateOfBirth')->getValue());
+        $this->assertEquals($form->getElement('IdentifierGnd')->getValue(), '1234');
+        $this->assertEquals($form->getElement('IdentifierOrcid')->getValue(), '3456');
+        $this->assertEquals($form->getElement('IdentifierMisc')->getValue(), '5678');
     }
     
     public function testUpdateModel() {
@@ -92,6 +103,10 @@ class Admin_Form_PersonTest extends ControllerTestCase {
         $form->getElement('Email')->setValue('jenny@example.org');
         $form->getElement('PlaceOfBirth')->setValue('London');
         $form->getElement('DateOfBirth')->setValue('1990/02/01');
+        $form->getElement('IdentifierGnd')->setValue('1234');
+        $form->getElement('IdentifierOrcid')->setValue('3456');
+        $form->getElement('IdentifierMisc')->setValue('5678');
+
         
         $person = new Opus_Person();
                 
@@ -102,6 +117,10 @@ class Admin_Form_PersonTest extends ControllerTestCase {
         $this->assertEquals('Block', $person->getLastName());
         $this->assertEquals('jenny@example.org', $person->getEmail());
         $this->assertEquals('London', $person->getPlaceOfBirth());
+
+        $this->assertEquals('1234', $person->getIdentifierGnd());
+        $this->assertEquals('3456', $person->getIdentifierOrcid());
+        $this->assertEquals('5678', $person->getIdentifierMisc());
         
         $datesHelper = $form->getDatesHelper();
         
@@ -139,6 +158,9 @@ class Admin_Form_PersonTest extends ControllerTestCase {
         $form->getElement('Email')->setValue('jenny@example.org');
         $form->getElement('PlaceOfBirth')->setValue('London');
         $form->getElement('DateOfBirth')->setValue('1990/02/01');
+        $form->getElement('IdentifierGnd')->setValue('1234');
+        $form->getElement('IdentifierOrcid')->setValue('3456');
+        $form->getElement('IdentifierMisc')->setValue('5678');
         
         $model = $form->getModel();
      
@@ -148,6 +170,9 @@ class Admin_Form_PersonTest extends ControllerTestCase {
         $this->assertEquals('Block', $model->getLastName());
         $this->assertEquals('jenny@example.org', $model->getEmail());
         $this->assertEquals('London', $model->getPlaceOfBirth());
+        $this->assertEquals('1234', $model->getIdentifierGnd());
+        $this->assertEquals('3456', $model->getIdentifierOrcid());
+        $this->assertEquals('5678', $model->getIdentifierMisc());
         
         $datesHelper = $form->getDatesHelper();
         

@@ -104,7 +104,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
     /**
      * Konstante für Identifier OrcId
      */
-    const ELEMENT_IDENTIFIER_ORC = 'IdentifierOrcid';
+    const ELEMENT_IDENTIFIER_ORCID = 'IdentifierOrcid';
 
     /**
      * Konstante für Identifier Misc
@@ -132,8 +132,8 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
         $this->addElement('Email', self::ELEMENT_EMAIL, array('label' => 'Email'));
         $this->addElement('text', self::ELEMENT_PLACE_OF_BIRTH, array('label' => 'PlaceOfBirth', 'size' => 40));
         $this->addElement('date', self::ELEMENT_DATE_OF_BIRTH, array('label' => 'DateOfBirth'));
-        $this->addElement('text', self::ELEMENT_IDENTIFIER_GND, array('label' => 'IdentifierGND'));
-        $this->addElement('text', self::ELEMENT_IDENTIFIER_ORC, array('label' => 'IdentifierOrcid'));
+        $this->addElement('text', self::ELEMENT_IDENTIFIER_GND, array('label' => 'IdentifierGnd'));
+        $this->addElement('text', self::ELEMENT_IDENTIFIER_ORCID, array('label' => 'IdentifierOrcid'));
         $this->addElement('text', self::ELEMENT_IDENTIFIER_MISC, array('label' => 'IdentifierMisc'));
         $this->addDisplayGroup($this->getElements(), 'fields', array(
             'decorators' => array(
@@ -174,7 +174,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
         $this->getElement(self::ELEMENT_PLACE_OF_BIRTH)->setValue($person->getPlaceOfBirth());
         $date = $person->getDateOfBirth();
         $this->getElement(self::ELEMENT_IDENTIFIER_GND)->setValue($person->getIdentifierGnd());
-        $this->getElement(self::ELEMENT_IDENTIFIER_ORC)->setValue($person->getIdentifierOrcid());
+        $this->getElement(self::ELEMENT_IDENTIFIER_ORCID)->setValue($person->getIdentifierOrcid());
         $this->getElement(self::ELEMENT_IDENTIFIER_MISC)->setValue($person->getIdentifierMisc());
         $this->getElement(self::ELEMENT_DATE_OF_BIRTH)->setValue($datesHelper->getDateString($date));
         $this->getElement(self::ELEMENT_EMAIL)->setValue($person->getEmail());
@@ -209,7 +209,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
             $model->setEmail($this->getElementValue(self::ELEMENT_EMAIL));
             $model->setPlaceOfBirth($this->getElementValue(self::ELEMENT_PLACE_OF_BIRTH));
             $model->setIdentifierGnd($this->getElementValue(self::ELEMENT_IDENTIFIER_GND));
-            $model->setIdentifierOrcid($this->getElementValue(self::ELEMENT_IDENTIFIER_ORC));
+            $model->setIdentifierOrcid($this->getElementValue(self::ELEMENT_IDENTIFIER_ORCID));
             $model->setIdentifierMisc($this->getElementValue(self::ELEMENT_IDENTIFIER_MISC));
             $datesHelper = $this->getDatesHelper();
             $model->setDateOfBirth($datesHelper->getOpusDate($this->getElementValue(self::ELEMENT_DATE_OF_BIRTH)));
