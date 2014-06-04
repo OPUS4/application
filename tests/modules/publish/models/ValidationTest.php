@@ -369,6 +369,7 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         // clean-up
         $collectionRole->delete();
 
+        $this->assertEquals(1, count($children));
         $this->assertEquals('visible collection', $children[$visibleId]);
     }
 
