@@ -1851,19 +1851,19 @@
 
         <tu tuid="IdentifierGnd">
             <tuv xml:lang="en">
-                <seg>GND</seg>
+                <seg>GND ID</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>GND</seg>
+                <seg>GND ID</seg>
             </tuv>
         </tu>
 
         <tu tuid="IdentifierMisc">
             <tuv xml:lang="en">
-                <seg>Internal</seg>
+                <seg>Internal ID</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Intern</seg>
+                <seg>Interne ID</seg>
             </tuv>
         </tu>
 

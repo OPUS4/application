@@ -132,9 +132,9 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
         $this->addElement('Email', self::ELEMENT_EMAIL, array('label' => 'Email'));
         $this->addElement('text', self::ELEMENT_PLACE_OF_BIRTH, array('label' => 'PlaceOfBirth', 'size' => 40));
         $this->addElement('date', self::ELEMENT_DATE_OF_BIRTH, array('label' => 'DateOfBirth'));
-        $this->addElement('text', self::ELEMENT_IDENTIFIER_GND, array('label' => 'IdentifierGnd'));
-        $this->addElement('text', self::ELEMENT_IDENTIFIER_ORCID, array('label' => 'IdentifierOrcid'));
-        $this->addElement('text', self::ELEMENT_IDENTIFIER_MISC, array('label' => 'IdentifierMisc'));
+        $this->addElement('text', self::ELEMENT_IDENTIFIER_GND, array('label' => 'IdentifierGnd', 'size' => 40));
+        $this->addElement('text', self::ELEMENT_IDENTIFIER_ORCID, array('label' => 'IdentifierOrcid', 'size' => 40));
+        $this->addElement('text', self::ELEMENT_IDENTIFIER_MISC, array('label' => 'IdentifierMisc', 'size' => 40));
         $this->addDisplayGroup($this->getElements(), 'fields', array(
             'decorators' => array(
                 'FormElements',
@@ -172,10 +172,10 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
         $this->getElement(self::ELEMENT_FIRST_NAME)->setValue($person->getFirstName());
         $this->getElement(self::ELEMENT_LAST_NAME)->setValue($person->getLastName());
         $this->getElement(self::ELEMENT_PLACE_OF_BIRTH)->setValue($person->getPlaceOfBirth());
-        $date = $person->getDateOfBirth();
         $this->getElement(self::ELEMENT_IDENTIFIER_GND)->setValue($person->getIdentifierGnd());
         $this->getElement(self::ELEMENT_IDENTIFIER_ORCID)->setValue($person->getIdentifierOrcid());
         $this->getElement(self::ELEMENT_IDENTIFIER_MISC)->setValue($person->getIdentifierMisc());
+        $date = $person->getDateOfBirth();
         $this->getElement(self::ELEMENT_DATE_OF_BIRTH)->setValue($datesHelper->getDateString($date));
         $this->getElement(self::ELEMENT_EMAIL)->setValue($person->getEmail());
     }
