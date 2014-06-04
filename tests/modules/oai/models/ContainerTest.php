@@ -49,9 +49,11 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
     }
 
     public function tearDown() {
-        if (!is_null($this->userId)) {
+        if (!is_null($this->roleId)) {
             $testRole = new Opus_UserRole($this->roleId);
             $testRole->delete();
+        }
+        if (!is_null($this->userId)) {
             $userAccount = new Opus_Account($this->userId);
             $userAccount->delete();
         }
@@ -306,7 +308,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
     /*
      * tests document access for three user roles (admin, user with access rights, user without access rights)
      */
-    public function testRegression3281() {
+    public function testAdminAccessToFileRegression3281() {
         $this->enableSecurity();
 
         // test document access as admin
@@ -321,14 +323,17 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $doc->setServerState('unpublished');
         $docId = $doc->store();
         $this->tryAccessForDocument($docId, true);
+    }
 
-        $this->logoutUser();
+    public function testAccessUserToFileRegression3281() {
+        $this->enableSecurity();
 
         // test document access as user with document access rights
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $publishedDocId = $doc->store();
-        $doc = new Opus_Document($docId);
+
+        $doc = $this->createTestDocument();
         $doc->setServerState('unpublished');
         $unpublishedDocId = $doc->store();
 
@@ -339,8 +344,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->roleId = $testRole->store();
 
         $userAccount = new Opus_Account();
-        $userAccount->setLogin('test_account')
-                ->setPassword('role_tester_user2');
+        $userAccount->setLogin('test_account')->setPassword('role_tester_user2');
         $userAccount->setRole($testRole);
         $this->userId = $userAccount->store();
 
@@ -348,6 +352,10 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $this->tryAccessForDocument($publishedDocId, true);
         $this->tryAccessForDocument($unpublishedDocId, false);
         $this->logoutUser();
+    }
+
+    public function testGuestAccessToFileRegression3281() {
+        $this->enableSecurity();
 
         // test document access as user without access rights
         $doc = $this->createTestDocument();

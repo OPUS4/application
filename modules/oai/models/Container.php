@@ -80,26 +80,27 @@ class Oai_Model_Container {
     }
 
     /**
-     * @return array an array of all associated Opus_File objects that are visible in OAI and accessible by user role guest
+     * @return array All associated Opus_File objects that are visible in OAI and accessible by user
      */
     private function getAccessibleFiles() {
         $realm = Opus_Security_Realm::getInstance();
 
         // admins sollen immer durchgelassen werden, nutzer nur wenn das doc im publizierten Zustand ist
-        if (!$realm->checkDocument($this->docId) ) {
-            if ($this->doc->getServerState() !== 'published') {
-                $this->logErrorMessage('document with id ' . $this->docId . ' is not in server state published');
+        if (!$realm->skipSecurityChecks()) {
+            // kein administrator
+            if (!$realm->checkDocument($this->docId)) {
+                // Dokument ist nicht verfügbar für aktuellen Nutzer
+                $this->logErrorMessage('access to document with id ' . $this->docId
+                    . ' is not allowed for current user');
                 throw new Oai_Model_Exception('access to requested document is forbidden');
             }
             else {
-                $this->logErrorMessage('access to document with id ' . $this->docId . ' is not allowed for current user');
-                throw new Oai_Model_Exception('access to requested document is forbidden');
-            }
-        }
-        else {
-            if (!$realm->skipSecurityChecks() && $this->doc->getServerState() !== 'published') {
-                $this->logErrorMessage('document with id ' . $this->docId . ' is not in server state published');
-                throw new Oai_Model_Exception('access to requested document is forbidden');
+                // Dokument ist verfügbar für Nutzer; prüfen, ob veroeffentlicht
+                if ($this->doc->getServerState() !== 'published') {
+                    // Dokument noch nicht veröffentlicht
+                    $this->logErrorMessage('document with id ' . $this->docId . ' is not in server state published');
+                    throw new Oai_Model_Exception('access to requested document is forbidden');
+                }
             }
         }
 
@@ -114,7 +115,7 @@ class Oai_Model_Container {
                 $this->logErrorMessage("skip non-readable file $filename");
             }
         }
-        
+
         if (empty($files)) {
             $this->logErrorMessage('document with id ' . $this->docId . ' does not have any associated files');
             throw new Oai_Model_Exception('requested document does not have any associated readable files');
