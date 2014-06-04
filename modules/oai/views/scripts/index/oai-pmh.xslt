@@ -44,7 +44,6 @@
 
     <!-- add include here for each new metadata format    -->
 
-    <xsl:include href="prefixes/ec_fundedresources.xslt" />
     <xsl:include href="prefixes/oai_dc.xslt"/>
     <xsl:include href="prefixes/oai_pp.xslt"/>
     <xsl:include href="prefixes/epicur.xslt"/>
@@ -308,7 +307,7 @@
                   </xsl:choose>
                 </datestamp>
             <xsl:choose>
-                <xsl:when test="$oai_metadataPrefix='ec_fundedresources'">
+                <xsl:when test="/Documents/Opus_Document/Collection/@OaiSubset='ec_fundedresources'">
                     <setSpec>EC_fundedresources</setSpec>
                 </xsl:when>
                 <xsl:otherwise>
@@ -343,16 +342,13 @@
                     <xsl:when test="$oai_metadataPrefix='copy_xml'">
                        <xsl:apply-templates select="." mode="copy_xml" />
                     </xsl:when>
-                    <xsl:when test="$oai_metadataPrefix='ec_fundedresources'">
-                        <xsl:apply-templates select="." mode="open_aire" />
-                    </xsl:when>
                  </xsl:choose>
                  </metadata>
 
             </xsl:when>
             </xsl:choose>
     </xsl:template>
-    
+
     <xsl:template match="SetSpec">
        <setSpec><xsl:value-of select="@Value"/></setSpec>
     </xsl:template>

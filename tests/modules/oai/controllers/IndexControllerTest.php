@@ -1539,6 +1539,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      * Test verb=ListRecords, metadataPrefix=ec_fundedresources, set=ec_fundedresources.
      */
     public function testListRecordsForOpenAireCompliance() {
+        $this->markTestSkipped('Oai-Ausgabe von open-aire sets vorübergehend deaktiviert');
         $this->dispatch('/oai?verb=ListRecords&metadataPrefix=ec_fundedresources&set=ec_fundedresources');
         $this->assertResponseCode(200);
 
