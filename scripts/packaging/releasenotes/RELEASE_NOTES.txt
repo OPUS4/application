@@ -1,6 +1,35 @@
 h1. OPUS 4 Release Notes
 
-h2. ======================== Release 4.4.3 2014-06-03 ========================
+h2. ======================== Release 4.4.3 2014-06-04 ========================
+
+h3. Allgmein
+
+* Zahlreiche Bug-Fixes
+* Tarball wird jetzt in Unterverzeichnis opus-x.x.x (opus-4.4.3) entpackt und
+  nicht mehr einfach in das aktuelle Verzeichnis
+
+h3. Administration
+
+* Auflistung und Validierung der verfügbaren Dokumententypen unter
+  "Systeminformationen -> Dokumenttypen"
+
+h3. OpenAIRE (experimentell)
+
+Es gibt eine erste Umsetzung des OpenAIRE Supports. Dafür wurde eine Variante
+der "oai_dc.xslt" Datei mit dem Namen "oai_dc.xslt.openaire" angelegt. Durch
+das Umbenennen der OpenAIRE Datei in "oai_dc.xslt" lässt sich der OpenAIRE
+konforme OAI Export aktivieren.
+
+h3. XMetaDiss Plus Änderungen
+
+Es wurden einige Erweiterungen für XMetaDiss Plus vorgenommen, insbesondere
+für Zeitschriftenlieferungen.
+
+* Neue Attribute "ZSTitelID" (Opus ID der Schriftenreihe) und
+  "ZS-Ausgabe" (Bandnummer) für "isPartOf" Element
+* Neuer Dokumententyp "PeriodicalPart" für Zeitschriftenbände
+* Dokumententypen wurden um ThesisPublisher erweitert (muss für angepasste
+  Typen manuell nachgezogen werden)
 
 h3. ServerDatePublished
 

@@ -1,5 +1,60 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.4.3 2014-06-04 ========================
+
+h3. Bugs
+
+* [OPUSVIER-1486] - Datei-Downloads funktionieren nicht mit VirtualHosts (z.B. mit Standard-Apache unter Ubuntu)
+* [OPUSVIER-1574] - OAI-Schnittstelle, epicur: Dokumente ohne URN dürfen nicht mit ausgegeben werden
+* [OPUSVIER-2025] - Speichern eines "Dependent Models" propagiert nicht an das übergeordnete Model
+* [OPUSVIER-2323] - Anpassung von form.first.show_rights_checkbox in config.ini.template
+* [OPUSVIER-2709] - Anzeige der Veröffentlichungsstatistik in der Administration setzt Existenz der Collection Role institutes voraus
+* [OPUSVIER-3212] - OPUS Update: solr.xslt wird ungefragt überschrieben, Anpassungen gehen verloren
+* [OPUSVIER-3215] - Install-Script: Ordner public/js wird nicht erstellt
+* [OPUSVIER-3218] - Inkonsistenz im Datenmodell bei Scope und Type von Opus_Language
+* [OPUSVIER-3238] - Falsche Platzierung von neu eingefügten Sammlungseinträgen wenn "sort_order"!=0
+* [OPUSVIER-3245] - Zugriffrechte auf DNB-Institution nicht vorhanden, obwohl gesetzt
+* [OPUSVIER-3248] - XMetaDissPlus: Beim Publikationstyp "Sound" (dc:type) muss der erste Buchstabe groß geschrieben sein.
+* [OPUSVIER-3263] - update script für die Sortierung der Collections benötigt
+* [OPUSVIER-3264] - Anzeige des Dokumenttyps in der Zusammenfassung des Publish-Formulars
+* [OPUSVIER-3278] - initLanguageList() nach Form / Element verschieben
+* [OPUSVIER-3282] - Pfad zur confirmation-mail.template im MatheonModel anpassen
+* [OPUSVIER-3283] - Aufruf von loginUser in Unit Test wirkt sich auf folgenden Test aus
+* [OPUSVIER-3285] - Lokale Schema-Datei bei der Doctype-Validierung verwenden
+
+h3. Feature Requests
+
+* [OPUSVIER-1772] - Anzeige der Titel des Dokuments nur in der Veröffentlichungssprache
+* [OPUSVIER-2472] - Dokumente (d.h. deren Metdaten) in der Ausgabe in der OAI-Schnittstelle verbergen
+
+h3. Aufgaben
+
+* [OPUSVIER-713] - Erstellung von Publikationslisten
+* [OPUSVIER-901] - kaputtes Layout auf Fehlerseite; geeignetere Fehlermeldung
+* [OPUSVIER-1017] - Frontdoor verwendet XML-Cache nicht
+* [OPUSVIER-1133] - Anpassungen auf Startseite
+* [OPUSVIER-1152] - Webdesign
+* [OPUSVIER-1156] - Rendering von Latex in Titel und Abstract
+* [OPUSVIER-1178] - Anzeige der zugeordneten Dokumente in der Sammlungsadministration
+* [OPUSVIER-1575] - OAI-Schnittstelle, epicur: Unit-Test für Dokumente ohne URN
+* [OPUSVIER-1667] - asynchronen Cache-Neuaufbau nach dem Löschen eines Cacheeintrags auslösen
+* [OPUSVIER-1989] - Innerhalb des Browsing soll standardmäßig nach server_date_published sortiert werden (außer bei latest documents und bei dem Serienbrowsing)
+* [OPUSVIER-2241] - EnrichmentKeys bzgl. Review-Modul und Migration
+* [OPUSVIER-2272] - Nach dem Ausführen des Installationsskripts sollte das Excecutable-Bit auf createdb.sh sicherheitshalber entfernt werden
+* [OPUSVIER-2479] - Versionsinfo als HTML-Kommentar in Seitenheader aufnehmen
+* [OPUSVIER-2653] - benutzerspezifische index.xslt ermöglichen
+* [OPUSVIER-2705] - CSS für Druckversion bereitstellen
+* [OPUSVIER-2877] - Funktion der "Menu" Controller in der Administration in IndexController aufnehmen
+* [OPUSVIER-3030] - Standardtexte anpassen auf GND (anstelle von SWD)
+* [OPUSVIER-3146] - Selenium AccessModuleSetupAndAdmin und AccountSecurity11 in Unit Test umwandeln
+* [OPUSVIER-3197] - XML Catalog Datei für RDFA und XHTML Validierungen anlegen
+* [OPUSVIER-3225] - Funktion getDisplayName von Opus_Series sollte 'Title' zurückgeben
+* [OPUSVIER-3240] - Eintragen des Feldes "ThesisPublisher" in allen Dokumentvorlagen der Standardauslieferung
+* [OPUSVIER-3255] - Gesamtzahl der Dokumente
+* [OPUSVIER-3272] - Rechtschreibfehler in error.tmx
+* [OPUSVIER-3280] - Erweiterung von documentType.include in tests.ini um Wert 'masterthesis'
+* [OPUSVIER-3302] - Felder des Personenformulars im Adminbereich anlegen
+
 h2. ======================== Release 4.4.2 2013-11-22 ========================
 
 h3. Bugs
