@@ -67,6 +67,7 @@
     <xsl:param name="oai_verb" />
     <xsl:param name="oai_from" />
     <xsl:param name="oai_until" />
+    <xsl:param name="oai_set" />
     <xsl:param name="oai_metadataPrefix" />
     <xsl:param name="oai_resumptionToken" />
     <xsl:param name="oai_identifier" />
@@ -99,6 +100,9 @@
                 </xsl:if>
                 <xsl:if test="$oai_until != ''">
                     <xsl:attribute name="until"><xsl:value-of select="$oai_until" /></xsl:attribute>
+                </xsl:if>
+                <xsl:if test="$oai_set != ''">
+                    <xsl:attribute name="until"><xsl:value-of select="$oai_set" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="$oai_metadataPrefix != ''">
                     <xsl:attribute name="metadataPrefix"><xsl:value-of select="$oai_metadataPrefix" /></xsl:attribute>
@@ -307,7 +311,7 @@
                   </xsl:choose>
                 </datestamp>
             <xsl:choose>
-                <xsl:when test="/Documents/Opus_Document/Collection/@OaiSubset='ec_fundedresources'">
+                <xsl:when test="$oai_set='ec_fundedresources'">
                     <setSpec>EC_fundedresources</setSpec>
                 </xsl:when>
                 <xsl:otherwise>
