@@ -329,6 +329,48 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         }
                     
     }
-    
+
+    /**
+     * Testet, ob eine Collection, bei der visiblePublish=false gesetzt ist, im Publish-Modul ausgegeben wird.
+     */
+    public function testCollectionFieldVisiblePublish() {
+        $collectionRole = new Opus_CollectionRole();
+        $collectionRole->setName("test");
+        $collectionRole->setOaiName("test");
+        $collectionRole->setDisplayBrowsing("Name");
+        $collectionRole->setDisplayFrontdoor("Name");
+        $collectionRole->setDisplayOai("Name");
+        $collectionRole->setPosition(101);
+        $collectionRole->setVisible(true);
+        $collectionRole->store();
+
+        $rootCollection = $collectionRole->addRootCollection();
+        $rootCollection->store();
+
+        $invisibleCollection = new Opus_Collection();
+        $invisibleCollection->setName("invisible collection");
+        $invisibleCollection->setNumber("123");
+        $invisibleCollection->setVisible(true);
+        $invisibleCollection->setVisiblePublish(false);
+        $rootCollection->addFirstChild($invisibleCollection);
+        $invisibleCollection->store();
+
+        $visibleCollection = new Opus_Collection();
+        $visibleCollection->setName("visible collection");
+        $visibleCollection->setNumber("987");
+        $visibleCollection->setVisiblePublish(true);
+        $visibleCollection->setVisible(true);
+        $rootCollection->addLastChild($visibleCollection);
+        $visibleId = $visibleCollection->store();
+
+        $val = new Publish_Model_Validation('Collection', $this->session, 'test');
+        $children = $val->selectOptions('Collection');
+
+        // clean-up
+        $collectionRole->delete();
+
+        $this->assertEquals('visible collection', $children[$visibleId]);
+    }
+
 }
 
