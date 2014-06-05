@@ -40,7 +40,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
     private $securityEnabled;
     private $testDocuments;
-    protected $testFiles;
+    private $testFiles;
 
     const MESSAGE_LEVEL_NOTICE = 'notice';
     const MESSAGE_LEVEL_FAILURE = 'failure';

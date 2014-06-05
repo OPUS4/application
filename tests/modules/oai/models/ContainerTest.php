@@ -172,7 +172,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $doc->addFile($file);
         $doc->store();
 
-        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($this->testFiles[$filename])));
+        $this->assertTrue($file->exists());
 
         $model = new Oai_Model_Container($doc->getId());
         $tarball = null;
@@ -183,7 +183,6 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
             $this->assertEquals('access denied on all files that are associated to the requested document', $e->getMessage());
         }
         $this->assertTrue(is_null($tarball));
-        Opus_Util_File::deleteDirectory(dirname($this->testFiles[$filename]));
     }
 
     public function testDocumentWithNonExistentFile() {       
@@ -216,65 +215,74 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $doc->addFile($file);
         $doc->store();
 
-        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($this->testFiles[$filename])));
+        $this->assertTrue($file->exists());
 
         $model = new Oai_Model_Container($doc->getId());
         $file = $model->getFileHandle();
-        $this->assertTrue(is_readable($file->getPath()));
-        $this->assertEquals('.txt', $file->getExtension());
-        // TODO OPUSVIER-2503
-        $this->assertTrue($file->getMimeType() == 'application/x-empty' || $file->getMimeType() == 'inode/x-empty');
 
-        Opus_Util_File::deleteDirectory(dirname($this->testFiles[$filename]));
-        unlink($file->getPath());
+        $path = $file->getPath();
+        $extension = $file->getExtension();
+        $mimeType = $file->getMimeType();
+        //clean up File Handle
+        $this->assertTrue(is_readable($path));
+        unlink($path);
+
+        $this->assertEquals('.txt', $extension);
+        // TODO OPUSVIER-2503
+        $this->assertTrue($mimeType == 'application/x-empty' || $mimeType == 'inode/x-empty');
     }
 
     public function testDocumentWithTwoUnrestrictedFiles() {
         $filename1 = 'foo.pdf';
         $filename2 = 'bar.pdf';
 
-        $file = $this->createTestFile($filename1);
-        $file->setVisibleInOai(true);
+        $file1 = $this->createTestFile($filename1);
+        $file1->setVisibleInOai(true);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $doc->addFile($file);
+        $doc->addFile($file1);
 
-        $file = $this->createTestFile($filename2);
-        $file->setVisibleInOai(true);
-        $doc->addFile($file);
+        $file2 = $this->createTestFile($filename2);
+        $file2->setVisibleInOai(true);
+        $doc->addFile($file2);
         $doc->store();
 
-        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($this->testFiles[$filename1])));
-        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($this->testFiles[$filename2])));
+        $this->assertTrue($file1->exists());
+        $this->assertTrue($file2->exists());
 
         $model = new Oai_Model_Container($doc->getId());
         $file = $model->getFileHandle();
-        $this->assertTrue(is_readable($file->getPath()));
-        $this->assertEquals('.tar', $file->getExtension());
-        $this->assertEquals('application/x-tar', $file->getMimeType());
 
-        unlink($file->getPath());
+        $path = $file->getPath();
+        $extension = $file->getExtension();
+        $mimeType = $file->getMimeType();
+        //clean up File Handle
+        $this->assertTrue(is_readable($path));
+        unlink($path);
+
+        $this->assertEquals('.tar', $extension);
+        $this->assertEquals('application/x-tar', $mimeType);
     }
 
     public function testDeleteContainerTarFile() {
         $filename1 = 'test.pdf';
         $filename2 = 'foo.html';
 
-        $file = $this->createTestFile($filename1);
-        $file->setVisibleInOai(true);
+        $file1 = $this->createTestFile($filename1);
+        $file1->setVisibleInOai(true);
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $doc->addFile($file);
+        $doc->addFile($file1);
 
-        $file = $this->createTestFile($filename2);
-        $file->setVisibleInOai(true);
-        $doc->addFile($file);
+        $file2 = $this->createTestFile($filename2);
+        $file2->setVisibleInOai(true);
+        $doc->addFile($file2);
         $doc->store();
 
-        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($this->testFiles[$filename1])));
-        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($this->testFiles[$filename2])));
+        $this->assertTrue($file1->exists());
+        $this->assertTrue($file2->exists());
 
         $model = new Oai_Model_Container($doc->getId());
         $tarball = $model->getFileHandle();
@@ -295,7 +303,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $doc->addFile($file);
         $doc->store();
 
-        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . basename($this->testFiles[$filename1])));
+        $this->assertTrue(is_readable($this->workspacePath . '/files/' . $doc->getId() . '/' . $file->getPathName()));
 
         $model = new Oai_Model_Container($doc->getId());
         $tarball = $model->getFileHandle();
