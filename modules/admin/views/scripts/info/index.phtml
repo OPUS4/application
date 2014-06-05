@@ -35,21 +35,23 @@
 
 <dl>
     <?PHP foreach (Application_Configuration::getOpusInfo() as $infoKey => $infoValue) : ?>
-        <dt id="<?= $infoKey ?>"><?= $this->translate($infoKey) ?></dt>
+        <dt id="<?= $infoKey ?>"><?= htmlspecialchars($this->translate($infoKey)) ?></dt>
         <dd><?= $infoValue ?></dd>
     <?PHP endforeach ?>
 </dl>
-<!--
-<dl>
-    <?= $this->translate($this->versionLabel) ?>
-    <a href="http://www.kobv.de/opus4/software/">
-        <?php
-        if ($this->versionUpdate != '')
-            echo $this->translate($this->versionUpdate);
-        ?>
-    </a>
+
+<dl><?PHP if ($this->versionButton) { ?>
+        <a href="<?= $this->url(array('check' => 'version')) ?>"><?= htmlspecialchars($this->translate('admin_info_versioncheck')) ?></a>
+    <?PHP } else { ?>
+        <?= htmlspecialchars($this->translate($this->versionLabel)) ?>
+        <a href="http://www.kobv.de/opus4/software/">
+            <?php
+            if ($this->versionUpdate != '') ?>
+                <?= htmlspecialchars( $this->translate($this->versionUpdate)); ?>
+        </a>
+    <?PHP } ?>
 </dl>
--->
+
 <fieldset>
     <legend><?= $this->translate('admin_info_section_upload') ?></legend>
 

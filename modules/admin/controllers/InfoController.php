@@ -48,15 +48,25 @@ class Admin_InfoController extends Controller_Action {
         }
         $this->view->postMaxSize = ini_get('post_max_size');
         $this->view->uploadMaxFilesize = ini_get('upload_max_filesize');
-        $this->view->versionLabel = $this->compareVersion();
+
+        if ($this->getRequest()->getParam('check') == 'version') {
+            $this->view->versionButton = false;
+            $this->view->versionLabel = $this->compareVersion();
+        }
+        else {
+            $this->view->versionButton = true;
+        }
     }
 
-    // TODO OPUSVIER-1386 (update check, prüfung von seitenaufbau trennen)
-    // TODO clean up code
+    public function yo() {
+                    $this->view->versionButton = false;
+            $this->view->versionLabel = $this->compareVersion();
+    }
+
     private function compareVersion() {
         $config = Zend_Registry::get('Zend_Config');
         $localVersion = $config->version;
-        $latestVersion = 'Opus-4.4.2'; //file_get_contents('http://opus4.kobv.de/update');
+        $latestVersion = '4.4.3'; //file_get_contents('http://opus4.kobv.de/update');
         $this->view->versionUpdate = '';
 
         if (is_null($localVersion)) {

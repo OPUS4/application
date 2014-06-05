@@ -132,7 +132,16 @@
         <seg>Datei 'VERSION.txt' nicht gefunden.</seg>
       </tuv>
     </tu>
-    
+
+    <tu tuid="admin_info_versioncheck">
+      <tuv xml:lang="en">
+        <seg>Version-Check</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Versionsabgleich</seg>
+      </tuv>
+    </tu>
+
   </body>
 
 </tmx>
