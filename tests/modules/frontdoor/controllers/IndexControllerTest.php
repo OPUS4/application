@@ -988,5 +988,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('<img width="16" height="11" src="/layouts/opus4/img/flag/spa.png" alt="spa"/>', $body);
         $this->assertNotContains('<img width="16" height="11" src="/layouts/opus4/img/flag/fra.png" alt="fra"/>', $body);
         $this->assertNotContains('<img width="16" height="11" src="/layouts/opus4/img/flag/rus.png" alt="rus"/>', $body);
+
+        $this->assertQueryContentContains('//div', '(spa)');
+        $this->assertQueryContentContains('//div', '(eng)');
+        $this->assertQueryContentContains('//div', '(deu)');
+        $this->assertQueryContentContains('//div', '(rus)');
+        $this->assertQueryContentContains('//div', '(fra)');
     }
 }

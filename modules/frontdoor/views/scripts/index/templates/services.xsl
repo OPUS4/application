@@ -80,6 +80,11 @@
                           </xsl:attribute>
                       </img>
                   </xsl:when>
+                  <xsl:otherwise>
+                      <xsl:text>(</xsl:text>
+                      <xsl:value-of select="@Language"/>
+                      <xsl:text>)</xsl:text>
+                  </xsl:otherwise>
               </xsl:choose>
           </xsl:variable>
 
