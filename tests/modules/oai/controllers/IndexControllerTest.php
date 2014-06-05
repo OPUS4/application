@@ -1578,4 +1578,23 @@ class Oai_IndexControllerTest extends ControllerTestCase {
             'tested document does not contain the expected series information: Series-Title');
     }
 
+    /**
+     * Prüft, ob das Feld dc:source richtig zusammen gebaut wird für die XMetaDissPlus-Schnittstelle.
+     */
+    public function testDcSourceForXMetaDissPlus() {
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->setVolume(1337);
+        $doc->setPageNumber(1);
+        $doc->setIssue('issue');
+
+        $title = new Opus_Title();
+        $title->setValue('titleParent');
+        $doc->addTitleParent($title);
+
+        $docId = $doc->store();
+
+        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai:opus4.demo:' . $docId);
+        $this->assertTrue(strpos($this->_response->getBody(), 'titleParent, 1337, issue, 1') !== false);
+    }
 }

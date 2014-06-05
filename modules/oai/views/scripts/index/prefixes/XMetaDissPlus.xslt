@@ -471,6 +471,12 @@
     <xsl:template match="TitleParent" mode="xmetadissplus">
         <dc:source xsi:type="ddb:noScheme">
             <xsl:value-of select="@Value" />
+            <xsl:text>, </xsl:text>
+            <xsl:value-of select="/Documents/Opus_Document/@Volume" />
+            <xsl:text>, </xsl:text>
+            <xsl:value-of select="/Documents/Opus_Document/@Issue" />
+            <xsl:text>, </xsl:text>
+            <xsl:value-of select="/Documents/Opus_Document/@PageNumber" />
         </dc:source> 
     </xsl:template>
 
