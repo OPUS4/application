@@ -44,7 +44,7 @@
  * @param dryrun
  */
 if (basename(__FILE__) !== basename($argv[0])) {
-    echo "script must be executed directy (not via opus-console)\n";
+    echo "script must be executed directy (not via opus-console)" . PHP_EOL;
     exit;
 }
 
@@ -56,21 +56,21 @@ $dryrun = isset($options['dryrun']);
 
 $doctype = '';
 if (is_null($options['doctype'])) {
-    echo "parameter --doctype not specified; function will be executed for all document types \n";
+    echo "parameter --doctype not specified; function will be executed for all document types" . PHP_EOL;
 }
 else {
     $doctype = $options['doctype'];
 }
 
 if (!isset($options['type']) || empty($options['type'])) {
-    echo "Usage: {$argv[0]} --type <type of title> (--dryrun)\n";
-    echo "type of title must be provided (e. g. parent).\n";
+    echo "Usage: {$argv[0]} --type <type of title> (--dryrun)" . PHP_EOL;
+    echo "type of title must be provided (e. g. parent)" . PHP_EOL;
     exit;
 }
 
 $enrichmentField = '';
 if (is_null($options['enrichment'])) {
-    echo "parameter --enrichment not specified; function will now exit \n";
+    echo "parameter --enrichment not specified; function will now exit" . PHP_EOL;
     exit;
 }
 else {
@@ -111,7 +111,7 @@ foreach ($docIds as $docId) {
 }
 
 function _log($message) {
-    echo "$message\n";
+    echo $message . PHP_EOL;
 }
 
 ?>
