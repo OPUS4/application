@@ -76,7 +76,7 @@ class Admin_StatisticController extends Controller_Action {
         $this->view->languageSelectorDisabled = true;
 
         $this->view->selectedYear = $selectedYear;
-        $this->view->sumDocsUntil = $this->statisticsModel->getNumDocsUntil($selectedYear);
+        $this->view->sumDocsUntil = $this->statisticsModel->findNumDocsUntil($selectedYear);
 
         $monthStat = $this->statisticsModel->getMonthStatistics($selectedYear);
 

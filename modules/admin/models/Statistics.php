@@ -39,8 +39,7 @@ class Admin_Model_Statistics {
     }
 
     /**
-     * helper-function
-     * builds up the result array for the statistic-functions
+     * Helper-function (builds up the result array for the statistic-functions).
      */
     private function fillResultArray($select, $name) {
         $statistics = array();
@@ -52,8 +51,7 @@ class Admin_Model_Statistics {
     }
 
     /**
-     * builds month statistics
-     * returns sum of published documents sorted by month
+     * Builds month statistics (returns sum of published documents sorted by month).
      */
     public function getMonthStatistics($selectedYear) {
         // TODO: use tokens to reduce redundancy of inserting year twice
@@ -153,17 +151,12 @@ class Admin_Model_Statistics {
 
     /**
      * Returns sum of all documents published before the $thresholdYear.
-     *
-     * TODO use one SQL query for result
      */
-    public function getNumDocsUntil($thresholdYear) {
-        $result = 0;
-        foreach ($this->getYears() as $year) {
-            if ($year <= $thresholdYear) {
-                $result += array_sum($this->getMonthStatistics($year));
-            }
-        }
-        return $result;
+    public function findNumDocsUntil($thresholdYear) {
+        $finder = new Opus_DocumentFinder();
+        $finder->setServerState('published');
+        $finder->setServerDatePublishedBefore($thresholdYear+1);
+        return $finder->count();
     }
 
 }
