@@ -75,6 +75,10 @@ class Admin_StatisticController extends Controller_Action {
 
         $this->view->languageSelectorDisabled = true;
 
+        $date = new Opus_Date();
+        $date->setYear($selectedYear)->setMonth(12)->setDay(31);
+        $this->view->dateThreshold = $this->getHelper('Dates')->getDateString($date);
+
         $this->view->selectedYear = $selectedYear;
         $this->view->sumDocsUntil = $this->statisticsModel->findNumDocsUntil($selectedYear);
 
