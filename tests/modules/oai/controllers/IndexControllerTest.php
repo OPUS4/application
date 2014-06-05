@@ -1500,7 +1500,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
     
     public function testXMetaDissPlusDcsourceContainsTitleParent() {
-        
         $doc = new Opus_Document(146);
         $parentTitle = $doc->getTitleParent();
         $this->assertFalse(empty($parentTitle), 'Test Data modified: Expected TitleParent');
@@ -1514,10 +1513,10 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $dcSource = $xpath->query('//xMetaDiss:xMetaDiss/dc:source');
         
         $this->assertEquals(1, $dcSource->length);
-
-        $this->assertEquals($parentTitleValue, $dcSource->item(0)->nodeValue);
-
-        
+        $this->assertEquals($parentTitleValue . ', ' .
+                            $doc->getVolume() . ', ' .
+                            $doc->getIssue() . ', ' .
+                            $doc->getPageNumber(), $dcSource->item(0)->nodeValue);
     }
 
     public function testXMetaDissPlusDctermsispartofContainsSeriesTitleAndNumber() {
@@ -1532,7 +1531,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals(1, $dctermsIspartof->length);
 
         $this->assertEquals($series[0]->getTitle().' ; '.$series[0]->getNumber(), $dctermsIspartof->item(0)->nodeValue);
-
     }
 
     /**
@@ -1576,25 +1574,5 @@ class Oai_IndexControllerTest extends ControllerTestCase {
             'tested document does not contain the expected series information: Series-Number');
         $this->assertTrue(strpos($this->_response->getBody(), 'xsi:type="ddb:ZSTitelID">7') > 0,
             'tested document does not contain the expected series information: Series-Title');
-    }
-
-    /**
-     * Prüft, ob das Feld dc:source richtig zusammen gebaut wird für die XMetaDissPlus-Schnittstelle.
-     */
-    public function testDcSourceForXMetaDissPlus() {
-        $doc = $this->createTestDocument();
-        $doc->setServerState('published');
-        $doc->setVolume(1337);
-        $doc->setPageNumber(1);
-        $doc->setIssue('issue');
-
-        $title = new Opus_Title();
-        $title->setValue('titleParent');
-        $doc->addTitleParent($title);
-
-        $docId = $doc->store();
-
-        $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai:opus4.demo:' . $docId);
-        $this->assertTrue(strpos($this->_response->getBody(), 'titleParent, 1337, issue, 1') !== false);
     }
 }
