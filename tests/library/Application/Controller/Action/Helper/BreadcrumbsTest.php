@@ -134,9 +134,15 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
         $this->assertEquals('0123456789012345678901234567890123456789 ...', $this->helper->getDocumentTitle($document));
     }
 
+    /**
+     * Testet die Funktion Application_Controller_Action_Helper_Breadcrumbs::setLabelFor().
+     */
     public function testSetLabelFor() {
-        $this->dispatch('/admin/doctype/show/document/demo_invalid');
-        $this->assertQueryContentContains('//div[class="breadcrumbsContainer"]', 'demo_invalid');
+        $this->helper->setLabelFor('admin_doctype_show', 'hallo');
+
+        $page = $this->getPage('hallo');
+        $this->assertNotNull($page);
+        $this->assertEquals('hallo', $page->getLabel());
     }
 
 }

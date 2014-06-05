@@ -25,14 +25,14 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 class Admin_DoctypeControllerTest extends ControllerTestCase {
 
-    /*
-     * Ruft die Dokumenttyp-Validierungsseite auf und prüft ob diese korrekt angezeigt wird
+    /**
+     * Ruft die Dokumenttyp-Validierungsseite auf und prüft ob diese korrekt angezeigt wird.
      */
     public function testDoctypePage() {
         $this->useEnglish();
@@ -44,14 +44,22 @@ class Admin_DoctypeControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//td', 'active');
     }
 
-    /*
-     * Ruft die Fehlerseite für einzelne Dokumenttypen auf und prüft ob diese korrekt angezeigt wird
+    /**
+     * Ruft die Fehlerseite für einzelne Dokumenttypen auf und prüft ob diese korrekt angezeigt wird.
      */
     public function testDoctypeErrorMessagePage() {
         $this->useEnglish();
         $this->dispatch('/admin/doctype/show/document/demo_invalid');
         $this->assertResponseCode(200);
         $this->assertQueryContentContains('//h2', 'Error Message of Document Type demo_invalid:');
+    }
+
+    /**
+     * Prüft, ob die Breadcrumbs auf dieser Seite korrekt angezeigt werden.
+     */
+    public function testBreadcrumbs() {
+        $this->dispatch('/admin/doctype/show/document/demo_invalid');
+        $this->assertQueryContentContains('//div[class="breadcrumbsContainer"]', 'demo_invalid');
     }
 }
  

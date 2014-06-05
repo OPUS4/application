@@ -83,8 +83,8 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
         }
     }
 
-    /*
-     * setzt das Label eines Breadcrumbs auf den Wert von $value
+    /**
+     * Setzt das Label eines Breadcrumbs auf den Wert von $value.
      */
     public function setLabelFor($label, $value) {
         $page = $this->getNavigation()->findOneBy('label', $label);
