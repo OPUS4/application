@@ -42,5 +42,26 @@ class Admin_InfoControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains("//dt[@id='admin_info_version']/following-sibling::dd", $config->version);
     }
 
+    public function testCompareVersionWithWrongVersion() {
+        $this->useEnglish();
+        $config = Zend_Registry::get('Zend_Config');
+        $oldVersion = $config->version;
+        $config->version = 'abcd';
+        $this->dispatch('admin/info/index/check/version');
+        $config->version = $oldVersion;
+        $this->assertContains('Your Opus version is not up to date.', $this->_response->getBody());
+        $this->assertContains('<a href="http://www.kobv.de/opus4/software/">
+                             Get the latest version here.        </a>', $this->_response->getBody());
+    }
+
+    public function testCompareVersionWithRightVersion() {
+        $this->useEnglish();
+        $config = Zend_Registry::get('Zend_Config');
+        $oldVersion = $config->version;
+        $config->version = 'trunk'; //file_get_contents('http://opus4.kobv.de/update');
+        $this->dispatch('admin/info/index/check/version');
+        $config->version = $oldVersion;
+        $this->assertContains('Your Opus version is up to date.', $this->_response->getBody());
+    }
 }
 
