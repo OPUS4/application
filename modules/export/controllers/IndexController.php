@@ -96,13 +96,11 @@ class Export_IndexController extends Controller_Xml {
             $this->stylesheet = $this->getRequest()->getParam('stylesheet');
         }
 
-        $roleParam = $this->getRequest()->getParam('role');
-        if (is_null($roleParam)) {
+        if (is_null($this->getRequest()->getParam('role'))) {
             throw new Application_Exception('role is not specified');
         }
 
-        $numberParam = $this->getRequest()->getParam('number');
-        if (is_null($numberParam)) {
+        if (is_null($this->getRequest()->getParam('number'))) {
             throw new Application_Exception('number is not specified');
         }
 
