@@ -50,15 +50,12 @@ class Admin_DoctypeController extends Controller_Action {
         $this->view->content = $validationArray;
         $this->view->activeDoctypes = $this->documentTypesHelper->getDocumentTypes();
         $this->view->title = $this->view->translate('admin_doctype_index');
-        $this->view->numDocs = $this->view->translate('admin_doctype_numDocs') . ": " . sizeof($validationArray);
-        $this->view->numActiveDocs = $this->view->translate('admin_doctype_numActiveDocs') . ": " .
-            sizeof($this->view->activeDoctypes);
-        $this->view->errorStatus = $this->view->translate((!in_array(0, $validationArray)) ?
-            '' : 'admin_doctype_errors');
+        $this->view->numDocs = sizeof($validationArray);
+        $this->view->numActiveDocs = sizeof($this->view->activeDoctypes);
     }
 
     public function showAction() {
-        $document = $this->getRequest()->getParam('document');
+        $document = $this->getRequest()->getParam('doctype');
         $this->view->doctypeName = $document . ':';
         $this->documentTypesHelper->validate($document);
         $errors = $this->documentTypesHelper->getErrors();

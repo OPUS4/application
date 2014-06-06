@@ -1236,6 +1236,7 @@ table + .paginationControl{
    margin: 1.5em 0;
    width: 100%;
 }
+.adminContainer .wrapper .invisible,
 .adminContainer .wrapper .invisible a,
 .adminContainer .wrapper a.invisible,
 .adminContainer .wrapper td.unhide a{
