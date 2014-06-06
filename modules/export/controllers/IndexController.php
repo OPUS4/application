@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -30,6 +29,7 @@
  * @author      Sascha Szott <szott@zib.de>
  * @author      Gunar Maiwald <maiwald@zib.de>
  * @author      Michael Lang <lang@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -96,11 +96,13 @@ class Export_IndexController extends Controller_Xml {
             $this->stylesheet = $this->getRequest()->getParam('stylesheet');
         }
 
-        if (is_null($this->getRequest()->getParam('role'))) {
+        $roleParam = $this->getRequest()->getParam('role');
+        if (is_null($roleParam)) {
             throw new Application_Exception('role is not specified');
         }
 
-        if (is_null($this->getRequest()->getParam('number'))) {
+        $numberParam = $this->getRequest()->getParam('number');
+        if (is_null($numberParam)) {
             throw new Application_Exception('number is not specified');
         }
 
@@ -109,7 +111,7 @@ class Export_IndexController extends Controller_Xml {
             $groupBy = 'completedYear';
         }
 
-        $collection = $this->exportModel->mapQuery($this->getRequest()->getParam('role'), $this->getRequest()->getParam('number'));
+        $collection = $this->exportModel->mapQuery($roleParam, $numberParam);
         $this->getRequest()->setParam('searchtype', 'collection');
         $this->getRequest()->setParam('id', $collection->getId());
         $this->getRequest()->setParam('export', 'xml');
