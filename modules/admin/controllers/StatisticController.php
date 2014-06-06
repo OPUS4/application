@@ -80,7 +80,7 @@ class Admin_StatisticController extends Controller_Action {
         $this->view->dateThreshold = $this->getHelper('Dates')->getDateString($date);
 
         $this->view->selectedYear = $selectedYear;
-        $this->view->sumDocsUntil = $this->statisticsModel->findNumDocsUntil($selectedYear);
+        $this->view->sumDocsUntil = $this->statisticsModel->getNumDocsUntil($selectedYear);
 
         $monthStat = $this->statisticsModel->getMonthStatistics($selectedYear);
 

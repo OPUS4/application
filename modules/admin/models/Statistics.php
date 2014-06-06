@@ -152,7 +152,7 @@ class Admin_Model_Statistics {
     /**
      * Returns sum of all documents published before the $thresholdYear.
      */
-    public function findNumDocsUntil($thresholdYear) {
+    public function getNumDocsUntil($thresholdYear) {
         $finder = new Opus_DocumentFinder();
         $finder->setServerState('published');
         $finder->setServerDatePublishedBefore($thresholdYear+1);

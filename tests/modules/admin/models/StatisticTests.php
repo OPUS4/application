@@ -37,11 +37,11 @@ class Admin_Model_StatisticsTest extends ControllerTestCase {
     public function testInstituteStatistics() {
         $statistics = new Admin_Model_Statistics();
         $institutes = $statistics->getInstituteStatistics(2010);
-        $this->assertTrue($institutes['Technische Universität Hamburg-Harburg'] == 94,
+        $this->assertEquals(94, $institutes['Technische Universität Hamburg-Harburg'],
             'wrong publication count of Technische Universität Hamburg-Harburg returned' );
-        $this->assertTrue($institutes['Bauwesen'] == 3, 'wrong publicatin count of "Bauwesen" returned');
-        $this->assertTrue($institutes['Maschinenbau'] == 47, 'wrong publication count of "Maschinenbau" returned');
-        $this->assertTrue($institutes['Massivbau B-7'] == 0, 'wrong publication count of "Massivbau B-7" returned');
+        $this->assertEquals(3, $institutes['Bauwesen'], 'wrong publicatin count of "Bauwesen" returned');
+        $this->assertEquals(47, $institutes['Maschinenbau'], 'wrong publication count of "Maschinenbau" returned');
+        $this->assertEquals(0, $institutes['Massivbau B-7'], 'wrong publication count of "Massivbau B-7" returned');
     }
 
     /**
@@ -50,10 +50,10 @@ class Admin_Model_StatisticsTest extends ControllerTestCase {
     public function testMonthStatistics() {
         $statistics = new Admin_Model_Statistics();
         $months = $statistics->getMonthStatistics(2010);
-        $this->assertTrue( $months[1] == 16, 'wrong publication count of month Jan returned');
-        $this->assertTrue( $months[2] == 6, 'wrong publication count of month Feb returned');
-        $this->assertTrue( $months[3] == 25, 'wrong publication count of month March returned');
-        $this->assertTrue( $months[5] == 0, 'wrong publication count of month May returned');
+        $this->assertEquals(16, $months[1], 'wrong publication count of month Jan returned');
+        $this->assertEquals(6, $months[2], 'wrong publication count of month Feb returned');
+        $this->assertEquals(25, $months[3], 'wrong publication count of month March returned');
+        $this->assertEquals(0, $months[5], 'wrong publication count of month May returned');
     }
 
     /**
@@ -62,20 +62,20 @@ class Admin_Model_StatisticsTest extends ControllerTestCase {
     public function testTypeStatistics() {
         $statistics = new Admin_Model_Statistics();
         $types = $statistics->getTypeStatistics(2010);
-        $this->assertTrue( $types['article'] == 15, 'wrong publication count of Article returned' );
-        $this->assertTrue( $types['masterthesis'] == 0, 'wrong publication count of masterthesis returned' );
-        $this->assertTrue( $types['conferenceobject'] == 2, 'wrong publication count of conferenceobject returned' );
+        $this->assertEquals(15, $types['article'], 'wrong publication count of Article returned');
+        $this->assertEquals(0, $types['masterthesis'], 'wrong publication count of masterthesis returned');
+        $this->assertEquals(2, $types['conferenceobject'], 'wrong publication count of conferenceobject returned');
     }
 
     /**
      * Tests, if the right number of documents has been published until 2010.
      */
-    public function testNumDocsUntil() {
+    public function testGetNumDocsUntil() {
         $statistics = new Admin_Model_Statistics();
-        $this->assertTrue( $statistics->findNumDocsUntil(1900) == 0, 'wrong publication count of documents from the first year to 1900');
-        $this->assertTrue( $statistics->findNumDocsUntil(2008) == 10, 'wrong publication count of documents from the first year to 2008');
-        $this->assertTrue( $statistics->findNumDocsUntil(2010) == 107, 'wrong publication count of documents from the first year to 2010');
-        $this->assertTrue( $statistics->findNumDocsUntil(2013) == 142, 'wrong publication count of documents from the first year to 2013');
+        $this->assertEquals(0, $statistics->getNumDocsUntil(1900), 'wrong publication count of documents until 1900');
+        $this->assertEquals(10, $statistics->getNumDocsUntil(2008), 'wrong publication count of documents until 2008');
+        $this->assertEquals(107, $statistics->getNumDocsUntil(2010), 'wrong publication count of documents until 2010');
+        $this->assertEquals(142, $statistics->getNumDocsUntil(2013), 'wrong publication count of documents until 2013');
     }
 
     /*
