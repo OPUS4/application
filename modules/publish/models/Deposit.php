@@ -251,6 +251,9 @@ class Publish_Model_Deposit {
             $this->storePersonAttribute($person, $type, 'PlaceOfBirth', 'pob', $counter);
             $this->storePersonAttribute($person, $type, 'AcademicTitle', 'title', $counter);
             $this->storePersonAttribute($person, $type, 'DateOfBirth', 'dob', $counter);
+            $this->storePersonAttribute($person, $type, 'IdentifierGnd', 'Identifier', $counter);
+            $this->storePersonAttribute($person, $type, 'IdentifierOrcid', 'Identifier', $counter);
+            $this->storePersonAttribute($person, $type, 'IdentifierMisc', 'Identifier', $counter);
 
             // link-person-model
             $this->storePersonAttribute($person, $type, 'AllowEmailContact', 'check', $counter);
@@ -306,7 +309,12 @@ class Publish_Model_Deposit {
                             $entry = 0;
                         $person->setAllowEmailContact($entry);
                         break;
-                }                
+                    case 'Identifier' :
+                        $this->log->debug("Identifier?: " . $entry);
+                        $functionName = 'set' . $attribute;
+                        $person->$functionName($entry);
+                        break;
+                }
             }
         }
     }
