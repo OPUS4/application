@@ -869,7 +869,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Checks, whether the document language title is printed before other titles
+     * Checks, whether the document language title is printed before other titles.
      * OPUSVIER-1752
      */
     public function testMainTitleSortOrderGermanFirst() {
@@ -895,7 +895,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Checks, whether the document language title is printed before other titles
+     * Checks, whether the document language title is printed before other titles.
      * OPUSVIER-1752
      */
     public function testMainTitleSortOrderEnglishFirst() {
@@ -915,9 +915,60 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $docId = $doc->store();
 
         $this->dispatch('/frontdoor/index/index/docId/' . $docId);
-        $startPosition = strlen($this->_response->getBody()) / 2;
-        $title1 = strpos($this->_response->getBody(), '<h2 class="titlemain">englischer Titel</h2>', $startPosition);
-        $title2 = strpos($this->_response->getBody(), '<h3 class="titlemain">deutscher Titel</h3>', $startPosition);
+        $title1 = strpos($this->_response->getBody(), '<h2 class="titlemain">englischer Titel</h2>');
+        $title2 = strpos($this->_response->getBody(), '<h3 class="titlemain">deutscher Titel</h3>');
+        $this->assertTrue($title1 < $title2);
+    }
+
+    /**
+     * Checks, whether the document language title is printed before other titles.
+     * OPUSVIER-1752
+     */
+    public function testAbstractTitleSortOrderGermanFirst() {
+        $doc = $this->createTestDocument();
+        $title = new Opus_Title();
+        $title->setLanguage('deu');
+        $title->setValue('german abstract');
+        $doc->addTitleAbstract($title);
+
+        $title = new Opus_Title();
+        $title->setLanguage('eng');
+        $title->setValue('english abstract');
+        $doc->addTitleAbstract($title);
+
+        $doc->setLanguage('deu');
+        $doc->setServerState('published');
+        $docId = $doc->store();
+
+        $this->dispatch('/frontdoor/index/index/docId/' . $docId);
+        $title1 = strpos($this->_response->getBody(), '<li class="abstract preserve-spaces">german abstract</li>');
+        $title2 = strpos($this->_response->getBody(), '<li class="abstract preserve-spaces">english abstract</li>');
+        $this->assertTrue($title1 < $title2);
+    }
+
+    /**
+     * Checks, whether the document language title is printed before other titles.
+     * OPUSVIER-1752
+     */
+    public function testAbstractTitleSortOrderEnglishFirst() {
+        $doc = $this->createTestDocument();
+        $title = new Opus_Title();
+        $title->setLanguage('deu');
+        $title->setValue('german abstract');
+        $doc->addTitleAbstract($title);
+
+        $title = new Opus_Title();
+        $title->setLanguage('eng');
+        $title->setValue('english abstract');
+        $doc->addTitleAbstract($title);
+
+        $doc->setLanguage('eng');
+        $doc->setServerState('published');
+        $docId = $doc->store();
+
+        $this->dispatch('/frontdoor/index/index/docId/' . $docId);
+        $title1 = strpos($this->_response->getBody(), '<li class="abstract preserve-spaces">english abstract</li>');
+        $title2 = strpos($this->_response->getBody(), '<li class="abstract preserve-spaces">german abstract</li>');
         $this->assertTrue($title1 < $title2);
     }
 

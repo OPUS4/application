@@ -84,9 +84,23 @@
         </xsl:for-each>
     </xsl:template>
 
-    <xsl:template name="Abstract">
+    <xsl:template name="SortAbstract">
+        <xsl:variable name="docLang" select="@Language" />
         <ul>
         <xsl:for-each select="TitleAbstract">
+            <xsl:if test="@Language = $docLang">
+                <xsl:call-template name="Abstract" />
+            </xsl:if>
+        </xsl:for-each>
+        <xsl:for-each select="TitleAbstract">
+            <xsl:if test="@Language != $docLang">
+                <xsl:call-template name="Abstract" />
+            </xsl:if>
+        </xsl:for-each>
+        </ul>
+    </xsl:template>
+
+    <xsl:template name="Abstract">
             <li class="abstract preserve-spaces">
                 <xsl:choose>
                     <xsl:when test="$numOfShortAbstractChars = '0' or string-length(@Value) &lt; $numOfShortAbstractChars">
@@ -152,8 +166,6 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </li>
-        </xsl:for-each>
-        </ul>
     </xsl:template>
 
    
