@@ -1549,4 +1549,21 @@ table + .paginationControl{
 .admin_doctype_fail {
     background-color: #FFD4D4;
 }
+
+/* Definitionsliste für Anzeige auf Dokumenttypenseite. */
+
+.adminContainer dl.table {
+    font-size: 1.2em;
+}
+
+.adminContainer dl.table dt {
+    float: left;
+}
+
+.adminContainer dl.table dd {
+    padding-left: 14em;
+    margin: .5em;
+    font-weight: bold;
+}
+
 /* @end */
