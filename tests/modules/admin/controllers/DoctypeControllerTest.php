@@ -38,10 +38,12 @@ class Admin_DoctypeControllerTest extends ControllerTestCase {
         $this->useEnglish();
         $this->dispatch('/admin/doctype/index');
         $this->assertResponseCode(200);
-        $this->assertQuery('//a[@href="doctype/show/document/demo_invalid"]');
+        $this->assertQuery('//a[@href="doctype/show/doctype/demo_invalid"]');
         $this->assertQueryContentContains('//div', 'The red-marked document types are not valid.');
-        $this->assertQueryContentContains('//td', 'article');
+        $this->assertQueryContentContains('//th', 'article');
         $this->assertQueryContentContains('//td', 'active');
+
+        $this->assertQueryContentContains('//th.invisible', 'book'); // Book ist deaktiviert
     }
 
     /**
@@ -49,7 +51,7 @@ class Admin_DoctypeControllerTest extends ControllerTestCase {
      */
     public function testDoctypeErrorMessagePage() {
         $this->useEnglish();
-        $this->dispatch('/admin/doctype/show/document/demo_invalid');
+        $this->dispatch('/admin/doctype/show/doctype/demo_invalid');
         $this->assertResponseCode(200);
         $this->assertQueryContentContains('//h2', 'Error Message of Document Type demo_invalid:');
     }
@@ -58,7 +60,7 @@ class Admin_DoctypeControllerTest extends ControllerTestCase {
      * Prüft, ob die Breadcrumbs auf dieser Seite korrekt angezeigt werden.
      */
     public function testBreadcrumbs() {
-        $this->dispatch('/admin/doctype/show/document/demo_invalid');
+        $this->dispatch('/admin/doctype/show/doctype/demo_invalid');
         $this->assertQueryContentContains('//div[class="breadcrumbsContainer"]', 'demo_invalid');
     }
 }
