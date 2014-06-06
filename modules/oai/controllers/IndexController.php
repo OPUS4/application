@@ -516,7 +516,7 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
     private function _addFrontdoorUrlAttribute(DOMNode $document, $docid) {
-        $url = $this->view->basicUrl()->fullUrl() . '/frontdoor/index/index/docId/' . $docid;
+        $url = $this->view->fullUrl() . '/frontdoor/index/index/docId/' . $docid;
         
         $owner = $document->ownerDocument;
         $attr = $owner->createAttribute('frontdoorurl');
@@ -533,7 +533,7 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */  
     private function _addFileUrlAttribute(DOMNode $file, $docid, $filename) {
-        $url = $this->view->basicUrl()->fullUrl() . '/files/' . $docid . '/' . rawurlencode($filename);
+        $url = $this->view->fullUrl() . '/files/' . $docid . '/' . rawurlencode($filename);
 
         $owner = $file->ownerDocument;
         $attr = $owner->createAttribute('url');

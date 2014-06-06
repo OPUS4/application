@@ -45,7 +45,7 @@ class Solrsearch_OpensearchController extends Controller_Xml {
     public function indexAction() {
         $this->_proc->setParameter('',
                 'searchBaseUrl',
-                $this->view->basicUrl()->fullUrl() . '/solrsearch/index/search/searchtype/simple/query/{searchTerms}');
+                $this->view->fullUrl() . '/solrsearch/index/search/searchtype/simple/query/{searchTerms}');
         $this->_proc->setParameter('',
                 'faviconUrl',
                 $this->view->serverUrl() . $this->view->layoutPath() . '/img/logo/favicon.ico');

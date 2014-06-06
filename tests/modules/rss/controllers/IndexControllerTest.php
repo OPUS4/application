@@ -171,10 +171,10 @@ class Rss_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Tests, whether fullUrlHelper returns the correct Url.
+     * Tests, whether rss links are correctly build.
      * TODO: insert host in test-url
      */
-    public function testFullUrlHelper() {
+    public function testRssLink() {
         Zend_Controller_Front::getInstance()->setBaseUrl('opus4dev');
         $this->dispatch('/rss/index/index');
         $this->assertXpathContentContains('//link', 'http://opus4dev/frontdoor/index/index/docId/147');

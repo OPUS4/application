@@ -105,7 +105,7 @@ class Matheon_SelectReviewerController extends Controller_Action {
         $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
         $job->setData(array(
             'subject' => $document->renderPublishMailSubject(),
-            'message' => $document->renderPublishMailBody($this->view->basicUrl()->fullUrl(), $baseUrlFiles),
+            'message' => $document->renderPublishMailBody($this->view->fullUrl(), $baseUrlFiles),
             'users' => $recipient
         ));
 

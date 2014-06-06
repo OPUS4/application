@@ -122,7 +122,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $layoutPath = 'layouts/' . (isset($config, $config->theme) ? $config->theme : '');
         $numOfShortAbstractChars = isset($config, $config->frontdoor->numOfShortAbstractChars) ? $config->frontdoor->numOfShortAbstractChars : '0';
 
-        $proc->setParameter('', 'baseUrlServer', $this->view->basicUrl()->fullUrl());
+        $proc->setParameter('', 'baseUrlServer', $this->view->fullUrl());
         $proc->setParameter('', 'baseUrl', $baseUrl);
         $proc->setParameter('', 'layoutPath', $baseUrl . '/' . $layoutPath);
         $proc->setParameter('', 'isMailPossible', $this->isMailPossible($document));
@@ -339,7 +339,7 @@ class Frontdoor_IndexController extends Controller_Action {
             }
             $metas[] = array('DC.Identifier', $identifierValue);
         }
-        $metas[] = array('DC.Identifier', $this->view->basicUrl()->fullUrl() . '/frontdoor/index/index/docId/'. $document->getId());
+        $metas[] = array('DC.Identifier', $this->view->fullUrl() . '/frontdoor/index/index/docId/'. $document->getId());
 
         foreach ($document->getFile() AS $file) {
             if (!$file->exists() or ($file->getVisibleInFrontdoor() !== '1') ) {

@@ -137,7 +137,7 @@ class Rss_IndexController extends Controller_Xml {
     }
 
     private function setFrontdoorBaseUrl() {
-        $this->_proc->setParameter('', 'frontdoorBaseUrl', $this->view->basicUrl()->fullUrl() . '/frontdoor/index/index/docId/');
+        $this->_proc->setParameter('', 'frontdoorBaseUrl', $this->view->fullUrl() . '/frontdoor/index/index/docId/');
     }
 
 }

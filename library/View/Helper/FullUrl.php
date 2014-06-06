@@ -40,33 +40,16 @@
  *
  * TODO rename to View_Helper_FullUrl
  */
-class View_Helper_BasicUrl extends Zend_View_Helper_Abstract {
-
-    public function basicUrl() {
-        return $this;
-    }
-
-    /**
-     * Return the base url of the application.
-     *
-     * @return Base url string.
-     *
-     * TODO remove; use Zend_View_Helper_BaseUrl instead
-     */
-    public function partialUrl() {
-        $fc = Zend_Controller_Front::getInstance();
-        return $fc->getRequest()->getBaseUrl();
-    }
+class View_Helper_FullUrl extends Zend_View_Helper_Abstract {
 
     /**
      * Return the full url (server name followed by base URL).
      * This method might by useful when constructing absolute URLs.
-     * 
+     *
      * @param Zend_View $view instance of Zend_View
      * @return Full url string.
      */
     public function fullUrl() {
-	    return $this->view->serverUrl() . $this->partialUrl();
+        return $this->view->serverUrl() . $this->view->baseUrl();
     }
-
 }
