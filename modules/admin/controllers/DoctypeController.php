@@ -45,7 +45,7 @@ class Admin_DoctypeController extends Controller_Action {
     }
 
     public function indexAction() {
-        $validationArray = $this->documentTypesHelper->validateDocuments();
+        $validationArray = $this->documentTypesHelper->validateAll();
         ksort($validationArray);
         $this->view->content = $validationArray;
         $this->view->activeDoctypes = $this->documentTypesHelper->getDocumentTypes();

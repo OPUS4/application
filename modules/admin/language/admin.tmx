@@ -370,10 +370,10 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
 
     <tu tuid="admin_doctype_errorMsg">
       <tuv xml:lang="en">
-        <seg>Error Message</seg>
+        <seg>Show Error</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Fehlermeldung</seg>
+        <seg>Fehler anzeigen</seg>
       </tuv>
     </tu>
 
@@ -388,7 +388,7 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
 
     <tu tuid="admin_doctype_index">
       <tuv xml:lang="en">
-        <seg>Document types</seg>
+        <seg>Document Types</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Dokumenttypen</seg>

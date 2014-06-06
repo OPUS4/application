@@ -57,7 +57,7 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
      * Testet, ob die Validierung der Dokumenttypen korrekt ist.
      */
     public function testDoctypeValidation() {
-        $validationArray = $this->docTypeHelper->validateDocuments();
+        $validationArray = $this->docTypeHelper->validateAll();
         $this->assertTrue($validationArray['foobar'], 1);
         $this->assertTrue($validationArray['bazbar'], 1);
         $this->assertFalse($validationArray['demo_invalidfieldname']);

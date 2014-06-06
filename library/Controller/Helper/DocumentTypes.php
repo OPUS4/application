@@ -27,7 +27,8 @@
  * @category    Application
  * @package     Controller
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -245,11 +246,11 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         return $result;
     }
 
-    /*
-     * validates all document types in folder getDocTypesPath()
+    /**
+     * Validates all document types in folder getDocTypesPath().
      * returns an array ($filename => bool)
      */
-    public function validateDocuments() {
+    public function validateAll() {
         $documents = array();
         if ($handle = opendir($this::getDocTypesPath())) {
             while(false !== ($file = readdir($handle))) {
