@@ -138,9 +138,11 @@ class Application_Controller_Action_Helper_BreadcrumbsTest extends ControllerTes
      * Testet die Funktion Application_Controller_Action_Helper_Breadcrumbs::setLabelFor().
      */
     public function testSetLabelFor() {
+        $page = $this->getPage('admin_doctype_show');
+        $this->assertEquals('admin_doctype_show', $page->getLabel());
+
         $this->helper->setLabelFor('admin_doctype_show', 'hallo');
 
-        $page = $this->getPage('hallo');
         $this->assertNotNull($page);
         $this->assertEquals('hallo', $page->getLabel());
     }
