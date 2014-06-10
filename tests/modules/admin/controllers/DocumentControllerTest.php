@@ -826,46 +826,6 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*[@id="Document-Files-File0-VisibleInFrontdoor"]', 'Yes');
         $this->assertQueryContentContains('//*[@id="Document-Files-File0-VisibleInOai"]', 'Yes');
     }
-    
-    public function testEmbargoDatePassed() {
-        $this->useEnglish();
-        $file = $this->createTestFile('foo.pdf');
-
-        $doc = $this->createTestDocument();
-        $doc->setServerState('published');
-        $file->setVisibleInOai(false);
-        $doc->addFile($file);
-
-        $date = new Opus_Date();
-        $date->setYear('2000')->setMonth('00')->setDay('01');
-        $doc->setEmbargoDate($date);
-
-        $docId = $doc->store();
-
-        $this->dispatch('frontdoor/index/index/docId/' . $docId);
-        $this->assertQueryContentContains('//*', '/files/'.$docId.'/foo.pdf');
-        $this->assertNotQueryContentContains('//*', 'This document is embargoed until:');
-    }
-
-    public function testEmbargoDateHasNotPassed() {
-        $this->useEnglish();
-        $file = $this->createTestFile('foo.pdf');
-
-        $doc = $this->createTestDocument();
-        $doc->setServerState('published');
-        $file->setVisibleInOai(false);
-        $doc->addFile($file);
-
-        $date = new Opus_Date();
-        $date->setYear('2100')->setMonth('00')->setDay('01');
-        $doc->setEmbargoDate($date);
-
-        $docId = $doc->store();
-
-        $this->dispatch('frontdoor/index/index/docId/' . $docId);
-        $this->assertNotQueryContentContains('//*', '/files/'.$docId.'/foo.pdf');
-        $this->assertQueryContentContains('//*', 'This document is embargoed until:');
-    }
 
     /**
      * Asserts that document files are displayed up in the correct order, if the sort order field is set.

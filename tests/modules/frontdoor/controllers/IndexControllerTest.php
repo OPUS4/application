@@ -1046,4 +1046,51 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//div', '(rus)');
         $this->assertQueryContentContains('//div', '(fra)');
     }
+
+    /**
+     * Test für OPUSVIER-3275.
+     */
+    public function testEmbargoDatePassed() {
+        $this->useEnglish();
+        $file = $this->createTestFile('foo.pdf');
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $file->setVisibleInOai(false);
+        $doc->addFile($file);
+
+        $date = new Opus_Date();
+        $date->setYear('2000')->setMonth('00')->setDay('01');
+        $doc->setEmbargoDate($date);
+
+        $docId = $doc->store();
+
+        $this->dispatch('frontdoor/index/index/docId/' . $docId);
+        $this->assertQueryContentContains('//*', '/files/'.$docId.'/foo.pdf');
+        $this->assertNotQueryContentContains('//*', 'This document is embargoed until:');
+    }
+
+    /**
+     * Test für OPUSVIER-3275.
+     */
+    public function testEmbargoDateHasNotPassed() {
+        $this->useEnglish();
+        $file = $this->createTestFile('foo.pdf');
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $file->setVisibleInOai(false);
+        $doc->addFile($file);
+
+        $date = new Opus_Date();
+        $date->setYear('2100')->setMonth('00')->setDay('01');
+        $doc->setEmbargoDate($date);
+
+        $docId = $doc->store();
+
+        $this->dispatch('frontdoor/index/index/docId/' . $docId);
+        $this->assertNotQueryContentContains('//*', '/files/'.$docId.'/foo.pdf');
+        $this->assertQueryContentContains('//*', 'This document is embargoed until:');
+    }
+
 }
