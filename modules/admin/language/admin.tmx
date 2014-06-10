@@ -422,12 +422,12 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
       </tuv>
     </tu>
 
-    <tu tuid="admin_doctype_notFoundError">
+    <tu tuid="admin_doctype_invalid">
       <tuv xml:lang="en">
-        <seg>The document type was not found</seg>
+        <seg>The requested document type is invalid or undefined</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Der Dokumenttyp wurde nicht gefunden</seg>
+        <seg>Der angegebene Dokumenttyp ist ungültig oder nicht vorhanden</seg>
       </tuv>
     </tu>
 

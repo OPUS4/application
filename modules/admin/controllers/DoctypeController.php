@@ -58,7 +58,7 @@ class Admin_DoctypeController extends Controller_Action {
         $doctype = $this->getRequest()->getParam('doctype');
         if (!$this->documentTypesHelper->isValid($doctype)) {
             return $this->_redirectTo('index', array('failure' =>
-                    $this->view->translate('admin_doctype_notFoundError') . ': ' . $doctype),
+                    'admin_doctype_invalid'),
                 'doctype', 'admin');
         }
         $this->view->doctypeName = $doctype . ':';
