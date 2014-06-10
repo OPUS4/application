@@ -207,7 +207,7 @@ class Frontdoor_IndexController extends Controller_Action {
      * @return bool
      */
     public static function checkLanguageFile($language) {
-        if (file_exists(APPLICATION_PATH . '/public/layouts/opus4/img/flag/' . $language . '.png')) {
+        if (file_exists(APPLICATION_PATH . '/public/img/lang/' . $language . '.png')) {
             return true;
         }
         else {
