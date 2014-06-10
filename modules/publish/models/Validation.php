@@ -295,11 +295,8 @@ class Publish_Model_Validation {
             $children = array();
             $collectionId = $collectionRole->getRootCollection()->getId();
             $collection = new Opus_Collection($collectionId);
-            $colls = $collection->getVisibleChildren();
-            foreach ($colls as $coll) {
-                if ($coll->getVisiblePublish()) {
-                    $children[$coll->getId()] = $coll->getDisplayNameForBrowsingContext($collectionRole);
-                }
+            foreach ($collection->getVisiblePublishChildren() as $coll) {
+                $children[$coll->getId()] = $coll->getDisplayNameForBrowsingContext($collectionRole);
             }
             return $children;
         }
