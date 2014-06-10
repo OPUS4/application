@@ -1027,8 +1027,8 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $doc->addFile($file);
         $docId = $doc->store();
 
-        $oldPath = APPLICATION_PATH . '/public/layouts/opus4/img/flag/';
-        $bupPath = APPLICATION_PATH . '/public/layouts/opus4/img/flag_bup/';
+        $oldPath = APPLICATION_PATH . '/public/img/lang/';
+        $bupPath = APPLICATION_PATH . '/public/img/lang_bup/';
         rename($oldPath, $bupPath);
         $this->dispatch('/frontdoor/index/index/docId/' . $docId);
         rename($bupPath, $oldPath);
