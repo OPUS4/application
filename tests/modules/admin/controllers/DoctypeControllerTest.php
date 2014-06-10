@@ -40,10 +40,11 @@ class Admin_DoctypeControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->assertQuery('//a[@href="doctype/show/doctype/demo_invalid"]');
         $this->assertQueryContentContains('//div', 'The red-marked document types are not valid.');
-        $this->assertQueryContentContains('//th', 'article');
+        $this->assertQueryContentContains('//th', 'Article');
+        $this->assertQueryContentContains('//td', 'article');
         $this->assertQueryContentContains('//td', 'active');
 
-        $this->assertQueryContentContains('//th.invisible', 'book'); // Book ist deaktiviert
+        $this->assertQueryContentContains('//td.invisible', 'book'); // Book ist deaktiviert
     }
 
     /**
