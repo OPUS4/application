@@ -172,7 +172,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $doc->addFile($file);
         $doc->store();
 
-        $this->assertTrue($file->exists());
+        $this->assertTrue($file->isReadable());
 
         $model = new Oai_Model_Container($doc->getId());
         $tarball = null;
@@ -215,7 +215,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $doc->addFile($file);
         $doc->store();
 
-        $this->assertTrue($file->exists());
+        $this->assertTrue($file->isReadable());
 
         $model = new Oai_Model_Container($doc->getId());
         $file = $model->getFileHandle();
@@ -248,8 +248,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $doc->addFile($file2);
         $doc->store();
 
-        $this->assertTrue($file1->exists());
-        $this->assertTrue($file2->exists());
+        $this->assertTrue($file1->isReadable());
+        $this->assertTrue($file2->isReadable());
 
         $model = new Oai_Model_Container($doc->getId());
         $file = $model->getFileHandle();
@@ -281,8 +281,8 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $doc->addFile($file2);
         $doc->store();
 
-        $this->assertTrue($file1->exists());
-        $this->assertTrue($file2->exists());
+        $this->assertTrue($file1->isReadable());
+        $this->assertTrue($file2->isReadable());
 
         $model = new Oai_Model_Container($doc->getId());
         $tarball = $model->getFileHandle();
