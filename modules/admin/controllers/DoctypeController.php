@@ -55,12 +55,17 @@ class Admin_DoctypeController extends Controller_Action {
     }
 
     public function showAction() {
-        $document = $this->getRequest()->getParam('doctype');
-        $this->view->doctypeName = $document . ':';
-        $this->documentTypesHelper->validate($document);
+        $doctype = $this->getRequest()->getParam('doctype');
+        if (!$this->documentTypesHelper->isValid($doctype)) {
+            return $this->_redirectTo('index', array('failure' =>
+                    $this->view->translate('admin_doctype_notFoundError') . ': ' . $doctype),
+                'doctype', 'admin');
+        }
+        $this->view->doctypeName = $doctype . ':';
+        $this->documentTypesHelper->validate($doctype);
         $errors = $this->documentTypesHelper->getErrors();
-        $this->view->errorArray = $errors[$document];
-        $this->view->title = $document;
-        $this->_breadcrumbs->setLabelFor('admin_doctype_show', $document);
+        $this->view->errorArray = $errors[$doctype];
+        $this->view->title = $doctype;
+        $this->_breadcrumbs->setLabelFor('admin_doctype_show', $doctype);
     }
 }

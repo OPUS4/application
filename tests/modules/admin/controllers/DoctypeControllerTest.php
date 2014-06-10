@@ -63,5 +63,14 @@ class Admin_DoctypeControllerTest extends ControllerTestCase {
         $this->dispatch('/admin/doctype/show/doctype/demo_invalid');
         $this->assertQueryContentContains('//div[class="breadcrumbsContainer"]', 'demo_invalid');
     }
+
+    /**
+     * Wenn nach der Fehlermeldung eines nicht existenten Dokumententyps gesucht wird, soll ein Redirect zur Übersicht
+     * stattfinden und eine Fehlermeldung ausgegeben werden.
+     */
+    public function testInvalidDocumentTypeRedirect() {
+        $this->dispatch('/admin/doctype/show/doctype/yoyo');
+        $this->assertRedirectTo('/admin/doctype');
+    }
 }
  
