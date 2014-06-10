@@ -47,18 +47,20 @@
     <thead>
         <tr>
             <th><?= $this->translate('admin_doctype_document') ?></th>
+            <th><?= $this->translate('admin_doctype_filename') ?> </th>
             <th><?= $this->translate('admin_doctype_status') ?></th>
             <th></th>
         </tr>
     </thead>
 
-    <?PHP foreach ($this->content as $document => $validation) : ?>
-        <tr id="<?= $document ?>" class="<?= ($validation) ? 'admin_doctype' : 'admin_doctype_fail' ?>" >
-            <th class="<?= in_array($document, $this->activeDoctypes) ? '' : 'invisible' ?>"><?= $document ?></th>
-            <td class="<?= in_array($document, $this->activeDoctypes) ? '' : 'invisible' ?>"
-                ><?= in_array($document, $this->activeDoctypes) ? $this->translate('admin_doctype_active') :
+    <?PHP foreach ($this->content as $doctype => $validation) : ?>
+        <tr id="<?= $doctype ?>" class="<?= ($validation) ? 'admin_doctype' : 'admin_doctype_fail' ?>" >
+            <th class="<?= in_array($doctype, $this->activeDoctypes) ? '' : 'invisible' ?>"><?= $this->translate($doctype) ?></th>
+            <td class="<?= in_array($doctype, $this->activeDoctypes) ? '' : 'invisible' ?>"><?= $doctype ?></td>
+            <td class="<?= in_array($doctype, $this->activeDoctypes) ? '' : 'invisible' ?>"
+                ><?= in_array($doctype, $this->activeDoctypes) ? $this->translate('admin_doctype_active') :
                     $this->translate('admin_doctype_inactive') ?></td>
-            <td><a href="<?= 'doctype/show/doctype/' . $document?>"><?= ($validation) ? '' :
+            <td><a href="<?= 'doctype/show/doctype/' . $doctype?>"><?= ($validation) ? '' :
                         $this->translate('admin_doctype_errorMsg')?></a></td>
         </tr>
     <?PHP endforeach ?>

@@ -332,6 +332,15 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
       </tuv>
     </tu>
 
+    <tu tuid="admin_doctype_filename">
+      <tuv xml:lang="en">
+        <seg>File Name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dateiname</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_doctype_status">
       <tuv xml:lang="en">
         <seg>Status</seg>
