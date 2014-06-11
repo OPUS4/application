@@ -70,8 +70,10 @@ class Admin_DoctypeControllerTest extends ControllerTestCase {
      * stattfinden und eine Fehlermeldung ausgegeben werden.
      */
     public function testInvalidDocumentTypeRedirect() {
+        $this->useEnglish();
         $this->dispatch('/admin/doctype/show/doctype/yoyo');
         $this->assertRedirectTo('/admin/doctype');
+        $this->verifyFlashMessage('admin_doctype_invalid');
     }
 }
  
