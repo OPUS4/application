@@ -1560,19 +1560,23 @@ class Oai_IndexControllerTest extends ControllerTestCase {
             "Document 145: <dc:rights> must contain 'info:eu-repo/semantics/embargoedAccess'");
     }
 
+    /**
+     * Testet die korrekte Anzeige eines Dokuments vom Typ Periodical Parts.
+     */
     public function testXMetaDissPlusForPeriodicalParts() {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->setType('periodicalpart');
         $series = new Opus_Series(7);
-        $doc->addSeries($series)->setNumber('hallohallo');
+        $doc->addSeries($series)->setNumber('1337');
         $docId = $doc->store();
 
         $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai:opus4.demo:' . $docId);
 
-        $this->assertTrue(strpos($this->_response->getBody(), 'hallohallo') > 0,
-            'tested document does not contain the expected series information: Series-Number');
-        $this->assertTrue(strpos($this->_response->getBody(), 'xsi:type="ddb:ZSTitelID">7') > 0,
-            'tested document does not contain the expected series information: Series-Title');
+        $xpath = $this->prepareXpathFromResultString($this->_response->getBody());
+        $elements = $xpath->query('//dcterms:isPartOf[@xsi:type="ddb:ZSTitelID"]');
+        $this->assertEquals($elements->item(0)->nodeValue, 7, 'data contains wrong series id. expected id: 7');
+        $elements = $xpath->query('//dcterms:isPartOf[@xsi:type="ddb:ZS-Ausgabe"]');
+        $this->assertEquals($elements->item(0)->nodeValue, '1337', 'data contains wrong series number; expected number: 1337');
     }
 }
