@@ -24,32 +24,28 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
- * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
+ * @category    Application Unit Test
+ * @package     Application_View_Helper
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008 - 2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * 
- * This helper class defines only one method baseUrl() to retrieve the
- * application base url for absolute urls in views.
- *
- * TODO rename to View_Helper_FullUrl
- */
-class View_Helper_FullUrl extends Zend_View_Helper_Abstract {
+class Application_View_Helper_FullUrlTest extends ControllerTestCase {
 
     /**
-     * Return the full url (server name followed by base URL).
-     * This method might by useful when constructing absolute URLs.
-     *
-     * @param Zend_View $view instance of Zend_View
-     * @return Full url string.
+     * Testet die url.
+     * Im PhpUnit-Test ist der Host leer, deswegen wird er hier im Test nicht mit berücksichtigt.
+     * TODO: insert host in test-url
      */
-    public function fullUrl() {
-        return $this->view->serverUrl() . $this->view->baseUrl();
+    public function testFullUrl() {
+        $helper = new Application_View_Helper_FullUrl();
+        $view = new Zend_View();
+        Zend_Controller_Front::getInstance()->setBaseUrl('opus4dev');
+        $helper->setView($view);
+        $this->assertEquals($helper->fullUrl(), 'http://opus4dev');
     }
+
 }
+ 

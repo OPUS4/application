@@ -171,7 +171,8 @@ class Rss_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Tests, whether rss links are correctly build.
+     * Testet, ob Links im Rss richtig aufgebaut werden.
+     * Im PhpUnit-Test ist der Host leer, deswegen wird er hier im Test nicht mit berücksichtigt.
      * TODO: insert host in test-url
      */
     public function testRssLink() {
