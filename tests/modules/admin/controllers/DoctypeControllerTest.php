@@ -35,14 +35,15 @@ class Admin_DoctypeControllerTest extends ControllerTestCase {
      * Ruft die Dokumenttyp-Validierungsseite auf und prüft ob diese korrekt angezeigt wird.
      */
     public function testDoctypePage() {
-        $this->useEnglish();
+        $this->useGerman();
         $this->dispatch('/admin/doctype/index');
         $this->assertResponseCode(200);
         $this->assertQuery('//a[@href="doctype/show/doctype/demo_invalid"]');
-        $this->assertQueryContentContains('//div', 'The red-marked document types are not valid.');
-        $this->assertQueryContentContains('//th', 'Article');
+        $this->assertQueryContentContains('//div',
+            'Die Validierung der rot-markierten Dokumententypen ist fehlgeschlagen.');
+        $this->assertQueryContentContains('//th', 'Artikel');
         $this->assertQueryContentContains('//td', 'article');
-        $this->assertQueryContentContains('//td', 'active');
+        $this->assertQueryContentContains('//td', 'aktiv');
 
         $this->assertQueryContentContains('//td.invisible', 'book'); // Book ist deaktiviert
     }

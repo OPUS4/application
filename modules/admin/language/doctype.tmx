@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+
+<header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+</header>
+
+<body>
+
+    <tu tuid="admin_doctype_errors">
+      <tuv xml:lang="en">
+        <seg>The red-marked document types are not valid.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Validierung der rot-markierten Dokumententypen ist fehlgeschlagen.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_filename">
+      <tuv xml:lang="en">
+        <seg>File Name</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dateiname</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_status">
+      <tuv xml:lang="en">
+        <seg>Status</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Status</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_active">
+      <tuv xml:lang="en">
+        <seg>active</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>aktiv</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_inactive">
+      <tuv xml:lang="en">
+        <seg>inactive</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>inaktiv</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_error">
+      <tuv xml:lang="en">
+        <seg>Error</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehler</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_errorMsg">
+      <tuv xml:lang="en">
+        <seg>Show Error</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehler anzeigen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_show_message">
+      <tuv xml:lang="en">
+        <seg>Error Message of Document Type </seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Fehlermeldung des Dokumenttyps </seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_index">
+      <tuv xml:lang="en">
+        <seg>Document Types</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Dokumenttypen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_numDocs">
+      <tuv xml:lang="en">
+        <seg>Document Types</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Verschiedene Dokumenttypen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_numActiveDocs">
+      <tuv xml:lang="en">
+        <seg>Active documents</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Aktive Dokumenttypen</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_doctype_invalid">
+      <tuv xml:lang="en">
+        <seg>The requested document type is invalid or undefined</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Der angegebene Dokumenttyp ist ungültig oder nicht vorhanden</seg>
+      </tuv>
+    </tu>
+
+</body>
+
+</tmx>
