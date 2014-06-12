@@ -136,10 +136,6 @@ class Admin_WorkflowController extends Controller_Action {
             if ($targetState == 'published') {
                 $this->_sendNotification($document, $form);
             }
-            else {
-                $document->setServerDatePublished(null);
-                $document->store();
-            }
         }
         catch (Exception $e) {
             return $this->_redirectTo('index', array('failure' => $e->getMessage()), 'documents', 'admin');
