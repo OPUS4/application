@@ -234,4 +234,55 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
         $this->assertInstanceOf('Controller_Helper_AccessControl', $helper);
     }
 
+    /**
+     * Dateien, die nicht sichtbar sind in Frontdoor dürfen nicht heruntergeladen werden.
+     *
+     * @expectedException Frontdoor_Model_FileAccessNotAllowedException
+     */
+    public function testFileAccessDeniedIfNotVisibleInFrontdoorForGuest() {
+        $model = new Frontdoor_Model_File(91, "frontdoor_invisible.txt");
+
+        $realm = new MockRealm(true,true);
+
+        $opusFile = new Opus_File(128);
+
+        $this->assertEquals(0, $opusFile->getVisibleInFrontdoor(), "Testdaten geändert.");
+        $this->assertEquals("frontdoor_invisible.txt", $opusFile->getPathName(), "Testdaten geändert.");
+
+        $model->getFileObject($realm);
+    }
+
+    /**
+     * User mit Zugriff auf "documents" kann unsichtbare Dateien herunterladen.
+     */
+    public function testFileAccessAllowedWhenNotVisibleInFrontdoorForDocumentsAdmin() {
+        $this->loginUser('security8', 'security8pwd');
+
+        $model = new Frontdoor_Model_File(91, "frontdoor_invisible.txt");
+
+        $realm = new MockRealm(true,true);
+
+
+        $opusFile = $model->getFileObject($realm);
+
+        $this->assertEquals(0, $opusFile->getVisibleInFrontdoor(), "Testdaten geändert.");
+        $this->assertEquals("frontdoor_invisible.txt", $opusFile->getPathName(), "Testdaten geändert.");
+    }
+
+    /**
+     * Administrator kann unsichtbare Dateien herunterladen.
+     */
+    public function testFileAccessAllowedWhenNotVisibleInFrontdoorForAdmin() {
+        $this->loginUser('admin', 'adminadmin');
+
+        $model = new Frontdoor_Model_File(91, "frontdoor_invisible.txt");
+
+        $realm = new MockRealm(true,true);
+
+        $opusFile = $model->getFileObject($realm);
+
+        $this->assertEquals(0, $opusFile->getVisibleInFrontdoor(), "Testdaten geändert.");
+        $this->assertEquals("frontdoor_invisible.txt", $opusFile->getPathName(), "Testdaten geändert.");
+    }
+
 }
