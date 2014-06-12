@@ -79,7 +79,8 @@ class Frontdoor_Model_File {
                     break;
                 default:
                     // Dateien dürfen bei Nutzer mit Zugriff auf "documents" heruntergeladen werden
-                    
+                    throw new Frontdoor_Model_DocumentAccessNotAllowedException();
+
                     if (!$this->getAclHelper()->accessAllowed('documents') || !($realm instanceof Opus_Security_Realm)) {
                         throw new Frontdoor_Model_DocumentAccessNotAllowedException();
                     }
@@ -93,7 +94,7 @@ class Frontdoor_Model_File {
         if (is_null($targetFile)) {
             throw new Frontdoor_Model_FileNotFoundException();
         }
-        if (!$this->isFileAccessAllowed($targetFile->getId(), $realm)) {
+        if (!$this->isFileAccessAllowed($targetFile, $realm)) {
             throw new Frontdoor_Model_FileAccessNotAllowedException();
         }
         return $targetFile;
@@ -106,12 +107,13 @@ class Frontdoor_Model_File {
         return $realm->checkDocument($docId) || $this->getAclHelper()->accessAllowed('documents');
     }
 
-    function isFileAccessAllowed($fileId, $realm) {
-        if (is_null($fileId) or !($realm instanceof Opus_Security_IRealm)) {
+    function isFileAccessAllowed($file, $realm) {
+        if (is_null($file) or !($realm instanceof Opus_Security_IRealm)) {
             return false;
         }
         
-        return $realm->checkFile($fileId) || $this->getAclHelper()->accessAllowed('documents');
+        return ($realm->checkFile($file->getId()) && $file->getVisibleInFrontdoor())
+                || $this->getAclHelper()->accessAllowed('documents');
     }
 
     public function getAclHelper() {
