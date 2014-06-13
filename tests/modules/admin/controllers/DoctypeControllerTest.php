@@ -76,5 +76,13 @@ class Admin_DoctypeControllerTest extends ControllerTestCase {
         $this->assertRedirectTo('/admin/doctype');
         $this->verifyFlashMessage('admin_doctype_invalid');
     }
+
+    public function testMissingDocumentTypeRedirect() {
+        $this->useEnglish();
+        $this->dispatch('/admin/doctype/show');
+        $this->assertRedirectTo('/admin/doctype');
+        $this->verifyFlashMessage('admin_doctype_invalid');
+    }
+
 }
  
