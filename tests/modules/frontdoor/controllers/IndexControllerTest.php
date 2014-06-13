@@ -1056,7 +1056,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file->setVisibleInOai(false);
         $doc->addFile($file);
 
         $date = new Opus_Date();
@@ -1079,7 +1078,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
-        $file->setVisibleInOai(false);
         $doc->addFile($file);
 
         $date = new Opus_Date();
