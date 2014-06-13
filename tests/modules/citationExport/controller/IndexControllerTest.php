@@ -506,7 +506,18 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $this->setDocumentType('foo');
         $this->dispatch('/citationExport/index/download/output/bibtex/docId/' . $this->documentId);
         $this->checkBibtexAssertions('@misc', false);
-        
+    }
+
+    /**
+     * Regression-Test für OPUSVIER-3289.
+     * Der Test prüft, ob das Jahr mit ausgegeben wird, wenn NUR das Feld 'publishedDate' gesetzt ist.
+     */
+    public function testYearIsNotExportedWhenOnlyPublishedYearIsSet() {
+        $doc = $this->createTestDocument();
+        $doc->setPublishedYear(2013);
+        $docId = $doc->store();
+        $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
+        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2013},");
     }
 
     private function setDocumentType($documenttype) {
@@ -532,5 +543,6 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
             $this->assertContains('/citationExport/index/download/output/ris/docId/' . $this->documentId, $response->getBody());
         }
     }
+
 }
 
