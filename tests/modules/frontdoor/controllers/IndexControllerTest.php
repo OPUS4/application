@@ -997,11 +997,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/frontdoor/index/index/docId/' . $docId);
         $body = $this->_response->getBody();
-        $this->assertContains('<img width="16" height="11" src="/layouts/opus4/img/flag/eng.png" alt="eng"/>', $body);
-        $this->assertContains('<img width="16" height="11" src="/layouts/opus4/img/flag/deu.png" alt="deu"/>', $body);
-        $this->assertContains('<img width="16" height="11" src="/layouts/opus4/img/flag/spa.png" alt="spa"/>', $body);
-        $this->assertContains('<img width="16" height="11" src="/layouts/opus4/img/flag/fra.png" alt="fra"/>', $body);
-        $this->assertContains('<img width="16" height="11" src="/layouts/opus4/img/flag/rus.png" alt="rus"/>', $body);
+        $this->assertContains('<img width="16" height="11" src="/img/lang/eng.png" alt="eng"/>', $body);
+        $this->assertContains('<img width="16" height="11" src="/img/lang/deu.png" alt="deu"/>', $body);
+        $this->assertContains('<img width="16" height="11" src="/img/lang/spa.png" alt="spa"/>', $body);
+        $this->assertContains('<img width="16" height="11" src="/img/lang/fra.png" alt="fra"/>', $body);
+        $this->assertContains('<img width="16" height="11" src="/img/lang/rus.png" alt="rus"/>', $body);
     }
 
     /**
@@ -1034,11 +1034,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         rename($bupPath, $oldPath);
         $body = $this->_response->getBody();
 
-        $this->assertNotContains('<img width="16" height="11" src="/layouts/opus4/img/flag/eng.png" alt="eng"/>', $body);
-        $this->assertNotContains('<img width="16" height="11" src="/layouts/opus4/img/flag/deu.png" alt="deu"/>', $body);
-        $this->assertNotContains('<img width="16" height="11" src="/layouts/opus4/img/flag/spa.png" alt="spa"/>', $body);
-        $this->assertNotContains('<img width="16" height="11" src="/layouts/opus4/img/flag/fra.png" alt="fra"/>', $body);
-        $this->assertNotContains('<img width="16" height="11" src="/layouts/opus4/img/flag/rus.png" alt="rus"/>', $body);
+        $this->assertNotContains('<img width="16" height="11" src="/img/lang/eng.png" alt="eng"/>', $body);
+        $this->assertNotContains('<img width="16" height="11" src="/img/lang/deu.png" alt="deu"/>', $body);
+        $this->assertNotContains('<img width="16" height="11" src="/img/lang/spa.png" alt="spa"/>', $body);
+        $this->assertNotContains('<img width="16" height="11" src="/img/lang/fra.png" alt="fra"/>', $body);
+        $this->assertNotContains('<img width="16" height="11" src="/img/lang/rus.png" alt="rus"/>', $body);
 
         $this->assertQueryContentContains('//div', '(spa)');
         $this->assertQueryContentContains('//div', '(eng)');

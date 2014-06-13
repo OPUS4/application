@@ -66,8 +66,8 @@
                   <xsl:when test="php:functionString('Frontdoor_IndexController::checkLanguageFile', @Language)">
                       <img width="16" height="11">
                           <xsl:attribute name="src">
-                              <xsl:value-of select="$layoutPath"/>
-                              <xsl:text>/img/flag/</xsl:text>
+                              <xsl:value-of select="$baseUrl"/>
+                              <xsl:text>/img/lang/</xsl:text>
                               <xsl:call-template name="replaceCharsInString">
                                   <xsl:with-param name="stringIn" select="string(@Language)"/>
                                   <xsl:with-param name="charsIn" select="'/'"/>
