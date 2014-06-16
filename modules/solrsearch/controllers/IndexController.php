@@ -159,31 +159,15 @@ class Solrsearch_IndexController extends Controller_Action {
      * @return array result[facet_name] = number
      */
     private function facetNumberChanger() {
+        $this->view->showIconPlus = array();
         $facetArray = array();
-        if (!is_null($this->_request->getParam('facetNumber_author_facet'))) {
-            $facetArray['author_facet'] = $this->_request->getParam('facetNumber_author_facet');
-        }
-        if (!is_null($this->_request->getParam('facetNumber_year'))) {
-            $facetArray['year'] = $this->_request->getParam('facetNumber_year');
-        }
-        if (!is_null($this->_request->getParam('facetNumber_doctype'))) {
-            $facetArray['doctype'] = $this->_request->getParam('facetNumber_doctype');
-        }
-        if (!is_null($this->_request->getParam('facetNumber_language'))) {
-            $facetArray['language'] = $this->_request->getParam('facetNumber_language');
-        }
-        if (!is_null($this->_request->getParam('facetNumber_has_fulltext'))) {
-            $facetArray['has_fulltext'] = $this->_request->getParam('facetNumber_has_fulltext');
-        }
-        if (!is_null($this->_request->getParam('facetNumber_belongs_to_bibliography'))) {
-            $facetArray['belongs_to_bibliography'] = $this->_request->getParam('facetNumber_belongs_to_bibliography');
-        }
-        if (!is_null($this->_request->getParam('facetNumber_subject'))) {
-            $facetArray['subject'] = $this->_request->getParam('facetNumber_subject');
-        }
-        if (!is_null($this->_request->getParam('facetNumber_institute'))) {
-            $facetArray['institute'] = $this->_request->getParam('facetNumber_institute');
-        }
+        $this->chooseFacetNumber($facetArray, 'author_facet');
+        $this->chooseFacetNumber($facetArray, 'year');
+        $this->chooseFacetNumber($facetArray, 'doctype');
+        $this->chooseFacetNumber($facetArray, 'language');
+        $this->chooseFacetNumber($facetArray, 'subject');
+        $this->chooseFacetNumber($facetArray, 'institute');
+
         if (sizeof($facetArray) == 0) {
             return null;
         }
@@ -192,8 +176,17 @@ class Solrsearch_IndexController extends Controller_Action {
         }
     }
 
-    private function setViewValues() {
+    private function chooseFacetNumber(&$facetArray, $facet) {
+        if ($this->_request->getParam('facetNumber_' . $facet) == 'all') {
+            $facetArray[$facet] = 10000;
+            $this->view->showIconPlus[$facet] = false;
+        }
+        else {
+            $this->view->showIconPlus[$facet] = true;
+        }
+    }
 
+    private function setViewValues() {
         $this->setGeneralViewValues();
 
         if ($this->numOfHits > 0) {
