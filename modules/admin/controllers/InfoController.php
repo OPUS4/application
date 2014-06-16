@@ -61,15 +61,18 @@ class Admin_InfoController extends Controller_Action {
     private function compareVersion() {
         $config = Zend_Registry::get('Zend_Config');
         $localVersion = $config->version;
-        $latestVersion = 'trunk'; //file_get_contents('http://opus4.kobv.de/update');
+        $versionFileContent = file_get_contents('http://www.kobv.de/fileadmin/opus/download/VERSION.txt');
         $this->view->versionUpdate = '';
 
         if (is_null($localVersion)) {
             return '';
         }
-        if (is_null($latestVersion)) {
+        if (is_null($versionFileContent)) {
             return '';
         }
+        $fileContentArray = explode("\n", $versionFileContent);
+        $latestVersion = $fileContentArray[0];
+
         if ($localVersion == $latestVersion) {
             return 'version_latest';
         }

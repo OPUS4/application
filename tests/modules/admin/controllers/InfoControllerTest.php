@@ -58,7 +58,10 @@ class Admin_InfoControllerTest extends ControllerTestCase {
         $this->useEnglish();
         $config = Zend_Registry::get('Zend_Config');
         $oldVersion = $config->version;
-        $config->version = 'trunk'; //file_get_contents('http://opus4.kobv.de/update');
+        $versionFileContent = file_get_contents('http://www.kobv.de/fileadmin/opus/download/VERSION.txt');
+        $fileContentArray = explode("\n", $versionFileContent);
+        $config->version = $fileContentArray[0];
+
         $this->dispatch('admin/info/index/check/version');
         $config->version = $oldVersion;
         $this->assertContains('Your Opus version is up to date.', $this->_response->getBody());
