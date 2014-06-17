@@ -68,7 +68,7 @@
                     <? endif ?>
                 <?php endforeach ?>
             </ul>
-            <? if ($key != 'has_fulltext' && $key != 'belongs_to_bibliography') {
+            <? if ($this->showFacetExtender[$key]) {
                 if ($this->showIconPlus[$key]) {
                     ?>
                     <div class="facetValueExtender"><a href="<?= $this->url($facetUrl) ?>"><?= $this->translate('facets_more_results') ?></a></div>

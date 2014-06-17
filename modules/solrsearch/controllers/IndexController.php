@@ -284,8 +284,16 @@ class Solrsearch_IndexController extends Controller_Action {
         $facetArray = array();
         $selectedFacets = array();
         $this->view->facetNumberContainer = array();
+        $configFacetLimit = Zend_Registry::get('Zend_Config')->searchengine->solr->globalfacetlimit;
+        $this->view->showFacetExtender = array();
 
         foreach($facets as $key=>$facet) {
+            if ($configFacetLimit <= sizeof($facet)) {
+                $this->view->showFacetExtender[$key] = true;
+            }
+            else {
+                $this->view->showFacetExtender[$key] = false;
+            }
             $this->_logger->debug("found $key facet in search results");
             $this->view->facetNumberContainer[$key] = sizeof($facet);
             $facetValue = $this->getRequest()->getParam($key . 'fq','');
