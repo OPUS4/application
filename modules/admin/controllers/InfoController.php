@@ -48,39 +48,33 @@ class Admin_InfoController extends Controller_Action {
         }
         $this->view->postMaxSize = ini_get('post_max_size');
         $this->view->uploadMaxFilesize = ini_get('upload_max_filesize');
-
-        if ($this->getRequest()->getParam('check') == 'version') {
-            $this->view->versionButton = false;
-            $this->view->versionLabel = $this->compareVersion();
-        }
-        else {
-            $this->view->versionButton = true;
-        }
     }
 
-    private function compareVersion() {
+    public function compareAction() {
         $config = Zend_Registry::get('Zend_Config');
         $localVersion = $config->version;
-        $versionFileContent = file_get_contents('http://www.kobv.de/fileadmin/opus/download/VERSION.txt');
+        $versionFileContent = file_get_contents($config->versionFile);
         $this->view->versionUpdate = '';
 
         if (is_null($localVersion)) {
-            return '';
+            throw new Exception( 'admin_info_local_Version_File_Not_Readable' );
         }
         if (is_null($versionFileContent)) {
-            return '';
+            throw new Exception( 'admin_info_server_Version_File_Not_Readable' );
         }
         $fileContentArray = explode("\n", $versionFileContent);
         $latestVersion = $fileContentArray[0];
 
         if ($localVersion == $latestVersion) {
-            return 'version_latest';
+            $this->view->versionLabel = 'version_latest';
         }
         else {
-            $this->view->versionUpdate = 'version_get_Update';
-            return 'version_outdated';
+            $this->view->versionUpdate = 'version_get_update';
+            $this->view->versionLabel = 'version_outdated';
         }
     }
+
+
 }
 
 

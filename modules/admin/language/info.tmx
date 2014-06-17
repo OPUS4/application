@@ -135,12 +135,31 @@
 
     <tu tuid="admin_info_versioncheck">
       <tuv xml:lang="en">
-        <seg>Version-Check</seg>
+        <seg>Check for Update</seg>
       </tuv>
       <tuv xml:lang="de">
         <seg>Versionsabgleich</seg>
       </tuv>
     </tu>
+
+    <tu tuid="admin_info_local_Version_File_Not_Readable">
+      <tuv xml:lang="en">
+        <seg>The local version file (VERSION.txt) is not available.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die lokale Versionsdatei (VERSION.txt) ist nicht verfügbar.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_server_Version_File_Not_Readable">
+      <tuv xml:lang="en">
+        <seg>The server version file is not available.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die Versionsdatei des Servers ist nicht verfügbar.</seg>
+      </tuv>
+    </tu>
+
 
   </body>
 

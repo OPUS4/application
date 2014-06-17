@@ -784,6 +784,13 @@
                                     <controller>info</controller>
                                     <action>job-detail</action>
                                 </job-detail>
+                                <compare>
+                                    <type>mvc</type>
+                                    <label>admin_info_versioncheck</label>
+                                    <module>admin</module>
+                                    <controller>info</controller>
+                                    <action>compare</action>
+                                </compare>
                             </pages>
                         </sysinfo>  
                         

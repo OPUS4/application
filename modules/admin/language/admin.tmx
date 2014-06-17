@@ -292,11 +292,11 @@ Dokumentstatus ändern und Dateien (Volltexte) verwalten.</seg>
         <seg>Your Opus version is not up to date.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Sie benutzen nicht die neueste Opus-Version</seg>
+        <seg>Sie benutzen nicht die neueste Opus-Version.</seg>
       </tuv>
     </tu>
 
-    <tu tuid="version_get_Update">
+    <tu tuid="version_get_update">
       <tuv xml:lang="en">
         <seg> Get the latest version here.</seg>
       </tuv>

@@ -25,9 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    TODO
- * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -41,38 +40,11 @@
 </dl>
 
 <dl>
-    <a href="<?= $this->url(array('module' => 'admin', 'controller' => 'info', 'action' => 'compare')) ?>">
-        <?= htmlspecialchars($this->translate('admin_info_versioncheck')) ?></a>
+    <? if (!is_null($this->versionLabel)) ?>
+        <?= htmlspecialchars($this->translate($this->versionLabel)) ?>
+    <a href="http://www.kobv.de/opus4/software/">
+        <?php
+        if ($this->versionUpdate != '') ?>
+            <?= htmlspecialchars( $this->translate($this->versionUpdate)); ?>
+    </a>
 </dl>
-
-<fieldset>
-    <legend><?= $this->translate('admin_info_section_upload') ?></legend>
-
-    <table class="systeminfo">
-        <tr>
-            <th class="label"><?= $this->translate('admin_info_column_setting') ?></th>
-            <th class="value"><?= $this->translate('admin_info_column_value') ?></th>
-            <th class="location"><?= $this->translate('admin_info_column_location') ?></th>
-            <th class="description"><?= $this->translate('admin_info_column_description') ?></th>
-        </tr>
-        <tr>
-            <td class="label">publish.maxfilesize</td>
-            <td class="value"><?= htmlspecialchars($this->maxfilesize) ?></td>
-            <td class="location">config.ini</td>
-            <td class="description"><?= $this->translate('admin_info_maxfilesize_description') ?></td>
-        </tr>
-        <tr>
-            <td class="label">upload_max_filesize</td>
-            <td class="value"><?= htmlspecialchars($this->uploadMaxFilesize) ?></td>
-            <td class="location">php.ini</td>
-            <td class="description"><?= $this->translate('admin_info_uploadmaxfilesize_description') ?></td>
-        </tr>
-        <tr>
-            <td class="label">post_max_size</td>
-            <td class="value"><?= htmlspecialchars($this->postMaxSize) ?></td>
-            <td class="location">php.ini</td>
-            <td class="description"><?= $this->translate('admin_info_postmaxsize_description') ?></td>
-        </tr>
-    </table>
-
-</fieldset>
