@@ -84,7 +84,7 @@
         </xsl:for-each>
     </xsl:template>
 
-    <xsl:template name="SortAbstract">
+    <xsl:template name="SortedAbstracts">
         <xsl:variable name="docLang" select="@Language" />
         <ul>
         <xsl:for-each select="TitleAbstract">

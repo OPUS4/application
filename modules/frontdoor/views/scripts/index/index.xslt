@@ -86,7 +86,7 @@
          </div>
 
          <div id="abstract">
-            <xsl:call-template name="SortAbstract" />
+            <xsl:call-template name="SortedAbstracts" />
          </div>
       </div>
       
