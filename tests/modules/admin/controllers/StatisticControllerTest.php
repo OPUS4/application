@@ -89,5 +89,14 @@ class Admin_StatisticControllerTest extends ControllerTestCase {
         $this->dispatch('/admin/statistic/show');
         $this->assertRedirectTo('/admin/statistic');
     }
+
+    /**
+     * Regression test for OPUSVIER-1769.
+     * Documents must not be shown in publication statistics, if their serverState is not 'published'.
+     */
+    public function testIgnoreUnpublishedDocuments() {
+        $this->dispatch('/admin/statistic');
+        $this->assertNotQueryContentContains('//option', '2110');
+    }
 }
 
