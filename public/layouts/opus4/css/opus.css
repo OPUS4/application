@@ -101,6 +101,9 @@
 .facet{
 	margin: 1em 0;
 }
+.facetValueExtender {
+    margin: 0.75em;
+}
 .services ul{
 	margin: 0 0 1em;
 	padding: 0;

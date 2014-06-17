@@ -231,19 +231,19 @@
 
         <tu tuid="facets_more_results">
             <tuv xml:lang="en">
-                <seg> + show all</seg>
+                <seg> + more</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg> + alle anzeigen</seg>
+                <seg> + weitere</seg>
             </tuv>
         </tu>
 
         <tu tuid="facets_less_results">
             <tuv xml:lang="en">
-                <seg> - show favorites</seg>
+                <seg> - less</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg> - Favoriten anzeigen</seg>
+                <seg> - weniger</seg>
             </tuv>
         </tu>
 
