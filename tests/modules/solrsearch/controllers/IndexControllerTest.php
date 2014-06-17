@@ -1016,7 +1016,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//a', 'Wally Walruss');
         $this->assertQueryContentContains('//a', 'M. Scheinpflug');
         $this->assertQueryContentContains(
-            "//a[@href='/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_author_facet/del']", ' - show favorites');
+            "//a[@href='/solrsearch/index/search/searchtype/all/start/0/rows/10']", ' - show favorites');
     }
 
     /**
