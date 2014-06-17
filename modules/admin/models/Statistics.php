@@ -140,6 +140,7 @@ class Admin_Model_Statistics {
     public function getYears() {
         $documents = new Opus_Db_Documents();
         $select = $documents->select()->from('documents', array('year' => 'YEAR(server_date_published)'))
+            ->where('server_state=?', 'published')
             ->distinct()
             ->order('year');
         $result = $documents->fetchAll($select);
