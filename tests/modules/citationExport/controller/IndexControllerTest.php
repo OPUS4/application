@@ -509,8 +509,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Regression-Test für OPUSVIER-3289.
-     * Der Test prüft, ob das Jahr mit ausgegeben wird, wenn NUR das Feld 'publishedDate' gesetzt ist.
+     * Regression-Tests für OPUSVIER-3289.
+     * Der Test prüft, ob das Jahr mit ausgegeben wird, wenn NUR das Feld 'publishedYear' gesetzt ist.
      */
     public function testYearIsNotExportedWhenOnlyPublishedYearIsSet() {
         $doc = $this->createTestDocument();
@@ -518,6 +518,56 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $docId = $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
         $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2013},");
+    }
+
+    /**
+     * Regression-Tests für OPUSVIER-3289.
+     * Der Test prüft, ob das Jahr mit ausgegeben wird, wenn NUR das Feld 'publishedDate' gesetzt ist.
+     */
+    public function testBibtexExportWithOnlyPublishedDateSet() {
+        $doc = $this->createTestDocument();
+        $doc->setPublishedDate('2012-02-01');
+        $docId = $doc->store();
+        $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
+        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2012},");
+    }
+
+    /**
+     * Regression-Tests für OPUSVIER-3289.
+     * Der Test prüft, ob das Jahr mit ausgegeben wird, wenn NUR das Feld 'completedDate' gesetzt ist.
+     */
+    public function testBibtexExportWithOnlyCompletedDateSet() {
+        $doc = $this->createTestDocument();
+        $doc->setCompletedDate('2012-02-01');
+        $docId = $doc->store();
+        $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
+        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2012},");
+    }
+
+    /**
+     * Regression-Tests für OPUSVIER-3289.
+     * Der Test prüft, ob das Jahr mit ausgegeben wird, wenn NUR das Feld 'completedYear' gesetzt ist.
+     */
+    public function testBibtexExportWithOnlyCompletedYearSet() {
+        $doc = $this->createTestDocument();
+        $doc->setPublishedYear(2012);
+        $docId = $doc->store();
+        $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
+        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2012},");
+    }
+
+    /**
+     * Der Test prüft, ob das richtige Jahr ausgegeben wird, wenn alle Felder gesetzt sind.
+     */
+    public function testBibtexExportWithEveryDate() {
+        $doc = $this->createTestDocument();
+        $doc->setCompletedDate('2015-01-01');
+        $doc->setPublishedYear(2012);
+        $doc->setPublishedDate('2013-01-01');
+        $doc->setCompletedYear(2014);
+        $docId = $doc->store();
+        $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
+        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2015},");
     }
 
     private function setDocumentType($documenttype) {

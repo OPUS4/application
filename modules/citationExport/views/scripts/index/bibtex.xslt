@@ -68,7 +68,7 @@
                 <xsl:when test="string-length(normalize-space(CompletedDate/@Year)) > 0">
                     <xsl:value-of select="CompletedDate/@Year" />
                 </xsl:when>
-                <xsl:when test="normalize-space(@CompletedYear) != '0000'">
+                <xsl:when test="normalize-space(@CompletedYear) != '0000' and normalize-space(@CompletedYear) != ''">
                     <xsl:value-of select="@CompletedYear" />
                 </xsl:when>
                 <xsl:when test="string-length(normalize-space(PublishedDate/@Year)) > 0">
