@@ -71,12 +71,12 @@
             <? if ($key != 'has_fulltext' && $key != 'belongs_to_bibliography') {
                 if ($this->showIconPlus[$key]) {
                     ?>
-                    <a href="<?= $this->url($facetUrl) ?>">
-                        <img src="<?= $this->layoutPath() ?>/img/plus.png" height="22" width="22"></a>
+                    <br/>
+                    <a href="<?= $this->url($facetUrl) ?>"><?= $this->translate('facets_more_results') ?></a>
                 <? } else { ?>
+                    <br/>
                     <? $facetUrl['facetNumber_' . $key] = 'del'; ?>
-                    <a href="<?= $this->url($facetUrl) ?>">
-                        <img src="<?= $this->layoutPath() ?>/img/minus.png" height="22" width="22"></a>
+                    <a href="<?= $this->url($facetUrl) ?>"><?= $this->translate('facets_less_results') ?></a>
                 <?
                 }
             } ?>

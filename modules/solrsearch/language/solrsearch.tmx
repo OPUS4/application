@@ -229,6 +229,24 @@
             </tuv>
         </tu>
 
+        <tu tuid="facets_more_results">
+            <tuv xml:lang="en">
+                <seg> + show all</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg> + alle anzeigen</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="facets_less_results">
+            <tuv xml:lang="en">
+                <seg> - show favorites</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg> - Favoriten anzeigen</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="advanced_search_form_reset_action">
             <tuv xml:lang="en">
                 <seg>Reset form</seg>

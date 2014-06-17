@@ -1010,24 +1010,28 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      * Test für OPUSVIER-1713.
      */
     public function testAuthorFacetOpen() {
+        $this->useEnglish();
         $this->dispatch('/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_author_facet/all');
         $this->assertQueryContentContains('//a', 'Wilfried Stecher');
         $this->assertQueryContentContains('//a', 'Wally Walruss');
         $this->assertQueryContentContains('//a', 'M. Scheinpflug');
-        $this->assertContains('<img src="/layouts/opus4/img/minus.png"', $this->_response->getBody());
+        $this->assertQueryContentContains(
+            "//a[@href='/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_author_facet/del']", ' - show favorites');
     }
 
     /**
      * Test für OPUSVIER-1713.
      */
     public function testAuthorFacetClosed() {
+        $this->useEnglish();
         $this->dispatch('/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_author_facet/del');
         $this->assertQueryContentContains('//a', 'John Doe');
         $this->assertQueryContentContains('//a', 'Gerold A. Schneider');
         $this->assertNotQueryContentContains('//a', 'Wilfried Stecher');
         $this->assertNotQueryContentContains('//a', 'Wally Walruss');
         $this->assertNotQueryContentContains('//a', 'M. Scheinpflug');
-        $this->assertContains('<img src="/layouts/opus4/img/plus.png"', $this->_response->getBody());
+        $this->assertQueryContentContains(
+            "//a[@href='/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_author_facet/all']", ' + show all');
     }
 
 }
