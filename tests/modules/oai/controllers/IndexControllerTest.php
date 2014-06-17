@@ -1538,19 +1538,22 @@ class Oai_IndexControllerTest extends ControllerTestCase {
      */
     public function testListRecordsForOpenAireCompliance() {
         $this->markTestSkipped('Oai-Ausgabe von open-aire sets vorübergehend deaktiviert');
-        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=ec_fundedresources&set=ec_fundedresources');
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=ec_fundedresources');
         $this->assertResponseCode(200);
 
-        $response = $this->getResponse();
+        $responseBody = $this->getResponse()->getBody();
         $badStrings = array("Exception", "Stacktrace", "badVerb");
-        $this->checkForCustomBadStringsInHtml($response->getBody(), $badStrings);
+        $this->checkForCustomBadStringsInHtml($responseBody, $badStrings);
+
+        $this->assertContains('<setSpec>EC_fundedresources</setSpec>', $responseBody);
+        $this->assertNotContains('<setSpec>doc-type:doctoralthesis</setSpec>', $responseBody);
 
         $this->assertContains('<dc:relation>info:eu-repo/grantAgreement/EC/FP7/12345/EU//OpenAIRE</dc:relation>',
-                $response->getBody(), "<dc:relation> must contain 'info:eu-repo/grantAgreement/EC/FP7/12345/EU//OpenAIRE'");
-        $this->assertContains('<dc:relation>info:eu-repo/grantAgreement/EC/FP7/12345</dc:relation>', $response->getBody(),
+                $responseBody, "<dc:relation> must contain 'info:eu-repo/grantAgreement/EC/FP7/12345/EU//OpenAIRE'");
+        $this->assertContains('<dc:relation>info:eu-repo/grantAgreement/EC/FP7/12345</dc:relation>', $responseBody,
                 "<dc:relation> must contain 'info:eu-repo/grantAgreement/EC/FP7/12345'");
 
-        $xpath = $this->prepareXpathFromResultString($response->getBody());
+        $xpath = $this->prepareXpathFromResultString($responseBody);
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:rights");
         $this->assertEquals($queryResponse->item(1)->nodeValue, 'info:eu-repo/semantics/openAccess',
             "Document 146: <dc:rights> must contain 'info:eu-repo/semantics/openAccess'");
