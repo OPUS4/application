@@ -75,7 +75,7 @@
                     <a href="<?= $this->url($facetUrl) ?>"><?= $this->translate('facets_more_results') ?></a>
                 <? } else { ?>
                     <br/>
-                    <? $facetUrl['facetNumber_' . $key] = 'del'; ?>
+                    <? $facetUrl['facetNumber_' . $key] = null; ?>
                     <a href="<?= $this->url($facetUrl) ?>"><?= $this->translate('facets_less_results') ?></a>
                 <?
                 }
