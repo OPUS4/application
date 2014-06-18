@@ -276,7 +276,7 @@
 
         <tu tuid="Position">
 			<tuv xml:lang="en">
-				<seg>Sort order</seg>
+				<seg>Sort Order</seg>
 			</tuv>
 			<tuv xml:lang="de">
 				<seg>Sortierreihenfolge</seg>

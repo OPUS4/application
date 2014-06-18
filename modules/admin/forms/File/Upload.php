@@ -81,7 +81,7 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
         $hash->addDecorator('HtmlTag', array('tag' => 'div'));
         $this->addElement($hash);
 
-        $this->addElement('text', self::ELEMENT_SORT_ORDER);
+        $this->addElement('SortOrder', self::ELEMENT_SORT_ORDER);
 
         $this->getElement(self::ELEMENT_MODEL_ID)->setRequired(true);
     }

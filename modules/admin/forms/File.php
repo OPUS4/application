@@ -91,7 +91,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         $element->setLabel('Opus_File_' . self::ELEMENT_SERVER_DATE_SUBMITTED);
         $this->addElement($element);
 
-        $element = $this->createElement('text', self::ELEMENT_SORT_ORDER);
+        $element = $this->createElement('SortOrder', self::ELEMENT_SORT_ORDER);
         $this->addElement($element);
 
         $this->addElement('Language', self::ELEMENT_LANGUAGE, array('label' => 'Language', 'required' => true));

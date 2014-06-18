@@ -2124,7 +2124,7 @@
 
         <tu tuid="Opus_File_ServerDateSubmitted">
             <tuv xml:lang="en">
-                <seg>Date of upload</seg>
+                <seg>Date of Upload</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Datum des Hochladens</seg>
@@ -2133,7 +2133,7 @@
 
         <tu tuid="Opus_File_SortOrder">
             <tuv xml:lang="en">
-                <seg>Sort order</seg>
+                <seg>Sort Order</seg>
             </tuv>
             <tuv xml:lang="de">
                 <seg>Reihenfolge</seg>

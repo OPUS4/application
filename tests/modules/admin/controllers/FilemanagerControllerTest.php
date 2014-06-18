@@ -330,10 +330,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
         $positionFile3 = strpos($body, 'test.pdf');
         $positionFile4 = strpos($body, 'frontdoor_invisible.txt');
         $this->assertTrue($positionFile1 < $positionFile2);
-        $this->assertTrue($positionFile1 < $positionFile3);
-        $this->assertTrue($positionFile1 < $positionFile4);
         $this->assertTrue($positionFile2 < $positionFile3);
-        $this->assertTrue($positionFile2 < $positionFile4);
         $this->assertTrue($positionFile3 < $positionFile4);
     }
 

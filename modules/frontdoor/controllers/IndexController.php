@@ -216,23 +216,11 @@ class Frontdoor_IndexController extends Controller_Action {
     }
 
     /**
-     * If the sortorder-value of any attached file is set, this function returns the files in the correct sortorder;
-     * otherwise files are returned in attached order.
+     * If the sortorder-value of any attached file is set, this function returns true.
      */
     public static function useSortOrder($docId) {
         $doc = new Opus_Document($docId);
-        $files = $doc->getFile();
-        if (sizeof($files > 1)) {
-            foreach ($files as $file) {
-                if (!is_null($file->getSortOrder())) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        else {
-            return false;
-        }
+        return $doc->useSortOrder();
     }
 
     /**
