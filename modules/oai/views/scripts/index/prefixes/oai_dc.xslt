@@ -8,12 +8,11 @@
  *
  * OPUS 4 is a complete rewrite of the original OPUS software and was developed
  * by the Stuttgart University Library, the Library Service Center
- * Baden-Wuerttemberg, the North Rhine-Westphalian Library Service Center,
- * the Cooperative Library Network Berlin-Brandenburg, the Saarland University
- * and State Library, the Saxon State Library - Dresden State and University
- * Library, the Bielefeld University Library and the University Library of
- * Hamburg University of Technology with funding from the German Research
- * Foundation and the European Regional Development Fund.
+ * Baden-Wuerttemberg, the Cooperative Library Network Berlin-Brandenburg,
+ * the Saarland University and State Library, the Saxon State Library -
+ * Dresden State and University Library, the Bielefeld University Library and
+ * the University Library of Hamburg University of Technology with funding from
+ * the German Research Foundation and the European Regional Development Fund.
  *
  * LICENCE
  * OPUS is free software; you can redistribute it and/or modify it under the
@@ -22,14 +21,14 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
  * @package     Module_Oai
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
- * @copyright   Copyright (c) 2009, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -82,24 +81,27 @@
             <!-- dc:contributor -->
             <xsl:apply-templates select="@ContributingCorporation" mode="oai_dc" />
             <!-- dc:date -->
-            <!-- TODO: date-code has been copy-pasted from XMetaDissPlus.xslt! -->
+            <!-- TODO: date-code has been copy-pasted from XMetaDissPlus.xslt!-->
             <dc:date>
                 <xsl:choose>
-                  <xsl:when test="PublishedDate">
-                    <xsl:value-of select="PublishedDate/@Year"/>-<xsl:value-of select="format-number(PublishedDate/@Month,'00')"/>-<xsl:value-of select="format-number(PublishedDate/@Day,'00')"/>
-                  </xsl:when>
-                  <xsl:when test="CompletedDate">
-                    <xsl:value-of select="CompletedDate/@Year"/>-<xsl:value-of select="format-number(CompletedDate/@Month,'00')"/>-<xsl:value-of select="format-number(CompletedDate/@Day,'00')"/>
-                  </xsl:when>
-                  <xsl:when test="@PublishedYear">
-                    <xsl:value-of select="@PublishedYear"/>
-                  </xsl:when>
-                  <xsl:when test="@CompletedYear">
-                    <xsl:value-of select="@CompletedYear"/>
-                  </xsl:when>
-                  <xsl:otherwise>
-                    <xsl:value-of select="ServerDatePublished/@Year"/>-<xsl:value-of select="format-number(ServerDatePublished/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDatePublished/@Day,'00')"/>
-                  </xsl:otherwise>
+                    <xsl:when test="EmbargoDate">
+                        <xsl:value-of select="EmbargoDate/@Year"/>-<xsl:value-of select="format-number(EmbargoDate/@Month,'00')"/>-<xsl:value-of select="format-number(EmbargoDate/@Day,'00')"/>
+                    </xsl:when>
+                    <xsl:when test="PublishedDate">
+                        <xsl:value-of select="PublishedDate/@Year"/>-<xsl:value-of select="format-number(PublishedDate/@Month,'00')"/>-<xsl:value-of select="format-number(PublishedDate/@Day,'00')"/>
+                    </xsl:when>
+                    <xsl:when test="CompletedDate">
+                        <xsl:value-of select="CompletedDate/@Year"/>-<xsl:value-of select="format-number(CompletedDate/@Month,'00')"/>-<xsl:value-of select="format-number(CompletedDate/@Day,'00')"/>
+                    </xsl:when>
+                    <xsl:when test="@PublishedYear">
+                        <xsl:value-of select="@PublishedYear"/>
+                    </xsl:when>
+                    <xsl:when test="@CompletedYear">
+                        <xsl:value-of select="@CompletedYear"/>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:value-of select="ServerDatePublished/@Year"/>-<xsl:value-of select="format-number(ServerDatePublished/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDatePublished/@Day,'00')"/>
+                    </xsl:otherwise>
                 </xsl:choose>
             </dc:date>
             <!-- dc:type -->
@@ -123,6 +125,9 @@
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:rights -->
             <xsl:apply-templates select="Licence" mode="oai_dc" />
+            <!-- open aire -->
+            <xsl:apply-templates select="Enrichment" mode="oai_dc" />
+            <xsl:apply-templates select="Rights" mode="oai_dc" />
         </oai_dc:dc>
     </xsl:template>
 
@@ -171,7 +176,7 @@
               <xsl:attribute name="xml:lang">
                  <xsl:value-of select="@Language" />
               </xsl:attribute>
-            </xsl:if>    
+            </xsl:if>
          <xsl:value-of select="@Value" />
         </dc:subject>
     </xsl:template>
@@ -258,4 +263,17 @@
         </dc:rights>
     </xsl:template>
 
+    <xsl:template match="Enrichment[@KeyName='Relation']" mode="oai_dc">
+        <dc:relation>
+            <xsl:value-of select="@Value" />
+        </dc:relation>
+    </xsl:template>
+
+    <xsl:template match="Rights" mode="oai_dc">
+        <dc:rights>
+            <xsl:value-of select="@Value" />
+        </dc:rights>
+    </xsl:template>
+
 </xsl:stylesheet>
+
