@@ -517,6 +517,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $doc->setPublishedYear(2013);
         $docId = $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
+        $this->assertNotQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {},");
         $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2013},");
     }
 
@@ -524,7 +525,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
      * Regression-Tests für OPUSVIER-3289.
      * Der Test prüft, ob das Jahr mit ausgegeben wird, wenn NUR das Feld 'publishedDate' gesetzt ist.
      */
-    public function testBibtexExportWithOnlyPublishedDateSet() {
+    public function testBibtexYearExportWithOnlyPublishedDateSet() {
         $doc = $this->createTestDocument();
         $doc->setPublishedDate('2012-02-01');
         $docId = $doc->store();
@@ -536,7 +537,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
      * Regression-Tests für OPUSVIER-3289.
      * Der Test prüft, ob das Jahr mit ausgegeben wird, wenn NUR das Feld 'completedDate' gesetzt ist.
      */
-    public function testBibtexExportWithOnlyCompletedDateSet() {
+    public function testBibtexYearExportWithOnlyCompletedDateSet() {
         $doc = $this->createTestDocument();
         $doc->setCompletedDate('2012-02-01');
         $docId = $doc->store();
@@ -548,7 +549,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
      * Regression-Tests für OPUSVIER-3289.
      * Der Test prüft, ob das Jahr mit ausgegeben wird, wenn NUR das Feld 'completedYear' gesetzt ist.
      */
-    public function testBibtexExportWithOnlyCompletedYearSet() {
+    public function testBibtexYearExportWithOnlyCompletedYearSet() {
         $doc = $this->createTestDocument();
         $doc->setPublishedYear(2012);
         $docId = $doc->store();
@@ -559,12 +560,26 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
     /**
      * Der Test prüft, ob das richtige Jahr ausgegeben wird, wenn alle Felder gesetzt sind.
      */
-    public function testBibtexExportWithEveryDate() {
+    public function testBibtexYearExportWithEveryDate() {
         $doc = $this->createTestDocument();
         $doc->setCompletedDate('2015-01-01');
         $doc->setPublishedYear(2012);
         $doc->setPublishedDate('2013-01-01');
         $doc->setCompletedYear(2014);
+        $docId = $doc->store();
+        $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
+        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2015},");
+    }
+
+    /**
+     * Der Test prüft, ob das richtige Jahr ausgegeben wird, wenn alle Felder gesetzt sind.
+     */
+    public function testBibtexYearExportWithEmptyStrings() {
+        $doc = $this->createTestDocument();
+        $doc->setCompletedDate('');
+        $doc->setCompletedYear('');
+        $doc->setPublishedDate('');
+        $doc->setPublishedYear('2015');
         $docId = $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
         $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2015},");
