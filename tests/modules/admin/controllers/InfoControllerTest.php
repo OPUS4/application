@@ -45,12 +45,12 @@ class Admin_InfoControllerTest extends ControllerTestCase {
     /**
      * Test für OPUSVIER-1386.
      */
-    public function testCompareVersionWithWrongVersion() {
+    public function testVersionWithOldVersion() {
         $this->useEnglish();
         $config = Zend_Registry::get('Zend_Config');
         $oldVersion = $config->version;
         $config->version = 'abcd';
-        $this->dispatch('admin/info/compare');
+        $this->dispatch('admin/info/update');
         $config->version = $oldVersion;
         $this->assertQueryContentContains('//a', "Get the latest version here.");
         $this->assertQueryContentContains('//dl', "Your Opus version is not up to date.");
@@ -59,7 +59,7 @@ class Admin_InfoControllerTest extends ControllerTestCase {
     /**
      * Test für OPUSVIER-1386.
      */
-    public function testCompareVersionWithCorrectVersion() {
+    public function testVersionWithCurrentVersion() {
         $this->useEnglish();
         $config = Zend_Registry::get('Zend_Config');
         $oldVersion = $config->version;
@@ -67,9 +67,10 @@ class Admin_InfoControllerTest extends ControllerTestCase {
         $fileContentArray = explode("\n", $versionFileContent);
         $config->version = $fileContentArray[0];
 
-        $this->dispatch('admin/info/compare');
+        $this->dispatch('admin/info/update');
         $config->version = $oldVersion;
         $this->assertQueryContentContains('//dl', 'Your Opus version is up to date.');
     }
+
 }
 

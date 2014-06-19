@@ -784,13 +784,13 @@
                                     <controller>info</controller>
                                     <action>job-detail</action>
                                 </job-detail>
-                                <compare>
+                                <update>
                                     <type>mvc</type>
-                                    <label>admin_info_versioncheck</label>
+                                    <label>admin_info_update</label>
                                     <module>admin</module>
                                     <controller>info</controller>
-                                    <action>compare</action>
-                                </compare>
+                                    <action>update</action>
+                                </update>
                             </pages>
                         </sysinfo>  
                         

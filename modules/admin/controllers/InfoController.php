@@ -50,7 +50,7 @@ class Admin_InfoController extends Controller_Action {
         $this->view->uploadMaxFilesize = ini_get('upload_max_filesize');
     }
 
-    public function compareAction() {
+    public function updateAction() {
         $config = Zend_Registry::get('Zend_Config');
         $localVersion = $config->version;
         $versionFileContent = file_get_contents($config->versionFile);

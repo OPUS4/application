@@ -133,6 +133,15 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_info_update">
+      <tuv xml:lang="en">
+        <seg>Update Check</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Update verfügbar?</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="admin_info_versioncheck">
       <tuv xml:lang="en">
         <seg>Check for Update</seg>
