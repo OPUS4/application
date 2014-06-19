@@ -95,12 +95,13 @@ fi
 
 echo "Step 2: Updating PHTML document type templates ..."
 
+PHTML_FILES_CONFIGS="$BASEDIR/opus4/application/configs/doctypes_templates"
+
 # hint: 4.4.0 > 4.4 is true in lexicographic ordering
 if [[ "$VERSION_OLD" < "4.4" && "$VERSION_NEW" > "4.4" ]]; then
 
     # PHTML doctype templates should be moved from 'modules' to 'configs'
     PHTML_FILES_MODULES="$BASEDIR/opus4/modules/publish/views/scripts/form"
-    PHTML_FILES_CONFIGS="$BASEDIR/opus4/application/configs/doctypes_templates"
 
     # Create target folder if necessary
     if [[ ! -d $PHTML_FILES_CONFIGS ]]; then
@@ -202,4 +203,4 @@ if [[ -f $OLD_XSLT_FILE ]]; then
     moveFile "$OLD_XSLT_FILE" "$XSLT_DIR/solr.xslt"
 fi
 
-updateFile "$SRC/solr" "$XSLT_DIR" "$MD5PATH/solr" "solr.xslt" backup
+updateFile "$SRC/solr" "$XSLT_DIR" "
