@@ -941,8 +941,13 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $docId = $doc->store();
 
         $this->dispatch('/frontdoor/index/index/docId/' . $docId);
-        $title1 = strpos($this->_response->getBody(), 'class="abstract preserve-spaces">german abstract');
-        $title2 = strpos($this->_response->getBody(), 'class="abstract preserve-spaces">english abstract');
+        $body = $this->getResponse()->getBody();
+        // Absicherung gegen HTML Aenderungen;  in Meta-Tags steht Text in Attribut
+        $this->assertEquals(1, substr_count($body, '>german abstract<'));
+        $this->assertEquals(1, substr_count($body, '>english abstract<'));
+
+        $title1 = strpos($body, '>german abstract<');
+        $title2 = strpos($body, '>english abstract<');
         $this->assertTrue($title1 < $title2);
     }
 
@@ -967,8 +972,13 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $docId = $doc->store();
 
         $this->dispatch('/frontdoor/index/index/docId/' . $docId);
-        $title1 = strpos($this->_response->getBody(), 'class="abstract preserve-spaces">english abstract');
-        $title2 = strpos($this->_response->getBody(), 'class="abstract preserve-spaces">german abstract');
+        $body = $this->getResponse()->getBody();
+        // Absicherung gegen HTML Aenderungen; in Meta-Tags steht Text in Attribut
+        $this->assertEquals(1, substr_count($body, '>german abstract<'));
+        $this->assertEquals(1, substr_count($body, '>english abstract<'));
+
+        $title1 = strpos($body, '>english abstract<');
+        $title2 = strpos($body, '>german abstract<');
         $this->assertTrue($title1 < $title2);
     }
 
