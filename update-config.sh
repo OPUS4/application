@@ -203,4 +203,4 @@ if [[ -f $OLD_XSLT_FILE ]]; then
     moveFile "$OLD_XSLT_FILE" "$XSLT_DIR/solr.xslt"
 fi
 
-updateFile "$SRC/solr" "$XSLT_DIR" "
+updateFile "$SRC/solr" "$XSLT_DIR" "$MD5PATH/solr" "solr.xslt" backup
