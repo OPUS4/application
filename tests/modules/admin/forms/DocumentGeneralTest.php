@@ -38,7 +38,9 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
         
     public function testCreateForm() {
         $form = new Admin_Form_DocumentGeneral();
-        
+
+        $this->assertEquals(7, count($form->getElements()));
+
         $this->assertNotNull($form->getElement('Language'));
         $this->assertNotNull($form->getElement('Type'));
         $this->assertNotNull($form->getElement('PublishedDate'));
