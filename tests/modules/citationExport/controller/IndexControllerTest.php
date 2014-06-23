@@ -572,7 +572,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Der Test prüft, ob das richtige Jahr ausgegeben wird, wenn alle Felder gesetzt sind.
+     * Der Test prüft, ob das richtige Jahr ausgegeben wird, wenn alle Felder auf leere Strings gesetzt sind.
      */
     public function testBibtexYearExportWithEmptyStrings() {
         $doc = $this->createTestDocument();

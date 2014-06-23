@@ -61,16 +61,16 @@
         <!-- Preprocessing: some variables will be defined -->
         <xsl:variable name="year">
             <xsl:choose>
-                <xsl:when test="string-length(normalize-space(CompletedDate/@Year)) > 0">
+                <xsl:when test="normalize-space(CompletedDate/@Year) > 0 and string-length(normalize-space(CompletedDate/@Year)) > 0">
                     <xsl:value-of select="CompletedDate/@Year" />
                 </xsl:when>
                 <xsl:when test="normalize-space(@CompletedYear) != '0000' and normalize-space(@CompletedYear) != ''">
                     <xsl:value-of select="@CompletedYear" />
                 </xsl:when>
-                <xsl:when test="string-length(normalize-space(PublishedDate/@Year)) > 0">
+                <xsl:when test="normalize-space(PublishedDate/@Year) > 0 and string-length(normalize-space(PublishedDate/@Year)) > 0">
                     <xsl:value-of select="PublishedDate/@Year" />
                 </xsl:when>
-                <xsl:when test="normalize-space(@PublishedYear) != '0000'">
+                <xsl:when test="normalize-space(@PublishedYear) != '0000' and normalize-space(@PublishedYear) != ''">
                     <xsl:value-of select="@PublishedYear" />
                 </xsl:when>
            </xsl:choose>
