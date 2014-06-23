@@ -1034,4 +1034,26 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             "//a[@href='/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_author_facet/all']", ' + more');
     }
 
+    /**
+     * Wenn in der config.ini weniger oder mehr Parameter als üblich (oder als in searchengine->solr->globalFacetLimit)
+     * angegeben sind, muss der FacetExtender trotzdem noch angezeigt werden.
+     */
+    public function testFacetExtenderWithVariousConfigFacetLimits() {
+        $this->useEnglish();
+        $oldConfig = Zend_Registry::get('Zend_Config');
+        $testConfig = $oldConfig;
+        $testConfig->merge(new Zend_Config(array('searchengine' =>
+            array('solr' =>
+                array('facetlimit' =>
+                    array('author_facet' => 3,
+                          'year'         => 15))))));
+
+        $this->dispatch('/solrsearch/index/search/searchtype/all/');
+        Zend_Registry::set('Zend_Config', $oldConfig);
+        $this->assertQueryContentContains(
+            "//a[@href='/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_author_facet/all']", ' + more');
+        $this->assertQueryContentContains(
+            "//a[@href='/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_year/all']", ' + more');
+    }
+
 }
