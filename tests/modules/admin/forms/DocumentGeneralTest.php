@@ -47,6 +47,7 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('PublishedYear'));
         $this->assertNotNull($form->getElement('CompletedDate'));
         $this->assertNotNull($form->getElement('CompletedYear'));
+        $this->assertNotNull($form->getElement('EmbargoDate'));
     }
     
     /**
@@ -67,6 +68,7 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
         $this->assertEquals('2008', $form->getElement('PublishedYear')->getValue());
         $this->assertEquals('2011/12/01', $form->getElement('CompletedDate')->getValue());
         $this->assertEquals('2009', $form->getElement('CompletedYear')->getValue());
+        $this->assertEquals('1984/06/05', $form->getElement('EmbargoDate')->getValue());
     }
     
     public function testUpdateModel() {
@@ -80,6 +82,7 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
         $form->getElement('PublishedYear')->setValue('2006');
         $form->getElement('CompletedDate')->setValue('2006/07/03');
         $form->getElement('CompletedYear')->setValue('2007');
+        $form->getElement('EmbargoDate')->setValue('1986/03/29');
         
         $document = $this->createTestDocument();
         
@@ -95,6 +98,8 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
         $this->assertNotNull($document->getCompletedDate());
         $this->assertEquals('2006/07/03', date('Y/m/d', $document->getCompletedDate()->getZendDate()->get()));
         $this->assertEquals('2007', $document->getCompletedYear());
+
+        $this->assertEquals('1986/03/29', date('Y/m/d', $document->getEmbargoDate()->getZendDate()->get()));
     }
     
     public function testValidation() {
@@ -109,6 +114,7 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
             'PublishedYear' => 'year1', // muss Integer sein
             'CompletedDate' => '2008/02/31', // muss korrektes Datum sein
             'CompletedYear' => '-1', // muss groesser als 0 sein
+            'EmbargoDate' => '2008/02/31', // muss korrektes Datum sein
         );
 
         $this->assertFalse($form->isValid($post));
@@ -119,6 +125,7 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
         $this->assertContains('notInt', $form->getErrors('PublishedYear'));
         $this->assertContains('dateInvalidDate', $form->getErrors('CompletedDate'));
         $this->assertContains('notGreaterThan', $form->getErrors('CompletedYear'));
+        $this->assertContains('dateInvalidDate', $form->getErrors('EmbargoDate'));
     }
     
     public function testValidationGerman() {
