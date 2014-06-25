@@ -374,7 +374,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*[@id="Document-General-PublishedYear"]', '2008');
         $this->assertQueryContentContains('//*[@id="Document-General-CompletedDate"]', '01.12.2011');
         $this->assertQueryContentContains('//*[@id="Document-General-CompletedYear"]', '2009');
-        
+        $this->assertQueryContentContains('//*[@id="Document-General-EmbargoDate"]', '05.06.1984');
+
         // Persons
         $this->assertQueryContentContains('//*[@id="Document-Persons-author-PersonAuthor0-FirstName"]', 'John');
         $this->assertQueryContentContains('//*[@id="Document-Persons-author-PersonAuthor0-LastName"]', 'Doe');
@@ -609,7 +610,8 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*[@id="Document-General-PublishedYear"]', '2008');
         $this->assertQueryContentContains('//*[@id="Document-General-CompletedDate"]', '2011/12/01');
         $this->assertQueryContentContains('//*[@id="Document-General-CompletedYear"]', '2009');
-        
+        $this->assertQueryContentContains('//*[@id="Document-General-EmbargoDate"]', '1984/06/05');
+
         // Persons
         $this->assertQueryContentContains('//*[@id="Document-Persons-author-PersonAuthor0-FirstName"]', 'John');
         $this->assertQueryContentContains('//*[@id="Document-Persons-author-PersonAuthor0-LastName"]', 'Doe');

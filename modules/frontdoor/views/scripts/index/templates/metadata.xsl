@@ -46,7 +46,7 @@
     </xsl:template>
 
 
-    <xsl:template match="EmbargoDate">
+    <xsl:template match="EmbargoDate" mode="fileDownloadEmbargo">
         <div id="embargo" class="services">
             <h3>
                 <xsl:call-template name="translateString">
@@ -147,6 +147,21 @@
     </xsl:template>
 
     <xsl:template match="CompletedDate|PublishedDate|ThesisDateAccepted|ServerDatePublished">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateFieldname"/>
+            </th>
+            <td>
+                <xsl:call-template name="formatDate">
+                    <xsl:with-param name="day"><xsl:value-of select="@Day"/></xsl:with-param>
+                    <xsl:with-param name="month"><xsl:value-of select="@Month"/></xsl:with-param>
+                    <xsl:with-param name="year"><xsl:value-of select="@Year"/></xsl:with-param>
+                </xsl:call-template>
+            </td>
+        </tr>
+    </xsl:template>
+
+    <xsl:template match="EmbargoDate" mode="metadataEmbargo">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateFieldname"/>

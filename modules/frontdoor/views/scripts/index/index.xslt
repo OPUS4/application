@@ -118,7 +118,7 @@
                     </div>
                 </xsl:when>
                 <xsl:otherwise>
-                     <xsl:apply-templates select="EmbargoDate" />
+                     <xsl:apply-templates select="EmbargoDate" mode="fileDownloadEmbargo"/>
                 </xsl:otherwise>
 
              </xsl:choose>
@@ -209,7 +209,12 @@
                 <xsl:when test="normalize-space(@PublishedYear) != '0000'">
                     <xsl:apply-templates select="@PublishedYear" />
                 </xsl:when>
-            </xsl:choose>            
+            </xsl:choose>
+            <xsl:choose>
+                <xsl:when test="string-length(normalize-space(EmbargoDate/@Year)) > 0">
+                    <xsl:apply-templates select="EmbargoDate" mode="metadataEmbargo" />
+                </xsl:when>
+            </xsl:choose>
 
             <xsl:apply-templates select="ThesisPublisher" />
             <xsl:apply-templates select="ThesisGrantor" />

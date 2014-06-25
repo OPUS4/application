@@ -196,6 +196,12 @@ class Frontdoor_IndexController extends Controller_Action {
         return $realm->checkFile($file_id);
     }
 
+    /**
+     * Invokes Opus_Document::hasEmbargoPassed(); compares EmbargoDate with parameter or system time.
+     *
+     * @param Opus_Date $now
+     * @return bool true - if embargo date has passed; false - if not
+     */
     public static function checkIfFileEmbargoHasPassed($docId) {
         $doc = new Opus_Document($docId);
         return $doc->hasEmbargoPassed();
