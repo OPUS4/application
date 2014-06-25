@@ -77,7 +77,7 @@ class Rss_IndexController extends Controller_Xml {
             $resultList = $searcher->search($queryBuilder->createSearchQuery($params));
         }
         catch (Opus_SolrSearch_Exception $exception) {
-            return $this->handleSolrError($exception);
+            $this->handleSolrError($exception);
         }
 
         $this->loadStyleSheet($this->view->getScriptPath('') . 'stylesheets' . DIRECTORY_SEPARATOR . 'rss2_0.xslt');
@@ -88,18 +88,21 @@ class Rss_IndexController extends Controller_Xml {
     }
 
     private function handleSolrError(Opus_SolrSearch_Exception $exception) {
+        $this->_helper->layout()->enableLayout();
         $this->log->err(__METHOD__ . ' : ' . $exception);
         if ($exception->isServerUnreachable()) {
-            $this->view->errorMessage = $this->view->translate('error_search_unavailable') . $exception->getMessage();
-            $this->getResponse()->setHttpResponseCode(503);
+            $e = new Application_Exception('error_search_unavailable');
+            $e->setHttpResponseCode(503);
+            throw $e;
         } elseif ($exception->isInvalidQuery()) {
-            $this->view->errorMessage = $this->view->translate('error_search_invalidquery') . $exception->getMessage();
-            $this->getResponse()->setHttpResponseCode(500);
+            $e = new Application_Exception('error_search_invalidquery');
+            $e->setHttpResponseCode(500);
+            throw $e;
         } else {
-            $this->view->errorMessage = $this->view->translate('error_search_unknown') . $exception->getMessage();
-            $this->getResponse()->setHttpResponseCode(500);
+            $e = new Application_Exception('error_search_unknown');
+            $e->setHttpResponseCode(500);
+            throw $e;
         }
-        $this->renderScript('index/error.phtml');
     }
 
     private function setLink() {
