@@ -51,10 +51,13 @@ class Admin_InfoController extends Controller_Action {
     }
 
     public function updateAction() {
-        $config = Zend_Registry::get('Zend_Config');
-        $localVersion = $config->version;
-        $versionFileContent = file_get_contents($config->versionFile);
-        $this->view->versionUpdate = '';
+        $this->view->versionUpdate = "";
+        $this->compareVersion();
+    }
+
+    private function compareVersion() {
+        $localVersion = Zend_Registry::get('Zend_Config')->version;
+        $versionFileContent = $this->_helper->version();
 
         if (is_null($localVersion)) {
             throw new Exception( 'admin_info_local_Version_File_Not_Readable' );
@@ -74,7 +77,4 @@ class Admin_InfoController extends Controller_Action {
         }
     }
 
-
 }
-
-

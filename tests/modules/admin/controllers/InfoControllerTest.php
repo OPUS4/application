@@ -37,6 +37,7 @@ class Admin_InfoControllerTest extends ControllerTestCase {
     public function testIndexDisplayVersion() {
         $config = Zend_Registry::get('Zend_Config');
         $this->dispatch('admin/info');
+        $this->validateXHTML();
         $this->assertResponseCode(200);
         $this->assertQuery('dt#admin_info_version');
         $this->assertQueryContentContains("//dt[@id='admin_info_version']/following-sibling::dd", $config->version);
@@ -52,6 +53,7 @@ class Admin_InfoControllerTest extends ControllerTestCase {
         $config->version = 'abcd';
         $this->dispatch('admin/info/update');
         $config->version = $oldVersion;
+        $this->validateXHTML();
         $this->assertQueryContentContains('//a', "Get the latest version here.");
         $this->assertQueryContentContains('//dl', "Your Opus version is not up to date.");
     }
@@ -62,13 +64,12 @@ class Admin_InfoControllerTest extends ControllerTestCase {
     public function testVersionWithCurrentVersion() {
         $this->useEnglish();
         $config = Zend_Registry::get('Zend_Config');
-        $oldVersion = $config->version;
-        $versionFileContent = file_get_contents('http://www.kobv.de/fileadmin/opus/download/VERSION.txt');
-        $fileContentArray = explode("\n", $versionFileContent);
-        $config->version = $fileContentArray[0];
+        $configBackup = $config;
+        $helper = Zend_Controller_Action_HelperBroker::getStaticHelper('version');
+        $helper->setVersion($config->version);
 
         $this->dispatch('admin/info/update');
-        $config->version = $oldVersion;
+        Zend_Registry::set('Zend_Config', $configBackup);
         $this->assertQueryContentContains('//dl', 'Your Opus version is up to date.');
     }
 

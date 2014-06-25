@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -23,29 +23,30 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Helper für das Auslesen der aktuellen Opusversion vom Opus-Server.
  *
  * @category    Application
+ * @package     Application_Controller_Helper
  * @author      Michael Lang <lang@zib.de>
  * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
+class Application_Controller_Action_Helper_Version extends Application_Controller_Action_Helper_Abstract {
 
-<dl>
-    <?PHP foreach (Application_Configuration::getOpusInfo() as $infoKey => $infoValue) : ?>
-        <dt id="<?= $infoKey ?>"><?= htmlspecialchars($this->translate($infoKey)) ?></dt>
-        <dd><?= $infoValue ?></dd>
-    <?PHP endforeach ?>
-</dl>
+    private $version;
 
-<dl>
-    <? if (!is_null($this->versionLabel)) ?>
-        <dt><?= htmlspecialchars($this->translate($this->versionLabel)) ?>
+    public function direct() {
+        if (!is_null($this->version)) {
+            return $this->version;
+        }
+        return file_get_contents(Zend_Registry::get('Zend_Config')->versionFile);
+    }
 
-    <a href="http://www.kobv.de/opus4/software/">
-    <?php
-    if ($this->versionUpdate != '') ?>
-        <?= htmlspecialchars( $this->translate($this->versionUpdate)); ?>
-    </a></dt>
-</dl>
+    public function setVersion($version) {
+        $this->version = $version;
+    }
+} 
