@@ -1056,4 +1056,49 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             "//a[@href='/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_year/all']", ' + more');
     }
 
+    /**
+     * Redirect from search result with searchtype=latest should work with mixture of parameters.
+     * Parameter 'searchtype' should not be interpreted as 'latest/export/xml/stylesheet/example'.
+     * Regressiontest für OPUSVIER-2742.
+     */
+    public function testRedirectToExportFromSearchtypeLatestWithParameterTypeMixture() {
+        $this->dispatch('/solrsearch/index/search?rows=10&searchtype=latest/export/xml/stylesheet/example');
+        $this->assertRedirectTo('/export/index/index/rows/10/searchtype/latest/export/xml/stylesheet/example');
+    }
+
+    /**
+     * Redirect from search result with searchtype=latest should work for get-Parameters.
+     * Regressiontest für OPUSVIER-2742.
+     */
+    public function testRedirectToExportFromSearchtypeLatestWithGetParameters() {
+        $this->dispatch('/solrsearch/index/search?rows=10&searchtype=latest&export=xml&stylesheet=example');
+        $this->assertRedirectTo('/export/index/index/rows/10/searchtype/latest/export/xml/stylesheet/example');
+    }
+
+    /**
+     * Redirect from search result with searchtype=latest should work for parameters before get-statement
+     * Regressiontest für OPUSVIER-2742.
+     */
+    public function testRedirectToExportFromSearchtypeLatestWithParametersBeforeGet() {
+        $this->dispatch('/solrsearch/index/search/export/xml/stylesheet/example?rows=10&searchtype=latest');
+        $this->assertRedirectTo('/export/index/index/export/xml/stylesheet/example/rows/10/searchtype/latest');
+    }
+
+    /**
+     * Important: parameter 'rows' should not be deleted (OPUSVIER-2742).
+     */
+    public function testRedirectToExportWithRowsParameter() {
+        $this->dispatch('/solrsearch/index/search/searchtype/latest/start/0/rows/10/export/xml/stylesheet/example');
+        $this->assertRedirectTo('/export/index/index/searchtype/latest/rows/10/export/xml/stylesheet/example');
+    }
+
+    /**
+     * Important: parameter 'rows' should be appended (OPUSVIER-2742).
+     */
+    public function testRedirectToExportWithoutRowsParameter() {
+        $this->dispatch('/solrsearch/index/search/searchtype/latest/export/xml/stylesheet/example');
+        $this->assertRedirectTo('/export/index/index/searchtype/latest/export/xml/stylesheet/example/rows/10');
+    }
+
+
 }

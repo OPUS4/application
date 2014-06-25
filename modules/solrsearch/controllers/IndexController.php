@@ -98,6 +98,7 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     public function searchAction() {
+        // TODO OPUSVIER-3324 Mischform in der url entfernen
         // check if searchtype = latest and params parsed incorrect
         if (strpos($this->getRequest()->getParam('searchtype'), 'latest/export') !== false) {
             $paramArray = explode('/', $this->getParam('searchtype'));
@@ -105,12 +106,12 @@ class Solrsearch_IndexController extends Controller_Action {
             $params['searchtype'] = 'latest';
             $params['export'] = $paramArray[2];
             $params['stylesheet'] = $paramArray[4];
-            $this->redirectToExport($params);
+            return $this->redirectToExport($params);
         }
         if (!is_null($this->getRequest()->getParam('export'))) {
             $params = $this->getRequest()->getParams();
             // export module ignores pagination parameters
-            $this->redirectToExport($params);
+            return $this->redirectToExport($params);
         }
 
         $this->query = $this->buildQuery();
