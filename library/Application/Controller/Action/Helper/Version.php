@@ -63,7 +63,9 @@ class Application_Controller_Action_Helper_Version extends Application_Controlle
      * @return string
      */
     public function getLatestReleaseFromServer() {
-        return file_get_contents(Zend_Registry::get('Zend_Config')->versionFile);
+        $versionFileContent = file_get_contents(Zend_Registry::get('Zend_Config')->update->latestVersionCheckUrl);
+        $fileContentArray = explode("\n", $versionFileContent);
+        return $fileContentArray[0];
     }
 
 } 

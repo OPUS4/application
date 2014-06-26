@@ -57,16 +57,14 @@ class Admin_InfoController extends Controller_Action {
 
     private function compareVersion() {
         $localVersion = Zend_Registry::get('Zend_Config')->version;
-        $versionFileContent = $this->_helper->version();
+        $latestVersion = $this->_helper->version();
 
         if (is_null($localVersion)) {
             throw new Exception( 'admin_info_local_Version_File_Not_Readable' );
         }
-        if (is_null($versionFileContent)) {
+        if (is_null($latestVersion)) {
             throw new Exception( 'admin_info_server_Version_File_Not_Readable' );
         }
-        $fileContentArray = explode("\n", $versionFileContent);
-        $latestVersion = $fileContentArray[0];
 
         if ($localVersion == $latestVersion) {
             $this->view->versionLabel = 'version_latest';

@@ -63,13 +63,10 @@ class Admin_InfoControllerTest extends ControllerTestCase {
      */
     public function testVersionWithCurrentVersion() {
         $this->useEnglish();
-        $config = Zend_Registry::get('Zend_Config');
-        $configBackup = $config;
         $helper = Zend_Controller_Action_HelperBroker::getStaticHelper('version');
-        $helper->setVersion($config->version);
+        $helper->setVersion(Zend_Registry::get('Zend_Config')->version);
 
         $this->dispatch('admin/info/update');
-        Zend_Registry::set('Zend_Config', $configBackup);
         $this->assertQueryContentContains('//dl', 'Your Opus version is up to date.');
     }
 
