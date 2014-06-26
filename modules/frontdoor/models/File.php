@@ -111,8 +111,9 @@ class Frontdoor_Model_File {
         if (is_null($file) or !($realm instanceof Opus_Security_IRealm)) {
             return false;
         }
-        
-        return ($realm->checkFile($file->getId()) && $file->getVisibleInFrontdoor())
+        $document = new Opus_Document($this->docId);
+
+        return ($realm->checkFile($file->getId()) && $file->getVisibleInFrontdoor() && $document->hasEmbargoPassed())
                 || $this->getAclHelper()->accessAllowed('documents');
     }
 

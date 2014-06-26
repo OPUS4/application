@@ -291,9 +291,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
      * @expectedException Frontdoor_Model_FileAccessNotAllowedException
      */
     public function testAccessEmbargoedFile() {
-        $this->useEnglish();
         $file = $this->createTestFile('test.pdf');
-
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $doc->addFile($file);
@@ -307,6 +305,53 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
         $model = new Frontdoor_Model_File($docId, "test.pdf");
         $realm = new MockRealm(true,true);
         $model->getFileObject($realm);
+    }
+
+    /**
+     * Dateien dürfen vom DocumentsAdmin heruntergeladen werden, auch wenn das Embargo-Datum nicht vergangen ist.
+     * Regressiontest for OPUSVIER-3313.
+     */
+    public function testAccessEmbargoedFileForDocumentsAdmin() {
+        $this->loginUser('security8', 'security8pwd');
+        $file = $this->createTestFile('test.pdf');
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->addFile($file);
+
+        $date = new Opus_Date();
+        $date->setYear('2100')->setMonth('00')->setDay('01');
+        $doc->setEmbargoDate($date);
+
+        $docId = $doc->store();
+
+        $model = new Frontdoor_Model_File($docId, "test.pdf");
+        $realm = new MockRealm(true,true);
+        $opusFile = $model->getFileObject($realm);
+
+        $this->assertEquals("test.pdf", $opusFile->getPathName());
+    }
+
+    /**
+     * Dateien dürfen vom Admin heruntergeladen werden, auch wenn das Embargo-Datum nicht vergangen ist.
+     * Regressiontest for OPUSVIER-3313.
+     */
+    public function testAccessEmbargoedFileForAdmin() {
+        $this->loginUser('admin', 'adminadmin');
+        $file = $this->createTestFile('test.pdf');
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->addFile($file);
+
+        $date = new Opus_Date();
+        $date->setYear('2100')->setMonth('00')->setDay('01');
+        $doc->setEmbargoDate($date);
+
+        $docId = $doc->store();
+
+        $model = new Frontdoor_Model_File($docId, "test.pdf");
+        $realm = new MockRealm(true,true);
+        $file = $model->getFileObject($realm);
+        $this->assertEquals('test.pdf', $file->getPathName());
     }
 
 }
