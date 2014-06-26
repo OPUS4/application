@@ -68,6 +68,9 @@ class Rss_IndexControllerTest extends ControllerTestCase {
         $this->assertContains("The search service is currently not available.", $body);
 
         $this->assertResponseCode(503);
+
+        // Prüfen, ob Layout aktiviert ist
+        $this->assertQuery("//div#container", "Container DIV missing. Layout disabled?");
     }
 
     /**

@@ -94,11 +94,13 @@ class Rss_IndexController extends Controller_Xml {
             $e = new Application_Exception('error_search_unavailable');
             $e->setHttpResponseCode(503);
             throw $e;
-        } elseif ($exception->isInvalidQuery()) {
+        }
+        elseif ($exception->isInvalidQuery()) {
             $e = new Application_Exception('error_search_invalidquery');
             $e->setHttpResponseCode(500);
             throw $e;
-        } else {
+        }
+        else {
             $e = new Application_Exception('error_search_unknown');
             $e->setHttpResponseCode(500);
             throw $e;
