@@ -285,4 +285,28 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
         $this->assertEquals("frontdoor_invisible.txt", $opusFile->getPathName(), "Testdaten geändert.");
     }
 
+    /**
+     * Dateien dürfen nicht heruntergeladen werden, wenn das Embargo-Datum nicht vergangen ist.
+     * Regressiontest for OPUSVIER-3313.
+     * @expectedException Frontdoor_Model_FileAccessNotAllowedException
+     */
+    public function testAccessEmbargoedFile() {
+        $this->useEnglish();
+        $file = $this->createTestFile('test.pdf');
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $doc->addFile($file);
+
+        $date = new Opus_Date();
+        $date->setYear('2100')->setMonth('00')->setDay('01');
+        $doc->setEmbargoDate($date);
+
+        $docId = $doc->store();
+
+        $model = new Frontdoor_Model_File($docId, "test.pdf");
+        $realm = new MockRealm(true,true);
+        $model->getFileObject($realm);
+    }
+
 }
