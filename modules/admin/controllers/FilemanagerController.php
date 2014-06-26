@@ -192,9 +192,7 @@ class Admin_FilemanagerController extends Controller_Action {
                             self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true'));
                     }
                     else {
-                        // Formular wieder anzeigen
-                        $form->populate($post);
-                        // TODO show message in formular (admin_filemanager_invalid_upload)
+                        throw new Application_Exception('admin_filemanager_invalid_upload');
                     }
                     break;
 
