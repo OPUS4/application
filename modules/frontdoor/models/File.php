@@ -39,7 +39,7 @@ class Frontdoor_Model_File {
     const ILLEGAL_DOCID_MESSAGE_KEY = 'illegal_argument_docid';
     const ILLEGAL_FILENAME_MESSAGE_KEY = 'illegal_argument_filename';
     
-    private $docId;
+    private $doc;
     private $filename;
     
     private $accessControl;
@@ -51,26 +51,23 @@ class Frontdoor_Model_File {
         if (mb_strlen($filename) < 1 || preg_match('/\.\.\//', $filename) === 1) {
             throw new Frontdoor_Model_FrontdoorDeliveryException(self::ILLEGAL_FILENAME_MESSAGE_KEY, 400);
         }
-        $this->docId = $docId;
+        try {
+            $this->doc = new Opus_Document($docId);
+        }
+        catch (Opus_Model_NotFoundException $e) {
+            throw new Frontdoor_Model_DocumentNotFoundException();
+        }
         $this->filename = $filename;
     }
 
     public function getFileObject($realm) {
         $this->checkDocumentApplicableForFileDownload($realm);
-        $targetFile = $this->fetchFile($realm);
-        return $targetFile;
+        return $this->fetchFile($realm);
     }
 
     private function checkDocumentApplicableForFileDownload($realm) {
-        $document = null;
-        try {
-            $document = new Opus_Document($this->docId);
-        }
-        catch (Opus_Model_NotFoundException $e) {
-            throw new Frontdoor_Model_DocumentNotFoundException();
-        }
-        if (!$this->isDocumentAccessAllowed($this->docId, $realm)) {
-            switch ($document->getServerState()) {
+        if (!$this->isDocumentAccessAllowed($this->doc->getId(), $realm)) {
+            switch ($this->doc->getServerState()) {
                 case self::SERVER_STATE_DELETED:
                     throw new Frontdoor_Model_DocumentDeletedException();
                     break;
@@ -90,7 +87,7 @@ class Frontdoor_Model_File {
     }
 
     private function fetchFile($realm) {
-        $targetFile = Opus_File::fetchByDocIdPathName($this->docId, $this->filename);
+        $targetFile = Opus_File::fetchByDocIdPathName($this->doc->getId(), $this->filename);
         if (is_null($targetFile)) {
             throw new Frontdoor_Model_FileNotFoundException();
         }
@@ -100,20 +97,19 @@ class Frontdoor_Model_File {
         return $targetFile;
     }
 
-    function isDocumentAccessAllowed($docId, $realm) {
+    private function isDocumentAccessAllowed($docId, $realm) {
         if (!($realm instanceof Opus_Security_IRealm)) {
             return false;
         }
         return $realm->checkDocument($docId) || $this->getAclHelper()->accessAllowed('documents');
     }
 
-    function isFileAccessAllowed($file, $realm) {
+    private function isFileAccessAllowed($file, $realm) {
         if (is_null($file) or !($realm instanceof Opus_Security_IRealm)) {
             return false;
         }
-        $document = new Opus_Document($this->docId);
 
-        return ($realm->checkFile($file->getId()) && $file->getVisibleInFrontdoor() && $document->hasEmbargoPassed())
+        return ($realm->checkFile($file->getId()) && $file->getVisibleInFrontdoor() && $this->doc->hasEmbargoPassed())
                 || $this->getAclHelper()->accessAllowed('documents');
     }
 
