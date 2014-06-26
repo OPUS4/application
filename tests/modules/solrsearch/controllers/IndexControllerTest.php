@@ -1088,8 +1088,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      * Important: parameter 'rows' should not be deleted (OPUSVIER-2742).
      */
     public function testRedirectToExportWithRowsParameter() {
-        $this->dispatch('/solrsearch/index/search/searchtype/latest/start/0/rows/10/export/xml/stylesheet/example');
-        $this->assertRedirectTo('/export/index/index/searchtype/latest/rows/10/export/xml/stylesheet/example');
+        $this->dispatch('/solrsearch/index/search/searchtype/latest/start/0/rows/15/export/xml/stylesheet/example');
+        $this->assertRedirectTo('/export/index/index/searchtype/latest/rows/15/export/xml/stylesheet/example');
     }
 
     /**
