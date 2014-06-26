@@ -49,7 +49,7 @@ class Application_Controller_Action_Helper_Version extends Application_Controlle
 
     public function getVersion() {
         if (is_null($this->version)) {
-            $this->version = getLatestReleaseFromServer();
+            $this->version = $this->getLatestReleaseFromServer();
         }
         return $this->version;
     }
