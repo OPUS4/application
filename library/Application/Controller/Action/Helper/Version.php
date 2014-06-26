@@ -31,22 +31,39 @@
  * @category    Application
  * @package     Application_Controller_Helper
  * @author      Michael Lang <lang@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 class Application_Controller_Action_Helper_Version extends Application_Controller_Action_Helper_Abstract {
 
+    /**
+     * Version of latest OPUS 4 Release.
+     */
     private $version;
 
     public function direct() {
-        if (!is_null($this->version)) {
-            return $this->version;
+        return $this->getVersion();
+    }
+
+    public function getVersion() {
+        if (is_null($this->version)) {
+            $this->version = getLatestReleaseFromServer();
         }
-        return file_get_contents(Zend_Registry::get('Zend_Config')->versionFile);
+        return $this->version;
     }
 
     public function setVersion($version) {
         $this->version = $version;
     }
+
+    /**
+     * Retrieves the version of the latest release from server.
+     * @return string
+     */
+    public function getLatestReleaseFromServer() {
+        return file_get_contents(Zend_Registry::get('Zend_Config')->versionFile);
+    }
+
 } 

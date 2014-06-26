@@ -33,10 +33,17 @@
  */
 class Application_Controller_Action_Helper_VersionTest extends ControllerTestCase {
 
-    public function testVersion() {
+    public function testDirect() {
         $helper = Zend_Controller_Action_HelperBroker::getStaticHelper('version');
         $helper->setVersion('Opus-noVersion');
         $this->assertEquals('Opus-noVersion', $helper->direct());
     }
+
+    public function testSetGetVersion() {
+        $helper = Zend_Controller_Action_HelperBroker::getStaticHelper('version');
+        $helper->setVersion('Opus-noVersion');
+        $this->assertEquals('Opus-noVersion', $helper->getVersion());
+    }
+
 }
  
