@@ -517,8 +517,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $doc->setPublishedYear(2013);
         $docId = $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
-        $this->assertNotQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {},");
-        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2013},");
+        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,");
+        $this->assertQueryContentContains('//pre', "{2013}");
     }
 
     /**
@@ -530,7 +530,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $doc->setPublishedDate('2012-02-01');
         $docId = $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
-        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2012},");
+        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,");
+        $this->assertQueryContentContains('//pre', "{2012}");
     }
 
     /**
@@ -542,7 +543,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $doc->setCompletedDate('2012-02-01');
         $docId = $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
-        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2012},");
+        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,");
+        $this->assertQueryContentContains('//pre', "{2012}");
     }
 
     /**
@@ -551,10 +553,11 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
      */
     public function testBibtexYearExportWithOnlyCompletedYearSet() {
         $doc = $this->createTestDocument();
-        $doc->setPublishedYear(2012);
+        $doc->setCompletedYear(2012);
         $docId = $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
-        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2012},");
+        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,");
+        $this->assertQueryContentContains('//pre', "{2012}");
     }
 
     /**
@@ -568,7 +571,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $doc->setCompletedYear(2014);
         $docId = $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
-        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2015},");
+        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,");
+        $this->assertQueryContentContains('//pre', "{2015}");
     }
 
     /**
@@ -582,7 +586,8 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $doc->setPublishedYear('2015');
         $docId = $doc->store();
         $this->dispatch('/citationExport/index/index/output/bibtex_conferenceobject/docId/' . $docId);
-        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,\n  year      = {2015},");
+        $this->assertQueryContentContains('//pre', "@inproceedings{OPUS4-$docId,");
+        $this->assertQueryContentContains('//pre', "{2015}");
     }
 
     private function setDocumentType($documenttype) {
