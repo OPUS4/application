@@ -1101,4 +1101,36 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*', 'This document is embargoed until:');
     }
 
+    /**
+     * EmbargoDate should be shown in metadata table, no matter if it has passed or not.
+     * OPUSVIER-3270.
+     */
+    public function testEmbargoDateLabelWithEmbargoDatePassed() {
+        $this->useEnglish();
+        $doc = $this->createTestDocument();
+        $doc->setEmbargoDate('2012-02-01');
+        $doc->setServerState('published');
+        $docId = $doc->store();
+
+        $this->dispatch('frontdoor/index/index/docId/' . $docId);
+        $this->assertQueryContentContains('//th', 'Embargo Date');
+        $this->assertQueryContentContains('//td', '2012/02/01');
+    }
+
+    /**
+     * EmbargoDate should be shown in metadata table, no matter if it has passed or not.
+     * OPUSVIER-3270.
+     */
+    public function testEmbargoDateLabelWithEmbargoDateNotPassed() {
+        $this->useEnglish();
+        $doc = $this->createTestDocument();
+        $doc->setEmbargoDate('2112-02-01');
+        $doc->setServerState('published');
+        $docId = $doc->store();
+
+        $this->dispatch('frontdoor/index/index/docId/' . $docId);
+        $this->assertQueryContentContains('//th', 'Embargo Date');
+        $this->assertQueryContentContains('//td', '2112/02/01');
+    }
+
 }

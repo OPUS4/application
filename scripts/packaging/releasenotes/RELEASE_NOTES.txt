@@ -1,5 +1,12 @@
 h1. OPUS 4 Release Notes
 
+h2. ======================== Release 4.4.4  ========================
+
+h3. Allgemein
+
+* Dokument-Embargo möglich - bis zu diesem Zeitpunkt wird der fulltext des
+  Dokuments unter Verschluss gehalten. Metadaten können eingesehen werden.
+
 h2. ======================== Release 4.4.3 2014-06-04 ========================
 
 h3. Allgmein
