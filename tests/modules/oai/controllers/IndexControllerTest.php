@@ -1555,12 +1555,16 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         $xpath = $this->prepareXpathFromResultString($responseBody);
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:rights");
-        $this->assertEquals($queryResponse->item(1)->nodeValue, 'info:eu-repo/semantics/openAccess',
+        $this->assertEquals('info:eu-repo/semantics/openAccess', $queryResponse->item(1)->nodeValue,
             "Document 146: <dc:rights> must contain 'info:eu-repo/semantics/openAccess'");
 
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:rights");
-        $this->assertEquals($queryResponse->item(0)->nodeValue, 'info:eu-repo/semantics/embargoedAccess',
+        $this->assertEquals('info:eu-repo/semantics/embargoedAccess', $queryResponse->item(0)->nodeValue,
             "Document 145: <dc:rights> must contain 'info:eu-repo/semantics/embargoedAccess'");
+
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:date");
+        $this->assertEquals('info:eu-repo/date/embargoEnd/2050-01-01', $queryResponse->item(0)->nodeValue,
+            "Document 145: <dc:date> must contain embargo date 'info:eu-repo/date/embargoEnd/2050-01-01'");
     }
 
     /**

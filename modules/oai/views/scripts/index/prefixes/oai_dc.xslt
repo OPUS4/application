@@ -30,7 +30,7 @@
  * @author      Michael Lang <lang@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
+ * @version     $Id: oai_dc.xslt 13349 2014-06-18 06:53:53Z mlang $
  */
 -->
 
@@ -85,6 +85,7 @@
             <dc:date>
                 <xsl:choose>
                     <xsl:when test="EmbargoDate">
+                        <xsl:text>info:eu-repo/date/embargoEnd/</xsl:text>
                         <xsl:value-of select="EmbargoDate/@Year"/>-<xsl:value-of select="format-number(EmbargoDate/@Month,'00')"/>-<xsl:value-of select="format-number(EmbargoDate/@Day,'00')"/>
                     </xsl:when>
                     <xsl:when test="PublishedDate">
