@@ -311,7 +311,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
      * Dateien dürfen vom DocumentsAdmin heruntergeladen werden, auch wenn das Embargo-Datum nicht vergangen ist.
      * Regressiontest for OPUSVIER-3313.
      */
-    public function testAccessDeniedForEmbargoedDocumentForDocumentsAdmin() {
+    public function testAccessForEmbargoedDocumentForDocumentsAdmin() {
         $this->loginUser('security8', 'security8pwd');
         $file = $this->createTestFile('test.pdf');
         $doc = $this->createTestDocument();
@@ -335,7 +335,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
      * Dateien dürfen vom Admin heruntergeladen werden, auch wenn das Embargo-Datum nicht vergangen ist.
      * Regressiontest for OPUSVIER-3313.
      */
-    public function testAccessDeniedForEmbargoedDocumentForAdmin() {
+    public function testAccessForEmbargoedDocumentForAdmin() {
         $this->loginUser('admin', 'adminadmin');
         $file = $this->createTestFile('test.pdf');
         $doc = $this->createTestDocument();
