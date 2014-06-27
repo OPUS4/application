@@ -1007,6 +1007,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Authorfacette aufgeklappt -> '- less' soll angezeigt werden.
      * Test für OPUSVIER-1713.
      */
     public function testAuthorFacetOpen() {
@@ -1016,22 +1017,27 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//a', 'Wally Walruss');
         $this->assertQueryContentContains('//a', 'M. Scheinpflug');
         $this->assertQueryContentContains(
-            "//a[@href='/solrsearch/index/search/searchtype/all/start/0/rows/10']", ' - less');
+            "//div[@id='author_facet_facet']//a[@href='/solrsearch/index/search/searchtype/all/start/0/rows/10']", ' - less');
     }
 
     /**
+     * Alle Facetten zugeklappt -> '+ more' Link soll für die Authorenliste angezeigt werden. Für BelongsToBibliography
+     * und hasFulltext nicht.
      * Test für OPUSVIER-1713.
      */
     public function testAuthorFacetClosed() {
         $this->useEnglish();
-        $this->dispatch('/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_author_facet/del');
+        $this->dispatch('/solrsearch/index/search/searchtype/all/start/0/rows/10');
         $this->assertQueryContentContains('//a', 'John Doe');
         $this->assertQueryContentContains('//a', 'Gerold A. Schneider');
         $this->assertNotQueryContentContains('//a', 'Wilfried Stecher');
         $this->assertNotQueryContentContains('//a', 'Wally Walruss');
         $this->assertNotQueryContentContains('//a', 'M. Scheinpflug');
-        $this->assertQueryContentContains(
+        $this->assertQueryContentContains("//div[@id='author_facet_facet']".
             "//a[@href='/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_author_facet/all']", ' + more');
+        $this->assertNotQueryContentContains("//div[@id='has_fulltext_facet']//a", ' + more');
+        $this->assertNotQueryContentContains("//div[@id='belongs_to_bibliography_facet']//a", ' + more');
+        $this->assertNotQueryContentContains("//div[@id='language_facet']//a", ' + more');
     }
 
     /**
