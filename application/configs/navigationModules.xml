@@ -404,17 +404,7 @@
                         </edit>
                     </pages>
                 </dnbInstitute>
-                                                                                                
-                <upload>
-                    <type>mvc</type>
-                    <label>admin_title_bibtexupload</label>
-                    <description>admin_title_bibtexupload_description</description>
-                    <group>hidden</group>
-                    <module>admin</module>
-                    <controller>bibtexupload</controller>
-                    <action>index</action>
-                </upload>
-             
+
                 <security>
                     <type>mvc</type>
                     <label>admin_title_security</label>
