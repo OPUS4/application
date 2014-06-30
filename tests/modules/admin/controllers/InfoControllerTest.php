@@ -54,6 +54,7 @@ class Admin_InfoControllerTest extends ControllerTestCase {
         $this->dispatch('admin/info/update');
         $config->version = $oldVersion;
         $this->validateXHTML();
+        $this->assertQueryContentContains('//dl', "Latest OPUS version: ");
         $this->assertQueryContentContains('//a', "Get the latest version here.");
         $this->assertQueryContentContains('//dl', "Your Opus version is not up to date.");
     }

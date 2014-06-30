@@ -40,12 +40,21 @@
 </dl>
 
 <dl>
-    <? if (!is_null($this->versionLabel)) ?>
-        <dt><?= htmlspecialchars($this->translate($this->versionLabel)) ?>
+    <dt>
+        <? if ($this->versionUpdate != '') { ?>
+            <?= htmlspecialchars($this->translate($this->latestVersionLabel)) . ": " . $this->latestVersion ?>
+        <? } ?>
+    </dt>
+</dl>
 
-    <a href="http://www.kobv.de/opus4/software/">
-    <?php
-    if ($this->versionUpdate != '') ?>
-        <?= htmlspecialchars( $this->translate($this->versionUpdate)); ?>
-    </a></dt>
+<dl>
+    <dt>
+        <? if (!is_null($this->versionLabel)) ?>
+            <?= htmlspecialchars($this->translate($this->versionLabel)) ?>
+
+        <a href="http://www.kobv.de/opus4/software/">
+            <? if ($this->versionUpdate != '') ?>
+                <?= htmlspecialchars( $this->translate($this->versionUpdate)); ?>
+        </a>
+    </dt>
 </dl>

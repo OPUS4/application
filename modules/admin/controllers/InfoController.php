@@ -51,6 +51,7 @@ class Admin_InfoController extends Controller_Action {
     }
 
     public function updateAction() {
+        $this->view->latestVersionLabel = "";
         $this->view->versionUpdate = "";
         $this->compareVersion();
     }
@@ -70,8 +71,10 @@ class Admin_InfoController extends Controller_Action {
             $this->view->versionLabel = 'version_latest';
         }
         else {
-            $this->view->versionUpdate = 'version_get_update';
+            $this->view->latestVersionLabel = "version_get_latest";
+            $this->view->latestVersion = $latestVersion;
             $this->view->versionLabel = 'version_outdated';
+            $this->view->versionUpdate = 'version_get_update';
         }
     }
 
