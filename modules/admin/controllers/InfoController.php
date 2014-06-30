@@ -38,6 +38,9 @@
  */
 class Admin_InfoController extends Controller_Action {
 
+    /**
+     * Zeigt Informationen über die OPUS Systemkonfiguration an.
+     */
     public function indexAction() {
         $config = Zend_Registry::get('Zend_Config');
 
@@ -50,31 +53,25 @@ class Admin_InfoController extends Controller_Action {
         $this->view->uploadMaxFilesize = ini_get('upload_max_filesize');
     }
 
+    /**
+     * Zeigt an, ob eine neuere Version von OPUS verfügbar ist.
+     */
     public function updateAction() {
-        $this->view->latestVersionLabel = "";
-        $this->view->versionUpdate = "";
-        $this->compareVersion();
-    }
-
-    private function compareVersion() {
-        $localVersion = Zend_Registry::get('Zend_Config')->version;
+        $localVersion = Application_Configuration::getOpusVersion();
         $latestVersion = $this->_helper->version();
 
-        if (is_null($localVersion)) {
-            throw new Exception( 'admin_info_local_Version_File_Not_Readable' );
-        }
-        if (is_null($latestVersion)) {
-            throw new Exception( 'admin_info_server_Version_File_Not_Readable' );
-        }
+        $this->view->currentVersion = $localVersion;
+        $this->view->latestVersion = null;
 
-        if ($localVersion == $latestVersion) {
-            $this->view->versionLabel = 'version_latest';
+        if (is_null($latestVersion)) {
+            $this->view->message = $this->view->translate('admin_info_version_error_getting_latest');
+        }
+        elseif ($localVersion == $latestVersion) {
+            $this->view->message = $this->view->translate('admin_info_version_current');
         }
         else {
-            $this->view->latestVersionLabel = "version_get_latest";
+            $this->view->message = $this->view->translate('admin_info_version_outdated');
             $this->view->latestVersion = $latestVersion;
-            $this->view->versionLabel = 'version_outdated';
-            $this->view->versionUpdate = 'version_get_update';
         }
     }
 

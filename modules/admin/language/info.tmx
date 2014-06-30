@@ -169,6 +169,50 @@
       </tuv>
     </tu>
 
+    <tu tuid="admin_info_version_current">
+      <tuv xml:lang="en">
+        <seg>Your OPUS version is up to date.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie benutzen die neueste OPUS-Version.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_version_outdated">
+      <tuv xml:lang="en">
+        <seg>Your OPUS version is not up to date.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie benutzen nicht die neueste OPUS-Version.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_version_get_update">
+      <tuv xml:lang="en">
+        <seg>Get the latest version here.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Sie bekommen die neueste Version hier.</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_version_latest">
+      <tuv xml:lang="en">
+        <seg>Latest OPUS version</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Aktuelle OPUS-Version</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_info_version_error_getting_latest">
+      <tuv xml:lang="en">
+        <seg>Could not determine latest OPUS release.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Die neueste OPUS-Version konnte nicht ermittelt werden.</seg>
+      </tuv>
+    </tu>
 
   </body>
 

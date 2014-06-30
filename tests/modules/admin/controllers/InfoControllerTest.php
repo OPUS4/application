@@ -50,13 +50,14 @@ class Admin_InfoControllerTest extends ControllerTestCase {
         $this->useEnglish();
         $config = Zend_Registry::get('Zend_Config');
         $oldVersion = $config->version;
-        $config->version = 'abcd';
+        $config->version = '4.5-TEST';
         $this->dispatch('admin/info/update');
         $config->version = $oldVersion;
         $this->validateXHTML();
-        $this->assertQueryContentContains('//dl', "Latest OPUS version: ");
+        $this->assertQueryContentContains('//dt', "Latest OPUS version");
+        $this->assertQueryContentContains('//dd', "4.5-TEST");
         $this->assertQueryContentContains('//a', "Get the latest version here.");
-        $this->assertQueryContentContains('//dl', "Your Opus version is not up to date.");
+        $this->assertQueryContentContains('//div', "Your OPUS version is not up to date.");
     }
 
     /**
@@ -68,7 +69,7 @@ class Admin_InfoControllerTest extends ControllerTestCase {
         $helper->setVersion(Zend_Registry::get('Zend_Config')->version);
 
         $this->dispatch('admin/info/update');
-        $this->assertQueryContentContains('//dl', 'Your Opus version is up to date.');
+        $this->assertQueryContentContains('//div', 'Your OPUS version is up to date.');
     }
 
 }

@@ -33,28 +33,18 @@
 ?>
 
 <dl>
-    <?PHP foreach (Application_Configuration::getOpusInfo() as $infoKey => $infoValue) : ?>
-        <dt id="<?= $infoKey ?>"><?= htmlspecialchars($this->translate($infoKey)) ?></dt>
-        <dd><?= $infoValue ?></dd>
-    <?PHP endforeach ?>
+    <dt><?= $this->translate('admin_info_version') ?></dt>
+    <dd><?= htmlspecialchars($this->currentVersion) ?></dd>
+    <?PHP if (!is_null($this->latestVersion)) : ?>
+    <dt><?= $this->translate('admin_info_version_latest') ?></dt>
+    <dd><?= htmlspecialchars($this->latestVersion) ?></dd>
+    <?PHP endif; ?>
 </dl>
 
-<dl>
-    <dt>
-        <? if ($this->versionUpdate != '') { ?>
-            <?= htmlspecialchars($this->translate($this->latestVersionLabel)) . ": " . $this->latestVersion ?>
-        <? } ?>
-    </dt>
-</dl>
+<div>
+    <?= $this->message ?>
 
-<dl>
-    <dt>
-        <? if (!is_null($this->versionLabel)) ?>
-            <?= htmlspecialchars($this->translate($this->versionLabel)) ?>
-
-        <a href="http://www.kobv.de/opus4/software/">
-            <? if ($this->versionUpdate != '') ?>
-                <?= htmlspecialchars( $this->translate($this->versionUpdate)); ?>
-        </a>
-    </dt>
-</dl>
+    <?PHP if (!is_null($this->latestVersion)) : ?>
+        <a href="http://www.kobv.de/opus4/software/"><?= $this->translate('admin_info_version_get_update') ?></a>
+    <?PHP endif; ?>
+</div>
