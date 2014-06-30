@@ -61,6 +61,8 @@ class Application_Controller_Action_Helper_Version extends Application_Controlle
     /**
      * Retrieves the version of the latest release from server.
      * @return string
+     *
+     * TODO Exception handling for connection problems (e.g. not found)
      */
     public function getLatestReleaseFromServer() {
         $versionFileContent = file_get_contents(Zend_Registry::get('Zend_Config')->update->latestVersionCheckUrl);

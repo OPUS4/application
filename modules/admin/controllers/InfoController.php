@@ -55,6 +55,8 @@ class Admin_InfoController extends Controller_Action {
 
     /**
      * Zeigt an, ob eine neuere Version von OPUS verfügbar ist.
+     *
+     * TODO Behandlung von is_null($latestVersion) hängt vom Verhalten der Version Helpers ab (ueberarbeiten)
      */
     public function updateAction() {
         $localVersion = Application_Configuration::getOpusVersion();
