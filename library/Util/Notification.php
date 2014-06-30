@@ -165,34 +165,22 @@ class Util_Notification {
         switch ($context) {
             case self::SUBMISSION:
                 if (isset($this->config->notification->document->submitted->email)) {
-                    if (strlen(trim($this->config->notification->document->submitted->email)) > 0) {
-                        foreach (explode(",", $this->config->notification->document->submitted->email) as $address) {
-                            $address = trim($address);
-                            $this->logger->debug("send $context notification mail to $address");
-                            array_push($addresses, array( "name" => $address, "address" => $address));
-                        }
-                    }
+                    $addresses = $this->buildAddressesArray($context,
+                        $this->config->notification->document->submitted->email);
                 }
                 break;
 
             case self::PUBLICATION:
                 if (isset($this->config->notification->document->published->email)) {
-                    if (strlen(trim($this->config->notification->document->published->email)) > 0) {
-                        foreach (explode(",", $this->config->notification->document->published->email) as $address) {
-                            $address = trim($address);
-                            $this->logger->debug("send $context notification mail to $address");
-                            array_push($addresses, array( "name" => $address, "address" => $address));
-                        }
-                    }
+                    $addresses = $this->buildAddressesArray($context,
+                        $this->config->notification->document->published->email);
                 }
 
-                if (!is_null($authorAddresses)) {
-                    for ($i = 0; $i < count($authorAddresses); $i++) {
-                        $authorAddress = $authorAddresses[$i];
-                        array_push($addresses, $authorAddress);
-                        $this->logger->debug("send $context notification mail to author " . $authorAddress['address']
-                            . " (" . $authorAddress['name'] . ")");
-                    }
+                for ($i = 0; $i < count($authorAddresses); $i++) {
+                    $authorAddress = $authorAddresses[$i];
+                    array_push($addresses, $authorAddress);
+                    $this->logger->debug("send $context notification mail to author " . $authorAddress['address']
+                        . " (" . $authorAddress['name'] . ")");
                 }
 
                 if ($notifySubmitter && !is_null($document)) {
@@ -211,6 +199,20 @@ class Util_Notification {
             default:
                 $addresses = null;
                 break;
+        }
+
+        return $addresses;
+    }
+
+    private function buildAddressesArray($context, $emails) {
+        $addresses = array();
+
+        if (strlen(trim($emails)) > 0) {
+            foreach (explode(",", $emails) as $address) {
+                $address = trim($address);
+                $this->logger->debug("send $context notification mail to $address");
+                array_push($addresses, array("name" => $address, "address" => $address));
+            }
         }
 
         return $addresses;
