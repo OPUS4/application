@@ -63,21 +63,21 @@
                             <span class="removeFacetLink"><a href="<?= $remove_fqUrl ?>" <?= $fqLinkRel ?>>(<?= $this->translate('facets_remove') ?>)</a></span>
                             </li>
                         <?php endif ?>
-                    <?php else: ?>
+                    <?php else : ?>
                         <li><a href="<?= $this->url($fqUrl) ?>" <?= $fqLinkRel ?>><?= $this->translate(htmlspecialchars($facetvalue_name)) ?></a>&nbsp;(<?= $facetItem->getCount() ?>)</li>
-                    <? endif ?>
+                    <?php endif; ?>
                 <?php endforeach ?>
             </ul>
-            <? if ($this->showFacetExtender[$key]) {
-                if ($this->showIconPlus[$key]) {
-                    ?>
-                    <div class="facetValueExtender"><a href="<?= $this->url($facetUrl) ?>"><?= $this->translate('facets_more_results') ?></a></div>
-                <? } else { ?>
+            <?PHP if ($this->showFacetExtender[$key]) : ?>
+                <?PHP if ($this->showIconPlus[$key]) : ?>
+                    <div class="facetValueExtender"><a href="<?= $this->url($facetUrl) ?>"
+                            ><?= $this->translate('facets_more_results') ?></a></div>
+                <?PHP else : ?>
                     <? $facetUrl['facetNumber_' . $key] = null; ?>
-                    <div class="facetValueExtender"><a href="<?= $this->url($facetUrl) ?>"><?= $this->translate('facets_less_results') ?></a></div>
-                <?
-                }
-            } ?>
+                    <div class="facetValueExtender"><a href="<?= $this->url($facetUrl) ?>"
+                            ><?= $this->translate('facets_less_results') ?></a></div>
+                <?PHP endif ?>
+            <?PHP endif ?>
         </div>
     <?php endforeach ?>
 </div>
