@@ -361,15 +361,15 @@ class Admin_CollectionControllerTest extends ControllerTestCase {
     }
 
     public function testCreateCollectionCancel() {
+        $this->markTestIncomplete('Cancel Buttons hinzufügen und Test erweitern (OPUSVIER-3329)');
+
         $this->getRequest()->setMethod('POST')->setPost(array(
             'Name' => 'TestCollection',
             'Visible' => '1',
             'Cancel' => 'Abbrechen'
         ));
 
-        $this->dispatch('/admin/collection/create/id/16216/type/child');
-
-
+        $this->dispatch('/admin/collection/create/id/16216/type/sibling');
     }
         
 }
