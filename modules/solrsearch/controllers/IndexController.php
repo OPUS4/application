@@ -289,12 +289,7 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->showFacetExtender = array();
 
         foreach($facets as $key=>$facet) {
-            if ($facetLimit[$key] <= sizeof($facet)) {
-                $this->view->showFacetExtender[$key] = true;
-            }
-            else {
-                $this->view->showFacetExtender[$key] = false;
-            }
+            $this->view->showFacetExtender[$key] = ($facetLimit[$key] <= sizeof($facet));
             $this->_logger->debug("found $key facet in search results");
             $this->view->facetNumberContainer[$key] = sizeof($facet);
             $facetValue = $this->getRequest()->getParam($key . 'fq','');
