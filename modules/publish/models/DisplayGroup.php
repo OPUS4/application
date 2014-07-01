@@ -186,7 +186,7 @@ class Publish_Model_DisplayGroup {
             $displayGroup = array_merge($buttons, $displayGroup);
         }
 
-        $this->elements = $displayGroup;        
+        $this->elements = $displayGroup;
     }
 
     private function addDeleteButtons() {
@@ -226,7 +226,7 @@ class Publish_Model_DisplayGroup {
             return null;
         }
 
-        if ($collection->hasVisibleChildren()) {
+        if ($collection->hasVisiblePublishChildren()) {
             $downButton = $this->addDownButtontoGroup();
             $this->form->addElement($downButton);
             $displayGroup[] = $downButton->getName();
@@ -333,7 +333,7 @@ class Publish_Model_DisplayGroup {
             $selectField->setLabel('choose_collection_subcollection');
 
             $role = $collection->getRole();
-            $colls = $collection->getVisibleChildren();
+            $colls = $collection->getVisiblePublishChildren();
             foreach ($colls as $coll) {
                 $children[] = array(
                     'key' => strval($coll->getId()),

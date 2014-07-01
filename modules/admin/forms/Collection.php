@@ -37,6 +37,7 @@ class Admin_Form_Collection extends Application_Form_Model_Abstract {
     const ELEMENT_NAME = 'Name';
     const ELEMENT_NUMBER = 'Number';
     const ELEMENT_VISIBLE = 'Visible';
+    const ELEMENT_VISIBLE_PUBLISH = 'VisiblePublish';
     const ELEMENT_OAI_SUBSET = 'OaiSubset';
     const ELEMENT_THEME = 'Theme';
 
@@ -48,6 +49,7 @@ class Admin_Form_Collection extends Application_Form_Model_Abstract {
         $this->addElement('text', self::ELEMENT_NAME, array('size' => 70));
         $this->addElement('text', self::ELEMENT_NUMBER, array('size' => 30));
         $this->addElement('checkbox', self::ELEMENT_VISIBLE);
+        $this->addElement('checkbox', self::ELEMENT_VISIBLE_PUBLISH);
         $this->addElement('text', self::ELEMENT_OAI_SUBSET, array('size' => 50));
         $this->addElement('Theme', self::ELEMENT_THEME);
 
@@ -59,6 +61,7 @@ class Admin_Form_Collection extends Application_Form_Model_Abstract {
         $this->getElement(self::ELEMENT_NAME)->setValue($collection->getName());
         $this->getElement(self::ELEMENT_NUMBER)->setValue($collection->getNumber());
         $this->getElement(self::ELEMENT_VISIBLE)->setValue($collection->getVisible());
+        $this->getElement(self::ELEMENT_VISIBLE_PUBLISH)->setValue($collection->getVisiblePublish());
         $this->getElement(self::ELEMENT_OAI_SUBSET)->setValue($collection->getOaiSubset());
         $this->getElement(self::ELEMENT_THEME)->setValue($collection->getTheme());
     }
@@ -67,6 +70,7 @@ class Admin_Form_Collection extends Application_Form_Model_Abstract {
         $collection->setName($this->getElementValue(self::ELEMENT_NAME));
         $collection->setNumber($this->getElementValue(self::ELEMENT_NUMBER));
         $collection->setVisible($this->getElementValue(self::ELEMENT_VISIBLE));
+        $collection->setVisiblePublish($this->getElementValue(self::ELEMENT_VISIBLE_PUBLISH));
         $collection->setOaiSubset($this->getElementValue(self::ELEMENT_OAI_SUBSET));
         $collection->setTheme($this->getElementValue(self::ELEMENT_THEME));
     }

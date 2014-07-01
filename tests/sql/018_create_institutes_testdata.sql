@@ -169,3 +169,5 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`, `lef
 (16146, 10, NULL, 'Band 83', NULL, 117, 118, 15991, 0),
 (16147, 10, NULL, 'Band 72', NULL, 123, 124, 15992, 0),
 (16148, 9, NULL, 'TUHH Spektrum Specials', NULL, 2, 9, 15982, 1);
+
+UPDATE collections SET `visible_publish` = 0 WHERE `name` = 'Serviceeinrichtungen';
