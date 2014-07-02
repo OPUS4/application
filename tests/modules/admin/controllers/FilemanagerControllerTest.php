@@ -323,6 +323,7 @@ class Admin_FilemanagerControllerTest extends ControllerTestCase {
      * Asserts that document files are displayed up in the correct order, if the sort order field is set.
      */
     public function testFileSortOrder() {
+        $this->markTestSkipped('OPUSVIER-3319');
         $this->dispatch('/admin/filemanager/index/id/155');
         $body = $this->_response->getBody();
         $positionFile1 = strpos($body, 'oai_invisible.txt');
