@@ -37,11 +37,12 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
     public function testConstructForm() {
         $form = new Admin_Form_Collection();
 
-        $this->assertEquals('7', count($form->getElements()));
+        $this->assertEquals('8', count($form->getElements()));
 
         $this->assertNotNull($form->getElement('Name'));
         $this->assertNotNull($form->getElement('Number'));
         $this->assertNotNull($form->getElement('Visible'));
+        $this->assertNotNull($form->getElement('VisiblePublish'));
         $this->assertNotNull($form->getElement('OaiSubset'));
         $this->assertNotNull($form->getElement('Theme'));
 
@@ -58,6 +59,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $model->setName('TestName');
         $model->setNumber('50');
         $model->setVisible(1);
+        $model->setVisiblePublish(1);
         $model->setOaiSubset('TestSubset');
         $model->setTheme('opus4-matheon');
 
@@ -66,6 +68,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $this->assertEquals('TestName', $form->getElement('Name')->getValue());
         $this->assertEquals(50, $form->getElement('Number')->getValue());
         $this->assertEquals(1, $form->getElement('Visible')->getValue());
+        $this->assertEquals(1, $form->getElement('VisiblePublish')->getValue());
         $this->assertEquals('TestSubset', $form->getElement('OaiSubset')->getValue());
         $this->assertEquals('opus4-matheon', $form->getElement('Theme')->getValue());
     }
@@ -87,6 +90,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $form->getElement('Name')->setValue('TestName');
         $form->getElement('Number')->setValue('50');
         $form->getElement('Visible')->setValue('1');
+        $form->getElement('VisiblePublish')->setValue('1');
         $form->getElement('OaiSubset')->setValue('TestSubset');
         $form->getElement('Theme')->setValue('opus4-matheon');
 
@@ -98,6 +102,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $this->assertEquals('TestName', $model->getName());
         $this->assertEquals('50', $model->getNumber());
         $this->assertEquals('1', $model->getVisible());
+        $this->assertEquals('1', $model->getVisiblePublish());
         $this->assertEquals('TestSubset', $model->getOaiSubset());
         $this->assertEquals('opus4-matheon', $model->getTheme());
     }
