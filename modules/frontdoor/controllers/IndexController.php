@@ -45,7 +45,7 @@ class Frontdoor_IndexController extends Controller_Action {
     const FILE_ACCESS_FUNCTION = 'Frontdoor_IndexController::checkIfUserHasFileAccess';
     const FORMAT_DATE_FUNCTION = 'Frontdoor_IndexController::formatDate';
     const EMBARGO_ACCESS_FUNCTION = 'Frontdoor_IndexController::checkIfFileEmbargoHasPassed';
-    const SORT_ORDER_FUNCTION = 'Frontdoor_IndexController::useSortOrder';
+    const SORT_ORDER_FUNCTION = 'Frontdoor_IndexController::useCustomSortOrder';
     const CHECK_LANGUAGE_FILE_FUNCTION = 'Frontdoor_IndexController::checkLanguageFile';
 
     /**
@@ -222,11 +222,11 @@ class Frontdoor_IndexController extends Controller_Action {
     }
 
     /**
-     * If the sortorder-value of any attached file is set, this function returns true.
+     * Use custom sorting according to the sort order field.
+     * if (false) -> use alphabetic order.
      */
-    public static function useSortOrder($docId) {
-        $doc = new Opus_Document($docId);
-        return $doc->useSortOrder();
+    public static function useCustomSortOrder() {
+        return Zend_Registry::get('Zend_Config')->frontdoor->files->customSorting;
     }
 
     /**

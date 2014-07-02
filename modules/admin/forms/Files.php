@@ -58,41 +58,6 @@ class Admin_Form_Files extends Admin_Form_DocumentMultiSubForm {
             'decorators' => array(), 'disableLoadDefaultDecorators' => true));
     }
 
-    /**
-     * Erzeugt Unterformulare abhängig von den Dateien im Dokument.
-     *
-     * @param Opus_Document $document
-     */
-    public function populateFromModel($document) {
-        $values = $document->getFile();
-        if (sizeof($values > 1)) {
-            foreach ($values as $file) {
-                // if the sortorder-value of any attached file is set, this function returns the files in the correct sortorder
-                // otherwise files are returned in attached order
-                if (!is_null($file->getSortOrder())) {
-                    $this->clearSubForms();
-
-                    $maxIndex = 0;
-                    $position = 0;
-
-                    foreach ($values as $index => $value) {
-                        if ($maxIndex < $value->getSortOrder()) {
-                            $maxIndex = $value->getSortOrder();
-                        }
-                        $subForm = $this->_addSubForm($position++);
-                        $subForm->populateFromModel($value);
-                    }
-
-                    // Sicherstellen, daß Button zum Hinzufügen zuletzt angezeigt wird
-                    $this->getElement(self::ELEMENT_ADD)->setOrder($maxIndex + 1);
-
-                    return;
-                }
-            }
-        }
-        parent::populateFromModel($document);
-    }
-
     public function processPost($post, $context) {
         $result = parent::processPost($post, $context);
 

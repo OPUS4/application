@@ -843,10 +843,17 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Asserts that document files are displayed up in the correct order, if the sort order field is set.
+     * Asserts that document files are displayed up in the custom order according to the sort order field, if specified
+     * in the config.
      */
-    public function testFilesSortOrder() {
+    public function testFilesInCustomSortOrder() {
+        $config = Zend_Registry::get('Zend_Config');
+        $configBackup = $config;
+        $config->frontdoor->files->customSorting = true;
+
         $this->dispatch('/frontdoor/index/index/docId/155');
+        Zend_Registry::set('Zend_Config', $configBackup);
+
         $body = $this->_response->getBody();
         $positionFile1 = strpos($body, 'oai_invisible.txt (1 KB)');
         $positionFile2 = strpos($body, 'test.txt (1 KB)');
@@ -854,18 +861,26 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertTrue($positionFile1 < $positionFile2);
         $this->assertTrue($positionFile1 < $positionFile3);
         $this->assertTrue($positionFile2 < $positionFile3);
-
     }
 
     /**
-     * Asserts that document files are displayed up in the correct order, if the sort order field is NOT set.
+     * Asserts that document files are displayed up in alphabetic order, if specified in the config.
      */
-    public function testDocumentFilesWithoutSortOrder() {
-        $this->dispatch('/frontdoor/index/index/docId/92');
+    public function testFilesInAlphabeticSortOrder() {
+        $config = Zend_Registry::get('Zend_Config');
+        $configBackup = $config;
+        $config->frontdoor->files->customSorting = false;
+
+        $this->dispatch('/frontdoor/index/index/docId/155');
+        Zend_Registry::set('Zend_Config', $configBackup);
+
         $body = $this->_response->getBody();
-        $positionFile1 = strpos($body, 'datei mit unüblichem Namen.xhtml (0 KB)');
-        $positionFile2 = strpos($body, 'test.xhtml (0 KB)');
+        $positionFile1 = strpos($body, 'oai_invisible.txt (1 KB)');
+        $positionFile2 = strpos($body, 'test.pdf (7 KB)');
+        $positionFile3 = strpos($body, 'test.txt (1 KB)');
         $this->assertTrue($positionFile1 < $positionFile2);
+        $this->assertTrue($positionFile1 < $positionFile3);
+        $this->assertTrue($positionFile2 < $positionFile3);
     }
 
     /**
