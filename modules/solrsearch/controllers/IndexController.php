@@ -40,9 +40,12 @@ class Solrsearch_IndexController extends Controller_Action {
     private $numOfHits;
     private $searchtype;
     private $resultList;
+    private $facetMenu;
+    private $openFacets;
 
     public function  init() {
         parent::init();
+        $this->facetMenu = new Solrsearch_Model_FacetMenu();
         $this->_helper->mainMenu('search');
     }
 
@@ -145,7 +148,8 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->_logger->debug('performing search');
         try {
             $searcher = new Opus_SolrSearch_Searcher();
-            $searcher->setFacetArray($this->facetNumberChanger());
+            $this->openFacets = $this->facetMenu->buildFacetArray($this->_request->getParams());
+            $searcher->setFacetArray($this->openFacets);
             $this->resultList = $searcher->search($this->query);
         }
         catch (Opus_SolrSearch_Exception $e) {
@@ -153,38 +157,6 @@ class Solrsearch_IndexController extends Controller_Action {
             throw new Application_SearchException($e);
         }
         $this->numOfHits = $this->resultList->getNumberOfHits();
-    }
-
-    /**
-     * Resolves the facet-options from URL and builds a result array with the number of facets to display.
-     * @return array result[facet_name] = number
-     */
-    private function facetNumberChanger() {
-        $this->view->showIconPlus = array();
-        $facetArray = array();
-        $this->chooseFacetNumber($facetArray, 'author_facet');
-        $this->chooseFacetNumber($facetArray, 'year');
-        $this->chooseFacetNumber($facetArray, 'doctype');
-        $this->chooseFacetNumber($facetArray, 'language');
-        $this->chooseFacetNumber($facetArray, 'subject');
-        $this->chooseFacetNumber($facetArray, 'institute');
-
-        if (sizeof($facetArray) == 0) {
-            return null;
-        }
-        else {
-            return $facetArray;
-        }
-    }
-
-    private function chooseFacetNumber(&$facetArray, $facet) {
-        if ($this->_request->getParam('facetNumber_' . $facet) == 'all') {
-            $facetArray[$facet] = 10000;
-            $this->view->showIconPlus[$facet] = false;
-        }
-        else {
-            $this->view->showIconPlus[$facet] = true;
-        }
     }
 
     private function setViewValues() {
@@ -282,10 +254,11 @@ class Solrsearch_IndexController extends Controller_Action {
 
     private function setViewFacets() {
         $facets = $this->resultList->getFacets();
+        $facetLimit = $this->facetMenu->getFacetLimitsFromConfig();
+
         $facetArray = array();
         $selectedFacets = array();
         $this->view->facetNumberContainer = array();
-        $facetLimit = $this->determineFacetLimit();
         $this->view->showFacetExtender = array();
 
         foreach($facets as $key=>$facet) {
@@ -302,33 +275,9 @@ class Solrsearch_IndexController extends Controller_Action {
             }
         }
 
+        $this->view->showIconPlus = $this->openFacets;
         $this->view->facets = $facetArray;
         $this->view->selectedFacets = $selectedFacets;
-    }
-
-    /**
-     * Determines the number of facet-values to be depicted.
-     * @return $facetLimit[$facetName] = number of values to be shown.
-     */
-    private function determineFacetLimit() {
-        $facetLimit = array();
-        $config = Zend_Registry::get('Zend_Config');
-        $facets = explode(',', $config->searchengine->solr->facets);
-        foreach ($facets as $facet) {
-            if (isset($config->searchengine->solr->facetlimit->$facet)) {
-                $facetLimit[$facet] = (int) $config->searchengine->solr->facetlimit->$facet;
-            }
-            else {
-                $facetLimit[$facet] = (int) $config->searchengine->solr->globalfacetlimit;
-            }
-        }
-        // if facet-name is 'year_inverted', the facet values have to be sorted vice versa
-        // however, the facet-name should be 'year' (reset in framework (ResponseRenderer::getFacets())
-        if (array_key_exists('year_inverted', $facetLimit)) {
-            $facetLimit['year'] = $facetLimit['year_inverted'];
-            unset($facetLimit['year_inverted']);
-        }
-        return $facetLimit;
     }
 
     private function buildQuery() {
