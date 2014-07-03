@@ -73,7 +73,7 @@
                     <div class="facetValueExtender"><a href="<?= $this->url($facetUrl) ?>"
                             ><?= $this->translate('facets_more_results') ?></a></div>
                 <?PHP else : ?>
-                    <? $facetUrl['facetNumber_' . $key] = null; ?>
+                    <?PHP $facetUrl['facetNumber_' . $key] = null; ?>
                     <div class="facetValueExtender"><a href="<?= $this->url($facetUrl) ?>"
                             ><?= $this->translate('facets_less_results') ?></a></div>
                 <?PHP endif ?>

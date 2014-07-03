@@ -83,7 +83,7 @@ class Solrsearch_Model_FacetMenu {
             $facetArray['institute'] = 10000;
         }
 
-        if (sizeof($facetArray) == 0) {
+        if (count($facetArray) == 0) {
             return null;
         }
         else {
