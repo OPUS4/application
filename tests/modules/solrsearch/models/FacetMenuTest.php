@@ -35,20 +35,20 @@
 
 class Solrsearch_Model_FacetMenuTest extends ControllerTestCase {
 
-    public function testGetFacetLimit() {
+    public function testGetFacetLimitsFromConfig() {
         $model = new Solrsearch_Model_FacetMenu();
-        $oldConfig = Zend_Registry::get('Zend_Config');
-        $testConfig = $oldConfig;
-        $testConfig->merge(new Zend_Config(array('searchengine' =>
+        $config = Zend_Registry::get('Zend_Config');
+        $configBackup = $config;
+        $config->merge(new Zend_Config(array('searchengine' =>
             array('solr' =>
                 array('facetlimit' =>
                     array('author_facet' => 3,
                           'year'         => 15))))));
 
-        // clean-up
-        Zend_Registry::set('Zend_Config', $oldConfig);
-
         $facetLimits = $model->getFacetLimitsFromConfig();
+        // clean-up
+        Zend_Registry::set('Zend_Config', $configBackup);
+
         $this->assertEquals(3, $facetLimits['author_facet']);
         $this->assertEquals(15, $facetLimits['year']);
         $this->assertEquals(10, $facetLimits['doctype']);
@@ -58,12 +58,12 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase {
         $this->assertEquals(10, $facetLimits['institute']);
     }
 
-    public function testGetFacetLimitWithYearInverted() {
+    public function testGetFacetLimitsFromConfigWithYearInverted() {
         $model = new Solrsearch_Model_FacetMenu();
-        $oldConfig = Zend_Registry::get('Zend_Config');
-        $testConfig = $oldConfig;
-        if (isset($testConfig->searchengine->solr->facets)) {
-            $testConfig->searchengine->solr->facets = 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute';
+        $config = Zend_Registry::get('Zend_Config');
+        $configBackup = $config;
+        if (isset($config->searchengine->solr->facets)) {
+            $config->searchengine->solr->facets = 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute';
         }
         else {
             $testConfig = new Zend_Config(array(
@@ -71,18 +71,18 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase {
                     'solr' => array(
                         'facets' => 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute'))), true);
             // Include the above made configuration changes in the application configuration.
-            $testConfig->merge(Zend_Registry::get('Zend_Config'));
+            $testConfig->merge($config);
         }
-        $testConfig->merge(new Zend_Config(array('searchengine' =>
+        $config->merge(new Zend_Config(array('searchengine' =>
             array('solr' =>
                 array('facetlimit' =>
                     array('author_facet'  => 3,
                           'year_inverted' => 15))))));
 
-        // cleanup
-        Zend_Registry::set('Zend_Config', $oldConfig);
-
         $facetLimits = $model->getFacetLimitsFromConfig();
+        // cleanup
+        Zend_Registry::set('Zend_Config', $configBackup);
+
         $this->assertEquals(3, $facetLimits['author_facet']);
         $this->assertEquals(15, $facetLimits['year']);
         $this->assertEquals(10, $facetLimits['doctype']);

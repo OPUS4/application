@@ -275,7 +275,7 @@ class Solrsearch_IndexController extends Controller_Action {
             }
         }
 
-        $this->view->showIconPlus = $this->openFacets;
+        $this->view->openFacets = $this->openFacets;
         $this->view->facets = $facetArray;
         $this->view->selectedFacets = $selectedFacets;
     }

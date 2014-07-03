@@ -69,7 +69,7 @@
                 <?php endforeach ?>
             </ul>
             <?PHP if ($this->showFacetExtender[$key]) : ?>
-                <?PHP if (!isset($this->showIconPlus[$key])) : ?>
+                <?PHP if (!isset($this->openFacets[$key])) : ?>
                     <div class="facetValueExtender"><a href="<?= $this->url($facetUrl) ?>"
                             ><?= $this->translate('facets_more_results') ?></a></div>
                 <?PHP else : ?>

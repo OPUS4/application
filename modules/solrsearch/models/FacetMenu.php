@@ -63,24 +63,25 @@ class Solrsearch_Model_FacetMenu {
      * @return array result[facet_name] = number
      */
     public function buildFacetArray($paramSet) {
+        $limit = 10000;
         $facetArray = array();
         if (isset($paramSet['facetNumber_author_facet'])) {
-            $facetArray['author_facet'] = 10000;
+            $facetArray['author_facet'] = $limit;
         }
         if (isset($paramSet['facetNumber_year'])) {
-            $facetArray['year'] = 10000;
+            $facetArray['year'] = $limit;
         }
         if (isset($paramSet['facetNumber_doctype'])) {
-            $facetArray['doctype'] = 10000;
+            $facetArray['doctype'] = $limit;
         }
         if (isset($paramSet['facetNumber_language'])) {
-            $facetArray['language'] = 10000;
+            $facetArray['language'] = $limit;
         }
         if (isset($paramSet['facetNumber_subject'])) {
-            $facetArray['subject'] = 10000;
+            $facetArray['subject'] = $limit;
         }
         if (isset($paramSet['facetNumber_institute'])) {
-            $facetArray['institute'] = 10000;
+            $facetArray['institute'] = $limit;
         }
 
         if (count($facetArray) == 0) {
