@@ -849,7 +849,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     public function testFilesInCustomSortOrder() {
         $config = Zend_Registry::get('Zend_Config');
         $configBackup = $config;
-        $config->frontdoor->files->customSorting = true;
+        $config->frontdoor->files->customSorting = 1;
 
         $this->dispatch('/frontdoor/index/index/docId/155');
         Zend_Registry::set('Zend_Config', $configBackup);
@@ -869,7 +869,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     public function testFilesInAlphabeticSortOrder() {
         $config = Zend_Registry::get('Zend_Config');
         $configBackup = $config;
-        $config->frontdoor->files->customSorting = false;
+        $config->frontdoor->files->customSorting = 0;
 
         $this->dispatch('/frontdoor/index/index/docId/155');
         Zend_Registry::set('Zend_Config', $configBackup);

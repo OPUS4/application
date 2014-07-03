@@ -33,7 +33,6 @@
  * @version     $Id$
  *
  */
-
 class Frontdoor_IndexController extends Controller_Action {
 
     const SERVER_STATE_DELETED = 'deleted';
@@ -226,7 +225,7 @@ class Frontdoor_IndexController extends Controller_Action {
      * if (false) -> use alphabetic order.
      */
     public static function useCustomSortOrder() {
-        return Zend_Registry::get('Zend_Config')->frontdoor->files->customSorting;
+        return Zend_Registry::get('Zend_Config')->frontdoor->files->customSorting == '1';
     }
 
     /**
