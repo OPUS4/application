@@ -72,7 +72,7 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
     protected function _removeEnrichmentAssociation() {
         $d = new Opus_Document(146);
         $enrichment = $d->getEnrichment();
-        $this->assertEquals(9, count($enrichment), "Test data has changed.");
+        $this->assertEquals(11, count($enrichment), "Test data has changed.");
         $d->setEnrichment(null);
         $d->store();
         return $enrichment;
