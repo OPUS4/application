@@ -363,13 +363,21 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $rootCollection->addLastChild($visibleCollection);
         $visibleId = $visibleCollection->store();
 
+        $mixedVisibilityCollection = new Opus_Collection();
+        $mixedVisibilityCollection->setName("mixed visibility");
+        $mixedVisibilityCollection->setNumber("456");
+        $mixedVisibilityCollection->setVisiblePublish(true);
+        $mixedVisibilityCollection->setVisible(false);
+        $rootCollection->addLastChild($mixedVisibilityCollection);
+        $mixedVisibilityCollection->store();
+
         $val = new Publish_Model_Validation('Collection', $this->session, 'test');
         $children = $val->selectOptions('Collection');
 
         // clean-up
         $collectionRole->delete();
 
-        $this->assertEquals(1, count($children));
+        $this->assertEquals(1, count($children), "only 'visible collection' has the correct visibility settings");
         $this->assertEquals('visible collection', $children[$visibleId]);
     }
 
