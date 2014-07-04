@@ -226,7 +226,7 @@ class Publish_Model_DisplayGroup {
             return null;
         }
 
-        if ($collection->hasVisiblePublishChildren()) {
+        if ($collection->hasVisiblePublishChildren() && $collection->hasVisibleChildren()) {
             $downButton = $this->addDownButtontoGroup();
             $this->form->addElement($downButton);
             $displayGroup[] = $downButton->getName();
@@ -333,7 +333,9 @@ class Publish_Model_DisplayGroup {
             $selectField->setLabel('choose_collection_subcollection');
 
             $role = $collection->getRole();
-            $colls = $collection->getVisiblePublishChildren();
+            $collsVisiblePublish = $collection->getVisiblePublishChildren();
+            $collsVisible = $collection->getVisibleChildren();
+            $colls = array_intersect($collsVisible, $collsVisiblePublish);
             foreach ($colls as $coll) {
                 $children[] = array(
                     'key' => strval($coll->getId()),

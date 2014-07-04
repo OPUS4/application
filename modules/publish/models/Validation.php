@@ -291,11 +291,17 @@ class Publish_Model_Validation {
             return null;
         }
 
-        if ($collectionRole->getVisible() == '1' && $this->hasVisibleChildren($collectionRole)) {
+        if ($collectionRole->getVisible() == '1' &&
+                    $this->hasVisibleChildren($collectionRole) && $this->hasVisibleChildren($collectionRole)) {
             $children = array();
             $collectionId = $collectionRole->getRootCollection()->getId();
             $collection = new Opus_Collection($collectionId);
-            foreach ($collection->getVisiblePublishChildren() as $coll) {
+
+            $collsVisiblePublish = $collection->getVisiblePublishChildren();
+            $collsVisible = $collection->getVisibleChildren();
+            $colls = array_intersect($collsVisible, $collsVisiblePublish);
+
+            foreach ($colls as $coll) {
                 $children[$coll->getId()] = $coll->getDisplayNameForBrowsingContext($collectionRole);
             }
             return $children;

@@ -55,6 +55,7 @@ class Admin_Model_Collection {
     private function initNewCollection() {
         $this->collection = new Opus_Collection();
         $this->collection->setVisible('1');
+        $this->collection->setVisiblePublish('1');
     }
 
     /**
