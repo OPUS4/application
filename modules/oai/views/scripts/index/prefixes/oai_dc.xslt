@@ -71,6 +71,8 @@
             <!--<xsl:apply-templates select="PersonAuthor" mode="oai_dc" />-->
             <!-- dc:contributor -->
             <xsl:apply-templates select="PersonContributor" mode="oai_dc" />
+            <!-- dc:source -->
+            <xsl:apply-templates select="TitleParent" mode="oai_dc" />
             <!-- dc:subject -->
             <xsl:apply-templates select="Subject[@Type='swd']" mode="oai_dc" />
             <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]" mode="oai_dc" />
@@ -107,6 +109,8 @@
             </dc:date>
             <!-- dc:type -->
             <xsl:apply-templates select="@Type" mode="oai_dc" />
+            <!-- dc:type -->
+            <dc:type><xsl:value-of select="$publicationVersion" /></dc:type>
             <!-- dc:format -->
             <xsl:apply-templates select="File/@MimeType" mode="oai_dc" />
             <!-- dc:identifier -->
@@ -201,21 +205,25 @@
         <xsl:choose>
             <xsl:when test=".='habilitation'" >
                 <dc:type>
+                    <xsl:value-of select="$openAireDoctype" />
                     <xsl:text>doctoralthesis</xsl:text>
                 </dc:type>
                 <dc:type>
+                    <xsl:value-of select="$openAireDoctype" />
                     <xsl:text>doc-type:doctoralthesis</xsl:text>
                 </dc:type>
             </xsl:when>
-	    <xsl:otherwise>
+	        <xsl:otherwise>
                 <dc:type>
+                    <xsl:value-of select="$openAireDoctype" />
                     <xsl:value-of select="." />
                 </dc:type>
                 <dc:type>
+                    <xsl:value-of select="$openAireDoctype" />
                     <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
                 </dc:type>
-	    </xsl:otherwise>
-	</xsl:choose>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="@ContributingCorporation" mode="oai_dc">
@@ -275,6 +283,31 @@
             <xsl:value-of select="@Value" />
         </dc:rights>
     </xsl:template>
+
+    <xsl:template match="TitleParent" mode="oai_dc">
+        <dc:source>
+            <xsl:attribute name="xml:lang">
+                <xsl:value-of select="@Language" />
+            </xsl:attribute>
+            <xsl:value-of select="@Value" />
+        </dc:source>
+    </xsl:template>
+
+    <xsl:param name="openAireDoctype">
+        <xsl:choose>
+            <xsl:when test="$oai_set='ec_fundedresources'">
+                <xsl:text>info:eu-repo/semantics/</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:param>
+
+    <xsl:param name="publicationVersion">
+        <xsl:choose>
+            <xsl:when test="$oai_set='ec_fundedresources'">
+                <xsl:text>info:eu-repo/semantics/publishedVersion</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:param>
 
 </xsl:stylesheet>
 
