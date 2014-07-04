@@ -71,8 +71,6 @@
             <!--<xsl:apply-templates select="PersonAuthor" mode="oai_dc" />-->
             <!-- dc:contributor -->
             <xsl:apply-templates select="PersonContributor" mode="oai_dc" />
-            <!-- dc:source -->
-            <xsl:apply-templates select="TitleParent" mode="oai_dc" />
             <!-- dc:subject -->
             <xsl:apply-templates select="Subject[@Type='swd']" mode="oai_dc" />
             <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]" mode="oai_dc" />
@@ -109,8 +107,6 @@
             </dc:date>
             <!-- dc:type -->
             <xsl:apply-templates select="@Type" mode="oai_dc" />
-            <!-- dc:type -->
-            <dc:type><xsl:value-of select="$publicationVersion" /></dc:type>
             <!-- dc:format -->
             <xsl:apply-templates select="File/@MimeType" mode="oai_dc" />
             <!-- dc:identifier -->
@@ -133,6 +129,10 @@
             <!-- open aire -->
             <xsl:apply-templates select="Enrichment" mode="oai_dc" />
             <xsl:apply-templates select="Rights" mode="oai_dc" />
+            <!-- dc:type -->
+            <dc:type><xsl:value-of select="$publicationVersion" /></dc:type>
+            <!-- dc:source -->
+            <xsl:apply-templates select="TitleParent" mode="oai_dc" />
         </oai_dc:dc>
     </xsl:template>
 
@@ -291,6 +291,18 @@
             </xsl:attribute>
             <xsl:value-of select="@Value" />
         </dc:source>
+    </xsl:template>
+<!--
+    <xsl:template match="Enrichment[@KeyName='Audience']" mode="oai_dc">
+        <dc:audience>
+            <xsl:value-of select="@Value" />
+        </dc:audience>
+    </xsl:template>
+-->
+    <xsl:template match="Enrichment[@KeyName='Coverage']" mode="oai_dc">
+        <dc:coverage>
+            <xsl:value-of select="@Value" />
+        </dc:coverage>
     </xsl:template>
 
     <xsl:param name="openAireDoctype">
