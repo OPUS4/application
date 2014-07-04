@@ -171,5 +171,5 @@ INSERT INTO `collections` (`id`, `role_id`, `number`, `name`, `oai_subset`, `lef
 (16148, 9, NULL, 'TUHH Spektrum Specials', NULL, 2, 9, 15982, 1);
 
 UPDATE collections SET `visible_publish` = 0 WHERE `name` = 'Serviceeinrichtungen';
-UPDATE collections SET `visible_publish` = 1 WHERE `name` = 'Maschinenbau';
-UPDATE collections SET `visible` = 0 WHERE `name` = 'Maschinenbau';
+UPDATE collections SET `visible_publish` = 1 WHERE `name` = 'Elektrotechnik und Informationstechnik';
+UPDATE collections SET `visible` = 0 WHERE `name` = 'Elektrotechnik und Informationstechnik';
