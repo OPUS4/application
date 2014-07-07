@@ -1157,11 +1157,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $doc = new Opus_Document();
 
         $enrichment = new Opus_EnrichmentKey();
-        $enrichment->setName('ExternalFiles');
+        $enrichment->setName('ExternalHtml');
         $enrichment->store();
 
         $newEnrichment = new Opus_Enrichment();
-        $newEnrichment->setKeyName('ExternalFiles')->setValue('http://www.test.de');
+        $newEnrichment->setKeyName('ExternalHtml')->setValue('http://www.test.de');
         $doc->addEnrichment($newEnrichment);
         $doc->setServerState('published');
         $docId = $doc->store();

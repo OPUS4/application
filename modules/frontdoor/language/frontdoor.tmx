@@ -175,7 +175,7 @@
         </tuv>
     </tu>
 
-    <tu tuid="frontdoor_external_files">
+    <tu tuid="frontdoor_external_html">
         <tuv xml:lang="en">
             <seg>External Files</seg>
         </tuv>

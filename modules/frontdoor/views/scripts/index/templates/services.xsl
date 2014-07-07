@@ -362,11 +362,11 @@
       </a>
    </xsl:template>
 
-    <xsl:template match="Enrichment[@KeyName='ExternalFiles']">
-        <div id="external-files" class="services">
+    <xsl:template match="Enrichment[@KeyName='ExternalHtml']">
+        <div id="external-html" class="services">
             <h3>
                 <xsl:call-template name="translateString">
-                    <xsl:with-param name="string">frontdoor_external_files</xsl:with-param>
+                    <xsl:with-param name="string">frontdoor_external_html</xsl:with-param>
                 </xsl:call-template>
             </h3>
             <div>

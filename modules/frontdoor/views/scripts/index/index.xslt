@@ -160,7 +160,7 @@
             </div>
          </div>
 
-          <xsl:apply-templates select="Enrichment[@KeyName='ExternalFiles']" />
+          <xsl:apply-templates select="Enrichment[@KeyName='ExternalHtml']" />
 
       </div>
 
