@@ -69,6 +69,10 @@ class Solrsearch_Model_FacetMenu {
             $facetArray['author_facet'] = $limit;
         }
         if (isset($paramSet['facetNumber_year'])) {
+            if (in_array('year_inverted', explode(',', Zend_Registry::get('Zend_Config')->searchengine->solr->facets))) {
+                // 'year_inverted' is used in framework and result is returned as 'year'
+                $facetArray['year_inverted'] = $limit;
+            }
             $facetArray['year'] = $limit;
         }
         if (isset($paramSet['facetNumber_doctype'])) {

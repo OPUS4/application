@@ -106,6 +106,34 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase {
         $this->assertNotContains('institute', $facetArray);
         $this->assertNotContains('doctype', $facetArray);
         $this->assertNotContains('language', $facetArray);
+        $this->assertNotContains('year_inverted', $facetArray);
+    }
+
+    /**
+     * If 'year_inverted' is set in config, buildFacetArray should contain both entries ('year' & 'year_inverted'), because,
+     * in framework, 'year_inverted' is expected and changed to 'year'. Hence, as result from framework 'year' is expected.
+     */
+    public function testBuildFacetArrayWithYearInverted() {
+        $model = new Solrsearch_Model_FacetMenu();
+        $config = Zend_Registry::get('Zend_Config');
+        $configBackup = $config;
+        if (isset($config->searchengine->solr->facets)) {
+            $config->searchengine->solr->facets = 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute';
+        }
+        else {
+            $testConfig = new Zend_Config(array(
+                'searchengine' => array(
+                    'solr' => array(
+                        'facets' => 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute'))), true);
+            // Include the above made configuration changes in the application configuration.
+            $testConfig->merge($config);
+        }
+        $paramSet = array('facetNumber_year' => 'all');
+        $facetArray = $model->buildFacetArray($paramSet);
+        // cleanup
+        Zend_Registry::set('Zend_Config', $configBackup);
+        $this->assertEquals(10000, $facetArray['year']);
+        $this->assertEquals(10000, $facetArray['year_inverted']);
     }
 
     public function testBuildEmptyFacetArray() {
