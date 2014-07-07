@@ -159,6 +159,9 @@
                <xsl:call-template name="MailToAuthor"/>
             </div>
          </div>
+
+          <xsl:apply-templates select="Enrichment[@KeyName='ExternalFiles']" />
+
       </div>
 
       <!-- metadata templates defined in templates/metadata.xsl -->
