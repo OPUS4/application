@@ -40,7 +40,6 @@ class Controller_Helper_AccessControlTest extends ControllerTestCase {
     private $accessControl;
 
     public function setUp() {
-        parent::setUp();
         parent::setUpWithEnv('production');
         $this->assertEquals(1, Zend_Registry::get('Zend_Config')->security);
         $this->assertTrue(Zend_Registry::isRegistered('Opus_Acl'), 'Expected registry key Opus_Acl to be set');
