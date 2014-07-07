@@ -124,7 +124,9 @@
              </xsl:choose>
          </xsl:if>
 
-         <div id="export" class="services">
+          <xsl:apply-templates select="Enrichment[@KeyName='ExternalHtml']" />
+
+          <div id="export" class="services">
             <h3>
                <xsl:call-template name="translateString">
                   <xsl:with-param name="string">frontdoor_export_options</xsl:with-param>
@@ -159,8 +161,6 @@
                <xsl:call-template name="MailToAuthor"/>
             </div>
          </div>
-
-          <xsl:apply-templates select="Enrichment[@KeyName='ExternalHtml']" />
 
       </div>
 
