@@ -66,5 +66,3 @@ class View_Helper_AccessAllowedTest extends ControllerTestCase {
     }
 
 }
-
-?>
