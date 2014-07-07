@@ -43,10 +43,8 @@ class View_Helper_AccessAllowedTest extends ControllerTestCase {
         // workaround to enable security before bootstrapping
         // bootstrapping authorization twice is not possible
         parent::setUpWithEnv('production');
-        $this->assertEquals(1, Zend_Registry::get('Zend_Config')->security);
-        $this->assertTrue(Zend_Registry::isRegistered('Opus_Acl'), 'Expected registry key Opus_Acl to be set');
+        $this->assertSecurityConfigured();
         $acl = Zend_Registry::get('Opus_Acl');
-        $this->assertTrue($acl instanceof Zend_Acl, 'Expected instance of Zend_Acl');
         $acl->allow('guest', 'accounts');
         $this->__helper = new View_Helper_AccessAllowed();
         $this->__helper->setView(Zend_Registry::get('Opus_View'));

@@ -41,10 +41,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
     
     public function setUp() {
         parent::setUpWithEnv('production');
-        $this->assertEquals(1, Zend_Registry::get('Zend_Config')->security);
-        $this->assertTrue(Zend_Registry::isRegistered('Opus_Acl'), 'Expected registry key Opus_Acl to be set');
-        $acl = Zend_Registry::get('Opus_Acl');
-        $this->assertTrue($acl instanceof Zend_Acl, 'Expected instance of Zend_Acl');
+        $this->assertSecurityConfigured();
     }
 
     public function testGetFileObjectSuccessfulCase() {

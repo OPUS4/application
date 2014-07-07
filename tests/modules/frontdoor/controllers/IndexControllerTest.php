@@ -42,7 +42,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     */
    protected $_document = null;
    protected $_document_col = null;
-   protected $_security_backup = null;
 
    /**
     * Provide clean documents and statistics table and remove temporary files.
@@ -52,10 +51,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     */
    public function setUp() {
       parent::setUpWithEnv('production');
-      $this->assertEquals(1, Zend_Registry::get('Zend_Config')->security);
-      $this->assertTrue(Zend_Registry::isRegistered('Opus_Acl'), 'Expected registry key Opus_Acl to be set');
-      $acl = Zend_Registry::get('Opus_Acl');
-      $this->assertTrue($acl instanceof Zend_Acl, 'Expected instance of Zend_Acl');
+      $this->assertSecurityConfigured();
 
       $path = Zend_Registry::get('temp_dir') . '~localstat.xml';
       @unlink($path);
@@ -68,11 +64,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $_SERVER['REMOTE_ADDR'] = '127.0.0.1';
       $_SERVER['HTTP_USER_AGENT'] = 'bla';
       $_SERVER['REDIRECT_STATUS'] = 200;
-
-      // enable security
-      $config = Zend_Registry::get('Zend_Config');
-      $this->_security_backup = $config->security;
-      $config->security = '1';
 
       // create collection test document
       $this->_document_col = $this->createTestDocument();
@@ -88,11 +79,6 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
    }
 
    protected function tearDown() {
-      // restore old security config
-      $config = Zend_Registry::get('Zend_Config');
-      $config->security = $this->_security_backup;
-      Zend_Registry::set('Zend_Config', $config);
-
       $this->removeDocument($this->_document);
       $this->removeDocument($this->_document_col);
       parent::tearDown();
