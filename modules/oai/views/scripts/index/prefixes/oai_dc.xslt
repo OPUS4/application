@@ -203,13 +203,39 @@
 
     <xsl:template match="@Type" mode="oai_dc">
         <xsl:choose>
-            <xsl:when test=".='habilitation'" >
-                <dc:type>info:eu-repo/semantics/<xsl:text>doctoralthesis</xsl:text></dc:type>
-                <dc:type>info:eu-repo/semantics/<xsl:text>doc-type:doctoralthesis</xsl:text></dc:type>
+            <xsl:when test="$oai_set='ec_fundedresources'">
+                <!-- dc:type für OpenAire muss in einer Zeile und in einem Feld ausgegeben werden. Die Verwendung eines
+                Parameters anstelle des 'info:eu-repo/semeantics/' führt zu einem Fehler in der Validierung -->
+                <xsl:choose>
+                    <xsl:when test=".='habilitation'" >
+                        <dc:type>info:eu-repo/semantics/doctoralthesis</dc:type>
+                        <dc:type>info:eu-repo/semantics/doc-type:doctoralthesis</dc:type>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <dc:type>info:eu-repo/semantics/<xsl:value-of select="."/></dc:type>
+                        <dc:type>info:eu-repo/semantics/doc-type:<xsl:value-of select="." /></dc:type>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:when>
-	        <xsl:otherwise>
-                <dc:type><xsl:value-of select="$OpenAirePrefix"/><xsl:value-of select="."/></dc:type>
-                <dc:type>info:eu-repo/semantics/<xsl:text>doc-type:</xsl:text><xsl:value-of select="." /></dc:type>
+            <xsl:otherwise>
+                <xsl:choose>
+                    <xsl:when test=".='habilitation'" >
+                        <dc:type>
+                            <xsl:text>doctoralthesis</xsl:text>
+                        </dc:type>
+                        <dc:type>
+                            <xsl:text>doc-type:doctoralthesis</xsl:text>
+                        </dc:type>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <dc:type>
+                            <xsl:value-of select="." />
+                        </dc:type>
+                        <dc:type>
+                            <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
+                        </dc:type>
+                    </xsl:otherwise>
+                </xsl:choose>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -282,23 +308,6 @@
         </dc:source>
     </xsl:template>
 
-    <xsl:template match="Enrichment[@KeyName='Audience']" mode="oai_dc">
-        <dc:audience>
-            <xsl:value-of select="@Value" />
-        </dc:audience>
-    </xsl:template>
-
-    <xsl:template match="Enrichment[@KeyName='Coverage']" mode="oai_dc">
-        <dc:coverage>
-            <xsl:value-of select="@Value" />
-        </dc:coverage>
-    </xsl:template>
-
-    <xsl:param name="OpenAirePrefix">
-        <xsl:choose>
-            <xsl:when test="$oai_set='ec_fundedresources'">info:eu-repo/semantics/</xsl:when>
-        </xsl:choose>
-    </xsl:param>
 
 </xsl:stylesheet>
 
