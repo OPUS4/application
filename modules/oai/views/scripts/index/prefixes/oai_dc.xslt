@@ -130,7 +130,7 @@
             <xsl:apply-templates select="Enrichment" mode="oai_dc" />
             <xsl:apply-templates select="Rights" mode="oai_dc" />
             <!-- dc:type -->
-            <dc:type>info:eu-repo/semantics/publishedVersion</dc:type>
+            <!-- <dc:type>info:eu-repo/semantics/publishedVersion</dc:type> -->
             <!-- dc:source -->
             <xsl:apply-templates select="TitleParent" mode="oai_dc" />
         </oai_dc:dc>
@@ -267,7 +267,6 @@
     </xsl:template>
 
     <xsl:template match="Licence" mode="oai_dc">
-        <!--<dc:rights>cc-by-sa, info:eu-repo/dai/nl/344568</dc:rights>-->
         <dc:rights>
             <xsl:value-of select="@NameLong" />
         </dc:rights>
@@ -285,14 +284,14 @@
         </dc:rights>
     </xsl:template>
 
-    <xsl:template match="TitleParent" mode="oai_dc">
+<!--    <xsl:template match="TitleParent" mode="oai_dc">
         <dc:source>
             <xsl:attribute name="xml:lang">
                 <xsl:value-of select="@Language" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
         </dc:source>
-    </xsl:template>
+    </xsl:template>     -->
 
     <xsl:param name="OpenAirePrefix">
         <xsl:choose>
