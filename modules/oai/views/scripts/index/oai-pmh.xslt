@@ -312,7 +312,7 @@
                 </datestamp>
             <xsl:choose>
                 <xsl:when test="$oai_set='ec_fundedresources'">
-                    <setSpec>EC_fundedresources</setSpec>
+                    <setSpec>openaire</setSpec>
                 </xsl:when>
                 <xsl:otherwise>
                     <xsl:apply-templates select="SetSpec" />

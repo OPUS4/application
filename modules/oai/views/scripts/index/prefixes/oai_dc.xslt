@@ -268,7 +268,8 @@
 
     <xsl:template match="Licence" mode="oai_dc">
         <dc:rights>
-            <xsl:value-of select="@NameLong" />
+            <!--<xsl:value-of select="@NameLong" />-->
+            <dc:text>http://creativecommons.org/licenses/by- sa/2.0/uk/</dc:text>
         </dc:rights>
     </xsl:template>
 
@@ -292,13 +293,13 @@
             <xsl:value-of select="@Value" />
         </dc:source>
     </xsl:template>
-<!--
+
     <xsl:template match="Enrichment[@KeyName='Audience']" mode="oai_dc">
         <dc:audience>
             <xsl:value-of select="@Value" />
         </dc:audience>
     </xsl:template>
--->
+
     <xsl:template match="Enrichment[@KeyName='Coverage']" mode="oai_dc">
         <dc:coverage>
             <xsl:value-of select="@Value" />
