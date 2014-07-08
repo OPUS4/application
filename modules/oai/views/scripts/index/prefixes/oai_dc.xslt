@@ -30,7 +30,7 @@
  * @author      Michael Lang <lang@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: oai_dc.xslt 13349 2014-06-18 06:53:53Z mlang $
+ * @version     $Id$
  */
 -->
 
@@ -208,9 +208,7 @@
                 <dc:type>info:eu-repo/semantics/<xsl:text>doc-type:doctoralthesis</xsl:text></dc:type>
             </xsl:when>
 	        <xsl:otherwise>
-                <dc:type>
-                    info:eu-repo/semantics/<xsl:value-of select="."/>
-                </dc:type>
+                <dc:type><xsl:value-of select="$OpenAirePrefix"/><xsl:value-of select="."/></dc:type>
                 <dc:type>info:eu-repo/semantics/<xsl:text>doc-type:</xsl:text><xsl:value-of select="." /></dc:type>
             </xsl:otherwise>
         </xsl:choose>
@@ -295,6 +293,12 @@
             <xsl:value-of select="@Value" />
         </dc:coverage>
     </xsl:template>
+
+    <xsl:param name="OpenAirePrefix">
+        <xsl:choose>
+            <xsl:when test="$oai_set='ec_fundedresources'">info:eu-repo/semantics/</xsl:when>
+        </xsl:choose>
+    </xsl:param>
 
 </xsl:stylesheet>
 
