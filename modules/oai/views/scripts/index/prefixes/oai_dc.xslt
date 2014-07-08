@@ -200,7 +200,7 @@
             <xsl:value-of select="@Value" />
         </dc:description>
     </xsl:template>
-<!--
+
     <xsl:template match="@Type" mode="oai_dc">
         <xsl:choose>
             <xsl:when test=".='habilitation'" >
@@ -215,7 +215,7 @@
             </xsl:when>
 	        <xsl:otherwise>
                 <dc:type>
-                    <xsl:value-of select="$openAireDoctype" />
+                    <xsl:value-of select="$openAireDoctype"/>
                     <xsl:value-of select="." />
                 </dc:type>
                 <dc:type>
@@ -225,7 +225,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
--->
+
     <xsl:template match="@ContributingCorporation" mode="oai_dc">
         <dc:contributor>
             <xsl:value-of select="." />
@@ -265,13 +265,14 @@
             <xsl:value-of select="." />
         </dc:language>
     </xsl:template>
-<!--
+
     <xsl:template match="Licence" mode="oai_dc">
         <dc:rights>
-            <xsl:value-of select="@NameLong" />
+            cc-by-sa, info:eu-repo/dai/nl/344568
         </dc:rights>
     </xsl:template>
--->
+
+    <!--<xsl:value-of select="@NameLong" />-->
                 <xsl:template match="Enrichment[@KeyName='review.accepted_by']" mode="oai_dc">
                     <dc:rights>
                         <xsl:value-of select="@Value" />
@@ -287,7 +288,6 @@
                         <xsl:value-of select="@Value" />
                     </dc:type>
                 </xsl:template>
-
 
     <xsl:template match="Enrichment[@KeyName='Relation']" mode="oai_dc">
         <dc:relation>
@@ -324,16 +324,14 @@
 
     <xsl:param name="openAireDoctype">
         <xsl:choose>
-            <xsl:when test="$oai_set='ec_fundedresources'">
-                <xsl:text>info:eu-repo/semantics/</xsl:text>
-            </xsl:when>
+            <xsl:when test="$oai_set='ec_fundedresources'">info:eu-repo/semantics/</xsl:when>
         </xsl:choose>
     </xsl:param>
 
     <xsl:param name="publicationVersion">
         <xsl:choose>
             <xsl:when test="$oai_set='ec_fundedresources'">
-                <xsl:text>info:eu-repo/semantics/publishedVersion</xsl:text>
+                info:eu-repo/semantics/publishedVersion
             </xsl:when>
         </xsl:choose>
     </xsl:param>
