@@ -269,7 +269,11 @@
     <xsl:template match="Licence" mode="oai_dc">
         <dc:rights>
             <!--<xsl:value-of select="@NameLong" />-->
-            <dc:text>http://creativecommons.org/licenses/by- sa/2.0/uk/</dc:text>
+            <dc:text>cc-by-sa, info:eu-repo/dai/nl/344568</dc:text>
+        </dc:rights>
+        <dc:rights>
+            <!--<xsl:value-of select="@NameLong" />-->
+            <dc:text>http://creativecommons.org/licenses/by-sa/2.0/uk/</dc:text>
         </dc:rights>
     </xsl:template>
 
