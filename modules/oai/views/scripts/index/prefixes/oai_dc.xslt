@@ -130,7 +130,7 @@
             <xsl:apply-templates select="Enrichment" mode="oai_dc" />
             <xsl:apply-templates select="Rights" mode="oai_dc" />
             <!-- dc:type -->
-            <!--<dc:type><xsl:value-of select="$publicationVersion" /></dc:type>-->
+            <dc:type><xsl:value-of select="$publicationVersion" /></dc:type>
             <!-- dc:source -->
             <xsl:apply-templates select="TitleParent" mode="oai_dc" />
         </oai_dc:dc>
@@ -214,10 +214,7 @@
                 </dc:type>
             </xsl:when>
 	        <xsl:otherwise>
-                <dc:type>
-                    <xsl:value-of select="$openAireDoctype"/>
-                    <xsl:value-of select="." />
-                </dc:type>
+                <dc:type>info:eu-repo/semantics/<xsl:value-of select="."/></dc:type>
                 <dc:type>
                     <xsl:value-of select="$openAireDoctype" />
                     <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
@@ -267,9 +264,7 @@
     </xsl:template>
 
     <xsl:template match="Licence" mode="oai_dc">
-        <dc:rights>
-            cc-by-sa, info:eu-repo/dai/nl/344568
-        </dc:rights>
+        <dc:rights>cc-by-sa, info:eu-repo/dai/nl/344568</dc:rights>
     </xsl:template>
 
     <!--<xsl:value-of select="@NameLong" />-->
