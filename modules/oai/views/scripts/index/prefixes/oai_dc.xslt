@@ -41,10 +41,10 @@
  */
 -->
 <xsl:stylesheet version="1.0"
-    xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
-    xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+                xmlns:dc="http://purl.org/dc/elements/1.1/"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
     <xsl:output method="xml" indent="yes" />
 
@@ -111,7 +111,7 @@
             <xsl:apply-templates select="File/@MimeType" mode="oai_dc" />
             <!-- dc:identifier -->
             <dc:identifier>
-               <xsl:value-of select="@frontdoorurl"/>
+                <xsl:value-of select="@frontdoorurl"/>
             </dc:identifier>
             <xsl:apply-templates select="IdentifierUrn" mode="oai_dc" />
             <xsl:apply-templates select="IdentifierIsbn" mode="oai_dc" />
@@ -178,11 +178,11 @@
     <xsl:template match="Subject[@Type='swd']" mode="oai_dc">
         <dc:subject>
             <xsl:if test="@language != ''">
-              <xsl:attribute name="xml:lang">
-                 <xsl:value-of select="@Language" />
-              </xsl:attribute>
+                <xsl:attribute name="xml:lang">
+                    <xsl:value-of select="@Language" />
+                </xsl:attribute>
             </xsl:if>
-         <xsl:value-of select="@Value" />
+            <xsl:value-of select="@Value" />
         </dc:subject>
     </xsl:template>
 
@@ -203,39 +203,25 @@
 
     <xsl:template match="@Type" mode="oai_dc">
         <xsl:choose>
-            <xsl:when test="$oai_set='ec_fundedresources'">
-                <!-- dc:type für OpenAire muss in einer Zeile und in einem Feld ausgegeben werden. Die Verwendung eines
-                Parameters anstelle des 'info:eu-repo/semeantics/' führt zu einem Fehler in der Validierung -->
-                <xsl:choose>
-                    <xsl:when test=".='habilitation'" >
-                        <dc:type>info:eu-repo/semantics/doctoralthesis</dc:type>
-                        <dc:type>info:eu-repo/semantics/doc-type:doctoralthesis</dc:type>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <dc:type>info:eu-repo/semantics/<xsl:value-of select="."/></dc:type>
-                        <dc:type>info:eu-repo/semantics/doc-type:<xsl:value-of select="." /></dc:type>
-                    </xsl:otherwise>
-                </xsl:choose>
+            <xsl:when test=".='habilitation'" >
+                <dc:type>
+                    <xsl:value-of select="$OpenAirePrefix"/>
+                    <xsl:text>doctoralthesis</xsl:text>
+                </dc:type>
+                <dc:type>
+                    <xsl:value-of select="$OpenAirePrefix"/>
+                    <xsl:text>doc-type:doctoralthesis</xsl:text>
+                </dc:type>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:choose>
-                    <xsl:when test=".='habilitation'" >
-                        <dc:type>
-                            <xsl:text>doctoralthesis</xsl:text>
-                        </dc:type>
-                        <dc:type>
-                            <xsl:text>doc-type:doctoralthesis</xsl:text>
-                        </dc:type>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <dc:type>
-                            <xsl:value-of select="." />
-                        </dc:type>
-                        <dc:type>
-                            <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
-                        </dc:type>
-                    </xsl:otherwise>
-                </xsl:choose>
+                <dc:type>
+                    <xsl:value-of select="$OpenAirePrefix"/>
+                    <xsl:value-of select="." />
+                </dc:type>
+                <dc:type>
+                    <xsl:value-of select="$OpenAirePrefix"/>
+                    <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
+                </dc:type>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -308,6 +294,13 @@
         </dc:source>
     </xsl:template>
 
+    <xsl:param name="OpenAirePrefix">
+        <xsl:choose>
+            <xsl:when test="$oai_set='openaire'">
+                <xsl:text>info:eu-repo/semantics/</xsl:text>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:param>
 
 </xsl:stylesheet>
 
