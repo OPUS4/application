@@ -130,7 +130,7 @@
             <xsl:apply-templates select="Enrichment" mode="oai_dc" />
             <xsl:apply-templates select="Rights" mode="oai_dc" />
             <!-- dc:type -->
-            <dc:type><xsl:value-of select="$publicationVersion" /></dc:type>
+            <dc:type>info:eu-repo/semantics/publishedVersion</dc:type>
             <!-- dc:source -->
             <xsl:apply-templates select="TitleParent" mode="oai_dc" />
         </oai_dc:dc>
@@ -204,21 +204,14 @@
     <xsl:template match="@Type" mode="oai_dc">
         <xsl:choose>
             <xsl:when test=".='habilitation'" >
-                <dc:type>
-                    <xsl:value-of select="$openAireDoctype" />
-                    <xsl:text>doctoralthesis</xsl:text>
-                </dc:type>
-                <dc:type>
-                    <xsl:value-of select="$openAireDoctype" />
-                    <xsl:text>doc-type:doctoralthesis</xsl:text>
-                </dc:type>
+                <dc:type>info:eu-repo/semantics/<xsl:text>doctoralthesis</xsl:text></dc:type>
+                <dc:type>info:eu-repo/semantics/<xsl:text>doc-type:doctoralthesis</xsl:text></dc:type>
             </xsl:when>
 	        <xsl:otherwise>
-                <dc:type>info:eu-repo/semantics/<xsl:value-of select="."/></dc:type>
                 <dc:type>
-                    <xsl:value-of select="$openAireDoctype" />
-                    <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
+                    info:eu-repo/semantics/<xsl:value-of select="."/>
                 </dc:type>
+                <dc:type>info:eu-repo/semantics/<xsl:text>doc-type:</xsl:text><xsl:value-of select="." /></dc:type>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -264,25 +257,11 @@
     </xsl:template>
 
     <xsl:template match="Licence" mode="oai_dc">
-        <dc:rights>cc-by-sa, info:eu-repo/dai/nl/344568</dc:rights>
+        <!--<dc:rights>cc-by-sa, info:eu-repo/dai/nl/344568</dc:rights>-->
+        <dc:rights>
+            <xsl:value-of select="@NameLong" />
+        </dc:rights>
     </xsl:template>
-
-    <!--<xsl:value-of select="@NameLong" />-->
-                <xsl:template match="Enrichment[@KeyName='review.accepted_by']" mode="oai_dc">
-                    <dc:rights>
-                        <xsl:value-of select="@Value" />
-                    </dc:rights>
-                </xsl:template>
-                <xsl:template match="Enrichment[@KeyName='review.rejected_by']" mode="oai_dc">
-                    <dc:type>
-                        <xsl:value-of select="@Value" />
-                    </dc:type>
-                </xsl:template>
-                <xsl:template match="Enrichment[@KeyName='reviewer.user_id']" mode="oai_dc">
-                    <dc:type>
-                        <xsl:value-of select="@Value" />
-                    </dc:type>
-                </xsl:template>
 
     <xsl:template match="Enrichment[@KeyName='Relation']" mode="oai_dc">
         <dc:relation>
@@ -316,20 +295,6 @@
             <xsl:value-of select="@Value" />
         </dc:coverage>
     </xsl:template>
-
-    <xsl:param name="openAireDoctype">
-        <xsl:choose>
-            <xsl:when test="$oai_set='ec_fundedresources'">info:eu-repo/semantics/</xsl:when>
-        </xsl:choose>
-    </xsl:param>
-
-    <xsl:param name="publicationVersion">
-        <xsl:choose>
-            <xsl:when test="$oai_set='ec_fundedresources'">
-                info:eu-repo/semantics/publishedVersion
-            </xsl:when>
-        </xsl:choose>
-    </xsl:param>
 
 </xsl:stylesheet>
 
