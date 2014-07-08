@@ -130,7 +130,7 @@
             <xsl:apply-templates select="Enrichment" mode="oai_dc" />
             <xsl:apply-templates select="Rights" mode="oai_dc" />
             <!-- dc:type -->
-            <dc:type><xsl:value-of select="$publicationVersion" /></dc:type>
+            <!--<dc:type><xsl:value-of select="$publicationVersion" /></dc:type>-->
             <!-- dc:source -->
             <xsl:apply-templates select="TitleParent" mode="oai_dc" />
         </oai_dc:dc>
@@ -200,7 +200,7 @@
             <xsl:value-of select="@Value" />
         </dc:description>
     </xsl:template>
-
+<!--
     <xsl:template match="@Type" mode="oai_dc">
         <xsl:choose>
             <xsl:when test=".='habilitation'" >
@@ -225,7 +225,7 @@
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
-
+-->
     <xsl:template match="@ContributingCorporation" mode="oai_dc">
         <dc:contributor>
             <xsl:value-of select="." />
@@ -265,17 +265,29 @@
             <xsl:value-of select="." />
         </dc:language>
     </xsl:template>
-
+<!--
     <xsl:template match="Licence" mode="oai_dc">
         <dc:rights>
-            <!--<xsl:value-of select="@NameLong" />-->
-            <dc:text>cc-by-sa, info:eu-repo/dai/nl/344568</dc:text>
-        </dc:rights>
-        <dc:rights>
-            <!--<xsl:value-of select="@NameLong" />-->
-            <dc:text>http://creativecommons.org/licenses/by-sa/2.0/uk/</dc:text>
+            <xsl:value-of select="@NameLong" />
         </dc:rights>
     </xsl:template>
+-->
+                <xsl:template match="Enrichment[@KeyName='review.accepted_by']" mode="oai_dc">
+                    <dc:rights>
+                        <xsl:value-of select="@Value" />
+                    </dc:rights>
+                </xsl:template>
+                <xsl:template match="Enrichment[@KeyName='review.rejected_by']" mode="oai_dc">
+                    <dc:type>
+                        <xsl:value-of select="@Value" />
+                    </dc:type>
+                </xsl:template>
+                <xsl:template match="Enrichment[@KeyName='reviewer.user_id']" mode="oai_dc">
+                    <dc:type>
+                        <xsl:value-of select="@Value" />
+                    </dc:type>
+                </xsl:template>
+
 
     <xsl:template match="Enrichment[@KeyName='Relation']" mode="oai_dc">
         <dc:relation>
