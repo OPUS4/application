@@ -411,7 +411,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      * @param $message Übersetzungsschlüssel bzw. Nachricht
      * @param string $level 'notice' oder 'failure'
      */
-    public function verifyNotFlashMessage($message, $level = self::MESSAGE_LEVEL_FAILURE) {
+    public function verifyNotFlashMessageContains($message, $level = self::MESSAGE_LEVEL_FAILURE) {
         $flashMessenger = Zend_Controller_Action_HelperBroker::getStaticHelper('FlashMessenger');
         $flashMessages = $flashMessenger->getCurrentMessages();
 
