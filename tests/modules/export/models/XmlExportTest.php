@@ -55,9 +55,9 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
 
         $xpath = new DOMXPath($xml);
         $result = $xpath->query('//Opus_Document');
-        $count = $result->length;
 
-        $this->assertEquals('Deutscher Titel', $result->item(--$count)->childNodes->item(3)->attributes->item(2)->nodeValue);
+        // in OPUSVIER-3336 wurde die Sortierreihenfolge geändert, dh es wird nicht mehr aufsteigend nach id sortiert
+        $this->assertEquals('Deutscher Titel', $result->item(0)->childNodes->item(3)->attributes->item(2)->nodeValue);
     }
 
     public function testXmlPreparationForFrontdoor() {
@@ -111,6 +111,46 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
 
         $this->setExpectedException('Application_Exception');
         $xmlExportModel->prepareXmlForFrontdoor($xml, $proc, $this->getRequest());
+    }
+
+    public function testXmlSortOrder() {
+        $firstDoc = $this->createTestDocument();
+        $firstDoc->setPublishedYear(9999);
+        $firstDoc->setServerState('published');
+        $firstDocId = $firstDoc->store();
+
+        $secondDoc = $this->createTestDocument();
+        $secondDoc->setPublishedYear(9998);
+        $secondDoc->setServerState('published');
+        $secondDocId = $secondDoc->store();
+
+        $forthDoc = $this->createTestDocument();
+        $forthDoc->setPublishedYear(9996);
+        $forthDoc->setServerState('published');
+        $forthDocId = $forthDoc->store();
+
+        $thirdDoc = $this->createTestDocument();
+        $thirdDoc->setPublishedYear(9997);
+        $thirdDoc->setServerState('published');
+        $thirdDocId = $thirdDoc->store();
+
+        $xml = new DomDocument;
+        $proc = new XSLTProcessor;
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'searchtype' => 'all',
+            'sortfield' => 'year',
+            'sortorder' => 'desc'
+        ));
+        $xmlExportModel = new Export_Model_XmlExport();
+        $xmlExportModel->prepareXml($xml, $proc, $this->getRequest());
+
+        $xpath = new DOMXPath($xml);
+        $result = $xpath->query('//Opus_Document');
+
+        $this->assertEquals($firstDocId, $result->item(0)->attributes->item(0)->nodeValue);
+        $this->assertEquals($secondDocId, $result->item(1)->attributes->item(0)->nodeValue);
+        $this->assertEquals($thirdDocId, $result->item(2)->attributes->item(0)->nodeValue);
+        $this->assertEquals($forthDocId, $result->item(3)->attributes->item(0)->nodeValue);
     }
 }
  
