@@ -1046,16 +1046,14 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      */
     public function testFacetExtenderWithVariousConfigFacetLimits() {
         $this->useEnglish();
-        $oldConfig = Zend_Registry::get('Zend_Config');
-        $testConfig = $oldConfig;
-        $testConfig->merge(new Zend_Config(array('searchengine' =>
+        $config = Zend_Registry::get('Zend_Config');
+        $config->merge(new Zend_Config(array('searchengine' =>
             array('solr' =>
                 array('facetlimit' =>
                     array('author_facet' => 3,
                           'year'         => 15))))));
 
         $this->dispatch('/solrsearch/index/search/searchtype/all/');
-        Zend_Registry::set('Zend_Config', $oldConfig);
         $this->assertQueryContentContains(
             "//a[@href='/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_author_facet/all']", ' + more');
         $this->assertQueryContentContains(
