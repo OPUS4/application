@@ -1534,24 +1534,21 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
-     * Test verb=ListRecords, metadataPrefix=ec_fundedresources, set=ec_fundedresources.
+     * Mindestanforderungstest für OpenAire 3.0.
+     * Obwohl Doc 145 hier getestet wird, hat nur Doc 146 OpenAire-Compliance.
+     * Test verb=ListRecords, metadataPrefix=oai_dc, set=openaire.
      */
     public function testListRecordsForOpenAireCompliance() {
-        $this->markTestSkipped('Oai-Ausgabe von open-aire sets vorübergehend deaktiviert');
-        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=ec_fundedresources');
+    //    $this->markTestSkipped('Oai-Ausgabe von open-aire sets vorübergehend deaktiviert');
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=openaire');
         $this->assertResponseCode(200);
 
         $responseBody = $this->getResponse()->getBody();
         $badStrings = array("Exception", "Stacktrace", "badVerb");
         $this->checkForCustomBadStringsInHtml($responseBody, $badStrings);
 
-        $this->assertContains('<setSpec>EC_fundedresources</setSpec>', $responseBody);
+        $this->assertContains('<setSpec>openaire</setSpec>', $responseBody, 'OpenAire requires set-name to be "openaire"');
         $this->assertNotContains('<setSpec>doc-type:doctoralthesis</setSpec>', $responseBody);
-
-        $this->assertContains('<dc:relation>info:eu-repo/grantAgreement/EC/FP7/12345/EU//OpenAIRE</dc:relation>',
-                $responseBody, "<dc:relation> must contain 'info:eu-repo/grantAgreement/EC/FP7/12345/EU//OpenAIRE'");
-        $this->assertContains('<dc:relation>info:eu-repo/grantAgreement/EC/FP7/12345</dc:relation>', $responseBody,
-                "<dc:relation> must contain 'info:eu-repo/grantAgreement/EC/FP7/12345'");
 
         $xpath = $this->prepareXpathFromResultString($responseBody);
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:rights");
@@ -1563,8 +1560,44 @@ class Oai_IndexControllerTest extends ControllerTestCase {
             "Document 145: <dc:rights> must contain 'info:eu-repo/semantics/embargoedAccess'");
 
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:date");
-        $this->assertEquals('info:eu-repo/date/embargoEnd/2050-01-01', $queryResponse->item(0)->nodeValue,
-            "Document 145: <dc:date> must contain embargo date 'info:eu-repo/date/embargoEnd/2050-01-01'");
+        $this->assertEquals('2011', $queryResponse->item(0)->nodeValue);
+        $this->assertEquals('2050-01-01', $queryResponse->item(1)->nodeValue,
+            "If document is embargoed, <dc:date> should contain embargo date");
+
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:date");
+        $this->assertEquals(1, $queryResponse->length, '146 should not contain embargodate (it has passed)');
+        $this->assertEquals('2007-04-30', $queryResponse->item(0)->nodeValue);
+
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:creator");
+        $this->assertEquals('Doe, John', $queryResponse->item(0)->nodeValue, "<dc:creator> is mandatory field for OpenAire");
+
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:description");
+        $this->assertEquals('Die KOBV-Zentrale in Berlin-Dahlem.', $queryResponse->item(0)->nodeValue,
+            "<dc:description> is mandatory field for OpenAire");
+
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:relation");
+        $this->assertEquals('info:eu-repo/grantAgreement/EC/FP7/12345', $queryResponse->item(0)->nodeValue,
+            "<dc:relation> is mandatory field for OpenAire");
+
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:relation");
+        $this->assertEquals('info:eu-repo/grantAgreement/EC/FP7/12345/EU//OpenAIRE', $queryResponse->item(0)->nodeValue,
+            "<dc:relation> is mandatory field for OpenAire");
+
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:type");
+        $this->assertEquals('info:eu-repo/semantics/workingpaper', $queryResponse->item(0)->nodeValue,
+            "<dc:type> is mandatory field for OpenAire");
+
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:type");
+        $this->assertEquals('info:eu-repo/semantics/masterthesis', $queryResponse->item(0)->nodeValue,
+            "<dc:type> is mandatory field for OpenAire");
+
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:identifier");
+        $this->assertEquals('urn:nbn:op:123', $queryResponse->item(1)->nodeValue,
+            "<dc:identifier> is mandatory field for OpenAire");
+
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:title");
+        $this->assertEquals('KOBV', $queryResponse->item(0)->nodeValue,
+            "<dc:title> is mandatory field for OpenAire");
     }
 
     /**

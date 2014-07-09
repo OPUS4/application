@@ -84,10 +84,6 @@
             <!-- TODO: date-code has been copy-pasted from XMetaDissPlus.xslt!-->
             <dc:date>
                 <xsl:choose>
-                    <xsl:when test="EmbargoDate">
-                        <xsl:text>info:eu-repo/date/embargoEnd/</xsl:text>
-                        <xsl:value-of select="EmbargoDate/@Year"/>-<xsl:value-of select="format-number(EmbargoDate/@Month,'00')"/>-<xsl:value-of select="format-number(EmbargoDate/@Day,'00')"/>
-                    </xsl:when>
                     <xsl:when test="PublishedDate">
                         <xsl:value-of select="PublishedDate/@Year"/>-<xsl:value-of select="format-number(PublishedDate/@Month,'00')"/>-<xsl:value-of select="format-number(PublishedDate/@Day,'00')"/>
                     </xsl:when>
@@ -105,6 +101,8 @@
                     </xsl:otherwise>
                 </xsl:choose>
             </dc:date>
+            <!-- dc:date: embargo date -->
+            <xsl:apply-templates select="EmbargoDate" mode="oai_dc" />
             <!-- dc:type -->
             <xsl:apply-templates select="@Type" mode="oai_dc" />
             <!-- dc:format -->
@@ -284,14 +282,25 @@
         </dc:rights>
     </xsl:template>
 
-<!--    <xsl:template match="TitleParent" mode="oai_dc">
-        <dc:source>
-            <xsl:attribute name="xml:lang">
-                <xsl:value-of select="@Language" />
-            </xsl:attribute>
-            <xsl:value-of select="@Value" />
-        </dc:source>
-    </xsl:template>     -->
+    <xsl:template match="EmbargoDate" mode="oai_dc">
+        <xsl:choose>
+            <xsl:when test="following-sibling::Rights/@Value='info:eu-repo/semantics/embargoedAccess'">
+                <dc:date>
+                    <xsl:value-of select="./@Year"/>-<xsl:value-of select="format-number(./@Month,'00')"/>-<xsl:value-of select="format-number(./@Day,'00')"/>
+                </dc:date>
+            </xsl:when>
+        </xsl:choose>
+    </xsl:template>
+
+
+    <!--    <xsl:template match="TitleParent" mode="oai_dc">
+            <dc:source>
+                <xsl:attribute name="xml:lang">
+                    <xsl:value-of select="@Language" />
+                </xsl:attribute>
+                <xsl:value-of select="@Value" />
+            </dc:source>
+        </xsl:template>     -->
 
     <xsl:param name="OpenAirePrefix">
         <xsl:choose>
