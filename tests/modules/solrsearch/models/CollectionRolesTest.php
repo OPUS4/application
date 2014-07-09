@@ -37,7 +37,7 @@ class Solrsearch_Model_CollectionRolesTest extends ControllerTestCase {
     public function testGetAllVisible() {
         $collectionRoles = new Solrsearch_Model_CollectionRoles();
         $visibleRoles = $collectionRoles->getAllVisible();
-        $this->assertEquals(13, count($visibleRoles));
+        $this->assertEquals(14, count($visibleRoles));
     }
 
     public function testHasVisibleChildrenForEmptyCollectionRole() {
