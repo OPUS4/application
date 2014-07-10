@@ -139,7 +139,8 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $this->getRequest()->setMethod('POST')->setPost(array(
             'searchtype' => 'all',
             'sortfield' => 'year',
-            'sortorder' => 'desc'
+            'sortorder' => 'desc',
+            'rows' => '10' // die ersten 10 Dokumente reichen
         ));
         $xmlExportModel = new Export_Model_XmlExport();
         $xmlExportModel->prepareXml($xml, $proc, $this->getRequest());
@@ -152,5 +153,6 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $this->assertEquals($thirdDocId, $result->item(2)->attributes->item(0)->nodeValue);
         $this->assertEquals($forthDocId, $result->item(3)->attributes->item(0)->nodeValue);
     }
+
 }
  

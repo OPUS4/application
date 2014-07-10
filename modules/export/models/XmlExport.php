@@ -77,18 +77,19 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
         $proc->setParameter('', 'timestamp', str_replace('+00:00', 'Z', Zend_Date::now()->setTimeZone('UTC')->getIso()));
         $proc->setParameter('', 'docCount', count($results));
         $proc->setParameter('', 'queryhits', $numOfHits);
+
         $xml->appendChild($xml->createElement('Documents'));
 
         $resultIds = array();
+
         foreach ($results as $result) {
             $resultIds[] = $result->getId();
         }
-        if(!empty($resultIds)) {
-            $documents = $this->catchDocumentsFromCache($resultIds);
-            $idsOfUncachedDocs = array_diff($resultIds, array_keys($documents));
-            array_push($documents, $this->catchUncachedDocuments($idsOfUncachedDocs));
 
-            foreach($resultIds as $docId) {
+        if (!empty($resultIds)) {
+            $documents = $this->getDocumentsXml($resultIds);
+
+            foreach ($resultIds as $docId) {
                 $domNode = $xml->importNode($documents[$docId], true);
                 $xml->documentElement->appendChild($domNode);
             }
@@ -96,36 +97,57 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
     }
 
     /**
-     * Returns a list of documents which are not cached.
+     * Returns array with document XML nodes.
+     * @param $documentIds IDs of documents
+     * @return array Map of document IDs and DOM nodes
+     */
+    private function getDocumentsXml($documentIds) {
+        $documents = $this->getDocumentsFromCache($documentIds);
+
+        $idsOfUncachedDocs = array_diff($documentIds, array_keys($documents));
+
+        $uncachedDocs = $this->getDocumentsFromDatabase($idsOfUncachedDocs);
+
+        return $documents + $uncachedDocs;
+    }
+
+    /**
+     * Returns a list of documents from the database.
      * @param $resultIds ids of documents for export
      * @return array [docId] DocumentXml
      */
-    private function catchUncachedDocuments($uncachedIds) {
-        $uncachedDocuments = array();
-        foreach($uncachedIds as $docId) {
+    private function getDocumentsFromDatabase($documentIds) {
+        $documents = array();
+
+        foreach ($documentIds as $docId) {
             $document = new Opus_Document($docId);
             $documentXml = new Util_Document($document);
-            $uncachedDocuments[$docId] = $documentXml->getNode();
+            $documents[$docId] = $documentXml->getNode();
         }
-        return $uncachedDocuments;
+
+        return $documents;
     }
 
     /**
      * Returns a list of documents from cache.
      * @param $resultIds ids of documents for export
-     * @return array [docId] DocumentXml
+     * @return array Map of docId to  Document XML
      */
-    private function catchDocumentsFromCache($resultIds) {
-        $cachedDocuments = array();
+    private function getDocumentsFromCache($documentIds) {
+        $documents = array();
+
         $documentCacheTable = new Opus_Db_DocumentXmlCache();
-        $docXmlCache = $documentCacheTable->fetchAll($documentCacheTable->select()->where('document_id IN (?)', $resultIds));//->find($this->document->getId(), '1')->current()->xml_data;
+        $docXmlCache = $documentCacheTable->fetchAll($documentCacheTable->select()->where('document_id IN (?)',
+            $documentIds));//->find($this->document->getId(), '1')->current()->xml_data;
+
         foreach($docXmlCache as $row) {
             $fragment = new DomDocument();
             $fragment->loadXML($row->xml_data);
             $node = $fragment->getElementsByTagName('Opus_Document')->item(0);
-            $cachedDocuments[$node->attributes->item(0)->nodeValue] = $node;
+            $documents[$row->document_id] = $node;
         }
-        return $cachedDocuments;
+
+        return $documents;
     }
 
     /**
