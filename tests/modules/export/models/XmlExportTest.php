@@ -134,6 +134,11 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $thirdDoc->setServerState('published');
         $thirdDocId = $thirdDoc->store();
 
+        // Dokument aus dem Cache löschen
+        $documentCacheTable = new Opus_Db_DocumentXmlCache();
+        $documentCacheTable->delete('document_id = ' . $secondDocId);
+        $documentCacheTable->delete('document_id = ' . $firstDocId);
+
         $xml = new DomDocument;
         $proc = new XSLTProcessor;
         $this->getRequest()->setMethod('POST')->setPost(array(
@@ -147,6 +152,8 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
 
         $xpath = new DOMXPath($xml);
         $result = $xpath->query('//Opus_Document');
+
+        $this->assertEquals(10, $result->length);
 
         $this->assertEquals($firstDocId, $result->item(0)->attributes->item(0)->nodeValue);
         $this->assertEquals($secondDocId, $result->item(1)->attributes->item(0)->nodeValue);
