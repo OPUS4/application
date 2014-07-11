@@ -1134,30 +1134,4 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//td', '2112/02/01');
     }
 
-    /**
-     * If enrichment 'ExternalFiles' is set, there should be a link displayed on frontdoor, leading to the value of
-     * the enrichment (OPUSVIER-3305).
-     */
-    public function testLinkToExternalFiles() {
-        $this->useEnglish();
-        $doc = new Opus_Document();
-
-        $enrichment = new Opus_EnrichmentKey();
-        $enrichment->setName('ExternalHtml');
-        $enrichment->store();
-
-        $newEnrichment = new Opus_Enrichment();
-        $newEnrichment->setKeyName('ExternalHtml')->setValue('http://www.test.de');
-        $doc->addEnrichment($newEnrichment);
-        $doc->setServerState('published');
-        $docId = $doc->store();
-        $this->dispatch('frontdoor/index/index/docId/' . $docId);
-
-        //clean-up
-        $doc->deletePermanent();
-        $enrichment->delete();
-
-        $this->assertQueryContentContains('//a', 'http://www.test.de');
-    }
-
 }

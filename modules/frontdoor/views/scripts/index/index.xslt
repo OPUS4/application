@@ -124,8 +124,6 @@
              </xsl:choose>
          </xsl:if>
 
-          <xsl:apply-templates select="Enrichment[@KeyName='ExternalHtml']" />
-
           <div id="export" class="services">
             <h3>
                <xsl:call-template name="translateString">

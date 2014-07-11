@@ -362,22 +362,4 @@
       </a>
    </xsl:template>
 
-    <xsl:template match="Enrichment[@KeyName='ExternalHtml']">
-        <div id="external-html" class="services">
-            <h3>
-                <xsl:call-template name="translateString">
-                    <xsl:with-param name="string">frontdoor_external_html</xsl:with-param>
-                </xsl:call-template>
-            </h3>
-            <div>
-                <a>
-                    <xsl:attribute name="href">
-                        <xsl:value-of select="@Value" />
-                    </xsl:attribute>
-                    <xsl:value-of select="@Value" />
-                </a>
-            </div>
-        </div>
-    </xsl:template>
-
 </xsl:stylesheet>
