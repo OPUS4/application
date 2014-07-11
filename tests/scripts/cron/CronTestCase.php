@@ -40,12 +40,14 @@ class CronTestCase extends ControllerTestCase {
 
     protected static $scriptPath;
     protected static $lockDir;
+    protected static $logDir;
     private $jobIds = array();
 
     public static function setUpBeforeClass() {
         parent::setUpBeforeClass();
         self::$scriptPath = realpath(dirname(__FILE__) . '/../../../scripts/cron') . '/';
         self::$lockDir = realpath(self::$scriptPath . '/../../workspace/cache/');
+        self::$logDir = realpath(self::$scriptPath . '/../../workspace/log/');
     }
 
     public function tearDown() {
@@ -63,7 +65,8 @@ class CronTestCase extends ControllerTestCase {
     }
 
     protected function executeScript($fileName) {
-        $command = self::$scriptPath . 'cron-php-runner.sh ' . self::$scriptPath . $fileName . ' ' . self::$lockDir;
+        $command = self::$scriptPath . 'cron-php-runner.sh ' . self::$scriptPath . $fileName . ' ' . self::$lockDir
+            . ' ' . self::$logDir;
         $savedApplicationEnv = getenv('APPLICATION_ENV');
         putenv('APPLICATION_ENV=' . APPLICATION_ENV);
         $result = shell_exec($command);
