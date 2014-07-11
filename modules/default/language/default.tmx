@@ -672,13 +672,22 @@
       </tuv>
     </tu>
 
-        <tu tuid="page-help-link-title">
-            <tuv xml:lang="en">
-                <seg>Help</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Hilfe</seg>
-            </tuv>
-        </tu>
+    <tu tuid="page-help-link-title">
+        <tuv xml:lang="en">
+            <seg>Help</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Hilfe</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="mail_toauthor_subject">
+        <tuv xml:lang="en">
+            <seg>Message from Opus-repository according your publication</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Nachricht vom Opus-Repository bezueglich Ihrer Veroeffentlichung</seg>
+        </tuv>
+    </tu>
     </body>
 </tmx>
