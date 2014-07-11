@@ -683,7 +683,7 @@
 
     <tu tuid="mail_toauthor_subject">
         <tuv xml:lang="en">
-            <seg>Message from Opus-repository according your publication</seg>
+            <seg>Message from Opus-repository regarding your publication</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Nachricht vom Opus-Repository bezueglich Ihrer Veroeffentlichung</seg>
