@@ -80,7 +80,7 @@ class Opus3Migration_Documents extends Opus3Migration_Base {
         if (array_key_exists('l', $options) !== false) { $this->lockFile  = $options["l"]; }
     }
 
-   // Import Documents
+    // Import Documents
     private function load_documents() {
         $xmlImporter = new Opus3XMLImport($this->xslt, $this->stylesheet);
         $toImport = $xmlImporter->initImportFile($this->importData);
@@ -115,7 +115,7 @@ class Opus3Migration_Documents extends Opus3Migration_Base {
             $this->status = self::_FINISHED;
         }
 
-   }
+    }
 
     private function load_fulltext() {
         foreach ($this->doclist as $id) {

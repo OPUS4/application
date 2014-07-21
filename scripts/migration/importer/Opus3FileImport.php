@@ -214,10 +214,10 @@ class Opus3FileImport {
 
     private function saveFile($f) {
         if (!$this->isValidFile($f)) { return false; }
-	$subdir = $this->getSubdir($f);
-	$label = null;
+    	$subdir = $this->getSubdir($f);
+	    $label = null;
 	
-	$visibleInOai = $this->getVisibilityInOai($subdir);
+	    $visibleInOai = $this->getVisibilityInOai($subdir);
         $visibleInFrontdoor = $this->getVisibilityInFrontdoor($subdir);
         $pathName = $this->getPathName($subdir, basename($f));
         
@@ -305,13 +305,13 @@ class Opus3FileImport {
     */
 
     private function getVisibilityInOai($subdir)  {
-	if (strpos($subdir , "original") === 0) {
+        if (strpos($subdir, "original") === 0) {
             return false;
-	}    
+        }
         if (!is_null($this->roleId)) {
             $role = new Opus_UserRole($this->roleId);
             if ($role->getName() == 'guest') {
-		return true;
+                return true;
             }
         }
         return false;
@@ -325,9 +325,9 @@ class Opus3FileImport {
     */
 
     private function getVisibilityInFrontdoor($subdir)  {
-	if (strpos($subdir , "original") === 0) {
+        if (strpos($subdir , "original") === 0) {
             return false;
-	}    
+        }
         return true;
     }
 
