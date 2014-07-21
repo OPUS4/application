@@ -186,6 +186,7 @@ class CitationExport_IndexController extends Controller_Action {
         $xslt->load($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $template);
 
         // find Enrichment that should be included in bibtex-output as note
+        // TODO document this feature
         $enrichmentNote = null;
         $config = Zend_Registry::get('Zend_Config');
         if(isset($config->citationExport->bibtex->enrichment)
