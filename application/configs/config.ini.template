@@ -136,7 +136,7 @@ urn.nss = de:kobv:test-opus
 
 ; SECURITY SETTINGS
 ; Change default role for newly uploaded files (default is "guest").
-; security.files.defaultAccessRole = 'guest'
+; securityPolicy.files.defaultAccessRole = 'guest'
 
 ;REFEREES
 ; reviewer.collections.ddc.66[] = 'admin'
