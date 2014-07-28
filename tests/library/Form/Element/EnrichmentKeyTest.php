@@ -68,4 +68,36 @@ class Form_Element_EnrichmentKeyTest extends FormElementTestCase {
         $this->assertTrue($translator->isTranslated('validation_error_unknown_enrichmentkey'));
     }
 
+    public function testKeysTranslated() {
+        $this->useEnglish();
+
+        $element = $this->getElement();
+
+        $options = $element->getMultiOptions();
+
+        $this->assertContains('Country', array_keys($options));
+        $this->assertEquals('Country of event', $options['Country']);
+    }
+
+    /**
+     * Wenn es keine Übersetzung für den Schlüssel gibt, soll kein Prefix hinzugefügt werden.
+     */
+    public function testKeysWithoutTranlationNotPrefixed() {
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('TestEnrichmentKey');
+        $enrichmentKey->store();
+
+        $this->useEnglish();
+
+        $element = $this->getElement();
+
+        $options = $element->getMultiOptions();
+
+        $enrichmentKey->delete(); // cleanup
+
+        $this->assertContains('TestEnrichmentKey', array_keys($options));
+        $this->assertNotEquals('EnrichmentTestEnrichmentKey', $options['TestEnrichmentKey']);
+        $this->assertEquals('TestEnrichmentKey', $options['TestEnrichmentKey']);
+    }
+
 }
