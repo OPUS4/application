@@ -291,15 +291,13 @@ class Publish_Model_Validation {
             return null;
         }
 
-        if ($collectionRole->getVisible() == '1' &&
-                    $this->hasVisibleChildren($collectionRole) && $this->hasVisibleChildren($collectionRole)) {
+        if ($collectionRole->getVisible() == '1' && $collectionRole->getRootCollection()->getVisiblePublish() == '1'
+                    && $this->hasVisiblePublishChildren($collectionRole)) {
             $children = array();
             $collectionId = $collectionRole->getRootCollection()->getId();
             $collection = new Opus_Collection($collectionId);
 
-            $collsVisiblePublish = $collection->getVisiblePublishChildren();
-            $collsVisible = $collection->getVisibleChildren();
-            $colls = array_intersect($collsVisible, $collsVisiblePublish);
+            $colls = $collection->getVisiblePublishChildren();
 
             foreach ($colls as $coll) {
                 $children[$coll->getId()] = $coll->getDisplayNameForBrowsingContext($collectionRole);
@@ -431,14 +429,14 @@ class Publish_Model_Validation {
     /**
      *
      * code taken from Solrsearch_Model_CollectionRoles()
-     * 
+     *
      */
-    private function hasVisibleChildren($collectionRole) {
+    private function hasVisiblePublishChildren($collectionRole) {
         $rootCollection = $collectionRole->getRootCollection();
         if (is_null($rootCollection)) {
             return false;
-	}
-        return $rootCollection->hasVisibleChildren();
+	    }
+        return $rootCollection->hasVisiblePublishChildren();
     }
 }
 

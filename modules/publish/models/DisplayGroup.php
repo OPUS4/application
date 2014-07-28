@@ -226,7 +226,7 @@ class Publish_Model_DisplayGroup {
             return null;
         }
 
-        if ($collection->hasVisiblePublishChildren() && $collection->hasVisibleChildren()) {
+        if ($collection->hasVisiblePublishChildren()) {
             $downButton = $this->addDownButtontoGroup();
             $this->form->addElement($downButton);
             $displayGroup[] = $downButton->getName();

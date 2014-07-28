@@ -381,5 +381,59 @@ class Publish_Model_ValidationTest extends ControllerTestCase{
         $this->assertEquals('visible collection', $children[$visibleId]);
     }
 
+    /**
+     * Wenn eine übergeordnete Collection (z.B. die Root-Collection) für das Attribut visiblePublish = false gesetzt ist,
+     * sollen die Kinder auch unsichtbar sein im Publish-Modul.
+     */
+    public function testRootCollectionFieldVisiblePublish() {
+        $collectionRole = new Opus_CollectionRole();
+        $collectionRole->setName("test");
+        $collectionRole->setOaiName("test");
+        $collectionRole->setDisplayBrowsing("Name");
+        $collectionRole->setDisplayFrontdoor("Name");
+        $collectionRole->setDisplayOai("Name");
+        $collectionRole->setPosition(101);
+        $collectionRole->setVisible(true);
+        $collectionRole->store();
+
+        $rootCollection = $collectionRole->addRootCollection();
+        $rootCollection->setName("rootInvisible");
+        $rootCollection->setVisible(true);
+        $rootCollection->setVisiblePublish(false);
+        $rootCollection->store();
+
+        $visibleCollection = new Opus_Collection();
+        $visibleCollection->setName("visible collection");
+        $visibleCollection->setNumber("123");
+        $visibleCollection->setVisible(true);
+        $visibleCollection->setVisiblePublish(true);
+        $rootCollection->addFirstChild($visibleCollection);
+        $visibleCollection->store();
+
+        $invisibleCollection = new Opus_Collection();
+        $invisibleCollection->setName("collection to invisible root collection");
+        $invisibleCollection->setNumber("123");
+        $invisibleCollection->setVisible(true);
+        $invisibleCollection->setVisiblePublish(false);
+        $rootCollection->addFirstChild($invisibleCollection);
+        $invisibleCollection->store();
+
+        $childCollection = new Opus_Collection();
+        $childCollection->setName("collection child");
+        $childCollection->setNumber("123");
+        $childCollection->setVisible(true);
+        $childCollection->setVisiblePublish(true);
+        $invisibleCollection->addFirstChild($childCollection);
+        $childCollection->store();
+
+        $val = new Publish_Model_Validation('Collection', $this->session, 'test');
+        $children = $val->selectOptions('Collection');
+
+        // clean-up
+        $collectionRole->delete();
+
+        $this->assertEquals(0, count($children), "root collection should be invisible in publish");
+    }
+
 }
 
