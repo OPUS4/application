@@ -142,7 +142,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/admin/document/index/id/' . $doc->getId());
-        
+
         $this->assertContains('<pre class="abstractTextContainer preserve-spaces">' . "foo\nbar\n\nbaz" . '</pre>', $this->getResponse()->getBody());        
     }
 
@@ -160,7 +160,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/admin/document/index/id/' . $doc->getId());
-        
+
         $this->assertContains('<pre class="preserve-spaces noteTextContainer">' . "foo\nbar\n\nbaz" . '</pre>', $this->getResponse()->getBody());        
     }
 
@@ -357,7 +357,6 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
       // document/overviewTests
     public function testIndexActionGerman() {
         $this->useGerman();
-        $this->loginUser('admin', 'adminadmin');
 
         $this->dispatch('/admin/document/index/id/146');
 
@@ -461,25 +460,25 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment0-KeyName"]', 'validtestkey');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment0-Value"]', 'Köln');
         
-        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment1-KeyName"]', 'SourceSwb');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment1-KeyName"]', 'Zur Bestellung der Druckausgabe');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment1-Value"]', 'http://www.test.de');
         
-        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment2-KeyName"]', 'SourceTitle');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment2-KeyName"]', 'Quelle');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment2-Value"]', 'Dieses Dokument ist auch erschienen als ...');
         
-        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment3-KeyName"]', 'ClassRvk');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment3-KeyName"]', 'RVK - Regensburger Verbundklassifikation');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment3-Value"]', 'LI 99660');
         
-        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment4-KeyName"]', 'ContributorsName');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment4-KeyName"]', 'Sonstige beteiligte Person');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment4-Value"]', 'John Doe (Foreword) and Jane Doe (Illustration)');
         
-        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment5-KeyName"]', 'Event');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment5-KeyName"]', 'Name der Veranstaltung');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment5-Value"]', 'Opus4 OAI-Event');
         
-        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment6-KeyName"]', 'City');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment6-KeyName"]', 'Stadt der Veranstaltung');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment6-Value"]', 'Opus4 OAI-City');
         
-        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment7-KeyName"]', 'Country');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment7-KeyName"]', 'Land der Veranstaltung');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment7-Value"]', 'Opus4 OAI-Country');
         
         // Collections
@@ -593,8 +592,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
     
     public function testIndexActionEnglish() {
         $this->useEnglish();
-        $this->loginUser('admin', 'adminadmin');
-        
+
         $this->dispatch('/admin/document/index/id/146');
         
         // Information in Actionbox
@@ -699,25 +697,25 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment0-KeyName"]', 'validtestkey');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment0-Value"]', 'Köln');
         
-        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment1-KeyName"]', 'SourceSwb');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment1-KeyName"]', 'To order the print edition');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment1-Value"]', 'http://www.test.de');
         
-        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment2-KeyName"]', 'SourceTitle');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment2-KeyName"]', 'Source');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment2-Value"]', 'Dieses Dokument ist auch erschienen als ...');
         
-        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment3-KeyName"]', 'ClassRvk');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment3-KeyName"]', 'RVK - Regensburg Classification');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment3-Value"]', 'LI 99660');
         
-        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment4-KeyName"]', 'ContributorsName');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment4-KeyName"]', 'Contributor');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment4-Value"]', 'John Doe (Foreword) and Jane Doe (Illustration)');
         
-        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment5-KeyName"]', 'Event');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment5-KeyName"]', 'Name of Event');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment5-Value"]', 'Opus4 OAI-Event');
         
-        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment6-KeyName"]', 'City');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment6-KeyName"]', 'City of event');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment6-Value"]', 'Opus4 OAI-City');
         
-        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment7-KeyName"]', 'Country');
+        $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment7-KeyName"]', 'Country of event');
         $this->assertQueryContentContains('//*[@id="Document-Enrichments-Enrichment7-Value"]', 'Opus4 OAI-Country');
         
         // Collections
