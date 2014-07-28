@@ -134,6 +134,10 @@ urn.nss = de:kobv:test-opus
 ; Checkbox for the institutions legal notices is by default shown. Comment out to hide checkbox.
 ;form.first.show_rights_checkbox = 0
 
+; SECURITY SETTINGS
+; Change default role for newly uploaded files (default is "guest").
+; security.files.defaultAccessRole = 'guest'
+
 ;REFEREES
 ; reviewer.collections.ddc.66[] = 'admin'
 ; reviewer.collections.ddc.66[] = 'administrine'
