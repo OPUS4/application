@@ -43,10 +43,22 @@ class Form_Element_EnrichmentKey extends Form_Element_Select {
         $options = Opus_EnrichmentKey::getAll();
 
         $values = array();
+
+        $translator = $this->getTranslator();
         
         foreach ($options as $index => $option) {
-            $values[] = $option->getName();
-            $this->addMultiOption($option->getName(), $option->getName());
+            $keyName = $option->getName();
+
+            $values[] = $keyName;
+
+            $translationKey = 'Enrichment' . $keyName;
+
+            if (!is_null($translator) && ($translator->isTranslated($translationKey))) {
+                $this->addMultiOption($keyName, $translationKey);
+            }
+            else {
+                $this->addMultiOption($keyName, $keyName);
+            }
         }
 
         $validator = new Zend_Validate_InArray($values);
