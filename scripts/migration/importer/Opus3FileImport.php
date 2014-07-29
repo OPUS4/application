@@ -222,14 +222,12 @@ class Opus3FileImport {
         $visibleInFrontdoor = $this->getVisibilityInFrontdoor($subdir);
         $pathName = $this->getPathName($subdir, basename($f));
 
-        $this->isHtmlFile[$pathName] = (strpos($subdir, "html") === 0) ? 0 : 1;
-
         if ($pathName != iconv("UTF-8", "UTF-8//IGNORE", $pathName)) {
             $this->logger->log("Filename '" . $pathName . "' of OPUS3-Id '" . $this->opus3Id
                 . "' is corrupt. Changed to '" . utf8_encode($pathName) . "'.", Zend_Log::ERR);
             $pathName = utf8_encode($pathName);
         }
-
+        $this->isHtmlFile[$pathName] = (strpos($subdir, "html") === 0) ? 0 : 1;
         $this->logger->log("Import '" . $pathName . "'", Zend_Log::DEBUG);
         if ($visibleInFrontdoor) {
             $this->logger->log("File '" . $pathName . "' visible", Zend_Log::DEBUG);
