@@ -81,9 +81,11 @@
                       </img>
                   </xsl:when>
                   <xsl:otherwise>
+                      <span class="file-language">
                       <xsl:text>(</xsl:text>
                       <xsl:value-of select="@Language"/>
                       <xsl:text>)</xsl:text>
+                      </span>
                   </xsl:otherwise>
               </xsl:choose>
           </xsl:variable>

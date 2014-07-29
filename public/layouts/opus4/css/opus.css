@@ -116,6 +116,12 @@
 #download-fulltext li a img{
 	margin-right: 0.5em;
 }
+
+#download-fulltext span.file-language {
+    font-style: italic;
+    color: gray;
+}
+
 #export li{
 	display: inline;
         float: left;

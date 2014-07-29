@@ -1051,11 +1051,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('<img width="16" height="11" src="/img/lang/fra.png" alt="fra"/>', $body);
         $this->assertNotContains('<img width="16" height="11" src="/img/lang/rus.png" alt="rus"/>', $body);
 
-        $this->assertQueryContentContains('//div', '(spa)');
-        $this->assertQueryContentContains('//div', '(eng)');
-        $this->assertQueryContentContains('//div', '(deu)');
-        $this->assertQueryContentContains('//div', '(rus)');
-        $this->assertQueryContentContains('//div', '(fra)');
+        $this->assertQueryContentContains('//span.file-language', '(spa)');
+        $this->assertQueryContentContains('//span.file-language', '(eng)');
+        $this->assertQueryContentContains('//span.file-language', '(deu)');
+        $this->assertQueryContentContains('//span.file-language', '(rus)');
+        $this->assertQueryContentContains('//span.file-language', '(fra)');
     }
 
     /**
