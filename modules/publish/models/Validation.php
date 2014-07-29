@@ -287,7 +287,7 @@ class Publish_Model_Validation {
 
     private function _collectionSelect(){
         $collectionRole = Opus_CollectionRole::fetchByName($this->collectionRole);
-        if (is_null($collectionRole)) {
+        if (is_null($collectionRole) || is_null($collectionRole->getRootCollection())) {
             return null;
         }
 
