@@ -211,7 +211,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             $logger->debug("Current locale = '$language'");
             // check if locale is supported; if not, use default language
             if (!$configHelper->isLanguageSupported($language)) {
-                $language = Application_Configuration::DEFAULT_LANGUAGE;
+                $language = $configHelper->getDefaultLanguage();
             }
         }
         

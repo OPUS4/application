@@ -123,7 +123,10 @@ class Home_IndexController extends Controller_Action {
             }
         }
 
-        if (!is_null($language) && Zend_Registry::get('Zend_Translate')->isAvailable($language)) {
+        $appConfig = new Application_Configuration();
+
+        if ($appConfig->isLanguageSelectionEnabled() && !is_null($language)
+                && Zend_Registry::get('Zend_Translate')->isAvailable($language)) {
             $sessiondata = new Zend_Session_Namespace();
             $sessiondata->language = $language;
         }

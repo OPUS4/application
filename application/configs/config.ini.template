@@ -63,6 +63,10 @@ searchengine.extract.app = @searchengine.extract.app@
 ; Number of default search results
 ; searchengine.solr.numberOfDefaultSearchResults = 10
 
+; SUPPORTED LANGUAGES
+; Change the setting to 'de' or 'en' in order to disable language selection.
+; supportedLanguages = de
+
 ;MAIL SETTINGS
 ; mail.opus.smtp = localhost; SMTP server for sending email
 ; mail.opus.port = 25 ; SMTP server port for sending email

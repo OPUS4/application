@@ -96,4 +96,25 @@ class Application_ConfigurationTest extends ControllerTestCase {
         $this->assertArrayHasKey('admin_info_version', $data);
         $this->assertEquals($config->version, $data['admin_info_version']);
     }
+
+    public function testIsLanguageSelectionEnabledTrue() {
+        $this->assertEquals(array('de', 'en'), $this->config->getSupportedLanguages());
+        $this->assertTrue($this->config->isLanguageSelectionEnabled());
+    }
+
+    public function testIsLanguageSelectionEnabledFalse() {
+        Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
+        $this->assertEquals(array('de'), $this->config->getSupportedLanguages());
+        $this->assertFalse($this->config->isLanguageSelectionEnabled());
+    }
+
+    public function testGetDefaultLanguage() {
+        $this->assertEquals('en', $this->config->getDefaultLanguage());
+    }
+
+    public function testGetDefaultLanguageIfOnlyOneIsSupported() {
+        Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
+        $this->assertEquals('de', $this->config->getDefaultLanguage());
+    }
+
 }

@@ -221,4 +221,16 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/home');
         $this->assertNotQueryContentContains("//div[@id='login-bar']", 'Account');
     }
+
+    public function testShowLanguageSelector() {
+        $this->dispatch("/home");
+        $this->assertQuery('//ul#lang-switch');
+    }
+
+    public function testHideLanguageSelector() {
+        Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
+        $this->dispatch("/home");
+        $this->assertNotQuery('//ul#lang-switch');
+    }
+
 }

@@ -85,7 +85,14 @@ if ($this->jQueryEnabled()) {
     }
 }
 
-$languageSelectors = $this->languageSelector();
+$appConfig = new Application_Configuration();
+
+if ($appConfig->isLanguageSelectionEnabled()) {
+    $languageSelectors = $this->languageSelector();
+}
+else {
+    $languageSelectors = null;
+}
 ?>
 
 <?= $this->doctype() ?>

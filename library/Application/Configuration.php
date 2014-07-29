@@ -56,6 +56,11 @@ class Application_Configuration {
     private $supportedLanguages = null;
 
     /**
+     * Is language selection active in user interface.
+     */
+    private $languageSelectionEnabled = null;
+
+    /**
      * Liefert den Logger für diese Klasse.
      * @return Zend_Log
      */
@@ -109,6 +114,30 @@ class Application_Configuration {
         return in_array($language, $languages);
     }
 
+    /**
+     * Liefert Defaultsprache für Userinterface.
+     * @return string
+     */
+    public function getDefaultLanguage() {
+        if ($this->isLanguageSelectionEnabled()) {
+            return self::DEFAULT_LANGUAGE;
+        }
+        else {
+            $languages = $this->getSupportedLanguages();
+            return $languages[0];
+        }
+    }
+
+    /**
+     * Prüft, ob mehr als eine Sprache unterstützt wird.
+     * @return bool
+     */
+    public function isLanguageSelectionEnabled() {
+        if (is_null($this->languageSelectionEnabled)) {
+            $this->languageSelectionEnabled = count($this->getSupportedLanguages()) > 1;
+        }
+        return $this->languageSelectionEnabled;
+    }
 
     /**
      * Liest Inhalt von VERSION.txt um die installierte Opusversion zu ermitteln.
