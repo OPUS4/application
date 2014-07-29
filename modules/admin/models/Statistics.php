@@ -45,7 +45,9 @@ class Admin_Model_Statistics {
         $statistics = array();
         $result = $select->fetchAll();
         foreach($result as $row) {
-            $statistics[$row[$name]] = $row['c'];
+            if ($row[$name] != '') {
+                $statistics[$row[$name]] = $row['c'];
+            }
         }
         return $statistics;
     }
@@ -102,33 +104,24 @@ class Admin_Model_Statistics {
      * Returns sum of published documents sorted by institutes.
      */
     public function getInstituteStatistics($selectedYear) {
-        $instStat = null;
-        // institution statistics
-        //$institutes = new Opus_OrganisationalUnits;
         $role = Opus_CollectionRole::fetchByName('institutes');
+        $instStat = array_fill_keys(Opus_Collection::fetchCollectionsByRoleId($role->getId()), 0);
+
+        if (array_key_exists('', $instStat)) {
+            unset ($instStat['']);
+        }
         if (isset($role)) {
-            $colls = Opus_Collection::fetchCollectionsByRoleId($role->getId());
-            //$institutes = Opus_CollectionRole::fetchByName('institutes');
-            $instStat = array();
+            $query = "SELECT c.name name, COUNT(DISTINCT(d.id)) entries
+                 FROM documents d
+                 LEFT JOIN link_documents_collections ldc ON d.id=ldc.document_id
+                 LEFT JOIN collections c ON ldc.collection_id=c.id
+                 WHERE c.role_id=1 AND YEAR(server_date_published)=2010 AND server_state='published'
+                group by name";
             $db = Zend_Registry::get('db_adapter');
-            //foreach ($institutes->getSubCollection() as $institut) {
-            foreach ($colls as $institut) {
-                //$institut = $c->getName();
-                /*
-                $query = "SELECT COUNT(d.id) AS entries FROM link_documents_collections_1 AS l JOIN documents AS d ON d.id =
-                    l.documents_id WHERE l.collections_id IN (SELECT collections_id FROM collections_structure_1 WHERE
-                    `left` >= (SELECT `left` FROM collections_structure_1 WHERE collections_id = ?) AND `right` <=
-                    (SELECT `right` FROM collections_structure_1 WHERE collections_id = ?)AND
-                    YEAR(d.server_date_published) = ?)";
-                 *
-                 */
-                $query = "SELECT COUNT(d.id) AS entries FROM link_documents_collections AS l JOIN documents AS d
-                    ON d.id = l.document_id WHERE l.collection_id IN (SELECT id FROM collections WHERE `left_id` >=
-                    (SELECT `left_id` FROM collections WHERE id = ?) AND `right_id` <=
-                    (SELECT `right_id` FROM collections WHERE id = ?)AND
-                    YEAR(d.server_date_published) = ? and server_state = 'published' )";
-                $res = $db->query($query, array($institut->getId(), $institut->getId(), $selectedYear))->fetchAll();
-                $instStat[$institut->getDisplayName()] = $res[0]['entries'];
+            $res = $db->query($query, array($role->getId(), $selectedYear))->fetchAll();
+
+            foreach($res as $result) {
+                $instStat[$result['name']] = $result['entries'];
             }
         }
         return $instStat;

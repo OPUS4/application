@@ -37,10 +37,10 @@ class Admin_Model_StatisticsTest extends ControllerTestCase {
     public function testInstituteStatistics() {
         $statistics = new Admin_Model_Statistics();
         $institutes = $statistics->getInstituteStatistics(2010);
-        $this->assertEquals(94, $institutes['Technische Universität Hamburg-Harburg'],
+        $this->assertEquals(29, $institutes['Technische Universität Hamburg-Harburg'],
             'wrong publication count of Technische Universität Hamburg-Harburg returned' );
-        $this->assertEquals(3, $institutes['Bauwesen'], 'wrong publicatin count of "Bauwesen" returned');
-        $this->assertEquals(47, $institutes['Maschinenbau'], 'wrong publication count of "Maschinenbau" returned');
+        $this->assertEquals(1, $institutes['Bauwesen'], 'wrong publicatin count of "Bauwesen" returned');
+        $this->assertEquals(1, $institutes['Maschinenbau'], 'wrong publication count of "Maschinenbau" returned');
         $this->assertEquals(0, $institutes['Massivbau B-7'], 'wrong publication count of "Massivbau B-7" returned');
     }
 
