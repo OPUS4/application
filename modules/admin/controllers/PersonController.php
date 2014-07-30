@@ -145,7 +145,12 @@ class Admin_PersonController extends Controller_Action {
         $this->view->languageSelectorDisabled = true;
         $this->view->breadcrumbsDisabled = true;
     }
-            
+
+    /**
+     * Action zum Editieren einer Person, die mit einem Dokument verknüpft ist.
+     *
+     * Wird über den Edit-Link für eine Person im Metadatenformular eines Dokuments aufgerufen.
+     */
     public function editlinkedAction() {
         $docId = $this->getRequest()->getParam('document');
 
@@ -180,8 +185,6 @@ class Admin_PersonController extends Controller_Action {
                 return $this->returnToMetadataForm($docId);
             }
 
-
-            
             $form->populateFromModel($person);
 
             $this->view->form = $form;
@@ -226,8 +229,12 @@ class Admin_PersonController extends Controller_Action {
         $this->view->languageSelectorDisabled = true;
         $this->view->breadcrumbsDisabled = true;
     }
-    
-    public function returnToMetadataForm($docId, $action = null) {
+
+    /**
+     * Führt Redirect zum Metadatenformular des Dokuments aus.
+     * @param $docId Dokument-ID
+     */
+    public function returnToMetadataForm($docId) {
         return $this->_redirectToAndExit('edit', null, 'document', 'admin', array('id' => $docId,
             'continue' => 'true'));
     }
