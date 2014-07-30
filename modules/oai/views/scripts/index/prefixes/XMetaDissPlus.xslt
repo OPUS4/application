@@ -143,8 +143,14 @@
                    <xsl:when test="@Type='coursematerial'">
                        <xsl:text>CourseMaterial</xsl:text>
                    </xsl:when>
+                   <xsl:when test="@Type='diplom'">
+                       <xsl:text>masterThesis</xsl:text>
+                   </xsl:when>
                    <xsl:when test="@Type='doctoralthesis'">
                        <xsl:text>doctoralThesis</xsl:text>
+                   </xsl:when>
+                   <xsl:when test="@Type='examen'">
+                       <xsl:text>masterThesis</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='habilitation'">
                        <xsl:text>doctoralThesis</xsl:text>
@@ -154,6 +160,9 @@
                    </xsl:when>
                    <xsl:when test="@Type='lecture'">
                        <xsl:text>lecture</xsl:text>
+                   </xsl:when>
+                   <xsl:when test="@Type='magister'">
+                       <xsl:text>masterThesis</xsl:text>
                    </xsl:when>
                    <xsl:when test="@Type='masterthesis'">
                        <xsl:text>masterThesis</xsl:text>
@@ -227,7 +236,8 @@
             <xsl:apply-templates select="Licence" mode="xmetadissplus" />
 
             <!--  thesis.degree only, if type doctoral or habilitation -->
-            <xsl:if test="@Type='bachelorthesis' or @Type='doctoralthesis' or @Type='habilitation' or @Type='masterthesis'">
+            <xsl:if test="@Type='bachelorthesis' or @Type='doctoralthesis' or @Type='habilitation' or @Type='masterthesis'
+                    or @Type='diplom' or @Type='examen' or @Type='magister'">
                 <thesis:degree>
                    <thesis:level>
                      <xsl:choose>
@@ -242,6 +252,15 @@
                        </xsl:when>
                        <xsl:when test="@Type='masterthesis'">
                            <xsl:text>master</xsl:text>
+                       </xsl:when>
+                       <xsl:when test="@Type='diplom'">
+                           <xsl:text>diplom</xsl:text>
+                       </xsl:when>
+                       <xsl:when test="@Type='magister'">
+                           <xsl:text>magister</xsl:text>
+                       </xsl:when>
+                       <xsl:when test="@Type='examen'">
+                           <xsl:text>examen</xsl:text>
                        </xsl:when>
                        <xsl:otherwise>
                            <xsl:text>other</xsl:text> 

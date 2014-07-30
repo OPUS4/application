@@ -79,12 +79,30 @@
         </tuv>
    </tu>
 
+   <tu tuid="diplom">
+        <tuv xml:lang="en">
+            <seg>Diploma Thesis</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Diplomarbeit</seg>
+        </tuv>
+   </tu>
+
    <tu tuid="doctoralthesis">
         <tuv xml:lang="en">
             <seg>Doctoral Thesis</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Dissertation</seg>
+        </tuv>
+   </tu>
+
+   <tu tuid="examen">
+        <tuv xml:lang="en">
+            <seg>Examination Thesis</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Examensarbeit</seg>
         </tuv>
    </tu>
 
@@ -112,6 +130,15 @@
         </tuv>
         <tuv xml:lang="de">
             <seg>Vorlesung</seg>
+        </tuv>
+   </tu>
+
+   <tu tuid="magister">
+        <tuv xml:lang="en">
+            <seg>Magister's Thesis</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Magisterarbeit</seg>
         </tuv>
    </tu>
 

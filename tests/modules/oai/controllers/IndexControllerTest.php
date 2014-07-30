@@ -555,6 +555,27 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Testet, ob die neuangelegten Dokumenttypen als thesislevel ausgegeben werden.
+     * Opusvier-3341
+     */
+    public function testThesisLevelForXMetaDissPlus() {
+        $thesisLevel = array('diplom', 'examen', 'magister');
+        foreach ($thesisLevel as $level) {
+            $doc = $this->createTestDocument();
+            $doc->setType($level);
+            $doc->setServerState('published');
+            $docId = $doc->store();
+
+            $this->dispatch('/oai?verb=GetRecord&metadataPrefix=XMetaDissPlus&identifier=oai:opus4.demo:' . $docId);
+            $xpath = $this->prepareXpathFromResultString($this->getResponse()->getBody());
+            $elements = $xpath->query('//thesis:degree/thesis:level');
+            $this->assertEquals($elements->item(0)->nodeValue, $level);
+            $elements = $xpath->query('//dc:type[@xsi:type="dini:PublType"]');
+            $this->assertEquals($elements->item(0)->nodeValue, 'masterThesis');
+        }
+    }
+
+    /**
      * Regression test for OPUSVIER-2379
      */
     public function testGetRecordOaiDcDoc91DocType() {
