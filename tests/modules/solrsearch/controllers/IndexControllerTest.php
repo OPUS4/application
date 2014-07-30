@@ -984,6 +984,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Asserts, that in browsing the documents are sorted by server_date_published.
+     * Opusvier-1989.
      */
     public function testSortOrderOfDocumentsInBrowsing() {
         $olderDoc = $this->createTestDocument();
@@ -1004,6 +1005,42 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $olderDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $olderDocId);
         $newerDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $newerDocId);
         $this->assertTrue($newerDocPosition < $olderDocPosition);
+    }
+
+    /**
+     * Tests, that the sortfields in browsing are still working.
+     * see Opusvier-3334.
+     */
+    public function testSortOrderOfDocumentsInBrowsingWithSortfield() {
+        $olderDoc = $this->createTestDocument();
+        $olderDoc->setServerState('published');
+        $olderDoc->setLanguage('eng');
+        $date = new Opus_Date();
+        $date->setNow();
+        $date->setDay($date->getDay() - 1);
+        $olderDoc->setServerDatePublished($date);
+        $olderDoc->setType('article');
+
+        $title = new Opus_Title();
+        $title->setValue('zzzOlderDoc'); // 'zzz' to show the document at the first page
+        $title->setLanguage('eng');
+        $olderDoc->addTitleMain($title);
+        $olderDocId = $olderDoc->store();
+
+        $newerDoc = $this->createTestDocument();
+        $newerDoc->setServerState('published');
+        $newerDoc->setLanguage('eng');
+        $newerDoc->setType('article');
+        $title = new Opus_Title();
+        $title->setValue('zzzNewerDoc');
+        $title->setLanguage('eng');
+        $newerDoc->addTitleMain($title);
+        $newerDocId = $newerDoc->store();
+
+        $this->dispatch('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article/sortfield/title/sortorder/desc');
+        $olderDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $olderDocId);
+        $newerDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $newerDocId);
+        $this->assertTrue($newerDocPosition > $olderDocPosition);
     }
 
     /**
