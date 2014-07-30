@@ -2176,6 +2176,33 @@
             </tuv>
         </tu>
 
+        <tu tuid="Opus_Person_Author_Identifier_Orcid">
+            <tuv xml:lang="en">
+                <seg>Orcid Identifier</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Orcid-Id</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Person_Author_Identifier_Misc">
+            <tuv xml:lang="en">
+                <seg>Misc Identifier</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Misc-Id</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_Person_Author_Identifier_Gnd">
+            <tuv xml:lang="en">
+                <seg>Gnd Identifier</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Gnd-Id</seg>
+            </tuv>
+        </tu>
+
     </body>
 
 </tmx>
