@@ -33,6 +33,15 @@
  */
 ?>
 
+<script>
+    $(function() {
+        var extensions = '<?= $this->extensions ?>';
+        var fileElem = $("input:file")[0];
+        fileElem.validFileExtensions = extensions.split(',');
+        fileElem.invalidFileMessage = "<?= htmlspecialchars($this->translate('fileExtensionFalse')) ?>";
+    });
+</script>
+
 <h2><?= $this->translate($this->title) ?></h2>
 <div class="content">
     <h3 class="document-type"><?= $this->translate($this->subtitle) ?></h3>

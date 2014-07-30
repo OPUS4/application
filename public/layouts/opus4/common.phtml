@@ -76,6 +76,9 @@ if (in_array($this->moduleName, array('admin', 'review', 'setup'))) {
     $jsFiles[] = 'theme.js';
     $jsFiles[] = 'theme_lic.js';
 }
+else if (in_array($this->moduleName, array('publish'))) {
+    $jsFiles[] = 'filetypes.js';
+}
 
 if ($this->jQueryEnabled()) {
     $this->headScript()->prependFile($this->baseUrl() . '/' . $config->javascript->jquery->path);

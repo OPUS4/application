@@ -1,5 +1,3 @@
-<?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -26,54 +24,25 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Publish
- * @author      Susanne Gottwald <gottwald@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
+ *
  */
-class Publish_IndexController extends Controller_Action {
-    
-    /**
-     * Renders the first form:
-     * a list of available document types (that can be configured in config.ini
-     * and different upload fields
-     * 
-     * @return void
-     *
-     */
-    public function indexAction() {        
-        $session = new Zend_Session_Namespace('Publish');
 
-        //unset all possible session content
-        $session->unsetAll();
+$(function() {
+    var fileElem = $("input:file")[0];
 
-        $this->view->title = 'publish_controller_index';
-        
-        $form = new Publish_Form_PublishingFirst();
-
-        $this->view->action_url = $this->view->url(array('controller' => 'form', 'action' => 'upload'));
-        $this->view->showBib = $form->bibliographie;
-        $this->view->showRights = $form->showRights;
-        $this->view->enableUpload = $form->enableUpload;
-        if (!$form->enableUpload) {
-            $this->view->subtitle = 'publish_controller_index_sub_without_file';
+    fileElem.validFileExtensions = []; // nichts erlaubt, wird auf Publishseite überschrieben
+    fileElem.invalidFileMessage = 'The extension of file \'%value%\' is not allowed.';
+    fileElem.onchange = function() {
+        var filename = this.value;
+        var ext = filename.match(/\.(.+)$/)[1];
+        if ($.inArray(ext, this.validFileExtensions) == -1) {
+            $message = fileElem.invalidFileMessage;
+            alert($message.replace('%value%', filename));
+            this.value = null;
         }
-        else {
-            $this->view->subtitle = 'publish_controller_index_sub';
-        }
-
-        //initialize session variables
-        // TODO hide initialization routine
-        $session->documentType = "";
-        $session->documentId = "";
-        $session->additionalFields = array();
-
-        $config = Zend_Registry::get('Zend_Config');
-
-        if (isset($config->publish->filetypes->allowed)) {
-            $this->view->extensions = $config->publish->filetypes->allowed;
-        }
-
-    }
-}
+    };
+});
