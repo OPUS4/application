@@ -101,19 +101,20 @@ class PersonControllerTest extends ControllerTestCase {
 
         $location = $this->getLocation();
 
-        $this->assertTrue(strpos($location, '/admin/document/edit/id/'
-            . $this->documentId . '/continue/addperson') === 0);
-
-
         $matches = array();
         preg_match('/person\/(\d+)\//', $location, $matches);
         $personId = $matches[1];
 
         $person = new Opus_Person($personId);
 
-        $this->assertEquals('Testy-AssignAction', $person->getLastName());
+        $lastName = $person->getLastName();
 
         $person->delete();
+
+        $this->assertTrue(strpos($location, '/admin/document/edit/id/'
+                . $this->documentId . '/continue/addperson') === 0);
+
+        $this->assertEquals('Testy-AssignAction', $lastName);
     }
 
     public function testEditlinkedAction() {
