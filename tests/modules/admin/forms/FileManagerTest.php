@@ -58,8 +58,55 @@ class Admin_Form_FileManagerTest extends ControllerTestCase {
         $this->assertEquals('FileManager', $form->getName());
     }
 
+    public function testPopulateFromModel() {
+        $form = new Admin_Form_FileManager();
+
+        $document = new Opus_Document(92);
+
+        $filesForm = $form->getSubForm(Admin_Form_FileManager::SUBFORM_FILES);
+
+        $this->assertEquals(0, count($filesForm->getSubForms()));
+
+        $form->populateFromModel($document);
+
+        $this->assertEquals(2, count($filesForm->getSubForms()));
+
+        $infoForm = $form->getSubForm(Admin_Form_FileManager::SUBFORM_INFO);
+
+        $this->assertEquals($document, $infoForm->getDocument());
+
+        $actionForm = $form->getSubForm(Admin_Form_FileManager::SUBFORM_ACTION);
+
+        $this->assertEquals($document, $actionForm->getDocument());
+    }
+
+    /**
+     * TODO Test sollte nur prüfen, ob Funktionen in Unterformular aufgerufen wird (verwende Mock-Objekt)
+     */
     public function testUpdateModel() {
-        $this->markTestIncomplete('Use Mocking Framework to make sure subform function is called.');
+        $form = new Admin_Form_FileManager();
+
+        $document = new Opus_Document(92);
+
+        $form->populateFromModel($document);
+
+        $filesForm = $form->getSubForm(Admin_Form_FileManager::SUBFORM_FILES);
+
+        $files = $document->getFile();
+
+        $this->assertEquals(2, count($files));
+        $this->assertNull($files[0]->getComment());
+
+        $fileForm = $filesForm->getSubForm('File0');
+
+        $fileForm->getElement('Comment')->setValue('Testkommentar');
+
+        $form->updateModel($document);
+
+        $files = $document->getFile();
+
+        $this->assertEquals(2, count($files));
+        $this->assertEquals('Testkommentar', $files[0]->getComment());
     }
 
     public function testProcessPost() {
