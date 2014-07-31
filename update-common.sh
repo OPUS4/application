@@ -392,7 +392,7 @@ function deleteFiles() {
     if [[ ! -z $3 ]] && [[ $3 = 'flat' ]]; then
         local FLAT=1
     fi
-    provideFileNamesInArray "$SRC"
+    provideFileNamesInArray "$DEST"
     # local DEST_FILES=$(ls $DEST)
     # Iterate through destination files
     local FILE

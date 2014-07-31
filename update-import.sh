@@ -27,6 +27,9 @@ source update-common.sh
 
 setVars
 
+# Wenn der alte import Ordner existiert, sollen Dateien, die zur alten Distribution gehörten gelöscht werden.
+# Modifizierte und unbekannte Dateien sollen erhalten bleiben.
+
 echo -e "Removing old *import* folder ... \c "
 
 SRC="$BASE_SOURCE/opus4/import"
