@@ -32,7 +32,6 @@
  */
 class DocumentsAdminTest extends ControllerTestCase {
 
-
     public function setUp() {
         parent::setUp();
         $this->enableSecurity();
@@ -74,7 +73,7 @@ class DocumentsAdminTest extends ControllerTestCase {
     }
 
     /**
-     * Prüft, das auf die Seite zum Editieren eines Dokumentes zugegriffen werden kann.
+     * Prüft, das auf die Seite Übersichtsseite eines Dokumentes zugegriffen werden kann.
      */
     public function testAccessDocumentController() {
         $this->useEnglish();
@@ -143,12 +142,26 @@ class DocumentsAdminTest extends ControllerTestCase {
         $this->assertNotQuery("//*[@id='State-Link-restricted']", 'Restrict document');
     }
 
+    /**
+     * Basically, just checks access to WorkflowController.
+     */
     public function testDeleteDocument() {
         $this->useEnglish();
         $this->loginUser('security8', 'security8pwd');
         $this->dispatch('/admin/workflow/changestate/docId/300/targetState/deleted');
         $this->assertQueryContentContains('//html/head/title', 'Delete document');
         $this->assertQueryContentContains('//html/body', 'Are you sure you want to delete document 300?');
+    }
+
+    /**
+     * Basically, just checks access to WorkflowController.
+     */
+    public function testPublishDocument() {
+        $this->useEnglish();
+        $this->loginUser('security8', 'security8pwd');
+        $this->dispatch('/admin/workflow/changestate/docId/300/targetState/published');
+        $this->assertQueryContentContains('//html/head/title', 'Publish document');
+        $this->assertQueryContentContains('//html/body', 'Are you sure you want to publish document 300?');
     }
 
     public function testAccessFilebrowserController() {
