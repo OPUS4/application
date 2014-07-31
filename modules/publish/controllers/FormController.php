@@ -292,6 +292,10 @@ class Publish_FormController extends Controller_Action {
         }
         else {
             $this->document = $docModel->loadDocument($this->session->documentId);
+            if ($documentType !== $this->document->getType()) {
+                $this->document->setType($documentType);
+                $this->document->store();
+            }
         }
     }
 
