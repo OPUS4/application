@@ -33,6 +33,7 @@
  */
 ?>
 
+<?PHP if ($this->jQueryEnabled() && !empty($this->extensions)) : ?>
 <script>
     $(function() {
         var extensions = '<?= $this->extensions ?>';
@@ -41,6 +42,7 @@
         fileElem.invalidFileMessage = "<?= htmlspecialchars($this->translate('fileExtensionFalse')) ?>";
     });
 </script>
+<?PHP endif ?>
 
 <h2><?= $this->translate($this->title) ?></h2>
 <div class="content">

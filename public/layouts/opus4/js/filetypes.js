@@ -34,12 +34,12 @@
 $(function() {
     var fileElem = $("input:file")[0];
 
-    fileElem.validFileExtensions = []; // nichts erlaubt, wird auf Publishseite überschrieben
+    fileElem.validFileExtensions = null; // nichts erlaubt, wird auf Publishseite überschrieben
     fileElem.invalidFileMessage = 'The extension of file \'%value%\' is not allowed.';
     fileElem.onchange = function() {
         var filename = this.value;
-        var ext = filename.match(/\.(.+)$/)[1];
-        if ($.inArray(ext, this.validFileExtensions) == -1) {
+        var ext = filename.match(/\.(.+)$/);
+        if (fileElem.validFileExtensions != null && (ext == null || $.inArray(ext[1], this.validFileExtensions) == -1)) {
             $message = fileElem.invalidFileMessage;
             alert($message.replace('%value%', filename));
             this.value = null;
