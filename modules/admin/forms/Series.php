@@ -43,11 +43,12 @@ class Admin_Form_Series extends Application_Form_Model_Abstract {
 
         $this->setRemoveEmptyCheckbox(false);
         $this->setUseNameAsLabel(true);
+        $this->setModelClass('Opus_Series');
 
         $this->addElement('text', self::ELEMENT_TITLE, array('required' => true, 'size' => 70));
         $this->addElement('textarea', self::ELEMENT_INFOBOX);
         $this->addElement('checkbox', self::ELEMENT_VISIBLE);
-        $this->addElement('text', self::ELEMENT_SORT_ORDER); // TODO improve?
+        $this->addElement('text', self::ELEMENT_SORT_ORDER, array('required' => true)); // TODO improve?
     }
 
     public function populateFromModel($series) {

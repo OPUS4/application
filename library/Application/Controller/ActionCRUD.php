@@ -117,6 +117,12 @@ class Application_Controller_ActionCRUD extends Controller_Action {
     private $modelClass = null;
 
     /**
+     * Name of function for retrieving all models.
+     * @var string
+     */
+    private $functionNameForGettingModels = 'getAll';
+
+    /**
      * Initialisiert den Controller.
      */
     public function init() {
@@ -394,7 +400,7 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * Liefert alle Instanzen der Model-Klasse.
      */
     public function getAllModels() {
-        return call_user_func(array($this->getModelClass(), 'getAll'));
+        return call_user_func(array($this->getModelClass(), $this->functionNameForGettingModels));
     }
 
     /**
@@ -539,6 +545,18 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      */
     public function loadDefaultMessages() {
         $this->messageTemplates = new Application_Controller_MessageTemplates($this->defaultMessageTemplates);
+    }
+
+    /**
+     * Setzt Namen der Funktion, um alle Modelle zu holen.
+     * @param $name
+     */
+    public function setFunctionNameForGettingModels($name) {
+        $this->functionNameForGettingModels = ($name != null) ? $name : 'getAll';
+    }
+
+    public function getFunctionNameForGettingModels() {
+        return $this->functionNameForGettingModels;
     }
 
 }

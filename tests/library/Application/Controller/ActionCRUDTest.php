@@ -366,4 +366,32 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase {
         }
     }
 
+    public function testSetGetFunctionNameForGettingModels() {
+        $this->assertEquals('getAll', $this->controller->getFunctionNameForGettingModels());
+
+        $this->controller->setFormClass('Admin_Form_Series');
+
+        $series = $this->controller->getAllModels();
+
+        $this->controller->setFunctionNameForGettingModels('getAllSortedBySortKey');
+
+        $sortedSeries = $this->controller->getAllModels();
+
+        $this->assertEquals(count($series), count($sortedSeries));
+
+        // Prüfen, ob die sortierende Funktion verwendet wurde
+        $lastValue = null;
+        foreach ($sortedSeries as $series) {
+            $sortOrder = $series->getSortOrder();
+            $this->assertTrue($lastValue = null || $lastValue <= $sortOrder, 'Series are not properly sorted.');
+            $lastValue = $sortOrder;
+        }
+
+        $this->assertEquals('getAllSortedBySortKey', $this->controller->getFunctionNameForGettingModels());
+
+        $this->controller->setFunctionNameForGettingModels(null);
+
+        $this->assertEquals('getAll', $this->controller->getFunctionNameForGettingModels());
+    }
+
 }

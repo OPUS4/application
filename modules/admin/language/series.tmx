@@ -43,6 +43,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="admin_series_delete">
+            <tuv xml:lang="en">
+                <seg>Delete Series</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Schriftenreihe löschen</seg>
+            </tuv>
+        </tu>
+
         <tu tuid="admin_series_link_showdocuments">
             <tuv xml:lang="en">
                 <seg>Show documents</seg>

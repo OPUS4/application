@@ -270,6 +270,13 @@
                             <controller>series</controller>
                             <action>edit</action>
                         </edit>
+                        <delete>
+                            <type>mvc</type>
+                            <label>admin_series_delete</label>
+                            <module>admin</module>
+                            <controller>series</controller>
+                            <action>delete</action>
+                        </delete>
                     </pages>
                 </series>                
 

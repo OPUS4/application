@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -37,82 +37,35 @@
  *
  * Creating, editing, deleting of Opus_Series models. Changing the order
  * of Opus_Series models.
+ *
+ * TODO Show documents column in index table
+ *   TODO document count $entry->getNumOfAssociatedDocuments();
+ *   TODO link to documents /admin/documents/index/seriesid/[ID]   'admin_series_link_showdocuments'
+ * TODO Show ID for series?
+ *
+ * TODO Check translations
+ * TODO unit tests
  */
-class Admin_SeriesController extends Controller_CRUDAction {
-
-    protected $_modelclass = "Opus_Series";
+class Admin_SeriesController extends Application_Controller_ActionCRUD {
 
     /**
-     * Shows all series.
+     * Konfiguriere Formularklasse für den Controller.
      */
-    public function indexAction() {
-        $entries = Opus_Series::getAllSortedBySortKey();
-        $this->view->entries = array();
-        foreach ($entries as $entry) {
-            $this->view->entries[$entry->getId()] = $entry;
-        }
-    }
-
-    protected function adaptForm($form) {
-        $subform = $form->getSubform('Opus_Series');
-        $sortOrder = $subform->getSubform('SortOrder');
-        $sortOrder->getElement('1')->setRequired(true);
-
-        // Fix length of input field for 'Title'
-        $element = $subform->getSubForm('Title')->getElement('1');
-        $element->setAttrib('size', 70);
-    }
-
-    public function newAction() {
-        parent::newAction();
-        $this->adaptForm($this->view->form);
-        $form = $this->view->form->getSubform('Opus_Series');
-        $form->getSubform('Visible')->getElement('1')->setValue(true);
-        $form->getSubform('SortOrder')->getElement('1')->setValue(Opus_Series::getMaxSortKey() + 1);
+    public function init() {
+        $this->setFormClass('Admin_Form_Series');
+        $this->setFunctionNameForGettingModels('getAllSortedBySortKey');
+        parent::init();
     }
 
     /**
-     * Show series.
+     * Setzt Defaultwerte für das Formular.
+     * @return Opus_Series
      */
-    public function showAction() {
-        parent::showAction();
-    }
-
-    /**
-     * Creates a new series.
-     */
-    public function createAction() {
-        parent::createAction();
-        $this->adaptForm($this->view->form);
-    }
-
-    /**
-     * Show series for editing.
-     */
-    public function editAction() {
-        parent::editAction();
-        $this->adaptForm($this->view->form);
-    }
-
-    /**
-     * Updates fields of a series.
-     */
-    public function updateAction() {
-        parent::updateAction();
-        $this->adaptForm($this->view->form);
-    }
-
-    /**
-     * Deletes a series after verifying that the user is sure.
-     */
-    public function deleteAction() {
-        parent::deleteAction();
-    }
-
-    /**
-     * Action for moving a series to change the order of series.
-     */
-    public function moveAction() {
+    public function getNewModel() {
+        $series = parent::getNewModel();
+        $series->setVisible(1);
+        $series->setSortOrder(Opus_Series::getMaxSortKey() + 1);
+        return $series;
     }
 
 }
