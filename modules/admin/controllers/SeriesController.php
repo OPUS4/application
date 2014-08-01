@@ -37,14 +37,6 @@
  *
  * Creating, editing, deleting of Opus_Series models. Changing the order
  * of Opus_Series models.
- *
- * TODO Show documents column in index table
- *   TODO document count $entry->getNumOfAssociatedDocuments();
- *   TODO link to documents /admin/documents/index/seriesid/[ID]   'admin_series_link_showdocuments'
- * TODO Show ID for series?
- *
- * TODO Check translations
- * TODO unit tests
  */
 class Admin_SeriesController extends Application_Controller_ActionCRUD {
 
@@ -66,6 +58,16 @@ class Admin_SeriesController extends Application_Controller_ActionCRUD {
         $series->setVisible(1);
         $series->setSortOrder(Opus_Series::getMaxSortKey() + 1);
         return $series;
+    }
+
+    /**
+     * Modifiziert Formular für Indextabelle, so daß angepasstes ViewScript verwendet wird.
+     * @return Application_Form_Model_Table
+     */
+    public function getIndexForm() {
+        $form = parent::getIndexForm();
+        $form->setViewScript('series/modeltable.phtml');
+        return $form;
     }
 
 }

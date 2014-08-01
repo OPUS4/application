@@ -394,4 +394,10 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase {
         $this->assertEquals('getAll', $this->controller->getFunctionNameForGettingModels());
     }
 
+    public function testGetIndexForm() {
+        $form = $this->controller->getIndexForm();
+
+        $this->assertInstanceOf('Application_Form_Model_Table', $form);
+    }
+
 }

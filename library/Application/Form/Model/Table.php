@@ -50,16 +50,28 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
     private $columns = null;
 
     /**
+     * ViewScript for rendering table.
+     * @var string
+     */
+    private $viewScript = 'modeltable.phtml';
+
+    /**
      * Initialisiert Formular.
      *
      * Setzt Decorators so, daß das Rendering in einem View Script erfolgt.
      */
     public function init() {
         parent::init();
+        $this->initDecorators();
+    }
 
+    /**
+     * Initialisiert die Decorators für die Tabelle.
+     */
+    public function initDecorators() {
         $this->setDecorators(array(
             'PrepareElements',
-            array('ViewScript', array('viewScript' => 'modeltable.phtml'))
+            array('ViewScript', array('viewScript' => $this->getViewScript()))
         ));
     }
 
@@ -110,6 +122,27 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
             throw new Application_Exception(__METHOD__ . 'Parameter must be array.');
         }
         $this->models = $models;
+    }
+
+    /**
+     * Setzt ViewScript für die Ausgabe der Modeltabelle.
+     * @param $name
+     */
+    public function setViewScript($name) {
+        if (!is_null($name)) {
+            $this->viewScript = $name;
+        }
+        else {
+            $this->viewScript = 'modeltable.phtml';
+        }
+        $this->initDecorators();
+    }
+
+    /**
+     * Liefert Namen des ViewScripts für die Ausgabe der Modeltabelle.
+     */
+    public function getViewScript() {
+        return $this->viewScript;
     }
 
 }

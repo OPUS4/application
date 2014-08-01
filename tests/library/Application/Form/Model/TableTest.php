@@ -100,4 +100,23 @@ class Application_Form_Model_TableTest extends ControllerTestCase {
         $this->assertEquals($columns, $form->getColumns());
     }
 
+    public function testGetViewScript() {
+        $form = new Application_Form_Model_Table();
+
+        $this->assertEquals('modeltable.phtml', $form->getViewScript());
+    }
+
+    public function testSetViewScript() {
+        $form = new Application_Form_Model_Table();
+
+        $form->setViewScript('series/modeltable.phtml');
+
+        $this->assertEquals('series/modeltable.phtml', $form->getViewScript());
+
+        $form->setViewScript(null);
+
+        $this->assertEquals('modeltable.phtml', $form->getViewScript());
+    }
+
+
 }

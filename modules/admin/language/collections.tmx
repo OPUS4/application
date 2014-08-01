@@ -321,10 +321,10 @@
 
         <tu tuid="Visible">
 			<tuv xml:lang="en">
-				<seg>visible</seg>
+				<seg>Visible</seg>
 			</tuv>
 			<tuv xml:lang="de">
-				<seg>sichtbar</seg>
+				<seg>Sichtbar</seg>
 			</tuv>
         </tu>
 

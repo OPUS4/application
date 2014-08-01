@@ -131,17 +131,25 @@ class Application_Controller_ActionCRUD extends Controller_Action {
     }
 
     /**
-     * List all available model instances
+     * List all available model instances.
      *
      * @return void
      * 
-     * TODO Konfigurierbare Tabelle mit Links für Editing/Deleting
      */
     public function indexAction() {
+        $this->renderForm($this->getIndexForm());
+    }
+
+    /**
+     * Erzeugt das Formular für die Darstellung der Modeltabelle auf der Indexseite.
+     * @return Application_Form_Model_Table
+     * TODO Konfigurierbare Tabelle mit Links für Editing/Deleting
+     */
+    public function getIndexForm() {
         $form = new Application_Form_Model_Table();
         $form->setModels($this->getAllModels());
         $form->setColumns(array(array('label' => $this->getModelClass())));
-        $this->renderForm($form);
+        return $form;
     }
 
     /**
@@ -555,6 +563,10 @@ class Application_Controller_ActionCRUD extends Controller_Action {
         $this->functionNameForGettingModels = ($name != null) ? $name : 'getAll';
     }
 
+    /**
+     * Liefert Namen der Funktion, die für das holen aller Modelle verwendet wird.
+     * @return string
+     */
     public function getFunctionNameForGettingModels() {
         return $this->functionNameForGettingModels;
     }

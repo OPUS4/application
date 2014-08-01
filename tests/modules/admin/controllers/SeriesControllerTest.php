@@ -75,6 +75,15 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase {
         $this->assertQueryContentContains('div#SortOrder', '10');
     }
 
+    public function testShowNewAction() {
+        $this->dispatch('/admin/series/new');
+
+        $sortOrder = Opus_Series::getMaxSortKey() + 1;
+
+        $this->assertXPath('//input[@type = "checkbox" and @checked = "checked"]');
+        $this->assertXPath('//input[@name = "SortOrder" and @value = "' . $sortOrder .  '"]');
+    }
+
     public function testNewActionSave() {
         $this->createsModels = true;
 
@@ -203,26 +212,45 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase {
     }
 
     public function testHideDocumentsLinkForSeriesWithoutDocuments() {
-        $this->markTestSkipped('modify for new implementation');
         $this->dispatch('/admin/series');
-        $this->assertQuery("//a[@href='/admin/documents/index/seriesid/1']");
-        $this->assertQuery("//a[@href='/admin/documents/index/seriesid/2']");
-        $this->assertQuery("//a[@href='/admin/documents/index/seriesid/3']");
-        $this->assertQuery("//a[@href='/admin/documents/index/seriesid/4']");
-        $this->assertQuery("//a[@href='/admin/documents/index/seriesid/5']");
-        $this->assertQuery("//a[@href='/admin/documents/index/seriesid/6']");
-        $this->assertNotQuery("//a[@href='/admin/documents/index/seriesid/7']");
-        $this->assertNotQuery("//a[@href='/admin/documents/index/seriesid/8']");
+
+        $allSeries = Opus_Series::getAll();
+
+        foreach ($allSeries as $series) {
+            $seriesId = $series->getId();
+            if ($series->getNumOfAssociatedDocuments() > 0) {
+                $this->assertQuery("//a[@href='/admin/documents/index/seriesid/$seriesId']");
+            }
+            else {
+                $this->assertNotQuery("//a[@href='/admin/documents/index/seriesid/$seriesId']");
+            }
+        }
     }
 
     public function testSeriesVisibilityIsDisplayedCorrectly() {
-        $this->markTestSkipped('modify for new implementation');
         $this->dispatch('/admin/series');
-        foreach (array(1, 2, 4, 5, 6, 8) as $visibleId) {
-            $this->assertQuery('//td[@class="visible"]/a[@href="/admin/series/show/id/' . $visibleId . '"]');
+
+        $allSeries = Opus_Series::getAll();
+
+        foreach ($allSeries as $series) {
+            $seriesId = $series->getId();
+            if ($series->getVisible()) {
+                $this->assertXPath('//a[@href="/admin/series/show/id/' . $seriesId . '" and @class="displayname"]');
+            }
+            else {
+                $this->assertXPath('//a[@href="/admin/series/show/id/' . $seriesId . '" and @class="displayname invisible"]');
+            }
         }
-        foreach (array(3, 7) as $unvisibleId) {
-            $this->assertQuery('//td[@class="unvisible"]/a[@href="/admin/series/show/id/' . $unvisibleId . '"]');
+    }
+
+    public function testSeriesIdIsShownInTable() {
+        $this->dispatch('/admin/series');
+
+        $allSeries = Opus_Series::getAll();
+
+        foreach ($allSeries as $series) {
+            $seriesId = $series->getId();
+            $this->assertXPathContentContains('//td', "(ID = $seriesId)");
         }
     }
 

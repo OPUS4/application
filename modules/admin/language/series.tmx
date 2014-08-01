@@ -54,13 +54,21 @@
 
         <tu tuid="admin_series_link_showdocuments">
             <tuv xml:lang="en">
-                <seg>Show documents</seg>
+                <seg>Associated Documents</seg>
             </tuv>
             <tuv xml:lang="de">
-                <seg>Dokumente anzeigen</seg>
+                <seg>Verknüpfte Dokumente</seg>
             </tuv>
         </tu>
 
+        <tu tuid="admin_series_link_nodocuments">
+            <tuv xml:lang="en">
+                <seg>None</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Keine</seg>
+            </tuv>
+        </tu>
 
         <tu tuid="admin_series_confirm_deletion">
             <tuv xml:lang="en">
