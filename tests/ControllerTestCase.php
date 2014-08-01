@@ -499,12 +499,12 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         if (!is_null($value)) {
             try {
                 // check if value is Opus_Document or ID
-                $doc = ($value instanceof Opus_Document) ? $value : new Opus_Document($value);
+                $doc = ($value instanceof Opus_Document) ? new Opus_Document($value->getId()) : new Opus_Document($value);
 
-                if (!$doc->isNewRecord()) {
+                // if (!$doc->isNewRecord()) {
                     // only delete if document has been stored
                     $doc->deletePermanent();
-                }
+                // }
             }
             catch (Opus_Model_NotFoundException $omnfe) {
                 // Model nicht gefunden -> alles gut (hoffentlich)
