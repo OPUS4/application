@@ -24,7 +24,9 @@ and open the template in the editor.
 
 
     <testsuite name="ServerTests">
-        <directory>./</directory>
+        <directory>./scripts</directory>
+        <directory>./library</directory>
+        <directory>./modules</directory>
     </testsuite>
 
     <!-- Define directories/files filter for code coverage. -->
