@@ -112,7 +112,7 @@ class Admin_Form_SeriesTest extends ControllerTestCase {
     public function testValidationTrue() {
         $form = new Admin_Form_Series();
 
-        $this->assertTrue($form->isValid(array('Title' => 'TestTitle')));
+        $this->assertTrue($form->isValid(array('Title' => 'TestTitle', 'SortOrder' => '50')));
     }
 
 }
