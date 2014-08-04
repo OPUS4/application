@@ -65,6 +65,7 @@ class Form_Validate_CollectionRoleNameUnique extends Zend_Validate_Abstract {
         $model = $this->_getModel($value);
 
         if (!is_null($model) && $model->getId() != $collectionId) {
+            // es gibt bereits CollectionRole mit Identifier (z.B. Name) und anderer ID
             $this->_error(self::NAME_NOT_UNIQUE);
             return false;
         }
@@ -72,6 +73,11 @@ class Form_Validate_CollectionRoleNameUnique extends Zend_Validate_Abstract {
         return true;
     }
 
+    /**
+     * Holt CollectionRole mit Identifier.
+     * @param $identifier
+     * @return Opus_CollectionRole
+     */
     protected function _getModel($identifier) {
         return Opus_CollectionRole::fetchByName($identifier);
     }

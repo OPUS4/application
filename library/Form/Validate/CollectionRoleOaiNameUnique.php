@@ -33,6 +33,9 @@
  */
 class Form_Validate_CollectionRoleOaiNameUnique extends Form_Validate_CollectionRoleNameUnique {
 
+    /**
+     * Verwende OaiName um CollectionRole zu finden.
+     */
     protected function _getModel($identifier) {
         return Opus_CollectionRole::fetchByOaiName($identifier);
     }

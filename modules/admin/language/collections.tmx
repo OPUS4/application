@@ -544,5 +544,14 @@
             </tuv>
         </tu>
 
+        <tu tuid="admin_collectionroles_error_not_unique">
+            <tuv xml:lang="en">
+                <seg>Value already exists.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Der Wert existiert bereits.</seg>
+            </tuv>
+        </tu>
+
     </body>
 </tmx>

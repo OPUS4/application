@@ -130,6 +130,8 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
 
         $this->assertContains('isEmpty', $form->getErrors('Name'));
         $this->assertContains('isEmpty', $form->getErrors('OaiName'));
+        $this->assertContains('isEmpty', $form->getErrors('DisplayBrowsing'));
+        $this->assertContains('isEmpty', $form->getErrors('DisplayFrontdoor'));
     }
 
     public function testValidationSuccess() {
@@ -137,7 +139,35 @@ class Admin_Form_CollectionRoleTest extends ControllerTestCase {
 
         $this->assertTrue($form->isValid(array(
             'Name' => 'TestName',
-            'OaiName' => 'TestOaiName'
+            'OaiName' => 'TestOaiName',
+            'DisplayBrowsing' => 'Name',
+            'DisplayFrontdoor' => 'NameNumber'
+        )));
+    }
+
+    public function testValidationFailureBecauseOfConflict() {
+        $form = new Admin_Form_CollectionRole();
+
+        $this->assertFalse($form->isValid(array(
+            'Name' => 'institutes',
+            'OaiName' => 'institutes',
+            'DisplayBrowsing' => 'Name',
+            'DisplayFrontdoor' => 'NameNumber'
+        )));
+
+        $this->assertContains('notUnique', $form->getErrors('Name'));
+        $this->assertContains('notUnique', $form->getErrors('OaiName'));
+    }
+
+    public function testValidationTrueForEditing() {
+        $form = new Admin_Form_CollectionRole();
+
+        $this->assertTrue($form->isValid(array(
+            'Id' => '1', // ID for 'institutes' CollectionRole
+            'Name' => 'institutes',
+            'OaiName' => 'institutes',
+            'DisplayBrowsing' => 'Name',
+            'DisplayFrontdoor' => 'NameNumber'
         )));
     }
 

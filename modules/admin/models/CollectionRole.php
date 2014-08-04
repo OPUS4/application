@@ -30,8 +30,9 @@
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
+ *
+ * TODO überarbeiten (entfernen?)
  */
-
 class Admin_Model_CollectionRole {
 
     private $collectionRole = null;
@@ -46,66 +47,53 @@ class Admin_Model_CollectionRole {
         }
         try {
             $this->collectionRole = new Opus_CollectionRole((int) $id);
-            $this->setDisplayOptions($this->collectionRole->getPosition());
         }
         catch (Opus_Model_NotFoundException $e) {
             throw new Admin_Model_Exception('roleid parameter value unknown');
         }
     }
 
+    /**
+     * Initialisiert Defaultwerte für neue CollectionRole.
+     */
     private function initNewCollectionRole() {
         $this->collectionRole = new Opus_CollectionRole();
         foreach (array('Visible', 'VisibleBrowsingStart', 'VisibleFrontdoor', 'VisibleOai') as $field) {
-            $this->collectionRole->getField($field)->setValue('1');
-        }
-        $this->setDisplayOptions();
-    }
-
-    private function setDisplayOptions($position = null) {
-        $allCollectionRoles = Opus_CollectionRole::fetchAll();
-        $selectValues = array(0);
-        foreach ($allCollectionRoles as $collectionRole) {
-            array_push($selectValues, $collectionRole->getPosition());
-        }
-        $countRoles = count($allCollectionRoles);
-        if (is_null($position)) {
-            $countRoles++;
-            $lastPosition = $selectValues[count($selectValues) - 1];
-            array_push($selectValues, 1 + $lastPosition);
-        }
-        $pos_field = $this->collectionRole->getField('Position');
-        $options = range(0, $countRoles);
-        $pos_field->setDefault(array_combine($selectValues, $options))->setSelection(true);
-        if (!is_null($position)) {
-            $pos_field->setValue($position);
-        }
-        else {
-            $pos_field->setValue($countRoles);
-        }
-        foreach (array('DisplayBrowsing', 'DisplayFrontdoor', 'DisplayOai') as $fieldname) {
-            $field = $this->collectionRole->getField($fieldname);
-            $field->setDefault(array('Name' => 'Name', 'Number' => 'Number', 'Name, Number' => 'NameNumber', 'Number, Name' => 'NumberName'))
-                    ->setSelection(true)
-                    ->setMandatory(true);
-            if (is_null($position)) {
-                $field->setValue('Name');
-            }
+            $this->collectionRole->getField($field)->setValue(1);
         }
     }
 
+    /**
+     * Liefert CollectionRole.
+     * @return null|Opus_CollectionRole
+     */
     public function getObject() {
         return $this->collectionRole;
     }
 
+    /**
+     * Löscht CollectionRole.
+     */
     public function delete() {
         $this->collectionRole->delete();
     }
 
+    /**
+     * Setzt Sichtbarkeit von CollectionRole.
+     * @param $visibility
+     */
     public function setVisibility($visibility) {
         $this->collectionRole->setVisible($visibility);
         $this->collectionRole->store();
     }
 
+    /**
+     * Verschiebt CollectionRole zu neuer Position.
+     * @param $position
+     * @throws Admin_Model_Exception
+     *
+     * TODO make robuster
+     */
     public function move($position) {
         if (is_null($position)) {
             return;
@@ -117,4 +105,5 @@ class Admin_Model_CollectionRole {
         $this->collectionRole->setPosition($position);
         $this->collectionRole->store();
     }
+
 }

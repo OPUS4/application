@@ -30,6 +30,8 @@
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
+ *
+ * TODO rename to CollectionRolePosition or make generic
  */
  class Form_Element_Position extends Form_Element_Select {
 

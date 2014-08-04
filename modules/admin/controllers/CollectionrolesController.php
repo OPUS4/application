@@ -35,23 +35,29 @@
 /**
  * Controller for administration of collection roles.
  *
+ * TODO auf Application_Controller_ActionCRUD umstellen (IndexTabelle und neue Actions berücksichtigen)
  */
 class Admin_CollectionrolesController extends Controller_Action {
 
     /**
-     * List all available collection role instances
-     *
+     * List all available collection role instances.
      */
     public function indexAction() {
         $this->view->collectionRoles = Opus_CollectionRole::fetchAll();
     }
 
+    /**
+     * Zeigt Formular für Erzeugung einer neuen CollectionRole an.
+     */
     public function newAction() {
         Opus_CollectionRole::fixPositions();
         $collectionRoleModel = new Admin_Model_CollectionRole();
         $this->view->form = $this->getRoleForm($collectionRoleModel->getObject());
     }
 
+    /**
+     * Zeigt Formular für das Editieren einer CollectionRole.
+     */
     public function editAction() {
         Opus_CollectionRole::fixPositions();
         try {
@@ -64,28 +70,41 @@ class Admin_CollectionrolesController extends Controller_Action {
         }
     }
 
+    /**
+     * Verschiebt eine CollectionRole einen Schritt nach oben oder unten.
+     */
     public function moveAction() {
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->move($this->getRequest()->getParam('pos'));
-            return $this->_redirectTo('index', $this->view->translate('admin_collectionroles_move', $collectionRoleModel->getObject()->getName()));
+            return $this->_redirectTo('index', $this->view->translate('admin_collectionroles_move',
+                $collectionRoleModel->getObject()->getName()));
         }
         catch (Application_Exception $e) {
             return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
         }
     }
 
+    /**
+     * Ändert die Sichtbarkeit einer CollectionRole.
+     * @param $visibility boolean
+     */
     private function changeRoleVisibility($visibility) {
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->setVisibility($visibility);
-            return $this->_redirectTo('index', $this->view->translate('admin_collectionroles_changevisibility', $collectionRoleModel->getObject()->getName()));
+            return $this->_redirectTo('index', $this->view->translate('admin_collectionroles_changevisibility',
+                $collectionRoleModel->getObject()->getName()));
         }
         catch (Application_Exception $e) {
             return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
         }
     }
-    
+
+    /**
+     * Sets Breadcrumbs for a CollectionRole.
+     * @param $name
+     */
     public function setCollectionBreadcrumb($name) {
         $page = $this->view->navigation()->findOneBy('label', 'admin_collection_index');
         if (!is_null($page)) {
@@ -93,15 +112,93 @@ class Admin_CollectionrolesController extends Controller_Action {
         }
     }
 
+    /**
+     * Setzt eine CollectionRole unsichtbar.
+     */
     public function hideAction() {
         $this->changeRoleVisibility(false);
     }
 
+    /**
+     * Setzt eine CollectionRole sichtbar.
+     */
     public function unhideAction() {
         $this->changeRoleVisibility(true);
     }
 
+    /**
+     * Erzeugt eine neue CollectionRole bzw. speichert eine geänderte ab.
+     */
+    public function createAction() {
+        if (!$this->getRequest()->isPost()) {
+            return $this->_redirectToAndExit('index');
+        }
 
+        $data = $this->getRequest()->getPost();
+
+        $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('oid'));
+        $collectionRole = $collectionRoleModel->getObject();
+
+        $form = new Admin_Form_CollectionRole();
+        $form->populate($data);
+
+        if (!$form->isValid($data)) {
+            $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
+            $this->setTitle($collectionRole);
+            return;
+        }
+
+        $form->updateModel($collectionRole);
+
+        if (true === $collectionRole->isNewRecord()) {
+            $messageKey = 'admin_collectionroles_add';
+
+            if (true === is_null($collectionRole->getRootCollection())) {
+                $collectionRole->addRootCollection();
+                $collectionRole->getRootCollection()->setVisible('1');
+            }
+        }
+        else {
+            $messageKey = 'admin_collectionroles_edit_notice';
+        }
+
+        $collectionRole->store();
+
+        return $this->_redirectTo('index', $this->view->translate($messageKey, $collectionRole->getName()));
+    }
+
+    /**
+     * Setzt die Überschrift der Seite, abhängig vom Status der CollectionRole.
+     * @param $collectionRole
+     */
+    private function setTitle($collectionRole) {
+        if ($collectionRole->isNewRecord()) {
+            $this->view->title = 'admin_collectionroles_new';
+        }
+        $this->view->title = 'admin_collectionroles_edit';
+    }
+
+    /**
+     * Erzeugt Formular für ein CollectionRole Objekt.
+     *
+     * @param Opus_CollectionRole $collectionRole
+     * @return mixed
+     */
+    private function getRoleForm(Opus_CollectionRole $collectionRole) {
+        $form = new Admin_Form_CollectionRole();
+        $form->populateFromModel($collectionRole);
+
+        $this->initCreateRoleForm($form, $collectionRole);
+
+        return $form;
+    }
+
+    /**
+     * Setzt Formularaction.
+     * @param $form
+     * @param $collectionRole
+     * @return Admin_Form_CollectionRole
+     */
     private function initCreateRoleForm($form, $collectionRole) {
         if ($collectionRole->isNewRecord()) {
             $form->setAction($this->view->url(array('action' => 'create')));
@@ -112,105 +209,21 @@ class Admin_CollectionrolesController extends Controller_Action {
         return $form;
     }
 
-    public function createAction() {
-        if (!$this->getRequest()->isPost()) {
-            return $this->_redirectToAndExit('index');
-        }
-
-        $data = $this->_request->getPost();
-
-        $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('oid'));
-        $collectionRole = $collectionRoleModel->getObject();
-
-        $form_builder = new Form_Builder();
-        $form_builder->buildModelFromPostData($collectionRole, $data['Opus_Model_Filter']);
-        $form = $form_builder->build($this->__createRoleFilter($collectionRole));
-
-        if (!$form->isValid($data)) {
-            $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
-            $this->setTitle($collectionRole);
-            return;
-        }
-
-        // manuelles Überprüfen der IBs in Tabelle collections_roles
-        $tmpRole = Opus_CollectionRole::fetchByName($collectionRole->getName());
-        if (!is_null($tmpRole) && $tmpRole->getId() !== $collectionRole->getId()) {
-            $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
-            $this->view->message = 'name is not unique';
-            $this->setTitle($collectionRole);
-            return;
-        }
-
-        $tmpRole = Opus_CollectionRole::fetchByOaiName($collectionRole->getOaiName());
-        if (!is_null($tmpRole) && $tmpRole->getId() !== $collectionRole->getId()) {
-            $this->view->form = $this->initCreateRoleForm($form, $collectionRole);
-            $this->view->message = 'oainame is not unique';
-            $this->setTitle($collectionRole);
-            return;
-        }
-
-        if (true === $collectionRole->isNewRecord()) {
-            if (true === is_null($collectionRole->getRootCollection())) {
-                $collectionRole->addRootCollection();
-                $collectionRole->getRootCollection()->setVisible('1');
-            }
-            $collectionRole->store();
-            $message = $this->view->translate('admin_collectionroles_add', $collectionRole->getName());
-            return $this->_redirectTo('index', $message);
-        }
-        else {
-            $collectionRole->store();
-            $message = $this->view->translate('admin_collectionroles_edit_notice', $collectionRole->getName());
-            return $this->_redirectTo('index', $message);
-        }
-    }
-
-    private function setTitle($collectionRole) {
-        if ($collectionRole->isNewRecord()) {
-            $this->view->title = 'admin_collectionroles_new';
-        }
-        $this->view->title = 'admin_collectionroles_edit';
-    }
-
-
-    private function getRoleForm(Opus_CollectionRole $collectionRole) {
-        $form_builder = new Form_Builder();
-        $collectionForm = $form_builder->build($this->__createRoleFilter($collectionRole));
-
-        // Fix length of 'Name' Element
-        $element = $collectionForm->getSubForm('Opus_Model_Filter')->getSubForm('Name')->getElement('1');
-        $element->setAttrib('size', 70);
-
-        // Fix length of 'OaiName' Element
-        $element = $collectionForm->getSubForm('Opus_Model_Filter')->getSubForm('OaiName')->getElement('1');
-        $element->setAttrib('size', 30);
-
-        if ($collectionRole->isNewRecord()) {
-            $collectionForm->setAction($this->view->url(array('action' => 'create')));
-        }
-        else {
-            $collectionForm->setAction($this->view->url(array('action' => 'create', 'oid' => $collectionRole->getId())));
-        }
-        return $collectionForm;
-    }
-
-    private function __createRoleFilter(Opus_CollectionRole $collectionRole) {
-        $filter = new Opus_Model_Filter();
-        $filter->setModel($collectionRole);
-        $filter->setBlacklist(array('RootCollection'));
-        return $filter;
-    }
-
+    /**
+     * Löscht eine CollectionRole.
+     */
     public function deleteAction() {
         try {
             $collectionRoleModel = new Admin_Model_CollectionRole($this->getRequest()->getParam('roleid', ''));
             $collectionRoleModel->delete();
             $collectionRoleModel->getObject()->getDisplayName();
-            $message = $this->view->translate('admin_collectionroles_delete', $collectionRoleModel->getObject()->getName());
+            $message = $this->view->translate('admin_collectionroles_delete',
+                $collectionRoleModel->getObject()->getName());
             return $this->_redirectTo('index', $message);
         }
         catch (Application_Exception $e) {
             return $this->_redirectToAndExit('index', array('failure' => $e->getMessage()));
         }
     }
+
 }
