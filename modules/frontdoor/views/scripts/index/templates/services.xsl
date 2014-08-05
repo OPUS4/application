@@ -153,7 +153,7 @@
                      </xsl:call-template>
                   </xsl:attribute>
                   <xsl:copy-of select="$fileIcon" />
-                  <xsl:text> </xsl:text>
+                  <xsl:text>&#8201;&#8201;&#8201;</xsl:text> <!--schmales Leerzeichen - etwas anderes wird nicht angezeigt-->
                   <xsl:copy-of select="$fileLinkText" />
                   <xsl:text> </xsl:text>
                   <xsl:copy-of select="$flagIcon" />
