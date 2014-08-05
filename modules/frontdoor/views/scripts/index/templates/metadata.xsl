@@ -366,7 +366,7 @@
         </tr>
     </xsl:template>
 
-    <xsl:template match="IdentifierIsbn|IdentifierIssn|IdentifierSerial|ReferenceIsbn|ReferenceIssn|ReferenceHandle|TitleParent|TitleSub|TitleAdditional">
+    <xsl:template match="IdentifierIsbn|IdentifierIssn|IdentifierSerial|ReferenceIsbn|ReferenceIssn|ReferenceHandle">
         <tr>
             <th class="name">
                 <xsl:call-template name="translateFieldname"/>
@@ -375,6 +375,32 @@
                 <xsl:value-of select="@Value" />
             </td>
         </tr>
+    </xsl:template>
+
+    <xsl:template match="TitleParent|TitleSub|TitleAdditional" mode="mainLanguage">
+        <xsl:if test="@Language = $docLang">
+            <tr>
+                <th class="name">
+                    <xsl:call-template name="translateFieldname"/>
+                </th>
+                <td>
+                    <xsl:value-of select="@Value" />
+                </td>
+            </tr>
+        </xsl:if>
+    </xsl:template>
+
+    <xsl:template match="TitleParent|TitleSub|TitleAdditional" mode="otherLanguage">
+        <xsl:if test="@Language != $docLang">
+        <tr>
+            <th class="name">
+                <xsl:call-template name="translateFieldname"/>
+            </th>
+            <td>
+                <xsl:value-of select="@Value" />
+            </td>
+        </tr>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="Series[@Visible=1]">

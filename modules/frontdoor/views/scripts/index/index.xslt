@@ -56,6 +56,7 @@
     <xsl:param name="layoutPath" />
     <xsl:param name="isMailPossible" />
     <xsl:param name="numOfShortAbstractChars" />
+    <xsl:param name="docLang" select="//Opus_Document/@Language" />
 
     <xsl:key name="list" match="/Opus/Opus_Document/Subject[@Type='uncontrolled']" use="@Language"/>
     <xsl:key name="userCollections-by-roleId" match="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel']" use="@RoleId"/>
@@ -74,7 +75,7 @@
     if you wish new fields, you have to add a new line xsl:apply-templates...
     and a special template for each new field below, too -->
     <xsl:template match="Opus_Document">
-       
+
       <!-- main data templates defined in templates/main.xsl -->
        <div id="titlemain-wrapper">
          <xsl:call-template name="Title" />
@@ -178,9 +179,12 @@
             <xsl:apply-templates select="IdentifierIssn" />
             <xsl:apply-templates select="IdentifierArxiv" />
             <xsl:apply-templates select="IdentifierPubmed" />
-            <xsl:apply-templates select="TitleParent" />
-            <xsl:apply-templates select="TitleSub" />
-            <xsl:apply-templates select="TitleAdditional" />
+            <xsl:apply-templates select="TitleParent" mode="mainLanguage" />
+            <xsl:apply-templates select="TitleParent" mode="otherLanguage" />
+            <xsl:apply-templates select="TitleSub" mode="mainLanguage" />
+            <xsl:apply-templates select="TitleSub" mode="otherLanguage" />
+            <xsl:apply-templates select="TitleAdditional" mode="mainLanguage" />
+            <xsl:apply-templates select="TitleAdditional" mode="otherLanguage" />
             <xsl:apply-templates select="Series[@Visible=1]" >
                 <xsl:sort select="@SortOrder"/>
             </xsl:apply-templates>

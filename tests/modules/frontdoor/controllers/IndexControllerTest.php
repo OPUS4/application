@@ -872,53 +872,67 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     /**
      * Checks, whether the document language title is printed before other titles.
      * OPUSVIER-1752
+     * OPUSVIER-3315
      */
     public function testMainTitleSortOrderGermanFirst() {
-        $doc = $this->createTestDocument();
-        $title = new Opus_Title();
-        $title->setLanguage('deu');
-        $title->setValue('deutscher Titel');
-        $doc->addTitleMain($title);
+        $functions = array('addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional');
+        foreach($functions as $function) {
+            $doc = $this->createTestDocument();
+            $title = new Opus_Title();
+            $title->setLanguage('deu');
+            $title->setValue('deutscher Titel');
+            $doc->$function($title);
 
-        $title = new Opus_Title();
-        $title->setLanguage('eng');
-        $title->setValue('englischer Titel');
-        $doc->addTitleMain($title);
+            $title = new Opus_Title();
+            $title->setLanguage('eng');
+            $title->setValue('englischer Titel');
+            $doc->$function($title);
 
-        $doc->setLanguage('deu');
-        $doc->setServerState('published');
-        $docId = $doc->store();
+            $doc->setLanguage('deu');
+            $doc->setServerState('published');
+            $docId = $doc->store();
 
-        $this->dispatch('/frontdoor/index/index/docId/' . $docId);
-        $title1 = strpos($this->_response->getBody(), '<h2 class="titlemain">deutscher Titel</h2>');
-        $title2 = strpos($this->_response->getBody(), '<h3 class="titlemain">englischer Titel</h3>');
-        $this->assertTrue($title1 < $title2);
+            $this->dispatch('/frontdoor/index/index/docId/' . $docId);
+            $this->assertEquals(1, substr_count($this->_response->getBody(), '>deutscher Titel<'), 'Test is not reliable');
+            $this->assertEquals(1, substr_count($this->_response->getBody(), '>englischer Titel<'), 'Test is not reliable');
+            $title1 = strpos($this->_response->getBody(), '>deutscher Titel<');
+            $title2 = strpos($this->_response->getBody(), '>englischer Titel<');
+            $this->assertTrue($title1 < $title2);
+            $this->_response->clearBody();
+        }
     }
 
     /**
      * Checks, whether the document language title is printed before other titles.
      * OPUSVIER-1752
+     * OPUSVIER-3316
      */
     public function testMainTitleSortOrderEnglishFirst() {
-        $doc = $this->createTestDocument();
-        $title = new Opus_Title();
-        $title->setLanguage('deu');
-        $title->setValue('deutscher Titel');
-        $doc->addTitleMain($title);
+        $functions = array('addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional');
+        foreach($functions as $function) {
+            $doc = $this->createTestDocument();
+            $title = new Opus_Title();
+            $title->setLanguage('deu');
+            $title->setValue('deutscher Titel');
+            $doc->$function($title);
 
-        $title = new Opus_Title();
-        $title->setLanguage('eng');
-        $title->setValue('englischer Titel');
-        $doc->addTitleMain($title);
+            $title = new Opus_Title();
+            $title->setLanguage('eng');
+            $title->setValue('englischer Titel');
+            $doc->$function($title);
 
-        $doc->setLanguage('eng');
-        $doc->setServerState('published');
-        $docId = $doc->store();
+            $doc->setLanguage('eng');
+            $doc->setServerState('published');
+            $docId = $doc->store();
 
-        $this->dispatch('/frontdoor/index/index/docId/' . $docId);
-        $title1 = strpos($this->_response->getBody(), '<h2 class="titlemain">englischer Titel</h2>');
-        $title2 = strpos($this->_response->getBody(), '<h3 class="titlemain">deutscher Titel</h3>');
-        $this->assertTrue($title1 < $title2);
+            $this->dispatch('/frontdoor/index/index/docId/' . $docId);
+            $this->assertEquals(1, substr_count($this->_response->getBody(), '>deutscher Titel<'), 'Test is not reliable');
+            $this->assertEquals(1, substr_count($this->_response->getBody(), '>englischer Titel<'), 'Test is not reliable');
+            $title1 = strpos($this->_response->getBody(), '>englischer Titel<');
+            $title2 = strpos($this->_response->getBody(), '>deutscher Titel<');
+            $this->assertTrue($title1 < $title2);
+            $this->_response->clearBody();
+        }
     }
 
     /**

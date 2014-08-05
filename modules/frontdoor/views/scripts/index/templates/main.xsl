@@ -67,7 +67,6 @@
     </xsl:template>
 
     <xsl:template name="Title">
-        <xsl:variable name="docLang" select="@Language" />
         <xsl:for-each select="TitleMain">
             <xsl:if test="@Language = $docLang">
                 <h2 class="titlemain">
@@ -85,7 +84,6 @@
     </xsl:template>
 
     <xsl:template name="SortedAbstracts">
-        <xsl:variable name="docLang" select="@Language" />
         <ul>
         <xsl:for-each select="TitleAbstract">
             <xsl:if test="@Language = $docLang">
