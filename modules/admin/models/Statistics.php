@@ -115,7 +115,7 @@ class Admin_Model_Statistics {
                  FROM documents d
                  LEFT JOIN link_documents_collections ldc ON d.id=ldc.document_id
                  LEFT JOIN collections c ON ldc.collection_id=c.id
-                 WHERE c.role_id=1 AND YEAR(server_date_published)=2010 AND server_state='published'
+                 WHERE c.role_id=? AND YEAR(server_date_published)=? AND server_state='published'
                 group by name";
             $db = Zend_Registry::get('db_adapter');
             $res = $db->query($query, array($role->getId(), $selectedYear))->fetchAll();

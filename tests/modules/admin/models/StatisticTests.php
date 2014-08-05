@@ -42,6 +42,13 @@ class Admin_Model_StatisticsTest extends ControllerTestCase {
         $this->assertEquals(1, $institutes['Bauwesen'], 'wrong publicatin count of "Bauwesen" returned');
         $this->assertEquals(1, $institutes['Maschinenbau'], 'wrong publication count of "Maschinenbau" returned');
         $this->assertEquals(0, $institutes['Massivbau B-7'], 'wrong publication count of "Massivbau B-7" returned');
+
+        $institutes = $statistics->getInstituteStatistics(2009);
+        $this->assertEquals(50, $institutes['Technische Universität Hamburg-Harburg'],
+            'wrong publication count of Technische Universität Hamburg-Harburg returned' );
+        $this->assertEquals(0, $institutes['Bauwesen'], 'wrong publicatin count of "Bauwesen" returned');
+        $this->assertEquals(3, $institutes['Maschinenbau'], 'wrong publication count of "Maschinenbau" returned');
+        $this->assertEquals(0, $institutes['Massivbau B-7'], 'wrong publication count of "Massivbau B-7" returned');
     }
 
     /**
@@ -54,6 +61,12 @@ class Admin_Model_StatisticsTest extends ControllerTestCase {
         $this->assertEquals(6, $months[2], 'wrong publication count of month Feb returned');
         $this->assertEquals(25, $months[3], 'wrong publication count of month March returned');
         $this->assertEquals(0, $months[5], 'wrong publication count of month May returned');
+
+        $months = $statistics->getMonthStatistics(2009);
+        $this->assertEquals(0, $months[1], 'wrong publication count of month Jan returned');
+        $this->assertEquals(12, $months[8], 'wrong publication count of month Feb returned');
+        $this->assertEquals(9, $months[9], 'wrong publication count of month March returned');
+        $this->assertEquals(15, $months[12], 'wrong publication count of month May returned');
     }
 
     /**
@@ -65,6 +78,11 @@ class Admin_Model_StatisticsTest extends ControllerTestCase {
         $this->assertEquals(15, $types['article'], 'wrong publication count of Article returned');
         $this->assertEquals(0, $types['masterthesis'], 'wrong publication count of masterthesis returned');
         $this->assertEquals(2, $types['conferenceobject'], 'wrong publication count of conferenceobject returned');
+
+        $types = $statistics->getTypeStatistics(2009);
+        $this->assertEquals(4, $types['article'], 'wrong publication count of Article returned');
+        $this->assertEquals(1, $types['masterthesis'], 'wrong publication count of masterthesis returned');
+        $this->assertEquals(0, $types['conferenceobject'], 'wrong publication count of conferenceobject returned');
     }
 
     /**
