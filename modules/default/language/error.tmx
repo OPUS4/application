@@ -91,6 +91,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="fileUploadErrorNoFile">
+        <tuv xml:lang="en">
+            <seg>File upload is required.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sie haben keine Datei ausgewählt.</seg>
+        </tuv>
+    </tu>
+
   </body>
 
 </tmx>

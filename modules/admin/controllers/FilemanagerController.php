@@ -192,8 +192,7 @@ class Admin_FilemanagerController extends Controller_Action {
                     }
                     else {
                         // Formular wieder anzeigen
-                        $form->populate($post);
-                        // TODO show message in formular (admin_filemanager_invalid_upload)
+                        $form->populateFromModel($document);
                     }
                     break;
 
