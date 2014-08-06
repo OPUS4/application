@@ -114,11 +114,11 @@ class Opus3FileImport {
     protected $filesImported = array();
 
     /**
-     * Holds information, whether a file belongs to the folder 'html' or not.
+     * Holds information, whether the role 'guest' will be appended to the file or not.
      *
      * @var array
      */
-    protected $isHtmlFile = array();
+    protected $guestFiles = array();
 
     /**
      * Do some initialization on startup of every action.
@@ -227,7 +227,7 @@ class Opus3FileImport {
                 . "' is corrupt. Changed to '" . utf8_encode($pathName) . "'.", Zend_Log::ERR);
             $pathName = utf8_encode($pathName);
         }
-        $this->isHtmlFile[$pathName] = (strpos($subdir, "html") === 0) ? 0 : 1;
+        $this->guestFiles[$pathName] = (strpos($subdir, "html") === 0 || strpos($subdir, "original") === 0) ? 0 : 1;
         $this->logger->log("Import '" . $pathName . "'", Zend_Log::DEBUG);
         if ($visibleInFrontdoor) {
             $this->logger->log("File '" . $pathName . "' visible", Zend_Log::DEBUG);
@@ -272,7 +272,7 @@ class Opus3FileImport {
     * @return void
     */
     private function appendFileToRole($file)  {
-        if (!is_null($this->roleId) && $this->isHtmlFile[$file->getPathName()]) {
+        if (!is_null($this->roleId) && $this->guestFiles[$file->getPathName()]) {
             $role = new Opus_UserRole($this->roleId);
             $role->appendAccessFile($file->getId());
             $this->logger->log("Role '" . $role . "' for File '" . $file->getPathName()
