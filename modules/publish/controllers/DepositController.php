@@ -109,7 +109,7 @@ class Publish_DepositController extends Controller_Action {
         }
         catch (Exception $e) {
             // TODO wie sollte die Exception sinnvoll behandelt werden?
-            $this->log->err("Document $docId could not stored successfully: " . $e->getMessage());
+            $this->log->err("Document could not be stored successfully: " . $e->getMessage());
             throw new Application_Exception('publish_error_unexpected');
         }        
 
@@ -156,7 +156,10 @@ class Publish_DepositController extends Controller_Action {
         }
         $this->view->docId = $this->session->depositConfirmDocumentId;
 
-        if (true === Opus_Security_Realm::getInstance()->check('clearance')) {
+        $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+
+        if (true === Opus_Security_Realm::getInstance()->check('clearance')
+                || true === $accessControl->accessAllowed('documents')) {
             $this->view->showFrontdoor = true;
         }
         //unset all possible session content

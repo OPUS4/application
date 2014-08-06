@@ -39,8 +39,8 @@
     <?= $this->translate('publish_success', $this->docId) ?>
 
     <?php if ($this->showFrontdoor) : ?>
-       <a href="<?= $this->url(array('module' => 'frontdoor', 'controller' => 'index', 'action' => 'index', 'docId' => $this->docId)) ?>"
-           name="frontdoor-link">
+       <a href="<?= $this->url(array('module' => 'frontdoor', 'controller' => 'index', 'action' => 'index',
+           'docId' => $this->docId)) ?>" name="frontdoor-link">
           <?= htmlspecialchars( $this->translate('publish_success_frontdoor') ) ?>
        </a>
     <?php endif ?>
