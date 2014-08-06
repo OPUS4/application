@@ -152,16 +152,6 @@
         </tuv>
     </tu>
 
-    <tu tuid="fileUploadErrorNoFile">
-        <tuv xml:lang="en">
-            <seg>File upload is required.</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Sie haben keine Datei ausgewählt.</seg>
-        </tuv>
-    </tu>
-
-
     <tu tuid="fileExtensionFalse">
         <tuv xml:lang="en">
             <seg>File '%value%' has a forbidden extension. Please choose another file.</seg>
