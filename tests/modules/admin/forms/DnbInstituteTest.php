@@ -146,4 +146,13 @@ class Admin_Form_DnbInstituteTest extends ControllerTestCase {
         )));
     }
 
+    public function testTranslationKeysForElements() {
+        $form = new Admin_Form_DnbInstitute();
+
+        foreach ($form->getElements() as $name => $element) {
+            $this->assertTrue(strpos($element->getLabel(), 'Opus_DnbInstitute_') === FALSE,
+                    "Element '$name' is not translated.");
+        }
+    }
+
 }

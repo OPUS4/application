@@ -47,7 +47,7 @@ class Admin_Form_DnbInstitute extends Application_Form_Model_Abstract {
         parent::init();
 
         $this->setRemoveEmptyCheckbox(false);
-        // TODO $this->setLabelPrefix('Opus_DnbInstitute_');
+        $this->setLabelPrefix('Opus_DnbInstitute_');
         $this->setUseNameAsLabel(true);
         $this->setModelClass('Opus_DnbInstitute');
 

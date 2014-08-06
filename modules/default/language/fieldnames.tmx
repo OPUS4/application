@@ -2203,6 +2203,78 @@
             </tuv>
         </tu>
 
+        <tu tuid="Opus_DnbInstitute_Name">
+            <tuv xml:lang="en">
+                <seg>Institute</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Institut</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_DnbInstitute_Department">
+            <tuv xml:lang="en">
+                <seg>Department</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Fakultät</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_DnbInstitute_Address">
+            <tuv xml:lang="en">
+                <seg>Address</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Adresse</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_DnbInstitute_City">
+            <tuv xml:lang="en">
+                <seg>City</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Stadt</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_DnbInstitute_Phone">
+            <tuv xml:lang="en">
+                <seg>Phone</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Telefon</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_DnbInstitute_DnbContactId">
+            <tuv xml:lang="en">
+                <seg>DNB Contact ID</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>DNB Kontakt ID</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_DnbInstitute_IsGrantor">
+            <tuv xml:lang="en">
+                <seg>Is Grantor</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Titel verleihend</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="Opus_DnbInstitute_IsPublisher">
+            <tuv xml:lang="en">
+                <seg>Is Publisher</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Veröffentlichend</seg>
+            </tuv>
+        </tu>
+
     </body>
 
 </tmx>
