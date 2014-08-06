@@ -132,7 +132,7 @@
     <field name="Series" required="no" formelement="Select" datatype="Series" multiplicity="*"/>      
     
      <!-- possible browsable collection fields -->
-    <field name="SubjectDDC" required="no" formelement="Select" datatype="Collection" root="ddc" multiplicity="*"/>
+    <field name="SubjectDDC" required="no" formelement="Select" datatype="CollectionLeaf" root="ddc" multiplicity="*"/>
     <field name="SubjectMSC" required="no" formelement="Select" datatype="Collection" root="msc" multiplicity="*"/>
     <field name="SubjectPACS" required="no" formelement="Select" datatype="Collection" root="pacs" multiplicity="*"/>
     <field name="SubjectCCS" required="no" formelement="Select" datatype="Collection" root="ccs" multiplicity="*"/>
