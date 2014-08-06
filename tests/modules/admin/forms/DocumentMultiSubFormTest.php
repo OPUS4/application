@@ -555,4 +555,27 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
         }
     }
 
+    public function testSubformsAppearInOrderOfObjects() {
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier');
+
+        $doc = new Opus_Document(146);
+
+        $identifiers = $doc->getIdentifier();
+
+        $form->populateFromModel($doc);
+
+        $this->assertEquals(count($identifiers), count($form->getSubForms()));
+
+        $index = 0;
+
+        foreach($form->getSubForms() as $name => $subform) {
+            $this->assertEquals($identifiers[$index]->getId(), $subform->getElement('Id')->getValue(),
+                "Subform $name should habe been at position $index.");
+            $index++;
+        }
+
+
+
+    }
+
 }

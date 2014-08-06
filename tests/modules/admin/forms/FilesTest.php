@@ -197,4 +197,23 @@ class Admin_Form_FilesTest extends ControllerTestCase {
         $this->assertNull($form->getSubFormForId(5555));
     }
 
+    public function testFilesAppearInOrder() {
+        $form = new Admin_Form_Files();
+
+        $document = new Opus_Document(91);
+
+        $form->populateFromModel($document);
+
+        $files = $document->getFile();
+
+        $this->assertEquals(count($files), count($form->getSubForms()));
+
+        $index = 0;
+
+        foreach ($form->getSubForms() as $name => $subform) {
+            $this->assertEquals($files[$index]->getId(), $subform->getElement('Id')->getValue(),
+                    "Subform '$name' should habe been at position $index.");
+        }
+    }
+
 }
