@@ -86,6 +86,12 @@ class Publish_FormController extends Controller_Action {
             $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
         }
 
+        $config = Zend_Registry::get('Zend_Config');
+
+        if (isset($config->publish->filetypes->allowed)) {
+            $this->view->extensions = $config->publish->filetypes->allowed;
+        }
+
         // validate fileupload (if the current form contains a file upload field and file upload is enabled in application config)
         if ($indexForm->enableUpload) {
             if ($indexForm->getElement('fileupload') != null && !$indexForm->getElement('fileupload')->isValid($postData)) {
