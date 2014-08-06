@@ -1141,5 +1141,12 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertRedirectTo('/export/index/index/searchtype/latest/export/xml/stylesheet/example/rows/10');
     }
 
-
+    /**
+     * In refined facet, the facet value extender should not exist.
+     * OPUSVIER-3351.
+     */
+    public function testHideFacetExtenderInRefinedFacets() {
+        $this->dispatch('/solrsearch/index/search/searchtype/all/rows/10/start/0/institutefq/Technische+Universität+Hamburg-Harburg');
+        $this->assertNotXpath('//div[@id="institute_facet"]/div[@class="facetValueExtender"]');
+    }
 }
