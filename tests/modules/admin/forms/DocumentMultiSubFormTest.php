@@ -573,9 +573,6 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
                 "Subform $name should habe been at position $index.");
             $index++;
         }
-
-
-
     }
 
 }

@@ -146,4 +146,13 @@ class Admin_Form_Files extends Admin_Form_DocumentMultiSubForm {
         return null;
     }
 
+    /**
+     * Liefert Opus_File objects for document through getFile function to get proper order of files.
+     * @param Opus_Document $document
+     * @return array Array of Opus_File objects
+     */
+    public function getFieldValues($document) {
+        return $document->getFile();
+    }
+
 }

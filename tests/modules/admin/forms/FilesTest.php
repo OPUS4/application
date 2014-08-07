@@ -200,7 +200,7 @@ class Admin_Form_FilesTest extends ControllerTestCase {
     public function testFilesAppearInOrder() {
         $form = new Admin_Form_Files();
 
-        $document = new Opus_Document(91);
+        $document = new Opus_Document(155);
 
         $form->populateFromModel($document);
 
@@ -212,7 +212,24 @@ class Admin_Form_FilesTest extends ControllerTestCase {
 
         foreach ($form->getSubForms() as $name => $subform) {
             $this->assertEquals($files[$index]->getId(), $subform->getElement('Id')->getValue(),
-                    "Subform '$name' should habe been at position $index.");
+                    "Subform '$name' should have been at position $index.");
+            $index++;
+        }
+    }
+
+    public function testGetFieldValues() {
+        $form = new Admin_Form_Files();
+
+        $document = new Opus_Document(155);
+
+        $files = $document->getFile();
+
+        $values = $form->getFieldValues($document);
+
+        $this->assertEquals(count($files), count($values));
+
+        foreach ($files as $index => $file) {
+            $this->assertEquals($file->getId(), $values[$index]->getId(), 'Files are not in expected order.');
         }
     }
 
