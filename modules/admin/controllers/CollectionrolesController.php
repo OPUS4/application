@@ -55,6 +55,8 @@ class Admin_CollectionrolesController extends Controller_Action {
         $this->view->form = $this->getRoleForm($collectionRoleModel->getObject());
     }
 
+
+
     /**
      * Zeigt Formular für das Editieren einer CollectionRole.
      */

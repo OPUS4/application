@@ -238,4 +238,65 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
         $this->assertEquals((string) $docBefore->getServerDateModified(), (string) $docAfter->getServerDateModified());
     }
 
+    public function testCreateActionGetRequest() {
+        $this->dispatch('/admin/collectionroles/create');
+        $this->assertRedirectTo('/admin/collectionroles');
+    }
+
+    public function testCreateAction() {
+        $roles = Opus_CollectionRole::fetchAll();
+
+        $this->assertEquals(21, count($roles));
+
+        $roleIds = array();
+
+        foreach ($roles as $role) {
+            $roleIds[] = $role->getId();
+        }
+
+        $post = array(
+            'Name' => 'CreateTestColName',
+            'OaiName' => 'CreateTestColOaiName',
+            'DisplayBrowsing' => 'Name',
+            'DisplayFrontdoor' => 'Number',
+            'Visible' => '1',
+            'VisibleBrowsingStart' => '1',
+            'VisibleFrontdoor' => '0',
+            'VisibleOai' => '0',
+            'Position' => '20',
+            'Save' => 'Speichern'
+        );
+
+        $this->getRequest()->setMethod('POST')->setPost($post);
+
+        $this->dispatch('/admin/collectionroles/create');
+
+        $roles = Opus_CollectionRole::fetchAll();
+
+        $this->assertEquals(count($roleIds) + 1, count($roles)); // neue Collection wurde erzeugt
+
+        $newColFound = false;
+
+        foreach ($roles as $role) {
+            if (!in_array($role->getId(), $roleIds)) {
+                $role->delete();
+
+                $this->assertEquals('CreateTestColName', $role->getName());
+                $this->assertEquals('CreateTestColOaiName', $role->getOaiName());
+                $this->assertEquals('Name', $role->getDisplayBrowsing());
+                $this->assertEquals('Number', $role->getDisplayFrontdoor());
+                $this->assertEquals(1, $role->getVisible());
+                $this->assertEquals(1, $role->getVisibleBrowsingStart());
+                $this->assertEquals(0, $role->getVisibleFrontdoor());
+                $this->assertEquals(0, $role->getVisibleOai());
+                $this->assertEquals(20, $role->getPosition());
+
+                $newColFound = true;
+            }
+        }
+
+        $this->assertTrue($newColFound, 'No new CollectionRole was created.');
+        $this->assertRedirectTo('/admin/collectionroles');
+    }
+
 }
