@@ -244,6 +244,8 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
     }
 
     public function testCreateAction() {
+        $this->useEnglish();
+
         $roles = Opus_CollectionRole::fetchAll();
 
         $this->assertEquals(21, count($roles));
@@ -297,6 +299,65 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
 
         $this->assertTrue($newColFound, 'No new CollectionRole was created.');
         $this->assertRedirectTo('/admin/collectionroles');
+        $this->verifyFlashMessage('Collection role \'CreateTestColName\' was created successfully.',
+            self::MESSAGE_LEVEL_NOTICE);
+    }
+
+    public function testCreateActionForEdit() {
+        $this->useEnglish();
+
+        $roles = Opus_CollectionRole::fetchAll();
+
+        $role = new Opus_CollectionRole();
+        $role->setName('EditTestName');
+        $role->setOaiName('EditTestOaiName');
+        $role->setDisplayBrowsing('Name');
+        $role->setDisplayFrontdoor('Number');
+        $role->setVisible(1);
+        $role->setVisibleBrowsingStart(1);
+        $role->setVisibleFrontdoor(0);
+        $role->setVisibleOai(0);
+        $role->setPosition(20);
+
+        $roleId = $role->store();
+
+        $post = array(
+            'oid' => $roleId,
+            'Name' => 'ModifiedName',
+            'OaiName' => 'ModifiedOaiName',
+            'DisplayBrowsing' => 'NumberName',
+            'DisplayFrontdoor' => 'NameNumber',
+            'Visible' => '0',
+            'VisibleBrowsingStart' => '0',
+            'VisibleFrontdoor' => '1',
+            'VisibleOai' => '1',
+            'Position' => '19',
+            'Save' => 'Speichern'
+        );
+
+        $this->getRequest()->setMethod('POST')->setPost($post);
+
+        $this->dispatch('/admin/collectionroles/create');
+
+        $this->assertEquals(count($roles) + 1, count(Opus_CollectionRole::fetchAll())); // keine neue Collection
+
+        $role = new Opus_CollectionRole($roleId);
+
+        $role->delete();
+
+        $this->assertEquals('ModifiedName', $role->getName());
+        $this->assertEquals('ModifiedOaiName', $role->getOaiName());
+        $this->assertEquals('NumberName', $role->getDisplayBrowsing());
+        $this->assertEquals('NameNumber', $role->getDisplayFrontdoor());
+        $this->assertEquals(0, $role->getVisible());
+        $this->assertEquals(0, $role->getVisibleBrowsingStart());
+        $this->assertEquals(1, $role->getVisibleFrontdoor());
+        $this->assertEquals(1, $role->getVisibleOai());
+        $this->assertEquals(19, $role->getPosition());
+
+        $this->assertRedirectTo('/admin/collectionroles');
+        $this->verifyFlashMessage('Collection role \'ModifiedName\' was edited successfully.',
+            self::MESSAGE_LEVEL_NOTICE);
     }
 
 }
