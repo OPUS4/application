@@ -117,6 +117,7 @@ class Solrsearch_IndexController extends Controller_Action {
             return $this->redirectToExport($params);
         }
 
+        $this->setAnchor();
         $this->query = $this->buildQuery();
         $this->performSearch();
         $this->setViewValues();
@@ -129,6 +130,21 @@ class Solrsearch_IndexController extends Controller_Action {
         }
         else {
             $this->render('results');
+        }
+    }
+
+    public function setAnchor() {
+        $this->view->paramsToDelete = array();
+        $params = $this->getRequest()->getParams();
+        foreach($params as $key => $value) {
+            if ($value == 'all') {
+                $this->view->anchor = $key;
+            }
+            if ($value == 'del') {
+                $this->view->anchor = $key;
+                $this->view->paramsToDelete[$key] = null;
+                break;
+            }
         }
     }
     
