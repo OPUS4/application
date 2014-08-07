@@ -113,7 +113,7 @@
         word-wrap: break-word;
 }
 
-#download-fulltext li a img{
+#download-fulltext li img.file-icon {
 	margin-right: 0.5em;
 }
 

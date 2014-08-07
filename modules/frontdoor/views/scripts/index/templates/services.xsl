@@ -44,7 +44,7 @@
    <xsl:template match="File[@VisibleInFrontdoor='1']">
       <li>
          <xsl:variable name="fileIcon">
-            <img width="16" height="16">
+            <img width="16" height="16" class="file-icon">
                <xsl:attribute name="src">
                   <xsl:value-of select="$layoutPath"/>
                   <xsl:text>/img/filetype/</xsl:text>
@@ -153,7 +153,7 @@
                      </xsl:call-template>
                   </xsl:attribute>
                   <xsl:copy-of select="$fileIcon" />
-                  <xsl:text>&#8201;&#8201;&#8201;</xsl:text> <!--schmales Leerzeichen - etwas anderes wird nicht angezeigt-->
+                  <xsl:text> </xsl:text>
                   <xsl:copy-of select="$fileLinkText" />
                   <xsl:text> </xsl:text>
                   <xsl:copy-of select="$flagIcon" />
