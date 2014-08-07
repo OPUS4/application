@@ -284,6 +284,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $facetValue = $this->getRequest()->getParam($key . 'fq','');
             if($facetValue !== '') {
                 $selectedFacets[$key] = $facetValue;
+                $this->view->showFacetExtender[$key] = false;
             }
 
             if(count($facets[$key]) > 1 || $facetValue !== '') {
