@@ -41,6 +41,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     private $securityEnabled;
     private $testDocuments;
     private $testFiles;
+    private $logger = null;
 
     const MESSAGE_LEVEL_NOTICE = 'notice';
     const MESSAGE_LEVEL_FAILURE = 'failure';
@@ -101,6 +102,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->logoutUser();
         $this->deleteTestDocuments();
         $this->deleteTestFiles();
+        $this->logger = null;
         parent::tearDown();
     }
 
@@ -354,6 +356,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      * @return boolean TRUE - wenn Kommando existiert
      */
     public function isCommandAvailable($command) {
+        $this->getLogger()->debug("Checking command $command");
+        $this->getLogger()->debug('User: ' . get_current_user());
         $result = shell_exec("which $command");
         return (empty($result) ? false : true);
     }
@@ -573,6 +577,14 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->assertTrue(Zend_Registry::isRegistered('Opus_Acl'), 'Expected registry key Opus_Acl to be set');
         $acl = Zend_Registry::get('Opus_Acl');
         $this->assertTrue($acl instanceof Zend_Acl, 'Expected instance of Zend_Acl');
+    }
+
+    public function getLogger() {
+        if (is_null($this->logger)) {
+            $this->logger = Zend_Registry::get('Zend_Log');
+        }
+
+        return $this->logger;
     }
 
 }
