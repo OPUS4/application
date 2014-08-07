@@ -1,5 +1,5 @@
-<?PHP
-/*
+<?php
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,47 +24,51 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
+ * @category    Application Unit Test
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Eingabefeld für Jahreszahlen.
- */
-class Form_Element_Year extends Form_Element_Text {
+class Form_Element_YearTest extends FormElementTestCase {
 
-    public function init() {
-        parent::init();
-        
-        $this->setLabel($this->getName()); // TODO use prefix for translation
-        
-        $validators = array();
-        
-        $validator = new Zend_Validate_Int();
-        $validator->setMessage('validation_error_year_invalid_format');
-        $validators[] = $validator;
-        
-        $validator = new Zend_Validate_GreaterThan(-1);
-        $validator->setMessages(array(
-            Zend_Validate_GreaterThan::NOT_GREATER => 'validation_error_year_invalid_negative'
-        ));
-        $validators[] = $validator;
-
-        $validator = new Zend_Validate_LessThan(10000);
-        $validator->setMessages(array(
-            Zend_Validate_LessThan::NOT_LESS => 'validation_error_year_too_large'
-        ));
-        $validators[] = $validator;
-
-        $this->setAttrib('placeholder', $this->getTranslator()->translate('year_format'));
-        $this->setAttrib('size', 6);
-        $this->setAttrib('maxlength', 4);
-        
-        $this->setValidators($validators, true);
+    public function setUp() {
+        $this->_formElementClass = 'Form_Element_Year';
+        $this->_expectedDecoratorCount = 8;
+        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_staticViewHelper = 'viewFormDefault';
+        parent::setUp();
     }
-    
+
+    public function testValidation() {
+        $element = $this->getElement();
+
+        $element->setValue(-1);
+
+        $this->assertTrue($element->isValid(null));
+        $this->assertTrue($element->isValid(''));
+        $this->assertTrue($element->isValid(0));
+        $this->assertTrue($element->isValid(1990));
+        $this->assertTrue($element->isValid(2050));
+        $this->assertTrue($element->isValid(9999));
+
+        $this->assertFalse($element->isValid(' '));
+        $this->assertFalse($element->isValid('anno'));
+        $this->assertFalse($element->isValid(-1));
+        $this->assertFalse($element->isValid(10000));
+    }
+
+    public function testTranslation() {
+        $element = $this->getElement();
+
+        $translator = $element->getTranslator();
+
+        $this->assertTrue($translator->isTranslated('validation_error_year_invalid_format'));
+        $this->assertTrue($translator->isTranslated('validation_error_year_invalid_negative'));
+        $this->assertTrue($translator->isTranslated('validation_error_year_too_large'));
+    }
+
 }

@@ -52,6 +52,15 @@
         </tuv>
     </tu>    
     
+    <tu tuid="validation_error_year_too_large">
+        <tuv xml:lang="en">
+            <seg>Please provide a year less than 10000.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Bitte geben Sie eine Jahreszahl unter 10000 an.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="validation_error_int">
         <tuv xml:lang="en">
             <seg>Please provide a number.</seg>
