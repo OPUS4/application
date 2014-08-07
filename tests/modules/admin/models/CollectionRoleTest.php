@@ -137,11 +137,11 @@ class Admin_Model_CollectionRoleTest extends ControllerTestCase {
 
         $this->assertEquals(1, $collectionRole->getVisible());
 
-        $model->setVisibility(true);
+        $model->setVisibility(false);
 
         $collectionRole = new Opus_CollectionRole($this->collectionRoleId);
 
-        $this->assertEquals(1, $collectionRole->getVisible());
+        $this->assertEquals(0, $collectionRole->getVisible());
     }
 
     public function testMove() {
