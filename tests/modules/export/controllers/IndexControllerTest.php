@@ -751,12 +751,12 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertContains(urlencode('datei mit unüblichem Namen.xhtml'), $response->getBody());
     }
 
-
     public function testXMLExportForFrontdoor() {
         $document = $this->createTestDocument();
+        $document->setServerState('published');
         $docId = $document->store();
 
-        $this->dispatch('/export/index/index/docId/' . $docId . '/export/xmlFd/stylesheet/example');
+        $this->dispatch('/export/index/index/docId/' . $docId . '/searchtype/id/export/xml/stylesheet/example');
 
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
@@ -764,5 +764,4 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<export-example>', $response->getBody());
         $this->assertContains($docId, $response->getBody());
     }
-
 }
