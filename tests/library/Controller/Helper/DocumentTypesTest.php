@@ -263,5 +263,41 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         libxml_clear_errors();
     }
 
+    /**
+     * Dieser Test vergleicht jedes DokumentTemplate mit jedem DokumentTyp und umgekehrt und validiert,
+     * dass beide in Paaren vorkommen.
+     */
+    public function testDocumentTypesAndTemplates() {
+        $config = Zend_Registry::get('Zend_Config');
+        $templates = $this->getFileNames($config->publish->path->documenttemplates);
+        $types = $this->getFileNames($config->publish->path->documenttypes);
+
+        unset($templates['barfoo']);
+        unset($types['bazbar']);
+        unset($types['demo_invalidfieldname']);
+        unset($types['demo_invalid']);
+        unset($types['foobar']);
+        unset($types['barbaz']);
+
+        $array1 = array_diff($templates, $types);
+        $array2 = array_diff($types, $templates);
+
+        $this->assertEmpty($array1);
+        $this->assertEmpty($array2);
+    }
+
+    private function getFileNames($path) {
+        $fileNames = array();
+        if ($handle = opendir($path)) {
+            while (false !== ($file = readdir($handle))) {
+                if ($file != "." && $file != ".." && $file != ".svn") {
+                    $fileNameParts = explode('.', $file);
+                    $fileNames[$fileNameParts[0]] = $fileNameParts[0];
+                }
+            }
+            closedir($handle);
+        }
+        return $fileNames;
+    }
 
 }
