@@ -91,7 +91,7 @@ class Util_QueryBuilder {
             'rows' => $request->getParam('rows', Opus_SolrSearch_Query::getDefaultRows()),
             'sortField' => $request->getParam('sortfield', Opus_SolrSearch_Query::DEFAULT_SORTFIELD),
             'sortOrder' => $request->getParam('sortorder', Opus_SolrSearch_Query::DEFAULT_SORTORDER),
-            'docId' => $request->getParam('docId', Opus_SolrSearch_Query::DOC_ID),
+            'docId' => $request->getParam('docId'),
             'query' => $request->getParam('query', '*:*')
         );
 
@@ -200,6 +200,10 @@ class Util_QueryBuilder {
 
     private function createIdSearchQuery($input) {
         $this->logger->debug("Constructing query for id search.");
+
+        if (is_null($input['docId'])) {
+            throw new Application_Exception("No id provided.", 404);
+        }
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::DOC_ID);
         $query->setField('id', $input['docId']);

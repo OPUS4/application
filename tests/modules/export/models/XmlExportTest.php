@@ -73,10 +73,10 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $proc = new XSLTProcessor;
         $this->getRequest()->setMethod('POST')->setPost(array(
             'docId' => $docId,
-            'searchtype' => 'all'
+            'searchtype' => 'id'
         ));
         $xmlExportModel = new Export_Model_XmlExport();
-        $xmlExportModel->prepareXmlForFrontdoor($xml, $proc, $this->getRequest());
+        $xmlExportModel->prepareXml($xml, $proc, $this->getRequest());
 
         $xpath = new DOMXPath($xml);
         $result = $xpath->query('//Opus_Document');
@@ -92,12 +92,14 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
 
         $this->getRequest()->setMethod('POST')->setPost(array(
             'docId' => ++$docId,
-            'searchtype' => 'all'
+            'searchtype' => 'id'
         ));
         $xmlExportModel = new Export_Model_XmlExport();
 
-        $this->setExpectedException('Application_Exception');
-        $xmlExportModel->prepareXmlForFrontdoor($xml, $proc, $this->getRequest());
+        $xmlExportModel->prepareXml($xml, $proc, $this->getRequest());
+        $xpath = new DOMXPath($xml);
+        $result = $xpath->query('//Opus_Document');
+        $this->assertEquals(0, $result->length);
     }
 
     public function testXmlPreparationForFrontdoorWithoutId() {
@@ -105,12 +107,12 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $proc = new XSLTProcessor;
 
         $this->getRequest()->setMethod('POST')->setPost(array(
-            'searchtype' => 'all'
+            'searchtype' => 'id'
         ));
         $xmlExportModel = new Export_Model_XmlExport();
 
         $this->setExpectedException('Application_Exception');
-        $xmlExportModel->prepareXmlForFrontdoor($xml, $proc, $this->getRequest());
+        $xmlExportModel->prepareXml($xml, $proc, $this->getRequest());
     }
 
     public function testXmlSortOrder() {
