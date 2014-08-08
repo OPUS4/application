@@ -56,7 +56,7 @@ class Export_IndexController extends Controller_Xml {
         }
 
         // currently only xml is supported here
-        if ($exportParam !== 'xml' && $exportParam !== 'xmlFd') {
+        if ($exportParam !== 'xml') {
             throw new Application_Exception('export format is not supported' . $exportParam);
         }
 
@@ -72,12 +72,8 @@ class Export_IndexController extends Controller_Xml {
         $this->loadStyleSheet($this->exportModel->buildStylesheetPath($this->stylesheet,
             $this->view->getScriptPath('') . $this->stylesheetDirectory));
 
-        if ($exportParam == 'xml') {
-            $this->exportModel->prepareXml($this->_xml, $this->_proc, $this->getRequest());
-        }
-        else {
-            $this->exportModel->prepareXmlForFrontdoor($this->_xml, $this->_proc, $this->getRequest());
-        }
+        $this->exportModel->prepareXml($this->_xml, $this->_proc, $this->getRequest());
+
     }
 
     /*

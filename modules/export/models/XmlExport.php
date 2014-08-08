@@ -51,25 +51,6 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
     }
 
     /**
-     * Prepares xml export for frontdoor documents.
-     */
-    public function prepareXmlForFrontdoor($xml, $proc, $request) {
-        $docId = $request->getParam('docId', '');
-        if (is_null($docId) || $docId == '') {
-            throw new Application_Exception("No document id provided.", 404);
-        }
-        try {
-            $document = new Opus_Document($docId);
-            $results = array();
-            $results[0] = $document;
-            $this->handleResults($results, 1, $xml, $proc);
-        }
-        catch (Opus_Model_NotFoundException $e) {
-            throw new Application_Exception("The document for id $docId is not found.", 404);
-        }
-    }
-
-    /**
      * Sets up an xml document out of the result list.
      * @param array $results An array of Opus_SolrSearch_Result objects.
      */
