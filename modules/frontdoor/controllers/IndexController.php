@@ -59,6 +59,7 @@ class Frontdoor_IndexController extends Controller_Action {
             // export module ignores pagination parameters
             unset($params['rows']);
             unset($params['start']);
+            $params['searchtype'] = 'id';
 
             return $this->_redirectToAndExit('index', null, 'index', 'export', $params);
         }

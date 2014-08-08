@@ -91,6 +91,7 @@ class Util_QueryBuilder {
             'rows' => $request->getParam('rows', Opus_SolrSearch_Query::getDefaultRows()),
             'sortField' => $request->getParam('sortfield', Opus_SolrSearch_Query::DEFAULT_SORTFIELD),
             'sortOrder' => $request->getParam('sortorder', Opus_SolrSearch_Query::DEFAULT_SORTORDER),
+            'docId' => $request->getParam('docId', Opus_SolrSearch_Query::DOC_ID),
             'query' => $request->getParam('query', '*:*')
         );
 
@@ -192,13 +193,30 @@ class Util_QueryBuilder {
         if ($input['searchtype'] === Util_Searchtypes::ALL_SEARCH) {
             return $this->createAllSearchQuery($input);
         }
+        if ($input['searchtype'] === Util_Searchtypes::ID_SEARCH) {
+            return $this->createIdSearchQuery($input);
+        }
+    }
+
+    private function createIdSearchQuery($input) {
+        $this->logger->debug("Constructing query for id search.");
+
+        $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::DOC_ID);
+        $query->setField('id', $input['docId']);
+
+        if ($this->export) {
+            $query->setReturnIdsOnly(true);
+        }
+        
+        $this->logger->debug("Query $query complete");
+        return $query;
     }
 
     private function createSimpleSearchQuery($input) {
         $this->logger->debug("Constructing query for simple search.");
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
-        $query->setStart($input['start']);        
+        $query->setStart($input['start']);
         $query->setRows($input['rows']);
         $query->setSortField($input['sortField']);
         $query->setSortOrder($input['sortOrder']);
@@ -209,7 +227,7 @@ class Util_QueryBuilder {
         if ($this->export) {
             $query->setReturnIdsOnly(true);
         }
-        
+
         $this->logger->debug("Query $query complete");
         return $query;
     }
