@@ -42,4 +42,8 @@ class Form_Element_SelectTest extends FormElementTestCase {
         parent::setUp();
     }
 
+    public function testGetHint() {
+        $this->assertNull($this->getElement()->getHint());
+    }
+
 }

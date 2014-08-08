@@ -23,68 +23,59 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
+ *
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Element_CheckboxTest extends FormElementTestCase {
+class Form_Element_SeriesTest extends FormElementTestCase {
 
     public function setUp() {
-        $this->_formElementClass = 'Form_Element_Checkbox';
+        $this->_formElementClass = 'Form_Element_Series';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'Label',
+        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
             'dataWrapper');
+        $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
 
-    public function testGetViewCheckedValue() {
+    public function testOptions() {
         $element = $this->getElement();
 
-        $this->assertEquals('Field_Value_True', $element->getViewCheckedValue());
+        $allSeries = Opus_Series::getAll();
+
+        $this->assertEquals(count($allSeries), count($element->getMultiOptions()));
+
+        $index = 0;
+
+        foreach ($element->getMultiOptions() as $seriesId => $label) {
+            $this->assertEquals($allSeries[$index]->getId(), $seriesId);
+            $this->assertEquals($allSeries[$index]->getTitle(), $label);
+            $index++;
+        }
     }
 
-    public function testSetViewCheckedValue() {
+    /**
+     * TODO fehlender, leerer Wert wird nicht geprüft
+     */
+    public function testValidation() {
         $element = $this->getElement();
 
-        $element->setViewCheckedValue('Public');
-
-        $this->assertEquals('Public', $element->getViewCheckedValue());
+        $this->assertFalse($element->isValid('-1'));
+        $this->assertFalse($element->isValid('a'));
+        $this->assertFalse($element->isValid(null));
+        $this->assertFalse($element->isValid(' '));
+        $this->assertFalse($element->isValid('99'));
+        $this->assertTrue($element->isValid('2')); // existing ID for series
     }
 
-    public function testGetViewUncheckedValue() {
-        $element = $this->getElement();
+    public function testTranslation() {
+        $translator = $this->getElement()->getTranslator();
 
-        $this->assertEquals('Field_Value_False', $element->getViewUncheckedValue());
-    }
-
-    public function testSetViewUncheckedValue() {
-        $element = $this->getElement();
-
-        $element->setViewUncheckedValue('Private');
-
-        $this->assertEquals('Private', $element->getViewUncheckedValue());
-    }
-
-    public function testPrepareRenderingAsViewModifyValues() {
-        $this->useEnglish();
-
-        $element = $this->getElement();
-        $element->setValue(1);
-        $element->prepareRenderingAsView();
-
-        $this->assertEquals('Yes', $element->getCheckedValue());
-        $this->assertEquals('No', $element->getUncheckedValue());
-        $this->assertEquals('Yes', $element->getValue());
-    }
-
-    public function testGetHint() {
-        $this->assertNull($this->getElement()->getHint());
+        $this->assertTrue($translator->isTranslated('validation_error_int'));
     }
 
 }

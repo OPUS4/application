@@ -23,68 +23,59 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
+ *
  * @category    Application Unit Test
  * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Element_CheckboxTest extends FormElementTestCase {
+class Form_Element_LanguageTest extends FormElementTestCase {
 
     public function setUp() {
-        $this->_formElementClass = 'Form_Element_Checkbox';
+        $this->_formElementClass = 'Form_Element_Language';
         $this->_expectedDecoratorCount = 6;
-        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'Label',
+        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
             'dataWrapper');
+        $this->_staticViewHelper = 'viewFormSelect';
         parent::setUp();
     }
 
-    public function testGetViewCheckedValue() {
-        $element = $this->getElement();
-
-        $this->assertEquals('Field_Value_True', $element->getViewCheckedValue());
-    }
-
-    public function testSetViewCheckedValue() {
-        $element = $this->getElement();
-
-        $element->setViewCheckedValue('Public');
-
-        $this->assertEquals('Public', $element->getViewCheckedValue());
-    }
-
-    public function testGetViewUncheckedValue() {
-        $element = $this->getElement();
-
-        $this->assertEquals('Field_Value_False', $element->getViewUncheckedValue());
-    }
-
-    public function testSetViewUncheckedValue() {
-        $element = $this->getElement();
-
-        $element->setViewUncheckedValue('Private');
-
-        $this->assertEquals('Private', $element->getViewUncheckedValue());
-    }
-
-    public function testPrepareRenderingAsViewModifyValues() {
+    public function testGetLanguageList() {
         $this->useEnglish();
 
-        $element = $this->getElement();
-        $element->setValue(1);
-        $element->prepareRenderingAsView();
+        $languages = Form_Element_Language::getLanguageList();
 
-        $this->assertEquals('Yes', $element->getCheckedValue());
-        $this->assertEquals('No', $element->getUncheckedValue());
-        $this->assertEquals('Yes', $element->getValue());
+        $this->assertEquals(array(
+            'deu' => 'German',
+            'eng' => 'English',
+            'fra' => 'French',
+            'rus' => 'Russian',
+            'spa' => 'Spanish',
+            'mul' => 'Multiple languages'), $languages);
     }
 
-    public function testGetHint() {
-        $this->assertNull($this->getElement()->getHint());
+    public function testOptions() {
+        $element = $this->getElement();
+
+        $languages = Form_Element_Language::getLanguageList();
+
+        $this->assertEquals(count($languages), count($element->getMultiOptions()));
+
+        foreach ($element->getMultiOptions() as $type => $label) {
+            $this->assertTrue(array_key_exists($type, $languages));
+        }
+    }
+
+    /**
+     * TODO fehlender, leerer Wert wird nicht geprüft
+     */
+    public function testValidation() {
+        $element = $this->getElement();
+
+        $this->assertFalse($element->isValid('unknownlang'));
+        $this->assertTrue($element->isValid('deu'));
     }
 
 }

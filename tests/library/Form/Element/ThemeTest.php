@@ -76,4 +76,12 @@ class Form_Element_ThemeTest extends FormElementTestCase {
         $this->assertNull($element->getValue());
     }
 
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Argument should be a valid path.
+     */
+    public function testFindThemesInvalidPath() {
+        Form_Element_Theme::findThemes('/invalidPath');
+    }
+
 }

@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class Form_Element_PublisherTest extends FormElementTestCase{
+class Form_Element_PublisherTest extends FormElementTestCase {
 
     public function setUp() {
         $this->_formElementClass = 'Form_Element_Publisher';
