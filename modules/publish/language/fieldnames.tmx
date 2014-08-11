@@ -115,6 +115,33 @@
       </tuv>
     </tu>
 
+    <tu tuid="PersonAuthorIdentifierGnd">
+      <tuv xml:lang="en">
+        <seg>GND ID</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>GND ID</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="PersonAuthorIdentifierOrcid">
+      <tuv xml:lang="en">
+        <seg>ORCID</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>ORCID</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="PersonAuthorIdentifierMisc">
+      <tuv xml:lang="en">
+        <seg>Internal ID</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Interne ID</seg>
+      </tuv>
+    </tu>
+
     <tu tuid="PersonAuthorEmail">
       <tuv xml:lang="en">
         <seg>Email</seg>
