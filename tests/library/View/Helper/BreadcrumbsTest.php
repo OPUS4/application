@@ -55,7 +55,6 @@ class View_Helper_BreadcrumbsTest extends ControllerTestCase {
     }
 
     public function testHelpLinkPresent() {
-        $this->markTestSkipped('OPUSVIER-3100 - Problem mit Testausführung');
         $this->page->helpUrl = 'http://opus4.kobv.de';
 
         $this->dispatch('/admin/documents');
