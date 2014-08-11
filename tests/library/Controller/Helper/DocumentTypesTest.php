@@ -269,9 +269,10 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
      */
     public function testDocumentTypesAndTemplates() {
         $config = Zend_Registry::get('Zend_Config');
-        $templates = $this->getFileNames($config->publish->path->documenttemplates);
-        $types = $this->getFileNames($config->publish->path->documenttypes);
+        $templates = $this->getFileNames($config->publish->path->documenttemplates, '.phtml');
+        $types = $this->getFileNames($config->publish->path->documenttypes, '.xml');
 
+        // Test-Templates und -Dokumenttypen werden von der Prüfung ausgenommen
         unset($templates['barfoo']);
         unset($types['bazbar']);
         unset($types['demo_invalidfieldname']);
@@ -282,20 +283,16 @@ class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
         $array1 = array_diff($templates, $types);
         $array2 = array_diff($types, $templates);
 
-        $this->assertEmpty($array1);
-        $this->assertEmpty($array2);
+        $this->assertEmpty($array1, 'Doctype missing for template: ' . implode(", ", $array1));
+        $this->assertEmpty($array2, 'Template missing for doctype: ' . implode(", ", $array2));
     }
 
-    private function getFileNames($path) {
+    private function getFileNames($path, $extension) {
         $fileNames = array();
-        if ($handle = opendir($path)) {
-            while (false !== ($file = readdir($handle))) {
-                if ($file != "." && $file != ".." && $file != ".svn") {
-                    $fileNameParts = explode('.', $file);
-                    $fileNames[$fileNameParts[0]] = $fileNameParts[0];
-                }
+        foreach (new DirectoryIterator($path) as $fileinfo) {
+            if ($fileinfo->isFile()) {
+                $fileNames[$fileinfo->getBaseName($extension)] = $fileinfo->getBaseName($extension);
             }
-            closedir($handle);
         }
         return $fileNames;
     }
