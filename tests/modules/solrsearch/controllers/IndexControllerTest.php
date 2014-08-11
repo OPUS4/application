@@ -1038,9 +1038,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $newerDocId = $newerDoc->store();
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article/sortfield/title/sortorder/desc');
+
         $olderDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $olderDocId);
         $newerDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $newerDocId);
-        $this->assertTrue($newerDocPosition > $olderDocPosition);
+
+        $this->assertTrue($newerDocPosition > $olderDocPosition, "Documents are not sorted by sortfield (title).");
     }
 
     /**

@@ -298,10 +298,14 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     private function buildQuery() {
+        $request = $this->getRequest();
+
         $queryBuilder = new Util_QueryBuilder($this->_logger);
-        $queryBuilderInput = array();
+
+        $queryBuilderInput = null;
+
         try {
-            $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($this->getRequest());
+            $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($request);
         }
         catch (Util_BrowsingParamsException $e) {
             $this->_logger->err(__METHOD__ . ' : ' . $e->getMessage());
@@ -311,10 +315,13 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->_logger->err(__METHOD__ . ' : ' . $e->getMessage());
             return $this->_redirectToAndExit('index');
         }
-        if (($this->_request->getParam('browsing') || $this->_request->getParam('searchtype') == 'collection') && is_null($this->_request->getParam('sortfield'))) {
+
+        if (is_null($request->getParam('sortfield')) &&
+                ($request->getParam('browsing') === 'true' || $request->getParam('searchtype') === 'collection')) {
             $queryBuilderInput['sortField'] = 'server_date_published';
         }
-        $this->searchtype = $this->getRequest()->getParam('searchtype');
+
+        $this->searchtype = $request->getParam('searchtype');
         if ($this->searchtype === Util_Searchtypes::LATEST_SEARCH) {
             return $queryBuilder->createSearchQuery($this->validateInput($queryBuilderInput, 10, 100));
         }
