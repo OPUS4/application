@@ -192,7 +192,8 @@ class Admin_FilemanagerController extends Controller_Action {
                     }
                     else {
                         // Formular wieder anzeigen
-                        $form->populateFromModel($document);
+                        // $form->populate($post); // currently not needed because no invalid value should be kept
+                        $form->populateFromModel($document); // sets document ID and info in form
                     }
                     break;
 
