@@ -874,7 +874,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      * OPUSVIER-1752
      * OPUSVIER-3315
      */
-    public function testMainTitleSortOrderGermanFirst() {
+    public function testTitleSortOrderGermanFirst() {
         $functions = array('addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional');
         foreach($functions as $function) {
             $doc = $this->createTestDocument();
@@ -893,8 +893,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
             $docId = $doc->store();
 
             $this->dispatch('/frontdoor/index/index/docId/' . $docId);
-            $this->assertEquals(1, substr_count($this->_response->getBody(), '>deutscher Titel<'), 'Test is not reliable');
-            $this->assertEquals(1, substr_count($this->_response->getBody(), '>englischer Titel<'), 'Test is not reliable');
+            $this->assertEquals(1, substr_count($this->_response->getBody(), '>deutscher Titel<'),
+                'Testdata has been modified; test is not reliable anymore');
+            $this->assertEquals(1, substr_count($this->_response->getBody(), '>englischer Titel<'),
+                'Testdata has been modified; test is not reliable anymore');
             $title1 = strpos($this->_response->getBody(), '>deutscher Titel<');
             $title2 = strpos($this->_response->getBody(), '>englischer Titel<');
             $this->assertTrue($title1 < $title2);
@@ -907,7 +909,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      * OPUSVIER-1752
      * OPUSVIER-3316
      */
-    public function testMainTitleSortOrderEnglishFirst() {
+    public function testTitleSortOrderEnglishFirst() {
         $functions = array('addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional');
         foreach($functions as $function) {
             $doc = $this->createTestDocument();
@@ -926,8 +928,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
             $docId = $doc->store();
 
             $this->dispatch('/frontdoor/index/index/docId/' . $docId);
-            $this->assertEquals(1, substr_count($this->_response->getBody(), '>deutscher Titel<'), 'Test is not reliable');
-            $this->assertEquals(1, substr_count($this->_response->getBody(), '>englischer Titel<'), 'Test is not reliable');
+            $this->assertEquals(1, substr_count($this->_response->getBody(), '>deutscher Titel<'),
+                'Testdata has been modified; test is not reliable anymore');
+            $this->assertEquals(1, substr_count($this->_response->getBody(), '>englischer Titel<'),
+                'Testdata has been modified; test is not reliable anymore');
             $title1 = strpos($this->_response->getBody(), '>englischer Titel<');
             $title2 = strpos($this->_response->getBody(), '>deutscher Titel<');
             $this->assertTrue($title1 < $title2);
