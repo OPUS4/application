@@ -153,10 +153,6 @@ class Frontdoor_IndexController extends Controller_Action {
         $this->addMetaTagsForDocument($document);
         $this->view->title = $this->getFrontdoorTitle($document);
 
-        if (file_exists(APPLICATION_PATH . '/public/' . $config->javascript->latex->path)) {
-            $this->view->headScript()->appendFile($this->view->baseUrl() . '/' . $config->javascript->latex->path, 'text/javascript');
-        }
-
         $this->incrementStatisticsCounter($docId);
         
         $actionbox = new Admin_Form_ActionBox();

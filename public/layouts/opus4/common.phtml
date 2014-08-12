@@ -96,6 +96,10 @@ if ($appConfig->isLanguageSelectionEnabled()) {
 else {
     $languageSelectors = null;
 }
+
+if (isset($config->javascript->latex->mathjax)) {
+    $this->headScript()->prependFile($config->javascript->latex->mathjax, 'text/javascript');
+}
 ?>
 
 <?= $this->doctype() ?>
@@ -107,7 +111,7 @@ else {
         <?= $this->headTitle() ?>
         <?= $this->headLink() ?>
         <?= $this->headScript() ?>
-	
+
 	<!--[if IE 6]>
         <link rel="stylesheet" type="text/css" href="<?= $this->layoutPath() ?>/css/opus-ie.css" />
         <![endif]-->
