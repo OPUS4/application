@@ -65,26 +65,26 @@ class Solrsearch_Model_FacetMenu {
     public function buildFacetArray($paramSet) {
         $limit = 10000;
         $facetArray = array();
-        if (isset($paramSet['facetNumber_author_facet']) && $paramSet['facetNumber_author_facet'] == 'all') {
+        if (isset($paramSet['facetNumber_author_facet'])) {
             $facetArray['author_facet'] = $limit;
         }
-        if (isset($paramSet['facetNumber_year']) && $paramSet['facetNumber_year'] == 'all') {
+        if (isset($paramSet['facetNumber_year'])) {
             if (in_array('year_inverted', explode(',', Zend_Registry::get('Zend_Config')->searchengine->solr->facets))) {
                 // 'year_inverted' is used in framework and result is returned as 'year'
                 $facetArray['year_inverted'] = $limit;
             }
             $facetArray['year'] = $limit;
         }
-        if (isset($paramSet['facetNumber_doctype']) && $paramSet['facetNumber_doctype'] == 'all') {
+        if (isset($paramSet['facetNumber_doctype'])) {
             $facetArray['doctype'] = $limit;
         }
-        if (isset($paramSet['facetNumber_language']) && $paramSet['facetNumber_language'] == 'all') {
+        if (isset($paramSet['facetNumber_language'])) {
             $facetArray['language'] = $limit;
         }
-        if (isset($paramSet['facetNumber_subject']) && $paramSet['facetNumber_subject'] == 'all') {
+        if (isset($paramSet['facetNumber_subject'])) {
             $facetArray['subject'] = $limit;
         }
-        if (isset($paramSet['facetNumber_institute']) && $paramSet['facetNumber_institute'] == 'all') {
+        if (isset($paramSet['facetNumber_institute'])) {
             $facetArray['institute'] = $limit;
         }
 
