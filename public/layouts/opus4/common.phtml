@@ -98,7 +98,7 @@ else {
 }
 
 if (isset($config->javascript->latex->mathjax)) {
-    $this->headScript()->prependFile($config->javascript->latex->mathjax, 'text/javascript');
+    $this->headScript()->appendFile($this->baseUrl() . $config->javascript->latex->mathjax, 'text/javascript');
 }
 ?>
 

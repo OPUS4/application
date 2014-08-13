@@ -88,7 +88,7 @@ searchengine.extract.app = @searchengine.extract.app@
 ; confirmation.document.statechange.enabled = 0
 
 ; JAVASCRIPT SETTINGS
-; javascript.latex.mathjax = "http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+javascript.latex.mathjax = "/js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
 
 ;ERROR CONTROLLER SETTINGS - who should receive error mails?
 ; errorController.mailTo.name = root
