@@ -46,6 +46,7 @@ class Frontdoor_IndexController extends Controller_Action {
     const EMBARGO_ACCESS_FUNCTION = 'Frontdoor_IndexController::checkIfFileEmbargoHasPassed';
     const SORT_ORDER_FUNCTION = 'Frontdoor_IndexController::useCustomSortOrder';
     const CHECK_LANGUAGE_FILE_FUNCTION = 'Frontdoor_IndexController::checkLanguageFile';
+    const GET_STYLESHEET_FUNCTION = 'Frontdoor_IndexController::getStylesheet';
 
     /**
      * Displays the metadata of a document.
@@ -115,6 +116,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $proc->registerPHPFunctions(self::EMBARGO_ACCESS_FUNCTION);
         $proc->registerPHPFunctions(self::SORT_ORDER_FUNCTION);
         $proc->registerPHPFunctions(self::CHECK_LANGUAGE_FILE_FUNCTION);
+        $proc->registerPHPFunctions(self::GET_STYLESHEET_FUNCTION);
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
 
@@ -423,6 +425,10 @@ class Frontdoor_IndexController extends Controller_Action {
         // TODO aktuell werden nur zwei Sprachen unterstützt
         $formatPattern = ($session->language == 'de') ? 'd.m.Y' : 'Y/m/d';
         return date_format($date, $formatPattern);
+    }
+
+    public static function getStylesheet() {
+        return Zend_Registry::get('Zend_Config')->export->stylesheet;
     }
 
 }
