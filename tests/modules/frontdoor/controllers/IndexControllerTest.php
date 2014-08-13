@@ -873,6 +873,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      * Checks, whether the document language title is printed before other titles.
      * OPUSVIER-1752
      * OPUSVIER-3315
+     *
+     * TODO use variable or constant for title string
+     * TODO Review assert messages
+     * TODO use getResponse() - don't access variables of another class
      */
     public function testTitleSortOrderGermanFirst() {
         $functions = array('addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional');
