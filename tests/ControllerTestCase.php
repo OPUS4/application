@@ -223,20 +223,6 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     }
 
     /**
-     * @deprecated Use 'useGerman' instead
-     */
-    public function setUpGerman() {
-        $this->useGerman();
-    }
-
-    /**
-     * @deprecated Use 'useEnglish' instead
-     */
-    public function setUpEnglish() {
-        $this->useEnglish();
-    }
-    
-    /**
      * Stellt die Übersetzungen auf Deutsch um.
      */
     public function useGerman() {

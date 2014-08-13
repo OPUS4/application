@@ -45,79 +45,69 @@ class Controller_Helper_DatesTest extends ControllerTestCase {
         $this->__datesHelper = new Controller_Helper_Dates();
     }
 
-    private function __setUpGerman() {
-        $session = new Zend_Session_Namespace();
-        $session->language = 'de';
-    }
-
-    private function __setUpEnglish() {
-        $session = new Zend_Session_Namespace();
-        $session->language = 'en';
-    }
-
     public function testIsValidGermanTrue() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $this->assertTrue($this->__datesHelper->isValid('20.3.2005'));
     }
 
     public function testIsValidGermanFalse() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $this->assertFalse($this->__datesHelper->isValid('2005'));
     }
 
     public function testIsValidEnglishTrue() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $this->assertTrue($this->__datesHelper->isValid('2005/03/20'));
     }
 
     public function testIsValidEnglishFalse() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $this->assertFalse($this->__datesHelper->isValid('2005'));
     }
 
     public function testGetOpusDateGerman() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $date = $this->__datesHelper->getOpusDate('25.3.2005');
         $this->assertNotNull($date);
         $this->assertEquals('25.03.2005', $this->__datesHelper->getDateString($date));
     }
 
     public function testGetOpusDateEnglish() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $date = $this->__datesHelper->getOpusDate('2005/03/25');
         $this->assertNotNull($date);
         // Check read back in German (just for fun)
-        $this->__setUpGerman();
+        $this->useGerman();
         $this->assertEquals('25.03.2005', $this->__datesHelper->getDateString($date));
     }
 
     public function testGetOpusDateInvalidGerman() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $date = $this->__datesHelper->getOpusDate('2005');
         $this->assertNull($date);
     }
 
     public function testGetOpusDateInvalidEnglish() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $date = $this->__datesHelper->getOpusDate('2005');
         $this->assertNull($date);
 
     }
 
     public function testGetDateStringGerman() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $date = new Opus_Date('2005-03-25');
         $this->assertEquals('25.03.2005', $this->__datesHelper->getDateString($date));
     }
 
     public function testGetDateStringEnglish() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $date = new Opus_Date('2005-03-25');
         $this->assertEquals('2005/03/25', $this->__datesHelper->getDateString($date));
     }
 
     public function testGetDateStringForInvalidDate() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $date = new Opus_Date('2005');
         $this->assertFalse($date->isValid());
         $this->assertEquals(null, $this->__datesHelper->getDateString($date));

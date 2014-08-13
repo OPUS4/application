@@ -53,25 +53,23 @@ class Form_Validate_DateTest extends ControllerTestCase {
         $this->__validator = new Form_Validate_Date();
     }
 
-    private function __setUpGerman() {
-        $session = new Zend_Session_Namespace();
-        $session->language = 'de';
+    public function useGerman() {
+        parent::useGerman();
         $this->__validator->setLocale('de');
     }
 
-    private function __setUpEnglish() {
-        $session = new Zend_Session_Namespace();
-        $session->language = 'en';
+    public function useEnglish() {
+        parent::useEnglish();
         $this->__validator->setLocale('en');
     }
 
     public function testGetDateFormatGerman() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $this->assertEquals(self::DE_FORMAT, $this->__validator->getDateFormat());
     }
 
     public function testGetDateFormatEnglish() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $this->assertEquals(self::EN_FORMAT, $this->__validator->getDateFormat());
     }
 
@@ -100,111 +98,111 @@ class Form_Validate_DateTest extends ControllerTestCase {
     }
 
     public function testIsValidFor2001German() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $this->assertFalse($this->__validator->isValid('2001'));
     }
 
     public function testIsValidFor2001English() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $this->assertFalse($this->__validator->isValid('2001'));
     }
 
     public function testIsValidFor2011German() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $this->assertFalse($this->__validator->isValid('2011'));
     }
 
     public function testIsValidFor2011English() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $this->assertFalse($this->__validator->isValid('2011'));
     }
 
     public function testIsValidForValidDate1German() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $this->assertTrue($this->__validator->isValid('12.5.1999'));
     }
 
     public function testIsValidForValidDate1English() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $this->assertTrue($this->__validator->isValid('1999/05/15'));
     }
 
     public function testIsValidForValidDate2German() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $this->assertTrue($this->__validator->isValid('12.5.99'));
     }
 
     public function testIsValidForValidDate2English() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $this->assertTrue($this->__validator->isValid('99/05/15'));
     }
 
     public function testIsValidForValidDate3German() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $this->assertTrue($this->__validator->isValid('1.1.1'));
     }
 
     public function testIsValidForValidDate3English() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $this->assertTrue($this->__validator->isValid('1/1/1'));
     }
 
     public function testIsValidForYear10000German() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $this->assertFalse($this->__validator->isValid('1.1.10000'));
     }
 
     public function testIsValidForYear10000English() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $this->assertFalse($this->__validator->isValid('10000/1/1'));
     }
 
     public function testIsValidForInvalidInputGerman() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $this->assertFalse($this->__validator->isValid('1. Jan 2002'));
     }
 
     public function testIsValidForInvalidInputEnglish() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $this->assertFalse($this->__validator->isValid('Feb, 1. 2002'));
     }
 
     public function testIsValidForInvalidDateGerman() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $this->assertFalse($this->__validator->isValid('29.2.2001'));
     }
 
     public function testIsValidForInvalidDateEnglish() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $this->assertFalse($this->__validator->isValid('2001/02/29'));
     }
 
     public function testConstructGerman() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $validator = new Form_Validate_Date();
         $this->assertEquals(self::DE_FORMAT, $validator->getFormat());
     }
 
     public function testConstructEnglish() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $validator = new Form_Validate_Date();
         $this->assertEquals(self::EN_FORMAT, $validator->getFormat());
     }
 
     public function testGetInputPatternGerman() {
-        $this->__setUpGerman();
+        $this->useGerman();
         $validator = new Form_Validate_Date();
         $this->assertEquals(self::DE_PATTERN, $validator->getInputPattern());
     }
 
     public function testGetInputPatternEnglish() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $validator = new Form_Validate_Date();
         $this->assertEquals(self::EN_PATTERN, $validator->getInputPattern());
     }
 
     public function testSetGetInputPattern() {
-        $this->__setUpEnglish();
+        $this->useEnglish();
         $validator = new Form_Validate_Date();
         $validator->setInputPattern('#^[0-9]{1.4}$#');
         $this->assertEquals('#^[0-9]{1.4}$#', $validator->getInputPattern());

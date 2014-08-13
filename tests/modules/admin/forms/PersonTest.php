@@ -53,7 +53,7 @@ class Admin_Form_PersonTest extends ControllerTestCase {
     }
 
     public function testPopulateFromModel() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_Person();
         
@@ -93,7 +93,7 @@ class Admin_Form_PersonTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_Person();
         
@@ -143,7 +143,7 @@ class Admin_Form_PersonTest extends ControllerTestCase {
     }
     
     public function testGetModel() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_Person();
         
@@ -180,7 +180,7 @@ class Admin_Form_PersonTest extends ControllerTestCase {
     }
     
     public function testGetModelNew() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_Person();
         
@@ -206,7 +206,7 @@ class Admin_Form_PersonTest extends ControllerTestCase {
     }
     
     public function testValidation() {
-        $this->setUpEnglish();
+        $this->useEnglish();
             
         $form = new Admin_Form_Person();
     
@@ -229,7 +229,7 @@ class Admin_Form_PersonTest extends ControllerTestCase {
     }
     
     public function testValidationGerman() {
-        $this->setUpGerman();
+        $this->useGerman();
         
         $form = new Admin_Form_Person();
         

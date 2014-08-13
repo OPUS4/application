@@ -97,7 +97,7 @@ class Admin_Form_DocumentPersonAddTest extends ControllerTestCase {
     }
     
     public function testValidationFalse() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_DocumentPersonAdd();
         
@@ -121,7 +121,7 @@ class Admin_Form_DocumentPersonAddTest extends ControllerTestCase {
     }
     
     public function testValidationTrue() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_DocumentPersonAdd();
         
