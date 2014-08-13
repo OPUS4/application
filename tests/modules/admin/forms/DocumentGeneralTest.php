@@ -54,7 +54,7 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
      * TODO use temporary Opus_Document instead of doc from test data
      */
     public function testPopulateFromModel() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $document = new Opus_Document(146);
         
@@ -72,7 +72,7 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_DocumentGeneral();
         
@@ -99,11 +99,12 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
         $this->assertEquals('2006/07/03', date('Y/m/d', $document->getCompletedDate()->getZendDate()->get()));
         $this->assertEquals('2007', $document->getCompletedYear());
 
+        $this->assertNotNull($document->getEmbargoDate());
         $this->assertEquals('1986/03/29', date('Y/m/d', $document->getEmbargoDate()->getZendDate()->get()));
     }
     
     public function testValidation() {
-        $this->setUpEnglish();
+        $this->useEnglish();
         
         $form = new Admin_Form_DocumentGeneral();
         
@@ -129,7 +130,7 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
     }
     
     public function testValidationGerman() {
-        $this->setUpGerman();
+        $this->useGerman();
         
         $form = new Admin_Form_DocumentGeneral();
         
