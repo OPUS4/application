@@ -54,6 +54,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->doStandardControllerTest('/solrsearch', 'index', 'index');
     }
 
+
     public function testAdvancedAction() {
         $this->doStandardControllerTest('/solrsearch/index/advanced', 'index', 'advanced');
         $response = $this->getResponse();
@@ -800,6 +801,16 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         for ($index = 5; $index < $numOfSubjects; $index++) {
             $this->assertNotContains('/solrsearch/index/search/searchtype/simple/query/facetlimittestwithsubjects-opusvier2610/start/0/rows/10/subjectfq/subject0' . $index, $this->getResponse()->getBody());
         }
+    }
+
+    public function testFacetExtenderLinkIncludesTarget() {
+        $this->dispatch('solrsearch/index/search/searchtype/all');
+        // ends-with function would be more accurate, but currently not supported
+        $this->assertXPath('//div[@id="author_facet_facet"]//a[contains(@href, "#author_facet_facet")]');
+        $this->assertXPath('//div[@id="year_facet"]//a[contains(@href, "#year_facet")]');
+        $this->assertXPath('//div[@id="doctype_facet"]//a[contains(@href, "#doctype_facet")]');
+        $this->assertXPath('//div[@id="subject_facet"]//a[contains(@href, "#subject_facet")]');
+        $this->assertXPath('//div[@id="institute_facet"]//a[contains(@href, "#institute_facet")]');
     }
 
     private function addSampleDocWithMultipleSubjects($numOfSubjects = 0) {
