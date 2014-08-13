@@ -281,3 +281,8 @@ setPropertyInShellScript "$FILE" "master_dir" "$CREATEDB_MASTER_DIR"
 echo "Running post-update scripts (if any)"
 runDbPostUpdateScripts "$VERSION_OLD" "$VERSION_NEW"
 echo "Finished post-update procedures"
+
+echo "Clearing document xml cache ..."
+"$SCRIPTPATH/clear-document-cache.php" --host=$HOST --port=$PORT --dbname=$DBNAME --user=$USER --password=$PASSWORD
+
+
