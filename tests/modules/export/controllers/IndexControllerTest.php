@@ -152,8 +152,6 @@ class Export_IndexControllerTest extends ControllerTestCase {
         Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/export/index/index/export/xml');
-        $this->assertResponseCode(500);
-        $this->assertContains('missing parameter stylesheet', $this->getResponse()->getBody());
 
         // restore security settings
         if ($addOaiModuleAccess) {
@@ -163,6 +161,9 @@ class Export_IndexControllerTest extends ControllerTestCase {
 
         $config->security = $security;
         Zend_Registry::set('Zend_Config', $config);
+
+        $this->assertResponseCode(500);
+        $this->assertContains('missing parameter stylesheet', $this->getResponse()->getBody());
     }
 
     /**
@@ -193,15 +194,22 @@ class Export_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/export/index/index/searchtype/all/export/xml/stylesheet/example');
         $body = $this->getResponse()->getBody();
-        $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
-        $this->assertContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $body);
-        $this->assertResponseCode(503);
+
+        // restore security settings
+        if ($addOaiModuleAccess) {
+            $r->removeAccessModule('export');
+            $r->store();
+        }
 
         // restore configuration
         $config = Zend_Registry::get('Zend_Config');
         $config->searchengine->index->app = $oldValue;
         $config->security = $security;
         Zend_Registry::set('Zend_Config', $config);
+
+        $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
+        $this->assertContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $body);
+        $this->assertResponseCode(503);
     }
 
     /**
