@@ -1189,6 +1189,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $config = Zend_Registry::get('Zend_Config');
         $config->merge(new Zend_Config(array('export' => array('stylesheet' => 'example'))));
         $this->dispatch('/solrsearch/index/search/searchtype/all');
+        $this->assertFalse(Opus_Security_Realm::getInstance()->checkModule('export'));
         $this->assertNotQuery('//a[@href="/solrsearch/index/search/searchtype/all/export/xml/stylesheet/example"]');
     }
+
 }
