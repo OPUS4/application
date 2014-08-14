@@ -1158,4 +1158,37 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/index/search/searchtype/all/rows/10/start/0/institutefq/Technische+Universität+Hamburg-Harburg');
         $this->assertNotXpath('//div[@id="institute_facet"]/div[@class="facetValueExtender"]');
     }
+
+    /**
+     * If not specified in config, there should be no link to export documents to xml.
+     */
+    public function testXmlExportButtonNotPresent() {
+        $this->enableSecurity();
+        $this->loginUser('admin', 'adminadmin');
+        $this->dispatch('/solrsearch/index/search/searchtype/all');
+        $this->assertNotQuery('//a[@href="/solrsearch/index/search/searchtype/all/export/xml/stylesheet/example"]');
+    }
+
+    /**
+     * The export functionality should be available for admins.
+     */
+    public function testXmlExportButtonPresentForAdmin() {
+        $this->enableSecurity();
+        $this->loginUser('admin', 'adminadmin');
+        $config = Zend_Registry::get('Zend_Config');
+        $config->merge(new Zend_Config(array('export' => array('stylesheet' => 'example'))));
+        $this->dispatch('/solrsearch/index/search/searchtype/all');
+        $this->assertQuery('//a[@href="/solrsearch/index/search/searchtype/all/export/xml/stylesheet/example"]');
+    }
+
+    /**
+     * The export functionality should not be present for guests.
+     */
+    public function testXmlExportNotButtonPresentForGuest() {
+        $this->enableSecurity();
+        $config = Zend_Registry::get('Zend_Config');
+        $config->merge(new Zend_Config(array('export' => array('stylesheet' => 'example'))));
+        $this->dispatch('/solrsearch/index/search/searchtype/all');
+        $this->assertNotQuery('//a[@href="/solrsearch/index/search/searchtype/all/export/xml/stylesheet/example"]');
+    }
 }

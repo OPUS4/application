@@ -116,7 +116,10 @@ class Solrsearch_IndexController extends Controller_Action {
             // export module ignores pagination parameters
             return $this->redirectToExport($params);
         }
-        $this->view->stylesheet = Zend_Registry::get('Zend_Config')->export->stylesheet;
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config->export->stylesheet) && Opus_Security_Realm::getInstance()->checkModule('export')) {
+            $this->view->stylesheet = $config->export->stylesheet;
+        }
 
         $this->query = $this->buildQuery();
         $this->performSearch();

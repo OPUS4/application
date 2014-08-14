@@ -428,7 +428,11 @@ class Frontdoor_IndexController extends Controller_Action {
     }
 
     public static function getStylesheet() {
-        return Zend_Registry::get('Zend_Config')->export->stylesheet;
+        $config = Zend_Registry::get('Zend_Config');
+        if (isset($config->export->stylesheet) && Opus_Security_Realm::getInstance()->checkModule('export')) {
+           return $config->export->stylesheet;
+        }
+        return '';
     }
 
 }

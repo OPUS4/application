@@ -38,18 +38,17 @@
         <?= ($this->numOfHits === 1 ? $this->translate('results_title_single') : $this->translate('results_title')); ?> <strong><?= (int)($this->start)+1 ?></strong> <?= $this->translate('pagination_to') ?> <strong><?php if(((int)($this->start) + (int)($this->rows)) > $this->numOfHits) echo $this->numOfHits; else echo (int)($this->start) + (int)($this->rows); ?></strong>
     </p>
     <?PHP if ($this->stylesheet != '') : ?>
-        <div class="search_export_xml">
-            <a href=" <?= $this->url(array('export' => 'xml', 'stylesheet' => $this->stylesheet)) ?> ">
-                <img src="<?= $this->layoutPath() . '/img/xml_w.png' ?>" id="search_export_xml_pic" name="xml"
-                     onmouseover="document.xml.src='<?=$this->layoutPath() .  '/img/xml_o.png'?>';"
-                     onmouseout="document.xml.src='<?= $this->layoutPath() .  '/img/xml_w.png'?>';"
-                     title="<?= $this->translate('search_export_xml') ?>" alt="<?= $this->translate('search_export_xml') ?>"/>
-            </a>
-        </div>
+    <div class="search_export_xml">
+        <a href="<?= $this->url(array('export' => 'xml', 'stylesheet' => $this->stylesheet)) ?>">
+            <img src="<?= $this->layoutPath() . '/img/xml_w.png' ?>" id="search_export_xml_pic" name="xml"
+                 onmouseover="document.xml.src='<?=$this->layoutPath() .  '/img/xml_o.png'?>';"
+                 onmouseout="document.xml.src='<?= $this->layoutPath() .  '/img/xml_w.png'?>';"
+                 title="<?= $this->translate('search_export_xml') ?>" alt="<?= $this->translate('search_export_xml') ?>"/>
+        </a>
+    </div>
     <?PHP endif ?>
 
     <ul class="paginationControl">
-
         <?php if($this->start >= $this->rows) : ?>
         <li>
             <a href="<?= $this->url($this->firstPage); ?>">

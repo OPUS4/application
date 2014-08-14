@@ -90,6 +90,10 @@ searchengine.extract.app = @searchengine.extract.app@
 ; JAVASCRIPT SETTINGS
 javascript.latex.mathjax = "/js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
 
+
+; EXPORT SETTINGS
+; export.stylesheet = example
+
 ;ERROR CONTROLLER SETTINGS - who should receive error mails?
 ; errorController.mailTo.name = root
 ; errorController.mailTo.address = root@localhost

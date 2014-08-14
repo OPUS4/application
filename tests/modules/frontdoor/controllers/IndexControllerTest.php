@@ -840,7 +840,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/frontdoor/index/index/docId/155');
         Zend_Registry::set('Zend_Config', $configBackup);
 
-        $body = $this->_response->getBody();
+        $body = $this->getResponse()->getBody();
         $positionFile1 = strpos($body, 'oai_invisible.txt (1 KB)');
         $positionFile2 = strpos($body, 'test.txt (1 KB)');
         $positionFile3 = strpos($body, 'test.pdf (7 KB)');
@@ -860,7 +860,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/frontdoor/index/index/docId/155');
         Zend_Registry::set('Zend_Config', $configBackup);
 
-        $body = $this->_response->getBody();
+        $body = $this->getResponse()->getBody();
         $positionFile1 = strpos($body, 'oai_invisible.txt (1 KB)');
         $positionFile2 = strpos($body, 'test.pdf (7 KB)');
         $positionFile3 = strpos($body, 'test.txt (1 KB)');
@@ -872,14 +872,10 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     /**
      * Checks, whether the document language title is printed before other titles.
      * OPUSVIER-1752
-     * OPUSVIER-3315
-     *
-     * TODO use variable or constant for title string
-     * TODO Review assert messages
-     * TODO use getResponse() - don't access variables of another class
+     * OPUSVIER-3316
      */
     public function testTitleSortOrderGermanFirst() {
-        $functions = array('addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional');
+        $functions = array('addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional', 'addTitleAbstract');
         foreach($functions as $function) {
             $doc = $this->createTestDocument();
             $title = new Opus_Title();
@@ -897,14 +893,17 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
             $docId = $doc->store();
 
             $this->dispatch('/frontdoor/index/index/docId/' . $docId);
-            $this->assertEquals(1, substr_count($this->_response->getBody(), '>deutscher Titel<'),
-                'Testdata has been modified; test is not reliable anymore');
-            $this->assertEquals(1, substr_count($this->_response->getBody(), '>englischer Titel<'),
-                'Testdata has been modified; test is not reliable anymore');
-            $title1 = strpos($this->_response->getBody(), '>deutscher Titel<');
-            $title2 = strpos($this->_response->getBody(), '>englischer Titel<');
+
+            // Absicherung gegen HTML Aenderungen;  in Meta-Tags steht Text in Attribut
+            $this->assertEquals(1, substr_count($this->getResponse()->getBody(), '>deutscher Titel<'),
+                'Teststring is found more than once; test is not reliable anymore');
+            $this->assertEquals(1, substr_count($this->getResponse()->getBody(), '>englischer Titel<'),
+                'Teststring is found more than once; test is not reliable anymore');
+
+            $title1 = strpos($this->getResponse()->getBody(), '>deutscher Titel<');
+            $title2 = strpos($this->getResponse()->getBody(), '>englischer Titel<');
             $this->assertTrue($title1 < $title2);
-            $this->_response->clearBody();
+            $this->getResponse()->clearBody();
         }
     }
 
@@ -914,7 +913,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
      * OPUSVIER-3316
      */
     public function testTitleSortOrderEnglishFirst() {
-        $functions = array('addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional');
+        $functions = array('addTitleMain', 'addTitleParent', 'addTitleSub', 'addTitleAdditional', 'addTitleAbstract');
         foreach($functions as $function) {
             $doc = $this->createTestDocument();
             $title = new Opus_Title();
@@ -932,77 +931,17 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
             $docId = $doc->store();
 
             $this->dispatch('/frontdoor/index/index/docId/' . $docId);
-            $this->assertEquals(1, substr_count($this->_response->getBody(), '>deutscher Titel<'),
-                'Testdata has been modified; test is not reliable anymore');
-            $this->assertEquals(1, substr_count($this->_response->getBody(), '>englischer Titel<'),
-                'Testdata has been modified; test is not reliable anymore');
-            $title1 = strpos($this->_response->getBody(), '>englischer Titel<');
-            $title2 = strpos($this->_response->getBody(), '>deutscher Titel<');
+                // Absicherung gegen HTML Aenderungen;  in Meta-Tags steht Text in Attribut
+            $this->assertEquals(1, substr_count($this->getResponse()->getBody(), '>deutscher Titel<'),
+                'Teststring is found more than once; test is not reliable anymore');
+            $this->assertEquals(1, substr_count($this->getResponse()->getBody(), '>englischer Titel<'),
+                'Teststring is found more than once; test is not reliable anymore');
+
+            $title1 = strpos($this->getResponse()->getBody(), '>englischer Titel<');
+            $title2 = strpos($this->getResponse()->getBody(), '>deutscher Titel<');
             $this->assertTrue($title1 < $title2);
-            $this->_response->clearBody();
+            $this->getResponse()->clearBody();
         }
-    }
-
-    /**
-     * Checks, whether the document language title is printed before other titles.
-     * OPUSVIER-1752
-     */
-    public function testAbstractTitleSortOrderGermanFirst() {
-        $doc = $this->createTestDocument();
-        $title = new Opus_Title();
-        $title->setLanguage('deu');
-        $title->setValue('german abstract');
-        $doc->addTitleAbstract($title);
-
-        $title = new Opus_Title();
-        $title->setLanguage('eng');
-        $title->setValue('english abstract');
-        $doc->addTitleAbstract($title);
-
-        $doc->setLanguage('deu');
-        $doc->setServerState('published');
-        $docId = $doc->store();
-
-        $this->dispatch('/frontdoor/index/index/docId/' . $docId);
-        $body = $this->getResponse()->getBody();
-        // Absicherung gegen HTML Aenderungen;  in Meta-Tags steht Text in Attribut
-        $this->assertEquals(1, substr_count($body, '>german abstract<'));
-        $this->assertEquals(1, substr_count($body, '>english abstract<'));
-
-        $title1 = strpos($body, '>german abstract<');
-        $title2 = strpos($body, '>english abstract<');
-        $this->assertTrue($title1 < $title2);
-    }
-
-    /**
-     * Checks, whether the document language title is printed before other titles.
-     * OPUSVIER-1752
-     */
-    public function testAbstractTitleSortOrderEnglishFirst() {
-        $doc = $this->createTestDocument();
-        $title = new Opus_Title();
-        $title->setLanguage('deu');
-        $title->setValue('german abstract');
-        $doc->addTitleAbstract($title);
-
-        $title = new Opus_Title();
-        $title->setLanguage('eng');
-        $title->setValue('english abstract');
-        $doc->addTitleAbstract($title);
-
-        $doc->setLanguage('eng');
-        $doc->setServerState('published');
-        $docId = $doc->store();
-
-        $this->dispatch('/frontdoor/index/index/docId/' . $docId);
-        $body = $this->getResponse()->getBody();
-        // Absicherung gegen HTML Aenderungen; in Meta-Tags steht Text in Attribut
-        $this->assertEquals(1, substr_count($body, '>german abstract<'));
-        $this->assertEquals(1, substr_count($body, '>english abstract<'));
-
-        $title1 = strpos($body, '>english abstract<');
-        $title2 = strpos($body, '>german abstract<');
-        $this->assertTrue($title1 < $title2);
     }
 
     /**
@@ -1029,7 +968,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $docId = $doc->store();
 
         $this->dispatch('/frontdoor/index/index/docId/' . $docId);
-        $body = $this->_response->getBody();
+        $body = $this->getResponse()->getBody();
         $this->assertContains('<img width="16" height="11" src="/img/lang/eng.png" alt="eng"/>', $body);
         $this->assertContains('<img width="16" height="11" src="/img/lang/deu.png" alt="deu"/>', $body);
         $this->assertContains('<img width="16" height="11" src="/img/lang/spa.png" alt="spa"/>', $body);
@@ -1065,7 +1004,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         rename($oldPath, $bupPath);
         $this->dispatch('/frontdoor/index/index/docId/' . $docId);
         rename($bupPath, $oldPath);
-        $body = $this->_response->getBody();
+        $body = $this->getResponse()->getBody();
 
         $this->assertNotContains('<img width="16" height="11" src="/img/lang/eng.png" alt="eng"/>', $body);
         $this->assertNotContains('<img width="16" height="11" src="/img/lang/deu.png" alt="deu"/>', $body);
@@ -1156,4 +1095,36 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('//td', '2112/02/01');
     }
 
+    /**
+     * If not specified in config, there should be no link to export a document to xml.
+     */
+    public function testXmlExportButtonNotPresent() {
+        $this->enableSecurity();
+        $this->loginUser('admin', 'adminadmin');
+        $this->dispatch('/frontdoor/index/index/docId/305');
+        $this->assertNotQuery('//a[@href="/frontdoor/index/index/docId/305/export/xml/stylesheet/example"]');
+    }
+
+    /**
+     * The export functionality should be available for admins.
+     */
+    public function testXmlExportButtonPresentForAdmin() {
+        $this->enableSecurity();
+        $this->loginUser('admin', 'adminadmin');
+        $config = Zend_Registry::get('Zend_Config');
+        $config->merge(new Zend_Config(array('export' => array('stylesheet' => 'example'))));
+        $this->dispatch('/frontdoor/index/index/docId/305');
+        $this->assertQuery('//a[@href="/frontdoor/index/index/docId/305/export/xml/stylesheet/example"]');
+    }
+
+    /**
+     * The export functionality should not be present for guests.
+     */
+    public function testXmlExportNotButtonPresentForGuest() {
+        $this->enableSecurity();
+        $config = Zend_Registry::get('Zend_Config');
+        $config->merge(new Zend_Config(array('export' => array('stylesheet' => 'example'))));
+        $this->dispatch('/frontdoor/index/index/docId/305');
+        $this->assertNotQuery('//a[@href="/frontdoor/index/index/docId/305/export/xml/stylesheet/example"]');
+    }
 }
