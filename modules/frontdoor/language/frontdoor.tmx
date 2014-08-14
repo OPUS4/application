@@ -580,7 +580,7 @@
       </tuv>
     </tu>
 
-    <tu tuid="frontdoor_exportxml">
+    <tu tuid="frontdoor_export_xml">
       <tuv xml:lang="en">
         <seg>Export XML</seg>
       </tuv>

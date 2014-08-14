@@ -326,45 +326,47 @@
       </li>
 
       <!--Xml-Export-->
-      <li>
-         <xsl:element name="a">
-            <!--TODO: Use Zend Url-Helper to build href attribute-->
-            <xsl:attribute name="href">
-               <xsl:value-of select="$baseUrl"/>
-               <xsl:text>/frontdoor/index/index/docId/</xsl:text>
-               <xsl:value-of select="@Id" />
-               <xsl:text>/export/xml/stylesheet/</xsl:text>
-               <xsl:value-of select="php:functionString('Frontdoor_IndexController::getStylesheet')" />
-            </xsl:attribute>
-            <xsl:element name="img">
-               <xsl:attribute name="src">
-                  <xsl:value-of select="$layoutPath"/>
-                  <xsl:text>/img/xml_w.png</xsl:text>
-               </xsl:attribute>
-               <xsl:attribute name="name">
-                  <xsl:text>xml</xsl:text>
-               </xsl:attribute>
-               <xsl:attribute name="onmouseover">
-                  <xsl:text>document.xml.src='</xsl:text><xsl:value-of select="$layoutPath"/><xsl:text>/img/xml_o.png';</xsl:text>
-               </xsl:attribute>
-               <xsl:attribute name="onmouseout">
-                  <xsl:text>document.xml.src='</xsl:text><xsl:value-of select="$layoutPath"/><xsl:text>/img/xml_w.png';</xsl:text>
-               </xsl:attribute>
-               <xsl:attribute name="title">
-                  <xsl:call-template name="translateString">
-                     <xsl:with-param name="string">frontdoor_exportxml</xsl:with-param>
-                  </xsl:call-template>
-               </xsl:attribute>
-               <xsl:attribute name="alt">
-                  <xsl:call-template name="translateString">
-                     <xsl:with-param name="string">frontdoor_exportxml</xsl:with-param>
-                  </xsl:call-template>
-               </xsl:attribute>
-            </xsl:element>
-         </xsl:element>
-      </li>
-
-
+      <xsl:choose>
+          <xsl:when test="php:functionString('Frontdoor_IndexController::getStylesheet') != '' ">
+              <li>
+                  <xsl:element name="a">
+                      <!--TODO: Use Zend Url-Helper to build href attribute-->
+                      <xsl:attribute name="href">
+                          <xsl:value-of select="$baseUrl"/>
+                          <xsl:text>/frontdoor/index/index/docId/</xsl:text>
+                          <xsl:value-of select="@Id" />
+                          <xsl:text>/export/xml/stylesheet/</xsl:text>
+                          <xsl:value-of select="php:functionString('Frontdoor_IndexController::getStylesheet')" />
+                      </xsl:attribute>
+                      <xsl:element name="img">
+                          <xsl:attribute name="src">
+                              <xsl:value-of select="$layoutPath"/>
+                              <xsl:text>/img/xml_w.png</xsl:text>
+                          </xsl:attribute>
+                          <xsl:attribute name="name">
+                              <xsl:text>xml</xsl:text>
+                          </xsl:attribute>
+                          <xsl:attribute name="onmouseover">
+                              <xsl:text>document.xml.src='</xsl:text><xsl:value-of select="$layoutPath"/><xsl:text>/img/xml_o.png';</xsl:text>
+                          </xsl:attribute>
+                          <xsl:attribute name="onmouseout">
+                              <xsl:text>document.xml.src='</xsl:text><xsl:value-of select="$layoutPath"/><xsl:text>/img/xml_w.png';</xsl:text>
+                          </xsl:attribute>
+                          <xsl:attribute name="title">
+                              <xsl:call-template name="translateString">
+                                  <xsl:with-param name="string">frontdoor_export_xml</xsl:with-param>
+                              </xsl:call-template>
+                          </xsl:attribute>
+                          <xsl:attribute name="alt">
+                              <xsl:call-template name="translateString">
+                                  <xsl:with-param name="string">frontdoor_export_xml</xsl:with-param>
+                              </xsl:call-template>
+                          </xsl:attribute>
+                      </xsl:element>
+                  </xsl:element>
+              </li>
+          </xsl:when>
+      </xsl:choose>
    </xsl:template>
     
    <xsl:template name="PrintOnDemand">

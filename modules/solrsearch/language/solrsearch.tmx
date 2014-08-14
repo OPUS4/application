@@ -139,6 +139,15 @@
             </tuv>
         </tu>
 
+        <tu tuid="search_export_xml">
+          <tuv xml:lang="en">
+            <seg>Export XML</seg>
+          </tuv>
+          <tuv xml:lang="de">
+            <seg>Export nach XML</seg>
+          </tuv>
+        </tu>
+
         <tu tuid="pagination_last_page">
             <tuv xml:lang="en">
                 <seg>Last Page</seg>

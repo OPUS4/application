@@ -737,6 +737,16 @@ body > #top-header{
 	float: left;
 	width: 100%;
 }
+.search_export_xml{
+    float: right;
+    padding: 5px 0px 0px 0px;
+    margin: 0;
+}
+#search_export_xml_pic {
+    max-width: 80%;
+    max-height: 80%;
+}
+
 #facets h3,
 #titlemain-wrapper,
 .breadcrumb_results{
