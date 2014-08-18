@@ -93,7 +93,8 @@ javascript.latex.mathjax = "/js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
 
 ; EXPORT SETTINGS
 ; Use to specify default XSLT stylesheet for exports in search or frontdoor
-; export.stylesheet = example
+; export.stylesheet.frontdoor = example
+; export.stylesheet.search = example
 
 ;ERROR CONTROLLER SETTINGS - who should receive error mails?
 ; errorController.mailTo.name = root

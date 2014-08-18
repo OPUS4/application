@@ -1176,7 +1176,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
         $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(array('export' => array('stylesheet' => 'example'))));
+        $config->merge(new Zend_Config(array('export' => array('stylesheet' => array('search' => 'example')))));
         $this->dispatch('/solrsearch/index/search/searchtype/all');
         $this->assertQuery('//a[@href="/solrsearch/index/search/searchtype/all/export/xml/stylesheet/example"]');
     }
@@ -1187,7 +1187,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     public function testXmlExportNotButtonPresentForGuest() {
         $this->enableSecurity();
         $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(array('export' => array('stylesheet' => 'example'))));
+        $config->merge(new Zend_Config(array('export' => array('stylesheet' => array('search' => 'example')))));
         $this->dispatch('/solrsearch/index/search/searchtype/all');
         $this->assertFalse(Opus_Security_Realm::getInstance()->checkModule('export'));
         $this->assertNotQuery('//a[@href="/solrsearch/index/search/searchtype/all/export/xml/stylesheet/example"]');

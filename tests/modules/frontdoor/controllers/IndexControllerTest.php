@@ -1112,7 +1112,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
         $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(array('export' => array('stylesheet' => 'example'))));
+        $config->merge(new Zend_Config(array('export' => array('stylesheet' => array('frontdoor' => 'example')))));
         $this->dispatch('/frontdoor/index/index/docId/305');
         $this->assertQuery('//a[@href="/frontdoor/index/index/docId/305/export/xml/stylesheet/example"]');
     }
@@ -1123,7 +1123,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     public function testXmlExportNotButtonPresentForGuest() {
         $this->enableSecurity();
         $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(array('export' => array('stylesheet' => 'example'))));
+        $config->merge(new Zend_Config(array('export' => array('stylesheet' => array('frontdoor' => 'example')))));
         $this->dispatch('/frontdoor/index/index/docId/305');
         $this->assertNotQuery('//a[@href="/frontdoor/index/index/docId/305/export/xml/stylesheet/example"]');
     }

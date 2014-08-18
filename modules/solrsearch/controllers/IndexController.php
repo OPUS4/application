@@ -117,8 +117,8 @@ class Solrsearch_IndexController extends Controller_Action {
             return $this->redirectToExport($params);
         }
         $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->export->stylesheet) && Opus_Security_Realm::getInstance()->checkModule('export')) {
-            $this->view->stylesheet = $config->export->stylesheet;
+        if (isset($config->export->stylesheet->search) && Opus_Security_Realm::getInstance()->checkModule('export')) {
+            $this->view->stylesheet = $config->export->stylesheet->search;
         }
 
         $this->query = $this->buildQuery();
