@@ -88,8 +88,7 @@ searchengine.extract.app = @searchengine.extract.app@
 ; confirmation.document.statechange.enabled = 0
 
 ; JAVASCRIPT SETTINGS
-javascript.latex.mathjax = "/js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
-
+; javascript.latex.mathjax = "/js/MathJax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
 
 ; EXPORT SETTINGS
 ; Use to specify default XSLT stylesheet for exports in search or frontdoor
