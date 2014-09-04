@@ -258,7 +258,7 @@
             <seg>Value is required and can't be empty.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Dert Wert wird benötigt und darf nicht leer bleiben.</seg>
+            <seg>Der Wert wird benötigt und darf nicht leer bleiben.</seg>
         </tuv>
     </tu>
 
