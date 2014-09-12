@@ -39,7 +39,7 @@
 </div>
 
 <table>
-    <? foreach($this->ipRanges as $id => $ipRange) : ?>
+    <?PHP foreach($this->ipRanges as $id => $ipRange) : ?>
     <tr>
         <td>
             <div><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars($ipRange->getName()) ?></a></div>
@@ -50,5 +50,5 @@
             <a href="<?= $this->url(array('action' => 'delete', 'id' => $id)) ?>"><?= $this->translate('admin_form_action_delete') ?></a>
         </td>
     </tr>
-    <? endforeach; ?>
+    <?PHP endforeach; ?>
 </table>

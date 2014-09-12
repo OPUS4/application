@@ -38,7 +38,7 @@
 </div>
 
 <table>
-    <? foreach($this->enrichmentkeys as $name => $enrichmentkey) : ?>
+    <?PHP foreach($this->enrichmentkeys as $name => $enrichmentkey) : ?>
     <tr>
         <td>
             <div><a href="<?= $this->url(array('action' => 'show', 'name' => $name)) ?>"><?= htmlspecialchars($enrichmentkey) ?></a></div>
@@ -50,5 +50,5 @@
         <?PHP endif; ?>
         </td>
       </tr>
-    <? endforeach; ?>
+    <?PHP endforeach; ?>
 </table>

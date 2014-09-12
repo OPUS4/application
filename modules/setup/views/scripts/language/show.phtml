@@ -62,11 +62,11 @@
 
     <table >
         <tr>
-            <? foreach ($this->sortKeys as $sortKey): ?>
+            <?PHP foreach ($this->sortKeys as $sortKey): ?>
                 <th class="<?= $sortKey == $this->currentSortKey ? 'hilite' : '' ?>"><?= $this->translate('setup_language_' . $sortKey) ?></th>
-            <? endforeach ?>
+            <?PHP endforeach ?>
         </tr>
-        <?
+        <?PHP
 //        $keyPos = array_flip($this->sortKeys);
         foreach ($this->translations as $row):
             $writeable = ($row['directory'] == 'language_custom');
@@ -75,13 +75,13 @@
             ?>
             <tr>
                 <td><?= empty($this->searchTerm) ? $key : str_replace($this->searchTerm, '<span class="hilite">' . $this->searchTerm . '</span>', $key) ?></td>
-                <? foreach ($row as $item): ?>
+                <?PHP foreach ($row as $item): ?>
                     <td><?= $item ?></td>
-                <? endforeach ?>
+                <?PHP endforeach ?>
                 <td>
                     <a href="<?= $this->url(array('action' => 'edit', 'file' => urlencode($file), 'key' => $key, 'search' => $this->searchTerm, 'sort' => $this->currentSortKey)) ?>" title="<?= $this->translate('setup_language_edit_hint', $key, $row['module'] . DIRECTORY_SEPARATOR . 'language_custom' . DIRECTORY_SEPARATOR . $row['filename']) ?>"><?= ($writeable) ? 'bearbeiten' : 'übernehmen' ?></a>
                 </td>
             </tr>
-        <? endforeach ?>
+        <?PHP endforeach ?>
 
     </table>

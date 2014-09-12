@@ -46,7 +46,7 @@
         <th><?= $this->translate('admin_account_column_roles') ?></th>
         <th>&nbsp;</th>
     </tr>
-<? $index = -1; foreach($this->accounts as $id => $entry) : ?>
+<?PHP $index = -1; foreach($this->accounts as $id => $entry) : ?>
     <?PHP $firstName = $entry->getFirstName() ?>
     <tr class="<?= ($index++ % 2) ? 'odd' : 'even' ?>">
         <td class="accountname"><a href="<?= $this->url(array('action' => 'show', 'id' => $id)) ?>"><?= htmlspecialchars(strtolower($entry->getDisplayName())) ?></a></td>
@@ -63,5 +63,5 @@
             <?PHP endif; ?>
         </td>
     </tr>
-<? endforeach; ?>
+<?PHP endforeach; ?>
 </table>

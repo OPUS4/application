@@ -42,7 +42,7 @@
             <th colspan="2">&nbsp;</th>
         </tr>
     </thead>
-    <? foreach($this->element->getModels() as $model) : ?>
+    <?PHP foreach($this->element->getModels() as $model) : ?>
         <tr>
             <td><a href="<?= $this->url(array('action' => 'show', 'id' => $model->getId())) ?>"
                 class="displayname<?= (is_null($model->getField('Active')) || $model->getActive()) ? '' : ' invisible'?>"
@@ -56,5 +56,5 @@
                     ><?= $this->translate('admin_button_remove'); ?></a>
             </td>
         </tr>
-    <? endforeach; ?>
+    <?PHP endforeach; ?>
 </table>
