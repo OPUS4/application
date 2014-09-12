@@ -40,8 +40,8 @@ db.params.password = @db.user.password@
 db.params.dbname   = @db.name@
 
 ; Admin access for is used to create or rebuild the database.
-db.params.admin.name = @db.admin.name@
-db.params.admin.password = @db.admin.password@
+opusdb.params.admin.name = @db.admin.name@
+opusdb.params.admin.password = @db.admin.password@
 
 ;PHP SETTINGS - enable error reporting
 phpSettings.display_startup_errors = 1

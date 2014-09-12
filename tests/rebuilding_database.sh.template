@@ -31,8 +31,8 @@ config_ini=$script_dir/config.ini
 
 # Read database parameters from tests/config.ini
 # user should has rights to drop and create a database (grant rights)
-user=$(sed -n 's/^db\.params\.admin\.name *= *\([^ ]*.*\)/\1/p' < $config_ini)
-password=$(sed -n 's/^db\.params\.admin\.password *= *\([^ ]*.*\)/\1/p' < $config_ini)
+user=$(sed -n 's/^opusdb\.params\.admin\.name *= *\([^ ]*.*\)/\1/p' < $config_ini)
+password=$(sed -n 's/^opusdb\.params\.admin\.password *= *\([^ ]*.*\)/\1/p' < $config_ini)
 host=$(sed -n 's/^db\.params\.host *= *\([^ ]*.*\)/\1/p' < $config_ini)
 port=$(sed -n 's/^db\.params\.port *= *\([^ ]*.*\)/\1/p' < $config_ini)
 dbname=$(sed -n 's/^db\.params\.dbname *= *\([^ ]*.*\)/\1/p' < $config_ini)
