@@ -74,8 +74,16 @@ class Controller_Helper_ReturnParams extends Zend_Controller_Action_Helper_Abstr
                 // don't use for URL generation
                 break;
             default :
-                $log->debug('Login extra param: ' . $key . " -> " . $value);
-                $params[$key] = $value;
+                if (!is_array($value)) {
+                    $log->debug('Login extra param: ' . $key . " -> " . $value);
+                    $params[$key] = $value;
+                }
+                else {
+                    // ignore array values
+                    // TODO when do these values occur?
+                    $output = Zend_Debug::dump($value, null, false);
+                    $log->debug("Login array param ignored: $key -> $output");
+                }
                 break;
             }
         }
