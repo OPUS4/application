@@ -228,8 +228,14 @@
          <xsl:element name="a">
             <!--TODO: Use Zend Url-Helper to build href attribute--> 
             <xsl:attribute name="href">
-               <xsl:text disable-output-escaping="yes">http://scholar.google.de/scholar?hl=de&amp;q="</xsl:text><xsl:value-of select="TitleMain/@Value"/>
+               <xsl:text disable-output-escaping="yes">http://scholar.google.de/scholar?hl=de&amp;q="</xsl:text>
+                <xsl:value-of select="TitleMain/@Value"/>
                <xsl:text>"</xsl:text>
+                <xsl:call-template name="AuthorUrl" />
+                <xsl:text>&amp;as_ylo=</xsl:text>
+                <xsl:call-template name="DateUrl" />
+                <xsl:text>&amp;as_yhi=</xsl:text>
+                <xsl:call-template name="DateUrl" />
             </xsl:attribute>
             <xsl:element name="img">
                <xsl:attribute name="src">
@@ -250,6 +256,35 @@
          <xsl:text> </xsl:text>
       </xsl:if>
    </xsl:template>
+
+    <xsl:template name="AuthorUrl">
+        <xsl:for-each select="PersonAuthor">
+            <xsl:text>&amp;as_sauthors=</xsl:text>
+            <xsl:value-of select="@FirstName" />
+            <xsl:text>+</xsl:text>
+            <xsl:value-of select="@LastName" />
+        </xsl:for-each>
+    </xsl:template>
+
+    <xsl:template name="DateUrl" >
+        <xsl:choose>
+            <xsl:when test="PublishedDate">
+                <xsl:value-of select="PublishedDate/@Year"/>
+            </xsl:when>
+            <xsl:when test="CompletedDate">
+                <xsl:value-of select="CompletedDate/@Year"/>
+            </xsl:when>
+            <xsl:when test="@PublishedYear">
+                <xsl:value-of select="@PublishedYear"/>
+            </xsl:when>
+            <xsl:when test="@CompletedYear">
+                <xsl:value-of select="@CompletedYear"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="format-number(ServerDatePublished/@Year, '0000')"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
 
    <xsl:template name="ExportFunctions">
       <!--Bib-Export--> 
