@@ -223,18 +223,18 @@
       </a>
       <xsl:text> </xsl:text>
 
-      <!--google-scholar--> 
+      <!--google-scholar-->
       <xsl:if test="normalize-space(TitleMain/@Value)">
          <xsl:element name="a">
             <!--TODO: Use Zend Url-Helper to build href attribute--> 
             <xsl:attribute name="href">
                <xsl:text disable-output-escaping="yes">http://scholar.google.de/scholar?hl=de&amp;q="</xsl:text>
-                <xsl:value-of select="TitleMain/@Value"/>
+                <xsl:value-of select="TitleMain/@Value"/>       <!-- q: Titelsuchfeld -->
                <xsl:text>"</xsl:text>
-                <xsl:call-template name="AuthorUrl" />
-                <xsl:text>&amp;as_ylo=</xsl:text>
+                <xsl:call-template name="AuthorUrl" />       <!-- as_sauthors: Suchfeld für Autor -->
+                <xsl:text>&amp;as_ylo=</xsl:text>       <!-- as_ylo: gibt die untere Grenze des Suchzeitraums an -->
                 <xsl:call-template name="DateUrl" />
-                <xsl:text>&amp;as_yhi=</xsl:text>
+                <xsl:text>&amp;as_yhi=</xsl:text>       <!-- as_yhi: gibt die obere Grenze des Suchzeitraums an-->
                 <xsl:call-template name="DateUrl" />
             </xsl:attribute>
             <xsl:element name="img">
