@@ -125,6 +125,7 @@ class SolrIndexBuilder {
         $runtime = microtime(true) - $runtime;
         echo "\n" . date('Y-m-d H:i:s') . " Finished indexing.\n";
         $indexer->commit();
+        echo "\n\nErrors appeared in " . $indexer->getErrorFileCount() . " of " . $indexer->getTotalFileCount() . " files.";
         $this->resetMode();
         return $runtime;
     }
