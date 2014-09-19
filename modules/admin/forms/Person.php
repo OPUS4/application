@@ -135,6 +135,10 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
         $this->addElement('text', self::ELEMENT_IDENTIFIER_GND, array('label' => 'IdentifierGnd', 'size' => 40));
         $this->addElement('text', self::ELEMENT_IDENTIFIER_ORCID, array('label' => 'IdentifierOrcid', 'size' => 40));
         $this->addElement('text', self::ELEMENT_IDENTIFIER_MISC, array('label' => 'IdentifierMisc', 'size' => 40));
+
+        $this->getElement(self::ELEMENT_IDENTIFIER_GND)->addValidator(new Form_Validate_Gnd());
+        $this->getElement(self::ELEMENT_IDENTIFIER_ORCID)->addValidator(new Form_Validate_Orcid());
+
         $this->addDisplayGroup($this->getElements(), 'fields', array(
             'decorators' => array(
                 'FormElements',

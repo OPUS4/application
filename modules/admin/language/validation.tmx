@@ -133,8 +133,26 @@
             <tuv xml:lang="de">
                 <seg>Ungültige Jahresangabe</seg>
             </tuv>
-        </tu>        
-        
+        </tu>
+
+        <tu tuid="admin_validate_person_orcid">
+            <tuv xml:lang="en">
+                <seg>Please provide a valid orcid identifier in format '0000-0000-0000-0000'.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte geben Sie eine valide Orc-Id in folgendem Format an: '0000-0000-0000-0000'.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_validate_person_gnd">
+            <tuv xml:lang="en">
+                <seg>Please provide a valid gnd identifier as plain number without separators.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte geben Sie eine valide Gnd-Id als Ziffernfolge ohne Trennzeichen an.</seg>
+            </tuv>
+        </tu>
+
     </body>
 
 </tmx>
