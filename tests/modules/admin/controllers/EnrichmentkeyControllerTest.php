@@ -52,6 +52,7 @@ class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
     }
 
     public function testIndexActionWithoutEnrichmentkeys() {
+        $this->markTestSkipped('Tests manipulates document 146 and might break other tests.');
         $enrichment = $this->_removeEnrichmentAssociation();
 
         $keyNames = $this->_removeAllEnrichmentKeys();
