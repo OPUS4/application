@@ -42,7 +42,7 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
         try {
             $searcher = new Opus_SolrSearch_Searcher();
             if ($request->getParam('searchtype') == 'id') {
-                $resultList = $this->buildResultListForIdSearch($request->getParam('docId'));
+                $resultList = $this->buildResultListForIdSearch($request);
             }
             else {
                 $resultList = $searcher->search($this->buildQuery($request));
@@ -87,8 +87,17 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
      * @param $id
      * @return Opus_SolrSearch_ResultList
      */
-    private function buildResultListForIdSearch($id) {
-        $doc = new Opus_Document($id);
+    private function buildResultListForIdSearch($request) {
+        $id = $request->getParam('docId');
+        if (is_null($id)) {
+            throw new Application_Exception();
+        }
+        try {
+            $doc = new Opus_Document($id);
+        }
+        catch (Exception $e) {
+            return new Opus_SolrSearch_ResultList(array());
+        }
         if ($doc->getServerState() == 'published') {
             return new Opus_SolrSearch_ResultList(array($doc));
         }
