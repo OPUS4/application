@@ -41,7 +41,12 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
     public function prepareXml($xml, $proc, $request) {
         try {
             $searcher = new Opus_SolrSearch_Searcher();
-            $resultList = $searcher->search($this->buildQuery($request));
+            if ($request->getParam('searchtype') == 'id') {
+                $resultList = $this->buildResultListForIdSearch($request->getParam('docId'));
+            }
+            else {
+                $resultList = $searcher->search($this->buildQuery($request));
+            }
             $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits(), $xml, $proc);
         }
         catch (Opus_SolrSearch_Exception $e) {
@@ -75,6 +80,19 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
                 $xml->documentElement->appendChild($domNode);
             }
         }
+    }
+
+    /**
+     * If searchtype == 'id', skip search and return result list with document.
+     * @param $id
+     * @return Opus_SolrSearch_ResultList
+     */
+    private function buildResultListForIdSearch($id) {
+        $doc = new Opus_Document($id);
+        if ($doc->getServerState() == 'published') {
+            return new Opus_SolrSearch_ResultList(array($doc));
+        }
+        return new Opus_SolrSearch_ResultList(array());
     }
 
     /**

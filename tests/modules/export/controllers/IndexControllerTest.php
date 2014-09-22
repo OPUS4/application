@@ -772,4 +772,19 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<export-example>', $response->getBody());
         $this->assertContains($docId, $response->getBody());
     }
+
+
+    public function testXmlExportForSearchtypeIdWithoutAccessRights() {
+        $this->enableSecurity();
+        $this->useEnglish();
+
+        $doc = $this->createTestDocument();
+        $doc->setServerState('published');
+        $docId = $doc->store();
+
+        $this->dispatch("/export/index/index/docId/$docId/export/xml/stylesheet/example/searchtype/id");
+
+        $this->assertXpath('//error');
+        $this->assertXpathContentContains('//error', 'Unauthorized: Access to module not allowed.');
+    }
 }

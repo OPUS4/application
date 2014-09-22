@@ -163,5 +163,44 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $this->assertEquals($forthDocId, $result->item(3)->attributes->item(0)->nodeValue);
     }
 
+    public function testXmlExportForSearchtypeId() {
+        $doc = new Opus_Document();
+        $doc->setServerState('published');
+        $docId = $doc->store();
+
+        $xml = new DomDocument;
+        $proc = new XSLTProcessor;
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'searchtype' => 'id',
+            'docId' => $docId
+        ));
+        $xmlExportModel = new Export_Model_XmlExport();
+        $xmlExportModel->prepareXml($xml, $proc, $this->getRequest());
+
+        $xpath = new DOMXPath($xml);
+        $result = $xpath->query('//Opus_Document');
+
+        $this->assertEquals($docId, $result->item(0)->attributes->item(0)->nodeValue);
+    }
+
+    public function testXmlExportForSearchtypeIdWithUnpublishedDocument() {
+        $doc = new Opus_Document();
+        $docId = $doc->store();
+
+        $xml = new DomDocument;
+        $proc = new XSLTProcessor;
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'searchtype' => 'id',
+            'docId' => $docId
+        ));
+        $xmlExportModel = new Export_Model_XmlExport();
+        $xmlExportModel->prepareXml($xml, $proc, $this->getRequest());
+
+        $xpath = new DOMXPath($xml);
+        $result = $xpath->query('//Opus_Document');
+
+        $this->assertEquals(0, $result->length);
+    }
+
 }
  
