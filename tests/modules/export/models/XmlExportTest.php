@@ -163,8 +163,12 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $this->assertEquals($forthDocId, $result->item(3)->attributes->item(0)->nodeValue);
     }
 
+    /**
+     * If only one document is exported, searchtype 'id' is used. It is not necessary the invoke solr search, because
+     * the document can be constructed in XmlExport.
+     */
     public function testXmlExportForSearchtypeId() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $docId = $doc->store();
 
@@ -183,8 +187,11 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $this->assertEquals($docId, $result->item(0)->attributes->item(0)->nodeValue);
     }
 
+    /**
+     * Only published documents should be exported.
+     */
     public function testXmlExportForSearchtypeIdWithUnpublishedDocument() {
-        $doc = new Opus_Document();
+        $doc = $this->createTestDocument();
         $docId = $doc->store();
 
         $xml = new DomDocument;

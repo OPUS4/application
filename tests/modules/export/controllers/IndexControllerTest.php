@@ -773,7 +773,9 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertContains($docId, $response->getBody());
     }
 
-
+    /**
+     * Without access rights, no documents can be exported.
+     */
     public function testXmlExportForSearchtypeIdWithoutAccessRights() {
         $this->enableSecurity();
         $this->useEnglish();
