@@ -46,7 +46,10 @@ class Admin_Model_Statistics {
         $result = $select->fetchAll();
         foreach($result as $row) {
             if ($row[$name] != '') {
-                $statistics[$row[$name]] = $row['c'];
+                if ($name == 'mon' || ($name != 'mon' && $row['c'])) {
+                    // only in month stats rows with zero documents should be depicted.
+                    $statistics[$row[$name]] = $row['c'];
+                }
             }
         }
         return $statistics;
@@ -105,11 +108,7 @@ class Admin_Model_Statistics {
      */
     public function getInstituteStatistics($selectedYear) {
         $role = Opus_CollectionRole::fetchByName('institutes');
-        $instStat = array_fill_keys(Opus_Collection::fetchCollectionsByRoleId($role->getId()), 0);
-
-        if (array_key_exists('', $instStat)) {
-            unset ($instStat['']);
-        }
+        $instStat = array();
         if (isset($role)) {
             $query = "SELECT c.name name, COUNT(DISTINCT(d.id)) entries
                  FROM documents d

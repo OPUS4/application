@@ -41,14 +41,14 @@ class Admin_Model_StatisticsTest extends ControllerTestCase {
             'wrong publication count of Technische Universität Hamburg-Harburg returned' );
         $this->assertEquals(1, $institutes['Bauwesen'], 'wrong publicatin count of "Bauwesen" returned');
         $this->assertEquals(1, $institutes['Maschinenbau'], 'wrong publication count of "Maschinenbau" returned');
-        $this->assertEquals(0, $institutes['Massivbau B-7'], 'wrong publication count of "Massivbau B-7" returned');
+        $this->assertNotContains('Massivbau B-7', $institutes, 'Institutes should not contain data with 0 documents');
 
         $institutes = $statistics->getInstituteStatistics(2009);
         $this->assertEquals(50, $institutes['Technische Universität Hamburg-Harburg'],
             'wrong publication count of Technische Universität Hamburg-Harburg returned' );
-        $this->assertEquals(0, $institutes['Bauwesen'], 'wrong publicatin count of "Bauwesen" returned');
+        $this->assertNotContains('Bauwesen', $institutes, 'Institutes should not contain data with 0 documents');
         $this->assertEquals(3, $institutes['Maschinenbau'], 'wrong publication count of "Maschinenbau" returned');
-        $this->assertEquals(0, $institutes['Massivbau B-7'], 'wrong publication count of "Massivbau B-7" returned');
+        $this->assertNotContains('Massivbau B-7', $institutes, 'Institutes should not contain data with 0 documents');
     }
 
     /**
@@ -76,13 +76,13 @@ class Admin_Model_StatisticsTest extends ControllerTestCase {
         $statistics = new Admin_Model_Statistics();
         $types = $statistics->getTypeStatistics(2010);
         $this->assertEquals(15, $types['article'], 'wrong publication count of Article returned');
-        $this->assertEquals(0, $types['masterthesis'], 'wrong publication count of masterthesis returned');
+        $this->assertNotContains('masterthesis', $types, 'Document types should not contain data with 0 documents');
         $this->assertEquals(2, $types['conferenceobject'], 'wrong publication count of conferenceobject returned');
 
         $types = $statistics->getTypeStatistics(2009);
         $this->assertEquals(4, $types['article'], 'wrong publication count of Article returned');
         $this->assertEquals(1, $types['masterthesis'], 'wrong publication count of masterthesis returned');
-        $this->assertEquals(0, $types['conferenceobject'], 'wrong publication count of conferenceobject returned');
+        $this->assertNotContains('conferenceobject', $types, 'Document types should not contain data with 0 documents');
     }
 
     /**

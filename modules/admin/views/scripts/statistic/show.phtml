@@ -32,56 +32,67 @@
  */
 ?>
 <h1><?= $this->title ?></h1>
-<h2><?= $this->translate('Total_Number_Documents') . ' in ' . $this->selectedYear ?> : <?= $this->totalNumber ?><br />
-<?= $this->translate('Number_Documents_Until') . ' ' . $this->dateThreshold ?> : <?= $this->sumDocsUntil ?></h2>
+<ul><li><span class="documentStatisticInfo"><?= $this->translate('Total_Number_Documents') . ' in ' . $this->selectedYear ?> : <?= $this->totalNumber ?></span></li>
+<li><span class="documentStatisticInfo"><?= $this->translate('Number_Documents_Until') . ' ' . $this->dateThreshold ?> : <?= $this->sumDocsUntil ?></span></li></ul>
 
-<h2><?= $this->translate('Month_Overview_Title') ?></h2>
 
-<table>
-    <tr>
-        <th><?= $this->translate('Month_Title') ?></th>
-        <th><?= $this->translate('Count_Title') ?></th>
-    </tr>
-    <?php foreach ($this->monthStat as $month => $count) : ?>
-    <tr>
-        <td><?= $this->translate('Month_'.$month) ?></td>
-        <td><?= $count ?></td>
-    </tr>
-    <?php endforeach; ?>
+<h2 class="statisticHeadline"><?= $this->translate('Month_Overview_Title') ?></h2>
+
+<table class="collections statisticTable">
+    <thead>
+        <tr>
+            <th><?= $this->translate('Month_Title') ?></th>
+            <th><?= $this->translate('Count_Title') ?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->monthStat as $month => $count) : ?>
+            <tr>
+                <th><?= $this->translate('Month_'.$month) ?></th>
+                <td><?= $count ?></td>
+            </tr>
+        <?php endforeach; ?>
+    </tbody>
 </table>
 
-<br />
 
-<h2><?= $this->translate('Type_Overview_Title')?></h2>
+<h2 class="statisticHeadline"><?= $this->translate('Type_Overview_Title')?></h2>
 
-<table>
-    <tr>
-        <th><?= $this->translate('Doc_Type');?></th>
-        <th><?= $this->translate('Count_Title');?></th>
-    </tr>
-    <?php foreach ($this->typeStat as $type => $count) : ?>
-    <tr>
-        <td><?= htmlspecialchars($this->translate($type)) ?></td>
-        <td><?= $count ?></td>
-    </tr>
-    <?php endforeach;?>
+<table class="collections statisticTable">
+    <thead>
+        <tr>
+            <th><?= $this->translate('Doc_Type');?></th>
+            <th><?= $this->translate('Count_Title');?></th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php foreach ($this->typeStat as $type => $count) : ?>
+            <tr>
+                <th><?= htmlspecialchars($this->translate($type)) ?></th>
+                <td><?= $count ?></td>
+            </tr>
+        <?php endforeach;?>
+    </tbody>
 </table>
 
 
 <?php if (isset($this->instStat)) : ?>
-    <br />
-    <h2><?= $this->translate('Institute_Overview_Title') ?></h2>
+    <h2 class="statisticHeadline"><?= $this->translate('Institute_Overview_Title') ?></h2>
 
-    <table>
-        <tr>
-            <th><?= $this->translate('Institute_Title') ?></th>
-            <th><?= $this->translate('Count_Title') ?></th>
-        </tr>
-        <?php foreach ($this->instStat as $instName => $count) : ?>
-        <tr>
-            <td><?= htmlspecialchars($instName) ?></td>
-            <td><?= $count ?></td>
-        </tr>
-        <?php endforeach; ?>
+    <table class="collections statisticTable">
+        <thead>
+            <tr>
+                <th><?= $this->translate('Institute_Title') ?></th>
+                <th><?= $this->translate('Count_Title') ?></th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($this->instStat as $instName => $count) : ?>
+            <tr>
+                <th><?= htmlspecialchars($instName) ?></th>
+                <td><?= $count ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </tbody>
     </table>
 <?php endif; ?>

@@ -1566,4 +1566,17 @@ table + .paginationControl{
     font-weight: bold;
 }
 
+.statisticTable {
+    margin-top: 0px !important;
+}
+
+.statisticHeadline {
+    margin-top: 40px !important;
+    margin-bottom: 0px !important;
+}
+
+.documentStatisticInfo {
+    font-size:120%;
+}
+
 /* @end */
