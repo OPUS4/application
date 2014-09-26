@@ -259,9 +259,13 @@
     </xsl:template>
 
     <xsl:template match="@Language" mode="oai_dc">
+        <xsl:choose>
+        <xsl:when test="$oai_set='openaire'">
         <dc:language>
             <xsl:value-of select="." />
         </dc:language>
+        </xsl:when>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="Licence" mode="oai_dc">
