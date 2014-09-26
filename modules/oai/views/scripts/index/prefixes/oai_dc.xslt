@@ -81,7 +81,7 @@
             <!-- dc:contributor -->
             <xsl:apply-templates select="@ContributingCorporation" mode="oai_dc" />
             <!-- dc:date -->
-            <!-- TODO: date-code has been copy-pasted from XMetaDissPlus.xslt!-->
+            <!-- TODO: date-code has been copy-pasted from XMetaDissPlus.xslt!
             <dc:date>
                 <xsl:choose>
                     <xsl:when test="PublishedDate">
@@ -100,7 +100,7 @@
                         <xsl:value-of select="ServerDatePublished/@Year"/>-<xsl:value-of select="format-number(ServerDatePublished/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDatePublished/@Day,'00')"/>
                     </xsl:otherwise>
                 </xsl:choose>
-            </dc:date>
+            </dc:date>-->
             <!-- dc:date: embargo date -->
             <xsl:apply-templates select="EmbargoDate" mode="oai_dc" />
             <!-- dc:type -->
@@ -244,6 +244,9 @@
 
     <xsl:template match="IdentifierIsbn" mode="oai_dc">
         <dc:identifier>
+            <xsl:if test="$oai_set='openaire'">
+                <xsl:text>urn:isbn:</xsl:text>
+            </xsl:if>
             <xsl:value-of select="@Value" />
         </dc:identifier>
     </xsl:template>
