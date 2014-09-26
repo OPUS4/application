@@ -203,30 +203,31 @@
         <xsl:choose>
             <xsl:when test=".='habilitation'" >
                 <dc:type>
+                    <xsl:choose>
                     <xsl:when test="$oai_set='openaire'">
                         <xsl:text>info:eu-repo/semantics/</xsl:text>
-                    </xsl:when>
+                    </xsl:when></xsl:choose>
                     <xsl:text>doctoralthesis</xsl:text>
                 </dc:type>
-                <dc:type>
+                <dc:type><xsl:choose>
                     <xsl:when test="$oai_set='openaire'">
                         <xsl:text>info:eu-repo/semantics/</xsl:text>
-                    </xsl:when>
+                    </xsl:when></xsl:choose>
                     <xsl:text>doc-type:doctoralthesis</xsl:text>
                 </dc:type>
             </xsl:when>
             <xsl:otherwise>
-                <dc:type>
+                <dc:type><xsl:choose>
                     <xsl:when test="$oai_set='openaire'">
                         <xsl:text>info:eu-repo/semantics/</xsl:text>
-                    </xsl:when>
+                    </xsl:when></xsl:choose>
                     <xsl:value-of select="." />
                 </dc:type>
-                <dc:type>
+                <dc:type><xsl:choose>
                     <!--<xsl:value-of select="$OpenAirePrefix"/>-->
                     <xsl:when test="$oai_set='openaire'">
                         <xsl:text>info:eu-repo/semantics/</xsl:text>
-                    </xsl:when>
+                    </xsl:when></xsl:choose>
                     <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
                 </dc:type>
             </xsl:otherwise>
