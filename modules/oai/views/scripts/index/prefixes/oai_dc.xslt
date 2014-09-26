@@ -203,21 +203,30 @@
         <xsl:choose>
             <xsl:when test=".='habilitation'" >
                 <dc:type>
-                    <xsl:value-of select="$OpenAirePrefix"/>
+                    <xsl:when test="$oai_set='openaire'">
+                        <xsl:text>info:eu-repo/semantics/</xsl:text>
+                    </xsl:when>
                     <xsl:text>doctoralthesis</xsl:text>
                 </dc:type>
                 <dc:type>
-                    <xsl:value-of select="$OpenAirePrefix"/>
+                    <xsl:when test="$oai_set='openaire'">
+                        <xsl:text>info:eu-repo/semantics/</xsl:text>
+                    </xsl:when>
                     <xsl:text>doc-type:doctoralthesis</xsl:text>
                 </dc:type>
             </xsl:when>
             <xsl:otherwise>
                 <dc:type>
-                    <xsl:value-of select="$OpenAirePrefix"/>
+                    <xsl:when test="$oai_set='openaire'">
+                        <xsl:text>info:eu-repo/semantics/</xsl:text>
+                    </xsl:when>
                     <xsl:value-of select="." />
                 </dc:type>
                 <dc:type>
-                    <xsl:value-of select="$OpenAirePrefix"/>
+                    <!--<xsl:value-of select="$OpenAirePrefix"/>-->
+                    <xsl:when test="$oai_set='openaire'">
+                        <xsl:text>info:eu-repo/semantics/</xsl:text>
+                    </xsl:when>
                     <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
                 </dc:type>
             </xsl:otherwise>
@@ -259,13 +268,9 @@
     </xsl:template>
 
     <xsl:template match="@Language" mode="oai_dc">
-        <xsl:choose>
-        <xsl:when test="$oai_set='openaire'">
         <dc:language>
             <xsl:value-of select="." />
         </dc:language>
-        </xsl:when>
-        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="Licence" mode="oai_dc">
@@ -275,13 +280,9 @@
     </xsl:template>
 
     <xsl:template match="Enrichment[@KeyName='Relation']" mode="oai_dc">
-                <xsl:choose>
-            <xsl:when test="$oai_set='openaire'">
         <dc:relation>
             <xsl:value-of select="@Value" />
         </dc:relation>
-            </xsl:when>
-        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="Rights" mode="oai_dc">
