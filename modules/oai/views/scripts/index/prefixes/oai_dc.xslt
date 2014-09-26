@@ -271,9 +271,13 @@
     </xsl:template>
 
     <xsl:template match="Enrichment[@KeyName='Relation']" mode="oai_dc">
+                <xsl:choose>
+            <xsl:when test="$oai_set='openaire'">
         <dc:relation>
             <xsl:value-of select="@Value" />
         </dc:relation>
+            </xsl:when>
+        </xsl:choose>
     </xsl:template>
 
     <xsl:template match="Rights" mode="oai_dc">
@@ -304,9 +308,6 @@
         </xsl:template>     -->
 
     <xsl:param name="OpenAirePrefix">
-        <xsl:text>set:</xsl:text>
-        <xsl:value-of select="$oai_set" />
-        <xsl:text>-</xsl:text>
         <xsl:choose>
             <xsl:when test="$oai_set='openaire'">
                 <xsl:text>info:eu-repo/semantics/</xsl:text>
