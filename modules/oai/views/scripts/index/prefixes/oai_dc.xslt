@@ -286,6 +286,7 @@
         <xsl:choose>
             <xsl:when test="following-sibling::Rights/@Value='info:eu-repo/semantics/embargoedAccess'">
                 <dc:date>
+                    <xsl:text>info:eu-repo/date/embargoEnd/</xsl:text>
                     <xsl:value-of select="./@Year"/>-<xsl:value-of select="format-number(./@Month,'00')"/>-<xsl:value-of select="format-number(./@Day,'00')"/>
                 </dc:date>
             </xsl:when>
@@ -303,6 +304,9 @@
         </xsl:template>     -->
 
     <xsl:param name="OpenAirePrefix">
+        <xsl:text>set:</xsl:text>
+        <xsl:value-of select="$oai_set" />
+        <xsl:text>-</xsl:text>
         <xsl:choose>
             <xsl:when test="$oai_set='openaire'">
                 <xsl:text>info:eu-repo/semantics/</xsl:text>
