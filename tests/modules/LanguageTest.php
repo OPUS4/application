@@ -43,7 +43,8 @@ class LanguageTest extends ControllerTestCase {
     }
 
     public function testAllTmxFiles() {
-        $this->markTestIncomplete("Die Datei 'frontdoor/language/messages.tmx' enthält Tags in den Strings. Das wird als Fehler gemeldet. Daher kann dieser Unit Test noch nicht eingesetzt werden.");
+        $this->markTestIncomplete('Die Datei "frontdoor/language/messages.tmx" enthält Tags in den Strings. '
+            . 'Das wird als Fehler gemeldet. Daher kann dieser Unit Test noch nicht eingesetzt werden.');
         $dir = APPLICATION_PATH . '/modules';
         $DirIter = new RecursiveDirectoryIterator($dir);
         $Iterator = new RecursiveIteratorIterator($DirIter);

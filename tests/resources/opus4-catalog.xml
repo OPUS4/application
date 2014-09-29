@@ -77,4 +77,7 @@
     <uri name="http://www.w3.org/MarkUp/DTD/xhtml-legacy-1.mod" uri="xhtml/xhtml-legacy-1.mod"/>
     <uri name="http://www.w3.org/MarkUp/DTD/xhtml-struct-1.mod" uri="xhtml/xhtml-struct-1.mod"/>
 
+    <!-- TMX Validierung -->
+    <uri name="http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd" uri="tmx/tmx14.dtd" />
+
 </catalog>
