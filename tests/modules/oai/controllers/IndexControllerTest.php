@@ -1592,7 +1592,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:creator");
         $this->assertEquals('Doe, John', $queryResponse->item(0)->nodeValue);
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:creator");
-        $this->assertEquals('Doe, John', $queryResponse->item(0)->nodeValue);
+        $this->assertEquals('Done, John', $queryResponse->item(0)->nodeValue);
 
         // Description
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:description");

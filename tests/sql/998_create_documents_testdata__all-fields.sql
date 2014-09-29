@@ -88,7 +88,7 @@ INSERT INTO `persons` (`id`, `academic_title`, `date_of_birth`, `email`, `first_
 (263,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
 (264,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
 (270,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
-(271,NULL,NULL,'doe@example.org','John','Doe',NULL);
+(271,NULL,NULL,'doe@example.org','John','Done',NULL);
 
 INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_order`, `allow_email_contact`) VALUES
 (258,146,'advisor',1,0),
