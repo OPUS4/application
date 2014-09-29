@@ -80,31 +80,8 @@
             <!-- <xsl:apply-templates select="" /> -->
             <!-- dc:contributor -->
             <xsl:apply-templates select="@ContributingCorporation" mode="oai_dc" />
-            <!-- dc:date -->
-            <!-- TODO: date-code has been copy-pasted from XMetaDissPlus.xslt!-->
-            <dc:date>
-                <xsl:if test="$oai_set='openaire'">
-                    <xsl:text>info:eu-repo/date/publication/</xsl:text>
-                </xsl:if>
-
-                <xsl:choose>
-                    <xsl:when test="PublishedDate">
-                        <xsl:value-of select="PublishedDate/@Year"/>-<xsl:value-of select="format-number(PublishedDate/@Month,'00')"/>-<xsl:value-of select="format-number(PublishedDate/@Day,'00')"/>
-                    </xsl:when>
-                    <xsl:when test="CompletedDate">
-                        <xsl:value-of select="CompletedDate/@Year"/>-<xsl:value-of select="format-number(CompletedDate/@Month,'00')"/>-<xsl:value-of select="format-number(CompletedDate/@Day,'00')"/>
-                    </xsl:when>
-                    <xsl:when test="@PublishedYear">
-                        <xsl:value-of select="@PublishedYear"/>
-                    </xsl:when>
-                    <xsl:when test="@CompletedYear">
-                        <xsl:value-of select="@CompletedYear"/>
-                    </xsl:when>
-                    <xsl:otherwise>
-                        <xsl:value-of select="ServerDatePublished/@Year"/>-<xsl:value-of select="format-number(ServerDatePublished/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDatePublished/@Day,'00')"/>
-                    </xsl:otherwise>
-                </xsl:choose>
-            </dc:date>
+            <!-- dc:date (call-template, weil die 'Funktion' nur einmal aufgerufen werden soll, nicht einmal für jedes Date-->
+            <xsl:call-template name="OpusDate" />
             <!-- dc:date: embargo date -->
             <xsl:apply-templates select="EmbargoDate" mode="oai_dc" />
             <!-- dc:type -->
@@ -136,6 +113,28 @@
             <!-- dc:source -->
             <xsl:apply-templates select="TitleParent" mode="oai_dc" />
         </oai_dc:dc>
+    </xsl:template>
+
+    <xsl:template name="OpusDate" >
+        <dc:date>
+            <xsl:choose>
+                <xsl:when test="PublishedDate">
+                    <xsl:value-of select="PublishedDate/@Year"/>-<xsl:value-of select="format-number(PublishedDate/@Month,'00')"/>-<xsl:value-of select="format-number(PublishedDate/@Day,'00')"/>
+                </xsl:when>
+                <xsl:when test="CompletedDate">
+                    <xsl:value-of select="CompletedDate/@Year"/>-<xsl:value-of select="format-number(CompletedDate/@Month,'00')"/>-<xsl:value-of select="format-number(CompletedDate/@Day,'00')"/>
+                </xsl:when>
+                <xsl:when test="@PublishedYear">
+                    <xsl:value-of select="@PublishedYear"/>
+                </xsl:when>
+                <xsl:when test="@CompletedYear">
+                    <xsl:value-of select="@CompletedYear"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="ServerDatePublished/@Year"/>-<xsl:value-of select="format-number(ServerDatePublished/@Month,'00')"/>-<xsl:value-of select="format-number(ServerDatePublished/@Day,'00')"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </dc:date>
     </xsl:template>
 
     <xsl:template match="TitleMain" mode="oai_dc">
@@ -252,9 +251,26 @@
             <xsl:when test=". = 'contributiontoperiodical'">
                 <xsl:text>info:eu-repo/semantics/contributionToPeriodical</xsl:text>
             </xsl:when>
+            <xsl:when test=". = 'article'">
+                <xsl:text>info:eu-repo/semantics/article</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'book'">
+                <xsl:text>info:eu-repo/semantics/book</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'review'">
+                <xsl:text>info:eu-repo/semantics/review</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'lecture'">
+                <xsl:text>info:eu-repo/semantics/lecture</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'preprint'">
+                <xsl:text>info:eu-repo/semantics/preprint</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'report'">
+                <xsl:text>info:eu-repo/semantics/report</xsl:text>
+            </xsl:when>
             <xsl:otherwise>
-                <xsl:text>info:eu-repo/semantics/</xsl:text>
-                <xsl:value-of select="." />
+                <xsl:text>info:eu-repo/semantics/other</xsl:text>
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
