@@ -83,25 +83,27 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
     }
 
     /**
-     * If searchtype == 'id', skip search and return result list with document.
-     * @param $id
+     * Returns result for ID search of a single document.
+     * @param $request HTTP request object
      * @return Opus_SolrSearch_ResultList
      */
     private function buildResultListForIdSearch($request) {
-        $id = $request->getParam('docId');
-        if (is_null($id)) {
+        $docId = $request->getParam('docId');
+        if (is_null($docId)) {
             throw new Application_Exception();
         }
+        $result = array();
         try {
-            $doc = new Opus_Document($id);
+            $doc = new Opus_Document($docId);
+            // SOLR index currently only contains published documents
+            if ($doc->getServerState() == 'published') {
+                $result[] = $doc;
+            }
         }
         catch (Exception $e) {
-            return new Opus_SolrSearch_ResultList(array());
+            // do nothing; return result with empty array
         }
-        if ($doc->getServerState() == 'published') {
-            return new Opus_SolrSearch_ResultList(array($doc));
-        }
-        return new Opus_SolrSearch_ResultList(array());
+        return new Opus_SolrSearch_ResultList($result);
     }
 
     /**
