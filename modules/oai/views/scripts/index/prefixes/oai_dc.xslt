@@ -201,25 +201,56 @@
 
     <xsl:template match="@Type" mode="oai_dc">
         <xsl:choose>
+            <xsl:when test="$oai_set='openaire'">
+                <dc:type>
+                    <xsl:call-template name="compareDocumentName" />
+                </dc:type>
+            </xsl:when>
             <xsl:when test=".='habilitation'" >
                 <dc:type>
-                    <xsl:value-of select="$OpenAirePrefix"/>
                     <xsl:text>doctoralthesis</xsl:text>
                 </dc:type>
                 <dc:type>
-                    <xsl:value-of select="$OpenAirePrefix"/>
                     <xsl:text>doc-type:doctoralthesis</xsl:text>
                 </dc:type>
             </xsl:when>
             <xsl:otherwise>
                 <dc:type>
-                    <xsl:value-of select="$OpenAirePrefix"/>
                     <xsl:value-of select="." />
                 </dc:type>
                 <dc:type>
-                    <xsl:value-of select="$OpenAirePrefix"/>
                     <xsl:text>doc-type:</xsl:text><xsl:value-of select="." />
                 </dc:type>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <xsl:template name="compareDocumentName" >
+        <xsl:choose>
+            <xsl:when test=". = 'masterthesis'">
+                <xsl:text>info:eu-repo/semantics/masterThesis</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'bachelorthesis'">
+                <xsl:text>info:eu-repo/semantics/bachelorThesis</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'doctoralthesis'">
+                <xsl:text>info:eu-repo/semantics/doctoralThesis</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'bookpart'">
+                <xsl:text>info:eu-repo/semantics/bookPart</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'conferenceobject'">
+                <xsl:text>info:eu-repo/semantics/conferenceObject</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'workingpaper'">
+                <xsl:text>info:eu-repo/semantics/workingPaper</xsl:text>
+            </xsl:when>
+            <xsl:when test=". = 'contributiontoperiodical'">
+                <xsl:text>info:eu-repo/semantics/contributionToPeriodical</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:text>info:eu-repo/semantics/</xsl:text>
+                <xsl:value-of select="." />
             </xsl:otherwise>
         </xsl:choose>
     </xsl:template>
@@ -305,14 +336,6 @@
                 <xsl:value-of select="@Value" />
             </dc:source>
         </xsl:template>     -->
-
-    <xsl:param name="OpenAirePrefix">
-        <xsl:choose>
-            <xsl:when test="$oai_set='openaire'">
-                <xsl:text>info:eu-repo/semantics/</xsl:text>
-            </xsl:when>
-        </xsl:choose>
-    </xsl:param>
 
 </xsl:stylesheet>
 

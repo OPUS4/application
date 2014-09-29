@@ -10,7 +10,7 @@ INSERT INTO `document_enrichments` (`id`, `document_id`, `key_name`, `value`) VA
 (8, 146, 'Event', 'Opus4 OAI-Event'),
 (9, 146, 'City', 'Opus4 OAI-City'),
 (10, 146, 'Country', 'Opus4 OAI-Country'),
-(11, 146, 'Relation', 'info:eu-repo/grantAgreement/EC/FP7/12345/EU//OpenAIRE'),
+(11, 146, 'Relation', 'info:eu-repo/grantAgreement/EC/FP7/12345'),
 (12, 145, 'Relation', 'info:eu-repo/grantAgreement/EC/FP7/12345'),
 (13, 146, 'Audience', 'Researchers'),
 (14, 145, 'Audience', 'Students'),
@@ -87,7 +87,8 @@ INSERT INTO `persons` (`id`, `academic_title`, `date_of_birth`, `email`, `first_
 (262,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
 (263,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
 (264,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
-(270,'PhD','1970-01-01',NULL,'Jane','Doe','New York');
+(270,'PhD','1970-01-01',NULL,'Jane','Doe','New York'),
+(271,NULL,NULL,'doe@example.org','John','Doe',NULL);
 
 INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_order`, `allow_email_contact`) VALUES
 (258,146,'advisor',1,0),
@@ -97,7 +98,8 @@ INSERT INTO `link_persons_documents` (`person_id`, `document_id`, `role`, `sort_
 (262,146,'referee',1,0),
 (263,146,'translator',1,0),
 (264,146,'submitter',1,0),
-(270,146,'other',1,0);
+(270,146,'other',1,0),
+(271,145,'author',1,0);
 
 INSERT INTO `document_patents` (`id`, `document_id`, `countries`, `date_granted`, `number`, `year_applied`, `application`) VALUES
 (1,146,'DDR','1970-1-1T0:00:00CET','1234',1970,'The foo machine.');

@@ -1556,7 +1556,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
     /**
      * Mindestanforderungstest für OpenAire 3.0.
-     * Obwohl Doc 145 hier getestet wird, hat nur Doc 146 OpenAire-Compliance.
+     * Document 145 und 146
      * Test verb=ListRecords, metadataPrefix=oai_dc, set=openaire.
      */
     public function testListRecordsForOpenAireCompliance() {
@@ -1572,53 +1572,60 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('<setSpec>doc-type:doctoralthesis</setSpec>', $responseBody);
 
         $xpath = $this->prepareXpathFromResultString($responseBody);
+
+        // Access Level
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:rights");
-        $this->assertEquals('info:eu-repo/semantics/openAccess', $queryResponse->item(1)->nodeValue,
-            "Document 146: <dc:rights> must contain 'info:eu-repo/semantics/openAccess'");
-
+        $this->assertEquals('info:eu-repo/semantics/openAccess', $queryResponse->item(1)->nodeValue);
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:rights");
-        $this->assertEquals('info:eu-repo/semantics/embargoedAccess', $queryResponse->item(0)->nodeValue,
-            "Document 145: <dc:rights> must contain 'info:eu-repo/semantics/embargoedAccess'");
+        $this->assertEquals('info:eu-repo/semantics/embargoedAccess', $queryResponse->item(0)->nodeValue);
 
+        // Publication Date, Embargo Date
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:date");
         $this->assertEquals('2011', $queryResponse->item(0)->nodeValue);
-        $this->assertEquals('2050-01-01', $queryResponse->item(1)->nodeValue,
+        $this->assertEquals('info:eu-repo/date/embargoEnd/2050-01-01', $queryResponse->item(1)->nodeValue,
             "If document is embargoed, <dc:date> should contain embargo date");
-
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:date");
         $this->assertEquals(1, $queryResponse->length, '146 should not contain embargodate (it has passed)');
         $this->assertEquals('2007-04-30', $queryResponse->item(0)->nodeValue);
 
+        // Author
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:creator");
-        $this->assertEquals('Doe, John', $queryResponse->item(0)->nodeValue, "<dc:creator> is mandatory field for OpenAire");
+        $this->assertEquals('Doe, John', $queryResponse->item(0)->nodeValue);
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:creator");
+        $this->assertEquals('Doe, John', $queryResponse->item(0)->nodeValue);
 
+        // Description
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:description");
-        $this->assertEquals('Die KOBV-Zentrale in Berlin-Dahlem.', $queryResponse->item(0)->nodeValue,
-            "<dc:description> is mandatory field for OpenAire");
+        $this->assertEquals('Die KOBV-Zentrale in Berlin-Dahlem.', $queryResponse->item(0)->nodeValue);
 
+        // Project-Identifier (Reference)
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:relation");
-        $this->assertEquals('info:eu-repo/grantAgreement/EC/FP7/12345', $queryResponse->item(0)->nodeValue,
-            "<dc:relation> is mandatory field for OpenAire");
-
+        $this->assertEquals('info:eu-repo/grantAgreement/EC/FP7/12345', $queryResponse->item(0)->nodeValue);
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:relation");
-        $this->assertEquals('info:eu-repo/grantAgreement/EC/FP7/12345/EU//OpenAIRE', $queryResponse->item(0)->nodeValue,
-            "<dc:relation> is mandatory field for OpenAire");
+        $this->assertEquals('info:eu-repo/grantAgreement/EC/FP7/12345', $queryResponse->item(0)->nodeValue);
 
+        // Document Type
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:type");
-        $this->assertEquals('info:eu-repo/semantics/workingpaper', $queryResponse->item(0)->nodeValue,
-            "<dc:type> is mandatory field for OpenAire");
-
+        $this->assertEquals('info:eu-repo/semantics/workingPaper', $queryResponse->item(0)->nodeValue);
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:type");
-        $this->assertEquals('info:eu-repo/semantics/masterthesis', $queryResponse->item(0)->nodeValue,
-            "<dc:type> is mandatory field for OpenAire");
+        $this->assertEquals('info:eu-repo/semantics/masterThesis', $queryResponse->item(0)->nodeValue);
 
+        // Identifier
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:identifier");
+        // assertContains, weil der Identifier die url ist und diese sich mit dem Host ändert
+        $this->assertContains('frontdoor/index/index/docId/145', $queryResponse->item(0)->nodeValue);
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:identifier");
-        $this->assertEquals('urn:nbn:op:123', $queryResponse->item(1)->nodeValue,
-            "<dc:identifier> is mandatory field for OpenAire");
+        $this->assertEquals('urn:nbn:op:123', $queryResponse->item(1)->nodeValue);
 
+        // Document Title
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:title");
-        $this->assertEquals('KOBV', $queryResponse->item(0)->nodeValue,
-            "<dc:title> is mandatory field for OpenAire");
+        $this->assertEquals('KOBV', $queryResponse->item(0)->nodeValue);
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:title");
+        $this->assertEquals('OpenAire Test Document', $queryResponse->item(0)->nodeValue);
+
+        // Subject
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:subject");
+        $this->assertEquals('Berlin', $queryResponse->item(0)->nodeValue);
     }
 
     /**
