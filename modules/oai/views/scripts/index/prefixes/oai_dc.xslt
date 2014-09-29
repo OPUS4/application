@@ -339,10 +339,10 @@
     <xsl:template match="EmbargoDate" mode="oai_dc">
         <xsl:choose>
             <xsl:when test="following-sibling::Rights/@Value='info:eu-repo/semantics/embargoedAccess'">
-                <dc:rights>
+                <dc:date>
                     <xsl:text>info:eu-repo/date/embargoEnd/</xsl:text>
                     <xsl:value-of select="./@Year"/>-<xsl:value-of select="format-number(./@Month,'00')"/>-<xsl:value-of select="format-number(./@Day,'00')"/>
-                </dc:rights>
+                </dc:date>
             </xsl:when>
         </xsl:choose>
     </xsl:template>
