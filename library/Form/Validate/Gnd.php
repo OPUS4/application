@@ -39,7 +39,7 @@ class Form_Validate_Gnd extends Zend_Validate_Abstract {
     const NOT_VALID = 'isAvailable';
 
     protected $_messageTemplates = array(
-        self::NOT_VALID => 'admin_validate_person_gnd'
+        self::NOT_VALID => 'validation_error_person_gnd'
     );
 
     /**
