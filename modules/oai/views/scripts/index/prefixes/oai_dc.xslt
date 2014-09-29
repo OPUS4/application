@@ -83,6 +83,10 @@
             <!-- dc:date -->
             <!-- TODO: date-code has been copy-pasted from XMetaDissPlus.xslt!-->
             <dc:date>
+                <xsl:if test="$oai_set='openaire'">
+                    <xsl:text>info:eu-repo/date/publication/</xsl:text>
+                </xsl:if>
+
                 <xsl:choose>
                     <xsl:when test="PublishedDate">
                         <xsl:value-of select="PublishedDate/@Year"/>-<xsl:value-of select="format-number(PublishedDate/@Month,'00')"/>-<xsl:value-of select="format-number(PublishedDate/@Day,'00')"/>
