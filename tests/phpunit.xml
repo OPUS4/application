@@ -1,17 +1,4 @@
 <?xml version="1.0"?>
-<!--
-To change this template, choose Tools | Templates
-and open the template in the editor.
--->
-
-<!-- see http://www.phpunit.de/wiki/Documentation -->
-<!--phpunit bootstrap="/path/to/bootstrap.php"
-         colors="false"
-         convertErrorsToExceptions="true"
-         convertNoticesToExceptions="true"
-         convertWarningsToExceptions="true"
-         stopOnFailure="true">
-</phpunit-->
 
 <phpunit bootstrap="./Bootstrap.php"
          colors="false"
@@ -21,7 +8,6 @@ and open the template in the editor.
          stopOnFailure="false"
          processIsolation="false"
          syntaxCheck="true">
-
 
     <testsuite name="ServerTests">
         <directory>./scripts</directory>
@@ -39,11 +25,11 @@ and open the template in the editor.
         <!-- Define directories to include. -->
         <whitelist>
             <directory suffix=".php">../modules</directory>
-            <directory suffix=".php">../library</directory>
-            <exclude>
-                <directory suffix=".php">../library/Zend</directory>
-                <directory suffix=".php">../tests</directory>
-            </exclude>
+            <directory suffix=".php">../library/Application</directory>
+            <directory suffix=".php">../library/Controller</directory>
+            <directory suffix=".php">../library/Form</directory>
+            <directory suffix=".php">../library/Util</directory>
+            <directory suffix=".php">../library/View</directory>
         </whitelist>
     </filter>
 
