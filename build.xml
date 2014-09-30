@@ -8,6 +8,7 @@
     <property name="libsdir" location="/home/opus4ci/libs" />
     <property name="testpath" value="" />
     <property name="codingstandard" location="${libsdir}/opus4cs/ruleset.xml" />
+    <property name="adminPassword" value="AdminAdmin" />
 
     <target name="analyse-code" depends="phpcs,phpmd,phpcpd,phploc" />
     
@@ -194,10 +195,28 @@
     </target>
 
     <target name="phpunit-fast" depends="rebuild-database,rebuild-index" description="Runs unit tests without coverage">
-        <exec executable="phpunit" dir="${basedir}/tests" failonerror="on">
+        <exec executable="phpunit" dir="${basedir}/tests" failonerror="true">
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
             <arg line="--configuration phpunit.xml" />
             <arg line="${testpath}" />
+        </exec>
+    </target>
+
+    <target name="demo-reset" depends="rebuild-database,demo-prepare-docs,rebuild-index,demo-reset-password">
+    </target>
+
+    <target name="demo-reset-password">
+        <exec executable="php" dir="${basedir}/scripts" failonerror="true">
+            <arg line="change-password.php" />
+            <arg line="admin" />
+            <arg line="${adminPassword}" />
+        </exec>
+    </target>
+
+    <target name="demo-prepare-docs">
+        <exec executable="php" dir="${basedir}/scripts" failonerror="true">
+            <arg line="opus-console.php" />
+            <arg line="snippets/delete_non-demo_docs.php" />
         </exec>
     </target>
 
