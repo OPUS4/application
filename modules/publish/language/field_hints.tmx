@@ -1035,12 +1035,12 @@ Beispieleingabe: "C.1" (für Processor Architectures)</seg>
 <tu tuid="hint_groupSubjectPACS">
         <tuv xml:lang="en">
             <seg>Please enter the PACS classes of the document. You may add more PACS classes by clicking on the button (or delete them).<br />
-See the overview at <a href="http://www.aip.org/pacs/pacs2010/individuals/pacs2010_regular_edition/index.html" target="tab" >http://www.aip.org/pacs/pacs2010/individuals/pacs2010_regular_edition/index.html</a>.<br />
+See the overview at <a href="http://www.aip.org/publishing/pacs/pacs-2010-regular-edition" target="tab" >http://www.aip.org/publishing/pacs/pacs-2010-regular-edition</a>.<br />
 Example input: "11.15.Bt" (for General properties of perturbation theory )</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Tragen Sie hier bitte die PACS Klassen Ihres Dokumentes ein. Sie können durch Klicken auf den Button weitere Klassen hinzufügen (oder wieder löschen).<br />
-Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://www.aip.org/pacs/pacs2010/individuals/pacs2010_regular_edition/index.html" target="tab" >http://www.aip.org/pacs/pacs2010/individuals/pacs2010_regular_edition/index.html</a><br />
+Eine Übersicht über verfügbare Klassen bekommen Sie unter: <a href="http://www.aip.org/publishing/pacs/pacs-2010-regular-edition" target="tab" >http://www.aip.org/publishing/pacs/pacs-2010-regular-edition</a><br />
 Beispieleingabe: "11.15.Bt" (für General properties of perturbation theory )</seg>
         </tuv>
     </tu>
