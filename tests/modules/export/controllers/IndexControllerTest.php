@@ -789,4 +789,16 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertXpath('//error');
         $this->assertXpathContentContains('//error', 'Unauthorized: Access to module not allowed.');
     }
+
+    /**
+     * Regressionstest für OPUSVIER-3391.
+     * // TODO insert host
+     */
+    public function testExportedFilePath() {
+        Zend_Controller_Front::getInstance()->setBaseUrl('opus4dev');
+        $this->dispatch('/export/index/index/docId/146/export/xml/stylesheet/example/searchtype/id');
+        $host = isset($_SERVER['HTTP_HOST']) ? $_SERVER['HTTP_HOST'] : '';
+        $server = $this->getRequest()->getBasePath();
+        $this->assertXpathContentContains('//file', 'https://' . $host . $server . '/files/146/test.pdf');
+    }
 }

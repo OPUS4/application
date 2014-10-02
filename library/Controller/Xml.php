@@ -105,6 +105,10 @@ class Controller_Xml extends Controller_ModuleAccess {
         $this->_xslt = new DomDocument;
         $this->_xslt->load($stylesheet);
         $this->_proc->importStyleSheet($this->_xslt);
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $this->_proc->setParameter('', 'host', $_SERVER['HTTP_HOST']);
+        }
+        $this->_proc->setParameter('', 'server', $this->getRequest()->getBaseUrl());
     }
 
     /**
