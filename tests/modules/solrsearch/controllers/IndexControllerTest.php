@@ -1182,9 +1182,21 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * The export functionality should be available for admins also in latest search.
+     */
+    public function testXmlExportButtonPresentForAdminInLatestSearch() {
+        $this->enableSecurity();
+        $this->loginUser('admin', 'adminadmin');
+        $config = Zend_Registry::get('Zend_Config');
+        $config->merge(new Zend_Config(array('export' => array('stylesheet' => array('search' => 'example')))));
+        $this->dispatch('/solrsearch/index/search/searchtype/latest');
+        $this->assertQuery('//a[@href="/solrsearch/index/search/searchtype/latest/export/xml/stylesheet/example"]');
+    }
+
+    /**
      * The export functionality should not be present for guests.
      */
-    public function testXmlExportNotButtonPresentForGuest() {
+    public function testXmlExportButtonNotPresentForGuest() {
         $this->enableSecurity();
         $config = Zend_Registry::get('Zend_Config');
         $config->merge(new Zend_Config(array('export' => array('stylesheet' => array('search' => 'example')))));
