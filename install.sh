@@ -64,7 +64,7 @@ fi
 cd libs
 
 tar xfvz "$BASEDIR/downloads/zend.tar.gz"
-ln -svf ZendFramework-1.12.3-minimal ZendFramework
+ln -svf ZendFramework-1.12.9-minimal ZendFramework
 
 mkdir -p jpgraph-3.0.7
 tar xfvz "$BASEDIR/downloads/jpgraph.tar.gz" --directory jpgraph-3.0.7/

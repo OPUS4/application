@@ -23,7 +23,7 @@ SCRIPT_NAME=`basename "$0"`
 DOWNLOADS_DIR="$1"
 
 
-ZEND_LIB_URL='https://packages.zendframework.com/releases/ZendFramework-1.12.3/ZendFramework-1.12.3-minimal.tar.gz'
+ZEND_LIB_URL='https://packages.zendframework.com/releases/ZendFramework-1.12.9/ZendFramework-1.12.9-minimal.tar.gz'
 JPGRAPH_LIB_URL='http://jpgraph.net/download/download.php?p=1'
 SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/1.4.1/apache-solr-1.4.1.tgz'
 SOLR_PHP_CLIENT_LIB_URL='http://solr-php-client.googlecode.com/svn/trunk/'
