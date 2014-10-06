@@ -16,21 +16,21 @@
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 # @version     $Id$
 
-# Updates the ZendFramework library to Version 1.12.3
+# Updates the ZendFramework library to Version 1.12.9
 
 set -o errexit
 
 DOWNLOADS_DIR="$OPUS_UPDATE_BASEDIR"/downloads 
 LIB_DIR="$OPUS_UPDATE_BASEDIR"/libs
-NEW_ZEND_FOLDER='ZendFramework-1.12.3-minimal'
-ZEND_LIB_URL='https://packages.zendframework.com/releases/ZendFramework-1.12.3/ZendFramework-1.12.3-minimal.tar.gz'
+NEW_ZEND_FOLDER='ZendFramework-1.12.9-minimal'
+ZEND_LIB_URL='https://packages.zendframework.com/releases/ZendFramework-1.12.9/ZendFramework-1.12.9-minimal.tar.gz'
 
-echo "Updating Zend-Framework to Version 1.12.3"
+echo "Updating Zend-Framework to Version 1.12.9"
 
 echo "$LIB_DIR/$NEW_ZEND_FOLDER"
 if [ -d "$LIB_DIR/$NEW_ZEND_FOLDER" ];
 then
-  echo "Zend-Framework Version 1.12.3 already installed. Nothing to do here."
+  echo "Zend-Framework Version 1.12.9 already installed. Nothing to do here."
   exit 0
 fi
 
@@ -46,7 +46,7 @@ then
     exit 1
 fi
 
-echo "Downloading Zend-Framework Version 1.12.3"
+echo "Downloading Zend-Framework Version 1.12.9"
 
 if ! wget -O "$DOWNLOADS_DIR"/zend.tar.gz "$ZEND_LIB_URL";
 then
@@ -59,7 +59,7 @@ tar xzf "$DOWNLOADS_DIR/zend.tar.gz" -C "$LIB_DIR"
 echo "Updating Symlink to Zend-Framework"
 cd "$LIB_DIR"
 rm ZendFramework
-ln -svf ZendFramework-1.12.3-minimal ZendFramework
+ln -svf ZendFramework-1.12.9-minimal ZendFramework
 
 echo "done"
 exit 0
