@@ -31,6 +31,11 @@
  * @version     $Id$
  */
 
+/**
+ * Dieses Skript soll den Dokument XML Cache in der Datenbank löschen, damit Änderungen durch das Update berücksichtigt
+ * werden.
+ */
+
 $options = getopt('', array(
     "dbname:",
     "user:",
