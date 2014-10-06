@@ -1619,7 +1619,7 @@ class Oai_IndexControllerTest extends ControllerTestCase {
 
         // Document Title
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:title");
-        $this->assertEquals('KOBV', $queryResponse->item(0)->nodeValue);
+        $this->assertEquals('KOBV:Service-Zentrale', $queryResponse->item(0)->nodeValue);
         $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:title");
         $this->assertEquals('OpenAire Test Document', $queryResponse->item(0)->nodeValue);
 
