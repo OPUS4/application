@@ -143,6 +143,10 @@
                 <xsl:value-of select="@Language" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
+            <xsl:if test="$oai_set='openaire' and ../TitleSub/@Value != ''">
+                <xsl:text>:</xsl:text>
+                <xsl:value-of select="../TitleSub/@Value" />
+            </xsl:if>
         </dc:title>
     </xsl:template>
 
