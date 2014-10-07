@@ -112,6 +112,7 @@
             <!-- <dc:type>info:eu-repo/semantics/publishedVersion</dc:type> -->
             <!-- dc:source -->
             <xsl:apply-templates select="TitleParent" mode="oai_dc" />
+            <xsl:call-template name="PublicationVersion" />
         </oai_dc:dc>
     </xsl:template>
 
@@ -351,15 +352,20 @@
         </xsl:choose>
     </xsl:template>
 
+    <xsl:template match="TitleParent" mode="oai_dc">
+        <dc:source>
+            <xsl:attribute name="xml:lang">
+                <xsl:value-of select="@Language" />
+            </xsl:attribute>
+            <xsl:value-of select="@Value" />
+        </dc:source>
+    </xsl:template>
 
-    <!--    <xsl:template match="TitleParent" mode="oai_dc">
-            <dc:source>
-                <xsl:attribute name="xml:lang">
-                    <xsl:value-of select="@Language" />
-                </xsl:attribute>
-                <xsl:value-of select="@Value" />
-            </dc:source>
-        </xsl:template>     -->
+    <xsl:template name="PublicationVersion">
+        <dc:type>
+            <xsl:text>info:eu-repo/semantics/publishedVersion</xsl:text>
+        </dc:type>
+    </xsl:template>
 
 </xsl:stylesheet>
 
