@@ -88,17 +88,15 @@ class Oai_Model_Container {
         // admins sollen immer durchgelassen werden, nutzer nur wenn das doc im publizierten Zustand ist
         if (!$realm->skipSecurityChecks()) {
             // kein administrator
-            if (!$realm->checkDocument($this->docId)) {
-                // Dokument ist nicht verfügbar für aktuellen Nutzer
-                $this->logErrorMessage('access to document with id ' . $this->docId
-                    . ' is not allowed for current user');
-                throw new Oai_Model_Exception('access to requested document is forbidden');
-            }
-            else {
-                // Dokument ist verfügbar für Nutzer; prüfen, ob veroeffentlicht
-                if ($this->doc->getServerState() !== 'published') {
-                    // Dokument noch nicht veröffentlicht
-                    $this->logErrorMessage('document with id ' . $this->docId . ' is not in server state published');
+
+            // PUBLISHED Dokumente sind immer verfügbar (Zugriff auf Modul kann eingeschränkt sein)
+            if ($this->doc->getServerState() !== 'published') {
+                // Dokument nicht published
+
+                if (!$realm->checkDocument($this->docId)) {
+                    // Dokument ist nicht verfügbar für aktuellen Nutzer
+                    $this->logErrorMessage('document id =' . $this->docId
+                        . ' is not published and access is not allowed for current user');
                     throw new Oai_Model_Exception('access to requested document is forbidden');
                 }
             }

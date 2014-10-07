@@ -358,7 +358,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
 
         $this->loginUser('test_account', 'role_tester_user2');
         $this->tryAccessForDocument($publishedDocId, true);
-        $this->tryAccessForDocument($unpublishedDocId, false);
+        $this->tryAccessForDocument($unpublishedDocId, true);
         $this->logoutUser();
     }
 
@@ -369,7 +369,7 @@ class Oai_Model_ContainerTest extends ControllerTestCase {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
         $docId = $doc->store();
-        $this->tryAccessForDocument($docId, false);
+        $this->tryAccessForDocument($docId, true);
 
         $doc = new Opus_Document($docId);
         $doc->setServerState('unpublished');
