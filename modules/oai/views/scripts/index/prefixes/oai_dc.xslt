@@ -342,37 +342,45 @@
     </xsl:template>
 
     <xsl:template match="EmbargoDate" mode="oai_dc">
-        <xsl:choose>
-            <xsl:when test="following-sibling::Rights/@Value='info:eu-repo/semantics/embargoedAccess'">
-                <dc:date>
-                    <xsl:text>info:eu-repo/date/embargoEnd/</xsl:text>
-                    <xsl:value-of select="./@Year"/>-<xsl:value-of select="format-number(./@Month,'00')"/>-<xsl:value-of select="format-number(./@Day,'00')"/>
-                </dc:date>
-            </xsl:when>
-        </xsl:choose>
+        <xsl:if test="$oai_set='openaire'">
+            <xsl:choose>
+                <xsl:when test="following-sibling::Rights/@Value='info:eu-repo/semantics/embargoedAccess'">
+                    <dc:date>
+                        <xsl:text>info:eu-repo/date/embargoEnd/</xsl:text>
+                        <xsl:value-of select="./@Year"/>-<xsl:value-of select="format-number(./@Month,'00')"/>-<xsl:value-of select="format-number(./@Day,'00')"/>
+                    </dc:date>
+                </xsl:when>
+            </xsl:choose>
+        </xsl:if>
     </xsl:template>
 
     <xsl:template match="TitleParent" mode="oai_dc">
-        <dc:source>
-            <xsl:attribute name="xml:lang">
-                <xsl:value-of select="@Language" />
-            </xsl:attribute>
-            <xsl:value-of select="@Value" />
-        </dc:source>
+        <xsl:if test="$oai_set='openaire'">
+            <dc:source>
+                <xsl:attribute name="xml:lang">
+                    <xsl:value-of select="@Language" />
+                </xsl:attribute>
+                <xsl:value-of select="@Value" />
+            </dc:source>
+        </xsl:if>
     </xsl:template>
 
     <!-- Verwende dieses Template, um das EnrichmentFeld 'SourceTitle' als <dc:source> auszugeben
     <xsl:template match="Enrichment[@KeyName='SourceTitle']" mode="oai_dc">
-        <dc:source>
-            <xsl:value-of select="@Value" />
-        </dc:source>
+        <xsl:if test="$oai_set='openaire'">
+            <dc:source>
+                <xsl:value-of select="@Value" />
+            </dc:source>
+        </xsl:if>
     </xsl:template>
     -->
 
     <xsl:template name="PublicationVersion">
-        <dc:type>
-            <xsl:text>info:eu-repo/semantics/publishedVersion</xsl:text>
-        </dc:type>
+        <xsl:if test="$oai_set='openaire'">
+            <dc:type>
+                <xsl:text>info:eu-repo/semantics/publishedVersion</xsl:text>
+            </dc:type>
+        </xsl:if>
     </xsl:template>
 
 </xsl:stylesheet>
