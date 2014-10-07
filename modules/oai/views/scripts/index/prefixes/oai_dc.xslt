@@ -361,6 +361,14 @@
         </dc:source>
     </xsl:template>
 
+    <!-- Verwende dieses Template, um das EnrichmentFeld 'SourceTitle' als <dc:source> auszugeben
+    <xsl:template match="Enrichment[@KeyName='SourceTitle']" mode="oai_dc">
+        <dc:source>
+            <xsl:value-of select="@Value" />
+        </dc:source>
+    </xsl:template>
+    -->
+
     <xsl:template name="PublicationVersion">
         <dc:type>
             <xsl:text>info:eu-repo/semantics/publishedVersion</xsl:text>

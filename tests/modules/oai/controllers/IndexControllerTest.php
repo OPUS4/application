@@ -1629,6 +1629,36 @@ class Oai_IndexControllerTest extends ControllerTestCase {
     }
 
     /**
+     * Testet die empfohlenen Felder für die OpenAireCompliance.
+     */
+    public function testListRecordsForOpenAireComplianceForRecommendedFields() {
+        $this->dispatch('/oai?verb=ListRecords&metadataPrefix=oai_dc&set=openaire');
+        $this->assertResponseCode(200);
+
+        $responseBody = $this->getResponse()->getBody();
+        $badStrings = array("Exception", "Stacktrace", "badVerb");
+        $this->checkForCustomBadStringsInHtml($responseBody, $badStrings);
+
+        $xpath = $this->prepareXpathFromResultString($responseBody);
+
+        // Language
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:language");
+        $this->assertEquals('deu', $queryResponse->item(0)->nodeValue);
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:language");
+        $this->assertEquals('deu', $queryResponse->item(0)->nodeValue);
+
+        // Publication Version
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:type");
+        $this->assertEquals('info:eu-repo/semantics/publishedVersion', $queryResponse->item(1)->nodeValue);
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/145']/dc:type");
+        $this->assertEquals('info:eu-repo/semantics/publishedVersion', $queryResponse->item(1)->nodeValue);
+
+        // Source (TitleParent ist nur bei 146 gesetzt
+        $queryResponse = $xpath->query("//oai_dc:dc[dc:identifier='http:///frontdoor/index/index/docId/146']/dc:source");
+        $this->assertEquals('Parent Title', $queryResponse->item(0)->nodeValue);
+    }
+
+    /**
      * Testet die korrekte Anzeige eines Dokuments vom Typ Periodical Parts.
      */
     public function testXMetaDissPlusForPeriodicalParts() {
