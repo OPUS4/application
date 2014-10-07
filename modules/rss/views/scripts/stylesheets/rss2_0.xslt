@@ -50,8 +50,8 @@
         <xsl:element name="rss">
             <xsl:attribute name="version">2.0</xsl:attribute>
             <xsl:element name="channel">
-                <xsl:element name="title">OPUS 4 Latest Documents RSS Feed</xsl:element>
-                <xsl:element name="description">Latest documents</xsl:element>
+                <xsl:element name="title">OPUS RSS Feed</xsl:element>
+                <xsl:element name="description">OPUS documents</xsl:element>
                 <xsl:element name="link">
                     <xsl:value-of select="$link"/>
                 </xsl:element>
