@@ -44,7 +44,8 @@
         ?></td>
     <td id="<?= $formId . 'FileSize' ?>" class="filesize"><?= $this->fileSize(null, $file->getFileSize()) ?></td>
     <td id="<?= $formId . 'MimeType' ?>" class="mimetype"><?= htmlspecialchars($file->getMimeType()) ?></td>
-    <td id="<?= $formId . 'Language' ?>" class="language"><?= $this->translate($file->getLanguage()) ?></td>
+    <td id="<?= $formId . 'Language' ?>" class="language"
+        ><?= is_null($file->getLanguage()) ? '-' : $this->translate($file->getLanguage()) ?></td>
     <td id="<?= $formId . 'VisibleInFrontdoor' ?>" class="visiblefrontdoor"
         ><?= $this->translate($file->getVisibleInFrontdoor() ? 'Field_Value_True' : 'Field_Value_False') ?></td>
     <td id="<?= $formId . 'VisibleInOai' ?>" class="visibleoai"
