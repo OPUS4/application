@@ -88,7 +88,7 @@
           <li class="cancel-element"><?= $this->element->getElement(Admin_Form_ActionBox::ELEMENT_CANCEL) ?></li>
           <?PHP else : ?>
           <?PHP foreach ($actionLinks as $action => $params) : ?>
-          <li class="<?= $action ?>"><a href="<?= $this->url($params) ?>"
+          <li class="<?= $action ?>"><a href="<?= $this->url($params, null, true) ?>"
                                         ><?= htmlspecialchars($this->translate('admin_document_' .$action)) ?></a></li>
           <?PHP endforeach; ?>
           <?PHP endif; ?>
