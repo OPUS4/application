@@ -861,4 +861,24 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
             'Parameter \'id\' should not appear in link to frontdoor.');
     }
 
+    public function testShowDocumentWithFilesWithLanguageNull() {
+        $doc = $this->createTestDocument();
+        $file = $this->createTestFile('nolang.pdf');
+
+        $file->setLanguage(null);
+
+        $doc->addFile($file);
+        $docId = $doc->store();
+
+        $this->dispatch("/admin/document/index/id/$docId");
+
+        $body = $this->getResponse()->getBody();
+
+        $this->checkForCustomBadStringsInHtml($body, array(
+            'Catchable fatal error',
+            'Object of class Zend_View_Helper_Translate could not be converted to string',
+            'Application/View/Parial/filerow.phtml'
+        ));
+    }
+
 }
