@@ -861,6 +861,10 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
             'Parameter \'id\' should not appear in link to frontdoor.');
     }
 
+    /**
+     * Run in separate process so fatal error won't stop build completely.
+     * @runInSeparateProcess
+     */
     public function testShowDocumentWithFilesWithLanguageNull() {
         $doc = $this->createTestDocument();
         $file = $this->createTestFile('nolang.pdf');
