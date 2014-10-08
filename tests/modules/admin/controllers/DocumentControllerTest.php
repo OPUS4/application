@@ -852,4 +852,13 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         $positionFile2 = strpos($body, 'datei mit unüblichem Namen.xhtml');
         $this->assertTrue($positionFile1 < $positionFile2);
     }
+
+    public function testFrontdoorLinkWithoutIdParameter() {
+        $this->dispatch('/admin/document/index/id/146');
+        $this->assertXpath('//ul[@class = "form-action"]/li[@class = "frontdoor"]/a[contains(@href, "docId/146")]');
+        $this->assertXpathCountMax(
+            '//ul[@class = "form-action"]/li[@class = "frontdoor"]/a[contains(@href, "id/146")]', 0,
+            'Parameter \'id\' should not appear in link to frontdoor.');
+    }
+
 }
