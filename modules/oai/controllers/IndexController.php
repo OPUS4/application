@@ -567,8 +567,9 @@ class Oai_IndexController extends Controller_Xml {
 
     private function _addAccessRights(DOMNode $domNode, Opus_Document $doc) {
         $visible = 0;
-        if (sizeof($doc->getFile()) > 0) {
-            foreach ($doc->getFile() as $file) {
+        $files = $doc->getFile();
+        if (count($files) > 0) {
+            foreach ($files as $file) {
                 if ($file->getField('VisibleInOai')->getValue() && $file->getField('VisibleInFrontdoor')->getValue()) {
                     $visible = 1;
                 }
