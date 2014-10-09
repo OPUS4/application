@@ -33,7 +33,7 @@
  */
 
 /**
- * Unit Test for class Admin_Model_Workflow.
+ * Unit Test for class Controller_Helper_Workflow.
  */
 class Controller_Helper_WorkflowTest extends ControllerTestCase {
 
