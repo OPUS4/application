@@ -863,7 +863,7 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
 
     /**
      * Run in separate process so fatal error won't stop build completely.
-     * @runInSeparateProcess
+     * TODO OPUSVIER-3399 @ runInSeparateProcess
      */
     public function testShowDocumentWithFilesWithLanguageNull() {
         $doc = $this->createTestDocument();
