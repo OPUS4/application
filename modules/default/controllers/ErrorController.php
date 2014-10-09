@@ -128,6 +128,18 @@ class ErrorController extends Controller_Action {
         }
     }
 
+    /**
+     * @param $config
+     * @param $response_code
+     * @param $view
+     * @param $request
+     * @param $exception
+     * @return bool
+     * @throws Application_Exception
+     * @throws Opus_Mail_Exception
+     *
+     * TODO Escape exception messages, other stuff? Is it possible to inject javascript in E-Mail?
+     */
     public function _sendErrorMail($config, $response_code, $view, $request, $exception) {
         if (!isset($config->errorController->mailTo)) {
             return false;
