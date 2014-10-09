@@ -144,11 +144,8 @@ cd -
 
 echo -e "\n*** Created backup of fulltexts, log files and series logos in $TEMP_DIR ***\n"
 
-cd $workspace_test_dir
-rm -rf *
+rm -rf $script_dir/workspace/*
 svn up
-cd -
-
 
 #
 # Copy test fulltexts to workspace
