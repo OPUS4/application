@@ -45,7 +45,6 @@ defined('APPLICATION_ENV')
 
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
-    realpath(dirname(__FILE__)),
     realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'support', // Support-Klassen fuer Tests
     realpath(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library', // tests/library
     realpath(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library'), // Server library
