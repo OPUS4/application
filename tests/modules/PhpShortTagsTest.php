@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -26,31 +25,31 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Frontdoor
- * @author      Simone Finkbeiner-Franke <simone.finkbeiner@ub.uni-stuttgart.de>
- * @copyright   Copyright (c) 2008, OPUS 4 development team
+ * @package     Tests
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
- *
- *  This view displays a mailform to recommend a document
  */
-?>
-<h1><?= $this->translate ('frontdoor_sendmailtitle')?></h1><br/>
-<?PHP
-echo $this->translate ('frontdoor_sendmailtext') . ': <br>';
-echo '<br><b>'. $this->title . '</b> (' . $this->translate($this->docType) . ').</br>';
-echo '<br><br><b>'. $this->translate('frontdoor_recipientmail') . ': </b></br></br>';
-echo $this->recipientMail;
-if ($this->message != '') {
-   echo '<br><br><b>'. $this->translate('frontdoor_message') . ': </b></br></br>';
-   echo $this->message;
-}
-?>
 
-<br />
-<br /><p><a href="<?= $this->value =
-   $this->url(array(
-   'module' => 'frontdoor',
-   'controller' => 'index',
-   'docId' => $this->docId,
-   ), null, true);?>"><?= $this->translate('frontdoor_back')?></a></p><br />
+/**
+ * Check source code for PHP short tags.
+ *
+ * PHP Short Tags sind unerwünscht und führen zu Problemen mit neueren Version von PHP wo sie nicht mehr automatisch
+ * unterstützt werden. Dieser Test prüft das Auftreten von "<? " Tags in den PHTML Dateien von OPUS 4.
+ */
+class PhpShortTagsTest extends ControllerTestCase {
+
+    public function testDetectPhpShortTags() {
+        $modulesDir = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'modules';
+
+        // look for short tags
+        $output = shell_exec("find $modulesDir -name '*phtml' -print0 |xargs -r0 grep -n '<?[^pP=]'");
+
+        // look for shorts tags with line break afterwards
+        $output .= shell_exec("find $modulesDir -name '*phtml' -print0 |xargs -r0 grep -n '<?$'");
+
+        $this->assertTrue(strlen(trim($output)) == 0, $output);
+    }
+
+}
