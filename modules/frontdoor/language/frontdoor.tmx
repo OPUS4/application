@@ -679,5 +679,13 @@
         </tuv>
     </tu>
 
+    <tu tuid="frontdoor_collection_link">
+        <tuv xml:lang="en">
+            <seg>Browse collection</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Sammlung anzeigen</seg>
+        </tuv>
+    </tu>
   </body>
 </tmx>
