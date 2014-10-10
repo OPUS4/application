@@ -69,6 +69,10 @@ oai.max.listrecords = 10
 oai.max.listidentifiers = 10
 publish.maxfilesize = 1024000
 
+; Log settings allow checking for "Unable to translate" messages in log
+log.level = DEBUG
+log.untranslated = true
+
 [testing : production]
 security = 0
 sql.schema.path =
