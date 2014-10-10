@@ -106,7 +106,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         ));
         
         $this->addSubForm(new Admin_Form_ActionBox($this), 'ActionBox');
-        
+
         $subform = new Admin_Form_InfoBox();
         $subform->addDecorator(array('wrapperDivOpen' => 'HtmlTag'), 
                 array('tag' => 'div', 'placement' => 'prepend', 'class' => 'wrapper', 'openOnly' => 'true'));
@@ -126,7 +126,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
                 array('label' => 'Opus_Model_Dependent_Link_DocumentSeries_Number'),
                 array('label' => 'Opus_Model_Dependent_Link_DocumentSeries_SortOrder')
             ))), 'Series');
-        
+
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentEnrichment', 'Enrichment', null,
                 array('columns' => array(
                     array('label' => 'KeyName'),
@@ -136,7 +136,6 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $this->addSubForm(new Admin_Form_DocumentCollections(), 'Collections');
 
         // Inhaltliche Erschließung
-        
         $subform = new Admin_Form_DocumentSection();
         $subform->setLegend('admin_document_section_content');
         $subform->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentAbstract', 'TitleAbstract',
@@ -146,7 +145,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         );
         $subform->addSubForm(new Admin_Form_DocumentSubjects(), 'Subjects');
         $this->addSubForm($subform, 'Content');
-        
+
         // Weiteres Allgemeines
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier',
             new Form_Validate_MultiSubForm_RepeatedValues('Value',
@@ -157,7 +156,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $this->addSubForm(new Admin_Form_DocumentLicences(), 'Licences');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPatent', 'Patent'), 'Patents');
         $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentNote', 'Note'), 'Notes');
-    
+
         $this->addSubForm(new Admin_Form_DocumentActions(), 'Actions');
     }
 
@@ -227,7 +226,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
     public function continueEdit($request, $session = null) {
         $subforms = $this->getSubForms();
 
-        foreach ($subforms as $name => $subform) {
+        foreach ($subforms as $subform) {
             $subform->continueEdit($request, $session);
         }
     }
@@ -265,7 +264,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
 
     /**
      * Setzt die globale Nachricht für das Formular.
-     * @param $message Nachricht
+     * @param $message string Nachricht
      */
     public function setMessage($message) {
         $this->message = $message;
