@@ -41,6 +41,7 @@ class Form_Element_Series extends Form_Element_Select {
         parent::init();
         
         $this->setRequired(true);
+        $this->setDisableTranslator(true); // Schriftenreihen werden nicht übersetzt
         
         $validator = new Zend_Validate_Int();
         $validator->setMessage('validation_error_int');

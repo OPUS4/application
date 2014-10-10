@@ -1137,4 +1137,25 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
     }
 
+    public function testShowDocumentWithFileWithoutLanguage() {
+        $this->markTestIncomplete('OPUSVIER-3401');
+        $doc = $this->createTestDocument();
+        $file = $this->createTestFile('nolang.pdf');
+        $doc->addFile($file);
+        $docId = $doc->store();
+
+        $this->dispatch("/frontdoor/index/index/docId/$docId");
+    }
+
+    public function testUnableToTranslate() {
+        $logger = new MockLogger();
+        Zend_Registry::set('Zend_Log', $logger);
+
+        $this->dispatch('/frontdoor/index/index/docId/146');
+
+        foreach($logger->getMessages() as $line) {
+            $this->assertTrue(strpos($line, 'Unable to translate') === false, "Log contains: $line");
+        }
+    }
+
 }

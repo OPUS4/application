@@ -47,6 +47,7 @@ class Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator_Fieldset {
      */
     public function render($content) {
         $this->setOption('escape', false);
+        $this->getElement()->setDisableTranslator(true); // legend is translated before set
         return parent::render($content);
     }
 
@@ -77,10 +78,6 @@ class Form_Decorator_FieldsetWithButtons extends Zend_Form_Decorator_Fieldset {
 
         $element = $this->getElement();
         $view = $element->getView();
-
-        if (null !== ($translator = $element->getTranslator())) {
-            $legend = $translator->translate($legend);
-        }
 
         $buttons = $this->getLegendButtons();
 

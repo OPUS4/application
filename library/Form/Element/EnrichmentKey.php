@@ -45,7 +45,9 @@ class Form_Element_EnrichmentKey extends Form_Element_Select {
         $values = array();
 
         $translator = $this->getTranslator();
-        
+
+        $this->setDisableTranslator(true); // keys are translated below if possible
+
         foreach ($options as $index => $option) {
             $keyName = $option->getName();
 
@@ -54,7 +56,7 @@ class Form_Element_EnrichmentKey extends Form_Element_Select {
             $translationKey = 'Enrichment' . $keyName;
 
             if (!is_null($translator) && ($translator->isTranslated($translationKey))) {
-                $this->addMultiOption($keyName, $translationKey);
+                $this->addMultiOption($keyName, $translator->translate($translationKey));
             }
             else {
                 $this->addMultiOption($keyName, $keyName);

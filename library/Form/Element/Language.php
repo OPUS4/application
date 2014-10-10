@@ -42,14 +42,12 @@ class Form_Element_Language extends Form_Element_Select {
     public function init() {
         parent::init();
         
-        // $this->setLabel($this->getName()); // TODO remove
-        // $this->setRequired(true); // TODO remove
+        $this->setDisableTranslator(true); // languages are already translated
 
         foreach ($this->getLanguageList() as $index => $language) {
             $this->addMultiOption($index, $language);
         }
 
-        $this->setDisableTranslator(false); // TODO Check for multiple translations
     }
 
     public static function getLanguageList() {

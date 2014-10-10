@@ -63,8 +63,16 @@ class Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Form_I
         if ($viewHelper instanceof Form_Decorator_ViewHelper) {
             $viewHelper->setViewOnlyEnabled(true);
         }
-        $this->setCheckedValue($this->getTranslator()->translate($this->viewCheckedValue));
-        $this->setUncheckedValue($this->getTranslator()->translate($this->viewUncheckedValue));
+        $translator = $this->getTranslator();
+        if (!is_null($translator)) {
+            $this->setCheckedValue($translator->translate($this->viewCheckedValue));
+            $this->setUncheckedValue($translator->translate($this->viewUncheckedValue));
+        }
+        else {
+            $this->setCheckedValue($this->viewCheckedValue);
+            $this->setUncheckedValue($this->viewUncheckedValue);
+        }
+
         $this->setChecked($this->getValue());
     }
 

@@ -42,7 +42,7 @@ class Form_Element_DocumentType extends Form_Element_Select {
         
         $this->setLabel($this->getName());
         $this->setRequired(true);
-        
+
         $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
         
         $options = $docTypeHelper->getDocumentTypes();
@@ -50,8 +50,8 @@ class Form_Element_DocumentType extends Form_Element_Select {
         foreach ($options as $index => $type) {
             $this->addMultiOption($index, $type);
         }
-        
-        $this->setDisableTranslator(false); // TODO Check for multiple translations
+
+        $this->setDisableTranslator(true); // document types already translated after addMultiOption
     }
     
 }

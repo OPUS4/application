@@ -37,7 +37,7 @@ class Application_View_Helper_LinkList extends Application_View_Helper_Abstract 
         if (is_array($links)) {
             $markup = '<ul>';
             foreach ($links as $href => $label) {
-                $text = htmlspecialchars($this->view->translate($label));
+                $text = htmlspecialchars($label); // section legends are already translated
                 $markup .= "<li><a href=\"$href\">$text</a></li>";
             }
             $markup .= '</ul>';

@@ -69,6 +69,7 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
         
         $this->addElement('hidden', self::ELEMENT_ID);
         $this->addElement('submit', self::ELEMENT_EDIT);
+        $this->getElement(self::ELEMENT_EDIT)->setDisableTranslator(true); // Collections are translated manually
         $this->addElement('submit', self::ELEMENT_REMOVE, array('label' => 'admin_button_remove'));
     }
     
@@ -95,7 +96,14 @@ class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
     protected function getDisplayNameForCollection($collection) {
         $displayName = $collection->getDisplayName();
         if (strlen(trim($displayName)) == 0 && $collection->isRoot()) {
-            $displayName = $this->getTranslator()->translate('default_collection_role_' . $collection->getRoleName());
+            $translator = $this->getTranslator();
+            $translationKey = 'default_collection_role_' . $collection->getRoleName();
+            if ($translator->isTranslated($translationKey)) {
+                $displayName = $translator->translate($translationKey);
+            }
+            else {
+                $displayName = $collection->getRoleName();
+            }
         }
         return $displayName;
     }

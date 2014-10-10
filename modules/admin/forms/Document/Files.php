@@ -45,8 +45,9 @@ class Admin_Form_Document_Files extends Admin_Form_AbstractDocumentSubForm {
     
     public function init() {
         parent::init();
-        
+
         $this->setLegend('admin_document_section_files');
+        $this->setDisableTranslator(true); // so legend won't be translated twice
 
         $header = new Application_Form_TableHeader($this->header);
 

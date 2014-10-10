@@ -73,7 +73,7 @@ class Form_Element_SeriesTest extends FormElementTestCase {
     }
 
     public function testTranslation() {
-        $translator = $this->getElement()->getTranslator();
+        $translator = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
 
         $this->assertTrue($translator->isTranslated('validation_error_int'));
     }

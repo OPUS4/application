@@ -149,4 +149,23 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
         return Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
     }
 
+    /**
+     * Translate legend if possible.
+     *
+     * This is done, so the translation in fieldset decorator can be disabled. It won't check if translation is
+     * possible and therefore create log messages. Unfortunately some of our legends cannot be translated.
+     *
+     * @param string $legend
+     * @return void|Zend_Form
+     */
+    public function setLegend($legend) {
+        $translator = $this->getTranslator();
+        if (!is_null($translator) && $translator->isTranslated($legend)) {
+            parent::setLegend($translator->translate($legend));
+        }
+        else {
+            parent::setLegend($legend);
+        }
+    }
+
 }
