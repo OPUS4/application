@@ -885,4 +885,54 @@ class Admin_DocumentControllerTest extends ControllerTestCase {
         ));
     }
 
+    public function testUnableToTranslateForMetadataView() {
+        $logger = new MockLogger();
+        Zend_Registry::set('Zend_Log', $logger);
+
+        $adapter = Zend_Registry::get('Zend_Translate')->getAdapter();
+        $options = $adapter->getOptions();
+        $options['log'] = $logger;
+        $adapter->setOptions($options);
+
+        $this->dispatch('/admin/document/index/id/146');
+
+        $failedTranslations = array();
+
+        foreach ($logger->getMessages() as $line) {
+            if (strpos($line, 'Unable to translate') !== false) {
+                $failedTranslations[] = $line;
+            }
+        }
+
+        $output = Zend_Debug::dump($failedTranslations, null, false);
+
+        // until all messages can be prevented less than 20 is good enough
+        $this->assertLessThanOrEqual(20, count($failedTranslations), $output);
+    }
+
+    public function testUnableToTranslateForEditForm() {
+        $logger = new MockLogger();
+        Zend_Registry::set('Zend_Log', $logger);
+
+        $adapter = Zend_Registry::get('Zend_Translate')->getAdapter();
+        $options = $adapter->getOptions();
+        $options['log'] = $logger;
+        $adapter->setOptions($options);
+
+        $this->dispatch('/admin/document/edit/id/146');
+
+        $failedTranslations = array();
+
+        foreach ($logger->getMessages() as $line) {
+            if (strpos($line, 'Unable to translate') !== false) {
+                $failedTranslations[] = $line;
+            }
+        }
+
+        $output = Zend_Debug::dump($failedTranslations, null, false);
+
+        // until all messages can be prevented less than 20 is good enough
+        $this->assertLessThanOrEqual(20, count($failedTranslations), $output);
+    }
+
 }

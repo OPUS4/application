@@ -27,7 +27,7 @@
  * @category    Application
  * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -35,37 +35,19 @@
 /**
  * Mock Klasse für Logging.
  * 
- * TODO Funktionen für weitere Log-Level hinzufügen
  * TODO Unterscheidung von Nachrichten in Log-Leveln?
- * TODO Wo sollten unsere Mock Klassen plaziert werden?
- * TODO weiter ausbauen oder existierende Klasse finden
  */
 class MockLogger extends Zend_Log {
     
     private $messages = array();
 
-    public function err($message) {
-        $this->messages[] = $message;
-    }
-
-    public function warn($message) {
-        $this->messages[] = $message;
-    }
-
-    public function notice($message) {
-        $this->messages[] = $message;
-    }
-    
-    public function debug($message) {
-        $this->messages[] = $message;
-    }
-    
     public function log($message, $priority, $extras = null) {
         switch ($priority) {
             case self::DEBUG:
-                $this->debug($message);
+                $this->messages[] = $message;
                 break;
             default:
+                parent::log($message, $priority, $extras);
         }
     }
      
