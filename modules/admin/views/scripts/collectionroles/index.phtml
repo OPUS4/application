@@ -51,13 +51,22 @@
         </tr>
     </thead>     
     
-<?php foreach ($this->collectionRoles as $i => $collectionRole) :
+<?php
+    $translator = Zend_Registry::get('Zend_Translate');
+
+    foreach ($this->collectionRoles as $i => $collectionRole) :
+
     $translatelabel = 'default_collection_role_' . $collectionRole->getName();
+
     $printname = '';
-    if ($translatelabel === $this->translate($translatelabel))
-        $printname = $collectionRole->getName();
-    else
+
+    if ($translator->isTranslated($translatelabel)) {
         $printname = $this->translate($translatelabel);
+    }
+    else {
+        $printname = $collectionRole->getName();
+    }
+
     $translationInfoText = $this->translate('admin_collectionroles_translation_key') . ' ' . htmlspecialchars($translatelabel);
 ?>
 <tr class="<?= ($i % 2 === 0) ? 'even' : 'odd' ?>">
