@@ -47,7 +47,6 @@ class Form_Element_Language extends Form_Element_Select {
         foreach ($this->getLanguageList() as $index => $language) {
             $this->addMultiOption($index, $language);
         }
-
     }
 
     public static function getLanguageList() {

@@ -79,6 +79,7 @@ class Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstract {
     public function __construct($languages, $position) {
         $this->languages = $languages;
         $this->position = $position;
+        $this->setTranslator(Zend_Registry::get(Application_Translate::REGISTRY_KEY));
     }
     
     /**
@@ -127,6 +128,14 @@ class Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstract {
      */
     public function getLanguages() { 
         return $this->languages;
+    }
+
+    /**
+     * Translation is required for error messages, even if validated element is not translated (e.g. Languages).
+     * @return bool
+     */
+    public function translatorIsDisabled() {
+        return false;
     }
     
 }
