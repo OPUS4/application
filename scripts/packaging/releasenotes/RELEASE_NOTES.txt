@@ -1,11 +1,64 @@
 h1. OPUS 4 Release Notes
 
-h2. ======================== Release 4.4.4  ========================
+h2. ======================== Release 4.4.4 2014-10-13 ========================
 
 h3. Allgemein
 
-* Dokument-Embargo möglich - bis zu diesem Zeitpunkt wird der fulltext des
+* Dokument-Embargo möglich - bis zu diesem Zeitpunkt wird der Volltext des
   Dokuments unter Verschluss gehalten. Metadaten können eingesehen werden.
+* MathJax Support kann aktiviert werden um Formeln in Zusammenfassungen oder
+  Titeln anzuzeigen.
+* Zend Framework wird beim Update auf Version 1.12.9 aktualisiert.
+* Komplette Sammlungsnamen werden jetzt in der Frontdoor angezeigt und sind
+  mit den Sammlungen verlinkt.
+* Javascript Validierung des Dateityps im Publish-Modul vor dem Hochladen.
+* Personen-ID Felder ins Publish-Modul integriert. (Die Felder sind noch nicht
+  in die Suche integriert, können jetzt aber bereits erfasst werden.)
+* Link für XML Export von Dokumenten und Suchergebnissen kann mit einem
+  Defaultstylesheet aktiviert werden.
+
+h3. Konfiguration
+
+* Die Defaultrolle für neue Dateien kann in der config.ini festgelegt werden.
+* Die Sprachauswahl verschwindet automatisch, wenn nur eine Sprache als
+  "supported" in der config.ini festgelegt wird.
+* In der Frontdoor kann eine lokale XSLT Datei verwendet werden, so daß die
+  ausgelieferte Datei nicht mehr verändert werden muss.
+
+h4. Apache 2.4 Support
+
+OPUS 4 wird in diesem Release noch mit einer Konfiguration für Apache 2.2
+ausgeliefert. Um Apache 2.4 zu verwenden müssen kleine Änderungen manuell
+an der opus4 Apache-Konfiguration vorgenommen werden. Das ist im Handbuch
+näher erläutert.
+
+h3. OpenAIRE
+
+Erweiterung des OpenAIRE Supports. Die Validierung gegen Version 3 von
+OpenAIRE war erfolgreich, wobei bisher nicht die optionalen Anforderungen
+umgesetzt wurden.
+
+h3. XMetaDissPlus
+
+* Erweiterung von isPartOf um Band oder Heftnummer für Zeitschriften
+* Unterscheidung des Akademischen Grades für Abschlussarbeiten
+
+h3. Datenmodell
+
+* Datum für das Hinzufügen einer Datei wird erfasst.
+* Embargo Datum für Dokumente kann festgelegt werden.
+
+h3. Bug Fixes
+
+* Codebereinigung um Probleme mit aktuellen PHP Versionen (z.B. 5.5.9) zu
+  beseitigen
+* Korrektur der Statistikseite in der Administration
+* Reduzierung der "Unable to translate" Nachrichten im Log für Debugging
+
+h3. Sonstiges
+
+* Modernisierung der Entwicklungsinfrastruktur, einschließlich Upgrade zu
+  PHPUnit 4.2.5
 
 h2. ======================== Release 4.4.3 2014-06-04 ========================
 

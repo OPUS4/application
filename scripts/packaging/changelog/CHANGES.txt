@@ -1,5 +1,243 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.4.4 2014-10-13 ========================
+
+h3. Bugs
+
+* [OPUSVIER-1769] - Veröffentlichungsstatistik wertet auch Dokumente im ServerState != 'published' aus
+* [OPUSVIER-1843] - Merkwürdiges Verhalten bei der Eingabe von validen Datumswerten in allen Datumsfelden innerhalb der Metadatenverwaltung
+* [OPUSVIER-2113] - Dokument-Formular im Admin-Bereich übersetzt Felder doppelt
+* [OPUSVIER-2210] - Publish_Model_Validation benutzt ein Model eines anderen Moduls
+* [OPUSVIER-2247] - Der ausgelieferte OPUS4-Tarball ist eine Tar-Bombe
+* [OPUSVIER-2332] - Legal Notice Checkbox im zweiten Formularschritt wird aktiviert, wenn zusätzliches Feld angefordert wird
+* [OPUSVIER-2390] - Exception bei zweimaligem Validierungsfehler für CRUDAction Formulare
+* [OPUSVIER-2414] - Google Scholar: citation_date or citation_publication_date not set
+* [OPUSVIER-2451] - Name der RSS-Feeds immer "Latest Documents"
+* [OPUSVIER-2515] - potentiell gefährliche Löschoperationen im Dateisystem in rebuilding_database.sh.template
+* [OPUSVIER-2551] - RSS-Export erzeugt HTML-Output ohne Header, wenn der Solr-Server nicht erreichbar ist
+* [OPUSVIER-2596] - Apache-Rewrite LogLevel unnötig hoch in Standard-Auslieferung
+* [OPUSVIER-2624] - ausbleibende Rückfrage beim Löschen von Lizenzen und Sprachen
+* [OPUSVIER-2673] - Test Opus_Model_Xml_Version1Test::testSerializingInvalidUTF8Chars erfordert phpunit 3.6
+* [OPUSVIER-2726] - Beim Einfügen neuer Collections ist die Sortierung nicht richtig
+* [OPUSVIER-2742] - Export "Neueste Dokumente" liefert alle Dokumente, wenn Modul solrsearch verwendet und rows-Parameter gesetzt wird
+* [OPUSVIER-2815] - Nutzer mit Rechten zur Dokumentenverwaltung kann von nicht publizierten Dokumenten die Frontdoor nicht ansehen
+* [OPUSVIER-3028] - Fehler beim Update von Version <= 4.2.2 auf >= 4.4.0 in Zusammenhang mit dem Verschieben der PHTML-Dokumenttyp-Templates
+* [OPUSVIER-3100] - Breadcrumbs Tests funktioniert nicht, wenn mit anderen Tests ausgeführt
+* [OPUSVIER-3167] - Fehlermeldung beim Update auf 4.4.1 zu altem import-Folder "opus4/import"
+* [OPUSVIER-3168] - Bug beim Installieren von OPUS 4.4.1
+* [OPUSVIER-3173] - Fehlerhafte Ausgabe im Migrationsscript: Opus3InstituteImport: No Faculty with Opus3-Id '6
+* [OPUSVIER-3176] - Meldungen beim Löschen von Schriftenreihen
+* [OPUSVIER-3177] - Hinweis bei Löschen von Sprachen
+* [OPUSVIER-3178] - Konkrete Meldung beim Löschen von DNB-Instituten
+* [OPUSVIER-3183] - Formular DNB-Institute ist Englisch statt Deutsch
+* [OPUSVIER-3204] - MetadataImport zerstört Dokumente, wenn Exception beim Speichern auftritt
+* [OPUSVIER-3210] - Notification bei "Publication" - Dokument wurde freigeschaltet - an Autor und Einsteller funktioniert nicht
+* [OPUSVIER-3223] - Originaldateien sollen nach Migration nicht in OAI sichtbar sein
+* [OPUSVIER-3226] - Erste Seite Veröffentlichen: Dokumente können unbemerkt ohne Dokumenttyp erzeugt werden
+* [OPUSVIER-3228] - Cache-Invalidierung bei Update einer Instanz
+* [OPUSVIER-3233] - Die Attribute "RoleVisibleFrontdoor" und "visible" funktionieren nur für ausgewählte Collections
+* [OPUSVIER-3234] - Link zur Frontdoor fehlt auf der letzten Seite nach erfolgreichem Publishprozess bei eingeschränkten Adminrechten
+* [OPUSVIER-3244] - Anzeige Abstract in Ergebnisliste und Frontdoor ist fehlerhaft bei neuen OPUS 4.4.2 Instanzen
+* [OPUSVIER-3256] - Übertragung von Seleniumtests auf PHPUnittests
+* [OPUSVIER-3265] - Umbau XMetaDissPlus: dc:source soll nicht aus TitleParent sondern TitleSource kommen
+* [OPUSVIER-3267] - Skript für die Migration des Enrichments "SourceTitle" nach TitleSource
+* [OPUSVIER-3269] - OPUS über HTTPS: Fehler bei Suche nach Strings mit /
+* [OPUSVIER-3273] - Veröffentlichungsstatistik liefert falsche Zahlen
+* [OPUSVIER-3277] - Abfangen der Exception im Admin-File-Upload
+* [OPUSVIER-3281] - Fehlerhafte Zugriffskontrolle auf Dateien in Oai_Model_Container
+* [OPUSVIER-3289] - Bibtex-Export-Stylesheets bauen year-Angabe fehlerhaft zusammen weshalb die year-Angabe in bestimmten Fällen in der Ausgabe fehlt
+* [OPUSVIER-3291] - Übersetzungen für Enrichments in der Administration greifen nicht (immer?)
+* [OPUSVIER-3293] - Fehlender Übersetzungsschlüssel mail_toauthor_subject, wenn über die Frontdoor eine Email an den Autor geschickt wird
+* [OPUSVIER-3300] - Darstellung einer Latex-Formel im Abstract & Title im Chrome-Browser
+* [OPUSVIER-3306] - Rolle ungleich Administrator hat kein Änderungsrecht bei Schriftenreihen trotz Zugriff auf Modul "admin" und auf den Bereich "Schriftenreihen verwalten"
+* [OPUSVIER-3311] - Datei kann heruntergeladen werden, obwohl sie nicht in der Frontdoor sichtbar ist
+* [OPUSVIER-3313] - Dateien von Embargoed Dokumenten können heruntergeladen werden
+* [OPUSVIER-3322] - Update auf 4.4.3 schreibt Dokumenttyp-Templates (PHTML-Dateien) unter / (root-Verzeichnis)
+* [OPUSVIER-3334] - Falsche Reihenfolge der Suchergebnisse im Browsing
+* [OPUSVIER-3336] - Sortierungsparameter werden beim Export nicht berücksichtigt
+* [OPUSVIER-3337] - cron-php-runner.sh Skript kann nicht zu /dev/stdout schreiben
+* [OPUSVIER-3341] - Unterscheidung des akademischen Grades beim Typ "masterthesis" fehlt in der XmetadissPlus-Schnittstelle
+* [OPUSVIER-3344] - Ändern der DDC-Auswahl im Publishformular "all" auf CollectionLeaf
+* [OPUSVIER-3350] - Zeitabhängigkeit in Unit Test für Opus_File beheben
+* [OPUSVIER-3363] - Error Logging beim Indexieren von Volltexten erweitern
+* [OPUSVIER-3364] - Schreibfehler in opus4/modules/publish/language/errors.tmx korrigieren
+* [OPUSVIER-3379] - @depends Deklaration für Regression2543Test stimmt nicht
+* [OPUSVIER-3382] - ServerDateModified von Dokument 146 ändert sich beim Löschen von Collection(Role)s
+* [OPUSVIER-3383] - Löschen von CollectionRole löscht unter Umständen falsche Collections
+* [OPUSVIER-3390] - Link zur PACS-Klassifikation in den Hilfetexten ändern
+* [OPUSVIER-3391] - Host und Instanz-URI für Export XSLT verfügbar machen
+* [OPUSVIER-3392] - Dokument-Cache wird unter Umständen nicht aktualisiert
+* [OPUSVIER-3397] - Link zur Frontdoor eines Dokuments enthält ID Parameter, der in der Administration verwendet wird
+* [OPUSVIER-3398] - Fehler bei der Anzeige eines Dokuments in der Administration, wenn Sprache einer Datei NULL ist
+* [OPUSVIER-3403] - Test für Seite mit Versionsinformation schlägt fehl, wenn Server mit aktueller Versionsnummer nicht erreichbar ist
+
+h3. Feature Request
+
+* [OPUSVIER-2429] - Sprachauswahl über ein Konfigschlüssel abschaltbar machen
+* [OPUSVIER-2447] - MathJax für Formeln auf der Frontdoor
+* [OPUSVIER-2471] - Sprache der Datei soll auf Frontdoor angezeigt werden
+* [OPUSVIER-3043] - Ungültige Institute ausblenden im Publish, nicht jedoch auf Frontdoor und beim Browsen/Suchen
+* [OPUSVIER-3061] - Hochladeversuch von nicht erlaubten Dateiformaten sollte sofort einen Fehler bringen, nicht erst nach langer Bearbeitungszeit
+* [OPUSVIER-3190] - Datum für das Hinzufügen einer Datei
+* [OPUSVIER-3211] - Metadaten-Import sollte bei Update ausgewählte Felder nicht löschen
+* [OPUSVIER-3221] - Link auf die Sammlung (Collection) in der Frontdoor
+* [OPUSVIER-3222] - Kompletten Sammlungsnamen (Collection-Namen) in der Frontdoor anzeigen
+* [OPUSVIER-3251] - Ausgabe eines Enrichments als "note" in Bibtex-Export
+* [OPUSVIER-3253] - Statistik: Gesamtbestand zum 31.12. eines Jahres anzeigen
+
+h3. Stories
+
+* [OPUSVIER-126] - Solr-Anbindung
+* [OPUSVIER-128] - Abklärung der lizenzrechtlichen Belange
+* [OPUSVIER-167] - Administration UI issues/bugs/tasks
+* [OPUSVIER-197] - Configuration handling in application
+* [OPUSVIER-508] - Frontdoor Überarbeitung
+* [OPUSVIER-524] - UI Testing
+* [OPUSVIER-582] - CSS und web design
+* [OPUSVIER-772] - Editieren der Metadaten von Dokumenten im Administrationsmodul
+* [OPUSVIER-907] - Distribution
+* [OPUSVIER-972] - OPUS 3.x-Migration
+* [OPUSVIER-1046] - Sichtbarkeit in Google-Scholar
+* [OPUSVIER-1110] - OpenSearch Support
+* [OPUSVIER-1269] - Jira-Projekt OPUSVIER aufräumen
+* [OPUSVIER-1340] - Unit-Tests hinzufügen, die das Editieren der Metadaten eines Dokumentes abdecken
+* [OPUSVIER-1386] - OPUS-Update-Check
+* [OPUSVIER-1413] - Alten Form-Builder-Code entfernen, wenn komplett umgestiegen
+* [OPUSVIER-1416] - Update Skript
+* [OPUSVIER-1451] - Sortierbarkeit von Dateien eines Dokument
+* [OPUSVIER-1713] - Anzahl der Anzeige der Facetten erhöhen
+* [OPUSVIER-1754] - OpenAIRE Compliance herstellen
+* [OPUSVIER-1775] - Sprachzuordnung bei SWD-Schlagwörter entfernen, da diese nur in deutscher Sprache vorliegen
+* [OPUSVIER-2747] - Überarbeitung der Gestaltung der Administration durch Grafiker
+* [OPUSVIER-2772] - Neues Metadaten-Formular für Dokumente
+
+h3. Task
+
+* [OPUSVIER-2708] - Anzahl der Suchtreffer pro Seite sollte instanzabhängig über die Konfiguration überschrieben werden können
+* [OPUSVIER-2758] - Soll phpinfo Ausgabe erhalten bleiben?
+* [OPUSVIER-2853] - Konzeption und Umsetzung der Fehlerbehandlung für den Fall, dass beim Neuaufbau eines Cache-Eintrags die Reindexierung des Dokuments nicht erfolgreich war
+* [OPUSVIER-2926] - View Helper für ServerUrl und BaseUrl einsetzen
+* [OPUSVIER-2950] - Basisklasse ControllerTestCase um eine Methode erweitern, die ein Testdokument erzeugt und Referenz darauf zurückgibt
+* [OPUSVIER-3021] - In sprachabhängigen Unit Tests die Sprache setzen
+* [OPUSVIER-3022] - Deprecated Funktionen setUpEnglish und setUpGerman von ControllerTestCase entfernen
+* [OPUSVIER-3048] - Support Klasse fuer Unit Test in *support* Ordner verschieben
+* [OPUSVIER-3138] - Entfernen von Collections erst nach Speichern wirksam
+* [OPUSVIER-3144] - Authorization Tests als Unit Tests ermöglichen
+* [OPUSVIER-3158] - Jahreszahlen auf Maximalwert validieren
+* [OPUSVIER-3219] - Abhängigkeit vom Framework zur Applikation durch Funktion setThemesPath in Opus_Collection beheben
+* [OPUSVIER-3237] - Anlegen eines neuen Dokumenttyp "PeriodicalPart" für die Standardauslieferung
+* [OPUSVIER-3247] - Anlegen von EnrichmentKeys
+* [OPUSVIER-3250] - Trennung von Model und Controller in der Veröffentlichungsstatistik
+* [OPUSVIER-3258] - Erweiterung von isPartOf um Band oder Heftnummer für Zeitschriften (XMetaDissPlus)
+* [OPUSVIER-3262] - Datenbank Update Skript für 4.4.3 erweitern
+* [OPUSVIER-3270] - FullText bis Ablauf eines Embargos nicht zugänglich machen
+* [OPUSVIER-3274] - Frontdoor Selenium Tests in Unit Tests umwandeln
+* [OPUSVIER-3279] - createTestFile nach ControllerTestCase auslagern
+* [OPUSVIER-3288] - Lokale XSLT-Datei für Frontdoor ermöglich
+* [OPUSVIER-3292] - Anzeige der Publikationsstatistik in der Administration verbessern
+* [OPUSVIER-3305] - Anlegen eines Feldes zum Einbinden von HTML-Dateien in der Frontdoor
+* [OPUSVIER-3308] - Analoge Funktion zu Opus_Collection::getVisibleChildren() für das Feld visiblePublish
+* [OPUSVIER-3309] - Name des Dokumententypes auf Validierungsseite mit anzeigen
+* [OPUSVIER-3310] - Datenbank Update Skript für OPUS 4.4.4
+* [OPUSVIER-3312] - Sichtbarkeit in Frontdoor steuert Zugriff auf Dateien
+* [OPUSVIER-3314] - Ausrichten der Dateiliste in Frontdoor
+* [OPUSVIER-3315] - Dezentere Anzeige der Dateisprache in Frontdoor ohne Bild
+* [OPUSVIER-3316] - Bei allen Titeln sollten die in der Dokumentsprache zuerst angezeigt werden
+* [OPUSVIER-3323] - Beim Metadaten-Import sind Personen mit der Role "other" nicht erlaubt
+* [OPUSVIER-3326] - Defaultrolle für neue Dateien konfigurierbar machen
+* [OPUSVIER-3327] - Test der Installation und des Updates für Opus-4.4.4
+* [OPUSVIER-3339] - Regeln für OAI Zugriff auf Dateien publizierter Dokumente klären
+* [OPUSVIER-3342] - Dateien aus HTML-Ordner im Migrationsscript wie Dateien aus Original-Ordner behandeln
+* [OPUSVIER-3352] - Umzug der Selenium-Instanz in neue VM
+* [OPUSVIER-3353] - OPUS 4 Demo Instanz muss in neuer VM aufgesetzt werden
+* [OPUSVIER-3358] - Klasse View_Filter_RemoveWhitespaces entfernen
+* [OPUSVIER-3359] - Button/Link für XML-Export für Dokumente
+* [OPUSVIER-3360] - Export eines Dokuments verwendet SolrIndex unnötig
+* [OPUSVIER-3361] - Klasse View_Helper_Hostname löschen
+* [OPUSVIER-3368] - OPUS Entwicklung auf PHPUnit 4.x umstellen
+* [OPUSVIER-3369] - title-Attribute für Facet-Extender Links
+* [OPUSVIER-3370] - OPUS für PHP 5.5.9 anpassen
+* [OPUSVIER-3373] - Write Unit Test de prüft, daß keine Short-Tags ("<? ") in PHTML vorkommen
+* [OPUSVIER-3380] - Remove Matheon Selenium Tests von SVN
+* [OPUSVIER-3385] - Language Unit Test gebrochen, weil DTD nicht erreichbar
+* [OPUSVIER-3387] - Validierungsklassen für Klassifikationen entfernen
+* [OPUSVIER-3388] - Zend Framework auf Version 1.12.9 aktualisieren
+
+h3. Aufgabe
+
+* [OPUSVIER-1334] - falsche NOT NULL-Constraints in server_date_* Feldern
+* [OPUSVIER-1342] - Validierung für alle Felder von Opus_Document zu Metadaten Formularen hinzufügen
+* [OPUSVIER-1752] - Bei der Anzeige von Titeln und Zusammenfassungen, soll der Wert in der Dokumentsprache zuerst angezeigt werden
+* [OPUSVIER-1831] - Suche nach unterschiedlichen Nicht-Autoren-Personen in erweiterter Suche ermöglichen
+* [OPUSVIER-1982] - Verwaltung von Schriftenreihen in der Administration
+* [OPUSVIER-2061] - Verhalten des Publish-Formulars bei Verwendung unzulässiger EnrichmentKeys testen
+* [OPUSVIER-2076] - Opus3ImportLogger entfernen und den Standard-PHP-Logger verwenden
+* [OPUSVIER-2090] - Logmeldungen im CI-Target opus4framework-fast: Konfigurationsparameter searchengine.index.host kann nicht gefunden werden
+* [OPUSVIER-2194] - Google Scholar Link hinter dem Button auf der Dokument-Frontdoor um weitere Metadatenfelder erweitern
+* [OPUSVIER-2219] - Übersicht über den Validierungsstatus für die einzelnen Dokumenttypdefinitionen in der Administration anzeigen
+* [OPUSVIER-2346] - OpenAire-Compliance: Set "ec_fundedresources"
+* [OPUSVIER-2347] - OpenAire-Compliance: Plugin, um die benötigten spez. Metadaten zu erzeugen
+* [OPUSVIER-2411] - Verhindern von Indexieren durch Crawler
+* [OPUSVIER-2489] - Export eines Dokuments sollte direkt durch das Anhängen von Parametern an die Frontdoor-URL unterstützt werden
+* [OPUSVIER-2558] - Migration zur neuesten Version von PHPUnit (> 3.6)
+* [OPUSVIER-2571] - Regression-Test für OPUSVIER-2570 schreiben
+* [OPUSVIER-2773] - Formular(e) zum Verwalten der Personen eines Dokuments
+* [OPUSVIER-2795] - Zugriffskontrolle für neues Formular anpassen/überprüfen
+* [OPUSVIER-2805] - Thesis Grantor und Publisher editieren im Metadaten-Formular
+* [OPUSVIER-2871] - Rendering von Formular-Elementen
+* [OPUSVIER-2879] - Änderungen am Form-Builder um HTML Output zu vereinheitlichen
+* [OPUSVIER-2893] - Implementierung eines Modells für das Export-Modul
+* [OPUSVIER-2895] - Prüfung der XML-Wohlgeformtheit im Framework
+* [OPUSVIER-2951] - Hinzufügen von ein oder mehreren Personen zu einem Dokument
+* [OPUSVIER-2952] - Editieren von Personen, die mit einem Dokument verknüpft sind
+* [OPUSVIER-2992] - Formularklasse für Opus_DnbInstitute implementieren
+* [OPUSVIER-2993] - Formularklasse für Opus_Language implementieren
+* [OPUSVIER-2995] - Formularklasse für Opus_Series implementieren
+* [OPUSVIER-2996] - Formularklasse für Opus_CollectionRole implementieren
+* [OPUSVIER-2997] - Formularklasse für Opus_Collection implementieren
+* [OPUSVIER-3002] - Anzeige im FileManager überarbeiten
+* [OPUSVIER-3041] - Unterscheidung zwischen Grantor-Institution und Grantor-Department im Datenmodel
+* [OPUSVIER-3180] - Übersichtsseite Schriftenreihe CSS anpassen
+* [OPUSVIER-3181] - Übersichtsseite Sprache CSS anpassen
+* [OPUSVIER-3182] - Übersichtsseite DNB-Institute CSS anpassen
+* [OPUSVIER-3217] - Rewrite Rule von OPUS3 nach OPUS4 anpassen
+* [OPUSVIER-3252] - Anzeige eines Enrichments im Bibtex-Export konfigurierbar
+* [OPUSVIER-3254] - Jahreszahl in Veröffentlichungsstatistik
+* [OPUSVIER-3275] - Test für Embargodate
+* [OPUSVIER-3276] - EmbargoDate über Oai ausgeben
+* [OPUSVIER-3290] - Latex-Formel im Abstract & Title
+* [OPUSVIER-3304] - Neue Person Identifier Felder (z.B. GND) im Publishmodul
+* [OPUSVIER-3307] - Validierung der ID Felder für Personen im Dokument-Admin-Bereich
+* [OPUSVIER-3317] - Online OpenAire Compliance Tests mit dem Validator
+* [OPUSVIER-3319] - Änderung des Typ von Feld "sort_order" in Tabelle "document_files" zu INT
+* [OPUSVIER-3320] - bei Auf- und Zuklappen der Facette springt man an den Seitenanfang
+* [OPUSVIER-3321] - Dateien im FileManager in der Framework Reihenfolge anzeigen
+* [OPUSVIER-3349] - Dateien aus dem Ordner 'original' im Migrationsscript die Zugriffsrolle 'guest' entziehen
+* [OPUSVIER-3351] - 'more'-link sollte versteckt werden, wenn Facette ausgewählt ist
+* [OPUSVIER-3371] - Short-Tags "<? " von PHTML Dateien entfernen
+* [OPUSVIER-3374] - Fix "Array to String Conversion" Fehler in Unit Tests
+* [OPUSVIER-3375] - Konfiguration von Datenbank Admin Zugang provoziert "Array to String Conversion" Fehler
+* [OPUSVIER-3376] - preg_replace(): /e modifier is deprecated in PHP 5.5.9
+* [OPUSVIER-3377] - Framework Tests für Plugin schlagen fehlt
+* [OPUSVIER-3378] - Skipped Tests werden in Selenium mit PHPUnit 4.x als Fehler angezeigt
+* [OPUSVIER-3384] - Zwei Unit Tests in Opus_Model_Xml_Version1Test gebrochen
+
+h3. Dokumentation
+
+* [OPUSVIER-949] - "interne" Datumsfelder server_date_*
+* [OPUSVIER-2141] - Hinweis zu OpenSearch-Unterstützung in die Dokumentation aufnehmen
+* [OPUSVIER-2714] - Möglichkeit zum Editieren des eigenen Accounts dokumentieren
+* [OPUSVIER-3242] - Überarbeitung der Dokumentation für die Anpassung des Feldes "ThesisPublisher" in den Dokumenttypen
+* [OPUSVIER-3243] - Beschreibung des neuen Dokumenttyps "periodicalpart" in der Dokumentation
+* [OPUSVIER-3260] - Dokumentation Release OPUS 4.4.3
+* [OPUSVIER-3284] - Anpassung der Dokumentation bzgl. der Konvertierung von Tarbomb zu Tarball
+* [OPUSVIER-3325] - Anhängen der Export-Parameter für Suchergebnisse beim searchtype=latest
+* [OPUSVIER-3343] - Konfiguration der Defaultrole für neue Dateien dokumentieren
+* [OPUSVIER-3346] - Neue Dokumententypen für akademischen Grad dokumentieren
+* [OPUSVIER-3389] - Dokumentation der OpenAire-Funktionalität
+* [OPUSVIER-3394] - Dokumentation des Export-Buttons auf Frontdoor und Suche
+* [OPUSVIER-3400] - Dokumentation des Embargo Date
+
 h2. ======================== Release 4.4.3 2014-06-04 ========================
 
 h3. Bugs
