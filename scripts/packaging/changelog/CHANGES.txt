@@ -111,7 +111,7 @@ h3. Stories
 * [OPUSVIER-2747] - Überarbeitung der Gestaltung der Administration durch Grafiker
 * [OPUSVIER-2772] - Neues Metadaten-Formular für Dokumente
 
-h3. Task
+h3. Tasks
 
 * [OPUSVIER-2708] - Anzahl der Suchtreffer pro Seite sollte instanzabhängig über die Konfiguration überschrieben werden können
 * [OPUSVIER-2758] - Soll phpinfo Ausgabe erhalten bleiben?
@@ -163,7 +163,7 @@ h3. Task
 * [OPUSVIER-3387] - Validierungsklassen für Klassifikationen entfernen
 * [OPUSVIER-3388] - Zend Framework auf Version 1.12.9 aktualisieren
 
-h3. Aufgabe
+h3. Aufgaben
 
 * [OPUSVIER-1334] - falsche NOT NULL-Constraints in server_date_* Feldern
 * [OPUSVIER-1342] - Validierung für alle Felder von Opus_Document zu Metadaten Formularen hinzufügen
