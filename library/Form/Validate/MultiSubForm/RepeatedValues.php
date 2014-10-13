@@ -56,7 +56,15 @@ class Form_Validate_MultiSubForm_RepeatedValues implements Form_Validate_IMultiS
 
         $this->_elementName = $elementName;
         $this->_otherElements = $otherElements;
-        $this->_message = $message;
+
+        $translator = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
+
+        if ($translator->isTranslated($message)) {
+            $this->_message = $translator->translate($message);
+        }
+        else {
+            $this->_message = $message;
+        }
     }
 
     public function isValid($data, $context = null) {
