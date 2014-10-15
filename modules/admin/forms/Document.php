@@ -114,7 +114,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         
         $this->addSubForm(new Admin_Form_Document_General(), 'General');
         
-        $this->addSubForm(new Admin_Form_DocumentPersons(), 'Persons');
+        $this->addSubForm(new Admin_Form_Document_Persons(), 'Persons');
         
         // Bibliographische Beschreibung
         $this->addSubForm(new Admin_Form_Document_Titles(), 'Titles');

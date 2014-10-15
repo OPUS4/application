@@ -58,7 +58,7 @@
     <?PHP if (!$this->element->isViewModeEnabled()) : ?>
     <dl class="sort dropdown">
         <dt>
-            <?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->renderViewHelper() ?>
+            <?= $this->element->getElement(Admin_Form_Document_Person::ELEMENT_SORT_ORDER)->renderViewHelper() ?>
             <a>Move</a></dt>
             <dd>
                 <p class="label"><i><?= $this->translate('admin_document_person_move_label') ?></i></p>
@@ -88,7 +88,7 @@
         <div>
             <span id="<?=$formId . 'Email'?>" class="person-email"><?= $person->getEmail() ?></span>
             <?PHP if (!$this->element->isViewModeEnabled()) : ?>
-            -<?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT
+            -<?= $this->element->getElement(Admin_Form_Document_Person::ELEMENT_ALLOW_CONTACT
                     )->renderViewHelper() ?>
             <?= $this->translate('AllowEmailContact') ?>
             <?PHP elseif ($person->getAllowEmailContact()) : ?>
@@ -107,7 +107,7 @@
                 <?= $this->element->getSubForm('Roles') ?>
                 <p class="label"><i><?= $this->translate('admin_document_person_remove_label') ?></i></p>
                 <ul class="buttons">
-                    <li class="edit"><?= $this->element->getElement(Admin_Form_DocumentPerson::ELEMENT_EDIT
+                    <li class="edit"><?= $this->element->getElement(Admin_Form_Document_Person::ELEMENT_EDIT
                             )->renderViewHelper() ?></li>
                 </ul>
             </dd>

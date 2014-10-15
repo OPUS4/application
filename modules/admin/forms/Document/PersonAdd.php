@@ -35,7 +35,7 @@
 /**
  * Formular für das Hinzufügen einer Person zu einem Dokument.
  */
-class Admin_Form_DocumentPersonAdd extends Admin_Form_Person {
+class Admin_Form_Document_PersonAdd extends Admin_Form_Person {
     
     /**
      * Name für Button, um weitere Person einzugeben.
@@ -104,7 +104,7 @@ class Admin_Form_DocumentPersonAdd extends Admin_Form_Person {
      * @param string $role Rolle der Person für Dokument
      */
     public function setSelectedRole($role) {
-        if (!in_array($role, Admin_Form_DocumentPersons::getRoles())) {
+        if (!in_array($role, Admin_Form_Document_Persons::getRoles())) {
             $this->getLog()->err(__METHOD__ . " Called with unknown role '$role'.");
             $role = 'author';
         }

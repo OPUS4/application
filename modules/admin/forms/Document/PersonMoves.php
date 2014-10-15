@@ -35,7 +35,7 @@
 /**
  * Unterformular fuer die Buttons, um die Rolle einer Person zu ändern.
  */
-class Admin_Form_DocumentPersonMoves extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_Document_PersonMoves extends Admin_Form_AbstractDocumentSubForm {
     
     /**
      * Konstante für Person an erster Stelle.

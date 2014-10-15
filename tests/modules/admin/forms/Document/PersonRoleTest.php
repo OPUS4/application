@@ -34,10 +34,10 @@
 /**
  * Unit Tests fuer Unterformular fuer Personen in einer Rolle im Metadaten-Formular.
  */
-class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
+class Admin_Form_Document_PersonRoleTest extends ControllerTestCase {
     
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $this->assertEquals(1, count($form->getElements()));
         $this->assertEquals(0, count($form->getSubForms()));
@@ -46,7 +46,7 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
     }
     
     public function testPopulateFromModel() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $document = new Opus_Document(21); // hat zwei Authoren
 
@@ -58,7 +58,7 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
     }
     
     public function testProcessPostAdd() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $post = array(
             'Add' => 'Hinzufügen'
@@ -78,7 +78,7 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
     }
     
     public function testProcessPostRemove() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $post = array(
             'PersonAuthor0' => array(
@@ -100,7 +100,7 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
     }
     
     public function testProcessPostEdit() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $post = array(
             'PersonAuthor0' => array(
@@ -128,7 +128,7 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
     }
     
     public function testProcessPost() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $post = array();
         
@@ -326,7 +326,7 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
     public function testMoveSubFormUnknownDirection() {
         $form = $this->getFormForSorting();
 
-        $method = $this->getMethod('Admin_Form_DocumentPersonRole', 'moveSubForm');
+        $method = $this->getMethod('Admin_Form_Document_PersonRole', 'moveSubForm');
 
         $method->invokeArgs($form, array('PersonAuthor1', 'left'));
 
@@ -392,12 +392,12 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
     }
 
     public function testCreateSubForm() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $subform = $form->createSubForm();
         
         $this->assertNotNull($subform);
-        $this->assertTrue($subform instanceof Admin_Form_DocumentPerson);
+        $this->assertTrue($subform instanceof Admin_Form_Document_Person);
         $this->assertNotNull($subform->getSubForm('Roles'));
         $this->assertNull($subform->getSubForm('Roles')->getElement('RoleAuthor')); // Unterformular richtig
         $this->assertNotNull($subform->getSubForm('Moves'));
@@ -407,7 +407,7 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
      * Prüft, ob Unterformulare von einer anderen Rolle eingefügt werden können.
      */
     public function testAddSubFormForPerson() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $form->createSubForm();
     }
@@ -515,7 +515,7 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
     }
     
     public function testAddPersonLastPosition() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $form->addPerson(array('person' => '310'));
         $form->addPerson(array('person' => '311'));
@@ -583,7 +583,7 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
     }
 
     public function testAttemptToAddPersonTwiceInSameRole() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $form->addPerson(array('person' => '310'));
         $form->addPerson(array('person' => '310'));
@@ -594,7 +594,7 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
     }
     
     public function testAddPersonWithoutId() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $logger = new MockLogger();
         
@@ -611,19 +611,19 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
     }
     
     public function testIsValidSubFormTrue() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $this->assertTrue($form->isValidSubForm(array('PersonId' => 310)));
     }
     
     public function testIsValidSubFormFalse() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $this->assertFalse($form->isValidSubForm(array()));
     }
     
     public function testGetSubFormForPerson() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $form->addPerson(array('person' => '312'));
         
@@ -639,7 +639,7 @@ class Admin_Form_DocumentPersonRoleTest extends ControllerTestCase {
     }
         
     protected function getFormForSorting() {
-        $form = new Admin_Form_DocumentPersonRole('author');
+        $form = new Admin_Form_Document_PersonRole('author');
         
         $document = new Opus_Document(250);
         

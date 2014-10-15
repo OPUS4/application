@@ -57,7 +57,7 @@ class Form_Element_PersonRole extends Form_Element_Select {
      * @return array
      */
     public function getSelectOptions() {
-        return Admin_Form_DocumentPersons::getRoles();
+        return Admin_Form_Document_Persons::getRoles();
     }
     
 }

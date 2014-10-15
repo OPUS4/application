@@ -72,7 +72,7 @@ class Admin_PersonController extends Controller_Action {
         
         if (!$this->getRequest()->isPost()) {
             // Neues Formular anzeigen
-            $form = new Admin_Form_DocumentPersonAdd();
+            $form = new Admin_Form_Document_PersonAdd();
             
             $role = $this->getRequest()->getParam('role', 'author');
             $form->setSelectedRole($role);
@@ -83,15 +83,15 @@ class Admin_PersonController extends Controller_Action {
             // POST verarbeiten
             $post = $this->getRequest()->getPost();
             
-            $form = new Admin_Form_DocumentPersonAdd();
+            $form = new Admin_Form_Document_PersonAdd();
             
             $form->populate($post);
             
             $result = $form->processPost($post, $post);
             
             switch ($result) {
-                case Admin_Form_DocumentPersonAdd::RESULT_SAVE:
-                case Admin_Form_DocumentPersonAdd::RESULT_NEXT:
+                case Admin_Form_Document_PersonAdd::RESULT_SAVE:
+                case Admin_Form_Document_PersonAdd::RESULT_NEXT:
                     if ($form->isValid($post)) {
                         $person = $form->getModel();
                         $person->store();
@@ -99,7 +99,7 @@ class Admin_PersonController extends Controller_Action {
                         $linkProps = $form->getPersonLinkProperties($person->getId());
                         $editSession = new Admin_Model_DocumentEditSession($docId);
                     
-                        if ($result == Admin_Form_DocumentPersonAdd::RESULT_SAVE) {
+                        if ($result == Admin_Form_Document_PersonAdd::RESULT_SAVE) {
                             // Zurück zum Metadaten-Formular springen
                             if ($editSession->getPersonCount() > 0) {
                                 // Link Informationen durch Session übermitteln
@@ -118,7 +118,7 @@ class Admin_PersonController extends Controller_Action {
                             $editSession->addPerson($linkProps);
                             // Neues Formular erzeugen
                             $role = $form->getSelectedRole();
-                            $form = new Admin_Form_DocumentPersonAdd();
+                            $form = new Admin_Form_Document_PersonAdd();
                             $form->setSelectedRole($role);
                         }
                     }
@@ -127,7 +127,7 @@ class Admin_PersonController extends Controller_Action {
                         $form->addError($this->view->translate('admin_document_error_validation'));
                     }
                     break;
-                case Admin_Form_DocumentPersonAdd::RESULT_CANCEL:
+                case Admin_Form_Document_PersonAdd::RESULT_CANCEL:
                     // Aktuelle Person nicht speichern, aber eventuell gemerkte Personen hinzufügen
                     return $this->_redirectToAndExit('edit', null, 'document', 'admin', array(
                         'id' => $docId, 'continue' => 'addperson'));

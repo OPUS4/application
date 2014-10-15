@@ -31,10 +31,10 @@
  * @version     $Id$
  */
 
-class Admin_Form_DocumentPersonAddTest extends ControllerTestCase {
+class Admin_Form_Document_PersonAddTest extends ControllerTestCase {
  
     public function testConstructForm() {
-        $form = new Admin_Form_DocumentPersonAdd();
+        $form = new Admin_Form_Document_PersonAdd();
         
         $this->assertEquals(1, count($form->getSubForms()));
         
@@ -45,36 +45,36 @@ class Admin_Form_DocumentPersonAddTest extends ControllerTestCase {
     }
     
     public function testProcessPostCancel() {
-        $form = new Admin_Form_DocumentPersonAdd();
+        $form = new Admin_Form_Document_PersonAdd();
         
         $post = array( 
             'Cancel' => 'Abbrechen'
         );
         
-        $this->assertEquals(Admin_Form_DocumentPersonAdd::RESULT_CANCEL, $form->processPost($post, null));
+        $this->assertEquals(Admin_Form_Document_PersonAdd::RESULT_CANCEL, $form->processPost($post, null));
     }
     
     public function testProcessPostNext() {
-        $form = new Admin_Form_DocumentPersonAdd();
+        $form = new Admin_Form_Document_PersonAdd();
         
         $post = array( 
             'Next' => 'Weiter'
         );
         
-        $this->assertEquals(Admin_Form_DocumentPersonAdd::RESULT_NEXT, $form->processPost($post, null));
+        $this->assertEquals(Admin_Form_Document_PersonAdd::RESULT_NEXT, $form->processPost($post, null));
     }
 
     public function testGetSelectedRole() {
-        $form = new Admin_Form_DocumentPersonAdd();
+        $form = new Admin_Form_Document_PersonAdd();
 
-        $form->getSubForm(Admin_Form_DocumentPersonAdd::SUBFORM_DOCUMENT)->getElement(
+        $form->getSubForm(Admin_Form_Document_PersonAdd::SUBFORM_DOCUMENT)->getElement(
             Admin_Form_PersonLink::ELEMENT_ROLE)->setValue('contributor');
 
         $this->assertEquals('contributor', $form->getSelectedRole());
     }
 
     public function testSetSelectedRole() {
-        $form = new Admin_Form_DocumentPersonAdd();
+        $form = new Admin_Form_Document_PersonAdd();
         
         $form->setSelectedRole('other');
         
@@ -82,7 +82,7 @@ class Admin_Form_DocumentPersonAddTest extends ControllerTestCase {
     }
     
     public function testSetSelectedRoleBadRole() {
-        $form = new Admin_Form_DocumentPersonAdd();
+        $form = new Admin_Form_Document_PersonAdd();
         
         $logger = new MockLogger();
         
@@ -99,7 +99,7 @@ class Admin_Form_DocumentPersonAddTest extends ControllerTestCase {
     public function testValidationFalse() {
         $this->useEnglish();
         
-        $form = new Admin_Form_DocumentPersonAdd();
+        $form = new Admin_Form_Document_PersonAdd();
         
         $post = array(
             'LastName' => '', // darf nicht leer sein
@@ -123,7 +123,7 @@ class Admin_Form_DocumentPersonAddTest extends ControllerTestCase {
     public function testValidationTrue() {
         $this->useEnglish();
         
-        $form = new Admin_Form_DocumentPersonAdd();
+        $form = new Admin_Form_Document_PersonAdd();
         
         $post = array(
             'LastName' => 'Meier', // darf nicht leer sein
@@ -139,9 +139,9 @@ class Admin_Form_DocumentPersonAddTest extends ControllerTestCase {
     }
 
     public function testGetPersonLinkProperties() {
-        $form = new Admin_Form_DocumentPersonAdd();
+        $form = new Admin_Form_Document_PersonAdd();
 
-        $subform = $form->getSubForm(Admin_Form_DocumentPersonAdd::SUBFORM_DOCUMENT);
+        $subform = $form->getSubForm(Admin_Form_Document_PersonAdd::SUBFORM_DOCUMENT);
 
         $subform->getElement('Role')->setValue('advisor');
         $subform->getElement('AllowContact')->setChecked(true);
@@ -162,9 +162,9 @@ class Admin_Form_DocumentPersonAddTest extends ControllerTestCase {
     }
 
     public function testGetPersonLinkProperties2() {
-        $form = new Admin_Form_DocumentPersonAdd();
+        $form = new Admin_Form_Document_PersonAdd();
 
-        $subform = $form->getSubForm(Admin_Form_DocumentPersonAdd::SUBFORM_DOCUMENT);
+        $subform = $form->getSubForm(Admin_Form_Document_PersonAdd::SUBFORM_DOCUMENT);
 
         $subform->getElement('Role')->setValue('advisor');
         $subform->getElement('AllowContact')->setChecked(false);

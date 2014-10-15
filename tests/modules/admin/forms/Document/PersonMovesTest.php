@@ -31,10 +31,10 @@
  * @version     $Id$
  **/
 
-class Admin_Form_DocumentPersonMovesTest extends ControllerTestCase {
+class Admin_Form_Document_PersonMovesTest extends ControllerTestCase {
     
     public function testConstructForm() {
-        $form = new Admin_Form_DocumentPersonMoves();
+        $form = new Admin_Form_Document_PersonMoves();
         
         $this->assertEquals(4, count($form->getElements()));
         
@@ -45,7 +45,7 @@ class Admin_Form_DocumentPersonMovesTest extends ControllerTestCase {
     }
     
     public function testConstructFormPositionFirst() {
-        $form = new Admin_Form_DocumentPersonMoves(Admin_Form_DocumentPersonMoves::POSITION_FIRST);
+        $form = new Admin_Form_Document_PersonMoves(Admin_Form_Document_PersonMoves::POSITION_FIRST);
         
         $this->assertEquals(2, count($form->getElements()));
         
@@ -54,7 +54,7 @@ class Admin_Form_DocumentPersonMovesTest extends ControllerTestCase {
     }
     
     public function testConstructFormPositionLast() {
-        $form = new Admin_Form_DocumentPersonMoves(Admin_Form_DocumentPersonMoves::POSITION_LAST);
+        $form = new Admin_Form_Document_PersonMoves(Admin_Form_Document_PersonMoves::POSITION_LAST);
         
         $this->assertEquals(2, count($form->getElements()));
         
@@ -63,7 +63,7 @@ class Admin_Form_DocumentPersonMovesTest extends ControllerTestCase {
     }
     
     public function testProcessPost() {
-        $form = new Admin_Form_DocumentPersonMoves();
+        $form = new Admin_Form_Document_PersonMoves();
         
         $post = array(
             'First' => 'Erster'
@@ -73,35 +73,35 @@ class Admin_Form_DocumentPersonMovesTest extends ControllerTestCase {
 
         $this->assertNotNull($result);
         $this->assertArrayHasKey('result', $result);
-        $this->assertEquals(Admin_Form_DocumentPersonMoves::RESULT_MOVE, $result['result']);
+        $this->assertEquals(Admin_Form_Document_PersonMoves::RESULT_MOVE, $result['result']);
         $this->assertArrayHasKey('move', $result);
         $this->assertEquals('First', $result['move']);
     }
     
     public function testChangePosition() {
-        $form = new Admin_Form_DocumentPersonMoves();
+        $form = new Admin_Form_Document_PersonMoves();
         
         $this->assertEquals(4, count($form->getElements()));
         
-        $form->changePosition(Admin_Form_DocumentPersonMoves::POSITION_FIRST);
+        $form->changePosition(Admin_Form_Document_PersonMoves::POSITION_FIRST);
         
         $this->assertEquals(2, count($form->getElements()));
         $this->assertNotNull($form->getElement('Down'));
         $this->assertNotNull($form->getElement('Last'));
         
-        $form->changePosition(Admin_Form_DocumentPersonMoves::POSITION_LAST);
+        $form->changePosition(Admin_Form_Document_PersonMoves::POSITION_LAST);
        
         $this->assertEquals(2, count($form->getElements()));
         $this->assertNotNull($form->getElement('First'));
         $this->assertNotNull($form->getElement('Up'));
         
-        $form->changePosition(Admin_Form_DocumentPersonMoves::POSITION_DEFAULT);
+        $form->changePosition(Admin_Form_Document_PersonMoves::POSITION_DEFAULT);
        
         $this->assertEquals(4, count($form->getElements()));
     }
         
     public function testProcessPostEmpty() {
-        $form = new Admin_Form_DocumentPersonMoves();
+        $form = new Admin_Form_Document_PersonMoves();
         
         $this->assertNull($form->processPost(array(), null));
     }

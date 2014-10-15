@@ -35,7 +35,7 @@
 /**
  * Unterformular für die Personen in einer bestimmten Role für ein Dokument.
  */
-class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
+class Admin_Form_Document_PersonRole extends Admin_Form_DocumentMultiSubForm {
     
     /**
      * Name fuer Button um Person hinzuzufuegen.
@@ -57,7 +57,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
         $this->__roleName = $roleName;
 
         // __construct ruft init Funktion auf
-        parent::__construct('Admin_Form_DocumentPerson', 'Person' . ucfirst($roleName), null, $options);
+        parent::__construct('Admin_Form_Document_Person', 'Person' . ucfirst($roleName), null, $options);
     }
     
     /**
@@ -81,7 +81,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
             $action = (is_array($result)) ? $result['result'] : $result;
 
             switch ($action) {
-                case Admin_Form_DocumentPersonMoves::RESULT_MOVE:
+                case Admin_Form_Document_PersonMoves::RESULT_MOVE:
                     $move = $result['move'];
                     $subFormName = $result['subformName'];
                     $this->moveSubForm($subFormName, $move);
@@ -147,7 +147,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
         }
 
         $subform->setOrder(-1);
-        $subform->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->setValue($position + 1);
+        $subform->getElement(Admin_Form_Document_Person::ELEMENT_SORT_ORDER)->setValue($position + 1);
     }
 
     /**
@@ -156,7 +156,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
      * Nach dem ausführen dieser Funktion muss $this->sortSubFormsBySortOrder() ausgeführt werden bevor das Formular
      * verwendet wird, damit alle Unterformulare an der richtigen Position stehen.
      *
-     * @param \Admin_Form_DocumentPerson $subForm Unterformular, daß eingefügt werden soll
+     * @param \Admin_Form_Document_Person $subForm Unterformular, daß eingefügt werden soll
      * @param int $position SortOrder/Position für neues Formular
      */
     protected function insertSubForm($subForm, $position) {
@@ -170,7 +170,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
         }
 
         $subForm->setOrder(-1);
-        $subForm->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->setValue($position);
+        $subForm->getElement(Admin_Form_Document_Person::ELEMENT_SORT_ORDER)->setValue($position);
         $this->addSubForm($subForm, $this->getSubFormBaseName() . $subFormCount);
     }
 
@@ -224,7 +224,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
     public function getMaxSortOrder($subforms) {
         $maxSortOrder = 0;
         foreach ($subforms as $subform) {
-            $sortOrder = $subform->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->getValue();
+            $sortOrder = $subform->getElement(Admin_Form_Document_Person::ELEMENT_SORT_ORDER)->getValue();
             if ($sortOrder > $maxSortOrder) {
                 $maxSortOrder = $sortOrder;
             }
@@ -253,7 +253,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
      * @return type
      */
     public function getSortKey($subform, $maxSortOrder, $digitsSortOrder = 2,  $digitsOrder = 2) {
-        $sortOrder = $subform->getElement(Admin_Form_DocumentPerson::ELEMENT_SORT_ORDER)->getValue();
+        $sortOrder = $subform->getElement(Admin_Form_Document_Person::ELEMENT_SORT_ORDER)->getValue();
         $sortOrder = ($sortOrder == null) ? $maxSortOrder + 1 : $sortOrder;
         $order = $subform->getOrder() + 1;
         $modified = ($sortOrder == $order) ? 1 : 0; // NICHT MODIFIZIERT (1) : MODIFIZIERT (0)
@@ -313,7 +313,7 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
      */
     public function addSubFormForPerson($subForm) {
         // Unterformular vorbereiten
-        $rolesForm = new Admin_Form_DocumentPersonRoles($this->__roleName);
+        $rolesForm = new Admin_Form_Document_PersonRoles($this->__roleName);
         $subForm->addSubForm($rolesForm, 'Roles');
 
         // Unterformular einfügen
@@ -339,15 +339,15 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
         
     /**
      * Erzeugt neues Unterformular für eine Person.
-     * @return \Admin_Form_DocumentPerson
+     * @return \Admin_Form_Document_Person
      */
     public function createNewSubFormInstance() {
-        $subform = new Admin_Form_DocumentPerson();
+        $subform = new Admin_Form_Document_Person();
         
-        $rolesForm = new Admin_Form_DocumentPersonRoles($this->__roleName);
+        $rolesForm = new Admin_Form_Document_PersonRoles($this->__roleName);
         $subform->addSubForm($rolesForm, 'Roles');
         
-        $movesForm = new Admin_Form_DocumentPersonMoves();
+        $movesForm = new Admin_Form_Document_PersonMoves();
         $subform->addSubForm($movesForm, 'Moves');
                         
         return $subform;
@@ -377,8 +377,8 @@ class Admin_Form_DocumentPersonRole extends Admin_Form_DocumentMultiSubForm {
             $form = $this->createSubForm();
 
             $form->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personId);
-            $form->getElement(Admin_Form_DocumentPerson::ELEMENT_ROLE)->setValue($this->__roleName);
-            $form->getElement(Admin_Form_DocumentPerson::ELEMENT_ALLOW_CONTACT)->setValue($allowContact);
+            $form->getElement(Admin_Form_Document_Person::ELEMENT_ROLE)->setValue($this->__roleName);
+            $form->getElement(Admin_Form_Document_Person::ELEMENT_ALLOW_CONTACT)->setValue($allowContact);
 
             $this->insertSubForm($form, $sortOrder);
 

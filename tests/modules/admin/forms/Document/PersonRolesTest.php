@@ -31,7 +31,7 @@
  * @version     $Id$
  **/
 
-class Admin_Form_DocumentPersonRolesTest extends ControllerTestCase {
+class Admin_Form_Document_PersonRolesTest extends ControllerTestCase {
 
     private $roles;
     
@@ -51,7 +51,7 @@ class Admin_Form_DocumentPersonRolesTest extends ControllerTestCase {
     }
         
     public function testConstructForm() {
-        $form = new Admin_Form_DocumentPersonRoles();
+        $form = new Admin_Form_Document_PersonRoles();
         
         $this->assertEquals(8, count($form->getElements()));
         
@@ -67,7 +67,7 @@ class Admin_Form_DocumentPersonRolesTest extends ControllerTestCase {
             $activeRoles = $this->roles;
             unset($activeRoles[$role]);
             
-            $form = new Admin_Form_DocumentPersonRoles($role);
+            $form = new Admin_Form_Document_PersonRoles($role);
 
             $this->assertEquals(7, count($form->getElements()));
 
@@ -82,7 +82,7 @@ class Admin_Form_DocumentPersonRolesTest extends ControllerTestCase {
     }
     
     public function testProcessPost() {
-        $form = new Admin_Form_DocumentPersonRoles();
+        $form = new Admin_Form_Document_PersonRoles();
         
         $post = array(
             'RoleContributor' => 'Beitragende Person'
@@ -92,19 +92,19 @@ class Admin_Form_DocumentPersonRolesTest extends ControllerTestCase {
         
         $this->assertNotNull($result);
         $this->assertArrayHasKey('result', $result);
-        $this->assertEquals(Admin_Form_DocumentPersonRoles::RESULT_CHANGE_ROLE, $result['result']);
+        $this->assertEquals(Admin_Form_Document_PersonRoles::RESULT_CHANGE_ROLE, $result['result']);
         $this->assertArrayHasKey('role', $result);
         $this->assertEquals('contributor', $result['role']);
     }
     
     public function testProcessPostEmpty() {
-        $form = new Admin_Form_DocumentPersonRoles();
+        $form = new Admin_Form_Document_PersonRoles();
         
         $this->assertNull($form->processPost(array(), null));
     }
     
     public function testGetRoleElementName() {
-        $form = new Admin_Form_DocumentPersonRoles();
+        $form = new Admin_Form_Document_PersonRoles();
         
         $this->assertEquals('RoleAuthor', $form->getRoleElementName('author'));
         $this->assertEquals('RoleEditor', $form->getRoleElementName('Editor'));

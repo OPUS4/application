@@ -35,7 +35,7 @@
 /**
  * Unterformular fuer eine einem Dokument zugewiesene Person im Metadaten-Formular.
  */
-class Admin_Form_DocumentPerson extends Admin_Form_PersonLink {
+class Admin_Form_Document_Person extends Admin_Form_PersonLink {
     
     /**
      * Name fuer Button zum Editieren der Person.

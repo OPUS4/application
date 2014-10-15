@@ -35,7 +35,7 @@
 /**
  * Unterformular fuer die mit einem Dokument verknuepften Personen.
  */
-class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm {
 
     /**
      * Button, um die Sortierung der Personen auszulösen nachdem die SortOrder Werte editiert wurden.
@@ -74,7 +74,7 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
         $this->getDecorator('FieldsetWithButtons')->setLegendButtons(array('Sort'));
 
         foreach (self::$personRoles as $roleName) {
-            $subform = new Admin_Form_DocumentPersonRole($roleName);
+            $subform = new Admin_Form_Document_PersonRole($roleName);
             $this->addSubForm($subform, $roleName);
         }        
     }
@@ -122,7 +122,7 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
                     $action = (is_array($result)) ? $result['result'] : $result;
 
                     switch ($action) {
-                        case Admin_Form_DocumentPersonRoles::RESULT_CHANGE_ROLE:
+                        case Admin_Form_Document_PersonRoles::RESULT_CHANGE_ROLE:
                             $role = $result['role'];
                             $subFormName = $result['subformName'];
                             $personForm = $subform->getSubForm($subFormName);
@@ -203,7 +203,7 @@ class Admin_Form_DocumentPersons extends Admin_Form_AbstractDocumentSubForm {
     /**
      * Liefert das Unterformular für eine Rolle.
      * @param string $role
-     * @return Admin_Form_DocumentPersonRole
+     * @return Admin_Form_Document_PersonRole
      */
     public function getSubFormForRole($role) {
         return $this->getSubForm($role);

@@ -34,10 +34,10 @@
 /**
  * Unit Tests fuer Unterformular fuer eine mit einem Dokument verknuepfte Person.
  */
-class Admin_Form_DocumentPersonTest extends ControllerTestCase {
+class Admin_Form_Document_PersonTest extends ControllerTestCase {
     
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentPerson();
+        $form = new Admin_Form_Document_Person();
         
         $this->assertEquals(5, count($form->getElements()));
         
@@ -50,13 +50,13 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
     }
 
     public function testProcessPostEmpty() {
-        $form = new Admin_Form_DocumentPerson();
+        $form = new Admin_Form_Document_Person();
 
         $this->assertNull($form->processPost(array(), null));
     }
     
     public function testProcessPostEdit() {
-        $form = new Admin_Form_DocumentPerson();
+        $form = new Admin_Form_Document_Person();
         
         $form->getElement('PersonId')->setValue('1234');
         
@@ -89,7 +89,7 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
     }
         
     public function testGetLinkModel() {
-        $form = new Admin_Form_DocumentPerson();
+        $form = new Admin_Form_Document_Person();
         
         $document = new Opus_Document(146);
         
@@ -106,7 +106,7 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
     }
     
     public function testGetLinkModelNew() {
-        $form = new Admin_Form_DocumentPerson();
+        $form = new Admin_Form_Document_Person();
         
         $form->getElement('PersonId')->setValue(310);
         // $form->getElement('Role')->setValue('submitter'); // nicht teil des POST beim Metadaten-Formular
@@ -123,7 +123,7 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
     }
         
     public function testPrepareRenderingAsView() {
-        $form = new Admin_Form_DocumentPerson();
+        $form = new Admin_Form_Document_Person();
         
         $form->getElement('SortOrder')->setValue(2); // wird entfernt auch wenn nicht leer
         
@@ -133,7 +133,7 @@ class Admin_Form_DocumentPersonTest extends ControllerTestCase {
     }
     
     public function testSetOrder() {
-        $form = new Admin_Form_DocumentPerson();
+        $form = new Admin_Form_Document_Person();
         
         $form->setOrder(5);
         
