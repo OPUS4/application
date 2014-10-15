@@ -37,10 +37,10 @@
  * TODO implement MockSubForm() um Delegation zu testen
  * TODO implement more stringent tests
  */
-class Admin_Form_DocumentSectionTest extends ControllerTestCase {
+class Admin_Form_Document_SectionTest extends ControllerTestCase {
     
     public function testPopulateFromModel() {
-        $form = new Admin_Form_DocumentSection();
+        $form = new Admin_Form_Document_Section();
         
         $model = $this->createTestDocument();
         
@@ -48,7 +48,7 @@ class Admin_Form_DocumentSectionTest extends ControllerTestCase {
     }
     
     public function testConstructFromPost() {
-        $form = new Admin_Form_DocumentSection();
+        $form = new Admin_Form_Document_Section();
         
         $post = array();
         
@@ -56,7 +56,7 @@ class Admin_Form_DocumentSectionTest extends ControllerTestCase {
     }
     
     public function testProcessPost() {
-        $form = new Admin_Form_DocumentSection();
+        $form = new Admin_Form_Document_Section();
         
         $post = array();
         $context = $post;
@@ -66,13 +66,13 @@ class Admin_Form_DocumentSectionTest extends ControllerTestCase {
     }
     
     public function testContinueEdit() {
-        $form = new Admin_Form_DocumentSection();
+        $form = new Admin_Form_Document_Section();
         
         $form->continueEdit(null);
     }
     
     public function testUpdateModel() {
-        $form = new Admin_Form_DocumentSection();
+        $form = new Admin_Form_Document_Section();
         
         $model = $this->createTestDocument();
         

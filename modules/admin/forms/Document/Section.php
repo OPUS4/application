@@ -40,7 +40,7 @@
  * TODO Parent-Class für Admin_Form_DocumentMultiSubForm?
  * TODO construct and set Legend
  */
-class Admin_Form_DocumentSection extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_Document_Section extends Admin_Form_AbstractDocumentSubForm {
     
     public function populateFromModel($model) {
         $subforms = $this->getSubForms();

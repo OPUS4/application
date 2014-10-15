@@ -40,7 +40,7 @@
  * 
  * TODO Umgang mit alten Schlagwörtern mit unbekanntem Typ (siehe auch OPUSVIER-2604)
  */
-class Admin_Form_Document_Subjects extends Admin_Form_DocumentSection {
+class Admin_Form_Document_Subjects extends Admin_Form_Document_Section {
     
     /**
      * Initialisiert Formular und fuegt Unterformulare fuer Schlagworttypen hinzu.

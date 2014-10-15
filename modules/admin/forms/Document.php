@@ -136,7 +136,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $this->addSubForm(new Admin_Form_Document_Collections(), 'Collections');
 
         // Inhaltliche Erschließung
-        $subform = new Admin_Form_DocumentSection();
+        $subform = new Admin_Form_Document_Section();
         $subform->setLegend('admin_document_section_content');
         $subform->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Abstract', 'TitleAbstract',
             new Form_Validate_MultiSubForm_RepeatedValues('Language',
