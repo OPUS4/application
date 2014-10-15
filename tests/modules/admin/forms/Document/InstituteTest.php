@@ -35,10 +35,10 @@
 /**
  * Unit Tests fuer Unterformular fuer Verknuepfung mit einem Institut im Metadaten-Formular.
  */
-class Admin_Form_DocumentInstituteTest extends ControllerTestCase {
+class Admin_Form_Document_InstituteTest extends ControllerTestCase {
     
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentInstitute(Admin_Form_DocumentInstitute::ROLE_PUBLISHER);
+        $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
 
         $this->assertEquals(2, count($form->getElements()));
         $this->assertNotNull($form->getElement('Id'));
@@ -50,11 +50,11 @@ class Admin_Form_DocumentInstituteTest extends ControllerTestCase {
      * @expectedExceptionMessage Unknown role 'unknown_role'.
      */
     public function testCreateFormBadRole() {
-        $form = new Admin_Form_DocumentInstitute('unknown_role');
+        $form = new Admin_Form_Document_Institute('unknown_role');
     }
     
     public function testPopulateFromModel() {
-        $form = new Admin_Form_DocumentInstitute(Admin_Form_DocumentInstitute::ROLE_PUBLISHER);
+        $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
         
         $doc = new Opus_Document(146);
         $publishers = $doc->getThesisPublisher();
@@ -67,7 +67,7 @@ class Admin_Form_DocumentInstituteTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $form = new Admin_Form_DocumentInstitute(Admin_Form_DocumentInstitute::ROLE_PUBLISHER);
+        $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
         
         $form->getElement('Institute')->setValue(3);
 
@@ -79,7 +79,7 @@ class Admin_Form_DocumentInstituteTest extends ControllerTestCase {
     }
     
     public function testGetModel() {
-        $form = new Admin_Form_DocumentInstitute(Admin_Form_DocumentInstitute::ROLE_PUBLISHER);
+        $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
         
         $doc = new Opus_Document(146);
         $publishers = $doc->getThesisPublisher();
@@ -101,7 +101,7 @@ class Admin_Form_DocumentInstituteTest extends ControllerTestCase {
     }
     
     public function testGetNewModel() {
-        $form = new Admin_Form_DocumentInstitute(Admin_Form_DocumentInstitute::ROLE_PUBLISHER);
+        $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
         
         $form->getElement('Institute')->setValue(3);
         
@@ -113,7 +113,7 @@ class Admin_Form_DocumentInstituteTest extends ControllerTestCase {
     }
 
     public function testValidation() {
-        $form = new Admin_Form_DocumentInstitute(Admin_Form_DocumentInstitute::ROLE_PUBLISHER);
+        $form = new Admin_Form_Document_Institute(Admin_Form_Document_Institute::ROLE_PUBLISHER);
 
         $post = array();
         

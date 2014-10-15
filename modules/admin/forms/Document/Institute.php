@@ -35,7 +35,7 @@
 /**
  * Unterformular fuer Institute.
  */
-class Admin_Form_DocumentInstitute extends Admin_Form_AbstractModelSubForm {
+class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm {
     
     const ROLE_PUBLISHER = 'publisher';
     

@@ -32,14 +32,14 @@
  * @version     $Id$
  */
 
-class Admin_Form_DocumentGrantorTest extends ControllerTestCase {
+class Admin_Form_Document_PublisherTest extends ControllerTestCase {
 
     public function testConstruct() {
-        $form = new Admin_Form_DocumentGrantor();
+        $form = new Admin_Form_Document_Publisher();
 
-        $this->assertNotNull($form->getElement(Admin_Form_DocumentGrantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Form_Element_Grantor',
-            $form->getElement(Admin_Form_DocumentGrantor::ELEMENT_INSTITUTE));
+        $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
+        $this->assertInstanceOf('Form_Element_Publisher',
+            $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
     }
 
 }

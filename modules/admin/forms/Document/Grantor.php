@@ -35,10 +35,10 @@
 /**
  * Unterformular fuer Publisher eines Dokuments.
  */
-class Admin_Form_DocumentPublisher extends Admin_Form_DocumentInstitute {
+class Admin_Form_Document_Grantor extends Admin_Form_Document_Institute {
     
     public function __construct() {
-        parent::__construct(self::ROLE_PUBLISHER);
+        parent::__construct(self::ROLE_GRANTOR);
     }
     
 }
