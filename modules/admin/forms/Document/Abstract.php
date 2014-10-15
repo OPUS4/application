@@ -35,7 +35,7 @@
 /**
  * Unterformular zum Editieren einer Zusammenfassung (abstract). 
  */
-class Admin_Form_DocumentAbstract extends Admin_Form_AbstractModelSubForm {
+class Admin_Form_Document_Abstract extends Admin_Form_AbstractModelSubForm {
     
     const ELEMENT_ID = 'Id';
     

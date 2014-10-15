@@ -34,10 +34,10 @@
 /**
  * Unit Tests fuer Unterformular fuer Zusammenfassungen.
  */
-class Admin_Form_DocumentAbstractTest extends ControllerTestCase {
+class Admin_Form_Document_AbstractTest extends ControllerTestCase {
     
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentAbstract();
+        $form = new Admin_Form_Document_Abstract();
 
         $this->assertEquals(3, count($form->getElements()));
         $this->assertNotNull($form->getElement('Id'));
@@ -46,7 +46,7 @@ class Admin_Form_DocumentAbstractTest extends ControllerTestCase {
     }
     
     public function testPopulateFromModel() {
-        $form = new Admin_Form_DocumentAbstract();
+        $form = new Admin_Form_Document_Abstract();
         
         $doc = new Opus_Document(146);
         
@@ -64,7 +64,7 @@ class Admin_Form_DocumentAbstractTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $form = new Admin_Form_DocumentAbstract();
+        $form = new Admin_Form_Document_Abstract();
         
         $form->getElement('Language')->setValue('eng');
         $form->getElement('Value')->setValue('Test Zusammenfassung!');
@@ -78,7 +78,7 @@ class Admin_Form_DocumentAbstractTest extends ControllerTestCase {
     }
     
     public function testGetModel() {
-        $form = new Admin_Form_DocumentAbstract();
+        $form = new Admin_Form_Document_Abstract();
         
         $doc = new Opus_Document(146);
         
@@ -98,7 +98,7 @@ class Admin_Form_DocumentAbstractTest extends ControllerTestCase {
     }
     
     public function testGetNewModel() {
-        $form = new Admin_Form_DocumentAbstract();
+        $form = new Admin_Form_Document_Abstract();
         $form->getElement('Language')->setValue('eng');
         $form->getElement('Value')->setValue('Test Zusammenfassung!');
         
@@ -110,7 +110,7 @@ class Admin_Form_DocumentAbstractTest extends ControllerTestCase {
     }
 
     public function testGetModelBadId() {
-        $form = new Admin_Form_DocumentAbstract();
+        $form = new Admin_Form_Document_Abstract();
         $form->getElement('Id')->setValue('bad');
         $form->getElement('Language')->setValue('eng');
         $form->getElement('Value')->setValue('Test Zusammenfassung!');
@@ -123,7 +123,7 @@ class Admin_Form_DocumentAbstractTest extends ControllerTestCase {
     }
 
     public function testGetModelUnknownId() {
-        $form = new Admin_Form_DocumentAbstract();
+        $form = new Admin_Form_Document_Abstract();
 
         $logger = new MockLogger();
 
@@ -145,7 +145,7 @@ class Admin_Form_DocumentAbstractTest extends ControllerTestCase {
     }
 
     public function testValidation() {
-        $form = new Admin_Form_DocumentAbstract();
+        $form = new Admin_Form_Document_Abstract();
         
         $post = array(
             'Language' => 'rus',
