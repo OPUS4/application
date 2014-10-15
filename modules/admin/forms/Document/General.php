@@ -38,7 +38,7 @@
  * 
  * TODO validierung
  */
-class Admin_Form_DocumentGeneral extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_Document_General extends Admin_Form_AbstractDocumentSubForm {
     
     /**
      * Name des Formularelements fuer die Sprache des Dokuments.

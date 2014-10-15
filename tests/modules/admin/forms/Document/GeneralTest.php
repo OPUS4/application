@@ -32,12 +32,12 @@
  */
 
 /**
- * Unit Tests fuer Admin_Form_DocumentGeneral.
+ * Unit Tests fuer Admin_Form_Document_General.
  */
-class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
+class Admin_Form_Document_GeneralTest extends ControllerTestCase {
         
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentGeneral();
+        $form = new Admin_Form_Document_General();
 
         $this->assertEquals(7, count($form->getElements()));
 
@@ -58,7 +58,7 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
         
         $document = new Opus_Document(146);
         
-        $form = new Admin_Form_DocumentGeneral();
+        $form = new Admin_Form_Document_General();
         
         $form->populateFromModel($document);
         
@@ -74,7 +74,7 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
     public function testUpdateModel() {
         $this->useEnglish();
         
-        $form = new Admin_Form_DocumentGeneral();
+        $form = new Admin_Form_Document_General();
         
         $form->getElement('Language')->setValue('eng');
         $form->getElement('Type')->setValue('masterthesis');
@@ -106,7 +106,7 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
     public function testValidation() {
         $this->useEnglish();
         
-        $form = new Admin_Form_DocumentGeneral();
+        $form = new Admin_Form_Document_General();
         
         $post = array(
             'Language' => '',
@@ -132,7 +132,7 @@ class Admin_Form_DocumentGeneralTest extends ControllerTestCase {
     public function testValidationGerman() {
         $this->useGerman();
         
-        $form = new Admin_Form_DocumentGeneral();
+        $form = new Admin_Form_Document_General();
         
         $post = array(
             'Language' => 'deu', 

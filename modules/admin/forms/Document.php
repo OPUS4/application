@@ -112,7 +112,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
                 array('tag' => 'div', 'placement' => 'prepend', 'class' => 'wrapper', 'openOnly' => 'true'));
         $this->addSubForm($subform, 'InfoBox');
         
-        $this->addSubForm(new Admin_Form_DocumentGeneral(), 'General');
+        $this->addSubForm(new Admin_Form_Document_General(), 'General');
         
         $this->addSubForm(new Admin_Form_DocumentPersons(), 'Persons');
         
@@ -237,7 +237,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * Die überschriebene Function führt einmal die normale Validierung aus und ruft dann eine zweite Funktion auf,
      * die sich mit Validierungen befasst, die mehrere Unterformulare betreffen können. Beispiele sind:
      * 
-     * - ein TitleMain in Document-Language muss vorhanden sein (DocumentGeneral und DocumentTitleMain)
+     * - ein TitleMain in Document-Language muss vorhanden sein (Document_General und Document_TitleMain)
      * 
      * @param array $data
      * @param array $context
