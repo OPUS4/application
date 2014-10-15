@@ -34,10 +34,10 @@
 /**
  * Unit Test fuer Unterformular fuer einen Titel.
  */
-class Admin_Form_DocumentTitleTest extends ControllerTestCase {
+class Admin_Form_Document_TitleTest extends ControllerTestCase {
     
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentTitle();
+        $form = new Admin_Form_Document_Title();
         
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('Type'));
@@ -46,7 +46,7 @@ class Admin_Form_DocumentTitleTest extends ControllerTestCase {
     }
     
     public function testPopulateFromModel() {
-        $form = new Admin_Form_DocumentTitle();
+        $form = new Admin_Form_Document_Title();
         
         $doc = new Opus_Document(146);
         
@@ -63,7 +63,7 @@ class Admin_Form_DocumentTitleTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $form = new Admin_Form_DocumentTitle();
+        $form = new Admin_Form_Document_Title();
         
         $form->getElement('Type')->setValue('main');
         $form->getElement('Language')->setValue('rus');
@@ -79,7 +79,7 @@ class Admin_Form_DocumentTitleTest extends ControllerTestCase {
     }
     
     public function testGetModel() {
-        $form = new Admin_Form_DocumentTitle();
+        $form = new Admin_Form_Document_Title();
         
         $doc = new Opus_Document(146);
         
@@ -101,7 +101,7 @@ class Admin_Form_DocumentTitleTest extends ControllerTestCase {
     }
     
     public function testGetNewModel() {
-        $form = new Admin_Form_DocumentTitle();
+        $form = new Admin_Form_Document_Title();
         
         $form->getElement('Type')->setValue('parent');
         $form->getElement('Language')->setValue('rus');
@@ -119,7 +119,7 @@ class Admin_Form_DocumentTitleTest extends ControllerTestCase {
      * TODO Validierung ausbauen (Type, Language)
      */
     public function testValidation() {
-        $form = new Admin_Form_DocumentTitle();
+        $form = new Admin_Form_Document_Title();
         
         $post = array(
             'Type' => 'parent',

@@ -37,7 +37,7 @@
  * 
  * Für das Metadaten-Formular wurde vereinbart, daß der Typ eines Titels nicht mehr verändert werden kann.
  */
-class Admin_Form_DocumentTitle extends Admin_Form_AbstractModelSubForm {
+class Admin_Form_Document_Title extends Admin_Form_AbstractModelSubForm {
     
     /**
      * Name von Formularelement fuer ID von Opus_Title Objekt.

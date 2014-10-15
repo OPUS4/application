@@ -34,10 +34,10 @@
 /**
  * Unit Tests fuer Unterformular fuer Titel eines Dokuments.
  */
-class Admin_Form_DocumentTitlesTest extends ControllerTestCase {
+class Admin_Form_Document_TitlesTest extends ControllerTestCase {
     
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentTitles();
+        $form = new Admin_Form_Document_Titles();
         
         $this->assertNotNull($form->getSubForm('Main'));
         $this->assertNotNull($form->getSubForm('Parent'));

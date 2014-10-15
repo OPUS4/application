@@ -43,7 +43,7 @@
  * Der Typ eines Titels kann später nicht mehr geändert werden. Die Felder fuer die verschiedenen Titeltypen setzen
  * den Wert vom Feld 'Type' eines Titels automatisch.
  */
-class Admin_Form_DocumentTitles extends Admin_Form_DocumentSection {
+class Admin_Form_Document_Titles extends Admin_Form_DocumentSection {
     
     /**
      * Initialisiert das Formular und erzeugt die Unterformulare für die Titeltypen.
@@ -53,12 +53,12 @@ class Admin_Form_DocumentTitles extends Admin_Form_DocumentSection {
         
         $this->setLegend('admin_document_section_titles');
         
-        $this->addSubForm(new Admin_Form_DocumentTitlesMain(), 'Main');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleAdditional',
+        $this->addSubForm(new Admin_Form_Document_TitlesMain(), 'Main');
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleAdditional',
                 new Form_Validate_MultiSubForm_RepeatedLanguages()), 'Additional');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent',
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleParent',
                 new Form_Validate_MultiSubForm_RepeatedLanguages()), 'Parent');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub',
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleSub',
                 new Form_Validate_MultiSubForm_RepeatedLanguages()), 'Sub');        
     }
     

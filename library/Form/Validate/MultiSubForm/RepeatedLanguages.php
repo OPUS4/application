@@ -66,7 +66,7 @@ class Form_Validate_MultiSubForm_RepeatedLanguages implements Form_Validate_IMul
         
         foreach ($form->getSubForms() as $name => $subform) {
             if (array_key_exists($name, $data)) {
-                $element = $subform->getElement(Admin_Form_DocumentTitle::ELEMENT_LANGUAGE);
+                $element = $subform->getElement(Admin_Form_Document_Title::ELEMENT_LANGUAGE);
                 if (!is_null($element)) {
                     $element->addValidator(new Form_Validate_LanguageUsedOnceOnly($languages, $position++));
                 }
@@ -83,8 +83,8 @@ class Form_Validate_MultiSubForm_RepeatedLanguages implements Form_Validate_IMul
         $values = array();
         
         foreach($parentContext as $index => $entry) {
-            if (isset($entry[Admin_Form_DocumentTitle::ELEMENT_LANGUAGE])) {
-                $values[] = $entry[Admin_Form_DocumentTitle::ELEMENT_LANGUAGE];
+            if (isset($entry[Admin_Form_Document_Title::ELEMENT_LANGUAGE])) {
+                $values[] = $entry[Admin_Form_Document_Title::ELEMENT_LANGUAGE];
             }
         }
 

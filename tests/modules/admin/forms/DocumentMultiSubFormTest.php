@@ -46,7 +46,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
     
     public function testConstructFormWithValidator() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleParent',
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
         
         $this->assertNotNull($form->getElement('Add'));
@@ -60,12 +60,12 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
      * @expectedExceptionMessage Validator ist keine Instanz von Form_Validate_IMultiSubForm.
      */
     public function testConstructFormWithBadValidator() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleParent',
                 'NotAValidClass');
     }
     
     public function testPopulateFromModel() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleSub',
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
         
         $document = new Opus_Document(146);
@@ -86,7 +86,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
     
     public function testPopulateFromModelWithEmptyModel() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleSub',
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
         
         $document = $this->createTestDocument();
@@ -97,7 +97,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
     
     public function testGetFieldValues() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleSub',
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
         
         $document = new Opus_Document(146);
@@ -110,7 +110,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
     
     public function testContructFromPost() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleParent',
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
         
         $post = array(
@@ -139,7 +139,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
     
     public function testProcessPostAdd() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleParent',
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
         
         $post = array('Add' => 'Hinzufügen');
@@ -165,7 +165,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
     
     public function testProcessPostRemove() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleSub',
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
         
         $document = new Opus_Document(146);
@@ -193,7 +193,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleSub',
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
 
         $form->appendSubForm();
@@ -218,7 +218,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
     
     public function testGetSubFormModels() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleSub',
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
         
         $document = new Opus_Document(146);
@@ -237,7 +237,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
     
     public function testCreateSubForm() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleSub',
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
         
         $subform = $form->createSubForm();
@@ -254,13 +254,13 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
     
     public function testCreateNewSubFormInstance() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleSub',
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
         
         $subform = $form->createNewSubFormInstance();
         
         $this->assertNotNull($subform);
-        $this->assertTrue($subform instanceof Admin_Form_DocumentTitle);
+        $this->assertTrue($subform instanceof Admin_Form_Document_Title);
     }
     
     /**
@@ -268,7 +268,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
      * Unterformulare entfernt.
      */
     public function testDetermineSubFormForAnker() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleSub', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleSub',
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
         
         $document = new Opus_Document(146);
@@ -283,7 +283,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
     
     public function testIsValidTrue() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleParent',
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
         
         $form->appendSubForm();
@@ -304,7 +304,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
     
     public function testIsValidFalse() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent', 
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleParent',
                 new Form_Validate_MultiSubForm_RepeatedLanguages());
         
         $form->appendSubForm();
@@ -442,7 +442,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
 
     public function testOddEven() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent');
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleParent');
 
         $document = $this->createTestDocument();
 
@@ -473,7 +473,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
 
     public function testOddEvenAfterRemove() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent');
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleParent');
 
         $document = $this->createTestDocument();
 
@@ -511,7 +511,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
 
     public function testRegression3106ConstructFromAddPost() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentTitle', 'TitleParent');
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Title', 'TitleParent');
 
         $post = array(
             'Add' => 'Hinzufügen',

@@ -34,13 +34,13 @@
 /**
  * Unit Tests fuer das Unterformular fuer die Haupttitel eines Dokuments.
  */
-class Admin_Form_DocumentTitlesMainTest extends ControllerTestCase {
+class Admin_Form_Document_TitlesMainTest extends ControllerTestCase {
 
     /**
      * Prueft, das der Titel in der Dokumentensprache an erste Position zurueckgegeben wird.
      */
     public function testGetFieldValues() {
-        $form = new Admin_Form_DocumentTitlesMain();
+        $form = new Admin_Form_Document_TitlesMain();
         
         $document = $this->getTestDocument();
                 
@@ -52,7 +52,7 @@ class Admin_Form_DocumentTitlesMainTest extends ControllerTestCase {
     }
     
     public function testIsDependenciesValidTrue() {
-        $form = new Admin_Form_DocumentTitlesMain();
+        $form = new Admin_Form_Document_TitlesMain();
         
         $document = $this->getTestDocument();
         
@@ -68,7 +68,7 @@ class Admin_Form_DocumentTitlesMainTest extends ControllerTestCase {
     }
     
     public function testIsDependenciesValidFalse() {
-        $form = new Admin_Form_DocumentTitlesMain();
+        $form = new Admin_Form_Document_TitlesMain();
         
         $document = $this->getTestDocument();
         
