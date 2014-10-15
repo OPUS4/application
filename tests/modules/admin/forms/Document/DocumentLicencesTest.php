@@ -32,12 +32,12 @@
  */
 
 /**
- * Description of DocumentLicencesTest
+ * Description of Document_LicencesTest
  */
-class DocumentLicencesTest extends ControllerTestCase {
+class Admin_Form_Document_LicencesTest extends ControllerTestCase {
     
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentLicences();
+        $form = new Admin_Form_Document_Licences();
         
         $licences = Opus_Licence::getAll();
         
@@ -47,16 +47,16 @@ class DocumentLicencesTest extends ControllerTestCase {
             
             $cssClass = $element->getDecorator('Label')->getOption('class');
             if ($licence->getActive()) {
-                $this->assertEquals(Admin_Form_DocumentLicences::ACTIVE_CSS_CLASS, $cssClass);
+                $this->assertEquals(Admin_Form_Document_Licences::ACTIVE_CSS_CLASS, $cssClass);
             }
             else {
-                $this->assertEquals(Admin_Form_DocumentLicences::INACTIVE_CSS_CLASS, $cssClass);
+                $this->assertEquals(Admin_Form_Document_Licences::INACTIVE_CSS_CLASS, $cssClass);
             }
         }
     }
     
     public function testPopulateFromModel() {
-        $form = new Admin_Form_DocumentLicences();
+        $form = new Admin_Form_Document_Licences();
         
         $document = new Opus_Document(146);
         
@@ -78,7 +78,7 @@ class DocumentLicencesTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $form = new Admin_Form_DocumentLicences();
+        $form = new Admin_Form_Document_Licences();
         
         $form->getElement('licence4')->setChecked(true);
         $form->getElement('licence2')->setChecked(true);
@@ -101,7 +101,7 @@ class DocumentLicencesTest extends ControllerTestCase {
     }
     
     public function testIsEmptyFalse() {
-        $form = new Admin_Form_DocumentLicences();
+        $form = new Admin_Form_Document_Licences();
         
         $form->getElement('licence4')->setChecked(true);
         $form->getElement('licence2')->setChecked(true);
@@ -110,13 +110,13 @@ class DocumentLicencesTest extends ControllerTestCase {
     }
     
     public function testIsEmptyTrue() {
-        $form = new Admin_Form_DocumentLicences();
+        $form = new Admin_Form_Document_Licences();
         
         $this->assertTrue($form->isEmpty());
     }
     
     public function testHasLicenceFalse() {
-        $form = new Admin_Form_DocumentLicences();
+        $form = new Admin_Form_Document_Licences();
         
         $document = new Opus_Document(146);
         $licence = new Opus_Licence(2);
@@ -125,7 +125,7 @@ class DocumentLicencesTest extends ControllerTestCase {
     }
     
     public function testHasLicenceTrue() {
-        $form = new Admin_Form_DocumentLicences();
+        $form = new Admin_Form_Document_Licences();
         
         $document = new Opus_Document(146);
         
@@ -133,7 +133,7 @@ class DocumentLicencesTest extends ControllerTestCase {
     }
     
     public function testPrepareRenderingAsView() {
-        $form = new Admin_Form_DocumentLicences();
+        $form = new Admin_Form_Document_Licences();
         
         $form->getElement('licence4')->setChecked(true);
         $form->getElement('licence2')->setChecked(true);

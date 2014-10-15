@@ -41,7 +41,7 @@
  * Das Metadaten-Formular in der Administration zeigt alle Lizenzen, unabhängig davon ob sie aktiv sind, da bei 
  * nachträglicher Deaktivierung einer Lizenz, immer noch Dokumente damit verknüpft sein können.
  */
-class Admin_Form_DocumentLicences extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm {
     
     /**
      * Name für Formularelement für ID der Lizenz.

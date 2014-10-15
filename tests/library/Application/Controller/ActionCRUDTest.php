@@ -83,7 +83,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase {
     }
 
     public function testIsClassSupportedFalse() {
-        $this->assertFalse($this->controller->isClassSupported('Admin_Form_DocumentLicences'));
+        $this->assertFalse($this->controller->isClassSupported('Admin_Form_Document_Licences'));
     }
 
     public function testGetAllModels() {
