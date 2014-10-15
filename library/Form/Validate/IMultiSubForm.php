@@ -32,7 +32,7 @@
  */
 
 /**
- * Interface für Klassen die Validierungen für die Unterformulare von Admin_Form_DocumentMultiSubForm durchführen.
+ * Interface für Klassen die Validierungen für die Unterformulare von Admin_Form_Document_MultiSubForm durchführen.
  */
 interface Form_Validate_IMultiSubForm {
     

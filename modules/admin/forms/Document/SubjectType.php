@@ -35,10 +35,10 @@
 /**
  * Unterformular fuer Subjects eines bestimmten Typs im Metadaten-Formular.
  *
- * Diese Klasse überschreibt ein paar Funktion von Admin_Form_DocumentMultiSubForm um Unterformulare vom richtigen Typ
+ * Diese Klasse überschreibt ein paar Funktion von Admin_Form_Document_MultiSubForm um Unterformulare vom richtigen Typ
  * zu verwenden und die richtigen Werte aus dem Modell zu holen.
  */
-class Admin_Form_Document_SubjectType extends Admin_Form_DocumentMultiSubForm {
+class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
 
     /**
      * Der Schlagworttyp für den dieses Unterformular verwendet wird.
@@ -92,7 +92,7 @@ class Admin_Form_Document_SubjectType extends Admin_Form_DocumentMultiSubForm {
     /**
      * Ueberschreibt Funktion damit hier nichts passiert.
      * 
-     * In der Klasse Admin_Form_DocumentMultiSubForm wird in dieser Funktion das Dokument aktualisiert, was aber bei
+     * In der Klasse Admin_Form_Document_MultiSubForm wird in dieser Funktion das Dokument aktualisiert, was aber bei
      * Schlagwoertern nicht passieren soll, da die Werte aus mehreren MultiSubForm-Formularen zusammengesammelt werden
      * muessen.
      * 

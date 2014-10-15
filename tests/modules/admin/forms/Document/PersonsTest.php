@@ -109,7 +109,7 @@ class Admin_Form_Document_PersonsTest extends ControllerTestCase {
      * 
      * Es sollte eine Meldung ins Log geschrieben werden und das Unterformular entweder erst garnicht angelegt werden
      * oder aufgrund des fehlens einer Person-ID an späterer Stelle wieder entfernt werden. Es wird das 
-     * constructFromPost in Admin_Form_DocumentMultiSubForm verwendet.
+     * constructFromPost in Admin_Form_Document_MultiSubForm verwendet.
      * 
      * TODO test Logging
      */

@@ -37,7 +37,7 @@
  * 
  * Diese Klasse hat die Aufgabe mehrere Unterformulare aufzunehmen und die Anzeige des Formulars zu strukturieren. 
  * 
- * TODO Parent-Class für Admin_Form_DocumentMultiSubForm?
+ * TODO Parent-Class für Admin_Form_Document_MultiSubForm?
  * TODO construct and set Legend
  */
 class Admin_Form_Document_Section extends Admin_Form_AbstractDocumentSubForm {

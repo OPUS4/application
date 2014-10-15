@@ -35,7 +35,7 @@
 /**
  * Unterformular für die Personen in einer bestimmten Role für ein Dokument.
  */
-class Admin_Form_Document_PersonRole extends Admin_Form_DocumentMultiSubForm {
+class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm {
     
     /**
      * Name fuer Button um Person hinzuzufuegen.
@@ -272,7 +272,7 @@ class Admin_Form_Document_PersonRole extends Admin_Form_DocumentMultiSubForm {
     /**
      * Verarbeitet Klick auf Add Button für Personen.
      * 
-     * Die Funktion von Admin_Form_DocumentMultiSubForm wurde überschrieben, damit ein anderes Ergebnis an den 
+     * Die Funktion von Admin_Form_Document_MultiSubForm wurde überschrieben, damit ein anderes Ergebnis an den
      * Controller weitergegeben werden kann und ein Wechsel auf eine andere Seite erfolgt, um eine Person hinzufügen 
      * zu können.
      * 

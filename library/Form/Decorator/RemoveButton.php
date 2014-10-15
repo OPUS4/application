@@ -48,7 +48,7 @@ class Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract {
         $button = $this->getElement();
 
         if ($button instanceof Zend_Form) {
-            $button = $button->getElement(Admin_Form_DocumentMultiSubForm::ELEMENT_REMOVE);
+            $button = $button->getElement(Admin_Form_Document_MultiSubForm::ELEMENT_REMOVE);
         }
 
         if (is_null($button)) {

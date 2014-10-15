@@ -38,7 +38,7 @@
  * Die Basisklasse wurde erweitert um dafür zu sorgen, dass der Titel in der Dokumentensprache zuerst angezeigt wird.
  * Außerdem wird zusätzlich bei der Validierung geprüft, ob ein Titel in der Dokumentsprache existiert.
  */
-class Admin_Form_Document_TitlesMain extends Admin_Form_DocumentMultiSubForm {
+class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm {
     
     /**
      * Konstruiert Unterformular fuer die Haupttitel eines Dokuments.

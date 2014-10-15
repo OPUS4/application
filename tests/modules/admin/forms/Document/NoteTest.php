@@ -32,12 +32,12 @@
  */
 
 /**
- * Description of DocumentNoteTest
+ * Description of Document_NoteTest
  */
-class Admin_Form_DocumentNoteTest extends ControllerTestCase {
+class Admin_Form_Document_NoteTest extends ControllerTestCase {
     
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentNote();
+        $form = new Admin_Form_Document_Note();
 
         $this->assertEquals(3, count($form->getElements()));
 
@@ -49,7 +49,7 @@ class Admin_Form_DocumentNoteTest extends ControllerTestCase {
     }
     
     public function testPopulateFromModel() {
-        $form = new Admin_Form_DocumentNote();
+        $form = new Admin_Form_Document_Note();
         
         $note = new Opus_Note();
         $note->setMessage('Message1');
@@ -68,7 +68,7 @@ class Admin_Form_DocumentNoteTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $form = new Admin_Form_DocumentNote();
+        $form = new Admin_Form_Document_Note();
         
         $form->getElement('Message')->setValue('Test Message');
         $form->getElement('Visibility')->setChecked(true);
@@ -88,7 +88,7 @@ class Admin_Form_DocumentNoteTest extends ControllerTestCase {
     }
     
     public function testGetModel() {
-        $form = new Admin_Form_DocumentNote();
+        $form = new Admin_Form_Document_Note();
         
         $doc = new Opus_Document(146);
         
@@ -108,7 +108,7 @@ class Admin_Form_DocumentNoteTest extends ControllerTestCase {
     }
     
     public function testGetNewModel() {
-        $form = new Admin_Form_DocumentNote();
+        $form = new Admin_Form_Document_Note();
         
         $form->getElement('Visibility')->setChecked(false);
         $form->getElement('Message')->setValue('Test Message');
@@ -121,7 +121,7 @@ class Admin_Form_DocumentNoteTest extends ControllerTestCase {
     }
     
     public function testValidation() {
-        $form = new Admin_Form_DocumentNote();
+        $form = new Admin_Form_Document_Note();
         
         $post = array(
             'Visibility' => '0',
@@ -134,7 +134,7 @@ class Admin_Form_DocumentNoteTest extends ControllerTestCase {
     }
 
     public function testPrepareRenderingAsView() {
-        $form = new Admin_Form_DocumentNote();
+        $form = new Admin_Form_Document_Note();
 
         $note = new Opus_Note();
         $note->setMessage('Message1');

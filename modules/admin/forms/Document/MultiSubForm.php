@@ -46,7 +46,7 @@
  * +- ...
  * +- Add Button
  */
-class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubForm {
     
     /**
      * Name von Button zum Hinzufügen eines Unterformulars (z.B. Enrichment).
@@ -498,7 +498,7 @@ class Admin_Form_DocumentMultiSubForm extends Admin_Form_AbstractDocumentSubForm
      * das neue letzte Formular.
      * 
      * @param type $removedPosition
-     * @return \Admin_Form_DocumentMultiSubForm
+     * @return \Admin_Form_Document_MultiSubForm
      */
     public function determineSubFormForAnker($removedPosition) {
         $subforms = $this->getSubForms();

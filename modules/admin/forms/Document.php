@@ -119,7 +119,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         // Bibliographische Beschreibung
         $this->addSubForm(new Admin_Form_Document_Titles(), 'Titles');
         $this->addSubForm(new Admin_Form_Document_Bibliographic(), 'Bibliographic');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentSeries', 'Series',
+        $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_DocumentSeries', 'Series',
             new Form_Validate_MultiSubForm_RepeatedValues('SeriesId', 'admin_document_error_repeated_series'), array(
             'columns' => array(
                 array(),
@@ -127,7 +127,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
                 array('label' => 'Opus_Model_Dependent_Link_DocumentSeries_SortOrder')
             ))), 'Series');
 
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Enrichment', 'Enrichment', null,
+        $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Enrichment', 'Enrichment', null,
                 array('columns' => array(
                     array('label' => 'KeyName'),
                     array('label' => 'Value')
@@ -138,7 +138,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         // Inhaltliche Erschließung
         $subform = new Admin_Form_Document_Section();
         $subform->setLegend('admin_document_section_content');
-        $subform->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Abstract', 'TitleAbstract',
+        $subform->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Abstract', 'TitleAbstract',
             new Form_Validate_MultiSubForm_RepeatedValues('Language',
                 'admin_document_error_MoreThanOneTitleInLanguage')),
             'Abstracts'
@@ -147,15 +147,15 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $this->addSubForm($subform, 'Content');
 
         // Weiteres Allgemeines
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Identifier', 'Identifier',
+        $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Identifier', 'Identifier',
             new Form_Validate_MultiSubForm_RepeatedValues('Value',
                 'admin_document_error_repeated_identifier', 'Type'),
             array('columns' => array(
                 array('label' => 'Opus_Identifier_Type'), array('label' => 'Text')
             ))), 'Identifiers');
         $this->addSubForm(new Admin_Form_Document_Licences(), 'Licences');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentPatent', 'Patent'), 'Patents');
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentNote', 'Note'), 'Notes');
+        $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_DocumentPatent', 'Patent'), 'Patents');
+        $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Note', 'Note'), 'Notes');
 
         $this->addSubForm(new Admin_Form_Document_Actions(), 'Actions');
     }

@@ -36,7 +36,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_Form_Files extends Admin_Form_DocumentMultiSubForm {
+class Admin_Form_Files extends Admin_Form_Document_MultiSubForm {
 
     const ELEMENT_IMPORT = 'Import';
 

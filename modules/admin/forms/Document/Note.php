@@ -35,7 +35,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_Form_DocumentNote extends Admin_Form_AbstractModelSubForm {
+class Admin_Form_Document_Note extends Admin_Form_AbstractModelSubForm {
 
     const ELEMENT_ID = 'Id';
     const ELEMENT_VISIBILITY = 'Visibility';

@@ -190,7 +190,7 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm {
     }
 
     protected function _removeElements() {
-        $this->removeElement(Admin_Form_DocumentMultiSubForm::ELEMENT_REMOVE);
+        $this->removeElement(Admin_Form_Document_MultiSubForm::ELEMENT_REMOVE);
     }
     
 }
