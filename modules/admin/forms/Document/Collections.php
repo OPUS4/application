@@ -40,13 +40,13 @@
  * weiteren Collection bringt.
  * 
  * Für jede CollectionRole wird ein Zend_Form_SubForm angelegt. Diesem wiederum wird für jede zugehörige Collection ein
- * Admin_Form_DocumentCollection Unterformular hinzugefügt. Dadurch entsteht eine Hierarchy für die Anzeige und POST
+ * Admin_Form_Document_Collection Unterformular hinzugefügt. Dadurch entsteht eine Hierarchy für die Anzeige und POST
  * Verarbeitung.
  * 
  * <pre>
- * Admin_Form_DocumentCollections
+ * Admin_Form_Document_Collections
  *   +-Zend_Form_SubForm
- *     +-Admin_Form_DocumentCollection
+ *     +-Admin_Form_Document_Collection
  * </pre>
  * 
  * Wenn eine neue Collection zugewiesen werden soll, muß dem Controller signalisiert werden, das der aktuelle POST in 
@@ -54,7 +54,7 @@
  * 
  * TODO eliminiere redundanten Code fuer CollectionRole SubForm (separate Klasse?) (vergl. mit MultiSubForm Klasse)
  */
-class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm {
     
     /**
      * Name für Button zum Hinzufügen von Collections.
@@ -220,7 +220,7 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
         
         $roleForm = $this->_getRoleForm($roleName);
         
-        $collectionForm = new Admin_Form_DocumentCollection();
+        $collectionForm = new Admin_Form_Document_Collection();
 
         $collectionForm->populateFromModel($collection);
 
@@ -248,7 +248,7 @@ class Admin_Form_DocumentCollections extends Admin_Form_AbstractDocumentSubForm 
     }
     
     public function createCollectionForm($position) {
-        $subform = new Admin_Form_DocumentCollection();
+        $subform = new Admin_Form_Document_Collection();
         
         $multiWrapper = $subform->getDecorator('multiWrapper');
 

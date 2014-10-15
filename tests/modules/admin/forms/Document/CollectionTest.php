@@ -33,12 +33,12 @@
  */
 
 /**
- * Tests fuer Admin_Form_DocumentCollection Unterformular Klasse.
+ * Tests fuer Admin_Form_Document_Collection Unterformular Klasse.
  */
-class DocumentCollectionTest extends ControllerTestCase {
+class Admin_Form_Document_CollectionTest extends ControllerTestCase {
     
     public function createForm() {
-        $form = new Admin_Form_DocumentCollection();
+        $form = new Admin_Form_Document_Collection();
         
         $this->assertEquals(3, count($form->getElements()));
         
@@ -48,7 +48,7 @@ class DocumentCollectionTest extends ControllerTestCase {
     }
     
     public function testPopulateFromModel() {
-        $form = new Admin_Form_DocumentCollection();
+        $form = new Admin_Form_Document_Collection();
         
         $collection = new Opus_Collection(499);
         
@@ -61,7 +61,7 @@ class DocumentCollectionTest extends ControllerTestCase {
     public function testPopulateFromModelWithRootCollectionWithoutName() {
         $this->useEnglish();
         
-        $form = new Admin_Form_DocumentCollection();
+        $form = new Admin_Form_Document_Collection();
         
         $collection = new Opus_Collection(2); // Root-Collection DDC-Klassifikation
         
@@ -74,7 +74,7 @@ class DocumentCollectionTest extends ControllerTestCase {
     }
     
     public function testProcessPostRemove() {
-        $form = new Admin_Form_DocumentCollection();
+        $form = new Admin_Form_Document_Collection();
         
         $post = array('Id' => '499', 'Remove' => 'Remove Collection');
         
@@ -82,7 +82,7 @@ class DocumentCollectionTest extends ControllerTestCase {
     }
     
     public function testProcessPostEdit() {
-        $form = new Admin_Form_DocumentCollection();
+        $form = new Admin_Form_Document_Collection();
         
         $post = array('Id' => '499', 'Edit' => 'Edit Collection');
         
@@ -90,13 +90,13 @@ class DocumentCollectionTest extends ControllerTestCase {
     }
     
     public function testProcessPostEmpty() {
-        $form = new Admin_Form_DocumentCollection();
+        $form = new Admin_Form_Document_Collection();
 
         $this->assertNull($form->processPost(array(), null));
     }
     
     public function testGetModel() {
-        $form = new Admin_Form_DocumentCollection();
+        $form = new Admin_Form_Document_Collection();
         
         $form->getElement('Id')->setValue(499);
         
@@ -106,7 +106,7 @@ class DocumentCollectionTest extends ControllerTestCase {
     }
     
     public function testPopulateFromPost() {
-        $form = new Admin_Form_DocumentCollection();
+        $form = new Admin_Form_Document_Collection();
         
         $post = array('Id' => '499');
         

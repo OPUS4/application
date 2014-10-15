@@ -36,7 +36,7 @@
  * Unterformular fuer eine zugewiesene Collection.
  * 
  */
-class Admin_Form_DocumentCollection extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm {
     
     /**
      * Name von Formularelement fuer Collection-ID.

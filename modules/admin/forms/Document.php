@@ -133,7 +133,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
                     array('label' => 'Value')
                 ))), 'Enrichments');
 
-        $this->addSubForm(new Admin_Form_DocumentCollections(), 'Collections');
+        $this->addSubForm(new Admin_Form_Document_Collections(), 'Collections');
 
         // Inhaltliche Erschließung
         $subform = new Admin_Form_DocumentSection();

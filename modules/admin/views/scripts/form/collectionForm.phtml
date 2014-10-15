@@ -39,20 +39,20 @@
 
 <?PHP
     // Vollständige ID für Formular ermitteln
-    $formId = $this->element->getElement(Admin_Form_DocumentCollection::ELEMENT_ID)->getId();
+    $formId = $this->element->getElement(Admin_Form_Document_Collection::ELEMENT_ID)->getId();
     $formId = substr($formId, 0, strrpos($formId, '-') + 1);
 ?>
 
 <?PHP if ($this->element->isViewModeEnabled()) : ?>
 <div class="data-wrapper multiple-data">
     <div id="<?= $formId . 'Name' ?>"><?= htmlspecialchars($this->element->getCollectionName()) ?></div>    
-    <?= $this->element->getElement(Admin_Form_DocumentCollection::ELEMENT_ID) ?>
+    <?= $this->element->getElement(Admin_Form_Document_Collection::ELEMENT_ID) ?>
 </div>
 <?PHP else : ?>
 <div class="data-wrapper multiple-data">
-    <?= $this->element->getElement(Admin_Form_DocumentCollection::ELEMENT_EDIT) ?>    
-    <?= $this->element->getElement(Admin_Form_DocumentCollection::ELEMENT_ID) ?>
+    <?= $this->element->getElement(Admin_Form_Document_Collection::ELEMENT_EDIT) ?>
+    <?= $this->element->getElement(Admin_Form_Document_Collection::ELEMENT_ID) ?>
 </div>
-<?= $this->element->getElement(Admin_Form_DocumentCollection::ELEMENT_REMOVE) ?>
+<?= $this->element->getElement(Admin_Form_Document_Collection::ELEMENT_REMOVE) ?>
 <?PHP endif; ?>
 

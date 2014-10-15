@@ -32,10 +32,10 @@
  * @version     $Id$
  */
 
-class Admin_Form_DocumentCollectionsTest extends ControllerTestCase {
+class Admin_Form_Document_CollectionsTest extends ControllerTestCase {
     
     public function testConstructForm() {
-        $form = new Admin_Form_DocumentCollections();
+        $form = new Admin_Form_Document_Collections();
         
         $this->assertEquals(1, count($form->getElements()));
         $this->assertNotNull($form->getElement('Add'));
