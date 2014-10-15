@@ -147,7 +147,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $this->addSubForm($subform, 'Content');
 
         // Weiteres Allgemeines
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier',
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Identifier', 'Identifier',
             new Form_Validate_MultiSubForm_RepeatedValues('Value',
                 'admin_document_error_repeated_identifier', 'Type'),
             array('columns' => array(

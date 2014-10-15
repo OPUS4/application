@@ -34,10 +34,10 @@
 /**
  * Unit Test fuer Identifier Formular Klasse.
  */
-class Admin_Form_DocumentIdentifierTest extends ControllerTestCase {
+class Admin_Form_Document_IdentifierTest extends ControllerTestCase {
     
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentIdentifier();
+        $form = new Admin_Form_Document_Identifier();
 
         $this->assertEquals(3, count($form->getElements()));
 
@@ -55,7 +55,7 @@ class Admin_Form_DocumentIdentifierTest extends ControllerTestCase {
      * wird.
      */
     public function testPopulateFromModel() {
-        $form = new Admin_Form_DocumentIdentifier();
+        $form = new Admin_Form_Document_Identifier();
         
         $document = new Opus_Document(146);
         $identifiers = $document->getIdentifier();
@@ -69,7 +69,7 @@ class Admin_Form_DocumentIdentifierTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $form = new Admin_Form_DocumentIdentifier();
+        $form = new Admin_Form_Document_Identifier();
         
         $form->getElement('Type')->setValue('url');
         $form->getElement('Value')->setValue('test-urn-1');
@@ -86,7 +86,7 @@ class Admin_Form_DocumentIdentifierTest extends ControllerTestCase {
      * Prueft, dass bei nicht gesetztem Id-Element ein neuer Identifier zurueck geliefert wird.
      */
     public function testGetModel() {
-        $form = new Admin_Form_DocumentIdentifier();
+        $form = new Admin_Form_Document_Identifier();
         
         $form->getElement('Type')->setValue('url');
         $form->getElement('Value')->setValue('test-urn-1');
@@ -103,7 +103,7 @@ class Admin_Form_DocumentIdentifierTest extends ControllerTestCase {
      * wird.
      */
     public function testGetModelExistingIdentifier() {
-        $form = new Admin_Form_DocumentIdentifier();
+        $form = new Admin_Form_Document_Identifier();
         
         $document = new Opus_Document(146);
         $identifiers = $document->getIdentifier();
@@ -121,7 +121,7 @@ class Admin_Form_DocumentIdentifierTest extends ControllerTestCase {
     }
 
     public function testGetModelBadId() {
-        $form = new Admin_Form_DocumentIdentifier();
+        $form = new Admin_Form_Document_Identifier();
 
         $form->getElement('Id')->setValue('bad');
         $form->getElement('Type')->setValue('url');
@@ -143,7 +143,7 @@ class Admin_Form_DocumentIdentifierTest extends ControllerTestCase {
     }
 
     public function testGetModelUnknownId() {
-        $form = new Admin_Form_DocumentIdentifier();
+        $form = new Admin_Form_Document_Identifier();
 
         $form->getElement('Id')->setValue('7777');
         $form->getElement('Type')->setValue('url');

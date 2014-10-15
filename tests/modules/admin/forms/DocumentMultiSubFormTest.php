@@ -37,7 +37,7 @@
 class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     
     public function testConstructForm() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier');
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Identifier', 'Identifier');
         
         $this->assertNotNull($form->getElement('Add'));
         $this->assertNotNull($form->getLegend());
@@ -327,20 +327,20 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
     
     public function testIsEmptyTrue() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier');
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Identifier', 'Identifier');
         
         $this->assertTrue($form->isEmpty());
     }
     
     public function testIsEmptyFalse() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier');
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Identifier', 'Identifier');
         $form->appendSubForm();
         
         $this->assertFalse($form->isEmpty());
     }
     
     public function testGetSubFormBaseName() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier');
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Identifier', 'Identifier');
         $this->assertEquals('Identifier', $form->getSubFormBaseName());
     }
 
@@ -556,7 +556,7 @@ class Admin_Form_DocumentMultiSubFormTest extends ControllerTestCase {
     }
 
     public function testSubformsAppearInOrderOfObjects() {
-        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentIdentifier', 'Identifier');
+        $form = new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Identifier', 'Identifier');
 
         $doc = new Opus_Document(146);
 

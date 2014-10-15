@@ -35,7 +35,7 @@
 /**
  * Formular fuer einen Identifier eines Dokuments.
  */
-class Admin_Form_DocumentIdentifier extends Admin_Form_AbstractModelSubForm {
+class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm {
     
     /**
      * Name fuer Formularelement fuer Identifier-Wert.
