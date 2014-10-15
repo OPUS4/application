@@ -35,7 +35,7 @@
 /**
  * Unterformular fuer weitere Metadaten eines Dokuments.
  */
-class Admin_Form_DocumentBibliographic extends Admin_Form_DocumentSection {
+class Admin_Form_Document_Bibliographic extends Admin_Form_DocumentSection {
 
     const ELEMENT_CONTRIBUTING_CORPORATION = 'ContributingCorporation';
     const ELEMENT_CREATING_CORPORATION = 'CreatingCorporation';

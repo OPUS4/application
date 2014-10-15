@@ -34,10 +34,10 @@
 /**
  * Unit Tests fuer Unterformular fuer bibliographische Information im Metadaten-Formular.
  */
-class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
+class Admin_Form_Document_BibliographicTest extends ControllerTestCase {
     
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentBibliographic();
+        $form = new Admin_Form_Document_Bibliographic();
 
         $elements = array(
             'ContributingCorporation',
@@ -70,7 +70,7 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
     }
     
     public function testPopulateFromModel() {
-        $form = new Admin_Form_DocumentBibliographic();
+        $form = new Admin_Form_Document_Bibliographic();
         
         $doc = new Opus_Document(146);
         
@@ -99,7 +99,7 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
     public function testUpdateModel() {
         $this->useEnglish();
         
-        $form = new Admin_Form_DocumentBibliographic();
+        $form = new Admin_Form_Document_Bibliographic();
         
         $form->getElement('ContributingCorporation')->setValue('contribcorp');
         $form->getElement('CreatingCorporation')->setValue('creatingcorp');
@@ -147,7 +147,7 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
     public function testUpdateModelForEmptyFields() {
         $this->useEnglish();
         
-        $form = new Admin_Form_DocumentBibliographic();
+        $form = new Admin_Form_Document_Bibliographic();
         
         $form->getElement('ContributingCorporation')->setValue(' ');
         $form->getElement('CreatingCorporation')->setValue(' ');
@@ -180,7 +180,7 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
     }
     
     public function testUpdateModelForValue0() {
-        $form = new Admin_Form_DocumentBibliographic();
+        $form = new Admin_Form_Document_Bibliographic();
         
         $form->getElement('ContributingCorporation')->setValue('0');
         $form->getElement('CreatingCorporation')->setValue('0');
@@ -211,7 +211,7 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
     public function testValidation() {
         $this->useEnglish();
         
-        $form = new Admin_Form_DocumentBibliographic();
+        $form = new Admin_Form_Document_Bibliographic();
         
         $post = array(
             'ThesisDateAccepted' => '2010/02/31', // muss korrektes Datum sein
@@ -238,7 +238,7 @@ class Admin_Form_DocumentBibliographicTest extends ControllerTestCase {
     }
 
     public function testRegression3046AlphanumericPageFirstLastAndNumberValues() {
-        $form = new Admin_Form_DocumentBibliographic();
+        $form = new Admin_Form_Document_Bibliographic();
 
         $post = array(
             'PageFirst' => 'XI',
