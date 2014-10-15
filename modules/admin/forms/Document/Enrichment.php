@@ -35,7 +35,7 @@
 /**
  * Unterformular fuer Enrichments im Metadaten-Formular.
  */
-class Admin_Form_DocumentEnrichment extends Admin_Form_AbstractModelSubForm {
+class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm {
     
     /**
      * Name von Formularelement für Enrichment-ID.

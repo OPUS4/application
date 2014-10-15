@@ -34,10 +34,10 @@
 /**
  * Unit Test fuer Unterformular fuer ein Enrichment im Metadaten-Formular.
  */
-class Admin_Form_DocumentEnrichmentTest extends ControllerTestCase {
+class Admin_Form_Document_EnrichmentTest extends ControllerTestCase {
     
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentEnrichment();
+        $form = new Admin_Form_Document_Enrichment();
 
         $this->assertEquals(3, count($form->getElements()));
         $this->assertNotNull($form->getElement('Id'));
@@ -48,7 +48,7 @@ class Admin_Form_DocumentEnrichmentTest extends ControllerTestCase {
     }
     
     public function testPopulateFromModel() {
-        $form = new Admin_Form_DocumentEnrichment();
+        $form = new Admin_Form_Document_Enrichment();
         
         $document = new Opus_Document(146);
         $enrichments = $document->getEnrichment();
@@ -62,7 +62,7 @@ class Admin_Form_DocumentEnrichmentTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $form = new Admin_Form_DocumentEnrichment();
+        $form = new Admin_Form_Document_Enrichment();
         
         $enrichment = new Opus_Enrichment();
         $keyNames = $enrichment->getField('KeyName')->getDefault();
@@ -78,7 +78,7 @@ class Admin_Form_DocumentEnrichmentTest extends ControllerTestCase {
     }
     
     public function testGetModel() {
-        $form = new Admin_Form_DocumentEnrichment();
+        $form = new Admin_Form_Document_Enrichment();
         
         $document = new Opus_Document(146);
         $enrichments = $document->getEnrichment();
@@ -99,7 +99,7 @@ class Admin_Form_DocumentEnrichmentTest extends ControllerTestCase {
     }
     
     public function testGetNewModel() {
-        $form = new Admin_Form_DocumentEnrichment();
+        $form = new Admin_Form_Document_Enrichment();
 
         $enrichment = new Opus_Enrichment();
         $keyNames = $enrichment->getField('KeyName')->getDefault();
@@ -116,7 +116,7 @@ class Admin_Form_DocumentEnrichmentTest extends ControllerTestCase {
     }
 
     public function testGetModelUnknownId() {
-        $form = new Admin_Form_DocumentEnrichment();
+        $form = new Admin_Form_Document_Enrichment();
 
         $enrichment = new Opus_Enrichment();
         $keyNames = $enrichment->getField('KeyName')->getDefault();
@@ -142,7 +142,7 @@ class Admin_Form_DocumentEnrichmentTest extends ControllerTestCase {
     }
 
     public function testGetModelBadId() {
-        $form = new Admin_Form_DocumentEnrichment();
+        $form = new Admin_Form_Document_Enrichment();
 
         $enrichment = new Opus_Enrichment();
         $keyNames = $enrichment->getField('KeyName')->getDefault();
@@ -162,7 +162,7 @@ class Admin_Form_DocumentEnrichmentTest extends ControllerTestCase {
     /**
      */
     public function testValidation() {
-        $form = new Admin_Form_DocumentEnrichment();
+        $form = new Admin_Form_Document_Enrichment();
         
         $post = array(
             'KeyName' => ' ',

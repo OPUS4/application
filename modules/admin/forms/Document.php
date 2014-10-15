@@ -127,7 +127,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
                 array('label' => 'Opus_Model_Dependent_Link_DocumentSeries_SortOrder')
             ))), 'Series');
 
-        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_DocumentEnrichment', 'Enrichment', null,
+        $this->addSubForm(new Admin_Form_DocumentMultiSubForm('Admin_Form_Document_Enrichment', 'Enrichment', null,
                 array('columns' => array(
                     array('label' => 'KeyName'),
                     array('label' => 'Value')
