@@ -43,7 +43,7 @@
  * - Application
  * - ID (hidden)
  */
-class Admin_Form_DocumentPatent extends Admin_Form_AbstractModelSubForm {
+class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm {
     
     /**
      * Name fuer Formularelement fuer ID von Opus_Patent.

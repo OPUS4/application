@@ -32,12 +32,12 @@
  */
 
 /**
- * Unit Tests fuer Admin_Form_DocumentPatent.
+ * Unit Tests fuer Admin_Form_Document_Patent.
  */
-class Admin_Form_DocumentPatentTest extends ControllerTestCase {
+class Admin_Form_Document_PatentTest extends ControllerTestCase {
     
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentPatent();
+        $form = new Admin_Form_Document_Patent();
         
         $this->assertEquals(6, count($form->getElements()));
         
@@ -53,7 +53,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
     public function testPopulateFromModel() {
         $this->useEnglish();
         
-        $form = new Admin_Form_DocumentPatent();
+        $form = new Admin_Form_Document_Patent();
 
         $document = new Opus_Document(146);
         $patents = $document->getPatent();
@@ -75,7 +75,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
     public function testUpdateModel() {
         $this->useEnglish();
         
-        $form = new Admin_Form_DocumentPatent();
+        $form = new Admin_Form_Document_Patent();
         
         $form->getElement('Number')->setValue('323');
         $form->getElement('Countries')->setValue('Germany');
@@ -99,7 +99,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
     public function testGetModelNew() {
         $this->useEnglish();
         
-        $form = new Admin_Form_DocumentPatent();
+        $form = new Admin_Form_Document_Patent();
         
         $form->getElement('Number')->setValue('323');
         $form->getElement('Countries')->setValue('Germany');
@@ -126,7 +126,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
         $patents = $document->getPatent();
         $patentId = $patents[0]->getId();
 
-        $form = new Admin_Form_DocumentPatent();
+        $form = new Admin_Form_Document_Patent();
         
         $form->getElement('Id')->setValue($patentId);
         $form->getElement('Number')->setValue('323');
@@ -155,10 +155,10 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
     public function testGetModelInvalidId() {
         $this->useEnglish();
 
-        $form = new Admin_Form_DocumentPatent();
+        $form = new Admin_Form_Document_Patent();
         
         $form->getElement('Id')->setValue('notvalid');
-        $form = new Admin_Form_DocumentPatent();
+        $form = new Admin_Form_Document_Patent();
         
         $form->getElement('Number')->setValue('323');
         $form->getElement('Countries')->setValue('Germany');
@@ -182,7 +182,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
     public function testValidation() {
         $this->useEnglish();
         
-        $form = new Admin_Form_DocumentPatent();
+        $form = new Admin_Form_Document_Patent();
 
         $post = array(
             'Number' => '', // ist Pflichtfeld
@@ -218,7 +218,7 @@ class Admin_Form_DocumentPatentTest extends ControllerTestCase {
     public function testRegressionOpusvier2824() {
         $this->useEnglish();
         
-        $form = new Admin_Form_DocumentPatent();
+        $form = new Admin_Form_Document_Patent();
                 
         $form->getElement('Number')->setValue('323');
         $form->getElement('YearApplied')->setValue(''); // Leeres Feld

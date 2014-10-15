@@ -154,7 +154,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
                 array('label' => 'Opus_Identifier_Type'), array('label' => 'Text')
             ))), 'Identifiers');
         $this->addSubForm(new Admin_Form_Document_Licences(), 'Licences');
-        $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_DocumentPatent', 'Patent'), 'Patents');
+        $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Patent', 'Patent'), 'Patents');
         $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Note', 'Note'), 'Notes');
 
         $this->addSubForm(new Admin_Form_Document_Actions(), 'Actions');
