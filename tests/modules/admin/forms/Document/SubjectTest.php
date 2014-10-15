@@ -34,10 +34,10 @@
 /**
  * Unit Tests fuer Unterformular fuer ein Subject im Metadaten-Formular.
  */
-class Admin_Form_DocumentSubjectTest extends ControllerTestCase {
+class Admin_Form_Document_SubjectTest extends ControllerTestCase {
 
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentSubject('psyndex');
+        $form = new Admin_Form_Document_Subject('psyndex');
 
         $this->assertEquals(4, count($form->getElements()));
 
@@ -51,7 +51,7 @@ class Admin_Form_DocumentSubjectTest extends ControllerTestCase {
     }
 
     public function testCreateFormWithLanguage() {
-        $form = new Admin_Form_DocumentSubject('swd', 'deu');
+        $form = new Admin_Form_Document_Subject('swd', 'deu');
 
         $this->assertEquals(4, count($form->getElements()));
 
@@ -69,7 +69,7 @@ class Admin_Form_DocumentSubjectTest extends ControllerTestCase {
     }
 
     public function testPopulateFromModel() {
-        $form = new Admin_Form_DocumentSubject('swd', 'deu');
+        $form = new Admin_Form_Document_Subject('swd', 'deu');
         
         $document = new Opus_Document(146);
         $subjects = $document->getSubject();
@@ -86,7 +86,7 @@ class Admin_Form_DocumentSubjectTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $form = new Admin_Form_DocumentSubject('psyndex');
+        $form = new Admin_Form_Document_Subject('psyndex');
         
         $form->getElement('Language')->setValue('eng');
         $form->getElement('Value')->setValue('Test Schlagwort');
@@ -103,7 +103,7 @@ class Admin_Form_DocumentSubjectTest extends ControllerTestCase {
     }
     
     public function testGetModel() {
-        $form = new Admin_Form_DocumentSubject('uncontrolled');
+        $form = new Admin_Form_Document_Subject('uncontrolled');
         
         $document = new Opus_Document(146);
         $subjects = $document->getSubject();
@@ -126,7 +126,7 @@ class Admin_Form_DocumentSubjectTest extends ControllerTestCase {
     }
     
     public function testGetNewModel() {
-        $form = new Admin_Form_DocumentSubject('swd', 'deu');
+        $form = new Admin_Form_Document_Subject('swd', 'deu');
         
         $form->getElement('Value')->setValue('Test Schlagwort');
         $form->getElement('ExternalKey')->setValue('Test Key');
@@ -141,7 +141,7 @@ class Admin_Form_DocumentSubjectTest extends ControllerTestCase {
     }
 
     public function testGetModelUnknownId() {
-        $form = new Admin_Form_DocumentSubject('uncontrolled');
+        $form = new Admin_Form_Document_Subject('uncontrolled');
 
         $form->getElement('Id')->setValue('7777');
         $form->getElement('Language')->setValue('rus');
@@ -166,7 +166,7 @@ class Admin_Form_DocumentSubjectTest extends ControllerTestCase {
     }
 
     public function testGetModelBadId() {
-        $form = new Admin_Form_DocumentSubject('uncontrolled');
+        $form = new Admin_Form_Document_Subject('uncontrolled');
 
         $form->getElement('Id')->setValue('bad');
         $form->getElement('Language')->setValue('rus');
@@ -183,7 +183,7 @@ class Admin_Form_DocumentSubjectTest extends ControllerTestCase {
     }
 
     public function testValidation() {
-        $form = new Admin_Form_DocumentSubject('swd', 'deu');
+        $form = new Admin_Form_Document_Subject('swd', 'deu');
 
         $post = array(
             'Value' => ' ' // darf nicht leer sein
@@ -195,7 +195,7 @@ class Admin_Form_DocumentSubjectTest extends ControllerTestCase {
     }
 
     public function testPrepareRenderingAsView() {
-        $form = new Admin_Form_DocumentSubject('swd', 'deu');
+        $form = new Admin_Form_Document_Subject('swd', 'deu');
 
         $form->prepareRenderingAsView();
 

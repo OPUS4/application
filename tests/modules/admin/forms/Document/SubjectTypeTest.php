@@ -34,10 +34,10 @@
 /**
  * Unit Tests für Unterformular, daß Subjects eines bestimmten Typs anzeigt.
  */
-class Admin_Form_DocumentSubjectTypeTest extends ControllerTestCase {
+class Admin_Form_Document_SubjectTypeTest extends ControllerTestCase {
 
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentSubjectType('swd');
+        $form = new Admin_Form_Document_SubjectType('swd');
 
         $this->assertEquals(0, count($form->getSubForms()));
         $this->assertEquals(1, count($form->getElements()));
@@ -47,27 +47,27 @@ class Admin_Form_DocumentSubjectTypeTest extends ControllerTestCase {
     }
 
     public function testCreateNewSubFormInstance() {
-        $form = new Admin_Form_DocumentSubjectType('psyndex');
+        $form = new Admin_Form_Document_SubjectType('psyndex');
 
         $subform = $form->createNewSubFormInstance();
 
-        $this->assertInstanceOf('Admin_Form_DocumentSubject', $subform);
+        $this->assertInstanceOf('Admin_Form_Document_Subject', $subform);
         $this->assertEquals('psyndex', $subform->getSubjectType());
         $this->assertNull($subform->getLanguage());
     }
 
     public function testCreateNewSubFormInstanceSwd() {
-        $form = new Admin_Form_DocumentSubjectType('swd');
+        $form = new Admin_Form_Document_SubjectType('swd');
 
         $subform = $form->createNewSubFormInstance();
 
-        $this->assertInstanceOf('Admin_Form_DocumentSubject', $subform);
+        $this->assertInstanceOf('Admin_Form_Document_Subject', $subform);
         $this->assertEquals('swd', $subform->getSubjectType());
         $this->assertEquals('deu', $subform->getLanguage());
     }
 
     public function testGetFieldValues() {
-        $form = new Admin_Form_DocumentSubjectType('swd');
+        $form = new Admin_Form_Document_SubjectType('swd');
 
         $document = new Opus_Document(146);
 
@@ -81,7 +81,7 @@ class Admin_Form_DocumentSubjectTypeTest extends ControllerTestCase {
      * Dieser Test soll sicherstellen, das updateModel überschrieben wurde und das Dokument in Ruhe lässt.
      */
     public function testUpdateModel() {
-        $form = new Admin_Form_DocumentSubjectType('swd'); // Formular ohne Schlagwörter
+        $form = new Admin_Form_Document_SubjectType('swd'); // Formular ohne Schlagwörter
 
         $document = new Opus_Document(200);
 

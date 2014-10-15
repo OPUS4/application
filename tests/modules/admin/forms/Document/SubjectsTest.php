@@ -31,10 +31,10 @@
  * @version     $Id$
  */
 
-class Admin_Form_DocumentSubjectsTest extends ControllerTestCase {
+class Admin_Form_Document_SubjectsTest extends ControllerTestCase {
     
     public function testConstructForm() {
-        $form = new Admin_Form_DocumentSubjects();
+        $form = new Admin_Form_Document_Subjects();
         
         $this->assertEquals(3, count($form->getSubForms()));
         $this->assertNotNull($form->getSubForm('Swd'));
@@ -46,7 +46,7 @@ class Admin_Form_DocumentSubjectsTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $form = new Admin_Form_DocumentSubjects();
+        $form = new Admin_Form_Document_Subjects();
         
         $document = $this->createTestDocument();
         

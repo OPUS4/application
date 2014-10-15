@@ -38,7 +38,7 @@
  * Diese Klasse überschreibt ein paar Funktion von Admin_Form_DocumentMultiSubForm um Unterformulare vom richtigen Typ
  * zu verwenden und die richtigen Werte aus dem Modell zu holen.
  */
-class Admin_Form_DocumentSubjectType extends Admin_Form_DocumentMultiSubForm {
+class Admin_Form_Document_SubjectType extends Admin_Form_DocumentMultiSubForm {
 
     /**
      * Der Schlagworttyp für den dieses Unterformular verwendet wird.
@@ -104,14 +104,14 @@ class Admin_Form_DocumentSubjectType extends Admin_Form_DocumentMultiSubForm {
     
     /**
      * Erzeugt neues Unterformular Instanz fuer den entsprechenden Schlagworttyp.
-     * @return \Admin_Form_DocumentSubject
+     * @return \Admin_Form_Document_Subject
      */
     public function createNewSubFormInstance() {
         if ($this->__subjectType == 'swd') {
-            return new Admin_Form_DocumentSubject('swd', 'deu');
+            return new Admin_Form_Document_Subject('swd', 'deu');
         } 
         else {
-            return new Admin_Form_DocumentSubject($this->__subjectType);
+            return new Admin_Form_Document_Subject($this->__subjectType);
         }
     }
     

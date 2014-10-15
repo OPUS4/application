@@ -143,7 +143,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
                 'admin_document_error_MoreThanOneTitleInLanguage')),
             'Abstracts'
         );
-        $subform->addSubForm(new Admin_Form_DocumentSubjects(), 'Subjects');
+        $subform->addSubForm(new Admin_Form_Document_Subjects(), 'Subjects');
         $this->addSubForm($subform, 'Content');
 
         // Weiteres Allgemeines
