@@ -34,10 +34,10 @@
 /**
  * Unit Tests fuer Unterformular fuer Verknuepfung mit Schriftenreihe in Metadaten-Formular.
  */
-class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
+class Admin_Form_Document_SeriesTest extends ControllerTestCase {
     
     public function testCreateForm() {
-        $form = new Admin_Form_DocumentSeries();
+        $form = new Admin_Form_Document_Series();
 
         $this->assertEquals(4, count($form->getElements()));
         $this->assertNotNull($form->getElement('Id'));
@@ -47,7 +47,7 @@ class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
     }
     
     public function testPopulateFromModel() {
-        $form = new Admin_Form_DocumentSeries();
+        $form = new Admin_Form_Document_Series();
         
         $doc = new Opus_Document(146);
         
@@ -63,13 +63,13 @@ class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
     }
     
     public function testUpdateModel() {
-        $form = new Admin_Form_DocumentSeries();
+        $form = new Admin_Form_Document_Series();
         
         $form->getElement('SeriesId')->setValue(3);
         $form->getElement('Number')->setValue('III');
         $form->getElement('SortOrder')->setValue(2);
         
-        $model = new Opus_Model_Dependent_Link_DocumentSeries();
+        $model = new Opus_Model_Dependent_Link_Document_Series();
         
         $form->updateModel($model);
         
@@ -79,7 +79,7 @@ class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
     }
     
     public function testGetModel() {
-        $form = new Admin_Form_DocumentSeries();
+        $form = new Admin_Form_Document_Series();
         
         $doc = new Opus_Document(146);
         $series = $doc->getSeries();
@@ -99,7 +99,7 @@ class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
     }
     
     public function testGetNewModel() {
-        $form = new Admin_Form_DocumentSeries();
+        $form = new Admin_Form_Document_Series();
         
         $form->getElement('SeriesId')->setValue(3);
         $form->getElement('Number')->setValue('VI');
@@ -114,7 +114,7 @@ class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
     }
 
     public function testGetModelWithoutSortOrder() {
-        $form = new Admin_Form_DocumentSeries();
+        $form = new Admin_Form_Document_Series();
 
         $form->getElement('SeriesId')->setValue(3);
         $form->getElement('Number')->setValue('VI');
@@ -128,7 +128,7 @@ class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
     }
     
     public function testValidationRequired() {
-        $form = new Admin_Form_DocumentSeries();
+        $form = new Admin_Form_Document_Series();
 
         $post = array(
             'Number' => ' ',
@@ -142,7 +142,7 @@ class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
     }
 
     public function testValidationSortOrder() {
-        $form = new Admin_Form_DocumentSeries();
+        $form = new Admin_Form_Document_Series();
 
         $post = array(
             'SortOrder' => '1st'
@@ -164,7 +164,7 @@ class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
     }
 
     public function testValidationSeriesId() {
-        $form = new Admin_Form_DocumentSeries();
+        $form = new Admin_Form_Document_Series();
 
         $post = array(
             'SeriesId' => 'a',
@@ -176,7 +176,7 @@ class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
     }
 
     public function testValidationAlreadyUsedNumber() {
-        $form = new Admin_Form_DocumentSeries();
+        $form = new Admin_Form_Document_Series();
 
         $post = array(
             'Id' => '250',
@@ -189,7 +189,7 @@ class Admin_Form_DocumentSeriesTest extends ControllerTestCase {
     }
 
     public function testValidationNumberCurrentDocument() {
-        $form = new Admin_Form_DocumentSeries();
+        $form = new Admin_Form_Document_Series();
 
         $post = array(
             'Id' => '146',

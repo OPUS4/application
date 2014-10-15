@@ -64,8 +64,8 @@ class Form_Validate_SeriesNumberAvailable extends Zend_Validate_Abstract {
         $value = (string) $value;
         $this->_setValue($value);
 
-        if (array_key_exists(Admin_Form_DocumentSeries::ELEMENT_SERIES_ID, $context)) {
-            $seriesId = $context[Admin_Form_DocumentSeries::ELEMENT_SERIES_ID];
+        if (array_key_exists(Admin_Form_Document_Series::ELEMENT_SERIES_ID, $context)) {
+            $seriesId = $context[Admin_Form_Document_Series::ELEMENT_SERIES_ID];
         }
         else {
             $seriesId = null;
@@ -85,8 +85,8 @@ class Form_Validate_SeriesNumberAvailable extends Zend_Validate_Abstract {
         }
 
         if (!$series->isNumberAvailable($value)) {
-            if (array_key_exists(Admin_Form_DocumentSeries::ELEMENT_DOC_ID, $context)) {
-                $currentDocId = $context[Admin_Form_DocumentSeries::ELEMENT_DOC_ID];
+            if (array_key_exists(Admin_Form_Document_Series::ELEMENT_DOC_ID, $context)) {
+                $currentDocId = $context[Admin_Form_Document_Series::ELEMENT_DOC_ID];
                 $otherDocId = $series->getDocumentIdForNumber($value);
 
                 if ($currentDocId == $otherDocId) {

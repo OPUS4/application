@@ -37,7 +37,7 @@
  * 
  * TODO gibt es gute Lösung die Doc-ID nicht noch einmal im Unterformular zu haben (als Teil der ID)
  */
-class Admin_Form_DocumentSeries extends Admin_Form_AbstractModelSubForm {
+class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm {
     
     /**
      * Name von Formelement für Dokument-ID (Teil des Schlüssels für Link DocumentSeries).

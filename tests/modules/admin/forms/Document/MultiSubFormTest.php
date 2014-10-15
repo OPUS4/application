@@ -351,7 +351,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
             array('label' => 'SortOrder')
         );
 
-        $form = new Admin_Form_Document_MultiSubForm('Admin_Form_DocumentSeries', 'Series', null, array(
+        $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Series', 'Series', null, array(
             'columns' => $columns
         ));
 
@@ -377,7 +377,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
             array('label' => 'SortOrder')
         );
 
-        $form = new Admin_Form_Document_MultiSubForm('Admin_Form_DocumentSeries', 'Series', null, array(
+        $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Series', 'Series', null, array(
             'columns' => $columns
         ));
 
@@ -408,7 +408,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
     }
 
     public function testAddRemoveButtonForTableRendering() {
-        $form = new Admin_Form_Document_MultiSubForm('Admin_Form_DocumentSeries', 'Series', null, array(
+        $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Series', 'Series', null, array(
             'columns' => array(array())
         ));
 
@@ -428,7 +428,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
     }
 
     public function testIsRenderAsTableEnabledTrue() {
-        $form = new Admin_Form_Document_MultiSubForm('Admin_Form_DocumentSeries', 'Series', null, array(
+        $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Series', 'Series', null, array(
             'columns' => array(array())
         ));
 
@@ -436,7 +436,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
     }
 
     public function testIsRenderAsTableEnabledFalse() {
-        $form = new Admin_Form_Document_MultiSubForm('Admin_Form_DocumentSeries', 'Series');
+        $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Series', 'Series');
 
         $this->assertFalse($form->isRenderAsTableEnabled());
     }
@@ -532,7 +532,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
     }
 
     public function testCssClassForTableCellsSet() {
-        $form = new Admin_Form_Document_MultiSubForm('Admin_Form_DocumentSeries', 'Series', null, array(
+        $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Series', 'Series', null, array(
             'columns' => array(array())
         ));
 
