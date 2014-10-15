@@ -34,8 +34,10 @@
 
 /**
  * Unterformular fuer die Aktions im Metadaten-Formular.
+ *
+ * TODO Unit Tests
  */
-class Admin_Form_DocumentActions extends Admin_Form_AbstractDocumentSubForm {
+class Admin_Form_Document_Actions extends Admin_Form_AbstractDocumentSubForm {
 
     const ELEMENT_ID = 'Id';
     
