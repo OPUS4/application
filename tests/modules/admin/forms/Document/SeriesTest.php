@@ -69,7 +69,7 @@ class Admin_Form_Document_SeriesTest extends ControllerTestCase {
         $form->getElement('Number')->setValue('III');
         $form->getElement('SortOrder')->setValue(2);
         
-        $model = new Opus_Model_Dependent_Link_Document_Series();
+        $model = new Opus_Model_Dependent_Link_DocumentSeries();
         
         $form->updateModel($model);
         
