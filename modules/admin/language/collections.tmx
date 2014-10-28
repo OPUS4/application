@@ -130,6 +130,15 @@
 			</tuv>
         </tu>
 
+        <tu tuid="admin_collections_entry">
+			<tuv xml:lang="en">
+				<seg>Collection Entry</seg>
+			</tuv>
+			<tuv xml:lang="de">
+				<seg>Sammlungseintrag</seg>
+			</tuv>
+        </tu>
+
         <tu tuid="admin_collections_collection_edit">
 			<tuv xml:lang="en">
 				<seg>Collection Entry Properties</seg>
