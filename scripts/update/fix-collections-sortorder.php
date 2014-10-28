@@ -1,7 +1,8 @@
 #!/usr/bin/env php5
 
-<?php
-/** This file is part of OPUS. The software OPUS has been originally developed
+<?PHP
+/**
+ * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
  * of Science, Research and the Arts of the State of Baden-Wuerttemberg.
@@ -27,36 +28,36 @@
  *
  * @category    Application
  * @author      Edouard Simon <edouard.simon@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
- * */
-/**
- * This script sorts the nested set structure of collections according to the
- * field 'sort_order', which is removed as of Opus Version 4.4.3.
- * It must be applied before to updates from versions prior to 4.4.3 to 4.4.3 or higher.
- * Otherwise custom sort orders will be lost.
- * 
+ *
  */
+
+/*
+ * This script sorts the nested set structure of collections according to the
+ * field 'sort_order', which is removed as of Opus Version 4.4.3. It must be
+ * applied before updating the database from versions prior to 4.4.3 to 4.4.3
+ * or higher. Otherwise custom sort orders will be lost.
+ */
+
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
-
 $collectionsTable = new Opus_Db_Collections();
-//
-//// check if sort order is set in any collection
+
+// check if sort order is set in any collection
 $selectSortedCollections = $collectionsTable->select()->where('sort_order > 0');
-//
+
 $sortedCollections = $collectionsTable->fetchAll($selectSortedCollections);
-//
-//// nothing to do here
+
+// nothing to do here
 if ($sortedCollections->count() == 0) {
     _log("No sort order found in any collection. Nothing to do here..");
-        exit;
-
+    exit;
 }
 
-
-//// sort all collections
+// sort all collections
 $selectRoots = $collectionsTable->select()->where('parent_id IS NULL');
 $rootCollections = $collectionsTable->fetchAll($selectRoots)->toArray();
 
@@ -69,16 +70,15 @@ if(!empty($rootCollections)) {
 
     // check if collections are sorted
     foreach ($rootCollections as $rootCollection) {
-       if(!checkSortOrder($collectionsTable, $rootCollection['id'])) {
+        if(!checkSortOrder($collectionsTable, $rootCollection['id'])) {
             _log("SORT ORDER NOT FIXED FOR COLLECTION #{$rootCollection['id']} (and maybe more). Exiting..");
             exit(1);
-       }
+        }
     }
 }
 
 // everything's fine if we get here
-_log('mission complete.');
-
+_log('update collection sorting complete.');
 
 /*
  * used functions below
@@ -92,65 +92,25 @@ _log('mission complete.');
  */
 function sortNestedSet(Opus_Db_Collections $collectionsTable, $collectionId) {
     $childrenSelect = $collectionsTable
-            ->select()->where("parent_id = ?", $collectionId)
-            ->order("sort_order ASC");
+        ->select()->where("parent_id = ?", $collectionId)
+        ->order("sort_order ASC");
+
     $children = $collectionsTable->fetchAll($childrenSelect)->toArray();
-    if (count($children) < 2) {
-        _log("no sortable children for node #$collectionId");
-        return;
-    }
 
-    if (!isSortOrderSet($children)) {
-        _log("sort order not set for children of node #$collectionId");
-        return;
-    }
-    usort($children, function($a, $b) {
-                if ($a['left_id'] == $b['left_id']) {
-                    return 0;
-                }
-                return ($a['left_id'] < $b['left_id']) ? -1 : 1;
-            });
+    if (!is_null($children)) {
+        $sortedIds = array();
 
-// start with smallest sort_order value
-    $i = $children[0]['sort_order'];
-
-    foreach ($children as $child) {
-
-        $position = $i;
-        $sortOrder = $child['sort_order'];
-        _log("#{$child['id']}: pos: $position, sortorder: $sortOrder");
-        if ($position < $sortOrder) {
-            $posDiff = $sortOrder - $position;
-            _log("moving down #" . $child['id'] . " $posDiff time(s)  ($position > $sortOrder)");
-            for ($i = 0; $i < $posDiff; $i++) {
-                try {
-                    $collectionsTable->moveSubTreeAfterNextSibling($child['id']);
-                } catch (Opus_Model_DbException $e) {
-                    _log("failed moving down #{$child['id']} step {$i}, continuing..");
-                    break;
-                }
-            }
-//             sort nex sibling
-            sortNestedSet($collectionsTable, $collectionId);
-            return;
-        } else if ($position > $sortOrder) {
-            $posDiff = $position - $sortOrder;
-            _log("moving up #{$child['id']} $posDiff time(s) ($sortOrder > $position)");
-            for ($i = 0; $i < $posDiff; $i++) {
-                try {
-                    $collectionsTable->moveSubTreeBeforePreviousSibling($child['id']);
-                } catch (Opus_Model_DbException $e) {
-                    _log("failed moving up #{$child['id']} step {$i}, continuing..");
-                    break;
-                }
-            }
-            sortNestedSet($collectionsTable, $collectionId);
-            return;
+        foreach ($children as $child) {
+            $sortedIds[] = $child['id'];
         }
-//         sort children of current node
-        sortNestedSet($collectionsTable, $child['id']);
 
-        $i++;
+        if (isSortOrderSet($children)) {
+            $collectionsTable->applySortOrderOfChildren($this->getId(), $sortedIds);
+        }
+
+        foreach ($sortedIds as $childId) {
+            sortNestedSet($collectionsTable, $childId);
+        }
     }
 }
 
@@ -162,7 +122,6 @@ function sortNestedSet(Opus_Db_Collections $collectionsTable, $collectionId) {
  */
 
 function checkSortOrder(Opus_Db_Collections $collectionsTable, $collectionId) {
-
     $childrenSelect = $collectionsTable
             ->select()->where("parent_id = ?", $collectionId)
             ->order("sort_order ASC");
@@ -190,11 +149,12 @@ function checkSortOrder(Opus_Db_Collections $collectionsTable, $collectionId) {
                 return false;
         }
     }
+
     return true;
 }
 
 /**
- * helper function returning wether subtree is sorted by sort_order field
+ * Helper function returning true if any collection has a value in field sort_order.
  */
 function isSortOrderSet($collectionArray) {
     foreach ($collectionArray as $child) {
@@ -205,12 +165,9 @@ function isSortOrderSet($collectionArray) {
     return false;
 }
 
-
 /**
- * basic logging to console
+ * Basic logging to console.
  */
 function _log($string) {
-    echo "$string\n";
+    echo "$string" . PHP_EOL;
 }
-
-?>
