@@ -128,11 +128,13 @@ class Admin_Model_Statistics {
 
     /**
      * Returns all years in which documents were published.
+     * TODO show that there are published documents without publication date?
      */
     public function getYears() {
         $documents = new Opus_Db_Documents();
         $select = $documents->select()->from('documents', array('year' => 'YEAR(server_date_published)'))
-            ->where('server_state=?', 'published')
+            ->where('server_state = ?', 'published')
+            ->where('server_date_published IS NOT NULL')
             ->distinct()
             ->order('year');
         $result = $documents->fetchAll($select);
