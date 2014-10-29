@@ -1580,3 +1580,37 @@ table + .paginationControl{
 }
 
 /* @end */
+
+/* Weitere Ergaenzungen */
+
+#collectionActions dl.dropdown dt a {
+    background-color: #595A56;
+    color: white;
+    padding: 6px 28px 6px 10px;
+    position: relative;
+}
+#collectionActions dl.dropdown dt a:after {
+    border-color: white transparent transparent;
+    top: 10px;
+    right: 10px;
+}
+#collectionAction dl.dropdown dd {
+    border-top: 5px solid #595a56;
+    background-color: #767676;
+    color: white;
+    font-weight: normal;
+    min-width: 250px;
+}
+#collectionActions dl.dropdown ul a {
+    color: white;
+}
+#collectionActions dd {
+    margin-left: 0px;
+}
+#collectionActions dd ul {
+    padding: 0.3em 15px 0.8em;
+}
+
+#collectionActions dl.dropdown-open ul {
+    background-color: #767676;
+}

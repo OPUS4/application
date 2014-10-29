@@ -54,6 +54,28 @@
     <?php endforeach; ?>
 </div>
 
+<div id="collectionActions">
+    <dl class="dropdown">
+        <dt><a><?= $this->translate('admin_collections_actions') ?></a></dt>
+        <dd>
+            <ul>
+                <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'sort',
+                    'id' => $parent->getId(), 'sortby' => 'name')) ?>"
+                        ><?= $this->translate('admin_collections_sortby_name') ?></a></li>
+                <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'sort',
+                    'id' => $parent->getId(), 'sortby' => 'name', 'order' => 'desc')) ?>"
+                        ><?= $this->translate('admin_collections_sortby_name_desc') ?></a></li>
+                <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'sort',
+                        'id' => $parent->getId(), 'sortby' => 'number')) ?>"
+                        ><?= $this->translate('admin_collections_sortby_number') ?></a></li>
+                <li><a href="<?= $this->url(array('module' => 'admin', 'controller' => 'collection', 'action' => 'sort',
+                        'id' => $parent->getId(), 'sortby' => 'number', 'order' => 'desc')) ?>"
+                        ><?= $this->translate('admin_collections_sortby_number_desc') ?></a></li>
+            </ul>
+        </dd>
+    </dl>
+</div>
+
 <table class="collections">
     <thead>
         <tr>

@@ -562,5 +562,49 @@
             </tuv>
         </tu>
 
+        <tu tuid="admin_collections_actions">
+            <tuv xml:lang="en">
+                <seg>Sort Collections</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Sammlungen sortieren</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collections_sortby_name">
+            <tuv xml:lang="en">
+                <seg>Sort by name</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Nach Namen sortieren</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collections_sortby_name_desc">
+            <tuv xml:lang="en">
+                <seg>Sort by name (descending)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Nach Namen sortieren (abwärts)</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collections_sortby_number">
+            <tuv xml:lang="en">
+                <seg>Sort by number</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Nach Nummer sortieren</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collections_sortby_number_desc">
+            <tuv xml:lang="en">
+                <seg>Sort by number (descending)</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Nach Nummer sortieren (abwärts)</seg>
+            </tuv>
+        </tu>
     </body>
 </tmx>

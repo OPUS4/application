@@ -260,6 +260,64 @@ class Admin_CollectionController extends Controller_Action {
     }
 
     /**
+     * This action sorts the children of a collection by name or number.
+     *
+     * Parameters:
+     * id: ID of collection
+     * sortby: 'name' or 'number'
+     * order: 'asc' or 'desc'
+     *
+     * TODO translate error messages
+     */
+    public function sortAction() {
+        $request = $this->getRequest();
+
+        $collectionId = $request->getParam('id');
+        $sortBy = $request->getParam('sortby');
+        $order = $request->getParam('order');
+
+        if (is_null($collectionId)) {
+            return $this->_redirectToAndExit('index',
+                array('failure' => 'id parameter is missing'), 'collectionroles');
+        }
+
+        if (!is_numeric($collectionId)) {
+            return $this->_redirectToAndExit('index',
+                array('failure' => 'id parameter must be an integer'), 'collectionroles');
+        }
+
+        try {
+            $collection = new Opus_Collection($collectionId);
+
+            if (is_null($sortBy)) {
+                return $this->_redirectToAndExit('show', null, 'collection', 'admin', array('id' => $collectionId));
+            }
+
+            $reverse = (strtolower($order) == 'desc');
+
+            switch ($sortBy) {
+                case 'name':
+                    $collection->sortChildrenByName($reverse);
+                    break;
+                case 'number':
+                    $collection->sortChildrenByNumber($reverse);
+                    break;
+                default:
+                    return $this->_redirectToAndExit('show',
+                        array('failure' => 'parameter sortby must have value name or number'),
+                        'collection', 'admin', array('id' => $collectionId));
+                    break;
+            }
+        }
+        catch (Opus_Model_NotFoundException $omnfe) {
+            return $this->_redirectToAndExit('index',
+                array('failure' => "collection with id $collectionId not found"), 'collectionroles');
+        }
+
+        return $this->_redirectToAndExit('show', null, 'collection', 'admin', array('id' => $collectionId));
+    }
+
+    /**
      * Assign a document to a collection (used in document administration)
      * 
      * 
