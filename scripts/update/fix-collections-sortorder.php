@@ -105,7 +105,7 @@ function sortNestedSet(Opus_Db_Collections $collectionsTable, $collectionId) {
         }
 
         if (isSortOrderSet($children)) {
-            $collectionsTable->applySortOrderOfChildren($this->getId(), $sortedIds);
+            $collectionsTable->applySortOrderOfChildren($collectionId, $sortedIds);
         }
 
         foreach ($sortedIds as $childId) {
