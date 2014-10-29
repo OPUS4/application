@@ -126,6 +126,60 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
         
         $this->assertEquals($docAdapter->getMainTitle(), 'Englischer Titel');
     }
+
+    public function testGetMainTitleForDocWithNoTitles() {
+        $view = Zend_Registry::get('Opus_View');
+
+        $doc = $this->createTestDocument();
+
+        $docAdapter = new Util_DocumentAdapter($view, $doc);
+
+        $this->assertEquals($docAdapter->getMainTitle(), 'document_no_title(id = )');
+    }
+
+    public function testGetMainTitleForDocWithNoLanguage() {
+        $view = Zend_Registry::get('Opus_View');
+
+        $doc = $this->createTestDocument();
+
+        $title = new Opus_Title();
+        $title->setLanguage('deu');
+        $title->setValue('Deutscher Titel');
+        $doc->addTitleMain($title);
+
+        $title = new Opus_Title();
+        $title->setLanguage('eng');
+        $title->setValue('Englischer Titel');
+        $doc->addTitleMain($title);
+
+        $docAdapter = new Util_DocumentAdapter($view, $doc);
+
+        // should return first title
+        $this->assertEquals($docAdapter->getMainTitle(), 'Deutscher Titel');
+    }
+
+    public function testGetMainTitleForDocWithNoTitleInDocLanguage() {
+        $view = Zend_Registry::get('Opus_View');
+
+        $doc = $this->createTestDocument();
+
+        $title = new Opus_Title();
+        $title->setLanguage('deu');
+        $title->setValue('Deutscher Titel');
+        $doc->addTitleMain($title);
+
+        $title = new Opus_Title();
+        $title->setLanguage('eng');
+        $title->setValue('Englischer Titel');
+        $doc->addTitleMain($title);
+
+        $doc->setLanguage('fra');
+
+        $docAdapter = new Util_DocumentAdapter($view, $doc);
+
+        // should return first title
+        $this->assertEquals($docAdapter->getMainTitle(), 'Deutscher Titel');
+    }
     
     public function testGetDocTitle() {
         $view = Zend_Registry::get('Opus_View');

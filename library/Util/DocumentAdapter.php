@@ -137,8 +137,9 @@ class Util_DocumentAdapter {
                     return $title->getValue();
                 }
             }
-            
-            return null; // $titles[0]->getValue();
+
+            // if no title in document language ist found use first title
+            return $titles[0]->getValue();
         }
         else {
             return Zend_Registry::get('Zend_Translate')->translate('document_no_title') . '(id = ' . $this->getDocId() . ')';
