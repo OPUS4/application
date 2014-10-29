@@ -1614,3 +1614,7 @@ table + .paginationControl{
 #collectionActions dl.dropdown-open ul {
     background-color: #767676;
 }
+
+.no-js #collectionActions dl.dropdown ul {
+    background-color: #767676;
+}
