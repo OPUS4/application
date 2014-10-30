@@ -38,6 +38,7 @@
         <delete dir="${basedir}/build/coverage" />
         <delete dir="${basedir}/build/pdepend" />
         <delete dir="${basedir}/build/code-browser" />
+        <delete dir="${basedir}/build/release" />
 
         <delete includeemptydirs="true">
             <fileset dir="${basedir}/workspace/tmp" includes="**/*" />
@@ -218,6 +219,56 @@
             <arg line="opus-console.php" />
             <arg line="snippets/delete_non-demo_docs.php" />
         </exec>
+    </target>
+
+    <!--
+        requires: version, date, CHANGES and RELEASE_NOTES already updated
+        tag release
+        build tarball
+        copy, encode, commit CHANGES/RELEASE_NOTES
+    -->
+    <target name="prepare-release-check">
+        <condition property="runPrepareRelease">
+            <and>
+                <isset property="releaseVersion" />
+                <isset property="releaseTag" />
+                <!-- TODO check existence of tag -->
+            </and>
+        </condition>
+    </target>
+
+    <!-- TODO tagging -->
+
+    <target name="prepare-release" depends="prepare-release-check" if="runPrepareRelease"
+            description="Builds release files (tarball, CHANGES, RELEASE_NOTES)">
+        <echo message="Preparing release files ..." />
+
+        <mkdir dir="${basedir}/build/release" />
+
+        <!-- build tarball -->
+        <exec executable="./prepare_tarball.sh" dir="${basedir}/scripts/packaging" failonerror="true">
+            <arg line="tags/${releaseTag}" />
+            <arg line="opus-${releaseVersion}" />
+        </exec>
+
+        <!-- Move release files to build folder. -->
+        <move todir="${basedir}/build/release">
+            <fileset dir="${basedir}/scripts/packaging">
+                <include name="opus-${releaseVersion}.*" />
+            </fileset>
+        </move>
+
+        <delete dir="${basedir}/scripts/packaging/opus-${releaseVersion}" />
+
+        <!-- prepare website files -->
+        <copy file="${basedir}/scripts/packaging/changelog/CHANGES.txt"
+              tofile="${basedir}/build/release/CHANGES.txt"
+              filtering="true" encoding="UTF-8" outputencoding="ISO-8859-1" />
+        <copy file="${basedir}/scripts/packaging/releasenotes/RELEASE_NOTES.txt"
+              tofile="${basedir}/build/release/RELEASE_NOTES.txt"
+              filtering="true" encoding="UTF-8" outputencoding="ISO-8859-1" />
+
+        <!-- TODO commit website files to svn -->
     </target>
 
 </project>
