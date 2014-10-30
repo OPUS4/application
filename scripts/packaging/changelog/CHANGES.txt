@@ -1,5 +1,23 @@
 h1. OPUS 4 Change Log
 
+h2. ======================== Release 4.4.5 2014-10-30 ========================
+
+h3. Bugs
+
+* [OPUSVIER-2340] - Admin-Veröffentlichungsstatistik enthält in Select-Box leeren Eintrag, wenn Dokumente ohne ServerDatePublished existieren
+* [OPUSVIER-3396] - Übersetzungsversuche von HTML Code tauchen im Log auf
+* [OPUSVIER-3402] - DocInfo Balken in Administration enthält keinen Titel, wenn Dokumensprache NULL ist
+* [OPUSVIER-3405] - Endlosschleife in Script fix-collections-sortorder.php beim Update
+* [OPUSVIER-3407] - Tabellenüberschriften für Sammlungen in Administration übersetzen
+
+h3. Aufgaben
+
+* [OPUSVIER-1499] - Updatelog enthält DELETED Einträge für Verzeichnisse, die nicht gelöscht wurden
+* [OPUSVIER-3000] - Metadaten-Formulare (DocumentXXX) umbenennen und in Order "Document" verschieben
+* [OPUSVIER-3301] - Ausgeblendete Sammlungseinträge (Collections) ab der zweiten Ebene sind in der  Dokumentenadministration (Metadatenformular) farblich nicht markiert
+* [OPUSVIER-3406] - Sortierfunktionen für Opus_Db_NestedSet hinzufügen
+* [OPUSVIER-3408] - Sortierfunktionen für Sammlungen in Administration verfügbar machen
+
 h2. ======================== Release 4.4.4 2014-10-13 ========================
 
 h3. Bugs

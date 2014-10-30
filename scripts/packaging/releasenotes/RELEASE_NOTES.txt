@@ -1,5 +1,25 @@
 h1. OPUS 4 Release Notes
 
+h2. ======================== Release 4.4.5 2014-10-30 ========================
+
+Es wurde ein Bug gefixt, der beim Update von Instanzen der Version 4.4.2 oder
+früher mit umfangreichen, sortierten Sammlungseinträgen zu Problemen führen
+konnte.
+Das Update sollte jetzt durchlaufen und die Sortierung der Sammlungseinträge
+erhalten bleiben.
+
+Die für den Fix implementierten Sortierfunktionen wurden in die Administration
+integriert, so daß Sammlungseinträge einer Ebene jetzt durch einen Klick
+automatisch nach Namen oder Nummern, aufwärts oder abwärts sortiert werden
+können. Das Menü für die neuen Sortierfunktionen erscheint oberhalb der
+Tabellen, die die Einträge einer Sammlung anzeigen.
+
+Die neuen Funktionen stehen nicht für Sammlungen (oberste Ebene) zur
+Verfügung. Die Sortierung umfangreicher Sammlungen kann einen Moment dauern,
+da die notwendigen Datenbankoperationen aufwendig sind.
+
+Weitere Informationen zu Änderungen finden sich in der Datei CHANGES.txt.
+
 h2. ======================== Release 4.4.4 2014-10-13 ========================
 
 h3. Allgemein
