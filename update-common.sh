@@ -472,11 +472,15 @@ function deleteFolder() {
     fi
     if [[ $DELETE_EMPTY == 0 ]]; then
         DRYRUN || rmdir --ignore-fail-on-non-empty --parents "$FOLDER"
+        if [[ ! -d  $FOLDER ]]; then
+            UPDATELOG "DELETED" "$FOLDER"
+            DEBUG "Deleted folder $FOLDER"
+        fi
     else
         DRYRUN || rm -rf "$FOLDER"
+        UPDATELOG "DELETED" "$FOLDER"
+        DEBUG "Deleted folder $FOLDER"
     fi
-    UPDATELOG "DELETED" "$FOLDER"
-    DEBUG "Deleted folder $FOLDER"
 }
 
 # Creates a folder
