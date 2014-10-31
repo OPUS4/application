@@ -140,8 +140,14 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         $this->getSubForm(self::SUBFORM_HASHES)->populateFromModel($file);
     }
 
-    public function setDefaults(array $post) {
-        parent::setDefaults($post);
+    /**
+     * Sets default values for form.
+     *
+     * @param array $post
+     * @return Zend_Form
+     */
+    public function setDefaults(array $defaults) {
+        $return = parent::setDefaults($defaults);
 
         if (isset($post[$this->getName()])) {
             $fileId = $post[$this->getName()][self::ELEMENT_ID];
@@ -152,7 +158,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         else {
             $this->getLogger()->err('No POST data for subform \'' . $this->getName() . '\'.');
         }
-        return $this;
+        return $return;
     }
 
     /**
