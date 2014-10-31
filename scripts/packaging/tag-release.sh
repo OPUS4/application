@@ -39,25 +39,34 @@ function createTag() {
 # Main
 # -----------------------------------------------------------------------------
 
-# Determine date for tag
-DATESTR="$(date +"%Y-%m-%d")"
+DATE_ENTERED=$1
+RELEASE_VERSION=$2
 
-echo -e "What date should be used for tag [$DATESTR]? \c "
-read DATE_ENTERED
+if [[ -z $DATE_ENTERED ]]; then
+    # Determine date for tag
+    DATESTR="$(date +"%Y-%m-%d")"
 
-if [[ ! -z $DATE_ENTERED ]]; then
-    # TODO validate formatting
+    echo -e "What date should be used for tag [$DATESTR]? \c "
+    read DATE_ENTERED
+
+    if [[ ! -z $DATE_ENTERED ]]; then
+        # TODO validate formatting
+        DATESTR="$DATE_ENTERED"
+    fi
+else
     DATESTR="$DATE_ENTERED"
 fi
 
 echo "Date '$DATESTR' will be used!"
 
-# Determine version for tag
-echo -e 'What version should be used for release? \c '
-read RELEASE_VERSION
+if [[ -z $RELEASE_VERSION ]]; then
+    # Determine version for tag
+    echo -e 'What version should be used for release? \c '
+    read RELEASE_VERSION
+
+fi
 
 # TODO validate RELEASE_VERSION (empty, format)
-
 TAG="$DATESTR"_"$RELEASE_VERSION"
 
 # Show summary and ask to proceed
