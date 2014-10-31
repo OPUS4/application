@@ -152,6 +152,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         else {
             $this->getLogger()->err('No POST data for subform \'' . $this->getName() . '\'.');
         }
+        return $this;
     }
 
     /**
