@@ -35,6 +35,19 @@
 
 class Export_Model_XmlExportTest extends ControllerTestCase {
 
+    private $plugin;
+
+    public function setUp() {
+        parent::setUp();
+
+        $plugin = new Export_Model_XmlExport();
+        $plugin->setRequest($this->getRequest());
+        $plugin->setResponse($this->getResponse());
+        $plugin->init();
+
+        $this->plugin = $plugin;
+    }
+
     public function testXmlPreparation() {
         $doc = $this->createTestDocument();
         $doc->setServerState('published');
@@ -44,16 +57,13 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $doc->setTitleMain($title);
         $doc->store();
 
-        $xml = new DomDocument;
-        $proc = new XSLTProcessor;
         $this->_request->setMethod('POST')->setPost(array(
             'searchtype' => 'all'
         ));
 
-        $xmlExportModel = new Export_Model_XmlExport();
-        $xmlExportModel->prepareXml($xml, $proc, $this->_request);
+        $this->plugin->prepareXml();
 
-        $xpath = new DOMXPath($xml);
+        $xpath = new DOMXPath($this->plugin->getXml());
         $result = $xpath->query('//Opus_Document');
 
         // in OPUSVIER-3336 wurde die Sortierreihenfolge geändert, dh es wird nicht mehr aufsteigend nach id sortiert
@@ -69,16 +79,14 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $doc->setTitleMain($title);
         $docId = $doc->store();
 
-        $xml = new DomDocument;
-        $proc = new XSLTProcessor;
         $this->getRequest()->setMethod('POST')->setPost(array(
             'docId' => $docId,
             'searchtype' => 'id'
         ));
-        $xmlExportModel = new Export_Model_XmlExport();
-        $xmlExportModel->prepareXml($xml, $proc, $this->getRequest());
 
-        $xpath = new DOMXPath($xml);
+        $this->plugin->prepareXml();
+
+        $xpath = new DOMXPath($this->plugin->getXml());
         $result = $xpath->query('//Opus_Document');
         $count = $result->length;
 
@@ -87,32 +95,25 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
 
     public function testXmlPreparationForFrontdoorWithWrongId() {
         $docId = 199293;
-        $xml = new DomDocument;
-        $proc = new XSLTProcessor;
 
         $this->getRequest()->setMethod('POST')->setPost(array(
             'docId' => ++$docId,
             'searchtype' => 'id'
         ));
-        $xmlExportModel = new Export_Model_XmlExport();
 
-        $xmlExportModel->prepareXml($xml, $proc, $this->getRequest());
-        $xpath = new DOMXPath($xml);
+        $this->plugin->prepareXml();
+        $xpath = new DOMXPath($this->plugin->getXml());
         $result = $xpath->query('//Opus_Document');
         $this->assertEquals(0, $result->length);
     }
 
     public function testXmlPreparationForFrontdoorWithoutId() {
-        $xml = new DomDocument;
-        $proc = new XSLTProcessor;
-
         $this->getRequest()->setMethod('POST')->setPost(array(
             'searchtype' => 'id'
         ));
-        $xmlExportModel = new Export_Model_XmlExport();
 
         $this->setExpectedException('Application_Exception');
-        $xmlExportModel->prepareXml($xml, $proc, $this->getRequest());
+        $this->plugin->prepareXml();
     }
 
     public function testXmlSortOrder() {
@@ -141,18 +142,16 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $documentCacheTable->delete('document_id = ' . $secondDocId);
         $documentCacheTable->delete('document_id = ' . $firstDocId);
 
-        $xml = new DomDocument;
-        $proc = new XSLTProcessor;
         $this->getRequest()->setMethod('POST')->setPost(array(
             'searchtype' => 'all',
             'sortfield' => 'year',
             'sortorder' => 'desc',
             'rows' => '10' // die ersten 10 Dokumente reichen
         ));
-        $xmlExportModel = new Export_Model_XmlExport();
-        $xmlExportModel->prepareXml($xml, $proc, $this->getRequest());
 
-        $xpath = new DOMXPath($xml);
+        $this->plugin->prepareXml();
+
+        $xpath = new DOMXPath($this->plugin->getXml());
         $result = $xpath->query('//Opus_Document');
 
         $this->assertEquals(10, $result->length);
@@ -172,16 +171,14 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $doc->setServerState('published');
         $docId = $doc->store();
 
-        $xml = new DomDocument;
-        $proc = new XSLTProcessor;
         $this->getRequest()->setMethod('POST')->setPost(array(
             'searchtype' => 'id',
             'docId' => $docId
         ));
-        $xmlExportModel = new Export_Model_XmlExport();
-        $xmlExportModel->prepareXml($xml, $proc, $this->getRequest());
 
-        $xpath = new DOMXPath($xml);
+        $this->plugin->prepareXml();
+
+        $xpath = new DOMXPath($this->plugin->getXml());
         $result = $xpath->query('//Opus_Document');
 
         $this->assertEquals($docId, $result->item(0)->attributes->item(0)->nodeValue);
@@ -194,16 +191,14 @@ class Export_Model_XmlExportTest extends ControllerTestCase {
         $doc = $this->createTestDocument();
         $docId = $doc->store();
 
-        $xml = new DomDocument;
-        $proc = new XSLTProcessor;
         $this->getRequest()->setMethod('POST')->setPost(array(
             'searchtype' => 'id',
             'docId' => $docId
         ));
-        $xmlExportModel = new Export_Model_XmlExport();
-        $xmlExportModel->prepareXml($xml, $proc, $this->getRequest());
 
-        $xpath = new DOMXPath($xml);
+        $this->plugin->prepareXml();
+
+        $xpath = new DOMXPath($this->plugin->getXml());
         $result = $xpath->query('//Opus_Document');
 
         $this->assertEquals(0, $result->length);

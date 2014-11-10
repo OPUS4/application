@@ -32,13 +32,118 @@
  * @version     $Id$
  */
 
+/**
+ * Export plugin for exporting documents as XML.
+ *
+ * TODO reduce to basic XML export (move XSLT into different class)
+ */
+class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
 
-class Export_Model_XmlExport extends Application_Model_Abstract {
+    /**
+     * Holds xml representation of document information to be processed.
+     *
+     * @var DomDocument  Defaults to null.
+     *
+     */
+    protected $_xml = null;
+
+    /**
+     * Holds the stylesheet for the transformation.
+     *
+     * @var DomDocument  Defaults to null.
+     */
+    protected $_xslt = null;
+
+    /**
+     * Holds the xslt processor.
+     *
+     * @var XSLTProcessor  Defaults to null.
+     */
+    protected $_proc = null;
+
+    /**
+     * Deliver the (transformed) Xml content
+     *
+     * @return void
+     *
+     * TODO adapt
+     */
+    public function postDispatch() {
+        if (!isset($this->getView()->errorMessage)) {
+            // Send Xml response.
+            $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
+            if (false === is_null($this->_xslt)) {
+                $this->getResponse()->setBody($this->_proc->transformToXML($this->_xml));
+            } else {
+                $this->getResponse()->setBody($this->_xml->saveXml());
+            }
+        }
+    }
+
+    public function init() {
+        // Initialize member variables.
+        $this->_xml = new DomDocument();
+        $this->_proc = new XSLTProcessor();
+    }
+
+    /**
+     * Load an xslt stylesheet.
+     *
+     * @return void
+     *
+     * TODO adapt
+     */
+    protected function loadStyleSheet($stylesheet) {
+        $this->_xslt = new DomDocument;
+        $this->_xslt->load($stylesheet);
+        $this->_proc->importStyleSheet($this->_xslt);
+        if (isset($_SERVER['HTTP_HOST'])) {
+            $this->_proc->setParameter('', 'host', $_SERVER['HTTP_HOST']);
+        }
+        $this->_proc->setParameter('', 'server', $this->getRequest()->getBaseUrl());
+    }
+
+    /**
+     * Performs XML export.
+     * @throws Application_Exception
+     * @throws Application_SearchException
+     * @throws Exception
+     * @throws Zend_View_Exception
+     */
+    public function execute() {
+        $request = $this->getRequest();
+
+        $exportParam = $request->getParam('export');
+        if (is_null($exportParam)) {
+            throw new Application_Exception('export format is not specified');
+        }
+
+        // currently only xml is supported here
+        if ($exportParam !== 'xml') {
+            throw new Application_Exception('export format is not supported' . $exportParam);
+        }
+
+        // parameter stylesheet is mandatory (only administrator is able to see raw output)
+        // non-administrative users can only reference user-defined stylesheets
+        if (is_null($request->getParam('stylesheet')) && !Opus_Security_Realm::getInstance()->checkModule('admin')) {
+            throw new Application_Exception('missing parameter stylesheet');
+        }
+
+        $stylesheet = $request->getParam('stylesheet');
+        $stylesheetDirectory = 'stylesheets-custom';
+
+        $this->loadStyleSheet($this->buildStylesheetPath($stylesheet,
+            $this->getView()->getScriptPath('') . $stylesheetDirectory));
+
+        $this->prepareXml();
+    }
 
     /**
      * Prepares xml export for solr search results.
      */
-    public function prepareXml($xml, $proc, $request) {
+    public function prepareXml() {
+        $request = $this->getRequest();
+
         try {
             $searcher = new Opus_SolrSearch_Searcher();
             if ($request->getParam('searchtype') == 'id') {
@@ -47,7 +152,7 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
             else {
                 $resultList = $searcher->search($this->buildQuery($request));
             }
-            $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits(), $xml, $proc);
+            $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits());
         }
         catch (Opus_SolrSearch_Exception $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e);
@@ -59,7 +164,10 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
      * Sets up an xml document out of the result list.
      * @param array $results An array of Opus_SolrSearch_Result objects.
      */
-    private function handleResults($results, $numOfHits, $xml, $proc) {
+    private function handleResults($results, $numOfHits) {
+        $proc = $this->_proc;
+        $xml = $this->_xml;
+
         $proc->setParameter('', 'timestamp', str_replace('+00:00', 'Z', Zend_Date::now()->setTimeZone('UTC')->getIso()));
         $proc->setParameter('', 'docCount', count($results));
         $proc->setParameter('', 'queryhits', $numOfHits);
@@ -80,6 +188,10 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
                 $xml->documentElement->appendChild($domNode);
             }
         }
+    }
+
+    public function getXml() {
+        return $this->_xml;
     }
 
     /**
@@ -231,4 +343,5 @@ class Export_Model_XmlExport extends Application_Model_Abstract {
         $scriptPath = substr($path, 0, ++$pos);
         return $scriptPath . 'stylesheets' . DIRECTORY_SEPARATOR . 'raw.xslt';
     }
+
 }

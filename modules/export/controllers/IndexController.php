@@ -35,94 +35,97 @@
  * @version     $Id$
  */
 
-class Export_IndexController extends Controller_Xml {
+/**
+ * Controller for export function.
+ *
+ * The export actions are separate classes implementing the interface Export_Model_ExportPlugin and are dynamically
+ * mapped to controller functions.
+ */
+class Export_IndexController extends Controller_ModuleAccess {
 
-    private $stylesheetDirectory;
-    private $stylesheet;
-    private $exportModel;
+    /**
+     * @var array containing export plugins
+     */
+    private $plugins;
 
+    /**
+     * Do some initialization on startup of every action
+     *
+     * @return void
+     */
     public function init() {
         parent::init();
-        $this->exportModel = new Export_Model_XmlExport();
-    }    
 
-    /*
-     * called by frontdoor or solr search results. returns the results in xml format
-     */
-    public function indexAction() {
-        $exportParam = $this->getRequest()->getParam('export');
-        if (is_null($exportParam)) {
-            throw new Application_Exception('export format is not specified');
-        }
+        // Controller outputs plain Xml, so rendering and layout are disabled.
+        $this->_helper->viewRenderer->setNoRender(true); // TODO there could be plugins requiring rendering
+        $this->_helper->layout()->disableLayout();
 
-        // currently only xml is supported here
-        if ($exportParam !== 'xml') {
-            throw new Application_Exception('export format is not supported' . $exportParam);
-        }
-
-        // parameter stylesheet is mandatory (only administrator is able to see raw output)
-        // non-administrative users can only reference user-defined stylesheets
-        if (is_null($this->getRequest()->getParam('stylesheet')) && !Opus_Security_Realm::getInstance()->checkModule('admin')) {
-            throw new Application_Exception('missing parameter stylesheet');
-        }
-
-        $this->stylesheet = $this->getRequest()->getParam('stylesheet');
-        $this->stylesheetDirectory = 'stylesheets-custom';
-
-        $this->loadStyleSheet($this->exportModel->buildStylesheetPath($this->stylesheet,
-            $this->view->getScriptPath('') . $this->stylesheetDirectory));
-
-        $this->exportModel->prepareXml($this->_xml, $this->_proc, $this->getRequest());
-
+        $this->loadPlugins();
     }
 
-    /*
-     * exports the publication list
+    /**
+     * Returns small XML error message if access to module has been denied.
      */
-    public function publistAction() {
-        $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->publist->stylesheetDirectory)) {
-                $this->stylesheetDirectory = $config->publist->stylesheetDirectory;
-        }
+    public function moduleAccessDeniedAction() {
+        $response = $this->getResponse();
+        $response->setHttpResponseCode(401);
 
-        if (isset($config->publist->stylesheet)) {
-                $this->stylesheet = $config->publist->stylesheet;
-        }
-        if (!is_null($this->getRequest()->getParam('stylesheet'))) {
-            $this->stylesheet = $this->getRequest()->getParam('stylesheet');
-        }
-
-        $roleParam = $this->getRequest()->getParam('role');
-        if (is_null($roleParam)) {
-            throw new Application_Exception('role is not specified');
-        }
-
-        $numberParam = $this->getRequest()->getParam('number');
-        if (is_null($numberParam)) {
-            throw new Application_Exception('number is not specified');
-        }
-
-        $groupBy = 'publishedYear';
-        if (isset($config->publist->groupby->completedyear)) {
-            $groupBy = 'completedYear';
-        }
-
-        $collection = $this->exportModel->mapQuery($roleParam, $numberParam);
-        $this->getRequest()->setParam('searchtype', 'collection');
-        $this->getRequest()->setParam('id', $collection->getId());
-        $this->getRequest()->setParam('export', 'xml');
-        $this->_proc->setParameter('', 'collName', $collection->getName());
-
-        $this->_proc->registerPHPFunctions('max');
-        $this->_proc->registerPHPFunctions('urlencode');
-        $this->_proc->registerPHPFunctions('Export_Model_PublicationList::getMimeTypeDisplayName');
-        $this->_proc->setParameter('', 'fullUrl', $this->view->fullUrl());
-        $this->_proc->setParameter('', 'groupBy', $groupBy);
-
-        $this->loadStyleSheet($this->exportModel->buildStylesheetPath($this->stylesheet,
-            $this->view->getScriptPath('') . $this->stylesheetDirectory));
-
-        $this->exportModel->prepareXml($this->_xml, $this->_proc, $this->getRequest());
+        $doc = new DOMDocument();
+        $doc->appendChild($doc->createElement('error', 'Unauthorized: Access to module not allowed.'));
+        $this->getResponse()->setBody($doc->saveXml());
     }
+
+    /**
+     * Maps action calls to export plugins or returns an error message.
+     *
+     * @param  string $action     The name of the action that was called.
+     * @param  array  $parameters The parameters passed to the action.
+     * @return void
+     */
+    public function __call($action, $parameters) {
+        if (!'Action' == substr($action, -6)) {
+            $this->_logger->info(__METHOD__ . ' undefined method: ' . $action);
+            parent::__call($action, $parameters);
+        }
+
+        // TODO throw exceptions of type NO_ACTION
+        $actionName = $this->getRequest()->getActionName();
+
+        $plugin = $this->getPlugin($actionName);
+
+        if (!is_null($plugin)) {
+            $plugin->setConfig(Zend_Registry::get('Zend_Config'));
+            $plugin->setRequest($this->getRequest());
+            $plugin->setResponse($this->getResponse());
+            $plugin->setView($this->view);
+            $plugin->init();
+            $plugin->execute();
+            $plugin->postDispatch();
+        }
+    }
+
+    /**
+     * Returns plugin for action name.
+     *
+     * @param $name Name of plugin/action.
+     * @return null|Export_Model_ExportPlugin
+     */
+    protected function getPlugin($name) {
+        return (isset($this->plugins[$name])) ? $this->plugins[$name] : null;
+    }
+
+    /**
+     * Loads export plugins.
+     *
+     * TODO use plugin configuration (Zend_Config)
+     * TODO instantiate plugin only if necessary
+     */
+    protected function loadPlugins() {
+        $this->plugins = array(
+            'index' => new Export_Model_XmlExport(),
+            'publist' => new Export_Model_PublistExport()
+        );
+    }
+
 }
 
