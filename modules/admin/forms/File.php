@@ -149,8 +149,8 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
     public function setDefaults(array $defaults) {
         $return = parent::setDefaults($defaults);
 
-        if (isset($post[$this->getName()])) {
-            $fileId = $post[$this->getName()][self::ELEMENT_ID];
+        if (isset($defaults[$this->getName()])) {
+            $fileId = $defaults[$this->getName()][self::ELEMENT_ID];
             $file = new Opus_File($fileId);
             $this->getSubForm(self::SUBFORM_HASHES)->populateFromModel($file);
             $this->getElement(self::ELEMENT_FILE_SIZE)->setValue($file->getFileSize());
