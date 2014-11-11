@@ -49,18 +49,24 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
     public function execute() {
         $config = $this->getConfig();
         $request = $this->getRequest();
-        $view = $this->getView(); // TODO
+        $view = $this->getView();
+        $logger = $this->getLogger();
 
         // TODO Xslt stuff
-        if (isset($config->publist->stylesheetDirectory)) {
-            $this->stylesheetDirectory = $config->publist->stylesheetDirectory;
+        if (isset($config->stylesheetDirectory)) {
+            $stylesheetDirectory = $config->stylesheetDirectory;
+        }
+        else {
+
+            $logger->debug(Zend_Debug::dump($config->toArray(), 'no stylesheet directory specified'));
         }
 
-        if (isset($config->publist->stylesheet)) {
-            $this->stylesheet = $config->publist->stylesheet;
+        if (isset($config->stylesheet)) {
+            $stylesheet = $config->stylesheet;
         }
+
         if (!is_null($request->getParam('stylesheet'))) {
-            $this->stylesheet = $request->getParam('stylesheet');
+            $stylesheet = $request->getParam('stylesheet');
         }
 
         // TODO params
@@ -76,7 +82,8 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
 
         // TODO config
         $groupBy = 'publishedYear';
-        if (isset($config->publist->groupby->completedyear)) {
+        // TODO config does not make sense - completely ignores value of setting
+        if (isset($config->groupby->completedyear)) {
             $groupBy = 'completedYear';
         }
 
@@ -92,8 +99,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
         $this->_proc->setParameter('', 'fullUrl', $view->fullUrl());
         $this->_proc->setParameter('', 'groupBy', $groupBy);
 
-        $this->loadStyleSheet($this->buildStylesheetPath($this->stylesheet,
-            $view->getScriptPath('') . $this->stylesheetDirectory));
+        $this->loadStyleSheet($this->buildStylesheetPath($stylesheet, $view->getScriptPath('') . $stylesheetDirectory));
 
         $this->prepareXml();
     }

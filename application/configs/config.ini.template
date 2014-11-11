@@ -188,18 +188,18 @@ setup.translation.modules.allowed = default,publish
 ; PUBLICATION LIST SETTINGS
 ; Per default publication lists are rendered by the default stylehseet.
 ; Here you can define your own stylesheet for rendering publication lists:
-; publist.stylesheet =
+; plugins.export.publist.stylesheet =
 ;
 ; Per default publications are grouped by 'published year'.
 ; Here you can switch grouping to 'completed year':
-; publist.groupby.completedyear = 1
+; plugins.export.publist.groupby.completedyear = 1
 
 ; You can allow files of a certain mime type to be exported in publication lists.
 ; For each mime type you must set the text to be displayed in the download link.
-; publist.file.allow.mimetype[application/pdf]=PDF
-; publist.file.allow.mimetype[application/postscript]=PS
-; publist.file.allow.mimetype[text/html]=HTML
-; publist.file.allow.mimetype[application/xhtml+xml]=HTML
+; plugins.export.publist.file.allow.mimetype[application/pdf]=PDF
+; plugins.export.publist.file.allow.mimetype[application/postscript]=PS
+; plugins.export.publist.file.allow.mimetype[text/html]=HTML
+; plugins.export.publist.file.allow.mimetype[application/xhtml+xml]=HTML
 
 ; The following is needed even if sections are empty.
 [staging : production]

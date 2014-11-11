@@ -35,6 +35,17 @@
 
 class Export_IndexControllerTest extends ControllerTestCase {
 
+    /**
+     * expectedException Application_Exception
+     *
+     */
+    public function testUnknownAction() {
+        $this->dispatch('/export/index/invalid');
+        $this->assertResponseCode(500);
+        $body = $this->getResponse()->getBody();
+        $this->assertContains('Plugin invalid not found', $body);
+    }
+
     public function testIndexActionWithoutFormat() {
         $this->dispatch('/export');
         $this->assertResponseCode(500);
@@ -427,14 +438,14 @@ class Export_IndexControllerTest extends ControllerTestCase {
      * begin: tests for OPUSVIER-2778
      */
 
-    public function testPublistActionWithoutStylesheetParameter() {
+    public function testPublistActionWithoutAnyParameter() {
         $this->dispatch('/export/index/publist');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
         $this->assertContains('role is not specified', $response->getBody());
     }
 
-    public function testPublistActionWithoutStylesheetArgument() {
+    public function testPublistActionWithoutStylesheetValue() {
         $this->dispatch('/export/index/publist/stylesheet');
         $this->assertResponseCode(500);
         $response = $this->getResponse();
@@ -551,12 +562,12 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $oldConfig = Zend_Registry::get('Zend_Config');
 
         $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->publist->stylesheet)) {
-            $config->publist->stylesheet = 'invalid';
+        if (isset($config->plugins->export->publist->stylesheet)) {
+            $config->plugins->export->publist->stylesheet = 'invalid';
         }
         else {
-            $config = new Zend_Config(array(
-                'publist' => array('stylesheet' =>  'invalid')), true);
+            $config = new Zend_Config(array('plugins' => array('export' => array(
+                'publist' => array('stylesheet' =>  'invalid')), true)));
             // Include the above made configuration changes in the application configuration.
             $config->merge(Zend_Registry::get('Zend_Config'));
         }
@@ -576,22 +587,22 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $oldConfig = Zend_Registry::get('Zend_Config');
 
         $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->publist->stylesheet)) {
-            $config->publist->stylesheet = 'raw';
+        if (isset($config->plugins->export->publist->stylesheet)) {
+            $config->plugins->export->publist->stylesheet = 'raw';
         }
         else {
-            $config = new Zend_Config(array(
-                'publist' => array('stylesheet' =>  'raw')), true);
+            $config = new Zend_Config(array('plugins' => array('export' => array(
+                'publist' => array('stylesheet' =>  'raw')), true)));
             // Include the above made configuration changes in the application configuration.
             $config->merge(Zend_Registry::get('Zend_Config'));
         }
 
-        if (isset($config->publist->stylesheetDirectory)) {
-            $config->publist->stylesheetDirectory = 'stylesheets';
+        if (isset($config->plugins->export->publist->stylesheetDirectory)) {
+            $config->plugins->export->publist->stylesheetDirectory = 'stylesheets';
         }
         else {
-            $config = new Zend_Config(array(
-                'publist' => array('stylesheetDirectory' =>  'stylesheets')), true);
+            $config = new Zend_Config(array('plugins' => array('export' => array(
+                'publist' => array('stylesheetDirectory' =>  'stylesheets')), true)));
             // Include the above made configuration changes in the application configuration.
             $config->merge(Zend_Registry::get('Zend_Config'));
         }
@@ -619,8 +630,10 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $response = $this->getResponse();
         $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
         $normalizedResponseBody = preg_replace('/\n/', "", $response->getBody());
-        $this->assertRegExp('/<a href="#opus-year-2010">2010<\/a>.*<a href="#opus-year-2009">2009<\/a>/', $normalizedResponseBody);
-        $this->assertRegExp('/<h4 id="opus-year-2010">2010<\/h4>.*<h4 id="opus-year-2009">2009<\/h4>/', $normalizedResponseBody);
+        $this->assertRegExp('/<a href="#opus-year-2010">2010<\/a>.*<a href="#opus-year-2009">2009<\/a>/',
+            $normalizedResponseBody);
+        $this->assertRegExp('/<h4 id="opus-year-2010">2010<\/h4>.*<h4 id="opus-year-2009">2009<\/h4>/',
+            $normalizedResponseBody);
     }
 
     /**
@@ -629,27 +642,26 @@ class Export_IndexControllerTest extends ControllerTestCase {
      * 2. Undoing changes are not necessary, as Zend_Config is initialized per test.
      * May apply to other tests as well.
      */
+
+    protected function setPublistConfig($options) {
+
+    }
     
     public function testPublistActionGroupedByCompletedYear() {
-        // manipulate application configuration
-        $oldConfig = Zend_Registry::get('Zend_Config');
-
         $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->publist->groupby->completedyear)) {
-            $config->publist->groupby->completedyear = '1';
+        if (isset($config->plugins->export->publist->groupby->completedyear)) {
+            $config->plugins->export->publist->groupby->completedyear = '1';
         }
         else {
-            $config = new Zend_Config(array(
-                'publist' => array('groupby' =>  array('completedyear' => '1'))), true);
+            $configNew = new Zend_Config(array('plugins' => array('export' => array(
+                'publist' => array('groupby' =>  array('completedyear' => '1'))))), false);
             // Include the above made configuration changes in the application configuration.
-            $config->merge(Zend_Registry::get('Zend_Config'));
+            $config->merge($configNew);
         }
         Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
 
-        // undo configuration manipulation
-        Zend_Registry::set('Zend_Config', $oldConfig);
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
         $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
@@ -690,34 +702,34 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
 	
-	/* id */
-	$this->assertContains(' id="opus-publist"', $response->getBody());
-	$this->assertContains(' id="opus-header"', $response->getBody());
+        /* id */
+        $this->assertContains(' id="opus-publist"', $response->getBody());
+        $this->assertContains(' id="opus-header"', $response->getBody());
         $this->assertNotContains(' id="header"', $response->getBody());
         $this->assertNotContains(' id="publist"', $response->getBody());
-        $this->assertNotRegExp('/ id="[a-z]+"/', $response->getBody());	
-	
-	/* class */
-	$this->assertContains(' class="opus-persons"', $response->getBody());
-	$this->assertContains(' class="opus-year"', $response->getBody());
-	$this->assertContains(' class="opus-title"', $response->getBody());
-	$this->assertContains(' class="opus-metadata"', $response->getBody());
-	$this->assertContains(' class="opus-links"', $response->getBody());	
-	$this->assertNotContains(' class="persons"', $response->getBody());
-	$this->assertNotContains(' class="year"', $response->getBody());
-	$this->assertNotContains(' class="title"', $response->getBody());
-	$this->assertNotContains(' class="metadata"', $response->getBody());
-	$this->assertNotContains(' class="links"', $response->getBody());
-        $this->assertNotRegExp('/ class="[a-z]+"/', $response->getBody());	
-	
-	/* anchor */
-	$this->assertContains(' href="#opus-year-2010"', $response->getBody());
-	$this->assertContains(' id="opus-year-2010"', $response->getBody());
-	$this->assertNotContains(' href="#L2010', $response->getBody());
-	$this->assertNotContains(' id="L2010"', $response->getBody());
-	$this->assertNotRegExp('/ href="#L[0-9]{4}"/', $response->getBody());	
-	$this->assertNotRegExp('/ id="L[0-9]{4}"/', $response->getBody());	
-       }   
+        $this->assertNotRegExp('/ id="[a-z]+"/', $response->getBody());
+
+        /* class */
+        $this->assertContains(' class="opus-persons"', $response->getBody());
+        $this->assertContains(' class="opus-year"', $response->getBody());
+        $this->assertContains(' class="opus-title"', $response->getBody());
+        $this->assertContains(' class="opus-metadata"', $response->getBody());
+        $this->assertContains(' class="opus-links"', $response->getBody());
+        $this->assertNotContains(' class="persons"', $response->getBody());
+        $this->assertNotContains(' class="year"', $response->getBody());
+        $this->assertNotContains(' class="title"', $response->getBody());
+        $this->assertNotContains(' class="metadata"', $response->getBody());
+        $this->assertNotContains(' class="links"', $response->getBody());
+        $this->assertNotRegExp('/ class="[a-z]+"/', $response->getBody());
+
+        /* anchor */
+        $this->assertContains(' href="#opus-year-2010"', $response->getBody());
+        $this->assertContains(' id="opus-year-2010"', $response->getBody());
+        $this->assertNotContains(' href="#L2010', $response->getBody());
+        $this->assertNotContains(' id="L2010"', $response->getBody());
+        $this->assertNotRegExp('/ href="#L[0-9]{4}"/', $response->getBody());
+        $this->assertNotRegExp('/ id="L[0-9]{4}"/', $response->getBody());
+    }
 
     /**
      * Regression Test for OPUSVIER-2998 and OPUSVIER-2999
@@ -725,11 +737,11 @@ class Export_IndexControllerTest extends ControllerTestCase {
     public function testPublistActionDisplaysUrlencodedFiles() {
         
         Zend_Registry::get('Zend_Config')->merge(
-                new Zend_Config(array(
+                new Zend_Config(array('plugins' => array('export' => array(
                     'publist' => array(
                         'file' => array(
                             'allow' => array(
-                                'mimetype' => array('application/xhtml+xml' => 'HTML')))))));
+                                'mimetype' => array('application/xhtml+xml' => 'HTML')))))))));
 
         // explicitly re-initialize mime type config to apply changes in Zend_Config
         // This is necessary due to static variable in Export_Model_PublicationList
@@ -737,8 +749,10 @@ class Export_IndexControllerTest extends ControllerTestCase {
         Export_Model_PublicationList::initMimeTypes();
         
         $config = Zend_Registry::get('Zend_Config');
-        $this->assertTrue(isset($config->publist->file->allow->mimetype), 'Failed setting configuration option');
-        $this->assertEquals(array('application/xhtml+xml' => 'HTML'), $config->publist->file->allow->mimetype->toArray(), 'Failed setting configuration option');
+        $this->assertTrue(isset($config->plugins->export->publist->file->allow->mimetype),
+            'Failed setting configuration option');
+        $this->assertEquals(array('application/xhtml+xml' => 'HTML'),
+            $config->plugins->export->publist->file->allow->mimetype->toArray(), 'Failed setting configuration option');
         
         $doc = new Opus_Document(92);
         $file = $doc->getFile(1);

@@ -129,7 +129,6 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
         $this->view = $view;
     }
 
-
     /**
      * Main function performing export.
      *

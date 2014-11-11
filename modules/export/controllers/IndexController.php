@@ -83,48 +83,75 @@ class Export_IndexController extends Controller_ModuleAccess {
      * @return void
      */
     public function __call($action, $parameters) {
+        // TODO what does this code do
         if (!'Action' == substr($action, -6)) {
             $this->_logger->info(__METHOD__ . ' undefined method: ' . $action);
             parent::__call($action, $parameters);
         }
 
-        // TODO throw exceptions of type NO_ACTION
         $actionName = $this->getRequest()->getActionName();
+
+        $this->getLogger()->debug("Request to export plugin $actionName");
 
         $plugin = $this->getPlugin($actionName);
 
         if (!is_null($plugin)) {
-            $plugin->setConfig(Zend_Registry::get('Zend_Config'));
-            $plugin->setRequest($this->getRequest());
-            $plugin->setResponse($this->getResponse());
-            $plugin->setView($this->view);
             $plugin->init();
             $plugin->execute();
             $plugin->postDispatch();
+        }
+        else {
+            throw new Application_Exception('Plugin ' . htmlspecialchars($actionName) . ' not found');
         }
     }
 
     /**
      * Returns plugin for action name.
      *
+     * The plugin is setup for execution.
+     *
      * @param $name Name of plugin/action.
      * @return null|Export_Model_ExportPlugin
+     *
+     * TODO should the namespace for plugins be limited (security)?
      */
     protected function getPlugin($name) {
-        return (isset($this->plugins[$name])) ? $this->plugins[$name] : null;
+        if (isset($this->plugins[$name])) {
+            $pluginConfig = $this->plugins[$name];
+            $pluginClass = $pluginConfig->class;
+
+            $plugin = new $pluginClass();
+            $plugin->setConfig($pluginConfig);
+            $plugin->setRequest($this->getRequest());
+            $plugin->setResponse($this->getResponse());
+            $plugin->setView($this->view);
+
+            return $plugin;
+        }
+        else {
+            return null;
+        }
     }
 
     /**
      * Loads export plugins.
      *
-     * TODO use plugin configuration (Zend_Config)
-     * TODO instantiate plugin only if necessary
+     * Der Plugin spezifische Teil der Konfiguation wird festgehalten und später verwendet.
      */
     protected function loadPlugins() {
-        $this->plugins = array(
-            'index' => new Export_Model_XmlExport(),
-            'publist' => new Export_Model_PublistExport()
-        );
+        $config = $this->getConfig();
+        if (isset($config->plugins->export)) {
+            $exportPlugins = $config->plugins->export->toArray();
+
+            $plugins = array();
+
+            foreach($exportPlugins as $name => $plugin) {
+                $pluginName = ($name === 'default') ? 'index' : $name;
+                $plugins[$pluginName] = $config->plugins->export->$name;
+            }
+
+            $this->plugins = $plugins;
+        }
     }
 
 }

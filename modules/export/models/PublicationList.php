@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -28,11 +27,20 @@
  * @category    Application
  * @package     Module_Export
  * @author      Edouard Simon <edouard.simon@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2013-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+/**
+ * Export_Model_PublicationList for usage in publist XSLT.
+ *
+ * Die Klasse wird im XSLT fuer die Publikationslisten verwendet, um auf die Konfiguration zuzugreifen.
+ *
+ * TODO is there a better solution, that fits better with the plugin model?
+ * TODO Doesn't work with multiple configurations for same plugin.
+ */
 class Export_Model_PublicationList {
 
     protected static $allowedMimeTypes;
@@ -42,7 +50,9 @@ class Export_Model_PublicationList {
      */
     public static function initMimeTypes() {
         $config = Zend_Registry::get('Zend_Config');
-        self::$allowedMimeTypes = isset($config->publist->file->allow->mimetype) ? $config->publist->file->allow->mimetype->toArray() : array();
+        self::$allowedMimeTypes =
+            isset($config->plugins->export->publist->file->allow->mimetype) ?
+                $config->plugins->export->publist->file->allow->mimetype->toArray() : array();
     }
     
     /**

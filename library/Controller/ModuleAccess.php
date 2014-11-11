@@ -49,6 +49,12 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
      * @var \Zend_Log
      */
     private $logger = null;
+
+    /**
+     * Konfigurationsobjekt.
+     * @var Zend_Config
+     */
+    private $config = null;
     
     /**
      * Use pre-dispatch to check user access rights *before* action is called.
@@ -237,6 +243,17 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
      */
     public function setLogger($logger) {
         $this->logger = $logger;
+    }
+
+    /**
+     * Returns configuration object or null if none can be found.
+     * @return null|Zend_Config
+     */
+    public function getConfig() {
+        if (is_null($this->config)) {
+            $this->config = Zend_Registry::get('Zend_Config');
+        }
+        return $this->config;
     }
 
 }
