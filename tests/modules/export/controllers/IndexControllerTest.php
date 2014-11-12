@@ -735,7 +735,6 @@ class Export_IndexControllerTest extends ControllerTestCase {
      * Regression Test for OPUSVIER-2998 and OPUSVIER-2999
      */
     public function testPublistActionDisplaysUrlencodedFiles() {
-        
         Zend_Registry::get('Zend_Config')->merge(
                 new Zend_Config(array('plugins' => array('export' => array(
                     'publist' => array(
@@ -746,14 +745,13 @@ class Export_IndexControllerTest extends ControllerTestCase {
         // explicitly re-initialize mime type config to apply changes in Zend_Config
         // This is necessary due to static variable in Export_Model_PublicationList
         // which is not reset between tests.
-        Export_Model_PublicationList::initMimeTypes();
-        
+
         $config = Zend_Registry::get('Zend_Config');
         $this->assertTrue(isset($config->plugins->export->publist->file->allow->mimetype),
             'Failed setting configuration option');
         $this->assertEquals(array('application/xhtml+xml' => 'HTML'),
             $config->plugins->export->publist->file->allow->mimetype->toArray(), 'Failed setting configuration option');
-        
+
         $doc = new Opus_Document(92);
         $file = $doc->getFile(1);
         $this->assertTrue($file instanceOf Opus_File, 'Test setup has changed.');

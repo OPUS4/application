@@ -42,6 +42,12 @@
 interface Export_Model_ExportPlugin {
 
     /**
+     * Returns name of plugin.
+     * @return mixed
+     */
+    public function getName();
+
+    /**
      * Sets the plugin configuration.
      * @param Zend_Config $config
      */

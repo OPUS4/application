@@ -120,7 +120,7 @@ class Export_IndexController extends Controller_ModuleAccess {
             $pluginConfig = $this->plugins[$name];
             $pluginClass = $pluginConfig->class;
 
-            $plugin = new $pluginClass();
+            $plugin = new $pluginClass($name); // TODO good design?
             $plugin->setConfig($pluginConfig);
             $plugin->setRequest($this->getRequest());
             $plugin->setResponse($this->getResponse());

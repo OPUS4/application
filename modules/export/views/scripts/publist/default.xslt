@@ -47,6 +47,7 @@
     <xsl:param name="fullUrl" />
     <xsl:param name="collName" />
     <xsl:param name="groupBy" />
+    <xsl:param name="pluginName" />
 
     <xsl:template match="/">
         <xsl:apply-templates select="Documents"/>
@@ -504,7 +505,7 @@
     </xsl:template>
 
     <xsl:template match="File">
-        <xsl:variable name="MimeTypeDisplayName" select="php:function('Export_Model_PublicationList::getMimeTypeDisplayName', string(@MimeType))" />
+        <xsl:variable name="MimeTypeDisplayName" select="php:function('Export_Model_PublistExport::getMimeTypeDisplayName', $pluginName, string(@MimeType))" />
         <xsl:choose>
             <xsl:when test="$MimeTypeDisplayName != ''">
                 <xsl:element name="a">

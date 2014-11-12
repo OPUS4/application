@@ -44,6 +44,22 @@
 class Export_Model_PublistExport extends Export_Model_XsltExport {
 
     /**
+     * File mime types that are allowed for publication list.
+     * @var
+     */
+    private $allowedMimeTypes;
+
+    /**
+     * @var Array containing instances of plugin
+     */
+    private static $instances;
+
+    public function __construct($name) {
+        $this->setName($name);
+        self::registerInstance($this);
+    }
+
+    /**
      * @throws Application_Exception if parameters are not sufficient
      */
     public function execute() {
@@ -95,13 +111,92 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
 
         $this->_proc->registerPHPFunctions('max');
         $this->_proc->registerPHPFunctions('urlencode');
-        $this->_proc->registerPHPFunctions('Export_Model_PublicationList::getMimeTypeDisplayName');
+        $this->_proc->registerPHPFunctions('Export_Model_PublistExport::getMimeTypeDisplayName');
         $this->_proc->setParameter('', 'fullUrl', $view->fullUrl());
         $this->_proc->setParameter('', 'groupBy', $groupBy);
+        $this->_proc->setParameter('', 'pluginName', $this->getName());
 
         $this->loadStyleSheet($this->buildStylesheetPath($stylesheet, $view->getScriptPath('') . $stylesheetDirectory));
 
         $this->prepareXml();
+    }
+
+    public function setMimeTypes($mimeTypes) {
+        $this->allowedMimeTypes = $mimeTypes;
+    }
+
+    /**
+     * Initialize the mime types from configuration
+     */
+    public function getMimeTypes() {
+        if (is_null($this->allowedMimeTypes)) {
+            $config = $this->getConfig();
+            $this->allowedMimeTypes =
+                isset($config->file->allow->mimetype) ? $config->file->allow->mimetype->toArray() : array();
+        }
+
+        return $this->allowedMimeTypes;
+    }
+
+    /**
+     * Registers instances of plugin by name.
+     * @param $instance
+     */
+    private static function registerInstance($instance) {
+        self::$instances[$instance->getName()] = $instance;
+    }
+
+    /**
+     * Gets instances of plugin by name.
+     * @param $pluginName
+     * @return null
+     */
+    public static function getInstance($pluginName) {
+        return isset(self::$instances[$pluginName]) ? self::$instances[$pluginName] : null;
+    }
+
+    /**
+     * Return the display name as configured for a specific mime type
+     * @param string $mimeType Mime type to get display name for.
+     * If mime type is not configured, an empty string is returned.
+     *
+     * @result string display name for mime type
+     */
+    public static function getMimeTypeDisplayName($pluginName, $mimeType) {
+        $instance = self::getInstance($pluginName);
+        $mimeTypes = $instance->getMimeTypes();
+        return isset($mimeTypes[$mimeType]) ? $mimeTypes[$mimeType] : '';
+    }
+
+    /**
+     * Maps query for publist action.
+     */
+    public function mapQuery($roleParam, $numberParam) {
+        if (is_null(Opus_CollectionRole::fetchByName($roleParam))) {
+            throw new Application_Exception('specified role does not exist');
+        }
+
+        $role = Opus_CollectionRole::fetchByName($roleParam);
+        if ($role->getVisible() != '1') {
+            throw new Application_Exception('specified role is invisible');
+        }
+
+        if (count(Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam)) == 0) {
+            throw new Application_Exception('specified number does not exist for specified role');
+        }
+
+        $collection = null;
+        foreach (Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam) as $coll) {
+            if ($coll->getVisible() == '1' && is_null($collection)) {
+                $collection = $coll;
+            }
+        }
+
+        if (is_null($collection)) {
+            throw new Application_Exception('specified collection is invisible');
+        }
+
+        return $collection;
     }
 
 }

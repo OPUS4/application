@@ -32,7 +32,6 @@
  * @version     $Id$
  */
 
-
 class Export_Model_XmlExportTest extends ControllerTestCase {
 
     private $plugin;

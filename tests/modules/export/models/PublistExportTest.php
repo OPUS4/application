@@ -26,47 +26,37 @@
  *
  * @category    Application
  * @package     Module_Export
- * @author      Edouard Simon <edouard.simon@zib.de>
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013-2014, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Export_Model_PublicationList for usage in publist XSLT.
- *
- * Die Klasse wird im XSLT fuer die Publikationslisten verwendet, um auf die Konfiguration zuzugreifen.
- *
- * TODO is there a better solution, that fits better with the plugin model?
- * TODO Doesn't work with multiple configurations for same plugin.
- */
-class Export_Model_PublicationList {
+class Export_Model_PublistExportTest extends ControllerTestCase {
 
-    protected static $allowedMimeTypes;
-    
-    /**
-     * Initialize the mime types from configuration
-     */
-    public static function initMimeTypes() {
-        $config = Zend_Registry::get('Zend_Config');
-        self::$allowedMimeTypes =
-            isset($config->plugins->export->publist->file->allow->mimetype) ?
-                $config->plugins->export->publist->file->allow->mimetype->toArray() : array();
+    public function testConstruction() {
+        $plugin = new Export_Model_PublistExport('publist');
+
+        $this->assertEquals('publist', $plugin->getName());
+
+        $this->assertEquals($plugin, Export_Model_PublistExport::getInstance('publist'));
     }
-    
-    /**
-     * Return the display name as configured for a specific mime type
-     * @param string $mimeType Mime type to get display name for. 
-     * If mime type is not configured, an empty string is returned.
-     * 
-     * @result string display name for mime type
-     */
-    public static function getMimeTypeDisplayName($mimeType) {
-        if(!is_array(self::$allowedMimeTypes)) {
-            self::initMimeTypes();
-        }
-        return isset(self::$allowedMimeTypes[$mimeType]) ? self::$allowedMimeTypes[$mimeType] : '';
+
+    public function testGetMimeTypes()
+    {
+        $config = Zend_Registry::get('Zend_Config');
+
+        $config->merge(
+            new Zend_Config(array('plugins' => array('export' => array(
+                'publist' => array(
+                    'file' => array(
+                        'allow' => array(
+                            'mimetype' => array('application/xhtml+xml' => 'HTML')))))))));
+
+        $plugin = new Export_Model_PublistExport('publist');
+        $plugin->setConfig($config->plugins->export->publist);
+
+        $this->assertEquals(array('application/xhtml+xml' => 'HTML'), $plugin->getMimeTypes());
     }
 
 }

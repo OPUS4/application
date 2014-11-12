@@ -41,6 +41,12 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
     implements Export_Model_ExportPlugin {
 
     /**
+     * @var Name of plugin.
+     * TODO Im Augenblick nur von PublistExport verwendet, um im XSLT zwischen Instanzen unterscheiden zu können.
+     */
+    private $name;
+
+    /**
      * @var Zend_Config $config Plugin configuration.
      */
     private $config;
@@ -59,6 +65,22 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
      * @var Zend_View View object for rendering response.
      */
     private $view;
+
+    /**
+     * Returns name of plugin instance.
+     * @return Name
+     */
+    public function getName() {
+        return $this->name;
+    }
+
+    /**
+     * Sets name of plugin instance.
+     * @param $name
+     */
+    public function setName($name) {
+        $this->name = $name;
+    }
 
     /**
      * Sets the plugin configuration.

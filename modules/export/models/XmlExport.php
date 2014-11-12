@@ -291,37 +291,6 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
     }
 
     /**
-     * Maps query for publist action.
-     */
-    public function mapQuery($roleParam, $numberParam) {
-        if (is_null(Opus_CollectionRole::fetchByName($roleParam))) {
-            throw new Application_Exception('specified role does not exist');
-        }
-
-        $role = Opus_CollectionRole::fetchByName($roleParam);
-        if ($role->getVisible() != '1') {
-            throw new Application_Exception('specified role is invisible');
-        }
-
-        if (count(Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam)) == 0) {
-            throw new Application_Exception('specified number does not exist for specified role');
-        }
-
-        $collection = null;
-        foreach (Opus_Collection::fetchCollectionsByRoleNumber($role->getId(), $numberParam) as $coll) {
-            if ($coll->getVisible() == '1' && is_null($collection)) {
-                $collection = $coll;
-            }
-        }
-
-        if (is_null($collection)) {
-            throw new Application_Exception('specified collection is invisible');
-        }
-
-        return $collection;
-    }
-
-    /**
      * Searches for available stylesheets and builds the path of the selected stylesheet.
      */
     public function buildStylesheetPath($stylesheet, $path) {
