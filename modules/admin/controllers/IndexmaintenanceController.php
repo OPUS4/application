@@ -41,7 +41,7 @@ class Admin_IndexmaintenanceController extends Controller_Action {
     
     public function init() {
         parent::init();                
-        $this->model = new Admin_Model_IndexMaintenance($this->_logger);
+        $this->model = new Admin_Model_IndexMaintenance($this->getLogger());
         
         
         // TODO features will be enabled in later version

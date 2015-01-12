@@ -32,15 +32,13 @@
  * @version     $Id$
  */
 
-abstract class Oai_Model_AbstractFile {
+abstract class Oai_Model_AbstractFile extends Application_Model_Abstract {
 
     protected $path;
 
     protected $mimeType;
 
     protected $extension;
-
-    protected $_logger;
 
     public function getPath() {
         return $this->path;
@@ -60,7 +58,7 @@ abstract class Oai_Model_AbstractFile {
 
     protected function logErrorMessage($message) {
         if (!is_null($this->_logger)) {
-            $this->_logger->err(__CLASS__ . ': ' . $message);
+            $this->getLogger()->err(__CLASS__ . ': ' . $message);
         }
     }
 }

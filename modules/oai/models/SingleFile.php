@@ -35,7 +35,7 @@
 class Oai_Model_SingleFile extends Oai_Model_AbstractFile {    
 
     public function __construct($docId, $fileToInclude, $filesPath, $tempPath, $logger = null) {
-        $this->_logger = $logger;
+        $this->setLogger($logger);
         $numberOfFiles = count($fileToInclude);
         if ($numberOfFiles != 1) {
             $this->logErrorMessage("unexpected number of files to process: $numberOfFiles");

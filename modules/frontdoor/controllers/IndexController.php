@@ -372,7 +372,7 @@ class Frontdoor_IndexController extends Controller_Action {
             $statistics->countFrontdoor($docId);
         }
         catch (Exception $e) {
-            $this->_logger->err("Counting frontdoor statistics failed: " . $e);
+            $this->getLogger()->err("Counting frontdoor statistics failed: " . $e);
         }
     }
     

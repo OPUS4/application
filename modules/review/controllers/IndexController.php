@@ -171,7 +171,7 @@ class Review_IndexController extends Controller_Action {
 
             if (is_null($person) or !$person->isValid()) {
                 $message = "Problem clearing documents.  Information for current user is incomplete or invalid.";
-                $this->_logger->err($message);
+                $this->getLogger()->err($message);
                 throw new Application_Exception($message);
             }
         }
@@ -289,12 +289,12 @@ class Review_IndexController extends Controller_Action {
             return array();
         }
 
-        $this->_logger->debug("ids before filtering: " . implode(", ", $ids));
+        $this->getLogger()->debug("ids before filtering: " . implode(", ", $ids));
 
         $finder = $this->_prepareDocumentFinder();
         $ids = $finder->setIdSubset($ids)->ids();
 
-        $this->_logger->debug("ids after filtering: " . implode(", ", $ids));
+        $this->getLogger()->debug("ids after filtering: " . implode(", ", $ids));
         return $ids;
     }
 

@@ -68,7 +68,7 @@ class Admin_AccountController extends Controller_Action {
 
         $id = $this->getRequest()->getParam('id');
         if (empty($id)) {
-            $this->_logger->debug('Missing parameter account id.');
+            $this->getLogger()->debug('Missing parameter account id.');
             $this->_helper->redirector('index');
         }
 
@@ -190,7 +190,7 @@ class Admin_AccountController extends Controller_Action {
         $id = $this->getRequest()->getParam('id');
 
         if (empty($id)) {
-            $this->_logger->debug('Missing parameter account id.');
+            $this->getLogger()->debug('Missing parameter account id.');
             $this->_helper->redirector('index');
         }
         else {

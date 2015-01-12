@@ -35,7 +35,7 @@
 class Oai_Model_TarFile extends Oai_Model_AbstractFile {
 
     public function __construct($docId, $filesToInclude, $filesPath, $tempPath, $logger = null) {
-        $this->_logger = $logger;
+        $this->setLogger($logger);
         $numberOfFiles = count($filesToInclude);
         if ($numberOfFiles < 2) {
             $this->logErrorMessage("unexpected number of files to process: $numberOfFiles");

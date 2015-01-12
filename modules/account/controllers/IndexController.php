@@ -82,6 +82,7 @@ class Account_IndexController extends Controller_Action {
     public function saveAction() {
         $login = Zend_Auth::getInstance()->getIdentity();
         $config = Zend_Registry::get('Zend_Config');
+        $logger = $this->getLogger();
 
         if (!empty($login) && $this->getRequest()->isPost()) {
             $accountForm = new Account_Form_Account($login);
@@ -123,19 +124,19 @@ class Account_IndexController extends Controller_Action {
                     $account->setLastName($lastname);
                     $account->setEmail($email);
 
-                    $this->_logger->debug('login = ' . $login);
-                    $this->_logger->debug('new login = ' . $newLogin);
+                    $logger->debug('login = ' . $login);
+                    $logger->debug('new login = ' . $newLogin);
 
                     $isLoginChanged = ($login == $newLogin) ? false : true;
 
                     if ($isLoginChanged && ($login !== 'admin')) {
-                        $this->_logger->debug('login changed');
+                        $logger->debug('login changed');
                         $account->setLogin($newLogin);
                     }
                 }
 
                 if ($isPasswordChanged) {
-                    $this->_logger->debug('Password changed');
+                    $logger->debug('Password changed');
                     $account->setPassword($password);
                 }
 

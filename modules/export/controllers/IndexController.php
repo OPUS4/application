@@ -85,7 +85,7 @@ class Export_IndexController extends Controller_ModuleAccess {
     public function __call($action, $parameters) {
         // TODO what does this code do
         if (!'Action' == substr($action, -6)) {
-            $this->_logger->info(__METHOD__ . ' undefined method: ' . $action);
+            $this->getLogger()->info(__METHOD__ . ' undefined method: ' . $action);
             parent::__call($action, $parameters);
         }
 

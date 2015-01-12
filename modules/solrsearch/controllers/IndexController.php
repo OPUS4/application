@@ -149,7 +149,7 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     private function performSearch() {
-        $this->_logger->debug('performing search');
+        $this->getLogger()->debug('performing search');
         try {
             $searcher = new Opus_SolrSearch_Searcher();
             $this->openFacets = $this->facetMenu->buildFacetArray($this->_request->getParams());
@@ -157,7 +157,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->resultList = $searcher->search($this->query);
         }
         catch (Opus_SolrSearch_Exception $e) {
-            $this->_logger->err(__METHOD__ . ' : ' . $e);
+            $this->getLogger()->err(__METHOD__ . ' : ' . $e);
             throw new Application_SearchException($e);
         }
         $this->numOfHits = $this->resultList->getNumberOfHits();
@@ -170,13 +170,15 @@ class Solrsearch_IndexController extends Controller_Action {
             $nrOfRows = (int)$this->query->getRows();
             $start = $this->query->getStart();
             $query = null;
-            if ($this->searchtype === Util_Searchtypes::SIMPLE_SEARCH || $this->searchtype === Util_Searchtypes::ALL_SEARCH) {
+            if ($this->searchtype === Util_Searchtypes::SIMPLE_SEARCH
+                    || $this->searchtype === Util_Searchtypes::ALL_SEARCH) {
                 $query = $this->query->getCatchAll();
             }
             $this->setUpPagination($nrOfRows, $start, $query);
         }
 
-        if ($this->searchtype === Util_Searchtypes::SIMPLE_SEARCH || $this->searchtype === Util_Searchtypes::ALL_SEARCH) {
+        if ($this->searchtype === Util_Searchtypes::SIMPLE_SEARCH
+                || $this->searchtype === Util_Searchtypes::ALL_SEARCH) {
             $queryString = $this->query->getCatchAll();
             if (trim($queryString) !== '*:*') {
                 $this->view->q = $queryString;
@@ -192,7 +194,8 @@ class Solrsearch_IndexController extends Controller_Action {
             }
             return;
         }
-        if ($this->searchtype === Util_Searchtypes::ADVANCED_SEARCH || $this->searchtype === Util_Searchtypes::AUTHOR_SEARCH) {
+        if ($this->searchtype === Util_Searchtypes::ADVANCED_SEARCH
+                || $this->searchtype === Util_Searchtypes::AUTHOR_SEARCH) {
             $this->setFilterQueryBaseURL();
             $this->view->authorQuery = $this->query->getField('author');
             $this->view->titleQuery = $this->query->getField('title');
@@ -209,13 +212,15 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->personsQueryModifier = $this->query->getModifier('persons');
             return;
         }
-        if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH || $this->searchtype === Util_Searchtypes::SERIES_SEARCH) {
+        if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH
+                || $this->searchtype === Util_Searchtypes::SERIES_SEARCH) {
             $this->setFilterQueryBaseURL();
             return;
         }
         if ($this->searchtype === Util_Searchtypes::LATEST_SEARCH) {
             $this->view->isSimpleList = true;
-            $this->view->specialTitle = $this->view->translate('title_latest_docs_article').' '.$this->query->getRows(). ' '.$this->view->translate('title_latest_docs');
+            $this->view->specialTitle = $this->view->translate('title_latest_docs_article') . ' '
+                . $this->query->getRows(). ' '.$this->view->translate('title_latest_docs');
             return;
         }
     }
@@ -267,7 +272,7 @@ class Solrsearch_IndexController extends Controller_Action {
 
         foreach($facets as $key=>$facet) {
             $this->view->showFacetExtender[$key] = ($facetLimit[$key] <= sizeof($facet));
-            $this->_logger->debug("found $key facet in search results");
+            $this->getLogger()->debug("found $key facet in search results");
             $this->view->facetNumberContainer[$key] = sizeof($facet);
             $facetValue = $this->getRequest()->getParam($key . 'fq','');
             if($facetValue !== '') {
@@ -288,7 +293,7 @@ class Solrsearch_IndexController extends Controller_Action {
     private function buildQuery() {
         $request = $this->getRequest();
 
-        $queryBuilder = new Util_QueryBuilder($this->_logger);
+        $queryBuilder = new Util_QueryBuilder($this->getLogger());
 
         $queryBuilderInput = null;
 
@@ -296,11 +301,11 @@ class Solrsearch_IndexController extends Controller_Action {
             $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($request);
         }
         catch (Util_BrowsingParamsException $e) {
-            $this->_logger->err(__METHOD__ . ' : ' . $e->getMessage());
+            $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             return $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
         }
         catch (Util_QueryBuilderException $e) {
-            $this->_logger->err(__METHOD__ . ' : ' . $e->getMessage());
+            $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             return $this->_redirectToAndExit('index');
         }
 
@@ -329,7 +334,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $series = new Solrsearch_Model_Series($this->getRequest()->getParam('id'));
         }
         catch (Solrsearch_Model_Exception $e) {
-            $this->_logger->debug($e->getMessage());
+            $this->getLogger()->debug($e->getMessage());
             return $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
         }
 
@@ -346,7 +351,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $collectionList = new Solrsearch_Model_CollectionList($this->getRequest()->getParam('id'));
         }
         catch (Solrsearch_Model_Exception $e) {
-            $this->_logger->debug($e->getMessage());
+            $this->getLogger()->debug($e->getMessage());
             return $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
         }
 
@@ -377,7 +382,8 @@ class Solrsearch_IndexController extends Controller_Action {
                 $this->_helper->layout->setLayoutPath($layoutPath);
             }
             else {
-                $this->_logger->debug("The requested theme '" . $collectionList->getTheme() . "' does not exist - use default theme instead.");
+                $this->getLogger()->debug("The requested theme '" . $collectionList->getTheme()
+                    . "' does not exist - use default theme instead.");
             }
         }
     }
@@ -427,16 +433,18 @@ class Solrsearch_IndexController extends Controller_Action {
      * it is not in the interval [$lowerBoundInclusive, $upperBoundInclusive].
      */
     private function validateInput($input, $min = 1, $max = 100) {
+        $logger = $this->getLogger();
+
         if ($input['rows'] > $max) {
-            $this->_logger->warn("Values greater than 100 are currently not allowed for the rows paramter.");
+            $logger->warn("Values greater than 100 are currently not allowed for the rows paramter.");
             $input['rows'] = $max;
         }
         if ($input['rows'] < $min) {
-            $this->_logger->warn("rows parameter is smaller than 1: adjusting to 1.");
+            $logger->warn("rows parameter is smaller than 1: adjusting to 1.");
             $input['rows'] = $min;
         }
         if ($input['start'] < 0) {
-            $this->_logger->warn("A negative start parameter is ignored.");
+            $logger->warn("A negative start parameter is ignored.");
             $input['start'] = 0;
         }
         return $input;

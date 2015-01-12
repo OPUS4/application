@@ -56,7 +56,7 @@ class Solrsearch_BrowseController extends Controller_Action {
             $facets = $searcher->search($query)->getFacets();
         }
         catch (Opus_SolrSearch_Exception $e) {
-            $this->_logger->err(__METHOD__ . ' : ' . $e);
+            $this->getLogger()->err(__METHOD__ . ' : ' . $e);
             throw new Application_SearchException($e);
         }
         

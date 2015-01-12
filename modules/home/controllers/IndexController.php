@@ -56,7 +56,7 @@ class Home_IndexController extends Controller_Action {
      */
     public function __call($action, $parameters) {
         if (!'Action' == substr($action, -6)) {
-            $this->_logger->info(__METHOD__ . ' undefined method: ' . $action);
+            $this->getLogger()->info(__METHOD__ . ' undefined method: ' . $action);
             parent::__call($action, $parameters);
         }
         // it should be checked if the requested static page exists at all, as
@@ -66,7 +66,7 @@ class Home_IndexController extends Controller_Action {
         $phtmlFilesAvailable = $this->getViewScripts();
 
         if (array_search($actionName, $phtmlFilesAvailable) === FALSE) {
-            $this->_logger->info(__METHOD__ . ' requested file ' . $actionName . '.phtml is not readable or does not exist');
+            $this->getLogger()->info(__METHOD__ . ' requested file ' . $actionName . '.phtml is not readable or does not exist');
             parent::__call($action, $parameters);
         }
 

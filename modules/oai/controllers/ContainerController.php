@@ -41,7 +41,7 @@ class Oai_ContainerController extends Controller_Action {
         $container = null;
         $fileHandle = null;	
         try {
-            $container = new Oai_Model_Container($docId, $this->_logger);
+            $container = new Oai_Model_Container($docId, $this->getLogger());
             $fileHandle = $container->getFileHandle();            
         }
         catch (Oai_Model_Exception $e) {
@@ -58,11 +58,12 @@ class Oai_ContainerController extends Controller_Action {
                 ->setHeader('Content-Type', $fileHandle->getMimeType(), true)
                 ->setHeader('Content-Disposition', 'attachment; filename=' . $container->getName() . $fileHandle->getExtension(), true);
 
-        $this->_helper->SendFile->setLogger($this->_logger);
+        $this->_helper->SendFile->setLogger($this->getLogger());
         try {
             $this->_helper->SendFile($fileHandle->getPath());
-        } catch (Exception $e) {
-            $this->_logger->err($e->getMessage());
+        }
+        catch (Exception $e) {
+            $this->getLogger()->err($e->getMessage());
             $this->getResponse()->clearAllHeaders();
             $this->getResponse()->clearBody();
             $this->getResponse()->setHttpResponseCode(500);

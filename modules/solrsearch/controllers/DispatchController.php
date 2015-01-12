@@ -36,7 +36,7 @@
 class Solrsearch_DispatchController extends Controller_Action {
 
     public function indexAction() {
-        $this->_logger->debug('Received new search request. Redirecting to search action of IndexController.');
+        $this->getLogger()->debug('Received new search request. Redirecting to search action of IndexController.');
         $params = array();
         $action = 'search';
 

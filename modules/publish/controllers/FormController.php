@@ -70,7 +70,7 @@ class Publish_FormController extends Controller_Action {
         }
 
         if (is_array($postData) && count($postData) === 0) {
-            $this->_logger->err('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
+            $this->getLogger()->err('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
             return $this->_redirectTo('index', $this->view->translate('error_empty_post_array'), 'index');
         }
 
@@ -140,30 +140,32 @@ class Publish_FormController extends Controller_Action {
     }
 
     private function createPublishingSecondForm($postData = null) {
+        $logger = $this->getLogger();
+
         try {
-            return new Publish_Form_PublishingSecond($this->_logger, $postData);
+            return new Publish_Form_PublishingSecond($logger, $postData);
         }
         catch (Publish_Model_FormSessionTimeoutException $e) {
-            $this->_logger->info('Session Timeout beim Verarbeiten des zweiten Formularschritts');
+            $logger->info('Session Timeout beim Verarbeiten des zweiten Formularschritts');
             throw $e; // unmittelbarer Redirect erfolgt in Action-Methode
         }
         catch (Publish_Model_FormIncorrectFieldNameException $e) {
-            $this->_logger->err('invalider Feldname ' . $e->fieldName);
+            $logger->err('invalider Feldname ' . $e->fieldName);
             throw new Application_Exception(preg_replace('/%value%/', htmlspecialchars($e->fieldName), $this->view->translate($e->getTranslateKey())));
         }
         catch (Publish_Model_FormIncorrectEnrichmentKeyException $e) {
-            $this->_logger->err('invalider EnrichmentKey ' . $e->enrichmentKey);
+            $logger->err('invalider EnrichmentKey ' . $e->enrichmentKey);
             throw new Application_Exception(preg_replace('/%value%/', htmlspecialchars($e->enrichmentKey), $this->view->translate($e->getTranslateKey())));
         }
         catch (Publish_Model_FormException $e) {
-            $this->_logger->err('Exception bei der Erzeugung des zweiten Formulars: ' . $e->enrichmentKey);
+            $logger->err('Exception bei der Erzeugung des zweiten Formulars: ' . $e->enrichmentKey);
             throw new Application_Exception($e->getTranslateKey());
         }
         catch (Application_Exception $e) {
             throw $e;
         }
         catch (Exception $e) {
-            $this->_logger->err('unerwartete Exception bei der Erzeugung des zweiten Formulars: ' . $e->getMessage());
+            $logger->err('unerwartete Exception bei der Erzeugung des zweiten Formulars: ' . $e->getMessage());
             throw new Application_Exception('publish_error_unexpected');
         }
     }
@@ -199,7 +201,7 @@ class Publish_FormController extends Controller_Action {
                         $document->deletePermanent();
                     }
                     catch (Opus_Model_Exception $e) {
-                        $this->_logger->err("deletion of document # " . $this->session->documentId . " was not successful", $e);
+                        $this->getLogger()->err("deletion of document # " . $this->session->documentId . " was not successful", $e);
                     }
                 }
                 return $this->_redirectTo('index', '', 'index');
@@ -291,10 +293,10 @@ class Publish_FormController extends Controller_Action {
         $docModel = new Publish_Model_DocumentWorkflow();
 
         if (!isset($this->session->documentId) || $this->session->documentId == '') {
-            $this->_logger->info(__METHOD__ . ' documentType = ' . $documentType);
+            $this->getLogger()->info(__METHOD__ . ' documentType = ' . $documentType);
             $this->document = $docModel->createDocument($documentType);
             $this->session->documentId = $this->document->store();
-            $this->_logger->info(__METHOD__ . ' The corresponding document ID is: ' . $this->session->documentId);
+            $this->getLogger()->info(__METHOD__ . ' The corresponding document ID is: ' . $this->session->documentId);
         }
         else {
             $this->document = $docModel->loadDocument($this->session->documentId);
@@ -331,23 +333,25 @@ class Publish_FormController extends Controller_Action {
             }
         }
 
-        $this->_logger->info("Fileupload of: " . count($files) . " potential files (vs. $upload_count really uploaded)");
+        $logger = $this->getLogger();
+
+        $logger->info("Fileupload of: " . count($files) . " potential files (vs. $upload_count really uploaded)");
 
         if ($upload_count < 1) {
-            $this->_logger->debug("NO File uploaded!!!");
+            $logger->debug("NO File uploaded!!!");
             if (!isset($this->session->fulltext)) {
                 $this->session->fulltext = '0';
             }
             return false;
         }
 
-        $this->_logger->debug("File uploaded!!!");
+        $logger->debug("File uploaded!!!");
         $this->session->fulltext = '1';
 
         $perfomStore = false;
         foreach ($files AS $file => $fileValues) {
             if (!empty($fileValues['name'])) {
-                $this->_logger->info("uploaded: " . $fileValues['name']);
+                $logger->info("uploaded: " . $fileValues['name']);
                 $docfile = $this->document->addFile();
                 //$docfile->setFromPost($fileValues);
                 $docfile->setLabel(urldecode($fileValues['name']));
@@ -374,7 +378,7 @@ class Publish_FormController extends Controller_Action {
         }
 
         if (isset($data['bibliographie']) && $data['bibliographie'] === '1') {
-            $this->_logger->debug("Bibliographie is set -> store it!");
+            $this->getLogger()->debug("Bibliographie is set -> store it!");
             //store the document internal field BelongsToBibliography
             $this->document->setBelongsToBibliography(1);
             $this->document->store();

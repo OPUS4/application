@@ -55,12 +55,6 @@ class Controller_Action extends Controller_ModuleAccess {
     private $__flashMessenger = null;
 
     /**
-     * Logger instance.
-     * @var Zend_Log
-     */
-    protected $_logger;
-
-    /**
      * Helper fuer Breadcrumbs.
      * @var null
      */
@@ -73,8 +67,8 @@ class Controller_Action extends Controller_ModuleAccess {
      */
     public function init() {
         parent::init();
-        $this->_logger = $this->getLogger(); // TODO find all usages of _logger and replace with getLogger()
-        $this->view->title = $this->_request->getModuleName() . '_' . $this->_request->getParam('controller') . '_' . $this->_request->getParam('action');
+        $this->view->title = $this->_request->getModuleName() . '_' . $this->_request->getParam('controller') . '_'
+            . $this->_request->getParam('action');
         $this->__redirector = $this->_helper->getHelper('Redirector');
         $this->__flashMessenger = $this->_helper->getHelper('FlashMessenger');
         $this->view->flashMessenger = $this->__flashMessenger;
@@ -105,21 +99,25 @@ class Controller_Action extends Controller_ModuleAccess {
      * @param string $module        The target module.
      * @param array $params         Optional request parameters.
      */
-    protected function _redirectToPermanent($action, $message = null, $controller = null, $module = null, $params = array()) {
+    protected function _redirectToPermanent($action, $message = null, $controller = null, $module = null,
+                                            $params = array()) {
         $this->__redirector->setCode(301);
         $this->performRedirect($action, $message, $controller, $module, $params);
     }
     
-    protected function _redirectToAndExit($action, $message = null, $controller = null, $module = null, $params = array()) {
+    protected function _redirectToAndExit($action, $message = null, $controller = null, $module = null,
+                                          $params = array()) {
         $this->performRedirect($action, $message, $controller, $module, $params, true);
     }
 
-    protected function _redirectToPermanentAndExit($action, $message = null, $controller = null, $module = null, $params = array()) {
+    protected function _redirectToPermanentAndExit($action, $message = null, $controller = null, $module = null,
+                                                   $params = array()) {
         $this->__redirector->setCode(301);
         $this->performRedirect($action, $message, $controller, $module, $params, true);
     }
 
-    private function performRedirect($action, $message = null, $controller = null, $module = null, $params = array(), $exit = false) {
+    private function performRedirect($action, $message = null, $controller = null, $module = null, $params = array(),
+                                     $exit = false) {
         if (!is_null($message)) {
             if (is_array($message) && count($message) !==  0) {
                 $keys = array_keys($message);
@@ -135,7 +133,7 @@ class Controller_Action extends Controller_ModuleAccess {
                 $this->__flashMessenger->addMessage(array('level' => 'notice', 'message' => $message));
             }
         }
-        $this->_logger->debug("redirect to module: $module controller: $controller action: $action");
+        $this->getLogger()->debug("redirect to module: $module controller: $controller action: $action");
         $this->__redirector->gotoSimple($action, $controller, $module, $params);
         $this->__redirector->setExit($exit);
 

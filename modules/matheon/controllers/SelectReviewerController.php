@@ -83,7 +83,7 @@ class Matheon_SelectReviewerController extends Controller_Action {
                     strtolower($reviewerAccount->getLogin()),
                 ));
 
-        $this->_logger->debug('sending messages to users (' . implode(",", $recipients) . ')');
+        $this->getLogger()->debug('sending messages to users (' . implode(",", $recipients) . ')');
         if ($this->__sendPublishNotification($documentModel, $recipients)) {
             $this->view->success = true;
         }
@@ -123,10 +123,10 @@ class Matheon_SelectReviewerController extends Controller_Action {
 
         // Execute job immediately (synchronously)
         try {
-            $mail = new Opus_Job_Worker_MailNotification($this->_logger);
+            $mail = new Opus_Job_Worker_MailNotification($this->getLogger());
             $mail->work($job);
         } catch(Exception $exc) {
-            $this->_logger->err($exc);
+            $this->getLogger()->err($exc);
         }
 
         return true;
@@ -146,7 +146,7 @@ class Matheon_SelectReviewerController extends Controller_Action {
             $login = strtolower($user->getLogin());
 
             if (is_null($user)) {
-                $this->_logger->warn("-- skipping name: " . $login . " (user does not exist)");
+                $this->getLogger()->warn("-- skipping name: " . $login . " (user does not exist)");
                 continue;
             }
 
@@ -159,7 +159,7 @@ class Matheon_SelectReviewerController extends Controller_Action {
                 $displayValue = $lastname . ", " . $firstname;
             }
             else {
-                $this->_logger->warn("-- incomplete name: " . $login . " (missing first/last name)");
+                $this->getLogger()->warn("-- incomplete name: " . $login . " (missing first/last name)");
             }
 
             $reviewerSelect[$key] = $displayValue;
