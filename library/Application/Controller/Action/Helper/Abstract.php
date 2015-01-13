@@ -37,17 +37,29 @@
  */
 abstract class Application_Controller_Action_Helper_Abstract extends Zend_Controller_Action_Helper_Abstract {
 
-    private $logger = null;
+    /**
+     * Logger for controller classes.
+     * @var Zend_Log
+     */
+    private $_logger = null;
 
+    /**
+     * Returns logger.
+     * @return Zend_Log
+     */
     public function getLogger() {
-        if (is_null($this->logger)) {
-            $this->logger = Zend_Registry::get('Zend_Log');
+        if (is_null($this->_logger)) {
+            $this->_logger = Zend_Registry::get('Zend_Log');
         }
-        return $this->logger;
+        return $this->_logger;
     }
 
+    /**
+     * Sets logger for class.
+     * @param $logger Zend_Log
+     */
     public function setLogger($logger) {
-        $this->logger = $logger;
+        $this->_logger = $logger;
     }
 
 }

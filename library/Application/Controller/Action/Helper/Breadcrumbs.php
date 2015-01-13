@@ -47,7 +47,7 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
 
     const TITLE_SHORT_SUFFIX = ' ...';
 
-    private $navigation = null;
+    private $_navigation = null;
 
     public function init() {
         parent::init();
@@ -110,15 +110,15 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
     }
 
     public function getNavigation() {
-        if (is_null($this->navigation)) {
-            $this->navigation = $this->getActionController()->view->navigation();
+        if (is_null($this->_navigation)) {
+            $this->_navigation = $this->getActionController()->view->navigation();
         }
 
-        return $this->navigation;
+        return $this->_navigation;
     }
 
     public function setNavigation($navigation) {
-        $this->navigation = $navigation;
+        $this->_navigation = $navigation;
     }
 
     public function getDocumentTitle($document) {

@@ -41,21 +41,22 @@ class Application_Controller_Action_Helper_Version extends Application_Controlle
     /**
      * Version of latest OPUS 4 Release.
      */
-    private $version;
+    private $_version;
 
     public function direct() {
         return $this->getVersion();
     }
 
     public function getVersion() {
-        if (is_null($this->version)) {
-            $this->version = $this->getLatestReleaseFromServer();
+        if (is_null($this->_version)) {
+            $this->_version = $this->getLatestReleaseFromServer();
         }
-        return $this->version;
+
+        return $this->_version;
     }
 
     public function setVersion($version) {
-        $this->version = $version;
+        $this->_version = $version;
     }
 
     /**
@@ -70,4 +71,4 @@ class Application_Controller_Action_Helper_Version extends Application_Controlle
         return $fileContentArray[0];
     }
 
-} 
+}
