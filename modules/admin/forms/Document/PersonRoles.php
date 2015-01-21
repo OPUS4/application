@@ -53,7 +53,7 @@ class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm
      * 
      * TODO centralize
      */
-    private $personRoles =  array(
+    private $_personRoles =  array(
         'author' => 'author',
         'editor' => 'editor',
         'translator' => 'translator',
@@ -71,8 +71,8 @@ class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm
      * @param mixed $options
      */
     public function __construct($role = null, $options = null) {
-        if (!is_null($role) && isset($this->personRoles[$role])) {
-            unset($this->personRoles[$role]);
+        if (!is_null($role) && isset($this->_personRoles[$role])) {
+            unset($this->_personRoles[$role]);
         }
         
         parent::__construct($options);
@@ -84,18 +84,22 @@ class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm
     public function init() {
         parent::init();
         
-        $roles = $this->personRoles;
+        $roles = $this->_personRoles;
         
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             'FormElements',
             array('HtmlTag', array('tag' => 'ul', 'class' => 'links'))
-        ));
+            )
+        );
         
         foreach ($roles as $role) {
-            $this->addElement('submit', $this->getRoleElementName($role), array(
+            $this->addElement(
+                'submit', $this->getRoleElementName($role), array(
                 'decorators' => array('ViewHelper', array('HtmlTag', array('tag' => 'li'))),
                 'label' => 'Opus_Person_Role_Value_' . ucfirst($role)
-            ));
+                )
+            );
         }
     }
     
@@ -107,7 +111,7 @@ class Admin_Form_Document_PersonRoles extends Admin_Form_AbstractDocumentSubForm
      */
     public function processPost($post, $context) {
         // Prüfen, ob Button für Rollenänderung ausgewählt wurde
-        foreach ($this->personRoles as $role) {
+        foreach ($this->_personRoles as $role) {
             if (array_key_exists($this->getRoleElementName($role), $post)) {
                 return array(
                     'result' => Admin_Form_Document_PersonRoles::RESULT_CHANGE_ROLE,

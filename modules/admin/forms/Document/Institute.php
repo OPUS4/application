@@ -48,10 +48,10 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm {
     /**
      * @var ROLE_GRANTOR or ROLE_PUBLISHER
      */
-    private $__role;
+    private $_role;
     
     public function __construct($role, $options = null) {
-        $this->__role = $role;
+        $this->_role = $role;
         parent::__construct($options);
     }
     
@@ -60,7 +60,7 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm {
         
         $this->addElement('Hidden', self::ELEMENT_DOC_ID);
         
-        switch ($this->__role) {
+        switch ($this->_role) {
             case self::ROLE_PUBLISHER:
                 $this->addElement('Publisher', self::ELEMENT_INSTITUTE);
                 break;
@@ -68,7 +68,7 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm {
                 $this->addElement('Grantor', self::ELEMENT_INSTITUTE);
                 break;
             default:
-                throw new Application_Exception(__METHOD__ . ' Unknown role \'' . $this->__role . '\'.');
+                throw new Application_Exception(__METHOD__ . ' Unknown role \'' . $this->_role . '\'.');
                 break;
         }
     }
@@ -102,7 +102,7 @@ class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm {
         }
         else {
             $instituteId = $this->getElement(self::ELEMENT_INSTITUTE)->getValue();
-            $linkId = array($docId, $instituteId, $this->__role);
+            $linkId = array($docId, $instituteId, $this->_role);
         }
         
         try {

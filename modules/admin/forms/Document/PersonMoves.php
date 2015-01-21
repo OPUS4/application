@@ -63,13 +63,13 @@ class Admin_Form_Document_PersonMoves extends Admin_Form_AbstractDocumentSubForm
      * 
      * TODO centralize
      */
-    private $moves;
+    private $_moves;
     
     /**
      * Flag für spezielle Position, erste oder letzte Stelle.
      * @var string
      */
-    private $position;
+    private $_position;
     
     /**
      * Konstruiert Formular.
@@ -77,7 +77,7 @@ class Admin_Form_Document_PersonMoves extends Admin_Form_AbstractDocumentSubForm
      * @param mixed $options
      */
     public function __construct($position = null, $options = null) {
-        $this->position = $position;
+        $this->_position = $position;
         parent::__construct($options);
     }
     
@@ -87,40 +87,44 @@ class Admin_Form_Document_PersonMoves extends Admin_Form_AbstractDocumentSubForm
     public function init() {
         parent::init();
         
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             'FormElements',
             array('HtmlTag', array('tag' => 'ul', 'class' => 'links'))
-        ));
+            )
+        );
         
         $this->createButtons();
     }
     
     private function createButtons() {
-        switch ($this->position) {
+        switch ($this->_position) {
             case self::POSITION_FIRST:
-                $this->moves = array('Down', 'Last');
+                $this->_moves = array('Down', 'Last');
                 break;
             case self::POSITION_LAST:
-                $this->moves = array('First', 'Up');
+                $this->_moves = array('First', 'Up');
                 break;
             default:
-                $this->moves = array('First', 'Up', 'Down', 'Last');
+                $this->_moves = array('First', 'Up', 'Down', 'Last');
                 break;
         }
         
-        foreach ($this->moves as $move) {
+        foreach ($this->_moves as $move) {
             $lower = strtolower($move);
-            $this->addElement('submit', $move, array(
+            $this->addElement(
+                'submit', $move, array(
                 'decorators' => array('ViewHelper',
                     array('HtmlTag', array('tag' => 'li', 'class' => 'move-' . $lower))),
                 'label' => 'admin_button_move_' . $lower
-            ));
+                )
+            );
         }
     }
     
     public function changePosition($position) {
-        if ($this->position !== $position) {
-            $this->position = $position;
+        if ($this->_position !== $position) {
+            $this->_position = $position;
             
             $this->clearElements();
             $this->createButtons();
@@ -135,7 +139,7 @@ class Admin_Form_Document_PersonMoves extends Admin_Form_AbstractDocumentSubForm
      */
     public function processPost($post, $context) {
         // Prüfen, ob Button für Rollenänderung ausgewählt wurde
-        foreach ($this->moves as $move) {
+        foreach ($this->_moves as $move) {
             if (array_key_exists($move, $post)) {
                 return array(
                     'result' => self::RESULT_MOVE,

@@ -44,7 +44,7 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
      * Der Schlagworttyp für den dieses Unterformular verwendet wird.
      * @var string
      */
-    private $__subjectType;
+    private $_subjectType;
 
     /**
      * Konstruiert ein Unterformular für Schlagwörter eines bestimmten Typs.
@@ -52,18 +52,22 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
      * @param mixed $options
      */
     public function __construct($type, $options = null) {
-        $this->__subjectType = $type;
+        $this->_subjectType = $type;
 
         $validator = null;
 
         switch ($type) {
             case 'swd':
-                $validator = new Form_Validate_MultiSubForm_RepeatedValues('Value',
-                    'admin_document_error_repeated_subject');
+                $validator = new Form_Validate_MultiSubForm_RepeatedValues(
+                    'Value',
+                    'admin_document_error_repeated_subject'
+                );
                 break;
             default:
-                $validator = new Form_Validate_MultiSubForm_RepeatedValues('Value',
-                    'admin_document_error_repeated_subject', 'Language');
+                $validator = new Form_Validate_MultiSubForm_RepeatedValues(
+                    'Value',
+                    'admin_document_error_repeated_subject', 'Language'
+                );
                 break;
         }
 
@@ -78,7 +82,7 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
     public function init() {
         parent::init();
                 
-        $this->setLegend('admin_document_section_subject' . $this->__subjectType); 
+        $this->setLegend('admin_document_section_subject' . $this->_subjectType);
     }
 
     /**
@@ -86,7 +90,7 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
      * @return string Schlagworttyp
      */
     public function getSubjectType() {
-        return $this->__subjectType;
+        return $this->_subjectType;
     }
     
     /**
@@ -107,11 +111,11 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
      * @return \Admin_Form_Document_Subject
      */
     public function createNewSubFormInstance() {
-        if ($this->__subjectType == 'swd') {
+        if ($this->_subjectType == 'swd') {
             return new Admin_Form_Document_Subject('swd', 'deu');
-        } 
+        }
         else {
-            return new Admin_Form_Document_Subject($this->__subjectType);
+            return new Admin_Form_Document_Subject($this->_subjectType);
         }
     }
     
@@ -127,7 +131,7 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
         $subjects = array();
         
         foreach ($values as $value) {
-            if ($value->getType() == $this->__subjectType) {
+            if ($value->getType() == $this->_subjectType) {
                 $subjects[] = $value;
             }
         }

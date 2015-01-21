@@ -54,7 +54,7 @@ class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm {
      * Bestimmt die Reihenfolge der Sektionen für die einzelnen Rollen.
      * @var array
      */
-    private static $personRoles =  array(
+    private static $_personRoles =  array(
         'author', 'editor', 'translator', 'contributor', 'other', 'advisor', 'referee', 'submitter'
     );
     
@@ -68,12 +68,14 @@ class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm {
 
         $this->setLegend('admin_document_section_persons');
         
-        $this->addElement('submit', 'Sort', array('label' => 'admin_button_sort', 'decorators' => array(),
-            'disableLoadDefaultDecorators' => true));
+        $this->addElement(
+            'submit', 'Sort', array('label' => 'admin_button_sort', 'decorators' => array(),
+            'disableLoadDefaultDecorators' => true)
+        );
 
         $this->getDecorator('FieldsetWithButtons')->setLegendButtons(array('Sort'));
 
-        foreach (self::$personRoles as $roleName) {
+        foreach (self::$_personRoles as $roleName) {
             $subform = new Admin_Form_Document_PersonRole($roleName);
             $this->addSubForm($subform, $roleName);
         }        
@@ -99,7 +101,7 @@ class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm {
      * @param array $post
      */
     public function constructFromPost($post, $document = null) {
-        foreach($post as $key => $data) {
+        foreach ($post as $key => $data) {
             $subform = $this->getSubForm($key);
             if (!is_null($subform)) {
                 $subform->constructFromPost($data, $document);
@@ -216,7 +218,7 @@ class Admin_Form_Document_Persons extends Admin_Form_AbstractDocumentSubForm {
      * TODO wohin?
      */
     public static function getRoles() {
-        return self::$personRoles;
+        return self::$_personRoles;
     }
 
 }

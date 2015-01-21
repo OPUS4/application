@@ -34,7 +34,7 @@
 
 class Admin_Form_Document_Files extends Admin_Form_AbstractDocumentSubForm {
 
-    private $header = array(
+    private $_header = array(
         array('label' => null, 'class' => 'file'),
         array('label' => 'files_column_size', 'class' => 'size'),
         array('label' => 'files_column_mimetype', 'class' => 'mimetype'),
@@ -49,17 +49,19 @@ class Admin_Form_Document_Files extends Admin_Form_AbstractDocumentSubForm {
         $this->setLegend('admin_document_section_files');
         $this->setDisableTranslator(true); // so legend won't be translated twice
 
-        $header = new Application_Form_TableHeader($this->header);
+        $header = new Application_Form_TableHeader($this->_header);
 
         $this->addSubForm($header, 'Header');
 
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             'FormElements',
             array(array('table' => 'HtmlTag'), array('tag' => 'table')),
             array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
             'Fieldset',
             array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
-        ));
+            )
+        );
     }
 
     public function populateFromModel($document) {

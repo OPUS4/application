@@ -37,7 +37,7 @@
  */
 class Admin_Form_Document_File extends Admin_Form_AbstractDocumentSubForm {
 
-    private $file = null;
+    private $_file = null;
 
     /**
      * Initialisiert Formular und setzt Dekoratoren.
@@ -45,9 +45,11 @@ class Admin_Form_Document_File extends Admin_Form_AbstractDocumentSubForm {
     public function init() {
         parent::init();
 
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             array('ViewScript', array('viewScript' => 'filerow.phtml'))
-        ));
+            )
+        );
     }
 
     /**
@@ -55,7 +57,7 @@ class Admin_Form_Document_File extends Admin_Form_AbstractDocumentSubForm {
      * @param Opus_File $model
      */
     public function populateFromModel($model) {
-        $this->file = $model;
+        $this->_file = $model;
     }
 
     /**
@@ -63,7 +65,7 @@ class Admin_Form_Document_File extends Admin_Form_AbstractDocumentSubForm {
      * @return null
      */
     public function getModel() {
-        return $this->file;
+        return $this->_file;
     }
 
 }

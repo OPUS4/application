@@ -54,10 +54,12 @@ class Admin_Form_Document_Person extends Admin_Form_PersonLink {
 
         $this->addElement('submit', self::ELEMENT_EDIT, array('label' => 'admin_button_edit'));
 
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             'PrepareElements',
             array('ViewScript', array('viewScript' => 'form/personForm.phtml'))
-        ));
+            )
+        );
     }
 
     /**
@@ -113,8 +115,12 @@ class Admin_Form_Document_Person extends Admin_Form_PersonLink {
             $log->debug(Zend_Debug::dump($personLink->getId(), 'DocumentPerson-ID', false));
             $log->debug(Zend_Debug::dump($personLink->getRole(), 'DocumentPerson-Role', false));
             $log->debug(Zend_Debug::dump($personLink->getSortOrder(), 'DocumentPerson-SortOrder', false));
-            $log->debug(Zend_Debug::dump($personLink->getAllowEmailContact(), 'DocumentPerson->AllowEmailContact', 
-                    false));
+            $log->debug(
+                Zend_Debug::dump(
+                    $personLink->getAllowEmailContact(), 'DocumentPerson->AllowEmailContact', 
+                    false
+                )
+            );
             $log->debug(Zend_Debug::dump($personLink->getModel()->getId(), 'DocumentPerson-Model-ID', false));
         }
        

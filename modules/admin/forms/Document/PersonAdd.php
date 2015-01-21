@@ -69,15 +69,19 @@ class Admin_Form_Document_PersonAdd extends Admin_Form_Person {
         
         $this->addSubForm($linkForm, self::SUBFORM_DOCUMENT, 20);
         
-        $next = $this->createElement('submit', self::ELEMENT_NEXT, array(
+        $next = $this->createElement(
+            'submit', self::ELEMENT_NEXT, array(
             'decorators' => array(
                 'ViewHelper',
                 array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li', 'class' => 'save-element')),
             )
-        ));
+            )
+        );
         
-        $this->getDisplayGroup('actions')->setElements(array(
-            $this->getElement(self::ELEMENT_SAVE), $next, $this->getElement(self::ELEMENT_CANCEL)));
+        $this->getDisplayGroup('actions')->setElements(
+            array(
+            $this->getElement(self::ELEMENT_SAVE), $next, $this->getElement(self::ELEMENT_CANCEL))
+        );
     }
     
     public function processPost($post, $context) {

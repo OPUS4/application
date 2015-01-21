@@ -44,13 +44,16 @@ class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm {
      * Konstruiert Unterformular fuer die Haupttitel eines Dokuments.
      */
     public function __construct() {
-        parent::__construct('Admin_Form_Document_Title', 'TitleMain',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
+        parent::__construct(
+            'Admin_Form_Document_Title', 'TitleMain',
+            new Form_Validate_MultiSubForm_RepeatedLanguages()
+        );
     }
     
     public function init() {
         parent::init();
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             'FormElements',
             array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
             array('FormErrors', array(
@@ -64,7 +67,8 @@ class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm {
             )),
             array('FieldsetWithButtons', array('legendButtons' => self::ELEMENT_ADD)),
             array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
-        ));        
+            )
+        );        
     }
             
     /**
@@ -86,9 +90,12 @@ class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm {
         
         if (!$validator->isValid($language, $data)) {
             $translator = $this->getTranslator();
-            $this->addErrorMessage(vsprintf(
+            $this->addErrorMessage(
+                vsprintf(
                     $translator->translate('admin_document_error_NoTitleInDocumentLanguage'), 
-                    array($translator->translate($language))));
+                    array($translator->translate($language))
+                )
+            );
             
             $result = false;
         }

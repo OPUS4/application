@@ -57,7 +57,7 @@ class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm 
      */
     const ELEMENT_REMOVE = 'Remove';
     
-    private $collectionName = null;
+    private $_collectionName = null;
         
     /**
      * Erzeugt die Formularelemente.
@@ -159,11 +159,13 @@ class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm 
      * Setzt die Decoratoren für das Formular.
      */
     public function loadDefaultDecorators() {
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             'PrepareElements',
             array('ViewScript', array('viewScript' => 'form/collectionForm.phtml')),
             array(array('multiWrapper' => 'HtmlTag'), array('class' => 'multiple-wrapper'))
-        ));
+            )
+        );
     }
     
     /**
@@ -171,7 +173,7 @@ class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm 
      * Collection im Formular zu speichern.
      */
     public function _removeElements() {
-        $this->collectionName = $this->getElement(self::ELEMENT_EDIT)->getLabel();
+        $this->_collectionName = $this->getElement(self::ELEMENT_EDIT)->getLabel();
         parent::_removeElements();
     }
     
@@ -180,7 +182,7 @@ class Admin_Form_Document_Collection extends Admin_Form_AbstractDocumentSubForm 
      * @return string
      */
     public function getCollectionName() {
-        return $this->collectionName;
+        return $this->_collectionName;
     }
             
 }

@@ -76,9 +76,9 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      */
     private $_subformValidator;
 
-    private $renderAsTableEnabled = false;
+    private $_renderAsTableEnabled = false;
 
-    private $columns;
+    private $_columns;
 
     /**
      * Konstruiert Instanz von Fomular.
@@ -96,8 +96,10 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
             $this->_subformValidator = $validator;
         }
         else {
-            throw new Application_Exception('Fehler beim Instanzieren von ' . __CLASS__ 
-                    . '. Validator ist keine Instanz von Form_Validate_IMultiSubForm.');
+            throw new Application_Exception(
+                'Fehler beim Instanzieren von ' . __CLASS__ 
+                . '. Validator ist keine Instanz von Form_Validate_IMultiSubForm.'
+            );
         }
         
         parent::__construct($options);
@@ -116,15 +118,17 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
         $this->getElement(self::ELEMENT_ADD)->setDecorators(array())->setDisableLoadDefaultDecorators(true);
 
         if (!is_null($this->getColumns())) {
-            $this->renderAsTableEnabled = true;
-            $this->setDecorators(array(
+            $this->_renderAsTableEnabled = true;
+            $this->setDecorators(
+                array(
                 'FormElements',
                 'TableHeader',
                 'TableWrapper',
                 array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
                 array('FieldsetWithButtons', array('legendButtons' => self::ELEMENT_ADD)),
                 array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
-            ));
+                )
+            );
         }
         else {
             $this->getDecorator('FieldsetWithButtons')->setLegendButtons(self::ELEMENT_ADD);
@@ -392,8 +396,10 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
                 $element->removeDecorator('dataWrapper');
                 $element->removeDecorator('LabelNotEmpty');
                 $element->removeDecorator('ElementHtmlTag');
-                $element->addDecorator(array('tableCellWrapper' => 'ElementHtmlTag'), array('tag' => 'td',
-                    'class' => "$name-data"));
+                $element->addDecorator(
+                    array('tableCellWrapper' => 'ElementHtmlTag'), array('tag' => 'td',
+                    'class' => "$name-data")
+                );
             }
             else {
                 $element->setDecorators(array());
@@ -427,8 +433,10 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      * @return Zend_Form_Element
      */
     protected function createRemoveButton() {
-        return $this->createElement('submit', self::ELEMENT_REMOVE, array('label' => 'admin_button_remove',
-            'decorators' => array(), 'disableLoadDefaultDecorators' => true));
+        return $this->createElement(
+            'submit', self::ELEMENT_REMOVE, array('label' => 'admin_button_remove',
+            'decorators' => array(), 'disableLoadDefaultDecorators' => true)
+        );
     }
     
     /**
@@ -456,12 +464,12 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      * Sorgt für lückenlose Nummerierung der Unterformulare.
      * 
      * Warum ist dies wichtig? Bei der Konstruktion des Formulares vom POST werden die Unterformulare von 0 angefangen
-     * durchnummeriert. Die Namen entsprechen also getSubFormBaseName() . $index, z.B. Identifier0, Identifier1 usw. Das
-     * passiert unabhängig von den eigentlichen Namen der Unterformulare. Daher müssen die Namen der Unterformulare vor 
-     * der Ausgabe des Formulars lückenlos sein, z.B. nach dem Entfernen eines Identfier. Würden beliebige Namen 
-     * verwendet werden müsste unter Umständen, z.B. beim ändern der Rolle einer Person, mit Konflikten gerechnet werden
-     * und die Unit Tests wären unübersichtlicher. Wenn die Anzahl der Unterformular zum Beispiel 5 ist, könnte dann 
-     * nicht garantiert werden, daß der Name "Identifier5" nicht schon belegt ist.
+     * durchnummeriert. Die Namen entsprechen also getSubFormBaseName() . $index, z.B. Identifier0, Identifier1 usw.
+     * Das passiert unabhängig von den eigentlichen Namen der Unterformulare. Daher müssen die Namen der Unterformulare
+     * vor der Ausgabe des Formulars lückenlos sein, z.B. nach dem Entfernen eines Identfier. Würden beliebige Namen
+     * verwendet werden müsste unter Umständen, z.B. beim ändern der Rolle einer Person, mit Konflikten gerechnet
+     * werden und die Unit Tests wären unübersichtlicher. Wenn die Anzahl der Unterformular zum Beispiel 5 ist, könnte
+     * dann nicht garantiert werden, daß der Name "Identifier5" nicht schon belegt ist.
      */
     protected function _removeGapsInSubFormOrder() {
         $subforms = $this->getSubForms();
@@ -528,8 +536,9 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      */
     protected function _addAnker($subform) {
         $subform->addDecorator(
-                array('currentAnker' => 'HtmlTag'), 
-                array('tag' => 'a', 'placement' => 'prepend', 'name' => 'current'));
+            array('currentAnker' => 'HtmlTag'), 
+            array('tag' => 'a', 'placement' => 'prepend', 'name' => 'current')
+        );
     }
     
     /**
@@ -567,11 +576,11 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     }
 
     public function setColumns($columns) {
-        $this->columns = $columns;
+        $this->_columns = $columns;
     }
 
     public function getColumns() {
-        $columns = $this->columns;
+        $columns = $this->_columns;
 
         if (!is_null($columns) && !$this->isViewModeEnabled()) {
             $columns[] = array('class' => 'Remove'); // Extra Spalte für Remove-Button
@@ -590,7 +599,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     }
 
    public function isRenderAsTableEnabled() {
-       return $this->renderAsTableEnabled;
+       return $this->_renderAsTableEnabled;
    }
 
 }

@@ -65,7 +65,7 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm {
      * 
      * @var string
      */
-    private $__subjectType;
+    private $_subjectType;
     
     /**
      * Sprache des Schlagworts.
@@ -75,7 +75,7 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm {
      * 
      * @var string
      */
-    private $__language;
+    private $_language;
     
     /**
      * Konstruiert das Formular.
@@ -87,8 +87,8 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm {
      * @param array $options Weitere Optionen (für Zend_Form_SubForm)
      */
     public function __construct($type, $language = null, $options = null) {
-        $this->__subjectType = $type;
-        $this->__language = $language;
+        $this->_subjectType = $type;
+        $this->_language = $language;
         parent::__construct($options);
     }
     
@@ -101,11 +101,11 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm {
         $this->addElement('Hidden', self::ELEMENT_ID);
         
         // wenn die Sprache gesetzt wurde wird kein sichtbares Formularelement erzeugt
-        if (is_null($this->__language)) {
+        if (is_null($this->_language)) {
             $element = $this->createElement('Language', self::ELEMENT_LANGUAGE);
         }
         else {
-            $element = $this->createElement('Hidden', self::ELEMENT_LANGUAGE, array('value' => $this->__language));
+            $element = $this->createElement('Hidden', self::ELEMENT_LANGUAGE, array('value' => $this->_language));
         }
         $this->addElement($element);
         
@@ -132,7 +132,7 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm {
         $subject->setLanguage($this->getElementValue(self::ELEMENT_LANGUAGE));
         $subject->setValue($this->getElementValue(self::ELEMENT_VALUE));
         $subject->setExternalKey($this->getElementValue(self::ELEMENT_EXTERNAL_KEY));
-        $subject->setType($this->__subjectType);
+        $subject->setType($this->_subjectType);
     }
 
     /**
@@ -178,7 +178,7 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm {
      * @return string Schlagworttyp
      */
     public function getSubjectType() {
-        return $this->__subjectType;
+        return $this->_subjectType;
     }
 
     /**
@@ -186,7 +186,7 @@ class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm {
      * @return null|string Sprache
      */
     public function getLanguage() {
-        return $this->__language;
+        return $this->_language;
     }
 
     protected function _removeElements() {

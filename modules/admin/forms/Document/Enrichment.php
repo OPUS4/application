@@ -97,8 +97,10 @@ class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm {
             $enrichment = new Opus_Enrichment($enrichmentId);
         }
         catch (Opus_Model_NotFoundException $omnfe) {
-            $this->getLogger()->err(__METHOD__ . " Unknown enrichment ID = '$enrichmentId' (" . $omnfe->getMessage()
-                . ').');
+            $this->getLogger()->err(
+                __METHOD__ . " Unknown enrichment ID = '$enrichmentId' (" . $omnfe->getMessage()
+                . ').'
+            );
             $enrichment = new Opus_Enrichment();
         }
         

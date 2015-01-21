@@ -39,9 +39,9 @@
  * um die Zuweisung zu löschen. Außerdem gibt es einen Submit Button der den Nutzer zur Seite für das Zuweisen einer
  * weiteren Collection bringt.
  * 
- * Für jede CollectionRole wird ein Zend_Form_SubForm angelegt. Diesem wiederum wird für jede zugehörige Collection ein
- * Admin_Form_Document_Collection Unterformular hinzugefügt. Dadurch entsteht eine Hierarchy für die Anzeige und POST
- * Verarbeitung.
+ * Für jede CollectionRole wird ein Zend_Form_SubForm angelegt. Diesem wiederum wird für jede zugehörige Collection
+ * ein Admin_Form_Document_Collection Unterformular hinzugefügt. Dadurch entsteht eine Hierarchy für die Anzeige und
+ * POST Verarbeitung.
  * 
  * <pre>
  * Admin_Form_Document_Collections
@@ -67,8 +67,10 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
     public function init() {
         parent::init();
         
-        $this->addElement('submit', self::ELEMENT_ADD, array('order' => 1000, 'label' => 'admin_button_add',
-            'decorators' => array(), 'disableLoadDefaultDecorators' => true));
+        $this->addElement(
+            'submit', self::ELEMENT_ADD, array('order' => 1000, 'label' => 'admin_button_add',
+            'decorators' => array(), 'disableLoadDefaultDecorators' => true)
+        );
         $this->setLegend('admin_document_section_collection');
 
         $this->getDecorator('FieldsetWithButtons')->setLegendButtons(self::ELEMENT_ADD);
@@ -268,7 +270,7 @@ class Admin_Form_Document_Collections extends Admin_Form_AbstractDocumentSubForm
     public function getGroupedCollections($document) {
         $groupedCollections = array();
 
-        foreach($document->getCollection() as $collection) {
+        foreach ($document->getCollection() as $collection) {
 
             $roleName = $collection->getRoleName();
 

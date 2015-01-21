@@ -49,7 +49,7 @@ class Admin_Form_Document_Abstract extends Admin_Form_AbstractModelSubForm {
         $this->addElement('Hidden', self::ELEMENT_ID);
         $this->addElement('Language', self::ELEMENT_LANGUAGE); 
         $this->addElement('Textarea', self::ELEMENT_VALUE, array('required' => true, 'rows' => 12));
-   }
+    }
     
     public function populateFromModel($abstract) {
         $this->getElement(self::ELEMENT_ID)->setValue($abstract->getId());

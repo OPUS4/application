@@ -46,7 +46,7 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm {
      * Name der Rolle fuer Personen im Unterformular.
      * @var type 
      */
-    private $__roleName;
+    private $_roleName;
 
     /**
      * Konstruiert Unterformular fuer Personen in einer Rolle.
@@ -54,7 +54,7 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm {
      * @param mixed $options
      */
     public function __construct($roleName, $options = null) {
-        $this->__roleName = $roleName;
+        $this->_roleName = $roleName;
 
         // __construct ruft init Funktion auf
         parent::__construct('Admin_Form_Document_Person', 'Person' . ucfirst($roleName), null, $options);
@@ -65,7 +65,7 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm {
      * @return string
      */
     public function getRoleName() {
-        return $this->__roleName;
+        return $this->_roleName;
     }
 
     /**
@@ -89,7 +89,7 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm {
                     break;
                 case Admin_Form_Document::RESULT_SWITCH_TO:
                     // Ergebnis (Edit) mit Rolle anreichern
-                    $result['target']['role'] = $this->__roleName;
+                    $result['target']['role'] = $this->_roleName;
                     break;
                 default:
                     // do nothing
@@ -242,9 +242,9 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm {
      * Zuerst kommt die gewünscht SortOrder, dann kommt ein Flag, ob die SortOrder modifiziert wurde, also nicht mehr
      * der aktuellen Position entspricht, und zum Schluss kommt die alte Position. 
      * 
-     * Um beliebig viele Unterfomulare oder beliebig große SortOrder Werte zu unterstützen werden diese mit einer festen
-     * Länge, gegebenfalls mit 0 aufgefüllt ausgegeben. Die Anzahl der Digits wird übergeben, damit die Berechnung nicht
-     * für jeden Schlüssel erfolgen muss.
+     * Um beliebig viele Unterfomulare oder beliebig große SortOrder Werte zu unterstützen werden diese mit einer
+     * festen Länge, gegebenfalls mit 0 aufgefüllt ausgegeben. Die Anzahl der Digits wird übergeben, damit die
+     * Berechnung nicht für jeden Schlüssel erfolgen muss.
      * 
      * Wenn der SortOrder Wert leer ist wird er auf $maxSortOrder + 1 gesetzt, damit diese Unterformular nach ganz 
      * hinten kommen. Das muss bei der Berechnung der Digits berücksichtig werden (99 + 1 = 100).
@@ -285,7 +285,7 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm {
             'module' => 'admin',
             'controller' => 'person',
             'action' => 'assign',
-            'role' => $this->__roleName)
+            'role' => $this->_roleName)
         );
     }
     
@@ -298,8 +298,8 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm {
         
         $persons = array();
         
-        foreach($subforms as $name => $subform) {
-            $person = $subform->getLinkModel($document->getId(), $this->__roleName); // TODO should return Link Objekt
+        foreach ($subforms as $name => $subform) {
+            $person = $subform->getLinkModel($document->getId(), $this->_roleName); // TODO should return Link Objekt
             $persons[] = $person;
         }
         
@@ -313,7 +313,7 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm {
      */
     public function addSubFormForPerson($subForm) {
         // Unterformular vorbereiten
-        $rolesForm = new Admin_Form_Document_PersonRoles($this->__roleName);
+        $rolesForm = new Admin_Form_Document_PersonRoles($this->_roleName);
         $subForm->addSubForm($rolesForm, 'Roles');
 
         // Unterformular einfügen
@@ -344,7 +344,7 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm {
     public function createNewSubFormInstance() {
         $subform = new Admin_Form_Document_Person();
         
-        $rolesForm = new Admin_Form_Document_PersonRoles($this->__roleName);
+        $rolesForm = new Admin_Form_Document_PersonRoles($this->_roleName);
         $subform->addSubForm($rolesForm, 'Roles');
         
         $movesForm = new Admin_Form_Document_PersonMoves();
@@ -377,7 +377,7 @@ class Admin_Form_Document_PersonRole extends Admin_Form_Document_MultiSubForm {
             $form = $this->createSubForm();
 
             $form->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personId);
-            $form->getElement(Admin_Form_Document_Person::ELEMENT_ROLE)->setValue($this->__roleName);
+            $form->getElement(Admin_Form_Document_Person::ELEMENT_ROLE)->setValue($this->_roleName);
             $form->getElement(Admin_Form_Document_Person::ELEMENT_ALLOW_CONTACT)->setValue($allowContact);
 
             $this->insertSubForm($form, $sortOrder);
