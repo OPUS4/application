@@ -25,8 +25,8 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Controller
- * @author		Pascal-Nicolas Becker <becker@zib.de>
+ * @package     Controller/Plugin
+ * @author      Pascal-Nicolas Becker <becker@zib.de>
  * @author      Ralf Claussnitzer (ralf.claussnitzer@slub-dresden.de)
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License

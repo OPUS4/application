@@ -25,8 +25,8 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
- * @package     TODO
+ * @category    Application
+ * @package     Controller
  * @author      Edouard Simon (edouard.simon@zib.de)
  * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -61,32 +61,53 @@ abstract class Controller_SetupAbstract extends Controller_Action {
                     $stored = $model->store();
                     if (!$stored) {
                         $dataForm->populate($postData);
-                        $this->view->messages[] = array('level' => 'failure', 'message' => $this->view->translate('setup_message_write-failed'));
-                    } else {
-                        $this->view->messages[] = array('level' => 'notice', 'message' => $this->view->translate('setup_message_write-success'));
+                        $this->view->messages[] = array('level' => 'failure',
+                            'message' => $this->view->translate('setup_message_write-failed'));
+                    }
+                    else {
+                        $this->view->messages[] = array('level' => 'notice',
+                            'message' => $this->view->translate('setup_message_write-success'));
                         Zend_Translate::clearCache();
                     }
-                } else {
-                    $this->view->messages[] = array('level' => 'failure', 'message' => 'Es ist ein Fehler aufgetreten. Bitte überprüfen Sie Ihre Eingaben.');
                 }
-            } else {
+                else {
+                    $this->view->messages[] = array('level' => 'failure',
+                        'message' => 'Es ist ein Fehler aufgetreten. Bitte überprüfen Sie Ihre Eingaben.');
+                }
+            }
+            else {
                 $formData = $model->toArray();
                 $dataForm->populate($formData);
             }
 
             $this->view->form = $form;
-        } catch (Setup_Model_FileNotReadableException $exc) {
-            $this->_redirectTo('error', array('failure' => $this->view->translate('setup_message_error_read-access', $exc->getMessage())));
-        } catch (Setup_Model_FileNotWriteableException $exc) {
-            $this->_redirectTo('error', array('failure' => $this->view->translate('setup_message_error_write-access', $exc->getMessage())));
-        } catch (Setup_Model_FileNotFoundException $exc) {
-            $this->_redirectTo('error', array('failure' => $this->view->translate('setup_message_error_filenotfound', $exc->getMessage())));
+        }
+        catch (Setup_Model_FileNotReadableException $exc) {
+            $this->_redirectTo(
+                'error',
+                array('failure' => $this->view->translate('setup_message_error_read-access', $exc->getMessage()))
+            );
+        }
+        catch (Setup_Model_FileNotWriteableException $exc) {
+            $this->_redirectTo(
+                'error',
+                array('failure' => $this->view->translate('setup_message_error_write-access', $exc->getMessage()))
+            );
+        }
+        catch (Setup_Model_FileNotFoundException $exc) {
+            $this->_redirectTo(
+                'error',
+                array('failure' => $this->view->translate('setup_message_error_filenotfound', $exc->getMessage()))
+            );
         }
         $this->render('edit', null, true);
     }
 
     public function errorAction() {
-        $this->view->backLink = $this->view->url(array('controller' => $this->getRequest()->getControllerName(), 'action' => 'index'));
+        $this->view->backLink = $this->view->url(
+            array('controller' => $this->getRequest()->getControllerName(),
+            'action' => 'index')
+        );
         $this->render('error', null, true);
     }
 

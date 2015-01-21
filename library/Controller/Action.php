@@ -45,14 +45,14 @@ class Controller_Action extends Controller_ModuleAccess {
      *
      * @var Zend_Controller_Action_Helper_Redirector
      */
-    private $__redirector = null;
+    private $_redirector = null;
 
     /**
      * Holds the FlashMessenger Helper.
      *
      * @var Zend_Controller_Action_Helper_Messenger
      */
-    private $__flashMessenger = null;
+    private $_flashMessenger = null;
 
     /**
      * Helper fuer Breadcrumbs.
@@ -69,9 +69,9 @@ class Controller_Action extends Controller_ModuleAccess {
         parent::init();
         $this->view->title = $this->_request->getModuleName() . '_' . $this->_request->getParam('controller') . '_'
             . $this->_request->getParam('action');
-        $this->__redirector = $this->_helper->getHelper('Redirector');
-        $this->__flashMessenger = $this->_helper->getHelper('FlashMessenger');
-        $this->view->flashMessenger = $this->__flashMessenger;
+        $this->_redirector = $this->_helper->getHelper('Redirector');
+        $this->_flashMessenger = $this->_helper->getHelper('FlashMessenger');
+        $this->view->flashMessenger = $this->_flashMessenger;
         $this->_breadcrumbs = $this->_helper->getHelper('breadcrumbs');
     }
 
@@ -101,7 +101,7 @@ class Controller_Action extends Controller_ModuleAccess {
      */
     protected function _redirectToPermanent($action, $message = null, $controller = null, $module = null,
                                             $params = array()) {
-        $this->__redirector->setCode(301);
+        $this->_redirector->setCode(301);
         $this->performRedirect($action, $message, $controller, $module, $params);
     }
     
@@ -112,7 +112,7 @@ class Controller_Action extends Controller_ModuleAccess {
 
     protected function _redirectToPermanentAndExit($action, $message = null, $controller = null, $module = null,
                                                    $params = array()) {
-        $this->__redirector->setCode(301);
+        $this->_redirector->setCode(301);
         $this->performRedirect($action, $message, $controller, $module, $params, true);
     }
 
@@ -123,19 +123,19 @@ class Controller_Action extends Controller_ModuleAccess {
                 $keys = array_keys($message);
                 $key = $keys[0];
                 if ($key === 'failure' || $key === 'notice') {
-                    $this->__flashMessenger->addMessage(array ('level' => $key, 'message' => $message[$key]));
+                    $this->_flashMessenger->addMessage(array ('level' => $key, 'message' => $message[$key]));
                 }
                 else {
-                    $this->__flashMessenger->addMessage(array ('level' => 'notice', 'message' => $message[$key]));
+                    $this->_flashMessenger->addMessage(array ('level' => 'notice', 'message' => $message[$key]));
                 }
             }
             else if (is_string($message) && $message != '') {
-                $this->__flashMessenger->addMessage(array('level' => 'notice', 'message' => $message));
+                $this->_flashMessenger->addMessage(array('level' => 'notice', 'message' => $message));
             }
         }
         $this->getLogger()->debug("redirect to module: $module controller: $controller action: $action");
-        $this->__redirector->gotoSimple($action, $controller, $module, $params);
-        $this->__redirector->setExit($exit);
+        $this->_redirector->gotoSimple($action, $controller, $module, $params);
+        $this->_redirector->setExit($exit);
 
         return;
     }
@@ -164,8 +164,8 @@ class Controller_Action extends Controller_ModuleAccess {
         }
 
         // Forward to module auth
-        $this->__flashMessenger->addMessage(array('level' => 'failure', 'message' => $errorcode));
-        $this->__redirector->gotoSimple('index', 'auth', 'default');
+        $this->_flashMessenger->addMessage(array('level' => 'failure', 'message' => $errorcode));
+        $this->_redirector->gotoSimple('index', 'auth', 'default');
     }
 
     /**

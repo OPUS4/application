@@ -89,7 +89,8 @@ class Controller_Xml extends Controller_ModuleAccess {
             $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
             if (false === is_null($this->_xslt)) {
                 $this->getResponse()->setBody($this->_proc->transformToXML($this->_xml));
-            } else {
+            }
+            else {
                 $this->getResponse()->setBody($this->_xml->saveXml());
             }
         }

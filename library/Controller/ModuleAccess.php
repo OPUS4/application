@@ -48,13 +48,13 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
      * Objekt für Logging.
      * @var \Zend_Log
      */
-    private $logger = null;
+    private $_logger = null;
 
     /**
      * Konfigurationsobjekt.
      * @var Zend_Config
      */
-    private $config = null;
+    private $_config = null;
     
     /**
      * Use pre-dispatch to check user access rights *before* action is called.
@@ -224,14 +224,14 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
      * @return Zend_Log
      */
     public function getLogger() {
-        if (is_null($this->logger)) {
-            $this->logger = Zend_Registry::get('Zend_Log');
-            if (is_null($this->logger)) {
+        if (is_null($this->_logger)) {
+            $this->_logger = Zend_Registry::get('Zend_Log');
+            if (is_null($this->_logger)) {
                 throw new Application_Exception('No logger found in Zend_Registry.');
             }
         }
 
-        return $this->logger;
+        return $this->_logger;
     }
 
     /**
@@ -242,7 +242,7 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
      * @param Zend_Log
      */
     public function setLogger($logger) {
-        $this->logger = $logger;
+        $this->_logger = $logger;
     }
 
     /**
@@ -250,10 +250,10 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
      * @return null|Zend_Config
      */
     public function getConfig() {
-        if (is_null($this->config)) {
-            $this->config = Zend_Registry::get('Zend_Config');
+        if (is_null($this->_config)) {
+            $this->_config = Zend_Registry::get('Zend_Config');
         }
-        return $this->config;
+        return $this->_config;
     }
 
 }
