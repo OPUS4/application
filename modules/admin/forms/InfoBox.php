@@ -44,7 +44,7 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm {
      * Dokument das angezeigt wird.
      * @var Opus_Document 
      */
-    private $document;
+    private $_document;
     
     /**
      * Initialisiert das Formular.
@@ -56,9 +56,11 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm {
         
         parent::init();
         
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             array('ViewScript', array('viewScript' => 'infobox.phtml'))
-        ));
+            )
+        );
     }
     
     /**
@@ -67,7 +69,7 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm {
      */
     public function populateFromModel($document) {
         if ($document instanceof Opus_Document) {
-            $this->document = $document;
+            $this->_document = $document;
         }
         else {
             $objclass = ($document !== null) ? get_class($document) : 'null'; 
@@ -82,7 +84,7 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm {
      */
     public function constructFromPost($post, $document = null) {
         if ($document instanceof Opus_Document) {
-            $this->document = $document;
+            $this->_document = $document;
         }
         else {
             $objclass = ($document !== null) ? get_class($document) : 'null'; 
@@ -97,7 +99,7 @@ class Admin_Form_InfoBox extends Admin_Form_AbstractDocumentSubForm {
      * @return Opus_Document
      */
     public function getDocument() {
-        return $this->document;
+        return $this->_document;
     }
     
     /**

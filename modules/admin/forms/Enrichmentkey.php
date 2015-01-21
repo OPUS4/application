@@ -46,8 +46,10 @@ class Admin_Form_Enrichmentkey extends Zend_Form {
     public function __construct($name = null) {
         $section = empty($name) ? 'new' : 'edit';
 
-        $config = new Zend_Config_Ini(APPLICATION_PATH .
-                '/modules/admin/forms/enrichmentkey.ini', $section);
+        $config = new Zend_Config_Ini(
+            APPLICATION_PATH .
+            '/modules/admin/forms/enrichmentkey.ini', $section
+        );
 
         parent::__construct($config->form->enrichmentkey);
 

@@ -40,7 +40,7 @@
  */
 class Admin_Form_Account extends Admin_Form_RolesAbstract {
 
-    private $mode;
+    private $_mode;
 
     /**
      * Constructs empty form or populates it with values from Opus_Account($id).
@@ -49,10 +49,12 @@ class Admin_Form_Account extends Admin_Form_RolesAbstract {
     public function __construct($id = null) {
         $env = (empty($id)) ? 'new' : 'edit';
 
-        $this->mode = $env;
+        $this->_mode = $env;
 
-        $config = new Zend_Config_Ini(APPLICATION_PATH .
-                '/modules/admin/forms/account.ini', $env);
+        $config = new Zend_Config_Ini(
+            APPLICATION_PATH .
+            '/modules/admin/forms/account.ini', $env
+        );
 
         parent::__construct($config->form->account);
 
@@ -76,8 +78,10 @@ class Admin_Form_Account extends Admin_Form_RolesAbstract {
         parent::init();
 
         $this->getElement('username')->addValidator(
-                new Form_Validate_LoginAvailable(
-                        array('ignoreCase' => $this->mode === 'edit')));
+            new Form_Validate_LoginAvailable(
+                array('ignoreCase' => $this->_mode === 'edit')
+            )
+        );
 
         // add password validator
         $confirmPassword = $this->getElement('confirmPassword');

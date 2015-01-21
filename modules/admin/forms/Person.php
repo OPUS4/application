@@ -117,17 +117,21 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
     public function init() {
         parent::init();
         
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             'FormElements',            
             'Fieldset',
             array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform')),
             'Form'
-        ));
+            )
+        );
 
         $this->addElement('hidden', self::ELEMENT_PERSON_ID, array('size' => '40'));
         $this->addElement('text', self::ELEMENT_ACADEMIC_TITLE, array('label' => 'AcademicTitle'));
-        $this->addElement('text', self::ELEMENT_LAST_NAME, array('label' => 'LastName', 'required' => true,
-            'size' => 50));
+        $this->addElement(
+            'text', self::ELEMENT_LAST_NAME, array('label' => 'LastName', 'required' => true,
+            'size' => 50)
+        );
         $this->addElement('text', self::ELEMENT_FIRST_NAME, array('label' => 'FirstName', 'size' => 50));
         $this->addElement('Email', self::ELEMENT_EMAIL, array('label' => 'Email'));
         $this->addElement('text', self::ELEMENT_PLACE_OF_BIRTH, array('label' => 'PlaceOfBirth', 'size' => 40));
@@ -139,29 +143,37 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
         $this->getElement(self::ELEMENT_IDENTIFIER_GND)->addValidator(new Form_Validate_Gnd());
         $this->getElement(self::ELEMENT_IDENTIFIER_ORCID)->addValidator(new Form_Validate_Orcid());
 
-        $this->addDisplayGroup($this->getElements(), 'fields', array(
+        $this->addDisplayGroup(
+            $this->getElements(), 'fields', array(
             'decorators' => array(
                 'FormElements',
                 array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
             )
-        ));
+            )
+        );
         
-        $this->addElement('submit', self::ELEMENT_SAVE, array('decorators' => array(
+        $this->addElement(
+            'submit', self::ELEMENT_SAVE, array('decorators' => array(
             'ViewHelper',
             array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li', 'class' => 'save-element')),
-        )));
-        $this->addElement('submit', self::ELEMENT_CANCEL, array('decorators' => array(
+            ))
+        );
+        $this->addElement(
+            'submit', self::ELEMENT_CANCEL, array('decorators' => array(
             'ViewHelper',
             array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li', 'class' => 'cancel-element')),
-        )));
-        $this->addDisplayGroup(array(self::ELEMENT_SAVE, self::ELEMENT_CANCEL), 'actions', array(
+            ))
+        );
+        $this->addDisplayGroup(
+            array(self::ELEMENT_SAVE, self::ELEMENT_CANCEL), 'actions', array(
             'order' => 100,
             'decorators' => array(
                 'FormElements',
                 array(array('ulWrapper' => 'HtmlTag'), array('tag' => 'ul', 'class' => 'form-action')),
                 array(array('divWrapper' => 'HtmlTag'), array('id' => 'form-action'))
             )
-        ));
+            )
+        );
     }
     
     /**

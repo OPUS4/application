@@ -46,26 +46,28 @@
  */
 class Admin_Form_Wrapper extends Zend_Form {
     
-    private $subFormName;
+    private $_subFormName;
 
     public function __construct($subform, $name = 'Document', $options = null) {
         parent::__construct($options);
-        $this->subFormName = $name;
+        $this->_subFormName = $name;
         $this->addSubForm($subform, $name);
     }
     
     public function loadDefaultDecorators() {
         parent::loadDefaultDecorators();
         
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             'FormElements',
             'Form',
             array('HtmlTag', array('tag' => 'div', 'class' => 'metadata-form'))
-        ));
+            )
+        );
     }
         
     public function getWrappedForm() {
-        return $this->getSubForm($this->subFormName);
+        return $this->getSubForm($this->_subFormName);
     }
     
 }

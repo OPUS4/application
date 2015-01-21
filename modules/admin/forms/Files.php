@@ -54,8 +54,10 @@ class Admin_Form_Files extends Admin_Form_Document_MultiSubForm {
 
     protected function initButton() {
         parent::initButton();
-        $this->addElement('submit', self::ELEMENT_IMPORT, array('order' => 1002, 'label' => 'button_file_import',
-            'decorators' => array(), 'disableLoadDefaultDecorators' => true));
+        $this->addElement(
+            'submit', self::ELEMENT_IMPORT, array('order' => 1002, 'label' => 'button_file_import',
+            'decorators' => array(), 'disableLoadDefaultDecorators' => true)
+        );
     }
 
     public function processPost($post, $context) {

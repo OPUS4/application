@@ -41,12 +41,14 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
         parent::init();
 
         $this->setDisableLoadDefaultDecorators(true);
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             'FormElements',
             array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
             'FieldsetWithButtons',
             array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
-        ));
+            )
+        );
     }
     
     /**

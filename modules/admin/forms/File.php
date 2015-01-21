@@ -100,13 +100,15 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
 
         $this->addSubForm(new Admin_Form_File_Hashes(), self::SUBFORM_HASHES);
 
-        $this->addElement('multiCheckbox', self::ELEMENT_VISIBILITY, array(
+        $this->addElement(
+            'multiCheckbox', self::ELEMENT_VISIBILITY, array(
             'multiOptions' => array(
                 'frontdoor' => 'admin_filemanager_label_visibleinfrontdoor',
                 'oai' => 'admin_filemanager_label_visibleinoai'
             ),
             'label' => 'admin_filemanager_file_visibility'
-        ));
+            )
+        );
 
         $this->addElement('Roles', self::ELEMENT_ROLES, array('label' => 'admin_filemanager_file_roles'));
     }
@@ -122,7 +124,9 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
         $this->getElement(self::ELEMENT_FILE_SIZE)->setValue($file->getFileSize());
         $this->getElement(self::ELEMENT_LANGUAGE)->setValue($file->getLanguage());
         $this->getElement(self::ELEMENT_COMMENT)->setValue($file->getComment());
-        $this->getElement(self::ELEMENT_SERVER_DATE_SUBMITTED)->setValue($this->getView()->formatValue()->formatDate($file->getServerDateSubmitted()));
+        $this->getElement(self::ELEMENT_SERVER_DATE_SUBMITTED)->setValue(
+            $this->getView()->formatValue()->formatDate($file->getServerDateSubmitted())
+        );
         $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($file->getSortOrder());
 
         $visibility = array();
@@ -214,8 +218,7 @@ class Admin_Form_File extends Admin_Form_AbstractModelSubForm {
 
         $roles = Opus_UserRole::getAll();
 
-        $items = array();
-        foreach($roles as $role) {
+        foreach ($roles as $role) {
             $files = $role->listAccessFiles();
             if (in_array($fileId, $files)) {
                 array_push($checkedRoles, $role->getName());

@@ -47,9 +47,11 @@ abstract class Admin_Form_AbstractModelSubForm extends Admin_Form_AbstractDocume
     public function init() {
         parent::init();
 
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             'FormElements'
-        ));
+            )
+        );
     }
 
     /**

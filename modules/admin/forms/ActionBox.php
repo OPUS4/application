@@ -44,13 +44,13 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     
     const ELEMENT_CANCEL = 'Cancel';
     
-    private $document;
+    private $_document;
     
-    private $parentForm;
+    private $_parentForm;
 
     public function __construct($parentForm = null, $options = null) {
         parent::__construct($options);
-        $this->parentForm = $parentForm;
+        $this->_parentForm = $parentForm;
     }
 
     public function init() {
@@ -68,11 +68,11 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     }
     
     public function populateFromModel($document) {
-        $this->document= $document;
+        $this->_document= $document;
     }
     
     public function constructFromPost($post, $document = null) {
-        $this->document = $document;
+        $this->_document = $document;
     }
     
     public function processPost($post, $context) {
@@ -85,11 +85,11 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     }
     
     public function getDocument() {
-        return $this->document;
+        return $this->_document;
     }
     
     public function getMessage() {
-        return (method_exists($this->parentForm, 'getMessage')) ? $this->parentForm->getMessage() : null;
+        return (method_exists($this->_parentForm, 'getMessage')) ? $this->_parentForm->getMessage() : null;
     }
     
     /**
@@ -99,8 +99,8 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     public function getJumpLinks() {
         $links = array();
         
-        if ($this->parentForm != null) {
-            $subforms = $this->parentForm->getSubForms();
+        if ($this->_parentForm != null) {
+            $subforms = $this->_parentForm->getSubForms();
             
             foreach ($subforms as $name => $subform) {
                 if (!is_null($subform->getDecorator('Fieldset'))) {
@@ -125,14 +125,14 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
         
         $workflow = Zend_Controller_Action_HelperBroker::getStaticHelper('workflow');
         
-        $targetStates = $workflow->getAllowedTargetStatesForDocument($this->document);
+        $targetStates = $workflow->getAllowedTargetStatesForDocument($this->_document);
 
         foreach ($targetStates as $targetState) {
             $links[$targetState] = array(
                 'module'     => 'admin',
                 'controller' => 'workflow',
                 'action'     => 'changestate',
-                'docId'      => $this->document->getId(),
+                'docId'      => $this->_document->getId(),
                 'targetState' => $targetState
             );
         }
@@ -143,7 +143,7 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     public function getViewActionLinks() {
         $actions = array();
 
-        $docId = $this->document->getId();
+        $docId = $this->_document->getId();
         
         $actions['edit'] = array(
             'module' => 'admin', 
@@ -178,15 +178,17 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
             'module'     => 'admin',
             'controller' => 'document',
             'action'     => 'index',
-            'id'         => $this->document->getId()
+            'id'         => $this->_document->getId()
         );
         
         return $actions;
     }
     
     public function loadDefaultDecorators() {
-        $this->setDecorators(array(array(
-            'ViewScript', array('viewScript' => 'actionbox.phtml'))));
+        $this->setDecorators(
+            array(array(
+            'ViewScript', array('viewScript' => 'actionbox.phtml')))
+        );
     }
     
     public function prepareRenderingAsView() {
@@ -194,7 +196,7 @@ class Admin_Form_ActionBox extends Admin_Form_AbstractDocumentSubForm {
     }
 
     public function isNavigationEnabled() {
-        return !is_null($this->parentForm);
+        return !is_null($this->_parentForm);
     }
 
     

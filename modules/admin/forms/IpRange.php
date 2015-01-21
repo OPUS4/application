@@ -44,8 +44,10 @@ class Admin_Form_IpRange extends Admin_Form_RolesAbstract {
     public function __construct($id = null) {
         $env = (empty($id)) ? 'new' : 'edit';
 
-        $config = new Zend_Config_Ini(APPLICATION_PATH .
-                '/modules/admin/forms/iprange.ini', $env);
+        $config = new Zend_Config_Ini(
+            APPLICATION_PATH .
+            '/modules/admin/forms/iprange.ini', $env
+        );
 
         parent::__construct($config->form->iprange);
 

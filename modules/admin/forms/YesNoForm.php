@@ -32,8 +32,7 @@
  * @version     $Id$
  */
 
-class Admin_Form_YesNoForm extends Zend_Form
-{
+class Admin_Form_YesNoForm extends Zend_Form {
     /**
      * Build easy form
      *

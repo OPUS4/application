@@ -38,7 +38,7 @@ class Admin_Form_FileManager extends Application_Form_Model_Abstract {
     const SUBFORM_INFO = 'Info';
     const SUBFORM_ACTION = 'Action';
 
-    private $message;
+    private $_message;
 
     public function init() {
         parent::init();
@@ -52,11 +52,13 @@ class Admin_Form_FileManager extends Application_Form_Model_Abstract {
 
         $this->addSubForm(new Admin_Form_Files(), self::SUBFORM_FILES);
 
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             'FormElements',
             array('HtmlTag', array('class' => 'wrapper', 'closeOnly' => true)),
             'Form'
-        ));
+            )
+        );
 
         $this->setName('FileManager');
     }
@@ -115,11 +117,11 @@ class Admin_Form_FileManager extends Application_Form_Model_Abstract {
     }
 
     public function setMessage($message) {
-        $this->message = $message;
+        $this->_message = $message;
     }
 
     public function getMessage() {
-        return $this->message;
+        return $this->_message;
     }
 
 }

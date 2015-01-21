@@ -84,12 +84,12 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      *
      * @var string
      */
-    private $message = null;
+    private $_message = null;
 
     /**
      * @var Opus_Document
      */
-    private $document;
+    private $_document;
     
     /**
      * Konstruiert das Metadaten-Formular aus verschiedenen Unterformularen und den Aktion Buttons.
@@ -97,19 +97,23 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
     public function init() {
         parent::init();
 
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             'FormElements',
             array(
                 array('wrapperDivClose' => 'HtmlTag'), 
                 array('tag' => 'div', 'closeOnly' => 'true', 'placement' => 'append')
             )
-        ));
+            )
+        );
         
         $this->addSubForm(new Admin_Form_ActionBox($this), 'ActionBox');
 
         $subform = new Admin_Form_InfoBox();
-        $subform->addDecorator(array('wrapperDivOpen' => 'HtmlTag'), 
-                array('tag' => 'div', 'placement' => 'prepend', 'class' => 'wrapper', 'openOnly' => 'true'));
+        $subform->addDecorator(
+            array('wrapperDivOpen' => 'HtmlTag'), 
+            array('tag' => 'div', 'placement' => 'prepend', 'class' => 'wrapper', 'openOnly' => 'true')
+        );
         $this->addSubForm($subform, 'InfoBox');
         
         $this->addSubForm(new Admin_Form_Document_General(), 'General');
@@ -119,40 +123,59 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         // Bibliographische Beschreibung
         $this->addSubForm(new Admin_Form_Document_Titles(), 'Titles');
         $this->addSubForm(new Admin_Form_Document_Bibliographic(), 'Bibliographic');
-        $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Series', 'Series',
-            new Form_Validate_MultiSubForm_RepeatedValues('SeriesId', 'admin_document_error_repeated_series'), array(
-            'columns' => array(
+        $this->addSubForm(
+            new Admin_Form_Document_MultiSubForm(
+                'Admin_Form_Document_Series', 'Series',
+                new Form_Validate_MultiSubForm_RepeatedValues('SeriesId', 'admin_document_error_repeated_series'), array(
+                'columns' => array(
                 array(),
                 array('label' => 'Opus_Model_Dependent_Link_DocumentSeries_Number'),
                 array('label' => 'Opus_Model_Dependent_Link_DocumentSeries_SortOrder')
-            ))), 'Series');
+                ))
+            ), 'Series'
+        );
 
-        $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Enrichment', 'Enrichment', null,
+        $this->addSubForm(
+            new Admin_Form_Document_MultiSubForm(
+                'Admin_Form_Document_Enrichment', 'Enrichment', null,
                 array('columns' => array(
                     array('label' => 'KeyName'),
                     array('label' => 'Value')
-                ))), 'Enrichments');
+                ))
+            ), 'Enrichments'
+        );
 
         $this->addSubForm(new Admin_Form_Document_Collections(), 'Collections');
 
         // Inhaltliche Erschließung
         $subform = new Admin_Form_Document_Section();
         $subform->setLegend('admin_document_section_content');
-        $subform->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Abstract', 'TitleAbstract',
-            new Form_Validate_MultiSubForm_RepeatedValues('Language',
-                'admin_document_error_MoreThanOneTitleInLanguage')),
+        $subform->addSubForm(
+            new Admin_Form_Document_MultiSubForm(
+                'Admin_Form_Document_Abstract', 'TitleAbstract',
+                new Form_Validate_MultiSubForm_RepeatedValues(
+                    'Language',
+                    'admin_document_error_MoreThanOneTitleInLanguage'
+                )
+            ),
             'Abstracts'
         );
         $subform->addSubForm(new Admin_Form_Document_Subjects(), 'Subjects');
         $this->addSubForm($subform, 'Content');
 
         // Weiteres Allgemeines
-        $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Identifier', 'Identifier',
-            new Form_Validate_MultiSubForm_RepeatedValues('Value',
-                'admin_document_error_repeated_identifier', 'Type'),
-            array('columns' => array(
+        $this->addSubForm(
+            new Admin_Form_Document_MultiSubForm(
+                'Admin_Form_Document_Identifier', 'Identifier',
+                new Form_Validate_MultiSubForm_RepeatedValues(
+                    'Value',
+                    'admin_document_error_repeated_identifier', 'Type'
+                ),
+                array('columns' => array(
                 array('label' => 'Opus_Identifier_Type'), array('label' => 'Text')
-            ))), 'Identifiers');
+                ))
+            ), 'Identifiers'
+        );
         $this->addSubForm(new Admin_Form_Document_Licences(), 'Licences');
         $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Patent', 'Patent'), 'Patents');
         $this->addSubForm(new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Note', 'Note'), 'Notes');
@@ -164,7 +187,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * Populates form from model values.
      */
     public function populateFromModel($document) {
-        $this->document = $document;
+        $this->_document = $document;
 
         $subforms = $this->getSubForms();
         
@@ -267,7 +290,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * @param $message string Nachricht
      */
     public function setMessage($message) {
-        $this->message = $message;
+        $this->_message = $message;
     }
 
     /**
@@ -275,7 +298,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * @return null|string
      */
     public function getMessage() {
-        return $this->message;
+        return $this->_message;
     }
 
     /**
@@ -287,10 +310,10 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
     public function prepareRenderingAsView() {
         parent::prepareRenderingAsView();
 
-        if (!is_null($this->document)) {
-            if (count($this->document->getFile()) > 0) {
+        if (!is_null($this->_document)) {
+            if (count($this->_document->getFile()) > 0) {
                 $subform = new Admin_Form_Document_Files();
-                $subform->populateFromModel($this->document);
+                $subform->populateFromModel($this->_document);
                 $this->addSubForm($subform, 'Files');
             }
         }

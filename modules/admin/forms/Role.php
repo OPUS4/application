@@ -37,7 +37,7 @@
  */
 class Admin_Form_Role extends Zend_Form {
 
-    private static $protectedRoles = array('administrator', 'guest');
+    private static $_protectedRoles = array('administrator', 'guest');
 
     /**
      * Constructs form.
@@ -46,8 +46,10 @@ class Admin_Form_Role extends Zend_Form {
     public function __construct($id = null) {
         $section = empty($id) ? 'new' : 'edit';
 
-        $config = new Zend_Config_Ini(APPLICATION_PATH .
-                '/modules/admin/forms/role.ini', $section);
+        $config = new Zend_Config_Ini(
+            APPLICATION_PATH .
+            '/modules/admin/forms/role.ini', $section
+        );
 
         parent::__construct($config->form->role);
 
@@ -67,7 +69,7 @@ class Admin_Form_Role extends Zend_Form {
         $nameElement = $this->getElement('name');
         $roleName = $role->getName();
         $nameElement->setValue($roleName);
-        if (in_array($roleName, self::$protectedRoles)) {
+        if (in_array($roleName, self::$_protectedRoles)) {
             $nameElement->setAttrib('disabled', 'true');
         }
     }

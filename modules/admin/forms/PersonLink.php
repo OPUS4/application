@@ -68,7 +68,7 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm {
      * Link-Model das angezeigt wird.
      * @var \Opus_Model_Dependent_Link_DocumentPerson 
      */
-    private $model = null;
+    private $_model = null;
     
     /**
      * Erzeugt die Formularelemente.
@@ -76,8 +76,10 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm {
     public function init() {
         parent::init();
         
-        $this->addElement('hidden', Admin_Form_Person::ELEMENT_PERSON_ID, array('required' => true,
-            'validators' => array('Int')));
+        $this->addElement(
+            'hidden', Admin_Form_Person::ELEMENT_PERSON_ID, array('required' => true,
+            'validators' => array('Int'))
+        );
         $this->addElement('PersonRole', self::ELEMENT_ROLE, array('label' => 'Role'));
         $this->addElement('checkbox', self::ELEMENT_ALLOW_CONTACT, array('label' => 'AllowEmailContact'));
         $this->addElement('SortOrder', self::ELEMENT_SORT_ORDER, array('label' => 'SortOrder'));
@@ -93,7 +95,7 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm {
             $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($personLink->getSortOrder());
             $this->getElement(Admin_Form_Person::ELEMENT_PERSON_ID)->setValue($personLink->getModel()->getId());
             $this->getElement(self::ELEMENT_ROLE)->setValue($personLink->getRole());
-            $this->model = $personLink;
+            $this->_model = $personLink;
         }
         else {
             $this->getLog()->err(__METHOD__ . self::BAD_MODEL_MESSAGE);
@@ -120,7 +122,7 @@ class Admin_Form_PersonLink extends Admin_Form_AbstractDocumentSubForm {
      * @return \Opus_Model_Dependent_Link_DocumentPerson 
      */
     public function getModel() {
-        return $this->model;
+        return $this->_model;
     }
     
 }
