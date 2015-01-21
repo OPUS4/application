@@ -41,7 +41,7 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
      * Wird TRUE gesetzt wenn das Formular für die Anzeige als View vorbereitet wird.
      * @var bool
      */
-    private $viewMode = false;
+    private $_viewMode = false;
 
     /**
      * Option für das Entfernen von Elementen mit leerem Wert für das View Rendering.
@@ -49,7 +49,7 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
      * Manchmal will man sehen welche Felder nicht gesetzt wurden.
      * @var bool
      */
-    private $removeEmptyElements = true;
+    private $_removeEmptyElements = true;
 
     /**
      * Option für das Entfernen von Checkboxen die nicht ausgewählt sind für das View Rendering.
@@ -58,21 +58,21 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
      *
      * @var bool
      */
-    private $removeEmptyCheckbox = true;
+    private $_removeEmptyCheckbox = true;
 
     /**
      * Meldet, ob Anzeige als View vorbereitet wurde.
      * @return bool
      */
     public function isViewModeEnabled() {
-        return $this->viewMode;
+        return $this->_viewMode;
     }
 
     /**
      * Aktiviert den View Mode für die Anzeige.
      */
     protected function setViewModeEnabled() {
-        $this->viewMode = true;
+        $this->_viewMode = true;
     }
 
     /**
@@ -158,7 +158,7 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
      * @param $removeEmptyElements
      */
     public function setRemoveEmptyElements($removeEmptyElements) {
-        $this->removeEmptyElements = $removeEmptyElements;
+        $this->_removeEmptyElements = $removeEmptyElements;
     }
 
     /**
@@ -166,7 +166,7 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
      * @return bool
      */
     public function isRemoveEmptyElements() {
-        return $this->removeEmptyElements;
+        return $this->_removeEmptyElements;
     }
 
     /**
@@ -174,7 +174,7 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
      * @param $removeEmptyCheckbox
      */
     public function setRemoveEmptyCheckbox($removeEmptyCheckbox) {
-        $this->removeEmptyCheckbox = $removeEmptyCheckbox;
+        $this->_removeEmptyCheckbox = $removeEmptyCheckbox;
     }
 
     /**
@@ -182,7 +182,7 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
      * @return bool
      */
     public function isRemoveEmptyCheckbox() {
-        return $this->removeEmptyCheckbox;
+        return $this->_removeEmptyCheckbox;
     }
 
 }

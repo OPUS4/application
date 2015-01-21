@@ -66,19 +66,19 @@ class Application_Form_Confirmation extends Application_Form_Abstract {
      * Frage für Bestätigungsformular.
      * @var string
      */
-    private $question = null;
+    private $_question = null;
 
     /**
      * Model auf das sich die Frage bezieht.
      * @var Opus_Model_Abstract
      */
-    private $model = null;
+    private $_model = null;
 
     /**
      * Klasse für Model.
      * @var string
      */
-    private $modelClass = null;
+    private $_modelClass = null;
 
     /**
      * Angepasster Anzeigename für Model;
@@ -97,7 +97,7 @@ class Application_Form_Confirmation extends Application_Form_Abstract {
         if (is_null($modelClass) || strlen(trim($modelClass)) === 0) {
             throw new Application_Exception(__CLASS__ . 'Attempt to construct without parameter "modelClass".');
         }
-        $this->modelClass = $modelClass;
+        $this->_modelClass = $modelClass;
         parent::__construct($options);
     }
 
@@ -113,11 +113,13 @@ class Application_Form_Confirmation extends Application_Form_Abstract {
 
         $this->setLegend($this->getFormLegend());
 
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             array('ViewScript', array('viewScript' => 'confirmation.phtml')),
             array('Fieldset', array('class' => 'headline')),
             'Form'
-        ));
+            )
+        );
     }
 
     /**
@@ -175,13 +177,15 @@ class Application_Form_Confirmation extends Application_Form_Abstract {
      */
     public function setModel($model) {
         if (!is_null($model) && $model instanceof Opus_Model_AbstractDb) {
-            $this->model = $model;
+            $this->_model = $model;
             $this->getElement(self::ELEMENT_MODEL_ID)->setValue($model->getId());
         }
         else {
             if (is_object($model)) {
-                throw new Application_Exception(__METHOD__ . ' Parameter ' . get_class($model)
-                    . ' not instance of Opus_Model_AbstractDb.');
+                throw new Application_Exception(
+                    __METHOD__ . ' Parameter ' . get_class($model)
+                    . ' not instance of Opus_Model_AbstractDb.'
+                );
             }
             else {
                 throw new Application_Exception(__METHOD__ . ' Parameter must be Opus_Model_AbstractDb.');
@@ -194,7 +198,7 @@ class Application_Form_Confirmation extends Application_Form_Abstract {
      * @return string|null
      */
     public function getModelClass() {
-        return $this->modelClass;
+        return $this->_modelClass;
     }
 
     /**
@@ -202,7 +206,7 @@ class Application_Form_Confirmation extends Application_Form_Abstract {
      * @return string
      */
     public function getModelClassName() {
-        return $this->getTranslator()->translate($this->modelClass);
+        return $this->getTranslator()->translate($this->_modelClass);
     }
 
     /**
@@ -213,8 +217,8 @@ class Application_Form_Confirmation extends Application_Form_Abstract {
         if (!is_null($this->_modelDisplayName)) {
             return $this->_modelDisplayName;
         }
-        else if (!is_null($this->model)) {
-            return $this->model->getDisplayName();
+        else if (!is_null($this->_model)) {
+            return $this->_model->getDisplayName();
         }
         else {
             return '';
@@ -230,11 +234,11 @@ class Application_Form_Confirmation extends Application_Form_Abstract {
      * @return string
      */
     public function getQuestion() {
-        if (is_null($this->question)) {
+        if (is_null($this->_question)) {
             return 'confirmation_question_default';
         }
         else {
-            return $this->question;
+            return $this->_question;
         }
     }
 
@@ -243,7 +247,7 @@ class Application_Form_Confirmation extends Application_Form_Abstract {
      * @param string $question
      */
     public function setQuestion($question) {
-        $this->question = $question;
+        $this->_question = $question;
     }
 
     /**
@@ -258,9 +262,11 @@ class Application_Form_Confirmation extends Application_Form_Abstract {
     public function renderQuestion() {
         $question = $this->getTranslator()->translate($this->getQuestion());
 
-        return sprintf($question,
+        return sprintf(
+            $question,
             $this->getModelClassName(),
-            '<span class="displayname">' . htmlspecialchars($this->getModelDisplayName()) . '</span>');
+            '<span class="displayname">' . htmlspecialchars($this->getModelDisplayName()) . '</span>'
+        );
     }
 
 }

@@ -41,14 +41,14 @@ abstract class Application_Model_Abstract {
      * Logger for this class.
      * @var Zend_Log
      */
-    private $__logger;
+    private $_logger;
 
     /**
      * Set logger for this class.
      * @param Zend_Log $logger
      */
     public function setLogger($logger) {
-        $this->__logger = $logger;
+        $this->_logger = $logger;
     }
 
     /**
@@ -56,11 +56,11 @@ abstract class Application_Model_Abstract {
      * @return Zend_Log
      */
     public function getLogger() {
-        if (is_null($this->__logger)) {
-            $this->__logger = Zend_Registry::get('Zend_Log');
+        if (is_null($this->_logger)) {
+            $this->_logger = Zend_Registry::get('Zend_Log');
         }
 
-        return $this->__logger;
+        return $this->_logger;
     }
 
 }

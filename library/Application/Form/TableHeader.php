@@ -37,14 +37,14 @@
  */
 class Application_Form_TableHeader extends Application_Form_Abstract {
 
-    private $columns = null;
+    private $_columns = null;
 
     public function __construct($columns, $options = null) {
         if (!is_array($columns)) {
             throw new Application_Exception(__METHOD__ . ' Parameter \'columns\' must be array.');
         }
 
-        $this->columns = $columns;
+        $this->_columns = $columns;
 
         parent::__construct($options);
     }
@@ -52,14 +52,16 @@ class Application_Form_TableHeader extends Application_Form_Abstract {
     public function init() {
         parent::init();
 
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             array('ViewScript', array('viewScript' => 'tableheader.phtml'))
-        ));
+            )
+        );
     }
 
     public function getColumnLabel($index) {
-        if (isset($this->columns[$index]) && isset($this->columns[$index]['label'])) {
-            return $this->columns[$index]['label'];
+        if (isset($this->_columns[$index]) && isset($this->_columns[$index]['label'])) {
+            return $this->_columns[$index]['label'];
         }
         else {
             return '&nbsp;';
@@ -67,8 +69,8 @@ class Application_Form_TableHeader extends Application_Form_Abstract {
     }
 
     public function getColumnClass($index) {
-        if (isset($this->columns[$index]) && isset($this->columns[$index]['class'])) {
-            return $this->columns[$index]['class'];
+        if (isset($this->_columns[$index]) && isset($this->_columns[$index]['class'])) {
+            return $this->_columns[$index]['class'];
         }
         else {
             return '';
@@ -76,11 +78,11 @@ class Application_Form_TableHeader extends Application_Form_Abstract {
     }
 
     public function getColumnCount() {
-        return count($this->columns);
+        return count($this->_columns);
     }
 
     public function getColumns() {
-        return $this->columns;
+        return $this->_columns;
     }
 
 }

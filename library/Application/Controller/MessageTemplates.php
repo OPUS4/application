@@ -59,7 +59,7 @@ class Application_Controller_MessageTemplates {
      *
      * @var array
      */
-    private $messages = null;
+    private $_messages = null;
 
     /**
      * Konstruiert Instanz mit Basisnachrichten.
@@ -70,7 +70,7 @@ class Application_Controller_MessageTemplates {
             throw new Application_Exception(__METHOD__ . ' Parameter \'messages\' is required and must be an array.');
         }
 
-        $this->messages = $messages;
+        $this->_messages = $messages;
     }
 
     /**
@@ -79,7 +79,7 @@ class Application_Controller_MessageTemplates {
      * @return array
      */
     public function getMessages() {
-        return $this->messages;
+        return $this->_messages;
     }
 
     /**
@@ -102,8 +102,8 @@ class Application_Controller_MessageTemplates {
      * @return string
      */
     public function getMessage($key) {
-        if (array_key_exists($key, $this->messages)) {
-            return $this->messages[$key];
+        if (array_key_exists($key, $this->_messages)) {
+            return $this->_messages[$key];
         }
         else {
             throw new Application_Exception("Message key '$key' is not defined.");
@@ -119,15 +119,15 @@ class Application_Controller_MessageTemplates {
      * @param $message Nachricht
      */
     public function setMessage($key, $message) {
-        if (!is_array($this->messages)) {
-            $this->messages = array();
+        if (!is_array($this->_messages)) {
+            $this->_messages = array();
         }
 
         if (is_null($message)) {
             throw new Application_Exception("Message key '$key' must not be null.");
         }
 
-        $this->messages[$key] = $message;
+        $this->_messages[$key] = $message;
     }
 
 }

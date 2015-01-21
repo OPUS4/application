@@ -33,17 +33,17 @@
  */
 class Application_View_Helper_Abstract extends Zend_View_Helper_Abstract {
 
-    private $logger;
+    private $_logger;
 
     public function getLogger() {
-        if (is_null($this->logger)) {
-            $this->logger = Zend_Registry::get('Zend_Log');
+        if (is_null($this->_logger)) {
+            $this->_logger = Zend_Registry::get('Zend_Log');
         }
-        return $this->logger;
+        return $this->_logger;
     }
 
     public function setLogger($logger) {
-        $this->logger = $logger;
+        $this->_logger = $logger;
     }
 
 }

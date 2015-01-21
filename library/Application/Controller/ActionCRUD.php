@@ -85,13 +85,13 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * Nachrichten für die verschiedenen Ereignisse.
      * @var array
      */
-    private $messageTemplates;
+    private $_messageTemplates;
 
     /**
      * Default Messages für die verschiedenen Ereignisse.
      * @var array
      */
-    private $defaultMessageTemplates = array(
+    private $_defaultMessageTemplates = array(
         self::SAVE_SUCCESS => 'controller_crud_save_success',
         self::SAVE_FAILURE => array('failure' => 'controller_crud_save_failure'),
         self::DELETE_SUCCESS => 'controller_crud_delete_success',
@@ -108,19 +108,19 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * Klasse für Model-Formular.
      * @var \Application_Form_IModel
      */
-    private $formClass = null;
+    private $_formClass = null;
 
     /**
      * Klasse für OPUS Model.
      * @var \Opus_Model_Abstract
      */
-    private $modelClass = null;
+    private $_modelClass = null;
 
     /**
      * Name of function for retrieving all models.
      * @var string
      */
-    private $functionNameForGettingModels = 'getAll';
+    private $_functionNameForGettingModels = 'getAll';
 
     /**
      * Initialisiert den Controller.
@@ -408,7 +408,7 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * Liefert alle Instanzen der Model-Klasse.
      */
     public function getAllModels() {
-        return call_user_func(array($this->getModelClass(), $this->functionNameForGettingModels));
+        return call_user_func(array($this->getModelClass(), $this->_functionNameForGettingModels));
     }
 
     /**
@@ -447,7 +447,7 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * @return Application_Form_IModel
      */
     public function getModelForm() {
-        return new $this->formClass();
+        return new $this->_formClass();
     }
 
     /**
@@ -477,7 +477,7 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * @return Application_Form_IModel|null
      */
     public function getFormClass() {
-        return $this->formClass;
+        return $this->_formClass;
     }
 
     /**
@@ -489,7 +489,7 @@ class Application_Controller_ActionCRUD extends Controller_Action {
             throw new Application_Exception("Class '$formClass' is not instance of Application_Form_IModel.");
         }
 
-        $this->formClass = $formClass;
+        $this->_formClass = $formClass;
     }
 
     /**
@@ -497,11 +497,11 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * @return null|Opus_Model_Abstract
      */
     public function getModelClass() {
-        if (is_null($this->modelClass)) {
-            $this->modelClass = $this->getModelForm()->getModelClass();
+        if (is_null($this->_modelClass)) {
+            $this->_modelClass = $this->getModelForm()->getModelClass();
         }
 
-        return $this->modelClass;
+        return $this->_modelClass;
     }
 
     /**
@@ -519,7 +519,7 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * @return array
      */
     public function getMessages() {
-        return $this->messageTemplates->getMessages();
+        return $this->_messageTemplates->getMessages();
     }
 
     /**
@@ -527,7 +527,7 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * @param $messages
      */
     public function setMessages($messages) {
-        $this->messageTemplates->setMessages($messages);
+        $this->_messageTemplates->setMessages($messages);
     }
 
     /**
@@ -536,7 +536,7 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * @return null|string
      */
     public function getMessage($key) {
-        return $this->messageTemplates->getMessage($key);
+        return $this->_messageTemplates->getMessage($key);
     }
 
     /**
@@ -545,14 +545,14 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * @param $message Nachricht
      */
     public function setMessage($key, $message) {
-        $this->messageTemplates->setMessage($key, $message);
+        $this->_messageTemplates->setMessage($key, $message);
     }
 
     /**
      * Lädt die Standardnachrichten.
      */
     public function loadDefaultMessages() {
-        $this->messageTemplates = new Application_Controller_MessageTemplates($this->defaultMessageTemplates);
+        $this->_messageTemplates = new Application_Controller_MessageTemplates($this->_defaultMessageTemplates);
     }
 
     /**
@@ -560,7 +560,7 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * @param $name
      */
     public function setFunctionNameForGettingModels($name) {
-        $this->functionNameForGettingModels = ($name != null) ? $name : 'getAll';
+        $this->_functionNameForGettingModels = ($name != null) ? $name : 'getAll';
     }
 
     /**
@@ -568,7 +568,7 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * @return string
      */
     public function getFunctionNameForGettingModels() {
-        return $this->functionNameForGettingModels;
+        return $this->_functionNameForGettingModels;
     }
 
 }

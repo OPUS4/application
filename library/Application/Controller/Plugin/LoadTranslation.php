@@ -47,11 +47,11 @@ class Application_Controller_Plugin_LoadTranslation extends Zend_Controller_Plug
      * @return void
      */
     public function preDispatch(Zend_Controller_Request_Abstract $request) {
-        $current_module = $request->getModuleName();
+        $currentModule = $request->getModuleName();
 
         // Add translation
-        if ($current_module !== 'default' && Zend_Registry::isRegistered(Application_Translate::REGISTRY_KEY)) {
-            Zend_Registry::get(Application_Translate::REGISTRY_KEY)->loadModule($current_module);
+        if ($currentModule !== 'default' && Zend_Registry::isRegistered(Application_Translate::REGISTRY_KEY)) {
+            Zend_Registry::get(Application_Translate::REGISTRY_KEY)->loadModule($currentModule);
         }
     }
 

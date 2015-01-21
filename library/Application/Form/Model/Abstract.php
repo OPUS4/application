@@ -70,7 +70,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * Name der Modelklasse fuer Formular.
      * @var string
      */
-    private $modelClass;
+    private $_modelClass;
 
     /**
      * Initialisiert die Formularelement und Dekoratoren.
@@ -78,32 +78,42 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
     public function init() {
         parent::init();
 
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             'FormElements',
             'Form'
-        ));
+            )
+        );
 
-        $this->addElement('hidden', self::ELEMENT_MODEL_ID, array('decorators' => array(
+        $this->addElement(
+            'hidden', self::ELEMENT_MODEL_ID, array('decorators' => array(
             'ViewHelper',
             array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li'))
-        )));
+            ))
+        );
 
-        $this->addElement('submit', self::ELEMENT_SAVE, array('decorators' => array(
+        $this->addElement(
+            'submit', self::ELEMENT_SAVE, array('decorators' => array(
             'ViewHelper',
             array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li', 'class' => 'save-element'))
-        )));
+            ))
+        );
 
-        $this->addElement('submit', self::ELEMENT_CANCEL, array('decorators' => array(
+        $this->addElement(
+            'submit', self::ELEMENT_CANCEL, array('decorators' => array(
             'ViewHelper',
             array(array('liWrapper' => 'HtmlTag'), array('tag' => 'li', 'class' => 'cancel-element'))
-        )));
+            ))
+        );
 
-        $this->addDisplayGroup(array(self::ELEMENT_MODEL_ID, self::ELEMENT_SAVE, self::ELEMENT_CANCEL), 'actions',
+        $this->addDisplayGroup(
+            array(self::ELEMENT_MODEL_ID, self::ELEMENT_SAVE, self::ELEMENT_CANCEL), 'actions',
             array('order' => 1000, 'decorators' => array(
                 'FormElements',
                 array(array('ulWrapper' => 'HtmlTag'), array('tag' => 'ul', 'class' => 'form-action')),
                 array(array('divWrapper' => 'HtmlTag'), array('id' => 'form-action'))
-        )));
+            ))
+        );
     }
 
     /**
@@ -182,7 +192,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * @return string
      */
     public function getModelClass() {
-        return $this->modelClass;
+        return $this->_modelClass;
     }
 
     /**
@@ -190,7 +200,7 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * @param $modelClass
      */
     public function setModelClass($modelClass) {
-        $this->modelClass = $modelClass;
+        $this->_modelClass = $modelClass;
     }
 
     /**

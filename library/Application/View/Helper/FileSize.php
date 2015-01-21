@@ -33,7 +33,7 @@
  */
 class Application_View_Helper_FileSize extends Zend_View_Helper_Abstract {
 
-    private $labels = array("Byte", "KB", "MB", "GB");
+    private $_labels = array("Byte", "KB", "MB", "GB");
 
     /**
      * Return the hostname of the application.
@@ -42,13 +42,13 @@ class Application_View_Helper_FileSize extends Zend_View_Helper_Abstract {
      */
     public function fileSize($name, $value = 0, $options = null) {
         $labelIndex = 0;
-        $maxIndex = count($this->labels) - 1;
+        $maxIndex = count($this->_labels) - 1;
         while ($value >= 1024 && $labelIndex < $maxIndex) {
             $labelIndex++;
             $value = $value / 1024;
         }
 
-        return sprintf('%1$s %2$s', round($value, 2), $this->labels[$labelIndex]);
+        return sprintf('%1$s %2$s', round($value, 2), $this->_labels[$labelIndex]);
     }
 
 }

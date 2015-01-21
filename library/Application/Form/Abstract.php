@@ -42,19 +42,19 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * Logger für Formularklasse.
      * @var Zend_Log
      */
-    private $logger;
+    private $_logger;
 
     /**
      * Option für die automatische Verwendung der Element-Namen als Labels.
      * @var bool
      */
-    private $useNameAsLabel = false;
+    private $_useNameAsLabel = false;
 
     /**
      * Prefix fuer automatische Label.
      * @var string
      */
-    private $labelPrefix;
+    private $_labelPrefix;
 
     /**
      * Initialisiert das Formular.
@@ -114,7 +114,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      */
     public function createElement($element, $name , $options = null) {
         if ($this->isUseNameAsLabel()) {
-            $labelOption = array('label' => is_null($this->labelPrefix) ? $name : $this->labelPrefix . $name);
+            $labelOption = array('label' => is_null($this->_labelPrefix) ? $name : $this->_labelPrefix . $name);
             $options = (is_array($options)) ? array_merge($labelOption, $options) : $labelOption;
         }
 
@@ -166,11 +166,11 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * @return Zend_Log
      */
     public function getLogger() {
-        if (is_null($this->logger)) {
-            $this->logger = Zend_Registry::get('Zend_Log');
+        if (is_null($this->_logger)) {
+            $this->_logger = Zend_Registry::get('Zend_Log');
         }
 
-        return $this->logger;
+        return $this->_logger;
     }
 
     /**
@@ -178,7 +178,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * @param $logger
      */
     public function setLogger($logger) {
-        $this->logger = $logger;
+        $this->_logger = $logger;
     }
 
     /**
@@ -186,7 +186,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * @return bool TRUE - Element Namen werden als Label verwendet; FALSE - keine automatischen Label
      */
     public function isUseNameAsLabel() {
-        return $this->useNameAsLabel;
+        return $this->_useNameAsLabel;
     }
 
     /**
@@ -194,7 +194,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * @param bool $useNameAsLabel
      */
     public function setUseNameAsLabel($useNameAsLabel) {
-        $this->useNameAsLabel = $useNameAsLabel;
+        $this->_useNameAsLabel = $useNameAsLabel;
     }
 
     /**
@@ -202,7 +202,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * @return string
      */
     public function getLabelPrefix() {
-        return $this->labelPrefix;
+        return $this->_labelPrefix;
     }
 
     /**
@@ -211,7 +211,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      * @param $prefix
      */
     public function setLabelPrefix($prefix) {
-        $this->labelPrefix = $prefix;
+        $this->_labelPrefix = $prefix;
     }
 
 }

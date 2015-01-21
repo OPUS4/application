@@ -41,19 +41,19 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * Modelle die angezeigt werden sollen.
      * @var array
      */
-    private $models = null;
+    private $_models = null;
 
     /**
      * Konfiguration für Spalten.
      * @var array
      */
-    private $columns = null;
+    private $_columns = null;
 
     /**
      * ViewScript for rendering table.
      * @var string
      */
-    private $viewScript = 'modeltable.phtml';
+    private $_viewScript = 'modeltable.phtml';
 
     /**
      * Initialisiert Formular.
@@ -69,10 +69,12 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * Initialisiert die Decorators für die Tabelle.
      */
     public function initDecorators() {
-        $this->setDecorators(array(
+        $this->setDecorators(
+            array(
             'PrepareElements',
             array('ViewScript', array('viewScript' => $this->getViewScript()))
-        ));
+            )
+        );
     }
 
     /**
@@ -80,7 +82,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * @return array|null
      */
     public function getColumns() {
-        return $this->columns;
+        return $this->_columns;
     }
 
     /**
@@ -88,7 +90,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * @param $columns
      */
     public function setColumns($columns) {
-        $this->columns = $columns;
+        $this->_columns = $columns;
     }
 
     /**
@@ -97,8 +99,8 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * @return string|null
      */
     public function getColumnLabel($index) {
-        if (isset($this->columns[$index]['label'])) {
-            return $this->columns[$index]['label'];
+        if (isset($this->_columns[$index]['label'])) {
+            return $this->_columns[$index]['label'];
         }
         else {
             return null;
@@ -110,7 +112,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * @return array|null
      */
     public function getModels() {
-        return $this->models;
+        return $this->_models;
     }
 
     /**
@@ -121,7 +123,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
         if (!is_null($models) && !is_array($models)) {
             throw new Application_Exception(__METHOD__ . 'Parameter must be array.');
         }
-        $this->models = $models;
+        $this->_models = $models;
     }
 
     /**
@@ -130,10 +132,10 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      */
     public function setViewScript($name) {
         if (!is_null($name)) {
-            $this->viewScript = $name;
+            $this->_viewScript = $name;
         }
         else {
-            $this->viewScript = 'modeltable.phtml';
+            $this->_viewScript = 'modeltable.phtml';
         }
         $this->initDecorators();
     }
@@ -142,7 +144,7 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * Liefert Namen des ViewScripts für die Ausgabe der Modeltabelle.
      */
     public function getViewScript() {
-        return $this->viewScript;
+        return $this->_viewScript;
     }
 
 }

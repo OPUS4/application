@@ -42,10 +42,10 @@
  */
 class Application_Security_RoleConfig {
     
-    private $roleName;
+    private $_roleName;
     
     public function __construct($roleName) {
-        $this->roleName = $roleName;
+        $this->_roleName = $roleName;
     }
     
     /**
@@ -53,7 +53,7 @@ class Application_Security_RoleConfig {
      * @param Zend_Acl $acl
      */
     public function applyPermissions($acl) {
-        $this->getRolePermissions($acl, $this->roleName);
+        $this->getRolePermissions($acl, $this->_roleName);
     }
 
     
