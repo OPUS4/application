@@ -35,10 +35,10 @@
  */
 class Admin_Form_File_UploadTest extends ControllerTestCase {
 
-    private $documentId;
+    private $_documentId;
 
     public function tearDown() {
-        $this->removeDocument($this->documentId);
+        $this->removeDocument($this->_documentId);
 
         parent::tearDown();
     }

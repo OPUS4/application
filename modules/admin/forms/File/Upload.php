@@ -55,7 +55,7 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
 
     const SUBFORM_DOCINFO    = 'Info';
 
-    private $fileInfo = null;
+    private $_fileInfo = null;
 
     public function init() {
         parent::init();
@@ -67,10 +67,12 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
         $this->setLabelPrefix('Opus_File_');
         $this->setUseNameAsLabel(true);
 
-        $element = $this->createElement('file', self::ELEMENT_FILE, array(
+        $element = $this->createElement(
+            'file', self::ELEMENT_FILE, array(
             'required' => true,
             'label' => 'admin_filemanager_element_file',
-        ));
+            )
+        );
         $element->addValidator('Count', false, 1); // ensure only 1 file
         $this->addElement($element);
 
@@ -100,7 +102,8 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
         $files = $this->getFileInfo();
 
         foreach ($files as $file) {
-            /* TODO: Uncaught exception 'Zend_File_Transfer_Exception' with message '"fileupload" not found by file transfer adapter
+            /* TODO Uncaught exception 'Zend_File_Transfer_Exception' with message '"fileupload" not found by file
+            * TODO (continued) transfer adapter
             * if (!$upload->isValid($file)) {
             *    $this->view->message = 'Upload failed: Not a valid file!';
             *    break;
@@ -120,17 +123,17 @@ class Admin_Form_File_Upload extends Application_Form_Model_Abstract {
     }
 
     public function getFileInfo() {
-        if (is_null($this->fileInfo)) {
+        if (is_null($this->_fileInfo)) {
             $upload = new Zend_File_Transfer_Adapter_Http();
             return $upload->getFileInfo();
         }
         else {
-            return $this->fileInfo;
+            return $this->_fileInfo;
         }
     }
 
     public function setFileInfo($fileInfo) {
-        $this->fileInfo = $fileInfo;
+        $this->_fileInfo = $fileInfo;
     }
 
 }

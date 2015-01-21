@@ -50,7 +50,7 @@ class Admin_Form_File_Hashes extends Admin_Form_AbstractDocumentSubForm {
     }
 
     public function populateFromModel($file) {
-        foreach($file->getHashValue() as $hashValue) {
+        foreach ($file->getHashValue() as $hashValue) {
             $hash = new Admin_Model_Hash($file, $hashValue);
             $hashType = $hash->getHashType();
             if (!empty($hashType)) {
