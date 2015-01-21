@@ -42,31 +42,31 @@ class Admin_WorkflowController extends Controller_Action {
      * Helper for verifying document IDs.
      * @var Controller_Helper_Documents
      */
-    private $__documentsHelper;
+    private $_documentsHelper;
 
     /**
      * Helper for workflow functionality.
      * @var Controller_Helper_Workflow
      */
-    private $__workflowHelper;
+    private $_workflowHelper;
 
-    private $__confirmChanges = true;
+    private $_confirmChanges = true;
 
     /**
      * Initializes controller.
      */
     public function init() {
         parent::init();
-        $this->__documentsHelper = $this->_helper->getHelper('Documents');
-        $this->__workflowHelper = $this->_helper->getHelper('Workflow');
+        $this->_documentsHelper = $this->_helper->getHelper('Documents');
+        $this->_workflowHelper = $this->_helper->getHelper('Workflow');
 
         $config = Zend_Registry::get('Zend_Config');
 
         if (isset($config->confirmation->document->statechange->enabled)) {
-            $this->__confirmChanges = ($config->confirmation->document->statechange->enabled == 1) ? true : false;
+            $this->_confirmChanges = ($config->confirmation->document->statechange->enabled == 1) ? true : false;
         }
         else {
-            $this->__confirmChanges = true;
+            $this->_confirmChanges = true;
         }
     }
 
@@ -77,24 +77,33 @@ class Admin_WorkflowController extends Controller_Action {
         $docId = $this->getRequest()->getParam('docId');
         $targetState = $this->getRequest()->getParam('targetState');
 
-        $document = $this->__documentsHelper->getDocumentForId($docId);
+        $document = $this->_documentsHelper->getDocumentForId($docId);
 
         // Check if document identifier is valid
         if (!isset($document)) {
-            return $this->_redirectTo('index', array('failure' => $this->view->translate(
-                'admin_document_error_novalidid')), 'documents', 'admin');
+            return $this->_redirectTo(
+                'index', array('failure' => $this->view->translate(
+                    'admin_document_error_novalidid'
+                )), 'documents', 'admin'
+            );
         }
 
         // Check if valid target state
-        if (!$this->__workflowHelper->isValidState($targetState)) {
-            return $this->_redirectTo('index', array('failure' => $this->view->translate(
-                'admin_workflow_error_invalidstate')), 'document', 'admin', array('id' => $docId));
+        if (!$this->_workflowHelper->isValidState($targetState)) {
+            return $this->_redirectTo(
+                'index', array('failure' => $this->view->translate(
+                    'admin_workflow_error_invalidstate'
+                )), 'document', 'admin', array('id' => $docId)
+            );
         }
 
         // Check if allowed target state
-        if (!$this->__workflowHelper->isTransitionAllowed($document, $targetState)) {
-            return $this->_redirectTo('index', array('failure' => $this->view->translate(
-                'admin_workflow_error_illegal_transition', $targetState)), 'document', 'admin', array('id' => $docId));
+        if (!$this->_workflowHelper->isTransitionAllowed($document, $targetState)) {
+            return $this->_redirectTo(
+                'index', array('failure' => $this->view->translate(
+                    'admin_workflow_error_illegal_transition', $targetState
+                )), 'document', 'admin', array('id' => $docId)
+            );
         }
 
         // Check if document is already in target state
@@ -104,11 +113,13 @@ class Admin_WorkflowController extends Controller_Action {
             if (!$this->view->translate()->getTranslator()->isTranslated($key)) {
                 $key = 'admin_workflow_error_alreadyinstate';
             }
-            return $this->_redirectTo('index', array('failure' => $this->view->translate($key, $targetState)),
-                'document', 'admin', array('id' => $docId));
+            return $this->_redirectTo(
+                'index', array('failure' => $this->view->translate($key, $targetState)),
+                'document', 'admin', array('id' => $docId)
+            );
         }
 
-        if ($this->__confirmChanges) {
+        if ($this->_confirmChanges) {
             if ($this->getRequest()->isPost()) {
                 $form = $this->_getConfirmationForm($document, $targetState);
                 $sureyes = $this->getRequest()->getPost('sureyes');
@@ -131,7 +142,7 @@ class Admin_WorkflowController extends Controller_Action {
 
     private function _changeState($document, $targetState, $form = null) {
         try {
-            $this->__workflowHelper->changeState($document, $targetState);
+            $this->_workflowHelper->changeState($document, $targetState);
 
             if ($targetState == 'published') {
                 $this->_sendNotification($document, $form);
@@ -163,7 +174,8 @@ class Admin_WorkflowController extends Controller_Action {
                 "docId" => $document->getId()
             ),
             null,
-            true);
+            true
+        );
 
         $authorsBitmask = array();
         $notifySubmitter = true;
@@ -183,7 +195,8 @@ class Admin_WorkflowController extends Controller_Action {
             Util_Notification::PUBLICATION,
             $this->view->serverUrl() . $url,
             $notifySubmitter,
-            $authorsBitmask);
+            $authorsBitmask
+        );
     }
 
     /**
@@ -195,8 +208,11 @@ class Admin_WorkflowController extends Controller_Action {
      */
     private function _getConfirmationForm($document, $targetState) {
         $form = new Admin_Form_YesNoForm();
-        $form->setAction($this->view->url(array('controller' => 'workflow', 'action' => 'changestate',
-            'targetState' => $targetState)));
+        $form->setAction(
+            $this->view->url(
+                array('controller' => 'workflow', 'action' => 'changestate', 'targetState' => $targetState)
+            )
+        );
         $form->setMethod('post');
 
         $idElement = new Zend_Form_Element_Hidden('id');
@@ -220,7 +236,8 @@ class Admin_WorkflowController extends Controller_Action {
      * 
      */
     private function _addPublishNotificationSelection($document, $form) {
-        $form->addElement('hidden', 'plaintext',
+        $form->addElement(
+            'hidden', 'plaintext',
             array(
                 'description' => '<br/><p><strong>' . $this->view->translate('admin_workflow_notification_headline')
                     . '</strong></p>'
@@ -238,8 +255,10 @@ class Admin_WorkflowController extends Controller_Action {
             if (trim($submitters[0]->getEmail()) == '') {
                 // email notification is not possible since no email address is specified for submitter
                 $label .= ' (' . $this->view->translate('admin_workflow_notification_noemail') . ')';
-                $element = new Zend_Form_Element_Checkbox('submitter', array('checked' => false, 'disabled' => true,
-                    'label' => $label));
+                $element = new Zend_Form_Element_Checkbox(
+                    'submitter', array('checked' => false, 'disabled' => true,
+                    'label' => $label)
+                );
                 $element->getDecorator('Label')->setOption('class', 'notification-option option-not-available');
             }
             else {
@@ -261,14 +280,16 @@ class Admin_WorkflowController extends Controller_Action {
                 if (trim($author->getEmail()) == '') {
                     // email notification is not possible since no email address is specified for author
                     $label .= ' (' . $this->view->translate('admin_workflow_notification_noemail') . ')';
-                    $element = new Zend_Form_Element_Checkbox($id, array('checked' => false, 'disabled' => true,
-                        'label' => $label));
+                    $element = new Zend_Form_Element_Checkbox(
+                        $id, array('checked' => false, 'disabled' => true, 'label' => $label)
+                    );
                     $element->getDecorator('Label')->setOption('class', 'notification-option option-not-available');
                 }
                 else {
                     $label .= ' (' . trim($author->getEmail()) . ')';
-                    $element = new Zend_Form_Element_Checkbox($id, array('checked' => true, 'label' => 'foo',
-                        'label' => $label));
+                    $element = new Zend_Form_Element_Checkbox(
+                        $id, array('checked' => true, 'label' => 'foo', 'label' => $label)
+                    );
                     $element->getDecorator('Label')->setOption('class', 'notification-option');
                 }                
                 $form->addElement($element);                

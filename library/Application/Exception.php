@@ -34,14 +34,14 @@
 
 class Application_Exception extends Exception {
     
-    protected $httpResponseCode = null;
+    protected $_httpResponseCode = null;
     
     public function setHttpResponseCode($code) {
-        $this->httpResponseCode = $code;
+        $this->_httpResponseCode = $code;
     }
     
     public function getHttpResponseCode() {
-        return $this->httpResponseCode;
+        return $this->_httpResponseCode;
     }
 }
 

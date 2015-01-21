@@ -47,36 +47,36 @@ class Application_Configuration {
      * Logger.
      * @var Zend_Log
      */
-    private $logger = null;
+    private $_logger = null;
     
     /**
      * Unterstützte Sprachen.
      * @var array
      */
-    private $supportedLanguages = null;
+    private $_supportedLanguages = null;
 
     /**
      * Is language selection active in user interface.
      */
-    private $languageSelectionEnabled = null;
+    private $_languageSelectionEnabled = null;
 
     /**
      * Liefert den Logger für diese Klasse.
      * @return Zend_Log
      */
     public function getLogger() {
-        if (is_null($this->logger)) {
-            $this->logger = Zend_Registry::get('Zend_Log');
+        if (is_null($this->_logger)) {
+            $this->_logger = Zend_Registry::get('Zend_Log');
         }
 
-        return $this->logger;
+        return $this->_logger;
     }
 
     /**
      * Setzt den Logger für diese Klasse.
      */
     public function setLogger($logger) {
-        $this->logger = $logger;
+        $this->_logger = $logger;
     }
     
     /**
@@ -92,16 +92,19 @@ class Application_Configuration {
      * @return array
      */
     public function getSupportedLanguages() {
-        if (is_null($this->supportedLanguages)) {
+        if (is_null($this->_supportedLanguages)) {
             $config = $this->getConfig();
             if (isset($config->supportedLanguages)) {
-                $this->supportedLanguages = explode(",", $config->supportedLanguages);
+                $this->_supportedLanguages = explode(",", $config->supportedLanguages);
                 $this->getLogger()->debug(
-                        Zend_Debug::dump($this->supportedLanguages, 'Supported languages (' 
-                                . count($this->supportedLanguages) . ')', false));
+                    Zend_Debug::dump(
+                        $this->_supportedLanguages, 'Supported languages ('
+                        . count($this->_supportedLanguages) . ')', false
+                    )
+                );
             }
         }
-        return $this->supportedLanguages;
+        return $this->_supportedLanguages;
     }
     
     /**
@@ -133,10 +136,10 @@ class Application_Configuration {
      * @return bool
      */
     public function isLanguageSelectionEnabled() {
-        if (is_null($this->languageSelectionEnabled)) {
-            $this->languageSelectionEnabled = count($this->getSupportedLanguages()) > 1;
+        if (is_null($this->_languageSelectionEnabled)) {
+            $this->_languageSelectionEnabled = count($this->getSupportedLanguages()) > 1;
         }
-        return $this->languageSelectionEnabled;
+        return $this->_languageSelectionEnabled;
     }
 
     /**

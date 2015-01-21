@@ -97,9 +97,11 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             throw new Exception('Requested theme "' . $theme . '" not found.');
         }
 
-        Zend_Layout::startMvc(array(
+        Zend_Layout::startMvc(
+            array(
                 'layoutPath'=> $layoutpath,
-                'layout'=>'common'));
+                'layout'=>'common')
+        );
 
         // Initialize view with custom encoding and global view helpers.
         $view = new Zend_View;
@@ -189,7 +191,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * 
      * @return Zend_Translate
      */
-    protected function _initTranslation()  {
+    protected function _initTranslation() {
         $this->bootstrap(array('Configuration', 'Session', 'Logging', 'ZendCache'));
         
         $logger = $this->getResource('Logging');
