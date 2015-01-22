@@ -38,18 +38,16 @@
 
 class Rss_IndexController extends Controller_Xml {
 
-    private $log;
     const NUM_OF_ITEMS_PER_FEED = '25';
     const RSS_SORT_FIELD = 'server_date_published';
     const RSS_SORT_ORDER = 'desc';
 
     public function init() {
         parent::init();
-        $this->log = Zend_Registry::get('Zend_Log');
     }
 
     public function indexAction() {
-        $queryBuilder = new Util_QueryBuilder($this->log, true);
+        $queryBuilder = new Util_QueryBuilder($this->getLogger(), true);
 
         // support backward compatibility: interpret missing parameter searchtype as latest search
         if (is_null($this->getRequest()->getParam('searchtype', null))) {
@@ -61,7 +59,7 @@ class Rss_IndexController extends Controller_Xml {
             $params = $queryBuilder->createQueryBuilderInputFromRequest($this->getRequest());
         }
         catch (Util_QueryBuilderException $e) {
-            $this->log->err(__METHOD__ . ' : ' . $e->getMessage());
+            $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             throw new Application_Exception($e->getMessage());
         }
         
@@ -91,7 +89,7 @@ class Rss_IndexController extends Controller_Xml {
 
     private function handleSolrError(Opus_SolrSearch_Exception $exception) {
         $this->_helper->layout()->enableLayout();
-        $this->log->err(__METHOD__ . ' : ' . $exception);
+        $this->getLogger()->err(__METHOD__ . ' : ' . $exception);
         if ($exception->isServerUnreachable()) {
             $e = new Application_Exception('error_search_unavailable');
             $e->setHttpResponseCode(503);
@@ -110,7 +108,9 @@ class Rss_IndexController extends Controller_Xml {
     }
 
     private function setLink() {
-        $this->_proc->setParameter('', 'link', $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/index/index/');
+        $this->_proc->setParameter(
+            '', 'link', $this->view->serverUrl() . $this->getRequest()->getBaseUrl() . '/index/index/'
+        );
     }
 
     private function setDates($resultList) {
