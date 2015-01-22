@@ -35,8 +35,10 @@
 class Account_Form_Account extends Zend_Form {
 
     public function __construct($login) {
-        $config = new Zend_Config_Ini(APPLICATION_PATH .
-                '/modules/account/forms/account.ini', 'production');
+        $config = new Zend_Config_Ini(
+            APPLICATION_PATH .
+            '/modules/account/forms/account.ini', 'production'
+        );
 
         parent::__construct($config->form->account);
 
@@ -51,15 +53,19 @@ class Account_Form_Account extends Zend_Form {
         parent::init();
 
         $this->getElement('confirmPassword')->addValidator(
-                new Form_Validate_Password());
+            new Form_Validate_Password()
+        );
 
         $this->getElement('username')->addValidator(
-                new Form_Validate_LoginAvailable(array('ignoreCase' => true)));
+            new Form_Validate_LoginAvailable(array('ignoreCase' => true))
+        );
 
-        $this->getElement('password')->addErrorMessages(array(
+        $this->getElement('password')->addErrorMessages(
+            array(
             Zend_Validate_StringLength::TOO_SHORT =>
                 'admin_account_error_password_tooshort'
-        ));
+            )
+        );
     }
 
     public function populateFromAccount($account) {

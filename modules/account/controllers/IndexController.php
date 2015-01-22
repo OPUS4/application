@@ -44,14 +44,14 @@ class Account_IndexController extends Controller_Action {
      * @return boolean
      */
     protected function customAccessCheck() {
-        $parent_value =  parent::customAccessCheck();
+        $parentValue =  parent::customAccessCheck();
 
         $config = Zend_Registry::get('Zend_Config');
         if (!isset($config) or !isset($config->account->editOwnAccount)) {
             return false;
         }
 
-        return $parent_value and $config->account->editOwnAccount;
+        return $parentValue and $config->account->editOwnAccount;
     }
 
     /**
