@@ -49,14 +49,14 @@ class View_Helper_LoginBar extends Zend_View_Helper_Abstract {
      *
      * @var array
      */
-    protected $_login_url = array('action' => 'login', 'controller' => 'auth', 'module' => 'default');
+    protected $_loginUrl = array('action' => 'login', 'controller' => 'auth', 'module' => 'default');
 
     /**
      * Default logout action.
      *
      * @var array
      */
-    protected $_logout_url = array('action' => 'logout', 'controller' => 'auth', 'module' => 'default');
+    protected $_logoutUrl = array('action' => 'logout', 'controller' => 'auth', 'module' => 'default');
 
     /**
      * Set the action (controller and module) to perform a login.
@@ -67,12 +67,12 @@ class View_Helper_LoginBar extends Zend_View_Helper_Abstract {
      * @return void
      */
     public function setLoginAction($action, $controller = null, $module = null) {
-        $this->_login_url['action'] = $action;
+        $this->_loginUrl['action'] = $action;
         if (is_null($controller) === false) {
-            $this->_login_url['controller'] = $controller;
+            $this->_loginUrl['controller'] = $controller;
         }
         if (is_null($module) === false) {
-            $this->_login_url['module'] = $module;
+            $this->_loginUrl['module'] = $module;
         }
     }
 
@@ -85,12 +85,12 @@ class View_Helper_LoginBar extends Zend_View_Helper_Abstract {
      * @return void
      */
     public function setLogoutAction($action, $controller = null, $module = null) {
-        $this->_logout_url['action'] = $action;
+        $this->_logoutUrl['action'] = $action;
         if (is_null($controller) === false) {
-            $this->_logout_url['controller'] = $controller;
+            $this->_logoutUrl['controller'] = $controller;
         }
         if (is_null($module) === false) {
-            $this->_logout_url['module'] = $module;
+            $this->_logoutUrl['module'] = $module;
         }
     }
 
@@ -113,7 +113,7 @@ class View_Helper_LoginBar extends Zend_View_Helper_Abstract {
         $returnParams = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
         $identity = Zend_Auth::getInstance()->getIdentity();
         if (empty($identity) === true) {
-            $url = $this->view->url(array_merge($this->_login_url, $returnParams->getReturnParameters()));
+            $url = $this->view->url(array_merge($this->_loginUrl, $returnParams->getReturnParameters()));
             return '<a rel="nofollow" href="' . $url . '">' . $this->view->translate('default_auth_index') . '</a>';
         }
 
@@ -131,7 +131,7 @@ class View_Helper_LoginBar extends Zend_View_Helper_Abstract {
             }
         }
 
-        $url = $this->view->url(array_merge($this->_logout_url, $returnParams->getReturnParameters()));
+        $url = $this->view->url(array_merge($this->_logoutUrl, $returnParams->getReturnParameters()));
         $logoutLink = '<a rel="nofollow" href="' . $url . '">' . $this->view->translate('default_auth_logout')
             . ' (' . htmlspecialchars($identity) . ')</a>';
 

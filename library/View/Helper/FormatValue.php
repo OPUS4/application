@@ -46,29 +46,30 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
      * Logger for this class.
      * @var Zend_Log Logger
      */
-    private $__logger;
+    private $_logger;
 
     /**
      * Controller helper for translations.
      * @var Controller_Helper_Translation
      */
-    private $__translation;
+    private $_translation;
 
     /**
      * Controller helper for handling of dates.
      * @var Controller_Helper_Dates
      */
-    private $__dates;
+    private $_dates;
 
     /**
      * Constructs View_Helper_FormatValue.
      */
     public function __construct() {
-        $this->__translation =
+        $this->_translation =
                 Zend_Controller_Action_HelperBroker::getStaticHelper(
-                        'Translation');
+                    'Translation'
+                );
 
-        $this->__dates =
+        $this->_dates =
                 Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
     }
 
@@ -118,7 +119,7 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
             else {
                 if ($field->isSelection()) {
                     $value = $field->getValue();
-                    $key = $this->__translation->getKeyForValue($model, $field->getName(), $value);
+                    $key = $this->_translation->getKeyForValue($model, $field->getName(), $value);
                     return $this->view->translate($key);
                 }
                 else if ($field->isCheckbox()) {
@@ -147,7 +148,7 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
             return $date;
         }
         else {
-            return $this->__dates->getDateString($date);
+            return $this->_dates->getDateString($date);
         }
     }
 
@@ -183,10 +184,10 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
      */
     private function getLogger() {
         if (empty($this->logger)) {
-            $this->__logger = Zend_Registry::get('Zend_Log');
+            $this->_logger = Zend_Registry::get('Zend_Log');
         }
 
-        return $this->__logger;
+        return $this->_logger;
     }
 
 }

@@ -40,7 +40,7 @@ class View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
     /**
      * @var \Controller_Helper_AccessControl
      */
-    private $accessControl;
+    private $_accessControl;
     
     /**
      * Returns true if access to resource is allowed or resource does not exist.
@@ -56,10 +56,10 @@ class View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
      * @return Zend_Acl
      */
     protected function getAccessControl() {
-        if (is_null($this->accessControl)) {
-            $this->accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        if (is_null($this->_accessControl)) {
+            $this->_accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
         }
-        return $this->accessControl;
+        return $this->_accessControl;
     }
 
 }

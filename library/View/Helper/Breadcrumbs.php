@@ -37,11 +37,11 @@
  */
 class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
     
-    private $suffixSeparatorDisabled = false;
+    private $_suffixSeparatorDisabled = false;
     
-    private $suffix = null;
+    private $_suffix = null;
     
-    private $replacement = null;
+    private $_replacement = null;
 
     /**
      * Setze String, der an die Breadcrumbs gehängt wird.
@@ -50,7 +50,7 @@ class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
      * @return $this
      */
     public function setSuffix($suffix) {
-        $this->suffix = $suffix;
+        $this->_suffix = $suffix;
         return $this;
     }
 
@@ -61,7 +61,7 @@ class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
      * @return $this
      */
     public function setSuffixSeparatorDisabled($disabled) {
-        $this->suffixSeparatorDisabled = $disabled;
+        $this->_suffixSeparatorDisabled = $disabled;
         return $this;
     }
 
@@ -71,7 +71,7 @@ class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
      * @return $this
      */
     public function setReplacement($replacement) {
-        $this->replacement = $replacement;
+        $this->_replacement = $replacement;
         return $this;
     }
     
@@ -111,18 +111,18 @@ class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
         }
 
 
-        if (is_null($this->replacement)) {
+        if (is_null($this->_replacement)) {
             $html .= parent::renderStraight($container);
         }
         else {
-            $html .= $this->replacement;
+            $html .= $this->_replacement;
         }
 
-        if (!is_null($this->suffix)) {
-            if ($this->suffixSeparatorDisabled !== true) {
+        if (!is_null($this->_suffix)) {
+            if ($this->_suffixSeparatorDisabled !== true) {
                 $html .= $this->getSeparator();
             }
-            $html .= $this->suffix;
+            $html .= $this->_suffix;
         }
 
         $html .= '</div></div>';

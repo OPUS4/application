@@ -58,11 +58,15 @@ class View_Helper_LanguageSelector extends Zend_View_Helper_Abstract {
         foreach ($translations as $translation) {
             if ($currentLocale->getLanguage() !== $translation) {
                 $languageName = $currentLocale->getTranslation($translation, 'language', $translation);
-                $languageUrl = $this->view->url(array_merge(array(
-                    'action' => 'language',
-                    'controller' => 'index',
-                    'module' => 'home',
-                    'language' => $translation), $returnParams->getReturnParameters()), null, true);
+                $languageUrl = $this->view->url(
+                    array_merge(
+                        array(
+                        'action' => 'language',
+                        'controller' => 'index',
+                        'module' => 'home',
+                        'language' => $translation), $returnParams->getReturnParameters()
+                    ), null, true
+                );
                 array_push($result, array('name' => htmlspecialchars($languageName), 'url' => $languageUrl));
             }
         }
