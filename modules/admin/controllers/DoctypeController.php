@@ -26,7 +26,8 @@
  */
 
 /**
- * Dieser Controller zeigt alle Dokumenttypen an und deren Validierungsstatus (einschließlich möglicher Fehlermeldungen).
+ * Dieser Controller zeigt alle Dokumenttypen an und deren Validierungsstatus (einschließlich möglicher
+ * Fehlermeldungen).
  *
  * @category    Application
  * @package     Module_Admin
@@ -37,18 +38,18 @@
  */
 class Admin_DoctypeController extends Controller_Action {
 
-    private $documentTypesHelper;
+    private $_documentTypesHelper;
 
     public function init() {
         parent::init();
-        $this->documentTypesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+        $this->_documentTypesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
     }
 
     public function indexAction() {
-        $validationArray = $this->documentTypesHelper->validateAll();
+        $validationArray = $this->_documentTypesHelper->validateAll();
         ksort($validationArray);
         $this->view->content = $validationArray;
-        $this->view->activeDoctypes = $this->documentTypesHelper->getDocumentTypes();
+        $this->view->activeDoctypes = $this->_documentTypesHelper->getDocumentTypes();
         $this->view->title = $this->view->translate('admin_doctype_index');
         $this->view->numDocs = sizeof($validationArray);
         $this->view->numActiveDocs = sizeof($this->view->activeDoctypes);
@@ -56,14 +57,16 @@ class Admin_DoctypeController extends Controller_Action {
 
     public function showAction() {
         $doctype = $this->getRequest()->getParam('doctype');
-        if (!$this->documentTypesHelper->isValid($doctype)) {
-            return $this->_redirectTo('index', array('failure' =>
+        if (!$this->_documentTypesHelper->isValid($doctype)) {
+            return $this->_redirectTo(
+                'index', array('failure' =>
                     'admin_doctype_invalid'),
-                'doctype', 'admin');
+                'doctype', 'admin'
+            );
         }
         $this->view->doctypeName = $doctype . ':';
-        $this->documentTypesHelper->validate($doctype);
-        $errors = $this->documentTypesHelper->getErrors();
+        $this->_documentTypesHelper->validate($doctype);
+        $errors = $this->_documentTypesHelper->getErrors();
         $this->view->errorArray = $errors[$doctype];
         $this->view->title = $doctype;
         $this->_breadcrumbs->setLabelFor('admin_doctype_show', $doctype);

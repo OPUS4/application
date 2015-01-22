@@ -281,7 +281,7 @@ class Admin_AccountController extends Controller_Action {
 
                 $account->store();
 
-                if ($isCurrentUser &&  ($loginChanged || $passwordChanged))  {
+                if ($isCurrentUser && ($loginChanged || $passwordChanged)) {
                     Zend_Auth::getInstance()->clearIdentity();
                 }
             }
@@ -335,7 +335,8 @@ class Admin_AccountController extends Controller_Action {
 
         if ($message === null) {
             $messages['notice'] = $this->view->translate(
-                    'admin_account_delete_success');
+                'admin_account_delete_success'
+            );
         }
         else {
             $messages['failure'] = $this->view->translate($message);

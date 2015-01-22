@@ -61,10 +61,10 @@ class Admin_AccessController extends Controller_Action {
      */
     private function getCheckedRoles($id, $roles) {
         $items = array();
-        foreach($roles as $role) {
+        foreach ($roles as $role) {
             $docs = $role->listAccessDocuments();
 
-            if(in_array($id, $docs)) {
+            if (in_array($id, $docs)) {
                 array_push($items, $role->getId());
             }
         }
@@ -80,8 +80,9 @@ class Admin_AccessController extends Controller_Action {
     public function listmoduleAction() {
 
         $id = $this->getRequest()->getParam('roleid');
-        if($id == null)
-            throw new Exception('Role ID missing');
+        if ($id == null) {
+            throw new Exception('Role ID missing'); 
+        }
 
         $role = new Opus_UserRole($id);
         $roleModules = $role->listAccessModules();
@@ -137,10 +138,11 @@ class Admin_AccessController extends Controller_Action {
             $this->view->redirect = array('module'=>'admin','controller'=>'document','action'=>'index','id'=>$docId);
         }
 
-        if($save != null) {
+        if ($save != null) {
             $this->view->submit = 'access_submit_save';
             $this->view->message = 'access_save_message';
-        } else {
+        }
+        else {
             $this->view->submit = 'access_submit_cancel';
             $this->view->message = 'access_cancel_message';
         }
@@ -159,16 +161,16 @@ class Admin_AccessController extends Controller_Action {
         $role = new Opus_UserRole($id);
         $roleModules = $role->listAccessModules();
 
-        foreach($roleModules as $module) {
-            if($request->getParam('set_'.$module, 'NULL') === 'NULL') {
+        foreach ($roleModules as $module) {
+            if ($request->getParam('set_'.$module, 'NULL') === 'NULL') {
                 $role->removeAccessModule($module);
             }
         }
 
         $params = $request->getParams();
         
-        foreach($params as $name=>$value) {
-            if($this->string_begins_with($name, 'set_')) {
+        foreach ($params as $name=>$value) {
+            if ($this->string_begins_with($name, 'set_')) {
                 $module = explode("_", $name, 2);
                 $module = $module[1];
                 $role->appendAccessModule($module);

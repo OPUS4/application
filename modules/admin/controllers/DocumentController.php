@@ -41,14 +41,14 @@ class Admin_DocumentController extends Controller_Action {
      * Helper for verifying document IDs.
      * @var Controller_Helper_Documents
      */
-    private $documentsHelper;
+    private $_documentsHelper;
         
     /**
      * Initializes controller.
      */
     public function init() {
         parent::init();
-        $this->documentsHelper = $this->_helper->getHelper('Documents');
+        $this->_documentsHelper = $this->_helper->getHelper('Documents');
     }
 
     /**
@@ -58,7 +58,7 @@ class Admin_DocumentController extends Controller_Action {
     public function indexAction() {
         $docId = $this->getRequest()->getParam('id');
 
-        $document = $this->documentsHelper->getDocumentForId($docId);
+        $document = $this->_documentsHelper->getDocumentForId($docId);
 
         if (isset($document)) {
             $this->view->document = $document;
@@ -75,9 +75,11 @@ class Admin_DocumentController extends Controller_Action {
         }
         else {
             // missing or bad parameter => go back to main page
-            return $this->_redirectTo('index', array('failure' =>
+            return $this->_redirectTo(
+                'index', array('failure' =>
                 $this->view->translate('admin_document_error_novalidid')),
-                    'documents', 'admin');
+                'documents', 'admin'
+            );
         }
     }
     
@@ -89,12 +91,14 @@ class Admin_DocumentController extends Controller_Action {
     public function editAction() {
         $docId = $this->getRequest()->getParam('id');
 
-        $document = $this->documentsHelper->getDocumentForId($docId);
+        $document = $this->_documentsHelper->getDocumentForId($docId);
         
         if (!isset($document)) {
-            return $this->_redirectTo('index', array('failure' =>
+            return $this->_redirectTo(
+                'index', array('failure' =>
                 $this->view->translate('admin_document_error_novalidid')),
-                    'documents', 'admin');
+                'documents', 'admin'
+            );
         }
         else {
             $editSession = new Admin_Model_DocumentEditSession($docId);

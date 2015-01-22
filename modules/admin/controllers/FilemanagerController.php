@@ -80,14 +80,20 @@ class Admin_FilemanagerController extends Controller_Action {
                                 $document->store();
                             }
                             catch (Opus_Mode_Exception $ome) {
-                                $this->getLogger()->err(__METHOD__ . ' Error saving file metadata: '
-                                    . $ome->getMessage());
-                                return $this->_redirectTo('index', 'admin_filemanager_save_failure', 'document', 'admin',
-                                    array('id' => $docId));
+                                $this->getLogger()->err(
+                                    __METHOD__ . ' Error saving file metadata: '
+                                    . $ome->getMessage()
+                                );
+                                return $this->_redirectTo(
+                                    'index', 'admin_filemanager_save_failure', 'document', 'admin',
+                                    array('id' => $docId)
+                                );
                             }
 
-                            return $this->_redirectTo('index', 'admin_filemanager_save_success', 'document', 'admin',
-                                array('id' => $docId));
+                            return $this->_redirectTo(
+                                'index', 'admin_filemanager_save_success', 'document', 'admin',
+                                array('id' => $docId)
+                            );
                         }
                         else {
                             $form->setMessage($this->view->translate('admin_filemanager_error_validation'));
@@ -136,8 +142,10 @@ class Admin_FilemanagerController extends Controller_Action {
         }
         else {
             // missing or bad parameter => go back to main page
-            return $this->_redirectTo('index', array('failure' => 'admin_document_error_novalidid'),
-                'documents', 'admin');
+            return $this->_redirectTo(
+                'index', array('failure' => 'admin_document_error_novalidid'),
+                'documents', 'admin'
+            );
         }
 
         // Set dynamic breadcrumb
@@ -146,8 +154,12 @@ class Admin_FilemanagerController extends Controller_Action {
         $this->view->languageSelectorDisabled = true;
         $this->view->contentWrapperDisabled = true; // wrapper wird innerhalb des Formulars gerendert
 
-        $form->setAction($this->view->url(array('module' => 'admin', 'controller' => 'filemanager',
-            'action' => 'index', self::PARAM_DOCUMENT_ID => $document->getId()), null, true));
+        $form->setAction(
+            $this->view->url(
+                array('module' => 'admin', 'controller' => 'filemanager',
+                'action' => 'index', self::PARAM_DOCUMENT_ID => $document->getId()), null, true
+            )
+        );
 
         $this->renderForm($form);
     }
@@ -183,12 +195,16 @@ class Admin_FilemanagerController extends Controller_Action {
                         }
                         catch (Opus_Model_Exception $e) {
                             $this->getLogger()->err("Storing document with new files failed" . $e);
-                            return $this->_redirectTo('index', array('failure' => 'error_uploaded_files'),
+                            return $this->_redirectTo(
+                                'index', array('failure' => 'error_uploaded_files'),
                                 'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId,
-                                'continue' => 'true'));
+                                'continue' => 'true')
+                            );
                         }
-                        $this->_redirectTo('index', 'admin_filemanager_upload_success', 'filemanager', 'admin', array(
-                            self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true'));
+                        $this->_redirectTo(
+                            'index', 'admin_filemanager_upload_success', 'filemanager', 'admin', array(
+                            self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true')
+                        );
                     }
                     else {
                         // Formular wieder anzeigen
@@ -198,8 +214,10 @@ class Admin_FilemanagerController extends Controller_Action {
                     break;
 
                 case Admin_Form_File_Upload::RESULT_CANCEL:
-                    $this->_redirectTo('index', null, 'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId,
-                        'continue' => 'true'));
+                    $this->_redirectTo(
+                        'index', null, 'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId,
+                        'continue' => 'true')
+                    );
                     break;
 
                 default:
@@ -214,8 +232,10 @@ class Admin_FilemanagerController extends Controller_Action {
             }
             else {
                 // missing or bad parameter => go back to main page
-                return $this->_redirectTo('index', array('failure' => 'admin_document_error_novalidid'),
-                    'documents', 'admin');
+                return $this->_redirectTo(
+                    'index', array('failure' => 'admin_document_error_novalidid'),
+                    'documents', 'admin'
+                );
             }
         }
 
@@ -233,8 +253,10 @@ class Admin_FilemanagerController extends Controller_Action {
 
         if (!isset($document)) {
             // missing or bad parameter => go back to main page
-            return $this->_redirectTo('index', array('failure' => 'admin_document_error_novalidid'),
-                'documents', 'admin');
+            return $this->_redirectTo(
+                'index', array('failure' => 'admin_document_error_novalidid'),
+                'documents', 'admin'
+            );
         }
 
         $fileId = $this->getRequest()->getParam(self::PARAM_FILE_ID);
@@ -242,13 +264,17 @@ class Admin_FilemanagerController extends Controller_Action {
         $fileHelper = new Admin_Model_FileImport();
 
         if (!$fileHelper->isValidFileId($fileId)) {
-            return $this->_redirectTo('index', array('failure' => 'admin_filemanager_error_novalidid'),
-                'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId));
+            return $this->_redirectTo(
+                'index', array('failure' => 'admin_filemanager_error_novalidid'),
+                'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId)
+            );
         }
 
         if (!$fileHelper->isFileBelongsToDocument($docId, $fileId)) {
-            return $this->_redirectTo('index', array('failure' => 'admin_filemanager_error_filenotlinkedtodoc'),
-                'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId));
+            return $this->_redirectTo(
+                'index', array('failure' => 'admin_filemanager_error_filenotlinkedtodoc'),
+                'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId)
+            );
         }
 
         $form = new Application_Form_Confirmation('Opus_File');
@@ -265,17 +291,23 @@ class Admin_FilemanagerController extends Controller_Action {
                 }
                 catch (Opus_Model_Exception $ome) {
                     $this->getLogger()->err(__METHOD__ . ' Error deleting file. (' . $ome->getMessage . ')');
-                    return $this->_redirectTo('index', array('failure' => 'admin_filemanager_delete_failure'),
-                        'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true'));
+                    return $this->_redirectTo(
+                        'index', array('failure' => 'admin_filemanager_delete_failure'),
+                        'filemanager', 'admin', array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true')
+                    );
                 }
 
-                return $this->_redirectTo('index', 'admin_filemanager_delete_success', 'filemanager', 'admin',
-                    array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true', self::PARAM_FILE_ID => $fileId));
+                return $this->_redirectTo(
+                    'index', 'admin_filemanager_delete_success', 'filemanager', 'admin',
+                    array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true', self::PARAM_FILE_ID => $fileId)
+                );
             }
             else {
                 // Delete cancelled
-                return $this->_redirectTo('index', null, 'filemanager', 'admin',
-                    array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true'));
+                return $this->_redirectTo(
+                    'index', null, 'filemanager', 'admin',
+                    array(self::PARAM_DOCUMENT_ID => $docId, 'continue' => 'true')
+                );
             }
         }
         else {

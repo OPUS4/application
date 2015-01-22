@@ -36,22 +36,24 @@
  */
 class Admin_StatisticController extends Controller_Action {
 
-    private $statisticsModel = null;
+    private $_statisticsModel = null;
 
     public function init() {
         parent::init();
-        $this->statisticsModel = new Admin_Model_Statistics();
+        $this->_statisticsModel = new Admin_Model_Statistics();
     }
 
     public function indexAction() {
         $this->view->title = 'admin_title_statistic';
 
-        $years = $this->statisticsModel->getYears();
+        $years = $this->_statisticsModel->getYears();
 
         $highest = max($years);
 
-        $selectYear = new Zend_Form_Element_Select('selectedYear',
-            array("multiOptions" => $years, "value" => $highest));
+        $selectYear = new Zend_Form_Element_Select(
+            'selectedYear',
+            array("multiOptions" => $years, "value" => $highest)
+        );
 
         $selectYear->setRequired(true)
             ->setLabel($this->view->translate('Select_Year_Label'));
@@ -69,7 +71,7 @@ class Admin_StatisticController extends Controller_Action {
     public function showAction() {
         $selectedYear =  $this->getRequest()->getParam('selectedYear', null);
 
-        if (is_null($selectedYear) || !in_array($selectedYear, $this->statisticsModel->getYears())) {
+        if (is_null($selectedYear) || !in_array($selectedYear, $this->_statisticsModel->getYears())) {
             return $this->_redirectToAndExit('index');
         }
 
@@ -80,16 +82,16 @@ class Admin_StatisticController extends Controller_Action {
         $this->view->dateThreshold = $this->getHelper('Dates')->getDateString($date);
 
         $this->view->selectedYear = $selectedYear;
-        $this->view->sumDocsUntil = $this->statisticsModel->getNumDocsUntil($selectedYear);
+        $this->view->sumDocsUntil = $this->_statisticsModel->getNumDocsUntil($selectedYear);
 
-        $monthStat = $this->statisticsModel->getMonthStatistics($selectedYear);
+        $monthStat = $this->_statisticsModel->getMonthStatistics($selectedYear);
 
         $this->view->totalNumber = array_sum($monthStat);
         $this->view->title = $this->view->translate('Statistic_Controller') . ' ' . $selectedYear;
         $this->view->monthStat = $monthStat;
 
-        $this->view->typeStat = $this->statisticsModel->getTypeStatistics($selectedYear);
-        $this->view->instStat = $this->statisticsModel->getInstituteStatistics($selectedYear);
+        $this->view->typeStat = $this->_statisticsModel->getTypeStatistics($selectedYear);
+        $this->view->instStat = $this->_statisticsModel->getInstituteStatistics($selectedYear);
 
         $this->_breadcrumbs->setLabelFor('admin_statistic_show', $selectedYear);
     }

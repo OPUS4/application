@@ -46,7 +46,8 @@ class Admin_InfoController extends Controller_Action {
 
         if (isset($config->publish->maxfilesize)) {
             $this->view->maxfilesize = $config->publish->maxfilesize;
-        } else {
+        }
+        else {
             $this->view->maxfilesize = $this->view->translate('admin_info_error_not_set');
         }
         $this->view->postMaxSize = ini_get('post_max_size');

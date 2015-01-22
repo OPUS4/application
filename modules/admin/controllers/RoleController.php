@@ -35,7 +35,7 @@
 
 class Admin_RoleController extends Controller_Action {
 
-    private static $protectedRoles = array('guest', 'administrator');
+    private static $_protectedRoles = array('guest', 'administrator');
 
     /**
      * Shows list of all roles.
@@ -55,7 +55,7 @@ class Admin_RoleController extends Controller_Action {
             }
         }
 
-        $this->view->protectedRoles = self::$protectedRoles;
+        $this->view->protectedRoles = self::$_protectedRoles;
     }
     
     /**
@@ -186,7 +186,7 @@ class Admin_RoleController extends Controller_Action {
             
             $roleName = $role->getName();
             
-            if (in_array($roleName, self::$protectedRoles)) {
+            if (in_array($roleName, self::$_protectedRoles)) {
                 // TODO deliver message to user
             }
             else {
@@ -207,7 +207,7 @@ class Admin_RoleController extends Controller_Action {
 
         $oldName = $role->getName();
 
-        if (!empty($name) && (!in_array($name, self::$protectedRoles))) {
+        if (!empty($name) && (!in_array($name, self::$_protectedRoles))) {
             $role->setName($name);
         }
 

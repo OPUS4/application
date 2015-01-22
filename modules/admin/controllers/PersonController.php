@@ -42,15 +42,17 @@
  */
 class Admin_PersonController extends Controller_Action {
 
-    private $__documentsHelper;
+    private $_documentsHelper;
+
+    private $_dates;
     
     /**
      * Initializes controller.
      */
     public function init() {
         parent::init();
-        $this->__documentsHelper = $this->_helper->getHelper('Documents');
-        $this->__dates = $this->_helper->getHelper('Dates');
+        $this->_documentsHelper = $this->_helper->getHelper('Documents');
+        $this->_dates = $this->_helper->getHelper('Dates');
     }
     
     /**
@@ -63,11 +65,13 @@ class Admin_PersonController extends Controller_Action {
     public function assignAction() {
         $docId = $this->getRequest()->getParam('document');
 
-        $document = $this->__documentsHelper->getDocumentForId($docId);
+        $document = $this->_documentsHelper->getDocumentForId($docId);
         
         if (!isset($document)) {
-            return $this->_redirectTo('index', array('failure' => 'admin_document_error_novalidid'),
-                    'documents', 'admin');
+            return $this->_redirectTo(
+                'index', array('failure' => 'admin_document_error_novalidid'),
+                'documents', 'admin'
+            );
         }
         
         if (!$this->getRequest()->isPost()) {
@@ -104,15 +108,21 @@ class Admin_PersonController extends Controller_Action {
                             if ($editSession->getPersonCount() > 0) {
                                 // Link Informationen durch Session übermitteln
                                 $editSession->addPerson($linkProps);
-                                return $this->_redirectToAndExit('edit', null, 'document', 'admin', array(
-                                    'id' => $docId, 'continue' => 'addperson'));
+                                return $this->_redirectToAndExit(
+                                    'edit', null, 'document', 'admin', array(
+                                    'id' => $docId, 'continue' => 'addperson')
+                                );
                             }
                             else {
                                 // Link Informationen direkt als Parameter übergeben
-                                return $this->_redirectToAndExit('edit', null, 'document', 'admin', array_merge(array(
-                                    'id' => $docId, 'continue' => 'addperson'), $linkProps));
+                                return $this->_redirectToAndExit(
+                                    'edit', null, 'document', 'admin', array_merge(
+                                        array(
+                                        'id' => $docId, 'continue' => 'addperson'), $linkProps
+                                    )
+                                );
                             }
-                        } 
+                        }
                         else {
                             // Person in Session merken
                             $editSession->addPerson($linkProps);
@@ -129,8 +139,10 @@ class Admin_PersonController extends Controller_Action {
                     break;
                 case Admin_Form_Document_PersonAdd::RESULT_CANCEL:
                     // Aktuelle Person nicht speichern, aber eventuell gemerkte Personen hinzufügen
-                    return $this->_redirectToAndExit('edit', null, 'document', 'admin', array(
-                        'id' => $docId, 'continue' => 'addperson'));
+                    return $this->_redirectToAndExit(
+                        'edit', null, 'document', 'admin', array(
+                        'id' => $docId, 'continue' => 'addperson')
+                    );
                 default:
                     break;
             }
@@ -154,11 +166,13 @@ class Admin_PersonController extends Controller_Action {
     public function editlinkedAction() {
         $docId = $this->getRequest()->getParam('document');
 
-        $document = $this->__documentsHelper->getDocumentForId($docId);
+        $document = $this->_documentsHelper->getDocumentForId($docId);
         
         if (!isset($document)) {
-            return $this->_redirectTo('index', array('failure' => 'admin_document_error_novalidid'),
-                    'documents', 'admin');
+            return $this->_redirectTo(
+                'index', array('failure' => 'admin_document_error_novalidid'),
+                'documents', 'admin'
+            );
         }
  
         $form = new Admin_Form_Person();
@@ -202,10 +216,12 @@ class Admin_PersonController extends Controller_Action {
                     if ($form->isValid($post)) {
                         $person = $form->getModel();
                         $person->store();
-                        return $this->_redirectToAndExit('edit', null, 'document', 'admin', array('id' => $docId,
+                        return $this->_redirectToAndExit(
+                            'edit', null, 'document', 'admin', array('id' => $docId,
                             'continue' => 'updateperson', 
                             'person' => $person->getId() 
-                            ));
+                            )
+                        );
                     }
                     else {
                         // TODO Validierungsfehlernachricht für Formular anzeigen (notwendig?)
@@ -235,8 +251,10 @@ class Admin_PersonController extends Controller_Action {
      * @param $docId Dokument-ID
      */
     public function returnToMetadataForm($docId) {
-        return $this->_redirectToAndExit('edit', null, 'document', 'admin', array('id' => $docId,
-            'continue' => 'true'));
+        return $this->_redirectToAndExit(
+            'edit', null, 'document', 'admin', array('id' => $docId,
+            'continue' => 'true')
+        );
     }
         
 }

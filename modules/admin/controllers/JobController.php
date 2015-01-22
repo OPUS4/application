@@ -45,7 +45,8 @@ class Admin_JobController extends Controller_Action {
             $this->view->asyncjobs = true;
             $this->view->failedJobCount = Opus_Job::getCountPerLabel(Opus_Job::STATE_FAILED);
             $this->view->unprocessedJobCount = Opus_Job::getCountPerLabel(Opus_Job::STATE_UNDEFINED);
-        } else {
+        }
+        else {
             $this->view->asyncjobs = false;
         }
     }
@@ -63,7 +64,8 @@ class Admin_JobController extends Controller_Action {
         $this->_helper->layout()->disableLayout();
         if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
             $this->view->failedJobCount = Opus_Job::getCount(Opus_Job::STATE_FAILED);
-        } else {
+        }
+        else {
             $this->view->failedJobCount = 0;
         }
     }

@@ -35,7 +35,7 @@
 class Admin_EnrichmentkeyController extends Controller_Action {
     
 
-    private $protectedEnrichmentkeys = array();
+    private $_protectedEnrichmentkeys = array();
 
 
     /**
@@ -49,8 +49,8 @@ class Admin_EnrichmentkeyController extends Controller_Action {
            throw new Opus_Exception("config key 'enrichmentkey.protected.modules' is not defined in config file");
         }
 
-        foreach(explode(',', $config->enrichmentkey->protected->modules) as $protectedEnrichmentkey) {
-            array_push($this->protectedEnrichmentkeys, $protectedEnrichmentkey);
+        foreach (explode(',', $config->enrichmentkey->protected->modules) as $protectedEnrichmentkey) {
+            array_push($this->_protectedEnrichmentkeys, $protectedEnrichmentkey);
 
         }
 
@@ -58,8 +58,8 @@ class Admin_EnrichmentkeyController extends Controller_Action {
            throw new Opus_Exception("config key 'enrichmentkey.protected.migration' is not defined in config file");
         }
 
-        foreach(explode(',', $config->enrichmentkey->protected->migration) as $protectedEnrichmentkey) {
-            array_push($this->protectedEnrichmentkeys, $protectedEnrichmentkey);
+        foreach (explode(',', $config->enrichmentkey->protected->migration) as $protectedEnrichmentkey) {
+            array_push($this->_protectedEnrichmentkeys, $protectedEnrichmentkey);
 
         }
     }
@@ -72,7 +72,10 @@ class Admin_EnrichmentkeyController extends Controller_Action {
         $enrichmentkeys = Opus_EnrichmentKey::getAll();
 
         if (!empty($enrichmentkeys)) {
-            $this->view->protectedKeys = array_merge(Opus_EnrichmentKey::getAllReferenced(), $this->protectedEnrichmentkeys);
+            $this->view->protectedKeys = array_merge(
+                Opus_EnrichmentKey::getAllReferenced(),
+                $this->_protectedEnrichmentkeys
+            );
             $this->view->enrichmentkeys = array();
             foreach ($enrichmentkeys as $enrichmentkey) {
                 $this->view->enrichmentkeys[$enrichmentkey->getName()] = $enrichmentkey->getDisplayName();
@@ -106,7 +109,7 @@ class Admin_EnrichmentkeyController extends Controller_Action {
         $this->view->title = $this->view->translate($this->view->title);
         $name = $this->getRequest()->getParam('name');
   
-        if (!is_null(Opus_EnrichmentKey::fetchByName($name)) && !in_array($name, $this->protectedEnrichmentkeys)) {
+        if (!is_null(Opus_EnrichmentKey::fetchByName($name)) && !in_array($name, $this->_protectedEnrichmentkeys)) {
             $form = new Admin_Form_Enrichmentkey($name);
             $actionUrl = $this->view->url(array('action' => 'update', 'name' => $name));
             $form->setAction($actionUrl);
@@ -157,7 +160,7 @@ class Admin_EnrichmentkeyController extends Controller_Action {
             }
         }
         $this->_redirectTo('index');
-    }
+   }
 
     /**
      * Updates an enrichmentkey.
@@ -169,7 +172,7 @@ class Admin_EnrichmentkeyController extends Controller_Action {
             $postData = $this->getRequest()->getPost();
             $enrichmentkey = Opus_EnrichmentKey::fetchByName($name);
 
-            if(!is_null($enrichmentkey)) {
+            if (!is_null($enrichmentkey)) {
 
                 if (!isset($postData['name'])) {
                     $postData['name'] = $enrichmentkey->getName();
@@ -203,7 +206,7 @@ class Admin_EnrichmentkeyController extends Controller_Action {
     public function deleteAction() {
         $name = $this->getRequest()->getParam('name');
 
-        if (!is_null(Opus_EnrichmentKey::fetchByName($name)) && !in_array($name, $this->protectedEnrichmentkeys)) {
+        if (!is_null(Opus_EnrichmentKey::fetchByName($name)) && !in_array($name, $this->_protectedEnrichmentkeys)) {
             $enrichmentkey = new Opus_EnrichmentKey($name);
             $enrichmentkey->delete();
         }
