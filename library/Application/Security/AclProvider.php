@@ -53,7 +53,7 @@ class Application_Security_AclProvider {
     /**
      * Ressourcen, die in Datei application/configs/navigationModules.xml referenziert werden.
      */
-    public static $RESOURCE_NAMES = array(
+    public static $resourceNames = array(
         'admin' => array(
             'documents', 
             'accounts', 
@@ -87,7 +87,8 @@ class Application_Security_AclProvider {
 
         Zend_View_Helper_Navigation_HelperAbstract::setDefaultAcl($acl);
         Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(
-            Application_Security_AclProvider::ACTIVE_ROLE);
+            Application_Security_AclProvider::ACTIVE_ROLE
+        );
     }
     
     /**
@@ -118,7 +119,7 @@ class Application_Security_AclProvider {
 
         // create role for user on-the-fly with assigned roles as parents
         if (Zend_Registry::get('LOG_LEVEL') >= Zend_LOG::DEBUG) {
-                $logger->debug("ACL: Create role '" . $user . "' with parents " . "(" . implode( ", ", $parents) . ")");
+                $logger->debug("ACL: Create role '" . $user . "' with parents " . "(" . implode(", ", $parents) . ")");
         }
         
         // Add role for current user
@@ -131,7 +132,7 @@ class Application_Security_AclProvider {
      * Erzeugt die notwendigen Zend_Acl_Resource Objekte.
      */
     public function loadResources($acl) {
-        $modules = Application_Security_AclProvider::$RESOURCE_NAMES;
+        $modules = Application_Security_AclProvider::$resourceNames;
         
         foreach ($modules as $module => $resources) {
             $acl->addResource(new Zend_Acl_Resource($module));
@@ -148,13 +149,13 @@ class Application_Security_AclProvider {
         
         $acl->addResource(new Zend_Acl_Resource('workflow'));
         
-        foreach($resources as $resource) {
+        foreach ($resources as $resource) {
             $acl->addResource(new Zend_Acl_Resource($resource), 'workflow');
         }
     }
     
     public function getAllResources() {
-        $modules = Application_Security_AclProvider::$RESOURCE_NAMES;
+        $modules = Application_Security_AclProvider::$resourceNames;
         
         $allResources = array();
         
