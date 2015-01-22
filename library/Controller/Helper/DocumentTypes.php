@@ -44,25 +44,25 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
      *
      * @var Zend_Config
      */
-    private $config;
+    private $_config;
 
     /**
      * Variable to store document types for additional calls.
      * @var array($docTypeName => $docTypeName)
      */
-    private $docTypes;
+    private $_docTypes;
 
     /**
      * Variable to store errors of document-type validation
      * @var array ($documentType => $errorMessage)
      */
-    private $errors;
+    private $_errors;
 
     /**
      * Constructs instances.
      */
     public function __construct() {
-        $this->config = Zend_Registry::get('Zend_Config');
+        $this->_config = Zend_Registry::get('Zend_Config');
     }
 
     /**
@@ -70,8 +70,8 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
      * @return array
      */
     public function getDocumentTypes() {
-        if (isset($this->docTypes)) {
-            return $this->docTypes;
+        if (isset($this->_docTypes)) {
+            return $this->_docTypes;
         }
         
         $allDocTypes = $this->_getDocTypeFileNames();
@@ -95,7 +95,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
             unset($docTypes[$docType]);
         }
 
-        $this->docTypes = $docTypes;
+        $this->_docTypes = $docTypes;
         return $docTypes;
     }
 
@@ -128,11 +128,15 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         libxml_clear_errors();
         libxml_use_internal_errors(true);
 
-        if (!$dom->schemaValidate(APPLICATION_PATH . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'Opus' .
-                DIRECTORY_SEPARATOR . 'Document' . DIRECTORY_SEPARATOR . 'documenttype.xsd')) {
+        if (!$dom->schemaValidate(
+            APPLICATION_PATH . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'Opus' .
+            DIRECTORY_SEPARATOR . 'Document' . DIRECTORY_SEPARATOR . 'documenttype.xsd'
+        )) {
             libxml_clear_errors();
-            throw new Application_Exception('given xml document type definition for document type ' . $documentType .
-                ' is not valid');
+            throw new Application_Exception(
+                'given xml document type definition for document type ' . $documentType .
+                ' is not valid'
+            );
         }
 
         return $dom;
@@ -152,8 +156,8 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
 
         $template = null;
 
-        if (isset($this->config->documentTypes->templates->$documentType)) {
-            $template = $this->config->documentTypes->templates->$documentType;
+        if (isset($this->_config->documentTypes->templates->$documentType)) {
+            $template = $this->_config->documentTypes->templates->$documentType;
         }
 
         if (!empty($template)) {
@@ -172,8 +176,8 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
     public function getDocTypesPath() {
         $path = null;
 
-        if (isset($this->config->publish->path->documenttypes)) {
-            $path = $this->config->publish->path->documenttypes;
+        if (isset($this->_config->publish->path->documenttypes)) {
+            $path = $this->_config->publish->path->documenttypes;
         }
 
         if (empty($path)) {
@@ -223,10 +227,10 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
      * @return array of strings
      */
     protected function _getIncludeList() {
-        if (!isset($this->config->documentTypes->include)) {
+        if (!isset($this->_config->documentTypes->include)) {
             return array();
         }
-        return $this->_getList($this->config->documentTypes->include);
+        return $this->_getList($this->_config->documentTypes->include);
     }
 
     /**
@@ -234,10 +238,10 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
      * @return array of strings
      */
     protected function _getExcludeList() {
-        if (!isset($this->config->documentTypes->exclude)) {
+        if (!isset($this->_config->documentTypes->exclude)) {
             return array();
         }
-        return $this->_getList($this->config->documentTypes->exclude);
+        return $this->_getList($this->_config->documentTypes->exclude);
     }
 
     private function _getList($str) {
@@ -253,7 +257,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
     public function validateAll() {
         $documents = array();
         if ($handle = opendir($this::getDocTypesPath())) {
-            while(false !== ($file = readdir($handle))) {
+            while (false !== ($file = readdir($handle))) {
                 $fileInfo = explode('.', $file);
                 if (strlen($file) >= 4 && $fileInfo[1] == 'xml') {
                     $documents[$fileInfo[0]] = $this->validate($fileInfo[0]);
@@ -269,8 +273,8 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
      * returns bool
      */
     public function validate($filename) {
-        if (is_null($this->errors)) {
-            $this->errors = array();
+        if (is_null($this->_errors)) {
+            $this->_errors = array();
         }
         $domDoc = new DOMDocument();
         $domDoc->load($this::getDocTypesPath() . '/' . $filename . '.xml');
@@ -278,18 +282,18 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         libxml_clear_errors();
         libxml_use_internal_errors(true);
         try {
-            $isValid = $domDoc->schemaValidate($this->config->documentTypes->xmlSchema);
-            $this->errors[$filename] = libxml_get_errors();
+            $isValid = $domDoc->schemaValidate($this->_config->documentTypes->xmlSchema);
+            $this->_errors[$filename] = libxml_get_errors();
         }
         catch (Exception $e) {
-            $this->errors[$filename] = $e->getMessage();
+            $this->_errors[$filename] = $e->getMessage();
             return 0;
         }
         return $isValid;
     }
 
     public function getErrors () {
-        return $this->errors;
+        return $this->_errors;
     }
 
 }

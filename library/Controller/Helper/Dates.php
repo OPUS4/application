@@ -41,13 +41,13 @@ class Controller_Helper_Dates extends Zend_Controller_Action_Helper_Abstract {
      * Validator for dates.
      * @var Form_Validate_Date
      */
-    private $__validator;
+    private $_validator;
 
     /**
      * Constructs Controller_Helper_Dates.
      */
     public function __construct() {
-        $this->__validator = new Form_Validate_Date();
+        $this->_validator = new Form_Validate_Date();
     }
 
     /**
@@ -76,7 +76,7 @@ class Controller_Helper_Dates extends Zend_Controller_Action_Helper_Abstract {
      */
     public function getOpusDate($datestr) {
         if (!is_null($datestr) && $this->isValid($datestr)) {
-            $dateFormat = $this->__validator->getDateFormat();
+            $dateFormat = $this->_validator->getDateFormat();
 
             $date = new Zend_Date($datestr, $dateFormat);
 
@@ -97,7 +97,7 @@ class Controller_Helper_Dates extends Zend_Controller_Action_Helper_Abstract {
     public function getDateString($date) {
         // Protect against invalid dates
         if (!is_null($date) && $date->isValid()) {
-            $dateFormat = $this->__validator->getDateFormat();
+            $dateFormat = $this->_validator->getDateFormat();
             $zendDate = $date->getZendDate();
             return $zendDate->get($dateFormat);
         }

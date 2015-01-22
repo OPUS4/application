@@ -58,10 +58,12 @@ class Controller_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
         $result = array();
         foreach (new DirectoryIterator($folder) as $file) {
             if (self::checkFile($file, $ignoreAllowedFiletypes)) {
-                array_push($result, array(
+                array_push(
+                    $result, array(
                     'name' => $file->getFilename(),
                     'size' => number_format($file->getSize() / 1024.0, 2, '.', ''),
-                ));
+                    )
+                );
             }
         }
         return $result;

@@ -43,7 +43,7 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
      * Basic workflow configuration.
      * @var Zend_Config_Ini
      */
-    private static $__workflowConfig;
+    private static $_workflowConfig;
 
     private $_acl;
 
@@ -102,7 +102,8 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
                 foreach ($targetStates as $targetState) {
                     $resource = 'workflow_' . $currentState . '_' . $targetState;
                     if (!$acl->has(new Zend_Acl_Resource($resource)) || $acl->isAllowed(
-                            Application_Security_AclProvider::ACTIVE_ROLE, $resource)) {
+                        Application_Security_AclProvider::ACTIVE_ROLE, $resource
+                    )) {
                         $allowedTargetStates[] = $targetState;
                     }
                     else {
@@ -197,12 +198,13 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
      * @return Zend_Config_Ini
      */
     public static function getWorkflowConfig() {
-        if (empty(Controller_Helper_Workflow::$__workflowConfig)) {
-            Controller_Helper_Workflow::$__workflowConfig = new Zend_Config_Ini(
-                    APPLICATION_PATH . '/modules/admin/models/workflow.ini');
+        if (empty(Controller_Helper_Workflow::$_workflowConfig)) {
+            Controller_Helper_Workflow::$_workflowConfig = new Zend_Config_Ini(
+                APPLICATION_PATH . '/modules/admin/models/workflow.ini'
+            );
         }
 
-        return Controller_Helper_Workflow::$__workflowConfig;
+        return Controller_Helper_Workflow::$_workflowConfig;
     }
 
     /**

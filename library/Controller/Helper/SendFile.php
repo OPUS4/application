@@ -33,13 +33,15 @@
  */
 
 class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract {
+
     const FPASSTHRU = 'fpassthru';
+
     const XSENDFILE = 'xsendfile';
 
     /**
      * @var Zend_Log
      */
-    private $logger = null;
+    private $_logger = null;
 
     /**
      * This method to call when we use   $this->_helper->SendFile(...)   and
@@ -47,8 +49,8 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
      *
      * @see Controller_Helper_SendFile::sendFile
      */
-    public function direct($file, $method = self::FPASSTHRU, $must_resend = false) {
-        return $this->sendFile($file, $method, $must_resend);
+    public function direct($file, $method = self::FPASSTHRU, $mustResend = false) {
+        return $this->sendFile($file, $method, $mustResend);
     }
 
     /**
@@ -56,10 +58,10 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
      *
      * @param string  $file        Absoulte filename of file to send.
      * @param string  $method      defaults to self::FPASSTHRU, use self::XSENDFILE for X-Sendfile
-     * @param boolean $must_resend Ignore "if-modified-since" header, defaults to false.
+     * @param boolean $mustResend Ignore "if-modified-since" header, defaults to false.
      * @return void
      */
-    public function sendFile($file, $method = self::FPASSTHRU, $must_resend = false) {
+    public function sendFile($file, $method = self::FPASSTHRU, $mustResend = false) {
 
         $response = $this->getResponse();
         if (!$response->canSendHeaders()) {
@@ -72,7 +74,7 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
         }
 
         $modified = filemtime($file);
-        if ($must_resend === true && $this->notModifiedSince($modified)) {
+        if ($mustResend === true && $this->notModifiedSince($modified)) {
             return;
         }
 
@@ -123,10 +125,10 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
         $response = $this->getResponse();
         $response->setHttpResponseCode(200);
 
-        if (!is_null($this->logger)) {
+        if (!is_null($this->_logger)) {
             $content = ob_get_contents();
             if (!empty ($content)) {
-                $this->logger->err($content);
+                $this->_logger->err($content);
             }
         }
 
@@ -157,7 +159,7 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
      * @param Zend_Log $logger
      */
     public function setLogger($logger) {
-        $this->logger = $logger;
+        $this->_logger = $logger;
     }
 
 }
