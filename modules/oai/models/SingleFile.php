@@ -49,9 +49,9 @@ class Oai_Model_SingleFile extends Oai_Model_AbstractFile {
             $this->logErrorMessage("error while performing copy operation from '$filePath' to '$outputFile'");
             throw new Oai_Model_Exception('error while copying file');
         }
-        $this->path = $outputFile;
-        $this->mimeType = $file->getMimeType();
-        $this->extension = $extension;
+        $this->_path = $outputFile;
+        $this->_mimeType = $file->getMimeType();
+        $this->_extension = $extension;
     }
 
 }

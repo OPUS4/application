@@ -35,16 +35,16 @@
 
 class Oai_Model_Container {
 
-    private $docId;
+    private $_docId;
 
-    private $doc;
+    private $_doc;
 
     private $_logger;
 
     public function  __construct($docId, $logger = null) {
         $this->_logger = $logger;
-        $this->doc = $this->validateId($docId);
-        $this->docId = $this->doc->getId();
+        $this->_doc = $this->validateId($docId);
+        $this->_docId = $this->_doc->getId();
     }
 
     private function logErrorMessage($message) {
@@ -56,7 +56,7 @@ class Oai_Model_Container {
     /**
      *
      * @param string $docId
-     * @return Opus_Document returns a valid Opus_Document object if given docId is valid, otherwise throws an Oai_Model_Exception
+     * @return Opus_Document returns valid Opus_Document if docId is valid, otherwise throws an Oai_Model_Exception
      * @throws Oai_Model_Exception throws Oai_Model_Exception if the given docId is invalid
      */
     private function validateId($docId) {
@@ -90,22 +90,24 @@ class Oai_Model_Container {
             // kein administrator
 
             // PUBLISHED Dokumente sind immer verfügbar (Zugriff auf Modul kann eingeschränkt sein)
-            if ($this->doc->getServerState() !== 'published') {
+            if ($this->_doc->getServerState() !== 'published') {
                 // Dokument nicht published
 
-                if (!$realm->checkDocument($this->docId)) {
+                if (!$realm->checkDocument($this->_docId)) {
                     // Dokument ist nicht verfügbar für aktuellen Nutzer
-                    $this->logErrorMessage('document id =' . $this->docId
-                        . ' is not published and access is not allowed for current user');
+                    $this->logErrorMessage(
+                        'document id =' . $this->_docId
+                        . ' is not published and access is not allowed for current user'
+                    );
                     throw new Oai_Model_Exception('access to requested document is forbidden');
                 }
             }
         }
 
         $files = array();
-        $filesToCheck = $this->doc->getFile();
+        $filesToCheck = $this->_doc->getFile();
         foreach ($filesToCheck as $file) {
-            $filename = $this->getFilesPath() . $this->docId . DIRECTORY_SEPARATOR . $file->getPathName();
+            $filename = $this->getFilesPath() . $this->_docId . DIRECTORY_SEPARATOR . $file->getPathName();
             if (is_readable($filename)) {
                 array_push($files, $file);
             }
@@ -115,7 +117,7 @@ class Oai_Model_Container {
         }
 
         if (empty($files)) {
-            $this->logErrorMessage('document with id ' . $this->docId . ' does not have any associated files');
+            $this->logErrorMessage('document with id ' . $this->_docId . ' does not have any associated files');
             throw new Oai_Model_Exception('requested document does not have any associated readable files');
         }
 
@@ -127,7 +129,9 @@ class Oai_Model_Container {
         }
 
         if (empty($containerFiles)) {
-            $this->logErrorMessage('document with id ' . $this->docId . ' does not have associated files that are accessible');
+            $this->logErrorMessage(
+                'document with id ' . $this->_docId . ' does not have associated files that are accessible'
+            );
             throw new Oai_Model_Exception('access denied on all files that are associated to the requested document');
         }
 
@@ -156,10 +160,14 @@ class Oai_Model_Container {
     public function getFileHandle() {
         $filesToInclude = $this->getAccessibleFiles();
         if (count($filesToInclude) > 1) {
-            return new Oai_Model_TarFile($this->docId, $filesToInclude, $this->getFilesPath(), $this->getTempPath(), $this->_logger);
+            return new Oai_Model_TarFile(
+                $this->_docId, $filesToInclude, $this->getFilesPath(), $this->getTempPath(), $this->_logger
+            );
         }
         else {
-            return new Oai_Model_SingleFile($this->docId, $filesToInclude, $this->getFilesPath(), $this->getTempPath(), $this->_logger);
+            return new Oai_Model_SingleFile(
+                $this->_docId, $filesToInclude, $this->getFilesPath(), $this->getTempPath(), $this->_logger
+            );
         }
     }
 
@@ -174,6 +182,6 @@ class Oai_Model_Container {
     }
 
     public function getName() {
-        return $this->docId;
+        return $this->_docId;
     }
 }

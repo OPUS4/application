@@ -161,7 +161,9 @@ class Oai_Model_Request {
 
         if (false === $result) {
             $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
-            $this->setErrorMessage('From date "' . $date . '" is not a correct date format ("' . strtoupper($this->_dateFormat) . '").');
+            $this->setErrorMessage(
+                'From date "' . $date . '" is not a correct date format ("' . strtoupper($this->_dateFormat) . '").'
+            );
         }
         
         return $result;
@@ -178,7 +180,8 @@ class Oai_Model_Request {
         // we assuming that a metadata prefix file ends with xslt
         $possibleFiles = glob($this->_pathToMetadataPrefixFiles . DIRECTORY_SEPARATOR . '*.xslt');
 
-        $availableMetadataPrefixes = array('xMetaDissPlus'); // we support both spellings, xMetaDissPlus and XMetaDissPlus
+        // we support both spellings, xMetaDissPlus and XMetaDissPlus TODO really?
+        $availableMetadataPrefixes = array('xMetaDissPlus');
         foreach ($possibleFiles as $prefixFile) {
            $availableMetadataPrefixes[] = basename($prefixFile, '.xslt');
         }
@@ -193,7 +196,10 @@ class Oai_Model_Request {
         if (false === $result) {
             // MetadataPrefix not available.
             $this->setErrorCode(Oai_Model_Error::CANNOTDISSEMINATEFORMAT);
-            $this->setErrorMessage('The metadata format "' . $oaiMetadataPrefix . '" given by metadataPrefix is not supported by the item or this repository.');
+            $this->setErrorMessage(
+                'The metadata format "' . $oaiMetadataPrefix
+                . '" given by metadataPrefix is not supported by the item or this repository.'
+            );
         }
 
         return $result;
@@ -210,7 +216,9 @@ class Oai_Model_Request {
 
         if (false === $result) {
             $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
-            $this->setErrorMessage('Until date "' . $date . '" is not a correct date format ("' . strtoupper($this->_dateFormat) . '").');
+            $this->setErrorMessage(
+                'Until date "' . $date . '" is not a correct date format ("' . strtoupper($this->_dateFormat) . '").'
+            );
         }
 
         return $result;
@@ -273,7 +281,9 @@ class Oai_Model_Request {
 
         if (false === $result) {
             $this->setErrorCode(Oai_Model_Error::BADRESUMPTIONTOKEN);
-            $this->setErrorMessage('The resumptionToken "' . $oaiResumptionToken . '" does not exist or has already expired.');
+            $this->setErrorMessage(
+                'The resumptionToken "' . $oaiResumptionToken . '" does not exist or has already expired.'
+            );
         }
 
         return $result;
@@ -377,7 +387,7 @@ class Oai_Model_Request {
             // Invalid or unspecified Verb
             $this->setErrorCode(Oai_Model_Error::BADVERB);
             $this->setErrorMessage('The verb provided in the request is illegal.');
-            $logger->err( $this->getErrorCode() . "::" .$this->getErrorMessage() );
+            $logger->err($this->getErrorCode() . "::" .$this->getErrorMessage());
             return false;
         }
 
@@ -387,7 +397,7 @@ class Oai_Model_Request {
             // Error occured
             $this->setErrorCode(Oai_Model_Error::BADARGUMENT);
             $this->setErrorMessage(implode(', ', $invalidArguments));
-            $logger->err( $this->getErrorCode() . "::" .$this->getErrorMessage() );
+            $logger->err($this->getErrorCode() . "::" .$this->getErrorMessage());
             return false;
         }
 
@@ -400,14 +410,14 @@ class Oai_Model_Request {
             $valid = true;
 
             $missingRequiredParameters = array_diff(
-                    $validRequest['required'], 
-                    $oaiParameters
-                );
+                $validRequest['required'], 
+                $oaiParameters
+            );
 
             $unknownParameters = array_diff(
-                    $oaiParameters, 
-                    array_merge($validRequest['required'], $validRequest['optional'])
-                );
+                $oaiParameters, 
+                array_merge($validRequest['required'], $validRequest['optional'])
+            );
 
             if (false === empty($missingRequiredParameters)) {
                 // Missing required parameter
@@ -416,7 +426,8 @@ class Oai_Model_Request {
                         'code' => Oai_Model_Error::BADARGUMENT
                     );
                 $valid = false;
-            } else if (false === empty($unknownParameters)) {
+            }
+            else if (false === empty($unknownParameters)) {
                 // Superflous parameter
                 $errorInformation = array(
                         'message' => 'badArgument ' . implode(', ', $unknownParameters),
@@ -437,7 +448,7 @@ class Oai_Model_Request {
         if (false === $valid) {
             $this->setErrorMessage($errorInformation['message']);
             $this->setErrorCode($errorInformation['code']);
-            $logger->err( $this->getErrorCode() . "::" .$this->getErrorMessage() );
+            $logger->err($this->getErrorCode() . "::" .$this->getErrorMessage());
             return false;
         }
 
@@ -452,7 +463,7 @@ class Oai_Model_Request {
                 // do not check other parameter values.
                 if (false === $result) {
                     // error code and message are set inside validate method
-                    $logger->err( ":: $parameter" );
+                    $logger->err(":: $parameter");
                     return false;
                 }
             }

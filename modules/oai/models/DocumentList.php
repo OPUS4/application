@@ -40,15 +40,19 @@ class Oai_Model_DocumentList {
      * are delivered out
      *
      * @var array
+     *
+     * TODO should be private
      */
-    public $_deliveringDocumentStates = null;
+    public $deliveringDocumentStates = null;
 
     /**
      * Holds restriction types for xMetaDiss
      *
      * @var array
+     *
+     * TODO should be private
      */
-    public $_xMetaDissRestriction = null;
+    public $xMetaDissRestriction = null;
 
     /**
      * Retrieve all document ids for a valid oai request.
@@ -60,7 +64,7 @@ class Oai_Model_DocumentList {
         $finder = new Opus_DocumentFinder();
 
         // add server state restrictions
-        $finder->setServerStateInList($this->_deliveringDocumentStates);
+        $finder->setServerStateInList($this->deliveringDocumentStates);
 
         $metadataPrefix = $oaiRequest['metadataPrefix'];
         if ('xMetaDissPlus' === $metadataPrefix 
@@ -68,7 +72,7 @@ class Oai_Model_DocumentList {
             $finder->setFilesVisibleInOai();
         }
         if ('xMetaDiss' === $metadataPrefix) {
-            $finder->setTypeInList($this->_xMetaDissRestriction);
+            $finder->setTypeInList($this->xMetaDissRestriction);
         }
         if ('epicur' === $metadataPrefix) {
             $finder->setIdentifierTypeExists('urn');
@@ -121,9 +125,10 @@ class Oai_Model_DocumentList {
                 // Trying to locate given collection and filter documents.
                 if (count($setarray) == 2) {
                     $subsetName = $setarray[1];
-                    $foundSubsets = array_filter($role->getOaiSetNames(), function ($s) use ($subsetName) {
+                    $foundSubsets = array_filter(
+                        $role->getOaiSetNames(), function ($s) use ($subsetName) {
                                 return $s['oai_subset'] === $subsetName;
-                            }
+                        }
                     );
 
                     if (count($foundSubsets) < 1) {

@@ -699,8 +699,8 @@ class Oai_IndexController extends Controller_Xml {
         }
         else {
             $docListModel = new Oai_Model_DocumentList();
-            $docListModel->_deliveringDocumentStates = $this->_deliveringDocumentStates;
-            $docListModel->_xMetaDissRestriction = $this->_xMetaDissRestriction;
+            $docListModel->deliveringDocumentStates = $this->_deliveringDocumentStates;
+            $docListModel->xMetaDissRestriction = $this->_xMetaDissRestriction;
             $reldocIds = $docListModel->query($oaiRequest);
             $totalIds = count($reldocIds);
         }

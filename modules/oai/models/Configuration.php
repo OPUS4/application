@@ -45,56 +45,56 @@ class Oai_Model_Configuration {
      *
      * @var string
      */
-    private $_path_tokens = '';    
+    private $_pathTokens = '';
     
     /**
      * Holds email address of repository contact person.
      *
      * @var string
      */
-    private $_email_contact = '';
+    private $_emailContact = '';
     
     /**
      * Holds repository name.
      *
      * @var string
      */
-    private $_repo_name = '';
+    private $_repoName = '';
     
     /**
      * Holds repository identifier.
      *
      * @var string
      */
-    private $_repo_id = '';
+    private $_repoId = '';
     
     /**
      * Holds sample identifier.
      *
      * @var string
      */
-    private $_sample_id = '';
+    private $_sampleId = '';
     
     /**
      * Holds maximum number of identifiers to list per request.
      *
      * @var int
      */
-    private $_max_list_ids = 10;
+    private $_maxListIds = 10;
     
     /**
      * Holds maximum number of records to list per request.
      *
      * @var int
      */
-    private $_max_list_recs = 10;
+    private $_maxListRecs = 10;
 
     /**
      * Holds oai base url. If not given, local server name will be used.
      *
      * @var string
      */
-    private $_oai_baseurl = '';
+    private $_oaiBaseUrl = '';
 
     /**
      * Collect configuration information from Zend_Config instance.
@@ -107,32 +107,32 @@ class Oai_Model_Configuration {
         }
 
         if (true === isset($config->oai->repository->name)) {
-            $this->_repo_name = $config->oai->repository->name;
+            $this->_repoName = $config->oai->repository->name;
         }
         if (true === isset($config->oai->repository->identifier)) {
-            $this->_repo_id = $config->oai->repository->identifier;
+            $this->_repoId = $config->oai->repository->identifier;
         }
         if (true === isset($config->oai->sample->identifier)) {
-            $this->_sample_id = $config->oai->sample->identifier;
+            $this->_sampleId = $config->oai->sample->identifier;
         }
         if (true === isset($config->oai->max->listidentifiers)) {
-            $this->_max_list_ids = $config->oai->max->listidentifiers;
+            $this->_maxListIds = $config->oai->max->listidentifiers;
         }
         if (true === isset($config->oai->max->listrecords)) {
-            $this->_max_list_recs = $config->oai->max->listrecords;
+            $this->_maxListRecs = $config->oai->max->listrecords;
         }
         if (true === isset($config->oai->baseurl)) {
-            $this->_oai_baseurl = $config->oai->baseurl;
+            $this->_oaiBaseUrl = $config->oai->baseurl;
         }
 
         if (true === isset($config->workspacePath)) {
-            $this->_path_tokens = $config->workspacePath
+            $this->_pathTokens = $config->workspacePath
                 . DIRECTORY_SEPARATOR .'tmp' 
                 . DIRECTORY_SEPARATOR . 'resumption';
         }
         
         if (true === isset($config->mail->opus->address)) {
-            $this->_email_contact = $config->mail->opus->address;
+            $this->_emailContact = $config->mail->opus->address;
         }
     }
 
@@ -142,7 +142,7 @@ class Oai_Model_Configuration {
      * @return string Path.
      */
     public function getResumptionTokenPath() {
-        return $this->_path_tokens;
+        return $this->_pathTokens;
     }
     
     /**
@@ -151,7 +151,7 @@ class Oai_Model_Configuration {
      * @return string Email address.
      */
     public function getEmailContact() {
-        return $this->_email_contact;
+        return $this->_emailContact;
     }
 
     /**
@@ -160,7 +160,7 @@ class Oai_Model_Configuration {
      * @return string Oai base url.
      */
     public function getOaiBaseUrl() {
-        return $this->_oai_baseurl;
+        return $this->_oaiBaseUrl;
     }
 
     /**
@@ -169,7 +169,7 @@ class Oai_Model_Configuration {
      * @return string Repository name.
      */
     public function getRepositoryName() {
-        return $this->_repo_name;
+        return $this->_repoName;
     }
     
     /**
@@ -178,7 +178,7 @@ class Oai_Model_Configuration {
      * @return string Repository identifier.
      */
     public function getRepositoryIdentifier() {
-        return $this->_repo_id;
+        return $this->_repoId;
     }
 
     /**
@@ -187,7 +187,7 @@ class Oai_Model_Configuration {
      * @return string Sample identifier.
      */
     public function getSampleIdentifier() {
-        return $this->_sample_id;
+        return $this->_sampleId;
     }
     
     /**
@@ -196,7 +196,7 @@ class Oai_Model_Configuration {
      * @return int Maximum number of listable identifiers per request.
      */
     public function getMaxListIdentifiers() {
-        return $this->_max_list_ids;
+        return $this->_maxListIds;
     }
 
     /**
@@ -205,7 +205,7 @@ class Oai_Model_Configuration {
      * @return int Maximum number of listable records per request.
      */
     public function getMaxListRecords() {
-        return $this->_max_list_recs;
+        return $this->_maxListRecs;
     }
 
 }

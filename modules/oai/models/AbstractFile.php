@@ -34,31 +34,29 @@
 
 abstract class Oai_Model_AbstractFile extends Application_Model_Abstract {
 
-    protected $path;
+    protected $_path;
 
-    protected $mimeType;
+    protected $_mimeType;
 
-    protected $extension;
+    protected $_extension;
 
     public function getPath() {
-        return $this->path;
+        return $this->_path;
     }
 
     public function getMimeType() {
-        return $this->mimeType;
+        return $this->_mimeType;
     }
 
     public function getExtension() {
-        return $this->extension;
+        return $this->_extension;
     }
 
     public function delete() {
-        unlink($this->path);
+        unlink($this->_path);
     }
 
     protected function logErrorMessage($message) {
-        if (!is_null($this->_logger)) {
-            $this->getLogger()->err(__CLASS__ . ': ' . $message);
-        }
+        $this->getLogger()->err(__CLASS__ . ': ' . $message);
     }
 }

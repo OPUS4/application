@@ -41,28 +41,35 @@ class Oai_Model_TarFile extends Oai_Model_AbstractFile {
             $this->logErrorMessage("unexpected number of files to process: $numberOfFiles");
             throw new Oai_Model_Exception('unexpected number of files to include: at least two files were expected');
         }
-        $this->path = $this->getTar($filesToInclude, $docId, $filesPath, $tempPath);
-        $this->mimeType = 'application/x-tar';
-        $this->extension = '.tar';
+        $this->_path = $this->getTar($filesToInclude, $docId, $filesPath, $tempPath);
+        $this->_mimeType = 'application/x-tar';
+        $this->_extension = '.tar';
     }
 
     private function getTar($filesToInclude, $docId, $filesPath, $tempPath) {
         $tarball = $tempPath . uniqid($docId, true) . '.tar';
-	$phar = null;
-	try {
+    $phar = null;
+    try {
             $phar = new PharData($tarball);
-        } catch(UnexpectedValueException $e) {
-            $this->logErrorMessage('could not create tarball archive file ' . $tarball . ' due to insufficient file system permissions: ' . $e->getMessage());
+    }
+    catch(UnexpectedValueException $e) {
+            $this->logErrorMessage(
+                'could not create tarball archive file ' . $tarball . ' due to insufficient file system permissions: '
+                . $e->getMessage()
+            );
             throw new Oai_Model_Exception('error while creating tarball container: could not open tarball');
-	}
+    }
 
         foreach ($filesToInclude as $file) {
             $filePath = $filesPath . $docId . DIRECTORY_SEPARATOR;
             try {
-            	$phar->addFile($filePath . $file->getPathName(), $file->getPathName());
-            } catch (Exception $e) {
-		$this->logErrorMessage('could not add ' . $file->getPathName() . ' to tarball archive file: ' . $e->getMessage());
-		throw new Oai_Model_Exception('error while creating tarball container: could not add file to tarball');
+                $phar->addFile($filePath . $file->getPathName(), $file->getPathName());
+            }
+            catch (Exception $e) {
+                $this->logErrorMessage(
+                    'could not add ' . $file->getPathName() . ' to tarball archive file: ' . $e->getMessage()
+                );
+                throw new Oai_Model_Exception('error while creating tarball container: could not add file to tarball');
             }
         }
 

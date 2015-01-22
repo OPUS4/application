@@ -166,11 +166,15 @@ class Oai_Model_Resumptiontokens {
         $realPath = realpath($resPath);
 
         if (empty($realPath) or false === is_dir($realPath)) {
-            throw new Oai_Model_ResumptionTokenException('Given resumption path "' . $resPath . '" (real path: "' . $realPath . '") is not a directory.');
+            throw new Oai_Model_ResumptionTokenException(
+                'Given resumption path "' . $resPath . '" (real path: "' . $realPath . '") is not a directory.'
+            );
         }
 
         if (false === is_writable($realPath)) {
-            throw new Oai_Model_ResumptionTokenException('Given resumption path "' . $resPath . '" (real path: "' . $realPath . '") is not writeable.');
+            throw new Oai_Model_ResumptionTokenException(
+                'Given resumption path "' . $resPath . '" (real path: "' . $realPath . '") is not writeable.'
+            );
         }
 
         $this->_resumptionPath = $realPath;
