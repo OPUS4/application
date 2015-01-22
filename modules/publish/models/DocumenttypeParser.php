@@ -53,10 +53,10 @@ class Publish_Model_DocumenttypeParser {
      */
     public $formElements = array();
 
-    private $log;
-    private $session;
-    private $postValues = array();
-    private $additionalFields = array();
+    private $_log;
+    private $_session;
+    private $_postValues = array();
+    private $_additionalFields = array();
 
     /**
      * 
@@ -66,15 +66,15 @@ class Publish_Model_DocumenttypeParser {
      * @param array $postValues
      */
     public function __construct($dom, $form, $additionalFields = array(), $postValues = array()) {
-        $this->log = Zend_Registry::get('Zend_Log');
-        $this->session = new Zend_Session_Namespace('Publish');
+        $this->_log = Zend_Registry::get('Zend_Log');
+        $this->_session = new Zend_Session_Namespace('Publish');
         $this->form = $form;
         $this->dom = $dom;
         if (is_array($additionalFields)) {
-            $this->additionalFields = $additionalFields;
+            $this->_additionalFields = $additionalFields;
         }
         if (is_array($postValues)) {
-            $this->postValues = $postValues;
+            $this->_postValues = $postValues;
         }
     }
 
@@ -88,12 +88,12 @@ class Publish_Model_DocumenttypeParser {
         //parse root node for tags named 'field'
         foreach ($this->dom->getElementsByTagname('field') as $field) {
             $currentElement = new Publish_Model_FormElement($this->form);
-            $currentElement->setAdditionalFields($this->additionalFields);
+            $currentElement->setAdditionalFields($this->_additionalFields);
             $this->_parseAttributes($field, $currentElement);
             $this->_parseSubFields($field, $currentElement);
             $this->_parseDefaultEntry($currentElement, $field);
             $this->_parseRequiredIfFulltext($field, $currentElement);
-            $currentElement->setPostValues($this->postValues);            
+            $currentElement->setPostValues($this->_postValues);
             $group = $currentElement->initGroup();            
             $this->formElements[] = $group;
            
@@ -122,9 +122,11 @@ class Publish_Model_DocumenttypeParser {
             $datatype = $field->getAttribute('datatype');
             $multiplicity = $field->getAttribute('multiplicity');
 
-            if ($datatype === 'Enrichment') 
-                if ($this->isValidEnrichmentKey($elementName))
-                    $elementName = 'Enrichment' . $elementName;            
+            if ($datatype === 'Enrichment') { 
+                if ($this->isValidEnrichmentKey($elementName)) {
+                    $elementName = 'Enrichment' . $elementName; 
+                } 
+            }            
 
             if ($datatype == 'Collection' || $datatype == 'CollectionLeaf') {                
                 $collectionRole = $field->getAttribute('root');
@@ -147,9 +149,10 @@ class Publish_Model_DocumenttypeParser {
             $currentElement->setDatatype($datatype);
             $currentElement->setMultiplicity($multiplicity);
         }
-        // No Attributes found!
-        else
+        else {
+            // No Attributes found!
             return false;
+        }
     }
 
     /**
@@ -185,9 +188,10 @@ class Publish_Model_DocumenttypeParser {
 
                     $currentSubField->isSubField = true;
                 }
-                else
+                else {
                 //No Attributes found!
-                    return false;
+                    return false; 
+                }
 
                 if ($subField->hasChildNodes()) {
                     $this->_parseDefaultEntry($currentElement, $subField, $currentSubField);
@@ -204,9 +208,10 @@ class Publish_Model_DocumenttypeParser {
             }
             $currentElement->setListOptions($options);
         }
-        //No Subfields found!
-        else
+        else {
+            // No Subfields found!
             return false;
+        }
     }
 
     /**
@@ -216,7 +221,8 @@ class Publish_Model_DocumenttypeParser {
      * @param Publish_Model_FormElement $subfield
      * @return false if there are no child nodes
      */
-    private function _parseDefaultEntry($currentElement, DOMElement $field, Publish_Model_FormElement $subfield = null) {
+    private function _parseDefaultEntry($currentElement, DOMElement $field,
+                                        Publish_Model_FormElement $subfield = null) {
         if ($field->hasChildNodes()) {
             foreach ($field->getElementsByTagname('default') as $default) {
 
@@ -224,24 +230,28 @@ class Publish_Model_DocumenttypeParser {
                     $defaultArray = array();
 
                     $forValue = $default->getAttribute('for');
-                    if (isset($forValue))
-                        $defaultArray['for'] = $forValue;
+                    if (isset($forValue)) {
+                        $defaultArray['for'] = $forValue; 
+                    }
 
                     $value = $default->getAttribute('value');
-                    if (isset($value))
-                        $defaultArray['value'] = $value;
+                    if (isset($value)) {
+                        $defaultArray['value'] = $value; 
+                    }
 
                     $edit = $default->getAttribute('edit');
-                    if (isset($edit))
-                        $defaultArray['edit'] = $edit;
+                    if (isset($edit)) {
+                        $defaultArray['edit'] = $edit; 
+                    }
 
                     $public = $default->getAttribute('public');
-                    if (isset($public))
-                        $defaultArray['public'] = $public;
+                    if (isset($public)) {
+                        $defaultArray['public'] = $public; 
+                    }
 
                     if (!isset($subfield)) {
                         $currentElement->setDefaultValue($defaultArray);
-                        $this->log->debug(__METHOD__ . " : " . $value);
+                        $this->_log->debug(__METHOD__ . " : " . $value);
                     }
                     else {
                         $subfield->setDefaultValue($defaultArray);
@@ -256,18 +266,26 @@ class Publish_Model_DocumenttypeParser {
 
     /**
      * Allocates member variables currentElement.
-     * Parses for specific child node "required-if-fulltext" and sets the value "required" to true in case a fulltext has been uploaded.
+     * Parses for specific child node "required-if-fulltext" and sets the value "required" to true in case a fulltext
+     * has been uploaded.
      * @param DomElement $field
      */
     private function _parseRequiredIfFulltext(DomElement $field, $currentElement) {
         if ($field->hasChildNodes()) {
             foreach ($field->getElementsByTagname('required-if-fulltext') as $fulltext) {
-                if ($this->session->fulltext === '1') {
+                if ($this->_session->fulltext === '1') {
                     $currentElement->setRequired(true);
-                    $this->log->debug("currentElement : " . $currentElement->getElementName() . " and its required has been set to true!");
+                    $this->_log->debug(
+                        "currentElement : " . $currentElement->getElementName()
+                        . " and its required has been set to true!"
+                    );
                 }
-                else
-                    $this->log->debug("currentElement : " . $currentElement->getElementName() . " and its required hasn't been changed!");
+                else {
+                    $this->_log->debug(
+                        "currentElement : " . $currentElement->getElementName()
+                        . " and its required hasn't been changed!"
+                    );
+                }
             }
         }
     }
@@ -280,13 +298,14 @@ class Publish_Model_DocumenttypeParser {
      * @return true if string can be used as zend_form_element name, else Exception
      * 
      */    
-    private function zendConformElementName($string){
+    private function zendConformElementName($string) {
        
         $element = new Zend_Form_Element_Text($string);
         $element->setName($string);
         
-        if ($element->getName() !== $string)
-            throw new Publish_Model_FormIncorrectFieldNameException($string);
+        if ($element->getName() !== $string) {
+            throw new Publish_Model_FormIncorrectFieldNameException($string); 
+        }
         
         return true;
         
@@ -294,8 +313,9 @@ class Publish_Model_DocumenttypeParser {
     
     private function isValidEnrichmentKey($elementName) {
         $enrichment = Opus_EnrichmentKey::fetchByName($elementName);
-        if (is_null($enrichment))
-            throw new Publish_Model_FormIncorrectEnrichmentKeyException($elementName);
+        if (is_null($enrichment)) {
+            throw new Publish_Model_FormIncorrectEnrichmentKeyException($elementName); 
+        }
             
         return true;
     }

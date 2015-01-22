@@ -36,7 +36,7 @@
 class Publish_Model_FormNoButtonFoundException extends Publish_Model_FormException {
     
     public function  __construct() {
-        $this->translateKey = 'publish_no_pressed_button_found';
+        $this->_translateKey = 'publish_no_pressed_button_found';
         $this->code = 404;
     }
 }

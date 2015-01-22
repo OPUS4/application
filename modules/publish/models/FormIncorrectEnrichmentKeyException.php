@@ -38,7 +38,7 @@ class Publish_Model_FormIncorrectEnrichmentKeyException extends Publish_Model_Fo
     public $enrichmentKey; 
     
     public function  __construct($enrichment) {
-        $this->translateKey = 'publish_incorrect_enrichment_name';
+        $this->_translateKey = 'publish_incorrect_enrichment_name';
         $this->code = 404;
         $this->enrichmentKey = $enrichment;
     }

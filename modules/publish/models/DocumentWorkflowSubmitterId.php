@@ -49,7 +49,7 @@ class Publish_Model_DocumentWorkflowMatheon extends Publish_Model_DocumentWorkfl
             return;
         }
 
-        $this->document->addEnrichment()
+        $this->getDocument()->addEnrichment()
                 ->setKeyName('submitter.user_id')
                 ->setValue($userId);
     }

@@ -44,8 +44,8 @@ class Publish_Model_Validation {
     public $listOptions = array();
     public $collectionRole;
 
-    private $view;
-    private $session;
+    private $_view;
+    private $_session;
 
     public function __construct($datatype, $session, $collectionRole = null, $options = null, $view = null) {
         if (isset($options) && !empty($options)) {
@@ -60,8 +60,8 @@ class Publish_Model_Validation {
             $this->datatype = $datatype;
         }
         
-        $this->view = $view;
-        $this->session = $session;        
+        $this->_view = $view;
+        $this->_session = $session;
     }
 
     public function validate() {
@@ -120,11 +120,11 @@ class Publish_Model_Validation {
     }
 
     private function _validateDate() {
-        if (!isset($this->session->language)) {
+        if (!isset($this->_session->language)) {
             return;
         }
         
-        $lang = $this->session->language;
+        $lang = $this->_session->language;
         $validators = array();
 
         $validator = new Form_Validate_Date();
@@ -174,8 +174,9 @@ class Publish_Model_Validation {
         $validators = array();
         $languages = array_keys($this->getLanguages());
 
-        if (is_null($languages))
-            return null;
+        if (is_null($languages)) {
+            return null; 
+        }
 
         return $this->validateSelect($languages);
     }
@@ -194,8 +195,9 @@ class Publish_Model_Validation {
     private function _validateLicence() {
         $validators = array();
         $licences = array_keys($this->getLicences());
-        if (is_null($licences))
-            return null;
+        if (is_null($licences)) {
+            return null; 
+        }
 
         return $this->validateSelect($licences);
     }
@@ -203,16 +205,18 @@ class Publish_Model_Validation {
     private function _validateSeries() {
         $validators = array();
         $series = array_keys($this->getSeries());
-        if (is_null($series))
-            return null;
+        if (is_null($series)) {
+            return null; 
+        }
 
         return $this->validateSelect($series);
     }
 
     private function _validateList() {
         $validators = array();
-        foreach ($this->listOptions as $option)
-            $this->listOptions[$option] = $option;
+        foreach ($this->listOptions as $option) {
+            $this->listOptions[$option] = $option; 
+        }
 
         return $this->validateSelect($this->listOptions);
     }
@@ -232,17 +236,20 @@ class Publish_Model_Validation {
     private function _validateYear() {
         $validators = array();
 
-        $validator1 = new Zend_Validate_GreaterThan('0000');
-        $validator1->setMessage($this->translate('publish_validation_error_year_greaterthan'), Zend_Validate_GreaterThan::NOT_GREATER);
-        $validators[] = $validator1;
+        $greaterThan = new Zend_Validate_GreaterThan('0000');
+        $greaterThan->setMessage(
+            $this->translate('publish_validation_error_year_greaterthan'),
+            Zend_Validate_GreaterThan::NOT_GREATER
+        );
+        $validators[] = $greaterThan;
 
-        $validator2 = new Zend_Validate_Int();
+        $validInt = new Zend_Validate_Int();
         $messages = array(
             Zend_Validate_Int::INVALID => $this->translate('publish_validation_error_year_intinvalid'),
             Zend_Validate_Int::NOT_INT => $this->translate('publish_validation_error_year_notint')
         );
-        $validator2->setMessages($messages);
-        $validators[] = $validator2;
+        $validInt->setMessages($messages);
+        $validators[] = $validInt;
 
         return $validators;
     }
@@ -261,22 +268,28 @@ class Publish_Model_Validation {
                 return $this->_collectionSelect();
                 break;
 
-            case 'Language': return $this->_languageSelect();
+            case 'Language': 
+                return $this->_languageSelect();
                 break;
 
-            case 'Licence': return $this->_licenceSelect();
+            case 'Licence': 
+                return $this->_licenceSelect();
                 break;
 
-            case 'List': return $this->listOptions;
+            case 'List': 
+                return $this->listOptions;
                 break;
 
-            case 'ThesisGrantor' : return $this->_thesisSelect(true);
+            case 'ThesisGrantor' : 
+                return $this->_thesisSelect(true);
                 break;
 
-            case 'ThesisPublisher' : return $this->_thesisSelect();
+            case 'ThesisPublisher' : 
+                return $this->_thesisSelect();
                 break;
 
-            case 'Series' : return $this->_seriesSelect();
+            case 'Series' : 
+                return $this->_seriesSelect();
                 break;
 
             default :
@@ -285,7 +298,7 @@ class Publish_Model_Validation {
         }
     }
 
-    private function _collectionSelect(){
+    private function _collectionSelect() {
         $collectionRole = Opus_CollectionRole::fetchByName($this->collectionRole);
         if (is_null($collectionRole) || is_null($collectionRole->getRootCollection())) {
             return null;
@@ -368,8 +381,10 @@ class Publish_Model_Validation {
             }
             $this->licences = $licences;
             return $licences;
-        } else
-            return $this->licences;
+        }
+        else {
+            return $this->licences; 
+        }
     }
 
     /**
@@ -388,8 +403,10 @@ class Publish_Model_Validation {
             }
             $this->series = $sets;
             return $sets;
-        } else
-            return $this->series;
+        }
+        else {
+            return $this->series; 
+        }
     }
 
     /**
@@ -420,10 +437,10 @@ class Publish_Model_Validation {
     }
 
     private function translate($key) {
-        if (is_null($this->view)) {
+        if (is_null($this->_view)) {
             return $key;
         }
-        return $this->view->translate($key);
+        return $this->_view->translate($key);
     }
 
     /**
@@ -435,7 +452,7 @@ class Publish_Model_Validation {
         $rootCollection = $collectionRole->getRootCollection();
         if (is_null($rootCollection)) {
             return false;
-	    }
+        }
         return $rootCollection->hasVisiblePublishChildren();
     }
 }

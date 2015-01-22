@@ -34,14 +34,14 @@
 
 class Publish_Model_Exception extends Exception {
     
-    protected $translateKey;
+    protected $_translateKey;
 
-    public function __construct($key) {
+    public function __construct($key = null) {
         parent::__construct($key);
-        $this->translateKey = $key;
+        $this->_translateKey = $key;
     }
 
     public function getTranslateKey() {
-        return $this->translateKey;
+        return $this->_translateKey;
     }
 }

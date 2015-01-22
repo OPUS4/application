@@ -39,7 +39,7 @@ class Publish_Model_DocumentWorkflow {
     /**
      * @var Opus_Document
      */
-    private $document;
+    private $_document;
 
     /**
      * Create and initialize document object.
@@ -48,13 +48,13 @@ class Publish_Model_DocumentWorkflow {
      * @return Opus_Document 
      */
     public function createDocument($documentType) {
-        $this->document = new Opus_Document();
-        $this->document->setServerState(self::DOCUMENT_STATE)
+        $this->_document = new Opus_Document();
+        $this->_document->setServerState(self::DOCUMENT_STATE)
             ->setType($documentType);
 
         $this->initializeDocument();
 
-        return $this->document;
+        return $this->_document;
     }
 
     /**
@@ -77,12 +77,16 @@ class Publish_Model_DocumentWorkflow {
             throw new Publish_Model_Exception('Invalid document ID given');
         }
 
-        $this->document = new Opus_Document($documentId);
-        if ($this->document->getServerState() !== self::DOCUMENT_STATE) {
+        $this->_document = new Opus_Document($documentId);
+        if ($this->_document->getServerState() !== self::DOCUMENT_STATE) {
             throw new Publish_Model_Exception('Document->ServerState mismatch!');
         }
 
-        return $this->document;
+        return $this->_document;
+    }
+
+    public function getDocument() {
+        return $this->_document;
     }
 
 }

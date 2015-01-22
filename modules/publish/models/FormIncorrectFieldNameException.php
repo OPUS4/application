@@ -38,7 +38,7 @@ class Publish_Model_FormIncorrectFieldNameException extends Publish_Model_FormEx
     public $fieldName; 
     
     public function  __construct($field) {
-        $this->translateKey = 'publish_incorrect_field_name';
+        $this->_translateKey = 'publish_incorrect_field_name';
         $this->code = 404;
         $this->fieldName = $field;
     }

@@ -39,15 +39,15 @@ class Publish_Model_DisplayGroup {
     public $collectionIds = array();
     public $datatype;
             
-    private $elementName;
-    private $additionalFields;
-    private $form;
-    private $multiplicity;
-    private $log;
-    private $session;
+    private $_elementName;
+    private $_additionalFields;
+    private $_form;
+    private $_multiplicity;
+    private $_log;
+    private $_session;
 
     public function __construct($elementName, Publish_Form_PublishingSecond $form, $multiplicity, $log, $session) {
-        $this->elementName = $elementName;
+        $this->_elementName = $elementName;
 
         if (strstr($elementName, 'Enrichment')) {
             $this->label = 'group' . str_replace('Enrichment', '', $elementName);
@@ -56,10 +56,10 @@ class Publish_Model_DisplayGroup {
             $this->label = 'group' . $elementName;
         }
 
-        $this->form = $form;
-        $this->multiplicity = $multiplicity;
-        $this->log = $log;
-        $this->session = $session;
+        $this->_form = $form;
+        $this->_multiplicity = $multiplicity;
+        $this->_log = $log;
+        $this->_session = $session;
     }
 
     /**
@@ -75,7 +75,7 @@ class Publish_Model_DisplayGroup {
                 $elem = clone $element;
                 $elem->setDisableTranslator(true);
                 $elem->setName($element->getName() . '_' . $i);                
-                $this->form->addElement($elem);
+                $this->_form->addElement($elem);
                 $displayGroup[] = $elem->getName();
             }
         }
@@ -83,10 +83,10 @@ class Publish_Model_DisplayGroup {
         //count fields for "visually grouping" in template
         $number = count($displayGroup);
         $groupCount = 'num' . $this->label;
-        if (!isset($this->session->$groupCount) || $number < $this->session->$groupCount) {
-            $this->session->$groupCount = $number;
+        if (!isset($this->_session->$groupCount) || $number < $this->_session->$groupCount) {
+            $this->_session->$groupCount = $number;
         }
-        $this->log->debug("initial number for group elements = " . $number . " for group " . $this->label);        
+        $this->_log->debug("initial number for group elements = " . $number . " for group " . $this->label);
 
         $buttons = $this->addDeleteButtons();
         $displayGroup = array_merge($buttons, $displayGroup);
@@ -98,15 +98,17 @@ class Publish_Model_DisplayGroup {
         $elem = clone $this->elements[0];
 
         $elem->setDisableTranslator(true);
-        $elem->setName($this->elementName . '_' . $i);
-        if (isset($this->session->additionalFields['collId1' . $this->elementName . '_' . $i])) {
-            $elem->setValue($this->session->additionalFields['collId1' . $this->elementName . '_' . $i]);
+        $elem->setName($this->_elementName . '_' . $i);
+        if (isset($this->_session->additionalFields['collId1' . $this->_elementName . '_' . $i])) {
+            $elem->setValue($this->_session->additionalFields['collId1' . $this->_elementName . '_' . $i]);
         }
-        if ($currentStep !== 1) { // dieser Fall tritt ein, wenn in der aktuellen Gruppe mindestens die erste Stufe ausgewählt wurde (in diesem Fall wird die erste Stufe disabled)
+        if ($currentStep !== 1) {
+            // dieser Fall tritt ein, wenn in der aktuellen Gruppe mindestens die erste Stufe ausgewählt wurde (in
+            // diesem Fall wird die erste Stufe disabled)
             $elem->setAttrib('disabled', true);
             $elem->setAttrib('isRoot', true);
         }
-        $this->form->addElement($elem);        
+        $this->_form->addElement($elem);
         $this->elements[] = $elem;
         return $elem;
     }
@@ -146,15 +148,24 @@ class Publish_Model_DisplayGroup {
                     $element = $selectFields[$count];
                     $this->elements[] = $element;
 
-                    // es muss sichergestellt werden, dass nur die unterste Stufe einer Gruppe dem Dokument zugeordnet wird
-                    // alle höheren Stufen der Gruppe bekommen daher das Attribut 'doNotStore', das die Zuordnung verhindert                    
-                    if ($count < $numOfFields - 2 || // mindestens zwei Stufen vor der letzten Stufe: nicht zum Dokument zuordnen
-                            ($count == $numOfFields - 2 && $selectFields[$numOfFields - 1]->getAttrib('isLeaf') != true) || // die vorletzte Stufe: keine Zuordnung, wenn die letzte Stufe nicht(!) der Hinweis "Ende wurde erreicht" ist
-                            ($count == $numOfFields - 1 && $element->getAttrib('isLeaf') == true)) { // die letzte Stufe: keine Zuordnung, wenn die letzte Stufe der Hinweis "Ende wurde erreicht" ist
+                    // es muss sichergestellt werden, dass nur die unterste Stufe einer Gruppe dem Dokument zugeordnet
+                    // wird alle höheren Stufen der Gruppe bekommen daher das Attribut 'doNotStore', das die Zuordnung
+                    // verhindert
+                    // (a) mindestens zwei Stufen vor der letzten Stufe: nicht zum Dokument zuordnen
+                    // (b) die vorletzte Stufe: keine Zuordnung, wenn die letzte Stufe nicht(!) der Hinweis "Ende wurde
+                    //   erreicht" ist
+                    // (c) die letzte Stufe: keine Zuordnung, wenn die letzte Stufe der Hinweis "Ende wurde erreicht" ist
+                    // a || b || c
+                    if ($count < $numOfFields - 2 || // (a)
+                            ($count == $numOfFields - 2
+                                && $selectFields[$numOfFields - 1]->getAttrib('isLeaf') != true) || // (b)
+                            ($count == $numOfFields - 1
+                                && $element->getAttrib('isLeaf') == true)) { // (c)
                         $element->setAttrib('doNotStore', true);
                     }
 
-                    // nur die letzte Select-Box der letzten Stufe darf aktiv sein (der Hinweis "Ende wurde erreicht" (erkennbar am Attribut isLeaf) darf grundsätzlich nicht disabled werden)
+                    // nur die letzte Select-Box der letzten Stufe darf aktiv sein (der Hinweis "Ende wurde erreicht"
+                    // (erkennbar am Attribut isLeaf) darf grundsätzlich nicht disabled werden)
                     if ($i < $maxNum || ($i == $maxNum && $count < $numOfFields - 1)) {
                         if ($element->getAttrib('isLeaf') != true) {
                             $element->setAttrib('disabled', true);
@@ -162,12 +173,13 @@ class Publish_Model_DisplayGroup {
                     }
 
                     $element->setAttrib('datatype', $this->datatype);
-                    $this->form->addElement($element);
+                    $this->_form->addElement($element);
                     $displayGroup[] = $element->getName();
                 }
 
-                // Spezialbehandlung für einstufige Collection Roles: hier muss das Attribut isRoot für die erste Select-Box
-                // entfernt werden, da sonst keine Zuordnung zur Collection erfolgt, wenn der "Browse Down"-Button verwendet wurde (OPUSVIER-2759)
+                // Spezialbehandlung für einstufige Collection Roles: hier muss das Attribut isRoot für die erste
+                // Select-Box entfernt werden, da sonst keine Zuordnung zur Collection erfolgt, wenn der
+                // "Browse Down"-Button verwendet wurde (OPUSVIER-2759)
                 if ($numOfFields == 1 && $element->getAttrib('isLeaf') == true) {
                     $rootElement->setAttrib('isRoot', false);
                 }
@@ -176,7 +188,9 @@ class Publish_Model_DisplayGroup {
 
         //count fields for "visually grouping" in template
         $groupCount = 'num' . $this->label;
-        $this->session->$groupCount = null; // besondere Berechnung der Zebrastreifen in der View (CRs müssen speziell behandelt werden)
+
+        // besondere Berechnung der Zebrastreifen in der View (CRs müssen speziell behandelt werden)
+        $this->_session->$groupCount = null;
 
         $buttons = $this->addDeleteButtons();
         $displayGroup = array_merge($displayGroup, $buttons);
@@ -192,15 +206,15 @@ class Publish_Model_DisplayGroup {
     private function addDeleteButtons() {
         $displayGroup = array();        
         //show delete button only in case multiplicity has not been reached yet
-        if ($this->maxNumber() < (int) $this->multiplicity || $this->multiplicity === '*') {
+        if ($this->maxNumber() < (int) $this->_multiplicity || $this->_multiplicity === '*') {
             $addButton = $this->addAddButtontoGroup();
-            $this->form->addElement($addButton);
+            $this->_form->addElement($addButton);
             $displayGroup[] = $addButton->getName();           
         }
 
         if ($this->maxNumber() > 1) {
             $deleteButton = $this->addDeleteButtonToGroup();
-            $this->form->addElement($deleteButton);
+            $this->_form->addElement($deleteButton);
             $displayGroup[] = $deleteButton->getName();
         }
         return $displayGroup;
@@ -228,7 +242,7 @@ class Publish_Model_DisplayGroup {
 
         if ($collection->hasVisiblePublishChildren()) {
             $downButton = $this->addDownButtontoGroup();
-            $this->form->addElement($downButton);
+            $this->_form->addElement($downButton);
             $displayGroup[] = $downButton->getName();
         }
 
@@ -236,7 +250,7 @@ class Publish_Model_DisplayGroup {
         if (!$isRoot && !is_null($this->collectionIds[0])) {
             // collection has parents -> make button to browse up
             $upButton = $this->addUpButtontoGroup();
-            $this->form->addElement($upButton);
+            $this->_form->addElement($upButton);
             $displayGroup[] = $upButton->getName();          
         }
         
@@ -252,9 +266,9 @@ class Publish_Model_DisplayGroup {
      */
     private function browseFields($fieldset, $step) {
         if (is_null($this->collectionIds[0])) {
-            $error = $this->form->createElement('text', $this->elementName);
-            $error->setLabel($this->elementName);
-            $error->setDescription('hint_no_selection_' . $this->elementName);
+            $error = $this->_form->createElement('text', $this->_elementName);
+            $error->setLabel($this->_elementName);
+            $error->setDescription('hint_no_selection_' . $this->_elementName);
             $error->setAttrib('disabled', true);
             $this->elements[] = $error;
             return;
@@ -265,7 +279,7 @@ class Publish_Model_DisplayGroup {
         }
         
         //initialize root node
-        $this->session->additionalFields['collId0' . $this->elementName . '_' . $fieldset] = $this->collectionIds[0];
+        $this->_session->additionalFields['collId0' . $this->_elementName . '_' . $fieldset] = $this->collectionIds[0];
 
         if ($step < 2) { // es wurde für die aktuelle Gruppe noch keine Auswahl auf der ersten Stufe vorgenommen
             return;
@@ -276,8 +290,8 @@ class Publish_Model_DisplayGroup {
         // für die aktuelle Gruppe wurde mindestens die erste Stufe ausgewählt
         for ($j = 1; $j < $step; $j++) {
             //get the previous selection collection id from session
-            if (isset($this->session->additionalFields['collId' . $j . $this->elementName . '_' . $fieldset])) {
-                $id = $this->session->additionalFields['collId' . $j . $this->elementName . '_' . $fieldset];
+            if (isset($this->_session->additionalFields['collId' . $j . $this->_elementName . '_' . $fieldset])) {
+                $id = $this->_session->additionalFields['collId' . $j . $this->_elementName . '_' . $fieldset];
 
                 if (!is_null($id)) {
                     $this->collectionIds[] = $id;
@@ -292,10 +306,10 @@ class Publish_Model_DisplayGroup {
     }
 
     private function maxNumber() {        
-        if (!isset($this->additionalFields) || !array_key_exists($this->elementName, $this->additionalFields)) {
-            $this->additionalFields[$this->elementName] = 1;            
+        if (!isset($this->_additionalFields) || !array_key_exists($this->_elementName, $this->_additionalFields)) {
+            $this->_additionalFields[$this->_elementName] = 1;
         }
-        return $this->additionalFields[$this->elementName];
+        return $this->_additionalFields[$this->_elementName];
     }
 
     /**
@@ -304,10 +318,11 @@ class Publish_Model_DisplayGroup {
      * @return int
      */
     private function collectionStep($index = null) {
-        if (!isset($this->session->additionalFields) || !isset($this->session->additionalFields['step' . $this->elementName . '_' . $index])) {
-            $this->session->additionalFields['step' . $this->elementName . '_' . $index] = 1;
+        if (!isset($this->_session->additionalFields) ||
+            !isset($this->_session->additionalFields['step' . $this->_elementName . '_' . $index])) {
+            $this->_session->additionalFields['step' . $this->_elementName . '_' . $index] = 1;
         }
-        return $this->session->additionalFields['step' . $this->elementName . '_' . $index];
+        return $this->_session->additionalFields['step' . $this->_elementName . '_' . $index];
     }
 
     /**
@@ -328,7 +343,9 @@ class Publish_Model_DisplayGroup {
         $children = array();
 
         if ($collection->hasChildren()) {
-            $selectField = $this->form->createElement('select', 'collId' . $step . $this->elementName . '_' . $fieldset);
+            $selectField = $this->_form->createElement(
+                'select', 'collId' . $step . $this->_elementName . '_' . $fieldset
+            );
             $selectField->setDisableTranslator(true);
             $selectField->setLabel('choose_collection_subcollection');
 
@@ -346,7 +363,9 @@ class Publish_Model_DisplayGroup {
         
         //show no field?
         if (empty($children)) {
-            $selectField = $this->form->createElement('text', 'collId' . $step . $this->elementName . '_' . $fieldset);
+            $selectField = $this->_form->createElement(
+                'text', 'collId' . $step . $this->_elementName . '_' . $fieldset
+            );
             $selectField->setDisableTranslator(true);            
             $selectField->setLabel('endOfCollectionTree');
             $selectField->setAttrib('disabled', true);
@@ -360,40 +379,40 @@ class Publish_Model_DisplayGroup {
     }
 
     public function setAdditionalFields($additionalFields) {
-        $this->additionalFields = $additionalFields;
+        $this->_additionalFields = $additionalFields;
     }
 
     private function addAddButtontoGroup() {
-        $addButton = $this->form->createElement('submit', 'addMore' . $this->elementName);
+        $addButton = $this->_form->createElement('submit', 'addMore' . $this->_elementName);
         $addButton->setDisableTranslator(true);
-        $addButton->setLabel($this->form->view->translate('button_label_add_one_more' . $this->elementName));
+        $addButton->setLabel($this->_form->view->translate('button_label_add_one_more' . $this->_elementName));
         return $addButton;
     }
 
     private function addDeleteButtonToGroup() {
-        $deleteButton = $this->form->createElement('submit', 'deleteMore' . $this->elementName);
+        $deleteButton = $this->_form->createElement('submit', 'deleteMore' . $this->_elementName);
         $deleteButton->setDisableTranslator(true);
-        $deleteButton->setLabel($this->form->view->translate('button_label_delete' . $this->elementName));
+        $deleteButton->setLabel($this->_form->view->translate('button_label_delete' . $this->_elementName));
         return $deleteButton;
     }
 
     private function addDownButtontoGroup() {
-        $downButton = $this->form->createElement('submit', 'browseDown' . $this->elementName);
+        $downButton = $this->_form->createElement('submit', 'browseDown' . $this->_elementName);
         $downButton->setDisableTranslator(true);
-        $label = $this->form->view->translate('button_label_browse_down' . $this->elementName);
-        if ($label == 'button_label_browse_down' . $this->elementName) {
-            $label = $this->form->view->translate('button_label_browse_down');
+        $label = $this->_form->view->translate('button_label_browse_down' . $this->_elementName);
+        if ($label == 'button_label_browse_down' . $this->_elementName) {
+            $label = $this->_form->view->translate('button_label_browse_down');
         }
         $downButton->setLabel($label);
         return $downButton;
     }
 
     private function addUpButtontoGroup() {
-        $upButton = $this->form->createElement('submit', 'browseUp' . $this->elementName);
+        $upButton = $this->_form->createElement('submit', 'browseUp' . $this->_elementName);
         $upButton->setDisableTranslator(true);
-        $label = $this->form->view->translate('button_label_browse_up' . $this->elementName);
-        if ($label == 'button_label_browse_up' . $this->elementName) {
-            $label = $this->form->view->translate('button_label_browse_up');
+        $label = $this->_form->view->translate('button_label_browse_up' . $this->_elementName);
+        if ($label == 'button_label_browse_up' . $this->_elementName) {
+            $label = $this->_form->view->translate('button_label_browse_up');
         }
         $upButton->setLabel($label);
         return $upButton;

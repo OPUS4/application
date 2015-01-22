@@ -93,15 +93,15 @@ class Publish_Model_ExtendedValidation {
      */
     private function _validatePersons() {
         //1) validate: no first name without a last name
-        $valid1 = $this->_validateFirstNames();
+        $validFirstName = $this->_validateFirstNames();
 
         //2) validate: no email without a name
-        $valid2 = $this->_validateEmail();
+        $validEmail = $this->_validateEmail();
 
         //3) validate: no checkbox without mail
-        $valid3 = $this->_validateEmailNotification();
+        $validEmailNotification = $this->_validateEmailNotification();
 
-        return $valid1 && $valid2 && $valid3;
+        return $validFirstName && $validEmail && $validEmailNotification;
     }
 
     /**
@@ -192,7 +192,8 @@ class Publish_Model_ExtendedValidation {
                             }
                         }
                     }
-                } else {
+                }
+                else {
                     $this->data[$key] = "";
                     $this->data[$titleName] = "";
                 }
@@ -210,8 +211,9 @@ class Publish_Model_ExtendedValidation {
 
         foreach ($this->extendedData as $name => $entry) {
 
-            if ($entry['datatype'] == 'Person' && $entry['subfield'] == true && strstr($name, 'First'))
-                $firstNames[$name] = $entry['value'];
+            if ($entry['datatype'] == 'Person' && $entry['subfield'] == true && strstr($name, 'First')) {
+                $firstNames[$name] = $entry['value']; 
+            }
         }
 
         return $firstNames;
@@ -221,8 +223,10 @@ class Publish_Model_ExtendedValidation {
         $emails = array();
 
         foreach ($this->extendedData as $name => $entry) {
-            if ($entry['datatype'] == 'Person' && $entry['subfield'] == true && strstr($name, 'Email') && !strstr($name, 'Allow'))
-                $emails[$name] = $entry['value'];
+            if ($entry['datatype'] == 'Person' && $entry['subfield'] == true && strstr($name, 'Email')
+                && !strstr($name, 'Allow')) {
+                $emails[$name] = $entry['value']; 
+            }
         }
 
         return $emails;
@@ -232,8 +236,9 @@ class Publish_Model_ExtendedValidation {
         $emails = array();
 
         foreach ($this->extendedData as $name => $entry) {
-            if ($entry['datatype'] == 'Person' && $entry['subfield'] == true && strstr($name, 'AllowEmailContact'))
-                $emails[$name] = $entry['value'];
+            if ($entry['datatype'] == 'Person' && $entry['subfield'] == true && strstr($name, 'AllowEmailContact')) {
+                $emails[$name] = $entry['value']; 
+            }
         }
 
         return $emails;
@@ -245,18 +250,18 @@ class Publish_Model_ExtendedValidation {
      */
     private function _validateTitles() {        
         //1) validate language Fields
-        $validate1 = $this->_validateTitleLanguages();
+        $validTitleLang = $this->_validateTitleLanguages();
 
         //2) validate title fields
-        $validate2 = $this->_validateTitleValues();
+        $validTitleVal = $this->_validateTitleValues();
 
         //3) validate titles per language
-        $validate3 = $this->_validateTitlesPerLanguage();
+        $validTitlePerLang = $this->_validateTitlesPerLanguage();
 
         //4) validate usage of document language for main titles
-        $validate4 = $this->_validateDocumentLanguageForMainTitles();
+        $validDocLangForMainTitle = $this->_validateDocumentLanguageForMainTitles();
 
-        return $validate1 && $validate2 && $validate3 && $validate4;
+        return $validTitleLang && $validTitleVal && $validTitlePerLang && $validDocLangForMainTitle;
     }
 
     /**
@@ -300,7 +305,8 @@ class Publish_Model_ExtendedValidation {
                 if (!is_null($counter)) {
                     $titleType = $this->_getCounterOrType($key, 'type');
                     $languageKey = $titleType . 'Language' . '_' . $counter;
-                } else {
+                }
+                else {
                     $titleType = $key;
                     $languageKey = $key . 'Language';
                 }
@@ -311,7 +317,8 @@ class Publish_Model_ExtendedValidation {
     }
 
     /**
-     * Method counts the same title types per language and throws an error, if there are more than one titles with the same language
+     * Method counts the same title types per language and throws an error, if there are more than one titles with the
+     * same language
      * @return boolean
      */
     private function _validateTitlesPerLanguage() {
@@ -329,7 +336,6 @@ class Publish_Model_ExtendedValidation {
                     $titleType = $this->_getCounterOrType($key, 'type');
                     $languageKey = $titleType . 'Language' .'_' . $counter;
                 }
-
                 else {
                     $titleType = $key;
                     $languageKey = $key . 'Language';
@@ -338,11 +344,15 @@ class Publish_Model_ExtendedValidation {
                 if ($this->data[$languageKey] != "") {
                     //count title types and languages => same languages for same title type must produce an error
                     $index = $titleType . $this->data[$languageKey]; //z.B. TitleSubdeu
-                    $this->log->debug(__METHOD__ . " : language is set, titletype " . $titleType . " and language " . $languageKey . " index = " . $index);
+                    $this->log->debug(
+                        __METHOD__ . " : language is set, titletype " . $titleType . " and language " . $languageKey
+                        . " index = " . $index
+                    );
 
                     if (isset($languagesPerTitleType[$index])) {
                         $languagesPerTitleType[$index] = $languagesPerTitleType[$index] + 1;
-                    } else {
+                    }
+                    else {
                         $languagesPerTitleType[$index] = 1;
                     }
 
@@ -367,16 +377,19 @@ class Publish_Model_ExtendedValidation {
         $validTitles = true;
         $titles = $this->_getTitleMainFields();
         $languages = $this->_getTitleMainLanguageFields();
-        if (array_key_exists('Language', $this->data) && $this->data['Language'] !== "")
-            $docLanguage = $this->data['Language'];
-        else
-            return true;
+        if (array_key_exists('Language', $this->data) && $this->data['Language'] !== "") {
+            $docLanguage = $this->data['Language']; 
+        }
+        else {
+            return true; 
+        }
 
         $i = 0;
 
         foreach ($languages AS $title => $lang) {
-            if ($lang == $docLanguage)
-                $i++;
+            if ($lang == $docLanguage) {
+                $i++; 
+            }
         }
 
         if ($i == 0) {
@@ -398,8 +411,9 @@ class Publish_Model_ExtendedValidation {
         $languages = array();
 
         foreach ($this->extendedData as $name => $entry) {
-            if ($entry['datatype'] == 'Title' && $entry['subfield'] == '1' && strstr($name, 'anguage'))
-                $languages[$name] = $entry['value'];
+            if ($entry['datatype'] == 'Title' && $entry['subfield'] == '1' && strstr($name, 'anguage')) {
+                $languages[$name] = $entry['value']; 
+            }
         }
 
         return $languages;
@@ -413,8 +427,9 @@ class Publish_Model_ExtendedValidation {
         $titles = array();
 
         foreach ($this->extendedData as $name => $entry) {
-            if ($entry['datatype'] == 'Title' && $entry['subfield'] == '0')
-                $titles[$name] = $entry['value'];
+            if ($entry['datatype'] == 'Title' && $entry['subfield'] == '0') {
+                $titles[$name] = $entry['value']; 
+            }
         }
 
         return $titles;
@@ -429,9 +444,10 @@ class Publish_Model_ExtendedValidation {
         foreach ($this->extendedData as $name => $entry) {
             //find only TitleMain fields: datatype=Title, no subfield, 'main' must be present in name
             $fieldname = strtolower($name);
-            if ($entry['datatype'] == 'Title' && $entry['subfield'] == false && strstr($fieldname, 'main'))
-                $titles[$name] = $entry['value'];
+            if ($entry['datatype'] == 'Title' && $entry['subfield'] == false && strstr($fieldname, 'main')) {
+                $titles[$name] = $entry['value']; 
             }
+        }
 
         return $titles;
     }
@@ -447,8 +463,9 @@ class Publish_Model_ExtendedValidation {
             $fieldname = strtolower($name);
             //find only TitleMainLanguage fields: datatype=Language, subfield, 'main' must be present in name
             if ($entry['datatype'] == 'Language' && $entry['subfield'] == true && strstr($fieldname, 'main')) {
-                if (empty($entry['value']))
-                    $entry['value'] = $this->documentLanguage;
+                if (empty($entry['value'])) {
+                    $entry['value'] = $this->documentLanguage; 
+                }
                 $titles[$name] = $entry['value'];
             }
         }
@@ -470,7 +487,8 @@ class Publish_Model_ExtendedValidation {
                 if (!is_null($counter)) {
                     $titleType = $this->_getCounterOrType($key, 'type');
                     $languageKey = $titleType . 'Language' . '_' . $counter;
-                } else {
+                }
+                else {
                     $titleType = $key;
                     $languageKey = $key . 'Language';
                 }
@@ -493,21 +511,25 @@ class Publish_Model_ExtendedValidation {
      * sollte die Funktion einfach ein Array mit den Componenten zurückliefern.
      */
     private function _getCounterOrType($dataKey, $method = 'counter') {
-        if (!strstr($dataKey, '_'))
-            return;
+        if (!strstr($dataKey, '_')) {
+            return; 
+        }
 
         $array = explode('_', $dataKey);
         $i = count($array);
 
-        if ($method == 'counter')
-            return $array[$i - 1];
+        if ($method == 'counter') {
+            return $array[$i - 1]; 
+        }
 
-        if ($method == 'type')
-            return $array[0];
+        if ($method == 'type') {
+            return $array[0]; 
+        }
     }
 
     private function _checkLanguageElement($languageKey) {
-        if (!array_key_exists($languageKey, $this->data) || is_null($this->data[$languageKey]) || empty($this->data[$languageKey])) {
+        if (!array_key_exists($languageKey, $this->data) || is_null($this->data[$languageKey])
+            || empty($this->data[$languageKey])) {
             //set language value to the document language
             if (!is_null($this->documentLanguage)) {
                 $this->data[$languageKey] = $this->documentLanguage;
@@ -524,8 +546,9 @@ class Publish_Model_ExtendedValidation {
         $titles = array();
 
         foreach ($this->extendedData as $name => $entry) {
-            if ($entry['datatype'] == 'Subject' && $entry['subfield'] == '0' && strstr($name, 'ncontrolled'))
-                $titles[$name] = $entry['value'];
+            if ($entry['datatype'] == 'Subject' && $entry['subfield'] == '0' && strstr($name, 'ncontrolled')) {
+                $titles[$name] = $entry['value']; 
+            }
         }
 
         return $titles;
@@ -552,8 +575,9 @@ class Publish_Model_ExtendedValidation {
         $boxes = array();
 
         foreach ($this->form->getElements() as $element) {
-            if ($element->getType() === 'Zend_Form_Element_Checkbox' && $element->isRequired())
-                $boxes[] = $element->getName();
+            if ($element->getType() === 'Zend_Form_Element_Checkbox' && $element->isRequired()) {
+                $boxes[] = $element->getName(); 
+            }
         }
 
         return $boxes;
@@ -648,7 +672,7 @@ class Publish_Model_ExtendedValidation {
                 $element = $this->form->getElement($key);
                 if (!is_null($element)) {
                     $element->clearErrorMessages();
-                    $element->addError($this->translate('publish_error_series_missing_' . $errorMsgPrefix));                    
+                    $element->addError($this->translate('publish_error_series_missing_' . $errorMsgPrefix));
                 }
                 $this->log->debug(__METHOD__ . " Feld $seriesElement ohne zugehöriges Feld $key");
                 $validSeries = false;
@@ -677,7 +701,9 @@ class Publish_Model_ExtendedValidation {
                     }
 
                     if ($currSeries != null && !$currSeries->isNumberAvailable($number)) {
-                        $this->log->debug(__METHOD__ . " : error for element $fieldname : serial number $number not available");
+                        $this->log->debug(
+                            __METHOD__ . " : error for element $fieldname : serial number $number not available"
+                        );
                         $element = $this->form->getElement($fieldname);
                         if (!is_null($element)) {
                             $element->clearErrorMessages();
@@ -714,7 +740,10 @@ class Publish_Model_ExtendedValidation {
             }
 
             if ($countSeries[$seriesId] > 1) {
-                $this->log->debug(__METHOD__ . " : error for element $fieldname : is used " . $countSeries[$seriesId] . ' times');
+                $this->log->debug(
+                    __METHOD__ . " : error for element $fieldname : is used " . $countSeries[$seriesId]
+                    . ' times'
+                );
                 $element = $this->form->getElement($fieldname);
                 if (!is_null($element)) {
                     $element->clearErrorMessages();
@@ -764,11 +793,13 @@ class Publish_Model_ExtendedValidation {
         $series = array();
 
         foreach ($this->extendedData as $name => $entry) {
-            if ($entry['datatype'] == 'SeriesNumber' && $fetchNumbers)
-                $series[$name] = $entry['value'];
+            if ($entry['datatype'] == 'SeriesNumber' && $fetchNumbers) {
+                $series[$name] = $entry['value']; 
+            }
             else {
-                if ($entry['datatype'] == 'Series')
-                    $series[$name] = $entry['value'];
+                if ($entry['datatype'] == 'Series') {
+                    $series[$name] = $entry['value']; 
+                }
             }
         }
 
