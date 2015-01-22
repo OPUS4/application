@@ -94,14 +94,14 @@ class Home_Model_HelpFiles {
      * Stores help configuration after reading it for the first time.
      * @var array
      */
-    private static $__helpConfig;
+    private static $_helpConfig;
 
     /**
      * Loads help configuration.
      * @return Zend_Config_Ini
      */
     private static function getHelpConfig() {
-        if (empty(Home_Model_HelpFiles::$__helpConfig)) {
+        if (empty(Home_Model_HelpFiles::$_helpConfig)) {
             $config = null;
 
             $filePath = Home_Model_HelpFiles::getHelpPath() . 'help.ini';
@@ -123,10 +123,10 @@ class Home_Model_HelpFiles {
                 $config = new Zend_Config(array());
             }
 
-            Home_Model_HelpFiles::$__helpConfig = $config;
+            Home_Model_HelpFiles::$_helpConfig = $config;
         }
 
-        return Home_Model_HelpFiles::$__helpConfig;
+        return Home_Model_HelpFiles::$_helpConfig;
     }
 
 }

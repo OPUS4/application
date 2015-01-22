@@ -66,7 +66,9 @@ class Home_IndexController extends Controller_Action {
         $phtmlFilesAvailable = $this->getViewScripts();
 
         if (array_search($actionName, $phtmlFilesAvailable) === FALSE) {
-            $this->getLogger()->info(__METHOD__ . ' requested file ' . $actionName . '.phtml is not readable or does not exist');
+            $this->getLogger()->info(
+                __METHOD__ . ' requested file ' . $actionName . '.phtml is not readable or does not exist'
+            );
             parent::__call($action, $parameters);
         }
 
