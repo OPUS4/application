@@ -34,35 +34,35 @@
 
 class Util_QueryBuilder {
     
-    private $logger;
-    private $filterFields;
-    private $searchFields;
-    private $export = false;
+    private $_logger;
+    private $_filterFields;
+    private $_searchFields;
+    private $_export = false;
 
     /**
      *
      * @param boolean $export
      */
     public function __construct($logger, $export = false) {
-        $this->logger = $logger;
+        $this->_logger = $logger;
 
-        $this->filterFields = array();
+        $this->_filterFields = array();
         $config = Zend_Registry::get("Zend_Config");
-        if (!isset($config->searchengine->solr->facets)){
-            $this->logger->debug("key searchengine.solr.facets is not present in config. skipping filter queries");
+        if (!isset($config->searchengine->solr->facets)) {
+            $this->_logger->debug("key searchengine.solr.facets is not present in config. skipping filter queries");
         }
         $filters = $config->searchengine->solr->facets;
-        $this->logger->debug("searchengine.solr.facets is set to $filters");
+        $this->_logger->debug("searchengine.solr.facets is set to $filters");
 
         foreach (explode(',', $filters) as $filterfield) {
             if ($filterfield == 'year_inverted') {
                 $filterfield = 'year';
             }
-            array_push($this->filterFields, trim($filterfield));
+            array_push($this->_filterFields, trim($filterfield));
         }
 
-        $this->searchFields = array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year');
-        $this->export = $export;
+        $this->_searchFields = array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year');
+        $this->_export = $export;
     }
 
     /**
@@ -80,7 +80,9 @@ class Util_QueryBuilder {
         }
 
         if (!Util_Searchtypes::isSupported($request->getParam('searchtype'))) {
-            throw new Util_QueryBuilderException('Unsupported search type ' . $request->getParam('searchtype') . ' : unable to create query.');
+            throw new Util_QueryBuilderException(
+                'Unsupported search type ' . $request->getParam('searchtype') . ' : unable to create query.'
+            );
         }
 
         $this->validateParamsType($request);
@@ -95,36 +97,39 @@ class Util_QueryBuilder {
             'query' => $request->getParam('query', '*:*')
         );
 
-        if ($this->export) {
-            $MAX_ROWS = Opus_SolrSearch_Query::MAX_ROWS;
+        if ($this->_export) {
+            $maxRows = Opus_SolrSearch_Query::MAX_ROWS;
             // pagination within export was introduced in OPUS 4.2.2
             $startParam = $request->getParam('start', 0);
-            $rowsParam = $request->getParam('rows', $MAX_ROWS);
+            $rowsParam = $request->getParam('rows', $maxRows);
             $start = intval($startParam);
             $rows = intval($rowsParam);
             $input['start'] = $start > 0 ? $start : 0;
-            $input['rows'] = $rows > 0 || ($rows == 0 && $rowsParam == '0') ? $rows : $MAX_ROWS;
-            if ($input['start'] > $MAX_ROWS) {
-                $input['start'] = $MAX_ROWS;
+            $input['rows'] = $rows > 0 || ($rows == 0 && $rowsParam == '0') ? $rows : $maxRows;
+            if ($input['start'] > $maxRows) {
+                $input['start'] = $maxRows;
             }
-            if ($input['rows'] + $input['start'] > $MAX_ROWS) {
-                $input['rows'] = $MAX_ROWS - $start;
+            if ($input['rows'] + $input['start'] > $maxRows) {
+                $input['rows'] = $maxRows - $start;
             }
         }
 
-        foreach ($this->searchFields as $searchField) {
+        foreach ($this->_searchFields as $searchField) {
             $input[$searchField] = $request->getParam($searchField, '');
-            $input[$searchField . 'modifier'] = $request->getParam($searchField . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL);
+            $input[$searchField . 'modifier'] = $request->getParam(
+                $searchField . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL
+            );
         }
 
-        foreach ($this->filterFields as $filterField) {
+        foreach ($this->_filterFields as $filterField) {
             $param = $filterField . 'fq';
             $input[$param] = $request->getParam($param, '');                        
         }
 
 
-        if ($request->getParam('searchtype') === Util_Searchtypes::COLLECTION_SEARCH || $request->getParam('searchtype') === Util_Searchtypes::SERIES_SEARCH) {
-            $searchParams = new Util_BrowsingParams($request, $this->logger);
+        if ($request->getParam('searchtype') === Util_Searchtypes::COLLECTION_SEARCH
+                || $request->getParam('searchtype') === Util_Searchtypes::SERIES_SEARCH) {
+            $searchParams = new Util_BrowsingParams($request, $this->_logger);
             switch ($request->getParam('searchtype')) {
                 case Util_Searchtypes::COLLECTION_SEARCH:
                     $input['collectionId'] = $searchParams->getCollectionId();
@@ -154,10 +159,10 @@ class Util_QueryBuilder {
             'collectionId',
             'seriesId'
         );
-        foreach ($this->searchFields as $searchField) {
+        foreach ($this->_searchFields as $searchField) {
             array_push($paramNames, $searchField, $searchField . 'modifier');
         }
-        foreach ($this->filterFields as $filterField) {
+        foreach ($this->_filterFields as $filterField) {
             array_push($paramNames, $filterField . 'fq');
         }
 
@@ -178,7 +183,8 @@ class Util_QueryBuilder {
         if ($input['searchtype'] === Util_Searchtypes::SIMPLE_SEARCH) {
             return $this->createSimpleSearchQuery($input);
         }
-        if ($input['searchtype'] === Util_Searchtypes::ADVANCED_SEARCH || $input['searchtype'] === Util_Searchtypes::AUTHOR_SEARCH) {
+        if ($input['searchtype'] === Util_Searchtypes::ADVANCED_SEARCH
+                || $input['searchtype'] === Util_Searchtypes::AUTHOR_SEARCH) {
             return $this->createAdvancedSearchQuery($input);
         }
         if ($input['searchtype'] === Util_Searchtypes::LATEST_SEARCH) {
@@ -199,7 +205,7 @@ class Util_QueryBuilder {
     }
 
     private function createIdSearchQuery($input) {
-        $this->logger->debug("Constructing query for id search.");
+        $this->_logger->debug("Constructing query for id search.");
 
         if (is_null($input['docId'])) {
             throw new Application_Exception("No id provided.", 404);
@@ -208,16 +214,16 @@ class Util_QueryBuilder {
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::DOC_ID);
         $query->setField('id', $input['docId']);
 
-        if ($this->export) {
+        if ($this->_export) {
             $query->setReturnIdsOnly(true);
         }
         
-        $this->logger->debug("Query $query complete");
+        $this->_logger->debug("Query $query complete");
         return $query;
     }
 
     private function createSimpleSearchQuery($input) {
-        $this->logger->debug("Constructing query for simple search.");
+        $this->_logger->debug("Constructing query for simple search.");
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
         $query->setStart($input['start']);
@@ -228,16 +234,16 @@ class Util_QueryBuilder {
         $query->setCatchAll($input['query']);
         $this->addFiltersToQuery($query, $input);
 
-        if ($this->export) {
+        if ($this->_export) {
             $query->setReturnIdsOnly(true);
         }
 
-        $this->logger->debug("Query $query complete");
+        $this->_logger->debug("Query $query complete");
         return $query;
     }
 
     private function createAdvancedSearchQuery($input) {
-        $this->logger->debug("Constructing query for advanced search.");
+        $this->_logger->debug("Constructing query for advanced search.");
         
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::ADVANCED);
         $query->setStart($input['start']);
@@ -260,30 +266,30 @@ class Util_QueryBuilder {
             $query->setField('author', str_replace(array(',', ';'), '', $author), $authormodifier);
         }
 
-        if ($this->export) {
+        if ($this->_export) {
             $query->setReturnIdsOnly(true);
         }
 
-        $this->logger->debug("Query $query complete");
+        $this->_logger->debug("Query $query complete");
         return $query;
     }
 
     private function createLatestSearchQuery($input) {
-        $this->logger->debug("Constructing query for latest search.");
+        $this->_logger->debug("Constructing query for latest search.");
         
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::LATEST_DOCS);
         $query->setRows($input['rows']);
 
-        if ($this->export) {
+        if ($this->_export) {
             $query->setReturnIdsOnly(true);
         }
 
-        $this->logger->debug("Query $query complete");
+        $this->_logger->debug("Query $query complete");
         return $query;
     }
 
     private function createCollectionSearchQuery($input) {
-        $this->logger->debug("Constructing query for collection search.");
+        $this->_logger->debug("Constructing query for collection search.");
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
         $query->setStart($input['start']);        
@@ -295,21 +301,22 @@ class Util_QueryBuilder {
         $query->addFilterQuery('collection_ids', $input['collectionId']);
         $this->addFiltersToQuery($query, $input);
 
-        if ($this->export) {
+        if ($this->_export) {
             $query->setReturnIdsOnly(true);
         }
 
-        $this->logger->debug("Query $query complete");
+        $this->_logger->debug("Query $query complete");
         return $query;
     }
 
     private function createSeriesSearchQuery($input) {
-        $this->logger->debug("Constructing query for series search.");
+        $this->_logger->debug("Constructing query for series search.");
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::SIMPLE);
         $query->setStart($input['start']);
         $query->setRows($input['rows']);
-        if ($input['sortField'] === 'seriesnumber' || $input['sortField'] === Opus_SolrSearch_Query::DEFAULT_SORTFIELD) {
+        if ($input['sortField'] === 'seriesnumber'
+                || $input['sortField'] === Opus_SolrSearch_Query::DEFAULT_SORTFIELD) {
             $query->setSortField('doc_sort_order_for_seriesid_' . $input['seriesId']);
         }
         else {
@@ -321,16 +328,16 @@ class Util_QueryBuilder {
         $query->addFilterQuery('series_ids', $input['seriesId']);
         $this->addFiltersToQuery($query, $input);
 
-        if ($this->export) {
+        if ($this->_export) {
             $query->setReturnIdsOnly(true);
         }
 
-        $this->logger->debug("Query $query complete");
+        $this->_logger->debug("Query $query complete");
         return $query;
     }
 
     private function createAllSearchQuery($input) {
-        $this->logger->debug("Constructing query for all search.");
+        $this->_logger->debug("Constructing query for all search.");
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::ALL_DOCS);
         $query->setStart($input['start']);
@@ -340,20 +347,22 @@ class Util_QueryBuilder {
         
         $this->addFiltersToQuery($query, $input);
 
-        if ($this->export) {
+        if ($this->_export) {
             $query->setReturnIdsOnly(true);
         }
 
-        $this->logger->debug("Query $query complete");
+        $this->_logger->debug("Query $query complete");
         return $query;
     }
 
     private function addFiltersToQuery($query, $input) {
-        foreach($this->filterFields as $filterField) {
+        foreach ($this->_filterFields as $filterField) {
             $facetKey = $filterField . 'fq';
             $facetValue = $input[$facetKey];        
             if ($facetValue !== '') {
-                $this->logger->debug("request has facet key: $facetKey - value is: $facetValue - corresponding facet is: $filterField");
+                $this->_logger->debug(
+                    "request has facet key: $facetKey - value is: $facetValue - corresponding facet is: $filterField"
+                );
                 $query->addFilterQuery($filterField, $facetValue);
             }
         }

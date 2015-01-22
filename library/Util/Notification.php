@@ -37,12 +37,12 @@ class Util_Notification {
     const SUBMISSION = "submission";
     const PUBLICATION = "publication";
 
-    private $logger;
-    private $config;
+    private $_logger;
+    private $_config;
 
     public function __construct($logger = null, $config = null) {
-        $this->logger = is_null($logger) ? Zend_Registry::get('Zend_Log') : $logger;
-        $this->config = is_null($config) ? Zend_Registry::get('Zend_Config') : $config;
+        $this->_logger = is_null($logger) ? Zend_Registry::get('Zend_Log') : $logger;
+        $this->_config = is_null($config) ? Zend_Registry::get('Zend_Config') : $config;
     }
 
     /**
@@ -56,12 +56,14 @@ class Util_Notification {
      */
     public function prepareMail($document, $context, $url, $notifySubmitter = true, $notifyAuthors = array()) {
         if (!$this->validateContext($context)) {
-            $this->logger->err("context $context is currently not supported or delivery of notification mails is not"
-                    . ' enabled for the current context');
+            $this->_logger->err(
+                "context $context is currently not supported or delivery of notification mails is not"
+                . ' enabled for the current context'
+            );
             return;
         }
 
-        $this->logger->info("prepare $context notification email for document id " . $document->getId());
+        $this->_logger->info("prepare $context notification email for document id " . $document->getId());
         
         $authorAddresses = array();
         $authors = array();
@@ -71,13 +73,14 @@ class Util_Notification {
         if (!empty($personAuthors)) {
             $index = 0;
             foreach ($personAuthors as $author) {
-                $name = trim($author->getLastName() . ", " . $author->getFirstName()); // TODO Komma nur wenn FirstName present
+                // TODO Komma nur wenn FirstName present
+                $name = trim($author->getLastName() . ", " . $author->getFirstName());
                 array_push($authors, $name);
                 if ($context == self::PUBLICATION) {
                     $email = trim($author->getEmail());
                     if (!empty($email) && (empty($notifyAuthors) || (isset($notifyAuthors[$index])
                                 && $notifyAuthors[$index]))) {
-                        array_push($authorAddresses, array( "name" => $name, "address" => $email));                        
+                        array_push($authorAddresses, array( "name" => $name, "address" => $email));
                     }
                 }
                 $index++;
@@ -98,11 +101,12 @@ class Util_Notification {
         }
         
         $this->scheduleNotification(
-                $this->getMailSubject($context, $document->getId(), $authors, $title),
-                $this->getMailBody($context, $document->getId(), $authors, $title, $url),
-                $this->getRecipients($context, $authorAddresses, $document, $notifySubmitter));
+            $this->getMailSubject($context, $document->getId(), $authors, $title),
+            $this->getMailBody($context, $document->getId(), $authors, $title, $url),
+            $this->getRecipients($context, $authorAddresses, $document, $notifySubmitter)
+        );
 
-        $this->logger->info("$context notification mail creation was completed successfully");
+        $this->_logger->info("$context notification mail creation was completed successfully");
     }
 
     private function getMailSubject($context, $docId, $authors, $title) {
@@ -119,40 +123,48 @@ class Util_Notification {
         if ($title == "") {
             $title = "n/a";
         }
-        if ($context == self::SUBMISSION && isset($this->config->notification->document->submitted->subject)) {
-            return sprintf($this->config->notification->document->submitted->subject, $docId, $authorString, $title);
+        if ($context == self::SUBMISSION && isset($this->_config->notification->document->submitted->subject)) {
+            return sprintf($this->_config->notification->document->submitted->subject, $docId, $authorString, $title);
         }
-        if ($context == self::PUBLICATION && isset($this->config->notification->document->published->subject)) {
-            return sprintf($this->config->notification->document->published->subject, $docId, $authorString, $title);
+        if ($context == self::PUBLICATION && isset($this->_config->notification->document->published->subject)) {
+            return sprintf($this->_config->notification->document->published->subject, $docId, $authorString, $title);
         }
-        $this->logger->err("could not construct mail subject based on application configuration");
+        $this->_logger->err("could not construct mail subject based on application configuration");
     }
 
     private function getMailBody($context, $docId, $authors, $title, $url) {
-        if ($context == self::SUBMISSION && isset($this->config->notification->document->submitted->template)) {            
-            return $this->getTemplate($this->config->notification->document->submitted->template, $docId, $authors,
-                $title, $url);
+        if ($context == self::SUBMISSION && isset($this->_config->notification->document->submitted->template)) {
+            return $this->getTemplate(
+                $this->_config->notification->document->submitted->template, $docId, $authors,
+                $title, $url
+            );
         }
-        if ($context == self::PUBLICATION && isset($this->config->notification->document->published->template)) {
-            return $this->getTemplate($this->config->notification->document->published->template, $docId, $authors,
-                $title, $url);
+        if ($context == self::PUBLICATION && isset($this->_config->notification->document->published->template)) {
+            return $this->getTemplate(
+                $this->_config->notification->document->published->template, $docId, $authors,
+                $title, $url
+            );
         }
     }
 
     private function getTemplate($template, $docId, $authors, $title, $url) {
         $templateFileName = APPLICATION_PATH . '/application/configs/mail_templates/' . $template;
         if (!is_file($templateFileName)) {
-            $this->logger->err("could not find mail template based on application configuration: '$templateFileName'"
-                    . ' does not exist or is not readable');
+            $this->_logger->err(
+                "could not find mail template based on application configuration: '$templateFileName'"
+                . ' does not exist or is not readable'
+            );
             return;
         }
         ob_start();
-        extract(array(            
+        extract(
+            array(            
             "authors" => $authors,
             "title" => $title,
             "docId" => $docId,
             "url" => $url
-        ));
+            )
+        );
         require($templateFileName);
         $body = ob_get_contents();
         ob_end_clean();
@@ -164,23 +176,29 @@ class Util_Notification {
 
         switch ($context) {
             case self::SUBMISSION:
-                if (isset($this->config->notification->document->submitted->email)) {
-                    $addresses = $this->buildAddressesArray($context,
-                        $this->config->notification->document->submitted->email);
+                if (isset($this->_config->notification->document->submitted->email)) {
+                    $addresses = $this->buildAddressesArray(
+                        $context,
+                        $this->_config->notification->document->submitted->email
+                    );
                 }
                 break;
 
             case self::PUBLICATION:
-                if (isset($this->config->notification->document->published->email)) {
-                    $addresses = $this->buildAddressesArray($context,
-                        $this->config->notification->document->published->email);
+                if (isset($this->_config->notification->document->published->email)) {
+                    $addresses = $this->buildAddressesArray(
+                        $context,
+                        $this->_config->notification->document->published->email
+                    );
                 }
 
                 for ($i = 0; $i < count($authorAddresses); $i++) {
                     $authorAddress = $authorAddresses[$i];
                     array_push($addresses, $authorAddress);
-                    $this->logger->debug("send $context notification mail to author " . $authorAddress['address']
-                        . " (" . $authorAddress['name'] . ")");
+                    $this->_logger->debug(
+                        "send $context notification mail to author " . $authorAddress['address']
+                        . " (" . $authorAddress['name'] . ")"
+                    );
                 }
 
                 if ($notifySubmitter && !is_null($document)) {
@@ -190,7 +208,7 @@ class Util_Notification {
                         $email = trim($submitter[0]->getEmail());
                         if (!empty($email)) {
                             array_push($addresses, array( "name" => $name , "address" => $email));
-                            $this->logger->debug("send $context notification mail to submitter $email ($name)");
+                            $this->_logger->debug("send $context notification mail to submitter $email ($name)");
                         }
                     }
                 }
@@ -210,7 +228,7 @@ class Util_Notification {
         if (strlen(trim($emails)) > 0) {
             foreach (explode(",", $emails) as $address) {
                 $address = trim($address);
-                $this->logger->debug("send $context notification mail to $address");
+                $this->_logger->debug("send $context notification mail to $address");
                 array_push($addresses, array("name" => $address, "address" => $address));
             }
         }
@@ -220,20 +238,20 @@ class Util_Notification {
 
     private function validateContext($context) {
         if ($context == self::SUBMISSION) {
-            return isset($this->config->notification->document->submitted->enabled)
-                    && $this->config->notification->document->submitted->enabled == 1;
+            return isset($this->_config->notification->document->submitted->enabled)
+                    && $this->_config->notification->document->submitted->enabled == 1;
         }
         if ($context == self::PUBLICATION) {
-            return isset($this->config->notification->document->published->enabled)
-                    && $this->config->notification->document->published->enabled == 1;;
+            return isset($this->_config->notification->document->published->enabled)
+                    && $this->_config->notification->document->published->enabled == 1;;
         }
-        $this->logger->err("Email notification mechanism is not supported for context '$context'");
+        $this->_logger->err("Email notification mechanism is not supported for context '$context'");
         return false;
     }
 
     private function scheduleNotification($subject, $message, $recipients) {
         if (empty($recipients)) {
-            $this->logger->warn("No recipients could be determined for email notification: skip operation");
+            $this->_logger->warn("No recipients could be determined for email notification: skip operation");
             return;
         }
 
@@ -243,13 +261,15 @@ class Util_Notification {
             if (!in_array($recipient['address'], $addressesUsed)) {
                 $job = new Opus_Job();
                 $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
-                $job->setData(array(
+                $job->setData(
+                    array(
                     'subject' => $subject,
                     'message' => $message,
                     'users' => array($recipient)
-                ));
+                    )
+                );
 
-                if (isset($this->config->runjobs->asynchronous) && $this->config->runjobs->asynchronous) {
+                if (isset($this->_config->runjobs->asynchronous) && $this->_config->runjobs->asynchronous) {
                     // Queue job (execute asynchronously)
                     // skip creating job if equal job already exists
                     if (true === $job->isUniqueInQueue()) {
@@ -259,11 +279,11 @@ class Util_Notification {
                 else {
                     // Execute job immediately (synchronously)
                     try {
-                        $mail = new Opus_Job_Worker_MailNotification($this->logger, false);
+                        $mail = new Opus_Job_Worker_MailNotification($this->_logger, false);
                         $mail->work($job);
                     }
                     catch (Exception $exc) {
-                        $this->logger->err("Email notification failed: ".$exc);
+                        $this->_logger->err("Email notification failed: ".$exc);
                     }
                 }
 

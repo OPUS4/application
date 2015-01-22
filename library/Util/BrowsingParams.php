@@ -34,11 +34,11 @@
 
 class Util_BrowsingParams {
 
-    private $request;
+    private $_request;
 
     public function  __construct($request, $log) {
         $this->log = $log;
-        $this->request = $request;
+        $this->_request = $request;
     }
 
     /**
@@ -48,7 +48,7 @@ class Util_BrowsingParams {
      */
     public function getCollectionId() {
         try {
-            $collectionList = new Solrsearch_Model_CollectionList($this->request->getParam('id'));
+            $collectionList = new Solrsearch_Model_CollectionList($this->_request->getParam('id'));
             return $collectionList->getCollectionId();
         }
         catch (Solrsearch_Model_Exception $e) {
@@ -64,7 +64,7 @@ class Util_BrowsingParams {
      */
     public function getSeriesId() {
         try {
-            $series = new Solrsearch_Model_Series($this->request->getParam('id'));
+            $series = new Solrsearch_Model_Series($this->_request->getParam('id'));
             return $series->getId();
         }
         catch (Solrsearch_Model_Exception $e) {
@@ -74,4 +74,3 @@ class Util_BrowsingParams {
     }
 
 }
-?>

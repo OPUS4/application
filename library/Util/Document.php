@@ -38,7 +38,7 @@ class Util_Document {
      *
      * @var Opus_Document
      */
-    private $document;
+    private $_document;
 
     /**
      *
@@ -46,9 +46,9 @@ class Util_Document {
      * @throws Application_Exception
      */
     public function  __construct($document) {
-        $this->document = $document;
+        $this->_document = $document;
         if (!$this->checkPermission()) {
-            throw new Application_Exception('document access for id ' . $this->document->getId() . ' not allowed');
+            throw new Application_Exception('document access for id ' . $this->_document->getId() . ' not allowed');
         }
     }
 
@@ -56,11 +56,11 @@ class Util_Document {
      * @return boolean
      */
     private function checkPermission() {
-        if ($this->document->getServerState() === 'published') {
+        if ($this->_document->getServerState() === 'published') {
             return true;
         }
         $accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
-        return Opus_Security_Realm::getInstance()->checkDocument($this->document->getId())
+        return Opus_Security_Realm::getInstance()->checkDocument($this->_document->getId())
                 || $accessControl->accessAllowed('documents');
     }
 
@@ -70,7 +70,7 @@ class Util_Document {
      */
     public function getNode($useCache = true) {
         $xmlModel = new Opus_Model_Xml();
-        $xmlModel->setModel($this->document);
+        $xmlModel->setModel($this->_document);
         $xmlModel->excludeEmptyFields(); // needed for preventing handling errors
         $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
         if ($useCache) {

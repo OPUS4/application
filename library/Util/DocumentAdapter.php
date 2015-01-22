@@ -57,13 +57,13 @@ class Util_DocumentAdapter {
      * Zend_View for presentation.
      * @var Zend_View
      */
-    private $view;
+    private $_view;
 
     /**
      * Array of author names.
      * @var array
      */
-    private $authors = null;
+    private $_authors = null;
 
     /**
      * Constructs wrapper around document.
@@ -71,14 +71,14 @@ class Util_DocumentAdapter {
      * @param int $id
      */
     public function __construct($view, $value) {
-        $this->view = $view;
+        $this->_view = $view;
         if ($value instanceof Opus_Document) {
             $this->document = $value;
             $this->docId = $this->document->getId();
         }
         else {
             $this->docId = $value;
-            $this->document = new Opus_Document( (int) $value);
+            $this->document = new Opus_Document((int) $value);
         }
     }
 
@@ -121,7 +121,8 @@ class Util_DocumentAdapter {
             return $titles[0]->getValue();
         }
         else {
-            return Zend_Registry::get('Zend_Translate')->translate('document_no_title') . '(id = ' . $this->getDocId() . ')';
+            return Zend_Registry::get('Zend_Translate')->translate('document_no_title') . '(id = ' . $this->getDocId()
+                . ')';
         }
     }
     
@@ -132,7 +133,7 @@ class Util_DocumentAdapter {
         $titles = $this->document->getTitleMain();
         $language = $this->document->getLanguage();
         if (count($titles) > 0) {
-            foreach($titles as $title) {
+            foreach ($titles as $title) {
                 if ($language === $title->getLanguage()) {
                     return $title->getValue();
                 }
@@ -142,7 +143,8 @@ class Util_DocumentAdapter {
             return $titles[0]->getValue();
         }
         else {
-            return Zend_Registry::get('Zend_Translate')->translate('document_no_title') . '(id = ' . $this->getDocId() . ')';
+            return Zend_Registry::get('Zend_Translate')->translate('document_no_title') . '(id = ' . $this->getDocId()
+                . ')';
         }
     }
     
@@ -225,8 +227,8 @@ class Util_DocumentAdapter {
      * @return array
      */
     public function getAuthors() {
-        if ($this->authors) {
-            return $this->authors;
+        if ($this->_authors) {
+            return $this->_authors;
         }
 
         try {
@@ -252,7 +254,7 @@ class Util_DocumentAdapter {
             $authors[$counter] = $author;
         }
 
-        $this->authors = $authors;
+        $this->_authors = $authors;
 
         return $authors;
     }
@@ -261,7 +263,7 @@ class Util_DocumentAdapter {
      * Returns the search URL for an author.
      */
     public function getAuthorUrl($author) {
-        if (!is_null($this->view)) {
+        if (!is_null($this->_view)) {
             $author = str_replace(' ', '+', $author);
             $url = array(
                 'module' => 'solrsearch',
@@ -269,7 +271,7 @@ class Util_DocumentAdapter {
                 'action' => 'search',
                 'searchtype' => 'authorsearch',
                 'author' => '"' . $author . '"');
-            return $this->view->url($url, null, true);
+            return $this->_view->url($url, null, true);
         }
         else {
             return null;
@@ -323,8 +325,8 @@ class Util_DocumentAdapter {
             if ($e->getKeyName() != 'reviewer.user_id') {
                 continue;
             }
-            $user_id = $e->getValue();
-            $account = new Opus_Account($user_id);
+            $userId = $e->getValue();
+            $account = new Opus_Account($userId);
             $return[$account->getId()] = strtolower($account->getLogin());
         }
         return $return;
@@ -336,8 +338,8 @@ class Util_DocumentAdapter {
             if ($e->getKeyName() != 'submitter.user_id') {
                 continue;
             }
-            $user_id = $e->getValue();
-            $account = new Opus_Account($user_id);
+            $userId = $e->getValue();
+            $account = new Opus_Account($userId);
             $return[$account->getId()] = strtolower($account->getLogin());
         }
         return $return;

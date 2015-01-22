@@ -44,14 +44,15 @@ class Util_TmxFile {
     const template = '<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
-    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="Opus4"></header>
+    <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de"
+    o-tmf="abc" creationtool="Opus4"></header>
     <body></body>
 </tmx>';
 
     /**
      * Internal representation of the file
      */
-    protected $data = array();
+    protected $_data = array();
 
     /**
      * 
@@ -71,7 +72,7 @@ class Util_TmxFile {
      * @return DomDocument
      */
     public function toDomDocument() {
-        return $this->_arrayToDom($this->data);
+        return $this->_arrayToDom($this->_data);
     }
 
     /**
@@ -80,7 +81,7 @@ class Util_TmxFile {
      * @return array 
      */
     public function toArray() {
-        return $this->data;
+        return $this->_data;
     }
 
     /**
@@ -91,7 +92,7 @@ class Util_TmxFile {
      * @return self Fluid Interface
      */
     public function fromArray($array) {
-        $this->data = array_replace_recursive($this->data, $array);
+        $this->_data = array_replace_recursive($this->_data, $array);
         return $this;
     }
 
@@ -109,7 +110,7 @@ class Util_TmxFile {
         $result = @$dom->load($fileName); // supress warning since return value is checked
         if ($result) {
             $newData = $this->_domToArray($dom);
-            $this->data = array_replace_recursive($this->data, $newData);
+            $this->_data = array_replace_recursive($this->_data, $newData);
         }
         return $result;
     }
@@ -121,7 +122,7 @@ class Util_TmxFile {
      * @return bool true on success or false on failure
      */
     public function save($fileName) {
-        $domDocument = $this->_arrayToDom($this->data);
+        $domDocument = $this->_arrayToDom($this->_data);
         return ($domDocument->save($fileName) !== false);
     }
 
@@ -137,8 +138,9 @@ class Util_TmxFile {
      */
     public function setVariantSegment($unitName, $language, $text) {
         $tmxArray = $this->toArray();
-        if (!isset($tmxArray[$unitName]))
-            $tmxArray[$unitName] = array();
+        if (!isset($tmxArray[$unitName])) {
+            $tmxArray[$unitName] = array(); 
+        }
         $tmxArray[$unitName][$language] = $text;
         $this->fromArray($tmxArray);
         return $this;
@@ -152,7 +154,8 @@ class Util_TmxFile {
             $key = $tu->attributes->getNamedItem('tuid')->textContent;
             $translationUnits[$key] = array();
             foreach ($tu->getElementsByTagName('tuv') as $child) {
-                $translationUnits[$key][$child->attributes->getNamedItem('lang')->nodeValue] = $child->getElementsByTagName('seg')->item(0)->nodeValue;
+                $translationUnits[$key][$child->attributes->getNamedItem('lang')->nodeValue] =
+                    $child->getElementsByTagName('seg')->item(0)->nodeValue;
             }
         }
         return $translationUnits;
