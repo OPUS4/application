@@ -39,7 +39,7 @@ class Oai_ContainerController extends Controller_Action {
         $docId = $this->getRequest()->getParam('docId', null);
 
         $container = null;
-        $fileHandle = null;	
+        $fileHandle = null;    
         try {
             $container = new Oai_Model_Container($docId, $this->getLogger());
             $fileHandle = $container->getFileHandle();            
@@ -56,7 +56,10 @@ class Oai_ContainerController extends Controller_Action {
 
         $this->getResponse()
                 ->setHeader('Content-Type', $fileHandle->getMimeType(), true)
-                ->setHeader('Content-Disposition', 'attachment; filename=' . $container->getName() . $fileHandle->getExtension(), true);
+                ->setHeader(
+                    'Content-Disposition', 'attachment; filename=' . $container->getName()
+                    . $fileHandle->getExtension(), true
+                );
 
         $this->_helper->SendFile->setLogger($this->getLogger());
         try {

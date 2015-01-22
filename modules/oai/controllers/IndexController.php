@@ -104,7 +104,9 @@ class Oai_IndexController extends Controller_Xml {
         catch (Oai_Model_ResumptionTokenException $e) {
             Zend_Registry::get('Zend_Log')->err($e);
             $this->_proc->setParameter('', 'oai_error_code', 'unknown');
-            $this->_proc->setParameter('', 'oai_error_message', 'An error occured while processing the resumption token.');
+            $this->_proc->setParameter(
+                '', 'oai_error_message', 'An error occured while processing the resumption token.'
+            );
             $this->getResponse()->setHttpResponseCode(500);
         }
         catch (Exception $e) {
@@ -118,19 +120,19 @@ class Oai_IndexController extends Controller_Xml {
     }
 
     private function getOaiBaseUrl() {
-        $oai_base_url = $this->_configuration->getOaiBaseUrl();
+        $oaiBaseUrl = $this->_configuration->getOaiBaseUrl();
 
         // if no OAI base url is set, use local information as base url
-        if (true === empty($oai_base_url)) {
+        if (true === empty($oaiBaseUrl)) {
             $request = $this->getRequest();
             $base = $request->getBaseUrl();
             $host = $request->getHttpHost();
             $scheme = $request->getScheme();
             $module = $request->getModuleName();
-            $oai_base_url = $scheme . '://' . $host . $base . '/' . $module;
+            $oaiBaseUrl = $scheme . '://' . $host . $base . '/' . $module;
         }
 
-        return $oai_base_url;
+        return $oaiBaseUrl;
     }
 
     /**
@@ -148,7 +150,9 @@ class Oai_IndexController extends Controller_Xml {
 
         
         // Set response time
-        $this->_proc->setParameter('', 'dateTime', str_replace('+00:00', 'Z', Zend_Date::now()->setTimeZone('UTC')->getIso()));
+        $this->_proc->setParameter(
+            '', 'dateTime', str_replace('+00:00', 'Z', Zend_Date::now()->setTimeZone('UTC')->getIso())
+        );
 
         // set OAI base url
         $this->_proc->setParameter('', 'oai_base_url', $this->getOaiBaseUrl());
@@ -215,8 +219,12 @@ class Oai_IndexController extends Controller_Xml {
         $document = null;
         try {
             $document = new Opus_Document($docId);
-        } catch (Opus_Model_NotFoundException $ex) {
-            throw new Oai_Model_Exception('The value of the identifier argument is unknown or illegal in this repository.', Oai_Model_Error::IDDOESNOTEXIST);
+        }
+        catch (Opus_Model_NotFoundException $ex) {
+            throw new Oai_Model_Exception(
+                'The value of the identifier argument is unknown or illegal in this repository.',
+                Oai_Model_Error::IDDOESNOTEXIST
+            );
         }
 
         // do not deliver documents which are restricted by document state
@@ -230,7 +238,10 @@ class Oai_IndexController extends Controller_Xml {
             $type = $document->getType();
             $isHabOrDoc = in_array($type, $this->_xMetaDissRestriction);
             if (false === $isHabOrDoc) {
-               throw new Oai_Model_Exception("The combination of the given values results in an empty list (xMetaDiss only for habilitation and doctoralthesis).", Oai_Model_Error::NORECORDSMATCH);
+               throw new Oai_Model_Exception(
+                   "The combination of the given values results in an empty list (xMetaDiss only for habilitation"
+                   . " and doctoralthesis).", Oai_Model_Error::NORECORDSMATCH
+               );
             }
         }
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
@@ -277,8 +288,8 @@ class Oai_IndexController extends Controller_Xml {
      */
     private function __handleListIdentifiers(array &$oaiRequest) {
 
-        $max_identifier = $this->_configuration->getMaxListIdentifiers();
-        $this->_handlingOfLists($oaiRequest, $max_identifier);
+        $maxIdentifier = $this->_configuration->getMaxListIdentifiers();
+        $this->_handlingOfLists($oaiRequest, $maxIdentifier);
 
     }
 
@@ -301,8 +312,8 @@ class Oai_IndexController extends Controller_Xml {
      */
     private function __handleListRecords(array &$oaiRequest) {
 
-        $max_records = $this->_configuration->getMaxListRecords();
-        $this->_handlingOfLists($oaiRequest, $max_records);
+        $maxRecords = $this->_configuration->getMaxListRecords();
+        $this->_handlingOfLists($oaiRequest, $maxRecords);
 
     }
 
@@ -379,16 +390,16 @@ class Oai_IndexController extends Controller_Xml {
         }
 
         foreach ($sets as $type => $name) {
-            $opus_doc = $this->_xml->createElement('Opus_Sets');
-            $type_attr = $this->_xml->createAttribute('Type');
-            $type_value = $this->_xml->createTextNode($type);
-            $type_attr->appendChild($type_value);
-            $opus_doc->appendChild($type_attr);
-            $name_attr = $this->_xml->createAttribute('TypeName');
-            $name_value = $this->_xml->createTextNode($name);
-            $name_attr->appendChild($name_value);
-            $opus_doc->appendChild($name_attr);
-            $this->_xml->documentElement->appendChild($opus_doc);
+            $opusDoc = $this->_xml->createElement('Opus_Sets');
+            $typeAttr = $this->_xml->createAttribute('Type');
+            $typeValue = $this->_xml->createTextNode($type);
+            $typeAttr->appendChild($typeValue);
+            $opusDoc->appendChild($typeAttr);
+            $nameAttr = $this->_xml->createAttribute('TypeName');
+            $nameValue = $this->_xml->createTextNode($name);
+            $nameAttr->appendChild($nameValue);
+            $opusDoc->appendChild($nameAttr);
+            $this->_xml->documentElement->appendChild($opusDoc);
         }
     }
 
@@ -453,16 +464,16 @@ class Oai_IndexController extends Controller_Xml {
         // Iterating over DOMNodeList is only save for readonly-operations; 
         // copy element-by-element before removing!
         $filenodes = $domNode->getElementsByTagName('File');
-        $filenodes_list = array();
+        $filenodesList = array();
         foreach ($filenodes as $filenode) {
-            $filenodes_list[] = $filenode;
+            $filenodesList[] = $filenode;
 
             // add file download urls
             $this->_addFileUrlAttribute($filenode, $docId, $filenode->getAttribute('PathName'));
         }
 
         // remove file elements which should not be exported through OAI
-        foreach ($filenodes_list AS $filenode) {
+        foreach ($filenodesList AS $filenode) {
             if ((false === $filenode->hasAttribute('VisibleInOai'))
                     or ('1' !== $filenode->getAttribute('VisibleInOai'))) {
                 $domNode->removeChild($filenode);
@@ -499,13 +510,13 @@ class Oai_IndexController extends Controller_Xml {
      */
     private function _addSpecInformation(DOMNode $document, $information) {
 
-        $set_spec_attribute = $this->_xml->createAttribute('Value');
-        $set_spec_attribute_value = $this->_xml->createTextNode($information);
-        $set_spec_attribute->appendChild($set_spec_attribute_value);
+        $setSpecAttribute = $this->_xml->createAttribute('Value');
+        $setSpecAttributeValue = $this->_xml->createTextNode($information);
+        $setSpecAttribute->appendChild($setSpecAttributeValue);
 
-        $set_spec_element = $this->_xml->createElement('SetSpec');
-        $set_spec_element->appendChild($set_spec_attribute);
-        $document->appendChild($set_spec_element);
+        $setSpecElement = $this->_xml->createElement('SetSpec');
+        $setSpecElement->appendChild($setSpecAttribute);
+        $document->appendChild($setSpecElement);
     }
 
     /**
@@ -574,7 +585,8 @@ class Oai_IndexController extends Controller_Xml {
                     $visible = 1;
                 }
             }
-        } else {
+        }
+        else {
             $visible = 1;
         }
         if (!$doc->hasEmbargoPassed()) {
@@ -582,10 +594,14 @@ class Oai_IndexController extends Controller_Xml {
         }
         $fileElement = $domNode->ownerDocument->createElement('Rights');
         switch ($visible) {
-            case 0: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/closedAccess'); break;
-            case 1: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/openAccess'); break;
-            case 2: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/embargoedAccess'); break;
-            case 3: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/restrictedAccess'); break;
+            case 0: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/closedAccess'); 
+                break;
+            case 1: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/openAccess'); 
+                break;
+            case 2: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/embargoedAccess'); 
+                break;
+            case 3: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/restrictedAccess'); 
+                break;
         }
         $domNode->appendChild($fileElement);
     }
@@ -614,12 +630,17 @@ class Oai_IndexController extends Controller_Xml {
                 }
                 break;
             default:
-                throw new Oai_Model_Exception('The prefix of the identifier argument is unknown.', Oai_Model_Error::BADARGUMENT);
+                throw new Oai_Model_Exception(
+                    'The prefix of the identifier argument is unknown.', Oai_Model_Error::BADARGUMENT
+                );
                 break;
         }
 
         if (empty($docId) or !preg_match('/^\d+$/', $docId)) {
-            throw new Oai_Model_Exception('The value of the identifier argument is unknown or illegal in this repository.', Oai_Model_Error::IDDOESNOTEXIST);
+            throw new Oai_Model_Exception(
+                'The value of the identifier argument is unknown or illegal in this repository.',
+                Oai_Model_Error::IDDOESNOTEXIST
+            );
         }
 
         return $docId;
@@ -629,13 +650,13 @@ class Oai_IndexController extends Controller_Xml {
      * Helper method for handling lists.
      *
      * @param array &$oaiRequest
-     * @param mixed $max_records
+     * @param mixed $maxRecords
      * @return void
      */
-    private function _handlingOfLists(array &$oaiRequest, $max_records) {
+    private function _handlingOfLists(array &$oaiRequest, $maxRecords) {
 
-        if (true === empty($max_records)) {
-            $max_records = 100;
+        if (true === empty($maxRecords)) {
+            $maxRecords = 100;
         }
 
         $repIdentifier = $this->_configuration->getRepositoryIdentifier();
@@ -646,7 +667,7 @@ class Oai_IndexController extends Controller_Xml {
         // do some initialisation
         $cursor = 0;
         $totalIds = 0;
-        $start = $max_records + 1;
+        $start = $maxRecords + 1;
         $reldocIds = array();
 
         $metadataPrefix = null;
@@ -668,14 +689,15 @@ class Oai_IndexController extends Controller_Xml {
             }
 
             $cursor = $token->getStartPosition() - 1;
-            $start = $token->getStartPosition() + $max_records;
+            $start = $token->getStartPosition() + $maxRecords;
             $totalIds = $token->getTotalIds();
             $reldocIds = $token->getDocumentIds();
             $metadataPrefix = $token->getMetadataPrefix();
             $this->_proc->setParameter('', 'oai_metadataPrefix', $metadataPrefix);
 
         // no resumptionToken is given
-        } else {
+        }
+        else {
             $docListModel = new Oai_Model_DocumentList();
             $docListModel->_deliveringDocumentStates = $this->_deliveringDocumentStates;
             $docListModel->_xMetaDissRestriction = $this->_xMetaDissRestriction;
@@ -685,7 +707,7 @@ class Oai_IndexController extends Controller_Xml {
 
         // handling of document ids
         $restIds = $reldocIds;
-        $workIds = array_splice($restIds, 0, $max_records);
+        $workIds = array_splice($restIds, 0, $maxRecords);
         foreach ($workIds as $docId) {
             $document = new Opus_Document($docId);
             $this->createXmlRecord($document);
@@ -693,7 +715,9 @@ class Oai_IndexController extends Controller_Xml {
 
         // no records returned
         if (true === empty($workIds)) {
-            throw new Oai_Model_Exception("The combination of the given values results in an empty list.", Oai_Model_Error::NORECORDSMATCH);
+            throw new Oai_Model_Exception(
+                "The combination of the given values results in an empty list.", Oai_Model_Error::NORECORDSMATCH
+            );
         }
 
         // store the further Ids in a resumption-file
