@@ -101,7 +101,11 @@ class CitationExport_IndexController extends Controller_Action {
             default:
                 $extension = 'txt';
         }               
-        $this->getResponse()->setHeader('Content-Disposition', 'attachment; filename=' . $outputFormat . '-' . $this->getRequest()->getParam('docId') . '.' . $extension, true);
+        $this->getResponse()->setHeader(
+            'Content-Disposition',
+            'attachment; filename=' . $outputFormat . '-' . $this->getRequest()->getParam('docId') . '.' . $extension,
+            true
+        );
         $this->getResponse()->setBody($output);
     }
 
@@ -189,7 +193,7 @@ class CitationExport_IndexController extends Controller_Action {
         // TODO document this feature
         $enrichmentNote = null;
         $config = Zend_Registry::get('Zend_Config');
-        if(isset($config->citationExport->bibtex->enrichment)
+        if (isset($config->citationExport->bibtex->enrichment)
                 && !empty($config->citationExport->bibtex->enrichment)) {
             $enrichmentNote = $config->citationExport->bibtex->enrichment;
         }
@@ -201,7 +205,7 @@ class CitationExport_IndexController extends Controller_Action {
             $proc->setParameter('', 'url_prefix', $this->view->fullUrl());
             $proc->registerPHPFunctions();
             $proc->importStyleSheet($xslt);
-        	
+            
             return $proc->transformToXML($xml);
         }
         catch (Exception $e) {
