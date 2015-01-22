@@ -59,14 +59,16 @@ class Form_Element_Textarea extends Zend_Form_Element_Textarea implements Form_I
 
     public function loadDefaultDecorators() {
         if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(array(
+            $this->setDecorators(
+                array(
                 'ViewHelper',
                 'Errors',
                 'Description',
                 'ElementHtmlTag',
                 array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
                 array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-            ));
+                )
+            );
         }
     }
 

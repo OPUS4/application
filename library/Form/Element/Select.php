@@ -50,14 +50,16 @@ class Form_Element_Select extends Zend_Form_Element_Select implements Form_IElem
 
     public function loadDefaultDecorators() {
         if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(array(
+            $this->setDecorators(
+                array(
                 'ViewHelper',
                 'Errors',
                 'Description',
                 'ElementHtmlTag',
                 array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
                 array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-            ));
+                )
+            );
         }
     }
 

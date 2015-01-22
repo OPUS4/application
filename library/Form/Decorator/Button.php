@@ -33,7 +33,7 @@
  */
 class Form_Decorator_Button extends Zend_Form_Decorator_Abstract {
 
-    private $elementName;
+    private $_elementName;
 
     public function render($content) {
         $button = $this->getElement()->getElement($this->getElementName());
@@ -69,7 +69,7 @@ class Form_Decorator_Button extends Zend_Form_Decorator_Abstract {
             $this->removeOption('name');
         }
         else {
-            $name = $this->elementName;
+            $name = $this->_elementName;
         }
 
         return $name;

@@ -76,17 +76,25 @@ class Form_Validate_MultiSubForm_RepeatedValues implements Form_Validate_IMultiS
 
         $values = $this->getValues($this->_elementName, $data);
 
-        foreach($form->getSubForms() as $name => $subform) {
+        foreach ($form->getSubForms() as $name => $subform) {
             if (array_key_exists($name, $data)) {
                 $element = $subform->getElement($this->_elementName);
                 if (!is_null($element)) {
                     if (is_null($this->_otherElements)) {
-                        $element->addValidator(new Form_Validate_DuplicateValue($values, $position++,
-                            $this->_message));
+                        $element->addValidator(
+                            new Form_Validate_DuplicateValue(
+                                $values, $position++,
+                                $this->_message
+                            )
+                        );
                     }
                     else {
-                        $element->addValidator(new Form_Validate_DuplicateMultiValue($values, $position++,
-                            $this->_message, $this->_otherElements));
+                        $element->addValidator(
+                            new Form_Validate_DuplicateMultiValue(
+                                $values, $position++,
+                                $this->_message, $this->_otherElements
+                            )
+                        );
                     }
                 }
             }

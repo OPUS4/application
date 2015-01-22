@@ -82,7 +82,7 @@ class Form_Validate_MultiSubForm_RepeatedLanguages implements Form_Validate_IMul
     public function getSelectedLanguages($parentContext) {
         $values = array();
         
-        foreach($parentContext as $index => $entry) {
+        foreach ($parentContext as $index => $entry) {
             if (isset($entry[Admin_Form_Document_Title::ELEMENT_LANGUAGE])) {
                 $values[] = $entry[Admin_Form_Document_Title::ELEMENT_LANGUAGE];
             }

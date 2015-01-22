@@ -48,11 +48,11 @@ class Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
      * is edited.
      * @var type
      */
-    private $ignoreCase = false;
+    private $_ignoreCase = false;
 
     public function __construct($options = null) {
         if (isset($options['ignoreCase'])) {
-            $this->ignoreCase = $options['ignoreCase'];
+            $this->_ignoreCase = $options['ignoreCase'];
         }
     }
 
@@ -91,7 +91,7 @@ class Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
             $oldLogin = $context;
         }
 
-        if ($this->ignoreCase) {
+        if ($this->_ignoreCase) {
             $value = strtolower($value);
             $oldLogin = strtolower($oldLogin);
         }

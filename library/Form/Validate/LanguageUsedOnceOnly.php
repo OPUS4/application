@@ -52,13 +52,13 @@ class Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstract {
      * Ausgewählte Sprachen in den Unterformularen.
      * @var array 
      */
-    private $languages;
+    private $_languages;
     
     /**
      * Position des Formulars im übergeordneten Formular.
      * @var type 
      */
-    private $position;
+    private $_position;
         
     /**
      * Definition der Fehlermeldungen.
@@ -77,8 +77,8 @@ class Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstract {
      * @param int $position Position des Unterformulars im Context
      */
     public function __construct($languages, $position) {
-        $this->languages = $languages;
-        $this->position = $position;
+        $this->_languages = $languages;
+        $this->_position = $position;
         $this->setTranslator(Zend_Registry::get(Application_Translate::REGISTRY_KEY));
     }
     
@@ -93,15 +93,15 @@ class Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstract {
         $value = (string) $value;
         $this->_setValue($value);
         
-        $langCount = count($this->languages);
+        $langCount = count($this->_languages);
         
-        if (!($this->position < $langCount)) {
+        if (!($this->_position < $langCount)) {
             Zend_Registry::get('Zend_Log')->err(__CLASS__ . ' mit Position > count(Languages) konstruiert.');
         } 
 
-        if (!is_null($this->languages)) {
-            for ($index = 0; $index < $this->position && $index < $langCount; $index++) {
-                if ($value == $this->languages[$index]) {
+        if (!is_null($this->_languages)) {
+            for ($index = 0; $index < $this->_position && $index < $langCount; $index++) {
+                if ($value == $this->_languages[$index]) {
                     $this->_error(self::NOT_VALID);
                     return false;
                 }
@@ -119,7 +119,7 @@ class Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstract {
      * @return int
      */
     public function getPosition() {
-        return $this->position;
+        return $this->_position;
     }
     
     /**
@@ -127,7 +127,7 @@ class Form_Validate_LanguageUsedOnceOnly extends Zend_Validate_Abstract {
      * @return array
      */
     public function getLanguages() { 
-        return $this->languages;
+        return $this->_languages;
     }
 
     /**

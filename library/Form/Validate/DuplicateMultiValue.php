@@ -37,7 +37,7 @@ class Form_Validate_DuplicateMultiValue extends Form_Validate_DuplicateValue {
 
     private $_otherElements;
 
-    public function __construct($values, $position, $message = null, $otherElements) {
+    public function __construct($values, $position, $message, $otherElements) {
         if (!is_array($otherElements)) {
             $this->_otherElements = array($otherElements);
         }

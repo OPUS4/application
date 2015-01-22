@@ -44,8 +44,10 @@
 
          foreach ($allCollectionRoles as $collectionRole) {
              $position = $collectionRole->getPosition();
-             $this->addMultiOption($position, $position . ' - '
-                 . $translator->translate('default_collection_role_' . $collectionRole->getDisplayName()));
+             $this->addMultiOption(
+                 $position, $position . ' - '
+                 . $translator->translate('default_collection_role_' . $collectionRole->getDisplayName())
+             );
          }
 
          $this->addMultiOption(count($allCollectionRoles) + 1, 'admin_collectionroles_last_position');

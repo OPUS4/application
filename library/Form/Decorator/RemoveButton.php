@@ -42,7 +42,7 @@
  */
 class Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract {
 
-    private $secondElement;
+    private $_secondElement;
 
     public function render($content) {
         $button = $this->getElement();
@@ -92,7 +92,7 @@ class Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract {
     }
 
     public function setSecondElement($element) {
-        $this->secondElement = $element;
+        $this->_secondElement = $element;
     }
 
     public function getSecondElement() {
@@ -100,10 +100,10 @@ class Form_Decorator_RemoveButton extends Zend_Form_Decorator_Abstract {
 
         if (!is_null($element)) {
             $this->removeOption('element');
-            $this->secondElement = $element;
+            $this->_secondElement = $element;
         }
 
-        return $this->secondElement;
+        return $this->_secondElement;
     }
 
 

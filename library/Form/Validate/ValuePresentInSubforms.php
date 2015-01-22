@@ -47,7 +47,7 @@ class Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abstract {
     /**
      * Name des Formularelements das geprüft werden soll.
      */
-    private $elementName;
+    private $_elementName;
     
     /**
      * Error messages.
@@ -61,7 +61,7 @@ class Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abstract {
      * @param string $elementName
      */
     public function __construct($elementName) {
-        $this->elementName = $elementName;
+        $this->_elementName = $elementName;
     }
     
     /**
@@ -78,9 +78,9 @@ class Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abstract {
         $value = (string) $value;
         $this->_setValue($value);
 
-        if (!is_null($context) && count(trim($this->elementName)) !== 0) {
-            foreach($context as $index => $entry) {
-                if (isset($entry[$this->elementName]) && $entry[$this->elementName] == $value) {
+        if (!is_null($context) && count(trim($this->_elementName)) !== 0) {
+            foreach ($context as $index => $entry) {
+                if (isset($entry[$this->_elementName]) && $entry[$this->_elementName] == $value) {
                     return true;
                 }
             }
@@ -98,7 +98,7 @@ class Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abstract {
      * @return string
      */
     public function getElementName() {
-        return $this->elementName;
+        return $this->_elementName;
     }
     
 }

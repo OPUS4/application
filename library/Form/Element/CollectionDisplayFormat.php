@@ -43,7 +43,7 @@ class Form_Element_CollectionDisplayFormat extends Form_Element_Select {
             'NumberName'
         );
 
-        foreach($options as $option) {
+        foreach ($options as $option) {
             $this->addMultiOption($option, $option);
         }
     }

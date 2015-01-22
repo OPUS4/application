@@ -41,13 +41,13 @@ class Form_Validate_Date extends Zend_Validate_Date {
      * Regex pattern for valid date input.
      * @var string
      */
-    private $__inputPattern;
+    private $_inputPattern;
 
     /**
      * Date formats and input patterns used by Opus.
      * @var array
      */
-    private static $__DATE_FORMATS = array(
+    private static $_dateFormats = array(
         'de' => array(
             'format' => 'dd.MM.yyyy',
             'regex' => '#^[0-9]{1,2}\.[0-9]{1,2}\.[0-9]{1,4}$#'
@@ -93,11 +93,11 @@ class Form_Validate_Date extends Zend_Validate_Date {
      * @return string Regex input pattern for dates
      */
     public function getInputPattern() {
-        if (empty($this->__inputPattern)) {
+        if (empty($this->_inputPattern)) {
             return $this->getDatePattern();
         }
         else {
-            return $this->__inputPattern;
+            return $this->_inputPattern;
         }
     }
 
@@ -106,7 +106,7 @@ class Form_Validate_Date extends Zend_Validate_Date {
      * @param string $pattern Regex input pattern
      */
     public function setInputPattern($pattern) {
-        $this->__inputPattern = $pattern;
+        $this->_inputPattern = $pattern;
     }
 
     /**
@@ -164,11 +164,11 @@ class Form_Validate_Date extends Zend_Validate_Date {
      * @return string Date format for locale
      */
     private function __getDateFormatForLocale($locale) {
-        if (array_key_exists($locale, self::$__DATE_FORMATS)) {
-            return self::$__DATE_FORMATS[$locale]['format'];
+        if (array_key_exists($locale, self::$_dateFormats)) {
+            return self::$_dateFormats[$locale]['format'];
         }
         else {
-            return self::$__DATE_FORMATS['en']['format'];
+            return self::$_dateFormats['en']['format'];
         }
     }
 
@@ -178,11 +178,11 @@ class Form_Validate_Date extends Zend_Validate_Date {
      * @return string Date input pattern for locale
      */
     private function __getDatePatternForLocale($locale) {
-        if (array_key_exists($locale, self::$__DATE_FORMATS)) {
-            return self::$__DATE_FORMATS[$locale]['regex'];
+        if (array_key_exists($locale, self::$_dateFormats)) {
+            return self::$_dateFormats[$locale]['regex'];
         }
         else {
-            return self::$__DATE_FORMATS['en']['regex'];
+            return self::$_dateFormats['en']['regex'];
         }
     }
 

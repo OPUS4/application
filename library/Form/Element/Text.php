@@ -50,9 +50,9 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
      *
      * @var string
      */
-    private $hint;
+    private $_hint;
 
-    private $staticViewHelper = 'viewFormDefault';
+    private $_staticViewHelper = 'viewFormDefault';
 
     /**
      * Initialisiert das Formularelement.
@@ -70,7 +70,8 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
      */
     public function loadDefaultDecorators() {
         if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(array(
+            $this->setDecorators(
+                array(
                 'ViewHelper',
                 'Placeholder',
                 'Description',
@@ -79,7 +80,8 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
                 'ElementHtmlTag',
                 array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
                 array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-            ));
+                )
+            );
         }
     }
 
@@ -88,7 +90,7 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
      * @param $hint Hinweis
      */
     public function setHint($hint) {
-        $this->hint = $hint;
+        $this->_hint = $hint;
     }
 
     /**
@@ -96,7 +98,7 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
      * @return string
      */
     public function getHint() {
-        return $this->hint;
+        return $this->_hint;
     }
 
     /**
@@ -111,11 +113,11 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
     }
 
     public function getStaticViewHelper() {
-        return $this->staticViewHelper;
+        return $this->_staticViewHelper;
     }
 
     public function setStaticViewHelper($viewHelper) {
-        $this->staticViewHelper = $viewHelper;
+        $this->_staticViewHelper = $viewHelper;
     }
 
 }

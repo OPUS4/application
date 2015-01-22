@@ -47,13 +47,15 @@ class Form_Element_Roles extends Form_Element_MultiCheckbox {
 
     public function loadDefaultDecorators() {
         if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(array(
+            $this->setDecorators(
+                array(
                 'ViewHelper',
                 'ElementHtmlTag',
                 array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
                     'disableFor' => true)),
                 array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-            ));
+                )
+            );
         }
     }
 

@@ -49,15 +49,19 @@ class Form_Element_Year extends Form_Element_Text {
         $validators[] = $validator;
         
         $validator = new Zend_Validate_GreaterThan(-1);
-        $validator->setMessages(array(
+        $validator->setMessages(
+            array(
             Zend_Validate_GreaterThan::NOT_GREATER => 'validation_error_year_invalid_negative'
-        ));
+            )
+        );
         $validators[] = $validator;
 
         $validator = new Zend_Validate_LessThan(10000);
-        $validator->setMessages(array(
+        $validator->setMessages(
+            array(
             Zend_Validate_LessThan::NOT_LESS => 'validation_error_year_too_large'
-        ));
+            )
+        );
         $validators[] = $validator;
 
         $this->setAttrib('placeholder', $this->getTranslator()->translate('year_format'));

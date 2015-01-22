@@ -37,9 +37,9 @@
  */
 class Form_Element_FileHash extends Zend_Form_Element_Xhtml {
 
-    private $hash;
+    private $_hash;
 
-    private $file;
+    private $_file;
 
     public function init() {
         parent::init();
@@ -51,36 +51,38 @@ class Form_Element_FileHash extends Zend_Form_Element_Xhtml {
 
     public function loadDefaultDecorators() {
         if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
-            $this->setDecorators(array(
+            $this->setDecorators(
+                array(
                 'FileHash',
                 array('ElementHtmlTag'),
                 array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend',
                     'disableFor' => true)),
                 array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
-            ));
+                )
+            );
         }
     }
 
     public function setFile($file) {
-        $this->file = $file;
+        $this->_file = $file;
     }
 
     public function getFile() {
-        return $this->file;
+        return $this->_file;
     }
 
     public function setValue($hash) {
         if ($hash instanceof Opus_HashValues) {
-            $this->hash = $hash;
+            $this->_hash = $hash;
         }
     }
 
     public function getValue() {
-        return $this->hash;
+        return $this->_hash;
     }
 
     public function getLabel() {
-        return parent::getLabel() . $this->getTranslator()->translate($this->hash->getType());
+        return parent::getLabel() . $this->getTranslator()->translate($this->_hash->getType());
     }
 
 }

@@ -39,8 +39,7 @@
  * The field becomes required, so it can't be empty, if another field meets a
  * certain condition.
  */
-class Form_Validate_RequiredIf extends Zend_Validate_Abstract
-{
+class Form_Validate_RequiredIf extends Zend_Validate_Abstract {
 
     const FAILED = 'failed';
 
@@ -48,19 +47,19 @@ class Form_Validate_RequiredIf extends Zend_Validate_Abstract
      * Name of other field.
      * @var string
      */
-    private $dependsOnField;
+    private $_dependsOnField;
 
     /**
      * Apply not to result or not.
      * @var <type>
      */
-    private $negateResult = false;
+    private $_negateResult = false;
 
     /**
      * Expected value in target field.
      * @var <type>
      */
-    private $expectedValue = null;
+    private $_expectedValue = null;
 
     /**
      * Validator messages.
@@ -71,13 +70,12 @@ class Form_Validate_RequiredIf extends Zend_Validate_Abstract
     );
 
     public function __construct($options) {
-        $this->dependsOnField = $options['target'];
-        $this->negateResult = $options['negate'];
-        $this->expectedValue = $options['targetValue'];
+        $this->_dependsOnField = $options['target'];
+        $this->_negateResult = $options['negate'];
+        $this->_expectedValue = $options['targetValue'];
     }
 
-    public function isValid($value, $context = null) 
-    {
+    public function isValid($value, $context = null) {
         $result = false;
 
         // check if field is not empty
@@ -90,7 +88,7 @@ class Form_Validate_RequiredIf extends Zend_Validate_Abstract
         }
 
         // Apply not to result if negateResult is true
-        $result = ($result XOR $this->negateResult);
+        $result = ($result XOR $this->_negateResult);
 
         // Set error message
         if (!$result) {
@@ -104,19 +102,17 @@ class Form_Validate_RequiredIf extends Zend_Validate_Abstract
     protected function _checkTargetField($context = null) {
         $result = true;
 
-        if (is_array($context))
-        {
-            if (isset($context[$this->dependsOnField]))
-            {
-                $otherValue = $context[$this->dependsOnField];
+        if (is_array($context)) {
+            if (isset($context[$this->_dependsOnField])) {
+                $otherValue = $context[$this->_dependsOnField];
 
-                if (empty($this->expectedValue)) {
+                if (empty($this->_expectedValue)) {
                     // if no targetValue has been set check if notEmpty
                     $result = !Zend_Validate::is($otherValue, "NotEmpty");
                 }
                 else {
                     // check if targetValue is expected
-                    $result = !Zend_Validate::is($otherValue, "Identical", array('token' => $this->expectedValue));
+                    $result = !Zend_Validate::is($otherValue, "Identical", array('token' => $this->_expectedValue));
                 }
             }
             else {

@@ -40,7 +40,7 @@
  */
 class Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelper {
 
-    private $viewOnlyEnabled = false;
+    private $_viewOnlyEnabled = false;
 
     public function getHelper() {
         if ($this->isViewOnlyEnabled()) {
@@ -71,7 +71,7 @@ class Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelper {
     }
 
     public function setViewOnlyEnabled($enabled) {
-        $this->viewOnlyEnabled = $enabled;
+        $this->_viewOnlyEnabled = $enabled;
         return $this;
     }
 
@@ -80,10 +80,10 @@ class Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelper {
 
         if (!is_null($enabled)) {
             $this->removeOption('viewOnlyEnabled');
-            $this->viewOnlyEnabled = $enabled;
+            $this->_viewOnlyEnabled = $enabled;
         }
 
-        return $this->viewOnlyEnabled;
+        return $this->_viewOnlyEnabled;
     }
 
 }

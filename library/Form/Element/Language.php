@@ -37,7 +37,7 @@
  */
 class Form_Element_Language extends Form_Element_Select {
 
-    private static $languageList;
+    private static $_languageList;
 
     public function init() {
         parent::init();
@@ -50,10 +50,10 @@ class Form_Element_Language extends Form_Element_Select {
     }
 
     public static function getLanguageList() {
-        if (is_null(self::$languageList)) {
+        if (is_null(self::$_languageList)) {
             self::initLanguageList();
         }
-        return self::$languageList;
+        return self::$_languageList;
     }
 
     /**
@@ -65,11 +65,10 @@ class Form_Element_Language extends Form_Element_Select {
         $translate = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
         $languages = array();
         foreach (Opus_Language::getAllActiveTable() as $languageRow) {
-            $ref_name = $languageRow['ref_name'];
-            $part2_t = $languageRow['part2_t'];
-            $languages[$part2_t] = $translate->translate($part2_t);
+            $langId = $languageRow['part2_t'];
+            $languages[$langId] = $translate->translate($langId);
         }
-        self::$languageList = $languages;
+        self::$_languageList = $languages;
         Zend_Registry::set('Available_Languages', $languages);
     }
 }

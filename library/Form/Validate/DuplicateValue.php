@@ -110,8 +110,10 @@ class Form_Validate_DuplicateValue extends Zend_Validate_Abstract {
         $valueCount = count($this->_values);
 
         if (!($this->_position < $valueCount)) {
-            Zend_Registry::get('Zend_Log')->err(__CLASS__ .
-                ' mit Position > count(values) konstruiert.');
+            Zend_Registry::get('Zend_Log')->err(
+                __CLASS__ .
+                ' mit Position > count(values) konstruiert.'
+            );
         }
 
         if (!is_null($this->_values)) {

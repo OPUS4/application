@@ -37,7 +37,7 @@
  */
 class Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstract {
 
-    private $columns = null;
+    private $_columns = null;
 
     public function render($content) {
         // Zeige Tabellenkopf nur wenn es Einträge (Unterformulare) gibt
@@ -65,7 +65,7 @@ class Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstract {
     }
 
     public function setColumns($columns) {
-        $this->columns = $columns;
+        $this->_columns = $columns;
     }
 
     public function getColumns() {
@@ -73,15 +73,15 @@ class Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstract {
 
         if (!is_null($columns)) {
             $this->removeOption('columns');
-            $this->columns = $columns;
+            $this->_columns = $columns;
         }
         else {
             if (method_exists($this->getElement(), 'getColumns')) {
-                $this->columns = $this->getElement()->getColumns();
+                $this->_columns = $this->getElement()->getColumns();
             }
         }
 
-        return $this->columns;
+        return $this->_columns;
     }
 
 }

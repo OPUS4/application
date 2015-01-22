@@ -84,7 +84,7 @@ class Form_Validate_EnrichmentkeyAvailable extends Zend_Validate_Abstract {
         }
         
         return true;
-    }
+   }
 
     /**
      * Checks if a enrichmentkey already used.
@@ -94,7 +94,7 @@ class Form_Validate_EnrichmentkeyAvailable extends Zend_Validate_Abstract {
     protected function _isEnrichmentKeyUsed($name) {
 
         $enrichmentkey = Opus_EnrichmentKey::fetchByName($name);
-        if (is_null($enrichmentkey )) {
+        if (is_null($enrichmentkey)) {
             return false;
         }
         return true;
@@ -115,7 +115,7 @@ class Form_Validate_EnrichmentkeyAvailable extends Zend_Validate_Abstract {
            throw new Opus_Exception("config key 'enrichmentkey.protected.modules' is not defined in config file");
         }
 
-        foreach(explode(',', $config->enrichmentkey->protected->modules) as $protectedEnrichmentkey) {
+        foreach (explode(',', $config->enrichmentkey->protected->modules) as $protectedEnrichmentkey) {
             array_push($protectedEnrichmentkeys, $protectedEnrichmentkey);
 
         }
@@ -124,7 +124,7 @@ class Form_Validate_EnrichmentkeyAvailable extends Zend_Validate_Abstract {
            throw new Opus_Exception("config key 'enrichmentkey.protected.migration' is not defined in config file");
         }
 
-        foreach(explode(',', $config->enrichmentkey->protected->migration) as $protectedEnrichmentkey) {
+        foreach (explode(',', $config->enrichmentkey->protected->migration) as $protectedEnrichmentkey) {
             array_push($protectedEnrichmentkeys, $protectedEnrichmentkey);
 
         }
