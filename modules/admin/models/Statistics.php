@@ -32,10 +32,10 @@
  */
 class Admin_Model_Statistics {
 
-    private $documents = null;
+    private $_documents = null;
 
     public function __construct() {
-        $this->documents = new Opus_Db_Documents();
+        $this->_documents = new Opus_Db_Documents();
     }
 
     /**
@@ -44,7 +44,7 @@ class Admin_Model_Statistics {
     private function fillResultArray($select, $name) {
         $statistics = array();
         $result = $select->fetchAll();
-        foreach($result as $row) {
+        foreach ($result as $row) {
             if ($row[$name] != '') {
                 if ($name == 'mon' || ($name != 'mon' && $row['c'])) {
                     // only in month stats rows with zero documents should be depicted.
@@ -60,7 +60,8 @@ class Admin_Model_Statistics {
      */
     public function getMonthStatistics($selectedYear) {
         // TODO: use tokens to reduce redundancy of inserting year twice
-        $select = $this->documents->getAdapter()->query("SELECT months.m as mon, count(d.id) as c
+        $select = $this->_documents->getAdapter()->query(
+            "SELECT months.m as mon, count(d.id) as c
             FROM
                 (SELECT id, MONTH(`server_date_published`) as m
                     FROM `documents`
@@ -72,11 +73,12 @@ class Admin_Model_Statistics {
                 months
             WHERE months.m = d.m
             GROUP BY months.m",
-            array($selectedYear, $selectedYear));
+            array($selectedYear, $selectedYear)
+        );
 
         $monthStat = $this->fillResultArray($select, 'mon');
 
-        for($i = 1; $i<13; $i++) {
+        for ($i = 1; $i<13; $i++) {
             if (isset($monthStat[$i]) === FALSE) {
                 $monthStat[$i] = 0;
             }
@@ -92,12 +94,14 @@ class Admin_Model_Statistics {
      */
     public function getTypeStatistics($selectedYear) {
         // get document type overview from database
-        $select = $this->documents->getAdapter()->query("SELECT t.type as ty, count(d.id) as c
+        $select = $this->_documents->getAdapter()->query(
+            "SELECT t.type as ty, count(d.id) as c
           FROM (SELECT DISTINCT type FROM documents) t
           LEFT OUTER JOIN
           (SELECT id, type FROM documents WHERE YEAR(server_date_published) = ? AND server_state = 'published') d
           ON t.type = d.type
-          GROUP BY t.type", $selectedYear);
+          GROUP BY t.type", $selectedYear
+        );
         return $this->fillResultArray($select, 'ty');
     }
 
@@ -119,7 +123,7 @@ class Admin_Model_Statistics {
             $db = Zend_Registry::get('db_adapter');
             $res = $db->query($query, array($role->getId(), $selectedYear))->fetchAll();
 
-            foreach($res as $result) {
+            foreach ($res as $result) {
                 $instStat[$result['name']] = $result['entries'];
             }
         }
@@ -138,7 +142,7 @@ class Admin_Model_Statistics {
             ->distinct()
             ->order('year');
         $result = $documents->fetchAll($select);
-        foreach($result as $row) {
+        foreach ($result as $row) {
             $years[$row->year] = $row->year;
         }
         return $years;

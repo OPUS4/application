@@ -39,10 +39,10 @@
  */
 class Admin_Model_FileImport extends Application_Model_Abstract {
 
-    private $__importFolder = null;
+    private $_importFolder = null;
 
     public function __construct() {
-        $this->__importFolder = APPLICATION_PATH . '/workspace/incoming';
+        $this->_importFolder = APPLICATION_PATH . '/workspace/incoming';
     }
 
     /**
@@ -70,7 +70,7 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
         foreach ($files as $file) {
             $log->debug('check filename ' . $file);
             if (in_array($file, $validFilenames)) {
-                $pathname = $this->__importFolder . DIRECTORY_SEPARATOR . $file;
+                $pathname = $this->_importFolder . DIRECTORY_SEPARATOR . $file;
                 $log->info('import file ' . $pathname);
 
                 $docfile = $document->addFile();
@@ -97,7 +97,7 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
      * Lists files in import folder.
      */
     public function listFiles() {
-        return Zend_Controller_Action_HelperBroker::getStaticHelper('Files')->listFiles($this->__importFolder, true);
+        return Zend_Controller_Action_HelperBroker::getStaticHelper('Files')->listFiles($this->_importFolder, true);
     }
 
     public function getNamesOfIncomingFiles() {
@@ -109,11 +109,11 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
     }
 
     public function setImportFolder($path) {
-        $this->__importFolder = $path;
+        $this->_importFolder = $path;
     }
 
     public function getImportFolder() {
-        return $this->__importFolder;
+        return $this->_importFolder;
     }
 
     /**
@@ -129,7 +129,7 @@ class Admin_Model_FileImport extends Application_Model_Abstract {
 
         $files = $doc->getFile();
 
-        foreach($files as $index => $file) {
+        foreach ($files as $index => $file) {
             if ($file->getId() !== $fileId) {
                 $keepFiles[] = $file;
             }

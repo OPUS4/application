@@ -34,7 +34,7 @@
 
 class Admin_Model_Collection {
 
-    private $collection = null;
+    private $_collection = null;
 
     public function  __construct($id = null) {
         if ($id === '') {
@@ -45,7 +45,7 @@ class Admin_Model_Collection {
             return;
         }
         try {
-            $this->collection = new Opus_Collection($id);
+            $this->_collection = new Opus_Collection($id);
         }
         catch (Opus_Model_NotFoundException $e) {
             throw new Admin_Model_Exception('id parameter value unknown');
@@ -53,9 +53,9 @@ class Admin_Model_Collection {
     }
 
     private function initNewCollection() {
-        $this->collection = new Opus_Collection();
-        $this->collection->setVisible('1');
-        $this->collection->setVisiblePublish('1');
+        $this->_collection = new Opus_Collection();
+        $this->_collection->setVisible('1');
+        $this->_collection->setVisiblePublish('1');
     }
 
     /**
@@ -63,25 +63,25 @@ class Admin_Model_Collection {
      * @return Opus_Collection
      */
     public function getObject() {
-        return $this->collection;
+        return $this->_collection;
     }
 
     public function delete() {
-        if (is_null($this->collection)) {
+        if (is_null($this->_collection)) {
             return;
         }
-        $parents = $this->collection->getParents();
-        $this->collection->delete();
+        $parents = $this->_collection->getParents();
+        $this->_collection->delete();
         return $parents[1]->getId();
     }
 
     public function setVisiblity($visibility) {
-        if (is_null($this->collection)) {
+        if (is_null($this->_collection)) {
             return;
         }
-        $this->collection->setVisible($visibility);
-        $this->collection->store();
-        $parents = $this->collection->getParents();
+        $this->_collection->setVisible($visibility);
+        $this->_collection->store();
+        $parents = $this->_collection->getParents();
         return $parents[1]->getId();
     }
 
@@ -96,16 +96,17 @@ class Admin_Model_Collection {
         catch (Opus_Model_Exception $e) {
             throw new Admin_Model_Exception('invalid document id');
         }
-        $document->addCollection($this->collection);
+        $document->addCollection($this->_collection);
         $document->store();
     }
 
     public function getName() {
-        if (count($this->collection->getParents()) === 1) {
-            // die Wurzel einer Collection-Hierarchie hat selbst keinen Namen/Number: in diesem Fall wird der Name der Collection Role verwendet
-            return $this->collection->getRole()->getDisplayName();
+        if (count($this->_collection->getParents()) === 1) {
+            // die Wurzel einer Collection-Hierarchie hat selbst keinen Namen/Number: in diesem Fall wird der Name
+            // der Collection Role verwendet
+            return $this->_collection->getRole()->getDisplayName();
         }
-        return $this->collection->getNumberAndName();
+        return $this->_collection->getNumberAndName();
     }
 
     /**
@@ -125,7 +126,7 @@ class Admin_Model_Collection {
             throw new Admin_Model_Exception('cannot move collection to position ' . $newPosition);
         }
 
-        $parents = $this->collection->getParents();
+        $parents = $this->_collection->getParents();
         if (count($parents) < 2) {
             throw new Admin_Model_Exception('cannot move root collection');
         }
@@ -138,7 +139,7 @@ class Admin_Model_Collection {
         // find current position of collection
         $oldPosition = 0;
         foreach ($siblings as $position => $sibling) {
-            if ($sibling->getId() === $this->collection->getId()) {
+            if ($sibling->getId() === $this->_collection->getId()) {
                 $oldPosition = $position;
             }
         }
@@ -153,10 +154,11 @@ class Admin_Model_Collection {
             throw new Admin_Model_Exception('cannot move collection to position ' . $newPosition);
         }
 
-        if($newPosition > $oldPosition) {
-            $this->collection->moveAfterNextSibling();
-        } else if($newPosition < $oldPosition) {
-            $this->collection->moveBeforePrevSibling();
+        if ($newPosition > $oldPosition) {
+            $this->_collection->moveAfterNextSibling();
+        }
+        else if ($newPosition < $oldPosition) {
+            $this->_collection->moveBeforePrevSibling();
         }
         return $parents[1]->getId();
     }

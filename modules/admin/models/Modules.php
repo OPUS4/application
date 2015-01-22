@@ -45,10 +45,10 @@ class Admin_Model_Modules {
      * Directory path for modules.
      * @var String
      */
-    private $moduleDirectory;
+    private $_moduleDirectory;
 
-    public function __construct($module_directory = null) {
-        $this->moduleDirectory = $module_directory;
+    public function __construct($moduleDirectory = null) {
+        $this->_moduleDirectory = $moduleDirectory;
     }
 
     /**
@@ -56,17 +56,17 @@ class Admin_Model_Modules {
      * @return array List of module names
      */
     public function getAll() {
-        $module_dir = $this->moduleDirectory;
+        $moduleDir = $this->_moduleDirectory;
         $deadPaths = Array( ".", "..", ".svn");
         $modules = array();
 
-        $temp = array_diff(scandir($module_dir), $deadPaths);
+        $temp = array_diff(scandir($moduleDir), $deadPaths);
         foreach ($temp as $module) {
-            if (!is_dir($module_dir . '/' . $module)) {
+            if (!is_dir($moduleDir . '/' . $module)) {
                 continue;
             }
 
-            if (!is_dir($module_dir . '/' . $module . '/controllers/')) {
+            if (!is_dir($moduleDir . '/' . $module . '/controllers/')) {
                 continue;
             }
 

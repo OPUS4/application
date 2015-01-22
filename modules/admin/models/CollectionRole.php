@@ -35,7 +35,7 @@
  */
 class Admin_Model_CollectionRole {
 
-    private $collectionRole = null;
+    private $_collectionRole = null;
 
     public function  __construct($id = null) {
         if ($id === '') {
@@ -46,7 +46,7 @@ class Admin_Model_CollectionRole {
             return;
         }
         try {
-            $this->collectionRole = new Opus_CollectionRole((int) $id);
+            $this->_collectionRole = new Opus_CollectionRole((int) $id);
         }
         catch (Opus_Model_NotFoundException $e) {
             throw new Admin_Model_Exception('roleid parameter value unknown');
@@ -57,9 +57,9 @@ class Admin_Model_CollectionRole {
      * Initialisiert Defaultwerte für neue CollectionRole.
      */
     private function initNewCollectionRole() {
-        $this->collectionRole = new Opus_CollectionRole();
+        $this->_collectionRole = new Opus_CollectionRole();
         foreach (array('Visible', 'VisibleBrowsingStart', 'VisibleFrontdoor', 'VisibleOai') as $field) {
-            $this->collectionRole->getField($field)->setValue(1);
+            $this->_collectionRole->getField($field)->setValue(1);
         }
     }
 
@@ -68,14 +68,14 @@ class Admin_Model_CollectionRole {
      * @return null|Opus_CollectionRole
      */
     public function getObject() {
-        return $this->collectionRole;
+        return $this->_collectionRole;
     }
 
     /**
      * Löscht CollectionRole.
      */
     public function delete() {
-        $this->collectionRole->delete();
+        $this->_collectionRole->delete();
     }
 
     /**
@@ -83,8 +83,8 @@ class Admin_Model_CollectionRole {
      * @param $visibility
      */
     public function setVisibility($visibility) {
-        $this->collectionRole->setVisible($visibility);
-        $this->collectionRole->store();
+        $this->_collectionRole->setVisible($visibility);
+        $this->_collectionRole->store();
     }
 
     /**
@@ -102,8 +102,8 @@ class Admin_Model_CollectionRole {
         if ($position < 1) {
             throw new Admin_Model_Exception('cannot move collection role');
         }
-        $this->collectionRole->setPosition($position);
-        $this->collectionRole->store();
+        $this->_collectionRole->setPosition($position);
+        $this->_collectionRole->store();
     }
 
 }

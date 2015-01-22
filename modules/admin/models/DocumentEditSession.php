@@ -41,19 +41,19 @@ class Admin_Model_DocumentEditSession extends Application_Model_Abstract {
      * Dokument-ID.
      * @var int 
      */
-    private $docId;
+    private $_docId;
     
     /**
      * Name für allgemeinen Session Namespace.
      * @var type 
      */
-    private $__namespace = 'admin';
+    private $_namespace = 'admin';
 
     /**
      * Allgemeiner Session Namespace.
      * @Zend_Session_Namespace type 
      */
-    private $__session;
+    private $_session;
 
     /**
      * Session Namespaces fuer einzelne Dokument.
@@ -66,7 +66,7 @@ class Admin_Model_DocumentEditSession extends Application_Model_Abstract {
      * 
      * TODO Review solution (Wie funktioniert Namespace Bereinigung?)
      */
-    private $__documentNamespaces = array();
+    private $_documentNamespaces = array();
     
     /**
      * Konstruiert Model für Zugriff auf Edit Session eines Dokuments.
@@ -75,7 +75,7 @@ class Admin_Model_DocumentEditSession extends Application_Model_Abstract {
      */
     public function __construct($documentId) {
         if (is_numeric($documentId) && $documentId > 0) {
-            $this->docId = $documentId;
+            $this->_docId = $documentId;
         }
         else {
             // should never happen
@@ -175,11 +175,11 @@ class Admin_Model_DocumentEditSession extends Application_Model_Abstract {
      * @return Zend_Session_Namespace
      */
     public function getSessionNamespace() {
-        if (null === $this->__session) {
-            $this->__session = new Zend_Session_Namespace($this->__namespace);
+        if (null === $this->_session) {
+            $this->_session = new Zend_Session_Namespace($this->_namespace);
         }
  
-        return $this->__session;        
+        return $this->_session;
     }
     
     /**
@@ -187,14 +187,14 @@ class Admin_Model_DocumentEditSession extends Application_Model_Abstract {
      * @return Zend_Session_Namespace
      */
     public function getDocumentSessionNamespace() {
-        $key = 'doc' . $this->docId;
+        $key = 'doc' . $this->_docId;
         
-        if (!array_key_exists($key, $this->__documentNamespaces)) {
+        if (!array_key_exists($key, $this->_documentNamespaces)) {
             $namespace = new Zend_Session_Namespace($key);
-            $this->__documentNamespaces[$key] = $namespace;
+            $this->_documentNamespaces[$key] = $namespace;
         }
         else {
-            $namespace = $this->__documentNamespaces[$key];
+            $namespace = $this->_documentNamespaces[$key];
         }
  
         return $namespace;        
@@ -205,7 +205,7 @@ class Admin_Model_DocumentEditSession extends Application_Model_Abstract {
      * @return int
      */
     public function getDocumentId() {
-        return $this->docId;
+        return $this->_docId;
     }
     
 }

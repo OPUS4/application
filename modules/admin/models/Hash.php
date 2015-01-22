@@ -37,20 +37,20 @@
  */
 class Admin_Model_Hash {
 
-    private $hash = null;
+    private $_hash = null;
 
     /**
      * @var Opus_File
      */
-    private $file = null;
+    private $_file = null;
 
     public function __construct($file, $hash) {
-        $this->hash = $hash;
-        $this->file = $file;
+        $this->_hash = $hash;
+        $this->_file = $file;
     }
 
     public function getHashType() {
-        return $this->hash->getType();
+        return $this->_hash->getType();
     }
 
     public function getSignatureType() {
@@ -58,33 +58,33 @@ class Admin_Model_Hash {
     }
 
     public function getSoll() {
-        return $this->hash->getValue();
+        return $this->_hash->getValue();
     }
 
     /**
      * @return boolean
      */
     public function canVerify() {
-        return $this->file->canVerify();
+        return $this->_file->canVerify();
     }
 
     /**
      * @return boolean
      */
     public function checkFilePermission() {
-        return $this->file->isReadable();
+        return $this->_file->isReadable();
     }
 
     /**
      * @return boolean
      */
     public function checkFileExists() {
-        return $this->file->exists();
+        return $this->_file->exists();
     }
 
     public function getIst() {
-        if ($this->file->exists() && $this->getSignatureType() !== 'gpg' && $this->file->canVerify()) {
-            return $this->file->getRealHash($this->getHashType());
+        if ($this->_file->exists() && $this->getSignatureType() !== 'gpg' && $this->_file->canVerify()) {
+            return $this->_file->getRealHash($this->getHashType());
         }
         else {
             return null;
