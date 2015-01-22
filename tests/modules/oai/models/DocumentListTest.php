@@ -53,7 +53,7 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
 
         $oaiRequest = array('metadataPrefix' => 'epicur');
         $docListModel = new Oai_Model_DocumentList();
-        $docListModel->_deliveringDocumentStates = array('published');
+        $docListModel->deliveringDocumentStates = array('published');
         $docIds = $docListModel->query($oaiRequest);
 
         $this->assertTrue(in_array($docWithUrnId, $docIds), 'Document with URN is not returned.');
@@ -105,8 +105,8 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
             $oaiRequest = array_merge($interval, $oaiRequest);
 
             $docListModel = new Oai_Model_DocumentList();
-            $docListModel->_deliveringDocumentStates = array('published', 'deleted');
-            $docListModel->_xMetaDissRestriction = array();
+            $docListModel->deliveringDocumentStates = array('published', 'deleted');
+            $docListModel->xMetaDissRestriction = array();
             $docIds = $docListModel->query($oaiRequest);
 
             $this->assertTrue(in_array($this->docId, $docIds), "Response must contain document id $this->docId: " . var_export($interval, true));
@@ -160,8 +160,8 @@ class Oai_Model_DocumentListTest extends ControllerTestCase {
             $oaiRequest = array_merge($interval, $oaiRequest);
 
             $docListModel = new Oai_Model_DocumentList();
-            $docListModel->_deliveringDocumentStates = array('published', 'deleted');
-            $docListModel->_xMetaDissRestriction = array();
+            $docListModel->deliveringDocumentStates = array('published', 'deleted');
+            $docListModel->xMetaDissRestriction = array();
             $docIds = $docListModel->query($oaiRequest);
 
             $this->assertFalse(in_array($this->docId, $docIds), "Response must NOT contain document id $this->docId: " . var_export($interval, true));
