@@ -43,20 +43,24 @@ class AuthController extends Controller_Action {
     /**
      * Always allow access to this controller; Override check in parent method.
      */
-    protected function checkAccessModulePermissions() {}
+    protected function checkAccessModulePermissions() {
+
+    }
 
     /**
      * Default URL to goto after successful login. Maybe overwritten by findRemoteParameters().
      *
      * @var array
      */
-    protected $_login_url = array('action' => 'index', 'controller' => 'index', 'module' => 'home', 'params' => array());
+    protected $_loginUrl = array('action' => 'index', 'controller' => 'index', 'module' => 'home', 'params' => array());
     /**
      * Default URL to goto after successful logout. Maybe overwritten by findRemoteParameters().
      *
      * @var array
      */
-    protected $_logout_url = array('action' => 'index', 'controller' => 'index', 'module' => 'default', 'params' => array());
+    protected $_logoutUrl = array(
+        'action' => 'index', 'controller' => 'index', 'module' => 'default', 'params' => array()
+    );
 
     /**
      * Index action shows login form or logout link respectively.
@@ -91,7 +95,9 @@ class AuthController extends Controller_Action {
 
         if ($this->getRequest()->isPost() !== true) {
             // Do not forget return parameters.
-            $url = $this->view->url(array_merge(array('action' => 'login', 'controller' => 'auth', 'module' => 'default'), $rparams));
+            $url = $this->view->url(
+                array_merge(array('action' => 'login', 'controller' => 'auth', 'module' => 'default'), $rparams)
+            );
             $form->setAction($url);
 
             $this->view->form = $form;
@@ -127,11 +133,11 @@ class AuthController extends Controller_Action {
         $login = strtolower($data['login']);
 
         $auth->setCredentials($login, $data['password']);
-        $auth_result = $auth->authenticate();
+        $authResult = $auth->authenticate();
 
-        if ($auth_result->isValid() !== true) {
+        if ($authResult->isValid() !== true) {
             // Put authentication failure message to the view.
-            $message = $auth_result->getMessages();
+            $message = $authResult->getMessages();
             $this->view->auth_failed_msg = $this->view->translate($message[0]);
 
             // Populate the form again to trigger validator decorators.
@@ -147,10 +153,10 @@ class AuthController extends Controller_Action {
         Zend_Auth::getInstance()->getStorage()->write(strtolower($login));
 
         // Redirect to post login url.
-        $action = $this->_login_url['action'];
-        $controller = $this->_login_url['controller'];
-        $module = $this->_login_url['module'];
-        $params = $this->_login_url['params'];
+        $action = $this->_loginUrl['action'];
+        $controller = $this->_loginUrl['controller'];
+        $module = $this->_loginUrl['module'];
+        $params = $this->_loginUrl['params'];
         $this->_helper->_redirector($action, $controller, $module, $params);
 
     }
@@ -181,17 +187,21 @@ class AuthController extends Controller_Action {
         $login->addValidator(new Zend_Validate_Regex('/^[A-Za-z0-9@._-]+$/'))
                 ->setRequired()
                 ->setLabel('auth_field_login');
-        $login->addErrorMessages(array(
+        $login->addErrorMessages(
+            array(
             Zend_Validate_NotEmpty::IS_EMPTY => 'auth_error_no_username'
-        ));
+            )
+        );
 
         // Password element.
         $password = new Zend_Form_Element_Password('password');
         $password->setRequired()
                 ->setLabel('auth_field_password');
-        $password->addErrorMessages(array(
+        $password->addErrorMessages(
+            array(
             Zend_Validate_NotEmpty::IS_EMPTY => 'auth_error_no_password'
-        ));
+            )
+        );
 
         // Submit button.
         $submit = new Zend_Form_Element_Submit('SubmitCredentials');
@@ -216,7 +226,7 @@ class AuthController extends Controller_Action {
         $rmodule = null;
         $rcontroller = null;
         $raction = null;
-        foreach($params as $key=>$value) {
+        foreach ($params as $key=>$value) {
             switch ($key) {
                 // ignore default parameters
                 case 'module' :
@@ -256,18 +266,20 @@ class AuthController extends Controller_Action {
         }
 
         // store return address and parameters
-        $this->_login_url = array(
+        $this->_loginUrl = array(
             'action' => $raction,
             'controller' => $rcontroller,
             'module' => $rmodule,
             'params' => $rparams,
         );
-        $this->_logout_url = array(
+        $this->_logoutUrl = array(
             'action' => $raction,
             'controller' => $rcontroller,
             'module' => $rmodule,
             'params' => $rparams,
         );
-        return array_merge(array('rmodule' => $rmodule, 'rcontroller' => $rcontroller, 'raction' => $raction), $rparams);
+        return array_merge(
+            array('rmodule' => $rmodule, 'rcontroller' => $rcontroller, 'raction' => $raction), $rparams
+        );
     }
 }

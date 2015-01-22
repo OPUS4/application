@@ -45,7 +45,9 @@ class ErrorController extends Controller_Action {
     /**
      * Always allow access to this controller; Override check in parent method.
      */
-    protected function checkAccessModulePermissions() {}
+    protected function checkAccessModulePermissions() {
+
+    }
 
     /**
      * Print error information appropriate to environment.
@@ -76,9 +78,9 @@ class ErrorController extends Controller_Action {
             default:
                 // application error
                 $this->setResponseCode(500);
-                if($errors->exception instanceof Application_Exception) {
+                if ($errors->exception instanceof Application_Exception) {
                     $code = $errors->exception->getHttpResponsecode();
-                    if($code != null) {
+                    if ($code != null) {
                         $this->setResponseCode($code);
                     }
                 }
@@ -108,11 +110,11 @@ class ErrorController extends Controller_Action {
 
         try {
             $this->_sendErrorMail(
-                    $config,
-                    $this->getResponse()->getHttpResponseCode(),
-                    $this->view,
-                    $errors->request,
-                    $errors->exception
+                $config,
+                $this->getResponse()->getHttpResponseCode(),
+                $this->view,
+                $errors->request,
+                $errors->exception
             );
         }
         catch (Exception $e) {
@@ -121,16 +123,17 @@ class ErrorController extends Controller_Action {
     }
 
     private function setResponseCode($code) {
-        if($code != null) {
+        if ($code != null) {
             $this->getResponse()->setHttpResponseCode($code);
-        } else {
+        }
+        else {
             $this->getResponse()->setHttpResponseCode(500);
         }
     }
 
     /**
      * @param $config
-     * @param $response_code
+     * @param $responseCode
      * @param $view
      * @param $request
      * @param $exception
@@ -140,7 +143,7 @@ class ErrorController extends Controller_Action {
      *
      * TODO Escape exception messages, other stuff? Is it possible to inject javascript in E-Mail?
      */
-    public function _sendErrorMail($config, $response_code, $view, $request, $exception) {
+    public function _sendErrorMail($config, $responseCode, $view, $request, $exception) {
         if (!isset($config->errorController->mailTo)) {
             return false;
         }
@@ -154,10 +157,12 @@ class ErrorController extends Controller_Action {
         }
 
         // Setting up mail subject.
-        $instance_name = isset($config->instance_name) ? $config->instance_name : 'Opus4';
+        $instanceName = isset($config->instance_name) ? $config->instance_name : 'Opus4';
 
-        $subject = $instance_name . " (ID " . (array_key_exists('id_string', $GLOBALS) ? $GLOBALS['id_string'] : 'undef'). ") ($response_code): " . get_class($exception) . " ";
-        $subject .= "/" . $request->getModuleName() . "/" . $request->getControllerName() . "/" . $request->getActionName();
+        $subject = $instanceName . " (ID " . (array_key_exists('id_string', $GLOBALS) ? $GLOBALS['id_string'] : 'undef')
+            . ") ($responseCode): " . get_class($exception) . " ";
+        $subject .= "/" . $request->getModuleName() . "/" . $request->getControllerName() . "/"
+            . $request->getActionName();
 
         // Setting up mail body.
         $body = '';
@@ -179,8 +184,8 @@ class ErrorController extends Controller_Action {
         $body .= "\n";
 
         $body .= "Request:\n";
-        $server_keys = array('HTTP_USER_AGENT', 'SCRIPT_URI', 'HTTP_REFERER', 'REMOTE_ADDR');
-        foreach ($server_keys AS $key) {
+        $serverKeys = array('HTTP_USER_AGENT', 'SCRIPT_URI', 'HTTP_REFERER', 'REMOTE_ADDR');
+        foreach ($serverKeys AS $key) {
             if (array_key_exists($key, $_SERVER)) {
                 $body .= "   $key: " . $_SERVER[$key] . "\n";
             }
@@ -220,11 +225,11 @@ class ErrorController extends Controller_Action {
 
         $mail = new Opus_Mail_SendMail();
         $mail->sendMail(
-                $config->mail->opus->address,
-                $config->mail->opus->name,
-                $subject,
-                $body,
-                array($adminAddress)
+            $config->mail->opus->address,
+            $config->mail->opus->name,
+            $subject,
+            $body,
+            array($adminAddress)
         );
 
         return true;

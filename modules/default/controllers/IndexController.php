@@ -46,7 +46,9 @@ class IndexController extends Controller_Action {
     /**
      * Always allow access to this controller; Override check in parent method.
      */
-    protected function checkAccessModulePermissions() {}
+    protected function checkAccessModulePermissions() {
+
+    }
 
     /**
      * Redirect to default module 'home'.

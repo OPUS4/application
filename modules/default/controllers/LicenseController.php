@@ -38,7 +38,9 @@ class LicenseController extends Controller_Action {
     /**
      * Always allow access to this controller; Override check in parent method.
      */
-    protected function checkAccessModulePermissions() {}
+    protected function checkAccessModulePermissions() {
+
+    }
 
     /**
      * Display the metadata of a document.
