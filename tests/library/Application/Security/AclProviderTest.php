@@ -96,7 +96,7 @@ class Application_Security_AclProviderTest extends ControllerTestCase {
     }
     
     public function testGetAllResources() {
-        $aclResources = Application_Security_AclProvider::$RESOURCE_NAMES;
+        $aclResources = Application_Security_AclProvider::$resourceNames;
         
         $allResources = array();
         
