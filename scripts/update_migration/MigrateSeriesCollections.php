@@ -37,12 +37,12 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 class FindMissingSeriesNumbers {
 
-    private $logger;
+    private $_logger;
     
-    private $seriesRole;
+    private $_seriesRole;
 
-    public function  __construct($logfile) {
-        $this->seriesRole = Opus_CollectionRole::fetchByName('series');
+    public function __construct($logfile) {
+        $this->_seriesRole = Opus_CollectionRole::fetchByName('series');
         $this->initLogger($logfile);
     }
     
@@ -52,9 +52,9 @@ class FindMissingSeriesNumbers {
     private function initLogger($logfileName) {
         $logfile = @fopen($logfileName, 'a', false);
         $writer = new Zend_Log_Writer_Stream($logfile);        
-	$formatter=new Zend_Log_Formatter_Simple('%priorityName%: %message%' . PHP_EOL);
-	$writer->setFormatter($formatter);
-        $this->logger = new Zend_Log($writer);        
+        $formatter=new Zend_Log_Formatter_Simple('%priorityName%: %message%' . PHP_EOL);
+        $writer->setFormatter($formatter);
+        $this->_logger = new Zend_Log($writer);
     }
 
     /**
@@ -69,7 +69,7 @@ class FindMissingSeriesNumbers {
      */
     private function migrateCollectionToSeries() {
         $numOfCollectionsMigrated = 0;
-        foreach (Opus_Collection::fetchCollectionsByRoleId($this->seriesRole->getId()) as $collection) {            
+        foreach (Opus_Collection::fetchCollectionsByRoleId($this->_seriesRole->getId()) as $collection) {
             // ignore root collection (does not have valid data and associated documents)
             if ($collection->isRoot()) {
                 continue;
@@ -79,7 +79,7 @@ class FindMissingSeriesNumbers {
             $series->setVisible($collection->getVisible());
             $series->setSortOrder($collection->getSortOrder());
             $series->store();
-            $this->logger->info('created series with id #' . $collection->getId());
+            $this->_logger->info('created series with id #' . $collection->getId());
             $numOfCollectionsMigrated++;
         }
         return $numOfCollectionsMigrated;
@@ -125,7 +125,7 @@ class FindMissingSeriesNumbers {
         $numOfConflicts = 0;
         $numOfDocsMigrated = 0;
         $finder = new Opus_DocumentFinder();
-        $finder->setCollectionRoleId($this->seriesRole->getId());
+        $finder->setCollectionRoleId($this->_seriesRole->getId());
         $serialIdsInUse = array();
         foreach ($finder->ids() as $docId) {
             $doc = new Opus_Document($docId);
@@ -133,13 +133,15 @@ class FindMissingSeriesNumbers {
             $numOfSerialIds = count($serialIds);
 
             if ($numOfSerialIds == 0) {
-                $this->logger->warn("doc #$docId : does not have a field IdentifierSerial -- leave it untouched");
+                $this->_logger->warn("doc #$docId : does not have a field IdentifierSerial -- leave it untouched");
                 $numOfConflicts++;
                 continue;
             }
 
             if ($numOfSerialIds > 1) {
-                $this->logger->warn("doc #$docId : has $numOfSerialIds values for field IdentifierSerial -- leave it untouched");
+                $this->_logger->warn(
+                    "doc #$docId : has $numOfSerialIds values for field IdentifierSerial -- leave it untouched"
+                );
                 $numOfConflicts++;
                 continue;
             }
@@ -150,7 +152,7 @@ class FindMissingSeriesNumbers {
             foreach ($doc->getCollection() as $collection) {
 
                 // only consider collection in collection role series
-                if ($collection->getRoleId() != $this->seriesRole->getId()) {
+                if ($collection->getRoleId() != $this->_seriesRole->getId()) {
                     array_push($remainingCollections, $collection);
                 }
                 else {
@@ -158,10 +160,16 @@ class FindMissingSeriesNumbers {
                     if (!$collection->isRoot()) {
                         
                         // check for conflict
-                        if (array_key_exists($collectionId, $serialIdsInUse) && in_array($serialId, $serialIdsInUse[$collectionId])) {
+                        if (array_key_exists($collectionId, $serialIdsInUse)
+                                && in_array($serialId, $serialIdsInUse[$collectionId])) {
                             // conflict was found: serialId for series $collectionId already in use
-                            $this->logger->warn("doc #$docId : could not assign to series #$collectionId: value $serialId already in use");
-                            $this->logger->warn("doc #$docId : leave assignment to collection #$collectionId untouched");
+                            $this->_logger->warn(
+                                "doc #$docId : could not assign to series #$collectionId: "
+                                . "value $serialId already in use"
+                            );
+                            $this->_logger->warn(
+                                "doc #$docId : leave assignment to collection #$collectionId untouched"
+                            );
                             array_push($remainingCollections, $collection);
                             $numOfConflicts++;
                         }
@@ -178,15 +186,22 @@ class FindMissingSeriesNumbers {
                             else {
                                 $serialIdsInUse[$collectionId] = array($serialId);
                             }
-                            $this->logger->info("doc #$docId : assign document to series #$collectionId with value $serialId");
-                            $this->logger->info("doc #$docId : removed assignment from collection #$collectionId");                            
-                            $this->logger->info("doc #$docId : removed field IdentifierSerial with value " . $serialId);
+                            $this->_logger->info(
+                                "doc #$docId : assign document to series #$collectionId with value $serialId"
+                            );
+                            $this->_logger->info("doc #$docId : removed assignment from collection #$collectionId");
+                            $this->_logger->info(
+                                "doc #$docId : removed field IdentifierSerial with value " . $serialId
+                            );
                             $numOfDocsMigrated++;
                         }
                     }
                     else {
                         // series root collection assignment will not be migrated
-                        $this->logger->warn("doc #$docId : is assigned to root collection #$collectionId of collection role series: leave assignment untouched");
+                        $this->_logger->warn(
+                            "doc #$docId : is assigned to root collection #$collectionId of collection role series:"
+                            . " leave assignment untouched"
+                        );
                         array_push($remainingCollections, $collection);
                         $numOfConflicts++;
                     }
@@ -202,12 +217,12 @@ class FindMissingSeriesNumbers {
     }
 
     private function hideCollectionRoleSeries() {
-        $this->seriesRole->setVisible(0);
-        $this->seriesRole->setVisibleBrowsingStart(0);
-        $this->seriesRole->setVisibleFrontdoor(0);
-        $this->seriesRole->setVisibleOai(0);
-        $this->seriesRole->store();
-        $this->logger->info("set visibility status of collection role series to unvisible");
+        $this->_seriesRole->setVisible(0);
+        $this->_seriesRole->setVisibleBrowsingStart(0);
+        $this->_seriesRole->setVisibleFrontdoor(0);
+        $this->_seriesRole->setVisibleOai(0);
+        $this->_seriesRole->store();
+        $this->_logger->info("set visibility status of collection role series to unvisible");
     }
 
     public function run() {

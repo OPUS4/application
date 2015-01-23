@@ -168,7 +168,9 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName) {
 
         $collection = $collections[0];
         if ($collection->isRoot()) {
-            $logger->warn("$logPrefix  No non-root collection found for value '$value' -- migrating to enrichment $eKeyName.");
+            $logger->warn(
+                "$logPrefix  No non-root collection found for value '$value' -- migrating to enrichment $eKeyName."
+            );
             // migrate subject to enrichments
             $doc->addEnrichment()
                     ->setKeyName($eKeyName)
@@ -180,7 +182,10 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName) {
         // check if document already belongs to this collection
         if (checkDocumentHasCollectionId($doc, $collectionId)) {
             // nothing to do            
-            $logger->info("$logPrefix  Migrating subject (type '$type', value '$value') -- collection already assigned to collection $collectionId.");
+            $logger->info(
+                "$logPrefix  Migrating subject (type '$type', value '$value') -- collection already assigned to "
+                . "collection $collectionId."
+            );
             continue;
         }
 
@@ -192,12 +197,16 @@ function migrateSubjectToCollection($doc, $subjectType, $roleId, $eKeyName) {
     if (count($removeSubjects) > 0) {
         // debug: removees
         foreach ($removeSubjects AS $r) {
-            $logger->debug("$logPrefix  Removing subject (type '" . $r->getType() . "', value '" . $r->getValue() . "')");
+            $logger->debug(
+                "$logPrefix  Removing subject (type '" . $r->getType() . "', value '" . $r->getValue() . "')"
+            );
         }
 
         $newSubjects = array_filter(array_values($keepSubjects));
         foreach ($newSubjects AS $k) {
-            $logger->debug("$logPrefix  Keeping subject (type '" . $k->getType() . "', value '" . $k->getValue() . "')");
+            $logger->debug(
+                "$logPrefix  Keeping subject (type '" . $k->getType() . "', value '" . $k->getValue() . "')"
+            );
         }
 
         $doc->setSubject($newSubjects);

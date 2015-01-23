@@ -61,7 +61,7 @@ if ($sortedCollections->count() == 0) {
 $selectRoots = $collectionsTable->select()->where('parent_id IS NULL');
 $rootCollections = $collectionsTable->fetchAll($selectRoots)->toArray();
 
-if(!empty($rootCollections)) {
+if (!empty($rootCollections)) {
 
     // do the sorting
     foreach ($rootCollections as $rootCollection) {
@@ -70,7 +70,7 @@ if(!empty($rootCollections)) {
 
     // check if collections are sorted
     foreach ($rootCollections as $rootCollection) {
-        if(!checkSortOrder($collectionsTable, $rootCollection['id'])) {
+        if (!checkSortOrder($collectionsTable, $rootCollection['id'])) {
             _log("SORT ORDER NOT FIXED FOR COLLECTION #{$rootCollection['id']} (and maybe more). Exiting..");
             exit(1);
         }
@@ -137,16 +137,19 @@ function checkSortOrder(Opus_Db_Collections $collectionsTable, $collectionId) {
     }
 
     if ($result) {
-        usort($sortedChildren, function($a, $b) {
+        usort(
+            $sortedChildren, function($a, $b) {
                     if ($a['left_id'] == $b['left_id']) {
                         return 0;
                     }
                     return ($a['left_id'] < $b['left_id']) ? -1 : 1;
-                });
+            }
+        );
 
         foreach ($sortedChildren as $pos => $child) {
-            if ($unsortedChildren[$pos]['id'] != $child['id'])
-                return false;
+            if ($unsortedChildren[$pos]['id'] != $child['id']) {
+                return false; 
+            }
         }
     }
 
