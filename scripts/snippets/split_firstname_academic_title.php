@@ -51,24 +51,28 @@ foreach (Opus_Person::getAll() as $person) {
 
     if ($numOfOpeningParenthesis != $numOfClosingParenthesis) {
         // conflict found
-        echo '[WARN] Opus_Person #' . $person->getId() . " with conflict in firstname '$firstname' : mismatch between opening and closing parentheses -- skip person\n";
+        echo '[WARN] Opus_Person #' . $person->getId() . " with conflict in firstname '$firstname' : "
+            . "mismatch between opening and closing parentheses -- skip person\n";
         continue;
     }
 
     if ($numOfOpeningParenthesis == 0) {
         // nothing to do
-        echo '[INFO] Opus_Person #' . $person->getId() . " without parenthesis in firstname '$firstname' -- skip person\n";
+        echo '[INFO] Opus_Person #' . $person->getId()
+            . " without parenthesis in firstname '$firstname' -- skip person\n";
         continue;
     }
 
     // check if firstname ends with '('
     if (preg_match('/^.*\)\s*$/', $firstname) == 0) {
-        echo '[WARN] Opus_Person #' . $person->getId() . " without trailing closing parenthesis in firstname '$firstname' -- skip person\n";
+        echo '[WARN] Opus_Person #' . $person->getId()
+            . " without trailing closing parenthesis in firstname '$firstname' -- skip person\n";
         continue;
     }
 
     if ($numOfOpeningParenthesis > 1) {
-        echo '[INFO] Opus_Person #' . $person->getId() . " with $numOfOpeningParenthesis parentheses in firstname '$firstname'\n";
+        echo '[INFO] Opus_Person #' . $person->getId()
+            . " with $numOfOpeningParenthesis parentheses in firstname '$firstname'\n";
     }
 
     $academicTitle = trim(strstr($firstname, '('));
@@ -80,13 +84,13 @@ foreach (Opus_Person::getAll() as $person) {
 
     try {
         $person->store();
-        echo '[INFO] Opus_Person #' . $person->getId(). " changed firstname from '$firstname' to '$remainingFirstname' and set academicTitle to '$academicTitle'\n";
+        echo '[INFO] Opus_Person #' . $person->getId() . " changed firstname from '$firstname' "
+            . "to '$remainingFirstname' and set academicTitle to '$academicTitle'\n";
     }
     catch (Exception $e) {
         echo '[ERR] Opus_Person #' . $person->getId() . ' could not be stored to database: ' . $e->getMessage() . "\n";
     }
 
 }
-
 
 exit();

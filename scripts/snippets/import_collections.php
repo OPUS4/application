@@ -39,47 +39,47 @@
  */
 
 // ID of parent collection
-$parent_collection_id = 0;
+$parentCollectionId = 0;
 // file to import
-$input_file = '../workspace/tmp/test.txt';
+$inputFile = '../workspace/tmp/test.txt';
 // visibility status of imported collections
 $visible = true;
 
-if (!file_exists($input_file)) {
-    echo "Error: input file $input_file does not exist\n";
+if (!file_exists($inputFile)) {
+    echo "Error: input file $inputFile does not exist\n";
     exit();
 }
 
-if (!is_readable($input_file)) {
-    echo "Error: input file $input_file is not readable\n";
+if (!is_readable($inputFile)) {
+    echo "Error: input file $inputFile is not readable\n";
     exit();
 }
 
-$root_collection = null;
+$rootCollection = null;
 try {
-    $root_collection = new Opus_Collection($parent_collection_id);
+    $rootCollection = new Opus_Collection($parentCollectionId);
 }
 catch (Opus_Model_NotFoundException $e) {
-    echo "Error: collection with id $parent_collection_id does not exist\n";
+    echo "Error: collection with id $parentCollectionId does not exist\n";
     exit();
 }
 
-if (!is_null($root_collection)) {
+if (!is_null($rootCollection)) {
 
-    $line_count = 0;
-    $lines_imported = 0;
-    foreach (file($input_file) as $line) {
-        $line_count++;
+    $lineCount = 0;
+    $linesImported = 0;
+    foreach (file($inputFile) as $line) {
+        $lineCount++;
         if (trim($line) === '') {
             continue;
         }
         $parts = explode('|', $line);
         if (count($parts) > 2) {
-            echo "Warning: ignore line number $line_count (more than one | character exists): $line\n";
+            echo "Warning: ignore line number $lineCount (more than one | character exists): $line\n";
             continue;
         }
         if (count($parts) < 2) {
-            echo "Warning: ignore line number $line_count (| character does not exist): $line\n";
+            echo "Warning: ignore line number $lineCount (| character does not exist): $line\n";
             continue;
         }
 
@@ -87,12 +87,12 @@ if (!is_null($root_collection)) {
         $collection->setName(trim($parts[0]));
         $collection->setNumber(trim($parts[1]));
         $collection->setVisible($visible);
-        $root_collection->addLastChild($collection);
-        $root_collection->store();
-        $lines_imported++;
+        $rootCollection->addLastChild($collection);
+        $rootCollection->store();
+        $linesImported++;
     }
 
-    echo "$lines_imported collections were successfully imported\n";
+    echo "$linesImported collections were successfully imported\n";
 }
 
 

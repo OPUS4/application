@@ -40,7 +40,8 @@ $doc->setServerDatePublished('1900-01-01');
 // damn API. $doc->addPersonSubmiter() doesn't work for link models!
 // -> we should change this in 4.x
 $submitter = new Opus_Person();
-$submitter->setFirstName('Donald')->setLastName('Duck')->setEmail('donald@example.org')->setDateOfBirth('1920-03-13')->setPlaceOfBirth('Entenhausen');
+$submitter->setFirstName('Donald')->setLastName('Duck')->setEmail('donald@example.org')->setDateOfBirth('1920-03-13')
+    ->setPlaceOfBirth('Entenhausen');
 $doc->addPersonSubmitter($submitter);
 
 $author = new Opus_Person();
@@ -52,9 +53,9 @@ $doc->setLanguage('deu');
 $titleMain = $doc->addTitleMain();
 $titleMain->setValue('Dokument zur empirischen Unterschung der OAI-Schnittstelle');
 $titleMain->setLanguage('deu');
-$titleMain2 = $doc->addTitleMain();
-$titleMain2->setValue('Document for empirical testing OAI interface');
-$titleMain2->setLanguage('eng');
+$titleMainEng = $doc->addTitleMain();
+$titleMainEng->setValue('Document for empirical testing OAI interface');
+$titleMainEng->setLanguage('eng');
 
 $abstract = $doc->addTitleAbstract();
 $abstract->setValue('Dokument, dass alle Daten enhält, um testen zu können, wie die OAI-Schnittstelle sie ausgibt.');
@@ -98,7 +99,8 @@ if (is_null($institutesRole) === true) {
 $instituteCollections = Opus_Collection::fetchCollectionsByRoleName($institutesRole->getId(), $instituteName);
 if (count($instituteCollections) >=1) {
     $instituteCollection = $instituteCollections[0];
-} else {
+}
+else {
     $rootCollection = $institutesRole->getRootCollection();
     if (is_null($rootCollection) === true) {
         $rootCollection = $institutesRole->addRootCollection();
@@ -121,8 +123,8 @@ $doc->setPublisherPlace('Burbank, CA');
 $doc->setCompletedYear('2010');
 $doc->setCompletedDate('2010-09-27');
 
-$o3id = $doc->addIdentifierOpus3();
-$o3id->setValue('1234');
+$opusThreeId = $doc->addIdentifierOpus3();
+$opusThreeId->setValue('1234');
 
 // empty URN will be automaticaly replace by new URN.
 $urn = $doc->addIdentifierUrn();
@@ -152,7 +154,7 @@ $doc->setThesisDateAccepted('2003-02-01');
 
 $dnbInstitute=new Opus_DnbInstitute();
 $dnbInstitute->setName('Forschungsinstitut für Code Coverage');
-foreach(Opus_DnbInstitute::getGrantors() as $grantor) {
+foreach (Opus_DnbInstitute::getGrantors() as $grantor) {
     if ($dnbInstitute->getName() === $grantor->getName()) {
         $dnbInstitute = $grantor;
         break;
@@ -169,7 +171,7 @@ $referee->setFirstName('Gyro');
 $referee->setLastName('Gearloose');
 $referee->setAcademicTitle('Prof. Dr.');
 $referee->store();
-$doc->addPersonReferee($referee );
+$doc->addPersonReferee($referee);
 
 $editor = new Opus_Person();
 $editor->setFirstName('Bob');
@@ -201,21 +203,24 @@ $doc->setContributingCorporation('Pixar Animation Studio');
 $swd = $doc->addSubject()->setType('swd');
 $swd->setValue('Test');
 
-$free_subject_deu = $doc->addSubject()->setType('uncontrolled');
-$free_subject_deu->setLanguage('deu')->setValue('Maustest');
+$freeSubjectDeu = $doc->addSubject()->setType('uncontrolled');
+$freeSubjectDeu->setLanguage('deu')->setValue('Maustest');
 
-$free_subject_eng = $doc->addSubject()->setType('uncontrolled');
-$free_subject_eng->setLanguage('eng')->setValue('mouse test');
+$freeSubjectEng = $doc->addSubject()->setType('uncontrolled');
+$freeSubjectEng->setLanguage('eng')->setValue('mouse test');
 
-$note1 = $doc->addNote();
-$note1->setVisibility('public')->setMessage('ein Dokument, dass noch eine Bemerkung braucht, weil im Abstract nicht alles gesagt wurde...');
-$note2 = $doc->addNote();
-$note2->setVisibility('private')->setMessage('und noch eine Bemerkung zum Bearbeitungsstand.');
+$note = $doc->addNote();
+$note->setVisibility('public')->setMessage(
+    'ein Dokument, dass noch eine Bemerkung braucht, weil im Abstract nicht alles gesagt wurde...'
+);
+$noteTwo = $doc->addNote();
+$noteTwo->setVisibility('private')->setMessage('und noch eine Bemerkung zum Bearbeitungsstand.');
 
 $licences = Opus_Licence::getAll();
 if (count($licences) >= 1) {
     $lic = $licences[0];
-} else {
+}
+else {
     $lic = new Opus_Licence();
     $lic->setActive(1);
     $lic->setLanguage('deu');
@@ -228,12 +233,14 @@ $doc->setLicence($lic);
 // check for enrichment keys before creating enrichments
 $enrichmentKeys = Opus_EnrichmentKey::getAll();
 $enrichmentKeyNames = array();
-foreach($enrichmentKeys as $enrichmentKey) {
+foreach ($enrichmentKeys as $enrichmentKey) {
    $enrichmentKeyNames[] = $enrichmentKey->getName();
 }
-$missingEnrichmentKeyNames = array_diff(array('SourceSwb','SourceTitle','ClassRvk','ContributorsName','Event', 'City', 'Country'), $enrichmentKeyNames);
-if(!empty($missingEnrichmentKeyNames)) {
-   foreach($missingEnrichmentKeyNames as $missingEnrichmentKeyName) {
+$missingEnrichmentKeyNames = array_diff(
+    array('SourceSwb','SourceTitle','ClassRvk','ContributorsName','Event', 'City', 'Country'), $enrichmentKeyNames
+);
+if (!empty($missingEnrichmentKeyNames)) {
+   foreach ($missingEnrichmentKeyNames as $missingEnrichmentKeyName) {
       $newEnrichmentKey = new Opus_EnrichmentKey();
       $newEnrichmentKey->setName($missingEnrichmentKeyName);
       $newEnrichmentKey->store();

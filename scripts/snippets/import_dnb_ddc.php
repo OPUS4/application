@@ -39,18 +39,18 @@
  */
 
 // file to import
-$input_file = '../workspace/tmp/ddc_dnb.txt';
+$inputFile = '../workspace/tmp/ddc_dnb.txt';
 // visibility status of imported collections
 $visible = true;
 $fieldSeparator = '	';
 
-if (!file_exists($input_file)) {
-    echo "Error: input file $input_file does not exist\n";
+if (!file_exists($inputFile)) {
+    echo "Error: input file $inputFile does not exist\n";
     exit();
 }
 
-if (!is_readable($input_file)) {
-    echo "Error: input file $input_file is not readable\n";
+if (!is_readable($inputFile)) {
+    echo "Error: input file $inputFile is not readable\n";
     exit();
 }
 
@@ -81,20 +81,20 @@ $rootCollection->store();
 
 if (!is_null($rootCollection)) {
 
-    $line_count = 0;
-    $lines_imported = 0;
-    foreach (file($input_file) as $line) {
-        $line_count++;
+    $lineCount = 0;
+    $linesImported = 0;
+    foreach (file($inputFile) as $line) {
+        $lineCount++;
         if (trim($line) === '') {
             continue;
         }
         $parts = explode($fieldSeparator, $line);
         if (count($parts) > 2) {
-            echo "Warning: ignore line number $line_count (more than one field separating character exists): $line\n";
+            echo "Warning: ignore line number $lineCount (more than one field separating character exists): $line\n";
             continue;
         }
         if (count($parts) < 2) {
-            echo "Warning: ignore line number $line_count (field separating character does not exist): $line\n";
+            echo "Warning: ignore line number $lineCount (field separating character does not exist): $line\n";
             continue;
         }
 
@@ -105,10 +105,10 @@ if (!is_null($rootCollection)) {
         $collection->setVisible($visible);
         $rootCollection->addLastChild($collection);
         $rootCollection->store();
-        $lines_imported++;
+        $linesImported++;
     }
 
-    echo "$lines_imported collections were successfully imported\n";
+    echo "$linesImported collections were successfully imported\n";
 }
 
 

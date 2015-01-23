@@ -57,12 +57,13 @@ foreach ($finder->ids() as $docId) {
     if ($search->getNumberOfHits() != 1) {
         echo "ERROR: document # $docId is not stored in search index\n";
         $numOfErrors++;
-    } else {
+    }
+    else {
         $result = $search->getResults();
         $solrModificationDate = $result[0]->getServerDateModified();
         $document = new Opus_Document($docId);
         $docModificationDate = $document->getServerDateModified()->getUnixTimestamp();
-        if($solrModificationDate != $docModificationDate) {
+        if ($solrModificationDate != $docModificationDate) {
             $numOfModified++;
             echo "document # $docId is modified\n";
         }

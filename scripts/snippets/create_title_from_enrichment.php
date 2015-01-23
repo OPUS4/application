@@ -80,8 +80,9 @@ else {
 $getType = 'getTitle' . ucfirst(strtolower($options['type']));
 $addType = 'addTitle' . ucfirst(strtolower($options['type']));
 
-if ($dryrun)
-    _log("TEST RUN: NO DATA WILL BE MODIFIED");
+if ($dryrun) {
+    _log("TEST RUN: NO DATA WILL BE MODIFIED"); 
+}
 
 $docFinder = new Opus_DocumentFinder();
 $docIds = $docFinder->setEnrichmentKeyExists($enrichmentField)->ids();
@@ -97,12 +98,17 @@ foreach ($docIds as $docId) {
             if ($enrichmentArray['KeyName'] == $enrichmentField) {
                 $titles = $doc->{$getType}();
                 if (count($titles) > 0) {
-                    _log('Title ' . ucfirst(strtolower($options['type'])) . ' already exists for Document #' . $docId . '. Skipping.. ');
-                } else {
+                    _log(
+                        'Title ' . ucfirst(strtolower($options['type'])) . ' already exists for Document #' . $docId
+                        . '. Skipping.. '
+                    );
+                }
+                else {
                     $title = $doc->{$addType}();
                     $title->setValue($enrichmentArray['Value']);
-                    if (!$dryrun)
-                        $doc->store();
+                    if (!$dryrun) {
+                        $doc->store(); 
+                    }
                     _log('Document #' . $docId . ' updated');
                 }
             }
@@ -114,4 +120,3 @@ function _log($message) {
     echo $message . PHP_EOL;
 }
 
-?>

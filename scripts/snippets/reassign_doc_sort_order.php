@@ -96,11 +96,17 @@ foreach (Opus_Series::getAll() as $series) {
         foreach ($allSeries as $docSeries) {
             $seriesInstance = $docSeries->getModel();
             if ($seriesInstance->getId() === $series->getId()) {
-                echo "reassign doc_sort_order for doc #" . $doc->getId() . " (series number: " . $docSeries->getNumber() . ") -- old / new doc_sort_order: " . $docSeries->getDocSortOrder() . " / " . $seriesCounter . "\n";
+                echo "reassign doc_sort_order for doc #" . $doc->getId() . " (series number: "
+                    . $docSeries->getNumber() . ") -- old / new doc_sort_order: " . $docSeries->getDocSortOrder()
+                    . " / " . $seriesCounter . "\n";
                 $doc->addSeries($seriesInstance)->setNumber($docSeries->getNumber())->setDocSortOrder($seriesCounter++);
             }
             else {
-                $doc->addSeries($seriesInstance)->setNumber($docSeries->getNumber())->setDocSortOrder($docSeries->getDocSortOrder());
+                $doc->addSeries($seriesInstance)->setNumber(
+                    $docSeries->getNumber()
+                )->setDocSortOrder(
+                    $docSeries->getDocSortOrder()
+                );
             }
         }
         $doc->store();

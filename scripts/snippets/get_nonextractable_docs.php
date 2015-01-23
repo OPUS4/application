@@ -67,15 +67,19 @@ foreach ($docFinder->ids() as $id) {
         $overallNumOfFulltexts++;
         $response = null;
         try {
-            $response = $solrServer->extract($file->getPath(), array( 'extractOnly' => 'true', 'extractFormat' => 'text' ));
+            $response = $solrServer->extract(
+                $file->getPath(), array( 'extractOnly' => 'true', 'extractFormat' => 'text' )
+            );
         }
         catch (Exception $e) {
-            echo "error while extracting full text for document # " . $d->getId() . " (file name : " . $file->getPath() . " )\n";
+            echo "error while extracting full text for document # " . $d->getId() . " (file name : "
+                . $file->getPath() . " )\n";
             $numOfNonExtractableFulltexts++;
             continue;
         }
         if (is_null($response->getRawResponse()) || strlen(trim($response->getRawResponse())) == 0) {
-            echo "non-extractable full text for document # " . $d->getId() . " (file name: " . $file->getPath() . " )\n";
+            echo "non-extractable full text for document # " . $d->getId() . " (file name: "
+                . $file->getPath() . " )\n";
             $numOfNonExtractableFulltexts++;
         }
     }

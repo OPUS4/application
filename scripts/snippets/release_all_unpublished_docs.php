@@ -51,12 +51,12 @@ foreach ($docFinder->ids() as $id) {
     }
 
     if (!is_null($d)) {
-	$date = new Opus_Date();
-	$date->setNow();
-	$d->setServerState('published');
-	$d->setServerDatePublished($date);
-	$d->store();
-	echo "publishing of document with id $id was successful\n"; 
+    $date = new Opus_Date();
+    $date->setNow();
+    $d->setServerState('published');
+    $d->setServerDatePublished($date);
+    $d->store();
+    echo "publishing of document with id $id was successful\n"; 
     }
 }
 

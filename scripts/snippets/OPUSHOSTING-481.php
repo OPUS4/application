@@ -46,7 +46,11 @@ $docfinder = new Opus_DocumentFinder();
 $docfinder->setServerState('published');
 $select = $docfinder->getSelect();
 $select
-  ->joinLeft(array('pd' => 'link_persons_documents'), 'd.id = pd.document_id AND (pd.role = "author" OR pd.role = "advisor" OR pd.role = "contributor" OR pd.role = "editor" OR pd.role = "other" OR pd.role = "translator")', array())
+  ->joinLeft(
+      array('pd' => 'link_persons_documents'), 'd.id = pd.document_id AND (pd.role = "author"'
+      . ' OR pd.role = "advisor" OR pd.role = "contributor" OR pd.role = "editor" OR pd.role = "other"'
+      . ' OR pd.role = "translator")', array()
+  )
   ->joinLeft(array('p' => 'persons'), 'pd.person_id = p.id', array())
   ->where('p.first_name = ?', $firstName)
   ->where('p.last_name = ?', $lastName)

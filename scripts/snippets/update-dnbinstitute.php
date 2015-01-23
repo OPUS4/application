@@ -48,11 +48,10 @@ require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 $options = getopt('', array('doctype:', 'publisherid:', 'grantorid:', 'dryrun'));
 
-if (
-        (!isset($options['publisherid']) || empty($options['publisherid']))
-        && (!isset($options['grantorid']) || empty($options['grantorid']))
-        ) {
-    echo "Usage: {$argv[0]} [--publisherid <thesis publisher ID>] [--grantorid <thesis grantor ID>] (--doctype <document type>) (--dryrun)\n";
+if ((!isset($options['publisherid']) || empty($options['publisherid']))
+        && (!isset($options['grantorid']) || empty($options['grantorid']))) {
+    echo "Usage: {$argv[0]} [--publisherid <thesis publisher ID>] [--grantorid <thesis grantor ID>]"
+        . " (--doctype <document type>) (--dryrun)\n";
     echo "publisherid and/or grantorid must be provided.\n";
     exit;
 }
@@ -68,14 +67,16 @@ try {
     _log("Opus_DnbInstitute with ID <$thesisPublisherId> does not exist.\nExiting...");
     exit;
 }
-if ($dryrun)
-    _log("TEST RUN: NO DATA WILL BE MODIFIED");
+if ($dryrun) {
+    _log("TEST RUN: NO DATA WILL BE MODIFIED"); 
+}
 
 $docFinder = new Opus_DocumentFinder();
 $docIds = $docFinder
         ->setServerState('published');
-if ($documentType != false)
-    $docFinder->setType($documentType);
+if ($documentType != false) {
+    $docFinder->setType($documentType); 
+}
 $docIds = $docFinder->ids();
 
 _log(count($docIds) . " documents " . ($documentType != false ? "of type '$documentType' " : '') . "found");
@@ -83,7 +84,7 @@ _log(count($docIds) . " documents " . ($documentType != false ? "of type '$docum
 foreach ($docIds as $docId) {
     try {
         $doc = new Opus_Document($docId);
-        if(count($doc->getFile()) == 0) {
+        if (count($doc->getFile()) == 0) {
             _log("Document <$docId> has no files, skipping..");
             continue;
         }
@@ -95,7 +96,8 @@ foreach ($docIds as $docId) {
                     $doc->store();
                 }
                 _log("Setting ThesisPublisher <$thesisPublisherId> on Document <$docId>");
-            } else {
+            }
+            else {
                 $existingThesisPublisherId = $thesisPublisher[0]->getId();
                 _log("ThesisPublisher <{$existingThesisPublisherId[1]}> already set for Document <$docId>");
             }
@@ -108,7 +110,8 @@ foreach ($docIds as $docId) {
                     $doc->store();
                 }
                 _log("Setting ThesisGrantor <$thesisGrantorId> on Document <$docId>");
-            } else {
+            }
+            else {
                 $existingThesisGrantorId = $thesisGrantor[0]->getId();
                 _log("ThesisGrantor <{$existingThesisGrantorId[1]}> already set for Document <$docId>");
             }
@@ -123,4 +126,3 @@ function _log($message) {
     echo "$message\n";
 }
 
-?>

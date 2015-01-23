@@ -47,7 +47,7 @@ $options = getopt('', array('dryrun', 'from:', 'to:'));
 
 $dryrun = isset($options['dryrun']);
 
-if(!isset($options['from']) || empty($options['from']) || !isset($options['to']) || empty($options['to'])) {
+if (!isset($options['from']) || empty($options['from']) || !isset($options['to']) || empty($options['to'])) {
     echo "Usage: {$argv[0]} --from <current doc type> --to <target doc type> (--dryrun)\n";
     echo "--from and --to must be provided.\n";
     exit;
@@ -56,8 +56,9 @@ if(!isset($options['from']) || empty($options['from']) || !isset($options['to'])
 $from = $options['from'];
 $to = $options['to'];
 
-if ($dryrun)
-    _log("TEST RUN: NO DATA WILL BE MODIFIED");
+if ($dryrun) {
+    _log("TEST RUN: NO DATA WILL BE MODIFIED"); 
+}
 
 $docFinder = new Opus_DocumentFinder();
 $docIds = $docFinder->setType($from)->ids();
@@ -67,8 +68,9 @@ _log(count($docIds) . " documents found");
 foreach ($docIds as $docId) {
     $doc = new Opus_Document($docId);
     $doc->setType($to);
-    if(!$dryrun)
-        $doc->store();
+    if (!$dryrun) {
+        $doc->store(); 
+    }
     _log("Document #$docId changed from '$from' to '$to'");
 }
 
@@ -76,4 +78,3 @@ function _log($message) {
     echo "$message\n";
 }
 
-?>

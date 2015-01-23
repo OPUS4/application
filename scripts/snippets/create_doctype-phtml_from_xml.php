@@ -43,7 +43,8 @@ if ($argc == 2) {
         echo "Could not find file {$argv[1]} ($filename)";
         exit;
     }
-} else {
+}
+else {
     echo "No file supplied";
     exit;
 }
@@ -54,4 +55,3 @@ $xslt->load(dirname(__FILE__)."/doctype.xslt");
 $proc = new XSLTProcessor;
 $proc->importStyleSheet($xslt);
 $proc->transformToURI($xml, 'php://output');
-?>

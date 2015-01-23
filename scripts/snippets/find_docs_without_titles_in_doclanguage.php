@@ -44,22 +44,23 @@ foreach ($docfinder->ids() as $docId) {
     $doc = new Opus_Document($docId);
 
 foreach ($doc->getTitleMain() as $title) {
-	$titleLanguage = $title->getLanguage();
-	$docLanguage = $doc->getLanguage();	
+    $titleLanguage = $title->getLanguage();
+    $docLanguage = $doc->getLanguage();    
 }
 
-$lang = strpbrk ($docLanguage, $titleLanguage);
-	if ($lang === false) {
-		echo "Dokument $doc muss überprueft werden.\n";	
-		$updateRequired++;
-		}
+$lang = strpbrk($docLanguage, $titleLanguage);
+    if ($lang === false) {
+        echo "Dokument $doc muss überprueft werden.\n";    
+        $updateRequired++;
+    }
 }
 
 if ($updateRequired == 0) {
     echo "Alle Dokumente wurden überprüft -- alles ok!\n";
 }
 else {
-    echo "Alle Dokumente wurden überprüft -- Anzahl der Dokumente, die  keinen Titel in der Sprache des Dokuments besitzen: $updateRequired !\n";
+    echo "Alle Dokumente wurden überprüft -- Anzahl der Dokumente, die  keinen Titel in der Sprache des Dokuments"
+        . " besitzen: $updateRequired !\n";
 }
 
 exit();

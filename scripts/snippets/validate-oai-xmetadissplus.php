@@ -79,8 +79,9 @@ $importedNode = $metadataDocument->importNode($xMetaDissNode, true);
 $metadataDocument->appendChild($importedNode);
 
 $schemaFile = realpath($options['schema-cache'] . '/xmetadissplus.xsd');
-if (!is_file($schemaFile))
-    echo "Could not find schema file '" . $options['schema-cache'] . '/xmetadissplus.xsd' . "'";
+if (!is_file($schemaFile)) {
+    echo "Could not find schema file '" . $options['schema-cache'] . '/xmetadissplus.xsd' . "'"; 
+}
 $metadataDocument->schemaValidate($options['schema-cache'] . '/xmetadissplus.xsd');
 printXmlErrors($sourceXml);
 
@@ -90,14 +91,16 @@ function printXmlErrors($xml) {
     $errors = libxml_get_errors();
 
     foreach ($errors AS $error) {
-        if ($error->level < 2)
-            continue;
+        if ($error->level < 2) {
+            continue; 
+        }
 
         $lines = explode("\n", $xml);
         $line = $lines[abs(($error->line) - 1)];
         echo "\n\nERROR(" . $error->level . "): \n";
         echo "\t" . trim($error->message) . ' at line ' . $error->line . ":\n";
-        for ($i = $error->line - 20; $i < $error->line; $i++)
-            echo isset($lines[$i]) ? ($i + 1) . "\t" . $lines[$i] . "\n" : '';
+        for ($i = $error->line - 20; $i < $error->line; $i++) {
+            echo isset($lines[$i]) ? ($i + 1) . "\t" . $lines[$i] . "\n" : ''; 
+        }
     }
 }
