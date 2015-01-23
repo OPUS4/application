@@ -43,11 +43,12 @@ $f->setServerState('temporary')
   ->setServerDateModifiedBefore($dateString);
 
 foreach ($f->ids() AS $id) {
-  $d = new Opus_Document( $id );
-  if($d->getServerState() == 'temporary') {
-    echo "deleting document: $id\n";
-    $d->deletePermanent();
-  } else {
-      echo "NOT deleting document: $id because it has server state ".$d->getServerState();
-  }
+    $d = new Opus_Document($id);
+    if ($d->getServerState() == 'temporary') {
+        echo "deleting document: $id\n";
+        $d->deletePermanent();
+    }
+    else {
+        echo "NOT deleting document: $id because it has server state ".$d->getServerState();
+    }
 }

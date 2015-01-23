@@ -37,9 +37,9 @@
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 
 // Get files directory...
-$start_mtime = microtime(true);
+$startTime = microtime(true);
 $config = Zend_Registry::get('Zend_Config');
-$filesPath = realpath( $config->workspacePath . DIRECTORY_SEPARATOR . "files" );
+$filesPath = realpath($config->workspacePath . DIRECTORY_SEPARATOR . "files");
 
 if ($filesPath == false or empty($filesPath)) {
   die("ERROR: Failed scanning workspace files path.\n");
@@ -50,9 +50,10 @@ echo "INFO: Scanning directory '$filesPath'...\n";
 // Iterate over all files
 $count = 0;
 $errors = 0;
+
 foreach (glob($filesPath . DIRECTORY_SEPARATOR . "*") AS $file) {
    if ($count > 0 and $count%100 == 0) {
-      echo "INFO: checked $count entries with ".round($count/(microtime(true)-$start_mtime))." entries/seconds.\n";
+      echo "INFO: checked $count entries with ".round($count/(microtime(true) - $startTime))." entries/seconds.\n";
    }
    $count++;
 
@@ -77,7 +78,7 @@ foreach (glob($filesPath . DIRECTORY_SEPARATOR . "*") AS $file) {
    }
 }
 
-echo "INFO: Checked a total of $count entries with ".round($count/(microtime(true)-$start_mtime))." entries/seconds.\n";
+echo "INFO: Checked a total of $count entries with ".round($count/(microtime(true)-$startTime))." entries/seconds.\n";
 
 if ($errors === 0) {
   exit(0);

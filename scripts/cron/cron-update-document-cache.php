@@ -37,6 +37,7 @@ define('APPLICATION_ENV', 'development');
 
 // Bootstrapping
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
+
 $opusDocCacheTable = new Opus_Db_DocumentXmlCache();
 $db = Zend_Registry::get('db_adapter');
 //
@@ -46,8 +47,10 @@ $select->from($opusDocCacheTable->info('name'), 'document_id');
 $docFinder = new Opus_DocumentFinder();
 $docFinder->setSubSelectNotExists($select);
 $docIds = $docFinder->ids();
+
 echo "processing ".count($docIds)." documents\n";
-foreach($docIds as $docId) {
+
+foreach ($docIds as $docId) {
     $model = new Opus_Document($docId);
 
     $cache = new Opus_Model_Xml_Cache; 
