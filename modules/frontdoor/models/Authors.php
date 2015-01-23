@@ -38,7 +38,7 @@ class Frontdoor_Model_Authors {
      *
      * @var Opus_Document
      */
-    private $document;
+    private $_document;
 
     /**
      * @param $arg either an instance of Opus_Document or an int that is interpreted
@@ -49,11 +49,11 @@ class Frontdoor_Model_Authors {
      */
     public function __construct($arg) {
         if ($arg instanceof Opus_Document) {
-            $this->document = $arg;
+            $this->_document = $arg;
         }
         else {
             try {
-                $this->document = new Opus_Document($arg);
+                $this->_document = new Opus_Document($arg);
             }
             catch (Opus_Model_NotFoundException $e) {
                 throw new Frontdoor_Model_Exception('invalid value for parameter docId given', null, $e);
@@ -63,7 +63,7 @@ class Frontdoor_Model_Authors {
         // check if document access is allowed
         // TODO document access check will be refactored in later releases
         try {
-            new Util_Document($this->document);
+            new Util_Document($this->_document);
         }
         catch (Application_Exception $e) {
             throw new Frontdoor_Model_Exception('access to requested document is forbidden');
@@ -78,13 +78,15 @@ class Frontdoor_Model_Authors {
      */
     public function getAuthors() {
         $authors = array();
-        foreach ($this->document->getPersonAuthor() as $author) {
+        foreach ($this->_document->getPersonAuthor() as $author) {
             $authorId = $author->getId();
-            array_push($authors, array(
+            array_push(
+                $authors, array(
                 'id' => $authorId[0],
                 'name' => $author->getName(),
                 'mail' => $author->getEmail(),
-                'allowMail' => $author->getAllowEmailContact()));
+                'allowMail' => $author->getAllowEmailContact())
+            );
         }
         return $authors;
     }
@@ -112,7 +114,7 @@ class Frontdoor_Model_Authors {
      * @return Opus_Document
      */
     public function getDocument() {
-        return $this->document;
+        return $this->_document;
     }
 
     /**
@@ -142,7 +144,9 @@ class Frontdoor_Model_Authors {
      */
     public function sendMail($mailProvider, $from, $fromName, $subject, $bodyText, $authorSelection) {
         try {
-            $mailProvider->sendMail($from, $fromName, $subject, $bodyText, $this->validateAuthorCheckboxInput($authorSelection));
+            $mailProvider->sendMail(
+                $from, $fromName, $subject, $bodyText, $this->validateAuthorCheckboxInput($authorSelection)
+            );
         }
         catch (Exception $e) {
             throw new Frontdoor_Model_Exception('failure while sending mail', null, $e);

@@ -36,8 +36,8 @@
 /**
  * class to built the mail form for mail contact to author
  */
-class Frontdoor_Form_ToauthorForm extends Zend_Form
-{
+class Frontdoor_Form_ToauthorForm extends Zend_Form {
+
     /**
      * hold author information (name, mail)
      * @var array('name' => ..., 'mail' => ...)
@@ -55,7 +55,7 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
 
         if (!is_null($this->_authors)) {
             $authCheck = null;
-            foreach($this->_authors as $author) {
+            foreach ($this->_authors as $author) {
                 $options = array('checked' => true);
                 if (count($this->_authors) == 1) {
                     $options['disabled'] = true;
@@ -78,27 +78,29 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
         $sender->setRequired(true);
         $sender->setLabel('frontdoor_sendername');
 
-        $sender_mail = new Zend_Form_Element_Text('sender_mail');
-        $sender_mail->setRequired(true);
-        $sender_mail->setLabel('frontdoor_sendermail');
-        $sender_mail->addValidator('EmailAddress');
+        $senderMail = new Zend_Form_Element_Text('sender_mail');
+        $senderMail->setRequired(true);
+        $senderMail->setLabel('frontdoor_sendermail');
+        $senderMail->addValidator('EmailAddress');
 
         $message = new Zend_Form_Element_Textarea('message');
         $message->setRequired(true);
         $message->setLabel('frontdoor_messagetext');
 
-        $captcha = new Zend_Form_Element_Captcha('foo', array(
+        $captcha = new Zend_Form_Element_Captcha(
+            'foo', array(
             'label' => 'label_captcha',
             'captcha' => array(
                 'captcha' => 'Figlet',
                 'wordLen' => 6,
                 'timeout' => 300,
-            )));
+            ))
+        );
 
         $submit = new Zend_Form_Element_Submit('frontdoor_send_mailtoauthor');
         $submit->setLabel('frontdoor_send_mailtoauthor');
 
-        $this->addElements(array($sender, $sender_mail, $message, $captcha, $submit));
+        $this->addElements(array($sender, $senderMail, $message, $captcha, $submit));
     }
 
     public function setAuthors($authors) {
@@ -109,4 +111,5 @@ class Frontdoor_Form_ToauthorForm extends Zend_Form
     public function isValid($data) {
         return parent::isValid($data);
     }
+
 }

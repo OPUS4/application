@@ -122,7 +122,9 @@ class Frontdoor_IndexController extends Controller_Action {
 
         $config = Zend_Registry::getInstance()->get('Zend_Config');
         $layoutPath = 'layouts/' . (isset($config, $config->theme) ? $config->theme : '');
-        $numOfShortAbstractChars = isset($config, $config->frontdoor->numOfShortAbstractChars) ? $config->frontdoor->numOfShortAbstractChars : '0';
+        $numOfShortAbstractChars =
+            isset($config,
+            $config->frontdoor->numOfShortAbstractChars) ? $config->frontdoor->numOfShortAbstractChars : '0';
 
         $proc->setParameter('', 'baseUrlServer', $this->view->fullUrl());
         $proc->setParameter('', 'baseUrl', $baseUrl);
@@ -145,7 +147,9 @@ class Frontdoor_IndexController extends Controller_Action {
         /* Setup view. */
         $this->view->frontdoor = $frontdoorContent;
         $this->view->baseUrl = $baseUrl;
-        $this->view->doctype('<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN"  "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">');
+        $this->view->doctype(
+            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">'
+        );
 
         $dateModified = $document->getServerDateModified();
         if (!is_null($dateModified)) {
@@ -182,16 +186,16 @@ class Frontdoor_IndexController extends Controller_Action {
     /**
      * Static function to be called from XSLT script to check file permission.
      *
-     * @param string|int $file_id
+     * @param string|int $fileId
      * @return boolean
      */
-    public static function checkIfUserHasFileAccess($file_id = null) {
-        if (is_null($file_id)) {
+    public static function checkIfUserHasFileAccess($fileId = null) {
+        if (is_null($fileId)) {
             return false;
         }
 
         $realm = Opus_Security_Realm::getInstance();
-        return $realm->checkFile($file_id);
+        return $realm->checkFile($fileId);
     }
 
     /**
@@ -270,7 +274,8 @@ class Frontdoor_IndexController extends Controller_Action {
     private function createMetaTagsForDocument($document) {
         $config = Zend_Registry::getInstance()->get('Zend_Config');
         $serverUrl = $this->view->serverUrl();
-        $baseUrlFiles = $serverUrl . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents');
+        $baseUrlFiles = $serverUrl
+            . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents');
 
         $metas = array();
 
@@ -292,7 +297,7 @@ class Frontdoor_IndexController extends Controller_Action {
         }
 
         foreach ($document->getTitleMain() AS $title) {
-            $titleValue = trim( $title->getValue() );
+            $titleValue = trim($title->getValue());
             if (empty($titleValue)) {
                 continue;
             }
@@ -302,7 +307,7 @@ class Frontdoor_IndexController extends Controller_Action {
         }
 
         foreach ($document->getTitleAbstract() AS $abstract) {
-            $abstractValue = trim( $abstract->getValue() );
+            $abstractValue = trim($abstract->getValue());
             if (empty($abstractValue)) {
                 continue;
             }
@@ -354,9 +359,10 @@ class Frontdoor_IndexController extends Controller_Action {
 
             $metas[] = array("citation_date", $dateString);
             $metas[] = array("DC.Date", $dateString);
-        } else {
+        }
+        else {
             $yearPublished = $document->getPublishedYear();
-            if(!is_null($yearPublished)) {
+            if (!is_null($yearPublished)) {
 
                 $metas[] = array("citation_date", $yearPublished);
                 $metas[] = array("DC.Date", $yearPublished);

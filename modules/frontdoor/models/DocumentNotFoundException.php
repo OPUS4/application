@@ -34,7 +34,7 @@
 
 class Frontdoor_Model_DocumentNotFoundException extends Frontdoor_Model_FrontdoorDeliveryException {
     public function __construct() {
-        $this->translateKey = "frontdoor_doc_not_found";
+        $this->_translateKey = "frontdoor_doc_not_found";
         $this->code = 404;
     }
 }

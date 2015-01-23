@@ -34,7 +34,7 @@
 
 class Frontdoor_Model_DocumentDeletedException extends Frontdoor_Model_FrontdoorDeliveryException {
     public function __construct() {
-        $this->translateKey = "frontdoor_document_deleted";
+        $this->_translateKey = "frontdoor_document_deleted";
         $this->code = 410;
     }
 }

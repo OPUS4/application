@@ -76,7 +76,9 @@ class Frontdoor_MailController extends Controller_Action {
         $mailForm->title->setValue($this->view->title);
         $mailForm->doc_id->setValue($docId);
         $mailForm->doc_type->setValue($this->view->translate($this->view->type));
-        $mailForm->setAction($this->view->url(array('module' => 'frontdoor', 'controller' => 'mail', 'action' => 'sendmail')));
+        $mailForm->setAction(
+            $this->view->url(array('module' => 'frontdoor', 'controller' => 'mail', 'action' => 'sendmail'))
+        );
         $mailForm->setMethod('post');
         $this->view->mailForm = $mailForm;
          *
@@ -168,10 +170,14 @@ class Frontdoor_MailController extends Controller_Action {
         }
         
         $form = new Frontdoor_Form_ToauthorForm(array('authors' => $authors));
-        $form->setAction($this->view->url(array(
+        $form->setAction(
+            $this->view->url(
+                array(
                     'module' => 'frontdoor',
                     'controller' => 'mail',
-                    'action' => 'toauthor')));
+                    'action' => 'toauthor')
+            )
+        );
         $form->setMethod('post');
 
         $this->view->docId = $docId;
@@ -186,12 +192,13 @@ class Frontdoor_MailController extends Controller_Action {
 
         try {
             $authorsModel->sendMail(
-                    new Opus_Mail_SendMail(),
-                    $form->getValue('sender_mail'),
-                    $form->getValue('sender'),
-                    $this->view->translate('mail_toauthor_subject'),
-                    $form->getValue('message'),
-                    $form->getValue('authors'));
+                new Opus_Mail_SendMail(),
+                $form->getValue('sender_mail'),
+                $form->getValue('sender'),
+                $this->view->translate('mail_toauthor_subject'),
+                $form->getValue('message'),
+                $form->getValue('authors')
+            );
             $this->view->success = 'frontdoor_mail_ok';
         }
         catch (Exception $e) {

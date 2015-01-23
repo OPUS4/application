@@ -39,10 +39,10 @@ class Frontdoor_Model_File {
     const ILLEGAL_DOCID_MESSAGE_KEY = 'illegal_argument_docid';
     const ILLEGAL_FILENAME_MESSAGE_KEY = 'illegal_argument_filename';
     
-    private $doc;
-    private $filename;
+    private $_doc;
+    private $_filename;
     
-    private $accessControl;
+    private $_accessControl;
 
     public function __construct($docId, $filename) {
         if (mb_strlen($docId) < 1 || preg_match('/^[\d]+$/', $docId) === 0 || $docId == null) {
@@ -52,12 +52,12 @@ class Frontdoor_Model_File {
             throw new Frontdoor_Model_FrontdoorDeliveryException(self::ILLEGAL_FILENAME_MESSAGE_KEY, 400);
         }
         try {
-            $this->doc = new Opus_Document($docId);
+            $this->_doc = new Opus_Document($docId);
         }
         catch (Opus_Model_NotFoundException $e) {
             throw new Frontdoor_Model_DocumentNotFoundException();
         }
-        $this->filename = $filename;
+        $this->_filename = $filename;
     }
 
     public function getFileObject($realm) {
@@ -66,8 +66,8 @@ class Frontdoor_Model_File {
     }
 
     private function checkDocumentApplicableForFileDownload($realm) {
-        if (!$this->isDocumentAccessAllowed($this->doc->getId(), $realm)) {
-            switch ($this->doc->getServerState()) {
+        if (!$this->isDocumentAccessAllowed($this->_doc->getId(), $realm)) {
+            switch ($this->_doc->getServerState()) {
                 case self::SERVER_STATE_DELETED:
                     throw new Frontdoor_Model_DocumentDeletedException();
                     break;
@@ -87,7 +87,7 @@ class Frontdoor_Model_File {
     }
 
     private function fetchFile($realm) {
-        $targetFile = Opus_File::fetchByDocIdPathName($this->doc->getId(), $this->filename);
+        $targetFile = Opus_File::fetchByDocIdPathName($this->_doc->getId(), $this->_filename);
         if (is_null($targetFile)) {
             throw new Frontdoor_Model_FileNotFoundException();
         }
@@ -109,25 +109,27 @@ class Frontdoor_Model_File {
             return false;
         }
 
-        return ($realm->checkFile($file->getId()) && $file->getVisibleInFrontdoor() && $this->doc->hasEmbargoPassed())
+        return ($realm->checkFile($file->getId()) && $file->getVisibleInFrontdoor() && $this->_doc->hasEmbargoPassed())
                 || $this->getAclHelper()->accessAllowed('documents');
     }
 
     public function getAclHelper() {
-        if (is_null($this->accessControl)) {
-            $this->accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
+        if (is_null($this->_accessControl)) {
+            $this->_accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
         }
 
-        return $this->accessControl;
+        return $this->_accessControl;
     }
 
     public function setAclHelper($helper) {
         if ($helper instanceof Application_Security_AccessControl || is_null($helper)) {
-            $this->accessControl = $helper;
+            $this->_accessControl = $helper;
         }
         else {
-            throw new Application_Exception('#1 argument must be of type Application_Security_AccessControl (not \''
-                . get_class($helper) . '\')');
+            throw new Application_Exception(
+                '#1 argument must be of type Application_Security_AccessControl (not \''
+                . get_class($helper) . '\')'
+            );
         }
     }
       

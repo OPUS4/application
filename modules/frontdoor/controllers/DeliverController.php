@@ -42,48 +42,49 @@ class Frontdoor_DeliverController extends Controller_Action {
 
         $realm = Opus_Security_Realm::getInstance();
 
-        $file_model = null;
+        $fileModel = null;
 
         try {
-            $file_model = new Frontdoor_Model_File($docId, $path);
+            $fileModel = new Frontdoor_Model_File($docId, $path);
         }
         catch (Frontdoor_Model_FrontdoorDeliveryException $e) {
             $this->handleDeliveryError($e);
             return;
         }
 
-        $file_object = null;
+        $fileObject = null;
         
         try {
-            $file_object = $file_model->getFileObject($realm);
+            $fileObject = $fileModel->getFileObject($realm);
         }
         catch(Frontdoor_Model_FrontdoorDeliveryException $e) {
             $this->handleDeliveryError($e);
             return;
         }
 
-        if(!$file_object->exists()) {
+        if (!$fileObject->exists()) {
             $this->handleDeliveryError(new Frontdoor_Model_FileNotFoundException());
             return;
         }
 
-        $full_filename = $file_object->getPath();
-        $base_filename = basename($full_filename);
-        $base_filename = self::quoteFileName($base_filename);
+        $fullFilename = $fileObject->getPath();
+        $baseFilename = basename($fullFilename);
+        $baseFilename = self::quoteFileName($baseFilename);
 
         $this->disableViewRendering();
 
         $this->getResponse()
                 ->clearAllHeaders()
-                ->setHeader('Content-Disposition', 'attachment; filename="'.$base_filename.'"', true)
-                ->setHeader('Content-type', $file_object->getMimeType(), true)
+                ->setHeader('Content-Disposition', 'attachment; filename="'.$baseFilename.'"', true)
+                ->setHeader('Content-type', $fileObject->getMimeType(), true)
                 ->setHeader('Cache-Control', 'private', true)
                 ->setHeader('Pragma', 'cache', true);
 
-        $this->_helper->SendFile->setLogger( Zend_Registry::get('Zend_Log') );
+        $this->_helper->SendFile->setLogger(Zend_Registry::get('Zend_Log'));
         try {
-            $this->_helper->SendFile($full_filename);
-        } catch (Exception $e) {
+            $this->_helper->SendFile($fullFilename);
+        }
+        catch (Exception $e) {
             $this->logError($e);
             $response = $this->getResponse();
             $response->clearAllHeaders();

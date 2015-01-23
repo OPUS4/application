@@ -40,59 +40,49 @@ require_once 'Zend/Validate/Abstract.php';
 /**
  * validator class to check if at least one of the given fields is not empty
  */
-class Frontdoor_Form_AtLeastOneValidator extends Zend_Validate_Abstract
-{
+class Frontdoor_Form_AtLeastOneValidator extends Zend_Validate_Abstract {
+
     const REQUIRED_EMPTY = 'requiredFieldsEmpty';
 
     protected $_messageTemplates = array(
         self::REQUIRED_EMPTY => 'At least one of the checkboxes must be checked'
     );
 
-    private $requiredFields;
-    private $requiredFieldKeys;
+    private $_requiredFields;
+    private $_requiredFieldKeys;
 
-    function __construct()
-    {
-        $this->requiredFields = array();
-        $this->requiredFieldKeys = array();
-
+    function __construct() {
+        $this->_requiredFields = array();
+        $this->_requiredFieldKeys = array();
     }
 
-    public function addField(&$field)
-    {
-        $this->requiredFieldKeys[] = $field->getName();
-        $this->requiredFields[] = &$field;
+    public function addField(&$field) {
+        $this->_requiredFieldKeys[] = $field->getName();
+        $this->_requiredFields[] = &$field;
     }
 
-    public function isValid($value, $context = null)
-    {
-        $size = count($this->requiredFieldKeys);
+    public function isValid($value, $context = null) {
+        $size = count($this->_requiredFieldKeys);
         //  if no fields required, return success
-        if ($size <= 0)
-        {
+        if ($size <= 0) {
             return true;
         }
 
         $result = false;
 
-        if (is_array($context))
-        {
+        if (is_array($context)) {
             $empty = true;
 
-            foreach (array_keys($context) as $field)
-            {
-                if (in_array($field, $this->requiredFieldKeys) )
-                {
-                    if (! empty($context[$field]))
-                    {
+            foreach (array_keys($context) as $field) {
+                if (in_array($field, $this->_requiredFieldKeys) ) {
+                    if (! empty($context[$field])) {
                         $empty = false;
                         break;
                     }
                 }
             }
 
-            if ($empty)
-            {
+            if ($empty) {
                 $this->_error(self::REQUIRED_EMPTY);
 
                 $result = false;
@@ -104,5 +94,6 @@ class Frontdoor_Form_AtLeastOneValidator extends Zend_Validate_Abstract
         
         return $result;
     }
+
 }
 

@@ -36,31 +36,30 @@
 /**
  * class to built the mail mask for document recommendation via e-mail
  */
-class Frontdoor_Form_MailForm extends Zend_Form
-{
+class Frontdoor_Form_MailForm extends Zend_Form {
+
     /**
      * Build easy mail form
      *
      * @return void
      */
-    public function init()
-    {
+    public function init() {
         // Create and configure query field elements:
         $recipient = new Zend_Form_Element_Text('recipient');
         $recipient->setRequired(false);
         $recipient->setLabel('frontdoor_recipientname');
 
-        $recipient_mail = new Zend_Form_Element_Text('recipient_mail');
-        $recipient_mail->setRequired(true);
-        $recipient_mail->setLabel('frontdoor_recipientmail');
+        $recipientMail = new Zend_Form_Element_Text('recipient_mail');
+        $recipientMail->setRequired(true);
+        $recipientMail->setLabel('frontdoor_recipientmail');
 
         $sender = new Zend_Form_Element_Text('sender');
         $sender->setRequired(false);
         $sender->setLabel('frontdoor_sendername');
 
-        $sender_mail = new Zend_Form_Element_Text('sender_mail');
-        $sender_mail->setRequired(false);
-        $sender_mail->setLabel('frontdoor_sendermail');
+        $senderMail = new Zend_Form_Element_Text('sender_mail');
+        $senderMail->setRequired(false);
+        $senderMail->setLabel('frontdoor_sendermail');
 
         $message = new Zend_Form_Element_Textarea('message');
         $message->setRequired(false);
@@ -68,23 +67,26 @@ class Frontdoor_Form_MailForm extends Zend_Form
 
         $title = new Zend_Form_Element_Hidden('title');
         $htmlTag = $title->getDecorator('htmlTag');
-        $htmlTag->setOption('tag','div');
+        $htmlTag->setOption('tag', 'div');
         $title->removeDecorator('label');
 
-        $doc_id = new Zend_Form_Element_Hidden('doc_id');
-        $htmlTag = $doc_id->getDecorator('htmlTag');
-        $htmlTag->setOption('tag','div');
-        $doc_id->removeDecorator('label');
+        $docId = new Zend_Form_Element_Hidden('doc_id');
+        $htmlTag = $docId->getDecorator('htmlTag');
+        $htmlTag->setOption('tag', 'div');
+        $docId->removeDecorator('label');
 
-        $doc_type = new Zend_Form_Element_Hidden('doc_type');
-        $htmlTag = $doc_type->getDecorator('htmlTag');
-        $htmlTag->setOption('tag','div');
-        $doc_type->removeDecorator('label');
+        $docType = new Zend_Form_Element_Hidden('doc_type');
+        $htmlTag = $docType->getDecorator('htmlTag');
+        $htmlTag->setOption('tag', 'div');
+        $docType->removeDecorator('label');
 
         $submit = new Zend_Form_Element_Submit('frontdoor_send_recommendation');
         $submit->setLabel('frontdoor_sendrecommendation');
 
         // Add elements to form:
-        $this->addElements(array($recipient, $recipient_mail, $sender, $sender_mail, $message, $title, $doc_id, $doc_type, $submit));
+        $this->addElements(
+            array($recipient, $recipientMail, $sender, $senderMail, $message, $title, $docId, $docType, $submit)
+        );
     }
+
 }

@@ -34,14 +34,15 @@
 
 class Frontdoor_Model_FrontdoorDeliveryException extends Exception {
 
-    protected $translateKey;
+    protected $_translateKey;
 
     public function __construct($key) {
-        $this->translateKey = $key;
+        $this->_translateKey = $key;
     }
 
     public function getTranslateKey() {
-        return $this->translateKey;
+        return $this->_translateKey;
     }
+
 }
 
