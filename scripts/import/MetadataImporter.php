@@ -39,18 +39,18 @@ require_once 'Log.php';
 
 class MetadataImporter {
 
-    private $console;
+    private $_console;
 
-    private $logfile;
+    private $_logfile;
 
     public function run($options) {
         $consoleConf = array('lineFormat' => '[%1$s] %4$s');
         $logfileConf = array('append' => false, 'lineFormat' => '%4$s');
         
-        $this->console = Log::factory('console', '', '', $consoleConf, PEAR_LOG_INFO);
+        $this->_console = Log::factory('console', '', '', $consoleConf, PEAR_LOG_INFO);
 
         if (count($options) < 2) {
-            $this->console->log('Missing parameter: no file to import.');
+            $this->_console->log('Missing parameter: no file to import.');
             return;
         }
 
@@ -59,13 +59,13 @@ class MetadataImporter {
             // logfile path is given
             $logfilePath = $options[2];
         }
-        $this->logfile = Log::factory('file', $logfilePath, '', $logfileConf, PEAR_LOG_INFO);
+        $this->_logfile = Log::factory('file', $logfilePath, '', $logfileConf, PEAR_LOG_INFO);
         
         $xmlFile = $options[1];
 
-        $importer = new Opus_Util_MetadataImport($xmlFile, true, $this->console, $this->logfile);
+        $importer = new Opus_Util_MetadataImport($xmlFile, true, $this->_console, $this->_logfile);
         $importer->run();
-     }
+    }
 }
 
 try {
