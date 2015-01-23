@@ -47,12 +47,12 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
      * File mime types that are allowed for publication list.
      * @var
      */
-    private $allowedMimeTypes;
+    private $_allowedMimeTypes;
 
     /**
      * @var Array containing instances of plugin
      */
-    private static $instances;
+    private static $_instances;
 
     public function __construct($name) {
         $this->setName($name);
@@ -73,7 +73,6 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
             $stylesheetDirectory = $config->stylesheetDirectory;
         }
         else {
-
             $logger->debug(Zend_Debug::dump($config->toArray(), 'no stylesheet directory specified'));
         }
 
@@ -122,20 +121,20 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
     }
 
     public function setMimeTypes($mimeTypes) {
-        $this->allowedMimeTypes = $mimeTypes;
+        $this->_allowedMimeTypes = $mimeTypes;
     }
 
     /**
      * Initialize the mime types from configuration
      */
     public function getMimeTypes() {
-        if (is_null($this->allowedMimeTypes)) {
+        if (is_null($this->_allowedMimeTypes)) {
             $config = $this->getConfig();
-            $this->allowedMimeTypes =
+            $this->_allowedMimeTypes =
                 isset($config->file->allow->mimetype) ? $config->file->allow->mimetype->toArray() : array();
         }
 
-        return $this->allowedMimeTypes;
+        return $this->_allowedMimeTypes;
     }
 
     /**
@@ -143,7 +142,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
      * @param $instance
      */
     private static function registerInstance($instance) {
-        self::$instances[$instance->getName()] = $instance;
+        self::$_instances[$instance->getName()] = $instance;
     }
 
     /**
@@ -152,7 +151,7 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
      * @return null
      */
     public static function getInstance($pluginName) {
-        return isset(self::$instances[$pluginName]) ? self::$instances[$pluginName] : null;
+        return isset(self::$_instances[$pluginName]) ? self::$_instances[$pluginName] : null;
     }
 
     /**

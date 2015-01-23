@@ -46,7 +46,7 @@ class Export_IndexController extends Controller_ModuleAccess {
     /**
      * @var array containing export plugins
      */
-    private $plugins;
+    private $_plugins;
 
     /**
      * Do some initialization on startup of every action
@@ -116,8 +116,8 @@ class Export_IndexController extends Controller_ModuleAccess {
      * TODO should the namespace for plugins be limited (security)?
      */
     protected function getPlugin($name) {
-        if (isset($this->plugins[$name])) {
-            $pluginConfig = $this->plugins[$name];
+        if (isset($this->_plugins[$name])) {
+            $pluginConfig = $this->_plugins[$name];
             $pluginClass = $pluginConfig->class;
 
             $plugin = new $pluginClass($name); // TODO good design?
@@ -145,12 +145,12 @@ class Export_IndexController extends Controller_ModuleAccess {
 
             $plugins = array();
 
-            foreach($exportPlugins as $name => $plugin) {
+            foreach ($exportPlugins as $name => $plugin) {
                 $pluginName = ($name === 'default') ? 'index' : $name;
                 $plugins[$pluginName] = $config->plugins->export->$name;
             }
 
-            $this->plugins = $plugins;
+            $this->_plugins = $plugins;
         }
     }
 

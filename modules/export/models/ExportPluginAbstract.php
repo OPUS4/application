@@ -44,34 +44,34 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
      * @var Name of plugin.
      * TODO Im Augenblick nur von PublistExport verwendet, um im XSLT zwischen Instanzen unterscheiden zu können.
      */
-    private $name;
+    private $_name;
 
     /**
      * @var Zend_Config $config Plugin configuration.
      */
-    private $config;
+    private $_config;
 
     /**
      * @var Zend_Controller_Request_Http Current request.
      */
-    private $request;
+    private $_request;
 
     /**
      * @var Zend_Controller_Response_Http Response object.
      */
-    private $response;
+    private $_response;
 
     /**
      * @var Zend_View View object for rendering response.
      */
-    private $view;
+    private $_view;
 
     /**
      * Returns name of plugin instance.
      * @return Name
      */
     public function getName() {
-        return $this->name;
+        return $this->_name;
     }
 
     /**
@@ -79,7 +79,7 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
      * @param $name
      */
     public function setName($name) {
-        $this->name = $name;
+        $this->_name = $name;
     }
 
     /**
@@ -87,7 +87,7 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
      * @param Zend_Config $config
      */
     public function setConfig(Zend_Config $config) {
-        $this->config = $config;
+        $this->_config = $config;
     }
 
     /**
@@ -97,10 +97,10 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
      * TODO access to global config just for convenience; should be removed
      */
     public function getConfig() {
-        if (is_null($this->config)) {
-            $this->config = Zend_Registry::get('Zend_Config');
+        if (is_null($this->_config)) {
+            $this->_config = Zend_Registry::get('Zend_Config');
         }
-        return $this->config;
+        return $this->_config;
     }
 
     /**
@@ -108,7 +108,7 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
      * @return Zend_Controller_Request_Http
      */
     public function getRequest() {
-        return $this->request;
+        return $this->_request;
     }
 
     /**
@@ -116,7 +116,7 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
      * @param Zend_Controller_Request_Http $request
      */
     public function setRequest(Zend_Controller_Request_Http $request) {
-        $this->request = $request;
+        $this->_request = $request;
     }
 
     /**
@@ -124,7 +124,7 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
      * @return Zend_Controller_Response_Http
      */
     public function getResponse() {
-        return $this->response;
+        return $this->_response;
     }
 
     /**
@@ -132,7 +132,7 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
      * @param Zend_Controller_Response_Http $response
      */
     public function setResponse(Zend_Controller_Response_Http $response) {
-        $this->response = $response;
+        $this->_response = $response;
     }
 
     /**
@@ -140,7 +140,7 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
      * @return Zend_View
      */
     public function getView() {
-        return $this->view;
+        return $this->_view;
     }
 
     /**
@@ -148,7 +148,7 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
      * @param Zend_View $view
      */
     public function setView(Zend_View $view) {
-        $this->view = $view;
+        $this->_view = $view;
     }
 
     /**

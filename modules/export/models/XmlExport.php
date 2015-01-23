@@ -75,7 +75,8 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
             $this->getResponse()->setHeader('Content-Type', 'text/xml; charset=UTF-8', true);
             if (false === is_null($this->_xslt)) {
                 $this->getResponse()->setBody($this->_proc->transformToXML($this->_xml));
-            } else {
+            }
+            else {
                 $this->getResponse()->setBody($this->_xml->saveXml());
             }
         }
@@ -133,8 +134,12 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
         $stylesheet = $request->getParam('stylesheet');
         $stylesheetDirectory = 'stylesheets-custom';
 
-        $this->loadStyleSheet($this->buildStylesheetPath($stylesheet,
-            $this->getView()->getScriptPath('') . $stylesheetDirectory));
+        $this->loadStyleSheet(
+            $this->buildStylesheetPath(
+                $stylesheet,
+                $this->getView()->getScriptPath('') . $stylesheetDirectory
+            )
+        );
 
         $this->prepareXml();
     }
@@ -260,10 +265,14 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
         $documents = array();
 
         $documentCacheTable = new Opus_Db_DocumentXmlCache();
-        $docXmlCache = $documentCacheTable->fetchAll($documentCacheTable->select()->where('document_id IN (?)',
-            $documentIds));//->find($this->document->getId(), '1')->current()->xml_data;
+        $docXmlCache = $documentCacheTable->fetchAll(
+            $documentCacheTable->select()->where(
+                'document_id IN (?)',
+                $documentIds
+            )
+        );//->find($this->document->getId(), '1')->current()->xml_data;
 
-        foreach($docXmlCache as $row) {
+        foreach ($docXmlCache as $row) {
             $fragment = new DomDocument();
             $fragment->loadXML($row->xml_data);
             $node = $fragment->getElementsByTagName('Opus_Document')->item(0);
@@ -299,7 +308,8 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
             $stylesheetsAvailable = array();
             $dir = new DirectoryIterator($path);
             foreach ($dir as $file) {
-                if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
+                if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..'
+                    && $file->isReadable()) {
                     array_push($stylesheetsAvailable, $file->getBasename('.xslt'));
                 }
             }
