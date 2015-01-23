@@ -35,34 +35,41 @@
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 require_once 'Opus3Migration_Base.php';
 
-set_include_path('.' . PATH_SEPARATOR
-        . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/importer'
-        . PATH_SEPARATOR . get_include_path());
+set_include_path(
+    '.' . PATH_SEPARATOR
+    . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/importer'
+    . PATH_SEPARATOR . get_include_path()
+);
 
 class Opus3Migration_Validation extends Opus3Migration_Base {
 
-    private $importFile;
-    private $type;
+    private $_importFile;
+
+    private $_type;
 
     function __construct($options) {
         parent::__construct();
-        if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
-	    if (array_key_exists('t', $options) !== false) { $this->type = $options["t"]; }
+        if (array_key_exists('f', $options) !== false) {
+            $this->_importFile = $options["f"];
+        }
+        if (array_key_exists('t', $options) !== false) {
+            $this->_type = $options["t"];
+        }
     }
     
     public function validate() {        
-	if ($this->type === 'validation') {
-		$this->validateImportFile();
-	}
-	if ($this->type === 'consistency') {
-		$this->checkConsistencyOfImportFile();
-	}	
+        if ($this->_type === 'validation') {
+            $this->validateImportFile();
+        }
+        if ($this->_type === 'consistency') {
+            $this->checkConsistencyOfImportFile();
+        }
     }
 
     private function validateImportFile() {
         libxml_clear_errors();
         libxml_use_internal_errors(true);
-        $file = file_get_contents($this->importFile, true);
+        $file = file_get_contents($this->_importFile, true);
         $xml = simplexml_load_string($file);
         $xmlstr = explode("\n", $file);
 
@@ -81,34 +88,35 @@ class Opus3Migration_Validation extends Opus3Migration_Base {
     }
 
     public function log_error($string) {
-        $this->logger->log($string, Zend_Log::ERR);
+        $this->_logger->log($string, Zend_Log::ERR);
     }
     
     private function checkConsistencyOfImportFile() {
-	$xml = new DOMDocument;
-	$xml->load($this->importFile);
+    $xml = new DOMDocument;
+    $xml->load($this->_importFile);
 
-	$xsl = new DOMDocument;
-	$xsl->load('stylesheets/check.xslt');
+    $xsl = new DOMDocument;
+    $xsl->load('stylesheets/check.xslt');
 
-	$proc = new XSLTProcessor;
-	$proc->importStyleSheet($xsl);
-	
-	$result = $proc->transformToXML($xml);
+    $proc = new XSLTProcessor;
+    $proc->importStyleSheet($xsl);
+    
+    $result = $proc->transformToXML($xml);
         if (strlen($result) > 0) {
-	    echo $result;
+        echo $result;
             throw new Exception("XML-Dump-File is not consistent.");
-        }	
+        }    
     }
     
 
     private function displayErrorLine($line, $error) {
-        echo "\n" . $this->importFile .": " . $error->line ."(" . $error->column .") : ". $error->message;
-	if ($error->column <= 50) {
-		echo substr($line, 0, 80)."\n";
-	} else {
-		echo substr($line, $error->column-40, 80)."\n";
-	}
+        echo "\n" . $this->_importFile .": " . $error->line ."(" . $error->column .") : ". $error->message;
+        if ($error->column <= 50) {
+            echo substr($line, 0, 80)."\n";
+        }
+        else {
+            echo substr($line, $error->column-40, 80)."\n";
+        }
     }
 }
 

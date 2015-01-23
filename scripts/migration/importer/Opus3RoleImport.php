@@ -37,24 +37,24 @@ class Opus3RoleImport {
    /**
     * Holds Zend-Configurationfile
     */
-    protected $config = null;
+    protected $_config = null;
 
    /**
     * Holds Logger
     *
     */
-    protected $logger = null;
+    protected $_logger = null;
 
    /**
     * Holds Roles
     *
     */
-    protected $roles = array();
+    protected $_roles = array();
 
    /**
     * Holds Ips    *
     */
-    protected $ips = array();
+    protected $_ips = array();
 
     /**
      * Imports roles and ipranges from Opus3
@@ -62,10 +62,10 @@ class Opus3RoleImport {
      */
     
     public function __construct() {
-        $this->config = Zend_Registry::get('Zend_Config');
-        $this->logger = Zend_Registry::get('Zend_Log');
-        $this->ips = $this->config->migration->ip;
-        $this->roles = $this->config->migration->role;
+        $this->_config = Zend_Registry::get('Zend_Config');
+        $this->_logger = Zend_Registry::get('Zend_Log');
+        $this->_ips = $this->_config->migration->ip;
+        $this->_roles = $this->_config->migration->role;
     }
 
     /**
@@ -83,8 +83,8 @@ class Opus3RoleImport {
 
     private function storeIps() {
         try {
-            if (count($this->ips) > 0) {
-                foreach ($this->ips as $i) {
+            if (count($this->_ips) > 0) {
+                foreach ($this->_ips as $i) {
                     $ip = explode('-', $i->ip, 2);
                     $lower = "";
                     $upper = "";
@@ -92,10 +92,12 @@ class Opus3RoleImport {
                     if (count($ip) == 1) {
                         $lower = $ip[0];
                         $upper = $ip[0];
-                    } else if (count($ip) == 2) {
+                    }
+                    else if (count($ip) == 2) {
                         $lower = $ip[0];
                         $upper = $ip[1];
-                    } else {
+                    }
+                    else {
                         throw new Exception("ERROR Opus3RoleImport: ".$i." is not a regular IP-Address or IP-Range\n");
                     }
 
@@ -106,7 +108,8 @@ class Opus3RoleImport {
                     $range->store();
                 }
             }
-        } catch (Exception $e) {
+        }
+        catch (Exception $e) {
             echo $e->getMessage();
         }
     }
@@ -114,7 +117,7 @@ class Opus3RoleImport {
 
     private function mapRoles() {
 
-        $mf = $this->config->migration->mapping->roles;
+        $mf = $this->_config->migration->mapping->roles;
         $fp = null;
         try {
             $fp = @fopen($mf, 'w');
@@ -122,39 +125,39 @@ class Opus3RoleImport {
                 throw new Exception("ERROR Opus3RoleImport: Could not create '".$mf."' for Roles.\n");
             }
         } catch (Exception $e){
-            $this->logger->log($e->getMessage(), Zend_Log::ERR);
+            $this->_logger->log($e->getMessage(), Zend_Log::ERR);
             return;
         }
 
         try {
-            if (count($this->roles) > 0) {
-                foreach ($this->roles as $r) {
+            if (count($this->_roles) > 0) {
+                foreach ($this->_roles as $r) {
                     $name = $r->name;
                     $bereich = $r->bereich;
 
                     $role = null;
                     if (Opus_UserRole::fetchByname($name)) {
                         $role = Opus_UserRole::fetchByname($name);
-                        $this->logger->log("Role in DB found: " . $r->name, Zend_Log::DEBUG);
-                    } else {
+                        $this->_logger->log("Role in DB found: " . $r->name, Zend_Log::DEBUG);
+                    }
+                    else {
                         $role = new Opus_UserRole();
                         $role->setName($r->name);
                         $role->store();
-                        $this->logger->log("Role imported: " . $r->name, Zend_Log::DEBUG);
+                        $this->_logger->log("Role imported: " . $r->name, Zend_Log::DEBUG);
                     }
 
-                    $db_ips = array();
-                    $db_ips = Opus_Iprange::getAll();
+                    $dbIps = Opus_Iprange::getAll();
 
                     if (count($r->ip) > 0) {
-                        foreach ($r->ip as $role_ip) {
-                            foreach ($db_ips as $db_ip) {
-                                if ($role_ip == $db_ip->getDisplayName()) {
+                        foreach ($r->ip as $roleIp) {
+                            foreach ($dbIps as $dbIp) {
+                                if ($roleIp == $dbIp->getDisplayName()) {
                                     $roles = array();
-                                    $roles = $db_ip->getRole();
+                                    $roles = $dbIp->getRole();
                                     array_push($roles, $role);
-                                    $db_ip->setRole($roles);
-                                    $db_ip->store();
+                                    $dbIp->setRole($roles);
+                                    $dbIp->store();
                                 }
                             }
                         }
@@ -164,10 +167,10 @@ class Opus3RoleImport {
                     fputs($fp, $r->bereich . ' ' .  $role->getId() . "\n");
 
                 }
-           }
+            }
         }
         catch (Exception $e){
-            $this->logger->log($e->getMessage(), Zend_Log::ERR);
+            $this->_logger->log($e->getMessage(), Zend_Log::ERR);
         }
 
         fclose($fp);

@@ -41,14 +41,14 @@ class Opus3XMLImport {
     *
     * @var file.
     */
-    protected $config = null;
+    protected $_config = null;
 
    /**
     * Holds Logger
     *
     * @var file
     */
-    protected $logger = null;
+    protected $_logger = null;
 
     /**
      * Holds xml representation of document information to be processed.
@@ -73,55 +73,55 @@ class Opus3XMLImport {
      *
      * @var DomNode  XML-Representation of the document to import
      */
-    protected $document = null;
+    protected $_document = null;
      /**
      * Holds the Mappings forCollections
      *
      * @var Array
      */
-    protected $mappings = array();
+    protected $_mappings = array();
 
     /**
      * Holds the Collections the document should be added
      *
      * @var Array
      */
-    protected $collections = array();
+    protected $_collections = array();
 
     /**
      * Holds the Series the document should be added
      *
      * @var Array
      */
-    protected $series = array();
+    protected $_series = array();
 
     /**
      * Holds Values for Grantor, Licence and PublisherUniversity
      *
      * @var Array
      */
-    protected $values = array();
+    protected $_values = array();
 
     /**
      * Holds SortOrder of Authors
      *
      * @var Array
      */
-    protected $personSortOrder = array();
+    protected $_personSortOrder = array();
 
     /**
      * Holds Doctypes for Thesis
      *
      * @var Array
      */
-    protected $thesistypes = array();
+    protected $_thesistypes = array();
 
     /**
      * Holds the old identifier of the document
      *
      * @var string
      */
-    protected $oldId = null;
+    protected $_oldId = null;
 
 
     /**
@@ -129,7 +129,7 @@ class Opus3XMLImport {
      *
      * @var DomDocument  XML-Representation of the importfile
      */
-    protected $completeXML = null;
+    protected $_completeXML = null;
 
 
     /**
@@ -141,8 +141,8 @@ class Opus3XMLImport {
      */
     public function __construct($xslt, $stylesheetPath) {
         // Initialize member variables.
-        $this->config = Zend_Registry::get('Zend_Config');
-        $this->logger = Zend_Registry::get('Zend_Log');
+        $this->_config = Zend_Registry::get('Zend_Config');
+        $this->_logger = Zend_Registry::get('Zend_Log');
 
         $this->_xml = new DomDocument;
         $this->_xslt = new DomDocument;
@@ -151,34 +151,52 @@ class Opus3XMLImport {
         $this->_proc->registerPhpFunctions();
         $this->_proc->importStyleSheet($this->_xslt);
 
-        $this->mapping['language'] =  array('old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->config->migration->language);
-        $this->mapping['type'] =  array('old' => 'OldType', 'new' => 'Type', 'config' => $this->config->migration->doctype);
+        $this->mapping['language'] =  array(
+            'old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->_config->migration->language
+        );
+        $this->mapping['type'] =  array(
+            'old' => 'OldType', 'new' => 'Type', 'config' => $this->_config->migration->doctype
+        );
 
-        $this->mapping['collection'] = array('name' => 'OldCollection', 'mapping' => $this->config->migration->mapping->collections);
-        $this->mapping['institute'] = array('name' => 'OldInstitute',  'mapping' => $this->config->migration->mapping->institutes);
-        $this->mapping['series'] = array('name' => 'OldSeries',  'mapping' => $this->config->migration->mapping->series);
-        $this->mapping['grantor'] = array('name' => 'OldGrantor', 'mapping' => $this->config->migration->mapping->grantors);
-        $this->mapping['licence'] = array('name' => 'OldLicence',  'mapping' => $this->config->migration->mapping->licences);
-        $this->mapping['publisherUniversity'] = array('name' => 'OldPublisherUniversity', 'mapping' => $this->config->migration->mapping->universities);
-        $this->mapping['role'] = array('name' => 'OldRole', 'mapping' => $this->config->migration->mapping->roles);
+        $this->mapping['collection'] = array(
+            'name' => 'OldCollection', 'mapping' => $this->_config->migration->mapping->collections
+        );
+        $this->mapping['institute'] = array(
+            'name' => 'OldInstitute',  'mapping' => $this->_config->migration->mapping->institutes
+        );
+        $this->mapping['series'] = array(
+            'name' => 'OldSeries',  'mapping' => $this->_config->migration->mapping->series
+        );
+        $this->mapping['grantor'] = array(
+            'name' => 'OldGrantor', 'mapping' => $this->_config->migration->mapping->grantors
+        );
+        $this->mapping['licence'] = array(
+            'name' => 'OldLicence',  'mapping' => $this->_config->migration->mapping->licences
+        );
+        $this->mapping['publisherUniversity'] = array(
+            'name' => 'OldPublisherUniversity', 'mapping' => $this->_config->migration->mapping->universities
+        );
+        $this->mapping['role'] = array(
+            'name' => 'OldRole', 'mapping' => $this->_config->migration->mapping->roles
+        );
 
-        array_push($this->thesistypes, 'bachelorthesis');
-        array_push($this->thesistypes, 'doctoralthesis');
-        array_push($this->thesistypes, 'habilitation');
-        array_push($this->thesistypes, 'masterthesis');
-        array_push($this->thesistypes, 'studythesis');
+        array_push($this->_thesistypes, 'bachelorthesis');
+        array_push($this->_thesistypes, 'doctoralthesis');
+        array_push($this->_thesistypes, 'habilitation');
+        array_push($this->_thesistypes, 'masterthesis');
+        array_push($this->_thesistypes, 'studythesis');
     }
 
     public function initImportFile($data) {
-        $this->completeXML = new DOMDocument;
-        if (isset($this->config->migration->bem_extern)) {
-            $this->_proc->setParameter('', 'bem_extern', $this->config->migration->bem_extern);
+        $this->_completeXML = new DOMDocument;
+        if (isset($this->_config->migration->bem_extern)) {
+            $this->_proc->setParameter('', 'bem_extern', $this->_config->migration->bem_extern);
         }
-        if (isset($this->config->migration->subjects)) {
-            $this->_proc->setParameter('', 'subjects', $this->config->migration->subjects);
+        if (isset($this->_config->migration->subjects)) {
+            $this->_proc->setParameter('', 'subjects', $this->_config->migration->subjects);
         }
-        $this->completeXML->loadXML($this->_proc->transformToXml($data));
-        $doclist = $this->completeXML->getElementsByTagName('Opus_Document');
+        $this->_completeXML->loadXML($this->_proc->transformToXml($data));
+        $doclist = $this->_completeXML->getElementsByTagName('Opus_Document');
         return $doclist;
     }
 
@@ -189,15 +207,15 @@ class Opus3XMLImport {
      * @return array information about the document that has been imported
      */
     public function import($document) {
-        $this->collections = array();
-        $this->values = array();
-        $this->series = array();
-        $this->personSortOrder = array();
-        $this->document = $document;
-        $this->oldId = $this->document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
+        $this->_collections = array();
+        $this->_values = array();
+        $this->_series = array();
+        $this->_personSortOrder = array();
+        $this->_document = $document;
+        $this->_oldId = $this->_document->getElementsByTagName('IdentifierOpus3')->Item(0)->getAttribute('Value');
 
         $this->skipEmptyFields();
-	$this->validatePersonSubmitterEmail();
+    $this->validatePersonSubmitterEmail();
         $this->checkTitleMainAbstractForDuplicateLanguage();
         $this->checkTitleAdditional();
 
@@ -214,42 +232,42 @@ class Opus3XMLImport {
         $doc = null;
 
         try {
-            $doc = Opus_Document::fromXml('<Opus>' . $this->completeXML->saveXML($this->document) . '</Opus>');
+            $doc = Opus_Document::fromXml('<Opus>' . $this->_completeXML->saveXML($this->_document) . '</Opus>');
 
             // ThesisGrantor and ThesisPublisher only for Thesis-Documents
-            if(in_array($doc->getType(), $this->thesistypes)) {
-                if (array_key_exists('grantor', $this->values)) {
-                    $dnbGrantor = new Opus_DnbInstitute($this->values['grantor']);
+            if (in_array($doc->getType(), $this->_thesistypes)) {
+                if (array_key_exists('grantor', $this->_values)) {
+                    $dnbGrantor = new Opus_DnbInstitute($this->_values['grantor']);
                     $doc->setThesisGrantor($dnbGrantor);
                 }
-                if (array_key_exists('publisherUniversity', $this->values)) {
-                    $dnbPublisher = new Opus_DnbInstitute($this->values['publisherUniversity']);
+                if (array_key_exists('publisherUniversity', $this->_values)) {
+                    $dnbPublisher = new Opus_DnbInstitute($this->_values['publisherUniversity']);
                     $doc->setThesisPublisher($dnbPublisher);
                 }
             }
 
-            if (array_key_exists('licence', $this->values)) {
-                $doc->addLicence(new Opus_Licence($this->values['licence']));
+            if (array_key_exists('licence', $this->_values)) {
+                $doc->addLicence(new Opus_Licence($this->_values['licence']));
             }
 
             // TODO Opus4.x : Handle SortOrder via Opus_Document_Model
              foreach ($doc->getPersonAuthor() as $a) {
                 $lastname = $a->getLastName();
                 $firstname = $a->getFirstName();
-                $sortorder = $this->personSortOrder[$lastname.",".$firstname];
+                $sortorder = $this->_personSortOrder[$lastname.",".$firstname];
                 $a->setSortOrder($sortorder);
-            }
+             }
 
 
 
-            foreach ($this->collections as $c) {
+            foreach ($this->_collections as $c) {
                 $coll = new Opus_Collection($c);
                 $coll->setVisible(1);
                 $coll->store();
                 $doc->addCollection($coll);
             }
 
-            foreach ($this->series as $s) {
+            foreach ($this->_series as $s) {
                 $series = new Opus_Series($s[0]);
                 $doc->addSeries($series)->setNumber($s[1]);
             }
@@ -258,11 +276,11 @@ class Opus3XMLImport {
             $doc->store();
 
             $imported['result'] = 'success';
-            $imported['oldid'] = $this->oldId;
+            $imported['oldid'] = $this->_oldId;
             $imported['newid'] = $doc->getId();
        
-            if (array_key_exists('role', $this->values)) {
-                $imported['roleid'] = $this->values['role'];
+            if (array_key_exists('role', $this->_values)) {
+                $imported['roleid'] = $this->_values['role'];
                 //$this->logger->log("ROLE_ID'" . $this->values['roleid'] . "', Zend_Log::DEBUG);
             }
         } catch (Exception $e) {
@@ -270,24 +288,25 @@ class Opus3XMLImport {
             $imported['message'] = $e->getMessage();
             if (!is_null($doc)) {
                 $imported['entry'] = $doc->toXml()->saveXML();
-            } else  {
-                $imported['entry'] = $this->completeXML->saveXML($this->document);
             }
-            $imported['oldid'] = $this->oldId;
+            else {
+                $imported['entry'] = $this->_completeXML->saveXML($this->_document);
+            }
+            $imported['oldid'] = $this->_oldId;
         }
 
-        unset($this->collections);
-        unset($this->series);
-        unset($this->values);
-        unset($this->document);
-        unset($this->oldId);
+        unset($this->_collections);
+        unset($this->_series);
+        unset($this->_values);
+        unset($this->_document);
+        unset($this->_oldId);
 
         return $imported;
     }
 
     private function createNewEnrichmentKeys() {
 
-        $elements = $this->document->getElementsByTagName('Enrichment');
+        $elements = $this->_document->getElementsByTagName('Enrichment');
         foreach ($elements as $e) {
             $keyname = $e->getAttribute('KeyName');
             if (is_null(Opus_EnrichmentKey::fetchByName($keyname))) {
@@ -310,17 +329,19 @@ class Opus3XMLImport {
 
         array_push($roles, array('Subject', 'Value'));
         array_push($roles, array('IdentifierIsbn', 'Value'));
-	array_push($roles, array('Enrichment', 'Value'));
+        array_push($roles, array('Enrichment', 'Value'));
 
         array_push($roles, array('Note', 'Message'));
  
         foreach ($roles as $r) {
-            $elements = $this->document->getElementsByTagName($r[0]);
+            $elements = $this->_document->getElementsByTagName($r[0]);
             foreach ($elements as $e) {
                 if (trim($e->getAttribute($r[1])) == "") {
-                    $this->logger->log("Old ID '" . $this->oldId . "' : '" . $r[0] . "' with empty '" .
-                        $r[1] . "' will not be imported", Zend_Log::ERR);
-                    $this->document->removeChild($e);
+                    $this->_logger->log(
+                        "Old ID '" . $this->_oldId . "' : '" . $r[0] . "' with empty '" .
+                        $r[1] . "' will not be imported", Zend_Log::ERR
+                    );
+                    $this->_document->removeChild($e);
                 }
             }
         }
@@ -332,72 +353,85 @@ class Opus3XMLImport {
         $oa = $this->mapping['language'];
         foreach ($tagnames as $tag) {
             $language = array();
-            $elements = $this->document->getElementsByTagName($tag);
+            $elements = $this->_document->getElementsByTagName($tag);
             foreach ($elements as $e) {
-                $old_value = $e->getAttribute($oa['old']);
-                if ($oa['config']->$old_value) {
-                    $new_value = $oa['config']->$old_value;
-                } else {
-                    $this->logger->log("Old ID '" .
-                        $this->oldId . "' : No Mapping for 'language' in '" . $tag . "' with value '" . $old_value .
-                        "' found. Set to default-Value '" .  $oa['config']->default . "'", Zend_Log::ERR);
-                    $new_value = $oa['config']->default;
+                $oldValue = $e->getAttribute($oa['old']);
+                if ($oa['config']->$oldValue) {
+                    $newValue = $oa['config']->$oldValue;
+                }
+                else {
+                    $this->_logger->log(
+                        "Old ID '" .
+                        $this->_oldId . "' : No Mapping for 'language' in '" . $tag . "' with value '" . $oldValue .
+                        "' found. Set to default-Value '" .  $oa['config']->default . "'", Zend_Log::ERR
+                    );
+                    $newValue = $oa['config']->default;
                 }
                 /* Check for TitleElements with duplicated Languages */
-                if (in_array($new_value, $language)) {
-                    $this->logger->log("Old ID '" . $this->oldId . "' : This document has two '" .
-                        $tag . "' with equal language. Document will not be indexed", Zend_Log::ERR);
-                } else {
-                    array_push($language, $new_value);
+                if (in_array($newValue, $language)) {
+                    $this->_logger->log(
+                        "Old ID '" . $this->_oldId . "' : This document has two '" .
+                        $tag . "' with equal language. Document will not be indexed", Zend_Log::ERR
+                    );
+                }
+                else {
+                    array_push($language, $newValue);
                 }
             }
         }
     }
 
     private function checkTitleAdditional() {
-        $elements = $this->document->getElementsByTagName('TitleAdditional');
+        $elements = $this->_document->getElementsByTagName('TitleAdditional');
         foreach ($elements as $e) {
-            $this->logger->log("Old ID '" . $this->oldId . "' : 'title_en' or 'title_de' mapped to ".
-                "'TitleAdditional' to prevent 'TitleMain' with duplicate language", Zend_Log::WARN);
+            $this->_logger->log(
+                "Old ID '" . $this->_oldId . "' : 'title_en' or 'title_de' mapped to ".
+                "'TitleAdditional' to prevent 'TitleMain' with duplicate language", Zend_Log::WARN
+            );
         }
-     }
+    }
 
      private function validatePersonSubmitterEmail() {
 
         $roles = array();
- 	$validator = new Zend_Validate_EmailAddress();
-        $elements = $this->document->getElementsByTagName('PersonSubmitter');
+        $validator = new Zend_Validate_EmailAddress();
+        $elements = $this->_document->getElementsByTagName('PersonSubmitter');
         foreach ($elements as $e) {
             if (trim($e->getAttribute('Email')) != "") {
                 if (!($validator->isValid($e->getAttribute('Email')))) {
-                    $this->logger->log("Old ID '" . $this->oldId . "' : Invalid Email-Address '"
+                    $this->_logger->log(
+                        "Old ID '" . $this->_oldId . "' : Invalid Email-Address '"
                         . $e->getAttribute('Email') . "' will be imported as 'InvalidVerification'-Enrichment",
-                        Zend_Log::ERR);
-                    $enrichment =  $this->document->appendChild(new DOMElement('Enrichment'));
+                        Zend_Log::ERR
+                    );
+                    $enrichment =  $this->_document->appendChild(new DOMElement('Enrichment'));
                     $enrichment->setAttributeNode(new DOMAttr('KeyName', 'InvalidVerification'));
                     $enrichment->setAttributeNode(new DOMAttr('Value', $e->getAttribute('Email')));
                     $e->removeAttribute('Email');
                 }
             }
         }
-    }
+     }
 
     
     private function mapDocumentTypeAndLanguage() {
         $mapping = array('language', 'type');
         foreach ($mapping as $m) {
             $oa = $this->mapping[$m];
-            $old_value = $this->document->getAttribute($oa['old']);
-            if ($oa['config']->$old_value) {
-                $new_value = $oa['config']->$old_value;
-            } else {
-                $this->logger->log("Old ID '" . $this->oldId . "' : No Mapping for '" . $m .
-                    "' in Document with value '" . $old_value . "' found. Set to default-Value '" .
-                    $oa['config']->default . "'", Zend_Log::ERR);
-                $new_value = $oa['config']->default;
+            $oldValue = $this->_document->getAttribute($oa['old']);
+            if ($oa['config']->$oldValue) {
+                $newValue = $oa['config']->$oldValue;
             }
-            $this->document->removeAttribute($oa['old']);
-            $this->document->setAttribute($oa['new'], $new_value);
+            else {
+                $this->_logger->log(
+                    "Old ID '" . $this->_oldId . "' : No Mapping for '" . $m .
+                    "' in Document with value '" . $oldValue . "' found. Set to default-Value '" .
+                    $oa['config']->default . "'", Zend_Log::ERR
+                );
+                $newValue = $oa['config']->default;
+            }
+            $this->_document->removeAttribute($oa['old']);
+            $this->_document->setAttribute($oa['new'], $newValue);
         }
     }
 
@@ -405,34 +439,38 @@ class Opus3XMLImport {
         $tagnames = array('TitleMain', 'TitleAbstract', 'TitleAdditional', 'Subject');
         $oa = $this->mapping['language'];
         foreach ($tagnames as $tag) {
-            $elements = $this->document->getElementsByTagName($tag);
+            $elements = $this->_document->getElementsByTagName($tag);
             foreach ($elements as $e) {
-                $old_value = $e->getAttribute($oa['old']);
-                if ($oa['config']->$old_value) {
-                    $new_value = $oa['config']->$old_value;
-                } else {
-                    $this->logger->log("Old ID '" . $this->oldId . "' : No Mapping for '" . $m .
-                        "' in '" . $tag . "' with value '" . $old_value . "' found. Set to default-Value '" .
-                        $oa['config']->default . "'", Zend_Log::ERR);
-                    $new_value = $oa['config']->default;
+                $oldValue = $e->getAttribute($oa['old']);
+                if ($oa['config']->$oldValue) {
+                    $newValue = $oa['config']->$oldValue;
+                }
+                else {
+                    // TODO bug $m not defined
+                    $this->_logger->log(
+                        "Old ID '" . $this->_oldId . "' : No Mapping for '" . $m .
+                        "' in '" . $tag . "' with value '" . $oldValue . "' found. Set to default-Value '" .
+                        $oa['config']->default . "'", Zend_Log::ERR
+                    );
+                    $newValue = $oa['config']->default;
                 }
                 $e->removeAttribute($oa['old']);
-                $e->setAttribute($oa['new'], $new_value);
+                $e->setAttribute($oa['new'], $newValue);
             }
         }
     }
 
     private function mapClassifications() {
-        $old_bkl = array('name' => 'OldBkl', 'role' => 'bkl');
-        $old_ccs = array('name' => 'OldCcs', 'role' => 'ccs');
-        $old_ddc = array('name' => 'OldDdc', 'role' => 'ddc');
-        $old_jel = array('name' => 'OldJel', 'role' => 'jel');
-        $old_msc = array('name' => 'OldMsc', 'role' => 'msc');
-        $old_pacs = array('name' => 'OldPacs', 'role' => 'pacs');
-        $old_array = array($old_bkl, $old_ccs, $old_ddc, $old_jel, $old_msc, $old_pacs);
+        $oldBkl = array('name' => 'OldBkl', 'role' => 'bkl');
+        $oldCcs = array('name' => 'OldCcs', 'role' => 'ccs');
+        $oldDdc = array('name' => 'OldDdc', 'role' => 'ddc');
+        $oldJel = array('name' => 'OldJel', 'role' => 'jel');
+        $oldMsc = array('name' => 'OldMsc', 'role' => 'msc');
+        $oldPacs = array('name' => 'OldPacs', 'role' => 'pacs');
+        $oldArray = array($oldBkl, $oldCcs, $oldDdc, $oldJel, $oldMsc, $oldPacs);
 
-        foreach ($old_array as $oa) {
-            $elements = $this->document->getElementsByTagName($oa['name']);
+        foreach ($oldArray as $oa) {
+            $elements = $this->_document->getElementsByTagName($oa['name']);
 
             while ($elements->length > 0) {
                 $e = $elements->Item(0);
@@ -443,15 +481,19 @@ class Opus3XMLImport {
                 if (count($colls) > 0) {
                     foreach ($colls as $c) {
                         /* TODO: DDC-Hack */
-                        if (($oa['role'] === 'ddc') and ($c->hasChildren())) { continue; }
-                        array_push($this->collections, $c->getId());
+                        if (($oa['role'] === 'ddc') and ($c->hasChildren())) {
+                            continue;
+                        }
+                        array_push($this->_collections, $c->getId());
                     }
                 }
                 else {
-                    $this->logger->log("Old ID '" . $this->oldId . "' : Document not added to '" .
-                        $oa['role'] . "' '" . $value . "'", Zend_Log::ERR);
+                    $this->_logger->log(
+                        "Old ID '" . $this->_oldId . "' : Document not added to '" .
+                        $oa['role'] . "' '" . $value . "'", Zend_Log::ERR
+                    );
                 }
-                $this->document->removeChild($e);
+                $this->_document->removeChild($e);
             }
         }
     }
@@ -461,32 +503,36 @@ class Opus3XMLImport {
 
         foreach ($mapping as $m) {
             $oa = $this->mapping[$m];
-            $elements = $this->document->getElementsByTagName($oa['name']);
+            $elements = $this->_document->getElementsByTagName($oa['name']);
             while ($elements->length > 0) {
                 $e = $elements->Item(0);
-                $old_value = $e->getAttribute('Value');
+                $oldValue = $e->getAttribute('Value');
 
-                if (!is_null ($this->getMapping($oa['mapping'], $old_value))) {
-                    $new_value = $this->getMapping($oa['mapping'], $old_value);
+                if (!is_null($this->getMapping($oa['mapping'], $oldValue))) {
+                    $newValue = $this->getMapping($oa['mapping'], $oldValue);
 
                     if ($m === 'series') {
 
-                        $old_issue = $e->getAttribute('Issue');
-                        $new_series = array($new_value, $old_issue);
-                        //$this->logger->log("Found Mapping in ".$oa['mapping'].": '".$old_value."' --> '".$new_value."' with Issue '".$old_issue."'", Zend_Log::DEBUG);
-                        array_push($this->series,  $new_series);
+                        $oldIssue = $e->getAttribute('Issue');
+                        $newSeries = array($newValue, $oldIssue);
+                        // $this->logger->log("Found Mapping in ".$oa['mapping'].": '".$old_value."' --> '".$new_value
+                        // ."' with Issue '".$old_issue."'", Zend_Log::DEBUG);
+                        array_push($this->_series, $newSeries);
 
-                    } else {
-                        array_push($this->collections,  $new_value);
+                    }
+                    else {
+                        array_push($this->_collections, $newValue);
                     }
 
                 }
                 else {
-                    $this->logger->log("Old ID '" . $this->oldId . "' : ('$m'): No valid Mapping in '"
-                        . $oa['mapping'] . "' for '" . $old_value . "'", Zend_Log::ERR);
+                    $this->_logger->log(
+                        "Old ID '" . $this->_oldId . "' : ('$m'): No valid Mapping in '"
+                        . $oa['mapping'] . "' for '" . $oldValue . "'", Zend_Log::ERR
+                    );
                 }
 
-                $this->document->removeChild($e);
+                $this->_document->removeChild($e);
             }
         }
     }
@@ -496,30 +542,33 @@ class Opus3XMLImport {
         foreach ($mapping as $m) {
             $oa = $this->mapping[$m];
             //$this->logger->log("($m): Mapping  '" . $oa['mapping'] . "' for '" . $oa['name'] . "'", Zend_Log::DEBUG);
-            $elements = $this->document->getElementsByTagName($oa['name']);
+            $elements = $this->_document->getElementsByTagName($oa['name']);
             while ($elements->length > 0) {
                 $e = $elements->Item(0);
-                $old_value = $e->getAttribute('Value');
+                $oldValue = $e->getAttribute('Value');
 
 
                 if ($m === 'publisherUniversity') {
-                    $old_value = str_replace(" ", "_", $old_value);
+                    $oldValue = str_replace(" ", "_", $oldValue);
                 }
 
-                if (!is_null ($this->getMapping($oa['mapping'], $old_value))) {
-                    $new_value = $this->getMapping($oa['mapping'], $old_value);
-                    $this->values[$m] = $new_value;
-                    //$this->logger->log("Found Mapping in " . $oa['mapping'] . ": '" .$old_value . "' --> '" .$new_value . "'", Zend_Log::DEBUG);
+                if (!is_null($this->getMapping($oa['mapping'], $oldValue))) {
+                    $newValue = $this->getMapping($oa['mapping'], $oldValue);
+                    $this->_values[$m] = $newValue;
+                    // $this->logger->log("Found Mapping in " . $oa['mapping'] . ": '" .$old_value . "' --> '"
+                    // . $new_value . "'", Zend_Log::DEBUG);
                 }
                 else {
-                    $this->logger->log("Old ID '" . $this->oldId . "' : ('$m'): No valid Mapping in '"
-                        . $oa['mapping'] . "' for '" . $old_value . "'", Zend_Log::ERR);
+                    $this->_logger->log(
+                        "Old ID '" . $this->_oldId . "' : ('$m'): No valid Mapping in '"
+                        . $oa['mapping'] . "' for '" . $oldValue . "'", Zend_Log::ERR
+                    );
                 }
 
-                $this->document->removeChild($e);
+                $this->_document->removeChild($e);
             }
         }
-    }
+     }
 
     private function getSortorder() {
 
@@ -527,12 +576,12 @@ class Opus3XMLImport {
         array_push($roles, 'PersonAuthor');
 
         foreach ($roles as $r) {
-            $elements = $this->document->getElementsByTagName($r);
+            $elements = $this->_document->getElementsByTagName($r);
             foreach ($elements as $e) {
                 $firstname = $e->getAttribute('FirstName');
                 $lastname = $e->getAttribute('LastName');
                 $sortorder = $e->getAttribute('SortOrder');
-                $this->personSortOrder[$lastname.",".$firstname] = $sortorder;
+                $this->_personSortOrder[$lastname.",".$firstname] = $sortorder;
                 $e->removeAttribute('SortOrder');
             }
         }
@@ -549,7 +598,7 @@ class Opus3XMLImport {
      private function getMapping($mappingFile, $id) {
         /* TODO: CHECK if File exists , echo ERROR and return null if not*/
         if (!is_readable($mappingFile)) {
-            $this->logger->log("MappingFile '" . $mappingFile . "' is not readable", Zend_Log::ERR);
+            $this->_logger->log("MappingFile '" . $mappingFile . "' is not readable", Zend_Log::ERR);
             return null;
         }
         $fp = file($mappingFile);
@@ -564,6 +613,6 @@ class Opus3XMLImport {
         }
         unset($fp);
         return $mapping[$id];
-    }
+     }
 
 }

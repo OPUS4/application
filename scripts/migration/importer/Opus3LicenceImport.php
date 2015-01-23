@@ -40,34 +40,34 @@ class Opus3LicenceImport {
     *
     * @var file
     */
-    protected $config = null;
+    protected $_config = null;
 
    /**
     * Holds Logger
     *
     * @var file
     */
-    protected $logger = null;
+    protected $_logger = null;
     
      /**
      * Holds the Mappings from ConfigFile
      *
      * @var Array
      */
-    protected $mapping = array();
+    protected $_mapping = array();
 
    /**
     * Holds Maximum Sortorder
     *
     */
-    protected $maxSortOrder = 1;
+    protected $_maxSortOrder = 1;
 
    /**
     * Holds the complete data to import in XML
     *
     * @var xml-structure
     */
-    protected $data = null;
+    protected $_data = null;
 
 
     /**
@@ -77,14 +77,16 @@ class Opus3LicenceImport {
      * @return array List of documents that have been imported
      */
     public function __construct($data) {
-        $this->config = Zend_Registry::get('Zend_Config');
-        $this->logger = Zend_Registry::get('Zend_Log');
-        $this->mapping['language'] =  array('old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->config->migration->language);
-        $this->data = $data;
+        $this->_config = Zend_Registry::get('Zend_Config');
+        $this->_logger = Zend_Registry::get('Zend_Log');
+        $this->_mapping['language'] =  array(
+            'old' => 'OldLanguage', 'new' => 'Language', 'config' => $this->_config->migration->language
+        );
+        $this->_data = $data;
 
         foreach (Opus_Licence::getAll() as $lic) {
-            if ($lic->getSortOrder() > $this->maxSortOrder) {
-                $this->maxSortOrder = $lic->getSortOrder();
+            if ($lic->getSortOrder() > $this->_maxSortOrder) {
+                $this->_maxSortOrder = $lic->getSortOrder();
             }
         }
     }
@@ -98,12 +100,12 @@ class Opus3LicenceImport {
      */
 
     public function start() {
-	$doclist = $this->data->getElementsByTagName('table_data');
-	foreach ($doclist as $document) {
+    $doclist = $this->_data->getElementsByTagName('table_data');
+    foreach ($doclist as $document) {
             if ($document->getAttribute('name') === 'license_de') {
                 $this->readLicenses($document);
             }
-        }
+    }
     }
 
 
@@ -116,37 +118,63 @@ class Opus3LicenceImport {
 
 
     protected function transferOpus3Licence($data) {
-    	//$classification = array();
-	$doclist = $data->getElementsByTagName('row');
+        //$classification = array();
+    $doclist = $data->getElementsByTagName('row');
         $licenses = array();
-	foreach ($doclist as $document) {
+    foreach ($doclist as $document) {
             $lic = new Opus_Licence();
             $shortname = "";
             foreach ($document->getElementsByTagName('field') as $field) {
-                if ($field->nodeValue === '') { continue; }
-                if ($field->getAttribute('name') === 'active') $lic->setActive($field->nodeValue);
-                if ($field->getAttribute('name') === 'comment') $lic->setCommentInternal($field->nodeValue);
-                if ($field->getAttribute('name') === 'desc_html') $lic->setDescMarkup($field->nodeValue);
-                if ($field->getAttribute('name') === 'desc_text') $lic->setDescText(html_entity_decode($field->nodeValue, ENT_COMPAT, 'UTF-8'));
-                if ($field->getAttribute('name') === 'language') $lic->setLanguage($this->mapLanguage($field->nodeValue));
-                if ($field->getAttribute('name') === 'link') $lic->setLinkLicence($field->nodeValue);
-                if ($field->getAttribute('name') === 'logo') $lic->setLinkLogo($field->nodeValue);
-                if ($field->getAttribute('name') === 'link_tosign') $lic->setLinkSign($field->nodeValue);
-                if ($field->getAttribute('name') === 'mime_type')  $lic->setMimeType($field->nodeValue); 
-                if ($field->getAttribute('name') === 'longname') $lic->setNameLong(html_entity_decode($field->nodeValue, ENT_COMPAT, 'UTF-8'));
-                if ($field->getAttribute('name') === 'pod_allowed') $lic->setPodAllowed($field->nodeValue);
+                if ($field->nodeValue === '') {
+                    continue;
+                }
+                if ($field->getAttribute('name') === 'active') {
+                    $lic->setActive($field->nodeValue);
+                }
+                if ($field->getAttribute('name') === 'comment') {
+                    $lic->setCommentInternal($field->nodeValue);
+                }
+                if ($field->getAttribute('name') === 'desc_html') {
+                    $lic->setDescMarkup($field->nodeValue);
+                }
+                if ($field->getAttribute('name') === 'desc_text') {
+                    $lic->setDescText(html_entity_decode($field->nodeValue, ENT_COMPAT, 'UTF-8'));
+                }
+                if ($field->getAttribute('name') === 'language') {
+                    $lic->setLanguage($this->mapLanguage($field->nodeValue));
+                }
+                if ($field->getAttribute('name') === 'link') {
+                    $lic->setLinkLicence($field->nodeValue);
+                }
+                if ($field->getAttribute('name') === 'logo') {
+                    $lic->setLinkLogo($field->nodeValue);
+                }
+                if ($field->getAttribute('name') === 'link_tosign') {
+                    $lic->setLinkSign($field->nodeValue);
+                }
+                if ($field->getAttribute('name') === 'mime_type') {
+                    $lic->setMimeType($field->nodeValue);
+                } 
+                if ($field->getAttribute('name') === 'longname') {
+                    $lic->setNameLong(html_entity_decode($field->nodeValue, ENT_COMPAT, 'UTF-8'));
+                }
+                if ($field->getAttribute('name') === 'pod_allowed') {
+                    $lic->setPodAllowed($field->nodeValue);
+                }
                 //if ($field->getAttribute('name') === 'sort') $lic->setSortOrder($field->nodeValue);
-           	if ($field->getAttribute('name') === 'shortname') $shortname = $field->nodeValue;
+               if ($field->getAttribute('name') === 'shortname') {
+                   $shortname = $field->nodeValue;
+               }
             }
 
             $this->checkMandatoryFields($lic, $shortname);
 
-            $this->maxSortOrder++;
-            $lic->setSortOrder($this->maxSortOrder);
+            $this->_maxSortOrder++;
+            $lic->setSortOrder($this->_maxSortOrder);
 
             $licenses[$shortname] = $lic;
-	}
-	return $licenses;
+    }
+    return $licenses;
     }
 
     /**
@@ -156,7 +184,7 @@ class Opus3LicenceImport {
      * @return Opus4-Language-String
      */
     private function mapLanguage($lang) {
-        return $this->config->migration->language->$lang;
+        return $this->_config->migration->language->$lang;
     }
 
 
@@ -168,7 +196,7 @@ class Opus3LicenceImport {
      */
     protected function readLicenses($data) {
 
-        $mf = $this->config->migration->mapping->licences;
+        $mf = $this->_config->migration->mapping->licences;
         $fp = null;
         try {
             $fp = @fopen($mf, 'w');
@@ -176,71 +204,83 @@ class Opus3LicenceImport {
                 throw new Exception("Could not create '".$mf."' for Licences");
             }
         } catch (Exception $e){
-            $this->logger->log($e->getMessage(), Zend_Log::ERR);
+            $this->_logger->log($e->getMessage(), Zend_Log::ERR);
             return;
         }
         $licenses = $this->transferOpus3Licence($data);
-	foreach ($licenses as $key => $licence) {
+    foreach ($licenses as $key => $licence) {
             
             $id = $licence->store();
 
-            $this->logger->log("Licence imported: " . $key, Zend_Log::DEBUG);
+            $this->_logger->log("Licence imported: " . $key, Zend_Log::DEBUG);
             fputs($fp, $key . ' ' . $id . "\n");
-	}
-	fclose($fp);
+    }
+    fclose($fp);
     }
 
      protected function checkMandatoryFields($lic, $name) {
          if (is_null($lic->getActive())) {
-             $this->logger->log("No Attribute 'active' for " . $name, Zend_Log::ERR);
-             if (!is_null($this->config->migration->licence->active)) {
-                $lic->setActive($this->config->migration->licence->active);
-                $this->logger->log("Set Attribute 'active' to default value '" . $lic->getActive() ."' for " .$name, Zend_Log::ERR);
+             $this->_logger->log("No Attribute 'active' for " . $name, Zend_Log::ERR);
+             if (!is_null($this->_config->migration->licence->active)) {
+                $lic->setActive($this->_config->migration->licence->active);
+                $this->_logger->log(
+                    "Set Attribute 'active' to default value '" . $lic->getActive() ."' for " .$name, Zend_Log::ERR
+                );
              }
          }
 
          if (is_null($lic->getLanguage())) {
-             $this->logger->log("No Attribute 'language' for " . $name, Zend_Log::ERR);
-             if (!is_null($this->config->migration->licence->language)) {
-                $lic->setLanguage($this->config->migration->licence->language);
-                $this->logger->log("Set Attribute 'language' to default value '" .
-                    $lic->getLanguage() . "' for " .$name, Zend_Log::ERR);
+             $this->_logger->log("No Attribute 'language' for " . $name, Zend_Log::ERR);
+             if (!is_null($this->_config->migration->licence->language)) {
+                $lic->setLanguage($this->_config->migration->licence->language);
+                $this->_logger->log(
+                    "Set Attribute 'language' to default value '" .
+                    $lic->getLanguage() . "' for " .$name, Zend_Log::ERR
+                );
              }
          }
 
          if (is_null($lic->getLinkLicence())) {
-             $this->logger->log("No Attribute 'link_licence' for " . $name, Zend_Log::ERR);
-             if (!is_null($this->config->migration->licence->link_licence)) {
-                $lic->setLinkLicence($this->config->migration->licence->link_licence);
-                $this->logger->log("Set Attribute 'link_licence' to default value '" .
-                    $lic->getLinkLicence() ."' for " .$name, Zend_Log::ERR);
+             $this->_logger->log("No Attribute 'link_licence' for " . $name, Zend_Log::ERR);
+             if (!is_null($this->_config->migration->licence->link_licence)) {
+                $lic->setLinkLicence($this->_config->migration->licence->link_licence);
+                $this->_logger->log(
+                    "Set Attribute 'link_licence' to default value '" .
+                    $lic->getLinkLicence() ."' for " .$name, Zend_Log::ERR
+                );
              }
          }
 
          if (is_null($lic->getMimeType())) {
-             $this->logger->log("No Attribute 'mime_type' for " . $name, Zend_Log::ERR);
-             if (!is_null($this->config->migration->licence->mime_type)) {
-                $lic->setMimeType($this->config->migration->licence->mime_type);
-                $this->logger->log("Set Attribute 'mime_type' to default value '" .
-                    $lic->getMimeType() ."' for " .$name, Zend_Log::ERR);
+             $this->_logger->log("No Attribute 'mime_type' for " . $name, Zend_Log::ERR);
+             if (!is_null($this->_config->migration->licence->mime_type)) {
+                $lic->setMimeType($this->_config->migration->licence->mime_type);
+                $this->_logger->log(
+                    "Set Attribute 'mime_type' to default value '" .
+                    $lic->getMimeType() ."' for " .$name, Zend_Log::ERR
+                );
              }
          }
 
          if (is_null($lic->getNameLong())) {
-             $this->logger->log("No Attribute 'name_long' for " . $name, Zend_Log::ERR);
-             if (!is_null($this->config->migration->licence->name_long)) {
-                $lic->setNameLong($this->config->migration->licence->name_long);
-                $this->logger->log("Set Attribute 'name_long' to default value '" .
-                    $lic->getNameLong() ."' for " .$name, Zend_Log::ERR);
+             $this->_logger->log("No Attribute 'name_long' for " . $name, Zend_Log::ERR);
+             if (!is_null($this->_config->migration->licence->name_long)) {
+                $lic->setNameLong($this->_config->migration->licence->name_long);
+                $this->_logger->log(
+                    "Set Attribute 'name_long' to default value '" .
+                    $lic->getNameLong() ."' for " .$name, Zend_Log::ERR
+                );
              }
          }
 
          if (is_null($lic->getPodAllowed())) {
-             $this->logger->log("No Attribute 'pod_allowed' for " . $name, Zend_Log::ERR);
-             if (!is_null($this->config->migration->licence->pod_allowed)) {
-                $lic->setPodAllowed($this->config->migration->licence->pod_allowed);
-                $this->logger->log("Set Attribute 'pod_allowed' to default value '" .
-                    $lic->getPodAllowed() ."' for " .$name, Zend_Log::ERR);
+             $this->_logger->log("No Attribute 'pod_allowed' for " . $name, Zend_Log::ERR);
+             if (!is_null($this->_config->migration->licence->pod_allowed)) {
+                $lic->setPodAllowed($this->_config->migration->licence->pod_allowed);
+                $this->_logger->log(
+                    "Set Attribute 'pod_allowed' to default value '" .
+                    $lic->getPodAllowed() ."' for " .$name, Zend_Log::ERR
+                );
              }
          }
 

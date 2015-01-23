@@ -40,21 +40,21 @@ class Opus3CollectionsImport {
     *
     * @var file
     */
-    protected $config = null;
+    protected $_config = null;
 
    /**
     * Holds Logger
     *
     * @var file
     */
-    protected $logger = null;
+    protected $_logger = null;
 
    /**
     * Holds the complete data to import in XML
     *
     * @var xml-structure
     */
-    protected $data = null;
+    protected $_data = null;
 
     /**
      * Imports Collection data to Opus4
@@ -63,11 +63,9 @@ class Opus3CollectionsImport {
      * @return array List of documents that have been imported
      */
     public function __construct($data) {
-
-        $this->config = Zend_Registry::get('Zend_Config');
-        $this->logger = Zend_Registry::get('Zend_Log');
-        $this->data = $data;
-
+        $this->_config = Zend_Registry::get('Zend_Config');
+        $this->_logger = Zend_Registry::get('Zend_Log');
+        $this->_data = $data;
     }
     
     /**
@@ -81,11 +79,11 @@ class Opus3CollectionsImport {
     public function start() {
         $collRole = Opus_CollectionRole::fetchByName('collections');
 
-        $doclist = $this->data->getElementsByTagName('table_data');
-        foreach ($doclist as $document)	{
-                if ($document->getAttribute('name') === 'collections') {
-                    $this->importCollectionsDirectly($document, $collRole);
-                }
+        $doclist = $this->_data->getElementsByTagName('table_data');
+        foreach ($doclist as $document) {
+            if ($document->getAttribute('name') === 'collections') {
+                $this->importCollectionsDirectly($document, $collRole);
+            }
         }
     }
 
@@ -95,16 +93,17 @@ class Opus3CollectionsImport {
      * @param DOMDocument $data XML-Document to be imported
      * @return array List of documents that have been imported
      */
-    protected function importCollectionsDirectly($data, $collRole)  {
-        $mf = $this->config->migration->mapping->collections;
+    protected function importCollectionsDirectly($data, $collRole) {
+        $mf = $this->_config->migration->mapping->collections;
         $fp = null;
         try {
             $fp = @fopen($mf, 'w');
             if (!$fp) {
                 throw new Exception("Could not create '" . $mf . "' for Collections");
             }
-        } catch (Exception $e){
-            $this->logger->log($e->getMessage(), Zend_Log::ERR);
+        }
+        catch (Exception $e){
+            $this->_logger->log($e->getMessage(), Zend_Log::ERR);
             return;
         }
 
@@ -115,14 +114,14 @@ class Opus3CollectionsImport {
             }
 
             // sort by lft-values
-            $sorted_collections = $this->msort($collections, 'lft');
+            $sortedCollections = $this->msort($collections, 'lft');
 
-            if (count($sorted_collections) == 0) {
+            if (count($sortedCollections) == 0) {
                 // TODO: Improve error handling in case of empty collections.
                 throw new Exception("Sorted collections empty");
             }
 
-            if ($sorted_collections[0]['lft'] != 1) {
+            if ($sortedCollections[0]['lft'] != 1) {
                 // var_dump($sorted_collections[0]);
                 // TODO: Improve error handling in case of wrong left-ids.
                 throw new Exception("First left_id is not 1");
@@ -132,19 +131,19 @@ class Opus3CollectionsImport {
             // so lets increment all old IDs by 1
             $previousRightStack = array();
             $previousNodeStack  = array();
-            $new_collection     = null;
+            $newCollection     = null;
 
-            foreach ($sorted_collections as $row) {
+            foreach ($sortedCollections as $row) {
 
                 //echo ".";
                 // case root_node
                 if (count($previousRightStack) == 0) {
                     //echo "case 1: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" .$row['rgt']. "\n";
                     $root = $collRole->getRootCollection();
-                    $new_collection = $root->addLastChild();
+                    $newCollection = $root->addLastChild();
     //              $collRole->store();
 
-                    array_push($previousNodeStack, $new_collection);
+                    array_push($previousNodeStack, $newCollection);
                     array_push($previousRightStack, $row['rgt']);
                 }
                 else {
@@ -155,56 +154,60 @@ class Opus3CollectionsImport {
                         $previousNode = array_pop($previousNodeStack);
                         $previousRight = array_pop($previousRightStack);
 
-                        $is_child = ($row['rgt'] < $previousRight);
-                        $is_brother = ((int) $row['lft'] === (int) $previousRight + 1);
-                    } while ( !$is_child && !$is_brother );
-
+                        $isChild = ($row['rgt'] < $previousRight);
+                        $isBrother = ((int) $row['lft'] === (int) $previousRight + 1);
+                    } while ( !$isChild && !$isBrother );
 
                     // same level
-                    if ($is_brother) {
-                        //echo "case 2: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt'] . "- prevright - " . $previousRight . "-\n";
+                    if ($isBrother) {
+                        //echo "case 2: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt']
+                        //    . "- prevright - " . $previousRight . "-\n";
                         // its a brother of previous node
-                        $left_brother = $previousNode;
-                        $new_collection = $left_brother->addNextSibling();
-                        $left_brother->store();
+                        $leftBrother = $previousNode;
+                        $newCollection = $leftBrother->addNextSibling();
+                        $leftBrother->store();
 
-                        array_push($previousNodeStack, $new_collection);
+                        array_push($previousNodeStack, $newCollection);
                         array_push($previousRightStack, $row['rgt']);
                     }
-                    // go down one level
-                    else if ($is_child) {
-                        //echo "case 3: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt'] . "- prevright - " . $previousRight . "-\n";
+                    else if ($isChild) {
+                        // go down one level
+                        //echo "case 3: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt']
+                        // . "- prevright - " . $previousRight . "-\n";
                         // its a child of previous node
                         $father = $previousNode;
-                        $new_collection = $father->addLastChild();
+                        $newCollection = $father->addLastChild();
                         $father->store();
 
                         array_push($previousNodeStack, $father);
                         array_push($previousRightStack, $previousRight);
 
-                        array_push($previousNodeStack, $new_collection);
+                        array_push($previousNodeStack, $newCollection);
                         array_push($previousRightStack, $row['rgt']);
 
-                    } else {
-                        //echo "case 4: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt'] . "- prevright - " . $previousRight . "-\n";
+                    }
+                    else {
+                        //echo "case 4: id -" . $row['coll_id'] . "-left -" . $row['lft'] . "- right -" . $row['rgt']
+                        // . "- prevright - " . $previousRight . "-\n";
                         throw new Exception("Collectionstructure of id " . $row['coll_id'] . " not valid");
                     }
                 }
 
-                $new_collection->setVisible(1);
-                $new_collection->setName($row['coll_name']);
-                $new_collection->store();
+                $newCollection->setVisible(1);
+                $newCollection->setName($row['coll_name']);
+                $newCollection->store();
                 $previousRight = $row['rgt'];
 
-                $this->logger->log("Collection imported: " . $row['coll_name'], Zend_Log::DEBUG);
+                $this->_logger->log("Collection imported: " . $row['coll_name'], Zend_Log::DEBUG);
 
-                fputs($fp, $row['coll_id'] . ' ' . $new_collection->getId() . "\n");
+                fputs($fp, $row['coll_id'] . ' ' . $newCollection->getId() . "\n");
             }
-        } catch (Exception $e) {
-            $this->logger->log($e->getMessage(), Zend_Log::ERR);
         }
-	fclose($fp);
+        catch (Exception $e) {
+            $this->_logger->log($e->getMessage(), Zend_Log::ERR);
+        }
 
+        fclose($fp);
     }
 
     /**
@@ -214,39 +217,39 @@ class Opus3CollectionsImport {
      * @return array List of documents that have been imported
      */
     protected function transferOpusClassification($data) {
-	$classification = array();
-	$doclist = $data->getElementsByTagName('row');
-	$index = 0;
-	foreach ($doclist as $document)	{
+        $classification = array();
+        $doclist = $data->getElementsByTagName('row');
+        $index = 0;
+        foreach ($doclist as $document) {
             $classification[$index] = array();
             foreach ($document->getElementsByTagName('field') as $field) {
-           	$classification[$index][$field->getAttribute('name')] = $field->nodeValue;
+                $classification[$index][$field->getAttribute('name')] = $field->nodeValue;
             }
             $index++;
-	}
-	return $classification;
+        }
+        return $classification;
     }
 
     /**
      * sort multidimensional arrays
      */
-    private function msort($array, $id="id") {
-        $temp_array = array();
-        while(count($array)>0) {
-            $lowest_id = 0;
+    private function msort($array, $id = 'id') {
+        $tempArray = array();
+        while (count($array) > 0) {
+            $lowestId = 0;
             $index=0;
             foreach ($array as $item) {
-                if (isset($item[$id]) && $array[$lowest_id][$id]) {
-                    if ($item[$id]<$array[$lowest_id][$id]) {
-                        $lowest_id = $index;
+                if (isset($item[$id]) && $array[$lowestId][$id]) {
+                    if ($item[$id] < $array[$lowestId][$id]) {
+                        $lowestId = $index;
                     }
                 }
                 $index++;
             }
-            $temp_array[] = $array[$lowest_id];
-            $array = array_merge(array_slice($array, 0,$lowest_id), array_slice($array, $lowest_id+1));
+            $tempArray[] = $array[$lowestId];
+            $array = array_merge(array_slice($array, 0, $lowestId), array_slice($array, $lowestId+1));
         }
-        return $temp_array;
+        return $tempArray;
     }
 
 }

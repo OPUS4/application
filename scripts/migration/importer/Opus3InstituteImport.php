@@ -40,28 +40,28 @@ class Opus3InstituteImport {
     *
     * @var file
     */
-    protected $config = null;
+    protected $_config = null;
 
    /**
     * Holds Logger
     *
     * @var file
     */
-    protected $logger = null;
+    protected $_logger = null;
 
    /**
     * Holds the complete data to import in XML
     *
     * @var xml-structure
     */
-    protected $data = null;
+    protected $_data = null;
 
    /**
     * Holds Full Path of XSLT-Stylesheet
     *
     * @var file
     */
-    protected $stylesheetPath = null;
+    protected $_stylesheetPath = null;
 
     /**
      * Imports Collection data to Opus4
@@ -69,12 +69,12 @@ class Opus3InstituteImport {
      * @param Strring $data XML-String with classifications to be imported
      * @return array List of documents that have been imported
      */
-    public function __construct($data, $path, $stylesheet)	{
-        $this->config = Zend_Registry::get('Zend_Config');
-        $this->logger = Zend_Registry::get('Zend_Log');
-        $this->data = $data;
-        $this->stylesheetPath = $path.'/'.$stylesheet;
-     }
+    public function __construct($data, $path, $stylesheet) {
+        $this->_config = Zend_Registry::get('Zend_Config');
+        $this->_logger = Zend_Registry::get('Zend_Log');
+        $this->_data = $data;
+        $this->_stylesheetPath = $path.'/'.$stylesheet;
+    }
 
     /**
      * Public Method for import of Institutes
@@ -83,16 +83,15 @@ class Opus3InstituteImport {
      * @return void
      *
      */
-
     public function start() {
         $role = Opus_CollectionRole::fetchByName('institutes');
         $xml = new DomDocument;
         $xslt = new DomDocument;
-        $xslt->load($this->stylesheetPath);
+        $xslt->load($this->_stylesheetPath);
         $proc = new XSLTProcessor;
         $proc->registerPhpFunctions();
         $proc->importStyleSheet($xslt);
-        $xml->loadXML($proc->transformToXml($this->data));
+        $xml->loadXML($proc->transformToXml($this->_data));
 
         $doclist = $xml->getElementsByTagName('table_data');
 
@@ -116,18 +115,18 @@ class Opus3InstituteImport {
      * @return array List of documents that have been imported
      */
     protected function transferOpusClassification($data) {
-	$classification = array();
+        $classification = array();
 
-	$doclist = $data->getElementsByTagName('row');
-	$index = 0;
-	foreach ($doclist as $document)	{
+        $doclist = $data->getElementsByTagName('row');
+        $index = 0;
+        foreach ($doclist as $document) {
             $classification[$index] = array();
             foreach ($document->getElementsByTagName('field') as $field) {
-            	$classification[$index][$field->getAttribute('name')] = $field->nodeValue;
+                $classification[$index][$field->getAttribute('name')] = $field->nodeValue;
             }
             $index++;
-	}
-	return $classification;
+        }
+        return $classification;
     }
 
     /**
@@ -138,7 +137,7 @@ class Opus3InstituteImport {
      * @return array List of documents that have been imported
      */
     protected function importUniversities($data) {
-        $mf = $this->config->migration->mapping->universities;
+        $mf = $this->_config->migration->mapping->universities;
         $fp = null;
         try {
             $fp = @fopen($mf, 'w');
@@ -146,7 +145,7 @@ class Opus3InstituteImport {
                 throw new Exception("Could not create '".$mf."' for Universities.\n");
             }
         } catch (Exception $e){
-            $this->logger->log($e->getMessage(), Zend_Log::ERR);
+            $this->_logger->log($e->getMessage(), Zend_Log::ERR);
             return;
         }
 
@@ -155,8 +154,12 @@ class Opus3InstituteImport {
 
         foreach ($classification as $class) {
 
-            if (array_key_exists('universitaet_anzeige', $class) === false) { continue; }
-            if (array_key_exists('universitaet', $class) === false) { continue; }
+            if (array_key_exists('universitaet_anzeige', $class) === false) {
+                continue;
+            }
+            if (array_key_exists('universitaet', $class) === false) {
+                continue;
+            }
            
             /* Create a DNB-Institute for University */
             $uni = new Opus_DnbInstitute();
@@ -170,14 +173,16 @@ class Opus3InstituteImport {
             $uni->setIsPublisher('1');
             $uni->store();
 
-            $this->logger->log("University imported: " .
-                $class['universitaet_anzeige'], Zend_Log::DEBUG);
+            $this->_logger->log(
+                "University imported: " .
+                $class['universitaet_anzeige'], Zend_Log::DEBUG
+            );
             fputs($fp, str_replace(" ", "_", $class['universitaet']) . ' ' .  $uni->getId() . "\n");
         }
         fclose($fp);
     }
 
-	
+    
     /**
      * Imports Faculties from Opus3 to Opus4 directly (without XML)
      * Faculty is also a DNB Institute
@@ -186,28 +191,28 @@ class Opus3InstituteImport {
      * @return array List of documents that have been imported
      */
     protected function importFaculties($data, $role) {
-        $mf1 = $this->config->migration->mapping->faculties;
-        $fp1 = null;
+        $mapFaculties = $this->_config->migration->mapping->faculties;
+        $fileFaculties = null;
         try {
-            $fp1 = @fopen($mf1, 'w');
-            if (!$fp1) {
-                throw new Exception("Could not create '".$mf1."' for Faculties.\n");
+            $fileFaculties = @fopen($mapFaculties, 'w');
+            if (!$fileFaculties) {
+                throw new Exception("Could not create '".$mapFaculties."' for Faculties.\n");
             }
         } catch (Exception $e){
-            $this->logger->log($e->getMessage(), Zend_Log::ERR);
+            $this->_logger->log($e->getMessage(), Zend_Log::ERR);
             return;
         }
 
-        $mf2 = $this->config->migration->mapping->grantors;
-        $fp2 = null;
+        $mapGrantors = $this->_config->migration->mapping->grantors;
+        $fileGrantors = null;
         try {
-            $fp2 = @fopen($mf2, 'w');
-            if (!$fp2) {
-                throw new Exception("Could not create '".$mf2."' for Grantors.\n");
+            $fileGrantors = @fopen($mapGrantors, 'w');
+            if (!$fileGrantors) {
+                throw new Exception("Could not create '".$mapGrantors."' for Grantors.\n");
             }
         } catch (Exception $e){
-            $this->logger->log($e->getMessage(), Zend_Log::ERR);
-            fclose($fp1);
+            $this->_logger->log($e->getMessage(), Zend_Log::ERR);
+            fclose($fileFaculties);
             return;
         }
 
@@ -215,8 +220,12 @@ class Opus3InstituteImport {
         $subcoll = array();
 
         foreach ($classification as $class) {
-            if (array_key_exists('fakultaet', $class) === false) { continue; }
-            if (array_key_exists('nr', $class) === false) { continue; }
+            if (array_key_exists('fakultaet', $class) === false) {
+                continue;
+            }
+            if (array_key_exists('nr', $class) === false) {
+                continue;
+            }
 
             /* Create a Collection for Faculty */
             $root = $role->getRootCollection();
@@ -237,15 +246,16 @@ class Opus3InstituteImport {
             $fac->setIsGrantor('1');
             $fac->store();
 
-            $this->logger->log("Faculty imported: " . $class['fakultaet'], Zend_Log::DEBUG);
-            //echo "Faculty imported: " . $class['fakultaet'] ."\t" . $class['nr'] . "\t" . $subcoll[$class["nr"]] . "\n";
-            fputs($fp1, $class['nr'] . ' ' . $subcoll[$class["nr"]] . "\n");
-            fputs($fp2, $class['nr'] . ' ' . $fac->getId() . "\n");
+            $this->_logger->log("Faculty imported: " . $class['fakultaet'], Zend_Log::DEBUG);
+            // echo "Faculty imported: " . $class['fakultaet'] ."\t" . $class['nr'] . "\t" . $subcoll[$class["nr"]]
+            // . "\n";
+            fputs($fileFaculties, $class['nr'] . ' ' . $subcoll[$class["nr"]] . "\n");
+            fputs($fileGrantors, $class['nr'] . ' ' . $fac->getId() . "\n");
 
-	}
-        fclose($fp1);
-        fclose($fp2);
-	return $subcoll;
+        }
+        fclose($fileFaculties);
+        fclose($fileGrantors);
+        return $subcoll;
     }
 
     /**
@@ -254,8 +264,8 @@ class Opus3InstituteImport {
      * @param DOMDocument $data XML-Document to be imported
      * @return array List of documents that have been imported
      */
-    protected function importInstitutes($data, $pColls)     {
-        $mf = $this->config->migration->mapping->institutes;
+    protected function importInstitutes($data, $pColls) {
+        $mf = $this->_config->migration->mapping->institutes;
         $fp = null;
         try {
             $fp = @fopen($mf, 'w');
@@ -263,26 +273,31 @@ class Opus3InstituteImport {
                 throw new Exception("ERROR Opus3InstituteImport: Could not create '".$mf."' for Institutes.\n");
             }
         } catch (Exception $e){
-            $this->logger->log($e->getMessage(), Zend_Log::ERR);
+            $this->_logger->log($e->getMessage(), Zend_Log::ERR);
             return;
         }
 
         $classification = $this->transferOpusClassification($data);
 
         foreach ($classification as $class) {
-            if (array_key_exists('fakultaet', $class) === false || array_key_exists('name', $class) === false || array_key_exists('nr', $class) === false) {
+            if (array_key_exists('fakultaet', $class) === false || array_key_exists('name', $class) === false
+                || array_key_exists('nr', $class) === false) {
                 $invalidInstitute = '';
                 foreach ($class as $key => $val) {
                     $invalidInstitute .= "[$key:'$val'] ";
                 }
-                $this->logger->log("Invalid entry for Institute will be ignored: '"
-                    . $invalidInstitute, Zend_Log::ERR);
+                $this->_logger->log(
+                    "Invalid entry for Institute will be ignored: '"
+                    . $invalidInstitute, Zend_Log::ERR
+                );
                 continue;
             }
 
             if (array_key_exists($class['fakultaet'], $pColls) === false) {
-                $this->logger->log("No Faculty with ID '" . $class['fakultaet'] .
-                    "' for Institute with ID '" . $class['nr'] ."'", Zend_Log::ERR);
+                $this->_logger->log(
+                    "No Faculty with ID '" . $class['fakultaet'] .
+                    "' for Institute with ID '" . $class['nr'] ."'", Zend_Log::ERR
+                );
                 continue;
             }
 
@@ -290,12 +305,13 @@ class Opus3InstituteImport {
             $root = new Opus_Collection($pColls[$class['fakultaet']]);
             $coll = $root->addLastChild();
             $coll->setName($class['name']);
-	    $coll->setVisible(1);
-	    $root->store();
+            $coll->setVisible(1);
+            $root->store();
 
-            $this->logger->log("Institute imported: " . $class['name'], Zend_Log::DEBUG);
+            $this->_logger->log("Institute imported: " . $class['name'], Zend_Log::DEBUG);
             fputs($fp, $class['nr'] . ' ' . $coll->getId() . "\n");
         }
+
         fclose($fp);
     }
 }

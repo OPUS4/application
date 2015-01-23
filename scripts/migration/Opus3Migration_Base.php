@@ -36,42 +36,44 @@
 
 class Opus3Migration_Base {
 
-    protected $logger;
-    protected $config;
+    protected $_logger;
+
+    protected $_config;
 
     function __construct () {
-        $this->config = Zend_Registry::get('Zend_Config');
+        $this->_config = Zend_Registry::get('Zend_Config');
         $this->configMigrationLogger();
     }
 
     public function configMigrationLogger() {
-        $this->logger = new Zend_Log();
+        $this->_logger = new Zend_Log();
 
-        $writer = $this->createWriter($this->config->migration->error->logfile);
+        $writer = $this->createWriter($this->_config->migration->error->logfile);
         $writer->addFilter(new Zend_Log_Filter_Priority(Zend_Log::WARN));
-        $this->logger->addWriter($writer);
+        $this->_logger->addWriter($writer);
 
-        $writer = $this->createWriter($this->config->migration->debug->logfile);
+        $writer = $this->createWriter($this->_config->migration->debug->logfile);
         // $writer->addFilter(new Zend_Log_Filter_Priority(Zend_Log::DEBUG));
-        $this->logger->addWriter($writer);
+        $this->_logger->addWriter($writer);
 
         $writer = $this->createWriter();
         $writer->addFilter(new Zend_Log_Filter_Priority(Zend_Log::DEBUG, '=='));
-        $this->logger->addWriter($writer);
+        $this->_logger->addWriter($writer);
 
         $writer = $this->createWriter();
         $writer->addFilter(new Zend_Log_Filter_Priority(Zend_Log::ERR, '=='));
-        $this->logger->addWriter($writer);
+        $this->_logger->addWriter($writer);
 
         $writer = $this->createWriter();
         $writer->addFilter(new Zend_Log_Filter_Priority(Zend_Log::WARN, '=='));
-        $this->logger->addWriter($writer);
+        $this->_logger->addWriter($writer);
 
-        Zend_Registry::set('Zend_Log', $this->logger);
+        Zend_Registry::set('Zend_Log', $this->_logger);
     }
 
     private function createWriter($logfilePath = null) {
-        $GLOBALS['id_string'] = uniqid(); // Write ID string to global variables, so we can identify/match individual runs.
+        // Write ID string to global variables, so we can identify/match individual runs.
+        $GLOBALS['id_string'] = uniqid();
         $format = '%timestamp% %priorityName% (%priority%, ID ' . $GLOBALS['id_string'] . '): %message%' . PHP_EOL;
         $formatter = new Zend_Log_Formatter_Simple($format);
         if (is_null($logfilePath)) {

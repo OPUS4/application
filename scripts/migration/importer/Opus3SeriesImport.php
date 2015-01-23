@@ -39,21 +39,21 @@ class Opus3SeriesImport {
     *
     * @var file
     */
-    protected $config = null;
+    protected $_config = null;
 
    /**
     * Holds Logger
     *
     * @var file
     */
-    protected $logger = null;
+    protected $_logger = null;
 
    /**
     * Holds the complete data to import in XML
     *
     * @var xml-structure
     */
-    protected $data = null;
+    protected $_data = null;
 
     /**
      * Imports Series data to Opus4
@@ -62,9 +62,9 @@ class Opus3SeriesImport {
      */
     public function __construct($data) {
 
-        $this->config = Zend_Registry::get('Zend_Config');
-        $this->logger = Zend_Registry::get('Zend_Log');
-        $this->data = $data;
+        $this->_config = Zend_Registry::get('Zend_Config');
+        $this->_logger = Zend_Registry::get('Zend_Log');
+        $this->_data = $data;
 
     }
     
@@ -77,13 +77,13 @@ class Opus3SeriesImport {
      */
 
     public function start() {
+        $tables = $this->_data->getElementsByTagName('table_data');
 
-        $tables = $this->data->getElementsByTagName('table_data');
-	foreach ($tables as $table)	{
+        foreach ($tables as $table) {
             if ($table->getAttribute('name') === 'schriftenreihen') {
                 $this->importSeries($table);
             }
-	}
+        }
     }
 
 
@@ -94,31 +94,36 @@ class Opus3SeriesImport {
      * @return void
      */
     protected function importSeries($data) {
-        $mf = $this->config->migration->mapping->series;
+        $mf = $this->_config->migration->mapping->series;
         $fp = null;
         $fp = @fopen($mf, 'w');
         if (!$fp) {
-            $this->logger->log("Could not create '" . $mf . "' for Series", Zend_Log::ERR);
+            $this->_logger->log("Could not create '" . $mf . "' for Series", Zend_Log::ERR);
             return;
         }
              
         $series = $this->transferOpusSeries($data);
-        $sort_order = 1;
+        $sortOrder = 1;
         foreach ($series as $s) {
-            if (array_key_exists('name', $s) === false) { continue; }
-            if (array_key_exists('sr_id', $s) === false) { continue; }
+            if (array_key_exists('name', $s) === false) {
+                continue;
+            }
+            if (array_key_exists('sr_id', $s) === false) {
+                continue;
+            }
 
             $sr = new Opus_Series();
             $sr->setTitle($s['name']);
             $sr->setVisible(1);
-            $sr->setSortOrder($sort_order++);
+            $sr->setSortOrder($sortOrder++);
             $sr->store();
 
-            $this->logger->log("Series imported: " . $s['name'], Zend_Log::DEBUG);
+            $this->_logger->log("Series imported: " . $s['name'], Zend_Log::DEBUG);
 
             fputs($fp, $s['sr_id'] . ' ' . $sr->getId() . "\n");
         }
-	fclose($fp);
+
+        fclose($fp);
     }
 
     /**
@@ -128,22 +133,26 @@ class Opus3SeriesImport {
      * @return array Seriess sorted by Name
      */
     protected function transferOpusSeries($data) {
-	$series = array();
-	$rowlist = $data->getElementsByTagName('row');
-	$index = 0;
-	foreach ($rowlist as $row)	{
+        $series = array();
+        $rowlist = $data->getElementsByTagName('row');
+        $index = 0;
+
+        foreach ($rowlist as $row) {
             $series[$index] = array();
             foreach ($row->getElementsByTagName('field') as $field) {
-           	$series[$index][$field->getAttribute('name')] = $field->nodeValue;
+               $series[$index][$field->getAttribute('name')] = $field->nodeValue;
             }
             $index++;
-	}
-
-        foreach($series as $s=>$key) {
-            $sort_name[] = $key['name'];
         }
-        array_multisort($sort_name, SORT_ASC, $series);
 
-	return $series;
+        $sortName = array();
+
+        foreach ($series as $s=>$key) {
+            $sortName[] = $key['name'];
+        }
+
+        array_multisort($sortName, SORT_ASC, $series);
+
+        return $series;
     }
 }

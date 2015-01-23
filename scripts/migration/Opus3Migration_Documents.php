@@ -38,9 +38,11 @@
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 require_once 'Opus3Migration_Base.php';
 
-set_include_path('.' . PATH_SEPARATOR
-        . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/importer'
-        . PATH_SEPARATOR . get_include_path());
+set_include_path(
+    '.' . PATH_SEPARATOR
+    . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/importer'
+    . PATH_SEPARATOR . get_include_path()
+);
 
 require_once 'Opus3XMLImport.php';
 require_once 'Opus3FileImport.php';
@@ -48,21 +50,21 @@ require_once 'Opus3FileImport.php';
 
 class Opus3Migration_Documents extends Opus3Migration_Base {
 
-    private $importFile;
-    private $importData;
-    private $stylesheet;
-    private $fulltextPath = array();
-    private $xslt;
-    private $start = null;
-    private $end = null;
-    private $doclist = array();
-    private $role = array();
-    private $lockFile;
+    private $_importFile;
+    private $_importData;
+    private $_stylesheet;
+    private $_fulltextPath = array();
+    private $_xslt;
+    private $_start = null;
+    private $_end = null;
+    private $_doclist = array();
+    private $_role = array();
+    private $_lockFile;
 
-    private $status;
+    private $_status;
     
-    CONST _FINISHED = "0";
-    CONST _RUNNING = "1";
+    const _FINISHED = "0";
+    const _RUNNING = "1";
 
     /**
      * Constructur.
@@ -72,70 +74,90 @@ class Opus3Migration_Documents extends Opus3Migration_Base {
     function __construct($options) {
         parent::__construct();
 
-        if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
-        if (array_key_exists('p', $options) !== false) { array_push($this->fulltextPath, $options["p"]); }
-        if (array_key_exists('q', $options) !== false) { $this->fulltextPath = preg_split('/\s+/', $options["q"]); }	
-        if (array_key_exists('s', $options) !== false) { $this->start = $options["s"]; }
-        if (array_key_exists('e', $options) !== false) { $this->end  = $options["e"]; }
-        if (array_key_exists('l', $options) !== false) { $this->lockFile  = $options["l"]; }
+        if (array_key_exists('f', $options) !== false) {
+            $this->_importFile = $options["f"];
+        }
+        if (array_key_exists('p', $options) !== false) {
+            array_push($this->_fulltextPath, $options["p"]);
+        }
+        if (array_key_exists('q', $options) !== false) {
+            $this->_fulltextPath = preg_split('/\s+/', $options["q"]);
+        }    
+        if (array_key_exists('s', $options) !== false) {
+            $this->_start = $options["s"];
+        }
+        if (array_key_exists('e', $options) !== false) {
+            $this->_end  = $options["e"];
+        }
+        if (array_key_exists('l', $options) !== false) {
+            $this->_lockFile  = $options["l"];
+        }
     }
 
     // Import Documents
     private function load_documents() {
-        $xmlImporter = new Opus3XMLImport($this->xslt, $this->stylesheet);
-        $toImport = $xmlImporter->initImportFile($this->importData);
+        $xmlImporter = new Opus3XMLImport($this->_xslt, $this->_stylesheet);
+        $toImport = $xmlImporter->initImportFile($this->_importData);
         $totalCount = 0;
 
-        $this->status = self::_RUNNING;
-	
+        $this->_status = self::_RUNNING;
+    
         foreach ($toImport as $document) {
-            $mem_now = round(memory_get_usage() / 1024 );
-            $mem_peak = round(memory_get_peak_usage() / 1024);
+            $memNow = round(memory_get_usage() / 1024);
+            $memPeak = round(memory_get_peak_usage() / 1024);
 
             $totalCount++;
 
-            if (!(is_null($this->start)) && ($totalCount < $this->start)) { continue; }
-            if (!(is_null($this->end)) && ($totalCount > $this->end)) {
+            if (!(is_null($this->_start)) && ($totalCount < $this->_start)) {
+                continue;
+            }
+            if (!(is_null($this->_end)) && ($totalCount > $this->_end)) {
                 break;
             }
 
             $result = $xmlImporter->import($document);
             if ($result['result'] === 'success') {
-                $this->logger->log("Successfully imported old ID '" . $result['oldid'] . "' with new ID '" . $result['newid'] . "' -- memory $mem_now (KB), peak memory $mem_peak (KB)", Zend_Log::DEBUG);
-                array_push($this->doclist, $result['newid']);
-                if (array_key_exists('roleid', $result))  {
-                    $this->role[$result['newid']] = $result['roleid'];
+                $this->_logger->log(
+                    "Successfully imported old ID '" . $result['oldid'] . "' with new ID '" . $result['newid']
+                    . "' -- memory $memNow (KB), peak memory $memPeak (KB)", Zend_Log::DEBUG
+                );
+                array_push($this->_doclist, $result['newid']);
+                if (array_key_exists('roleid', $result)) {
+                    $this->_role[$result['newid']] = $result['roleid'];
                 }
-            } else if ($result['result'] === 'failure') {
-                $this->logger->log($result['message'] . " for old ID '" . $result['oldid'] . "'\n" . $result['entry'], Zend_Log::ERR);
+            }
+            else if ($result['result'] === 'failure') {
+                $this->_logger->log(
+                    $result['message'] . " for old ID '" . $result['oldid'] . "'\n" . $result['entry'], Zend_Log::ERR
+                );
             }
         }
 
-        if ($totalCount <= $this->end) {
-            $this->status = self::_FINISHED;
+        if ($totalCount <= $this->_end) {
+            $this->_status = self::_FINISHED;
         }
 
     }
 
     private function load_fulltext() {
-        foreach ($this->doclist as $id) {
+        foreach ($this->_doclist as $id) {
             $role = null;
-            if (array_key_exists($id, $this->role)) {
-            $role = $this->role[$id];
+            if (array_key_exists($id, $this->_role)) {
+                $role = $this->_role[$id];
             }
-            foreach ($this->fulltextPath as $path) {
+            foreach ($this->_fulltextPath as $path) {
                 $fileImporter = new Opus3FileImport($id, $path, $role);
-
-                $mem_now = round(memory_get_usage() / 1024 );
-                $mem_peak = round(memory_get_peak_usage() / 1024);
 
                 $numberOfFiles = $fileImporter->loadFiles();
 
-                $mem_now = round(memory_get_usage() / 1024 );
-                $mem_peak = round(memory_get_peak_usage() / 1024 );
+                $memNow = round(memory_get_usage() / 1024);
+                $memPeak = round(memory_get_peak_usage() / 1024);
 
                 if ($numberOfFiles > 0) {
-                $this->logger->log($numberOfFiles . " file(s) have been imported successfully for document ID " . $id . " -- memory $mem_now (KB), peak memory $mem_peak (KB)", Zend_Log::DEBUG);
+                    $this->_logger->log(
+                        $numberOfFiles . " file(s) have been imported successfully for document ID " . $id
+                        . " -- memory $memNow (KB), peak memory $memPeak (KB)", Zend_Log::DEBUG
+                    );
                 }
             }
         }
@@ -143,21 +165,21 @@ class Opus3Migration_Documents extends Opus3Migration_Base {
     }
 
     public function getStatus() {
-        return $this->status;
+        return $this->_status;
     }
 
     private function setStylesheet() {
-        $this->stylesheet = 'stylesheets';
-        $this->xslt = 'opus3.xslt';
+        $this->_stylesheet = 'stylesheets';
+        $this->_xslt = 'opus3.xslt';
     }
 
     private function loadImportFile() {
-        $this->importData = new DOMDocument;
-        $this->importData->load($this->importFile);
+        $this->_importData = new DOMDocument;
+        $this->_importData->load($this->_importFile);
     }
 
     public function unlinkLockFile() {
-        unlink($this->lockFile);
+        unlink($this->_lockFile);
     }
 
     public function run() {

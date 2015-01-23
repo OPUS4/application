@@ -37,9 +37,11 @@
 // Configure include path.
 require_once dirname(__FILE__) . '/../common/bootstrap.php';
 require_once 'Opus3Migration_Base.php';
-set_include_path('.' . PATH_SEPARATOR
-        . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/importer'
-        . PATH_SEPARATOR . get_include_path());
+set_include_path(
+    '.' . PATH_SEPARATOR
+    . PATH_SEPARATOR . dirname(dirname(dirname(__FILE__))) . '/scripts/migration/importer'
+    . PATH_SEPARATOR . get_include_path()
+);
 
 require_once 'Opus3InstituteImport.php';
 require_once 'Opus3CollectionsImport.php';
@@ -50,10 +52,13 @@ require_once 'Opus3RoleImport.php';
 
 class Opus3Migration_ICL extends Opus3Migration_Base {
 
-    private $importFile;
-    private $importData;
-    private $stylesheet;
-    private $xslt;
+    private $_importFile;
+
+    private $_importData;
+
+    private $_stylesheet;
+
+    private $_xslt;
 
     /**
      * Constructur.
@@ -62,7 +67,9 @@ class Opus3Migration_ICL extends Opus3Migration_Base {
      */
     function __construct($options) {
         parent::__construct();
-        if (array_key_exists('f', $options) !== false) { $this->importFile = $options["f"]; }
+        if (array_key_exists('f', $options) !== false) {
+            $this->_importFile = $options["f"];
+        }
     }
 
     // Create Collections
@@ -96,31 +103,31 @@ class Opus3Migration_ICL extends Opus3Migration_Base {
     }
 
     private function setStylesheet() {
-        $this->stylesheet = 'stylesheets';
-        $this->xslt = 'institute_structure.xslt';
+        $this->_stylesheet = 'stylesheets';
+        $this->_xslt = 'institute_structure.xslt';
     }
 
     // Import collections
     private function load_collections() {
-        $import = new Opus3CollectionsImport($this->importData);
+        $import = new Opus3CollectionsImport($this->_importData);
         $import->start();
     }
 
     // Import series
     private function load_series() {
-        $import = new Opus3SeriesImport($this->importData);
+        $import = new Opus3SeriesImport($this->_importData);
         $import->start();
     }
 
     // Import faculties and institutes
     private function load_institutes() {
-        $import = new Opus3InstituteImport($this->importData, $this->stylesheet, $this->xslt);
+        $import = new Opus3InstituteImport($this->_importData, $this->_stylesheet, $this->_xslt);
         $import->start();
     }
 
     // Import Licences
     private function load_licences() {
-        $import= new Opus3LicenceImport($this->importData);
+        $import= new Opus3LicenceImport($this->_importData);
         $import->start();
     }
 
@@ -132,8 +139,8 @@ class Opus3Migration_ICL extends Opus3Migration_Base {
 
     // Import Fulltexts
     private function loadImportFile() {
-        $this->importData = new DOMDocument;
-        $this->importData->load($this->importFile);
+        $this->_importData = new DOMDocument;
+        $this->_importData->load($this->_importFile);
     }
 
    /**
