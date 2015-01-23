@@ -38,7 +38,7 @@
  */
 class Setup_LanguageController extends Controller_SetupAbstract {
 
-    protected $sortKeys = array('unit', 'module', 'directory', 'filename', 'language', 'variant');
+    protected $_sortKeys = array('unit', 'module', 'directory', 'filename', 'language', 'variant');
 
     public function init() {
         parent::init();
@@ -55,8 +55,9 @@ class Setup_LanguageController extends Controller_SetupAbstract {
         $searchTerm = $this->_request->getParam('search');
         $sortKey = $this->_request->getParam('sort', 'unit');
         $config = Zend_Registry::get('Zend_Config')->toArray();
-        if(!isset($config['setup']['translation']['modules']['allowed'])) 
-            $this->_redirectTo ('error', array('failure' => 'setup_language_translation_modules_missing'));
+        if (!isset($config['setup']['translation']['modules']['allowed'])) {
+            $this->_redirectTo('error', array('failure' => 'setup_language_translation_modules_missing')); 
+        }
 
         
         $moduleNames = explode(',', $config['setup']['translation']['modules']['allowed']);
@@ -70,7 +71,7 @@ class Setup_LanguageController extends Controller_SetupAbstract {
         $this->view->form = $this->getSearchForm($searchTerm, $sortKey);
 
         $this->view->translations = $translationManager->getTranslations($sortKey);
-        $this->view->sortKeys = $this->sortKeys;
+        $this->view->sortKeys = $this->_sortKeys;
         $this->view->currentSortKey = $sortKey;
         $this->view->searchTerm = $searchTerm;
         
@@ -79,8 +80,9 @@ class Setup_LanguageController extends Controller_SetupAbstract {
     protected function getForm() {
         $translationKey = $this->_request->getParam('key');
 
-        if (empty($translationKey))
-            throw new Application_Exception('Parameters missing');
+        if (empty($translationKey)) {
+            throw new Application_Exception('Parameters missing'); 
+        }
 
         $form = new Zend_Form_SubForm();
         $form->addSubForm(new Setup_Form_LanguageKey($translationKey), $translationKey);
@@ -92,8 +94,9 @@ class Setup_LanguageController extends Controller_SetupAbstract {
         $translationKey = $this->_request->getParam('key');
         $sourceFileEncoded = $this->_request->getParam('file');
 
-        if (empty($translationKey) || empty($sourceFileEncoded))
-            throw new Application_Exception('Parameters missing');
+        if (empty($translationKey) || empty($sourceFileEncoded)) {
+            throw new Application_Exception('Parameters missing'); 
+        }
 
         $sourceFile = urldecode($sourceFileEncoded);
 
@@ -119,7 +122,7 @@ class Setup_LanguageController extends Controller_SetupAbstract {
     protected function getSearchForm($searchTerm = null, $sortKey = null) {
 
         $sortKeysTranslated = array();
-        foreach ($this->sortKeys as $option) {
+        foreach ($this->_sortKeys as $option) {
             $sortKeysTranslated[$option] = $this->view->translate('setup_language_' . $option);
         }
         
@@ -132,10 +135,12 @@ class Setup_LanguageController extends Controller_SetupAbstract {
 
         $form->setAction($this->view->url(array('action' => 'show')));
 
-        if (!empty($searchTerm))
-            $form->search->setValue($searchTerm);
-        if (!empty($sortKey))
-            $form->sort->setValue($sortKey);
+        if (!empty($searchTerm)) {
+            $form->search->setValue($searchTerm); 
+        }
+        if (!empty($sortKey)) {
+            $form->sort->setValue($sortKey); 
+        }
 
         return $form;
     }

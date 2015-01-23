@@ -47,10 +47,26 @@ class Setup_Form_HomePage extends Zend_Form_SubForm {
             $langForm->setLegend($translator->translate("setup_language_$lang"));
             $keyForm = new Zend_Form_SubForm();
 
-            $keyForm->addElement('text', 'home_index_index_pagetitle', array('label' => $translator->translate('setup_home_index_index_pagetitle'), 'attribs' => array('size' => 90)));
-            $keyForm->addElement('text', 'home_index_index_title', array('label' => $translator->translate('setup_home_index_index_title'), 'attribs' => array('size' => 90)));
-            $keyForm->addElement('textarea', 'home_index_index_welcome', array('label' => $translator->translate('setup_home_index_index_welcome'), 'attribs' => array('size' => 90)));
-            $keyForm->addElement('textarea', 'home_index_index_instructions', array('label' => $translator->translate('setup_home_index_index_instructions'), 'attribs' => array('size' => 90)));
+            $keyForm->addElement(
+                'text', 'home_index_index_pagetitle',
+                array('label' => $translator->translate('setup_home_index_index_pagetitle'),
+                    'attribs' => array('size' => 90))
+            );
+            $keyForm->addElement(
+                'text', 'home_index_index_title',
+                array('label' => $translator->translate('setup_home_index_index_title'),
+                    'attribs' => array('size' => 90))
+            );
+            $keyForm->addElement(
+                'textarea', 'home_index_index_welcome',
+                array('label' => $translator->translate('setup_home_index_index_welcome'),
+                    'attribs' => array('size' => 90))
+            );
+            $keyForm->addElement(
+                'textarea', 'home_index_index_instructions',
+                array('label' => $translator->translate('setup_home_index_index_instructions'),
+                    'attribs' => array('size' => 90))
+            );
             $langForm->addSubForm($keyForm, 'key');
             $this->addSubForm($langForm, $lang);
         }

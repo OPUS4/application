@@ -41,7 +41,7 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
     /**
      *  base path for content files
      */
-    protected $contentBasepath = '';
+    protected $_contentBasepath = '';
 
     /**
      * Path to directory containing content files. 
@@ -50,7 +50,7 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
      */
     public function setContentBasepath($basePath) {
         $path = realpath($basePath);
-        $this->contentBasepath = $path;
+        $this->_contentBasepath = $path;
     }
 
     /**
@@ -59,17 +59,21 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
     public function toArray() {
         $resultArray = array();
         $translationUnits = $this->getTranslation();
-        if ($translationUnits === false) // error reading files, this should not happen
-            throw new Setup_Model_Exception('No tmx data found.');
+        if ($translationUnits === false) { // error reading files, this should not happen
+            throw new Setup_Model_Exception('No tmx data found.'); 
+        }
         foreach ($translationUnits as $translationUnit => $variants) {
             $resultArray[$translationUnit] = array();
             foreach ($variants as $language => $text) {
                 if (substr($text, -4) == '.txt') {
                     $resultArray[$translationUnit][$language] = array();
-                    $this->addContentSource($this->contentBasepath . DIRECTORY_SEPARATOR . $text);
+                    $this->addContentSource($this->_contentBasepath . DIRECTORY_SEPARATOR . $text);
                     $resultArray[$translationUnit][$language]['filename'] = $text;
-                    $resultArray[$translationUnit][$language]['contents'] = $this->getContent($this->contentBasepath . DIRECTORY_SEPARATOR . $text);
-                } else {
+                    $resultArray[$translationUnit][$language]['contents'] = $this->getContent(
+                        $this->_contentBasepath . DIRECTORY_SEPARATOR . $text
+                    );
+                }
+                else {
                     $resultArray[$translationUnit][$language] = $text;
                 }
             }
@@ -87,13 +91,16 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
         $tmxData = parent::getTranslation();
         $filteredTmxData = array();
         foreach ($helpConfigArray as $helpKey => $helpContents) {
-            if (isset($tmxData[$helpKey]))
-                $filteredTmxData[$helpKey] = $tmxData[$helpKey];
+            if (isset($tmxData[$helpKey])) {
+                $filteredTmxData[$helpKey] = $tmxData[$helpKey]; 
+            }
             foreach ($helpContents as $value) {
-                if (isset($tmxData["help_title_$value"]))
-                    $filteredTmxData["help_title_$value"] = $tmxData["help_title_$value"];
-                if (isset($tmxData["help_content_$value"]))
-                    $filteredTmxData["help_content_$value"] = $tmxData["help_content_$value"];
+                if (isset($tmxData["help_title_$value"])) {
+                    $filteredTmxData["help_title_$value"] = $tmxData["help_title_$value"]; 
+                }
+                if (isset($tmxData["help_content_$value"])) {
+                    $filteredTmxData["help_content_$value"] = $tmxData["help_content_$value"]; 
+                }
             }
         }
         return $filteredTmxData;
@@ -109,7 +116,7 @@ class Setup_Model_HelpPage extends Setup_Model_Abstract {
         foreach ($data as $translationUnit => $variants) {
             foreach ($variants as $language => $contents) {
                 if (is_array($contents) && isset($contents['filename']) && isset($contents['contents'])) {
-                    $filePath = $this->contentBasepath . DIRECTORY_SEPARATOR . $contents['filename'];
+                    $filePath = $this->_contentBasepath . DIRECTORY_SEPARATOR . $contents['filename'];
                     $resultData[$filePath] = $contents['contents'];
                     $contents = $contents['filename'];
                 }

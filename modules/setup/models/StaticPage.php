@@ -41,18 +41,18 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
     /**
      * name of the page to edit
      */
-    protected $pageName;
+    protected $_pageName;
 
     /**
      *  base path for content files
      */
-    protected $contentBasepath;
+    protected $_contentBasepath;
 
     /**
      * decide wether to use external content file (as in contact, imprint)
      * or save content data in tmx file (as in home page) 
      */
-    protected $useContentFile = true;
+    protected $_useContentFile = true;
 
     /**
      * @param string $pageName          Name of the page
@@ -61,14 +61,15 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
      * @param Zend_Log $log             Instance of Zend_Log (@see setLog())
      */
     public function __construct($pageName, $config = null, $log = null) {
-        $this->pageName = $pageName;
+        $this->_pageName = $pageName;
         parent::__construct($config, $log);
     }
 
     public function setPageNames($pageNames) {
         // check if pageName is valid
-        if (!in_array($this->pageName, $pageNames))
-            throw new Setup_Model_Exception('Invalid page name, not found in configuration. ');
+        if (!in_array($this->_pageName, $pageNames)) {
+            throw new Setup_Model_Exception('Invalid page name, not found in configuration. '); 
+        }
     }
 
     /**
@@ -78,7 +79,7 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
      * @param string $tmxTargetPath directory path used to write tmx content
      */
     public function setTranslationTargetPath($tmxTargetPath) {
-        $this->setTranslationTarget($tmxTargetPath . DIRECTORY_SEPARATOR . $this->pageName . '.tmx');
+        $this->setTranslationTarget($tmxTargetPath . DIRECTORY_SEPARATOR . $this->_pageName . '.tmx');
     }
 
     /**
@@ -88,7 +89,7 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
      * @param string $tmxTargetPath directory path used to write tmx content
      */
     public function setUseContentFile($bool = true) {
-        $this->useContentFile = $bool;
+        $this->_useContentFile = $bool;
     }
 
     /**
@@ -101,7 +102,7 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
     public function setTranslationSourcePaths(array $tmxSourcePaths) {
         $filePaths = array();
         foreach ($tmxSourcePaths as $tmxsrc) {
-            $filePaths[] = $tmxsrc . DIRECTORY_SEPARATOR . $this->pageName . '.tmx';
+            $filePaths[] = $tmxsrc . DIRECTORY_SEPARATOR . $this->_pageName . '.tmx';
         }
         parent::setTranslationSources($filePaths);
     }
@@ -113,7 +114,7 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
      * @param string $basePath name of directory used to read / write page content
      */
     public function setContentBasepath($basePath) {
-        $this->contentBasepath = $basePath;
+        $this->_contentBasepath = $basePath;
     }
 
     /**
@@ -126,9 +127,9 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
         $translationUnits = $this->getTranslation();
         foreach ($languages as $language) {
             $resultArray[$language] = array();
-            if ($this->useContentFile) {
-                $fileName = "{$this->pageName}.$language.txt";
-                $filePath = $this->contentBasepath . DIRECTORY_SEPARATOR . $fileName;
+            if ($this->_useContentFile) {
+                $fileName = "{$this->_pageName}.$language.txt";
+                $filePath = $this->_contentBasepath . DIRECTORY_SEPARATOR . $fileName;
                 $this->addContentSource($filePath);
                 $resultArray[$language]['file']['filename'] = $fileName;
                 $resultArray[$language]['file']['contents'] = $this->getContent($filePath);
@@ -157,14 +158,16 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
                         if (!is_array($val)
                                 || !isset($val['filename'])
                                 || !isset($val['contents'])
-                        )
-                            throw new Setup_Model_Exception('Invalid data structure');
-                        $filePath = $this->contentBasepath . DIRECTORY_SEPARATOR . $val['filename'];
+                        ) {
+                            throw new Setup_Model_Exception('Invalid data structure'); 
+                        }
+                        $filePath = $this->_contentBasepath . DIRECTORY_SEPARATOR . $val['filename'];
                         $resultData[$filePath] = $val['contents'];
                         break;
                     case 'key':
-                        foreach ($val as $translationUnit => $variant)
-                            $resultTmx->setVariantSegment($translationUnit, $language, $variant);
+                        foreach ($val as $translationUnit => $variant) {
+                            $resultTmx->setVariantSegment($translationUnit, $language, $variant); 
+                        }
                         break;
                     default:
                         throw new Setup_Model_Exception('Failed loading array. Invalid data structure.');

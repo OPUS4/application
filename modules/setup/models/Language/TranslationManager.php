@@ -71,12 +71,12 @@ class Setup_Model_Language_TranslationManager {
     /**
      * array holding modules to include
      */
-    protected $modules = array();
+    protected $_modules = array();
 
     /**
      * string used to filter translation units
      */
-    protected $filter;
+    protected $_filter;
 
     /**
      * Set Modules to include
@@ -85,7 +85,7 @@ class Setup_Model_Language_TranslationManager {
      *
      */
     public function setModules($array) {
-        $this->modules = $array;
+        $this->_modules = $array;
     }
 
     /**
@@ -95,7 +95,7 @@ class Setup_Model_Language_TranslationManager {
      * 
      */
     public function setFilter($string) {
-        $this->filter = $string;
+        $this->_filter = $string;
     }
 
     /**
@@ -120,7 +120,7 @@ class Setup_Model_Language_TranslationManager {
                     if ($tmxFile->load($filePath)) {
                         $translationUnits = $tmxFile->toArray();
                         foreach ($translationUnits as $key => $values) {
-                            if (empty($this->filter) || strpos($key, $this->filter) !== false) {
+                            if (empty($this->_filter) || strpos($key, $this->_filter) !== false) {
                                 foreach ($values as $lang => $value) {
                                     $row = array(
                                         'unit' => $key,
@@ -134,7 +134,8 @@ class Setup_Model_Language_TranslationManager {
                                 }
                             }
                         }
-                    } else {
+                    }
+                    else {
                         throw new Setup_Model_FileNotReadableException($filePath);
                     }
                 }
@@ -151,9 +152,11 @@ class Setup_Model_Language_TranslationManager {
     public function getFiles() {
         $modules = array();
         $languageDirs = array('language', 'language_custom');
-        foreach ($this->modules as $moduleName) {
+        foreach ($this->_modules as $moduleName) {
             $moduleFiles = array();
-            $moduleSubDirs = new RecursiveDirectoryIterator(realpath(APPLICATION_PATH . "/modules/$moduleName"), FilesystemIterator::CURRENT_AS_SELF);
+            $moduleSubDirs = new RecursiveDirectoryIterator(
+                realpath(APPLICATION_PATH . "/modules/$moduleName"), FilesystemIterator::CURRENT_AS_SELF
+            );
             foreach ($moduleSubDirs as $moduleSubDir) {
                 if ($moduleSubDir->isDir()) {
                     $dirName = $moduleSubDir->getFilename();
@@ -161,14 +164,16 @@ class Setup_Model_Language_TranslationManager {
                         $tmxFiles = $moduleSubDir->getChildren();
                         foreach ($tmxFiles as $tmxFile) {
                             $tmxFileName = $tmxFile->getFilename();
-                            if ($tmxFile->isFile() && substr($tmxFileName, -4) == '.tmx')
-                                $moduleFiles[$dirName][] = $tmxFile->getFilename();
+                            if ($tmxFile->isFile() && substr($tmxFileName, -4) == '.tmx') {
+                                $moduleFiles[$dirName][] = $tmxFile->getFilename(); 
+                            }
                         }
                     }
                 }
             }
-            if (!empty($moduleFiles))
-                $modules[$moduleName] = $moduleFiles;
+            if (!empty($moduleFiles)) {
+                $modules[$moduleName] = $moduleFiles; 
+            }
         }
         return $modules;
     }

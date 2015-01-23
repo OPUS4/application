@@ -38,10 +38,10 @@
  */
 class Setup_Form_LanguageSearch extends Zend_Form {
 
-    protected $sortKeys = array('unit', 'module', 'directory', 'filename', 'language', 'variant');
+    protected $_sortKeys = array('unit', 'module', 'directory', 'filename', 'language', 'variant');
 
     public function getSortKeys() {
-        return $this->sortKeys;
+        return $this->_sortKeys;
     }
     
     public function init() {

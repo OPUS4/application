@@ -41,29 +41,29 @@ abstract class Setup_Model_Abstract {
     /**
      * Source Paths for translation resources
      */
-    protected $tmxSources = array();
+    protected $_tmxSources = array();
 
     /**
      * Target file for writing translation resources
      */
-    protected $tmxTarget;
+    protected $_tmxTarget;
 
     /**
      * language resources
      */
-    protected $tmxContents;
+    protected $_tmxContents;
 
     /**
      * Array of with keys containing source paths for data resources
      * and values containing respective content
      */
-    protected $contentSources = array();
+    protected $_contentSources = array();
 
     /**
      * Zend_Log, can be set via @see setLog()
      * or will be set from Zend:Registry as needed
      */
-    protected $log;
+    protected $_log;
 
     /**
      * @param Zend_Config|array $config Object or Array containing configuration
@@ -92,7 +92,8 @@ abstract class Setup_Model_Abstract {
             $methodName = 'set' . ucfirst($key);
             if (method_exists($this, $methodName)) {
                 $this->$methodName($value);
-            } else {
+            }
+            else {
                 throw new Setup_Model_Exception("Invalid configuration key '$key'. No corresponding method found.");
             }
         }
@@ -119,7 +120,7 @@ abstract class Setup_Model_Abstract {
      * 
      */
     public function setTranslationSources(array $tmxSourcePaths) {
-        $this->tmxSources = $tmxSourcePaths;
+        $this->_tmxSources = $tmxSourcePaths;
     }
 
     /**
@@ -127,7 +128,7 @@ abstract class Setup_Model_Abstract {
      */
     public function setTranslationTarget($tmxTargetPath) {
         $this->verifyWriteAccess($tmxTargetPath);
-        $this->tmxTarget = $tmxTargetPath;
+        $this->_tmxTarget = $tmxTargetPath;
     }
 
     /**
@@ -150,12 +151,14 @@ abstract class Setup_Model_Abstract {
      */
     public function addContentSource($filename) {
         $filePath = realpath($filename);
-        if ($filePath == false)
-            throw new Setup_Model_FileNotFoundException($filename);
+        if ($filePath == false) {
+            throw new Setup_Model_FileNotFoundException($filename); 
+        }
         $this->verifyReadAccess($filePath);
         $this->verifyWriteAccess($filePath);
-        if (!isset($this->contentSources[$filePath]))
-            $this->contentSources[$filePath] = null;
+        if (!isset($this->_contentSources[$filePath])) {
+            $this->_contentSources[$filePath] = null;
+        }
     }
 
     /**
@@ -168,13 +171,14 @@ abstract class Setup_Model_Abstract {
     public function getContent($filename = null) {
         $result = array();
         if (is_null($filename)) {
-            foreach ($this->contentSources as $file) {
+            foreach ($this->_contentSources as $file) {
                 $this->verifyReadAccess($file);
-                $result[$filePath] = file_get_contents($file);
+                $result[$filePath] = file_get_contents($file); // TODO bug
             }
-        } else {
+        }
+        else {
             $filePath = realpath($filename);
-            if (!array_key_exists($filePath, $this->contentSources)) {
+            if (!array_key_exists($filePath, $this->_contentSources)) {
                 throw new Setup_Model_Exception("$filePath is not a valid source file.");
             }
             $result = file_get_contents($filePath);
@@ -190,9 +194,9 @@ abstract class Setup_Model_Abstract {
      */
     public function setContent(array $content) {
         foreach ($content as $filename => $contents) {
-            if (!isset($this->contentSources[$filename])) {
+            if (!isset($this->_contentSources[$filename])) {
                 $this->addContentSource($filename);
-                $this->contentSources[$filename] = $contents;
+                $this->_contentSources[$filename] = $contents;
             }
         }
     }
@@ -205,7 +209,7 @@ abstract class Setup_Model_Abstract {
      */
     public function getTranslation() {
         $tmxFile = new Util_TmxFile();
-        foreach ($this->tmxSources as $source) {
+        foreach ($this->_tmxSources as $source) {
             if (is_file($source) && is_readable($source)) {
                 $tmxFile->load($source);
             }
@@ -227,30 +231,33 @@ abstract class Setup_Model_Abstract {
         // an anonymous function that computes the difference between two
         // arrays recursively.
         // (taken from http://www.php.net/manual/en/function.array-diff.php#91756)
-        $recursiveDiff = function($aArray1, $aArray2) use (&$recursiveDiff) {
+        $recursiveDiff = function($arrayOne, $arrayTwo) use (&$recursiveDiff) {
                     $aReturn = array();
-                    foreach ($aArray1 as $mKey => $mValue) {
-                        if (array_key_exists($mKey, $aArray2)) {
+                    foreach ($arrayOne as $mKey => $mValue) {
+                        if (array_key_exists($mKey, $arrayTwo)) {
                             if (is_array($mValue)) {
-                                $aRecursiveDiff = $recursiveDiff($mValue, $aArray2[$mKey]);
+                                $aRecursiveDiff = $recursiveDiff($mValue, $arrayTwo[$mKey]);
                                 if (count($aRecursiveDiff)) {
                                     $aReturn[$mKey] = $aRecursiveDiff;
                                 }
-                            } else {
-                                if ($mValue != $aArray2[$mKey]) {
+                            }
+                            else {
+                                if ($mValue != $arrayTwo[$mKey]) {
                                     $aReturn[$mKey] = $mValue;
                                 }
                             }
-                        } else {
+                        }
+                        else {
                             $aReturn[$mKey] = $mValue;
                         }
                     }
                     return $aReturn;
-                };
+        };
         $currentTranslation = $this->getTranslation();
         if (empty($currentTranslation)) {
             $result = $array;
-        } else {
+        }
+        else {
             $diffArray = $recursiveDiff($array, $currentTranslation);
             $result = array_replace_recursive(array_intersect_key($currentTranslation, $diffArray), $diffArray);
         }
@@ -266,7 +273,7 @@ abstract class Setup_Model_Abstract {
         if ($diff) {
             $array = $this->getTranslationDiff($array);
         }
-        $this->tmxContents = $array;
+        $this->_tmxContents = $array;
     }
 
     /**
@@ -282,23 +289,23 @@ abstract class Setup_Model_Abstract {
         $tmxBackup = $savedContent = array();
 
         try {
-            if (!empty($this->tmxContents)) {
-                $this->verifyWriteAccess($this->tmxTarget);
+            if (!empty($this->_tmxContents)) {
+                $this->verifyWriteAccess($this->_tmxTarget);
                 $tmxFile = new Util_TmxFile();
-                if (is_file($this->tmxTarget)) {
-                    $tmxFile->load($this->tmxTarget);
+                if (is_file($this->_tmxTarget)) {
+                    $tmxFile->load($this->_tmxTarget);
                     // backup in case a write operation fails
                     $tmxBackup = $tmxFile->toArray();
                 }
 
-                $tmxFile->fromArray($this->tmxContents);
-                $result = $tmxFile->save($this->tmxTarget);
+                $tmxFile->fromArray($this->_tmxContents);
+                $result = $tmxFile->save($this->_tmxTarget);
                 if (!$result) {
-                    throw new Setup_Model_Exception("Saving File '{$this->tmxTarget}' failed");
+                    throw new Setup_Model_Exception("Saving File '{$this->_tmxTarget}' failed");
                 }
             }
 
-            foreach ($this->contentSources as $filename => $contents) {
+            foreach ($this->_contentSources as $filename => $contents) {
                 if (!is_null($contents)) {
                     $this->verifyWriteAccess($filename);
 // backup stored content to restore in case a write operation fails
@@ -313,7 +320,7 @@ abstract class Setup_Model_Abstract {
             if (!empty($tmxBackup)) {
                 $tmxFile = new Util_TmxFile();
                 $tmxFile->fromArray($tmxBackup);
-                $tmxFile->save($this->tmxTarget);
+                $tmxFile->save($this->_tmxTarget);
             }
 
             if (!empty($savedContent)) {
@@ -336,8 +343,9 @@ abstract class Setup_Model_Abstract {
      * @throws Setup_Model_FileNotReadableException
      */
     public function verifyReadAccess($file) {
-        if (!(is_file($file) && is_readable($file)))
-            throw new Setup_Model_FileNotReadableException($file);
+        if (!(is_file($file) && is_readable($file))) {
+            throw new Setup_Model_FileNotReadableException($file); 
+        }
     }
 
     /**
@@ -352,8 +360,9 @@ abstract class Setup_Model_Abstract {
         if (
                 (!( is_file($file) && is_writable($file) ))
                 && (!( is_dir(dirname($file)) && is_writeable(dirname($file))) )
-        )
-            throw new Setup_Model_FileNotWriteableException($file);
+        ) {
+            throw new Setup_Model_FileNotWriteableException($file); 
+        }
     }
 
     /**
@@ -361,14 +370,14 @@ abstract class Setup_Model_Abstract {
      * Will otherwise be set from Zend_Registry in @see log() as needed
      */
     public function setLog(Zend_Log $log) {
-        $this->log = $log;
+        $this->_log = $log;
     }
 
     protected function log($message, $priority = Zend_Log::ERR) {
-        if (is_null($this->log)) {
+        if (is_null($this->_log)) {
             $this->setLog(Zend_Registry::get('Zend_Log'));
         }
-        $this->log->log($message, $priority);
+        $this->_log->log($message, $priority);
     }
 
 }

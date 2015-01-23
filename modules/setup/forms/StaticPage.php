@@ -52,14 +52,19 @@ class Setup_Form_StaticPage extends Zend_Form_SubForm {
                         $fileForm = new Zend_Form_SubForm();
                         $languageForm->addSubForm($fileForm, 'file');
                         $fileForm->addElement('hidden', 'filename');
-                        $fileForm->addElement('textarea', 'contents', array('label' => $translator->translate('setup_page_content')));
+                        $fileForm->addElement(
+                            'textarea', 'contents', array('label' => $translator->translate('setup_page_content'))
+                        );
                         break;
                     case 'key':
                         $keyForm = new Zend_Form_SubForm();
                         $languageForm->addSubForm($keyForm, 'key');
                         $translationUnits = array_keys($values);
                         foreach ($translationUnits as $translationUnit) {
-                            $keyForm->addElement('text', $translationUnit, array('label' => $translator->translate("setup_$translationUnit"), 'size' => 90));
+                            $keyForm->addElement(
+                                'text', $translationUnit,
+                                array('label' => $translator->translate("setup_$translationUnit"), 'size' => 90)
+                            );
                         }
                         break;
                 }
