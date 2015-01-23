@@ -56,7 +56,7 @@ if ((true === isset($conf->file->destinationPath)) and
     $baseFilePath = $conf->file->destinationPath;
 }
 
-foreach($docIds as $docId) {
+foreach ($docIds as $docId) {
 
     printMessage(' Indexing document : ' . $docId);
 
@@ -95,15 +95,22 @@ foreach($docIds as $docId) {
                         break;
 
                     default:
-                        printMessage(' Skipped file "' . $filePath . '". Reason: Mime type "' . $mimeType . '" has no processor.');
+                        printMessage(
+                            ' Skipped file "' . $filePath . '". Reason: Mime type "' . $mimeType
+                            . '" has no processor.'
+                        );
                         break;
                 }
-            } else {
+            }
+            else {
                 printMessage(' Skipped file "' . $filePath . '". Reason: File not found.');
             }
         }
-    } else {
-        printMessage(' Skipped indexing of document files. Reason: no base path to files or document is not published.');
+    }
+    else {
+        printMessage(
+            ' Skipped indexing of document files. Reason: no base path to files or document is not published.'
+        );
     }
 
     $documents[] = $solrDocument;
