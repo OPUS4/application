@@ -36,31 +36,31 @@ include_once ("jpgraph/jpgraph_bar.php");
  */
 class Statistic_Model_StatisticGraphThumb {
 
-    protected $data = null;
-    protected $width = 35;
-    protected $height = 27;
-    protected $bgImg ;
+    protected $_data = null;
+    protected $_width = 35;
+    protected $_height = 27;
+    protected $_bgImg ;
 
     public function __construct($data, $backgroundImage = null) {
-        $this->bgImg = $backgroundImage;
+        $this->_bgImg = $backgroundImage;
 
-        $this->data = $data;
+        $this->_data = $data;
     }
 
         public function setSize($width, $height) {
-        $this->width = $width;
-        $this->height = $height;
-    }
+        $this->_width = $width;
+        $this->_height = $height;
+        }
 
     public function drawGraph() {
         // generate graphic
-        $graph = new Graph($this->width, $this->height, "auto");
+        $graph = new Graph($this->_width, $this->_height, "auto");
         $graph->SetScale("textlin");
 
-        $graph->img->SetMargin(0,0,1,0);
+        $graph->img->SetMargin(0, 0, 1, 0);
         //$graph->SetFrame(true);
         // generate bars
-        $bplot = new BarPlot($this->data);
+        $bplot = new BarPlot($this->_data);
         $graph->Add($bplot);
 
 
@@ -68,11 +68,11 @@ class Statistic_Model_StatisticGraphThumb {
         $bplot->SetFillColor('gray');
 
         //show background image if file exists
-        if (false === empty($this->bgImg) && file_exists($this->bgImg)) {
-            $graph->SetBackgroundImage($this->bgImg, BGIMG_FILLFRAME);
+        if (false === empty($this->_bgImg) && file_exists($this->_bgImg)) {
+            $graph->SetBackgroundImage($this->_bgImg, BGIMG_FILLFRAME);
         }
-        $bplot->SetFillGradient("gray","darkgray",GRAD_HOR);
-        $graph->yaxis->HideTicks(true,true);
+        $bplot->SetFillGradient("gray", "darkgray", GRAD_HOR);
+        $graph->yaxis->HideTicks(true, true);
         $graph->xaxis->HideLabels(true);
 
         // show graphic

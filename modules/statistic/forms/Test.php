@@ -35,6 +35,7 @@
 
 
 class Statistic_Form_Test extends Zend_Form {
+
     public $elementDecorators = array(
         'ViewHelper',
         'Errors',
@@ -50,30 +51,39 @@ class Statistic_Form_Test extends Zend_Form {
         array(array('row' => 'HtmlTag'), array('tag' => 'tr')),
     );
 
-    public function init()
-    {
-        $this->addElement('text', 'document_id', array(
+    public function init() {
+        $this->addElement(
+            'text', 'document_id', array(
             'decorators' => $this->elementDecorators,
             'label'       => 'Document ID:',
-        ));
-        $this->addElement('text', 'file_id', array(
+            )
+        );
+        $this->addElement(
+            'text', 'file_id', array(
             'decorators' => $this->elementDecorators,
             'label'       => 'File ID:',
-        ));
+            )
+        );
 
-        $this->addElement('text', 'ip', array(
+        $this->addElement(
+            'text', 'ip', array(
             'decorators' => $this->elementDecorators,
             'label'       => 'IP:',
-        ));
-        $this->addElement('text', 'user_agent', array(
+            )
+        );
+        $this->addElement(
+            'text', 'user_agent', array(
             'decorators' => $this->elementDecorators,
             'label'       => 'User Agent:',
-        ));
+            )
+        );
 
-        $this->addElement('submit', 'save', array(
+        $this->addElement(
+            'submit', 'save', array(
             'decorators' => $this->buttonDecorators,
             'label'       => 'Submit!',
-        ));
+            )
+        );
 
         $this->setDefaults(
             array(
@@ -85,13 +95,14 @@ class Statistic_Form_Test extends Zend_Form {
         );
     }
 
-    public function loadDefaultDecorators()
-    {
-        $this->setDecorators(array(
+    public function loadDefaultDecorators() {
+        $this->setDecorators(
+            array(
             'FormElements',
             array('HtmlTag', array('tag' => 'table')),
             'Form',
-        ));
+            )
+        );
     }
 
 

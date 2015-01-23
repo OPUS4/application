@@ -36,97 +36,97 @@ include_once ("jpgraph/jpgraph_bar.php");
  */
 class Statistic_Model_StatisticGraph {
 
-    protected $dataPdf = null;
-    protected $dataFrontdoor = null;
-    protected $xaxis = 'x axis';
-    protected $yaxis = 'y axis';
-    protected $frontdoorLabel = 'frontdoor';
-    protected $filesLabel = 'files';
-    protected $title;
+    protected $_dataPdf = null;
+    protected $_dataFrontdoor = null;
+    protected $_xaxis = 'x axis';
+    protected $_yaxis = 'y axis';
+    protected $_frontdoorLabel = 'frontdoor';
+    protected $_filesLabel = 'files';
+    protected $_title;
 
-    protected $width = 330;
-    protected $height = 200;
+    protected $_width = 330;
+    protected $_height = 200;
 
-    public function __construct($title = 'Statistic Graph', $dataPdf, $dataFrontdoor) {
-        $this->title = $title;
-        $this->dataPdf = $dataPdf;
-        $this->dataFrontdoor = $dataFrontdoor;
+    public function __construct($title = 'Statistic Graph', $dataPdf = null, $dataFrontdoor = null) {
+        $this->_title = $title;
+        $this->_dataPdf = $dataPdf;
+        $this->_dataFrontdoor = $dataFrontdoor;
     }
 
     public function setXAxisTitle($title) {
-        $this->xaxis = $title;
+        $this->_xaxis = $title;
     }
 
     public function setYAxisTitle($title) {
-        $this->yaxis = $title;
+        $this->_yaxis = $title;
     }
 
     public function setTitle($title) {
-        $this->title = $title;
+        $this->_title = $title;
     }
 
     public function setSize($width, $height) {
-        $this->width = $width;
-        $this->height = $height;
+        $this->_width = $width;
+        $this->_height = $height;
     }
 
     public function setLegendFrontdoorLabel($frontdoor) {
-        $this->frontdoorLabel = $frontdoor;
+        $this->_frontdoorLabel = $frontdoor;
     }
 
     public function setLegendFilesLabel($files) {
-        $this->filesLabel = $files;
+        $this->_filesLabel = $files;
     }
 
     public function drawGraph() {
         // generate graphic
-        $graph = new Graph($this->width, $this->height, "auto");
+        $graph = new Graph($this->_width, $this->_height, "auto");
         $graph->SetScale("textlin");
 
         // add shadow
         $graph->SetShadow();
 
         // change border
-        $graph->img->SetMargin(40,30,20,40);
+        $graph->img->SetMargin(40, 30, 20, 40);
         $graph->legend->Pos(0.05, 0.05, "right", "top");
         // generate bars
-        $bplot = new BarPlot(array_values($this->dataPdf));
-        $bplot->SetLegend($this->filesLabel);
-        $bplot2 = new BarPlot(array_values($this->dataFrontdoor));
-        $bplot2->SetLegend($this->frontdoorLabel);
-        $gbplot  = new GroupBarPlot (array($bplot ,$bplot2));
+        $bplot = new BarPlot(array_values($this->_dataPdf));
+        $bplot->SetLegend($this->_filesLabel);
+        $bplotFrontdoor = new BarPlot(array_values($this->_dataFrontdoor));
+        $bplotFrontdoor->SetLegend($this->_frontdoorLabel);
+        $gbplot  = new GroupBarPlot(array($bplot ,$bplotFrontdoor));
         $graph->Add($gbplot);
 
         // format bars
         $bplot->SetFillColor('orange');
         $bplot->SetShadow();
-        $bplot->SetFillGradient("orange","yellow",GRAD_HOR);
+        $bplot->SetFillGradient("orange", "yellow", GRAD_HOR);
         $bplot->value->Show();
         $bplot->value->SetFormat('%d');
         $bplot->value->SetFont(FF_FONT1, FS_BOLD);
 
         //$bplot->value->SetAngle(45);
-        $bplot->value->SetColor("darkblue","darkred");
+        $bplot->value->SetColor("darkblue", "darkred");
 
-        $bplot2->SetFillColor('blue');
-        $bplot2->SetShadow();
-        $bplot2->SetFillGradient("blue","lightblue",GRAD_HOR);
-        $bplot2->value->Show();
-        $bplot2->value->SetFormat('%d');
-        $bplot2->value->SetFont(FF_FONT1, FS_BOLD);
+        $bplotFrontdoor->SetFillColor('blue');
+        $bplotFrontdoor->SetShadow();
+        $bplotFrontdoor->SetFillGradient("blue", "lightblue", GRAD_HOR);
+        $bplotFrontdoor->value->Show();
+        $bplotFrontdoor->value->SetFormat('%d');
+        $bplotFrontdoor->value->SetFont(FF_FONT1, FS_BOLD);
 
         //$bplot2->value->SetAngle(45);
-        $bplot2->value->SetColor("darkgreen","darkred");
+        $bplotFrontdoor->value->SetColor("darkgreen", "darkred");
 
         // format graphic
-        $graph->title->Set($this->title);
-        $graph->xaxis->title->Set($this->xaxis);
-        $graph->yaxis->title->Set($this->yaxis);
-        $graph->xaxis->SetTickLabels(array_keys($this->dataPdf));
+        $graph->title->Set($this->_title);
+        $graph->xaxis->title->Set($this->_xaxis);
+        $graph->yaxis->title->Set($this->_yaxis);
+        $graph->xaxis->SetTickLabels(array_keys($this->_dataPdf));
 
-        $graph->title->SetFont(FF_FONT1,FS_BOLD);
-        $graph->yaxis->title->SetFont(FF_FONT1,FS_BOLD);
-        $graph->xaxis->title->SetFont(FF_FONT1,FS_BOLD);
+        $graph->title->SetFont(FF_FONT1, FS_BOLD);
+        $graph->yaxis->title->SetFont(FF_FONT1, FS_BOLD);
+        $graph->xaxis->title->SetFont(FF_FONT1, FS_BOLD);
 
         $graph->yaxis->scale->SetGrace(35);
 

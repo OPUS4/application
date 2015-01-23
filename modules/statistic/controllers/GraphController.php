@@ -34,11 +34,8 @@
 
 class Statistic_GraphController extends Controller_Action {
 
-
     protected function buildGraph($title, $dataPdf, $dataFrontdoor) {
-
     }
-
 
     public function indexAction() {
         $this->_forward('year');
@@ -65,18 +62,20 @@ class Statistic_GraphController extends Controller_Action {
         if (count($years) == 0) {
             $years = array(date('Y'));
         }
-        foreach($years as $year) {
+        foreach ($years as $year) {
             if (isset($dataPdf[$year]) === false) {
                 $dataPdf[$year] = 0;
             }
-        if (isset($dataFrontdoor[$year]) === false) {
+            if (isset($dataFrontdoor[$year]) === false) {
                 $dataFrontdoor[$year] = 0;
             }
         }
         ksort($dataPdf);
         ksort($dataFrontdoor);
 
-        $graph = new Statistic_Model_StatisticGraph($this->view->translate('graph_year_title'), $dataPdf, $dataFrontdoor);
+        $graph = new Statistic_Model_StatisticGraph(
+            $this->view->translate('graph_year_title'), $dataPdf, $dataFrontdoor
+        );
         $graph->setXAxisTitle($this->view->translate('graph_year_xaxis'));
         $graph->setYAxisTitle($this->view->translate('graph_yaxis'));
         $graph->setLegendFilesLabel($this->view->translate('graph_legend_files'));
@@ -114,7 +113,9 @@ class Statistic_GraphController extends Controller_Action {
         ksort($dataPdf);
         ksort($dataFrontdoor);
 
-        $graph = new Statistic_Model_StatisticGraph($this->view->translate('graph_month_title'), $dataPdf, $dataFrontdoor);
+        $graph = new Statistic_Model_StatisticGraph(
+            $this->view->translate('graph_month_title'), $dataPdf, $dataFrontdoor
+        );
         $graph->setXAxisTitle($this->view->translate('graph_month_xaxis'));
         $graph->setYAxisTitle($this->view->translate('graph_yaxis'));
         $graph->setLegendFilesLabel($this->view->translate('graph_legend_files'));

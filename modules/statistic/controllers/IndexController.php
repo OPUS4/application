@@ -55,7 +55,8 @@ class Statistic_IndexController extends Controller_Action {
         $result = $counter->count($documentId, $fileId, 'files', $ip, $userAgent);
         if ($result === FALSE) {
             $this->view->doubleClick = true;
-        } else {
+        }
+        else {
             $this->view->doubleClick = false;
             $this->view->count = $result;
         }
@@ -87,17 +88,16 @@ class Statistic_IndexController extends Controller_Action {
 
         if (isset($session->language)) {
             $language = $session->language;
-        } else {
+        }
+        else {
             $language = 'en';
         }
 
-        foreach($titles as $title) {
+        foreach ($titles as $title) {
             if ($title->getLanguage() == $language) {
                 $this->view->title = $title->getValue();
             }
         }
-
-
 
         $authorsArray = array();
         foreach ($authors as $author) {
@@ -121,12 +121,12 @@ class Statistic_IndexController extends Controller_Action {
         if (count($years) == 0) {
             $years = array(date('Y'));
         }
-        foreach($years as $year) {
+        foreach ($years as $year) {
             if (isset($yearFiles[$year]) === false) {
                 $yearFiles[$year] = 0;
             }
-        if (isset($yearAbstractPage[$year]) === false) {
-                $yearAbstractPage[$year] = 0;
+            if (isset($yearAbstractPage[$year]) === false) {
+                    $yearAbstractPage[$year] = 0;
             }
         }
         ksort($yearFiles);
