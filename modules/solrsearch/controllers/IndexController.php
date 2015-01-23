@@ -36,16 +36,16 @@
 
 class Solrsearch_IndexController extends Controller_Action {
     
-    private $query;
-    private $numOfHits;
-    private $searchtype;
-    private $resultList;
-    private $facetMenu;
-    private $openFacets;
+    private $_query;
+    private $_numOfHits;
+    private $_searchtype;
+    private $_resultList;
+    private $_facetMenu;
+    private $_openFacets;
 
     public function  init() {
         parent::init();
-        $this->facetMenu = new Solrsearch_Model_FacetMenu();
+        $this->_facetMenu = new Solrsearch_Model_FacetMenu();
         $this->_helper->mainMenu('search');
     }
 
@@ -121,14 +121,14 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->stylesheet = $config->export->stylesheet->search;
         }
 
-        $this->query = $this->buildQuery();
+        $this->_query = $this->buildQuery();
         $this->performSearch();
         $this->setViewValues();
         $this->setViewFacets();
 
         $this->setLinkRelCanonical();
 
-        if($this->numOfHits === 0 || $this->query->getStart() >= $this->numOfHits) {
+        if ($this->_numOfHits === 0 || $this->_query->getStart() >= $this->_numOfHits) {
             $this->render('nohits');
         }
         else {
@@ -143,7 +143,7 @@ class Solrsearch_IndexController extends Controller_Action {
         unset($query['sortorder']);
 
         $serverUrl = $this->view->serverUrl();
-        $fullCanonicalUrl = $serverUrl . $this->view->url( $query, null, true );
+        $fullCanonicalUrl = $serverUrl . $this->view->url($query, null, true);
 
         $this->view->headLink(array('rel' => 'canonical', 'href' => $fullCanonicalUrl));
     }
@@ -152,34 +152,34 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->getLogger()->debug('performing search');
         try {
             $searcher = new Opus_SolrSearch_Searcher();
-            $this->openFacets = $this->facetMenu->buildFacetArray($this->_request->getParams());
-            $searcher->setFacetArray($this->openFacets);
-            $this->resultList = $searcher->search($this->query);
+            $this->_openFacets = $this->_facetMenu->buildFacetArray($this->_request->getParams());
+            $searcher->setFacetArray($this->_openFacets);
+            $this->_resultList = $searcher->search($this->_query);
         }
         catch (Opus_SolrSearch_Exception $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e);
             throw new Application_SearchException($e);
         }
-        $this->numOfHits = $this->resultList->getNumberOfHits();
+        $this->_numOfHits = $this->_resultList->getNumberOfHits();
     }
 
     private function setViewValues() {
         $this->setGeneralViewValues();
 
-        if ($this->numOfHits > 0) {
-            $nrOfRows = (int)$this->query->getRows();
-            $start = $this->query->getStart();
+        if ($this->_numOfHits > 0) {
+            $nrOfRows = (int)$this->_query->getRows();
+            $start = $this->_query->getStart();
             $query = null;
-            if ($this->searchtype === Util_Searchtypes::SIMPLE_SEARCH
-                    || $this->searchtype === Util_Searchtypes::ALL_SEARCH) {
-                $query = $this->query->getCatchAll();
+            if ($this->_searchtype === Util_Searchtypes::SIMPLE_SEARCH
+                    || $this->_searchtype === Util_Searchtypes::ALL_SEARCH) {
+                $query = $this->_query->getCatchAll();
             }
             $this->setUpPagination($nrOfRows, $start, $query);
         }
 
-        if ($this->searchtype === Util_Searchtypes::SIMPLE_SEARCH
-                || $this->searchtype === Util_Searchtypes::ALL_SEARCH) {
-            $queryString = $this->query->getCatchAll();
+        if ($this->_searchtype === Util_Searchtypes::SIMPLE_SEARCH
+                || $this->_searchtype === Util_Searchtypes::ALL_SEARCH) {
+            $queryString = $this->_query->getCatchAll();
             if (trim($queryString) !== '*:*') {
                 $this->view->q = $queryString;
             }
@@ -194,39 +194,41 @@ class Solrsearch_IndexController extends Controller_Action {
             }
             return;
         }
-        if ($this->searchtype === Util_Searchtypes::ADVANCED_SEARCH
-                || $this->searchtype === Util_Searchtypes::AUTHOR_SEARCH) {
+        if ($this->_searchtype === Util_Searchtypes::ADVANCED_SEARCH
+                || $this->_searchtype === Util_Searchtypes::AUTHOR_SEARCH) {
             $this->setFilterQueryBaseURL();
-            $this->view->authorQuery = $this->query->getField('author');
-            $this->view->titleQuery = $this->query->getField('title');
-            $this->view->abstractQuery = $this->query->getField('abstract');
-            $this->view->fulltextQuery = $this->query->getField('fulltext');
-            $this->view->yearQuery = $this->query->getfield('year');
-            $this->view->authorQueryModifier = $this->query->getModifier('author');
-            $this->view->titleQueryModifier = $this->query->getModifier('title');
-            $this->view->abstractQueryModifier = $this->query->getModifier('abstract');
-            $this->view->yearQueryModifier = $this->query->getModifier('year');
-            $this->view->refereeQuery = $this->query->getField('referee');
-            $this->view->refereeQueryModifier = $this->query->getModifier('referee');
-            $this->view->personsQuery = $this->query->getField('persons');
-            $this->view->personsQueryModifier = $this->query->getModifier('persons');
+            $this->view->authorQuery = $this->_query->getField('author');
+            $this->view->titleQuery = $this->_query->getField('title');
+            $this->view->abstractQuery = $this->_query->getField('abstract');
+            $this->view->fulltextQuery = $this->_query->getField('fulltext');
+            $this->view->yearQuery = $this->_query->getfield('year');
+            $this->view->authorQueryModifier = $this->_query->getModifier('author');
+            $this->view->titleQueryModifier = $this->_query->getModifier('title');
+            $this->view->abstractQueryModifier = $this->_query->getModifier('abstract');
+            $this->view->yearQueryModifier = $this->_query->getModifier('year');
+            $this->view->refereeQuery = $this->_query->getField('referee');
+            $this->view->refereeQueryModifier = $this->_query->getModifier('referee');
+            $this->view->personsQuery = $this->_query->getField('persons');
+            $this->view->personsQueryModifier = $this->_query->getModifier('persons');
             return;
         }
-        if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH
-                || $this->searchtype === Util_Searchtypes::SERIES_SEARCH) {
+        if ($this->_searchtype === Util_Searchtypes::COLLECTION_SEARCH
+                || $this->_searchtype === Util_Searchtypes::SERIES_SEARCH) {
             $this->setFilterQueryBaseURL();
             return;
         }
-        if ($this->searchtype === Util_Searchtypes::LATEST_SEARCH) {
+        if ($this->_searchtype === Util_Searchtypes::LATEST_SEARCH) {
             $this->view->isSimpleList = true;
             $this->view->specialTitle = $this->view->translate('title_latest_docs_article') . ' '
-                . $this->query->getRows(). ' '.$this->view->translate('title_latest_docs');
+                . $this->_query->getRows(). ' '.$this->view->translate('title_latest_docs');
             return;
         }
     }
 
     private function setUpPagination($rows, $startIndex, $query) {
-        $pagination = new Solrsearch_Model_PaginationUtil($rows, $this->numOfHits, $startIndex, $query, $this->searchtype);
+        $pagination = new Solrsearch_Model_PaginationUtil(
+            $rows, $this->_numOfHits, $startIndex, $query, $this->_searchtype
+        );
         $this->view->nextPage = self::createSearchUrlArray($pagination->getNextPageUrlArray());
         $this->view->prevPage = self::createSearchUrlArray($pagination->getPreviousPageUrlArray());
         $this->view->lastPage = self::createSearchUrlArray($pagination->getLastPageUrlArray());
@@ -234,20 +236,20 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     private function setGeneralViewValues() {
-        $this->view->results = $this->resultList->getResults();
-        $this->view->searchType = $this->searchtype;
-        $this->view->numOfHits = $this->numOfHits;
-        $this->view->queryTime = $this->resultList->getQueryTime();
-        $this->view->start = $this->query->getStart();
-        $nrOfRows = $this->query->getRows();
-        if($nrOfRows != 0) {
-            $this->view->numOfPages = (int) ($this->numOfHits / $nrOfRows) + 1;
+        $this->view->results = $this->_resultList->getResults();
+        $this->view->searchType = $this->_searchtype;
+        $this->view->numOfHits = $this->_numOfHits;
+        $this->view->queryTime = $this->_resultList->getQueryTime();
+        $this->view->start = $this->_query->getStart();
+        $nrOfRows = $this->_query->getRows();
+        if ($nrOfRows != 0) {
+            $this->view->numOfPages = (int) ($this->_numOfHits / $nrOfRows) + 1;
         }
-        $this->view->rows = $this->query->getRows();
+        $this->view->rows = $this->_query->getRows();
         $this->view->authorSearch = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::AUTHOR_SEARCH));
         $this->view->isSimpleList = false;
         $this->view->browsing = (boolean) $this->getRequest()->getParam('browsing', false);
-        if ($this->searchtype == Util_Searchtypes::SERIES_SEARCH) {
+        if ($this->_searchtype == Util_Searchtypes::SERIES_SEARCH) {
             $this->view->sortfield = $this->getRequest()->getParam('sortfield', 'seriesnumber');
         }
         else {
@@ -262,30 +264,30 @@ class Solrsearch_IndexController extends Controller_Action {
     }
 
     private function setViewFacets() {
-        $facets = $this->resultList->getFacets();
-        $facetLimit = $this->facetMenu->getFacetLimitsFromConfig();
+        $facets = $this->_resultList->getFacets();
+        $facetLimit = $this->_facetMenu->getFacetLimitsFromConfig();
 
         $facetArray = array();
         $selectedFacets = array();
         $this->view->facetNumberContainer = array();
         $this->view->showFacetExtender = array();
 
-        foreach($facets as $key=>$facet) {
+        foreach ($facets as $key=>$facet) {
             $this->view->showFacetExtender[$key] = ($facetLimit[$key] <= sizeof($facet));
             $this->getLogger()->debug("found $key facet in search results");
             $this->view->facetNumberContainer[$key] = sizeof($facet);
-            $facetValue = $this->getRequest()->getParam($key . 'fq','');
-            if($facetValue !== '') {
+            $facetValue = $this->getRequest()->getParam($key . 'fq', '');
+            if ($facetValue !== '') {
                 $selectedFacets[$key] = $facetValue;
                 $this->view->showFacetExtender[$key] = false;
             }
 
-            if(count($facets[$key]) > 1 || $facetValue !== '') {
+            if (count($facets[$key]) > 1 || $facetValue !== '') {
                 $facetArray[$key] = $facet;
             }
         }
 
-        $this->view->openFacets = $this->openFacets;
+        $this->view->openFacets = $this->_openFacets;
         $this->view->facets = $facetArray;
         $this->view->selectedFacets = $selectedFacets;
     }
@@ -314,15 +316,15 @@ class Solrsearch_IndexController extends Controller_Action {
             $queryBuilderInput['sortField'] = 'server_date_published';
         }
 
-        $this->searchtype = $request->getParam('searchtype');
-        if ($this->searchtype === Util_Searchtypes::LATEST_SEARCH) {
+        $this->_searchtype = $request->getParam('searchtype');
+        if ($this->_searchtype === Util_Searchtypes::LATEST_SEARCH) {
             return $queryBuilder->createSearchQuery($this->validateInput($queryBuilderInput, 10, 100));
         }
         
-        if ($this->searchtype === Util_Searchtypes::COLLECTION_SEARCH) {
+        if ($this->_searchtype === Util_Searchtypes::COLLECTION_SEARCH) {
             $this->prepareChildren();
         }
-        else if ($this->searchtype === Util_Searchtypes::SERIES_SEARCH) {
+        else if ($this->_searchtype === Util_Searchtypes::SERIES_SEARCH) {
             $this->prepareSeries();
         }
         return $queryBuilder->createSearchQuery($this->validateInput($queryBuilderInput));
@@ -382,8 +384,10 @@ class Solrsearch_IndexController extends Controller_Action {
                 $this->_helper->layout->setLayoutPath($layoutPath);
             }
             else {
-                $this->getLogger()->debug("The requested theme '" . $collectionList->getTheme()
-                    . "' does not exist - use default theme instead.");
+                $this->getLogger()->debug(
+                    "The requested theme '" . $collectionList->getTheme()
+                    . "' does not exist - use default theme instead."
+                );
             }
         }
     }
@@ -397,7 +401,7 @@ class Solrsearch_IndexController extends Controller_Action {
             'module' => $rss ? 'rss' : 'solrsearch',
             'controller' => 'index',
             'action' => $rss ? 'index' : 'search');
-        foreach($params as $key => $value) {
+        foreach ($params as $key => $value) {
             $url[$key] = $value;
         }
         if ($rss) {

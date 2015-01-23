@@ -41,7 +41,7 @@ class Solrsearch_DispatchController extends Controller_Action {
         $action = 'search';
 
         $searchtype = $this->getRequest()->getParam('searchtype', 'invalid searchtype');
-        if($searchtype === Util_Searchtypes::SIMPLE_SEARCH) {
+        if ($searchtype === Util_Searchtypes::SIMPLE_SEARCH) {
             if (!$this->isSimpleSearchRequestValid()) {
                 $action = 'invalidsearchterm';
                 $params = array('searchtype' => Util_Searchtypes::SIMPLE_SEARCH);
@@ -102,7 +102,8 @@ class Solrsearch_DispatchController extends Controller_Action {
             if ($fieldvalue !== '') {
                 $params[$fieldname] = $fieldvalue;
                 $params[$fieldname . 'modifier'] = $this->getRequest()->getParam(
-                        $fieldname . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL);
+                    $fieldname . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL
+                );
             }
         }
         return $params;

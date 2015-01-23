@@ -34,8 +34,9 @@
 
 class Solrsearch_Model_CollectionList {
 
-    private $collection;
-    private $collectionRole;
+    private $_collection;
+
+    private $_collectionRole;
 
     public function __construct($collectionId) {
         if (is_null($collectionId)) {
@@ -62,11 +63,15 @@ class Solrsearch_Model_CollectionList {
             $collectionRole = new Opus_CollectionRole($collection->getRoleId());
         }
         catch (Opus_Model_NotFoundException $e) {
-            throw new Solrsearch_Model_Exception("Collection role with id '" . $collection->getRoleId() . "' does not exist.");
+            throw new Solrsearch_Model_Exception(
+                "Collection role with id '" . $collection->getRoleId() . "' does not exist."
+            );
         }
         
         if (!($collectionRole->getVisible() === '1' && $collectionRole->getVisibleBrowsingStart() === '1')) {
-            throw new Solrsearch_Model_Exception("Collection role with id '" . $collectionRole->getId() . "' is not visible.");
+            throw new Solrsearch_Model_Exception(
+                "Collection role with id '" . $collectionRole->getId() . "' is not visible."
+            );
         }
 
         // additional root collection check
@@ -74,16 +79,19 @@ class Solrsearch_Model_CollectionList {
         if (!is_null($rootCollection)) {
             // check if at least one visible child exists or current collection has at least one associated document
             if (!$rootCollection->hasVisibleChildren() && count($rootCollection->getPublishedDocumentIds()) == 0) {
-                throw new Solrsearch_Model_Exception("Collection role with id '" . $collectionRole->getId() . "' is not clickable and therefore not displayed.");
+                throw new Solrsearch_Model_Exception(
+                    "Collection role with id '" . $collectionRole->getId()
+                    . "' is not clickable and therefore not displayed."
+                );
             }
         }
 
-        $this->collectionRole = $collectionRole;
-        $this->collection = $collection;
+        $this->_collectionRole = $collectionRole;
+        $this->_collection = $collection;
     }
 
     public function isRootCollection() {
-        return count($this->collection->getParents()) === 1;
+        return count($this->_collection->getParents()) === 1;
     }
 
     /**
@@ -93,7 +101,7 @@ class Solrsearch_Model_CollectionList {
      * @return array
      */
     public function getParents() {
-        $parents = $this->collection->getParents();
+        $parents = $this->_collection->getParents();
         $numOfParents = count($parents);
         if ($numOfParents < 2) {
             return array();
@@ -111,19 +119,19 @@ class Solrsearch_Model_CollectionList {
      * @return array of Opus_Collection
      */
     public function getChildren() {
-        return $this->collection->getVisibleChildren();
+        return $this->_collection->getVisibleChildren();
     }
 
     public function getTitle() {
-        return $this->collection->getDisplayNameForBrowsingContext($this->collectionRole);
+        return $this->_collection->getDisplayNameForBrowsingContext($this->_collectionRole);
     }
 
     public function getTheme() {
-        return $this->collection->getTheme();
+        return $this->_collection->getTheme();
     }
 
     public function getCollectionId() {
-        return $this->collection->getId();
+        return $this->_collection->getId();
     }
 
     public function getCollectionRoleTitle() {
@@ -131,11 +139,11 @@ class Solrsearch_Model_CollectionList {
     }
 
     public function getCollectionRoleTitlePlain() {
-        return $this->collectionRole->getDisplayName('browsing');
+        return $this->_collectionRole->getDisplayName('browsing');
     }
 
     public function getCollectionRole() {
-        return $this->collectionRole;
+        return $this->_collectionRole;
     }
 }
 

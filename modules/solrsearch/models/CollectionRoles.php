@@ -34,18 +34,19 @@
 
 class Solrsearch_Model_CollectionRoles {
 
-    private $collectionRoles = array();
+    private $_collectionRoles = array();
 
     public function __construct() {
         foreach (Opus_CollectionRole::fetchAll() as $collectionRole) {
-            if ($this->isVisible($collectionRole) && ($this->HasVisibleChildren($collectionRole) || $this->hasPublishedDocs($collectionRole))) {
-                array_push($this->collectionRoles, $collectionRole);
+            if ($this->isVisible($collectionRole) && ($this->HasVisibleChildren($collectionRole)
+                    || $this->hasPublishedDocs($collectionRole))) {
+                array_push($this->_collectionRoles, $collectionRole);
             }
         }
     }
 
     public function getAllVisible() {
-        return $this->collectionRoles;
+        return $this->_collectionRoles;
     }
 
     /**
@@ -59,7 +60,7 @@ class Solrsearch_Model_CollectionRoles {
         $rootCollection = $collectionRole->getRootCollection();
         if (is_null($rootCollection)) {
             return false;
-	}
+        }
         return $rootCollection->hasVisibleChildren();
     }
 

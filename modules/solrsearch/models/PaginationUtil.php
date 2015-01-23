@@ -34,16 +34,16 @@
 class Solrsearch_Model_PaginationUtil {
 
     // prequisites
-    private $rows;
-    private $numHits;
-    private $query;
-    private $searchType;
-    private $startIndex;
+    private $_rows;
+    private $_numHits;
+    private $_query;
+    private $_searchType;
+    private $_startIndex;
 
     // results
-    private $lastPageStartIndex;
-    private $prevPageStartIndex;
-    private $nextPageStartIndex;
+    private $_lastPageStartIndex;
+    private $_prevPageStartIndex;
+    private $_nextPageStartIndex;
 
     /**
      *
@@ -53,20 +53,20 @@ class Solrsearch_Model_PaginationUtil {
      * @param string $query search query
      * @param string $searchType search type
      */
-    public function  __construct($rows, $numHits, $startIndex, $query, $searchType) {
-        $this->rows = $rows;
-        $this->numHits = $numHits;
-        $this->query = $query;
-        $this->searchType = $searchType;
-        $this->startIndex = $startIndex;
+    public function __construct($rows, $numHits, $startIndex, $query, $searchType) {
+        $this->_rows = $rows;
+        $this->_numHits = $numHits;
+        $this->_query = $query;
+        $this->_searchType = $searchType;
+        $this->_startIndex = $startIndex;
         $this->compute();
     }
 
     private function compute() {
-        $this->lastPageStartIndex = 0;
-        $this->lastPageStartIndex = (int) (($this->numHits - 1) / $this->rows)  * $this->rows;
-        $this->prevPageStartIndex = $this->startIndex - $this->rows;
-        $this->nextPageStartIndex = $this->startIndex + $this->rows;
+        $this->_lastPageStartIndex = 0;
+        $this->_lastPageStartIndex = (int) (($this->_numHits - 1) / $this->_rows)  * $this->_rows;
+        $this->_prevPageStartIndex = $this->_startIndex - $this->_rows;
+        $this->_nextPageStartIndex = $this->_startIndex + $this->_rows;
     }
 
     public function getFirstPageUrlArray() {
@@ -74,24 +74,24 @@ class Solrsearch_Model_PaginationUtil {
     }
 
     public function getNextPageUrlArray() {
-        return $this->constructUrlArrayWithStartIndex($this->nextPageStartIndex);
+        return $this->constructUrlArrayWithStartIndex($this->_nextPageStartIndex);
     }
 
     public function getPreviousPageUrlArray() {
-        return $this->constructUrlArrayWithStartIndex($this->prevPageStartIndex);
+        return $this->constructUrlArrayWithStartIndex($this->_prevPageStartIndex);
     }
 
     public function getLastPageUrlArray() {
-        return $this->constructUrlArrayWithStartIndex($this->lastPageStartIndex);
+        return $this->constructUrlArrayWithStartIndex($this->_lastPageStartIndex);
     }
 
     private function constructUrlArrayWithStartIndex($pageStartIndex) {
         $array =  array(
-            'searchtype'=>$this->searchType,
+            'searchtype'=>$this->_searchType,
             'start'=>$pageStartIndex,
-            'rows'=>$this->rows);
-        if($this->query != null) {
-            $array['query'] = $this->query;
+            'rows'=>$this->_rows);
+        if ($this->_query != null) {
+            $array['query'] = $this->_query;
         }
         return $array;
     }

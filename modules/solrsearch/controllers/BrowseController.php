@@ -61,7 +61,7 @@ class Solrsearch_BrowseController extends Controller_Action {
         }
         
         $docTypesTranslated = array();
-        foreach($facets[$facetname] as $facetitem) {
+        foreach ($facets[$facetname] as $facetitem) {
             $translation = $this->view->translate($facetitem->getText());
             $docTypesTranslated[$translation] = $facetitem;
         }

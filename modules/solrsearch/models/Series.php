@@ -34,7 +34,7 @@
 
 class Solrsearch_Model_Series {
 
-    private $series;
+    private $_series;
 
     public function  __construct($seriesId) {
         if (is_null($seriesId)) {
@@ -54,25 +54,28 @@ class Solrsearch_Model_Series {
         }
 
         if ($s->getNumOfAssociatedPublishedDocuments() === 0) {
-            throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' does not have any published documents.");
+            throw new Solrsearch_Model_Exception(
+                "Series with id '" . $seriesId . "' does not have any published documents."
+            );
         }
-        $this->series = $s;
+        $this->_series = $s;
     }
 
     public function getId() {
-        return $this->series->getId();
+        return $this->_series->getId();
     }
 
     public function getTitle() {
-        return $this->series->getTitle();
+        return $this->_series->getTitle();
     }
 
     public function getInfobox() {
-        return $this->series->getInfobox();
+        return $this->_series->getInfobox();
     }
 
     public function getLogoFilename() {
-        $logoDir = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'series_logos' . DIRECTORY_SEPARATOR . $this->series->getId();
+        $logoDir = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'series_logos'
+            . DIRECTORY_SEPARATOR . $this->_series->getId();
         if (is_readable($logoDir)) {
             $iterator = new DirectoryIterator($logoDir);
             foreach ($iterator as $fileinfo) {
