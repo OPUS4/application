@@ -36,16 +36,20 @@
  */
 
 // Configure include path.
-set_include_path(implode(PATH_SEPARATOR, array(
-    '.',
-    dirname(__FILE__),
-    dirname(dirname(dirname(__FILE__))) . '/library',
-    get_include_path(),
-)));
+set_include_path(
+    implode(
+        PATH_SEPARATOR, array(
+        '.',
+        dirname(__FILE__),
+        dirname(dirname(dirname(__FILE__))) . '/library',
+        get_include_path(),
+        )
+    )
+);
 
 // Define path to application directory
 defined('APPLICATION_PATH')
-    || define('APPLICATION_PATH', realpath( dirname(dirname(dirname(__FILE__))) ));
+    || define('APPLICATION_PATH', realpath(dirname(dirname(dirname(__FILE__)))));
 
 // Define application environment
 defined('APPLICATION_ENV')
