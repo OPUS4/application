@@ -64,7 +64,7 @@ class Matheon_SelectReviewerController extends Controller_Action {
 
         // Check data.
         $request = $this->getRequest();
-        if (!$request->isPost() or !$reviewerForm->isValid( $request->getPost() )) {
+        if (!$request->isPost() or !$reviewerForm->isValid($request->getPost())) {
             $this->view->reviewerForm = $reviewerForm;
             return;
         }
@@ -78,10 +78,12 @@ class Matheon_SelectReviewerController extends Controller_Action {
 
         // Send publish notification.
         $reviewerAccount = new Opus_Account($reviewerId);
-        $recipients = array_unique(array(
+        $recipients = array_unique(
+            array(
                     'admin',
                     strtolower($reviewerAccount->getLogin()),
-                ));
+                )
+        );
 
         $this->getLogger()->debug('sending messages to users (' . implode(",", $recipients) . ')');
         if ($this->__sendPublishNotification($documentModel, $recipients)) {
@@ -103,11 +105,13 @@ class Matheon_SelectReviewerController extends Controller_Action {
 
         $job = new Opus_Job();
         $job->setLabel(Opus_Job_Worker_MailNotification::LABEL);
-        $job->setData(array(
+        $job->setData(
+            array(
             'subject' => $document->renderPublishMailSubject(),
             'message' => $document->renderPublishMailBody($this->view->fullUrl(), $baseUrlFiles),
             'users' => $recipient
-        ));
+            )
+        );
 
 
         //throw new Exception(var_export($job, true));

@@ -37,12 +37,12 @@ class Matheon_Model_Document {
     /**
      * @var Opus_Document
      */
-    private $document;
+    private $_document;
 
     /**
      * @var Zend_Log
      */
-    private $log;
+    private $_log;
 
     /**
      * Create new instance of Matheon_Model_Document.
@@ -52,28 +52,28 @@ class Matheon_Model_Document {
      * @throws Application_Exception
      */
     public function __construct($docId) {
-        $this->log = Zend_Registry::get('Zend_Log');
+        $this->_log = Zend_Registry::get('Zend_Log');
 
         if (empty($docId)) {
             $error = "Empty docId given.";
-            $this->log->err($error);
+            $this->_log->err($error);
             throw new Application_Exception($error);
         }
 
         if (!preg_match('/\d+/', $docId) or $docId <= 0) {
             $error = "No or invalid docId given (docId:$docId).";
-            $this->log->err($error);
+            $this->_log->err($error);
             throw new Application_Exception($error);
         }
 
         $document = new Opus_Document($docId);
         if ($document->isNewRecord() or is_null($document->getId())) {
             $error = "Document '$docId' has not been stored.";
-            $this->log->err($error);
+            $this->_log->err($error);
             throw new Application_Exception($error);
         }
 
-        $this->document = $document;
+        $this->_document = $document;
 
     }
 
@@ -86,10 +86,10 @@ class Matheon_Model_Document {
      * @throws Application_Exception
      */
     public function requireServerState($state) {
-        $docState = $this->document->getServerState();
+        $docState = $this->_document->getServerState();
         if ($docState !== $state) {
             $error = "Document (id:{$this->getId()}) has wrong state (state:$docState).";
-            $this->log->err($error);
+            $this->_log->err($error);
             throw new Application_Exception($error);
         }
         return $this;
@@ -108,14 +108,14 @@ class Matheon_Model_Document {
 
         if (is_null($loggedUserId)) {
             $error = "No user logged in.  Unable to compare submitter for document (id:{$this->getId()}).";
-            $this->log->err($error);
+            $this->_log->err($error);
             throw new Application_Exception($error);
         }
 
         $hasSubmitterEnrichment = false;
         $hasRightSubmitterId = false;
 
-        foreach ($this->document->getEnrichment() AS $enrichment) {
+        foreach ($this->_document->getEnrichment() AS $enrichment) {
             if ($enrichment->getKeyName() == 'submitter.user_id') {
                 $hasSubmitterEnrichment = true;
 
@@ -128,13 +128,13 @@ class Matheon_Model_Document {
 
         if (!$hasSubmitterEnrichment) {
             $error = "Document (id:{$this->getId()}) does not contain submitter information.";
-            $this->log->err($error);
+            $this->_log->err($error);
             throw new Application_Exception($error);
         }
 
         if (!$hasRightSubmitterId) {
             $error = "Document (id:{$this->getId()}) does not belong to this user (user_id:$loggedUserId).";
-            $this->log->err($error);
+            $this->_log->err($error);
             throw new Application_Exception($error);
         }
 
@@ -148,7 +148,7 @@ class Matheon_Model_Document {
      * @return Matheon_Model_Document Fluent interface.
      */
     public function storeEnrichmentKeyValue($key, $value) {
-        foreach ($this->document->getEnrichment() AS $e) {
+        foreach ($this->_document->getEnrichment() AS $e) {
             if ($e->getKeyName() == $key) {
                 if ($e->getValue() == $value) {
                     return $this;
@@ -156,7 +156,7 @@ class Matheon_Model_Document {
             }
         }
 
-        $this->document->addEnrichment()
+        $this->_document->addEnrichment()
                 ->setKeyName($key)
                 ->setValue($value);
         return $this;
@@ -165,20 +165,25 @@ class Matheon_Model_Document {
     /**
      * Add readFile privilege to all files of this document.
      *
-     * @param string $role_name
+     * @param string $roleName
      * @return Matheon_Model_Document Fluent interface.
      */
-    public function addReadFilePrivilege($role_name = 'guest') {
-        $role = Opus_UserRole::fetchByName($role_name);
+    public function addReadFilePrivilege($roleName = 'guest') {
+        $role = Opus_UserRole::fetchByName($roleName);
 
         if (is_null($role)) {
-            $this->log->err("Cannot add readFile privilege for non-existent role '{$role->getName()}' to document " . $this->getId() . ".");
+            $this->_log->err(
+                "Cannot add readFile privilege for non-existent role '{$role->getName()}' to document "
+                . $this->getId() . "."
+            );
             return $this;
         }
 
-        $this->log->warn("Warning: Setting all files readable for role '{$role->getName()}' (document " . $this->getId() . ")");
+        $this->_log->warn(
+            "Warning: Setting all files readable for role '{$role->getName()}' (document " . $this->getId() . ")"
+        );
         $role->appendAccessDocument($this->getId());
-        foreach ($this->document->getFile() AS $file) {
+        foreach ($this->_document->getFile() AS $file) {
               $role->appendAccessFile($file->getId());
         }
         $role->store();
@@ -192,7 +197,7 @@ class Matheon_Model_Document {
      * @return integer
      */
     public function getId() {
-        return $this->document->getId();
+        return $this->_document->getId();
     }
 
     /**
@@ -201,7 +206,7 @@ class Matheon_Model_Document {
      * @return integer
      */
     public function store() {
-        return $this->document->store();
+        return $this->_document->store();
     }
 
     /**
@@ -232,13 +237,13 @@ class Matheon_Model_Document {
             $submitterString = trim($person->getFirstName() . " " . $person->getLastName());
         }
 
-        $titleModels = $this->document->getTitleMain();
+        $titleModels = $this->_document->getTitleMain();
         $titleString = '';
         if (count($titleModels) > 0) {
             $titleString = trim($titleModels[0]->getValue());
         }
 
-        $abstractModels = $this->document->getTitleAbstract();
+        $abstractModels = $this->_document->getTitleAbstract();
         $abstractString = '';
         if (count($abstractModels) > 0) {
             $abstractString = trim($abstractModels[0]->getValue());
@@ -247,16 +252,18 @@ class Matheon_Model_Document {
         $template = new Matheon_Model_Template();
         $template->template = APPLICATION_PATH . '/modules/matheon/models/confirmation-mail.template';
 
-        return $template->render(array(
-           'baseUrlServer'   => $baseUrlServer,
-           'baseUrlFiles'    => $baseUrlFiles,
-           'docId'           => $this->getId(),
+        return $template->render(
+            array(
+            'baseUrlServer'   => $baseUrlServer,
+            'baseUrlFiles'    => $baseUrlFiles,
+            'docId'           => $this->getId(),
 
-           'submitterString' => $submitterString,
-           'titleString'     => $titleString,
-           'abstractString'  => $abstractString,
-           'files'           => $this->document->getFile(),
-        ));
+            'submitterString' => $submitterString,
+            'titleString'     => $titleString,
+            'abstractString'  => $abstractString,
+            'files'           => $this->_document->getFile(),
+            )
+        );
     }
 
 }

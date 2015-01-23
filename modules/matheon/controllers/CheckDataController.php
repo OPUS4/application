@@ -52,7 +52,7 @@ class Matheon_CheckDataController extends Controller_Action {
         }
 
         $stats = array();
-        $email2docIds = array();
+        $emailToDocIds = array();
 
         $f = new Opus_DocumentFinder();
         $f->setServerState('published');
@@ -96,16 +96,16 @@ class Matheon_CheckDataController extends Controller_Action {
                         $key .= " <$email>";
                     }
 
-                    if (!array_key_exists($key, $email2docIds)) {
-                        $email2docIds[$key] = array(
+                    if (!array_key_exists($key, $emailToDocIds)) {
+                        $emailToDocIds[$key] = array(
                             'email' => $email,
                             'name' => $name,
                             'ids'  => array(),
                         );
                     }
-                    $email2docIds[$key]['ids'][] = $docId;
-                    $email2docIds[$key]['ids'] = array_unique($email2docIds[$key]['ids']);
-                    sort($email2docIds[$key]['ids']);
+                    $emailToDocIds[$key]['ids'][] = $docId;
+                    $emailToDocIds[$key]['ids'] = array_unique($emailToDocIds[$key]['ids']);
+                    sort($emailToDocIds[$key]['ids']);
                 }
             }
 
@@ -113,7 +113,7 @@ class Matheon_CheckDataController extends Controller_Action {
         }
 
         $this->view->stats = $stats;
-        $this->view->email2docid = $email2docIds;
+        $this->view->email2docid = $emailToDocIds;
         return $this->render('index');
     }
 

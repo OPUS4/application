@@ -72,9 +72,14 @@ class Rewrite_IndexController extends Controller_Action {
             return $this->_redirectToAndExit('index', array('failure' => 'given opus3id is unknown'), 'index', 'home');
         }
         if (count($ids) > 1) {
-            return $this->_redirectToAndExit('index', array('failure' => 'given opus3id is not unique'), 'index', 'home');
+            return $this->_redirectToAndExit(
+                'index', array('failure' => 'given opus3id is not unique'), 'index', 'home'
+            );
         }
-        return $this->_redirect($this->getRequest()->getBaseUrl() . '/files/' . $ids[0] . '/' . $filename, array('prependBase' => false, 'code' => 301));
+        return $this->_redirect(
+            $this->getRequest()->getBaseUrl() . '/files/' . $ids[0] . '/' . $filename, array('prependBase' => false,
+            'code' => 301)
+        );
     }
 }
 
