@@ -45,12 +45,12 @@ class Review_IndexController extends Controller_Action {
      *
      * @var string
      */
-    private static $reviewServerState = 'unpublished';
+    private static $_reviewServerState = 'unpublished';
 
     /**
      * @var Publish_Model_LoggedUser
      */
-    private $loggedUser = null;
+    private $_loggedUser = null;
 
     /**
      * Setup module.  Check privileges.
@@ -66,7 +66,7 @@ class Review_IndexController extends Controller_Action {
             $this->getHelper('MainMenu')->setActive('review');
         }
 
-        $this->loggedUser = new Publish_Model_LoggedUser();
+        $this->_loggedUser = new Publish_Model_LoggedUser();
         $this->view->title = $this->view->translate('review_index_title');
     }
 
@@ -76,7 +76,7 @@ class Review_IndexController extends Controller_Action {
      * Processes clicked buttons on that page.
      */
     public function indexAction() {
-        $ids = $this->_filterReviewableIds( $this->_getParam('selected') );
+        $ids = $this->_filterReviewableIds($this->_getParam('selected'));
 
         if ($this->_isButtonPressed('buttonSubmit', true, false)) {
             return $this->_forward('clear', null, null, array('selected' => $ids));
@@ -86,15 +86,15 @@ class Review_IndexController extends Controller_Action {
             return $this->_forward('reject', null, null, array('selected' => $ids));
         }
 
-        $sort_order = $this->_getParam('sort_order');
-        $sort_reverse = $this->_getParam('sort_reverse') ? 1 : 0;
-        $sort_reverse = $this->_isButtonPressed('buttonUp', '0', $sort_reverse);
-        $sort_reverse = $this->_isButtonPressed('buttonDown', '1', $sort_reverse);
+        $sortOrder = $this->_getParam('sort_order');
+        $sortReverse = $this->_getParam('sort_reverse') ? 1 : 0;
+        $sortReverse = $this->_isButtonPressed('buttonUp', '0', $sortReverse);
+        $sortReverse = $this->_isButtonPressed('buttonDown', '1', $sortReverse);
 
         $this->view->selected = $ids;
         $this->view->actionUrl = $this->view->url(array('action'=>'index'));
-        $this->view->sort_order = $sort_order;
-        $this->view->sort_reverse = $sort_reverse;
+        $this->view->sort_order = $sortOrder;
+        $this->view->sort_reverse = $sortReverse;
         $this->view->selectAll = $this->_getParam('buttonSelectAll')  ? 1 : 0;
         $this->view->selectNone = $this->_getParam('buttonSelectNone')  ? 1 : 0;
         $this->view->sortOptions = array(
@@ -108,21 +108,21 @@ class Review_IndexController extends Controller_Action {
         // Get list of document identifiers
         $finder = $this->_prepareDocumentFinder();
 
-        switch ($sort_order) {
+        switch ($sortOrder) {
             case 'author':
-                $finder->orderByAuthorLastname($sort_reverse != 1);
+                $finder->orderByAuthorLastname($sortReverse != 1);
                 break;
             case 'publicationDate':
-                $finder->orderByServerDatePublished($sort_reverse != 1);
+                $finder->orderByServerDatePublished($sortReverse != 1);
                 break;
             case 'docType':
-                $finder->orderByType($sort_reverse != 1);
+                $finder->orderByType($sortReverse != 1);
                 break;
             case 'title':
-                $finder->orderByTitleMain($sort_reverse != 1);
+                $finder->orderByTitleMain($sortReverse != 1);
                 break;
             default:
-                $finder->orderById($sort_reverse != 1);
+                $finder->orderById($sortReverse != 1);
         }
 
         $this->view->breadcrumbsDisabled = true;
@@ -147,7 +147,7 @@ class Review_IndexController extends Controller_Action {
      * Action for showing the clear form and processing POST from it.
      */
     public function clearAction() {
-        $ids = $this->_filterReviewableIds( $this->_getParam('selected') );
+        $ids = $this->_filterReviewableIds($this->_getParam('selected'));
 
         if (count($ids) < 1) {
             $this->view->message = 'review_error_noselection';
@@ -167,7 +167,7 @@ class Review_IndexController extends Controller_Action {
         }
 
         if ($useCurrentUser) {
-            $person = $this->loggedUser->createPerson();
+            $person = $this->_loggedUser->createPerson();
 
             if (is_null($person) or !$person->isValid()) {
                 $message = "Problem clearing documents.  Information for current user is incomplete or invalid.";
@@ -183,7 +183,7 @@ class Review_IndexController extends Controller_Action {
         if ($this->_isButtonPressed('sureyes', true, false)) {
             $helper = new Review_Model_ClearDocumentsHelper();
 
-            $userId = $this->loggedUser->getUserId();
+            $userId = $this->_loggedUser->getUserId();
             if (is_null($userId) or empty($userId)) {
                 $userId = 'unknown';
             }
@@ -203,7 +203,7 @@ class Review_IndexController extends Controller_Action {
      * Confirm rejection of selected documents and reject.
      */
     public function rejectAction() {
-        $ids = $this->_filterReviewableIds( $this->_getParam('selected') );
+        $ids = $this->_filterReviewableIds($this->_getParam('selected'));
 
         if (count($ids) < 1) {
             $this->view->message = 'review_error_noselection';
@@ -221,7 +221,7 @@ class Review_IndexController extends Controller_Action {
         if ($this->_isButtonPressed('sureyes', true, false)) {
             $helper = new Review_Model_ClearDocumentsHelper();
 
-            $userId = $this->loggedUser->getUserId();
+            $userId = $this->_loggedUser->getUserId();
             if (is_null($userId) or empty($userId)) {
                 $userId = 'unknown';
             }
@@ -244,16 +244,16 @@ class Review_IndexController extends Controller_Action {
      */
     protected function _prepareDocumentFinder() {
         $finder = new Opus_DocumentFinder();
-        $finder->setServerState(self::$reviewServerState);
+        $finder->setServerState(self::$_reviewServerState);
 
         $logger = Zend_Registry::get('Zend_Log');
-        $userId = $this->loggedUser->getUserId();
+        $userId = $this->_loggedUser->getUserId();
         $onlyReviewerByUserId = false;
 
         // Add constraint for reviewer, if current user is *not* admin.
         if (Opus_Security_Realm::getInstance()->checkModule('admin')) {
             $message = "Review: Showing all unpublished documents to admin";
-            $logger->debug( $message . " (user_id: $userId)");
+            $logger->debug($message . " (user_id: $userId)");
         }
         elseif (Opus_Security_Realm::getInstance()->checkModule('review')) {
             if ($onlyReviewerByUserId) {
@@ -263,7 +263,7 @@ class Review_IndexController extends Controller_Action {
             else {
                 $message = "Review: Showing all unpublished documents to reviewer";
             }
-            $logger->debug( $message . " (user_id: $userId)");
+            $logger->debug($message . " (user_id: $userId)");
         }
         else {
             $message = 'Review: Access to unpublished documents denied.';

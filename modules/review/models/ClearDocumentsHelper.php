@@ -60,9 +60,9 @@ class Review_Model_ClearDocumentsHelper {
             $document->setServerDatePublished($date);
             $document->setPublishedDate($date);
 
-            $guest_role = Opus_UserRole::fetchByName('guest');
-            foreach ($document->getFile() AS $file)  {
-                $guest_role->appendAccessFile($file->getId());
+            $guestRole = Opus_UserRole::fetchByName('guest');
+            foreach ($document->getFile() AS $file) {
+                $guestRole->appendAccessFile($file->getId());
             }
 
             if (isset($person)) {
@@ -75,7 +75,7 @@ class Review_Model_ClearDocumentsHelper {
 
             // TODO: Put into same transaction...
             $document->store();
-            $guest_role->store();
+            $guestRole->store();
         }
 
         return;
