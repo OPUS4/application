@@ -42,10 +42,14 @@ require_once dirname(__FILE__) . '/common/bootstrap.php';
  * @category Search
  */
 class SolrIndexBuilder {
-    private $start = null;
-    private $end = null;
-    private $deleteAllDocs = false;
-    private $syncMode = true;
+
+    private $_start = null;
+
+    private $_end = null;
+
+    private $_deleteAllDocs = false;
+
+    private $_syncMode = true;
 
     /**
      * Prints a help message to the console.
@@ -54,14 +58,16 @@ class SolrIndexBuilder {
         echo "\nThis program can be used to build up an initial Solr index (e.g., useful when migrating instances)\n\n";
         echo "Usage: " . $argv[0] . " [starting with ID] [ending with ID]\n";
         echo "\n";
-        echo "[starting with ID] If system aborted indexing at some ID, you can restart this command by supplying this parameter.\n";
+        echo "[starting with ID] If system aborted indexing at some ID, you can restart this command by supplying"
+            . " this parameter.\n";
         echo "It should be the ID where the program stopped before.\n";
         echo "Default start value is 0.\n";
         echo "\n";
         echo "[ending with ID] You can also supply a second ID where the indexer should stop indexing.\n";
         echo "If you omit this parameter or set it to -1, the indexer will index all remaining documents.\n";
         echo "\n";
-        echo "In case both parameters are not specified the currently used index is deleted before insertion of new documents begins.\n";
+        echo "In case both parameters are not specified the currently used index is deleted before insertion of new"
+            . " documents begins.\n";
         echo "\n";
     }
 
@@ -70,14 +76,14 @@ class SolrIndexBuilder {
      */
     private function evaluateArguments($argc, $argv) {
         if ($argc >= 2) {
-            $this->start = $argv[1];
+            $this->_start = $argv[1];
         }
         if ($argc >= 3) {
-            $this->end = $argv[2];
+            $this->_end = $argv[2];
         }
-        if (is_null($this->start) && is_null($this->end)) {
+        if (is_null($this->_start) && is_null($this->_end)) {
             // TODO gesondertes Argument für Indexdeletion einführen
-            $this->deleteAllDocs = true;
+            $this->_deleteAllDocs = true;
         }
     }
 
@@ -92,14 +98,14 @@ class SolrIndexBuilder {
         }
         $this->evaluateArguments($argc, $argv);
         $this->forceSyncMode();        
-        $docIds = Opus_Document::getAllPublishedIds($this->start, $this->end);
-        $indexer = new Opus_SolrSearch_Index_Indexer($this->deleteAllDocs);
+        $docIds = Opus_Document::getAllPublishedIds($this->_start, $this->_end);
+        $indexer = new Opus_SolrSearch_Index_Indexer($this->_deleteAllDocs);
         //$indexer = new Opus_SolrSearch_Index_Indexer();
         echo date('Y-m-d H:i:s') . " Start indexing of " . count($docIds) . " documents.\n";
         $numOfDocs = 0;
         $runtime = microtime(true);
         foreach ($docIds as $docId) {
-            $time_start = microtime(true);
+            $timeStart = microtime(true);
 
             $doc = new Opus_Document($docId);
             
@@ -107,26 +113,27 @@ class SolrIndexBuilder {
             $doc->unregisterPlugin('Opus_Document_Plugin_Index');            
             
             $indexer->addDocumentToEntryIndex($doc);
-            $time_delta = microtime(true) - $time_start;
-            if ($time_delta > 30) {
-               echo date('Y-m-d H:i:s') . " WARNING: Indexing document $docId took $time_delta seconds.\n";
+            $timeDelta = microtime(true) - $timeStart;
+            if ($timeDelta > 30) {
+               echo date('Y-m-d H:i:s') . " WARNING: Indexing document $docId took $timeDelta seconds.\n";
             }
 
             $numOfDocs++;
             if ($numOfDocs % 10 == 0) {
-                $mem_now = round(memory_get_usage() / 1024 / 1024);
-                $mem_peak = round(memory_get_peak_usage() / 1024 / 1024);
-                $delta_t = microtime(true)-$runtime;
-                $doc_per_second = round($delta_t) == 0 ? 'inf' : round($numOfDocs/$delta_t,2);
-                $seconds_per_doc = round($delta_t/$numOfDocs,2);
-                echo date('Y-m-d H:i:s') . " Stats after $numOfDocs documents -- memory $mem_now MB, peak memory $mem_peak (MB), $doc_per_second docs/second, $seconds_per_doc seconds/doc\n";
+                $memNow = round(memory_get_usage() / 1024 / 1024);
+                $memPeak = round(memory_get_peak_usage() / 1024 / 1024);
+                $deltaTime = microtime(true) - $runtime;
+                $docPerSecond = round($deltaTime) == 0 ? 'inf' : round($numOfDocs/$deltaTime, 2);
+                $secondsPerDoc = round($deltaTime/$numOfDocs, 2);
+                echo date('Y-m-d H:i:s') . " Stats after $numOfDocs documents -- memory $memNow MB,"
+                    . " peak memory $memPeak (MB), $docPerSecond docs/second, $secondsPerDoc seconds/doc\n";
             }
         }
         $runtime = microtime(true) - $runtime;
         echo "\n" . date('Y-m-d H:i:s') . " Finished indexing.\n";
         $indexer->commit();
-        echo "\n\nErrors appeared in " . $indexer->getErrorFileCount() . " of " . $indexer->getTotalFileCount() . " files."
-            . " Details were written to opus-console.log";
+        echo "\n\nErrors appeared in " . $indexer->getErrorFileCount() . " of " . $indexer->getTotalFileCount()
+            . " files. Details were written to opus-console.log";
         $this->resetMode();
         return $runtime;
     }
@@ -134,14 +141,14 @@ class SolrIndexBuilder {
     private function forceSyncMode() {
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
-            $this->syncMode = false;
+            $this->_syncMode = false;
             $config->runjobs->asynchronous = 0;
             Zend_Registry::set('Zend_Config', $config);
         }
     }
 
     private function resetMode() {
-        if (!$this->syncMode) {
+        if (!$this->_syncMode) {
             $config = Zend_Registry::get('Zend_Config');
             $config->runjobs->asynchronous = 1;
             Zend_Registry::set('Zend_Config', $config);

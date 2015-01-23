@@ -39,11 +39,11 @@
 require_once dirname(__FILE__) . '/common/bootstrap.php';
 
 $config = Zend_Registry::get('Zend_Config');
-$exportFile = $config->workspacePath . DIRECTORY_SEPARATOR . "export" . DIRECTORY_SEPARATOR . "export.xml";
+$exportFilePath = $config->workspacePath . DIRECTORY_SEPARATOR . "export" . DIRECTORY_SEPARATOR . "export.xml";
 
 // Exception if not writeable
 try {
-    if(!is_writeable($exportFile)) {
+    if (!is_writeable($exportFilePath)) {
         throw new Exception('exportfile is not writeable');
     }
 } catch (Exception $e) {
@@ -82,8 +82,8 @@ foreach ($docFinder->ids() as $id) {
 
 $opusDocuments->appendChild($export);
 
-$_exportFile= fopen($exportFile, 'w');
-fputs($_exportFile, $opusDocuments->saveXML());
-fclose($_exportFile);
+$exportFile= fopen($exportFilePath, 'w');
+fputs($exportFile, $opusDocuments->saveXML());
+fclose($exportFile);
 
 exit();

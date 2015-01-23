@@ -46,5 +46,5 @@ $username = array_shift($argv);
 $password = array_shift($argv);
 
 // Set passwort of $user to $password.
-$a = new Opus_Account(null,null,$username);
+$a = new Opus_Account(null, null, $username);
 $a->setPassword($password)->store();

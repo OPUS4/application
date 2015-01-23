@@ -137,10 +137,10 @@ class FakeSMTP {
                 $this->_sendSMTPResponse($socket, $response);
                 $cont = false;
                 break;
-	    case 'RSET':
-		$response = '250 Ok';
-		$this->_sendSMTPResponse($socket, $response);
-		break;
+        case 'RSET':
+        $response = '250 Ok';
+        $this->_sendSMTPResponse($socket, $response);
+            break;
             default:
                 $response = '500 Command not recognized: Syntax error.';
                 $this->_sendSMTPResponse($socket, $response);
@@ -156,7 +156,7 @@ class FakeSMTP {
      * @return void
      */
     protected function _startSMTPSession($client) {
-        $this->_sendSMTPResponse($client, "220 $host SMTP rabooF Mailserver");
+        $this->_sendSMTPResponse($client, "220 $host SMTP rabooF Mailserver"); // TODO bug $host
         do {
             $exit = false;
             // read client input
@@ -165,7 +165,8 @@ class FakeSMTP {
                     echo "< $input\n";
                     $exit = !$this->_handleSMTPRequest($client, $input);
                 }
-            } else {
+            }
+            else {
                 $exit = true;
             }
         } while (!$exit);

@@ -47,7 +47,7 @@ function myErrorHandler($errno, $errstr, $errfile, $errline) {
    return true;
 }
 // set to the user defined error handler
-$old_error_handler = set_error_handler("myErrorHandler");
+$oldErrorHandler = set_error_handler("myErrorHandler");
 
 
 
@@ -103,7 +103,7 @@ $referee = new Opus_Person();
 $referee->setFirstName('Gyro'.randString($counter++));
 $referee->setLastName('Gearloose'.randString($counter++));
 $referee->setAcademicTitle('Prof. Dr.'.randString($counter++));
-$doc->addPersonReferee($referee );
+$doc->addPersonReferee($referee);
 
 $editor = new Opus_Person();
 $editor->setFirstName('Bob'.randString($counter++));
@@ -130,7 +130,8 @@ $doc->addPersonContributor($contributor);
 //
 // Titles
 //
-foreach (array('addTitleMain', 'addTitleAbstract', 'addTitleParent', 'addTitleSub', 'addTitleAdditional') AS $titleMethod) {
+foreach (array('addTitleMain', 'addTitleAbstract', 'addTitleParent', 'addTitleSub', 'addTitleAdditional') AS
+         $titleMethod) {
    $doc->$titleMethod()
       ->setValue(randString($counter++))
       ->setLanguage(randString($counter++));
@@ -164,7 +165,8 @@ $instituteName='Institut für empirische Forschung ' . randString($counter++);
 $instituteCollections = Opus_Collection::fetchCollectionsByRoleName($institutesRole->getId(), $instituteName);
 if (count($instituteCollections) >=1) {
     $instituteCollection = $instituteCollections[0];
-} else {
+}
+else {
     $rootCollection = $institutesRole->getRootCollection();
     if (is_null($rootCollection) === true) {
         $rootCollection = $institutesRole->addRootCollection();
@@ -183,8 +185,8 @@ $doc->addCollection($instituteCollection);
 //
 // Identifiers
 //
-$o3id = $doc->addIdentifierOpus3();
-$o3id->setValue(randString($counter++));
+$oldOpusId = $doc->addIdentifierOpus3();
+$oldOpusId->setValue(randString($counter++));
 
 // empty URN will be automaticaly replace by new URN.
 $urn = $doc->addIdentifierUrn();

@@ -53,7 +53,7 @@ foreach ($argv AS $docId) {
    $xmlModel->setStrategy(new Opus_Model_Xml_Version1);
    // $xmlModel->setXmlCache(new Opus_Model_Xml_Cache);
 
-   $d_xml = $xmlModel->getDomDocument();
-   $d_xml->formatOutput = true;
-   echo $d_xml->saveXml();
+   $docXml = $xmlModel->getDomDocument();
+   $docXml->formatOutput = true;
+   echo $docXml->saveXml();
 }

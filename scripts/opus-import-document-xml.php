@@ -40,13 +40,13 @@ require_once dirname(__FILE__) . '/common/bootstrap.php';
 array_shift($argv);
 
 // Dump given documents
-error_log( "dumping document(s): " . implode(", ", $argv) );
+error_log("dumping document(s): " . implode(", ", $argv));
 
 foreach ($argv AS $filename) {
-   error_log( "loading filename $filename..." );
+   error_log("loading filename $filename...");
    $content = file_get_contents($filename);
 
    $doc = Opus_Document::fromXml($content);
    $docId = $doc->store();
-   error_log( "loading filename $filename... done.  Document $docId." );
+   error_log("loading filename $filename... done.  Document $docId.");
 }
