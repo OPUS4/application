@@ -34,54 +34,64 @@
  */
 class Remotecontrol_Model_Collection {
 
-    private $role       = null;
-    private $collection = null;
+    private $_role = null;
 
-    public function __construct($role_name, $collection_number = null) {
+    private $_collection = null;
 
-        $this->role = Opus_CollectionRole::fetchByName($role_name);
-        if (is_null($this->role)) {
-            throw new Remotecontrol_Model_Exception("Model_Collection: Role with name '$role_name' not found");
+    public function __construct($roleName, $collectionNumber = null) {
+
+        $this->_role = Opus_CollectionRole::fetchByName($roleName);
+        if (is_null($this->_role)) {
+            throw new Remotecontrol_Model_Exception("Model_Collection: Role with name '$roleName' not found");
         }
 
-        $root = $this->role->getRootCollection();
+        $root = $this->_role->getRootCollection();
         if (is_null($root)) {
-            throw new Remotecontrol_Model_Exception("Model_Collection: Root Collection for role '$role_name' does not exist.");
+            throw new Remotecontrol_Model_Exception(
+                "Model_Collection: Root Collection for role '$roleName' does not exist."
+            );
         }
 
-        if (!isset($collection_number)) {
-            $this->collection = $root;
+        if (!isset($collectionNumber)) {
+            $this->_collection = $root;
         }
         else {
-            $this->collection = $this->findByNumber($collection_number);
+            $this->_collection = $this->findByNumber($collectionNumber);
         }
 
     }
 
     public function getId() {
-        return $this->collection->getId();
+        return $this->_collection->getId();
     }
 
     public function findByNumber($number) {
-        $collections = Opus_Collection::fetchCollectionsByRoleNumber($this->role->getId(), $number);
+        $collections = Opus_Collection::fetchCollectionsByRoleNumber($this->_role->getId(), $number);
 
         if (count($collections) > 1) {
-            throw new Remotecontrol_Model_Exception("Model_Collection: Found more than one collection with number '$number'.", Remotecontrol_Model_Exception::COLLECTION_IS_NOT_UNIQUE);
+            throw new Remotecontrol_Model_Exception(
+                "Model_Collection: Found more than one collection with number '$number'.",
+                Remotecontrol_Model_Exception::COLLECTION_IS_NOT_UNIQUE
+            );
         }
         elseif (count($collections) != 1) {
-            throw new Remotecontrol_Model_Exception("Model_Collection: Collection with number '$number' does not exist.");
+            throw new Remotecontrol_Model_Exception(
+                "Model_Collection: Collection with number '$number' does not exist."
+            );
         }
 
         return $collections[0];
     }
 
     public function appendChild($number, $title) {
-        $collections = Opus_Collection::fetchCollectionsByRoleNumber($this->role->getId(), $number);
+        $collections = Opus_Collection::fetchCollectionsByRoleNumber($this->_role->getId(), $number);
         if (count($collections) > 0) {
-            throw new Remotecontrol_Model_Exception("Model_Collection: Collection with number '$number' already exists.");
+            throw new Remotecontrol_Model_Exception(
+                "Model_Collection: Collection with number '$number' already exists."
+            );
         }
 
-        $newChild = $this->collection->addLastChild();
+        $newChild = $this->_collection->addLastChild();
         $newChild->setNumber($number)
                 ->setName($title)
                 ->setVisible(1)
@@ -91,8 +101,8 @@ class Remotecontrol_Model_Collection {
     }
 
     public function rename($title) {
-        $this->collection->setName($title)->store();
-        return $this->collection;
+        $this->_collection->setName($title)->store();
+        return $this->_collection;
     }
 
 }

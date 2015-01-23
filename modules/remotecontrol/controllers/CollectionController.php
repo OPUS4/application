@@ -39,14 +39,14 @@ class Remotecontrol_CollectionController extends Controller_Action {
         $this->_helper->layout()->disableLayout();
         $request = $this->getRequest();
 
-        $role_name = $request->getParam('role');
-        $parent_number = $request->getParam('parent');
-        $collection_number = $request->getParam('key');
-        $collection_name = $request->getParam('title');
+        $roleName = $request->getParam('role');
+        $parentNumber = $request->getParam('parent');
+        $collectionNumber = $request->getParam('key');
+        $collectionName = $request->getParam('title');
 
         try {
-            $model = new Remotecontrol_Model_Collection($role_name, $parent_number);
-            $model->appendChild($collection_number, $collection_name);
+            $model = new Remotecontrol_Model_Collection($roleName, $parentNumber);
+            $model->appendChild($collectionNumber, $collectionName);
         }
         catch (Remotecontrol_Model_Exception $e) {
             $this->getResponse()->setHttpResponseCode(400);
@@ -59,13 +59,13 @@ class Remotecontrol_CollectionController extends Controller_Action {
         $this->_helper->layout()->disableLayout();
         $request = $this->getRequest();
 
-        $role_name = $request->getParam('role');
-        $collection_number = $request->getParam('key');
-        $collection_name = $request->getParam('title');
+        $roleName = $request->getParam('role');
+        $collectionNumber = $request->getParam('key');
+        $collectionName = $request->getParam('title');
 
         try {
-            $model = new Remotecontrol_Model_Collection($role_name, $collection_number);
-            $model->rename($collection_name);
+            $model = new Remotecontrol_Model_Collection($roleName, $collectionNumber);
+            $model->rename($collectionName);
         }
         catch (Remotecontrol_Model_Exception $e) {
             $this->getResponse()->setHttpResponseCode(400);

@@ -42,10 +42,10 @@ class Remotecontrol_AccountController extends Controller_Action {
 
         $login      = $request->getParam('login');
         $password   = $request->getParam('password');
-        $user_roles = $request->getParam('user-roles');
+        $userRoles = $request->getParam('user-roles');
 
-        $test_account = Opus_Account::fetchAccountByLogin($login);
-        if (!is_null($test_account)) {
+        $testAccount = Opus_Account::fetchAccountByLogin($login);
+        if (!is_null($testAccount)) {
             $this->getResponse()->setHttpResponseCode(400);
             $this->getResponse()->setBody("ERROR: Account '$login' already exists.");
             return;
@@ -55,16 +55,16 @@ class Remotecontrol_AccountController extends Controller_Action {
         $account->setLogin($login);
         $account->setPassword($password);
 
-        foreach (explode(",", $user_roles) AS $role_name) {
-            $role_name = trim($role_name);
-            $role = Opus_UserRole::fetchByName($role_name);
+        foreach (explode(",", $userRoles) AS $roleName) {
+            $roleName = trim($roleName);
+            $role = Opus_UserRole::fetchByName($roleName);
 
             if ($role instanceof Opus_UserRole) {
                 $account->addRole($role);
             }
             else {
                 $this->getResponse()->setHttpResponseCode(400);
-                $this->getResponse()->setBody("ERROR: Role '$role_name' does not exist.");
+                $this->getResponse()->setBody("ERROR: Role '$roleName' does not exist.");
                 return;
             }
 
