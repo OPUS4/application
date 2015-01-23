@@ -44,7 +44,7 @@ class Publish_View_Helper_LegalNotices extends Zend_View_Helper_Abstract {
     public function legalNotices($form) {
         $session = new Zend_Session_Namespace('Publish');
         
-        if (!is_null($form->getElement('LegalNotices')))  {
+        if (!is_null($form->getElement('LegalNotices'))) {
             $fieldset = new Publish_View_Helper_Element();
             $fieldset->view = $this->view;
             $elementData = $form->getElementAttributes('LegalNotices');

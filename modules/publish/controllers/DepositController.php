@@ -40,7 +40,8 @@ class Publish_DepositController extends Controller_Action {
     public $session;
     public $document;
 
-    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response, array $invokeArgs = array()) {
+    public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response,
+                                array $invokeArgs = array()) {
         $this->log = Zend_Registry::get('Zend_Log');
         $this->session = new Zend_Session_Namespace('Publish');
         
@@ -69,7 +70,9 @@ class Publish_DepositController extends Controller_Action {
                     $document->deletePermanent();
                 }
                 catch (Opus_Model_Exception $e) {
-                    $this->getLogger()->err("deletion of document # " . $this->session->documentId . " was not successful", $e);
+                    $this->getLogger()->err(
+                        "deletion of document # " . $this->session->documentId . " was not successful", $e
+                    );
                 }
             }
             return $this->_redirectTo('index', '', 'index');
@@ -86,7 +89,10 @@ class Publish_DepositController extends Controller_Action {
                     'datatype' => $element['datatype'],
                     'subfield' => $element['subfield']);  
                 
-                $this->log->debug("STORE DATA: " . $element['name'] . ": " . $element['value'] . ", Typ:" . $element['datatype'] . ", Sub:" . $element['subfield']);
+                $this->log->debug(
+                    "STORE DATA: " . $element['name'] . ": " . $element['value'] . ", Typ:" . $element['datatype']
+                    . ", Sub:" . $element['subfield']
+                );
             }
         }
 
@@ -139,7 +145,8 @@ class Publish_DepositController extends Controller_Action {
                 "id" => $this->document->getId()
             ),
             null,
-            true);
+            true
+        );
         $notification->prepareMail($this->document, Util_Notification::SUBMISSION, $this->view->serverUrl() . $url);
 
         return $this->_redirectToAndExit($targetAction, null, $targetController, $targetModule);

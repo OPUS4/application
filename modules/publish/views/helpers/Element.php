@@ -45,9 +45,9 @@ class Publish_View_Helper_Element extends Publish_View_Helper_Fieldset {
     public function element($value, $options = null, $type = null, $name = null) {
         $this->view->count++;
         if ($name == null && $value == null) {
-            $error_message = $this->view->translate('template_error_unknown_field');
+            $errorMessage = $this->view->translate('template_error_unknown_field');
             // TODO move to CSS
-            return "<br/><div style='width: 400px; color:red;'>" . $error_message . "</div><br/><br/>";
+            return "<br/><div style='width: 400px; color:red;'>" . $errorMessage . "</div><br/><br/>";
         }
         $method = "_render" . $type;
         if (method_exists($this, $method) === true) {

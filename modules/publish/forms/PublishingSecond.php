@@ -37,11 +37,11 @@
  *
  */
 class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
-    CONST FIRST = "Firstname";
-    CONST COUNTER = "_1";
-    CONST GROUP = "group";
-    CONST LABEL = "_label";
-    CONST ERROR = "Error";
+    const FIRST = "Firstname";
+    const COUNTER = "_1";
+    const GROUP = "group";
+    const LABEL = "_label";
+    const ERROR = "Error";
 
     public $doctype = "";
     public $additionalFields = array();
@@ -59,21 +59,21 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
      * @param <type> $data 
      */
     public function isValid($data) {
-        $extended = new Publish_Model_ExtendedValidation($this, $data, $this->log, $this->session);
-        $valid1 = $extended->validate();       
+        $extended = new Publish_Model_ExtendedValidation($this, $data, $this->log, $this->_session);
+        $validExtended = $extended->validate();
 
         $data = $this->getValues();
-        $valid2 = parent::isValid($data);
+        $validParent = parent::isValid($data);
         // undo changes through validation: restore values of disabled fields
         $this->populate($data);
         
-        $valid3 = $extended->validate();
+        $validExtendedAgain = $extended->validate(); // TODO why?
         
         //inherit data changes during validation
         $this->populate($extended->data);
         $this->postData = $extended->data;
 
-        return ($valid1 && $valid2 && $valid3);
+        return ($validExtended && $validParent && $validExtendedAgain);
     }
 
     /**
@@ -86,7 +86,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
 
         $this->setDisableTranslator(true);        
 
-        $this->doctype = $this->session->documentType;        
+        $this->doctype = $this->_session->documentType;
 
         if (!isset($this->doctype) or empty($this->doctype)) {
             throw new Publish_Model_FormSessionTimeoutException();
@@ -95,20 +95,22 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
         $dom = null;
         try {
             // Fetch the current XML DOM structure of the documenttype.
-            $dom = $this->documentTypesHelper->getDocument($this->doctype);
+            $dom = $this->_documentTypesHelper->getDocument($this->doctype);
         }
         catch (Application_Exception $e) {
             $this->log->err("Unable to load document type '" . $this->doctype . "'");
             throw $e;
         }
 
-        $this->additionalFields = $this->session->additionalFields;
+        $this->additionalFields = $this->_session->additionalFields;
 
         $parser = new Publish_Model_DocumenttypeParser($dom, $this, $this->additionalFields, $this->postData);
         $parser->parse();
         $parserElements = $parser->getFormElements();
                 
-        $this->log->debug("DocumenttypeParser (doctype '" . $this->doctype . "') found: " . count($parserElements) . " elements.");
+        $this->log->debug(
+            "DocumenttypeParser (doctype '" . $this->doctype . "') found: " . count($parserElements) . " elements."
+        );
         
         $this->addElements($parserElements);        
         $this->addElements($this->getExternalElements());       
@@ -129,7 +131,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
      * It sets important array values for these elements and returns an array of external fields.
      * @return type Array of external fields.
      */
-    private function getExternalElements(){        
+    private function getExternalElements() {
         $session = new Zend_Session_Namespace('Publish');
         $externalFields = $session->DT_externals;
         
@@ -153,8 +155,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
                             ->setRequired($req)
                             ->setValue($element['value'])
                             ->setLabel($element['label'])
-                            ->setAttrib('disabled' , $element['disabled'])
-                            ->setAttrib('DT_external' , $element['DT_external'])
+                            ->setAttrib('disabled', $element['disabled'])
+                            ->setAttrib('DT_external', $element['DT_external'])
                             ->addErrorMessages($element['error']);
             $externals[] = $externalElement;
             $this->postData[$element['id']] = $element['value'];            
@@ -170,34 +172,37 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
      * It adds two new buttons for "Back" and "Deposit Data".
      */
     public function prepareCheck() {
-        $this->session->elements = array();
+        $this->_session->elements = array();
 
         //iterate over form elements
         foreach ($this->getElements() as $element) {
             $name = $element->getName();            
             $element->removeDecorator('Label');
 
+            // (d) bei Collections erfolgt die Zuordnung zum Dokument nur die unterste Collection pro Gruppe
+            // (e) additional externals fields (from view helpers)
             if ($element->getValue() == "" 
                     || $element->getType() == "Zend_Form_Element_Submit"        // Submit buttons
                     || $element->getType() == "Zend_Form_Element_Hidden"        // Hidden fields
                     || $element->getAttrib('isRoot') == true                    // Root Nodes of Browsefields
-                    || $element->getAttrib('doNotStore') == true                // bei Collections erfolgt die Zuordnung zum Dokument nur die unterste Collection pro Gruppe
-                    || (!is_null($this->session->DT_externals)) && array_key_exists($element->getName(), $this->session->DT_externals)) {   // additional externals fields (from view helpers)
+                    || $element->getAttrib('doNotStore') == true                // (*d)
+                    || (!is_null($this->_session->DT_externals))
+                    && array_key_exists($element->getName(), $this->_session->DT_externals)) { // (*e)
                 
                 $this->removeElement($name);
-                
-            } else {
+            }
+            else {
                 // set important element values in an  array: name, value, label, datatype and subfield
                 // these are used for Deposit
-                $this->session->elements[$name]['name'] = $name;
-                $this->session->elements[$name]['value'] = $element->getValue();
-                $this->session->elements[$name]['label'] = $element->getLabel();
-                $this->session->elements[$name]['datatype'] = $element->getAttrib('datatype');
+                $this->_session->elements[$name]['name'] = $name;
+                $this->_session->elements[$name]['value'] = $element->getValue();
+                $this->_session->elements[$name]['label'] = $element->getLabel();
+                $this->_session->elements[$name]['datatype'] = $element->getAttrib('datatype');
                 if ($element->getAttrib('subfield')) {
-                    $this->session->elements[$name]['subfield'] = '1';
+                    $this->_session->elements[$name]['subfield'] = '1';
                 }
                 else {
-                    $this->session->elements[$name]['subfield'] = '0';
+                    $this->_session->elements[$name]['subfield'] = '0';
                 }
             }
         }
@@ -232,7 +237,7 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             if (!is_null($displayGroup)) {
                 $group = $this->buildViewDisplayGroup($displayGroup);
                 $group['Name'] = $groupName;
-                $group['Counter'] = $this->session->$groupCount;                
+                $group['Counter'] = $this->_session->$groupCount;
                 $this->view->$groupName = $group;
             }
 
@@ -242,7 +247,8 @@ class Publish_Form_PublishingSecond extends Publish_Form_PublishingAbstract {
             if (strstr($currentElement, 'Enrichment')) {
                 $name = str_replace('Enrichment', '', $currentElement);
                 $this->view->$name = $elementAttributes;
-            } else {
+            }
+            else {
                 $this->view->$currentElement = $elementAttributes;
             }
             

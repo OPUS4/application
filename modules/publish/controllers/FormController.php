@@ -33,12 +33,12 @@
  */
 class Publish_FormController extends Controller_Action {
 
-    CONST BUTTON_ADD = 'addMore';
-    CONST BUTTON_DELETE = 'deleteMore';
-    CONST BUTTON_BROWSE_UP = 'browseUp';
-    CONST BUTTON_BROWSE_DOWN = 'browseDown';
+    const BUTTON_ADD = 'addMore';
+    const BUTTON_DELETE = 'deleteMore';
+    const BUTTON_BROWSE_UP = 'browseUp';
+    const BUTTON_BROWSE_DOWN = 'browseDown';
 
-    CONST STEP = 'step';
+    const STEP = 'step';
 
 
     public $session;
@@ -70,7 +70,10 @@ class Publish_FormController extends Controller_Action {
         }
 
         if (is_array($postData) && count($postData) === 0) {
-            $this->getLogger()->err('FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than the expected value in OPUS4 config.ini. Further information can be read in our documentation.');
+            $this->getLogger()->err(
+                'FormController: EXCEPTION during uploading. Possibly the upload_max_filesize in php.ini is lower than'
+                . ' the expected value in OPUS4 config.ini. Further information can be read in our documentation.'
+            );
             return $this->_redirectTo('index', $this->view->translate('error_empty_post_array'), 'index');
         }
 
@@ -92,9 +95,11 @@ class Publish_FormController extends Controller_Action {
             $this->view->extensions = $config->publish->filetypes->allowed;
         }
 
-        // validate fileupload (if the current form contains a file upload field and file upload is enabled in application config)
+        // validate fileupload (if the current form contains a file upload field and file upload is enabled in
+        // application config)
         if ($indexForm->enableUpload) {
-            if ($indexForm->getElement('fileupload') != null && !$indexForm->getElement('fileupload')->isValid($postData)) {
+            if ($indexForm->getElement('fileupload') != null
+                && !$indexForm->getElement('fileupload')->isValid($postData)) {
                 $indexForm->setViewValues();
                 $this->view->errorCaseMessage = $this->view->translate('publish_controller_form_errorcase');
             }
@@ -104,7 +109,7 @@ class Publish_FormController extends Controller_Action {
                 if ($this->view->uploadSuccess) {
                     $this->view->subtitle = $this->view->translate('publish_controller_index_anotherFile');
                 }
-                // TODO warum wird hier nochmal eine Form instanziiert und nicht die weiter oben bereits erzeugte verwendet?
+                // TODO warum wird hier nochmal eine Form instanziiert und nicht das bereits erzeugte verwendet?
                 $indexForm = new Publish_Form_PublishingFirst($this->view);
                 $indexForm->populate($postData);
                 $indexForm->setViewValues();
@@ -151,11 +156,21 @@ class Publish_FormController extends Controller_Action {
         }
         catch (Publish_Model_FormIncorrectFieldNameException $e) {
             $logger->err('invalider Feldname ' . $e->fieldName);
-            throw new Application_Exception(preg_replace('/%value%/', htmlspecialchars($e->fieldName), $this->view->translate($e->getTranslateKey())));
+            throw new Application_Exception(
+                preg_replace(
+                    '/%value%/', htmlspecialchars($e->fieldName),
+                    $this->view->translate($e->getTranslateKey())
+                )
+            );
         }
         catch (Publish_Model_FormIncorrectEnrichmentKeyException $e) {
             $logger->err('invalider EnrichmentKey ' . $e->enrichmentKey);
-            throw new Application_Exception(preg_replace('/%value%/', htmlspecialchars($e->enrichmentKey), $this->view->translate($e->getTranslateKey())));
+            throw new Application_Exception(
+                preg_replace(
+                    '/%value%/', htmlspecialchars($e->enrichmentKey),
+                    $this->view->translate($e->getTranslateKey())
+                )
+            );
         }
         catch (Publish_Model_FormException $e) {
             $logger->err('Exception bei der Erzeugung des zweiten Formulars: ' . $e->enrichmentKey);
@@ -201,7 +216,9 @@ class Publish_FormController extends Controller_Action {
                         $document->deletePermanent();
                     }
                     catch (Opus_Model_Exception $e) {
-                        $this->getLogger()->err("deletion of document # " . $this->session->documentId . " was not successful", $e);
+                        $this->getLogger()->err(
+                            "deletion of document # " . $this->session->documentId . " was not successful", $e
+                        );
                     }
                 }
                 return $this->_redirectTo('index', '', 'index');
@@ -209,16 +226,20 @@ class Publish_FormController extends Controller_Action {
 
             //go back and change data
             if (array_key_exists('back', $postData)) {
-                if (isset($this->session->elements))
-                    foreach ($this->session->elements AS $element)
-                        $postData[$element['name']] = $element['value'];
+                if (isset($this->session->elements)) {
+                    foreach ($this->session->elements AS $element) {
+                        $postData[$element['name']] = $element['value']; 
+                    } 
+                }
             }
 
             if (!array_key_exists('send', $postData) || array_key_exists('back', $postData)) {
-                // A button (not SEND) was pressed => add / remove fields or browse fields (both in form step 2) OR back button (in form step 3)                
+                // A button (not SEND) was pressed => add / remove fields or browse fields (both in form step 2)
+                // OR back button (in form step 3)
 
                 if (!array_key_exists('back', $postData)) {
-                    // die Session muss nur dann manipuliert werden, wenn im zweiten Schritt ADD/DELETE/BROWSE durchgeführt wurde
+                    // die Session muss nur dann manipuliert werden, wenn im zweiten Schritt ADD/DELETE/BROWSE
+                    // durchgeführt wurde
                     try {
                         $this->manipulateSession($postData);
                     }
@@ -314,30 +335,30 @@ class Publish_FormController extends Controller_Action {
         $comment = array_key_exists('uploadComment', $postData) ? $postData['uploadComment'] : '';
         $upload = new Zend_File_Transfer_Adapter_Http();
         $files = $upload->getFileInfo();
-        $upload_count = 0;
+        $uploadCount = 0;
 
-        $uploaded_files = $this->document->getFile();
-        $uploaded_files_names = array();
-        foreach ($uploaded_files as $upfile) {
-            $uploaded_files_names[$upfile->getPathName()] = $upfile->getPathName();
+        $uploadedFiles = $this->document->getFile();
+        $uploadedFilesNames = array();
+        foreach ($uploadedFiles as $upfile) {
+            $uploadedFilesNames[$upfile->getPathName()] = $upfile->getPathName();
         }
 
         foreach ($files as $file) {
             if (!empty($file['name'])) {
 
                 //file have already been uploaded
-                if (array_key_exists($file['name'], $uploaded_files_names)) {
+                if (array_key_exists($file['name'], $uploadedFilesNames)) {
                     return false;
                 }
-                $upload_count++;
+                $uploadCount++;
             }
         }
 
         $logger = $this->getLogger();
 
-        $logger->info("Fileupload of: " . count($files) . " potential files (vs. $upload_count really uploaded)");
+        $logger->info("Fileupload of: " . count($files) . " potential files (vs. $uploadCount really uploaded)");
 
-        if ($upload_count < 1) {
+        if ($uploadCount < 1) {
             $logger->debug("NO File uploaded!!!");
             if (!isset($this->session->fulltext)) {
                 $this->session->fulltext = '0';
@@ -435,7 +456,8 @@ class Publish_FormController extends Controller_Action {
             $currentNumber = $this->session->additionalFields[$fieldName];
         }
 
-        // update collection fields in session member addtionalFields and find out the current level of collection browsing
+        // update collection fields in session member addtionalFields and find out the current level of collection
+        // browsing
         $level = $this->_updateCollectionField($fieldName, $currentNumber, $postData);
 
         $saveName = "";
@@ -444,8 +466,9 @@ class Publish_FormController extends Controller_Action {
             $saveName = $fieldName;
             $fieldName = str_replace('Enrichment', '', $fieldName);
         }
-        if ($saveName != "")
-            $fieldName = $saveName;
+        if ($saveName != "") {
+            $fieldName = $saveName; 
+        }
 
         $this->view->currentAnchor = 'group' . $fieldName;
 
@@ -471,7 +494,8 @@ class Publish_FormController extends Controller_Action {
 
             case 'down':
                 // Browse down in the Collection hierarchy.
-                if (($level == 1 && $postData[$fieldName . '_' . $currentNumber] !== '') || ($level > 1 && $postData['collId' . $level . $fieldName . '_' . $currentNumber] != '')) {
+                if (($level == 1 && $postData[$fieldName . '_' . $currentNumber] !== '')
+                    || ($level > 1 && $postData['collId' . $level . $fieldName . '_' . $currentNumber] != '')) {
                     $this->session->additionalFields[self::STEP . $fieldName . '_' . $currentNumber] = $level + 1;
                 }
                 break;
@@ -521,13 +545,16 @@ class Publish_FormController extends Controller_Action {
         if (substr($button, 0, 7) == self::BUTTON_ADD) {
             $result[0] = substr($button, 7);
             $result[1] = 'add';
-        } else if (substr($button, 0, 10) == self::BUTTON_DELETE) {
+        }
+        else if (substr($button, 0, 10) == self::BUTTON_DELETE) {
             $result[0] = substr($button, 10);
             $result[1] = 'delete';
-        } else if (substr($button, 0, 10) == self::BUTTON_BROWSE_DOWN) {
+        }
+        else if (substr($button, 0, 10) == self::BUTTON_BROWSE_DOWN) {
             $result[0] = substr($button, 10);
             $result[1] = 'down';
-        } else if (substr($button, 0, 8) == self::BUTTON_BROWSE_UP) {
+        }
+        else if (substr($button, 0, 8) == self::BUTTON_BROWSE_UP) {
             $result[0] = substr($button, 8);
             $result[1] = 'up';
         }
@@ -557,7 +584,8 @@ class Publish_FormController extends Controller_Action {
         else {
             // Middle Node or Leaf
             if (isset($post['collId' . $level . $field . '_' . $value])) {
-                $this->session->additionalFields['collId' . $level . $field . '_' . $value] = $post['collId' . $level . $field . '_' . $value];
+                $this->session->additionalFields['collId' . $level . $field . '_' . $value] =
+                    $post['collId' . $level . $field . '_' . $value];
             }
         }
 
@@ -573,19 +601,25 @@ class Publish_FormController extends Controller_Action {
 
         $path = $config->publish->path->documenttemplates;
         if (!is_dir($path)) {
-            throw new Application_Exception('invalid configuration: publish.path.documenttemplates does not refer to a directory');
+            throw new Application_Exception(
+                'invalid configuration: publish.path.documenttemplates does not refer to a directory'
+            );
         }
 
         $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
         $templateName = $docTypeHelper->getTemplateName($this->session->documentType);
         
         if (is_null($templateName)) {
-            throw new Application_Exception('invalid configuration: could not get template name for requested document type');
+            throw new Application_Exception(
+                'invalid configuration: could not get template name for requested document type'
+            );
         }
 
         $templateFileName = $path . DIRECTORY_SEPARATOR . $templateName . '.phtml';
         if (!is_readable($templateFileName)) {
-            throw new Application_Exception('invalid configuration: template file ' . $templateName . '.phtml is not readable or does not exist');
+            throw new Application_Exception(
+                'invalid configuration: template file ' . $templateName . '.phtml is not readable or does not exist'
+            );
         }
 
         $this->view->setScriptPath($path);

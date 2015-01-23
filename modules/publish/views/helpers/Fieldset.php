@@ -35,7 +35,7 @@
 
 class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
 
-    protected $disable = false;
+    protected $_disable = false;
 
     function fieldset() {
         
@@ -44,7 +44,8 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     function renderHtmlText($field, $options) {
         $fieldset = "";
         if (!isset($field['isLeaf'])) {
-            $fieldset .= "\n\t\t\t\t<input type='text' class='form-textfield' name='" . $field['id'] . "' id='" . $field['id'] . "' ";
+            $fieldset .= "\n\t\t\t\t<input type='text' class='form-textfield' name='" . $field['id'] . "' id='"
+                . $field['id'] . "' ";
             if ($options !== null) {
                 $fieldset .= $options . " ";
             }
@@ -54,7 +55,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
 
             if ($field['disabled'] === true) {
                 $fieldset .= " disabled='1' ";
-                $this->disable = true;
+                $this->_disable = true;
             }
 
             $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
@@ -78,7 +79,7 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
 
         if ($field['disabled'] === true) {
             $fieldset .= " disabled='1' ";
-            $this->disable = true;
+            $this->_disable = true;
         }
 
         $fieldset .= " title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
@@ -90,7 +91,8 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     // TODO: wofür wird der Parameter $options benötigt?
     function renderHtmlSelect($field, $options) {
         // TODO move style to CSS
-        $fieldset = "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id'] . '" class="form-selectfield"  id="' . $field['id'] . '"';
+        $fieldset = "\n\t\t\t\t" . '<select style="width:300px" name="' . $field['id']
+            . '" class="form-selectfield"  id="' . $field['id'] . '"';
         $fieldset .= ' title="' . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . '"';
         if ($field['disabled'] === true) {
             $fieldset .= ' disabled="1" ';
@@ -99,7 +101,8 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
         $fieldset .= '>' . "\n\t\t\t\t\t";
 
         foreach ($field['options'] AS $key => $option) {
-            $fieldset .= '<option value="' . htmlspecialchars($key, ENT_QUOTES) . '" label="' . htmlspecialchars($option, ENT_QUOTES) . '"';
+            $fieldset .= '<option value="' . htmlspecialchars($key, ENT_QUOTES) . '" label="'
+                . htmlspecialchars($option, ENT_QUOTES) . '"';
             
             if ($option == $field['value'] || $key == $field['value']) {
                 $fieldset .= ' selected="selected"';
@@ -119,14 +122,16 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     // TODO: wofür wird der Parameter $options benötigt?
     function renderHtmlCheckbox($field, $options) {
         $fieldset = "<input type='hidden' name='" . $field['id'] . "' value='0' />";
-        $fieldset .= "\n\t\t\t\t<input type='checkbox' class='form-checkbox' name='" . $field['id'] . "' id='" . $field['id'] . "' ";
+        $fieldset .= "\n\t\t\t\t<input type='checkbox' class='form-checkbox' name='" . $field['id'] . "' id='"
+            . $field['id'] . "' ";
         $fieldset .= "value='" . $field['value'] . "' ";
-        if ($field['check'] == 'checked')
-            $fieldset .= " checked='checked' ";
+        if ($field['check'] == 'checked') {
+            $fieldset .= " checked='checked' "; 
+        }
 
         if ($field['disabled'] === true) {
             $fieldset .= " disabled='disabled' ";
-            $this->disable = true;
+            $this->_disable = true;
         }
 
         $fieldset .= " />\n";
@@ -135,7 +140,8 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     }
 
     function renderHtmlFile($field, $options) {
-        $fieldset = "<input type='file' name='" . $field['id'] . "' id='" . $field['id'] . "' enctype='multipart/form-data' ";
+        $fieldset = "<input type='file' name='" . $field['id'] . "' id='" . $field['id']
+            . "' enctype='multipart/form-data' ";
         $fieldset .= "title='" . htmlspecialchars($this->view->translate($field['hint']), ENT_QUOTES) . "' ";
         if ($options !== null) {
             $fieldset .= $options . " ";
@@ -151,9 +157,10 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     /**
      * TODO:
      * Fehlerursache: multiplicity > 1 (Gruppe) aber Aufruf mit element
-     * Wenn element aufgerufen wird, es sich aber um eine Gruppe handelt, wird hier eine Exception geworfen und die Gruppe nicht gerendert.
-     * Kann man verhindern, wenn man dem Array ein zusätzliches Feld "isGroup" o.ä. mitgibt, das überprüft, ob es sich tatsächlich
-     * um eine Gruppe handelt.
+     * Wenn element aufgerufen wird, es sich aber um eine Gruppe handelt, wird hier eine Exception geworfen und die
+     * Gruppe nicht gerendert.
+     * Kann man verhindern, wenn man dem Array ein zusätzliches Feld "isGroup" o.ä. mitgibt, das überprüft, ob es
+     * sich tatsächlich um eine Gruppe handelt.
      */
     function renderFieldsetErrors($field) {
         $fieldset = "";
@@ -170,41 +177,48 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
     function renderHtmlButtons($buttons) {
         $fieldset = "\n\t\t\t\t<div class='button-wrapper add-delete-wrapper'>";
         foreach ($buttons AS $button) {
-            if (!$this->disable) {
+            if (!$this->_disable) {
                 $fieldset .= "<input type='submit' ";
-                if (strstr($button['id'], 'Down') !== false)
-                    $fieldset .= "class='form-button down-button' ";
+                if (strstr($button['id'], 'Down') !== false) {
+                    $fieldset .= "class='form-button down-button' "; 
+                }
                 else {
-                    if (strstr($button['id'], 'Up') !== false)
-                        $fieldset .= "class='form-button up-button' ";
+                    if (strstr($button['id'], 'Up') !== false) {
+                        $fieldset .= "class='form-button up-button' "; 
+                    }
                 }
 
-                if (strstr($button['id'], 'add') !== false)
-                    $fieldset .= "class='form-button add-button' ";
+                if (strstr($button['id'], 'add') !== false) {
+                    $fieldset .= "class='form-button add-button' "; 
+                }
                 else {
-                    if (strstr($button['id'], 'delete') !== false)
-                        $fieldset .= "class='form-button delete-button' ";
+                    if (strstr($button['id'], 'delete') !== false) {
+                        $fieldset .= "class='form-button delete-button' "; 
+                    }
                 }
 
-                $fieldset .= "name='" . $button['id'] . "' id='" . $button['id'] . "' value='" . htmlspecialchars($button['label'], ENT_QUOTES) . "' />&nbsp;";
+                $fieldset .= "name='" . $button['id'] . "' id='" . $button['id'] . "' value='"
+                    . htmlspecialchars($button['label'], ENT_QUOTES) . "' />&nbsp;";
             }
         }
         $fieldset .= "</div>";
 
-        $this->disable = false;
+        $this->_disable = false;
         return $fieldset;
     }
 
     function renderHtmlHidden($hiddens) {
     $fieldset = "";
         foreach ($hiddens AS $hidden) {
-            $fieldset .= "\n<input type='hidden' name='" . $hidden['id'] . "' id='" . $hidden['id'] . "' value='" . $hidden['value'] . "' />";
+            $fieldset .= "\n<input type='hidden' name='" . $hidden['id'] . "' id='" . $hidden['id'] . "' value='"
+                . $hidden['value'] . "' />";
         }    
         return $fieldset;
     }
     
     function _renderSubmit($value, $options=null, $name=null) {
-        $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='" . htmlspecialchars($this->view->translate($value), ENT_QUOTES) . "' ";
+        $submit = "\n\t\t<input type='submit' name='" . $name . "' id='" . $name . "' value='"
+            . htmlspecialchars($this->view->translate($value), ENT_QUOTES) . "' ";
         if (isset($options)) {
             $submit .= $options . " />";
         }
@@ -222,7 +236,8 @@ class Publish_View_Helper_Fieldset extends Zend_View_Helper_Abstract {
      * @return <type> 
      */
     function getRequiredSign() {
-        return "<span class='required' title='" . htmlspecialchars($this->view->translate('required_star_title'), ENT_QUOTES) . "'>*</span>";
+        return "<span class='required' title='"
+            . htmlspecialchars($this->view->translate('required_star_title'), ENT_QUOTES) . "'>*</span>";
     }
 
     /**

@@ -52,8 +52,9 @@ class Publish_View_Helper_BibliographieOverview extends Zend_View_Helper_Abstrac
 
         $this->session = new Zend_Session_Namespace('Publish');
 
-        $fieldset_start = "<fieldset><legend>" . $this->view->translate('header_bibliographie') . "</legend>\n\t\t\n\t\t";
-        $fieldset_end = "</fieldset>";
+        $fieldsetStart = "<fieldset><legend>" . $this->view->translate('header_bibliographie')
+            . "</legend>\n\t\t\n\t\t";
+        $fieldsetEnd = "</fieldset>";
 
         if ($this->session->documentId == "") {
             return "";
@@ -63,12 +64,12 @@ class Publish_View_Helper_BibliographieOverview extends Zend_View_Helper_Abstrac
         $bib = $this->document->getBelongsToBibliography();
 
         if (empty($bib)) {
-            return $fieldset_start . $this->view->translate('notBelongsToBibliographie') . $fieldset_end;
+            return $fieldsetStart . $this->view->translate('notBelongsToBibliographie') . $fieldsetEnd;
         }
         
         $overview = $this->view->translate('belongsToBibliographie');
 
-        return $fieldset_start . $overview . $fieldset_end;
+        return $fieldsetStart . $overview . $fieldsetEnd;
     }
 
 }

@@ -40,6 +40,7 @@
 class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
     public $bibliographie;
+
     public $showRights;
     /**
      *
@@ -54,7 +55,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
     public function isValid($data) {
         $valid = parent::isValid($data);
 
-        if ($this->config->form->first->show_rights_checkbox == 1) {
+        if ($this->_config->form->first->show_rights_checkbox == 1) {
             if (array_key_exists('rights', $data)) {
                 if ($data['rights'] == '0') {
                     $rights = $this->getElement('rights');
@@ -83,7 +84,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         $this->addElement($doctypes);        
 
         //create and add file upload
-        $this->enableUpload = ($this->config->form->first->enable_upload == 1);
+        $this->enableUpload = ($this->_config->form->first->enable_upload == 1);
         if ($this->enableUpload) {
             $fileupload = $this->_createFileuploadField();            
             $this->addDisplayGroup($fileupload, 'documentUpload');            
@@ -117,7 +118,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      */
     private function _createDocumentTypeField() {
         $optionsSorted = array();
-        foreach ($this->documentTypesHelper->getDocumentTypes() as $value) {
+        foreach ($this->_documentTypesHelper->getDocumentTypes() as $value) {
             $optionsSorted[$value] = $this->view->translate($value);
         }        
         asort($optionsSorted);
@@ -125,7 +126,9 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         $doctypes = $this->createElement('select', 'documentType');        
         $doctypes->setDisableTranslator(true)
                 ->setLabel('selecttype')
-                ->setMultiOptions(array_merge(array('' => $this->view->translate('choose_valid_doctype')), $optionsSorted))
+                ->setMultiOptions(
+                    array_merge(array('' => $this->view->translate('choose_valid_doctype')), $optionsSorted)
+                )
                 ->setRequired(true)                
                 ->setErrorMessages(array($this->view->translate('publish_error_missing_doctype')));
 
@@ -138,25 +141,28 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      */
     private function _createFileuploadField() {
         // get path to store files
-        $tempPath = $this->config->form->first->temp;
-        if (true === empty($tempPath))
-            $tempPath = APPLICATION_PATH . '/workspace/tmp/';
+        $tempPath = $this->_config->form->first->temp;
+        if (true === empty($tempPath)) {
+            $tempPath = APPLICATION_PATH . '/workspace/tmp/'; 
+        }
 
         // get allowed filetypes
-        $filetypes = $this->config->publish->filetypes->allowed;
-        if (true === empty($filetypes))
-            $filetypes = 'pdf,txt,html,htm';
+        $filetypes = $this->_config->publish->filetypes->allowed;
+        if (true === empty($filetypes)) {
+            $filetypes = 'pdf,txt,html,htm'; 
+        }
 
         //get allowed file size
-        $maxFileSize = (int) $this->config->publish->maxfilesize;
+        $maxFileSize = (int) $this->_config->publish->maxfilesize;
         if (true === empty($maxFileSize)) {
             $maxFileSize = 1024000; //1MB
         }
 
         // Upload-fields required to enter second stage
-        $requireUpload = $this->config->form->first->require_upload;
-        if (true === empty($requireUpload))
-            $requireUpload = 0;
+        $requireUpload = $this->_config->form->first->require_upload;
+        if (true === empty($requireUpload)) {
+            $requireUpload = 0; 
+        }
 
         //file upload field(s)
         $fileupload = new Zend_Form_Element_File('fileupload');
@@ -171,7 +177,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
                 ->setAttrib('enctype', 'multipart/form-data');
 
         if (1 == $requireUpload) {
-            if (!isset($this->session->fulltext) || $this->session->fulltext == '0') {
+            if (!isset($this->_session->fulltext) || $this->_session->fulltext == '0') {
                 $fileupload->setRequired(true);
             }
         }
@@ -198,7 +204,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      * @return <Zend_Element>
      */
     private function _createBibliographyField() {
-        $bib = $this->config->form->first->bibliographie;
+        $bib = $this->_config->form->first->bibliographie;
         if (true === empty($bib)) {
             $bib = 0;
             $this->bibliographie = 0;
@@ -217,7 +223,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
     }
 
     private function _createRightsCheckBox() {
-        $showRights = $this->config->form->first->show_rights_checkbox;
+        $showRights = $this->_config->form->first->show_rights_checkbox;
         if (true === empty($showRights)) {
             $showRights = 0;
             $this->showRights = 0;
@@ -257,7 +263,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
             $group['Counter'] = 2;
 
             $this->view->documentUpload = $group;
-            $this->view->MAX_FILE_SIZE = $this->config->publish->maxfilesize;
+            $this->view->MAX_FILE_SIZE = $this->_config->publish->maxfilesize;
         }
     }
 

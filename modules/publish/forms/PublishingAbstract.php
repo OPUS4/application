@@ -34,15 +34,18 @@
  */
 abstract class Publish_Form_PublishingAbstract extends Zend_Form {
 
-    protected $config;
-    protected $session;
-    protected $documentTypesHelper;
+    protected $_config;
+
+    protected $_session;
+
+    protected $_documentTypesHelper;
+
     public $view;
 
     public function __construct() {
-        $this->session = new Zend_Session_Namespace('Publish');
-        $this->config = Zend_Registry::get('Zend_Config');
-        $this->documentTypesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
+        $this->_session = new Zend_Session_Namespace('Publish');
+        $this->_config = Zend_Registry::get('Zend_Config');
+        $this->_documentTypesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
         $this->view = $this->getView();
         parent::__construct();        
     }
@@ -90,7 +93,7 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
             if ($element->getAttrib('subfield')) {
                 $elementAttributes['subfield'] = true;
             }
-            else  {
+            else {
                 $elementAttributes['subfield'] = false; 
             }
 
@@ -119,10 +122,12 @@ abstract class Publish_Form_PublishingAbstract extends Zend_Form {
             if ($groupElement->getType() === 'Zend_Form_Element_Submit') {
                 //buttons
                 $groupButtons[$elementAttributes["id"]] = $elementAttributes;
-            } else if ($groupElement->getType() === 'Zend_Form_Element_Hidden') {
+            }
+            else if ($groupElement->getType() === 'Zend_Form_Element_Hidden') {
                 //hidden fields
                 $groupHiddens[$elementAttributes["id"]] = $elementAttributes;
-            } else {
+            }
+            else {
                 //normal fields
                 $groupFields[$elementAttributes["id"]] = $elementAttributes;
             }

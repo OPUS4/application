@@ -45,9 +45,9 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
     public function group($value, $options = null, $name = null) {
         $this->view->count++;
         if ($name == null && $value == null) {
-            $error_message = $this->view->translate('template_error_unknown_field');
+            $errorMessage = $this->view->translate('template_error_unknown_field');
             // TODO move to CSS
-            return "<br/><div style='width: 400px; color:red;'>" . $error_message . "</div><br/><br/>";
+            return "<br/><div style='width: 400px; color:red;'>" . $errorMessage . "</div><br/><br/>";
         }
         return $this->_renderGroup($value, $options, $name);
     }
@@ -77,10 +77,12 @@ class Publish_View_Helper_Group extends Publish_View_Helper_Fieldset {
 
         foreach ($group['Fields'] AS $field) {
 
-            // besonderer Mechanismus erforderlich für Collection Roles (CRs sind erkennbar, weil nur bei ihnen $group['Counter'] auf null gesetzt wurde)
+            // besonderer Mechanismus erforderlich für Collection Roles (CRs sind erkennbar, weil nur bei ihnen
+            // $group['Counter'] auf null gesetzt wurde)
             // dort kann jede Gruppe aus unterschiedlich vielen Select-Boxen aufgebaut sein
             // daher greift der Mechanimus der Auswertung von $group['Counter'] hier nicht
-            if (is_null($group['Counter']) && $index > 0 && $field['label'] !== 'choose_collection_subcollection' && $field['label'] !== 'endOfCollectionTree') {                
+            if (is_null($group['Counter']) && $index > 0 && $field['label'] !== 'choose_collection_subcollection'
+                    && $field['label'] !== 'endOfCollectionTree') {
                 $groupCount++;
                 $groupElementCount = 0;
                 $fieldset .= "</div>";

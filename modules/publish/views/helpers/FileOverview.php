@@ -53,8 +53,9 @@ class Publish_View_Helper_FileOverview extends Zend_View_Helper_Abstract {
 
         $this->session = new Zend_Session_Namespace('Publish');
 
-        $fieldset_start = "<fieldset><legend>" . $this->view->translate('already_uploaded_files') . "</legend>\n\t\t\n\t\t";
-        $fieldset_end = "</fieldset>";
+        $fieldsetStart = "<fieldset><legend>" . $this->view->translate('already_uploaded_files')
+            . "</legend>\n\t\t\n\t\t";
+        $fieldsetEnd = "</fieldset>";
 
         if ($this->session->documentId == "") {
             return "";
@@ -64,24 +65,27 @@ class Publish_View_Helper_FileOverview extends Zend_View_Helper_Abstract {
         $files = $this->document->getFile();
 
         if (empty($files)) {
-            return $fieldset_start . "<b>" . $this->view->translate('no_uploaded_files') . "</b>" . $fieldset_end;
+            return $fieldsetStart . "<b>" . $this->view->translate('no_uploaded_files') . "</b>" . $fieldsetEnd;
         }
         
         $overview = "";
 
         if ($this->view->uploadSuccess === false) {
-                $overview .= "<div class='form-errors'><ul><li>" . $this->view->translate('error_uploaded_files') . "</li></ul></div>";
+            $overview .= "<div class='form-errors'><ul><li>" . $this->view->translate('error_uploaded_files')
+                . "</li></ul></div>";
         }
 
         foreach ($files as $file) {
-            $overview .= '<p>' . $this->view->translate('name') . ': <b>' . htmlspecialchars($file->getPathName()) .
-                        '</b><br/>' . $this->view->translate('type') . ': ' . htmlspecialchars($file->getMimeType()) .
-                        '<br/>' . $this->view->translate('size') . ': ' . htmlspecialchars($file->getFileSize()) . ' '. $this->view->translate('bytes')  .
-                        '<br />' . $this->view->translate('uploadComment') . ': ' . htmlspecialchars($file->getComment()) . '</p>';
+            $overview .= '<p>' . $this->view->translate('name') . ': <b>' . htmlspecialchars($file->getPathName())
+                . '</b><br/>' . $this->view->translate('type') . ': ' . htmlspecialchars($file->getMimeType())
+                . '<br/>' . $this->view->translate('size') . ': ' . htmlspecialchars($file->getFileSize())
+                . ' ' . $this->view->translate('bytes')
+                . '<br />' . $this->view->translate('uploadComment') . ': ' . htmlspecialchars($file->getComment())
+                . '</p>';
 
         }
 
-        return $fieldset_start . $overview . $fieldset_end;
+        return $fieldsetStart . $overview . $fieldsetEnd;
     }
 
 }
