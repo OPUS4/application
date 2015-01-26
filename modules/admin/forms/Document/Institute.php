@@ -34,6 +34,10 @@
 
 /**
  * Unterformular fuer Institute.
+ *
+ * @category    Application
+ * @package     Module_Admin
+ * @subpackage  Form_Document
  */
 class Admin_Form_Document_Institute extends Admin_Form_AbstractModelSubForm {
     

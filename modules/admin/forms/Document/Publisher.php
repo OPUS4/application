@@ -34,6 +34,10 @@
 
 /**
  * Unterformular fuer Publisher eines Dokuments.
+ *
+ * @category    Application
+ * @package     Module_Admin
+ * @subpackage  Form_Document
  */
 class Admin_Form_Document_Publisher extends Admin_Form_Document_Institute {
     

@@ -36,6 +36,10 @@
  * Unterformular fuer das Editieren eines Serieneintrags.
  * 
  * TODO gibt es gute Lösung die Doc-ID nicht noch einmal im Unterformular zu haben (als Teil der ID)
+ *
+ * @category    Application
+ * @package     Module_Admin
+ * @subpackage  Form_Document
  */
 class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm {
     

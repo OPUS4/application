@@ -34,6 +34,10 @@
 
 /**
  * Unterformular fuer Enrichments im Metadaten-Formular.
+ *
+ * @category    Application
+ * @package     Module_Admin
+ * @subpackage  Form_Document
  */
 class Admin_Form_Document_Enrichment extends Admin_Form_AbstractModelSubForm {
     

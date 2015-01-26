@@ -36,6 +36,10 @@
  * Unterformular fuer das Editieren von Titeln. 
  * 
  * Für das Metadaten-Formular wurde vereinbart, daß der Typ eines Titels nicht mehr verändert werden kann.
+ *
+ * @category    Application
+ * @package     Module_Admin
+ * @subpackage  Form_Document
  */
 class Admin_Form_Document_Title extends Admin_Form_AbstractModelSubForm {
     

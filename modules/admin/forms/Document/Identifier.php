@@ -34,6 +34,10 @@
 
 /**
  * Formular fuer einen Identifier eines Dokuments.
+ *
+ * @category    Application
+ * @package     Module_Admin
+ * @subpackage  Form_Document
  */
 class Admin_Form_Document_Identifier extends Admin_Form_AbstractModelSubForm {
     

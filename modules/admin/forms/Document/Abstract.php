@@ -33,7 +33,10 @@
  */
 
 /**
- * Unterformular zum Editieren einer Zusammenfassung (abstract). 
+ * Unterformular zum Editieren einer Zusammenfassung (abstract).
+ *
+ * @category    Application
+ * @package     Module_Admin
  */
 class Admin_Form_Document_Abstract extends Admin_Form_AbstractModelSubForm {
     

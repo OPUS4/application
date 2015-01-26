@@ -34,6 +34,10 @@
 
 /**
  * Unterformular fuer weitere Metadaten eines Dokuments.
+ *
+ * @category    Application
+ * @package     Module_Admin
+ * @subpackage  Form_Document
  */
 class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section {
 
