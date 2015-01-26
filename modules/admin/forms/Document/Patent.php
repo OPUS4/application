@@ -43,6 +43,8 @@
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
+ *
+ * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
 class Admin_Form_Document_Patent extends Admin_Form_AbstractModelSubForm {
     
