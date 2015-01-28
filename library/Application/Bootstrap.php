@@ -42,13 +42,13 @@
  * TODO unit test bootstrap
  */
 class Application_Bootstrap extends Opus_Bootstrap_Base {
-    
+
     /**
      * Setup a front controller instance with error options and module
      * directory.
      *
      * @return void
-     * 
+     *
      * TODO rename to _initControllerPlugins
      */
     protected function _initOpusFrontController() {
@@ -75,7 +75,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $viewSetup = new Controller_Plugin_ViewSetup();
         $frontController->registerPlugin($viewSetup);
     }
-    
+
     /**
      * Configure view with UTF-8 options and ViewRenderer action helper.
      * The Zend_Layout component also gets initialized here.
@@ -124,7 +124,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         // Breadcrumbs View Helper global ersetzen
         $breadcrumbsHelper = new View_Helper_Breadcrumbs();
         $view->registerHelper($breadcrumbsHelper, 'breadcrumbs');
-        
+
         $viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer($view);
 
         Zend_Controller_Action_HelperBroker::addHelper($viewRenderer);
@@ -188,24 +188,24 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * - Session (if supported)
      * - Locale (if supported)
      * - Default
-     * 
+     *
      * @return Zend_Translate
      */
     protected function _initTranslation() {
         $this->bootstrap(array('Configuration', 'Session', 'Logging', 'ZendCache'));
-        
+
         $logger = $this->getResource('Logging');
 
         $translate = new Application_Translate();
-        
+
         Zend_Registry::set(Application_Translate::REGISTRY_KEY, $translate);
 
         $configHelper = new Application_Configuration();
-        
+
         $session = $this->getResource('Session');
 
         $language = $session->language;
-        
+
         // check if language is supported; if not, use language from locale
         if (!$configHelper->isLanguageSupported($language)) {
             $locale = new Zend_Locale();
@@ -216,15 +216,15 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
                 $language = $configHelper->getDefaultLanguage();
             }
         }
-        
+
         $logger->debug("Language set to '$language'.");
         $session->language = $language;
         $translate->setLocale($language);
         $translate->loadModule('default'); // immer die Übersetzungen aus Default-Modul laden
-        
+
         return $translate;
     }
-    
+
     /**
      * Setup session.
      *
@@ -249,7 +249,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * Initializes general navigation as configured in navigationModules.xml'
      *
      * @return void
-     * 
+     *
      * TODO possible to cache? performance improvement?
      */
     protected function _initNavigation() {
@@ -278,23 +278,22 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
 
         $view = $this->getResource('View');
         $view->navigation($container);
-        
+
         $log->debug('Zend_Navigation initialization completed');
 
         return $container;
     }
-    
+
     /**
      * Initialisiert Zend_Acl für die Authorization in OPUS.
-     * 
+     *
      * TODO use Application_Security_AclProvider
      */
     protected function _initAuthz() {
         $this->bootstrap('Logging', 'Navigation', 'view');
-        
+
         $config = $this->getResource('configuration');
-        $log = $this->getResource('Logging');
-        
+
         if (isset($config->security) && $config->security == 1) {
             Application_Security_AclProvider::init();
         }
@@ -303,15 +302,13 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
             Zend_View_Helper_Navigation_HelperAbstract::setDefaultRole(null);
         }
     }
-    
+
     /**
      * Initializes navigation container for main menu.
      * @return Zend_Navigation
      */
     protected function _initMainMenu() {
         $this->bootstrap('Logging', 'View', 'Navigation');
-
-        $config = $this->getResource('configuration');
 
         $navigationConfigFile = APPLICATION_PATH . '/application/configs/navigation.xml';
 

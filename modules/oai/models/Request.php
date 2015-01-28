@@ -35,6 +35,9 @@
 
 /**
  * TODO
+ *
+ * @category Application
+ * @package Module_Oai
  */
 class Oai_Model_Request {
 
@@ -50,7 +53,7 @@ class Oai_Model_Request {
      *
      * @var mixed
      */
-    private $_errorCode = null; 
+    private $_errorCode = null;
 
     /**
      * TODO
@@ -146,7 +149,7 @@ class Oai_Model_Request {
              $zd = new Zend_Date($date, $this->_dateFormat);
              $result = $date === $zd->get($this->_dateFormat);
         }
-        
+
         return $result;
     }
 
@@ -165,7 +168,7 @@ class Oai_Model_Request {
                 'From date "' . $date . '" is not a correct date format ("' . strtoupper($this->_dateFormat) . '").'
             );
         }
-        
+
         return $result;
     }
 
@@ -328,7 +331,7 @@ class Oai_Model_Request {
     }
 
     /**
-     * Set path to meta data prefix files. 
+     * Set path to meta data prefix files.
      * Returns false if given path is not a directory.
      * There is no check if files are inside given directory!
      *
@@ -336,7 +339,7 @@ class Oai_Model_Request {
      * @return boolean
      */
     public function setPathToMetadataPrefixFiles($path) {
-        $realpathToFiles = realpath($path); 
+        $realpathToFiles = realpath($path);
 
         $result = is_dir($realpathToFiles);
 
@@ -356,7 +359,7 @@ class Oai_Model_Request {
      * @return boolean
      */
     public function setResumptionPath($path) {
-        $realpathToFiles = realpath($path); 
+        $realpathToFiles = realpath($path);
 
         $result = is_dir($realpathToFiles);
 
@@ -410,19 +413,19 @@ class Oai_Model_Request {
             $valid = true;
 
             $missingRequiredParameters = array_diff(
-                $validRequest['required'], 
+                $validRequest['required'],
                 $oaiParameters
             );
 
             $unknownParameters = array_diff(
-                $oaiParameters, 
+                $oaiParameters,
                 array_merge($validRequest['required'], $validRequest['optional'])
             );
 
             if (false === empty($missingRequiredParameters)) {
                 // Missing required parameter
                 $errorInformation = array(
-                        'message' => 'Missing parameter(s) ' . implode(', ', $missingRequiredParameters), 
+                        'message' => 'Missing parameter(s) ' . implode(', ', $missingRequiredParameters),
                         'code' => Oai_Model_Error::BADARGUMENT
                     );
                 $valid = false;

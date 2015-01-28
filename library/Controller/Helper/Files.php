@@ -45,19 +45,19 @@ class Controller_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
      * Lists files in import folder. If $ignoreAllowedFiletypes is set to true
      * all files will be returned. Otherwise only files of allowed types will
      * be considered.
-     * 
+     *
      * @param directory $folder
-     * @param boolean $ignoreAllowedFiletypes
+     * @param boolean $ignoreAllowedTypes
      * @return array
      */
-    public function listFiles($folder, $ignoreAllowedFiletypes = false) {
+    public function listFiles($folder, $ignoreAllowedTypes = false) {
         if (!is_dir($folder) || !is_readable($folder)) {
             throw new Application_Exception("Directory '$folder' is not readable.");
         }
 
         $result = array();
         foreach (new DirectoryIterator($folder) as $file) {
-            if (self::checkFile($file, $ignoreAllowedFiletypes)) {
+            if (self::checkFile($file, $ignoreAllowedTypes)) {
                 array_push(
                     $result, array(
                     'name' => $file->getFilename(),
@@ -75,17 +75,17 @@ class Controller_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
         if (!isset($config->publish->filetypes->allowed)) {
             return null;
         }
-        
+
         $allowed = explode(',', $config->publish->filetypes->allowed);
         Util_Array::trim($allowed);
         return $allowed;
     }
 
-    private function checkFile($file, $ignoreAllowedFiletypes) {
+    private function checkFile($file, $ignoreAllowedTypes) {
         $log = Zend_Registry::get('Zend_Log');
         $logMessage = 'check for file: ' . $file->getPathname();
 
-        if (!$ignoreAllowedFiletypes) {
+        if (!$ignoreAllowedTypes) {
             $allowedFileTypes = Controller_Helper_Files::getAllowedFileTypes();
             if (is_null($allowedFileTypes) || empty($allowedFileTypes)) {
                 $log->debug('no filetypes are allowed');
@@ -116,10 +116,10 @@ class Controller_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
             return false;
         }
 
-        if ($ignoreAllowedFiletypes) {
+        if ($ignoreAllowedTypes) {
             return true;
         }
-        
+
         foreach ($allowedFileTypes as $fileType) {
             if (fnmatch('*.' . $fileType, $file->getFilename())) {
                 $log->debug($logMessage . ' : OK');

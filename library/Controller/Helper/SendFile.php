@@ -140,17 +140,17 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
         $response->setHeader('Content-Length', filesize($file), true);
         $response->sendHeaders();
 
-        $fp = fopen($file, 'rb');
-        if ($fp === false) {
+        $filePointer = fopen($file, 'rb');
+        if ($filePointer === false) {
             throw new Exception('fopen failed.');
         }
 
-        $retval = fpassthru($fp);
+        $retval = fpassthru($filePointer);
         if ($retval === false) {
             throw new Exception('fpassthru failed.');
         }
-        
-        fclose($fp);
+
+        fclose($filePointer);
         exit;
     }
 

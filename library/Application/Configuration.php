@@ -48,7 +48,7 @@ class Application_Configuration {
      * @var Zend_Log
      */
     private $_logger = null;
-    
+
     /**
      * Unterstützte Sprachen.
      * @var array
@@ -78,7 +78,7 @@ class Application_Configuration {
     public function setLogger($logger) {
         $this->_logger = $logger;
     }
-    
+
     /**
      * Liefert die Konfiguration für Applikation.
      * @return Zend_Config
@@ -86,7 +86,7 @@ class Application_Configuration {
     public function getConfig() {
         return Zend_Registry::get('Zend_Config');
     }
-    
+
     /**
      * Liefert die Sprachen, die von OPUS unterstützt werden.
      * @return array
@@ -106,7 +106,7 @@ class Application_Configuration {
         }
         return $this->_supportedLanguages;
     }
-    
+
     /**
      * Prüft, ob eine Sprache unterstützt wird.
      * @param string $language Sprachcode (z.B. 'en')
@@ -148,7 +148,7 @@ class Application_Configuration {
     public static function getOpusVersion() {
         $config = Zend_Registry::get('Zend_Config');
         $localVersion = $config->version;
-        return (is_null($localVersion)) ? 'unknown' : $version = $localVersion;
+        return (is_null($localVersion)) ? 'unknown' : $localVersion;
     }
 
     /**
@@ -159,5 +159,5 @@ class Application_Configuration {
         $info['admin_info_version'] = self::getOpusVersion();
         return $info;
     }
-        
+
 }

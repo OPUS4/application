@@ -36,11 +36,13 @@ class Application_View_Helper_FileSize extends Zend_View_Helper_Abstract {
     private $_labels = array("Byte", "KB", "MB", "GB");
 
     /**
-     * Return the hostname of the application.
+     * Formats file size for output.
      *
-     * @return Base url string.
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter) // Variables part of interface
      */
-    public function fileSize($name, $value = 0, $options = null) {
+    public function fileSize($value = 0) {
         $labelIndex = 0;
         $maxIndex = count($this->_labels) - 1;
         while ($value >= 1024 && $labelIndex < $maxIndex) {
