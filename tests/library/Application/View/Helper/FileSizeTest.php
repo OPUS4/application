@@ -42,26 +42,26 @@ class Application_View_Helper_FileSizeTest extends ControllerTestCase {
     }
 
     public function testByte() {
-        $this->assertEquals('100 Byte', $this->helper->fileSize(null, 100));
+        $this->assertEquals('100 Byte', $this->helper->fileSize(100));
     }
 
     public function testKByte() {
-        $this->assertEquals('1 KB', $this->helper->fileSize(null, 1024));
-        $this->assertEquals('1.5 KB', $this->helper->fileSize(null, 1024 * 1.5));
+        $this->assertEquals('1 KB', $this->helper->fileSize(1024));
+        $this->assertEquals('1.5 KB', $this->helper->fileSize(1024 * 1.5));
     }
 
     public function testMByte() {
-        $this->assertEquals('3.46 MB', $this->helper->fileSize(null, 1024 * 1024 * 3.46));
-        $this->assertEquals('2 MB', $this->helper->fileSize(null, 1024 * 1024 * 2));
+        $this->assertEquals('3.46 MB', $this->helper->fileSize(1024 * 1024 * 3.46));
+        $this->assertEquals('2 MB', $this->helper->fileSize(1024 * 1024 * 2));
     }
 
     public function testGByte() {
-        $this->assertEquals('1 GB', $this->helper->fileSize(null, 1024 * 1024 * 1024));
-        $this->assertEquals('1.49 GB', $this->helper->fileSize(null, 1600000000));
+        $this->assertEquals('1 GB', $this->helper->fileSize(1024 * 1024 * 1024));
+        $this->assertEquals('1.49 GB', $this->helper->fileSize(1600000000));
     }
 
     public function testTByte() {
-        $this->assertEquals('1024 GB', $this->helper->fileSize(null, 1024 * 1024 * 1024 * 1024));
+        $this->assertEquals('1024 GB', $this->helper->fileSize(1024 * 1024 * 1024 * 1024));
     }
 
 }

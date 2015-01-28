@@ -120,6 +120,8 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
      * Delivers the file via function "fpassthru()".
      *
      * @param string $file
+     *
+     * @SuppressWarnings(PHPMD.ExitExpression)
      */
     private function sendFileViaFpassthru($file) {
         $response = $this->getResponse();
@@ -151,7 +153,7 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
         }
 
         fclose($filePointer);
-        exit;
+        exit; // needed for preventing broken downloads (OPUSVIER-1806)
     }
 
     /**
