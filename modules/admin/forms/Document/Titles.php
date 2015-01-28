@@ -42,6 +42,9 @@
  * 
  * Der Typ eines Titels kann später nicht mehr geändert werden. Die Felder fuer die verschiedenen Titeltypen setzen
  * den Wert vom Feld 'Type' eines Titels automatisch.
+ *
+ * @category    Application
+ * @package     Module_Admin
  */
 class Admin_Form_Document_Titles extends Admin_Form_Document_Section {
     

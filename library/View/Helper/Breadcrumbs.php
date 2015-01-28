@@ -34,6 +34,9 @@
 
 /**
  * View Helper um Breadcrumbs in Administration zu rendern.
+ *
+ * @category    Application
+ * @package     View
  */
 class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
     

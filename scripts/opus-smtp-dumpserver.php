@@ -26,6 +26,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
+ * @package     Scripts
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @copyright   Copyright (c) 2009, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -36,6 +37,7 @@
  * A dummy SMTP server that does not actually send mails.
  *
  * @category    Application
+ * @package     Scripts
  */
 class FakeSMTP {
 

@@ -37,6 +37,9 @@
 
 /**
  * Administrative work with document metadata.
+ *
+ * @category    Application
+ * @package     Module_Admin
  */
 class Admin_DocumentsController extends Controller_Action {
     

@@ -37,6 +37,9 @@
  *
  * Diese Klasse überschreibt ein paar Funktion von Admin_Form_Document_MultiSubForm um Unterformulare vom richtigen Typ
  * zu verwenden und die richtigen Werte aus dem Modell zu holen.
+ *
+ * @category    Application
+ * @package     Module_Admin
  */
 class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
 

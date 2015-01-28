@@ -28,7 +28,7 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Sascha Szott <szott@zib.de>
- * @author         Thoralf Klein <thoralf.klein@zib.de>
+ * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
  * @author      Tobias Tappe <tobias.tappe@uni-bielefeld.de>
  * @author      Jens Schwidder <schwidder@zib.de>
@@ -40,6 +40,8 @@
 /**
  * Controller for administration of collections.
  *
+ * @category    Application
+ * @package     Module_Admin
  */
 class Admin_CollectionController extends Controller_Action {
 

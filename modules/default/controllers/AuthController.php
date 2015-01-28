@@ -37,6 +37,8 @@
 /**
  * Provides actions for basic authenticating login and logout.
  *
+ * @category    Application
+ * @package     Module_Default
  */
 class AuthController extends Controller_Action {
 

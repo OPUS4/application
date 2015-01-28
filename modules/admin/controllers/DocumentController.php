@@ -34,6 +34,9 @@
 
 /**
  * Controller for showing and editing a document in the administration.
+ *
+ * @category    Application
+ * @package     Module_Admin
  */
 class Admin_DocumentController extends Controller_Action {
 

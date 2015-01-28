@@ -34,6 +34,9 @@
 
 /**
  * Unterformular fuer das Editieren eines Stichwortes.
+ *
+ * @category    Application
+ * @package     Module_Admin
  */
 class Admin_Form_Document_Subject extends Admin_Form_AbstractModelSubForm {
 
