@@ -42,9 +42,10 @@ class Application_View_Helper_FileSize extends Zend_View_Helper_Abstract {
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter) // Variables part of interface
      */
-    public function fileSize($value = 0) {
+    public function fileSize($name, $value = 0, $options = null) {
         $labelIndex = 0;
         $maxIndex = count($this->_labels) - 1;
+
         while ($value >= 1024 && $labelIndex < $maxIndex) {
             $labelIndex++;
             $value = $value / 1024;
