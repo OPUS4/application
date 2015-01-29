@@ -42,7 +42,7 @@
     <td id="<?= $formId . 'Label' ?>" class="label"><?= $this->fileLink('FileLink-' . $file->getId(),
             $file, array('useFileLabel' => true))
         ?></td>
-    <td id="<?= $formId . 'FileSize' ?>" class="filesize"><?= $this->fileSize($file->getFileSize()) ?></td>
+    <td id="<?= $formId . 'FileSize' ?>" class="filesize"><?= $this->fileSize(null, $file->getFileSize()) ?></td>
     <td id="<?= $formId . 'MimeType' ?>" class="mimetype"><?= htmlspecialchars($file->getMimeType()) ?></td>
     <td id="<?= $formId . 'Language' ?>" class="language"
         ><?= is_null($file->getLanguage()) ? '-' : $this->translate($file->getLanguage()) ?></td>
