@@ -30,6 +30,8 @@
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
+ *
+ * The values of the options must be existing Collection field names that are separated by commas.
  */
 class Form_Element_CollectionDisplayFormat extends Form_Element_Select {
 
@@ -37,14 +39,14 @@ class Form_Element_CollectionDisplayFormat extends Form_Element_Select {
         parent::init();
 
         $options = array(
-            'Name',
-            'Number',
-            'NameNumber',
-            'NumberName'
+            'Name' => 'Name',
+            'Number' => 'Number',
+            'Name,Number' => 'NameNumber',
+            'Number,Name' => 'NumberName'
         );
 
-        foreach ($options as $option) {
-            $this->addMultiOption($option, $option);
+        foreach ($options as $value => $label) {
+            $this->addMultiOption($value, $label);
         }
     }
 
