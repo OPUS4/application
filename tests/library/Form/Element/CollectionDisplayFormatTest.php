@@ -35,8 +35,11 @@ class Form_Element_CollectionDisplayFormatTest extends FormElementTestCase {
 
     private $keys = null;
 
+    private $values = null;
+
     public function setUp() {
         $this->keys = array('Name', 'Number', 'NameNumber', 'NumberName');
+        $this->values = array('Name', 'Number', 'Name,Number', 'Number,Name');
 
         $this->_formElementClass = 'Form_Element_CollectionDisplayFormat';
         $this->_expectedDecoratorCount = 6;
@@ -52,10 +55,10 @@ class Form_Element_CollectionDisplayFormatTest extends FormElementTestCase {
 
         $options = $element->getMultiOptions();
 
-        $this->assertEquals(count($this->keys), count($options));
+        $this->assertEquals(count($this->values), count($options));
 
-        foreach($this->keys as $key) {
-            $this->assertTrue(array_key_exists($key, $options), "Key '$key' is missing.");
+        foreach($this->values as $value) {
+            $this->assertTrue(array_key_exists($value, $options), "Value '$value' is missing.");
         }
     }
 

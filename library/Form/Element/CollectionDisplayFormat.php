@@ -41,11 +41,11 @@ class Form_Element_CollectionDisplayFormat extends Form_Element_Select {
         $options = array(
             'Name' => 'Name',
             'Number' => 'Number',
-            'Name,Number' => 'NameNumber',
-            'Number,Name' => 'NumberName'
+            'NameNumber' => 'Name,Number',
+            'NumberName' => 'Number,Name'
         );
 
-        foreach ($options as $value => $label) {
+        foreach ($options as $label => $value) {
             $this->addMultiOption($value, $label);
         }
     }
