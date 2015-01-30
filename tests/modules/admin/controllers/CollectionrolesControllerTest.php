@@ -325,8 +325,8 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
             'oid' => $roleId,
             'Name' => 'ModifiedName',
             'OaiName' => 'ModifiedOaiName',
-            'DisplayBrowsing' => 'NumberName',
-            'DisplayFrontdoor' => 'NameNumber',
+            'DisplayBrowsing' => 'Number,Name',
+            'DisplayFrontdoor' => 'Name,Number',
             'Visible' => '0',
             'VisibleBrowsingStart' => '0',
             'VisibleFrontdoor' => '1',
@@ -347,8 +347,8 @@ class Admin_CollectionrolesControllerTest extends ControllerTestCase {
 
         $this->assertEquals('ModifiedName', $role->getName());
         $this->assertEquals('ModifiedOaiName', $role->getOaiName());
-        $this->assertEquals('NumberName', $role->getDisplayBrowsing());
-        $this->assertEquals('NameNumber', $role->getDisplayFrontdoor());
+        $this->assertEquals('Number,Name', $role->getDisplayBrowsing());
+        $this->assertEquals('Name,Number', $role->getDisplayFrontdoor());
         $this->assertEquals(0, $role->getVisible());
         $this->assertEquals(0, $role->getVisibleBrowsingStart());
         $this->assertEquals(1, $role->getVisibleFrontdoor());
