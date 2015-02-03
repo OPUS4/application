@@ -42,5 +42,5 @@ class Form_Validate_OrcidTest extends ControllerTestCase {
         $this->assertFalse($validator->isValid('0000000218250097'));
         $this->assertTrue($validator->isValid('0000-0002-1825-0097'));
     }
+
 }
- 

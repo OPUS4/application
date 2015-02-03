@@ -24,8 +24,9 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Tests
  * @author      Michael Lang <lang@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
@@ -33,14 +34,44 @@
 
 class Form_Validate_GndTest extends ControllerTestCase {
 
-    public function testGndValidator() {
-        $validator = new Form_Validate_Gnd();
-        $this->assertFalse($validator->isValid(''));
-        $this->assertFalse($validator->isValid('Hallo'));
-        $this->assertFalse($validator->isValid('123456789012'));
-        $this->assertFalse($validator->isValid('12345AB--6789012'));
-        $this->assertFalse($validator->isValid('118768582'));
-        $this->assertTrue($validator->isValid('118768581'));
+    private $_validator;
+
+    public function setUp() {
+        $this->_validator = new Form_Validate_Gnd();
+
+        parent::setUp();
     }
+
+    public function testIsValidFalseFormat() {
+        $this->assertFalse($this->_validator->isValid(''));
+        $this->assertFalse($this->_validator->isValid('Hallo'));
+        $this->assertFalse($this->_validator->isValid('12345AB--6789012'));
+        $this->assertArrayHasKey('notValidFormat', $this->_validator->getMessages());
+    }
+
+    public function testIsValidFalseChecksum() {
+        $this->assertFalse($this->_validator->isValid('118768582'));
+        $this->assertFalse($this->_validator->isValid('123456789012'));
+        $this->assertArrayHasKey('notValidChecksum', $this->_validator->getMessages());
+    }
+
+    public function testIsValidTrue() {
+        $this->assertTrue($this->_validator->isValid('118768581'));
+        $this->assertTrue($this->_validator->isValid('0095980479X'));
+        $this->assertTrue($this->_validator->isValid('00040303187'));
+    }
+
+    public function testIsValidTrueForShortNumber() {
+        $this->assertTrue($this->_validator->isValid('136307396'));
+        $this->assertTrue($this->_validator->isValid('40303187'));
+    }
+
+    public function testGenerateCheckDigit() {
+        $digit = Form_Validate_Gnd::generateCheckDigit('0095980479');
+        $this->assertEquals('X', $digit);
+
+        $digit = Form_Validate_Gnd::generateCheckDigit('4030318');
+        $this->assertEquals('7', $digit);
+    }
+
 }
- 

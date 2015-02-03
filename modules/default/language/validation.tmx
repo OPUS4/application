@@ -33,7 +33,7 @@
             <seg>Bitte ändern Sie %value% in das Datumsformat %format%.</seg>
         </tuv>
     </tu>
-    
+
     <tu tuid="validation_error_year_invalid_format">
         <tuv xml:lang="en">
             <seg>Please provide a valid year value.</seg>
@@ -41,8 +41,8 @@
         <tuv xml:lang="de">
             <seg>Bitte geben Sie eine gültige Jahreszahl an.</seg>
         </tuv>
-    </tu>    
-    
+    </tu>
+
     <tu tuid="validation_error_year_invalid_negative">
         <tuv xml:lang="en">
             <seg>Please provide a positive year value.</seg>
@@ -50,8 +50,8 @@
         <tuv xml:lang="de">
             <seg>Bitte geben Sie eine positive Jahreszahl an.</seg>
         </tuv>
-    </tu>    
-    
+    </tu>
+
     <tu tuid="validation_error_year_too_large">
         <tuv xml:lang="en">
             <seg>Please provide a year less than 10000.</seg>
@@ -90,7 +90,7 @@
 
     <tu tuid="validation_error_person_orcid">
         <tuv xml:lang="en">
-            <seg>Please provide a valid orcid identifier in format '0000-0000-0000-0000'.</seg>
+            <seg>Please provide a valid ORCID identifier in format '0000-0000-0000-0000'.</seg>
         </tuv>
         <tuv xml:lang="de">
             <seg>Bitte geben Sie eine valide Orc-Id in folgendem Format an: '0000-0000-0000-0000'.</seg>
@@ -99,13 +99,21 @@
 
     <tu tuid="validation_error_person_gnd">
         <tuv xml:lang="en">
-            <seg>Please provide a valid gnd identifier as plain number without separators.</seg>
+            <seg>Please provide a valid GND identifier as plain number without separators.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Bitte geben Sie eine valide Gnd-Id als Ziffernfolge ohne Trennzeichen an.</seg>
+            <seg>Bitte geben Sie eine valide GND-ID als Ziffernfolge ohne Trennzeichen an.</seg>
         </tuv>
     </tu>
 
+    <tu tuid="validation_error_person_gnd_checksum">
+        <tuv xml:lang="en">
+            <seg> The check digit is invalid. Please provide a valid GND identifier.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die Prüfziffer stimmt nicht. Bitte geben Sie eine valide GND-ID als Ziffernfolge ohne Trennzeichen an.</seg>
+        </tuv>
+    </tu>
 
   </body>
 

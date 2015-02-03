@@ -26,20 +26,26 @@
  *
  * @category    Application
  * @author      Michael Lang <lang@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 class Form_Validate_Gnd extends Zend_Validate_Abstract {
 
     /**
-     * Constant for login is not available anymore.
+     * Error message for numbers that are too long.
      */
-    const NOT_VALID = 'isAvailable';
+    const NOT_VALID_FORMAT = 'notValidFormat';
+
+    /**
+     * Error message for numbers that have an invalid check digit.
+     */
+    const NOT_VALID_CHECKSUM = 'notValidChecksum';
 
     protected $_messageTemplates = array(
-        self::NOT_VALID => 'validation_error_person_gnd'
+        self::NOT_VALID_FORMAT => 'validation_error_person_gnd',
+        self::NOT_VALID_CHECKSUM => 'validation_error_person_gnd_checksum'
     );
 
     /**
@@ -50,31 +56,32 @@ class Form_Validate_Gnd extends Zend_Validate_Abstract {
      * @throws Zend_Validate_Exception If validation of $value is impossible
      */
     public function isValid($value) {
-        if (strlen($value) > 11 || strlen($value) < 8) {
-            $this->_error(self::NOT_VALID);
+        if (strlen($value) > 11 || strlen($value) < 8 || !preg_match('/[0-9X]/', $value)) {
+            $this->_error(self::NOT_VALID_FORMAT);
             return false;
         }
-        if ($this->generateCheckDigit($value) != $value{strlen($value) - 1}) {
-            $this->_error(self::NOT_VALID);
-            return false;
-        }
-        return true;
 
+        if (self::generateCheckDigit(substr($value, 0, strlen($value) - 1)) != substr($value, -1)) {
+            $this->_error(self::NOT_VALID_CHECKSUM);
+            return false;
+        }
+
+        return true;
     }
 
     /**
-      * Calculates the GND check digit.
-      */
-    public static function generateCheckDigit($baseDigits) {
+     * Calculates the GND check digit.
+     */
+    public static function generateCheckDigit($number) {
         $total = 0;
-        $weight = 11;
-        for ($i = 0; $i < strlen($baseDigits) - 1; $i++) {
-            $digit = intval($baseDigits{$i});
-            $total += $digit * ($weight - $i);
+        $weight = 11 - (10 - strlen($number));
+        for ($i = 0; $i < strlen($number); $i++) {
+            $digit = intval($number{$i});
+            $total += $digit * $weight;
+            $weight--;
         }
         $remainder = $total % 11;
         $result = (11 - $remainder) % 11;
-        $r = $result == 10 ? "X" : (string) $result;
         return $result == 10 ? "X" : (string) $result;
     }
 
