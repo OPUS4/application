@@ -97,6 +97,15 @@
         </tuv>
     </tu>
 
+    <tu tuid="validation_error_person_orcid_checksum">
+        <tuv xml:lang="en">
+            <seg>The check digit of the ORC-ID is invalid. Please check the number.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Die Prüfziffer der ORC-ID stimmt nicht.</seg>
+        </tuv>
+    </tu>
+
     <tu tuid="validation_error_person_gnd">
         <tuv xml:lang="en">
             <seg>Please provide a valid GND identifier as plain number without separators.</seg>

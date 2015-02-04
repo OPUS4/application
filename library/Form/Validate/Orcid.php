@@ -26,20 +26,42 @@
  *
  * @category    Application
  * @author      Michael Lang <lang@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+/**
+ * Class Form_Validate_Orcid
+ *
+ * @category    Application
+ * @package     Form_Validate
+ */
 class Form_Validate_Orcid extends Zend_Validate_Abstract {
 
     /**
-     * Constant for login is not available anymore.
+     * Constant for message for invalid format.
      */
-    const NOT_VALID = 'isAvailable';
+    const NOT_VALID_FORMAT = 'notValidFormat';
 
+    /**
+     * Constant for message for invalid checksum.
+     */
+    const NOT_VALID_CHECKSUM = 'notValidChecksum';
+
+    /**
+     * Pattern for checking ORC-ID format.
+     */
+    const PATTERN = '/\d{4}-\d{4}-\d{4}-\d{3}[0-9X]/';
+
+    /**
+     * Translation keys for validation messages.
+     * @var array
+     */
     protected $_messageTemplates = array(
-        self::NOT_VALID => 'validation_error_person_orcid'
+        self::NOT_VALID_FORMAT => 'validation_error_person_orcid',
+        self::NOT_VALID_CHECKSUM => 'validation_error_person_orcid_checksum'
     );
 
     /**
@@ -50,24 +72,29 @@ class Form_Validate_Orcid extends Zend_Validate_Abstract {
      * @throws Zend_Validate_Exception If validation of $value is impossible
      */
     public function isValid($value) {
-        if (strlen($value) != 19) {
-            $this->_error(self::NOT_VALID);
+        if (strlen($value) != 19 || !preg_match(self::PATTERN, $value)) {
+            $this->_error(self::NOT_VALID_FORMAT);
             return false;
         }
-        if ($this->generateCheckDigit($value) != $value{18}) {
-            $this->_error(self::NOT_VALID);
+
+        if ($this->generateCheckDigit(substr($value, 0, 18)) != substr($value, -1)) {
+            $this->_error(self::NOT_VALID_CHECKSUM);
             return false;
         }
+
         return true;
 
     }
 
     /**
-      * Generates the orcid check digit.
-      */
+     * Generates the ORC-ID check digit.
+     *
+     * @param string number without check digit
+     * @return string check digit
+     */
     public static function generateCheckDigit($baseDigits) {
         $total = 0;
-        for ($i = 0; $i < strlen($baseDigits) - 1; $i++) {
+        for ($i = 0; $i < strlen($baseDigits); $i++) {
             if ($baseDigits{$i} != '-') {
                 $digit = intval($baseDigits{$i});
                 $total = ($total + $digit) * 2;
@@ -75,7 +102,6 @@ class Form_Validate_Orcid extends Zend_Validate_Abstract {
         }
         $remainder = $total % 11;
         $result = (12 - $remainder) % 11;
-        $r = $result == 10 ? "X" : (string) $result;
         return $result == 10 ? "X" : (string) $result;
     }
 
