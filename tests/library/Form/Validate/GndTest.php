@@ -46,13 +46,16 @@ class Form_Validate_GndTest extends ControllerTestCase {
         $this->assertFalse($this->_validator->isValid(''));
         $this->assertFalse($this->_validator->isValid('Hallo'));
         $this->assertFalse($this->_validator->isValid('12345AB--6789012'));
+        $this->assertFalse($this->_validator->isValid('123456789012'));
         $this->assertArrayHasKey('notValidFormat', $this->_validator->getMessages());
+        $this->assertCount(1, $this->_validator->getMessages());
     }
 
     public function testIsValidFalseChecksum() {
         $this->assertFalse($this->_validator->isValid('118768582'));
-        $this->assertFalse($this->_validator->isValid('123456789012'));
+        $this->assertFalse($this->_validator->isValid('00959804798'));
         $this->assertArrayHasKey('notValidChecksum', $this->_validator->getMessages());
+        $this->assertCount(1, $this->_validator->getMessages());
     }
 
     public function testIsValidTrue() {

@@ -43,6 +43,16 @@ class Form_Validate_Gnd extends Zend_Validate_Abstract {
      */
     const NOT_VALID_CHECKSUM = 'notValidChecksum';
 
+    /**
+     * Pattern for format checking.
+     */
+    const PATTERN = '/\d{7,11}[0-9X]/';
+
+    /**
+     * Translation keys for validation errors.
+     *
+     * @var array
+     */
     protected $_messageTemplates = array(
         self::NOT_VALID_FORMAT => 'validation_error_person_gnd',
         self::NOT_VALID_CHECKSUM => 'validation_error_person_gnd_checksum'
@@ -56,7 +66,7 @@ class Form_Validate_Gnd extends Zend_Validate_Abstract {
      * @throws Zend_Validate_Exception If validation of $value is impossible
      */
     public function isValid($value) {
-        if (strlen($value) > 11 || strlen($value) < 8 || !preg_match('/[0-9X]/', $value)) {
+        if (strlen($value) > 11 || strlen($value) < 8 || !preg_match(self::PATTERN, $value)) {
             $this->_error(self::NOT_VALID_FORMAT);
             return false;
         }
