@@ -47,6 +47,7 @@ class Form_Validate_GndTest extends ControllerTestCase {
         $this->assertFalse($this->_validator->isValid('Hallo'));
         $this->assertFalse($this->_validator->isValid('12345AB--6789012'));
         $this->assertFalse($this->_validator->isValid('123456789012'));
+        $this->assertFalse($this->_validator->isValid('009598X4798'));
         $this->assertArrayHasKey('notValidFormat', $this->_validator->getMessages());
         $this->assertCount(1, $this->_validator->getMessages());
     }
