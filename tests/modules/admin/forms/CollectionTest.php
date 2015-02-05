@@ -107,4 +107,35 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $this->assertEquals('opus4-matheon', $model->getTheme());
     }
 
+    public function testValidationSuccess() {
+        $form = new Admin_Form_Collection();
+
+        $this->assertTrue($form->isValid(array(
+            'Name' => 'ColName'
+        )));
+
+        $this->assertTrue($form->isValid(array(
+            'Number' => 'ColNumber'
+        )));
+
+        $this->assertTrue($form->isValid(array(
+            'Name' => 'ColName',
+            'Number' => 'ColNumber'
+        )));
+    }
+
+    public function testValidationFailure() {
+        $form = new Admin_Form_Collection();
+
+        $this->assertFalse($form->isValid(array()));
+
+        $errors = $form->getErrors('Name');
+        $this->assertNotNull($errors);
+        $this->assertContains('allElementsEmpty', $errors);
+
+        $errors = $form->getErrors('Number');
+        $this->assertNotNull($errors);
+        $this->assertContains('allElementsEmpty', $errors);
+    }
+
 }

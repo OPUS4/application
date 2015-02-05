@@ -606,5 +606,24 @@
                 <seg>Nach Nummer sortieren (abwärts)</seg>
             </tuv>
         </tu>
+
+        <tu tuid="admin_collection_info_name_or_number_required">
+            <tuv xml:lang="en">
+                <seg>A Name and/or a Number must be entered.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Entweder der Name oder die Nummer müssen mindestens angegeben werden.</seg>
+            </tuv>
+        </tu>
+
+        <tu tuid="admin_collection_error_name_or_number_required">
+            <tuv xml:lang="en">
+                <seg>Please enter a name and/or a number for the collection.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Bitte geben Sie einen Namen und/oder eine Nummer für die Sammlung ein.</seg>
+            </tuv>
+        </tu>
+
     </body>
 </tmx>

@@ -46,8 +46,16 @@ class Admin_Form_Collection extends Application_Form_Model_Abstract {
 
         $this->setUseNameAsLabel(true);
 
-        $this->addElement('text', self::ELEMENT_NAME, array('size' => 70));
-        $this->addElement('text', self::ELEMENT_NUMBER, array('size' => 30));
+        $name = $this->createElement('text', self::ELEMENT_NAME, array('size' => 70, 'required' => true));
+        $name->setValidators(array(new Form_Validate_AtLeastOneNotEmpty(array('Name', 'Number'))));
+        $name->setDescription('admin_collection_info_name_or_number_required');
+        $this->addElement($name);
+
+        $number = $this->createElement('text', self::ELEMENT_NUMBER, array('size' => 30, 'required' => true));
+        $number->setValidators(array(new Form_Validate_AtLeastOneNotEmpty(array('Name', 'Number'))));
+        $number->setDescription('admin_collection_info_name_or_number_required');
+        $this->addElement($number);
+
         $this->addElement('checkbox', self::ELEMENT_VISIBLE);
         $this->addElement('checkbox', self::ELEMENT_VISIBLE_PUBLISH);
         $this->addElement('text', self::ELEMENT_OAI_SUBSET, array('size' => 50));
