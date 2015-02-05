@@ -13,6 +13,7 @@
         <directory>./scripts</directory>
         <directory>./library</directory>
         <directory>./modules</directory>
+        <directory>./security</directory>
     </testsuite>
 
     <!-- Define directories/files filter for code coverage. -->
