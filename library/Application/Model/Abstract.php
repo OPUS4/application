@@ -27,7 +27,7 @@
 
 /**
  * Abstract base class for model classes.
- * 
+ *
  * @category    Application
  * @package     Application_Model
  * @author      Jens Schwidder <schwidder@zib.de>
@@ -42,6 +42,12 @@ abstract class Application_Model_Abstract {
      * @var Zend_Log
      */
     private $_logger;
+
+    /**
+     * Configuration for application.
+     * @var Zend_Config
+     */
+    private $_config;
 
     /**
      * Set logger for this class.
@@ -61,6 +67,26 @@ abstract class Application_Model_Abstract {
         }
 
         return $this->_logger;
+    }
+
+    /**
+     * Sets configuration.
+     * @param $config Zend_Config
+     */
+    public function setConfig($config) {
+        $this->_config = $config;
+    }
+
+    /**
+     * Returns configuration object for application.
+     * @return Zend_Config
+     * @throws Zend_Exception
+     */
+    public function getConfig() {
+        if (is_null($this->_config)) {
+            $this->_config = Zend_Registry::get('Zend_Config');
+        }
+        return $this->_config;
     }
 
 }

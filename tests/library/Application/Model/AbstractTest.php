@@ -27,7 +27,7 @@
 
 /**
  * Unit Tests fuer abstrakte Basisklasse fuer Modelle.
- * 
+ *
  * @category    Application Unit Test
  * @package     Application_Model
  * @author      Jens Schwidder <schwidder@zib.de>
@@ -36,20 +36,20 @@
  * @version     $Id$
  */
 class Application_Model_AbstractTest extends ControllerTestCase {
-    
-    private $model;
-    
+
+    private $_model;
+
     public function setUp() {
         parent::setUp();
-        $this->model = $this->getModel();
+        $this->_model = $this->getModel();
     }
-    
+
     private function getModel() {
         return $this->getMockForAbstractClass('Application_Model_Abstract');
     }
 
     public function testGetLogger() {
-        $logger = $this->model->getLogger();
+        $logger = $this->_model->getLogger();
 
         $this->assertNotNull($logger);
         $this->assertInstanceOf('Zend_Log', $logger);
@@ -58,10 +58,28 @@ class Application_Model_AbstractTest extends ControllerTestCase {
     public function testSetLogger() {
         $logger = new MockLogger();
 
-        $this->model->setLogger($logger);
+        $this->_model->setLogger($logger);
 
-        $this->assertNotNull($this->model->getLogger());
-        $this->assertInstanceOf('MockLogger', $this->model->getLogger());
+        $this->assertNotNull($this->_model->getLogger());
+        $this->assertInstanceOf('MockLogger', $this->_model->getLogger());
     }
-    
+
+    public function testGetConfig() {
+        $config = $this->_model->getConfig();
+
+        $this->assertInstanceOf('Zend_Config', $config);
+        $this->assertEquals(Zend_Registry::get('Zend_Config'), $config);
+    }
+
+    public function testSetConfig() {
+        $config = new Zend_Config(array());
+
+        $this->_model->setConfig($config);
+
+        $returnedConfig = $this->_model->getConfig();
+
+        $this->assertInstanceOf('Zend_Config', $returnedConfig);
+        $this->assertEquals($config, $returnedConfig);
+    }
+
 }
