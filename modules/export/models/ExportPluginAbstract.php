@@ -47,11 +47,6 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
     private $_name;
 
     /**
-     * @var Zend_Config $config Plugin configuration.
-     */
-    private $_config;
-
-    /**
      * @var Zend_Controller_Request_Http Current request.
      */
     private $_request;
@@ -80,27 +75,6 @@ abstract class Export_Model_ExportPluginAbstract extends Application_Model_Abstr
      */
     public function setName($name) {
         $this->_name = $name;
-    }
-
-    /**
-     * Sets the plugin configuration.
-     * @param Zend_Config $config
-     */
-    public function setConfig(Zend_Config $config) {
-        $this->_config = $config;
-    }
-
-    /**
-     * Returns the plugin configuration.
-     * @return mixed|Zend_Config
-     * @throws Zend_Exception
-     * TODO access to global config just for convenience; should be removed
-     */
-    public function getConfig() {
-        if (is_null($this->_config)) {
-            $this->_config = Zend_Registry::get('Zend_Config');
-        }
-        return $this->_config;
     }
 
     /**
