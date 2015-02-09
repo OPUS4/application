@@ -73,7 +73,7 @@ abstract class Application_Model_Abstract {
      * Sets configuration.
      * @param $config Zend_Config
      */
-    public function setConfig($config) {
+    public function setConfig(Zend_Config $config) {
         $this->_config = $config;
     }
 
