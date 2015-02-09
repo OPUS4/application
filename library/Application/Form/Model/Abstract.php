@@ -73,6 +73,12 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
     private $_modelClass;
 
     /**
+     * Most model IDs are numeric. If not set to false;
+     * @var bool
+     */
+    private $_verifyModelIdIsNumeric = true;
+
+    /**
      * Initialisiert die Formularelement und Dekoratoren.
      */
     public function init() {
@@ -178,11 +184,13 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
      * Es wird nicht geprüft, ob fuer die ID ein Model existiert. Es geht darum die Funktion ueberschreiben zu koennen
      * fuer Klassen die nicht numerische Identifier verwenden.
      *
+     * TODO support arbitrary validator (Zend) to check model ID
+     *
      * @param $modelId
      * @throws Application_Exception
      */
     protected function validateModelId($modelId) {
-        if (!is_null($modelId) && !is_numeric($modelId)) {
+        if (!is_null($modelId) && !is_numeric($modelId) && $this->getVerifyModelIdIsNumeric()) {
             throw new Application_Exception(__METHOD__ . ' Model-ID must be numeric.');
         }
     }
@@ -210,6 +218,22 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
         parent::prepareRenderingAsView();
         $this->removeDecorator('Form');
         $this->removeDisplayGroup('actions');
+    }
+
+    /**
+     * Set if model ID should be validated as numeric value.
+     * @param $enabled true to enable, false to disable model ID validation
+     */
+    public function setVerifyModelIdIsNumeric($enabled) {
+        $this->_verifyModelIdIsNumeric = $enabled;
+    }
+
+    /**
+     * Return setting for verifying model Ids as numeric values.
+     * @return bool true - Model ID must be numeric; false - Model ID not verified
+     */
+    public function getVerifyModelIdIsNumeric() {
+        return $this->_verifyModelIdIsNumeric;
     }
 
 }

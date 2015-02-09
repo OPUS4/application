@@ -146,5 +146,52 @@ class Application_Form_Model_AbstractTest extends ControllerTestCase {
         $this->assertNull($this->form->getDisplayGroup('actions'));
     }
 
+    public function testSetGetVerifyModelIdIsNumeric() {
+        $value = $this->form->getVerifyModelIdIsNumeric();
+
+        $this->assertTrue($value);
+
+        $this->form->setVerifyModelIdIsNumeric(false);
+
+        $value = $this->form->getVerifyModelIdIsNumeric();
+
+        $this->assertFalse($value);
+    }
+
+    public function testValidateModelIdValidMustBeNumeric() {
+        $method = new ReflectionMethod('Application_Form_Model_Abstract', 'validateModelId');
+        $method->setAccessible(true);
+
+        $this->assertNull($method->invoke($this->form, '123'));
+    }
+
+    public function testValidateModelIdValidNonNumeric() {
+        $method = new ReflectionMethod('Application_Form_Model_Abstract', 'validateModelId');
+        $method->setAccessible(true);
+
+        $this->form->setVerifyModelIdIsNumeric(false);
+        $this->assertNull($method->invoke($this->form, 'enrichment'));
+    }
+
+    /**
+     * @expectedException Application_Exception
+     * @expectedExceptionMessage Model-ID must be numeric.
+     */
+    public function testValidateModelIdNotValidNonNumeric() {
+        $method = new ReflectionMethod('Application_Form_Model_Abstract', 'validateModelId');
+        $method->setAccessible(true);
+
+        $method->invoke($this->form, 'enrichment');
+    }
+
+    public function testValidateModelIdForNull() {
+        $method = new ReflectionMethod('Application_Form_Model_Abstract', 'validateModelId');
+        $method->setAccessible(true);
+
+        $this->assertNull($method->invoke($this->form, null));
+
+        $this->form->setVerifyModelIdIsNumeric(false);
+        $this->assertNull($method->invoke($this->form, null));
+    }
 }
 
