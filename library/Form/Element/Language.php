@@ -33,7 +33,7 @@
  */
 
 /**
- * 
+ *
  */
 class Form_Element_Language extends Form_Element_Select {
 
@@ -41,7 +41,9 @@ class Form_Element_Language extends Form_Element_Select {
 
     public function init() {
         parent::init();
-        
+
+        $this->setLabel($this->getView()->translate($this->getName()));
+
         $this->setDisableTranslator(true); // languages are already translated
 
         foreach ($this->getLanguageList() as $index => $language) {

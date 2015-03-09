@@ -33,25 +33,25 @@
  */
 
 /**
- * 
+ *
  */
 class Form_Element_DocumentType extends Form_Element_Select {
-    
+
     public function init() {
         parent::init();
-        
-        $this->setLabel($this->getName());
+
+        $this->setLabel($this->getView()->translate($this->getLabel()));
         $this->setRequired(true);
 
         $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
-        
+
         $options = $docTypeHelper->getDocumentTypes();
-        
+
         foreach ($options as $index => $type) {
             $this->addMultiOption($index, $type);
         }
 
         $this->setDisableTranslator(true); // document types already translated after addMultiOption
     }
-    
+
 }
