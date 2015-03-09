@@ -34,6 +34,7 @@
 
 /**
  *
+ * TODO override setLabel for more robust translation
  */
 class Form_Element_DocumentType extends Form_Element_Select {
 
