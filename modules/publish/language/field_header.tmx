@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
- 
+
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
-  
+
   <body>
 <!-- This language file contains all texts concerning field hints. -->
 
@@ -40,7 +40,7 @@
         <seg>Granting a simple right of use</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Einräumnung eines einfachen Nutzungsrechts</seg>
+        <seg>Einräumung eines einfachen Nutzungsrechts</seg>
       </tuv>
     </tu>
 
@@ -49,7 +49,7 @@
         <seg>Granting a simple right of use</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Einräumnung eines einfachen Nutzungsrechts</seg>
+        <seg>Einräumung eines einfachen Nutzungsrechts</seg>
       </tuv>
     </tu>
 
@@ -82,7 +82,7 @@
 
 <!-- BEGIN OF COMMENT
     Language keys can be used after the corresponding Enrichment keys
-    were created in administration -> Enrichments. 
+    were created in administration -> Enrichments.
 
     <tu tuid="header_EnrichmentNeuesFeld">
       <tuv xml:lang="en">
@@ -175,7 +175,7 @@ END OF COMMENT -->
         <seg>DDC Sachgruppen</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="groupSubjectJEL">
       <tuv xml:lang="en">
         <seg>JEL Classification</seg>
@@ -211,7 +211,7 @@ END OF COMMENT -->
         <seg>BKL Klassifikation</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="groupSubjectUncontrolled">
       <tuv xml:lang="en">
         <seg>Tag(s)</seg>
@@ -464,7 +464,7 @@ END OF COMMENT -->
         <seg>Alter Identifier des Dokuments</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="header_IdentifierUrn">
       <tuv xml:lang="en">
         <seg>URN of document</seg>
@@ -509,7 +509,7 @@ END OF COMMENT -->
         <seg>OPAC-Nummer des Dokuments</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="header_IdentifierSerial">
       <tuv xml:lang="en">
         <seg>Serial Number of document</seg>
@@ -518,7 +518,7 @@ END OF COMMENT -->
         <seg>Sequenznummer des Dokuments</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="header_IdentifierUuid">
       <tuv xml:lang="en">
         <seg>Uuid of document</seg>
@@ -527,7 +527,7 @@ END OF COMMENT -->
         <seg>Uuid des Dokuments</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="header_IdentifierDoi">
       <tuv xml:lang="en">
         <seg>DOI of document</seg>
@@ -536,7 +536,7 @@ END OF COMMENT -->
         <seg>DOI des Dokuments</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="header_IdentifierHandle">
       <tuv xml:lang="en">
         <seg>Handle of document</seg>
@@ -545,7 +545,7 @@ END OF COMMENT -->
         <seg>Handle des Dokuments</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="header_IdentifierStdDoi">
       <tuv xml:lang="en">
         <seg>StdDoi of document</seg>
@@ -554,7 +554,7 @@ END OF COMMENT -->
         <seg>StdDoi des Dokuments</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="header_IdentifierCrisLink">
       <tuv xml:lang="en">
         <seg>CRIS-Link of document</seg>
@@ -563,7 +563,7 @@ END OF COMMENT -->
         <seg>CRIS-Link des Dokuments</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="header_IdentifierSplashUrl">
       <tuv xml:lang="en">
         <seg>Splash URL of document</seg>
@@ -572,7 +572,7 @@ END OF COMMENT -->
         <seg>Splash-URL des Dokuments</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="header_IdentifierPubmed">
       <tuv xml:lang="en">
         <seg>Pubmed ID of document</seg>
@@ -581,7 +581,7 @@ END OF COMMENT -->
         <seg>Pubmed-ID des Dokuments</seg>
       </tuv>
     </tu>
-	
+
 	<tu tuid="header_IdentifierArxiv">
       <tuv xml:lang="en">
         <seg>Arxiv ID of document</seg>
@@ -618,7 +618,7 @@ END OF COMMENT -->
         <seg>Titel verleihende Institution</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="header_ThesisGrantor">
       <tuv xml:lang="en">
         <seg>Granting Institution</seg>
@@ -636,7 +636,7 @@ END OF COMMENT -->
         <seg>Veröffentlichende Institution</seg>
       </tuv>
     </tu>
-	
+
     <tu tuid="header_ThesisPublisher">
       <tuv xml:lang="en">
         <seg>Publishing Institution</seg>
