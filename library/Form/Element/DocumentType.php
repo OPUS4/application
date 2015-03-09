@@ -41,7 +41,7 @@ class Form_Element_DocumentType extends Form_Element_Select {
     public function init() {
         parent::init();
 
-        $this->setLabel($this->getView()->translate($this->getLabel()));
+        $this->setLabel($this->getView()->translate($this->getName()));
         $this->setRequired(true);
 
         $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
