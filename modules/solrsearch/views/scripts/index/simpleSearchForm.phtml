@@ -59,7 +59,7 @@ if ($this->jQueryEnabled()) {
                     if (isset($this->totalNumOfDocs)) {
                         $searchAllDocsText .= '&nbsp;(<span id="solrsearch-totalnumofdocs">' . $this->totalNumOfDocs . '</span>)';
                     }
-                ?>                
+                ?>
                 <a id="link-solrsearch-all-documents" class="link" href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'all'),null,true); ?>"><?= $searchAllDocsText; ?></a>
                 <a class="link" href="<?= $this->url(array('module' => 'solrsearch', 'controller' => 'index', 'action' => 'search', 'searchtype' => 'latest'),null,true); ?>"><?= $this->translate('solrsearch_title_latest'); ?></a>
                 <a href="<?= $this->url(array('module' => 'rss', 'controller' => 'index', 'action' => 'index'), null, true) ?>" class="rss" type="application/rss+xml">
@@ -68,7 +68,6 @@ if ($this->jQueryEnabled()) {
             </p>
 
             <input type="hidden" name="searchtype" id="searchtype" value="simple" />
-            <input type="hidden" name="rows" id="rows" value="10" />
             <input type="hidden" name="start" id="start" value="0" />
             <input type="hidden" name="sortfield" id="sortfield" value="score" />
             <input type="hidden" name="sordorder" id="sortorder" value="desc" />
