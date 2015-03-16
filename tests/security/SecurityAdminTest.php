@@ -59,7 +59,7 @@ class SecurityAdminTest extends ControllerTestCase {
         $this->assertNotQuery('//a[@href="/admin/dnbinstitute"]');
         $this->assertQuery('//a[@href="/admin/index/info"]'); // Untermenü für Informationen
         $this->assertNotQuery('//a[@href="/review"]');
-        $this->assertQuery('//a[@href="/admin/index/setup"]');
+        $this->assertNotQuery('//a[@href="/admin/index/setup"]');
     }
 
     public function testAccessAccountController() {
