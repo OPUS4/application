@@ -24,24 +24,26 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @category    Tests
+ * @package     Solrsearch_Form
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<?php
-    if($this->searchType === 'simple')
-        include('simpleSearchForm.phtml');
-    else if($this->searchType === 'advanced' || $this->searchType === 'authorsearch')
-        echo $this->form;
-?>
+class Solrsearch_Form_OptionsTest extends ControllerTestCase {
 
-<div class="invalidsearchterm">
-    <h2><?= $this->translate('invalid_search_request_title') ?></h2>
+    public function testInit() {
+        $form = new Solrsearch_Form_Options();
 
-    <p><?= $this->translate('invalid_search_request_message') ?></p>
-</div>
+        $this->assertEquals(3, count($form->getElements()));
+
+        $this->assertNotNull($form->getElement('rows'));
+        $this->assertNotNull($form->getElement('searchtype'));
+        $this->assertNotNull($form->getElement('search'));
+
+        $this->assertEquals('latest', $form->getElement('searchtype')->getValue());
+    }
+
+}

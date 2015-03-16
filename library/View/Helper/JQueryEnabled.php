@@ -27,11 +27,15 @@
  * @category    Application
  * @package     View_Helper
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+/**
+ * Checks if JQuery Library is available.
+ */
 class View_Helper_JQueryEnabled extends Zend_View_Helper_Abstract {
 
     public function jQueryEnabled() {
@@ -39,6 +43,7 @@ class View_Helper_JQueryEnabled extends Zend_View_Helper_Abstract {
         if (!isset($config->javascript->jquery->path)) {
             return false;
         }
-        return is_file(APPLICATION_PATH . '/public/' . $config->javascript->jquery->path);
+        return is_readable(APPLICATION_PATH . '/public/' . $config->javascript->jquery->path);
     }
+
 }

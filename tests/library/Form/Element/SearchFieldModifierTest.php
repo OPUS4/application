@@ -24,24 +24,41 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @category    Application Unit Test
+ * @package     Form_Element
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<?php
-    if($this->searchType === 'simple')
-        include('simpleSearchForm.phtml');
-    else if($this->searchType === 'advanced' || $this->searchType === 'authorsearch')
-        echo $this->form;
-?>
+class Form_Element_SearchFieldModifierTest extends ControllerTestCase {
 
-<div class="invalidsearchterm">
-    <h2><?= $this->translate('invalid_search_request_title') ?></h2>
+    public function testOptions() {
+        $element = new Form_Element_SearchFieldModifier('modifier');
 
-    <p><?= $this->translate('invalid_search_request_message') ?></p>
-</div>
+        $options = $element->getMultiOptions();
+
+        $this->assertCount(3, $options);
+
+        $this->assertNotNull($element->getMultiOption(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL));
+        $this->assertNotNull($element->getMultiOption(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY));
+        $this->assertNotNull($element->getMultiOption(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE));
+    }
+
+    public function testValidationTrue() {
+        $element = new Form_Element_SearchFieldModifier('modifier');
+
+        $this->assertTrue($element->isValid(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL));
+        $this->assertTrue($element->isValid(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY));
+        $this->assertTrue($element->isValid(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE));
+    }
+
+    public function testValidationFalse() {
+        $element = new Form_Element_SearchFieldModifier('modifier');
+
+        $this->assertFalse($element->isValid('anything'));
+    }
+
+
+}

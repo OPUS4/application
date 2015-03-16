@@ -25,23 +25,47 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @package     Form_Element
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<?php
-    if($this->searchType === 'simple')
-        include('simpleSearchForm.phtml');
-    else if($this->searchType === 'advanced' || $this->searchType === 'authorsearch')
-        echo $this->form;
-?>
+/**
+ * Class Form_Element_HitsPerPage
+ *
+ * TODO make options configurable?
+ * TODO limit configurable default value?
+ */
+class Form_Element_HitsPerPage extends Form_Element_Select {
 
-<div class="invalidsearchterm">
-    <h2><?= $this->translate('invalid_search_request_title') ?></h2>
+    public function init() {
+        parent::init();
 
-    <p><?= $this->translate('invalid_search_request_message') ?></p>
-</div>
+        $this->setLabel('advanced_search_form_hits_per_page');
+
+        $options = array('10', '20', '50', '100');
+
+        $defaultRows = Opus_SolrSearch_Query::getDefaultRows();
+
+        if (!in_array($defaultRows, $options)) {
+            $options[] = $defaultRows;
+            sort($options);
+        }
+
+        foreach ($options as $option) {
+            $this->addMultiOption($option, $option);
+        }
+
+        $this->setValue($defaultRows);
+
+        $this->setDecorators(array(
+            'ViewHelper',
+            'Errors',
+            'Description',
+            'Label'
+        ));
+    }
+
+}

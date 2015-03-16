@@ -742,7 +742,8 @@ body > #top-header{
     padding: 5px 0px 0px 0px;
     margin: 0;
 }
-.search_latest_export_xml{
+.search_latest_export_xml {
+    margin-top: 5px;
     float: right;
 }
 #search_export_xml_pic {

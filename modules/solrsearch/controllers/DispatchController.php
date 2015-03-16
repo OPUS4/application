@@ -36,6 +36,8 @@
 
 /**
  * Controller for redirecting search requests in order to create bookmarkable URLs for searches.
+ *
+ * TODO eliminate controller (merge with IndexController, move code to model for testing)
  */
 class Solrsearch_DispatchController extends Controller_Action {
 
@@ -49,9 +51,14 @@ class Solrsearch_DispatchController extends Controller_Action {
 
         $request = $this->getRequest();
 
-        $searchtype = $request->getParam('searchtype', 'invalid searchtype');
+        $searchType = $request->getParam('searchtype', 'invalid searchtype');
 
-        switch ($searchtype) {
+        if (in_array($searchType, array('advanced', 'authorsearch')) && !is_null($this->getParam('Reset'))) {
+            $this->_redirectTo('advanced', null, 'index', 'solrsearch');
+            return;
+        }
+
+        switch ($searchType) {
         case Util_Searchtypes::SIMPLE_SEARCH:
             if (!$searchModel->isSimpleSearchRequestValid($request)) {
                 $action = 'invalidsearchterm';
@@ -65,7 +72,7 @@ class Solrsearch_DispatchController extends Controller_Action {
         case Util_Searchtypes::AUTHOR_SEARCH:
             if (!$searchModel->isAdvancedSearchRequestValid($request)) {
                 $action = 'invalidsearchterm';
-                $params = array('searchtype' =>  $searchtype);
+                $params = array('searchtype' =>  $searchType);
             }
             else {
                 $params = $searchModel->createAdvancedSearchUrlParams($request);
@@ -75,7 +82,7 @@ class Solrsearch_DispatchController extends Controller_Action {
             break;
         }
 
-        return $this->_redirectToPermanentAndExit($action, null, 'index', null, $params);
+        $this->_redirectToPermanentAndExit($action, null, 'index', null, $params);
     }
 
 }

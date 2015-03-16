@@ -29,37 +29,71 @@
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+/**
+ * Main controller for solrsearch module.
+ *
+ * TODO cleanup (e.g. move functions to models, use forms, etc.)
+ */
 class Solrsearch_IndexController extends Controller_Action {
-    
+
     private $_query;
     private $_numOfHits;
     private $_searchtype;
     private $_resultList;
+
+    /**
+     * Model for handling facets.
+     *
+     * @var Solrsearch_Model_FacetMenu
+     */
     private $_facetMenu;
     private $_openFacets;
 
+    /**
+     * Initialize controller.
+     */
     public function  init() {
         parent::init();
+
         $this->_facetMenu = new Solrsearch_Model_FacetMenu();
-        $this->_helper->mainMenu('search');
+
+        $this->_helper->mainMenu('search'); // activate entry in main menu
     }
 
+    /**
+     * Displays simple search form.
+     */
     public function indexAction() {
         $this->view->title = $this->view->translate('solrsearch_title_simple');
     }
 
+    /**
+     * Shows advanced search form.
+     *
+     * TODO make advanced.phtml optional
+     */
     public function advancedAction() {
+        $form = new Solrsearch_Form_AdvancedSearch();
+        $form->setAction($this->view->url(array(
+            'module' => 'solrsearch', 'controller' => 'dispatch', 'action' => 'index'
+        )));
+        $this->view->form = $form;
         $this->view->title = $this->view->translate('solrsearch_title_advanced');
     }
 
     public function invalidsearchtermAction() {
         $this->view->title = $this->view->translate('solrsearch_title_invalidsearchterm');
         $searchtype = $this->getRequest()->getParam('searchtype');
+
+        // TODO create form
+
+
         if ($searchtype === Util_Searchtypes::ADVANCED_SEARCH) {
             $this->view->searchType = Util_Searchtypes::ADVANCED_SEARCH;
         }
@@ -103,19 +137,29 @@ class Solrsearch_IndexController extends Controller_Action {
     public function searchAction() {
         // TODO OPUSVIER-3324 Mischform in der url entfernen
         // check if searchtype = latest and params parsed incorrect
-        if (strpos($this->getRequest()->getParam('searchtype'), 'latest/export') !== false) {
-            $paramArray = explode('/', $this->getParam('searchtype'));
-            $params = $this->getRequest()->getParams();
+        $searchType = $this->getParam('searchtype');
+        $request = $this->getRequest();
+
+        if (in_array($searchType, array('advanced', 'authorsearch')) && !is_null($this->getParam('Reset'))) {
+            return $this->_redirectTo('advanced', null, 'index', 'solrsearch');
+        }
+
+        if (strpos($searchType, 'latest/export') !== false) {
+            $paramArray = explode('/', $searchType);
+            $params = $request->getParams();
             $params['searchtype'] = 'latest';
             $params['export'] = $paramArray[2];
             $params['stylesheet'] = $paramArray[4];
             return $this->redirectToExport($params);
         }
-        if (!is_null($this->getRequest()->getParam('export'))) {
-            $params = $this->getRequest()->getParams();
+
+        if (!is_null($request->getParam('export'))) {
+            $params = $request->getParams();
             // export module ignores pagination parameters
             return $this->redirectToExport($params);
         }
+
+        // TODO does the following make sense after the above?
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->export->stylesheet->search) && Opus_Security_Realm::getInstance()->checkModule('export')) {
             $this->view->stylesheet = $config->export->stylesheet->search;
@@ -128,6 +172,29 @@ class Solrsearch_IndexController extends Controller_Action {
 
         $this->setLinkRelCanonical();
 
+        switch ($searchType) {
+            case 'advanced':
+            case 'authorsearch':
+                $form = new Solrsearch_Form_AdvancedSearch($searchType);
+                $form->populate($this->getAllParams());
+                $form->setAction($this->view->url(array(
+                    'module' => 'solrsearch', 'controller' => 'dispatch', 'action' => 'index'
+                ), null, true));
+                $this->view->form = $form;
+                break;
+            case 'latest':
+                $form = new Solrsearch_Form_Options();
+                $form->setMethod(Zend_FORM::METHOD_GET);
+                $form->setAction($this->view->url(array(
+                    'module' => 'solrsearch', 'controller' => 'index', 'action' => 'search'
+                ), null, true));
+                $form->populate($this->getAllParams());
+                $this->view->form = $form;
+                break;
+            default:
+                break;
+        }
+
         if ($this->_numOfHits === 0 || $this->_query->getStart() >= $this->_numOfHits) {
             $this->render('nohits');
         }
@@ -135,7 +202,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->render('results');
         }
     }
-    
+
     private function setLinkRelCanonical() {
         $query = $this->getRequest()->getParams();
         $query['rows'] = 10;
@@ -177,54 +244,43 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->setUpPagination($nrOfRows, $start, $query);
         }
 
-        if ($this->_searchtype === Util_Searchtypes::SIMPLE_SEARCH
-                || $this->_searchtype === Util_Searchtypes::ALL_SEARCH) {
-            $queryString = $this->_query->getCatchAll();
-            if (trim($queryString) !== '*:*') {
-                $this->view->q = $queryString;
-            }
-            else {
-                $this->view->q = '';
-            }
-            $this->setFilterQueryBaseURL();
-            $browsing = $this->getRequest()->getParam('browsing', 'false');
-            if ($browsing === 'true') {
-                $this->view->specialTitle = $this->view->translate($this->getRequest()->getParam('doctypefq', ''));
-                $this->view->doctype = $this->getRequest()->getParam('doctypefq', null);
-            }
-            return;
-        }
-        if ($this->_searchtype === Util_Searchtypes::ADVANCED_SEARCH
-                || $this->_searchtype === Util_Searchtypes::AUTHOR_SEARCH) {
-            $this->setFilterQueryBaseURL();
-            $this->view->authorQuery = $this->_query->getField('author');
-            $this->view->titleQuery = $this->_query->getField('title');
-            $this->view->abstractQuery = $this->_query->getField('abstract');
-            $this->view->fulltextQuery = $this->_query->getField('fulltext');
-            $this->view->yearQuery = $this->_query->getfield('year');
-            $this->view->authorQueryModifier = $this->_query->getModifier('author');
-            $this->view->titleQueryModifier = $this->_query->getModifier('title');
-            $this->view->abstractQueryModifier = $this->_query->getModifier('abstract');
-            $this->view->yearQueryModifier = $this->_query->getModifier('year');
-            $this->view->refereeQuery = $this->_query->getField('referee');
-            $this->view->refereeQueryModifier = $this->_query->getModifier('referee');
-            $this->view->personsQuery = $this->_query->getField('persons');
-            $this->view->personsQueryModifier = $this->_query->getModifier('persons');
-            return;
-        }
-        if ($this->_searchtype === Util_Searchtypes::COLLECTION_SEARCH
-                || $this->_searchtype === Util_Searchtypes::SERIES_SEARCH) {
-            $this->setFilterQueryBaseURL();
-            return;
-        }
-        if ($this->_searchtype === Util_Searchtypes::LATEST_SEARCH) {
-            $this->view->isSimpleList = true;
-            $this->view->specialTitle = $this->view->translate('title_latest_docs_article') . ' '
-                . $this->_query->getRows(). ' '.$this->view->translate('title_latest_docs');
-            return;
+        switch ($this->_searchtype) {
+            case Util_Searchtypes::SIMPLE_SEARCH:
+            case Util_Searchtypes::ALL_SEARCH:
+                $queryString = $this->_query->getCatchAll();
+                if (trim($queryString) !== '*:*') {
+                    $this->view->q = $queryString;
+                }
+                else {
+                    $this->view->q = '';
+                }
+                $this->setFilterQueryBaseURL();
+                $browsing = $this->getRequest()->getParam('browsing', 'false');
+                if ($browsing === 'true') {
+                    $this->view->specialTitle = $this->view->translate($this->getRequest()->getParam('doctypefq', ''));
+                    $this->view->doctype = $this->getRequest()->getParam('doctypefq', null);
+                }
+                break;
+            case Util_Searchtypes::COLLECTION_SEARCH:
+            case Util_Searchtypes::SERIES_SEARCH:
+                $this->setFilterQueryBaseURL();
+                break;
+            case Util_Searchtypes::LATEST_SEARCH:
+                $this->view->isSimpleList = true;
+                $this->view->specialTitle = $this->view->translate('title_latest_docs_article') . ' '
+                    . $this->_query->getRows(). ' '.$this->view->translate('title_latest_docs');
+                break;
+            default:
+                break;
         }
     }
 
+    /**
+     * Sets up pagination for search results.
+     * @param $rows Number of results per page
+     * @param $startIndex Starting number for first result on current page
+     * @param $query Current query
+     */
     private function setUpPagination($rows, $startIndex, $query) {
         $pagination = new Solrsearch_Model_PaginationUtil(
             $rows, $this->_numOfHits, $startIndex, $query, $this->_searchtype
@@ -256,7 +312,7 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->sortfield = $this->getRequest()->getParam('sortfield', 'score');
         }
         $this->view->sortorder = $this->getRequest()->getParam('sortorder', 'desc');
-        $this->setRssUrl();        
+        $this->setRssUrl();
     }
 
     private function setRssUrl() {
@@ -320,7 +376,7 @@ class Solrsearch_IndexController extends Controller_Action {
         if ($this->_searchtype === Util_Searchtypes::LATEST_SEARCH) {
             return $queryBuilder->createSearchQuery($this->validateInput($queryBuilderInput, 10, 100));
         }
-        
+
         if ($this->_searchtype === Util_Searchtypes::COLLECTION_SEARCH) {
             $this->prepareChildren();
         }
@@ -343,9 +399,8 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->title = $series->getTitle();
         $this->view->seriesId = $series->getId();
         $this->view->infobox = $series->getInfobox();
-        $this->view->logoFilename = $series->getLogoFilename();        
+        $this->view->logoFilename = $series->getLogoFilename();
     }
-
 
     private function prepareChildren() {
         $collectionList = null;
@@ -435,6 +490,8 @@ class Solrsearch_IndexController extends Controller_Action {
      * @param int $upperBoundInclusive The upper bound.
      * @return int Returns the actual rows parameter value or an adjusted value if
      * it is not in the interval [$lowerBoundInclusive, $upperBoundInclusive].
+     *
+     * TODO move validation to form class
      */
     private function validateInput($input, $min = 1, $max = 100) {
         $logger = $this->getLogger();
@@ -454,4 +511,3 @@ class Solrsearch_IndexController extends Controller_Action {
         return $input;
     }
 }
-

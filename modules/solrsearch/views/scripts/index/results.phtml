@@ -28,7 +28,8 @@
  * @package     Module_Solrsearch
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -48,18 +49,37 @@ if($this->jQueryEnabled()) {
     ));
 ?>
 
+<?PHP if ($this->searchType === 'latest' && $this->stylesheet != '') : ?>
+    <div class="search_latest_export_xml">
+        <a href="<?= $this->url(array(
+            'searchtype' => $this->searchType,
+            'rows' => $this->rows,
+            'export' => 'xml',
+            'stylesheet' => $this->stylesheet
+        )) ?>">
+            <img src="<?= $this->layoutPath() . '/img/xml_w.png' ?>" id="search_export_xml_pic" name="xml"
+                 onmouseover="this.src='<?=$this->layoutPath() .  '/img/xml_o.png'?>';"
+                 onmouseout="this.src='<?= $this->layoutPath() .  '/img/xml_w.png'?>';"
+                 title="<?= $this->translate('search_export_xml') ?>"
+                 alt="<?= $this->translate('search_export_xml') ?>"/>
+        </a>
+    </div>
+<?PHP endif ?>
+
 <?php if (isset($this->specialTitle)) : ?>
-<h2><?= htmlspecialchars($this->specialTitle) ?></h2>
+    <h2><?= htmlspecialchars($this->specialTitle) ?></h2>
 <?php endif ?>
 
 <div class="content">
-    <?php
-     if ($this->searchType === 'simple' && !$this->browsing)
+    <?PHP
+    if ($this->searchType === 'simple' && !$this->browsing)
         include('simpleSearchForm.phtml');
-    else if (($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && !$this->browsing)
-        include('advancedSearchForm.phtml');
-    else if ($this->searchType === 'latest')
-        include('latestDocsForm.phtml');
+    else if (($this->searchType === 'advanced' || $this->searchType === 'authorsearch') && !$this->browsing) {
+        echo $this->form;
+    }
+    else if ($this->searchType === 'latest') {
+        echo $this->form;
+    }
     else if ($this->searchType === 'collection')
         include('browsecollection.phtml');
     else if ($this->searchType === 'series')

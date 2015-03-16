@@ -26,22 +26,27 @@
  *
  * @category    Application
  * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<?php
-    if($this->searchType === 'simple')
-        include('simpleSearchForm.phtml');
-    else if($this->searchType === 'advanced' || $this->searchType === 'authorsearch')
-        echo $this->form;
-?>
+/**
+ * Class Form_Element_SearchFieldModifier
+ */
+class Form_Element_SearchFieldModifier extends Form_Element_Select {
 
-<div class="invalidsearchterm">
-    <h2><?= $this->translate('invalid_search_request_title') ?></h2>
+    public function init() {
+        parent::init();
 
-    <p><?= $this->translate('invalid_search_request_message') ?></p>
-</div>
+        $options = array(
+            Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL => 'advanced_search_form_modifier_all',
+            Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY => 'advanced_search_form_modifier_one',
+            Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE => 'advanced_search_form_modifier_none'
+        );
+
+        $this->addMultiOptions($options);
+    }
+
+}

@@ -24,24 +24,53 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Solrsearch
- * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @category    Application Unit Test
+ * @package     Form_Element
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-?>
 
-<?php
-    if($this->searchType === 'simple')
-        include('simpleSearchForm.phtml');
-    else if($this->searchType === 'advanced' || $this->searchType === 'authorsearch')
-        echo $this->form;
-?>
+class Form_Element_HitsPerPageTest extends ControllerTestCase {
 
-<div class="invalidsearchterm">
-    <h2><?= $this->translate('invalid_search_request_title') ?></h2>
+    public function testInit() {
+        $element = new Form_Element_HitsPerPage('rows');
 
-    <p><?= $this->translate('invalid_search_request_message') ?></p>
-</div>
+        $options = $element->getMultiOptions();
+
+        $this->assertCount(4, $options);
+
+        $current = 0;
+
+        foreach ($options as $value => $label) {
+            $this->assertTrue($current < $value);
+            $current = $value;
+            $this->assertInternalType('int', $value);
+            $this->assertEquals($value, $label);
+        }
+    }
+
+    public function testInitWithCustomDefaultRows() {
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'searchengine' => array('solr' => array('numberOfDefaultSearchResults' => 15))
+        )));
+
+        $element = new Form_Element_HitsPerPage('rows');
+
+        $options = $element->getMultiOptions();
+
+        $this->assertCount(5, $options);
+
+        $current = 0;
+
+        foreach ($options as $value => $label) {
+            $this->assertTrue($current < $value);
+            $current = $value;
+            $this->assertInternalType('int', $value);
+        }
+
+        $this->assertArrayHasKey(15, $options);
+    }
+
+}
