@@ -43,6 +43,10 @@ class Application_View_Helper_AdminMenuTest extends ControllerTestCase {
         $this->_helper->setView(Zend_Registry::get('Opus_View'));
     }
 
+    private function getPageByLabel($label) {
+        return $this->_helper->view->navigation()->findByLabel($label);
+    }
+
     public function testAdminMenu() {
         $this->assertSame($this->_helper, $this->_helper->adminMenu());
     }
@@ -87,8 +91,12 @@ class Application_View_Helper_AdminMenuTest extends ControllerTestCase {
         $this->assertNotNull($page->description);
     }
 
-    private function getPageByLabel($label) {
-        return $this->_helper->view->navigation()->findByLabel($label);
+    public function testOaiLinkRendered() {
+        $this->loginUser('security19', 'security19pwd');
+
+        $page = $this->getPageByLabel('admin_title_oailink');
+        $this->assertTrue($this->_helper->hasAllowedChildren($page));
+        $this->assertTrue($this->_helper->isRenderActive($page));
     }
 
 }
