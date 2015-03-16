@@ -41,7 +41,7 @@ class View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
      * @var \Controller_Helper_AccessControl
      */
     private $_accessControl;
-    
+
     /**
      * Returns true if access to resource is allowed or resource does not exist.
      * @param type $resource
@@ -50,7 +50,7 @@ class View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
     public function accessAllowed($resource) {
         return $this->getAccessControl()->accessAllowed($resource);
     }
-    
+
     /**
      * Returns the Zend_Acl object or null.
      * @return Zend_Acl
