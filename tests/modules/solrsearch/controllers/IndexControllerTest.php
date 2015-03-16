@@ -34,19 +34,19 @@
  * @version     $Id$
  */
 class Solrsearch_IndexControllerTest extends ControllerTestCase {
-    
+
     private function doStandardControllerTest($url, $controller, $action) {
         $this->dispatch($url);
-        
+
         $this->assertResponseCode(200);
-        
+
         if (!is_null($controller)) {
             $this->assertController($controller);
         }
         if (!is_null($action)) {
             $this->assertAction($action);
         }
-        
+
         $this->assertNotEquals('', trim($this->getResponse()->getBody()), 'HTTP Response Body is empty');
     }
 
@@ -146,37 +146,37 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertTrue($numberOfHitsLower > 0);
         $this->assertEquals($numberOfHitsLower, $numberOfHitsUpper);
     }
-    
+
     private function createPublishedTestDoc() {
         $document = $this->createTestDocument();
         $document->setServerState('published');
         $document->setLanguage('eng');
         $document->addTitleMain()->setValue('testphrasequerieswithwildcard*s')->setLanguage('eng');
-        $document->store();        
-    }    
+        $document->store();
+    }
 
     public function testPhraseQueriesWithWildcards1() {
         $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"testphrasequerieswith*"', null, null);
         $this->assertEquals(0, substr_count($this->getResponse()->getBody(), 'result_box'), "result is not empty");
     }
-    
+
     public function testPhraseQueriesWithWildcards2() {
         $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"testphrasequerieswithwildcard*"', null, null);
-        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");
     }
 
     public function testPhraseQueriesWithWildcards3() {
         $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"testphrasequerieswithwildcard*s"', null, null);
-        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");
     }
-    
+
     public function testPhraseQueriesWithWildcards4() {
         $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"TESTPHRASEQUERIESWITH*"', null, null);
-        $this->assertEquals(0, substr_count($this->getResponse()->getBody(), 'result_box'), "result is not empty");        
+        $this->assertEquals(0, substr_count($this->getResponse()->getBody(), 'result_box'), "result is not empty");
     }
 
     public function testPhraseQueriesWithWildcards5() {
@@ -188,43 +188,43 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     public function testPhraseQueriesWithWildcards6() {
         $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/"TESTPHRASEQUERIESWITHWILDCARD*S"', null, null);
-        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");
     }
 
     public function testPhraseQueriesWithWildcards7() {
         $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/testphrasequerieswith*', null, null);
-        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");
     }
 
     public function testPhraseQueriesWithWildcards8() {
         $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/testphrasequerieswithwildcard*', null, null);
-        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");
     }
-    
+
     public function testPhraseQueriesWithWildcards9() {
         $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/testphrasequerieswithwildcard*s', null, null);
-        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");
     }
-    
+
     public function testPhraseQueriesWithWildcards10() {
         $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/TESTPHRASEQUERIESWITH*', null, null);
-        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");
     }
-    
+
     public function testPhraseQueriesWithWildcards11() {
         $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/TESTPHRASEQUERIESWITHWILDCARD*', null, null);
-        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");
     }
-    
+
     public function testPhraseQueriesWithWildcards12() {
         $this->createPublishedTestDoc();
         $this->doStandardControllerTest('/solrsearch/index/search/searchtype/simple/query/TESTPHRASEQUERIESWITHWILDCARD*S', null, null);
-        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");        
+        $this->assertEquals(1, substr_count($this->getResponse()->getBody(), 'result_box'), "result is empty");
     }
 
     public function testInvalidsearchtermAction() {
@@ -345,7 +345,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testRssLinkIsDisplayedForAdvancedSearch() {
-        $this->dispatch('/solrsearch/index/search/searchtype/advanced/start/0/rows/20/sortfield/score/sortorder/desc/author/doe/authormodifier/contains_all/fulltext/test/fulltextmodifier/contains_all/subjectfq/eBook');
+        $this->dispatch('/solrsearch/index/search/searchtype/advanced/start/0/rows/20/sortfield/score/sortorder/desc'
+            . '/author/doe/authormodifier/contains_all/fulltext/test/fulltextmodifier/contains_all/subjectfq/eBook');
         $this->assertResponseCode(200);
         $this->assertContains('/rss/index/index/searchtype/advanced/author/doe/authormodifier/contains_all/fulltext/test/fulltextmodifier/contains_all/subjectfq/eBook" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
     }
@@ -627,7 +628,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
             $this->getResponse()->clearAllHeaders();
             $this->getResponse()->clearBody();
-        }      
+        }
     }
 
     /**
@@ -705,7 +706,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
         // search should not return the test document
-        $this->assertNotContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());        
+        $this->assertNotContains('test document for OPUSVIER-2484', $this->getResponse()->getBody());
     }
 
     public function testFacetLimitWithDefaultSetting() {
@@ -842,8 +843,8 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     public function testFacetSortLexicographicallyForInstituteFacet() {
         // manipulate application configuration
         $oldConfig = Zend_Registry::get('Zend_Config');
-        
-        $config = Zend_Registry::get('Zend_Config');       
+
+        $config = Zend_Registry::get('Zend_Config');
         if (isset($config->searchengine->solr->sortcrit->institute)) {
             $config->searchengine->solr->sortcrit->institute = 'lexi';
         }
@@ -894,7 +895,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testFacetSortForYearInverted() {
-        // manipulate application configuration        
+        // manipulate application configuration
         $oldConfig = Zend_Registry::get('Zend_Config');
 
         $config = Zend_Registry::get('Zend_Config');
@@ -906,9 +907,9 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
                 'searchengine' => array(
                     'solr' => array(
                         'sortcrit' => array(
-                            'year_inverted' => 'lexi')))), true);            
+                            'year_inverted' => 'lexi')))), true);
             // Include the above made configuration changes in the application configuration.
-            $config->merge(Zend_Registry::get('Zend_Config'));            
+            $config->merge(Zend_Registry::get('Zend_Config'));
         }
 
         if (isset($config->searchengine->solr->facets)) {
@@ -920,11 +921,11 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
                     'solr' => array(
                         'facets' => 'year_inverted,doctype,author_facet,language,has_fulltext,belongs_to_bibliography,subject,institute'))), true);
             // Include the above made configuration changes in the application configuration.
-            $config->merge(Zend_Registry::get('Zend_Config'));            
+            $config->merge(Zend_Registry::get('Zend_Config'));
         }
         Zend_Registry::set('Zend_Config', $config);
 
-        $this->dispatch('/solrsearch/index/search/searchtype/all');        
+        $this->dispatch('/solrsearch/index/search/searchtype/all');
 
         // undo configuration manipulation
         Zend_Registry::set('Zend_Config', $oldConfig);
@@ -975,7 +976,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         }
         $this->assertTrue($loopComplete);
     }
-    
+
     private function getNumOfHits() {
         $document = new DOMDocument();
         $document->loadHTML($this->getResponse()->getBody());
@@ -984,7 +985,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->assertNotNull($element->firstChild, 'first child does not exist in response body');
         return $element->firstChild->textContent;
     }
-    
+
     /**
      * Regression Test for OPUSVIER-3131
      */
@@ -1187,10 +1188,12 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     public function testXmlExportButtonPresentForAdminInLatestSearch() {
         $this->enableSecurity();
         $this->loginUser('admin', 'adminadmin');
-        $config = Zend_Registry::get('Zend_Config');
-        $config->merge(new Zend_Config(array('export' => array('stylesheet' => array('search' => 'example')))));
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'export' => array('stylesheet' => array('search' => 'example')),
+            'searchengine' => array('solr' => array('numberOfDefaultSearchResults' => 10))
+        )));
         $this->dispatch('/solrsearch/index/search/searchtype/latest');
-        $this->assertQuery('//a[@href="/solrsearch/index/search/searchtype/latest/export/xml/stylesheet/example"]');
+        $this->assertQuery('//a[@href="/solrsearch/index/search/searchtype/latest/rows/10/export/xml/stylesheet/example"]');
     }
 
     /**

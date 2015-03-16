@@ -261,6 +261,8 @@ class Solrsearch_IndexController extends Controller_Action {
                     $this->view->doctype = $this->getRequest()->getParam('doctypefq', null);
                 }
                 break;
+            case Util_Searchtypes::ADVANCED_SEARCH:
+            case Util_Searchtypes::AUTHOR_SEARCH:
             case Util_Searchtypes::COLLECTION_SEARCH:
             case Util_Searchtypes::SERIES_SEARCH:
                 $this->setFilterQueryBaseURL();
