@@ -104,7 +104,8 @@ class Application_View_Helper_AdminMenu extends Zend_View_Helper_Abstract {
      * Determines if a page has any accessible children.
      *
      * This function is used to render menu entries as inactive if there are no children
-     * that would be rendered active.
+     * that would be rendered active. If there are no children the function returns true
+     * as well in order to not prevent rendering of the parent node as active.
      *
      * Some child pages are not tied to resources. Access to those pages is granted.
      *
