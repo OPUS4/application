@@ -67,7 +67,8 @@ class Application_Security_AclProvider {
             'enrichments',
             'systeminfo',
             'indexmaintenance',
-            'job'),
+            'job',
+            'options'),
         'review' => array(
             'reviewing'),
         'setup' => array(
