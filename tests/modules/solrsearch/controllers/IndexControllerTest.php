@@ -376,8 +376,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testRssLinkIsDisplayedForBrowseSeries() {
-        $this->markTestSkipped('see OPUSVIER-2315');
-
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/languagefq/eng/sortfield/seriesnumber/sortorder/asc');
         $this->assertResponseCode(200);
         $this->assertContains('/rss/index/index/searchtype/series/id/1/languagefq/eng" rel="alternate" type="application/rss+xml"', $this->getResponse()->getBody());
@@ -408,36 +406,30 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
      */
 
     public function testSeriesSearchWithInvalidId() {
-        $this->markTestSkipped('cannot be tested at the moment: method _redirectToAndExit does not work in test environment (see OPUSVIER-2315)');
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/12345');
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');
     }
 
     public function testSeriesSearchWithoutId() {
-        $this->markTestSkipped('cannot be tested at the moment: method _redirectToAndExit does not work in test environment (see OPUSVIER-2315)');
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/');
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');
     }
 
     public function testSeriesSearchWithInvisibleId() {
-        $this->markTestSkipped('cannot be tested at the moment: method _redirectToAndExit does not work in test environment (see OPUSVIER-2315)');
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/3');
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');
     }
 
     public function testSeriesSearchWithEmptyDocumentsId() {
-        $this->markTestSkipped('cannot be tested at the moment: method _redirectToAndExit does not work in test environment (see OPUSVIER-2315)');
-        $this->dispatch('/solrsearch/index/search/searchtype/series/id/4');
+        $this->dispatch('/solrsearch/index/search/searchtype/series/id/8');
         $this->assertRedirect();
         $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');
     }
 
     public function testSeriesSearch() {
-        $this->markTestSkipped('see OPUSVIER-2315');
-
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/1');
         $this->assertResponseCode(200);
 
@@ -454,8 +446,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testSeriesSearchPaginationAndSortingLinks() {
-        $this->markTestSkipped('see OPUSVIER-2315');
-
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/5');
         $this->assertResponseCode(200);
 
@@ -477,8 +467,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testSeriesSearchPaginationWorks() {
-        $this->markTestSkipped('see OPUSVIER-2315');
-
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/5/start/10/rows/10');
         $this->assertResponseCode(200);
 
@@ -496,8 +484,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testSeriesSearchRespectsDefaultDocSortOrder() {
-        $this->markTestSkipped('see OPUSVIER-2315');
-
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/1');
         $this->assertResponseCode(200);
 
@@ -516,8 +502,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testSeriesActionRespectsAscendingDocSortOrder() {
-        $this->markTestSkipped('consult OPUSVIER-2315');
-
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/asc');
         $this->assertResponseCode(200);
 
@@ -536,8 +520,6 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     }
 
     public function testSeriesActionRespectsDescendingDocSortOrder() {
-        $this->markTestSkipped('consult OPUSVIER-2315');
-
         $this->dispatch('/solrsearch/index/search/searchtype/series/id/1/start/0/rows/10/sortfield/seriesnumber/sortorder/desc');
         $this->assertResponseCode(200);
 

@@ -141,7 +141,8 @@ class Solrsearch_IndexController extends Controller_Action {
         $request = $this->getRequest();
 
         if (in_array($searchType, array('advanced', 'authorsearch')) && !is_null($this->getParam('Reset'))) {
-            return $this->_redirectTo('advanced', null, 'index', 'solrsearch');
+            $this->_redirectTo('advanced', null, 'index', 'solrsearch');
+            return;
         }
 
         if (strpos($searchType, 'latest/export') !== false) {
@@ -150,13 +151,15 @@ class Solrsearch_IndexController extends Controller_Action {
             $params['searchtype'] = 'latest';
             $params['export'] = $paramArray[2];
             $params['stylesheet'] = $paramArray[4];
-            return $this->redirectToExport($params);
+            $this->redirectToExport($params);
+            return;
         }
 
         if (!is_null($request->getParam('export'))) {
             $params = $request->getParams();
             // export module ignores pagination parameters
-            return $this->redirectToExport($params);
+            $this->redirectToExport($params);
+            return;
         }
 
         // TODO does the following make sense after the above?
@@ -165,41 +168,44 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->stylesheet = $config->export->stylesheet->search;
         }
 
-        $this->_query = $this->buildQuery();
-        $this->performSearch();
-        $this->setViewValues();
-        $this->setViewFacets();
+        $query = $this->buildQuery();
+        // if query is null, redirect has already been set
+        if (!is_null($query)) {
+            $this->_query = $query;
+            $this->performSearch();
+            $this->setViewValues();
+            $this->setViewFacets();
 
-        $this->setLinkRelCanonical();
+            $this->setLinkRelCanonical();
 
-        switch ($searchType) {
-            case 'advanced':
-            case 'authorsearch':
-                $form = new Solrsearch_Form_AdvancedSearch($searchType);
-                $form->populate($this->getAllParams());
-                $form->setAction($this->view->url(array(
-                    'module' => 'solrsearch', 'controller' => 'dispatch', 'action' => 'index'
-                ), null, true));
-                $this->view->form = $form;
-                break;
-            case 'latest':
-                $form = new Solrsearch_Form_Options();
-                $form->setMethod(Zend_FORM::METHOD_GET);
-                $form->setAction($this->view->url(array(
-                    'module' => 'solrsearch', 'controller' => 'index', 'action' => 'search'
-                ), null, true));
-                $form->populate($this->getAllParams());
-                $this->view->form = $form;
-                break;
-            default:
-                break;
-        }
+            switch ($searchType) {
+                case 'advanced':
+                case 'authorsearch':
+                    $form = new Solrsearch_Form_AdvancedSearch($searchType);
+                    $form->populate($this->getAllParams());
+                    $form->setAction($this->view->url(array(
+                        'module' => 'solrsearch', 'controller' => 'dispatch', 'action' => 'index'
+                    ), null, true));
+                    $this->view->form = $form;
+                    break;
+                case 'latest':
+                    $form = new Solrsearch_Form_Options();
+                    $form->setMethod(Zend_FORM::METHOD_GET);
+                    $form->setAction($this->view->url(array(
+                        'module' => 'solrsearch', 'controller' => 'index', 'action' => 'search'
+                    ), null, true));
+                    $form->populate($this->getAllParams());
+                    $this->view->form = $form;
+                    break;
+                default:
+                    break;
+            }
 
-        if ($this->_numOfHits === 0 || $this->_query->getStart() >= $this->_numOfHits) {
-            $this->render('nohits');
-        }
-        else {
-            $this->render('results');
+            if ($this->_numOfHits === 0 || $this->_query->getStart() >= $this->_numOfHits) {
+                $this->render('nohits');
+            } else {
+                $this->render('results');
+            }
         }
     }
 
@@ -350,6 +356,11 @@ class Solrsearch_IndexController extends Controller_Action {
         $this->view->selectedFacets = $selectedFacets;
     }
 
+    /**
+     * Builds query for Solr search.
+     * @return Opus_SolrSearch_Query|void
+     * @throws Application_Exception
+     */
     private function buildQuery() {
         $request = $this->getRequest();
 
@@ -362,11 +373,13 @@ class Solrsearch_IndexController extends Controller_Action {
         }
         catch (Util_BrowsingParamsException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
-            return $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
+            $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
+            return null;
         }
         catch (Util_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
-            return $this->_redirectToAndExit('index');
+            $this->_redirectToAndExit('index');
+            return null;
         }
 
         if (is_null($request->getParam('sortfield')) &&
