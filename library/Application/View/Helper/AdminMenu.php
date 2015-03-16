@@ -116,7 +116,7 @@ class Application_View_Helper_AdminMenu extends Zend_View_Helper_Abstract {
 
         $acl = $this->getAcl();
 
-        if ($pages != null) {
+        if (!is_null($pages) && !is_null($acl)) {
             foreach ($pages as $childPage) {
                 if ($acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, $childPage->getResource(),
                         $childPage->getPrivilege()) || is_null($childPage->getResource())) {
