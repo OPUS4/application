@@ -2,6 +2,9 @@ h1. OPUS 4 Release Notes
 
 h2. ======================== Release 4.5.0 2015-xx-xx ========================
 
+Die URLs für creativecommons.org in den Lizenzen wurden auf HTTPS umgestellt,
+um bei Instanzen mit HTTPS "Mixed Content"-Warnungen zu vermeiden. Das wird
+beim Update von bestehenden Instanzen nicht automatisch angepasst.
 
 
 h2. ======================== Release 4.4.5 2014-10-30 ========================
