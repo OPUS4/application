@@ -51,6 +51,14 @@
             </tuv>
         </tu>
 
+        <tu tuid="controller_crud_model_not_modifiable">
+            <tuv xml:lang="en">
+                <seg>Model cannot be modified.</seg>
+            </tuv>
+            <tuv xml:lang="de">
+                <seg>Model kann nicht modifiziert werden.</seg>
+            </tuv>
+        </tu>
   </body>
 
 </tmx>

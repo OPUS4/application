@@ -82,6 +82,11 @@ class Application_Controller_ActionCRUD extends Controller_Action {
     const INVALID_ID = 'invalidId';
 
     /**
+     * Message-Key für Versuche ein geschütztes Model zu editieren oder löschen.
+     */
+    const MODEL_NOT_MODIFIABLE = 'modelNotModifiable';
+
+    /**
      * Nachrichten für die verschiedenen Ereignisse.
      * @var array
      */
@@ -96,7 +101,8 @@ class Application_Controller_ActionCRUD extends Controller_Action {
         self::SAVE_FAILURE => array('failure' => 'controller_crud_save_failure'),
         self::DELETE_SUCCESS => 'controller_crud_delete_success',
         self::DELETE_FAILURE => array('failure' => 'controller_crud_delete_failure'),
-        self::INVALID_ID => array('failure' => 'controller_crud_invalid_id')
+        self::INVALID_ID => array('failure' => 'controller_crud_invalid_id'),
+        self::MODEL_NOT_MODIFIABLE => array('failure' => 'controller_crud_model_not_modifiable')
     );
 
     /**
@@ -123,6 +129,18 @@ class Application_Controller_ActionCRUD extends Controller_Action {
     private $_functionNameForGettingModels = 'getAll';
 
     /**
+     * Most model IDs are numeric, but for exceptions this can be set to false.
+     * @var bool
+     */
+    private $_verifyModelIdIsNumeric = true;
+
+    /**
+     * Enables link for model entries to show action.
+     * @var bool
+     */
+    private $_showActionEnabled = true;
+
+    /**
      * Initialisiert den Controller.
      */
     public function init() {
@@ -134,7 +152,7 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * List all available model instances.
      *
      * @return void
-     * 
+     *
      */
     public function indexAction() {
         $this->renderForm($this->getIndexForm());
@@ -149,6 +167,7 @@ class Application_Controller_ActionCRUD extends Controller_Action {
         $form = new Application_Form_Model_Table();
         $form->setModels($this->getAllModels());
         $form->setColumns(array(array('label' => $this->getModelClass())));
+        $form->setController($this);
         return $form;
     }
 
@@ -160,15 +179,20 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * @return void
      */
     public function showAction() {
-        $model = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
+        if ($this->getShowActionEnabled()) {
+            $model = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
 
-        if (!is_null($model)) {
-            $form = $this->getEditModelForm($model);
-            $form->prepareRenderingAsView();
-            $result = $form;
+            if (!is_null($model)) {
+                $form = $this->getEditModelForm($model);
+                $form->prepareRenderingAsView();
+                $result = $form;
+            }
+            else {
+                $result = $this->createInvalidIdResult();
+            }
         }
         else {
-            $result = $this->createInvalidIdResult();
+            $result = array();
         }
 
         $this->renderResult($result);
@@ -209,9 +233,14 @@ class Application_Controller_ActionCRUD extends Controller_Action {
             $model = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
 
             if (!is_null($model)) {
-                $form = $this->getEditModelForm($model);
-                $form->setAction($this->view->url(array('action' => 'edit')));
-                $result = $form;
+                if ($this->isModifiable($model)) {
+                    $form = $this->getEditModelForm($model);
+                    $form->setAction($this->view->url(array('action' => 'edit')));
+                    $result = $form;
+                }
+                else {
+                    $result = $this->createNotModifiableResult();
+                }
             }
             else {
                 $result = $this->createInvalidIdResult();
@@ -233,8 +262,13 @@ class Application_Controller_ActionCRUD extends Controller_Action {
             // Bestätigungsformular anzeigen
             $model = $this->getModel($this->getRequest()->getParam(self::PARAM_MODEL_ID));
             if (!is_null($model)) {
-                $form = $this->getConfirmationForm($model);
-                $result = $form;
+                if ($this->isModifiable($model)) {
+                    $form = $this->getConfirmationForm($model);
+                    $result = $form;
+                }
+                else {
+                    $result = $this->createNotModifiableResult();
+                }
             }
             else {
                 // Request mit invaliden IDs werden ignoriert und zur Index Seite umgeleitet
@@ -273,6 +307,10 @@ class Application_Controller_ActionCRUD extends Controller_Action {
                     }
 
                     if (!is_null($model)) {
+                        if (!$this->isModifiable($model)) {
+                            return array('message' => self::MODEL_NOT_MODIFIABLE);
+                        }
+
                         try {
                             $model->store();
                         }
@@ -282,8 +320,16 @@ class Application_Controller_ActionCRUD extends Controller_Action {
                         }
 
                         // Redirect zur Show Action
-                        return array('action' => 'show', 'message' => self::SAVE_SUCCESS,
-                            'params' =>array(self::PARAM_MODEL_ID => $model->getId()));
+                        if ($this->getShowActionEnabled()) {
+                            return array(
+                                'action' => 'show', 'message' => self::SAVE_SUCCESS,
+                                'params' => array(self::PARAM_MODEL_ID => $model->getId())
+                            );
+                        }
+                        else {
+                            // return to index page
+                            return array();
+                        }
                     }
                     else {
                         // Formular hat kein Model geliefert - Fehler beim speichern
@@ -321,6 +367,10 @@ class Application_Controller_ActionCRUD extends Controller_Action {
             $model = $this->getModel($modelId);
 
             if (!is_null($model)) {
+                if (!$this->isModifiable($model)) {
+                    return array('message' => self::MODEL_NOT_MODIFIABLE);
+                }
+
                 // Model löschen
                 try {
                     $this->deleteModel($model);
@@ -387,6 +437,14 @@ class Application_Controller_ActionCRUD extends Controller_Action {
     }
 
     /**
+     * Fuehrt Redirect fuer ein nicht editierbares Model aus.
+     * @return array
+     */
+    public function createNotModifiableResult() {
+        return array('message' => self::MODEL_NOT_MODIFIABLE);
+    }
+
+    /**
      * Erzeugt ein Bestätigunsformular für ein Model.
      *
      * Das Bestätigunsformular ohne Model wird für die Validierung verwendet.
@@ -396,6 +454,10 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      */
     public function getConfirmationForm($model = null) {
         $form = new Application_Form_Confirmation($this->getModelClass());
+
+        if (!$this->getVerifyModelIdIsNumeric()) {
+            $form->getElement(Application_Form_Confirmation::ELEMENT_MODEL_ID)->removeValidator('int');
+        }
 
         if (!is_null($model)) {
             $form->setModel($model);
@@ -426,7 +488,7 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * @return \modelClass
      */
     public function getModel($modelId) {
-        if (is_null($modelId) || is_numeric($modelId)) {
+        if (is_null($modelId) || is_numeric($modelId) || !$this->getVerifyModelIdIsNumeric()) {
             $modelClass = $this->getModelClass();
 
             if (strlen(trim($modelId)) !== 0) {
@@ -447,7 +509,11 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      * @return Application_Form_IModel
      */
     public function getModelForm() {
-        return new $this->_formClass();
+        $form = new $this->_formClass();
+        if (!$this->getVerifyModelIdIsNumeric()) {
+            $form->getElement(Application_Form_Model_Abstract::ELEMENT_MODEL_ID)->removeValidator('int');
+        }
+        return $form;
     }
 
     /**
@@ -457,6 +523,9 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      */
     public function getEditModelForm($model) {
         $form = $this->getModelForm();
+        if (!$this->getVerifyModelIdIsNumeric()) {
+            $form->getElement(Application_Form_Model_Abstract::ELEMENT_MODEL_ID)->removeValidator('int');
+        }
         $form->populateFromModel($model);
         return $form;
     }
@@ -569,6 +638,47 @@ class Application_Controller_ActionCRUD extends Controller_Action {
      */
     public function getFunctionNameForGettingModels() {
         return $this->_functionNameForGettingModels;
+    }
+
+    /**
+     * @param $enabled boolean true enabled verification that model ID is numeric value
+     */
+    public function setVerifyModelIdIsNumeric($enabled) {
+        $this->_verifyModelIdIsNumeric = $enabled;
+    }
+
+    /**
+     * Returns setting for verification of numeric model IDs.
+     * @return bool
+     */
+    public function getVerifyModelIdIsNumeric() {
+        return $this->_verifyModelIdIsNumeric;
+    }
+
+    /**
+     * Enables or disables show action.
+     * @param $enabled bool true to enable show action
+     */
+    public function setShowActionEnabled($enabled) {
+        $this->_showActionEnabled = $enabled;
+    }
+
+    /**
+     * Returns status of show action.
+     * @return bool true - enabled; false - disabled
+     */
+    public function getShowActionEnabled() {
+        return $this->_showActionEnabled;
+    }
+
+    /**
+     * Determines if a model can be edited.
+     *
+     * @param $model Object
+     * @return bool true if object can be edited; false - object cannot be edited
+     */
+    public function isModifiable($model) {
+        return true;
     }
 
 }

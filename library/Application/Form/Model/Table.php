@@ -34,6 +34,8 @@
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
+ *
+ * TODO class is tied to Application_Controller_ActionCRUD - resolve
  */
 class Application_Form_Model_Table extends Application_Form_Abstract {
 
@@ -54,6 +56,11 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      * @var string
      */
     private $_viewScript = 'modeltable.phtml';
+
+    /**
+     * @var null
+     */
+    private $_controller = null;
 
     /**
      * Initialisiert Formular.
@@ -145,6 +152,44 @@ class Application_Form_Model_Table extends Application_Form_Abstract {
      */
     public function getViewScript() {
         return $this->_viewScript;
+    }
+
+    /**
+     * Sets controller object for model table.
+     * @param $controller CRUD Controller object for model
+     *
+     * TODO make independent from controller class
+     */
+    public function setController($controller) {
+        $this->_controller = $controller;
+    }
+
+    /**
+     * Determines if a link for the show action should be rendered.
+     * @param $model Model object
+     * @return bool true - link should be rendered
+     */
+    public function isRenderShowActionLink($model) {
+        if (!is_null($this->_controller)) {
+            return $this->_controller->getShowActionEnabled();
+        }
+        else {
+            return true;
+        }
+    }
+
+    /**
+     * Determines if an object is modifiable and links for edit and remove should be rendered.
+     * @param $model Model object
+     * @return bool true - model can be modified and links should be rendered
+     */
+    public function isModifiable($model) {
+        if (!is_null($this->_controller)) {
+            return $this->_controller->isModifiable($model);
+        }
+        else {
+            return true;
+        }
     }
 
 }

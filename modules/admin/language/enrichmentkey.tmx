@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
- 
+
  <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
- 
+
   <body>
 
     <tu tuid="admin_enrichmentkey_label_name">
@@ -40,6 +40,15 @@
       </tuv>
       <tuv xml:lang="de">
         <seg>Enrichmentkey bearbeiten</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_enrichmentkey_delete">
+      <tuv xml:lang="en">
+        <seg>Delete Enrichmentkey</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Enrichmentkey löschen</seg>
       </tuv>
     </tu>
 
@@ -80,5 +89,5 @@
     </tu>
 
   </body>
-  
+
 </tmx>

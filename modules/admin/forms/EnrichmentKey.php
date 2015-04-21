@@ -30,53 +30,65 @@
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: EnrichmentkeyController.php 9368 2011-12-13 09:05:15Z gmaiwald $
+ * @version     $Id: Enrichmentkey.php 9260 2011-12-20 10:44:39Z gmaiwald $
  */
 
 /**
- * Class Admin_EnrichmentkeyController
- *
- * All enrichments are shown, but only enrichments that are not protected can be edited or deleted. An enrichment is
- * protected if it is configured as such in the configuration file or if it is referenced by documents.
- *
- * The two configurations parameters are:
- *
- * enrichmentkey.protected.modules   (for special enrichments used by modules)
- * enrichmentkey.protected.migration (for enrichments created during migration from OPUS 3)
+ * Form for creating and editing an enrichment key.
  *
  * @category    Application
  * @package     Module_Admin
- *
- * TODO show protected/referenced in list of keys
  */
-class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD {
+class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract {
 
     /**
-     * Model for handling enrichment keys.
-     * @var Admin_Model_EnrichmentKeys
+     * Form element name for enrichment key name.
      */
-    private $_enrichmentKeys;
+    const ELEMENT_NAME = 'Name';
 
     /**
-     * Initializes and configures controller.
-     * @throws Application_Exception
+     * Pattern for checking valid enrichment key names.
+     *
+     * Enrichment key have to start with a letter and can use letters, numbers and '.' and '_'.
+     */
+    const PATTERN = '/^[a-zA-Z][a-zA-Z0-9_\.]+$/';
+
+    /**
+     * Initialize form elements.
+     * @throws Zend_Form_Exception
      */
     public function init() {
-        $this->_enrichmentKeys = new Admin_Model_EnrichmentKeys();
-        $this->setVerifyModelIdIsNumeric(false);
-        $this->setShowActionEnabled(false);
-        $this->setFormClass('Admin_Form_EnrichmentKey');
         parent::init();
+
+        $this->setLabelPrefix('Opus_EnrichmentKey');
+        $this->setUseNameAsLabel(true);
+        $this->setModelClass('Opus_EnrichmentKey');
+        $this->setVerifyModelIdIsNumeric(false);
+
+        $name = $this->createElement('text', self::ELEMENT_NAME, array(
+            'required' => true, 'label' => 'admin_enrichmentkey_label_name'
+        ));
+        $name->addValidator('regex', false, array('pattern' => self::PATTERN));
+        $name->addValidator('StringLength', false, array('min' => 1, 'max' => 255));
+        $name->addValidator(new Form_Validate_EnrichmentKeyAvailable());
+        $this->addElement($name);
     }
 
     /**
-     * Checks if a model can be modified.
-     * @param $model Opus_EnrichmentKey
-     * @return bool true if model can be edited and deleted, false if model is protected
+     * Initialisiert das Formular mit Werten einer Model-Instanz.
+     * @param $model Opus_Enrichmentkey
      */
-    public function isModifiable($model) {
-        $protectedKeys = $this->_enrichmentKeys->getProtectedEnrichmentKeys();
-        return !in_array($model->getId(), array_merge($protectedKeys, Opus_EnrichmentKey::getAllReferenced()));
+    public function populateFromModel($enrichmentKey) {
+        $this->getElement(self::ELEMENT_MODEL_ID)->setValue($enrichmentKey->getName());
+        $this->getElement(self::ELEMENT_NAME)->setValue($enrichmentKey->getName());
+    }
+
+    /**
+     * Aktualsiert Model-Instanz mit Werten im Formular.
+     * @param $model Opus_Enrichmentkey
+     */
+    public function updateModel($enrichmentKey) {
+        $enrichmentKey->setName($this->getElementValue(self::ELEMENT_NAME));
     }
 
 }

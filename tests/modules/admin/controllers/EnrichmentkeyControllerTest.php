@@ -35,489 +35,290 @@
 /**
  * Basic unit tests for Admin_EnrichmentkeyController class.
  */
-class Admin_EnrichmentkeyControllerTest extends ControllerTestCase {
+class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
+
+    public function setUp() {
+        $this->setController('enrichmentkey');
+        parent::setUp();
+    }
+
+    public function getModels() {
+        return Opus_EnrichmentKey::getAll();
+    }
 
     private static $protectedEnrichmentkey = 'review.accepted_by';
     private static $protectedUnusedEnrichmentkey = 'SubjectSwd';
 
+    public function createNewModel() {
+        $model = new Opus_EnrichmentKey();
+        $model->setName('TestEnrichmentKey');
+
+        return $model->store();
+    }
+
+    public function getModel($identifier) {
+        return new Opus_EnrichmentKey($identifier);
+    }
+
     /**
-     * Test showing index page.
+     * Show action is disabled for enrichment keys.
      */
-    public function testIndexAction() {
-        $this->dispatch('/admin/enrichmentkey');
+    public function testShowActionBadId() {
+        $this->dispatch($this->getControllerPath() . '/show/id/123');
+        $this->assertRedirectTo($this->getControllerPath());
+    }
+
+    /**
+     * Show action is disabled for enrichment keys.
+     */
+    public function testShowActionBadUnknownId() {
+        $this->dispatch($this->getControllerPath() . '/show/id/City2');
+        $this->assertRedirectTo($this->getControllerPath());
+    }
+
+    /**
+     * Show action is disabled for enrichment keys.
+     */
+    public function testShowActionNoId() {
+        $this->dispatch($this->getControllerPath() . '/show');
+        $this->assertRedirectTo($this->getControllerPath());
+    }
+
+    public function testNewActionSave() {
+        $this->createsModels = true;
+
+        $post = array(
+            'Name' => 'MyTestEnrichment',
+            'Save' => 'Speichern'
+        );
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+
+        $this->dispatch($this->getControllerPath() . '/new');
+
+        $this->assertRedirect();
+        $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
+        // TODO $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
+
+        $enrichment = new Opus_EnrichmentKey('MyTestEnrichment');
+
+        $this->assertNotNull($enrichment);
+        $this->assertEquals('MyTestEnrichment', $enrichment->getName());
+    }
+
+    public function testNewActionCancel() {
+        $this->createsModels = true;
+
+        $modelCount = count($this->getModels());
+
+        $post = array(
+            'Name' => 'MyTestEnrichment',
+            'Cancel' => 'Abbrechen'
+        );
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+
+        $this->dispatch($this->getControllerPath() . '/new');
+
+        $this->assertRedirectTo('/admin/enrichmentkey', 'Should be a redirect to index action.');
+
+        $this->assertEquals($modelCount, count(Opus_EnrichmentKey::getAll()), 'There should be no new enrichment.');
+    }
+
+    public function testNewActionSaveForExistingEnrichment() {
+        $this->createsModels = true;
+
+        $post = array(
+            'Name' => 'City',
+            'Save' => 'Speichern'
+        );
+
+        $this->getRequest()->setPost($post)->setMethod('POST');
+
+        $this->dispatch($this->getControllerPath() . '/new');
         $this->assertResponseCode(200);
-        $this->assertModule('admin');
         $this->assertController('enrichmentkey');
-        $this->assertAction('index');
+        $this->assertAction('new');
+
+        $this->assertQueryContentContains('div#Name-element', 'Enrichmentkey already exists.');
     }
 
-    public function testIndexActionWithoutEnrichmentkeys() {
-        $this->markTestSkipped('Tests manipulates document 146 and might break other tests.');
-        $enrichment = $this->_removeEnrichmentAssociation();
-
-        $keyNames = $this->_removeAllEnrichmentKeys();
-        if (!is_array($keyNames)) {
-            $this->_restoreEnrichmentAssociation($enrichment);
-            $this->markTestSkipped("Skipped, because EnrichmentKey '$keyNames' could not be deleted.");
-        }
-
-        // call index action of controller
-        $this->dispatch('/admin/enrichmentkey');
+    public function testEditActionShowForm() {
+        $this->dispatch($this->getControllerPath() . '/edit/id/BibtexRecord');
         $this->assertResponseCode(200);
-        $response = $this->getResponse();
-
-        $this->_addEnrichmentKeys($keyNames);
-        $this->_restoreEnrichmentAssociation($enrichment);
-    }
-
-    protected function _removeEnrichmentAssociation() {
-        $d = new Opus_Document(146);
-        $enrichment = $d->getEnrichment();
-        $this->assertEquals(11, count($enrichment), "Test data has changed.");
-        $d->setEnrichment(null);
-        $d->store();
-        return $enrichment;
-    }
-
-    protected function _restoreEnrichmentAssociation($enrichments) {
-      $d = new Opus_Document(146);
-        if (!is_array($enrichments))
-            $enrichments = array($enrichments);
-        foreach ($enrichments as $enrichment) {
-            $newEnrichment = new Opus_Enrichment();
-            $newEnrichment->setKeyName($enrichment->getKeyName())->setValue($enrichment->getValue());
-            $d->addEnrichment($newEnrichment);
-        }
-        $d->store();
-    }
-
-   protected function _removeAllEnrichmentKeys() {
-        $enrichmentkeys = Opus_EnrichmentKey::getAll();
-        $keyNames = array();
-        $deletedKeys = array();
-        foreach ($enrichmentkeys as $key) {
-            array_push($keyNames, $key->getName());
-            try {
-                Opus_EnrichmentKey::fetchbyName($key->getName())->delete();
-                $deletedKeys[] = $key->getName();
-            }
-            catch (Opus_Model_Exception $e) {
-                $this->_addEnrichmentKeys($deletedKeys);
-                return $key->getName();
-            }
-        }
-        return $keyNames;
-    }
-
-    protected function _addEnrichmentKeys($keyNames) {
-        foreach ($keyNames as $key) {
-            $ek = new Opus_EnrichmentKey();
-            $ek->setName($key);
-            $ek->store();
-        }
-    }
-
-    public function testIndexActionWithProtectedEnrichmentKeys() {
-        $ek = Opus_EnrichmentKey::fetchByName(self::$protectedEnrichmentkey);
-        $this->assertNotNull($ek);
-        $config = Zend_Registry::get('Zend_Config');
-        $this->assertTrue(in_array($ek->getName(), explode(',', $config->enrichmentkey->protected->modules)));
-
-        $this->dispatch('/admin/enrichmentkey');
-        $this->assertResponseCode(200);
-        $this->assertModule('admin');
         $this->assertController('enrichmentkey');
-        $this->assertAction('index');
+        $this->assertAction('edit');
 
-        $this->assertContains('/admin/enrichmentkey/show/name/' . $ek->getName(), $this->getResponse()->getBody());
-        $this->assertNotContains('/admin/enrichmentkey/edit/name/' . $ek->getName(), $this->getResponse()->getBody());
-        $this->assertNotContains('/admin/enrichmentkey/delete/name/' . $ek->getName(), $this->getResponse()->getBody());
+        $this->assertQueryContentContains('div#Name-element', 'Name');
+        $this->assertQuery('li.save-element');
+        $this->assertQuery('li.cancel-element');
+        $this->assertQueryCount(1, 'input#Id');
+    }
+
+    public function testEditActionShowFormForProtectedEnrichment() {
+        $this->dispatch($this->getControllerPath() . '/edit/id/City');
+
+        $this->assertRedirect();
+        $this->assertRedirectTo($this->getControllerPath());
+        $this->verifyFlashMessage('controller_crud_model_not_modifiable', self::MESSAGE_LEVEL_FAILURE);
+
+        $enrichmentKey = new Opus_EnrichmentKey('City');
+
+        $this->assertNotNull($enrichmentKey);
+        $this->assertEquals('City', $enrichmentKey->getName());
     }
 
     /**
-     * Test show enrichmentkey information.
+     * @expectedException Opus_Model_NotFoundException
+     * @expectedExceptionMessage No Opus_Db_EnrichmentKeys with id MyTestEnrichment in database.
      */
-    public function testShowAction() {
-        $ek = new Opus_EnrichmentKey();
-        $ek->setName('testShowAction-foo');
-        $ek->store();
+    public function testEditActionSave() {
+        $this->createsModels = true;
 
-        $this->dispatch('/admin/enrichmentkey/show/name/' . $ek->getName());
-        $this->assertResponseCode(200);
-        $this->assertContains('<td>' . $ek->getName() . '</td>', $this->getResponse()->getBody());
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('MyTestEnrichment');
+        $enrichmentKey->store();
 
-        $ek->delete();
-    }
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'Id' => 'MyTestEnrichment',
+            'Name' => 'MyTestEnrichmentModified',
+            'Save' => 'Speichern'
+        ));
 
-    public function testShowActionWithoutNameParam() {
-        $this->dispatch('/admin/enrichmentkey/show');
-        $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
-    }
+        $this->dispatch($this->getControllerPath() . '/edit');
+        $this->assertRedirectTo($this->getControllerPath());
+        // TODO $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
-    public function testShowActionWithUnknownNameParam() {
-        $this->assertNull(Opus_EnrichmentKey::fetchByName('testShowActionWithUnknownNameParam'));
-        $this->dispatch('/admin/enrichmentkey/show/name/testShowActionWithUnknownNameParam');
-        $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
+        $enrichmentKey = new Opus_EnrichmentKey('MyTestEnrichmentModified');
+
+        $this->assertNotNull($enrichmentKey);
+        $this->assertEquals('MyTestEnrichmentModified', $enrichmentKey);
+
+        new Opus_EnrichmentKey('MyTestEnrichment');
+
+        $this->fail('Previous statement should have thrown exception.');
     }
 
     /**
-     * Test showing empty form for new enrichmentkey.
+     * @expectedException Opus_Model_NotFoundException
+     * @expectedExceptionMessage No Opus_Db_EnrichmentKeys with id CityModified in database.
      */
-    public function testNewAction() {
-        $this->dispatch('/admin/enrichmentkey/new');
-        $this->assertResponseCode(200);
-        $this->assertContains('<input type="text" name="name" id="name" value="" />', $this->getResponse()->getBody());
+    public function testEditActionSaveForProtectedEnrichment() {
+        $this->createsModels = true;
+
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('MyTestEnrichment');
+        $enrichmentKey->store();
+
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'Id' => 'City',
+            'Name' => 'CityModified',
+            'Save' => 'Speichern'
+        ));
+
+        $this->dispatch($this->getControllerPath() . '/edit');
+        $this->assertRedirectTo($this->getControllerPath());
+        $this->verifyFlashMessage('controller_crud_model_not_modifiable', self::MESSAGE_LEVEL_FAILURE);
+
+        $enrichmentKey = new Opus_EnrichmentKey('City');
+
+        $this->assertNotNull($enrichmentKey);
+        $this->assertEquals('City', $enrichmentKey->getName());
+
+        new Opus_EnrichmentKey('CityModified');
+
+        $this->fail('Previous statement should have thrown exception.');
     }
 
     /**
-     * Test showing form for editing enrichmentkey.
+     * @expectedException Opus_Model_NotFoundException
+     * @expectedExceptionMessage No Opus_Db_EnrichmentKeys with id MyTestEnrichmentModified in database.
      */
-    public function testEditAction() {
-        $ek = new Opus_EnrichmentKey();
-        $ek->setName('testEditAction-foo');
-        $ek->store();
+    public function testEditActionCancel() {
+        $this->createsModels = true;
 
-        $this->dispatch('/admin/enrichmentkey/edit/name/' . $ek->getName());
-        $this->assertResponseCode(200);
-        $this->assertContains('<input type="text" name="name" id="name" value="' . $ek->getName() . '" />', $this->getResponse()->getBody());
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('MyTestEnrichment');
+        $enrichmentKey->store();
 
-        $ek->delete();
-    }
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'Id' => 'MyTestEnrichment',
+            'Name' => 'MyTestEnrichmentModified',
+            'Cancel' => 'Abbrechen'
+        ));
 
-    public function testEditActionWithoutNameParam() {
-        $this->dispatch('/admin/enrichmentkey/edit');
-        $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
-    }
+        $this->dispatch($this->getControllerPath() . '/edit');
+        $this->assertRedirectTo($this->getControllerPath());
 
-    public function testEditActionWithUnknownNameParam() {
-        $this->assertNull(Opus_EnrichmentKey::fetchByName('testEditActionWithUnknownNameParam'));
-        $this->dispatch('/admin/enrichmentkey/edit/name/testEditActionWithUnknownNameParam');
-        $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
-    }
+        $enrichmentKey = new Opus_EnrichmentKey('MyTestEnrichment');
 
-    public function testEditActionProtectedEnrichmentKey() {
-        $ek = Opus_EnrichmentKey::fetchByName(self::$protectedEnrichmentkey);
-        $this->assertNotNull($ek);
-        $config = Zend_Registry::get('Zend_Config');
-        $this->assertTrue(in_array($ek->getName(), explode(',', $config->enrichmentkey->protected->modules)));
+        $this->assertNotNull($enrichmentKey);
+        $this->assertEquals('MyTestEnrichment', $enrichmentKey->getName());
 
-        $this->dispatch('/admin/enrichmentkey/edit/name/' . $ek->getName());
-        $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
+        new Opus_EnrichmentKey('MyTestEnrichmentModified');
+
+        $this->fail('Previous statement should have thrown exception.');
     }
 
     /**
-     * Test creating enrichmentkey.
+     * @expectedException Opus_Model_NotFoundException
+     * @expectedExceptionMessage No Opus_Db_EnrichmentKeys with id CityModified in database.
      */
-    public function testCreateAction() {
-        $this->assertNull(Opus_EnrichmentKey::fetchByName('testCreateAction'));
+    public function testEditActionCancelForProtectedEnrichment() {
+        $this->createsModels = true;
 
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'name' => 'testCreateAction',
-                    'submit' => 'submit'
-                ));
+        $enrichmentKey = new Opus_EnrichmentKey();
+        $enrichmentKey->setName('MyTestEnrichment');
+        $enrichmentKey->store();
 
-        $this->dispatch('/admin/enrichmentkey/create');
-        $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
-        $this->assertNotNull(Opus_EnrichmentKey::fetchByName('testCreateAction'));
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'Id' => 'City',
+            'Name' => 'CityModified',
+            'Cancel' => 'Abbrechen'
+        ));
 
-        $enrichmentkey = Opus_EnrichmentKey::fetchByName('testCreateAction');
-        $this->assertEquals('testCreateAction', $enrichmentkey->getDisplayName());
-        $enrichmentkey->delete();
+        $this->dispatch($this->getControllerPath() . '/edit');
+        $this->assertRedirectTo($this->getControllerPath());
+
+        $enrichmentKey = new Opus_EnrichmentKey('City');
+
+        $this->assertNotNull($enrichmentKey);
+        $this->assertEquals('City', $enrichmentKey->getName());
+
+        new Opus_EnrichmentKey('CityModified');
+
+        $this->fail('Previous statement should have thrown exception.');
     }
 
-    public function testCreateActionCancel() {
-        $this->assertNull(Opus_EnrichmentKey::fetchByName('testCreateActionCancel'));
+    public function testDeleteActionShowForm() {
+        $this->useEnglish();
 
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'name' => 'testCreateActionCancel',
-                    'cancel' => 'cancel'
-                ));
-        $this->dispatch('/admin/enrichmentkey/create');
-        $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
-        $this->assertNull(Opus_EnrichmentKey::fetchByName('testCreateActionCancel'));
+        $this->dispatch($this->getControllerPath() . '/delete/id/BibtexRecord');
+
+        $this->assertQueryContentContains('legend', 'Delete EnrichmentKey');
+        $this->assertQueryContentContains('span.displayname', 'BibtexRecord');
+        $this->assertQuery('input#ConfirmYes');
+        $this->assertQuery('input#ConfirmNo');
+
+        $enrichmentKey = new Opus_EnrichmentKey('BibtexRecord');
+
+        $this->assertNotNull($enrichmentKey);
+        $this->assertEquals('BibtexRecord', $enrichmentKey->getName());
     }
 
-    public function testCreateActionMissingInput() {
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'submit' => 'submit'
-                ));
+    public function testDeleteActionShowFormForProtectedEnrichment() {
+        $this->useEnglish();
 
-        $this->dispatch('/admin/enrichmentkey/create');
-        $this->assertModule('admin');
-        $this->assertController('enrichmentkey');
-        $this->assertAction('create');
-        $this->assertResponseCode(200);
-    }
-
-    public function testCreateActionDuplicateName() {
-        $ek = new Opus_EnrichmentKey();
-        $ek->setName('testCreateActionDuplicateName');
-        $ek->store();
-
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'name' => 'testCreateActionDuplicateName',
-                    'submit' => 'submit'
-                ));
-
-        $this->dispatch('/admin/enrichmentkey/create');
-        $this->assertResponseCode(200);
-        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
-
-        $ek->delete();
-    }
-
-    public function testCreateActionProtectedEnrichmentKey() {
-        $ek = Opus_EnrichmentKey::fetchByName(self::$protectedEnrichmentkey);
-        $this->assertNotNull($ek);
-        $config = Zend_Registry::get('Zend_Config');
-        $this->assertTrue(in_array($ek->getName(), explode(',', $config->enrichmentkey->protected->modules)));
-
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'name' => $ek->getName(),
-                    'submit' => 'submit'
-                ));
-
-        $this->dispatch('/admin/enrichmentkey/create');
-        $this->assertResponseCode(200);
-        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
-    }
-
-    public function testCreateActionProtectedUnusedEnrichmentKey() {
-        $ek = Opus_EnrichmentKey::fetchByName(self::$protectedUnusedEnrichmentkey);
-        $this->assertNull($ek);
-
-        $config = Zend_Registry::get('Zend_Config');
-        $this->assertTrue(in_array(self::$protectedUnusedEnrichmentkey, explode(',', $config->enrichmentkey->protected->migration)));
-
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'name' => self::$protectedUnusedEnrichmentkey,
-                    'submit' => 'submit'
-                ));
-
-        $this->dispatch('/admin/enrichmentkey/create');
-        $this->assertResponseCode(200);
-        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
-
-    }
-
-    public function testCreateActionInvalidInput() {
-        $this->assertNull(Opus_EnrichmentKey::fetchByName('foo/bar'));
-
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'name' => 'foo/bar',
-                    'submit' => 'submit'
-                ));
-        $this->dispatch('/admin/enrichmentkey/create');
-        $this->assertResponseCode(200);
-        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
-   }
-
-
-    /**
-     * @depends testCreateAction
-     */
-    public function testUpdateAction() {
-        $ek = new Opus_EnrichmentKey();
-        $ek->setName('testUpdateAction');
-        $ek->store();
-
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'name' => $ek->getName() . '_updated',
-                    'submit' => 'submit'
-                ));
-
-        $this->dispatch('/admin/enrichmentkey/update/name/' . $ek->getName());
-        $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
-
-        $this->assertNull(Opus_EnrichmentKey::fetchByName('testUpdateAction'));
-        $this->assertNotNull(Opus_EnrichmentKey::fetchByName('testUpdateAction_updated'));
-
-        $enrichmentkey = Opus_EnrichmentKey::fetchByName('testUpdateAction_updated');
-        $this->assertEquals('testUpdateAction_updated', $enrichmentkey->getDisplayName());
-
-        $enrichmentkey->delete();
-    }
-
-
-
-    /**
-     * @depends testUpdateAction
-     */
-    public function testUpdateActionNoInput() {
-        $ek = new Opus_EnrichmentKey();
-        $ek->setName('testUpdateActionInvalidInput');
-        $ek->store();
-
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'name' => '',
-                    'submit' => 'submit'
-                ));
-
-        $this->dispatch('/admin/enrichmentkey/update/name/' . $ek->getName());
-
-        $this->assertResponseCode(200);
-        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
-
-        $ek->delete();
-    }
-
-    /**
-     * @depends testUpdateAction
-     */
-    public function testUpdateActionInvalidInput() {
-        $ek = new Opus_EnrichmentKey();
-        $ek->setName('testUpdateActionInvalidInput');
-        $ek->store();
-
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'name' => $ek->getName() . '-updated',
-                    'submit' => 'submit'
-                ));
-
-        $this->dispatch('/admin/enrichmentkey/update/name/' . $ek->getName());
-
-        $this->assertResponseCode(200);
-        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
-
-        $ek->delete();
-    }
-
-    public function testUpdateActionWithUsedName() {
-        // create two enrichment keys
-        $ek_foo = new Opus_EnrichmentKey();
-        $ek_foo->setName('testUpdateActionWithUsedName-foo');
-        $ek_foo->store();
-
-        $ek_bar = new Opus_EnrichmentKey();
-        $ek_bar->setName('testUpdateActionWithUsedName-bar');
-        $ek_bar->store();
-
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'name' => $ek_foo,
-                    'submit' => 'submit'
-                ));
-
-        $this->dispatch('/admin/enrichmentkey/update/name/' . $ek_bar);
-        $this->assertResponseCode(200);
-        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
-
-        // cleanup
-        $ek_foo->delete();
-        $ek_bar->delete();
-    }
-
-    public function testUpdateActionCaseSensitiveName() {
-        $cs_string = 'testUpdateActionCaseSensitiveKey';
-        $cs_string_lc = strtolower($cs_string);
-
-        $ek_foo = new Opus_EnrichmentKey();
-        $ek_foo->setName($cs_string);
-        $ek_foo->store();
-
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'name' => $cs_string_lc,
-                    'submit' => 'submit'
-                ));
-
-        $this->dispatch('/admin/enrichmentkey/update/name/' . $cs_string);
-        $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
-
-        $ek_test = Opus_EnrichmentKey::fetchByName($cs_string_lc);
-        $this->assertEquals($cs_string_lc, $ek_test->getDisplayName());
-        $ek_test->delete();
-    }
-
-    public function testUpdateActionProtectedEnrichmentKey() {
-        $ek = Opus_EnrichmentKey::fetchByName(self::$protectedEnrichmentkey);
-        $this->assertNotNull($ek);
-        $config = Zend_Registry::get('Zend_Config');
-        $this->assertTrue(in_array($ek->getName(), explode(',', $config->enrichmentkey->protected->modules)));
-
-        $this->request
-                ->setMethod('POST')
-                ->setPost(array(
-                    'name' => $ek->getName() .'_update',
-                    'submit' => 'submit'
-                ));
-
-        $this->dispatch('/admin/enrichmentkey/update/name/' . $ek->getName());
-        $this->assertResponseCode(200);
-        $this->assertContains('<ul class="errors">', $this->getResponse()->getBody());
-    }
-
-    /**
-     * @depends testUpdateActionInvalidInput
-     */
-    public function testDeleteAction() {
-        $ek = new Opus_EnrichmentKey();
-        $ek->setName('testDeleteAction');
-        $ek->store();
-
-        $this->dispatch('/admin/enrichmentkey/delete/name/' . $ek->getName());
+        $this->dispatch($this->getControllerPath() . '/delete/id/City');
 
         $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
+        $this->assertRedirectTo($this->getControllerPath());
+        $this->verifyFlashMessage('controller_crud_model_not_modifiable', self::MESSAGE_LEVEL_FAILURE);
 
-        $this->assertNull(Opus_EnrichmentKey::fetchByName('testDeleteAction'));
+        $enrichmentKey = new Opus_EnrichmentKey('City');
 
-        // cleanup is not needed here
-    }
-
-    public function testDeleteActionWithMissingNameParam() {
-        $this->dispatch('/admin/enrichmentkey/delete/');
-        $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
-    }
-
-    public function testDeleteActionWithUnknownNameParam() {
-        $this->assertNull(Opus_EnrichmentKey::fetchByName('testDeleteActionWithUnknownNameParam'));
-        $this->dispatch('/admin/enrichmentkey/delete/name/testDeleteActionWithUnknownNameParam');
-        $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
-    }
-
-    public function testDeleteActionProtectedEnrichmentKey() {
-        $ek = Opus_EnrichmentKey::fetchByName(self::$protectedEnrichmentkey);
-        $this->assertNotNull($ek);
-        $config = Zend_Registry::get('Zend_Config');
-        $this->assertTrue(in_array($ek->getName(), explode(',', $config->enrichmentkey->protected->modules)));
-
-        $this->dispatch('/admin/enrichmentkey/delete/name/' . $ek->getName());
-        $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/admin/enrichmentkey');
+        $this->assertNotNull($enrichmentKey);
+        $this->assertEquals('City', $enrichmentKey->getName());
     }
 
 }

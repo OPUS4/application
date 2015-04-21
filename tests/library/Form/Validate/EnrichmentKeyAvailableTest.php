@@ -24,50 +24,51 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
- * @author      Gunar Maiwald <maiwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @category    Tests
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id: Enrichmentkey.php 9260 2011-12-20 10:44:39Z gmaiwald $
+ * @version     $Id$
  */
 
 /**
- * Form for creating and editing a role.
+ * Unit Tests for enrichment key availability validation.
  */
-class Admin_Form_Enrichmentkey extends Zend_Form {
+class Form_Validate_EnrichmentKeyAvailableTest extends ControllerTestCase {
 
-    //private static $protectedRoles = array('administrator', 'guest');
+    public function testIsValidSuccess() {
+        $validator = new Form_Validate_EnrichmentKeyAvailable();
 
-    /**
-     * Constructs form.
-     * @param int $id
-     */
-    public function __construct($name = null) {
-        $section = empty($name) ? 'new' : 'edit';
-
-        $config = new Zend_Config_Ini(
-            APPLICATION_PATH .
-            '/modules/admin/forms/enrichmentkey.ini', $section
-        );
-
-        parent::__construct($config->form->enrichmentkey);
-
-        if (!empty($name)) {
-            $enrichmentkey = new Opus_Enrichmentkey($name);
-            $this->populateFromEnrichmentkey($enrichmentkey);
-        }
+        $this->assertTrue($validator->isValid('TestEnrichment'));
     }
 
-    public function init() {
-        parent::init();
-        $this->getElement('name')->addValidator(new Form_Validate_EnrichmentkeyAvailable());
+    public function testIsValidFailure() {
+        $validator = new Form_Validate_EnrichmentKeyAvailable();
+
+        $this->assertFalse($validator->isValid('City'));
+
+        $messages = $validator->getMessages();
+
+        $this->assertCount(1, $messages);
+        $this->assertArrayHasKey('isAvailable', $messages);
     }
 
-    public function populateFromEnrichmentkey($enrichmentkey) {
-        $nameElement = $this->getElement('name');
-        $name = $enrichmentkey->getName();
-        $nameElement->setValue($enrichmentkey);
+    public function testIsValidSuccessForSameId() {
+        $validator = new Form_Validate_EnrichmentKeyAvailable();
+
+        $this->assertTrue($validator->isValid('City', array('Id' => 'City')));
+    }
+
+    public function testIsValidFailureForChangedName() {
+        $validator = new Form_Validate_EnrichmentKeyAvailable();
+
+        $this->assertFalse($validator->isValid('City', array('Id' => 'TestEnrichment')));
+    }
+
+    public function testIsValidSuccessForChangedName() {
+        $validator = new Form_Validate_EnrichmentKeyAvailable();
+
+        $this->assertTrue($validator->isValid('TestEnrichment', array('Id' => 'City')));
     }
 
 }

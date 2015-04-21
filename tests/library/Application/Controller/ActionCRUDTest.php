@@ -114,6 +114,17 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase {
         $this->assertNull($model);
     }
 
+    public function testGetModelWithStringId() {
+        $this->controller->setVerifyModelIdIsNumeric(false);
+        $this->controller->setFormClass('Admin_Form_EnrichmentKey');
+
+        $model = $this->controller->getModel('City');
+
+        $this->assertNotNull($model);
+        $this->assertInstanceOf('Opus_EnrichmentKey', $model);
+        $this->assertEquals('City', $model->getName());
+    }
+
     public function testGetModelEmptyId() {
         $model = $this->controller->getModel('');
 
@@ -156,7 +167,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase {
     public function testGetMessages() {
         $messages = $this->controller->getMessages();
 
-        $this->assertEquals(5, count($messages));
+        $this->assertEquals(6, count($messages));
         $this->verifyMessages($messages);
     }
 
@@ -170,7 +181,7 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase {
     public function testLoadDefaultMessages() {
         $messages = $this->controller->getMessages();
 
-        $this->assertEquals(5, count($messages));
+        $this->assertEquals(6, count($messages));
         $this->verifyMessages($messages);
     }
 

@@ -655,6 +655,14 @@
                                     <controller>enrichmentkey</controller>
                                     <action>edit</action>
                                 </edit>
+
+                                <delete>
+                                    <type>mvc</type>
+                                    <label>admin_enrichmentkey_delete</label>
+                                    <module>admin</module>
+                                    <controller>enrichmentkey</controller>
+                                    <action>delete</action>
+                                </delete>
                             </pages>
                         </enrichmentKey>
 
