@@ -41,11 +41,37 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase {
 
     private $controller = null;
 
+    private $licenceIds = null;
+
     public function setUp() {
         parent::setUp();
 
         $this->controller = $this->getController();
         $this->controller->setFormClass('Admin_Form_Licence');
+
+        $licences = Opus_Licence::getAll();
+
+        $this->licenceIds = array();
+
+        foreach ($licences as $licence) {
+            $this->licenceIds[] = $licence->getId();
+        }
+    }
+
+    public function tearDown() {
+        $licences = Opus_Licence::getAll();
+
+        if (count($this->licenceIds) < count($licences)) {
+            foreach ($licences as $licence) {
+                if (!in_array($licence->getId(), $this->licenceIds)) {
+                    $licence->delete();
+                    var_dump(count($licences));
+
+                }
+            }
+        }
+
+        parent::tearDown();
     }
 
     private function verifyMessages($messages) {
@@ -232,6 +258,25 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase {
 
         $licence = new Opus_Licence($licenceId);
         $licence->delete();
+    }
+
+    public function testHandlePostSaveShowDisabled() {
+        $this->controller->setShowActionEnabled(false);
+
+        $this->assertFalse($this->controller->getShowActionEnabled());
+
+        $result = $this->controller->handleModelPost(array(
+            'Save' => 'Abspeichern',
+            'NameLong' => 'New Test Licence',
+            'Language' => 'deu',
+            'LinkLicence' => 'www.example.org/licence'
+        ));
+
+        $this->assertNotNull($result);
+        $this->assertInternalType('array', $result);
+        $this->assertArrayNotHasKey('action', $result);
+        $this->assertArrayHasKey('message', $result);
+        $this->assertEquals(Application_Controller_ActionCRUD::SAVE_SUCCESS, $result['message']);
     }
 
     public function testHandlePostSaveInvalid() {

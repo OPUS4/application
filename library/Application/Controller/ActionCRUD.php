@@ -328,7 +328,9 @@ class Application_Controller_ActionCRUD extends Controller_Action {
                         }
                         else {
                             // return to index page
-                            return array();
+                            return array(
+                                'message' => self::SAVE_SUCCESS
+                            );
                         }
                     }
                     else {

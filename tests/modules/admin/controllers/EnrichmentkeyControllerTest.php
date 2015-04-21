@@ -46,9 +46,6 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
         return Opus_EnrichmentKey::getAll();
     }
 
-    private static $protectedEnrichmentkey = 'review.accepted_by';
-    private static $protectedUnusedEnrichmentkey = 'SubjectSwd';
-
     public function createNewModel() {
         $model = new Opus_EnrichmentKey();
         $model->setName('TestEnrichmentKey');
@@ -98,7 +95,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
 
         $this->assertRedirect();
         $this->assertRedirectRegex('/^\/admin\/enrichmentkey/');
-        // TODO $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
+        $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
         $enrichment = new Opus_EnrichmentKey('MyTestEnrichment');
 
@@ -187,7 +184,7 @@ class Admin_EnrichmentkeyControllerTest extends CrudControllerTestCase {
 
         $this->dispatch($this->getControllerPath() . '/edit');
         $this->assertRedirectTo($this->getControllerPath());
-        // TODO $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
+        $this->verifyFlashMessage('controller_crud_save_success', self::MESSAGE_LEVEL_NOTICE);
 
         $enrichmentKey = new Opus_EnrichmentKey('MyTestEnrichmentModified');
 
