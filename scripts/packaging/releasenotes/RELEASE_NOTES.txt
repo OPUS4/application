@@ -6,6 +6,9 @@ Die URLs für creativecommons.org in den Lizenzen wurden auf HTTPS umgestellt,
 um bei Instanzen mit HTTPS "Mixed Content"-Warnungen zu vermeiden. Das wird
 beim Update von bestehenden Instanzen nicht automatisch angepasst.
 
+Die erlaubten Zeichen für EnrichmentKeys wurde eingeschränkt. EnrichmentKeys
+müssen mit einem Buchstaben beginnen und dürfen Buchstaben, Zahlen, '.' und
+'_' verwenden. Existierende EnrichmentKeys können weiterhin verwendet werden.
 
 h2. ======================== Release 4.4.5 2014-10-30 ========================
 
