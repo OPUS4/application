@@ -65,8 +65,6 @@ class Application_Controller_ActionCRUDTest extends ControllerTestCase {
             foreach ($licences as $licence) {
                 if (!in_array($licence->getId(), $this->licenceIds)) {
                     $licence->delete();
-                    var_dump(count($licences));
-
                 }
             }
         }
