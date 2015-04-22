@@ -144,6 +144,7 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
      * @return string Formatted date
      */
     public function formatDate($date) {
+        Form_Element_Language::getLanguageList(); // initializes language list translations if necessary
         if (!($date instanceof Opus_Date)) {
             return $date;
         }
