@@ -118,6 +118,7 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
             }
             else {
                 if ($field->isSelection()) {
+                    Form_Element_Language::getLanguageList(); // initializes language list translations if necessary
                     $value = $field->getValue();
                     $key = $this->_translation->getKeyForValue($model, $field->getName(), $value);
                     return $this->view->translate($key);
@@ -144,7 +145,6 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
      * @return string Formatted date
      */
     public function formatDate($date) {
-        Form_Element_Language::getLanguageList(); // initializes language list translations if necessary
         if (!($date instanceof Opus_Date)) {
             return $date;
         }
@@ -174,7 +174,6 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
         }
         else {
             $this->getLogger()->debug('Formatting ' . $value);
-
             return $value;
         }
     }
