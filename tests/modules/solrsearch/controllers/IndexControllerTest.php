@@ -29,7 +29,8 @@
  * @package     Module_Solrsearch
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -1188,6 +1189,32 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/solrsearch/index/search/searchtype/all');
         $this->assertFalse(Opus_Security_Realm::getInstance()->checkModule('export'));
         $this->assertNotQuery('//a[@href="/solrsearch/index/search/searchtype/all/export/xml/stylesheet/example"]');
+    }
+
+    public function testDisableEmptyCollectionTrue() {
+        Zend_Registry::get('Zend_Config')->merge(
+            new Zend_Config(array('browsing' => array('disableEmptyCollections' => 1)))
+        );
+
+        $this->dispatch('/solrsearch/index/search/searchtype/collection/id/2');
+
+        $this->assertNotQuery('//a[@href="/solrsearch/index/search/searchtype/collection/id/6"]');
+        $this->assertQueryContentContains('//a[@href="/rss/index/index/searchtype/collection/id/6"]/..',
+            '3 Sozialwissenschaften');
+    }
+
+    public function testDisableEmptyCollectionsFalse() {
+        Zend_Registry::get('Zend_Config')->merge(
+            new Zend_Config(array('browsing' => array('disableEmptyCollections' => 0)))
+        );
+
+        $this->dispatch('/solrsearch/index/search/searchtype/collection/id/2');
+
+        $this->assertQuery('//a[@href="/solrsearch/index/search/searchtype/collection/id/6"]');
+        $this->assertQueryContentContains('//a[@href="/solrsearch/index/search/searchtype/collection/id/6"]',
+            'Sozialwissenschaften');
+        $this->assertQueryContentContains('//a[@href="/solrsearch/index/search/searchtype/collection/id/6"]/..',
+            '(0)');
     }
 
 }
