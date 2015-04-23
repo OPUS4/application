@@ -126,7 +126,7 @@ class Review_IndexController extends Controller_Action {
         }
 
         $this->view->breadcrumbsDisabled = true;
-        
+
         $result = $finder->ids();
         if (empty($result)) {
             $this->view->message = 'review_no_docs_found';

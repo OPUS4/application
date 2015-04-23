@@ -34,37 +34,39 @@
 
 <?php if ($this->pageCount > 1): ?>
     <div class="paginationControl">
+        <ul>
 
     <!-- First and previous page link -->
     <?php if (isset($this->previous)): ?>
-        <a href="<?PHP echo $this->url(array('page' => $this->first)); ?>">
-            &lt;&lt; <?= $this->translate('review_pagination_first') ?></a> |
-        <a href="<?php echo $this->url(array('page' => $this->previous)); ?>">
-            &lt; <?= $this->translate('review_pagination_prev') ?></a> |
+        <li><a href="<?PHP echo $this->url(array('page' => $this->first)); ?>">
+            &lt;&lt; <?= $this->translate('review_pagination_first') ?></a></li>
+        <li><a href="<?php echo $this->url(array('page' => $this->previous)); ?>">
+            &lt; <?= $this->translate('review_pagination_prev') ?></a></li>
       <?php else: ?>
-        <span class="disabled">&lt;&lt; <?= $this->translate('review_pagination_first') ?></span> |
-        <span class="disabled">&lt; <?= $this->translate('review_pagination_prev') ?></span> |
+        <li class="disabled">&lt;&lt; <?= $this->translate('review_pagination_first') ?></li>
+        <li class="disabled">&lt; <?= $this->translate('review_pagination_prev') ?></li>
     <?php endif; ?>
 
     <!-- Numbered page links -->
     <?php foreach ($this->pagesInRange as $page): ?>
         <?php if ($page != $this->current): ?>
-            <a href="<?php echo $this->url(array('page' => $page)); ?>" ..>
-                <?php echo $page; ?></a> |
+            <li><a href="<?php echo $this->url(array('page' => $page)); ?>" ..>
+                <?php echo $page; ?></a></li>
           <?php else: ?>
-            <span class="currentPage"><?php echo $page; ?></span> |
+            <li class="currentPage"><?php echo $page; ?></li>
         <?php endif; ?>
     <?php endforeach; ?>
 
     <!-- Next and last page link -->
     <?php if (isset($this->next)): ?>
-        <a href="<?php echo $this->url(array('page' => $this->next)); ?>">
-            <?= $this->translate('review_pagination_next') ?> &gt;</a> |
-        <a href="<?php echo $this->url(array('page' => $this->last)); ?>">
-            <?= $this->translate('review_pagination_last') ?> &gt;&gt;</a>
+        <li><a href="<?php echo $this->url(array('page' => $this->next, '')); ?>">
+            <?= $this->translate('review_pagination_next') ?> &gt;</a></li>
+        <li><a href="<?php echo $this->url(array('page' => $this->last)); ?>">
+            <?= $this->translate('review_pagination_last') ?> &gt;&gt;</a></li>
       <?php else: ?>
-        <span class="disabled"><?= $this->translate('review_pagination_next') ?> &gt;</span> |
-        <span class="disabled"><?= $this->translate('review_pagination_last') ?> &gt;&gt;</span>
+        <li class="disabled"><?= $this->translate('review_pagination_next') ?> &gt;</li>
+        <li class="disabled"><?= $this->translate('review_pagination_last') ?> &gt;&gt;</li>
     <?php endif; ?>
+            </ul>
     </div>
 <?php endif; ?>
