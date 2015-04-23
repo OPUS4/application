@@ -48,7 +48,6 @@ class LicenseController extends Controller_Action {
      * @return void
      */
     public function indexAction() {
-        // $logger = Zend_Registry::get('Zend_Log');
         // Load document
         $licId = $this->getRequest()->getParam('licId');
         try {

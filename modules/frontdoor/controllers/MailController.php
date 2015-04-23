@@ -56,13 +56,13 @@ class Frontdoor_MailController extends Controller_Action {
         $document = new Opus_Document($docId);
         $this->view->docId = $docId;
         $this->view->type = $document->getType();
-        
+
         $author_names = array();
         foreach ($document->getPersonAuthor() as $author) {
             array_push($author_names, $author->getName());
         }
         $this->view->author = $author_names;
-        
+
         $title = $document->getTitleMain();
         if (count($title) > 0) {
             $this->view->title = $title[0]->getValue();
@@ -70,7 +70,7 @@ class Frontdoor_MailController extends Controller_Action {
         else {
             $this->view->title = 'untitled document';
         }
-        
+
         // show mail form
         $mailForm = new Frontdoor_Form_MailForm();
         $mailForm->title->setValue($this->view->title);
@@ -84,11 +84,11 @@ class Frontdoor_MailController extends Controller_Action {
          *
          */
     }
-    
+
     /**
      *
      * TODO: this action is currently untested and therefore not supported
-     * 
+     *
      */
     public function sendmailAction() {
         throw new Application_Exception('currently not supported');
@@ -96,7 +96,7 @@ class Frontdoor_MailController extends Controller_Action {
         /*
         $form = new Frontdoor_Form_MailForm();
         $this->view->form = $form;
-        
+
         if (!$this->getRequest()->isPost()) {
             return ;
         }
@@ -145,7 +145,7 @@ class Frontdoor_MailController extends Controller_Action {
          */
     }
 
-    
+
     /**
      * Send mail to author(s) of document.
      */
@@ -168,7 +168,7 @@ class Frontdoor_MailController extends Controller_Action {
         if (empty($authors)) {
             throw new Application_Exception('no authors contactable via email');
         }
-        
+
         $form = new Frontdoor_Form_ToauthorForm(array('authors' => $authors));
         $form->setAction(
             $this->view->url(
@@ -202,8 +202,7 @@ class Frontdoor_MailController extends Controller_Action {
             $this->view->success = 'frontdoor_mail_ok';
         }
         catch (Exception $e) {
-            $log = Zend_Registry::get('Zend_Log');
-            $log->err($e->getMessage());
+            $this->getLogger()->err($e->getMessage());
             $this->view->success = 'frontdoor_mail_notok';
         }
         $this->render('feedback');

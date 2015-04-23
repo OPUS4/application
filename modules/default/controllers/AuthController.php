@@ -90,7 +90,7 @@ class AuthController extends Controller_Action {
         // Initialize form.
         $form = $this->getLoginForm();
         /* @var $logger Zend_Log */
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = $this->getLogger();
 
         // check for return module, controller, action and parameteres, overwrite $_login_url.
         $rparams = $this->findReturnParameters();

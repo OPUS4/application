@@ -95,13 +95,13 @@ class Oai_IndexController extends Controller_Xml {
         }
         catch (Oai_Model_Exception $e) {
             $errorCode = Oai_Model_Error::mapCode($e->getCode());
-            Zend_Registry::get('Zend_Log')->err($errorCode);
+            $this->getLogger()->err($errorCode);
             $this->_proc->setParameter('', 'oai_error_code', $errorCode);
-            Zend_Registry::get('Zend_Log')->err($e->getMessage());
+            $this->getLogger()->err($e->getMessage());
             $this->_proc->setParameter('', 'oai_error_message', htmlentities($e->getMessage()));
         }
         catch (Oai_Model_ResumptionTokenException $e) {
-            Zend_Registry::get('Zend_Log')->err($e);
+            $this->getLogger()->err($e);
             $this->_proc->setParameter('', 'oai_error_code', 'unknown');
             $this->_proc->setParameter(
                 '', 'oai_error_message', 'An error occured while processing the resumption token.'
@@ -109,7 +109,7 @@ class Oai_IndexController extends Controller_Xml {
             $this->getResponse()->setHttpResponseCode(500);
         }
         catch (Exception $e) {
-            Zend_Registry::get('Zend_Log')->err($e);
+            $this->getLogger()->err($e);
             $this->_proc->setParameter('', 'oai_error_code', 'unknown');
             $this->_proc->setParameter('', 'oai_error_message', 'An internal error occured.');
             $this->getResponse()->setHttpResponseCode(500);
@@ -333,7 +333,7 @@ class Oai_IndexController extends Controller_Xml {
             'bibliography:false' => 'Set for non-bibliographic entries',
         );
 
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = $this->getLogger();
         $setSpecPattern = '[A-Za-z0-9\-_\.!~\*\'\(\)]+';
 
         $finder = new Opus_DocumentFinder();
@@ -487,7 +487,7 @@ class Oai_IndexController extends Controller_Xml {
         $bibliography = $document->getBelongsToBibliography() == 1 ? 'true' : 'false';
         $this->_addSpecInformation($node, 'bibliography:' . $bibliography);
 
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = $this->getLogger();
         $setSpecs = Oai_Model_SetSpec::getSetSpecsFromCollections($document->getCollection());
         foreach ($setSpecs AS $setSpec) {
             if (preg_match("/^([A-Za-z0-9\-_\.!~\*'\(\)]+)(:[A-Za-z0-9\-_\.!~\*'\(\)]+)*$/", $setSpec)) {

@@ -42,7 +42,7 @@ class Publish_DepositController extends Controller_Action {
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response,
                                 array $invokeArgs = array()) {
-        $this->log = Zend_Registry::get('Zend_Log');
+        $this->log = $this->getLogger();
         $this->session = new Zend_Session_Namespace('Publish');
 
         parent::__construct($request, $response, $invokeArgs);

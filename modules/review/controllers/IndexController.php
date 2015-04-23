@@ -246,7 +246,7 @@ class Review_IndexController extends Controller_Action {
         $finder = new Opus_DocumentFinder();
         $finder->setServerState(self::$_reviewServerState);
 
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = $this->getLogger();
         $userId = $this->_loggedUser->getUserId();
         $onlyReviewerByUserId = false;
 
