@@ -33,23 +33,23 @@
  * @version     $Id$
  */
 class Publish_IndexController extends Controller_Action {
-    
+
     /**
      * Renders the first form:
      * a list of available document types (that can be configured in config.ini
      * and different upload fields
-     * 
+     *
      * @return void
      *
      */
-    public function indexAction() {        
+    public function indexAction() {
         $session = new Zend_Session_Namespace('Publish');
 
         //unset all possible session content
         $session->unsetAll();
 
         $this->view->title = 'publish_controller_index';
-        
+
         $form = new Publish_Form_PublishingFirst();
 
         $this->view->action_url = $this->view->url(array('controller' => 'form', 'action' => 'upload'));
@@ -69,7 +69,7 @@ class Publish_IndexController extends Controller_Action {
         $session->documentId = "";
         $session->additionalFields = array();
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
 
         if (isset($config->publish->filetypes->allowed)) {
             $this->view->extensions = $config->publish->filetypes->allowed;

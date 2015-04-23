@@ -120,7 +120,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $proc->registerPHPFunctions('urlencode');
         $proc->importStyleSheet($xslt);
 
-        $config = Zend_Registry::getInstance()->get('Zend_Config');
+        $config = $this->getConfig();
         $layoutPath = 'layouts/' . (isset($config, $config->theme) ? $config->theme : '');
         $numOfShortAbstractChars =
             isset($config,
@@ -131,7 +131,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $proc->setParameter('', 'layoutPath', $baseUrl . '/' . $layoutPath);
         $proc->setParameter('', 'isMailPossible', $this->isMailPossible($document));
         $proc->setParameter('', 'numOfShortAbstractChars', $numOfShortAbstractChars);
-        
+
         /* print on demand config */
         $printOnDemandEnabled = false;
         $podConfig = $config->get('printOnDemand', false);
@@ -160,7 +160,7 @@ class Frontdoor_IndexController extends Controller_Action {
         $this->view->title = $this->getFrontdoorTitle($document);
 
         $this->incrementStatisticsCounter($docId);
-        
+
         $actionbox = new Admin_Form_ActionBox();
         $actionbox->prepareRenderingAsView();
         $actionbox->populateFromModel($document);
@@ -272,7 +272,7 @@ class Frontdoor_IndexController extends Controller_Action {
     }
 
     private function createMetaTagsForDocument($document) {
-        $config = Zend_Registry::getInstance()->get('Zend_Config');
+        $config = $this->getConfig();
         $serverUrl = $this->view->serverUrl();
         $baseUrlFiles = $serverUrl
             . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents');
@@ -381,13 +381,13 @@ class Frontdoor_IndexController extends Controller_Action {
             $this->getLogger()->err("Counting frontdoor statistics failed: " . $e);
         }
     }
-    
+
     /**
      * maps an old ID from OPUS3 to the new one in OPUS4
-     * 
+     *
      * @deprecated since OPUS 4.0.3: this function will be removed in future releases
      * use Rewrite_IndexController instead
-     * 
+     *
      * @return void
      */
     public function mapopus3Action() {

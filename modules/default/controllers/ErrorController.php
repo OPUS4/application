@@ -55,8 +55,8 @@ class ErrorController extends Controller_Action {
      * @return void
      */
     public function errorAction() {
-        $config = Zend_Registry::get('Zend_Config');
-        $logger = Zend_Registry::get('Zend_Log');
+        $config = $this->getConfig();
+        $logger = $this->getLogger();
 
         $errors = $this->_getParam('error_handler');
 

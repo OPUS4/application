@@ -161,7 +161,7 @@ class Review_IndexController extends Controller_Action {
         $useCurrentUser = false;
         $person = null;
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         if (isset($config, $config->clearing->addCurrentUserAsReferee)) {
             $useCurrentUser = $config->clearing->addCurrentUserAsReferee;
         }

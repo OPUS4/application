@@ -60,7 +60,7 @@ class Admin_WorkflowController extends Controller_Action {
         $this->_documentsHelper = $this->_helper->getHelper('Documents');
         $this->_workflowHelper = $this->_helper->getHelper('Workflow');
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
 
         if (isset($config->confirmation->document->statechange->enabled)) {
             $this->_confirmChanges = ($config->confirmation->document->statechange->enabled == 1) ? true : false;
@@ -233,7 +233,7 @@ class Admin_WorkflowController extends Controller_Action {
      *
      * @param Opus_Document $document
      * @param Zend_Form $form
-     * 
+     *
      */
     private function _addPublishNotificationSelection($document, $form) {
         $form->addElement(
@@ -291,8 +291,8 @@ class Admin_WorkflowController extends Controller_Action {
                         $id, array('checked' => true, 'label' => 'foo', 'label' => $label)
                     );
                     $element->getDecorator('Label')->setOption('class', 'notification-option');
-                }                
-                $form->addElement($element);                
+                }
+                $form->addElement($element);
                 $index++;
             }
         }

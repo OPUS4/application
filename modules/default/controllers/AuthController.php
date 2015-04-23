@@ -126,7 +126,7 @@ class AuthController extends Controller_Action {
         $auth = new Opus_Security_AuthAdapter();
 
         // Overwrite auth adapter if config-key is set.
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         if (isset($config, $config->authenticationModule) and ($config->authenticationModule === 'Ldap')) {
             $auth = new Opus_Security_AuthAdapter_Ldap();
         }

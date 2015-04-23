@@ -56,7 +56,7 @@ class CitationExport_IndexController extends Controller_Action {
             $this->getResponse()->setHttpResponseCode(400);
             return;
         }
-                        
+
         $this->view->output = $output;
         $this->view->downloadUrl = $this->view->url(array('action' => 'download'), false, null);
     }
@@ -81,7 +81,7 @@ class CitationExport_IndexController extends Controller_Action {
             $this->getResponse()->setHttpResponseCode(400);
             return;
         }
-        
+
         // Transform to HTML
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_helper->layout()->disableLayout();
@@ -100,7 +100,7 @@ class CitationExport_IndexController extends Controller_Action {
                 break;
             default:
                 $extension = 'txt';
-        }               
+        }
         $this->getResponse()->setHeader(
             'Content-Disposition',
             'attachment; filename=' . $outputFormat . '-' . $this->getRequest()->getParam('docId') . '.' . $extension,
@@ -133,7 +133,7 @@ class CitationExport_IndexController extends Controller_Action {
         // check if document access is allowed
         // TODO document access check will be refactored in later releases
         new Util_Document($document);
-        
+
         return $document;
     }
 
@@ -173,13 +173,13 @@ class CitationExport_IndexController extends Controller_Action {
 
     /**
      * transform XML output to desired output format
-     * 
+     *
      * @param Opus_Document $document Document that should be transformed
      * @param string $template XSLT stylesheet that should be applied
-     * 
+     *
      * @return string document in the given output format as plain text
      */
-     private function getPlainOutput($document, $template) {
+    private function getPlainOutput($document, $template) {
         // Set up filter and get XML-Representation of filtered document.
         $filter = new Opus_Model_Filter;
         $filter->setModel($document);
@@ -192,12 +192,12 @@ class CitationExport_IndexController extends Controller_Action {
         // find Enrichment that should be included in bibtex-output as note
         // TODO document this feature
         $enrichmentNote = null;
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         if (isset($config->citationExport->bibtex->enrichment)
                 && !empty($config->citationExport->bibtex->enrichment)) {
             $enrichmentNote = $config->citationExport->bibtex->enrichment;
         }
-        
+
         // Set up XSLT-Processor
         try {
             $proc = new XSLTProcessor;
@@ -205,11 +205,11 @@ class CitationExport_IndexController extends Controller_Action {
             $proc->setParameter('', 'url_prefix', $this->view->fullUrl());
             $proc->registerPHPFunctions();
             $proc->importStyleSheet($xslt);
-            
+
             return $proc->transformToXML($xml);
         }
         catch (Exception $e) {
             throw new Application_Exception($e->getMessage(), null, $e);
-        }       
-     }
+        }
+    }
 }

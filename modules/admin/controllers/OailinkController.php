@@ -57,8 +57,7 @@ class Admin_OailinkController extends Controller_Action {
         $this->view->baseLink = $baseScheme . '://' . $baseHost . $baseUrl . '/oai';
 
         // set repIdentifier for OAI request examples
-        $registry = Zend_Registry::getInstance();
-        $config = $registry->get('Zend_Config');
+        $config = $this->getConfig();
         $repIdentifier = $config->oai->repository->identifier;
         $this->view->repIdentifier = $repIdentifier;
     }

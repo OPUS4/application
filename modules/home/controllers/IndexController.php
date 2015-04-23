@@ -144,7 +144,7 @@ class Home_IndexController extends Controller_Action {
 
 
     public function helpAction() {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         if (isset($config->help->separate)) {
             $this->view->separate = (boolean) $config->help->separate;
         }

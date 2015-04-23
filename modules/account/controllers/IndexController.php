@@ -46,7 +46,7 @@ class Account_IndexController extends Controller_Action {
     protected function customAccessCheck() {
         $parentValue =  parent::customAccessCheck();
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         if (!isset($config) or !isset($config->account->editOwnAccount)) {
             return false;
         }

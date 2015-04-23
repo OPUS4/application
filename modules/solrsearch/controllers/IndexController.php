@@ -163,7 +163,7 @@ class Solrsearch_IndexController extends Controller_Action {
         }
 
         // TODO does the following make sense after the above?
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         if (isset($config->export->stylesheet->search) && Opus_Security_Realm::getInstance()->checkModule('export')) {
             $this->view->stylesheet = $config->export->stylesheet->search;
         }

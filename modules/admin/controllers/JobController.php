@@ -39,7 +39,7 @@ class Admin_JobController extends Controller_Action {
 
     public function indexAction() {
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
 
         if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
             $this->view->asyncjobs = true;
@@ -50,17 +50,17 @@ class Admin_JobController extends Controller_Action {
             $this->view->asyncjobs = false;
         }
     }
-    
+
     public function menuAction() {
         $this->view->title = $this->view->translate('admin_title_job');
     }
 
-    
+
     /**
      * TODO review functionality and create ticket
      */
     public function workerMonitorAction() {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $this->_helper->layout()->disableLayout();
         if (isset($config->runjobs->asynchronous) && $config->runjobs->asynchronous) {
             $this->view->failedJobCount = Opus_Job::getCount(Opus_Job::STATE_FAILED);
@@ -77,7 +77,7 @@ class Admin_JobController extends Controller_Action {
         if (empty($this->view->state) || empty($this->view->label)) {
             throw new Application_Exception('Invalid arguments');
         }
-        
+
         $this->view->jobs = Opus_Job::getByLabels(array($this->view->label), null, $this->view->state);
     }
 
