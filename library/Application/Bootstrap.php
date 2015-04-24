@@ -115,11 +115,9 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $libRealPath = realpath(APPLICATION_PATH . '/library');
 
         $view->addHelperPath($libRealPath . '/Application/View/Helper', 'Application_View_Helper');
-        $view->addHelperPath($libRealPath . '/View/Helper', 'View_Helper');
 
         // Set path to shared view partials
         $view->addScriptPath($libRealPath . '/Application/View/Partial');
-        $view->addScriptPath($libRealPath . '/View/Partials');
 
         // Breadcrumbs View Helper global ersetzen
         $breadcrumbsHelper = new Application_View_Helper_Breadcrumbs();
