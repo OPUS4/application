@@ -34,15 +34,15 @@
 /**
  * FIXME Tests only if methods throw exceptions.
  */
-class View_Helper_LoginBarTest extends ControllerTestCase {
+class Application_View_Helper_LoginBarTest extends ControllerTestCase {
 
     public function testSetLoginAction() {
-        $loginBar = new View_Helper_LoginBar();
+        $loginBar = new Application_View_Helper_LoginBar();
         $loginBar->setLoginAction('login', 'auth', 'default');
     }
 
     public function testSetLogoutAction() {
-        $loginBar = new View_Helper_LoginBar();
+        $loginBar = new Application_View_Helper_LoginBar();
         $loginBar->setLogoutAction('logout', 'auth', 'default');
     }
 

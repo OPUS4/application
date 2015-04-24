@@ -42,7 +42,7 @@
  * @category    Application
  * @package     View
  */
-class View_Helper_LoginBar extends Zend_View_Helper_Abstract {
+class Application_View_Helper_LoginBar extends Zend_View_Helper_Abstract {
 
     /**
      * Default login action.
@@ -97,7 +97,7 @@ class View_Helper_LoginBar extends Zend_View_Helper_Abstract {
     /**
      * Return an instance of the view helper.
      *
-     * @return Opus_View_Helper_LoginBar
+     * @return Application_View_Helper_LoginBar
      */
     public function loginBar() {
         return $this;

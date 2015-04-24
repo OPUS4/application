@@ -33,9 +33,9 @@
  */
 
 /**
- * 
+ *
  */
-class View_Helper_AccessAllowedTest extends ControllerTestCase {
+class Application_View_Helper_AccessAllowedTest extends ControllerTestCase {
 
     private $__helper;
 
@@ -46,10 +46,10 @@ class View_Helper_AccessAllowedTest extends ControllerTestCase {
         $this->assertSecurityConfigured();
         $acl = Zend_Registry::get('Opus_Acl');
         $acl->allow('guest', 'accounts');
-        $this->__helper = new View_Helper_AccessAllowed();
+        $this->__helper = new Application_View_Helper_AccessAllowed();
         $this->__helper->setView(Zend_Registry::get('Opus_View'));
     }
-    
+
     public function tearDown() {
         $acl = Zend_Registry::get('Opus_Acl');
         $acl->deny('guest', 'accounts');

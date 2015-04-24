@@ -34,13 +34,13 @@
 /**
  * Unit tests for FormatValue view helper.
  */
-class View_Helper_FormatValueTest extends ControllerTestCase {
+class Application_View_Helper_FormatValueTest extends ControllerTestCase {
 
     private $__helper;
 
     public function setUp() {
         parent::setUp();
-        $this->__helper = new View_Helper_FormatValue();
+        $this->__helper = new Application_View_Helper_FormatValue();
         $this->__helper->setView(Zend_Registry::get('Opus_View'));
     }
 

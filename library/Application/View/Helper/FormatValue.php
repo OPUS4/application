@@ -40,7 +40,7 @@
  * TODO Explore options to remove overlap with ShowModel view helper
  *      (ShowModel combines value formatting and layout).
  */
-class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
+class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract {
 
     /**
      * Logger for this class.
@@ -61,7 +61,7 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
     private $_dates;
 
     /**
-     * Constructs View_Helper_FormatValue.
+     * Constructs Application_View_Helper_FormatValue.
      */
     public function __construct() {
         $this->_translation =
@@ -75,7 +75,7 @@ class View_Helper_FormatValue extends Zend_View_Helper_Abstract {
 
     /**
      * Returns instance of the view helper.
-     * @return View_Helper_FormatValue
+     * @return Application_View_Helper_FormatValue
      */
     public function formatValue() {
         return $this;

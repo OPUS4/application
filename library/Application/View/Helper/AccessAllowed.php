@@ -35,7 +35,7 @@
 /**
  * Returns true is current user has access to a resource.
  */
-class View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
+class Application_View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
 
     /**
      * @var \Controller_Helper_AccessControl
