@@ -35,11 +35,11 @@
 
 /**
  * Model for getting list of modules in server application.
- * 
+ *
  * Die Liste der Module wird verwendet, damit ein Administration bestimmen kann auf welche Module eine Role zugreifen
  * darf.
  */
-class Admin_Model_Modules {
+class Application_Util_Modules {
 
     /**
      * Directory path for modules.
@@ -48,7 +48,12 @@ class Admin_Model_Modules {
     private $_moduleDirectory;
 
     public function __construct($moduleDirectory = null) {
-        $this->_moduleDirectory = $moduleDirectory;
+        if (!is_null($moduleDirectory)) {
+            $this->_moduleDirectory = $moduleDirectory;
+        }
+        else {
+            $this->_moduleDirectory = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'modules';
+        }
     }
 
     /**
