@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class View_Helper_LayoutPath extends Zend_View_Helper_Abstract {
+class Application_View_Helper_LayoutPath extends Zend_View_Helper_Abstract {
 
     public function layoutPath() {
         $config = Zend_Registry::get('Zend_Config');

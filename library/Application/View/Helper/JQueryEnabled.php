@@ -36,7 +36,7 @@
 /**
  * Checks if JQuery Library is available.
  */
-class View_Helper_JQueryEnabled extends Zend_View_Helper_Abstract {
+class Application_View_Helper_JQueryEnabled extends Zend_View_Helper_Abstract {
 
     public function jQueryEnabled() {
         $config = Zend_Registry::get('Zend_Config');

@@ -35,7 +35,7 @@
 /**
  * This view helper returns the escaped number of a document in a series.
  */
-class View_Helper_SeriesNumber extends Zend_View_Helper_Abstract {
+class Application_View_Helper_SeriesNumber extends Zend_View_Helper_Abstract {
 
     /**
      * Returns the number of a document in a series.

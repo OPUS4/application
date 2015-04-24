@@ -258,7 +258,7 @@ class Solrsearch_Form_AdvancedSearch extends Application_Form_Abstract {
             'label' => 'advanced_search_form_reset_action'
         ));
 
-        $helper = new View_Helper_JQueryEnabled();
+        $helper = new Application_View_Helper_JQueryEnabled();
 
         if ($helper->jQueryEnabled()) {
             $button->setAttrib('onclick', 'return resetAdvancedSearchForm();');

@@ -38,19 +38,19 @@
  * Builds the language selection form.
  *
  */
-class View_Helper_LanguageSelector extends Zend_View_Helper_Abstract {
+class Application_View_Helper_LanguageSelector extends Zend_View_Helper_Abstract {
 
     /**
      * Get an instance of the view helper.
      *
-     * @return Opus_View_Helper_LanguageSelector
+     * @return Application_View_Helper_LanguageSelector
      */
     public function languageSelector() {
         if (isset($this->view->languageSelectorDisabled) && $this->view->languageSelectorDisabled === true) {
             return null;
         }
         $returnParams = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
-        
+
         $translations = Zend_Registry::get('Zend_Translate')->getList();
         $currentLocale = new Zend_Locale(Zend_Registry::get('Zend_Translate')->getLocale());
 

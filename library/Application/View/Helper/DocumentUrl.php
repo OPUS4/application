@@ -37,7 +37,7 @@
  * This helper class defines only one method baseUrl() to retrieve the
  * application base url for absolute urls in views.
  */
-class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
+class Application_View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
 
     public function documentUrl() {
         return $this;
@@ -82,7 +82,7 @@ class View_Helper_DocumentUrl extends Zend_View_Helper_Abstract {
         );
         return $this->view->url($url, 'default', true);
     }
-    
+
     public function adminEdit($docId) {
         $url = array(
             'module'     => 'admin',
