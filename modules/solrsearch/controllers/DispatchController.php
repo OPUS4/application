@@ -62,7 +62,7 @@ class Solrsearch_DispatchController extends Controller_Action {
         case Application_Util_Searchtypes::SIMPLE_SEARCH:
             if (!$searchModel->isSimpleSearchRequestValid($request)) {
                 $action = 'invalidsearchterm';
-                $params = array('searchtype' => Util_Searchtypes::SIMPLE_SEARCH);
+                $params = array('searchtype' => Application_Util_Searchtypes::SIMPLE_SEARCH);
             }
             else {
                 $params= $searchModel->createSimpleSearchUrlParams($request);
