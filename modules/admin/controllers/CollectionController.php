@@ -182,10 +182,10 @@ class Admin_CollectionController extends Controller_Action {
         $role = $collection->getRole();
         $this->view->role_id    = $role->getId();
         $this->view->role_name  = $role->getDisplayName();
-        
+
         $this->setCollectionBreadcrumb($role);
     }
-    
+
     public function setCollectionBreadcrumb($role) {
         $page = $this->view->navigation()->findOneBy('label', 'admin_collection_index');
         if (!is_null($page) && !is_null($role)) {
@@ -273,7 +273,7 @@ class Admin_CollectionController extends Controller_Action {
             return $this->_redirectTo('show', $message, 'collection', 'admin', array('id' => $collection->getId()));
         }
 
-        // nur Änderungen        
+        // nur Änderungen
         $collection->store();
         $message = $this->view->translate('admin_collections_edit', $collectionModel->getName());
         $parents = $collection->getParents();
@@ -351,8 +351,8 @@ class Admin_CollectionController extends Controller_Action {
 
     /**
      * Assign a document to a collection (used in document administration)
-     * 
-     * 
+     *
+     *
      *
      * @return void
      */
@@ -368,11 +368,11 @@ class Admin_CollectionController extends Controller_Action {
         if ($this->getRequest()->isPost() === true) {
             // Zuordnung des Dokuments zur Collection ist erfolgt
             $storeNow = $this->getRequest()->getParam('oldform', false);
-            
+
             $colId = $this->getRequest()->getParam('id', '');
-            
+
             if ($storeNow) {
-                // Speichere Collection sofort 
+                // Speichere Collection sofort
                 $collectionModel = new Admin_Model_Collection($colId);
                 $collectionModel->addDocument($documentId);
 
@@ -384,12 +384,12 @@ class Admin_CollectionController extends Controller_Action {
             }
             else {
                 return $this->_redirectToAndExit(
-                    'edit', null, 'document', 'admin', array('id' => $documentId, 
+                    'edit', null, 'document', 'admin', array('id' => $documentId,
                     'hash' => '123', 'continue' => 'addcol', 'colId' => $colId)
                 );
             }
         }
-        
+
 
         $collectionId = $this->getRequest()->getParam('id');
         if (is_null($collectionId)) {
@@ -400,17 +400,17 @@ class Admin_CollectionController extends Controller_Action {
             // Collection ausgewählt: Subcollections anzeigen
             $this->prepareAssignSubPage($documentId, $collectionId);
         }
-        
-        $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $documentId);
+
+        $this->view->documentAdapter = new Application_Util_DocumentAdapter($this->view, $documentId);
     }
 
     /**
      * Bereitet die Einstiegseite für das Zuweisen von einer Collection zu einem Dokument vor.
-     * 
+     *
      * Auf der Einstiegsseite werden die CollectionRoles mit Root-Collections aufgelistet. Da ein Dokument nur einer
      * Collection zugewiesen werden kann wird die Sichtbarkeit der Root-Collection als Kriterium für die Markierung
      * als sichtbare oder unsichtbare Collection verwendet.
-     * 
+     *
      * @param int $documentId
      */
     private function prepareAssignStartPage($documentId) {

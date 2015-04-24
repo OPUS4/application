@@ -25,36 +25,13 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Util
+ * @package     Application_Util
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Util_Searchtypes {
+class Application_Util_BrowsingParamsException extends Application_Util_QueryBuilderException {
 
-    const SIMPLE_SEARCH = 'simple';
-    const ADVANCED_SEARCH = 'advanced';
-    const AUTHOR_SEARCH = 'authorsearch';
-    const COLLECTION_SEARCH = 'collection';
-    const LATEST_SEARCH = 'latest';
-    const ALL_SEARCH = 'all';
-    const SERIES_SEARCH = 'series';
-    const ID_SEARCH = 'id';
-
-    public static function isSupported($searchtype) {
-        $supportedTypes = array (
-            self::SIMPLE_SEARCH,
-            self::ADVANCED_SEARCH,
-            self::AUTHOR_SEARCH,
-            self::COLLECTION_SEARCH,
-            self::LATEST_SEARCH,
-            self::ALL_SEARCH,
-            self::SERIES_SEARCH,
-            self::ID_SEARCH
-        );
-        return in_array($searchtype, $supportedTypes);
-    }
 }
-

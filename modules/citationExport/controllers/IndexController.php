@@ -132,7 +132,7 @@ class CitationExport_IndexController extends Controller_Action {
 
         // check if document access is allowed
         // TODO document access check will be refactored in later releases
-        new Util_Document($document);
+        new Application_Util_Document($document);
 
         return $document;
     }

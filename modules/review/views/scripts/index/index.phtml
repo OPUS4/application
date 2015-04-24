@@ -69,7 +69,7 @@
 
 <table class="documents">
 <?PHP $index = 0; foreach ($this->paginator as $docId) : ?>
-    <?PHP $document = new Util_DocumentAdapter($this, $docId); ?>
+    <?PHP $document = new Application_Util_DocumentAdapter($this, $docId); ?>
     <tr class="<?= ($index++ % 2) ? 'even' : 'odd' ?>">
         <td><input type="checkbox" name="selected[]" value="<?= $document->getDocId()?>"
                 <?= (!$this->selectNone && ($this->selectAll || in_array($document->getDocId(), $this->selected)))  ? 'checked' : '' ?> /></td>

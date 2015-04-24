@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,49 +24,30 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Util
- * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2014, OPUS 4 development team
+ * @category    Application Unit Tests
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+/**
+ * Unit test for class Review_Model_DocumentAdapter.
+ *
+ * TODO $view not used at the moment, refactor or add tests
+ */
+class Util_CollectionsUpdateTest extends ControllerTestCase {
 
-class Util_QueryBuilderTest extends ControllerTestCase {
+    public function testHasFilesTrue() {
+        $i = 0;
 
-    public function testCreateQueryBuilderInputFromRequest() {
-        $request = $this->getRequest();
-        $request->setParams(array('searchtype' => 'all',
-            'start' => '0',
-            'rows' => '1337',
-            'sortOrder' => 'desc'));
+        echo "Before: $i" . PHP_EOL;
 
-        $queryBuilder = new Util_QueryBuilder(Zend_Registry::get('Zend_Log'));
-        $result = $queryBuilder->createQueryBuilderInputFromRequest($request);
+        for ($i = 0; $i < 10; $i++) {
+            echo $i . ', ';
+        }
 
-        $this->assertEquals($result['start'], 0);
-        $this->assertEquals($result['rows'], 1337);
-        $this->assertEquals($result['sortOrder'], 'desc');
+        echo "After: $i" . PHP_EOL;
     }
 
-    /**
-     * Test für OPUSVIER-2708.
-     */
-    public function testGetRowsFromConfig() {
-        $config = Zend_Registry::get('Zend_Config');
-        $oldParamRows = $config->searchengine->solr->numberOfDefaultSearchResults;
-        $config->searchengine->solr->numberOfDefaultSearchResults = 1337;
-
-        $request = $this->getRequest();
-        $request->setParams(array('searchtype' => 'all'));
-        $queryBuilder = new Util_QueryBuilder(Zend_Registry::get('Zend_Log'));
-        $result = $queryBuilder->createQueryBuilderInputFromRequest($request);
-
-        //clean-up
-        $config->searchengine->solr->numberOfDefaultSearchResults = $oldParamRows;
-
-        $this->assertEquals($result['rows'], 1337);
-    }
 }
- 

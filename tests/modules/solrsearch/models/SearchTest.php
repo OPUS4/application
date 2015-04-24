@@ -56,7 +56,7 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase {
         $this->assertCount(6, $params);
 
         $this->assertArrayHasKey('searchtype', $params);
-        $this->assertEquals(Util_Searchtypes::ALL_SEARCH, $params['searchtype']);
+        $this->assertEquals(Application_Util_Searchtypes::ALL_SEARCH, $params['searchtype']);
 
         $this->assertArrayHasKey('start', $params);
         $this->assertEquals(30, $params['start']);
@@ -84,7 +84,7 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase {
         $this->assertCount(6, $params);
 
         $this->assertArrayHasKey('searchtype', $params);
-        $this->assertEquals(Util_Searchtypes::SIMPLE_SEARCH, $params['searchtype']);
+        $this->assertEquals(Application_Util_Searchtypes::SIMPLE_SEARCH, $params['searchtype']);
 
         $this->assertArrayHasKey('start', $params);
         $this->assertEquals(0, $params['start']);
@@ -145,7 +145,7 @@ class Solrsearch_Model_SearchTest extends ControllerTestCase {
         $this->assertCount(17, $params);
 
         $this->assertArrayHasKey('searchtype', $params);
-        $this->assertEquals(Util_Searchtypes::ALL_SEARCH, $params['searchtype']);
+        $this->assertEquals(Application_Util_Searchtypes::ALL_SEARCH, $params['searchtype']);
 
         $this->assertArrayHasKey('start', $params);
         $this->assertEquals(30, $params['start']);

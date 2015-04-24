@@ -73,7 +73,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
         if (isset($this->_docTypes)) {
             return $this->_docTypes;
         }
-        
+
         $allDocTypes = $this->_getDocTypeFileNames();
         $docTypes = $allDocTypes;
 
@@ -205,7 +205,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
             if ($fileinfo->isFile()) {
                 if (strrchr($fileinfo->getBaseName(), '.') == '.xml') {
                     $filename = $fileinfo->getBaseName('.xml');
-                    $files[$filename] = $filename;                    
+                    $files[$filename] = $filename;
                 }
             }
         }
@@ -246,7 +246,7 @@ class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abst
 
     private function _getList($str) {
         $result = explode(',', $str);
-        Util_Array::trim($result);
+        Application_Util_Array::trim($result);
         return $result;
     }
 

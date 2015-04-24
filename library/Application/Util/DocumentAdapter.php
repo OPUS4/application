@@ -39,7 +39,7 @@
  * TODO move code to admin module (is used there as well and belongs there, or?)
  * TODO remove dependency on View (and update unit tests accordingly)
  */
-class Util_DocumentAdapter {
+class Application_Util_DocumentAdapter {
 
     /**
      * Document identifier.
@@ -125,7 +125,7 @@ class Util_DocumentAdapter {
                 . ')';
         }
     }
-    
+
     /**
      * Returns title in document language.
      */
@@ -147,7 +147,7 @@ class Util_DocumentAdapter {
                 . ')';
         }
     }
-    
+
     /**
      * Returns document type.
      * @return string
@@ -221,7 +221,7 @@ class Util_DocumentAdapter {
         $date = $this->getDate(true);
         return $date;
     }
-    
+
     /**
      * Return list of authors.
      * @return array

@@ -130,7 +130,7 @@ class Admin_WorkflowController extends Controller_Action {
             }
 
             // show confirmation page
-            $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
+            $this->view->documentAdapter = new Application_Util_DocumentAdapter($this->view, $document);
             $this->view->title = $this->view->translate('admin_workflow_' . $targetState);
             $this->view->text = $this->view->translate('admin_workflow_' . $targetState . '_sure', $docId);
             $this->view->form = $this->_getConfirmationForm($document, $targetState);
@@ -165,7 +165,7 @@ class Admin_WorkflowController extends Controller_Action {
     }
 
     private function _sendNotification($document, $form = null) {
-        $notification = new Util_Notification();
+        $notification = new Application_Util_Notification();
         $url = $this->view->url(
             array(
                 "module" => "frontdoor",
@@ -192,7 +192,7 @@ class Admin_WorkflowController extends Controller_Action {
 
         $notification->prepareMail(
             $document,
-            Util_Notification::PUBLICATION,
+            Application_Util_Notification::PUBLICATION,
             $this->view->serverUrl() . $url,
             $notifySubmitter,
             $authorsBitmask

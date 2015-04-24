@@ -45,7 +45,7 @@ class Admin_DocumentController extends Controller_Action {
      * @var Controller_Helper_Documents
      */
     private $_documentsHelper;
-        
+
     /**
      * Initializes controller.
      */
@@ -65,7 +65,7 @@ class Admin_DocumentController extends Controller_Action {
 
         if (isset($document)) {
             $this->view->document = $document;
-            $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
+            $this->view->documentAdapter = new Application_Util_DocumentAdapter($this->view, $document);
 
             $form = new Admin_Form_Document();
             $form->populateFromModel($document);
@@ -85,17 +85,17 @@ class Admin_DocumentController extends Controller_Action {
             );
         }
     }
-    
+
     /**
      * Zeigt Metadaten-Formular an bzw. verarbeitet POST Requests vom Formular.
-     * 
+     *
      * TODO prüfen ob Form DocID mit URL DocID übereinstimmt
      */
     public function editAction() {
         $docId = $this->getRequest()->getParam('id');
 
         $document = $this->_documentsHelper->getDocumentForId($docId);
-        
+
         if (!isset($document)) {
             return $this->_redirectTo(
                 'index', array('failure' =>
@@ -105,22 +105,22 @@ class Admin_DocumentController extends Controller_Action {
         }
         else {
             $editSession = new Admin_Model_DocumentEditSession($docId);
-            
+
             if ($this->getRequest()->isPost()) {
                 $data = $this->getRequest()->getPost();
                 $data = $data['Document']; // 'Document' Form wraps actual metadata form
-                
+
                 $form = Admin_Form_Document::getInstanceFromPost($data, $document);
                 $form->populate($data);
-                
+
                 // Use return value for decision how to continue
                 $result = $form->processPost($data, $data);
-                
+
                 if (is_array($result)) {
                     $target = $result['target']; // TODO check if present
                     $result = $result['result']; // TODO check if present
                 }
-                
+
                 switch ($result) {
                     case Admin_Form_Document::RESULT_SAVE:
                         if ($form->isValid($data)) {
@@ -144,12 +144,12 @@ class Admin_DocumentController extends Controller_Action {
                             $form->setMessage($this->view->translate('admin_document_error_validation'));
                         }
                         break;
-                        
+
                     case Admin_Form_Document::RESULT_SAVE_AND_CONTINUE:
                         if ($form->isValid($data)) {
                             // Formular ist korrekt; aktualisiere Dokument
                             $form->updateModel($document);
-                        
+
                             // TODO handle exceptions
                             $document->store();
                         }
@@ -158,29 +158,29 @@ class Admin_DocumentController extends Controller_Action {
                             $form->setMessage($this->view->translate('admin_document_error_validation'));
                         }
                         break;
-                        
+
                     case Admin_Form_Document::RESULT_CANCEL:
                         // TODO redirect to origin page (Store in Session oder Form?)
                         // Possible Rücksprungziele: Frontdoor, Metadaten-Übersicht, Suchergebnisse (Documents, ?)
                         return $this->_redirectTo('index', null, 'document', 'admin', array('id' => $docId));
                         break;
-                    
+
                     case Admin_Form_Document::RESULT_SWITCH_TO:
                         $editSession->storePost($data, $docId);
-                        
+
                         // TODO Parameter in Unterarray 'params' => array() verlagern?
                         $target['document'] = $docId;
-                        
+
                         $action = $target['action'];
                         unset($target['action']);
                         $controller = $target['controller'];
                         unset($target['controller']);
                         $module = $target['module'];
                         unset($target['module']);
-                        
+
                         return $this->_redirectTo($action, null, $controller, $module, $target);
                         break;
-                    
+
                     default:
                         // Zurueck zum Formular
                         break;
@@ -189,16 +189,16 @@ class Admin_DocumentController extends Controller_Action {
             else {
                 // GET zeige neues oder gespeichertes Formular an
 
-                // Hole gespeicherten POST aus Session 
+                // Hole gespeicherten POST aus Session
                 $post = $editSession->retrievePost($docId);
-                
+
                 $continue = $this->getRequest()->getParam('continue', null);
-                
+
                 if ($post && !is_null($continue)) {
                     // Initialisiere Formular vom gespeicherten POST
                     $form = Admin_Form_Document::getInstanceFromPost($post, $document);
                     $form->populate($post);
-                    
+
                     // Führe Rücksprung aus
                     $form->continueEdit($this->getRequest(), $editSession);
                 }
@@ -207,17 +207,17 @@ class Admin_DocumentController extends Controller_Action {
                     $form = new Admin_Form_Document();
                     $form->populateFromModel($document);
                 }
-                
+
             }
-            
+
             $wrappedForm = new Admin_Form_Wrapper($form);
             $wrappedForm->setAction('#current');
             $this->view->form = $wrappedForm;
         }
-        
+
         $this->view->document = $document;
-        $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
-        
+        $this->view->documentAdapter = new Application_Util_DocumentAdapter($this->view, $document);
+
         // Beim wechseln der Sprache würden Änderungen in editierten Felder verloren gehen
         $this->view->languageSelectorDisabled = true;
         $this->view->contentWrapperDisabled = true;

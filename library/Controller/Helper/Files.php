@@ -77,7 +77,7 @@ class Controller_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
         }
 
         $allowed = explode(',', $config->publish->filetypes->allowed);
-        Util_Array::trim($allowed);
+        Application_Util_Array::trim($allowed);
         return $allowed;
     }
 

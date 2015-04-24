@@ -249,7 +249,7 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
 
         foreach ($documentIds as $docId) {
             $document = new Opus_Document($docId);
-            $documentXml = new Util_Document($document);
+            $documentXml = new Application_Util_Document($document);
             $documents[$docId] = $documentXml->getNode();
         }
 
@@ -286,12 +286,12 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
      * Sets up the xml query.
      */
     private function buildQuery($request) {
-        $queryBuilder = new Util_QueryBuilder($this->getLogger(), true);
+        $queryBuilder = new Application_Util_QueryBuilder($this->getLogger(), true);
         $queryBuilderInput = array();
         try {
             $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($request);
         }
-        catch (Util_QueryBuilderException $e) {
+        catch (Application_Util_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             throw new Application_Exception($e->getMessage());
         }

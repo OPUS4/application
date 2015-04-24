@@ -59,7 +59,7 @@ class Solrsearch_DispatchController extends Controller_Action {
         }
 
         switch ($searchType) {
-        case Util_Searchtypes::SIMPLE_SEARCH:
+        case Application_Util_Searchtypes::SIMPLE_SEARCH:
             if (!$searchModel->isSimpleSearchRequestValid($request)) {
                 $action = 'invalidsearchterm';
                 $params = array('searchtype' => Util_Searchtypes::SIMPLE_SEARCH);
@@ -68,8 +68,8 @@ class Solrsearch_DispatchController extends Controller_Action {
                 $params= $searchModel->createSimpleSearchUrlParams($request);
             }
             break;
-        case Util_Searchtypes::ADVANCED_SEARCH:
-        case Util_Searchtypes::AUTHOR_SEARCH:
+        case Application_Util_Searchtypes::ADVANCED_SEARCH:
+        case Application_Util_Searchtypes::AUTHOR_SEARCH:
             if (!$searchModel->isAdvancedSearchRequestValid($request)) {
                 $action = 'invalidsearchterm';
                 $params = array('searchtype' =>  $searchType);

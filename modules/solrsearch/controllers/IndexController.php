@@ -94,11 +94,11 @@ class Solrsearch_IndexController extends Controller_Action {
         // TODO create form
 
 
-        if ($searchtype === Util_Searchtypes::ADVANCED_SEARCH) {
-            $this->view->searchType = Util_Searchtypes::ADVANCED_SEARCH;
+        if ($searchtype === Application_Util_Searchtypes::ADVANCED_SEARCH) {
+            $this->view->searchType = Application_Util_Searchtypes::ADVANCED_SEARCH;
         }
         else {
-            $this->view->searchType = Util_Searchtypes::SIMPLE_SEARCH;
+            $this->view->searchType = Application_Util_Searchtypes::SIMPLE_SEARCH;
         }
     }
 
@@ -243,16 +243,16 @@ class Solrsearch_IndexController extends Controller_Action {
             $nrOfRows = (int)$this->_query->getRows();
             $start = $this->_query->getStart();
             $query = null;
-            if ($this->_searchtype === Util_Searchtypes::SIMPLE_SEARCH
-                    || $this->_searchtype === Util_Searchtypes::ALL_SEARCH) {
+            if ($this->_searchtype === Application_Util_Searchtypes::SIMPLE_SEARCH
+                    || $this->_searchtype === Application_Util_Searchtypes::ALL_SEARCH) {
                 $query = $this->_query->getCatchAll();
             }
             $this->setUpPagination($nrOfRows, $start, $query);
         }
 
         switch ($this->_searchtype) {
-            case Util_Searchtypes::SIMPLE_SEARCH:
-            case Util_Searchtypes::ALL_SEARCH:
+            case Application_Util_Searchtypes::SIMPLE_SEARCH:
+            case Application_Util_Searchtypes::ALL_SEARCH:
                 $queryString = $this->_query->getCatchAll();
                 if (trim($queryString) !== '*:*') {
                     $this->view->q = $queryString;
@@ -267,13 +267,13 @@ class Solrsearch_IndexController extends Controller_Action {
                     $this->view->doctype = $this->getRequest()->getParam('doctypefq', null);
                 }
                 break;
-            case Util_Searchtypes::ADVANCED_SEARCH:
-            case Util_Searchtypes::AUTHOR_SEARCH:
-            case Util_Searchtypes::COLLECTION_SEARCH:
-            case Util_Searchtypes::SERIES_SEARCH:
+            case Application_Util_Searchtypes::ADVANCED_SEARCH:
+            case Application_Util_Searchtypes::AUTHOR_SEARCH:
+            case Application_Util_Searchtypes::COLLECTION_SEARCH:
+            case Application_Util_Searchtypes::SERIES_SEARCH:
                 $this->setFilterQueryBaseURL();
                 break;
-            case Util_Searchtypes::LATEST_SEARCH:
+            case Application_Util_Searchtypes::LATEST_SEARCH:
                 $this->view->isSimpleList = true;
                 $this->view->specialTitle = $this->view->translate('title_latest_docs_article') . ' '
                     . $this->_query->getRows(). ' '.$this->view->translate('title_latest_docs');
@@ -310,10 +310,10 @@ class Solrsearch_IndexController extends Controller_Action {
             $this->view->numOfPages = (int) ($this->_numOfHits / $nrOfRows) + 1;
         }
         $this->view->rows = $this->_query->getRows();
-        $this->view->authorSearch = self::createSearchUrlArray(array('searchtype' => Util_Searchtypes::AUTHOR_SEARCH));
+        $this->view->authorSearch = self::createSearchUrlArray(array('searchtype' => Application_Util_Searchtypes::AUTHOR_SEARCH));
         $this->view->isSimpleList = false;
         $this->view->browsing = (boolean) $this->getRequest()->getParam('browsing', false);
-        if ($this->_searchtype == Util_Searchtypes::SERIES_SEARCH) {
+        if ($this->_searchtype == Application_Util_Searchtypes::SERIES_SEARCH) {
             $this->view->sortfield = $this->getRequest()->getParam('sortfield', 'seriesnumber');
         }
         else {
@@ -364,19 +364,19 @@ class Solrsearch_IndexController extends Controller_Action {
     private function buildQuery() {
         $request = $this->getRequest();
 
-        $queryBuilder = new Util_QueryBuilder($this->getLogger());
+        $queryBuilder = new Application_Util_QueryBuilder($this->getLogger());
 
         $queryBuilderInput = null;
 
         try {
             $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($request);
         }
-        catch (Util_BrowsingParamsException $e) {
+        catch (Application_Util_BrowsingParamsException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
             return null;
         }
-        catch (Util_QueryBuilderException $e) {
+        catch (Application_Util_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             $this->_redirectToAndExit('index');
             return null;
@@ -388,14 +388,14 @@ class Solrsearch_IndexController extends Controller_Action {
         }
 
         $this->_searchtype = $request->getParam('searchtype');
-        if ($this->_searchtype === Util_Searchtypes::LATEST_SEARCH) {
+        if ($this->_searchtype === Application_Util_Searchtypes::LATEST_SEARCH) {
             return $queryBuilder->createSearchQuery($this->validateInput($queryBuilderInput, 10, 100));
         }
 
-        if ($this->_searchtype === Util_Searchtypes::COLLECTION_SEARCH) {
+        if ($this->_searchtype === Application_Util_Searchtypes::COLLECTION_SEARCH) {
             $this->prepareChildren();
         }
-        else if ($this->_searchtype === Util_Searchtypes::SERIES_SEARCH) {
+        else if ($this->_searchtype === Application_Util_Searchtypes::SERIES_SEARCH) {
             $this->prepareSeries();
         }
         return $queryBuilder->createSearchQuery($this->validateInput($queryBuilderInput));

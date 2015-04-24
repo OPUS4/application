@@ -36,14 +36,14 @@
  *
  * TODO $view not used at the moment, refactor or add tests
  */
-class Util_DocumentAdapterTest extends ControllerTestCase {
+class Applicatin_Util_DocumentAdapterTest extends ControllerTestCase {
 
     public function testHasFilesTrue() {
         $view = Zend_Registry::get('Opus_View');
 
         $doc = new Opus_Document(1);
 
-        $docAdapter = new Util_DocumentAdapter($view, $doc);
+        $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
 
         $this->assertTrue($docAdapter->hasFiles());
     }
@@ -53,7 +53,7 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
 
         $doc = $this->createTestDocument();
 
-        $docAdapter = new Util_DocumentAdapter($view, $doc);
+        $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
 
         $this->assertFalse($docAdapter->hasFiles());
     }
@@ -63,7 +63,7 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
 
         $doc = new Opus_Document(1);
 
-        $docAdapter = new Util_DocumentAdapter($view, $doc);
+        $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
 
         $this->assertEquals(2, $docAdapter->getFileCount());
     }
@@ -73,7 +73,7 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
 
         $doc = $this->createTestDocument();
 
-        $docAdapter = new Util_DocumentAdapter($view, $doc);
+        $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
 
         $this->assertEquals(0, $docAdapter->getFileCount());
     }
@@ -85,7 +85,7 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
 
         $doc->setBelongsToBibliography(true);
 
-        $docAdapter = new Util_DocumentAdapter($view, $doc);
+        $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
 
         $this->assertTrue($docAdapter->isBelongsToBibliography());
     }
@@ -97,33 +97,33 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
 
         $doc->setBelongsToBibliography(false);
 
-        $docAdapter = new Util_DocumentAdapter($view, $doc);
+        $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
 
         $this->assertFalse($docAdapter->isBelongsToBibliography());
     }
-    
+
     /**
      * Tests returning title in document language.
      */
     public function testGetMainTitle() {
         $view = Zend_Registry::get('Opus_View');
-        
+
         $doc = $this->createTestDocument();
-        
+
         $title = new Opus_Title();
         $title->setLanguage('deu');
         $title->setValue('Deutscher Titel');
         $doc->addTitleMain($title);
-        
+
         $title = new Opus_Title();
         $title->setLanguage('eng');
         $title->setValue('Englischer Titel');
         $doc->addTitleMain($title);
-        
+
         $doc->setLanguage('eng');
-        
-        $docAdapter = new Util_DocumentAdapter($view, $doc);
-        
+
+        $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
+
         $this->assertEquals($docAdapter->getMainTitle(), 'Englischer Titel');
     }
 
@@ -132,7 +132,7 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
 
         $doc = $this->createTestDocument();
 
-        $docAdapter = new Util_DocumentAdapter($view, $doc);
+        $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
 
         $this->assertEquals($docAdapter->getMainTitle(), 'document_no_title(id = )');
     }
@@ -152,7 +152,7 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
         $title->setValue('Englischer Titel');
         $doc->addTitleMain($title);
 
-        $docAdapter = new Util_DocumentAdapter($view, $doc);
+        $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
 
         // should return first title
         $this->assertEquals($docAdapter->getMainTitle(), 'Deutscher Titel');
@@ -175,65 +175,65 @@ class Util_DocumentAdapterTest extends ControllerTestCase {
 
         $doc->setLanguage('fra');
 
-        $docAdapter = new Util_DocumentAdapter($view, $doc);
+        $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
 
         // should return first title
         $this->assertEquals($docAdapter->getMainTitle(), 'Deutscher Titel');
     }
-    
+
     public function testGetDocTitle() {
         $view = Zend_Registry::get('Opus_View');
-        
+
         $doc = $this->createTestDocument();
-        
+
         $title = new Opus_Title();
         $title->setLanguage('deu');
         $title->setValue('Deutscher Titel');
         $doc->addTitleMain($title);
-        
+
         $title = new Opus_Title();
         $title->setLanguage('eng');
         $title->setValue('Englischer Titel');
         $doc->addTitleMain($title);
-        
+
         $doc->setLanguage('eng');
-        
-        $docAdapter = new Util_DocumentAdapter($view, $doc);
-        
+
+        $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
+
         $this->assertEquals($docAdapter->getDocTitle(), 'Deutscher Titel');
     }
-    
+
     public function testGetAuthors() {
         $doc = $this->createTestDocument();
-        
+
         $person = new Opus_Person();
         $person->setLastName("Doe");
         $doc->addPersonAuthor($person);
-        
+
         $person = new Opus_Person();
         $person->setLastName("Smith");
         $person->setFirstName("Jane");
         $doc->addPersonAuthor($person);
-        
-        $docAdapter = new Util_DocumentAdapter(null, $doc);
-        
+
+        $docAdapter = new Application_Util_DocumentAdapter(null, $doc);
+
         $authors = $docAdapter->getAuthors();
-        
+
         $this->assertEquals('Doe', $authors[0]['name']);
         $this->assertEquals('Smith, Jane', $authors[1]['name']);
     }
-        
+
     public function testGetAuthorsForDocumentWithoutAuthors() {
         $view = Zend_Registry::get('Opus_View');
-        
+
         $doc = $this->createTestDocument();
-        
-        $docAdapter = new Util_DocumentAdapter($view, $doc);
-        
+
+        $docAdapter = new Application_Util_DocumentAdapter($view, $doc);
+
         $authors = $docAdapter->getAuthors();
-        
+
         $this->assertTrue(is_array($authors));
         $this->assertEmpty($authors);
     }
-    
+
 }

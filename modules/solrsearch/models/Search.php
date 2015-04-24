@@ -39,14 +39,14 @@ class Solrsearch_Model_Search extends Application_Model_Abstract {
 
     public function createSimpleSearchUrlParams($request) {
         $params = $this->createBasicSearchParams($request);
-        $params['searchtype'] = $request->getParam('searchtype', Util_Searchtypes::SIMPLE_SEARCH);
+        $params['searchtype'] = $request->getParam('searchtype', Application_Util_Searchtypes::SIMPLE_SEARCH);
         $params['query'] = $request->getParam('query', '*:*');
         return $params;
     }
 
     public function createAdvancedSearchUrlParams($request) {
         $params = $this->createBasicSearchParams($request);
-        $params['searchtype'] = $request->getParam('searchtype', Util_Searchtypes::ADVANCED_SEARCH);
+        $params['searchtype'] = $request->getParam('searchtype', Application_Util_Searchtypes::ADVANCED_SEARCH);
 
         foreach (array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext', 'year') as $fieldname) {
             $fieldvalue = $request->getParam($fieldname, '');

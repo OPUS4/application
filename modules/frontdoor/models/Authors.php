@@ -63,7 +63,7 @@ class Frontdoor_Model_Authors {
         // check if document access is allowed
         // TODO document access check will be refactored in later releases
         try {
-            new Util_Document($this->_document);
+            new Application_Util_Document($this->_document);
         }
         catch (Application_Exception $e) {
             throw new Frontdoor_Model_Exception('access to requested document is forbidden');

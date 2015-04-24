@@ -47,24 +47,24 @@ class Rss_IndexController extends Controller_Xml {
     }
 
     public function indexAction() {
-        $queryBuilder = new Util_QueryBuilder($this->getLogger(), true);
+        $queryBuilder = new Application_Util_QueryBuilder($this->getLogger(), true);
 
         // support backward compatibility: interpret missing parameter searchtype as latest search
         if (is_null($this->getRequest()->getParam('searchtype', null))) {
-            $this->getRequest()->setParam('searchtype', Util_Searchtypes::LATEST_SEARCH);            
+            $this->getRequest()->setParam('searchtype', Application_Util_Searchtypes::LATEST_SEARCH);
         }
 
         $params = array();
         try {
             $params = $queryBuilder->createQueryBuilderInputFromRequest($this->getRequest());
         }
-        catch (Util_QueryBuilderException $e) {
+        catch (Application_Util_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             throw new Application_Exception($e->getMessage());
         }
-        
+
         // overwrite parameters in rss context
-        // rss feeds have a fixed maximum number of items        
+        // rss feeds have a fixed maximum number of items
         $params['rows'] = self::NUM_OF_ITEMS_PER_FEED;
         $params['start'] = 0;
         // rss feeds have both a fixed sort field and sort order
@@ -124,15 +124,15 @@ class Rss_IndexController extends Controller_Xml {
         else {
             $date = Zend_Date::now();
             $this->_proc->setParameter('', 'lastBuildDate', $date->get(Zend_Date::RFC_2822));
-            $this->_proc->setParameter('', 'pubDate', $date->get(Zend_Date::RFC_2822));            
+            $this->_proc->setParameter('', 'pubDate', $date->get(Zend_Date::RFC_2822));
         }
     }
 
-    private function setItems($resultList) {                    
+    private function setItems($resultList) {
         $this->_xml->appendChild($this->_xml->createElement('Documents'));
         foreach ($resultList->getResults() as $result) {
             $document = new Opus_Document($result->getId());
-            $documentXml = new Util_Document($document);
+            $documentXml = new Application_Util_Document($document);
             $domNode = $this->_xml->importNode($documentXml->getNode(), true);
 
             // add publication date in RFC_2822 format

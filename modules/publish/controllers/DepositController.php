@@ -136,7 +136,7 @@ class Publish_DepositController extends Controller_Action {
             $targetModule = $config->publish->depositComplete->module;
         }
 
-        $notification = new Util_Notification($this->log, $config);
+        $notification = new Application_Util_Notification($this->log, $config);
         $url = $this->view->url(
             array(
                 "module" => "admin",
@@ -147,7 +147,7 @@ class Publish_DepositController extends Controller_Action {
             null,
             true
         );
-        $notification->prepareMail($this->document, Util_Notification::SUBMISSION, $this->view->serverUrl() . $url);
+        $notification->prepareMail($this->document, Application_Util_Notification::SUBMISSION, $this->view->serverUrl() . $url);
 
         return $this->_redirectToAndExit($targetAction, null, $targetController, $targetModule);
     }

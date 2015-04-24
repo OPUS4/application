@@ -34,10 +34,10 @@
 
 /**
  * Controller fuer die Verwaltung von Personen.
- * 
+ *
  * Dieser Controller enthaelt Funktionen fuer das Anlegung und Editieren von Personen. Er wird im Zusammespiel mit dem
  * DocumentController verwendet um Personen für ein Dokument zu manipulieren.
- * 
+ *
  * TODO Erweitern um Personen in Datenbank zu verwalten (z.B. Deduplizieren) (OPUSVIER-nnnn, noch kein Ticket)
  */
 class Admin_PersonController extends Controller_Action {
@@ -45,7 +45,7 @@ class Admin_PersonController extends Controller_Action {
     private $_documentsHelper;
 
     private $_dates;
-    
+
     /**
      * Initializes controller.
      */
@@ -54,10 +54,10 @@ class Admin_PersonController extends Controller_Action {
         $this->_documentsHelper = $this->_helper->getHelper('Documents');
         $this->_dates = $this->_helper->getHelper('Dates');
     }
-    
+
     /**
      * Fuegt Person zu Dokument hinzu.
-     * 
+     *
      * HTTP Parameter:
      * - Dokument-ID (document)
      * - Rolle (role)
@@ -66,18 +66,18 @@ class Admin_PersonController extends Controller_Action {
         $docId = $this->getRequest()->getParam('document');
 
         $document = $this->_documentsHelper->getDocumentForId($docId);
-        
+
         if (!isset($document)) {
             return $this->_redirectTo(
                 'index', array('failure' => 'admin_document_error_novalidid'),
                 'documents', 'admin'
             );
         }
-        
+
         if (!$this->getRequest()->isPost()) {
             // Neues Formular anzeigen
             $form = new Admin_Form_Document_PersonAdd();
-            
+
             $role = $this->getRequest()->getParam('role', 'author');
             $form->setSelectedRole($role);
 
@@ -86,13 +86,13 @@ class Admin_PersonController extends Controller_Action {
         else {
             // POST verarbeiten
             $post = $this->getRequest()->getPost();
-            
+
             $form = new Admin_Form_Document_PersonAdd();
-            
+
             $form->populate($post);
-            
+
             $result = $form->processPost($post, $post);
-            
+
             switch ($result) {
                 case Admin_Form_Document_PersonAdd::RESULT_SAVE:
                 case Admin_Form_Document_PersonAdd::RESULT_NEXT:
@@ -102,7 +102,7 @@ class Admin_PersonController extends Controller_Action {
 
                         $linkProps = $form->getPersonLinkProperties($person->getId());
                         $editSession = new Admin_Model_DocumentEditSession($docId);
-                    
+
                         if ($result == Admin_Form_Document_PersonAdd::RESULT_SAVE) {
                             // Zurück zum Metadaten-Formular springen
                             if ($editSession->getPersonCount() > 0) {
@@ -146,12 +146,12 @@ class Admin_PersonController extends Controller_Action {
                 default:
                     break;
             }
-            
+
             $this->view->form = $form;
         }
-        
+
         $this->view->document = $document;
-        $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
+        $this->view->documentAdapter = new Application_Util_DocumentAdapter($this->view, $document);
 
         // Beim wechseln der Sprache würden Änderungen in editierten Felder verloren gehen
         $this->view->languageSelectorDisabled = true;
@@ -167,20 +167,20 @@ class Admin_PersonController extends Controller_Action {
         $docId = $this->getRequest()->getParam('document');
 
         $document = $this->_documentsHelper->getDocumentForId($docId);
-        
+
         if (!isset($document)) {
             return $this->_redirectTo(
                 'index', array('failure' => 'admin_document_error_novalidid'),
                 'documents', 'admin'
             );
         }
- 
+
         $form = new Admin_Form_Person();
-        
+
         if (!$this->getRequest()->isPost()) {
             // Formular anzeigen
             $personId = $this->getRequest()->getParam('personId');
-            
+
             if (strlen(trim($personId)) == 0 || is_null($personId)) {
                 $this->getLogger()->err(__METHOD__ . ' No personId parameter.');
                 return $this->returnToMetadataForm($docId);
@@ -190,7 +190,7 @@ class Admin_PersonController extends Controller_Action {
                 $this->getLogger()->err(__METHOD__ . " Bad personId = '$personId' parameter.");
                 return $this->returnToMetadataForm($docId);
             }
-            
+
             try {
                 $person = new Opus_Person($personId);
             }
@@ -206,11 +206,11 @@ class Admin_PersonController extends Controller_Action {
         else {
             // POST verarbeiten
             $post = $this->getRequest()->getPost();
-            
+
             $form->populate($post);
-            
+
             $result = $form->processPost($post, $post);
-            
+
             switch ($result) {
                 case Admin_Form_Person::RESULT_SAVE:
                     if ($form->isValid($post)) {
@@ -218,8 +218,8 @@ class Admin_PersonController extends Controller_Action {
                         $person->store();
                         return $this->_redirectToAndExit(
                             'edit', null, 'document', 'admin', array('id' => $docId,
-                            'continue' => 'updateperson', 
-                            'person' => $person->getId() 
+                            'continue' => 'updateperson',
+                            'person' => $person->getId()
                             )
                         );
                     }
@@ -234,12 +234,12 @@ class Admin_PersonController extends Controller_Action {
                 default:
                     break;
             }
-            
+
             $this->view->form = $form;
         }
-        
+
         $this->view->document = $document;
-        $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
+        $this->view->documentAdapter = new Application_Util_DocumentAdapter($this->view, $document);
 
         // Beim wechseln der Sprache würden Änderungen in editierten Felder verloren gehen
         $this->view->languageSelectorDisabled = true;
@@ -256,5 +256,5 @@ class Admin_PersonController extends Controller_Action {
             'continue' => 'true')
         );
     }
-        
+
 }

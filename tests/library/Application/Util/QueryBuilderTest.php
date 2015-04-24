@@ -26,51 +26,46 @@
  *
  * @category    Application
  * @package     Util
- * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Util_BrowsingParams {
 
-    private $_request;
+class Application_Util_QueryBuilderTest extends ControllerTestCase {
 
-    public function  __construct($request, $log) {
-        $this->log = $log;
-        $this->_request = $request;
+    public function testCreateQueryBuilderInputFromRequest() {
+        $request = $this->getRequest();
+        $request->setParams(array('searchtype' => 'all',
+            'start' => '0',
+            'rows' => '1337',
+            'sortOrder' => 'desc'));
+
+        $queryBuilder = new Application_Util_QueryBuilder(Zend_Registry::get('Zend_Log'));
+        $result = $queryBuilder->createQueryBuilderInputFromRequest($request);
+
+        $this->assertEquals($result['start'], 0);
+        $this->assertEquals($result['rows'], 1337);
+        $this->assertEquals($result['sortOrder'], 'desc');
     }
 
     /**
-     *
-     * @return string collection id
-     * @throws Util_BrowsingParamsException if requested collection is not accessible in search context
+     * Test für OPUSVIER-2708.
      */
-    public function getCollectionId() {
-        try {
-            $collectionList = new Solrsearch_Model_CollectionList($this->_request->getParam('id'));
-            return $collectionList->getCollectionId();
-        }
-        catch (Solrsearch_Model_Exception $e) {
-            $this->log->debug($e->getMessage());
-            throw new Util_BrowsingParamsException($e->getMessage(), $e->getCode(), $e);
-        }
-    }
+    public function testGetRowsFromConfig() {
+        $config = Zend_Registry::get('Zend_Config');
+        $oldParamRows = $config->searchengine->solr->numberOfDefaultSearchResults;
+        $config->searchengine->solr->numberOfDefaultSearchResults = 1337;
 
-    /**
-     *
-     * @return string series id
-     * @throws Util_BrowsingParamsException if requested series is not accessible in search context
-     */
-    public function getSeriesId() {
-        try {
-            $series = new Solrsearch_Model_Series($this->_request->getParam('id'));
-            return $series->getId();
-        }
-        catch (Solrsearch_Model_Exception $e) {
-            $this->log->debug($e->getMessage());
-            throw new Util_BrowsingParamsException($e->getMessage(), $e->getCode(), $e);
-        }
-    }
+        $request = $this->getRequest();
+        $request->setParams(array('searchtype' => 'all'));
+        $queryBuilder = new Application_Util_QueryBuilder(Zend_Registry::get('Zend_Log'));
+        $result = $queryBuilder->createQueryBuilderInputFromRequest($request);
 
+        //clean-up
+        $config->searchengine->solr->numberOfDefaultSearchResults = $oldParamRows;
+
+        $this->assertEquals($result['rows'], 1337);
+    }
 }

@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class Util_Notification {
+class Application_Util_Notification {
 
     const SUBMISSION = "submission";
     const PUBLICATION = "publication";
@@ -64,7 +64,7 @@ class Util_Notification {
         }
 
         $this->_logger->info("prepare $context notification email for document id " . $document->getId());
-        
+
         $authorAddresses = array();
         $authors = array();
         $title = "";
@@ -99,7 +99,7 @@ class Util_Notification {
                 }
             }
         }
-        
+
         $this->scheduleNotification(
             $this->getMailSubject($context, $document->getId(), $authors, $title),
             $this->getMailBody($context, $document->getId(), $authors, $title, $url),
@@ -158,7 +158,7 @@ class Util_Notification {
         }
         ob_start();
         extract(
-            array(            
+            array(
             "authors" => $authors,
             "title" => $title,
             "docId" => $docId,

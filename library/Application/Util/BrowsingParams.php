@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,35 +24,53 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
- * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @category    Application
+ * @package     Application_Util
+ * @author      Sascha Szott <szott@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Utility methods for arrays.
- */
-class Util_Array {
+class Application_Util_BrowsingParams {
 
-    /**
-     * Trims an entire array of strings.
-     * @param <type> $array
-     *
-     * TODO optionally remove empty values
-     */
-    public static function trim(&$array) {
-        array_walk($array, array('Util_Array', 'trimValue'));
+    private $_request;
+
+    public function  __construct($request, $log) {
+        $this->log = $log;
+        $this->_request = $request;
     }
 
     /**
-     * Trims a single string.
-     * @param string $value 
+     *
+     * @return string collection id
+     * @throws Application_Util_BrowsingParamsException if requested collection is not accessible in search context
      */
-    public static function trimValue(&$value) {
-        $value = trim($value);
+    public function getCollectionId() {
+        try {
+            $collectionList = new Solrsearch_Model_CollectionList($this->_request->getParam('id'));
+            return $collectionList->getCollectionId();
+        }
+        catch (Solrsearch_Model_Exception $e) {
+            $this->log->debug($e->getMessage());
+            throw new Application_Util_BrowsingParamsException($e->getMessage(), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     *
+     * @return string series id
+     * @throws Application_Util_BrowsingParamsException if requested series is not accessible in search context
+     */
+    public function getSeriesId() {
+        try {
+            $series = new Solrsearch_Model_Series($this->_request->getParam('id'));
+            return $series->getId();
+        }
+        catch (Solrsearch_Model_Exception $e) {
+            $this->log->debug($e->getMessage());
+            throw new Application_Util_BrowsingParamsException($e->getMessage(), $e->getCode(), $e);
+        }
     }
 
 }
-

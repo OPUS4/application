@@ -122,7 +122,7 @@ class Application_Controller_Action_Helper_Breadcrumbs extends Application_Contr
     }
 
     public function getDocumentTitle($document) {
-        $helper = new Util_DocumentAdapter(null, $document); // TODO improve
+        $helper = new Application_Util_DocumentAdapter(null, $document); // TODO improve
         $title = $helper->getMainTitle();
         return (strlen($title) > self::TITLE_MAX_LENGTH) ? substr($title, 0, self::TITLE_MAX_LENGTH)
             . self::TITLE_SHORT_SUFFIX : $title;

@@ -87,7 +87,7 @@ class Frontdoor_IndexController extends Controller_Action {
 
         $documentXml = null;
         try {
-            $documentXml = new Util_Document($document);
+            $documentXml = new Application_Util_Document($document);
         }
         catch (Application_Exception $e) {
             switch ($document->getServerState()) {
