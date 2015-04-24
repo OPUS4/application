@@ -36,7 +36,7 @@
  *
  * TODO $view not used at the moment, refactor or add tests
  */
-class Util_CollectionsUpdateTest extends ControllerTestCase {
+class Application_Util_CollectionsUpdateTest extends ControllerTestCase {
 
     public function testHasFilesTrue() {
         $i = 0;
