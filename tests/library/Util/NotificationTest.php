@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class Util_NotificationTest extends ControllerTestCase {
+class Application_Util_NotificationTest extends ControllerTestCase {
 
     private $notification;
 
@@ -42,7 +42,7 @@ class Util_NotificationTest extends ControllerTestCase {
 
     public function setUp() {
         parent::setUp();
-        $this->notification = new Util_Notification();
+        $this->notification = new Application_Util_Notification();
         $this->logger = Zend_Registry::get('Zend_Log');
         // add required config keys
         $this->config = Zend_Registry::get('Zend_Config');
@@ -55,12 +55,12 @@ class Util_NotificationTest extends ControllerTestCase {
         $this->config->notification->document->submitted->email = "submitted@localhost";
         $this->config->notification->document->published->email = "published@localhost";
     }
-    
+
     /**
      * Diese Testmethode hat keine Assertions. Sie stellt lediglich sicher, dass alle Codeteile
      * der Funktion prepareMail durchlaufen werden.
      */
-    public function testPrepareMailForSubmissionContext() {       
+    public function testPrepareMailForSubmissionContext() {
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
@@ -70,14 +70,14 @@ class Util_NotificationTest extends ControllerTestCase {
         $doc->addTitleMain($title);
 
         $doc->store();
-        $this->notification->prepareMail($doc, Util_Notification::SUBMISSION, 'http://localhost/foo/1');
+        $this->notification->prepareMail($doc, Application_Util_Notification::SUBMISSION, 'http://localhost/foo/1');
     }
 
     /**
      * Diese Testmethode hat keine Assertions. Sie stellt lediglich sicher, dass alle Codeteile
      * der Funktion prepareMail durchlaufen werden.
      */
-    public function testPrepareMailForPublicationContext() {        
+    public function testPrepareMailForPublicationContext() {
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
 
@@ -104,29 +104,29 @@ class Util_NotificationTest extends ControllerTestCase {
         $doc->addPersonSubmitter($submitter);
 
         $doc->store();
-        $this->notification->prepareMail($doc, Util_Notification::PUBLICATION, 'http://localhost/foo/1');
+        $this->notification->prepareMail($doc, Application_Util_Notification::PUBLICATION, 'http://localhost/foo/1');
     }
 
     public function testValidateContextWithSubmissionContext() {
         $method = $this->getMethod('validateContext');
-        $this->assertTrue($method->invokeArgs($this->notification, array(Util_Notification::SUBMISSION)));
+        $this->assertTrue($method->invokeArgs($this->notification, array(Application_Util_Notification::SUBMISSION)));
     }
 
     public function testValidateContextWithSubmissionContextAndDisabledSubmissionNotification() {
         $this->config->notification->document->submitted->enabled = 0;
         $method = $this->getMethod('validateContext');
-        $this->assertFalse($method->invokeArgs($this->notification, array(Util_Notification::SUBMISSION)));
+        $this->assertFalse($method->invokeArgs($this->notification, array(Application_Util_Notification::SUBMISSION)));
     }
 
     public function testValidateContextWithPublicationContext() {
         $method = $this->getMethod('validateContext');
-        $this->assertTrue($method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION)));
+        $this->assertTrue($method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION)));
     }
 
     public function testValidateContextWithPublishedContextAndDisabledPublicationNotification() {
         $this->config->notification->document->published->enabled = 0;
         $method = $this->getMethod('validateContext');
-        $this->assertFalse($method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION)));
+        $this->assertFalse($method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION)));
     }
 
     public function testValidateContextWithUnknownContext() {
@@ -141,37 +141,37 @@ class Util_NotificationTest extends ControllerTestCase {
 
     public function testGetSubmissionMailSubjectWithEmptyAuthorsAndEmptyTitle() {
         $method = $this->getMethod('getMailSubject');
-        $subject = $method->invokeArgs($this->notification, array(Util_Notification::SUBMISSION, "123", array(), ""));
+        $subject = $method->invokeArgs($this->notification, array(Application_Util_Notification::SUBMISSION, "123", array(), ""));
         $this->assertEquals("Dokument #123 eingestellt: n/a : n/a", $subject);
     }
 
     public function testGetSubmissionMailSubjectWithOneAuthor() {
         $method = $this->getMethod('getMailSubject');
-        $subject = $method->invokeArgs($this->notification, array(Util_Notification::SUBMISSION, "123", array("Doe, John"), "Test Document"));
+        $subject = $method->invokeArgs($this->notification, array(Application_Util_Notification::SUBMISSION, "123", array("Doe, John"), "Test Document"));
         $this->assertEquals("Dokument #123 eingestellt: Doe, John : Test Document", $subject);
     }
 
     public function testGetSubmissionMailSubjectWithTwoAuthors() {
         $method = $this->getMethod('getMailSubject');
-        $subject = $method->invokeArgs($this->notification, array(Util_Notification::SUBMISSION, "123", array("Doe, John", "Doe, Jane"), "Test Document"));
+        $subject = $method->invokeArgs($this->notification, array(Application_Util_Notification::SUBMISSION, "123", array("Doe, John", "Doe, Jane"), "Test Document"));
         $this->assertEquals("Dokument #123 eingestellt: Doe, John ; Doe, Jane : Test Document", $subject);
     }
 
     public function testGetPublicationMailSubjectWithEmptyAuthorsAndEmptyTitle() {
         $method = $this->getMethod('getMailSubject');
-        $subject = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, "123", array(), ""));
+        $subject = $method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION, "123", array(), ""));
         $this->assertEquals("Dokument #123 veröffentlicht: n/a : n/a", $subject);
     }
 
     public function testGetPublicationMailSubjectWithOneAuthor() {
         $method = $this->getMethod('getMailSubject');
-        $subject = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, "123", array("Doe, John"), "Test Document"));
+        $subject = $method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION, "123", array("Doe, John"), "Test Document"));
         $this->assertEquals("Dokument #123 veröffentlicht: Doe, John : Test Document", $subject);
     }
 
     public function testGetPublicationMailSubjectWithTwoAuthors() {
         $method = $this->getMethod('getMailSubject');
-        $subject = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, "123", array("Doe, John", "Doe, Jane"), "Test Document"));
+        $subject = $method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION, "123", array("Doe, John", "Doe, Jane"), "Test Document"));
         $this->assertEquals("Dokument #123 veröffentlicht: Doe, John ; Doe, Jane : Test Document", $subject);
     }
 
@@ -183,7 +183,7 @@ class Util_NotificationTest extends ControllerTestCase {
 
     public function testGetSubmissionMailBodyWithEmptyAuthorsAndEmptyTitle() {
         $method = $this->getMethod('getMailBody');
-        $body = $method->invokeArgs($this->notification, array(Util_Notification::SUBMISSION, "123", array(), "", "http://localhost/foo/1"));
+        $body = $method->invokeArgs($this->notification, array(Application_Util_Notification::SUBMISSION, "123", array(), "", "http://localhost/foo/1"));
         $this->assertContains("Autor(en): n/a", $body);
         $this->assertContains("Titel: n/a", $body);
         $this->assertContains("Dokument-ID: 123", $body);
@@ -193,7 +193,7 @@ class Util_NotificationTest extends ControllerTestCase {
 
     public function testGetSubmissionMailBodyWithTwoAuthorsAndNonEmptyTitle() {
         $method = $this->getMethod('getMailBody');
-        $body = $method->invokeArgs($this->notification, array(Util_Notification::SUBMISSION, "123", array( "Doe, John", "Doe, Jane" ), "Test Title", "http://localhost/foo/1"));
+        $body = $method->invokeArgs($this->notification, array(Application_Util_Notification::SUBMISSION, "123", array( "Doe, John", "Doe, Jane" ), "Test Title", "http://localhost/foo/1"));
         $this->assertContains("Autor(en):\nDoe, John\nDoe, Jane", $body);
         $this->assertContains("Titel: Test Title", $body);
         $this->assertContains("Dokument-ID: 123", $body);
@@ -203,7 +203,7 @@ class Util_NotificationTest extends ControllerTestCase {
 
     public function testGetPublicationMailBodyWithEmptyAuthorsAndEmptyTitle() {
         $method = $this->getMethod('getMailBody');
-        $body = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, "123", array(), "", "http://localhost/foo/1"));
+        $body = $method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION, "123", array(), "", "http://localhost/foo/1"));
         $this->assertContains("Autor(en): n/a", $body);
         $this->assertContains("Titel: n/a", $body);
         $this->assertContains("Dokument-ID: 123", $body);
@@ -213,7 +213,7 @@ class Util_NotificationTest extends ControllerTestCase {
 
     public function testGetPublicationMailBodyWithTwoAuthorsAndNonEmptyTitle() {
         $method = $this->getMethod('getMailBody');
-        $body = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, "123", array( "Doe, John", "Doe, Jane" ), "Test Title", "http://localhost/foo/1"));
+        $body = $method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION, "123", array( "Doe, John", "Doe, Jane" ), "Test Title", "http://localhost/foo/1"));
         $this->assertContains("Autor(en):\nDoe, John\nDoe, Jane", $body);
         $this->assertContains("Titel: Test Title", $body);
         $this->assertContains("Dokument-ID: 123", $body);
@@ -230,19 +230,19 @@ class Util_NotificationTest extends ControllerTestCase {
     public function testGetSubmissionMailBodyWithUnknownTemplateFile() {
         $this->config->notification->document->submitted->template = 'does-not-exist.phtml';
         $method = $this->getMethod('getMailBody');
-        $body = $method->invokeArgs($this->notification, array(Util_Notification::SUBMISSION, "123", array(), "Test Document", "http://localhost/foo/1"));
+        $body = $method->invokeArgs($this->notification, array(Application_Util_Notification::SUBMISSION, "123", array(), "Test Document", "http://localhost/foo/1"));
         $this->assertNull($body);
     }
 
-    public function testGetRecipientsWithInvalidContext() {        
+    public function testGetRecipientsWithInvalidContext() {
         $method = $this->getMethod('getRecipients');
         $recipients = $method->invokeArgs($this->notification, array("deleted"));
         $this->assertNull($recipients);
     }
 
-    public function testGetRecipientsForSubmissionContext() {        
+    public function testGetRecipientsForSubmissionContext() {
         $method = $this->getMethod('getRecipients');
-        $recipients = $method->invokeArgs($this->notification, array(Util_Notification::SUBMISSION));
+        $recipients = $method->invokeArgs($this->notification, array(Application_Util_Notification::SUBMISSION));
         $this->assertEquals(1, count($recipients));
         $this->assertEquals($recipients[0]['name'], "submitted@localhost");
         $this->assertEquals($recipients[0]['address'], "submitted@localhost");
@@ -251,14 +251,14 @@ class Util_NotificationTest extends ControllerTestCase {
     public function testGetRecipientsForSubmissionContextWithoutSubmittedMailConfig() {
         $this->config->notification->document->submitted->email = "";
         $method = $this->getMethod('getRecipients');
-        $recipients = $method->invokeArgs($this->notification, array(Util_Notification::SUBMISSION));
+        $recipients = $method->invokeArgs($this->notification, array(Application_Util_Notification::SUBMISSION));
         $this->assertEquals(0, count($recipients));
     }
 
     public function testGetRecipientsForSubmissionContextAndMultipleAddresses() {
         $this->config->notification->document->submitted->email = "submitted@localhost,sub@host.tld";
         $method = $this->getMethod('getRecipients');
-        $recipients = $method->invokeArgs($this->notification, array(Util_Notification::SUBMISSION));
+        $recipients = $method->invokeArgs($this->notification, array(Application_Util_Notification::SUBMISSION));
         $this->assertEquals(2, count($recipients));
         $this->assertEquals($recipients[0]['name'], "submitted@localhost");
         $this->assertEquals($recipients[0]['address'], "submitted@localhost");
@@ -270,7 +270,7 @@ class Util_NotificationTest extends ControllerTestCase {
         $doc = $this->createTestDocument();
         $doc->store();
         $method = $this->getMethod('getRecipients');
-        $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, array(), $doc));
+        $recipients = $method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION, array(), $doc));
         $this->assertEquals(1, count($recipients));
         $this->assertEquals($recipients[0]['name'], "published@localhost");
         $this->assertEquals($recipients[0]['address'], "published@localhost");
@@ -279,7 +279,7 @@ class Util_NotificationTest extends ControllerTestCase {
     public function testGetRecipientsForPublicationContextWithoutPublishedMailConfig() {
         $this->config->notification->document->published->email = "";
         $method = $this->getMethod('getRecipients');
-        $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION));
+        $recipients = $method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION));
         $this->assertEquals(0, count($recipients));
     }
 
@@ -294,7 +294,7 @@ class Util_NotificationTest extends ControllerTestCase {
         );
 
         $method = $this->getMethod('getRecipients');
-        $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, $authors, $doc));
+        $recipients = $method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION, $authors, $doc));
 
         $this->assertEquals(2, count($recipients));
         $this->assertEquals($recipients[0]['name'], "Doe, John");
@@ -308,7 +308,7 @@ class Util_NotificationTest extends ControllerTestCase {
         $doc = $this->createTestDocument();
         $doc->store();
         $method = $this->getMethod('getRecipients');
-        $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, array(), $doc));
+        $recipients = $method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION, array(), $doc));
 
         $this->assertEquals(2, count($recipients));
         $this->assertEquals($recipients[0]['name'], "published@localhost");
@@ -322,13 +322,13 @@ class Util_NotificationTest extends ControllerTestCase {
         $doc = $this->createTestDocument();
         $doc->store();
 
-        $authors = array( 
+        $authors = array(
             array ( "name" => "Doe, John", "address" => "doe@localhost" ),
             array ( "name" => "Doe, Jane", "address" => "jane.doe@localhost" )
         );
 
         $method = $this->getMethod('getRecipients');
-        $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, $authors, $doc));
+        $recipients = $method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION, $authors, $doc));
 
         $this->assertEquals(3, count($recipients));
         $this->assertEquals($recipients[0]['name'], "published@localhost");
@@ -355,7 +355,7 @@ class Util_NotificationTest extends ControllerTestCase {
         );
 
         $method = $this->getMethod('getRecipients');
-        $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, $authors, $doc));
+        $recipients = $method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION, $authors, $doc));
 
         $this->assertEquals(4, count($recipients));
         $this->assertEquals($recipients[0]['name'], "published@localhost");
@@ -373,12 +373,12 @@ class Util_NotificationTest extends ControllerTestCase {
         $doc = $this->createTestDocument();
         $submitter = new Opus_Person();
         $submitter->setFirstName('John');
-        $submitter->setLastName('Submitter');        
+        $submitter->setLastName('Submitter');
         $doc->addPersonSubmitter($submitter);
         $doc->store();
 
         $method = $this->getMethod('getRecipients');
-        $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, array(), $doc));
+        $recipients = $method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION, array(), $doc));
 
         $this->assertEquals(1, count($recipients));
         $this->assertEquals($recipients[0]['name'], "published@localhost");
@@ -417,7 +417,7 @@ class Util_NotificationTest extends ControllerTestCase {
         $doc->addPersonSubmitter($submitter);
 
         $doc->store();
-        $this->notification->prepareMail($doc, Util_Notification::PUBLICATION, 'http://localhost/foo/1', false, array(false, true));
+        $this->notification->prepareMail($doc, Application_Util_Notification::PUBLICATION, 'http://localhost/foo/1', false, array(false, true));
     }
 
     public function testGetRecipientsForPublicationContextWithoutSubmitter() {
@@ -437,14 +437,14 @@ class Util_NotificationTest extends ControllerTestCase {
 
         $doc->store();
         $method = $this->getMethod('getRecipients');
-        $recipients = $method->invokeArgs($this->notification, array(Util_Notification::PUBLICATION, array(array("name" => "foo", "address" => "foo@localhost")), $doc, false));
+        $recipients = $method->invokeArgs($this->notification, array(Application_Util_Notification::PUBLICATION, array(array("name" => "foo", "address" => "foo@localhost")), $doc, false));
         $this->assertEquals(2, count($recipients));
         $this->assertEquals("published@localhost", $recipients[0]["name"]);
         $this->assertEquals("published@localhost", $recipients[0]["address"]);
         $this->assertEquals("foo", $recipients[1]["name"]);
         $this->assertEquals("foo@localhost", $recipients[1]["address"]);
     }
-    
+
     public function testCreateWorkerJobIfAsyncEnabled() {
         $this->config->merge(new Zend_Config(array('runjobs' => array('asynchronous' => 1))));
         $this->assertEquals(0, Opus_Job::getCount(), 'test data changed.');
@@ -458,23 +458,23 @@ class Util_NotificationTest extends ControllerTestCase {
         $doc->addTitleMain($title);
 
         $doc->store();
-        $this->notification->prepareMail($doc, Util_Notification::SUBMISSION, 'http://localhost/foo/1');
+        $this->notification->prepareMail($doc, Application_Util_Notification::SUBMISSION, 'http://localhost/foo/1');
 
         $mailJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_MailNotification::LABEL));
-        
+
         $this->assertEquals(1, count($mailJobs), 'Expected 1 mail job');
-        
+
         $jobs = Opus_Job::getAll();
-        
+
         if(!empty($jobs)) {
             foreach($jobs as $job) {
                 $job->delete();
             }
         }
     }
-    
+
     private function getMethod($methodName) {
-        $class = new ReflectionClass('Util_Notification');
+        $class = new ReflectionClass('Application_Util_Notification');
         $method = $class->getMethod($methodName);
         $method->setAccessible(true);
         return $method;
