@@ -214,4 +214,28 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->assertEquals('Opus_File_', $this->form->getLabelPrefix());
     }
 
+    public function testGetApplicationConfig() {
+        $config = $this->form->getApplicationConfig();
+
+        $this->assertNotNull($config);
+        $this->assertInstanceOf('Zend_Config', $config);
+        $this->assertSame($config, Zend_Registry::get('Zend_Config'));
+    }
+
+    public function testSetApplicationConfig() {
+        $config = new Zend_Config(array('test' => true));
+
+        $this->form->setApplicationConfig($config);
+
+        $returnedConfig = $this->form->getApplicationConfig();
+
+        $this->assertSame($config, $returnedConfig);
+
+        $this->form->setApplicationConfig(null);
+
+        $returnedConfig = $this->form->getApplicationConfig();
+
+        $this->assertSame(Zend_Registry::get('Zend_Config'), $returnedConfig);
+    }
+
 }

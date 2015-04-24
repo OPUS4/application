@@ -37,6 +37,12 @@
  */
 abstract class Application_Form_Abstract extends Zend_Form_SubForm {
 
+    /**
+     * Konfiguration Objekt für Applikation.
+     * @var Zend_Config
+     */
+    private $_config;
+
 
     /**
      * Logger für Formularklasse.
@@ -65,6 +71,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
         $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
         // $this->addElementPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
         $this->addPrefixPath('Form', 'Form'); // '_Element' wird anscheinend automatisch dran gehängt
+        $this->addPrefixPath('Application_Form', 'Application/Form');
     }
 
     /**
@@ -212,6 +219,26 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
      */
     public function setLabelPrefix($prefix) {
         $this->_labelPrefix = $prefix;
+    }
+
+    /**
+     * Returns configuration.
+     * @return Zend_Config
+     */
+    public function getApplicationConfig() {
+        if (is_null($this->_config)) {
+            $this->_config = Zend_Registry::get('Zend_Config');
+        }
+
+        return $this->_config;
+    }
+
+    /**
+     * Sets configuration.
+     * @param $config Zend_Config
+     */
+    public function setApplicationConfig($config) {
+        $this->_config = $config;
     }
 
 }
