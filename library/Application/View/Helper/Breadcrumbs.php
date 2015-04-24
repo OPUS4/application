@@ -38,12 +38,12 @@
  * @category    Application
  * @package     View
  */
-class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
-    
+class Application_View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
+
     private $_suffixSeparatorDisabled = false;
-    
+
     private $_suffix = null;
-    
+
     private $_replacement = null;
 
     /**
@@ -77,10 +77,10 @@ class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
         $this->_replacement = $replacement;
         return $this;
     }
-    
+
     /**
      * Rendert den kompletten Breadcrumbs Pfad für die aktuelle Seite.
-     * 
+     *
      * @param Zend_Navigation_Container $container
      * @return string
      */
@@ -129,10 +129,10 @@ class View_Helper_Breadcrumbs extends Zend_View_Helper_Navigation_Breadcrumbs {
         }
 
         $html .= '</div></div>';
-        
+
         return strlen($html) ? $this->getIndent() . $html : '';
     }
-    
+
 }
 
 

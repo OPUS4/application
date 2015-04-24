@@ -122,7 +122,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $view->addScriptPath($libRealPath . '/View/Partials');
 
         // Breadcrumbs View Helper global ersetzen
-        $breadcrumbsHelper = new View_Helper_Breadcrumbs();
+        $breadcrumbsHelper = new Application_View_Helper_Breadcrumbs();
         $view->registerHelper($breadcrumbsHelper, 'breadcrumbs');
 
         $viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer($view);

@@ -35,7 +35,7 @@
 /**
  * Class BreadcrumbsTest.
  */
-class View_Helper_BreadcrumbsTest extends ControllerTestCase {
+class Application_View_Helper_BreadcrumbsTest extends ControllerTestCase {
 
     private $page = null;
 
