@@ -122,7 +122,7 @@ class View_Helper_LoginBar extends Zend_View_Helper_Abstract {
 
         // Prüfe, ob Nutzer Zugriff auf Account Modul hat
         $realm = Opus_Security_Realm::getInstance();
-        
+
         if ($realm->checkModule('account') == true) {
             // Prüfe, ob Nutzer ihren Account editieren dürfen
             $config = Zend_Registry::get('Zend_Config');
