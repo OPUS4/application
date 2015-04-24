@@ -39,7 +39,7 @@
  *
  * TODO implement as Controller Helper (nicht soviel static)
  */
-class Controller_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
 
     /**
      * Lists files in import folder. If $ignoreAllowedFiletypes is set to true
@@ -86,7 +86,7 @@ class Controller_Helper_Files extends Zend_Controller_Action_Helper_Abstract {
         $logMessage = 'check for file: ' . $file->getPathname();
 
         if (!$ignoreAllowedTypes) {
-            $allowedFileTypes = Controller_Helper_Files::getAllowedFileTypes();
+            $allowedFileTypes = Application_Controller_Action_Helper_Files::getAllowedFileTypes();
             if (is_null($allowedFileTypes) || empty($allowedFileTypes)) {
                 $log->debug('no filetypes are allowed');
                 return false;

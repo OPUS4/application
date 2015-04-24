@@ -25,54 +25,68 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Opus
+ * @package     Controller_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Helper for setting the active entry in the main menu.
+ * Controller Helper für Access Control Nachfragen.
  *
- * Can be used statically like this:
+ * Dieser Helper dient dazu die accessAllowed Funktion in den Controllern zur Verfügung zu stellen.
  *
- * {code}
- * Zend_Controller_Action_HelperBroker::getStaticHelper('MainMenu')->setActive('home');
- * {code}
+ * TODO weiter ausbauen und mit Opus_Security_IRealm konsolidieren (Framework vs. Application Security)
  */
-class Controller_Helper_MainMenu extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_AccessControl extends Zend_Controller_Action_Helper_Abstract
+    implements Application_Security_AccessControl {
 
-    /**
-     * Allows calling helper like a method of the broker.
-     *
-     * {code}
-     * $this->_helper->mainMenu('home');
-     * {code}
-     *
-     * @param string $entry
-     */
-    public function direct($entry) {
-        $this->setActive($entry);
+    private $_acl;
+
+    public function direct($resource) {
+        return $this->accessAllowed($resource);
     }
 
     /**
-     * Sets entry with matching label active.
-     * @param string $entry
+     * Prüft Zugriff auf Ressource.
+     *
+     * Wenn die Security für OPUS abgeschaltet ist, gibt es kein Opus_Acl Objekt, daher ist in diesem Fall der Zugriff
+     * erlaubt.
+     *
+     * Wenn die übergebene Ressource NULL ist
+     *
+     * @param $resource
+     * @return bool
      */
-    public function setActive($entry) {
-        $mainMenu = Zend_Registry::get('Opus_Navigation');
+    public function accessAllowed($resource) {
+        $acl = $this->getAcl();
 
-        foreach ($mainMenu as $page) {
-            $label = $page->getLabel();
-            if (($label === $entry . '_menu_label') || ($label === $entry)) {
-                $page->setActive(true);
-            }
-            else {
-                $page->setActive(false);
-            }
+        if (strlen(trim($resource)) == 0) {
+            throw new Application_Exception('#1 argument must not be empty|null');
+        }
+
+        if (!is_null($acl)) {
+            return $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, $resource);
+        }
+        else {
+            return true; // Security disabled
         }
     }
 
-}
+    /**
+     * Returns the Zend_Acl object or null.
+     * @return Zend_Acl
+     */
+    protected function getAcl() {
+        if (is_null($this->_acl)) {
+            $this->_acl = Zend_Registry::isRegistered('Opus_Acl') ? Zend_Registry::get('Opus_Acl') : null;
+        }
+        return $this->_acl;
+    }
 
+    public function setAcl($acl) {
+        $this->_acl = $acl;
+    }
+
+}

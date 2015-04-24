@@ -36,7 +36,7 @@
 /**
  * Helper for getting a list of document IDs used by admin and review module.
  */
-class Controller_Helper_Documents extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_Documents extends Zend_Controller_Action_Helper_Abstract {
 
     /**
      * Gets called when the helper is used like a function of the helper broker.

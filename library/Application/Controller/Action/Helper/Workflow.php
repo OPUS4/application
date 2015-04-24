@@ -34,10 +34,10 @@
 
 /**
  * Controller helper for providing workflow support.
- * 
+ *
  * Implementiert den Workflow ohne Einschränkungen durch Rollen.
  */
-class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract {
 
     /**
      * Basic workflow configuration.
@@ -86,13 +86,13 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
      */
     public function getAllowedTargetStatesForDocument($document) {
         $logger = Zend_Registry::get('Zend_Log');
-        
+
         $currentState = $document->getServerState();
-        
+
         $targetStates = self::getTargetStates($currentState);
 
         $acl = $this->getAcl();
-                
+
         if (!is_null($acl)) {
             $logger->debug("ACL: got instance");
 
@@ -114,7 +114,7 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
                 return $allowedTargetStates;
             }
         }
-        
+
         return $targetStates;
     }
 
@@ -172,24 +172,24 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
 
         return array_keys($workflow->toArray());
     }
-    
+
     /**
      * Returns an array with resource names for all possible transitions.
      * @return array of strings
      */
     public static function getWorkflowResources() {
         $transitions = array();
-        
+
         $allStates = self::getAllStates();
-        
+
         foreach ($allStates as $state) {
             $allTargetStates = self::getTargetStates($state);
-            
+
             foreach ($allTargetStates as $targetState) {
                 $transitions[] = "workflow_" . $state . "_" . $targetState;
             }
         }
-        
+
         return $transitions;
     }
 
@@ -198,13 +198,13 @@ class Controller_Helper_Workflow extends Zend_Controller_Action_Helper_Abstract 
      * @return Zend_Config_Ini
      */
     public static function getWorkflowConfig() {
-        if (empty(Controller_Helper_Workflow::$_workflowConfig)) {
-            Controller_Helper_Workflow::$_workflowConfig = new Zend_Config_Ini(
+        if (empty(Application_Controller_Action_Helper_Workflow::$_workflowConfig)) {
+            Application_Controller_Action_Helper_Workflow::$_workflowConfig = new Zend_Config_Ini(
                 APPLICATION_PATH . '/modules/admin/models/workflow.ini'
             );
         }
 
-        return Controller_Helper_Workflow::$_workflowConfig;
+        return Application_Controller_Action_Helper_Workflow::$_workflowConfig;
     }
 
     /**

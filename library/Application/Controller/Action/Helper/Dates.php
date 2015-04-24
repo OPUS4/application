@@ -35,7 +35,7 @@
 /**
  * Controller helper for handling conversion between Opus_Date and strings.
  */
-class Controller_Helper_Dates extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_Helper_Abstract {
 
     /**
      * Validator for dates.
@@ -44,7 +44,7 @@ class Controller_Helper_Dates extends Zend_Controller_Action_Helper_Abstract {
     private $_validator;
 
     /**
-     * Constructs Controller_Helper_Dates.
+     * Constructs Application_Controller_Action_Helper_Dates.
      */
     public function __construct() {
         $this->_validator = new Form_Validate_Date();

@@ -38,7 +38,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
     const FILENAME_DELETED_DOC = 'foo.html';
     const FILENAME_UNPUBLISHED_DOC = 'bar.html';
     const EXPECTED_EXCEPTION = "Test failed: expected Exception";
-    
+
     public function setUp() {
         parent::setUpWithEnv('production');
         $this->assertSecurityConfigured();
@@ -211,7 +211,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
         $helper = $file->getAclHelper();
 
         $this->assertNotNull($helper);
-        $this->assertInstanceOf('Controller_Helper_AccessControl', $helper);
+        $this->assertInstanceOf('Application_Controller_Action_Helper_AccessControl', $helper);
     }
 
     public function testSetAclHelper() {
@@ -228,7 +228,7 @@ class Frontdoor_Model_FileTest extends ControllerTestCase {
         $helper = $file->getAclHelper();
 
         $this->assertNotNull($helper);
-        $this->assertInstanceOf('Controller_Helper_AccessControl', $helper);
+        $this->assertInstanceOf('Application_Controller_Action_Helper_AccessControl', $helper);
     }
 
     /**

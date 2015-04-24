@@ -24,54 +24,55 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Tests
+ * @category    Application
+ * @package     Opus
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Controller_Helper_DocumentsTest extends ControllerTestCase {
+/**
+ * Helper for setting the active entry in the main menu.
+ *
+ * Can be used statically like this:
+ *
+ * {code}
+ * Zend_Controller_Action_HelperBroker::getStaticHelper('MainMenu')->setActive('home');
+ * {code}
+ */
+class Application_Controller_Action_Helper_MainMenu extends Zend_Controller_Action_Helper_Abstract {
 
-    private $documents;
-
-    public function setUp() {
-        parent::setUp();
-
-        $this->documents = Zend_Controller_Action_HelperBroker::getStaticHelper('Documents');
+    /**
+     * Allows calling helper like a method of the broker.
+     *
+     * {code}
+     * $this->_helper->mainMenu('home');
+     * {code}
+     *
+     * @param string $entry
+     */
+    public function direct($entry) {
+        $this->setActive($entry);
     }
 
-    public function testGetDocumentForIdForValidId() {
-        $docId = 1;
+    /**
+     * Sets entry with matching label active.
+     * @param string $entry
+     */
+    public function setActive($entry) {
+        $mainMenu = Zend_Registry::get('Opus_Navigation');
 
-        $document = $this->documents->getDocumentForId($docId);
-
-        $this->assertNotNull($document);
-        $this->assertInstanceOf('Opus_Document', $document);
-    }
-
-    public function testGetDocumentForIdForEmptyValue() {
-        $docId = null;
-
-        $this->assertNull($this->documents->getDocumentForId($docId));
-    }
-
-    public function testGetDocumentForIdForMalformedValue() {
-        $docId = '<h1>123</h1>';
-
-        $this->assertNull($this->documents->getDocumentForId($docId));
-    }
-
-    public function testGetDocumentForIdForNotExistingValue() {
-        $docId = 3000;
-
-        $this->assertNull($this->documents->getDocumentForId($docId));
-    }
-
-    public function testGetDocumentForIdForNegativeValue() {
-        $docId = -1;
-
-        $this->assertNull($this->documents->getDocumentForId($docId));
+        foreach ($mainMenu as $page) {
+            $label = $page->getLabel();
+            if (($label === $entry . '_menu_label') || ($label === $entry)) {
+                $page->setActive(true);
+            }
+            else {
+                $page->setActive(false);
+            }
+        }
     }
 
 }
+

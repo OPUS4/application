@@ -35,14 +35,14 @@
 /**
  * Unit Test for class Admin_Model_Workflow.
  */
-class Controller_Helper_DatesTest extends ControllerTestCase {
+class Application_Controller_Action_Helper_DatesTest extends ControllerTestCase {
 
     private $__datesHelper;
 
     public function setUp() {
         parent::setUp();
 
-        $this->__datesHelper = new Controller_Helper_Dates();
+        $this->__datesHelper = new Application_Controller_Action_Helper_Dates();
     }
 
     public function testIsValidGermanTrue() {

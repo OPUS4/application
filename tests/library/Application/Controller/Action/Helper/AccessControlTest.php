@@ -35,8 +35,8 @@
 /**
  * Unit Tests für Controller Helper für Zugriffsprüfungen.
  */
-class Controller_Helper_AccessControlTest extends ControllerTestCase {
-    
+class Application_Controller_Action_Helper_AccessControlTest extends ControllerTestCase {
+
     private $accessControl;
 
     public function setUp() {
@@ -44,7 +44,7 @@ class Controller_Helper_AccessControlTest extends ControllerTestCase {
         $this->assertSecurityConfigured();
         $acl = Zend_Registry::get('Opus_Acl');
         $acl->allow('guest', 'accounts');
-        $this->accessControl = new Controller_Helper_AccessControl();
+        $this->accessControl = new Application_Controller_Action_Helper_AccessControl();
     }
 
     public function tearDown() {

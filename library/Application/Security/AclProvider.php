@@ -146,7 +146,7 @@ class Application_Security_AclProvider {
     }
 
     public function loadWorkflowResources($acl) {
-        $resources = Controller_Helper_Workflow::getWorkflowResources();
+        $resources = Application_Controller_Action_Helper_Workflow::getWorkflowResources();
 
         $acl->addResource(new Zend_Acl_Resource('workflow'));
 

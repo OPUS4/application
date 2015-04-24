@@ -35,9 +35,9 @@
  * Unit tests for document types helper.
  *
  * The unit test depend on the available document types in the doctypes folder
- * as well as the configuration in the file tests.ini. 
+ * as well as the configuration in the file tests.ini.
  */
-class Controller_Helper_DocumentTypesTest extends ControllerTestCase {
+class application_Controller_Action_Helper_DocumentTypesTest extends ControllerTestCase {
 
     /**
      * @var Controller_Helper_DocumentTypes Instance of DocumentTypes helper for testing.

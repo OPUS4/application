@@ -38,7 +38,7 @@
  * This class keeps some of the special code generating translation keys out of
  * the controllers and view scripts.
  */
-class Controller_Helper_Translation extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_Translation extends Zend_Controller_Action_Helper_Abstract {
 
     /**
      * Gets called when the helper is used like a method of the broker.

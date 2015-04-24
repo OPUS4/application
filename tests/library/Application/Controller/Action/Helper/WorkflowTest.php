@@ -33,16 +33,16 @@
  */
 
 /**
- * Unit Test for class Controller_Helper_Workflow.
+ * Unit Test for class Application_Controller_Action_Helper_Workflow.
  */
-class Controller_Helper_WorkflowTest extends ControllerTestCase {
+class Application_Controller_Action_Helper_WorkflowTest extends ControllerTestCase {
 
     private $__workflowHelper;
 
     public function setUp() {
         parent::setUp();
 
-        $this->__workflowHelper = new Controller_Helper_Workflow();
+        $this->__workflowHelper = new Application_Controller_Action_Helper_Workflow();
     }
 
     public function testIsValidStateTrue() {
@@ -58,7 +58,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
     }
 
     public function testIsValidStateForAllStates() {
-        $states = Controller_Helper_Workflow::getAllStates();
+        $states = Application_Controller_Action_Helper_Workflow::getAllStates();
 
         foreach ($states as $state) {
             $this->assertTrue($this->__workflowHelper->isValidState($state),
@@ -67,7 +67,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
     }
 
     public function testgetAllStates() {
-        $states = Controller_Helper_Workflow::getAllStates();
+        $states = Application_Controller_Action_Helper_Workflow::getAllStates();
 
         $this->assertEquals(7, count($states));
         $this->assertTrue(in_array('removed', $states));
@@ -86,19 +86,19 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
     }
 
     public function testGetTargetStatesForRemoved() {
-       $targetStates = Controller_Helper_Workflow::getTargetStates('removed');
+       $targetStates = Application_Controller_Action_Helper_Workflow::getTargetStates('removed');
 
        $this->assertEquals(0, count($targetStates));
     }
 
     public function testGetTargetStatesForInvalidState() {
-       $targetStates = Controller_Helper_Workflow::getTargetStates('invalid');
+       $targetStates = Application_Controller_Action_Helper_Workflow::getTargetStates('invalid');
 
        $this->assertEquals(0, count($targetStates));
     }
 
     public function testGetTargetStatesForNull() {
-       $targetStates = Controller_Helper_Workflow::getTargetStates(null);
+       $targetStates = Application_Controller_Action_Helper_Workflow::getTargetStates(null);
 
        $this->assertEquals(0, count($targetStates));
     }
@@ -147,7 +147,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
 
         $this->__workflowHelper->changeState($doc, 'removed');
 
-        $documentsHelper = new Controller_Helper_Documents();
+        $documentsHelper = new Application_Controller_Action_Helper_Documents();
 
         $this->assertNull($documentsHelper->getDocumentForId($docId));
     }
@@ -190,7 +190,7 @@ class Controller_Helper_WorkflowTest extends ControllerTestCase {
     }
 
     public function testWorkflowTranslationsForStates() {
-        $states = Controller_Helper_Workflow::getAllStates();
+        $states = Application_Controller_Action_Helper_Workflow::getAllStates();
 
         Zend_Registry::get('Zend_Translate')->loadModule('admin');
 

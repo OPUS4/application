@@ -37,7 +37,7 @@
  * Helper class for getting document types and template names.
  *
  */
-class Controller_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller_Action_Helper_Abstract {
 
     /**
      * Configuration.

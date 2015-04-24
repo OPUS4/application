@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract {
 
     const FPASSTHRU = 'fpassthru';
 
@@ -45,9 +45,9 @@ class Controller_Helper_SendFile extends Zend_Controller_Action_Helper_Abstract 
 
     /**
      * This method to call when we use   $this->_helper->SendFile(...)   and
-     * forwards to method Controller_Helper_SendFile::sendFile
+     * forwards to method Application_Controller_Action_Helper_SendFile::sendFile
      *
-     * @see Controller_Helper_SendFile::sendFile
+     * @see Application_Controller_Action_Helper_SendFile::sendFile
      */
     public function direct($file, $method = self::FPASSTHRU, $mustResend = false) {
         return $this->sendFile($file, $method, $mustResend);

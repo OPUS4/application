@@ -40,13 +40,13 @@ class Admin_WorkflowController extends Controller_Action {
 
     /**
      * Helper for verifying document IDs.
-     * @var Controller_Helper_Documents
+     * @var Application_Controller_Action_Helper_Documents
      */
     private $_documentsHelper;
 
     /**
      * Helper for workflow functionality.
-     * @var Controller_Helper_Workflow
+     * @var Application_Controller_Action_Helper_Workflow
      */
     private $_workflowHelper;
 

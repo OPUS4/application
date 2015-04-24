@@ -35,12 +35,12 @@
  * Unit Tests fuer Admin_Form_Document_Patent.
  */
 class Admin_Form_Document_PatentTest extends ControllerTestCase {
-    
+
     public function testCreateForm() {
         $form = new Admin_Form_Document_Patent();
-        
+
         $this->assertEquals(6, count($form->getElements()));
-        
+
         $this->assertNotNull($form->getElement('Id'));
         $this->assertNotNull($form->getElement('Number'));
         $this->assertTrue($form->getElement('Number')->isRequired());
@@ -49,21 +49,21 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
         $this->assertNotNull($form->getElement('Application'));
         $this->assertNotNull($form->getElement('DateGranted'));
     }
-    
+
     public function testPopulateFromModel() {
         $this->useEnglish();
-        
+
         $form = new Admin_Form_Document_Patent();
 
         $document = new Opus_Document(146);
         $patents = $document->getPatent();
         $patent = $patents[0];
         $patentId = $patent->getId();
-        
+
         $form->populateFromModel($patent);
-        
-        $datesHelper = new Controller_Helper_Dates();
-        
+
+        $datesHelper = new Application_Controller_Action_Helper_Dates();
+
         $this->assertEquals($patentId, $form->getElement('Id')->getValue());
         $this->assertEquals('1234', $form->getElement('Number')->getValue());
         $this->assertEquals('DDR', $form->getElement('Countries')->getValue());
@@ -71,46 +71,46 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
         $this->assertEquals('The foo machine.', $form->getElement('Application')->getValue());
         $this->assertEquals('1970/01/01', $form->getElement('DateGranted')->getValue());
     }
-    
+
     public function testUpdateModel() {
         $this->useEnglish();
-        
+
         $form = new Admin_Form_Document_Patent();
-        
+
         $form->getElement('Number')->setValue('323');
         $form->getElement('Countries')->setValue('Germany');
         $form->getElement('YearApplied')->setValue('1987');
         $form->getElement('Application')->setValue('Patent Title');
         $form->getElement('DateGranted')->setValue('2008/03/20');
-        
+
         $patent = new Opus_Patent();
-        
+
         $form->updateModel($patent);
-        
-        $datesHelper = new Controller_Helper_Dates();
-        
+
+        $datesHelper = new Application_Controller_Action_Helper_Dates();
+
         $this->assertEquals('323', $patent->getNumber());
         $this->assertEquals('Germany', $patent->getCountries());
         $this->assertEquals('1987', $patent->getYearApplied());
         $this->assertEquals('Patent Title', $patent->getApplication());
         $this->assertEquals('2008/03/20', $datesHelper->getDateString($patent->getDateGranted()));
     }
-    
+
     public function testGetModelNew() {
         $this->useEnglish();
-        
+
         $form = new Admin_Form_Document_Patent();
-        
+
         $form->getElement('Number')->setValue('323');
         $form->getElement('Countries')->setValue('Germany');
         $form->getElement('YearApplied')->setValue('1987');
         $form->getElement('Application')->setValue('Patent Title');
         $form->getElement('DateGranted')->setValue('2008/03/20');
-        
+
         $patent = $form->getModel();
-        
-        $datesHelper = new Controller_Helper_Dates();
-        
+
+        $datesHelper = new Application_Controller_Action_Helper_Dates();
+
         $this->assertNull($patent->getId());
         $this->assertEquals('323', $patent->getNumber());
         $this->assertEquals('Germany', $patent->getCountries());
@@ -118,27 +118,27 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
         $this->assertEquals('Patent Title', $patent->getApplication());
         $this->assertEquals('2008/03/20', $datesHelper->getDateString($patent->getDateGranted()));
     }
-    
+
     public function testGetModel() {
         $this->useEnglish();
-        
+
         $document = new Opus_Document(146);
         $patents = $document->getPatent();
         $patentId = $patents[0]->getId();
 
         $form = new Admin_Form_Document_Patent();
-        
+
         $form->getElement('Id')->setValue($patentId);
         $form->getElement('Number')->setValue('323');
         $form->getElement('Countries')->setValue('Germany');
         $form->getElement('YearApplied')->setValue('1987');
         $form->getElement('Application')->setValue('Patent Title');
         $form->getElement('DateGranted')->setValue('2008/03/20');
-        
+
         $patent = $form->getModel();
-        
-        $datesHelper = new Controller_Helper_Dates();
-        
+
+        $datesHelper = new Application_Controller_Action_Helper_Dates();
+
         $this->assertEquals($patentId, $patent->getId());
         $this->assertEquals('323', $patent->getNumber());
         $this->assertEquals('Germany', $patent->getCountries());
@@ -146,30 +146,30 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
         $this->assertEquals('Patent Title', $patent->getApplication());
         $this->assertEquals('2008/03/20', $datesHelper->getDateString($patent->getDateGranted()));
     }
-    
+
     /**
-     * Kann nur passieren wenn POST manipuliert wurde. 
-     * 
+     * Kann nur passieren wenn POST manipuliert wurde.
+     *
      * Ungültige IDs werden ignoriert und Patent wie ein neues behandelt.
      */
     public function testGetModelInvalidId() {
         $this->useEnglish();
 
         $form = new Admin_Form_Document_Patent();
-        
+
         $form->getElement('Id')->setValue('notvalid');
         $form = new Admin_Form_Document_Patent();
-        
+
         $form->getElement('Number')->setValue('323');
         $form->getElement('Countries')->setValue('Germany');
         $form->getElement('YearApplied')->setValue('1987');
         $form->getElement('Application')->setValue('Patent Title');
         $form->getElement('DateGranted')->setValue('2008/03/20');
-        
+
         $patent = $form->getModel();
-        
-        $datesHelper = new Controller_Helper_Dates();
-        
+
+        $datesHelper = new Application_Controller_Action_Helper_Dates();
+
         $this->assertNull($patent->getId());
         $this->assertEquals('323', $patent->getNumber());
         $this->assertEquals('Germany', $patent->getCountries());
@@ -177,11 +177,11 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
         $this->assertEquals('Patent Title', $patent->getApplication());
         $this->assertEquals('2008/03/20', $datesHelper->getDateString($patent->getDateGranted()));
     }
-    
-    
+
+
     public function testValidation() {
         $this->useEnglish();
-        
+
         $form = new Admin_Form_Document_Patent();
 
         $post = array(
@@ -189,21 +189,21 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
             'YearApplied' => 'year', // muss Integer sein
             'DateGranted' => '2008/02/31' // muss gültiges Datum sein
         );
-        
+
         $this->assertFalse($form->isValid($post));
         $this->assertContains('isEmpty', $form->getErrors('Number'));
         $this->assertContains('notInt', $form->getErrors('YearApplied'));
         $this->assertContains('dateInvalidDate', $form->getErrors('DateGranted'));
-        
-        
+
+
         $post = array(
             'Number' => '1',
             'YearApplied' => '-1'
         );
-                
+
         $this->assertFalse($form->isValid($post));
         $this->assertContains('notGreaterThan', $form->getErrors('YearApplied'));
-        
+
         $post = array(
             'Number' => '1',
             'YearApplied' => '1980',
@@ -211,37 +211,37 @@ class Admin_Form_Document_PatentTest extends ControllerTestCase {
             'Application' => 'Meine tolle Erfindung',
             'DateGranted' => '2000/03/25'
         );
-        
+
         $this->assertTrue($form->isValid($post));
     }
-    
+
     public function testRegressionOpusvier2824() {
         $this->useEnglish();
-        
+
         $form = new Admin_Form_Document_Patent();
-                
+
         $form->getElement('Number')->setValue('323');
         $form->getElement('YearApplied')->setValue(''); // Leeres Feld
-        
+
         $patent = new Opus_Patent();
-        
+
         $form->updateModel($patent);
-        
+
         $document = $this->createTestDocument();
         $document->addPatent($patent);
-        
+
         $document->store();
-        
+
         $documentId = $document->getId();
-        
+
         $document = new Opus_Document($documentId);
-        
+
         $patents = $document->getPatent();
         $patent = $patents[0];
-        
+
         $this->assertEquals('323', $patent->getNumber());
         $this->assertNotEquals('0000', $patent->getYearApplied());
         $this->assertNull($patent->getYearApplied());
     }
-    
+
 }

@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Test
- * @package     Controller_Helper_Files
+ * @package     Application_Controller_Action_Helper
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -33,7 +33,7 @@
  *
  * TODO test checkFile
  */
-class Controller_Helper_FilesTest extends ControllerTestCase {
+class Application_Controller_Action_Helper_FilesTest extends ControllerTestCase {
 
     private $helper;
 
@@ -88,7 +88,7 @@ class Controller_Helper_FilesTest extends ControllerTestCase {
     }
 
     public function testGetAllowedFileTypes() {
-        $method = new ReflectionMethod('Controller_Helper_Files', 'getAllowedFileTypes');
+        $method = new ReflectionMethod('Application_Controller_Action_Helper_Files', 'getAllowedFileTypes');
         $method->setAccessible(true);
 
         $fileTypes = $method->invoke($this->helper);

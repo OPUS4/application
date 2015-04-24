@@ -32,9 +32,9 @@
  */
 
 /**
- * Test for class Controller_Helper_Translation and translations in general.
+ * Test for class Application_Controller_Action_Helper_Translation and translations in general.
  */
-class Controller_Helper_TranslationTest extends ControllerTestCase {
+class Application_Controller_Action_Helper_TranslationTest extends ControllerTestCase {
 
     /**
      * Translation resource for tests.
@@ -44,7 +44,7 @@ class Controller_Helper_TranslationTest extends ControllerTestCase {
 
     /**
      * Translation controller helper for tests.
-     * @var Controller_Helper_Translation
+     * @var Application_Controller_Action_Helper_Translation
      */
     private $helper;
 

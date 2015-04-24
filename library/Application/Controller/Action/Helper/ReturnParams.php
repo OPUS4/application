@@ -38,7 +38,7 @@
  *
  * It is used by the LoginBar and the init.php files.
  */
-class Controller_Helper_ReturnParams extends Zend_Controller_Action_Helper_Abstract {
+class Application_Controller_Action_Helper_ReturnParams extends Zend_Controller_Action_Helper_Abstract {
 
     /**
      * Look for current module, controller, action and parameters. Forwards them to auth controller.

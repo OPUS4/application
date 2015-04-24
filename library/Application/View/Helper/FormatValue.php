@@ -50,13 +50,13 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract {
 
     /**
      * Controller helper for translations.
-     * @var Controller_Helper_Translation
+     * @var Application_Controller_Action_Helper_Translation
      */
     private $_translation;
 
     /**
      * Controller helper for handling of dates.
-     * @var Controller_Helper_Dates
+     * @var Application_Controller_Action_Helper_Dates
      */
     private $_dates;
 

@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,42 +24,54 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
+ * @category    Application Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Returns true is current user has access to a resource.
- */
-class Application_View_Helper_AccessAllowed extends Zend_View_Helper_Abstract {
+class Application_Controller_Action_Helper_DocumentsTest extends ControllerTestCase {
 
-    /**
-     * @var \Application_Controller_Action_Helper_AccessControl
-     */
-    private $_accessControl;
+    private $documents;
 
-    /**
-     * Returns true if access to resource is allowed or resource does not exist.
-     * @param type $resource
-     * @return boolean
-     */
-    public function accessAllowed($resource) {
-        return $this->getAccessControl()->accessAllowed($resource);
+    public function setUp() {
+        parent::setUp();
+
+        $this->documents = Zend_Controller_Action_HelperBroker::getStaticHelper('Documents');
     }
 
-    /**
-     * Returns the Zend_Acl object or null.
-     * @return Zend_Acl
-     */
-    protected function getAccessControl() {
-        if (is_null($this->_accessControl)) {
-            $this->_accessControl = Zend_Controller_Action_HelperBroker::getStaticHelper('accessControl');
-        }
-        return $this->_accessControl;
+    public function testGetDocumentForIdForValidId() {
+        $docId = 1;
+
+        $document = $this->documents->getDocumentForId($docId);
+
+        $this->assertNotNull($document);
+        $this->assertInstanceOf('Opus_Document', $document);
+    }
+
+    public function testGetDocumentForIdForEmptyValue() {
+        $docId = null;
+
+        $this->assertNull($this->documents->getDocumentForId($docId));
+    }
+
+    public function testGetDocumentForIdForMalformedValue() {
+        $docId = '<h1>123</h1>';
+
+        $this->assertNull($this->documents->getDocumentForId($docId));
+    }
+
+    public function testGetDocumentForIdForNotExistingValue() {
+        $docId = 3000;
+
+        $this->assertNull($this->documents->getDocumentForId($docId));
+    }
+
+    public function testGetDocumentForIdForNegativeValue() {
+        $docId = -1;
+
+        $this->assertNull($this->documents->getDocumentForId($docId));
     }
 
 }

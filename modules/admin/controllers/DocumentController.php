@@ -42,7 +42,7 @@ class Admin_DocumentController extends Controller_Action {
 
     /**
      * Helper for verifying document IDs.
-     * @var Controller_Helper_Documents
+     * @var Application_Controller_Action_Helper_Documents
      */
     private $_documentsHelper;
 
