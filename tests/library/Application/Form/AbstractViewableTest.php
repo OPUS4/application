@@ -102,19 +102,19 @@ class Application_Form_AbstractViewableTest extends ControllerTestCase {
         $decorators = $form->getElement('textfull')->getDecorators();
 
         $this->assertEquals(5, count($decorators));
-        $this->assertArrayHasKey('Form_Decorator_ViewHelper', $decorators);
+        $this->assertArrayHasKey('Application_Form_Decorator_ViewHelper', $decorators);
         $this->assertTrue($form->getElement('textfull')->getDecorator('ViewHelper')->isViewOnlyEnabled());
 
         $decorators = $form->getElement('checkboxtrue')->getDecorators();
 
         $this->assertEquals(5, count($decorators));
-        $this->assertArrayHasKey('Form_Decorator_ViewHelper', $decorators);
+        $this->assertArrayHasKey('Application_Form_Decorator_ViewHelper', $decorators);
         $this->assertTrue($form->getElement('checkboxtrue')->getDecorator('ViewHelper')->isViewOnlyEnabled());
 
         $decorators = $form->getElement('select')->getDecorators();
 
         $this->assertEquals(5, count($decorators));
-        $this->assertArrayHasKey('Form_Decorator_ViewHelper', $decorators);
+        $this->assertArrayHasKey('Application_Form_Decorator_ViewHelper', $decorators);
         $this->assertTrue($form->getElement('select')->getDecorator('ViewHelper')->isViewOnlyEnabled());
     }
 

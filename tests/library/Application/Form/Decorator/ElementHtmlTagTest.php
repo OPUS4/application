@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,20 +24,42 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     View
+ * @category    Application Unit Test
+ * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Form_Decorator_Placeholder extends Zend_Form_Decorator_Abstract {
-    
-    public function render($content) {
-        $placeholder = $this->getElement()->getAttrib('placeholder');
-        
-        return (!is_null($placeholder)) ? $content . '<i class="placeholder">' . $placeholder . '</i>' : $content;
+class Application_Form_Decorator_ElementHtmlTagTest extends ControllerTestCase {
+
+    public function testRenderWithoutElement() {
+        $decorator = new Application_Form_Decorator_ElementHtmlTag();
+
+        $this->assertEquals('<div class="field">content</div>', $decorator->render('content'));
     }
-    
+
+    public function testRender() {
+        $decorator = new Application_Form_Decorator_ElementHtmlTag();
+
+        $element = new Zend_Form_Element_Text('Value');
+
+        $decorator->setElement($element);
+
+        $this->assertEquals('<div class="field" id="Value-element">content</div>', $decorator->render('content'));
+    }
+
+    public function testRenderWithClass() {
+        $decorator = new Application_Form_Decorator_ElementHtmlTag();
+
+        $decorator->setOption('class', 'Value-data');
+
+        $element = new Zend_Form_Element_Text('Value');
+
+        $decorator->setElement($element);
+
+        $this->assertEquals('<div class="Value-data" id="Value-element">content</div>', $decorator->render('content'));
+    }
+
 }

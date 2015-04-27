@@ -1,4 +1,4 @@
-<?PHP 
+<?PHP
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -33,24 +33,36 @@
  */
 
 /**
- * TODO rename
+ * Renders DIV Tag Wrapper um Formularelement.
+ *
+ * Die Klasse dient dazu die Decoratorkonfiguration für einzelne Elemente zu vereinfachen.
  */
-class Form_Decorator_HtmlTagWithId extends Zend_Form_Decorator_HtmlTag {
-    
+class Application_Form_Decorator_ElementHtmlTag extends Zend_Form_Decorator_HtmlTag {
+
+    /**
+     * Tag Attribute vorbereiten.
+     *
+     * Das 'class' Attribute wird auf 'field' gesetzt und die 'id' auf die Element-ID plus '-element'.
+     *
+     * @param array $attribs
+     * @return array
+     */
     protected function _htmlAttribs(array $attribs) {
+        if (is_null($attribs)) {
+            $attribs = array();
+        }
+
+        if (!isset($attribs['class'])) {
+            $attribs['class'] = 'field';
+        }
+
         $element = $this->getElement();
 
         if (!is_null($element)) {
-            if (!is_null($attribs) && isset($attribs['class'])) {
-                $attribs['class'] = $attribs['class'] . ' ' . $this->getElement()->getName() . '-data';
-            }
-            else {
-                $attribs = array();
-                $attribs['class'] = $this->getElement()->getName() . '-data';
-            }
+            $attribs['id'] = $element->getId() . '-element';
         }
-        
+
         return parent::_htmlAttribs($attribs);;
     }
-    
+
 }

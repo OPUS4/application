@@ -40,7 +40,7 @@ class Form_Element_Roles extends Form_Element_MultiCheckbox {
     public function init() {
         parent::init();
 
-        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
 
         $this->setMultiOptions($this->getRolesMultiOptions());
     }

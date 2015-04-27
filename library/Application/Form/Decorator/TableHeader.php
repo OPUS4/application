@@ -26,58 +26,62 @@
  */
 
 /**
- * Unit Tests fuer Klasse, die Remove-Button ausgibt.
+ * Dekorator für die Ausgabe eines Tabellenkopfes.
  *
- * @category    Application Unit Test
- * @package     Form_Decorator
+ * @category    Application
+ * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Decorator_RemoveButtonTest extends ControllerTestCase {
+class Application_Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstract {
 
-    public function testRender() {
-        $form = new Zend_Form();
-        $form->setName('Test');
-        $form->addElement('submit', 'Remove');
+    private $_columns = null;
 
-        $decorator = new Form_Decorator_RemoveButton();
-        $decorator->setElement($form);
+    public function render($content) {
+        // Zeige Tabellenkopf nur wenn es Einträge (Unterformulare) gibt
+        if (count($this->getElement()->getSubForms()) == 0) {
+            return $content;
+        }
 
-        $output = $decorator->render('content'); // Output wird an content dran gehängt
+        $view = $this->getElement()->getView();
 
-        $this->assertEquals('content<input type="submit" name="Remove" id="Remove" value="Remove" />', $output);
+        if (!$view instanceof Zend_View_Interface) {
+            return $content;
+        }
+
+        $markup = '<thead><tr>';
+
+        foreach ($this->getColumns() as $column) {
+            $label = isset($column['label']) ? $view->escape($view->translate($column['label'])) : '&nbsp;';
+            $cssClass = isset($column['class']) ? $column['class'] : null;
+            $markup .= "<th class=\"$cssClass\">" . $label . "</th>";
+        }
+
+        $markup .= '</tr></thead>';
+
+        return $markup . $content;
     }
 
-    public function testRenderWithHidden() {
-        $form = new Zend_Form();
-        $form->setName('Test');
-        $form->addElement('submit', 'Remove');
-        $element = $form->createElement('hidden', 'Id');
-        $element->setValue(10);
-        $form->addElement($element);
-
-        $decorator = new Form_Decorator_RemoveButton();
-        $decorator->setElement($form);
-        $decorator->setSecondElement($element);
-
-        $output = $decorator->render('content'); // Output wird an content dran gehängt
-
-        $this->assertEquals('content'
-            . '<input type="hidden" name="Id" id="Id" value="10" />'
-            . '<input type="submit" name="Remove" id="Remove" value="Remove" />',
-            $output);
+    public function setColumns($columns) {
+        $this->_columns = $columns;
     }
 
-    public function testSetSecondElementOption() {
-        $element = new Form_Element_Hidden('name');
-        $decorator = new Form_Decorator_RemoveButton(array('element' => $element));
+    public function getColumns() {
+        $columns = $this->getOption('columns');
 
-        $this->assertEquals($element, $decorator->getSecondElement());
-        $this->assertEquals($element, $decorator->getSecondElement()); // works 2nd time as well
+        if (!is_null($columns)) {
+            $this->removeOption('columns');
+            $this->_columns = $columns;
+        }
+        else {
+            if (method_exists($this->getElement(), 'getColumns')) {
+                $this->_columns = $this->getElement()->getColumns();
+            }
+        }
 
-
+        return $this->_columns;
     }
 
 }

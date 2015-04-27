@@ -44,7 +44,7 @@ class Form_Element_FileHash extends Zend_Form_Element_Xhtml {
     public function init() {
         parent::init();
 
-        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
 
         $this->setLabel($this->getTranslator()->translate('admin_filemanager_checksum') . ' - ');
     }

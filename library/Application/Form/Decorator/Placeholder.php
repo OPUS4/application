@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -23,65 +23,21 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * Dekorator für die Ausgabe eines Tabellenkopfes.
  *
  * @category    Application
- * @package     Form_Decorator
+ * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Decorator_TableHeader extends Zend_Form_Decorator_Abstract {
 
-    private $_columns = null;
+class Application_Form_Decorator_Placeholder extends Zend_Form_Decorator_Abstract {
 
     public function render($content) {
-        // Zeige Tabellenkopf nur wenn es Einträge (Unterformulare) gibt
-        if (count($this->getElement()->getSubForms()) == 0) {
-            return $content;
-        }
+        $placeholder = $this->getElement()->getAttrib('placeholder');
 
-        $view = $this->getElement()->getView();
-
-        if (!$view instanceof Zend_View_Interface) {
-            return $content;
-        }
-
-        $markup = '<thead><tr>';
-
-        foreach ($this->getColumns() as $column) {
-            $label = isset($column['label']) ? $view->escape($view->translate($column['label'])) : '&nbsp;';
-            $cssClass = isset($column['class']) ? $column['class'] : null;
-            $markup .= "<th class=\"$cssClass\">" . $label . "</th>";
-        }
-
-        $markup .= '</tr></thead>';
-
-        return $markup . $content;
-    }
-
-    public function setColumns($columns) {
-        $this->_columns = $columns;
-    }
-
-    public function getColumns() {
-        $columns = $this->getOption('columns');
-
-        if (!is_null($columns)) {
-            $this->removeOption('columns');
-            $this->_columns = $columns;
-        }
-        else {
-            if (method_exists($this->getElement(), 'getColumns')) {
-                $this->_columns = $this->getElement()->getColumns();
-            }
-        }
-
-        return $this->_columns;
+        return (!is_null($placeholder)) ? $content . '<i class="placeholder">' . $placeholder . '</i>' : $content;
     }
 
 }

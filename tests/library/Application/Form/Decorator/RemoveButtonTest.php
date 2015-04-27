@@ -23,43 +23,61 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Unit Tests fuer Klasse, die Remove-Button ausgibt.
  *
  * @category    Application Unit Test
- * @package     Form_Decorator
+ * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
-class Form_Decorator_ElementHtmlTagTest extends ControllerTestCase {
-
-    public function testRenderWithoutElement() {
-        $decorator = new Form_Decorator_ElementHtmlTag();
-
-        $this->assertEquals('<div class="field">content</div>', $decorator->render('content'));
-    }
+class Application_Form_Decorator_RemoveButtonTest extends ControllerTestCase {
 
     public function testRender() {
-        $decorator = new Form_Decorator_ElementHtmlTag();
+        $form = new Zend_Form();
+        $form->setName('Test');
+        $form->addElement('submit', 'Remove');
 
-        $element = new Zend_Form_Element_Text('Value');
+        $decorator = new Application_Form_Decorator_RemoveButton();
+        $decorator->setElement($form);
 
-        $decorator->setElement($element);
+        $output = $decorator->render('content'); // Output wird an content dran gehängt
 
-        $this->assertEquals('<div class="field" id="Value-element">content</div>', $decorator->render('content'));
+        $this->assertEquals('content<input type="submit" name="Remove" id="Remove" value="Remove" />', $output);
     }
 
-    public function testRenderWithClass() {
-        $decorator = new Form_Decorator_ElementHtmlTag();
+    public function testRenderWithHidden() {
+        $form = new Zend_Form();
+        $form->setName('Test');
+        $form->addElement('submit', 'Remove');
+        $element = $form->createElement('hidden', 'Id');
+        $element->setValue(10);
+        $form->addElement($element);
 
-        $decorator->setOption('class', 'Value-data');
+        $decorator = new Application_Form_Decorator_RemoveButton();
+        $decorator->setElement($form);
+        $decorator->setSecondElement($element);
 
-        $element = new Zend_Form_Element_Text('Value');
+        $output = $decorator->render('content'); // Output wird an content dran gehängt
 
-        $decorator->setElement($element);
+        $this->assertEquals('content'
+            . '<input type="hidden" name="Id" id="Id" value="10" />'
+            . '<input type="submit" name="Remove" id="Remove" value="Remove" />',
+            $output);
+    }
 
-        $this->assertEquals('<div class="Value-data" id="Value-element">content</div>', $decorator->render('content'));
+    public function testSetSecondElementOption() {
+        $element = new Form_Element_Hidden('name');
+        $decorator = new Application_Form_Decorator_RemoveButton(array('element' => $element));
+
+        $this->assertEquals($element, $decorator->getSecondElement());
+        $this->assertEquals($element, $decorator->getSecondElement()); // works 2nd time as well
+
+
     }
 
 }

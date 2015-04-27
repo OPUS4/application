@@ -68,7 +68,7 @@ abstract class Application_Form_Abstract extends Zend_Form_SubForm {
     public function init() {
         parent::init();
 
-        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
         // $this->addElementPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
         $this->addPrefixPath('Form', 'Form'); // '_Element' wird anscheinend automatisch dran gehängt
         $this->addPrefixPath('Application_Form', 'Application/Form');

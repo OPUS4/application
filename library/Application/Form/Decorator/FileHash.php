@@ -29,7 +29,7 @@
  * Decorator fuer die Ausgabe eines Datei-Hashes (Form_Element_FileHash).
  *
  * @category    Application
- * @package     Form_Decorator
+ * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -37,7 +37,7 @@
  *
  * TODO HIDDEN inputs mit Hash entfernen? Werden momentan nicht benötigt.
  */
-class Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract {
+class Application_Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract {
 
     public function render($content) {
         $element = $this->getElement();

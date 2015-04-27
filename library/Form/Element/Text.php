@@ -34,7 +34,7 @@
 
 /**
  * Ein Text INPUT Element für OPUS Formulare.
- * 
+ *
  * Zur Zeit nur vom Metadaten-Formular genutzt.
  */
 class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement {
@@ -62,9 +62,9 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
     public function init() {
         parent::init();
 
-        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
     }
-    
+
     /**
      * Lädt die Defaultdekoratoren für ein Textelement.
      */
@@ -106,7 +106,7 @@ class Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement 
      */
     public function prepareRenderingAsView() {
         $viewHelper = $this->getDecorator('ViewHelper');
-        if ($viewHelper instanceof Form_Decorator_ViewHelper) {
+        if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
             $viewHelper->setViewOnlyEnabled(true);
         }
         $this->removeDecorator('Placeholder');

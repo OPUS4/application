@@ -38,13 +38,13 @@
 class Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Form_IElement {
 
     private $_viewCheckedValue = 'Field_Value_True';
-    
+
     private $_viewUncheckedValue = 'Field_Value_False';
 
     public function init() {
-        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
     }
-    
+
     public function loadDefaultDecorators() {
         if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
             $this->setDecorators(
@@ -62,7 +62,7 @@ class Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Form_I
 
     public function prepareRenderingAsView() {
         $viewHelper = $this->getDecorator('ViewHelper');
-        if ($viewHelper instanceof Form_Decorator_ViewHelper) {
+        if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
             $viewHelper->setViewOnlyEnabled(true);
         }
         $translator = $this->getTranslator();

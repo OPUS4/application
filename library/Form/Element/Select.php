@@ -45,7 +45,7 @@ class Form_Element_Select extends Zend_Form_Element_Select implements Form_IElem
     public function init() {
         parent::init();
 
-        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
     }
 
     public function loadDefaultDecorators() {
@@ -68,7 +68,7 @@ class Form_Element_Select extends Zend_Form_Element_Select implements Form_IElem
      */
     public function prepareRenderingAsView() {
         $viewHelper = $this->getDecorator('ViewHelper');
-        if ($viewHelper instanceof Form_Decorator_ViewHelper) {
+        if ($viewHelper instanceof Application_Form_Decorator_ViewHelper) {
             $viewHelper->setViewOnlyEnabled(true);
         }
     }

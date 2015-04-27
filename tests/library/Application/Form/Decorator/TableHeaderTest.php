@@ -25,13 +25,13 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Test
- * @package     Form_Decorator
+ * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Decorator_TableHeaderTest extends ControllerTestCase {
+class Application_Form_Decorator_TableHeaderTest extends ControllerTestCase {
 
     private $columns = array(
         array(
@@ -45,14 +45,16 @@ class Form_Decorator_TableHeaderTest extends ControllerTestCase {
     );
 
     public function testConstruct() {
-        $decorator = new Form_Decorator_TableHeader(array('placement' => 'prepend', 'columns' => $this->columns));
+        $decorator = new Application_Form_Decorator_TableHeader(
+            array('placement' => 'prepend', 'columns' => $this->columns)
+        );
 
         $this->assertEquals(Zend_Form_Decorator_Abstract::PREPEND, $decorator->getPlacement());
         $this->assertEquals($this->columns, $decorator->getColumns());
     }
 
     public function testSetOptionColumns() {
-        $decorator = new Form_Decorator_TableHeader();
+        $decorator = new Application_Form_Decorator_TableHeader();
 
         $decorator->setOption('columns', $this->columns);
 
@@ -60,7 +62,7 @@ class Form_Decorator_TableHeaderTest extends ControllerTestCase {
     }
 
     public function testSetGetColumns() {
-        $decorator = new Form_Decorator_TableHeader();
+        $decorator = new Application_Form_Decorator_TableHeader();
 
         $decorator->setColumns($this->columns);
 
@@ -68,7 +70,7 @@ class Form_Decorator_TableHeaderTest extends ControllerTestCase {
     }
 
     public function testRender() {
-        $decorator = new Form_Decorator_TableHeader();
+        $decorator = new Application_Form_Decorator_TableHeader();
 
         $decorator->setColumns($this->columns);
 
@@ -84,7 +86,7 @@ class Form_Decorator_TableHeaderTest extends ControllerTestCase {
     }
 
     public function testRenderEscape() {
-        $decorator = new Form_Decorator_TableHeader();
+        $decorator = new Application_Form_Decorator_TableHeader();
 
         $decorator->setColumns(array(array('label' => '<h1>HTML</h1>')));
 
@@ -102,7 +104,7 @@ class Form_Decorator_TableHeaderTest extends ControllerTestCase {
     public function testRenderTranslate() {
         $this->useGerman();
 
-        $decorator = new Form_Decorator_TableHeader();
+        $decorator = new Application_Form_Decorator_TableHeader();
 
         $decorator->setColumns(array(array('label' => 'Value')));
 

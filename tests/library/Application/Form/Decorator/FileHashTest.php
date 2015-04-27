@@ -25,22 +25,22 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Test
- * @package     Form_Decorator
+ * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Decorator_FileHashTest extends ControllerTestCase {
+class Application_Form_Decorator_FileHashTest extends ControllerTestCase {
 
     public function testRenderWithoutElement() {
-        $decorator = new Form_Decorator_FileHash();
+        $decorator = new Application_Form_Decorator_FileHash();
 
         $this->assertEquals('content', $decorator->render('content'));
     }
 
     public function testRenderWithWrongElement() {
-        $decorator = new Form_Decorator_FileHash();
+        $decorator = new Application_Form_Decorator_FileHash();
 
         $decorator->setElement(new Zend_Form_Element_Text('text'));
 
@@ -48,7 +48,7 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
     }
 
     public function testRender() {
-        $element = new Form_Element_FileHash('name');
+        $element = new Application_Form_Element_FileHash('name');
 
         $file = new Opus_File(116);
         $hashes = $file->getHashValue();
@@ -59,7 +59,7 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
         $element->setValue($hash);
         $element->setFile($file);
 
-        $decorator = new Form_Decorator_FileHash();
+        $decorator = new Application_Form_Decorator_FileHash();
 
         $decorator->setElement($element);
 
@@ -73,7 +73,7 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
 
     public function testRenderWithIst() {
         $this->useEnglish();
-        $element = new Form_Element_FileHash('name');
+        $element = new Application_Form_Element_FileHash('name');
 
         $file = new Opus_File(116);
         $hashes = $file->getHashValue();
@@ -86,7 +86,7 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
         $element->setValue($hash);
         $element->setFile($file);
 
-        $decorator = new Form_Decorator_FileHash();
+        $decorator = new Application_Form_Decorator_FileHash();
 
         $decorator->setElement($element);
 
@@ -101,7 +101,7 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
     }
 
     public function testRenderWithMissingFile() {
-        $element = new Form_Element_FileHash('name');
+        $element = new Application_Form_Element_FileHash('name');
 
         $file = new Opus_File(123);
         $hashes = $file->getHashValue();
@@ -111,7 +111,7 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
         $element->setValue($hash);
         $element->setFile($file);
 
-        $decorator = new Form_Decorator_FileHash();
+        $decorator = new Application_Form_Decorator_FileHash();
 
         $decorator->setElement($element);
 
@@ -130,7 +130,7 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
         $config = Zend_Registry::get('Zend_Config');
         $config->merge(new Zend_Config(array('checksum' => array('maxVerificationSize' => '0'))));
 
-        $element = new Form_Element_FileHash('name');
+        $element = new Application_Form_Element_FileHash('name');
 
         $file = new Opus_File(116);
         $hashes = $file->getHashValue();
@@ -140,7 +140,7 @@ class Form_Decorator_FileHashTest extends ControllerTestCase {
         $element->setValue($hash);
         $element->setFile($file);
 
-        $decorator = new Form_Decorator_FileHash();
+        $decorator = new Application_Form_Decorator_FileHash();
 
         $decorator->setElement($element);
 

@@ -25,21 +25,54 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Decorator
+ * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Decorator_TableWrapper extends Zend_Form_Decorator_Abstract {
+class Application_Form_Decorator_Button extends Zend_Form_Decorator_Abstract {
+
+    private $_elementName;
 
     public function render($content) {
-        // Render Tabellen Tags nur wenn es Einträge (Unterformulare) gibt
-        if (count($this->getElement()->getSubForms()) == 0) {
+        $button = $this->getElement()->getElement($this->getElementName());
+
+        if (is_null($button)) {
             return $content;
         }
 
-        return '<table>' . $content . '</table>';
+        $buttonId = $button->getId();
+        $buttonFullName = $button->getFullyQualifiedName();
+        $buttonName = $button->getName();
+        $buttonValue = $button->getLabel();
+
+        if (strlen(trim($buttonValue)) == 0) {
+            $buttonValue = $buttonName;
+        }
+
+        $markup = "<div class=\"data-wrapper $buttonName-data\">";
+        $markup .= "<div class=\"field\" id=\"$buttonId-element\">";
+        $markup .= "<input type=\"submit\" name=\"$buttonFullName\" id=\"$buttonId\" value=\"$buttonValue\" />";
+        $markup .= '</div></div>';
+
+        return $content . $markup;
+    }
+
+    public function setElementName($columns) {
+        $this->columns = $columns;
+    }
+
+    public function getElementName() {
+        $name = $this->getOption('name');
+        if (!is_null($name)) {
+            $this->removeOption('name');
+        }
+        else {
+            $name = $this->_elementName;
+        }
+
+        return $name;
     }
 
 }

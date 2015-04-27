@@ -38,7 +38,7 @@
 class Form_Element_Hidden extends Zend_Form_Element_Hidden {
 
     public function init() {
-        $this->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
     }
 
     public function loadDefaultDecorators() {
@@ -54,5 +54,5 @@ class Form_Element_Hidden extends Zend_Form_Element_Hidden {
     public function getStaticViewHelper() {
         return 'formHidden';
     }
-    
+
 }

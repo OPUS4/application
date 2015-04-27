@@ -1,4 +1,4 @@
-<?PHP 
+<?php
 /*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -33,36 +33,22 @@
  */
 
 /**
- * Renders DIV Tag Wrapper um Formularelement.
- * 
- * Die Klasse dient dazu die Decoratorkonfiguration für einzelne Elemente zu vereinfachen.
+ * Zeit List mit Hinweisen zum Feld an.
+ *
+ * TODO customizable class
  */
-class Form_Decorator_ElementHtmlTag extends Zend_Form_Decorator_HtmlTag {
+class Application_Form_Decorator_ElementHint extends Zend_Form_Decorator_Abstract {
 
-    /**
-     * Tag Attribute vorbereiten.
-     * 
-     * Das 'class' Attribute wird auf 'field' gesetzt und die 'id' auf die Element-ID plus '-element'.
-     * 
-     * @param array $attribs
-     * @return array
-     */
-    protected function _htmlAttribs(array $attribs) {
-        if (is_null($attribs)) {
-            $attribs = array();
-        }
-
-        if (!isset($attribs['class'])) {
-            $attribs['class'] = 'field';
-        }
-
+    public function render($content) {
         $element = $this->getElement();
 
-        if (!is_null($element)) {
-            $attribs['id'] = $element->getId() . '-element';
+        if ($element instanceof Form_IElement) {
+            $hint = $element->getHint();
+            return (!is_null($hint)) ? $content . '<p class="datahint">' . $hint . '</p>' : $content;
         }
-        
-        return parent::_htmlAttribs($attribs);;
+        else {
+            return $content;
+        }
     }
-    
+
 }

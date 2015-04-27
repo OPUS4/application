@@ -92,7 +92,7 @@ abstract class FormElementTestCase extends ControllerTestCase {
             $element->prepareRenderingAsView();
 
             $this->assertNotNull($element->getDecorator('ViewHelper'));
-            $this->assertInstanceOf('Form_Decorator_ViewHelper', $element->getDecorator('ViewHelper'));
+            $this->assertInstanceOf('Application_Form_Decorator_ViewHelper', $element->getDecorator('ViewHelper'));
             $this->assertTrue($element->getDecorator('ViewHelper')->isViewOnlyEnabled());
         }
     }

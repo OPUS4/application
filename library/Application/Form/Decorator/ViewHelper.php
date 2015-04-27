@@ -32,13 +32,13 @@
  * einem DIV auszugeben. Das wird für die statische Ansicht von Formularen, z.B. Metadaten-Übersicht verwendet.
  *
  * @category    Application
- * @package     Form_Decorator
+ * @package     Application_Form_Decorator
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelper {
+class Application_Form_Decorator_ViewHelper extends Zend_Form_Decorator_ViewHelper {
 
     private $_viewOnlyEnabled = false;
 
