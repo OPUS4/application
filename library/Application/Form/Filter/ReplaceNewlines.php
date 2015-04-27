@@ -25,7 +25,7 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Tests
+ * @package     Form_Filter
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -33,40 +33,25 @@
  */
 
 /**
- * Unit test for filter class Form_Filter_ReplaceNewlines.
+ * Filter that replace newline characters with whitespaces.
+ *
+ * This filter is used for document titles that are entered using a textarea,
+ * since the titles can be rather long.
  */
-class Form_Filter_ReplaceNewlinesTest extends ControllerTestCase {
-
-    public function testFilterCRLF() {
-        $value = "Title with\r\nline break.";
-        $filter = new Form_Filter_ReplaceNewlines();
-
-        $this->assertEquals('Title with line break.', $filter->filter($value));
-    }
-
-    public function testFilterLF() {
-        $value = "Title with\nline break.";
-        $filter = new Form_Filter_ReplaceNewlines();
-
-        $this->assertEquals('Title with line break.', $filter->filter($value));
-    }
-
-    public function testFilterCR() {
-        $value = "Title with\rline break.";
-        $filter = new Form_Filter_ReplaceNewlines();
-
-        $this->assertEquals('Title with line break.', $filter->filter($value));
-    }
+class Application_Form_Filter_ReplaceNewlines implements Zend_Filter_Interface {
 
     /**
-     * Test filter for value NULL.
+     * Returns value with newline characters replaced by whitespaces.
      *
-     * This seems to be the behaviour of Zend_Filter_StripNewlines as well.
+     * The replacing happens in two steps to avoid multiple whitespaces for each
+     * line break.
+     *
+     * @param string $value Value that should be filtered
+     * @return Filtered string (newlines => whitespaces)
      */
-    public function testFilterWithNull() {
-        $filter = new Form_Filter_ReplaceNewlines();
-
-        $this->assertEquals('', $filter->filter(null));
+    public function filter($value) {
+        $newValue = str_replace(array("\r\n"), ' ', $value);
+        return str_replace(array("\r", "\n"), ' ', $newValue);
     }
 
 }
