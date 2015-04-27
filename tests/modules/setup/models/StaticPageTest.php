@@ -34,7 +34,7 @@
  */
 
 /**
- * 
+ *
  */
 class Setup_Model_StaticPageTest extends ControllerTestCase {
 
@@ -69,7 +69,7 @@ class Setup_Model_StaticPageTest extends ControllerTestCase {
 
     public function testToArray() {
 
-        $tmxFile = new Util_TmxFile();
+        $tmxFile = new Application_Util_TmxFile();
         $tmxFile->setVariantSegment('test_translation_unit', 'de', 'Testübersetzung');
         $tmxFile->setVariantSegment('test_translation_unit', 'en', 'Test translation');
         $tmxFile->save(APPLICATION_PATH . DIRECTORY_SEPARATOR . $this->tmxTarget);
@@ -121,7 +121,7 @@ class Setup_Model_StaticPageTest extends ControllerTestCase {
         if (!$this->object->store()) {
             $this->fail("storing failed");
         }
-        $tmxFile = new Util_TmxFile();
+        $tmxFile = new Application_Util_TmxFile();
         $tmxFile->load(APPLICATION_PATH . DIRECTORY_SEPARATOR . $this->tmxTarget);
         $tmxArray = $tmxFile->toArray();
 
