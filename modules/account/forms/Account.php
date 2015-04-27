@@ -32,48 +32,65 @@
  * @version     $Id$
  */
 
-class Account_Form_Account extends Zend_Form {
+class Account_Form_Account extends Application_Form_Abstract {
 
-    public function __construct($login) {
-        $config = new Zend_Config_Ini(
-            APPLICATION_PATH .
-            '/modules/account/forms/account.ini', 'production'
-        );
-
-        parent::__construct($config->form->account);
-
-        if (!empty($login)) {
-            $account = new Opus_Account(null, null, $login);
-
-            $this->populateFromAccount($account);
-        }
-    }
+    const ELEMENT_LOGIN = 'username';
+    const ELEMENT_FIRSTNAME = 'firstname';
+    const ELEMENT_LASTNAME = 'lastname';
+    const ELEMENT_EMAIL = 'email';
+    const ELEMENT_PASSWORD = 'password';
+    const ELEMENT_CONFIRM_PASSWORD = 'confirm';
+    const ELEMENT_SUBMIT = 'submit';
 
     public function init() {
         parent::init();
 
-        $this->getElement('confirmPassword')->addValidator(
-            new Form_Validate_Password()
+        $this->setDecorators(
+            array(
+                'FormElements',
+                'Form'
+            )
         );
 
-        $this->getElement('username')->addValidator(
+        $this->setUseNameAsLabel(true);
+        $this->setLabelPrefix('admin_account_label_');
+
+        $this->addElement('Login', self::ELEMENT_LOGIN, array(
+            'label' => 'admin_account_label_login'
+        ));
+        $this->getElement(self::ELEMENT_LOGIN)->addValidator(
             new Form_Validate_LoginAvailable(array('ignoreCase' => true))
         );
 
-        $this->getElement('password')->addErrorMessages(
-            array(
-            Zend_Validate_StringLength::TOO_SHORT =>
-                'admin_account_error_password_tooshort'
-            )
+        $this->addElement('Text', self::ELEMENT_FIRSTNAME);
+        $this->addElement('Text', self::ELEMENT_LASTNAME);
+        $this->addElement('Email', self::ELEMENT_EMAIL);
+
+        $this->addElement('Password', self::ELEMENT_PASSWORD);
+        $this->addElement('Password', self::ELEMENT_CONFIRM_PASSWORD, array(
+            'label' => 'admin_account_label_confirmpassword'
+        ));
+
+        $this->getElement(self::ELEMENT_CONFIRM_PASSWORD)->addValidator(
+            new Form_Validate_Password()
         );
+
+        $this->getElement(self::ELEMENT_PASSWORD)->addErrorMessages(
+            array(Zend_Validate_StringLength::TOO_SHORT => 'admin_account_error_password_tooshort')
+        );
+
+        $this->addElement('Submit', self::ELEMENT_SUBMIT, array('label' => 'account_form_save'));
     }
 
-    public function populateFromAccount($account) {
+    /**
+     * @param $account Opus_Account
+     */
+    public function populateFromModel($account) {
         $login = strtolower($account->getLogin());
 
-        $this->getElement('username')->setValue($login);
+        $this->getElement(self::ELEMENT_LOGIN)->setValue($login);
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getApplicationConfig();
 
         $this->getElement('firstname')->setValue($account->getFirstName());
         $this->getElement('lastname')->setValue($account->getLastName());

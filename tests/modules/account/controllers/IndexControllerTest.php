@@ -162,7 +162,7 @@ class Account_IndexControllerTest extends ControllerTestCase {
                    'lastname' => '',
                    'email' => '',
                    'password' => 'newpassword',
-                   'confirmPassword' => 'newpassword'
+                   'confirm' => 'newpassword'
                 ));
         $this->dispatch('/account/index/save');
         $this->assertRedirect();
@@ -190,7 +190,7 @@ class Account_IndexControllerTest extends ControllerTestCase {
                    'lastname' => '',
                    'email' => '',
                    'password' => 'new@pwd$%',
-                   'confirmPassword' => 'new@pwd$%'
+                   'confirm' => 'new@pwd$%'
                 ));
         $this->dispatch('/account/index/save');
         $this->assertRedirect();
@@ -206,10 +206,13 @@ class Account_IndexControllerTest extends ControllerTestCase {
      * Test changing login.
      */
     public function testChangeLoginSuccess() {
+        $config = Zend_Registry::get('Zend_Config');
+        $config->account->editOwnAccount = 1;
+
         $this->deleteUser('john2');
 
         $this->loginUser('john', 'testpwd');
-        $this->request
+        $this->getRequest()
                 ->setMethod('POST')
                 ->setPost(array(
                    'username' => 'john2',
@@ -218,6 +221,7 @@ class Account_IndexControllerTest extends ControllerTestCase {
                    'email' => ''
                 ));
         $this->dispatch('/account/index/save');
+
         $this->assertRedirect();
 
         // Check if new user exists (with proper password) and old does not...

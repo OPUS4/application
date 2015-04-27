@@ -74,7 +74,9 @@ class Account_Form_AccountTest extends ControllerTestCase {
     }
 
     public function testChangedLoginNameValidationNewLoginName() {
-        $form = new Account_Form_Account('user');
+        $form = new Account_Form_Account();
+        $account = new Opus_Account(null, null, 'user');
+        $form->populateFromModel($account);
 
         $this->assertNotNull($form);
 
@@ -82,14 +84,16 @@ class Account_Form_AccountTest extends ControllerTestCase {
             'username' => 'newuser',
             'roleguest' => '1',
             'password' => 'notchanged',
-            'confirmPassword' => 'notchanged'
+            'confirm' => 'notchanged'
             );
 
         $this->assertTrue($form->isValid($postData));
     }
 
     public function testEditValidationSameAccount() {
-        $form = new Account_Form_Account('user');
+        $form = new Account_Form_Account();
+        $account = new Opus_Account(null, null, 'user');
+        $form->populateFromModel($account);
 
         // check that form was populated
         $this->assertEquals('user', $form->getElement('username')->getValue());
@@ -99,44 +103,48 @@ class Account_Form_AccountTest extends ControllerTestCase {
             'oldLogin' => 'user', // added by AccountController based on ID
             'roleguest' => '1',
             'password' => 'notchanged',
-            'confirmPassword' => 'notchanged'
+            'confirm' => 'notchanged'
             );
 
         $this->assertTrue($form->isValid($postData));
     }
 
     public function testValidationMissmatchedPasswords() {
-        $form = new Account_Form_Account('user');
+        $form = new Account_Form_Account();
+        $account = new Opus_Account(null, null, 'user');
+        $form->populateFromModel($account);
 
         $postData = array(
             'username' => 'user',
             'roleguest' => '1',
             'password' => 'password',
-            'confirmPassword' => 'different'
+            'confirm' => 'different'
         );
 
         $this->assertFalse($form->isValid($postData));
 
-        $errors = $form->getErrors();
+        $errors = $form->getErrors(null, true);
 
-        $this->assertTrue(isset($errors['confirmPassword']));
-        $this->assertTrue(in_array('notMatch', $errors['confirmPassword']));
+        $this->assertTrue(isset($errors['confirm']));
+        $this->assertTrue(in_array('notMatch', $errors['confirm']));
     }
 
     public function testValidationBadEmail() {
-        $form = new Account_Form_Account('user');
+        $form = new Account_Form_Account();
+        $account = new Opus_Account(null, null, 'user');
+        $form->populateFromModel($account);
 
         $postData = array(
             'username' => 'user',
             'roleguest' => '1',
             'email' => 'notAnEmail',
             'password' => 'password',
-            'confirmPassword' => 'password'
+            'confirm' => 'password'
         );
 
         $this->assertFalse($form->isValid($postData));
 
-        $errors = $form->getErrors();
+        $errors = $form->getErrors(null, true);
 
         $this->assertTrue(isset($errors['email']));
         $this->assertTrue(in_array('emailAddressInvalidFormat', $errors['email']));

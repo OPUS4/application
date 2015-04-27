@@ -35,7 +35,7 @@
 /**
  * Controller for editing account of logged in user.
  */
-class Account_IndexController extends Controller_Action {
+class Account_IndexController extends Application_Controller_Action {
 
     /**
      * Custom access check to be called by parent class.  Returns the value of
@@ -47,6 +47,7 @@ class Account_IndexController extends Controller_Action {
         $parentValue =  parent::customAccessCheck();
 
         $config = $this->getConfig();
+
         if (!isset($config) or !isset($config->account->editOwnAccount)) {
             return false;
         }
@@ -56,18 +57,22 @@ class Account_IndexController extends Controller_Action {
 
     /**
      * Show account form for logged in user.
+     *
+     * TODO show title on page H" $this->view->title;
      */
     public function indexAction() {
         $login = Zend_Auth::getInstance()->getIdentity();
 
         if (!empty($login)) {
-            $accountForm = new Account_Form_Account($login);
+            $accountForm = new Account_Form_Account();
+            $account = new Opus_Account(null, null, $login);
+            $accountForm->populateFromModel($account);
 
             $actionUrl = $this->view->url(array('action' => 'save'));
 
             $accountForm->setAction($actionUrl);
 
-            $this->view->accountForm = $accountForm;
+            $this->renderForm($accountForm);
         }
         else {
             $params = $this->_helper->returnParams->getReturnParameters();
@@ -78,14 +83,19 @@ class Account_IndexController extends Controller_Action {
     /**
      * Save account information.
      * @return <type>
+     *
+     * TODO move logic into model or form
      */
     public function saveAction() {
         $login = Zend_Auth::getInstance()->getIdentity();
-        $config = Zend_Registry::get('Zend_Config');
+
+        $config = $this->getConfig();
         $logger = $this->getLogger();
 
         if (!empty($login) && $this->getRequest()->isPost()) {
-            $accountForm = new Account_Form_Account($login);
+            $accountForm = new Account_Form_Account();
+            $account = new Opus_Account(null, null, $login);
+            $accountForm->populateFromModel($account);
 
             $postData = $this->getRequest()->getPost();
 
@@ -94,8 +104,8 @@ class Account_IndexController extends Controller_Action {
             if (empty($postData['password'])) {
                 // modify to pass default validation
                 // TODO think about better solution
-                $postData['password'] = 'notchanged';
-                $postData['confirmPassword'] = 'notchanged';
+                $postData[Account_Form_Account::ELEMENT_PASSWORD] = 'notchanged';
+                $postData[Account_Form_Account::ELEMENT_CONFIRM_PASSWORD] = 'notchanged';
                 $isPasswordChanged = false;
             }
 
@@ -149,8 +159,8 @@ class Account_IndexController extends Controller_Action {
             else {
                 $actionUrl = $this->view->url(array('action' => 'save'));
                 $accountForm->setAction($actionUrl);
-                $this->view->accountForm = $accountForm;
-                return $this->renderScript('index/index.phtml');
+
+                return $this->renderForm($accountForm);
             }
         }
 
