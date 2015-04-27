@@ -33,7 +33,7 @@
  * @version     $Id$
  */
 
-class Solrsearch_OpensearchController extends Controller_Xml {
+class Solrsearch_OpensearchController extends Application_Controller_Xml {
 
     public function init() {
         parent::init();

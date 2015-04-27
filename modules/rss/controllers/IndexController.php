@@ -36,7 +36,7 @@
  * TODO context spezifische Titel für RSS feed (latest, collections, ...)
  */
 
-class Rss_IndexController extends Controller_Xml {
+class Rss_IndexController extends Application_Controller_Xml {
 
     const NUM_OF_ITEMS_PER_FEED = '25';
     const RSS_SORT_FIELD = 'server_date_published';

@@ -37,7 +37,7 @@
  * @version     $Id$
  */
 
-class Oai_IndexController extends Controller_Xml {
+class Oai_IndexController extends Application_Controller_Xml {
 
     /**
      * Holds information about which document state aka server_state

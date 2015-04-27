@@ -36,7 +36,7 @@
 /**
  *
  */
-class Setup_HelpPageController extends Controller_SetupAbstract {
+class Setup_HelpPageController extends Application_Controller_SetupAbstract {
 
     public function init() {
         parent::init();
@@ -47,11 +47,11 @@ class Setup_HelpPageController extends Controller_SetupAbstract {
     public function indexAction() {
         $this->forward('edit');
     }
-    
+
     protected function getForm() {
         return new Setup_Form_HelpPage();
     }
-    
+
     protected function getModel() {
         return new Setup_Model_HelpPage(new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'help'));
     }

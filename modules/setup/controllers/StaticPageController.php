@@ -36,7 +36,7 @@
 /**
  *
  */
-class Setup_StaticPageController extends Controller_SetupAbstract {
+class Setup_StaticPageController extends Application_Controller_SetupAbstract {
 
     protected $_config;
 
@@ -45,7 +45,7 @@ class Setup_StaticPageController extends Controller_SetupAbstract {
         $this->_config = new Zend_Config_Ini(APPLICATION_PATH . '/modules/setup/setup.ini', 'static-page');
         $this->getHelper('MainMenu')->setActive('admin');
     }
-    
+
     public function indexAction() {
         $this->view->pageNames = $this->_config->pageNames;
     }

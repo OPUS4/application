@@ -35,7 +35,7 @@
 class Application_Controller_ModuleAccessTest extends ControllerTestCase {
 
     public function getController() {
-        return new Controller_ModuleAccess($this->getRequest(), $this->getResponse());
+        return new Application_Controller_ModuleAccess($this->getRequest(), $this->getResponse());
     }
 
     public function testGetLogger() {

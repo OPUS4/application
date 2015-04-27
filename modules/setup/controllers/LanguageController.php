@@ -36,7 +36,7 @@
 /**
  *
  */
-class Setup_LanguageController extends Controller_SetupAbstract {
+class Setup_LanguageController extends Application_Controller_SetupAbstract {
 
     protected $_sortKeys = array('unit', 'module', 'directory', 'filename', 'language', 'variant');
 
