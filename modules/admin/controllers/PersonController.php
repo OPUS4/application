@@ -40,7 +40,7 @@
  *
  * TODO Erweitern um Personen in Datenbank zu verwalten (z.B. Deduplizieren) (OPUSVIER-nnnn, noch kein Ticket)
  */
-class Admin_PersonController extends Controller_Action {
+class Admin_PersonController extends Application_Controller_Action {
 
     private $_documentsHelper;
 

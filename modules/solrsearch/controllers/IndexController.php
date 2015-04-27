@@ -40,7 +40,7 @@
  *
  * TODO cleanup (e.g. move functions to models, use forms, etc.)
  */
-class Solrsearch_IndexController extends Controller_Action {
+class Solrsearch_IndexController extends Application_Controller_Action {
 
     private $_query;
     private $_numOfHits;

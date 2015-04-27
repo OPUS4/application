@@ -39,7 +39,7 @@
  * @category    Application
  * @package     Controller
  */
-class Controller_Xml extends Controller_ModuleAccess {
+class Application_Controller_Xml extends Application_Controller_ModuleAccess {
 
     /**
      * Holds xml representation of document information to be processed.

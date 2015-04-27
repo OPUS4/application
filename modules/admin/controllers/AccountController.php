@@ -42,7 +42,7 @@
  *
  * TODO Support GET requests for create and update?
  */
-class Admin_AccountController extends Controller_Action {
+class Admin_AccountController extends Application_Controller_Action {
 
     /**
      * Default action presents list of existing accounts.

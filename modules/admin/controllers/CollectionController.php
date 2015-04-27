@@ -43,7 +43,7 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_CollectionController extends Controller_Action {
+class Admin_CollectionController extends Application_Controller_Action {
 
     /**
      * Setup theme path

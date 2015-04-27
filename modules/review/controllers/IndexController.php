@@ -38,7 +38,7 @@
  * @category    Application
  * @package     Module_Publish
  */
-class Review_IndexController extends Controller_Action {
+class Review_IndexController extends Application_Controller_Action {
 
     /**
      * Restrict reviewable documents to the given status.

@@ -36,7 +36,7 @@
  * @category    Application
  * @package     Module_Crawlers
  */
-class Crawlers_SitelinksController extends Controller_Action {
+class Crawlers_SitelinksController extends Application_Controller_Action {
 
     protected function checkAccessModulePermissions() {
     }
@@ -60,7 +60,7 @@ class Crawlers_SitelinksController extends Controller_Action {
            $f->setServerDatePublishedRange($year, $year+1);
            $this->view->ids = $f->ids();
         }
-        
+
         return $this->render('index');
     }
 }

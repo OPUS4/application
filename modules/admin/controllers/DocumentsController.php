@@ -41,7 +41,7 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_DocumentsController extends Controller_Action {
+class Admin_DocumentsController extends Application_Controller_Action {
 
     const PARAM_HITSPERPAGE = 'hitsperpage';
     const PARAM_STATE = 'state';

@@ -33,7 +33,7 @@
  * @version     $Id$
  */
 
-class Admin_RoleController extends Controller_Action {
+class Admin_RoleController extends Application_Controller_Action {
 
     private static $_protectedRoles = array('guest', 'administrator');
 
@@ -57,7 +57,7 @@ class Admin_RoleController extends Controller_Action {
 
         $this->view->protectedRoles = self::$_protectedRoles;
     }
-    
+
     /**
      * Show a role.
      */
@@ -74,7 +74,7 @@ class Admin_RoleController extends Controller_Action {
             $this->_helper->redirector('index');
         }
     }
-    
+
     /**
      * Shows form for creating a new role.
      */
@@ -87,7 +87,7 @@ class Admin_RoleController extends Controller_Action {
 
         $this->view->form = $form;
     }
-    
+
     /**
      * Creates a new role in the database.
      */
@@ -121,7 +121,7 @@ class Admin_RoleController extends Controller_Action {
 
         $this->_redirectTo('index');
     }
-    
+
     /**
      * Shows form for editing a role.
      */
@@ -138,7 +138,7 @@ class Admin_RoleController extends Controller_Action {
             $this->_helper->redirector('index');
         }
     }
-    
+
     /**
      * Updates a role in the database.
      */
@@ -183,9 +183,9 @@ class Admin_RoleController extends Controller_Action {
 
         if (!empty($roleId)) {
             $role = new Opus_UserRole($roleId);
-            
+
             $roleName = $role->getName();
-            
+
             if (in_array($roleName, self::$_protectedRoles)) {
                 // TODO deliver message to user
             }

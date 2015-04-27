@@ -32,23 +32,23 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_IndexmaintenanceController extends Controller_Action {
-    
+class Admin_IndexmaintenanceController extends Application_Controller_Action {
+
     /**
      * @var Admin_Model_IndexMaintenance
      */
     private $_model;
-    
+
     public function init() {
-        parent::init();                
+        parent::init();
         $this->_model = new Admin_Model_IndexMaintenance($this->getLogger());
-        
-        
+
+
         // TODO features will be enabled in later version
         $this->view->disabledFeatureFulltextExtractionCheck = true; // TODO OPUSVIER-2955
         $this->view->disabledFeatureIndexOptimization = true; // TODO OPUSVIER-2956
-        
-        
+
+
         if ($this->_model->getFeatureDisabled()) {
             $this->view->featureDisabled = true;
         }
@@ -56,8 +56,8 @@ class Admin_IndexmaintenanceController extends Controller_Action {
             $this->view->allowConsistencyCheck = $this->_model->allowConsistencyCheck();
             $this->view->allowFulltextExtractionCheck = $this->_model->allowFulltextExtractionCheck();
             $this->view->allowIndexOptimization = $this->_model->allowIndexOptimization();
-        }        
-    }   
+        }
+    }
 
     public function indexAction() {
         if (!$this->_model->getFeatureDisabled()) {
@@ -68,11 +68,11 @@ class Admin_IndexmaintenanceController extends Controller_Action {
                 if (!is_null($data)) {
                     $this->view->content = array('consistencycheck' => $data->getContent());
                     $this->view->contentLastModTime = array('consistencycheck' => $data->getModifiedDate());
-                }            
+                }
             }
             if (is_null($state)) {
                 $this->view->error = array('consistencycheck' => true);
-            }            
+            }
         }
     }
 
@@ -86,13 +86,13 @@ class Admin_IndexmaintenanceController extends Controller_Action {
                         $jobId
                     )
                 );
-            }            
+            }
         }
         return $this->_redirectToAndExit('index');
     }
 
     /**
-     * 
+     *
      * TODO implementation needed OPUSVIER-2956
      */
     public function optimizeindexAction() {
@@ -103,14 +103,14 @@ class Admin_IndexmaintenanceController extends Controller_Action {
     }
 
     /**
-     * 
+     *
      * TODO implementation needed OPUSVIER-2955
-     */    
+     */
     public function checkfulltextsAction() {
         if (!$this->_model->getFeatureDisabled() && $this->getRequest()->isPost()) {
             // add a job
         }
         return $this->_redirectToAndExit('index');
     }
-    
+
 }

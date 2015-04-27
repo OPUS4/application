@@ -41,7 +41,7 @@
  * @category    Application
  * @package     Module_Default
  */
-class IndexController extends Controller_Action {
+class IndexController extends Application_Controller_Action {
 
     /**
      * Always allow access to this controller; Override check in parent method.

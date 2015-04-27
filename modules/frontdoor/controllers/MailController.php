@@ -38,7 +38,7 @@
  * Controller for document recommendation starting from Frontdoor
  *
  */
-class Frontdoor_MailController extends Controller_Action {
+class Frontdoor_MailController extends Application_Controller_Action {
 
     /**
      *

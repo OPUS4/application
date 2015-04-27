@@ -38,7 +38,7 @@
  *
  * TODO redundanter Code mit DocumentController
  */
-class Admin_FilemanagerController extends Controller_Action {
+class Admin_FilemanagerController extends Application_Controller_Action {
 
     const PARAM_DOCUMENT_ID = 'id';
 

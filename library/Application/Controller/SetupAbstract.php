@@ -34,9 +34,9 @@
  */
 
 /**
- * 
+ *
  */
-abstract class Controller_SetupAbstract extends Controller_Action {
+abstract class Application_Controller_SetupAbstract extends Application_Controller_Action {
 
     abstract protected function getModel();
 

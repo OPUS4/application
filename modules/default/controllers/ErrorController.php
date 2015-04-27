@@ -40,7 +40,7 @@
  *
  * @package     Module_Default
  */
-class ErrorController extends Controller_Action {
+class ErrorController extends Application_Controller_Action {
 
     /**
      * Always allow access to this controller; Override check in parent method.

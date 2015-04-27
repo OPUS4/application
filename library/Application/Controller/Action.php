@@ -38,7 +38,7 @@
  * @version     $Id$
  */
 
-class Controller_Action extends Controller_ModuleAccess {
+class Application_Controller_Action extends Application_Controller_ModuleAccess {
 
     /**
      * Holds the Redirector Helper.
@@ -104,7 +104,7 @@ class Controller_Action extends Controller_ModuleAccess {
         $this->_redirector->setCode(301);
         $this->performRedirect($action, $message, $controller, $module, $params);
     }
-    
+
     protected function _redirectToAndExit($action, $message = null, $controller = null, $module = null,
                                           $params = array()) {
         $this->performRedirect($action, $message, $controller, $module, $params, true);

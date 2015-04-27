@@ -54,7 +54,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Controller_ActionCRUD extends Controller_Action {
+class Application_Controller_ActionCRUD extends Application_Controller_Action {
 
     /**
      * Message-Key für erfolgreiches Abspeichern.

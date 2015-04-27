@@ -36,7 +36,7 @@
  * Browsing of file import folder for adding files to documents.
  *
  */
-class Admin_FilebrowserController extends Controller_Action {
+class Admin_FilebrowserController extends Application_Controller_Action {
 
     const PARAM_DOCUMENT_ID = 'id';
 

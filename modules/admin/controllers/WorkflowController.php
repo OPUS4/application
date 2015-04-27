@@ -36,7 +36,7 @@
 /**
  * Controller handles transitions of documents between states.
  */
-class Admin_WorkflowController extends Controller_Action {
+class Admin_WorkflowController extends Application_Controller_Action {
 
     /**
      * Helper for verifying document IDs.

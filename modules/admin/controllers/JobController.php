@@ -35,7 +35,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_JobController extends Controller_Action {
+class Admin_JobController extends Application_Controller_Action {
 
     public function indexAction() {
 

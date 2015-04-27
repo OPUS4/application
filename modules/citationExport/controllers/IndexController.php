@@ -34,7 +34,7 @@
  * @version     $Id$
  */
 
-class CitationExport_IndexController extends Controller_Action {
+class CitationExport_IndexController extends Application_Controller_Action {
 
     /**
      * Output data to index view

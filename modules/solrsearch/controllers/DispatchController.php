@@ -39,7 +39,7 @@
  *
  * TODO eliminate controller (merge with IndexController, move code to model for testing)
  */
-class Solrsearch_DispatchController extends Controller_Action {
+class Solrsearch_DispatchController extends Application_Controller_Action {
 
     public function indexAction() {
         $this->getLogger()->debug('Received new search request. Redirecting to search action of IndexController.');

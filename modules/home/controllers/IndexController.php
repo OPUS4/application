@@ -33,7 +33,7 @@
  * @version     $Id$
  */
 
-class Home_IndexController extends Controller_Action {
+class Home_IndexController extends Application_Controller_Action {
 
     /**
      * Do some initialization on startup of every action.

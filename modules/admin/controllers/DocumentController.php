@@ -38,7 +38,7 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_DocumentController extends Controller_Action {
+class Admin_DocumentController extends Application_Controller_Action {
 
     /**
      * Helper for verifying document IDs.

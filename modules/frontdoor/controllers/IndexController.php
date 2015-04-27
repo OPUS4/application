@@ -33,7 +33,7 @@
  * @version     $Id$
  *
  */
-class Frontdoor_IndexController extends Controller_Action {
+class Frontdoor_IndexController extends Application_Controller_Action {
 
     const SERVER_STATE_DELETED = 'deleted';
     const SERVER_STATE_UNPUBLISHED = 'unpublished';

@@ -39,7 +39,7 @@
  *
  *
  */
-class Admin_AccessController extends Controller_Action {
+class Admin_AccessController extends Application_Controller_Action {
 
     /**
      *

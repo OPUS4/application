@@ -33,7 +33,7 @@
  * @version     $Id$
  */
 
-class Publish_DepositController extends Controller_Action {
+class Publish_DepositController extends Application_Controller_Action {
 
     public $depositData = array();
     public $log;

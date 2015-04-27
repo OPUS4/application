@@ -33,7 +33,7 @@
  * @version     $Id$
  *
  */
-class Frontdoor_DeliverController extends Controller_Action {
+class Frontdoor_DeliverController extends Application_Controller_Action {
 
     public function indexAction() {
 

@@ -33,7 +33,7 @@
  *
  */
 
-class LicenseController extends Controller_Action {
+class LicenseController extends Application_Controller_Action {
 
     /**
      * Always allow access to this controller; Override check in parent method.

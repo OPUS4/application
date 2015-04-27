@@ -37,7 +37,7 @@
  *
  * TODO auf Application_Controller_ActionCRUD umstellen (IndexTabelle und neue Actions berücksichtigen)
  */
-class Admin_CollectionrolesController extends Controller_Action {
+class Admin_CollectionrolesController extends Application_Controller_Action {
 
     /**
      * List all available collection role instances.

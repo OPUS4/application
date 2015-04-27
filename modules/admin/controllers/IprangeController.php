@@ -37,7 +37,7 @@
  * Controller for management of IP ranges.
  *
  */
-class Admin_IprangeController extends Controller_Action {
+class Admin_IprangeController extends Application_Controller_Action {
 
     /**
      * Show table with all defined IP ranges and process requests.
@@ -103,7 +103,7 @@ class Admin_IprangeController extends Controller_Action {
         $this->view->title = $this->view->translate('admin_iprange_index');
 
         $form = new Admin_Form_IpRange();
-        
+
         $actionUrl = $this->view->url(array('action' => 'create'));
 
         $form->setAction($actionUrl);

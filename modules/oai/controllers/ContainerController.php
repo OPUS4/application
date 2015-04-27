@@ -33,16 +33,16 @@
  * @version     $Id$
  */
 
-class Oai_ContainerController extends Controller_Action {
+class Oai_ContainerController extends Application_Controller_Action {
 
     public function indexAction() {
         $docId = $this->getRequest()->getParam('docId', null);
 
         $container = null;
-        $fileHandle = null;    
+        $fileHandle = null;
         try {
             $container = new Oai_Model_Container($docId, $this->getLogger());
-            $fileHandle = $container->getFileHandle();            
+            $fileHandle = $container->getFileHandle();
         }
         catch (Oai_Model_Exception $e) {
             $this->view->errorMessage = $e->getMessage();

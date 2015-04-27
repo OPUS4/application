@@ -40,7 +40,7 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_IndexController extends Controller_Action {
+class Admin_IndexController extends Application_Controller_Action {
 
     /**
      * Shows main menu.

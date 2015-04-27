@@ -40,8 +40,8 @@
  * @category    Application
  * @package     Controller
  */
-class Controller_ModuleAccess extends Zend_Controller_Action {
-    
+class Application_Controller_ModuleAccess extends Zend_Controller_Action {
+
     const ACCESS_DENIED_ACTION = 'module-access-denied';
 
     /**
@@ -55,7 +55,7 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
      * @var Zend_Config
      */
     private $_config = null;
-    
+
     /**
      * Use pre-dispatch to check user access rights *before* action is called.
      */
@@ -63,10 +63,10 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
         parent::preDispatch();
         $this->checkAccessModulePermissions();
     }
-    
+
     public function init() {
         parent::init();
-        
+
         // Wählt Hauptmenueeintrag nach Modul aus
         // Fuer einige Module muss das ueberschrieben werden (Review, Search).
         $this->getHelper('MainMenu')->setActive($this->_request->getModuleName());
@@ -90,7 +90,7 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
         $logger->debug("starting authorization check for module '$module'");
 
         $realm = Opus_Security_Realm::getInstance();
-        
+
         if (!$realm->skipSecurityChecks()) {
             // Check, if the user has accesss to the module...
             if (true !== $realm->checkModule($module)) {
@@ -110,57 +110,57 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
             $logger->debug("FAILED custom authorization check for module '$module'");
             return $this->_forward(self::ACCESS_DENIED_ACTION);
         }
-        
+
         $logger->debug("authorization check for module '$module' successful");
         return;
     }
-    
+
     /**
-     * 
+     *
      * @return boolean
-     * 
+     *
      * TODO Kann ein Teil davon vielleicht schon im Bootstrap passieren?
      */
     protected function checkPermissions() {
         $logger = $this->getLogger();
-        
+
         $navigation = $this->view->getHelper('navigation');
         $acl = $navigation->getAcl();
 
         if (is_null($acl)) {
             return true;
         }
-        
+
         $activePage = $navigation->findActive($navigation->getContainer());
-        
-        if (!empty($activePage)) {            
+
+        if (!empty($activePage)) {
             $logger->debug('ACL: active page found');
             $activePage = $activePage['page'];
-            
+
             $resource = $this->findResourceForPage($activePage);
-            
+
             return is_null($resource) || $acl->isAllowed(Application_Security_AclProvider::ACTIVE_ROLE, $resource);
         }
         else {
             $logger->debug('ACL: active page not found');
-            // Entweder die Seite ist nicht erfasst oder Zugriff ist nicht erlaubt. 
+            // Entweder die Seite ist nicht erfasst oder Zugriff ist nicht erlaubt.
             $pageInNav = $this->isPageForRequestInNavigation($navigation);
-            
+
             $logger->debug('ACL: page configured = ' . $pageInNav);
-            
+
             return !$pageInNav;
         }
-                
+
         return true;
     }
-    
+
     /**
      * Searches navigation for resource definition for current request.
      * @return string
      */
     protected function findResourceForPage($activePage) {
         $resource = null;
-        
+
         if ($activePage instanceof Zend_Navigation_Page) {
             $resource = $activePage->getResource();
 
@@ -171,10 +171,10 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
                 $page = $page->getParent();
             }
         }
-        
+
         return $resource;
     }
-    
+
     /**
      * Prüft ob die Seite in der Navigation definiert ist.
      */
@@ -198,10 +198,10 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
                 }
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Method stub to be overridden by controllers.  Enables checks for custom
      * properties.
@@ -209,7 +209,7 @@ class Controller_ModuleAccess extends Zend_Controller_Action {
      * @return boolean
      */
     protected function customAccessCheck() {
-        return true; 
+        return true;
     }
 
     /**

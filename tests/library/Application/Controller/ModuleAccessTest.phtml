@@ -23,10 +23,6 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * Unit Tests für Basisklasse für OPUS Controllers.
  *
  * @category    Application Unit Test
  * @package     Controller
@@ -35,14 +31,43 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Controller_ActionTest extends ControllerTestCase {
+
+class Application_Controller_ModuleAccessTest extends ControllerTestCase {
 
     public function getController() {
-        return new Controller_Action($this->getRequest(), $this->getResponse());
+        return new Controller_ModuleAccess($this->getRequest(), $this->getResponse());
     }
 
-    public function testInit() {
-        $this->markTestIncomplete("not implemented");
+    public function testGetLogger() {
+        $controller = $this->getController();
+
+        $logger = $controller->getLogger();
+
+        $this->assertNotNull($logger);
+
+        $this->assertInstanceOf('Zend_Log', $logger);
+    }
+
+    public function testSetGetLogger() {
+        $controller = $this->getController();
+
+        $logger = new MockLogger();
+
+        $controller->setLogger($logger);
+
+        $this->assertEquals($logger, $controller->getLogger());
+    }
+
+    /**
+     * @expectedException Application_Exception
+     * @expectedExceptionMessage No logger found in Zend_Registry
+     */
+    public function testNoLogger() {
+        $controller = $this->getController();
+
+        Zend_Registry::set('Zend_Log', null);
+
+        $controller->getLogger();
     }
 
 }
