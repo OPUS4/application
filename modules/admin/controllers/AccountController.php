@@ -73,7 +73,7 @@ class Admin_AccountController extends Controller_Action {
         }
 
         $moduleDirectory = dirname($this->getFrontController()->getModuleDirectory());
-        $modulesModel = new Admin_Model_Modules($moduleDirectory);
+        $modulesModel = new Application_Util_Modules($moduleDirectory);
         $this->view->allModules = $modulesModel->getAll();
 
         $account = new Opus_Account($id);
