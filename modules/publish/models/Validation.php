@@ -52,14 +52,14 @@ class Publish_Model_Validation {
             $this->listOptions = $options;
             $this->datatype = 'List';
         }
-        
+
         if (isset($collectionRole)) {
             $this->collectionRole = $collectionRole;
         }
         else {
             $this->datatype = $datatype;
         }
-        
+
         $this->_view = $view;
         $this->_session = $session;
     }
@@ -123,7 +123,7 @@ class Publish_Model_Validation {
         if (!isset($this->_session->language)) {
             return;
         }
-        
+
         $lang = $this->_session->language;
         $validators = array();
 
@@ -175,7 +175,7 @@ class Publish_Model_Validation {
         $languages = array_keys($this->getLanguages());
 
         if (is_null($languages)) {
-            return null; 
+            return null;
         }
 
         return $this->validateSelect($languages);
@@ -196,7 +196,7 @@ class Publish_Model_Validation {
         $validators = array();
         $licences = array_keys($this->getLicences());
         if (is_null($licences)) {
-            return null; 
+            return null;
         }
 
         return $this->validateSelect($licences);
@@ -206,7 +206,7 @@ class Publish_Model_Validation {
         $validators = array();
         $series = array_keys($this->getSeries());
         if (is_null($series)) {
-            return null; 
+            return null;
         }
 
         return $this->validateSelect($series);
@@ -215,7 +215,7 @@ class Publish_Model_Validation {
     private function _validateList() {
         $validators = array();
         foreach ($this->listOptions as $option) {
-            $this->listOptions[$option] = $option; 
+            $this->listOptions[$option] = $option;
         }
 
         return $this->validateSelect($this->listOptions);
@@ -225,10 +225,10 @@ class Publish_Model_Validation {
         $validators = array();
         $thesisGrantors = $this->getThesis($grantors);
         if (!is_null($thesisGrantors)) {
-            $thesises = array_keys($thesisGrantors);            
+            $thesises = array_keys($thesisGrantors);
             if (is_null($thesises)) {
                 return null;
-            }            
+            }
             return $this->validateSelect($thesises);
         }
     }
@@ -261,34 +261,34 @@ class Publish_Model_Validation {
         else {
             $switchVar = $this->datatype;
         }
-                
+
         switch ($switchVar) {
             case 'Collection':
             case 'CollectionLeaf' :
                 return $this->_collectionSelect();
                 break;
 
-            case 'Language': 
+            case 'Language':
                 return $this->_languageSelect();
                 break;
 
-            case 'Licence': 
+            case 'Licence':
                 return $this->_licenceSelect();
                 break;
 
-            case 'List': 
+            case 'List':
                 return $this->listOptions;
                 break;
 
-            case 'ThesisGrantor' : 
+            case 'ThesisGrantor' :
                 return $this->_thesisSelect(true);
                 break;
 
-            case 'ThesisPublisher' : 
+            case 'ThesisPublisher' :
                 return $this->_thesisSelect();
                 break;
 
-            case 'Series' : 
+            case 'Series' :
                 return $this->_seriesSelect();
                 break;
 
@@ -362,7 +362,7 @@ class Publish_Model_Validation {
      */
 
     private function getLanguages() {
-        return Form_Element_Language::getLanguageList();
+        return Application_Form_Element_Language::getLanguageList();
     }
 
     /**
@@ -383,7 +383,7 @@ class Publish_Model_Validation {
             return $licences;
         }
         else {
-            return $this->licences; 
+            return $this->licences;
         }
     }
 
@@ -405,7 +405,7 @@ class Publish_Model_Validation {
             return $sets;
         }
         else {
-            return $this->series; 
+            return $this->series;
         }
     }
 

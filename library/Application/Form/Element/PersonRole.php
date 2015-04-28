@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,22 +24,40 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Module_Admin
+ * @category    Application
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Admin_Form_Document_GrantorTest extends ControllerTestCase {
+/**
+ * Select Element für Role einer Person.
+ */
+class Application_Form_Element_PersonRole extends Application_Form_Element_Select {
 
-    public function testConstruct() {
-        $form = new Admin_Form_Document_Grantor();
+    /**
+     * Initialisiert Formularelement.
+     */
+    public function init() {
+        parent::init();
 
-        $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Application_Form_Element_Grantor',
-            $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
+        $this->setRequired(true);
+
+        $options = $this->getSelectOptions();
+
+        foreach ($options as $option) {
+            $this->addMultiOption($option, 'Opus_Person_Role_Value_' . ucfirst($option));
+        }
+    }
+
+    /**
+     * Liefert die erlaubten Rollen für die Optionen im Formularelement.
+     * @return array
+     */
+    public function getSelectOptions() {
+        return Admin_Form_Document_Persons::getRoles();
     }
 
 }

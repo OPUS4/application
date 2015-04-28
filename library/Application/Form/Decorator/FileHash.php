@@ -26,7 +26,7 @@
  */
 
 /**
- * Decorator fuer die Ausgabe eines Datei-Hashes (Form_Element_FileHash).
+ * Decorator fuer die Ausgabe eines Datei-Hashes (Application_Form_Element_FileHash).
  *
  * @category    Application
  * @package     Application_Form_Decorator
@@ -42,7 +42,7 @@ class Application_Form_Decorator_FileHash extends Zend_Form_Decorator_Abstract {
     public function render($content) {
         $element = $this->getElement();
 
-        if (!$element instanceof Form_Element_FileHash) {
+        if (!$element instanceof Application_Form_Element_FileHash) {
             return $content;
         }
 

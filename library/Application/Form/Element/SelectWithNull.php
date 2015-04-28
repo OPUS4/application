@@ -24,22 +24,34 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Module_Admin
+ * @category    Application
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Admin_Form_Document_GrantorTest extends ControllerTestCase {
+class Application_Form_Element_SelectWithNull extends Application_Form_Element_Select {
 
-    public function testConstruct() {
-        $form = new Admin_Form_Document_Grantor();
+    public function setValue($value) {
+        if (is_null($value)) {
+            parent::setValue('Null');
+        }
+        else {
+            parent::setValue($value);
+        }
+    }
 
-        $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Application_Form_Element_Grantor',
-            $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
+    public function getValue() {
+        $value = parent::getValue();
+
+        if ($value == 'Null') {
+            return null;
+        }
+        else {
+            return $value;
+        }
     }
 
 }

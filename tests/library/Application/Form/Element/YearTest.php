@@ -25,21 +25,50 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Test
- * @package     Module_Admin
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Admin_Form_Document_GrantorTest extends ControllerTestCase {
+class Application_Form_Element_YearTest extends FormElementTestCase {
 
-    public function testConstruct() {
-        $form = new Admin_Form_Document_Grantor();
+    public function setUp() {
+        $this->_formElementClass = 'Application_Form_Element_Year';
+        $this->_expectedDecoratorCount = 8;
+        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_staticViewHelper = 'viewFormDefault';
+        parent::setUp();
+    }
 
-        $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Application_Form_Element_Grantor',
-            $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
+    public function testValidation() {
+        $element = $this->getElement();
+
+        $element->setValue(-1);
+
+        $this->assertTrue($element->isValid(null));
+        $this->assertTrue($element->isValid(''));
+        $this->assertTrue($element->isValid(0));
+        $this->assertTrue($element->isValid(1990));
+        $this->assertTrue($element->isValid(2050));
+        $this->assertTrue($element->isValid(9999));
+
+        $this->assertFalse($element->isValid(' '));
+        $this->assertFalse($element->isValid('anno'));
+        $this->assertFalse($element->isValid(-1));
+        $this->assertFalse($element->isValid(10000));
+    }
+
+    public function testTranslation() {
+        $element = $this->getElement();
+
+        $translator = $element->getTranslator();
+
+        $this->assertTrue($translator->isTranslated('validation_error_year_invalid_format'));
+        $this->assertTrue($translator->isTranslated('validation_error_year_invalid_negative'));
+        $this->assertTrue($translator->isTranslated('validation_error_year_too_large'));
     }
 
 }

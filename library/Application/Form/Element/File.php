@@ -23,23 +23,39 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Formularelement fuer den Upload einer Datei.
  *
- * @category    Application Unit Test
- * @package     Module_Admin
+ * @category    Application
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Application_Form_Element_File extends Zend_Form_Element_File {
 
-class Admin_Form_Document_GrantorTest extends ControllerTestCase {
+    public function init() {
+        parent::init();
 
-    public function testConstruct() {
-        $form = new Admin_Form_Document_Grantor();
+        $this->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
+    }
 
-        $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Application_Form_Element_Grantor',
-            $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
+    public function loadDefaultDecorators() {
+        if (!$this->loadDefaultDecoratorsIsDisabled() && count($this->getDecorators()) == 0) {
+            $this->setDecorators(
+                array(
+                'File',
+                'Errors',
+                'ElementHtmlTag',
+                array('LabelNotEmpty', array('tag' => 'div', 'tagClass' => 'label', 'placement' => 'prepend')),
+                array(array('dataWrapper' => 'HtmlTagWithId'), array('tag' => 'div', 'class' => 'data-wrapper'))
+                )
+            );
+        }
     }
 
 }
+

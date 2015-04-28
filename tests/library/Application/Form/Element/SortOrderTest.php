@@ -23,61 +23,52 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * Unit Tests fuer Klasse, die Remove-Button ausgibt.
  *
  * @category    Application Unit Test
- * @package     Application_Form_Decorator
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Decorator_RemoveButtonTest extends ControllerTestCase {
 
-    public function testRender() {
-        $form = new Zend_Form();
-        $form->setName('Test');
-        $form->addElement('submit', 'Remove');
 
-        $decorator = new Application_Form_Decorator_RemoveButton();
-        $decorator->setElement($form);
+class Application_Form_Element_SortOrderTest extends FormElementTestCase {
 
-        $output = $decorator->render('content'); // Output wird an content dran gehängt
-
-        $this->assertEquals('content<input type="submit" name="Remove" id="Remove" value="Remove" />', $output);
+    public function setUp() {
+        $this->_formElementClass = 'Application_Form_Element_SortOrder';
+        $this->_expectedDecoratorCount = 8;
+        $this->_expectedDecorators = array('ViewHelper', 'Placeholder', 'Description', 'ElementHint', 'Errors',
+            'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
+        $this->_staticViewHelper = 'viewFormDefault';
+        parent::setUp();
     }
 
-    public function testRenderWithHidden() {
-        $form = new Zend_Form();
-        $form->setName('Test');
-        $form->addElement('submit', 'Remove');
-        $element = $form->createElement('hidden', 'Id');
-        $element->setValue(10);
-        $form->addElement($element);
+    public function testValidation() {
+        $element = $this->getElement();
 
-        $decorator = new Application_Form_Decorator_RemoveButton();
-        $decorator->setElement($form);
-        $decorator->setSecondElement($element);
-
-        $output = $decorator->render('content'); // Output wird an content dran gehängt
-
-        $this->assertEquals('content'
-            . '<input type="hidden" name="Id" id="Id" value="10" />'
-            . '<input type="submit" name="Remove" id="Remove" value="Remove" />',
-            $output);
+        $this->assertTrue($element->getValidator('Int') !== false, 'Validator Int is missing.');
+        $this->assertTrue($element->getValidator('GreaterThan') !== false, 'Validator GreaterThan is missing.');
+        $this->assertEquals(-1, $element->getValidator('GreaterThan')->getMin());
     }
 
-    public function testSetSecondElementOption() {
-        $element = new Application_Form_Element_Hidden('name');
-        $decorator = new Application_Form_Decorator_RemoveButton(array('element' => $element));
+    public function testDefaultSize() {
+        $element = $this->getElement();
 
-        $this->assertEquals($element, $decorator->getSecondElement());
-        $this->assertEquals($element, $decorator->getSecondElement()); // works 2nd time as well
+        $this->assertEquals(6, $element->getAttrib('size'));
+    }
 
+    public function testCustomSize() {
+        $element = $this->getElement(array('size' => 10));
 
+        $this->assertEquals(10, $element->getAttrib('size'));
+    }
+
+    public function testMessagesTranslated() {
+        $translator = Zend_Registry::get('Zend_Translate');
+
+        $this->assertTrue($translator->isTranslated('validation_error_int'));
+        $this->assertTrue($translator->isTranslated('validation_error_negative_number'));
     }
 
 }

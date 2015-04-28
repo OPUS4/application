@@ -25,60 +25,63 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Test
- * @package     Application_Form_Decorator
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Decorator_ViewHelperTest extends ControllerTestCase {
 
-    public function testGetHelper() {
-        $decorator = new Application_Form_Decorator_ViewHelper();
+class Application_Form_Element_ThemeTest extends FormElementTestCase {
 
-        $decorator->setElement(new Application_Form_Element_Select('select'));
-
-        $this->assertEquals('formSelect', $decorator->getHelper());
-
-        $decorator->setViewOnlyEnabled(true);
-
-        $this->assertEquals('viewFormSelect', $decorator->getHelper());
+    public function setUp() {
+        $this->_formElementClass = 'Application_Form_Element_Theme';
+        $this->_expectedDecoratorCount = 6;
+        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
+            'dataWrapper');
+        $this->_staticViewHelper = 'viewFormSelect';
+        parent::setUp();
     }
 
-    public function testGetHelperDefault() {
-        $decorator = new Application_Form_Decorator_ViewHelper();
+    public function testOptions() {
+        $element = $this->getElement();
 
-        $decorator->setElement(new Application_Form_Element_Text('name'));
+        $options = $element->getMultiOptions();
 
-        $decorator->setViewOnlyEnabled(true);
-
-        $this->assertEquals('viewFormDefault', $decorator->getHelper());
+        $this->assertArrayHasKey('opus4', $options);
+        $this->assertEquals('opus4', $options['opus4']);
+        $this->assertArrayHasKey('opus4-matheon', $options);
+        $this->assertEquals('opus4-matheon', $options['opus4-matheon']);
+        $this->assertArrayHasKey('plain', $options);
+        $this->assertEquals('plain', $options['plain']);
     }
 
-    public function testGetHelperForHidden() {
-        $decorator = new Application_Form_Decorator_ViewHelper();
+    public function testSetValue() {
+        $element = $this->getElement();
 
-        $decorator->setElement(new Application_Form_Element_Hidden('name'));
+        $this->assertNull($element->getValue());
 
-        $decorator->setViewOnlyEnabled(true);
+        $element->setValue('opus4');
 
-        $this->assertEquals('formHidden', $decorator->getHelper());
+        $this->assertEquals('opus4', $element->getValue());
     }
 
-    public function testSetIsViewOnlyEnabled() {
-        $decorator = new Application_Form_Decorator_ViewHelper();
+    public function testSetUnknownValue() {
+        $element = $this->getElement();
 
-        $this->assertFalse($decorator->isViewOnlyEnabled());
+        $this->assertNull($element->getValue());
 
-        $decorator->setViewOnlyEnabled(true);
+        $element->setValue('opus4-unknown');
 
-        $this->assertTrue($decorator->isViewOnlyEnabled());
+        $this->assertNull($element->getValue());
     }
 
-    public function testSetViewOnlyEnabledOption() {
-        $decorator = new Application_Form_Decorator_ViewHelper(array('viewOnlyEnabled' => true));
-
-        $this->assertTrue($decorator->isViewOnlyEnabled());
+    /**
+     * @expectedException InvalidArgumentException
+     * @expectedExceptionMessage Argument should be a valid path.
+     */
+    public function testFindThemesInvalidPath() {
+        Application_Form_Element_Theme::findThemes('/invalidPath');
     }
 
 }

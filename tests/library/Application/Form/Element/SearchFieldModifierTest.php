@@ -25,21 +25,40 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Test
- * @package     Module_Admin
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Admin_Form_Document_GrantorTest extends ControllerTestCase {
+class Application_Form_Element_SearchFieldModifierTest extends ControllerTestCase {
 
-    public function testConstruct() {
-        $form = new Admin_Form_Document_Grantor();
+    public function testOptions() {
+        $element = new Application_Form_Element_SearchFieldModifier('modifier');
 
-        $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Application_Form_Element_Grantor',
-            $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
+        $options = $element->getMultiOptions();
+
+        $this->assertCount(3, $options);
+
+        $this->assertNotNull($element->getMultiOption(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL));
+        $this->assertNotNull($element->getMultiOption(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY));
+        $this->assertNotNull($element->getMultiOption(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE));
     }
+
+    public function testValidationTrue() {
+        $element = new Application_Form_Element_SearchFieldModifier('modifier');
+
+        $this->assertTrue($element->isValid(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL));
+        $this->assertTrue($element->isValid(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY));
+        $this->assertTrue($element->isValid(Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE));
+    }
+
+    public function testValidationFalse() {
+        $element = new Application_Form_Element_SearchFieldModifier('modifier');
+
+        $this->assertFalse($element->isValid('anything'));
+    }
+
 
 }

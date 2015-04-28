@@ -24,22 +24,29 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Module_Admin
+ * @category    Application
+ * @package     Module_Solrsearch
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Admin_Form_Document_GrantorTest extends ControllerTestCase {
+/**
+ * Class Application_Form_Element_SearchFieldModifier
+ */
+class Application_Form_Element_SearchFieldModifier extends Application_Form_Element_Select {
 
-    public function testConstruct() {
-        $form = new Admin_Form_Document_Grantor();
+    public function init() {
+        parent::init();
 
-        $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Application_Form_Element_Grantor',
-            $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
+        $options = array(
+            Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL => 'advanced_search_form_modifier_all',
+            Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ANY => 'advanced_search_form_modifier_one',
+            Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_NONE => 'advanced_search_form_modifier_none'
+        );
+
+        $this->addMultiOptions($options);
     }
 
 }

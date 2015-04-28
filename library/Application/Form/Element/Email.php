@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,22 +24,29 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Module_Admin
+ * @category    Application
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Admin_Form_Document_GrantorTest extends ControllerTestCase {
+/**
+ * Formularelement für die Eingabe von Email-Adressen.
+ */
+class Application_Form_Element_Email extends Application_Form_Element_Text {
 
-    public function testConstruct() {
-        $form = new Admin_Form_Document_Grantor();
-
-        $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Application_Form_Element_Grantor',
-            $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
+    /**
+     * Konfiguriert das Formularelement.
+     */
+    public function init() {
+        parent::init();
+        $this->setAttrib('placeholder', $this->getTranslator()->translate('email_format'));
+        $this->setAttrib('size', 60);
+        $validator = new Zend_Validate_EmailAddress();
+        $validator->setMessage('admin_validate_error_email');
+        $this->addValidator($validator);
     }
 
 }

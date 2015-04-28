@@ -23,23 +23,74 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ */
+
+/**
+ * Formularelement für die Anzeige eines Download Links für ein Opus_File Objekt.
  *
- * @category    Application Unit Test
- * @package     Module_Admin
+ * Das Formularelement kann nur mit gültigen IDs für Opus_File verwendet werden.
+ *
+ * @category    Application
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Application_Form_Element_FileLink extends Application_Form_Element_Text {
 
-class Admin_Form_Document_GrantorTest extends ControllerTestCase {
+    public function loadDefaultDecorators() {
+        parent::loadDefaultDecorators();
 
-    public function testConstruct() {
-        $form = new Admin_Form_Document_Grantor();
+        $label = $this->getDecorator('LabelNotEmpty');
 
-        $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Application_Form_Element_Grantor',
-            $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
+        if ($label !== FALSE) {
+            $label->setOption('disableFor', true);
+        }
+    }
+
+    public function getStaticViewHelper() {
+        return 'fileLink';
+    }
+
+    public function setValue($file) {
+        if (is_null($file)) {
+            throw new Application_Exception(__METHOD__ . " Value must not be null.");
+        }
+
+        if (!$file instanceof Opus_File) {
+            try {
+                $file = new Opus_File($file);
+            }
+            catch (Opus_Model_NotFoundException $omnfe) {
+                throw new Application_Exception("File with ID = $file not found.");
+            }
+        }
+
+        if (!$file->exists()) {
+            $this->addError('admin_filemanager_file_does_not_exist');
+        }
+        parent::setValue($file);
+    }
+
+    /**
+     * Validierung ist erfolgreich, wenn Opus_File mit ID existiert.
+     *
+     * Wenn die ID nicht existiert wird in setValue eine Application_Exception geworfen.
+     *
+     * @param mixed $value
+     * @return bool
+     */
+    public function isValid($value) {
+        $this->setValue($value);
+        $file = $this->getValue();
+
+        if ($file instanceof Opus_File) {
+            return true;
+        }
+        else {
+            return false;
+        }
     }
 
 }

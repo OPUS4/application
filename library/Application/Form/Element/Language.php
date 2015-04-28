@@ -1,5 +1,5 @@
-<?php
-/**
+<?PHP
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,22 +24,54 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Module_Admin
+ * @category    Application
+ * @package     View
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Admin_Form_Document_GrantorTest extends ControllerTestCase {
+/**
+ *
+ * TODO override setLabel for more robust translation
+ */
+class Application_Form_Element_Language extends Application_Form_Element_Select {
 
-    public function testConstruct() {
-        $form = new Admin_Form_Document_Grantor();
+    private static $_languageList;
 
-        $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Application_Form_Element_Grantor',
-            $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
+    public function init() {
+        parent::init();
+
+        $this->setLabel($this->getView()->translate($this->getName()));
+
+        $this->setDisableTranslator(true); // languages are already translated
+
+        foreach ($this->getLanguageList() as $index => $language) {
+            $this->addMultiOption($index, $language);
+        }
     }
 
+    public static function getLanguageList() {
+        if (is_null(self::$_languageList)) {
+            self::initLanguageList();
+        }
+        return self::$_languageList;
+    }
+
+    /**
+     * Setup language list.
+     *
+     * @return void
+     */
+    public static function initLanguageList() {
+        $translate = Zend_Registry::get(Application_Translate::REGISTRY_KEY);
+        $languages = array();
+        foreach (Opus_Language::getAllActiveTable() as $languageRow) {
+            $langId = $languageRow['part2_t'];
+            $languages[$langId] = $translate->translate($langId);
+        }
+        self::$_languageList = $languages;
+        Zend_Registry::set('Available_Languages', $languages);
+    }
 }

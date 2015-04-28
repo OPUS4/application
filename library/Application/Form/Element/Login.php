@@ -39,7 +39,7 @@
  *
  * TODO reconsider the pattern for login names
  */
-class Application_Form_Element_Login extends Form_Element_Text {
+class Application_Form_Element_Login extends Application_Form_Element_Text {
 
     /**
      * Initialises the form element.

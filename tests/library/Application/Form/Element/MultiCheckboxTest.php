@@ -23,61 +23,29 @@
  * details. You should have received a copy of the GNU General Public License
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
- */
-
-/**
- * Unit Tests fuer Klasse, die Remove-Button ausgibt.
  *
  * @category    Application Unit Test
- * @package     Application_Form_Decorator
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Decorator_RemoveButtonTest extends ControllerTestCase {
+class Application_Form_Element_MultiCheckboxTest extends FormElementTestCase {
 
-    public function testRender() {
-        $form = new Zend_Form();
-        $form->setName('Test');
-        $form->addElement('submit', 'Remove');
+    public function setUp() {
+        $this->_formElementClass = 'Application_Form_Element_MultiCheckbox';
+        $this->_expectedDecoratorCount = 4;
+        $this->_expectedDecorators = array('ViewHelper', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
 
-        $decorator = new Application_Form_Decorator_RemoveButton();
-        $decorator->setElement($form);
-
-        $output = $decorator->render('content'); // Output wird an content dran gehängt
-
-        $this->assertEquals('content<input type="submit" name="Remove" id="Remove" value="Remove" />', $output);
+        parent::setUp();
     }
 
-    public function testRenderWithHidden() {
-        $form = new Zend_Form();
-        $form->setName('Test');
-        $form->addElement('submit', 'Remove');
-        $element = $form->createElement('hidden', 'Id');
-        $element->setValue(10);
-        $form->addElement($element);
-
-        $decorator = new Application_Form_Decorator_RemoveButton();
-        $decorator->setElement($form);
-        $decorator->setSecondElement($element);
-
-        $output = $decorator->render('content'); // Output wird an content dran gehängt
-
-        $this->assertEquals('content'
-            . '<input type="hidden" name="Id" id="Id" value="10" />'
-            . '<input type="submit" name="Remove" id="Remove" value="Remove" />',
-            $output);
-    }
-
-    public function testSetSecondElementOption() {
-        $element = new Application_Form_Element_Hidden('name');
-        $decorator = new Application_Form_Decorator_RemoveButton(array('element' => $element));
-
-        $this->assertEquals($element, $decorator->getSecondElement());
-        $this->assertEquals($element, $decorator->getSecondElement()); // works 2nd time as well
-
-
+    public function testDecoratorPath() {
+        $element = new $this->_formElementClass('name');
+        $paths = $element->getPluginLoader(Zend_Form::DECORATOR)->getPaths();
+        $this->assertArrayHasKey('Form_Decorator_', $paths);
+        $this->assertContains('Form/Decorator/', $paths['Form_Decorator_']);
     }
 
 }

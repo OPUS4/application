@@ -24,22 +24,24 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Module_Admin
+ * @category    Application
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Admin_Form_Document_GrantorTest extends ControllerTestCase {
+class Application_Form_Element_LanguageType extends Application_Form_Element_SelectWithNull {
 
-    public function testConstruct() {
-        $form = new Admin_Form_Document_Grantor();
+    public function init() {
+        parent::init();
 
-        $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Application_Form_Element_Grantor',
-            $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
+        $values = array('Null', 'A', 'C', 'E', 'H', 'L', 'S');
+
+        foreach ($values as $value) {
+            $this->addMultiOption($value, 'Opus_Language_Type_Value_' . $value);
+        }
     }
 
 }

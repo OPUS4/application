@@ -24,61 +24,79 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Application_Form_Decorator
+ * @category    Application
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Decorator_ViewHelperTest extends ControllerTestCase {
 
-    public function testGetHelper() {
-        $decorator = new Application_Form_Decorator_ViewHelper();
+class Application_Form_Element_Theme extends Application_Form_Element_SelectWithNull {
 
-        $decorator->setElement(new Application_Form_Element_Select('select'));
+    public function init() {
+        parent::init();
 
-        $this->assertEquals('formSelect', $decorator->getHelper());
+        $values = $this->getThemes();
 
-        $decorator->setViewOnlyEnabled(true);
+        $this->addMultiOption('Null', '-');
 
-        $this->assertEquals('viewFormSelect', $decorator->getHelper());
+        foreach ($values as $value) {
+            $this->addMultiOption($value, $value);
+        }
     }
 
-    public function testGetHelperDefault() {
-        $decorator = new Application_Form_Decorator_ViewHelper();
-
-        $decorator->setElement(new Application_Form_Element_Text('name'));
-
-        $decorator->setViewOnlyEnabled(true);
-
-        $this->assertEquals('viewFormDefault', $decorator->getHelper());
+    public function setValue($value) {
+        if (!array_key_exists($value, $this->getMultiOptions())) {
+            parent::setValue('Null');
+        }
+        else {
+            parent::setValue($value);
+        }
     }
 
-    public function testGetHelperForHidden() {
-        $decorator = new Application_Form_Decorator_ViewHelper();
+    /**
+     * Path to location of available themes.
+     *
+     * @var string
+     */
+    private static $_themesPath = '';
 
-        $decorator->setElement(new Application_Form_Element_Hidden('name'));
+    /**
+     * Available themes from directory self::$_themesPath.
+     *
+     * @var array
+     */
+    private static $_themes = null;
 
-        $decorator->setViewOnlyEnabled(true);
+    private function getThemes() {
+        if (is_null(self::$_themes)) {
+            $this->findThemes(APPLICATION_PATH . '/public/layouts'); // TODO configurable
+        }
 
-        $this->assertEquals('formHidden', $decorator->getHelper());
+        return self::$_themes;
     }
 
-    public function testSetIsViewOnlyEnabled() {
-        $decorator = new Application_Form_Decorator_ViewHelper();
+    /**
+     * Set location of available themes.
+     *
+     * @param  string $path
+     */
+    public static function findThemes($path) {
+        if (is_dir($path) === false) {
+            throw new InvalidArgumentException("Argument should be a valid path.");
+        }
 
-        $this->assertFalse($decorator->isViewOnlyEnabled());
+        $themes = array();
+        foreach (glob($path . '/*') as $entry) {
+            if (true === is_dir($entry)) {
+                $theme = basename($entry);
+                $themes[$theme] = $theme;
+            }
+        }
 
-        $decorator->setViewOnlyEnabled(true);
-
-        $this->assertTrue($decorator->isViewOnlyEnabled());
-    }
-
-    public function testSetViewOnlyEnabledOption() {
-        $decorator = new Application_Form_Decorator_ViewHelper(array('viewOnlyEnabled' => true));
-
-        $this->assertTrue($decorator->isViewOnlyEnabled());
+        self::$_themesPath = $path;
+        self::$_themes = $themes;
     }
 
 }

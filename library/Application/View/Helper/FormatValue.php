@@ -118,7 +118,7 @@ class Application_View_Helper_FormatValue extends Zend_View_Helper_Abstract {
             }
             else {
                 if ($field->isSelection()) {
-                    Form_Element_Language::getLanguageList(); // initializes language list translations if necessary
+                    Application_Form_Element_Language::getLanguageList(); // initializes language list translations
                     $value = $field->getValue();
                     $key = $this->_translation->getKeyForValue($model, $field->getName(), $value);
                     return $this->view->translate($key);

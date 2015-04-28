@@ -155,7 +155,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
     /**
      * Login user.
-     * 
+     *
      * @param string $login
      * @param string $password
      */
@@ -208,14 +208,14 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $this->assertNotNull($locationActual);
         $this->assertEquals($location, $locationActual);
     }
-    
+
     public function enableSecurity() {
         $config = Zend_Registry::get('Zend_Config');
         $this->securityEnabled = $config->security;
         $config->security = '1';
         Zend_Registry::set('Zend_Config', $config);
     }
-    
+
     public function restoreSecuritySetting() {
         $config = Zend_Registry::get('Zend_Config');
         $config->security = $this->securityEnabled;
@@ -229,9 +229,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $session = new Zend_Session_Namespace();
         $session->language = 'de';
         Zend_Registry::get('Zend_Translate')->setLocale('de');
-        Form_Element_Language::initLanguageList();
+        Application_Form_Element_Language::initLanguageList();
     }
-    
+
     /**
      * Stellt die Übersetzungen auf English um.
      */
@@ -239,13 +239,13 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $session = new Zend_Session_Namespace();
         $session->language = 'en';
         Zend_Registry::get('Zend_Translate')->setLocale('en');
-        Form_Element_Language::initLanguageList();
+        Application_Form_Element_Language::initLanguageList();
     }
-    
+
     /**
      * Prüft, ob das XHTML valide ist.
      * @param string $body
-     * 
+     *
      * TODO die DTD von W3C zu holen ist sehr langsam; sollte aus lokaler Datei geladen werden
      */
     public function validateXHTML($body = null) {
@@ -260,9 +260,9 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
         libxml_clear_errors();
         libxml_use_internal_errors(true);
-        
+
         $dom = new DOMDocument();
-        
+
         // Setze HTTP Header damit W3C Request nicht verweigert
         $opts = array(
             'http' => array(
@@ -270,15 +270,15 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
             )
         );
 
-        
+
         $context = stream_context_create($opts);
         libxml_set_streams_context($context);
 
         $mapping = array(
              'http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd' => 'xhtml1-strict.dtd'
-        );        
-        
-        /* TODO erst ab PHP >= 5.4.0 unterstützt; Alternative Lösung? 
+        );
+
+        /* TODO erst ab PHP >= 5.4.0 unterstützt; Alternative Lösung?
          * - momentan verwenden wir xmlcatalog für lokales Caching
         libxml_set_external_entity_loader(
             function ($public, $system, $context) use ($mapping) {
@@ -302,25 +302,25 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
 
         $dom->validateOnParse = true;
         $dom->loadXML($body);
-        
+
         $errors = libxml_get_errors();
-        
+
         $ignored = array(
             'No declaration for attribute class of element html',
             'No declaration for attribute placeholder of element input',
             'No declaration for attribute target of element a'
         );
-        
+
         $filteredErrors = array();
-        
+
         foreach ($errors as $error) {
             if (!in_array(trim($error->message), $ignored)) {
                 $filteredErrors[] = $error;
             }
         }
-        
+
         $errors = $filteredErrors;
-        
+
         // Array mit Fehlern ausgeben
         if (count($errors) !== 0) {
             $output = Zend_Debug::dump($errors, 'XHTML Fehler', false);
@@ -328,14 +328,14 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         else {
             $output = '';
         }
-        
-        $this->assertEquals(0, count($errors), 'XHTML Schemaverletzungen gefunden (' . count($errors) . ')' . PHP_EOL 
+
+        $this->assertEquals(0, count($errors), 'XHTML Schemaverletzungen gefunden (' . count($errors) . ')' . PHP_EOL
                 . $output);
-        
+
         libxml_use_internal_errors(false);
         libxml_clear_errors();
     }
-    
+
     /**
      * Prüft, ob ein Kommando auf den System existiert (Mac OS-X, Linux)
      * @param string $command Name des Kommandos
@@ -347,10 +347,10 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         $result = shell_exec("which $command");
         return (empty($result) ? false : true);
     }
-    
+
     /**
      * Prüft, ob Kommando existiert und markiert Test als Fail oder Skipped.
-     * 
+     *
      * @param string $command Name des Kommandos
      */
     public function verifyCommandAvailable($command) {
@@ -363,7 +363,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
             }
         }
     }
-    
+
     /**
      * Liefert true wenn Tests mit fehlenden Kommandos mit Fail markiert werden sollten.
      * @return boolean

@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,22 +24,30 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Module_Admin
+ * @category    Application
+ * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Admin_Form_Document_GrantorTest extends ControllerTestCase {
+/**
+ * Unit Tests for SELECT Element für die Rolle einer Person.
+ */
+class Application_Form_Element_EmailTest extends ControllerTestCase {
 
     public function testConstruct() {
-        $form = new Admin_Form_Document_Grantor();
+        $element = new Application_Form_Element_Email('Email');
 
-        $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Application_Form_Element_Grantor',
-            $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
+        $this->assertEquals('Email', $element->getName());
+        $this->assertFalse($element->isRequired());
+        $this->assertNotNull($element->getValidator('EmailAddress'));
+        $this->assertNotNull($element->getAttrib('placeholder'));
+
+        // Funktioniert evtl. nicht, wenn die Übersetzungsressource in Modul liegt (nicht 'default')
+        $this->assertNotEquals('email_format', $element->getAttrib('placeholder'),
+                'Der Schlüssel \'email_format\' wurde nicht übersetzt.');
     }
 
 }

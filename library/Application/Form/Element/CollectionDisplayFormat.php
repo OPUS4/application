@@ -24,22 +24,30 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application Unit Test
- * @package     Module_Admin
+ * @category    Application
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
+ *
+ * The values of the options must be existing Collection field names that are separated by commas.
  */
+class Application_Form_Element_CollectionDisplayFormat extends Application_Form_Element_Select {
 
-class Admin_Form_Document_GrantorTest extends ControllerTestCase {
+    public function init() {
+        parent::init();
 
-    public function testConstruct() {
-        $form = new Admin_Form_Document_Grantor();
+        $options = array(
+            'Name' => 'Name',
+            'Number' => 'Number',
+            'NameNumber' => 'Name,Number',
+            'NumberName' => 'Number,Name'
+        );
 
-        $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Application_Form_Element_Grantor',
-            $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
+        foreach ($options as $label => $value) {
+            $this->addMultiOption($value, $label);
+        }
     }
 
 }

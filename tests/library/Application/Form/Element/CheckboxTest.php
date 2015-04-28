@@ -26,58 +26,65 @@
  */
 
 /**
- * Unit Tests fuer Klasse, die Remove-Button ausgibt.
- *
  * @category    Application Unit Test
- * @package     Application_Form_Decorator
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Decorator_RemoveButtonTest extends ControllerTestCase {
+class Application_Form_Element_CheckboxTest extends FormElementTestCase {
 
-    public function testRender() {
-        $form = new Zend_Form();
-        $form->setName('Test');
-        $form->addElement('submit', 'Remove');
-
-        $decorator = new Application_Form_Decorator_RemoveButton();
-        $decorator->setElement($form);
-
-        $output = $decorator->render('content'); // Output wird an content dran gehängt
-
-        $this->assertEquals('content<input type="submit" name="Remove" id="Remove" value="Remove" />', $output);
+    public function setUp() {
+        $this->_formElementClass = 'Application_Form_Element_Checkbox';
+        $this->_expectedDecoratorCount = 6;
+        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'Label',
+            'dataWrapper');
+        parent::setUp();
     }
 
-    public function testRenderWithHidden() {
-        $form = new Zend_Form();
-        $form->setName('Test');
-        $form->addElement('submit', 'Remove');
-        $element = $form->createElement('hidden', 'Id');
-        $element->setValue(10);
-        $form->addElement($element);
+    public function testGetViewCheckedValue() {
+        $element = $this->getElement();
 
-        $decorator = new Application_Form_Decorator_RemoveButton();
-        $decorator->setElement($form);
-        $decorator->setSecondElement($element);
-
-        $output = $decorator->render('content'); // Output wird an content dran gehängt
-
-        $this->assertEquals('content'
-            . '<input type="hidden" name="Id" id="Id" value="10" />'
-            . '<input type="submit" name="Remove" id="Remove" value="Remove" />',
-            $output);
+        $this->assertEquals('Field_Value_True', $element->getViewCheckedValue());
     }
 
-    public function testSetSecondElementOption() {
-        $element = new Application_Form_Element_Hidden('name');
-        $decorator = new Application_Form_Decorator_RemoveButton(array('element' => $element));
+    public function testSetViewCheckedValue() {
+        $element = $this->getElement();
 
-        $this->assertEquals($element, $decorator->getSecondElement());
-        $this->assertEquals($element, $decorator->getSecondElement()); // works 2nd time as well
+        $element->setViewCheckedValue('Public');
 
+        $this->assertEquals('Public', $element->getViewCheckedValue());
+    }
 
+    public function testGetViewUncheckedValue() {
+        $element = $this->getElement();
+
+        $this->assertEquals('Field_Value_False', $element->getViewUncheckedValue());
+    }
+
+    public function testSetViewUncheckedValue() {
+        $element = $this->getElement();
+
+        $element->setViewUncheckedValue('Private');
+
+        $this->assertEquals('Private', $element->getViewUncheckedValue());
+    }
+
+    public function testPrepareRenderingAsViewModifyValues() {
+        $this->useEnglish();
+
+        $element = $this->getElement();
+        $element->setValue(1);
+        $element->prepareRenderingAsView();
+
+        $this->assertEquals('Yes', $element->getCheckedValue());
+        $this->assertEquals('No', $element->getUncheckedValue());
+        $this->assertEquals('Yes', $element->getValue());
+    }
+
+    public function testGetHint() {
+        $this->assertNull($this->getElement()->getHint());
     }
 
 }

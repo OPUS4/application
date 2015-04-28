@@ -35,19 +35,19 @@
  * Unit Tests für Klasse, die Unterformular auf Prüfung für wiederholte Sprachen vorbereitet.
  */
 class Form_Validate_MultiSubForm_RepeatedLanguagesTest extends ControllerTestCase {
-    
+
     public function testImplementsInterface() {
         $instance = new Form_Validate_MultiSubForm_RepeatedLanguages();
-        
+
         $this->assertTrue($instance instanceof Form_Validate_IMultiSubForm);
     }
-    
+
     public function testIsValidReturnsTrue() {
         $instance = new Form_Validate_MultiSubForm_RepeatedLanguages();
-        
+
         $this->assertTrue($instance->isValid(null));
     }
-    
+
     public function testGetSelectedLanguages() {
         $post = array(
             'TitleMain0' => array(
@@ -58,7 +58,7 @@ class Form_Validate_MultiSubForm_RepeatedLanguagesTest extends ControllerTestCas
             'TitleMain1' => array(
                 'Id' => '2',
                 'Language' => 'fra',
-                'Value' => 'Titel 2'               
+                'Value' => 'Titel 2'
             ),
             'TitleMain2' => array(
                 'Id' => '3',
@@ -66,38 +66,38 @@ class Form_Validate_MultiSubForm_RepeatedLanguagesTest extends ControllerTestCas
                 'Value' => 'Titel 3'
             )
         );
-        
+
         $instance = new Form_Validate_MultiSubForm_RepeatedLanguages();
-        
+
         $languages = $instance->getSelectedLanguages($post);
-        
+
         $this->assertEquals(3, count($languages));
         $this->assertEquals('deu', $languages[0]);
         $this->assertEquals('fra', $languages[1]);
         $this->assertEquals('rus', $languages[2]);
     }
-    
+
     /**
-     * Jedem Language-Element in den Unterformularen wird ein Validator hinzugefügt. Formulare ohne Language-Element 
+     * Jedem Language-Element in den Unterformularen wird ein Validator hinzugefügt. Formulare ohne Language-Element
      * werden ignoriert.
      */
     public function testPrepareValidation() {
         $form = new Zend_Form();
-        
+
         $titleCount = 3;
-        
+
         for ($index = 0; $index < $titleCount; $index++) {
             $subform = new Zend_Form_SubForm();
-            $subform->addElement(new Form_Element_Language('Language'));
+            $subform->addElement(new Application_Form_Element_Language('Language'));
             $form->addSubForm($subform, 'Title' . $index);
         }
-        
+
         $subform = new Zend_Form_Subform();
         $subform->addElement('submit', 'Add');
         $form->addSubForm($subform, 'Actions');
-        
+
         $instance = new Form_Validate_MultiSubForm_RepeatedLanguages();
-        
+
         $post = array(
             'Title0' => array(
                 'Id' => '1',
@@ -107,7 +107,7 @@ class Form_Validate_MultiSubForm_RepeatedLanguagesTest extends ControllerTestCas
             'Title1' => array(
                 'Id' => '2',
                 'Language' => 'fra',
-                'Value' => 'Titel 2'               
+                'Value' => 'Titel 2'
             ),
             'Title2' => array(
                 'Id' => '3',
@@ -118,9 +118,9 @@ class Form_Validate_MultiSubForm_RepeatedLanguagesTest extends ControllerTestCas
                 'Add' => 'Add'
             )
         );
-        
+
         $instance->prepareValidation($form, $post);
-        
+
         for ($index = 0; $index < $titleCount; $index++) {
             $subform = $form->getSubForm('Title' . $index);
             $validator = $subform->getElement('Language')->getValidator('Form_Validate_LanguageUsedOnceOnly');
@@ -129,5 +129,5 @@ class Form_Validate_MultiSubForm_RepeatedLanguagesTest extends ControllerTestCas
             $this->assertEquals(array('deu', 'fra', 'rus'), $validator->getLanguages());
         }
     }
-    
+
 }

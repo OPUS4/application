@@ -25,21 +25,33 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application Unit Test
- * @package     Module_Admin
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Application_Form_Element_PositionTest extends FormElementTestCase {
 
-class Admin_Form_Document_GrantorTest extends ControllerTestCase {
+    public function setUp() {
+        $this->_formElementClass = 'Application_Form_Element_Position';
+        $this->_expectedDecoratorCount = 6;
+        $this->_expectedDecorators = array('ViewHelper', 'Errors', 'Description', 'ElementHtmlTag', 'LabelNotEmpty',
+            'dataWrapper');
+        $this->_staticViewHelper = 'viewFormSelect';
+        parent::setUp();
+    }
 
-    public function testConstruct() {
-        $form = new Admin_Form_Document_Grantor();
+    public function testOptions() {
+        $element = $this->getElement();
 
-        $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Application_Form_Element_Grantor',
-            $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
+        $options = $element->getMultiOptions();
+
+        $collectionRoles = Opus_CollectionRole::fetchAll();
+
+        // One additional option for last position
+        $this->assertEquals(count($collectionRoles) + 1, count($options));
+        $this->assertEquals('admin_collectionroles_last_position', array_pop($options));
     }
 
 }

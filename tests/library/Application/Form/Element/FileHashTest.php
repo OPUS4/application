@@ -26,57 +26,46 @@
  */
 
 /**
- * Unit Tests fuer Klasse, die Remove-Button ausgibt.
+ * Unit Test fuer Formularelement zur Anzeige eines File Hashes.
  *
  * @category    Application Unit Test
- * @package     Application_Form_Decorator
+ * @package     Form_Element
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Application_Form_Decorator_RemoveButtonTest extends ControllerTestCase {
+class Application_Form_Element_FileHashTest extends FormElementTestCase {
 
-    public function testRender() {
-        $form = new Zend_Form();
-        $form->setName('Test');
-        $form->addElement('submit', 'Remove');
+    protected $_formElementClass = 'Application_Form_Element_FileHash';
 
-        $decorator = new Application_Form_Decorator_RemoveButton();
-        $decorator->setElement($form);
+    protected $_expectedDecoratorCount = 4;
 
-        $output = $decorator->render('content'); // Output wird an content dran gehängt
+    protected $_expectedDecorators = array('FileHash', 'ElementHtmlTag', 'LabelNotEmpty', 'dataWrapper');
 
-        $this->assertEquals('content<input type="submit" name="Remove" id="Remove" value="Remove" />', $output);
+    public function testGetLabel() {
+        $this->useEnglish();
+        Zend_Registry::get('Zend_Translate')->loadModule('admin');
+
+        $element = new Application_Form_Element_FileHash('filehash');
+
+        $file = new Opus_File(116);
+        $hashes = $file->getHashValue();
+        $hash = $hashes[0];
+
+        $this->assertEquals('MD5', $hash->getType());
+
+        $element->setValue($hash);
+        $element->setFile($file);
+
+        $this->assertEquals('Checksum - MD5', $element->getLabel());
     }
 
-    public function testRenderWithHidden() {
-        $form = new Zend_Form();
-        $form->setName('Test');
-        $form->addElement('submit', 'Remove');
-        $element = $form->createElement('hidden', 'Id');
-        $element->setValue(10);
-        $form->addElement($element);
+    public function testSetGetValue() {
 
-        $decorator = new Application_Form_Decorator_RemoveButton();
-        $decorator->setElement($form);
-        $decorator->setSecondElement($element);
-
-        $output = $decorator->render('content'); // Output wird an content dran gehängt
-
-        $this->assertEquals('content'
-            . '<input type="hidden" name="Id" id="Id" value="10" />'
-            . '<input type="submit" name="Remove" id="Remove" value="Remove" />',
-            $output);
     }
 
-    public function testSetSecondElementOption() {
-        $element = new Application_Form_Element_Hidden('name');
-        $decorator = new Application_Form_Decorator_RemoveButton(array('element' => $element));
-
-        $this->assertEquals($element, $decorator->getSecondElement());
-        $this->assertEquals($element, $decorator->getSecondElement()); // works 2nd time as well
-
+    public function tesSetGetFile() {
 
     }
 
