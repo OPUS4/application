@@ -37,7 +37,7 @@
  *
  * Zur Zeit nur vom Metadaten-Formular genutzt.
  */
-class Application_Form_Element_Text extends Zend_Form_Element_Text implements Form_IElement {
+class Application_Form_Element_Text extends Zend_Form_Element_Text implements Application_Form_IElement {
 
     /**
      * Hinweis, der mit dem Feld angezeigt werden sollte.

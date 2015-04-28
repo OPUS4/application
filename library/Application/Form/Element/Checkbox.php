@@ -35,7 +35,7 @@
 /**
  * Angepasste Klasse für Checkbox Formularelemente.
  */
-class Application_Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Form_IElement {
+class Application_Form_Element_Checkbox extends Zend_Form_Element_Checkbox implements Application_Form_IElement {
 
     private $_viewCheckedValue = 'Field_Value_True';
 

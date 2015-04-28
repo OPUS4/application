@@ -35,7 +35,7 @@
 /**
  * Angepasste Klasse für SELECT Formularelemente.
  */
-class Application_Form_Element_Select extends Zend_Form_Element_Select implements Form_IElement {
+class Application_Form_Element_Select extends Zend_Form_Element_Select implements Application_Form_IElement {
 
     /**
      * Initialisiert das Formularelement.

@@ -42,7 +42,7 @@ class Application_Form_Decorator_ElementHint extends Zend_Form_Decorator_Abstrac
     public function render($content) {
         $element = $this->getElement();
 
-        if ($element instanceof Form_IElement) {
+        if ($element instanceof Application_Form_IElement) {
             $hint = $element->getHint();
             return (!is_null($hint)) ? $content . '<p class="datahint">' . $hint . '</p>' : $content;
         }

@@ -129,7 +129,7 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
         $elements = $this->getElements();
 
         foreach ($elements as $element) {
-            if ($element instanceof Form_IElement) {
+            if ($element instanceof Application_Form_IElement) {
                 $element->prepareRenderingAsView();
             }
             else {
