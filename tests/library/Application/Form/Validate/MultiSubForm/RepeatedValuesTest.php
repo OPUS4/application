@@ -33,10 +33,10 @@
  */
 
 
-class Form_Validate_MultiSubForm_RepeatedValuesTest extends ControllerTestCase {
+class Application_Form_Validate_MultiSubForm_RepeatedValuesTest extends ControllerTestCase {
 
     public function testConstruct() {
-        $instance = new Form_Validate_MultiSubForm_RepeatedValues('Language', 'testmessage');
+        $instance = new Application_Form_Validate_MultiSubForm_RepeatedValues('Language', 'testmessage');
 
         $this->assertEquals('Language', $instance->getElementName());
         $this->assertEquals('testmessage', $instance->getMessage());
@@ -44,7 +44,7 @@ class Form_Validate_MultiSubForm_RepeatedValuesTest extends ControllerTestCase {
     }
 
     public function testConstructWithOtherElement() {
-        $instance = new Form_Validate_MultiSubForm_RepeatedValues('Value', 'testmessage', 'Language');
+        $instance = new Application_Form_Validate_MultiSubForm_RepeatedValues('Value', 'testmessage', 'Language');
 
         $this->assertEquals('Value', $instance->getElementName());
         $this->assertEquals('testmessage', $instance->getMessage());
@@ -58,7 +58,9 @@ class Form_Validate_MultiSubForm_RepeatedValuesTest extends ControllerTestCase {
     }
 
     public function testConstructWithOtherElements() {
-        $instance = new Form_Validate_MultiSubForm_RepeatedValues('Value', 'testmessage', array('Language', 'Active'));
+        $instance = new Application_Form_Validate_MultiSubForm_RepeatedValues(
+            'Value', 'testmessage', array('Language', 'Active')
+        );
 
         $this->assertEquals('Value', $instance->getElementName());
         $this->assertEquals('testmessage', $instance->getMessage());
@@ -77,7 +79,7 @@ class Form_Validate_MultiSubForm_RepeatedValuesTest extends ControllerTestCase {
      * @expectedExceptionMessage #1 argument must not be null or empty.
      */
     public function testConstructBadFirstArgument() {
-        $instance = new Form_Validate_MultiSubForm_RepeatedValues(null, 'testmessage');
+        $instance = new Application_Form_Validate_MultiSubForm_RepeatedValues(null, 'testmessage');
     }
 
     /**
@@ -85,23 +87,23 @@ class Form_Validate_MultiSubForm_RepeatedValuesTest extends ControllerTestCase {
      * @expectedExceptionMessage #2 argument must not be null or empty.
      */
     public function testConstructBadSecondArgument() {
-        $instance = new Form_Validate_MultiSubForm_RepeatedValues('Language', null);
+        $instance = new Application_Form_Validate_MultiSubForm_RepeatedValues('Language', null);
     }
 
     public function testImplementsInterface() {
-        $instance = new Form_Validate_MultiSubForm_RepeatedValues('Institute', 'message');
+        $instance = new Application_Form_Validate_MultiSubForm_RepeatedValues('Institute', 'message');
 
         $this->assertTrue($instance instanceof Application_Form_Validate_IMultiSubForm);
     }
 
     public function testIsValidReturnsTrue() {
-        $instance = new Form_Validate_MultiSubForm_RepeatedValues('Institute', 'message');
+        $instance = new Application_Form_Validate_MultiSubForm_RepeatedValues('Institute', 'message');
 
         $this->assertTrue($instance->isValid(null));
     }
 
     public function testGetValues() {
-        $validator = new Form_Validate_MultiSubForm_RepeatedValues('Language', 'message');
+        $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues('Language', 'message');
 
         $post = array(
             'subform1' => array(
@@ -119,7 +121,7 @@ class Form_Validate_MultiSubForm_RepeatedValuesTest extends ControllerTestCase {
     }
 
     public function testGetValuesWithOtherElement() {
-        $validator = new Form_Validate_MultiSubForm_RepeatedValues('Value', 'message', 'Language');
+        $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues('Value', 'message', 'Language');
 
         $post = array(
             'subform1' => array(
@@ -142,7 +144,9 @@ class Form_Validate_MultiSubForm_RepeatedValuesTest extends ControllerTestCase {
     }
 
     public function testGetValuesWithOtherElements() {
-        $validator = new Form_Validate_MultiSubForm_RepeatedValues('Value', 'message', array('Language', 'Active'));
+        $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues(
+            'Value', 'message', array('Language', 'Active')
+        );
 
         $post = array(
             'subform1' => array(
@@ -167,7 +171,7 @@ class Form_Validate_MultiSubForm_RepeatedValuesTest extends ControllerTestCase {
     }
 
     public function testPrepareValidation() {
-        $validator = new Form_Validate_MultiSubForm_RepeatedValues('Language', 'testmessage');
+        $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues('Language', 'testmessage');
 
         $form = new Zend_Form();
 
@@ -204,7 +208,7 @@ class Form_Validate_MultiSubForm_RepeatedValuesTest extends ControllerTestCase {
     }
 
     public function testPrepareValidationWithOtherElements() {
-        $validator = new Form_Validate_MultiSubForm_RepeatedValues('Value', 'testmessage', 'Language');
+        $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues('Value', 'testmessage', 'Language');
 
         $form = new Zend_Form();
 

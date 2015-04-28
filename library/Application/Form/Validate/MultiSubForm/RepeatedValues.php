@@ -33,7 +33,7 @@
  */
 
 
-class Form_Validate_MultiSubForm_RepeatedValues implements Application_Form_Validate_IMultiSubForm {
+class Application_Form_Validate_MultiSubForm_RepeatedValues implements Application_Form_Validate_IMultiSubForm {
 
     private $_elementName;
 
