@@ -24,8 +24,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
+ * @category    Unit Tests
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -33,48 +32,61 @@
  */
 
 /**
- * Unterformular fuer die Titel eines Dokuments.
- *
- * Die verschiedenen Typen von Titeln werden in separaten Unterformularen angezeigt. Bei den Haupttiteln wird der Titel
- * in der Dokumentensprache zuerst angezeigt.
- *
- * Es darf nur einen Titel in der Dokumentensprache geben.
- *
- * Der Typ eines Titels kann später nicht mehr geändert werden. Die Felder fuer die verschiedenen Titeltypen setzen
- * den Wert vom Feld 'Type' eines Titels automatisch.
- *
- * @category    Application
- * @package     Module_Admin
+ * Unit Tests für Validator, der prüft, ob ein Wert in Unterformularen vorkommt.
  */
-class Admin_Form_Document_Titles extends Admin_Form_Document_Section {
+class Application_Form_Validate_ValuePresentInSubformsTest extends ControllerTestCase {
 
-    /**
-     * Initialisiert das Formular und erzeugt die Unterformulare für die Titeltypen.
-     */
-    public function init() {
-        parent::init();
+    private $postData;
 
-        $this->setLegend('admin_document_section_titles');
+    public function setUp() {
+        parent::setUp();
 
-        $this->addSubForm(new Admin_Form_Document_TitlesMain(), 'Main');
-        $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
-                'Admin_Form_Document_Title', 'TitleAdditional',
-                new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
-            ), 'Additional'
-        );
-        $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
-                'Admin_Form_Document_Title', 'TitleParent',
-                new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
-            ), 'Parent'
-        );
-        $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
-                'Admin_Form_Document_Title', 'TitleSub',
-                new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
-            ), 'Sub'
+        $this->postData = array(
+            'TitleMain0' => array(
+                'Language' => 'deu',
+                'Value' => 'Titel 1'
+            ),
+            'TitleMain1' => array(
+                'Language' => 'eng',
+                'Value' => 'Title 2'
+            ),
+            'TitleMain2' => array(
+                'Language' => 'fra',
+                'Value' => 'Titel 3'
+            )
         );
     }
 
+
+    public function testConstruct() {
+        $validator = new Application_Form_Validate_ValuePresentInSubforms('Language');
+
+        $this->assertEquals('Language', $validator->getElementName());
+    }
+
+    public function testIsValidTrue() {
+        $validator = new Application_Form_Validate_ValuePresentInSubforms('Language');
+
+        $this->assertTrue($validator->isValid('eng', $this->postData));
+    }
+
+    public function testIsValidFalse() {
+        $validator = new Application_Form_Validate_ValuePresentInSubforms('Language');
+
+        $this->assertFalse($validator->isValid('rus', $this->postData));
+    }
+
+    public function testIsValidFalseForContextNull() {
+        $validator = new Application_Form_Validate_ValuePresentInSubforms('Language');
+
+        $this->assertFalse($validator->isValid('rus', null));
+    }
+
+    public function testIsValidFalseForElementNull() {
+        $validator = new Application_Form_Validate_ValuePresentInSubforms(null);
+
+        $this->assertFalse($validator->isValid('rus', $this->postData));
+    }
+
 }
+

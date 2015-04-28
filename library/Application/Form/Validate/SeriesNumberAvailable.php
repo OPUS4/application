@@ -25,73 +25,80 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Form_Validate
- * @author      Gunar Maiwald <maiwald@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Checks if a enrichmentkey already exists.
+ * Checks if a number already exists in a series.
  *
- * Enrichment key names are not case-sensitive.
+ * TODO Basisklasse mit setLogger verwenden
  */
-class Form_Validate_EnrichmentKeyAvailable extends Zend_Validate_Abstract {
+class Application_Form_Validate_SeriesNumberAvailable extends Zend_Validate_Abstract {
 
     /**
-     * Constants for enrichment key not available anymore.
+     * Constant for number is not available anymore message.
      */
-    const NOT_AVAILABLE = 'isAvailable';
+    const NOT_AVAILABLE = 'notAvailable';
 
     /**
      * Error messages.
      */
     protected $_messageTemplates = array(
-        self::NOT_AVAILABLE => 'admin_enrichmentkey_error_name_exists',
+        self::NOT_AVAILABLE => 'admin_series_error_number_exists'
     );
 
     /**
-     * Checks if an enrichmentkey already exists.
+     * Prüft, ob eine Nummer für eine Schriftenreihe bereits vergeben ist.
+     *
+     * Wenn die Nummer bereits vergeben ist, wird geprüft, ob es sich um das aktuelle Dokument handelt. In diesem Fall
+     * ist die Validierung ebenfalls erfolgreich.
+     *
+     * Wenn die Series nicht gefunden werden kann soll die Validierung einfach ignoriert werden, da nicht festgestellt
+     * werden kann, ob es eine Kollision gibt. Eine fehlende Series-ID im Formular muss woanders geprüft und gemeldet
+     * werden.
      */
-   public function isValid($value, $context = null) {
-
+    public function isValid($value, $context = null) {
         $value = (string) $value;
         $this->_setValue($value);
 
-        $name = null;
-
-        if (is_array($context)) {
-            if (isset($context['Id'])) {
-                $name = $context['Id'];
-            }
+        if (array_key_exists(Admin_Form_Document_Series::ELEMENT_SERIES_ID, $context)) {
+            $seriesId = $context[Admin_Form_Document_Series::ELEMENT_SERIES_ID];
         }
-        elseif (is_string($context)) {
-            $name = $context;
+        else {
+            $seriesId = null;
         }
 
-        if (strtolower($name) === strtolower($value)) {
+        if (strlen(trim($seriesId)) == 0 && is_numeric($seriesId)) {
+            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' Context without \'SeriesId\'.');
+            return true; // should be captured somewhere else
+        }
+
+        try {
+            $series = new Opus_Series($seriesId);
+        }
+        catch (Opus_Model_NotFoundException $omnfe) {
+            Zend_Registry::get('Zend_Log')->err(__METHOD__ . $omnfe->getMessage());
             return true;
         }
 
-        if ($this->_isEnrichmentKeyUsed($value)) {
+        if (!$series->isNumberAvailable($value)) {
+            if (array_key_exists(Admin_Form_Document_Series::ELEMENT_DOC_ID, $context)) {
+                $currentDocId = $context[Admin_Form_Document_Series::ELEMENT_DOC_ID];
+                $otherDocId = $series->getDocumentIdForNumber($value);
+
+                if ($currentDocId == $otherDocId) {
+                    return true;
+                }
+            }
+
             $this->_error(self::NOT_AVAILABLE);
             return false;
         }
 
         return true;
-   }
-
-    /**
-     * Checks if a enrichmentkey already used.
-     * @param string $login
-     * @return boolean
-     */
-    protected function _isEnrichmentKeyUsed($name) {
-        $enrichmentkey = Opus_EnrichmentKey::fetchByName($name);
-
-        return !is_null($enrichmentkey);
     }
 
 }

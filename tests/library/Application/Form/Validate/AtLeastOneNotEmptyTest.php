@@ -24,43 +24,39 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Application Unit Test
  * @package     Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+/**
+ * Class Application_Form_Validate_AtLeastOneNotEmptyTest
+ *
+ * @category    Application Unit Test
+ * @package     Form_Validate
+ */
+class Application_Form_Validate_AtLeastOneNotEmptyTest extends ControllerTestCase {
 
-class Form_Validate_DuplicateMultiValue extends Form_Validate_DuplicateValue {
+    private $_validator;
 
-    private $_otherElements;
-
-    public function __construct($values, $position, $message, $otherElements) {
-        if (!is_array($otherElements)) {
-            $this->_otherElements = array($otherElements);
-        }
-        else {
-            $this->_otherElements = $otherElements;
-        }
-
-        parent::__construct($values, $position, $message);
+    public function setUp() {
+        parent::setUp();
+        $this->_validator = new Application_Form_Validate_AtLeastOneNotEmpty();
+        $this->_validator->addElement('name');
+        $this->_validator->addElement('number');
     }
 
-    protected function isEqual($value, $context, $other) {
-        $multiValue = array();
+    public function testIsValidFalse() {
+        $this->assertFalse($this->_validator->isValid(null, array()));
+    }
 
-        foreach ($this->_otherElements as $element) {
-            if (isset($context[$element])) {
-                $multiValue[] = $context[$element];
-            }
-        }
-
-        $multiValue[] = $value;
-
-        // Return true wenn keine Unterschiede gefunden wurden
-        return count(array_diff($multiValue, $other)) == 0;
+    public function testIsValidTrue() {
+        // TODO use case? $this->assertTrue($this->_validator->isValid('value', array()));
+        $this->assertTrue($this->_validator->isValid(null, array('name' => 'Test')));
+        $this->assertTrue($this->_validator->isValid(null, array('number' => '12')));
     }
 
 }

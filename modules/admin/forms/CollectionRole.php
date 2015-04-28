@@ -50,10 +50,12 @@ class Admin_Form_CollectionRole extends Application_Form_Model_Abstract {
         $this->setUseNameAsLabel(true);
 
         $this->addElement('text', self::ELEMENT_NAME, array('required' => true, 'size' => 70));
-        $this->getElement(self::ELEMENT_NAME)->addValidator(new Form_Validate_CollectionRoleNameUnique());
+        $this->getElement(self::ELEMENT_NAME)->addValidator(new Application_Form_Validate_CollectionRoleNameUnique());
 
         $this->addElement('text', self::ELEMENT_OAI_NAME, array('required' => true, 'size' => 30));
-        $this->getElement(self::ELEMENT_OAI_NAME)->addValidator(new Form_Validate_CollectionRoleOaiNameUnique());
+        $this->getElement(self::ELEMENT_OAI_NAME)->addValidator(
+            new Application_Form_Validate_CollectionRoleOaiNameUnique()
+        );
 
         $this->addElement('Position', self::ELEMENT_POSITION);
         $this->addElement('checkbox', self::ELEMENT_VISIBLE);

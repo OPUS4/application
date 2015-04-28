@@ -35,7 +35,7 @@
 /**
  * Validiert Datumseingaben.
  */
-class Form_Validate_Date extends Zend_Validate_Date {
+class Application_Form_Validate_Date extends Zend_Validate_Date {
 
     /**
      * Regex pattern for valid date input.
@@ -59,7 +59,7 @@ class Form_Validate_Date extends Zend_Validate_Date {
     );
 
     /**
-     * Constructs Form_Validate_Date class for validating date input.
+     * Constructs Application_Form_Validate_Date class for validating date input.
      * @param array $config Configuration options (see Zend_Validate_Date)
      */
     public function __construct($config = null) {

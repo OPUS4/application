@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,8 +24,7 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
+ * @category    TODO
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -33,45 +32,56 @@
  */
 
 /**
- * Form for creating and editing a role.
+ *
  */
-class Admin_Form_Role extends Zend_Form {
+class Application_Form_Validate_RequiredIfValueTest extends PHPUnit_Framework_TestCase {
 
-    private static $_protectedRoles = array('administrator', 'guest');
+    private $validator;
+
+    protected function setUp() {
+        $this->validator = new Application_Form_Validate_RequiredIf(array(
+            'target' => 'Language', 'targetValue' => 'Englisch', 'negate' => false));
+    }
 
     /**
-     * Constructs form.
-     * @param int $id
+     * Test current field and target field have value.
      */
-    public function __construct($id = null) {
-        $section = empty($id) ? 'new' : 'edit';
+    public function testRequiredValid() {
+        $context = array();
+        $context['Language'] = 'Englisch';
 
-        $config = new Zend_Config_Ini(
-            APPLICATION_PATH .
-            '/modules/admin/forms/role.ini', $section
-        );
-
-        parent::__construct($config->form->role);
-
-        if (!empty($id)) {
-            $role = new Opus_UserRole($id);
-            $this->populateFromRole($role);
-        }
+        $this->assertTrue($this->validator->isValid('hasValue', $context));
     }
 
-    public function init() {
-        parent::init();
+    /**
+     * Test current field has no value, target field has value.
+     */
+    public function testRequiredFailed() {
+        $context = array();
+        $context['Language'] = 'Englisch';
 
-        $this->getElement('name')->addValidator(new Application_Form_Validate_RoleAvailable());
+        $this->assertFalse($this->validator->isValid(null, $context));
     }
 
-    public function populateFromRole($role) {
-        $nameElement = $this->getElement('name');
-        $roleName = $role->getName();
-        $nameElement->setValue($roleName);
-        if (in_array($roleName, self::$_protectedRoles)) {
-            $nameElement->setAttrib('disabled', 'true');
-        }
+    /**
+     *
+     */
+    public function testRequiredValidTargetEmpty() {
+        $context = array();
+        $context['Language'] = 'Deutsch';
+
+        $this->assertTrue($this->validator->isValid('hasValue', $context));
+    }
+
+    /**
+     *
+     */
+    public function testRequiredFailedTargetEmpty() {
+        $context = array();
+        $context['Language'] = 'Deutsch';
+
+        $this->assertTrue($this->validator->isValid(null, $context));
     }
 
 }
+

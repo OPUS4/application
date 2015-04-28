@@ -26,79 +26,73 @@
  *
  * @category    Application
  * @package     Form_Validate
+ * @author      Gunar Maiwald <maiwald@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Prüft ob ein Wertfür ein Feld in Unterformularen mindestens einmal vorkommt.
- * 
- * Wird für die Prüfung verwendet, ob ein TitleMain in der Dokumentensprache vorliegt.
+ * Checks if a enrichmentkey already exists.
+ *
+ * Enrichment key names are not case-sensitive.
  */
-class Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abstract {
-    
+class Application_Form_Validate_EnrichmentKeyAvailable extends Zend_Validate_Abstract {
+
     /**
-     * Error constant for language ID that does not exist.
+     * Constants for enrichment key not available anymore.
      */
-    const NOT_VALID = 'notValid';
-    
-    /**
-     * Name des Formularelements das geprüft werden soll.
-     */
-    private $_elementName;
-    
+    const NOT_AVAILABLE = 'isAvailable';
+
     /**
      * Error messages.
      */
     protected $_messageTemplates = array(
-        self::NOT_VALID => 'admin_validate_error_value_duplicated',
+        self::NOT_AVAILABLE => 'admin_enrichmentkey_error_name_exists',
     );
 
     /**
-     * Konstruiert Instanz des Validators.
-     * @param string $elementName
+     * Checks if an enrichmentkey already exists.
      */
-    public function __construct($elementName) {
-        $this->_elementName = $elementName;
-    }
-    
-    /**
-     * Führt Validierung aus.
-     * 
-     * Wenn kein Name für das Element ($this->elementName) spezifiziert wurde oder kein Kontext ($context) übergeben
-     * wurde, schlägt die Validierung fehl, da nicht geprüft werden, daß der Wert in den Unterformularen vorkommt.
-     * 
-     * @param array $value
-     * @param array $context
-     * @return boolean TRUE - wenn der Wert in den Unterformularen vorkommt; FALSE - wenn er nicht vorkommt
-     */
-    public function isValid($value, $context = null) {
+   public function isValid($value, $context = null) {
+
         $value = (string) $value;
         $this->_setValue($value);
 
-        if (!is_null($context) && count(trim($this->_elementName)) !== 0) {
-            foreach ($context as $index => $entry) {
-                if (isset($entry[$this->_elementName]) && $entry[$this->_elementName] == $value) {
-                    return true;
-                }
+        $name = null;
+
+        if (is_array($context)) {
+            if (isset($context['Id'])) {
+                $name = $context['Id'];
             }
         }
-        else {
-            Zend_Registry::get('Zend_Log')->err(__CLASS__ . '::' . __METHOD__ . ' mit $context = null aufgerufen.');
+        elseif (is_string($context)) {
+            $name = $context;
         }
-        
-        $this->_error(self::NOT_VALID);
-        return false;
-    }
-    
+
+        if (strtolower($name) === strtolower($value)) {
+            return true;
+        }
+
+        if ($this->_isEnrichmentKeyUsed($value)) {
+            $this->_error(self::NOT_AVAILABLE);
+            return false;
+        }
+
+        return true;
+   }
+
     /**
-     * Liefert den Namen des Elements, dass geprüft werden soll.
-     * @return string
+     * Checks if a enrichmentkey already used.
+     * @param string $login
+     * @return boolean
      */
-    public function getElementName() {
-        return $this->_elementName;
+    protected function _isEnrichmentKeyUsed($name) {
+        $enrichmentkey = Opus_EnrichmentKey::fetchByName($name);
+
+        return !is_null($enrichmentkey);
     }
-    
+
 }
+

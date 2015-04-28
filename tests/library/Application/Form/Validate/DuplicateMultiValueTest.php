@@ -24,20 +24,44 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    Application Unit Test
  * @package     Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Validate_CollectionRoleOaiNameUnique extends Form_Validate_CollectionRoleNameUnique {
 
-    /**
-     * Verwende OaiName um CollectionRole zu finden.
-     */
-    protected function _getModel($identifier) {
-        return Opus_CollectionRole::fetchByOaiName($identifier);
+class DuplicateMultiValueTest extends ControllerTestCase {
+
+    public function testIsValidTrue() {
+        $values = array(
+            array('deu', 'Tag 1'),
+            array('eng', 'Tag 1')
+        );
+
+        $validator = new Application_Form_Validate_DuplicateMultiValue($values, 1, 'testmessage', 'Language');
+
+        $context = array(
+            'Language' => 'eng',
+        );
+
+        $this->assertTrue($validator->isValid('Tag 1', $context));
+    }
+
+    public function testIsValidFalse() {
+        $values = array(
+            array('deu', 'Tag 1'),
+            array('deu', 'Tag 1')
+        );
+
+        $validator = new Application_Form_Validate_DuplicateMultiValue($values, 1, 'testmessage', 'Language');
+
+        $context = array(
+            'Language' => 'deu',
+        );
+
+        $this->assertFalse($validator->isValid('Tag 1', $context));
     }
 
 }

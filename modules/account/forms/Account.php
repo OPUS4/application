@@ -59,7 +59,7 @@ class Account_Form_Account extends Application_Form_Abstract {
             'label' => 'admin_account_label_login'
         ));
         $this->getElement(self::ELEMENT_LOGIN)->addValidator(
-            new Form_Validate_LoginAvailable(array('ignoreCase' => true))
+            new Application_Form_Validate_LoginAvailable(array('ignoreCase' => true))
         );
 
         $this->addElement('Text', self::ELEMENT_FIRSTNAME);
@@ -72,7 +72,7 @@ class Account_Form_Account extends Application_Form_Abstract {
         ));
 
         $this->getElement(self::ELEMENT_CONFIRM_PASSWORD)->addValidator(
-            new Form_Validate_Password()
+            new Application_Form_Validate_Password()
         );
 
         $this->getElement(self::ELEMENT_PASSWORD)->addErrorMessages(

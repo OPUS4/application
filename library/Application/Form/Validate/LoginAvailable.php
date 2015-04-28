@@ -32,9 +32,9 @@
  */
 
 /**
- * Checks if a role already exists.
+ * Checks if a login already exists.
  */
-class Form_Validate_RoleAvailable extends Zend_Validate_Abstract {
+class Application_Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
 
     /**
      * Constant for login is not available anymore.
@@ -42,10 +42,25 @@ class Form_Validate_RoleAvailable extends Zend_Validate_Abstract {
     const NOT_AVAILABLE = 'isAvailable';
 
     /**
+     * If this is set to true, the validation assumes an account is available
+     * if the old login name and the new one only differ in upper or lower case
+     * characters. This is used to avoid validation errors if an existing account
+     * is edited.
+     * @var type
+     */
+    private $_ignoreCase = false;
+
+    public function __construct($options = null) {
+        if (isset($options['ignoreCase'])) {
+            $this->_ignoreCase = $options['ignoreCase'];
+        }
+    }
+
+    /**
      * Error messages.
      */
     protected $_messageTemplates = array(
-        self::NOT_AVAILABLE => 'admin_role_error_role_used'
+        self::NOT_AVAILABLE => 'admin_account_error_login_used'
     );
 
     /**
@@ -65,18 +80,23 @@ class Form_Validate_RoleAvailable extends Zend_Validate_Abstract {
 
         $this->_setValue($value);
 
-        $oldRole = null;
+        $oldLogin = null;
 
         if (is_array($context)) {
-            if (isset($context['oldRole'])) {
-                $oldRole = $context['oldRole'];
+            if (isset($context['oldLogin'])) {
+                $oldLogin = $context['oldLogin'];
             }
         }
         elseif (is_string($context)) {
-            $oldRole = $context;
+            $oldLogin = $context;
         }
 
-        if (($this->_isRoleUsed($value)) && !($oldRole === $value)) {
+        if ($this->_ignoreCase) {
+            $value = strtolower($value);
+            $oldLogin = strtolower($oldLogin);
+        }
+
+        if ($this->_isLoginUsed($value) && $oldLogin !== $value) {
             $this->_error(self::NOT_AVAILABLE);
             return false;
         }
@@ -89,13 +109,9 @@ class Form_Validate_RoleAvailable extends Zend_Validate_Abstract {
      * @param string $login
      * @return boolean
      */
-    protected function _isRoleUsed($role) {
+    protected function _isLoginUsed($login) {
         try {
-            $role = Opus_UserRole::fetchByName($role);
-
-            if (empty($role)) {
-                return false;
-            }
+            $account = new Opus_Account(null, null, $login);
         } catch (Exception $ex) {
             return false;
         }

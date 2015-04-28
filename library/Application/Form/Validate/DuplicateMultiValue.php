@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,35 +25,42 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
+ * @package     Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2013, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-/**
- * Interface für Klassen die Validierungen für die Unterformulare von Admin_Form_Document_MultiSubForm durchführen.
- */
-interface Form_Validate_IMultiSubForm {
-    
-    /**
-     * Bereitet die Validierung vor.
-     * 
-     * In dieser Funktion können zum Beispiel die Validatoren von Elementen in den Unterformularen manipuliert werden.
-     * 
-     * @param Zend_Form $form
-     * @param array $data
-     * @param array $context
-     */
-    public function prepareValidation($form, $data, $context = null);
-    
-    /**
-     * Hier können Validierungen vorgenommen werden, deren Messages nicht mit bestimmten Elementen verknüpft sein 
-     * sollen.
-     * 
-     * @param array $data
-     * @param array $context
-     */
-    public function isValid($data, $context = null);
-    
+
+class Application_Form_Validate_DuplicateMultiValue extends Application_Form_Validate_DuplicateValue {
+
+    private $_otherElements;
+
+    public function __construct($values, $position, $message, $otherElements) {
+        if (!is_array($otherElements)) {
+            $this->_otherElements = array($otherElements);
+        }
+        else {
+            $this->_otherElements = $otherElements;
+        }
+
+        parent::__construct($values, $position, $message);
+    }
+
+    protected function isEqual($value, $context, $other) {
+        $multiValue = array();
+
+        foreach ($this->_otherElements as $element) {
+            if (isset($context[$element])) {
+                $multiValue[] = $context[$element];
+            }
+        }
+
+        $multiValue[] = $value;
+
+        // Return true wenn keine Unterschiede gefunden wurden
+        return count(array_diff($multiValue, $other)) == 0;
+    }
+
 }

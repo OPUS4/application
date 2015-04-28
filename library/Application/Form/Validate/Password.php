@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,74 +24,41 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Validate
+ * @category    TODO
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-
 /**
- * Class Form_Validate_AtLeastOneNotEmpty validates that at least one of multiple fields has a value.
- *
- * @category    Application
- * @package     Form_Validate
+ * TODO if password is not set should the result be TRUE?
  */
-class Form_Validate_AtLeastOneNotEmpty extends Zend_Validate_Abstract {
+class Application_Form_Validate_Password extends Zend_Validate_Abstract {
 
-    const ALL_EMPTY = 'allElementsEmpty';
-
-    /**
-     * @var array List of form elements that need to contain at least one value in the group.
-     */
-    private $_elements;
+    const NOT_MATCH = 'notMatch';
 
     protected $_messageTemplates = array(
-        self::ALL_EMPTY => 'admin_collection_error_name_or_number_required'
+        self::NOT_MATCH => 'password_confirmation_error'
     );
 
-    /**
-     * Constructs validator.
-     * @param null $elements
-     */
-    public function __construct($elements = null) {
-        $this->_elements = $elements;
-    }
-
-    /**
-     * Returns true if and only if $value meets the validation requirements
-     *
-     *
-     *
-     * @param  mixed $value
-     * @return boolean
-     * @throws Zend_Validate_Exception If validation of $value is impossible
-     */
     public function isValid($value, $context = null) {
-        if (is_array($this->_elements)) {
-            $notEmpty = new Zend_Validate_NotEmpty();
-            foreach ($this->_elements as $name) {
-                if (isset($context[$name]) && $notEmpty->isValid($context[$name])) {
-                    return true;
-                }
+        $value = (string) $value;
+
+        $this->_setValue($value);
+
+        if (is_array($context)) {
+            if (isset($context['password']) &&
+                    ($value == $context['password'])) {
+                return true;
             }
         }
-        $this->_error(self::ALL_EMPTY);
+        elseif (is_string($context) && ($value == $context)) {
+            return true;
+        }
+
+        $this->_error(self::NOT_MATCH);
         return false;
     }
 
-    /**
-     * Adds a form element to group for validation.
-     * @param $element Zend_Form_Element
-     */
-    public function addElement($element) {
-        if (!is_array($this->_elements)) {
-            $this->_elements = array();
-        }
-        if (!in_array($element, $this->_elements)) {
-            $this->_elements[] = $element;
-        }
-    }
-
 }
+

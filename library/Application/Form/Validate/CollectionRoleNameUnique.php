@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -25,54 +25,48 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @author      Michael Lang <lang@zib.de>
+ * @package     Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Validate_Gnd extends Zend_Validate_Abstract {
+class Application_Form_Validate_CollectionRoleNameUnique extends Zend_Validate_Abstract {
 
-    /**
-     * Error message for numbers that are too long.
-     */
-    const NOT_VALID_FORMAT = 'notValidFormat';
+    const NAME_NOT_UNIQUE = 'notUnique';
 
-    /**
-     * Error message for numbers that have an invalid check digit.
-     */
-    const NOT_VALID_CHECKSUM = 'notValidChecksum';
-
-    /**
-     * Pattern for format checking.
-     */
-    const PATTERN = '/\d{7,11}[0-9X]/';
-
-    /**
-     * Translation keys for validation errors.
-     *
-     * @var array
-     */
     protected $_messageTemplates = array(
-        self::NOT_VALID_FORMAT => 'validation_error_person_gnd',
-        self::NOT_VALID_CHECKSUM => 'validation_error_person_gnd_checksum'
+        self::NAME_NOT_UNIQUE => 'admin_collectionroles_error_not_unique'
     );
 
     /**
-     * Returns true if the gnd identifier can be validated.
+     * Returns true if and only if $value meets the validation requirements
+     *
+     * If $value fails validation, then this method returns false, and
+     * getMessages() will return an array of messages that explain why the
+     * validation failed.
      *
      * @param  mixed $value
      * @return boolean
      * @throws Zend_Validate_Exception If validation of $value is impossible
      */
-    public function isValid($value) {
-        if (strlen($value) > 11 || strlen($value) < 8 || !preg_match(self::PATTERN, $value)) {
-            $this->_error(self::NOT_VALID_FORMAT);
-            return false;
+    public function isValid($value, $context = null) {
+        $value = (string) $value;
+
+        $this->_setValue($value);
+
+        if (!is_null($context) && is_array($context) && array_key_exists('Id', $context)) {
+            $collectionId = $context['Id'];
+        }
+        else {
+            $collectionId = 0;
         }
 
-        if (self::generateCheckDigit(substr($value, 0, strlen($value) - 1)) != substr($value, -1)) {
-            $this->_error(self::NOT_VALID_CHECKSUM);
+        $model = $this->_getModel($value);
+
+        if (!is_null($model) && $model->getId() != $collectionId) {
+            // es gibt bereits CollectionRole mit Identifier (z.B. Name) und anderer ID
+            $this->_error(self::NAME_NOT_UNIQUE);
             return false;
         }
 
@@ -80,19 +74,13 @@ class Form_Validate_Gnd extends Zend_Validate_Abstract {
     }
 
     /**
-     * Calculates the GND check digit.
+     * Holt CollectionRole mit Identifier.
+     * @param $identifier
+     * @return Opus_CollectionRole
      */
-    public static function generateCheckDigit($number) {
-        $total = 0;
-        $weight = 11 - (10 - strlen($number));
-        for ($i = 0; $i < strlen($number); $i++) {
-            $digit = intval($number{$i});
-            $total += $digit * $weight;
-            $weight--;
-        }
-        $remainder = $total % 11;
-        $result = (11 - $remainder) % 11;
-        return $result == 10 ? "X" : (string) $result;
+    protected function _getModel($identifier) {
+        return Opus_CollectionRole::fetchByName($identifier);
     }
 
 }
+

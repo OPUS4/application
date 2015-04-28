@@ -25,7 +25,6 @@
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
- * @package     Module_Admin
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
@@ -33,48 +32,28 @@
  */
 
 /**
- * Unterformular fuer die Titel eines Dokuments.
- *
- * Die verschiedenen Typen von Titeln werden in separaten Unterformularen angezeigt. Bei den Haupttiteln wird der Titel
- * in der Dokumentensprache zuerst angezeigt.
- *
- * Es darf nur einen Titel in der Dokumentensprache geben.
- *
- * Der Typ eines Titels kann später nicht mehr geändert werden. Die Felder fuer die verschiedenen Titeltypen setzen
- * den Wert vom Feld 'Type' eines Titels automatisch.
- *
- * @category    Application
- * @package     Module_Admin
+ * Interface für Klassen die Validierungen für die Unterformulare von Admin_Form_Document_MultiSubForm durchführen.
  */
-class Admin_Form_Document_Titles extends Admin_Form_Document_Section {
+interface Application_Form_Validate_IMultiSubForm {
 
     /**
-     * Initialisiert das Formular und erzeugt die Unterformulare für die Titeltypen.
+     * Bereitet die Validierung vor.
+     *
+     * In dieser Funktion können zum Beispiel die Validatoren von Elementen in den Unterformularen manipuliert werden.
+     *
+     * @param Zend_Form $form
+     * @param array $data
+     * @param array $context
      */
-    public function init() {
-        parent::init();
+    public function prepareValidation($form, $data, $context = null);
 
-        $this->setLegend('admin_document_section_titles');
-
-        $this->addSubForm(new Admin_Form_Document_TitlesMain(), 'Main');
-        $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
-                'Admin_Form_Document_Title', 'TitleAdditional',
-                new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
-            ), 'Additional'
-        );
-        $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
-                'Admin_Form_Document_Title', 'TitleParent',
-                new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
-            ), 'Parent'
-        );
-        $this->addSubForm(
-            new Admin_Form_Document_MultiSubForm(
-                'Admin_Form_Document_Title', 'TitleSub',
-                new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
-            ), 'Sub'
-        );
-    }
+    /**
+     * Hier können Validierungen vorgenommen werden, deren Messages nicht mit bestimmten Elementen verknüpft sein
+     * sollen.
+     *
+     * @param array $data
+     * @param array $context
+     */
+    public function isValid($data, $context = null);
 
 }

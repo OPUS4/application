@@ -39,7 +39,7 @@ class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_
 
     /**
      * Validator for dates.
-     * @var Form_Validate_Date
+     * @var Application_Form_Validate_Date
      */
     private $_validator;
 
@@ -47,7 +47,7 @@ class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_
      * Constructs Application_Controller_Action_Helper_Dates.
      */
     public function __construct() {
-        $this->_validator = new Form_Validate_Date();
+        $this->_validator = new Application_Form_Validate_Date();
     }
 
     /**
@@ -65,7 +65,7 @@ class Application_Controller_Action_Helper_Dates extends Zend_Controller_Action_
      * @return boolean TRUE - Only if date string is valid for current local
      */
     public function isValid($datestr) {
-        $validator = new Form_Validate_Date();
+        $validator = new Application_Form_Validate_Date();
         return $validator->isValid($datestr);
     }
 

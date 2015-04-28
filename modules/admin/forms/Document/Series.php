@@ -34,7 +34,7 @@
 
 /**
  * Unterformular fuer das Editieren eines Serieneintrags.
- * 
+ *
  * TODO gibt es gute Lösung die Doc-ID nicht noch einmal im Unterformular zu haben (als Teil der ID)
  *
  * @category    Application
@@ -42,46 +42,46 @@
  * @subpackage  Form_Document
  */
 class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm {
-    
+
     /**
      * Name von Formelement für Dokument-ID (Teil des Schlüssels für Link DocumentSeries).
      */
     const ELEMENT_DOC_ID = 'Id';
-    
+
     /**
-     * Name von Formelement für Series-ID. 
+     * Name von Formelement für Series-ID.
      */
     const ELEMENT_SERIES_ID = 'SeriesId';
-    
+
     /**
      * Name von Formelement für Label/Nummer des Dokuments in Schriftenreihe.
      */
     const ELEMENT_NUMBER = 'Number';
-    
+
     /**
      * Name von Formelement für die Sortierposition in Schriftenreihe.
      */
     const ELEMENT_SORT_ORDER = 'SortOrder';
-    
+
     /**
      * Erzeugt die Formulareelemente.
      */
     public function init() {
         parent::init();
-        
+
         // Schluessel fuer Link Objekte ist Dokument-ID + Series-ID
         $this->addElement('Hidden', self::ELEMENT_DOC_ID);
 
         $this->addElement('Series', self::ELEMENT_SERIES_ID);
         $number = $this->createElement('text', self::ELEMENT_NUMBER, array('required' => true));
-        $number->addValidator(new Form_Validate_SeriesNumberAvailable());
+        $number->addValidator(new Application_Form_Validate_SeriesNumberAvailable());
         $this->addElement($number);
         $this->addElement('SortOrder', self::ELEMENT_SORT_ORDER);
     }
-    
+
     /**
      * Initialisiert das Formular mit den Werten im Modell.
-     * 
+     *
      * @param Opus_Model_Dependent_Link_DocumentSeries $seriesLink
      */
     public function populateFromModel($seriesLink) {
@@ -92,7 +92,7 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm {
         $this->getElement(self::ELEMENT_NUMBER)->setValue($seriesLink->getNumber());
         $this->getElement(self::ELEMENT_SORT_ORDER)->setValue($seriesLink->getDocSortOrder());
     }
-    
+
     /**
      * Aktualisiert das Modell mit den Werten im Formular.
      * @param type $seriesLink
@@ -111,7 +111,7 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm {
      */
     public function getModel() {
         $docId = $this->getElement(self::ELEMENT_DOC_ID)->getValue();
-        
+
         if (empty($docId)) {
             $linkId = null;
         }
@@ -119,17 +119,17 @@ class Admin_Form_Document_Series extends Admin_Form_AbstractModelSubForm {
             $seriesId = $this->getElement(self::ELEMENT_SERIES_ID)->getValue();
             $linkId = array($docId, $seriesId);
         }
-        
+
         try {
             $seriesLink = new Opus_Model_Dependent_Link_DocumentSeries($linkId);
         }
         catch (Opus_Model_NotFoundException $omnfe) {
             $seriesLink = new Opus_Model_Dependent_Link_DocumentSeries();
         }
-        
+
         $this->updateModel($seriesLink);
 
         return $seriesLink;
     }
-    
+
 }

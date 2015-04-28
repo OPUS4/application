@@ -36,11 +36,11 @@
  *
  * TODO Redundanz mit RepeatedInstitutes eliminieren
  */
-class Form_Validate_MultiSubForm_RepeatedLanguages implements Form_Validate_IMultiSubForm {
-    
+class Application_Form_Validate_MultiSubForm_RepeatedLanguages implements Application_Form_Validate_IMultiSubForm {
+
     /**
      * Es werden keine Validierungen auf Formularebene ausgeführt.
-     * 
+     *
      * @param array $data
      * @param array $context
      * @return boolean Immer true
@@ -51,29 +51,29 @@ class Form_Validate_MultiSubForm_RepeatedLanguages implements Form_Validate_IMul
 
     /**
      * Bereitet die Validierung vor.
-     * 
+     *
      * Zu jedem Language-Element in den Unterformularen wird ein zusätzlicher Validator hinzugefügt, der die POST Daten
      * für alle Unterformulare und die Position des Formulars mitbekommt, damit die Prüfung ausgeführt werden kann.
-     * 
+     *
      * @param Zend_Form $form
      * @param array $data
      * @param array $context
      */
     public function prepareValidation($form, $data, $context = null) {
         $position = 0;
-       
+
         $languages = $this->getSelectedLanguages($data);
-        
+
         foreach ($form->getSubForms() as $name => $subform) {
             if (array_key_exists($name, $data)) {
                 $element = $subform->getElement(Admin_Form_Document_Title::ELEMENT_LANGUAGE);
                 if (!is_null($element)) {
-                    $element->addValidator(new Form_Validate_LanguageUsedOnceOnly($languages, $position++));
+                    $element->addValidator(new Application_Form_Validate_LanguageUsedOnceOnly($languages, $position++));
                 }
             }
         }
     }
-    
+
     /**
      * Liefert die ausgewählten Sprachen für jedes Unterformular (alle Titel gleichen Typs).
      * @param array $parentContext
@@ -81,7 +81,7 @@ class Form_Validate_MultiSubForm_RepeatedLanguages implements Form_Validate_IMul
      */
     public function getSelectedLanguages($parentContext) {
         $values = array();
-        
+
         foreach ($parentContext as $index => $entry) {
             if (isset($entry[Admin_Form_Document_Title::ELEMENT_LANGUAGE])) {
                 $values[] = $entry[Admin_Form_Document_Title::ELEMENT_LANGUAGE];
@@ -90,5 +90,5 @@ class Form_Validate_MultiSubForm_RepeatedLanguages implements Form_Validate_IMul
 
         return $values;
     }
-    
+
 }

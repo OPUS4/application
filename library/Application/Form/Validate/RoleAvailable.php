@@ -24,80 +24,81 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
+ * @category    TODO
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2012, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Checks if a number already exists in a series.
- *
- * TODO Basisklasse mit setLogger verwenden
+ * Checks if a role already exists.
  */
-class Form_Validate_SeriesNumberAvailable extends Zend_Validate_Abstract {
+class Application_Form_Validate_RoleAvailable extends Zend_Validate_Abstract {
 
     /**
-     * Constant for number is not available anymore message.
+     * Constant for login is not available anymore.
      */
-    const NOT_AVAILABLE = 'notAvailable';
+    const NOT_AVAILABLE = 'isAvailable';
 
     /**
      * Error messages.
      */
     protected $_messageTemplates = array(
-        self::NOT_AVAILABLE => 'admin_series_error_number_exists'
+        self::NOT_AVAILABLE => 'admin_role_error_role_used'
     );
 
     /**
-     * Prüft, ob eine Nummer für eine Schriftenreihe bereits vergeben ist.
+     * Checks if a login already exists.
      *
-     * Wenn die Nummer bereits vergeben ist, wird geprüft, ob es sich um das aktuelle Dokument handelt. In diesem Fall
-     * ist die Validierung ebenfalls erfolgreich.
+     * Returns true if a login does not exist or if the oldLogin value equals
+     * the current value. Which means the login hasn't changed.
      *
-     * Wenn die Series nicht gefunden werden kann soll die Validierung einfach ignoriert werden, da nicht festgestellt
-     * werden kann, ob es eine Kollision gibt. Eine fehlende Series-ID im Formular muss woanders geprüft und gemeldet
-     * werden.
+     * TODO Is there a better way to deal with updates?
+     *
+     * @param string $value
+     * @param mixed $context
+     * @return boolean
      */
     public function isValid($value, $context = null) {
         $value = (string) $value;
+
         $this->_setValue($value);
 
-        if (array_key_exists(Admin_Form_Document_Series::ELEMENT_SERIES_ID, $context)) {
-            $seriesId = $context[Admin_Form_Document_Series::ELEMENT_SERIES_ID];
-        }
-        else {
-            $seriesId = null;
-        }
+        $oldRole = null;
 
-        if (strlen(trim($seriesId)) == 0 && is_numeric($seriesId)) {
-            Zend_Registry::get('Zend_Log')->err(__METHOD__ . ' Context without \'SeriesId\'.');
-            return true; // should be captured somewhere else
-        }
-
-        try {
-            $series = new Opus_Series($seriesId);
-        }
-        catch (Opus_Model_NotFoundException $omnfe) {
-            Zend_Registry::get('Zend_Log')->err(__METHOD__ . $omnfe->getMessage());
-            return true;
-        }
-
-        if (!$series->isNumberAvailable($value)) {
-            if (array_key_exists(Admin_Form_Document_Series::ELEMENT_DOC_ID, $context)) {
-                $currentDocId = $context[Admin_Form_Document_Series::ELEMENT_DOC_ID];
-                $otherDocId = $series->getDocumentIdForNumber($value);
-
-                if ($currentDocId == $otherDocId) {
-                    return true;
-                }
+        if (is_array($context)) {
+            if (isset($context['oldRole'])) {
+                $oldRole = $context['oldRole'];
             }
+        }
+        elseif (is_string($context)) {
+            $oldRole = $context;
+        }
 
+        if (($this->_isRoleUsed($value)) && !($oldRole === $value)) {
             $this->_error(self::NOT_AVAILABLE);
             return false;
         }
 
+        return true;
+    }
+
+    /**
+     * Checks if a login name already exists in database.
+     * @param string $login
+     * @return boolean
+     */
+    protected function _isRoleUsed($role) {
+        try {
+            $role = Opus_UserRole::fetchByName($role);
+
+            if (empty($role)) {
+                return false;
+            }
+        } catch (Exception $ex) {
+            return false;
+        }
         return true;
     }
 

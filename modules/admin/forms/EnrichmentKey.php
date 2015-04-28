@@ -70,7 +70,7 @@ class Admin_Form_EnrichmentKey extends Application_Form_Model_Abstract {
         ));
         $name->addValidator('regex', false, array('pattern' => self::PATTERN));
         $name->addValidator('StringLength', false, array('min' => 1, 'max' => 255));
-        $name->addValidator(new Form_Validate_EnrichmentKeyAvailable());
+        $name->addValidator(new Application_Form_Validate_EnrichmentKeyAvailable());
         $this->addElement($name);
     }
 

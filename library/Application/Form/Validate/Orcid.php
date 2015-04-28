@@ -33,12 +33,12 @@
  */
 
 /**
- * Class Form_Validate_Orcid
+ * Class Application_Form_Validate_Orcid
  *
  * @category    Application
  * @package     Form_Validate
  */
-class Form_Validate_Orcid extends Zend_Validate_Abstract {
+class Application_Form_Validate_Orcid extends Zend_Validate_Abstract {
 
     /**
      * Constant for message for invalid format.

@@ -49,7 +49,7 @@
  *
  * TODO Basisklasse mit getLogger
  */
-class Form_Validate_DuplicateValue extends Zend_Validate_Abstract {
+class Application_Form_Validate_DuplicateValue extends Zend_Validate_Abstract {
 
     /**
      * Error constant for language ID that does not exist.

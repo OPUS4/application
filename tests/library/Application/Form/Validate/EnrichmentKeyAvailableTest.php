@@ -24,54 +24,51 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
+ * @category    Tests
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Form for creating and editing a role.
+ * Unit Tests for enrichment key availability validation.
  */
-class Admin_Form_Role extends Zend_Form {
+class Application_Form_Validate_EnrichmentKeyAvailableTest extends ControllerTestCase {
 
-    private static $_protectedRoles = array('administrator', 'guest');
+    public function testIsValidSuccess() {
+        $validator = new Application_Form_Validate_EnrichmentKeyAvailable();
 
-    /**
-     * Constructs form.
-     * @param int $id
-     */
-    public function __construct($id = null) {
-        $section = empty($id) ? 'new' : 'edit';
-
-        $config = new Zend_Config_Ini(
-            APPLICATION_PATH .
-            '/modules/admin/forms/role.ini', $section
-        );
-
-        parent::__construct($config->form->role);
-
-        if (!empty($id)) {
-            $role = new Opus_UserRole($id);
-            $this->populateFromRole($role);
-        }
+        $this->assertTrue($validator->isValid('TestEnrichment'));
     }
 
-    public function init() {
-        parent::init();
+    public function testIsValidFailure() {
+        $validator = new Application_Form_Validate_EnrichmentKeyAvailable();
 
-        $this->getElement('name')->addValidator(new Application_Form_Validate_RoleAvailable());
+        $this->assertFalse($validator->isValid('City'));
+
+        $messages = $validator->getMessages();
+
+        $this->assertCount(1, $messages);
+        $this->assertArrayHasKey('isAvailable', $messages);
     }
 
-    public function populateFromRole($role) {
-        $nameElement = $this->getElement('name');
-        $roleName = $role->getName();
-        $nameElement->setValue($roleName);
-        if (in_array($roleName, self::$_protectedRoles)) {
-            $nameElement->setAttrib('disabled', 'true');
-        }
+    public function testIsValidSuccessForSameId() {
+        $validator = new Application_Form_Validate_EnrichmentKeyAvailable();
+
+        $this->assertTrue($validator->isValid('City', array('Id' => 'City')));
+    }
+
+    public function testIsValidFailureForChangedName() {
+        $validator = new Application_Form_Validate_EnrichmentKeyAvailable();
+
+        $this->assertFalse($validator->isValid('City', array('Id' => 'TestEnrichment')));
+    }
+
+    public function testIsValidSuccessForChangedName() {
+        $validator = new Application_Form_Validate_EnrichmentKeyAvailable();
+
+        $this->assertTrue($validator->isValid('TestEnrichment', array('Id' => 'City')));
     }
 
 }

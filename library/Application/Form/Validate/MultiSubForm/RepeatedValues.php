@@ -33,7 +33,7 @@
  */
 
 
-class Form_Validate_MultiSubForm_RepeatedValues implements Form_Validate_IMultiSubForm {
+class Form_Validate_MultiSubForm_RepeatedValues implements Application_Form_Validate_IMultiSubForm {
 
     private $_elementName;
 
@@ -82,7 +82,7 @@ class Form_Validate_MultiSubForm_RepeatedValues implements Form_Validate_IMultiS
                 if (!is_null($element)) {
                     if (is_null($this->_otherElements)) {
                         $element->addValidator(
-                            new Form_Validate_DuplicateValue(
+                            new Application_Form_Validate_DuplicateValue(
                                 $values, $position++,
                                 $this->_message
                             )
@@ -90,7 +90,7 @@ class Form_Validate_MultiSubForm_RepeatedValues implements Form_Validate_IMultiS
                     }
                     else {
                         $element->addValidator(
-                            new Form_Validate_DuplicateMultiValue(
+                            new Application_Form_Validate_DuplicateMultiValue(
                                 $values, $position++,
                                 $this->_message, $this->_otherElements
                             )

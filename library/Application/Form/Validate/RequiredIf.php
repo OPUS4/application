@@ -39,7 +39,7 @@
  * The field becomes required, so it can't be empty, if another field meets a
  * certain condition.
  */
-class Form_Validate_RequiredIf extends Zend_Validate_Abstract {
+class Application_Form_Validate_RequiredIf extends Zend_Validate_Abstract {
 
     const FAILED = 'failed';
 

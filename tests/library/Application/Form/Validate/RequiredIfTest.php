@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,62 +24,63 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Form_Validate
+ * @category    TODO
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Form_Validate_CollectionRoleNameUnique extends Zend_Validate_Abstract {
 
-    const NAME_NOT_UNIQUE = 'notUnique';
+/**
+ *
+ */
+class Application_Form_Validate_RequiredIfTest extends PHPUnit_Framework_TestCase {
 
-    protected $_messageTemplates = array(
-        self::NAME_NOT_UNIQUE => 'admin_collectionroles_error_not_unique'
-    );
+    private $validator;
 
-    /**
-     * Returns true if and only if $value meets the validation requirements
-     *
-     * If $value fails validation, then this method returns false, and
-     * getMessages() will return an array of messages that explain why the
-     * validation failed.
-     *
-     * @param  mixed $value
-     * @return boolean
-     * @throws Zend_Validate_Exception If validation of $value is impossible
-     */
-    public function isValid($value, $context = null) {
-        $value = (string) $value;
-
-        $this->_setValue($value);
-
-        if (!is_null($context) && is_array($context) && array_key_exists('Id', $context)) {
-            $collectionId = $context['Id'];
-        }
-        else {
-            $collectionId = 0;
-        }
-
-        $model = $this->_getModel($value);
-
-        if (!is_null($model) && $model->getId() != $collectionId) {
-            // es gibt bereits CollectionRole mit Identifier (z.B. Name) und anderer ID
-            $this->_error(self::NAME_NOT_UNIQUE);
-            return false;
-        }
-
-        return true;
+    protected function setUp() {
+        $this->validator = new Application_Form_Validate_RequiredIf(array(
+            'target' => 'FieldB', 'targetValue' => null, 'negate' => false));
     }
 
     /**
-     * Holt CollectionRole mit Identifier.
-     * @param $identifier
-     * @return Opus_CollectionRole
+     * Test current field and target field have value.
      */
-    protected function _getModel($identifier) {
-        return Opus_CollectionRole::fetchByName($identifier);
+    public function testRequiredValid() {
+        $context = array();
+        $context['FieldB'] = 'notEmpty';
+
+        $this->assertTrue($this->validator->isValid('value', $context));
+    }
+
+    /**
+     * Test current field has no value, target field has value.
+     */
+    public function testRequiredFailed() {
+        $context = array();
+        $context['FieldB'] = 'notEmpty';
+
+        $this->assertFalse($this->validator->isValid(null, $context));
+    }
+
+    /**
+     *
+     */
+    public function testRequiredValidTargetEmpty() {
+        $context = array();
+        $context['FieldB'] = null;
+
+        $this->assertTrue($this->validator->isValid('hasValue', $context));
+    }
+
+    /**
+     *
+     */
+    public function testRequiredFailedTargetEmpty() {
+        $context = array();
+        $context['FieldB'] = null;
+
+        $this->assertTrue($this->validator->isValid(null, $context));
     }
 
 }

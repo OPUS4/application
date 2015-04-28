@@ -44,7 +44,7 @@ class Application_Form_Element_Date extends Application_Form_Element_Text {
 
         $this->setLabel($this->getName());
 
-        $validator = new Form_Validate_Date();
+        $validator = new Application_Form_Validate_Date();
         $validator->setMessages(
             array(
             Zend_Validate_Date::INVALID => 'validation_error_date_invalid',

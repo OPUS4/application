@@ -127,7 +127,7 @@ class Publish_Model_Validation {
         $lang = $this->_session->language;
         $validators = array();
 
-        $validator = new Form_Validate_Date();
+        $validator = new Application_Form_Validate_Date();
         $validator->setLocale($lang);
 
         $messages = array(

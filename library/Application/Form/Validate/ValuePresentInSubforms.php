@@ -24,99 +24,81 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    TODO
+ * @category    Application
+ * @package     Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2013, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
 /**
- * Checks if a login already exists.
+ * Prüft ob ein Wertfür ein Feld in Unterformularen mindestens einmal vorkommt.
+ *
+ * Wird für die Prüfung verwendet, ob ein TitleMain in der Dokumentensprache vorliegt.
  */
-class Form_Validate_LoginAvailable extends Zend_Validate_Abstract {
+class Application_Form_Validate_ValuePresentInSubforms extends Zend_Validate_Abstract {
 
     /**
-     * Constant for login is not available anymore.
+     * Error constant for language ID that does not exist.
      */
-    const NOT_AVAILABLE = 'isAvailable';
+    const NOT_VALID = 'notValid';
 
     /**
-     * If this is set to true, the validation assumes an account is available
-     * if the old login name and the new one only differ in upper or lower case
-     * characters. This is used to avoid validation errors if an existing account
-     * is edited.
-     * @var type
+     * Name des Formularelements das geprüft werden soll.
      */
-    private $_ignoreCase = false;
-
-    public function __construct($options = null) {
-        if (isset($options['ignoreCase'])) {
-            $this->_ignoreCase = $options['ignoreCase'];
-        }
-    }
+    private $_elementName;
 
     /**
      * Error messages.
      */
     protected $_messageTemplates = array(
-        self::NOT_AVAILABLE => 'admin_account_error_login_used'
+        self::NOT_VALID => 'admin_validate_error_value_duplicated',
     );
 
     /**
-     * Checks if a login already exists.
-     *
-     * Returns true if a login does not exist or if the oldLogin value equals
-     * the current value. Which means the login hasn't changed.
-     *
-     * TODO Is there a better way to deal with updates?
-     *
-     * @param string $value
-     * @param mixed $context
-     * @return boolean
+     * Konstruiert Instanz des Validators.
+     * @param string $elementName
      */
-    public function isValid($value, $context = null) {
-        $value = (string) $value;
-
-        $this->_setValue($value);
-
-        $oldLogin = null;
-
-        if (is_array($context)) {
-            if (isset($context['oldLogin'])) {
-                $oldLogin = $context['oldLogin'];
-            }
-        }
-        elseif (is_string($context)) {
-            $oldLogin = $context;
-        }
-
-        if ($this->_ignoreCase) {
-            $value = strtolower($value);
-            $oldLogin = strtolower($oldLogin);
-        }
-
-        if ($this->_isLoginUsed($value) && $oldLogin !== $value) {
-            $this->_error(self::NOT_AVAILABLE);
-            return false;
-        }
-
-        return true;
+    public function __construct($elementName) {
+        $this->_elementName = $elementName;
     }
 
     /**
-     * Checks if a login name already exists in database.
-     * @param string $login
-     * @return boolean
+     * Führt Validierung aus.
+     *
+     * Wenn kein Name für das Element ($this->elementName) spezifiziert wurde oder kein Kontext ($context) übergeben
+     * wurde, schlägt die Validierung fehl, da nicht geprüft werden, daß der Wert in den Unterformularen vorkommt.
+     *
+     * @param array $value
+     * @param array $context
+     * @return boolean TRUE - wenn der Wert in den Unterformularen vorkommt; FALSE - wenn er nicht vorkommt
      */
-    protected function _isLoginUsed($login) {
-        try {
-            $account = new Opus_Account(null, null, $login);
-        } catch (Exception $ex) {
-            return false;
+    public function isValid($value, $context = null) {
+        $value = (string) $value;
+        $this->_setValue($value);
+
+        if (!is_null($context) && count(trim($this->_elementName)) !== 0) {
+            foreach ($context as $index => $entry) {
+                if (isset($entry[$this->_elementName]) && $entry[$this->_elementName] == $value) {
+                    return true;
+                }
+            }
         }
-        return true;
+        else {
+            Zend_Registry::get('Zend_Log')->err(__CLASS__ . '::' . __METHOD__ . ' mit $context = null aufgerufen.');
+        }
+
+        $this->_error(self::NOT_VALID);
+        return false;
+    }
+
+    /**
+     * Liefert den Namen des Elements, dass geprüft werden soll.
+     * @return string
+     */
+    public function getElementName() {
+        return $this->_elementName;
     }
 
 }
-

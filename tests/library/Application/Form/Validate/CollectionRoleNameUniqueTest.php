@@ -24,54 +24,38 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
+ * @category    Application Unit Test
+ * @package     Form_Validate
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
+class Application_Form_Validate_CollectionRoleNameUniqueTest extends ControllerTestCase {
 
-/**
- * Form for creating and editing a role.
- */
-class Admin_Form_Role extends Zend_Form {
+    private $validator;
 
-    private static $_protectedRoles = array('administrator', 'guest');
+    public function setUp() {
+        parent::setUp();
 
-    /**
-     * Constructs form.
-     * @param int $id
-     */
-    public function __construct($id = null) {
-        $section = empty($id) ? 'new' : 'edit';
-
-        $config = new Zend_Config_Ini(
-            APPLICATION_PATH .
-            '/modules/admin/forms/role.ini', $section
-        );
-
-        parent::__construct($config->form->role);
-
-        if (!empty($id)) {
-            $role = new Opus_UserRole($id);
-            $this->populateFromRole($role);
-        }
+        $this->validator = new Application_Form_Validate_CollectionRoleNameUnique();
     }
 
-    public function init() {
-        parent::init();
-
-        $this->getElement('name')->addValidator(new Application_Form_Validate_RoleAvailable());
+    public function testIsValidTrue() {
+        $this->assertTrue($this->validator->isValid('newTestColRole'));
+        $this->assertTrue($this->validator->isValid('newTestColRole', array()));
+        $this->assertTrue($this->validator->isValid('newTestColRole', array('Id' => 1)));
     }
 
-    public function populateFromRole($role) {
-        $nameElement = $this->getElement('name');
-        $roleName = $role->getName();
-        $nameElement->setValue($roleName);
-        if (in_array($roleName, self::$_protectedRoles)) {
-            $nameElement->setAttrib('disabled', 'true');
-        }
+    public function testIsValidTrueForUpdate() {
+        $this->assertTrue($this->validator->isValid('ddc', array('Id' => 2)));
     }
+
+    public function testIsValidFalse() {
+        $this->assertFalse($this->validator->isValid('ddc'));
+        $this->assertFalse($this->validator->isValid('ddc', array()));
+        $this->assertFalse($this->validator->isValid('ddc', array('Id' => 1)));
+    }
+
 
 }
