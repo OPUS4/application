@@ -53,12 +53,12 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->form->init();
 
         $paths = $this->form->getPluginLoader(Zend_Form::DECORATOR)->getPaths();
-        $this->assertArrayHasKey('Form_Decorator_', $paths);
-        $this->assertContains('Form/Decorator/', $paths['Form_Decorator_']);
+        $this->assertArrayHasKey('Application_Form_Decorator_', $paths);
+        $this->assertContains('Application/Form/Decorator/', $paths['Application_Form_Decorator_']);
 
         $paths = $this->form->getPluginLoader(Zend_Form::ELEMENT)->getPaths();
-        $this->assertArrayHasKey('Form_Element_', $paths);
-        $this->assertContains('Form/Element/', $paths['Form_Element_']);
+        $this->assertArrayHasKey('Application_Form_Element_', $paths);
+        $this->assertContains('Application/Form/Element/', $paths['Application_Form_Element_']);
     }
 
     public function testSetLogger() {

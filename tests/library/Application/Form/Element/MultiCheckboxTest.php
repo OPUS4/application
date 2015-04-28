@@ -44,8 +44,8 @@ class Application_Form_Element_MultiCheckboxTest extends FormElementTestCase {
     public function testDecoratorPath() {
         $element = new $this->_formElementClass('name');
         $paths = $element->getPluginLoader(Zend_Form::DECORATOR)->getPaths();
-        $this->assertArrayHasKey('Form_Decorator_', $paths);
-        $this->assertContains('Form/Decorator/', $paths['Form_Decorator_']);
+        $this->assertArrayHasKey('Application_Form_Decorator_', $paths);
+        $this->assertContains('Application/Form/Decorator/', $paths['Application_Form_Decorator_']);
     }
 
 }
