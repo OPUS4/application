@@ -254,4 +254,11 @@ class Admin_SeriesControllerTest extends CrudControllerTestCase {
         }
     }
 
+    public function testHiddenIdElementNotWrappedInLiTag() {
+        $this->dispatch('/admin/series/show/id/1');
+
+        $this->assertNotQuery('//li/input[@name="Id"]');
+        $this->assertQuery('//div[@class="wrapper"]/input[@name="Id"]');
+    }
+
 }
