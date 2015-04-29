@@ -218,6 +218,11 @@ abstract class Application_Form_Model_Abstract extends Application_Form_Abstract
         parent::prepareRenderingAsView();
         $this->removeDecorator('Form');
         $this->removeDisplayGroup('actions');
+
+        $modelIdElement = $this->getElement(self::ELEMENT_MODEL_ID);
+        if (!is_null($modelIdElement)) {
+            $modelIdElement->removeDecorator('liWrapper');
+        }
     }
 
     /**
