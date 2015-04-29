@@ -514,6 +514,10 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         }
     }
 
+    protected function getDocument($docId) {
+        return new Opus_Document($docId);
+    }
+
     protected function createTestDocument() {
         if (is_null($this->testDocuments)) {
             $this->testDocuments = array();
