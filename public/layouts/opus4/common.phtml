@@ -28,7 +28,8 @@
  * @author      Julian Heise <heise@zib.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2010-2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2010-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -100,11 +101,11 @@ else {
 if (isset($config->javascript->latex->mathjax)) {
     $this->headScript()->appendFile($this->baseUrl() . $config->javascript->latex->mathjax, 'text/javascript');
 }
+
+$pageLanguage = Zend_Registry::get('Zend_Translate')->getLocale();
 ?>
 
-<?= $this->doctype() ?>
-
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" dir="ltr" class="no-js">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $pageLanguage ?>" lang="<?= $pageLanguage ?>" dir="ltr" class="no-js">
 
     <head>
         <?= $this->headMeta() ?>
