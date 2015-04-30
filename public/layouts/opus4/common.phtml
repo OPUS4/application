@@ -40,7 +40,7 @@ $pageLanguage = Zend_Registry::get('Zend_Translate')->getLocale();
 
 $this->headMeta()
     ->prependHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
-    ->prependHttpEquiv('Content-Language', '<?= $pageLanguage ?>');
+    ->prependHttpEquiv('Content-Language', $pageLanguage);
 
 $this->headTitle('OPUS 4')
     ->setSeparator(' | ');

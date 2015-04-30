@@ -230,7 +230,9 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/home');
 
         $this->assertQuery('//html[@lang="en"]');
-        // TODO $this->assertQuery('//html[@xml:lang="en"]');
+        // TODO $this->assertXPath('//html[@xml:lang="en"]');
+
+        $this->assertXPath('//meta[@http-equiv="Content-Language" and @content="en"]');
     }
 
     public function testPageLanguageAttributeGerman() {
@@ -240,6 +242,8 @@ class Home_IndexControllerTest extends ControllerTestCase {
 
         $this->assertQuery('//html[@lang="de"]');
         // TODO $this->assertQuery('//html[@xml:lang="de"]');
+
+        $this->assertXPath('//meta[@http-equiv="Content-Language" and @content="de"]');
     }
 
 }
