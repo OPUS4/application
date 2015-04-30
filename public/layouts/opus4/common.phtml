@@ -36,9 +36,11 @@
 
 $config = Zend_Registry::get('Zend_Config');
 
+$pageLanguage = Zend_Registry::get('Zend_Translate')->getLocale();
+
 $this->headMeta()
     ->prependHttpEquiv('Content-Type', 'text/html; charset=UTF-8')
-    ->prependHttpEquiv('Content-Language', 'de-DE');
+    ->prependHttpEquiv('Content-Language', '<?= $pageLanguage ?>');
 
 $this->headTitle('OPUS 4')
     ->setSeparator(' | ');
@@ -101,9 +103,9 @@ else {
 if (isset($config->javascript->latex->mathjax)) {
     $this->headScript()->appendFile($this->baseUrl() . $config->javascript->latex->mathjax, 'text/javascript');
 }
-
-$pageLanguage = Zend_Registry::get('Zend_Translate')->getLocale();
 ?>
+
+<?= $this->doctype() ?>
 
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?= $pageLanguage ?>" lang="<?= $pageLanguage ?>" dir="ltr" class="no-js">
 
