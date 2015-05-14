@@ -89,16 +89,31 @@ then
 fi
 
 # prepare apache config
-sed -e "s!/OPUS_URL_BASE!/$OPUS_URL_BASE!g; s!/BASEDIR/!/$BASEDIR/!; s!//*!/!g" "$BASEDIR/apacheconf/apache.conf.template" > "$BASEDIR/apacheconf/apache.conf"
+sed -e "s!/OPUS_URL_BASE!/$OPUS_URL_BASE!g; s!/BASEDIR/!/$BASEDIR/!; s!//*!/!g" "$BASEDIR/opus4/apacheconf/apache.conf.template" > "$BASEDIR/opus4/apacheconf/apache.conf"
 
 # promt for username, if required
 echo "OPUS requires a dedicated system account under which Solr will be running."
 echo "In order to create this account, you will be prompted for some information."
-[[ -z $OPUS_USER_NAME ]] && read -p "System Account Name [opus4]: " OPUS_USER_NAME
-if [ -z "$OPUS_USER_NAME" ]; then
-  OPUS_USER_NAME='opus4'
-fi
-OPUS_USER_NAME_ESC=`echo "$OPUS_USER_NAME" | sed 's/\!/\\\!/g'`
+
+while [ -z "$OPUS_USER_NAME" ]; do
+	[[ -z $OPUS_USER_NAME ]] && read -p "System Account Name [opus4]: " OPUS_USER_NAME
+	if [ -z "$OPUS_USER_NAME" ]; then
+	  OPUS_USER_NAME='opus4'
+	fi
+	OPUS_USER_NAME_ESC=`echo "$OPUS_USER_NAME" | sed 's/\!/\\\!/g'`
+
+	if getent passwd "$OPUS_USER_NAME" &>/dev/null; then
+		echo "Selected user account exists already."
+		read -p "Use it anyway? [N] " choice
+		case "${choice,,}" in
+			"y"|"yes"|"j"|"ja")
+				CREATE_OPUS_USER=N
+				;;
+			*)
+				OPUS_USER_NAME=
+		esac
+	fi
+done
 
 # create user account
 [[ -z $CREATE_OPUS_USER ]] && CREATE_OPUS_USER=Y
