@@ -55,7 +55,7 @@ fi
 cd "$BASEDIR"
 
 # download required files into download folder
-if [ ! -d downloads -o ! -f downloads/zend.tar.gz -o ! -f downloads/jpgraph.tar.gz ]
+if [ ! -d downloads -o ! -f downloads/zend.tar.gz -o ! -f downloads/jpgraph.tar.gz -o ! -f downloads/solarium.tar.gz ]
 then
   "$SCRIPT_PATH/install-download-files.sh" "$BASEDIR/downloads"
 fi
@@ -76,6 +76,10 @@ ln -svf "SolrPhpClient_r36" SolrPhpClient
 mkdir -p "$BASEDIR/opus4/public/js"
 
 cp "$BASEDIR/downloads/jquery.js" "$BASEDIR/opus4/public/js/"
+
+mkdir -p solarium-3.3.0
+tar xzvf "$BASEDIR/downloads/solarium.tar.gz"
+ln -svf solarium-3.3.0 solarium
 
 
 cd "$BASEDIR"

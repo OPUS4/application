@@ -28,6 +28,7 @@ JPGRAPH_LIB_URL='http://jpgraph.net/download/download.php?p=1'
 SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/1.4.1/apache-solr-1.4.1.tgz'
 SOLR_PHP_CLIENT_LIB_URL='http://solr-php-client.googlecode.com/svn/trunk/'
 SOLR_PHP_CLIENT_LIB_REVISION='36'
+SOLARIUM_LIB_URL='https://github.com/solariumphp/solarium/archive/3.3.0.tar.gz'
 JQUERY_LIB_URL='http://code.jquery.com/jquery-1.4.3.min.js'
 
 
@@ -71,6 +72,15 @@ if [ ! -d "SolrPhpClient_r$SOLR_PHP_CLIENT_LIB_REVISION" ]; then
   if [ ! -d "SolrPhpClient_r$SOLR_PHP_CLIENT_LIB_REVISION" ]
   then
     echo "Unable to download $SOLR_PHP_CLIENT_LIB_URL"
+    exit 1
+  fi
+fi
+
+if [ ! -f solarium.tar.gz ]; then
+  wget -O solarium.tar.gz "$SOLARIUM_LIB_URL"
+  if [ ! -f solarium.tar.gz ]
+  then
+    echo "Unable to download Solarium Solr PHP Client"
     exit 1
   fi
 fi
