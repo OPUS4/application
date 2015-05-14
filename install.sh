@@ -299,13 +299,13 @@ if [ -z "$IMPORT_TESTDATA" ] || [ "$IMPORT_TESTDATA" = Y ] || [ "$IMPORT_TESTDAT
 then
   # import test data
   cd "$BASEDIR"
-  for i in `find testdata/sql -name *.sql \( -type f -o -type l \) | sort`; do
+  for i in `find opus4/tests/sql -name *.sql \( -type f -o -type l \) | sort`; do
     echo "Inserting file '${i}'"
     eval "$MYSQL_OPUS4ADMIN" "$DBNAME" < "${i}"
   done
 
   # copy test fulltexts to workspace directory
-  cp -rv testdata/fulltexts/* workspace/files
+  cp -rv opus4/tests/fulltexts/* workspace/files
 
   # sleep some seconds to ensure the server is running
   echo -en "\n\nwait until Solr server is running..."
