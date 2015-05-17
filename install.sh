@@ -54,35 +54,10 @@ fi
 
 cd "$BASEDIR"
 
-# download required files into download folder
-if [ ! -d downloads -o ! -f downloads/zend.tar.gz -o ! -f downloads/jpgraph.tar.gz -o ! -f downloads/solarium.tar.gz ]
-then
-  "$SCRIPT_PATH/install-download-files.sh" "$BASEDIR/downloads"
-fi
 
-# install required libraries into libraries folder
-cd libs
+# install dependencies
+"$SCRIPT_PATH/install-composer.sh" "$BASEDIR/opus4"
 
-tar xfvz "$BASEDIR/downloads/zend.tar.gz"
-ln -svf ZendFramework-1.12.9-minimal ZendFramework
-
-mkdir -p jpgraph-3.0.7
-tar xfvz "$BASEDIR/downloads/jpgraph.tar.gz" --directory jpgraph-3.0.7/
-ln -svf jpgraph-3.0.7 jpgraph
-
-cp -r "$BASEDIR/downloads/SolrPhpClient_r36" .
-ln -svf "SolrPhpClient_r36" SolrPhpClient
-
-mkdir -p "$BASEDIR/opus4/public/js"
-
-cp "$BASEDIR/downloads/jquery.js" "$BASEDIR/opus4/public/js/"
-
-mkdir -p solarium-3.3.0
-tar xzvf "$BASEDIR/downloads/solarium.tar.gz"
-ln -svf solarium-3.3.0 solarium
-
-
-cd "$BASEDIR"
 
 # create .htaccess
 [[ -z $OPUS_URL_BASE ]] && OPUS_URL_BASE='/opus4'
@@ -342,7 +317,7 @@ then
   echo 'restart apache webserver ...'
   /etc/init.d/apache2 restart
 fi
-  
+
 echo
 echo
 echo "OPUS 4 is running now! Point your browser to http://localhost$OPUS_URL_BASE"
