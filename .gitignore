@@ -1,3 +1,16 @@
-library/Apache
-library/Zend
-library/jpgraph
+# ignore any third-party library
+vendor
+
+# ignore composer runtime
+composer.phar
+composer.lock
+
+# ignore all workspace files
+workspace/*
+
+# ignore further files created by Opus4 installer
+apacheconf/apache.conf
+application/configs/config.ini
+db/createdb.sh
+public/.htaccess
+public/js
