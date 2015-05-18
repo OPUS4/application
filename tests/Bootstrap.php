@@ -48,11 +48,13 @@ set_include_path(implode(PATH_SEPARATOR, array(
     APPLICATION_PATH . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'support', // Support-Klassen fuer Tests
     APPLICATION_PATH . DIRECTORY_SEPARATOR . 'tests' . DIRECTORY_SEPARATOR . 'library', // tests/library
     APPLICATION_PATH . DIRECTORY_SEPARATOR . 'library', // Server library
+    APPLICATION_PATH . DIRECTORY_SEPARATOR . 'vendor', // 3rd party library
     get_include_path()
 )));
 
+require_once 'autoload.php';
+
 // enable fallback autoloader for testing
-require_once 'Zend/Loader/Autoloader.php';
 $autoloader = Zend_Loader_Autoloader::getInstance();
 $autoloader->suppressNotFoundWarnings(false);
 $autoloader->setFallbackAutoloader(true);

@@ -1,5 +1,6 @@
-# ignore merged framework library
+# ignore folders merged from separate repository framework
 library/Opus
+db/schema
 
 # ignore any third-party library
 vendor
@@ -17,3 +18,6 @@ application/configs/config.ini
 db/createdb.sh
 public/.htaccess
 public/js
+
+tests/build/
+tests/config.ini
