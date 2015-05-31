@@ -44,7 +44,7 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase {
                     array('author_facet' => 3,
                           'year'         => 15))))));
 
-        $facetLimits = $model->getFacetLimitsFromConfig();
+        $facetLimits = Opus_Search_Config::getFacetFields();
         $this->assertEquals(3, $facetLimits['author_facet']);
         $this->assertEquals(15, $facetLimits['year']);
         $this->assertEquals(10, $facetLimits['doctype']);
@@ -74,7 +74,7 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase {
                     array('author_facet'  => 3,
                           'year_inverted' => 15))))));
 
-        $facetLimits = $model->getFacetLimitsFromConfig();
+        $facetLimits = Opus_Search_Config::getFacetFields();
         $this->assertEquals(3, $facetLimits['author_facet']);
         $this->assertEquals(15, $facetLimits['year']);
         $this->assertEquals(10, $facetLimits['doctype']);
@@ -130,4 +130,3 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase {
         $this->assertNull($model->buildFacetArray(array()));
     }
 }
- 

@@ -151,11 +151,11 @@ class Export_Model_XmlExport extends Export_Model_ExportPluginAbstract {
         $request = $this->getRequest();
 
         try {
-            $searcher = new Opus_SolrSearch_Searcher();
             if ($request->getParam('searchtype') == 'id') {
                 $resultList = $this->buildResultListForIdSearch($request);
             }
             else {
+	            $searcher = new Opus_SolrSearch_Searcher();
                 $resultList = $searcher->search($this->buildQuery($request));
             }
             $this->handleResults($resultList->getResults(), $resultList->getNumberOfHits());

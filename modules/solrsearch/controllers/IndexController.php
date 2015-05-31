@@ -226,7 +226,7 @@ class Solrsearch_IndexController extends Application_Controller_Action {
         $this->getLogger()->debug('performing search');
         try {
             $searcher = new Opus_SolrSearch_Searcher();
-            $this->_openFacets = $this->_facetMenu->buildFacetArray($this->_request->getParams());
+            $this->_openFacets = Opus_Search_Facet_Set::getFacetLimitsFromInput( $this->_request->getParams() );
             $searcher->setFacetArray($this->_openFacets);
             $this->_resultList = $searcher->search($this->_query);
         }
@@ -330,7 +330,7 @@ class Solrsearch_IndexController extends Application_Controller_Action {
 
     private function setViewFacets() {
         $facets = $this->_resultList->getFacets();
-        $facetLimit = $this->_facetMenu->getFacetLimitsFromConfig();
+        $facetLimit = Opus_Search_Config::getFacetFields();
 
         $facetArray = array();
         $selectedFacets = array();

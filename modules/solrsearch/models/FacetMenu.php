@@ -30,6 +30,7 @@
  * @copyright   Copyright (c) 2014, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
+ * @deprecated
  */
 class Solrsearch_Model_FacetMenu {
 
@@ -38,24 +39,7 @@ class Solrsearch_Model_FacetMenu {
      * @return $facetLimit[$facetName] = number of values to be shown.
      */
     public function getFacetLimitsFromConfig() {
-        $facetLimit = array();
-        $config = Zend_Registry::get('Zend_Config');
-        $facets = explode(',', $config->searchengine->solr->facets);
-        foreach ($facets as $facet) {
-            if (isset($config->searchengine->solr->facetlimit->$facet)) {
-                $facetLimit[$facet] = (int) $config->searchengine->solr->facetlimit->$facet;
-            }
-            else {
-                $facetLimit[$facet] = (int) $config->searchengine->solr->globalfacetlimit;
-            }
-        }
-        // if facet-name is 'year_inverted', the facet values have to be sorted vice versa
-        // however, the facet-name should be 'year' (reset in framework (ResponseRenderer::getFacets())
-        if (array_key_exists('year_inverted', $facetLimit)) {
-            $facetLimit['year'] = $facetLimit['year_inverted'];
-            unset($facetLimit['year_inverted']);
-        }
-        return $facetLimit;
+	    return Opus_Search_Config::getFacetLimits();
     }
 
     /**
@@ -63,13 +47,14 @@ class Solrsearch_Model_FacetMenu {
      * @return array result[facet_name] = number
      */
     public function buildFacetArray($paramSet) {
+	    return Opus_Search_Facet_Set::getFacetLimitsFromInput( $paramSet );
         $limit = 10000;
         $facetArray = array();
         if (isset($paramSet['facetNumber_author_facet'])) {
             $facetArray['author_facet'] = $limit;
         }
         if (isset($paramSet['facetNumber_year'])) {
-            if (in_array('year_inverted', explode(',', Zend_Registry::get('Zend_Config')->searchengine->solr->facets))) {
+            if (in_array('year_inverted', Opus_Search_Config::getFacetFields() )) {
                 // 'year_inverted' is used in framework and result is returned as 'year'
                 $facetArray['year_inverted'] = $limit;
             }
@@ -96,4 +81,4 @@ class Solrsearch_Model_FacetMenu {
         }
     }
 
-} 
+}
