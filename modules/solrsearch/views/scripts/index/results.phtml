@@ -102,33 +102,37 @@ if($this->jQueryEnabled()) {
                 <?php foreach($this->results as $result) :?>
                     <dl class="result_box <?= $rowCount++ % 2 === 0 ? 'even' : 'odd'; ?>">
                         <?php
+
+                            $document = $result->getDocument();
+
                             $frontdoorUrl = array(
                                 'module' => 'frontdoor',
                                 'controller' => 'index',
                                 'action' => 'index',
-                                'docId' => $result->getId());
+                                'docId' => $document->getId());
+
                         ?>
-                        <?php if (!is_null($result->getSeriesNumber())) : ?>
+                        <?php if ($this->seriesId && !is_null($result->getSeriesNumber( $this->seriesId ))) : ?>
                             <dt class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber()); ?></dt>
                         <?php endif ?>
                         <dt class="results_title">
                             <?php if ($this->jQueryEnabled()) : ?>
-                                <?php if (!is_null($result->getAbstract())) : ?>
-                                    <img src="<?= $this->layoutPath() ?>/img/theme/icon-on-off.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#abstractText_<?= $result->getId() ?>').toggle();});" />
+                                <?php if (!is_null($result->getAsset( 'abstract' ))) : ?>
+                                    <img src="<?= $this->layoutPath() ?>/img/theme/icon-on-off.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#abstractText_<?= $document->getId() ?>').toggle();});" />
                                 <?php endif ?>
                             <?php endif ?>
-                            <?php if (!is_null($result->getTitle())) : ?>
-                                <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getTitle()); ?></a>
+                            <?php if (!is_null($result->getAsset( 'title' ))) : ?>
+                                <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getAsset( 'title' )); ?></a>
                             <?php else: ?>
                                 <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= $this->translate('results_missingtitle') ?></a>
                             <?php endif ?>
-                            <?php if ($result->getYear()) : ?>
-                                (<?= htmlspecialchars($result->getYear()); ?>)
+                            <?php if ($result->getAsset( 'year' )) : ?>
+                                (<?= htmlspecialchars($result->getAsset( 'year' )); ?>)
                             <?php endif ?>
                         </dt>
-                        <?php if (!is_null($result->getAuthors())) : ?>
+                        <?php if (!is_null($result->getAsset( 'author' ))) : ?>
                             <dt class="results_author">
-                                <?php foreach($result->getAuthors() as $author) :
+                                <?php foreach($result->getAsset( 'author' ) as $author) :
                                    $authorSearch = $this->authorSearch;
                                    $authorSearch['author'] = '"'.$author.'"';
                                 ?>
@@ -136,7 +140,7 @@ if($this->jQueryEnabled()) {
                                 <?php endforeach ?>
                             </dt>
                         <?php endif ?>
-                        <dd class="abstractText" id="abstractText_<?= $result->getId() ?>"><?= htmlspecialchars($result->getAbstract()) ?></dd>
+                        <dd class="abstractText" id="abstractText_<?= $document->getId() ?>"><?= htmlspecialchars($result->getAsset( 'abstract' )) ?></dd>
                     </dl>
                 <?php endforeach ?>
             </div>
