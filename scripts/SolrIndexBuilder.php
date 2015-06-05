@@ -128,6 +128,10 @@ class SolrIndexBuilder {
 		        echo date('Y-m-d H:i:s') . " ERROR: Failed indexing document $docId.\n";
 		        echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
 
+	        } catch ( Opus_Storage_Exception $e ) {
+		        echo date('Y-m-d H:i:s') . " ERROR: Failed indexing unavailable file on document $docId.\n";
+		        echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
+
 	        }
 
 
