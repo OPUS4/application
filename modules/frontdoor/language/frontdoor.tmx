@@ -687,5 +687,44 @@
             <seg>Sammlung anzeigen</seg>
         </tuv>
     </tu>
+
+    <tu tuid="pagination_next_entry">
+        <tuv xml:lang="en">
+            <seg>Next Page</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Nächste Seite</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="pagination_previous_entry">
+        <tuv xml:lang="en">
+            <seg>Previous Page</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Vorherige Seite</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="pagination_of">
+        <tuv xml:lang="en">
+            <seg>of</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>von</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="back_to_result_list">
+        <tuv xml:lang="en">
+            <seg>Back to Result List</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Zurck zur Trefferliste</seg>
+        </tuv>
+    </tu>
+
+    
+    
   </body>
 </tmx>

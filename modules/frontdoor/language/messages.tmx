@@ -50,6 +50,17 @@
         <seg>Das Dokument mit der ID %1$s wurde noch nicht freigeschaltet!</seg>
       </tuv>
     </tu>
+    
+    <tu tuid="frontdoor_export_no_valid_doc_id">
+        <tuv xml:lang="en">
+            <seg>There was no document ID provided for the export.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Es wurde keine Dokument-ID für den Export angegeben.</seg>
+        </tuv>
+    </tu>
+    
+
  
   </body>
 </tmx>
