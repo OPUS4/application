@@ -106,7 +106,10 @@ if($this->jQueryEnabled()) {
                                 'module' => 'frontdoor',
                                 'controller' => 'index',
                                 'action' => 'index',
-                                'docId' => $result->getId());
+                                'start' => $this->start + ($rowCount - 1),
+                                'rows' => 1,
+                                'listRows' => $this->rows
+                            );
                         ?>
                         <?php if (!is_null($result->getSeriesNumber())) : ?>
                             <dt class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber()); ?></dt>
@@ -118,9 +121,9 @@ if($this->jQueryEnabled()) {
                                 <?php endif ?>
                             <?php endif ?>
                             <?php if (!is_null($result->getTitle())) : ?>
-                                <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getTitle()); ?></a>
+                                <a href="<?= $this->url($frontdoorUrl) ?>"><?= htmlspecialchars($result->getTitle()); ?></a>
                             <?php else: ?>
-                                <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= $this->translate('results_missingtitle') ?></a>
+                                <a href="<?= $this->url($frontdoorUrl) ?>"><?= $this->translate('results_missingtitle') ?></a>
                             <?php endif ?>
                             <?php if ($result->getYear()) : ?>
                                 (<?= htmlspecialchars($result->getYear()); ?>)

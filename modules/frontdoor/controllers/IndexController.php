@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -37,7 +38,6 @@ class Frontdoor_IndexController extends Application_Controller_Action {
 
     const SERVER_STATE_DELETED = 'deleted';
     const SERVER_STATE_UNPUBLISHED = 'unpublished';
-
     // functions
     const TRANSLATE_FUNCTION = 'Frontdoor_IndexController::translate';
     const TRANSLATE_DEFAULT_FUNCTION = 'Frontdoor_IndexController::translateWithDefault';
@@ -53,6 +53,36 @@ class Frontdoor_IndexController extends Application_Controller_Action {
      * @return void
      */
     public function indexAction() {
+
+        $request = $this->getRequest();
+        $docId = $request->getParam('docId', '');
+
+        $isExport = !is_null($request->getParam('export'));
+
+        if (empty($docId)) {
+            $this->view->listRows = $request->getParam('listRows', 10);
+
+            $request->setParam('rows', '1'); // make sure only 1 entry is diplayed
+            $query = Application_Search_Navigation::getQueryUrl($request, $this->getLogger());
+            $searcher = new Opus_SolrSearch_Searcher();
+            $resultList = $searcher->search($query);
+            $queryResult = $resultList->getResults();
+            if (is_array($queryResult) && !empty($queryResult) && $queryResult[0] instanceof Opus_SolrSearch_Result) {
+                $docId = $queryResult[0]->getId();
+                $this->view->paginate = true;
+                $this->view->numOfHits = $resultList->getNumberOfHits();
+                $this->view->searchPosition = $request->getParam('start', '0');
+                $this->view->firstEntry = 0;
+                $this->view->lastEntry = $this->view->numOfHits - 1;
+                $this->view->previousEntry = ($this->view->searchPosition - 1) < 0 ? 0 : $this->view->searchPosition - 1;
+                $this->view->nextEntry = ($this->view->searchPosition + 1) < $this->view->numOfHits - 1 ? $this->view->searchPosition + 1 : $this->view->numOfHits - 1;
+            }
+
+            if ($isExport) {
+                $this->printDocumentError("frontdoor_export_no_valid_doc_id", 404);
+            }
+        }
+
         // call export index-action, if parameter is set
         if (!is_null($this->getRequest()->getParam('export'))) {
 
@@ -66,8 +96,8 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         }
 
         $this->view->title = $this->view->translate('frontdoor_title');
-        $request = $this->getRequest();
-        $docId = $request->getParam('docId', '');
+//        $request = $this->getRequest();
+//        $docId = $docId ? : $request->getParam('docId', '');
         $this->view->docId = $docId;
         $baseUrl = $request->getBaseUrl();
 
@@ -79,8 +109,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         $document = null;
         try {
             $document = new Opus_Document($docId);
-        }
-        catch (Opus_Model_NotFoundException $e) {
+        } catch (Opus_Model_NotFoundException $e) {
             $this->printDocumentError("frontdoor_doc_id_not_found", 404);
             return;
         }
@@ -88,8 +117,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         $documentXml = null;
         try {
             $documentXml = new Application_Util_Document($document);
-        }
-        catch (Application_Exception $e) {
+        } catch (Application_Exception $e) {
             switch ($document->getServerState()) {
                 case self::SERVER_STATE_DELETED:
                     $this->printDocumentError("frontdoor_doc_deleted", 410);
@@ -122,9 +150,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
 
         $config = $this->getConfig();
         $layoutPath = 'layouts/' . (isset($config, $config->theme) ? $config->theme : '');
-        $numOfShortAbstractChars =
-            isset($config,
-            $config->frontdoor->numOfShortAbstractChars) ? $config->frontdoor->numOfShortAbstractChars : '0';
+        $numOfShortAbstractChars = isset($config, $config->frontdoor->numOfShortAbstractChars) ? $config->frontdoor->numOfShortAbstractChars : '0';
 
         $proc->setParameter('', 'baseUrlServer', $this->view->fullUrl());
         $proc->setParameter('', 'baseUrl', $baseUrl);
@@ -148,7 +174,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         $this->view->frontdoor = $frontdoorContent;
         $this->view->baseUrl = $baseUrl;
         $this->view->doctype(
-            '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">'
+                '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML+RDFa 1.0//EN" "http://www.w3.org/MarkUp/DTD/xhtml-rdfa-1.dtd">'
         );
 
         $dateModified = $document->getServerDateModified();
@@ -181,7 +207,6 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         $authors = new Frontdoor_Model_Authors($doc);
         return count($authors->getContactableAuthors()) > 0;
     }
-
 
     /**
      * Static function to be called from XSLT script to check file permission.
@@ -217,8 +242,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
     public static function checkLanguageFile($language) {
         if (file_exists(APPLICATION_PATH . '/public/img/lang/' . $language . '.png')) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -275,7 +299,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         $config = $this->getConfig();
         $serverUrl = $this->view->serverUrl();
         $baseUrlFiles = $serverUrl
-            . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents');
+                . (isset($config, $config->deliver->url->prefix) ? $config->deliver->url->prefix : '/documents');
 
         $metas = array();
 
@@ -337,18 +361,17 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             $metas[] = array('DC.Identifier', $identifierValue);
             $metas[] = array('DC.Identifier', 'http://nbn-resolving.de/urn/resolver.pl?' . $identifierValue);
         }
-        $metas[] = array('DC.Identifier', $this->view->fullUrl() . '/frontdoor/index/index/docId/'. $document->getId());
+        $metas[] = array('DC.Identifier', $this->view->fullUrl() . '/frontdoor/index/index/docId/' . $document->getId());
 
         foreach ($document->getFile() AS $file) {
-            if (!$file->exists() or ($file->getVisibleInFrontdoor() !== '1') ) {
+            if (!$file->exists() or ( $file->getVisibleInFrontdoor() !== '1')) {
                 continue;
             }
             $metas[] = array('DC.Identifier', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
 
             if ($file->getMimeType() == 'application/pdf') {
                 $metas[] = array('citation_pdf_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
-            }
-            else if ($file->getMimeType() == 'application/postscript') {
+            } else if ($file->getMimeType() == 'application/postscript') {
                 $metas[] = array('citation_ps_url', "$baseUrlFiles/" . $document->getId() . "/" . $file->getPathName());
             }
         }
@@ -360,8 +383,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
 
             $metas[] = array("citation_date", $dateString);
             $metas[] = array("DC.Date", $dateString);
-        }
-        else {
+        } else {
             $yearPublished = $document->getPublishedYear();
             if (!is_null($yearPublished)) {
 
@@ -377,8 +399,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         try {
             $statistics = Opus_Statistic_LocalCounter::getInstance();
             $statistics->countFrontdoor($docId);
-        }
-        catch (Exception $e) {
+        } catch (Exception $e) {
             $this->getLogger()->err("Counting frontdoor statistics failed: " . $e);
         }
     }
@@ -395,7 +416,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         $docId = $this->getRequest()->getParam('oldId');
         $this->_redirectToAndExit('id', '', 'index', 'rewrite', array('type' => 'opus3-id', 'value' => $docId));
     }
-
+    
     /**
      * Gateway function to Zend's translation facilities.
      *
@@ -437,7 +458,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
     public static function getStylesheet() {
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->export->stylesheet->frontdoor) && Opus_Security_Realm::getInstance()->checkModule('export')) {
-           return $config->export->stylesheet->frontdoor;
+            return $config->export->stylesheet->frontdoor;
         }
         return '';
     }
