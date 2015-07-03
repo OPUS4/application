@@ -112,8 +112,8 @@ if($this->jQueryEnabled()) {
                                 'docId' => $document->getId());
 
                         ?>
-                        <?php if ($this->seriesId && !is_null($result->getSeriesNumber( $this->seriesId ))) : ?>
-                            <dt class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber()); ?></dt>
+                        <?php if (isset($this->seriesId) && $this->seriesId && !is_null($result->getSeriesNumber( $this->seriesId ))) : ?>
+                            <dt class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber( $this->seriesId )); ?></dt>
                         <?php endif ?>
                         <dt class="results_title">
                             <?php if ($this->jQueryEnabled()) : ?>
