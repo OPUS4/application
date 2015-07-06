@@ -87,12 +87,18 @@ class Application_Util_QueryBuilder {
 
         $this->validateParamsType($request);
 
+	    if ( $request->getParam( 'sortfield' ) ) {
+		    $sorting = array( $request->getParam( 'sortfield' ), 'asc' );
+	    } else {
+		    $sorting = Opus_Search_Query::getDefaultSorting();
+	    }
+
         $input = array(
             'searchtype' => $request->getParam('searchtype'),
-            'start' => $request->getParam('start', Opus_SolrSearch_Query::DEFAULT_START),
-            'rows' => $request->getParam('rows', Opus_SolrSearch_Query::getDefaultRows()),
-            'sortField' => $request->getParam('sortfield', Opus_SolrSearch_Query::DEFAULT_SORTFIELD),
-            'sortOrder' => $request->getParam('sortorder', Opus_SolrSearch_Query::DEFAULT_SORTORDER),
+            'start' => $request->getParam('start', Opus_Search_Query::getDefaultStart()),
+            'rows' => $request->getParam('rows', Opus_Search_Query::getDefaultRows()),
+            'sortField' => $sorting[0],
+            'sortOrder' => $request->getParam('sortorder', $sorting[1]),
             'docId' => $request->getParam('docId'),
             'query' => $request->getParam('query', '*:*')
         );
@@ -316,7 +322,7 @@ class Application_Util_QueryBuilder {
         $query->setStart($input['start']);
         $query->setRows($input['rows']);
         if ($input['sortField'] === 'seriesnumber'
-                || $input['sortField'] === Opus_SolrSearch_Query::DEFAULT_SORTFIELD) {
+                || $input['sortField'] === Opus_Search_Query::getDefaultSortingField()) {
             $query->setSortField('doc_sort_order_for_seriesid_' . $input['seriesId']);
         }
         else {

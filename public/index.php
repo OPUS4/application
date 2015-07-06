@@ -48,13 +48,13 @@ defined('APPLICATION_ENV')
 // Ensure library/ is on include_path
 set_include_path(implode(PATH_SEPARATOR, array(
             realpath(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'library'),
+            realpath(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'vendor'),
             get_include_path(),
         )));
 
-///** Zend_Application */
-require_once 'Zend/Application.php';
-require_once 'Zend/Config/Ini.php';
+require_once 'autoload.php';
 
+///** Zend_Application */
 $config = new Zend_Config_Ini(
         APPLICATION_PATH . '/application/configs/application.ini',
         APPLICATION_ENV,

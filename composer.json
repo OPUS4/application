@@ -1,6 +1,18 @@
 {
     "name": "opus4/server",
     "description": "Application Environment for Opus 4",
-    "license": "GPL-2.0+"
+    "license": "GPL-2.0+",
+	"require": {
+		"zendframework/zendframework1": "~1.12",
+		"jpgraph/jpgraph": "dev-master",
+		"solarium/solarium": "~3.3"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "~4.6",
+		"phpunit/dbunit": "~1.3",
+		"phpunit/phpunit-story": "~1.0",
+		"phpunit/phpunit-selenium": "~1.4",
+		"phpunit/php-invoker": "~1.1"
+	}
 }
 
