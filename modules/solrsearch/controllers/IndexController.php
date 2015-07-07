@@ -222,6 +222,12 @@ class Solrsearch_IndexController extends Application_Controller_Action {
         $this->view->headLink(array('rel' => 'canonical', 'href' => $fullCanonicalUrl));
     }
 
+    /**
+     * @throws Application_Exception
+     * @throws Application_SearchException
+     *
+     * TODO this should happen in model class so it can be tested directly
+     */
     private function performSearch() {
         $this->getLogger()->debug('performing search');
         try {

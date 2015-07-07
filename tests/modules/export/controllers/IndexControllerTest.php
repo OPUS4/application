@@ -199,6 +199,8 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $port = $config->searchengine->index->port;
         $oldValue = $config->searchengine->index->app;
         $config->searchengine->index->app = 'solr/corethatdoesnotexist';
+        $config->searchengine->solr->default->service->endpoint->localhost->path = '/solr/corethatdoesnotexist';
+
         $security = $config->security;
         $config->security = '1';
         Zend_Registry::set('Zend_Config', $config);

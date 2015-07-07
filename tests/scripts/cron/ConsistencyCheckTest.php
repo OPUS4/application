@@ -42,16 +42,19 @@ class ConsistencyCheckTest extends CronTestCase {
         return count($finder->ids());
     }
 
+    /**
+     * TODO fix for Solr update
+     */
     public function testJobSuccess() {
         $this->createJob(Opus_Job_Worker_ConsistencyCheck::LABEL);
         $this->executeScript('cron-check-consistency.php');
-        
+
         $allJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_ConsistencyCheck::LABEL), null, Opus_Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue: found ' . count($allJobs) . ' jobs');
-        
+
         $failedJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_ConsistencyCheck::LABEL), null, Opus_Job::STATE_FAILED);
         $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue: found ' . count($failedJobs) . ' jobs');
-        
+
         $logPath = parent::$scriptPath . '/../../workspace/log/';
         $this->assertFileExists($logPath . 'opus_consistency-check.log', 'Logfile opus_consistency-check.log does not exist');
         $this->assertFileNotExists($logPath . 'opus_consistency-check.log.lock', 'Lockfile opus_consistency-check.log.lock was not removed');
@@ -67,10 +70,13 @@ class ConsistencyCheckTest extends CronTestCase {
             'Logfile opus_consistency-check.log does not contain "No inconsistency ...".');
         $this->assertFalse(strpos($contents, 'Completed operation after') === false,
             'Logfile opus_consistency-check.log does not contain "Completed operation after".');
-        
+
         unlink($logPath . 'opus_consistency-check.log');
     }
-    
+
+    /**
+     * TODO fix for Solr Update
+     */
     public function testJobSuccessWithInconsistency() {
         $indexer = new Opus_SolrSearch_Index_Indexer();
         $indexer->deleteAllDocs();
@@ -78,13 +84,13 @@ class ConsistencyCheckTest extends CronTestCase {
 
         $this->createJob(Opus_Job_Worker_ConsistencyCheck::LABEL);
         $this->executeScript('cron-check-consistency.php');
-        
+
         $allJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_ConsistencyCheck::LABEL), null, Opus_Job::STATE_UNDEFINED);
         $this->assertTrue(empty($allJobs), 'Expected no more jobs in queue: found ' . count($allJobs) . ' jobs');
-        
+
         $failedJobs = Opus_Job::getByLabels(array(Opus_Job_Worker_ConsistencyCheck::LABEL), null, Opus_Job::STATE_FAILED);
         $this->assertTrue(empty($failedJobs), 'Expected no failed jobs in queue: found ' . count($failedJobs) . ' jobs');
-        
+
         $logPath = parent::$scriptPath . '/../../workspace/log/';
         $this->assertFileExists($logPath . 'opus_consistency-check.log', 'Logfile opus_consistency-check.log does not exist');
         $this->assertFileNotExists($logPath . 'opus_consistency-check.log.lock', 'Lockfile opus_consistency-check.log.lock was not removed');
@@ -108,7 +114,7 @@ class ConsistencyCheckTest extends CronTestCase {
             'Logfile opus_consistency-check.log does not contain "number of deletions: 0".');
         $this->assertFalse(strpos($contents, 'Completed operation after') === false,
             'Logfile opus_consistency-check.log does not contain "Completed operation after".');
-        
+
         unlink($logPath . 'opus_consistency-check.log');
     }
 }
