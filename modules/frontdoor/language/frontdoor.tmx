@@ -690,19 +690,19 @@
 
     <tu tuid="pagination_next_entry">
         <tuv xml:lang="en">
-            <seg>Next Page</seg>
+            <seg>Next Entry</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Nächste Seite</seg>
+            <seg>Nächster Eintrag</seg>
         </tuv>
     </tu>
 
     <tu tuid="pagination_previous_entry">
         <tuv xml:lang="en">
-            <seg>Previous Page</seg>
+            <seg>Previous Entry</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Vorherige Seite</seg>
+            <seg>Vorheriger Eintrag</seg>
         </tuv>
     </tu>
 
@@ -720,7 +720,7 @@
             <seg>Back to Result List</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Zurck zur Trefferliste</seg>
+            <seg>Zurück zur Trefferliste</seg>
         </tuv>
     </tu>
 

@@ -222,6 +222,34 @@ table.result-data {
     margin-top: -3px;
 }
 
+.frontdoor .frontdoor_pagination {
+     background-color:#F3F6F8;
+     overflow:hidden;
+     margin-bottom:1em;
+}
+
+.frontdoor .frontdoor_pagination #pagination-link-hitlist {
+     display:inline-block;
+     margin: 0.8em 0.7em;
+}
+
+.frontdoor .frontdoor_pagination ul.paginationControl {
+     float:right;
+     background-color:transparent;
+     width:auto;
+     list-style: none;
+}
+
+.frontdoor .frontdoor_pagination ul li {
+     border:none;
+}
+
+.frontdoor .frontdoor_pagination #pagination-current-hit,
+.frontdoor .frontdoor_pagination #pagination-num-hits {
+     font-weight: bold;
+}
+
+
 /* form styles
 ----------------------------------------------------------- */
 .opus h3.document-type{

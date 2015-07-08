@@ -34,37 +34,46 @@
 ?>
 
 <div class="frontdoor_pagination">
-    <a id="pagination-link-hitlist" href="<?=
-    $this->url(array(
-        'module' => 'solrsearch',
-        'controller' => 'index',
-        'action' => 'search',
-        'rows' => $this->listRows,
-        'start' => floor(($this->searchPosition) / $this->listRows) * $this->listRows,
-        'listRows' => null
-    ))
-    ?>"><?= $this->translate('back_to_result_list') ?></a>
-    <?= $this->translate('results_title_single') ?> <span id="pagination-current-hit"><?= $this->searchPosition + 1 ?></span> <?= $this->translate('pagination_of') ?> <span id="pagination-num-hits"><?= $this->numOfHits ?></span>
+    <div >
+
         <ul class="paginationControl">
+            <li>
+                <?= $this->translate('results_title_single') ?> <span id="pagination-current-hit"><?= $this->searchPosition + 1 ?></span> <?= $this->translate('pagination_of') ?> <span id="pagination-num-hits"><?= $this->numOfHits ?></span>
+            </li>
             <li id="pagination-previous">
-                 <?php if ($this->searchPosition == $this->firstEntry) : ?>
-                    <span><?= $this->translate('pagination_previous_entry') ?></span>
+                <?php if ($this->searchPosition == $this->firstEntry) : ?>
+                    <img src="browse_item_prev_inactive.png" alt="<?= $this->translate('pagination_previous_entry') ?>"/>
                 <?php else: ?>
 
                     <a href="<?= $this->url(array('start' => $this->previousEntry)); ?>">
-                         <?= $this->translate('pagination_previous_entry') ?>
+                        <img src="browse_item_prev.png" alt="<?= $this->translate('pagination_previous_entry') ?>"/>
                     </a>
                 <?php endif ?>
             </li>
 
             <li id="pagination-next">
                 <?php if ($this->searchPosition == $this->lastEntry) : ?>
-                    <span><?= $this->translate('pagination_next_entry') ?></span>
+                    <img src="browse_item_next_inactive.png" alt="<?= $this->translate('pagination_next_entry') ?>"/>
                 <?php else: ?>            
                     <a href="<?= $this->url(array('start' => $this->nextEntry)); ?>">
-                         <?= $this->translate('pagination_next_entry') ?>
+                        <img src="browse_item_next.png" alt="<?= $this->translate('pagination_next_entry') ?>"/>
                     </a>
                 <?php endif ?>
             </li>
         </ul>
+    </div>
+
+    <a id="pagination-link-hitlist" href="<?=
+       $this->url(array(
+           'module' => 'solrsearch',
+           'controller' => 'index',
+           'action' => 'search',
+           'rows' => $this->listRows,
+           'start' => floor(($this->searchPosition) / $this->listRows) * $this->listRows,
+           'listRows' => null
+       ))
+       ?>"><?= $this->translate('back_to_result_list') ?></a>
+
+
+
 </div>
