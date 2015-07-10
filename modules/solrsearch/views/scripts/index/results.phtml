@@ -120,7 +120,7 @@ if($this->jQueryEnabled()) {
 
 >>>>>>> adding required default configuration on mapping fields to assets
                         ?>
-                        <?php if ($this->seriesId && !is_null($result->getSeriesNumber( $this->seriesId ))) : ?>
+                        <?php if (isset($this->seriesId) && $this->seriesId && !is_null($result->getSeriesNumber( $this->seriesId ))) : ?>
                             <dt class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber( $this->seriesId )); ?></dt>
                         <?php endif ?>
                         <dt class="results_title">

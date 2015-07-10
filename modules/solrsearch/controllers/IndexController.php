@@ -336,7 +336,7 @@ class Solrsearch_IndexController extends Application_Controller_Action {
 
     private function setViewFacets() {
         $facets = $this->_resultList->getFacets();
-        $facetLimit = Opus_Search_Config::getFacetFields();
+        $facetLimit = Opus_Search_Config::getFacetLimits();
 
         $facetArray = array();
         $selectedFacets = array();
