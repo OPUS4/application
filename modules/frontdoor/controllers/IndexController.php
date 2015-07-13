@@ -335,6 +335,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
                 continue;
             }
             $metas[] = array('DC.Identifier', $identifierValue);
+            $metas[] = array('DC.Identifier', 'http://nbn-resolving.de/urn/resolver.pl?' . $identifierValue);
         }
         $metas[] = array('DC.Identifier', $this->view->fullUrl() . '/frontdoor/index/index/docId/'. $document->getId());
 
