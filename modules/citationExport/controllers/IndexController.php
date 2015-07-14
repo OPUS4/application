@@ -203,6 +203,7 @@ class CitationExport_IndexController extends Application_Controller_Action {
             $proc = new XSLTProcessor;
             $proc->setParameter('', 'enrichment_note', $enrichmentNote);
             $proc->setParameter('', 'url_prefix', $this->view->fullUrl());
+            $proc->setParameter('', 'urnResolverUrl', $config->urn->resolverUrl);
             $proc->registerPHPFunctions();
             $proc->importStyleSheet($xslt);
 

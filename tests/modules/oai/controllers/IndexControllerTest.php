@@ -618,7 +618,8 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals('Baz University',  $elements->item(1)->nodeValue, 'dc:contributor field changed');
 
         // Regression test for OPUSVIER-2393 (show dc:identifier)
-        $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="http://nbn-resolving.de/urn/resolver.pl?urn:nbn:op:123"]');
+        $urnResolverUrl = Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+        $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="' . $urnResolverUrl . 'urn:nbn:op:123"]');
         $this->assertEquals(1, $elements->length, 'dc:identifier URN count changed');
 
         $elements = $xpath->query('//oai_dc:dc/dc:identifier[text()="123"]');
