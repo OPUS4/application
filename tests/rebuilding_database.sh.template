@@ -152,7 +152,8 @@ rm -rf $workspace_test_dir/*
 mkdir -p $workspace_test_dir/cache
 mkdir -p $workspace_test_dir/export
 mkdir -p $workspace_test_dir/incoming
-mkdir -p $workspace_test_dir/export
+mkdir -p $workspace_test_dir/tmp
+mkdir -p $workspace_test_dir/tmp/resumption
 mkdir -p $workspace_test_dir/files
 mkdir -p $workspace_test_dir/log
 
