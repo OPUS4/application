@@ -96,7 +96,7 @@
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        
+
         <xsl:variable name="pages">
             <xsl:call-template name="Pages">
                 <xsl:with-param name="number"><xsl:value-of select="@PageNumber" /></xsl:with-param>
@@ -147,13 +147,21 @@
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">school     </xsl:with-param>
+            <xsl:with-param name="value">
+                <xsl:value-of select="ThesisPublisher/@Name" />
+                <xsl:if test="ThesisPublisher/@Department">, <xsl:value-of select="ThesisPublisher/@Department" /></xsl:if>
+            </xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">year       </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select="$year" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">note       </xsl:with-param>             
-            <xsl:with-param name="value"><xsl:value-of select="Enrichment[@KeyName=$enrichment_note]/@Value" /></xsl:with-param>         
+            <xsl:with-param name="field">note       </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select="Enrichment[@KeyName=$enrichment_note]/@Value" /></xsl:with-param>
         </xsl:call-template>
 <xsl:text>}</xsl:text>
      </xsl:template>
