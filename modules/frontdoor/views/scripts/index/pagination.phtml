@@ -33,8 +33,19 @@
  */
 ?>
 
+<div class="messages">
+    <? if (isset($this->messages)): ?>
+        <? foreach ($this->messages as $messageType => $message): ?>
+            <div class="<?= $messageType ?>">
+                <?= $message ?>
+            </div>
+        <? endforeach; ?>
+    <? endif; ?>
+</div>
+
+
 <div class="frontdoor_pagination">
-    <div >
+    <div>
 
         <ul class="paginationControl">
             <li>
@@ -45,7 +56,7 @@
                     <img src="browse_item_prev_inactive.png" alt="<?= $this->translate('pagination_previous_entry') ?>"/>
                 <?php else: ?>
 
-                    <a href="<?= $this->url(array('start' => $this->previousEntry)); ?>">
+                    <a href="<?= $this->url(array('start' => $this->previousEntry, 'docId' => null)); ?>">
                         <img src="browse_item_prev.png" alt="<?= $this->translate('pagination_previous_entry') ?>"/>
                     </a>
                 <?php endif ?>
@@ -55,7 +66,7 @@
                 <?php if ($this->searchPosition == $this->lastEntry) : ?>
                     <img src="browse_item_next_inactive.png" alt="<?= $this->translate('pagination_next_entry') ?>"/>
                 <?php else: ?>            
-                    <a href="<?= $this->url(array('start' => $this->nextEntry)); ?>">
+                    <a href="<?= $this->url(array('start' => $this->nextEntry, 'docId' => null)); ?>">
                         <img src="browse_item_next.png" alt="<?= $this->translate('pagination_next_entry') ?>"/>
                     </a>
                 <?php endif ?>
@@ -70,7 +81,7 @@
            'action' => 'search',
            'rows' => $this->listRows,
            'start' => floor(($this->searchPosition) / $this->listRows) * $this->listRows,
-           'listRows' => null
+           'docId' => null
        ))
        ?>"><?= $this->translate('back_to_result_list') ?></a>
 

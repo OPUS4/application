@@ -56,11 +56,15 @@ class Frontdoor_IndexController extends Application_Controller_Action {
 
         $request = $this->getRequest();
         $docId = $request->getParam('docId', '');
+        
+        
 
-        $isExport = !is_null($request->getParam('export'));
-
-        if (empty($docId)) {
-            $this->view->listRows = $request->getParam('listRows', 10);
+        $listRows = $request->getParam('rows'); 
+//        $listRows = $request->getParam('listRows'); 
+        $start = $request->getParam('start'); 
+        
+        if (!empty($listRows) && !empty($start)) {
+            $this->view->listRows = $listRows;
 
             $request->setParam('rows', '1'); // make sure only 1 entry is diplayed
             $query = Application_Search_Navigation::getQueryUrl($request, $this->getLogger());
@@ -68,19 +72,27 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             $resultList = $searcher->search($query);
             $queryResult = $resultList->getResults();
             if (is_array($queryResult) && !empty($queryResult) && $queryResult[0] instanceof Opus_SolrSearch_Result) {
-                $docId = $queryResult[0]->getId();
+                $resultDocId = $queryResult[0]->getId();
+                if (!empty($docId)) {
+                    if ($resultDocId != $docId) {
+                        $this->view->messages = array('notice' => $this->view->translate('frontdoor_pagination_list_changed'));
+                    }
+                } else {
+                    $docId = $resultDocId;
+                }
                 $this->view->paginate = true;
                 $this->view->numOfHits = $resultList->getNumberOfHits();
-                $this->view->searchPosition = $request->getParam('start', '0');
+                $this->view->searchPosition = $start;
                 $this->view->firstEntry = 0;
                 $this->view->lastEntry = $this->view->numOfHits - 1;
                 $this->view->previousEntry = ($this->view->searchPosition - 1) < 0 ? 0 : $this->view->searchPosition - 1;
                 $this->view->nextEntry = ($this->view->searchPosition + 1) < $this->view->numOfHits - 1 ? $this->view->searchPosition + 1 : $this->view->numOfHits - 1;
             }
+        }
 
-            if ($isExport) {
-                $this->printDocumentError("frontdoor_export_no_valid_doc_id", 404);
-            }
+        if ($docId == '') {
+            $this->printDocumentError("frontdoor_doc_id_missing", 404);
+            return;
         }
 
         // call export index-action, if parameter is set
@@ -96,15 +108,8 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         }
 
         $this->view->title = $this->view->translate('frontdoor_title');
-//        $request = $this->getRequest();
-//        $docId = $docId ? : $request->getParam('docId', '');
         $this->view->docId = $docId;
         $baseUrl = $request->getBaseUrl();
-
-        if ($docId == '') {
-            $this->printDocumentError("frontdoor_doc_id_missing", 404);
-            return;
-        }
 
         $document = null;
         try {
@@ -416,7 +421,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         $docId = $this->getRequest()->getParam('oldId');
         $this->_redirectToAndExit('id', '', 'index', 'rewrite', array('type' => 'opus3-id', 'value' => $docId));
     }
-    
+
     /**
      * Gateway function to Zend's translation facilities.
      *

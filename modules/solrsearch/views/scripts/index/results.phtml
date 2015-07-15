@@ -106,9 +106,9 @@ if($this->jQueryEnabled()) {
                                 'module' => 'frontdoor',
                                 'controller' => 'index',
                                 'action' => 'index',
+                                'docId' => $result->getId(),
                                 'start' => $this->start + ($rowCount - 1),
-                                'rows' => 1,
-                                'listRows' => $this->rows
+                                'rows' => $this->rows
                             );
                         ?>
                         <?php if (!is_null($result->getSeriesNumber())) : ?>
