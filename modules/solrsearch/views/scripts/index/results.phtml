@@ -108,7 +108,8 @@ if($this->jQueryEnabled()) {
                                 'action' => 'index',
                                 'docId' => $result->getId(),
                                 'start' => $this->start + ($rowCount - 1),
-                                'rows' => $this->rows
+                                'rows' => $this->rows,
+                                'searchtype' => $this->searchType
                             );
                         ?>
                         <?php if (!is_null($result->getSeriesNumber())) : ?>

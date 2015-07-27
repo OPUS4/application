@@ -56,14 +56,12 @@ class Frontdoor_IndexController extends Application_Controller_Action {
 
         $request = $this->getRequest();
         $docId = $request->getParam('docId', '');
-        
-        
 
-        $listRows = $request->getParam('rows'); 
-//        $listRows = $request->getParam('listRows'); 
-        $start = $request->getParam('start'); 
-        
-        if (!empty($listRows) && !empty($start)) {
+        if ($request->has('searchtype') && $request->has('rows') && $request->has('start')) {
+
+            $listRows = $request->getParam('rows');
+            $start = $request->getParam('start');
+
             $this->view->listRows = $listRows;
 
             $request->setParam('rows', '1'); // make sure only 1 entry is diplayed
@@ -81,7 +79,11 @@ class Frontdoor_IndexController extends Application_Controller_Action {
                     $docId = $resultDocId;
                 }
                 $this->view->paginate = true;
-                $this->view->numOfHits = $resultList->getNumberOfHits();
+                if ($request->getParam('searchtype') == 'latest') {
+                    $this->view->numOfHits = $listRows;
+                } else {
+                    $this->view->numOfHits = $resultList->getNumberOfHits();
+                }
                 $this->view->searchPosition = $start;
                 $this->view->firstEntry = 0;
                 $this->view->lastEntry = $this->view->numOfHits - 1;

@@ -47,7 +47,7 @@ class Application_Search_Navigation {
 
         $queryBuilder = new Application_Util_QueryBuilder($logger);
 
-        $queryBuilderInput = null;
+//        $queryBuilderInput = null;
 
         $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($request);
 
@@ -80,11 +80,11 @@ class Application_Search_Navigation {
     private static function validateInput($input, $logger, $min = 1, $max = 100) {
 
         if ($input['rows'] > $max) {
-            $logger->warn("Values greater than 100 are currently not allowed for the rows paramter.");
+            $logger->warn("Values greater than $max are currently not allowed for the rows paramter.");
             $input['rows'] = $max;
         }
         if ($input['rows'] < $min) {
-            $logger->warn("rows parameter is smaller than 1: adjusting to 1.");
+            $logger->warn("rows parameter is smaller than $min: adjusting to $min.");
             $input['rows'] = $min;
         }
         if ($input['start'] < 0) {
