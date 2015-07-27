@@ -1174,10 +1174,13 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     public function testMetaTagsForUrns() {
         $this->dispatch('/frontdoor/index/index/docId/146');
 
+
         $this->assertResponseCode(200);
 
+        $urnResolverUrl = Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+
         $this->assertXpath('//meta[@name="DC.Identifier" and @content="urn:nbn:op:123"]');
-        $this->assertXpath('//meta[@name="DC.Identifier" and @content="http://nbn-resolving.de/urn/resolver.pl?urn:nbn:op:123"]');
+        $this->assertXpath('//meta[@name="DC.Identifier" and @content="' . $urnResolverUrl . 'urn:nbn:op:123"]');
     }
 
 }

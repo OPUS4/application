@@ -27,7 +27,8 @@
  * @category    Application
  * @package     Tests
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -48,17 +49,18 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
 
     /* Regression-Test OPUSVIER-2738 */
      public function testMultipleIdentifiersInRis() {
-        $this->dispatch('/citationExport/index/index/output/ris/docId/153');
-        $this->assertResponseCode(200);
-        $response = $this->getResponse();
-        $this->assertContains('SN  - 1-2345-678-9', $response->getBody());
-        $this->assertContains('SN  - 1-5432-876-9', $response->getBody());
-        $this->assertContains('SN  - 1234-5678', $response->getBody());
-        $this->assertContains('SN  - 4321-8765', $response->getBody());
-        $this->assertContains('UR  - http://nbn-resolving.de/urn/resolver.pl?urn:nbn:de:foo:123-bar-456', $response->getBody());
-        $this->assertContains('UR  - http://nbn-resolving.de/urn/resolver.pl?urn:nbn:de:foo:123-bar-789', $response->getBody());
-        $this->assertContains('UR  - http://www.myexampledomain.de/foo', $response->getBody());
-        $this->assertContains('UR  - http://www.myexampledomain.de/bar', $response->getBody());
+         $this->dispatch('/citationExport/index/index/output/ris/docId/153');
+         $this->assertResponseCode(200);
+         $response = $this->getResponse();
+         $this->assertContains('SN  - 1-2345-678-9', $response->getBody());
+         $this->assertContains('SN  - 1-5432-876-9', $response->getBody());
+         $this->assertContains('SN  - 1234-5678', $response->getBody());
+         $this->assertContains('SN  - 4321-8765', $response->getBody());
+         $urnResolverUrl = Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+         $this->assertContains('UR  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-456', $response->getBody());
+         $this->assertContains('UR  - ' . $urnResolverUrl . 'urn:nbn:de:foo:123-bar-789', $response->getBody());
+         $this->assertContains('UR  - http://www.myexampledomain.de/foo', $response->getBody());
+         $this->assertContains('UR  - http://www.myexampledomain.de/bar', $response->getBody());
     }
 
     /* Regression-Test OPUSVIER-2328 */
@@ -67,7 +69,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $response = $this->getResponse();
         $this->assertContains('T2  - Parent Title', $response->getBody());
-    }    
+    }
 
     /* Regression-Test OPUSVIER-2328 */
      public function testPersonEditorInRis() {
@@ -112,7 +114,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/citationExport/index/index/output/foo/docId/' . $this->documentId);
         $this->assertResponseCode(400);
     }
-    
+
     public function testIndexActionRis() {
         $this->dispatch('/citationExport/index/index/output/ris/docId/' . $this->documentId);
         $this->assertResponseCode(200);
@@ -122,7 +124,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('/citationExport/index/download/output/ris/docId/' . $this->documentId, $response->getBody());
     }
 
-  
+
     /* RIS - TESTS  for Document-Types */
 
     public function testIndexActionRisDoctypeArticle() {
@@ -402,18 +404,18 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains('series    = {' . $s->getTitle() . '},', $response->getBody());
         $this->assertNotContains('number    = {SeriesNumber},', $response->getBody());
     }
-    
+
     /** Regression Test for OPUSVIER-3251 */
     public function testIndexActionBibtexEnrichmentVisibleAsNote() {
-      $bibtexConfArray = array('citationExport' =>
-            array('bibtex' => array(
-                    'enrichment' => 'SourceTitle')));
+        $bibtexConfArray = array(
+            'citationExport' => array('bibtex' => array('enrichment' => 'SourceTitle'))
+        );
         $bibtexConf = new Zend_Config($bibtexConfArray);
-      Zend_Registry::getInstance()->get('Zend_Config')->merge($bibtexConf);
-      $this->dispatch('/citationExport/index/index/output/bibtex/docId/146');
-      $this->assertResponseCode(200);
-      $response = $this->getResponse();
-      $this->assertContains('note        = {Dieses Dokument ist auch erschienen als ...}', $response->getBody());
+        Zend_Registry::getInstance()->get('Zend_Config')->merge($bibtexConf);
+        $this->dispatch('/citationExport/index/index/output/bibtex/docId/146');
+        $this->assertResponseCode(200);
+        $response = $this->getResponse();
+        $this->assertContains('note      = {Dieses Dokument ist auch erschienen als ...}', $response->getBody());
     }
 
     /* DOWNLOAD - TESTS */

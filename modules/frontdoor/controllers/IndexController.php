@@ -162,6 +162,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
         $proc->setParameter('', 'layoutPath', $baseUrl . '/' . $layoutPath);
         $proc->setParameter('', 'isMailPossible', $this->isMailPossible($document));
         $proc->setParameter('', 'numOfShortAbstractChars', $numOfShortAbstractChars);
+        $proc->setParameter('', 'urnResolverUrl', $config->urn->resolverUrl);
 
         /* print on demand config */
         $printOnDemandEnabled = false;
@@ -364,7 +365,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
                 continue;
             }
             $metas[] = array('DC.Identifier', $identifierValue);
-            $metas[] = array('DC.Identifier', 'http://nbn-resolving.de/urn/resolver.pl?' . $identifierValue);
+            $metas[] = array('DC.Identifier', $config->urn->resolverUrl . $identifierValue);
         }
         $metas[] = array('DC.Identifier', $this->view->fullUrl() . '/frontdoor/index/index/docId/' . $document->getId());
 

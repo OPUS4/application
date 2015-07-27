@@ -22,15 +22,15 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
  * @package     Module_Frontdoor
  * @author      Michael Lang <lang@zib.de>
- * @author      Felix Ostrowski <ostrowski@hbz-nrw.de> 
- * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de> 
+ * @author      Felix Ostrowski <ostrowski@hbz-nrw.de>
+ * @author      Simone Finkbeiner <simone.finkbeiner@ub.uni-stuttgart.de>
  * @author      Thoralf Klein <thoralf.klein@zib.de>
  * @author      Edouard Simon <edouard.simon@zib.de>
  * @copyright   Copyright (c) 2009-2014, OPUS 4 development team
@@ -43,20 +43,21 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:php="http://php.net/xsl"
                 exclude-result-prefixes="php">
-   
+
    <xsl:include href="templates/services.xsl"/>
    <xsl:include href="templates/metadata.xsl"/>
    <xsl:include href="templates/functions.xsl"/>
    <xsl:include href="templates/main.xsl"/>
-   
+
     <xsl:output method="xml" omit-xml-declaration="yes" />
- 
+
     <xsl:param name="baseUrlServer" />
     <xsl:param name="baseUrl" />
     <xsl:param name="layoutPath" />
     <xsl:param name="isMailPossible" />
     <xsl:param name="numOfShortAbstractChars" />
     <xsl:param name="docLang" select="//Opus_Document/@Language" />
+    <xsl:param name="urnResolverUrl" />
 
     <xsl:key name="list" match="/Opus/Opus_Document/Subject[@Type='uncontrolled']" use="@Language"/>
     <xsl:key name="userCollections-by-roleId" match="Collection[@RoleName!='institutes' and @RoleName!='projects' and @RoleName!='ccs' and @RoleName!='ddc' and @RoleName!='msc' and @RoleName!='pacs' and @RoleName!='bk' and @RoleName!='jel']" use="@RoleId"/>
@@ -90,7 +91,7 @@
             <xsl:call-template name="SortedAbstracts" />
          </div>
       </div>
-      
+
       <!-- service templates defined in templates/services.xsl -->
       <div id="services" class="services-menu">
          <xsl:if test="normalize-space(File/@PathName) and File[@VisibleInFrontdoor='1']">
@@ -135,7 +136,7 @@
                <xsl:call-template name="ExportFunctions" />
             </ul>
          </div>
-            
+
          <xsl:if test="$printOnDemandEnabled and Licence[@PodAllowed='1']">
             <div id="print-on-demand" class="services">
                <h3>
@@ -264,7 +265,7 @@
                 <xsl:sort select="@Value"/>
             </xsl:apply-templates>
             <!-- End Subjects -->
-            
+
             <xsl:apply-templates select="@Volume" />
             <xsl:apply-templates select="@Issue" />
             <xsl:apply-templates select="@Edition" />
@@ -272,7 +273,7 @@
             <xsl:apply-templates select="@PageFirst" />
             <xsl:apply-templates select="@PageLast" />
             <xsl:apply-templates select="Note[@Visibility='public']" />
-            
+
             <!-- Enrichment Section: add the enrichment keys that have to be displayed in frontdoor -->
             <xsl:apply-templates select="Enrichment[@KeyName='Event']" />
             <xsl:apply-templates select="Enrichment[@KeyName='Relation']" />
@@ -285,9 +286,9 @@
             <xsl:apply-templates select="Enrichment[@KeyName='ContributorsName']" />
             <xsl:apply-templates select="Enrichment[@KeyName='NeuesSelect']" />
             <!-- End Enrichtments -->
-			
+
             <!-- Collection Roles Section: add the collection roles keys that have to be displayed in frontdoor -->
-            <xsl:apply-templates select="Collection[@RoleName='institutes']" /> 
+            <xsl:apply-templates select="Collection[@RoleName='institutes']" />
             <xsl:apply-templates select="Collection[@RoleName='projects']" />
 
             <xsl:apply-templates select="Collection[@RoleName='ccs']" />
@@ -306,9 +307,9 @@
             <!-- End Collection Roles -->
 
             <xsl:apply-templates select="Patent" />
-            <xsl:apply-templates select="Licence" />            
+            <xsl:apply-templates select="Licence" />
         </table>
 
     </xsl:template>
-    
+
 </xsl:stylesheet>
