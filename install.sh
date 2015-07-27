@@ -54,31 +54,10 @@ fi
 
 cd "$BASEDIR"
 
-# download required files into download folder
-if [ ! -d downloads ]
-then
-  "$SCRIPT_PATH/install-download-files.sh" "$BASEDIR/downloads"
-fi
 
-# install required libraries into libraries folder
-cd libs
+# install dependencies
+"$SCRIPT_PATH/install-composer.sh" "$BASEDIR/opus4"
 
-tar xfvz "$BASEDIR/downloads/zend.tar.gz"
-ln -svf ZendFramework-1.12.9-minimal ZendFramework
-
-mkdir -p jpgraph-3.0.7
-tar xfvz "$BASEDIR/downloads/jpgraph.tar.gz" --directory jpgraph-3.0.7/
-ln -svf jpgraph-3.0.7 jpgraph
-
-cp -r "$BASEDIR/downloads/SolrPhpClient_r36" .
-ln -svf "SolrPhpClient_r36" SolrPhpClient
-
-mkdir -p "$BASEDIR/opus4/public/js"
-
-cp "$BASEDIR/downloads/jquery.js" "$BASEDIR/opus4/public/js/"
-
-
-cd "$BASEDIR"
 
 # create .htaccess
 [[ -z $OPUS_URL_BASE ]] && OPUS_URL_BASE='/opus4'
@@ -89,16 +68,31 @@ then
 fi
 
 # prepare apache config
-sed -e "s!/OPUS_URL_BASE!/$OPUS_URL_BASE!g; s!/BASEDIR/!/$BASEDIR/!; s!//*!/!g" "$BASEDIR/apacheconf/apache.conf.template" > "$BASEDIR/apacheconf/apache.conf"
+sed -e "s!/OPUS_URL_BASE!/$OPUS_URL_BASE!g; s!/BASEDIR/!/$BASEDIR/!; s!//*!/!g" "$BASEDIR/opus4/apacheconf/apache.conf.template" > "$BASEDIR/opus4/apacheconf/apache.conf"
 
 # promt for username, if required
 echo "OPUS requires a dedicated system account under which Solr will be running."
 echo "In order to create this account, you will be prompted for some information."
-[[ -z $OPUS_USER_NAME ]] && read -p "System Account Name [opus4]: " OPUS_USER_NAME
-if [ -z "$OPUS_USER_NAME" ]; then
-  OPUS_USER_NAME='opus4'
-fi
-OPUS_USER_NAME_ESC=`echo "$OPUS_USER_NAME" | sed 's/\!/\\\!/g'`
+
+while [ -z "$OPUS_USER_NAME" ]; do
+	[[ -z $OPUS_USER_NAME ]] && read -p "System Account Name [opus4]: " OPUS_USER_NAME
+	if [ -z "$OPUS_USER_NAME" ]; then
+	  OPUS_USER_NAME='opus4'
+	fi
+	OPUS_USER_NAME_ESC=`echo "$OPUS_USER_NAME" | sed 's/\!/\\\!/g'`
+
+	if getent passwd "$OPUS_USER_NAME" &>/dev/null; then
+		echo "Selected user account exists already."
+		read -p "Use it anyway? [N] " choice
+		case "${choice,,}" in
+			"y"|"yes"|"j"|"ja")
+				CREATE_OPUS_USER=N
+				;;
+			*)
+				OPUS_USER_NAME=
+		esac
+	fi
+done
 
 # create user account
 [[ -z $CREATE_OPUS_USER ]] && CREATE_OPUS_USER=Y
@@ -177,7 +171,7 @@ fi
 
 echo "Next you'll be now prompted to enter the root password of your MySQL server"
 $MYSQL <<LimitString
-CREATE DATABASE $DBNAME DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI;
+CREATE DATABASE IF NOT EXISTS $DBNAME DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI;
 GRANT ALL PRIVILEGES ON $DBNAME.* TO '$ADMIN'@'$MYSQLHOST' IDENTIFIED BY '$ADMIN_PASSWORD';
 GRANT SELECT,INSERT,UPDATE,DELETE ON $DBNAME.* TO '$WEBAPP_USER'@'$MYSQLHOST' IDENTIFIED BY '$WEBAPP_USER_PASSWORD';
 FLUSH PRIVILEGES;
@@ -198,18 +192,20 @@ sed -i -e "s!@db.user.name@!'$WEBAPP_USER_ESC'!" \
 
 # create createdb.sh and set database related parameters
 cd "$BASEDIR/opus4/db"
-cp createdb.sh.template createdb.sh
-if [ localhost != "$MYSQLHOST" ]; then
-  sed -i -e "s!^# host=localhost!host='$MYSQLHOST_ESC'!" createdb.sh
-fi
-if [ 3306 != "$MYSQLPORT" ]; then
-  sed -i -e "s!^# port=3306!port='$MYSQLPORT_ESC'!" createdb.sh
-fi
-sed -i -e "s!@db.admin.name@!'$ADMIN_ESC'!" \
-       -e "s!@db.admin.password@!'$ADMIN_PASSWORD_ESC'!" \
-       -e "s!@db.name@!'$DBNAME_ESC'!" createdb.sh
+if [ ! -e createdb.sh ]; then
+  cp createdb.sh.template createdb.sh
+  if [ localhost != "$MYSQLHOST" ]; then
+    sed -i -e "s!^# host=localhost!host='$MYSQLHOST_ESC'!" createdb.sh
+  fi
+  if [ 3306 != "$MYSQLPORT" ]; then
+    sed -i -e "s!^# port=3306!port='$MYSQLPORT_ESC'!" createdb.sh
+  fi
+  sed -i -e "s!@db.admin.name@!'$ADMIN_ESC'!" \
+         -e "s!@db.admin.password@!'$ADMIN_PASSWORD_ESC'!" \
+         -e "s!@db.name@!'$DBNAME_ESC'!" createdb.sh
 
-bash createdb.sh
+  bash createdb.sh || rm createdb.sh
+fi
 
 # install and configure Solr search server
 cd "$BASEDIR"
@@ -278,13 +274,13 @@ if [ -z "$IMPORT_TESTDATA" ] || [ "$IMPORT_TESTDATA" = Y ] || [ "$IMPORT_TESTDAT
 then
   # import test data
   cd "$BASEDIR"
-  for i in `find testdata/sql -name *.sql \( -type f -o -type l \) | sort`; do
+  for i in `find opus4/tests/sql -name *.sql \( -type f -o -type l \) | sort`; do
     echo "Inserting file '${i}'"
     eval "$MYSQL_OPUS4ADMIN" "$DBNAME" < "${i}"
   done
 
   # copy test fulltexts to workspace directory
-  cp -rv testdata/fulltexts/* workspace/files
+  cp -rv opus4/tests/fulltexts/* workspace/files
 
   # sleep some seconds to ensure the server is running
   echo -en "\n\nwait until Solr server is running..."
@@ -321,7 +317,7 @@ then
   echo 'restart apache webserver ...'
   /etc/init.d/apache2 restart
 fi
-  
+
 echo
 echo
 echo "OPUS 4 is running now! Point your browser to http://localhost$OPUS_URL_BASE"

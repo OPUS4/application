@@ -28,16 +28,11 @@ JPGRAPH_LIB_URL='http://jpgraph.net/download/download.php?p=1'
 SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/1.4.1/apache-solr-1.4.1.tgz'
 SOLR_PHP_CLIENT_LIB_URL='http://solr-php-client.googlecode.com/svn/trunk/'
 SOLR_PHP_CLIENT_LIB_REVISION='36'
+SOLARIUM_LIB_URL='https://github.com/solariumphp/solarium/archive/3.3.0.tar.gz'
 JQUERY_LIB_URL='http://code.jquery.com/jquery-1.4.3.min.js'
 
 
-if [ -d "$DOWNLOADS_DIR" ];
-then
-  echo "Download directory '$DOWNLOADS_DIR' already exists, exiting."
-  exit 1;
-fi
-
-mkdir "$DOWNLOADS_DIR"
+mkdir -p "$DOWNLOADS_DIR"
 cd "$DOWNLOADS_DIR"
 
 
@@ -45,39 +40,58 @@ cd "$DOWNLOADS_DIR"
 # downloading external dependencies
 #
 
-wget -O zend.tar.gz "$ZEND_LIB_URL"
-if [ ! -f zend.tar.gz ]
-then
-  echo "Unable to download $ZEND_LIB_URL"
-  exit 1
+if [ ! -f zend.tar.gz ]; then
+  wget -O zend.tar.gz "$ZEND_LIB_URL"
+  if [ ! -f zend.tar.gz ]
+  then
+    echo "Unable to download $ZEND_LIB_URL"
+    exit 1
+  fi
 fi
 
-wget -O jpgraph.tar.gz "$JPGRAPH_LIB_URL"
-if [ ! -f jpgraph.tar.gz ]
-then
-  echo "Unable to download $JPGRAPH_LIB_URL"
-  exit 1
+if [ ! -f jpgraph.tar.gz ]; then
+  wget -O jpgraph.tar.gz "$JPGRAPH_LIB_URL"
+  if [ ! -f jpgraph.tar.gz ]
+  then
+    echo "Unable to download $JPGRAPH_LIB_URL"
+    exit 1
+  fi
 fi
 
-wget -O solr.tgz "$SOLR_SERVER_URL"
-if [ ! -f solr.tgz ]
-then
-  echo "Unable to download $SOLR_SERVER_URL"
-  exit 1
+if [ ! -f solr.tgz ]; then
+  wget -O solr.tgz "$SOLR_SERVER_URL"
+  if [ ! -f solr.tgz ]
+  then
+    echo "Unable to download $SOLR_SERVER_URL"
+    exit 1
+  fi
 fi
 
-svn export --revision "$SOLR_PHP_CLIENT_LIB_REVISION" --force "$SOLR_PHP_CLIENT_LIB_URL" "SolrPhpClient_r$SOLR_PHP_CLIENT_LIB_REVISION"
-if [ ! -d "SolrPhpClient_r$SOLR_PHP_CLIENT_LIB_REVISION" ]
-then
-  echo "Unable to download $SOLR_PHP_CLIENT_LIB_URL"
-  exit 1
+if [ ! -d "SolrPhpClient_r$SOLR_PHP_CLIENT_LIB_REVISION" ]; then
+  svn export --revision "$SOLR_PHP_CLIENT_LIB_REVISION" --force "$SOLR_PHP_CLIENT_LIB_URL" "SolrPhpClient_r$SOLR_PHP_CLIENT_LIB_REVISION"
+  if [ ! -d "SolrPhpClient_r$SOLR_PHP_CLIENT_LIB_REVISION" ]
+  then
+    echo "Unable to download $SOLR_PHP_CLIENT_LIB_URL"
+    exit 1
+  fi
 fi
 
-wget -O jquery.js "$JQUERY_LIB_URL"
-if [ ! -f jquery.js ]
-then
-  echo "Unable to download $JQUERY_LIB_URL"
-  exit 1
+if [ ! -f solarium.tar.gz ]; then
+  wget -O solarium.tar.gz "$SOLARIUM_LIB_URL"
+  if [ ! -f solarium.tar.gz ]
+  then
+    echo "Unable to download Solarium Solr PHP Client"
+    exit 1
+  fi
+fi
+
+if [ ! -f jquery.js ]; then
+  wget -O jquery.js "$JQUERY_LIB_URL"
+  if [ ! -f jquery.js ]
+  then
+    echo "Unable to download $JQUERY_LIB_URL"
+    exit 1
+  fi
 fi
 
 exit 0
