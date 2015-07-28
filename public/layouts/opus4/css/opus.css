@@ -244,10 +244,34 @@ table.result-data {
      border:none;
 }
 
+.frontdoor .frontdoor_pagination #pagination-previous a:hover img,
+.frontdoor .frontdoor_pagination #pagination-next a:hover img {
+  display: block;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 12px; 
+  height: 13px;
+  padding-left: 12px;
+}
+
+.frontdoor .frontdoor_pagination #pagination-previous a:hover img {
+      background: url(/img/browse_item_prev_hover.png) no-repeat;
+}
+
+.frontdoor .frontdoor_pagination #pagination-next a:hover img {
+      background: url(/img/browse_item_next_hover.png) no-repeat;
+}
+
+.frontdoor .frontdoor_pagination #pagination-previous {
+     border:none;
+}
+
 .frontdoor .frontdoor_pagination #pagination-current-hit,
 .frontdoor .frontdoor_pagination #pagination-num-hits {
      font-weight: bold;
 }
+
+
 
 
 /* form styles

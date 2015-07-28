@@ -53,21 +53,21 @@
             </li>
             <li id="pagination-previous">
                 <?php if ($this->searchPosition == $this->firstEntry) : ?>
-                    <img src="browse_item_prev_inactive.png" alt="<?= $this->translate('pagination_previous_entry') ?>"/>
+                    <img src="/img/browse_item_prev_inactive.png" alt="<?= $this->translate('pagination_previous_entry') ?>"/>
                 <?php else: ?>
 
                     <a href="<?= $this->url(array('start' => $this->previousEntry, 'docId' => null)); ?>">
-                        <img src="browse_item_prev.png" alt="<?= $this->translate('pagination_previous_entry') ?>"/>
+                        <img src="/img/browse_item_prev.png" alt="<?= $this->translate('pagination_previous_entry') ?>"/>
                     </a>
                 <?php endif ?>
             </li>
 
             <li id="pagination-next">
                 <?php if ($this->searchPosition == $this->lastEntry) : ?>
-                    <img src="browse_item_next_inactive.png" alt="<?= $this->translate('pagination_next_entry') ?>"/>
+                    <img src="/img/browse_item_next_inactive.png" alt="<?= $this->translate('pagination_next_entry') ?>"/>
                 <?php else: ?>            
                     <a href="<?= $this->url(array('start' => $this->nextEntry, 'docId' => null)); ?>">
-                        <img src="browse_item_next.png" alt="<?= $this->translate('pagination_next_entry') ?>"/>
+                        <img src="/img/browse_item_next.png" alt="<?= $this->translate('pagination_next_entry') ?>"/>
                     </a>
                 <?php endif ?>
             </li>
