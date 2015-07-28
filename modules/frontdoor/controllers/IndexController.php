@@ -79,10 +79,11 @@ class Frontdoor_IndexController extends Application_Controller_Action {
                     $docId = $resultDocId;
                 }
                 $this->view->paginate = true;
+                $numHits = $resultList->getNumberOfHits();
                 if ($request->getParam('searchtype') == 'latest') {
-                    $this->view->numOfHits = $listRows;
+                    $this->view->numOfHits = $numHits < $listRows ? $numHits : $listRows;
                 } else {
-                    $this->view->numOfHits = $resultList->getNumberOfHits();
+                    $this->view->numOfHits = $numHits;
                 }
                 $this->view->searchPosition = $start;
                 $this->view->firstEntry = 0;

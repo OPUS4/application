@@ -47,8 +47,6 @@ class Application_Search_Navigation {
 
         $queryBuilder = new Application_Util_QueryBuilder($logger);
 
-//        $queryBuilderInput = null;
-
         $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($request);
 
         if (is_null($request->getParam('sortfield')) &&
