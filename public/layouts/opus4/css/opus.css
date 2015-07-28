@@ -244,8 +244,11 @@ table.result-data {
      border:none;
 }
 
-.frontdoor .frontdoor_pagination #pagination-previous a:hover img,
-.frontdoor .frontdoor_pagination #pagination-next a:hover img {
+.frontdoor .frontdoor_pagination #pagination-previous a,
+.frontdoor .frontdoor_pagination #pagination-previous div,
+.frontdoor .frontdoor_pagination #pagination-next a,
+.frontdoor .frontdoor_pagination #pagination-next div 
+{
   display: block;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -254,12 +257,24 @@ table.result-data {
   padding-left: 12px;
 }
 
-.frontdoor .frontdoor_pagination #pagination-previous a:hover img {
-      background: url(/img/browse_item_prev_hover.png) no-repeat;
+.frontdoor .frontdoor_pagination #pagination-previous a {
+      background: url(../img/theme/browse_item_prev.png) no-repeat;
+}
+.frontdoor .frontdoor_pagination #pagination-previous a:hover  {
+      background: url(../img/theme/browse_item_prev_hover.png) no-repeat;
+}
+.frontdoor .frontdoor_pagination #pagination-previous div {
+      background: url(../img/theme/browse_item_prev_inactive.png) no-repeat;
 }
 
-.frontdoor .frontdoor_pagination #pagination-next a:hover img {
-      background: url(/img/browse_item_next_hover.png) no-repeat;
+.frontdoor .frontdoor_pagination #pagination-next a {
+      background: url(../img/theme/browse_item_next.png) no-repeat;
+}
+.frontdoor .frontdoor_pagination #pagination-next a:hover  {
+      background: url(../img/theme/browse_item_next_hover.png) no-repeat;
+}
+.frontdoor .frontdoor_pagination #pagination-next div {
+      background: url(../img/theme/browse_item_next_inactive.png) no-repeat;
 }
 
 .frontdoor .frontdoor_pagination #pagination-previous {
