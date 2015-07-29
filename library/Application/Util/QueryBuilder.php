@@ -279,6 +279,7 @@ class Application_Util_QueryBuilder {
 
         $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::LATEST_DOCS);
         $query->setRows($input['rows']);
+        $query->setStart($input['start']);
 
         if ($this->_export) {
             $query->setReturnIdsOnly(true);

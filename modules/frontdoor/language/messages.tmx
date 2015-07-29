@@ -50,6 +50,25 @@
         <seg>Das Dokument mit der ID %1$s wurde noch nicht freigeschaltet!</seg>
       </tuv>
     </tu>
- 
+    
+    <tu tuid="frontdoor_export_no_valid_doc_id">
+        <tuv xml:lang="en">
+            <seg>There was no document ID provided for the export.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Es wurde keine Dokument-ID für den Export angegeben.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="frontdoor_pagination_list_changed">
+        <tuv xml:lang="en">
+            <seg>The search result changed since you submitted your search request. Documents might be displayed in a different sort order.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Das Suchergebnis hat sich seit Ihrer Suchanfrage verändert. Eventuell werden Dokumente in anderer Reihenfolge angezeigt.</seg>
+        </tuv>
+    </tu>
+    
+
   </body>
 </tmx>

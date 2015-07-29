@@ -222,6 +222,73 @@ table.result-data {
     margin-top: -3px;
 }
 
+.frontdoor .frontdoor_pagination {
+     background-color:#F3F6F8;
+     overflow:hidden;
+     margin-bottom:1em;
+}
+
+.frontdoor .frontdoor_pagination #pagination-link-hitlist {
+     display:inline-block;
+     margin: 0.8em 0.7em;
+}
+
+.frontdoor .frontdoor_pagination ul.paginationControl {
+     float:right;
+     background-color:transparent;
+     width:auto;
+     list-style: none;
+}
+
+.frontdoor .frontdoor_pagination ul li {
+     border:none;
+}
+
+.frontdoor .frontdoor_pagination #pagination-previous a,
+.frontdoor .frontdoor_pagination #pagination-previous div,
+.frontdoor .frontdoor_pagination #pagination-next a,
+.frontdoor .frontdoor_pagination #pagination-next div 
+{
+  display: block;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  width: 12px; 
+  height: 13px;
+  padding-left: 12px;
+}
+
+.frontdoor .frontdoor_pagination #pagination-previous a {
+      background: url(../img/theme/browse_item_prev.png) no-repeat;
+}
+.frontdoor .frontdoor_pagination #pagination-previous a:hover  {
+      background: url(../img/theme/browse_item_prev_hover.png) no-repeat;
+}
+.frontdoor .frontdoor_pagination #pagination-previous div {
+      background: url(../img/theme/browse_item_prev_inactive.png) no-repeat;
+}
+
+.frontdoor .frontdoor_pagination #pagination-next a {
+      background: url(../img/theme/browse_item_next.png) no-repeat;
+}
+.frontdoor .frontdoor_pagination #pagination-next a:hover  {
+      background: url(../img/theme/browse_item_next_hover.png) no-repeat;
+}
+.frontdoor .frontdoor_pagination #pagination-next div {
+      background: url(../img/theme/browse_item_next_inactive.png) no-repeat;
+}
+
+.frontdoor .frontdoor_pagination #pagination-previous {
+     border:none;
+}
+
+.frontdoor .frontdoor_pagination #pagination-current-hit,
+.frontdoor .frontdoor_pagination #pagination-num-hits {
+     font-weight: bold;
+}
+
+
+
+
 /* form styles
 ----------------------------------------------------------- */
 .opus h3.document-type{
