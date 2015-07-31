@@ -436,7 +436,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         $docIds = array(146, 93, 92, 94, 91);
         foreach ($docIds as $docId) {
-            $this->assertContains('/frontdoor/index/index/docId/' . $docId, $this->getResponse()->getBody());
+            $this->assertContains('/frontdoor/index/index/searchtype/series/id/1/docId/' . $docId, $this->getResponse()->getBody());
         }
         $seriesNumbers = array('5/5', '4/5', '3/5', '2/5', '1/5');
         foreach ($seriesNumbers as $seriesNumber) {
