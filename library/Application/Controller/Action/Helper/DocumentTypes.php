@@ -128,10 +128,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
         libxml_clear_errors();
         libxml_use_internal_errors(true);
 
-        if (!$dom->schemaValidate(
-            APPLICATION_PATH . DIRECTORY_SEPARATOR . 'library' . DIRECTORY_SEPARATOR . 'Opus' .
-            DIRECTORY_SEPARATOR . 'Document' . DIRECTORY_SEPARATOR . 'documenttype.xsd'
-        )) {
+        if (!$dom->schemaValidate($this->_config->documentTypes->xmlSchema)) {
             libxml_clear_errors();
             throw new Application_Exception(
                 'given xml document type definition for document type ' . $documentType .

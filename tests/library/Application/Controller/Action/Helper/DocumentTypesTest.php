@@ -37,7 +37,7 @@
  * The unit test depend on the available document types in the doctypes folder
  * as well as the configuration in the file tests.ini.
  */
-class application_Controller_Action_Helper_DocumentTypesTest extends ControllerTestCase {
+class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerTestCase {
 
     /**
      * @var Controller_Helper_DocumentTypes Instance of DocumentTypes helper for testing.
@@ -250,7 +250,7 @@ class application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
                 $xml = new DOMDocument();
                 $xml->load($fileinfo->getPathname());
-		$result = $xml->schemaValidate(APPLICATION_PATH . '/library/Opus/Document/documenttype.xsd');
+		$result = $xml->schemaValidate(Zend_Registry::get('Zend_Config')->documentTypes->xmlSchema);
 		if ($fileinfo->getFilename() == 'demo_invalid.xml' || $fileinfo->getFilename() == 'demo_invalidfieldname.xml') {
                    $this->assertFalse($result, $fileinfo->getFilename() . ' is valid');
 		}
