@@ -109,16 +109,11 @@ if($this->jQueryEnabled()) {
                                 'module' => 'frontdoor',
                                 'controller' => 'index',
                                 'action' => 'index',
-<<<<<<< HEAD
-                                'docId' => $result->getId(),
+                                'docId' => $document->getId(),
                                 'start' => $this->start + ($rowCount - 1),
                                 'rows' => $this->rows,
                                 'searchtype' => $this->searchType
                             );
-=======
-                                'docId' => $document->getId());
-
->>>>>>> adding required default configuration on mapping fields to assets
                         ?>
                         <?php if (isset($this->seriesId) && $this->seriesId && !is_null($result->getSeriesNumber( $this->seriesId ))) : ?>
                             <dt class="results_seriesnumber"><?= htmlspecialchars($result->getSeriesNumber( $this->seriesId )); ?></dt>
@@ -129,13 +124,8 @@ if($this->jQueryEnabled()) {
                                     <img src="<?= $this->layoutPath() ?>/img/theme/icon-on-off.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#abstractText_<?= $document->getId() ?>').toggle();});" />
                                 <?php endif ?>
                             <?php endif ?>
-<<<<<<< HEAD
                             <?php if (!is_null($result->getTitle())) : ?>
                                 <a href="<?= $this->url($frontdoorUrl) ?>"><?= htmlspecialchars($result->getTitle()); ?></a>
-=======
-                            <?php if (!is_null($result->getAsset( 'title' ))) : ?>
-                                <a href="<?= $this->url($frontdoorUrl, null, true) ?>"><?= htmlspecialchars($result->getAsset( 'title' )); ?></a>
->>>>>>> adding required default configuration on mapping fields to assets
                             <?php else: ?>
                                 <a href="<?= $this->url($frontdoorUrl) ?>"><?= $this->translate('results_missingtitle') ?></a>
                             <?php endif ?>
