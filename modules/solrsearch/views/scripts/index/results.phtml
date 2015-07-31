@@ -124,8 +124,8 @@ if($this->jQueryEnabled()) {
                                     <img src="<?= $this->layoutPath() ?>/img/theme/icon-on-off.png" alt="<?= $this->translate('results_hideabstract_alt') ?>" title="<?= $this->translate('results_hideabstract_title') ?>" onclick="$(function(){$('#abstractText_<?= $document->getId() ?>').toggle();});" />
                                 <?php endif ?>
                             <?php endif ?>
-                            <?php if (!is_null($result->getTitle())) : ?>
-                                <a href="<?= $this->url($frontdoorUrl) ?>"><?= htmlspecialchars($result->getTitle()); ?></a>
+                            <?php if (!is_null($result->getAsset('title'))) : ?>
+                                <a href="<?= $this->url($frontdoorUrl) ?>"><?= htmlspecialchars($result->getAsset('title')); ?></a>
                             <?php else: ?>
                                 <a href="<?= $this->url($frontdoorUrl) ?>"><?= $this->translate('results_missingtitle') ?></a>
                             <?php endif ?>
