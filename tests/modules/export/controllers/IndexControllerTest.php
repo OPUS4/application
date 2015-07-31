@@ -198,8 +198,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $host = $config->searchengine->index->host;
         $port = $config->searchengine->index->port;
         $oldValue = $config->searchengine->index->app;
-        $config->searchengine->index->app = 'solr/corethatdoesnotexist';
-        $config->searchengine->solr->default->service->endpoint->localhost->path = '/solr/corethatdoesnotexist';
+        $this->disableSolr();
 
         $security = $config->security;
         $config->security = '1';

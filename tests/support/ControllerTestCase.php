@@ -199,6 +199,17 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
     }
 
     /**
+     * Modifies Solr configuration to un unknown core to simulate connection failure.
+     * @throws Zend_Exception
+     */
+    protected function disableSolr() {
+        $config = Zend_Registry::get('Zend_Config');
+        // TODO old config path still needed?
+        // $config->searchengine->index->app = 'solr/corethatdoesnotexist';
+        $config->searchengine->solr->default->service->endpoint->localhost->path = '/solr/corethatdoesnotexist';
+    }
+
+    /**
      *
      * @param Zend_Controller_Response_Abstract $response
      * @param string $location

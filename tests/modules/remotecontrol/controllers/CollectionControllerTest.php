@@ -126,7 +126,7 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
 
     public function testListCsvActionWithNonUniqueCollectionName() {
         $this->markTestIncomplete('FIXME: Testdata does not contain non-unique collections.');
-    
+
         $this->request->setMethod('GET');
         $this->dispatch('/remotecontrol/collection/list?role=ddc&number=510');
         $this->assertResponseCode(501);
@@ -148,22 +148,12 @@ class Remotecontrol_CollectionControllerTest extends ControllerTestCase {
         $this->requireSolrConfig();
 
         // manipulate solr configuration
-        $config = Zend_Registry::get('Zend_Config');
-        $host = $config->searchengine->index->host;
-        $port = $config->searchengine->index->port;
-        $oldValue = $config->searchengine->index->app;
-        $config->searchengine->index->app = 'solr/corethatdoesnotexist';
-        Zend_Registry::set('Zend_Config', $config);
+        $this->disableSolr();
 
         $this->request->setMethod('GET');
         $this->dispatch('/remotecontrol/collection/list?role=ddc&number=000');
-        
+
         $this->assertResponseCode('503');
         $this->assertContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $this->getResponse()->getBody());
-
-        // restore configuration
-        $config = Zend_Registry::get('Zend_Config');
-        $config->searchengine->index->app = $oldValue;
-        Zend_Registry::set('Zend_Config', $config);
     }
 }
