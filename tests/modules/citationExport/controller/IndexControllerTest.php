@@ -415,7 +415,7 @@ class CitationExport_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/citationExport/index/index/output/bibtex/docId/146');
         $this->assertResponseCode(200);
         $response = $this->getResponse();
-        $this->assertContains('note      = {Dieses Dokument ist auch erschienen als ...}', $response->getBody());
+        $this->assertContains('note        = {Dieses Dokument ist auch erschienen als ...}', $response->getBody());
     }
 
     /* DOWNLOAD - TESTS */
