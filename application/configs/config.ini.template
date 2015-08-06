@@ -61,6 +61,9 @@ searchengine.extract.app = @searchengine.extract.app@
 
 ;SEARCH ENGINE SETTINGS
 searchengine.solr.adapterClass = Opus_Search_Solr_Solarium_Adapter
+searchengine.solr.default.service.endpoint.localhost.host = @searchengine.index.host@
+searchengine.solr.default.service.endpoint.localhost.port = @searchengine.index.port@
+searchengine.solr.default.service.endpoint.localhost.path = @searchengine.index.app@
 searchengine.solr.default.service.index.endpoint.primary.host = @searchengine.index.host@
 searchengine.solr.default.service.index.endpoint.primary.port = @searchengine.index.port@
 searchengine.solr.default.service.index.endpoint.primary.path = @searchengine.index.app@
