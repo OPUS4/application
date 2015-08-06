@@ -186,7 +186,7 @@
     </target>
 
     <target name="phpunit" depends="rebuild-database,rebuild-index" description="Runs unit tests with coverage">
-        <exec executable="phpunit" dir="${basedir}/tests" failonerror="true">
+        <exec executable="${basedir}/vendor/bin/phpunit" dir="${basedir}/tests" failonerror="true">
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
             <arg line="--coverage-clover ${basedir}/build/logs/phpunit.coverage.xml" />
             <arg line="--coverage-html ${basedir}/build/coverage" />
@@ -196,7 +196,7 @@
     </target>
 
     <target name="phpunit-fast" depends="rebuild-database,rebuild-index" description="Runs unit tests without coverage">
-        <exec executable="phpunit" dir="${basedir}/tests" failonerror="true">
+        <exec executable="${basedir}/vendor/bin/phpunit" dir="${basedir}/tests" failonerror="true">
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
             <arg line="--configuration phpunit.xml" />
             <arg line="${testpath}" />
