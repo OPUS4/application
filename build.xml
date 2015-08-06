@@ -98,8 +98,9 @@
         <apply executable="php" dir="${basedir}" failonerror="on" logerror="on">
             <arg line="-l"/>
             <fileset dir="${basedir}" followsymlinks="false">
-                <include name="**/*.php"/>
+                <include name="**/*.php" />
                 <modified />
+                <exclude name="vendor/**" />
             </fileset>
         </apply>
     </target>
