@@ -6,7 +6,7 @@
     <property name="configfile" location="${workspace}/../opus-config.properties" />
     <property name="libsdir" location="/home/opus4ci/libs" />
     <property name="testpath" value="" />
-    <property name="codingstandard" location="${libsdir}/opus4cs/ruleset.xml" />
+    <property name="codingstandard" location="${basedir}/vendor/opus4-repo/codesniffer/ruleset.xml" />
     <property name="adminPassword" value="AdminAdmin" />
 
     <target name="analyse-code" depends="phpcs,phpmd,phpcpd,phploc" />
