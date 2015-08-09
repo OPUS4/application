@@ -54,14 +54,14 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section {
     const ELEMENT_THESIS_DATE_ACCEPTED = 'ThesisDateAccepted';
     const ELEMENT_THESIS_YEAR_ACCEPTED = 'ThesisYearAccepted';
     const ELEMENT_BELONGS_TO_BIBLIOGRAPHY = 'BelongsToBibliography';
-    
+
     public function init() {
         parent::init();
-        
+
         $this->setLegend('admin_document_section_bibliographic');
 
         $this->setUseNameAsLabel(true);
-        
+
         // Label entsprechen den Namen der Elemente
         $this->addElement('text', self::ELEMENT_EDITION, array('size' => 70));
         $this->addElement('text', self::ELEMENT_VOLUME, array('size' => 30));
@@ -75,14 +75,14 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section {
         $this->addElement('text', self::ELEMENT_ISSUE, array('size' => 30));
         $this->addElement('text', self::ELEMENT_CONTRIBUTING_CORPORATION, array('size' => 70));
         $this->addElement('text', self::ELEMENT_CREATING_CORPORATION, array('size' => 70));
-        
+
         $this->addElement('Date', self::ELEMENT_THESIS_DATE_ACCEPTED);
         $this->addElement('Year', self::ELEMENT_THESIS_YEAR_ACCEPTED);
 
         $this->addSubForm(
             new Admin_Form_Document_MultiSubForm(
                 'Admin_Form_Document_Publisher', 'ThesisPublisher',
-                new Form_Validate_MultiSubForm_RepeatedValues(
+                new Application_Form_Validate_MultiSubForm_RepeatedValues(
                     Admin_Form_Document_Institute::ELEMENT_INSTITUTE,
                     'admin_document_error_repeated_institute'
                 )
@@ -91,23 +91,23 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section {
         $this->addSubForm(
             new Admin_Form_Document_MultiSubForm(
                 'Admin_Form_Document_Grantor', 'ThesisGrantor',
-                new Form_Validate_MultiSubForm_RepeatedValues(
+                new Application_Form_Validate_MultiSubForm_RepeatedValues(
                     Admin_Form_Document_Institute::ELEMENT_INSTITUTE,
                     'admin_document_error_repeated_institute'
                 )
             ), 'Grantors'
         );
-        
+
         $this->addElement('checkbox', self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY);
-        
+
         $this->setRemoveEmptyCheckbox(false);
     }
-    
+
     public function populateFromModel($document) {
         parent::populateFromModel($document);
-        
+
         $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
-        
+
         $this->getElement(self::ELEMENT_CONTRIBUTING_CORPORATION)->setValue($document->getContributingCorporation());
         $this->getElement(self::ELEMENT_CREATING_CORPORATION)->setValue($document->getCreatingCorporation());
         $this->getElement(self::ELEMENT_EDITION)->setValue($document->getEdition());
@@ -124,12 +124,12 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section {
         $this->getElement(self::ELEMENT_THESIS_YEAR_ACCEPTED)->setValue($document->getThesisYearAccepted());
         $this->getElement(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY)->setValue($document->getBelongsToBibliography());
     }
-    
+
     public function updateModel($document) {
         parent::updateModel($document);
-        
+
         $datesHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');
-        
+
         $document->setContributingCorporation($this->getElementValue(self::ELEMENT_CONTRIBUTING_CORPORATION));
         $document->setCreatingCorporation($this->getElementValue(self::ELEMENT_CREATING_CORPORATION));
         $document->setEdition($this->getElementValue(self::ELEMENT_EDITION));
@@ -140,11 +140,11 @@ class Admin_Form_Document_Bibliographic extends Admin_Form_Document_Section {
         $document->setPublisherName($this->getElementValue(self::ELEMENT_PUBLISHER_NAME));
         $document->setPublisherPlace($this->getElementValue(self::ELEMENT_PUBLISHER_PLACE));
         $document->setVolume($this->getElementValue(self::ELEMENT_VOLUME));
-        
+
         $value = $this->getElementValue(self::ELEMENT_THESIS_DATE_ACCEPTED);
-        $date = (is_null($value)) ? null : $datesHelper->getOpusDate($value);        
+        $date = (is_null($value)) ? null : $datesHelper->getOpusDate($value);
         $document->setThesisDateAccepted($date);
-        
+
         $document->setThesisYearAccepted($this->getElementValue(self::ELEMENT_THESIS_YEAR_ACCEPTED));
         $document->setBelongsToBibliography($this->getElementValue(self::ELEMENT_BELONGS_TO_BIBLIOGRAPHY));
     }

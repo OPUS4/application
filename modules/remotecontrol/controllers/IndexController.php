@@ -36,7 +36,7 @@
  * Controller does nothing, but prevents exception if user should access module
  * without specifying any specific controller.
  */
-class Remotecontrol_IndexController extends Controller_Action {
+class Remotecontrol_IndexController extends Application_Controller_Action {
 
     public function indexAction() {
         $this->_redirectTo('index', null, 'index', 'home');

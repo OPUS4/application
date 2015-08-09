@@ -33,7 +33,7 @@
  * @version     $Id$
  */
 
-class Home_IndexController extends Controller_Action {
+class Home_IndexController extends Application_Controller_Action {
 
     /**
      * Do some initialization on startup of every action.
@@ -144,7 +144,7 @@ class Home_IndexController extends Controller_Action {
 
 
     public function helpAction() {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         if (isset($config->help->separate)) {
             $this->view->separate = (boolean) $config->help->separate;
         }

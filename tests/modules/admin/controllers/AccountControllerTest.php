@@ -53,9 +53,9 @@ class Admin_AccountControllerTest extends ControllerTestCase {
         $this->assertQueryContentContains('td.email', 'security4@example.org');
         $this->assertQueryContentContains('td.roles', 'reviewer');
         $this->assertQueryContentContains('td.roles', 'fulladmin');
-        
+
     }
-    
+
     /**
      * Tests showing an account.
      */
@@ -296,29 +296,32 @@ class Admin_AccountControllerTest extends ControllerTestCase {
         $user = new Opus_Account(null, null, 'admin');
         $this->assertNotNull($user);
     }
-    
-    public function testHideDeleteLinkForAdmin() {        
+
+    public function testHideDeleteLinkForAdmin() {
         $user = new Opus_Account(null, null, 'admin');
         $this->dispatch('/admin/account');
         $this->assertResponseCode(200);
-        
-        $this->assertQueryCount("a[@href='" . $this->getRequest()->getBaseUrl() 
-                . "/admin/account/delete/id/" . $user->getId() . "']", 0, "There should be no delete link for 'admin'.");
+
+        $this->assertQueryCount("a[@href='" . $this->getRequest()->getBaseUrl()
+            . "/admin/account/delete/id/" . $user->getId() . "']", 0, "There should be no delete link for 'admin'."
+        );
     }
-  
+
     public function testHideDeleteLinkForCurrentUser() {
-        $this->markTestSkipped('Funktioniert noch nicht richtig auf CI-System.');
         $this->enableSecurity();
         $this->loginUser('security4', 'security4pwd');
-        
-        $user = new Opus_Account(null, null, 'security4');
+
         $this->dispatch('/admin/account');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $this->logoutUser();
         $this->restoreSecuritySetting();
-        
-        $this->assertQueryCount("a[@href='" . $this->getRequest()->getBaseUrl() 
-                . "/admin/account/delete/id/" . $user->getId() . "']", 0, "There should be no delete link for current user'.");
+
+        $user = new Opus_Account(null, null, 'security4');
+
+        $this->assertQueryCount("a[@href='" . $this->getRequest()->getBaseUrl()
+            . "/admin/account/delete/id/" . $user->getId() . "']", 0,
+            "There should be no delete link for current user'."
+        );
     }
 
 }

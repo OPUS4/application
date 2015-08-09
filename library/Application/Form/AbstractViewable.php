@@ -122,19 +122,19 @@ class Application_Form_AbstractViewable extends Application_Form_Abstract implem
     /**
      * Bereitet Formularelement für die Ausgabe als View vor.
      *
-     * Es wird Form_Decorator_ViewHelper verwendet, um Elemente als "View" ausgeben zu können.
+     * Es wird Application_Form_Decorator_ViewHelper verwendet, um Elemente als "View" ausgeben zu können.
      *
      */
     protected function _prepareRenderingOfElements() {
         $elements = $this->getElements();
 
         foreach ($elements as $element) {
-            if ($element instanceof Form_IElement) {
+            if ($element instanceof Application_Form_IElement) {
                 $element->prepareRenderingAsView();
             }
             else {
                 $decorator = $element->getDecorator('ViewHelper');
-                if ($decorator instanceof Form_Decorator_ViewHelper) {
+                if ($decorator instanceof Application_Form_Decorator_ViewHelper) {
                     $decorator->setViewOnlyEnabled(true);
                 }
             }

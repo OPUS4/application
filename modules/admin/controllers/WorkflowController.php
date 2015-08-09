@@ -36,17 +36,17 @@
 /**
  * Controller handles transitions of documents between states.
  */
-class Admin_WorkflowController extends Controller_Action {
+class Admin_WorkflowController extends Application_Controller_Action {
 
     /**
      * Helper for verifying document IDs.
-     * @var Controller_Helper_Documents
+     * @var Application_Controller_Action_Helper_Documents
      */
     private $_documentsHelper;
 
     /**
      * Helper for workflow functionality.
-     * @var Controller_Helper_Workflow
+     * @var Application_Controller_Action_Helper_Workflow
      */
     private $_workflowHelper;
 
@@ -60,7 +60,7 @@ class Admin_WorkflowController extends Controller_Action {
         $this->_documentsHelper = $this->_helper->getHelper('Documents');
         $this->_workflowHelper = $this->_helper->getHelper('Workflow');
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
 
         if (isset($config->confirmation->document->statechange->enabled)) {
             $this->_confirmChanges = ($config->confirmation->document->statechange->enabled == 1) ? true : false;
@@ -130,7 +130,7 @@ class Admin_WorkflowController extends Controller_Action {
             }
 
             // show confirmation page
-            $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
+            $this->view->documentAdapter = new Application_Util_DocumentAdapter($this->view, $document);
             $this->view->title = $this->view->translate('admin_workflow_' . $targetState);
             $this->view->text = $this->view->translate('admin_workflow_' . $targetState . '_sure', $docId);
             $this->view->form = $this->_getConfirmationForm($document, $targetState);
@@ -165,7 +165,7 @@ class Admin_WorkflowController extends Controller_Action {
     }
 
     private function _sendNotification($document, $form = null) {
-        $notification = new Util_Notification();
+        $notification = new Application_Util_Notification();
         $url = $this->view->url(
             array(
                 "module" => "frontdoor",
@@ -192,7 +192,7 @@ class Admin_WorkflowController extends Controller_Action {
 
         $notification->prepareMail(
             $document,
-            Util_Notification::PUBLICATION,
+            Application_Util_Notification::PUBLICATION,
             $this->view->serverUrl() . $url,
             $notifySubmitter,
             $authorsBitmask
@@ -233,7 +233,7 @@ class Admin_WorkflowController extends Controller_Action {
      *
      * @param Opus_Document $document
      * @param Zend_Form $form
-     * 
+     *
      */
     private function _addPublishNotificationSelection($document, $form) {
         $form->addElement(
@@ -291,8 +291,8 @@ class Admin_WorkflowController extends Controller_Action {
                         $id, array('checked' => true, 'label' => 'foo', 'label' => $label)
                     );
                     $element->getDecorator('Label')->setOption('class', 'notification-option');
-                }                
-                $form->addElement($element);                
+                }
+                $form->addElement($element);
                 $index++;
             }
         }

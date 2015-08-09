@@ -38,7 +38,7 @@ class Admin_Form_Document_GrantorTest extends ControllerTestCase {
         $form = new Admin_Form_Document_Grantor();
 
         $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Form_Element_Grantor',
+        $this->assertInstanceOf('Application_Form_Element_Grantor',
             $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
     }
 

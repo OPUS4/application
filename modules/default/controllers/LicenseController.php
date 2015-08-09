@@ -33,7 +33,7 @@
  *
  */
 
-class LicenseController extends Controller_Action {
+class LicenseController extends Application_Controller_Action {
 
     /**
      * Always allow access to this controller; Override check in parent method.
@@ -48,7 +48,6 @@ class LicenseController extends Controller_Action {
      * @return void
      */
     public function indexAction() {
-        // $logger = Zend_Registry::get('Zend_Log');
         // Load document
         $licId = $this->getRequest()->getParam('licId');
         try {

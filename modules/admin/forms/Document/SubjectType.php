@@ -61,13 +61,13 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
 
         switch ($type) {
             case 'swd':
-                $validator = new Form_Validate_MultiSubForm_RepeatedValues(
+                $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues(
                     'Value',
                     'admin_document_error_repeated_subject'
                 );
                 break;
             default:
-                $validator = new Form_Validate_MultiSubForm_RepeatedValues(
+                $validator = new Application_Form_Validate_MultiSubForm_RepeatedValues(
                     'Value',
                     'admin_document_error_repeated_subject', 'Language'
                 );
@@ -84,7 +84,7 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
      */
     public function init() {
         parent::init();
-                
+
         $this->setLegend('admin_document_section_subject' . $this->_subjectType);
     }
 
@@ -95,20 +95,20 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
     public function getSubjectType() {
         return $this->_subjectType;
     }
-    
+
     /**
      * Ueberschreibt Funktion damit hier nichts passiert.
-     * 
+     *
      * In der Klasse Admin_Form_Document_MultiSubForm wird in dieser Funktion das Dokument aktualisiert, was aber bei
      * Schlagwoertern nicht passieren soll, da die Werte aus mehreren MultiSubForm-Formularen zusammengesammelt werden
      * muessen.
-     * 
+     *
      * @param Opus_Document $document
      */
     public function updateModel($document) {
         // hier darf nichts passieren
     }
-    
+
     /**
      * Erzeugt neues Unterformular Instanz fuer den entsprechenden Schlagworttyp.
      * @return \Admin_Form_Document_Subject
@@ -121,25 +121,25 @@ class Admin_Form_Document_SubjectType extends Admin_Form_Document_MultiSubForm {
             return new Admin_Form_Document_Subject($this->_subjectType);
         }
     }
-    
+
     /**
      * Liefert die Schlagwoerter mit dem richtigen Typ.
-     * 
+     *
      * @param Opus_Document $document
      * @return array
      */
     public function getFieldValues($document) {
         $values = parent::getFieldValues($document);
-        
+
         $subjects = array();
-        
+
         foreach ($values as $value) {
             if ($value->getType() == $this->_subjectType) {
                 $subjects[] = $value;
             }
         }
-        
+
         return $subjects;
     }
-    
+
 }

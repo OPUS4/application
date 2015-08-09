@@ -40,7 +40,7 @@
  * @category    Application
  * @package     Module_Default
  */
-class AuthController extends Controller_Action {
+class AuthController extends Application_Controller_Action {
 
     /**
      * Always allow access to this controller; Override check in parent method.
@@ -90,7 +90,7 @@ class AuthController extends Controller_Action {
         // Initialize form.
         $form = $this->getLoginForm();
         /* @var $logger Zend_Log */
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = $this->getLogger();
 
         // check for return module, controller, action and parameteres, overwrite $_login_url.
         $rparams = $this->findReturnParameters();
@@ -126,7 +126,7 @@ class AuthController extends Controller_Action {
         $auth = new Opus_Security_AuthAdapter();
 
         // Overwrite auth adapter if config-key is set.
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         if (isset($config, $config->authenticationModule) and ($config->authenticationModule === 'Ldap')) {
             $auth = new Opus_Security_AuthAdapter_Ldap();
         }

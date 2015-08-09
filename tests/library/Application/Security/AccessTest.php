@@ -34,20 +34,20 @@
  */
 
 class Application_Security_AccessTest extends ControllerTestCase {
-    
+
     public function testLicenceAdminMenuFiltering() {
         $this->enableSecurity();
         $this->loginUser('security2', 'security2pwd');
 
         $this->dispatch('/admin');
-        
+
         $this->logoutUser();
         $this->restoreSecuritySetting();
 
         $this->assertQuery('//a[@href="/admin/licence"]');
-        $this->assertQuery('//a[@href="/admin/index/setup"]');
         $this->assertQuery('//a[@href="/admin/index/info"]');
 
+        $this->assertNotQuery('//a[@href="/admin/index/setup"]');
         $this->assertNotQuery('//a[@href="/admin/documents"]');
         $this->assertNotQuery('//a[@href="/review"]');
         $this->assertNotQuery('//a[@href="/admin/collectionroles"]');

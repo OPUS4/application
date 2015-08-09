@@ -1,5 +1,15 @@
 h1. OPUS 4 Release Notes
 
+h2. ======================== Release 4.5.0 2015-xx-xx ========================
+
+Die URLs für creativecommons.org in den Lizenzen wurden auf HTTPS umgestellt,
+um bei Instanzen mit HTTPS "Mixed Content"-Warnungen zu vermeiden. Das wird
+beim Update von bestehenden Instanzen nicht automatisch angepasst.
+
+Die erlaubten Zeichen für EnrichmentKeys wurde eingeschränkt. EnrichmentKeys
+müssen mit einem Buchstaben beginnen und dürfen Buchstaben, Zahlen, '.' und
+'_' verwenden. Existierende EnrichmentKeys können weiterhin verwendet werden.
+
 h2. ======================== Release 4.4.5 2014-10-30 ========================
 
 Es wurde ein Bug gefixt, der beim Update von Instanzen der Version 4.4.2 oder
@@ -194,7 +204,7 @@ OPUS 4.4 bietet innerhalb der Administration folgende zusätzliche Funktionen an
   * Verwaltung von Übersetzungsressourcen
 
 Für den Zugriff auf die Funktionen sind entsprechende Rechte erforderlich. Für
-den Zugriff auf die ersten beiden Funktionen muss der Rolle das Recht 
+den Zugriff auf die ersten beiden Funktionen muss der Rolle das Recht
 "Suchindex verwalten" bzw. "Job-Verarbeitung verwalten" zugeordnet werden.
 
 Für den Zugriff auf die drei letzten Funktionen ist entweder das Recht für das
@@ -253,7 +263,7 @@ vollständig entfernt. Hintergrund ist, dass wir bezogen auf URNs keine globalen
 Aussagen bezüglich der Kollisionsfreiheit machen können. Daher sollten URNs
 nach Möglichkeit nicht durch den allgemeinen Benutzer angegeben werden. Außerdem
 wird in OPUS standardmäßig eine URN erzeugt, sobald ein Dokument freigeschaltet
-wird (und es noch keine URN besitzt). Wir empfehlen daher, dass Feld im 
+wird (und es noch keine URN besitzt). Wir empfehlen daher, dass Feld im
 Publikationsformular nicht mehr zu verwenden und stattdessen den automatischen
 Vergabemechanismus in OPUS 4 zu benutzen.
 
@@ -276,14 +286,14 @@ durch Kommata getrennte Liste aller zur Bearbeitung freigegebenen Module enthäl
 Wird dieser Schlüssel nicht angegeben, dann ist die Bearbeitung der
 Übersetzungsressourcen über die Administrationsoberfläche nicht möglich.
 
-Als Vorgabe werden in der Datei config.ini.template die Module "default" und 
+Als Vorgabe werden in der Datei config.ini.template die Module "default" und
 "publish" freigegeben.
 
 
 h3. Verschiebung der PHTML-Templates für die Dokumenttypen
 
 Die PHTML-Templates wurden verschoben von modules/publish/views/scripts/form
-nach application/configs/doctypes_templates. Wird das Update-Skript zur 
+nach application/configs/doctypes_templates. Wird das Update-Skript zur
 Aktualisierung der Instanz verwendet, so werden die bestehenden PHTML-Templates
 automatisch in das neue Verzeichnis übernommen (ggf. mit Rückfrage, wenn für
 einen Dokumenttyp eine "Differenz" zum Standard-PHTML-Template besteht).
@@ -293,7 +303,7 @@ h2. ======================== Release 4.3.1 2013-02-21 ========================
 
 h3. Bugfixes
 
-In diesem Release wurden einige Fehler behoben, genaueres findet sich in der 
+In diesem Release wurden einige Fehler behoben, genaueres findet sich in der
 Datei CHANGES.txt
 
 
@@ -325,16 +335,16 @@ wird bei geänderten Templates einen Hinweis ausgeben.
 
 h3. Änderung an der Frontdoor - index.xslt
 
-Die Datei modules/frontdoor/view/scripts/index.xslt wurde aufgeteilt, 
+Die Datei modules/frontdoor/view/scripts/index.xslt wurde aufgeteilt,
 um die Übersichtlichkeit und Wartbarkeit zu verbessern.
 Die bisher in dieser Datei definierten XSLT-Templates wurden in mehrere Dateien
 verschoben, die nun im Unterverzeichnis "templates" liegen.
 
 Sofern sie eine eigene, angepasste index.xslt verwenden, können sie diese ohne
 Änderungen weiter verwenden. Die ausgelagerten Templates werden in diesem Fall
-nicht verwendet. 
-Stellen Sie dabei sicher, dass ihre eigene Version der Datei bei einem Update 
-nicht überschrieben wird, indem sie vor dem Update eine Sicherungskopie 
+nicht verwendet.
+Stellen Sie dabei sicher, dass ihre eigene Version der Datei bei einem Update
+nicht überschrieben wird, indem sie vor dem Update eine Sicherungskopie
 erstellen und diese danach wieder herstellen. Eventuelle Änderungen, die sich
 durch ein Update ergeben, müssen in diesem Fall von Hand eingearbeitet werden.
 

@@ -33,7 +33,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Matheon_SelectReviewerController extends Controller_Action {
+class Matheon_SelectReviewerController extends Application_Controller_Action {
 
     public function init() {
         parent::init();
@@ -100,7 +100,7 @@ class Matheon_SelectReviewerController extends Controller_Action {
      * @return void
      */
     private function __sendPublishNotification($document, $recipient) {
-        $config = Zend_Registry::getInstance()->get('Zend_Config');
+        $config = $this->getConfig();
         $baseUrlFiles = $this->view->serverUrl() . '/opus4-matheon/files';
 
         $job = new Opus_Job();

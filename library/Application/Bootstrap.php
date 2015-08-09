@@ -52,7 +52,7 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
      * TODO rename to _initControllerPlugins
      */
     protected function _initOpusFrontController() {
-        $this->bootstrap(array('LanguageList', 'frontController'));
+        $this->bootstrap(array('frontController'));
 
         $frontController = $this->getResource('frontController'); // Zend_Controller_Front::getInstance();
 
@@ -64,15 +64,15 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $frontController->registerPlugin($moduleprepare);
 
         // Add security realm initialization
-        $realmSetupPlugin = new Controller_Plugin_SecurityRealm();
+        $realmSetupPlugin = new Application_Controller_Plugin_SecurityRealm();
         $frontController->registerPlugin($realmSetupPlugin);
 
         // Add navigation initialization plugin
-        $navigationPlugin = new Controller_Plugin_Navigation();
+        $navigationPlugin = new Application_Controller_Plugin_Navigation();
         $frontController->registerPlugin($navigationPlugin);
 
         // Get Name of Module, Controller and Action for Use in View
-        $viewSetup = new Controller_Plugin_ViewSetup();
+        $viewSetup = new Application_Controller_Plugin_ViewSetup();
         $frontController->registerPlugin($viewSetup);
     }
 
@@ -115,14 +115,12 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
         $libRealPath = realpath(APPLICATION_PATH . '/library');
 
         $view->addHelperPath($libRealPath . '/Application/View/Helper', 'Application_View_Helper');
-        $view->addHelperPath($libRealPath . '/View/Helper', 'View_Helper');
 
         // Set path to shared view partials
         $view->addScriptPath($libRealPath . '/Application/View/Partial');
-        $view->addScriptPath($libRealPath . '/View/Partials');
 
         // Breadcrumbs View Helper global ersetzen
-        $breadcrumbsHelper = new View_Helper_Breadcrumbs();
+        $breadcrumbsHelper = new Application_View_Helper_Breadcrumbs();
         $view->registerHelper($breadcrumbsHelper, 'breadcrumbs');
 
         $viewRenderer = new Zend_Controller_Action_Helper_ViewRenderer($view);
@@ -233,16 +231,6 @@ class Application_Bootstrap extends Opus_Bootstrap_Base {
     protected function _initSession() {
         $this->bootstrap(array('Database'));
         return new Zend_Session_Namespace();
-    }
-
-    /**
-     * Initialize translated list of languages.
-     *
-     * TODO used by framework classes as default values; remove to reduce bootstrap overhead
-     */
-    protected function _initLanguageList() {
-        $this->bootstrap(array('Translation', 'Backend'));
-        Form_Element_Language::initLanguageList();
     }
 
     /**

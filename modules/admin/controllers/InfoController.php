@@ -36,13 +36,13 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_InfoController extends Controller_Action {
+class Admin_InfoController extends Application_Controller_Action {
 
     /**
      * Zeigt Informationen über die OPUS Systemkonfiguration an.
      */
     public function indexAction() {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
 
         if (isset($config->publish->maxfilesize)) {
             $this->view->maxfilesize = $config->publish->maxfilesize;

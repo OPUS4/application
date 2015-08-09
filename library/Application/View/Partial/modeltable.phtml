@@ -44,16 +44,26 @@
     </thead>
     <?PHP foreach($this->element->getModels() as $model) : ?>
         <tr>
-            <td><a href="<?= $this->url(array('action' => 'show', 'id' => $model->getId())) ?>"
-                class="displayname<?= (is_null($model->getField('Active')) || $model->getActive()) ? '' : ' invisible'?>"
-                    ><?= htmlspecialchars($model->getDisplayName()) ?></a></td>
+            <td>
+                <?PHP if ($this->element->isRenderShowActionLink($model)) : ?>
+                <a href="<?= $this->url(array('action' => 'show', 'id' => $model->getId())) ?>"
+                    class="displayname<?= (is_null($model->getField('Active')) || $model->getActive()) ? '' : ' invisible'?>"
+                    ><?= htmlspecialchars($model->getDisplayName()) ?></a>
+                <?PHP else : ?>
+                    <?= htmlspecialchars($model->getDisplayName()) ?>
+                <?PHP endif ?>
+            </td>
             <td class="edit">
+                <?PHP if ($this->element->isModifiable($model)) : ?>
                 <a href="<?= $this->url(array('action' => 'edit', 'id' => $model->getId())) ?>"
                     ><?= $this->translate('admin_button_edit'); ?></a>
+                <?PHP endif ?>
             </td>
             <td class="remove">
+                <?PHP if ($this->element->isModifiable($model)) : ?>
                 <a href="<?= $this->url(array('action' => 'delete', 'id' => $model->getId())) ?>"
                     ><?= $this->translate('admin_button_remove'); ?></a>
+                <?PHP endif ?>
             </td>
         </tr>
     <?PHP endforeach; ?>

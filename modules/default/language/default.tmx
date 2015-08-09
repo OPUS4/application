@@ -689,5 +689,26 @@
             <seg>Nachricht vom OPUS 4 Repository bezüglich Ihrer Veröffentlichung</seg>
         </tuv>
     </tu>
+    
+     <tu tuid="results_title_single">
+         <tuv xml:lang="en">
+             <seg>search hit</seg>
+         </tuv>
+         <tuv xml:lang="de">
+             <seg>Treffer</seg>
+         </tuv>
+     </tu>
+
+     <tu tuid="results_title">
+         <tuv xml:lang="en">
+             <seg>search hits</seg>
+         </tuv>
+         <tuv xml:lang="de">
+             <seg>Treffer</seg>
+         </tuv>
+     </tu>
+
+
+
     </body>
 </tmx>

@@ -29,187 +29,86 @@
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
  * @author      Pascal-Nicolas Becker <becker@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class CitationExport_IndexController extends Controller_Action {
+class CitationExport_IndexController extends Application_Controller_Action {
 
     /**
-     * Output data to index view
+     * Helper for handling citation export requests.
+     * @var CitationExport_Model_Helper
+     */
+    private $_exportHelper;
+
+    /**
+     * Initializes common controller variables.
+     */
+    public function init() {
+        parent::init();
+
+        $this->_exportHelper = new CitationExport_Model_Helper(
+            $this->view->fullUrl(),
+            $this->view->getScriptPath('index')
+        );
+        $this->view->title = $this->view->translate('citationExport_modulename');
+    }
+
+    /**
+     * Output data to index view.
      *
      * @return void
-     *
      */
     public function indexAction() {
-        $this->view->title = $this->view->translate('citationExport_modulename');
-        $output = null;
-
-        try {
-            $document = $this->getDocument();
-            $template = $this->getTemplateForDocument($document);
-            $output = $this->getPlainOutput($document, $template);
-        }
-        catch (CitationExport_Model_Exception $e) {
-            $this->view->output = $this->view->translate($e->getMessage());
-            $this->getResponse()->setHttpResponseCode(400);
-            return;
-        }
-                        
-        $this->view->output = $output;
+        $this->handleRequest();
         $this->view->downloadUrl = $this->view->url(array('action' => 'download'), false, null);
     }
 
     /**
-     * Output data as downloadable file
+     * Output data as downloadable file.
      *
      * @return void
-     *
      */
     public function downloadAction() {
-        $this->view->title = $this->view->translate('citationExport_modulename');
-        $output = null;
+        $request = $this->getRequest();
 
-        try {
-            $document = $this->getDocument();
-            $template = $this->getTemplateForDocument($document);
-            $output = $this->getPlainOutput($document, $template);
-        }
-        catch (CitationExport_Model_Exception $e) {
-            $this->view->output = $this->view->translate($e->getMessage());
-            $this->getResponse()->setHttpResponseCode(400);
+        if (!$this->handleRequest()) {
             return;
-        }
-        
-        // Transform to HTML
+        };
+
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_helper->layout()->disableLayout();
 
         // Send plain text response.
-        $this->getResponse()->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
+        $response = $this->getResponse();
 
-        $outputFormat = $this->getRequest()->getParam('output');
-        $extension = null;
-        switch ($outputFormat) {
-            case 'bibtex':
-                $extension = 'bib';
-                break;
-            case 'ris':
-                $extension = 'ris';
-                break;
-            default:
-                $extension = 'txt';
-        }               
-        $this->getResponse()->setHeader(
+        $response->setHeader('Content-Type', 'text/plain; charset=UTF-8', true);
+
+        $outputFormat = $request->getParam('output');
+
+        $extension = $this->_exportHelper->getExtension($outputFormat);
+
+        $response->setHeader(
             'Content-Disposition',
-            'attachment; filename=' . $outputFormat . '-' . $this->getRequest()->getParam('docId') . '.' . $extension,
+            'attachment; filename=' . $outputFormat . '-' . $request->getParam('docId') . '.' . $extension,
             true
         );
-        $this->getResponse()->setBody($output);
+
+        $response->setBody($this->view->output);
     }
 
-    /**
-     *
-     * @param string $docId
-     * @throws CitationExport_Module_Exception in case of an invalid parameter value
-     *
-     * @return Opus_Document
-     */
-    private function getDocument() {
-        $docId = $this->getRequest()->getParam('docId');
-        if (is_null($docId)) {
-            throw new CitationExport_Model_Exception('invalid_docid');
-        }
-
-        $document = null;
+    public function handleRequest() {
         try {
-            $document = new Opus_Document($docId);
+            $this->view->output = $this->_exportHelper->getOutput($this->getRequest());
         }
-        catch (Opus_Model_NotFoundException $e) {
-            throw new CitationExport_Model_Exception('invalid_docid', null, $e);
+        catch (CitationExport_Model_Exception $ceme) {
+            $this->view->output = $this->view->translate($ceme->getMessage());
+            $this->getResponse()->setHttpResponseCode(400);
+            return 0;
         }
-
-        // check if document access is allowed
-        // TODO document access check will be refactored in later releases
-        new Util_Document($document);
-        
-        return $document;
+        return 1;
     }
 
-    /**
-     *
-     * @param Opus_Document $document
-     * @throws CitationExport_Module_Exception in case of an invalid parameter value
-     *
-     * @return string
-     */
-    private function getTemplateForDocument($document) {
-        $outputFormat = $this->getRequest()->getParam('output');
-        if (is_null($outputFormat)) {
-            throw new CitationExport_Model_Exception('invalid_format');
-        }
-
-        $stylesheetsAvailable = array();
-        $dir = new DirectoryIterator($this->view->getScriptPath('index'));
-        foreach ($dir as $file) {
-            if ($file->isFile() && $file->getFilename() != '.' && $file->getFilename() != '..' && $file->isReadable()) {
-                array_push($stylesheetsAvailable, $file->getBasename('.xslt'));
-            }
-        }
-
-        $pos = array_search($outputFormat . '_' . $document->getType(), $stylesheetsAvailable);
-        if ($pos !== FALSE) {
-            return $stylesheetsAvailable[$pos] . '.xslt';
-        }
-
-        $pos = array_search($outputFormat, $stylesheetsAvailable);
-        if ($pos !== FALSE) {
-            return $stylesheetsAvailable[$pos] . '.xslt';
-        }
-
-        throw new CitationExport_Model_Exception('invalid_format');
-    }
-
-    /**
-     * transform XML output to desired output format
-     * 
-     * @param Opus_Document $document Document that should be transformed
-     * @param string $template XSLT stylesheet that should be applied
-     * 
-     * @return string document in the given output format as plain text
-     */
-     private function getPlainOutput($document, $template) {
-        // Set up filter and get XML-Representation of filtered document.
-        $filter = new Opus_Model_Filter;
-        $filter->setModel($document);
-        $xml = $filter->toXml();
-
-        // Set up XSLT-Stylesheet
-        $xslt = new DomDocument;
-        $xslt->load($this->view->getScriptPath('index') . DIRECTORY_SEPARATOR . $template);
-
-        // find Enrichment that should be included in bibtex-output as note
-        // TODO document this feature
-        $enrichmentNote = null;
-        $config = Zend_Registry::get('Zend_Config');
-        if (isset($config->citationExport->bibtex->enrichment)
-                && !empty($config->citationExport->bibtex->enrichment)) {
-            $enrichmentNote = $config->citationExport->bibtex->enrichment;
-        }
-        
-        // Set up XSLT-Processor
-        try {
-            $proc = new XSLTProcessor;
-            $proc->setParameter('', 'enrichment_note', $enrichmentNote);
-            $proc->setParameter('', 'url_prefix', $this->view->fullUrl());
-            $proc->registerPHPFunctions();
-            $proc->importStyleSheet($xslt);
-            
-            return $proc->transformToXML($xml);
-        }
-        catch (Exception $e) {
-            throw new Application_Exception($e->getMessage(), null, $e);
-        }       
-     }
 }

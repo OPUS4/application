@@ -78,14 +78,14 @@ class Admin_Form_Account extends Admin_Form_RolesAbstract {
         parent::init();
 
         $this->getElement('username')->addValidator(
-            new Form_Validate_LoginAvailable(
+            new Application_Form_Validate_LoginAvailable(
                 array('ignoreCase' => $this->_mode === 'edit')
             )
         );
 
         // add password validator
         $confirmPassword = $this->getElement('confirmPassword');
-        $passwordValidator = new Form_Validate_Password();
+        $passwordValidator = new Application_Form_Validate_Password();
         $confirmPassword->addValidator($passwordValidator);
 
         // add form elements for selecting roles

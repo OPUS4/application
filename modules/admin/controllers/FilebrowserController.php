@@ -36,7 +36,7 @@
  * Browsing of file import folder for adding files to documents.
  *
  */
-class Admin_FilebrowserController extends Controller_Action {
+class Admin_FilebrowserController extends Application_Controller_Action {
 
     const PARAM_DOCUMENT_ID = 'id';
 
@@ -65,7 +65,7 @@ class Admin_FilebrowserController extends Controller_Action {
 
         $importHelper = new Admin_Model_FileImport();
         $this->view->files = $importHelper->listFiles();
-        $this->view->documentAdapter = new Util_DocumentAdapter($this->view, $document);
+        $this->view->documentAdapter = new Application_Util_DocumentAdapter($this->view, $document);
         $this->view->document = $document;
     }
 

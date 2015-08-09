@@ -95,7 +95,7 @@ class Setup_Model_Language_TranslationManagerTest extends ControllerTestCase {
     }
 
     /**
-     * 
+     *
      */
     public function testSetModules() {
 
@@ -109,7 +109,7 @@ class Setup_Model_Language_TranslationManagerTest extends ControllerTestCase {
     }
 
     /**
-     * 
+     *
      */
     public function testSetFilter() {
         $filter = 'error';

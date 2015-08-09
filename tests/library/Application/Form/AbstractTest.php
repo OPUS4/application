@@ -53,12 +53,12 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->form->init();
 
         $paths = $this->form->getPluginLoader(Zend_Form::DECORATOR)->getPaths();
-        $this->assertArrayHasKey('Form_Decorator_', $paths);
-        $this->assertContains('Form/Decorator/', $paths['Form_Decorator_']);
+        $this->assertArrayHasKey('Application_Form_Decorator_', $paths);
+        $this->assertContains('Application/Form/Decorator/', $paths['Application_Form_Decorator_']);
 
         $paths = $this->form->getPluginLoader(Zend_Form::ELEMENT)->getPaths();
-        $this->assertArrayHasKey('Form_Element_', $paths);
-        $this->assertContains('Form/Element/', $paths['Form_Element_']);
+        $this->assertArrayHasKey('Application_Form_Element_', $paths);
+        $this->assertContains('Application/Form/Element/', $paths['Application_Form_Element_']);
     }
 
     public function testSetLogger() {
@@ -212,6 +212,30 @@ class Application_Form_AbstractTest extends ControllerTestCase {
         $this->assertNull($this->form->getLabelPrefix());
         $this->form->setLabelPrefix('Opus_File_');
         $this->assertEquals('Opus_File_', $this->form->getLabelPrefix());
+    }
+
+    public function testGetApplicationConfig() {
+        $config = $this->form->getApplicationConfig();
+
+        $this->assertNotNull($config);
+        $this->assertInstanceOf('Zend_Config', $config);
+        $this->assertSame($config, Zend_Registry::get('Zend_Config'));
+    }
+
+    public function testSetApplicationConfig() {
+        $config = new Zend_Config(array('test' => true));
+
+        $this->form->setApplicationConfig($config);
+
+        $returnedConfig = $this->form->getApplicationConfig();
+
+        $this->assertSame($config, $returnedConfig);
+
+        $this->form->setApplicationConfig(null);
+
+        $returnedConfig = $this->form->getApplicationConfig();
+
+        $this->assertSame(Zend_Registry::get('Zend_Config'), $returnedConfig);
     }
 
 }

@@ -38,7 +38,7 @@
  * @category    Application
  * @package     Module_Publish
  */
-class Review_IndexController extends Controller_Action {
+class Review_IndexController extends Application_Controller_Action {
 
     /**
      * Restrict reviewable documents to the given status.
@@ -126,7 +126,7 @@ class Review_IndexController extends Controller_Action {
         }
 
         $this->view->breadcrumbsDisabled = true;
-        
+
         $result = $finder->ids();
         if (empty($result)) {
             $this->view->message = 'review_no_docs_found';
@@ -161,7 +161,7 @@ class Review_IndexController extends Controller_Action {
         $useCurrentUser = false;
         $person = null;
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         if (isset($config, $config->clearing->addCurrentUserAsReferee)) {
             $useCurrentUser = $config->clearing->addCurrentUserAsReferee;
         }
@@ -246,7 +246,7 @@ class Review_IndexController extends Controller_Action {
         $finder = new Opus_DocumentFinder();
         $finder->setServerState(self::$_reviewServerState);
 
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = $this->getLogger();
         $userId = $this->_loggedUser->getUserId();
         $onlyReviewerByUserId = false;
 

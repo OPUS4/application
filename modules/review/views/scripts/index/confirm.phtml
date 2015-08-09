@@ -64,7 +64,7 @@
     <table style="margin-left: 2em">
     <?PHP foreach( $this->selected as $index => $docId ) : ?>
         <tr>
-        <?PHP $document = new Util_DocumentAdapter($this, $docId); ?>
+        <?PHP $document = new Application_Util_DocumentAdapter($this, $docId); ?>
         <td style="vertical-align: top; padding-right: 1em"><?= $docId ?></td>
         <td>
             <div class="title" style="font-weight: bold"><?= htmlspecialchars($document->getDocTitle()) ?></div>

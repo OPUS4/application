@@ -38,7 +38,7 @@ class Admin_Form_Document_PublisherTest extends ControllerTestCase {
         $form = new Admin_Form_Document_Publisher();
 
         $this->assertNotNull($form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
-        $this->assertInstanceOf('Form_Element_Publisher',
+        $this->assertInstanceOf('Application_Form_Element_Publisher',
             $form->getElement(Admin_Form_Document_Grantor::ELEMENT_INSTITUTE));
     }
 

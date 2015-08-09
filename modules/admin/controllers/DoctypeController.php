@@ -36,7 +36,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Admin_DoctypeController extends Controller_Action {
+class Admin_DoctypeController extends Application_Controller_Action {
 
     private $_documentTypesHelper;
 

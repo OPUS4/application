@@ -47,7 +47,7 @@
             <dt><a><?= $this->translate('admin_documents_show_docs') ?></a></dt>
             <dd>
                 <ul>
-                    <li class="active"><?= $this->translate('admin_documents_state_' . $this->state) ?></li>    
+                    <li class="active"><?= $this->translate('admin_documents_state_' . $this->state) ?></li>
                     <?PHP foreach ($this->registers as $state => $link) : ?>
                         <?PHP if ($this->state !== $state) : ?>
                             <li><a href="<?= $link ?>"><?= $this->translate('admin_documents_state_' . $state) ?></a></li>
@@ -60,7 +60,7 @@
             <dt><a><?= $this->translate('docs_sortorder') ?></a></dt>
             <dd>
                 <ul>
-                    <li class="active"><?= $this->translate('admin_documents_sortby_' . $this->sort_order) ?></li>    
+                    <li class="active"><?= $this->translate('admin_documents_sortby_' . $this->sort_order) ?></li>
                     <?PHP foreach ($this->sortingLinks as $key => $link) : ?>
                     <?PHP if ($this->sort_order !== $key) : ?>
                         <li><a href="<?= $link ?>"><?= $this->translate('admin_documents_sortby_' . $key) ?></a></li>
@@ -116,11 +116,11 @@
 <?PHP endforeach; ?>
     </ul>
 </div>
-<?= $this->paginationControl($this->paginator, 'Sliding', 'results_pagination.phtml') ?>
+<?= $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml') ?>
 
 <table class="documents">
     <?PHP $index = 0; foreach ($this->paginator as $docId) : ?>
-    <?PHP $document = new Util_DocumentAdapter($this, $docId); ?>
+    <?PHP $document = new Application_Util_DocumentAdapter($this, $docId); ?>
     <tr class="<?= ($index++ % 2) ? 'even' : 'odd' ?>">
         <td class="id"><?= $docId ?></td>
         <td class="info">
@@ -177,4 +177,4 @@
     <?PHP endforeach; ?>
 </table>
 
-<?= $this->paginationControl($this->paginator, 'Sliding', 'results_pagination.phtml') ?>
+<?= $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml') ?>

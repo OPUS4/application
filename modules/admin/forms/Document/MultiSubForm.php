@@ -34,12 +34,12 @@
 
 /**
  * SubForm um mehrere Unterformulare (z.B. Patente) zu verwalten.
- * 
+ *
  * Die Unterformularhierarchy sieht folgendermaßen aus:
- * 
+ *
  * DocumentMultiSubForm
  * +- SubForm0
- * |  +- 
+ * |  +-
  * |
  * |
  * +- SubForm1
@@ -47,12 +47,12 @@
  * +- Add Button
  */
 class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubForm {
-    
+
     /**
      * Name von Button zum Hinzufügen eines Unterformulars (z.B. Enrichment).
      */
     const ELEMENT_ADD = 'Add';
-    
+
     /**
      * Name von Button zum Entfernen eines Unterformulars (z.B. Identifier).
      */
@@ -60,19 +60,19 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
 
     /**
      * Klasse für Unterformulare.
-     * @var type 
+     * @var type
      */
     private $_subFormClass;
-    
+
     /**
      * Opus_Document Feldname für Unterformulare.
      * @var type
      */
     private $_fieldName;
-    
+
     /**
      * Validierungsextension für die Unterformulare.
-     * @var type 
+     * @var type
      */
     private $_subformValidator;
 
@@ -82,7 +82,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
 
     /**
      * Konstruiert Instanz von Fomular.
-     * 
+     *
      * @param string $subFormClass Name der Klasse für Unterformulare
      * @param string $fieldName Name des Opus_Document Feldes, dass angezeigt werden soll
      * @param string $validator Object für Validierungen über Unterformulare hinweg
@@ -91,20 +91,20 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     public function __construct($subFormClass, $fieldName, $validator = null, $options = null) {
         $this->_subFormClass = $subFormClass;
         $this->_fieldName = $fieldName;
-        
-        if (is_null($validator) || $validator instanceof Form_Validate_IMultiSubForm) {
+
+        if (is_null($validator) || $validator instanceof Application_Form_Validate_IMultiSubForm) {
             $this->_subformValidator = $validator;
         }
         else {
             throw new Application_Exception(
-                'Fehler beim Instanzieren von ' . __CLASS__ 
-                . '. Validator ist keine Instanz von Form_Validate_IMultiSubForm.'
+                'Fehler beim Instanzieren von ' . __CLASS__
+                . '. Validator ist keine Instanz von Application_Form_Validate_IMultiSubForm.'
             );
         }
-        
+
         parent::__construct($options);
     }
-    
+
     /**
      * Erzeugt die Formularelemente.
      */
@@ -138,19 +138,19 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
     protected function initButton() {
         $this->addElement('submit', self::ELEMENT_ADD, array('order' => 1000, 'label' => 'admin_button_add'));
     }
-    
+
     /**
      * Erzeugt Unterformulare abhängig von den Metadaten im Dokument.
-     * 
+     *
      * @param Opus_Document $document
      */
     public function populateFromModel($document) {
-       $this->clearSubForms(); 
-        
+       $this->clearSubForms();
+
        $values = $this->getFieldValues($document);
-       
+
        $maxIndex = 0;
-       
+
        foreach ($values as $index => $value) {
            if ($maxIndex < $index) {
                $maxIndex = $index;
@@ -158,11 +158,11 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
            $subForm = $this->_addSubForm($index);
            $subForm->populateFromModel($value);
        }
-       
+
        // Sicherstellen, daß Button zum Hinzufügen zuletzt angezeigt wird
        $this->getElement(self::ELEMENT_ADD)->setOrder($maxIndex + 1);
     }
-    
+
     /**
      * Holt vom Dokument den Wert des konfigurierten Feldes.
      * @param Opus_Document $document
@@ -170,7 +170,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      */
     public function getFieldValues($document) {
        $field = $document->getField($this->_fieldName);
-       
+
        if (!is_null($field)) {
             return $field->getValue();
        }
@@ -178,7 +178,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
            $this->getLogger()->err(__METHOD__ . " Feld $this->__fieldName nicht gefunden.");
        }
     }
-    
+
     /**
      * Erzeugt Unterformulare basierend auf den Informationen in den POST Daten.
      *
@@ -197,25 +197,25 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
             }
         }
     }
-    
+
     /**
      * Prüft, ob die POST Daten verwendet werden können, um Unterformular anzulegen.
-     * 
+     *
      * Die Standardimplementation liefert immer TRUE zurück.
-     * 
+     *
      * @param array $post
-     * @return boolean TRUE - valides Unterformular; FALSE - ungültiges Unterformular 
+     * @return boolean TRUE - valides Unterformular; FALSE - ungültiges Unterformular
      */
     public function isValidSubForm($post) {
         return true;
     }
-    
+
     /**
      * Verarbeitet POST Request fuer Formular.
-     * 
-     * Der POST wird nicht an die Unterformulare weitergeleitet. Bei der bisherigen Verwendung der Klasse ist das 
+     *
+     * Der POST wird nicht an die Unterformulare weitergeleitet. Bei der bisherigen Verwendung der Klasse ist das
      * nicht notwendig.
-     * 
+     *
      * @param array $data POST Daten für Unterformular
      * @param array $context POST Daten für gesamtes Formular
      * @return string Ergebnis der Verarbeitung
@@ -248,7 +248,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
                 }
             }
         }
-        
+
         return null;
     }
 
@@ -260,67 +260,67 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
 
         return Admin_Form_Document::RESULT_SHOW;
     }
-    
+
     protected function processPostAdd() {
         $subform = $this->appendSubForm();
         $this->_addAnker($subform);
         return Admin_Form_Document::RESULT_SHOW;
     }
-    
+
     /**
      * Aktualisiert das Dokument.
-     * 
+     *
      * @param Opus_Document $document
      */
     public function updateModel($document) {
        $field = $document->getField($this->_fieldName);
-       
+
        $values = $this->getSubFormModels($document);
-       
+
        $field->setValue($values);
     }
-    
+
     /**
      * Sammelt Werte (Modelle) von Unterformularen ein.
-     * 
-     * Standardimplementation benötigt Parameter $document nicht. 
-     * 
+     *
+     * Standardimplementation benötigt Parameter $document nicht.
+     *
      * @return array
      */
     public function getSubFormModels($document = null) {
         $subforms = $this->getSubForms();
-        
+
         $values = array();
-        
+
         foreach ($subforms as $subform) {
             if (!is_null($subform)) {
                 $value = $subform->getModel();
-                
+
                 if (!is_null($value)) {
                     $values[] = $value;
                 }
             }
         }
-        
+
         return $values;
     }
-    
+
     /**
      * Fügt ein Unterformular an der gewünschten Position hinzu.
-     * 
+     *
      * @param int $position
      * @return \_subFormClass
      */
     protected function _addSubForm($position) {
         $subForm = $this->createSubForm();
         $subForm->setOrder($position);
-        
+
         $this->_setOddEven($subForm);
         $this->addSubForm($subForm, $this->getSubFormBaseName() . $position);
-        
+
         return $subForm;
     }
-    
+
     public function removeSubForm($name) {
         $result = parent::removeSubForm($name);
         $this->_removeGapsInSubFormOrder();
@@ -332,9 +332,9 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
      */
     protected function _setOddEven($subForm) {
         $position = $subForm->getOrder();
-        
+
         $multiWrapper = $subForm->getDecorator('multiWrapper');
-        
+
         if (!is_null($multiWrapper) && $multiWrapper instanceof Zend_Form_Decorator_HtmlTag) {
             $multiClass = $multiWrapper->getOption('class');
             $markerClass = ($position % 2 == 0) ? 'even' : 'odd';
@@ -350,11 +350,11 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
             $multiWrapper->setOption('class', $multiClass);
         }
     }
-    
+
     public function getSubFormBaseName() {
         return $this->_fieldName;
     }
-    
+
     /**
      * Erzeugt neues Unterformular zum Hinzufügen.
      * @return \_subFormClass
@@ -370,7 +370,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
 
     /**
      * Bereites die Dekoratoren für das Unterformular vor.
-     * 
+     *
      * @param type $subform
      */
     protected function prepareSubFormDecorators($subform) {
@@ -438,7 +438,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
             'decorators' => array(), 'disableLoadDefaultDecorators' => true)
         );
     }
-    
+
     /**
      * Erzeugt neue Instanz der Unterformklasse.
      * @return \_subFormClass
@@ -459,10 +459,10 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
 
         return $order;
     }
-    
+
     /**
      * Sorgt für lückenlose Nummerierung der Unterformulare.
-     * 
+     *
      * Warum ist dies wichtig? Bei der Konstruktion des Formulares vom POST werden die Unterformulare von 0 angefangen
      * durchnummeriert. Die Namen entsprechen also getSubFormBaseName() . $index, z.B. Identifier0, Identifier1 usw.
      * Das passiert unabhängig von den eigentlichen Namen der Unterformulare. Daher müssen die Namen der Unterformulare
@@ -475,7 +475,7 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
         $subforms = $this->getSubForms();
 
         $renamedSubforms = array();
-        
+
         $pos = 0;
 
         foreach ($subforms as $index => $subform) {
@@ -488,31 +488,31 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
 
         $this->setSubForms($renamedSubforms);
     }
-    
+
     /**
      * Erzeugt ein weiteres Unterformular an letzter Stelle.
      */
     public function appendSubForm() {
         $subforms = $this->getSubForms();
-        
+
         return $this->_addSubForm(count($subforms));
     }
-    
+
     /**
      * Ermittelt an welchem Unterformular der Sprungankor plaziert werden sollte.
-     * 
+     *
      * Wenn es keine Unterformulare mehr gibt, kommt der Anker ans übergeordnete Formular. Ansonsten kommt der Ankor an
      * das nächste Formular, daß aufgerutscht ist oder wenn das letzte Unterformular entfernt wurde, kommt der Ankor an
      * das neue letzte Formular.
-     * 
+     *
      * @param type $removedPosition
      * @return \Admin_Form_Document_MultiSubForm
      */
     public function determineSubFormForAnker($removedPosition) {
         $subforms = $this->getSubForms();
-        
+
         $subformCount = count($subforms);
-        
+
         if ($subformCount == 0) {
             return $this;
         }
@@ -525,50 +525,50 @@ class Admin_Form_Document_MultiSubForm extends Admin_Form_AbstractDocumentSubFor
             return $this->getSubForm($keys[$subformCount - 1]);
         }
     }
-    
+
     /**
      * Fuegt Anker fuer Positionierung des Formulars im Browser hinzu.
-     * 
+     *
      * Durch den Anker springt der Browser nach einem POST zu der gewuenschten Stelle, zum Beispiel dem gerade neu
      * hinzugefuegten Unterformular.
-     * 
+     *
      * @param Zend_Form $subform
      */
     protected function _addAnker($subform) {
         $subform->addDecorator(
-            array('currentAnker' => 'HtmlTag'), 
+            array('currentAnker' => 'HtmlTag'),
             array('tag' => 'a', 'placement' => 'prepend', 'name' => 'current')
         );
     }
-    
+
     /**
      * Validiere TitleMain eingaben im Formular.
-     * 
+     *
      * Zusätzlich zu den normalen Validierungen für Formularelemente wird geprüft, ob eine Sprache zweimal ausgewählt
      * wurde.
-     * 
+     *
      * @param array $data
      * @return boolean
      */
     public function isValid($data, $context = null) {
         // wird immer aufgerufen um gegebenenfalls weitere Nachrichten anzuzeigen
         $result = true;
-        
+
         if (!is_null($this->_subformValidator)) {
             if (array_key_exists($this->getName(), $data)) {
                 $this->_subformValidator->prepareValidation($this, $data[$this->getName()], $context);
                 $result = $this->_subformValidator->isValid($data[$this->getName()], $context);
             }
         }
-        
+
         return $result && parent::isValid($data);
     }
-    
+
     /**
      * Ermittelt, ob das Formular leer ist.
-     * 
+     *
      * Das Formular ist leer, wenn es keine Unterformulare gibt, als keine Modelle angezeigt werden (z.B. Identifier).
-     * 
+     *
      * @return boolean TRUE - wenn keine Unterformulare
      */
     public function isEmpty() {

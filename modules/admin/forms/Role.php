@@ -62,7 +62,7 @@ class Admin_Form_Role extends Zend_Form {
     public function init() {
         parent::init();
 
-        $this->getElement('name')->addValidator(new Form_Validate_RoleAvailable());
+        $this->getElement('name')->addValidator(new Application_Form_Validate_RoleAvailable());
     }
 
     public function populateFromRole($role) {

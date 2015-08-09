@@ -80,7 +80,7 @@ abstract class Setup_Model_Abstract {
     }
 
     /**
-     * Set configuration parameters. The parameter keys must 
+     * Set configuration parameters. The parameter keys must
      * match corresponding method names as follows:
      * E.g. the key "basePath" will match method "setBasePath($value)"
      */
@@ -100,16 +100,16 @@ abstract class Setup_Model_Abstract {
     }
 
     /**
-     * Dump model content to array. 
+     * Dump model content to array.
      * The output structure should match the input expected by @see fromArray().
-     * 
+     *
      * @result array|false returns array on success, false on failure.
      */
     abstract public function toArray();
 
     /**
      * Set model content from array.
-     * Expects input matching the structure 
+     * Expects input matching the structure
      * of the result returned by @see toArray().
      * @param array $array Array of model content.
      */
@@ -117,7 +117,7 @@ abstract class Setup_Model_Abstract {
 
     /**
      * @param array $tmxSourcePaths Array of file paths used for reading tmx content
-     * 
+     *
      */
     public function setTranslationSources(array $tmxSourcePaths) {
         $this->_tmxSources = $tmxSourcePaths;
@@ -132,7 +132,7 @@ abstract class Setup_Model_Abstract {
     }
 
     /**
-     * @param array $contentFiles  Array of file paths used for 
+     * @param array $contentFiles  Array of file paths used for
      *                          reading and writing content.
      * @throws Setup_Model_FileNotReadableException
      * @throws Setup_Model_FileNotWriteableException
@@ -144,7 +144,7 @@ abstract class Setup_Model_Abstract {
     }
 
     /**
-     * @param string $filename  full path of file used for 
+     * @param string $filename  full path of file used for
      *                          reading and writing content.
      * @throws Setup_Model_FileNotReadableException
      * @throws Setup_Model_FileNotWriteableException
@@ -152,7 +152,7 @@ abstract class Setup_Model_Abstract {
     public function addContentSource($filename) {
         $filePath = realpath($filename);
         if ($filePath == false) {
-            throw new Setup_Model_FileNotFoundException($filename); 
+            throw new Setup_Model_FileNotFoundException($filename);
         }
         $this->verifyReadAccess($filePath);
         $this->verifyWriteAccess($filePath);
@@ -163,7 +163,7 @@ abstract class Setup_Model_Abstract {
 
     /**
      * @param string $filename      file path for content.
-     *                              If no file name is set, 
+     *                              If no file name is set,
      *                              all content is returned in an array.
      * @throws Setup_Model_FileNotReadableException
      * @return array|string Content found in file refered to by key.
@@ -202,13 +202,13 @@ abstract class Setup_Model_Abstract {
     }
 
     /**
-     * @return array|bool   Returns array of translation units from the first 
+     * @return array|bool   Returns array of translation units from the first
      *                      file that is found in translation source paths
      *                      (@see setTranslationSourcePaths).
      *                      Returns false if no valid file path can be found.
      */
     public function getTranslation() {
-        $tmxFile = new Util_TmxFile();
+        $tmxFile = new Application_Util_TmxFile();
         foreach ($this->_tmxSources as $source) {
             if (is_file($source) && is_readable($source)) {
                 $tmxFile->load($source);
@@ -219,11 +219,11 @@ abstract class Setup_Model_Abstract {
     }
 
     /**
-     * Computes the difference between the stored translation 
+     * Computes the difference between the stored translation
      * and the array provided. Translation units are returned as a whole,
      * i.e. if only one variant is altered, the other variant(s) will be returned
      * as well.
-     * 
+     *
      * @param array $translation Array containing altered translations
      * @return array Array containing altered or added translation units
      */
@@ -278,9 +278,9 @@ abstract class Setup_Model_Abstract {
 
     /**
      * Store all tmx and content that has been set.
-     * This is performed as a transaction, reverting 
+     * This is performed as a transaction, reverting
      * changes already written if one write fails.
-     * 
+     *
      * @return bool Returns true on success, false on failure.
      */
     public function store() {
@@ -291,7 +291,7 @@ abstract class Setup_Model_Abstract {
         try {
             if (!empty($this->_tmxContents)) {
                 $this->verifyWriteAccess($this->_tmxTarget);
-                $tmxFile = new Util_TmxFile();
+                $tmxFile = new Application_Util_TmxFile();
                 if (is_file($this->_tmxTarget)) {
                     $tmxFile->load($this->_tmxTarget);
                     // backup in case a write operation fails
@@ -318,7 +318,7 @@ abstract class Setup_Model_Abstract {
             }
         } catch (Setup_Model_Exception $se) {
             if (!empty($tmxBackup)) {
-                $tmxFile = new Util_TmxFile();
+                $tmxFile = new Application_Util_TmxFile();
                 $tmxFile->fromArray($tmxBackup);
                 $tmxFile->save($this->_tmxTarget);
             }
@@ -337,14 +337,14 @@ abstract class Setup_Model_Abstract {
 
     /**
      * Check if a file exists and is readable
-     * 
+     *
      * @param string $file Path to file
-     * 
+     *
      * @throws Setup_Model_FileNotReadableException
      */
     public function verifyReadAccess($file) {
         if (!(is_file($file) && is_readable($file))) {
-            throw new Setup_Model_FileNotReadableException($file); 
+            throw new Setup_Model_FileNotReadableException($file);
         }
     }
 
@@ -353,7 +353,7 @@ abstract class Setup_Model_Abstract {
      * If the file does not exists, write access is checked for the parent directory.
      *
      * @param string $file Path to file
-     * 
+     *
      * @throws Setup_Model_FileNotWriteableException
      */
     public function verifyWriteAccess($file) {
@@ -361,7 +361,7 @@ abstract class Setup_Model_Abstract {
                 (!( is_file($file) && is_writable($file) ))
                 && (!( is_dir(dirname($file)) && is_writeable(dirname($file))) )
         ) {
-            throw new Setup_Model_FileNotWriteableException($file); 
+            throw new Setup_Model_FileNotWriteableException($file);
         }
     }
 

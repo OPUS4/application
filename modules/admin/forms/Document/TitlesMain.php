@@ -34,7 +34,7 @@
 
 /**
  * Unterformular fuer Haupttitel eines Dokuments.
- * 
+ *
  * Die Basisklasse wurde erweitert um dafür zu sorgen, dass der Titel in der Dokumentensprache zuerst angezeigt wird.
  * Außerdem wird zusätzlich bei der Validierung geprüft, ob ein Titel in der Dokumentsprache existiert.
  *
@@ -42,17 +42,17 @@
  * @package     Module_Admin
  */
 class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm {
-    
+
     /**
      * Konstruiert Unterformular fuer die Haupttitel eines Dokuments.
      */
     public function __construct() {
         parent::__construct(
             'Admin_Form_Document_Title', 'TitleMain',
-            new Form_Validate_MultiSubForm_RepeatedLanguages()
+            new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
         );
     }
-    
+
     public function init() {
         parent::init();
         $this->setDecorators(
@@ -60,7 +60,7 @@ class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm {
             'FormElements',
             array(array('fieldsWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'fields-wrapper')),
             array('FormErrors', array(
-                'placement' => 'prepend', 
+                'placement' => 'prepend',
                 'ignoreSubForms' => true,
                 'onlyCustomFormErrors' => true,
                 'markupListStart' => '<div class="form-errors">',
@@ -71,55 +71,55 @@ class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm {
             array('FieldsetWithButtons', array('legendButtons' => self::ELEMENT_ADD)),
             array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform'))
             )
-        );        
+        );
     }
-            
+
     /**
      * Prüft Abhängigkeiten zu anderen Unterformularen.
-     * 
-     * Es wird geprüft, ob ein Titel in der Sprache des Dokuments vorhanden ist. Das ist technisch notwendig für die 
+     *
+     * Es wird geprüft, ob ein Titel in der Sprache des Dokuments vorhanden ist. Das ist technisch notwendig für die
      * Indizierung und für die Anzeige an vielen Stellen.
-     * 
+     *
      * @param array $data
      * @param array $globalContext Daten für das gesamte Metadaten-Formular
      * @return boolean true - wenn keine Abhängigkeiten verletzt wurden
      */
     public function isDependenciesValid($data, $globalContext) {
         $result = parent::isDependenciesValid($data, $globalContext);
-        
+
         $language = $globalContext['General']['Language']; // TODO kann das dynamisch ermittelt werden
 
-        $validator = new Form_Validate_ValuePresentInSubforms('Language');
-        
+        $validator = new Application_Form_Validate_ValuePresentInSubforms('Language');
+
         if (!$validator->isValid($language, $data)) {
             $translator = $this->getTranslator();
             $this->addErrorMessage(
                 vsprintf(
-                    $translator->translate('admin_document_error_NoTitleInDocumentLanguage'), 
+                    $translator->translate('admin_document_error_NoTitleInDocumentLanguage'),
                     array($translator->translate($language))
                 )
             );
-            
+
             $result = false;
         }
         return $result;
     }
-        
+
     /**
      * Liefert Array mit Haupttiteln des Dokuments.
-     * 
+     *
      * Sorgt dafuer, dass der Titel in der Dokumentensprache zuerst im Array steht.
-     * 
+     *
      * @param Opus_Document $document
      * @return array
      */
     public function getFieldValues($document) {
         $values = parent::getFieldValues($document);
-        
+
         $doclang = $document->getLanguage();
-        
+
         $sortedValues = array();
-        
+
         foreach ($values as $index => $value) {
             if ($value->getLanguage() == $doclang) {
                 $sortedValues[] = $value;
@@ -127,9 +127,9 @@ class Admin_Form_Document_TitlesMain extends Admin_Form_Document_MultiSubForm {
                 break;
             }
         }
-        
+
         return array_merge($sortedValues, $values);
     }
-    
+
 }
 

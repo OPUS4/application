@@ -32,7 +32,7 @@
  * @version     $Id$
  */
 
-class Solrsearch_BrowseController extends Controller_Action {
+class Solrsearch_BrowseController extends Application_Controller_Action {
 
     public function init() {
         parent::init();
@@ -59,7 +59,7 @@ class Solrsearch_BrowseController extends Controller_Action {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e);
             throw new Application_SearchException($e);
         }
-        
+
         $docTypesTranslated = array();
         foreach ($facets[$facetname] as $facetitem) {
             $translation = $this->view->translate($facetitem->getText());

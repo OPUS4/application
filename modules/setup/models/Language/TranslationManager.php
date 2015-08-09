@@ -34,7 +34,7 @@
  */
 
 /**
- * 
+ *
  */
 class Setup_Model_Language_TranslationManager {
     /**
@@ -80,7 +80,7 @@ class Setup_Model_Language_TranslationManager {
 
     /**
      * Set Modules to include
-     * 
+     *
      * @param array $modules Modules to include
      *
      */
@@ -91,8 +91,8 @@ class Setup_Model_Language_TranslationManager {
     /**
      * Set filter used to filter translation units.
      * Only units which contain filter are returned.
-     * 
-     * 
+     *
+     *
      */
     public function setFilter($string) {
         $this->_filter = $string;
@@ -101,8 +101,8 @@ class Setup_Model_Language_TranslationManager {
     /**
      * Returns translations in modules set via @see setModules()
      * and (optionally) matching string set via @see setFilter()
-     * 
-     * @param string $sortKey   Key used to sort result array. 
+     *
+     * @param string $sortKey   Key used to sort result array.
      *                          Valid keys are defined as class constants
      * @param int $sortOrder    Sort order as expected by @see array_multisort()
      * @throw Setup_Model_FileNotReadableException Thrown if loading tmx file(s) fails.
@@ -116,7 +116,7 @@ class Setup_Model_Language_TranslationManager {
                 foreach ($filenames as $fileName) {
                     $relativeFilePath = "$module/$dir/$fileName";
                     $filePath = APPLICATION_PATH . "/modules/$relativeFilePath";
-                    $tmxFile = new Util_TmxFile();
+                    $tmxFile = new Application_Util_TmxFile();
                     if ($tmxFile->load($filePath)) {
                         $translationUnits = $tmxFile->toArray();
                         foreach ($translationUnits as $key => $values) {
@@ -165,14 +165,14 @@ class Setup_Model_Language_TranslationManager {
                         foreach ($tmxFiles as $tmxFile) {
                             $tmxFileName = $tmxFile->getFilename();
                             if ($tmxFile->isFile() && substr($tmxFileName, -4) == '.tmx') {
-                                $moduleFiles[$dirName][] = $tmxFile->getFilename(); 
+                                $moduleFiles[$dirName][] = $tmxFile->getFilename();
                             }
                         }
                     }
                 }
             }
             if (!empty($moduleFiles)) {
-                $modules[$moduleName] = $moduleFiles; 
+                $modules[$moduleName] = $moduleFiles;
             }
         }
         return $modules;

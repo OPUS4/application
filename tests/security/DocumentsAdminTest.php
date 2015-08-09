@@ -58,7 +58,7 @@ class DocumentsAdminTest extends ControllerTestCase {
         $this->assertNotQuery('//a[@href="/admin/series"]');
         $this->assertNotQuery('//a[@href="/admin/language"]');
         $this->assertNotQuery('//a[@href="/admin/dnbinstitute"]');
-        $this->assertQuery('//a[@href="/admin/index/setup"]');
+        $this->assertNotQuery('//a[@href="/admin/index/setup"]');
         $this->assertNotQuery('//a[@href="/review"]');
     }
 
@@ -209,5 +209,5 @@ class DocumentsAdminTest extends ControllerTestCase {
         $this->dispatch('/admin/document/edit/id/146');
         $this->assertRedirectTo('/auth');
     }
-    
+
 }

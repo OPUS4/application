@@ -25,17 +25,26 @@
  *
  * @category    Application
  * @author      Julian Heise <heise@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
+/**
+ * The following functions allow reseting the form to empty values and default values without reloading the page.
+ *
+ * It is not really essential. The regular reset functionality for HTML forms is not sufficient, because the form may
+ * be loaded with values in the search fields. The reset buttons is supposed to empty those fields.
+ *
+ * @returns {boolean}
+ */
 function resetAdvancedSearchForm() {
-    var fields = ['author','title','referee','abstract','fulltext','year'];
-    for(i=0; i<fields.length; i++) {
+    var fields = ['author', 'title', 'referee', 'abstract', 'fulltext', 'year'];
+    for (i = 0; i < fields.length; i++) {
         var id = fields[i];
         resetTextBox(id);
-        resetComboBox(id+'Modifier');
+        resetComboBox(id + 'modifier');
     }
     resetComboBox('rows');
     return false;
@@ -43,13 +52,14 @@ function resetAdvancedSearchForm() {
 
 function resetTextBox(id) {
     var textBox = document.getElementById(id);
-    if(textBox != null) {
+    if (textBox != null) {
         textBox.value = '';
     }
 }
 
 function resetComboBox(id) {
     var comboBox = document.getElementById(id);
-    if(comboBox != null)
+    if (comboBox != null) {
         comboBox.selectedIndex = 0;
+    }
 }

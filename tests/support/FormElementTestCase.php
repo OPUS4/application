@@ -88,11 +88,11 @@ abstract class FormElementTestCase extends ControllerTestCase {
     public function testPrepareRenderingAsView() {
         $element = $this->getElement();
 
-        if ($element instanceof Form_IElement) {
+        if ($element instanceof Application_Form_IElement) {
             $element->prepareRenderingAsView();
 
             $this->assertNotNull($element->getDecorator('ViewHelper'));
-            $this->assertInstanceOf('Form_Decorator_ViewHelper', $element->getDecorator('ViewHelper'));
+            $this->assertInstanceOf('Application_Form_Decorator_ViewHelper', $element->getDecorator('ViewHelper'));
             $this->assertTrue($element->getDecorator('ViewHelper')->isViewOnlyEnabled());
         }
     }
@@ -101,8 +101,8 @@ abstract class FormElementTestCase extends ControllerTestCase {
         $element = $this->getElement();
 
         $paths = $element->getPluginLoader(Zend_Form::DECORATOR)->getPaths();
-        $this->assertArrayHasKey('Form_Decorator_', $paths);
-        $this->assertContains('Form/Decorator/', $paths['Form_Decorator_']);
+        $this->assertArrayHasKey('Application_Form_Decorator_', $paths);
+        $this->assertContains('Application/Form/Decorator/', $paths['Application_Form_Decorator_']);
     }
 
     public function testGetStaticViewHelper() {

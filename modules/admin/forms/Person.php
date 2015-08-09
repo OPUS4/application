@@ -35,7 +35,7 @@
 
 /**
  * Formular zum Editieren einer Person (Opus_Person).
- * 
+ *
  * Dieses Formular beruecksichtigt nicht die Felder, die bei der Verknuepfung einer Person mit einem Dokument in dem
  * Link Objekt hinzukommen.
  */
@@ -45,52 +45,52 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
      * Name fuer Formularelement fuer Feld ID von Opus_Person.
      */
     const ELEMENT_PERSON_ID = 'PersonId';
-        
+
     /**
      * Name fuer Formularelement fuer Feld AcademicTitle.
      */
     const ELEMENT_ACADEMIC_TITLE = 'AcademicTitle';
-    
+
     /**
      * Name fuer Formularelement fuer Feld LastName.
      */
     const ELEMENT_LAST_NAME = 'LastName';
-    
+
     /**
      * Name fuer Formularelement fuer Feld FirstName.
      */
     const ELEMENT_FIRST_NAME = 'FirstName';
-    
+
     /**
      * Name fuer Formularelement fuer Feld Email.
      */
     const ELEMENT_EMAIL = 'Email';
-    
+
     /**
      * Name fuer Formularelement fuer Feld PlaceOfBirth.
      */
     const ELEMENT_PLACE_OF_BIRTH = 'PlaceOfBirth';
-    
+
     /**
      * Name fuer Formularelement fuer Feld DateOfBirth.
      */
     const ELEMENT_DATE_OF_BIRTH = 'DateOfBirth';
-        
+
     /**
      * Name fuer Button zum Speichern.
      */
     const ELEMENT_SAVE = 'Save';
-    
+
     /**
      * Name fuer Button zum Abbrechen.
      */
     const ELEMENT_CANCEL = 'Cancel';
-    
+
     /**
      * Konstante fuer POST Ergebnis 'abspeichern'.
      */
     const RESULT_SAVE = 'save';
-    
+
     /**
      * Konstante fuer POST Ergebnis 'abbrechen'.
      */
@@ -116,10 +116,10 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
      */
     public function init() {
         parent::init();
-        
+
         $this->setDecorators(
             array(
-            'FormElements',            
+            'FormElements',
             'Fieldset',
             array(array('divWrapper' => 'HtmlTag'), array('tag' => 'div', 'class' => 'subform')),
             'Form'
@@ -140,8 +140,8 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
         $this->addElement('text', self::ELEMENT_IDENTIFIER_ORCID, array('label' => 'IdentifierOrcid', 'size' => 40));
         $this->addElement('text', self::ELEMENT_IDENTIFIER_MISC, array('label' => 'IdentifierMisc', 'size' => 40));
 
-        $this->getElement(self::ELEMENT_IDENTIFIER_GND)->addValidator(new Form_Validate_Gnd());
-        $this->getElement(self::ELEMENT_IDENTIFIER_ORCID)->addValidator(new Form_Validate_Orcid());
+        $this->getElement(self::ELEMENT_IDENTIFIER_GND)->addValidator(new Application_Form_Validate_Gnd());
+        $this->getElement(self::ELEMENT_IDENTIFIER_ORCID)->addValidator(new Application_Form_Validate_Orcid());
 
         $this->addDisplayGroup(
             $this->getElements(), 'fields', array(
@@ -151,7 +151,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
             )
             )
         );
-        
+
         $this->addElement(
             'submit', self::ELEMENT_SAVE, array('decorators' => array(
             'ViewHelper',
@@ -175,14 +175,14 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
             )
         );
     }
-    
+
     /**
      * Setzt die Werte der Formularelmente entsprechend der uebergebenen Opus_Person Instanz.
      * @param Opus_Person $model
      */
     public function populateFromModel($person) {
         $datesHelper = $this->getDatesHelper();
-        
+
         $this->getElement(self::ELEMENT_PERSON_ID)->setValue($person->getId());
         $this->getElement(self::ELEMENT_ACADEMIC_TITLE)->setValue($person->getAcademicTitle());
         $this->getElement(self::ELEMENT_FIRST_NAME)->setValue($person->getFirstName());
@@ -195,7 +195,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
         $this->getElement(self::ELEMENT_DATE_OF_BIRTH)->setValue($datesHelper->getDateString($date));
         $this->getElement(self::ELEMENT_EMAIL)->setValue($person->getEmail());
     }
-        
+
     /**
      * Ermittelt bei einem Post welcher Button geklickt wurde, also welche Aktion gewünscht ist.
      * @param array $post
@@ -209,7 +209,7 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
         else if (array_key_exists(self::ELEMENT_CANCEL, $post)) {
             return self::RESULT_CANCEL;
         }
-        
+
         return null;
     }
 
@@ -234,24 +234,24 @@ class Admin_Form_Person extends Admin_Form_AbstractDocumentSubForm {
             $this->getLog()->err(__METHOD__ . ' called with object that is not instance of Opus_Person');
         }
     }
-    
+
     /**
      * Liefert Instanz von Opus_Person zurueck.
      * @return \Opus_Person
      */
     public function getModel() {
        $personId = $this->getElementValue(self::ELEMENT_PERSON_ID);
-       
+
        if (is_numeric($personId)) {
            $person = new Opus_Person($personId);
        }
        else {
            $person = new Opus_Person();
        }
-       
+
        $this->updateModel($person);
-       
+
        return $person;
     }
-    
+
 }

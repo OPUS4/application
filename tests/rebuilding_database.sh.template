@@ -25,6 +25,7 @@
 # Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 set -e
+
 script_dir=$(cd `dirname $0` && pwd)
 
 config_ini=$script_dir/config.ini
@@ -123,37 +124,46 @@ mkdir -v $TEMP_DIR/{files,log}
 
 if [ -d ${workspace_files_dir} ] ; then
     mv $workspace_files_dir/ $TEMP_DIR/files
-    rm -rf $TEMP_DIR/files/.svn
 fi
 
 if [ -d ${workspace_log_dir} ] ; then
     mv $workspace_log_dir/ $TEMP_DIR/log
-    rm -rf $TEMP_DIR/log/.svn
 fi
 
-mv $series_logos_dir $TEMP_DIR
-rm -rf $TEMP_DIR/series_logos/.svn
+if [ -d ${series_logos_dir} ] ; then
+    mv $series_logos_dir $TEMP_DIR
+fi
 
-cd $workspace_dir
-svn up
-cd -
+mkdir -p $workspace_files_dir
+mkdir -p $workspace_log_dir
+mkdir -p $workspace_dir/cache
+mkdir -p $workspace_dir/export
+mkdir -p $workspace_dir/incoming
+mkdir -p $workspace_dir/tmp
+mkdir -p $workspace_dir/tmp/resumption
+
 echo -e "\n*** Created backup of fulltexts and log files in $TEMP_DIR ***\n"
 
-svn up $series_logos_dir
-cd -
+mkdir -p $series_logos_dir
 
 echo -e "\n*** Created backup of fulltexts, log files and series logos in $TEMP_DIR ***\n"
 
-rm -rf $script_dir/workspace/*
-svn up $script_dir/workspace
+rm -rf $workspace_test_dir/*
+
+mkdir -p $workspace_test_dir/cache
+mkdir -p $workspace_test_dir/export
+mkdir -p $workspace_test_dir/incoming
+mkdir -p $workspace_test_dir/tmp
+mkdir -p $workspace_test_dir/tmp/resumption
+mkdir -p $workspace_test_dir/files
+mkdir -p $workspace_test_dir/log
 
 #
 # Copy test fulltexts to workspace
 #
 
-rsync -rv --exclude=.svn $fulltext_dir/ $workspace_files_dir
-rsync -rv --exclude=.svn $fulltext_dir/ $workspace_test_dir/files
-
+rsync -rv $fulltext_dir/ $workspace_files_dir
+rsync -rv $fulltext_dir/ $workspace_test_dir/files
 
 #
 # Restore log files
@@ -164,10 +174,8 @@ fi
 touch $workspace_log_dir/{opus.log,opus-console.log}
 chmod -R o+w,g+w {$workspace_files_dir,$workspace_log_dir}
 
-
 #
 # Copy test series logos to public/series_logos
 #
 
 rsync -rv --exclude=.svn $test_series_logos_dir/ $series_logos_dir
-

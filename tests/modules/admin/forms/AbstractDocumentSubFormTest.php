@@ -42,7 +42,7 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase {
         parent::setUp();
         $this->form = $this->getForm();
     }
-    
+
     private function getForm() {
         return $this->getMockForAbstractClass('Admin_Form_AbstractDocumentSubForm');
     }
@@ -114,9 +114,9 @@ class Admin_Form_AbstractDocumentSubFormTest extends ControllerTestCase {
 
     public function testGetDatesHelper() {
         $form = $this->getForm();
-        
+
         $this->assertNotNull($form->getDatesHelper());
-        $this->assertInstanceOf('Controller_Helper_Dates', $form->getDatesHelper());
+        $this->assertInstanceOf('Application_Controller_Action_Helper_Dates', $form->getDatesHelper());
     }
 
 }

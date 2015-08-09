@@ -27,208 +27,56 @@
  * @category    Application
  * @package     Module_Admin
  * @author      Gunar Maiwald <maiwald@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id: EnrichmentkeyController.php 9368 2011-12-13 09:05:15Z gmaiwald $
  */
 
-class Admin_EnrichmentkeyController extends Controller_Action {
-    
-
-    private $_protectedEnrichmentkeys = array();
-
+/**
+ * Class Admin_EnrichmentkeyController
+ *
+ * All enrichments are shown, but only enrichments that are not protected can be edited or deleted. An enrichment is
+ * protected if it is configured as such in the configuration file or if it is referenced by documents.
+ *
+ * The two configurations parameters are:
+ *
+ * enrichmentkey.protected.modules   (for special enrichments used by modules)
+ * enrichmentkey.protected.migration (for enrichments created during migration from OPUS 3)
+ *
+ * @category    Application
+ * @package     Module_Admin
+ *
+ * TODO show protected/referenced in list of keys
+ */
+class Admin_EnrichmentkeyController extends Application_Controller_ActionCRUD {
 
     /**
-     * Initializes controller.
+     * Model for handling enrichment keys.
+     * @var Admin_Model_EnrichmentKeys
+     */
+    private $_enrichmentKeys;
+
+    /**
+     * Initializes and configures controller.
+     * @throws Application_Exception
      */
     public function init() {
+        $this->_enrichmentKeys = new Admin_Model_EnrichmentKeys();
+        $this->setVerifyModelIdIsNumeric(false);
+        $this->setShowActionEnabled(false);
+        $this->setFormClass('Admin_Form_EnrichmentKey');
         parent::init();
-        $config = Zend_Registry::get('Zend_Config');
-
-        if (!isset($config->enrichmentkey->protected->modules)) {
-           throw new Opus_Exception("config key 'enrichmentkey.protected.modules' is not defined in config file");
-        }
-
-        foreach (explode(',', $config->enrichmentkey->protected->modules) as $protectedEnrichmentkey) {
-            array_push($this->_protectedEnrichmentkeys, $protectedEnrichmentkey);
-
-        }
-
-        if (!isset($config->enrichmentkey->protected->migration)) {
-           throw new Opus_Exception("config key 'enrichmentkey.protected.migration' is not defined in config file");
-        }
-
-        foreach (explode(',', $config->enrichmentkey->protected->migration) as $protectedEnrichmentkey) {
-            array_push($this->_protectedEnrichmentkeys, $protectedEnrichmentkey);
-
-        }
     }
 
     /**
-     * Shows list of all enrichmentkeys.
+     * Checks if a model can be modified.
+     * @param $model Opus_EnrichmentKey
+     * @return bool true if model can be edited and deleted, false if model is protected
      */
-    public function indexAction() {
-        $this->view->title = $this->view->translate('admin_enrichmentkey_index');
-        $enrichmentkeys = Opus_EnrichmentKey::getAll();
-
-        if (!empty($enrichmentkeys)) {
-            $this->view->protectedKeys = array_merge(
-                Opus_EnrichmentKey::getAllReferenced(),
-                $this->_protectedEnrichmentkeys
-            );
-            $this->view->enrichmentkeys = array();
-            foreach ($enrichmentkeys as $enrichmentkey) {
-                $this->view->enrichmentkeys[$enrichmentkey->getName()] = $enrichmentkey->getDisplayName();
-            }
-        }
-        else {
-            return $this->renderScript('enrichmentkey/none.phtml');
-        }
+    public function isModifiable($model) {
+        $protectedKeys = $this->_enrichmentKeys->getProtectedEnrichmentKeys();
+        return !in_array($model->getId(), array_merge($protectedKeys, Opus_EnrichmentKey::getAllReferenced()));
     }
-
-    /**
-     * Show enrichmentkey information.
-     */
-    public function showAction() {
-        $this->view->title = $this->view->translate('admin_enrichmentkey_show');
-        $name = $this->getRequest()->getParam('name');
-
-        if (!is_null(Opus_EnrichmentKey::fetchByName($name))) {
-            $enrichmentkey = new Opus_EnrichmentKey($name);
-            $this->view->enrichmentkey = $enrichmentkey;
-        }
-        else {
-            $this->_helper->redirector('index');
-        }
-    }
-
-    /**
-     * Shows edit form for enrichmentkey.
-     */
-    public function editAction() {
-        $this->view->title = $this->view->translate($this->view->title);
-        $name = $this->getRequest()->getParam('name');
-  
-        if (!is_null(Opus_EnrichmentKey::fetchByName($name)) && !in_array($name, $this->_protectedEnrichmentkeys)) {
-            $form = new Admin_Form_Enrichmentkey($name);
-            $actionUrl = $this->view->url(array('action' => 'update', 'name' => $name));
-            $form->setAction($actionUrl);
-            $this->view->form = $form;
-        }
-        else {
-            $this->_helper->redirector('index');
-        }
-    }
-
-    /**
-     * Shows form for creating a new enrichmentkey.
-     */
-    public function newAction() {
-        $this->view->title = $this->view->translate('admin_enrichmentkey_index');
-        $form = new Admin_Form_Enrichmentkey();
-        $actionUrl = $this->view->url(array('action' => 'create'));
-        $form->setAction($actionUrl);
-        $this->view->form = $form;
-    }
-
-    /**
-     * Creates a new enrichmentkey.
-     */
-   public function createAction() {
-        if ($this->getRequest()->isPost()) {
-            $postData = $this->getRequest()->getPost();
-
-            if ($this->getRequest()->getPost('cancel')) {
-                return $this->_redirectTo('index');
-            }
-
-            $form = new Admin_Form_Enrichmentkey();
-
-
-
-            if ($form->isValid($postData)) {
-                $name = $postData['name'];
-                $this->_updateEnrichmentkey(null, $name);
-            }
-            else {
-                $actionUrl = $this->view->url(array('action' => 'create'));
-                $form->setAction($actionUrl);
-                $this->view->form = $form;
-                $this->view->title = 'admin_enrichmentkey_new';
-                $this->_helper->viewRenderer->setRender('new');
-                return $this->render('new');
-            }
-        }
-        $this->_redirectTo('index');
-   }
-
-    /**
-     * Updates an enrichmentkey.
-     */
-    public function updateAction() {
-        $name = $this->getRequest()->getParam('name');
-
-        if (!is_null(Opus_EnrichmentKey::fetchByName($name))) {
-            $postData = $this->getRequest()->getPost();
-            $enrichmentkey = Opus_EnrichmentKey::fetchByName($name);
-
-            if (!is_null($enrichmentkey)) {
-
-                if (!isset($postData['name'])) {
-                    $postData['name'] = $enrichmentkey->getName();
-                }
-                
-                $form = new Admin_Form_Enrichmentkey();
-
-                $postData['oldName'] =  $enrichmentkey->getName();
-                if ($form->isValid($postData)) {
-                    $name = $postData['name'];
-                    $this->_updateEnrichmentkey($enrichmentkey, $name);
-                }
-                else {
-                    $actionUrl = $this->view->url(array('action' => 'update', 'name' => $name));
-                    $form->setAction($actionUrl);
-                    $this->view->form = $form;
-                    $this->view->title = 'admin_enrichmentkey_edit';
-                    $this->_helper->viewRenderer->setRender('edit');
-                    return $this->render('edit');
-                }
-            }
-        }
-
-        $this->_helper->redirector('index');
-    }
-
-
-    /**
-     * Deletes an enrichmentkey from the database.
-     */
-    public function deleteAction() {
-        $name = $this->getRequest()->getParam('name');
-
-        if (!is_null(Opus_EnrichmentKey::fetchByName($name)) && !in_array($name, $this->_protectedEnrichmentkeys)) {
-            $enrichmentkey = new Opus_EnrichmentKey($name);
-            $enrichmentkey->delete();
-        }
-
-        $this->_helper->redirector('index');
-    }
-
-
-    protected function _updateEnrichmentkey($id, $name) {
-        if (!empty($id)) {
-            $enrichmentkey = new Opus_EnrichmentKey($id);
-        }
-        else {
-            $enrichmentkey = new Opus_EnrichmentKey();
-        }
-
-        if (!empty($name)) {
-            $enrichmentkey->setName($name);
-            $enrichmentkey->store();
-        }
-       
-    }
-
 
 }

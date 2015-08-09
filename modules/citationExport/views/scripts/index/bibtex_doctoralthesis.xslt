@@ -38,7 +38,7 @@
 
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:php="http://php.net/xsl"    
+    xmlns:php="http://php.net/xsl"
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     exclude-result-prefixes="php">
 
@@ -147,6 +147,14 @@
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
+            <xsl:with-param name="field">school     </xsl:with-param>
+            <xsl:with-param name="value">
+                <xsl:value-of select="ThesisPublisher/@Name" />
+                <xsl:if test="ThesisPublisher/@Department">, <xsl:value-of select="ThesisPublisher/@Department" /></xsl:if>
+            </xsl:with-param>
+            <xsl:with-param name="delimiter">,</xsl:with-param>
+        </xsl:call-template>
+        <xsl:call-template name="outputFieldValue">
             <xsl:with-param name="field">doi      </xsl:with-param>
             <xsl:with-param name="value"><xsl:value-of select ="IdentifierDoi/@Value" /></xsl:with-param>
             <xsl:with-param name="delimiter">,</xsl:with-param>
@@ -162,8 +170,8 @@
             <xsl:with-param name="delimiter">,</xsl:with-param>
         </xsl:call-template>
         <xsl:call-template name="outputFieldValue">
-            <xsl:with-param name="field">note     </xsl:with-param>             
-            <xsl:with-param name="value"><xsl:value-of select="Enrichment[@KeyName=$enrichment_note]/@Value" /></xsl:with-param>         
+            <xsl:with-param name="field">note     </xsl:with-param>
+            <xsl:with-param name="value"><xsl:value-of select="Enrichment[@KeyName=$enrichment_note]/@Value" /></xsl:with-param>
         </xsl:call-template>
 <xsl:text>}</xsl:text>
      </xsl:template>

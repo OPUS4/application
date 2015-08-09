@@ -34,12 +34,12 @@
 
 /**
  * Unterformular fuer die Titel eines Dokuments.
- * 
+ *
  * Die verschiedenen Typen von Titeln werden in separaten Unterformularen angezeigt. Bei den Haupttiteln wird der Titel
  * in der Dokumentensprache zuerst angezeigt.
- * 
+ *
  * Es darf nur einen Titel in der Dokumentensprache geben.
- * 
+ *
  * Der Typ eines Titels kann später nicht mehr geändert werden. Die Felder fuer die verschiedenen Titeltypen setzen
  * den Wert vom Feld 'Type' eines Titels automatisch.
  *
@@ -47,34 +47,34 @@
  * @package     Module_Admin
  */
 class Admin_Form_Document_Titles extends Admin_Form_Document_Section {
-    
+
     /**
      * Initialisiert das Formular und erzeugt die Unterformulare für die Titeltypen.
      */
     public function init() {
         parent::init();
-        
+
         $this->setLegend('admin_document_section_titles');
-        
+
         $this->addSubForm(new Admin_Form_Document_TitlesMain(), 'Main');
         $this->addSubForm(
             new Admin_Form_Document_MultiSubForm(
                 'Admin_Form_Document_Title', 'TitleAdditional',
-                new Form_Validate_MultiSubForm_RepeatedLanguages()
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
             ), 'Additional'
         );
         $this->addSubForm(
             new Admin_Form_Document_MultiSubForm(
                 'Admin_Form_Document_Title', 'TitleParent',
-                new Form_Validate_MultiSubForm_RepeatedLanguages()
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
             ), 'Parent'
         );
         $this->addSubForm(
             new Admin_Form_Document_MultiSubForm(
                 'Admin_Form_Document_Title', 'TitleSub',
-                new Form_Validate_MultiSubForm_RepeatedLanguages()
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages()
             ), 'Sub'
-        );        
+        );
     }
-    
+
 }

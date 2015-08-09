@@ -37,7 +37,7 @@
     if($this->searchType === 'simple')
         include('simpleSearchForm.phtml');
     else if($this->searchType === 'advanced' || $this->searchType === 'authorsearch')
-        include('advancedSearchForm.phtml');
+        echo $this->form;
 ?>
 
 <div class="invalidsearchterm">

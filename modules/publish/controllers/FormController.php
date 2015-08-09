@@ -31,7 +31,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Publish_FormController extends Controller_Action {
+class Publish_FormController extends Application_Controller_Action {
 
     const BUTTON_ADD = 'addMore';
     const BUTTON_DELETE = 'deleteMore';
@@ -78,7 +78,7 @@ class Publish_FormController extends Controller_Action {
         }
 
         //don't allow MAX_FILE_SIZE to get overridden
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         $postData['MAX_FILE_SIZE'] = $config->publish->maxfilesize;
 
         $indexForm->populate($postData);
@@ -228,8 +228,8 @@ class Publish_FormController extends Controller_Action {
             if (array_key_exists('back', $postData)) {
                 if (isset($this->session->elements)) {
                     foreach ($this->session->elements AS $element) {
-                        $postData[$element['name']] = $element['value']; 
-                    } 
+                        $postData[$element['name']] = $element['value'];
+                    }
                 }
             }
 
@@ -263,7 +263,7 @@ class Publish_FormController extends Controller_Action {
                     $legalNotices = $form->getElement('LegalNotices');
                     $legalNotices->setChecked(false);
                 }
-                
+
                 $this->renderDocumenttypeForm();
                 return;
             }
@@ -467,7 +467,7 @@ class Publish_FormController extends Controller_Action {
             $fieldName = str_replace('Enrichment', '', $fieldName);
         }
         if ($saveName != "") {
-            $fieldName = $saveName; 
+            $fieldName = $saveName;
         }
 
         $this->view->currentAnchor = 'group' . $fieldName;
@@ -593,7 +593,7 @@ class Publish_FormController extends Controller_Action {
     }
 
     private function renderDocumenttypeForm() {
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
 
         if (!isset($config->publish->path->documenttemplates)) {
             throw new Application_Exception('invalid configuration: publish.path.documenttemplates is not defined');
@@ -608,7 +608,7 @@ class Publish_FormController extends Controller_Action {
 
         $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
         $templateName = $docTypeHelper->getTemplateName($this->session->documentType);
-        
+
         if (is_null($templateName)) {
             throw new Application_Exception(
                 'invalid configuration: could not get template name for requested document type'

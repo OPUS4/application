@@ -37,7 +37,7 @@
  * @version     $Id$
  */
 
-class Oai_IndexController extends Controller_Xml {
+class Oai_IndexController extends Application_Controller_Xml {
 
     /**
      * Holds information about which document state aka server_state
@@ -69,8 +69,7 @@ class Oai_IndexController extends Controller_Xml {
     public function init() {
         parent::init();
 
-        $registry = Zend_Registry::getInstance();
-        $config = $registry->get('Zend_Config');
+        $config = $this->getConfig();
 
         $this->_configuration = new Oai_Model_Configuration($config);
     }
@@ -96,13 +95,13 @@ class Oai_IndexController extends Controller_Xml {
         }
         catch (Oai_Model_Exception $e) {
             $errorCode = Oai_Model_Error::mapCode($e->getCode());
-            Zend_Registry::get('Zend_Log')->err($errorCode);
+            $this->getLogger()->err($errorCode);
             $this->_proc->setParameter('', 'oai_error_code', $errorCode);
-            Zend_Registry::get('Zend_Log')->err($e->getMessage());
+            $this->getLogger()->err($e->getMessage());
             $this->_proc->setParameter('', 'oai_error_message', htmlentities($e->getMessage()));
         }
         catch (Oai_Model_ResumptionTokenException $e) {
-            Zend_Registry::get('Zend_Log')->err($e);
+            $this->getLogger()->err($e);
             $this->_proc->setParameter('', 'oai_error_code', 'unknown');
             $this->_proc->setParameter(
                 '', 'oai_error_message', 'An error occured while processing the resumption token.'
@@ -110,7 +109,7 @@ class Oai_IndexController extends Controller_Xml {
             $this->getResponse()->setHttpResponseCode(500);
         }
         catch (Exception $e) {
-            Zend_Registry::get('Zend_Log')->err($e);
+            $this->getLogger()->err($e);
             $this->_proc->setParameter('', 'oai_error_code', 'unknown');
             $this->_proc->setParameter('', 'oai_error_message', 'An internal error occured.');
             $this->getResponse()->setHttpResponseCode(500);
@@ -147,8 +146,8 @@ class Oai_IndexController extends Controller_Xml {
         $this->loadStyleSheet($this->view->getScriptPath('index') . '/oai-pmh.xslt');
 
         $this->_proc->registerPHPFunctions('Oai_IndexController::getLanguageCode');
+        $this->_proc->setParameter('', 'urnResolverUrl', $this->getConfig()->urn->resolverUrl);
 
-        
         // Set response time
         $this->_proc->setParameter(
             '', 'dateTime', str_replace('+00:00', 'Z', Zend_Date::now()->setTimeZone('UTC')->getIso())
@@ -334,7 +333,7 @@ class Oai_IndexController extends Controller_Xml {
             'bibliography:false' => 'Set for non-bibliographic entries',
         );
 
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = $this->getLogger();
         $setSpecPattern = '[A-Za-z0-9\-_\.!~\*\'\(\)]+';
 
         $finder = new Opus_DocumentFinder();
@@ -461,7 +460,7 @@ class Oai_IndexController extends Controller_Xml {
         $this->_addAccessRights($domNode, $document);
 
         // remove file elements which should not be exported through OAI
-        // Iterating over DOMNodeList is only save for readonly-operations; 
+        // Iterating over DOMNodeList is only save for readonly-operations;
         // copy element-by-element before removing!
         $filenodes = $domNode->getElementsByTagName('File');
         $filenodesList = array();
@@ -479,7 +478,7 @@ class Oai_IndexController extends Controller_Xml {
                 $domNode->removeChild($filenode);
             }
         }
-        
+
         $node = $this->_xml->importNode($domNode, true);
 
         $type = $document->getType();
@@ -488,7 +487,7 @@ class Oai_IndexController extends Controller_Xml {
         $bibliography = $document->getBelongsToBibliography() == 1 ? 'true' : 'false';
         $this->_addSpecInformation($node, 'bibliography:' . $bibliography);
 
-        $logger = Zend_Registry::get('Zend_Log');
+        $logger = $this->getLogger();
         $setSpecs = Oai_Model_SetSpec::getSetSpecsFromCollections($document->getCollection());
         foreach ($setSpecs AS $setSpec) {
             if (preg_match("/^([A-Za-z0-9\-_\.!~\*'\(\)]+)(:[A-Za-z0-9\-_\.!~\*'\(\)]+)*$/", $setSpec)) {
@@ -528,7 +527,7 @@ class Oai_IndexController extends Controller_Xml {
      */
     private function _addFrontdoorUrlAttribute(DOMNode $document, $docid) {
         $url = $this->view->fullUrl() . '/frontdoor/index/index/docId/' . $docid;
-        
+
         $owner = $document->ownerDocument;
         $attr = $owner->createAttribute('frontdoorurl');
         $attr->appendChild($owner->createTextNode($url));
@@ -542,7 +541,7 @@ class Oai_IndexController extends Controller_Xml {
      * @param string  $docid    Id of the document
      * @param string  $filename File path name
      * @return void
-     */  
+     */
     private function _addFileUrlAttribute(DOMNode $file, $docid, $filename) {
         $url = $this->view->fullUrl() . '/files/' . $docid . '/' . rawurlencode($filename);
 
@@ -560,7 +559,7 @@ class Oai_IndexController extends Controller_Xml {
      * @return void
      */
 
-    
+
     /**
      * Add <ddb:transfer> element for ddb container file.
      *
@@ -594,13 +593,13 @@ class Oai_IndexController extends Controller_Xml {
         }
         $fileElement = $domNode->ownerDocument->createElement('Rights');
         switch ($visible) {
-            case 0: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/closedAccess'); 
+            case 0: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/closedAccess');
                 break;
-            case 1: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/openAccess'); 
+            case 1: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/openAccess');
                 break;
-            case 2: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/embargoedAccess'); 
+            case 2: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/embargoedAccess');
                 break;
-            case 3: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/restrictedAccess'); 
+            case 3: $fileElement->setAttribute('Value', 'info:eu-repo/semantics/restrictedAccess');
                 break;
         }
         $domNode->appendChild($fileElement);
@@ -608,7 +607,7 @@ class Oai_IndexController extends Controller_Xml {
 
     /**
      * Retrieve a document id by an oai identifier.
-     * 
+     *
      * @param string $oaiIdentifier
      * @result int
      */
@@ -737,7 +736,7 @@ class Oai_IndexController extends Controller_Xml {
             $this->setParamResumption($res, $cursor, $totalIds);
         }
     }
-    
+
     public static function getLanguageCode($code, $inPart='part2_t', $outPart='part2_b') {
         $result = Opus_Language::getPropertiesByPart2T($code);
         return empty($result) ? $code : $result['part2_b'];

@@ -28,7 +28,7 @@
  * @package     Tests
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -48,15 +48,6 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertController('index');
         $this->assertAction('index');
         $this->validateXHTML();
-    }
-
-    /**
-     * Tests setting language for session.
-     */
-    public function testLanguageAction() {
-        $this->markTestIncomplete('How can this be tested?');
-        $this->dispatch('/home/index/language/language/de');
-        $this->assertRedirect();
     }
 
     /**
@@ -121,14 +112,14 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->assertController('index');
         $this->assertAction('notice');
     }
-    
+
     private function getDocsInSearchIndex($checkConsistency = true) {
         $searcher = new Opus_SolrSearch_Searcher();
         $query = new Opus_SolrSearch_Query();
         $query->setCatchAll("*:*");
         $query->setRows(Opus_SolrSearch_Query::MAX_ROWS);
-        $resultList = $searcher->search($query, $checkConsistency);        
-        return $resultList;        
+        $resultList = $searcher->search($query, $checkConsistency);
+        return $resultList;
     }
 
     /**
@@ -137,12 +128,12 @@ class Home_IndexControllerTest extends ControllerTestCase {
     public function testStartPageContainsTotalNumOfDocs() {
         // get total number of documents from all doc search
         $this->dispatch('/solrsearch/index/search/searchtype/all');
-        
+
         $document = new DOMDocument();
         $document->loadHTML($this->getResponse()->getBody());
         $element = $document->getElementById('search-result-numofhits');
         $numOfHits = $element->firstChild->textContent;
-        
+
         $docsInIndex = $this->getDocsInSearchIndex();
         $numOfIndexDocs = $docsInIndex->getNumberOfHits();
         $this->assertEquals($numOfIndexDocs, $numOfHits);
@@ -150,7 +141,7 @@ class Home_IndexControllerTest extends ControllerTestCase {
         $this->getResponse()->clearBody();
 
         $this->dispatch('/home');
-        
+
         $document = new DOMDocument();
         $document->loadHTML($this->getResponse()->getBody());
         $element = $document->getElementById('solrsearch-totalnumofdocs');
@@ -158,10 +149,10 @@ class Home_IndexControllerTest extends ControllerTestCase {
 
         $docFinder = new Opus_DocumentFinder();
         $docFinder->setServerState('published');
-        
+
         $numOfDbDocs = $docFinder->count();
         $this->assertEquals($numOfDbDocs, $numOfDocs);
-        
+
         // kurze Erklärung des Vorhabens: die Dokumentanzahl bei der Catch-All-Suche
         // wird auf Basis einer Indexsuche ermittelt; die Anzahl der Dokument, die
         // auf der Startseite erscheint, wird dagegen über den DocumentFinder
@@ -169,31 +160,31 @@ class Home_IndexControllerTest extends ControllerTestCase {
         // abweichen
         // wenn sie abweichen, dann aufgrund einer Inkonsistenz zwischen Datenbank
         // und Suchindex (das sollte im Rahmen der Tests eigentlich nicht auftreten)
-        
+
         if ($numOfDbDocs != $numOfIndexDocs) {
 
-            // ermittle die Doc-IDs, die im Index, aber nicht in der DB existieren 
+            // ermittle die Doc-IDs, die im Index, aber nicht in der DB existieren
             // bzw. die in der DB, aber nicht im Index existieren
             $idsIndex = array();
             $results = $docsInIndex->getResults();
             foreach ($results as $result) {
                 array_push($idsIndex, $result->getId());
             }
-            
+
             $idsDb = $docFinder->ids();
-            
+
             $idsIndexOnly = array_diff($idsIndex, $idsDb);
             $this->assertEquals(0, count($idsIndexOnly), 'Document IDs in search index, but not in database: '
                 . var_export($idsIndexOnly, true));
-            
+
             $idsDbOnly = array_diff($idsDb, $idsIndex);
             $this->assertEquals(0, count($idsDbOnly), 'Document IDs in database, but not in search index: '
                 . var_export($idsDbOnly, true));
-            
+
             $this->assertEquals($numOfDbDocs, $numOfIndexDocs,
                 "number of docs in database ($numOfDbDocs) and search index ($numOfIndexDocs) differ from each other");
         }
-        
+
         $this->assertEquals($numOfDocs, $numOfHits);
     }
 
@@ -231,6 +222,28 @@ class Home_IndexControllerTest extends ControllerTestCase {
         Zend_Registry::get('Zend_Config')->supportedLanguages = 'de';
         $this->dispatch("/home");
         $this->assertNotQuery('//ul#lang-switch');
+    }
+
+    public function testPageLanguageAttributeEnglish() {
+        $this->useEnglish();
+
+        $this->dispatch('/home');
+
+        $this->assertQuery('//html[@lang="en"]');
+        // TODO $this->assertXPath('//html[@xml:lang="en"]');
+
+        $this->assertXPath('//meta[@http-equiv="Content-Language" and @content="en"]');
+    }
+
+    public function testPageLanguageAttributeGerman() {
+        $this->useGerman();
+
+        $this->dispatch('/home');
+
+        $this->assertQuery('//html[@lang="de"]');
+        // TODO $this->assertQuery('//html[@xml:lang="de"]');
+
+        $this->assertXPath('//meta[@http-equiv="Content-Language" and @content="de"]');
     }
 
 }

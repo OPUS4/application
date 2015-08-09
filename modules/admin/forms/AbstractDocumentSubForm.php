@@ -50,34 +50,34 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
             )
         );
     }
-    
+
     /**
      * Initialisiert das Formular mit den Werten des Models.
-     * 
+     *
      * @param $model
      */
     public function populateFromModel($model) {
         // leere Implementation
     }
-    
+
     /**
      * Erzeugt Unterformularstruktur anhand der POST Hierarchy.
-     * 
+     *
      * @param array $post
-     * 
+     *
      * TODO Möglich mit populate() zu verschmelzen?
      */
     public function constructFromPost($post, $document = null) {
     }
-        
+
     /**
      * Verarbeitet POST Request vom Formular.
-     * 
+     *
      * Das Defaultverhalten ist das weiterleiten des POST an die Unterformulare.
-     * 
+     *
      * @param $data POST Daten fuer Unterformular
      * @param $context POST Daten vom gesamten Request
-     * 
+     *
      * TODO Modifiziere zu $context = null um context optional zu machen?
      */
     public function processPost($data, $context) {
@@ -92,19 +92,19 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
                 }
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Aktualisiert die Instanz von Opus_Document durch Formularwerte.
-     * 
+     *
      * TODO consider options for ChangeLog
      * @param Opus_Document $document
      */
     public function updateModel($model) {
         $subforms = $this->getSubForms();
-        
+
         foreach ($subforms as $form) {
             $form->updateModel($model);
         }
@@ -122,30 +122,30 @@ abstract class Admin_Form_AbstractDocumentSubForm extends Application_Form_Abstr
 
     /**
      * Zusätzlich Validierungsfunktion für Prüfungen über mehrere Unterformulare hinweg.
-     * 
+     *
      * Bei dieser Funktion werden die POST Daten für das gesamte Formular mit heruntergereicht, um dann einen Abgleich
      * mit beliebigen Teilen des gesamten Formulars durchführen zu können.
-     * 
+     *
      * @param array $data
      * @param array $globalContext
      * @return boolean true - wenn alle Abhängigkeiten erfüllt sind
      */
     public function isDependenciesValid($data, $globalContext) {
         $result = true;
-        
+
         foreach ($this->getSubForms() as $name => $subform) {
             if (array_key_exists($name, $data) && !$subform->isDependenciesValid($data[$name], $globalContext)) {
                 $result = false; // trotzdem Validierung über alle Unterformulare um auch mehrere Meldungen anzuzeigen
             }
         }
-        
+
         return $result;
     }
 
     /**
      * Liefert Helper fuer die Handhabung von Datumsangaben.
-     * 
-     * @return \Controller_Helper_Dates
+     *
+     * @return \Application_Controller_Action_Helper_Dates
      */
     public function getDatesHelper() {
         return Zend_Controller_Action_HelperBroker::getStaticHelper('Dates');

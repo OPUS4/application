@@ -36,18 +36,18 @@
  * Formular fuer Metadaten eines Dokuments.
  */
 class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
-    
+
     /**
      * Ergebnis wenn keine weiteren Aktionen ausgeführt werden müssen.
-     * 
-     * Unterformulare, die einen POST erfolgreich abgearbeitet haben, zum Beispiel ein Unterformular entfernt oder 
+     *
+     * Unterformulare, die einen POST erfolgreich abgearbeitet haben, zum Beispiel ein Unterformular entfernt oder
      * hinzugefügt haben melden dieses Signal, um zu zeigen, daß das Formular wieder ausgegeben werden kann.
      */
     const RESULT_SHOW = 'show';
-    
+
     /**
      * Ergebnis von Unterformular, wenn die angezeigte Seite gewechselt werden soll.
-     * 
+     *
      * Unterformulare, die Aufgrund des POST möchten, daß zu einer anderen Seite gewechselt wird schicken, dieses
      * Ergebnis zusammen mit den notwendigen Informationen für den Seitenwechsel.
      */
@@ -90,7 +90,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      * @var Opus_Document
      */
     private $_document;
-    
+
     /**
      * Konstruiert das Metadaten-Formular aus verschiedenen Unterformularen und den Aktion Buttons.
      */
@@ -101,32 +101,33 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
             array(
             'FormElements',
             array(
-                array('wrapperDivClose' => 'HtmlTag'), 
+                array('wrapperDivClose' => 'HtmlTag'),
                 array('tag' => 'div', 'closeOnly' => 'true', 'placement' => 'append')
             )
             )
         );
-        
+
         $this->addSubForm(new Admin_Form_ActionBox($this), 'ActionBox');
 
         $subform = new Admin_Form_InfoBox();
         $subform->addDecorator(
-            array('wrapperDivOpen' => 'HtmlTag'), 
+            array('wrapperDivOpen' => 'HtmlTag'),
             array('tag' => 'div', 'placement' => 'prepend', 'class' => 'wrapper', 'openOnly' => 'true')
         );
         $this->addSubForm($subform, 'InfoBox');
-        
+
         $this->addSubForm(new Admin_Form_Document_General(), 'General');
-        
+
         $this->addSubForm(new Admin_Form_Document_Persons(), 'Persons');
-        
+
         // Bibliographische Beschreibung
         $this->addSubForm(new Admin_Form_Document_Titles(), 'Titles');
         $this->addSubForm(new Admin_Form_Document_Bibliographic(), 'Bibliographic');
         $this->addSubForm(
             new Admin_Form_Document_MultiSubForm(
                 'Admin_Form_Document_Series', 'Series',
-                new Form_Validate_MultiSubForm_RepeatedValues('SeriesId', 'admin_document_error_repeated_series'), array(
+                new Application_Form_Validate_MultiSubForm_RepeatedValues(
+                    'SeriesId', 'admin_document_error_repeated_series'), array(
                 'columns' => array(
                 array(),
                 array('label' => 'Opus_Model_Dependent_Link_DocumentSeries_Number'),
@@ -153,7 +154,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $subform->addSubForm(
             new Admin_Form_Document_MultiSubForm(
                 'Admin_Form_Document_Abstract', 'TitleAbstract',
-                new Form_Validate_MultiSubForm_RepeatedValues(
+                new Application_Form_Validate_MultiSubForm_RepeatedValues(
                     'Language',
                     'admin_document_error_MoreThanOneTitleInLanguage'
                 )
@@ -167,7 +168,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $this->addSubForm(
             new Admin_Form_Document_MultiSubForm(
                 'Admin_Form_Document_Identifier', 'Identifier',
-                new Form_Validate_MultiSubForm_RepeatedValues(
+                new Application_Form_Validate_MultiSubForm_RepeatedValues(
                     'Value',
                     'admin_document_error_repeated_identifier', 'Type'
                 ),
@@ -190,35 +191,35 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
         $this->_document = $document;
 
         $subforms = $this->getSubForms();
-        
+
         foreach ($subforms as $form) {
             $form->populateFromModel($document);
         }
     }
-     
+
     /**
      * Konstruiert Formular mit Unterformularen basierend auf POST Daten.
      * @param array $data
      */
     public static function getInstanceFromPost($data, $document = null) {
         $form = new Admin_Form_Document();
-        
+
         $subforms = $form->getSubForms();
-        
+
         foreach ($subforms as $name => $subform) {
             if (array_key_exists($name, $data)) {
                 $subform->constructFromPost($data[$name], $document);
             }
             else {
                 // ActionBox und InfoBox haben keine Element die im POST enthalten wären, müssen aber nach POST wieder
-                // neu initialisiert werden 
+                // neu initialisiert werden
                 $subform->constructFromPost(array(), $document);
             }
         }
-        
+
         return $form;
     }
-    
+
     /**
      * Verarbeitet POST Request vom Formular.
      * @param type $data
@@ -253,21 +254,21 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
             $subform->continueEdit($request, $session);
         }
     }
-    
+
     /**
      * Validiert POST Daten.
-     * 
+     *
      * Die überschriebene Function führt einmal die normale Validierung aus und ruft dann eine zweite Funktion auf,
      * die sich mit Validierungen befasst, die mehrere Unterformulare betreffen können. Beispiele sind:
-     * 
+     *
      * - ein TitleMain in Document-Language muss vorhanden sein (Document_General und Document_TitleMain)
-     * 
+     *
      * @param array $data
      * @param array $context
      */
     public function isValid($data, $context = null) {
         $result = parent::isValid($data, $context);
-        
+
         return ($result & $this->isDependenciesValid($data, $data)) == 1;
     }
 
@@ -281,7 +282,7 @@ class Admin_Form_Document extends Admin_Form_AbstractDocumentSubForm {
      */
     public function loadDefaultDecorators() {
         parent::loadDefaultDecorators();
-        
+
         $this->removeDecorator('Fieldset');
     }
 

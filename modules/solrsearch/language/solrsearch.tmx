@@ -67,15 +67,6 @@
             </tuv>
         </tu>
 
-        <tu tuid="results_title_single">
-            <tuv xml:lang="en">
-                <seg>search hit</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Treffer</seg>
-            </tuv>
-        </tu>
-
         <tu tuid="sorting_relevancy">
             <tuv xml:lang="en">
                 <seg>Relevancy</seg>
@@ -127,15 +118,6 @@
             </tuv>
             <tuv xml:lang="de">
                 <seg>Sortieren nach</seg>
-            </tuv>
-        </tu>
-
-        <tu tuid="results_title">
-            <tuv xml:lang="en">
-                <seg>search hits</seg>
-            </tuv>
-            <tuv xml:lang="de">
-                <seg>Treffer</seg>
             </tuv>
         </tu>
 

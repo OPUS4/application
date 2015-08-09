@@ -41,7 +41,7 @@
  * The export actions are separate classes implementing the interface Export_Model_ExportPlugin and are dynamically
  * mapped to controller functions.
  */
-class Export_IndexController extends Controller_ModuleAccess {
+class Export_IndexController extends Application_Controller_ModuleAccess {
 
     /**
      * @var array containing export plugins

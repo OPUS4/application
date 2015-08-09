@@ -41,8 +41,8 @@
  * @category    Application
  * @package     Module_Admin
  */
-class Admin_DocumentsController extends Controller_Action {
-    
+class Admin_DocumentsController extends Application_Controller_Action {
+
     const PARAM_HITSPERPAGE = 'hitsperpage';
     const PARAM_STATE = 'state';
     const PARAM_SORT_BY = 'sort_order';
@@ -51,36 +51,34 @@ class Admin_DocumentsController extends Controller_Action {
     protected $_sortingOptions = array('id', 'title', 'author', 'publicationDate', 'docType');
 
     protected $_docOptions = array('unpublished', 'inprogress', 'audited', 'published', 'restricted', 'deleted');
-    
+
     private $_maxDocsDefault = 10;
     private $_stateOptionDefault = 'unpublished';
     private $_sortingOptionDefault = 'id';
-
-    private $_config;
 
     private $_namespace;
 
     public function init() {
         parent::init();
 
-        $this->_config = Zend_Registry::get("Zend_Config");
+        $config = $this->getConfig();
 
-        if (isset($this->_config->admin->documents->linkToAuthorSearch)) {
-            $this->view->linkToAuthorSearch = $this->_config->admin->documents->linkToAuthorSearch;
+        if (isset($config->admin->documents->linkToAuthorSearch)) {
+            $this->view->linkToAuthorSearch = $config->admin->documents->linkToAuthorSearch;
         }
         else {
             $this->view->linkToAuthorSearch = 0;
         }
-        
-        if (isset($this->_config->admin->documents->maxDocsDefault)) {
-            $this->_maxDocsDefault = $this->_config->admin->documents->maxDocsDefault;
+
+        if (isset($config->admin->documents->maxDocsDefault)) {
+            $this->_maxDocsDefault = $config->admin->documents->maxDocsDefault;
         }
         else {
             $this->_maxDocsDefault = 10;
         }
 
-        if (isset($this->_config->admin->documents->defaultview)) {
-            $default = $this->_config->admin->documents->defaultview;
+        if (isset($config->admin->documents->defaultview)) {
+            $default = $config->admin->documents->defaultview;
             if (!in_array($default, $this->_docOptions)) {
                 $this->getLogger()->err("Option 'admin.documents.defaultview' hat ungegueltigen Wert '$default'.");
             }
@@ -174,12 +172,12 @@ class Admin_DocumentsController extends Controller_Action {
         $this->view->paginator = $paginator;
         $this->prepareItemCountLinks();
     }
-    
+
     /**
      * Liefert die Zahl der Dokumente, die auf einer Seite angezeigt werden soll.
-     * 
+     *
      * Der Wert wird aus verschiedenen Quellen ermittelt
-     * 
+     *
      * - Request Parameter
      * - Session
      * - Konfiguration?
@@ -197,7 +195,7 @@ class Admin_DocumentsController extends Controller_Action {
         }
 
         $this->setOption(self::PARAM_HITSPERPAGE, $value);
-        
+
         return $value;
     }
 
@@ -296,31 +294,33 @@ class Admin_DocumentsController extends Controller_Action {
 
         return $this->_namespace;
     }
-    
+
     /**
      * Bereitet die Links für die Auswahl der Anzahl der Dokumente pro Seite vor.
      */
     protected function prepareItemCountLinks() {
-        if (isset($this->_config->admin->documents->maxDocsOptions)) {
-            $options = $this->_config->admin->documents->maxDocsOptions;
+        $config = $this->getConfig();
+
+        if (isset($config->admin->documents->maxDocsOptions)) {
+            $options = $config->admin->documents->maxDocsOptions;
         }
         else {
             $options ="10,50,100,all";
         }
-        
+
         $itemCountOptions = explode(',', $options);
 
         $itemCountLinks = array();
 
         foreach ($itemCountOptions as $option) {
             $link = array();
-            
+
             $link['label'] = $option;
             $link['url'] = $this->view->url(array(self::PARAM_HITSPERPAGE => $option), null, false);
-            
+
             $itemCountLinks[$option] = $link;
         }
-        
+
         $this->view->itemCountLinks = $itemCountLinks;
     }
 

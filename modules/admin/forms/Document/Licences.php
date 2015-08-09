@@ -34,40 +34,40 @@
 
 /**
  * Formular fuer das Editieren der Lizenzen eines Dokuments.
- * 
- * Es werden die aktiven Lizenzen mit Checkboxen angezeigt, so daß man schnell die Lizenzen des Dokuments auswählen 
+ *
+ * Es werden die aktiven Lizenzen mit Checkboxen angezeigt, so daß man schnell die Lizenzen des Dokuments auswählen
  * kann. Die Namen der Checkboxen entsprechen 'licence' + Lizenz-ID.
- * 
- * Das Metadaten-Formular in der Administration zeigt alle Lizenzen, unabhängig davon ob sie aktiv sind, da bei 
+ *
+ * Das Metadaten-Formular in der Administration zeigt alle Lizenzen, unabhängig davon ob sie aktiv sind, da bei
  * nachträglicher Deaktivierung einer Lizenz, immer noch Dokumente damit verknüpft sein können.
  */
 class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm {
-    
+
     /**
      * Name für Formularelement für ID der Lizenz.
      */
     const ELEMENT_NAME_PREFIX = 'licence';
-    
+
     /**
      * CSS Klasse für aktive Lizenzen.
      */
     const ACTIVE_CSS_CLASS = 'active';
-    
+
     /**
      * CSS Klasse für inaktive Lizenzen.
      */
     const INACTIVE_CSS_CLASS = 'disabled';
-    
+
     /**
      * Erzeugt Checkbox Formularelemente für alle Lizenzen.
      */
     public function init() {
         parent::init();
-        
+
         $licences = Opus_Licence::getAll();
 
         foreach ($licences as $licence) {
-            $element = new Form_Element_Checkbox(self::ELEMENT_NAME_PREFIX . $licence->getId());
+            $element = new Application_Form_Element_Checkbox(self::ELEMENT_NAME_PREFIX . $licence->getId());
             $element->setDisableTranslator(true); // Lizenzen werden nicht übersetzt
             $element->setLabel($licence->getNameLong());
             $cssClass = ($licence->getActive()) ? self::ACTIVE_CSS_CLASS : self::INACTIVE_CSS_CLASS;
@@ -76,17 +76,17 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm {
             $element->setCheckedValue($licence->getId());
             $this->addElement($element);
         }
-        
+
         $this->setLegend('admin_document_section_licences');
     }
-    
+
     /**
      * Setzt die dem Dokument zugewiesenen Lizenzen als ausgewählt im Formular.
      * @param Opus_Document $document
      */
     public function populateFromModel($document) {
         $licences = $this->getElements();
-        
+
         foreach ($licences as $element) {
             if ($element instanceof Zend_Form_Element_Checkbox) {
                 $licenceId = $element->getCheckedValue();
@@ -94,16 +94,16 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm {
             }
         }
     }
-    
+
     /**
      * Aktualisiert die Liste der Lizenzen fuer ein Dokument.
      * @param Opus_Document $document
      */
     public function updateModel($document) {
         $licences = $this->getElements();
-        
+
         $docLicences = array();
-        
+
         foreach ($licences as $element) {
             if ($element instanceof Zend_Form_Element_Checkbox) {
                 $licenceId = $element->getCheckedValue();
@@ -112,46 +112,46 @@ class Admin_Form_Document_Licences extends Admin_Form_AbstractDocumentSubForm {
                 }
             }
         }
-        
+
         $document->setLicence($docLicences);
     }
-    
+
     /**
      * Prueft, ob eine Lizenz einem Dokument zugewiesen ist.
-     * 
+     *
      * @param Opus_Document $document
      * @param Opus_Licence $licence
      * @return boolean true - Lizenz zugewiesen; false - Lizenz nicht zugewiesen
      */
     public function hasLicence($document, $licenceId) {
         $licences = $document->getLicence();
-        
+
         foreach ($licences as $docLicence) {
             if ($docLicence->getModel()->getId() == $licenceId) {
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     /**
      * Meldet, ob mindestens eine Lizenz ausgewählt ist.
-     * 
+     *
      * Die Funktion wird für die Ausgabe des Metadaten-Formulars als Metadaten-Übersicht verwendet, um zu entscheiden,
      * ob das Unterformular für Lizenzen angezeigt werden soll oder nicht.
-     * 
+     *
      * @return boolean
      */
     public function isEmpty() {
         $elements = $this->getElements();
-        
+
         foreach ($elements as $element) {
             if ($element->getValue() !== '0') {
                 return false;
             }
         }
-        
+
         return true;
     }
 

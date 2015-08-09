@@ -113,3 +113,7 @@ table.frontdoordata td,
 /*.adminContainer form .wrapper .subform .subform fieldset{
     border-top: 2px solid black !important;
 }*/
+
+.frontdoor .frontdoor_pagination {
+    display:none;
+}

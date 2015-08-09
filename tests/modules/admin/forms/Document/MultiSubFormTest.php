@@ -35,84 +35,84 @@
  * Unit Tests für MulitSubForm Formular das mehrere Unterformular des gleichen Typs verwalten kann.
  */
 class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
-    
+
     public function testConstructForm() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Identifier', 'Identifier');
-        
+
         $this->assertNotNull($form->getElement('Add'));
         $this->assertNotNull($form->getLegend());
         $this->assertEquals($form->getLegend(), 'admin_document_section_identifier');
         $this->assertFalse($form->isRenderAsTableEnabled());
     }
-    
+
     public function testConstructFormWithValidator() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleParent',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
-        
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
+
         $this->assertNotNull($form->getElement('Add'));
         $this->assertNotNull($form->getLegend());
         $this->assertEquals($form->getLegend(), 'admin_document_section_titleparent');
         $this->assertFalse($form->isRenderAsTableEnabled());
     }
-    
+
     /**
      * @expectedException Application_Exception
-     * @expectedExceptionMessage Validator ist keine Instanz von Form_Validate_IMultiSubForm.
+     * @expectedExceptionMessage Validator ist keine Instanz von Application_Form_Validate_IMultiSubForm.
      */
     public function testConstructFormWithBadValidator() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleParent',
                 'NotAValidClass');
     }
-    
+
     public function testPopulateFromModel() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleSub',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
-        
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
+
         $document = new Opus_Document(146);
-        
+
         $form->populateFromModel($document);
-        
+
         $this->assertEquals(2, count($form->getSubForms()), 'Formular sollte zwei Unterformulare (2 Untertitel) haben.');
-        
+
         $form1 = $form->getSubForm('TitleSub0');
-        
+
         $this->assertEquals('deu', $form1->getElementValue('Language'));
         $this->assertEquals('Service-Zentrale', $form1->getElementValue('Value'));
 
         $form2 = $form->getSubForm('TitleSub1');
-        
+
         $this->assertEquals('eng', $form2->getElementValue('Language'));
         $this->assertEquals('Service Center', $form2->getElementValue('Value'));
     }
-    
+
     public function testPopulateFromModelWithEmptyModel() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleSub',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
-        
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
+
         $document = $this->createTestDocument();
-        
+
         $form->populateFromModel($document);
-        
+
         $this->assertEquals(0, count($form->getSubForms()), 'Formular sollte keine Unterformulare haben.');
     }
-    
+
     public function testGetFieldValues() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleSub',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
-        
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
+
         $document = new Opus_Document(146);
-        
+
         $values = $form->getFieldValues($document);
-        
+
         $this->assertEquals(2, count($values));
         $this->assertTrue($values[0] instanceof Opus_Title);
         $this->assertEquals('sub', $values[0]->getType());
     }
-    
+
     public function testContructFromPost() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleParent',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
-        
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
+
         $post = array(
             'TitleParent0' => array(
                 'Language' => 'deu',
@@ -127,34 +127,34 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
                 'Value' => 'Titel 3'
             )
         );
-        
+
         $this->assertEquals(0, count($form->getSubForms()));
-        
+
         $form->constructFromPost($post);
-        
+
         $this->assertEquals(3, count($form->getSubForms()));
         $this->assertNotNull($form->getSubForm('TitleParent0'));
         $this->assertNotNull($form->getSubForm('TitleParent1'));
         $this->assertNotNull($form->getSubForm('TitleParent2'));
     }
-    
+
     public function testProcessPostAdd() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleParent',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
-        
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
+
         $post = array('Add' => 'Hinzufügen');
-        
+
         $this->assertEquals(0, count($form->getSubForms()));
-        
+
         $this->assertEquals(Admin_Form_Document::RESULT_SHOW, $form->processPost($post, $post));
-        
+
         $this->assertEquals(1, count($form->getSubForms()));
         $this->assertNotNull($form->getSubForm('TitleParent0'));
-        
+
         $form->getSubForm('TitleParent0')->getElement('Value')->setValue('Titel 1');
-        
+
         $this->assertEquals(Admin_Form_Document::RESULT_SHOW, $form->processPost($post, $post));
-        
+
         $this->assertEquals(2, count($form->getSubForms()));
         $this->assertNotNull($form->getSubForm('TitleParent0'));
         $this->assertNotNull($form->getSubForm('TitleParent1'));
@@ -163,18 +163,18 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
         $this->assertEquals('Titel 1', $form->getSubForm('TitleParent0')->getElementValue('Value'));
         $this->assertNull($form->getSubForm('TitleParent1')->getElementValue('Value'));
     }
-    
+
     public function testProcessPostRemove() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleSub',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
-        
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
+
         $document = new Opus_Document(146);
-        
+
         $form->populateFromModel($document);
-        
+
         $this->assertEquals(2, count($form->getSubForms()));
         $this->assertEquals('Service Center', $form->getSubForm('TitleSub1')->getElementValue('Value'));
-        
+
         $post = array(
             'TitleSub0' => array(
                 'Remove' => 'Entfernen'
@@ -182,66 +182,66 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
             'TitleSub1' => array(
             )
         );
-        
+
         $this->assertEquals(Admin_Form_Document::RESULT_SHOW, $form->processPost($post, $post));
-        
+
         $this->assertEquals(1, count($form->getSubForms()));
         $this->assertNotNull($form->getSubForm('TitleSub0'), 'Formular TitleSub0 fehlt.'); // TitleSub1 wird TitleSub0
         $this->assertEquals('Service Center', $form->getSubForm('TitleSub0')->getElementValue('Value'));
-        $this->assertNotNull($form->getSubForm('TitleSub0')->getDecorator('CurrentAnker'), 
+        $this->assertNotNull($form->getSubForm('TitleSub0')->getDecorator('CurrentAnker'),
                 'Dekorator \'CurrentAnker\' fehlt.');
     }
-    
+
     public function testUpdateModel() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleSub',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
 
         $form->appendSubForm();
         $form->getSubForm('TitleSub0')->getElement('Language')->setValue('deu');
         $form->getSubForm('TitleSub0')->getElement('Value')->setValue('Titel 1');
-        
+
         $form->appendSubForm();
         $form->getSubForm('TitleSub1')->getElement('Language')->setValue('eng');
         $form->getSubForm('TitleSub1')->getElement('Value')->setValue('Title 2');
-        
+
         $document = $this->createTestDocument();
-        
+
         $form->updateModel($document);
-        
+
         $titles = $document->getTitleSub();
-        
+
         $this->assertEquals(2, count($titles));
         $this->assertEquals('deu', $titles[0]->getLanguage());
         $this->assertEquals('Titel 1', $titles[0]->getValue());
         $this->assertEquals('eng', $titles[1]->getLanguage());
         $this->assertEquals('Title 2', $titles[1]->getValue());
     }
-    
+
     public function testGetSubFormModels() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleSub',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
-        
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
+
         $document = new Opus_Document(146);
-        
+
         $form->populateFromModel($document);
         $form->appendSubForm();
         $form->getSubForm('TitleSub2')->getElement('Language')->setValue('fra');
         $form->getSubForm('TitleSub2')->getElement('Value')->setValue('Titel 3');
-        
+
         $titles = $form->getSubFormModels();
-        
+
         $this->assertEquals(3, count($titles));
         $this->assertNotNull($titles[0]->getId());
         $this->assertNotNull($titles[1]->getId());
         $this->assertNull($titles[2]->getId()); // Neuer Titel noch nicht gespeichert (ohne ID)
     }
-    
+
     public function testCreateSubForm() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleSub',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
-        
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
+
         $subform = $form->createSubForm();
-        
+
         $this->assertNotNull($subform);
         $this->assertNotNull($subform->getElement('Remove'));
         $this->assertEmpty($subform->getElement('Remove')->getDecorators());
@@ -252,43 +252,43 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
         $this->assertNotNull($subform->getDecorator('dataWrapper'));
         $this->assertNotNull($subform->getDecorator('multiWrapper'));
     }
-    
+
     public function testCreateNewSubFormInstance() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleSub',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
-        
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
+
         $subform = $form->createNewSubFormInstance();
-        
+
         $this->assertNotNull($subform);
         $this->assertTrue($subform instanceof Admin_Form_Document_Title);
     }
-    
+
     /**
      * Bei diesem Test geht es nur um die Ermittlung des richtigen Unterformulars für den Anker. Beim Test werden keine
      * Unterformulare entfernt.
      */
     public function testDetermineSubFormForAnker() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleSub',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
-        
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
+
         $document = new Opus_Document(146);
-        
+
         $this->assertEquals($form, $form->determineSubFormForAnker(0));
 
         $form->populateFromModel($document);
-        
+
         $this->assertEquals('TitleSub0', $form->determineSubFormForAnker(0)->getName());
         $this->assertEquals('TitleSub1', $form->determineSubFormForAnker(1)->getName());
         $this->assertEquals('TitleSub1', $form->determineSubFormForAnker(2)->getName()); // letztes Subform entfernt
     }
-    
+
     public function testIsValidTrue() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleParent',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
-        
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
+
         $form->appendSubForm();
         $form->appendSubForm();
-        
+
         $post = array(
             'TitleParent0' => array(
                 'Language' => 'deu',
@@ -299,17 +299,17 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
                 'Value' => 'Title 2'
             )
         );
-                
+
         $this->assertTrue($form->isValid($post, $post));
     }
-    
+
     public function testIsValidFalse() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Title', 'TitleParent',
-                new Form_Validate_MultiSubForm_RepeatedLanguages());
-        
+                new Application_Form_Validate_MultiSubForm_RepeatedLanguages());
+
         $form->appendSubForm();
         $form->appendSubForm();
-        
+
         $post = array(
             'Parent' => array(
                 'TitleParent0' => array(
@@ -322,23 +322,23 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
                 )
             )
         );
-                
+
         $this->assertFalse($form->isValid($post, $post));
     }
-    
+
     public function testIsEmptyTrue() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Identifier', 'Identifier');
-        
+
         $this->assertTrue($form->isEmpty());
     }
-    
+
     public function testIsEmptyFalse() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Identifier', 'Identifier');
         $form->appendSubForm();
-        
+
         $this->assertFalse($form->isEmpty());
     }
-    
+
     public function testGetSubFormBaseName() {
         $form = new Admin_Form_Document_MultiSubForm('Admin_Form_Document_Identifier', 'Identifier');
         $this->assertEquals('Identifier', $form->getSubFormBaseName());
@@ -382,7 +382,7 @@ class Admin_Form_Document_MultiSubFormTest extends ControllerTestCase {
         ));
 
         $subform = new Zend_Form_SubForm();
-        $subform->addPrefixPath('Form_Decorator', 'Form/Decorator', Zend_Form::DECORATOR);
+        $subform->addPrefixPath('Application_Form_Decorator', 'Application/Form/Decorator', Zend_Form::DECORATOR);
 
         $subform->setDecorators(array());
         $subform->addElement('text', 'test', array('decorators' => array(

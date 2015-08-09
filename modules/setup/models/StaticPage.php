@@ -34,7 +34,7 @@
  */
 
 /**
- * 
+ *
  */
 class Setup_Model_StaticPage extends Setup_Model_Abstract {
 
@@ -50,7 +50,7 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
 
     /**
      * decide wether to use external content file (as in contact, imprint)
-     * or save content data in tmx file (as in home page) 
+     * or save content data in tmx file (as in home page)
      */
     protected $_useContentFile = true;
 
@@ -68,14 +68,14 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
     public function setPageNames($pageNames) {
         // check if pageName is valid
         if (!in_array($this->_pageName, $pageNames)) {
-            throw new Setup_Model_Exception('Invalid page name, not found in configuration. '); 
+            throw new Setup_Model_Exception('Invalid page name, not found in configuration. ');
         }
     }
 
     /**
      * Set path to directory where the translation target file resides.
      *  The complete path to the file is generated from the page name.
-     * 
+     *
      * @param string $tmxTargetPath directory path used to write tmx content
      */
     public function setTranslationTargetPath($tmxTargetPath) {
@@ -85,7 +85,7 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
     /**
      * Set usage of external content file. If true, content data is saved to
      * external file (@see $useContentFile).
-     * 
+     *
      * @param string $tmxTargetPath directory path used to write tmx content
      */
     public function setUseContentFile($bool = true) {
@@ -97,7 +97,7 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
      * The complete path to the files is generated from the page name,
      * i.e. each file must be named after the page name.
      * @param array $tmxSourcePaths Array of directory paths used for reading tmx content
-     * 
+     *
      */
     public function setTranslationSourcePaths(array $tmxSourcePaths) {
         $filePaths = array();
@@ -108,9 +108,9 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
     }
 
     /**
-     * Path to directory containing content file. 
+     * Path to directory containing content file.
      * The file must be named after the page name.
-     * 
+     *
      * @param string $basePath name of directory used to read / write page content
      */
     public function setContentBasepath($basePath) {
@@ -149,7 +149,7 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
      */
     public function fromArray(array $data) {
         $resultData = array();
-        $resultTmx = new Util_TmxFile();
+        $resultTmx = new Application_Util_TmxFile();
 
         foreach ($data as $language => $fields) {
             foreach ($fields as $key => $val) {
@@ -159,14 +159,14 @@ class Setup_Model_StaticPage extends Setup_Model_Abstract {
                                 || !isset($val['filename'])
                                 || !isset($val['contents'])
                         ) {
-                            throw new Setup_Model_Exception('Invalid data structure'); 
+                            throw new Setup_Model_Exception('Invalid data structure');
                         }
                         $filePath = $this->_contentBasepath . DIRECTORY_SEPARATOR . $val['filename'];
                         $resultData[$filePath] = $val['contents'];
                         break;
                     case 'key':
                         foreach ($val as $translationUnit => $variant) {
-                            $resultTmx->setVariantSegment($translationUnit, $language, $variant); 
+                            $resultTmx->setVariantSegment($translationUnit, $language, $variant);
                         }
                         break;
                     default:

@@ -36,13 +36,13 @@
 
 /**
  * Controller for managing permissions for roles including module access.
- * 
- * 
+ *
+ *
  */
-class Admin_AccessController extends Controller_Action {
+class Admin_AccessController extends Application_Controller_Action {
 
     /**
-     * 
+     *
      */
     public function listroleAction() {
         $id = $this->getRequest()->getParam('docid');
@@ -54,7 +54,7 @@ class Admin_AccessController extends Controller_Action {
 
     /**
      * Returns list of selected roles.
-     * 
+     *
      * @param type $id
      * @param type $roles
      * @return array
@@ -70,18 +70,18 @@ class Admin_AccessController extends Controller_Action {
         }
         return $items;
     }
-    
-    
+
+
     /**
      * Action for showing list of modules and permissions.
-     * 
+     *
      * @throws Exception
      */
     public function listmoduleAction() {
 
         $id = $this->getRequest()->getParam('roleid');
         if ($id == null) {
-            throw new Exception('Role ID missing'); 
+            throw new Exception('Role ID missing');
         }
 
         $role = new Opus_UserRole($id);
@@ -104,9 +104,9 @@ class Admin_AccessController extends Controller_Action {
         }
 
         $moduleDirectory = dirname($this->getFrontController()->getModuleDirectory());
-        $modulesModel = new Admin_Model_Modules($moduleDirectory);
-        
-        $transitions = Controller_Helper_Workflow::getWorkflowResources();
+        $modulesModel = new Application_Util_Modules($moduleDirectory);
+
+        $transitions = Application_Controller_Action_Helper_Workflow::getWorkflowResources();
 
         $this->view->loginNames = $role->getAllAccountNames();
         $this->view->roleId = $role->getId();
@@ -119,7 +119,7 @@ class Admin_AccessController extends Controller_Action {
 
     /**
      * Action for saving selected permissions for role.
-     * 
+     *
      */
     public function storeAction() {
         $save = $this->getRequest()->getParam('save_button');
@@ -150,14 +150,14 @@ class Admin_AccessController extends Controller_Action {
 
     /**
      * Stores selected permissions in database.
-     * 
+     *
      * @param type $request
-     * 
+     *
      * TODO secure against missing parameters
      */
     private function storeModules($request) {
         $id = $request->getParam('roleid');
-        
+
         $role = new Opus_UserRole($id);
         $roleModules = $role->listAccessModules();
 
@@ -168,7 +168,7 @@ class Admin_AccessController extends Controller_Action {
         }
 
         $params = $request->getParams();
-        
+
         foreach ($params as $name=>$value) {
             if ($this->string_begins_with($name, 'set_')) {
                 $module = explode("_", $name, 2);
@@ -176,13 +176,13 @@ class Admin_AccessController extends Controller_Action {
                 $role->appendAccessModule($module);
             }
         }
-        
+
         $role->store();
     }
 
     /**
      * Stores roles for document.
-     * 
+     *
      * @param <type> $request
      *
      * TODO Is it a problem if document is append twice?
@@ -208,7 +208,7 @@ class Admin_AccessController extends Controller_Action {
 
     /**
      * Checks whether a given string has the supplied prefix.
-     * 
+     *
      * @param $string
      * @param $prefix
      * @return boolean
@@ -216,26 +216,26 @@ class Admin_AccessController extends Controller_Action {
     private function string_begins_with($string, $prefix) {
         return (strncmp($string, $prefix, strlen($prefix)) == 0);
     }
-    
+
     /**
      * Liefert Liste mit Ressourcen für die Rechteverwaltung.
-     * 
+     *
      * Ressourcen für die Rechte vergeben können. Module und Workflow-Übergänge werden separat behandelt.
-     * 
+     *
      * @return array of strings
      */
     private function getAllResources() {
         $allResources = array();
 
         $aclProvider = new Application_Security_AclProvider();
-        
+
         $resources = $aclProvider->getAllResources();
-        
+
         foreach ($resources as $resource) {
             $allResources[] = 'resource_' . $resource;
         }
-        
+
         return $allResources;
     }
-    
+
 }

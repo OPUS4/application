@@ -40,7 +40,7 @@
  *
  * @package     Module_Default
  */
-class ErrorController extends Controller_Action {
+class ErrorController extends Application_Controller_Action {
 
     /**
      * Always allow access to this controller; Override check in parent method.
@@ -55,8 +55,8 @@ class ErrorController extends Controller_Action {
      * @return void
      */
     public function errorAction() {
-        $config = Zend_Registry::get('Zend_Config');
-        $logger = Zend_Registry::get('Zend_Log');
+        $config = $this->getConfig();
+        $logger = $this->getLogger();
 
         $errors = $this->_getParam('error_handler');
 

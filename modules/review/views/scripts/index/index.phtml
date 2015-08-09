@@ -24,15 +24,16 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @package     Application - Module Review
+ * @category    Application
+ * @package     Module Review
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 ?>
 
-<?PHP $suffix = ' <span class="info">(' . $this->documentCount . ' ' 
+<?PHP $suffix = ' <span class="info">(' . $this->documentCount . ' '
         . $this->translate('review_docs_found_short') . ')</span>' ?>
 
 <?PHP if (true === Opus_Security_Realm::getInstance()->check('administrate')) : ?>
@@ -41,11 +42,12 @@
     <?= $this->navigation()->breadcrumbs()->setReplacement($this->translate('review_index_title') . $suffix) ?>
 <?PHP endif; ?>
 
+<div class="wrapper">
+
 <?PHP if (isset($this->error)) : ?>
 <div class="error">
     <?= htmlspecialchars($this->error) ?>
 </div>
-
 <?PHP endif; ?>
 
 <form action="<?= $this->actionUrl ?>" method="post">
@@ -63,12 +65,11 @@
     <input type="submit" name="buttonDown" value="<?= $this->translate('review_sort_down') ?>" />
 </div>
 
-
 <?PHP echo $this->paginationControl($this->paginator, 'Sliding', 'pagination_control.phtml'); ?>
 
 <table class="documents">
 <?PHP $index = 0; foreach ($this->paginator as $docId) : ?>
-    <?PHP $document = new Util_DocumentAdapter($this, $docId); ?>
+    <?PHP $document = new Application_Util_DocumentAdapter($this, $docId); ?>
     <tr class="<?= ($index++ % 2) ? 'even' : 'odd' ?>">
         <td><input type="checkbox" name="selected[]" value="<?= $document->getDocId()?>"
                 <?= (!$this->selectNone && ($this->selectAll || in_array($document->getDocId(), $this->selected)))  ? 'checked' : '' ?> /></td>
@@ -131,4 +132,6 @@
     </div>
 
     </form>
+
+</div>
 

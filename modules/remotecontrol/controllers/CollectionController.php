@@ -33,7 +33,7 @@
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
-class Remotecontrol_CollectionController extends Controller_Action {
+class Remotecontrol_CollectionController extends Application_Controller_Action {
 
     public function addAction() {
         $this->_helper->layout()->disableLayout();
@@ -80,7 +80,7 @@ class Remotecontrol_CollectionController extends Controller_Action {
         $number = $request->getParam('number');
 
         $downloadList = new Remotecontrol_Model_DownloadList();
-        
+
         $this->_helper->viewRenderer->setNoRender(true);
         $this->_helper->layout()->disableLayout();
 
@@ -88,7 +88,7 @@ class Remotecontrol_CollectionController extends Controller_Action {
             $this->getResponse()->setBody($downloadList->getCvsFile($role, $number));
         }
         catch (Remotecontrol_Model_Exception $e) {
-            if ($e->getPrevious() instanceof Opus_SolrSearch_Exception) {
+            if ($e->getPrevious() instanceof Opus_Search_Exception) {
                 throw new Application_SearchException($e->getPrevious(), true);
             }
             if ($e->collectionIsNotUnique()) {

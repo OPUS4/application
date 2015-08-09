@@ -9,7 +9,7 @@
             <controller>index</controller>
             <action>index</action>
         </home>
-        
+
         <administration>
             <type>mvc</type>
             <label>admin_menu_label</label>
@@ -109,7 +109,7 @@
                             <controller>workflow</controller>
                             <action>changestate</action>
                         </workflow>
-                        
+
                         <collection>
                             <type>mvc</type>
                             <label>admin_collection_assign</label>
@@ -117,7 +117,7 @@
                             <controller>collection</controller>
                             <action>assign</action>
                         </collection>
-                        
+
                     </pages>
                 </documents>
 
@@ -231,7 +231,7 @@
                         </createrole>
                     </pages>
                 </collections>
-                
+
                 <series>
                     <type>mvc</type>
                     <label>admin_title_series</label>
@@ -278,7 +278,7 @@
                             <action>delete</action>
                         </delete>
                     </pages>
-                </series>                
+                </series>
 
                 <licence>
                     <type>mvc</type>
@@ -333,7 +333,7 @@
                     <controller>language</controller>
                     <action>index</action>
                     <resource>languages</resource>
-                    <pages>                        
+                    <pages>
                         <show>
                             <type>mvc</type>
                             <label>admin_language_show</label>
@@ -473,7 +473,7 @@
                                 </update>
                             </pages>
                         </accounts>
-                        
+
                         <roles>
                             <type>mvc</type>
                             <label>admin_security_title_roles</label>
@@ -522,7 +522,7 @@
                                     <controller>role</controller>
                                     <action>update</action>
                                 </update>
-                                
+
                                 <listmodule>
                                     <type>mvc</type>
                                     <label>admin_access_listmodule</label>
@@ -530,7 +530,7 @@
                                     <controller>access</controller>
                                     <action>listmodule</action>
                                 </listmodule>
-                                
+
                                 <storemodules>
                                     <type>mvc</type>
                                     <label>admin_access_listmodule</label>
@@ -593,7 +593,7 @@
                         </ipranges>
                     </pages>
                 </security>
-                
+
                 <setup>
                     <type>mvc</type>
                     <label>admin_title_setup</label>
@@ -603,6 +603,17 @@
                     <controller>index</controller>
                     <action>setup</action>
                     <pages>
+                        <config>
+                            <type>mvc</type>
+                            <label>admin_title_config</label>
+                            <description>admin_title_config_description</description>
+                            <group>group-cafelatte</group>
+                            <module>admin</module>
+                            <controller>config</controller>
+                            <action>index</action>
+                            <resource>options</resource>
+                        </config>
+
                         <enrichmentKey>
                             <type>mvc</type>
                             <label>admin_title_enrichmentkey</label>
@@ -644,9 +655,17 @@
                                     <controller>enrichmentkey</controller>
                                     <action>edit</action>
                                 </edit>
+
+                                <delete>
+                                    <type>mvc</type>
+                                    <label>admin_enrichmentkey_delete</label>
+                                    <module>admin</module>
+                                    <controller>enrichmentkey</controller>
+                                    <action>delete</action>
+                                </delete>
                             </pages>
                         </enrichmentKey>
-                        
+
                         <help-page>
                             <type>mvc</type>
                             <label>setup_title_help-page</label>
@@ -754,7 +773,7 @@
 -->
                     </pages>
                 </setup>
-                
+
                 <info>
                     <type>mvc</type>
                     <label>admin_title_info</label>
@@ -789,8 +808,8 @@
                                     <action>update</action>
                                 </update>
                             </pages>
-                        </sysinfo>  
-                        
+                        </sysinfo>
+
                         <oailink>
                             <type>mvc</type>
                             <label>admin_title_oailink</label>

@@ -42,7 +42,7 @@
  *
  * TODO Support GET requests for create and update?
  */
-class Admin_AccountController extends Controller_Action {
+class Admin_AccountController extends Application_Controller_Action {
 
     /**
      * Default action presents list of existing accounts.
@@ -73,7 +73,7 @@ class Admin_AccountController extends Controller_Action {
         }
 
         $moduleDirectory = dirname($this->getFrontController()->getModuleDirectory());
-        $modulesModel = new Admin_Model_Modules($moduleDirectory);
+        $modulesModel = new Application_Util_Modules($moduleDirectory);
         $this->view->allModules = $modulesModel->getAll();
 
         $account = new Opus_Account($id);

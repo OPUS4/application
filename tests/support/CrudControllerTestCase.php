@@ -67,6 +67,10 @@ abstract class CrudControllerTestCase extends ControllerTestCase {
         }
     }
 
+    public function getControllerPath() {
+        return $this->controllerPath;
+    }
+
     public function tearDown() {
         if ($this->createsModels) {
             $this->deleteNewModels();

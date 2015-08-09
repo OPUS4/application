@@ -28,85 +28,62 @@
  * @package     Module_Solrsearch
  * @author      Julian Heise <heise@zib.de>
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
 
-class Solrsearch_DispatchController extends Controller_Action {
+/**
+ * Controller for redirecting search requests in order to create bookmarkable URLs for searches.
+ *
+ * TODO eliminate controller (merge with IndexController, move code to model for testing)
+ */
+class Solrsearch_DispatchController extends Application_Controller_Action {
 
     public function indexAction() {
         $this->getLogger()->debug('Received new search request. Redirecting to search action of IndexController.');
+
         $params = array();
         $action = 'search';
 
-        $searchtype = $this->getRequest()->getParam('searchtype', 'invalid searchtype');
-        if ($searchtype === Util_Searchtypes::SIMPLE_SEARCH) {
-            if (!$this->isSimpleSearchRequestValid()) {
+        $searchModel = new Solrsearch_Model_Search();
+
+        $request = $this->getRequest();
+
+        $searchType = $request->getParam('searchtype', 'invalid searchtype');
+
+        if (in_array($searchType, array('advanced', 'authorsearch')) && !is_null($this->getParam('Reset'))) {
+            $this->_redirectTo('advanced', null, 'index', 'solrsearch');
+            return;
+        }
+
+        switch ($searchType) {
+        case Application_Util_Searchtypes::SIMPLE_SEARCH:
+            if (!$searchModel->isSimpleSearchRequestValid($request)) {
                 $action = 'invalidsearchterm';
-                $params = array('searchtype' => Util_Searchtypes::SIMPLE_SEARCH);
+                $params = array('searchtype' => Application_Util_Searchtypes::SIMPLE_SEARCH);
             }
             else {
-                $params= $this->createSimpleSearchUrlParams();
+                $params= $searchModel->createSimpleSearchUrlParams($request);
             }
-        }
-        else if ($searchtype === Util_Searchtypes::ADVANCED_SEARCH || $searchtype === Util_Searchtypes::AUTHOR_SEARCH) {
-            if (!$this->isAdvancedSearchRequestValid()) {
+            break;
+        case Application_Util_Searchtypes::ADVANCED_SEARCH:
+        case Application_Util_Searchtypes::AUTHOR_SEARCH:
+            if (!$searchModel->isAdvancedSearchRequestValid($request)) {
                 $action = 'invalidsearchterm';
-                $params = array('searchtype' =>  $searchtype);
+                $params = array('searchtype' =>  $searchType);
             }
             else {
-                $params = $this->createAdvancedSearchUrlParams();
+                $params = $searchModel->createAdvancedSearchUrlParams($request);
             }
+            break;
+        default:
+            break;
         }
-        return $this->_redirectToPermanentAndExit($action, null, 'index', null, $params);
+
+        $this->_redirectToPermanentAndExit($action, null, 'index', null, $params);
     }
 
-    private function isSimpleSearchRequestValid() {
-        $query = $this->getRequest()->getParam('query');
-        return !is_null($query) && trim($query) != '';
-    }
-
-    private function isAdvancedSearchRequestValid() {
-        foreach (array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext',  'year') as $fieldname) {
-            $fieldvalue = $this->getRequest()->getParam($fieldname);
-            if (!is_null($fieldvalue) && trim($fieldvalue) != '') {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private function createSimpleSearchUrlParams() {
-        return array(
-            'searchtype' => $this->getRequest()->getParam('searchtype', Util_Searchtypes::SIMPLE_SEARCH),
-            'start' => $this->getRequest()->getParam('start', '0'),
-            'rows' => $this->getRequest()->getParam('rows', '10'),
-            'query' => $this->getRequest()->getParam('query', '*:*'),
-            'sortfield'  => $this->getRequest()->getParam('sortfield', 'score'),
-            'sortorder' => $this->getRequest()->getParam('sortorder', 'desc')
-        );
-    }
-
-    private function createAdvancedSearchUrlParams() {
-        $params = array (
-            'searchtype' => $this->getRequest()->getParam('searchtype', Util_Searchtypes::ADVANCED_SEARCH),
-            'start' => $this->getRequest()->getParam('start', '0'),
-            'rows' => $this->getRequest()->getParam('rows', '10'),
-            'sortfield' => $this->getRequest()->getParam('sortfield', 'score'),
-            'sortorder' => $this->getRequest()->getParam('sortorder', 'desc')
-        );
-
-        foreach (array('author', 'title', 'persons', 'referee', 'abstract', 'fulltext',  'year') as $fieldname) {
-            $fieldvalue = $this->getRequest()->getParam($fieldname, '');
-            if ($fieldvalue !== '') {
-                $params[$fieldname] = $fieldvalue;
-                $params[$fieldname . 'modifier'] = $this->getRequest()->getParam(
-                    $fieldname . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL
-                );
-            }
-        }
-        return $params;
-    }
 }
 

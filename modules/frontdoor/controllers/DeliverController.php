@@ -33,10 +33,10 @@
  * @version     $Id$
  *
  */
-class Frontdoor_DeliverController extends Controller_Action {
+class Frontdoor_DeliverController extends Application_Controller_Action {
 
     public function indexAction() {
-        
+
         $docId = $this->_getParam('docId', null);
         $path = $this->_getParam('file', null);
 
@@ -53,7 +53,7 @@ class Frontdoor_DeliverController extends Controller_Action {
         }
 
         $fileObject = null;
-        
+
         try {
             $fileObject = $fileModel->getFileObject($realm);
         }
@@ -80,7 +80,7 @@ class Frontdoor_DeliverController extends Controller_Action {
                 ->setHeader('Cache-Control', 'private', true)
                 ->setHeader('Pragma', 'cache', true);
 
-        $this->_helper->SendFile->setLogger(Zend_Registry::get('Zend_Log'));
+        $this->_helper->SendFile->setLogger($this->getLogger());
         try {
             $this->_helper->SendFile($fullFilename);
         }
@@ -112,8 +112,7 @@ class Frontdoor_DeliverController extends Controller_Action {
     }
 
     private function logError($exception) {
-        $logger = Zend_Registry::get("Zend_Log");
-        $logger->err($exception);
+        $this->getLogger()->err($exception);
     }
 
     private function handleDeliveryError($exception) {

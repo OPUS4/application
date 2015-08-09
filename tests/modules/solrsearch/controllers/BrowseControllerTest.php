@@ -27,7 +27,9 @@
  * @category    Application
  * @package     Module_Solrsearch
  * @author      Sascha Szott <szott@zib.de>
- * @copyright   Copyright (c) 2008-2010, OPUS 4 development team
+ * @author      Michael Lang <lang@zib.de>
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  * @version     $Id$
  */
@@ -83,16 +85,16 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $s = new Opus_Series(7);
         $s->setVisible('1');
         $s->store();
-        
+
         $d->addSeries($s)->setNumber('testSeriesAction-7');
         $d->store();
 
         $this->dispatch('/solrsearch/browse/series');
 
         $this->restoreSeriesVisibility($visibilities);
-        
+
         $this->assertRedirect();
-        $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');        
+        $this->assertResponseLocationHeader($this->getResponse(), '/solrsearch/browse');
     }
 
     public function testSeriesActionWithOneVisibleSeriesWithOnePublishedDocument() {
@@ -105,20 +107,20 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         $s = new Opus_Series(7);
         $s->setVisible('1');
         $s->store();
-        
+
         $d->addSeries($s)->setNumber('testSeriesAction-7');
         $d->store();
 
         $this->dispatch('/solrsearch/browse/series');
 
         $this->restoreSeriesVisibility($visibilities);
-        
+
         $this->assertContains('/solrsearch/index/search/searchtype/series/id/7', $this->getResponse()->getBody());
         foreach (Opus_Series::getAll() as $series) {
             if ($series->getId() != 7) {
                 $this->assertNotContains('/solrsearch/index/search/searchtype/series/id/' . $series->getId(), $this->getResponse()->getBody());
             }
-        }                
+        }
         $this->assertResponseCode(200);
     }
 
@@ -148,7 +150,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
             $responseBody = substr($responseBody, $pos);
-        }        
+        }
     }
 
     public function testSeriesActionRespectsSeriesSortOrderAfterManipulation() {
@@ -168,7 +170,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
             $pos = strpos($responseBody, '/solrsearch/index/search/searchtype/series/id/' . $seriesId);
             $this->assertTrue($pos !== false);
             $responseBody = substr($responseBody, $pos);
-        }        
+        }
 
         $this->setSortOrders($sortOrders);
     }
@@ -200,7 +202,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
     private function getSortOrders() {
         $sortOrders = array();
         foreach (Opus_Series::getAll() as $seriesItem) {
-            $sortOrders[$seriesItem->getId()] = $seriesItem->getSortOrder();            
+            $sortOrders[$seriesItem->getId()] = $seriesItem->getSortOrder();
         }
         return $sortOrders;
     }
@@ -225,7 +227,7 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
      */
     public function testUnavailableServiceReturnsHttpCode503() {
         $this->requireSolrConfig();
-        
+
         // manipulate solr configuration
         $config = Zend_Registry::get('Zend_Config');
         $host = $config->searchengine->index->host;
@@ -235,8 +237,8 @@ class Solrsearch_BrowseControllerTest extends ControllerTestCase {
         Zend_Registry::set('Zend_Config', $config);
 
         $this->dispatch('/solrsearch/browse/doctypes');
-        
-        $body = $this->getResponse()->getBody();        
+
+        $body = $this->getResponse()->getBody();
         $this->assertNotContains("http://${host}:${port}/solr/corethatdoesnotexist", $body);
         $this->assertContains("exception 'Application_SearchException' with message 'error_search_unavailable'", $body);
         $this->assertResponseCode(503);

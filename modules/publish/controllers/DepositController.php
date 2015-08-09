@@ -33,7 +33,7 @@
  * @version     $Id$
  */
 
-class Publish_DepositController extends Controller_Action {
+class Publish_DepositController extends Application_Controller_Action {
 
     public $depositData = array();
     public $log;
@@ -42,9 +42,9 @@ class Publish_DepositController extends Controller_Action {
 
     public function __construct(Zend_Controller_Request_Abstract $request, Zend_Controller_Response_Abstract $response,
                                 array $invokeArgs = array()) {
-        $this->log = Zend_Registry::get('Zend_Log');
+        $this->log = $this->getLogger();
         $this->session = new Zend_Session_Namespace('Publish');
-        
+
         parent::__construct($request, $response, $invokeArgs);
     }
 
@@ -57,7 +57,7 @@ class Publish_DepositController extends Controller_Action {
         if ($this->getRequest()->isPost() !== true) {
             return $this->_redirectTo('index', '', 'index');
         }
-        
+
         //post content is just checked for buttons
         $post = $this->getRequest()->getPost();
         if (array_key_exists('back', $post)) {
@@ -77,7 +77,7 @@ class Publish_DepositController extends Controller_Action {
             }
             return $this->_redirectTo('index', '', 'index');
         }
-        
+
         $this->view->title = 'publish_controller_index';
         $this->view->subtitle = $this->view->translate('publish_controller_deposit_successful');
 
@@ -85,10 +85,10 @@ class Publish_DepositController extends Controller_Action {
         if (isset($this->session->elements)) {
             foreach ($this->session->elements AS $element) {
                 $this->depositData[$element['name']] = array(
-                    'value' => $element['value'], 
+                    'value' => $element['value'],
                     'datatype' => $element['datatype'],
-                    'subfield' => $element['subfield']);  
-                
+                    'subfield' => $element['subfield']);
+
                 $this->log->debug(
                     "STORE DATA: " . $element['name'] . ": " . $element['value'] . ", Typ:" . $element['datatype']
                     . ", Sub:" . $element['subfield']
@@ -106,7 +106,7 @@ class Publish_DepositController extends Controller_Action {
         catch (Publish_Model_Exception $e) {
             throw new Application_Exception('publish_error_unexpected');
         }
-        
+
         $this->document = $depositData->getDocument();
         $this->document->setServerState('unpublished');
 
@@ -117,11 +117,11 @@ class Publish_DepositController extends Controller_Action {
             // TODO wie sollte die Exception sinnvoll behandelt werden?
             $this->log->err("Document could not be stored successfully: " . $e->getMessage());
             throw new Application_Exception('publish_error_unexpected');
-        }        
+        }
 
         $this->log->info("Document $docId was successfully stored!");
         $this->session->documentId = $docId;
-      
+
         // Prepare redirect to confirmation action.
         $this->session->depositConfirmDocumentId = $docId;
 
@@ -129,14 +129,14 @@ class Publish_DepositController extends Controller_Action {
         $targetController = 'deposit';
         $targetModule = 'publish';
 
-        $config = Zend_Registry::get('Zend_Config');
+        $config = $this->getConfig();
         if (isset($config) and isset($config->publish->depositComplete)) {
             $targetAction = $config->publish->depositComplete->action;
             $targetController = $config->publish->depositComplete->controller;
             $targetModule = $config->publish->depositComplete->module;
         }
 
-        $notification = new Util_Notification($this->log, $config);
+        $notification = new Application_Util_Notification($this->log, $config);
         $url = $this->view->url(
             array(
                 "module" => "admin",
@@ -147,7 +147,7 @@ class Publish_DepositController extends Controller_Action {
             null,
             true
         );
-        $notification->prepareMail($this->document, Util_Notification::SUBMISSION, $this->view->serverUrl() . $url);
+        $notification->prepareMail($this->document, Application_Util_Notification::SUBMISSION, $this->view->serverUrl() . $url);
 
         return $this->_redirectToAndExit($targetAction, null, $targetController, $targetModule);
     }
@@ -157,7 +157,7 @@ class Publish_DepositController extends Controller_Action {
      * finished.
      */
     public function confirmAction() {
-        // redirecting if action is called directly 
+        // redirecting if action is called directly
         if (is_null($this->session->depositConfirmDocumentId)) {
             return $this->_redirectToAndExit('index', null, 'index');
         }

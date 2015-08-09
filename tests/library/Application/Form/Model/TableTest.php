@@ -118,5 +118,16 @@ class Application_Form_Model_TableTest extends ControllerTestCase {
         $this->assertEquals('modeltable.phtml', $form->getViewScript());
     }
 
+    public function testIsRenderShowActionLinkDefault() {
+        $form = new Application_Form_Model_Table();
+
+        $this->assertTrue($form->isRenderShowActionLink(null));
+    }
+
+    public function testIsModifiableDefault() {
+        $form = new Application_Form_Model_Table();
+
+        $this->assertTrue($form->isModifiable(null));
+    }
 
 }

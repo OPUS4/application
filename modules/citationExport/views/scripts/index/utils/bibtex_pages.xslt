@@ -45,9 +45,9 @@
 
     <!-- bibtex-style for pages  -->
     <xsl:template name="Pages">
-      <xsl:param name="first" required="yes" />
-      <xsl:param name="last" required="yes" />
-      <xsl:param name="number" required="yes" />
+      <xsl:param name="first" />
+      <xsl:param name="last" />
+      <xsl:param name="number" />
       <xsl:choose>
          <xsl:when test="string-length($first) > 0 and string-length($last) > 0">
             <xsl:value-of select="$first" /><xsl:text> -- </xsl:text><xsl:value-of select="$last" />
