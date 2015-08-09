@@ -271,7 +271,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
         // make search index up to date
         $indexer->removeDocumentFromEntryIndexById($docId2);
         $indexer->commit();
-        
+
         $doc1->deletePermanent();
 
         $body = $this->getResponse()->getBody();
@@ -284,7 +284,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
 
         $this->assertContains(' doccount="1"', $body); // only the first document can be instantiated (xml output does not contain the second document although it exists in search index)
         $this->assertContains(' queryhits="2"', $body); // both documents exist in search index, but only the first one exists in database (queryhits contains the number of search hits)
-        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());        
+        $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
     }
 
     /**
@@ -480,7 +480,6 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('number is not specified', $response->getBody());
     }
 
-
     /**
      * begin: tests for OPUSVIER-2779
      */
@@ -531,7 +530,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $response = $this->getResponse();
         $this->assertContains('<h1>Sichtbare Publikationsliste</h1>', $response->getBody());
     }
-    
+
     public function testPublistActionWithCollectionNumberIncludingWhiteSpace() {
         $this->dispatch('/export/index/publist/stylesheet/default/role/publists/number/coll%20whitespace');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
@@ -636,6 +635,14 @@ class Export_IndexControllerTest extends ControllerTestCase {
             $normalizedResponseBody);
     }
 
+    public function testPublistActionUrnResolverUrlCorrect() {
+        $this->dispatch('/export/index/publist/role/ccs/number/H.3');
+
+        $urnResolverUrl = Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+
+        $this->assertXpathContentContains('//a[starts-with(@href, "' . $urnResolverUrl . '")]', 'URN');
+    }
+
     /**
      * TODO: Fix manipulation of Zend_Config:
      * 1. $oldConfig and $config are references to the same object
@@ -646,7 +653,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
     protected function setPublistConfig($options) {
 
     }
-    
+
     public function testPublistActionGroupedByCompletedYear() {
         $config = Zend_Registry::get('Zend_Config');
         if (isset($config->plugins->export->publist->groupby->completedyear)) {
@@ -693,7 +700,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertNotContains(' xmlns:xsi=', $response->getBody());
         $this->assertNotContains(' xmlns:xsl=', $response->getBody());
     }
-    
+
      /*
      * OPUSVIER: 2889
      */
@@ -701,7 +708,7 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
         $this->assertResponseCode(200, $this->getResponse()->getBody());
         $response = $this->getResponse();
-	
+
         /* id */
         $this->assertContains(' id="opus-publist"', $response->getBody());
         $this->assertContains(' id="opus-header"', $response->getBody());
@@ -758,15 +765,15 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals('datei mit unüblichem Namen.xhtml', $file->getPathName(), 'Test setup has changed.');
 
         $collection = $doc->getCollection(0);
-        
+
         $this->assertEquals('coll_visible', $collection->getNumber(), 'Test setup has changed');
         $this->assertEquals(1, $collection->getVisible(), 'Test setup has changed');
 
-        
+
         $this->dispatch('/export/index/publist/role/publists/number/coll_visible');
 
         $this->assertResponseCode(200, $this->getResponse()->getBody());
-        
+
         $response = $this->getResponse();
         $this->assertContains(urlencode('datei mit unüblichem Namen.xhtml'), $response->getBody());
     }

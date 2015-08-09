@@ -41,6 +41,8 @@
     xmlns:xml="http://www.w3.org/XML/1998/namespace"
     exclude-result-prefixes="php">
 
+    <xsl:param name="urnResolverUrl" />
+
     <xsl:output method="text" omit-xml-declaration="yes"/>
 
     <xsl:template match="/">
@@ -52,7 +54,7 @@
 
     <!--
         here you can change the order of the fields, just change the order of the
-        apply-templates-rows 
+        apply-templates-rows
         if there is a choose-block for the field, you have to move the whole
         choose-block
         if you wish new fields, you have to add a new line xsl:apply-templates...
@@ -101,7 +103,7 @@
            </xsl:otherwise>
        </xsl:choose>
        <xsl:text>&#10;</xsl:text>
-       
+
        <xsl:if test="string-length(PersonAuthor/@LastName)>0">
            <xsl:apply-templates select="PersonAuthor" />
        </xsl:if>
@@ -204,7 +206,8 @@
     </xsl:template>
 
     <xsl:template match="IdentifierUrn">
-        <xsl:text>UR  - http://nbn-resolving.de/urn/resolver.pl?</xsl:text>
+        <xsl:text>UR  - </xsl:text>
+        <xsl:value-of select="$urnResolverUrl" />
         <xsl:value-of select="@Value" />
         <xsl:text>&#10;</xsl:text>
     </xsl:template>

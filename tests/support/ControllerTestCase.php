@@ -158,6 +158,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      *
      * @param string $login
      * @param string $password
+     *
+     * TODO should be possible to be just 'guest' (see also enableSecurity)
      */
     public function loginUser($login, $password) {
         $adapter = new Opus_Security_AuthAdapter();

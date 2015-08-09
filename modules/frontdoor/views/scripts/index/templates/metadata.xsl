@@ -40,8 +40,8 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:php="http://php.net/xsl"
                 exclude-result-prefixes="php">
-   
-           
+
+
    <xsl:template name="MetaData">
     </xsl:template>
 
@@ -77,7 +77,7 @@
             </td>
         </tr>
     </xsl:template>
-    
+
     <xsl:template match="@PageFirst|@PageLast|@PageNumber|@PublishedYear|@PublisherName|@PublisherPlace">
         <tr>
             <th class="name">
@@ -88,7 +88,7 @@
             </td>
         </tr>
     </xsl:template>
-    
+
     <xsl:template match="@Language|@Type">
         <tr>
             <th class="name">
@@ -99,11 +99,11 @@
                     <xsl:with-param name="string">
                         <xsl:value-of select="." />
                     </xsl:with-param>
-                </xsl:call-template>	    
-                
+                </xsl:call-template>
+
             </td>
         </tr>
-    </xsl:template>    
+    </xsl:template>
 
     <!-- -->
     <!-- Templates for "external fields". -->
@@ -247,7 +247,7 @@
             <xsl:text disable-output-escaping="yes">&lt;/tr&gt;</xsl:text>
         </xsl:if>
     </xsl:template>
-   
+
 
     <xsl:template match="PersonAdvisor|PersonOther|PersonContributor|PersonEditor|PersonTranslator">
         <xsl:if test="position() = 1">
@@ -308,7 +308,7 @@
             <th class="name">
                 <xsl:call-template name="translateFieldname"/>
             </th>
-            <td>                
+            <td>
                 <xsl:element name="a">
                     <xsl:choose>
                         <xsl:when test="contains(@Value, '://')">
@@ -355,9 +355,9 @@
                 <xsl:call-template name="translateFieldname"/>
             </th>
             <td>
-                <xsl:element name="a">                
+                <xsl:element name="a">
                     <xsl:attribute name="href">
-                        <xsl:text>http://nbn-resolving.de/urn/resolver.pl?</xsl:text>
+                        <xsl:value-of select="$urnResolverUrl" />
                         <xsl:value-of select="@Value" />
                     </xsl:attribute>
                     <xsl:value-of select="@Value" />
@@ -470,7 +470,7 @@
             </td>
         </tr>
     </xsl:template>
-      
+
     <xsl:template match="Note">
         <tr>
             <th class="name">
@@ -520,7 +520,7 @@
             </xsl:call-template>
         </xsl:if>
     </xsl:template>
- 
+
     <xsl:template name="PatentData">
         <xsl:param name="name"/>
         <xsl:param name="value"/>
@@ -538,7 +538,7 @@
             </td>
         </tr>
     </xsl:template>
- 
+
     <xsl:template match="ReferenceUrl">
         <tr>
             <th class="name">

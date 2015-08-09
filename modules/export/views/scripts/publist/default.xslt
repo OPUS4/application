@@ -48,6 +48,7 @@
     <xsl:param name="collName" />
     <xsl:param name="groupBy" />
     <xsl:param name="pluginName" />
+    <xsl:param name="urnResolverUrl" />
 
     <xsl:template match="/">
         <xsl:apply-templates select="Documents"/>
@@ -297,9 +298,9 @@
 
     <xsl:template name="render_thesis">
         <!-- Type: Bachelorthesis, Masterhesis, Doctoral thesis, Habilitation thesis -->
-        <xsl:call-template name="ThesisType" />   
+        <xsl:call-template name="ThesisType" />
         <!-- School -->
-        <xsl:apply-templates select="ThesisGrantor" /> 
+        <xsl:apply-templates select="ThesisGrantor" />
         <!-- CompleteadDate, CompletedYear -->
         <xsl:call-template name="Year" />
     </xsl:template>
@@ -581,7 +582,7 @@
        <xsl:if test="@Type='urn'">
             <xsl:element name="a">
                 <xsl:attribute name="href">
-                    <xsl:text>http://nbn-resolving.de/urn/resolver.pl?</xsl:text>
+                    <xsl:value-of select="$urnResolverUrl" />
                     <xsl:value-of select="@Value" />
                 </xsl:attribute>
                 <xsl:text>URN</xsl:text>

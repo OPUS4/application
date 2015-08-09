@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
@@ -81,7 +82,7 @@ class Solrsearch_IndexController extends Application_Controller_Action {
     public function advancedAction() {
         $form = new Solrsearch_Form_AdvancedSearch();
         $form->setAction($this->view->url(array(
-            'module' => 'solrsearch', 'controller' => 'dispatch', 'action' => 'index'
+                    'module' => 'solrsearch', 'controller' => 'dispatch', 'action' => 'index'
         )));
         $this->view->form = $form;
         $this->view->title = $this->view->translate('solrsearch_title_advanced');
@@ -184,16 +185,16 @@ class Solrsearch_IndexController extends Application_Controller_Action {
                     $form = new Solrsearch_Form_AdvancedSearch($searchType);
                     $form->populate($this->getAllParams());
                     $form->setAction($this->view->url(array(
-                        'module' => 'solrsearch', 'controller' => 'dispatch', 'action' => 'index'
-                    ), null, true));
+                                'module' => 'solrsearch', 'controller' => 'dispatch', 'action' => 'index'
+                                    ), null, true));
                     $this->view->form = $form;
                     break;
                 case 'latest':
                     $form = new Solrsearch_Form_Options();
                     $form->setMethod(Zend_FORM::METHOD_GET);
                     $form->setAction($this->view->url(array(
-                        'module' => 'solrsearch', 'controller' => 'index', 'action' => 'search'
-                    ), null, true));
+                                'module' => 'solrsearch', 'controller' => 'index', 'action' => 'search'
+                                    ), null, true));
                     $form->populate($this->getAllParams());
                     $this->view->form = $form;
                     break;
@@ -291,7 +292,7 @@ class Solrsearch_IndexController extends Application_Controller_Action {
      */
     private function setUpPagination($rows, $startIndex, $query) {
         $pagination = new Solrsearch_Model_PaginationUtil(
-            $rows, $this->_numOfHits, $startIndex, $query, $this->_searchtype
+                $rows, $this->_numOfHits, $startIndex, $query, $this->_searchtype
         );
         $this->view->nextPage = self::createSearchUrlArray($pagination->getNextPageUrlArray());
         $this->view->prevPage = self::createSearchUrlArray($pagination->getPreviousPageUrlArray());
@@ -363,42 +364,23 @@ class Solrsearch_IndexController extends Application_Controller_Action {
      */
     private function buildQuery() {
         $request = $this->getRequest();
-
-        $queryBuilder = new Application_Util_QueryBuilder($this->getLogger());
-
-        $queryBuilderInput = null;
-
-        try {
-            $queryBuilderInput = $queryBuilder->createQueryBuilderInputFromRequest($request);
+        $this->_searchtype = $request->getParam('searchtype');
+        if ($this->_searchtype === Application_Util_Searchtypes::COLLECTION_SEARCH) {
+            $this->prepareChildren();
+        } else if ($this->_searchtype === Application_Util_Searchtypes::SERIES_SEARCH) {
+            $this->prepareSeries();
         }
-        catch (Application_Util_BrowsingParamsException $e) {
+        try {
+            return Application_Search_Navigation::getQueryUrl($request, $this->getLogger());
+        } catch (Application_Util_BrowsingParamsException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
             return null;
-        }
-        catch (Application_Util_QueryBuilderException $e) {
+        } catch (Application_Util_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             $this->_redirectToAndExit('index');
             return null;
         }
-
-        if (is_null($request->getParam('sortfield')) &&
-                ($request->getParam('browsing') === 'true' || $request->getParam('searchtype') === 'collection')) {
-            $queryBuilderInput['sortField'] = 'server_date_published';
-        }
-
-        $this->_searchtype = $request->getParam('searchtype');
-        if ($this->_searchtype === Application_Util_Searchtypes::LATEST_SEARCH) {
-            return $queryBuilder->createSearchQuery($this->validateInput($queryBuilderInput, 10, 100));
-        }
-
-        if ($this->_searchtype === Application_Util_Searchtypes::COLLECTION_SEARCH) {
-            $this->prepareChildren();
-        }
-        else if ($this->_searchtype === Application_Util_Searchtypes::SERIES_SEARCH) {
-            $this->prepareSeries();
-        }
-        return $queryBuilder->createSearchQuery($this->validateInput($queryBuilderInput));
     }
 
     private function prepareSeries() {
@@ -455,8 +437,8 @@ class Solrsearch_IndexController extends Application_Controller_Action {
             }
             else {
                 $this->getLogger()->debug(
-                    "The requested theme '" . $collectionList->getTheme()
-                    . "' does not exist - use default theme instead."
+                        "The requested theme '" . $collectionList->getTheme()
+                        . "' does not exist - use default theme instead."
                 );
             }
         }
@@ -491,38 +473,5 @@ class Solrsearch_IndexController extends Application_Controller_Action {
     private function setFilterQueryBaseURL() {
         $this->view->removeFilterQueryBase = $this->getRequest()->getParams();
         unset($this->view->removeFilterQueryBase['start']);
-    }
-
-    /**
-     * Adjust the actual rows parameter value if it is not between $min
-     * and $max (inclusive). In case the actual value is smaller (greater)
-     * than $min ($max) it is adjusted to $min ($max).
-     *
-     * Sets the actual start parameter value to 0 if it is negative.
-     *
-     * @param array $data An array that contains the request parameters.
-     * @param int $lowerBoundInclusive The lower bound.
-     * @param int $upperBoundInclusive The upper bound.
-     * @return int Returns the actual rows parameter value or an adjusted value if
-     * it is not in the interval [$lowerBoundInclusive, $upperBoundInclusive].
-     *
-     * TODO move validation to form class
-     */
-    private function validateInput($input, $min = 1, $max = 100) {
-        $logger = $this->getLogger();
-
-        if ($input['rows'] > $max) {
-            $logger->warn("Values greater than 100 are currently not allowed for the rows paramter.");
-            $input['rows'] = $max;
-        }
-        if ($input['rows'] < $min) {
-            $logger->warn("rows parameter is smaller than 1: adjusting to 1.");
-            $input['rows'] = $min;
-        }
-        if ($input['start'] < 0) {
-            $logger->warn("A negative start parameter is ignored.");
-            $input['start'] = 0;
-        }
-        return $input;
     }
 }

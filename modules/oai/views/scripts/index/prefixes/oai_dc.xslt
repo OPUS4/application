@@ -48,7 +48,6 @@
 
     <xsl:output method="xml" indent="yes" />
 
-
     <xsl:template match="Opus_Document" mode="oai_dc">
         <oai_dc:dc xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
             <!-- dc:title -->
@@ -312,7 +311,7 @@
             <xsl:value-of select="@Value" />
         </dc:identifier>
         <dc:identifier>
-            <xsl:text>http://nbn-resolving.de/urn/resolver.pl?</xsl:text>
+            <xsl:value-of select="$urnResolverUrl" />
             <xsl:value-of select="@Value" />
         </dc:identifier>
     </xsl:template>

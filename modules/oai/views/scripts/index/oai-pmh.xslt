@@ -22,8 +22,8 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
@@ -41,6 +41,7 @@
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 
+    <xsl:param name="urnResolverUrl" />
 
     <!-- add include here for each new metadata format    -->
 
@@ -102,7 +103,7 @@
                     <xsl:attribute name="until"><xsl:value-of select="$oai_until" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="$oai_set != ''">
-                    <xsl:attribute name="until"><xsl:value-of select="$oai_set" /></xsl:attribute>
+                    <xsl:attribute name="set"><xsl:value-of select="$oai_set" /></xsl:attribute>
                 </xsl:if>
                 <xsl:if test="$oai_metadataPrefix != ''">
                     <xsl:attribute name="metadataPrefix"><xsl:value-of select="$oai_metadataPrefix" /></xsl:attribute>
@@ -121,7 +122,7 @@
                     <xsl:value-of select="$oai_error_message" />
                 </error>
             </xsl:if>
-            
+
     <!--create the rest of oai response depending on oai_verb -->
         <xsl:choose>
                 <xsl:when test="$oai_verb='GetRecord'">
@@ -260,7 +261,7 @@
            <setSpec><xsl:value-of select="@Type"/></setSpec>
            <setName><xsl:value-of select="@TypeName"/></setName>
         </set>
-    </xsl:template>    
+    </xsl:template>
 
 
     <xsl:template match="Opus_Document">

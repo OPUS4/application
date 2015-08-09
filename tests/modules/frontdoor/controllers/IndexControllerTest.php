@@ -197,7 +197,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $lang = $d->getLanguage();
       $d->setLanguage('deu');
       $d->store();
-       
+
       $this->dispatch('/frontdoor/index/index/docId/146');
 
       // restore language
@@ -205,7 +205,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $d->setLanguage($lang);
       $d->store();
 
-      
+
       $this->assertNotContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
       $this->assertContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
    }
@@ -225,7 +225,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $d = new Opus_Document(146);
       $d->setLanguage($lang);
       $d->store();
-      
+
       $this->assertContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
       $this->assertNotContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
 
@@ -236,7 +236,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
     *
     * if database does not contain a title in the document's language,
     * the first title is used as page title
-    * 
+    *
     */
    public function testFrontdoorTitleRespectsDocumentLanguageWithoutCorrespondingTitle() {
       $d = new Opus_Document(146);
@@ -252,7 +252,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $d->store();
 
       $this->assertNotContains('<title>OPUS 4 | COLN</title>', $this->getResponse()->getBody());
-      $this->assertContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());      
+      $this->assertContains('<title>OPUS 4 | KOBV</title>', $this->getResponse()->getBody());
    }
 
    /**
@@ -468,7 +468,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
       $this->dispatch('/frontdoor/index/index/docId/146');
       $translate = Zend_Registry::getInstance()->get('Zend_Translate');
-      
+
       $this->assertQuery('h2.titlemain');
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('PersonAuthor'));
       $this->assertQuery('div#abstract');
@@ -519,7 +519,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentSourceSwb'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentClassRvk'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('EnrichmentContributorsName'));
-      
+
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_institutes'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_ccs'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_ddc'));
@@ -527,11 +527,11 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_pacs'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_bk'));
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('default_collection_role_jel'));
-      
+
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('IdentifierSerial'));
-      
+
       $this->assertQueryContentContains('table.result-data.frontdoordata th.name', $translate->_('Licence'));
-      
+
    }
 
     public function testAbstractPreserveSpace() {
@@ -547,7 +547,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/frontdoor/index/index/docId/' . $doc->getId());
-        
+
         $this->assertContains('<li class="abstract preserve-spaces">' . "foo\nbar\n\nbaz</li>",
             $this->getResponse()->getBody());
     }
@@ -556,7 +556,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $doc = $this->createTestDocument();
         $doc->setLanguage("eng");
         $doc->setServerState("published");
-        
+
         $note = new Opus_Note();
         $note->setMessage("foo\nbar\n\nbaz");
         $note->setVisibility("public");
@@ -565,7 +565,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $doc->store();
 
         $this->dispatch('/frontdoor/index/index/docId/' . $doc->getId());
-        
+
         $this->assertContains('<pre class="preserve-spaces">' . "foo\nbar\n\nbaz</pre>",
             $this->getResponse()->getBody());
     }
@@ -620,7 +620,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
         // undo changes
         $role->setDisplayBrowsing($displayFrontdoor);
-        $role->store();        
+        $role->store();
 
         $this->assertNotQueryContentContains('td', '52.00', $this->getResponse()->getBody());
         $this->assertQueryContentContains('td', 'Maschinenbau, Energietechnik, Fertigungstechnik: Allgemeines', $this->getResponse()->getBody());
@@ -694,7 +694,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/frontdoor/index/index/docId/146');
         $this->assertContains('<td>03.01.2012</td>', $this->getResponse()->getBody());
     }
-    
+
     /**
      * Regression Test for OPUSVIER-3159
      */
@@ -704,7 +704,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertContains(
                 '<tr><th class="name">Titel verleihende Institution:</th><td>Foobar Universität, Testwissenschaftliche Fakultät</td></tr>',
                 $this->getResponse()->getBody());
-        
+
     }
 
     public function testValidateXHTML() {
@@ -722,7 +722,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertResponseCode(200);
         $this->validateXHTML();
     }
-    
+
     public function testDisplayFullCollectionName() {
         $this->useGerman();
         $this->dispatch('/frontdoor/index/index/docId/146');
@@ -735,7 +735,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->assertContains('<a href="/solrsearch/index/search/searchtype/collection/id/16007" title="Sammlung anzeigen">Technische Universität Hamburg-Harburg / Bauwesen / Abwasserwirtschaft und Gewässerschutz B-2</a>',
                 $this->getResponse()->getBody());
     }
-    
+
     /**
      * Regression Test for OPUSVIER-2414
      */
@@ -743,7 +743,7 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/frontdoor/index/index/docId/145');
         $this->assertContains('<meta name="citation_date" content="2011" />',
                 $this->getResponse()->getBody());
-        
+
     }
 
     public function testPatentInformationGerman() {
@@ -1169,6 +1169,18 @@ class Frontdoor_IndexControllerTest extends ControllerTestCase {
 
         // until all messages can be prevented less than 20 is good enough
         $this->assertLessThanOrEqual(1, count($failedTranslations), $output);
+    }
+
+    public function testMetaTagsForUrns() {
+        $this->dispatch('/frontdoor/index/index/docId/146');
+
+
+        $this->assertResponseCode(200);
+
+        $urnResolverUrl = Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+
+        $this->assertXpath('//meta[@name="DC.Identifier" and @content="urn:nbn:op:123"]');
+        $this->assertXpath('//meta[@name="DC.Identifier" and @content="' . $urnResolverUrl . 'urn:nbn:op:123"]');
     }
 
 }

@@ -115,6 +115,9 @@ class Export_Model_PublistExport extends Export_Model_XsltExport {
         $this->_proc->setParameter('', 'groupBy', $groupBy);
         $this->_proc->setParameter('', 'pluginName', $this->getName());
 
+        $urnResolverUrl = Zend_Registry::get('Zend_Config')->urn->resolverUrl;
+        $this->_proc->setParameter('', 'urnResolverUrl', $urnResolverUrl);
+
         $this->loadStyleSheet($this->buildStylesheetPath($stylesheet, $view->getScriptPath('') . $stylesheetDirectory));
 
         $this->prepareXml();
