@@ -25,10 +25,7 @@ DOWNLOADS_DIR="$1"
 
 ZEND_LIB_URL='https://packages.zendframework.com/releases/ZendFramework-1.12.9/ZendFramework-1.12.9-minimal.tar.gz'
 JPGRAPH_LIB_URL='http://jpgraph.net/download/download.php?p=1'
-SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/1.4.1/apache-solr-1.4.1.tgz'
-SOLR_PHP_CLIENT_LIB_URL='http://solr-php-client.googlecode.com/svn/trunk/'
-SOLR_PHP_CLIENT_LIB_REVISION='36'
-SOLARIUM_LIB_URL='https://github.com/solariumphp/solarium/archive/3.3.0.tar.gz'
+SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/5.2.1/solr-5.2.1.tgz'
 JQUERY_LIB_URL='http://code.jquery.com/jquery-1.4.3.min.js'
 
 
@@ -42,7 +39,7 @@ cd "$DOWNLOADS_DIR"
 
 if [ ! -f zend.tar.gz ]; then
   wget -O zend.tar.gz "$ZEND_LIB_URL"
-  if [ ! -f zend.tar.gz ]
+  if [ $? -ne 0 -o ! -f zend.tar.gz ]
   then
     echo "Unable to download $ZEND_LIB_URL"
     exit 1
@@ -51,36 +48,18 @@ fi
 
 if [ ! -f jpgraph.tar.gz ]; then
   wget -O jpgraph.tar.gz "$JPGRAPH_LIB_URL"
-  if [ ! -f jpgraph.tar.gz ]
+  if [ $? -ne 0 -o ! -f jpgraph.tar.gz ]
   then
     echo "Unable to download $JPGRAPH_LIB_URL"
     exit 1
   fi
 fi
 
-if [ ! -f solr.tgz ]; then
-  wget -O solr.tgz "$SOLR_SERVER_URL"
-  if [ ! -f solr.tgz ]
+if [ ! -f solr.tar.gz ]; then
+  wget -O solr.tar.gz "$SOLR_SERVER_URL"
+  if [ $? -ne 0 -o ! -f solr.tar.gz ]
   then
     echo "Unable to download $SOLR_SERVER_URL"
-    exit 1
-  fi
-fi
-
-if [ ! -d "SolrPhpClient_r$SOLR_PHP_CLIENT_LIB_REVISION" ]; then
-  svn export --revision "$SOLR_PHP_CLIENT_LIB_REVISION" --force "$SOLR_PHP_CLIENT_LIB_URL" "SolrPhpClient_r$SOLR_PHP_CLIENT_LIB_REVISION"
-  if [ ! -d "SolrPhpClient_r$SOLR_PHP_CLIENT_LIB_REVISION" ]
-  then
-    echo "Unable to download $SOLR_PHP_CLIENT_LIB_URL"
-    exit 1
-  fi
-fi
-
-if [ ! -f solarium.tar.gz ]; then
-  wget -O solarium.tar.gz "$SOLARIUM_LIB_URL"
-  if [ ! -f solarium.tar.gz ]
-  then
-    echo "Unable to download Solarium Solr PHP Client"
     exit 1
   fi
 fi

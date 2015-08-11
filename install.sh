@@ -21,6 +21,7 @@ set -e
 # START USER-CONFIGURATION
 
 BASEDIR='/var/local/opus4'
+SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/4.9.1/solr-4.9.1.tgz'
 
 # END OF USER-CONFIGURATION
 
@@ -212,8 +213,22 @@ cd "$BASEDIR"
 [[ -z $INSTALL_SOLR ]] && read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
 if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ]
 then
-  tar xfvz "$BASEDIR/downloads/solr.tgz"
-  ln -sf apache-solr-1.4.1 solr
+
+  mkdir -p "downloads"
+  if [ ! -f "downloads/solr.tar.gz" ]; then
+    wget -O "downloads/solr.tar.gz" "$SOLR_SERVER_URL"
+    if [ $? -ne 0 -o ! -f "downloads/solr.tar.gz" ]
+    then
+      echo "Unable to download Solr service from $SOLR_SERVER_URL"
+      exit 1
+    fi
+  fi
+
+  SOLR_ARCHIVE_PATH="$(tar tzf "downloads/solr.tar.gz" | head -1)"
+  SOLR_ARCHIVE_PATH="${SOLR_ARCHIVE_PATH%%/*}"
+
+  tar xfvz "downloads/solr.tar.gz"
+  ln -sf "$SOLR_ARCHIVE_PATH" solr
   cd solr
   cp -r example opus4
   cd opus4
@@ -261,11 +276,11 @@ then
   fi
 
   # change file owner of solr installation
-  chown -R "$OWNER" "$BASEDIR/apache-solr-1.4.1"
+  chown -R "$OWNER" "$BASEDIR/$SOLR_ARCHIVE_PATH"
   chown -R "$OWNER" "$BASEDIR/solrconfig"
 
   # start Solr server
-  ./opus4-solr-jetty start
+  ./opus4-solr-jetty restart
 fi
 
 # import some test documents
@@ -285,10 +300,31 @@ then
   # sleep some seconds to ensure the server is running
   echo -en "\n\nwait until Solr server is running..."
 
-  while :; do
+  waiting=true
+
+  pingSolr() {
+    wget -SO- "http://localhost:${1}/solr/admin/ping" 2>&1
+  }
+
+  pingSolrStatus() {
+    pingSolr "$1" | sed -ne 's/^ *HTTP\/1\.[01] \([0-9]\+\) .\+$/\1/p' | head -1
+  }
+
+  while $waiting; do
     echo -n "."
-    wget -q -O /dev/null "http://localhost:$SOLR_SERVER_PORT/solr/admin/ping" && break
-    sleep 2
+    state=$(pingSolrStatus "$SOLR_SERVER_PORT")
+    case $state in
+      200|304)
+        waiting=false
+        ;;
+      500)
+        echo "solr server responds on error" >&2
+        pingSolr "$SOLR_SERVER_PORT"
+        exit 1
+        ;;
+      *)
+        sleep 2
+    esac
   done
 
   echo "completed."
