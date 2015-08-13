@@ -21,7 +21,7 @@ set -e
 # START USER-CONFIGURATION
 
 BASEDIR='/var/local/opus4'
-SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/4.9.1/solr-4.9.1.tgz'
+SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/5.2.1/solr-5.2.1.tgz'
 
 # END OF USER-CONFIGURATION
 
@@ -127,24 +127,12 @@ echo
 
 
 # set defaults if value is not given
-if [ -z "$DBNAME" ]; then
-   DBNAME='opus400'
-fi
-if [ -z "$ADMIN" ]; then
-   ADMIN='opus4admin'
-fi
-if [ -z "$WEBAPP_USER" ]; then
-   WEBAPP_USER='opus4'
-fi
-if [ -z "$MYSQLROOT" ]; then
-   MYSQLROOT='root'
-fi
-if [ -z "$MYSQLHOST" ]; then
-   MYSQLHOST='localhost'
-fi
-if [ -z "$MYSQLPORT" ]; then
-   MYSQLPORT='3306'
-fi
+DBNAME="${DBNAME:-opus400}"
+ADMIN="${ADMIN:-opus4admin}"
+WEBAPP_USER="${WEBAPP_USER:-opus4}"
+MYSQLROOT="${MYSQLROOT:-root}"
+MYSQLHOST="${MYSQLHOST:-localhost}"
+MYSQLPORT="${MYSQLPORT:-3306}"
 
 # escape ! (for later use in sed substitute)
 MYSQLHOST_ESC=`echo "$MYSQLHOST" | sed 's/\!/\\\!/g'`
@@ -210,77 +198,106 @@ fi
 
 # install and configure Solr search server
 cd "$BASEDIR"
-[[ -z $INSTALL_SOLR ]] && read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
+[ -z $INSTALL_SOLR ] && read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
 if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ]
 then
 
+  # extract archive name from URL
+  SOLR_ARCHIVE_NAME="${SOLR_SERVER_URL##*/}"
+  SOLR_ARCHIVE_NAME="${SOLR_ARCHIVE_NAME%%\?*}"
+
+  # fetch installation archive if missing locally
   mkdir -p "downloads"
-  if [ ! -f "downloads/solr.tar.gz" ]; then
-    wget -O "downloads/solr.tar.gz" "$SOLR_SERVER_URL"
-    if [ $? -ne 0 -o ! -f "downloads/solr.tar.gz" ]
+  if [ ! -f "downloads/$SOLR_ARCHIVE_NAME" ]; then
+    wget -O "downloads/$SOLR_ARCHIVE_NAME" "$SOLR_SERVER_URL"
+    if [ $? -ne 0 -o ! -f "downloads/$SOLR_ARCHIVE_NAME" ]
     then
       echo "Unable to download Solr service from $SOLR_SERVER_URL"
       exit 1
     fi
   fi
 
-  SOLR_ARCHIVE_PATH="$(tar tzf "downloads/solr.tar.gz" | head -1)"
-  SOLR_ARCHIVE_PATH="${SOLR_ARCHIVE_PATH%%/*}"
+  # ask for desired port of solr service
+  [ -z "$SOLR_SERVER_PORT" ] && read -p "Solr server port number [8983]: " SOLR_SERVER_PORT
+  SOLR_SERVER_PORT="${SOLR_SERVER_PORT:-8983}"
 
-  tar xfvz "downloads/solr.tar.gz"
-  ln -sf "$SOLR_ARCHIVE_PATH" solr
-  cd solr
-  cp -r example opus4
-  cd opus4
-  rm -rf example-DIH exampledocs multicore/exampledocs
-  cd solr/conf
-  ln -sf "$BASEDIR/solrconfig/schema.xml"
-  ln -sf "$BASEDIR/solrconfig/solrconfig.xml"
-  cd ../../
-  ln -sf "$BASEDIR/solrconfig/logging.properties"
+  # extract name of folder contained in archive
+  SOLR_DIR="$(tar tzf "downloads/$SOLR_ARCHIVE_NAME" | head -1)"
+  SOLR_DIR="${SOLR_DIR%%/*}"
 
-  [[ -z $SOLR_SERVER_PORT ]] && read -p "Solr server port number [8983]: " SOLR_SERVER_PORT
-  if [ -z "$SOLR_SERVER_PORT" ]; then
-    SOLR_SERVER_PORT='8983';
+  SOLR_MAJOR="${SOLR_DIR#solr-}"
+  SOLR_MAJOR="${SOLR_MAJOR%%.*}"
+
+  # extract archive into basedir (expecting to create folder named solr-x.y.z)
+  tar xfvz "downloads/$SOLR_ARCHIVE_NAME"
+
+  # ensure extracted folder is available as solr/
+  if [ -e solr -a "$(readlink -f solr)" != "$BASEDIR/$SOLR_DIR" ]; then
+    rm solr
   fi
-  SOLR_SERVER_PORT_ESC=`echo "$SOLR_SERVER_PORT" |sed 's/\!/\\\!/g'`
+  ln -sf "$SOLR_DIR" solr
 
-  # write solr-config to config.ini
+  cd solr
+
+  SOLR_BASE_DIR="$(pwd)/opus4"
+
+  # create space for configuring solr service
+  mkdir -p "${SOLR_BASE_DIR}/data/solr/conf"
+
+  # put configuration and schema files
+  cp "$BASEDIR/solrconfig/core.properties" "${SOLR_BASE_DIR}/data/solr"
+  if [ -e "$BASEDIR/solrconfig/schema-${SOLR_MAJOR}.xml" ]; then
+    ln -sf "$BASEDIR/solrconfig/schema-${SOLR_MAJOR}.xml" "${SOLR_BASE_DIR}/data/solr/conf/schema.xml"
+  else
+    ln -sf "$BASEDIR/solrconfig/schema.xml" "${SOLR_BASE_DIR}/data/solr/conf"
+  fi
+
+  if [ -e "$BASEDIR/solrconfig/solrconfig-${SOLR_MAJOR}.xml" ]; then
+    ln -sf "$BASEDIR/solrconfig/solrconfig-${SOLR_MAJOR}.xml" "${SOLR_BASE_DIR}/data/solr/conf/solrconfig.xml"
+  else
+    ln -sf "$BASEDIR/solrconfig/solrconfig.xml" "${SOLR_BASE_DIR}/data/solr/conf"
+  fi
+
+  # provide logging properties
+  # TODO check integration of logging.properties with recent versions of solr
+  ln -sf "$BASEDIR/solrconfig/logging.properties" opus4/logging.properties
+
+  # write solr-config to application's config.ini
   CONFIG_INI="$BASEDIR/opus4/application/configs/config.ini"
   "$SCRIPT_PATH/install-config-solr.sh" "$CONFIG_INI" localhost "$SOLR_SERVER_PORT" solr localhost "$SOLR_SERVER_PORT" solr
 
-  cd "$BASEDIR/install"
-  if [ "$OS" = suse ]
-  then
-    sed -i -e "s!^START_STOP_DAEMON=1!START_STOP_DAEMON=0!" opus4-solr-jetty
-  fi
-  sed -e "s!^JETTY_PORT=!JETTY_PORT=$SOLR_SERVER_PORT_ESC!" \
-      -e "s!^JETTY_USER=!JETTY_USER=$OPUS_USER_NAME_ESC!" opus4-solr-jetty.conf.template > opus4-solr-jetty.conf
-  chmod +x opus4-solr-jetty
+  # change file owner of solr installation
+  chown -R "$OWNER" "$BASEDIR/$SOLR_DIR"
+  chown -R "$OWNER" "$BASEDIR/solrconfig"
 
+  # install init script
   [[ -z $INSTALL_INIT_SCRIPT ]] && read -p "Install init.d script to start and stop Solr server automatically? [Y]: " INSTALL_INIT_SCRIPT
   if [ -z "$INSTALL_INIT_SCRIPT" ] || [ "$INSTALL_INIT_SCRIPT" = Y ] || [ "$INSTALL_INIT_SCRIPT" = y ]
   then
-    ln -sf "$BASEDIR/install/opus4-solr-jetty" /etc/init.d/opus4-solr-jetty
-    ln -sf "$BASEDIR/install/opus4-solr-jetty.conf" /etc/default/jetty
-    ln -sf "$BASEDIR/install/jetty-logging.xml" "$BASEDIR/solr/opus4/etc/jetty-logging.xml"
-    chmod +x /etc/init.d/opus4-solr-jetty
-    if [ "$OS" = ubuntu ]
-    then
-      update-rc.d -f opus4-solr-jetty remove
-      update-rc.d opus4-solr-jetty defaults
-    else
-      chkconfig --del opus4-solr-jetty
-      chkconfig --set opus4-solr-jetty on
+    # stop any running solr service
+    if [ -x /etc/init.d/opus4-solr-jetty ]; then
+      /etc/init.d/opus4-solr-jetty stop
+    elif [ -x /etc/init.d/solr ]; then
+      /etc/init.d/solr stop
+    fi
+
+    # remove files and folders causing unneccessary errors in install script
+    rm -f /etc/init.d/{opus4-solr-jetty,solr}
+    rm -f "$BASEDIR/solr"
+
+    # run installer bundled with solr
+    bin/install_solr_service.sh "../downloads/$SOLR_ARCHIVE_NAME" -d "$SOLR_BASE_DIR" -i "$BASEDIR" -p "$SOLR_SERVER_PORT" -s solr -u "$OPUS_USER_NAME"
+
+    # make sure new service is available just like the old one
+    ln -s solr /etc/init.d/opus4-solr-jetty
+  else
+    # (re)start solr service
+    if [ -x /etc/init.d/opus4-solr-jetty ]; then
+      /etc/init.d/opus4-solr-jetty restart
+    elif [ -x /etc/init.d/solr ]; then
+      /etc/init.d/solr restart
     fi
   fi
-
-  # change file owner of solr installation
-  chown -R "$OWNER" "$BASEDIR/$SOLR_ARCHIVE_PATH"
-  chown -R "$OWNER" "$BASEDIR/solrconfig"
-
-  # start Solr server
-  ./opus4-solr-jetty restart
 fi
 
 # import some test documents
@@ -303,23 +320,31 @@ then
   waiting=true
 
   pingSolr() {
-    wget -SO- "http://localhost:${1}/solr/admin/ping" 2>&1
+    wget -SO- "$1" 2>&1
   }
 
   pingSolrStatus() {
     pingSolr "$1" | sed -ne 's/^ *HTTP\/1\.[01] \([0-9]\+\) .\+$/\1/p' | head -1
   }
 
+  case "$SOLR_MAJOR" in
+    5)
+      PING_URL="http://localhost:${SOLR_SERVER_PORT}/solr/solr/admin/ping"
+      ;;
+    *)
+      PING_URL="http://localhost:${SOLR_SERVER_PORT}/solr/admin/ping"
+  esac
+
   while $waiting; do
     echo -n "."
-    state=$(pingSolrStatus "$SOLR_SERVER_PORT")
+    state=$(pingSolrStatus "$PING_URL")
     case $state in
       200|304)
         waiting=false
         ;;
       500)
         echo "solr server responds on error" >&2
-        pingSolr "$SOLR_SERVER_PORT"
+        pingSolr "$PING_URL"
         exit 1
         ;;
       *)
