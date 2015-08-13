@@ -135,31 +135,29 @@ MYSQLHOST="${MYSQLHOST:-localhost}"
 MYSQLPORT="${MYSQLPORT:-3306}"
 
 # escape ! (for later use in sed substitute)
-MYSQLHOST_ESC=`echo "$MYSQLHOST" | sed 's/\!/\\\!/g'`
-MYSQLPORT_ESC=`echo "$MYSQLPORT" | sed 's/\!/\\\!/g'`
-WEBAPP_USER_ESC=`echo "$WEBAPP_USER" | sed 's/\!/\\\!/g'`
-WEBAPP_USER_PASSWORD_ESC=`echo "$WEBAPP_USER_PASSWORD" | sed 's/\!/\\\!/g'`
-DBNAME_ESC=`echo "$DBNAME" | sed 's/\!/\\\!/g'`
-ADMIN_ESC=`echo "$ADMIN" | sed 's/\!/\\\!/g'`
-ADMIN_PASSWORD_ESC=`echo "$ADMIN_PASSWORD" | sed 's/\!/\\\!/g'`
-ADMIN_PASSWORD_QUOTED=`echo "$(printf %q "$ADMIN_PASSWORD")"`
+MYSQLHOST_ESC="${MYSQLHOST//\!/\\\!}"
+MYSQLPORT_ESC="${MYSQLPORT//\!/\\\!}"
+WEBAPP_USER_ESC="${WEBAPP_USER//\!/\\\!}"
+WEBAPP_USER_PASSWORD_ESC="${WEBAPP_USER_PASSWORD//\!/\\\!}"
+DBNAME_ESC="${DBNAME//\!/\\\!}"
+ADMIN_ESC="${ADMIN//\!/\\\!}"
+ADMIN_PASSWORD_ESC="${ADMIN_PASSWORD//\!/\\\!}"
 
 # process creating mysql user and database
-MYSQL="$MYSQL_CLIENT --default-character-set=utf8 -u $MYSQLROOT -p -v"
-MYSQL_OPUS4ADMIN="$MYSQL_CLIENT --default-character-set=utf8 -u $ADMIN -p$ADMIN_PASSWORD_QUOTED -v"
-if [ localhost != "$MYSQLHOST" ]
-then
-  MYSQL="$MYSQL -h $MYSQLHOST"
-  MYSQL_OPUS4ADMIN="$MYSQL_OPUS4ADMIN -h $MYSQLHOST"
-fi
-if [ 3306 != "$MYSQLPORT" ]
-then
-  MYSQL="$MYSQL -P $MYSQLPORT"
-  MYSQL_OPUS4ADMIN="$MYSQL_OPUS4ADMIN -P $MYSQLPORT"
-fi
+mysqlRoot() {
+  "$MYSQL_CLIENT" --default-character-set=utf8 -u "$MYSQLROOT" -p -v
+}
+
+mysqlOpus4Admin() {
+  "$MYSQL_CLIENT" --defaults-file=<(echo -e "[client]\npassword=${ADMIN_PASSWORD}") --default-character-set=utf8 -u "$ADMIN" -v $1
+}
+
+MYSQL_OPTS=""
+[ "localhost" != "$MYSQLHOST" ] && MYSQL_OPTS="-h $MYSQLHOST"
+[ "3306" != "$MYSQLPORT" ] && MYSQL_OPTS="$MYSQL_OPTS -P $MYSQLPORT"
 
 echo "Next you'll be now prompted to enter the root password of your MySQL server"
-$MYSQL <<LimitString
+mysqlRoot <<LimitString
 CREATE DATABASE IF NOT EXISTS $DBNAME DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI;
 GRANT ALL PRIVILEGES ON $DBNAME.* TO '$ADMIN'@'$MYSQLHOST' IDENTIFIED BY '$ADMIN_PASSWORD';
 GRANT SELECT,INSERT,UPDATE,DELETE ON $DBNAME.* TO '$WEBAPP_USER'@'$MYSQLHOST' IDENTIFIED BY '$WEBAPP_USER_PASSWORD';
@@ -308,7 +306,7 @@ then
   cd "$BASEDIR"
   for i in `find opus4/tests/sql -name *.sql \( -type f -o -type l \) | sort`; do
     echo "Inserting file '${i}'"
-    eval "$MYSQL_OPUS4ADMIN" "$DBNAME" < "${i}"
+    mysqlOpus4Admin "$DBNAME" < "${i}"
   done
 
   # copy test fulltexts to workspace directory
