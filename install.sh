@@ -199,26 +199,6 @@ cd "$BASEDIR"
 if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ]
 then
 
-  # stop any running solr service
-  lsof -i ":$SOLR_SERVER_PORT" &>/dev/null && {
-    (
-      if [ -x /etc/init.d/opus4-solr-jetty ]; then
-        /etc/init.d/opus4-solr-jetty stop
-      elif [ -x /etc/init.d/solr ]; then
-        /etc/init.d/solr stop
-      fi
-    ) || \
-    sudo kill "$(lsof -i ":$SOLR_SERVER_PORT" | awk 'NR>1 {print $2}')" || \
-    {
-      cat >&2 <<EOT
-stopping running Solr service failed, please stop any service listening on
-port $SOLR_SERVER_PORT ...
-EOT
-      exit 1
-    }
-  }
-
-
   # extract archive name from URL
   SOLR_ARCHIVE_NAME="${SOLR_SERVER_URL##*/}"
   SOLR_ARCHIVE_NAME="${SOLR_ARCHIVE_NAME%%\?*}"
@@ -244,6 +224,29 @@ EOT
 
   SOLR_VERSION="${SOLR_DIR#solr-}"
   SOLR_MAJOR="${SOLR_VERSION%%.*}"
+
+  # stop any running solr service
+  lsof -i ":$SOLR_SERVER_PORT" &>/dev/null && {
+    (
+      echo "stopping running Solr service ..." >&2
+
+      if [ -x /etc/init.d/opus4-solr-jetty ]; then
+        /etc/init.d/opus4-solr-jetty stop
+      elif [ -x /etc/init.d/solr ]; then
+        /etc/init.d/solr stop
+      else
+        false
+      fi
+    ) || \
+    sudo kill "$(lsof -i ":$SOLR_SERVER_PORT" | awk 'NR>1 {print $2}')" || \
+    {
+      cat >&2 <<EOT
+stopping running Solr service failed, please stop any service listening on
+port $SOLR_SERVER_PORT ...
+EOT
+      exit 1
+    }
+  }
 
   # extract archive into basedir (expecting to create folder named solr-x.y.z)
   tar xfvz "downloads/$SOLR_ARCHIVE_NAME"
