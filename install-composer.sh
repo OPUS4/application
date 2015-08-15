@@ -31,7 +31,12 @@ BASEDIR="$(pwd)"
 if [ -e composer.phar ]; then
 	# upgrade existing composer
 	php composer.phar selfupdate || {
-		echo "failed updating composer" >&2
+		echo "failed self-updating composer" >&2
+		exit 1
+	}
+
+	php composer.phar update || {
+		echo "failed updating dependencies" >&2
 		exit 1
 	}
 else
@@ -40,11 +45,10 @@ else
 		echo "failed getting composer" >&2
 		exit 1
 	}
+
+	# install all dependencies
+	php composer.phar install || {
+		echo "failed installing dependencies" >&2
+		exit 1
+	}
 fi
-
-
-# install all dependencies
-php composer.phar install || {
-	echo "failed installing dependencies" >&2
-	exit 1
-}

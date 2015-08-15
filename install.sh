@@ -121,8 +121,8 @@ echo
 echo
 [[ -z $MYSQLHOST            ]] && read -p "MySQL DBMS Host [localhost]: "               MYSQLHOST
 [[ -z $MYSQLPORT            ]] && read -p "MySQL DBMS Port [3306]: "                    MYSQLPORT
-echo
 [[ -z $MYSQLROOT            ]] && read -p "MySQL Root User [root]: "                    MYSQLROOT
+read -p "MySQL Root User Password: " -s MYSQLROOT_PASSWORD
 echo
 
 
@@ -145,7 +145,7 @@ ADMIN_PASSWORD_ESC="${ADMIN_PASSWORD//\!/\\\!}"
 
 # process creating mysql user and database
 mysqlRoot() {
-  "$MYSQL_CLIENT" --default-character-set=utf8 -u "$MYSQLROOT" -p -v
+  "$MYSQL_CLIENT" --defaults-file=<(echo -e "[client]\npassword=${MYSQLROOT_PASSWORD}") --default-character-set=utf8 -u "$MYSQLROOT" -v
 }
 
 mysqlOpus4Admin() {
@@ -156,7 +156,6 @@ MYSQL_OPTS=""
 [ "localhost" != "$MYSQLHOST" ] && MYSQL_OPTS="-h $MYSQLHOST"
 [ "3306" != "$MYSQLPORT" ] && MYSQL_OPTS="$MYSQL_OPTS -P $MYSQLPORT"
 
-echo "Next you'll be now prompted to enter the root password of your MySQL server"
 mysqlRoot <<LimitString
 CREATE DATABASE IF NOT EXISTS $DBNAME DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI;
 GRANT ALL PRIVILEGES ON $DBNAME.* TO '$ADMIN'@'$MYSQLHOST' IDENTIFIED BY '$ADMIN_PASSWORD';
@@ -196,9 +195,29 @@ fi
 
 # install and configure Solr search server
 cd "$BASEDIR"
-[ -z $INSTALL_SOLR ] && read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
+[ -z "$INSTALL_SOLR" ] && read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
 if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ]
 then
+
+  # stop any running solr service
+  lsof -i ":$SOLR_SERVER_PORT" &>/dev/null && {
+    (
+      if [ -x /etc/init.d/opus4-solr-jetty ]; then
+        /etc/init.d/opus4-solr-jetty stop
+      elif [ -x /etc/init.d/solr ]; then
+        /etc/init.d/solr stop
+      fi
+    ) || \
+    sudo kill "$(lsof -i ":$SOLR_SERVER_PORT" | awk 'NR>1 {print $2}')" || \
+    {
+      cat >&2 <<EOT
+stopping running Solr service failed, please stop any service listening on
+port $SOLR_SERVER_PORT ...
+EOT
+      exit 1
+    }
+  }
+
 
   # extract archive name from URL
   SOLR_ARCHIVE_NAME="${SOLR_SERVER_URL##*/}"
@@ -223,8 +242,8 @@ then
   SOLR_DIR="$(tar tzf "downloads/$SOLR_ARCHIVE_NAME" | head -1)"
   SOLR_DIR="${SOLR_DIR%%/*}"
 
-  SOLR_MAJOR="${SOLR_DIR#solr-}"
-  SOLR_MAJOR="${SOLR_MAJOR%%.*}"
+  SOLR_VERSION="${SOLR_DIR#solr-}"
+  SOLR_MAJOR="${SOLR_VERSION%%.*}"
 
   # extract archive into basedir (expecting to create folder named solr-x.y.z)
   tar xfvz "downloads/$SOLR_ARCHIVE_NAME"
@@ -242,19 +261,39 @@ then
   # create space for configuring solr service
   mkdir -p "${SOLR_BASE_DIR}/data/solr/conf"
 
-  # put configuration and schema files
-  cp "$BASEDIR/solrconfig/core.properties" "${SOLR_BASE_DIR}/data/solr"
-  if [ -e "$BASEDIR/solrconfig/schema-${SOLR_MAJOR}.xml" ]; then
-    ln -sf "$BASEDIR/solrconfig/schema-${SOLR_MAJOR}.xml" "${SOLR_BASE_DIR}/data/solr/conf/schema.xml"
-  else
-    ln -sf "$BASEDIR/solrconfig/schema.xml" "${SOLR_BASE_DIR}/data/solr/conf"
-  fi
+  copyConfigFile() {
+    NAME="${1}"
+    SRC="${2}"
+    DST="${3}"
 
-  if [ -e "$BASEDIR/solrconfig/solrconfig-${SOLR_MAJOR}.xml" ]; then
-    ln -sf "$BASEDIR/solrconfig/solrconfig-${SOLR_MAJOR}.xml" "${SOLR_BASE_DIR}/data/solr/conf/solrconfig.xml"
-  else
-    ln -sf "$BASEDIR/solrconfig/solrconfig.xml" "${SOLR_BASE_DIR}/data/solr/conf"
-  fi
+    [ -e "${DST}/${NAME}" ] || {
+      PRE="${NAME%.*}"
+      POST="${NAME##*.}"
+
+      VERSION="${SOLR_VERSION}"
+
+      SRCNAME=
+      while [ -z "${SRCNAME}" -o \( ! -e "${SRCNAME}" -a -n "${VERSION}" \) ]
+      do
+        SRCNAME="${SRC}/${PRE}-${VERSION}.${POST}"
+        VERSION="${VERSION%.*}"
+      done
+
+      if [ -e "${SRCNAME}" ]; then
+        echo "setting up ${SRCNAME} as ${DST}/${NAME}" >&2
+        ln -sf "${SRCNAME}" "${DST}/${NAME}"
+      else
+        echo "setting up ${SRC}/${NAME} as ${DST}/${NAME}" >&2
+        ln -sf "${SRC}/${NAME}" "${DST}/${NAME}"
+      fi
+    }
+  }
+
+  # put configuration and schema files
+  ln -sf  "$BASEDIR/solrconfig/core.properties" "${SOLR_BASE_DIR}/data/solr"
+
+  copyConfigFile "schema.xml" "${BASEDIR}/solrconfig" "${SOLR_BASE_DIR}/data/solr/conf"
+  copyConfigFile "solrconfig.xml" "${BASEDIR}/solrconfig" "${SOLR_BASE_DIR}/data/solr/conf"
 
   # provide logging properties
   # TODO check integration of logging.properties with recent versions of solr
@@ -269,16 +308,9 @@ then
   chown -R "$OWNER" "$BASEDIR/solrconfig"
 
   # install init script
-  [[ -z $INSTALL_INIT_SCRIPT ]] && read -p "Install init.d script to start and stop Solr server automatically? [Y]: " INSTALL_INIT_SCRIPT
+  [ -z "$INSTALL_INIT_SCRIPT" ] && read -p "Install init.d script to start and stop Solr server automatically? [Y]: " INSTALL_INIT_SCRIPT
   if [ -z "$INSTALL_INIT_SCRIPT" ] || [ "$INSTALL_INIT_SCRIPT" = Y ] || [ "$INSTALL_INIT_SCRIPT" = y ]
   then
-    # stop any running solr service
-    if [ -x /etc/init.d/opus4-solr-jetty ]; then
-      /etc/init.d/opus4-solr-jetty stop
-    elif [ -x /etc/init.d/solr ]; then
-      /etc/init.d/solr stop
-    fi
-
     # remove files and folders causing unneccessary errors in install script
     rm -f /etc/init.d/{opus4-solr-jetty,solr}
     rm -f "$BASEDIR/solr"
@@ -299,7 +331,7 @@ then
 fi
 
 # import some test documents
-[[ -z $IMPORT_TESTDATA ]] && read -p "Import test data? [Y]: " IMPORT_TESTDATA
+[ -z "$IMPORT_TESTDATA" ] && read -p "Import test data? [Y]: " IMPORT_TESTDATA
 if [ -z "$IMPORT_TESTDATA" ] || [ "$IMPORT_TESTDATA" = Y ] || [ "$IMPORT_TESTDATA" = y ]
 then
   # import test data
@@ -341,7 +373,7 @@ then
         waiting=false
         ;;
       500)
-        echo "solr server responds on error" >&2
+        echo -e "\n\nSolr server responds on error:\n" >&2
         pingSolr "$PING_URL"
         exit 1
         ;;
@@ -365,15 +397,15 @@ cd "$BASEDIR"
 chmod -R 777 workspace
 
 # delete tar archives
-[[ -z $DELETE_DOWNLOADS ]] && read -p "Delete downloads? [N]: " DELETE_DOWNLOADS
+[ -z "$DELETE_DOWNLOADS" ] && read -p "Delete downloads? [N]: " DELETE_DOWNLOADS
 if [ "$DELETE_DOWNLOADS" = Y ] || [ "$DELETE_DOWNLOADS" = y ]; then
   rm -rf downloads
 fi
 
-[[ -z $RESTART_APACHE ]] && RESTART_APACHE=Y
+[ -z "$RESTART_APACHE" ] && RESTART_APACHE=Y
 if [ "$RESTART_APACHE" = Y ];
 then
-  echo 'restart apache webserver ...'
+  echo "restart apache webserver ..."
   /etc/init.d/apache2 restart
 fi
 
