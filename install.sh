@@ -259,10 +259,11 @@ EOT
 
   cd solr
 
-  SOLR_BASE_DIR="$(pwd)/opus4"
+  SOLR_BASE_DIR="$(pwd)"
+  SOLR_CORE_DIR="$(pwd)/opus4"
 
   # create space for configuring solr service
-  mkdir -p "${SOLR_BASE_DIR}/data/solr/conf"
+  mkdir -p "${SOLR_CORE_DIR}/data/solr/conf"
 
   copyConfigFile() {
     NAME="${1}"
@@ -293,18 +294,29 @@ EOT
   }
 
   # put configuration and schema files
-  ln -sf  "$BASEDIR/solrconfig/core.properties" "${SOLR_BASE_DIR}/data/solr"
+  ln -sf  "$BASEDIR/solrconfig/core.properties" "${SOLR_CORE_DIR}/data/solr"
 
-  copyConfigFile "schema.xml" "${BASEDIR}/solrconfig" "${SOLR_BASE_DIR}/data/solr/conf"
-  copyConfigFile "solrconfig.xml" "${BASEDIR}/solrconfig" "${SOLR_BASE_DIR}/data/solr/conf"
+  copyConfigFile "schema.xml" "${BASEDIR}/solrconfig" "${SOLR_CORE_DIR}/data/solr/conf"
+  copyConfigFile "solrconfig.xml" "${BASEDIR}/solrconfig" "${SOLR_CORE_DIR}/data/solr/conf"
 
   # provide logging properties
   # TODO check integration of logging.properties with recent versions of solr
   ln -sf "$BASEDIR/solrconfig/logging.properties" opus4/logging.properties
 
+  # detect URL prefix to use
+  case "$SOLR_MAJOR" in
+    5)
+      SOLR_CONTEXT="/solr/solr"
+      ;;
+    *)
+      SOLR_CONTEXT="/solr"
+  esac
+
+
+
   # write solr-config to application's config.ini
   CONFIG_INI="$BASEDIR/opus4/application/configs/config.ini"
-  "$SCRIPT_PATH/install-config-solr.sh" "$CONFIG_INI" localhost "$SOLR_SERVER_PORT" solr localhost "$SOLR_SERVER_PORT" solr
+  "$SCRIPT_PATH/install-config-solr.sh" "$CONFIG_INI" localhost "$SOLR_SERVER_PORT" "${SOLR_CONTEXT}" localhost "$SOLR_SERVER_PORT" "${SOLR_CONTEXT}"
 
   # change file owner of solr installation
   chown -R "$OWNER" "$BASEDIR/$SOLR_DIR"
@@ -319,7 +331,7 @@ EOT
     rm -f "$BASEDIR/solr"
 
     # run installer bundled with solr
-    bin/install_solr_service.sh "../downloads/$SOLR_ARCHIVE_NAME" -d "$SOLR_BASE_DIR" -i "$BASEDIR" -p "$SOLR_SERVER_PORT" -s solr -u "$OPUS_USER_NAME"
+    bin/install_solr_service.sh "../downloads/$SOLR_ARCHIVE_NAME" -d "$SOLR_CORE_DIR" -i "$BASEDIR" -p "$SOLR_SERVER_PORT" -s solr -u "$OPUS_USER_NAME"
 
     # make sure new service is available just like the old one
     ln -s solr /etc/init.d/opus4-solr-jetty
@@ -362,10 +374,10 @@ then
 
   case "$SOLR_MAJOR" in
     5)
-      PING_URL="http://localhost:${SOLR_SERVER_PORT}/solr/solr/admin/ping"
+      PING_URL="http://localhost:${SOLR_SERVER_PORT}${SOLR_CONTEXT}/admin/ping"
       ;;
     *)
-      PING_URL="http://localhost:${SOLR_SERVER_PORT}/solr/admin/ping"
+      PING_URL="http://localhost:${SOLR_SERVER_PORT}${SOLR_CONTEXT}/admin/ping"
   esac
 
   while $waiting; do
