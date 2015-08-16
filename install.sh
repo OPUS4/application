@@ -143,19 +143,20 @@ DBNAME_ESC="${DBNAME//\!/\\\!}"
 ADMIN_ESC="${ADMIN//\!/\\\!}"
 ADMIN_PASSWORD_ESC="${ADMIN_PASSWORD//\!/\\\!}"
 
-# process creating mysql user and database
-mysqlRoot() {
-  "$MYSQL_CLIENT" --defaults-file=<(echo -e "[client]\npassword=${MYSQLROOT_PASSWORD}") --default-character-set=utf8 -u "$MYSQLROOT" -v
-}
-
-mysqlOpus4Admin() {
-  "$MYSQL_CLIENT" --defaults-file=<(echo -e "[client]\npassword=${ADMIN_PASSWORD}") --default-character-set=utf8 -u "$ADMIN" -v $1
-}
-
+# prepare to access MySQL service
 MYSQL_OPTS=""
 [ "localhost" != "$MYSQLHOST" ] && MYSQL_OPTS="-h $MYSQLHOST"
 [ "3306" != "$MYSQLPORT" ] && MYSQL_OPTS="$MYSQL_OPTS -P $MYSQLPORT"
 
+mysqlRoot() {
+  "$MYSQL_CLIENT" --defaults-file=<(echo -e "[client]\npassword=${MYSQLROOT_PASSWORD}") --default-character-set=utf8 ${MYSQL_OPTS} -u "$MYSQLROOT" -v
+}
+
+mysqlOpus4Admin() {
+  "$MYSQL_CLIENT" --defaults-file=<(echo -e "[client]\npassword=${ADMIN_PASSWORD}") --default-character-set=utf8 ${MYSQL_OPTS} -u "$ADMIN" -v $1
+}
+
+# process creating mysql user and database
 mysqlRoot <<LimitString
 CREATE DATABASE IF NOT EXISTS $DBNAME DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI;
 GRANT ALL PRIVILEGES ON $DBNAME.* TO '$ADMIN'@'$MYSQLHOST' IDENTIFIED BY '$ADMIN_PASSWORD';
@@ -228,7 +229,7 @@ then
   # stop any running solr service
   lsof -i ":$SOLR_SERVER_PORT" &>/dev/null && {
     (
-      echo "stopping running Solr service ..." >&2
+      echo "stopping running Solr service ..."
 
       if [ -x /etc/init.d/opus4-solr-jetty ]; then
         /etc/init.d/opus4-solr-jetty stop
@@ -249,7 +250,8 @@ EOT
   }
 
   # extract archive into basedir (expecting to create folder named solr-x.y.z)
-  tar xfvz "downloads/$SOLR_ARCHIVE_NAME"
+  echo "extracting Solr archive ..."
+  tar xfz "downloads/$SOLR_ARCHIVE_NAME"
 
   # ensure extracted folder is available as solr/
   if [ -e solr -a "$(readlink -f solr)" != "$BASEDIR/$SOLR_DIR" ]; then
@@ -284,10 +286,10 @@ EOT
       done
 
       if [ -e "${SRCNAME}" ]; then
-        echo "setting up ${SRCNAME} as ${DST}/${NAME}" >&2
+        echo "setting up ${SRCNAME} as ${DST}/${NAME}"
         ln -sf "${SRCNAME}" "${DST}/${NAME}"
       else
-        echo "setting up ${SRC}/${NAME} as ${DST}/${NAME}" >&2
+        echo "setting up ${SRC}/${NAME} as ${DST}/${NAME}"
         ln -sf "${SRC}/${NAME}" "${DST}/${NAME}"
       fi
     }
@@ -359,6 +361,7 @@ then
   # copy test fulltexts to workspace directory
   cp -rv opus4/tests/fulltexts/* workspace/files
 
+  # TODO is waiting for running solr required since service script has been waiting for this before
   # sleep some seconds to ensure the server is running
   echo -en "\n\nwait until Solr server is running..."
 
@@ -389,7 +392,7 @@ then
         ;;
       500)
         echo -e "\n\nSolr server responds on error:\n" >&2
-        pingSolr "$PING_URL"
+        pingSolr "$PING_URL" >&2
         exit 1
         ;;
       *)
