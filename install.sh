@@ -21,6 +21,7 @@ set -e
 # START USER-CONFIGURATION
 
 BASEDIR='/var/local/opus4'
+SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/5.2.1/solr-5.2.1.tgz'
 
 # END OF USER-CONFIGURATION
 
@@ -120,57 +121,43 @@ echo
 echo
 [[ -z $MYSQLHOST            ]] && read -p "MySQL DBMS Host [localhost]: "               MYSQLHOST
 [[ -z $MYSQLPORT            ]] && read -p "MySQL DBMS Port [3306]: "                    MYSQLPORT
-echo
 [[ -z $MYSQLROOT            ]] && read -p "MySQL Root User [root]: "                    MYSQLROOT
+read -p "MySQL Root User Password: " -s MYSQLROOT_PASSWORD
 echo
 
 
 # set defaults if value is not given
-if [ -z "$DBNAME" ]; then
-   DBNAME='opus400'
-fi
-if [ -z "$ADMIN" ]; then
-   ADMIN='opus4admin'
-fi
-if [ -z "$WEBAPP_USER" ]; then
-   WEBAPP_USER='opus4'
-fi
-if [ -z "$MYSQLROOT" ]; then
-   MYSQLROOT='root'
-fi
-if [ -z "$MYSQLHOST" ]; then
-   MYSQLHOST='localhost'
-fi
-if [ -z "$MYSQLPORT" ]; then
-   MYSQLPORT='3306'
-fi
+DBNAME="${DBNAME:-opus400}"
+ADMIN="${ADMIN:-opus4admin}"
+WEBAPP_USER="${WEBAPP_USER:-opus4}"
+MYSQLROOT="${MYSQLROOT:-root}"
+MYSQLHOST="${MYSQLHOST:-localhost}"
+MYSQLPORT="${MYSQLPORT:-3306}"
 
 # escape ! (for later use in sed substitute)
-MYSQLHOST_ESC=`echo "$MYSQLHOST" | sed 's/\!/\\\!/g'`
-MYSQLPORT_ESC=`echo "$MYSQLPORT" | sed 's/\!/\\\!/g'`
-WEBAPP_USER_ESC=`echo "$WEBAPP_USER" | sed 's/\!/\\\!/g'`
-WEBAPP_USER_PASSWORD_ESC=`echo "$WEBAPP_USER_PASSWORD" | sed 's/\!/\\\!/g'`
-DBNAME_ESC=`echo "$DBNAME" | sed 's/\!/\\\!/g'`
-ADMIN_ESC=`echo "$ADMIN" | sed 's/\!/\\\!/g'`
-ADMIN_PASSWORD_ESC=`echo "$ADMIN_PASSWORD" | sed 's/\!/\\\!/g'`
-ADMIN_PASSWORD_QUOTED=`echo "$(printf %q "$ADMIN_PASSWORD")"`
+MYSQLHOST_ESC="${MYSQLHOST//\!/\\\!}"
+MYSQLPORT_ESC="${MYSQLPORT//\!/\\\!}"
+WEBAPP_USER_ESC="${WEBAPP_USER//\!/\\\!}"
+WEBAPP_USER_PASSWORD_ESC="${WEBAPP_USER_PASSWORD//\!/\\\!}"
+DBNAME_ESC="${DBNAME//\!/\\\!}"
+ADMIN_ESC="${ADMIN//\!/\\\!}"
+ADMIN_PASSWORD_ESC="${ADMIN_PASSWORD//\!/\\\!}"
+
+# prepare to access MySQL service
+MYSQL_OPTS=""
+[ "localhost" != "$MYSQLHOST" ] && MYSQL_OPTS="-h $MYSQLHOST"
+[ "3306" != "$MYSQLPORT" ] && MYSQL_OPTS="$MYSQL_OPTS -P $MYSQLPORT"
+
+mysqlRoot() {
+  "$MYSQL_CLIENT" --defaults-file=<(echo -e "[client]\npassword=${MYSQLROOT_PASSWORD}") --default-character-set=utf8 ${MYSQL_OPTS} -u "$MYSQLROOT" -v
+}
+
+mysqlOpus4Admin() {
+  "$MYSQL_CLIENT" --defaults-file=<(echo -e "[client]\npassword=${ADMIN_PASSWORD}") --default-character-set=utf8 ${MYSQL_OPTS} -u "$ADMIN" -v $1
+}
 
 # process creating mysql user and database
-MYSQL="$MYSQL_CLIENT --default-character-set=utf8 -u $MYSQLROOT -p -v"
-MYSQL_OPUS4ADMIN="$MYSQL_CLIENT --default-character-set=utf8 -u $ADMIN -p$ADMIN_PASSWORD_QUOTED -v"
-if [ localhost != "$MYSQLHOST" ]
-then
-  MYSQL="$MYSQL -h $MYSQLHOST"
-  MYSQL_OPUS4ADMIN="$MYSQL_OPUS4ADMIN -h $MYSQLHOST"
-fi
-if [ 3306 != "$MYSQLPORT" ]
-then
-  MYSQL="$MYSQL -P $MYSQLPORT"
-  MYSQL_OPUS4ADMIN="$MYSQL_OPUS4ADMIN -P $MYSQLPORT"
-fi
-
-echo "Next you'll be now prompted to enter the root password of your MySQL server"
-$MYSQL <<LimitString
+mysqlRoot <<LimitString
 CREATE DATABASE IF NOT EXISTS $DBNAME DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI;
 GRANT ALL PRIVILEGES ON $DBNAME.* TO '$ADMIN'@'$MYSQLHOST' IDENTIFIED BY '$ADMIN_PASSWORD';
 GRANT SELECT,INSERT,UPDATE,DELETE ON $DBNAME.* TO '$WEBAPP_USER'@'$MYSQLHOST' IDENTIFIED BY '$WEBAPP_USER_PASSWORD';
@@ -209,86 +196,202 @@ fi
 
 # install and configure Solr search server
 cd "$BASEDIR"
-[[ -z $INSTALL_SOLR ]] && read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
+[ -z "$INSTALL_SOLR" ] && read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
 if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ]
 then
-  tar xfvz "$BASEDIR/downloads/solr.tgz"
-  ln -sf apache-solr-1.4.1 solr
-  cd solr
-  cp -r example opus4
-  cd opus4
-  rm -rf example-DIH exampledocs multicore/exampledocs
-  cd solr/conf
-  ln -sf "$BASEDIR/solrconfig/schema.xml"
-  ln -sf "$BASEDIR/solrconfig/solrconfig.xml"
-  cd ../../
-  ln -sf "$BASEDIR/solrconfig/logging.properties"
 
-  [[ -z $SOLR_SERVER_PORT ]] && read -p "Solr server port number [8983]: " SOLR_SERVER_PORT
-  if [ -z "$SOLR_SERVER_PORT" ]; then
-    SOLR_SERVER_PORT='8983';
-  fi
-  SOLR_SERVER_PORT_ESC=`echo "$SOLR_SERVER_PORT" |sed 's/\!/\\\!/g'`
+  # extract archive name from URL
+  SOLR_ARCHIVE_NAME="${SOLR_SERVER_URL##*/}"
+  SOLR_ARCHIVE_NAME="${SOLR_ARCHIVE_NAME%%\?*}"
 
-  # write solr-config to config.ini
-  CONFIG_INI="$BASEDIR/opus4/application/configs/config.ini"
-  "$SCRIPT_PATH/install-config-solr.sh" "$CONFIG_INI" localhost "$SOLR_SERVER_PORT" solr localhost "$SOLR_SERVER_PORT" solr
-
-  cd "$BASEDIR/install"
-  if [ "$OS" = suse ]
-  then
-    sed -i -e "s!^START_STOP_DAEMON=1!START_STOP_DAEMON=0!" opus4-solr-jetty
-  fi
-  sed -e "s!^JETTY_PORT=!JETTY_PORT=$SOLR_SERVER_PORT_ESC!" \
-      -e "s!^JETTY_USER=!JETTY_USER=$OPUS_USER_NAME_ESC!" opus4-solr-jetty.conf.template > opus4-solr-jetty.conf
-  chmod +x opus4-solr-jetty
-
-  [[ -z $INSTALL_INIT_SCRIPT ]] && read -p "Install init.d script to start and stop Solr server automatically? [Y]: " INSTALL_INIT_SCRIPT
-  if [ -z "$INSTALL_INIT_SCRIPT" ] || [ "$INSTALL_INIT_SCRIPT" = Y ] || [ "$INSTALL_INIT_SCRIPT" = y ]
-  then
-    ln -sf "$BASEDIR/install/opus4-solr-jetty" /etc/init.d/opus4-solr-jetty
-    ln -sf "$BASEDIR/install/opus4-solr-jetty.conf" /etc/default/jetty
-    ln -sf "$BASEDIR/install/jetty-logging.xml" "$BASEDIR/solr/opus4/etc/jetty-logging.xml"
-    chmod +x /etc/init.d/opus4-solr-jetty
-    if [ "$OS" = ubuntu ]
+  # fetch installation archive if missing locally
+  mkdir -p "downloads"
+  if [ ! -f "downloads/$SOLR_ARCHIVE_NAME" ]; then
+    wget -O "downloads/$SOLR_ARCHIVE_NAME" "$SOLR_SERVER_URL"
+    if [ $? -ne 0 -o ! -f "downloads/$SOLR_ARCHIVE_NAME" ]
     then
-      update-rc.d -f opus4-solr-jetty remove
-      update-rc.d opus4-solr-jetty defaults
-    else
-      chkconfig --del opus4-solr-jetty
-      chkconfig --set opus4-solr-jetty on
+      echo "Unable to download Solr service from $SOLR_SERVER_URL"
+      exit 1
     fi
   fi
 
+  # ask for desired port of solr service
+  [ -z "$SOLR_SERVER_PORT" ] && read -p "Solr server port number [8983]: " SOLR_SERVER_PORT
+  SOLR_SERVER_PORT="${SOLR_SERVER_PORT:-8983}"
+
+  # extract name of folder contained in archive
+  SOLR_DIR="$(tar tzf "downloads/$SOLR_ARCHIVE_NAME" | head -1)"
+  SOLR_DIR="${SOLR_DIR%%/*}"
+
+  SOLR_VERSION="${SOLR_DIR#solr-}"
+  SOLR_MAJOR="${SOLR_VERSION%%.*}"
+
+  # stop any running solr service
+  lsof -i ":$SOLR_SERVER_PORT" &>/dev/null && {
+    (
+      echo "stopping running Solr service ..."
+
+      if [ -x /etc/init.d/opus4-solr-jetty ]; then
+        /etc/init.d/opus4-solr-jetty stop
+      elif [ -x /etc/init.d/solr ]; then
+        /etc/init.d/solr stop
+      else
+        false
+      fi
+    ) || \
+    sudo kill "$(lsof -i ":$SOLR_SERVER_PORT" | awk 'NR>1 {print $2}')" || \
+    {
+      cat >&2 <<EOT
+stopping running Solr service failed, please stop any service listening on
+port $SOLR_SERVER_PORT ...
+EOT
+      exit 1
+    }
+  }
+
+  # extract archive into basedir (expecting to create folder named solr-x.y.z)
+  echo "extracting Solr archive ..."
+  tar xfz "downloads/$SOLR_ARCHIVE_NAME"
+
+  cd "$SOLR_DIR"
+
+  SOLR_BASE_DIR="$(pwd)"
+  SOLR_CORE_DIR="$(pwd)/opus4"
+
+  # create space for configuring solr service
+  mkdir -p "${SOLR_CORE_DIR}/data/solr/conf"
+
+  copyConfigFile() {
+    NAME="${1}"
+    SRC="${2}"
+    DST="${3}"
+
+    [ -e "${DST}/${NAME}" ] || {
+      PRE="${NAME%.*}"
+      POST="${NAME##*.}"
+
+      VERSION="${SOLR_VERSION}"
+
+      SRCNAME=
+      while [ -z "${SRCNAME}" -o \( ! -e "${SRCNAME}" -a -n "${VERSION}" \) ]
+      do
+        SRCNAME="${SRC}/${PRE}-${VERSION}.${POST}"
+        VERSION="${VERSION%.*}"
+      done
+
+      if [ -e "${SRCNAME}" ]; then
+        echo "setting up ${SRCNAME} as ${DST}/${NAME}"
+        ln -sf "${SRCNAME}" "${DST}/${NAME}"
+      else
+        echo "setting up ${SRC}/${NAME} as ${DST}/${NAME}"
+        ln -sf "${SRC}/${NAME}" "${DST}/${NAME}"
+      fi
+    }
+  }
+
+  # put configuration and schema files
+  ln -sf  "$BASEDIR/solrconfig/core.properties" "${SOLR_CORE_DIR}/data/solr"
+
+  copyConfigFile "schema.xml" "${BASEDIR}/solrconfig" "${SOLR_CORE_DIR}/data/solr/conf"
+  copyConfigFile "solrconfig.xml" "${BASEDIR}/solrconfig" "${SOLR_CORE_DIR}/data/solr/conf"
+
+  # provide logging properties
+  # TODO check integration of logging.properties with recent versions of solr
+  ln -sf "$BASEDIR/solrconfig/logging.properties" opus4/logging.properties
+
+  # detect URL prefix to use
+  case "$SOLR_MAJOR" in
+    5)
+      SOLR_CONTEXT="/solr/solr"
+      ;;
+    *)
+      SOLR_CONTEXT="/solr"
+  esac
+
+
+
+  # write solr-config to application's config.ini
+  CONFIG_INI="$BASEDIR/opus4/application/configs/config.ini"
+  "$SCRIPT_PATH/install-config-solr.sh" "$CONFIG_INI" localhost "$SOLR_SERVER_PORT" "${SOLR_CONTEXT}" localhost "$SOLR_SERVER_PORT" "${SOLR_CONTEXT}"
+
   # change file owner of solr installation
-  chown -R "$OWNER" "$BASEDIR/apache-solr-1.4.1"
+  chown -R "$OWNER" "$BASEDIR/$SOLR_DIR"
   chown -R "$OWNER" "$BASEDIR/solrconfig"
 
-  # start Solr server
-  ./opus4-solr-jetty start
+  # install init script
+  [ -z "$INSTALL_INIT_SCRIPT" ] && read -p "Install init.d script to start and stop Solr server automatically? [Y]: " INSTALL_INIT_SCRIPT
+  if [ -z "$INSTALL_INIT_SCRIPT" ] || [ "$INSTALL_INIT_SCRIPT" = Y ] || [ "$INSTALL_INIT_SCRIPT" = y ]
+  then
+    # remove files and folders causing unneccessary errors in install script
+    rm -f /etc/init.d/{opus4-solr-jetty,solr}
+    rm -f "${BASEDIR}/solr"
+
+    # run installer bundled with solr
+    bin/install_solr_service.sh "../downloads/$SOLR_ARCHIVE_NAME" -d "$SOLR_CORE_DIR" -i "$BASEDIR" -p "$SOLR_SERVER_PORT" -s solr -u "$OPUS_USER_NAME"
+
+    # make sure new service is available just like the old one
+    ln -s solr /etc/init.d/opus4-solr-jetty
+  else
+    # (re)start solr service
+    if [ -x /etc/init.d/opus4-solr-jetty ]; then
+      /etc/init.d/opus4-solr-jetty restart
+    elif [ -x /etc/init.d/solr ]; then
+      /etc/init.d/solr restart
+    fi
+  fi
 fi
 
 # import some test documents
-[[ -z $IMPORT_TESTDATA ]] && read -p "Import test data? [Y]: " IMPORT_TESTDATA
+[ -z "$IMPORT_TESTDATA" ] && read -p "Import test data? [Y]: " IMPORT_TESTDATA
 if [ -z "$IMPORT_TESTDATA" ] || [ "$IMPORT_TESTDATA" = Y ] || [ "$IMPORT_TESTDATA" = y ]
 then
   # import test data
   cd "$BASEDIR"
   for i in `find opus4/tests/sql -name *.sql \( -type f -o -type l \) | sort`; do
     echo "Inserting file '${i}'"
-    eval "$MYSQL_OPUS4ADMIN" "$DBNAME" < "${i}"
+    mysqlOpus4Admin "$DBNAME" < "${i}"
   done
 
   # copy test fulltexts to workspace directory
   cp -rv opus4/tests/fulltexts/* workspace/files
 
+  # TODO is waiting for running solr required since service script has been waiting for this before
   # sleep some seconds to ensure the server is running
   echo -en "\n\nwait until Solr server is running..."
 
-  while :; do
+  waiting=true
+
+  pingSolr() {
+    wget -SO- "$1" 2>&1
+  }
+
+  pingSolrStatus() {
+    pingSolr "$1" | sed -ne 's/^ *HTTP\/1\.[01] \([0-9]\+\) .\+$/\1/p' | head -1
+  }
+
+  case "$SOLR_MAJOR" in
+    5)
+      PING_URL="http://localhost:${SOLR_SERVER_PORT}${SOLR_CONTEXT}/admin/ping"
+      ;;
+    *)
+      PING_URL="http://localhost:${SOLR_SERVER_PORT}${SOLR_CONTEXT}/admin/ping"
+  esac
+
+  while $waiting; do
     echo -n "."
-    wget -q -O /dev/null "http://localhost:$SOLR_SERVER_PORT/solr/admin/ping" && break
-    sleep 2
+    state=$(pingSolrStatus "$PING_URL")
+    case $state in
+      200|304)
+        waiting=false
+        ;;
+      500)
+        echo -e "\n\nSolr server responds on error:\n" >&2
+        pingSolr "$PING_URL" >&2
+        exit 1
+        ;;
+      *)
+        sleep 2
+    esac
   done
 
   echo "completed."
@@ -302,19 +405,20 @@ fi
 chown -R "$OWNER" "$BASEDIR"
 
 # set permission in workspace directory appropriately
-cd "$BASEDIR"
-chmod -R 777 workspace
+cd "$(readlink "$BASEDIR/workspace")"
+find ../workspace -type d -print0 | xargs -0 -- chmod 777
+find ../workspace -type f -print0 | xargs -0 -- chmod 666
 
 # delete tar archives
-[[ -z $DELETE_DOWNLOADS ]] && read -p "Delete downloads? [N]: " DELETE_DOWNLOADS
+[ -z "$DELETE_DOWNLOADS" ] && read -p "Delete downloads? [N]: " DELETE_DOWNLOADS
 if [ "$DELETE_DOWNLOADS" = Y ] || [ "$DELETE_DOWNLOADS" = y ]; then
   rm -rf downloads
 fi
 
-[[ -z $RESTART_APACHE ]] && RESTART_APACHE=Y
+[ -z "$RESTART_APACHE" ] && RESTART_APACHE=Y
 if [ "$RESTART_APACHE" = Y ];
 then
-  echo 'restart apache webserver ...'
+  echo "restart apache webserver ..."
   /etc/init.d/apache2 restart
 fi
 
