@@ -5,7 +5,7 @@
   "require": {
     "zendframework/zendframework1": "~1.12",
     "jpgraph/jpgraph": "dev-master",
-    "solarium/solarium": "~3.3",
+    "solarium/solarium": "3.*",
     "opus4-repo/framework": "dev-solrupdate",
     "components/jquery": "1.9.*"
   },
