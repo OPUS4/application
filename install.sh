@@ -253,13 +253,7 @@ EOT
   echo "extracting Solr archive ..."
   tar xfz "downloads/$SOLR_ARCHIVE_NAME"
 
-  # ensure extracted folder is available as solr/
-  if [ -e solr -a "$(readlink -f solr)" != "$BASEDIR/$SOLR_DIR" ]; then
-    rm solr
-  fi
-  ln -sf "$SOLR_DIR" solr
-
-  cd solr
+  cd "$SOLR_DIR"
 
   SOLR_BASE_DIR="$(pwd)"
   SOLR_CORE_DIR="$(pwd)/opus4"
@@ -330,7 +324,7 @@ EOT
   then
     # remove files and folders causing unneccessary errors in install script
     rm -f /etc/init.d/{opus4-solr-jetty,solr}
-    rm -f "$BASEDIR/solr"
+    rm -f "${BASEDIR}/solr"
 
     # run installer bundled with solr
     bin/install_solr_service.sh "../downloads/$SOLR_ARCHIVE_NAME" -d "$SOLR_CORE_DIR" -i "$BASEDIR" -p "$SOLR_SERVER_PORT" -s solr -u "$OPUS_USER_NAME"
@@ -411,8 +405,9 @@ fi
 chown -R "$OWNER" "$BASEDIR"
 
 # set permission in workspace directory appropriately
-cd "$BASEDIR"
-chmod -R 777 workspace
+cd "$(readlink "$BASEDIR/workspace")"
+find ../workspace -type d -print0 | xargs -0 -- chmod 777
+find ../workspace -type f -print0 | xargs -0 -- chmod 666
 
 # delete tar archives
 [ -z "$DELETE_DOWNLOADS" ] && read -p "Delete downloads? [N]: " DELETE_DOWNLOADS
