@@ -58,10 +58,25 @@ searchengine.index.app = @searchengine.index.app@
 searchengine.extract.host = @searchengine.extract.host@
 searchengine.extract.port = @searchengine.extract.port@
 searchengine.extract.app = @searchengine.extract.app@
+
+;SEARCH ENGINE SETTINGS
+searchengine.solr.adapterClass = Opus_Search_Solr_Solarium_Adapter
+searchengine.solr.default.service.endpoint.localhost.host = @searchengine.index.host@
+searchengine.solr.default.service.endpoint.localhost.port = @searchengine.index.port@
+searchengine.solr.default.service.endpoint.localhost.path = @searchengine.index.app@
+searchengine.solr.default.service.index.endpoint.primary.host = @searchengine.index.host@
+searchengine.solr.default.service.index.endpoint.primary.port = @searchengine.index.port@
+searchengine.solr.default.service.index.endpoint.primary.path = @searchengine.index.app@
+searchengine.solr.default.service.extract.endpoint.primary.host = @searchengine.extract.host@
+searchengine.solr.default.service.extract.endpoint.primary.port = @searchengine.extract.port@
+searchengine.solr.default.service.extract.endpoint.primary.path = @searchengine.extract.app@
+
 ; Facets fields to be considered.
 ;searchengine.solr.facets = author_facet,year,doctype,language,has_fulltext,belongs_to_bibliography,subject,institute
 ; Number of default search results
 ; searchengine.solr.numberOfDefaultSearchResults = 10
+
+
 
 ; SUPPORTED LANGUAGES
 ; Change the setting to 'de' or 'en' in order to disable language selection.
@@ -161,19 +176,19 @@ oai.repository.identifier = opus4.demo
 oai.sample.identifier = oai:opus4.demo:90
 
 ; PRINT ON DEMAND SETTINGS
-; To enable print on demand services specifiy the provider's url 
+; To enable print on demand services specifiy the provider's url
 ; and (optionally) the name of a button image.
 ; The image must reside in the current layout's image folder
 ; (e.g. $BASEDIR/opus4/public/layouts/<LAYOUTNAME>/img/)
 ;
 ; When a provider is specified, the print on demand button or link will
 ; be displayed if the document's licence allows it.
-; printOnDemand.url = 
+; printOnDemand.url =
 ; printOnDemand.button =
 
 ; JOB EXECUTION SETTINGS
 ; To enable asynchronous job execution, set this to 1
-; You will need to set up appropriate cron jobs for 
+; You will need to set up appropriate cron jobs for
 ; scripts/cron/cron-php-runner.sh
 runjobs.asynchronous = 0
 ; configuration of specific jobs

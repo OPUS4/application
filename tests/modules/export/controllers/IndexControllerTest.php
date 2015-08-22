@@ -198,7 +198,8 @@ class Export_IndexControllerTest extends ControllerTestCase {
         $host = $config->searchengine->index->host;
         $port = $config->searchengine->index->port;
         $oldValue = $config->searchengine->index->app;
-        $config->searchengine->index->app = 'solr/corethatdoesnotexist';
+        $this->disableSolr();
+
         $security = $config->security;
         $config->security = '1';
         Zend_Registry::set('Zend_Config', $config);

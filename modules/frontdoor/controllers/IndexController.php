@@ -69,7 +69,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             $searcher = new Opus_SolrSearch_Searcher();
             $resultList = $searcher->search($query);
             $queryResult = $resultList->getResults();
-            if (is_array($queryResult) && !empty($queryResult) && $queryResult[0] instanceof Opus_SolrSearch_Result) {
+            if (is_array($queryResult) && !empty($queryResult) && $queryResult[0] instanceof Opus_Search_Result_Match) {
                 $resultDocId = $queryResult[0]->getId();
                 if (!empty($docId)) {
                     if ($resultDocId != $docId) {

@@ -222,6 +222,12 @@ class Solrsearch_IndexController extends Application_Controller_Action {
         $this->view->headLink(array('rel' => 'canonical', 'href' => $fullCanonicalUrl));
     }
 
+    /**
+     * @throws Application_Exception
+     * @throws Application_SearchException
+     *
+     * TODO this should happen in model class so it can be tested directly
+     */
     private function performSearch() {
         $this->getLogger()->debug('performing search');
         try {
@@ -330,7 +336,7 @@ class Solrsearch_IndexController extends Application_Controller_Action {
 
     private function setViewFacets() {
         $facets = $this->_resultList->getFacets();
-        $facetLimit = Opus_Search_Config::getFacetFields();
+        $facetLimit = Opus_Search_Config::getFacetLimits();
 
         $facetArray = array();
         $selectedFacets = array();
@@ -364,19 +370,27 @@ class Solrsearch_IndexController extends Application_Controller_Action {
      */
     private function buildQuery() {
         $request = $this->getRequest();
+
         $this->_searchtype = $request->getParam('searchtype');
+
         if ($this->_searchtype === Application_Util_Searchtypes::COLLECTION_SEARCH) {
             $this->prepareChildren();
-        } else if ($this->_searchtype === Application_Util_Searchtypes::SERIES_SEARCH) {
-            $this->prepareSeries();
         }
+        else if ($this->_searchtype === Application_Util_Searchtypes::SERIES_SEARCH) {
+            if (!$this->prepareSeries()) {
+                return null;
+            }
+        }
+
         try {
             return Application_Search_Navigation::getQueryUrl($request, $this->getLogger());
-        } catch (Application_Util_BrowsingParamsException $e) {
+        }
+        catch (Application_Util_BrowsingParamsException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
             return null;
-        } catch (Application_Util_QueryBuilderException $e) {
+        }
+        catch (Application_Util_QueryBuilderException $e) {
             $this->getLogger()->err(__METHOD__ . ' : ' . $e->getMessage());
             $this->_redirectToAndExit('index');
             return null;
@@ -390,13 +404,16 @@ class Solrsearch_IndexController extends Application_Controller_Action {
         }
         catch (Solrsearch_Model_Exception $e) {
             $this->getLogger()->debug($e->getMessage());
-            return $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
+            $this->_redirectToAndExit('index', '', 'browse', null, array(), true);
+            return false;
         }
 
         $this->view->title = $series->getTitle();
         $this->view->seriesId = $series->getId();
         $this->view->infobox = $series->getInfobox();
         $this->view->logoFilename = $series->getLogoFilename();
+
+        return true;
     }
 
     private function prepareChildren() {

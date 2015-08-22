@@ -61,7 +61,7 @@ class Remotecontrol_Model_DownloadListTest extends ControllerTestCase {
         $host = $config->searchengine->index->host;
         $port = $config->searchengine->index->port;
         $oldValue = $config->searchengine->index->app;
-        $config->searchengine->index->app = 'solr/corethatdoesnotexist';
+        $config->searchengine->solr->default->service->endpoint->localhost->path = '/solr/corethatdoesnotexist';
         Zend_Registry::set('Zend_Config', $config);
 
         $downloadList = new Remotecontrol_Model_DownloadList();
@@ -72,10 +72,10 @@ class Remotecontrol_Model_DownloadListTest extends ControllerTestCase {
         catch (Exception $e) {
             $exception = $e;
         }
-        $this->assertInstanceOf('Remotecontrol_Model_Exception', $e);
-        $this->assertFalse($e->collectionIsNotUnique());
-        $this->assertTrue($e->getPrevious() instanceof Opus_SolrSearch_Exception);
-        $this->assertEquals($e->getPrevious()->getCode(), Opus_SolrSearch_Exception::SERVER_UNREACHABLE);
+        $this->assertInstanceOf('Remotecontrol_Model_Exception', $exception);
+        $this->assertFalse($exception->collectionIsNotUnique());
+        $this->assertTrue($exception->getPrevious() instanceof Opus_SolrSearch_Exception);
+        $this->assertEquals($exception->getPrevious()->getCode(), Opus_SolrSearch_Exception::SERVER_UNREACHABLE);
 
         // restore configuration
         $config = Zend_Registry::get('Zend_Config');
@@ -119,7 +119,7 @@ class Remotecontrol_Model_DownloadListTest extends ControllerTestCase {
         $host = $config->searchengine->index->host;
         $port = $config->searchengine->index->port;
         $oldValue = $config->searchengine->index->app;
-        $config->searchengine->index->app = 'solr/corethatdoesnotexist';
+        $config->searchengine->solr->default->service->endpoint->localhost->path = '/solr/corethatdoesnotexist';
         Zend_Registry::set('Zend_Config', $config);
 
         $downloadList = new Remotecontrol_Model_DownloadList();

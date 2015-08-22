@@ -3,20 +3,19 @@
 
     <property environment="env" />
     <property name="workspace" value="${env.WORKSPACE}" /><!-- Wird von Jenkins gesetzt. -->
-    <property name="frameworkdir" location="${basedir}/../framework" />
     <property name="configfile" location="${workspace}/../opus-config.properties" />
     <property name="libsdir" location="/home/opus4ci/libs" />
     <property name="testpath" value="" />
-    <property name="codingstandard" location="${libsdir}/opus4cs/ruleset.xml" />
+    <property name="codingstandard" location="${basedir}/vendor/opus4-repo/codesniffer/ruleset.xml" />
     <property name="adminPassword" value="AdminAdmin" />
 
     <target name="analyse-code" depends="phpcs,phpmd,phpcpd,phploc" />
-    
+
     <target name="build" depends="clean,prepare,lint,pdepend,analyse-code,phpdoc"
             description="" />
-    
+
     <target name="build-parallel" depends="prepare,tools-parallel" />
-    
+
     <target name="build-fast" depends="clean,prepare,lint,phpunit-fast" description="" />
 
     <target name="tools-parallel">
@@ -31,7 +30,7 @@
             <antcall target="phpdoc" />
         </parallel>
     </target>
-    
+
     <target name="clean" depends="clean-cache">
         <delete dir="${basedir}/build/logs" />
         <delete dir="${basedir}/build/api" />
@@ -53,7 +52,7 @@
             <fileset dir="${basedir}/tests/workspace/cache" includes="*cache*-*" />
         </delete>
     </target>
-    
+
     <target name="setup" depends="prepare-dependencies,prepare-javascript,prepare-config" />
 
     <target name="prepare" depends="clean">
@@ -64,11 +63,11 @@
     </target>
 
     <target name="prepare-dependencies">
-        <symlink link="${basedir}/db/schema" resource="${frameworkdir}/db/schema" failonerror="false" />
-        <symlink link="${basedir}/library/Opus" resource="${frameworkdir}/library/Opus" failonerror="false" />
-        <symlink link="${basedir}/library/Zend" resource="${libsdir}/ZendFramework/library/Zend" failonerror="false" />
-        <symlink link="${basedir}/library/Apache" resource="${libsdir}/SolrPhpClient/Apache" failonerror="false" />
-        <symlink link="${basedir}/library/jpgraph" resource="${libsdir}/jpgraph/src" failonerror="false" />
+        <exec executable="composer">
+            <arg value="install" />
+        </exec>
+        <symlink link="${basedir}/db/schema" resource="${basedir}/vendor/opus4-repo/framework/db/schema"
+                 failonerror="false" />
     </target>
 
     <target name="prepare-javascript">
@@ -84,7 +83,7 @@
 
         <!-- Prepare test configuration. -->
         <copy file="${basedir}/tests/config.ini.template" toFile="${basedir}/tests/config.ini" filtering="true"
-                overwrite="true">
+              overwrite="true">
             <filterset filtersFile="${configfile}" />
         </copy>
 
@@ -99,18 +98,19 @@
         <apply executable="php" dir="${basedir}" failonerror="on" logerror="on">
             <arg line="-l"/>
             <fileset dir="${basedir}" followsymlinks="false">
-                <include name="**/*.php"/>
+                <include name="**/*.php" />
                 <modified />
+                <exclude name="vendor/**" />
             </fileset>
         </apply>
     </target>
-    
+
     <target name="phploc" description="">
         <exec executable="phploc">
             <arg value="--log-csv" />
             <arg value="${basedir}/build/logs/phploc.csv" />
             <arg path="${basedir}/modules" /> <!-- TODO library code -->
-        </exec>            
+        </exec>
     </target>
 
     <target name="phpdoc">
@@ -178,15 +178,15 @@
     <target name="rebuild-database">
         <exec executable="./rebuilding_database.sh" dir="${basedir}/tests" failonerror="on" />
     </target>
-    
+
     <target name="rebuild-index">
         <exec executable="php" dir="${basedir}/scripts" failonerror="on">
             <arg line="SolrIndexBuilder.php" />
         </exec>
     </target>
-    
+
     <target name="phpunit" depends="rebuild-database,rebuild-index" description="Runs unit tests with coverage">
-        <exec executable="phpunit" dir="${basedir}/tests" failonerror="true">
+        <exec executable="${basedir}/vendor/bin/phpunit" dir="${basedir}/tests" failonerror="true">
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
             <arg line="--coverage-clover ${basedir}/build/logs/phpunit.coverage.xml" />
             <arg line="--coverage-html ${basedir}/build/coverage" />
@@ -196,7 +196,7 @@
     </target>
 
     <target name="phpunit-fast" depends="rebuild-database,rebuild-index" description="Runs unit tests without coverage">
-        <exec executable="phpunit" dir="${basedir}/tests" failonerror="true">
+        <exec executable="${basedir}/vendor/bin/phpunit" dir="${basedir}/tests" failonerror="true">
             <arg line="--log-junit ${basedir}/build/logs/phpunit.xml" />
             <arg line="--configuration phpunit.xml" />
             <arg line="${testpath}" />
