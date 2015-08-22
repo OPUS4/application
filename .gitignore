@@ -10,7 +10,7 @@ composer.phar
 composer.lock
 
 # ignore all workspace files
-workspace/*
+workspace/**/*
 
 # ignore further files created by Opus4 installer
 apacheconf/apache.conf
@@ -21,4 +21,7 @@ public/js
 
 tests/build/
 tests/config.ini
-tests/workspace/*
+tests/workspace/**/*
+
+downloads
+components
