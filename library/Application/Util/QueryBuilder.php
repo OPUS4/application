@@ -47,14 +47,15 @@ class Application_Util_QueryBuilder {
         $this->_logger = $logger;
 
         $this->_filterFields = array();
-        $config = Zend_Registry::get("Zend_Config");
-        if (!isset($config->searchengine->solr->facets)) {
-            $this->_logger->debug("key searchengine.solr.facets is not present in config. skipping filter queries");
-        }
-        $filters = $config->searchengine->solr->facets;
-        $this->_logger->debug("searchengine.solr.facets is set to $filters");
 
-        foreach (explode(',', $filters) as $filterfield) {
+        $filters = Opus_Search_Config::getFacetFields();
+        if ( !count( $filters ) ) {
+            $this->_logger->debug( 'key searchengine.solr.facets is not present in config. skipping filter queries' );
+        } else {
+            $this->_logger->debug( 'searchengine.solr.facets is set to ' . implode( ',', $filters ) );
+        }
+
+        foreach ($filters as $filterfield) {
             if ($filterfield == 'year_inverted') {
                 $filterfield = 'year';
             }
