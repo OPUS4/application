@@ -46,7 +46,6 @@ db.params.password = @db.user.password@
 db.params.dbname   = @db.name@
 
 ;SEARCH ENGINE SETTINGS
-searchengine.solr.default.adapterClass = Opus_Search_Solr_Solarium_Adapter
 searchengine.solr.default.service.default.endpoint.localhost.host = @searchengine.index.host@
 searchengine.solr.default.service.default.endpoint.localhost.port = @searchengine.index.port@
 searchengine.solr.default.service.default.endpoint.localhost.path = @searchengine.index.app@
@@ -56,11 +55,6 @@ searchengine.solr.default.service.default.endpoint.localhost.path = @searchengin
 searchengine.solr.default.service.extract.endpoint.localhost.host = @searchengine.index.host@
 searchengine.solr.default.service.extract.endpoint.localhost.port = @searchengine.index.port@
 searchengine.solr.default.service.extract.endpoint.localhost.path = @searchengine.index.app@
-
-; Facets fields to be considered.
-;searchengine.solr.facets = author_facet,year,doctype,language,has_fulltext,belongs_to_bibliography,subject,institute
-; Number of default search results
-; searchengine.solr.numberOfDefaultSearchResults = 10
 
 
 
