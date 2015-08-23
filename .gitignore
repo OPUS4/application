@@ -1,5 +1,8 @@
 # ignore folders merged from separate repository framework
 library/Opus
+library/Apache
+library/Zend
+library/jpgraph
 db/schema
 
 # ignore any third-party library
