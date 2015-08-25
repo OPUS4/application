@@ -184,7 +184,7 @@ try {
     $runtime = (int) $index->run();
     echo "\nOperation completed successfully in $runtime seconds.\n";
 }
-catch (Opus_SolrSearch_Index_Exception $e) {
+catch (Opus_Search_Exception $e) {
     echo "\nAn error occurred while indexing.";
     echo "\nError Message: " . $e->getMessage();
     if (!is_null($e->getPrevious())) {
