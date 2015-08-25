@@ -39,6 +39,12 @@ class Application_Util_QueryBuilder {
     private $_searchFields;
     private $_export = false;
 
+    const SEARCH_MODIFIER_CONTAINS_ALL = "contains_all";
+    const SEARCH_MODIFIER_CONTAINS_ANY = "contains_any";
+    const SEARCH_MODIFIER_CONTAINS_NONE = "contains_none";
+
+    const MAX_ROWS = 2147483647;
+
     /**
      *
      * @param boolean $export
@@ -105,7 +111,7 @@ class Application_Util_QueryBuilder {
         );
 
         if ($this->_export) {
-            $maxRows = Opus_SolrSearch_Query::MAX_ROWS;
+            $maxRows = self::MAX_ROWS;
             // pagination within export was introduced in OPUS 4.2.2
             $startParam = $request->getParam('start', 0);
             $rowsParam = $request->getParam('rows', $maxRows);
@@ -124,7 +130,7 @@ class Application_Util_QueryBuilder {
         foreach ($this->_searchFields as $searchField) {
             $input[$searchField] = $request->getParam($searchField, '');
             $input[$searchField . 'modifier'] = $request->getParam(
-                $searchField . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL
+                $searchField . 'modifier', self::SEARCH_MODIFIER_CONTAINS_ALL
             );
         }
 
