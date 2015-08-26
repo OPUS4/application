@@ -3,14 +3,14 @@
   "description": "Application Environment for Opus 4",
   "license": "GPL-2.0+",
   "require": {
-    "zendframework/zendframework1": "~1.12",
+    "zendframework/zendframework1": "1.12.15",
     "jpgraph/jpgraph": "dev-master",
-    "solarium/solarium": "~3.3",
-    "opus4-repo/framework": "dev-solrupdate",
+    "solarium/solarium": "3.4.1",
+    "opus4-repo/framework": "dev-soletan-solrupdate",
     "components/jquery": "1.9.*"
   },
   "require-dev": {
-    "phpunit/phpunit": "~4.6",
+    "phpunit/phpunit": "4.8.5",
     "phpunit/dbunit": "~1.3",
     "phpunit/phpunit-story": "~1.0",
     "phpunit/phpunit-selenium": "~1.4",
