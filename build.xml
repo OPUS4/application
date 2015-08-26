@@ -66,6 +66,9 @@
         <exec executable="composer">
             <arg value="install" />
         </exec>
+        <exec executable="composer">
+            <arg value="update" />
+        </exec>
         <symlink link="${basedir}/db/schema" resource="${basedir}/vendor/opus4-repo/framework/db/schema"
                  failonerror="false" />
     </target>
