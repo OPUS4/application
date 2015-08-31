@@ -8,7 +8,7 @@ The next release will be OPUS 4.5.
 OPUS 4 Homepage:
 http://opus4.kobv.de
 
-OPUS 4 Documentation
+OPUS 4 Documentation for Developers and Administrators
 http://opus4.github.io
 
 OPUS 4 Development on GitHub:
