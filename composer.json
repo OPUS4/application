@@ -6,7 +6,7 @@
     "zendframework/zendframework1": "1.12.15",
     "jpgraph/jpgraph": "dev-master",
     "solarium/solarium": "3.4.1",
-    "opus4-repo/framework": "dev-soletan-solrupdate",
+    "opus4-repo/framework": "dev-master",
     "components/jquery": "1.9.*"
   },
   "require-dev": {
