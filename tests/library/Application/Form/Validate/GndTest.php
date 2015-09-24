@@ -63,6 +63,8 @@ class Application_Form_Validate_GndTest extends ControllerTestCase {
         $this->assertTrue($this->_validator->isValid('118768581'));
         $this->assertTrue($this->_validator->isValid('0095980479X'));
         $this->assertTrue($this->_validator->isValid('00040303187'));
+        $this->assertTrue($this->_validator->isValid('123050421')); // Spinner, Kasper H.
+        $this->assertTrue($this->_validator->isValid('136704425')); // Süselbeck, Kirsten
     }
 
     public function testIsValidTrueForShortNumber() {
