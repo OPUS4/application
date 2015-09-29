@@ -47,14 +47,10 @@ $finder->setServerState('published');
 foreach ($finder->ids() as $docId) {
 
     // check if document with id $docId is already persisted in search index
-    $query = new Opus_SolrSearch_Query(Opus_SolrSearch_Query::DOC_ID);
-    $query->setField('id', $docId);
-//    $query->setReturnIdsOnly(true);
-    $query->setRows(Opus_SolrSearch_Query::MAX_ROWS);
-    $searcher = new Opus_SolrSearch_Searcher();
-    $search = $searcher->search($query);
-    
-    if ($search->getNumberOfHits() != 1) {
+    $search = Opus_Search_Service::selectSearchingService();
+    $query  = Opus_Search_QueryFactory::selectDocumentById( $search, $docId );
+
+    if ( $search->customSearch( $query )->getAllMatchesCount() != 1 ) {
         echo "ERROR: document # $docId is not stored in search index\n";
         $numOfErrors++;
     }
