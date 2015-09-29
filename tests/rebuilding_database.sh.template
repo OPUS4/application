@@ -139,7 +139,8 @@ mkdir -p $workspace_log_dir
 mkdir -p $workspace_dir/cache
 mkdir -p $workspace_dir/export
 mkdir -p $workspace_dir/incoming
-mkdir -p $workspace_dir/export
+mkdir -p $workspace_dir/tmp
+mkdir -p $workspace_dir/tmp/resumption
 
 echo -e "\n*** Created backup of fulltexts and log files in $TEMP_DIR ***\n"
 

@@ -88,7 +88,7 @@ class SolrIndexBuilder {
     }
 
     /**
-     * Starts an Opus console.     
+     * Starts an Opus console.
      */
     public function run() {
         global $argv, $argc;
@@ -97,10 +97,16 @@ class SolrIndexBuilder {
             exit;
         }
         $this->evaluateArguments($argc, $argv);
-        $this->forceSyncMode();        
+        $this->forceSyncMode();
         $docIds = Opus_Document::getAllPublishedIds($this->_start, $this->_end);
-        $indexer = new Opus_SolrSearch_Index_Indexer($this->_deleteAllDocs);
-        //$indexer = new Opus_SolrSearch_Index_Indexer();
+
+	    $indexer = Opus_Search_Service::selectIndexingService( 'indexBuilder' );
+	    if ( $this->_deleteAllDocs ) {
+		    $indexer->removeAllDocumentsFromIndex();
+	    }
+
+	    $extractor = Opus_Search_Service::selectExtractingService( 'indexBuilder' );
+
         echo date('Y-m-d H:i:s') . " Start indexing of " . count($docIds) . " documents.\n";
         $numOfDocs = 0;
         $runtime = microtime(true);
@@ -108,11 +114,27 @@ class SolrIndexBuilder {
             $timeStart = microtime(true);
 
             $doc = new Opus_Document($docId);
-            
+
             // dirty hack: disable implicit reindexing of documents in case of cache misses
-            $doc->unregisterPlugin('Opus_Document_Plugin_Index');            
-            
-            $indexer->addDocumentToEntryIndex($doc);
+            $doc->unregisterPlugin('Opus_Document_Plugin_Index');
+
+	        try {
+		        $indexer->addDocumentsToIndex( $doc );
+
+		        foreach ( $doc->getFile() as $file ) {
+			        $extractor->extractDocumentFile( $file, $doc );
+		        }
+	        } catch ( Opus_Search_Exception $e ) {
+		        echo date('Y-m-d H:i:s') . " ERROR: Failed indexing document $docId.\n";
+		        echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
+
+	        } catch ( Opus_Storage_Exception $e ) {
+		        echo date('Y-m-d H:i:s') . " ERROR: Failed indexing unavailable file on document $docId.\n";
+		        echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
+
+	        }
+
+
             $timeDelta = microtime(true) - $timeStart;
             if ($timeDelta > 30) {
                echo date('Y-m-d H:i:s') . " WARNING: Indexing document $docId took $timeDelta seconds.\n";
@@ -131,9 +153,10 @@ class SolrIndexBuilder {
         }
         $runtime = microtime(true) - $runtime;
         echo "\n" . date('Y-m-d H:i:s') . " Finished indexing.\n";
-        $indexer->commit();
-        echo "\n\nErrors appeared in " . $indexer->getErrorFileCount() . " of " . $indexer->getTotalFileCount()
-            . " files. Details were written to opus-console.log";
+	    // new search API doesn't track number of indexed files, but issues are kept written to log file
+        //echo "\n\nErrors appeared in " . $indexer->getErrorFileCount() . " of " . $indexer->getTotalFileCount()
+        //    . " files. Details were written to opus-console.log";
+        echo "\n\nDetails were written to opus-console.log";
         $this->resetMode();
         return $runtime;
     }
@@ -161,7 +184,7 @@ try {
     $runtime = (int) $index->run();
     echo "\nOperation completed successfully in $runtime seconds.\n";
 }
-catch (Opus_SolrSearch_Index_Exception $e) {
+catch (Opus_Search_Exception $e) {
     echo "\nAn error occurred while indexing.";
     echo "\nError Message: " . $e->getMessage();
     if (!is_null($e->getPrevious())) {

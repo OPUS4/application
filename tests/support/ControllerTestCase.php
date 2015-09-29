@@ -100,6 +100,7 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
      */
     protected function tearDown() {
         $this->logoutUser();
+        $this->resetSearch();
         $this->deleteTestDocuments();
         $this->deleteTestFiles();
         $this->logger = null;
@@ -119,6 +120,8 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
             $log->__destruct();
             Zend_Registry::set('Zend_Log', null);
         }
+
+        Opus_Log::drop();
     }
 
     protected function closeDatabaseConnection() {
@@ -193,6 +196,17 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
             !isset($config->searchengine->index->app)) {
             $this->markTestSkipped('No solr-config given.  Skipping test.');
         }
+    }
+
+    /**
+     * Modifies Solr configuration to un unknown core to simulate connection failure.
+     * @throws Zend_Exception
+     */
+    protected function disableSolr() {
+        $config = Zend_Registry::get('Zend_Config');
+        // TODO old config path still needed?
+        // $config->searchengine->index->app = 'solr/corethatdoesnotexist';
+        $config->searchengine->solr->default->service->endpoint->localhost->path = '/solr/corethatdoesnotexist';
     }
 
     /**
@@ -577,6 +591,11 @@ class ControllerTestCase extends Zend_Test_PHPUnit_ControllerTestCase {
         }
 
         return $this->logger;
+    }
+
+    public function resetSearch() {
+        Opus_Search_Config::dropCached();
+        Opus_Search_Service::dropCached();
     }
 
 }

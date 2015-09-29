@@ -39,6 +39,12 @@ class Application_Util_QueryBuilder {
     private $_searchFields;
     private $_export = false;
 
+    const SEARCH_MODIFIER_CONTAINS_ALL = "contains_all";
+    const SEARCH_MODIFIER_CONTAINS_ANY = "contains_any";
+    const SEARCH_MODIFIER_CONTAINS_NONE = "contains_none";
+
+    const MAX_ROWS = 2147483647;
+
     /**
      *
      * @param boolean $export
@@ -47,14 +53,15 @@ class Application_Util_QueryBuilder {
         $this->_logger = $logger;
 
         $this->_filterFields = array();
-        $config = Zend_Registry::get("Zend_Config");
-        if (!isset($config->searchengine->solr->facets)) {
-            $this->_logger->debug("key searchengine.solr.facets is not present in config. skipping filter queries");
-        }
-        $filters = $config->searchengine->solr->facets;
-        $this->_logger->debug("searchengine.solr.facets is set to $filters");
 
-        foreach (explode(',', $filters) as $filterfield) {
+        $filters = Opus_Search_Config::getFacetFields();
+        if ( !count( $filters ) ) {
+            $this->_logger->debug( 'key searchengine.solr.facets is not present in config. skipping filter queries' );
+        } else {
+            $this->_logger->debug( 'searchengine.solr.facets is set to ' . implode( ',', $filters ) );
+        }
+
+        foreach ($filters as $filterfield) {
             if ($filterfield == 'year_inverted') {
                 $filterfield = 'year';
             }
@@ -87,18 +94,24 @@ class Application_Util_QueryBuilder {
 
         $this->validateParamsType($request);
 
+	    if ( $request->getParam( 'sortfield' ) ) {
+		    $sorting = array( $request->getParam( 'sortfield' ), 'asc' );
+	    } else {
+		    $sorting = Opus_Search_Query::getDefaultSorting();
+	    }
+
         $input = array(
             'searchtype' => $request->getParam('searchtype'),
-            'start' => $request->getParam('start', Opus_SolrSearch_Query::DEFAULT_START),
-            'rows' => $request->getParam('rows', Opus_SolrSearch_Query::getDefaultRows()),
-            'sortField' => $request->getParam('sortfield', Opus_SolrSearch_Query::DEFAULT_SORTFIELD),
-            'sortOrder' => $request->getParam('sortorder', Opus_SolrSearch_Query::DEFAULT_SORTORDER),
+            'start' => $request->getParam('start', Opus_Search_Query::getDefaultStart()),
+            'rows' => $request->getParam('rows', Opus_Search_Query::getDefaultRows()),
+            'sortField' => $sorting[0],
+            'sortOrder' => $request->getParam('sortorder', $sorting[1]),
             'docId' => $request->getParam('docId'),
             'query' => $request->getParam('query', '*:*')
         );
 
         if ($this->_export) {
-            $maxRows = Opus_SolrSearch_Query::MAX_ROWS;
+            $maxRows = self::MAX_ROWS;
             // pagination within export was introduced in OPUS 4.2.2
             $startParam = $request->getParam('start', 0);
             $rowsParam = $request->getParam('rows', $maxRows);
@@ -117,7 +130,7 @@ class Application_Util_QueryBuilder {
         foreach ($this->_searchFields as $searchField) {
             $input[$searchField] = $request->getParam($searchField, '');
             $input[$searchField . 'modifier'] = $request->getParam(
-                $searchField . 'modifier', Opus_SolrSearch_Query::SEARCH_MODIFIER_CONTAINS_ALL
+                $searchField . 'modifier', self::SEARCH_MODIFIER_CONTAINS_ALL
             );
         }
 
@@ -317,7 +330,7 @@ class Application_Util_QueryBuilder {
         $query->setStart($input['start']);
         $query->setRows($input['rows']);
         if ($input['sortField'] === 'seriesnumber'
-                || $input['sortField'] === Opus_SolrSearch_Query::DEFAULT_SORTFIELD) {
+                || $input['sortField'] === Opus_Search_Query::getDefaultSortingField()) {
             $query->setSortField('doc_sort_order_for_seriesid_' . $input['seriesId']);
         }
         else {

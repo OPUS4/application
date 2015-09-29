@@ -33,7 +33,7 @@
  * @version     $Id$
  */
 
-class CitationExport_IndexControllerTest extends ControllerTestCase {
+class CitationExport_Model_HelperTest extends ControllerTestCase {
 
     private $_documentId;
 

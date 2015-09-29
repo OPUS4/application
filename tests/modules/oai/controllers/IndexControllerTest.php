@@ -1404,7 +1404,6 @@ class Oai_IndexControllerTest extends ControllerTestCase {
         $this->assertEquals('fre', $language->nodeValue);
     }
 
-
     /**
      * XMetaDissPlus Schema validation (see OPUSVIER-3165)
      */

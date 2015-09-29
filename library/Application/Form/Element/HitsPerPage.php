@@ -47,7 +47,7 @@ class Application_Form_Element_HitsPerPage extends Application_Form_Element_Sele
 
         $options = array('10', '20', '50', '100');
 
-        $defaultRows = Opus_SolrSearch_Query::getDefaultRows();
+        $defaultRows = Opus_Search_Query::getDefaultRows();
 
         if (!in_array($defaultRows, $options)) {
             $options[] = $defaultRows;

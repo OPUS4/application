@@ -46,22 +46,17 @@ db.params.password = @db.user.password@
 db.params.dbname   = @db.name@
 
 ;SEARCH ENGINE SETTINGS
-; OPUS4 uses a solr server for search and browsing.
-; The solr server can run on the same or on a different host.
-; Please enter the credentials to connect to your solr server.
-searchengine.index.host = @searchengine.index.host@
-searchengine.index.port = @searchengine.index.port@
-searchengine.index.app = @searchengine.index.app@
+searchengine.solr.default.service.default.endpoint.localhost.host = @searchengine.index.host@
+searchengine.solr.default.service.default.endpoint.localhost.port = @searchengine.index.port@
+searchengine.solr.default.service.default.endpoint.localhost.path = @searchengine.index.app@
 ; The text extraction can run on a different solr server as the metadata indexer
 ; doese. You can also use the same solr server, then you would have to enter
 ; the same credentials as above.
-searchengine.extract.host = @searchengine.extract.host@
-searchengine.extract.port = @searchengine.extract.port@
-searchengine.extract.app = @searchengine.extract.app@
-; Facets fields to be considered.
-;searchengine.solr.facets = author_facet,year,doctype,language,has_fulltext,belongs_to_bibliography,subject,institute
-; Number of default search results
-; searchengine.solr.numberOfDefaultSearchResults = 10
+searchengine.solr.default.service.extract.endpoint.localhost.host = @searchengine.index.host@
+searchengine.solr.default.service.extract.endpoint.localhost.port = @searchengine.index.port@
+searchengine.solr.default.service.extract.endpoint.localhost.path = @searchengine.index.app@
+
+
 
 ; SUPPORTED LANGUAGES
 ; Change the setting to 'de' or 'en' in order to disable language selection.
@@ -161,19 +156,19 @@ oai.repository.identifier = opus4.demo
 oai.sample.identifier = oai:opus4.demo:90
 
 ; PRINT ON DEMAND SETTINGS
-; To enable print on demand services specifiy the provider's url 
+; To enable print on demand services specifiy the provider's url
 ; and (optionally) the name of a button image.
 ; The image must reside in the current layout's image folder
 ; (e.g. $BASEDIR/opus4/public/layouts/<LAYOUTNAME>/img/)
 ;
 ; When a provider is specified, the print on demand button or link will
 ; be displayed if the document's licence allows it.
-; printOnDemand.url = 
+; printOnDemand.url =
 ; printOnDemand.button =
 
 ; JOB EXECUTION SETTINGS
 ; To enable asynchronous job execution, set this to 1
-; You will need to set up appropriate cron jobs for 
+; You will need to set up appropriate cron jobs for
 ; scripts/cron/cron-php-runner.sh
 runjobs.asynchronous = 0
 ; configuration of specific jobs

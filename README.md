@@ -1,11 +1,16 @@
-# OPUS 4 application 
+The current release of OPUS 4 is Version 4.4.5 and can be
+[downloaded](https://www.kobv.de/entwicklung/software/opus-4/download/)
+from the [OPUS 4 Homepage](https://opus4.kobv.de).
 
-Dieses Repository enthält den Source Code für die OPUS 4 Frontend Applikation. 
-Der **master** Branch ist momentan veraltet.
-Das Projekt befindet sich noch in der Umstiegsphase von den früheren 
-SVN Repositories zu der auf GitHub gehosteten Entwicklung.
+The project is still in the process of adapting development to GitHub and Composer.
+The next release will be OPUS 4.5.
 
-Die aktuelle Entwicklung für OPUS 4.5 findet im Branch **solrupdate** statt.
-Zum Release wird **master** aktualisiert werden und in Zukunft "sauber" gehalten,
-so daß jederzeit eine Installation von OPUS 4 mit der Version im **master** Branch
-möglich ist.
+OPUS 4 Homepage:
+http://opus4.kobv.de
+
+OPUS 4 Documentation for Developers and Administrators
+http://opus4.github.io
+
+OPUS 4 Development on GitHub:
+https://github.com/opus4
+
