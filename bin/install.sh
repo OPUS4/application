@@ -20,14 +20,16 @@ set -e
 
 # START USER-CONFIGURATION
 
-BASEDIR='/var/local/opus4'
 SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/5.2.1/solr-5.2.1.tgz'
+
+MYSQL_CLIENT='/usr/bin/mysql'
 
 # END OF USER-CONFIGURATION
 
 SCRIPT_NAME="`basename "$0"`"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
 SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
+BASEDIR="`dirname "$SCRIPT_PATH"`"
 
 # check input parameter
 if [ $# -lt 1 ]
@@ -46,30 +48,34 @@ else
   exit 1
 fi
 
-MYSQL_CLIENT='/usr/bin/mysql'
-
-# including installer components
-if [ -f "$SCRIPT_PATH/installer.includes" ]; then
-    . "$SCRIPT_PATH/installer.includes"
-fi
-
 cd "$BASEDIR"
 
+# Install dependencies
+# --------------------
 
-# install dependencies
-"$SCRIPT_PATH/install-composer.sh" "$BASEDIR/opus4"
+"$SCRIPT_PATH/install-composer.sh" "$BASEDIR"
 
+# Create .htaccess file
+# ---------------------
 
-# create .htaccess
-[[ -z $OPUS_URL_BASE ]] && OPUS_URL_BASE='/opus4'
-sed -e "s!<template>!$OPUS_URL_BASE!" opus4/public/htaccess-template > opus4/public/.htaccess
+[[ -z $OPUS_URL_BASE ]] && read -p "Base URL for OPUS [opus4]: " OPUS_URL_BASE
+
+OPUS_URL_BASE="/${OPUS_URL_BASE:-opus4}"
+OPUS_URL_BASE_ESC=`echo "$OPUS_URL_BASE" | sed 's/\!/\\\!/g'`
+
+sed -e "s!<template>!$OPUS_URL_BASE_ESC!" public/htaccess-template > public/.htaccess
 if [ "$OS" = ubuntu ]
 then
-  sed -i -e 's!#Enable for UBUNTU/DEBIAN:# !!' opus4/public/.htaccess
+  sed -i -e 's!#Enable for UBUNTU/DEBIAN:# !!' public/.htaccess
 fi
 
-# prepare apache config
-sed -e "s!/OPUS_URL_BASE!/$OPUS_URL_BASE!g; s!/BASEDIR/!/$BASEDIR/!; s!//*!/!g" "$BASEDIR/opus4/apacheconf/apache.conf.template" > "$BASEDIR/opus4/apacheconf/apache.conf"
+# Prepare apache configuration
+# ----------------------------
+
+sed -e "s!/OPUS_URL_BASE!/$OPUS_URL_BASE!g; s!/BASEDIR/!/$BASEDIR/!; s!//*!/!g" "$BASEDIR/apacheconf/apache.conf.template" > "$BASEDIR/apacheconf/apache.conf"
+
+# Create OPUS user account
+# ------------------------
 
 # promt for username, if required
 echo "OPUS requires a dedicated system account under which Solr will be running."
@@ -111,6 +117,9 @@ fi
 OPUS_GROUP_NAME="`id -gn "$OPUS_USER_NAME"`"
 OWNER="$OPUS_USER_NAME:$OPUS_GROUP_NAME"
 
+# Create database
+# ---------------
+
 # prompt for database parameters
 [[ -z $DBNAME               ]] && read -p "New OPUS Database Name [opus400]: "          DBNAME
 [[ -z $ADMIN                ]] && read -p "New OPUS Database Admin Name [opus4admin]: " ADMIN
@@ -123,8 +132,8 @@ echo
 [[ -z $MYSQLPORT            ]] && read -p "MySQL DBMS Port [3306]: "                    MYSQLPORT
 [[ -z $MYSQLROOT            ]] && read -p "MySQL Root User [root]: "                    MYSQLROOT
 read -p "MySQL Root User Password: " -s MYSQLROOT_PASSWORD
-echo
 
+echo
 
 # set defaults if value is not given
 DBNAME="${DBNAME:-opus400}"
@@ -164,8 +173,11 @@ GRANT SELECT,INSERT,UPDATE,DELETE ON $DBNAME.* TO '$WEBAPP_USER'@'$MYSQLHOST' ID
 FLUSH PRIVILEGES;
 LimitString
 
+# Update configuration files
+# --------------------------
+
 # create config.ini and set database related parameters
-cd "$BASEDIR/opus4/application/configs"
+cd "$BASEDIR/application/configs"
 cp config.ini.template config.ini
 if [ localhost != "$MYSQLHOST" ]; then
   sed -i -e "s!^; db.params.host = localhost!db.params.host = '$MYSQLHOST_ESC'!" config.ini
@@ -178,7 +190,8 @@ sed -i -e "s!@db.user.name@!'$WEBAPP_USER_ESC'!" \
        -e "s!@db.name@!'$DBNAME_ESC'!" config.ini
 
 # create createdb.sh and set database related parameters
-cd "$BASEDIR/opus4/db"
+# TODO creating symbolic links
+cd "$BASEDIR/db"
 if [ ! -e createdb.sh ]; then
   cp createdb.sh.template createdb.sh
   if [ localhost != "$MYSQLHOST" ]; then
@@ -194,8 +207,11 @@ if [ ! -e createdb.sh ]; then
   bash createdb.sh || rm createdb.sh
 fi
 
-# install and configure Solr search server
+# Install and configure Solr search server
+# ----------------------------------------
+
 cd "$BASEDIR"
+
 [ -z "$INSTALL_SOLR" ] && read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
 if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ]
 then
@@ -341,7 +357,9 @@ EOT
   fi
 fi
 
-# import some test documents
+# import test documents
+# ---------------------
+
 [ -z "$IMPORT_TESTDATA" ] && read -p "Import test data? [Y]: " IMPORT_TESTDATA
 if [ -z "$IMPORT_TESTDATA" ] || [ "$IMPORT_TESTDATA" = Y ] || [ "$IMPORT_TESTDATA" = y ]
 then
@@ -401,6 +419,9 @@ then
   "$BASEDIR/opus4/scripts/SolrIndexBuilder.php"
 fi
 
+# Set file permissions
+# --------------------
+
 # change file owner of all files in $BASEDIR to $OPUS_USER_NAME
 chown -R "$OWNER" "$BASEDIR"
 
@@ -409,11 +430,17 @@ cd "$(readlink "$BASEDIR/workspace")"
 find ../workspace -type d -print0 | xargs -0 -- chmod 777
 find ../workspace -type f -print0 | xargs -0 -- chmod 666
 
+# Cleanup downloads
+# -----------------
+
 # delete tar archives
 [ -z "$DELETE_DOWNLOADS" ] && read -p "Delete downloads? [N]: " DELETE_DOWNLOADS
 if [ "$DELETE_DOWNLOADS" = Y ] || [ "$DELETE_DOWNLOADS" = y ]; then
   rm -rf downloads
 fi
+
+# Restart Apache
+# --------------
 
 [ -z "$RESTART_APACHE" ] && RESTART_APACHE=Y
 if [ "$RESTART_APACHE" = Y ];
@@ -422,7 +449,10 @@ then
   /etc/init.d/apache2 restart
 fi
 
+# Installation finished
+# ---------------------
+
 echo
 echo
-echo "OPUS 4 is running now! Point your browser to http://localhost$OPUS_URL_BASE"
+echo "OPUS 4 is running now! Point your browser to http://localhost$OPUS_URL_BASE_ESC"
 echo
