@@ -55,6 +55,15 @@ cd "$BASEDIR"
 
 "$SCRIPT_PATH/install-composer.sh" "$BASEDIR"
 
+# Link to framework
+# -----------------
+
+cd "$BASEDIR/db"
+ln -svnf "$BASEDIR/vendor/opus4-repo/framework/db/schema" "schema"
+cd "$BASEDIR"
+
+exit 0;
+
 # Create .htaccess file
 # ---------------------
 
