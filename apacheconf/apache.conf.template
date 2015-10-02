@@ -1,7 +1,7 @@
 AllowEncodedSlashes On
 
-Alias /OPUS_URL_BASE "/BASEDIR/opus4/public/"
-<Directory "/BASEDIR/opus4/public/">
+Alias /OPUS_URL_BASE "/BASEDIR/public/"
+<Directory "/BASEDIR/public/">
  Options FollowSymLinks
  AllowOverride All
  Order deny,allow

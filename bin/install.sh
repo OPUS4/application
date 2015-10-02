@@ -24,6 +24,8 @@ SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/5.2.1/solr-5.2.1.tgz
 
 MYSQL_CLIENT='/usr/bin/mysql'
 
+APACHE_SITES='/etc/apache2/sites-available'
+
 # END OF USER-CONFIGURATION
 
 SCRIPT_NAME="`basename "$0"`"
@@ -62,15 +64,17 @@ cd "$BASEDIR/db"
 ln -svnf "$BASEDIR/vendor/opus4-repo/framework/db/schema" "schema"
 cd "$BASEDIR"
 
-exit 0;
-
 # Create .htaccess file
 # ---------------------
 
 [[ -z $OPUS_URL_BASE ]] && read -p "Base URL for OPUS [opus4]: " OPUS_URL_BASE
 
-OPUS_URL_BASE="/${OPUS_URL_BASE:-opus4}"
+OPUS_NAME="${OPUS_URL_BASE:-opus4}"
+OPUS_NAME_ESC=`echo "$OPUS_NAME" | sed 's/\!/\\\!/g'`
+
+OPUS_URL_BASE="/$OPUS_NAME"
 OPUS_URL_BASE_ESC=`echo "$OPUS_URL_BASE" | sed 's/\!/\\\!/g'`
+
 
 sed -e "s!<template>!$OPUS_URL_BASE_ESC!" public/htaccess-template > public/.htaccess
 if [ "$OS" = ubuntu ]
@@ -82,6 +86,13 @@ fi
 # ----------------------------
 
 sed -e "s!/OPUS_URL_BASE!/$OPUS_URL_BASE!g; s!/BASEDIR/!/$BASEDIR/!; s!//*!/!g" "$BASEDIR/apacheconf/apache.conf.template" > "$BASEDIR/apacheconf/apache.conf"
+
+# TODO handle case file exists
+cd $APACHE_SITES
+ln -sv "$BASEDIR/apacheconf/apache.conf" "$OPUS_NAME.conf"
+cd $BASEDIR
+
+exit 0;
 
 # Create OPUS user account
 # ------------------------
@@ -199,7 +210,6 @@ sed -i -e "s!@db.user.name@!'$WEBAPP_USER_ESC'!" \
        -e "s!@db.name@!'$DBNAME_ESC'!" config.ini
 
 # create createdb.sh and set database related parameters
-# TODO creating symbolic links
 cd "$BASEDIR/db"
 if [ ! -e createdb.sh ]; then
   cp createdb.sh.template createdb.sh
