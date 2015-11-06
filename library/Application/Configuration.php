@@ -160,4 +160,68 @@ class Application_Configuration {
         return $info;
     }
 
+    /**
+     * Saves configuration as XML file.
+     * @param Zend_Config $config
+     * @throws Zend_Config_Exception
+     */
+    public static function save(Zend_Config $config) {
+        $writer = new Zend_Config_Writer_Xml();
+        $writer->write(APPLICATION_PATH . '/application/configs/config.xml', $config);
+    }
+
+    public static function load() {
+    }
+
+    /**
+     * Gets a value from a Zend_Config object.
+     * @param Zend_Config $config
+     * @param $option
+     * @return mixed|Zend_Config
+     */
+    public static function getValueFromConfig(Zend_Config $config, $option) {
+        $keys = explode('.', $option);
+        $subconfig = $config;
+        foreach ($keys as $key) {
+            $subconfig = $subconfig->get($key);
+            if (!($subconfig instanceof Zend_Config)) {
+                return $subconfig;
+            }
+        }
+    }
+
+    /**
+     * Updates a value in a Zend_Config object.
+     *
+     * @param Zend_Config $config
+     * @param $option Name of option
+     * @param $value New value
+     * @throws Zend_Exception
+     */
+    public static function setValueInConfig(Zend_Config $config, $option, $value) {
+        if ($config->readOnly()) {
+            Zend_Registry::get('Zend_Log')->err('Zend_Config object is readonly.');
+            return;
+        }
+
+        $keys = explode('.', $option);
+
+        $subconfig = $config;
+
+        $index = 0;
+
+        foreach ($keys as $key) {
+            $index++;
+            if (is_null($subconfig->get($key)) && $index < count($keys)) {
+                // create subsection
+                eval('$subconfig->' . $key . ' = array();');
+                $subconfig = $subconfig->get($key);
+            }
+            else {
+                // set value
+                eval('$subconfig->' . $key . ' = $value;');
+            }
+        }
+    }
+
 }

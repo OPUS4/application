@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
+<tmx version="1.4">
+
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
+ </header>
+
+  <body>
+
+    <tu tuid="admin_config_index">
+        <tuv xml:lang="en">
+            <seg>Options</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Optionen</seg>
+        </tuv>
+    </tu>
+
+
+    <tu tuid="admin_title_config">
+        <tuv xml:lang="en">
+            <seg>Options</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Optionen</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_config_supportedLanguages">
+        <tuv xml:lang="en">
+            <seg>Supported Languages (en,de)</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Unterstützte Sprachen (en,de)</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_config_supportedLanguages_description">
+        <tuv xml:lang="en">
+            <seg>List of languages for user interface. Languages 'de' and 'en' are supported.</seg>
+        </tuv>
+        <tuv xml:lang="de">
+            <seg>Kommaliste mit Sprachen für die Benutzeroberfläche. Die Werte 'de' und 'en' werden unterstützt.</seg>
+        </tuv>
+    </tu>
+
+    <tu tuid="admin_config_maxSearchResults">
+      <tuv xml:lang="en">
+        <seg>Default search results/page</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Defaultwert für Suchergebnisse/Seite</seg>
+      </tuv>
+    </tu>
+
+    <tu tuid="admin_config_maxSearchResults_description">
+      <tuv xml:lang="en">
+        <seg>Number of results that should be display on a single page.</seg>
+      </tuv>
+      <tuv xml:lang="de">
+        <seg>Anzahl der Suchergebnisse, die auf einer Seite angezeigt werden sollen.</seg>
+      </tuv>
+    </tu>
+
+  </body>
+
+</tmx>

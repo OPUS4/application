@@ -28,15 +28,14 @@
  * @package     Application
  * @author      Jens Schwidder <schwidder@zib.de>
  * @author      Michael Lang <lang@zib.de
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
 class Application_ConfigurationTest extends ControllerTestCase {
-    
+
     private $config;
-    
+
     public function setUp() {
         parent::setUp();
         $this->config = new Application_Configuration();
@@ -67,15 +66,15 @@ class Application_ConfigurationTest extends ControllerTestCase {
     public function testGetSupportedLanguages() {
         $this->assertEquals(array('de', 'en'), $this->config->getSupportedLanguages());
     }
-    
+
     public function testIsLanguageSupportedTrue() {
         $this->assertTrue($this->config->isLanguageSupported('en'));
     }
-    
+
     public function testIsLanguageSupportedFalse() {
         $this->assertFalse($this->config->isLanguageSupported('ru'));
     }
-    
+
     public function testIsLanguageSupportedFalseNull() {
         $this->assertFalse($this->config->isLanguageSupported(null));
     }
