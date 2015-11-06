@@ -51,8 +51,14 @@ class Application_View_Helper_LanguageSelector extends Zend_View_Helper_Abstract
         }
         $returnParams = Zend_Controller_Action_HelperBroker::getStaticHelper('ReturnParams');
 
-        $translations = Zend_Registry::get('Zend_Translate')->getList();
         $currentLocale = new Zend_Locale(Zend_Registry::get('Zend_Translate')->getLocale());
+
+        $configHelper = new Application_Configuration();
+
+        // only show languages that are present in resources and activated in configuration
+        $translations = Zend_Registry::get('Zend_Translate')->getList();
+        $supportedLang = $configHelper->getSupportedLanguages();
+        $translations = array_intersect($translations, $supportedLang);
 
         $result = array();
         foreach ($translations as $translation) {
@@ -70,6 +76,8 @@ class Application_View_Helper_LanguageSelector extends Zend_View_Helper_Abstract
                 array_push($result, array('name' => htmlspecialchars($languageName), 'url' => $languageUrl));
             }
         }
+
         return $result;
     }
+
 }
