@@ -414,24 +414,10 @@ class Admin_CollectionController extends Application_Controller_Action {
      * @param int $documentId
      */
     private function prepareAssignStartPage($documentId) {
-        $collectionRoles = Opus_CollectionRole::fetchAll();
-        $this->view->collections = array();
-        foreach ($collectionRoles as $collectionRole) {
-            $rootCollection = $collectionRole->getRootCollection();
-            if (!is_null($rootCollection)) {
-                array_push(
-                    $this->view->collections, array(
-                    'id' => $rootCollection->getId(),
-                    'name' => $this->view->translate('default_collection_role_' . $collectionRole->getDisplayName()),
-                    'hasChildren' => $rootCollection->hasChildren(),
-                    'visible' => $rootCollection->getVisible()
-                    )
-                );
-            }
-        }
+        $helper = new Admin_Model_Collections($this->view);
+        $helper->setView($this->view);
+        $this->view->collections = $helper->getCollectionRolesInfo();
         $this->view->documentId = $documentId;
-        $this->view->breadcrumb = array();
-        $this->view->role_name = $collectionRole->getDisplayName();
     }
 
     private function prepareAssignSubPage($documentId, $collectionId) {
