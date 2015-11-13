@@ -41,10 +41,14 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase {
 
         $config = new Zend_Config(array(), true);
 
-        $form->updateConfig($config);
+        $form->updateModel($config);
 
         $this->assertEquals('de', $config->supportedLanguages);
         $this->assertEquals(15, $config->searchengine->solr->numberOfDefaultSearchResults);
+    }
+
+    public function testValidationSuccess() {
+        $this->markTestIncomplete('Validation has not been implemented yet.');
     }
 
 }
