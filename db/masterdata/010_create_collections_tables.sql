@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `collections` (
   `number` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
   `oai_subset` varchar(255) DEFAULT NULL,
-  
+
   `left_id` int(10) unsigned NOT NULL,
   `right_id` int(10) unsigned NOT NULL,
   `parent_id` int(10) unsigned DEFAULT NULL,
@@ -38,7 +38,9 @@ CREATE TABLE IF NOT EXISTS `collections` (
   UNIQUE KEY `role_id_left` (`role_id`,`left_id`),
   UNIQUE KEY `role_id_right` (`role_id`,`right_id`),
   -- UNIQUE KEY `role_id_number` (`role_id`,`number`), -- Uniqueness-constraint on number?
-  KEY `parent_id` (`parent_id`)
+  KEY `parent_id` (`parent_id`),
+  CONSTRAINT `collections_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+  CONSTRAINT `collections_ibfk_2` FOREIGN KEY (`parent_id`) REFERENCES `collections` (`id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=15985;
 
 -- --------------------------------------------------------
@@ -78,7 +80,8 @@ CREATE TABLE IF NOT EXISTS collections_enrichments (
    key_name      VARCHAR(255),
    value         VARCHAR(255),
    PRIMARY KEY(id),
-   INDEX(collection_id, key_name)
+   INDEX(collection_id, key_name),
+   CONSTRAINT `collections_enrichments_ibfk_1` FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB
 CHARACTER SET = 'utf8'
 COLLATE = 'utf8_general_ci'
@@ -97,6 +100,9 @@ CREATE TABLE IF NOT EXISTS `link_documents_collections` (
   PRIMARY KEY  (`document_id`,`collection_id`),
   KEY `role_id` (`role_id`,`collection_id`),
   KEY `collection_id` (`collection_id`),
-  KEY `document_id` (`document_id`)
+  KEY `document_id` (`document_id`),
+  CONSTRAINT `link_documents_collections_ibfk_1` FOREIGN KEY (`document_id`) REFERENCES `documents` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `link_documents_collections_ibfk_2` FOREIGN KEY (`collection_id`) REFERENCES `collections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `link_documents_collections_ibfk_3` FOREIGN KEY (`role_id`) REFERENCES `collections_roles` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `link_documents_collections_ibfk_4` FOREIGN KEY (`role_id`, `collection_id`) REFERENCES `collections` (`role_id`, `id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=20;
-
