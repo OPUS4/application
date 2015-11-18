@@ -864,6 +864,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
             'Fluiddynamik und Schiffstheorie M-8',
             'Geotechnik und Baubetrieb B-5',
             'Hochfrequenztechnik E-3');
+
         $this->assertPositions($this->getResponse()->getBody(), $searchStrings, 'id="institute_facet"');
 
         $this->dispatch('/solrsearch/index/search/searchtype/all');
@@ -1002,8 +1003,17 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
         $newerDocId = $newerDoc->store();
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article');
-        $olderDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $olderDocId);
-        $newerDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $newerDocId);
+
+        $responseBody = $this->getResponse()->getBody();
+
+        preg_match("$/frontdoor/index/index.*/docId/$olderDocId$", $responseBody, $matches, PREG_OFFSET_CAPTURE);
+        $this->assertNotEmpty($matches, "Document $olderDocId not found!");
+        $olderDocPosition = $matches[0][1];
+
+        preg_match("$/frontdoor/index/index.*/docId/$newerDocId$", $responseBody, $matches, PREG_OFFSET_CAPTURE);
+        $this->assertNotEmpty($matches, "Document $newerDocId not found!");
+        $newerDocPosition = $matches[0][1];
+
         $this->assertTrue($newerDocPosition < $olderDocPosition);
     }
 
@@ -1039,8 +1049,15 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
 
         $this->dispatch('/solrsearch/index/search/searchtype/simple/query/*%3A*/browsing/true/doctypefq/article/sortfield/title/sortorder/desc');
 
-        $olderDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $olderDocId);
-        $newerDocPosition = strpos ($this->_response->getBody(), '<a href="/frontdoor/index/index/docId/' . $newerDocId);
+        $responseBody = $this->getResponse()->getBody();
+
+        preg_match("$/frontdoor/index/index.*/docId/$olderDocId$", $responseBody, $matches, PREG_OFFSET_CAPTURE);
+        $this->assertNotEmpty($matches, "Document $olderDocId not found!");
+        $olderDocPosition = $matches[0][1];
+
+        preg_match("$/frontdoor/index/index.*/docId/$newerDocId$", $responseBody, $matches, PREG_OFFSET_CAPTURE);
+        $this->assertNotEmpty($matches, "Document $newerDocId not found!");
+        $newerDocPosition = $matches[0][1];
 
         $this->assertTrue($newerDocPosition > $olderDocPosition, "Documents are not sorted by sortfield (title).");
     }
@@ -1052,6 +1069,7 @@ class Solrsearch_IndexControllerTest extends ControllerTestCase {
     public function testAuthorFacetOpen() {
         $this->useEnglish();
         $this->dispatch('/solrsearch/index/search/searchtype/all/start/0/rows/10/facetNumber_author_facet/all');
+        $this->assertXpathCount('//a[contains(@href, "author_facetfq")]', 104); // stimmt für Testdaten TODO über SQL
         $this->assertQueryContentContains('//a', 'Wilfried Stecher');
         $this->assertQueryContentContains('//a', 'Wally Walruss');
         $this->assertQueryContentContains('//a', 'M. Scheinpflug');
