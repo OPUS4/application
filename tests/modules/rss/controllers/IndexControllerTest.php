@@ -92,32 +92,23 @@ class Rss_IndexControllerTest extends ControllerTestCase {
         $docId1 = $doc1->getId();
         $date = new Zend_Date($doc1->getServerDatePublished());
         $dateValue1 = $date->get(Zend_Date::RFC_2822);
-        
-        $indexer = new Opus_SolrSearch_Index_Indexer();
 
-        $class = new ReflectionClass('Opus_SolrSearch_Index_Indexer');
-        $methodGetSolrXmlDocument = $class->getMethod('getSolrXmlDocument');
-        $methodGetSolrXmlDocument->setAccessible(true);
-        $solrXml = $methodGetSolrXmlDocument->invoke($indexer, $doc1);
+        $indexer = Opus_Search_Service::selectIndexingService( null, 'solr' );
+
+        $indexer->addDocumentsToIndex($doc1);
 
         // delete document from database
         $doc1->deletePermanent();
 
-        // add document to search index
-        $methodSendSolrXmlToServer = $class->getMethod('sendSolrXmlToServer');
-        $methodSendSolrXmlToServer->setAccessible(true);
-        $methodSendSolrXmlToServer->invoke($indexer, $solrXml);
-        $indexer->commit();
-
         sleep(2); // make sure $doc2 do not get the same value for server_date_published
-        
+
         $doc2 = $this->createTestDocument();
         $doc2->setServerState('published');
         $doc2->setLanguage('eng');
         $title = new Opus_Title();
         $title->setValue('another test document for OPUSVIER-1726');
         $title->setLanguage('eng');
-        $doc2->setTitleMain($title);        
+        $doc2->setTitleMain($title);
         $doc2->store();
 
         $docId2 = $doc2->getId();
@@ -127,15 +118,14 @@ class Rss_IndexControllerTest extends ControllerTestCase {
         $this->dispatch('/rss/index/index/searchtype/all');
 
         // make search index up to date
-        $indexer->removeDocumentFromEntryIndexById($docId1);
-        $indexer->commit();
+        $indexer->removeDocumentsFromIndexById($docId1);
 
         $doc2->deletePermanent();
 
         $body = $this->getResponse()->getBody();
         $this->assertNotContains("No Opus_Db_Documents with id $docId1 in database.", $body);
         $this->assertNotContains('<title>test document for OPUSVIER-1726</title>', $body);
-        $this->assertContains('<title>another test document for OPUSVIER-1726</title>', $body);        
+        $this->assertContains('<title>another test document for OPUSVIER-1726</title>', $body);
         $this->assertNotContains("frontdoor/index/index/docId/$docId1</link>", $body);
         $this->assertContains("frontdoor/index/index/docId/$docId2</link>", $body);
         $this->assertNotContains("<pubDate>$dateValue1</pubDate>", $body);
@@ -148,14 +138,14 @@ class Rss_IndexControllerTest extends ControllerTestCase {
     /**
      * Regression test for OPUSVIER-2434
      */
-    public function testInvalidSearchQueryReturn500() {        
+    public function testInvalidSearchQueryReturn500() {
         $this->requireSolrConfig();
 
         $this->dispatch('/rss/index/index/searchtype/simple/start/0/rows/10/query/%22%5C%22%22');
 
         $this->assertContains("The given search query is not supported", $this->getResponse()->getBody());
         $this->assertNotContains("exception 'Application_SearchException' with message 'search server is not responding -- try again later'", $this->getResponse()->getBody());
-        
+
         $this->assertEquals(500, $this->getResponse()->getHttpResponseCode());
     }
 
@@ -166,7 +156,7 @@ class Rss_IndexControllerTest extends ControllerTestCase {
         $this->requireSolrConfig();
 
         $this->dispatch('/rss/index/index/searchtype/simple/start/0/rows/10/query/asearchquerywithoutanyhits');
-        
+
         $this->assertNotContains("Warning: XSLTProcessor::transformToXml(): runtime error", $this->getResponse()->getBody());
 
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
