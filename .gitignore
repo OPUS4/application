@@ -12,6 +12,9 @@ vendor
 composer.phar
 composer.lock
 
+# ignore all workspace files
+workspace/**/*
+
 # ignore further files created by Opus4 installer
 apacheconf/apache.conf
 application/configs/config.ini
