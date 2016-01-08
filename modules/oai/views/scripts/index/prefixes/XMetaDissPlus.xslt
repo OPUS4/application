@@ -72,8 +72,11 @@
 
             <!-- dc:title -->
             <xsl:apply-templates select="TitleMain" mode="xmetadissplus" />
+            <xsl:apply-templates select="TitleSub" mode="xmetadissplus" />
             <!-- dc:creator -->
             <xsl:apply-templates select="PersonAuthor" mode="xmetadissplus" />
+            <xsl:apply-templates select="@CreatingCorporation" mode="xmetadissplus" />
+            <xsl:apply-templates select="@ContributingCorporation" mode="xmetadissplus" />
             <!-- dc:subject -->
             <xsl:apply-templates select="Collection[@RoleName='ddc' and @Visible=1]" mode="xmetadissplus" />
             <xsl:apply-templates select="Subject[@Type='swd']" mode="xmetadissplus" />
@@ -85,7 +88,7 @@
             <!-- dc:contributor -->
             <xsl:apply-templates select="PersonAdvisor" mode="xmetadissplus" />
             <xsl:apply-templates select="PersonReferee" mode="xmetadissplus" />
-
+            <xsl:apply-templates select="PersonEditor" mode="xmetadissplus" />
 
             <xsl:choose>
                 <xsl:when test="ThesisDateAccepted">
@@ -254,13 +257,13 @@
                            <xsl:text>master</xsl:text>
                        </xsl:when>
                        <xsl:when test="@Type='diplom'">
-                           <xsl:text>diplom</xsl:text>
+                           <xsl:text>Diplom</xsl:text>
                        </xsl:when>
                        <xsl:when test="@Type='magister'">
-                           <xsl:text>magister</xsl:text>
+                           <xsl:text>M.A.</xsl:text>
                        </xsl:when>
                        <xsl:when test="@Type='examen'">
-                           <xsl:text>examen</xsl:text>
+                           <xsl:text>other</xsl:text>
                        </xsl:when>
                        <xsl:otherwise>
                            <xsl:text>other</xsl:text> 
@@ -318,15 +321,8 @@
     <xsl:template match="TitleMain" mode="xmetadissplus">
         <dc:title xsi:type="ddb:titleISO639-2">
             <xsl:attribute name="lang">
-               <xsl:choose>
-                  <xsl:when test="@Language='deu'">
-                    <xsl:text>ger</xsl:text>
-                  </xsl:when>
-                  <xsl:otherwise>     
-                     <xsl:value-of select="@Language" />
-                  </xsl:otherwise>
-               </xsl:choose>
-            </xsl:attribute>
+              <xsl:value-of select="php:functionString('Oai_IndexController::getLanguageCode', @Language)" />
+             </xsl:attribute>
             <xsl:choose>
               <xsl:when test="../@Language!=@Language">
                  <xsl:attribute name="ddb:type"><xsl:text>translated</xsl:text></xsl:attribute>
@@ -336,6 +332,22 @@
             </xsl:choose>
             <xsl:value-of select="@Value" />
         </dc:title>
+    </xsl:template>
+    
+    <xsl:template match="TitleSub" mode="xmetadissplus">
+        <dcterms:alternative xsi:type="ddb:talternativeISO639-2">
+            <xsl:attribute name="lang">
+                 <xsl:value-of select="php:functionString('Oai_IndexController::getLanguageCode', @Language)" />
+            </xsl:attribute>
+            <xsl:choose>
+              <xsl:when test="../@Language!=@Language">
+                 <xsl:attribute name="ddb:type"><xsl:text>translated</xsl:text></xsl:attribute>
+              </xsl:when>
+              <xsl:otherwise>
+              </xsl:otherwise>
+            </xsl:choose>
+            <xsl:value-of select="@Value" />
+        </dcterms:alternative>
     </xsl:template>
 
     <xsl:template match="PersonAuthor" mode="xmetadissplus">
@@ -356,6 +368,30 @@
                <xsl:value-of select="@AcademicTitle" />
              </pc:academicTitle>
           </xsl:if>
+         </pc:person>
+       </dc:creator>
+    </xsl:template>
+    
+    <xsl:template match="@CreatingCorporation" mode="xmetadissplus">
+       <dc:creator xsi:type="pc:MetaPers">
+         <pc:person>
+         <pc:name type="otherName" otherNameType="organisation">
+           <pc:organisationName>
+             <xsl:value-of select="." />
+           </pc:organisationName>
+         </pc:name>
+         </pc:person>
+       </dc:creator>
+    </xsl:template>	
+
+    <xsl:template match="@ContributingCorporation" mode="xmetadissplus">
+       <dc:creator xsi:type="pc:MetaPers">
+         <pc:person>
+         <pc:name type="otherName" otherNameType="organisation">
+           <pc:organisationName>
+             <xsl:value-of select="." />
+           </pc:organisationName>
+         </pc:name>
          </pc:person>
        </dc:creator>
     </xsl:template>
@@ -381,19 +417,11 @@
     <xsl:template match="TitleAbstract" mode="xmetadissplus">
         <dcterms:abstract xsi:type="ddb:contentISO639-2" ddb:type="noScheme">
             <xsl:attribute name="lang">
-               <xsl:choose>
-                  <xsl:when test="@Language='deu'">
-                    <xsl:text>ger</xsl:text>
-                  </xsl:when>
-                  <xsl:otherwise>     
-                     <xsl:value-of select="@Language" />
-                  </xsl:otherwise>
-               </xsl:choose>
+                <xsl:value-of select="php:functionString('Oai_IndexController::getLanguageCode', @Language)" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
         </dcterms:abstract>
     </xsl:template>
-
 
     <xsl:template match="PersonAdvisor" mode="xmetadissplus">
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="advisor">
@@ -419,6 +447,28 @@
 
     <xsl:template match="PersonReferee" mode="xmetadissplus">
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="referee">
+           <pc:person>
+             <pc:name type="nameUsedByThePerson">
+               <xsl:if test="normalize-space(@FirstName)">
+                  <pc:foreName>
+                    <xsl:value-of select="@FirstName" />
+                  </pc:foreName>
+               </xsl:if>
+                <pc:surName>
+                  <xsl:value-of select="@LastName" />
+                </pc:surName>
+             </pc:name>
+             <xsl:if test="normalize-space(@AcademicTitle)">
+                <pc:academicTitle>
+                  <xsl:value-of select="@AcademicTitle" />
+                </pc:academicTitle>
+             </xsl:if>
+           </pc:person>
+       </dc:contributor>
+    </xsl:template>
+    
+    <xsl:template match="PersonEditor" mode="xmetadissplus">
+       <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="editor">
            <pc:person>
              <pc:name type="nameUsedByThePerson">
                <xsl:if test="normalize-space(@FirstName)">
@@ -490,12 +540,27 @@
     <xsl:template match="TitleParent" mode="xmetadissplus">
         <dc:source xsi:type="ddb:noScheme">
             <xsl:value-of select="@Value" />
-            <xsl:text>, </xsl:text>
-            <xsl:value-of select="/Documents/Opus_Document/@Volume" />
-            <xsl:text>, </xsl:text>
-            <xsl:value-of select="/Documents/Opus_Document/@Issue" />
-            <xsl:text>, </xsl:text>
-            <xsl:value-of select="/Documents/Opus_Document/@PageNumber" />
+            <xsl:if test="../@Volume != ''">
+               <xsl:text>, </xsl:text>
+               <xsl:value-of select="../@Volume" />
+            </xsl:if>
+            <xsl:if test="../@Issue != ''">
+               <xsl:text>,</xsl:text>
+               <xsl:value-of select="../@Issue" />
+            </xsl:if>
+            <xsl:choose>
+               <xsl:when test="../@PageFirst">
+                  <xsl:text>, S. </xsl:text>
+                  <xsl:value-of select="../@PageFirst" />
+                  <xsl:text>-</xsl:text>
+                  <xsl:value-of select="../@PageLast" />
+               </xsl:when>
+               <xsl:otherwise>
+                  <xsl:text>, </xsl:text>
+                  <xsl:value-of select="../@PageNumber" />
+                  <xsl:text> S.</xsl:text>
+               </xsl:otherwise>
+            </xsl:choose>
         </dc:source> 
     </xsl:template>
 
