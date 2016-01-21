@@ -250,13 +250,13 @@ class Application_Controller_Action_Helper_DocumentTypesTest extends ControllerT
 
                 $xml = new DOMDocument();
                 $xml->load($fileinfo->getPathname());
-		$result = $xml->schemaValidate(Zend_Registry::get('Zend_Config')->documentTypes->xmlSchema);
-		if ($fileinfo->getFilename() == 'demo_invalid.xml' || $fileinfo->getFilename() == 'demo_invalidfieldname.xml') {
-                   $this->assertFalse($result, $fileinfo->getFilename() . ' is valid');
-		}
-		else {
-                   $this->assertTrue($result, $fileinfo->getFilename() . ' is not valid');
-		}
+		        $result = $xml->schemaValidate($this->docTypeHelper->getXmlSchemaPath());
+		        if ($fileinfo->getFilename() == 'demo_invalid.xml' || $fileinfo->getFilename() == 'demo_invalidfieldname.xml') {
+                    $this->assertFalse($result, $fileinfo->getFilename() . ' is valid');
+                }
+                else {
+                    $this->assertTrue($result, $fileinfo->getFilename() . ' is not valid');
+                }
             }
         }
 

@@ -128,7 +128,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
         libxml_clear_errors();
         libxml_use_internal_errors(true);
 
-        if (!$dom->schemaValidate($this->_config->documentTypes->xmlSchema)) {
+        if (!$dom->schemaValidate($this->getXmlSchemaPath())) {
             libxml_clear_errors();
             throw new Application_Exception(
                 'given xml document type definition for document type ' . $documentType .
@@ -279,7 +279,7 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
         libxml_clear_errors();
         libxml_use_internal_errors(true);
         try {
-            $isValid = $domDoc->schemaValidate($this->_config->documentTypes->xmlSchema);
+            $isValid = $domDoc->schemaValidate($this->getXmlSchemaPath());
             $this->_errors[$filename] = libxml_get_errors();
         }
         catch (Exception $e) {
@@ -291,6 +291,16 @@ class Application_Controller_Action_Helper_DocumentTypes extends Zend_Controller
 
     public function getErrors () {
         return $this->_errors;
+    }
+
+    /**
+     * Returns path to xml schema for validation of document type definitions.
+     * @return string
+     */
+    public function getXmlSchemaPath() {
+        $reflector = new ReflectionClass('Opus_Document');
+        return dirname($reflector->getFileName()) . DIRECTORY_SEPARATOR . 'Document' . DIRECTORY_SEPARATOR
+            . 'documenttype.xsd';
     }
 
 }
