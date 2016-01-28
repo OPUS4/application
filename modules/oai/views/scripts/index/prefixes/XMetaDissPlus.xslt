@@ -22,8 +22,8 @@
  * OPUS is distributed in the hope that it will be useful, but WITHOUT ANY
  * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  * FOR A PARTICULAR PURPOSE. See the GNU General Public License for more
- * details. You should have received a copy of the GNU General Public License 
- * along with OPUS; if not, write to the Free Software Foundation, Inc., 51 
+ * details. You should have received a copy of the GNU General Public License
+ * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
  * @category    Application
@@ -203,10 +203,10 @@
                    <xsl:otherwise>
                      <xsl:value-of select="@Type" />
                        <xsl:text>Other</xsl:text>
-                   </xsl:otherwise>    
-                 </xsl:choose>  
+                   </xsl:otherwise>
+                 </xsl:choose>
             </dc:type>
-            
+
             <!-- dc:identifier -->
             <xsl:apply-templates select="IdentifierUrn" mode="xmetadissplus" />
 
@@ -266,9 +266,9 @@
                            <xsl:text>other</xsl:text>
                        </xsl:when>
                        <xsl:otherwise>
-                           <xsl:text>other</xsl:text> 
-                       </xsl:otherwise>    
-                     </xsl:choose>  
+                           <xsl:text>other</xsl:text>
+                       </xsl:otherwise>
+                     </xsl:choose>
                    </thesis:level>
 
                     <xsl:for-each select="ThesisGrantor">
@@ -333,7 +333,7 @@
             <xsl:value-of select="@Value" />
         </dc:title>
     </xsl:template>
-    
+
     <xsl:template match="TitleSub" mode="xmetadissplus">
         <dcterms:alternative xsi:type="ddb:talternativeISO639-2">
             <xsl:attribute name="lang">
@@ -371,7 +371,7 @@
          </pc:person>
        </dc:creator>
     </xsl:template>
-    
+
     <xsl:template match="@CreatingCorporation" mode="xmetadissplus">
        <dc:creator xsi:type="pc:MetaPers">
          <pc:person>
@@ -382,7 +382,7 @@
          </pc:name>
          </pc:person>
        </dc:creator>
-    </xsl:template>	
+    </xsl:template>
 
     <xsl:template match="@ContributingCorporation" mode="xmetadissplus">
        <dc:creator xsi:type="pc:MetaPers">
@@ -466,7 +466,7 @@
            </pc:person>
        </dc:contributor>
     </xsl:template>
-    
+
     <xsl:template match="PersonEditor" mode="xmetadissplus">
        <dc:contributor xsi:type="pc:Contributor" type="dcterms:ISO3166" thesis:role="editor">
            <pc:person>
@@ -503,7 +503,7 @@
                 <xsl:value-of select="@Address" />
             </cc:address>
         </dc:publisher>
-    </xsl:template>          
+    </xsl:template>
 
     <xsl:template match="IdentifierUrn" mode="xmetadissplus">
         <dc:identifier xsi:type="urn:nbn">
@@ -516,7 +516,7 @@
             <xsl:value-of select="@NameLong" />
         </dc:rights>
     </xsl:template>
-  
+
     <xsl:template match="File" mode="xmetadissplus">
         <ddb:fileProperties ddb:fileName="{@PathName}" ddb:fileSize="{@FileSize}">
             <xsl:attribute name="ddb:fileID">
@@ -541,27 +541,27 @@
         <dc:source xsi:type="ddb:noScheme">
             <xsl:value-of select="@Value" />
             <xsl:if test="../@Volume != ''">
-               <xsl:text>, </xsl:text>
-               <xsl:value-of select="../@Volume" />
+                <xsl:text>, </xsl:text>
+                <xsl:value-of select="../@Volume" />
             </xsl:if>
             <xsl:if test="../@Issue != ''">
-               <xsl:text>,</xsl:text>
-               <xsl:value-of select="../@Issue" />
+                <xsl:text>, </xsl:text>
+                <xsl:value-of select="../@Issue" />
             </xsl:if>
             <xsl:choose>
-               <xsl:when test="../@PageFirst">
-                  <xsl:text>, S. </xsl:text>
-                  <xsl:value-of select="../@PageFirst" />
-                  <xsl:text>-</xsl:text>
-                  <xsl:value-of select="../@PageLast" />
-               </xsl:when>
-               <xsl:otherwise>
-                  <xsl:text>, </xsl:text>
-                  <xsl:value-of select="../@PageNumber" />
-                  <xsl:text> S.</xsl:text>
-               </xsl:otherwise>
+                <xsl:when test="../@PageFirst">
+                    <xsl:text>, S. </xsl:text>
+                    <xsl:value-of select="../@PageFirst" />
+                    <xsl:text>-</xsl:text>
+                    <xsl:value-of select="../@PageLast" />
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>, </xsl:text>
+                    <xsl:value-of select="../@PageNumber" />
+                    <xsl:text> S.</xsl:text>
+                </xsl:otherwise>
             </xsl:choose>
-        </dc:source> 
+        </dc:source>
     </xsl:template>
 
     <xsl:template match="Series" mode="xmetadissplus">
