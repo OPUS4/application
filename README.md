@@ -3,7 +3,7 @@
 OPUS 4 is an open source software under the GNU General Public Licence for the operation of intitutional document
 servers and repositories. OPUS is an acronym for **O**nline **P**ublikationsverbund **U**niversity **S**tuttgart.
 It was originally developed at the university library in Stuttgart at the end of the 90's. OPUS 4 is a complete
-redevelopment that was created in a DFG ([Deutsche Forschungsgemeinschaft][DFG]) project between 2008 and 2010.
+redevelopment that was created as part of a DFG ([Deutsche Forschungsgemeinschaft][DFG]) project between 2008 and 2010.
 Since then the development has been continued at KOBV ([Kooperativer Bibliotheksverbund Berlin-Brandenburg][KOBV])
 mostly.
 
@@ -14,19 +14,17 @@ efforts. The first OPUS 4 version developed at GitHub is 4.5. Starting with this
 using Git, since this will make updates for bug fixes and new features easier. More information can be found online.
 
 [Users][DOC]
-
-: Information for setting up a repository, users and administrators.
+: Information on setting up a repository, for users and administrators.
 
 [Developers][DEVDOC]
-
 : Information for developers.
 
-## Previous (non-Git) Version:
+## Previous (non-GitHub) Version:
 
 The last non-Git release of OPUS 4 is Version 4.4.5 and can be [downloaded][OPUS445] from the
 [OPUS 4 Homepage][OPUS4] as a tarball. The [documentation][OPUS445DOC] for this version can
 be found there as well.
-Version 4.4.5 can be installed without it Git. It is recommended to use the GitHub version of
+Version 4.4.5 can be installed without Git. It is recommended to use the GitHub version of
 OPUS 4 for setting up new repositories. However if you are looking at migrating an existing OPUS 3
 repository to OPUS 4 this version would currently be a necessary step since there is at the moment
 no working migration script for the Git version.
