@@ -13,7 +13,7 @@ In 2015 the development was moved to GitHub in order to better support collabora
 efforts. The first OPUS 4 version developed at GitHub is 4.5. Starting with this version OPUS 4 should be installed
 using Git, since this will make updates for bug fixes and new features easier. More information can be found online.
 
-[Users][DOC]
+[Documentation][DOC]
 : Information on setting up a repository, for users and administrators.
 
 [Developers][DEVDOC]
@@ -26,7 +26,7 @@ The last non-Git release of OPUS 4 is Version 4.4.5 and can be [downloaded][OPUS
 be found there as well.
 Version 4.4.5 can be installed without Git. It is recommended to use the GitHub version of
 OPUS 4 for setting up new repositories. However if you are looking at migrating an existing OPUS 3
-repository to OPUS 4 this version would currently be a necessary step since there is at the moment
+repository to OPUS 4 using this version would currently be a necessary step since there is at the moment
 no working migration script for the Git version.
 
 [OPUS4]: https://opus4.kobv.de
