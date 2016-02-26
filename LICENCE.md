@@ -1,4 +1,4 @@
-Copyright (c) 2008-2015, OPUS 4 development team
+Copyright (c) 2008-2016, OPUS 4 development team
 
 The software OPUS has been originally developed at the University of Stuttgart
 with funding from the German Research Net, the Federal Department of Higher
