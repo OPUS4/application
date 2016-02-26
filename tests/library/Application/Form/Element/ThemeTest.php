@@ -50,8 +50,6 @@ class Application_Form_Element_ThemeTest extends FormElementTestCase {
 
         $this->assertArrayHasKey('opus4', $options);
         $this->assertEquals('opus4', $options['opus4']);
-        $this->assertArrayHasKey('opus4-matheon', $options);
-        $this->assertEquals('opus4-matheon', $options['opus4-matheon']);
         $this->assertArrayHasKey('plain', $options);
         $this->assertEquals('plain', $options['plain']);
     }

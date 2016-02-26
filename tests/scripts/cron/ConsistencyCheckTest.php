@@ -78,9 +78,8 @@ class ConsistencyCheckTest extends CronTestCase {
      * TODO fix for Solr Update
      */
     public function testJobSuccessWithInconsistency() {
-        $indexer = new Opus_SolrSearch_Index_Indexer();
-        $indexer->deleteAllDocs();
-        $indexer->commit();
+        $service = Opus_Search_Service::selectIndexingService( null, 'solr' );
+        $service->removeAllDocumentsFromIndex();
 
         $this->createJob(Opus_Job_Worker_ConsistencyCheck::LABEL);
         $this->executeScript('cron-check-consistency.php');

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE tmx SYSTEM "http://www.gala-global.org/oscarStandards/tmx/tmx14.dtd">
 <tmx version="1.4">
- 
- <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">  
+
+ <header creationtoolversion="1.0.0" datatype="winres" segtype="sentence" adminlang="en-us" srclang="de-de" o-tmf="abc" creationtool="XYZTool">
  </header>
- 
+
    <body>
 
    <tu tuid="all">
@@ -15,7 +15,7 @@
             <seg>Alle Felder (Testdokumenttyp)</seg>
         </tuv>
    </tu>
-   
+
    <tu tuid="article">
         <tuv xml:lang="en">
             <seg>Article</seg>
@@ -159,7 +159,7 @@
             <seg>Bewegte Bilder</seg>
         </tuv>
    </tu>
-   
+
    <tu tuid="other">
         <tuv xml:lang="en">
             <seg>Other</seg>
@@ -168,7 +168,7 @@
             <seg>Sonstiges</seg>
         </tuv>
    </tu>
-   
+
    <tu tuid="periodical">
         <tuv xml:lang="en">
             <seg>Periodical</seg>
@@ -177,7 +177,7 @@
             <seg>Periodikum</seg>
         </tuv>
    </tu>
-   
+
    <tu tuid="periodicalpart">
         <tuv xml:lang="en">
             <seg>Part of Periodical</seg>
@@ -186,7 +186,7 @@
             <seg>Ausgabe (Heft) zu einer Zeitschrift</seg>
         </tuv>
    </tu>
-   
+
    <tu tuid="preprint">
         <tuv xml:lang="en">
             <seg>Preprint</seg>
@@ -241,15 +241,6 @@
         </tuv>
    </tu>
 
-   <tu tuid="preprintmatheon">
-        <tuv xml:lang="en">
-            <seg>Preprint for MATHEON</seg>
-        </tuv>
-        <tuv xml:lang="de">
-            <seg>Preprint für MATHEON</seg>
-        </tuv>
-   </tu>
-
    <tu tuid="talkzib">
         <tuv xml:lang="en">
             <seg>Talk for ZIB</seg>
@@ -268,5 +259,5 @@
         </tuv>
    </tu>
    </body>
-  
+
 </tmx>

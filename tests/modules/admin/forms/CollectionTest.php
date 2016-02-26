@@ -61,7 +61,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $model->setVisible(1);
         $model->setVisiblePublish(1);
         $model->setOaiSubset('TestSubset');
-        $model->setTheme('opus4-matheon');
+        $model->setTheme('plain');
 
         $form->populateFromModel($model);
 
@@ -70,7 +70,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $this->assertEquals(1, $form->getElement('Visible')->getValue());
         $this->assertEquals(1, $form->getElement('VisiblePublish')->getValue());
         $this->assertEquals('TestSubset', $form->getElement('OaiSubset')->getValue());
-        $this->assertEquals('opus4-matheon', $form->getElement('Theme')->getValue());
+        $this->assertEquals('plain', $form->getElement('Theme')->getValue());
     }
 
     public function testPopulateFromModelWithId() {
@@ -92,7 +92,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $form->getElement('Visible')->setValue('1');
         $form->getElement('VisiblePublish')->setValue('1');
         $form->getElement('OaiSubset')->setValue('TestSubset');
-        $form->getElement('Theme')->setValue('opus4-matheon');
+        $form->getElement('Theme')->setValue('plain');
 
         $model = new Opus_Collection();
 
@@ -104,7 +104,7 @@ class Admin_Form_CollectionTest extends ControllerTestCase {
         $this->assertEquals('1', $model->getVisible());
         $this->assertEquals('1', $model->getVisiblePublish());
         $this->assertEquals('TestSubset', $model->getOaiSubset());
-        $this->assertEquals('opus4-matheon', $model->getTheme());
+        $this->assertEquals('plain', $model->getTheme());
     }
 
     public function testValidationSuccess() {

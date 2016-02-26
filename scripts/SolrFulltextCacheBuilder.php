@@ -36,11 +36,9 @@
 require_once dirname(__FILE__) . '/common/bootstrap.php';
 
 /**
- * Indexes all or a range of documents.
- *
- * If all documents are indexed the index is cleared first.
+ * Populates cache for extracted full texts for all or a range of documents.
  */
-class SolrIndexBuilder {
+class SolrFulltextCacheBuilder {
 
     /**
      * Start of document ID range for indexing (first command line parameter).
@@ -53,12 +51,6 @@ class SolrIndexBuilder {
      * @var int
      */
     private $_end = null;
-
-    /**
-     * Flag for deleting all documents from index before indexing.
-     * @var bool
-     */
-    private $_deleteAllDocs = false;
 
     /**
      * Temporary variable for storing sync mode.
@@ -78,7 +70,8 @@ class SolrIndexBuilder {
     private function printHelpMessage($argv) {
         $this->write(
             PHP_EOL .
-            "This program can be used to build up an initial Solr index (e.g., useful when migrating instances)" .
+            "This program can be used to build up the full text cache for OPUS 4 documents. This is useful for testing
+            full text extraction and speeding up subsequent indexing runs." .
             PHP_EOL .
             PHP_EOL .
             "Usage: " . $argv[0] . " [starting with ID] [ending with ID]" . PHP_EOL .
@@ -111,10 +104,6 @@ class SolrIndexBuilder {
             if ($argc >= 3) {
                 $this->_end = $argv[2];
             }
-            if (is_null($this->_start) && is_null($this->_end)) {
-                // TODO gesondertes Argument für Indexdeletion einführen
-                $this->_deleteAllDocs = true;
-            }
         }
     }
 
@@ -130,7 +119,7 @@ class SolrIndexBuilder {
         }
 
         try {
-            $runtime = $this->index($this->_start, $this->_end);
+            $runtime = $this->extract($this->_start, $this->_end);
             echo PHP_EOL . "Operation completed successfully in $runtime seconds." . PHP_EOL;
         }
         catch (Opus_Search_Exception $e) {
@@ -144,22 +133,17 @@ class SolrIndexBuilder {
         }
     }
 
-    private function index($startId, $endId) {
+    private function extract($startId, $endId) {
         $this->forceSyncMode();
 
         $docIds = $this->getDocumentIds($startId, $endId);
 
-        $indexer = Opus_Search_Service::selectIndexingService( 'indexBuilder' );
+        $extractor = Opus_Search_Service::selectIndexingService( 'indexBuilder' );
 
-        if ( !$this->_deleteAllDocs ) {
-            $indexer->removeAllDocumentsFromIndex();
-        }
 
         echo date('Y-m-d H:i:s') . " Start indexing of " . count($docIds) . " documents.\n";
         $numOfDocs = 0;
         $runtime = microtime(true);
-
-        $docs = array();
 
         // measure time for each document
 
@@ -168,27 +152,36 @@ class SolrIndexBuilder {
 
             $doc = new Opus_Document($docId);
 
-            // dirty hack: disable implicit reindexing of documents in case of cache misses
-            $doc->unregisterPlugin('Opus_Document_Plugin_Index');
+            foreach ( $doc->getFile() as $file ) {
+                try {
+                    $extractor->extractDocumentFile( $file, $doc );
+                }
+                catch ( Opus_Search_Exception $e ) {
+                    echo date('Y-m-d H:i:s') . " ERROR: Failed extracting document $docId.\n";
+                    echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
 
-            $docs[] = $doc;
+                }
+                catch ( Opus_Storage_Exception $e ) {
+                    echo date('Y-m-d H:i:s') . " ERROR: Failed extracting unavailable file on document $docId.\n";
+                    echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
+
+                }
+            }
 
             $timeDelta = microtime(true) - $timeStart;
             if ($timeDelta > 30) {
-                echo date('Y-m-d H:i:s') . " WARNING: Indexing document $docId took $timeDelta seconds.\n";
+                echo date('Y-m-d H:i:s') . " WARNING: Extracting document $docId took $timeDelta seconds.\n";
             }
 
             $numOfDocs++;
 
             if ($numOfDocs % 10 == 0) {
-                $this->addDocumentsToIndex( $indexer, $docs );
-                $docs = array();
                 $this->outputProgress($runtime, $numOfDocs);
             }
         }
 
         $runtime = microtime(true) - $runtime;
-        echo PHP_EOL . date('Y-m-d H:i:s') . ' Finished indexing.' . PHP_EOL;
+        echo PHP_EOL . date('Y-m-d H:i:s') . ' Finished extracting.' . PHP_EOL;
         // new search API doesn't track number of indexed files, but issues are kept written to log file
         //echo "\n\nErrors appeared in " . $indexer->getErrorFileCount() . " of " . $indexer->getTotalFileCount()
         //    . " files. Details were written to opus-console.log";
@@ -241,19 +234,6 @@ class SolrIndexBuilder {
     }
 
     private function addDocumentsToIndex($indexer, $docs) {
-        try {
-            $indexer->addDocumentsToIndex( $docs );
-        }
-        catch ( Opus_Search_Exception $e ) {
-            // echo date('Y-m-d H:i:s') . " ERROR: Failed indexing document $docId.\n";
-            echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
-
-        }
-        catch ( Opus_Storage_Exception $e ) {
-            // echo date('Y-m-d H:i:s') . " ERROR: Failed indexing unavailable file on document $docId.\n";
-            echo date('Y-m-d H:i:s') . "        {$e->getMessage()}\n";
-
-        }
     }
 
     private function forceSyncMode() {
@@ -284,5 +264,5 @@ class SolrIndexBuilder {
  */
 global $argc, $argv;
 
-$builder = new SolrIndexBuilder();
+$builder = new SolrFulltextCacheBuilder();
 $builder->run($argc, $argv);
