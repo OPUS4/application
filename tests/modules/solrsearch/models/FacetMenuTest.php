@@ -131,4 +131,10 @@ class Solrsearch_Model_FacetMenuTest extends ControllerTestCase {
         $model = new Solrsearch_Model_FacetMenu();
         $this->assertNull($model->buildFacetArray(array()));
     }
+
+    public function testPrepareViewFacetHideInstitutes()
+    {
+        $this->markTestIncomplete('not implemented');
+    }
+
 }
