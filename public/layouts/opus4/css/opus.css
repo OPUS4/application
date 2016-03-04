@@ -689,7 +689,7 @@ body > #top-header{
 }
 .exceptionMessage,
 .stacktrace pre,
-.request pre{
+.request pre {
         font: 1em "Courier New", Courier, monospace;
 }
 
@@ -1138,7 +1138,7 @@ dl.result_box {
 }
 
 .preserve-spaces {
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: inherit; /* use same font as rest of page */
     white-space: pre-wrap;
     margin: 0 0;
 }
