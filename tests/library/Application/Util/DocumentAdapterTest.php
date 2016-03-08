@@ -236,4 +236,56 @@ class Applicatin_Util_DocumentAdapterTest extends ControllerTestCase {
         $this->assertEmpty($authors);
     }
 
+    public function testGetPublishedDate() {
+        $this->useEnglish();
+        $dates = new Application_Controller_Action_Helper_Dates();
+
+        $doc = $this->createTestDocument();
+
+        $doc->setPublishedDate($dates->getOpusDate('2010/10/19'));
+
+        $docId = $doc->store();
+
+        $adapter = new Application_Util_DocumentAdapter(null, $doc);
+
+        $this->assertEquals('2010', $adapter->getPublishedDate(true));
+        $this->assertEquals('2010/10/19', $adapter->getPublishedDate(false));
+
+        $doc->setPublishedYear(2012);
+
+        $this->assertEquals('2010', $adapter->getPublishedDate(true));
+        $this->assertEquals('2010/10/19', $adapter->getPublishedDate(false)); // PublishedDate preferred
+
+        $doc->setPublishedDate(null);
+
+        $this->assertEquals('2012', $adapter->getPublishedDate(true));
+        $this->assertEquals('2012', $adapter->getPublishedDate(false));
+    }
+
+    public function testGetCompletedDate() {
+        $this->useGerman();
+        $dates = new Application_Controller_Action_Helper_Dates();
+
+        $doc = $this->createTestDocument();
+
+        $doc->setCompletedDate($dates->getOpusDate('19.10.2010'));
+
+        $docId = $doc->store();
+
+        $adapter = new Application_Util_DocumentAdapter(null, $doc);
+
+        $this->assertEquals('2010', $adapter->getCompletedDate(true));
+        $this->assertEquals('19.10.2010', $adapter->getCompletedDate(false));
+
+        $doc->setCompletedYear(2012);
+
+        $this->assertEquals('2010', $adapter->getCompletedDate(true));
+        $this->assertEquals('19.10.2010', $adapter->getCompletedDate(false)); // PublishedDate preferred
+
+        $doc->setCompletedDate(null);
+
+        $this->assertEquals('2012', $adapter->getCompletedDate(true));
+        $this->assertEquals('2012', $adapter->getCompletedDate(false));
+    }
+
 }
