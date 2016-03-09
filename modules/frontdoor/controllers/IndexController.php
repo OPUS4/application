@@ -244,7 +244,7 @@ class Frontdoor_IndexController extends Application_Controller_Action {
     }
 
     /**
-     * Checks existence of language sign for services.xsl
+     * Checks existence of language sign for services.xslt
      * @param $filename
      * @return bool
      */
