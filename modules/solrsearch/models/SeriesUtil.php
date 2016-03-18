@@ -26,66 +26,69 @@
  *
  * @category    Application
  * @package     Module_Solrsearch
- * @author      Sascha Szott <szott@zib.de>
  * @author      Jens Schwidder <schwidder@zib.de>
  * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
 
-class Solrsearch_Model_Series {
+/**
+ */
+class Solrsearch_Model_SeriesUtil extends Application_Model_Abstract
+{
 
-    private $_series;
-
-    public function  __construct($seriesId) {
-        if (is_null($seriesId)) {
-            throw new Solrsearch_Model_Exception('Could not browse series due to missing id parameter.');
-        }
-
-        $s = null;
-        try {
-            $s = new Opus_Series($seriesId);
-        }
-        catch (Opus_Model_NotFoundException $e) {
-            throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' does not exist.");
-        }
-
-        if ($s->getVisible() !== '1') {
-            throw new Solrsearch_Model_Exception("Series with id '" . $seriesId . "' is not visible.");
-        }
-
-        if ($s->getNumOfAssociatedPublishedDocuments() === 0) {
-            throw new Solrsearch_Model_Exception(
-                "Series with id '" . $seriesId . "' does not have any published documents."
-            );
-        }
-        $this->_series = $s;
+    /**
+     * Checks if any series is available for display in browsing.
+     * @return bool Number of displayable series
+     */
+    public function hasDisplayableSeries()
+    {
+        return count($this->getVisibleNonEmptySeriesSortedBySortKey()) > 0;
     }
 
-    public function getId() {
-        return $this->_series->getId();
-    }
-
-    public function getTitle() {
-        return $this->_series->getTitle();
-    }
-
-    public function getInfobox() {
-        return $this->_series->getInfobox();
-    }
-
-    public function getLogoFilename() {
-        $logoDir = APPLICATION_PATH . DIRECTORY_SEPARATOR . 'public' . DIRECTORY_SEPARATOR . 'series_logos'
-            . DIRECTORY_SEPARATOR . $this->_series->getId();
-        if (is_readable($logoDir)) {
-            $iterator = new DirectoryIterator($logoDir);
-            foreach ($iterator as $fileinfo) {
-                if ($fileinfo->isFile()) {
-                    return $fileinfo->getFilename();
-                }
+    /**
+     * Return all non-empty visible Opus_Series objects in sorted order.
+     *
+     * @return array an array of Opus_Series objects
+     */
+    public function getVisibleNonEmptySeriesSortedBySortKey()
+    {
+        $visibleSeries = array();
+        foreach (Opus_Series::getAllSortedBySortKey() as $series)
+        {
+            if ($series->getVisible() == '1' && $series->getNumOfAssociatedPublishedDocuments() > 0)
+            {
+                array_push($visibleSeries, $series);
             }
         }
-        return null;
+
+        return $visibleSeries;
+    }
+
+    /**
+     * @return array
+     */
+    public function getVisibleSeries()
+    {
+        $visibleSeries = $this->getVisibleNonEmptySeriesSortedBySortKey();
+
+        $allSeries = array();
+
+        foreach ($visibleSeries as $series)
+        {
+            array_push($allSeries, array('id' => $series->getId(), 'title' => $series->getTitle()));
+        }
+
+        $config = $this->getConfig();
+
+        if (isset($config->browsing->series->sortByTitle) && boolval($config->browsing->series->sortByTitle))
+        {
+            usort($allSeries, function ($value1, $value2) {
+                    return strnatcmp($value1['title'], $value2['title']);
+                }
+            );
+        }
+
+        return $allSeries;
     }
 
 }
-
