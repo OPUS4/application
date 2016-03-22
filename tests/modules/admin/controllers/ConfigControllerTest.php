@@ -1,5 +1,5 @@
 <?php
-/**
+/*
  * This file is part of OPUS. The software OPUS has been originally developed
  * at the University of Stuttgart with funding from the German Research Net,
  * the Federal Department of Higher Education and Research and the Ministry
@@ -24,48 +24,33 @@
  * along with OPUS; if not, write to the Free Software Foundation, Inc., 51
  * Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  *
- * @category    Application
- * @package     Module_Admin
+ * @category    Unit Test
  * @author      Jens Schwidder <schwidder@zib.de>
- * @copyright   Copyright (c) 2008-2015, OPUS 4 development team
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
  */
-class Admin_ConfigController extends Application_Controller_Action {
 
-    public function indexAction() {
-        $form = new Admin_Form_Configuration();
+/**
+ * Basic unit tests for the Admin_AccountController class.
+ */
+class Admin_ConfigControllerTest extends ControllerTestCase {
 
-        if ($this->getRequest()->isPost()) {
-            $data = $this->getRequest()->getPost();
+    /**
+     * Tests routing to and successfull execution of 'index' action.
+     */
+    public function testIndexAction() {
+        $this->dispatch('/admin/config');
+        $this->assertResponseCode(200);
+    }
 
-            $form->populate($data);
+    public function testIndexActionCancel() {
+        $this->getRequest()->setMethod('POST')->setPost(array(
+            'Cancel' => 'Cancel'
+        ));
 
-            $result = $form->processPost($data, $data);
-
-            switch ($result) {
-                case Admin_Form_Configuration::RESULT_SAVE:
-                    if ($form->isValid($data)) {
-                        $config = new Zend_Config(array(), true);
-                        $form->updateModel($config);
-                        Application_Configuration::save($config);
-                    }
-                    else {
-                        break;
-                    }
-                case Admin_Form_Configuration::RESULT_CANCEL:
-                    $this->_redirectTo('setup', null, 'index', 'admin');
-                    break;
-                default:
-                    break;
-            }
-        }
-        else {
-            $form->populateFromModel($this->getConfig());
-        }
-
-        $this->_helper->viewRenderer->setNoRender(true);
-
-        echo $form;
+        $this->dispatch('/admin/config');
+        $this->assertRedirectTo('/admin/index/setup');
     }
 
 }
+
