@@ -100,10 +100,10 @@
 
     <tu tuid="admin_config_seriesSortByTitle_description">
       <tuv xml:lang="en">
-        <seg>Activates alphabetical sorting of series in browsing list.</seg>
+        <seg>Activates alphabetical sorting of series in browsing list and publish form.</seg>
       </tuv>
       <tuv xml:lang="de">
-        <seg>Aktiviert die alphabetische Sortierung der Schriftenreihen beim Browsing.</seg>
+        <seg>Aktiviert die alphabetische Sortierung der Schriftenreihen beim Browsing und im Publish-Formular.</seg>
       </tuv>
     </tu>
 
