@@ -5,7 +5,7 @@
     "section": "general"
   },
   "maxSearchResults": {
-    "key": "searchengine.solr.numberOfDefaultSearchResults",
+    "key": "searchengine.solr.parameterDefaults.rows",
     "type": "number",
     "section": "searchopt",
     "options": {
