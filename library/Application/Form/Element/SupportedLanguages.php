@@ -33,8 +33,6 @@
 
 /**
  * Class Application_Form_Element_SupportedLanguages
- *
- * TODO reduce possible error messages for supportedLanguages to one (notEmpty OR notInArray)
  */
 class Application_Form_Element_SupportedLanguages extends Application_Form_Element_MultiCheckbox {
 
@@ -50,8 +48,9 @@ class Application_Form_Element_SupportedLanguages extends Application_Form_Eleme
 
         $this->setRequired(true);
         $this->setAutoInsertNotEmptyValidator(false);
-        $this->setRegisterInArrayValidator(false);
 
+        // custom error message
+        $this->setRegisterInArrayValidator(false);
         $options = $this->getMultiOptions();
         $this->addValidator(
             'InArray',
@@ -64,7 +63,7 @@ class Application_Form_Element_SupportedLanguages extends Application_Form_Eleme
             )
         );
 
-        $this->setAllowEmpty(false);
+        $this->setAllowEmpty(false); // there must be a value
     }
 
     /**
@@ -87,6 +86,8 @@ class Application_Form_Element_SupportedLanguages extends Application_Form_Eleme
     }
 
     /**
+     * Returns available language options determined by translation resources.
+     *
      * @return array
      * @throws Zend_Exception
      */
@@ -107,6 +108,7 @@ class Application_Form_Element_SupportedLanguages extends Application_Form_Eleme
     }
 
     /**
+     * Sets value from comma separated values or array.
      * @param mixed $value
      */
     public function setValue($value) {
