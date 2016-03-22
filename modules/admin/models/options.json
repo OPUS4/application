@@ -9,7 +9,8 @@
     "type": "number",
     "section": "searchopt",
     "options": {
-      "min": 10
+      "min": 10,
+      "required": "true"
     }
   },
   "seriesSortByTitle": {

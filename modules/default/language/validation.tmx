@@ -81,10 +81,10 @@
 
     <tu tuid="validation_error_number_tooSmall">
         <tuv xml:lang="en">
-            <seg>Please provide a number %min% or higher.</seg>
+            <seg>Please provide a number higher than %min%.</seg>
         </tuv>
         <tuv xml:lang="de">
-            <seg>Bitte geben Sie eine positive Zahl, die größer oder gleich %min% ist.</seg>
+            <seg>Bitte geben Sie eine positive Zahl, die größer als %min% ist.</seg>
         </tuv>
     </tu>
 
