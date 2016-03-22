@@ -1,0 +1,22 @@
+{
+  "supportedLanguages": {
+    "key": "supportedLanguages",
+    "type": "supportedLanguages",
+    "section": "general"
+  },
+  "maxSearchResults": {
+    "key": "searchengine.solr.numberOfDefaultSearchResults",
+    "type": "number",
+    "section": "searchopt",
+    "options": {
+      "min": 10
+    }
+  },
+  "seriesSortByTitle": {
+    "key": "browsing.series.sortByTitle",
+    "type": "checkbox",
+    "section": "browsing"
+  }
+}
+
+
