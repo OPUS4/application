@@ -48,7 +48,7 @@ class Application_Form_Element_NumberTest extends FormElementTestCase {
 
         $this->assertTrue($element->getValidator('Int') !== false, 'Validator Int is missing.');
         $this->assertTrue($element->getValidator('GreaterThan') !== false, 'Validator GreaterThan is missing.');
-        $this->assertEquals(0, $element->getValidator('GreaterThan')->getMin());
+        $this->assertEquals(-1, $element->getValidator('GreaterThan')->getMin());
     }
 
     public function testDefaultSize() {
