@@ -55,7 +55,7 @@
                 <?php if ($this->searchPosition == $this->firstEntry) : ?>
                     <div title="<?= $this->translate('pagination_previous_entry') ?>"></div>
                 <?php else: ?>
-                    <a title="<?= $this->translate('pagination_previous_entry') ?>" href="<?= $this->url(array('start' => $this->previousEntry, 'docId' => null)); ?>"></a>
+                    <a title="<?= $this->translate('pagination_previous_entry') ?>" href="<?= $this->url(array('start' => $this->previousEntry, 'nav' => 'prev', 'docId' => null)); ?>"></a>
                 <?php endif ?>
             </li>
 
@@ -63,7 +63,7 @@
                 <?php if ($this->searchPosition == $this->lastEntry) : ?>
                     <div title="<?= $this->translate('pagination_next_entry') ?>"></div>
                 <?php else: ?>
-                    <a title="<?= $this->translate('pagination_next_entry') ?>" href="<?= $this->url(array('start' => $this->nextEntry, 'docId' => null)); ?>"></a>
+                    <a title="<?= $this->translate('pagination_next_entry') ?>" href="<?= $this->url(array('start' => $this->nextEntry, 'nav' => 'next', 'docId' => null)); ?>"></a>
                 <?php endif ?>
             </li>
         </ul>
@@ -76,6 +76,7 @@
            'action' => 'search',
            'rows' => $this->listRows,
            'start' => floor(($this->searchPosition) / $this->listRows) * $this->listRows,
+           'nav' => null,
            'docId' => null
        ))
        ?>"><?= $this->translate('back_to_result_list') ?></a>

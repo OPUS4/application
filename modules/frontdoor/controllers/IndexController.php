@@ -64,13 +64,17 @@ class Frontdoor_IndexController extends Application_Controller_Action {
 
             $this->view->listRows = $listRows;
 
-            $request->setParam('rows', '1'); // make sure only 1 entry is diplayed
+            $request->setParam('rows', '1'); // make sure only 1 entry is displayed
             $query = Application_Search_Navigation::getQueryUrl($request, $this->getLogger());
             $searcher = new Opus_SolrSearch_Searcher();
             $resultList = $searcher->search($query);
             $queryResult = $resultList->getResults();
             if (is_array($queryResult) && !empty($queryResult) && $queryResult[0] instanceof Opus_Search_Result_Match) {
                 $resultDocId = $queryResult[0]->getId();
+
+                if (!$request->has('docId')) {
+                    $this->redirect($this->view->url(array('docId' => $resultDocId)));
+                }
                 if (!empty($docId)) {
                     if ($resultDocId != $docId) {
                         $this->view->messages = array('notice' => $this->view->translate('frontdoor_pagination_list_changed'));
@@ -78,19 +82,19 @@ class Frontdoor_IndexController extends Application_Controller_Action {
                 } else {
                     $docId = $resultDocId;
                 }
-                $this->view->paginate = true;
-                $numHits = $resultList->getNumberOfHits();
-                if ($request->getParam('searchtype') == 'latest') {
-                    $this->view->numOfHits = $numHits < $listRows ? $numHits : $listRows;
-                } else {
-                    $this->view->numOfHits = $numHits;
-                }
-                $this->view->searchPosition = $start;
-                $this->view->firstEntry = 0;
-                $this->view->lastEntry = $this->view->numOfHits - 1;
-                $this->view->previousEntry = ($this->view->searchPosition - 1) < 0 ? 0 : $this->view->searchPosition - 1;
-                $this->view->nextEntry = ($this->view->searchPosition + 1) < $this->view->numOfHits - 1 ? $this->view->searchPosition + 1 : $this->view->numOfHits - 1;
             }
+            $this->view->paginate = true;
+            $numHits = $resultList->getNumberOfHits();
+            if ($request->getParam('searchtype') == 'latest') {
+                $this->view->numOfHits = $numHits < $listRows ? $numHits : $listRows;
+            } else {
+                $this->view->numOfHits = $numHits;
+            }
+            $this->view->searchPosition = $start;
+            $this->view->firstEntry = 0;
+            $this->view->lastEntry = $this->view->numOfHits - 1;
+            $this->view->previousEntry = ($this->view->searchPosition - 1) < 0 ? 0 : $this->view->searchPosition - 1;
+            $this->view->nextEntry = ($this->view->searchPosition + 1) < $this->view->numOfHits - 1 ? $this->view->searchPosition + 1 : $this->view->numOfHits - 1;
         }
 
         if ($docId == '') {
