@@ -55,10 +55,10 @@
 
     <?PHP foreach ($this->content as $doctype => $validation) : ?>
         <tr id="<?= $doctype ?>" class="<?= ($validation) ? 'admin_doctype' : 'admin_doctype_fail' ?>" >
-            <th class="<?= in_array($doctype, $this->activeDoctypes) ? '' : 'invisible' ?>"><?= $this->translate($doctype) ?></th>
-            <td class="<?= in_array($doctype, $this->activeDoctypes) ? '' : 'invisible' ?>"><?= $doctype ?></td>
-            <td class="<?= in_array($doctype, $this->activeDoctypes) ? '' : 'invisible' ?>"
-                ><?= in_array($doctype, $this->activeDoctypes) ? $this->translate('admin_doctype_active') :
+            <th class="<?= array_key_exists($doctype, $this->activeDoctypes) ? '' : 'invisible' ?>"><?= $this->translate($doctype) ?></th>
+            <td class="<?= array_key_exists($doctype, $this->activeDoctypes) ? '' : 'invisible' ?>"><?= $doctype ?></td>
+            <td class="<?= array_key_exists($doctype, $this->activeDoctypes) ? '' : 'invisible' ?>"
+                ><?= array_key_exists($doctype, $this->activeDoctypes) ? $this->translate('admin_doctype_active') :
                     $this->translate('admin_doctype_inactive') ?></td>
             <td><a href="<?= 'doctype/show/doctype/' . $doctype?>"><?= ($validation) ? '' :
                         $this->translate('admin_doctype_errorMsg')?></a></td>

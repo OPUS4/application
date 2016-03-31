@@ -201,4 +201,10 @@ setup.translation.modules.allowed = default,publish
 
 [testing : production]
 
+; Additional document types for testing
+publish.path.documenttypes[] = APPLICATION_PATH "/application/configs/doctypes"
+publish.path.documenttypes[] = APPLICATION_PATH "/tests/resources/doctypes"
+publish.path.documenttemplates[] = APPLICATION_PATH "/application/configs/doctypes_templates"
+publish.path.documenttemplates[] = APPLICATION_PATH "/tests/resources/doctypes_templates"
+
 [development : production]

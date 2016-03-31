@@ -81,6 +81,11 @@ log.untranslated = true
 security = 0
 sql.schema.path =
 
+publish.path.documenttypes[] = APPLICATION_PATH "/application/configs/doctypes"
+publish.path.documenttypes[] = APPLICATION_PATH "/tests/resources/doctypes"
+publish.path.documenttemplates[] = APPLICATION_PATH "/application/configs/doctypes_templates"
+publish.path.documenttemplates[] = APPLICATION_PATH "/tests/resources/doctypes_templates"
+
 [staging : production]
 
 [development : production]

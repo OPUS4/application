@@ -593,19 +593,6 @@ class Publish_FormController extends Application_Controller_Action {
     }
 
     private function renderDocumenttypeForm() {
-        $config = $this->getConfig();
-
-        if (!isset($config->publish->path->documenttemplates)) {
-            throw new Application_Exception('invalid configuration: publish.path.documenttemplates is not defined');
-        }
-
-        $path = $config->publish->path->documenttemplates;
-        if (!is_dir($path)) {
-            throw new Application_Exception(
-                'invalid configuration: publish.path.documenttemplates does not refer to a directory'
-            );
-        }
-
         $docTypeHelper = Zend_Controller_Action_HelperBroker::getStaticHelper('DocumentTypes');
         $templateName = $docTypeHelper->getTemplateName($this->session->documentType);
 
@@ -615,15 +602,18 @@ class Publish_FormController extends Application_Controller_Action {
             );
         }
 
-        $templateFileName = $path . DIRECTORY_SEPARATOR . $templateName . '.phtml';
-        if (!is_readable($templateFileName)) {
+        $templateFileName = $docTypeHelper->getTemplatePath($templateName);
+
+        $file = new SplFileInfo($templateFileName);
+
+        if (!$file->isReadable()) {
             throw new Application_Exception(
                 'invalid configuration: template file ' . $templateName . '.phtml is not readable or does not exist'
             );
         }
 
-        $this->view->setScriptPath($path);
-        $this->renderScript($templateName . '.phtml');
+        $this->view->setScriptPath($file->getPath());
+        $this->renderScript($file->getBasename());
     }
 
 }

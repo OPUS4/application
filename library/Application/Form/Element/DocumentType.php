@@ -49,7 +49,7 @@ class Application_Form_Element_DocumentType extends Application_Form_Element_Sel
         $options = $docTypeHelper->getDocumentTypes();
 
         foreach ($options as $index => $type) {
-            $this->addMultiOption($index, $type);
+            $this->addMultiOption($index, $index);
         }
 
         $this->setDisableTranslator(true); // document types already translated after addMultiOption

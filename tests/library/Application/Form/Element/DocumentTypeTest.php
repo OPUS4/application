@@ -50,7 +50,7 @@ class Application_Form_Element_DocumentTypeTest extends FormElementTestCase {
         $this->assertEquals(count($types), count($element->getMultiOptions()));
 
         foreach ($element->getMultiOptions() as $typeId => $label) {
-            $this->assertContains($typeId, $types);
+            $this->assertArrayHasKey($typeId, $types);
         }
     }
 

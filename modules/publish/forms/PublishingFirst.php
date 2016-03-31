@@ -48,7 +48,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      */
     public $enableUpload = false;
 
-    public function __construct() {        
+    public function __construct() {
         parent::__construct();
     }
 
@@ -78,22 +78,22 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         parent::init();
 
         $this->setDisableTranslator(true);
-        
+
         //create and add document type
         $doctypes = $this->_createDocumentTypeField();
-        $this->addElement($doctypes);        
+        $this->addElement($doctypes);
 
         //create and add file upload
         $this->enableUpload = ($this->_config->form->first->enable_upload == 1);
         if ($this->enableUpload) {
-            $fileupload = $this->_createFileuploadField();            
-            $this->addDisplayGroup($fileupload, 'documentUpload');            
+            $fileupload = $this->_createFileuploadField();
+            $this->addDisplayGroup($fileupload, 'documentUpload');
         }
 
         //create and add bibliographie
         $bibliographie = $this->_createBibliographyField();
         if (!is_null($bibliographie)) {
-            $this->addElement($bibliographie);            
+            $this->addElement($bibliographie);
         }
 
         //create and add rights checkbox
@@ -104,7 +104,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
         // TODO can be removed?
         //$this->addSubmitButton('Send', 'send');
-        
+
         $this->setAttrib('enctype', Zend_Form::ENCTYPE_MULTIPART);
         $this->setViewValues();
     }
@@ -113,23 +113,23 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      * Method shows the field for document types by looking in config file
      * shows selection: >1 Options
      * shows text field: =1 Option
-     * 
-     * @return <Zend_Element> 
+     *
+     * @return <Zend_Element>
      */
     private function _createDocumentTypeField() {
         $optionsSorted = array();
-        foreach ($this->_documentTypesHelper->getDocumentTypes() as $value) {
+        foreach ($this->_documentTypesHelper->getDocumentTypes() as $value => $path) {
             $optionsSorted[$value] = $this->view->translate($value);
-        }        
+        }
         asort($optionsSorted);
 
-        $doctypes = $this->createElement('select', 'documentType');        
+        $doctypes = $this->createElement('select', 'documentType');
         $doctypes->setDisableTranslator(true)
                 ->setLabel('selecttype')
                 ->setMultiOptions(
                     array_merge(array('' => $this->view->translate('choose_valid_doctype')), $optionsSorted)
                 )
-                ->setRequired(true)                
+                ->setRequired(true)
                 ->setErrorMessages(array($this->view->translate('publish_error_missing_doctype')));
 
         return $doctypes;
@@ -137,19 +137,19 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
 
     /**
      * Method shows the fields for file uploads by looking in config file
-     * @return <Zend_Element> 
+     * @return <Zend_Element>
      */
     private function _createFileuploadField() {
         // get path to store files
         $tempPath = $this->_config->form->first->temp;
         if (true === empty($tempPath)) {
-            $tempPath = APPLICATION_PATH . '/workspace/tmp/'; 
+            $tempPath = APPLICATION_PATH . '/workspace/tmp/';
         }
 
         // get allowed filetypes
         $filetypes = $this->_config->publish->filetypes->allowed;
         if (true === empty($filetypes)) {
-            $filetypes = 'pdf,txt,html,htm'; 
+            $filetypes = 'pdf,txt,html,htm';
         }
 
         //get allowed file size
@@ -161,7 +161,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         // Upload-fields required to enter second stage
         $requireUpload = $this->_config->form->first->require_upload;
         if (true === empty($requireUpload)) {
-            $requireUpload = 0; 
+            $requireUpload = 0;
         }
 
         //file upload field(s)
@@ -172,7 +172,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
                 ->setDestination($tempPath)
                 ->addValidator('Size', false, $maxFileSize)     // limit to value given in application.ini
                 ->setMaxFileSize($maxFileSize)
-                ->addValidator('Extension', false, $filetypes)  // allowed filetypes by extension                
+                ->addValidator('Extension', false, $filetypes)  // allowed filetypes by extension
                 ->setValueDisabled(true)
                 ->setAttrib('enctype', 'multipart/form-data');
 
@@ -184,14 +184,14 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
         else {
             $fileupload->setRequired(false);
         }
-        
+
         $this->addElement($fileupload);
 
         $this->addSubmitButton('addAnotherFile', 'addAnotherFile');
-        
+
         $comment = $this->createElement('textarea', 'uploadComment');
         $comment->setDisableTranslator(true);
-        $comment->setLabel('uploadComment');        
+        $comment->setLabel('uploadComment');
         $this->addElement($comment);
 
         $group = array($fileupload->getName(), 'addAnotherFile', $comment->getName());
@@ -216,7 +216,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
             $this->bibliographie = 1;
             $bibliographie = $this->createElement('checkbox', 'bibliographie');
             $bibliographie->setDisableTranslator(true);
-            $bibliographie->setLabel('bibliographie');            
+            $bibliographie->setLabel('bibliographie');
         }
 
         return $bibliographie;
@@ -248,10 +248,7 @@ class Publish_Form_PublishingFirst extends Publish_Form_PublishingAbstract {
      * Method sets the different variables and arrays for the view and the templates in the first form
      */
     public function setViewValues() {
-        // TODO unused variable?
-        $errors = $this->getMessages();
-        
-        foreach ($this->getElements() AS $currentElement => $value) {            
+        foreach ($this->getElements() AS $currentElement => $value) {
             $this->view->$currentElement = $this->getElementAttributes($currentElement);
         }
 
