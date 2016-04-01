@@ -71,17 +71,18 @@ class Frontdoor_IndexController extends Application_Controller_Action {
             $queryResult = $resultList->getResults();
             if (is_array($queryResult) && !empty($queryResult) && $queryResult[0] instanceof Opus_Search_Result_Match) {
                 $resultDocId = $queryResult[0]->getId();
-
-                if (!$request->has('docId')) {
-                    $this->redirect($this->view->url(array('docId' => $resultDocId)));
-                }
-                if (!empty($docId)) {
-                    if ($resultDocId != $docId) {
-                        $this->view->messages = array('notice' => $this->view->translate('frontdoor_pagination_list_changed'));
+                $docIdDontMatch = !empty($docId) && $resultDocId != $docId;
+                if (!$request->has('docId') || $docIdDontMatch) {
+                    if ($docIdDontMatch) {
+                        $this->_helper->flashMessenger(array('notice' => $this->view->translate('frontdoor_pagination_list_changed')));
                     }
-                } else {
-                    $docId = $resultDocId;
+                    $this->redirect($this->view->url(array('docId' => $resultDocId)), array('prependBase' => false));
                 }
+                $docId = $resultDocId;
+            }
+            $messages = $this->_helper->flashMessenger->getMessages();
+            if (!empty($messages)) {
+                $this->view->messages = $messages[0];
             }
             $this->view->paginate = true;
             $numHits = $resultList->getNumberOfHits();
