@@ -28,9 +28,9 @@
  * @category    Application
  * @package     Module_Oai
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 -->
 
@@ -44,7 +44,9 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
                 xmlns:dc="http://purl.org/dc/elements/1.1/"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:php="http://php.net/xsl"
+                exclude-result-prefixes="php">
 
     <xsl:output method="xml" indent="yes" />
 
@@ -140,7 +142,7 @@
     <xsl:template match="TitleMain" mode="oai_dc">
         <dc:title>
             <xsl:attribute name="xml:lang">
-                <xsl:value-of select="@Language" />
+                <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language, 'part1')" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
             <xsl:if test="$oai_set='openaire' and ../TitleSub/@Value != ''">
@@ -184,7 +186,7 @@
         <dc:subject>
             <xsl:if test="@language != ''">
                 <xsl:attribute name="xml:lang">
-                    <xsl:value-of select="@Language" />
+                    <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language, 'part1')" />
                 </xsl:attribute>
             </xsl:if>
             <xsl:value-of select="@Value" />
@@ -200,7 +202,7 @@
     <xsl:template match="TitleAbstract" mode="oai_dc">
         <dc:description>
             <xsl:attribute name="xml:lang">
-                <xsl:value-of select="@Language" />
+                <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language, 'part1')" />
             </xsl:attribute>
             <xsl:value-of select="@Value" />
         </dc:description>
@@ -357,7 +359,7 @@
         <xsl:if test="$oai_set='openaire'">
             <dc:source>
                 <xsl:attribute name="xml:lang">
-                    <xsl:value-of select="@Language" />
+                    <xsl:value-of select="php:functionString('Oai_Model_Language::getLanguageCode', @Language, 'part1')" />
                 </xsl:attribute>
                 <xsl:value-of select="@Value" />
             </dc:source>
