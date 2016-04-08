@@ -1,28 +1,26 @@
 AllowEncodedSlashes On
 
-Alias /opus4 "/var/local/opus4/opus4/public"
+Alias /OPUS_URL_BASE "/BASEDIR/public"
 
-<Directory "/var/local/opus4/opus4/public">
-    Options FollowSymLinks
-    AllowOverride All
-    Order deny,allow
-    Deny from all
-    Allow from all
+<Directory "/BASEDIR/public">
+	Options FollowSymLinks
+	AllowOverride All
+	Require all granted
 
     # Configure environment for application (testing, production)
     # The default is "production" if APPLICATION_ENV is not configured here.
     # SetEnv APPLICATION_ENV testing
 
     # Configure on rewriting. Note that the rewrite base has to be adjusted to the base url of the application.
-    # Replace <template> with correct path e.g. /MyProject/public/
+    # Replace OPUS_URL_BASE with correct path e.g. /opus4-myrepo
     RewriteEngine on
-    RewriteBase <template>
+    RewriteBase /OPUS_URL_BASE
 
     # Rewrite rule for file delivery
     RewriteRule ^files/(\d+)/(.*)$ "frontdoor/deliver/index/docId/$1/file/$2" [L,R]
 
     # Rewrite rule to remove index.php in request URL
-    RewriteRule ^index.php/ <template> [L]
+    RewriteRule ^index.php/ /OPUS_URL_BASE [L]
 
     # Rewrite rule for unknown file icons in the frontdoor
     RewriteCond %{REQUEST_URI} layouts/[^/]*/img/filetype/
@@ -30,7 +28,7 @@ Alias /opus4 "/var/local/opus4/opus4/public"
     RewriteRule ^layouts/([^/]+)/img/filetype/.*$ layouts/$1/img/filetype/application_octet-stream.png [L,R=301]
 
     # Rewrite rule to prevent access to common.phtml
-    RewriteRule ^layouts/[^/]+/common.phtml$ <template> [L]
+    RewriteRule ^layouts/[^/]+/common.phtml$ /OPUS_URL_BASE [L]
 
     # Rewrite rule for the delivery of static resources
     RewriteCond %{REQUEST_FILENAME} -s [OR]
@@ -50,7 +48,7 @@ Alias /opus4 "/var/local/opus4/opus4/public"
     php_flag short_open_tag on
 
     # Setting cookie options
-    php_value session.cookie_path    <template>
+    php_value session.cookie_path    /OPUS_URL_BASE
 
     # On Debian/Ubuntu, prevent PHP from deleting the cookies
     #Enable for UBUNTU/DEBIAN:# php_value session.gc_probability 0
@@ -58,7 +56,7 @@ Alias /opus4 "/var/local/opus4/opus4/public"
 </Directory>
 
 <IfModule mod_rewrite.c>
-  RewriteEngine on
-  RewriteLog /var/local/opus4/opus4/workspace/log/rewrite.log
-  RewriteLogLevel 1
+	RewriteEngine on
+	ErrorLog /BASEDIR/workspace/log/error.log
+	LogLevel error rewrite:trace1
 </IfModule>
