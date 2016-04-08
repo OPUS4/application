@@ -12,9 +12,8 @@
 # GNU General Public License for more details.
 #
 # @author      Thoralf Klein <thoralf.klein@zib.de>
-# @copyright   Copyright (c) 2011, OPUS 4 development team
+# @copyright   Copyright (c) 2011-2016, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
-# @version     $Id: install.sh 8791 2011-08-03 11:34:33Z tklein $
 
 set -e
 
