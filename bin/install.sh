@@ -12,16 +12,25 @@
 # GNU General Public License for more details.
 #
 # @author      Sascha Szott <szott@zib.de>
-# @copyright   Copyright (c) 2010-2011, OPUS 4 development team
+# @author      Jens Schwidder <schwidder@zib.de>
+# @copyright   Copyright (c) 2010-2016, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
-# @version     $Id$
+
+#
+# TODO more output to verify installation process
+# TODO remmove the need to enter leading '/' for base url
+# TODO add more explanatory output
+# TODO fix solr setup
+#
 
 set -e
 
 # START USER-CONFIGURATION
 
-BASEDIR='/var/local/opus4'
-SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/5.2.1/solr-5.2.1.tgz'
+MYSQL_CLIENT='/usr/bin/mysql'
+
+APACHE_CONF='test.conf'
+OPUS_CONF='configtest.ini'
 
 # END OF USER-CONFIGURATION
 
@@ -29,289 +38,234 @@ SCRIPT_NAME="`basename "$0"`"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
 SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
 
+BASEDIR="`dirname "$SCRIPT_PATH"`"
+
 # check input parameter
-if [ $# -lt 1 ]
+if [ $# -eq 1 ]
 then
-  echo "Missing Argument: use $SCRIPT_NAME {ubuntu,suse}"
-  echo "Installation aborted."
-  exit 1
-fi
-
-if [ "$1" = ubuntu ] || [ "$1" = suse ]
-then
-  OS="$1"
+    # check if selected OS is supported
+    if [ "$1" = ubuntu ] || [ "$1" = suse ]
+    then
+      OS="$1"
+    else
+      echo "Invalid Argument $1 : use $SCRIPT_NAME {ubuntu,suse}"
+      echo "Installation aborted."
+      exit 1
+    fi
 else
-  echo "Invalid Argument $1 : use $SCRIPT_NAME {ubuntu,suse}"
-  echo "Installation aborted."
-  exit 1
-fi
-
-MYSQL_CLIENT='/usr/bin/mysql'
-
-# including installer components
-if [ -f "$SCRIPT_PATH/installer.includes" ]; then
-    . "$SCRIPT_PATH/installer.includes"
+    OS="ubuntu"
 fi
 
 cd "$BASEDIR"
 
+cat <<LimitString
 
-# install dependencies
-"$SCRIPT_PATH/install-composer.sh" "$BASEDIR/opus4"
+OPUS 4 Installation
+===================
 
+This script will ask you a number of questions in order to setup the following:
 
-# create .htaccess
-[[ -z $OPUS_URL_BASE ]] && OPUS_URL_BASE='/opus4'
-sed -e "s!<template>!$OPUS_URL_BASE!" opus4/public/htaccess-template > opus4/public/.htaccess
-if [ "$OS" = ubuntu ]
+- Apache2 site configuration
+- MySQL database schema
+- Solr index
+
+LimitString
+
+# Ask for base Url for new OPUS 4 instance
+[[ -z $OPUS_URL_BASE ]] && read -p "Base URL for OPUS [/opus4]: " OPUS_URL_BASE
+
+OPUS_URL_BASE="${OPUS_URL_BASE:-/opus4}"
+
+# Add leading '/' if missing
+if [[ $OPUS_URL_BASE != /* ]] ;
 then
-  sed -i -e 's!#Enable for UBUNTU/DEBIAN:# !!' opus4/public/.htaccess
+   OPUS_URL_BASE="/$OPUS_URL_BASE"
 fi
 
-# prepare apache config
-sed -e "s!/OPUS_URL_BASE!/$OPUS_URL_BASE!g; s!/BASEDIR/!/$BASEDIR/!; s!//*!/!g" "$BASEDIR/opus4/apacheconf/apache.conf.template" > "$BASEDIR/opus4/apacheconf/apache.conf"
+#
+# Install Composer and dependencies
+#
 
-# promt for username, if required
-echo "OPUS requires a dedicated system account under which Solr will be running."
-echo "In order to create this account, you will be prompted for some information."
+echo
+echo "Installing Composer and dependencies ..."
+echo
 
-while [ -z "$OPUS_USER_NAME" ]; do
-	[[ -z $OPUS_USER_NAME ]] && read -p "System Account Name [opus4]: " OPUS_USER_NAME
-	if [ -z "$OPUS_USER_NAME" ]; then
-	  OPUS_USER_NAME='opus4'
-	fi
-	OPUS_USER_NAME_ESC=`echo "$OPUS_USER_NAME" | sed 's/\!/\\\!/g'`
+"$SCRIPT_PATH/install-composer.sh" "$BASEDIR"
 
-	if getent passwd "$OPUS_USER_NAME" &>/dev/null; then
-		echo "Selected user account exists already."
-		read -p "Use it anyway? [N] " choice
-		case "${choice,,}" in
-			"y"|"yes"|"j"|"ja")
-				CREATE_OPUS_USER=N
-				;;
-			*)
-				OPUS_USER_NAME=
-		esac
-	fi
+#
+# Prepare Apache2 configuration
+#
+
+echo
+echo "Creating Apache2 site configuration ..."
+echo
+
+"$SCRIPT_PATH/install-apache.sh" "$OPUS_URL_BASE" "apache24.conf.template" "$APACHE_CONF" "$OS"
+
+#
+# Prompt for database parameters
+#
+# TODO Support using existing database
+# TODO Support using existing users
+#
+
+[[ -z $DBNAME ]] && read -p "New OPUS Database Name [opusdb]: "           DBNAME
+[[ -z $DB_ADMIN ]] && read -p "New OPUS Database Admin Name [opus4admin]: " DB_ADMIN
+
+while [[ -z $DB_ADMIN_PASSWORD || "$DB_ADMIN_PASSWORD" != "$DB_ADMIN_PASSWORD_VERIFY" ]] ;
+do
+  read -p "New OPUS Database Admin Password: " -s       DB_ADMIN_PASSWORD
+  echo
+  read -p "New OPUS Database Admin Password again: " -s DB_ADMIN_PASSWORD_VERIFY
+  echo
+  if [[ $DB_ADMIN_PASSWORD != $DB_ADMIN_PASSWORD_VERIFY ]] ;
+  then
+    echo "Passwords do not match. Please try again."
+  fi
 done
 
-# create user account
-[[ -z $CREATE_OPUS_USER ]] && CREATE_OPUS_USER=Y
-if [ "$CREATE_OPUS_USER" = Y ];
-then
-  if [ "$OS" = ubuntu ]
+[[ -z $DB_USER ]] && read -p "New OPUS Database User Name [opus4]: "       DB_USER
+
+while [[ -z $DB_USER_PASSWORD || "$DB_USER_PASSWORD" != "$DB_USER_PASSWORD_VERIFY" ]] ;
+do
+  read -p "New OPUS Database User Password: " -s        DB_USER_PASSWORD
+  echo
+  read -p "New OPUS Database User Password again: " -s  DB_USER_PASSWORD_VERIFY
+  echo
+  if [[ $DB_USER_PASSWORD != $DB_USER_PASSWORD_VERIFY ]] ;
   then
-    useradd -c 'OPUS 4 Solr manager' --system "$OPUS_USER_NAME_ESC"
-  else
-    useradd -c 'OPUS 4 Solr manager' --system --create-home --shell /bin/bash "$OPUS_USER_NAME_ESC"
+    echo "Passwords do not match. Please try again."
   fi
-fi
+done
 
-# preparing OWNER string for chown-calls.
-OPUS_GROUP_NAME="`id -gn "$OPUS_USER_NAME"`"
-OWNER="$OPUS_USER_NAME:$OPUS_GROUP_NAME"
+# set defaults if values are not given
+DBNAME="${DBNAME:-opusdb}"
+DB_ADMIN="${DB_ADMIN:-opus4admin}"
+DB_USER="${DB_USER:-opus4}"
 
-# prompt for database parameters
-[[ -z $DBNAME               ]] && read -p "New OPUS Database Name [opus400]: "          DBNAME
-[[ -z $ADMIN                ]] && read -p "New OPUS Database Admin Name [opus4admin]: " ADMIN
-[[ -z $ADMIN_PASSWORD       ]] && read -p "New OPUS Database Admin Password: " -s       ADMIN_PASSWORD
-echo
-[[ -z $WEBAPP_USER          ]] && read -p "New OPUS Database User Name [opus4]: "       WEBAPP_USER
-[[ -z $WEBAPP_USER_PASSWORD ]] && read -p "New OPUS Database User Password: " -s        WEBAPP_USER_PASSWORD
-echo
-[[ -z $MYSQLHOST            ]] && read -p "MySQL DBMS Host [localhost]: "               MYSQLHOST
-[[ -z $MYSQLPORT            ]] && read -p "MySQL DBMS Port [3306]: "                    MYSQLPORT
-[[ -z $MYSQLROOT            ]] && read -p "MySQL Root User [root]: "                    MYSQLROOT
-read -p "MySQL Root User Password: " -s MYSQLROOT_PASSWORD
-echo
+# escape ! (for later use in sed substitute)
+DBNAME_ESC="${DBNAME//\!/\\\!}"
+DB_ADMIN_ESC="${DB_ADMIN//\!/\\\!}"
+DB_ADMIN_PASSWORD_ESC="${DB_ADMIN_PASSWORD//\!/\\\!}"
+DB_USER_ESC="${DB_USER//\!/\\\!}"
+DB_USER_PASSWORD_ESC="${DB_USER_PASSWORD//\!/\\\!}"
 
+#
+# Create database and users.
+#
+# By default the database and the users are created requiring the MySQL root password,
+# however that can be suppressed in order to just generate the configuration files for
+# an existing database.
+#
+
+echo
+echo "Please provide parameters for the database connection:"
+[[ -z $MYSQLHOST ]] && read -p "MySQL DBMS Host [localhost]: " MYSQLHOST
+[[ -z $MYSQLPORT ]] && read -p "MySQL DBMS Port [3306]: "      MYSQLPORT
 
 # set defaults if value is not given
-DBNAME="${DBNAME:-opus400}"
-ADMIN="${ADMIN:-opus4admin}"
-WEBAPP_USER="${WEBAPP_USER:-opus4}"
-MYSQLROOT="${MYSQLROOT:-root}"
 MYSQLHOST="${MYSQLHOST:-localhost}"
 MYSQLPORT="${MYSQLPORT:-3306}"
 
 # escape ! (for later use in sed substitute)
 MYSQLHOST_ESC="${MYSQLHOST//\!/\\\!}"
 MYSQLPORT_ESC="${MYSQLPORT//\!/\\\!}"
-WEBAPP_USER_ESC="${WEBAPP_USER//\!/\\\!}"
-WEBAPP_USER_PASSWORD_ESC="${WEBAPP_USER_PASSWORD//\!/\\\!}"
-DBNAME_ESC="${DBNAME//\!/\\\!}"
-ADMIN_ESC="${ADMIN//\!/\\\!}"
-ADMIN_PASSWORD_ESC="${ADMIN_PASSWORD//\!/\\\!}"
 
-# prepare to access MySQL service
-MYSQL_OPTS=""
-[ "localhost" != "$MYSQLHOST" ] && MYSQL_OPTS="-h $MYSQLHOST"
-[ "3306" != "$MYSQLPORT" ] && MYSQL_OPTS="$MYSQL_OPTS -P $MYSQLPORT"
+[[ -z $CREATE_DATABASE ]] && read -p "Create database and users [Y]? " CREATE_DATABASE
+
+if [[ -z "$CREATE_DATABASE" || "$CREATE_DATABASE" == Y || "$CREATE_DATABASE" == y ]] ;
+then
+
+    echo
+    [[ -z $MYSQLROOT ]] && read -p "MySQL Root User [root]: "                    MYSQLROOT
+    read -p "MySQL Root User Password: " -s MYSQLROOT_PASSWORD
+    echo
+
+    # set defaults if value is not given
+    MYSQLROOT="${MYSQLROOT:-root}"
+
+    # prepare to access MySQL service
+    MYSQL_OPTS=""
+    [ "localhost" != "$MYSQLHOST" ] && MYSQL_OPTS="-h $MYSQLHOST"
+    [ "3306" != "$MYSQLPORT" ] && MYSQL_OPTS="$MYSQL_OPTS -P $MYSQLPORT"
+
+    #
+    # Create database and users in MySQL.
+    #
+    # Users do not have to be created first before granting privileges.
+    #
 
 mysqlRoot() {
   "$MYSQL_CLIENT" --defaults-file=<(echo -e "[client]\npassword=${MYSQLROOT_PASSWORD}") --default-character-set=utf8 ${MYSQL_OPTS} -u "$MYSQLROOT" -v
 }
 
-mysqlOpus4Admin() {
-  "$MYSQL_CLIENT" --defaults-file=<(echo -e "[client]\npassword=${ADMIN_PASSWORD}") --default-character-set=utf8 ${MYSQL_OPTS} -u "$ADMIN" -v $1
-}
-
-# process creating mysql user and database
 mysqlRoot <<LimitString
 CREATE DATABASE IF NOT EXISTS $DBNAME DEFAULT CHARACTER SET = UTF8 DEFAULT COLLATE = UTF8_GENERAL_CI;
-GRANT ALL PRIVILEGES ON $DBNAME.* TO '$ADMIN'@'$MYSQLHOST' IDENTIFIED BY '$ADMIN_PASSWORD';
-GRANT SELECT,INSERT,UPDATE,DELETE ON $DBNAME.* TO '$WEBAPP_USER'@'$MYSQLHOST' IDENTIFIED BY '$WEBAPP_USER_PASSWORD';
+GRANT ALL PRIVILEGES ON $DBNAME.* TO '$DB_ADMIN'@'$MYSQLHOST' IDENTIFIED BY '$DB_ADMIN_PASSWORD';
+GRANT SELECT,INSERT,UPDATE,DELETE ON $DBNAME.* TO '$DB_USER'@'$MYSQLHOST' IDENTIFIED BY '$DB_USER_PASSWORD';
 FLUSH PRIVILEGES;
 LimitString
 
-# create config.ini and set database related parameters
-cd "$BASEDIR/opus4/application/configs"
-cp config.ini.template config.ini
+    #
+    # Create createdb.sh and set database related parameters
+    #
+    # TODO overwrite existing file?
+    #
+
+    cd "$BASEDIR/db"
+    if [ ! -e createdb.sh ]; then
+      cp createdb.sh.template createdb.sh
+      if [ localhost != "$MYSQLHOST" ]; then
+        sed -i -e "s!^# host=localhost!host='$MYSQLHOST_ESC'!" createdb.sh
+      fi
+      if [ 3306 != "$MYSQLPORT" ]; then
+        sed -i -e "s!^# port=3306!port='$MYSQLPORT_ESC'!" createdb.sh
+      fi
+      sed -i -e "s!@db.admin.name@!'$DB_ADMIN_ESC'!" \
+             -e "s!@db.admin.password@!'$DB_ADMIN_PASSWORD_ESC'!" \
+             -e "s!@db.name@!'$DBNAME_ESC'!" createdb.sh
+
+      bash createdb.sh || rm createdb.sh
+    fi
+
+fi
+
+#
+# Create config.ini and set database related parameters.
+#
+# TODO overwrite existing file?
+#
+
+cd "$BASEDIR/application/configs"
+cp config.ini.template "$OPUS_CONF"
 if [ localhost != "$MYSQLHOST" ]; then
-  sed -i -e "s!^; db.params.host = localhost!db.params.host = '$MYSQLHOST_ESC'!" config.ini
+  sed -i -e "s!^; db.params.host = localhost!db.params.host = '$MYSQLHOST_ESC'!" "$OPUS_CONF"
 fi
 if [ 3306 != "$MYSQLPORT" ]; then
-  sed -i -e "s!^; db.params.port = 3306!db.params.port = '$MYSQLPORT_ESC'!" config.ini
+  sed -i -e "s!^; db.params.port = 3306!db.params.port = '$MYSQLPORT_ESC'!" "$OPUS_CONF"
 fi
-sed -i -e "s!@db.user.name@!'$WEBAPP_USER_ESC'!" \
-       -e "s!@db.user.password@!'$WEBAPP_USER_PASSWORD_ESC'!" \
-       -e "s!@db.name@!'$DBNAME_ESC'!" config.ini
+sed -i -e "s!@db.user.name@!'$DB_USER_ESC'!" \
+       -e "s!@db.user.password@!'$DB_USER_PASSWORD_ESC'!" \
+       -e "s!@db.name@!'$DBNAME_ESC'!" "$OPUS_CONF"
 
-# create createdb.sh and set database related parameters
-cd "$BASEDIR/opus4/db"
-if [ ! -e createdb.sh ]; then
-  cp createdb.sh.template createdb.sh
-  if [ localhost != "$MYSQLHOST" ]; then
-    sed -i -e "s!^# host=localhost!host='$MYSQLHOST_ESC'!" createdb.sh
-  fi
-  if [ 3306 != "$MYSQLPORT" ]; then
-    sed -i -e "s!^# port=3306!port='$MYSQLPORT_ESC'!" createdb.sh
-  fi
-  sed -i -e "s!@db.admin.name@!'$ADMIN_ESC'!" \
-         -e "s!@db.admin.password@!'$ADMIN_PASSWORD_ESC'!" \
-         -e "s!@db.name@!'$DBNAME_ESC'!" createdb.sh
+exit 0 # TODO remove
 
-  bash createdb.sh || rm createdb.sh
-fi
+#
+# Install and configure Solr search server
+#
 
-# install and configure Solr search server
 cd "$BASEDIR"
 [ -z "$INSTALL_SOLR" ] && read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
 if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ]
 then
 
-  # extract archive name from URL
-  SOLR_ARCHIVE_NAME="${SOLR_SERVER_URL##*/}"
-  SOLR_ARCHIVE_NAME="${SOLR_ARCHIVE_NAME%%\?*}"
+  # TODO call solr installation script
 
-  # fetch installation archive if missing locally
-  mkdir -p "downloads"
-  if [ ! -f "downloads/$SOLR_ARCHIVE_NAME" ]; then
-    wget -O "downloads/$SOLR_ARCHIVE_NAME" "$SOLR_SERVER_URL"
-    if [ $? -ne 0 -o ! -f "downloads/$SOLR_ARCHIVE_NAME" ]
-    then
-      echo "Unable to download Solr service from $SOLR_SERVER_URL"
-      exit 1
-    fi
-  fi
-
-  # ask for desired port of solr service
-  [ -z "$SOLR_SERVER_PORT" ] && read -p "Solr server port number [8983]: " SOLR_SERVER_PORT
-  SOLR_SERVER_PORT="${SOLR_SERVER_PORT:-8983}"
-
-  # extract name of folder contained in archive
-  SOLR_DIR="$(tar tzf "downloads/$SOLR_ARCHIVE_NAME" | head -1)"
-  SOLR_DIR="${SOLR_DIR%%/*}"
-
-  SOLR_VERSION="${SOLR_DIR#solr-}"
-  SOLR_MAJOR="${SOLR_VERSION%%.*}"
-
-  # stop any running solr service
-  lsof -i ":$SOLR_SERVER_PORT" &>/dev/null && {
-    (
-      echo "stopping running Solr service ..."
-
-      if [ -x /etc/init.d/opus4-solr-jetty ]; then
-        /etc/init.d/opus4-solr-jetty stop
-      elif [ -x /etc/init.d/solr ]; then
-        /etc/init.d/solr stop
-      else
-        false
-      fi
-    ) || \
-    sudo kill "$(lsof -i ":$SOLR_SERVER_PORT" | awk 'NR>1 {print $2}')" || \
-    {
-      cat >&2 <<EOT
-stopping running Solr service failed, please stop any service listening on
-port $SOLR_SERVER_PORT ...
-EOT
-      exit 1
-    }
-  }
-
-  # extract archive into basedir (expecting to create folder named solr-x.y.z)
-  echo "extracting Solr archive ..."
-  tar xfz "downloads/$SOLR_ARCHIVE_NAME"
-
-  cd "$SOLR_DIR"
-
-  SOLR_BASE_DIR="$(pwd)"
-  SOLR_CORE_DIR="$(pwd)/opus4"
-
-  # create space for configuring solr service
-  mkdir -p "${SOLR_CORE_DIR}/data/solr/conf"
-
-  copyConfigFile() {
-    NAME="${1}"
-    SRC="${2}"
-    DST="${3}"
-
-    [ -e "${DST}/${NAME}" ] || {
-      PRE="${NAME%.*}"
-      POST="${NAME##*.}"
-
-      VERSION="${SOLR_VERSION}"
-
-      SRCNAME=
-      while [ -z "${SRCNAME}" -o \( ! -e "${SRCNAME}" -a -n "${VERSION}" \) ]
-      do
-        SRCNAME="${SRC}/${PRE}-${VERSION}.${POST}"
-        VERSION="${VERSION%.*}"
-      done
-
-      if [ -e "${SRCNAME}" ]; then
-        echo "setting up ${SRCNAME} as ${DST}/${NAME}"
-        ln -sf "${SRCNAME}" "${DST}/${NAME}"
-      else
-        echo "setting up ${SRC}/${NAME} as ${DST}/${NAME}"
-        ln -sf "${SRC}/${NAME}" "${DST}/${NAME}"
-      fi
-    }
-  }
-
-  # put configuration and schema files
-  ln -sf  "$BASEDIR/solrconfig/core.properties" "${SOLR_CORE_DIR}/data/solr"
-
-  copyConfigFile "schema.xml" "${BASEDIR}/solrconfig" "${SOLR_CORE_DIR}/data/solr/conf"
-  copyConfigFile "solrconfig.xml" "${BASEDIR}/solrconfig" "${SOLR_CORE_DIR}/data/solr/conf"
-
-  # provide logging properties
-  # TODO check integration of logging.properties with recent versions of solr
-  ln -sf "$BASEDIR/solrconfig/logging.properties" opus4/logging.properties
-
-  # detect URL prefix to use
-  case "$SOLR_MAJOR" in
-    5)
-      SOLR_CONTEXT="/solr/solr"
-      ;;
-    *)
-      SOLR_CONTEXT="/solr"
-  esac
 
 
 
   # write solr-config to application's config.ini
-  CONFIG_INI="$BASEDIR/opus4/application/configs/config.ini"
+  CONFIG_INI="$BASEDIR/application/configs/$OPUS_CONF"
   "$SCRIPT_PATH/install-config-solr.sh" "$CONFIG_INI" localhost "$SOLR_SERVER_PORT" "${SOLR_CONTEXT}" localhost "$SOLR_SERVER_PORT" "${SOLR_CONTEXT}"
 
   # change file owner of solr installation
@@ -341,88 +295,46 @@ EOT
   fi
 fi
 
-# import some test documents
+#
+# Import some test documents optionally
+#
+
 [ -z "$IMPORT_TESTDATA" ] && read -p "Import test data? [Y]: " IMPORT_TESTDATA
-if [ -z "$IMPORT_TESTDATA" ] || [ "$IMPORT_TESTDATA" = Y ] || [ "$IMPORT_TESTDATA" = y ]
+if [ -z "$IMPORT_TESTDATA" ] || [ "$IMPORT_TESTDATA" = Y ] || [ "$IMPORT_TESTDATA" = y ] ;
 then
-  # import test data
-  cd "$BASEDIR"
-  for i in `find opus4/tests/sql -name *.sql \( -type f -o -type l \) | sort`; do
-    echo "Inserting file '${i}'"
-    mysqlOpus4Admin "$DBNAME" < "${i}"
-  done
-
-  # copy test fulltexts to workspace directory
-  cp -rv opus4/tests/fulltexts/* workspace/files
-
-  # TODO is waiting for running solr required since service script has been waiting for this before
-  # sleep some seconds to ensure the server is running
-  echo -en "\n\nwait until Solr server is running..."
-
-  waiting=true
-
-  pingSolr() {
-    wget -SO- "$1" 2>&1
-  }
-
-  pingSolrStatus() {
-    pingSolr "$1" | sed -ne 's/^ *HTTP\/1\.[01] \([0-9]\+\) .\+$/\1/p' | head -1
-  }
-
-  case "$SOLR_MAJOR" in
-    5)
-      PING_URL="http://localhost:${SOLR_SERVER_PORT}${SOLR_CONTEXT}/admin/ping"
-      ;;
-    *)
-      PING_URL="http://localhost:${SOLR_SERVER_PORT}${SOLR_CONTEXT}/admin/ping"
-  esac
-
-  while $waiting; do
-    echo -n "."
-    state=$(pingSolrStatus "$PING_URL")
-    case $state in
-      200|304)
-        waiting=false
-        ;;
-      500)
-        echo -e "\n\nSolr server responds on error:\n" >&2
-        pingSolr "$PING_URL" >&2
-        exit 1
-        ;;
-      *)
-        sleep 2
-    esac
-  done
-
-  echo "completed."
-  echo -e "Solr server is running under http://localhost:$SOLR_SERVER_PORT/solr\n"
-
-  # start indexing of testdata
-  "$BASEDIR/opus4/scripts/SolrIndexBuilder.php"
+    echo "Installing test data ..."
+    # TODO call script for installing testdata
 fi
+
+#
+# Set file permissions
+#
+# TODO what user should be used
+#
 
 # change file owner of all files in $BASEDIR to $OPUS_USER_NAME
-chown -R "$OWNER" "$BASEDIR"
+# TODO chown -R "$OWNER" "$BASEDIR"
 
 # set permission in workspace directory appropriately
-cd "$(readlink "$BASEDIR/workspace")"
-find ../workspace -type d -print0 | xargs -0 -- chmod 777
-find ../workspace -type f -print0 | xargs -0 -- chmod 666
+# TODO cd "$(readlink "$BASEDIR/workspace")"
+# TODO find ../workspace -type d -print0 | xargs -0 -- chmod 777
+# TODO find ../workspace -type f -print0 | xargs -0 -- chmod 666
 
-# delete tar archives
-[ -z "$DELETE_DOWNLOADS" ] && read -p "Delete downloads? [N]: " DELETE_DOWNLOADS
-if [ "$DELETE_DOWNLOADS" = Y ] || [ "$DELETE_DOWNLOADS" = y ]; then
-  rm -rf downloads
-fi
+#
+# Restart Apache2 (optionally)
+#
+# - requires script to run with 'sudo'
+#
 
-[ -z "$RESTART_APACHE" ] && RESTART_APACHE=Y
-if [ "$RESTART_APACHE" = Y ];
+[[ -z "$RESTART_APACHE" ]] && read -p "Restart Apache2 [Y]? " RESTART_APACHE
+
+if [[ -z "$RESTART_APACHE" || "$RESTART_APACHE" = Y ]] ;
 then
-  echo "restart apache webserver ..."
-  /etc/init.d/apache2 restart
+  service apache2 restart
 fi
 
 echo
 echo
-echo "OPUS 4 is running now! Point your browser to http://localhost$OPUS_URL_BASE"
+echo "OPUS 4 is running now! Point your browser to"
+echo "http://localhost$OPUS_URL_BASE"
 echo
