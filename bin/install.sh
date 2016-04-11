@@ -29,8 +29,8 @@ set -e
 
 MYSQL_CLIENT='/usr/bin/mysql'
 
-APACHE_CONF='test.conf'
-OPUS_CONF='configtest.ini'
+APACHE_CONF='apache.conf'
+OPUS_CONF='config.ini'
 
 # END OF USER-CONFIGURATION
 
@@ -247,8 +247,6 @@ fi
 sed -i -e "s!@db.user.name@!'$DB_USER_ESC'!" \
        -e "s!@db.user.password@!'$DB_USER_PASSWORD_ESC'!" \
        -e "s!@db.name@!'$DBNAME_ESC'!" "$OPUS_CONF"
-
-exit 0 # TODO remove
 
 #
 # Install and configure Solr search server
