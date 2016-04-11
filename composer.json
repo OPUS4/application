@@ -18,6 +18,12 @@
     "opus4-repo/codesniffer": "dev-master"
   },
   "minimum-stability": "dev",
-  "prefer-stable": true
+  "prefer-stable": true,
+  "scripts" : {
+    "post-install-cmd": [
+      "@linkDbSchema"
+    ],
+    "linkDbSchema": "ln -svf -t db ../vendor/opus4-repo/framework/db/schema"
+  }
 }
 
