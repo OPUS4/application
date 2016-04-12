@@ -65,4 +65,30 @@ class Application_View_Helper_TranslateTest extends ControllerTestCase {
         $this->assertEquals('Deutsch', $model->translate('deu'));
     }
 
+    public function testTranslateWithParameters() {
+        $this->useEnglish();
+
+        Zend_Registry::get('Zend_Translate')->loadModule('admin');
+
+        $model = new Application_View_Helper_Translate();
+
+        $this->assertEquals(
+            'Overview of access control for role \'collectionsadmin\'',
+            $model->translate('access_select_module', 'collectionsadmin')
+        );
+    }
+
+    public function testTranslateWithParameterArray() {
+        $this->useEnglish();
+
+        Zend_Registry::get('Zend_Translate')->loadModule('admin');
+
+        $model = new Application_View_Helper_Translate();
+
+        $this->assertEquals(
+            'Allow transition from \'state1\' to \'state2\'.',
+            $model->translate('acl_resource_workflow_generic', array('state1', 'state2'))
+        );
+    }
+
 }
