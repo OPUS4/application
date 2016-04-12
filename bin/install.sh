@@ -253,14 +253,16 @@ sed -i -e "s!@db.user.name@!'$DB_USER_ESC'!" \
 #
 
 cd "$BASEDIR"
-[ -z "$INSTALL_SOLR" ] && read -p "Install and configure Solr server? [Y]: " INSTALL_SOLR
+[ -z "$INSTALL_SOLR" ] && read -p "Install Solr server? [Y]: " INSTALL_SOLR
 if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ]
 then
 
+  # ask for desired port of solr service
+  [ -z "$SOLR_SERVER_PORT" ] && read -p "Solr server port number [8983]: " SOLR_SERVER_PORT
+  SOLR_SERVER_PORT="${SOLR_SERVER_PORT:-8983}"
+
   # TODO call solr installation script
-
-
-
+  "$SCRIPT_PATH/install-solr.sh" "$SOLR_SERVER_PORT"
 
   # write solr-config to application's config.ini
   CONFIG_INI="$BASEDIR/application/configs/$OPUS_CONF"

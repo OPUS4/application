@@ -15,6 +15,22 @@
 # @copyright   Copyright (c) 2010-2016, OPUS 4 development team
 # @license     http://www.gnu.org/licenses/gpl.html General Public License
 
+#
+# Downloads Apache Solr and runs the provides install script.
+#
+# Parameters:
+# 1) Port for new Solr server
+#
+# Asks for port number of new Solr instance if not provides as parameter.
+#
+
+set -e
+
+if [ $# -eq 1 ] ;
+then
+  SOLR_SERVER_PORT="$1"
+fi
+
 # START USER-CONFIGURATION
 
 SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/5.2.1/solr-5.2.1.tgz'
@@ -71,8 +87,12 @@ EOT
 }
 
 # extract archive into basedir (expecting to create folder named solr-x.y.z)
-echo "extracting Solr archive ..."
+echo "Extracting Solr archive ..."
 tar xfz "downloads/$SOLR_ARCHIVE_NAME"
+
+#
+# Run Solr installation
+#
 
 cd "$SOLR_DIR"
 
@@ -129,8 +149,10 @@ case "$SOLR_MAJOR" in
   SOLR_CONTEXT="/solr"
 esac
 
+#
+# Delete downloaded tar archive
+#
 
-# delete tar archives
 [ -z "$DELETE_DOWNLOADS" ] && read -p "Delete downloads? [N]: " DELETE_DOWNLOADS
 if [ "$DELETE_DOWNLOADS" = Y ] || [ "$DELETE_DOWNLOADS" = y ]; then
   rm -rf downloads
