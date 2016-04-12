@@ -251,49 +251,61 @@ sed -i -e "s!@db.user.name@!'$DB_USER_ESC'!" \
 #
 # Install and configure Solr search server
 #
+# Add Solr connection parameters to configuration files.
+# Optionally install new local Solr.
+#
+# TODO add new core to existing, local Solr
+#
+
+# ask for desired port of solr service
+[ -z "$SOLR_SERVER_PORT" ] && read -p "Solr server port number [8983]: " SOLR_SERVER_PORT
+SOLR_SERVER_PORT="${SOLR_SERVER_PORT:-8983}"
 
 cd "$BASEDIR"
 [ -z "$INSTALL_SOLR" ] && read -p "Install Solr server? [Y]: " INSTALL_SOLR
-if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ]
+if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ] ;
 then
 
-  # ask for desired port of solr service
-  [ -z "$SOLR_SERVER_PORT" ] && read -p "Solr server port number [8983]: " SOLR_SERVER_PORT
-  SOLR_SERVER_PORT="${SOLR_SERVER_PORT:-8983}"
+  echo "Installing Apache Solr ..."
+  # TODO call "$SCRIPT_PATH/install-solr.sh" "$SOLR_SERVER_PORT"
 
-  # TODO call solr installation script
-  "$SCRIPT_PATH/install-solr.sh" "$SOLR_SERVER_PORT"
+else
+  # Do not install Solr, just configure connection
 
-  # write solr-config to application's config.ini
-  CONFIG_INI="$BASEDIR/application/configs/$OPUS_CONF"
-  "$SCRIPT_PATH/install-config-solr.sh" "$CONFIG_INI" localhost "$SOLR_SERVER_PORT" "${SOLR_CONTEXT}" localhost "$SOLR_SERVER_PORT" "${SOLR_CONTEXT}"
+  # ask for host of solr service
+  [ -z "$SOLR_SERVER_HOST" ] && read -p "Solr server host name [localhost]: " SOLR_SERVER_HOST
+  SOLR_SERVER_HOST="${SOLR_SERVER_HOST:-localhost}"
 
-  # change file owner of solr installation
-  chown -R "$OWNER" "$BASEDIR/$SOLR_DIR"
-  chown -R "$OWNER" "$BASEDIR/solrconfig"
+  [ -z "$SOLR_CONTEXT" ] && read -p "Solr context name [/opus4]: " SOLR_CONTEXT
+  SOLR_CONTEXT="${SOLR_CONTEXT:-/opus4}"
 
-  # install init script
-  [ -z "$INSTALL_INIT_SCRIPT" ] && read -p "Install init.d script to start and stop Solr server automatically? [Y]: " INSTALL_INIT_SCRIPT
-  if [ -z "$INSTALL_INIT_SCRIPT" ] || [ "$INSTALL_INIT_SCRIPT" = Y ] || [ "$INSTALL_INIT_SCRIPT" = y ]
+  # Text extraction can use a different Solr connection
+  [ -z "$SOLR_EXTRACT" ] && read -p "Use different connection for text extraction? [N]: " SOLR_EXTRACT
+  SOLR_EXTRACT="${SOLR_EXTRACT:-N}"
+
+  if [ "$SOLR_EXTRACT" = Y ] || [ "$SOLR_EXTRACT" = y ] ;
   then
-    # remove files and folders causing unneccessary errors in install script
-    rm -f /etc/init.d/{opus4-solr-jetty,solr}
-    rm -f "${BASEDIR}/solr"
+    [ -z "$SOLR_EXTRACT_SERVER_HOST" ] && read -p "Solr extraction server host [$SOLR_SERVER_HOST]: " SOLR_EXTRACT_SERVER_HOST
 
-    # run installer bundled with solr
-    bin/install_solr_service.sh "../downloads/$SOLR_ARCHIVE_NAME" -d "$SOLR_CORE_DIR" -i "$BASEDIR" -p "$SOLR_SERVER_PORT" -s solr -u "$OPUS_USER_NAME"
+    [ -z "$SOLR_EXTRACT_SERVER_PORT" ] && read -p "Solr extraction server port [$SOLR_SERVER_PORT]: " SOLR_EXTRACT_SERVER_PORT
 
-    # make sure new service is available just like the old one
-    ln -s solr /etc/init.d/opus4-solr-jetty
-  else
-    # (re)start solr service
-    if [ -x /etc/init.d/opus4-solr-jetty ]; then
-      /etc/init.d/opus4-solr-jetty restart
-    elif [ -x /etc/init.d/solr ]; then
-      /etc/init.d/solr restart
-    fi
+    [ -z "$SOLR_EXTRACT_CONTEXT" ] && read -p "Solr extraction server context [$SOLR_CONTEXT]: " SOLR_EXTRACT_CONTEXT
   fi
 fi
+
+# Use same connection if not set
+SOLR_EXTRACT_SERVER_HOST="${SOLR_EXTRACT_SERVER_HOST:-$SOLR_SERVER_HOST}"
+SOLR_EXTRACT_SERVER_PORT="${SOLR_EXTRACT_SERVER_PORT:-$SOLR_SERVER_PORT}"
+SOLR_EXTRACT_CONTEXT="${SOLR_EXTRACT_CONTEXT:-$SOLR_CONTEXT}"
+
+#
+# Write solr-config to application's config.ini
+#
+echo "Writing Solr connection paramters to configuration ..."
+CONFIG_INI="$BASEDIR/application/configs/$OPUS_CONF"
+"$SCRIPT_PATH/install-config-solr.sh" "$CONFIG_INI" \
+    "${SOLR_SERVER_HOST}" "$SOLR_SERVER_PORT" "${SOLR_CONTEXT}" \
+    "${SOLR_EXTRACT_SERVER_HOST}" "$SOLR_EXTRACT_SERVER_PORT" "${SOLR_EXTRACT_CONTEXT}"
 
 #
 # Import some test documents optionally
