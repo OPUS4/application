@@ -22,6 +22,10 @@
 # TODO add more explanatory output
 # TODO fix solr setup
 #
+# Parameters:
+# -a <filename> : Sets name for Apache configuration file
+# -c <filename> : Sets name for OPUS configuration file (used for testing)
+#
 
 set -e
 
@@ -29,10 +33,20 @@ set -e
 
 MYSQL_CLIENT='/usr/bin/mysql'
 
-APACHE_CONF='apache.conf'
-OPUS_CONF='config.ini'
+while getopts ":a:c:" opt; do
+  case $opt in
+    a) APACHE_CONF="$OPTARG"
+    ;;
+    c) OPUS_CONF="$OPTARG"
+    ;;
+  esac
+done
 
 # END OF USER-CONFIGURATION
+
+# Set defaults
+APACHE_CONF="${APACHE_CONF:-apache.conf}"
+OPUS_CONF="${OPUS_CONF:-config.ini}"
 
 SCRIPT_NAME="`basename "$0"`"
 SCRIPT_NAME_FULL="`readlink -f "$0"`"
@@ -108,6 +122,10 @@ echo
 # TODO Support using existing database
 # TODO Support using existing users
 #
+
+echo
+echo "Database configuration"
+echo
 
 [[ -z $DBNAME ]] && read -p "New OPUS Database Name [opusdb]: "           DBNAME
 [[ -z $DB_ADMIN ]] && read -p "New OPUS Database Admin Name [opus4admin]: " DB_ADMIN
@@ -256,6 +274,10 @@ sed -i -e "s!@db.user.name@!'$DB_USER_ESC'!" \
 #
 # TODO add new core to existing, local Solr
 #
+
+echo
+echo "Solr configuration"
+echo
 
 # ask for desired port of solr service
 [ -z "$SOLR_SERVER_PORT" ] && read -p "Solr server port number [8983]: " SOLR_SERVER_PORT
