@@ -18,7 +18,6 @@
 
 #
 # TODO more output to verify installation process
-# TODO remmove the need to enter leading '/' for base url
 # TODO add more explanatory output
 # TODO fix solr setup
 #
@@ -337,22 +336,15 @@ CONFIG_INI="$BASEDIR/application/configs/$OPUS_CONF"
 if [ -z "$IMPORT_TESTDATA" ] || [ "$IMPORT_TESTDATA" = Y ] || [ "$IMPORT_TESTDATA" = y ] ;
 then
     echo "Installing test data ..."
-    # TODO call script for installing testdata
+    "$SCRIPT_PATH/install-testdata.sh"
+    echo "done"
 fi
 
 #
 # Set file permissions
 #
-# TODO what user should be used
-#
 
-# change file owner of all files in $BASEDIR to $OPUS_USER_NAME
-# TODO chown -R "$OWNER" "$BASEDIR"
-
-# set permission in workspace directory appropriately
-# TODO cd "$(readlink "$BASEDIR/workspace")"
-# TODO find ../workspace -type d -print0 | xargs -0 -- chmod 777
-# TODO find ../workspace -type f -print0 | xargs -0 -- chmod 666
+"$SCRIPT_PATH/set-workspace-permissions.sh -g www-data"
 
 #
 # Restart Apache2 (optionally)
@@ -367,7 +359,6 @@ then
   service apache2 restart
 fi
 
-echo
 echo
 echo "OPUS 4 is running now! Point your browser to"
 echo "http://localhost$OPUS_URL_BASE"
