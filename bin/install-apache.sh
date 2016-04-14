@@ -48,6 +48,13 @@ OUTPUT_FILENAME="$3"
 OS="$4"
 RESTART_APACHE="$5"
 
+# Apache Version
+if [ -z "$INPUT_FILENAME" ] ;
+then
+    # if version 2.2 use apache22 template otherwise use default defined below
+    [[ $(apache2 -v | grep "Apache/2.2") ]] && INPUT_FILENAME='apache22.conf.template'
+fi
+
 # Set defaults if necessary
 [[ -z $OPUS_URL_BASE ]] && OPUS_URL_BASE='/opus4'
 [[ -z $INPUT_FILENAME ]] && INPUT_FILENAME='apache24.conf.template'
