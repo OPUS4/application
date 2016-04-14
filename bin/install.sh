@@ -20,6 +20,7 @@
 # TODO more output to verify installation process
 # TODO add more explanatory output
 # TODO fix solr setup
+# TODO remove code that requires "sudo"? Keep it separate?
 #
 # Parameters:
 # -a <filename> : Sets name for Apache configuration file
@@ -113,7 +114,7 @@ echo
 echo "Creating Apache2 site configuration ..."
 echo
 
-"$SCRIPT_PATH/install-apache.sh" "$OPUS_URL_BASE" "apache24.conf.template" "$APACHE_CONF" "$OS"
+"$SCRIPT_PATH/install-apache.sh" "$OPUS_URL_BASE" "apache24.conf.template" "$APACHE_CONF" "$OS" 'N'
 
 #
 # Prompt for database parameters

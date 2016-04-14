@@ -46,6 +46,7 @@ OPUS_URL_BASE="$1"
 INPUT_FILENAME="$2"
 OUTPUT_FILENAME="$3"
 OS="$4"
+RESTART_APACHE="$5"
 
 # Set defaults if necessary
 [[ -z $OPUS_URL_BASE ]] && OPUS_URL_BASE='/opus4'
