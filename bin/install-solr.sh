@@ -89,6 +89,7 @@ EOT
 # extract archive into basedir (expecting to create folder named solr-x.y.z)
 echo "Extracting Solr archive ..."
 tar xfz "downloads/$SOLR_ARCHIVE_NAME"
+echo "done"
 
 #
 # Run Solr installation
@@ -148,6 +149,39 @@ case "$SOLR_MAJOR" in
 *)
   SOLR_CONTEXT="/solr"
 esac
+
+
+
+# change file owner of solr installation
+# TODO chown -R "$OWNER" "$BASEDIR/$SOLR_DIR"
+# TODO chown -R "$OWNER" "$BASEDIR/solrconfig"
+
+# install init script
+[ -z "$INSTALL_INIT_SCRIPT" ] && read -p "Install init.d script to start and stop Solr server automatically? [Y]: " INSTALL_INIT_SCRIPT
+if [ -z "$INSTALL_INIT_SCRIPT" ] || [ "$INSTALL_INIT_SCRIPT" = Y ] || [ "$INSTALL_INIT_SCRIPT" = y ]
+then
+# remove files and folders causing unneccessary errors in install script
+rm -f /etc/init.d/{opus4-solr-jetty,solr}
+rm -f "${BASEDIR}/solr"
+
+# run installer bundled with solr
+bin/install_solr_service.sh "../downloads/$SOLR_ARCHIVE_NAME" -d "$SOLR_CORE_DIR" -i "$BASEDIR" -p "$SOLR_SERVER_PORT" -s solr -u "$OPUS_USER_NAME"
+
+# make sure new service is available just like the old one
+ln -s solr /etc/init.d/opus4-solr-jetty
+else
+# (re)start solr service
+if [ -x /etc/init.d/opus4-solr-jetty ]; then
+  /etc/init.d/opus4-solr-jetty restart
+elif [ -x /etc/init.d/solr ]; then
+  /etc/init.d/solr restart
+fi
+fi
+
+
+
+
+
 
 #
 # Delete downloaded tar archive
