@@ -18,21 +18,34 @@
 #
 # Adds testdata to database and rebuilds the index.
 #
+# TODO verify waiting for Solr works for local and remote setup
+# TODO requires DB_ADMIN_PASSWORD DB_ADMIN DB_NAME (get from config.ini?)
+#
+#
+
+set -e
+
+SCRIPT_NAME="`basename "$0"`"
+SCRIPT_NAME_FULL="`readlink -f "$0"`"
+SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
+
+BASEDIR="`dirname "$SCRIPT_PATH"`"
 
 mysqlOpus4Admin() {
-  "$MYSQL_CLIENT" --defaults-file=<(echo -e "[client]\npassword=${ADMIN_PASSWORD}") --default-character-set=utf8 ${MYSQL_OPTS} -u "$ADMIN" -v $1
+  "$MYSQL_CLIENT" --defaults-file=<(echo -e "[client]\npassword=${ADMIN_PASSWORD}") \
+        --default-character-set=utf8 ${MYSQL_OPTS} -u "$ADMIN" -v $1
 }
 
 # import test data
 cd "$BASEDIR"
 
-for i in `find opus4/tests/sql -name *.sql \( -type f -o -type l \) | sort`; do
+for i in `find tests/sql -name *.sql \( -type f -o -type l \) | sort`; do
   echo "Inserting file '${i}'"
   mysqlOpus4Admin "$DBNAME" < "${i}"
 done
 
 # copy test fulltexts to workspace directory
-cp -rv opus4/tests/fulltexts/* workspace/files
+cp -rv tests/fulltexts/* workspace/files
 
 # TODO is waiting for running solr required since service script has been waiting for this before
 # sleep some seconds to ensure the server is running
@@ -77,4 +90,4 @@ echo "completed."
 echo -e "Solr server is running under http://localhost:$SOLR_SERVER_PORT/solr\n"
 
 # start indexing of testdata
-"$BASEDIR/opus4/scripts/SolrIndexBuilder.php"
+"$BASEDIR/scripts/SolrIndexBuilder.php"
