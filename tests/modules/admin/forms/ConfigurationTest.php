@@ -66,14 +66,15 @@ class Admin_Form_ConfigurationTest extends ControllerTestCase {
         $form->updateModel($config);
 
         $this->assertEquals('de', $config->supportedLanguages);
-        $this->assertEquals(15, $config->searchengine->solr->numberOfDefaultSearchResults);
+        $this->assertEquals(15, $config->searchengine->solr->parameterDefaults->rows);
     }
 
     public function testValidationSuccess() {
         $form = new Admin_Form_Configuration();
 
         $this->assertTrue($form->isValid(array(
-            'supportedLanguages' => array('en')
+            'supportedLanguages' => array('de'),
+            'maxSearchResults' => '10'
         )));
     }
 
