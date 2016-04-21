@@ -7,6 +7,7 @@
     "jpgraph/jpgraph": "dev-master",
     "solarium/solarium": "3.4.1",
     "opus4-repo/framework": "dev-master",
+    "opus4-repo/search": "dev-master",
     "components/jquery": "1.9.*"
   },
   "require-dev": {
