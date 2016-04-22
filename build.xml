@@ -252,10 +252,10 @@
         <mkdir dir="${basedir}/build/release" />
 
         <!-- prepare website files -->
-        <copy file="${basedir}/scripts/packaging/changelog/CHANGES.txt"
+        <copy file="/CHANGES.txt"
               tofile="${basedir}/build/release/CHANGES.txt"
               filtering="true" encoding="UTF-8" outputencoding="ISO-8859-1" />
-        <copy file="${basedir}/scripts/packaging/releasenotes/RELEASE_NOTES.txt"
+        <copy file="/RELEASE_NOTES.txt"
               tofile="${basedir}/build/release/RELEASE_NOTES.txt"
               filtering="true" encoding="UTF-8" outputencoding="ISO-8859-1" />
     </target>
