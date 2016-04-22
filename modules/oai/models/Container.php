@@ -104,12 +104,13 @@ class Oai_Model_Container extends Application_Model_Abstract {
     }
 
     /**
-     * @return array All associated Opus_File objects that are visible in OAI and accessible by user
+     * Returns all associated Opus_File objects that are visible in OAI and accessible by user
+     * @return array Accessible Opus_File objects
      *
      * TODO check embargo date
      * TODO merge access checks with code for deliver controller
      */
-    private function getAccessibleFiles() {
+    public function getAccessibleFiles() {
         $realm = Opus_Security_Realm::getInstance();
 
         // admins sollen immer durchgelassen werden, nutzer nur wenn das doc im publizierten Zustand ist
@@ -128,6 +129,18 @@ class Oai_Model_Container extends Application_Model_Abstract {
                     );
                     throw new Oai_Model_Exception('access to requested document is forbidden');
                 }
+            }
+
+            if ($this->_doc->hasEmbargoPassed() === false) {
+                if (!$realm->checkDocument($this->_docId)) {
+                    // Dokument ist nicht verfügbar für aktuellen Nutzer
+                    $this->logErrorMessage(
+                        'document id =' . $this->_docId
+                        . ' is not embargoed and access is not allowed for current user'
+                    );
+                    throw new Oai_Model_Exception('access to requested document files is embargoed');
+                }
+
             }
         }
 
@@ -192,7 +205,15 @@ class Oai_Model_Container extends Application_Model_Abstract {
         throw new Exception('Not Implemented');
     }
 
+    /**
+     * Returns name of file.
+     *
+     * For OAI the name of the file should be the document ID.
+     *
+     * @return int
+     */
     public function getName() {
         return $this->_docId;
     }
+
 }
