@@ -28,9 +28,9 @@
  * @category    Application
  * @package     Module_Frontdoor
  * @author      Thoralf Klein <thoralf.klein@zib.de>
- * @copyright   Copyright (c) 2008-2011, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 class Frontdoor_Model_File {
 
@@ -38,12 +38,27 @@ class Frontdoor_Model_File {
     const SERVER_STATE_PUBLISHED = 'published';
     const ILLEGAL_DOCID_MESSAGE_KEY = 'illegal_argument_docid';
     const ILLEGAL_FILENAME_MESSAGE_KEY = 'illegal_argument_filename';
-    
+
+    /**
+     * @var Opus_Document
+     */
     private $_doc;
+
+    /**
+     * @var string
+     */
     private $_filename;
-    
+
+    /**
+     * @var
+     */
     private $_accessControl;
 
+    /**
+     * Frontdoor_Model_File constructor.
+     * @param $docId int OPUS document id number
+     * @param $filename string Name of file
+     */
     public function __construct($docId, $filename) {
         if (mb_strlen($docId) < 1 || preg_match('/^[\d]+$/', $docId) === 0 || $docId == null) {
             throw new Frontdoor_Model_FrontdoorDeliveryException(self::ILLEGAL_DOCID_MESSAGE_KEY, 400);
@@ -65,7 +80,7 @@ class Frontdoor_Model_File {
         return $this->fetchFile($realm);
     }
 
-    private function checkDocumentApplicableForFileDownload($realm) {
+    public function checkDocumentApplicableForFileDownload($realm) {
         if (!$this->isDocumentAccessAllowed($this->_doc->getId(), $realm)) {
             switch ($this->_doc->getServerState()) {
                 case self::SERVER_STATE_DELETED:
@@ -77,11 +92,6 @@ class Frontdoor_Model_File {
                 default:
                     // Dateien dürfen bei Nutzer mit Zugriff auf "documents" heruntergeladen werden
                     throw new Frontdoor_Model_DocumentAccessNotAllowedException();
-
-                    if (!$this->getAclHelper()->accessAllowed('documents') || !($realm instanceof Opus_Security_Realm)) {
-                        throw new Frontdoor_Model_DocumentAccessNotAllowedException();
-                    }
-                    break;
             }
         }
     }
@@ -109,8 +119,10 @@ class Frontdoor_Model_File {
             return false;
         }
 
-        return ($realm->checkFile($file->getId()) && $file->getVisibleInFrontdoor() && $this->_doc->hasEmbargoPassed())
-                || $this->getAclHelper()->accessAllowed('documents');
+        return ($realm->checkFile($file->getId())
+            && $file->getVisibleInFrontdoor()
+            && $this->_doc->hasEmbargoPassed())
+            || $this->getAclHelper()->accessAllowed('documents');
     }
 
     public function getAclHelper() {
@@ -132,5 +144,5 @@ class Frontdoor_Model_File {
             );
         }
     }
-      
+
 }
