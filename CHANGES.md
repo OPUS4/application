@@ -1,7 +1,8 @@
 # OPUS 4 Change Log
 
-##  Release 4.4.5 2014-10-30
-----------------------------
+---
+
+## Release 4.4.5 2014-10-30
 
 ### Bugs
 
@@ -19,8 +20,9 @@
 * [OPUSVIER-3406] - Sortierfunktionen für Opus_Db_NestedSet hinzufügen
 * [OPUSVIER-3408] - Sortierfunktionen für Sammlungen in Administration verfügbar machen
 
-##  Release 4.4.4 2014-10-13
-----------------------------
+---
+
+## Release 4.4.4 2014-10-13
 
 ### Bugs
 
@@ -258,8 +260,9 @@
 * [OPUSVIER-3394] - Dokumentation des Export-Buttons auf Frontdoor und Suche
 * [OPUSVIER-3400] - Dokumentation des Embargo Date
 
-##  Release 4.4.3 2014-06-04 
-----------------------------
+---
+
+## Release 4.4.3 2014-06-04
 
 ### Bugs
 
@@ -314,8 +317,9 @@
 * [OPUSVIER-3280] - Erweiterung von documentType.include in tests.ini um Wert 'masterthesis'
 * [OPUSVIER-3302] - Felder des Personenformulars im Adminbereich anlegen
 
-##  Release 4.4.2 2013-11-22 
-----------------------------
+---
+
+## Release 4.4.2 2013-11-22
 
 ### Bugs
 
@@ -353,8 +357,9 @@
 
 * [OPUSVIER-3206] - Hinweis auf Abhängigkeit von XMetaDissPlus auf Spracheinstellungen
 
-##  Release 4.4.1 2013-10-17 
-----------------------------
+---
+
+## Release 4.4.1 2013-10-17
 
 ### Bugs
 
@@ -530,8 +535,9 @@
 
 * [OPUSVIER-12] - Bibtex-Import
 
-##  Release 4.4.0 2013-07-22 
-----------------------------
+---
+
+## Release 4.4.0 2013-07-22
 
 ### Bugs
 
@@ -686,9 +692,9 @@
 
 * [OPUSVIER-1684] - Hinzufügen von mehreren Informationen gleichen Types ist mühsam
 
+---
 
-##  Release 4.3.1 2013-02-21 
-----------------------------
+## Release 4.3.1 2013-02-21
 
 ### Bugs
 
@@ -711,9 +717,9 @@
 * [OPUSVIER-2723] - Anforderungen an Mail-Server (SMTP) in der Dokumentation präzisieren
 * [OPUSVIER-2736] - Abhängigkeit zwischen PHTML-Template und XML-Dokumenttypdefinition: Schreibweise des Wertes des Attributs name
 
+---
 
-##  Release 4.3.0 2012-12-20 
-----------------------------
+## Release 4.3.0 2012-12-20
 
 ### Bugs
 
@@ -831,9 +837,9 @@
 
 * [OPUSVIER-2691] - Systematische Tests für Titel und Abstracts
 
+---
 
-##  Release 4.2.2 2012-07-04 
-----------------------------
+## Release 4.2.2 2012-07-04
 
 ### Bugs
 
@@ -953,9 +959,9 @@
 * [OPUSVIER-2567] - Hilfe Index wird in "help.ini" statt "help.phtml" konfiguriert
 * [OPUSVIER-2569] - Nur noch "all-lower-case" Loginnamen verwenden
 
+---
 
-##  Release 4.2.1 2012-03-01 
-----------------------------
+## Release 4.2.1 2012-03-01
 
 ### Bugs
 
@@ -993,9 +999,9 @@
 * [OPUSVIER-2389] - Hinweis auf manuelles Bearbeiten "korrupter" XML-Dumps in die Dokumentation aufnehmen
 * [OPUSVIER-2408] - Abängigkeit von Modul php5-phar auf openSUSE
 
+---
 
-##  Release 4.2.0 2012-01-27 
-----------------------------
+## Release 4.2.0 2012-01-27
 
 ### Bugs
 
@@ -1278,9 +1284,9 @@
 * [OPUSVIER-2325] - Eintrag in den Releasenotes, der die Migration der SubjectClassifications (MSC, DDC) beschreibt
 * [OPUSVIER-2330] - Grafik Datenmodell aktualisieren
 
+---
 
-##  Release 4.1.4 2011-10-18 
-----------------------------
+## Release 4.1.4 2011-10-18
 
 ### Bugs
 
@@ -1345,9 +1351,9 @@
 * [OPUSVIER-1839] - Migration: Fehlermeldung bei Dokumenten mit zwei sprachidentischen Titeln oder Abstracts
 * [OPUSVIER-1802] - Parameter checksum.maxVerificationSize in die Dokumentation aufnehmen
 
+---
 
-##  Release 4.1.3 2011-09-07 
-----------------------------
+## Release 4.1.3 2011-09-07
 
 ### Bugs
 
@@ -1392,9 +1398,9 @@
 * [OPUSVIER-1729] - Config Parameter form-first.numberoffiles wurde entfernt!
 * [OPUSVIER-1731] - Dokumentation des neuen Datatypes "CollectionLeaf" für die Dokumenttypen
 
+---
 
-##  Release 4.1.2 2011-08-08 
-----------------------------
+## Release 4.1.2 2011-08-08
 
 ### Bugfixes
 
@@ -1570,9 +1576,9 @@
 * [OPUSVIER-1664] - Dokumentation Migration Zugriffsbeschränkung
 * [OPUSVIER-1665] - Dokumentation Migration Lizenzen
 
+---
 
-##  Release 4.1.1 2011-06-03 
-----------------------------
+## Release 4.1.1 2011-06-03
 
 ### Bugfixes
 
@@ -1680,9 +1686,9 @@
 * [OPUSVIER-1387] - Fehler in Kap. 8.6 (benutzerspezifische Layouts)
 * [OPUSVIER-1402] - Fehler in Doku in Kap. 5.2.1 und 5.3.1 (Installation von php5 unter ubuntu bzw. opensuse)
 
+---
 
-##  Release 4.1.0 2011-04-27 
-----------------------------
+## Release 4.1.0 2011-04-27
 
 ### Stories
 
@@ -1895,8 +1901,9 @@
 * OPUSVIER-153 	-   Asynchrone Indexaktualisierung mittels Cron
 * OPUSVIER-113 	-   Bearbeitung der OAI-Resumption-Token in extra Klasse auslagern
 
-##  Release 4.0.3 2011-02-21 
-----------------------------
+---
+
+## Release 4.0.3 2011-02-21
 
 ### Bug Fixes
 
@@ -1993,8 +2000,9 @@
 * [OPUSVIER-1077] - Hinweis zur Apache-Konfiguration
 * [OPUSVIER-1078] - Weiterer Hinweis zur PHP-Konfiguration in php.ini
 
-##  Release 4.0.2 2010-12-22 
-----------------------------
+---
+
+## Release 4.0.2 2010-12-22
 
 ### Änderungen
 
@@ -2020,8 +2028,9 @@ Metadaten-Formular erscheint '0' als Wert
 * [OPUSVIER-1011] - r*-Mechanismus in Sprachumschaltung bzw. Login führt zu Exception
 * [OPUSVIER-1015] - Subversion Package-Dependency in deb-Package aufnehmen
 
-##  Release 4.0.1 2010-11-26 
-----------------------------
+---
+
+## Release 4.0.1 2010-11-26
 
 * Layout/CSS Änderungen
 
@@ -2046,9 +2055,9 @@ Exceptions zu verhindern
 
 * [OPUSVIER-804] - Collections aus voherigem Schritt ausblenden
 
+---
 
-##  Release 4.0.0 2010-11-15 
-----------------------------
+## Release 4.0.0 2010-11-15
 
 ### Bugfixes
 
@@ -2097,9 +2106,9 @@ Exceptions zu verhindern
 * [OPUSVIER-843] - Anzeige der Dateigröße im Dateimanager
 * [OPUSVIER-857] - Bestätigungsfeld für Übertragung der Rechte
 
+---
 
-##  Release 4.0.0 Release Candidate 2010-10-08 
-----------------------------------------------
+## Release 4.0.0 Release Candidate 2010-10-08
 
 ### Bugfixes
 
@@ -2490,7 +2499,6 @@ Exceptions zu verhindern
 * [OPUSVIER-755] - Dokumentation der Konfiguration der Hilfeseite
 * [OPUSVIER-756] - Dokumentation der Konfiguration der Impressumseite
 * [OPUSVIER-757] - Dokumentation der Konfiguration der Kontaktseite
-
 
 ### Specification
 
