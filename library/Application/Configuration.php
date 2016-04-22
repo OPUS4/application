@@ -61,6 +61,23 @@ class Application_Configuration {
     private $_languageSelectionEnabled = null;
 
     /**
+     * @var Application_Configuration
+     */
+    private static $_instance;
+
+    /**
+     * Returns instance of class.
+     * @return Application_Configuration
+     */
+    public static function getInstance() {
+        if (is_null(self::$_instance)) {
+            self::$_instance = new Application_Configuration();
+        }
+
+        return self::$_instance;
+    }
+
+    /**
      * Liefert den Logger für diese Klasse.
      * @return Zend_Log
      */

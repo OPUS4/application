@@ -150,4 +150,11 @@ class Application_ConfigurationTest extends ControllerTestCase {
         $this->assertEquals(APPLICATION_PATH . '/tests/workspace/tmp/', $this->config->getTempPath());
     }
 
+    public function testGetInstance() {
+        $config = Application_Configuration::getInstance();
+        $this->assertNotNull($config);
+        $this->assertInstanceOf('Application_Configuration', $config);
+        $this->assertSame($config, Application_Configuration::getInstance());
+    }
+
 }
