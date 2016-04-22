@@ -28,29 +28,51 @@
  * @package     Module_Oai
  * @author      Sascha Szott <szott@zib.de>
  * @author      Michael Lang <lang@zib.de>
- * @copyright   Copyright (c) 2008-2014, OPUS 4 development team
+ * @author      Jens Schwidder <schwidder@zib.de>
+ * @copyright   Copyright (c) 2008-2016, OPUS 4 development team
  * @license     http://www.gnu.org/licenses/gpl.html General Public License
- * @version     $Id$
  */
 
-class Oai_Model_Container {
+/**
+ * Class Oai_Model_Container
+ *
+ * TODO document class
+ */
+class Oai_Model_Container extends Application_Model_Abstract {
 
+    /**
+     * OPUS document identifier.
+     * @var int
+     */
     private $_docId;
 
+    /**
+     * @var Opus_Document
+     */
     private $_doc;
 
-    private $_logger;
+    /**
+     * @var Application_Configuration
+     */
+    private $_appConfig;
 
-    public function  __construct($docId, $logger = null) {
-        $this->_logger = $logger;
+    /**
+     * Oai_Model_Container constructor.
+     * @param $docId
+     * @param null $logger
+     */
+    public function  __construct($docId) {
         $this->_doc = $this->validateId($docId);
         $this->_docId = $this->_doc->getId();
+        $this->_appConfig = Application_Configuration::getInstance();
     }
 
+    /**
+     * Writes log message with additional class information.
+     * @param $message
+     */
     private function logErrorMessage($message) {
-        if (!is_null($this->_logger)) {
-            $this->_logger->err(__CLASS__ . ': ' . $message);
-        }
+        $this->getLogger()->err(__CLASS__ . ': ' . $message);
     }
 
     /**
@@ -58,6 +80,8 @@ class Oai_Model_Container {
      * @param string $docId
      * @return Opus_Document returns valid Opus_Document if docId is valid, otherwise throws an Oai_Model_Exception
      * @throws Oai_Model_Exception throws Oai_Model_Exception if the given docId is invalid
+     *
+     * TODO centralize this function (is used in several controllers)
      */
     private function validateId($docId) {
         if (is_null($docId)) {
@@ -81,6 +105,9 @@ class Oai_Model_Container {
 
     /**
      * @return array All associated Opus_File objects that are visible in OAI and accessible by user
+     *
+     * TODO check embargo date
+     * TODO merge access checks with code for deliver controller
      */
     private function getAccessibleFiles() {
         $realm = Opus_Security_Realm::getInstance();
@@ -106,8 +133,9 @@ class Oai_Model_Container {
 
         $files = array();
         $filesToCheck = $this->_doc->getFile();
+        /* @var $file Opus_File */
         foreach ($filesToCheck as $file) {
-            $filename = $this->getFilesPath() . $this->_docId . DIRECTORY_SEPARATOR . $file->getPathName();
+            $filename = $this->_appConfig->getFilesPath() . $this->_docId . DIRECTORY_SEPARATOR . $file->getPathName();
             if (is_readable($filename)) {
                 array_push($files, $file);
             }
@@ -122,6 +150,7 @@ class Oai_Model_Container {
         }
 
         $containerFiles = array();
+        /* @var $file Opus_File */
         foreach ($files as $file) {
             if ($file->getVisibleInOai() && $realm->checkFile($file->getId())) {
                 array_push($containerFiles, $file);
@@ -138,35 +167,17 @@ class Oai_Model_Container {
         return $containerFiles;
     }
 
-    private function getWorkspacePath() {
-        $config = Zend_Registry::get('Zend_Config');
-
-        if (!isset($config->workspacePath)) {
-            $this->logErrorMessage('missing config key workspacePath');
-            throw new Oai_Model_Exception('missing configuration key workspacePath');
-        }
-
-        return $config->workspacePath . DIRECTORY_SEPARATOR;
-    }
-
-    private function getTempPath() {
-        return $this->getWorkspacePath() . 'tmp' . DIRECTORY_SEPARATOR;
-    }
-
-    private function getFilesPath() {
-        return $this->getWorkspacePath() . 'files' . DIRECTORY_SEPARATOR;
-    }
-
     public function getFileHandle() {
+        $config = $this->_appConfig;
         $filesToInclude = $this->getAccessibleFiles();
         if (count($filesToInclude) > 1) {
             return new Oai_Model_TarFile(
-                $this->_docId, $filesToInclude, $this->getFilesPath(), $this->getTempPath(), $this->_logger
+                $this->_docId, $filesToInclude, $config->getFilesPath(), $config->getTempPath(), $this->getLogger()
             );
         }
         else {
             return new Oai_Model_SingleFile(
-                $this->_docId, $filesToInclude, $this->getFilesPath(), $this->getTempPath(), $this->_logger
+                $this->_docId, $filesToInclude, $config->getFilesPath(), $config->getTempPath(), $this->getLogger()
             );
         }
     }
