@@ -28,24 +28,6 @@ set -e
 
 script_dir=$(cd `dirname $0` && pwd)
 
-config_ini=$script_dir/config.ini
-
-# Read database parameters from tests/config.ini
-# user should has rights to drop and create a database (grant rights)
-user=$(sed -n 's/^opusdb\.params\.admin\.name *= *\([^ ]*.*\)/\1/p' < $config_ini)
-password=$(sed -n 's/^opusdb\.params\.admin\.password *= *\([^ ]*.*\)/\1/p' < $config_ini)
-host=$(sed -n 's/^db\.params\.host *= *\([^ ]*.*\)/\1/p' < $config_ini)
-port=$(sed -n 's/^db\.params\.port *= *\([^ ]*.*\)/\1/p' < $config_ini)
-dbname=$(sed -n 's/^db\.params\.dbname *= *\([^ ]*.*\)/\1/p' < $config_ini)
-
-# path to mysql binary
-mysql_bin=/usr/bin/mysql
-# path to schema file
-schema_file=$script_dir/../db/schema/opus4current.sql
-# path to different sql locations
-master_dir=$script_dir/../db/masterdata/
-test_dir=$script_dir/sql/
-
 #
 # Application Workspace Directories
 #
@@ -64,7 +46,6 @@ workspace_cache_dir=$workspace_dir/cache
 # path to directory of series_logos
 series_logos_dir=$script_dir/../public/series_logos
 
-
 #
 # Files and Directiories associated with test documents / data
 #
@@ -80,47 +61,17 @@ test_series_logos_dir=$script_dir/series_logos
 # end editable part
 #
 
-mysql="${mysql_bin} --default-character-set=utf8 --user=${user} --host=${host}"
-
-if [ -n "${password}" ]; then
-    mysql="${mysql} --password=${password}"
-fi
-
-#Delete database
-echo "Dropping database: ${dbname}"
-echo "DROP DATABASE IF EXISTS ${dbname};" | ${mysql}
-
-#Creating database
-echo "Creating database: ${dbname}"
-echo "CREATE SCHEMA IF NOT EXISTS ${dbname} DEFAULT CHARACTER SET = utf8 DEFAULT COLLATE = utf8_general_ci;" | ${mysql}
-
-#Import database schema
-echo "Importing database schema file '${schema_file}'"
-${mysql} ${dbname} < ${schema_file}
-
-#Import master data
-if [ -d ${master_dir} ] ; then
-    for i in `find ${master_dir} -name '*.sql' \( -type f -o -type l \) | sort`; do
-        echo "Inserting file '${i}'"
-        ${mysql} ${dbname} < "${i}"
-    done
-fi
-
-#Import test data
-if [ -d ${test_dir} ] ; then
-    for i in `find ${test_dir} -name '*.sql' \( -type f -o -type l \) | sort`; do
-        echo "Inserting file '${i}'"
-        ${mysql} ${dbname} < "${i}"
-    done
-fi
-
+#
+# Rebuild database
+#
+php rebuild-database.php
 
 #
 # Backup old fulltexts and log files and series logos
 #
 
 TEMP_DIR=$(mktemp -d $workspace_tmp_dir/old-XXXXXXX)
-mkdir -v $TEMP_DIR/{files,log}
+mkdir -v "$TEMP_DIR"/{files,log}
 
 if [ -d ${workspace_files_dir} ] ; then
     mv $workspace_files_dir/ $TEMP_DIR/files
@@ -171,7 +122,7 @@ rsync -rv $fulltext_dir/ $workspace_test_dir/files
 if [ ! -d ${workspace_log_dir} ] ; then
    mkdir -p ${workspace_log_dir}
 fi
-touch $workspace_log_dir/{opus.log,opus-console.log}
+touch "$workspace_log_dir"/{opus.log,opus-console.log}
 chmod -R o+w,g+w {$workspace_files_dir,$workspace_log_dir}
 
 #
