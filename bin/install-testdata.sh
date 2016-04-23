@@ -31,20 +31,15 @@ SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
 
 BASEDIR="`dirname "$SCRIPT_PATH"`"
 
-mysqlOpus4Admin() {
-  "$MYSQL_CLIENT" --defaults-file=<(echo -e "[client]\npassword=${ADMIN_PASSWORD}") \
-        --default-character-set=utf8 ${MYSQL_OPTS} -u "$ADMIN" -v $1
-}
-
-# import test data
-cd "$BASEDIR"
-
-for i in `find tests/sql -name *.sql \( -type f -o -type l \) | sort`; do
-  echo "Inserting file '${i}'"
-  mysqlOpus4Admin "$DBNAME" < "${i}"
-done
+#
+# Import test data into database
+#
+cd "$BASEDIR/tests"
+php import-testdata.php
 
 # copy test fulltexts to workspace directory
+cd "$BASEDIR"
+
 cp -rv tests/fulltexts/* workspace/files
 
 # TODO is waiting for running solr required since service script has been waiting for this before
