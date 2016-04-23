@@ -30,6 +30,11 @@
 
 set -e
 
+if [[ $EUID -ne 0 ]]; then
+    echo -e "\nERROR: This script must be run as root\n" 1>&2
+    exit 1
+fi
+
 # Get command line parameters
 while getopts ":g:u:" opt; do
   case $opt in
