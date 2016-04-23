@@ -1,6 +1,8 @@
-h1. OPUS 4 Release Notes
+# OPUS 4 Release Notes
 
-h2. ======================== Release 4.5.0 2015-xx-xx ========================
+---
+
+## Release 4.5.0 2015-xx-xx
 
 Die URLs für creativecommons.org in den Lizenzen wurden auf HTTPS umgestellt,
 um bei Instanzen mit HTTPS "Mixed Content"-Warnungen zu vermeiden. Das wird
@@ -10,7 +12,9 @@ Die erlaubten Zeichen für EnrichmentKeys wurde eingeschränkt. EnrichmentKeys
 müssen mit einem Buchstaben beginnen und dürfen Buchstaben, Zahlen, '.' und
 '_' verwenden. Existierende EnrichmentKeys können weiterhin verwendet werden.
 
-h2. ======================== Release 4.4.5 2014-10-30 ========================
+---
+
+## Release 4.4.5 2014-10-30
 
 Es wurde ein Bug gefixt, der beim Update von Instanzen der Version 4.4.2 oder
 früher mit umfangreichen, sortierten Sammlungseinträgen zu Problemen führen
@@ -30,9 +34,11 @@ da die notwendigen Datenbankoperationen aufwendig sind.
 
 Weitere Informationen zu Änderungen finden sich in der Datei CHANGES.txt.
 
-h2. ======================== Release 4.4.4 2014-10-13 ========================
+---
 
-h3. Allgemein
+## Release 4.4.4 2014-10-13
+
+### Allgemein
 
 * Dokument-Embargo möglich - bis zu diesem Zeitpunkt wird der Volltext des
   Dokuments unter Verschluss gehalten. Metadaten können eingesehen werden.
@@ -47,7 +53,7 @@ h3. Allgemein
 * Link für XML Export von Dokumenten und Suchergebnissen kann mit einem
   Defaultstylesheet aktiviert werden.
 
-h3. Konfiguration
+### Konfiguration
 
 * Die Defaultrolle für neue Dateien kann in der config.ini festgelegt werden.
 * Die Sprachauswahl verschwindet automatisch, wenn nur eine Sprache als
@@ -55,62 +61,64 @@ h3. Konfiguration
 * In der Frontdoor kann eine lokale XSLT Datei verwendet werden, so daß die
   ausgelieferte Datei nicht mehr verändert werden muss.
 
-h4. Apache 2.4 Support
+#### Apache 2.4 Support
 
 OPUS 4 wird in diesem Release noch mit einer Konfiguration für Apache 2.2
 ausgeliefert. Um Apache 2.4 zu verwenden müssen kleine Änderungen manuell
 an der opus4 Apache-Konfiguration vorgenommen werden. Das ist im Handbuch
 näher erläutert.
 
-h3. OpenAIRE
+### OpenAIRE
 
 Erweiterung des OpenAIRE Supports. Die Validierung gegen Version 3 von
 OpenAIRE war erfolgreich, wobei bisher nicht die optionalen Anforderungen
 umgesetzt wurden.
 
-h3. XMetaDissPlus
+### XMetaDissPlus
 
 * Erweiterung von isPartOf um Band oder Heftnummer für Zeitschriften
 * Unterscheidung des Akademischen Grades für Abschlussarbeiten
 
-h3. Datenmodell
+### Datenmodell
 
 * Datum für das Hinzufügen einer Datei wird erfasst.
 * Embargo Datum für Dokumente kann festgelegt werden.
 
-h3. Bug Fixes
+### Bug Fixes
 
 * Codebereinigung um Probleme mit aktuellen PHP Versionen (z.B. 5.5.9) zu
   beseitigen
 * Korrektur der Statistikseite in der Administration
 * Reduzierung der "Unable to translate" Nachrichten im Log für Debugging
 
-h3. Sonstiges
+### Sonstiges
 
 * Modernisierung der Entwicklungsinfrastruktur, einschließlich Upgrade zu
   PHPUnit 4.2.5
 
-h2. ======================== Release 4.4.3 2014-06-04 ========================
+---
 
-h3. Allgmein
+## Release 4.4.3 2014-06-04
+
+### Allgmein
 
 * Zahlreiche Bug-Fixes
 * Tarball wird jetzt in Unterverzeichnis opus-x.x.x (opus-4.4.3) entpackt und
   nicht mehr einfach in das aktuelle Verzeichnis
 
-h3. Administration
+### Administration
 
 * Auflistung und Validierung der verfügbaren Dokumententypen unter
   "Systeminformationen -> Dokumenttypen"
 
-h3. OpenAIRE (experimentell)
+### OpenAIRE (experimentell)
 
 Es gibt eine erste Umsetzung des OpenAIRE Supports. Dafür wurde eine Variante
 der "oai_dc.xslt" Datei mit dem Namen "oai_dc.xslt.openaire" angelegt. Durch
 das Umbenennen der OpenAIRE Datei in "oai_dc.xslt" lässt sich der OpenAIRE
 konforme OAI Export aktivieren.
 
-h3. XMetaDiss Plus Änderungen
+### XMetaDiss Plus Änderungen
 
 Es wurden einige Erweiterungen für XMetaDiss Plus vorgenommen, insbesondere
 für Zeitschriftenlieferungen.
@@ -121,7 +129,7 @@ für Zeitschriftenlieferungen.
 * Dokumententypen wurden um ThesisPublisher erweitert (muss für angepasste
   Typen manuell nachgezogen werden)
 
-h3. ServerDatePublished
+### ServerDatePublished
 
 Ändert sich der ServerState eines Dokuments von 'published' zu einem anderen
 Zustand wird das Feld ServerDatePublished gelöscht, so daß dieses Dokument
@@ -129,21 +137,23 @@ auch nicht mehr in der Veröffentlichungsstatistik auftaucht. Wird das Dokument
 anschließend wieder veröffentlich, wird ServerDatePublished auf das neue Datum
 gesetzt.
 
-h2. ======================== Release 4.4.2 2013-11-22 ========================
+---
 
-h3. XMetaDiss Plus Änderungen
+## Release 4.4.2 2013-11-22
+
+### XMetaDiss Plus Änderungen
 
 Es gab einige Anpassungen, um den Standard besser zu unterstützen. Dazu wird
 unter anderem bei Sprachen jetzt der Wert von Feld "Part2B" verwendet, so
 dass zum Beispiel 'ger' anstelle von bisher 'deu' verwendet wird. Weitere
 Hinweise dazu gibt es in Kapitel 9.6 der Dokumentation.
 
-h3. Datenmodel Änderungen
+### Datenmodel Änderungen
 
 Die maximale Länge der Felder "edition", "issue", und "volume" von Dokumenten
 wurde auf 255 Zeichen erhöht.
 
-h3. Frontdoor Layout & CSS
+### Frontdoor Layout & CSS
 
 Die Zusammenfassungen werden jetzt als HTML Liste (UL) ausgegeben, um valides
 XHTML zu generieren. Dafür wurde auch das CSS in opus.css angepasst. Unter
@@ -151,14 +161,16 @@ Umständen müssen daher Anpassungen am CSS für Ihre OPUS Instanzen vorgenommen
 werden. Die Probleme mit dem Einklappen von Zusammenfassungen sollten durch
 diese Änderungen behoben sein.
 
-h3. Update Skript
+### Update Skript
 
 Das Update Skript funktioniert nur mit BASH Versionen ab 4.0. Die Version wird
 jetzt am Anfang des Update-Skript geprüft.
 
-h2. ======================== Release 4.4.1 2013-10-17 ========================
+---
 
-h3. Neue Konfigurationsoption für Dateien in Publikationslisten
+## Release 4.4.1 2013-10-17
+
+### Neue Konfigurationsoption für Dateien in Publikationslisten
 
 Im neu in 4.4.0 eingeführten Feature der Publikationslisten war im
 ausgelieferten Stylesheet default.xslt nur die Anzeige von PDF-Dateien
@@ -166,29 +178,31 @@ vorgesehen. Nun ist es möglich, über entsprechende Konfigurationsoptionen
 die Anzeige verschiedener Dateitypen zuzulassen. Wenn hier kein Wert für die
 Anzeige gesetzt ist, werden keine Dateien in der Liste ausgegeben.
 
-h3. Umbau Administration
+### Umbau Administration
 
 Der Umbau der Administration wurde weiter fortgesetzt, insbesondere wurde der
 Dateimanager überarbeitet.
 
-h3. Bekannte Probleme
+### Bekannte Probleme
 
-h4. Editieren von Collections eines Dokuments
+#### Editieren von Collections eines Dokuments
 
 Das Editieren, als ersetzen einer Collection hat es nicht mehr in diesen
 Release geschafft. Um eine Collection zu ersetzen muss weiterhin die alte
 entfernt und eine neue zugewiesen werden.
 
-h4. Positionierung des Metadaten-Formulars
+#### Positionierung des Metadaten-Formulars
 
 Nach dem Hinzufügen oder Entfernen eines Objekts im Metadaten-Formulars sollte
 der Browser wieder in die Nähe der usprünglichen Position springen. Das ist
 leider noch nicht konsequent für das gesamte Formular umgesetzt, insbesondere
 die Collections.
 
-h2. ======================== Release 4.4.0 2013-07-22 ========================
+---
 
-h3. Zugriff auf neue Funktionen innerhalb der Administration
+## Release 4.4.0 2013-07-22
+
+### Zugriff auf neue Funktionen innerhalb der Administration
 
 OPUS 4.4 bietet innerhalb der Administration folgende zusätzliche Funktionen an
 
@@ -223,7 +237,7 @@ auf eine oder mehrere der Funktionen "FAQ-Seiten verwalten", "Statischen Seiten
 verwalten" bzw. "Übersetzungsressourcen verwalten" erlaubt.
 
 
-h3. Anpassung der benötigten Version des Zend Frameworks
+### Anpassung der benötigten Version des Zend Frameworks
 
 Mit OPUS 4.4 ändert sich die Versionsabhängigkeit auf das Zend Framework von
 1.10.6 auf 1.12.3. Sofern Sie die Instanz mit dem Update-Skript aktualisieren,
@@ -232,7 +246,7 @@ Andernfalls konsultieren Sie bitte die Dokumentation (Abschnitt 6.3.1) und führ
 die Änderungen manuell durch.
 
 
-h3. Anpassungen am Solr-Indexschema
+### Anpassungen am Solr-Indexschema
 
 Mit OPUS 4.4 werden vier neue Indexfelder eingeführt:
 
@@ -255,7 +269,7 @@ Version 4.4 eine Reindexierung aller Dokumente erforderlich, damit die neu
 eingeführten Indexfelder für alle Indexdokumente angelegt werden.
 
 
-h3. Verwendung des Felds 'IdentifierUrn' im Publikationsformular
+### Verwendung des Felds 'IdentifierUrn' im Publikationsformular
 
 Mit der Version 4.4 wurde das optionale Feld IdentifierUrn in den ausgelieferten
 Dokumenttypen (sowohl in der XML-Typdefinition als auch den PHTML-Templates)
@@ -276,7 +290,7 @@ achten, dass die URN aus dem eigenen Namensraum kommt (ansonsten kann keine
 Kollisionsfreiheit sichergestellt werden).
 
 
-h3. Konfiguration der bearbeitbaren Übersetzungsressourcen
+### Konfiguration der bearbeitbaren Übersetzungsressourcen
 
 Für die Bearbeitung von Übersetzungsressourcen über die Administration
 muss in der config.ini festgelegt werden, welche Module bearbeitbar sein sollen.
@@ -290,7 +304,7 @@ Als Vorgabe werden in der Datei config.ini.template die Module "default" und
 "publish" freigegeben.
 
 
-h3. Verschiebung der PHTML-Templates für die Dokumenttypen
+### Verschiebung der PHTML-Templates für die Dokumenttypen
 
 Die PHTML-Templates wurden verschoben von modules/publish/views/scripts/form
 nach application/configs/doctypes_templates. Wird das Update-Skript zur
@@ -298,29 +312,31 @@ Aktualisierung der Instanz verwendet, so werden die bestehenden PHTML-Templates
 automatisch in das neue Verzeichnis übernommen (ggf. mit Rückfrage, wenn für
 einen Dokumenttyp eine "Differenz" zum Standard-PHTML-Template besteht).
 
+---
 
-h2. ======================== Release 4.3.1 2013-02-21 ========================
+## Release 4.3.1 2013-02-21
 
-h3. Bugfixes
+### Bugfixes
 
 In diesem Release wurden einige Fehler behoben, genaueres findet sich in der
 Datei CHANGES.txt
 
+---
 
-h2. ======================== Release 4.3.0 2012-12-20 ========================
+## Release 4.3.0 2012-12-20
 
-h3. Anpassung an den PHTML-Dokumenttyp-Templates
+### Anpassung an den PHTML-Dokumenttyp-Templates
 
 Sämtliche Dokumenttyp-Templates im Verzeichnis modules/publish/views/scripts/form
 wurden angepasst. Zum einen wurde ein auskommentierter Codeblock direkt unter
 dem OPUS4-Prolog entfernt. Außerdem wurde zur Vermeidung doppelter Übersetzungen
 die Zeile
 
-<h2><?= $this->title ?></h2>
+    <h2><?= $this->title ?></h2>
 
 ersetzt durch
 
-<h2><?= $this->translate($this->title) ?></h2>
+    <h2><?= $this->translate($this->title) ?></h2>
 
 Die alten Dokumenttyp-Templates funktionieren weiterhin. Wird die Änderung
 bezüglich der Übersetzung nicht nachgezogen, so erscheint auf der zweiten
@@ -333,7 +349,7 @@ Dokumenttyp-Templates müssen manuell aktualisiert werden. Das Update-Skript
 wird bei geänderten Templates einen Hinweis ausgeben.
 
 
-h3. Änderung an der Frontdoor - index.xslt
+### Änderung an der Frontdoor - index.xslt
 
 Die Datei modules/frontdoor/view/scripts/index.xslt wurde aufgeteilt,
 um die Übersichtlichkeit und Wartbarkeit zu verbessern.
@@ -348,10 +364,11 @@ nicht überschrieben wird, indem sie vor dem Update eine Sicherungskopie
 erstellen und diese danach wieder herstellen. Eventuelle Änderungen, die sich
 durch ein Update ergeben, müssen in diesem Fall von Hand eingearbeitet werden.
 
+---
 
-h2. ======================== Release 4.2.2 2012-07-04 ========================
+## Release 4.2.2 2012-07-04
 
-h3. URNs werden nur noch für Dokumente mit sichtbarem Volltext vergeben
+### URNs werden nur noch für Dokumente mit sichtbarem Volltext vergeben
 
 Die DNB lässt nur URNs für Dokumente mit Volltexten zu. Daher wurde die
 Vergabe von URNs auf Dokumente im Status "published" beschränkt, die per OAI
@@ -362,11 +379,11 @@ Bitte stellen Sie für bereits existierende Dokumente sicher, dass Sie keine
 Dokumente ohne sichtbare Dateien an die DNB melden. Zu diesem Zweck haben
 wir ein kleines Script für Sie vorbereitet:
 
-$ opus4/scripts/
-$ php opus-console.php snippets/find_urns_for_docs_without_visible_files.php
+    $ opus4/scripts/
+    $ php opus-console.php snippets/find_urns_for_docs_without_visible_files.php
 
 
-h3. Paginierung in der Exportausgabe
+### Paginierung in der Exportausgabe
 
 Mit dieser Version ist die Paginierung innerhalb des Exports möglich (unter
 Verwendung der Parameter *start* und *rows*). Bislang wurden die beiden
@@ -378,7 +395,7 @@ exportieren, so müssen die beiden Paginierungsparameter aus der URL entfernt
 werden.
 
 
-h3. Hilfedateien (FAQ-, Kontakt- und Impressumsseite)
+### Hilfedateien (FAQ-, Kontakt- und Impressumsseite)
 
 Die Hilfedateien liegen jetzt unter $BASEDIR/opus4/application/configs/help".
 (Siehe auch Dokumentation Kapitel 8.10 ff. und 11.4) Beim Update von existierenden
@@ -390,18 +407,18 @@ Die Konfiguration der Hilfeseite, die bisher in der Datei
 sich jetzt in der Datei "$BASEDIR/opus4/application/configs/help/help.ini". Die
 alte Konfiguration muß manuell übertragen werden.
 
-h3. Umbenennung von benutzerspezifischen Enrichment-Feldern
+### Umbenennung von benutzerspezifischen Enrichment-Feldern
 
 Mit OPUS 4.2.2 wird in der Standardauslieferung ein neues Enrichment-Feld
 eingeführt, das für die Migration von Dokumenten aus OPUS3 relevant sind:
 
-    * InvalidVerification
+    InvalidVerification
 
 Damit im Rahmen eines OPUS4-Updates keine Konflikte mit identischen, vom
 Benutzer angelegten, Enrichment-Feldern auftreten, wird ein gleichnamiges
 benutzerdefiniertes Enrichment-Feld vor dem Update auf OPUS 4.2.2 umbenannt in:
 
-    * TempInvalidVerification
+    TempInvalidVerification
 
 Im Falle einer Umbenennung muss die Übersetzungsressource des alten Feldes
 angepasst werden.
@@ -412,35 +429,36 @@ der Datei $BASEDIR/opus4/modules/default/language_custom/custom.tmx folgende
 
 ersetze
 
-<tu tuid="InvalidVerification">
-...
-</tu>
+    <tu tuid="InvalidVerification">
+    ...
+    </tu>
 
 durch
 
-<tu tuid="TempInvalidVerification">
-...
-</tu>
+    <tu tuid="TempInvalidVerification">
+    ...
+    </tu>
 
 
-h3. Änderungen an Solr-Indexschema
+### Änderungen an Solr-Indexschema
 
 Wird der Solr-Server nicht im Rahmen des Updateskripts aktualisiert (weil er
 z.B. auf einem anderen Server betrieben wird), dann muss das Indexschema
 aktualisiert werden. Dazu muss die Datei
 
-* solrconfig/schema.xml
+    solrconfig/schema.xml
 
 in das Konfigurationsverzeichnis der Solr-Server kopiert werden und anschließend
 der Index neu erstellt werden mittels:
 
-cd $BASEDIR/opus4/scripts
-./SolrIndexBuilder.php
+    cd $BASEDIR/opus4/scripts
+    ./SolrIndexBuilder.php
 
+---
 
-h2. ======================== Release 4.2.1 2012-03-01 ========================
+## Release 4.2.1 2012-03-01
 
-h3. Validierung des XML-Dumps für die Migration aus OPUS3
+### Validierung des XML-Dumps für die Migration aus OPUS3
 
 Ab dieser Version wird der Opus3-XML-Dump vor Beginn der Migration validiert.
 Treten dabei Fehler auf, bricht die Migration mit Hinweis auf Fehlerstelle und
@@ -449,7 +467,7 @@ Wir empfehlen in diesem Fall, den Opus3-XML-Dump von Hand zu korrigieren und die
 Migration anschließend erneut durchzuführen.
 
 
-h3. Migration von Volltextdateien aus OPUS3 mit fehlerhaften Sonderzeichen
+### Migration von Volltextdateien aus OPUS3 mit fehlerhaften Sonderzeichen
 
 Enthält der Dateiname eines Dokuments fehlerhafte Sonderzeichen, wird diese
 Datei mit modifizierten Dateinamen migriert: die fehlerhaften Zeichen werden aus
@@ -458,31 +476,32 @@ Wir empfehlen, die Originaldatei nach Abschluss der Migration von Hand
 umzubenennen und über die Administration einzufügen. Die durch die Migration
 umbenannte Datei kann anschließend gelöscht werden.
 
+---
 
-h2. ======================== Release 4.2.0 2012-01-27 ========================
+## Release 4.2.0 2012-01-27
 
-h3. Dokumentation im Tarball aufgenommen
+### Dokumentation im Tarball aufgenommen
 
 Ab dieser Version ist die aktuelle Dokumentation in deutscher Sprache im
 Tarball enthalten (opus_dokumentation_de.pdf).
 
 
-h3. Änderungen an Solr-Indexschema
+### Änderungen an Solr-Indexschema
 
 Wird der Solr-Server nicht im Rahmen des Updateskripts aktualisiert (weil er
 z.B. auf einem anderen Server betrieben wird), dann muss das Indexschema
 aktualisiert werden. Dazu muss die Datei
 
-* solrconfig/schema.xml
+    solrconfig/schema.xml
 
 in das Konfigurationsverzeichnis der Solr-Server kopiert werden und anschließend
 der Index neu erstellt werden mittels:
 
-cd $BASEDIR/opus4/scripts
-./SolrIndexBuilder.php
+    cd $BASEDIR/opus4/scripts
+    ./SolrIndexBuilder.php
 
 
-h3. Änderungen an der Datenbank
+### Änderungen an der Datenbank
 
 Das Update-Script befüllt für alle Collections automatisch das Feld "oai_subset"
 mit dem Inhalt des Feldes "number", sofern "number" gesetzt und das Feld
@@ -494,7 +513,7 @@ Kapitel 9.7 "Sammlungen verwalten" beschreibt, welche OAI-Einstellungen die
 Collections besitzen und wie diese manuell geändert werden können.
 
 
-h3. Migration der sammlungsbasierten Schriftenreihen
+### Migration der sammlungsbasierten Schriftenreihen
 
 Die Schriftenreihen werden in OPUS 4.2.0 neu modelliert. Es gibt nun ein
 eigenes Modell für die Abbildung von Schriftenreihen. Der Umweg über die
@@ -515,6 +534,7 @@ Bei der Übernahme von Dokumenten, die den Sammlungseinträgen der Sammlung seri
 zugeordneten sind, werden im Rahmen der Migration mehrere Fälle unterschieden.
 
 Fall 1: Dokument hat keinen IdentifierSerial (Bandnummer)
+
 * das Dokument wird nicht migriert -- es verbleibt am Sammlungseintrag / an
   den Sammlungseinträgen in der Sammlung series
 * es wird eine Warnung im Logfile ausgegeben (diese enthält die ID des
@@ -523,6 +543,7 @@ Fall 1: Dokument hat keinen IdentifierSerial (Bandnummer)
   migriert werden -- dabei muss eine Bandnummer festgelegt werden
 
 Fall 2: Dokument hat mehrere IdentifierSerial
+
 * das Dokument wird nicht migriert -- es verbleibt am Sammlungseintrag / an
   den Sammlungseinträgen in der Sammlung series
 * es wird eine Warnung im Logfile ausgegeben (diese enthält die ID des
@@ -533,6 +554,7 @@ Fall 2: Dokument hat mehrere IdentifierSerial
   manuell vom Dokument entfernt werden
 
 Fall 3: Dokument hat genau einen IdentifierSerial
+
 * grundsätzlich: das Dokument wird nur dann in die neuen Schriftenreihen
   migriert, wenn es zu keinem Bandnummernkonflikt (d.h. bei der Zuweisung zu
   einer Schriftenreihe wird eine Bandnummer verwendet, die für ein bereits
@@ -561,7 +583,7 @@ Sind die erforderlich Nacharbeiten nach Durchsicht der Logdatei abgeschlossen,
 kann die Sammlung series entfernt werden.
 
 
-h3. Migration von SubjectMsc bzw. SubjectDdc in die Sammlungen msc bzw. ddc
+### Migration von SubjectMsc bzw. SubjectDdc in die Sammlungen msc bzw. ddc
 
 In früheren Versionen konnten MSC- und DDC-Klassifikationen eines Dokuments
 sowohl in den Sammlungen (msc bzw. ddc) als auch in den Subject-Feldern
@@ -590,7 +612,7 @@ gespeichert, so ist im Anschluss an die Ausführung des Updates eine manuelle
 Nacharbeit erforderlich.
 
 
-h3. Anpassungen im den XML-Dokumenttypdefinitionen zugrunde liegenden XML Schema
+### Anpassungen im den XML-Dokumenttypdefinitionen zugrunde liegenden XML Schema
 
 Mit dieser Version hat sich die Spezifikation von Feldern, die auf den internen
 Feldern Identifier*, Subject* und Note basieren, geändert. Außerdem muss durch
@@ -638,7 +660,7 @@ Alle Manipulationen werden im Logfile $BASEDIR/UPDATE-documenttypes.log
 protokolliert.
 
 
-h3. Änderung in der Verarbeitung der XML-basierten Dokumenttypdefinitionen
+### Änderung in der Verarbeitung der XML-basierten Dokumenttypdefinitionen
 
 Mit OPUS 4.2.0 werden die XML-basierten Dokumenttypdefinitionen (im Verzeichnis
 $BASEDIR/opus4/applications/config/doctypes) gegen das XML-Schema validiert,
@@ -661,7 +683,7 @@ Fehler können Sie den Dokumenttyp durch das Entfernen des Suffix
 formular freigeben.
 
 
-h3. Hinweis zu URNs von migrierten Dokumenten
+### Hinweis zu URNs von migrierten Dokumenten
 
 Wir haben einen Hinweis in die Dokumentation aufgenommen, die alle Instanzen
 betrifft, die bereits vor OPUS4 für die URN-Vergabe registriert waren.  Bei
@@ -678,10 +700,11 @@ ID 123 aus dem alten System.
 
 Weitere Details erhalten Sie in Kapitel 7.6 unserer Dokumentation, bei der
 DNB oder im Nestor-Handbuch:
-* http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:de:0008-20100305176
+
+[http://nbn-resolving.de/urn/resolver.pl?urn=urn:nbn:de:0008-20100305176]
 
 
-h3. Neue Konfigurationsdatei für die Migration aus OPUS3
+### Neue Konfigurationsdatei für die Migration aus OPUS3
 
 Mit OPUS 4.2.0 ändert sich die Konfiguration der Migration aus OPUS3. Für
 instanzspezifische Anpassungen steht im Verzeichnis
@@ -697,7 +720,7 @@ vor der Migration nach migration_config.ini unter Berücksichtigung der neuen
 Konfigurationsschlüssel übetragen werden.
 
 
-h3. Validierung in Metadaten-Formularen (Administration)
+### Validierung in Metadaten-Formularen (Administration)
 
 Es wurde angefangen die Validierung der Formulare umzusetzen. Es werden aber
 immer noch nicht sämtliche Fehleingaben abgefangen und es kann zu Exceptions
@@ -705,36 +728,38 @@ kommen. In diesem Fall bitte den 'Back' Knopf im Browser verwenden und die
 Eingaben korrigieren. Es sollte bei einer Fehleingabe nicht zu korrumpierten
 Daten in der Datenbank kommen.
 
-h2. ======================== Release 4.1.4 2011-10-18 ========================
+---
 
-h3. Änderungen an Dateien im benutzerdefinierten Layout-Verzeichnis
+## Release 4.1.4 2011-10-18
+
+### Änderungen an Dateien im benutzerdefinierten Layout-Verzeichnis
 
 Wird ein Custom Layout verwendet, so müssen zwei Änderungen an CSS und
 JavaScript manuell nachgezogen werden, da das Update-Skript keine Veränderung an
 benutzerdefinierten Layouts vollzieht. Betroffen sind die Dateien
 
-* public/layouts/opus4/css/opus.css
-* public/layouts/opus4/js/searchutil.js
+    public/layouts/opus4/css/opus.css
+    public/layouts/opus4/js/searchutil.js
 
 Diese müssen in das eigene Layout durch Kopieren der Dateien übernommen werden.
 
 
-h3. Änderungen an Solr-Indexschema
+### Änderungen an Solr-Indexschema
 
 Wird der Solr-Server nicht im Rahmen des Updateskripts aktualisiert (weil er
 z.B. auf einem anderen Server betrieben wird), dann muss das Indexschema
 aktualisiert werden. Dazu muss die Datei
 
-* solrconfig/schema.xml
+    solrconfig/schema.xml
 
 in das Konfigurationsverzeichnis der Solr-Server kopiert werden und anschließend
 der Index neu erstellt werden mittels:
 
-cd $BASEDIR/opus4/scripts
-php SolrIndexBuilder.php
+    cd $BASEDIR/opus4/scripts
+    php SolrIndexBuilder.php
 
 
-h3. Umbenennung von benutzerspezifischen Enrichment-Feldern
+### Umbenennung von benutzerspezifischen Enrichment-Feldern
 
 Mit OPUS 4.1.4 werden in der Standardauslieferung neue Enrichment-Felder
 eingeführt, die für die Migration von Dokumenten aus OPUS3 relevant sind:
@@ -768,15 +793,15 @@ der Datei $BASEDIR/opus4/modules/default/language_custom/custom.tmx folgende
 
 ersetze
 
-<tu tuid="EnrichmentSourceTitle">
-...
-</tu>
+    <tu tuid="EnrichmentSourceTitle">
+    ...
+    </tu>
 
 durch
 
-<tu tuid="EnrichmentTempSourceTitle">
-...
-</tu>
+    <tu tuid="EnrichmentTempSourceTitle">
+    ...
+    </tu>
 
 
 

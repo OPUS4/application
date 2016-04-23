@@ -51,7 +51,14 @@ class Application_View_Helper_Translate extends Zend_View_Helper_Translate {
             $messageid = null;
         }
 
-        return parent::translate($messageid);
+        $options = func_get_args();
+        array_shift($options);
+
+        if ((count($options) === 1) and (is_array($options[0]) === true)) {
+            $options = $options[0];
+        }
+
+        return parent::translate($messageid, $options);
     }
 
 }

@@ -1,8 +1,10 @@
-h1. OPUS 4 Change Log
+# OPUS 4 Change Log
 
-h2. ======================== Release 4.4.5 2014-10-30 ========================
+---
 
-h3. Bugs
+## Release 4.4.5 2014-10-30
+
+### Bugs
 
 * [OPUSVIER-2340] - Admin-Veröffentlichungsstatistik enthält in Select-Box leeren Eintrag, wenn Dokumente ohne ServerDatePublished existieren
 * [OPUSVIER-3396] - Übersetzungsversuche von HTML Code tauchen im Log auf
@@ -10,7 +12,7 @@ h3. Bugs
 * [OPUSVIER-3405] - Endlosschleife in Script fix-collections-sortorder.php beim Update
 * [OPUSVIER-3407] - Tabellenüberschriften für Sammlungen in Administration übersetzen
 
-h3. Aufgaben
+### Aufgaben
 
 * [OPUSVIER-1499] - Updatelog enthält DELETED Einträge für Verzeichnisse, die nicht gelöscht wurden
 * [OPUSVIER-3000] - Metadaten-Formulare (DocumentXXX) umbenennen und in Order "Document" verschieben
@@ -18,9 +20,11 @@ h3. Aufgaben
 * [OPUSVIER-3406] - Sortierfunktionen für Opus_Db_NestedSet hinzufügen
 * [OPUSVIER-3408] - Sortierfunktionen für Sammlungen in Administration verfügbar machen
 
-h2. ======================== Release 4.4.4 2014-10-13 ========================
+---
 
-h3. Bugs
+## Release 4.4.4 2014-10-13
+
+### Bugs
 
 * [OPUSVIER-1769] - Veröffentlichungsstatistik wertet auch Dokumente im ServerState != 'published' aus
 * [OPUSVIER-1843] - Merkwürdiges Verhalten bei der Eingabe von validen Datumswerten in allen Datumsfelden innerhalb der Metadatenverwaltung
@@ -89,7 +93,7 @@ h3. Bugs
 * [OPUSVIER-3398] - Fehler bei der Anzeige eines Dokuments in der Administration, wenn Sprache einer Datei NULL ist
 * [OPUSVIER-3403] - Test für Seite mit Versionsinformation schlägt fehl, wenn Server mit aktueller Versionsnummer nicht erreichbar ist
 
-h3. Feature Request
+### Feature Request
 
 * [OPUSVIER-2429] - Sprachauswahl über ein Konfigschlüssel abschaltbar machen
 * [OPUSVIER-2447] - MathJax für Formeln auf der Frontdoor
@@ -103,7 +107,7 @@ h3. Feature Request
 * [OPUSVIER-3251] - Ausgabe eines Enrichments als "note" in Bibtex-Export
 * [OPUSVIER-3253] - Statistik: Gesamtbestand zum 31.12. eines Jahres anzeigen
 
-h3. Stories
+### Stories
 
 * [OPUSVIER-126] - Solr-Anbindung
 * [OPUSVIER-128] - Abklärung der lizenzrechtlichen Belange
@@ -129,7 +133,7 @@ h3. Stories
 * [OPUSVIER-2747] - Überarbeitung der Gestaltung der Administration durch Grafiker
 * [OPUSVIER-2772] - Neues Metadaten-Formular für Dokumente
 
-h3. Tasks
+### Tasks
 
 * [OPUSVIER-2708] - Anzahl der Suchtreffer pro Seite sollte instanzabhängig über die Konfiguration überschrieben werden können
 * [OPUSVIER-2758] - Soll phpinfo Ausgabe erhalten bleiben?
@@ -181,7 +185,7 @@ h3. Tasks
 * [OPUSVIER-3387] - Validierungsklassen für Klassifikationen entfernen
 * [OPUSVIER-3388] - Zend Framework auf Version 1.12.9 aktualisieren
 
-h3. Aufgaben
+### Aufgaben
 
 * [OPUSVIER-1334] - falsche NOT NULL-Constraints in server_date_* Feldern
 * [OPUSVIER-1342] - Validierung für alle Felder von Opus_Document zu Metadaten Formularen hinzufügen
@@ -240,7 +244,7 @@ h3. Aufgaben
 * [OPUSVIER-3378] - Skipped Tests werden in Selenium mit PHPUnit 4.x als Fehler angezeigt
 * [OPUSVIER-3384] - Zwei Unit Tests in Opus_Model_Xml_Version1Test gebrochen
 
-h3. Dokumentation
+### Dokumentation
 
 * [OPUSVIER-949] - "interne" Datumsfelder server_date_*
 * [OPUSVIER-2141] - Hinweis zu OpenSearch-Unterstützung in die Dokumentation aufnehmen
@@ -256,9 +260,11 @@ h3. Dokumentation
 * [OPUSVIER-3394] - Dokumentation des Export-Buttons auf Frontdoor und Suche
 * [OPUSVIER-3400] - Dokumentation des Embargo Date
 
-h2. ======================== Release 4.4.3 2014-06-04 ========================
+---
 
-h3. Bugs
+## Release 4.4.3 2014-06-04
+
+### Bugs
 
 * [OPUSVIER-1486] - Datei-Downloads funktionieren nicht mit VirtualHosts (z.B. mit Standard-Apache unter Ubuntu)
 * [OPUSVIER-1574] - OAI-Schnittstelle, epicur: Dokumente ohne URN dürfen nicht mit ausgegeben werden
@@ -278,12 +284,12 @@ h3. Bugs
 * [OPUSVIER-3283] - Aufruf von loginUser in Unit Test wirkt sich auf folgenden Test aus
 * [OPUSVIER-3285] - Lokale Schema-Datei bei der Doctype-Validierung verwenden
 
-h3. Feature Requests
+### Feature Requests
 
 * [OPUSVIER-1772] - Anzeige der Titel des Dokuments nur in der Veröffentlichungssprache
 * [OPUSVIER-2472] - Dokumente (d.h. deren Metdaten) in der Ausgabe in der OAI-Schnittstelle verbergen
 
-h3. Aufgaben
+### Aufgaben
 
 * [OPUSVIER-713] - Erstellung von Publikationslisten
 * [OPUSVIER-901] - kaputtes Layout auf Fehlerseite; geeignetere Fehlermeldung
@@ -311,9 +317,11 @@ h3. Aufgaben
 * [OPUSVIER-3280] - Erweiterung von documentType.include in tests.ini um Wert 'masterthesis'
 * [OPUSVIER-3302] - Felder des Personenformulars im Adminbereich anlegen
 
-h2. ======================== Release 4.4.2 2013-11-22 ========================
+---
 
-h3. Bugs
+## Release 4.4.2 2013-11-22
+
+### Bugs
 
 * [OPUSVIER-3114] - Konfiguration der Felder, die beim Speichern eines Models kein Update des ServerDateModified bewirken sollen.
 * [OPUSVIER-3129] - Keine einfache und erweiterte Suche unter IE8  und IE 9 möglich
@@ -332,11 +340,11 @@ h3. Bugs
 * [OPUSVIER-3202] - Update Script berücksichtigt Benachrichtigungsfunktion nicht richtig - Ordner mail_templates wird nicht angelegt
 * [OPUSVIER-3203] - InvalidateDocumentCache::preDelete nur ausführen, wenn Model-ID gesetzt
 
-h3. Feature Request
+### Feature Request
 
 * [OPUSVIER-2720] - Feldlänge von edition von varchar(25) auf edition varchar(255) erweitern
 
-h3. Aufgaben
+### Aufgaben
 
 * [OPUSVIER-2846] - Opus_Document.ServerDateModified aktualisieren, wenn "dependent models", an denen das Dokument hängt, modifiziert oder gelöscht werden
 * [OPUSVIER-3136] - Term SWD im Publishformular durch GND ersetzen
@@ -345,13 +353,15 @@ h3. Aufgaben
 * [OPUSVIER-3172] - 'SWD' im Publish Formular  in 'GND' ändern (Übersetzungen)
 * [OPUSVIER-3207] -  Beschreibung wie implizierte Felder als Pflichtfeld deklariert werden können
 
-h3. Dokumentation
+### Dokumentation
 
 * [OPUSVIER-3206] - Hinweis auf Abhängigkeit von XMetaDissPlus auf Spracheinstellungen
 
-h2. ======================== Release 4.4.1 2013-10-17 ========================
+---
 
-h3. Bugs
+## Release 4.4.1 2013-10-17
+
+### Bugs
 
 * [OPUSVIER-1542] - Administration-Tab im Menü ist nicht mehr aktiv, sofern eine Admin-Action ausgewählt wird
 * [OPUSVIER-1773] - fehlende Übersetzung der CollectionRoles bei Zuweisung über bzw. Anzeige in Dokument-Metadatenverwaltung
@@ -390,11 +400,11 @@ h3. Bugs
 * [OPUSVIER-3143] - Zugriffsrecht "guest" für eine Datei kann nicht entfernt werden
 * [OPUSVIER-3145] - Bug beim Speichern geänderter Felder in Opus_Collection
 
-h3. Feature Request
+### Feature Request
 
 * [OPUSVIER-1818] - Anzeige einer Warnmeldung im Filemanager, wenn Hash-Ist und Hash-Soll nicht übereinstimmen
 
-h3. Aufgaben
+### Aufgaben
 
 * [OPUSVIER-1742] - XML-Cache rauswerfen oder wieder aktivieren
 * [OPUSVIER-3007] - OAI-Schnittstelle - Anforderungen der DNB umsetzen
@@ -503,7 +513,7 @@ h3. Aufgaben
 * [OPUSVIER-3101] - Anzeige der Paginierung für Dokumente-Liste
 * [OPUSVIER-3108] - Anpassung HTML für Sektionsfehlermeldungen
 
-h3. Dokumentation
+### Dokumentation
 
 * [OPUSVIER-2891] - Kapitel 9 Administration grundlegend überarbeiten
 * [OPUSVIER-3031] - Dokumentation 4.4 S. 193: "Contribution" anstelle von "Contribution to a Periodical"
@@ -521,13 +531,15 @@ h3. Dokumentation
 * [OPUSVIER-3119] - Dokumentation für Dateimanager anpassen
 * [OPUSVIER-2856] - Dokumentation des Features Publikationslisten
 
-h3. Spezifikation
+### Spezifikation
 
 * [OPUSVIER-12] - Bibtex-Import
 
-h2. ======================== Release 4.4.0 2013-07-22 ========================
+---
 
-h3. Bugs
+## Release 4.4.0 2013-07-22
+
+### Bugs
 
 * [OPUSVIER-1666] - XML-Cache wird nach Collection/CollectionRole-Update (Umbenennung, Unsichtbarmachung, Löschung, Änderung von Eigenschaften) nicht geupdated
 * [OPUSVIER-1681] - XML-Cache bekommt von Änderungen an Dateien eines Dokuments nichts mit
@@ -567,7 +579,7 @@ h3. Bugs
 * [OPUSVIER-2970] - ACL-Ressourcen für neu hinzugefügte Admin-Funktionalitäten konfigurieren
 * [OPUSVIER-2976] - Opus_File::_createHashValues härten gegen den Fall, dass zwar in der Datenbank eine Referenz auf eine Datei angegeben wurde, diese aber nicht im Dateisystem existiert
 
-h3. Aufgaben
+### Aufgaben
 
 * [OPUSVIER-2722] - server_date_published (Datum der Publikation (Server)) auf der Frontdoor anzeigen
 * [OPUSVIER-2158] - Automatisches Testen des Migrationsskripts
@@ -667,7 +679,7 @@ h3. Aufgaben
 * [OPUSVIER-2949] - Einführung eines spezifischen Konfigurationsparameters für die asynchrone Ausführung der Index-Maintenance
 * [OPUSVIER-2954] - Dokumentation des neuen Features Konsistenzprüfung
 
-h3. Dokumentation
+### Dokumentation
 
 * [OPUSVIER-2678] - Dokumentation der asynchronen Jobverarbeitung
 * [OPUSVIER-2725] - Korrektur in Kapitel 5.1 (Workspace Permissions)
@@ -676,14 +688,15 @@ h3. Dokumentation
 * [OPUSVIER-2830] - Bearbeitung von Übersetzungsressourcen und statischen Inhalten
 * [OPUSVIER-2898] - Verzeichnisbaum in der Dokumentation in Kap. 5.1 aktualisieren 
 
-h3. Spezifikation
+### Spezifikation
 
 * [OPUSVIER-1684] - Hinzufügen von mehreren Informationen gleichen Types ist mühsam
 
+---
 
-h2. ======================== Release 4.3.1 2013-02-21 ========================
+## Release 4.3.1 2013-02-21
 
-h3. Bugs
+### Bugs
 
 * [OPUSVIER-2328] - PersonEditor wird im RIS-Export nicht ausgegeben
 * [OPUSVIER-2587] - Übersetzungsresource modules/admin/language/access.tmx ist nicht valide
@@ -694,20 +707,21 @@ h3. Bugs
 * [OPUSVIER-2738] - Datenexport RIS: mehrere Werte des gleichen Typs separat ausgeben
 * [OPUSVIER-2739] - Standardbezeichnungen für DDC im Publish anpassen
 
-h3. Aufgaben
+### Aufgaben
 
 * [OPUSVIER-2407] - optionales Anlegen einer DINI-konformen DDC (nach DNB-Standard)
 * [OPUSVIER-2642] - leeres DB-Update-Skript db/schema/update-4.3.0-to-4.3.1.sql anlegen
 
-h3. Dokumentation
+### Dokumentation
 
 * [OPUSVIER-2723] - Anforderungen an Mail-Server (SMTP) in der Dokumentation präzisieren
 * [OPUSVIER-2736] - Abhängigkeit zwischen PHTML-Template und XML-Dokumenttypdefinition: Schreibweise des Wertes des Attributs name
 
+---
 
-h2. ======================== Release 4.3.0 2012-12-20 ========================
+## Release 4.3.0 2012-12-20
 
-h3. Bugs
+### Bugs
 
 * [OPUSVIER-1886] - Falscher Hinweis zur Zugehörigkeit des Dokuments zur Bibliographie
 * [OPUSVIER-1933] - BK Collection führt zu weißer Seite im Publish
@@ -749,7 +763,7 @@ h3. Bugs
 * [OPUSVIER-2699] - mehrere Warnungen und Hinweise im PHP-Error-Log in Zusammenhang mit dem Test von Opus3FileImport.php
 * [OPUSVIER-2712] - Nutzer können eigenen Account nicht editieren
 
-h3. Tasks
+### Tasks
 
 * [OPUSVIER-2127] - Check-Seite im Publish-Modul: Anzeige des BelongsToBibliography-Status und der hochgeladenen Dateien sollte jeweils ausblendbar sein
 * [OPUSVIER-2677] - Hinweis in die Release Notes aufnehmen, dass mit OPUS 4.3.0 kleine Anpassungen an den PHTML-Dokumenttyp-Templates vorgenommen wurden
@@ -801,7 +815,7 @@ h3. Tasks
 * [OPUSVIER-2706] - Testaufbau für die asynchrone Jobverarbeitung
 * [OPUSVIER-2710] - Tests für erweiterte Recht im Admin Modul hinzufügen
 
-h3. Documentation
+### Documentation
 
 * [OPUSVIER-2626] - Kapitel "Dokumente verwalten" bzw. "Übersicht - Metadaten bearbeiten" überarbeiten
 * [OPUSVIER-2627] - Kapitel "Lizenzen verwalten" überarbeiten
@@ -819,14 +833,15 @@ h3. Documentation
 * [OPUSVIER-2672] - Kapitel 10.1: Mapping von Sprachen anpassen
 * [OPUSVIER-2674] - Kapitel 10.1: Migration der Lizenzen
 
-h3. Stories
+### Stories
 
 * [OPUSVIER-2691] - Systematische Tests für Titel und Abstracts
 
+---
 
-h2. ======================== Release 4.2.2 2012-07-04 ========================
+## Release 4.2.2 2012-07-04
 
-h3. Bugs
+### Bugs
 
 * [OPUSVIER-938]  - Import
 * [OPUSVIER-1207] - FormController Unit-Tests schlagen fehl
@@ -901,7 +916,7 @@ h3. Bugs
 * [OPUSVIER-2564] - OAI-Schnittstelle: GetRecord liefert SetSpecs mit ungültigen Zeichen aus
 * [OPUSVIER-2570] - boolesche Attribute "belongstobibliography" und "allowemailcontact" werden nicht korrekt importiert, wenn als Werte statt 0/1 die Werte false/true verwendet werden
 
-h3. Tasks
+### Tasks
 
 * [OPUSVIER-2490] - OAI-Schnittstelle soll XSLT für Browser-Rendering übermitteln
 * [OPUSVIER-645]  - Frontdoor: Abstracts einklappbar machen
@@ -925,7 +940,7 @@ h3. Tasks
 * [OPUSVIER-2553] - Migration der Subjects konfigurierbar machen: Tests
 * [OPUSVIER-1917] - Collection "open_access" und OAI-Set einrichten
 
-h3. Documentation
+### Documentation
 
 * [OPUSVIER-2458] - Hinweis zur Dokumentsprache aufnehmen
 * [OPUSVIER-2460] - Hinweis in die Checkliste für die Liveschaltung aufnehmen, dass uns nach der Liveschaltung die Instanz-URL mitgeteilt wird
@@ -944,10 +959,11 @@ h3. Documentation
 * [OPUSVIER-2567] - Hilfe Index wird in "help.ini" statt "help.phtml" konfiguriert
 * [OPUSVIER-2569] - Nur noch "all-lower-case" Loginnamen verwenden
 
+---
 
-h2. ======================== Release 4.2.1 2012-03-01 ========================
+## Release 4.2.1 2012-03-01
 
-h3. Bugs
+### Bugs
 
 * [OPUSVIER-1930] - Sprachabhängige Assertions in Unit-Tests entfernen
 * [OPUSVIER-2281] - Fehlender Übersetzungsschlüssel admin_access_store
@@ -971,22 +987,23 @@ h3. Bugs
 * [OPUSVIER-2402] - Element "required-if-fulltext" in Dokumenttyp-Definition bringt abhängig von der Position Fehler
 * [OPUSVIER-2403] - Falsche Pfadangabe in der Dokumentation zur XMetaDissPlus.xslt
 
-h3. Tasks
+### Tasks
 
 * [OPUSVIER-1497] - Unklarheit beim Aufruf des Update-Skripts
 * [OPUSVIER-2369] - Shell-Skript erstellen, das die IDs der Dokumente ausgibt, die im ServerState published sind, aber nicht im Index enthalten sind
 * [OPUSVIER-2405] - XMetaDissPlus auf neue Scheme Location anpassen
 
-h3. Documentation
+### Documentation
 
 * [OPUSVIER-2388] - Hinweis auf Umbenennung "korrupter" Dateinamen in die Dokumentation aufnehmen
 * [OPUSVIER-2389] - Hinweis auf manuelles Bearbeiten "korrupter" XML-Dumps in die Dokumentation aufnehmen
 * [OPUSVIER-2408] - Abängigkeit von Modul php5-phar auf openSUSE
 
+---
 
-h2. ======================== Release 4.2.0 2012-01-27 ========================
+## Release 4.2.0 2012-01-27
 
-h3. Bugs
+### Bugs
 
 * [OPUSVIER-1316] - Collection-Auswahl im Publikationsformular Schritt 2: Nicht ausgewählte Collection kann nicht mehr rückgängig gemacht werden
 * [OPUSVIER-1583] - Newlines und Tabulatoren im Dateinamen verursachen Probleme
@@ -1050,7 +1067,7 @@ h3. Bugs
 * [OPUSVIER-2326] - Release Notes im Tarball sind leer
 * [OPUSVIER-2329] - Symlink db/schema/opus4current.sql wird beim Update nicht in das Instanzverzeichnis kopiert
 
-h3. Stories
+### Stories
 
 * [OPUSVIER-979] - Alle Opus_Subject*-Klassen durch ein Opus_Subject ersetzen
 * [OPUSVIER-1064] - Fehlende Bandnr. für Schriftenreihen
@@ -1058,7 +1075,7 @@ h3. Stories
 * [OPUSVIER-2202] - Änderung Feldtyp  - page_number
 * [OPUSVIER-2233] - Anzeige von Legal Notices im zweiten Schritt des Publish-Formulars
 
-h3. Tasks
+### Tasks
 
 * [OPUSVIER-175] - Form for creating and editing languages could use hints
 * [OPUSVIER-845] - Einstellung eines Defaultwerts bei Angabe von Seitenzahlen
@@ -1228,7 +1245,7 @@ h3. Tasks
 * [OPUSVIER-2309] - geeignete Behandlung von Bandnummern-Konflikten bei der Migration der Collection-basierten Schriftenreihen
 * [OPUSVIER-2327] - Sichtbarkeitsstatus der einzelnen Schriftenreihen in der Administration farblich kennzeichnen
 
-h3. Documentation
+### Documentation
 
 * [OPUSVIER-1728] - Dokumentation des neuen Parameters form.first.show_rights_checkbox
 * [OPUSVIER-1848] - Dokumentation: manuelles Update muss mit sudo ausgeführt werden
@@ -1267,10 +1284,11 @@ h3. Documentation
 * [OPUSVIER-2325] - Eintrag in den Releasenotes, der die Migration der SubjectClassifications (MSC, DDC) beschreibt
 * [OPUSVIER-2330] - Grafik Datenmodell aktualisieren
 
+---
 
-h2. ======================== Release 4.1.4 2011-10-18 ========================
+## Release 4.1.4 2011-10-18
 
-h3. Bugs
+### Bugs
 
 * [OPUSVIER-1317] - Sichtbarkeitseinstellung einer CollectionRole wird nicht beachtet
 * [OPUSVIER-1449] - Unzureichende Validierung von Formularwerten
@@ -1298,11 +1316,11 @@ h3. Bugs
 * [OPUSVIER-1823] - Navigation der Collections im Adminbereich berücksichtigt nicht die Übersetzungsressourcen
 * [OPUSVIER-1826] - leere Lognachricht mit Loglevel error beim Download von Dateien
 
-h3. Stories
+### Stories
 
 * [OPUSVIER-1807] - DB-Änderungen für die 4.1.4
 
-h3. Tasks
+### Tasks
 
 * [OPUSVIER-715] - Unit-Tests für das PublicationList-Feature erstellen
 * [OPUSVIER-835] - Kollektionsauswahl im dritten Formularschritt berücksichtigt nicht die Sichtbarkeitseinstellung von CollectionRole bzw. Collection
@@ -1324,7 +1342,7 @@ h3. Tasks
 * [OPUSVIER-1812] - SubjectDDC und SubjectMSC aus der Frontdoor entfernen
 * [OPUSVIER-1816] - Errors und Warnings bei der Migration in separates Logfile
 
-h3. Documentation
+### Documentation
 
 * [OPUSVIER-1793] - RIS Mapping bei neu angelegten Dokumenttypen
 * [OPUSVIER-1794] - OAI Mapping bei neu angelegten Dokumenttypen
@@ -1333,10 +1351,11 @@ h3. Documentation
 * [OPUSVIER-1839] - Migration: Fehlermeldung bei Dokumenten mit zwei sprachidentischen Titeln oder Abstracts
 * [OPUSVIER-1802] - Parameter checksum.maxVerificationSize in die Dokumentation aufnehmen
 
+---
 
-h2. ======================== Release 4.1.3 2011-09-07 ========================
+## Release 4.1.3 2011-09-07
 
-h3. Bugs
+### Bugs
 
 * [OPUSVIER-883] - unpassende Notifikation nach dem Ausloggen
 * [OPUSVIER-884] - Passwortänderung lässt unzulässige Zeichen zu (keine Validierung)
@@ -1353,11 +1372,11 @@ h3. Bugs
 * [OPUSVIER-1710] - Harvesten der Dokumente zur DNB
 * [OPUSVIER-1720] - Dokument kann nicht permanent gelöscht werden, wenn in Datenbank noch mindestens eine Datei assoziiert ist, die aber nicht (mehr) im Dateisystem liegt
 
-h3. Stories
+### Stories
 
 * [OPUSVIER-1702] - Publish-Formular: Session-Variable "depositConfirmDocumentId" verschwunden
 
-h3. Tasks
+### Tasks
 
 * [OPUSVIER-1056] - Workflow für die Migration von URNs
 * [OPUSVIER-1204] - Update-Script dokumentieren
@@ -1372,17 +1391,18 @@ h3. Tasks
 * [OPUSVIER-1685] - Changelog für die Releases 4.0.0 nachtragen und für 4.0.1 und 4.0.2 erweitern
 * [OPUSVIER-1732] - CollectionRole-spezifische Übersetzungsschlüssel für Up-/Down-Button entfernen und durch einen generischen Schlüssel ersetzen
 
-h3. Documentation
+### Documentation
 
 * [OPUSVIER-1633] - Installations-Script: Section mit User-konfigurierbare Variablen erstellt
 * [OPUSVIER-1724] - Anlegen einer neuen Collecrtion Role: Welche Änderungen sind bezogen auf das Publish-Formular erforderlich?
 * [OPUSVIER-1729] - Config Parameter form-first.numberoffiles wurde entfernt!
 * [OPUSVIER-1731] - Dokumentation des neuen Datatypes "CollectionLeaf" für die Dokumenttypen
 
+---
 
-h2. ======================== Release 4.1.2 2011-08-08 ========================
+## Release 4.1.2 2011-08-08
 
-h3. Bugfixes
+### Bugfixes
 
 * [OPUSVIER-232] - Opus_Model_Xml_Version2 crashes
 * [OPUSVIER-729] - Frontdoor Unit Tests funktionieren nicht, weil Opus_Statistic_LocalCounter HTTP Header erwartet
@@ -1463,7 +1483,7 @@ h3. Bugfixes
 * [OPUSVIER-1675] - Dokumentation: Aufnahme eines weiteren Pakets unter Ubuntu 11.04
 * [OPUSVIER-1676] - cd-Befehl in Dokumentation Kap. 5.2.6 und Kap. 5.3.6 anpassen
 
-h3. Stories
+### Stories
 
 * [OPUSVIER-517] - Klärung von bibliothekarischen Fragen
 * [OPUSVIER-801] - Änderungen von Dokumenten
@@ -1479,7 +1499,7 @@ h3. Stories
 * [OPUSVIER-1601] - Frontdoor: Dateien sollen nach Label sortiert angezeigt werden
 * [OPUSVIER-1636] - Doku aufnehmen: Anlegen einer neuen Collection Role / Sammlung
 
-h3. Tasks
+### Tasks
 
 * [OPUSVIER-304] - Validierung von Titel und Abstract in Abhängigkeit von der Dokumentsprache
 * [OPUSVIER-324] - Security: Hochgeladene PHP-Dateien werden ausgeführt
@@ -1529,7 +1549,7 @@ h3. Tasks
 * [OPUSVIER-1654] - Anpassung des Deinstall-Skripts nach Überarbeitung von DB Host und Port
 * [OPUSVIER-1655] - Fehlerbehandlung im Deinstallationsskript einfügen, wenn Konfigurationsdateien nicht existieren
 
-h3. Documentation
+### Documentation
 
 * [OPUSVIER-1020] - Anzeige der hochgeladenen Dateien
 * [OPUSVIER-1330] - Kapitel 8.3 Dokumenttypen überarbeiten
@@ -1556,10 +1576,11 @@ h3. Documentation
 * [OPUSVIER-1664] - Dokumentation Migration Zugriffsbeschränkung
 * [OPUSVIER-1665] - Dokumentation Migration Lizenzen
 
+---
 
-h2. ======================== Release 4.1.1 2011-06-03 ========================
+## Release 4.1.1 2011-06-03
 
-h3. Bugfixes
+### Bugfixes
 
 * [OPUSVIER-752] - Wiederherstellen (Publishing) eines gelöschten Dokumentes von der Metadata Seite erzeugt SOLR Exception
 * [OPUSVIER-810] - Alternatives Startmodul wird nicht verlinkt
@@ -1606,13 +1627,13 @@ h3. Bugfixes
 * [OPUSVIER-1489] - create-tarball-script: Verzeichnis "workspace/files/error" existiert nicht
 * [OPUSVIER-1493] - keine Auslieferung und Ausführung von common.phtml in /public erlauben
 
-h3. Stories
+### Stories
 
 * [OPUSVIER-995] - FileManager: Upload-Size und erlaubte Dokumenttypen fest vorgegeben
 * [OPUSVIER-1094] - Datenbank-Änderungen für die 4.1
 * [OPUSVIER-1102] - Anpassungen für geänderten Datei-Download-Pfad
 
-h3. Tasks
+### Tasks
 
 * [OPUSVIER-974] - Zugriffsbeschränkung sollte auf Frontdoor angezeigt werden
 * [OPUSVIER-987] - Subject-Unterfeld "Type" wird mit "Document Type" beschriftet
@@ -1651,7 +1672,7 @@ h3. Tasks
 * [OPUSVIER-1464] - Opus_Person: Automatisches Setzen von SortOrder beim Hinzufügen neuer Autoren
 * [OPUSVIER-1465] - Opus_Person: SortOrder korrekt initialisieren bei "->setPersonAuthor($authors)"
 
-h3. Documentation
+### Documentation
 
 * [OPUSVIER-1327] - Fehler in Kapitel 8.3.1 XML-Dokumenttypdefinitionen
 * [OPUSVIER-1328] - Browsing-Felder dokumentieren
@@ -1665,10 +1686,11 @@ h3. Documentation
 * [OPUSVIER-1387] - Fehler in Kap. 8.6 (benutzerspezifische Layouts)
 * [OPUSVIER-1402] - Fehler in Doku in Kap. 5.2.1 und 5.3.1 (Installation von php5 unter ubuntu bzw. opensuse)
 
+---
 
-h2. ======================== Release 4.1.0 2011-04-27 ========================
+## Release 4.1.0 2011-04-27
 
-h3. Stories
+### Stories
 
 * OPUSVIER-1233 -   nachträgliches Hinzufügen von Dateien zu Dokumenten
 * OPUSVIER-1209 -   Umbau OPUS-Rechtemanagement
@@ -1691,12 +1713,12 @@ h3. Stories
 * OPUSVIER-613  -   OAI-Schnittstelle
 * OPUSVIER-184  -   Prüfen und ergänzen der Metadatenformate, die die OAI-Schnitstelle unterstützt
 
-h3. Specification
+### Specification
 
 * OPUSVIER-895  -   Collections für die Standardauslieferung
 * OPUSVIER-438  -   Umgang mit den Zend_Lucene-Relikten
 
-h3. Documentation
+### Documentation
 
 * OPUSVIER-1303 -   Anlegen der Datei opus-apache-rewritemap-caller.sh aus der Doku entfernen
 * OPUSVIER-1289 -   Featurebeschreibung für nachträgliche Hinzufügen von Dateien zu Dokumenten
@@ -1712,7 +1734,7 @@ h3. Documentation
 * OPUSVIER-1167 -   Übersetzungsschlüssel für Werte der Bibliographie- und Volltext-Vorhanden-Facette
 * OPUSVIER-896  -   Script "change-password.php" in Dokumentation aufnehmen
 
-h3. Bug Fixes
+### Bug Fixes
 
 * OPUSVIER-1314 -   Edit-Links in Dokumentverwaltung funktionieren nicht, wenn Dokument direkt per ID aufgerufen wird
 * OPUSVIER-1312 -   MailToAuthor: unerlaubter Mailversand an Autoren möglich durch clientsetige Manipulation des Formulars
@@ -1772,7 +1794,7 @@ h3. Bug Fixes
 * OPUSVIER-354 	-   Aufräumen der Reste von abgebrochenen Dokumentuploads
 * OPUSVIER-139 	-   OPUS_Security blockt IPv6
 
-h3. Tasks
+### Tasks
 
 * OPUSVIER-1319 -   Rechte-Umbau: Anzeige von Edit-Button auf Frontdoor kaputt für User != Admin
 * OPUSVIER-1318 -   Rechte-Umbau: Anzeige von Admin-Button kaputt für User != Admin
@@ -1879,9 +1901,11 @@ h3. Tasks
 * OPUSVIER-153 	-   Asynchrone Indexaktualisierung mittels Cron
 * OPUSVIER-113 	-   Bearbeitung der OAI-Resumption-Token in extra Klasse auslagern
 
-h2. ======================== Release 4.0.3 2011-02-21 ========================
+---
 
-h3. Bug Fixes
+## Release 4.0.3 2011-02-21
+
+### Bug Fixes
 
 * [OPUSVIER-598] - Ausgewählter Reiter wird nicht immer korrekt angezeigt
 * [OPUSVIER-663] - RSS-Export der neuesten Dokumente liefert HTML-Seite aus
@@ -1946,7 +1970,7 @@ h3. Bug Fixes
 * [OPUSVIER-1070] - Falsches Sprungziel nach abspeichern einer Collection
 * [OPUSVIER-1079] - XSS-Vulnerability in Browsing nach Dokumenttypen
 
-h3. Improvements
+### Improvements
 
 * [OPUSVIER-912] - Feld "Allow Email Contact?" wird immer wieder aktiviert
 * [OPUSVIER-968] - Dateien auf Check-Seite des Publish-Formulars werden nicht angezeigt
@@ -1976,13 +2000,15 @@ h3. Improvements
 * [OPUSVIER-1077] - Hinweis zur Apache-Konfiguration
 * [OPUSVIER-1078] - Weiterer Hinweis zur PHP-Konfiguration in php.ini
 
-h2. ======================== Release 4.0.2 2010-12-22 ========================
+---
 
-h3. Änderungen
+## Release 4.0.2 2010-12-22
+
+### Änderungen
 
 * Erfassung von Änderungen in CHANGES.txt in Tarball
 
-h3. Behobene Fehler
+### Behobene Fehler
 
 * Fehler behoben, der dafür sorgte, daß beim Freischalten bzw. Ablehnen
 eines Dokumentes die Zuordnung dieses Dokumentes zu Collections verloren ging.
@@ -1996,13 +2022,15 @@ Werte in der Frontdoor mit dem Wert '0' auftauchen.
 Issue #OPUSVIER-924 - Nach dem Löschen von Seiten Einträgen im
 Metadaten-Formular erscheint '0' als Wert
 
-h3. Bugfixes
+### Bugfixes
 
 * [OPUSVIER-858] - Keine Field Hints bei hinzugefügten Feldern
 * [OPUSVIER-1011] - r*-Mechanismus in Sprachumschaltung bzw. Login führt zu Exception
 * [OPUSVIER-1015] - Subversion Package-Dependency in deb-Package aufnehmen
 
-h2. ======================== Release 4.0.1 2010-11-26 ========================
+---
+
+## Release 4.0.1 2010-11-26
 
 * Layout/CSS Änderungen
 
@@ -2018,19 +2046,20 @@ und im Admin Modul
 * FormBuilder geändert um bei uninitialisierten Modelinstancen
 Exceptions zu verhindern
 
-h3. Bugfixes
+### Bugfixes
 
 * [OPUSVIER-1011] - r*-Mechanismus in Sprachumschaltung bzw. Login führt zu Exception
 * [OPUSVIER-1015] - Subversion Package-Dependency in deb-Package aufnehmen
 
-h3. Tasks
+### Tasks
 
 * [OPUSVIER-804] - Collections aus voherigem Schritt ausblenden
 
+---
 
-h2. ======================== Release 4.0.0 2010-11-15 ========================
+## Release 4.0.0 2010-11-15
 
-h3. Bugfixes
+### Bugfixes
 
 * [OPUSVIER-799] - Klick auf OAI-Links verursacht Error
 * [OPUSVIER-818] - Mail an Autor
@@ -2053,12 +2082,12 @@ h3. Bugfixes
 * [OPUSVIER-1011] - r*-Mechanismus in Sprachumschaltung bzw. Login führt zu Exception
 * [OPUSVIER-1015] - Subversion Package-Dependency in deb-Package aufnehmen
 
-h3. Stories
+### Stories
 
 * [OPUSVIER-770] - Rewrite-Mechanismus zum Download von Dateien überprüfen
 * [OPUSVIER-853] - Matheon-Anfragen: Remotecontrol, Rechte
 
-h3. Tasks
+### Tasks
 
 * [OPUSVIER-68] - Modellierung einer fortgeschrittenen Dokument-Validierung
 * [OPUSVIER-73] - Dokumente in Collections zaehlen
@@ -2077,10 +2106,11 @@ h3. Tasks
 * [OPUSVIER-843] - Anzeige der Dateigröße im Dateimanager
 * [OPUSVIER-857] - Bestätigungsfeld für Übertragung der Rechte
 
+---
 
-h2. ======================== Release 4.0.0 Release Candidate 2010-10-08 ========================
+## Release 4.0.0 Release Candidate 2010-10-08
 
-h3. Bugfixes
+### Bugfixes
 
 * [OPUSVIER-142] - Fehlerbehandlung bei ungültigen Parameterwerten in URL
 * [OPUSVIER-144] - Statstik-Modul funktioniert nicht mit PHP 5.3
@@ -2186,7 +2216,7 @@ h3. Bugfixes
 * [OPUSVIER-1011] - r*-Mechanismus in Sprachumschaltung bzw. Login führt zu Exception
 * [OPUSVIER-1015] - Subversion Package-Dependency in deb-Package aufnehmen
 
-h3. Stories
+### Stories
 
 * [OPUSVIER-11] - T8: Modul zum Freischalten von Dokumenten
 * [OPUSVIER-14] - Freigabedatum für Dokumente nutzen/abfragen
@@ -2204,7 +2234,7 @@ h3. Stories
 * [OPUSVIER-682] - Collections und CollectionNodes zusammenfassen
 * [OPUSVIER-811] - Einräumung von Verwertungsrechten
 
-h3. Tasks
+### Tasks
 
 * [OPUSVIER-8] - Anwenderdokumentation
 * [OPUSVIER-15] - Schlüsselnamen der Felder in den Übersetzungsressourcen ändern
@@ -2457,7 +2487,7 @@ h3. Tasks
 * [OPUSVIER-1191] - Änderungen der Dokumenttypen in OAI-Schnittstelle prüfen
 * [OPUSVIER-1336] - 'Cancel' Button in den Edit Formularen für Metadaten sollte 'Zurück' heißen
 
-h3. Documentation
+### Documentation
 
 * [OPUSVIER-148] - Dokument-Config dokumentieren
 * [OPUSVIER-435] - Matheon-spezifischen Änderungen im Wiki dokumentieren
@@ -2470,8 +2500,7 @@ h3. Documentation
 * [OPUSVIER-756] - Dokumentation der Konfiguration der Impressumseite
 * [OPUSVIER-757] - Dokumentation der Konfiguration der Kontaktseite
 
-
-h3. Specification
+### Specification
 
 * [OPUSVIER-60] - Anforderungen an Formular-Generierung
 * [OPUSVIER-66] - Technische Umsetzung von Validierung
