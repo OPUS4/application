@@ -44,6 +44,14 @@ done
 
 # END OF USER-CONFIGURATION
 
+# Check for sudo
+
+if [[ $EUID -eq 0 ]]; then
+    SUDO_ENABLED=1
+else
+    SUDO_ENABLED=0
+fi
+
 # Set defaults
 APACHE_CONF="${APACHE_CONF:-apache.conf}"
 OPUS_CONF="${OPUS_CONF:-config.ini}"
@@ -93,7 +101,7 @@ OPUS_URL_BASE="${OPUS_URL_BASE:-/opus4}"
 # Add leading '/' if missing
 if [[ $OPUS_URL_BASE != /* ]] ;
 then
-   OPUS_URL_BASE="/$OPUS_URL_BASE"
+    OPUS_URL_BASE="/$OPUS_URL_BASE"
 fi
 
 #
@@ -410,8 +418,10 @@ cd "$BASEDIR"
 #
 # Set file permissions
 #
+# TODO make it possible to run without sudo
+#
 
-"$SCRIPT_PATH/set-file-permissions.sh -g www-data"
+"$SCRIPT_PATH/set-file-permissions.sh" "-g www-data"
 
 #
 # Restart Apache2 (optionally)
@@ -419,11 +429,16 @@ cd "$BASEDIR"
 # - requires script to run with 'sudo'
 #
 
-[[ -z "$RESTART_APACHE" ]] && read -p "Restart Apache2 [Y]? " RESTART_APACHE
-
-if [[ -z "$RESTART_APACHE" || "$RESTART_APACHE" = Y ]] ;
+if [[ -z SUDO_ENABLED ]] ;
 then
-  service apache2 restart
+    [[ -z "$RESTART_APACHE" ]] && read -p "Restart Apache2 [Y]? " RESTART_APACHE
+
+    if [[ -z "$RESTART_APACHE" || "$RESTART_APACHE" = Y ]] ;
+    then
+      service apache2 restart
+    fi
+else
+    echo -e "You need to restart Apache2, e.g. run 'service apache2 restart'."
 fi
 
 echo
