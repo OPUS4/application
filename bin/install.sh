@@ -289,7 +289,7 @@ if [ -z "$INSTALL_SOLR" ] || [ "$INSTALL_SOLR" = Y ] || [ "$INSTALL_SOLR" = y ] 
 then
 
   echo "Installing Apache Solr ..."
-  # TODO call "$SCRIPT_PATH/install-solr.sh" "$SOLR_SERVER_PORT"
+  "$SCRIPT_PATH/install-solr.sh" "$SOLR_SERVER_PORT"
 
 else
   # Do not install Solr, just configure connection

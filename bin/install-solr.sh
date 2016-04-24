@@ -33,7 +33,7 @@ fi
 
 # START USER-CONFIGURATION
 
-SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/5.2.1/solr-5.2.1.tgz'
+SOLR_SERVER_URL='http://archive.apache.org/dist/lucene/solr/5.3.1/solr-5.3.1.tgz'
 
 # END OF USER-CONFIGURATION
 
@@ -134,12 +134,12 @@ DST="${3}"
 # put configuration and schema files
 ln -sf  "$BASEDIR/solrconfig/core.properties" "${SOLR_CORE_DIR}/data/solr"
 
-copyConfigFile "schema.xml" "${BASEDIR}/solrconfig" "${SOLR_CORE_DIR}/data/solr/conf"
-copyConfigFile "solrconfig.xml" "${BASEDIR}/solrconfig" "${SOLR_CORE_DIR}/data/solr/conf"
+copyConfigFile "schema.xml" "${BASEDIR}/vendor/opus4-repo/search" "${SOLR_CORE_DIR}/data/solr/conf"
+copyConfigFile "solrconfig.xml" "${BASEDIR}/vendor/opus4-repo/search" "${SOLR_CORE_DIR}/data/solr/conf"
 
 # provide logging properties
 # TODO check integration of logging.properties with recent versions of solr
-ln -sf "$BASEDIR/solrconfig/logging.properties" opus4/logging.properties
+ln -sf "$BASEDIR/vendor/opus4-repo/search/logging.properties" opus4/logging.properties
 
 # detect URL prefix to use
 case "$SOLR_MAJOR" in
@@ -150,38 +150,8 @@ case "$SOLR_MAJOR" in
   SOLR_CONTEXT="/solr"
 esac
 
-
-
-# change file owner of solr installation
-# TODO chown -R "$OWNER" "$BASEDIR/$SOLR_DIR"
-# TODO chown -R "$OWNER" "$BASEDIR/solrconfig"
-
-# install init script
-[ -z "$INSTALL_INIT_SCRIPT" ] && read -p "Install init.d script to start and stop Solr server automatically? [Y]: " INSTALL_INIT_SCRIPT
-if [ -z "$INSTALL_INIT_SCRIPT" ] || [ "$INSTALL_INIT_SCRIPT" = Y ] || [ "$INSTALL_INIT_SCRIPT" = y ]
-then
-# remove files and folders causing unneccessary errors in install script
-rm -f /etc/init.d/{opus4-solr-jetty,solr}
-rm -f "${BASEDIR}/solr"
-
 # run installer bundled with solr
-bin/install_solr_service.sh "../downloads/$SOLR_ARCHIVE_NAME" -d "$SOLR_CORE_DIR" -i "$BASEDIR" -p "$SOLR_SERVER_PORT" -s solr -u "$OPUS_USER_NAME"
-
-# make sure new service is available just like the old one
-ln -s solr /etc/init.d/opus4-solr-jetty
-else
-# (re)start solr service
-if [ -x /etc/init.d/opus4-solr-jetty ]; then
-  /etc/init.d/opus4-solr-jetty restart
-elif [ -x /etc/init.d/solr ]; then
-  /etc/init.d/solr restart
-fi
-fi
-
-
-
-
-
+bin/install_solr_service.sh "../downloads/$SOLR_ARCHIVE_NAME" -d "$SOLR_CORE_DIR" -i "$BASEDIR" -p "$SOLR_SERVER_PORT" -s solr
 
 #
 # Delete downloaded tar archive
