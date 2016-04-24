@@ -4,9 +4,21 @@
 
 ## Release 4.5-RC1 2016-04-25
 
-Dies ist der Release Candidate 1 für OPUS 4.5. Er dient dazu noch einmal zu
-testen, ob es keine kritischen Probleme mehr gibt, die noch in 4.5 behoben
+Dies ist der erste Release Candidate für OPUS 4.5. Er dient dazu noch einmal zu
+testen, ob es keine kritischen Probleme mehr gibt, die noch in OPUS 4.5 behoben
 werden müssen.
+
+Sie können die Entwicklung unterstützen indem Sie diese Version testen und uns
+Rückmeldungen geben, z.B. über die OPUS 4 Tester Mailing-Liste oder auch als
+Issue Ticket auf GitHub.
+
+* [Mailing-Liste](http://listserv.zib.de/mailman/listinfo/kobv-opus-tester)
+* [Issues auf GitHub](https://github.com/OPUS4/application/issues)
+
+Für die eigentliche Verwaltung von Issues wird weiterhin intern JIRA verwendet.
+Entwicklungspartner können Zugriff auf JIRA bekommen. Die Issues auf GitHub
+sollen vorallem dazu dienen wichtige Entwicklungsthemen zu kommunizieren und zu
+diskutieren. Wir stecken da aber noch in den Anfängen.
 
 ### Umstieg auf Git
 
@@ -15,16 +27,18 @@ sich nun unter:
 
 https://github.com/OPUS4
 
-Die Dokumentation findet sich jetzt Online unter:
+Mit dem Umstieg auf Git als Entwicklungswerkzeug ändert sich auch viel bei
+der Installation von OPUS 4 und bei der Durchführung von Updates.
+
+### Dokumentation
+
+Das OPUS 4 Handbuch findet sich jetzt Online unter:
 
 https://opus4.github.io/userdoc
 
-Für Entwickler gibt es weitere Informationen hier:
+Für Entwickler gibt es weitere Dokumentation hier:
 
 https://opus4.github.io
-
-Mit dem Umstieg auf Git als Entwicklungswerkzeug ändert sich auch viel bei
-der Installation von OPUS 4 und bei der Durchführung von Updates.
 
 ### Installation
 
