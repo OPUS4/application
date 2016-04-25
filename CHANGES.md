@@ -2,6 +2,165 @@
 
 ---
 
+## Release 4.5.0-RC1 2016-04-25
+
+### Bugs
+
+* [OPUSVIER-1364] - Sprache einer Seite ist Deutsch, XHTML-Tags behaupten aber Englisch.
+* [OPUSVIER-1543] - Anlegen einer leeren Collection wird nicht verhindert
+* [OPUSVIER-1585] - Indexing funktioniert mit Version r60 der Client Library nicht mehr
+* [OPUSVIER-2304] - isValid-Tracking auf Linked-Models tested NICHT das verlinkte Model
+* [OPUSVIER-2311] - Default-Collation sollte beim Aufruf des MySQL-Clients in install.sh und update-db.sh übergeben werden
+* [OPUSVIER-2315] - SeriesSearch-Tests laufen auf dem CI-System nicht durch
+* [OPUSVIER-2503] - MIME-Type für leere Dateien hat sich geändert (Unit Test Fails)
+* [OPUSVIER-2572] - unregisterPlugin sollte keine Opus_Model_Exception werfen, wenn das angegebene Plugin nicht registriert ist
+* [OPUSVIER-2731] - Ausgabe von Opus_Date für Zend_Date fehlerhaft
+* [OPUSVIER-2973] - Admin-Menu-Eintrag ist aktiviert, obwohl alle Untereinträge deaktiviert sind
+* [OPUSVIER-3229] - Translate-Mechanismus provoziert Exception, wenn der zu übersetzende Wert leer ist
+* [OPUSVIER-3404] - Falsche Übergabe des Sprachcodes im Element dc:title über XMetaDissPlus
+* [OPUSVIER-3415] - Anzeige von Nummer und Name für Collections schlägt im Browsing fehl
+* [OPUSVIER-3423] - Schriftenreihen-Administration hat ein LI-Element mit einem versteckten Input-Field
+* [OPUSVIER-3430] - GND-ID lässt sich bei den Personen im Adminbereich nicht abspeichen
+* [OPUSVIER-3458] - Fehlende deutsche Übersetzung von Language und Type in der Administration (Dokumente, Metadatenformular)
+* [OPUSVIER-3459] - Schreibfehler in opus4/modules/publish/language/field_header.tmx
+* [OPUSVIER-3462] - Option numberOfDefaultSearchResults wirkt bei den meisten Suchanfragen nicht
+* [OPUSVIER-3471] - Fehler mit Umlauten im IE10 und Chrome
+* [OPUSVIER-3488] - Frontdoor-Anzeige: Formatierung der Bemerkung (Note) unterscheidet sich von den übgrigen Metadaten
+* [OPUSVIER-3501] - Fehlerhafte Ausgabe der OAI-Anfrage für xMetaDissPlus mit einem DNB-Set
+* [OPUSVIER-3503] - Minor Bug bei der Datumsanzeige in der Administration
+* [OPUSVIER-3514] - Überprüfen, ob im XMetaDissPlus.xslt der Feldinhalt eines Feldes aus meheren Feldern zusammengebaut werden kann
+* [OPUSVIER-3536] - Fehlende DocId  im Apache-Logfile bei Zugriffen auf die Frontdoor aus der Trefferliste
+* [OPUSVIER-3545] - Sprachauswahl sollte nur unterstützte Sprachen anzeigen
+* [OPUSVIER-3546] - Sichtbarkeit von CollectionRole beim Zuweisen zu Dokument nicht korrekt angezeigt
+* [OPUSVIER-3547] - Sichtbarkeit von CollectionRole "institutes" wird in der Facette nicht berücksichtigt
+* [OPUSVIER-3558] - Fehler im Publishformular, wenn keine Datei hochgeladen wird
+* [OPUSVIER-3562] - Fehler in Lizenzbeschreibung korrigieren
+* [OPUSVIER-3565] - Fehler beim Speichern des Pubhlishprozess bei Verwendung von PersonOther
+* [OPUSVIER-3579] - FAQ-Änderungen im Adminbereich lassen sich nicht abspeichern
+* [OPUSVIER-3584] - Bug in der Administration der Zugriffskontrolle - Rolle und Module werden nicht korrekt angezeigt ('%1$s' )
+* [OPUSVIER-3596] - Umlaute werden mit Opus_Database nicht korrekt importiert
+
+### Feature Request
+
+* [OPUSVIER-1727] - Den Abschnitt "Einräumung eines einfachen Nutzungsrechts" auf der ersten Seite des Publish-Formulars konfigurierbar machen
+* [OPUSVIER-2786] - Blättern zwischen Titeln aus einer Trefferübersicht
+
+### Stories
+
+* [OPUSVIER-1101] - Überarbeitung der offiziellen Opus4-Webseite
+* [OPUSVIER-1414] - installationsort der OPUS4-Instanz im Dateisystem
+* [OPUSVIER-1496] - Wofür ist der opus4-User da?
+* [OPUSVIER-1615] - Install-Script: opus4-user sollte keine Shell bekommen
+* [OPUSVIER-1641] - Installations-Script: Apache-Config wird automatisch erstellt
+* [OPUSVIER-2406] - DINI-Zertifikat
+* [OPUSVIER-2620] - Verwaltung der Abhängigkeiten zu externen Software-Komponenten
+
+### Tasks
+
+* [OPUSVIER-2717] - Bibtex-Eintragstyp "PhDThesis" um um Entstehungsort erweitern
+* [OPUSVIER-2770] - Unit/Selenium Test für verstecken des Delete Links für Accounts
+* [OPUSVIER-2818] - getrennte Konfigurationsmöglichkeit für Suche und Indexierung schaffen
+* [OPUSVIER-2921] - einheitliche Dateiendung für XSLT-Stylesheets verwenden: xsl oder xslt
+* [OPUSVIER-2946] - Überarbeitung der Opus_Date-Klasse
+* [OPUSVIER-3023] - Code für "Available_Languages" aus Bootstrap entfernen und Handling überarbeiten
+* [OPUSVIER-3065] - Composer als Dependency Manager für die Installation der Opus-Entwicklungsumgebung
+* [OPUSVIER-3067] - Framework Entwicklung sollte nicht von createdb.sh in Server abhängen
+* [OPUSVIER-3122] - Refactoring / Umbenennung der Klassen unter server/library
+* [OPUSVIER-3199] - Version von JQuery in Install-Skript aktualisieren
+* [OPUSVIER-3268] - Übersetzungen in der Administration nicht mehr BETA
+* [OPUSVIER-3295] - Mit Apache 2.4 funktioniert unsere Konfiguration nicht mehr
+* [OPUSVIER-3355] - Migrationscode aus dem Hauptprojekt herauslösen
+* [OPUSVIER-3356] - Authorization Unit Tests liegen momentan im Modules Verzeichnis
+* [OPUSVIER-3409] - Vorbereitung von CHANGES.txt und RELEASE_NOTES.txt für das Web automatisieren
+* [OPUSVIER-3421] - $_logger Variable in Controller_Action bereinigen
+* [OPUSVIER-3422] - Coding Style Cleanup in Applikation
+* [OPUSVIER-3431] - Validierung von ORCID verbessern
+* [OPUSVIER-3442] - Erlaubte Zeichen für EnrichmentKeys einschränken
+* [OPUSVIER-3460] - Grundlagen zum Editieren der Konfiguration in der Administration
+* [OPUSVIER-3466] - Source Code Migration zu GitHUB
+* [OPUSVIER-3470] - CC-Lizenz-Logo-URI in der Standardauslieferung auf HTTPS anpassen
+* [OPUSVIER-3473] - CSS für Review Modul anpassen
+* [OPUSVIER-3478] - Unit Tests für View Helper SeriesNumber
+* [OPUSVIER-3487] - Build OPUS 4 Master von GitHUB
+* [OPUSVIER-3489] - Korrekturen am  XMetaDissPlus-Format in der Standardauslieferung
+* [OPUSVIER-3490] - Releases mit GitHUB gehosteten Sourcen ermöglichen
+* [OPUSVIER-3491] - Collections Tabellen durch OPUS 4 Schema SQL erstellen
+* [OPUSVIER-3493] - Feld "school" für BibTeX-Templates doctoralthesis und masterthesis
+* [OPUSVIER-3497] - rebuilding_database.sh Skript für Tests SVN unabhängig machen
+* [OPUSVIER-3500] - URN Resolver an vielen Stellen im Code spezifiziert
+* [OPUSVIER-3502] - Refactor citationExport Modul
+* [OPUSVIER-3506] - OPUS 4 Framework durch Packagist.org verfügbar machen
+* [OPUSVIER-3507] - Merge von Solr Update mit Framework Master zurücknehmen
+* [OPUSVIER-3510] - Installations Skript auf Composer umstellen
+* [OPUSVIER-3520] - Framework von GitHub im CI System bauen
+* [OPUSVIER-3521] - Application von GitHub im CI System bauen
+* [OPUSVIER-3522] - OPUS 4 Coding Standard als Composer Paket
+* [OPUSVIER-3523] - .gitignore für workspace Verzeichnisse anlegen
+* [OPUSVIER-3526] - README und LICENCE Datei opus4/application Repository hinzufügen
+* [OPUSVIER-3527] - Installationsskript zu Application hinzufügen
+* [OPUSVIER-3534] - Installationsskripte in Application Repository verschieben
+* [OPUSVIER-3538] - Base URL für OPUS bei Installation wählbar machen
+* [OPUSVIER-3553] - Matheon Dateien aus Application Git Repository entfernen
+* [OPUSVIER-3559] - Fix 'year_inverted' facet handling
+* [OPUSVIER-3564] - Separate Übersetzung für Mouseover-Text auf erster Seite "Auswahl Dokumenttyp"
+* [OPUSVIER-3569] - Inhalt von .htaccess in Apache Konfiguration verschieben
+* [OPUSVIER-3570] - Code für Opus_Document_Plugin_SequenceNumber entfernt
+* [OPUSVIER-3571] - BibTex Feld "type" mit Dokumenttyp füllen, anstelle von Enrichment "Type"
+* [OPUSVIER-3574] - Schriftenreihen im Browsing alphabetisch sortieren
+* [OPUSVIER-3576] - Schriftenreihen im Publish-Formular auf alphabetisch sortieren
+* [OPUSVIER-3583] - Installationsskript für OPUS 4 mit Git überarbeiten
+* [OPUSVIER-3586] - Solr Configuration als Composer Paket
+* [OPUSVIER-3587] - HTML Tags im Seitenkopf (HEAD) auf separaten Zeilen
+* [OPUSVIER-3588] - Packaging Skripte für Tarball entfernen
+* [OPUSVIER-3589] - Netbeans Projektdateien entfernen
+* [OPUSVIER-3590] - Verzeichnis scripts/install entfernen
+* [OPUSVIER-3595] - Release 4.5-RC1
+
+### Aufgabe
+
+* [OPUSVIER-392] - Code Duplication zwischen Opus_Model_Xml_Version1 und Opus_Model_Xml_Version2
+* [OPUSVIER-820] - Anzeige der Anzahl der Dokumente
+* [OPUSVIER-856] - Update auf aktuellste Revision des PHP Solr-Clients
+* [OPUSVIER-1085] - Passwörter im Install-Skript zweimal abfragen, um Tipfehler zu entdecken
+* [OPUSVIER-1190] - Dokumenttypen "all", "demo", "preprintmatheon" und "talkzib" aus Standardauslieferung entfernen.
+* [OPUSVIER-1482] - OAI-Schnittstelle gibt nicht gültige Werte für Attribut lang zurück
+* [OPUSVIER-1672] - Welche Rechte/welcher Owner für workspace
+* [OPUSVIER-1693] - Zend_Registry-Lookup nach Zend_Log in Controllern, die von Controller_Action abgeleitet sind, entfernen
+* [OPUSVIER-1887] - Unit Tests für Übersetzungsresourcen in Modulen ermöglichen
+* [OPUSVIER-2004] - Anlegen eines neuen Git-Repositories scripts
+* [OPUSVIER-2382] - zwei Icons für Administration und FAQ in der Navigationsleiste hinzufügen
+* [OPUSVIER-2581] - MARCXML-Import-XSL-Stylesheet in den Tarball aufnehmen
+* [OPUSVIER-3069] - Parameter für rebuilding_database.sh aus tests/config.ini auslesen
+* [OPUSVIER-3186] - Übersichtsseite Enrichments CSS anpassen
+* [OPUSVIER-3467] - Organisation für OPUS 4 in GitHUB anlegen
+* [OPUSVIER-3468] - GitHUB Repository für Framework anlegen
+* [OPUSVIER-3469] - Framework Sourcen unabhängig von Server machen
+* [OPUSVIER-3474] - DINI Zertifikat 2013: Anpassung Frontdoor mit Metatag für Persistent Identifier mit URL eines entsprechenden Resolver-Dienstes
+* [OPUSVIER-3492] - Framework Testing using Composer
+
+### Dokumentation
+
+* [OPUSVIER-3261] - Konzept Dokumentation online
+* [OPUSVIER-3434] - OPUS 4 Handbuch in Online-Version übertragen
+* [OPUSVIER-3435] - Kapitel 6 - Manuelle Installation - übertragen
+* [OPUSVIER-3436] - Kapitel 5 - Installation ohne Paketverwaltung - übertragen
+* [OPUSVIER-3437] - Kapitel 3 - Voraussetzungen für die Installation - übertragen
+* [OPUSVIER-3438] - Kapitel 7 - Parameter der config.ini - übertragen
+* [OPUSVIER-3439] - Kapitel 12 - Import - übertragen
+* [OPUSVIER-3440] - Anhang 13.1 - Dokumententypen - übertragen
+* [OPUSVIER-3443] - Kapitel 2 - Begriffe und Funktionen in OPUS - übertragen
+* [OPUSVIER-3445] - Kapitel 8 - Erweiterte Konfiguration - übertragen
+* [OPUSVIER-3446] - Kapitel 9 - Administration - übertragen
+* [OPUSVIER-3447] - Kapitel 10 - Migration OPUS3.x nach OPUS4 - übertragen
+* [OPUSVIER-3448] - Kapitel 11 - Update - übertragen
+* [OPUSVIER-3449] - Kapitel 13.2 - Bedeutung der Felder - übertragen
+* [OPUSVIER-3450] - Kapitel 13.3 - Feldtypen für die Templates - übertragen
+* [OPUSVIER-3451] - Kapitel 13.4-13.6 - Dokumententyp Mappings - übertragen
+* [OPUSVIER-3453] - Kapitel 13.8 - Optionale PHP-Module - übertragen
+* [OPUSVIER-3454] - Kapitel 13.9 - DINI-Zertifikat - übertragen
+
+---
+
 ## Release 4.4.5 2014-10-30
 
 ### Bugs
