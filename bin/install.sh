@@ -300,7 +300,7 @@ then
   "$SCRIPT_PATH/install-solr.sh" "$SOLR_SERVER_PORT"
 
   SOLR_SERVER_HOST='localhost'
-  SOLR_CONTEXT='/solr/opus4'
+  SOLR_CONTEXT='/solr/solr'
 
 else
   # Do not install Solr, just configure connection
