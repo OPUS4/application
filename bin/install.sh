@@ -439,7 +439,7 @@ cd "$BASEDIR"
 # - requires script to run with 'sudo'
 #
 
-if [[ -z SUDO_ENABLED ]] ;
+if [[ "$SUDO_ENABLED" -eq 1 ]] ;
 then
     [[ -z "$RESTART_APACHE" ]] && read -p "Restart Apache2 [Y]? " RESTART_APACHE
 
