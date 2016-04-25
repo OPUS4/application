@@ -4,9 +4,9 @@
 
 ## Release 4.5-RC1 2016-04-25
 
-Dies ist der erste Release Candidate für OPUS 4.5. Er dient dazu noch einmal zu
-testen, ob es keine kritischen Probleme mehr gibt, die noch in OPUS 4.5 behoben
-werden müssen.
+Dies ist der erste Release Candidate für OPUS 4.5. Er dient dazu den Release
+Prozess zu proben und die aktuelle Version für allgemeine Tests freizugeben.
+Es sollte keine akuten kritischen Probleme mehr geben.
 
 Sie können die Entwicklung unterstützen indem Sie diese Version testen und uns
 Rückmeldungen geben, z.B. über die OPUS 4 Tester Mailing-Liste oder auch als
@@ -27,18 +27,18 @@ sich nun unter:
 
 https://github.com/OPUS4
 
-Mit dem Umstieg auf Git als Entwicklungswerkzeug ändert sich auch viel bei
-der Installation von OPUS 4 und bei der Durchführung von Updates.
-
-### Dokumentation
-
-Das OPUS 4 Handbuch findet sich jetzt Online unter:
+Die Dokumentation ist jetzt online. Das OPUS 4 Handbuch findet sich unter:
 
 https://opus4.github.io/userdoc
 
-Für Entwickler gibt es weitere Dokumentation hier:
+Für Entwickler gibt es weitere Informationen hier:
 
 https://opus4.github.io
+
+Mit dem Umstieg auf Git als Entwicklungswerkzeug ändert sich die Installation
+von OPUS 4 und die Durchführung von Updates wesentlich. Außerdem wird Composer
+eingesetzt um Abhängigkeiten, wie z.B. das Zend Framework zu installieren und
+zu aktualisieren.
 
 ### Installation
 
@@ -48,12 +48,21 @@ sich in der Online Dokumentation.
 
 ### Update
 
-Es gibt kein Updateskript auf die Git-Version von OPUS 4. Es wird empfohlen
-mit Hilfe der Online Dokumentation eine neue Instanz mit Git aufzusetzen und
-die Anpassungen der alten Instanz mit geeigneten Werkzeugen zu übertragen.
-Mehr Informationen dazu finden sich in der Online Dokumentation.
+Es gibt kein Updateskript auf diese neue Git-basierte Version von OPUS 4. Es
+wird empfohlen mit Hilfe der Online Dokumentation eine neue Instanz mit Git
+aufzusetzen und die Anpassungen der alten Instanz mit geeigneten Werkzeugen
+zu übertragen. Mehr Informationen dazu finden sich in der Online Dokumentation.
+
+OPUS 4.5-RC1 verwendet das gleiche Datenbankschema wie 4.4.5. Eine neue Instanz
+kann also mit der alten Datenbank betrieben werden.
 
 ### Weitere Änderungen
+
+Es wurde auf die Solarium Library für die Solr-Anbindung gewechselt. Bei der
+Installation wird jetzt Apache Solr 5.3.1 mit installiert (optional).
+
+Es gibt este Anfänge einer Online-Konfiguration für OPUS in der Administration
+unter Oberflächenanpassungen->Optionen.
 
 Die URLs für creativecommons.org in den Lizenzen wurden auf HTTPS umgestellt,
 um bei Instanzen mit HTTPS "Mixed Content"-Warnungen zu vermeiden.
@@ -61,6 +70,8 @@ um bei Instanzen mit HTTPS "Mixed Content"-Warnungen zu vermeiden.
 Die erlaubten Zeichen für EnrichmentKeys wurde eingeschränkt. EnrichmentKeys
 müssen mit einem Buchstaben beginnen und dürfen Buchstaben, Zahlen, '.' und
 '_' verwenden. Existierende EnrichmentKeys können weiterhin verwendet werden.
+
+Es wurden viele kleine Tickets und Bugs behoben.
 
 Mehr Informationen zu den Änderungen in diesem Release finden sich in der
 Datei [CHANGES.md](CHANGES.md)
