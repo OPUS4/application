@@ -26,6 +26,12 @@
 
 set -e
 
+SCRIPT_NAME="`basename "$0"`"
+SCRIPT_NAME_FULL="`readlink -f "$0"`"
+SCRIPT_PATH="`dirname "$SCRIPT_NAME_FULL"`"
+
+BASEDIR="`dirname "$SCRIPT_PATH"`"
+
 if [ $# -eq 1 ] ;
 then
   SOLR_SERVER_PORT="$1"
@@ -64,6 +70,7 @@ SOLR_VERSION="${SOLR_DIR#solr-}"
 SOLR_MAJOR="${SOLR_VERSION%%.*}"
 
 # stop any running solr service
+# TODO why?
 lsof -i ":$SOLR_SERVER_PORT" &>/dev/null && {
 (
   echo "stopping running Solr service ..."
@@ -132,7 +139,7 @@ DST="${3}"
 }
 
 # put configuration and schema files
-ln -sf  "$BASEDIR/solrconfig/core.properties" "${SOLR_CORE_DIR}/data/solr"
+ln -sf  "$BASEDIR/vendor/opus4-repo/search/core.properties" "${SOLR_CORE_DIR}/data/solr"
 
 copyConfigFile "schema.xml" "${BASEDIR}/vendor/opus4-repo/search" "${SOLR_CORE_DIR}/data/solr/conf"
 copyConfigFile "solrconfig.xml" "${BASEDIR}/vendor/opus4-repo/search" "${SOLR_CORE_DIR}/data/solr/conf"
