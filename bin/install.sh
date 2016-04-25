@@ -338,6 +338,13 @@ CONFIG_INI="$BASEDIR/application/configs/$OPUS_CONF"
     "${SOLR_EXTRACT_SERVER_HOST}" "$SOLR_EXTRACT_SERVER_PORT" "${SOLR_EXTRACT_CONTEXT}"
 
 #
+# Prepare workspace
+#
+
+mkdir -p "$BASEDIR/workspace/files"
+mkdir -p "$BASEDIR/workspace/incoming"
+
+#
 # Import some test documents optionally
 #
 
