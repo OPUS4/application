@@ -431,7 +431,7 @@ cd "$BASEDIR"
 # TODO make it possible to run without sudo
 #
 
-"$SCRIPT_PATH/set-file-permissions.sh" "-g www-data"
+"$SCRIPT_PATH/set-file-permissions.sh" -g www-data
 
 #
 # Restart Apache2 (optionally)
