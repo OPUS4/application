@@ -2,15 +2,68 @@
 
 ---
 
-## Release 4.5.0 2015-xx-xx
+## Release 4.5-RC1 2016-04-25
+
+Dies ist der erste Release Candidate für OPUS 4.5. Er dient dazu noch einmal zu
+testen, ob es keine kritischen Probleme mehr gibt, die noch in OPUS 4.5 behoben
+werden müssen.
+
+Sie können die Entwicklung unterstützen indem Sie diese Version testen und uns
+Rückmeldungen geben, z.B. über die OPUS 4 Tester Mailing-Liste oder auch als
+Issue Ticket auf GitHub.
+
+* [Mailing-Liste](http://listserv.zib.de/mailman/listinfo/kobv-opus-tester)
+* [Issues auf GitHub](https://github.com/OPUS4/application/issues)
+
+Für die eigentliche Verwaltung von Issues wird weiterhin intern JIRA verwendet.
+Entwicklungspartner können Zugriff auf JIRA bekommen. Die Issues auf GitHub
+sollen vorallem dazu dienen wichtige Entwicklungsthemen zu kommunizieren und zu
+diskutieren. Wir stecken da aber noch in den Anfängen.
+
+### Umstieg auf Git
+
+Die Entwicklung ist zu GitHub.com umgezogen. Der OPUS 4 Source Code befindet
+sich nun unter:
+
+https://github.com/OPUS4
+
+Mit dem Umstieg auf Git als Entwicklungswerkzeug ändert sich auch viel bei
+der Installation von OPUS 4 und bei der Durchführung von Updates.
+
+### Dokumentation
+
+Das OPUS 4 Handbuch findet sich jetzt Online unter:
+
+https://opus4.github.io/userdoc
+
+Für Entwickler gibt es weitere Dokumentation hier:
+
+https://opus4.github.io
+
+### Installation
+
+Es gibt keinen Tarball mehr. Die Installation wird mit Git und mit Hilfe
+eines Installationsskriptes durchgeführt. Mehr Informationen dazu finden
+sich in der Online Dokumentation.
+
+### Update
+
+Es gibt kein Updateskript auf die Git-Version von OPUS 4. Es wird empfohlen
+mit Hilfe der Online Dokumentation eine neue Instanz mit Git aufzusetzen und
+die Anpassungen der alten Instanz mit geeigneten Werkzeugen zu übertragen.
+Mehr Informationen dazu finden sich in der Online Dokumentation.
+
+### Weitere Änderungen
 
 Die URLs für creativecommons.org in den Lizenzen wurden auf HTTPS umgestellt,
-um bei Instanzen mit HTTPS "Mixed Content"-Warnungen zu vermeiden. Das wird
-beim Update von bestehenden Instanzen nicht automatisch angepasst.
+um bei Instanzen mit HTTPS "Mixed Content"-Warnungen zu vermeiden.
 
 Die erlaubten Zeichen für EnrichmentKeys wurde eingeschränkt. EnrichmentKeys
 müssen mit einem Buchstaben beginnen und dürfen Buchstaben, Zahlen, '.' und
 '_' verwenden. Existierende EnrichmentKeys können weiterhin verwendet werden.
+
+Mehr Informationen zu den Änderungen in diesem Release finden sich in der
+Datei [CHANGES.md](CHANGES.md)
 
 ---
 

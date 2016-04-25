@@ -80,8 +80,6 @@
 
     <target name="prepare-config" description="Prepares the configuration files">
         <!-- Prepare script for rebuilding database. --> <!-- TODO not really necessary anymore -->
-        <copy file="${basedir}/tests/rebuilding_database.sh.template"
-              toFile="${basedir}/tests/rebuilding_database.sh" />
         <chmod file="${basedir}/tests/rebuilding_database.sh" perm="+x" />
 
         <!-- Prepare test configuration. -->
