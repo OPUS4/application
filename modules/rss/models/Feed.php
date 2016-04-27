@@ -50,8 +50,9 @@ class Rss_Model_Feed extends Application_Model_Abstract {
      * In 'rss.default.feedTitle' three placeholders can be used:
      *
      * %1$s - Name of repository ('name' key in config.ini)
-     * %2$s - Full URL for repository, e.g. 'http://opus4web.zib.de/opus4-demo'
+     * %2$s - Host, e.g. opus4web.zib.de
      * %3$s - Base URL for repository without leading '/', e.g. 'opus4-demo'
+     * %4$s - Full URL for repository, e.g. 'http://opus4web.zib.de/opus4-demo'
      *
      * @return string
      */
@@ -64,13 +65,14 @@ class Rss_Model_Feed extends Application_Model_Abstract {
             $feedTitle = $config->rss->default->feedTitle;
         }
         else {
-            $feedTitle = $name;
+            $feedTitle = '%4$s';
         }
 
         $feedTitle = sprintf($feedTitle,
             $name,
-            $this->view->fullUrl(),
-            substr($this->view->baseUrl(), 1)
+            $this->view->getHelper('ServerUrl')->getHost(),
+            substr($this->view->baseUrl(), 1),
+            $this->view->fullUrl()
         );
 
         return $feedTitle;

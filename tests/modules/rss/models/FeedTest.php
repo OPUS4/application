@@ -46,14 +46,18 @@ class Rss_Model_FeedTest extends ControllerTestCase {
 
     public function testGetTitle()
     {
-        $this->assertEquals('OPUS 4', $this->_model->getTitle());
+        $view = Zend_Registry::get('Opus_View');
+        Zend_Controller_Front::getInstance()->setBaseUrl('/opus4test');
+        $model = new Rss_Model_Feed($view);
+
+        $this->assertEquals('http:///opus4test', $model->getTitle());
 
         $config = Zend_Registry::get('Zend_Config');
 
         $config->merge(new Zend_Config(array(
             'rss' => array('default' => array('feedTitle' => 'OPUS 4 Test'))
         )));
-        $this->assertEquals('OPUS 4 Test', $this->_model->getTitle());
+        $this->assertEquals('OPUS 4 Test', $model->getTitle());
     }
 
     public function testGetTitleWithName()
@@ -71,7 +75,7 @@ class Rss_Model_FeedTest extends ControllerTestCase {
         $model = new Rss_Model_Feed($view);
 
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
-            'rss' => array('default' => array('feedTitle' => '%2$s'))
+            'rss' => array('default' => array('feedTitle' => '%4$s'))
         )));
         $this->assertEquals('http:///opus4test', $this->_model->getTitle());
     }
@@ -88,7 +92,21 @@ class Rss_Model_FeedTest extends ControllerTestCase {
         $this->assertEquals('opus4test', $model->getTitle());
     }
 
-    public function testGetDescription() {
+    public function testGetTitleWithHost()
+    {
+        $view = Zend_Registry::get('Opus_View');
+        Zend_Controller_Front::getInstance()->setBaseUrl('/opus4test');
+        $view->getHelper('ServerUrl')->setHost('testhost');
+        $model = new Rss_Model_Feed($view);
+
+        Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
+            'rss' => array('default' => array('feedTitle' => '%2$s'))
+        )));
+        $this->assertEquals('testhost', $model->getTitle());
+    }
+
+    public function testGetDescription()
+    {
         $this->assertEquals('OPUS documents', $this->_model->getDescription());
 
         Zend_Registry::get('Zend_Config')->merge(new Zend_Config(array(
